@@ -20411,11 +20411,28 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off a house": {
+  "body": "94a5d55beb8ffaa7",
+  "claim": "off a house - village-lanes.drawing: a lane's tread keeps 3 ft clear of a farmhouse wall - the fabric's 7 ft to the middle keeps a tread of up to 8 ft inside it",
+  "code": "badb90d040794b36",
+  "core": "a5113f26869d1b3f",
+  "date": "2026-10-22",
+  "note": "The claim says the fabric's 7 ft to the middle keeps a tread of up to 8 ft at least 3 ft off a wall. The changed return line judges the fabric from `start` (2 ft along), not from `a`. So a wall level with `a` is held only sqrt(7² - 2²) ≈ 6.7 ft from the middle, which leaves 3 ft of clearance for a tread up to about 7.4 ft, not 8 ft (\"A lane's tread keeps 3 ft clear of a farmhouse wall\"). The hamlet's 3, 5 and 6 ft treads stay inside it. Either the claim should say \"up to 7.4 ft\", or houses should be judged from `a`",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "rests": [
+   "0081-village-lanes.drawing.html:417841cd16f112d9",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off its own garden": {
   "body": "b8286366aa68ebb2",
   "claim": "off its own garden - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: the page lets a household's own way run beside its own fence, kept only off the beds; the run-on's blocks are read without the lane they judge, so every garden is walled at 7 ft, the way's own included (at the hamlet's 1 px = 1 ft; 405 T116, recorded on the page by T114)",
-  "code": "775ef7ff2499d516",
-  "core": "5793c1f4802cc463",
+  "code": "fca407c34fb03f38",
+  "core": "a5113f26869d1b3f",
   "date": "2026-10-22",
   "note": "The page records the opposite departure. Its DEVIATION is that a household's own way \"may run beside its own garden fence, kept only off the beds\". Nothing on the page records walling the way's own garden at 7 ft, which is what the code does. Record the walling on 0246 as this project's choice, or release the own garden down to its beds",
   "outside": true,
@@ -20427,13 +20444,14 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
+  "triaged": "2026-10-22",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the crop": {
   "body": "b8286366aa68ebb2",
   "claim": "off the crop - village-lanes.drawing: never across a dry plot",
-  "code": "8390822d937435e4",
-  "core": "5793c1f4802cc463",
+  "code": "2e1b2061aff0db69",
+  "core": "a5113f26869d1b3f",
   "date": "2026-10-22",
   "note": "the tread quad stays off dry plots; refusing a gap of exactly 0 is a float tolerance",
   "pages": {
@@ -20444,44 +20462,61 @@
    "0081-village-lanes.drawing.html:7237abd9ead63ebe",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the groves, strips and wells": {
-  "body": "b8286366aa68ebb2",
-  "claim": "off the groves, strips and wells - GUESS: the same 7 ft off the farm groves, bamboo strips and wells in the fabric, which no page sizes",
-  "code": "6a938ae81affa747",
-  "core": "5793c1f4802cc463",
+ "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the fixtures": {
+  "body": "94a5d55beb8ffaa7",
+  "claim": "off the fixtures - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane - no farmstead fixture under the tread, at `FIXTURE_PAD_FT` (its own claim)",
+  "code": "993ac6e6129772f2",
+  "core": "a5113f26869d1b3f",
   "date": "2026-10-22",
-  "note": "the pages say only \"off every lane\" and \"no lane ... across it\"; none sizes the gap",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the other built ground": {
-  "body": "b8286366aa68ebb2",
-  "claim": "off the other built ground - GUESS: the same 7 ft off houses, byres, sheds and yards, which no page sizes",
-  "code": "8e42cc86b89c55bc",
-  "core": "5793c1f4802cc463",
-  "date": "2026-10-22",
-  "note": "The house part is answered in the bundle: 0081 says \"A lane's tread keeps 3 ft clear of a farmhouse wall\". 7 ft to the middle of a tread of 8 ft or less stays inside that, so the claim should cite research/questions/0081-village-lanes.drawing.html for houses and keep GUESS only for byres, sheds and yards",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
- },
- "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings": {
-  "body": "b8286366aa68ebb2",
-  "claim": "off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane, and the run-on's middle at least 7 ft (`FOOTPATH_FABRIC_GAP`, passed raw: a hamlet rolls at 1 px = 1 ft, `SitePlan.ftpx`) off another household's garden fence",
-  "code": "d5347bd94cd0c829",
-  "core": "5793c1f4802cc463",
-  "date": "2026-10-22",
-  "note": "FOOTPATH_FABRIC_GAP 7 measured from the polyline (the lane's middle) to the fence; nothing built on the stretch judged",
+  "note": "over_a_fixture on [a, b] at the tread width, with the fixture pad: nothing built on a lane",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the groves, strips and wells": {
+  "body": "94a5d55beb8ffaa7",
+  "claim": "off the groves, strips and wells - GUESS: the same 7 ft off the farm groves, bamboo strips and wells in the fabric, which no page sizes",
+  "code": "cbbe6bd0c2522d8b",
+  "core": "a5113f26869d1b3f",
+  "date": "2026-10-22",
+  "note": "No page sizes the clearance from groves, bamboo strips or wells. §41 only says the walker goes round them",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the other built ground": {
+  "body": "94a5d55beb8ffaa7",
+  "claim": "off the other built ground - GUESS: the same 7 ft off byres, sheds and yards, which no page sizes",
+  "code": "444edcb4eb3bf498",
+  "core": "a5113f26869d1b3f",
+  "date": "2026-10-22",
+  "note": "No page sizes a lane's clearance from byres, sheds or yards. Only the farmhouse wall (§34) and the garden fence (§59) are sized",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings": {
+  "body": "94a5d55beb8ffaa7",
+  "claim": "off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane, and the run-on's middle at least 7 ft (`FOOTPATH_FABRIC_GAP`, passed raw: a hamlet rolls at 1 px = 1 ft, `SitePlan.ftpx`) off another household's garden fence",
+  "code": "2411e15c660e5b5b",
+  "core": "a5113f26869d1b3f",
+  "date": "2026-10-22",
+  "note": "_crosses_fabric at FOOTPATH_FABRIC_GAP = 7 measures fence to middle, as §59 sets it. The first 2 ft are under their own GUESS claim",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
   "verdict": "IN-STEP"
@@ -20489,8 +20524,8 @@
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the wet ground": {
   "body": "b2d01812993e4469",
   "claim": "off the wet ground - village-lanes.drawing: no marsh, no wet toe",
-  "code": "6faec470939d0213",
-  "core": "5793c1f4802cc463",
+  "code": "32e284ad24013bb1",
+  "core": "a5113f26869d1b3f",
   "date": "2026-10-19",
   "note": "no marsh or wet toe crossed",
   "pages": {
@@ -20505,32 +20540,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#the stretch from 2 ft along": {
-  "body": "b8286366aa68ebb2",
-  "claim": "the stretch from 2 ft along - GUESS: the fabric, crop and steading are judged from 2 ft along the stretch, since the end it grows from may stand at its own dooryard's gap - another house's corner inside those 2 ft is not asked (405 T118)",
-  "code": "7d644f121766bdd6",
-  "core": "5793c1f4802cc463",
+  "body": "94a5d55beb8ffaa7",
+  "claim": "the stretch from 2 ft along - GUESS: the fabric and the crop are judged from 2 ft along the stretch, since the end it grows from may stand at its own dooryard's gap (405 T118)",
+  "code": "addb83fd6cfc09b3",
+  "core": "a5113f26869d1b3f",
   "date": "2026-10-22",
-  "note": "The page is not silent on house corners in those 2 ft: it says \"no corner of a house stands on its tread\", and gives no exception near a way's start. Leaving a corner in the first 2 ft unasked (`_hits_a_steading(self.s, [start, b], width)`) is an unrecorded DEVIATION from 0246. Record it on the page, or judge houses from `a`",
+  "note": "The 2 ft step off the end it grows from is decided in code, and nothing in the cited pages answers it",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
- },
- "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#the stretch kept off farmstead fixtures at `self._fix_pad` (`over_a_fixture`), with no claim naming the fixture clearance": {
-  "code": "5793c1f4802cc463",
-  "core": "5793c1f4802cc463",
-  "date": "2026-10-22",
-  "note": "the stretch kept off farmstead fixtures at `self._fix_pad` (`over_a_fixture`), with no claim naming the fixture clearance",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#the whole tread off a house": {
-  "body": "b8286366aa68ebb2",
-  "claim": "the whole tread off a house - how-our-maps-lay-a-clustered-settlements-lanes.drawing: no house corner on the tread, at the run-on's width unrounded (405 T118: it was cut to a whole foot, a 3.5 ft tread judged at 3)",
-  "code": "8134388c8adbf95d",
-  "core": "5793c1f4802cc463",
+  "body": "94a5d55beb8ffaa7",
+  "claim": "the whole tread off a house - how-our-maps-lay-a-clustered-settlements-lanes.drawing: no house corner on the tread, at the run-on's width unrounded and from the stretch's own start (405 T118: it was cut to a whole foot, a 3.5 ft tread judged at 3, and asked only from 2 ft along)",
+  "code": "ca09899ece4c0390",
+  "core": "a5113f26869d1b3f",
   "date": "2026-10-22",
-  "note": "house_hit is called at the run-on's own width, unrounded, from `start`; the 2 ft gap is judged under its own key",
+  "note": "_hits_a_steading(self.s, [a, b], width) runs from the stretch's own start at the width unrounded: no house corner within half the tread",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -20543,8 +20570,8 @@
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#water crossed on a plank": {
   "body": "b2d01812993e4469",
   "claim": "water crossed on a plank - plank-bridges-over-farm-ditches-itabashi.drawing: at most `over_water` courses, each bridged by the crossings stage",
-  "code": "a294288c4c6aafde",
-  "core": "5793c1f4802cc463",
+  "code": "cc936cc2eb123ec7",
+  "core": "a5113f26869d1b3f",
   "date": "2026-10-19",
   "note": "a way crossing water takes one planked deck",
   "pages": {
