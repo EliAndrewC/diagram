@@ -17,22 +17,26 @@ project's arithmetic. No price is converted to koku; between coins only by a rat
 Research only: edit no code, modal, sheet or canon. Keep the question under the 20,000-byte cap (split into a second money
 question, tagged the same, if it would pass it).
 
-**Already answered, nearest, OPEN.** The bale's weight is in 0197 (`0197-charcoal-yards-and-charcoal-stores.html`, about 4
-kan): name it, and give the Itsukaichi bulletin's 4, 5 or 6.5 kan as the variation. A figure for which only a nearest exists
-(another century, another fuel) is OPEN: name the nearest as a nearest, never as an answer, and put the search in the
-absence note.
+**Already answered, and the nearest.** The record's only bale weights are 0197's and 0199's (Iburi, Hokkaido, undated, by grade: 4,
+10 and 8 kan): name both, say the record holds no Edo-period weight, and give the Itsukaichi bulletin's Tama 4, 5 or 6.5 kan
+(undated) and its Meiji 20s 5 kan. Each verdict is one of the four of `research/money-requests.md` (ATTESTED, ATTESTED ONLY
+FOR, NOT ATTESTED, SILENT). A figure for which only a nearest exists (another century, another fuel) is SILENT: name the
+nearest as a nearest under what is still open, never as an answer, and put the search in the absence note.
 
 ## The figures (from the passes)
 
-- Black/ordinary by the bale, retail: Ōishi 1966 table (12), Edo 1842, 上中下炭 500/448/364 -> 466/422/342 mon a bale,
+- By the bale: Ōishi 1966 table (12), Edo 1842, 上中下炭 500/448/364 -> 466/422/342 mon a bale,
   佐倉炭 144/132/120 -> 135/124/112 (read on page images pp. 86-87; key oishi-1966-tenpo13-bukka-kakiage, live host 406 -
   `make archive-find`, then render the PDF's pages with pdftoppm and pass the images with `IMAGES=`). No weight printed; the
-  grades are not called black or white: say so. 佐倉炭's low price is as printed, unexplained: say so.
+  grades are not called black or white, and the table does not say retail or wholesale (a price-cut order reported by the
+  ward headmen): say what the page says, and leave the rest under what is still open. 佐倉炭's low price is as printed, unexplained: say so.
 - White, white against white: Itsukaichi 郷土あれこれ 33 (2022), 1716 via Mitamura Engyo: Kumano 400-500 mon a bale, 8-9
   bales a ryo, Hachiōji about 20 a ryo; Tama charcoal "all white". Japan's black-against-white SILENT.
 - Kiln output: the same bulletin's undated statement, 20-30 bales an earth kiln of black in 3-4 days, 2-3 a stone kiln of
   white - ATTESTED ONLY FOR the author's general statement. Burner-days, yield SILENT.
-- Wholesale and carriage: OPEN/SILENT - the brokers' levy 8 (later 12) mon per 8-bale horse-load (a tax), horse-loads of 6-8
+- Retail by small measure in a city (by weight, not the bale): SILENT in the passes - give it its own verdict line and
+  search (Morisada's 炭売 is the likeliest lead).
+- Wholesale and carriage: SILENT - the brokers' levy 8 (later 12) mon per 8-bale horse-load (a tax), horse-loads of 6-8
   bales, the 1814 women carriers (no amount); 809,710 bales by ship in 1726 (second hand, tamaikada blog - cite only if
   the page reads so).
 - Nearest only: Akita 1600, 181 kanmon for 120 bales of smith's charcoal (Wayback copy of 高橋正's paper).

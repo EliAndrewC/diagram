@@ -28,10 +28,13 @@ N/A: no generator change.
 
 ## D1 - the question (FR-001, FR-002, FR-005)
 
-0279, tagged as the money section's price questions are, in the order: Japan (black by the bale retail, the bale's
-weight naming 0197, white and the Kumano/Hachiōji contrast, wholesale and carriage OPEN or SILENT, kiln output), then the
-Qing comparison (Beijing 1615/1736, Zhili 1769, 武編). A figure the record holds only a nearest for is OPEN with the
-nearest named and the search in the absence note. Under the 20,000-byte cap; a question that would pass it splits.
+0279, tagged as the money section's price questions are, in the order: Japan - charcoal by the bale (the 1842 ordered
+price by grade, retail/wholesale and black/white left open unless the page says so), the bale's weight (naming 0197 and
+0199's Iburi weights; the record has no Edo-period one), retail by small measure, white and the Kumano/Hachiōji contrast,
+wholesale, carriage, kiln output, burner-days and yield - then the Qing comparison (Beijing 1615/1736, Zhili 1769, 武編).
+Each verdict is one of the four of `research/money-requests.md`; a figure the record holds only a nearest for is SILENT,
+the nearest named under what is still open and the search in the absence note. Under the 20,000-byte cap; a question that
+would pass it splits.
 
 ## D2 - the implementation check (FR-003)
 
