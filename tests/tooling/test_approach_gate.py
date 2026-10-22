@@ -278,3 +278,23 @@ def test_part_a_holds_the_constant_and_the_arithmetic_items_and_an_approach_with
     assert "**Before moving a constant.**" in text and "**Before fitting things into room.**" in text
     old_answer = "\n".join(f"{n}. **x.** answered" for n in range(1, 10))
     assert ag.unanswered(old_answer, items) == [10, 11]
+
+
+def test_a_trigger_charges_every_task_in_flight_not_only_the_last_started(tmp_path: pathlib.Path) -> None:
+    """Feature 405 (the GM 2026-10-21): batch 11 started T26 then T103, and the cohort T26's change failed owed part B to T103 alone,
+    so the "why not just make it bigger?" question was answered about the wrong change. Every open task started since the
+    feature's last tick is charged; a task ticked, or started before that tick, is not."""
+    root, d = feature(tmp_path, git=True)
+    _git(root, "add", "-A")
+    _git(root, "commit", "-qm", "999-x: T00 ticked (make land)", "--date=2026-10-17T10:00:00Z")
+    tick = int(_git(root, "log", "-1", "--format=%ct").strip())
+    stamp = lambda s: __import__("time").strftime("%Y-%m-%dT%H:%M:%SZ", __import__("time").gmtime(tick + s))  # noqa: E731
+    starts = [("T03", -60), ("T01", 60), ("T02", 120)]
+    (ag.git_dir(root) / "task-starts.jsonl").write_text("".join(json.dumps({"feature": "999-x", "task": t, "utc": stamp(s)}) + "\n" for t, s in starts))
+    (ag.git_dir(root) / "active-task").write_text(json.dumps({"feature": "999-x", "task": "T02"}))
+    assert ag.in_flight(root, d, "T02") == ["T02", "T01"], "T03 was started before the last tick"
+    msg = str(ag.ruled(root, "hour:999-x@3", now="2026-10-17T21:40:00Z"))
+    assert "T02 owes" in msg and "T01 owes" in msg
+    assert sorted(r["task"] for r in ag.owed_entries(root)) == ["T01", "T02"]
+    (d / "tasks.md").write_text(TASKS.replace("- [ ] T01", "- [x] T01"))
+    assert ag.in_flight(root, d, "T02") == ["T02"], "a ticked task is not in flight"
