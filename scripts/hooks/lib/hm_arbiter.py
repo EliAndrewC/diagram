@@ -38,6 +38,8 @@ from pathlib import Path
 from typing import Any
 
 OWED = "arbiter-owed.json"
+#: the reviews an ask may be about, its ruling then standing as that review's verdict (feature 409)
+REVIEWS = ("spec", "plan")
 RULINGS = ("continue", "accept", "process-fault")
 #: the hourly step-back's rulings (feature 383 FR-010): nothing to change, or a binding change of route (`what`)
 HOUR_RULINGS = ("continue", "change-route")
@@ -108,8 +110,9 @@ def aside(root: Path) -> list[str]:
     return sorted(f"{t} (feature {v.get('feature')})" for t, v in owed(root).items() if not mine(root, v))
 
 
-def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float | None = None) -> bool:
-    """Record a trigger once (a second firing of a trigger already owed or ruled changes nothing); True when it is new."""
+def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float | None = None, review: str = "") -> bool:
+    """Record a trigger once (a second firing of a trigger already owed or ruled changes nothing); True when it is new. `review`
+    names the spec or plan review an ask is about (feature 409), so its ruling stands as that review's verdict."""
     if trigger in rulings(root):
         return False
     path = common_dir(root) / OWED
@@ -128,6 +131,8 @@ def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float
         # the arbiter's tooling fix) - `mine` keeps each feature to its own. GUARD_EDIT_OK: feature 352, the round arbiter's
         # tooling fix on round:quote-check|q:0036@3
         state[trigger] = {"kind": kind, "unit": unit, "detail": detail, "t": time.time() if now is None else now, "feature": d.name if d else ""}
+        if review:
+            state[trigger]["review"] = review
         m = re.match(r"(\d+) check dispatches", detail)
         if m:
             state[trigger]["dispatches"] = int(m.group(1))
@@ -340,7 +345,9 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
         **({"tooling_fix": fix, "fix": "open", **measure} if fix else {}),
         **({"tooling_fix_on": fix_on} if fix_on and not fix else {}),
         # a spec review's ruling names the spec it ruled on: the review gate honors it only while the spec still reads so
-        **({"spec_sha": spec_body_sha(d)} if trigger.startswith("round:spec-fidelity|") else {}),
+        # an ask about a review (feature 409) names it, and a spec review's its digest, as a spec round's ruling does
+        **({"review": trig["review"]} if trig.get("review") in REVIEWS else {}),
+        **({"spec_sha": spec_body_sha(d)} if trigger.startswith("round:spec-fidelity|") or trig.get("review") == "spec" else {}),
         # a review unit's ruling names the sheet it ruled on, so the review gate honors an accept while the sheet still
         # reads so (feature 374 batch 5: an accepted unit's last verdict was NEEDS-WORK at an older key, and the gate refused)
         **({"content_key": ck} if trigger.startswith("round:") and not trigger.startswith("round:spec-fidelity|") and (ck := unit_content_key(root, row_unit(trig, trigger))) else {}),
@@ -465,7 +472,8 @@ def spec_ruled(d: Path) -> str:
             r = json.loads(line)
         except ValueError:
             continue
-        if str(r.get("trigger", "")).startswith(f"round:spec-fidelity|{d.name}#") and r.get("ruling") in ("accept", "process-fault") and r.get("spec_sha") == sha:
+        spec_review = str(r.get("trigger", "")).startswith(f"round:spec-fidelity|{d.name}#") or r.get("review") == "spec"  # an asked one too (409)
+        if spec_review and r.get("ruling") in ("accept", "process-fault") and r.get("spec_sha") == sha:
             return str(r["trigger"])
     return ""
 
@@ -646,7 +654,8 @@ def main(argv: list[str]) -> int:
         print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl and for the GM's review)")
         # GUARD_EDIT_OK: feature 385 T02, plan D9 - an hour or red-gate ruling owes the task's part B answered (nothing loosened)
         owed = _approach().ruled(root, row["trigger"])
-        if row["trigger"].startswith("round:spec-fidelity|plan:") and row["ruling"] in ("accept", "process-fault"):  # feature 385 T16
+        plan_review = row["trigger"].startswith("round:spec-fidelity|plan:") or row.get("review") == "plan"  # an asked one too (409)
+        if plan_review and row["ruling"] in ("accept", "process-fault"):  # feature 385 T16
             d = feature_dir(root)
             if d is not None:
                 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "gates"))
@@ -687,17 +696,26 @@ def main(argv: list[str]) -> int:
     if argv[:1] == ["unit-ruled"] and len(argv) == 3:  # review-gate.sh: does a ruling stand for this review unit's verdict?
         d = feature_dir(Path(".").resolve())
         return 0 if d is not None and unit_ruled(d, argv[1], argv[2]) else 1
-    if argv[:1] == ["ask"] and len(argv) == 3:  # `make arbiter-ask` (feature 379 amendment 2, FR-008/FR-009)
+    if argv[:1] == ["ask"] and len(argv) in (3, 4):  # `make arbiter-ask` (feature 379 amendment 2, FR-008/FR-009)
         subject, why = argv[1].strip(), argv[2].strip()
+        review = argv[3].strip() if len(argv) == 4 else ""  # REVIEW= (feature 409): the spec or plan review the ask is about
         if not re.fullmatch(r"[\w.-]+", subject) or len(why.split()) < 2 or len(why) < 8:
             print("arbiter-ask: SUBJECT is one short id (letters, digits, . _ -) and WHY the question, two words or more", file=sys.stderr)
+            return 2
+        if review and review not in REVIEWS:
+            print(f"arbiter-ask: REVIEW= is spec or plan (the review whose verdict the ruling stands as), or left out - not {review!r}", file=sys.stderr)
             return 2
         trigger = f"ask:{subject}"
         if trigger in rulings(Path(".").resolve()):
             print(f"arbiter-ask: {trigger} is already ruled - one ruling per trigger, binding; ask a new SUBJECT for a new question", file=sys.stderr)
             return 1
-        trip(Path(".").resolve(), trigger, "ask", "", why)
+        stands = f"(REVIEW={review}: an accept stands as the {review} review's verdict)" if review else ""
+        trip(Path(".").resolve(), trigger, "ask", "", f"{why} {stands}".strip(), review=review)
         print(f"arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM, who reviews the ruling after landing; dispatch `round-arbiter` with the MANIFEST below")
+        if stands:
+            print(f"arbiter-ask: {stands}")
+        elif re.match(r"\d+-(spec|plan)-", subject):
+            print("arbiter-ask: hint - if this asks about a spec or plan review, ask it with REVIEW=spec or REVIEW=plan, so an accept stands as its verdict (feature 409)")
         return 0
     if argv[:1] == ["fix"] and len(argv) in (4, 5) and argv[1] in ("done", "declined"):
         # several fixes one change made settle together: ID="<trigger> <trigger> ..." (2026-10-11: 343 carried 36 open fixes,

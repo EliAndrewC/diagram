@@ -3,56 +3,56 @@
  "blocks": {
   "preamble": {
    "sha256": "4ab029f1dc44eac7cfe608146002102bc7f1cefb3a2f67d07dcd89ad009baabe",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "93c476faaad3721ce77acc06bd55a26cdf1f017bf8200ba58895ce542c6148a4",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
    "sha256": "91f1010a8f885259510f05acb9b37fa6cef726d4dc30df6367734db84da7b610",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "## Performance bookends": {
    "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "0a9fc8e0a2b1b89a86b80efd6f2948a7dd2ba16afe459a9d9b7773ec60829d5c",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "## D1 - the ask names its review (FR-001)": {
-   "sha256": "ea6152035f4b72a70af2393ede51fe246400288eedd8be5af484d6db33b42a2e",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
+   "sha256": "d9bb5b3f57e58c5e4bfcec0f8153b923270723f0acfd825fff675aaec79321e4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "## D2 - the ruling carries it (FR-002, FR-003, FR-004)": {
    "sha256": "3ca062d7dd78f5f3897835e7803489a290f68fa00c0ff7f9e143e90704633e8f",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "## D3 - tests (FR-005)": {
-   "sha256": "6d19b3237fa8b96498bb29773e890e94301a2c5388f7f6ffa78dc60bc5656a16",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
+   "sha256": "35b3c0b7848f1d948e42bb00f10080efde9f35c14b1234bc4b4ae374c4f74dd9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "## T - the order": {
    "sha256": "400c7d9961decafb28099a16a35af17c41b9eaf148db78a3c5747ff1657873e3",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-21",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   }
  },
@@ -138,6 +138,83 @@
      "summary": "D1-D3 in one change, tests run, then report and make land (direct route).",
      "class": "within",
      "why": "The GM asked to work the feature start to finish."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the ask names its review (FR-001)",
+    "## D2 - the ruling carries it (FR-002, FR-003, FR-004)",
+    "## D3 - tests (FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1a",
+     "summary": "REVIEW is a third positional arg to hm_arbiter.py ask, spec|plan only, any other value refused; stored as `review` on the owed entry via an optional `trip` keyword",
+     "class": "within",
+     "why": "FR-001 names REVIEW=spec|plan and its recording on the owed entry; refusing a value outside that set only enforces the named domain."
+    },
+    {
+     "id": "D1b",
+     "summary": "The ask's detail (the arbiter bundle's question) and its output end with '(REVIEW=<r>: an accept stands as the <r> review's verdict)'",
+     "class": "within",
+     "why": "FR-001 requires the output to name the review and the bundle's question to say an accept stands as that review's verdict."
+    },
+    {
+     "id": "D1c",
+     "summary": "An ask with no REVIEW is recorded as today, with no review; on a SUBJECT matching ^\\d+-(spec|plan)- the output only adds a hint to pass REVIEW=",
+     "class": "within",
+     "why": "FR-001: an ask without REVIEW= is about no review - it is now recorded unchanged, curing round 1's BLOCKED reading (the ask is no longer refused). The hint is added output that refuses, blocks and rewrites nothing; it helps a review ask reach the gates the request asks to honor it, and narrows nothing."
+    },
+    {
+     "id": "D1d",
+     "summary": "make arbiter-ask passes $(REVIEW); its ## help line names [REVIEW=spec|plan]",
+     "class": "within",
+     "why": "FR-001's interface is `make arbiter-ask ... REVIEW=`."
+    },
+    {
+     "id": "D2a",
+     "summary": "record_ruling puts trig['review'] on an ask: trigger's row, and spec_sha for spec as a spec round does",
+     "class": "within",
+     "why": "FR-002 verbatim."
+    },
+    {
+     "id": "D2b",
+     "summary": "spec_ruled honors a row whose trigger is a spec-fidelity round for the feature OR whose review is spec, with the ruling (accept/process-fault) and digest tests unchanged",
+     "class": "within",
+     "why": "FR-003: honored as a spec round trigger's ruling is, including the spec_sha match."
+    },
+    {
+     "id": "D2c",
+     "summary": "The ruled command runs arbiter_accept for a plan round trigger OR a row with review plan; arbiter_accept takes such a trigger with its accept test unchanged and refuses any other non-plan trigger as today",
+     "class": "within",
+     "why": "FR-004 and the request's core ('have the plan ... gates honor an arbiter's ACCEPT on a plan review'). Keeping the refusal for asks about no review is not a narrowing: those are not plan reviews."
+    },
+    {
+     "id": "D3",
+     "summary": "Tests: asked plan accept clears pg.owed, continue leaves it owed, no-review ask records none even on a plan-like name; bad REVIEW refused; spec_ruled honors an asked spec accept on the unchanged spec and not after an edit; output/detail name the review and the hint shows only on a review-like SUBJECT with none; make -n passes plan through; each proved to fail with its change removed",
+     "class": "within",
+     "why": "FR-005 and SC-001/SC-002; every test enforces a behavior the spec requires (verification, not new behavior)."
+    },
+    {
+     "id": "T",
+     "summary": "One change for D1-D3, tests run, report and land via make land (direct route)",
+     "class": "within",
+     "why": "The GM asked for the feature to be worked start to finish; ordering and landing route settle nothing the request constrains."
+    },
+    {
+     "id": "context",
+     "summary": "Preamble, Summary, Technical Context, Performance bookends (N/A, no generator change), Constitution Check: restate the spec and name files; tooling only",
+     "class": "within",
+     "why": "No decision beyond the spec's; 'tooling only' matches the request's 'tooling feature'."
     }
    ]
   }

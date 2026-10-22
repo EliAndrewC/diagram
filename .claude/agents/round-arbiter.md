@@ -63,6 +63,8 @@ previously coming to me"*), so two more kinds of trigger reach you:
   a stuck choice of route: `continue` means go on as the question proposes (for a regression: fix it); `accept` means it
   stands (a waiver); `process-fault` means the process is wrong, its `tooling_fix` named. A question about WHAT the GM wants
   built is not yours: say so in `why` and rule `continue`, with `what` naming it as the GM's question.
+  A question that ends "(REVIEW=spec: ...)" or "(REVIEW=plan: ...)" asks about that review: your `accept` or `process-fault`
+  stands as its verdict on the spec or plan as it reads now, as on a review's round (feature 409).
 - a BAND-3 PERFORMANCE INCREASE (`ask:perf-band3-<environment>-<binding>`, from `make perf-arbiter`), asked only in an
   investigation since feature 375 amendment 5 made the bands a flag, never a gate: read `perf-report.txt` beside the MANIFEST and the band-2 audit in `dev/perf-log/`.
   `accept` lets the increase land - only when it is NECESSARY, COMMENSURATE with what it buys, and has NO GOOD WAY AROUND IT
