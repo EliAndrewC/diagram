@@ -25,30 +25,30 @@ nearest as a nearest under what is still open, never as an answer, and put the s
 
 ## Your items
 
-- **0279 "What did charcoal cost?"** (new) - the figures, from the passes:
+- `0279` **"What did charcoal cost?"** (new) - the figures, from the passes:
 
-- By the bale: Ōishi 1966 table (12), Edo 1842, 上中下炭 500/448/364 -> 466/422/342 mon a bale,
-  佐倉炭 144/132/120 -> 135/124/112 (read on page images pp. 86-87; key oishi-1966-tenpo13-bukka-kakiage, live host 406 -
-  `make archive-find`, then render the PDF's pages with pdftoppm and pass the images with `IMAGES=`). No weight printed; the
-  grades are not called black or white, and the table does not say retail or wholesale (a price-cut order reported by the
-  ward headmen): say what the page says, and leave the rest under what is still open. 佐倉炭's low price is as printed, unexplained: say so.
-- White, white against white: Itsukaichi 郷土あれこれ 33 (2022), 1716 via Mitamura Engyo: Kumano 400-500 mon a bale, 8-9
-  bales a ryo, Hachiōji about 20 a ryo; Tama charcoal "all white". Japan's black-against-white SILENT.
-- Kiln output: the same bulletin's undated statement, 20-30 bales an earth kiln of black in 3-4 days, 2-3 a stone kiln of
-  white - ATTESTED ONLY FOR the author's general statement. Burner-days, yield SILENT.
-- Retail by small measure in a city (by weight, not the bale): SILENT in the passes - give it its own verdict line and
-  search (Morisada's 炭売 is the likeliest lead).
-- Wholesale and carriage: SILENT - the brokers' levy 8 (later 12) mon per 8-bale horse-load (a tax), horse-loads of 6-8
-  bales, the 1814 women carriers (no amount); 809,710 bales by ship in 1726 (second hand, tamaikada blog - cite only if
-  the page reads so).
-- Nearest only: Akita 1600, 181 kanmon for 120 bales of smith's charcoal (Wayback copy of 高橋正's paper).
-- Qing: Gao 2022 (key gao-shouxian-jiuqing-wuliao): Beijing 1736 炭 0.225, 黑炭 0.5/0.6, 白炭 1.1, 紅螺炭 1.06 tael per 100
-  jin; 1615 炭 0.12-0.75, 白炭 0.49-1.113; wages 154 / 75 cash (Gao's 800 cash a tael). Bochum Zhili 1769 木炭 by district
-  (the pass's table, with each district's 匠 and 夫 wage rows): give the range and a few named districts, with sheet and
-  row. 武編 (key wubian-qianji-05): 170 jin 0.51 tael, 500 jin 0.85 tael, smiths 0.03-0.05 a day.
-- Leads to try if time allows, else name them in the handoff: Morisada 生業 pages (pid 991466, pp. 87-186) for 炭売 -
-  `specs/402-money-open-leads/measure/shot.py` takes a koma screenshot (run with `/usr/bin/python3`; skip it if memory is
-  low); the 飯能市 1822 broker agreement PDF.
+  - By the bale: Ōishi 1966 table (12), Edo 1842, 上中下炭 500/448/364 -> 466/422/342 mon a bale,
+    佐倉炭 144/132/120 -> 135/124/112 (read on page images pp. 86-87; key oishi-1966-tenpo13-bukka-kakiage, live host 406 -
+    `make archive-find`, then render the PDF's pages with pdftoppm and pass the images with `IMAGES=`). No weight printed; the
+    grades are not called black or white, and the table does not say retail or wholesale (a price-cut order reported by the
+    ward headmen): say what the page says, and leave the rest under what is still open. 佐倉炭's low price is as printed, unexplained: say so.
+  - White, white against white: Itsukaichi 郷土あれこれ 33 (2022), 1716 via Mitamura Engyo: Kumano 400-500 mon a bale, 8-9
+    bales a ryo, Hachiōji about 20 a ryo; Tama charcoal "all white". Japan's black-against-white SILENT.
+  - Kiln output: the same bulletin's undated statement, 20-30 bales an earth kiln of black in 3-4 days, 2-3 a stone kiln of
+    white - ATTESTED ONLY FOR the author's general statement. Burner-days, yield SILENT.
+  - Retail by small measure in a city (by weight, not the bale): SILENT in the passes - give it its own verdict line and
+    search (Morisada's 炭売 is the likeliest lead).
+  - Wholesale and carriage: SILENT - the brokers' levy 8 (later 12) mon per 8-bale horse-load (a tax), horse-loads of 6-8
+    bales, the 1814 women carriers (no amount); 809,710 bales by ship in 1726 (second hand, tamaikada blog - cite only if
+    the page reads so).
+  - Nearest only: Akita 1600, 181 kanmon for 120 bales of smith's charcoal (Wayback copy of 高橋正's paper).
+  - Qing: Gao 2022 (key gao-shouxian-jiuqing-wuliao): Beijing 1736 炭 0.225, 黑炭 0.5/0.6, 白炭 1.1, 紅螺炭 1.06 tael per 100
+    jin; 1615 炭 0.12-0.75, 白炭 0.49-1.113; wages 154 / 75 cash (Gao's 800 cash a tael). Bochum Zhili 1769 木炭 by district
+    (the pass's table, with each district's 匠 and 夫 wage rows): give the range and a few named districts, with sheet and
+    row. 武編 (key wubian-qianji-05): 170 jin 0.51 tael, 500 jin 0.85 tael, smiths 0.03-0.05 a day.
+  - Leads to try if time allows, else name them in the handoff: Morisada 生業 pages (pid 991466, pp. 87-186) for 炭売 -
+    `specs/402-money-open-leads/measure/shot.py` takes a koma screenshot (run with `/usr/bin/python3`; skip it if memory is
+    low); the 飯能市 1822 broker agreement PDF.
 
 **Reading what the reader cannot.** A PDF `make source-pages` cannot read: download it with curl into its own empty
 directory and read it with pdftotext, or render its pages (pdftoppm) and pass the images to source-reader with `IMAGES=`. A
