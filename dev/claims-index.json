@@ -22376,22 +22376,21 @@
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#field way off the gardens": {
   "body": "0099614c0c3039b1",
-  "claim": "field way off the gardens - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) from the way's middle to a garden fence, the page's lane-to-fence 7 ft",
-  "code": "a97d5f26bd109a02",
+  "claim": "field way off the gardens - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) from the way's middle to every garden fence, its start's household's too - the page's gap is kept from another household's garden and a household's own way may run beside its own, but the field way is the hamlet's way to the field, drawn with no household (`FIELD_ROLE`, no `of`), so no garden is its own",
+  "code": "807ea9f565005fde",
   "core": "6f8cce7f9df46841",
   "date": "2026-10-22",
-  "note": "The 7 ft gap to another household's garden matches the page. But `_homestead_polys` passes every garden with owner None, so `mine()` never frees one and the way's own garden is also kept 7 ft off. §122 says the gap is \"kept from another household's garden\" and that a household's own way \"may run beside its own garden fence, kept only off the beds\". There are two fixes. One: the claim says the own garden is walled too, and records that as a choice (or says a field way is not the \"own way\" of §122). Two: the code holds its own garden only off the beds.",
+  "note": "0246's drawing page answers this, so it is not a GUESS. The page sets 7 ft from a garden fence to the lane's middle and calls it a map drawing convention, not a guess. It keeps that gap from every garden but the way's own household's, and the field way belongs to no household. The code does what the page says: gardens are always walled (owner None), with `gap=FIELD_ROUTE_GAP_FT` = 7. The claim should cite 0246's drawing page directly, without GUESS.",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#field way off the other built ground": {
   "body": "0099614c0c3039b1",
@@ -22423,20 +22422,22 @@
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#its own house at its door": {
   "body": "0099614c0c3039b1",
-  "claim": "its own house at its door - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a route starting at its own door is not walled by its own house; the law keeps only the page's no house corner on the tread (`house_hit`) (405 T115)",
-  "code": "0b4e95638dc7adb9",
+  "claim": "its own house at its door - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of a house, at its door, is not walled by that house; the law keeps only the page's no house corner on the tread (`house_hit`) (405 T115)",
+  "code": "61692c9e231dfd1c",
   "core": "6f8cce7f9df46841",
   "date": "2026-10-22",
-  "note": "The way leaves its dooryard (§111), and only the no-house-corner-on-the-tread rule stays (§113).",
+  "note": "The page bears on part of this: §113 bars a house corner from the tread, and the law keeps that check. The page is silent on the 13 ft (`GABLE_MARGIN_FT + FIELD_ROUTE_GAP_FT`) within which a route's start counts as at its house's door and the house stops being a wall. It is also silent on how near a way may pass its own house: the page sizes no clearance off houses, only off garden fences. The claim presents the 13 ft as 0246's; it should mark the 13 ft as GUESS or UNRESEARCHED.",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#nothing built on a lane": {
   "body": "0099614c0c3039b1",
@@ -22486,17 +22487,6 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
   "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/corridors.py::field_router#out of its own house": {
-  "body": "0099614c0c3039b1",
-  "claim": "out of its own house - NONE: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of its own house is not walled by it, so it can leave the door",
-  "code": "86ba72231afebcf5",
-  "core": "6f8cce7f9df46841",
-  "date": "2026-10-22",
-  "note": "the 13 ft (`GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT`) is how close to its own house a route may start and still be let out. A reader cannot see it on the map, and `house_hit` still keeps the tread off the house",
-  "pages": {},
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#the brook at its fords": {
