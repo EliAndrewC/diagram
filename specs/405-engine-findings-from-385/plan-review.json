@@ -810,6 +810,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T102 - one reading of a plan section, committed or not": {
+   "sha256": "ea6d9cab39748100bd35c607cd519b9c5577321d6376f797f6e8012676e7a5b9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T102 Approach (checklist part A)": {
+   "sha256": "5d853c401acfdac463b2a931f73851c35fafab2f1ad9da8d8cb062082756f525",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T102 Decisions": {
+   "sha256": "d30274f1c2a2f44245601b23af328c185fe160ec0699bf2e37eb3e91f5640657",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T109 - a reply written outside the project is not corrected": {
+   "sha256": "73332ae322cad2dad681109639414757b445b648cad48cbbd7439d3fb6eee09a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T109 Approach (checklist part A)": {
+   "sha256": "5aa85216d93f5f3538992680dfc97cd24bee753add134aa272160c2b02b2b08a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T109 Decisions": {
+   "sha256": "c238b3652a0c1fb71b68287cb22da7d913e345885462eab8643b4f385632f204",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3628,6 +3664,32 @@
      "summary": "Three flags read off Claim.backing/Claim.account: GUESS whose account states a departure; bare GUESS naming a question number; GUESS <page> stating a figure in feet no named page states. Printed as claims-label: <key> - <fix>.",
      "class": "within",
      "why": "The content of the lint; it alters no claim, no label and no rule the GM set, and narrows no clause of request.md."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T102 - one reading of a plan section, committed or not",
+    "## T109 - a reply written outside the project is not corrected",
+    "### T102 Approach (checklist part A)",
+    "### T102 Decisions",
+    "### T109 Approach (checklist part A)",
+    "### T109 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D92",
+     "summary": "Every block a plan verdict is written at keeps its text in <git common dir>/plan-seen/<digest>.txt; History.block reads a kept text with a matching digest before plan.md's git history; a clone with nothing kept reads the history as before.",
+     "class": "within",
+     "why": "A tooling fix found while taking the feature to completion (Amendments 7 and 9; FR-002 found work). It makes the plan guard's existing typo forgiveness give the same answer before and after a commit; a changed decision is still refused (its Done test), so the gate's reach over what the GM asked it to hold is not reduced. Nothing in request.md or the spec is narrowed. Note: the D63 and D6 the block cites are the plan-gate decisions of feature 375 (amendment 11's slim record, the typo rule), not 405's D63 (first street) and D6 (push order) that the bundle resolved; the citation should name 375 to be unambiguous, but this does not change the ruling."
+    },
+    {
+     "id": "D93",
+     "summary": "hm_house.held_ranges holds the body of each heredoc written by cat/tee (>, >>) to an absolute path under /tmp/ or the session state directory, so a checker's reply recorded in the same command is not corrected; a relative or unknown target is not held, and a project heredoc in the same command is still corrected.",
+     "class": "within",
+     "why": "A tooling fix found during the claims batches (Amendments 7 and 9; FR-002). It carries the GM's 2026-09-06 quotation rule (house style does not edit other people's quotes) and the hook's existing exemption for writes outside the project into the mixed-command case; the same heredoc alone was already left as typed, so no prose escapes correction that did not before, and project writes in the same command stay corrected. It narrows nothing the GM asked for in this feature; were it read as a carve-out of the house-style hook it would be LEGITIMATE as implied by the GM's own quotation rule."
     }
    ]
   }
