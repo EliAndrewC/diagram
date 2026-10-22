@@ -300,9 +300,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T106 Turn a wood shed's four recorded seats by the household's roll, as the coop's are (T26's fourth note): tried in batch 11, it moved Sawada's farms so two households' ways ended 22.9 ft apart unjoined - the knot's gather refused for passing 2.7 ft from a neighbor's yard (0246's 7 ft gap) or splitting the web; land it once the knots step has a gather that keeps the gap, or the farms the room (measured 2026-10-21) [lands-open]
       research: rendering
       research: rendering
-- [ ] T107 The knots step cannot gather two households' ways whose join would pass within 0246's 7 ft of a neighbor's garden (T18 keeps that gap off every garden but a way's own): any reshuffle of the farms exposes it - T26's wood-shed rule, measured 2026-10-21, left knots on cohort seeds 10, 24, 36 (and 47 refused) without the seat roll, and on Sawada with it. Find a gather that keeps the gap (a meeting point clear of the gardens, a tee onto the side away from them), or give the farms the room (room before packing); T26 and T106 wait on it [lands-open]
+- [x] T107 The knots step cannot gather two households' ways whose join would pass within 0246's 7 ft of a neighbor's garden (T18 keeps that gap off every garden but a way's own): any reshuffle of the farms exposes it - T26's wood-shed rule, measured 2026-10-21, left knots on cohort seeds 10, 24, 36 (and 47 refused) without the seat roll, and on Sawada with it. Find a gather that keeps the gap (a meeting point clear of the gardens, a tee onto the side away from them), or give the farms the room (room before packing); T26 and T106 wait on it [lands-open]
       research: rendering
       research: rendering
+      verify: DONE. landed: a knot the fence gap leaves gathered at 3 ft in a second pass (D83); seeds 1-48 + pinned 54/54
 - [ ] T108 Two notes from T105's round: joints._one_joint reads a lane with no width as 5 ft (the spine's) where settle_ends, touch and the knots read 3 ft (0081's footpath) - one default; and 0081 asks a Z at a joint pulled straight and names no mend when the pull fails - research the joint moved back a vertex, or record it as the page's GUESS (impl-drift outside the change, 2026-10-21) [lands-open]
       research: rendering
       research: rendering
