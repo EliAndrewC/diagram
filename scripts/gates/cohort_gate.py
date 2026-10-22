@@ -100,7 +100,13 @@ def check(root: pathlib.Path) -> tuple[list[str], list[str]]:
     recs = records(root)
     landing = pick(root, recs)
     if landing is None:
-        return [f"no landing cohort ({SEEDS} seeds from seed 1, the pinned rows and a {SEEDS}-seed fresh block) was rolled on the engine being landed - run: {COMMAND}"], []
+        why = f"no landing cohort ({SEEDS} seeds from seed 1, the pinned rows and a {SEEDS}-seed fresh block) was rolled on the engine being landed - run: {COMMAND}"
+        # 405 T125: the gate regenerates a pool map the change moved, which moves the engine key under a cohort already rolled -
+        # T09's landing was refused so with 54/54 passed and nothing said of the map
+        maps = [ln[3:] for ln in git(root, "status", "--porcelain", "--untracked-files=all", "--", "pool").stdout.splitlines() if ln[3:].endswith(".json")]
+        if maps:
+            why += f"; the tree has uncommitted pool maps ({', '.join(maps)}) - the gate regenerated what the change moved: read each diff, commit it, then land again"
+        return [why], []
     refusals, notes = [], []
     for line in standing(root, landing, recs):
         (refusals if any(w in line for w in REFUSING) else notes).append(line)

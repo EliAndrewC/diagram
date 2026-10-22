@@ -357,6 +357,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T124 0081 says the track out never stops in open country (§63), while `_thread_the_fabric`'s unrouted clip keeps a connector's near part, cut at the first steading it fouls, which can leave the track out stopping short; its claim 'track round the steadings' cites only 0246 - test the clipped connector against 0081 §63 (take the dry exit instead), or record it (impl-drift outside the change, T09's round 5, 2026-10-22) [lands-open]
       research: rendering
+- [ ] T125 The cohort gate refused T09's landing for 'no landing cohort was rolled on the engine being landed' with 54/54 passed: the gate had regenerated Mizuguchi's map (the change moved it), so the engine key moved under the cohort's record - and the refusal did not say so. Name the uncommitted pool maps in the refusal with what to do (read each diff, commit, land again), with a test (2026-10-22) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

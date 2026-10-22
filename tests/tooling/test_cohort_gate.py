@@ -142,3 +142,14 @@ def test_a_failing_seed_with_no_baseline_is_refused_and_main_s_is_asked_for(tmp_
 def test_it_runs_as_a_script() -> None:
     out = subprocess.run([sys.executable, str(REPO / "scripts/gates/cohort_gate.py"), "fresh-seed"], capture_output=True, text=True, cwd=REPO, check=True)
     assert int(out.stdout) >= cg.FRESH_BASE
+
+
+def test_a_missing_cohort_names_the_pool_maps_the_gate_regenerated(tmp_path: pathlib.Path) -> None:
+    """405 T125: T09's landing was refused for "no landing cohort" with 54/54 passed - the gate had regenerated Mizuguchi's map,
+    moving the engine key - and the message did not say so."""
+    root, _base, _head = _repo(tmp_path)
+    assert "uncommitted pool maps" not in cg.check(root)[0][0]
+    m = root / "pool" / "hamlets" / "x" / "x.json"
+    m.parent.mkdir(parents=True)
+    m.write_text("{}")
+    assert "uncommitted pool maps (pool/hamlets/x/x.json)" in cg.check(root)[0][0]
