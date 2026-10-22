@@ -517,41 +517,7 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 - **D100** 0246 records the code's two DEVIATIONs with their reasons - the knot's join as close as 3 ft to another household's garden, and every garden (the way's own included) kept 7 ft off by the run-on and the homestead fabric - and the engine's claims cite them as recorded. Rendering: as each line is labeled on its page.
 
-## T70 - the record, written in a page session
-
-### T70 Approach (checklist part A)
-
-1. **The goal, in the world.** 0081's worn-path paragraph agrees with 'A turn the ground forces'; 0196's absence note says only what was read; the isotherm/isohyet glossary error is gone; 0081 records the joint mend (the meeting point moved back one bend) as its GUESS, which `joints._joint_moved_back` cites.
-2. **The constraints.** The research record's rules (a fact quoted, a guess labeled); the 20,000-byte question cap; page sessions write, then a fresh session checks and applies (`make page-session`).
-3. **Where each comes from.** R: 0081, 0196, the glossary.
-4. **Do they describe the world here?** Yes: each item was what an impl-drift or record check found silent or out of step.
-5. **The order.** Written in a page session, checked in the next, merged, then the engine's claims repointed where they rest on it.
-6. **The exits.** (a) change the code instead - not taken: the page was silent or ambiguous, the code deliberate; (b) record it on the page - taken.
-7. **The search smell.** None.
-8. **The budget.** Its share of five page sessions.
-9. **Done, measured.** page sessions 1-2 (p1 T70, p2 T70); session 3's checks clean.
-10. **Before moving a constant.** None moves.
-11. **Before fitting things into room.** n/a.
-
-### T70 Decisions
-
-- **D101** 0081's worn-path paragraph agrees with 'A turn the ground forces'; 0196's absence note says only what was read; the isotherm/isohyet glossary error is gone; 0081 records the joint mend (the meeting point moved back one bend) as its GUESS, which `joints._joint_moved_back` cites. Rendering: as each line is labeled on its page.
-
-
-### T70 part B (2026-10-22T14:17Z)
-
-Owed by the cohort record of 2026-10-22T03:45Z (seeds 10, 24, 36, 47 newly failing), rolled while T70 was in flight - T26's wood-shed change under test, never landed (set down, its knots carried to T107).
-
-1. **What is refusing?** Nothing of T70's: its work is record text (0081, 0196, the glossary) and one claim's label (`joints._joint_moved_back`); the four seeds failed on T26's uncommitted engine diff, measured then (dev/cohort-log/20261022T034510Z-*), and every landing since passed its cohort (T09, the record batch: 54/54).
-2. **A3 again.** Unchanged: 0081, 0196, the glossary (R).
-3. **A4 again.** Unchanged.
-4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** Neither: D101 as reviewed.
-6. **The one-sentence test.** "0081's paragraph agrees with its forced-turn bullet, 0196 says only what was read, isotherm is not isohyet, and the joint mend is the page's GUESS" - true on the pages (session 3's checks clean).
-7. **The next step is a measurement.** `make land` on T70.
-8. **Every route measured before offering one?** No route is offered.
-9. **After a ruling: the step it names?** No ruling owed.
-
+<!-- plan-archive: T70 to T70 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 ## T92 - the record, written in a page session
 
 ### T92 Approach (checklist part A)
