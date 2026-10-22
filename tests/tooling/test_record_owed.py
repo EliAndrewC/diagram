@@ -293,6 +293,16 @@ def test_a_quote_check_answered_stands_when_only_another_note_s_sentence_in_its_
     assert ru.claims_of("At p. 28 the wall was 3 ft. high. [^a] B rose. [^b]", "a") == ["At p. 28 the wall was 3 ft. high. [^a]"]
 
 
+def test_a_fix_declared_on_an_unfootnoted_unit_is_refused_not_a_crash(tmp_path: pathlib.Path) -> None:
+    """405 p9 (2026-10-22): `FIXED_BY` on `#unfootnoted` raised a KeyError - the unit has no quotation key. Its changed words
+    are the claim itself, so a fix there moved it: refused, and quote-check stays owed."""
+    d = _repo(tmp_path)
+    (d / Q / "0094-rooms.html").write_text(PAGE + "<p>Both sides traded furs.</p>\n", encoding="utf-8")
+    _git(d, "commit", "-qam", "unmarked")
+    assert ro.fixed_answer(d, "0094", "unfootnoted", "record-format: a clarity EDIT") == ([], ["quote-check:0094#unfootnoted"])
+    assert "quote-check:0094#unfootnoted" in [u.slug for u in ro.unanswered(d)]
+
+
 def test_the_command_replays_a_commit_pair(tmp_path: pathlib.Path) -> None:
     d = _repo(tmp_path)
     (d / Q / "0094-rooms.notes.html").write_text(NOTES.replace("quickly built", "built"), encoding="utf-8")
