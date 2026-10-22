@@ -293,9 +293,37 @@ def answered(store_dir: pathlib.Path, slug: str, fp: str, reading: str = "") -> 
     return fp == rec.get("fingerprint") or fp in rec.get("answered", []) or bool(reading and reading in rec.get("readings", []))
 
 
+def sibling_stores(root: pathlib.Path) -> list[pathlib.Path]:
+    """The other session clones' answer stores (405 T128): a page session works in a second clone, and its checks' answers stay in
+    that clone's git directory - after the merge, the landing clone's record gate owed the 48 units they had answered again."""
+    if root.parent.name != ".clones" or os.environ.get("RECORD_CHECKS_DIR"):
+        return []
+    return [d / ".git" / "record-checks" for d in sorted(root.parent.iterdir()) if d != root and (d / ".git" / "record-checks").is_dir()]
+
+
+def adopt(s: pathlib.Path, others: list[pathlib.Path], slug: str, fp: str, reading: str = "") -> bool:
+    """An answer at these exact words in another clone's store, copied into this one: the check read the same words wherever it ran."""
+    for o in others:
+        if answered(o, slug, fp, reading):
+            rec = _read(o, slug)
+            s.mkdir(parents=True, exist_ok=True)
+            mine = _read(s, slug)
+            mine.setdefault("answered", [])
+            for f in [rec.get("fingerprint"), *rec.get("answered", [])]:
+                if f and f not in mine["answered"]:
+                    mine["answered"].append(f)
+            mine["readings"] = sorted({*mine.get("readings", []), *rec.get("readings", [])})
+            mine.setdefault("fingerprint", rec.get("fingerprint"))
+            _file(s, slug).write_text(json.dumps(mine, ensure_ascii=False) + "\n", encoding="utf-8")
+            return True
+    return False
+
+
 def unanswered(root: pathlib.Path) -> list[ru.Unit]:
     s = store(root)
-    owed = [u for u in units(root) if not answered(s, u.slug, u.fingerprint, u.reading) and not legacy_depiction_answered(root, s, u.slug)
+    others = sibling_stores(root)
+    owed = [u for u in units(root) if not answered(s, u.slug, u.fingerprint, u.reading) and not adopt(s, others, u.slug, u.fingerprint, u.reading)
+            and not legacy_depiction_answered(root, s, u.slug)
             and not amendment1_depiction_answered(root, s, u.slug)]
     quote_owed = {u.subject for u in owed if u.check == "quote-check"}
     return [u for u in owed if not (u.check == "source-reader" and u.subject not in quote_owed and readers_own(root, s, u.slug))]

@@ -486,3 +486,19 @@ def test_a_note_grown_only_by_its_readers_own_passages_is_not_owed_again(tmp_pat
     assert not ro.readers_own(tmp_path, store, "source-reader:0263#k"), "a page it never read is read again"
     ro.write_answer(store, "source-reader:0263#k", "fp2", "1 READ")
     assert ro._read(store, "source-reader:0263#k")["passages"], "a later answer keeps what the earlier one read"
+
+
+def test_an_answer_made_in_another_clone_at_the_same_words_is_adopted(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """405 T128: page sessions answered 48 units in a second clone; after the merge the landing clone's gate owed them all again."""
+    monkeypatch.delenv("RECORD_CHECKS_DIR", raising=False)
+    clones = tmp_path / ".clones"
+    mine, pages = clones / "mine", clones / "pages"
+    for d in (mine, pages):
+        (d / ".git" / "record-checks").mkdir(parents=True)
+    ro.write_answer(pages / ".git" / "record-checks", "quote-check:0246", "fp1", "clean")
+    others = ro.sibling_stores(mine)
+    assert others == [pages / ".git" / "record-checks"]
+    s = mine / ".git" / "record-checks"
+    assert not ro.adopt(s, others, "quote-check:0246", "fp2"), "other words are not answered"
+    assert ro.adopt(s, others, "quote-check:0246", "fp1") and ro.answered(s, "quote-check:0246", "fp1"), "the same words are, and kept here"
+    assert ro.sibling_stores(tmp_path / "elsewhere") == [], "a tree not among the clones looks nowhere else"
