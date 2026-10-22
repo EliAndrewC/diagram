@@ -1182,6 +1182,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T121 - a defense belt's reeds walled by every hamlet way": {
+   "sha256": "41012cb0e491bd6554dce0cf8db30e5e8dd824f66ef1684633c5caa2ebf7b750",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T121 Approach (checklist part A)": {
+   "sha256": "7ff55316c8dbd41e2a8d6ee1c986004a386220c4e87aaf727af926bba320508e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T121 Decisions": {
+   "sha256": "890a15a12a410c48c32bfa4d725d671026bae5d4fde8f98f8b9cf35c5c808bb2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4493,6 +4511,47 @@
      "summary": "0035's drawing page states that a way crosses water only at a crossing place, written in page session 6, so the rule several claims cite is on the page.",
      "class": "within",
      "why": "Part of working the claims to completion (Amendment 7: follow the research); the source named is 0035 itself and the sentence states its rule rather than carving a case out of anything the GM asked. Historical accuracy of the sentence is the research ladder's, not this review's."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T121 - a defense belt's reeds walled by every hamlet way",
+    "### T121 Approach (checklist part A)",
+    "### T121 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T121 (filing)",
+     "summary": "A finding T09's round 2 raised on code T09 did not change (hamlet ways exempting the defense-belt marsh role) is worked as its own task of this feature.",
+     "class": "within",
+     "why": "FR-002 and the GM's 2026-10-19 rule that findings on code a task did not change are kept as new tasks; Amendment 9 asks for the feature taken to completion."
+    },
+    {
+     "id": "D111",
+     "summary": "Every hamlet way (track, corridors x2, law, bund, web/stage, web/skeleton, homesteads/boundary, homesteads/rows) walls every marsh role including the defense belt; claims that excluded it cite 0081 instead.",
+     "class": "within",
+     "why": "Brings code and claims into line with research 0081 (no causeway drawn, lanes keep to bunds and dry ground); the GM's Amendment 7 standing instruction is to follow the research. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D111 (legacy town)",
+     "summary": "The frozen legacy town's way-end walk-back keeps 0057's defensive-belt causeway exemption; marsh_ground's docstring says which is which.",
+     "class": "within",
+     "why": "Not a carve-out from anything requested: the finding and fix concern hamlet ways only, and the legacy town's exemption is research-backed (0057) and outside the finding's reach. Leaving code the finding does not concern unchanged narrows nothing."
+    },
+    {
+     "id": "Approach 6",
+     "summary": "Exit (a), recording the exclusion on 0081 as a DEVIATION, not taken; exit (b), walling the belt, taken.",
+     "class": "within",
+     "why": "Chooses conformance with the research over a recorded departure, which is what the GM's guidance (follow the research) points to."
+    },
+    {
+     "id": "Approach 9",
+     "summary": "Done when a span across a defense belt is refused by a test red without the fix, make quick clean, make cohort 16/16.",
+     "class": "within",
+     "why": "Verification that enforces the fix itself; also measures the step-4 premise that no live map moves."
     }
    ]
   }
