@@ -1122,6 +1122,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T119 - a tread 3 ft off every building's wall": {
+   "sha256": "b1a53bfff37f3831a88fbac76c81144c66dc355b1a54e0daaa340a693d91c51f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T119 Approach (checklist part A)": {
+   "sha256": "4bbf53eea1aaaa4204971d40cf2aa42008e1a63ebbf53d0d3eae90412539c748",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T119 Decisions": {
+   "sha256": "78635e789cda66abdc8c9442dbe24b7fe6d8800dd31ba6dd13767d0f3e418e27",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4326,6 +4344,53 @@
      "summary": "Next step is `make land` on T70; no route offered, no ruling owed.",
      "class": "within",
      "why": "Working and landing the feature's open tasks is what amendment 9 asks ('take another run at closing out this feature')."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T119 - a tread 3 ft off every building's wall",
+    "### T119 Approach (checklist part A)",
+    "### T119 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D96",
+     "summary": "fabric.house_hit counts a house corner or center within the tread's half-width plus TREAD_WALL_FT (3 ft, 0081) of a segment as a hit; the claims on house_hit, _hits_a_steading and the run-on cite 0081's 3 ft",
+     "class": "within",
+     "why": "Carries out the attested 0081 rule this task is for (a lane's tread 3 ft clear of a farmhouse wall). It enforces the research rather than relaxing it, and goes with the GM's standing instruction (Amendment 7) to follow the research without asking for a ruling."
+    },
+    {
+     "id": "D96-span_walkable",
+     "summary": "law.span_walkable passes 2 * TREAD_HALF_FT as a width, so its line keeps the 4.5 ft its claim states rather than the halved 2.25 ft",
+     "class": "within",
+     "why": "span_walkable calls house_hit, the function T119 changes, and how much clearance it passes is part of that same house test. This is not a finding on code the task leaves alone, so FR-002 does not require a separate task. The change makes the code match what its own claim already says and does not narrow anything."
+    },
+    {
+     "id": "D96-other-buildings",
+     "summary": "the same 3 ft applies off a shed, byre or retirement house wall, recorded on 0081 as a GUESS, and rendered as a GUESS",
+     "class": "within",
+     "why": "The task's own title is 'every building's wall'. It applies the attested figure to the steading's other buildings, and the 0081 page labels that as a guess. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T119-exit-a",
+     "summary": "exit (a), recording the 0 ft clearance as a DEVIATION of 0081, is not taken unless the cohort refuses the 3 ft after room has been tried first",
+     "class": "within",
+     "why": "The plan declines to carve out an exception: the research's 3 ft holds, and a deviation is considered only after room has failed. This keeps to the request rather than narrowing it."
+    },
+    {
+     "id": "T119-room-first",
+     "summary": "if the cohort fails on knots or refusals, add room first (the room table) and pack only after that; exit (c) is used only if (b) fails seeds",
+     "class": "within",
+     "why": "This is the route Amendment 8 asked for: widen spacing within the research's limits before attempting packing."
+    },
+    {
+     "id": "T119-no-constant-moves",
+     "summary": "no constant changes; TREAD_WALL_FT is read in places that did not read it before",
+     "class": "within",
+     "why": "The plan leaves the research figure alone and only uses it in more places."
     }
    ]
   }
