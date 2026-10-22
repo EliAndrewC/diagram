@@ -480,6 +480,54 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "round-arbiter"
+  },
+  "## T110 T122 - the record, written in page session 6": {
+   "sha256": "3b73720bd46e154fae647f8dda98747235117fa5bbe5da8c8de8c18c9d988c46",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T110 Approach (checklist part A)": {
+   "sha256": "d8885d869cc5f8265b6fb557897aff73a8f1320d582a375c7d9e7a1f36827abc",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T110 Decisions": {
+   "sha256": "129581db0bd5c2a97a891e0d4ebb08c3648360171f1cc26647dbd1ea19dbba6a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T122 Approach (checklist part A)": {
+   "sha256": "08eadb22eeb80f517fa7df1075757a33aac4112e8b9e1e8663cc920dd52d0905",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T122 Decisions": {
+   "sha256": "941e85ae41ec90d0915021553f2889e6b5930578b4ed84ddfa8795de13bb8f58",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T112 - the homesteads against the attested lot sizes": {
+   "sha256": "747d44830fd245b8560a3651322ae2bf646ec64644b6dea0318199e811f4f212",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T112 Approach (checklist part A)": {
+   "sha256": "b7ef241abad17ac749f33bcb2e9f21a46d04d95f41382f860d3571efc883b8fd",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T112 Decisions": {
+   "sha256": "5ee2a0fe882c1f07a1ace63bfdc751463950abed4003d197ae3c0bb45a2e5303",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3962,6 +4010,54 @@
      "id": "round:spec-fidelity|plan:405-engine-findings-from-385#T127@3",
      "class": "within",
      "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T110 T122 - the record, written in page session 6",
+    "## T112 - the homesteads against the attested lot sizes",
+    "### T110 Approach (checklist part A)",
+    "### T110 Decisions",
+    "### T112 Approach (checklist part A)",
+    "### T112 Decisions",
+    "### T122 Approach (checklist part A)",
+    "### T122 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D114",
+     "summary": "T110: 0084 records that a way crosses a farm ditch only where it cannot go round (ATTESTED ONLY for a by-way footbridge, King 1909; the track out's last resort a GUESS); 0035's brook crossing and 0084's deck reconciled; exit (b) record, no code change.",
+     "class": "within",
+     "why": "Records on the pages what the code already does, labeled by the research record's rules - FR-001's checklist exit (b). Nothing the request asked for is narrowed and no constant moves."
+    },
+    {
+     "id": "D115",
+     "summary": "T122: 0035 records a track crossing no water off a crossing place and the fallback's crossing count as a GUESS; 0246 records the 7 ft keep-off as a map drawing convention; exit (b) record.",
+     "class": "within",
+     "why": "Page records of code behavior the pages were silent on, labeled honestly - FR-001 exit (b)."
+    },
+    {
+     "id": "D115-defer",
+     "summary": "T122's done-measure omits the two 0081 sentences it gathered later (the T-foot, T121's 'defense belt walled'); they are written 'in the next page session'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Sequencing, not dropping: the GM asked for the whole feature to be closed (Amendment 9) and for found work to stay in it (FR-002), so the sentences remain owed inside 405. Legitimate ONLY on that reading: the block names no carrier, so if T122 is ticked the two sentences must sit on a task or the next page session's brief in tasks.md before it ticks - otherwise this becomes work silently dropped."
+    },
+    {
+     "id": "D116-homestead",
+     "summary": "T112: HOMESTEAD_GROUND_FT (104 ft) keeps its size, above the 0285 typical attested lot (1698 Hyakken register median 157 tsubo), labeled a map drawing convention with its cost; exit (a), bringing it toward the median, rejected as 'packing, which the GM's rule puts after room'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Keeps a figure above the attested record when the GM's standing words are that following the research is 'generally what we should do' (Amendment 7) and that more room is fine only 'as long as it's in line with our research' (Amendment 8, with 'farmhouses a mile apart ... not realistic' as the stated worry). The one ground offered is the room-before-packing rule, and it is applied at word level only: that rule's purpose (Amendment 8: 'don't try to solve the bin packing problem') is to give room within the research when things do not FIT, rather than squeeze them. Shrinking a ground toward its attested size is not squeezing to cure a fit failure - it adds free room - and the block's own reading of T107 ('smaller grounds pack') says smaller grounds fit. So the rule does not speak to this case, and nothing makes the literal reading impossible or purpose-defeating. Item 4's non-comparability argument is made for the SEATING ground only, not this one. What would make it legitimate: show the 104 ft ground (or its lot-equivalent part) lies within the range 0285 attests, so it is 'in line with our research' rather than above it; or show by measurement that conforming breaks a fit the room rule then governs; otherwise take exit (a)."
+    },
+    {
+     "id": "D116-seating",
+     "summary": "T112: SEATING_GROUND_FT (162 ft) keeps its size, labeled a map drawing convention on 0285.",
+     "class": "within",
+     "why": "Item 4 states the seating ground counts the household's wood floor, which a house lot need not hold, so the attested lot figure does not measure it and no research figure is departed from; labeling it a drawing convention on 0285 is the honest record (exit b). Adjudicated apart from the homestead ground because the argument covers this class and not that one."
     }
    ]
   }
