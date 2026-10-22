@@ -1830,3 +1830,30 @@ Owed by the cohort (cohort@20261021T192759Z: seeds 10, 24, 36 and 47 newly faili
 
 **D82 - the brook alone gapped.** `on_course(seg, plan.brook)` (both ends within 1 ft of the course) sorts the fill's lines into the brook's and the channels'; `gap_segments` opens only the brook's at its crossing places; the channels stay lines until T10's last fill, which drops them. The claims as Approach item 5 lists them; `FORD_HALF` stays 30 ft, now labeled UNRESEARCHED.
 
+<!-- plan-archive: archived 2026-10-22 -->
+### T10 Decisions (re-decided 2026-10-21T20:00Z)
+
+**D81 - a ditch crossed on a deck, last.** `connector_dry_exit` runs `dry_exit` a third time with the drawn channels left out of its lines (the brook's segments still gapped only at its crossing places, `gap_segments`) when the own-bank and crossing-place fills both return None; the track it finds crosses a channel, and the settle seats the deck there (`law` decks, `crossing_deck`) or refuses the map as for any undeckable crossing. Claimed on 0084.
+
+<!-- plan-archive: T67 to T67 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T67 to T67 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+## T91 - the 80 ft doorstep against 0246's reach (batch 9's round)
+
+### T91 Approach (checklist part A)
+
+1. **The goal, in the world.** A way that leaves a farmhouse's dooryard is not walled by that dooryard, and the house it leaves is the one its start reaches as 0246 counts reaching; a fan of ways at one door is cut back past the dooryard.
+2. **The constraints.** 0246's reach (an end reaches a farmhouse within 60 ft of the house or 12 ft of its steading's built ground, `law.reach_to_steading`); `law.DOORSTEP_FT` (80 ft from the house's center); seeds 1-48 and the pinned rows.
+3. **Where each comes from.** 0246's reach: O - the page's own GUESS, labeled so. `DOORSTEP_FT`: U - its claim says UNRESEARCHED, and impl-drift ruled it IN-STEP as that ("this is not 0246's reach test").
+4. **Do they describe the world here?** Three readers remain. `field_router`'s `own` asks which house a route STARTS at - a reach question, and its claim cites 0246 for an 80 ft the page does not give (the mislabel the round found). `settle_ends`' fan cut asks how far back an extra end at one door is cut - not a reach; the 80 ft is ours. `Lawful.fault`'s `houses` look-up is a search radius for `house_hit`, and its comment says `theirs` reads it, which stopped being true at T18 (`theirs` reads the lane's owner).
+5. **The order.** Nothing moves in the pipeline; the field way is routed where it was.
+6. **The exits.** (a) the route's own house by 0246's reach - taken; (b) record 80 ft on 0246 as a second reach - not taken: two figures for one question; (c) the fan cut by 0246's reach - not taken: the cut is a distance back from the door, not whether an end arrives, and the round found no fault in it; (d) more room - n/a, nothing fails to fit; (e) conform - the claim keeps citing 0246 for a figure it does not give.
+7. **The search smell.** None: one predicate swapped for the page's own.
+8. **The budget.** 30 min with its landing.
+9. **Done, measured.** `field_router`'s own house is the one `law.reach_to_steading` admits for the route's start (test); `DOORSTEP_FT`'s docstring names only its live readers; `Lawful.fault`'s comment says what the radius is for; seeds 1-48 and the pinned rows as main.
+10. **Before moving a constant.** No constant moves: `DOORSTEP_FT` keeps 80 ft for the fan cut and the search radius.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T91 Decisions
+
+**D84 - a route's own dooryard by 0246's reach.** `corridors.field_router`'s `route` takes as its own the nearest farmhouse whose reach (`law.reach_to_steading`, 60 ft of the house or 12 ft of its built ground, 0246's GUESS) holds the route's start, in place of the nearest house center within `law.DOORSTEP_FT`; its claim cites 0246's reach. `DOORSTEP_FT` stays 80 ft, UNRESEARCHED, for `settle_ends`' fan cut and `Lawful.fault`'s house look-up; its docstring drops the yards exemption it lost at T18, and the look-up's comment says it is a search radius for `house_hit`.
+
