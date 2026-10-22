@@ -591,6 +591,7 @@ communes	people's commune
 commutation	commutation
 commute	commutation
 commuted	commutation
+compactification	compactification
 compound shrine	compound shrine
 compound shrines	compound shrine
 concave bank	concave bank
