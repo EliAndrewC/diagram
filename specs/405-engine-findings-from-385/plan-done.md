@@ -1897,3 +1897,37 @@ Owed by the cohort (cohort@20261021T192759Z: seeds 10, 24, 36 and 47 newly faili
 ### T115 Decisions
 
 **D86 - the field way's margins as the page gives them.** `field_router`'s claim "field way off the steadings" is split: off another household's garden, 0246's 7 ft; off the other built ground (houses, byres, sheds, yards), the same 7 ft as a GUESS (no page sizes it); the route's own house where it starts at its door, only 0246's no house corner on the tread (`house_hit`). No code changes.
+<!-- plan-archive: archived 2026-10-22 -->
+## T116 - a way's own garden walled where the page lets it pass (T93's and T115's rounds)
+
+### T116 Approach (checklist part A)
+
+1. **The goal, in the world.** A way keeps 7 ft off a neighbor's garden fence; where the generator also keeps it off its own household's garden, its claims say that is our stricter choice, not the page's.
+2. **The constraints.** 0246 §45/§122: the 7 ft is kept from another household's garden, and a household's own way may run beside its own fence, kept only off the beds; the lanes' fouls take that permission (`owned_gardens`, 385 T03, a DEVIATION recorded beside it).
+3. **Where each comes from.** The 7 ft: O (the page's convention). The own-garden permission: O (the page's).
+4. **Do they describe the world here?** Two readers wall every garden at 7 ft, the way's own too: `RunOnBlocks.clear` (the run-on to the bund), which is read once per pass with no lane, so cannot tell whose garden is whose; and `_homestead_polys` (the router's and run-on's fabric), which frees only the dooryard. Neither is a passing the page forbids - a way kept farther off its own garden than the page requires - but both claims cite the page as if it asked it.
+5. **The order.** Nothing moves.
+6. **The exits.** (a) the claims say the own garden is walled too, labeled a DEVIATION of 0246 (the page speaks, so it cannot be a GUESS - T116's claims round), recorded on the page by T114's page session - taken; (b) give both readers the lane's owner - not taken here: the router and the run-on are asked before a lane has its record in several callers, a reach and cohort change for no map defect the page names; (c) record on 0246 - taken through T114, the same page and session as the knot exception; (d) more room - n/a; (e) conform - n/a.
+7. **The search smell.** None.
+8. **The budget.** 15 min with its landing.
+9. **Done, measured.** The two claims re-checked: IN-STEP, or DRIFTED only until 0246 records the departure (T114), landed with `CLAIMS_OK` naming T114 as T107's was; a docstring only.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a.
+
+### T116 Decisions
+
+**D87 - a way's own garden walled, claimed as ours.** `RunOnBlocks.clear`'s "off the steadings" and `_homestead_polys`' "a path leaves its own yard" say they keep 0246's 7 ft off every garden, the way's own included, labeled a DEVIATION of 0246 (the page lets a household's own way run beside its own fence, kept only off the beds) and recorded on the page by T114: the run-on's blocks are read without the lane they judge, and the fabric frees only the dooryard (a garden is an obstacle to its own farm's path, feature 328). No code changes.
+
+### T116 Approach (re-answered 2026-10-22T09:47Z)
+
+1. **The goal, in the world.** A way keeps 7 ft off a neighbor's garden fence; where the generator also keeps it off its own household's garden, its claims say that is our stricter choice, not the page's.
+2. **The constraints.** 0246 §45/§122: the 7 ft is kept from another household's garden, and a household's own way may run beside its own fence, kept only off the beds; the lanes' fouls take that permission (`owned_gardens`, 385 T03, a DEVIATION recorded beside it).
+3. **Where each comes from.** The 7 ft: O (the page's convention). The own-garden permission: O (the page's).
+4. **Do they describe the world here?** Two readers wall every garden at 7 ft, the way's own too: `RunOnBlocks.clear` (the run-on to the bund), which is read once per pass with no lane, so cannot tell whose garden is whose; and `_homestead_polys` (the router's and run-on's fabric), which frees only the dooryard. Neither is a passing the page forbids - a way kept farther off its own garden than the page requires - but both claims cite the page as if it asked it.
+5. **The order.** Nothing moves.
+6. **The exits.** (a) the claims say the own garden is walled too, labeled a DEVIATION of 0246 (the page speaks, so it cannot be a GUESS - T116's claims round), recorded on the page by T114's page session - taken; (b) give both readers the lane's owner - not taken here: the router and the run-on are asked before a lane has its record in several callers, a reach and cohort change for no map defect the page names; (c) record on 0246 - taken through T114, the same page and session as the knot exception; (d) more room - n/a; (e) conform - n/a.
+7. **The search smell.** None.
+8. **The budget.** 15 min with its landing.
+9. **Done, measured.** The two claims re-checked: IN-STEP, or DRIFTED only until 0246 records the departure (T114), landed with `CLAIMS_OK` naming T114 as T107's was; a docstring only.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a.
