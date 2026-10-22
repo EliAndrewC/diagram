@@ -276,3 +276,14 @@ def test_a_tread_keeps_three_feet_off_a_house_wall() -> None:
     assert not house_hit([(0.0, 0.0), (100.0, 0.0)], 3.0, houses), "4.6 ft is clear of it"
     M = {"houses": [{"x": 50.0, "y": 3.0 + 10.0, "w": 40.0, "h": 20.0, "rot": 0.0}]}  # a wall 3 ft off the span's line
     assert not law.span_walkable(M, (0.0, 0.0), (100.0, 0.0)), "the span's line keeps 4.5 ft off the wall, not 2.25"
+
+
+def test_a_tread_across_or_along_a_long_wall_is_a_hit() -> None:
+    """405 T119, round 2: `house_hit` measured only a house's corners and center, so a tread across a long house's middle, or
+    along a wall between its corners, passed."""
+    from l7r.diagram.hamletgen.ways.fabric import house_hit
+
+    houses = [{"x": 50.0, "y": 0.0, "w": 60.0, "h": 20.0, "rot": 0.0}]  # walls x 20..80, y -10..10
+    assert house_hit([(35.0, -40.0), (35.0, 40.0)], 3.0, houses), "across the house, 15 ft from every corner and the center"
+    assert house_hit([(20.0, 14.0), (80.0, 14.0)], 3.0, houses), "along the long wall, 4 ft off it, 4.5 ft from no corner's diagonal"
+    assert not house_hit([(20.0, 15.0), (80.0, 15.0)], 3.0, houses), "5 ft off the wall is clear of 1.5 + 3"

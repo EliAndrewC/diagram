@@ -482,7 +482,9 @@ def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) 
     rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
     if any(segments_cross(p, q, r[k], r[(k + 1) % len(r)]) for r in rings for k in range(len(r))):
         return False
-    if house_hit([p, q], 2 * TREAD_HALF_FT, M.get("houses") or []):  # a footpath's tread; `house_hit` keeps it 3 ft off the wall (405 T119: the sum was passed as a WIDTH, halved to 2.25 ft)
+    if house_hit(
+        [p, q], 2 * TREAD_HALF_FT, M.get("houses") or []
+    ):  # a footpath's tread; `house_hit` keeps it 3 ft off every wall (405 T119: the sum was passed as a WIDTH, halved to 2.25 ft, and only corners were measured)
         return False
     yards = [[(float(a), float(b)) for a, b in rec["poly"]] for key in ("threshing_yards", "gardens") for rec in M.get(key) or [] if rec.get("poly")]
     if _crosses_fabric([p, q], yards, WEB_FABRIC_GAP):

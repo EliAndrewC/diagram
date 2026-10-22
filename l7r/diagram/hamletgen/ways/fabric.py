@@ -335,16 +335,21 @@ def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> b
     manifest's houses, the web pass of the settlement's - one predicate, read by both.
 
     Research:
-        no house on a tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no corner (nor the center) within half
-            the tread's width - no corner of a house on the tread
+        no house on a tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane - no
+            part of a house (its walls or what they enclose) on the tread
         a tread 3 ft off the wall - research/questions/0081-village-lanes.drawing.html: a lane's tread kept 3 ft clear of a farmhouse wall
-            (`TREAD_WALL_FT`), the 3 ft winning over the 6 ft a straightened lane may come up to the buildings (405 T119)"""
+            (`TREAD_WALL_FT`), measured from the tread's middle to every wall (half the tread plus 3 ft), the 3 ft winning over the 6 ft a
+            straightened lane may come up to the buildings (405 T119)"""
     half = width / 2.0 + TREAD_WALL_FT
     for h in houses:
         quad = rot_rect(float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"]), float(h.get("rot", 0.0)))
-        probes = [*quad, (float(h["x"]), float(h["y"]))]
+        walls = list(zip(quad, quad[1:] + quad[:1], strict=True))
         for i in range(len(pts) - 1):
-            if any(seg_dist(px, py, pts[i], pts[i + 1]) < half for px, py in probes):
+            a, b = pts[i], pts[i + 1]
+            # 405 T119: measured to the WALLS, not to sample points - a tread crossing a long wall's middle, or along it, is a hit
+            if point_in_poly(a[0], a[1], quad) or any(
+                segments_cross(a, b, u, v) or min(seg_dist(u[0], u[1], a, b), seg_dist(v[0], v[1], a, b), seg_dist(a[0], a[1], u, v), seg_dist(b[0], b[1], u, v)) < half for u, v in walls
+            ):
                 return True
     return False
 

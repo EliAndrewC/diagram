@@ -465,6 +465,20 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 10. **Before moving a constant.** No constant moves: `TREAD_WALL_FT` (3 ft, 0081) is read where it was not.
 11. **Before fitting things into room.** If the cohort fails on knots or refusals, room before packing (the room table).
 
+### T119 Approach (re-answered 2026-10-22T14:35Z)
+
+1. **The goal, in the world.** Unchanged: no tread within 3 ft of a house wall, and no tread across a house.
+2. **The constraints.** As before; 0246 (nothing built on a lane).
+3. **Where each comes from.** The claims rounds (impl-drift, 2026-10-22): `house_hit` sampled corners and the center, never the walls. R: 0081, 0246.
+4. **Do they describe the world here?** Yes: a 30 x 20 ft house crossed at its middle passed the sampled test.
+5. **The order.** As before, the distance taken to each wall segment.
+6. **The exits.** (a) say "3 ft off each corner" - not taken: the page names the wall; (b) measure to the walls - taken.
+7. **The search smell.** None.
+8. **The budget.** 20 min more.
+9. **Done, measured.** A tread across a long house and one 4 ft along its wall are hits, 5 ft is clear (a test, red without the fix); `make test-file FILE=tests/hamletgen/ways/` 598 passed; `make cohort` 16/16 (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
 ### T119 Decisions
 
-- **D96** `fabric.house_hit` judges a house corner or center within the tread's half-width plus `TREAD_WALL_FT` (3 ft, 0081) of a segment as a hit; `law.span_walkable` passes `2 * TREAD_HALF_FT` (a footpath's tread), so its line keeps the 4.5 ft its claim states (it passed 4.5 as a width and the test halved it). The claims on `house_hit`, `_hits_a_steading` and the run-on's "off a house" cite 0081's 3 ft. Rendering: historically accurate (0081), the other buildings a GUESS.
+- **D96** (amended after the claims rounds, 2026-10-22) `fabric.house_hit` measures a tread to a house's WALLS - a hit where a segment crosses a wall, starts inside the house, or passes within the tread's half-width plus `TREAD_WALL_FT` (3 ft, 0081) of a wall - not to its four corners and center, which let a tread cross a long house's middle or run along a wall between its corners; `law.span_walkable` passes `2 * TREAD_HALF_FT` (a footpath's tread), so its line keeps the 4.5 ft its claim states (it passed 4.5 as a width and the test halved it). The claims say so. Rendering: historically accurate (0081), the other buildings a GUESS.
