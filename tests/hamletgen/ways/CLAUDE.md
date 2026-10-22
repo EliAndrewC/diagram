@@ -25,7 +25,8 @@ the ones for its own subject. It runs in the quick tier (the top-level tree deci
 | `test_matrix_287.py` | every lane the web lays, re-lays or carries on is admitted by the overlap matrix before it is written |
 | `test_route.py` | the router: `_route` going round hard ground, `_unjog`, and the pad multiplier that lets a link take the long way |
 | `test_serve.py` | `_lay_web_lane` - one web lane joins the network or is refused - and the web's late passes (`tidy_lane_ends`, `cut_the_overruns`) |
-| `test_settle.py` | `settle_the_web` (`ways/settle/`): each rule of the lane law provoked on constructed lanes and repaired |
+| `test_settle.py` | `settle_the_web` (`ways/settle/`): each rule of the lane law provoked on constructed lanes and repaired - steps 1-3, the shapes, ends and joins |
+| `test_settle_reach.py` | the reach the web owes (step 4: a stranded house, a way target, the field way) and `Lawful`, the law asked of a new lane, with the fabric's gaps (split from `test_settle.py` at the 1,000-line bar, 405 T107) |
 | `test_smooth.py` | the smoothing pass (`ways/smooth.py`): the collapse guard for a lane whose every vertex falls inside a knot |
 | `test_street.py` | a row village's streets (`ways/street.py`) and the road its street runs out on |
 | `test_sweeps.py` | the passes that REMOVE or REPAIR - doubled remnants, steading fouls, end nubs, collinear breaks, orphaned pieces |
@@ -34,4 +35,5 @@ the ones for its own subject. It runs in the quick tier (the top-level tree deci
 | `test_tree.py` | the access tree as lanes (`ways/tree.py`): `admits`, `settle_tree`, `tree_faults`, `settle_defer`, pruning |
 | `test_web.py` | STAGE `stage_web` and the skeleton it starts from - the settlement form roll and the dispersed short-circuit |
 | `test_weld.py` | the corner weld (`ways/weld.py`) |
+| `_settle_builders.py` | the constructed settlement the settle's suites share - `_S`, `_c`, `_pts`, `BROOK`, `CONN`, `_GEN` |
 | `_builders.py` | the shared fixtures - `_lanes`, `_StubSettlement`, `_walled_settlement`, `_webbed`, `AdmitsAll`. The wider hamlet builders (`SQUARE`, `a_plan`) still come from `tests/hamletgen/_builders.py` one level up |

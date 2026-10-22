@@ -7,7 +7,7 @@ import math
 from l7r.diagram.hamletgen.ways import knots as kn
 from l7r.diagram.hamletgen.ways.smooth import _KNOT_FT
 
-from .test_settle import _S, CONN
+from ._settle_builders import _S, CONN
 
 
 def _ln(*pts, **kw):

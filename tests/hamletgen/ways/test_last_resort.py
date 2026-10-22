@@ -8,7 +8,8 @@ from l7r.diagram.hamletgen.ways import corridors as co
 from l7r.diagram.hamletgen.ways import last_resort as lr
 from l7r.diagram.hamletgen.ways import law, settle
 
-from .test_settle import _GEN, _S, BROOK, CONN, _c, _over_and_back_on_the_tree
+from ._settle_builders import _GEN, _S, BROOK, CONN, _c
+from .test_settle import _over_and_back_on_the_tree
 
 DOUBLED_BACK = [(0.0, 2.0), (0.0, 200.0), (5.0, 150.0)]
 """An ordinary lane that runs on 200 ft and doubles back - a hook no round is given the chance to mend at `rounds=0`."""
