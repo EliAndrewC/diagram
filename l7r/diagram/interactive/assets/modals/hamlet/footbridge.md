@@ -41,4 +41,4 @@ Name: footbridge
 Covers: `bridges[foot]` - every plank and deck over water
 Sources: plank-bridges-over-farm-ditches-itabashi, aze-jawiki, xinhua-jiahou-muqiao, zhwiki-dumuqiao, kotobank-ipponbashi, kotobank-marukibashi, dobashi-jawiki, itabashi-kotobank, guo-shan-nongjia-gushiwen
 Entry: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html
-Drawing: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
+Drawing: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html, research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html

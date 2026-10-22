@@ -23,9 +23,9 @@ Depiction: The map draws the brook coming down off the high ground, passing the 
 running on down that flank, to leave the map or to take in the fields' drain; the irrigation ditch leaves it at the
 intake, leaning downstream. Every watercourse runs one way, downhill, though the map marks no heights. The brook's
 width shows its rank among the waters - brook, canal, ditch - rather than the water it carries, so where it meets the
-head race the two widths are not matched. Where a way crosses the brook it crosses squarely, on a plank bridge; that
-is a convention, since a brook was crossed on a single log or board, on logs with earth trodden over them, or on a
-planked deck. Scrub and grass are drawn right to the brook's edge, with no bare strip along it, as a natural stream's
+head race the two widths are not matched. Where a way crosses the brook it crosses squarely, on a timber deck as wide
+as the way.
+Scrub and grass are drawn right to the brook's edge, with no bare strip along it, as a natural stream's
 banks were grown to the water.
 
 Name: stream
