@@ -31,11 +31,12 @@ from pathlib import Path
 from typing import Any
 
 HERE = Path(__file__).resolve().parent
-for _d in ("../hooks/lib", "../measure"):
+for _d in ("../hooks/lib", "../measure", "../gates"):
     sys.path.insert(0, str((HERE / _d).resolve()))
 import event_log as el  # noqa: E402
 import hm_arbiter as ha  # noqa: E402
 import hm_checks as hc  # noqa: E402
+import room_table  # noqa: E402
 
 DEFAULT_OUT = Path("/tmp/l7r-check")
 #: where a background agent's transcript lives, by its id - the reply when the hook kept none
@@ -603,6 +604,8 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
             "process is wrong - name the fix as `tooling_fix`. Say in `what` exactly what the session does next.\n"
         )
         parts += evidence_section(out, evidence)
+        if room_table.names_fit(str(owed.get("detail", ""))):  # ...a fit failure: what more room each knob may buy (405 T113)
+            parts.append(room_table.render())
         parts += claims_section(root, [str(owed.get("detail", "")), *(Path(f).read_text(encoding="utf-8") for f in evidence if Path(f).is_file())])
         if _PLAN_REVIEW.search(str(owed.get("detail", ""))) and d is not None:
             plan_parts, plan = plan_rounds(d)

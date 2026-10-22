@@ -255,3 +255,18 @@ def test_a_spec_round_trigger_s_bundle_carries_each_round_s_reply_with_its_findi
     assert "### Round 3: spec-fidelity (no reply (stopped))" in text and "Round 4" not in text, "another feature's review is not this one's"
     assert (out / "round-1-spec-fidelity.md").read_text().startswith("**Verdict: CHANGES REQUIRED**")
     assert ab.spec_rounds(out, "11-none", tmp_path / "transcripts") == ["- (no spec review dispatch found in the subagent transcripts - read the Review history)\n"]
+
+
+def test_an_ask_naming_a_fit_failure_carries_the_room_table(tmp_path: pathlib.Path) -> None:
+    """405 T113 (the round arbiter's tooling_fix on ask:set-down-T26): the arbiter ruled on "room fails" without the table that
+    says which knobs grow the seating band; an ask naming a knot, a refusal or room now carries it, and one that does not, not."""
+    import subprocess
+
+    root = _clone(tmp_path, "385-x")
+    (root / "specs" / "385-x").mkdir(parents=True)
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    ha.trip(root, "ask:t26-seeds", "ask", "", "T26 resisted: seeds 10 and 36 newly fail on lane_knots; set it down?")
+    text = ab.bundle(root, "ask:t26-seeds", tmp_path / "out").read_text()
+    assert "## The room table (405 T113)" in text and "| `SEATING_GROUND_FT`" in text
+    ha.trip(root, "ask:t27-wording", "ask", "", "May the modal's About tab keep its second paragraph?")
+    assert "room table" not in ab.bundle(root, "ask:t27-wording", tmp_path / "out2").read_text()
