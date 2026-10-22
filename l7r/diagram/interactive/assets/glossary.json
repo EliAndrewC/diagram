@@ -17381,5 +17381,94 @@
    "Nine Ministers",
    "jiuqing"
   ]
+ },
+ "tribute grain": {
+  "def": "Grain the Qing state collected as tax from the southern provinces and shipped north to feed the capital and its garrisons, by the Grand Canal and at times by sea.",
+  "variants": [
+   "tribute grain"
+  ]
+ },
+ "ton-mile": {
+  "def": "A unit of freight work: one ton of goods carried one mile, so that a cost per ton-mile compares carriage of any load over any distance.",
+  "variants": [
+   "ton-mile",
+   "ton-miles"
+  ]
+ },
+ "DQHD": {
+  "def": "Da Qing huidian, the collected statutes of the Qing dynasty, as Ruoran Cheng's working paper abbreviates it; its rates for carrying grain date from 1738-1744.",
+  "variants": [
+   "DQHD"
+  ]
+ },
+ "Xiongnu": {
+  "def": "The steppe peoples north of the Qin and Han empires; to attack them the Qin hauled grain to its armies in the north at many times its worth.",
+  "variants": [
+   "Xiongnu"
+  ]
+ },
+ "rupee": {
+  "def": "A silver coin of British India, divided into 16 annas; at Ta-chien-lu in 1889 Rockhill reckoned it at 0.32 tael.",
+  "variants": [
+   "rupee",
+   "rupees"
+  ]
+ },
+ "anna": {
+  "def": "A coin of British India worth a sixteenth of a rupee, divided into 12 pies.",
+  "variants": [
+   "anna",
+   "annas"
+  ]
+ },
+ "censor": {
+  "def": "An official of the Censorate, the Chinese court's office of inspection, who reported on other officials and could propose policy; Ming censors were also sent out to inspect such matters as the tea trade with the frontier.",
+  "variants": [
+   "censor",
+   "censors"
+  ]
+ },
+ "tencha": {
+  "def": "Tea leaf that is steamed and dried without rolling, the leaf from which powdered tea is ground; the Uji tea masters filled the shogun's jars with the finest of it.",
+  "variants": [
+   "tencha"
+  ]
+ },
+ "Koshu-kaido": {
+  "def": "The highway from Edo west through Kai province, one of the shogunate's five main roads; the shogun's tea jars sometimes came back toward Edo by it.",
+  "variants": [
+   "Koshu-kaido",
+   "Koshu road"
+  ]
+ },
+ "picul": {
+  "def": "A Chinese weight of 100 catties, about 60 kg (133 lb), by which tea and other bulk goods were priced.",
+  "variants": [
+   "picul",
+   "piculs",
+   "pecul",
+   "peculs"
+  ]
+ },
+ "Congou": {
+  "def": "A black tea of the Wuyi hills of Fujian, in China, sold at Canton to the East India Company; Kong-fu is its Chinese name, which the Chinese gave to finer teas than the English did.",
+  "variants": [
+   "Congou",
+   "Kong-fu"
+  ]
+ },
+ "Bohea": {
+  "def": "The English name for the Wuyi hills of Fujian, in China, and for the black teas grown there.",
+  "variants": [
+   "Bohea",
+   "Bohea country"
+  ]
+ },
+ "Hong merchant": {
+  "def": "One of the Chinese merchants at Canton licensed to trade with foreigners; the East India Company bought its tea through them.",
+  "variants": [
+   "Hong merchant",
+   "Hong merchants"
+  ]
  }
 }
