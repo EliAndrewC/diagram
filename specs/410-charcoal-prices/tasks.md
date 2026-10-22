@@ -10,11 +10,11 @@ The question task is `research: physical` with its five boxes; the rest are `res
 
 - [ ] T01 s1+s2: 0279 What did charcoal cost? (D1; FR-002, FR-005)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
       verify: handoff written; make record-owed 0 unanswered after s2
 - [ ] T02 Implementation check (D2; FR-003)
       research: rendering
