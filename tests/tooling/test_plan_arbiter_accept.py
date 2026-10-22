@@ -77,3 +77,30 @@ def test_recording_the_arbiter_s_accept_makes_it_the_plan_s_verdict(tmp_path: pa
     monkeypatch.chdir(root)
     assert ha.main(["ruled", TRIG, str(ruling), "--as", "round-arbiter"]) == 0
     assert pg.owed(d) is None, "the accept recorded the plan CLEAR in the same command"
+
+
+def test_an_asked_plan_review_s_accept_makes_it_the_plan_s_verdict(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 409: 408's `ask:408-plan-round3` accept named no review; `make land` and the pushes needed PLAN_REVIEW_OK."""
+    ha = _load("hm_arbiter")
+    root = tmp_path
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    d = _feature(root, [])
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": "specs/385-x"}))
+    monkeypatch.chdir(root)
+    ruling = root / "ruling.json"
+    ruling.write_text(json.dumps({"ruling": "continue", "why": "one more round is owed", "what": "run it"}))
+    assert ha.main(["ask", "385-plan-round3", "may the plan stand without a third round?", "plan"]) == 0
+    assert ha.main(["ruled", "ask:385-plan-round3", str(ruling), "--as", "round-arbiter"]) == 0
+    assert pg.owed(d) is not None, "a continue records nothing CLEAR"
+    ruling.write_text(json.dumps({"ruling": "accept", "why": "converged, wording only", "what": "the plan stands"}))
+    assert ha.main(["ask", "385-plan-round4", "may the plan stand now it is fixed?", "plan"]) == 0
+    assert ha.main(["ruled", "ask:385-plan-round4", str(ruling), "--as", "round-arbiter"]) == 0
+    assert pg.owed(d) is None, "the asked plan review's accept is the plan's verdict"
+    assert ha.main(["ask", "385-route", "which route should the landing take?"]) == 0
+    assert ha.main(["ruled", "ask:385-route", str(ruling), "--as", "round-arbiter"]) == 0
+    try:
+        pg.arbiter_accept(d, "ask:385-route")
+        raise AssertionError("an ask about no review is no plan verdict")
+    except ValueError:
+        pass

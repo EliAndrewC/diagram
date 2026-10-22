@@ -1,0 +1,184 @@
+{
+ "feature": "410-charcoal-prices",
+ "blocks": {
+  "preamble": {
+   "sha256": "0729c5c9c7df5a374f48f7820a517647f804150025f6a2f1fe53e373d81e3101",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "9735a0c2d45bf4cafdfbb700a8c88621ddf8582f0330a333060850e221f9c756",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "38ab889a41a01db19c6bac1acf707160062e481b9130a31596ab4eef1a3f78e8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "af234ff75909927c87c1c6e621ff48b312f58df74bed7075dff7989537c08417",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the question (FR-001, FR-002, FR-005)": {
+   "sha256": "d4cdd30f2d2492c00a9eb85e8ad35253bbe81f4f7a9cd4c692e682801817375a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the implementation check (FR-003)": {
+   "sha256": "fa0c78a2371cfc4bfb968690816c797af4f8af1bb14110f74c7a17931d52ef33",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the reply (FR-001, FR-004, FR-005)": {
+   "sha256": "64e2f06d9e17a14c1ca1a68440db01a8d1184eb2f1cfc72e958e6a2f15b0a531",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "57f850e7d2f0b1cafec2abacf3a88ee85e97a897ef7471c084ebfce44b2c6227",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the question (FR-001, FR-002, FR-005)",
+    "## D2 - the implementation check (FR-003)",
+    "## D3 - the reply (FR-001, FR-004, FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary-one-question",
+     "summary": "One new money question, 0279 'What did charcoal cost?', from the two search passes; no code, map or canon change.",
+     "class": "within",
+     "why": "FR-002 asks for a new money question (or questions); the issue asks a research question and requests no code, map or canon change - the canon is given only as something to set the figures beside."
+    },
+    {
+     "id": "TC-sources-and-tooling",
+     "summary": "Write via make page-session with an s1 write and s2 check brief; Oishi 1966 read on rendered page images; Bochum Zhili .xls cells read with xlrd and dumped for the checks.",
+     "class": "within",
+     "why": "Method of reading sources under the record rules FR-002 names; it narrows nothing the issue asks for (Japan sources and a Qing price report are both what the issue names)."
+    },
+    {
+     "id": "TC-wages",
+     "summary": "Each figure beside the craftsman's and laborer's day wage of the same place and period where a source gives them; otherwise SILENT with the nearest wage named (0250, 0255, 0257, 0275), its class, place, unit and gap.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The issue asks 'each price beside the same place and period's day wages'. Where no source gives that wage, meeting the clause literally is impossible, not merely awkward; the plan neither drops the pairing nor passes a nearest wage off as the same place and period - it names the nearest with its class, place, unit and gap, which keeps the request's purpose (reading a price in labor-days) and states the shortfall, as the issue's 'what is still open' requires. This ruling covers only the wage beside a figure: it does not license SILENT for any figure the issue asks for, which FR-005 keeps OPEN with the nearest named when the record holds only a nearest."
+    },
+    {
+     "id": "D1-scope-and-order",
+     "summary": "0279 holds Japan first (black by the bale retail, bale weight naming 0197, white and the Kumano/Hachioji contrast, wholesale and carriage OPEN or SILENT, kiln output), then the Qing comparison (Beijing 1615/1736, Zhili 1769, Wu bian).",
+     "class": "within",
+     "why": "Region order Japan first, Ming/Qing as comparison, is the issue's own. Recording wholesale and carriage as OPEN or SILENT keeps both clauses in the question and the reply with a verdict and what is open, which the issue itself anticipates ('the verdict, and what is still open'); it does not remove them. The list is read as the question's order, not an exclusion: retail by small measure, burner-days and wood-to-charcoal yield are still owed a verdict line per figure under D3 and FR-001."
+    },
+    {
+     "id": "D1-nearest-is-open",
+     "summary": "A figure the record holds only a nearest for is OPEN, the nearest named and the search in the absence note.",
+     "class": "within",
+     "why": "Restates FR-005."
+    },
+    {
+     "id": "D1-split-at-cap",
+     "summary": "Under the 20,000-byte cap; a question that would pass it splits.",
+     "class": "within",
+     "why": "FR-002 already allows 'a new money question (or questions)'; a split changes the file layout, not what is answered."
+    },
+    {
+     "id": "D2-impl-check",
+     "summary": "implementation-check.md holds 0279's line.",
+     "class": "within",
+     "why": "FR-003."
+    },
+    {
+     "id": "D3-reply",
+     "summary": "A comment on #11 giving per figure the issue asks for the fragment FILE, verdict and what is still open; a combined price named with what it covers.",
+     "class": "within",
+     "why": "The issue's 'What the skill needs back', FR-001 and FR-004; naming what a combined price covers keeps a bundled figure from passing as one the issue asked for separately."
+    },
+    {
+     "id": "T-order-and-housekeeping",
+     "summary": "Order: page sessions, implementation check, reply, report and land; Performance bookends N/A (no generator change); Constitution check notes XII research: physical task, XIII record checks green, XVI built as the FRs.",
+     "class": "within",
+     "why": "Sequencing and process statements that decide nothing the spec left open about what is answered."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## D1 - the question (FR-001, FR-002, FR-005)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1a",
+     "summary": "The answer is money question 0279, tagged as the money section's price questions are",
+     "class": "within",
+     "why": "FR-002: new figures go in a new money question tagged as the money section's are."
+    },
+    {
+     "id": "D1b",
+     "summary": "Order: Japan first, then the Ming/Qing comparison (Beijing 1615/1736, Zhili 1769, Wu bian)",
+     "class": "within",
+     "why": "Request: 'Region order: Japan first', 'A Ming/Qing charcoal price (Beijing's official lists, Qing price reports) as comparison'. 1615 and the Wu bian are Ming sources under a 'Qing' label; the request asks for Ming/Qing, so the label is loose, not a cut."
+    },
+    {
+     "id": "D1c",
+     "summary": "The 1842 ordered price is given by grade, with retail/wholesale and black/white left open unless the page says so",
+     "class": "within",
+     "why": "FR-005 applied: a distinction the source does not state is not inferred and goes under what is still open. The ordered list by grade is also the same-place, same-period carrier of the white-to-black ratio the request asks for, alongside the Kumano/Hachioji contrast."
+    },
+    {
+     "id": "D1d",
+     "summary": "Bale weight: name 0197 and 0199's Iburi weights as nearest; the record holds no Edo-period weight",
+     "class": "within",
+     "why": "Request asks 'how many kan to a bale'. Naming a nearest under what is still open, with the figure SILENT and the search in the absence note, is FR-005 as written."
+    },
+    {
+     "id": "D1e",
+     "summary": "The figure list: bale price, bale weight, retail by small measure, white and the Kumano/Hachioji contrast, wholesale, carriage, kiln output, burner-days and yield",
+     "class": "within",
+     "why": "Walks the issue's question and 'Figure needed' clause by clause. Against the earlier CLEAR text this adds retail by small measure, burner-days and yield, and drops the pre-judged 'wholesale and carriage OPEN or SILENT', so it moves toward the request. The issue's 'each price beside the same place and period's day wages' is not listed. That was weighed: the issue's own deliverable is 'Per figure: the fragment FILE, the verdict, and what is still open', and its 'Figure needed' line names no wage, so the wage pairing frames the skill's own question and is not a figure this feature owes. No FR carries it either. This is noted, not a narrowing."
+    },
+    {
+     "id": "D1f",
+     "summary": "Each verdict is one of the four of money-requests.md; a nearest-only figure is SILENT, the nearest under what is still open and the search in the absence note",
+     "class": "within",
+     "why": "FR-005 verbatim. The earlier CLEAR text said OPEN; the change brings it to FR-005's own word."
+    },
+    {
+     "id": "D1g",
+     "summary": "Under the 20,000-byte cap; a question that would exceed it splits",
+     "class": "within",
+     "why": "Mechanism. FR-002 allows 'a new money question (or questions)'."
+    }
+   ]
+  }
+ ]
+}

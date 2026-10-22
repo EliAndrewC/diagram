@@ -771,3 +771,41 @@ def test_the_gate_asks_whether_a_red_gate_is_owed(tmp_path: pathlib.Path, monkey
     assert 'make arbiter-bundle TRIGGER="red-gate@2026-10-21T05:02:38Z"' in capsys.readouterr().err
     done = pathlib.Path(__file__).resolve().parents[2].joinpath("Makefile").read_text(encoding="utf-8").split("\ndone:", 1)[1]
     assert "hm_arbiter.py\"; [ ! -f \"$$h\" ] || python3 \"$$h\" gate-held" in done.splitlines()[1], "the gate's first step"
+
+
+def test_an_asked_spec_review_s_accept_stands_as_the_spec_s_verdict(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 409: 408's `ask:408-spec-round3` accept named no review, and `review-gate.sh` ran a third spec round anyway."""
+    root = _clone(tmp_path)
+    d = root / "specs" / "375-x"
+    d.mkdir(parents=True)
+    (d / "spec.md").write_text("# Feature 375\n\n## Requirements\n\n- FR-001: x.\n")
+    monkeypatch.chdir(root)
+    assert ha.main(["ask", "375-spec-round3", "may the spec stand without a third round?", "both"]) == 2, "spec or plan only"
+    assert ha.main(["ask", "375-spec-round3", "may the spec stand without a third round?", "spec"]) == 0
+    said = capsys.readouterr().out
+    assert "an accept stands as the spec review's verdict" in said
+    assert ha.owed(root)["ask:375-spec-round3"]["review"] == "spec"
+    assert "an accept stands as the spec review's verdict" in ha.owed(root)["ask:375-spec-round3"]["detail"], "the arbiter's bundle shows it"
+    ruling = root / "r.json"
+    ruling.write_text(json.dumps({"ruling": "accept", "why": "converged, one wording fix", "what": "the spec stands"}))
+    assert ha.main(["ruled", "ask:375-spec-round3", str(ruling), "--as", "round-arbiter"]) == 0
+    assert ha.spec_ruled(d) == "ask:375-spec-round3", "the ruling is the spec's verdict"
+    (d / "spec.md").write_text((d / "spec.md").read_text() + "- FR-002: y.\n")
+    assert ha.spec_ruled(d) == "", "a spec edited after the ruling is not covered by it"
+
+
+def test_an_ask_with_no_review_is_recorded_as_before_and_a_review_like_subject_only_hints(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 409 FR-001: no REVIEW=, no review, whatever the SUBJECT says - a hint, recording nothing more."""
+    root = _clone(tmp_path)
+    monkeypatch.chdir(root)
+    assert ha.main(["ask", "375-plan-round3", "may the plan stand without a third round?", ""]) == 0
+    assert "hint - if this asks about a spec or plan review" in capsys.readouterr().out
+    assert "review" not in ha.owed(root)["ask:375-plan-round3"]
+    assert ha.main(["ask", "which-route", "which route should the landing take?"]) == 0
+    assert "hint" not in capsys.readouterr().out and "review" not in ha.owed(root)["ask:which-route"]
+
+
+def test_make_arbiter_ask_passes_review_through() -> None:
+    repo = pathlib.Path(__file__).resolve().parents[2]
+    dry = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-ask", "SUBJECT=s", "WHY=why it is asked", "REVIEW=plan"], capture_output=True, text=True, check=False).stdout
+    assert 'hm_arbiter.py ask "s" "why it is asked" "plan"' in dry

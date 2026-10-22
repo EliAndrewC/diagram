@@ -1,0 +1,274 @@
+{
+ "feature": "409-arbiter-ask-review-verdict",
+ "blocks": {
+  "preamble": {
+   "sha256": "4ab029f1dc44eac7cfe608146002102bc7f1cefb3a2f67d07dcd89ad009baabe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "93c476faaad3721ce77acc06bd55a26cdf1f017bf8200ba58895ce542c6148a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "91f1010a8f885259510f05acb9b37fa6cef726d4dc30df6367734db84da7b610",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "0a9fc8e0a2b1b89a86b80efd6f2948a7dd2ba16afe459a9d9b7773ec60829d5c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the ask names its review (FR-001)": {
+   "sha256": "d9bb5b3f57e58c5e4bfcec0f8153b923270723f0acfd825fff675aaec79321e4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the ruling carries it (FR-002, FR-003, FR-004)": {
+   "sha256": "3ca062d7dd78f5f3897835e7803489a290f68fa00c0ff7f9e143e90704633e8f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - tests (FR-005)": {
+   "sha256": "35b3c0b7848f1d948e42bb00f10080efde9f35c14b1234bc4b4ae374c4f74dd9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "400c7d9961decafb28099a16a35af17c41b9eaf148db78a3c5747ff1657873e3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach": {
+   "sha256": "d63b62b67d35a03367a4c21755562ee1bc2795ad37da5bc80a587470f3783545",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach": {
+   "sha256": "965963b00255e64547781d124e09cc319b25fbf9f68b27f5ecc02e3a9c031437",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-21",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the ask names its review (FR-001)",
+    "## D2 - the ruling carries it (FR-002, FR-003, FR-004)",
+    "## D3 - tests (FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary/scope",
+     "summary": "Tooling only, no engine code; ask gains REVIEW=, ruling row carries it, spec_ruled and arbiter_accept honor it.",
+     "class": "within",
+     "why": "Restates FR-001..FR-004; the GM asked for a tooling feature."
+    },
+    {
+     "id": "Performance bookends N/A",
+     "summary": "No generator change, so no performance bookends.",
+     "class": "within",
+     "why": "Follows from tooling-only scope."
+    },
+    {
+     "id": "Constitution Check",
+     "summary": "Task tagged research: rendering (tooling); two test files and make hooks-test stay green.",
+     "class": "within",
+     "why": "Process classification; narrows nothing the request or spec asks."
+    },
+    {
+     "id": "D1a - positional review arg, third value refused",
+     "summary": "hm_arbiter.py ask <subject> <why> [spec|plan]; any other value refused; make arbiter-ask passes $(REVIEW) and its ## line names it.",
+     "class": "within",
+     "why": "FR-001 specifies REVIEW=spec|plan; refusing other values enforces that set."
+    },
+    {
+     "id": "D1b - review stored on owed entry, detail and output say an accept stands",
+     "summary": "trip takes review as optional keyword; the ask detail ends '(REVIEW=<r>: an accept stands as the <r> review's verdict)'; output says the same.",
+     "class": "within",
+     "why": "FR-001's own clauses: recorded on the owed entry, output names the review, bundle question says an accept stands."
+    },
+    {
+     "id": "D1c - review-shaped subject without REVIEW= prints a hint and records nothing",
+     "summary": "With no review, a SUBJECT matching ^\\d+-(spec|plan)- prints a hint to pass REVIEW= and records nothing.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001: 'An ask without REVIEW= is about no review' - a REVIEW-less ask is still an ask, recorded and about no review. 'prints a hint ... and records nothing' reads as the ask not being recorded at all: a refusal the spec does not contain, carving review-shaped subjects out of FR-001. Not impossible, not implied by the GM's words (honor an accept, not refuse an ask), and not required by the purpose (REVIEW= already fixes the 408 failure). It also disagrees with D3, whose test says such an ask 'records none' (no review), so the plan describes one behavior two ways and the implementer will follow D1. Fix: say the ask is recorded with no review and the hint is printed (or drop the hint sentence)."
+    },
+    {
+     "id": "D2a - ruling row carries review and, for spec, spec_sha",
+     "summary": "record_ruling puts trig.get('review') on an ask: trigger's row; spec_sha for spec as a spec round does.",
+     "class": "within",
+     "why": "FR-002 as written."
+    },
+    {
+     "id": "D2b - spec_ruled honors a row with review spec",
+     "summary": "spec_ruled honors a spec-round trigger OR a row whose review is spec, ruling and digest tests unchanged.",
+     "class": "within",
+     "why": "FR-003 as written, including the digest match."
+    },
+    {
+     "id": "D2c - ruled runs arbiter_accept for review plan; arbiter_accept accepts such a trigger, refuses other non-plan triggers as today",
+     "summary": "ruled runs arbiter_accept on a plan round or review plan row; arbiter_accept takes a trigger whose row has review: plan, accept test unchanged.",
+     "class": "within",
+     "why": "FR-004 as written; keeping the refusal of other non-plan triggers preserves behavior FR-004 does not widen."
+    },
+    {
+     "id": "D3 - tests",
+     "summary": "Plan accept clears pg.owed, continue leaves it owed, no-review ask records none even named 408-plan-round3, bad REVIEW refused, spec_ruled honors asked spec accept on unchanged spec and not after edit; each proved to fail with its change removed.",
+     "class": "within",
+     "why": "FR-005 and SC-001/SC-002. Note, not a ruling: FR-005 says each behavior has a test, and D3 names none for the bundle-question/output text or the Makefile REVIEW passthrough; the list does not claim to be exhaustive."
+    },
+    {
+     "id": "T - order and landing",
+     "summary": "D1-D3 in one change, tests run, then report and make land (direct route).",
+     "class": "within",
+     "why": "The GM asked to work the feature start to finish."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the ask names its review (FR-001)",
+    "## D2 - the ruling carries it (FR-002, FR-003, FR-004)",
+    "## D3 - tests (FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1a",
+     "summary": "REVIEW is a third positional arg to hm_arbiter.py ask, spec|plan only, any other value refused; stored as `review` on the owed entry via an optional `trip` keyword",
+     "class": "within",
+     "why": "FR-001 names REVIEW=spec|plan and its recording on the owed entry; refusing a value outside that set only enforces the named domain."
+    },
+    {
+     "id": "D1b",
+     "summary": "The ask's detail (the arbiter bundle's question) and its output end with '(REVIEW=<r>: an accept stands as the <r> review's verdict)'",
+     "class": "within",
+     "why": "FR-001 requires the output to name the review and the bundle's question to say an accept stands as that review's verdict."
+    },
+    {
+     "id": "D1c",
+     "summary": "An ask with no REVIEW is recorded as today, with no review; on a SUBJECT matching ^\\d+-(spec|plan)- the output only adds a hint to pass REVIEW=",
+     "class": "within",
+     "why": "FR-001: an ask without REVIEW= is about no review - it is now recorded unchanged, curing round 1's BLOCKED reading (the ask is no longer refused). The hint is added output that refuses, blocks and rewrites nothing; it helps a review ask reach the gates the request asks to honor it, and narrows nothing."
+    },
+    {
+     "id": "D1d",
+     "summary": "make arbiter-ask passes $(REVIEW); its ## help line names [REVIEW=spec|plan]",
+     "class": "within",
+     "why": "FR-001's interface is `make arbiter-ask ... REVIEW=`."
+    },
+    {
+     "id": "D2a",
+     "summary": "record_ruling puts trig['review'] on an ask: trigger's row, and spec_sha for spec as a spec round does",
+     "class": "within",
+     "why": "FR-002 verbatim."
+    },
+    {
+     "id": "D2b",
+     "summary": "spec_ruled honors a row whose trigger is a spec-fidelity round for the feature OR whose review is spec, with the ruling (accept/process-fault) and digest tests unchanged",
+     "class": "within",
+     "why": "FR-003: honored as a spec round trigger's ruling is, including the spec_sha match."
+    },
+    {
+     "id": "D2c",
+     "summary": "The ruled command runs arbiter_accept for a plan round trigger OR a row with review plan; arbiter_accept takes such a trigger with its accept test unchanged and refuses any other non-plan trigger as today",
+     "class": "within",
+     "why": "FR-004 and the request's core ('have the plan ... gates honor an arbiter's ACCEPT on a plan review'). Keeping the refusal for asks about no review is not a narrowing: those are not plan reviews."
+    },
+    {
+     "id": "D3",
+     "summary": "Tests: asked plan accept clears pg.owed, continue leaves it owed, no-review ask records none even on a plan-like name; bad REVIEW refused; spec_ruled honors an asked spec accept on the unchanged spec and not after an edit; output/detail name the review and the hint shows only on a review-like SUBJECT with none; make -n passes plan through; each proved to fail with its change removed",
+     "class": "within",
+     "why": "FR-005 and SC-001/SC-002; every test enforces a behavior the spec requires (verification, not new behavior)."
+    },
+    {
+     "id": "T",
+     "summary": "One change for D1-D3, tests run, report and land via make land (direct route)",
+     "class": "within",
+     "why": "The GM asked for the feature to be worked start to finish; ordering and landing route settle nothing the request constrains."
+    },
+    {
+     "id": "context",
+     "summary": "Preamble, Summary, Technical Context, Performance bookends (N/A, no generator change), Constitution Check: restate the spec and name files; tooling only",
+     "class": "within",
+     "why": "No decision beyond the spec's; 'tooling only' matches the request's 'tooling feature'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "### T01 Approach",
+    "### T02 Approach"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01.constraint-round-trigger-unchanged",
+     "summary": "The existing round-trigger arbiter paths are left unchanged; only the ask: path gains a review verdict.",
+     "class": "within",
+     "why": "The request is to have the gates honor an arbiter ACCEPT on an ask: trigger, which is the path that failed in feature 408; the round-trigger path already works, and leaving it alone removes nothing the GM asked for."
+    },
+    {
+     "id": "T01.constraint-ruling-covers-text-at-ruling",
+     "summary": "A ruling covers the spec or plan as it reads at the ruling (digest-bound, as the round-trigger accept already is).",
+     "class": "within",
+     "why": "An accept on a review is a verdict on the reviewed text, as every review verdict in this tooling is; binding it to that text is what 'honor an ACCEPT on a plan review' means, not a narrowing of which accepts are honored. It copies the round-trigger behavior the plan cites."
+    },
+    {
+     "id": "T01.REVIEW-explicit",
+     "summary": "The review an ask stands for is named explicitly with REVIEW=spec|plan; an ask without it is about no review.",
+     "class": "within",
+     "why": "Already settled by the accepted spec's FR-001; the plan restates it rather than deciding it."
+    },
+    {
+     "id": "T01.order-and-done",
+     "summary": "Implementation order (hm_arbiter, plan_gate.arbiter_accept, Makefile, docs, tests), each new test shown red with the change removed; done when the two test files pass.",
+     "class": "within",
+     "why": "Sequencing and a done criterion that enforces FR-005; no scope added or removed."
+    },
+    {
+     "id": "T02.land",
+     "summary": "Write the report and land on main through the review gate, ledger and hooks-test.",
+     "class": "within",
+     "why": "The GM asked to work the feature start to finish; landing through the standing procedure is that."
+    }
+   ]
+  }
+ ]
+}

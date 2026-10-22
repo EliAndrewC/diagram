@@ -661,10 +661,12 @@ def arbiter_accept(spec_dir: pathlib.Path, trigger: str, today: str | None = Non
     BLOCKED is recorded CLEAR at its digest now, declared `round-arbiter`. Without this the cap deadlocked the task - the review
     closed, the plan never CLEAR (T17, 2026-10-18). Only a ruling the feature's `arbiter.jsonl` records counts. Returns the
     blocks so recorded."""
-    if not trigger.startswith("round:spec-fidelity|plan:"):
-        raise ValueError(f"{trigger} is not a plan review's round trigger")
     lines = (spec_dir / "arbiter.jsonl").read_text(encoding="utf-8").splitlines() if (spec_dir / "arbiter.jsonl").is_file() else []
     rows = [json.loads(ln) for ln in lines if ln.strip()]
+    # an ask the session put as about the plan review (`make arbiter-ask REVIEW=plan`, feature 409) is one as well
+    asked = any(r.get("trigger") == trigger and r.get("review") == "plan" for r in rows)
+    if not trigger.startswith("round:spec-fidelity|plan:") and not asked:
+        raise ValueError(f"{trigger} is not a plan review's round trigger, nor an ask about the plan review (REVIEW=plan)")
     if not any(r.get("trigger") == trigger and r.get("ruling") in ACCEPTS for r in rows):
         raise PermissionError(f"declined: {spec_dir.name}'s arbiter.jsonl holds no accept on {trigger} - only the round arbiter's ruling stands as a verdict")
     plan = spec_dir / "plan.md"
