@@ -634,7 +634,9 @@ HOMESTEAD_GROUND_FT = 104.0
 
 Research:
     the yard within it - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: 25 tsubo
-    ground per homestead - UNRESEARCHED: 104 ft square, the 100 ft along-row span plus 3.8 ft of yard, cohort-measured
+    ground per homestead - research/questions/0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html: 104 ft square (about 305 tsubo), a map drawing convention sized by
+        what the seating needs, above the typical attested lot (157 tsubo, the 1698 register's median); the attested sizes do not fit
+        (75 ft: 49/54, 90 ft: 51/54 of the cohort, 405 T112)
 """
 
 # THE GROUND THE SEATING SPREADS ITS HOUSEHOLDS OVER, as the side of a square (feature 306, FR-010; a GUESS with its reasoning -
@@ -647,7 +649,8 @@ Research:
 # over (`homesteads.stages._seat_households`: the lattice and the seat bound); the margin's choice, the canvas's room and the belt
 # keep `HOMESTEAD_GROUND_FT`'s band - growing those as well re-fitted every field and refused sites the base seated (R11, R12).
 SEATING_GROUND_FT = 162.0
-"""Research: seating ground per homestead - GUESS: 162 ft square, the mean envelope plus the least wood floor"""
+"""Research: seating ground per homestead - research/questions/0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html: 162 ft square, the mean envelope plus the least wood floor - a
+map drawing convention, holding the wood floor a lot need not (405 T112)"""
 
 # `carve_comb`'s GRAIN, and why this tier passes the PRINCIPLED value rather than the pool's.
 #
