@@ -992,3 +992,15 @@ def test_a_lane_keeps_the_gap_off_a_neighbor_s_garden_at_its_end() -> None:
     assert [(0.0, 0.0)] not in own_way and [(50.0, 0.0)] in own_way, "its own household's exempt, the neighbor's not"
     assert shapes.lane_owner({"serves": [50.0, 0.0]}) == (50.0, 0.0), "a door path's household"
     assert shapes.theirs(yards, shapes.lane_owner({"pts": []})) == [y for y, _o in yards], "a back lane: every garden keeps its gap"
+
+
+def test_the_fence_gap_a_foul_is_judged_at_is_the_callers() -> None:
+    """405 T107 (D83): `fouled_segment` keeps a run `gap` off another household's garden - 0246's 7 ft unless the caller (the
+    knots step's second pass) passes 0081's crop clearance."""
+    from l7r.diagram.hamletgen.consts import WEB_CROP_GAP
+    from l7r.diagram.hamletgen.ways.settle import shapes
+
+    yards = [([(0.0, 0.0), (20.0, 0.0), (20.0, 20.0), (0.0, 20.0)], (10.0, 10.0))]
+    run = [(-5.0, -10.0), (-5.0, 30.0)]  # 5 ft off the fence
+    assert shapes.fouled_segment(run, 3.0, [], yards, []) == 0, "inside 0246's 7 ft"
+    assert shapes.fouled_segment(run, 3.0, [], yards, [], gap=WEB_CROP_GAP) is None, "clear at the crop clearance"

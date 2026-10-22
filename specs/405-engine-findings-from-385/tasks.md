@@ -319,6 +319,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T113 The room table: one row per spacing or size knob (HOMESTEAD_GROUND_FT, SEATING_GROUND_FT, grow_gap, MIN_WEB_GAP, the fence gap) with its label, what it measures and its research ceiling (or 'ceiling unresearched, research question owed'), printed into part B's prompt and the arbiter's bundle when a refusal is a fit failure (a knot, a refused seat, an unreached house) - the GM's third process fix of 2026-10-21, its ceilings from spacing-research.md [lands-open]
       research: rendering
+- [ ] T114 0246's drawing page records the knot exception (T107, D83): a knot the 7 ft fence gap leaves is gathered with the join 3 ft from another household's garden fence - a DEVIATION from the page's convention, labeled so in the code's claims; write it on the page with its reason (two ways joined at one point, 0081, where lots abut - spacing-research.md) in a page session (impl-drift on T107, 2026-10-22) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

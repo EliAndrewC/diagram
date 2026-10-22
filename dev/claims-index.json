@@ -24965,11 +24965,28 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot the fence gap leaves": {
+  "body": "139a686ff7392797",
+  "claim": "a knot the fence gap leaves - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: the page's 7 ft (a map drawing convention) asked first, then the knots it leaves with the join 3 ft off another household's garden; the page does not yet record the exception - a known gap, carried to 405 T114",
+  "code": "c83e5b4e98860a27",
+  "core": "448a58160bfacbc9",
+  "date": "2026-10-22",
+  "note": "a DEVIATION that the cited drawing page does not record: the second pass (`for gap in (WEB_FABRIC_GAP, WEB_CROP_GAP)`) lowers the gap to 3 ft, but 0246 records only \"A lane's middle keeps at least 7 ft clear of a garden fence\" and the 5.5 ft tread-edge deviation. The page needs to record the 3 ft knot-join exception (405 T114) before this claim is in step",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+  ],
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a lane with no width judged as a footpath": {
   "body": "f32f894b7fe9f88a",
   "claim": "a lane with no width judged as a footpath - village-lanes.drawing: a lane with no recorded width is judged at the footpath's 3 ft",
-  "code": "045d74d4f72f1cea",
-  "core": "e7d9ac5eb7fa1942",
+  "code": "32a9e4cfb560020c",
+  "core": "448a58160bfacbc9",
   "date": "2026-10-18",
   "note": "`lanes[i].get(\"w\") or 3.0` is the footpath's 3 ft, a drawing convention on the page",
   "pages": {
@@ -24980,27 +24997,23 @@
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-18",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#lane ends gathered": {
-  "body": "f32f894b7fe9f88a",
+  "body": "68c8686ead946323",
   "claim": "lane ends gathered - village-lanes.drawing: ends within 25 ft are joined at a single point",
-  "code": "3e3836bf6c900122",
-  "core": "e7d9ac5eb7fa1942",
-  "date": "2026-10-18",
-  "note": "gathers each knot at one node via next_gather (the 25 ft knot test is in knots, not here); ends a fence or garden parts are left alone (ground_apart); a gather is refused where it would break the network or leave a farmhouse unreached",
+  "code": "a4ff57aa33ac4ff2",
+  "core": "448a58160bfacbc9",
+  "date": "2026-10-22",
+  "note": "ends within the knot reach are gathered at one node",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
   "research": "324b10775c9108ef",
   "rests": [
-   "0081-village-lanes.drawing.html:34425c991aa27503",
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
-   "0081-village-lanes.drawing.html:9b3232646d7ce694"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
-  "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::teed_onto#lane ends gathered": {
@@ -28154,16 +28167,31 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.__init__#settle plumbing": {
-  "body": "00cc09d6c00c1e80",
+  "body": "43bd92b3892e20a8",
   "claim": "settle plumbing - NONE",
-  "code": "a4b010721e9c028c",
-  "core": "cf7c75dd8b6a871d",
-  "date": "2026-10-21",
-  "note": "collects the ground and fabric it reads",
+  "code": "22807f61ef3daebe",
+  "core": "fc30b781ee584b86",
+  "date": "2026-10-22",
+  "note": "the new `self.fence_gap = WEB_FABRIC_GAP` sets how far every run keeps off another household's garden (7 ft), which is a physical decision. It needs its own claim citing research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (a map drawing convention), not the module's NONE",
   "pages": {},
   "research": "",
-  "rests": [],
-  "triaged": "2026-10-21",
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.__init__#the fence gap": {
+  "body": "dac8bd67d556388a",
+  "claim": "the fence gap - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft from a lane's middle to another household's garden fence, a map drawing convention; only the knots step's second pass lowers it (405 T107, a DEVIATION carried to T114)",
+  "code": "f755ee5785c9169c",
+  "core": "fc30b781ee584b86",
+  "date": "2026-10-22",
+  "note": "`self.fence_gap = WEB_FABRIC_GAP` (7 ft from the lane's middle, another household's garden) matches the page's convention",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.blocked#a forced turn is lawful": {
@@ -28255,8 +28283,8 @@
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.ground_fault#bends like a path": {
   "body": "8882cd2ce93123f5",
   "claim": "bends like a path - village-lanes.drawing: no kink or hook",
-  "code": "d371075c1e7fb43e",
-  "core": "c28586b1488b3957",
+  "code": "9cba5287b9d6fde1",
+  "core": "fe880131a5ef2fa6",
   "date": "2026-10-17",
   "note": "hook and kink faults",
   "pages": {
@@ -28268,14 +28296,14 @@
    "0081-village-lanes.drawing.html:be608a70af4cfcc5",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.ground_fault#crossings": {
   "body": "8882cd2ce93123f5",
   "claim": "crossings - villages-beside-their-stream-one-bank-or-both.drawing: `_crossing_fault`",
-  "code": "82a3fabae0838927",
-  "core": "c28586b1488b3957",
+  "code": "f64202c0ef9eea96",
+  "core": "fe880131a5ef2fa6",
   "date": "2026-10-17",
   "note": "`_crossing_fault`: square, at a ford, decked",
   "pages": {
@@ -28286,32 +28314,31 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
   ],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.ground_fault#nothing built on a lane": {
-  "body": "a13e8afba7338080",
+  "body": "01863dd209fd2b5d",
   "claim": "nothing built on a lane - how-our-maps-lay-a-clustered-settlements-lanes.drawing: no foul of house, yard, building, fixture",
-  "code": "87d4029ff1f1f3c3",
-  "core": "c28586b1488b3957",
-  "date": "2026-10-21",
-  "note": "fouls of house, yard, building and fixture are refused; the owner exemption covers only the household's own dooryard and garden, as the page allows; the index reaches are plumbing",
+  "code": "51c6b4d5f35c5182",
+  "core": "fe880131a5ef2fa6",
+  "date": "2026-10-22",
+  "note": "the foul test is delegated to `fouled_segment` with the run's gap. The `near` reaches are index plumbing",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.ground_fault#off crop and marsh": {
   "body": "8882cd2ce93123f5",
   "claim": "off crop and marsh - village-lanes.drawing: no field, dry plot or marsh underfoot",
-  "code": "9d5931e8a5bd11e7",
-  "core": "c28586b1488b3957",
+  "code": "662fba1cfa66c3a4",
+  "core": "fe880131a5ef2fa6",
   "date": "2026-10-17",
   "note": "open_ground test",
   "pages": {
@@ -28323,7 +28350,7 @@
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.index#settle plumbing": {
@@ -28571,9 +28598,25 @@
   "triaged": "2026-10-18",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/settle/shapes.py::fouled_segment#a knot's join beside a fence": {
+  "body": "ca4eadd17da173db",
+  "claim": "a knot's join beside a fence - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: the knots step's second pass passes 3 ft (`WEB_CROP_GAP`'s value) for the page's 7 ft; the page does not yet record it - a known gap, carried to 405 T114",
+  "code": "2f7c377d91855d82",
+  "core": "9f692456512d3930",
+  "date": "2026-10-22",
+  "note": "a DEVIATION that the cited drawing page does not record: a caller-passed `gap` of 3 ft (WEB_CROP_GAP) is allowed in place of 0246's \"at least 7 ft clear of a garden fence\", and the page does not record that exception. It needs recording on 0246 (405 T114)",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+  ],
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::fouled_segment#no long leg through a building": {
-  "code": "84623f335e7d9f95",
-  "core": "d994695ea3eb3752",
+  "code": "82972b435207f902",
+  "core": "9f692456512d3930",
   "date": "2026-10-07",
   "note": "breaks_through",
   "pages": {
@@ -28583,12 +28626,12 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::fouled_segment#no tread on a farmhouse": {
-  "code": "166be6c1645ebf6f",
-  "core": "d994695ea3eb3752",
+  "code": "5d36ebad00050fd1",
+  "core": "9f692456512d3930",
   "date": "2026-10-07",
   "note": "house_hit",
   "pages": {
@@ -28598,16 +28641,16 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::fouled_segment#off another household's garden": {
-  "body": "170f51c962b65264",
-  "claim": "off another household's garden - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the line within `WEB_FABRIC_GAP`, 7 ft",
-  "code": "32816dec49f40835",
-  "core": "d994695ea3eb3752",
-  "date": "2026-10-21",
-  "note": "the segment (the lane's middle) is held 7 ft off gardens other than its own household's, as the page says",
+  "body": "ca4eadd17da173db",
+  "claim": "off another household's garden - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the line within `gap`, `WEB_FABRIC_GAP` (7 ft) unless the caller passes another",
+  "code": "8bafaef767fdd1bd",
+  "core": "9f692456512d3930",
+  "date": "2026-10-22",
+  "note": "the default gap is 0246's 7 ft from another household's garden fence, measured to the line",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -28619,12 +28662,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::fouled_segment#off another household's yard": {
-  "body": "170f51c962b65264",
-  "claim": "off another household's yard - UNRESEARCHED: the garden fence's 7 ft (`WEB_FABRIC_GAP`) held off a yard too; no page sets a gap from a yard",
-  "code": "fdf9c9277a2571af",
-  "core": "d994695ea3eb3752",
-  "date": "2026-10-21",
-  "note": "0246 sets the 7 ft gap from a garden fence only and gives no gap from a yard (its 2 ft is a house standing against a neighbor's yard, not a lane), so UNRESEARCHED holds; `theirs(yards, owner)` keeps the household's own yard exempt",
+  "body": "ca4eadd17da173db",
+  "claim": "off another household's yard - UNRESEARCHED: the garden fence's gap (`gap`, 7 ft unless the caller passes another) held off a yard too; no page sets a gap from a yard",
+  "code": "97292b7340222b93",
+  "core": "9f692456512d3930",
+  "date": "2026-10-22",
+  "note": "nothing in the bundle sets a gap from a yard: 0246 keeps the gap from a garden fence only, and its yard passages are about walks across a neighbor's yard, not clearance",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -28632,8 +28675,8 @@
  "l7r/diagram/hamletgen/ways/settle/shapes.py::fouled_segment#off the fixtures": {
   "body": "40a2439713db7932",
   "claim": "off the fixtures - how-our-maps-lay-a-clustered-settlements-lanes.drawing: its own household's too",
-  "code": "7e41eeb4eec9a04b",
-  "core": "d994695ea3eb3752",
+  "code": "fc458ea39a43e16b",
+  "core": "9f692456512d3930",
   "date": "2026-10-17",
   "note": "over_a_fixture with no owner exemption",
   "pages": {
@@ -28643,18 +28686,18 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::fouled_segment#what the overlap matrix forbids": {
-  "code": "8e809429782e1f1f",
-  "core": "d994695ea3eb3752",
+  "code": "2c75532812f66651",
+  "core": "9f692456512d3930",
   "date": "2026-10-07",
   "note": "delegated to the matrix's own claims",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::joined_way#settle plumbing": {

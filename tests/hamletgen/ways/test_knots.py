@@ -258,3 +258,22 @@ def test_a_manifests_view_reads_its_own_scale() -> None:
     from l7r.diagram.hamletgen.ways import forced
 
     assert forced._View({"meta": {"ftpx": 2.0}}).px(10.0) == 5.0 and forced._View({}).px(10.0) == 10.0
+
+
+def test_a_knot_the_fence_gap_leaves_is_gathered_at_the_crop_clearance(monkeypatch) -> None:  # noqa: ANN001
+    """405 T107 (D83): the gather asks every knot first at the fence gap (0246's 7 ft, a convention), and only the knots it
+    leaves again at 0081's crop clearance (3 ft) - a gather at 3 ft on every knot reshaped seed 7's web into a new knot."""
+    from l7r.diagram.hamletgen.consts import WEB_CROP_GAP, WEB_FABRIC_GAP
+    from l7r.diagram.hamletgen.ways.settle import lawful
+
+    asked: list[float] = []
+
+    def fault(self, run, width, skip=None):  # noqa: ANN001, ANN202 - the fence a join passes, refused at the convention's gap
+        asked.append(self.fence_gap)
+        return "fabric" if self.fence_gap > WEB_CROP_GAP else None
+
+    monkeypatch.setattr(lawful.Lawful, "fault", fault)
+    s = _S([CONN, [(-100.0, 150.0), (-100.0, 0.0)], [(-106.0, -150.0), (-106.0, 0.0)]], houses=[(-100.0, 180.0), (-106.0, -180.0)])
+    assert kn.settle_knots(s) == 1
+    assert kn.knots(s.M["lanes"]) == []
+    assert asked[0] == WEB_FABRIC_GAP and asked[-1] == WEB_CROP_GAP, "the convention first, the crop clearance after"
