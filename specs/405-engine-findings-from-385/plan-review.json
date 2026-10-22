@@ -846,6 +846,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T99 - both figures settled by later work": {
+   "sha256": "1746211c18ddaf4c7cc732f914c2a8e6f26230e70d3248d1d9d783bd10af651f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T99 Approach (checklist part A)": {
+   "sha256": "c04bb5a64f95193164fcaeb653e33868c5a5371bfaf6e7fbd6b034634a462c54",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T99 Decisions": {
+   "sha256": "005db8ed79d80c353f32271efb5b99b181598060f468f1e4552c496ef1d8c0e2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3690,6 +3708,29 @@
      "summary": "hm_house.held_ranges holds the body of each heredoc written by cat/tee (>, >>) to an absolute path under /tmp/ or the session state directory, so a checker's reply recorded in the same command is not corrected; a relative or unknown target is not held, and a project heredoc in the same command is still corrected.",
      "class": "within",
      "why": "A tooling fix found during the claims batches (Amendments 7 and 9; FR-002). It carries the GM's 2026-09-06 quotation rule (house style does not edit other people's quotes) and the hook's existing exemption for writes outside the project into the mixed-command case; the same heredoc alone was already left as typed, so no prose escapes correction that did not before, and project writes in the same command stay corrected. It narrows nothing the GM asked for in this feature; were it read as a carve-out of the house-style hook it would be LEGITIMATE as implied by the GM's own quotation rule."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T99 - both figures settled by later work",
+    "### T99 Approach (checklist part A)",
+    "### T99 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D94",
+     "summary": "T99 is settled with no code or page change, because measurement (Approach item 9) shows that neither of its two figures still holds: since T118 the run-on leg's clearance test against garden fabric uses FOOTPATH_FABRIC_GAP (7 ft) whatever its tread width, and no drawing page among 0006/0009/0029/0057/0081/0246 still states the field reach as 60 ft (FIELD_REACH_FT is 6 ft).",
+     "class": "within",
+     "why": "The task's stated goal in the world (a run-on leg keeps 0246's 7 ft off a garden fence; no page states a field reach the code no longer uses) is unchanged and is claimed as met, not reduced. Settling a task whose defect later work already removed does not narrow the GM's request (Amendments 7 and 9: take the feature to completion) or FR-001 (each task worked through the checklist's part A, which this block does). No carve-out, no 'except' case, no case dropped from the task's reach. Whether the item-9 measurements are true is a factual check of the landing, not a fidelity ruling, and this bundle does not allow repository reads to re-run them."
+    },
+    {
+     "id": "T99-A5",
+     "summary": "Measure before any edit (Approach item 5), with exit (b), settling by measurement, taken over exit (a), changing code or pages.",
+     "class": "within",
+     "why": "This is how the decision in D94 is reached, not a separate change of scope. Measuring first is the project's standing rule, and the exit the plan takes follows from the measurement."
     }
    ]
   }
