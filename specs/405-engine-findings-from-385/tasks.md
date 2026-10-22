@@ -390,6 +390,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T130 hamletgen/consts.py passed the 1,000-line bar (1,003) with T112's claims, refusing the page batch's push: split the field archetypes and the field and pond knobs (FIELD_ARCHETYPES ... ROLLED_ARCHETYPES, 20 names, ~185 lines) into consts_fields.py, re-exported by name as consts_water.py is (feature 316) [lands-open]
       research: rendering
       verify: DONE. landed in batch T110+T112+T122+T123+T130: page sessions 6-7: 0084/0035 ditch crossings (T110), 0285 the house lot with the homestead ground measured and kept (T112), 0035/0246 track silences (T122), 0035's crossing-place sentence and the wrapped-claim parser (T123); consts.py split at the bar into consts_fields/consts_ways (T130)
+- [ ] T131 The check-wave workflow returns each reply's label as the agent wrote it, and one agent echoed 'impl-drift dw3' for dw3, so the reply could not be matched to its bundle without a second look (2026-10-22): stamp each reply with its unit's own label in .claude/workflows/check-wave.js (`args.units[i].label`), with a test [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
