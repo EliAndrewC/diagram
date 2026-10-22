@@ -25283,11 +25283,11 @@
  },
  "l7r/diagram/hamletgen/ways/knots.py::teed_onto#lane ends gathered": {
   "body": "467529697edaf678",
-  "claim": "lane ends gathered - village-lanes.drawing: ends within 25 ft are joined, so lanes",
-  "code": "71b281777b6c1f1a",
+  "claim": "lane ends gathered - village-lanes.drawing: ends within 25 ft are joined, so lanes never arrive a few feet apart in a knot",
+  "code": "a71a81c21453c34c",
   "core": "03c1be0bb30950b6",
   "date": "2026-10-22",
-  "note": "a T-foot on the other lane, the gather's last form",
+  "note": "re-aiming the end onto the nearest point of the other lane joins the two lanes as a T, so no ends are left a few feet apart; the 25 ft threshold is applied by the caller, not in this unit",
   "pages": {
    "0081-village-lanes.drawing.html": "f0a488aba85003e2"
   },
@@ -31284,11 +31284,11 @@
  },
  "l7r/diagram/hamletgen/ways/thread.py::_inner#the ends drawn in": {
   "body": "7a42dbc3494f62ab",
-  "claim": "the ends drawn in - GUESS: 3 ft at each end, so a fallback whose end stands on the bund or at the field's edge is",
-  "code": "e09f5072d9100e91",
+  "claim": "the ends drawn in - GUESS: 3 ft at each end, so a fallback whose end stands on the bund or at the field's edge is not read as crossing it; a crossing nearer an end than that goes untested",
+  "code": "5dd462fd01d949e4",
   "core": "1812b42aa85e858c",
   "date": "2026-10-22",
-  "note": "a 3 ft tolerance for testing an end against the bund; the page lets a lane touch a plot's boundary but gives no figure",
+  "note": "the page lets a lane touch a plot's boundary but gives no figure for how far an end may stand on or into it, so the 3 ft is a fair GUESS",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
