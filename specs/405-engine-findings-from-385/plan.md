@@ -418,22 +418,4 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 <!-- plan-archive: T93 to T93 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 
-## T115 - the field way past its own house (T91's round)
-
-### T115 Approach (checklist part A)
-
-1. **The goal, in the world.** A field way leaving its own door may pass its own house as any path leaves a door, and keeps off its neighbors' steadings; its claims say which rule holds where.
-2. **The constraints.** 0246's 7 ft from a way's middle to another household's garden fence (§45); 0246's no house corner on the tread (§36); the router's walls (`field_router`, `FIELD_ROUTE_GAP_FT` 7 ft off every steading's built ground but the route's own dooryard and, where it starts at its door, its own house).
-3. **Where each comes from.** The 7 ft: O (the page's convention). No house on the tread: R. The 7 ft off houses, byres, sheds and yards: U - no page sizes a way's margin off a building.
-4. **Do they describe the world here?** The finding says the way may pass its own house closer than "the claimed 7 ft". The page's 7 ft is from a garden fence; at a house it asks only that no corner stand on the tread, which `house_hit` keeps (the law refuses the run otherwise). So the code keeps the page; the claim "field way off the steadings" overstates it by calling the 7 ft off all built ground the page's.
-5. **The order.** Nothing moves.
-6. **The exits.** (a) the claim split: the gardens at the page's 7 ft, the other built ground at 7 ft as a GUESS, the own house at its door by the tread rule - taken; (b) wall the own house again past the start - not taken: the page asks no more than the tread rule of a house, and a door path must leave its wall; (c) record the passing on 0246 - not needed: the page already says it; (d) more room - n/a; (e) conform - n/a.
-7. **The search smell.** None.
-8. **The budget.** 15 min with its landing.
-9. **Done, measured.** `field_router`'s claims re-checked IN-STEP; no code logic changes (a docstring only).
-10. **Before moving a constant.** No constant moves.
-11. **Before fitting things into room.** n/a.
-
-### T115 Decisions
-
-**D86 - the field way's margins as the page gives them.** `field_router`'s claim "field way off the steadings" is split: off another household's garden, 0246's 7 ft; off the other built ground (houses, byres, sheds, yards), the same 7 ft as a GUESS (no page sizes it); the route's own house where it starts at its door, only 0246's no house corner on the tread (`house_hit`). No code changes.
+<!-- plan-archive: T115 to T91 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
