@@ -1116,6 +1116,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "### T70 part B (2026-10-22T14:17Z)": {
+   "sha256": "7d52e2facaa2458f469ab350971ae01fcd7690e820d22101bf97700cb7b0db6e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4293,6 +4299,33 @@
      "summary": "Done measured by a test: every fillet spans at most 3 ft at 1 ft/px (red without the fix) and fillets still differ by over 1.2x; lands with the record batch",
      "class": "within",
      "why": "Enforces the page's range and the existing 'each leg drawn on its own' constraint; no new behavior or scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "### T70 part B (2026-10-22T14:17Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T70B-1",
+     "summary": "The 2026-10-22T03:45Z cohort failures (seeds 10, 24, 36, 47) are attributed to T26's uncommitted, never-landed wood-shed diff, not to T70; T70 is not held for them, and T26's knots stay carried to T107.",
+     "class": "within",
+     "why": "A triage of whose change failed, measured against the cohort log, not a reduction of any requested work: T70's text-and-label work is unchanged, and the failing engine change remains tracked as open work in this feature (T107) as FR-001/FR-002 require. Nothing the GM asked for is dropped or exempted."
+    },
+    {
+     "id": "T70B-2",
+     "summary": "Part B items 2-6 restate T70's reviewed decisions unchanged (A3, A4, D101; no ordering trade, no tuning).",
+     "class": "within",
+     "why": "Reaffirms already-reviewed scope; adds and removes nothing."
+    },
+    {
+     "id": "T70B-3",
+     "summary": "Next step is `make land` on T70; no route offered, no ruling owed.",
+     "class": "within",
+     "why": "Working and landing the feature's open tasks is what amendment 9 asks ('take another run at closing out this feature')."
     }
    ]
   }
