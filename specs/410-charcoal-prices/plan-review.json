@@ -54,6 +54,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "### T01 Approach": {
+   "sha256": "ec16c5f15c9d194e40e6e1d1198d3a5305d4431bc43b60748c905c63cabab660",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach": {
+   "sha256": "954a7effa16ff40db6b6f49da288b99ce5b09a68dc2cdb981c9ab789027c652c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach": {
+   "sha256": "0c1b5af1e7fbf54255ebe069a98bd08215f234f4bf723ffe55b8f26f8269531f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach": {
+   "sha256": "3b29f2f8ddaf8f574981b3a5546c2a38313e9e0491cc0c28a3b0c98b5a6f0f8a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -177,6 +201,73 @@
      "summary": "Under the 20,000-byte cap; a question that would exceed it splits",
      "class": "within",
      "why": "Mechanism. FR-002 allows 'a new money question (or questions)'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "### T01 Approach",
+    "### T02 Approach",
+    "### T03 Approach",
+    "### T04 Approach"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-question-0279",
+     "summary": "Issue #11's figures are written into a new record question, 0279 What did charcoal cost?, each with its verdict and file.",
+     "class": "within",
+     "why": "The issue asks for each figure with its fragment FILE and verdict; a new question holding them is how that record is made (FR-001, FR-002)."
+    },
+    {
+     "id": "T01-wage-or-named-nearest",
+     "summary": "Each figure is set beside its place's craftsman and laborer day wage, or beside a named nearest wage.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request says 'each price beside the same place and period's day wages'. Where the sources give no wage for that place and period, the literal rule cannot be met. Leaving the price with no wage at all would defeat the comparison the clause is there for, and a nearest wage that is labeled as one does not hide the gap. This is the same handling the request asks for under 'what is still open'. The ruling holds only where no same-place, same-period wage is on record, and the nearest must be labeled as a nearest, never shown as the same place and period."
+    },
+    {
+     "id": "T01-constraints",
+     "summary": "FR-005, the four verdicts of money-requests.md, the 20,000-byte cap and the record checks bind the write.",
+     "class": "within",
+     "why": "These are the spec's FR-005 and the record's own citation rules (FR-002). They govern how the figures are recorded and do not narrow which figures are sought."
+    },
+    {
+     "id": "T01-single-pass-leads-named",
+     "summary": "The research passes ran once. Leads not followed are named in the handoff and the absence note, with one write session, one check session and one capped leftovers round.",
+     "class": "within",
+     "why": "The request asks per figure for 'what is still open' and asks for burner-days only 'if found', and FR-005 has untried leads named rather than a nearest given as an answer. Every figure still gets a verdict, so naming the open leads is the reply format the request asks for, not a figure dropped."
+    },
+    {
+     "id": "T01-round3-to-arbiter",
+     "summary": "A third check round on 0279 went to the round arbiter first (ask:410-0279-round3).",
+     "class": "within",
+     "why": "This is review procedure and changes nothing about what is answered."
+    },
+    {
+     "id": "T02-impl-check",
+     "summary": "0279 closes with its no-code line, checked by make impl-check F=410.",
+     "class": "within",
+     "why": "This is FR-003 as written."
+    },
+    {
+     "id": "T03-reply-on-11",
+     "summary": "The reply on #11 gives, per figure, the file, the verdict and what is open, with combined prices named with what they cover.",
+     "class": "within",
+     "why": "This is the issue's 'What the skill needs back', and FR-001 and FR-004. Naming what a combined price covers keeps the bale, retail, wholesale and carriage figures apart, as the question asks."
+    },
+    {
+     "id": "T03-derived-arithmetic-labeled",
+     "summary": "Day counts and ratios (such as white-to-black and laborer-days) are this record's arithmetic, labeled as such in the reply.",
+     "class": "within",
+     "why": "The request asks for the white-to-black ratio and for prices beside day wages, so deriving them from recorded figures is how those figures are produced. Labeling them as derived is disclosure and narrows nothing."
+    },
+    {
+     "id": "T04-land-and-watch",
+     "summary": "Report, land on main, then watch #11 until gm-assistant closes it.",
+     "class": "within",
+     "why": "This is FR-004 ('gm-assistant verifies and closes') and the standing stop-work procedure."
     }
    ]
   }

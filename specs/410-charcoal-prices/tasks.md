@@ -25,3 +25,6 @@ The question task is `research: physical` with its five boxes; the rest are `res
 - [ ] T04 Close: report and land
       research: rendering
       verify: the push lands; origin/main carries 410
+- [ ] GM review (make gm-reviewed F=410) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
