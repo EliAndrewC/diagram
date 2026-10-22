@@ -114,6 +114,8 @@ def test_a_run_on_keeps_every_house_corner_off_its_whole_tread() -> None:
     blocks.fabric = []
     assert not blocks.clear((300.0, 100.0), (396.0, 100.0), 3.5), "a corner inside a 3.5 ft tread's half (1.75 ft)"
     assert blocks.clear((300.0, 100.0), (396.0, 100.0), 3.0), "...outside a 3 ft tread's (1.5 ft)"
+    s.M["houses"] = [{"x": 323.0, "y": 115.6, "w": 46.0, "h": 28.0, "rot": 0.0}]  # its near corner at x 300, inside the first 2 ft
+    assert not blocks.clear((300.0, 100.0), (396.0, 100.0), 3.5), "a corner at the stretch's own start is asked too"
 
 
 def test_every_lane_end_that_reaches_nothing_is_carried_on_to_the_bund() -> None:

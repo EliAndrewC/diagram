@@ -758,13 +758,19 @@
    "declared": "spec-fidelity"
   },
   "### T118 Approach (checklist part A)": {
-   "sha256": "1a9b342d00b1643e5f01961c65706905c3bb057b4449afa5d81099720a1606bd",
+   "sha256": "6761e0163db274818fe21f69e70db4d2f942263ec5f553bbfe7b2050197c274c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T118 Decisions": {
-   "sha256": "ef1fa883bba7af61e4c8cb95e5d3cfed2ed15aa767b556a8c59c772fbcc50f38",
+   "sha256": "cec9f519648e20f4c248cf17c02dc634125063d2c6093d2a31bb80068a8b15ff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T118 Approach (re-answered 2026-10-22T10:04Z)": {
+   "sha256": "82abc86cac9211f1aecb2848248cb79d11bfa0d94152bc22119b10945c05d839",
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
@@ -3469,6 +3475,41 @@
      "summary": "25 min budget with a gated landing; done means a unit test that fails with int() for a 3.5 ft run-on whose tread edge would touch a corner 1.5-1.75 ft off its line, the three claims re-checked IN-STEP, seeds 1-48 and the pinned rows matching main; no constant moves.",
      "class": "within",
      "why": "Checklist part A items that FR-001 requires. The unit test fails only when the requested fix is missing, so it enforces the request rather than adding scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "### T118 Approach (checklist part A)",
+    "### T118 Approach (re-answered 2026-10-22T10:04Z)",
+    "### T118 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D89/exit a",
+     "summary": "RunOnBlocks.clear passes the tread width to _hits_a_steading unrounded (float), so a 3.5 ft tread is judged at 3.5 ft, not 3 ft",
+     "class": "within",
+     "why": "A defect fix that makes the code keep house corners off the whole tread as 0246 requires; FR-001 claims work, unchanged from the block's earlier CLEAR text."
+    },
+    {
+     "id": "D89/exit b",
+     "summary": "the house-as-its-own-owner entry, the 2 ft start allowance and the 7 ft off groves, bamboo strips and wells claimed as bare GUESSes",
+     "class": "within",
+     "why": "Marking unsourced margins as GUESS is what FR-001's claims work does; no behavior is changed or exempted. Unchanged from the earlier CLEAR text."
+    },
+    {
+     "id": "D89/exit c (changed)",
+     "summary": "the 2 ft start allowance dropped for the houses (houses judged from the stretch's own start), kept for the fabric and the crop",
+     "class": "within",
+     "why": "The change removes a carve-out instead of adding one: houses are now held to 0246's no-corner-on-the-tread rule with no exception near a way's start, which follows the research more closely. Keeping the allowance for fabric and crop leaves existing behavior in place and claims it as a GUESS (exit b). It exempts nothing from a sourced rule, so nothing in the request or spec is narrowed."
+    },
+    {
+     "id": "exit f (new)",
+     "summary": "the tread's 3 ft off a farmhouse wall (0081) against the house test's 0 ft, and the well's 8 ft fallback, carried to T119 as the lane law's, not the run-on's",
+     "class": "within",
+     "why": "Routing a finding on code this task does not change to another task of this feature is what FR-002 and the GM's 2026-10-19 rule ask for ('keep findings on code a task didn't change as new tasks'). The work is deferred inside the feature, not dropped."
     }
    ]
   }

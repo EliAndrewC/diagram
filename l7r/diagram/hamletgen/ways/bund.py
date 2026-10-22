@@ -179,10 +179,12 @@ class RunOnBlocks:
             off the crop - research/questions/0081-village-lanes.drawing.html: never across a dry plot
             off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, and the run-on's middle at least 7 ft (`FOOTPATH_FABRIC_GAP`, passed raw: a hamlet rolls at 1 px = 1 ft, `SitePlan.ftpx`) off another household's garden fence
             off its own garden - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the page lets a household's own way run beside its own fence, kept only off the beds; the run-on's blocks are read without the lane they judge, so every garden is walled at 7 ft, the way's own included (at the hamlet's 1 px = 1 ft; 405 T116, recorded on the page by T114)
-            off the other built ground - GUESS: the same 7 ft off houses, byres, sheds and yards, which no page sizes
+            off a house - research/questions/0081-village-lanes.drawing.html: a lane's tread keeps 3 ft clear of a farmhouse wall - the fabric's 7 ft to the middle keeps a tread of up to 8 ft inside it
+            off the other built ground - GUESS: the same 7 ft off byres, sheds and yards, which no page sizes
             off the groves, strips and wells - GUESS: the same 7 ft off the farm groves, bamboo strips and wells in the fabric, which no page sizes
-            the stretch from 2 ft along - GUESS: the fabric, crop and steading are judged from 2 ft along the stretch, since the end it grows from may stand at its own dooryard's gap - another house's corner inside those 2 ft is not asked (405 T118)
-            the whole tread off a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no house corner on the tread, at the run-on's width unrounded (405 T118: it was cut to a whole foot, a 3.5 ft tread judged at 3)"""
+            the stretch from 2 ft along - GUESS: the fabric and the crop are judged from 2 ft along the stretch, since the end it grows from may stand at its own dooryard's gap (405 T118)
+            off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane - no farmstead fixture under the tread, at `FIXTURE_PAD_FT` (its own claim)
+            the whole tread off a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no house corner on the tread, at the run-on's width unrounded and from the stretch's own start (405 T118: it was cut to a whole foot, a 3.5 ft tread judged at 3, and asked only from 2 ft along)"""
         from .law import over_a_fixture  # local: the law sits above the run on
 
         seg = (min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]))
@@ -202,7 +204,7 @@ class RunOnBlocks:
             quad = stroke_quad(start, b, width / 2.0)
             if any(_meets(bb, seg, width) and poly_gap(quad, c) <= 0.0 for c, bb in self._crops):
                 return False  # the drawn tread, as the matrix reads it, on a dry plot
-        return not _crosses_fabric([start, b], self.fabric, FOOTPATH_FABRIC_GAP) and not _hits_a_steading(self.s, [start, b], width)
+        return not _crosses_fabric([start, b], self.fabric, FOOTPATH_FABRIC_GAP) and not _hits_a_steading(self.s, [a, b], width)
 
 
 def _box(poly: Sequence[Pt]) -> tuple[float, float, float, float]:
