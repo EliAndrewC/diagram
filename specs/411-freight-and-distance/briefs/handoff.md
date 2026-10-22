@@ -26,3 +26,4 @@
 - Search: the archive for 地方凡例録, 五里外, 寛政+日雇, 福井+賃銭, 福井+日用 and 五里外駄賃 (no text of the handbook, no 1790s wage); the web for 地方凡例録 五里外駄賃之事 一里弐俵附壱駄廿四文 (only U-Tokyo page scans and NDL catalog entries, not readable text). Nakamura's PDF read through pdftotext on a curl copy.
 - New registry keys (2): nakamura-2020-fukui-nengu (34010), kotobank-jikata-hanreiroku (34020); both ledger outcomes recorded cited.
 - Checks run: source-reader on both keys' notes and write-ups, all READ (2 + 6). Owed to the check session for the new notes: quote-check, record-format, translation-check, source-applicability (2 write-ups); 0281's intro-check was already owed.
+- Round 2: a note nakamura-2020-fukui-nengu-3 (note 22's citation of the 1969 edition) added under the Tojo-text sentence, READ; the sentence narrowed to one dictionary's statement, since the Heibonsha entry on the same Kotobank page names the Okura text as the one generally known.
