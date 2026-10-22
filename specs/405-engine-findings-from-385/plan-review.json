@@ -555,19 +555,37 @@
   },
   "## T129 - two 0081 sentences, written in page session 8": {
    "sha256": "2bfe7fb5e72e2a7259a9283685e3155cb7b922afb394d5cccb41fda61548f939",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T129 Approach (checklist part A)": {
-   "sha256": "ffc6d1a527b67a83dcf2dec33e2c77ce93d9d4f3ced6b3fe45adeab7555ab373",
-   "verdict": "BLOCKED",
+   "sha256": "df1799b6a8be4be14f3c7f8d8110210c01d6633f18ebf85b14f0a318568d8d1f",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T129 Decisions": {
-   "sha256": "162b4b3a8a89803193431fad0b7f79e973fd8d11a8e5eb4694a2a013949198e5",
-   "verdict": "BLOCKED",
+   "sha256": "7e3f790bad8e23630e8ac28237220be72a5a679518941770aa15dce45c5d305e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T132 - record-checked's FIXED_BY on an unfootnoted unit": {
+   "sha256": "89595b15887bcbbad2257e8a448ab68c453cc383ef496e471ddc202354acb233",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T132 Approach (checklist part A)": {
+   "sha256": "9f3d79a1699bbdfd3921a66e798cfabe71a8908650104af2b42af63d3178032f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T132 Decisions": {
+   "sha256": "bbc476edd951b719317fb72c3da0b8c35b8d1d8c4b9652faee89a7e2ededb181",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   }
@@ -4243,6 +4261,38 @@
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
      "why": "Ruled on FR-002's first line in spec-index.md ('a finding a task's checks raise on code it did not change is filed as a new task of this ...') and the GM's own words in request.md ('keep findings on code a task didn't change as new tasks'). The blocks cite no requirement, so the bundle holds no fuller FR-002 text and no carve-out. On the literal reading all three parts of FR-002 apply: a crash is a defect found, it came up while running session 9's checks, and record-checked is tooling that T129 (a research-page task) did not change. Filing the fix as its own task was slower but possible, so the impossibility ground does not apply. Amendments 7 and 9 ask for the feature to be finished, and a task filed in this feature is still worked, so they do not imply this exception. The rule's purpose is that found work on unchanged code is tracked and scoped as a separate unit instead of riding inside the task that ran into it, and this inline fix is exactly what the rule is for. The fix: record the record-checked crash fix as its own task in this feature (filed after the fact, with its own decision), or cite a written carve-out in FR-002 if one exists. This is a drafting fix and says nothing against 0081's two sentences."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T129 - two 0081 sentences, written in page session 8",
+    "## T132 - record-checked's FIXED_BY on an unfootnoted unit",
+    "### T129 Approach (checklist part A)",
+    "### T129 Decisions",
+    "### T132 Approach (checklist part A)",
+    "### T132 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D118",
+     "summary": "0081 records the T-foot join for a gathered lane end and the reeds walled to every way, labeled as the page labels each bullet; exit (b) record it rather than change code.",
+     "class": "within",
+     "why": "Recording what the existing code already does so the claims citing 0081 rest on what it states is part of working 405's moved tasks to completion (Amendments 7 and 9); it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T129-order",
+     "summary": "The record-checked crash met and fixed in page session 9 is no longer folded into T129; it is its own task, T132.",
+     "class": "within",
+     "why": "This is what FR-002 requires (the GM, 2026-10-19: findings on code a task did not change are new tasks). It resolves the earlier BLOCKED reading, where T129's order step absorbed that fix."
+    },
+    {
+     "id": "D119",
+     "summary": "make record-checked FIXED_BY= on a quote-check's unfootnoted unit refuses with a message saying what to do instead of raising KeyError; a test red without the fix pins it (session 9's commit 0889dcdc1).",
+     "class": "within",
+     "why": "Found work on tooling the task did not change, filed as its own task of this feature per FR-002; replacing a crash with a refusal on the same input adds no new reach or default, and the test only enforces the fix. Doing the fix in session 9 and filing the task afterward still satisfies FR-002's requirement that the finding stand as its own task."
     }
    ]
   }
