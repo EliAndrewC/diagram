@@ -552,17 +552,17 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 ### T130 Approach (checklist part A)
 
 1. **The goal, in the world.** `hamletgen/consts.py` stays a file a session can read, under the 1,000-line bar, every name importable as before.
-2. **The constraints.** The 1,000-line bar, split never trimmed (405 T53's rule, the GM 2026-10-21); the precedent `consts_water.py` (feature 316): a sibling module, bodies verbatim, every name re-exported by name.
+2. **The constraints.** The 1,000-line bar, split never trimmed, into pieces of about 650 lines each - well under the bar, so the next edits do not land at it again (amendment 7, the GM 2026-10-21); the precedent `consts_water.py` (feature 316): a sibling module, bodies verbatim, every name re-exported by name.
 3. **Where each comes from.** Measured: T112's claims took the file to 1,003 lines and the page batch's push refused (2026-10-22). R for the process.
 4. **Do they describe the world here?** Yes.
-5. **The order.** The field archetypes and the field and pond knobs (`FIELD_ARCHETYPES` through `ROLLED_ARCHETYPES`, 20 names) move verbatim to `consts_fields.py`, re-exported from `consts.py`; the claims rows carried (`make claims-rekey`: 23); the package index names it.
+5. **The order.** Two cohesive blocks move verbatim, each re-exported from `consts.py`: the field archetypes and the field and pond knobs (`FIELD_ARCHETYPES` through `ROLLED_ARCHETYPES`, 20 names) to `consts_fields.py`, and the lane and web clearances, the track's and footpath's, and a farmhouse's reach (`WEB_CLEARANCE` through `WEST_SUN_FT`, 19 names) to `consts_ways.py`; the claims rows carried (`make claims-rekey`); the package index names both.
 6. **The exits.** (a) trim to under the bar - not taken (the rule); (b) a package - not taken: `consts_water.py` is the shape this module already takes; (c) a sibling re-exported - taken.
 7. **The search smell.** None.
 8. **The budget.** 15 min.
-9. **Done, measured.** `consts.py` 846 lines, `consts_fields.py` 187; every moved name resolves through `consts` and the package; `make quick` clean; `make claims-rekey` carried 23 rows (2026-10-22).
+9. **Done, measured.** `consts.py` 603 lines, `consts_ways.py` 270, `consts_fields.py` 187 - each near or under about 650; every moved name resolves through `consts` and the package; `make quick` clean; `make claims-rekey` carried the rows (2026-10-22).
 10. **Before moving a constant.** No value moves.
 11. **Before fitting things into room.** n/a.
 
 ### T130 Decisions
 
-- **D117** The field block moves verbatim to `hamletgen/consts_fields.py`, re-exported by name from `consts.py` as `consts_water.py` is; nothing else changes. Rendering: n/a (structure).
+- **D117** The field block moves verbatim to `hamletgen/consts_fields.py` and the ways block to `hamletgen/consts_ways.py`, each re-exported by name from `consts.py` as `consts_water.py` is, leaving `consts.py` at about 600 lines; nothing else changes. Rendering: n/a (structure).

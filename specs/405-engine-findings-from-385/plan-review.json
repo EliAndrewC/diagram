@@ -534,6 +534,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T130 - consts.py split at the bar": {
+   "sha256": "705bfe5b056ce0951870ccaba1e2f3e4e31ae0d3c6a28d8d77d80351bac7a159",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T130 Approach (checklist part A)": {
+   "sha256": "fcd218b97744d2ec7bbfb1275c77ebb823565c69c29a5e1cb6a6ce182141e426",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T130 Decisions": {
+   "sha256": "dd0475962f0c4943c2891722314cf91bc34a7055e895e5eca7cfe762bdefb1bd",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4112,6 +4130,42 @@
      "summary": "T112: the seating ground (162 ft) keeps its size, labeled a map drawing convention on 0285, because it counts the household's wood floor, which a lot need not hold.",
      "class": "within",
      "why": "The reason is that the two do not compare, not fit: on that premise the seating ground does not depart from the lot-size record, and labeling it a convention is the record-it exit. The classification rests on that premise, a code fact the bundle cannot check. Adjudicated apart from the homestead ground because D116 covers both under one justification."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T130 - consts.py split at the bar",
+    "### T130 Approach (checklist part A)",
+    "### T130 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D117-shape",
+     "summary": "consts.py is split into a sibling module hamletgen/consts_fields.py re-exported by name from consts.py (as consts_water.py is), not a consts/ package (Approach step 6 exit c).",
+     "class": "within",
+     "why": "Amendment 7 offers the landing.py -> landing/__init__.py shape with 'like', as an example of a refactor in which 'anything that is importing from that module should be able to have imports that do not change'. A sibling submodule re-exported by name from consts.py meets that purpose (step 9: every moved name resolves through consts and the package)."
+    },
+    {
+     "id": "T130-split-not-trim",
+     "summary": "Over the bar the file is split, never trimmed (Approach step 2 and exit a not taken).",
+     "class": "within",
+     "why": "This is amendment 7's rule: 'we should not attempt to bring ourselves to just below that limit. When we hit it, we should take that as a sign that we need to do a refactor by pulling the module out into submodules'."
+    },
+    {
+     "id": "T130-which-names",
+     "summary": "The block moved is the field archetypes and field/pond knobs, FIELD_ARCHETYPES through ROLLED_ARCHETYPES, 20 names, verbatim, with no value changed and the claims rows rekeyed.",
+     "class": "within",
+     "why": "The request does not say which names go where; any coherent verbatim block moved with imports unchanged honors it."
+    },
+    {
+     "id": "D117-stopping-point",
+     "summary": "Only the 187-line field block moves ('nothing else changes'), leaving consts.py at 846 lines; the plan's constraints (step 2) state the bar and 'split never trimmed' but omit the GM's size target for the pieces.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Amendment 7: split 'into multiple submodules where no submodule should ideally be longer than about 2/3 the size of the limit. So, you know, around 650 lines or so. Now that second thing doesn't need to be a hard limit because it's still well under our 1,000 line limit, but the idea is that if we do a refactor that brings us to just barely under 1,000 lines, then what we're really doing is setting ourselves up for having to constantly go back and do iterative tweaks'. 846 is 85% of the bar and about 200 lines over the ~650 target; the GM's softness is licensed 'because it's still well under' 1,000, and the plan neither names the target nor argues that 846 is well under or that the headroom purpose is served, when the file reached 1,003 by exactly the claims-row growth that will continue. Not physically impossible (more names, or a second sibling, can move; cost is not a fidelity argument), not implied by the GM's words, and applying the target does not defeat the request's purpose. Amendment 9's 'raise our soft cap to 80%' cannot be confirmed from the bundle to refer to this cap, but 846 also exceeds 80% (800 lines), so the ruling is the same under either reading. To clear: split so each piece is near ~650 (or at most within whatever soft cap the GM's 80% sets), or state in the plan a reason grounded in the GM's words."
     }
    ]
   }
