@@ -32216,12 +32216,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_connector_through#connector round the field and the steadings": {
-  "body": "f3347cc6bdae785f",
+  "body": "a651b2fd818523e6",
   "claim": "connector round the field and the steadings - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: bent and threaded, else the dry exit",
-  "code": "c3515bdb3cbcc559",
-  "core": "74800c63d50ab983",
-  "date": "2026-10-18",
-  "note": "bent round the field, threaded through the steadings, else the dry exit; never across the crop or a farmstead",
+  "code": "fce55ea6b5b5a089",
+  "core": "2c3cd5892bbf56f1",
+  "date": "2026-10-22",
+  "note": "matches the pages: the track out is bent off the field and threaded through the steadings, otherwise it takes the dry exit. The new step sends a threaded run that no longer reaches its far end to the dry exit, which keeps the track running off the map rather than stopping in open country. Its 1 ft end check is a tolerance, not a fact about the place.",
   "pages": {
    "0081-village-lanes.drawing.html": "f0a488aba85003e2",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "73544dbd2b202b85"
@@ -32229,17 +32229,17 @@
   "research": "8a016db0365d2c0c",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
-   "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
+   "0081-village-lanes.drawing.html:df440690bbce9cb6",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_connector_through#connector's berth off the field": {
-  "code": "e2fd5a3b4cf731f4",
-  "core": "74800c63d50ab983",
+  "code": "8bdaea625276fd08",
+  "core": "2c3cd5892bbf56f1",
   "date": "2026-10-05",
   "note": "the page lets a lane touch the plot boundary and sets no setback, so 17 ft is the code's own",
   "pages": {},
@@ -32247,15 +32247,34 @@
   "rests": [
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_connector_through#gives up a wood seat as last resort": {
-  "code": "19071812c2e5569d",
-  "core": "74800c63d50ab983",
+  "code": "82a0a337d1b5aeb7",
+  "core": "2c3cd5892bbf56f1",
   "date": "2026-10-11",
   "note": "0036 keeps a lane out of a farm's wood and lets a copse fall short where the ground is used up; it never weighs a through-way against a seat",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-22",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::_connector_through#never stopping in open country": {
+  "body": "a651b2fd818523e6",
+  "claim": "never stopping in open country - village-lanes.drawing: the track out never stops in open country, so a threaded run that no longer reaches its far end, past the frame, takes the dry exit (405 T124)",
+  "code": "75842a94a1570b52",
+  "core": "2c3cd5892bbf56f1",
+  "date": "2026-10-22",
+  "note": "§13 says the track out \"never stops in open country\"; the new guard sends any threaded run that no longer reaches the swept track's far end to the dry exit, which always leaves the frame; the 1.0 ft is a float tolerance, not a decision about the place",
+  "pages": {
+   "0081-village-lanes.drawing.html": "f0a488aba85003e2"
+  },
+  "research": "f4963066b67090ee",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:df440690bbce9cb6"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::choose_track_out#the track out decided once": {
