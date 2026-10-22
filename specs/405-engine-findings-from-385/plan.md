@@ -474,3 +474,61 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 - **D113** Round 1 (claims only, no behavior changed): claims written for the 10 UNCLAIMED decisions round 1 takes (the connector's gate fold, a way reached only where walked to, the field reach asked on brook maps only, the paddy's edge tried first, a web run trimmed to what it serves, an end within 4 ft, a fouling segment cut out, a junction's bulge - its duplicate with it - and crossings only, the run-on's fixture pad) and 4 MISLABELED relabeled (a door end on 0081; the gap's middle on 0246 and the easiest way on 0081, the centering strength UNRESEARCHED; the 20 degree fray on 0081; the 12 ft dooryard reach a GUESS of 0246). Round 2 as Approach 5 names it. Rendering: as each claim is labeled.
 
+
+## T110 T122 - the record, written in page session 6
+
+### T110 Approach (checklist part A)
+
+1. **The goal, in the world.** A reader of 0084 and 0035 learns when a way crosses a farm ditch rather than going round, and which deck a way's crossing takes - the two pages agreeing.
+2. **The constraints.** The research record's rules; a search pass before a GUESS.
+3. **Where each comes from.** R: the research pass of 2026-10-22 (King 1909: a country by-way over a farm canal on a footbridge, ATTESTED ONLY narrowly; Fei 1936, post-1912, not cited; a Gifu 1779 catalog, a lead); 0084, 0035.
+4. **Do they describe the world here?** Yes: the engine's track out crosses a ditch only as its last resort (T10).
+5. **The order.** Page session 6 wrote it; session 7 checked and applied it; merged.
+6. **The exits.** (a) change the code - not taken: the page was silent; (b) record it - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of two page sessions.
+9. **Done, measured.** 0084's new bullet and the reconciled 0035/0084 deck; session 7's checks (quote-check, record-format, source-reader, modal-depiction) applied and answered (`make record-owed`: 0 unanswered, 2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T110 Decisions
+
+- **D114** 0084 says a way crosses a farm ditch only where it cannot go round (ATTESTED ONLY for a by-way's footbridge, King 1909), the track out's last resort its GUESS; 0035's brook crossing and 0084's deck are reconciled (a way's deck as wide as the way). Rendering: as labeled on the pages.
+
+### T122 Approach (checklist part A)
+
+1. **The goal, in the world.** 0035 says what a track running past the settlement does where no crossing place lies on its line, and that a way crosses water only at a crossing place; 0246 says a track outside the cluster keeps the 7 ft off every homestead part; 0081 names the T-foot a gathered end may take.
+2. **The constraints.** The research record's rules.
+3. **Where each comes from.** T09's rounds 3-5, T121's and T123's (impl-drift outside the change); R: 0035, 0246, 0081.
+4. **Do they describe the world here?** Yes: each item was a page silent on what the code does.
+5. **The order.** Page session 6 wrote 0035 and 0246; the 0081 T-foot sentence and the "defense belt walled" sentence (T121's note) were not in its brief and go to the next page session.
+6. **The exits.** (a) change the code - not taken; (b) record it - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of two page sessions.
+9. **Done, measured.** 0035's new bullet (no crossing place on a track's line; a fallback's crossing count the page's GUESS) and 0246's 7 ft bullet; session 7's checks applied and answered.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T122 Decisions
+
+- **D115** 0035 records where a track crosses no water off a crossing place (map drawing conventions) and the fallback's crossing count as its GUESS; 0246 records a track outside the cluster keeping 7 ft off every homestead part (a map drawing convention). The two 0081 sentences T122 gathered later are written in the next page session. Rendering: as labeled.
+
+## T112 - the homesteads against the attested lot sizes
+
+### T112 Approach (checklist part A)
+
+1. **The goal, in the world.** The record holds how big a clustered village's house lot was, and the maps' homestead ground is labeled honestly against it.
+2. **The constraints.** The spacing pass of 2026-10-22 (`spacing-research.md`); room before packing (the GM, 2026-10-12); T107's measurements (wider spacing failed more seeds; smaller grounds pack).
+3. **Where each comes from.** R: 0285 (the 1698 Hyakken register, median 157 tsubo; Buck; Ushijima); G: the 104 ft and 162 ft grounds, a map drawing convention.
+4. **Do they describe the world here?** Yes: the seating ground counts the household's wood floor, which a lot need not hold, so the two do not compare directly.
+5. **The order.** Page session 6 wrote 0285 with its drawing side; session 7 checked it; the engine's two claims cite it.
+6. **The exits.** (a) bring the homesteads toward the 157 tsubo median - not taken: it is packing, which the GM's rule puts after room, and T107 measured that the fit fails on packing, not on room; (b) keep them, labeled a convention with their cost on 0285 - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of two page sessions.
+9. **Done, measured.** 0285 written and checked (session 7); the claims of `HOMESTEAD_GROUND_FT` and `SEATING_GROUND_FT` cite 0285 as a convention.
+10. **Before moving a constant.** No constant moves: weighed and kept (exit b).
+11. **Before fitting things into room.** This is that question: room kept, nothing packed.
+
+### T112 Decisions
+
+- **D116** The homestead and seating grounds keep their sizes, labeled a map drawing convention on 0285 with their cost (above the typical attested lot); bringing them toward the median would pack the farms, against the room-first rule and T107's measurement. Rendering: a map drawing convention.
