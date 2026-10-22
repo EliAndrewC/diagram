@@ -173,6 +173,33 @@ def test_the_grove_fallback_s_route_round_the_band_is_taken(monkeypatch) -> None
     assert out == round_it and not _crosses_fabric(out, bands, 0.0), "the fallback's route, as found"
 
 
+def test_the_grove_fallback_s_route_across_a_crop_plot_is_not_taken(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 405 T09: the grove fallback's later routes left the crop out of their walls, so a route round the band could
+    cross row crops (0081: never). Each is now taken only where it crosses no crop plot: the same route as the test above,
+    with a plot on its middle leg, is refused, and what comes back crosses no plot."""
+    from l7r.diagram.hamletgen.ways import _crosses_fabric, track
+
+    plan = a_plan()
+    plan.seat = a_seat(plan)
+    s = _hamlet_for_ways()
+    s.M["houses"] = [{"x": 760.0, "y": 500.0 + dy, "w": 60.0, "h": 40.0, "rot": 0.0, "kind": "plain"} for dy in range(0, 401, 40)]
+    s.M["groves"] = [{"x": 700.0, "y": 700.0, "w": 40.0, "h": 80.0, "rot": 0.0, "of": [760.0, 700.0], "face": [-1, 0], "depth": "deep"}]
+    plot = [(540.0, 610.0), (570.0, 610.0), (570.0, 630.0), (540.0, 630.0)]
+    s.M["dry_plots"] = [{"poly": [list(v) for v in plot]}]
+    round_it = [(660.0, 700.0), (660.0, 620.0), (450.0, 620.0)]
+    calls: list[int] = []
+
+    def route(*a, **k):  # type: ignore[no-untyped-def]
+        calls.append(1)
+        return [] if len(calls) == 1 else list(round_it)
+
+    monkeypatch.setattr(track, "_route", route)
+    monkeypatch.setattr(track, "_out_of_bands", lambda p, bands, toward: round_it[0] if p == (700.0, 700.0) else p)
+    out = track._thread_the_fabric(s, plan, [(700.0, 700.0), (450.0, 620.0)])
+    assert _crosses_fabric(round_it, [plot], 0.0), "the route found crosses the plot"
+    assert out != round_it and not (len(out) >= 2 and _crosses_fabric(out, [plot], 0.0)), "it is not what comes back"
+
+
 def test_where_no_route_rounds_the_band_the_track_keeps_its_far_part(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """The grove fallback's last resort (feature 291): with no route at all, what is kept is the run's FAR part, from its
     far end back to where it would first enter a band - clear of every band - and the web joins the near end."""

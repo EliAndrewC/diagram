@@ -148,6 +148,16 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
             the bands, else only the part clear of them kept
         the track's route walled - research/questions/0081-village-lanes.drawing.html: never across row crops or the flooded paddy, and off wet ground (the field, crop, toe band and wet ground walled)
         the track kept off drawn water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses water only at a crossing
+        every fallback walled too - research/questions/0081-village-lanes.drawing.html: never across row crops, and off wet ground - the swing, the
+            grove fallback's three routes and its far clip are each taken only where they cross no crop plot (at 0 ft: a way may come up to the bund),
+            and the three routes wall the toe band and the wet ground as the first route does (405 T09)
+        an end walked clear along its own leg - GUESS: an end standing within the gap of the fabric is pushed out along the run's own first or
+            last leg, so the track still leaves from where it was aimed
+        the grove fallback's three routes in order - GUESS: round the grown bands and the crop, then the bands alone (the spur's field end
+            stands inside the crop's gap, so the crop is tested after the route, not walled in it), then the bands with the water left to the
+            ford pass; the first that crosses no band, no crop and no more water than the run it replaces is taken
+        no more water than the run it replaces - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way
+            crosses water only at a crossing, so a fallback may not add a crossing the run did not make
     """
     if len(run) < 2:
         return run
@@ -196,6 +206,8 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         for step in (40.0, 80.0, 140.0, 220.0):
             detour = [run[0], (mx + ux * step, my + uy * step), run[-1]]
             cand = clip_to_clear(detour, fabric, gap)
+            if len(cand) >= 2 and _crosses_fabric(cand, [*crops, *wet_now], 0.0):
+                continue  # 405 T09: walled as the first route is - no row crop, no wet ground
             # THE SWING THAT WORKS. Not reached by any test, and the structural reason is worth stating
             # rather than leaving for the next session to re-derive (feature 146, ~25 configurations
             # tried): the detour KEEPS `run[0]` and `run[-1]`, so whatever refused the straight run
@@ -228,11 +240,12 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         # ...AT 0036'S ROOM OFF THE TREES (feature 385 T109, D128): the bands grown so a route and a clip at the footpath's gap keep
         # the line `CONNECTOR_BAND_GAP_FT` (12.5 ft) off them, the crops keeping their own gap in the same route
         roomy = [list(ring_offset(b, CONNECTOR_BAND_GAP_FT - FOOTPATH_FABRIC_GAP, 0.0)[: len(b)]) for b in bands]
-        for hard, water in (([*roomy, *crops], lines), (roomy, lines), (roomy, [])):
+        wet = [*([toe_now] if toe_now else []), *wet_now]  # 405 T09: every fallback walls the wet ground the first route does
+        for hard, water in (([*roomy, *crops, *wet], lines), ([*roomy, *wet], lines), ([*roomy, *wet], [])):
             around = _route(ends[0], ends[1], hard, [], water, gap=FOOTPATH_FABRIC_GAP)
             if (
                 len(around) >= 2
-                and not _crosses_fabric(around, bands, 0.0)
+                and not _crosses_fabric(around, [*bands, *crops], 0.0)
                 and _water_crossings(around, lines) <= _water_crossings(kept, lines)
                 and not _crosses_fabric(around, fabric, FOOTPATH_FABRIC_GAP)
             ):
@@ -241,7 +254,7 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         # map's edge back to where it would first enter a band, and the web joins the near end (seed 1's spur, which began
         # inside its own farm's north band)
         far = clip_to_clear(kept[::-1], roomy, FOOTPATH_FABRIC_GAP)[::-1]
-        if len(far) >= 2 and not _crosses_fabric(far, fabric, FOOTPATH_FABRIC_GAP):
+        if len(far) >= 2 and not _crosses_fabric(far, fabric, FOOTPATH_FABRIC_GAP) and not _crosses_fabric(far, [*crops, *wet], 0.0):
             return far
     # AND NEVER THE OFFENDING RUN AT ALL (feature 287, ways W25, FR-005): this terminal handed back the clipped run whether or
     # not it still crossed the steadings, or the original when the clip left nothing - the fallback this docstring's own
