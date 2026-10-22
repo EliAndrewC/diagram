@@ -465,6 +465,20 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 10. **Before moving a constant.** None moves.
 11. **Before fitting things into room.** n/a.
 
+### T09 Approach (re-answered 2026-10-22T13:16Z)
+
+1. **The goal, in the world.** Unchanged: no fallback of the track crosses row crops, the flooded paddy, wet ground or reeds, or crosses water anywhere but at a crossing place.
+2. **The constraints.** As before; 0081 (no causeway drawn, so no track crosses the reeds); 0035 (a crossing place every 160 ft or so, on a straight reach).
+3. **Where each comes from.** The claims round 2 (impl-drift, 2026-10-22): the defense belt was left out of the walls, and the third route and the swing crossed water anywhere. R: 0081, 0035.
+4. **Do they describe the world here?** Yes; a scripted hamlet draws no defense belt, so walling it moves no live map.
+5. **The order.** As before, less the third route; the swing refused over water.
+6. **The exits.** (a) DEVIATIONs of 0081 and 0035 recorded on the pages - not taken: the code can keep both; (b) wall the belt, drop the third route, keep the swing off water - taken, measured.
+7. **The search smell.** None.
+8. **The budget.** 20 min more.
+9. **Done, measured.** `make test-file FILE=tests/hamletgen/ways/` 595 passed; `make cohort` 16/16 and seed 11 (the third route's own case) 7/7 (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
 ### T09 Decisions
 
-- **D95** (amended after the claims round 1, 2026-10-22) In `_thread_the_fabric` (now `ways/thread.py`): every fallback - the swing's detour, the grove fallback's three routes and its far clip - is taken only where it crosses no crop plot, no wet ground, no toe band and not the field (`plan.envelope`), tested at 0 ft with each end drawn in 3 ft (`_inner`: a spur ends on the bund); the three routes wall the toe band and the wet ground; the swing, like the grove routes, may add no water crossing the run did not make (0035). Claims: every fallback walled (0081), an end walked clear along its own leg (GUESS), the three routes in order (GUESS), no more water than the run it replaces (0035), the third route's crossings (GUESS). `track.py` passed the 1,000-line bar with the claims, so the thread half is lifted out to a sibling `ways/thread.py`, which `track` re-exports - as `cluster_edge.py` was lifted out of the same file (feature 316): a package would move about 40 test patches on `track` for no change in behavior. Rendering: historically accurate (0081, 0035), the order a GUESS.
+- **D95** (amended after the claims rounds 1 and 2, 2026-10-22) In `_thread_the_fabric` (now `ways/thread.py`): every fallback - the swing's detour, the grove fallback's two routes and its far clip - is taken only where it crosses no crop plot, no wet ground (a defense belt's reeds included: no map draws a causeway, 0081), no toe band and not the field (`plan.envelope`), tested at 0 ft with each end drawn in 3 ft (`_inner`: a spur ends on the bund); the two routes wall the toe band and the wet ground and are searched with the water lines, so they cross at the fords, adding no crossing the run did not make (0035); the swing is taken only where it crosses no water; the third route (water left out of its search) is dropped - it crossed wherever it met the water, not at a crossing place (0035). The first route walls the defense belt too. `track.py` passed the 1,000-line bar with the claims, so the thread half is lifted out to a sibling `ways/thread.py`, which `track` re-exports - as `cluster_edge.py` was lifted out of the same file (feature 316). Rendering: historically accurate (0081, 0035), the route order a GUESS.

@@ -145,21 +145,21 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster
         never across a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: routed round
             the bands, else only the part clear of them kept
-        the track's route walled - research/questions/0081-village-lanes.drawing.html: never across row crops or the flooded paddy, and off wet ground (the field, crop, toe band and wet ground walled)
+        the track's route walled - research/questions/0081-village-lanes.drawing.html: never across row crops or the flooded paddy, and off wet ground (the field, crop, toe band and wet ground walled - a defense belt's reeds too, since no map draws a causeway: 405 T09)
         the track kept off drawn water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses water only at a crossing
         every fallback walled too - research/questions/0081-village-lanes.drawing.html: never across row crops or the flooded paddy, and off wet
-            ground - the swing, the grove fallback's three routes and its far clip are each taken only where they cross no crop plot, no wet ground,
-            no toe band and not the field (at 0 ft, 3 ft in from each end: a way may come up to the bund, and a spur ends on it), and the three
-            routes wall the toe band and the wet ground (405 T09)
+            ground - the swing, the grove fallback's two routes and its far clip are each taken only where they cross no crop plot, no wet ground
+            (a defense belt's reeds included), no toe band and not the field (at 0 ft, 3 ft in from each end: a way may come up to the bund, and a
+            spur ends on it), and the two routes wall the toe band and the wet ground (405 T09)
         an end walked clear along its own leg - GUESS: an end standing within the gap of the fabric is pushed out along the run's own first or
             last leg, so the track still leaves from where it was aimed
-        the grove fallback's three routes in order - GUESS: round the grown bands and the crop, then the bands alone (the spur's field end
-            stands inside the crop's gap, so the crop is tested after the route, not walled in it), then the bands with the water left to the
-            ford pass; the first that crosses no band, no crop and no more water than the run it replaces is taken
+        the grove fallback's two routes in order - GUESS: round the grown bands and the crop, then the bands alone (the spur's field end
+            stands inside the crop's gap, so the crop is tested after the route, not walled in it); the first that crosses no band, no crop
+            and no more water than the run it replaces is taken. A third, with the water left out of its search, was dropped (405 T09): it
+            crossed wherever it met the water, not at a crossing place
         no more water than the run it replaces - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way
-            crosses water only at a crossing, so neither the swing nor a grove fallback route may add a crossing the run did not make
-        the third route's crossings - GUESS: the third route leaves the water out of its search, so where it crosses is the run's own count
-            of crossings, set wherever the route meets the water and squared and decked by the crossings stage, not at a ford place
+            crosses water only at a crossing place, so a grove fallback route - searched with the water lines, crossing at the fords - may add
+            no crossing the run did not make, and the swing, whose legs would meet the water anywhere, is taken only where it crosses none
     """
     if len(run) < 2:
         return run
@@ -170,7 +170,7 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         return run
     crops = crop_polys(s)
     toe_now = s.toe_band() or None
-    wet_now = marsh_ground(s.M, but=("defense",))
+    wet_now = marsh_ground(s.M)  # 405 T09: a defense belt's reeds too - no map draws a causeway (0081)
     drawn_water = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
     obstacles = [list(plan.envelope), *crops, *fabric, *([toe_now] if toe_now else []), *wet_now]
     held = [list(plan.envelope), *crops, *([toe_now] if toe_now else []), *wet_now]  # 405 T09: what no fallback crosses
@@ -209,8 +209,8 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         for step in (40.0, 80.0, 140.0, 220.0):
             detour = [run[0], (mx + ux * step, my + uy * step), run[-1]]
             cand = clip_to_clear(detour, fabric, gap)
-            if len(cand) >= 2 and (_crosses_fabric(_inner(cand), held, 0.0) or _water_crossings(cand, lines) > _water_crossings(run, lines)):
-                continue  # 405 T09: walled as the first route is, and no crossing the run did not make
+            if len(cand) >= 2 and (_crosses_fabric(_inner(cand), held, 0.0) or _water_crossings(cand, lines)):
+                continue  # 405 T09: walled as the first route is, and over no water - its legs would meet it anywhere
             # THE SWING THAT WORKS. Not reached by any test, and the structural reason is worth stating
             # rather than leaving for the next session to re-derive (feature 146, ~25 configurations
             # tried): the detour KEEPS `run[0]` and `run[-1]`, so whatever refused the straight run
@@ -236,15 +236,16 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
     if bands and _crosses_fabric(kept, bands, 0.0):
         # an end standing IN a band (seed 11's spur began at a deep band's middle, where the walk along the run found no
         # clear ground) is set out of it first, by the side facing the run's other end: a route cannot start inside what it
-        # avoids. Then three routes, each looser: round the bands and the crop; round the bands alone (the spur's field end
-        # stands on the bund, inside the crop's gap); round the bands with the water left to the ford pass (seed 11's spur
-        # already crossed the channel) - the last taken only if it crosses no more water than the run it replaces
+        # avoids. Then two routes, the second looser: round the bands and the crop; round the bands alone (the spur's field end
+        # stands on the bund, inside the crop's gap). A third, round the bands with the water left to the ford pass (seed 11's
+        # spur already crossed the channel), was DROPPED by 405 T09: it crossed wherever it met the water, not at a crossing
+        # place (0035) - where the two find nothing, the far clip or nothing is the answer
         ends = [_out_of_bands(run[0], bands, run[-1]), _out_of_bands(run[-1], bands, run[0])]
         # ...AT 0036'S ROOM OFF THE TREES (feature 385 T109, D128): the bands grown so a route and a clip at the footpath's gap keep
         # the line `CONNECTOR_BAND_GAP_FT` (12.5 ft) off them, the crops keeping their own gap in the same route
         roomy = [list(ring_offset(b, CONNECTOR_BAND_GAP_FT - FOOTPATH_FABRIC_GAP, 0.0)[: len(b)]) for b in bands]
         wet = [*([toe_now] if toe_now else []), *wet_now]  # 405 T09: every fallback walls the wet ground the first route does
-        for hard, water in (([*roomy, *crops, *wet], lines), ([*roomy, *wet], lines), ([*roomy, *wet], [])):
+        for hard, water in (([*roomy, *crops, *wet], lines), ([*roomy, *wet], lines)):
             around = _route(ends[0], ends[1], hard, [], water, gap=FOOTPATH_FABRIC_GAP)
             if (
                 len(around) >= 2
