@@ -31263,23 +31263,16 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#no more water than the run it replaces": {
+ "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#no more crossings than the run it replaces": {
   "body": "a6181ba244b18e6a",
-  "claim": "no more water than the run it replaces - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses water only at a crossing place, so a grove fallback route - searched with the water lines, crossing at the fords - may add no crossing the run did not make, and the swing, whose legs would meet the water anywhere, is taken only where it crosses none",
-  "code": "3c39289cd7436e99",
+  "claim": "no more crossings than the run it replaces - GUESS: a grove fallback route is taken only where it crosses no more water than the run it replaces; 0035 does not say how many crossings a way may make (only that a crossing pays where it saves about 150 ft)",
+  "code": "a4642ab5fa55a87a",
   "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
-  "note": "the swing's \"crosses none\" and the routes searched with the water lines follow 0035 (crossings at plank-bridge crossing places). The cap `_water_crossings(around, lines) <= _water_crossings(kept, lines)` does not: 0035 sets no limit on how many crossings a way makes. Its only rule is that a crossing pays when it saves about 150 ft. The cap is the project's own choice, so mark that part GUESS or UNRESEARCHED",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
-  },
-  "research": "d47738a05844fe19",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "the `<= _water_crossings(kept, lines)` test is a choice 0035 does not make; the page only prices a crossing at about 150 ft of walk, and marks that a guess too",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#the grove fallback's two routes in order": {
   "body": "a6181ba244b18e6a",
@@ -31342,6 +31335,23 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#water crossed only at a crossing place": {
+  "body": "a6181ba244b18e6a",
+  "claim": "water crossed only at a crossing place - villages-beside-their-stream-one-bank-or-both.drawing: a grove fallback route is searched with the water lines, so it crosses at the fords; the swing, whose legs would meet the water anywhere, is taken only where it crosses none",
+  "code": "5003aad96b881a55",
+  "core": "96eb304c7a6aa25e",
+  "date": "2026-10-22",
+  "note": "both grove fallback routes are searched with `lines`, and the swing is skipped (`continue`) wherever `_water_crossings(cand, lines)` is nonzero, matching the page's ways crossing at set crossing places",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
   ],
   "verdict": "IN-STEP"
  },
