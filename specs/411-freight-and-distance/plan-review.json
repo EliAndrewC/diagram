@@ -60,6 +60,36 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "### T01 Approach": {
+   "sha256": "bd90f2eb2062bbfa5834803ca21a5d487a4f546fe730eeb630687c369581f9c2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach": {
+   "sha256": "22215fcd5d2c580819ab8bd01b1e5c82ac54f9aa7d0d1fa2e0b33c694c258d6f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach": {
+   "sha256": "2a3bb9abb5e69b8d31899bda5ba6664ce6221a2713c065c5e957da8d92b42e2c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach": {
+   "sha256": "6d4b2bc3d0346a76a71ed1fd79f73ec17a1da18b2e10a1fb49bd97a7c91e7935",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach": {
+   "sha256": "07e85a4ec19cd6daf1461fa1c363bb9b92584a0f07cf8c7b08a8b408d20e62ba",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -150,6 +180,79 @@
      "summary": "Order: page sessions, implementation check, reply, report and land.",
      "class": "within",
      "why": "Sequencing only."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "### T01 Approach",
+    "### T02 Approach",
+    "### T03 Approach",
+    "### T04 Approach",
+    "### T05 Approach"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-split",
+     "summary": "Questions 1 and 2 are written into 0280 (freight, water against land) and 0281 (how far goods traveled), each figure with its verdict and file",
+     "class": "within",
+     "why": "This carries issue #12 questions 1 and 2 whole, and FR-001's per-figure file and verdict. Splitting them across two fragments narrows nothing."
+    },
+    {
+     "id": "T01-continuation",
+     "summary": "The ten-key write cap sent the Edo five-ri rule to a continuation session, which wrote it into 0281",
+     "class": "within",
+     "why": "The figure was still written. Only the session that writes it changes, and no figure is dropped."
+    },
+    {
+     "id": "T01-no-search-loop",
+     "summary": "The research passes run once; leads not followed are named in the handoff and in the absence notes",
+     "class": "within",
+     "why": "The issue is marked 'Low priority' and 'Not urgent' and does not ask for an exhaustive search. FR-005 itself requires that a nearest-only figure be SILENT with its untried leads named, and this block does exactly that. No figure is excused from a verdict."
+    },
+    {
+     "id": "T01-budget",
+     "summary": "One write session plus its continuation, and one check session of at most two rounds per check (three for record-format on 0282)",
+     "class": "within",
+     "why": "This is a process budget. It does not reduce what the reply must answer."
+    },
+    {
+     "id": "T02-split",
+     "summary": "Questions 3 and 4 are written into 0282 (how tea traveled) and 0283 (a famous good far from home)",
+     "class": "within",
+     "why": "This carries issue #12 questions 3 and 4 whole."
+    },
+    {
+     "id": "T02-outcomes",
+     "summary": "Shizuoka tea and Tosa charcoal were searched; Shizuoka is SILENT and Tosa is ATTESTED ONLY FOR Chikuzen 1836",
+     "class": "within",
+     "why": "Both cases the issue names were searched and given one of the four verdicts. This is the honest reporting FR-005 requires, not a narrowing of the question."
+    },
+    {
+     "id": "T03-impl-check",
+     "summary": "0280-0283 are closed with their no-code lines through make impl-check F=411",
+     "class": "within",
+     "why": "This is FR-003."
+    },
+    {
+     "id": "T04-reply",
+     "summary": "The reply on #12 gives, per figure, its file, its verdict and what is open, and every mode and good the issue names gets a verdict",
+     "class": "within",
+     "why": "This is FR-001, FR-004 and FR-005, and it covers every good and mode the issue lists."
+    },
+    {
+     "id": "T04-arithmetic",
+     "summary": "Ratios, day counts and parity distances are this record's own arithmetic, labeled as such in the reply",
+     "class": "within",
+     "why": "The issue asks for 'how many times cheaper', the land-to-water ratio and 'the distance at which carriage doubled the price', and these are derived quantities. Labeling them as arithmetic rather than as a source's figure keeps faith with FR-005 and does not narrow the request."
+    },
+    {
+     "id": "T05-land-and-watch",
+     "summary": "Report, land on main, then watch #12 until gm-assistant closes it",
+     "class": "within",
+     "why": "This follows the issue's 'I (gm-assistant) verify and close' and FR-004."
     }
    ]
   }

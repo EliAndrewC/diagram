@@ -73,6 +73,8 @@ anchor cultures	anchor culture
 animal unit	animal unit
 animal units	animal unit
 anjifang	anjifang
+anna	anna
+annas	anna
 anpei	anpei
 ansei	Ansei
 anthropogenic	anthropogenic
@@ -267,6 +269,8 @@ bobana	bobana
 bochi	bochi
 bodaiji	bodaiji
 bofurin	bofurin
+bohea	Bohea
+bohea country	Bohea
 boji	boji
 bojikui	bojikui
 bomori	bomori
@@ -422,7 +426,9 @@ causeways	causeway
 cdr	crude death rate
 cdrs	crude death rate
 celestial order	Celestial Order
+censor	censor
 censorate	Censorate
+censors	censor
 centipede lane	centipede lane
 centipede lanes	centipede lane
 centroid	centroid
@@ -593,6 +599,7 @@ concave-bank	concave bank
 confluence	confluence
 confluences	confluence
 confraternities	kō
+congou	Congou
 conservation headland	conservation headland
 conservation headlands	conservation headland
 consolidated paddies	kochi seiri
@@ -864,6 +871,7 @@ doyoboshi	nakaboshi
 dozo	kura
 dozo-zukuri	dozo-zukuri
 dozō	kura
+dqhd	DQHD
 dragon-bone water wheel	chain pump
 dragon-bone water wheels	chain pump
 dragon-bone wheel	chain pump
@@ -1659,6 +1667,8 @@ honbyakusho	honbyakusho
 honden	honden
 honen	Honen
 honen's	Honen
+hong merchant	Hong merchant
+hong merchants	Hong merchant
 hongawara	hongawara
 hongawara tile	hongawara
 hongluo	Hongluo charcoal
@@ -2248,6 +2258,7 @@ kon-ya	kon-ya
 kon-yamachi	Kon'yamachi
 konara	konara
 kondo	kondo
+kong-fu	Congou
 konnyaku	konnyaku
 konya	kon-ya
 konyamachi	Kon'yamachi
@@ -2262,6 +2273,8 @@ koshiate-mori	koshiate-mori
 koshin	Kōshin
 koshin tower	koshin tower
 koshin towers	koshin tower
+koshu road	Koshu-kaido
+koshu-kaido	Koshu-kaido
 kosode	kosode
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
@@ -3059,6 +3072,8 @@ patrol strips	patrol strip
 pearl delta	Pearl delta
 pearl river delta	Pearl delta
 pearl-delta	Pearl delta
+pecul	picul
+peculs	picul
 peer-reviewed flora	flora
 pekin	Peking
 peking	Peking
@@ -3091,6 +3106,8 @@ phytoplankton	phytoplankton
 pi	pi
 picket line	picket line
 picket lines	picket line
+picul	picul
+piculs	picul
 pig iron	pig iron
 pigsty privy	pigsty-privy
 pigsty-privies	pigsty-privy
@@ -3426,6 +3443,8 @@ ruiju sandai kyaku	Ruiju Sandai Kyaku
 runners	yayi
 running head	running head
 running heads	running head
+rupee	rupee
+rupees	rupee
 rural town	zaigomachi
 rural towns	zaigomachi
 ryo	ryo
@@ -4121,6 +4140,7 @@ temple-certification system	terauke
 ten'ei	Tenei
 ten-volume wamyosho	Wamyosho
 tenbun	Tenbun
+tencha	tencha
 tendai	Tendai
 tenei	Tenei
 tenjin	Tenjin
@@ -4256,6 +4276,8 @@ tokugawa yoshimune	Yoshimune
 tomb hill	tomb hill
 tomb hills	tomb hill
 ton'ya	ton'ya
+ton-mile	ton-mile
+ton-miles	ton-mile
 tonami	Tonami plain
 tonami plain	Tonami plain
 tongdian	Tongdian
@@ -4325,6 +4347,7 @@ trevis	ox-shoeing frame
 trial stand	forest stand
 trial stands	forest stand
 tributary	tributary
+tribute grain	tribute grain
 trifoliate orange	trifoliate orange
 trifoliate oranges	trifoliate orange
 trigram	eight trigrams
@@ -4659,6 +4682,7 @@ xiang-gan	Xiang-Gan
 xiangcang	shecang
 xingqing	Western Xia
 xinyou	xinyou
+xiongnu	Xiongnu
 xu	xu
 xu tan	Xu Tan
 xuande	Xuande
