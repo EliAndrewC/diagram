@@ -54,6 +54,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "### T01 Approach": {
+   "sha256": "d63b62b67d35a03367a4c21755562ee1bc2795ad37da5bc80a587470f3783545",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach": {
+   "sha256": "965963b00255e64547781d124e09cc319b25fbf9f68b27f5ecc02e3a9c031437",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -215,6 +227,46 @@
      "summary": "Preamble, Summary, Technical Context, Performance bookends (N/A, no generator change), Constitution Check: restate the spec and name files; tooling only",
      "class": "within",
      "why": "No decision beyond the spec's; 'tooling only' matches the request's 'tooling feature'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "### T01 Approach",
+    "### T02 Approach"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01.constraint-round-trigger-unchanged",
+     "summary": "The existing round-trigger arbiter paths are left unchanged; only the ask: path gains a review verdict.",
+     "class": "within",
+     "why": "The request is to have the gates honor an arbiter ACCEPT on an ask: trigger, which is the path that failed in feature 408; the round-trigger path already works, and leaving it alone removes nothing the GM asked for."
+    },
+    {
+     "id": "T01.constraint-ruling-covers-text-at-ruling",
+     "summary": "A ruling covers the spec or plan as it reads at the ruling (digest-bound, as the round-trigger accept already is).",
+     "class": "within",
+     "why": "An accept on a review is a verdict on the reviewed text, as every review verdict in this tooling is; binding it to that text is what 'honor an ACCEPT on a plan review' means, not a narrowing of which accepts are honored. It copies the round-trigger behavior the plan cites."
+    },
+    {
+     "id": "T01.REVIEW-explicit",
+     "summary": "The review an ask stands for is named explicitly with REVIEW=spec|plan; an ask without it is about no review.",
+     "class": "within",
+     "why": "Already settled by the accepted spec's FR-001; the plan restates it rather than deciding it."
+    },
+    {
+     "id": "T01.order-and-done",
+     "summary": "Implementation order (hm_arbiter, plan_gate.arbiter_accept, Makefile, docs, tests), each new test shown red with the change removed; done when the two test files pass.",
+     "class": "within",
+     "why": "Sequencing and a done criterion that enforces FR-005; no scope added or removed."
+    },
+    {
+     "id": "T02.land",
+     "summary": "Write the report and land on main through the review gate, ledger and hooks-test.",
+     "class": "within",
+     "why": "The GM asked to work the feature start to finish; landing through the standing procedure is that."
     }
    ]
   }
