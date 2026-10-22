@@ -127,7 +127,11 @@ def _section_span(lines: list[str]) -> tuple[int, int, bool] | None:
             continue
         flat = i == 0 and len(lines) > 1 and bool(lines[1].strip()) and not lines[1].startswith(" ")
         end = i + 1
-        while end < len(lines) and lines[end].strip() and (flat or lines[end].startswith(" ")):
+        # A ONE-LINE CLAIM WRAPPED AT THE SECTION'S OWN INDENTATION (405 T123): `Research: <claim>` whose text runs on to an
+        # unindented line with no ` - ` (so no claim of its own) is one claim; the section ended at that line, cutting T09's
+        # `_unrouted_clear` claim to "a"
+        carried = bool(_SECTION_HEAD.match(raw).group(1).strip()) and not flat
+        while end < len(lines) and lines[end].strip() and (flat or lines[end].startswith(" ") or (carried and " - " not in lines[end])):
             end += 1
         return i, end, flat
     return None
@@ -157,6 +161,8 @@ def section_lines(doc: str | None) -> list[str] | None:
                 out.append(nxt.strip())
             else:
                 out[-1] += " " + nxt.strip()
+        elif out and " - " not in nxt:
+            out[-1] += " " + nxt.strip()  # a line that cannot be a claim continues the one above (405 T123)
         elif base is None or indent <= base:
             base = indent if base is None else base
             out.append(nxt.strip())

@@ -454,3 +454,14 @@ def test_a_claimed_dictionary_s_claims_are_keyed_by_their_own_line_and_its_entri
     (z,) = [x for x in cl.module_units(spread, "m.py")[2] if x.qualname == "Z"]
     assert z.blocks == ("**B", "'c': 3")
     assert w.blocks == () and w.code(w.claims[0]) != cl._sha("section-claim\x1f" + w.claims[0].normalized()), "not a dict: as before"
+
+
+def test_a_one_line_claim_wrapped_at_the_docstring_s_indentation_keeps_its_continuation() -> None:
+    """405 T123: T09's `_unrouted_clear` claim wrapped onto a line at the docstring's own indentation, read as a new claim and
+    dropped, its account cut to 'a'."""
+    from l7r.diagram.tools.claims import parse_claim, section_lines
+
+    doc = "Pick a piece.\n\nResearch: a piece over no water - research/questions/0035-a.drawing.html: a\nway crosses water only at a crossing place"  # as `ast.get_docstring` cleans it
+    got = section_lines(doc)
+    assert got is not None and len(got) == 1
+    assert parse_claim(got[0]).account == "a way crosses water only at a crossing place"
