@@ -59,6 +59,9 @@ district).
   - Hauls: Ohara women (keihan.co.jp/navi/kyoto_tsu/tsu201205.html, "it is said": about 15 km, 30-40 kg on the head);
     Luopang firewood (廣東新語 卷25, registered: 10920-guangdong-xinyu-25), "a hill near water is worth double"; 0273's salt
     named; Hagi rice to Osaka (A). Tea, cloth and silk distances: SILENT beyond Xu Tan's destinations.
+  - A Japanese rule from the literature (the issue asks for Japan or China): search it (the 津出し五里 rule, that villages
+    bore the carriage of tax rice to the shipping point up to 5 ri, is a lead; the pass's Azumino PDF returned 404). Give it
+    a verdict and the search, or SILENT with the search in the absence note.
   - Leads to try if time allows, else name them in the handoff: Kibe's Table 1 (freight by district), Furushima on chuma
     freight per ri, 新唐書 食貨志 for Liu Yan.
 

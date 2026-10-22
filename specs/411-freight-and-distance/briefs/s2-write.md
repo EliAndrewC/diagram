@@ -58,6 +58,9 @@ belongs there rather than repeating it.
     Nada's licenses for Edo only (1832). Freight: Kato 2007 (key from session 1). Carriage: registered
     25760-gakken-nada-sakagura (1,000 koku a ship, 10-14 days). A brewery price the same year: SILENT.
   - SILENT: Kumano charcoal at Tanabe; Uji tea prices; Shaoxing wine; Jingdezhen porcelain (d'Entrecolles gives no pair).
+  - Not yet searched, which the issue names: Shizuoka (Suruga) tea reaching Edo (C) and Tosa white charcoal (D). Search
+    each (静岡茶 / 駿河茶 江戸 運送 値段; 土佐 白炭 江戸 値段): a verdict and the search, or SILENT with the search in the
+    absence note.
   - Leads to name: the HK EDB 1736 Wuyi cargo; Yunoki's tables; Liu Yong on VOC Canton prices; Ball's Appendix pp. 380-382.
 
 **New registry keys** (at most ten this session): Rockhill 1891, 明史 卷80, Parkes 1854, ja.wikipedia 宇治採茶使, Ball 1848,

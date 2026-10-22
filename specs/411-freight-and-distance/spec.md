@@ -77,7 +77,12 @@ the fragment file, the verdict and what is still open.
 ## Assumptions
 
 - China first for routes and transport, Japan beside it (the issue's order).
-- Low priority (the issue): one write session and one check session; leads not followed are named, not chased.
+- Two write sessions (A+B, then C+D) and one check session: the findings cite 16 sources with no registry entry yet
+  (counted 2026-10-22), against a cap of ten new keys a write session. Leads not followed are named, not chased; each is
+  listed under what is still open.
+- The issue names three cases the passes did not reach - a Japanese rule from the literature (question 2), Shizuoka tea
+  reaching Edo (question 3) and Tosa white charcoal (question 4): each gets a verdict and its search, or is listed as not
+  searched under what is still open.
 
 ## The findings, figure by figure (the passes, 2026-10-22; leads until read on the page)
 
@@ -126,3 +131,9 @@ made?"** (question 4). China first in each, Japan beside it.
   Jingdezhen porcelain: SILENT.
 - **Wages beside them**: where the source gives none, the nearest in the record (0250, 0255, 0260, 0275, 0278) named and
   labeled.
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-22): CHANGES REQUIRED - the session count was put in the issue's mouth and was false
+  against the ten-key cap; fixed (two write sessions, 16 keys counted). Its note on three cases the passes did not reach
+  (a Japanese rule, Shizuoka tea, Tosa charcoal) added to the Assumptions and the write briefs.
