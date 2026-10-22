@@ -1,0 +1,2 @@
+- 0280: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i -E 'freight|water.?freight|transport.?cost|boat.?rate|porter.?rate' l7r pool (only modal prose under l7r/diagram/interactive/assets/modals mentions freight; no code sets a freight rate)
+- 0281: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i -E 'haul distance|carriage cost|market radius|price.?distance|freight' l7r pool (no code prices a good by distance)
