@@ -137,3 +137,4 @@ made?"** (question 4). China first in each, Japan beside it.
 - spec-fidelity round 1 (2026-10-22): CHANGES REQUIRED - the session count was put in the issue's mouth and was false
   against the ten-key cap; fixed (two write sessions, 16 keys counted). Its note on three cases the passes did not reach
   (a Japanese rule, Shizuoka tea, Tosa charcoal) added to the Assumptions and the write briefs.
+- spec-fidelity round 2 (2026-10-22): FAITHFUL - the session count and the three cases resolved.
