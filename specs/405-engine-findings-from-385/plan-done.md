@@ -1811,22 +1811,3 @@ Owed by the cohort (cohort@20261021T192759Z: seeds 10, 24, 36 and 47 newly faili
 10. **Before moving a constant.** n/a - no constant moves in this task.
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
-<!-- plan-archive: archived 2026-10-22 -->
-### T10 Approach (re-answered 2026-10-21T20:00Z)
-
-1. **The goal, in the world.** Where a settlement's only way out crosses a farm ditch, the track out crosses it on a deck, as 0084 draws a way over a ditch.
-2. **The constraints.** 0084 §116: where a way crosses a stream or ditch the map draws a timber deck as wide as the way; 0035: the brook crossed at its crossing places; the law's decks (a crossing seats a deck, `crossing_deck`, or is refused).
-3. **Where each comes from.** R (0084, 0035) and O (the law's decks).
-4. **Do they describe the world here?** Yes - batch 7's claims round: the fill never crosses a drawn channel, and 0084 expects a deck there.
-5. **The order.** `connector_dry_exit`: after the own-bank fill and the fill open at the brook's crossing places, where both find nothing, a third fill with the drawn channels opened (the brook still only at its crossing places); the settle seats the deck as at any crossing; the claim on 0084; a test; seeds 1-48.
-6. **The exits.** (e) conform, as a last resort - it only turns a refused gateway into a way out.
-7. **The search smell.** None.
-8. **The budget.** 40 min with its landing.
-9. **Done, measured.** The third fill runs only where the other two find no way, with the channels opened and the brook not (test); seeds 1-48 and the pinned rows pass.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T67 Decisions
-
-**D82 - the brook alone gapped.** `on_course(seg, plan.brook)` (both ends within 1 ft of the course) sorts the fill's lines into the brook's and the channels'; `gap_segments` opens only the brook's at its crossing places; the channels stay lines until T10's last fill, which drops them. The claims as Approach item 5 lists them; `FORD_HALF` stays 30 ft, now labeled UNRESEARCHED.
-
