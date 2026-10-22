@@ -1218,6 +1218,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T127 - the carried claims findings": {
+   "sha256": "2a33d040f7551c27eb3a6d3dffffd982f7691b59d939370015467f266f3c4b86",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T127 Approach (checklist part A)": {
+   "sha256": "c831a96e7d0fab5cdfc08c7de603d426e17b67936c7a04a7ac4ada39a2c264d8",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T127 Decisions": {
+   "sha256": "df38ee2f531163598b9f37695940aa4d228d635aed8dccaa492651c530dab5ce",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4593,6 +4611,48 @@
      "summary": "Of the two exits, record the short track against 0081 (not taken) or send it to the dry exit (taken).",
      "class": "within",
      "why": "The taken exit follows the research page; the rejected exit would have been the carve-out. Choosing the page over the exception is inside the request (Amendment 7: follow the research)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T127 - the carried claims findings",
+    "### T127 Approach (checklist part A)",
+    "### T127 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "A5/A6a round-1 relabel only",
+     "summary": "Round 1 is claims only, no behavior changed: relabel only where the code is right and the label wrong.",
+     "class": "within",
+     "why": "Applying the claim vocabulary to carried findings is the work FR-002 and Amendments 7/9 assign; no behavior is changed and nothing is excluded by it."
+    },
+    {
+     "id": "A5 hold-backs",
+     "summary": "LANE_CLEARANCE and access.LANE_MIDDLE_CLEAR_FT (7 ft vs 0081's 3 ft) held back as a departure the page must record; law.field_unreached's connector held back as a code decision.",
+     "class": "within",
+     "why": "Deferring an item that needs a page DEVIATION record or a code decision is ordering, and the grounds are sound; recording the 7 ft vs 3 ft as a DEVIATION rather than a 'stricter than the page' GUESS is exactly what Amendment 9's lint exists to force."
+    },
+    {
+     "id": "A6b code changes later",
+     "summary": "Code changes are each their own decision, later.",
+     "class": "within",
+     "why": "Sequencing; code changes stay in the feature as their own decisions."
+    },
+    {
+     "id": "D113 the thirteen labelings",
+     "summary": "Claims written for 8 UNCLAIMED decisions and 5 MISLABELED relabeled (door end on 0081; gap's middle on 0246; easiest way on 0081; centering strength UNRESEARCHED; 20 degree fray on 0081; 12 ft dooryard reach a GUESS of 0246). Rendering as each claim is labeled.",
+     "class": "within",
+     "why": "Each is a label from the plan's stated vocabulary on code left unchanged; no behavior added, no requested work removed."
+    },
+    {
+     "id": "A4/A5/A9 coverage of the 28 carried claims",
+     "summary": "The plan states 28 carried claims (11 UNCLAIMED, 6 MISLABELED, 5 DRIFTED, 3 CANNOT-TELL, 2 NEEDS-RESEARCH, 1 more); round 1 takes '13 of the 17' while naming 3 held back (17 - 3 = 14); D113 does 8 + 5 = 13; done is 'the 14 owed claims checked'; the order after round 1 schedules only DRIFTED, CANNOT-TELL and NEEDS-RESEARCH.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The plan's own goal is every claim carried here, and FR-002 with Amendments 7 and 9 asks for the feature taken to completion. As written, the 17th UNCLAIMED/MISLABELED claim (17 - 3 held back - 13 done = 1) is placed in no round, the '1 more' of the 28 is placed in no round and given no vocabulary label, and the LANE pair's DEVIATION recording is neither a DRIFTED/CANNOT-TELL/NEEDS-RESEARCH item nor a code change, so neither the 'then' clause nor exit (b) places it. Dropping carried claims by omission is not physically required, not implied by the GM's words, and guts the stated goal. Fix: reconcile 13 vs 14 (name the 14th claim and either do it in round 1 or hold it back with its ground, and make the done criterion agree with D113); name the round that records the LANE pair's DEVIATION on its page; name the round and the category of the '1 more'."
     }
    ]
   }

@@ -789,7 +789,10 @@ def field_unreached(M: Mapping[str, Any]) -> bool:
     once per round and per lane tried (cohort seed 44: 39,321 distances a roll). No vertex comes within the reach of an edge
     whose box, grown by the reach, does not hold it, so the edges are filed by that box once and a vertex asks only its
     cell's; the first within the reach answers, by the same `seg_dist`.
-    Research: a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: on brook maps"""
+    Research:
+        a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: on brook maps
+        asked on brook maps only - UNRESEARCHED: the field reach is asked only where a brook runs, a map whose field is fed otherwise owing
+            none (405 T127)"""
     if not _brooks(M):
         return False
     rings = [f["outline"] for f in M.get("fields") or [] if f.get("outline")] + [d["poly"] for d in M.get("dry_plots") or [] if d.get("poly")]
