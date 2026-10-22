@@ -726,6 +726,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "### T116 Approach (re-answered 2026-10-22T09:47Z)": {
+   "sha256": "d2bcc46e8e8777415b336e78e47e62926be98351774dd2a09a41fca2886f612c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3330,6 +3336,39 @@
      "summary": "Docstrings only; no constant moves.",
      "class": "within",
      "why": "A claims task fixing what the claims say; nothing the GM asked for is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "### T116 Approach (re-answered 2026-10-22T09:47Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T116-a",
+     "summary": "Exit (a): the two claims (RunOnBlocks.clear, _homestead_polys) are reworded to say the own garden is walled at 7 ft too, labeled a DEVIATION of 0246 (stricter than the page), not a GUESS; a docstring change only.",
+     "class": "within",
+     "why": "The finding is that two claims cite 0246 for a behavior the page does not ask. Making the claim say what the code does and that it is our stricter choice is the whole of a claim-drift fix; nothing the GM asked (the request, amendment 7's 'follow the research') is cut. DEVIATION rather than GUESS is correct because the page speaks to the case."
+    },
+    {
+     "id": "T116-b",
+     "summary": "Exit (b) not taken: the readers are not given the lane's owner, so a way stays 7 ft off its own household's garden; nothing in the map moves.",
+     "class": "within",
+     "why": "0246 PERMITS a household's own way beside its own fence; it does not REQUIRE it. Keeping a way farther off is not a passing the page forbids and produces no map defect, so leaving behavior unchanged departs from nothing the GM or the page asked for. The cost reason the block gives is unnecessary to the ruling; the ruling stands on the page permitting rather than requiring."
+    },
+    {
+     "id": "T116-c",
+     "summary": "The departure is recorded on 0246 through T114 (the same page session as the knot exception), and T116 may land with the claims DRIFTED only until then, under CLAIMS_OK naming T114, as T107 did.",
+     "class": "within",
+     "why": "A sequencing choice inside the feature: the record is made by a task of this feature (FR-002 keeps found work here), the drift is bounded by a named task, and the precedent is T107's landing. It narrows no clause of the request."
+    },
+    {
+     "id": "T116-d",
+     "summary": "Budget 15 min with landing; no constant moves; no room fitting.",
+     "class": "within",
+     "why": "Consistent with the decisions above; nothing the spec leaves open is narrowed."
     }
    ]
   }
