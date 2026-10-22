@@ -1226,13 +1226,13 @@
    "declared": "spec-fidelity"
   },
   "### T127 Approach (checklist part A)": {
-   "sha256": "c831a96e7d0fab5cdfc08c7de603d426e17b67936c7a04a7ac4ada39a2c264d8",
+   "sha256": "dfa54f5012ffc369f253adc6ed6be2189da7bbe72ea570856208bc64e6263218",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T127 Decisions": {
-   "sha256": "df38ee2f531163598b9f37695940aa4d228d635aed8dccaa492651c530dab5ce",
+   "sha256": "ca71b318aa76d45ff830e09de32344aadb179683a233ccd99b4f79a3aef295a4",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
@@ -4653,6 +4653,48 @@
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
      "why": "The plan's own goal is every claim carried here, and FR-002 with Amendments 7 and 9 asks for the feature taken to completion. As written, the 17th UNCLAIMED/MISLABELED claim (17 - 3 held back - 13 done = 1) is placed in no round, the '1 more' of the 28 is placed in no round and given no vocabulary label, and the LANE pair's DEVIATION recording is neither a DRIFTED/CANNOT-TELL/NEEDS-RESEARCH item nor a code change, so neither the 'then' clause nor exit (b) places it. Dropping carried claims by omission is not physically required, not implied by the GM's words, and guts the stated goal. Fix: reconcile 13 vs 14 (name the 14th claim and either do it in round 1 or hold it back with its ground, and make the done criterion agree with D113); name the round that records the LANE pair's DEVIATION on its page; name the round and the category of the '1 more'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T127 - the carried claims findings",
+    "### T127 Approach (checklist part A)",
+    "### T127 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T127-scope",
+     "summary": "All 28 carried keys are taken (11 UNCLAIMED, 6 MISLABELED, 5 DRIFTED, 3 CANNOT-TELL, 2 NEEDS-RESEARCH, plus the fillet-bulge duplicate folded into its original); none is dropped.",
+     "class": "within",
+     "why": "Serves FR-002 (found work stays as tasks here) and Amendments 7/9 (take the feature to completion). Counts reconcile: 14 round 1 + 2 round 2 + 11 round 3 + the duplicate = 28. Counts carry a one-shot label (impl-drift rounds of 2026-10-22, claims-carried.jsonl); bundle mode cannot re-run them."
+    },
+    {
+     "id": "D113 / Approach 5 round 1",
+     "summary": "Claims only, no behavior changed: 10 UNCLAIMED written (all but the connector's field reach), the bulge duplicate with its original, 4 MISLABELED relabeled where the code is right and the label wrong; centering strength UNRESEARCHED, dooryard reach a GUESS of 0246.",
+     "class": "within",
+     "why": "FR-001's checklist route; labels follow the claim vocabulary. Parse recorded: the 'gap's middle on 0246 and the easiest way on 0081, the centering strength UNRESEARCHED' clause is read as ONE claim (one key citing two pages, relabeled once), giving 4 MISLABELED here and 4+2=6 overall; and 'the connector's gate fold' (round 1) and 'the connector's field reach' (round 3) as two keys on one piece of code. The bundle cannot confirm either; if either parse is wrong the block's arithmetic fails."
+    },
+    {
+     "id": "Approach 5 round 2 / Approach 6(b)",
+     "summary": "LANE_CLEARANCE and access.LANE_MIDDLE_CLEAR_FT stay at 7 ft off a house corner; the departure from 0081's 3 ft off a wall is recorded on 0081 as a DEVIATION and the claims relabeled DEVIATION. The code does not follow the page.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Amendment 7 sets the default in the GM's words: following the research 'is generally what we should do'. Keeping code that departs from 0081 is an exception to that default, and the block gives no ground for it - it describes the departure (7 ft corner vs 3 ft wall) but not why 7 ft stays. Not impossible, not implied by the GM's words, and no purpose of the request is defeated by conforming; the only visible basis is that the code already does this, which preserves existing behavior the GM did not ask to preserve. 'Use your best judgment' permits a DEVIATION but delegated judgment must be a recorded reason. Seam: law.field_unreached's connector is the same class (code departs from 0081) and is routed to round 3 as a code decision; the block does not say why the two clearances are not. Fix, either: move the two clearances into round 3 as code decisions beside the connector, or state the ground on which 7 ft stays, passing one of the three tests. Caution: if the ground is that 0081's 3 ft is a wall figure that does not speak to corners, the page does not speak and the vocabulary's label is UNRESEARCHED or GUESS, not DEVIATION (DEVIATION concedes the page applies); the label and the argument must agree."
+    },
+    {
+     "id": "Approach 5 round 3 / Approach 6(c)",
+     "summary": "The connector's field reach (0081 s32), the 5 DRIFTED, 3 CANNOT-TELL and 2 NEEDS-RESEARCH are code decisions taken one at a time, each its own decision.",
+     "class": "within",
+     "why": "Decides nothing yet; each returns as its own decision for review. Serves FR-002."
+    },
+    {
+     "id": "Approach 9 / D113 rendering",
+     "summary": "Round 1 done when make claims-coverage is clean, no claim-label flag, every changed claim checked by impl-drift; rendering as each claim is labeled; 30 min budget; no constant moves.",
+     "class": "within",
+     "why": "Verification of the requested work and FR-001's checklist; no behavior added."
     }
    ]
   }
