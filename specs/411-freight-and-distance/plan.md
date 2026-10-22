@@ -57,3 +57,9 @@ or ratio named with what it covers and labeled as this project's arithmetic wher
 ## T - the order
 
 1. The page sessions (s1, s2 write; s3 check). 2. The implementation check. 3. The reply. 4. Report and land.
+
+<!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
