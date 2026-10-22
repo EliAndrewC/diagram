@@ -163,7 +163,7 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
             grove fallback route is searched with the water lines, so it crosses at the fords; the swing, whose legs would meet the water
             anywhere, is taken only where it crosses none
         no more crossings than the run it replaces - GUESS: a grove fallback route is taken only where it crosses no more water than the
-            run it replaces; 0035 sets no limit on how many crossings a way makes (a crossing pays where it saves about 150 ft of walk)
+            run it replaces; 0035 does not say how many crossings a way may make (only that a crossing pays where it saves about 150 ft)
     """
     if len(run) < 2:
         return run
