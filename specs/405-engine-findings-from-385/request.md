@@ -68,3 +68,11 @@ The GM, after the session set T26 down "for the GM to see T107 first":
 After the session's proposal (1: `make set-down` refused while a part B has no arbiter ruling; 2: part B charged to every task in flight; 3: a room table with research ceilings, after a spacing research pass):
 
 > Yes, I agree with that. So please build 1 and 2 as tooling with tests. Now, then run the spacing research pass for 3, then do that task by widening the spacing within that bound as you suggest. Thank you.
+
+## Amendment 9 (2026-10-22) - the claim-label lint; the feature taken to completion again
+
+The GM, after five claims tasks whose time went to label rounds, on the session's proposal ("a lint at `make claims-owed` that flags a GUESS naming a page that doesn't hold the figure, and a GUESS whose text says it is 'stricter than the page'"):
+
+> Yes please file that fix for the lint as the next item in 405.  Then I think we should take another run at closing out this feature.  Im leaving for work soon, and it would be awesome to have the whole thing done when I get home.
+
+> Let's also raise our soft cap to 80%

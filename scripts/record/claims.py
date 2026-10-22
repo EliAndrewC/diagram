@@ -60,6 +60,7 @@ sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True  # the push runs this in fixture trees whose `git status` must stay clean
 import claims_carry  # noqa: E402
 import claims_context  # noqa: E402
+import claims_labels  # noqa: E402
 import claims_stale  # noqa: E402
 import claims_triage  # noqa: E402
 import record_cache as rc  # noqa: E402
@@ -853,6 +854,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         for x in claims_stale.stale(root):  # feature 385 T62: a changed constant's old figure, still on its research's pages
             print(x)
         due = owed(cur, index, qdir, store)
+        _say(claims_labels.flags(cur, (k for k, _ in due), qdir))  # 405 T120: a label its own words contradict, before a round
         if not due:
             print("claims-owed: no claim is owed")
             return 0
