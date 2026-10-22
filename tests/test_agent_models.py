@@ -245,3 +245,4 @@ def test_check_wave_types_every_agent_and_carries_its_follow_up() -> None:
     assert "required: ['label', 'verdict', 'text']" in js
     assert "(got, u) => got || run(args.agentType, u.prompt, u.label, 'Checks')" in js, "a null unit re-launched once"
     assert "u.then" in js and "check before you:" in js, "declared verify steps, the reply appended"
+    assert "{ ...replies[i], label: u.label }" in js, "405 T131: each reply stamped with its unit's own label"

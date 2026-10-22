@@ -493,3 +493,23 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 ### T132 Decisions
 
 - **D119** `record-checked` refuses FIXED_BY on an unfootnoted unit with its message rather than crashing (session 9's fix, with its test). Rendering: n/a (tooling).
+
+## T131 - check-wave stamps each reply with its unit's label
+
+### T131 Approach (checklist part A)
+
+1. **The goal, in the world.** Every reply a check-wave returns is matched to its own bundle by its label, whatever the agent wrote as its label.
+2. **The constraints.** Feature 383 amendment 7's check-wave (`.claude/workflows/check-wave.js`); a tooling fix lands with a test.
+3. **Where each comes from.** Measured: the wave of 2026-10-22 returned 'impl-drift dw3' for unit dw3, so its reply was not recorded until looked up by hand. R for the process.
+4. **Do they describe the world here?** Yes.
+5. **The order.** The workflow's return overwrites each reply's label with its unit's.
+6. **The exits.** (a) tell the agents to echo it - not taken (an instruction to remember); (b) stamp it in the workflow - taken.
+7. **The search smell.** None.
+8. **The budget.** 10 min.
+9. **Done, measured.** `tests/test_agent_models.py` pins the stamp (red without it).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T131 Decisions
+
+- **D120** `check-wave.js` returns `{ ...reply, label: unit.label }` for each unit. Rendering: n/a (tooling).

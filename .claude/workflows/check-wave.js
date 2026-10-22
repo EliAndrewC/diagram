@@ -49,4 +49,6 @@ const replies = await pipeline(
 )
 const back = replies.filter(Boolean).length
 log(`${back} of ${args.units.length} ${args.agentType} unit(s) returned`)
-return args.units.map((u, i) => replies[i] || { label: u.label, verdict: 'NO REPLY', text: '', then: [] })
+// EACH REPLY CARRIES ITS UNIT'S OWN LABEL (feature 405 T131): an agent echoed 'impl-drift dw3' for dw3, and the reply could not be
+// matched to its bundle without a second look
+return args.units.map((u, i) => (replies[i] ? { ...replies[i], label: u.label } : { label: u.label, verdict: 'NO REPLY', text: '', then: [] }))
