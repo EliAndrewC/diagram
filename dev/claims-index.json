@@ -20411,6 +20411,17 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off its own garden and the other built ground": {
+  "body": "b2d01812993e4469",
+  "claim": "off its own garden and the other built ground - GUESS: the same 7 ft off every garden, the lane's own included (the blocks are read without the lane they judge), and off houses, byres, sheds and yards, which no page sizes - stricter than the page, which lets a household's own way run beside its own fence (405 T116)",
+  "code": "b820ec96ebaeae50",
+  "core": "c26b9513b7ff28b3",
+  "date": "2026-10-22",
+  "note": "The research answers the own-garden part, so it is not a GUESS: §59 says \"A household's own way may run beside its own garden fence, kept only off the beds\", and §48 says the way leaves \"round its own garden beds\". The code keeps 7 ft off every garden, the lane's own included, which the page does not record. Either exempt the own fence and keep the run only off the beds, or record the stricter rule on the 0246 drawing page and cite it as a DEVIATION. Calling the houses, byres, sheds and yards a GUESS is fine; no block sizes them",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the crop": {
   "body": "b2d01812993e4469",
   "claim": "off the crop - village-lanes.drawing: never across a dry plot",
@@ -20429,21 +20440,21 @@
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings": {
   "body": "b2d01812993e4469",
-  "claim": "off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane, and the run-on's middle at least 7 ft (`FOOTPATH_FABRIC_GAP`) off the steadings' fabric, gardens included",
-  "code": "2a7c1c8061455bce",
+  "claim": "off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane, and the run-on's middle at least 7 ft (`FOOTPATH_FABRIC_GAP`) off another household's garden fence",
+  "code": "2ef48e600a25c42b",
   "core": "c26b9513b7ff28b3",
-  "date": "2026-10-19",
-  "note": "FOOTPATH_FABRIC_GAP, 7 ft, off the fabric; nothing built on the tread",
+  "date": "2026-10-22",
+  "note": "The checks have the right shape: no house corner or center on the tread, and the fabric gap measured from the run's middle line. But `FOOTPATH_FABRIC_GAP` (7.0) goes into `_crosses_fabric` as a raw figure in the fabric's own units, which are map pixels. In the sibling unit, `WELL_VERGE_FT` is converted with `s.px(...)` first. I need to know whether `s.px` is 1 pixel per foot. If it is not, the 7 ft gap from the fence to the lane's middle is not 7 ft",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
-  "triaged": "2026-10-19",
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the wet ground": {
   "body": "b2d01812993e4469",
@@ -23023,20 +23034,31 @@
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#a path leaves its own yard": {
   "body": "f6f52710e7d7e305",
-  "claim": "a path leaves its own yard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the owner's dooryard is not a wall to its own path; its beds, sheds and fixtures are, the way leaving round them",
-  "code": "ffbb02f72ed362e9",
+  "claim": "a path leaves its own yard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the owner's dooryard is not a wall to its own path; its beds and fixtures are, the way leaving round them",
+  "code": "61d0f6e8adc86a56",
   "core": "005fba1cef0bbd7e",
-  "date": "2026-10-17",
-  "note": "only threshing yards and groves carry an owner; gardens, sheds and fixtures are unowned walls",
+  "date": "2026-10-22",
+  "note": "Only the threshing yard (the dooryard) takes an owner. Gardens, sheds, byres and fixtures take none, so the way goes round them, as the page says",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-19",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#its own garden a wall": {
+  "body": "f6f52710e7d7e305",
+  "claim": "its own garden a wall - GUESS: a garden is an obstacle to its own farm's path as to any other, at the fabric's 7 ft - stricter than the page, which lets a household's own way run beside its own fence, kept only off the beds (405 T116)",
+  "code": "8ec7edffd75df60e",
+  "core": "005fba1cef0bbd7e",
+  "date": "2026-10-22",
+  "note": "The research answers this, so it is not a GUESS: §59 lets \"a household's own way ... run beside its own garden fence, kept only off the beds\". Setting `owner = None` for gardens makes its own garden fence a 7 ft wall to its own path, and the page does not record that departure. Either give the garden fence its owner and keep the bed outline as the obstacle, or record the stricter rule on the drawing page as a DEVIATION and cite it",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#no lane through a farm's grove": {
   "code": "917851046c066b52",
