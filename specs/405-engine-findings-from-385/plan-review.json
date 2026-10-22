@@ -716,13 +716,13 @@
    "declared": "spec-fidelity"
   },
   "### T116 Approach (checklist part A)": {
-   "sha256": "a325506adba5732139ae1b0f1f8b6f67b9509a6b6899bb90ec63cf6e481fdae7",
+   "sha256": "be8f9fc38699ca85f35735d1f02840354af3ef82071f824a5dbc381f11f0d7ff",
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
   },
   "### T116 Decisions": {
-   "sha256": "f50e21f87a49f2306b9af6638c69c6ec0758b1d21260a29c6dd393543258dbf7",
+   "sha256": "fb93688494835b9ffc57aac0391f22c2057ef2cf8c88bbc9c6e726962628d8bd",
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
@@ -3290,6 +3290,46 @@
      "summary": "Giving RunOnBlocks.clear and _homestead_polys the lane's owner so they could free a way's own garden is not done here.",
      "class": "within",
      "why": "The finding is that a claim misstates its source, not that the map breaks a rule the page sets; the request asks for findings to be filed and worked, not for each research permission to be implemented. Declining a behavior change the GM never asked for, while making the claim honest about the stricter choice, narrows nothing asked. Exit (c), no record on 0246, is likewise within: the page needs no amendment for a permission left unused."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "### T116 Approach (checklist part A)",
+    "### T116 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T116 exit (a) / D87 label",
+     "summary": "The two claims (RunOnBlocks.clear, _homestead_polys) state that the way's own garden is walled at 7 ft too, labeled a DEVIATION of 0246 rather than a GUESS, because the page speaks to the case (it permits a household's own way beside its own fence).",
+     "class": "within",
+     "why": "A relabeling of the claim's provenance to match what the page says; the claims stop citing the page for something it does not ask. Correcting a claim against its research is the work FR-001 carries; no behavior or scope changes."
+    },
+    {
+     "id": "T116 exit (c)",
+     "summary": "Record the departure on 0246, taken through T114's page session (the same page and session as the knot exception).",
+     "class": "within",
+     "why": "Recording a deviation on the research page it departs from is the project's standing convention and adds to, rather than narrows, what was asked; routing it through an existing task of this feature is scheduling."
+    },
+    {
+     "id": "T116 step 9 (done, measured)",
+     "summary": "The claims may land DRIFTED, with CLAIMS_OK naming T114, only until 0246 records the departure, following T107's precedent.",
+     "class": "within",
+     "why": "A deferral bound to a named open task that closes the drift, not a carve-out from it: the claim is still brought in step once the page records the departure. The request (and FR-001) does not speak to the ordering, and nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T116 exit (b) (unchanged)",
+     "summary": "Not giving the run-on and router the lane's owner; no code change, the generator stays stricter than the page.",
+     "class": "within",
+     "why": "Unchanged from the CLEAR verdict: the page grants a permission, not a requirement, so a stricter keep-off is no map defect, and the task is a claims correction."
+    },
+    {
+     "id": "D87 no code changes",
+     "summary": "Docstrings only; no constant moves.",
+     "class": "within",
+     "why": "A claims task fixing what the claims say; nothing the GM asked for is narrowed."
     }
    ]
   }

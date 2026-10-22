@@ -178,7 +178,8 @@ class RunOnBlocks:
             off the wet ground - research/questions/0081-village-lanes.drawing.html: no marsh, no wet toe
             off the crop - research/questions/0081-village-lanes.drawing.html: never across a dry plot
             off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, and the run-on's middle at least 7 ft (`FOOTPATH_FABRIC_GAP`) off another household's garden fence
-            off its own garden and the other built ground - GUESS: the same 7 ft off every garden, the lane's own included (the blocks are read without the lane they judge), and off houses, byres, sheds and yards, which no page sizes - stricter than the page, which lets a household's own way run beside its own fence (405 T116)"""
+            off its own garden - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the page lets a household's own way run beside its own fence, kept only off the beds; the run-on's blocks are read without the lane they judge, so every garden is walled at 7 ft, the way's own included (at the hamlet's 1 px = 1 ft; 405 T116, recorded on the page by T114)
+            off the other built ground - GUESS: the same 7 ft off houses, byres, sheds and yards, which no page sizes"""
         from .law import over_a_fixture  # local: the law sits above the run on
 
         seg = (min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]))
