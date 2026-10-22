@@ -2577,6 +2577,7 @@ memorialized	memorial
 memorials	memorial
 men-hai	taiping-gang
 menbansho	menbansho
+mencius	Mencius
 mengxi bitan	Mengxi Bitan
 mere	mere
 meres	mere

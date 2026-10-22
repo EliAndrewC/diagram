@@ -17462,5 +17462,12 @@
    "Hong merchant",
    "Hong merchants"
   ]
+ },
+ "Mencius": {
+  "def": "A Chinese Confucian philosopher of the 4th century BCE, and the book of his sayings, one of the Confucian classics.",
+  "variants": [
+   "Mencius"
+  ],
+  "cased": true
  }
 }

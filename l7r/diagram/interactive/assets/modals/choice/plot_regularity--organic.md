@@ -30,4 +30,4 @@ Name: The paddy plots' lines: following the ground
 Covers: `meta.plot_regularity = organic`
 Sources: tabayashi-1987, kato-1999-ittanbu-kukaku, jsidre-kochi-seiri, suido-ishizue-kochi-seiri, aze-jawiki, how-our-maps-choose-and-draw-clustered-and-scattered-villages-shuson-sanson, iwamuro-kenchicho, yashio-kenchi, senmaida
 Entry: research/questions/0005-rice-paddies-and-their-plots-suiden.html, research/questions/0014-bunds-between-the-paddies-aze.html
-Drawing: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html
+Drawing: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html
