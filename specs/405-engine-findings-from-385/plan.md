@@ -546,3 +546,23 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 ### T112 Decisions
 
 - **D116** (amended after the plan review, 2026-10-22) The homestead and seating grounds keep their sizes, labeled a map drawing convention on 0285 with their cost (above the typical attested lot). The seating ground counts the household's wood floor, which a lot need not hold; the homestead ground was measured at the attested sizes and the fit breaks there (75 ft: 49/54; 90 ft: 51/54; 104 ft: 54/54 - seating, brook and knot refusals), so the room-before-packing rule keeps it until the fit no longer needs it. Rendering: a map drawing convention.
+
+## T130 - consts.py split at the bar
+
+### T130 Approach (checklist part A)
+
+1. **The goal, in the world.** `hamletgen/consts.py` stays a file a session can read, under the 1,000-line bar, every name importable as before.
+2. **The constraints.** The 1,000-line bar, split never trimmed (405 T53's rule, the GM 2026-10-21); the precedent `consts_water.py` (feature 316): a sibling module, bodies verbatim, every name re-exported by name.
+3. **Where each comes from.** Measured: T112's claims took the file to 1,003 lines and the page batch's push refused (2026-10-22). R for the process.
+4. **Do they describe the world here?** Yes.
+5. **The order.** The field archetypes and the field and pond knobs (`FIELD_ARCHETYPES` through `ROLLED_ARCHETYPES`, 20 names) move verbatim to `consts_fields.py`, re-exported from `consts.py`; the claims rows carried (`make claims-rekey`: 23); the package index names it.
+6. **The exits.** (a) trim to under the bar - not taken (the rule); (b) a package - not taken: `consts_water.py` is the shape this module already takes; (c) a sibling re-exported - taken.
+7. **The search smell.** None.
+8. **The budget.** 15 min.
+9. **Done, measured.** `consts.py` 846 lines, `consts_fields.py` 187; every moved name resolves through `consts` and the package; `make quick` clean; `make claims-rekey` carried 23 rows (2026-10-22).
+10. **Before moving a constant.** No value moves.
+11. **Before fitting things into room.** n/a.
+
+### T130 Decisions
+
+- **D117** The field block moves verbatim to `hamletgen/consts_fields.py`, re-exported by name from `consts.py` as `consts_water.py` is; nothing else changes. Rendering: n/a (structure).

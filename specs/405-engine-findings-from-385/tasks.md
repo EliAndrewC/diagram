@@ -383,6 +383,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       verify: DONE. landed: the record gate adopts an answer another clone made at the same words (D109); rides with T123's parser fix
 - [ ] T129 Two 0081 sentences T122 gathered for the next page session: a gathered lane end may meet the other lane's side as a T (`knots.teed_onto`; §22 says only 'joined at a single point', §24's T covers lanes met end to end), and a defense belt's reeds are walled by every way as the track out's are (§12 says it of the track out at the fan's foot; the engine walls them for every lane, field way and span since T121) - write both, labeled (impl-drift outside the change, T123's and T121's rounds, 2026-10-22) [lands-open]
       research: rendering
+- [ ] T130 hamletgen/consts.py passed the 1,000-line bar (1,003) with T112's claims, refusing the page batch's push: split the field archetypes and the field and pond knobs (FIELD_ARCHETYPES ... ROLLED_ARCHETYPES, 20 names, ~185 lines) into consts_fields.py, re-exported by name as consts_water.py is (feature 316) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

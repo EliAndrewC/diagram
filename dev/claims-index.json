@@ -6387,33 +6387,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/consts.py::COPSE_SITINGS#village copse siting": {
-  "code": "96131e50212d5cab",
-  "core": "8fe15d9e9336fde2",
-  "date": "2026-10-07",
-  "note": "the page draws only one siting, in the gaps between the houses",
-  "pages": {
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
-  },
-  "research": "90cf9ff106c766c9",
-  "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:6d00137e5f270209",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:8869ee12a8b6d77d"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::DEFAULT_HARVEST_WEATHER#harvest weather when undeclared": {
-  "code": "eb9f6dd67d4bdb48",
-  "core": "9a4b37f25d2f443c",
-  "date": "2026-10-03",
-  "note": "settled, as the page decides",
-  "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
-  },
-  "research": "f94cd7cea915d311",
-  "triaged": "2026-10-12",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/consts.py::DEFAULT_WINDWARD#regional wind": {
   "code": "92d658e7f01c65e3",
   "core": "990a4886b3a936d4",
@@ -6424,32 +6397,6 @@
   },
   "research": "5892781a1ab23bcb",
   "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::DIKEPOND_CONVERSION#share of the block converted": {
-  "code": "a53a4dc867177482",
-  "core": "38b19659d3c25037",
-  "date": "2026-10-05",
-  "note": "about one parcel in ten left in rice, a calibrated degree",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "909bb100e23424ac",
-  "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::DIKE_CROPS#dike crop": {
-  "code": "b3581258c2b515c5",
-  "core": "2bce1bb51b9533b8",
-  "date": "2026-10-03",
-  "note": "mulberry half, fruit a third, tea a sixth, as the page states",
-  "pages": {
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
-  },
-  "research": "5204a1fdda1ca89b",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::DOOR_FIXTURE_CLEAR_FT#door point off the fixtures": {
@@ -6505,41 +6452,6 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/consts.py::FIELD_ARCHETYPES#field forms drawn": {
-  "code": "c7afa5dae85661f2",
-  "core": "5f10b1edca08dcfe",
-  "date": "2026-10-12",
-  "note": "valley fan, polder and dike-pond block, the forms the pages attest",
-  "pages": {
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "2244e5ab860ccc7e",
-  "rests": [
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:5fee94012929bfb6",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::FIELD_ARCHETYPES#no jori grid rolled": {
-  "code": "bafcfabd958f4038",
-  "core": "5f10b1edca08dcfe",
-  "date": "2026-10-05",
-  "note": "patchwork on jori ground recorded as a deviation",
-  "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
-  },
-  "research": "d79a89e5dea9602a",
-  "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:914c46003720293e",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:ea4f43ad90e14d1d"
-  ],
-  "triaged": "2026-10-09",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot": {
   "body": "663d24cb0d04a80f",
   "claim": "footpath off a plot - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle, a 3 ft footpath's included, keeps at least 7 ft clear of a garden fence",
@@ -6554,17 +6466,6 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
   ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::FRY_FORMS#fry form": {
-  "code": "5ae8c54fea5de6ec",
-  "core": "bdeb41c28696d095",
-  "date": "2026-10-03",
-  "note": "one in four, recorded as a GUESS",
-  "pages": {
-   "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
-  },
-  "research": "7c54d1e1ec4abfaa",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::GRAIN#aliases and plumbing": {
@@ -6619,36 +6520,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/consts.py::HARVEST_WEATHERS#harvest weather": {
-  "code": "a392d3da58a90e41",
-  "core": "b2ffdeb462b65fd4",
-  "date": "2026-10-03",
-  "note": "declared settled/changeable, never rolled",
-  "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
-  },
-  "research": "f94cd7cea915d311",
-  "triaged": "2026-10-12",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::HARVEST_WEATHERS#standing rack forms": {
-  "code": "80524ec8eb46e600",
-  "core": "b2ffdeb462b65fd4",
-  "date": "2026-10-12",
-  "note": "neither hasagi nor year-round racks is in the value space; both are undated modern records",
-  "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b",
-   "0016-rice-drying-racks-hasa-hasagi.html": "db3cb43976dd0ddf"
-  },
-  "research": "70e6793ff23c1204",
-  "rests": [
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html:7a7c600c144947cf",
-   "0016-rice-drying-racks-hasa-hasagi.html:5115b7fb88dff7e6",
-   "0016-rice-drying-racks-hasa-hasagi.html:8b3c95684718cd16",
-   "0016-rice-drying-racks-hasa-hasagi.html:b368e36098b20033"
-  ],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/consts.py::HOMESTEAD_GROUND_FT#ground per homestead": {
   "body": "1a4afe79e79ad963",
   "claim": "ground per homestead - how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing: 104 ft square (about 305 tsubo), a map drawing convention sized by what the seating needs, above the typical attested lot (157 tsubo, the 1698 register's median); the attested sizes do not fit (75 ft: 49/54, 90 ft: 51/54 of the cohort, 405 T112)",
@@ -6687,23 +6558,6 @@
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html": "8d5bae222470dc31"
   },
   "research": "c673ec140d58f7c3",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::KOSATSUBA_SITINGS#notice board siting": {
-  "code": "82100c9d3ec0c2a8",
-  "core": "da8b3ebe7fbaaf7c",
-  "date": "2026-10-11",
-  "note": "one form, the busiest frontage: beside the busiest main way, else where most buildings stand; drawing-water siting has no page behind it",
-  "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
-  },
-  "research": "5b977d097fda2bb4",
-  "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
-   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
-   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
-   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::LANE_CLEARANCE#fronting lane's corridor": {
@@ -6814,43 +6668,6 @@
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/consts.py::LEFTOVER_FORMS#dike-pond leftover parcels": {
-  "code": "819e54f4fec0baf0",
-  "core": "18bdba725ca26f70",
-  "date": "2026-10-05",
-  "note": "no page gives the leftover parcels' form",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::LEFTOVER_FORMS#dike-ponds throughout": {
-  "code": "b682f0f6e74b00b8",
-  "core": "18bdba725ca26f70",
-  "date": "2026-10-05",
-  "note": "every parcel a pond or one in ten in rice, even odds",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "909bb100e23424ac",
-  "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::MANURE_FORMS#manure fixture form": {
-  "code": "29ac4f0abb806666",
-  "core": "fd400ab42caf1f44",
-  "date": "2026-10-03",
-  "note": "heap or sunk jar, even odds",
-  "pages": {
-   "0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html": "167d19d77a88f3b9"
-  },
-  "research": "b33bcc2b7f637314",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/consts.py::MIN_WEB_GAP#least gap a lane threads": {
   "body": "0c29c4e8c87f8431",
   "claim": "least gap a lane threads - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft clear of each garden fence and a 4 ft tread between, within the page's 3 ft footpath to 5 ft spine; the 2 ft parting is added by `growth.grow_gap`",
@@ -6889,130 +6706,6 @@
   ],
   "verdict": "NEEDS-RESEARCH"
  },
- "l7r/diagram/hamletgen/consts.py::POLDER_ARCHETYPES#dike-pond built as a polder": {
-  "code": "7055efd8b156b0be",
-  "core": "893783f3cb5ce2be",
-  "date": "2026-10-12",
-  "note": "the dike-pond is laid on the polder lattice, one system at two scales",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "5ae0ab069188e330",
-  "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::POLDER_FABRIC#polder parcel fabric": {
-  "code": "c977abdb83c8c70a",
-  "core": "0d4958d4f774a880",
-  "date": "2026-10-05",
-  "note": "190 ft rice module, 3 ft bunds, 8 ft ditch corridors; 160 ft dike-pond module, 22 ft gaps, ~6 in 10 water",
-  "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html": "ff411e4bbbb6990f",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
-  },
-  "research": "2664eefd23f6fd31",
-  "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html:03c2e92a1fc9b267",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:2121aaffee2cc5ab",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:c34ac7096b3e1cd8",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:e1de8dfa80fedf09",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
-  ],
-  "section": "0d4958d4f774a880",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::POND_BANKS#pond bank form": {
-  "body": "ce9cc2270d0f1fb5",
-  "claim": "pond bank form - reservoir-ponds-tameike.drawing: a bare bank, or one planted sparsely with mulberry and cudrania; even odds a GUESS (no share given)",
-  "code": "dcf6bd0930d83f75",
-  "core": "db7297a523b86705",
-  "date": "2026-10-18",
-  "note": "two attested forms, rolled at even odds, recorded as a GUESS",
-  "pages": {
-   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
-  },
-  "research": "5b102e334372ecb3",
-  "rests": [
-   "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1",
-   "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::POND_BANK_CROWN_FT#a bank tree's crown radius": {
-  "body": "720df070b26d5b39",
-  "claim": "a bank tree's crown radius - GUESS reservoir-ponds-tameike.drawing: a tree whose shade the tethered cattle take (the manual), about 12 ft across - not sunlight-and-shade-on-the-farm.drawing's field mulberry trained as low bushes",
-  "code": "36dc316df3c5ed18",
-  "core": "5efeb905b7d48b3f",
-  "date": "2026-10-18",
-  "note": "radius 6 ft gives a crown 12 ft across, which the drawing page records as a guess (\"each crown is about 12 ft across, a GUESS\")",
-  "pages": {
-   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
-  },
-  "research": "5b102e334372ecb3",
-  "rests": [
-   "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::POND_BANK_FT#a tail pond's bank beyond its reeds": {
-  "body": "b6495f11c3ce8533",
-  "claim": "a tail pond's bank beyond its reeds - GUESS: 18 ft, room for a crown and a little play (no crest width recorded)",
-  "code": "98e3091af8ab13e9",
-  "core": "14aaee2fbe7c7694",
-  "date": "2026-10-18",
-  "note": "a physical figure (the bank's width) correctly labeled GUESS; the bundle cites no question, so nothing answers it",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::POND_BANK_PITCH_FT#one tree about every 30 ft of bank": {
-  "body": "347cd16150ed2bf6",
-  "claim": "one tree about every 30 ft of bank - GUESS: 0061's \"sparsely\" gives no figure",
-  "code": "d966c59fcdf3b810",
-  "core": "f9869fee1052b437",
-  "date": "2026-10-18",
-  "note": "\"sparsely\" carries no figure",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::POND_LAYOUTS#dike-pond layout": {
-  "code": "140ed1dd7030678f",
-  "core": "bfbdbf4350cd9733",
-  "date": "2026-10-12",
-  "note": "mosaic two in three, chessboard one in three, odds a GUESS as recorded",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::POND_LAYOUT_MOSAIC#mosaic strength": {
-  "code": "0a8d92a598252aa4",
-  "core": "8965d718adaaab2a",
-  "date": "2026-10-12",
-  "note": "calibrated liberty set on Kuwabata",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909"
-  ],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/consts.py::REF_CANAL_A#reference fan's canal A": {
   "code": "dc2e18b671f8fc87",
   "core": "72822c1a9c2ba1e1",
@@ -7043,20 +6736,6 @@
   "date": "2026-10-03",
   "note": "normalizer for the fan scale; the area is solved separately",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::ROLLED_ARCHETYPES#field forms rolled": {
-  "code": "f1722848ace43757",
-  "core": "04076665195f7fe6",
-  "date": "2026-10-12",
-  "note": "only the valley fan is dealt; polder and dike-pond are the recorded known gap",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::ROW_LINES#row village's line": {
@@ -7207,14 +6886,6 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
   ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts.py::WATERWARD_DEPTH#wild water outside the dike": {
-  "code": "b037a3a1cbfdddd3",
-  "core": "e70942de2d5be5d8",
-  "date": "2026-10-03",
-  "note": "drawn extent past the crop, a convention",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WATER_ALONG_FT#water along the cluster": {
@@ -7432,6 +7103,335 @@
   },
   "research": "4e7ba7479292ad40",
   "triaged": "2026-10-05",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::COPSE_SITINGS#village copse siting": {
+  "code": "96131e50212d5cab",
+  "core": "8fe15d9e9336fde2",
+  "date": "2026-10-07",
+  "note": "the page draws only one siting, in the gaps between the houses",
+  "pages": {
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
+  },
+  "research": "90cf9ff106c766c9",
+  "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:6d00137e5f270209",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:8869ee12a8b6d77d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::DEFAULT_HARVEST_WEATHER#harvest weather when undeclared": {
+  "code": "eb9f6dd67d4bdb48",
+  "core": "9a4b37f25d2f443c",
+  "date": "2026-10-03",
+  "note": "settled, as the page decides",
+  "pages": {
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
+  },
+  "research": "f94cd7cea915d311",
+  "triaged": "2026-10-12",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::DIKEPOND_CONVERSION#share of the block converted": {
+  "code": "a53a4dc867177482",
+  "core": "38b19659d3c25037",
+  "date": "2026-10-05",
+  "note": "about one parcel in ten left in rice, a calibrated degree",
+  "pages": {
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
+  },
+  "research": "909bb100e23424ac",
+  "rests": [
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::DIKE_CROPS#dike crop": {
+  "code": "b3581258c2b515c5",
+  "core": "2bce1bb51b9533b8",
+  "date": "2026-10-03",
+  "note": "mulberry half, fruit a third, tea a sixth, as the page states",
+  "pages": {
+   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
+  },
+  "research": "5204a1fdda1ca89b",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::FIELD_ARCHETYPES#field forms drawn": {
+  "code": "c7afa5dae85661f2",
+  "core": "5f10b1edca08dcfe",
+  "date": "2026-10-12",
+  "note": "valley fan, polder and dike-pond block, the forms the pages attest",
+  "pages": {
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
+  },
+  "research": "2244e5ab860ccc7e",
+  "rests": [
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:5fee94012929bfb6",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::FIELD_ARCHETYPES#no jori grid rolled": {
+  "code": "bafcfabd958f4038",
+  "core": "5f10b1edca08dcfe",
+  "date": "2026-10-05",
+  "note": "patchwork on jori ground recorded as a deviation",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
+  },
+  "research": "d79a89e5dea9602a",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:914c46003720293e",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:ea4f43ad90e14d1d"
+  ],
+  "triaged": "2026-10-09",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::FRY_FORMS#fry form": {
+  "code": "5ae8c54fea5de6ec",
+  "core": "bdeb41c28696d095",
+  "date": "2026-10-03",
+  "note": "one in four, recorded as a GUESS",
+  "pages": {
+   "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
+  },
+  "research": "7c54d1e1ec4abfaa",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::HARVEST_WEATHERS#harvest weather": {
+  "code": "a392d3da58a90e41",
+  "core": "b2ffdeb462b65fd4",
+  "date": "2026-10-03",
+  "note": "declared settled/changeable, never rolled",
+  "pages": {
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
+  },
+  "research": "f94cd7cea915d311",
+  "triaged": "2026-10-12",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::HARVEST_WEATHERS#standing rack forms": {
+  "code": "80524ec8eb46e600",
+  "core": "b2ffdeb462b65fd4",
+  "date": "2026-10-12",
+  "note": "neither hasagi nor year-round racks is in the value space; both are undated modern records",
+  "pages": {
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b",
+   "0016-rice-drying-racks-hasa-hasagi.html": "db3cb43976dd0ddf"
+  },
+  "research": "70e6793ff23c1204",
+  "rests": [
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html:7a7c600c144947cf",
+   "0016-rice-drying-racks-hasa-hasagi.html:5115b7fb88dff7e6",
+   "0016-rice-drying-racks-hasa-hasagi.html:8b3c95684718cd16",
+   "0016-rice-drying-racks-hasa-hasagi.html:b368e36098b20033"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::KOSATSUBA_SITINGS#notice board siting": {
+  "code": "82100c9d3ec0c2a8",
+  "core": "da8b3ebe7fbaaf7c",
+  "date": "2026-10-11",
+  "note": "one form, the busiest frontage: beside the busiest main way, else where most buildings stand; drawing-water siting has no page behind it",
+  "pages": {
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
+  },
+  "research": "5b977d097fda2bb4",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
+   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
+   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
+   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::LEFTOVER_FORMS#dike-pond leftover parcels": {
+  "code": "819e54f4fec0baf0",
+  "core": "18bdba725ca26f70",
+  "date": "2026-10-05",
+  "note": "no page gives the leftover parcels' form",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::LEFTOVER_FORMS#dike-ponds throughout": {
+  "code": "b682f0f6e74b00b8",
+  "core": "18bdba725ca26f70",
+  "date": "2026-10-05",
+  "note": "every parcel a pond or one in ten in rice, even odds",
+  "pages": {
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
+  },
+  "research": "909bb100e23424ac",
+  "rests": [
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::MANURE_FORMS#manure fixture form": {
+  "code": "29ac4f0abb806666",
+  "core": "fd400ab42caf1f44",
+  "date": "2026-10-03",
+  "note": "heap or sunk jar, even odds",
+  "pages": {
+   "0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html": "167d19d77a88f3b9"
+  },
+  "research": "b33bcc2b7f637314",
+  "triaged": "2026-10-05",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::POLDER_ARCHETYPES#dike-pond built as a polder": {
+  "code": "7055efd8b156b0be",
+  "core": "893783f3cb5ce2be",
+  "date": "2026-10-12",
+  "note": "the dike-pond is laid on the polder lattice, one system at two scales",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
+  },
+  "research": "5ae0ab069188e330",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::POLDER_FABRIC#polder parcel fabric": {
+  "code": "c977abdb83c8c70a",
+  "core": "0d4958d4f774a880",
+  "date": "2026-10-05",
+  "note": "190 ft rice module, 3 ft bunds, 8 ft ditch corridors; 160 ft dike-pond module, 22 ft gaps, ~6 in 10 water",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html": "ff411e4bbbb6990f",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+  },
+  "research": "2664eefd23f6fd31",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html:03c2e92a1fc9b267",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:2121aaffee2cc5ab",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:c34ac7096b3e1cd8",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:e1de8dfa80fedf09",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
+  ],
+  "section": "0d4958d4f774a880",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::POND_BANKS#pond bank form": {
+  "body": "ce9cc2270d0f1fb5",
+  "claim": "pond bank form - reservoir-ponds-tameike.drawing: a bare bank, or one planted sparsely with mulberry and cudrania; even odds a GUESS (no share given)",
+  "code": "dcf6bd0930d83f75",
+  "core": "db7297a523b86705",
+  "date": "2026-10-18",
+  "note": "two attested forms, rolled at even odds, recorded as a GUESS",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
+  },
+  "research": "5b102e334372ecb3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1",
+   "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::POND_BANK_CROWN_FT#a bank tree's crown radius": {
+  "body": "720df070b26d5b39",
+  "claim": "a bank tree's crown radius - GUESS reservoir-ponds-tameike.drawing: a tree whose shade the tethered cattle take (the manual), about 12 ft across - not sunlight-and-shade-on-the-farm.drawing's field mulberry trained as low bushes",
+  "code": "36dc316df3c5ed18",
+  "core": "5efeb905b7d48b3f",
+  "date": "2026-10-18",
+  "note": "radius 6 ft gives a crown 12 ft across, which the drawing page records as a guess (\"each crown is about 12 ft across, a GUESS\")",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
+  },
+  "research": "5b102e334372ecb3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::POND_BANK_FT#a tail pond's bank beyond its reeds": {
+  "body": "b6495f11c3ce8533",
+  "claim": "a tail pond's bank beyond its reeds - GUESS: 18 ft, room for a crown and a little play (no crest width recorded)",
+  "code": "98e3091af8ab13e9",
+  "core": "14aaee2fbe7c7694",
+  "date": "2026-10-18",
+  "note": "a physical figure (the bank's width) correctly labeled GUESS; the bundle cites no question, so nothing answers it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::POND_BANK_PITCH_FT#one tree about every 30 ft of bank": {
+  "body": "347cd16150ed2bf6",
+  "claim": "one tree about every 30 ft of bank - GUESS: 0061's \"sparsely\" gives no figure",
+  "code": "d966c59fcdf3b810",
+  "core": "f9869fee1052b437",
+  "date": "2026-10-18",
+  "note": "\"sparsely\" carries no figure",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::POND_LAYOUTS#dike-pond layout": {
+  "code": "140ed1dd7030678f",
+  "core": "bfbdbf4350cd9733",
+  "date": "2026-10-12",
+  "note": "mosaic two in three, chessboard one in three, odds a GUESS as recorded",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::POND_LAYOUT_MOSAIC#mosaic strength": {
+  "code": "0a8d92a598252aa4",
+  "core": "8965d718adaaab2a",
+  "date": "2026-10-12",
+  "note": "calibrated liberty set on Kuwabata",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::ROLLED_ARCHETYPES#field forms rolled": {
+  "code": "f1722848ace43757",
+  "core": "04076665195f7fe6",
+  "date": "2026-10-12",
+  "note": "only the valley fan is dealt; polder and dike-pond are the recorded known gap",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_fields.py::WATERWARD_DEPTH#wild water outside the dike": {
+  "code": "b037a3a1cbfdddd3",
+  "core": "e70942de2d5be5d8",
+  "date": "2026-10-03",
+  "note": "drawn extent past the crop, a convention",
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_BEND_WIDTHS#brook's bend radius": {
