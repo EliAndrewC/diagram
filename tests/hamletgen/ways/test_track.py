@@ -136,6 +136,9 @@ def test_the_connector_takes_the_dry_exit_where_the_field_or_the_steadings_leave
     assert track.connector_through(s, plan, [(10.0, 10.0), (-900.0, 10.0)], [], [], [], []) == dry
     monkeypatch.setattr(track, "_thread_the_fabric", lambda s, plan, run: run)
     assert track.connector_through(s, plan, [(10.0, 10.0), (-900.0, 10.0)], [], [], [], []) == [(10.0, 10.0), (-900.0, 10.0)]
+    # 405 T124: a run clipped short of its far end (past the frame) would stop in open country (0081) - the dry exit instead
+    monkeypatch.setattr(track, "_thread_the_fabric", lambda s, plan, run: [run[0], (-300.0, 10.0)])
+    assert track.connector_through(s, plan, [(10.0, 10.0), (-900.0, 10.0)], [], [], [], []) == dry
 
 
 def test_a_spur_with_no_way_clear_of_the_steadings_is_recorded_dropped(monkeypatch) -> None:

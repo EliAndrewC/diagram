@@ -473,3 +473,23 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 - **D110** A line under a header-line claim that cannot be a claim (no ` - `) continues it, at any indentation; 0035's drawing page states that a way crosses water only at a crossing place (page session 6). Rendering: as labeled on the page.
 
 <!-- plan-archive: T121 to T121 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+## T124 - the track out never stops in open country
+
+### T124 Approach (checklist part A)
+
+1. **The goal, in the world.** A hamlet's track out runs off the map, or takes the dry exit; it never ends short in open ground.
+2. **The constraints.** 0081: the track out never stops in open country; the dry exit (feature 287, ways W24/W25) as the fallback.
+3. **Where each comes from.** R: 0081. Found by T09's round 5 (impl-drift outside the change): `_thread_the_fabric`'s unrouted clip keeps a run's near part, cut at the first steading it fouls.
+4. **Do they describe the world here?** Yes: the connector took that clipped run as drawn.
+5. **The order.** `_connector_through` keeps a threaded run only where its end is still the track's far end, past the frame; otherwise the dry exit, as for a run that cannot be made clean.
+6. **The exits.** (a) record the short track on 0081 - not taken: the page forbids it and the dry exit exists; (b) send it to the dry exit - taken.
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** A run clipped short takes the dry exit (a test, red without the fix); `make test-file FILE=tests/hamletgen/ways/` 599 passed; `make cohort` 16/16 (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T124 Decisions
+
+- **D112** `track._connector_through` takes the dry exit where the threaded run's end is more than 1 ft from the track's far end (the clip stopped it short); its claim cites 0081. Rendering: historically accurate (0081).

@@ -667,6 +667,8 @@ def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequen
     Research:
         connector round the field and the steadings - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: bent and threaded,
             else the dry exit
+        never stopping in open country - research/questions/0081-village-lanes.drawing.html: the track out never stops in open country, so a
+            threaded run that no longer reaches its far end, past the frame, takes the dry exit (405 T124)
         gives up a wood seat as last resort - UNRESEARCHED: the seats the way out crosses are released; the accounts read have a
             farm's own way in through a gap in its grove, and none covers a through-way taking a household's wood seat
         connector's berth off the field - UNRESEARCHED: bent round the field at `SPUR_SETBACK`, 17 ft off its envelope"""
@@ -674,6 +676,10 @@ def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequen
 
     around = route_around(plan.envelope, track, SPUR_SETBACK)
     run = _thread_the_fabric(s, plan, around) if around is not None else []
+    # ...AND ONLY A RUN THAT STILL LEAVES THE MAP (405 T124): a clip keeps the run's near part, cut at the first steading it fouls,
+    # and a track out that stops there stops in open country (0081) - that run takes the dry exit instead
+    if len(run) >= 2 and around is not None and math.dist(run[-1], around[-1]) > 1.0:
+        run = []
     run = square_run(s.M, run) if len(run) >= 2 else run
     if len(run) >= 2 and connector_keeps_the_law(s.M, run):
         return run
