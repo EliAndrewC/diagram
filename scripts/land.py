@@ -374,12 +374,26 @@ def main(argv: list[str]) -> int:
     run(root, ["git", "add", "--", rel, "dev/bypass-log"])  # a tick's honored escape writes its record too (feature 408)
     run(root, ["git", "commit", "-q", "-m", f"{d.name}: {' '.join(tasks)} ticked (make land)"])
     tick_sha = run(root, ["git", "rev-parse", "HEAD"])[1].strip()
-    if rc := push(root, tasks):
+    rc = push(root, tasks)
+    if rc == MERGED:
+        # PUSHED, WITH OTHER SESSIONS' EDITS MERGED INTO FILES IT TOUCHED (405 T107: T107's landing pushed its tick, then reverted
+        # it in the clone as if nothing had landed, so the clone's next push would have unticked main): the ticks stand
+        print(
+            f"land: {' '.join(tasks)} landed and ticked - but the pull merged other sessions' edits into files it touched: rerun "
+            "the gate now (MEASURE_OK names it), then scripts/sync-with-main.sh render-sync",
+            file=sys.stderr,
+        )
+        return rc
+    if rc:
         run(root, ["git", "revert", "--no-edit", tick_sha])  # a new commit, nothing rewritten: the tasks read open again
         print(f"land: the push failed (exit {rc}) - its ticks reverted, nothing landed; fix it and run make land again", file=sys.stderr)
         return rc
     print(f"land: {' '.join(tasks)} landed and ticked")
     return 0
+
+
+#: `sync-with-main.sh done`'s exit when it PUSHED but the pull merged other sessions' edits into the files the push touched
+MERGED = 3
 
 
 if __name__ == "__main__":

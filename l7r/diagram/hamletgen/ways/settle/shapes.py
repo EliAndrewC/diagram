@@ -104,17 +104,19 @@ def fouled_segment(
     fixtures: Sequence[Poly] = (),
     M: Any = None,
     owner: Pt | None = None,
+    gap: float = WEB_FABRIC_GAP,
 ) -> int | None:
-    """The first segment of `p` that fouls the fabric: ink on a farmhouse (`house_hit`), within `WEB_FABRIC_GAP` of another
-    household's yard or garden (`theirs`), a long leg through a building's box (`law.breaks_through`),
+    """The first segment of `p` that fouls the fabric: ink on a farmhouse (`house_hit`), within `gap` (`WEB_FABRIC_GAP` unless
+    the caller passes another) of another household's yard or garden (`theirs`), a long leg through a building's box (`law.breaks_through`),
     a tread over a farmstead fixture, the lane's own household's too (`law.over_a_fixture`), or a tread the overlap matrix
     forbids on what stands on `M` (`registry.forbidden_segment`, feature 287 M8: a yard, a garden, a well, a burial
     ground - its own household's too, since a path arrives at its dooryard and does not cross it).
 
     Research:
         no tread on a farmhouse - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
-        off another household's garden - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line within `WEB_FABRIC_GAP`, 7 ft
-        off another household's yard - UNRESEARCHED: the garden fence's 7 ft (`WEB_FABRIC_GAP`) held off a yard too; no page sets a gap from a yard
+        off another household's garden - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line within `gap`, `WEB_FABRIC_GAP` (7 ft) unless the caller passes another
+        a knot's join beside a fence - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the knots step's second pass passes 3 ft (`WEB_CROP_GAP`'s value) for the page's 7 ft; the page does not yet record it - a known gap, carried to 405 T114
+        off another household's yard - UNRESEARCHED: the garden fence's gap (`gap`, 7 ft unless the caller passes another) held off a yard too; no page sets a gap from a yard
         no long leg through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `law.breaks_through`
         off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its own household's too
         what the overlap matrix forbids - NONE: each pair is claimed in the matrix"""
@@ -124,7 +126,7 @@ def fouled_segment(
     for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
         if k in (over, matrix):
             return k
-        if house_hit([a, b], width, houses) or _crosses_fabric([a, b], near, WEB_FABRIC_GAP):
+        if house_hit([a, b], width, houses) or _crosses_fabric([a, b], near, gap):
             return k
         if law.breaks_through([a, b], solid):
             return k

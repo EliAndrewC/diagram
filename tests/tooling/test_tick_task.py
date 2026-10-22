@@ -287,10 +287,16 @@ def test_one_task_or_several_every_tick_asked_first_landed_once_and_ticked(tmp_p
     assert lb.main(["188", "T02 T03"]) == 1 and len(landings) == 1
     assert "- [x] T02" in landings[0][1] and "- [x] T03" in landings[0][1], "the push carries the ticks"
     assert ["git", "revert", "--no-edit", "abc123"] in ran, "a failed push reverts its ticks, nothing rewritten"
+    (d / "tasks.md").write_text(before, encoding="utf-8")
+    ran.clear()
+    rc[0] = lb.MERGED  # 405 T107: pushed, the pull merged others' edits - landed, so the ticks stand
+    assert lb.main(["188", "T02 T03"]) == lb.MERGED and not any(c[:2] == ["git", "revert"] for c in ran)
+    assert "landed and ticked" in capsys.readouterr().err
+    (d / "tasks.md").write_text(before, encoding="utf-8")
     assert ["git", "add", "--", "specs/188-alpha", "dev/bypass-log"] in ran, "the ticks' escape records ride in their commit (408)"
     (d / "tasks.md").write_text(before, encoding="utf-8")  # what the revert commit does in a real tree
     rc[0] = 0
-    assert lb.main(["188", "T02 T03"]) == 0 and len(landings) == 2 and landings[-1][0] == ["T02", "T03"], "ONE push for the batch"
+    assert lb.main(["188", "T02 T03"]) == 0 and len(landings) == 3 and landings[-1][0] == ["T02", "T03"], "ONE push for the batch"
     text = (d / "tasks.md").read_text(encoding="utf-8")
     assert "verify: DONE. landed in batch T02+T03: both fixes green" in text and "- [x] T03" in text
     assert lb.main(["188", "T02a"]) == 0 and landings[-1][0] == ["T02a"], "one task lands alone"

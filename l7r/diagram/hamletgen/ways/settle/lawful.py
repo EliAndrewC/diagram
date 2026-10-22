@@ -51,6 +51,12 @@ class Lawful:
     Research: the lane law asked of a new lane - NONE: each clause claimed at `on_lawful_ground` and `__call__`"""
 
     def __init__(self, s: Any, tree: bool = False) -> None:
+        """The map's fabric, water and wet ground read once, and the gap every run keeps off another household's garden and
+        yard (`fence_gap`).
+
+        Research:
+            settle plumbing - NONE
+            the fence gap - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from a lane's middle to another household's garden fence, a map drawing convention; only the knots step's second pass lowers it (405 T107, a DEVIATION carried to T114)"""
         self.M = s.M
         self.tree = tree
         self.wet = flooded_ground(s.M)
@@ -63,6 +69,9 @@ class Lawful:
         # ...AND WHOSE OWN WAY A RUN IS (405 T18): a caller drawing a household's own way sets it on a copy (`copy.copy`), and that
         # household's yards and gardens are exempt from the fence gap (`theirs`); None - every other run - exempts none
         self.owner: Pt | None = None
+        # ...AND HOW FAR IT KEEPS OFF ANOTHER HOUSEHOLD'S GARDEN (405 T107): 0246's 7 ft, which only the knots step's second pass
+        # lowers to 3 ft, this project's own deviation (`knots.settle_knots`, carried to T114)
+        self.fence_gap = WEB_FABRIC_GAP
 
     @property
     def index(self) -> GroundIndex:
@@ -125,7 +134,15 @@ class Lawful:
         ix = self.index
         houses = ix.near("houses", run, max(width / 2.0 + 2.0, law.DOORSTEP_FT) + 1.0)  # ...the doorstep's reach: `theirs` reads it
         fouled = fouled_segment(
-            run, width, houses, ix.near("yards", run, WEB_FABRIC_GAP + 1.0), ix.near("solid", run, 1.0), ix.near("fixtures", run, width / 2.0 + law.FIXTURE_PAD_FT + 1.0), self.M, owner or self.owner
+            run,
+            width,
+            houses,
+            ix.near("yards", run, self.fence_gap + 1.0),
+            ix.near("solid", run, 1.0),
+            ix.near("fixtures", run, width / 2.0 + law.FIXTURE_PAD_FT + 1.0),
+            self.M,
+            owner or self.owner,
+            self.fence_gap,
         )
         if fouled is not None:
             return "fabric"
