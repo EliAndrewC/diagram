@@ -864,6 +864,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T09 - the track's fallbacks walled as its first route is": {
+   "sha256": "a08543bc0bc0912544019e95e4950d8e17c265835712a2a159ab19236835dbb1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (checklist part A)": {
+   "sha256": "134d2568d46dd24691e7e0a5fb35f2fa2c8ad62de376e113cf0ff4d1a6f4eaa9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Decisions": {
+   "sha256": "37c280d04d233c5a9bb743cce727bc6dfd6dcb8e5e72a9f440c3323a783a7efd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3731,6 +3749,41 @@
      "summary": "Measure before any edit (Approach item 5), with exit (b), settling by measurement, taken over exit (a), changing code or pages.",
      "class": "within",
      "why": "This is how the decision in D94 is reached, not a separate change of scope. Measuring first is the project's standing rule, and the exit the plan takes follows from the measurement."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T09 - the track's fallbacks walled as its first route is",
+    "### T09 Approach (checklist part A)",
+    "### T09 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D95-walls",
+     "summary": "Every fallback in track._thread_the_fabric (the swing's detour, the grove fallback's three routes, the far clip) walls what the first route walls - the toe band and wet ground - and is refused where it crosses a crop plot; when none qualifies the track is dropped (the spur recorded dropped, the connector taking the dry exit), as the first route already does.",
+     "class": "within",
+     "why": "The request (amendments 7 and 9) is to work every remaining task of the feature; this task is one of them, and its decision makes the fallbacks obey the research constraints the first route already obeys (0081 off row crops and wet ground, 0035 water only at a crossing, 0036 room off a grove band). It restores a rule everywhere rather than excepting any case from it; dropping an unroutable track is the first route's existing behavior extended to the fallbacks, not a new carve-out."
+    },
+    {
+     "id": "D95-crop-after-route",
+     "summary": "The crop plot is tested after each fallback route is found, at 0 ft (a way may touch the bund), rather than walled inside the router (exit a rejected because the spur's field end lies inside the crop's gap).",
+     "class": "within",
+     "why": "A choice of mechanism that still enforces the goal stated in Approach item 1 - no fallback crosses a crop plot - and its 0 ft tolerance is 0081's own allowance that a way may come up to the bund. Nothing the request or the research requires is given up."
+    },
+    {
+     "id": "D95-order-and-leg",
+     "summary": "The three grove-fallback routes are tried in a fixed order, and an end is walked clear along its own leg; both claimed as GUESSes.",
+     "class": "within",
+     "why": "Implementation choices the research does not settle, labeled as GUESSes as the project's claims process requires; they narrow nothing the GM asked for."
+    },
+    {
+     "id": "D95-water-claim",
+     "summary": "Claim that a fallback route crosses no more water than the run it replaces (0035).",
+     "class": "within",
+     "why": "A claim recording conformity with 0035 (water crossed only at a crossing); it adds no exception, since every route also walls wet ground."
     }
    ]
   }

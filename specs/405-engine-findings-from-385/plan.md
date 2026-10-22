@@ -434,3 +434,23 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 <!-- plan-archive: T109 to T109 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 
 <!-- plan-archive: T99 to T99 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+## T09 - the track's fallbacks walled as its first route is
+
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** A track out or field spur never crosses row crops or wet ground, however hard it was to route: what the first route walls, every fallback walls too, or the track is dropped (the spur recorded dropped, the connector taking the dry exit).
+2. **The constraints.** 0081: lanes never across row crops or the flooded paddy, and off wet ground - and a way may come up to the bund; 0035: a way crosses water only at a crossing; 0036's room off a grove band (T109, D128); the docstring's own rule: never the offending run.
+3. **Where each comes from.** R: 0081, 0035, 0036. G: the order of the three routes and the end walked along its own leg (claimed as GUESSes).
+4. **Do they describe the world here?** Yes: the spur's field end stands on the bund, inside the crop's gap - which is why the later routes left the crop out of their walls.
+5. **The order.** The first route is unchanged. The swing, the grove fallback's three routes and its far clip each wall the toe band and wet ground, and each is taken only where it crosses no crop plot at 0 ft (a way may touch the bund).
+6. **The exits.** (a) wall the crop in all three routes - not taken: the spur's end inside the crop's gap leaves no route at all; (b) test the crop after the route, at 0 ft - taken; (c) more room - n/a, no fit failure; (d) conform - this is conforming.
+7. **The search smell.** None.
+8. **The budget.** 45 min with a gated landing.
+9. **Done, measured.** A route round a band across a crop plot is refused (a test, red without it); `make cohort` 16/16 with the change (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T09 Decisions
+
+- **D95** In `track._thread_the_fabric`: the swing's detour is skipped where it crosses a crop plot or wet ground; the grove fallback's three routes wall the toe band and the wet ground, and each is taken only where it crosses no band and no crop plot (0 ft); the far clip is kept only where it crosses no crop plot or wet ground. Claims added: every fallback walled (0081), an end walked clear along its own leg (GUESS), the three routes in order (GUESS), no more water than the run it replaces (0035). Rendering: historically accurate (0081), the order a GUESS.
