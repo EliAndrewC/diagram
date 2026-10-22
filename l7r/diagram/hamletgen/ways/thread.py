@@ -156,8 +156,8 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
             last leg, so the track still leaves from where it was aimed
         the grove fallback's two routes in order - GUESS: each with the toe band and the wet ground walled, round the grown bands and the
             crop, then the bands alone (the spur's field end
-            stands inside the crop's gap, so the crop is tested after the route, not walled in it); the first that crosses no band, no crop
-            and no more water than the run it replaces is taken. A third, with the water left out of its search, was dropped (405 T09): it
+            stands inside the crop's gap, so the crop is tested after the route, not walled in it); the first that crosses no band, nothing
+            held (paddy, crop, toe band, wet ground), no steading at a footpath's gap and no more water than the run it replaces is taken. A third, with the water left out of its search, was dropped (405 T09): it
             crossed wherever it met the water, not at a crossing place
         no more water than the run it replaces - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way
             crosses water only at a crossing place, so a grove fallback route - searched with the water lines, crossing at the fords - may add
@@ -280,8 +280,10 @@ def _unrouted_clear(run: Poly, held: Sequence[Poly], lines: Sequence[tuple[Pt, P
     of `lines`, no water - each tested with its ends drawn in (`_inner`), so a piece ending on the bund or at a ford is not read
     as crossing it.
 
-    Research: an unrouted piece over no water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a
-    way crosses water only at a crossing place, and a piece no route found was never brought to one"""
+    Research:
+        an unrouted piece over no water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way
+            crosses water only at a crossing place, and a piece no route found was never brought to one
+    """
     inner = _inner(run)
     return not _crosses_fabric(inner, held, 0.0) and not _water_crossings(inner, lines)
 

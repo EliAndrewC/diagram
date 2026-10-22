@@ -352,6 +352,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 
 - [ ] T122 Two drawing-page silences T09's rounds found: 0035 says how a way crosses a brook (squarely, at a crossing place about every 160 ft) but not what a track running past the settlement (a connector or spur) does where no crossing place lies on its line - the code drops it, takes the dry exit or keeps its far part; and 0246's 7 ft gap is measured from another household's garden fence, silent on whether a track passing outside the cluster keeps the same 7 ft off a house wall, a byre or a threshing yard (`_thread_the_fabric` applies it to every homestead polygon) - record both, labeled (impl-drift outside the change, T09's round 3, 2026-10-22) [lands-open]
       research: rendering
+- [ ] T123 The claims parser keeps only the header line of a one-line `Research: <claim>` whose text wraps onto an indented continuation: T09's `_unrouted_clear` claim was read as account 'a', the rest dropped (impl-drift outside the change, T09's round 4) - join the continuation or refuse the form in `claims-owed`'s form check (`form_problems`), with a test; and 0035's drawing page implies but never states that a way crosses water only at a crossing place (§82 plank bridges, §85 a crossing place every 160 ft or so), which several claims cite - add the sentence (a record item) [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

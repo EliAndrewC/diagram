@@ -31173,8 +31173,8 @@
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#an end walked clear along its own leg": {
   "body": "3035eac06c938fd1",
   "claim": "an end walked clear along its own leg - GUESS: an end standing within the gap of the fabric is pushed out along the run's own first or last leg, so the track still leaves from where it was aimed",
-  "code": "0f84e33e40559f5b",
-  "core": "f71357b1140d6692",
+  "code": "c9a0d4010f731c4a",
+  "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
   "note": "the page sets the track's start on the cluster's edge but says nothing of which way an end is pushed",
   "pages": {},
@@ -31183,24 +31183,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#detour swing": {
-  "body": "3035eac06c938fd1",
+  "body": "a6181ba244b18e6a",
   "claim": "detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster",
-  "code": "2b97431a55c23476",
-  "core": "56ee5f7da77a6cbb",
+  "code": "bd13dc12b77fc80c",
+  "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
-  "note": "the ladder 40/80/140/220 is in the code, nearest swing first; the bundle gives no detour distance",
+  "note": "the ladder is (40.0, 80.0, 140.0, 220.0) swung out from the house centroid, as claimed. None of the cited pages gives a detour distance; 0081 only says a walker goes round what stands in the way",
   "pages": {},
   "research": "",
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#every fallback walled too": {
-  "body": "baeb2864a61c09dd",
-  "claim": "every fallback walled too - village-lanes.drawing: never across row crops or the flooded paddy, and off wet ground - the swing, the grove fallback's two routes and its far clip are each taken only where they cross no crop plot, no wet ground (a defense belt's reeds included), no toe band and not the field (at 0 ft, 3 ft in from each end: a way may come up to the bund, and a spur ends on it), and the two routes wall the toe band and the wet ground (405 T09)",
-  "code": "62725bb971118233",
-  "core": "f71357b1140d6692",
+  "body": "a6181ba244b18e6a",
+  "claim": "every fallback walled too - village-lanes.drawing: never across row crops or the flooded paddy, and off wet ground - the swing, the unrouted clip, the grove fallback's two routes and its far clip are each taken only where they cross no crop plot, no wet ground (a defense belt's reeds included), no toe band and no paddy (each field's outline, at 0 ft, 3 ft in from each end: a way may come up to the bund, and a spur ends on it), and the two routes wall the toe band and the wet ground (405 T09)",
+  "code": "e64bdbe42410f1a9",
+  "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
-  "note": "the swing, both grove routes and the far clip are each tested against `held` (field, crops, toe band, wet ground and defense-belt reeds) at 0 ft with ends drawn in 3 ft, and both routes wall the toe band and wet ground; this matches lanes keeping to the bund and keeping off the paddy and wet ground",
+  "note": "every fallback is tested against `held` (paddy outlines, crops, toe band, wet ground) at 0 ft with the ends drawn in 3 ft (`_inner`): the swing, the unrouted clip, both grove routes and the far clip. Both routes' `hard` lists wall the toe band and the wet ground. This matches \"never crosses row crops\", \"may touch a plot's boundary\", \"stops at the flooded paddy\" and \"does not cross the reeds\"",
   "pages": {
    "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
   },
@@ -31215,8 +31214,8 @@
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#gap off a grove band": {
   "body": "3035eac06c938fd1",
   "claim": "gap off a grove band - groves-of-trees-around-farmhouses-yashikirin.drawing: the grove fallback's route and clip keep `CONNECTOR_BAND_GAP_FT` (0036's working room past the connector's half-width, 12.5 ft) off the trees - the spur's too, half a foot more than its own 2.5 ft half-tread would need; the router's hard index holds the line about 13.5 ft off (`WEB_HARD_GAP` on the grown band), more room than the page's \"about\", never less",
-  "code": "180caaf6b9356b53",
-  "core": "f71357b1140d6692",
+  "code": "f7ac08a084c7df90",
+  "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
   "note": "12.5 ft is the page's opening of about 22 ft (11 ft a side at a footpath's 1.5 ft half-tread, so 9.5 ft of working room) carried to the connector's 3 ft half-width; the hard index's 13.5 ft is more room, never less",
   "pages": {
@@ -31232,8 +31231,8 @@
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#gap off the steadings": {
   "body": "3035eac06c938fd1",
   "claim": "gap off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: `gap` (`TRACK_FABRIC_GAP`, a lane's 7 ft from a garden fence) - the clip and the fabric test; the router walls the steadings as obstacles",
-  "code": "68f6e81c481cea24",
-  "core": "f71357b1140d6692",
+  "code": "6c57c2fd4d44a2dc",
+  "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
   "note": "the clip and the fabric test use 7 ft to the lane's middle and the router walls at 8 ft; the page asks at least 7 ft",
   "pages": {
@@ -31262,6 +31261,7 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#no more water than the run it replaces": {
@@ -31279,18 +31279,18 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#the grove fallback's two routes in order": {
-  "body": "baeb2864a61c09dd",
-  "claim": "the grove fallback's two routes in order - GUESS: round the grown bands and the crop, then the bands alone (the spur's field end stands inside the crop's gap, so the crop is tested after the route, not walled in it); the first that crosses no band, no crop and no more water than the run it replaces is taken. A third, with the water left out of its search, was dropped (405 T09): it crossed wherever it met the water, not at a crossing place",
-  "code": "048c27020fd04bbc",
-  "core": "f71357b1140d6692",
+  "body": "a6181ba244b18e6a",
+  "claim": "the grove fallback's two routes in order - GUESS: each with the toe band and the wet ground walled, round the grown bands and the crop, then the bands alone (the spur's field end stands inside the crop's gap, so the crop is tested after the route, not walled in it); the first that crosses no band, no crop and no more water than the run it replaces is taken. A third, with the water left out of its search, was dropped (405 T09): it crossed wherever it met the water, not at a crossing place",
+  "code": "64b16b086178f2e5",
+  "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
-  "note": "the code tries (bands+crops+wet) then (bands+wet), and the crops are tested after the route through `held`, as the claim says; no cited block answers the order",
+  "note": "the loop runs two routes in the claimed order, (roomy+crops+wet) then (roomy+wet). The first route that crosses no band, no `held` and no more water than `kept` is taken, and no third route remains. The pages do not set the order; 0081 only says a walker goes round a grove, a field or water",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#the track kept off drawn water": {
@@ -31308,6 +31308,7 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
   ],
+  "triage": "touched",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#the track's route walled": {
@@ -31326,6 +31327,7 @@
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triage": "touched",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#track round the steadings": {
@@ -31343,6 +31345,24 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+  ],
+  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/thread.py::_unrouted_clear#an unrouted piece over no water": {
+  "body": "df9a1bbd23d208d7",
+  "claim": "an unrouted piece over no water - villages-beside-their-stream-one-bank-or-both.drawing: a",
+  "code": "a0230125a6383373",
+  "core": "432abcd8afd836a6",
+  "date": "2026-10-22",
+  "note": "it accepts a piece only when the drawn-in piece crosses no water line at all. This is consistent with ways crossing only at the plank-bridge crossing places, which the maps set every 160 ft or so",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
   ],
   "verdict": "IN-STEP"
  },
