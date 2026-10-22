@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-22T15:33:00Z",
+  "target": "record-checked",
+  "commit": "99d27bb25",
+  "why": "source-applicability on source-applicability:kotobank-sanson: the check's own EDIT respelled metres -> meters for house style (American spelling); no other word moved"
+}

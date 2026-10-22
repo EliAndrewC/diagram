@@ -14,7 +14,7 @@ Guesses:
   the forms over a farm ditch was found, and the one proportion found, for river bridges, would make the planked deck far
   rarer than earth over logs.
 
-Depiction: Every ditch crossing on the map takes this form, drawn as a timber deck with its seams running across it, so
+Depiction: Every crossing a path along a bund takes over a ditch on the map takes this form, drawn as a timber deck with its seams running across it, so
 the boards read as laid from bank to bank. Each is drawn narrow and about 8 ft long,
 so it reads as a single-file crossing and not a road bridge.
 

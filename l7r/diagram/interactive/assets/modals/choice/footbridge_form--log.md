@@ -13,7 +13,7 @@ Guesses:
 - That a settlement's ditch crossings are all single logs, at even odds with earth over logs and a planked deck: no count
   of the forms over a farm ditch was found.
 
-Depiction: Every ditch crossing on the map takes this form, drawn as one rounded, bark-brown trunk across the water. Each is drawn narrow and about 8 ft long,
+Depiction: Every crossing a path along a bund takes over a ditch on the map takes this form, drawn as one rounded, bark-brown trunk across the water. Each is drawn narrow and about 8 ft long,
 so it reads as a single-file crossing and not a road bridge.
 
 Name: The footbridges: logs
