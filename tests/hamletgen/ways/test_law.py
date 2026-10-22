@@ -461,3 +461,12 @@ def test_an_end_reaches_a_farmhouse_as_0246_measures_it() -> None:
     assert reach_to_steading((225.0, 100.0), house, M), "10 ft off its own garden, 105 ft off the house"
     assert not reach_to_steading((240.0, 100.0), house, M), "25 ft past the garden: neither figure"
     assert not reach_to_steading((400.0, 100.0), house, M), "a byre of another house is not this steading's"
+
+
+def test_a_span_across_a_defense_belt_is_not_walkable() -> None:
+    """405 T121: the ways left a defense belt's reeds out of their walls, "whose approach is a causeway", while 0081 says no map
+    draws a causeway, so a track does not cross the reeds."""
+    M = {"marshes": [{"role": "defense", "poly": [[40.0, -20.0], [60.0, -20.0], [60.0, 20.0], [40.0, 20.0]]}]}
+    assert not law.span_walkable(M, (0.0, 0.0), (100.0, 0.0))
+    M["marshes"][0]["role"] = "toe"
+    assert not law.span_walkable(M, (0.0, 0.0), (100.0, 0.0)), "as any marsh"

@@ -471,3 +471,23 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 ### T123 Decisions
 
 - **D110** A line under a header-line claim that cannot be a claim (no ` - `) continues it, at any indentation; 0035's drawing page states that a way crosses water only at a crossing place (page session 6). Rendering: as labeled on the page.
+
+## T121 - a defense belt's reeds walled by every hamlet way
+
+### T121 Approach (checklist part A)
+
+1. **The goal, in the world.** No lane, span, field way, run-on or track out of a hamlet crosses reeds of any marsh, a defense belt's included.
+2. **The constraints.** 0081: lanes keep to the bunds and dry ground, and no map draws a causeway, so a track does not cross the reeds; 0057: a town's defensive belt has its causeway (its way ends walked back exempt).
+3. **Where each comes from.** R: 0081, 0057. Found by T09's round 2 (impl-drift outside the change).
+4. **Do they describe the world here?** Yes: no scripted hamlet draws a defense belt (only the frozen legacy towns do), so walling it moves no live map; the claims said the opposite of 0081.
+5. **The order.** Every hamlet way that read `marsh_ground(..., but=("defense",))` or filtered the role out reads every marsh: track.py, corridors.py (twice), law.py, bund.py, web/stage.py, web/skeleton.py, homesteads/boundary.py, homesteads/rows.py; the legacy town's way-end walk-back keeps 0057's causeway, and `marsh_ground`'s docstring says which is which.
+6. **The exits.** (a) record the exclusion on 0081 as a DEVIATION - not taken: nothing draws the belt in a hamlet, so there is nothing to depart for; (b) wall it - taken.
+7. **The search smell.** None.
+8. **The budget.** 30 min with a gated landing.
+9. **Done, measured.** A span across a defense belt is refused (a test, red without the fix); `make quick` clean; `make cohort` 16/16 (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T121 Decisions
+
+- **D111** The hamlet's ways wall every marsh role, the defense belt included (0081: no causeway drawn); the claims that left it out ("a defense marsh left out - UNRESEARCHED", "a defense marsh is no wall") cite 0081 instead; the legacy town's way ends keep 0057's causeway. Rendering: historically accurate (0081).

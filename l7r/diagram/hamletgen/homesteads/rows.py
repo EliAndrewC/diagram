@@ -557,7 +557,9 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
     corr = getattr(s, "_site_corridors", None)
     # ...AND THE WET GROUND the ways refuse: the toe marsh (asked before it is drawn, as `stage_web` asks it) and every marsh
     # drawn so far - missing, three Kashikawa farms fronted the toe marsh and no way could reach their doors
-    wet = [[(float(a), float(b)) for a, b in (s.toe_band() or [])]] + [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
+    wet = [[(float(a), float(b)) for a, b in (s.toe_band() or [])]] + [
+        [(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("poly")
+    ]  # 405 T121: a defense belt too (0081)
     hard = hard_ground(field, [*(getattr(corr, "ring_pts", ()) or ()), *[w for w in wet if len(w) >= 3]], getattr(corr, "water", ()) or ())
     anchor = (float(plan.seat["cx"]), float(plan.seat["cy"]))
     sides = plan.row_sides

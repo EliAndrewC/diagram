@@ -201,7 +201,7 @@ def choose_track_out(s: Settlement, plan: SitePlan) -> Poly:
     fabric = [poly for poly, _owner, _kind in polys] + law.solid_quads(s.M)
     plan.grove_bands = [poly for poly, _owner, kind in polys if kind == "groves"]  # for the dry exit (feature 291)
     toe = s.toe_band()
-    wet = ([toe] if toe else []) + marsh_ground(s.M, but=("defense",))
+    wet = ([toe] if toe else []) + marsh_ground(s.M)  # 405 T121: a defense belt too - no map draws a causeway (0081)
     avoid = [list(plan.envelope), *crop_polys(s)]
     gate = gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, band_gate))
     # ...WITH THE WALLED-IN GATEWAY'S FALLBACK ON EVERY FIELD FORM (feature 374 wave 141): a polder and a dike-pond block

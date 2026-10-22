@@ -496,7 +496,7 @@ def web_hard_ground(s: Settlement, plan: SitePlan) -> list[Any]:
 
     Research: the web's hard ground at seating - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the field and the crops at half the widest tread (`WEB_CROP_GAP`), the toe band and the wet ground, as `stage_web` hands its router"""
     toe = [(float(a), float(b)) for a, b in (s.toe_band() or [])]
-    wet = marsh_ground(s.M, but=("defense",))
+    wet = marsh_ground(s.M)  # 405 T121: a defense belt too - no map draws a causeway (0081)
     env = list(getattr(plan, "envelope", None) or [])  # a plan with no field envelope contributes none
     return [*([Gapped(env, WEB_CROP_GAP)] if len(env) >= 3 else []), *(Gapped(c, WEB_CROP_GAP) for c in crop_polys(s)), *([toe] if len(toe) >= 3 else []), *wet]
 

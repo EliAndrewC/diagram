@@ -403,14 +403,15 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
         the brook at its fords - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every steading part a wall but the
             path's own dooryard
-        a defense marsh is no wall - research/questions/0081-village-lanes.drawing.html: a marsh kept for defense is not a wall to the field way, though lanes keep to the bunds and dry ground
+        every marsh a wall - research/questions/0081-village-lanes.drawing.html: lanes keep to the bunds and dry ground, and no map draws a causeway, so a
+            defense belt's reeds wall the field way too (405 T121)
         field way off the gardens - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) from the way's middle to every garden fence, its start's household's too - the page's gap is kept from another household's garden and a household's own way may run beside its own, but the field way is the hamlet's way to the field, drawn with no household (`FIELD_ROLE`, no `of`), so past the dooryard it starts in (its own dooryard, above) no garden is its own
         field way off the other built ground - GUESS: the same 7 ft off houses, byres, sheds and yards, which no page sizes
         its own house beside its start - GUESS: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of any wall of a house (`edge_dist`, whichever side) is not walled by that house - the 13 ft is ours, as is the margin off a house no page sizes; the law keeps no house corner on the tread (`house_hit`, its own claim on 0246) (405 T115)"""
     M = s.M
     hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
     hard += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
-    hard += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
+    hard += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3]  # 405 T121: a defense belt too (0081)
     fabric = [(poly, own, kind) for poly, own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]
     # ...AND EVERYTHING THE OVERLAP MATRIX FORBIDS A WAY ON (feature 287 M8), read from the registry of what stands: the
     # burial ground, a kura, a sty, a fixture - the ground the law will refuse the run for, walled before it is routed
@@ -458,10 +459,11 @@ def open_ground_rings(M: Mapping[str, Any]) -> list[Poly]:
 
     Research:
         off crop and marsh - research/questions/0081-village-lanes.drawing.html: field outlines, dry plots, marsh
-        a defense marsh left out - UNRESEARCHED: a town's moat-side wet ground, which a way crosses at its bridge, so the crossing rules judge it (`_crossing_fault`), not this outline"""
+        a defense marsh too - research/questions/0081-village-lanes.drawing.html: no map draws a causeway, so a lane crosses no reeds, a defense
+            belt's included (405 T121)"""
     rings = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
     rings += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
-    rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
+    rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3]  # 405 T121: a defense belt too (0081)
     return rings
 
 

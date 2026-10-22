@@ -146,7 +146,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
     # what is already standing: houses, yards, gardens, sheds - the arm must go round all of it
     fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
     toe_now = s.toe_band() or None
-    wet_now = marsh_ground(s.M, but=("defense",))
+    wet_now = marsh_ground(s.M)  # 405 T121: a defense belt too - no map draws a causeway (0081)
     drawn_water = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
     kept: list[tuple[Poly, Poly]] = []
     for ai in range(len(raw_arms)):

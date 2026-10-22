@@ -188,7 +188,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
 
     crops = crop_polys(s)
     toe = s.toe_band() or None
-    wet = marsh_ground(s.M, but=("defense",))
+    wet = marsh_ground(s.M)  # 405 T121: a defense belt too - no map draws a causeway (0081)
     # THE CROP AT A WEB LANE'S HALF-TREAD, THE TOE AND THE MARSH AT `WEB_HARD_GAP` (feature 374 wave 143, 0081): each crop polygon
     # carries its own gap (`Gapped`), so every reader handed `hard` keeps a lane on the bund and off the wet
     hard = [Gapped(plan.envelope, WEB_CROP_GAP), *(Gapped(c, WEB_CROP_GAP) for c in crops), *([toe] if toe else []), *wet]

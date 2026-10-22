@@ -148,7 +148,7 @@ class RunOnBlocks:
         self.s = s
         self.water = drawn_water_segs(s)
         toe = s.toe_band()
-        self.wet: list[Poly] = marsh_ground(s.M, but=("defense",))
+        self.wet: list[Poly] = marsh_ground(s.M)  # 405 T121: a defense belt too - no map draws a causeway (0081)
         if toe:
             self.wet.append(list(toe))
         self.fabric = [poly for poly, _own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]

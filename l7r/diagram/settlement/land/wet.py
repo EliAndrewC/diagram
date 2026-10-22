@@ -286,8 +286,8 @@ def marsh_ground(M: Any, only: Any = None, but: Any = ()) -> list[list[Pt]]:
     """Every recorded marsh ring - the ONE reading of "is this in the marsh" (feature 287, M7; woods S3).
 
     Since M7 a marsh's record IS the ground its reeds are drawn on (`drawn_ground`), so this is the drawn marsh. `only`
-    names the roles to read (None: every role), `but` the roles to leave out - the ways leave out the `defense` belt, whose
-    approach is a causeway, and the belt's alder reads the toe and the waterside only. Rings of under three points are
+    names the roles to read (None: every role), `but` the roles to leave out - a town's way ends walked back leave out the `defense` belt, whose
+    approach is 0057's causeway (a hamlet's ways wall every role: 0081 draws no causeway, 405 T121), and the belt's alder reads the toe and the waterside only. Rings of under three points are
     not ground and are skipped."""
     out: list[list[Pt]] = []
     for m in M.get("marshes") or []:

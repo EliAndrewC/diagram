@@ -470,7 +470,8 @@ def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) 
     Research:
         a walkable span - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: off water, crop, marsh and houses, its line 7 ft (`WEB_FABRIC_GAP`) off a garden fence
         a span off a threshing yard - UNRESEARCHED: the garden fence's 7 ft (`WEB_FABRIC_GAP`) held off a threshing yard too; no page sets a gap from a yard
-        a defense marsh left out - UNRESEARCHED: a town's moat-side wet ground, crossed at its bridge and judged by the crossing rules
+        a defense marsh too - research/questions/0081-village-lanes.drawing.html: no map draws a causeway, so a span crosses no reeds, a defense belt's
+            included (405 T121)
         no span along another way - research/questions/0081-village-lanes.drawing.html: "Two paths running side by side are drawn as one" - a span whose middle runs within `JOIN_TOL` (4 ft) along another way would draw one tread twice
         a span off a farmhouse - research/questions/0081-village-lanes.drawing.html: its line a footpath's half-tread (`TREAD_HALF_FT`) and the 3 ft a lane's tread keeps off a farmhouse wall (`TREAD_WALL_FT`) off a house"""
     for wpts, _w in bridge_crossed_waters(M):
@@ -479,7 +480,7 @@ def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) 
             return False
     rings = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
     rings += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
-    rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
+    rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3]  # 405 T121: a defense belt too (0081)
     if any(segments_cross(p, q, r[k], r[(k + 1) % len(r)]) for r in rings for k in range(len(r))):
         return False
     if house_hit(
