@@ -588,6 +588,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T131 - check-wave stamps each reply with its unit's label": {
+   "sha256": "4c67f80ae332dab3671f595d482ac765bf618df2bbb4f5534c5576297fc91996",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T131 Approach (checklist part A)": {
+   "sha256": "03cce748944806cac90398dc118ad64125e3757fb7c682ad2ecf81e3070e5c79",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T131 Decisions": {
+   "sha256": "1a0d3a82dff56d62e0982cad636f0505fbacac64a9ae074bddb5c972411ecfdd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4293,6 +4311,41 @@
      "summary": "make record-checked FIXED_BY= on a quote-check's unfootnoted unit refuses with a message saying what to do instead of raising KeyError; a test red without the fix pins it (session 9's commit 0889dcdc1).",
      "class": "within",
      "why": "Found work on tooling the task did not change, filed as its own task of this feature per FR-002; replacing a crash with a refusal on the same input adds no new reach or default, and the test only enforces the fix. Doing the fix in session 9 and filing the task afterward still satisfies FR-002's requirement that the finding stand as its own task."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T131 - check-wave stamps each reply with its unit's label",
+    "### T131 Approach (checklist part A)",
+    "### T131 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T131 (the task)",
+     "summary": "File and work a tooling fix: check-wave's replies are matched to their bundles by the unit's label, after the 2026-10-22 wave returned 'impl-drift dw3' for unit dw3 and its reply went unrecorded.",
+     "class": "within",
+     "why": "Found work on the feature's own process tooling, filed as a task here (FR-002), in a feature whose request is to measure and fix the process and tooling (2026-10-20 start, Amendment 1's tooling and process changes) and to take the feature to completion (Amendments 7, 9). It narrows nothing asked."
+    },
+    {
+     "id": "D120",
+     "summary": "check-wave.js returns { ...reply, label: unit.label } for each unit, overwriting whatever label the agent wrote.",
+     "class": "within",
+     "why": "The mechanism of the fix; each reply is produced by the dispatch for that unit, so the unit's label is the correct key. Settles nothing the request or spec left to the GM."
+    },
+    {
+     "id": "T131 A6 exit",
+     "summary": "Stamp the label in the workflow (b) rather than instruct agents to echo it (a).",
+     "class": "within",
+     "why": "A choice between two implementations of the same fix; neither narrows the request."
+    },
+    {
+     "id": "T131 A9 done",
+     "summary": "tests/test_agent_models.py pins the stamp, red without it.",
+     "class": "within",
+     "why": "Enforcement of the fix itself (a test that fails only when the stamp is absent); not unrequested scope."
     }
    ]
   }
