@@ -286,9 +286,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [ ] T101 Move tails._DOUBLED_DEG from 15 to 0081's 20 degrees (an end running back along another way under 20 degrees is cut where it comes alongside) once the side-by-side family (T07) leaves the tree no doubled household way: at 20, cohort seed 10's household way, a tree lane no settle may cut, read as doubled and seed 40 left a shallow crossing (measured 2026-10-21, T97) - done when seeds 1-48 and the pinned rows pass at 20 [lands-open]
       research: rendering
       research: rendering
-- [ ] T102 The decide guard refused T100's claims check after the round arbiter's accept had recorded T100's plan blocks CLEAR (`plan_gate.arbiter_accept`); read again minutes later the section was CLEAR (its preamble a typo-scale change from the accepted text, forgiven). Find which reading refused - the guard on the mirror's scripts, a block the accept did not name, or the digest before T81's forgiveness - and make one reading hold (escaped with DECIDE_OK, logged; found landing batch 10, 2026-10-21) [lands-open]
+- [x] T102 The decide guard refused T100's claims check after the round arbiter's accept had recorded T100's plan blocks CLEAR (`plan_gate.arbiter_accept`); read again minutes later the section was CLEAR (its preamble a typo-scale change from the accepted text, forgiven). Find which reading refused - the guard on the mirror's scripts, a block the accept did not name, or the digest before T81's forgiveness - and make one reading hold (escaped with DECIDE_OK, logged; found landing batch 10, 2026-10-21) [lands-open]
       research: rendering
       research: rendering
+      verify: DONE. landed in batch T102+T109: T102: a reviewed block's text kept by digest, one reading committed or not (D92); T109: a reply heredoc outside the project held from the house-style correction (D93)
 - [x] T103 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/joints.py::tee#a lane whose vertex before the joint stands within `_TOUCH_GAP` (4 ft) of its foot on the other lane stops at that vertex, with no last leg to the foot (the nub cut; the hook rule at §27 is the nearest the page comes) [lands-open]
       research: rendering
       verify: DONE. landed: batch 11: tee's nub cut claimed CONVENTION, read IN-STEP (T103); T26's wood-shed change built, measured and set down - it exposed the knots-versus-gap conflict, now T107
@@ -310,9 +311,10 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
       research: rendering
       verify: DONE. landed: a lane with no width is the 3 ft footpath at a joint (D90)
-- [ ] T109 The house-style hook rewrote a checker's own words inside replies recorded verbatim (「labelled」 -> labeled, 「centre」 -> center) in the heredocs that wrote batch 8's round 2 (b8b), batch 9's (b9), batch 11's (b11c) and batch 12's (b12) REPLY files; a REPLY file is a quotation, which the house style exempts - exempt the claims and record REPLY files (make claims-checked / record-checked input) from the rewrite, with a test (found 2026-10-21) [lands-open]
+- [x] T109 The house-style hook rewrote a checker's own words inside replies recorded verbatim (「labelled」 -> labeled, 「centre」 -> center) in the heredocs that wrote batch 8's round 2 (b8b), batch 9's (b9), batch 11's (b11c) and batch 12's (b12) REPLY files; a REPLY file is a quotation, which the house style exempts - exempt the claims and record REPLY files (make claims-checked / record-checked input) from the rewrite, with a test (found 2026-10-21) [lands-open]
       research: rendering
       research: rendering
+      verify: DONE. landed in batch T102+T109: T102: a reviewed block's text kept by digest, one reading committed or not (D92); T109: a reply heredoc outside the project held from the house-style correction (D93)
 - [ ] T110 0084's drawing page says how a way's deck is drawn but not whether a way prefers going round a ditch to crossing it, while 0035 prices a brook crossing at 150 ft of walk: research when a way crosses a farm ditch rather than going round, and record it; the track out's last resort crosses one only where nothing else is dry (T10, UNRESEARCHED); and 0035 draws a way's brook crossing as the board bridge a farm ditch takes (about 4 ft) where 0084 gives a way a timber deck as wide as the way - reconcile the two pages (impl-drift outside the change, 2026-10-21) [lands-open]
       research: rendering
       research: rendering

@@ -116,9 +116,33 @@ def _head(text: str) -> str:
     return os.path.basename(word)
 
 
+#: A heredoc written to a file: `cat > <path> <<'EOF'` or `cat <<'EOF' > <path>` (`>>` and `tee` too), its tag and its body.
+_HEREDOC_TO = re.compile(
+    r"(?:\b(?:cat|tee)\s+(?:-a\s+)?(?:>>?\s*)?(?P<p1>/\S+)\s*<<-?\s*(?P<q1>['\"]?)(?P<t1>\w+)(?P=q1)"
+    r"|\bcat\s*<<-?\s*(?P<q2>['\"]?)(?P<t2>\w+)(?P=q2)\s*>>?\s*(?P<p2>/\S+))[^\n]*\n"
+)
+
+
+def outside_heredocs(cmd: str) -> list[tuple[int, int, str]]:
+    """The BODY of each heredoc whose file lands outside the project (`/tmp`, the session state directory), held whole.
+
+    WHY (feature 405 T109). The outside exemption judged the whole command: a heredoc writing a checker's reply to the
+    scratchpad was left as typed alone, but corrected as soon as a `make claims-checked` or a `git add` shared the command -
+    and the checker's own words (「labelled」, 「centre」) were rewritten in replies recorded verbatim (batches 8-12). A
+    reply is a quotation; what lands outside the project is not project content, whatever else the command does."""
+    out = []
+    for m in _HEREDOC_TO.finditer(cmd):
+        path, tag = (m.group("p1"), m.group("t1")) if m.group("p1") else (m.group("p2"), m.group("t2"))
+        if not (path.startswith("/tmp/") or "/.claude/projects/" in path):
+            continue
+        end = re.compile(rf"^\s*{re.escape(tag)}\s*$", re.M).search(cmd, m.end())
+        out.append((m.end(), end.start() if end else len(cmd), "mention"))
+    return out
+
+
 def held_ranges(cmd: str) -> list[tuple[int, int, str]]:
     """(start, end, kind) for every range that must not be corrected: kind `warn` or `mention`."""
-    held = []
+    held = outside_heredocs(cmd)
     for a, b in _segments(cmd):
         seg = cmd[a:b]
         head = _head(seg)
