@@ -424,36 +424,4 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 <!-- plan-archive: T117 to T115 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 
-## T118 - four notes on the run-on's blocks and the fabric (T116's rounds)
-
-### T118 Approach (checklist part A)
-
-1. **The goal, in the world.** A way carried on to the bund keeps every house corner off its whole tread, and the run-on's other margins are claimed for what they are.
-2. **The constraints.** 0246's no house corner on the tread (§113); the run-on's 7 ft off the fabric (`FOOTPATH_FABRIC_GAP`); the fabric's parts (`_homestead_polys`: houses, yards, gardens, groves, bamboo strips, wells).
-3. **Where each comes from.** The tread rule: R. The 7 ft: O at a garden fence (0246); U off groves, strips and wells. The 2 ft start allowance and a house as its own owner: U.
-4. **Do they describe the world here?** (a) `RunOnBlocks.clear` passes `int(width)` to `_hits_a_steading`, so a 3.5 ft tread is judged at 3 ft - narrower than the tread the page keeps corners off: a defect, the code is fixed. (b) `_homestead_polys` enters a house with itself as owner, read by `field_router`'s release of the house beside a route's start (T117) - unclaimed. (c) `clear` judges the fabric, crop and steading from 2 ft along the stretch, since the end it grows from may stand at its own dooryard's gap (its comment) - unclaimed. (d) `clear` keeps 7 ft off every fabric part, farm groves, bamboo strips and wells too - unclaimed past the gardens.
-5. **The order.** Nothing moves.
-6. **The exits.** (a) pass the width whole - taken; (b) claim the owner, the allowance and the 7 ft off the non-garden fabric as bare GUESSes (no page sizes them) - taken; (c) drop the allowance - taken for the houses alone (the claims round: 0246 gives no exception to "no corner of a house stands on its tread" near a way's start), kept for the fabric and the crop, where an end at its own dooryard's gap would refuse its own run-on; (f) the tread's 3 ft off a farmhouse wall (0081) against the house test's 0 ft, and the well's 8 ft fallback - carried to T119: they are the lane law's, not the run-on's; (d) more room - n/a; (e) conform - n/a.
-7. **The search smell.** None.
-8. **The budget.** 25 min with its landing (a gated one: an engine token changes).
-9. **Done, measured.** A unit test: a 3.5 ft run-on whose tread edge would touch a house corner between 1.5 and 1.75 ft off its line is refused (red with `int`); the three claims re-checked IN-STEP; seeds 1-48 and the pinned rows as main.
-10. **Before moving a constant.** No constant moves.
-11. **Before fitting things into room.** n/a.
-
-### T118 Decisions
-
-**D89 - the run-on judged on its whole tread; its unclaimed margins claimed.** `RunOnBlocks.clear` passes the width to `_hits_a_steading` unrounded (its `width` typed float), so the whole tread keeps off the house corners (0246). Claims added as bare GUESSes: `_homestead_polys`' house entered as its own owner (what lets `field_router` free the house beside a route's start); `clear`'s 2 ft start allowance for the fabric and the crop (the end it grows from may stand at its own dooryard's gap), the houses judged from the stretch's own start (0246's no corner on the tread, no exception); and its 7 ft off the farm groves, bamboo strips and wells, which no page sizes.
-
-### T118 Approach (re-answered 2026-10-22T10:04Z)
-
-1. **The goal, in the world.** A way carried on to the bund keeps every house corner off its whole tread, and the run-on's other margins are claimed for what they are.
-2. **The constraints.** 0246's no house corner on the tread (§113); the run-on's 7 ft off the fabric (`FOOTPATH_FABRIC_GAP`); the fabric's parts (`_homestead_polys`: houses, yards, gardens, groves, bamboo strips, wells).
-3. **Where each comes from.** The tread rule: R. The 7 ft: O at a garden fence (0246); U off groves, strips and wells. The 2 ft start allowance and a house as its own owner: U.
-4. **Do they describe the world here?** (a) `RunOnBlocks.clear` passes `int(width)` to `_hits_a_steading`, so a 3.5 ft tread is judged at 3 ft - narrower than the tread the page keeps corners off: a defect, the code is fixed. (b) `_homestead_polys` enters a house with itself as owner, read by `field_router`'s release of the house beside a route's start (T117) - unclaimed. (c) `clear` judges the fabric, crop and steading from 2 ft along the stretch, since the end it grows from may stand at its own dooryard's gap (its comment) - unclaimed. (d) `clear` keeps 7 ft off every fabric part, farm groves, bamboo strips and wells too - unclaimed past the gardens.
-5. **The order.** Nothing moves.
-6. **The exits.** (a) pass the width whole - taken; (b) claim the owner, the allowance and the 7 ft off the non-garden fabric as bare GUESSes (no page sizes them) - taken; (c) drop the allowance - taken for the houses alone (the claims round: 0246 gives no exception to "no corner of a house stands on its tread" near a way's start), kept for the fabric and the crop, where an end at its own dooryard's gap would refuse its own run-on; (f) the tread's 3 ft off a farmhouse wall (0081) against the house test's 0 ft, and the well's 8 ft fallback - carried to T119: they are the lane law's, not the run-on's; (d) more room - n/a; (e) conform - n/a.
-7. **The search smell.** None.
-8. **The budget.** 25 min with its landing (a gated one: an engine token changes).
-9. **Done, measured.** A unit test: a 3.5 ft run-on whose tread edge would touch a house corner between 1.5 and 1.75 ft off its line is refused (red with `int`); the three claims re-checked IN-STEP; seeds 1-48 and the pinned rows as main.
-10. **Before moving a constant.** No constant moves.
-11. **Before fitting things into room.** n/a.
+<!-- plan-archive: T118 to T116 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
