@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-22T04:40:21Z",
+  "target": "claims-gate",
+  "commit": "0dd7a5c0b",
+  "why": "CLAIMS_OK: the two DRIFTED claims are the known gap carried to 405 T114 (0246's page to record the knot exception)"
+}
