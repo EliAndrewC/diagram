@@ -563,7 +563,10 @@ def fixed_answer(root: pathlib.Path, q: str, notes: str, fixed_by: str) -> tuple
     owed = [u for u in unanswered(root) if u.check == "quote-check" and ru.question(u.subject) == q.zfill(4) and u.subject.partition("#")[2] in wanted]
     now = quotation_keys(root, None, [u.slug for u in owed])
     base = quotation_keys(root, merge_base(root), [u.slug for u in owed]) if merge_base(root) else {}
-    refused = [u.slug for u in owed if now[u.slug] not in _read(s, u.slug).get("qkeys", []) and now[u.slug] != base.get(u.slug)]
+    # an unfootnoted unit has no quotation key: its changed words ARE the claim, so a fix there always moved it - refused,
+    # not a KeyError (405 p9, 2026-10-22: a record-format EDIT on 0081.drawing's unfootnoted block crashed the declaration)
+    refused = [u.slug for u in owed if u.slug not in now
+               or (now[u.slug] not in _read(s, u.slug).get("qkeys", []) and now[u.slug] != base.get(u.slug))]
     if refused:
         return [], refused
     for u in owed:
