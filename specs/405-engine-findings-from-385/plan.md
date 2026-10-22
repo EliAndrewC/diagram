@@ -453,3 +453,23 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 
 <!-- plan-archive: T110 to T130 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+## T129 - two 0081 sentences, written in page session 8
+
+### T129 Approach (checklist part A)
+
+1. **The goal, in the world.** 0081 says a gathered lane end may meet the other lane's side as a T, and that every way keeps off every marsh's reeds, a defense belt's included - so the claims citing it rest on what it states.
+2. **The constraints.** The research record's rules; page sessions write, then a fresh session checks.
+3. **Where each comes from.** T123's and T121's impl-drift rounds (outside the change); R: 0081.
+4. **Do they describe the world here?** Yes: `knots.teed_onto` and T121's walls do it.
+5. **The order.** Page session 8 wrote both; session 9 checked them (record-format, quote-check, modal-depiction, a round arbiter's continue on a depiction cascade) and fixed a `record-checked` crash with a test; merged.
+6. **The exits.** (a) change the code - not taken; (b) record it - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of two page sessions.
+9. **Done, measured.** Session 9's checks applied and answered; `make record-owed` 0 unanswered (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T129 Decisions
+
+- **D118** 0081 records the T-foot join for a gathered end and the reeds walled to every way (labeled as the page labels each bullet). Rendering: as labeled.
