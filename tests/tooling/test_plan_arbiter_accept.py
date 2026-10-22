@@ -104,3 +104,19 @@ def test_an_asked_plan_review_s_accept_makes_it_the_plan_s_verdict(tmp_path: pat
         raise AssertionError("an ask about no review is no plan verdict")
     except ValueError:
         pass
+
+
+def test_a_typo_since_an_accept_is_forgiven_before_the_accepted_text_is_committed(tmp_path: pathlib.Path) -> None:
+    """Feature 405 T102: the decide guard refused T100's check after the arbiter's accept, and let it through minutes later -
+    the accepted text, never yet committed, was looked for only in plan.md's git history."""
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    d = _feature(tmp_path, [{"trigger": TRIG, "ruling": "accept"}])
+    (d / "plan.md").write_text("# plan\n\n## T17 - x\n\n### T17 Decisions\n\n**D1** the rule of teh ways.\n")
+    pg.arbiter_accept(d, TRIG)
+    (d / "plan.md").write_text("# plan\n\n## T17 - x\n\n### T17 Decisions\n\n**D1** the rule of the ways.\n")
+    review = json.loads((d / "plan-review.json").read_text())
+    section = pg.task_sections((d / "plan.md").read_text())["T17"]
+    assert pg._section_clear(review, section, pg.History(d / "plan.md")), "the typo is forgiven against the accepted text, uncommitted"
+    (d / "plan.md").write_text("# plan\n\n## T17 - x\n\n### T17 Decisions\n\n**D1** never the rule of the ways.\n")
+    section = pg.task_sections((d / "plan.md").read_text())["T17"]
+    assert not pg._section_clear(review, section, pg.History(d / "plan.md")), "a changed decision is not a typo"

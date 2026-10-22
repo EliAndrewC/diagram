@@ -34,6 +34,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import plan_seen  # noqa: E402 - the reviewed blocks' texts (405 T102)
 import wording  # noqa: E402 - the module beside this one (feature 385 T118)
 
 RECORD = "plan-review.json"
@@ -231,7 +232,9 @@ class History:
             yield from self._texts[-len(chunk):]
 
     def block(self, key: str, sha: str) -> str | None:
-        """The text a block had when its digest was `sha`, from the plan's history; None when no version held it."""
+        """The text a block had when its digest was `sha`, as its verdict kept it or from the plan's history; None when neither holds it."""
+        if self.path is not None and (kept := plan_seen.recall(self.path, sha)) is not None and block_digest(kept) == sha:
+            return kept
         for text in self.texts():
             for k, body, _at in blocks(text):
                 if k == key and block_digest(body) == sha:
@@ -644,6 +647,7 @@ def record_blocks(spec_dir: pathlib.Path, review: dict, declared: str, today: st
             continue
         out.setdefault("blocks", {})[key] = {"sha256": sha, "verdict": verdict, "reviewed": when, "declared": declared}
     out.setdefault("block_reviews", []).append({"reviewed": when, "blocks": sorted(named), "verdict": verdict, "decisions": decisions})
+    plan_seen.keep(plan, ((block_digest(b), b) for k, b, _a in blocks(plan.read_text(encoding="utf-8")) if k in named))
     rec_path.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     approach = _approach_gate()
     root = spec_dir.parent.parent
@@ -675,6 +679,7 @@ def arbiter_accept(spec_dir: pathlib.Path, trigger: str, today: str | None = Non
     out = slim_record(json.loads(rec_path.read_text(encoding="utf-8"))) if rec_path.is_file() else {"feature": spec_dir.name}
     owed_keys, blocked = block_status(out, text, set())
     named = {k: block_digest(b) for k, b, _a in blocks(text) if k in set(owed_keys) | set(blocked)}
+    plan_seen.keep(plan, ((block_digest(b), b) for k, b, _a in blocks(text) if k in named))
     when = today or datetime.date.today().isoformat()
     for key, sha in named.items():
         out.setdefault("blocks", {})[key] = {"sha256": sha, "verdict": "CLEAR", "reviewed": when, "declared": "round-arbiter"}
