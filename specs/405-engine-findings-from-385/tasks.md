@@ -359,8 +359,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
       verify: DONE. landed: the claim-label lint at make claims-owed (D91)
 
-- [ ] T121 `marsh_ground`'s docstring says the ways leave out the `defense` belt "whose approach is a causeway", while 0081 says no map draws a causeway, so a track does not cross the reeds: every way reading `marsh_ground(..., but=("defense",))` (the lane law's walkable span, the router, the web) - wall the belt as T09 does in `_thread_the_fabric`, or record the exclusion on 0081 as a DEVIATION (impl-drift outside the change, T09's round 2, 2026-10-22) [lands-open]
+- [x] T121 `marsh_ground`'s docstring says the ways leave out the `defense` belt "whose approach is a causeway", while 0081 says no map draws a causeway, so a track does not cross the reeds: every way reading `marsh_ground(..., but=("defense",))` (the lane law's walkable span, the router, the web) - wall the belt as T09 does in `_thread_the_fabric`, or record the exclusion on 0081 as a DEVIATION (impl-drift outside the change, T09's round 2, 2026-10-22) [lands-open]
       research: rendering
+      verify: DONE. landed: a defense belt's reeds walled by every hamlet way (0081: no causeway drawn); the legacy town keeps 0057's causeway (D111)
 
 - [ ] T122 Two drawing-page silences T09's rounds found: 0035 says how a way crosses a brook (squarely, at a crossing place about every 160 ft) but not what a track running past the settlement (a connector or spur) does where no crossing place lies on its line - the code drops it, takes the dry exit or keeps its far part; and 0246's 7 ft gap is measured from another household's garden fence, silent on whether a track passing outside the cluster keeps the same 7 ft off a house wall, a byre or a threshing yard (`_thread_the_fabric` applies it to every homestead polygon) - record both, labeled (impl-drift outside the change, T09's round 3, 2026-10-22) [lands-open]
       research: rendering
