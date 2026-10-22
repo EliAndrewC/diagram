@@ -1931,3 +1931,23 @@ Owed by the cohort (cohort@20261021T192759Z: seeds 10, 24, 36 and 47 newly faili
 9. **Done, measured.** The two claims re-checked: IN-STEP, or DRIFTED only until 0246 records the departure (T114), landed with `CLAIMS_OK` naming T114 as T107's was; a docstring only.
 10. **Before moving a constant.** No constant moves.
 11. **Before fitting things into room.** n/a.
+<!-- plan-archive: archived 2026-10-22 -->
+## T117 - the door release's words (T115's round 4)
+
+### T117 Approach (checklist part A)
+
+1. **The goal, in the world.** A field way that starts beside a house it serves can leave that house; its claim says where the release holds as the code tests it.
+2. **The constraints.** 0246's no house corner on the tread (§113, kept by `house_hit`); the router's release of a house within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of a route's start (`mine()`), a GUESS.
+3. **Where each comes from.** The tread rule: R. The 13 ft release: U - the claim already labels it a bare GUESS.
+4. **Do they describe the world here?** `mine()` frees the house when the start stands within 13 ft of any of its walls (`edge_dist`), not only its front; the claim says "at its door". The door side is not the release's business: the route only needs to leave the wall it starts beside, and the law still keeps every house corner off the tread, so a start beside a gable or the back is let out the same way and the tread rule holds.
+5. **The order.** Nothing moves.
+6. **The exits.** (a) the claim drops "at its door" for "beside any wall" - taken; (b) test the front wall - not taken: a house record's door side is not what the release needs, and it would wall a route the law already admits, for no map defect; (c) record on 0246 - n/a (a bare GUESS); (d) more room - n/a; (e) conform - n/a.
+7. **The search smell.** None.
+8. **The budget.** 10 min with its landing.
+9. **Done, measured.** The claim re-checked IN-STEP; a docstring only.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a.
+
+### T117 Decisions
+
+**D88 - the release beside any wall.** `field_router`'s claim "its own house at its door" says a route starting within 13 ft of any wall of a house is not walled by it (`mine()`'s `edge_dist`), a bare GUESS, the law keeping 0246's no house corner on the tread. No code changes.
