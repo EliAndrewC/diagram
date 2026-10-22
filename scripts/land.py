@@ -69,6 +69,17 @@ def file_carries(root: Path, d: Path) -> None:
         run(root, ["git", "commit", "-q", "-m", f"{d.name}: claims findings outside the change filed as a task (make land, 405 T36)"])
 
 
+def _boxes() -> bool:
+    """`make land ... BOXES=1`: the landing ticks a physical task's research boxes, as `make tick BOXES=1` does (410 T01 was
+    refused with a pointer to BOXES=1, which `make land` did not pass on)."""
+    return bool(os.environ.get("LAND_BOXES", "").strip())
+
+
+def _box_flag(tt, d: Path, task: str) -> list[str]:  # noqa: ANN001 - the tick-task module
+    """`--boxes` for a task with a research box still open, and only there: `--boxes` refuses a task that has none."""
+    return ["--boxes"] if _boxes() and tt.boxes_refusal((d / "tasks.md").read_text(encoding="utf-8"), task) else []
+
+
 def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: list[str] | None = None) -> list[str]:
     """Pass 1: every refusal the landing would meet that costs seconds to ask, all of them - but the claims gate's, which goes to
     `deferred` when given (405 T50, D23: the claims round runs beside the gate, and the landing waits for it before the push)."""
@@ -81,7 +92,7 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
         except ValueError as e:
             by_why.setdefault(str(e), []).append(task)
             continue
-        why, _msg = tt.refusal(root, d, task, note, landed=False)
+        why, _msg = tt.refusal(root, d, task, note, landed=False, boxes=_boxes())
         if why:
             by_why.setdefault(why, []).append(task)
     stops = [f"{', '.join(ts)}: {why}" for why, ts in by_why.items()]
@@ -366,7 +377,7 @@ def main(argv: list[str]) -> int:
     rel = str(d.relative_to(root))
     how = f"landed in batch {'+'.join(tasks)}" if len(tasks) > 1 else "landed"
     os.environ["L7R_LAND_TICKS"] = " ".join(tasks)  # the tasks the landing ticks: `--landing` is honored for these alone
-    failed = [task for task in tasks if tt.main([argv[0], task, f"{how}: {note}", "--landing"])]
+    failed = [task for task in tasks if tt.main([argv[0], task, f"{how}: {note}", "--landing", *_box_flag(tt, d, task)])]
     if failed:
         run(root, ["git", "checkout", "--", rel])  # the ticks already written put back: a landing that does not push ticks nothing
         print(f"land: {', '.join(failed)} refused its tick (above) - nothing landed, nothing ticked", file=sys.stderr)
