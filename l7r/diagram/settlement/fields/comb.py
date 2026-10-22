@@ -203,7 +203,10 @@ class CombMixin:
             junction pile size - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: four to six feet across - each
                 fillet leg 2-3 ft from the vertex (0.8-1.2 of 2.5 ft), floored at the drawn aze (405 T126)
             pile by quadrant - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a fillet per corner, each leg drawn on its
-                own, a quarter of corners left bare"""
+                own, a quarter of corners left bare
+            how far a pile swells - UNRESEARCHED: each fillet bulges 0.15-0.45 of its chord into the basin (405 T127)
+            only where bunds cross - UNRESEARCHED: only a node where three or more plot corners meet is piled; T-stubs and field-edge corners
+                are left bare (405 T127)"""
         from l7r.diagram.waterfields import AZE, aze_w
 
         cells: dict[tuple[int, int], list[list[tuple[float, float] | list[tuple[int, int]]]]] = {}

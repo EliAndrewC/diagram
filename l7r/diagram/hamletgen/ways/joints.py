@@ -669,7 +669,10 @@ def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> in
     It started the connector at the lane's vertex instead, so the two still met END TO END at that vertex (feature 328: 0081
     has the arriving lane meet the other's side).
 
-    Research: a hairpin at the track becomes a T - research/questions/0081-village-lanes.drawing.html: the arriving lane meets the other's side as a T"""
+    Research:
+        a hairpin at the track becomes a T - research/questions/0081-village-lanes.drawing.html: the arriving lane meets the other's side as a T
+        none at the way out's gate - UNRESEARCHED: no hairpin is folded where the connector starts at the way out's gate (`way_out_gate`)
+            (405 T127)"""
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     # ...NOT WHERE THE CONNECTOR STARTS AT THE WAY OUT'S GATE (feature 320; the exit strip's rule before it): the households'
     # ways reach it there, and moved off it they stood off the network; the settle re-aims the lane's end instead

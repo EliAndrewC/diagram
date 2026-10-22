@@ -207,7 +207,9 @@ def settle_shapes(s: Any) -> int:
     Research:
         a lane's end loses its hook - research/questions/0081-village-lanes.drawing.html: re-laid as a T where it joins a way, else cut
         no hairpin or zigzag - research/questions/0081-village-lanes.drawing.html: cut as `_unkinked` cuts it
-        crossings and fouls - NONE: claimed at `_crossing_fault` and `fouled_segment`"""
+        crossings and fouls - NONE: claimed at `_crossing_fault` and `fouled_segment`
+        a fouling segment cut out - UNRESEARCHED: a lane's fouling segment is cut out and the lane split into its two remaining pieces
+            (405 T127)"""
     M = s.M
     lanes = M.get("lanes") or []
     yards, houses = _fabric(s)
@@ -307,7 +309,10 @@ def reaimed(seq: Poly, tread: Poly, connector: bool = False) -> Poly:
     nearest point; a vertex already standing on the tread simply ends the lane there. With no such vertex the last leg is
     dropped.
 
-    Research: a lane meets another as a T - research/questions/0081-village-lanes.drawing.html: the end re-laid, never longer"""
+    Research:
+        a lane meets another as a T - research/questions/0081-village-lanes.drawing.html: the end re-laid, never longer
+        an end within a hand's width ends there - UNRESEARCHED: a vertex within `_TOUCH_GAP` (4 ft) of the way ends the lane at it, unjoined
+            by ink (405 T127)"""
     for m in range(len(seq) - 2, -1, -1):
         b = seq[m]
         f = _foot(b, tread)

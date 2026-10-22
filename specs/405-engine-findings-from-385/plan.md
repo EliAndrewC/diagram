@@ -453,3 +453,23 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 <!-- plan-archive: T121 to T121 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 
 <!-- plan-archive: T11 to T124 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+## T127 - the carried claims findings
+
+### T127 Approach (checklist part A)
+
+1. **The goal, in the world.** Every claim carried here by the claims gate says truly what its code decides and on what research, so the record's checks judge the maps against what the code really does.
+2. **The constraints.** The claim vocabulary (a page cited where it states it; `GUESS <page>` where the page records the guess; a bare GUESS or UNRESEARCHED where no page speaks; DEVIATION where the code departs, recorded on the page); the carried findings' own words (`claims-carried.jsonl`, the index notes).
+3. **Where each comes from.** The impl-drift rounds of 2026-10-22 (the record batch's wave, T119, T121); R for each page cited.
+4. **Do they describe the world here?** Yes: 28 carried claims - 11 UNCLAIMED, 6 MISLABELED, 5 DRIFTED, 3 CANNOT-TELL, 2 NEEDS-RESEARCH, 1 more.
+5. **The order.** Round 1: the label work no code or page waits on - 13 of the 17 UNCLAIMED and MISLABELED. Held back: `LANE_CLEARANCE` and `access.LANE_MIDDLE_CLEAR_FT` (7 ft off a house corner, stricter than 0081's 3 ft off a wall: a departure the page must record), and `law.field_unreached`'s connector (0081 §32 makes the spur and the track out one route: a code decision). Then the DRIFTED, CANNOT-TELL and NEEDS-RESEARCH items, one at a time.
+6. **The exits.** (a) relabel only where the code is right and the label wrong - taken for round 1; (b) code changes - each its own decision, later.
+7. **The search smell.** None.
+8. **The budget.** Round 1: 30 min.
+9. **Done, measured.** Round 1: `make claims-coverage` clean; no claim-label flag; the 14 owed claims checked.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T127 Decisions
+
+- **D113** Round 1 (claims only, no behavior changed): claims written for 8 UNCLAIMED decisions (the connector's gate fold, a way reached only where walked to, the paddy's edge tried first, a web run trimmed to what it serves, an end within 4 ft, a fouling segment cut out, a junction's bulge and crossings only, the run-on's fixture pad) and 5 MISLABELED relabeled (a door end on 0081; the gap's middle on 0246 and the easiest way on 0081, the centering strength UNRESEARCHED; the 20 degree fray on 0081; the 12 ft dooryard reach a GUESS of 0246). Rendering: as each claim is labeled.

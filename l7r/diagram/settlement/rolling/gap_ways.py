@@ -203,7 +203,10 @@ def flood(L: Layers, segs: Sequence[tuple[Pt, Pt]], rings: Sequence[tuple[int, i
     no diagonal cutting a blocked corner, each step dearer beside blocked ground (`CENTER_WEIGHT`); stopped `FLOOD_PAST_PX` past
     the first time every ring (a homestead's cell span) has been reached.
 
-    Research: a way keeps to the middle of its gap - GUESS research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a worn path takes the shortest or easiest way; the open middle of the ground between plots
+    Research:
+        a way keeps to the middle of its gap - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: along the middle of the gaps
+        the shortest or easiest way - research/questions/0081-village-lanes.drawing.html: a worn path takes the shortest or easiest way
+        how hard it keeps the middle - UNRESEARCHED: `CENTER_WEIGHT` (3) over `CENTER_CELLS` (3) (405 T127)
     """
     import numpy as np
 

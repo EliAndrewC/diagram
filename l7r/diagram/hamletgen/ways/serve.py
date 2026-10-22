@@ -160,6 +160,8 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
 
     Research:
         a web lane joins the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, or not drawn
+        trimmed to what it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane, or a stretch of one, that serves nothing is not drawn - the run
+            trimmed to the houses it serves before it is joined (`_trim_to_service`) (405 T127)
         no way drawn twice - UNRESEARCHED: a run refused over 60% of it, or a bundle pitch unbroken, beside a way
         not along a shelter belt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane kept through a belt, not along it
         how far inside a belt - UNRESEARCHED: a run over 60 ft inside a belt refused

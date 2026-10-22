@@ -517,7 +517,8 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
     Research:
         ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: within 25 ft (`JOIN_REACH_FT`)
         which ends count - UNRESEARCHED: an end counts only where the way it nears lies within `AIM_DEG`, 60 deg, of its heading
-        a door end is no short join - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a household's way is laid from its dooryard, so its door end is where it starts, never a join that stops short
+        a door end is no short join - research/questions/0081-village-lanes.drawing.html: a household's path that leaves its own door and meets nothing there is left as drawn
+            (a map drawing convention), never a join that stops short (405 T127)
         a blocked join is no short join - UNRESEARCHED: an end whose span would be blocked, fold or kink more than its own lane is not counted
         a connector's ends - UNRESEARCHED: never counted as joins that stop short"""
     ways = _ways(M)
@@ -708,7 +709,9 @@ def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None)
     Research:
         an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: walked toward it
         a burial ground's edge a lane end's destination - UNRESEARCHED: a way target counts as a farmhouse does
-        the connector exempt - research/questions/0081-village-lanes.drawing.html: the track out runs off the map, so its ends are not asked"""
+        the connector exempt - research/questions/0081-village-lanes.drawing.html: the track out runs off the map, so its ends are not asked
+        a way reached only where the lane walked to it - UNRESEARCHED: a way counts as reached only where the lane's end lies nearer it than
+            its far end does (`_walked_to`) (405 T127)"""
     ways = _ways(M)
     centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []] + way_targets(M)
     steadings = steading_footprints(M)

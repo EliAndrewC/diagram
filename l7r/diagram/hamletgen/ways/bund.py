@@ -144,7 +144,8 @@ class RunOnBlocks:
             off the wet ground - research/questions/0081-village-lanes.drawing.html: the marsh and the wet toe block
             off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, the built ground blocks
             off the crop - research/questions/0081-village-lanes.drawing.html: the dry plots block
-            across commons and village groves - UNRESEARCHED: left out of the blocking fabric, crossed freely"""
+            across commons and village groves - UNRESEARCHED: left out of the blocking fabric, crossed freely
+            off the fixtures - GUESS: farmstead fixtures block a run-on, padded `FIXTURE_PAD_FT` (0.5 ft) (405 T127)"""
         self.s = s
         self.water = drawn_water_segs(s)
         toe = s.toe_band()
