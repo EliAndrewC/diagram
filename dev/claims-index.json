@@ -22374,21 +22374,34 @@
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/corridors.py::field_router#field way off the steadings": {
-  "body": "349425af41737a46",
-  "claim": "field way off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) off their built ground, the page's lane-to-fence 7 ft",
-  "code": "deb851d65594b932",
+ "l7r/diagram/hamletgen/ways/corridors.py::field_router#field way off the gardens": {
+  "body": "0099614c0c3039b1",
+  "claim": "field way off the gardens - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) from the way's middle to a garden fence, the page's lane-to-fence 7 ft",
+  "code": "a97d5f26bd109a02",
   "core": "6f8cce7f9df46841",
-  "date": "2026-10-19",
-  "note": "routed at 7 ft",
+  "date": "2026-10-22",
+  "note": "The 7 ft gap to another household's garden matches the page. But `_homestead_polys` passes every garden with owner None, so `mine()` never frees one and the way's own garden is also kept 7 ft off. §122 says the gap is \"kept from another household's garden\" and that a household's own way \"may run beside its own garden fence, kept only off the beds\". There are two fixes. One: the claim says the own garden is walled too, and records that as a choice (or says a field way is not the \"own way\" of §122). Two: the code holds its own garden only off the beds.",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
   "research": "92410dbfeea7511e",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-22",
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/ways/corridors.py::field_router#field way off the other built ground": {
+  "body": "0099614c0c3039b1",
+  "claim": "field way off the other built ground - GUESS: the same 7 ft off houses, byres, sheds and yards, which no page sizes",
+  "code": "a0dcb638e4f939c8",
+  "core": "6f8cce7f9df46841",
+  "date": "2026-10-22",
+  "note": "The page sizes no gap off houses, byres, sheds or yards. It only rules that no house corner stands on the tread (§113) and gives the 18 ft room at garden fences (§109).",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#its own dooryard": {
@@ -22404,6 +22417,23 @@
   "research": "92410dbfeea7511e",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/corridors.py::field_router#its own house at its door": {
+  "body": "0099614c0c3039b1",
+  "claim": "its own house at its door - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a route starting at its own door is not walled by its own house; the law keeps only the page's no house corner on the tread (`house_hit`) (405 T115)",
+  "code": "0b4e95638dc7adb9",
+  "core": "6f8cce7f9df46841",
+  "date": "2026-10-22",
+  "note": "The way leaves its dooryard (§111), and only the no-house-corner-on-the-tread rule stays (§113).",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
+  },
+  "research": "92410dbfeea7511e",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
   "verdict": "IN-STEP"

@@ -398,16 +398,15 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
         off the crop and marsh - research/questions/0081-village-lanes.drawing.html: the field, the dry hem and the marsh hard
         across the groves - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the village groves are no wall to a field way, as a lane crosses the belt and the planting resumes on both sides
         off the farm groves - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a farm's own grove bands are walls, kept 7 ft (`FIELD_ROUTE_GAP_FT`) off - a footpath's clearance and some working room off the trees
-        out of its own house - NONE: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of its own house is not walled by it, so it can leave the door
         across the commons - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the commons' block leaves the lanes and their verges bare, so it is no wall to a path
         its own dooryard - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard, the threshing yard of the house the route's start reaches no wall to it - within 60 ft of the house or 12 ft of its built ground (`law.reach_to_steading`, the page's own guess)
         the brook at its fords - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every steading part a wall but the
             path's own dooryard
         a defense marsh is no wall - research/questions/0081-village-lanes.drawing.html: a marsh kept for defense is not a wall to the field way, though lanes keep to the bunds and dry ground
-        field way off the gardens - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) from the way's middle to a garden fence, the page's lane-to-fence 7 ft
+        field way off the gardens - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) from the way's middle to every garden fence, its start's household's too - the page's gap is kept from another household's garden and a household's own way may run beside its own, but the field way is the hamlet's way to the field, drawn with no household (`FIELD_ROLE`, no `of`), so no garden is its own
         field way off the other built ground - GUESS: the same 7 ft off houses, byres, sheds and yards, which no page sizes
-        its own house at its door - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a route starting at its own door is not walled by its own house; the law keeps only the page's no house corner on the tread (`house_hit`) (405 T115)"""
+        its own house at its door - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of a house, at its door, is not walled by that house; the law keeps only the page's no house corner on the tread (`house_hit`) (405 T115)"""
     M = s.M
     hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
     hard += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
