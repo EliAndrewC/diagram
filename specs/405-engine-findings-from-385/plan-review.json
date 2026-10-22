@@ -900,6 +900,186 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T78 - the record, written in a page session": {
+   "sha256": "c29210b987a1d06b3a006125b8107596e79fb183aa01ac225180fc2443e27edd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T78 Approach (checklist part A)": {
+   "sha256": "b391c63be5b7d6fe175d1dab01a786751ec586095de6fbaca89de4c4f6808caf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T78 Decisions": {
+   "sha256": "4045bdb21f8f733dfbe2974253216ae6c006f395f01797613ed8e9d0cae4e256",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T88 - the record, written in a page session": {
+   "sha256": "c9f79e6140e29ba2ccfd2b7252fd7e4e2344dd0388eb8b5f1cf7f5ac8b0a808a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T88 Approach (checklist part A)": {
+   "sha256": "9600bb2c791dd0a3e64ad884b2a737fed5b41944db964a66c9b6bf383c26272b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T88 Decisions": {
+   "sha256": "2b52cc0bc6ceb945782ddcb4f133a86ca3ccdb02efc2fa7f17cd63de5d90aa36",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T94 - the record, written in a page session": {
+   "sha256": "40f4bd30566b57a1d1fadee97ac5fdca973ecf798ee9a8f7d7154a2a985e5a5a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T94 Approach (checklist part A)": {
+   "sha256": "bd3bbb0a3ae2890d894ce3bf5acf4e9800d752f5ffef22d6dcf5b3bd75361a4c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T94 Decisions": {
+   "sha256": "8a6c0c287814fe3c7a6dd77bcec210d2ad830edb6b10063b7e29ee92d15a6df4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T114 - the record, written in a page session": {
+   "sha256": "e0f221d8c353c6a16a501cc0477c2852dffcbaad43232f3fd7cc31926e6529b7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T114 Approach (checklist part A)": {
+   "sha256": "329fbc587c724e8801845b538b13182350f46ad4bfb92ac0c06abdcbd1ac337a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T114 Decisions": {
+   "sha256": "5e76d89d4cef9734a2d7874b356d15a1e9d6ded4ccf5f38490c8729fcd300ccf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T70 - the record, written in a page session": {
+   "sha256": "d63a6d67450e6443421649160186ccc8a7a080d77467325669cc0807e4699cc5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T70 Approach (checklist part A)": {
+   "sha256": "98cf814069069f82b4714b5b5ab85d573f7cfa2aec4a1d0fab28f63fc738a417",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T70 Decisions": {
+   "sha256": "2aa07f3fedc0a724cf61a088d1b512d95f07494f347e0e65a9204785fcd72dcd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T92 - the record, written in a page session": {
+   "sha256": "217881ff229569d7b481e9f3b4b21facb4107053e0fc5ea2c511255d4a8c1f07",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T92 Approach (checklist part A)": {
+   "sha256": "3d21efd35a998a29f6accb81c3e526d26d9378c58f147ec88ca98cdf5190a5cd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T92 Decisions": {
+   "sha256": "f2d89c046a633d4a9d9be048ff16d021f43aa65f87cd092b0a4c8170a74136b9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T21 - the record, written in a page session": {
+   "sha256": "88c715e5b4aa4d2044a382e1a464e7e9431dcfaf7ba8a4f81daa574bff3e1db1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T21 Approach (checklist part A)": {
+   "sha256": "92e9004ef5f5fff35cda7ac2c3e532c3073406e115134ebb6fe9ddf64e1947d0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T21 Decisions": {
+   "sha256": "69dd362f639657472a83b3a51b36128d0bcf748de785af4ff9562d2efac31830",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T25 - the record, written in a page session": {
+   "sha256": "c76692a6753aa891b9eb8ca1c72bedfb985387b94ceb043fd18ba7b3741b07fe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T25 Approach (checklist part A)": {
+   "sha256": "942be5f0ba275e1e6571678e7dbe9899b749af71436d7a3b9e151ec631f27b18",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T25 Decisions": {
+   "sha256": "7a5de7073ac5ae82e67bbffbcc81e569f7b6a2e7908b18f038ef410bf147581d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T15 - the record, written in a page session": {
+   "sha256": "024930d635f3a2dfb60e6a8e8ae660e76ef23a5dc4a59a19a78b57d8928c09a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T15 Approach (checklist part A)": {
+   "sha256": "87a44ef31d132f9cf9e7e08bc28f741a56b794ca1afc121d8786a8c32d5a98d9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T15 Decisions": {
+   "sha256": "9679bf8b08f6f453a46a148c88e555b0fe8aca8f3a8acb67baf22bd45bdf45c2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T75 - the record, written in a page session": {
+   "sha256": "cd8e290f15fedc0af94a4da86e93a886bf10de2d298557c5426d70d8a1c54e38",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T75 Approach (checklist part A)": {
+   "sha256": "55bea733449c91b7c2f11751fda64bc37f08f6c63fc2de2afc68b63061351619",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T75 Decisions": {
+   "sha256": "3c944e63c726df6a8fb762ddc296b461249127039f52db4e9db5e0a7d6ffc24a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3941,6 +4121,104 @@
      "summary": "Exit (a), trusting the run to cross only at crossing places, not taken; exit (b), testing the pieces no route found, taken.",
      "class": "within",
      "why": "Chooses the stricter route that enforces the claim rather than assuming it; no narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T114 - the record, written in a page session",
+    "## T15 - the record, written in a page session",
+    "## T21 - the record, written in a page session",
+    "## T25 - the record, written in a page session",
+    "## T70 - the record, written in a page session",
+    "## T75 - the record, written in a page session",
+    "## T78 - the record, written in a page session",
+    "## T88 - the record, written in a page session",
+    "## T92 - the record, written in a page session",
+    "## T94 - the record, written in a page session",
+    "### T114 Approach (checklist part A)",
+    "### T114 Decisions",
+    "### T15 Approach (checklist part A)",
+    "### T15 Decisions",
+    "### T21 Approach (checklist part A)",
+    "### T21 Decisions",
+    "### T25 Approach (checklist part A)",
+    "### T25 Decisions",
+    "### T70 Approach (checklist part A)",
+    "### T70 Decisions",
+    "### T75 Approach (checklist part A)",
+    "### T75 Decisions",
+    "### T78 Approach (checklist part A)",
+    "### T78 Decisions",
+    "### T88 Approach (checklist part A)",
+    "### T88 Decisions",
+    "### T92 Approach (checklist part A)",
+    "### T92 Decisions",
+    "### T94 Approach (checklist part A)",
+    "### T94 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D97/T78",
+     "summary": "0246 records the 100 ft as the back-lane laying rule and the every-farmhouse-has-a-way-within-100-ft check (GUESS); a lane END held to s6's 60 ft / 12 ft test.",
+     "class": "within",
+     "why": "A research-record task moved from 385 (FR-001), worked as 385 worked its tasks: the page records what the impl-drift/record check found silent or out of step, facts quoted and guesses labeled; no code behavior changes and nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "D98/T88",
+     "summary": "0246 records the 4 ft lane room (7+4+7 = 18 ft) and the 3 ft footpath as map drawing conventions.",
+     "class": "within",
+     "why": "A research-record task moved from 385 (FR-001), worked as 385 worked its tasks: the page records what the impl-drift/record check found silent or out of step, facts quoted and guesses labeled; no code behavior changes and nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "D99/T94",
+     "summary": "0246 records back lane, cross lane, track out and field spur as no household's, keeping the gap from every garden; join link no household's (GUESS).",
+     "class": "within",
+     "why": "A research-record task moved from 385 (FR-001), worked as 385 worked its tasks: the page records what the impl-drift/record check found silent or out of step, facts quoted and guesses labeled; no code behavior changes and nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "D100/T114",
+     "summary": "0246 records the code's two DEVIATIONs with reasons (knot join as close as 3 ft to another garden; every garden kept 7 ft off by run-on and homestead fabric); claims cite them.",
+     "class": "within",
+     "why": "A research-record task moved from 385 (FR-001), worked as 385 worked its tasks: the page records what the impl-drift/record check found silent or out of step, facts quoted and guesses labeled; no code behavior changes and nothing the GM asked for is narrowed. Recording a deliberate deviation with its reason on the page is the record's own mechanism, not a carve-out from the request; it keeps no behavior the GM asked to change."
+    },
+    {
+     "id": "D101/T70",
+     "summary": "0081 worn-path paragraph aligned; 0196 absence note limited to what was read; isotherm/isohyet glossary error removed; 0081 records the joint mend as a GUESS cited by joints._joint_moved_back.",
+     "class": "within",
+     "why": "A research-record task moved from 385 (FR-001), worked as 385 worked its tasks: the page records what the impl-drift/record check found silent or out of step, facts quoted and guesses labeled; no code behavior changes and nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "D102/T92",
+     "summary": "0014 records the 6 ft join on a dry-hem field edge (GUESS); 0014 split at its topics past the 20,000-byte cap, bends/corners moved to 0284, claims repointed.",
+     "class": "within",
+     "why": "A research-record task moved from 385 (FR-001), worked as 385 worked its tasks: the page records what the impl-drift/record check found silent or out of step, facts quoted and guesses labeled; no code behavior changes and nothing the GM asked for is narrowed. The split follows the record's byte cap; it moves content whole and drops none."
+    },
+    {
+     "id": "D103/T21",
+     "summary": "0014 glosses 'sector' inline from the valley fan's words rather than a glossary term.",
+     "class": "within",
+     "why": "A research-record task moved from 385 (FR-001), worked as 385 worked its tasks: the page records what the impl-drift/record check found silent or out of step, facts quoted and guesses labeled; no code behavior changes and nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "D104/T25",
+     "summary": "0043's wood-shed share reads 'chosen at random afresh for each hamlet's map', not 'seed'.",
+     "class": "within",
+     "why": "A research-record task moved from 385 (FR-001), worked as 385 worked its tasks: the page records what the impl-drift/record check found silent or out of step, facts quoted and guesses labeled; no code behavior changes and nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "D105/T15",
+     "summary": "0246 records that a lane (or stretch) serving nothing is not drawn - GUESS on Mencius 14.21 and Tang Code art. 404, Japan SILENT; tidy_lane_ends/_pull_back cite it.",
+     "class": "within",
+     "why": "A research-record task moved from 385 (FR-001), worked as 385 worked its tasks: the page records what the impl-drift/record check found silent or out of step, facts quoted and guesses labeled; no code behavior changes and nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "D106/T75",
+     "summary": "The sweeps' served-house guard (_SERVE_FT, 100 ft) cites 0246's recorded GUESS; s6's 60 ft / 12 ft test is a lane end's (T78).",
+     "class": "within",
+     "why": "A research-record task moved from 385 (FR-001), worked as 385 worked its tasks: the page records what the impl-drift/record check found silent or out of step, facts quoted and guesses labeled; no code behavior changes and nothing the GM asked for is narrowed. A claims repoint only; the guard's value does not move."
     }
    ]
   }

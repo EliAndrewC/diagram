@@ -436,3 +436,204 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 <!-- plan-archive: T99 to T99 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 
 <!-- plan-archive: T09 to T09 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+## T78 - the record, written in a page session
+
+### T78 Approach (checklist part A)
+
+1. **The goal, in the world.** 0246 says the 100 ft is the back-lane laying rule AND the map's check that every farmhouse has a way within 100 ft (a GUESS), and that a lane END is held to §6's 60 ft / 12 ft test.
+2. **The constraints.** The research record's rules (a fact quoted, a guess labeled); the 20,000-byte question cap; page sessions write, then a fresh session checks and applies (`make page-session`).
+3. **Where each comes from.** R: 0246 (the page's own figures).
+4. **Do they describe the world here?** Yes: each item was what an impl-drift or record check found silent or out of step.
+5. **The order.** Written in a page session, checked in the next, merged, then the engine's claims repointed where they rest on it.
+6. **The exits.** (a) change the code instead - not taken: the page was silent or ambiguous, the code deliberate; (b) record it on the page - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of five page sessions.
+9. **Done, measured.** page session 1 (handoff p1 T78); quote-check and record-format clean in session 3.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T78 Decisions
+
+- **D97** 0246 says the 100 ft is the back-lane laying rule AND the map's check that every farmhouse has a way within 100 ft (a GUESS), and that a lane END is held to §6's 60 ft / 12 ft test. Rendering: as each line is labeled on its page.
+
+## T88 - the record, written in a page session
+
+### T88 Approach (checklist part A)
+
+1. **The goal, in the world.** 0246 says the 4 ft is the room a lane is given (7 + 4 + 7 = 18 ft) and the footpath drawn in it 3 ft, both map drawing conventions.
+2. **The constraints.** The research record's rules (a fact quoted, a guess labeled); the 20,000-byte question cap; page sessions write, then a fresh session checks and applies (`make page-session`).
+3. **Where each comes from.** R: 0246, 0081 (the 3 ft footpath).
+4. **Do they describe the world here?** Yes: each item was what an impl-drift or record check found silent or out of step.
+5. **The order.** Written in a page session, checked in the next, merged, then the engine's claims repointed where they rest on it.
+6. **The exits.** (a) change the code instead - not taken: the page was silent or ambiguous, the code deliberate; (b) record it on the page - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of five page sessions.
+9. **Done, measured.** page session 1 (p1 T88); session 3's checks clean.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T88 Decisions
+
+- **D98** 0246 says the 4 ft is the room a lane is given (7 + 4 + 7 = 18 ft) and the footpath drawn in it 3 ft, both map drawing conventions. Rendering: as each line is labeled on its page.
+
+## T94 - the record, written in a page session
+
+### T94 Approach (checklist part A)
+
+1. **The goal, in the world.** 0246 says a back lane, a cross lane, the track out and the field spur belong to no household and keep the gap from every garden, and records a join link as no household's (a GUESS).
+2. **The constraints.** The research record's rules (a fact quoted, a guess labeled); the 20,000-byte question cap; page sessions write, then a fresh session checks and applies (`make page-session`).
+3. **Where each comes from.** R: 0246.
+4. **Do they describe the world here?** Yes: each item was what an impl-drift or record check found silent or out of step.
+5. **The order.** Written in a page session, checked in the next, merged, then the engine's claims repointed where they rest on it.
+6. **The exits.** (a) change the code instead - not taken: the page was silent or ambiguous, the code deliberate; (b) record it on the page - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of five page sessions.
+9. **Done, measured.** page session 1 (p1 T94); session 3's checks clean.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T94 Decisions
+
+- **D99** 0246 says a back lane, a cross lane, the track out and the field spur belong to no household and keep the gap from every garden, and records a join link as no household's (a GUESS). Rendering: as each line is labeled on its page.
+
+## T114 - the record, written in a page session
+
+### T114 Approach (checklist part A)
+
+1. **The goal, in the world.** 0246 records the code's two DEVIATIONs with their reasons - the knot's join as close as 3 ft to another household's garden, and every garden (the way's own included) kept 7 ft off by the run-on and the homestead fabric - and the engine's claims cite them as recorded.
+2. **The constraints.** The research record's rules (a fact quoted, a guess labeled); the 20,000-byte question cap; page sessions write, then a fresh session checks and applies (`make page-session`).
+3. **Where each comes from.** R: 0246, 0081 (two ways joined at one point), spacing-research.md.
+4. **Do they describe the world here?** Yes: each item was what an impl-drift or record check found silent or out of step.
+5. **The order.** Written in a page session, checked in the next, merged, then the engine's claims repointed where they rest on it.
+6. **The exits.** (a) change the code instead - not taken: the page was silent or ambiguous, the code deliberate; (b) record it on the page - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of five page sessions.
+9. **Done, measured.** page session 1 (p1 T114), session 3's quote-check made 'lots abut closely' a GUESS; the claims in knots.py, settle/shapes.py, settle/lawful.py, bund.py and fabric.py no longer say the page does not record it.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T114 Decisions
+
+- **D100** 0246 records the code's two DEVIATIONs with their reasons - the knot's join as close as 3 ft to another household's garden, and every garden (the way's own included) kept 7 ft off by the run-on and the homestead fabric - and the engine's claims cite them as recorded. Rendering: as each line is labeled on its page.
+
+## T70 - the record, written in a page session
+
+### T70 Approach (checklist part A)
+
+1. **The goal, in the world.** 0081's worn-path paragraph agrees with 'A turn the ground forces'; 0196's absence note says only what was read; the isotherm/isohyet glossary error is gone; 0081 records the joint mend (the meeting point moved back one bend) as its GUESS, which `joints._joint_moved_back` cites.
+2. **The constraints.** The research record's rules (a fact quoted, a guess labeled); the 20,000-byte question cap; page sessions write, then a fresh session checks and applies (`make page-session`).
+3. **Where each comes from.** R: 0081, 0196, the glossary.
+4. **Do they describe the world here?** Yes: each item was what an impl-drift or record check found silent or out of step.
+5. **The order.** Written in a page session, checked in the next, merged, then the engine's claims repointed where they rest on it.
+6. **The exits.** (a) change the code instead - not taken: the page was silent or ambiguous, the code deliberate; (b) record it on the page - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of five page sessions.
+9. **Done, measured.** page sessions 1-2 (p1 T70, p2 T70); session 3's checks clean.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T70 Decisions
+
+- **D101** 0081's worn-path paragraph agrees with 'A turn the ground forces'; 0196's absence note says only what was read; the isotherm/isohyet glossary error is gone; 0081 records the joint mend (the meeting point moved back one bend) as its GUESS, which `joints._joint_moved_back` cites. Rendering: as each line is labeled on its page.
+
+## T92 - the record, written in a page session
+
+### T92 Approach (checklist part A)
+
+1. **The goal, in the world.** 0014 says the 6 ft join holds where the field's edge is its dry hem too, a GUESS; and 0014's drawing page, past the 20,000-byte cap after it, is split at its topics: the bends and corners moved whole to 0284, and the engine claims resting on them repointed.
+2. **The constraints.** The research record's rules (a fact quoted, a guess labeled); the 20,000-byte question cap; page sessions write, then a fresh session checks and applies (`make page-session`).
+3. **Where each comes from.** R: 0014, 0081 §56, 0284.
+4. **Do they describe the world here?** Yes: each item was what an impl-drift or record check found silent or out of step.
+5. **The order.** Written in a page session, checked in the next, merged, then the engine's claims repointed where they rest on it.
+6. **The exits.** (a) change the code instead - not taken: the page was silent or ambiguous, the code deliberate; (b) record it on the page - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of five page sessions.
+9. **Done, measured.** page sessions 2 and 4 (p2 T92, p4 split); session 5's checks clean.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T92 Decisions
+
+- **D102** 0014 says the 6 ft join holds where the field's edge is its dry hem too, a GUESS; and 0014's drawing page, past the 20,000-byte cap after it, is split at its topics: the bends and corners moved whole to 0284, and the engine claims resting on them repointed. Rendering: as each line is labeled on its page.
+
+## T21 - the record, written in a page session
+
+### T21 Approach (checklist part A)
+
+1. **The goal, in the world.** 0014 glosses 'sector' inline from the valley fan's own words (a glossary term would wrap the word's other senses on 0047, 0122, 0171).
+2. **The constraints.** The research record's rules (a fact quoted, a guess labeled); the 20,000-byte question cap; page sessions write, then a fresh session checks and applies (`make page-session`).
+3. **Where each comes from.** R: 0014, 0053.
+4. **Do they describe the world here?** Yes: each item was what an impl-drift or record check found silent or out of step.
+5. **The order.** Written in a page session, checked in the next, merged, then the engine's claims repointed where they rest on it.
+6. **The exits.** (a) change the code instead - not taken: the page was silent or ambiguous, the code deliberate; (b) record it on the page - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of five page sessions.
+9. **Done, measured.** page session 2 (p2 T21); session 3's record-format clean.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T21 Decisions
+
+- **D103** 0014 glosses 'sector' inline from the valley fan's own words (a glossary term would wrap the word's other senses on 0047, 0122, 0171). Rendering: as each line is labeled on its page.
+
+## T25 - the record, written in a page session
+
+### T25 Approach (checklist part A)
+
+1. **The goal, in the world.** 0043's wood-shed share reads 'chosen at random afresh for each hamlet's map', not the generator's 'seed'.
+2. **The constraints.** The research record's rules (a fact quoted, a guess labeled); the 20,000-byte question cap; page sessions write, then a fresh session checks and applies (`make page-session`).
+3. **Where each comes from.** R: 0043.
+4. **Do they describe the world here?** Yes: each item was what an impl-drift or record check found silent or out of step.
+5. **The order.** Written in a page session, checked in the next, merged, then the engine's claims repointed where they rest on it.
+6. **The exits.** (a) change the code instead - not taken: the page was silent or ambiguous, the code deliberate; (b) record it on the page - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of five page sessions.
+9. **Done, measured.** page session 2 (p2 T25); session 3's record-format clean.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T25 Decisions
+
+- **D104** 0043's wood-shed share reads 'chosen at random afresh for each hamlet's map', not the generator's 'seed'. Rendering: as each line is labeled on its page.
+
+## T15 - the record, written in a page session
+
+### T15 Approach (checklist part A)
+
+1. **The goal, in the world.** 0246 records that a lane, or a stretch of one, that serves nothing is not drawn - a GUESS on Mencius 14.21 and the Tang Code art. 404, Japan SILENT - and the engine's claims (tidy_lane_ends, _pull_back) cite it: `_pull_back` leaves such a lane whole for the tidy and the settle to drop.
+2. **The constraints.** The research record's rules (a fact quoted, a guess labeled); the 20,000-byte question cap; page sessions write, then a fresh session checks and applies (`make page-session`).
+3. **Where each comes from.** R: 0246; Mencius 14.21 (chinakongzi.org), Tang Code juan 26 (wikisource).
+4. **Do they describe the world here?** Yes: each item was what an impl-drift or record check found silent or out of step.
+5. **The order.** Written in a page session, checked in the next, merged, then the engine's claims repointed where they rest on it.
+6. **The exits.** (a) change the code instead - not taken: the page was silent or ambiguous, the code deliberate; (b) record it on the page - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of five page sessions.
+9. **Done, measured.** the research pass of 2026-10-22; page session 4 (p4 T15); session 5's quote, source-reader, source-applicability and translation checks clean.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T15 Decisions
+
+- **D105** 0246 records that a lane, or a stretch of one, that serves nothing is not drawn - a GUESS on Mencius 14.21 and the Tang Code art. 404, Japan SILENT - and the engine's claims (tidy_lane_ends, _pull_back) cite it: `_pull_back` leaves such a lane whole for the tidy and the settle to drop. Rendering: as each line is labeled on its page.
+
+## T75 - the record, written in a page session
+
+### T75 Approach (checklist part A)
+
+1. **The goal, in the world.** the sweeps' served-house guard (`_SERVE_FT`, 100 ft) cites 0246's recorded GUESS - every farmhouse has a way within 100 ft - which is what the guard protects; §6's 60 ft / 12 ft test is a lane END's, as 0246 now says (T78).
+2. **The constraints.** The research record's rules (a fact quoted, a guess labeled); the 20,000-byte question cap; page sessions write, then a fresh session checks and applies (`make page-session`).
+3. **Where each comes from.** R: 0246 (T78's record).
+4. **Do they describe the world here?** Yes: each item was what an impl-drift or record check found silent or out of step.
+5. **The order.** Written in a page session, checked in the next, merged, then the engine's claims repointed where they rest on it.
+6. **The exits.** (a) change the code instead - not taken: the page was silent or ambiguous, the code deliberate; (b) record it on the page - taken.
+7. **The search smell.** None.
+8. **The budget.** Its share of five page sessions.
+9. **Done, measured.** the claims round on sweeps.py.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T75 Decisions
+
+- **D106** The sweeps' served-house guard (`_SERVE_FT`, 100 ft) cites 0246's recorded GUESS - every farmhouse has a way within 100 ft - which is what the guard protects; §6's 60 ft / 12 ft test is a lane END's, as 0246 now says (T78). Rendering: as each line is labeled on its page.
+
