@@ -65,6 +65,10 @@ district).
   - Leads to try if time allows, else name them in the handoff: Kibe's Table 1 (freight by district), Furushima on chuma
     freight per ri, 新唐書 食貨志 for Liu Yan.
 
+**Every mode and good the issue names gets a verdict** (the reply gives one per figure, SILENT at worst): in A, pack mules,
+ox or horse carts and coastal ships as well as porters and river boats (0260 and 0278 hold the land rates: name them); in
+B, how far rice, salt, cloth, silk and tea went, typical and longest.
+
 **New registry keys** (at most ten this session): Bochum Jiangsu, 清史稿 卷122, Cheng 2024, 大學衍義補 卷34, 大學衍義補 卷33,
 Kato 2007, Kibe, 史記 卷129, 明史 卷79, the Keihan Ohara page - ten. Do not add kotobank 廻船 or 江戸地回り経済.
 

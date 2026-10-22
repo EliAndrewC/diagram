@@ -1,0 +1,157 @@
+{
+ "feature": "411-freight-and-distance",
+ "blocks": {
+  "preamble": {
+   "sha256": "af189725a77c8c3bc206c7907fa1b35f3ed6dbf783c327e375aa3f01e11cf24f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "64cd2b33aa5e8e3bb6ced7d4fc9a3d1ecce7510b9fb220618e01cecc2cd55b9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "8f2fcc87c8bd888739e03d5f9c440ab4f9ab7f1ef26e84733fea56856b36b3e3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "a3ea84735aa43805ad6fcd21caf97b83ecc86930760910f9fffc800bbf741c45",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - questions A and B (FR-001, FR-002, FR-005, FR-006)": {
+   "sha256": "290e1dbcc4d72c7dc24149b880955081834b4c704beb26150004d4018c8040bd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - questions C and D (FR-001, FR-002, FR-005, FR-006)": {
+   "sha256": "13d2caec43ead23c9922ef59941d8bedf6f3467d774802c2154beeecf6e3c96e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the implementation check (FR-003)": {
+   "sha256": "811e1a8ad54f491237a10cd5b9e280eea7e2efa84a97d65386ad846766066445",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - the reply (FR-001, FR-004, FR-005)": {
+   "sha256": "f835dcb8309dff34e97d64be08894613612a477eb8612c6f071cd275cd9d54bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "8d215c3a5c16aa20279a171c9037084776c242cca26d132b5f91989670494ed8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - questions A and B (FR-001, FR-002, FR-005, FR-006)",
+    "## D2 - questions C and D (FR-001, FR-002, FR-005, FR-006)",
+    "## D3 - the implementation check (FR-003)",
+    "## D4 - the reply (FR-001, FR-004, FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/four-questions",
+     "summary": "Issue sections 1-4 become four new money questions A-D (water vs land; how far goods went; tea; a named good far from home), written in two write sessions and one check session, then a reply on #12; no code, map or canon change.",
+     "class": "within",
+     "why": "One question per section of the issue; the session split is process; the issue asks for research figures only, so no code or canon change is consistent with it and with FR-003."
+    },
+    {
+     "id": "TechContext/sources-and-tools",
+     "summary": "Bochum Jiangsu .xls read with xlrd; unfetchable PDFs (Cheng, Kibe, Kato, Kobe City Archives) by curl + pdftotext or page images.",
+     "class": "within",
+     "why": "How sources are read; it does not narrow what is asked."
+    },
+    {
+     "id": "TechContext/wages",
+     "summary": "Each figure beside the same place and period's craftsman and laborer day wage; where no source gives one, SILENT with the nearest (0250, 0255, 0260, 0275, 0278) named with class, place, unit and gap.",
+     "class": "within",
+     "why": "Restates the issue ('each figure beside the same place and period's day wages') and FR-005/FR-006 (nearest named and labeled, a nearest is SILENT)."
+    },
+    {
+     "id": "Constitution",
+     "summary": "Question tasks are research: physical with five boxes; make record CHECK=1 and record tests stay green.",
+     "class": "within",
+     "why": "Process and gate compliance; no scope change."
+    },
+    {
+     "id": "Perf",
+     "summary": "Performance bookends N/A: no generator change.",
+     "class": "within",
+     "why": "True of a research-record feature; nothing asked is dropped."
+    },
+    {
+     "id": "D1/A",
+     "summary": "Question A tagged as the money section's price questions, China first, Japan beside: Jiangsu official boat and porter rates with wages, Qing grain freight (Qingshigao 122), the land-to-water ratio as Cheng 2024 and Qiu Jun state it and as the official rates give it (project arithmetic, labeled), Japan's sake-ship freight standard and Hagi freight shares; 0260's land and Hunan rates named rather than repeated.",
+     "class": "within",
+     "why": "Answers issue section 1 (freight by mode beside a laborer's day; the land-to-water ratio) in the issue's China-first order. Naming 0260 rather than repeating it still gives the reply its fragment file (FR-001). The source list does not exclude the modes it does not name (pack mule, ox/horse cart, coastal ship): FR-001 and the block's own 'each verdict one of the four' still owe each of them a verdict, SILENT at worst."
+    },
+    {
+     "id": "D1/B",
+     "summary": "Question B: Shiji proverb with Xu Tan's reading, Skinner's market radius, the Ming surcharge by distance, Qiu Jun's Han and Tang extremes; the distance at which carriage equaled a grain price recorded SILENT in the sources with the project's arithmetic from Cheng's official rates beside it, labeled; firewood, charcoal and salt hauls (0273 named).",
+     "class": "within",
+     "why": "Answers issue section 2: the rule (market radii, value against distance), the distance at which carriage doubled the price (carriage equal to the good's price is the doubling), and hauls by good. Recording SILENT with labeled arithmetic beside it is FR-005 as written. Goods the block does not name (rice beyond grain, cloth, tea, silk) and a Japanese rule are not excluded; FR-001 still owes each a verdict."
+    },
+    {
+     "id": "D2/C",
+     "summary": "Question C: Rockhill's Ya-chou porters and price ladder (Tea Horse Road), Ming tea-horse rates, Parkes's Kalgan-Kyakhta camels, the Uji tea-jar procession with its prices SILENT.",
+     "class": "within",
+     "why": "Covers the three cases the issue names as obvious (Tea Horse Road, Kyakhta, tea to Edo from Uji) in China-first order; Shizuoka was an example, not a requirement; a SILENT price is FR-005's verdict, not an exclusion."
+    },
+    {
+     "id": "D2/D",
+     "summary": "Question D: Ball's Wuyi Congou at origin, at Canton and in London with the region's wages; Nada sake's Edo prices and freight with no same-year brewery price (ATTESTED ONLY FOR); 0279 and 0262 named.",
+     "class": "within",
+     "why": "Issue section 4 asks for a named tea, sake or white charcoal near its source and in a distant city, same year 'if possible'; the issue itself cites 0279 for Kumano charcoal. The ATTESTED ONLY FOR verdict is one of the four FR-005 allows and is honest about the missing same-year price."
+    },
+    {
+     "id": "D3",
+     "summary": "implementation-check.md holds each new question's line; closes with make impl-check.",
+     "class": "within",
+     "why": "FR-003 as written."
+    },
+    {
+     "id": "D4",
+     "summary": "A comment on #12 giving per figure the fragment FILE, the verdict and what is still open; combined figures and ratios named with their coverage and labeled as project arithmetic.",
+     "class": "within",
+     "why": "The issue's 'What the skill needs back' and FR-001/FR-004/FR-005; labeling derived arithmetic adds honesty, not scope."
+    },
+    {
+     "id": "T",
+     "summary": "Order: page sessions, implementation check, reply, report and land.",
+     "class": "within",
+     "why": "Sequencing only."
+    }
+   ]
+  }
+ ]
+}
