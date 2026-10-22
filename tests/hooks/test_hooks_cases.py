@@ -125,6 +125,12 @@ HOUSE_STYLE = [
     ("prose written by heredoc", cmd("cat > docs/a.md <<'EOF'\nthe colour is grey\nEOF"),
      "rewritten:cat > docs/a.md <<'EOF'\nthe color is gray\nEOF"),
     ("clean prose by heredoc", cmd("cat > docs/a.md <<'EOF'\nthe color is gray\nEOF"), "ok"),
+    # FEATURE 405 T109 - A REPLY WRITTEN OUTSIDE THE PROJECT IS A QUOTATION, whatever shares its command: the checker's own
+    # words were rewritten in replies recorded verbatim, because `make claims-checked` sat in the same command
+    ("a reply heredoc to /tmp beside its recording", cmd("cat > /tmp/s/r.txt <<'EOF'\nVERDICT a DRIFTED - labelled centre\nEOF\nmake claims-checked BUNDLE=/tmp/b REPLY=/tmp/s/r.txt"), "ok"),
+    ("a /tmp heredoc beside a project one: only the project's is corrected",
+     cmd("cat > /tmp/s/r.txt <<'EOF'\ncentre\nEOF\ncat > docs/a.md <<'EOF'\ncentre\nEOF"),
+     "rewritten:cat > /tmp/s/r.txt <<'EOF'\ncentre\nEOF\ncat > docs/a.md <<'EOF'\ncenter\nEOF"),
     # THE WHOLE PAYLOAD, not only its heredoc bodies (feature 236 FR-007): the measured hole was a
     # write that travelled by some other route through Bash
     ("an echo append", cmd("echo 'the centre of it' >> docs/a.md"),
