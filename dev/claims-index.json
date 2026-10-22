@@ -22422,11 +22422,11 @@
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#its own house at its door": {
   "body": "0099614c0c3039b1",
-  "claim": "its own house at its door - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of a house, at its door, is not walled by that house; the law keeps only the page's no house corner on the tread (`house_hit`) (405 T115)",
-  "code": "61692c9e231dfd1c",
+  "claim": "its own house at its door - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of a house, at its door, is not walled by that house - the 13 ft is ours, as is the margin off a house the page does not size; the law keeps only the page's no house corner on the tread (`house_hit`) (405 T115)",
+  "code": "9df11185ca758f5f",
   "core": "6f8cce7f9df46841",
   "date": "2026-10-22",
-  "note": "The page bears on part of this: §113 bars a house corner from the tread, and the law keeps that check. The page is silent on the 13 ft (`GABLE_MARGIN_FT + FIELD_ROUTE_GAP_FT`) within which a route's start counts as at its house's door and the house stops being a wall. It is also silent on how near a way may pass its own house: the page sizes no clearance off houses, only off garden fences. The claim presents the 13 ft as 0246's; it should mark the 13 ft as GUESS or UNRESEARCHED.",
+  "note": "GUESS is the right class, since no block sizes a door-side exemption from a house wall. But a GUESS naming a file says that page records this figure as a guess, and 0246.drawing records no 13 ft (GABLE_MARGIN_FT 6 + FIELD_ROUTE_GAP_FT 7) door exemption. Its only house rule is \"no corner of a house stands on its tread\", and the dooryard reach is 60 ft / 12 ft. Make the claim a bare GUESS (citing 0246 only for house_hit), or have the page record the 13 ft as its guess.",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
   },
@@ -22437,7 +22437,7 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#nothing built on a lane": {
   "body": "0099614c0c3039b1",
