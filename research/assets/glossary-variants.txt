@@ -849,6 +849,7 @@ donggusup	donggusup
 dongjing	Dongjing
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
+dooryards	dooryard
 doro-aze	doro-aze
 dorui	dorui
 doshin	doshin

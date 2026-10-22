@@ -1244,7 +1244,8 @@
  "dooryard": {
   "def": "The yard at a farmhouse's door - the household's own ground beside the house.",
   "variants": [
-   "dooryard"
+   "dooryard",
+   "dooryards"
   ]
  },
  "doshin": {
