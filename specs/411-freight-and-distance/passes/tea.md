@@ -17,8 +17,8 @@
 
 - **Route length and the tea-horse bureaus, Hongwu reign:** 「設茶馬司於秦、洮、河、雅渚州，自碉門、黎、雅抵朵甘、烏思藏，行茶之地五千餘里。」 (translation) "Tea-horse bureaus were set up at Qin, Tao, He and Ya prefectures; from Diaomen, Li and Ya to Duogan and Ü-Tsang, the tea-trading land runs over 5,000 li."
 - **Exchange rate, Hongwu, before 1397:** 「茶馬司定價，馬一匹，茶千八百斤，於碉門茶課司給之。番商往復迂遠，而給茶太多。……詔茶馬司仍舊，而定上馬一匹，給茶百二十斤，中七十斤，駒五十斤。」 (translation) "The tea-horse bureau fixed the price at 1,800 jin of tea per horse, paid out at the Diaomen tea-tax office. The foreign merchants' round trip was long and roundabout, and too much tea was being given. … It was decreed that the bureau stay as it was, and the rate was set at 120 jin of tea for a top horse, 70 for a middling one, and 50 for a colt." The passage comes just before 「三十年改設秦州茶馬司於西寧」 ("in the thirtieth year [of Hongwu, 1397] the Qinzhou bureau was moved to Xining").
-- **Licence unit, early Ming:** 「引茶百斤，輸錢二百」 (translation) "A licence covers 100 jin of tea, for a fee of 200 cash."
-- **Hongzhi 3 (1490):** 「每引不過百斤……可得茶四十萬斤，易馬四千匹」 (translation) "No more than 100 jin per licence … 400,000 jin of tea can be had, to trade for 4,000 horses." That is an implied 100 jin per horse.
+- **License unit, early Ming:** 「引茶百斤，輸錢二百」 (translation) "A license covers 100 jin of tea, for a fee of 200 cash."
+- **Hongzhi 3 (1490):** 「每引不過百斤……可得茶四十萬斤，易馬四千匹」 (translation) "No more than 100 jin per license … 400,000 jin of tea can be had, to trade for 4,000 horses." That is an implied 100 jin per horse.
 - **Packing by the 篦 (bi, a basket package), 正德十年 (1515).** The year is read from context: the line follows 正德元年. 「番人之市馬也，不能辯權衡，止訂篦中馬。……十年巡茶御史王汝舟酌為中制，每千斤為三百三十篦。」 (translation) "When the Tibetans traded horses they could not judge weights, and bargained only by the bi … In the tenth year the tea-inspecting censor Wang Ruzhou fixed a middle standard: 1,000 jin makes 330 bi." That is about 3 jin per bi.
 - **Price conversion, Chenghua era (1465–1487):** 「令茶百斤折銀五錢」 (translation) "100 jin of tea was commuted at 0.5 tael of silver."
 
@@ -55,7 +55,7 @@
 **Ming tea-horse exchange: ATTESTED ONLY FOR official rates and the license weight**, as the *Mingshi* (compiled 1739) records them:
 - 1,800 jin per horse at first, then 120/70/50 jin by grade of horse, under Hongwu before 1397.
 - About 100 jin per horse implied in 1490.
-- A licence covered 100 jin, and the 1515 standard was 1,000 jin to 330 bi.
+- A license covered 100 jin, and the 1515 standard was 1,000 jin to 330 bi.
 - The tea-trading land ran "5,000-odd li".
 
 It gives no porter loads, days on the road or wages.

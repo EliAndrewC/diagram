@@ -67,7 +67,7 @@ The passage gives no unit. It is a founding story about the first ship-borne sak
 (d) Nada sake was made for Edo only:
 > 「灘酒造家は、天保３年新規株が交付されたとき、大坂市場を侵さないという一札を取られています。…灘の新規株はあくまでも江戸送りの酒として交付を受けたものでした。」
 
-(translation) "When new licences were issued in Tenpō 3 [1832], the Nada brewers were made to sign a pledge not to encroach on the Osaka market ... the new Nada licences were granted strictly for sake sent to Edo."
+(translation) "When new licenses were issued in Tenpō 3 [1832], the Nada brewers were made to sign a pledge not to encroach on the Osaka market ... the new Nada licenses were granted strictly for sake sent to Edo."
 
 **B2. 加藤慶一郎「樽廻船の加入形態に関する一考察」** (Kato Keiichirō), 流通科学大学論集 20-1 (2007), https://ryuka.repo.nii.ac.jp/record/181/files/n20-1kato.pdf. It discusses a contract dated 安政2年 (1855):
 > 「毎回 40 駄の積み込みの約束がある。酒荷物の運賃がおよそ 10 駄につき銀 60 匁が基準であったから 8）、40 駄ならば銀 240 匁で大体計算が合う。」
@@ -86,7 +86,7 @@ Note 8 cites 柚木学『酒造りの歴史』, so the figure is second hand and
 - Freight on the Nada-Edo run by tarukaisen: about 60 monme of silver per 10 駄, a late-Edo figure taken second hand. At the nominal 60 monme = 1 ryō that is about 1 ryō per 20 casks, roughly 5-7% of the Edo price. The real gold-silver rates in Bunka-Ansei moved away from 60, so this ratio is approximate.
 - Carriage: by sea, 10-14 days in 1,000-koku ships, with real losses from shipwreck and spoilage.
 - No brewery-gate price was found. The only origin price is the undated-unit Manji tradition (6 ryō against 55-60).
-- Structurally, Nada sake had no home market price: its licences were for Edo shipment only. The brewer's price was the Edo settlement minus freight and commission (Table 9 total: 「口銭等引〆金 1528 両」, "net after commission etc., 1,528 ryō").
+- Structurally, Nada sake had no home market price: its licenses were for Edo shipment only. The brewer's price was the Edo settlement minus freight and commission (Table 9 total: 「口銭等引〆金 1528 両」, "net after commission etc., 1,528 ryō").
 - No Nada or Edo wage turned up in this pass.
 
 ## C. SILENT
