@@ -31091,6 +31091,117 @@
   ],
   "verdict": "DRIFTED"
  },
+ "l7r/diagram/hamletgen/ways/thread.py::CONNECTOR_BAND_GAP_FT#the connector off a grove band": {
+  "body": "c02a628a4ecbe8d4",
+  "claim": "the connector off a grove band - groves-of-trees-around-farmhouses-yashikirin.drawing: some working room off the trees each side of the tread, 9.5 ft beyond the 6 ft connector's half-width",
+  "code": "2d4ca27648303652",
+  "core": "d6eb0aef07a05869",
+  "date": "2026-10-19",
+  "note": "9.5 + 3 = 12.5 ft to the middle keeps the 6 ft tread's edge 9.5 ft off the trees; it fits the 32 ft between neighbors' groves",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/thread.py::CONNECTOR_WIDTH#connector width": {
+  "code": "11520353a0c32704",
+  "core": "5efeb905b7d48b3f",
+  "date": "2026-10-03",
+  "note": "6 ft is the page's width for the track out",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "triaged": "2026-10-18",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/thread.py::SPUR_REACH_FT#spur reaches the field": {
+  "body": "4fb2fedb9bcd5304",
+  "claim": "spur reaches the field - GUESS bunds-between-the-paddies-aze.drawing: a lane end within 6 ft of the paddy's edge is drawn as joining it",
+  "code": "765de408a17e4868",
+  "core": "5efeb905b7d48b3f",
+  "date": "2026-10-21",
+  "note": "6.0 is 0014's 6 ft GUESS",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
+  },
+  "research": "cb222e5372134180",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/thread.py::_out_of_bands#a track's end out of the grove bands": {
+  "body": "03c75bdb6ceee97d",
+  "claim": "a track's end out of the grove bands - UNRESEARCHED: set 8 ft (`FOOTPATH_FABRIC_GAP` + 1) clear of a grove band",
+  "code": "b50626b06595e202",
+  "core": "f30173f234823f5d",
+  "date": "2026-10-19",
+  "note": "the 8 ft (FOOTPATH_FABRIC_GAP + 1) clearance from a grove band is unattested; 0246's 7 ft is from a garden fence, not a grove",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/thread.py::_out_of_bands#which side it leaves by": {
+  "body": "03c75bdb6ceee97d",
+  "claim": "which side it leaves by - UNRESEARCHED: walked toward the run's other end, or pushed out the nearest edge, whichever lands nearer it",
+  "code": "ce54a775da4ba6be",
+  "core": "f30173f234823f5d",
+  "date": "2026-10-19",
+  "note": "placement rule, correctly UNRESEARCHED; code walks toward `toward`, also pushes out the nearest edge, and keeps whichever result lies nearer `toward`, as claimed",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/thread.py::_water_crossings#track plumbing": {
+  "code": "3aecd6edb9bf1d17",
+  "core": "48924ba26f1b5a80",
+  "date": "2026-10-03",
+  "note": "plumbing",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/thread.py::spur_cut_at_the_fold#a folded spur's reach": {
+  "body": "2458ff9ca18300f3",
+  "claim": "a folded spur's reach - GUESS bunds-between-the-paddies-aze.drawing: the arm counts as reaching the field when it ends within `SPUR_REACH_FT` (6 ft, 0014's join) of it",
+  "code": "54ed59af93086569",
+  "core": "52c70ab0d3018725",
+  "date": "2026-10-21",
+  "note": "0014 records the 6 ft join as a GUESS; a folded arm that falls short is not drawn, which matches \"never ends in open ground short of the bund\"",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
+  },
+  "research": "cb222e5372134180",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
+  ],
+  "triaged": "2026-10-21",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/thread.py::spur_cut_at_the_fold#spur fold cut": {
+  "body": "8d05664aa826f722",
+  "claim": "spur fold cut - DEVIATION village-lanes.drawing: a folded field spur is cut at the fold whatever the returning leg's length, and drawn only while the arm reaches the field",
+  "code": "9507f199506ab816",
+  "core": "52c70ab0d3018725",
+  "date": "2026-10-21",
+  "note": "the code does not depart from the page: the page itself states \"A folded field spur is cut at the fold, an exception to the 40 ft rule\", and the fold test (&gt;140) matches; the claim should be a plain `research/questions/0081-village-lanes.drawing.html` claim, not DEVIATION",
+  "outside": true,
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
+  ],
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/hamletgen/ways/touch.py::_ALONG_CANDS#junction plumbing": {
   "code": "aaec8fdf89b4d92b",
   "core": "fb3833914fdfbf29",
@@ -31669,57 +31780,12 @@
   "triaged": "2026-10-19",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::CONNECTOR_BAND_GAP_FT#the connector off a grove band": {
-  "body": "c02a628a4ecbe8d4",
-  "claim": "the connector off a grove band - groves-of-trees-around-farmhouses-yashikirin.drawing: some working room off the trees each side of the tread, 9.5 ft beyond the 6 ft connector's half-width",
-  "code": "2d4ca27648303652",
-  "core": "d6eb0aef07a05869",
-  "date": "2026-10-19",
-  "note": "9.5 + 3 = 12.5 ft to the middle keeps the 6 ft tread's edge 9.5 ft off the trees; it fits the 32 ft between neighbors' groves",
-  "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
-  },
-  "research": "45be621f47448e34",
-  "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::CONNECTOR_WIDTH#connector width": {
-  "code": "11520353a0c32704",
-  "core": "5efeb905b7d48b3f",
-  "date": "2026-10-03",
-  "note": "6 ft is the page's width for the track out",
-  "pages": {
-   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
-  },
-  "research": "324b10775c9108ef",
-  "triaged": "2026-10-18",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/track.py::NoDryExit#track plumbing": {
   "code": "f14d30e8cf553531",
   "core": "f4a86449f4cc672d",
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::SPUR_REACH_FT#spur reaches the field": {
-  "body": "4fb2fedb9bcd5304",
-  "claim": "spur reaches the field - GUESS bunds-between-the-paddies-aze.drawing: a lane end within 6 ft of the paddy's edge is drawn as joining it",
-  "code": "765de408a17e4868",
-  "core": "5efeb905b7d48b3f",
-  "date": "2026-10-21",
-  "note": "6.0 is 0014's 6 ft GUESS",
-  "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
-  },
-  "research": "cb222e5372134180",
-  "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::SPUR_WIDTH#field spur width": {
@@ -31789,24 +31855,13 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::_out_of_bands#a track's end out of the grove bands": {
-  "body": "03c75bdb6ceee97d",
-  "claim": "a track's end out of the grove bands - UNRESEARCHED: set 8 ft (`FOOTPATH_FABRIC_GAP` + 1) clear of a grove band",
-  "code": "b50626b06595e202",
-  "core": "f30173f234823f5d",
-  "date": "2026-10-19",
-  "note": "the 8 ft (FOOTPATH_FABRIC_GAP + 1) clearance from a grove band is unattested; 0246's 7 ft is from a garden fence, not a grove",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::_out_of_bands#which side it leaves by": {
-  "body": "03c75bdb6ceee97d",
-  "claim": "which side it leaves by - UNRESEARCHED: walked toward the run's other end, or pushed out the nearest edge, whichever lands nearer it",
-  "code": "ce54a775da4ba6be",
-  "core": "f30173f234823f5d",
-  "date": "2026-10-19",
-  "note": "placement rule, correctly UNRESEARCHED; code walks toward `toward`, also pushes out the nearest edge, and keeps whichever result lies nearer `toward`, as claimed",
+ "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#an end walked clear along its own leg": {
+  "body": "c31fb65c8671faf1",
+  "claim": "an end walked clear along its own leg - GUESS: an end standing within the gap of the fabric is pushed out along the run's own first or last leg, so the track still leaves from where it was aimed",
+  "code": "c94b688b9fe94ccb",
+  "core": "d56436cee5f48575",
+  "date": "2026-10-22",
+  "note": "the pages say nothing on where a track's end is set when it lands inside the gap of the fabric (houses and grove bands); the code pushes it out along its first or last leg, as the claim says.",
   "pages": {},
   "research": "",
   "rests": [],
@@ -31815,20 +31870,39 @@
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#detour swing": {
   "body": "3ed00cc43aa37818",
   "claim": "detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster",
-  "code": "a98b50768f9f99d7",
-  "core": "c0e3c862710141e3",
+  "code": "97d4a9246c570293",
+  "core": "d56436cee5f48575",
   "date": "2026-10-19",
   "note": "no cited page says how far a track swings round a cluster",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#every fallback walled too": {
+  "body": "c31fb65c8671faf1",
+  "claim": "every fallback walled too - village-lanes.drawing: never across row crops, and off wet ground - the swing, the grove fallback's three routes and its far clip are each taken only where they cross no crop plot (at 0 ft: a way may come up to the bund), and the three routes wall the toe band and the wet ground as the first route does (405 T09)",
+  "code": "4b80c9010123a289",
+  "core": "d56436cee5f48575",
+  "date": "2026-10-22",
+  "note": "the first route walls `plan.envelope` (the field / flooded paddy) and the toe band. The fallbacks do not wall all of that. The swing test `_crosses_fabric(cand, [*crops, *wet_now], 0.0)` leaves out both the toe band and the field. The three routes' `hard` lists and the far clip's test leave out `plan.envelope`. So a fallback can cross ground that 0081 says \"a lane stops at the flooded paddy\" for. Either wall the field and toe in every fallback, or narrow the claim to crops and wet ground only and drop \"as the first route does\".",
+  "pages": {
+   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
+  },
+  "research": "324b10775c9108ef",
+  "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off a grove band": {
   "body": "d5e4f4c37b205405",
   "claim": "gap off a grove band - groves-of-trees-around-farmhouses-yashikirin.drawing: the grove fallback's route and clip keep `CONNECTOR_BAND_GAP_FT` (0036's working room past the connector's half-width, 12.5 ft) off the trees - the spur's too, half a foot more than its own 2.5 ft half-tread would need; the router's hard index holds the line about 13.5 ft off (`WEB_HARD_GAP` on the grown band), more room than the page's \"about\", never less",
-  "code": "f663ef5b2339608e",
-  "core": "c0e3c862710141e3",
+  "code": "931d9d422276be39",
+  "core": "d56436cee5f48575",
   "date": "2026-10-21",
   "note": "bands grown by (12.5 - gap) and tested at gap give 12.5 ft. Through the router's 8 ft hard gap they give 13.5 ft. A footpath's 1.5 ft half-tread plus the same working room comes to the page's \"about 22 ft of the opening\", and two bands at 27 ft fit inside the 32 ft least gap between neighbors' groves",
   "pages": {
@@ -31839,13 +31913,14 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings": {
   "body": "d5e4f4c37b205405",
   "claim": "gap off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: `gap` (`TRACK_FABRIC_GAP`, a lane's 7 ft from a garden fence) - the clip and the fabric test; the router walls the steadings as obstacles",
-  "code": "71cdff91cfa0a7e3",
-  "core": "c0e3c862710141e3",
+  "code": "5128a67ce315b589",
+  "core": "d56436cee5f48575",
   "date": "2026-10-21",
   "note": "clip and fabric test at TRACK_FABRIC_GAP 7 ft; the router holds the steadings as hard obstacles at 8 ft, which meets \"at least 7 ft\"",
   "pages": {
@@ -31856,6 +31931,7 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5"
   ],
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#never across a grove": {
@@ -31873,6 +31949,37 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
+  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#no more water than the run it replaces": {
+  "body": "c31fb65c8671faf1",
+  "claim": "no more water than the run it replaces - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses water only at a crossing, so a fallback may not add a crossing the run did not make",
+  "code": "35da26151dc1dc5d",
+  "core": "d56436cee5f48575",
+  "date": "2026-10-22",
+  "note": "the claim says \"a fallback may not add a crossing the run did not make\", but only the grove fallback's three routes check `_water_crossings`. The swing detour `[run[0], (mx+ux*step, my+uy*step), run[-1]]` is taken with no water test, so it can add a crossing. The third route also passes `water=[]` to `_route`, so it may cross anywhere, not squarely at a set crossing place. Either test water on the swing too, or scope the claim to the grove fallback.",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the grove fallback's three routes in order": {
+  "body": "c31fb65c8671faf1",
+  "claim": "the grove fallback's three routes in order - GUESS: round the grown bands and the crop, then the bands alone (the spur's field end stands inside the crop's gap, so the crop is tested after the route, not walled in it), then the bands with the water left to the ford pass; the first that crosses no band, no crop and no more water than the run it replaces is taken",
+  "code": "9bcbd9e0eeca464c",
+  "core": "d56436cee5f48575",
+  "date": "2026-10-22",
+  "note": "the order of the three routes and the accept test (no band, no crop, water count) match the code; the pages say nothing on fallback order.",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track kept off drawn water": {
@@ -31891,6 +31998,7 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triage": "touched",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled": {
@@ -31909,13 +32017,14 @@
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#track round the steadings": {
   "body": "3ed00cc43aa37818",
   "claim": "track round the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed round, else clipped, else none",
-  "code": "22a3ff7c19fc7f0c",
-  "core": "c0e3c862710141e3",
+  "code": "3ed9ec817ce346c9",
+  "core": "d56436cee5f48575",
   "date": "2026-10-19",
   "note": "routed, else clipped, else swung, else none; nothing built on a lane",
   "pages": {
@@ -31926,15 +32035,7 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
   ],
-  "triaged": "2026-10-19",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::_water_crossings#track plumbing": {
-  "code": "3aecd6edb9bf1d17",
-  "core": "48924ba26f1b5a80",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
+  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::choose_track_out#the track out decided once": {
@@ -32366,41 +32467,6 @@
   ],
   "triaged": "2026-10-19",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#a folded spur's reach": {
-  "body": "2458ff9ca18300f3",
-  "claim": "a folded spur's reach - GUESS bunds-between-the-paddies-aze.drawing: the arm counts as reaching the field when it ends within `SPUR_REACH_FT` (6 ft, 0014's join) of it",
-  "code": "54ed59af93086569",
-  "core": "52c70ab0d3018725",
-  "date": "2026-10-21",
-  "note": "0014 records the 6 ft join as a GUESS; a folded arm that falls short is not drawn, which matches \"never ends in open ground short of the bund\"",
-  "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "7bb55b5b1ab4c1ea"
-  },
-  "research": "cb222e5372134180",
-  "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:e6dc9a11b5490862"
-  ],
-  "triaged": "2026-10-21",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#spur fold cut": {
-  "body": "8d05664aa826f722",
-  "claim": "spur fold cut - DEVIATION village-lanes.drawing: a folded field spur is cut at the fold whatever the returning leg's length, and drawn only while the arm reaches the field",
-  "code": "9507f199506ab816",
-  "core": "52c70ab0d3018725",
-  "date": "2026-10-21",
-  "note": "the code does not depart from the page: the page itself states \"A folded field spur is cut at the fold, an exception to the 40 ft rule\", and the fold test (&gt;140) matches; the claim should be a plain `research/questions/0081-village-lanes.drawing.html` claim, not DEVIATION",
-  "outside": true,
-  "pages": {
-   "0081-village-lanes.drawing.html": "c6ac7410edabbd2d"
-  },
-  "research": "324b10775c9108ef",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:65ad16eace199d92"
-  ],
-  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_seat#brook crossed only at crossing places": {
   "code": "cf69d22918de14c8",

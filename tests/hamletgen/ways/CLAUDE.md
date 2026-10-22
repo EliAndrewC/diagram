@@ -30,6 +30,7 @@ the ones for its own subject. It runs in the quick tier (the top-level tree deci
 | `test_smooth.py` | the smoothing pass (`ways/smooth.py`): the collapse guard for a lane whose every vertex falls inside a knot |
 | `test_street.py` | a row village's streets (`ways/street.py`) and the road its street runs out on |
 | `test_sweeps.py` | the passes that REMOVE or REPAIR - doubled remnants, steading fouls, end nubs, collinear breaks, orphaned pieces |
+| `test_thread.py` | the track threaded through the fabric (`ways/thread.py`): the spur's fold, an end out of a grove band, the water count, and `_thread_the_fabric`'s fallbacks - patch `_route` / `_out_of_bands` on `thread` |
 | `test_touch.py` | how a lane end meets the network - `_touch_junctions` and the piece-joining it falls back on |
 | `test_track.py` | STAGE `stage_track` and `connector_track` - the way out of the frame and through the fabric |
 | `test_tree.py` | the access tree as lanes (`ways/tree.py`): `admits`, `settle_tree`, `tree_faults`, `settle_defer`, pruning |
