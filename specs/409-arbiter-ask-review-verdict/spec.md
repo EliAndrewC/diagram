@@ -42,7 +42,7 @@ gate can tell it is a spec's or a plan's verdict, and nothing honors it:
    (`<n>-spec-...`, `<n>-plan-...`), the ask prints a hint to pass `REVIEW=`; the hint records nothing.
 4. A plan or spec edited after the ruling is NOT covered by it: a changed plan block is owed its review as before (`make
    plan-delta`), a changed spec is owed spec-fidelity as before. A `continue` ruling records nothing CLEAR.
-5. Every other ask, with no review named or inferred, is recorded and ruled exactly as today.
+5. Every other ask, with no review named, is recorded and ruled exactly as today.
 
 ## Requirements
 
@@ -61,9 +61,9 @@ gate can tell it is a spec's or a plan's verdict, and nothing honors it:
 
 ## Success Criteria
 
-- **SC-001**: In a fixture feature, an asked plan review ruled `accept` leaves `plan_gate.py push` owing nothing for that
+- **SC-001** (FR-001, FR-002, FR-003, FR-004): In a fixture feature, an asked plan review ruled `accept` leaves `plan_gate.py push` owing nothing for that
   plan, and an asked spec review ruled `accept` makes `spec_ruled` answer for the unchanged spec and not for an edited one.
-- **SC-002**: `make test-file FILE="tests/hooks/test_hm_arbiter.py tests/tooling/test_plan_arbiter_accept.py"` and
+- **SC-002** (FR-005): `make test-file FILE="tests/hooks/test_hm_arbiter.py tests/tooling/test_plan_arbiter_accept.py"` and
   `make hooks-test` pass.
 
 ## Assumptions
@@ -79,3 +79,5 @@ gate can tell it is a spec's or a plan's verdict, and nothing honors it:
 - spec-fidelity round 1 (2026-10-22): CHANGES REQUIRED - the SUBJECT inference was not asked for (an accept on an ask merely
   named like a plan would clear every owed plan block); dropped, a hint kept that records nothing; the escape counts
   reconciled with `dev/bypass-log/`.
+- spec-fidelity round 2 (2026-10-22): FAITHFUL - all three round-1 items done; "or inferred" dropped from Scenario 5 and the
+  success criteria cite their FRs (spec-lint), no requirement changed.

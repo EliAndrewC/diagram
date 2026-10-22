@@ -29,8 +29,8 @@ N/A: no generator change.
 
 `hm_arbiter.py ask <subject> <why> [spec|plan]`; a third value is refused. The review is stored as `review` on the owed entry
 (`trip` takes it as an optional keyword) and the ask's detail - the question the arbiter's bundle shows - ends "(REVIEW=<r>:
-an accept stands as the <r> review's verdict)"; the output says the same. With no review, a SUBJECT matching
-`^\d+-(spec|plan)-` prints a hint to pass `REVIEW=` and records nothing. `make arbiter-ask` passes `$(REVIEW)`; its `##` line
+an accept stands as the <r> review's verdict)"; the output says the same. An ask with no review is recorded as
+today, with no review; where its SUBJECT matches `^\d+-(spec|plan)-` the output adds a hint to pass `REVIEW=`. `make arbiter-ask` passes `$(REVIEW)`; its `##` line
 names `[REVIEW=spec|plan]`.
 
 ## D2 - the ruling carries it (FR-002, FR-003, FR-004)
@@ -46,7 +46,8 @@ unchanged), and refuses any other non-plan trigger as today.
 In `test_plan_arbiter_accept.py`: an asked plan review ruled `accept` through `ha.main(["ask", ...])` then
 `ha.main(["ruled", ...])` leaves `pg.owed(d)` None; a `continue` leaves it owed; an ask with no review records none, even named `408-plan-round3`. In
 `test_hm_arbiter.py`: a bad REVIEW is refused; `spec_ruled` honors an asked spec
-accept on the unchanged spec and not after an edit. Each proved to fail with its change removed.
+accept on the unchanged spec and not after an edit. The ask's output and its stored detail name the review (and the hint shows only on a review-like SUBJECT with none);
+`make -n arbiter-ask ... REVIEW=plan` passes `plan` to the `ask` command. Each proved to fail with its change removed.
 
 ## T - the order
 
