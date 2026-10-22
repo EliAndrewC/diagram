@@ -878,7 +878,7 @@
    "declared": "spec-fidelity"
   },
   "### T09 Decisions": {
-   "sha256": "a7dd184a5ce16875395a475aa66281ed9b55d297c14c941e61e2337663278c57",
+   "sha256": "f052d3e1b91899f43e944935134e7e0a943d5e1b5c2132112aaf148ef7061cc3",
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
@@ -891,6 +891,12 @@
   },
   "### T09 Approach (re-answered 2026-10-22T13:16Z)": {
    "sha256": "b7bc6e0537d6e2873063b8ef40cb9d998f08a6439d74fc1f41ffdf6259d9a268",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (re-answered 2026-10-22T13:25Z)": {
+   "sha256": "a357a1c1bb67b98e6fac200eb5dc27554c27a30b0e680345e74aef926ba2b7a7",
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
@@ -3889,6 +3895,52 @@
      "summary": "The route order is recorded as a GUESS. Rendering is historically accurate under 0081 and 0035.",
      "class": "within",
      "why": "This labels a design choice the research does not settle. It narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "### T09 Approach (re-answered 2026-10-22T13:25Z)",
+    "### T09 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D95-a",
+     "summary": "The unrouted clip (the run as it came, clipped where the router found nothing) is now held to the same paddy / crop / toe band / wet ground test as every other fallback.",
+     "class": "within",
+     "why": "Extends the claim's own goal (no piece of the track crosses paddy, crops, wet ground) to a piece that had escaped it; T09's text names the unrouted clip. Adds enforcement, removes none."
+    },
+    {
+     "id": "D95-b",
+     "summary": "The paddy is tested as each field's outline (the flooded paddy as law.span_walkable reads it), replacing the field's whole frame (plan.envelope), because the whole frame refused spurs that end on the field's bund.",
+     "class": "within",
+     "why": "The goal the block states is that no track crosses the paddy; the field's outline IS the paddy, and the whole frame was a broader proxy that also covered the bund on which a spur legitimately ends. This corrects the proxy to the thing named, using the lane law's existing reading, rather than carving a case out of the rule: no track is allowed across a flooded field that the goal forbids. Nothing in the request (Amendment 7: follow the research, work the claims to completion) is narrowed."
+    },
+    {
+     "id": "D95-c",
+     "summary": "A piece no route found (the unrouted clip, the far clip of a raw run) and the swing are taken only where they cross no water (_unrouted_clear).",
+     "class": "within",
+     "why": "Closes the gap the claims round 3 found (the far clip of a raw run never tested for water); stricter than before, serves 'no crossing off a crossing place' (0035)."
+    },
+    {
+     "id": "D95-d",
+     "summary": "The two grove-fallback routes, searched with the water lines, are taken only where they add no crossing the run did not make (now a test, previously an assumption); third route stays dropped; first route walls the defense belt.",
+     "class": "within",
+     "why": "Turns a previously asserted property into a checked one; the dropped third route and the belt wall were judged CLEAR before and are unchanged in substance."
+    },
+    {
+     "id": "D95-e",
+     "summary": "track.py over the 1,000-line bar, so the thread half is lifted into sibling ways/thread.py re-exported by track.",
+     "class": "within",
+     "why": "Exactly the split-at-the-bar rule of Amendment 7 (imports unchanged via re-export); unchanged since the CLEAR verdict."
+    },
+    {
+     "id": "Approach-6a",
+     "summary": "Exit (a), trusting the run to cross only at crossing places, not taken; exit (b), testing the pieces no route found, taken.",
+     "class": "within",
+     "why": "Chooses the stricter route that enforces the claim rather than assuming it; no narrowing."
     }
    ]
   }
