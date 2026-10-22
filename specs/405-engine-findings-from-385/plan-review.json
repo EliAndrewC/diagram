@@ -792,6 +792,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T120 - the claim-label lint (the GM, 2026-10-22)": {
+   "sha256": "d73c4bbc2bb4a8e80dbfb982cf636dd0243ea267e7886a78cc3c588dda9a51b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T120 Approach (checklist part A)": {
+   "sha256": "d03d734205845b8a2b89af1e4930459ce7666a5910533e583b8fadd04a0840df",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T120 Decisions": {
+   "sha256": "a961f611d1178fff8b38ed12e5586ff22697f6b9c1ce627010544ff172860075",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3563,6 +3581,53 @@
      "summary": "done = a unit test red at 5 ft and green at the 3 ft clearance, the claim re-checked IN-STEP, seeds 1-48 and the pinned rows as main; budget 20 min with the landing",
      "class": "within",
      "why": "Verification that enforces this task's own change, and the feature's standing per-task practice (FR-001); no new map, tier or property is swept."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T120 - the claim-label lint (the GM, 2026-10-22)",
+    "### T120 Approach (checklist part A)",
+    "### T120 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T120-A2 flag-not-refuse",
+     "summary": "The lint prints claims-label lines and leaves the exit code unchanged (exit 6a: refusal not taken).",
+     "class": "within",
+     "why": "A choice of mechanism for a tooling task that request.md does not specify; it takes nothing away from any clause of request.md. Note: the GM's 2026-10-22 approval the block cites is not in the bundle's request.md, so this was checked against request.md as written only."
+    },
+    {
+     "id": "T120-A2 own module",
+     "summary": "The rules go in their own module because scripts/record/claims.py is at 988 lines.",
+     "class": "within",
+     "why": "Consistent with Amendment 7 (do not work a file to just under the 1,000-line bar; split instead). Narrows nothing."
+    },
+    {
+     "id": "T120-A5/A6b owed claims only",
+     "summary": "Runs in `claims.py owed` beside claims_stale, on owed claims only, not on every claim in the engine.",
+     "class": "within",
+     "why": "request.md asks for no claim-label lint at any scope, so the scope chosen cannot narrow a clause of it. Scope against the GM's 2026-10-22 words could not be checked: they are not in the bundle."
+    },
+    {
+     "id": "T120-A6c agent file untouched",
+     "summary": "The impl-drift agent file is not changed; the fix sits before the round.",
+     "class": "within",
+     "why": "No clause of request.md asks for the agent file to change."
+    },
+    {
+     "id": "T120-A9 done measured",
+     "summary": "One test per flag, each red with its rule deleted; four negative cases raise nothing.",
+     "class": "within",
+     "why": "Verification of the lint itself; enforces what the task builds and adds no behavior."
+    },
+    {
+     "id": "D91",
+     "summary": "Three flags read off Claim.backing/Claim.account: GUESS whose account states a departure; bare GUESS naming a question number; GUESS <page> stating a figure in feet no named page states. Printed as claims-label: <key> - <fix>.",
+     "class": "within",
+     "why": "The content of the lint; it alters no claim, no label and no rule the GM set, and narrows no clause of request.md."
     }
    ]
   }

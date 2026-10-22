@@ -694,3 +694,34 @@ def test_a_unit_moved_to_another_file_keeps_its_rows(tmp_path: pathlib.Path) -> 
     _tree(tmp_path, MOD.replace("x * SHARE", "x * SHARE * 2"))
     cur = cx.current(skill)
     assert "l7r/diagram/hamletgen/rows.py::far_row#dry share" not in cx.moved(cur, moved_then_changed), "its code changed: not a pure move"
+
+
+def test_a_claims_label_its_own_account_contradicts_is_flagged_with_its_fix(tmp_path: pathlib.Path) -> None:
+    """Feature 405 T120 (plan D91): T115-T108's claims rounds went to MISLABELED labels whose own words said so."""
+    from l7r.diagram.tools.claims import parse_claim  # noqa: PLC0415
+
+    lb = cx.claims_labels
+    q = tmp_path / "q"
+    q.mkdir()
+    (q / "0246-lanes.drawing.html").write_text("<p>a 7 ft gap off a garden fence; 3 ft is a GUESS</p>")
+    page = "research/questions/0246-lanes.drawing.html"
+
+    def said(line: str) -> list[str]:
+        return lb.flag("k", parse_claim(line), q, {})
+
+    departs = said("off its own garden - GUESS: kept 3 ft, stricter than the page's gap")
+    assert len(departs) == 1 and "`DEVIATION <page>`" in departs[0]
+    bare = said("off the fence - GUESS: 7 ft, as 0246 keeps it")
+    assert len(bare) == 1 and "names 0246" in bare[0]
+    unstated = said(f"off the well - GUESS {page}: 9 ft round the curb")
+    assert len(unstated) == 1 and "states 9 ft" in unstated[0]
+    for right in (
+        f"off the fence - {page}: 7 ft",  # cited
+        "off the shed - GUESS: 5 ft, which no page sizes",  # bare, names nothing
+        "off a corner - GUESS: 13 ft; 0246 does not say how far, so the 13 ft is ours",  # bare, names a silent page
+        f"off the bed - GUESS {page}: 3 ft",  # the page states the guess's figure
+        f"off its own garden - DEVIATION {page}: 3 ft, short of the page's 7 ft",  # a departure labeled one
+    ):
+        assert said(right) == [], right
+    rows = {"k": type("R", (), {"claim": parse_claim("x - GUESS: as 0081 says")})(), "none": type("R", (), {"claim": None})()}
+    assert len(lb.flags(rows, ["k", "k", "none", "gone"], q)) == 1  # once a key; an unclaimed or missing row is skipped
