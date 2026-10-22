@@ -774,6 +774,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T108 - one width default at a joint; the joint's mend (T105's round)": {
+   "sha256": "391fab04e1daabf4c37cb2c740ad2917660ada4af20490742f3f1d16f00729ad",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T108 Approach (checklist part A)": {
+   "sha256": "39c301644a7411cd1c8823a38479bd72f33beb7f639c5293adfcbb1d52bf31e3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T108 Decisions": {
+   "sha256": "34eda7f950f26d46062d00b53ff3de4e72a564df46219f01f551ddfe9cc78084",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3510,6 +3528,41 @@
      "summary": "the tread's 3 ft off a farmhouse wall (0081) against the house test's 0 ft, and the well's 8 ft fallback, carried to T119 as the lane law's, not the run-on's",
      "class": "within",
      "why": "Routing a finding on code this task does not change to another task of this feature is what FR-002 and the GM's 2026-10-19 rule ask for ('keep findings on code a task didn't change as new tasks'). The work is deferred inside the feature, not dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T108 - one width default at a joint; the joint's mend (T105's round)",
+    "### T108 Approach (checklist part A)",
+    "### T108 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D90",
+     "summary": "joints._one_joint reads a lane with no recorded width as 0081's 3 ft footpath (as settle_ends, touch and the knots do) instead of the 5 ft spine width; its claim says so",
+     "class": "within",
+     "why": "A found engine task (FR-002, worked under Amendment 7's 'take this feature to completion') that brings one reader into line with the researched 3 ft footpath every other reader already uses; it changes no constant and no researched figure, and drops nothing the request asked for."
+    },
+    {
+     "id": "T108-exit-b",
+     "summary": "keeping 5 ft as a cautious figure at the joint is not taken",
+     "class": "within",
+     "why": "The rejected option is the inconsistent, unresearched reading; rejecting it follows the research (Amendment 7: following the research is generally what we do), and narrows nothing."
+    },
+    {
+     "id": "T108-exit-c",
+     "summary": "the joint moved back a vertex when the pull fails (UNRESEARCHED) stays as the code's own mend and is recorded on 0081 as the page's GUESS by T70's page session, not changed in this task",
+     "class": "within",
+     "why": "The mend is neither removed nor exempted: it is routed to T70, a task already owed in this same feature (found work stays in the feature, FR-002), and labeled GUESS rather than presented as researched. No part of what the GM asked is narrowed."
+    },
+    {
+     "id": "T108-done",
+     "summary": "done = a unit test red at 5 ft and green at the 3 ft clearance, the claim re-checked IN-STEP, seeds 1-48 and the pinned rows as main; budget 20 min with the landing",
+     "class": "within",
+     "why": "Verification that enforces this task's own change, and the feature's standing per-task practice (FR-001); no new map, tier or property is swept."
     }
    ]
   }

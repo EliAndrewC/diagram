@@ -416,3 +416,13 @@ def test_a_two_kind_joint_that_would_move_an_arriving_end_off_its_farm_is_not_pu
     monkeypatch.setattr(joints, "arrives_off", lambda *a: True)
     assert straighten_joints(s, [], [], []) == 0
     assert [len(ln["pts"]) for ln in s.M["lanes"]] == [2, 3], "the jog left as it was"
+
+
+def test_a_lane_with_no_width_keeps_the_footpaths_tread_off_a_wall_at_a_joint() -> None:
+    """405 T108: `_one_joint` read a lane with no width as 5 ft (the spine's) where every other reader reads 0081's 3 ft footpath."""
+    from l7r.diagram.hamletgen.ways import joints as J
+    from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP
+    from l7r.diagram.settlement.rolling.access import TREAD_WALL_FT
+
+    assert J.tread_gap({}, {}) == max(_TOUCH_GAP, 1.5 + TREAD_WALL_FT), "two lanes with no width: the footpath's tread"
+    assert J.tread_gap({"w": 5}, {}) == max(_TOUCH_GAP, 2.5 + TREAD_WALL_FT), "the wider of the two"
