@@ -2416,3 +2416,37 @@ Owed by the cohort record of 2026-10-22T03:45Z (seeds 10, 24, 36, 47 newly faili
 ### T126 Decisions
 
 - **D108** `CombMixin.bund_junctions` rolls each fillet leg at 0.8-1.2 of its base (2.5 ft, floored at the drawn aze), so a node is 4-6 ft across (0284); its claims say so. Rendering: historically accurate (0284).
+<!-- plan-archive: archived 2026-10-22 -->
+## T119 - a tread 3 ft off every building's wall
+
+### T119 Approach (checklist part A)
+
+1. **The goal, in the world.** A lane's tread keeps 0081's 3 ft clear of a farmhouse wall, and of a shed, byre or retirement house, wherever it passes one - as the page now says the 3 ft wins over the 6 ft pull (session 1, 2026-10-22) - so no lane is drawn brushing a wall.
+2. **The constraints.** 0081 §34: a lane's tread 3 ft clear of a farmhouse wall (attested); the same 3 ft off the other buildings (0081, the page's GUESS since 2026-10-22); 0081: the 3 ft wins over the 6 ft pull (a map drawing convention); 0246: no house corner on the tread.
+3. **Where each comes from.** R: 0081 (the 3 ft); G: the other buildings' 3 ft (recorded on 0081 as a GUESS).
+4. **Do they describe the world here?** Yes: the lane law's house test (`house_hit`) held only the tread itself off a corner (0 ft to the wall), and `span_walkable` passed its 4.5 ft as a WIDTH, so the test halved it to 2.25 ft - a bug found reading T119.
+5. **The order.** `house_hit` keeps the tread's half-width plus `TREAD_WALL_FT` off every house corner and center; every caller passes the tread's width, as before; `span_walkable` passes a footpath's tread (its claim's 4.5 ft now holds).
+6. **The exits.** (a) record the 0 ft as a DEVIATION of 0081 - not taken unless the cohort refuses the 3 ft (room first); (b) keep the 3 ft in `house_hit` - taken, measured on the cohort; (c) more room - only if (b) fails seeds.
+7. **The search smell.** None.
+8. **The budget.** 45 min with a gated landing.
+9. **Done, measured.** A tread 2 ft off a wall is a hit, 4 ft is not (a test, red without it); `span_walkable` refuses a line 3 ft off a corner; `make test-file FILE=tests/hamletgen/ways/` 597 passed; `make cohort` 16/16 (2026-10-22); the landing cohort at the landing.
+10. **Before moving a constant.** No constant moves: `TREAD_WALL_FT` (3 ft, 0081) is read where it was not.
+11. **Before fitting things into room.** If the cohort fails on knots or refusals, room before packing (the room table).
+
+### T119 Approach (re-answered 2026-10-22T14:35Z)
+
+1. **The goal, in the world.** Unchanged: no tread within 3 ft of a house wall, and no tread across a house.
+2. **The constraints.** As before; 0246 (nothing built on a lane).
+3. **Where each comes from.** The claims rounds (impl-drift, 2026-10-22): `house_hit` sampled corners and the center, never the walls. R: 0081, 0246.
+4. **Do they describe the world here?** Yes: a 30 x 20 ft house crossed at its middle passed the sampled test.
+5. **The order.** As before, the distance taken to each wall segment.
+6. **The exits.** (a) say "3 ft off each corner" - not taken: the page names the wall; (b) measure to the walls - taken.
+7. **The search smell.** None.
+8. **The budget.** 20 min more.
+9. **Done, measured.** A tread across a long house and one 4 ft along its wall are hits, 5 ft is clear (a test, red without the fix); `make test-file FILE=tests/hamletgen/ways/` 598 passed; `make cohort` 16/16 (2026-10-22).
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T119 Decisions
+
+- **D96** (amended after the claims rounds, 2026-10-22) `fabric.house_hit` measures a tread to a house's WALLS - a hit where a segment crosses a wall, starts inside the house, or passes within the tread's half-width plus `TREAD_WALL_FT` (3 ft, 0081) of a wall - not to its four corners and center, which let a tread cross a long house's middle or run along a wall between its corners; `law.span_walkable` passes `2 * TREAD_HALF_FT` (a footpath's tread), so its line keeps the 4.5 ft its claim states (it passed 4.5 as a width and the test halved it). The claims say so. Rendering: historically accurate (0081), the other buildings a GUESS.
