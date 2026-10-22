@@ -118,7 +118,7 @@ def tip_onto_the_bund(pts: Sequence[Pt], ground: WorkedGround, half_tread: float
 
     Research:
         spur tip on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: never short of it, never in it
-        a run-on leg clear by its tread - UNRESEARCHED: the leg keeps its whole tread (twice the half-tread) off what blocks it - short of 0246's 7 ft off a garden fence where a block is a garden (405 T99)
+        a run-on leg clear by its tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the leg is judged at its drawn width (twice the half-tread: no house corner on its tread, nor a fixture or crop) and `RunOnBlocks.clear` keeps its middle 7 ft (`FOOTPATH_FABRIC_GAP`) off the steadings' fabric, gardens included - the width is the tread, not a clearance (405 T93)
         a tip that cannot be carried on - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: past the run-on's reach, turning back or blocked, it is left as it came for the settle - the lane law calls the short end dangling and 0246's pull-back takes it - and the field is reached by `a_way_onto_the_bund` (0014: the hamlet's nearest lane runs on to the bund)"""
     out = [(float(p[0]), float(p[1])) for p in pts]
     if len(out) < 2:

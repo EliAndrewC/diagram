@@ -672,6 +672,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T93 - two claims the claims gate carried (385 FR-013)": {
+   "sha256": "b5ce555f55fa9a37109ed5deebbeb5ab04ccae159f7db67676e04e59c8bd4074",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T93 Approach (checklist part A)": {
+   "sha256": "7c5ca25ce1cc2d0cd9e3920c7d15ce1c7bf87140aa3029b2e6a1cd3e1cc91384",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T93 Decisions": {
+   "sha256": "e9ef95c2495cef7fb221394dce0a76de15490639598b82492b39505adcbc0075",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3149,6 +3167,35 @@
      "summary": "A fit failure's part B prints the table and a row-rule failure's does not. An ask naming a knot carries it and a wording ask does not.",
      "class": "within",
      "why": "Enforces the requested behavior, per the feature 379 rule that a tooling fix lands with its test and the GM's 'build ... as tooling with tests'. Delete the table and the tests have nothing left to check."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T93 - two claims the claims gate carried (385 FR-013)",
+    "### T93 Approach (checklist part A)",
+    "### T93 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D85 / exit (a)+(b)",
+     "summary": "Item 1: tip_onto_the_bund's claim is rewritten to say the run-on is judged at its drawn width (2*half_tread) and kept 7 ft (FOOTPATH_FABRIC_GAP, 0246) off the steadings' fabric by RunOnBlocks.clear; the code is not changed.",
+     "class": "within",
+     "why": "385 FR-013 lets a carried finding close when fixed or re-checked clean; a mislabeled claim over code that already keeps the cited page's gap is fixed by correcting the claim, and Amendment 7 asks the session to follow the research rather than relitigate it. Nothing the GM asked for is dropped, and the re-check by impl-drift is the FR-013 close."
+    },
+    {
+     "id": "exit (c) / D85 last sentence",
+     "summary": "Item 2 (_clear_touch's 7 ft join-link margin off the crop vs 0081's lane that may touch a plot's boundary) is not worked in T93; it is carried to T98, which already names the same finding, and T98's text records that it came from T93.",
+     "class": "within",
+     "why": "The finding stays an open task of this feature (FR-013's carry, FR-002's found work stays here), so the feature cannot close until it is fixed or re-checked clean; it moves between two tasks of the same feature rather than leaving scope, and merging it avoids deciding the crop margin twice. The 'done' line requires T98's text to name it, so it cannot be lost."
+    },
+    {
+     "id": "Approach item 3",
+     "summary": "0246's 7 ft is classed O (a map drawing convention, per the page); no house on a tread and 0081's bund are classed R.",
+     "class": "within",
+     "why": "A provenance label for checklist part A (FR-001); it changes no behavior, since the 7 ft is kept as the page has it."
     }
    ]
   }
