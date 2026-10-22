@@ -426,22 +426,4 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 <!-- plan-archive: T118 to T116 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 
-## T108 - one width default at a joint; the joint's mend (T105's round)
-
-### T108 Approach (checklist part A)
-
-1. **The goal, in the world.** Where two lanes meet end to end and are pulled straight past a building, the tread keeps its 3 ft off the wall at the lane's own width; a lane recorded with no width is read as the footpath it is everywhere else.
-2. **The constraints.** 0081's 3 ft footpath (the width `settle_ends`, `touch` and the knots read when a lane records none); 0081's tread 3 ft off a farmhouse wall (`TREAD_WALL_FT`); 0081's no-zigzag rule, which asks a mend for a Z at a joint and names none.
-3. **Where each comes from.** The footpath's 3 ft: R (0081). The 3 ft off a wall: R (0081). The joint moved back a vertex when the pull fails: U - its claim says UNRESEARCHED.
-4. **Do they describe the world here?** `_one_joint` reads a lane with no width as 5 ft (the spine's) for the pulled lane's clearance, where every other reader reads 3 ft: two defaults for one record. The mend is the code's own; 0081 is silent.
-5. **The order.** Nothing moves.
-6. **The exits.** (a) `_one_joint` reads 3 ft, as the rest do - taken; (b) keep 5 ft as the cautious figure - not taken: one record, one reading; (c) the mend recorded on 0081 as the page's GUESS - carried to T70, the 0081 page session already owed (a page edit, not a code one); (d) more room - n/a; (e) conform - n/a.
-7. **The search smell.** None.
-8. **The budget.** 20 min with its landing (gated: an engine token).
-9. **Done, measured.** A unit test: `_one_joint`'s clearance for two lanes with no width is the 3 ft footpath's (`max(_TOUCH_GAP, 1.5 + TREAD_WALL_FT)`), red at 5; the claim re-checked IN-STEP; seeds 1-48 and the pinned rows as main.
-10. **Before moving a constant.** No constant moves: only the fallback for a missing width.
-11. **Before fitting things into room.** n/a.
-
-### T108 Decisions
-
-**D90 - a lane with no width is the footpath at a joint too.** `joints._one_joint` reads a lane with no `w` as 3 ft (0081's footpath), as `settle_ends`, `touch` and the knots do; its claim "a pulled lane's clearance" says so. The joint moved back a vertex (UNRESEARCHED) is recorded on 0081 as the page's GUESS by T70's page session; T70's text says so.
+<!-- plan-archive: T108 to T105 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
