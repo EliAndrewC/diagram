@@ -326,6 +326,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T115 `corridors.field_router` lets a route that starts within 13 ft of its own house treat that whole house as no wall, so the field way may pass its own house closer than the claimed 7 ft (`FIELD_ROUTE_GAP_FT`); 0246 records a closer passing only for a way's own garden fence (§122 DEVIATION), not its own house wall - wall the house again past the start, or record the passing on the page (impl-drift outside the change, T91's round, 2026-10-22) [lands-open]
 
+- [ ] T116 `bund.RunOnBlocks.clear` keeps a run-on's middle 7 ft (`FOOTPATH_FABRIC_GAP`) off ALL the steadings' fabric - house, byre, shed and every household's garden, its own included - where 0246 §45 attests the gap only from another household's garden and lets a household's own way run beside its own: narrow it to the page's scope (the owner, as `settle.theirs` since T18), or claim the wider gap as a GUESS or DEVIATION (impl-drift outside the change, T93's round, 2026-10-22) [lands-open]
+
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
