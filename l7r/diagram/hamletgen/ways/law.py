@@ -134,10 +134,10 @@ JOIN_TOL = _TOUCH_GAP
 ink's), which both network tests read; a looser bar would call a near-miss a junction."""
 
 DOORSTEP_FT = 80.0
-"""A lane end this near a farmhouse's center is at its dooryard for the settle: the steadings exempt from a lane's fence
-clearance near its ends (`settle.py`'s yards a lane may not come near) and the end a fan of ways is cut back past
-(`settle_ends`). Whether an end REACHES a farmhouse, 0246's measure, is `reach_to_steading` (feature 328 wave 43; this was
-that test too, at 80 ft from the center).
+"""A lane end this near a farmhouse's center is at its dooryard for the settle: the end a fan of ways is cut back past
+(`settle_ends`), and the reach `Lawful.fault` looks up the houses a run may hit within. Whether an end REACHES a farmhouse,
+0246's measure, is `reach_to_steading` (feature 328 wave 43; this was that test too, at 80 ft from the center; the yards a
+lane may not come near read the lane's owner since 405 T18, and the field router's own dooryard the reach since 405 T91).
 Research: a dooryard's reach for the settle - UNRESEARCHED: 80 ft from the house's center; 0246's own reach is 60 ft of the house or 12 ft of its built ground"""
 HOUSE_REACH_FT = 60.0
 """Research: an end reaches a farmhouse - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: "within 60 ft of the house, or within 12 ft of the steading's built ground" (the page's own guess)"""

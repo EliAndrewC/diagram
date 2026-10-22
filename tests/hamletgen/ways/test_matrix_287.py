@@ -4,6 +4,8 @@ yard, a well in the lane's way, its own household's too."""
 
 from __future__ import annotations
 
+import math
+
 import pytest
 
 from l7r.diagram.hamletgen.ways import bund as B
@@ -133,6 +135,16 @@ def test_the_field_router_walls_what_the_matrix_forbids_and_leaves_its_own_doory
     assert all(not (470.0 < x < 530.0 and 0.0 < y < 200.0) for x, y in run), "round the burial ground, not through it"
     assert route((240.0, 100.0), (240.0, 300.0)), "a route from its own yard leaves it"
     assert route((200.0, 75.0), (200.0, 300.0)), "...and one from a step off its own front wall"
+
+
+def test_the_field_router_knows_its_own_dooryard_by_0246s_reach_not_the_doorstep_radius() -> None:
+    from l7r.diagram.hamletgen.ways.corridors import field_router
+
+    s = Registered(houses=[(200.0, 60.0)])
+    s.M["threshing_yards"] = [{**YARD, "x": 265.0, "w": 80.0}]  # a long yard running out to x 305
+    route = field_router(s, [])
+    assert math.dist((290.0, 100.0), (200.0, 60.0)) > law.DOORSTEP_FT
+    assert route((290.0, 100.0), (290.0, 300.0)), "a route from the far end of its own yard, 98 ft from the house, leaves it (405 T91)"
 
 
 def test_the_web_walls_a_reserved_seat_at_the_buffer_less_its_own_margin() -> None:

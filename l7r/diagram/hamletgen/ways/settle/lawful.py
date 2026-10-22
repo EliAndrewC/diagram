@@ -132,7 +132,7 @@ class Lawful:
         # every test below reads only what stands near the run (`index`, `GroundIndex`): a crossing fault needs a crossing,
         # and each foul a part within its own reach of the run - so the parts beyond it are left out, not the verdict
         ix = self.index
-        houses = ix.near("houses", run, max(width / 2.0 + 2.0, law.DOORSTEP_FT) + 1.0)  # ...the doorstep's reach: `theirs` reads it
+        houses = ix.near("houses", run, max(width / 2.0 + 2.0, law.DOORSTEP_FT) + 1.0)  # ...a search radius wide enough for any house `house_hit` may meet
         fouled = fouled_segment(
             run,
             width,

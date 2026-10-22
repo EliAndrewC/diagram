@@ -400,7 +400,7 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
         off the farm groves - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a farm's own grove bands are walls, kept 7 ft (`FIELD_ROUTE_GAP_FT`) off - a footpath's clearance and some working room off the trees
         out of its own house - NONE: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of its own house is not walled by it, so it can leave the door
         across the commons - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the commons' block leaves the lanes and their verges bare, so it is no wall to a path
-        its own dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard, the threshing yard of the house within `law.DOORSTEP_FT` of where the route starts no wall to it
+        its own dooryard - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard, the threshing yard of the house the route's start reaches no wall to it - within 60 ft of the house or 12 ft of its built ground (`law.reach_to_steading`, the page's own guess)
         the brook at its fords - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every steading part a wall but the
             path's own dooryard
@@ -424,7 +424,9 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
         # the router's gap of its wall (a house with no yard: its dooryard is a step off the front) - the web draws the run
         # from the yard's edge (`door_ends`) and the law refuses a tread on the house (`house_hit`); its beds, sheds and
         # fixtures and every other steading's are walls, as the matrix holds them
-        own = min((c for c in houses if math.dist(c, a) <= law.DOORSTEP_FT), key=lambda c: math.dist(c, a), default=None)
+        # ...the house is the nearest whose reach holds the start, as 0246 counts an end reaching a farmhouse (405 T91: it was
+        # the nearest center within `law.DOORSTEP_FT`, a figure the page does not give)
+        own = min((c for c, h in zip(houses, M.get("houses") or [], strict=True) if law.reach_to_steading(a, h, M)), key=lambda c: math.dist(c, a), default=None)
 
         def mine(owner: Any, kind: str, poly: Poly) -> bool:
             # ...an owner the registry names by an id rather than a house's point is never the route's own (feature 374 wave 149:

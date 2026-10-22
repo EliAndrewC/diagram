@@ -642,6 +642,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T91 - the 80 ft doorstep against 0246's reach (batch 9's round)": {
+   "sha256": "8f49bc4017003706358fa5b5d42e14ec9205bea9a89caeeebbccf6c64fcf47de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T91 Approach (checklist part A)": {
+   "sha256": "3b1c83a6a7a104501d104ee4849e84eb471b6cc0b141550cac096bc0a684b077",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T91 Decisions": {
+   "sha256": "e78c5edcb9309f11b53d934423945ef7d5e77b38e42577eec27ef1896825eeb9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3044,6 +3062,35 @@
      "summary": "Done when a test shows a gather the 7 ft refuses and the crop clearance admits is taken only after the 7 ft pass, and seeds 1-48 and the pinned rows hold 54/54.",
      "class": "within",
      "why": "Verification that enforces the fix; it checks nothing the request did not ask for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T91 - the 80 ft doorstep against 0246's reach (batch 9's round)",
+    "### T91 Approach (checklist part A)",
+    "### T91 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D84 (route's own house)",
+     "summary": "field_router's route takes as its own the nearest farmhouse whose 0246 reach (law.reach_to_steading: 60 ft of the house or 12 ft of built ground, the page's labeled GUESS) holds the route's start, replacing nearest house center within the unresearched 80 ft DOORSTEP_FT; the claim cites 0246's reach.",
+     "class": "within",
+     "why": "Working this open task is what Amendment 7 asks (take the feature to completion, work the remaining open tasks), and FR-001 governs how. The task's finding is a claim citing 0246 for a figure 0246 does not give; replacing an unresearched number with the research page's own labeled figure follows the research, which the GM says is generally what to do. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "D84 (DOORSTEP_FT kept for its other readers)",
+     "summary": "DOORSTEP_FT stays 80 ft, labeled UNRESEARCHED, for settle_ends' fan cut and Lawful.fault's house look-up; exit (c), moving the fan cut onto 0246's reach, not taken.",
+     "class": "within",
+     "why": "This leaves untouched readers the round raised no finding against, and the plan says plainly that they are not reach questions (a cut-back distance and a search radius). The request asks for the open tasks to be worked, not for every unresearched constant to be re-sourced, so holding this task to its finding drops nothing that was asked. The constant stays honestly labeled UNRESEARCHED and is not presented as research."
+    },
+    {
+     "id": "D84 (docstring and comment corrections)",
+     "summary": "DOORSTEP_FT's docstring drops the yards exemption it lost at T18 and names only its live readers; Lawful.fault's look-up comment says the radius is a search radius for house_hit rather than claiming theirs reads it.",
+     "class": "within",
+     "why": "Correcting text that has become false, about the constant this task touches, is part of fixing the mislabel the task exists for. It adds no behavior."
     }
    ]
   }
