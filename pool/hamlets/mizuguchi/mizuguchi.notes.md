@@ -97,11 +97,11 @@ intake on its bank and runs on past the field, and this map draws a weir there.
 ### Place
 
 - **district**: Kawabe
-- **district direction**: northeast
+- **district direction**: west
 
 *Kawabe (川辺, "riverside, by the river") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
-DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster - compass 59 deg on its first long leg, northeast (measured 2026-09-27).*
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster - compass 270 deg on its first leg, west (measured 2026-10-22, after feature 405 T09 dropped the eastern run-on track that crossed the toe marsh; it was 59 deg, northeast, measured 2026-09-27).*
 
 
 ### Features
