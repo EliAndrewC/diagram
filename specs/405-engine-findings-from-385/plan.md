@@ -448,3 +448,23 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 <!-- plan-archive: T75 to T75 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 <!-- plan-archive: T125 to T125 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 <!-- plan-archive: T126 to T126 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+## T119 - a tread 3 ft off every building's wall
+
+### T119 Approach (checklist part A)
+
+1. **The goal, in the world.** A lane's tread keeps 0081's 3 ft clear of a farmhouse wall, and of a shed, byre or retirement house, wherever it passes one - as the page now says the 3 ft wins over the 6 ft pull (session 1, 2026-10-22) - so no lane is drawn brushing a wall.
+2. **The constraints.** 0081 §34: a lane's tread 3 ft clear of a farmhouse wall (attested); the same 3 ft off the other buildings (0081, the page's GUESS since 2026-10-22); 0081: the 3 ft wins over the 6 ft pull (a map drawing convention); 0246: no house corner on the tread.
+3. **Where each comes from.** R: 0081 (the 3 ft); G: the other buildings' 3 ft (recorded on 0081 as a GUESS).
+4. **Do they describe the world here?** Yes: the lane law's house test (`house_hit`) held only the tread itself off a corner (0 ft to the wall), and `span_walkable` passed its 4.5 ft as a WIDTH, so the test halved it to 2.25 ft - a bug found reading T119.
+5. **The order.** `house_hit` keeps the tread's half-width plus `TREAD_WALL_FT` off every house corner and center; every caller passes the tread's width, as before; `span_walkable` passes a footpath's tread (its claim's 4.5 ft now holds).
+6. **The exits.** (a) record the 0 ft as a DEVIATION of 0081 - not taken unless the cohort refuses the 3 ft (room first); (b) keep the 3 ft in `house_hit` - taken, measured on the cohort; (c) more room - only if (b) fails seeds.
+7. **The search smell.** None.
+8. **The budget.** 45 min with a gated landing.
+9. **Done, measured.** A tread 2 ft off a wall is a hit, 4 ft is not (a test, red without it); `span_walkable` refuses a line 3 ft off a corner; `make test-file FILE=tests/hamletgen/ways/` 597 passed; `make cohort` 16/16 (2026-10-22); the landing cohort at the landing.
+10. **Before moving a constant.** No constant moves: `TREAD_WALL_FT` (3 ft, 0081) is read where it was not.
+11. **Before fitting things into room.** If the cohort fails on knots or refusals, room before packing (the room table).
+
+### T119 Decisions
+
+- **D96** `fabric.house_hit` judges a house corner or center within the tread's half-width plus `TREAD_WALL_FT` (3 ft, 0081) of a segment as a hit; `law.span_walkable` passes `2 * TREAD_HALF_FT` (a footpath's tread), so its line keeps the 4.5 ft its claim states (it passed 4.5 as a width and the test halved it). The claims on `house_hit`, `_hits_a_steading` and the run-on's "off a house" cite 0081's 3 ft. Rendering: historically accurate (0081), the other buildings a GUESS.

@@ -42,7 +42,7 @@ from l7r.diagram.settlement.city.bridges import PLANK_DITCH_FT as PLANK_DITCH_FT
 from l7r.diagram.settlement.city.bridges import deck_covers as deck_covers
 from l7r.diagram.settlement.city.bridges import undeckable_at as undeckable_at
 from l7r.diagram.settlement.homestead_parts.fixture_seats import TRUNK_FT
-from l7r.diagram.settlement.rolling.access import TREAD_HALF_FT, TREAD_WALL_FT
+from l7r.diagram.settlement.rolling.access import TREAD_HALF_FT
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
 
 from ..consts import WEB_FABRIC_GAP, Poly, Pt
@@ -482,7 +482,7 @@ def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) 
     rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
     if any(segments_cross(p, q, r[k], r[(k + 1) % len(r)]) for r in rings for k in range(len(r))):
         return False
-    if house_hit([p, q], TREAD_HALF_FT + TREAD_WALL_FT, M.get("houses") or []):  # the line: a footpath's half-tread and its 3 ft off the wall
+    if house_hit([p, q], 2 * TREAD_HALF_FT, M.get("houses") or []):  # a footpath's tread; `house_hit` keeps it 3 ft off the wall (405 T119: the sum was passed as a WIDTH, halved to 2.25 ft)
         return False
     yards = [[(float(a), float(b)) for a, b in rec["poly"]] for key in ("threshing_yards", "gardens") for rec in M.get(key) or [] if rec.get("poly")]
     if _crosses_fabric([p, q], yards, WEB_FABRIC_GAP):

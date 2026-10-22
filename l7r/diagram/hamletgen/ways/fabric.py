@@ -10,6 +10,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
+from l7r.diagram.settlement.rolling.access import TREAD_WALL_FT
 from l7r.diagram.sitegen.geom import centroid, unit
 
 from ..consts import (
@@ -333,8 +334,12 @@ def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> b
     """`_hits_a_steading`'s body on plain records (feature 287, M1): the web's foul test (`settle.fouled_segment`) asks it of a
     manifest's houses, the web pass of the settlement's - one predicate, read by both.
 
-    Research: no house on a tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no corner (nor the center) within half the tread's width - no corner of a house on the tread; the 2 ft pad past it, on no page, went with feature 328"""
-    half = width / 2.0
+    Research:
+        no house on a tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no corner (nor the center) within half
+            the tread's width - no corner of a house on the tread
+        a tread 3 ft off the wall - research/questions/0081-village-lanes.drawing.html: a lane's tread kept 3 ft clear of a farmhouse wall
+            (`TREAD_WALL_FT`), the 3 ft winning over the 6 ft a straightened lane may come up to the buildings (405 T119)"""
+    half = width / 2.0 + TREAD_WALL_FT
     for h in houses:
         quad = rot_rect(float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"]), float(h.get("rot", 0.0)))
         probes = [*quad, (float(h["x"]), float(h["y"]))]

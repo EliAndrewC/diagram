@@ -262,3 +262,17 @@ def test_a_garden_belongs_to_its_house_for_the_lane_fouls_alone() -> None:
     assert [owner for _poly, owner in yards] == [(100.0, 100.0), (100.0, 100.0), (100.0, 100.0), None], "the yard, the bed and its rect, an ownerless rect"
     assert houses == s.M["houses"]
     assert all(owner is None for _poly, owner, kind in hg.ways._homestead_polys(s) if kind == "gardens"), "the router's fabric is unchanged"
+
+
+def test_a_tread_keeps_three_feet_off_a_house_wall() -> None:
+    """405 T119: 0081 keeps a lane's tread 3 ft clear of a farmhouse wall, the 3 ft winning over the 6 ft pull; `house_hit` held only
+    the tread itself off a corner (0 ft to the wall), and `span_walkable` passed its 4.5 ft as a width, halved to 2.25 ft."""
+    from l7r.diagram.hamletgen.ways import law
+    from l7r.diagram.hamletgen.ways.fabric import house_hit
+
+    houses = [{"x": 50.0, "y": 4.4 + 10.0, "w": 40.0, "h": 20.0, "rot": 0.0}]  # its near wall 4.4 ft off the line y = 0
+    assert house_hit([(0.0, 0.0), (100.0, 0.0)], 3.0, houses), "4.4 ft is inside a 3 ft tread's 1.5 + 3"
+    houses[0]["y"] = 4.6 + 10.0  # 4.6 ft off
+    assert not house_hit([(0.0, 0.0), (100.0, 0.0)], 3.0, houses), "4.6 ft is clear of it"
+    M = {"houses": [{"x": 50.0, "y": 3.0 + 10.0, "w": 40.0, "h": 20.0, "rot": 0.0}]}  # a wall 3 ft off the span's line
+    assert not law.span_walkable(M, (0.0, 0.0), (100.0, 0.0)), "the span's line keeps 4.5 ft off the wall, not 2.25"
