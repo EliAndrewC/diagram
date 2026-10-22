@@ -22,9 +22,9 @@ rules send a third round to before it runs - gets an `ask:<subject>` trigger. It
 gate can tell it is a spec's or a plan's verdict, and nothing honors it:
 
 - 408's `ask:408-spec-round3` (accept) did not satisfy `review-gate.sh`; a third spec-fidelity round ran anyway.
-- 408's `ask:408-plan-round3` (accept) did not satisfy `plan-gate.sh`; `make land` and two pushes needed
-  `PLAN_REVIEW_OK`, and the page sessions' plan-review-stale guard fired three times on a plan that had not changed
-  since the ruling.
+- 408's `ask:408-plan-round3` (accept) did not satisfy `plan-gate.sh`: `dev/bypass-log/` holds 6 `plan-gate push` and
+  19 `plan-gate tick` escapes for 408 (clone 686ec2) with the reason "round arbiter ruled ACCEPT on ask:408-plan-round3",
+  and the page sessions' plan-review-stale guard fired on a plan that had not changed since the ruling.
 
 ## User Scenarios & Testing
 
@@ -38,9 +38,8 @@ gate can tell it is a spec's or a plan's verdict, and nothing honors it:
    and `make tick` pass on that plan with no escape.
 2. `REVIEW=spec` records the ask as about the spec review; the ruling row carries the spec's body digest, and
    `review-gate.sh` takes it as the spec's verdict while the spec still reads so - exactly as for a spec round trigger.
-3. A SUBJECT of the form `<feature number>-spec-...` or `<feature number>-plan-...` (408's `408-spec-round3`,
-   `408-plan-round3`) names its review without `REVIEW=`; the ask prints which review the ruling will stand for, so a
-   wrong inference is seen when it is made. `REVIEW=none` says the ask is about no review.
+3. An ask without `REVIEW=` is about no review, whatever its SUBJECT says. Where the SUBJECT looks like a review's
+   (`<n>-spec-...`, `<n>-plan-...`), the ask prints a hint to pass `REVIEW=`; the hint records nothing.
 4. A plan or spec edited after the ruling is NOT covered by it: a changed plan block is owed its review as before (`make
    plan-delta`), a changed spec is owed spec-fidelity as before. A `continue` ruling records nothing CLEAR.
 5. Every other ask, with no review named or inferred, is recorded and ruled exactly as today.
@@ -49,8 +48,9 @@ gate can tell it is a spec's or a plan's verdict, and nothing honors it:
 
 ### Functional Requirements
 
-- **FR-001**: `make arbiter-ask` MUST accept `REVIEW=spec|plan|none` and record the review on the ask's owed entry; with no
-  `REVIEW=`, a SUBJECT matching `^<digits>-(spec|plan)-` records that review, and the ask's output names it.
+- **FR-001**: `make arbiter-ask` MUST accept `REVIEW=spec|plan` and record it on the ask's owed entry, and the ask's output
+  names the review the ruling will stand for. An ask without `REVIEW=` is about no review. The question the arbiter's bundle
+  shows says, for a review ask, that an accept stands as that review's verdict.
 - **FR-002**: A ruling recorded on an ask about a review MUST carry `review` in its `arbiter.jsonl` row, and for `spec` the
   spec body digest (`spec_sha`) as a spec round's ruling does.
 - **FR-003**: `hm_arbiter.spec_ruled` MUST honor an `accept`/`process-fault` row whose `review` is `spec` and whose
@@ -75,3 +75,7 @@ gate can tell it is a spec's or a plan's verdict, and nothing honors it:
   blocks.
 
 ## Review history
+
+- spec-fidelity round 1 (2026-10-22): CHANGES REQUIRED - the SUBJECT inference was not asked for (an accept on an ask merely
+  named like a plan would clear every owed plan block); dropped, a hint kept that records nothing; the escape counts
+  reconciled with `dev/bypass-log/`.
