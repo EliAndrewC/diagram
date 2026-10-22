@@ -17343,10 +17343,9 @@
   ]
  },
  "Sakura charcoal": {
-  "def": "Charcoal named for Sakura, a castle town of Shimosa province east of Edo (the name is the place, not cherry wood); Edo's 1842 return priced it in three grades, at under a third of the top charcoal.",
+  "def": "A grade of charcoal named for Sakura, a place and a domain, not the word for cherry trees; Edo's 1842 return priced it in three grades, at under a third of the top charcoal.",
   "variants": [
-   "Sakura charcoal",
-   "Sakura"
+   "Sakura charcoal"
   ]
  },
  "Wubian": {
@@ -17356,7 +17355,7 @@
   ]
  },
  "zhilizhou": {
-  "def": "An independent department of Qing China: a department that answered directly to its province rather than to a prefecture, as Dingzhou did in Zhili.",
+  "def": "A rank of district in Qing China, written 直隸州 (an independent department); the Zhili price regulation of 1769 styles Dingzhou one.",
   "variants": [
    "zhilizhou",
    "Zhilizhou",
@@ -17368,6 +17367,20 @@
   "variants": [
    "Hongluo charcoal",
    "Hongluo"
+  ]
+ },
+ "Tenpo reforms": {
+  "def": "The shogunate's reforms of the Tenpo era; among them, in 1842 it fixed the copper rate and ordered prices cut to match, and Edo's ward headmen returned the trades' prices before and after the cut.",
+  "variants": [
+   "Tenpo reforms",
+   "Tenpo reform"
+  ]
+ },
+ "Nine Ministers": {
+  "def": "The body of high Qing officials, the jiuqing, who with the Ministry of Works settled Beijing's official list of material prices of 1736, the Jiuqing yiding wuliao jiazhi.",
+  "variants": [
+   "Nine Ministers",
+   "jiuqing"
   ]
  }
 }

@@ -1950,6 +1950,7 @@ jittered	jitter
 jittering	jitter
 jitō	jito
 jiujiang	Jiujiang
+jiuqing	Nine Ministers
 jiwari	warichi
 jizo	jizo
 jizo-bon	Jizo-bon
@@ -2842,6 +2843,7 @@ nikko-kaido	Nikko Kaido
 nikkō tōshōgū	Toshogu
 nimosaku	nimosaku
 ninbetsu aratame cho	shumon aratame cho
+nine ministers	Nine Ministers
 ninjobon	ninjōbon
 ninjōbon	ninjōbon
 ninomaru	ninomaru
@@ -3452,7 +3454,6 @@ sakaki	sakaki
 sakimono-gashira	sakimono-gashira
 sakoda	sakoda
 sakuba-michi	sakuba-michi
-sakura	Sakura charcoal
 sakura charcoal	Sakura charcoal
 sakutoku	sakutoku
 sakutoku landlord	sakutoku
@@ -4144,6 +4145,8 @@ tenpo	Tenpo era
 tenpo coin	Tenpo coin
 tenpo coins	Tenpo coin
 tenpo era	Tenpo era
+tenpo reform	Tenpo reforms
+tenpo reforms	Tenpo reforms
 tenpō	Tenpo era
 tenpō era	Tenpo era
 tensho	Tensho
