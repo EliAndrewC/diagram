@@ -690,6 +690,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T115 - the field way past its own house (T91's round)": {
+   "sha256": "6d4350b714b8136b9f491a4b1685cf46fdde01b547df2fdd3088a46103bc21f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T115 Approach (checklist part A)": {
+   "sha256": "010c38224a5434559cfaca6ce7ca06dd8eaf850d44c061b865999407eab8a449",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T115 Decisions": {
+   "sha256": "0931d8c54c8b31aca18f9b912dbf89e3715cb803da0c20d99ef7c029dbe195ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3196,6 +3214,35 @@
      "summary": "0246's 7 ft is classed O (a map drawing convention, per the page); no house on a tread and 0081's bund are classed R.",
      "class": "within",
      "why": "A provenance label for checklist part A (FR-001); it changes no behavior, since the 7 ft is kept as the page has it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T115 - the field way past its own house (T91's round)",
+    "### T115 Approach (checklist part A)",
+    "### T115 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D86",
+     "summary": "field_router's claim 'field way off the steadings' is split by source: 7 ft off another household's garden (0246 sec. 45, O); 7 ft off other built ground marked a GUESS (U, no page sizes it); the route's own house at its starting door held only to 0246's no-corner-on-the-tread rule (house_hit). No code logic changes, docstring only.",
+     "class": "within",
+     "why": "A found task (FR-002) worked under the checklist (FR-001) and Amendment 7's charge to finish the open tasks by following the research. The code already keeps what the page gives; the change corrects a claim that attributed a guessed margin to the page and labels the guess honestly. Nothing the GM asked for is narrowed: no rule loses a case, no constant moves."
+    },
+    {
+     "id": "T115 exit (b) not taken",
+     "summary": "Do not wall the route's own house again beyond its start; the own house stays held to the tread rule only.",
+     "class": "within",
+     "why": "The page asks of a house only that no corner stand on the tread, which house_hit enforces; walling the own house further would add a margin no source gives. Declining an unrequested, unsourced constraint follows the GM's standing direction (Amendment 7, Amendment 8) to follow the research rather than narrowing anything asked."
+    },
+    {
+     "id": "T115 exit (c) not taken",
+     "summary": "No note recorded on 0246 about passing one's own house.",
+     "class": "within",
+     "why": "The plan states the page already carries the rule; no research record is withheld that the request or spec requires."
     }
    ]
   }

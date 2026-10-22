@@ -405,7 +405,9 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every steading part a wall but the
             path's own dooryard
         a defense marsh is no wall - research/questions/0081-village-lanes.drawing.html: a marsh kept for defense is not a wall to the field way, though lanes keep to the bunds and dry ground
-        field way off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) off their built ground, the page's lane-to-fence 7 ft"""
+        field way off the gardens - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) from the way's middle to a garden fence, the page's lane-to-fence 7 ft
+        field way off the other built ground - GUESS: the same 7 ft off houses, byres, sheds and yards, which no page sizes
+        its own house at its door - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a route starting at its own door is not walled by its own house; the law keeps only the page's no house corner on the tread (`house_hit`) (405 T115)"""
     M = s.M
     hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
     hard += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
