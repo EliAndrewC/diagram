@@ -322,6 +322,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T114 0246's drawing page records the knot exception (T107, D83): a knot the 7 ft fence gap leaves is gathered with the join 3 ft from another household's garden fence - a DEVIATION from the page's convention, labeled so in the code's claims; write it on the page with its reason (two ways joined at one point, 0081, where lots abut - spacing-research.md) in a page session (impl-drift on T107, 2026-10-22) [lands-open]
       research: rendering
+- [ ] T115 `corridors.field_router` lets a route that starts within 13 ft of its own house treat that whole house as no wall, so the field way may pass its own house closer than the claimed 7 ft (`FIELD_ROUTE_GAP_FT`); 0246 records a closer passing only for a way's own garden fence (§122 DEVIATION), not its own house wall - wall the house again past the start, or record the passing on the page (impl-drift outside the change, T91's round, 2026-10-22) [lands-open]
+
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

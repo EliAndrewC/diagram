@@ -660,6 +660,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T113 - the room table (the GM's third process fix, 2026-10-21; the arbiter's tooling_fix on ask:set-down-T26)": {
+   "sha256": "571c64f5505b410dc85c4b9bbc611db246ddb36baa779621928e90f64d34443e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T113 Approach (checklist part A)": {
+   "sha256": "126abb952bee18f42260f09e3ac07eab7f01c3cdcef1d25a1f977693dc942cfa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3091,6 +3103,52 @@
      "summary": "DOORSTEP_FT's docstring drops the yards exemption it lost at T18 and names only its live readers; Lawful.fault's look-up comment says the radius is a search radius for house_hit rather than claiming theirs reads it.",
      "class": "within",
      "why": "Correcting text that has become false, about the constant this task touches, is part of fixing the mislabel the task exists for. It adds no behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T113 - the room table (the GM's third process fix, 2026-10-21; the arbiter's tooling_fix on ask:set-down-T26)",
+    "### T113 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T113-1 table content: research ceiling per spacing knob",
+     "summary": "The room table lists each spacing knob with its ceiling from spacing-research.md, cited where attested (1698 register, Buck, Ushijima).",
+     "class": "within",
+     "why": "Amendment 8: the GM agreed to proposal 3, 'a room table with research ceilings, after a spacing research pass', and set the bound as 'in line with our historical research' so farms are not 'a mile apart'. This is that table."
+    },
+    {
+     "id": "T113-2 band column",
+     "summary": "Each row also says whether widening the knob grows the band the seats are dealt over, so a room probe measures room rather than packing.",
+     "class": "within",
+     "why": "The arbiter's tooling_fix on ask:set-down-T26, and it serves the GM's purpose in amendment 8: the session must not mistake a packing failure for proof that more room is impossible ('don't try to solve the bin packing problem')."
+    },
+    {
+     "id": "T113-3 silent knob marked 'unresearched - research question owed'",
+     "summary": "Where the spacing research pass was silent (neighbor spacing), the row states no ceiling and says a research question is owed, rather than inventing a bound.",
+     "class": "within",
+     "why": "The GM's rule is spacing 'in line with our research'. Where there is no research, stating that a question is owed keeps the table honest and allows no unbounded widening. It removes nothing the GM asked the table to carry, so it is not a narrowing."
+    },
+    {
+     "id": "T113-4 where it prints: fit-failure part B (approach_gate.cohort) and arbiter asks naming a knot, refusal or room (arbiter_bundle.bundle); exits (a) and (c) not taken",
+     "summary": "The table prints where the session meets the room question: a cohort fit failure's part B prompt and an arbiter ask about room. Not in a doc the session must remember to read, and not on every part B.",
+     "class": "within",
+     "why": "Amendment 8's purpose is to make the room route obvious at the moment of a fit failure ('it's still not happening'). Showing it at that moment achieves that. Leaving it off row-rule or water-rule part Bs leaves out nothing the GM asked for, because those failures do not raise the room question."
+    },
+    {
+     "id": "T113-5 no constant moves in T113",
+     "summary": "T113 only states the knobs. The widening itself is left to the claim task (T107/T26) that the GM ordered done 'by widening the spacing within that bound'.",
+     "class": "within",
+     "why": "Amendment 8 orders the steps: build 1 and 2, run the research pass for 3, then do that task by widening. Keeping the table task separate from the widening follows that order."
+    },
+    {
+     "id": "T113-6 done = two tests, each red without the wiring",
+     "summary": "A fit failure's part B prints the table and a row-rule failure's does not. An ask naming a knot carries it and a wording ask does not.",
+     "class": "within",
+     "why": "Enforces the requested behavior, per the feature 379 rule that a tooling fix lands with its test and the GM's 'build ... as tooling with tests'. Delete the table and the tests have nothing left to check."
     }
    ]
   }
