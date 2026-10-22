@@ -333,29 +333,13 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 11. **Before fitting things into room.** n/a - nothing is fitted in this task.
 
 <!-- plan-archive: T103 to T105 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T10 Approach (re-answered 2026-10-21T20:00Z)
-
-1. **The goal, in the world.** Where a settlement's only way out crosses a farm ditch, the track out crosses it on a deck, as 0084 draws a way over a ditch.
-2. **The constraints.** 0084 §116: where a way crosses a stream or ditch the map draws a timber deck as wide as the way; 0035: the brook crossed at its crossing places; the law's decks (a crossing seats a deck, `crossing_deck`, or is refused).
-3. **Where each comes from.** R (0084, 0035) and O (the law's decks).
-4. **Do they describe the world here?** Yes - batch 7's claims round: the fill never crosses a drawn channel, and 0084 expects a deck there.
-5. **The order.** `connector_dry_exit`: after the own-bank fill and the fill open at the brook's crossing places, where both find nothing, a third fill with the drawn channels opened (the brook still only at its crossing places); the settle seats the deck as at any crossing; the claim on 0084; a test; seeds 1-48.
-6. **The exits.** (e) conform, as a last resort - it only turns a refused gateway into a way out.
-7. **The search smell.** None.
-8. **The budget.** 40 min with its landing.
-9. **Done, measured.** The third fill runs only where the other two find no way, with the channels opened and the brook not (test); seeds 1-48 and the pinned rows pass.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
+<!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 ### T10 Decisions (re-decided 2026-10-21T20:00Z)
 
 **D81 - a ditch crossed on a deck, last.** `connector_dry_exit` runs `dry_exit` a third time with the drawn channels left out of its lines (the brook's segments still gapped only at its crossing places, `gap_segments`) when the own-bank and crossing-place fills both return None; the track it finds crosses a channel, and the settle seats the deck there (`law` decks, `crossing_deck`) or refuses the map as for any undeckable crossing. Claimed on 0084.
 
 <!-- plan-archive: T67 to T67 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T67 Decisions
-
-**D82 - the brook alone gapped.** `on_course(seg, plan.brook)` (both ends within 1 ft of the course) sorts the fill's lines into the brook's and the channels'; `gap_segments` opens only the brook's at its crossing places; the channels stay lines until T10's last fill, which drops them. The claims as Approach item 5 lists them; `FORD_HALF` stays 30 ft, now labeled UNRESEARCHED.
-
+<!-- plan-archive: T67 to T67 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 ## T107, T26 - a knot's gather where the fence gap would leave it (the GM, 2026-10-21: room first, within the research)
 
 ### T107 Approach (checklist part A)
