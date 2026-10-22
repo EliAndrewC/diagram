@@ -79,6 +79,50 @@ the fragment file, the verdict and what is still open.
 - China first for routes and transport, Japan beside it (the issue's order).
 - Low priority (the issue): one write session and one check session; leads not followed are named, not chased.
 
-## The findings, figure by figure
+## The findings, figure by figure (the passes, 2026-10-22; leads until read on the page)
 
-(Filled from the passes before the spec review.)
+Four new money questions, numbers reserved at writing: **A "What did carrying goods cost by water, against by land?"**
+(question 1), **B "How far did goods travel before carriage priced them out?"** (question 2), **C "How did tea travel,
+and what did it cost at the end of the road?"** (question 3), **D "What did a famous good cost far from where it was
+made?"** (question 4). China first in each, Japan beside it.
+
+- **A. Freight by water, China**: ATTESTED ONLY FOR official rates - Jiangsu's Qianlong-era 物料價值則例 (Bochum .xls):
+  a boat of 10,000 jin at 0.006-0.012 tael a li around Suzhou, Taicang, Changzhou, Songjiang, porters at the landing
+  0.002-0.003 tael per 100 jin a li, beside a laborer's 0.04 and a craftsman's 0.05-0.06 tael; Hunan 1769 already in 0260
+  (named, not repeated). Grain freight, 清史稿 卷122: Tianjin lighters 1695, 1.32 tael per 100-shi boat per 100 li; the
+  sand-junk rate Shanghai-Tianjin 0.55 tael a shi (restated 1868), the sea route "over 4,000 li" (1826); a later ceiling of
+  0.7 rising to about 1 tael a shi.
+- **A. The land-to-water ratio**: ATTESTED ONLY FOR historians' statements and official rates - Cheng 2024 (LSE WP 371):
+  water about one-tenth of mule-pack land carriage in the early-to-mid Qing Yangzi; 1:10 to 1:37.5 in an 1890 survey; Qiu
+  Jun 1487 (大學衍義補 卷34): the canal saves 30-40 percent on land carriage, the sea 70-80. The Jiangsu porter-to-boat rates
+  give 25-50 to 1, and Hunan's in 0260 about 19 to 1 (this project's arithmetic, labeled).
+- **A. Japan**: ATTESTED ONLY FOR a late-Edo standard of about 60 monme of silver per 10 da of sake, Nishinomiya/Nada to
+  Edo (Kato 2007, citing Yunoki), no distance or wage; Hagi domain's sea freight on tax rice as a share of the rice: 3.4
+  percent to Osaka in 1652, about 4 to 1763, 6-7 from 1764 (Kibe). Pack horses: 0260's post-station fares (named); the
+  chuma carriers' 100 kan a trip with 3-4 horses (kotobank, already a registry source). An Edo land-to-water ratio: SILENT.
+- **B. How far goods went, and a rule**: ATTESTED ONLY FOR a Han proverb and modern statements - Shiji 129, 「百里不販樵，
+  千里不販糴」; Xu Tan (already registered) that Ming-Qing everyday goods broke it, and that hubs lay along waterways; Skinner
+  (already registered): a marketing area's farthest villager 3.4-6.1 km from the town, modal about 4.5 km. Carriage as a
+  share of the good: the Ming surcharge of 1431 by distance, 0.5-0.8 shi per shi of tax grain to Beijing by province, later
+  0.25-0.6 (明史 卷79); Qiu Jun's Han and Tang extremes, 10 to 190 units spent per unit delivered (卷33). The distance at
+  which carriage equaled the price: SILENT in the sources; this project's arithmetic from Cheng's official land rates and
+  his 1680 grain price, about 300-900 li by land against thousands by river, labeled as arithmetic. Hauls: firewood
+  head-loads of 30-40 kg about 15 km into Kyoto by the Ohara women (modern, "it is said"); Luopang firewood rafted hundreds
+  of li (廣東新語 卷25, already registered); salt doubling within 2 ri inland (0273, named). Tea, cloth and silk distances:
+  SILENT beyond Xu Tan's destinations.
+- **C. Tea**: Ya-chou to Ta-chien-lu, ATTESTED (Rockhill 1891, of 1889): about 150 miles in 17-18 days, porters with 9
+  packages of 18-23 lb (190-200 lb), up to 17; 0.2 tael a package; repacked into rawhide cases of about 45 lb, two a yak
+  load; best brick 2 taels a package at Ya-chou; Desgodins' 1883 ladder Ta-chien-lu - Batang - Lhasa about fourfold. Ming
+  tea-horse rates: ATTESTED ONLY FOR official rates (明史 卷80): 1,800 jin a horse, then 120/70/50; 5,000-odd li of tea
+  country. Kalgan to Kyakhta, ATTESTED (Parkes 1854, of about 1850): 804 miles in 40-50 days, camels up to 300 catties,
+  freight usually 2.5 taels per 100 catties; chests 40-90 catties; no price pair (money banned at Kyakhta). Uji to Edo:
+  ATTESTED ONLY FOR the tea-jar procession's route and season; prices, freight, weights SILENT.
+- **D. A named good far from home**: China, ATTESTED ONLY FOR Wuyi Congou c. 1800-1834 (Ball 1848): 12 taels a picul at
+  origin, carriage to Canton 3.92 taels (about a third of origin cost) over six weeks to two months by river with two
+  porter stages, about 27 taels to the Company at Canton, 60 at London sale; wages of the region beside it. Japan, ATTESTED
+  ONLY FOR Nada sake's Edo price and freight, not a brewery price the same year: 15-20 ryo per 10 da (20 casks) normally in
+  1804-1830, 13.5-23 ryo in the Shibata accounts of 1858 (Kobe City Archives), freight about 60 monme per 10 da, 10-14
+  days by ship. 0279's Kumano/Tama pair and 0262's Osaka/Edo sake named. Kumano charcoal at Tanabe, Uji tea, Shaoxing wine,
+  Jingdezhen porcelain: SILENT.
+- **Wages beside them**: where the source gives none, the nearest in the record (0250, 0255, 0260, 0275, 0278) named and
+  labeled.
