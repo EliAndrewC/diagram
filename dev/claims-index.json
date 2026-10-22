@@ -22422,22 +22422,14 @@
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#its own house at its door": {
   "body": "0099614c0c3039b1",
-  "claim": "its own house at its door - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of a house, at its door, is not walled by that house - the 13 ft is ours, as is the margin off a house the page does not size; the law keeps only the page's no house corner on the tread (`house_hit`) (405 T115)",
-  "code": "9df11185ca758f5f",
+  "claim": "its own house at its door - GUESS: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of a house, at its door, is not walled by that house - the 13 ft is ours, as is the margin off a house no page sizes; the law keeps no house corner on the tread (`house_hit`, its own claim on 0246) (405 T115)",
+  "code": "92e2bafa17be77bd",
   "core": "6f8cce7f9df46841",
   "date": "2026-10-22",
-  "note": "GUESS is the right class, since no block sizes a door-side exemption from a house wall. But a GUESS naming a file says that page records this figure as a guess, and 0246.drawing records no 13 ft (GABLE_MARGIN_FT 6 + FIELD_ROUTE_GAP_FT 7) door exemption. Its only house rule is \"no corner of a house stands on its tread\", and the dooryard reach is 60 ft / 12 ft. Make the claim a bare GUESS (citing 0246 only for house_hit), or have the page record the 13 ft as its guess.",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "418b79299aa91bf8"
-  },
-  "research": "92410dbfeea7511e",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:6512a0387080aae5",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
-  ],
-  "verdict": "MISLABELED"
+  "note": "no page says how close a route's start must be for its own house not to wall it; §111 covers only the garden beds and fixtures a way leaves round, §112's 60 ft / 12 ft only decides which house is its own, and §113's rule against house corners on the tread is enforced by house_hit, not by walling; so GUESS is right, and `GABLE_MARGIN_FT + FIELD_ROUTE_GAP_FT` (6 + 7 = 13 ft) is what the claim says",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#nothing built on a lane": {
   "body": "0099614c0c3039b1",

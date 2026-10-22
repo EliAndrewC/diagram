@@ -329,6 +329,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 
 - [ ] T116 `bund.RunOnBlocks.clear` keeps a run-on's middle 7 ft (`FOOTPATH_FABRIC_GAP`) off ALL the steadings' fabric - house, byre, shed and every household's garden, its own included - where 0246 §45 attests the gap only from another household's garden and lets a household's own way run beside its own: narrow it to the page's scope (the owner, as `settle.theirs` since T18), or claim the wider gap as a GUESS or DEVIATION (impl-drift outside the change, T93's round, 2026-10-22); and `fabric._homestead_polys` (claim 'a path leaves its own yard') walls a household's own garden for its own path too, unrecorded (T115's round, 2026-10-22) [lands-open]
 
+- [ ] T117 `corridors.field_router`'s `mine()` frees a route's start from its own house wherever the start stands within 13 ft of any wall, while its claim ("its own house at its door") says at its door: test the front wall (the door side the house records), or drop "at its door" from the claim (impl-drift outside the change, T115's round 4, 2026-10-22) [lands-open]
+
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
