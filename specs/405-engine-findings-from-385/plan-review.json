@@ -1080,6 +1080,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T125 - the cohort gate names the pool maps the gate regenerated": {
+   "sha256": "af57162f8f4ce3c1142d4383ce4447dd3bd4dbb4b07d84962cd2e9d2dee65cbc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T125 Approach (checklist part A)": {
+   "sha256": "14457f5ecebe4d78e11ff914f5eacb1d5922a9f408ca2324baef56ff5ce02b10",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T125 Decisions": {
+   "sha256": "1db182c67db597fad43a6415f021fa9e6d4a534d4e1c51163a47904378f82021",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T126 - a bund junction piled within 0284's four to six feet": {
+   "sha256": "1be9f7af7b77300ea447fd61d9eaea448e9dbd9847d0468f6c455880ab3cfe83",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T126 Approach (checklist part A)": {
+   "sha256": "96aca568d6864d789384286b5ea1e587ee6fc0b45bc1432c69bd361f86eb0783",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T126 Decisions": {
+   "sha256": "9024acffac9d5968ffdcd1b3dbd0bcd23ca210d78c3fc232c2dbec91432a9f38",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4219,6 +4255,44 @@
      "summary": "The sweeps' served-house guard (_SERVE_FT, 100 ft) cites 0246's recorded GUESS; s6's 60 ft / 12 ft test is a lane end's (T78).",
      "class": "within",
      "why": "A research-record task moved from 385 (FR-001), worked as 385 worked its tasks: the page records what the impl-drift/record check found silent or out of step, facts quoted and guesses labeled; no code behavior changes and nothing the GM asked for is narrowed. A claims repoint only; the guard's value does not move."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T125 - the cohort gate names the pool maps the gate regenerated",
+    "## T126 - a bund junction piled within 0284's four to six feet",
+    "### T125 Approach (checklist part A)",
+    "### T125 Decisions",
+    "### T126 Approach (checklist part A)",
+    "### T126 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D107",
+     "summary": "cohort_gate.check, finding no landing cohort on the engine, appends the uncommitted pool maps (git status, untracked included) and 'read each diff, commit it, then land again' to the same refusal; auto-committing the map rejected",
+     "class": "within",
+     "why": "Found work on tooling raised by T09's landing, filed as a task of this feature (FR-002, the GM 2026-10-19) and worked toward completion (Amendment 9). It only adds information to an existing refusal - it does not change when the gate refuses - and the rejected exit (auto-commit) would have been the larger behavior change. Serves Amendment 1's aim of cutting landing cost. No part of the request is narrowed."
+    },
+    {
+     "id": "T125-approach",
+     "summary": "Done measured by a test: no map, no mention; an uncommitted pool map named; red without the fix",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the requested fix; enforcement, not unrequested scope."
+    },
+    {
+     "id": "D108",
+     "summary": "CombMixin.bund_junctions rolls each fillet leg at 0.8-1.2 of its 2.5 ft base (floored at the drawn aze), so a node is 4-6 ft across as 0284 states; claims updated; relabeling the claim to the drawn 2.5-10 ft range rejected",
+     "class": "within",
+     "why": "Brings drawn output inside the cited page (0284) rather than relabeling the claim away from it - the direction the request and Amendment 7 ask for (follow the research, close the feature). Leg 2-3 ft x two opposite fillets = 4-6 ft is arithmetically consistent. The aze floor is not a carve-out of the page's range on its face: the plan's own test (every fillet at most 3 ft at 1 ft/px) would fail if the floor ever lifted a leg past 3 ft, so the 4-6 ft bound is enforced rather than excepted. Nothing in the request is narrowed."
+    },
+    {
+     "id": "T126-approach",
+     "summary": "Done measured by a test: every fillet spans at most 3 ft at 1 ft/px (red without the fix) and fillets still differ by over 1.2x; lands with the record batch",
+     "class": "within",
+     "why": "Enforces the page's range and the existing 'each leg drawn on its own' constraint; no new behavior or scope."
     }
    ]
   }
