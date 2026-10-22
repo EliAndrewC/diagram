@@ -1146,6 +1146,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-22",
    "declared": "spec-fidelity"
+  },
+  "## T128 - record answers found in another clone": {
+   "sha256": "c7160187ce83680fd8be5feb144fe3c113799162304e938dbc5dbab410781a4b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T128 Approach (checklist part A)": {
+   "sha256": "b045ccb4556402387f6acde14bddae053b5cc84141d844b40894199d8789168e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T128 Decisions": {
+   "sha256": "ba95c1127d52edf76682a9f79da3a23e8bcea3ed53de4282041cdc6c188f7ce6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "## T123 - a wrapped one-line claim read whole; 0035 says a way crosses only at a crossing place": {
+   "sha256": "34ecc08846bbc8acc77a5f2b53e607c172fcee86342f52b91b20f29992c63cda",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T123 Approach (checklist part A)": {
+   "sha256": "24da63f882def6ee90845485dd80c10f3afcada1ca2155534612163085631ee7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
+  },
+  "### T123 Decisions": {
+   "sha256": "0f0f93bc3eb90e1383d43c2b40ff919c79b87ac8b2821f380dbb40095b268628",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4425,6 +4461,38 @@
      "summary": "the claims are amended to say walls; houses historically accurate (0081), other buildings labeled GUESS",
      "class": "within",
      "why": "Brings the claim text into line with the corrected measure. The GUESS label for non-house buildings is carried unchanged from the earlier CLEAR text and states an evidence level rather than excepting anything from what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-22",
+   "blocks": [
+    "## T123 - a wrapped one-line claim read whole; 0035 says a way crosses only at a crossing place",
+    "## T128 - record answers found in another clone",
+    "### T123 Approach (checklist part A)",
+    "### T123 Decisions",
+    "### T128 Approach (checklist part A)",
+    "### T128 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D109",
+     "summary": "record_owed.unanswered adopts a record-check answer from a sibling clone's .git/record-checks at the unit's own fingerprint or reading, copying it into this clone's store (exit (c), adopt at the gate; not committing the store, not a sync command).",
+     "class": "within",
+     "why": "Tooling found while working the feature to completion (Amendments 7 and 9) and filed here per FR-002. It narrows nothing the GM asked: an answer keyed to the same words is the same answer, so no check is skipped for words that were not answered; other words stay owed, and the per-clone store is kept. It does not touch the claims work, the landing or the file-bar rules the request governs."
+    },
+    {
+     "id": "D110 (parser)",
+     "summary": "A line under a header-line claim that cannot be a claim (no ' - ') continues that claim at any indentation; _section_span and section_lines read a wrapped claim whole, rather than refusing the form at claims-owed.",
+     "class": "within",
+     "why": "Serves the claims tasks the request asks to be worked (FR-001, Amendments 7 and 9): a claim is judged on its whole text instead of a truncated account. It widens what is read, not what is checked, and narrows no requirement or GM instruction."
+    },
+    {
+     "id": "D110 (0035 sentence)",
+     "summary": "0035's drawing page states that a way crosses water only at a crossing place, written in page session 6, so the rule several claims cite is on the page.",
+     "class": "within",
+     "why": "Part of working the claims to completion (Amendment 7: follow the research); the source named is 0035 itself and the sentence states its rule rather than carving a case out of anything the GM asked. Historical accuracy of the sentence is the research ladder's, not this review's."
     }
    ]
   }
