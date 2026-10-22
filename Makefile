@@ -532,9 +532,10 @@ where-time:     ## [project] where a feature's time went, by task: the time by b
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/where_time.py" "$(F)" $(if $(SINCE),--since "$(SINCE)",) $(if $(filter tick,$(BY)),--by-tick,)
 
 set-down: export SET_DOWN_WHY = $(WHY)
-set-down:       ## [project] set a feature's work down, so a turn may end with tasks open (feature 385 T70): F=385 WHY="awaiting the GM on the cohort trend"
+set-down:       ## [project] set a feature's work down, so a turn may end with tasks open (feature 385 T70); refused while an open task's part B has no arbiter ruling since (405): F=385 WHY="awaiting the GM on the cohort trend" [SET_DOWN_OK="<reason>"]
 	@if [ -z "$(F)" ]; then printf 'make set-down: F=<feature> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/set-down.py" "$(F)"
+	$(if $(SET_DOWN_OK),$(LOGESCAPE) SET_DOWN_OK "$(SET_DOWN_OK)",@:)
+	@SET_DOWN_OK="$(SET_DOWN_OK)" python3 "$$(git rev-parse --show-toplevel)/scripts/set-down.py" "$(F)"
 
 found-list:     ## [project] a feature's open findings (found.jsonl), numbered - what is not yet filed as a task or settled (405 T29)   F=405
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/found.py" list --feature "$$(ls -d specs/$(F)-* | head -1)"

@@ -60,5 +60,19 @@ echo "7. a read error fails open, recorded"
 printf -- "- [ ] T03 x\n" > "$C/specs/385-x/tasks.md"; chmod 000 "$C/specs/385-x/tasks.md"
 [ "$(stop)" = 0 ] && grep -rq "read-error" "$GUARD_LOG_DIR" && ok "an unreadable tasks.md lets the turn end, logged" || no "fail open"
 
+echo "8. a part B owed with no arbiter ruling since: set-down refused, naming make arbiter-ask (feature 405, GM 2026-10-21)"
+chmod 644 "$C/specs/385-x/tasks.md"
+printf -- '- [ ] T26 the wood shed\n- [x] T103 the nub\n' > "$C/specs/385-x/tasks.md"
+printf '[{"feature": "385-x", "task": "T26", "trigger": "cohort@x: seed(s) 10 newly failing", "part": "B", "utc": "2026-10-21T19:28:05Z"}]\n' > "$G/approach-owed.json"
+( cd "$C" && SET_DOWN_WHY="the GM sees it first" python3 "$SETDOWN" 385 >/dev/null 2>"$T/err" ); rc=$?
+[ "$rc" = 2 ] && grep -q "make arbiter-ask SUBJECT=set-down-T26" "$T/err" && grep -q "more room" "$T/err" && ok "refused, naming the arbiter ask" || no "unruled set-down" "rc=$rc $(cat "$T/err")"
+( cd "$C" && SET_DOWN_OK="the usage cap wind-down" SET_DOWN_WHY="the cap is reached" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "the escape lets it through" || no "escape"
+printf '{"trigger": "ask:set-down-T26", "ruling": "continue", "utc": "2026-10-21T19:20:00Z"}\n' > "$C/specs/385-x/arbiter.jsonl"
+( cd "$C" && SET_DOWN_WHY="the GM sees it first" python3 "$SETDOWN" 385 >/dev/null 2>&1 ); [ $? = 2 ] && ok "a ruling from before the trigger answers nothing" || no "old ruling"
+printf '{"trigger": "ask:set-down-T26", "ruling": "continue", "utc": "2026-10-21T19:40:00Z"}\n' >> "$C/specs/385-x/arbiter.jsonl"
+( cd "$C" && SET_DOWN_WHY="the arbiter ruled it" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "ruled since: set down" || no "ruled set-down"
+printf -- '- [x] T26 the wood shed\n' > "$C/specs/385-x/tasks.md"; rm -f "$C/specs/385-x/arbiter.jsonl"
+( cd "$C" && SET_DOWN_WHY="nothing owed now" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "a ticked task's part B holds nothing" || no "ticked owed"
+
 echo "set-down-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

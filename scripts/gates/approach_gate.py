@@ -175,6 +175,39 @@ def _active(root: pathlib.Path) -> tuple[pathlib.Path | None, str]:
     return plan_gate.active_task(root)
 
 
+def _last_tick(root: pathlib.Path, d: pathlib.Path) -> float:
+    """When the feature last ticked a task (the newest commit naming a tick that touched its tasks.md), as epoch seconds; 0.0
+    where none or no git."""
+    out = subprocess.run(["git", "-C", str(root), "log", "-1", "--format=%ct", "--grep=ticked", "--", str(d / "tasks.md")],
+                         capture_output=True, text=True).stdout.strip()
+    return float(out) if out.isdigit() else 0.0
+
+
+def in_flight(root: pathlib.Path, d: pathlib.Path, active: str) -> list[str]:
+    """Every task a trigger charges: the active task, and each open task of the feature started (`task-starts.jsonl`) since its
+    last tick - a batch's tasks are worked together, and the work that resisted may be any of them.
+
+    WHY (feature 405, the GM 2026-10-21): batch 11 started T26 and then T103; the cohort T26's wood-shed rule failed charged
+    part B to T103 alone - the last task started - so B6 ("why not just make it bigger?") was answered about T103's nub, T26
+    was set down unasked, and more room between the farms, the route the checklist names, waited on the GM for nothing."""
+    tasks = (d / "tasks.md").read_text(encoding="utf-8") if (d / "tasks.md").is_file() else ""
+    since = _last_tick(root, d)
+    common = subprocess.run(["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-common-dir"],
+                            capture_output=True, text=True).stdout.strip()
+    path = pathlib.Path(common) / "task-starts.jsonl" if common else git_dir(root) / "task-starts.jsonl"
+    out = [active]
+    for raw in path.read_text(encoding="utf-8").splitlines() if path.is_file() else []:
+        try:
+            row = json.loads(raw)
+        except ValueError:
+            continue
+        t = str(row.get("task") or "")
+        if (row.get("feature") == d.name and t and t not in out and (parse_utc(str(row.get("utc"))) or 0.0) >= since
+                and re.search(rf"^- \[ \] {re.escape(t)}\b", tasks, re.M)):
+            out.append(t)
+    return out
+
+
 def _opted_in(root: pathlib.Path, d: pathlib.Path | None) -> bool:
     plan = d / "plan.md" if d is not None else None
     return plan is not None and plan.is_file() and checklist(root, plan.read_text(encoding="utf-8")) is not None
@@ -186,7 +219,7 @@ def ruled(root: pathlib.Path, trigger: str, now: str | None = None) -> str | Non
     d, task = _active(root)
     if d is None or not task or not _opted_in(root, d):
         return None
-    return owe(root, d.name, task, trigger, "B", now)
+    return "\n".join(owe(root, d.name, t, trigger, "B", now) for t in in_flight(root, d, task))
 
 
 def _on_main(root: pathlib.Path, commit: str) -> bool:
@@ -226,7 +259,8 @@ def cohort(root: pathlib.Path, now: str | None = None) -> str | None:
     d, task = _active(root)
     if not seeds or d is None or not task or not _opted_in(root, d):
         return None
-    return owe(root, d.name, task, f"cohort@{records[-1].get('utc')}: seed(s) {', '.join(map(str, seeds))} newly failing", "B", now)
+    trigger = f"cohort@{records[-1].get('utc')}: seed(s) {', '.join(map(str, seeds))} newly failing"
+    return "\n".join(owe(root, d.name, t, trigger, "B", now) for t in in_flight(root, d, task))
 
 
 def main(argv: list[str]) -> int:
