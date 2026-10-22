@@ -115,7 +115,7 @@ def fouled_segment(
     Research:
         no tread on a farmhouse - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
         off another household's garden - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line within `gap`, `WEB_FABRIC_GAP` (7 ft) unless the caller passes another
-        a knot's join beside a fence - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the knots step's second pass passes 3 ft (`WEB_CROP_GAP`'s value) for the page's 7 ft; the page does not yet record it - a known gap, carried to 405 T114
+        a knot's join beside a fence - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the knots step's second pass passes 3 ft (`WEB_CROP_GAP`'s value) for the page's 7 ft - the exception the page records, with its reason (405 T114)
         off another household's yard - UNRESEARCHED: the garden fence's gap (`gap`, 7 ft unless the caller passes another) held off a yard too; no page sets a gap from a yard
         no long leg through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `law.breaks_through`
         off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its own household's too

@@ -110,7 +110,7 @@ def build_polder(
       8 px column corridors carrying the 3.2 px lateral (a bang 浜 field ditch + spoil banks, ~2.4 m).
       A GAP IS ONLY AS WIDE AS WHAT RUNS IN IT (`split_gap`, GM 2026-07-24; research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html;
       `mosaic` at research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, and
-      `line_wander` at research/questions/0014-bunds-between-the-paddies-aze.drawing.html):
+      `line_wander` at research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html):
       `gap[1]` is the width of a
       DITCH corridor, so it belongs only on the module column lines, where a lateral actually runs. The
       lines INSIDE a bay - where a holding was split into side-by-side strips - carry no ditch, just a
@@ -134,8 +134,8 @@ def build_polder(
         parcel mix - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: most modules split into two or three strips, a few merged along the fall
         gaps - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a walking bund between rows and between strips, a ditch corridor between columns, by default 3 ft and 8 ft at the map's scale
         low rows wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: every low plot tinted - the two lowest rows, no merge straddling the band
-        module line bow - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each row and column line bowed up to `line_wander` 0.10 of the module, off the boundary lines
-        hand-piled outlines - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each parcel softened by `organic` (a fillet of 0.05 of the module, a bow of 0.02), each corner's legs drawn on their own from all but square to a broad sweep (`palette.organic_parcel`)
+        module line bow - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: each row and column line bowed up to `line_wander` 0.10 of the module, off the boundary lines
+        hand-piled outlines - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: each parcel softened by `organic` (a fillet of 0.05 of the module, a bow of 0.02), each corner's legs drawn on their own from all but square to a broad sweep (`palette.organic_parcel`)
         toe ends on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each toe end snapped onto the nearer trunk and run 3 ft on along its centerline, at the map's scale
         lattice unbent by default - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder takes `mosaic` 0, its surveyed grid unbroken into a mosaic; the dike-pond block passes its own mosaic, and every caller its fitted `edge_wander` (claimed at the hamlet's `_polder_candidate`)
         acreage reckoned - NONE: the cropped area reckoned at the map's scale (area x ftpx squared / 43560)
@@ -230,7 +230,7 @@ def _polder_lattice(
         edge wander - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the gently wavering line is a drawing convention; the whole block bent as one piece by a tilt and low-frequency sines, `edge_wander` of a module
         node jitter - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: interior bund nodes moved up to 6 px, the perimeter pinned
         dike-pond mosaic - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift of the interior lattice fading to nothing at the edge, `mosaic` of 0.32 module
-        each line wanders - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: every row and column line bowed on its own, up to `line_wander` of a module, off the boundary lines
+        each line wanders - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: every row and column line bowed on its own, up to `line_wander` of a module, off the boundary lines
         ring corridor - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the parcels inset so the ring canal runs inside the dike on every side
     """
     dx, dy = d_unit
@@ -372,7 +372,7 @@ def _polder_parcels(
         splits and merges - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: per `parcel_mix`, merges along the fall never across a column line
         split positions - UNRESEARCHED: one cut at 0.38-0.62 or two at 0.26-0.4 and 0.6-0.74, across or along the fall at even odds
         gap is what runs in it - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: the corridor gap on column lines, the walking-bund gap between strips of one module
-        hand-piled outlines - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each parcel softened by `organic_parcel`
+        hand-piled outlines - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: each parcel softened by `organic_parcel`
         low rows wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the two lowest rows FLOODED
     """
 

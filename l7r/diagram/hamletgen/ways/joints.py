@@ -451,7 +451,8 @@ def _joint_moved_back(
 
     Research:
         no zigzag at a joint - research/questions/0081-village-lanes.drawing.html: no two turns of more than 50 degrees within 40 ft
-        the mend a vertex back - UNRESEARCHED: the joint moved one vertex back; the page asks the mend and names none"""
+        the mend a vertex back - GUESS research/questions/0081-village-lanes.drawing.html: where a jog cannot be pulled straight within the
+            clearances, the meeting point moves back one bend along one of the two lanes (405 T70)"""
     i, ei, j, ej = joint
     old = [*x, *y[1:]]
     for nx, ny in moved_back(x, y):

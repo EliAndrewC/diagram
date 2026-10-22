@@ -838,13 +838,13 @@ def tapers_to_a_point(poly: Poly, end: float, min_deg: float, arm: float) -> boo
 # the four maps where the gate reports 7 - each refused by a guard
 # protecting another rule (see `_unjog`), and the backlog carried them (since closed; git history).
 _JOG_OFF_FT = 2.0
-"""Research: step offset - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a sideways hop of 2 ft or more"""
+"""Research: step offset - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a sideways hop of 2 ft or more"""
 _JOG_RUN_FT = 6.0
-"""Research: step runs - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: runs of 6 ft or more either side of the hop"""
+"""Research: step runs - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: runs of 6 ft or more either side of the hop"""
 _JOG_LINK_FT = 30.0
-"""Research: step or L-shape - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a hop over 30 ft is a limb of the plot, not a step"""
+"""Research: step or L-shape - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a hop over 30 ft is a limb of the plot, not a step"""
 _JOG_PARALLEL_DEG = 20.0
-"""Research: the run resumes - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the two runs within 20 deg of one heading"""
+"""Research: the run resumes - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: the two runs within 20 deg of one heading"""
 # AND THE HOP MUST BE ACROSS THE WALL, NOT ALONG IT. Without this the test fires on a gently CURVING
 # bund: sample a curve into ~30 px segments and every three of them read as a run, a link and a run
 # resuming near-parallel, with a perpendicular offset of a few feet purely from the bend. Measured
@@ -855,13 +855,13 @@ _JOG_PARALLEL_DEG = 20.0
 # needing to be tuned. (The two turns are opposite in sign by construction once the runs are
 # required to be near-parallel, so only the magnitude is tested.)
 _JOG_CORNER_DEG = 55.0
-"""Research: a step turns hard - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a 55 deg turn at each end of the hop makes a step; a gentler dogleg is a wall that bends"""
+"""Research: a step turns hard - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a 55 deg turn at each end of the hop makes a step; a gentler dogleg is a wall that bends"""
 
 
 def jog_steps(ring: Poly, g: float) -> int:
     """How many times `ring` steps sideways and carries on parallel to itself.
 
-    Research: sideways steps - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the count of jog vertices
+    Research: sideways steps - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: the count of jog vertices
     """
     return len(jog_vertices(ring, g))
 
@@ -877,7 +877,7 @@ def jog_vertices(ring: Poly, g: float) -> list[tuple[Pt, Pt]]:
     fabric legitimately carries would report a step on its own end wall - measured 2026-08-18 on the
     shipped Inashiro, 78 hits against 28 for the directed test, the extra 50 all end walls.
 
-    Research: a bund never steps sideways - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a run, a short hop across the wall, the run resuming the same way
+    Research: a bund never steps sideways - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a run, a short hop across the wall, the run resuming the same way
     """
     ring = dedup_ring(ring, 0.5)
     n = len(ring)

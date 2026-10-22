@@ -420,7 +420,7 @@ def settle_knots(s: Any) -> int:
     TWO PASSES (405 T107, D83): every knot is asked first with the fence gap as it stands (`WEB_FABRIC_GAP`, 0246's 7 ft, a
     convention), then the knots it leaves with the join 3 ft off another household's garden (`WEB_CROP_GAP`'s value, a figure
     this project chose) - where the convention and 0081's knot rule collide, the research rule wins and the convention
-    gives. The 3 ft is ours, a DEVIATION from 0246's 7 ft that the page does not yet record (405 T114). Seed 24 (T26's sheds in) left two tees 25.0 ft apart whose diagonal
+    gives. The 3 ft is ours, a DEVIATION from 0246's 7 ft, recorded on the page with its reason (405 T114). Seed 24 (T26's sheds in) left two tees 25.0 ft apart whose diagonal
     passed 5.7 ft off a neighbor's fence. One pass at 3 ft on every knot knotted seed 7 (an earlier gather admitted at 3 ft
     reshaped the web), so it is the second pass only. More room between the homesteads was tried first: two wider `grow_gap`s (+5 and
     +10 ft), within the band the spacing pass of 2026-10-22 attests (specs/405-engine-findings-from-385/spacing-research.md),
@@ -428,7 +428,7 @@ def settle_knots(s: Any) -> int:
 
     Research:
         lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point
-        a knot the fence gap leaves - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the page's 7 ft (a map drawing convention) asked first, then the knots it leaves with the join 3 ft off another household's garden; the page does not yet record the exception - a known gap, carried to 405 T114
+        a knot the fence gap leaves - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the page's 7 ft (a map drawing convention) asked first, then the knots it leaves with the join 3 ft off another household's garden - the exception the page records, with its reason (two ways joined at one point, 0081; lots that abut closely) (405 T114)
         a lane with no width judged as a footpath - research/questions/0081-village-lanes.drawing.html: a lane with no recorded width is judged at the footpath's 3 ft"""
     from .settle import Lawful, apply_pieces  # bound here: `settle` names this step in its STEPS
     from .tree import set_corridor

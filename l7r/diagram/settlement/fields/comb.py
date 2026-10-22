@@ -200,8 +200,8 @@ class CombMixin:
         side and untouched on the other, and no two crossings on a map carry the same mark.
 
         Research:
-            junction pile size - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: about 5 ft of earth, floored at the drawn aze
-            pile by quadrant - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a fillet per corner, legs 0.5-2x, a quarter of corners left bare"""
+            junction pile size - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: about 5 ft of earth, floored at the drawn aze
+            pile by quadrant - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a fillet per corner, legs 0.5-2x, a quarter of corners left bare"""
         from l7r.diagram.waterfields import AZE, aze_w
 
         cells: dict[tuple[int, int], list[list[tuple[float, float] | list[tuple[int, int]]]]] = {}

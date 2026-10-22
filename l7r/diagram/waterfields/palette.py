@@ -141,8 +141,8 @@ def organic_parcel(
     must leave a positive gap given the inset the caller applied, or the drawn bunds would touch.
 
     Research:
-        corners rounded - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each corner filleted with its own reach on each leg, from all but square to a broad sweep, the arc roughened
-        edges wander - research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each straight run offset by eye, capped at `bow` of its length and a tenth of it
+        corners rounded - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: each corner filleted with its own reach on each leg, from all but square to a broad sweep, the arc roughened
+        edges wander - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html, research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each straight run offset by eye, capped at `bow` of its length and a tenth of it
     """
     n = len(poly)
     if n < 3:

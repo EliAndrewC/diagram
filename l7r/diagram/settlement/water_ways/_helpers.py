@@ -98,7 +98,7 @@ def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, min_len: float = 
 
     Research:
         end pulled back to what it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the end nearest the last house it serves (its dooryard, `near`), else the shortest end still reaching a way or the field
-        no trim floor - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back as far as the last house it serves, held only at a junction; a lane reaching nothing at all is left whole (no house to pull it back to)
+        no trim floor - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back as far as the last house it serves, held only at a junction; a lane reaching nothing at all is left whole here (no house to pull it back to) - not drawn so: the page draws no lane that serves nothing, and `tidy_lane_ends` and the settle's `settle_dangling` drop it (405 T15)
     """
     # `min_len` is the one floor, the one a junction sets - see `_junction_floor`: a lane may not be trimmed past a way that
     # ties into it, whatever fraction of its length that leaves

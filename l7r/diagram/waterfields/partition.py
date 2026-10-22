@@ -189,8 +189,8 @@ class Sectors:
         Research:
             row spacing - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: rows a random `row_step` apart down the fall, the design cell's depth
             column count - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: one column a plot width at the sector's widest
-            row wander - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each row bund drifts downhill by up to 0.13 of a row step, fading to nothing at the first and last rows
-            column wobble - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each column line bows along the contour by up to 5 px on its own phase
+            row wander - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: each row bund drifts downhill by up to 0.13 of a row step, fading to nothing at the first and last rows
+            column wobble - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: each column line bows along the contour by up to 5 px on its own phase
             lattice, not patchwork - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: every sector cut as
                 a warped lattice of row bunds crossing column bunds
             no jori grid on the old plains - DEVIATION research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:

@@ -73,7 +73,7 @@ MAX_STEPS = 0
 """A STAIRCASE is any sideways step on a ring (feature 328: 0014's drawing page, "never step sideways"; a single step was
 allowed until then as one awkward corner where a scrap had exactly one home - `test_a_bund_does_not_build_a_flight_of_steps`).
 
-Research: sideways steps - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: no ring keeps a sideways step
+Research: sideways steps - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: no ring keeps a sideways step
 """
 
 STROKE_SAMPLE_PX = 3.0
@@ -213,7 +213,7 @@ def staircase(ring: Sequence[Sequence[float]], g: float) -> bool:
 
     `g` is the engine's grain, `2 / ftpx` - the same conversion `jog_vertices` documents.
 
-    Research: staircase - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: more than MAX_STEPS sideways steps on a ring
+    Research: staircase - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: more than MAX_STEPS sideways steps on a ring
     """
     return len(jog_vertices(_pts(ring), g)) > MAX_STEPS
 

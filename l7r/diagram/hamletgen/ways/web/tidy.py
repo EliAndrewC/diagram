@@ -90,7 +90,9 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
     Research:
         lane end reaches something - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to a way, a house or the bund
         end carried on to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html
-        lane serving nothing dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: unless it is the only link in the web
+        lane serving nothing dropped - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane, or a stretch of
+            one, that serves nothing is not drawn (the page's GUESS, on Mencius 14.21 and the Tang Code art. 404) - unless it is the only link in
+            the web, which serves the ways it joins (405 T15)
         a tail kept as a house's only way - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: never for a household reached across a neighbor's land, owed none (`geom.lane_houses`)
         connector at the gate kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the track out starts on the cluster's edge with every household's way laid to it, so a connector starting at the way out's gate is never trimmed
         shortest lane kept - UNRESEARCHED: a trim leaving a lane under _WEB_MIN_FT, 30 ft, is not applied, or the lane is dropped

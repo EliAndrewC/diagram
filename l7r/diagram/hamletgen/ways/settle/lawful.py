@@ -56,7 +56,7 @@ class Lawful:
 
         Research:
             settle plumbing - NONE
-            the fence gap - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from a lane's middle to another household's garden fence, a map drawing convention; only the knots step's second pass lowers it (405 T107, a DEVIATION carried to T114)"""
+            the fence gap - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from a lane's middle to another household's garden fence, a map drawing convention; only the knots step's second pass lowers it (405 T107, a DEVIATION the page records, T114)"""
         self.M = s.M
         self.tree = tree
         self.wet = flooded_ground(s.M)
@@ -70,7 +70,7 @@ class Lawful:
         # household's yards and gardens are exempt from the fence gap (`theirs`); None - every other run - exempts none
         self.owner: Pt | None = None
         # ...AND HOW FAR IT KEEPS OFF ANOTHER HOUSEHOLD'S GARDEN (405 T107): 0246's 7 ft, which only the knots step's second pass
-        # lowers to 3 ft, this project's own deviation (`knots.settle_knots`, carried to T114)
+        # lowers to 3 ft, this project's own deviation, recorded on 0246 (`knots.settle_knots`, 405 T114)
         self.fence_gap = WEB_FABRIC_GAP
 
     @property

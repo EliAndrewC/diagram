@@ -196,7 +196,7 @@ class Fabric:
     def split(self, i: int) -> None:
         """A staircase split on its hops by the repair's own `_split_steps` (W23).
 
-        Research: staircase split - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a bund that steps sideways is carried straight on instead
+        Research: staircase split - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a bund that steps sideways is carried straight on instead
         """
         from .seams.close import _split_steps
 

@@ -83,7 +83,7 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
     any neighbor.
 
     Research:
-        staircase split on its hop - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a bund never steps sideways and carries on, so the step is carried straight across
+        staircase split on its hop - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a bund never steps sideways and carries on, so the step is carried straight across
         scrap welded to its neighbor - research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: into the basin it shares the most bund with
         scrap left bare - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: what no weld makes lawful stays bare, the fan floor drawn under it
         judged at the placer's lines - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a ring it keeps, split or welded, holds `held_faults` - the gate's rules and the placer's 25 deg, quarter cell and arrowhead under them
@@ -212,7 +212,7 @@ def _split_steps(poly: Polygon, ctx: RingContext) -> list[Polygon]:
     basin, not a tread shaved off it. A ring none of whose hops can be cut is handed back whole, and the caller judges it
     as it stands - a staircase goes to the scrap path, never onto the map.
 
-    Research: no sideways step - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: cut until no part steps more than MAX_STEPS times, the cut that makes basins not scraps
+    Research: no sideways step - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: cut until no part steps more than MAX_STEPS times, the cut that makes basins not scraps
     """
     g = float(ctx.g or 0.0)
     done: list[Polygon] = []
@@ -237,7 +237,7 @@ def _cut_on_hop(poly: Polygon, b: Pt, c: Pt) -> list[Polygon]:
     corner the basin's floor lies beyond: the knife starts there and runs on, in the hop's own direction, to where it
     first leaves the basin. That is the wall the step should have been - carried straight on to the junction.
 
-    Research: wall carried on to the junction - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the hop continued straight across the basin to the far bund
+    Research: wall carried on to the junction - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: the hop continued straight across the basin to the far bund
     """
     from shapely.geometry import LineString as _Line
     from shapely.geometry import Point as _Point
