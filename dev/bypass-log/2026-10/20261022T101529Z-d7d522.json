@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-22T10:15:29Z",
+  "target": "claims-gate",
+  "commit": "2f5360fc2",
+  "why": "CLAIMS_OK: the own-garden claims are DRIFTED only until 0246 records the departure (405 T114); the house-as-own-owner claim's 0081 3 ft question is carried to 405 T119"
+}
