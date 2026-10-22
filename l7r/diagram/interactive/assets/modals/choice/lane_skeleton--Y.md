@@ -15,8 +15,8 @@ Guesses:
 - How often each shape comes up: no source counts them.
 
 Depiction: The map seats the houses first and lays the Y after, fitted to where they stand: two arms joining in a stem that runs on through
-the cluster; the households' own ways join it. Each arm is drawn as a track of
-bare earth a little wider than a footpath - a width of the map's choosing, since how wide a village lane ran is not recorded - pulled
+the cluster, joining the households' own ways in one network. Each arm is drawn as a track of
+bare earth a little wider than a footpath - a width of the map's choosing, since no page we read measures a lane in a wet-rice village - pulled
 as straight as the plots allow.
 
 Name: A Y of lanes

@@ -15,10 +15,10 @@ Guesses:
 
 Depiction: Only a settlement with water running along its cluster takes a lane along the water. The map lays it down the
 water's side of the cluster as a track of bare earth a little wider than a footpath - a width of the map's choosing, since
-no lane in a wet-rice village was measured - pulled as straight as the plots allow.
+no page we read measures a lane in a wet-rice village - pulled as straight as the plots allow.
 
 Name: A lane along the water
 Covers: `meta.lane_skeleton = waterside`
 Sources: shizen-teibo-jawiki, shuson-jawiki, sonraku-jawiki, wang-2023-sw-zhejiang, kotobank-suiun, jarimichi-jawiki, ishidatami-jawiki, lowtech-chinese-wheelbarrow, mlit-tokaido-michi
 Entry: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0081-village-lanes.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0081-village-lanes.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html

@@ -1244,7 +1244,8 @@
  "dooryard": {
   "def": "The yard at a farmhouse's door - the household's own ground beside the house.",
   "variants": [
-   "dooryard"
+   "dooryard",
+   "dooryards"
   ]
  },
  "doshin": {
@@ -4621,15 +4622,6 @@
    "hot-shoeing",
    "hot shoeing",
    "hot-shoe"
-  ]
- },
- "isohyet": {
-  "def": "A line on a map joining places of equal rainfall; an isotherm joins places of equal temperature.",
-  "variants": [
-   "isohyet",
-   "isohyets",
-   "isotherm",
-   "isotherms"
   ]
  },
  "Sue ware": {
@@ -17470,5 +17462,12 @@
    "Hong merchant",
    "Hong merchants"
   ]
+ },
+ "Mencius": {
+  "def": "A Chinese Confucian philosopher of the 4th century BCE, and the book of his sayings, one of the Confucian classics.",
+  "variants": [
+   "Mencius"
+  ],
+  "cased": true
  }
 }

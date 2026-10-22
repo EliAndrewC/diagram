@@ -856,6 +856,7 @@ donggusup	donggusup
 dongjing	Dongjing
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
+dooryards	dooryard
 doro-aze	doro-aze
 dorui	dorui
 doshin	doshin
@@ -1889,10 +1890,6 @@ ishikawa method	Ishikawa method
 ishikawa-method	Ishikawa method
 island field	island field
 island fields	island field
-isohyet	isohyet
-isohyets	isohyet
-isotherm	isohyet
-isotherms	isohyet
 ita-bune	ita-bune
 itabashi	itabashi
 itami	Itami
@@ -2580,6 +2577,7 @@ memorialized	memorial
 memorials	memorial
 men-hai	taiping-gang
 menbansho	menbansho
+mencius	Mencius
 mengxi bitan	Mengxi Bitan
 mere	mere
 meres	mere
