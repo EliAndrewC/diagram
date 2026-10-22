@@ -46,3 +46,8 @@ China village surveys, the Tonami 小島 sanson PDFs.
 | 28 + 2 ft | the reference map Inashiro refused (a farmhouse no way came within 80 ft of) | stopped at the reference |
 
 Wider spacing made the cohort worse, not better: the band and canvas the seats are dealt over do not grow with the gap.
+| 23 + 2 ft, the seating band +5 ft too (room, not packing - the round arbiter's ruling on ask:set-down-T26) | 8, 18, 20, 36, 41, 47 (seed 10 cleared) | `dev/cohort-log/20261022T045917Z-*` |
+
+The first two widths dealt the same seats into the same band, so they measured packing (the round arbiter, ask:set-down-T26);
+the third grew the band with the gap, and failed the same six seeds - room does not settle T26's knots on these seeds.
+
