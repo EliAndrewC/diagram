@@ -451,26 +451,7 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 <!-- plan-archive: T119 to T119 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 
-## T128 - record answers found in another clone
-
-### T128 Approach (checklist part A)
-
-1. **The goal, in the world.** A record check answered in one session clone answers the same words in every clone, so a page session's work merged into the landing clone lands without its checks run twice.
-2. **The constraints.** Answers are about words (`write_answer` keeps every fingerprint answered); the store lives in each clone's git directory (feature 375, plan D6); a tooling fix lands with a test red without it.
-3. **Where each comes from.** Measured 2026-10-22: the record batch's push refused 48 units page sessions 3 and 5 had answered in `diagram-backlog-pages` (copied across by hand). R for the process.
-4. **Do they describe the world here?** Yes: page sessions run in a second clone by design (feature 274).
-5. **The order.** `unanswered` asks this clone's store, then each sibling clone's under `.clones/`, and copies an answer at the same fingerprint (or reading) in.
-6. **The exits.** (a) commit the answer store - not taken: it is per-clone state by design; (b) a sync command to remember - not taken (tooling, not remembering); (c) adopt at the gate - taken.
-7. **The search smell.** None.
-8. **The budget.** 20 min.
-9. **Done, measured.** A test: another clone's answer at the same words is adopted and kept; other words are not; a tree outside the clones looks nowhere else (red without the fix); `make record-owed` clean in this clone.
-10. **Before moving a constant.** None moves.
-11. **Before fitting things into room.** n/a.
-
-### T128 Decisions
-
-- **D109** `record_owed.unanswered` adopts, from the sibling clones' `.git/record-checks`, an answer at the unit's own fingerprint or reading, copying it into this clone's store. Rendering: n/a (tooling).
-
+<!-- plan-archive: T128 to T128 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 ## T123 - a wrapped one-line claim read whole; 0035 says a way crosses only at a crossing place
 
 ### T123 Approach (checklist part A)
