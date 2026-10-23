@@ -754,13 +754,19 @@
    "declared": "spec-fidelity"
   },
   "### T07 Decisions": {
-   "sha256": "dce64b798978e371e448b87c7e888cc8c1f6d1a521381851fd9742e4ac662876",
+   "sha256": "25a75c47239a15c9f486c8ef461b38776730ad85ab11387ec9a543f5bbc03c13",
    "verdict": "CLEAR",
    "reviewed": "2026-10-23",
    "declared": "spec-fidelity"
   },
   "### T07 Approach (re-answered 2026-10-23T09:55Z)": {
    "sha256": "0c286266fedf3d9dd3f29bacb9742341299f188c9de12b3dc0c4983cdd58b160",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (re-answered 2026-10-23T10:04Z)": {
+   "sha256": "db1890a4c3fbb58e51bfe330dcd8f03d6d4cf85d7e7b3e0f4193c4cd32c52d9d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-23",
    "declared": "spec-fidelity"
@@ -4889,6 +4895,58 @@
      "summary": "The bend is asked in the first pass only (keeps the 7 ft fence gap) and no farther off than the leg is long (no hairpin).",
      "class": "within",
      "why": "Design limits on D126's own mechanism that keep the bent leg inside the page's gap; they restrict the fix, not the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-23",
+   "blocks": [
+    "### T07 Approach (re-answered 2026-10-23T10:04Z)",
+    "### T07 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D126",
+     "summary": "First pass: a matrix-refused one-lane gather's new last leg is bent through a waypoint 10-40 ft off its middle, either side, nearest first; each bend judged and written where the matrix admits; otherwise refused as today.",
+     "class": "within",
+     "why": "Text unchanged from the version ruled CLEAR. It carries out amendment 10 ('solve the knots problem inside 405') by 0081's rule (a way the mapped ground blocks is drawn as walked, round the grove). The offsets are marked UNRESEARCHED, and the bend keeps the 7 ft gap. That adds to what the engine can do and drops nothing the GM asked for."
+    },
+    {
+     "id": "D128",
+     "summary": "Second pass (the 3 ft join gap) applies only where every moved lane AND every lane at a moved end's old or new node (tee lanes too) is a household's way (knots.households_only); every other knot keeps 7 ft.",
+     "class": "within",
+     "why": "The changed decision. It tightens an accepted deviation from 0246 back to the page's own case ('two households' way ends a few feet apart and unjoined'). Following the research is the GM's standing instruction (amendment 7). The tightening is within the request because it leaves no knot standing: measured 2026-10-23 with make cohort N=48 it scores 54/54, and seed 57 passes, so the knots problem amendment 10 asks to have solved is not given up to get it."
+    },
+    {
+     "id": "D127",
+     "summary": "T07's carried claim rows (settle.py::theirs, _clear_link's re-check, Lawful.fault's 15 vs 20 degrees) go to T127; T101 keeps the 20 degrees.",
+     "class": "within",
+     "why": "Text unchanged from the version ruled CLEAR. The rows stay in 405, in T127, which amendment 10 and D122 order last. Nothing leaves the feature."
+    },
+    {
+     "id": "A-cap",
+     "summary": "Approach 3: a bend's offset is never larger than the leg is long (a hairpin otherwise).",
+     "class": "within",
+     "why": "A bound on the bend search that D126 does not state. It narrows a design choice the plan itself made (the offsets are UNRESEARCHED), not anything in the GM's request or the spec. It is consistent with 0081's 'walker goes round', since a walker does not hairpin. The author should add it to D126's text so the decision and the approach agree. That is a drafting note and does not change the ruling."
+    },
+    {
+     "id": "A-3a",
+     "summary": "The side-by-side merge with its fixed REACH (cited as 'D17, saved') is not built in T07; seed 57's knot is measured as two household ways whose one admitted gather the matrix refuses.",
+     "class": "within",
+     "why": "Not building a mechanism that the measured knot does not need takes nothing out of 'solve the knots problem inside 405', which is feature-scoped. The ruling rests on the cohort measurement (54/54 on 2026-10-23, seed 57 passing), which shows the knots are solved without the merge. It does not rest on 'not seed 57's case' alone. Citation defect: the bundle's spec-cited.md resolves D17 to T133's gencache coverage-hash decision, which has nothing to do with the merge, so where the merge is 'saved' cannot be checked from inside the bundle. The author should correct the id. It does not change the ruling."
+    },
+    {
+     "id": "A-3b",
+     "summary": "Seed 49's refusals (last_resort.refuse_unreached) are kept: the generator's every-house-reached contract (feature 287) is not loosened, and seed 49 is not T07's measure.",
+     "class": "within",
+     "why": "This keeps an existing contract rather than carving out an exception to the request. Seed 49 is not dropped from the feature, only from T07's measure, and the knots family is measured solved at 54/54 without loosening the contract. Loosening it would itself be unrequested behavior."
+    },
+    {
+     "id": "A-3c",
+     "summary": "needle_loops / needle_joins and the 20 degree needle (a drawing convention of 0081's drawing page) are kept as they are.",
+     "class": "within",
+     "why": "Leaving existing predicates alone excepts nothing from the request. The 20 degree question is in T127 by D127, so it stays in the feature."
     }
    ]
   }

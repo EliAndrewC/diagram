@@ -25181,6 +25181,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/knots.py::_BEND_OFFSETS_FT#the bend's offsets": {
+  "body": "cf9352150864401f",
+  "claim": "the bend's offsets - UNRESEARCHED: 0081 has the walker go round what stands, not how far; 10 to 40 ft, a copse's lane buffer and more",
+  "code": "37cfd13f102ee76e",
+  "core": "46f542ebe4efdf10",
+  "date": "2026-10-23",
+  "note": "0081 says the walker goes round but gives no distance; UNRESEARCHED is right",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::_KNOT_MARGIN#a knot's reach": {
   "body": "061d9b8289664d15",
   "claim": "a knot's reach - village-lanes.drawing: the page's own 25 ft, no margin past it",
@@ -25267,6 +25278,78 @@
   "research": "348d3cab06271e76",
   "rests": [
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::bent_round#how far off": {
+  "body": "e658e84627a4fb07",
+  "claim": "how far off - UNRESEARCHED: the waypoint 10 to 40 ft off the leg's middle (`_BEND_OFFSETS_FT`)",
+  "code": "6dd1a78a75c1766e",
+  "core": "ee13d4dad8fcd04a",
+  "date": "2026-10-23",
+  "note": "neither page gives a detour's offset; §26 says only that the walker goes round",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::bent_round#never farther off than the leg is long": {
+  "body": "e658e84627a4fb07",
+  "claim": "never farther off than the leg is long - village-lanes.drawing: a hairpin is refused (the drawing page's 140 degrees, a drawing convention); a waypoint no farther off than its leg is long turns at most 127 degrees",
+  "code": "e1ccdaaca93da3e0",
+  "core": "ee13d4dad8fcd04a",
+  "date": "2026-10-23",
+  "note": "`o <= span` holds the turn at the midpoint waypoint to at most 180 - 2*atan(0.5) = 126.9 degrees, under the page's 140-degree hairpin, which the page calls a drawing convention",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::bent_round#round a grove, not through it": {
+  "body": "e658e84627a4fb07",
+  "claim": "round a grove, not through it - village-lanes.drawing: where a grove stands across the straighter way, the walker goes round it",
+  "code": "d85486bbadc05a3b",
+  "core": "ee13d4dad8fcd04a",
+  "date": "2026-10-23",
+  "note": "a grove is named among what the walker goes round",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:9b3232646d7ce694"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::bent_round#the bend's form": {
+  "body": "e658e84627a4fb07",
+  "claim": "the bend's form - UNRESEARCHED: one waypoint off the leg's middle, either side, nearest first - the smallest detour tried first, each asked of the gather's judge (its angle rules read as open ground, `forced.py`)",
+  "code": "1c4c9b1f391e7ea5",
+  "core": "ee13d4dad8fcd04a",
+  "date": "2026-10-23",
+  "note": "one waypoint, smallest detour first, fits \"as few turns as the plots allow\"; nothing in the pages fixes how a forced detour is shaped",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::bent_round#the leg bent round what stands": {
+  "body": "e658e84627a4fb07",
+  "claim": "the leg bent round what stands - village-lanes.drawing: a turn whose straighter way the mapped ground blocks is drawn as walked (the GM 2026-10-17)",
+  "code": "d4d8af71a6028ab8",
+  "core": "ee13d4dad8fcd04a",
+  "date": "2026-10-23",
+  "note": "a leg the mapped ground blocks is bent round it and drawn as walked",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:9b3232646d7ce694",
+   "0081-village-lanes.drawing.html:eac54e81463e9673"
   ],
   "verdict": "IN-STEP"
  },
@@ -25362,6 +25445,23 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0081-village-lanes.drawing.html:9b3232646d7ce694"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::households_only#households' ways only": {
+  "body": "03137e1cfc163af3",
+  "claim": "households' ways only - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the 3 ft join is for two households' way ends a few feet apart and unjoined",
+  "code": "9f8c8e19d21faeb0",
+  "core": "1e422438e6f7d7dc",
+  "date": "2026-10-23",
+  "note": "refuses any moved lane that is not ACCESS_ROLE, and any non-household lane within 1 ft (the joint tolerance) of a moved end's old or new point, so the 3 ft join is only ever between two households' ways",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
   ],
   "verdict": "IN-STEP"
  },
@@ -25488,12 +25588,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot the fence gap leaves": {
-  "body": "468961cdeacf5f3d",
-  "claim": "a knot the fence gap leaves - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: the page's 7 ft (a map drawing convention) asked first, then the knots it leaves with the join 3 ft off another household's garden - the exception the page records, with its reason (two ways joined at one point, 0081; lots that abut closely) (405 T114)",
-  "code": "b3a63f9e1b503808",
-  "core": "448a58160bfacbc9",
-  "date": "2026-10-22",
-  "note": "the second pass (`for gap in (WEB_FABRIC_GAP, WEB_CROP_GAP)`) lowers the fence gap to 3 ft for every knot `next_gather` finds, including back lanes, cross lanes and any other lane's end. §17 records the 3 ft only \"where the 7 ft would leave two households' way ends a few feet apart and unjoined\", and says a back lane and a cross lane \"keep the gap from every garden\". The second pass should be limited to joins of two households' ways, or the page should record the wider departure",
+  "body": "29437fbe90225ea2",
+  "claim": "a knot the fence gap leaves - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: the page's 7 ft (a map drawing convention) asked first, then the knots it leaves between two households' ways with the join 3 ft off another household's garden - the exception the page records, with its reason (two ways joined at one point, 0081; lots that abut closely) (405 T114)",
+  "code": "b98e90f34deca51d",
+  "core": "74bfa30b5cda7fc8",
+  "date": "2026-10-23",
+  "note": "the 7 ft pass runs first, then the 3 ft pass (WEB_CROP_GAP) for households' ways only. The page records this as one of its \"Two further DEVIATIONS\", with its reasons (two ways joined at one point; lots that abut closely)",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -25501,13 +25601,13 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a lane with no width judged as a footpath": {
   "body": "f32f894b7fe9f88a",
   "claim": "a lane with no width judged as a footpath - village-lanes.drawing: a lane with no recorded width is judged at the footpath's 3 ft",
-  "code": "32a9e4cfb560020c",
-  "core": "448a58160bfacbc9",
+  "code": "68ee63beb4236b2b",
+  "core": "74bfa30b5cda7fc8",
   "date": "2026-10-18",
   "note": "`lanes[i].get(\"w\") or 3.0` is the footpath's 3 ft, a drawing convention on the page",
   "pages": {
@@ -25518,22 +25618,23 @@
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-23",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#lane ends gathered": {
-  "body": "468961cdeacf5f3d",
+  "body": "29437fbe90225ea2",
   "claim": "lane ends gathered - village-lanes.drawing: ends within 25 ft are joined at a single point",
-  "code": "a4ff57aa33ac4ff2",
-  "core": "448a58160bfacbc9",
-  "date": "2026-10-22",
-  "note": "every knot gathered at one node under the lane law",
+  "code": "7a60be022a2f4a07",
+  "core": "74bfa30b5cda7fc8",
+  "date": "2026-10-23",
+  "note": "knots within 25 ft are gathered by next_gather. The new bent leg still joins at the node, and the gather's judge still checks it",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
-   "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
+   "0081-village-lanes.drawing.html:9b3232646d7ce694"
   ],
   "verdict": "IN-STEP"
  },
