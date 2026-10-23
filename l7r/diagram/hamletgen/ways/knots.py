@@ -23,9 +23,9 @@ from l7r.diagram.settlement import seg_closest, seg_dist
 from l7r.diagram.settlement.rolling.gap_ways import KNOT_MARGIN
 
 from ..consts import WEB_CROP_GAP, WEB_FABRIC_GAP, WEB_SHADOW_FT, Poly, Pt
-from .geom import polyline_len
 from .corridors import ACCESS_ROLE, FIELD_ROLE, TARGET_ROLE
 from .forced import ground
+from .geom import polyline_len
 from .joints import _JOINT_FT
 from .smooth import _KNOT_FT
 
@@ -200,7 +200,7 @@ def teed_back(pts: Poly, end: int, other: Poly) -> list[Poly]:
 
     Research:
         a lane cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: "Two paths running side by side are drawn as one. A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other as a T"
-        beside, as the map reads it - CONVENTION: within `WEB_SHADOW_FT` (30 ft at fit zoom), the distance the shadow rule reads two ways together at"""
+        beside, as the map reads it - UNRESEARCHED: 0081 gives the angle but no distance; read within `WEB_SHADOW_FT` (30 ft), the distance the shadow rule reads two ways together at"""
     seq = list(pts) if end == -1 else list(pts)[::-1]
     legs = list(zip(other, other[1:], strict=False))
     if len(seq) < 3 or not legs:

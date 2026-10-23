@@ -25198,6 +25198,22 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/knots.py::_SIDE_BY_SIDE_DEG#two paths side by side": {
+  "body": "ff37d5270a1d798c",
+  "claim": "two paths side by side - village-lanes.drawing: \"A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other as a T\" (0081)",
+  "code": "61915d64a759c8b3",
+  "core": "212f34fd481113bf",
+  "date": "2026-10-23",
+  "note": "20 degrees, tested as strictly under, which matches \"at less than 20 degrees\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::_WHOLE_RULES#plumbing": {
   "code": "45f37584081d2cd5",
   "core": "881fa61431772e84",
@@ -25400,6 +25416,23 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#a lone end cut where it comes alongside": {
+  "body": "51a24b9ddd9222d1",
+  "claim": "a lone end cut where it comes alongside - village-lanes.drawing: \"the maps cut it where it comes alongside and let it meet the other as a T\" (`teed_back`, 405 T134), taken only where its T stands past the knot's reach and the web keeps no more knots",
+  "code": "4ee650506023fd4b",
+  "core": "df46f27645d299fa",
+  "date": "2026-10-23",
+  "note": "teed_back cut at the alongside run; the T must stand past the 25 ft reach and add no knot, keeping ends from nearly meeting",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#a lone end teed onto the other lane": {
   "body": "51a24b9ddd9222d1",
   "claim": "a lone end teed onto the other lane - village-lanes.drawing: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)",
@@ -25443,13 +25476,16 @@
   "triaged": "2026-10-23",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/knots.py::next_gather#which ways a teed-back end may meet (lanes at the target node, plus any lane running through its own node)": {
-  "code": "df46f27645d299fa",
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#which ways a lone end is cut back onto": {
+  "body": "51a24b9ddd9222d1",
+  "claim": "which ways a lone end is cut back onto - UNRESEARCHED: a lane at the other node, or the lane its own end stands on",
+  "code": "175dfc481cd281ab",
   "core": "df46f27645d299fa",
   "date": "2026-10-23",
-  "note": "which ways a teed-back end may meet (lanes at the target node, plus any lane running through its own node)",
+  "note": "the candidate set (lanes at the target node, or the lane the end stands on) is a search scope; the page is silent on it",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot the fence gap leaves": {
   "body": "468961cdeacf5f3d",
@@ -25501,13 +25537,32 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/knots.py::teed_back#how far back a lane's end may be cut (any earlier vertex, as far as its first)": {
-  "code": "af46008f5a28efd8",
-  "core": "af46008f5a28efd8",
+ "l7r/diagram/hamletgen/ways/knots.py::teed_back#a lane cut where it comes alongside": {
+  "body": "56c23597be525d3f",
+  "claim": "a lane cut where it comes alongside - village-lanes.drawing: \"Two paths running side by side are drawn as one. A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other as a T\"",
+  "code": "eda688fccaba97f1",
+  "core": "d4d44aa8ca7832bd",
   "date": "2026-10-23",
-  "note": "how far back a lane's end may be cut (any earlier vertex, as far as its first)",
+  "note": "drops the legs that run alongside under 20 degrees and tees from the vertex where that run starts, always shorter",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::teed_back#beside, as the map reads it": {
+  "body": "56c23597be525d3f",
+  "claim": "beside, as the map reads it - CONVENTION: within `WEB_SHADOW_FT` (30 ft at fit zoom), the distance the shadow rule reads two ways together at",
+  "code": "bc2acaba28c7ac40",
+  "core": "d4d44aa8ca7832bd",
+  "date": "2026-10-23",
+  "note": "`WEB_SHADOW_FT` (30 ft) decides whether a lane counts as side by side and so gets cut. That is a placement rule, not how something is shown. §25 gives the angle but no distance, so the label should be GUESS or UNRESEARCHED, or the drawing page should record the 30 ft",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/knots.py::teed_onto#lane ends gathered": {
   "body": "467529697edaf678",
@@ -28493,12 +28548,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#a foot re-aimed only onto lawful ground": {
-  "body": "d7addc485d684650",
+  "body": "e25bbb4e52d82055",
   "claim": "a foot re-aimed only onto lawful ground - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: the walker goes round a garden or yard, a way runs along the middle of the gaps",
-  "code": "c13f6a7ed267cc8b",
-  "core": "da43c401eed710d8",
-  "date": "2026-10-22",
-  "note": "on_lawful_ground decides whether the re-aim is taken",
+  "code": "3a66681f50b51612",
+  "core": "249bf159e5eef10d",
+  "date": "2026-10-23",
+  "note": "a household way's re-aimed foot must pass Lawful.on_lawful_ground, so it goes round yards and gardens",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
@@ -28506,16 +28561,18 @@
   "research": "bb1cc346ff176dc2",
   "rests": [
    "0081-village-lanes.drawing.html:9b3232646d7ce694",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#a household's way moved at its foot": {
-  "code": "1a0e96baaaa7db9a",
-  "core": "da43c401eed710d8",
-  "date": "2026-10-17",
-  "note": "only end -1 of an access-role way is edited, never its door end, and it is re-aimed to meet the other way as a T",
+  "body": "e25bbb4e52d82055",
+  "claim": "a household's way moved at its foot - village-lanes.drawing: \"cut at its far end, never at its door\"",
+  "code": "fbe24ab23441fb93",
+  "core": "249bf159e5eef10d",
+  "date": "2026-10-23",
+  "note": "a tree lane is edited only at end -1 of an access lane, never at its door end",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -28523,14 +28580,13 @@
   "rests": [
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#a lane ends at the dooryard": {
   "body": "d7addc485d684650",
   "claim": "a lane ends at the dooryard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end within 60 ft of the house or 12 ft of its built ground reaches it on any side; one that reaches nothing is trimmed to service (`settle_dangling`)",
-  "code": "591ed847fc85c2fc",
-  "core": "da43c401eed710d8",
+  "code": "352b9bff56a47385",
+  "core": "249bf159e5eef10d",
   "date": "2026-10-22",
   "note": "reached on any side; it defers to settle_dangling",
   "pages": {
@@ -28540,14 +28596,14 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-23",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#a lane with no width judged as a footpath": {
   "body": "d7addc485d684650",
   "claim": "a lane with no width judged as a footpath - village-lanes.drawing: a lane with no recorded width is judged at the footpath's 3 ft",
-  "code": "5557bb607605fc74",
-  "core": "da43c401eed710d8",
+  "code": "40177dc53603028c",
+  "core": "249bf159e5eef10d",
   "date": "2026-10-22",
   "note": "`w or 3.0`, the footpath's 3 ft",
   "pages": {
@@ -28557,32 +28613,32 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-23",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#lanes met end to end read as one": {
-  "body": "d7addc485d684650",
+  "body": "e25bbb4e52d82055",
   "claim": "lanes met end to end read as one - village-lanes.drawing: a needle, fold or hairpin re-laid as a T",
-  "code": "e471f083e4e54b09",
-  "core": "da43c401eed710d8",
-  "date": "2026-10-22",
-  "note": "needle, fold and hairpin re-aimed as a T; forced meetings left alone",
+  "code": "86c9e032d36250be",
+  "core": "249bf159e5eef10d",
+  "date": "2026-10-23",
+  "note": "needles, folds and hairpins are re-laid as a T through reaimed; the new joiner flag only adds §23's cut at the crossing",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:9b3232646d7ce694",
    "0081-village-lanes.drawing.html:b3423a58c3ff2774"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#no doubled tail": {
   "body": "d7addc485d684650",
   "claim": "no doubled tail - village-lanes.drawing: an end running back along another way under 20 degrees cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T101",
-  "code": "25d8a5cc6220db32",
-  "core": "da43c401eed710d8",
+  "code": "ff936482039a7224",
+  "core": "249bf159e5eef10d",
   "date": "2026-10-21",
   "note": "it cuts doubled tails at `_DOUBLED_DEG` = 15 where the page says \"less than 20 degrees\"; same fix as `law.doubled_tails` (20, or a recorded DEVIATION)",
   "pages": {
@@ -28593,23 +28649,23 @@
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-23",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#no fan of stubs at a door": {
-  "code": "ee460bcbc239a6c3",
-  "core": "da43c401eed710d8",
+  "code": "540ee40fffe84715",
+  "core": "249bf159e5eef10d",
   "date": "2026-10-17",
   "note": "the pages are silent",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-23",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#two paths side by side become one": {
-  "code": "9ee11380530fc308",
-  "core": "da43c401eed710d8",
+  "code": "97e1831ea3126c03",
+  "core": "249bf159e5eef10d",
   "date": "2026-10-17",
   "note": "a lane wandering over another at under 20 degrees is cut at the crossing and meets it as a T",
   "pages": {
@@ -28619,17 +28675,17 @@
   "rests": [
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-23",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#which of a folded pair is re-aimed": {
-  "code": "6257242e7d422f6e",
-  "core": "da43c401eed710d8",
+  "code": "e5b555e11750ba4d",
+  "core": "249bf159e5eef10d",
   "date": "2026-10-17",
   "note": "0081 says the arriving lane meets the other as a T, but not which of the two; the code prefers the shorter record that has a vertex to fall back to",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-23",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_fragments#debris": {
@@ -29025,6 +29081,22 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/settle/shapes.py::JOIN_ROLE#a lane laid only to join two others": {
+  "body": "65335f104baa1c0b",
+  "claim": "a lane laid only to join two others - village-lanes.drawing: \"A lane laid only to join two others ends where it first meets one\" (0081)",
+  "code": "b34dbac87b9e1f3b",
+  "core": "32b80eeca489b0fd",
+  "date": "2026-10-23",
+  "note": "the role names the orphan links, which are the lanes laid only to join two others",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::SETTLE_ROUNDS#settle plumbing": {
   "body": "e9f56db896016097",
   "claim": "settle plumbing - NONE",
@@ -29035,6 +29107,22 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/settle/shapes.py::_CROSSING_TAIL_FT#a tail beyond a crossing": {
+  "body": "d33597357856648e",
+  "claim": "a tail beyond a crossing - village-lanes.drawing: \"A tail of under 40 ft beyond a crossing is cut\" (0081)",
+  "code": "cbfc1543fee2c096",
+  "core": "4f6abb3ccbbe5fc1",
+  "date": "2026-10-23",
+  "note": "40 ft, tested as strictly under, which matches \"under 40 ft\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::_as_end#settle plumbing": {
@@ -29354,27 +29442,44 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::reaimed#a lane meets another as a T": {
-  "body": "d4cb86e90faa2b8d",
+  "body": "b2dffd81aa896a9c",
   "claim": "a lane meets another as a T - village-lanes.drawing: the end re-laid, never longer",
-  "code": "6074cda762095c4e",
-  "core": "4219396dcb71e1fa",
+  "code": "01d9ae93a44d69cd",
+  "core": "e677853a9b013d52",
   "date": "2026-10-23",
-  "note": "the end re-aimed at its nearest foot on the way, as a T",
+  "note": "the crossing cut and the re-aim from an earlier vertex are both shorter than the lane they replace, and both end as a T",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb",
    "0081-village-lanes.drawing.html:b3423a58c3ff2774"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/settle/shapes.py::reaimed#a tail beyond a crossing cut": {
+  "body": "b2dffd81aa896a9c",
+  "claim": "a tail beyond a crossing cut - village-lanes.drawing: \"A tail of under 40 ft beyond a crossing is cut. A lane laid only to join two others ends where it first meets one, its tail cut however long it is\"",
+  "code": "ee7381b33b590dbd",
+  "core": "e677853a9b013d52",
+  "date": "2026-10-23",
+  "note": "cut at the first crossing when the tail is under 40 ft, or at any length for a joiner",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::reaimed#an end within a hand's width ends there": {
   "body": "7a41196fde0176da",
   "claim": "an end within a hand's width ends there - UNRESEARCHED: a vertex within `_TOUCH_GAP` (4 ft) of the way ends the lane at it, unjoined by ink (405 T127)",
-  "code": "060655555ca5e89b",
-  "core": "4219396dcb71e1fa",
+  "code": "abdf97e9f714fe96",
+  "core": "e677853a9b013d52",
   "date": "2026-10-22",
   "note": "the bundle answers this decision: 0246 §16 \"joined where their treads meet\" and 0081 §74 \"joined at a single point\". The claim should cite those, not UNRESEARCHED. Under that citation the code does not match: `math.dist(b, f) <= _TOUCH_GAP` ends a 3 ft lane up to 4 ft off a 3 ft way's centerline, leaving about 1 ft of bare ground between the treads",
   "pages": {},

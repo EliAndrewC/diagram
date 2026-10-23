@@ -692,13 +692,13 @@
    "declared": "spec-fidelity"
   },
   "### T134 Decisions": {
-   "sha256": "9841c5781ade07697deff48d7f420cd49d7ba98fefa94c166f563f1b3c53c849",
+   "sha256": "6c635ca30b4861c20f47efd2edbc24843ef0d69b15315101ec77d89c834151ac",
    "verdict": "CLEAR",
    "reviewed": "2026-10-23",
    "declared": "spec-fidelity"
   },
   "### T134 Approach (re-answered 2026-10-23T05:28Z)": {
-   "sha256": "cc73baad0f1780528d96f25f4d69074aa220b1829d2a1b886b12bbc6ba636b81",
+   "sha256": "14fce10f325f2887c10eab713b6e4240c469fac97f00f0ed971a08720a6dfcb2",
    "verdict": "CLEAR",
    "reviewed": "2026-10-23",
    "declared": "spec-fidelity"
@@ -4733,6 +4733,46 @@
      "summary": "Done when: unit tests of both forms and the 40 ft and joiner cases red without them; seeds 10 and 717220 knot-free with T26's sheds; cohort N=48 on main 54/54 with the fresh block's rate, and the landing cohort.",
      "class": "within",
      "why": "Verification that the requested fix happens (enforcement of the request), not new scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-23",
+   "blocks": [
+    "### T134 Approach (re-answered 2026-10-23T05:28Z)",
+    "### T134 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D124",
+     "summary": "settle.shapes.reaimed cuts a lane at its FIRST crossing of the way it ends on when the tail is under 40 ft, or at any length for a JOIN_ROLE lane; settle_ends passes joiner for hairpin/needle/fold re-aims",
+     "class": "within",
+     "why": "Unchanged since its CLEAR. An implementation of the knots family the GM asked solved inside 405 (Amendment 10, FR-003a), following 0081 as written; narrows nothing the request or the spec asked for."
+    },
+    {
+     "id": "D125",
+     "summary": "knots.next_gather gains teed_back: a lone movable end cut where it comes alongside (within 20 degrees and within WEB_SHADOW_FT) the lane it meets and teed from there, under the existing judge; 'beside' relabeled from CONVENTION to UNRESEARCHED (0081 gives the angle, no distance)",
+     "class": "within",
+     "why": "The only change is the provenance label of the 'beside' distance: no behavior, scope or condition moved. UNRESEARCHED is the more honest label (0081 gives 20 degrees but no distance) and does not narrow the request. The form's guards (shorter result, tee beyond _KNOT_FT, no new knots, judge admits) bound a repair inside the knots work the GM asked for; they excuse no knot, and the done criterion still demands seeds 10 and 717220 knot-free and the cohort."
+    },
+    {
+     "id": "Approach-6",
+     "summary": "Exits: (a) widening the knot verdict to excuse a T on a lane's side not taken; (b),(c),(e) measured and refused; (d) the two forms taken",
+     "class": "within",
+     "why": "Unchanged. Declining to redefine the knot verdict keeps the request's 'solve the knots problem' at full strength rather than narrowing it."
+    },
+    {
+     "id": "Approach-3",
+     "summary": "Sources: R from 0081; O the gather's form order UNRESEARCHED; 'beside' at WEB_SHADOW_FT now UNRESEARCHED (page gives no distance)",
+     "class": "within",
+     "why": "Label-only change mirroring D125; provenance labeling, not a narrowing of the request."
+    },
+    {
+     "id": "Approach-10-11",
+     "summary": "No constant moves; nothing fitted into room",
+     "class": "within",
+     "why": "Unchanged; decides nothing the request or spec constrains."
     }
    ]
   }
