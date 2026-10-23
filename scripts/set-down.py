@@ -9,6 +9,13 @@ part B (`approach-owed.json`) and the round arbiter has ruled on nothing since, 
 arbiter-ask`: a process stop goes to the arbiter (CLAUDE.md), whose rules ask first whether more room, within the research,
 settles it. T26 was set down "for the GM to see T107 first" when the arbiter would have ruled the farms wider apart. The escape
 is `SET_DOWN_OK="<reason>"` (the usage cap's wind-down, say), logged by the make target.
+
+A GOAL WITH A USAGE CAP IS WORKED TO THE CAP (the GM 2026-10-23: *"I thought we had tooling to make it so that we didn't stop
+partway through a feature being done when I asked for it to be worked to completion"*). The run of 2026-10-23 set 405 down at
+69% of an armed 80% cap, "past the usage left", and ended its turn on a question at 1:53am with the GM asleep: the Stop hook
+let it, because this command took any reason. While this session's cap (`~/.claude/hooks/usage_cap.py`) is armed and the
+7-day figure is under it, the set-down is refused unless the round arbiter has ruled on a set-down ask since the feature's
+last task-start - a process stop goes to the arbiter, never to the GM.
 """
 
 from __future__ import annotations
@@ -55,6 +62,57 @@ def unruled(root: Path, feature: str) -> str | None:
             f"(escape: SET_DOWN_OK=\"<reason>\", e.g. the usage cap's wind-down)")
 
 
+def _since_start(root: Path, feature: str) -> str:
+    """The feature's last task-start stamp in this clone, '' where none."""
+    gd = Path(subprocess.run(["git", "-C", str(root), "rev-parse", "--absolute-git-dir"], capture_output=True, text=True).stdout.strip() or root / ".git")
+    last = ""
+    for raw in (gd / "task-starts.jsonl").read_text(encoding="utf-8").splitlines() if (gd / "task-starts.jsonl").is_file() else []:
+        try:
+            row = json.loads(raw)
+        except ValueError:
+            continue
+        if row.get("feature") == feature:
+            last = max(last, _utc(str(row.get("utc"))))
+    return last
+
+
+def under_cap(root: Path, feature: str) -> str | None:
+    """Why the feature may not be set down while this session's usage cap is armed and not reached, or None."""
+    sid = os.environ.get("CLAUDE_CODE_SESSION_ID", "")
+    cap_dir = Path(os.environ.get("USAGE_CAP_DIR") or Path.home() / ".claude" / "usage-cap")
+    safe = "".join(c if c.isalnum() or c in "_-" else "_" for c in sid)
+    try:
+        budget = json.loads((cap_dir / f"budget-{safe}.json").read_text(encoding="utf-8")) if sid else None
+    except (OSError, ValueError):
+        budget = None
+    if not isinstance(budget, dict) or not isinstance(budget.get("cap"), (int, float)):
+        return None
+    for name in (f"latest-{safe}.json", "latest.json"):
+        try:
+            pct = json.loads((cap_dir / name).read_text(encoding="utf-8")).get("seven_day")
+        except (OSError, ValueError):
+            continue
+        if isinstance(pct, (int, float)):
+            break
+    else:
+        return None
+    if pct >= budget["cap"]:
+        return None
+    since = _since_start(root, feature)
+    d = root / "specs" / feature
+    for raw in (d / "arbiter.jsonl").read_text(encoding="utf-8").splitlines() if (d / "arbiter.jsonl").is_file() else []:
+        try:
+            row = json.loads(raw)
+        except ValueError:
+            continue
+        if str(row.get("trigger", "")).startswith("ask:set-down") and _utc(str(row.get("utc"))) >= since:
+            return None
+    return (f"set-down: refused - the usage cap is armed at {budget['cap']:g}% and the 7-day figure is {pct:g}%: a goal with a cap "
+            f"is worked to the cap, and the GM may be asleep. Take the next open task; a stop for any other reason goes to the "
+            f"round arbiter: make arbiter-ask SUBJECT=set-down-{feature.split('-')[0]} WHY=\"<what blocks every open task, the "
+            f"routes measured>\", then make set-down again (escape: SET_DOWN_OK=\"<reason>\")")
+
+
 def main(argv: list[str]) -> int:
     why = os.environ.get("SET_DOWN_WHY", "").strip()
     if len(argv) != 1 or len(why.split()) < 2:
@@ -65,7 +123,7 @@ def main(argv: list[str]) -> int:
     if len(hits) != 1:
         print(f"set-down: no single specs/{argv[0]}* directory", file=sys.stderr)
         return 2
-    if not os.environ.get("SET_DOWN_OK", "").strip() and (why_not := unruled(root, hits[0])):
+    if not os.environ.get("SET_DOWN_OK", "").strip() and (why_not := unruled(root, hits[0]) or under_cap(root, hits[0])):
         print(why_not, file=sys.stderr)
         return 2
     gd = Path(subprocess.run(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True, check=True).stdout.strip())

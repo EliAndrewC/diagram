@@ -11,6 +11,7 @@ HOOK="$HERE/../../scripts/hooks/set-down-hooks.sh"
 SETDOWN="$HERE/../../scripts/set-down.py"
 T=$(mktemp -d)
 GUARD_LOG_DIR="$T/log"; export GUARD_LOG_DIR
+USAGE_CAP_DIR="$T/cap"; export USAGE_CAP_DIR  # never the real session's cap
 trap 'rm -rf "$T"' EXIT
 PASS=0; FAIL=0
 ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
@@ -73,6 +74,22 @@ printf '{"trigger": "ask:set-down-T26", "ruling": "continue", "utc": "2026-10-21
 ( cd "$C" && SET_DOWN_WHY="the arbiter ruled it" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "ruled since: set down" || no "ruled set-down"
 printf -- '- [x] T26 the wood shed\n' > "$C/specs/385-x/tasks.md"; rm -f "$C/specs/385-x/arbiter.jsonl"
 ( cd "$C" && SET_DOWN_WHY="nothing owed now" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "a ticked task's part B holds nothing" || no "ticked owed"
+
+echo "9. a usage cap armed and not reached: set-down refused until the arbiter rules on a set-down ask (the GM 2026-10-23)"
+mkdir -p "$T/cap"; export CLAUDE_CODE_SESSION_ID=s-1
+printf -- '- [ ] T07 the merge\n' > "$C/specs/385-x/tasks.md"; rm -f "$G/approach-owed.json"
+printf '{"cap": 80.0, "goal": "385 to completion"}' > "$T/cap/budget-s-1.json"
+printf '{"seven_day": 69}' > "$T/cap/latest-s-1.json"
+( cd "$C" && SET_DOWN_WHY="past the usage left" python3 "$SETDOWN" 385 >/dev/null 2>"$T/err" ); rc=$?
+[ "$rc" = 2 ] && grep -q "armed at 80% and the 7-day figure is 69%" "$T/err" && grep -q "make arbiter-ask SUBJECT=set-down-385" "$T/err" && ok "under the cap: refused, naming the arbiter ask" || no "under cap" "rc=$rc $(cat "$T/err")"
+printf '{"trigger": "ask:set-down-385", "ruling": "accept", "utc": "2026-10-18T22:30:00Z"}\n' > "$C/specs/385-x/arbiter.jsonl"
+( cd "$C" && SET_DOWN_WHY="past the usage left" python3 "$SETDOWN" 385 >/dev/null 2>&1 ); [ $? = 2 ] && ok "a ruling before the task-start answers nothing" || no "old cap ruling"
+printf '{"trigger": "ask:set-down-385", "ruling": "accept", "utc": "2026-10-19T01:00:00Z"}\n' >> "$C/specs/385-x/arbiter.jsonl"
+( cd "$C" && SET_DOWN_WHY="the arbiter ruled it" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "ruled since the task-start: set down" || no "cap ruled"
+rm -f "$C/specs/385-x/arbiter.jsonl"; printf '{"seven_day": 80}' > "$T/cap/latest-s-1.json"
+( cd "$C" && SET_DOWN_WHY="the cap is reached" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "at the cap: set down" || no "at cap"
+printf '{"seven_day": 50}' > "$T/cap/latest-s-1.json"; rm -f "$T/cap/budget-s-1.json"
+( cd "$C" && SET_DOWN_WHY="not armed here" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "no cap armed: set down" || no "unarmed"
 
 echo "set-down-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

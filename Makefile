@@ -532,7 +532,7 @@ where-time:     ## [project] where a feature's time went, by task: the time by b
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/where_time.py" "$(F)" $(if $(SINCE),--since "$(SINCE)",) $(if $(filter tick,$(BY)),--by-tick,)
 
 set-down: export SET_DOWN_WHY = $(WHY)
-set-down:       ## [project] set a feature's work down, so a turn may end with tasks open (feature 385 T70); refused while an open task's part B has no arbiter ruling since (405): F=385 WHY="awaiting the GM on the cohort trend" [SET_DOWN_OK="<reason>"]
+set-down:       ## [project] set a feature's work down, so a turn may end with tasks open (feature 385 T70); refused while an open task's part B has no arbiter ruling since (405), or while this session's usage cap is armed and not reached unless the arbiter ruled a set-down ask (GM 2026-10-23): F=385 WHY="awaiting the GM on the cohort trend" [SET_DOWN_OK="<reason>"]
 	@if [ -z "$(F)" ]; then printf 'make set-down: F=<feature> is required\n' >&2; exit 2; fi
 	$(if $(SET_DOWN_OK),$(LOGESCAPE) SET_DOWN_OK "$(SET_DOWN_OK)",@:)
 	@SET_DOWN_OK="$(SET_DOWN_OK)" python3 "$$(git rev-parse --show-toplevel)/scripts/set-down.py" "$(F)"
