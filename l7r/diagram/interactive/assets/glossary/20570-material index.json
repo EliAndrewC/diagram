@@ -4,5 +4,6 @@
  "variants": [
   "material index",
   "MI"
- ]
+ ],
+ "cased": true
 }

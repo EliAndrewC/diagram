@@ -4,5 +4,6 @@
  "variants": [
   "Mongol Yam",
   "Yam"
- ]
+ ],
+ "cased": true
 }
