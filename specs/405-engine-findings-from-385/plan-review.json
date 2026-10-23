@@ -678,6 +678,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-23",
    "declared": "spec-fidelity"
+  },
+  "## T134 - two knots the settle makes, mended where they are made (amendment 10)": {
+   "sha256": "6a1d43ff581cd3423447d5455ae9633ecd335ec35696cc2f5ad3b7ea7db5747a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T134 Approach (checklist part A)": {
+   "sha256": "8dc347ca6bfc570402e9548a7b44e1b8db08964bcbd984daf3877c2e59165eab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T134 Decisions": {
+   "sha256": "e36e4a968d02ea8420ef8fbe0b4104aa421722a28ea0ba7d8a5ebcba923e1f6b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4604,6 +4622,53 @@
      "summary": "Exit (b) read every existing form taken over (a) rewriting every plan to one form",
      "class": "within",
      "why": "Choice of implementation route for the same repair; leaves the plans as written and narrows nothing asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-23",
+   "blocks": [
+    "## T134 - two knots the settle makes, mended where they are made (amendment 10)",
+    "### T134 Approach (checklist part A)",
+    "### T134 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T134-order",
+     "summary": "Approach 5: nothing moves earlier; the re-aim acts inside settle_ends and the tee inside the gather (settle_knots), after the ways are drawn.",
+     "class": "within",
+     "why": "Mends the knot where it is made; serves amendment 10's 'solve the knots problem inside 405' and narrows nothing asked."
+    },
+    {
+     "id": "T134-exits",
+     "summary": "Approach 6: exit (a), widening the knot verdict to excuse a T on a lane's side, refused; (b), (c) and (e) measured and not taken; (d), the two forms, taken.",
+     "class": "within",
+     "why": "Refusing to redefine a knot out of existence is the faithful reading of 'solve the knots problem'; the rejected exits are design alternatives, not reductions of what was asked."
+    },
+    {
+     "id": "T134-constraints",
+     "summary": "Approach 2/7/10/11: 0081's 25 ft join, T and never-longer; lane law and web kept whole under the gather's judge; knots.py's no-slide rule honoured; every form strictly shortens a lane; no constant moves, nothing fitted into room.",
+     "class": "within",
+     "why": "Constraints carried from research and existing invariants; none narrows the request."
+    },
+    {
+     "id": "D124",
+     "summary": "settle.shapes.reaimed first cuts the lane where it FIRST crosses the way it ends on (crossing margin measured in feet, over a foot inside both legs) when it meets clean, else falls back to today's walk back from the last vertex; never longer.",
+     "class": "within",
+     "why": "A repair of a knot the settle itself makes (seed 10), filed under FR-002 as found work and amendment 10's knots mandate. The fallback decides which repair runs, not whether a knot is excused: exit (a) was refused, so no block changes what counts as a knot, and a knot the fallback leaves is still one the Done line (seeds 10 and 717220 knot-free) and FR-003a's knots family must clear."
+    },
+    {
+     "id": "D125",
+     "summary": "knots.next_gather gains a last form, teed_back: a lone movable end re-aimed from an earlier vertex (nearest end first) onto the lane it comes alongside, legs past it dropped, only where shorter, its tee beyond _KNOT_FT, no more knots in the web, and the judge admits it.",
+     "class": "within",
+     "why": "The guards stop the form from making the web worse (more knots, longer lanes, a broken lane law); they are not carve-outs from what the GM asked, and the Done line still requires seeds 10 and 717220 knot-free with a 54/54 cohort. Vertex order is a labeled GUESS on design, not scope."
+    },
+    {
+     "id": "T134-done",
+     "summary": "Approach 9: unit tests red without both forms; seeds 10 and 717220 knot-free with T26's sheds; make cohort N=48 54/54 and the landing cohort.",
+     "class": "within",
+     "why": "Verification that enforces the requested fix; it adds no unrequested scope."
     }
    ]
   }

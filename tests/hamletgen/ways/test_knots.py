@@ -239,6 +239,26 @@ def test_a_knot_neither_node_can_move_onto_is_teed_onto_the_other_lane() -> None
     assert kn.next_gather(lanes, lambda e: e == tee) == tee
 
 
+def test_a_lone_end_beside_a_way_is_teed_from_an_earlier_vertex_clear_of_the_knot() -> None:
+    """405 T134 (D125), fresh cohort seed 717220 with T26's sheds: a way ran 20 ft beside another and teed onto it 24 ft from
+    that way's end - its tee from the vertex before its end is where it already stands. It is teed from an earlier vertex,
+    the legs beside the way dropped, its tee past the knot's reach; never a form the judge refuses or one that adds a knot."""
+    lanes = [_ln((0.0, 0.0), (0.0, -500.0), connector=True), _ln((80.0, 0.0), (0.0, 0.0)), _ln((150.0, 30.0), (60.0, 20.0), (24.0, 20.0), (24.0, 0.0))]
+    assert kn.knots(lanes) == [(0, 4, 24.0)]
+    tee = {2: [(150.0, 30.0), (60.0, 20.0), (60.0, 0.0)]}
+    assert kn.next_gather(lanes, lambda e: e == tee) == tee
+    assert kn.next_gather(lanes, lambda e: False) is None
+
+
+def test_an_end_is_teed_back_from_each_earlier_vertex_never_longer() -> None:
+    """`teed_back`: each earlier vertex nearest the end first, either end, every form shorter than the lane it replaces."""
+    way = [(80.0, 0.0), (0.0, 0.0)]
+    run = [(150.0, 30.0), (60.0, 20.0), (24.0, 20.0), (24.0, 0.0)]
+    assert kn.teed_back(run, -1, way) == [[(150.0, 30.0), (60.0, 20.0), (60.0, 0.0)], [(150.0, 30.0), (80.0, 0.0)]]
+    assert kn.teed_back(run[::-1], 0, way) == [[(60.0, 0.0), (60.0, 20.0), (150.0, 30.0)], [(80.0, 0.0), (150.0, 30.0)]]
+    assert kn.teed_back([(0.0, 0.0), (10.0, 30.0), (0.0, 20.0)], -1, [(-5.0, 0.0), (5.0, 0.0)]) == [], "a vertex already on the way is no tee"
+
+
 def test_two_ends_a_house_parts_are_no_knot() -> None:
     """Feature 385 T01 (plan D4b): ends within the knot reach with a building between them are two paths either side of it,
     not a knot - on the manifest's ground; with no manifest the rule reads as before (cohort seed 24 under the wave 155

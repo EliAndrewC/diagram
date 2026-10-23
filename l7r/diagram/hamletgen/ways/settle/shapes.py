@@ -25,6 +25,7 @@ from ..fabric import _crosses_fabric, house_hit
 from ..fabric import lane_fabric as _fabric
 from ..forced import lazy_ground
 from ..geom import _TOUCH_GAP, lane_owner, polyline_len
+from ..joints import _JOINT_FT
 from ..squaring import (
     SQUARE_MARGIN_FT,
     _pts,
@@ -303,16 +304,46 @@ def _foot(q: Pt, tread: Poly) -> Pt:
 meets_clean = law.meets_clean
 
 
+def _crossing(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
+    """Where leg a-b crosses tread c-d more than `_JOINT_FT` (1 ft, two ends one point) inside both - measured in feet, where `geom._seg_cross` measures its
+    margin as a share of a segment (60 ft on a 3,000 ft track, which missed cohort seed 10's crossing 30 ft from the track's
+    head - 405 T134, D124).
+
+    Research: plumbing - NONE: segment geometry"""
+    r, q = (b[0] - a[0], b[1] - a[1]), (d[0] - c[0], d[1] - c[1])
+    den = r[0] * q[1] - r[1] * q[0]
+    if abs(den) < 1e-9:
+        return None
+    w = (c[0] - a[0], c[1] - a[1])
+    t, u = (w[0] * q[1] - w[1] * q[0]) / den, (w[0] * r[1] - w[1] * r[0]) / den
+    la, lc = math.hypot(*r), math.hypot(*q)
+    if _JOINT_FT < t * la < la - _JOINT_FT and _JOINT_FT < u * lc < lc - _JOINT_FT:
+        return (a[0] + t * r[0], a[1] + t * r[1])
+    return None
+
+
 def reaimed(seq: Poly, tread: Poly, connector: bool = False) -> Poly:
-    """`seq` (ending on the way `tread`) re-laid to meet it cleanly (`meets_clean`): from the last vertex before its end
+    """`seq` (ending on the way `tread`) re-laid to meet it cleanly (`meets_clean`): FIRST where it first crosses the way, cut
+    there - a T where the walker first reaches it (405 T134, D124: cohort seed 10 with T26's sheds, a link crossing the
+    track 30 ft from its head and hooking back to the head was teed from its last vertex 12 ft from the head, a knot);
+    otherwise from the last vertex before its end
     whose leg to its foot on the tread keeps the law, that leg - never longer than what it replaces, since a foot is the
     nearest point; a vertex already standing on the tread simply ends the lane there. With no such vertex the last leg is
     dropped.
 
     Research:
         a lane meets another as a T - research/questions/0081-village-lanes.drawing.html: the end re-laid, never longer
+        a lane meets the way where it first reaches it - research/questions/0081-village-lanes.drawing.html: the end re-laid as a T, never longer - a crossing before the end is that T
         an end within a hand's width ends there - UNRESEARCHED: a vertex within `_TOUCH_GAP` (4 ft) of the way ends the lane at it, unjoined
             by ink (405 T127)"""
+    # ...WHERE THE LANE FIRST REACHES THE WAY: a lane that crosses the way before its end is cut at that crossing
+    for k in range(len(seq) - 2):
+        x = next((c for u, v in zip(tread, tread[1:], strict=False) if (c := _crossing(seq[k], seq[k + 1], u, v)) is not None), None)
+        if x is not None:
+            cand = [*seq[: k + 1], x]
+            if math.dist(cand[-2], x) > 1e-6 and meets_clean(cand, tread, connector):
+                return cand
+            break
     for m in range(len(seq) - 2, -1, -1):
         b = seq[m]
         f = _foot(b, tread)

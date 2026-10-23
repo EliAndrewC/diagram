@@ -1,0 +1,26 @@
+diff --git a/l7r/diagram/hamletgen/ways/settle/stage.py b/l7r/diagram/hamletgen/ways/settle/stage.py
+index 5dc547019..9e5e57b98 100644
+--- a/l7r/diagram/hamletgen/ways/settle/stage.py
++++ b/l7r/diagram/hamletgen/ways/settle/stage.py
+@@ -82,9 +82,20 @@ def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
+     before = len(unreached_houses(s.M))
+     changed = dropped = done = 0
+     settled = False
++    import sys as _s0
++    from ..knots import lane_knots as _lk0
++    print('KNOTS-START', _lk0(s.M.get('lanes') or [], s.M), file=_s0.stderr)
+     while done < rounds and not settled:
+         done += 1
+-        n = sum(step(s) for step in STEPS)
++        n = 0
++        import sys as _s
++        from ..knots import lane_knots as _lk
++        for step in STEPS:
++            k0 = len(_lk(s.M.get("lanes") or [], s.M))
++            n += step(s)
++            k1 = len(_lk(s.M.get("lanes") or [], s.M))
++            if k1 != k0:
++                print("KNOTS", done, step.__name__, k0, "->", k1, _lk(s.M.get("lanes") or [], s.M)[:2], file=_s.stderr)
+         changed += n
+         settled = not n
+     # (feature 297, research R12: later rounds asking the law and running only the steps for what it named broken were measured

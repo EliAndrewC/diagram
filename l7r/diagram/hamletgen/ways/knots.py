@@ -183,6 +183,30 @@ def teed_onto(pts: Poly, end: int, other: Poly) -> list[Poly]:
     return [run if end == -1 else run[::-1]]
 
 
+def teed_back(pts: Poly, end: int, other: Poly) -> list[Poly]:
+    """Lane `pts` with its `end` (0 or -1) re-aimed from each EARLIER vertex, nearest the end first, at its nearest point on
+    the `other` lane - the legs past that vertex dropped, never longer than the lane it replaces (`settle.reaimed`'s walk
+    back, asked by the gather where the end's own last vertex tees it within the knot's reach - 405 T134, D125: fresh cohort
+    seed 717220 with T26's sheds, a household's way ran 20 ft beside another and teed onto it 24.4 ft from that way's foot).
+    Not the slide this module's index forbids: the slide kept the approach and moved the foot along the way to just past
+    the reach; this drops the end legs that ran on beside the way.
+
+    Research:
+        a lone end teed onto the way it comes alongside - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined; the arriving lane meets the other's side as a T, never longer
+        which vertex is tried first - GUESS: nearest the end, the least of the lane given up"""
+    seq = list(pts) if end == -1 else list(pts)[::-1]
+    out: list[Poly] = []
+    for m in range(len(seq) - 3, -1, -1):
+        prev = seq[m]
+        foot = min((seg_closest(prev[0], prev[1], a, b) for a, b in zip(other, other[1:], strict=False)), key=lambda z: math.dist(z, prev))
+        if math.dist(foot, prev) <= 1e-9:
+            continue
+        run = [*seq[: m + 1], foot]
+        if sum(math.dist(a, b) for a, b in zip(run, run[1:])) < sum(math.dist(a, b) for a, b in zip(seq, seq[1:])):
+            out.append(run if end == -1 else run[::-1])
+    return out
+
+
 def contracted(lanes: Sequence[Mapping[str, Any]], at: Pt, node: Pt, skip: Collection[int], fixed: Callable[[Mapping[str, Any], int], bool] = _fixed) -> dict[int, Poly]:
     """The lanes a knot's stretch is taken out of when its node at `at` is gathered onto `node`: each lane but `skip` with an
     end on `node` and a corner at `at` - the knot's two junctions joined by its last leg - with every inner vertex within
@@ -237,7 +261,8 @@ def next_gather(
     Research:
         lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
         which node a knot gathers at - UNRESEARCHED: the node with fewer ends moves onto the other, the other way round where refused
-        a lone end teed onto the other lane - research/questions/0081-village-lanes.drawing.html: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)"""
+        a lone end teed onto the other lane - research/questions/0081-village-lanes.drawing.html: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)
+        a lone end teed from an earlier vertex - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined - the lane's end legs that ran on beside a way dropped and the T made clear of the knot (`teed_back`, 405 T134), taken only where the web keeps no more knots"""
     nodes = end_nodes(lanes, fixed)
     for a, b, _d in knots(lanes, apart):
         order = sorted(((b, a), (a, b)), key=lambda mt: len(nodes[mt[0]][1]))
@@ -263,6 +288,20 @@ def next_gather(
             for j in sorted({j for j, _f in nodes[target][1] if j != i}):
                 for form in teed_onto(_pts(lanes[i]), e, _pts(lanes[j])):
                     if judge({i: form}):
+                        return {i: form}
+        for mover, target in order:  # ...or teed from an EARLIER vertex onto the lane it comes alongside, clear of the knot
+            ends = nodes[mover][1]
+            if len(ends) != 1 or fixed(lanes[ends[0][0]], ends[0][1]):
+                continue
+            i, e = ends[0]
+            for j in sorted({j for j, _f in nodes[target][1] if j != i} | {j for j, ln in enumerate(lanes) if j != i and _on(_pts(ln), nodes[mover][0])}):
+                for form in teed_back(_pts(lanes[i]), e, _pts(lanes[j])):
+                    tip = form[-1] if e == -1 else form[0]
+                    if (
+                        math.dist(tip, nodes[target][0]) > _KNOT_FT * KNOT_MARGIN
+                        and len(knots([*lanes[:i], {**lanes[i], "pts": form}, *lanes[i + 1 :]], apart)) <= len(knots(lanes, apart))
+                        and judge({i: form})
+                    ):
                         return {i: form}
     return None
 

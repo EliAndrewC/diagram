@@ -461,3 +461,24 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 <!-- plan-archive: T01 to T24 moved to plan-done.md, 2026-10-23 (feature 375 FR-044) -->
 
 <!-- plan-archive: T133 to T133 moved to plan-done.md, 2026-10-23 (feature 375 FR-044) -->
+
+## T134 - two knots the settle makes, mended where they are made (amendment 10)
+
+### T134 Approach (checklist part A)
+
+1. **The goal, in the world.** Where a path meets a way, it meets it where the walker first reaches it, and ends that nearly meet are joined - so the settle's own repairs stop leaving a lane end teed a few feet from a junction.
+2. **The constraints.** 0081: ends within 25 ft joined at a single point; a lane meets another as a T, its end re-laid, never longer; where neither node can move, the arriving lane meets the other's side as a T. The lane law (needles, folds, hairpins, bends, doubled tails, shadows, fabric) and the web kept whole, as the gather's judge asks them. `knots.py`'s index: never slide a foot along the tree to just past the reach.
+3. **Where each comes from.** R: 0081 (the 25 ft, the T, never longer). O: the order of the gather's forms (the project's, UNRESEARCHED as today's `next_gather` labels it).
+4. **Do they describe the world here?** Yes. Seed 10 (T26's sheds in): a join-orphans link crosses the track 30 ft from its head and hooks back to the head; `settle_ends`' hairpin re-aim tees it from its last vertex 12.1 ft from the head, where a household's way ends - a knot no gather mends (`knots-2026-10-23.md`). Fresh seed 717220 (T26's sheds in): a household's way runs 20 ft beside another and tees onto it 24.4 ft from that way's foot; the gather's tee from its last vertex is where it already stands.
+5. **The order.** Nothing moves earlier: both forms act where the knot is made - the re-aim inside `settle_ends`, the tee inside the gather (`settle_knots`), after the ways are drawn.
+6. **The exits.** (a) widen the knot verdict's "one lane runs between" to a T on a lane's side - not taken: seed 24's staggered tees were read as a knot, and it would excuse the knot rather than mend it; (b) aim the join-orphans link at a junction - measured, no change (both links already end on one); (c) `contracted` widened to an end on a lane's tread - measured, refused `needle_joins`; (d) the two forms here - taken; (e) room - measured worse on 2026-10-22 (T107).
+7. **The search smell.** The tee from an earlier vertex is a search over the lane's own vertices, nearest the end first, each judged by the gather's existing judge; it is taken only where its tee stands beyond the knot's reach and the web is left with no more knots. Every form strictly shortens a lane, so the gather cannot cycle.
+8. **The budget.** 90 min with its landing.
+9. **Done, measured.** Unit tests of both forms (red without them); seeds 10 and 717220 knot-free with T26's sheds (measured 2026-10-23); `make cohort N=48` on main 54/54 with the fresh block's rate, and the landing cohort.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T134 Decisions
+
+- **D124** `settle.shapes.reaimed` first asks where the lane FIRST crosses the way it ends on (a crossing more than a foot inside both legs, measured in feet - `geom._seg_cross` measures its margin as a share of a segment, 60 ft on a 3,000 ft track): the lane cut there, a T where the walker first reaches the way, when it meets clean; otherwise the walk back from the last vertex as today. Never longer than the lane it replaces. Rendering: historically accurate (0081: a lane meets another as a T, its end re-laid, never longer).
+- **D125** `knots.next_gather` gains a last form, `teed_back`: a lone movable end re-aimed from an EARLIER vertex (nearest the end first) onto its nearest point on the lane it comes alongside (a lane at the other node, or the lane its end stands on), the legs past that vertex dropped - only where the result is shorter, its tee stands beyond `_KNOT_FT` of the other node, the web keeps no more knots, and the gather's judge admits it. It is not the slide `knots.py`'s index forbids: the slide kept the approach and moved the foot along the way to just past the reach; this drops the end legs that ran on beside the way. Rendering: historically accurate (0081: ends within 25 ft joined; the arriving lane meets the other's side as a T); which vertex is tried first, a GUESS (nearest the end - the least of the lane given up).
