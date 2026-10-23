@@ -202,7 +202,7 @@ def teed_back(pts: Poly, end: int, other: Poly) -> list[Poly]:
         if math.dist(foot, prev) <= 1e-9:
             continue
         run = [*seq[: m + 1], foot]
-        if sum(math.dist(a, b) for a, b in zip(run, run[1:])) < sum(math.dist(a, b) for a, b in zip(seq, seq[1:])):
+        if sum(math.dist(a, b) for a, b in zip(run, run[1:], strict=False)) < sum(math.dist(a, b) for a, b in zip(seq, seq[1:], strict=False)):
             out.append(run if end == -1 else run[::-1])
     return out
 
