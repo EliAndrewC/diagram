@@ -322,26 +322,36 @@ def _crossing(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
     return None
 
 
-def reaimed(seq: Poly, tread: Poly, connector: bool = False) -> Poly:
-    """`seq` (ending on the way `tread`) re-laid to meet it cleanly (`meets_clean`): FIRST where it first crosses the way, cut
-    there - a T where the walker first reaches it (405 T134, D124: cohort seed 10 with T26's sheds, a link crossing the
-    track 30 ft from its head and hooking back to the head was teed from its last vertex 12 ft from the head, a knot);
-    otherwise from the last vertex before its end
+JOIN_ROLE = "join-orphans"
+"""The role of a lane laid only to join two others - the web's orphan links (`sweeps._join_orphan_ways`, named by its pass).
+
+Research: a lane laid only to join two others - research/questions/0081-village-lanes.drawing.html: "A lane laid only to join two others ends where it first meets one" (0081)"""
+
+_CROSSING_TAIL_FT = 40.0
+"""Research: a tail beyond a crossing - research/questions/0081-village-lanes.drawing.html: "A tail of under 40 ft beyond a crossing is cut" (0081)"""
+
+
+def reaimed(seq: Poly, tread: Poly, connector: bool = False, joiner: bool = False) -> Poly:
+    """`seq` (ending on the way `tread`) re-laid to meet it cleanly (`meets_clean`): FIRST, where it crossed the way before
+    its end, cut at that first crossing - when the tail beyond it is under `_CROSSING_TAIL_FT`, or however long it is for a
+    `joiner` (a lane laid only to join two others, `JOIN_ROLE`) - 405 T134, D124: cohort seed 10 with T26's sheds, an orphan
+    link crossing the track 30 ft from its head and hooking back to the head was teed from its last vertex 12 ft from the
+    head, a knot; otherwise from the last vertex before its end
     whose leg to its foot on the tread keeps the law, that leg - never longer than what it replaces, since a foot is the
     nearest point; a vertex already standing on the tread simply ends the lane there. With no such vertex the last leg is
     dropped.
 
     Research:
         a lane meets another as a T - research/questions/0081-village-lanes.drawing.html: the end re-laid, never longer
-        a lane meets the way where it first reaches it - research/questions/0081-village-lanes.drawing.html: the end re-laid as a T, never longer - a crossing before the end is that T
+        a tail beyond a crossing cut - research/questions/0081-village-lanes.drawing.html: "A tail of under 40 ft beyond a crossing is cut. A lane laid only to join two others ends where it first meets one, its tail cut however long it is"
         an end within a hand's width ends there - UNRESEARCHED: a vertex within `_TOUCH_GAP` (4 ft) of the way ends the lane at it, unjoined
             by ink (405 T127)"""
-    # ...WHERE THE LANE FIRST REACHES THE WAY: a lane that crosses the way before its end is cut at that crossing
+    # ...A TAIL BEYOND A CROSSING (0081): cut where the lane first crossed the way - under 40 ft, or any length for a joiner
     for k in range(len(seq) - 2):
         x = next((c for u, v in zip(tread, tread[1:], strict=False) if (c := _crossing(seq[k], seq[k + 1], u, v)) is not None), None)
         if x is not None:
             cand = [*seq[: k + 1], x]
-            if math.dist(cand[-2], x) > 1e-6 and meets_clean(cand, tread, connector):
+            if (joiner or polyline_len([x, *seq[k + 1 :]]) < _CROSSING_TAIL_FT) and math.dist(cand[-2], x) > 1e-6 and meets_clean(cand, tread, connector):
                 return cand
             break
     for m in range(len(seq) - 2, -1, -1):

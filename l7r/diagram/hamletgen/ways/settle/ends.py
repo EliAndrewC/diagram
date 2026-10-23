@@ -30,7 +30,7 @@ from ..sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 from ..tree import left_to_the_tree, set_corridor, tree_faults
 from ..weld import weld_corner
 from .lawful import Lawful
-from .shapes import _as_end, _back, _ordinary, apply_pieces, fouled_segment, lane_owner, reaimed
+from .shapes import JOIN_ROLE, _as_end, _back, _ordinary, apply_pieces, fouled_segment, lane_owner, reaimed
 
 
 def settle_ends(s: Any) -> int:
@@ -88,9 +88,9 @@ def settle_ends(s: Any) -> int:
                 break
     forced = lazy_ground(M, s)  # ...a meeting the ground forces is no needle, fold or hairpin to repair (feature 385 plan D2)
     for ci, i, end in law.connector_hairpin_ends(lanes, forced):
-        claim({ci, i}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[ci]), connector=True), end)])
+        claim({ci, i}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[ci]), connector=True, joiner=lanes[i].get("role") == JOIN_ROLE), end)])
     for i, end, k, _u, _v in law.needle_ends(lanes, forced):
-        claim({i, k}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[k]), bool(lanes[k].get("connector"))), end)], end)
+        claim({i, k}, i, [_back(reaimed(_as_end(_pts(lanes[i]), end), _pts(lanes[k]), bool(lanes[k].get("connector")), lanes[i].get("role") == JOIN_ROLE), end)], end)
     for i, ei, j, ej in law.folded_joint_pairs(lanes, forced):
         # the SHORTER record of the two that has a vertex to fall back to is re-aimed as a T on the other; two bare legs
         # folded on each other lose the shorter
@@ -101,7 +101,7 @@ def settle_ends(s: Any) -> int:
             continue
         if bent:
             _len, m, seq, me, other = bent[0]
-            claim({i, j}, m, [_back(reaimed(seq, other), me)])
+            claim({i, j}, m, [_back(reaimed(seq, other, joiner=lanes[m].get("role") == JOIN_ROLE), me)])
         else:
             claim({i, j}, both[0][1], [])
     for i in law.doubled_tails(M):

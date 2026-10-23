@@ -692,7 +692,13 @@
    "declared": "spec-fidelity"
   },
   "### T134 Decisions": {
-   "sha256": "e36e4a968d02ea8420ef8fbe0b4104aa421722a28ea0ba7d8a5ebcba923e1f6b",
+   "sha256": "9841c5781ade07697deff48d7f420cd49d7ba98fefa94c166f563f1b3c53c849",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T134 Approach (re-answered 2026-10-23T05:28Z)": {
+   "sha256": "cc73baad0f1780528d96f25f4d69074aa220b1829d2a1b886b12bbc6ba636b81",
    "verdict": "CLEAR",
    "reviewed": "2026-10-23",
    "declared": "spec-fidelity"
@@ -4669,6 +4675,64 @@
      "summary": "Approach 9: unit tests red without both forms; seeds 10 and 717220 knot-free with T26's sheds; make cohort N=48 54/54 and the landing cohort.",
      "class": "within",
      "why": "Verification that enforces the requested fix; it adds no unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-23",
+   "blocks": [
+    "### T134 Approach (re-answered 2026-10-23T05:28Z)",
+    "### T134 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D124",
+     "summary": "settle.shapes.reaimed cuts a lane at its FIRST crossing (more than _JOINT_FT inside both legs, in feet) of the way it ends on when the tail beyond is under 40 ft, or at any length for a JOIN_ROLE joiner (settle_ends passes joiner for hairpin/needle/fold re-aims), when it meets clean; otherwise today's walk back from the last vertex.",
+     "class": "within",
+     "why": "Amendment 10 asks the knots problem solved inside 405; this is a mechanism for that, and amendment 7 asks the research followed. The 40 ft threshold and the joining-lane case are 0081's own words, quoted, not a session carve-out: a 40 ft-or-longer tail is left to today's re-aim because the page cuts only under 40 ft, and the joiner case widens the cut as the page says. The narrowing from round 1 (cut every tail) brings the form INTO the page; it removes nothing the GM asked for."
+    },
+    {
+     "id": "D125",
+     "summary": "knots.next_gather gains a last form, teed_back: a lone movable end whose trailing legs run within 20 degrees and WEB_SHADOW_FT of the lane it meets has that run dropped and is teed from the vertex where the run starts, only where shorter, its tee beyond _KNOT_FT of the other node, no new knots, and the judge admits it; distinct from the forbidden slide.",
+     "class": "within",
+     "why": "A further gather form serving amendment 10's 'solve the knots problem'. The cut point is 0081's ('cut where it comes alongside ... meet the other as a T'); 'beside' at WEB_SHADOW_FT is labeled a CONVENTION and the ways cut back onto UNRESEARCHED, as the labels require. The admission conditions (shorter, no more knots, judge admits) keep the existing lane law whole rather than excuse any knot; they withhold nothing the GM asked for. Respects knots.py's index against sliding the foot."
+    },
+    {
+     "id": "D125-order",
+     "summary": "teed_back placed as the LAST of the gather's forms; the order of forms labeled UNRESEARCHED (Approach item 3).",
+     "class": "within",
+     "why": "Nothing in the request or 0081 as quoted bears on the order of gather forms; last means it acts only where the existing forms leave a knot, which adds a repair and withholds none."
+    },
+    {
+     "id": "D124-margin",
+     "summary": "The crossing margin is written as _JOINT_FT where the earlier form said 'a foot'; Approach item 10 says no constant moves.",
+     "class": "within",
+     "why": "A tolerance for what counts as a crossing, measured in feet rather than as a share of a segment; it narrows nothing the GM asked. Taken as stated - _JOINT_FT's value is not in the bundle, so its equality to the earlier foot was not verifiable here."
+    },
+    {
+     "id": "Approach-6a",
+     "summary": "Not taken: widening the knot verdict's 'one lane runs between' to excuse a T on a lane's side.",
+     "class": "within",
+     "why": "Declining to redefine the problem as solved is faithful to 'solve the knots problem'; taking it would have been the narrowing."
+    },
+    {
+     "id": "Approach-6e",
+     "summary": "Room (wider spacing) not used for this knot; measured worse on 2026-10-22 (T107).",
+     "class": "within",
+     "why": "Amendment 8 makes room a permitted route within the research bound, not a required one; the route was measured and recorded, not skipped by assertion."
+    },
+    {
+     "id": "Approach-5",
+     "summary": "Order unchanged: the re-aim acts inside settle_ends, the tee inside settle_knots, after ways are drawn.",
+     "class": "within",
+     "why": "Nothing in the request or 0081 as quoted bears on the order; it moves nothing earlier or later."
+    },
+    {
+     "id": "Approach-9",
+     "summary": "Done when: unit tests of both forms and the 40 ft and joiner cases red without them; seeds 10 and 717220 knot-free with T26's sheds; cohort N=48 on main 54/54 with the fresh block's rate, and the landing cohort.",
+     "class": "within",
+     "why": "Verification that the requested fix happens (enforcement of the request), not new scope."
     }
    ]
   }

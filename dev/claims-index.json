@@ -25401,12 +25401,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#a lone end teed onto the other lane": {
-  "body": "633c612d1dddffe6",
+  "body": "51a24b9ddd9222d1",
   "claim": "a lone end teed onto the other lane - village-lanes.drawing: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)",
-  "code": "3e907d27e0375b1c",
-  "core": "6060ee5d83c4b0da",
-  "date": "2026-10-22",
-  "note": "the code tees a lone end onto the other lane whenever `judge` refuses both node moves, for any rule (ground fault, doubled tail, unreached house and so on). The page tees only \"where bringing both ends to one point would leave a sliver of ground between the two lanes or pull another lane out of the network\". Either limit the tee fallback to a needle/sliver or network-split refusal, or reword the claim and the page",
+  "code": "2719419380d56f71",
+  "core": "df46f27645d299fa",
+  "date": "2026-10-23",
+  "note": "teed_onto tried only after both moves are refused (sliver or split web), the end run onto the other's side as a T",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -25415,16 +25415,15 @@
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
    "0081-village-lanes.drawing.html:b3423a58c3ff2774"
   ],
-  "triage": "touched",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": {
-  "body": "633c612d1dddffe6",
+  "body": "51a24b9ddd9222d1",
   "claim": "lane ends gathered - village-lanes.drawing: ends within 25 ft meet at one node",
-  "code": "d93090bb22ee77d2",
-  "core": "6060ee5d83c4b0da",
-  "date": "2026-10-22",
-  "note": "nearest knot first; the ends of one node are moved onto the other",
+  "code": "40612ade51922e95",
+  "core": "df46f27645d299fa",
+  "date": "2026-10-23",
+  "note": "ends within _KNOT_FT*KNOT_MARGIN (25 ft) put on one node",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -25432,7 +25431,6 @@
   "rests": [
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#which node a knot gathers at": {
@@ -25444,6 +25442,14 @@
   "research": "",
   "triaged": "2026-10-23",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#which ways a teed-back end may meet (lanes at the target node, plus any lane running through its own node)": {
+  "code": "df46f27645d299fa",
+  "core": "df46f27645d299fa",
+  "date": "2026-10-23",
+  "note": "which ways a teed-back end may meet (lanes at the target node, plus any lane running through its own node)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot the fence gap leaves": {
   "body": "468961cdeacf5f3d",
@@ -25494,6 +25500,14 @@
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::teed_back#how far back a lane's end may be cut (any earlier vertex, as far as its first)": {
+  "code": "af46008f5a28efd8",
+  "core": "af46008f5a28efd8",
+  "date": "2026-10-23",
+  "note": "how far back a lane's end may be cut (any earlier vertex, as far as its first)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/knots.py::teed_onto#lane ends gathered": {
   "body": "467529697edaf678",
@@ -29047,6 +29061,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/settle/shapes.py::_crossing#plumbing": {
+  "body": "99b43302f466bbb8",
+  "claim": "plumbing - NONE: segment geometry",
+  "code": "c0168cdd66131945",
+  "core": "839c3b75988d347b",
+  "date": "2026-10-23",
+  "note": "segment intersection with a 1 ft joint tolerance",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::_crossing_fault#a crossing no deck seats": {
   "code": "e008e3a66cab4eb8",
   "core": "2dc75f7457cfffd5",
@@ -29328,22 +29354,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::reaimed#a lane meets another as a T": {
-  "body": "7a41196fde0176da",
+  "body": "d4cb86e90faa2b8d",
   "claim": "a lane meets another as a T - village-lanes.drawing: the end re-laid, never longer",
-  "code": "26de593e522b3e62",
-  "core": "f97d19934f36daa7",
-  "date": "2026-10-22",
-  "note": "the end is re-laid onto its foot as a T and never lengthened, else its last leg is dropped",
+  "code": "6074cda762095c4e",
+  "core": "4219396dcb71e1fa",
+  "date": "2026-10-23",
+  "note": "the end re-aimed at its nearest foot on the way, as a T",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
-   "0081-village-lanes.drawing.html:a857325132f8d4ee",
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
    "0081-village-lanes.drawing.html:b3423a58c3ff2774"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::reaimed#an end within a hand's width ends there": {

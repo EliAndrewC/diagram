@@ -22,7 +22,8 @@ from typing import Any
 from l7r.diagram.settlement import seg_closest, seg_dist
 from l7r.diagram.settlement.rolling.gap_ways import KNOT_MARGIN
 
-from ..consts import WEB_CROP_GAP, WEB_FABRIC_GAP, Poly, Pt
+from ..consts import WEB_CROP_GAP, WEB_FABRIC_GAP, WEB_SHADOW_FT, Poly, Pt
+from .geom import polyline_len
 from .corridors import ACCESS_ROLE, FIELD_ROLE, TARGET_ROLE
 from .forced import ground
 from .joints import _JOINT_FT
@@ -183,28 +184,47 @@ def teed_onto(pts: Poly, end: int, other: Poly) -> list[Poly]:
     return [run if end == -1 else run[::-1]]
 
 
+_SIDE_BY_SIDE_DEG = 20.0
+"""Research: two paths side by side - research/questions/0081-village-lanes.drawing.html: "A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other as a T" (0081)"""
+
+
 def teed_back(pts: Poly, end: int, other: Poly) -> list[Poly]:
-    """Lane `pts` with its `end` (0 or -1) re-aimed from each EARLIER vertex, nearest the end first, at its nearest point on
-    the `other` lane - the legs past that vertex dropped, never longer than the lane it replaces (`settle.reaimed`'s walk
-    back, asked by the gather where the end's own last vertex tees it within the knot's reach - 405 T134, D125: fresh cohort
-    seed 717220 with T26's sheds, a household's way ran 20 ft beside another and teed onto it 24.4 ft from that way's foot).
-    Not the slide this module's index forbids: the slide kept the approach and moved the foot along the way to just past
-    the reach; this drops the end legs that ran on beside the way.
+    """Lane `pts` with its `end` (0 or -1) cut WHERE IT COMES ALONGSIDE the `other` lane and teed onto it from there: the run
+    of legs before its last that lie within `_SIDE_BY_SIDE_DEG` of the other and within `WEB_SHADOW_FT` of it (the distance
+    at which the map reads two ways as beside each other), dropped, and the lane re-aimed from the vertex where that run
+    starts at its nearest point on the other - shorter than the lane it replaces. Asked by the gather where the end's own
+    last vertex tees it within the knot's reach (405 T134, D125: fresh cohort seed 717220 with T26's sheds, a household's
+    way ran 20 ft beside another and teed onto it 24.4 ft from that way's foot). Not the slide this module's index forbids:
+    the slide kept the approach and moved the foot along the way; this drops the legs that ran beside the way. Nothing
+    where the leg before the last is not alongside.
 
     Research:
-        a lone end teed onto the way it comes alongside - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined; the arriving lane meets the other's side as a T, never longer
-        which vertex is tried first - GUESS: nearest the end, the least of the lane given up"""
+        a lane cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: "Two paths running side by side are drawn as one. A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other as a T"
+        beside, as the map reads it - CONVENTION: within `WEB_SHADOW_FT` (30 ft at fit zoom), the distance the shadow rule reads two ways together at"""
     seq = list(pts) if end == -1 else list(pts)[::-1]
-    out: list[Poly] = []
-    for m in range(len(seq) - 3, -1, -1):
-        prev = seq[m]
-        foot = min((seg_closest(prev[0], prev[1], a, b) for a, b in zip(other, other[1:], strict=False)), key=lambda z: math.dist(z, prev))
-        if math.dist(foot, prev) <= 1e-9:
-            continue
-        run = [*seq[: m + 1], foot]
-        if sum(math.dist(a, b) for a, b in zip(run, run[1:], strict=False)) < sum(math.dist(a, b) for a, b in zip(seq, seq[1:], strict=False)):
-            out.append(run if end == -1 else run[::-1])
-    return out
+    legs = list(zip(other, other[1:], strict=False))
+    if len(seq) < 3 or not legs:
+        return []
+
+    def alongside(a: Pt, b: Pt) -> bool:
+        if any(min(seg_dist(q[0], q[1], u, v) for u, v in legs) > WEB_SHADOW_FT for q in (a, b)):
+            return False
+        mid = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
+        u, v = min(legs, key=lambda uv: seg_dist(mid[0], mid[1], *uv))
+        turn = abs(math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]) - math.atan2(v[1] - u[1], v[0] - u[0]))) % 180.0
+        return min(turn, 180.0 - turn) < _SIDE_BY_SIDE_DEG
+
+    m = len(seq) - 2
+    while m > 0 and alongside(seq[m - 1], seq[m]):
+        m -= 1
+    if m == len(seq) - 2:
+        return []
+    prev = seq[m]
+    foot = min((seg_closest(prev[0], prev[1], u, v) for u, v in legs), key=lambda z: math.dist(z, prev))
+    run = [*seq[: m + 1], foot]
+    if math.dist(foot, prev) <= 1e-9 or polyline_len(run) >= polyline_len(seq):
+        return []
+    return [run if end == -1 else run[::-1]]
 
 
 def contracted(lanes: Sequence[Mapping[str, Any]], at: Pt, node: Pt, skip: Collection[int], fixed: Callable[[Mapping[str, Any], int], bool] = _fixed) -> dict[int, Poly]:
@@ -262,7 +282,8 @@ def next_gather(
         lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
         which node a knot gathers at - UNRESEARCHED: the node with fewer ends moves onto the other, the other way round where refused
         a lone end teed onto the other lane - research/questions/0081-village-lanes.drawing.html: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)
-        a lone end teed from an earlier vertex - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined - the lane's end legs that ran on beside a way dropped and the T made clear of the knot (`teed_back`, 405 T134), taken only where the web keeps no more knots"""
+        a lone end cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: "the maps cut it where it comes alongside and let it meet the other as a T" (`teed_back`, 405 T134), taken only where its T stands past the knot's reach and the web keeps no more knots
+        which ways a lone end is cut back onto - UNRESEARCHED: a lane at the other node, or the lane its own end stands on"""
     nodes = end_nodes(lanes, fixed)
     for a, b, _d in knots(lanes, apart):
         order = sorted(((b, a), (a, b)), key=lambda mt: len(nodes[mt[0]][1]))

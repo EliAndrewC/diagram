@@ -106,10 +106,14 @@ def test_a_re_laid_end_meets_its_way_clean_or_not_at_all() -> None:
 def test_an_end_that_crossed_its_way_is_teed_where_it_first_reaches_it() -> None:
     """405 T134 (D124), cohort seed 10 with T26's sheds: a link crossed the track 30 ft from its head and hooked back to the
     head; the re-aim teed it from its last vertex 12 ft from the head, beside the junction there - a knot. It is cut where it
-    first crosses the way, on a way long enough that a margin taken as a share of it would miss the crossing."""
+    first crosses the way (0081: a tail under 40 ft beyond a crossing is cut; a lane laid only to join two others, however long),
+    on a way long enough that a margin taken as a share of it would miss the crossing."""
     tread = [(0.0, 0.0), (0.0, -3000.0)]
-    seq = [(100.0, -60.0), (20.0, -40.0), (-20.0, -20.0), (0.0, 0.0)]
-    assert settle.reaimed(seq, tread, connector=True) == [(100.0, -60.0), (20.0, -40.0), (0.0, -30.0)]
+    seq = [(100.0, -60.0), (20.0, -40.0), (-20.0, -20.0), (0.0, 0.0)]  # its tail beyond the crossing is 51 ft
+    assert settle.reaimed(seq, tread, connector=True, joiner=True) == [(100.0, -60.0), (20.0, -40.0), (0.0, -30.0)], "a lane laid only to join: any tail"
+    assert settle.reaimed(seq, tread, connector=True) != [(100.0, -60.0), (20.0, -40.0), (0.0, -30.0)], "40 ft or more: re-laid as before"
+    short = [(100.0, -60.0), (20.0, -40.0), (-10.0, -25.0), (0.0, -15.0)]  # a 26 ft tail
+    assert settle.reaimed(short, tread) == [(100.0, -60.0), (20.0, -40.0), (0.0, -30.0)], "a tail under 40 ft is cut at the crossing"
 
 
 def test_a_crossing_off_a_ford_is_cut_and_one_at_a_ford_stands() -> None:
