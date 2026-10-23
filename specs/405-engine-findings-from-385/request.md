@@ -76,3 +76,17 @@ The GM, after five claims tasks whose time went to label rounds, on the session'
 > Yes please file that fix for the lint as the next item in 405.  Then I think we should take another run at closing out this feature.  Im leaving for work soon, and it would be awesome to have the whole thing done when I get home.
 
 > Let's also raise our soft cap to 80%
+
+## Amendment 10 (2026-10-23) - T127 finished last, the knots solved here, the ranking rows released
+
+The GM, after the session's report proposed filing T127 as its own feature:
+
+> Thanks.  I don't see why we need to file T127 as its own feature?  Should we not jnusgt finish  it as the last thing in this feature?
+
+After the session named the two open questions (the knots family; the ranking rows, run here or moved):
+
+> Yes solve the knots problem inside 405. However, explain the ranking rows question to me.
+
+After the session's explanation (option 1: work seven live E3/E4 rows here; option 2: release the seven-row quota, the rows staying open in 328's ranking for a future feature the GM chooses to file):
+
+> Sure go with option 2, then after you remove these from the feature, please wokr on getting this existing feaure through to completion.

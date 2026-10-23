@@ -28,6 +28,7 @@ Every open task of feature 385 that was not process work, moved verbatim to `tas
 
 - the six remaining ranking rows of 385's FR-020 (385 T35-T40) and the one replacing T32's dead row (385 T144): seven claims on
   328's ranking, read as the round arbiter ruled on ask:t33-ranking-pick (live rows only; a kind not yet tried where one is left);
+  released by amendment 10 (2026-10-23), not worked here;
 - D17's side-by-side merge carried from 385 T03 (385 T12);
 - the findings the claims and record checks of 385's tasks raised on code and pages those tasks did not change (385 T111-T147):
   lane ends and their trims, the bund and the field reach, the fixture seats, the track's fallbacks, and three record wordings.
@@ -43,6 +44,11 @@ Every open task of feature 385 that was not process work, moved verbatim to `tas
 - **FR-003 (the ranking rows)**: the seven ranking rows (385 T35-T40, T144) are taken from 328's ranking as the round arbiter
   read 385's amendment 7 on ask:t33-ranking-pick - live rows only, a kind not yet tried where one is left, else the top-ranked
   live row, said so in the task's Approach - each marked with its wave in 328's `audit/waves.json`.
+  *Released by amendment 10 (the GM, 2026-10-23: "Sure go with option 2"):* the seven rows are not worked in this feature; their
+  tasks (T01-T06, T24) close as released, and the rows stay open in 328's ranking for a feature the GM chooses to file. Every
+  live open row was E3 or E4 (a form or several places, or research first) when released.
+- **FR-003a (the close order)**: the knots family (T07, T26, T101, T104, T106) is solved in this feature (amendment 10), and T127
+  (the claims carried from code a task left unchanged) is worked last, after every task whose landing could carry more into it.
 
 - **FR-004 (the first round: one claim, then the numbers)**: the GM's 2026-10-20 start is one claim worked through FR-001's
   whole route, landing included; its time and where the time went are reported to the GM (`make where-time`, the feature

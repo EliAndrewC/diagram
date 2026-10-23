@@ -457,3 +457,10 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 <!-- plan-archive: T129 to T129 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 <!-- plan-archive: T132 to T132 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 <!-- plan-archive: T131 to T131 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+## T01-T06, T24 - the ranking rows released (amendment 10, the GM, 2026-10-23)
+
+### T01 Decisions
+
+- **D121** The seven ranking-row tasks (T01-T06, T24) close as released, unworked: the GM chose option 2 ("Sure go with option 2"), releasing 385 FR-020's seven-row quota. No row is marked in 328's `audit/waves.json` (none was worked); the rows stay open in 328's ranking for a feature the GM chooses to file. Each task's tick NOTE says released by amendment 10. Rendering: none - no code or page changes.
+- **D122** The close order (FR-003a): the knots family (T07, T26, T101, T104, T106) is solved here, the other open engine tasks (T98, T111) worked, and T127 last, so no later landing carries into it after it is worked. Rendering: none.
