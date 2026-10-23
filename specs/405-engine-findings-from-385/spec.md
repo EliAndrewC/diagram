@@ -58,9 +58,11 @@ Every open task of feature 385 that was not process work, moved verbatim to `tas
 ## Success Criteria
 
 - **SC-001** (FR-001, FR-002, FR-003): every task in `tasks.md` ticked with its retro row, each finding its checks raised on
-  unchanged code filed here, each ranking row marked with its wave, and the GM's review box.
+  unchanged code filed here, the ranking rows released unworked (amendment 10), and the GM's review box.
 - **SC-002** (FR-004): the first round's one claim landed, and its time and breakdown reported to the GM before a second task
   starts.
+- **SC-003** (FR-003a): T127 is the last task ticked, after the knots family (T07, T26, T101, T104, T106), each of which landed
+  here or closed with its evidence.
 
 ## Review history
 
