@@ -25415,6 +25415,7 @@
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
    "0081-village-lanes.drawing.html:b3423a58c3ff2774"
   ],
+  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": {
@@ -25431,15 +25432,17 @@
   "rests": [
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#which node a knot gathers at": {
-  "code": "3045ca617b19c61d",
-  "core": "6060ee5d83c4b0da",
+  "code": "dd7bcb08fc136d29",
+  "core": "df46f27645d299fa",
   "date": "2026-10-17",
   "note": "the page is silent on which node moves",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-23",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot the fence gap leaves": {
@@ -29339,18 +29342,20 @@
    "0081-village-lanes.drawing.html:a857325132f8d4ee",
    "0081-village-lanes.drawing.html:b3423a58c3ff2774"
   ],
+  "triage": "touched",
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::reaimed#an end within a hand's width ends there": {
   "body": "7a41196fde0176da",
   "claim": "an end within a hand's width ends there - UNRESEARCHED: a vertex within `_TOUCH_GAP` (4 ft) of the way ends the lane at it, unjoined by ink (405 T127)",
-  "code": "2f8a0f19da05fcb1",
-  "core": "f97d19934f36daa7",
+  "code": "060655555ca5e89b",
+  "core": "4219396dcb71e1fa",
   "date": "2026-10-22",
   "note": "the bundle answers this decision: 0246 §16 \"joined where their treads meet\" and 0081 §74 \"joined at a single point\". The claim should cite those, not UNRESEARCHED. Under that citation the code does not match: `math.dist(b, f) <= _TOUCH_GAP` ends a 3 ft lane up to 4 ft off a 3 ft way's centerline, leaving about 1 ft of bare ground between the treads",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-23",
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::settle_shapes#a fouling segment cut out": {
