@@ -618,6 +618,48 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-23",
    "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "db83b8155e7f1b026907add1b180e9af262f4cbb236cdbc5edf98abadd0a54de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "6412913cad0ba9a8489ac9ece16b2f00eba85df025b32d67f83408de9ed829b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "748716f5bc95d153e48cc5b2f180b3ebf086cea2c723e738fa6d2690ccb9fd09",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "b54c3a5aa93ce08d8e66403ae9e591aac21747b69fc040ab4ff82452f3883268",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "6d93fb4de59f0e8685dc779b955e6308c857c3af9de4bb5899bc4f04ec9f4cca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "5cac09b355b4a480a57e91e049b33d86381ca8fe99c5600e9018e58615aa1728",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T24 Approach (checklist part A)": {
+   "sha256": "bcf06f406beba3a45cc9920dc41b6744153f543e817d5f02926b153db2d56c87",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4380,6 +4422,147 @@
      "summary": "Close order per FR-003a: the knots family (T07, T26, T101, T104, T106) is solved here, the other open engine tasks (T98, T111) are worked, and T127 comes last so that no later landing carries into it.",
      "class": "within",
      "why": "Amendment 10 says: 'solve the knots problem inside 405' (the knots family is solved here), 'Should we not just finish it as the last thing in this feature?' (T127 last), and 'work on getting this existing feature through to completion' (T98 and T111 worked). This matches FR-003a and does not narrow it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-23",
+   "blocks": [
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T06 Approach (checklist part A)",
+    "### T24 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-release",
+     "summary": "T01 is released unworked; its ranking row stays open in 328's ranking",
+     "class": "within",
+     "why": "Amendment 10 verbatim: 'Sure go with option 2' - option 2 being release the seven-row quota, the rows staying open in 328's ranking for a future feature. Nothing is drawn or changed. D121's text was not supplied in the bundle (spec-cited.md empty); judged against the GM's words directly."
+    },
+    {
+     "id": "T01-tick-as-released",
+     "summary": "T01 is removed by ticking it with a 'released' note rather than deleting it from tasks.md",
+     "class": "within",
+     "why": "The GM said 'after you remove these from the feature'. A tick whose note says released, with 328's audit/waves.json unchanged as the measured done, removes the task from the feature's open work without claiming it was worked, and the feature proceeds to completion as asked; the request's purpose is met either way."
+    },
+    {
+     "id": "T01-order",
+     "summary": "T01 ticked as released before the knots work",
+     "class": "within",
+     "why": "Amendment 10: 'after you remove these from the feature, please wokr on getting this existing feaure through to completion' - removal first, then the rest."
+    },
+    {
+     "id": "T02-release",
+     "summary": "T02 is released unworked; its ranking row stays open in 328's ranking",
+     "class": "within",
+     "why": "Amendment 10 verbatim: 'Sure go with option 2' - option 2 being release the seven-row quota, the rows staying open in 328's ranking for a future feature. Nothing is drawn or changed. D121's text was not supplied in the bundle (spec-cited.md empty); judged against the GM's words directly."
+    },
+    {
+     "id": "T02-tick-as-released",
+     "summary": "T02 is removed by ticking it with a 'released' note rather than deleting it from tasks.md",
+     "class": "within",
+     "why": "The GM said 'after you remove these from the feature'. A tick whose note says released, with 328's audit/waves.json unchanged as the measured done, removes the task from the feature's open work without claiming it was worked, and the feature proceeds to completion as asked; the request's purpose is met either way."
+    },
+    {
+     "id": "T02-order",
+     "summary": "T02 ticked as released before the knots work",
+     "class": "within",
+     "why": "Amendment 10: 'after you remove these from the feature, please wokr on getting this existing feaure through to completion' - removal first, then the rest."
+    },
+    {
+     "id": "T03-release",
+     "summary": "T03 is released unworked; its ranking row stays open in 328's ranking",
+     "class": "within",
+     "why": "Amendment 10 verbatim: 'Sure go with option 2' - option 2 being release the seven-row quota, the rows staying open in 328's ranking for a future feature. Nothing is drawn or changed. D121's text was not supplied in the bundle (spec-cited.md empty); judged against the GM's words directly."
+    },
+    {
+     "id": "T03-tick-as-released",
+     "summary": "T03 is removed by ticking it with a 'released' note rather than deleting it from tasks.md",
+     "class": "within",
+     "why": "The GM said 'after you remove these from the feature'. A tick whose note says released, with 328's audit/waves.json unchanged as the measured done, removes the task from the feature's open work without claiming it was worked, and the feature proceeds to completion as asked; the request's purpose is met either way."
+    },
+    {
+     "id": "T03-order",
+     "summary": "T03 ticked as released before the knots work",
+     "class": "within",
+     "why": "Amendment 10: 'after you remove these from the feature, please wokr on getting this existing feaure through to completion' - removal first, then the rest."
+    },
+    {
+     "id": "T04-release",
+     "summary": "T04 is released unworked; its ranking row stays open in 328's ranking",
+     "class": "within",
+     "why": "Amendment 10 verbatim: 'Sure go with option 2' - option 2 being release the seven-row quota, the rows staying open in 328's ranking for a future feature. Nothing is drawn or changed. D121's text was not supplied in the bundle (spec-cited.md empty); judged against the GM's words directly."
+    },
+    {
+     "id": "T04-tick-as-released",
+     "summary": "T04 is removed by ticking it with a 'released' note rather than deleting it from tasks.md",
+     "class": "within",
+     "why": "The GM said 'after you remove these from the feature'. A tick whose note says released, with 328's audit/waves.json unchanged as the measured done, removes the task from the feature's open work without claiming it was worked, and the feature proceeds to completion as asked; the request's purpose is met either way."
+    },
+    {
+     "id": "T04-order",
+     "summary": "T04 ticked as released before the knots work",
+     "class": "within",
+     "why": "Amendment 10: 'after you remove these from the feature, please wokr on getting this existing feaure through to completion' - removal first, then the rest."
+    },
+    {
+     "id": "T05-release",
+     "summary": "T05 is released unworked; its ranking row stays open in 328's ranking",
+     "class": "within",
+     "why": "Amendment 10 verbatim: 'Sure go with option 2' - option 2 being release the seven-row quota, the rows staying open in 328's ranking for a future feature. Nothing is drawn or changed. D121's text was not supplied in the bundle (spec-cited.md empty); judged against the GM's words directly."
+    },
+    {
+     "id": "T05-tick-as-released",
+     "summary": "T05 is removed by ticking it with a 'released' note rather than deleting it from tasks.md",
+     "class": "within",
+     "why": "The GM said 'after you remove these from the feature'. A tick whose note says released, with 328's audit/waves.json unchanged as the measured done, removes the task from the feature's open work without claiming it was worked, and the feature proceeds to completion as asked; the request's purpose is met either way."
+    },
+    {
+     "id": "T05-order",
+     "summary": "T05 ticked as released before the knots work",
+     "class": "within",
+     "why": "Amendment 10: 'after you remove these from the feature, please wokr on getting this existing feaure through to completion' - removal first, then the rest."
+    },
+    {
+     "id": "T06-release",
+     "summary": "T06 is released unworked; its ranking row stays open in 328's ranking",
+     "class": "within",
+     "why": "Amendment 10 verbatim: 'Sure go with option 2' - option 2 being release the seven-row quota, the rows staying open in 328's ranking for a future feature. Nothing is drawn or changed. D121's text was not supplied in the bundle (spec-cited.md empty); judged against the GM's words directly."
+    },
+    {
+     "id": "T06-tick-as-released",
+     "summary": "T06 is removed by ticking it with a 'released' note rather than deleting it from tasks.md",
+     "class": "within",
+     "why": "The GM said 'after you remove these from the feature'. A tick whose note says released, with 328's audit/waves.json unchanged as the measured done, removes the task from the feature's open work without claiming it was worked, and the feature proceeds to completion as asked; the request's purpose is met either way."
+    },
+    {
+     "id": "T06-order",
+     "summary": "T06 ticked as released before the knots work",
+     "class": "within",
+     "why": "Amendment 10: 'after you remove these from the feature, please wokr on getting this existing feaure through to completion' - removal first, then the rest."
+    },
+    {
+     "id": "T24-release",
+     "summary": "T24 is released unworked; its ranking row stays open in 328's ranking",
+     "class": "within",
+     "why": "Amendment 10 verbatim: 'Sure go with option 2' - option 2 being release the seven-row quota, the rows staying open in 328's ranking for a future feature. Nothing is drawn or changed. D121's text was not supplied in the bundle (spec-cited.md empty); judged against the GM's words directly."
+    },
+    {
+     "id": "T24-tick-as-released",
+     "summary": "T24 is removed by ticking it with a 'released' note rather than deleting it from tasks.md",
+     "class": "within",
+     "why": "The GM said 'after you remove these from the feature'. A tick whose note says released, with 328's audit/waves.json unchanged as the measured done, removes the task from the feature's open work without claiming it was worked, and the feature proceeds to completion as asked; the request's purpose is met either way."
+    },
+    {
+     "id": "T24-order",
+     "summary": "T24 ticked as released before the knots work",
+     "class": "within",
+     "why": "Amendment 10: 'after you remove these from the feature, please wokr on getting this existing feaure through to completion' - removal first, then the rest."
     }
    ]
   }

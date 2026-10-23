@@ -460,6 +460,104 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 
 ## T01-T06, T24 - the ranking rows released (amendment 10, the GM, 2026-10-23)
 
+### T01 Approach (checklist part A)
+
+1. **The goal, in the world.** None: the task is released unworked by amendment 10 (D121); its ranking row stays open in 328's ranking.
+2. **The constraints.** The GM's choice of option 2 (amendment 10).
+3. **Where each comes from.** The GM, 2026-10-23.
+4. **Do they describe the world here?** n/a - nothing is drawn or changed.
+5. **The order.** Ticked as released before the knots work.
+6. **The exits.** (a) work the row here - declined by the GM; (b) release it - taken.
+7. **The search smell.** None.
+8. **The budget.** None.
+9. **Done, measured.** The tick's note says released; 328's `audit/waves.json` unchanged.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T02 Approach (checklist part A)
+
+1. **The goal, in the world.** None: the task is released unworked by amendment 10 (D121); its ranking row stays open in 328's ranking.
+2. **The constraints.** The GM's choice of option 2 (amendment 10).
+3. **Where each comes from.** The GM, 2026-10-23.
+4. **Do they describe the world here?** n/a - nothing is drawn or changed.
+5. **The order.** Ticked as released before the knots work.
+6. **The exits.** (a) work the row here - declined by the GM; (b) release it - taken.
+7. **The search smell.** None.
+8. **The budget.** None.
+9. **Done, measured.** The tick's note says released; 328's `audit/waves.json` unchanged.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T03 Approach (checklist part A)
+
+1. **The goal, in the world.** None: the task is released unworked by amendment 10 (D121); its ranking row stays open in 328's ranking.
+2. **The constraints.** The GM's choice of option 2 (amendment 10).
+3. **Where each comes from.** The GM, 2026-10-23.
+4. **Do they describe the world here?** n/a - nothing is drawn or changed.
+5. **The order.** Ticked as released before the knots work.
+6. **The exits.** (a) work the row here - declined by the GM; (b) release it - taken.
+7. **The search smell.** None.
+8. **The budget.** None.
+9. **Done, measured.** The tick's note says released; 328's `audit/waves.json` unchanged.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** None: the task is released unworked by amendment 10 (D121); its ranking row stays open in 328's ranking.
+2. **The constraints.** The GM's choice of option 2 (amendment 10).
+3. **Where each comes from.** The GM, 2026-10-23.
+4. **Do they describe the world here?** n/a - nothing is drawn or changed.
+5. **The order.** Ticked as released before the knots work.
+6. **The exits.** (a) work the row here - declined by the GM; (b) release it - taken.
+7. **The search smell.** None.
+8. **The budget.** None.
+9. **Done, measured.** The tick's note says released; 328's `audit/waves.json` unchanged.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T05 Approach (checklist part A)
+
+1. **The goal, in the world.** None: the task is released unworked by amendment 10 (D121); its ranking row stays open in 328's ranking.
+2. **The constraints.** The GM's choice of option 2 (amendment 10).
+3. **Where each comes from.** The GM, 2026-10-23.
+4. **Do they describe the world here?** n/a - nothing is drawn or changed.
+5. **The order.** Ticked as released before the knots work.
+6. **The exits.** (a) work the row here - declined by the GM; (b) release it - taken.
+7. **The search smell.** None.
+8. **The budget.** None.
+9. **Done, measured.** The tick's note says released; 328's `audit/waves.json` unchanged.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** None: the task is released unworked by amendment 10 (D121); its ranking row stays open in 328's ranking.
+2. **The constraints.** The GM's choice of option 2 (amendment 10).
+3. **Where each comes from.** The GM, 2026-10-23.
+4. **Do they describe the world here?** n/a - nothing is drawn or changed.
+5. **The order.** Ticked as released before the knots work.
+6. **The exits.** (a) work the row here - declined by the GM; (b) release it - taken.
+7. **The search smell.** None.
+8. **The budget.** None.
+9. **Done, measured.** The tick's note says released; 328's `audit/waves.json` unchanged.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T24 Approach (checklist part A)
+
+1. **The goal, in the world.** None: the task is released unworked by amendment 10 (D121); its ranking row stays open in 328's ranking.
+2. **The constraints.** The GM's choice of option 2 (amendment 10).
+3. **Where each comes from.** The GM, 2026-10-23.
+4. **Do they describe the world here?** n/a - nothing is drawn or changed.
+5. **The order.** Ticked as released before the knots work.
+6. **The exits.** (a) work the row here - declined by the GM; (b) release it - taken.
+7. **The search smell.** None.
+8. **The budget.** None.
+9. **Done, measured.** The tick's note says released; 328's `audit/waves.json` unchanged.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
 ### T01 Decisions
 
 - **D121** The seven ranking-row tasks (T01-T06, T24) close as released, unworked: the GM chose option 2 ("Sure go with option 2"), releasing 385 FR-020's seven-row quota. No row is marked in 328's `audit/waves.json` (none was worked); the rows stay open in 328's ranking for a feature the GM chooses to file. Each task's tick NOTE says released by amendment 10. Rendering: none - no code or page changes.
