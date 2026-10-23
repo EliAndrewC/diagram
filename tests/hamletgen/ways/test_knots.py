@@ -100,6 +100,7 @@ def test_a_leg_is_bent_off_its_middle_either_side_nearest_first_at_either_end() 
     assert forms[1][2] == (20.0, -10.0) and forms[-1][2] == (20.0, -40.0)
     assert kn.bent_round(run[::-1], 0)[0] == forms[0][::-1], "the first end bent as the last is"
     assert kn.bent_round([(0.0, 0.0), (0.0, 0.0)], -1) == [], "no leg, no bend"
+    assert len(kn.bent_round([(0.0, 0.0), (12.0, 0.0)], -1)) == 2, "no farther off than the leg is long: a hairpin otherwise"
 
 
 def test_a_gather_that_would_split_the_web_is_refused() -> None:
@@ -325,6 +326,10 @@ def test_a_knot_the_fence_gap_leaves_is_gathered_at_the_crop_clearance(monkeypat
 
     monkeypatch.setattr(lawful.Lawful, "fault", fault)
     s = _S([CONN, [(-100.0, 150.0), (-100.0, 0.0)], [(-106.0, -150.0), (-106.0, 0.0)]], houses=[(-100.0, 180.0), (-106.0, -180.0)])
+    assert kn.settle_knots(s) == 0, "two lanes that are no household's way keep the gap (0246; T07 round 1)"
+    for ln in s.M["lanes"][1:]:
+        ln["role"] = kn.ACCESS_ROLE
+    asked.clear()
     assert kn.settle_knots(s) == 1
     assert kn.knots(s.M["lanes"]) == []
     assert asked[0] == WEB_FABRIC_GAP and asked[-1] == WEB_CROP_GAP, "the convention first, the crop clearance after"

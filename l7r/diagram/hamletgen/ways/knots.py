@@ -198,10 +198,13 @@ def bent_round(pts: Poly, end: int) -> list[Poly]:
     """The gather's new leg at `end` (0 or -1) of `pts` bent round what stands: through a waypoint `_BEND_OFFSETS_FT` off the
     leg's middle, either side, nearest first (405 T07, D126). Asked by `settle_knots` only where the matrix refused the gather's
     write: seed 57's one admitted gather ran its leg 15 ft past a household's reserved copse seat, and the walker goes round.
+    Asked in the first pass only, with the fence gap as it stands (`WEB_FABRIC_GAP`): a bent leg is a new run past the gardens,
+    never one of the joins the second pass lets come within 3 ft (impl-drift, T07 round 1).
 
     Research:
         the leg bent round what stands - research/questions/0081-village-lanes.drawing.html: a turn whose straighter way the mapped ground blocks is drawn as walked (the GM 2026-10-17)
-        never through a copse - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the way runs outside the grove or through a gap in it to the house"""
+        round a grove, not through it - research/questions/0081-village-lanes.drawing.html: where a grove stands across the straighter way, the walker goes round it
+        the bend's form - UNRESEARCHED: one waypoint off the leg's middle, either side, nearest first - the smallest detour tried first, each asked of the gather's judge (its angle rules read as open ground, `forced.py`)"""
     seq = list(pts) if end == -1 else list(reversed(pts))
     if len(seq) < 2 or (span := math.dist(seq[-2], seq[-1])) < 1e-6:
         return []
@@ -209,7 +212,7 @@ def bent_round(pts: Poly, end: int) -> list[Poly]:
     nx, ny = -(by - ay) / span, (bx - ax) / span
     mx, my = (ax + bx) / 2, (ay + by) / 2
     out = []
-    for off in _BEND_OFFSETS_FT:
+    for off in (o for o in _BEND_OFFSETS_FT if o <= span):  # no farther off than the leg is long: a hairpin otherwise (T07 round 1)
         for side in (1, -1):
             bent = [*seq[:-1], (mx + side * off * nx, my + side * off * ny), seq[-1]]
             out.append(bent if end == -1 else bent[::-1])
@@ -501,14 +504,15 @@ def settle_knots(s: Any) -> int:
     (Kashikawa: two farms' paths met their street 8.5 ft apart): an end re-aimed at the junction beside it, never a cut. A foot
     the seating left beside a junction where no gathered join was admitted (`gap_ways._way_for`) is gathered here, with the
     knot's corner taken out of the lane joining the two (`contracted`). A one-lane gather whose write the matrix refuses
-    (`reshape_lane`) has its new leg bent round what stands (`bent_round`, 405 T07: seed 57's leg ran past a household's
-    copse seat); ends no bend writes are left, and that knot is not asked again this step. Returns the lanes moved. Each gather joins two nodes into one, so
+    (`reshape_lane`) has its new leg bent round what stands in the first pass (`bent_round`, 405 T07: seed 57's leg ran past a
+    household's copse seat); ends no bend writes are left, and that knot is not asked again this step. Returns the lanes moved. Each gather joins two nodes into one, so
     the step ends. The web as it stands is asked once a gather is applied, never once a trial; a trial's whole-web questions
     are answered pair by pair, each pair's answer kept by the two lanes' points (`WebMemo`) - the same verdicts.
 
     TWO PASSES (405 T107, D83): every knot is asked first with the fence gap as it stands (`WEB_FABRIC_GAP`, 0246's 7 ft, a
-    convention), then the knots it leaves with the join 3 ft off another household's garden (`WEB_CROP_GAP`'s value, a figure
-    this project chose) - where the convention and 0081's knot rule collide, the research rule wins and the convention
+    convention), then the knots it leaves between households' ways (`ACCESS_ROLE`) with the join 3 ft off another household's garden
+    (`WEB_CROP_GAP`'s value, a figure this project chose) - 0246 allows the 3 ft for two households' way ends a few feet apart,
+    and every other lane keeps the gap (impl-drift, T07 round 1) - where the convention and 0081's knot rule collide, the research rule wins and the convention
     gives. The 3 ft is ours, a DEVIATION from 0246's 7 ft, recorded on the page with its reason (405 T114). Seed 24 (T26's sheds in) left two tees 25.0 ft apart whose diagonal
     passed 5.7 ft off a neighbor's fence. One pass at 3 ft on every knot knotted seed 7 (an earlier gather admitted at 3 ft
     reshaped the web), so it is the second pass only. More room between the homesteads was tried first: two wider `grow_gap`s (+5 and
@@ -517,7 +521,7 @@ def settle_knots(s: Any) -> int:
 
     Research:
         lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point
-        a knot the fence gap leaves - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the page's 7 ft (a map drawing convention) asked first, then the knots it leaves with the join 3 ft off another household's garden - the exception the page records, with its reason (two ways joined at one point, 0081; lots that abut closely) (405 T114)
+        a knot the fence gap leaves - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the page's 7 ft (a map drawing convention) asked first, then the knots it leaves between two households' ways with the join 3 ft off another household's garden - the exception the page records, with its reason (two ways joined at one point, 0081; lots that abut closely) (405 T114)
         a lane with no width judged as a footpath - research/questions/0081-village-lanes.drawing.html: a lane with no recorded width is judged at the footpath's 3 ft"""
     from .settle import Lawful, apply_pieces  # bound here: `settle` names this step in its STEPS
     from .tree import set_corridor
@@ -535,6 +539,8 @@ def settle_knots(s: Any) -> int:
     def judge(edits: dict[int, Poly]) -> bool:
         if edits in refused:
             return False
+        if lawful.fence_gap < WEB_FABRIC_GAP and any(lanes[i].get("role") != ACCESS_ROLE for i in edits):
+            return False  # the 3 ft pass gathers households' ways only (0246; impl-drift, T07 round 1)
         if "nets" not in had:
             ways[:] = [_pts(ln) for ln in lanes]
             ids[:] = memo.ids(ways)
@@ -602,7 +608,7 @@ def settle_knots(s: Any) -> int:
                 if i < len(lanes) and lanes[i]["pts"] != before[i]:
                     n += 1
                     set_corridor(s.M, lanes[i])
-            if not n and len(edits) == 1:
+            if not n and len(edits) == 1 and gap == WEB_FABRIC_GAP:
                 ((i, p),) = edits.items()
                 for bent in bent_round(p, 0 if _pts({"pts": before[i]})[0] != p[0] else -1):
                     if judge({i: bent}):
