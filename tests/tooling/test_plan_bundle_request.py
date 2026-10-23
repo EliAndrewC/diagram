@@ -132,3 +132,15 @@ def test_a_feature_with_no_request_md_gets_no_bundle(tmp_path, monkeypatch) -> N
         pb.build(d, "T01", [("T01", "## T01 - x\n")], {}, "task")
     assert "specs/905-x/request.md is missing" in str(e.value) and "verbatim" in str(e.value)
     assert not (tmp_path / "out").exists(), "nothing is written for a bundle that cannot be reviewed"
+
+
+def test_every_written_form_of_a_decision_is_read() -> None:
+    """405 T133: the plans write a decision five ways, and the bundle read only `**D83 - `, so amendment 10's review got an
+    empty spec-cited.md for blocks citing D121 (written `- **D121**`). Each form below is a real occurrence's shape."""
+    plan = (
+        "**D83 - a knot gathered.** body\n\n- **D96 - the tread off a wall.** body\n\n- **D121** The rows released.\n\n"
+        "- **D7 The placed-house index**: body\n\n**D8.** `make hooks-test` body\n\n**Dx** not one\n"
+    )
+    got = pb._paragraphs(plan, pb._DECISION)
+    assert sorted(got) == ["D121", "D7", "D8", "D83", "D96"]
+    assert got["D121"] == "- **D121** The rows released.\n"

@@ -39,7 +39,9 @@ _IDS = re.compile(r"\b((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b")
 #: ...and through its amendment (T123, plan D145): "Feature 375 amendment 11 (D64)" was read as 385's own D64
 _QUALIFIED = re.compile(r"(?<![-\w])(?:[Ff]eature\s+)?(\d{3})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?\(?(?:plan\s+)?((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b")
 _ITEM = re.compile(r"^- \*\*((?:FR|SC)-\d{3}[a-z]?)\b", re.M)
-_DECISION = re.compile(r"^\*\*(D\d+[a-z]?) - ", re.M)
+#: every form the plans write a decision in (405 T133, D123): `**D83 - `, `- **D96 - `, `- **D121** `, `- **D7 The ...**` and
+#: `**D8.**` - the first form alone left 452 decisions out of every `spec-cited.md` that cited one
+_DECISION = re.compile(r"^(?:- )?\*\*(D\d+[a-z]?)(?: - |\*\*|\.| )", re.M)
 #: the older specs' form, a requirement as its own heading (`### FR-001 - ...`, 12 specs among them 170): to the next heading
 _HEAD_ITEM = re.compile(r"^#{2,4} ((?:FR|SC)-\d{3}[a-z]?)\b", re.M)
 

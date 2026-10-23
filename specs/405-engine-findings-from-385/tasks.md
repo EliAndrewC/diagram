@@ -404,6 +404,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T132 make record-checked FIXED_BY= on an #unfootnoted unit crashed with a KeyError (page session 9, 2026-10-22); the session fixed it - the form refused with its message - with a test (commit 0889dcdc1): the found work, recorded as its own task [lands-open]
       research: rendering
       verify: DONE. landed in batch T129+T132+T131: 0081's T-foot join and reeds walled to every way (T129, page sessions 8-9); record-checked refuses FIXED_BY on an unfootnoted unit (T132); check-wave stamps each reply's label (T131)
+- [ ] T133 plan_bundle's _DECISION reads only the '**Dnn - ' form, so a block citing a decision written '- **Dnn**', '- **Dnn - ' or '- **Dnn ' (36 of 405's, 452 across the plans) gets an empty spec-cited.md and its reviewer judges it without the decision's text (found by the amendment 10 review, 2026-10-23)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

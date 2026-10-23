@@ -660,6 +660,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-23",
    "declared": "spec-fidelity"
+  },
+  "## T133 - every decision form bundled": {
+   "sha256": "fdc5713baee111d2a82bd15390ebf37b9e90bf48461fa536d94a5a84cf56a479",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T133 Approach (checklist part A)": {
+   "sha256": "9294e889141dbaf6300f966e9dc84f6a8b27f0bf9e2823fdd893c95c6a58788d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T133 Decisions": {
+   "sha256": "3ca01adc8dcca6af8d10960abe0afde473379c1e8bf9d5859b7c516e1594545c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4563,6 +4581,29 @@
      "summary": "T24 ticked as released before the knots work",
      "class": "within",
      "why": "Amendment 10: 'after you remove these from the feature, please wokr on getting this existing feaure through to completion' - removal first, then the rest."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-23",
+   "blocks": [
+    "## T133 - every decision form bundled",
+    "### T133 Approach (checklist part A)",
+    "### T133 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D123",
+     "summary": "plan_bundle._DECISION widened to match all five written decision forms (**Dnn - , - **Dnn - , - **Dnn** , - **Dnn , **Dnn.) so spec-cited.md carries every cited decision; the blocks' own-decision exclusion reads the same pattern",
+     "class": "within",
+     "why": "Tooling repair of a defect a previous plan review found (D121 omitted from its bundle), filed under FR-002 (the GM 2026-10-19: findings on code a task did not change stay as new tasks in the feature). Widening the match makes the review bundle complete; it narrows nothing the request or spec asks for and adds no behavior beyond the bundle being correct."
+    },
+    {
+     "id": "T133-exit",
+     "summary": "Exit (b) read every existing form taken over (a) rewriting every plan to one form",
+     "class": "within",
+     "why": "Choice of implementation route for the same repair; leaves the plans as written and narrows nothing asked."
     }
    ]
   }
