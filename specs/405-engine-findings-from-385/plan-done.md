@@ -2898,3 +2898,23 @@ Owed by the cohort record of 2026-10-22T03:45Z (seeds 10, 24, 36, 47 newly faili
 
 - **D121** The seven ranking-row tasks (T01-T06, T24) close as released, unworked: the GM chose option 2 ("Sure go with option 2"), releasing 385 FR-020's seven-row quota. No row is marked in 328's `audit/waves.json` (none was worked); the rows stay open in 328's ranking for a feature the GM chooses to file. Each task's tick NOTE says released by amendment 10. Rendering: none - no code or page changes.
 - **D122** The close order (FR-003a): the knots family (T07, T26, T101, T104, T106) is solved here, the other open engine tasks (T98, T111) worked, and T127 last, so no later landing carries into it after it is worked. Rendering: none.
+<!-- plan-archive: archived 2026-10-23 -->
+## T133 - every decision form bundled
+
+### T133 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review is handed the full text of every decision its blocks cite, whichever of the plans' written forms the decision takes.
+2. **The constraints.** The plans write a decision five ways: `**D83 - `, `- **D96 - `, `- **D96** `, `- **D96 ` and `**D9.` (counted across `specs/*/plan*.md`); `_paragraphs` cuts each at the next blank line or the next match.
+3. **Where each comes from.** The plans themselves (counted 2026-10-23).
+4. **Do they describe the world here?** Yes: amendment 10's review got an empty `spec-cited.md` for blocks citing D121, written `- **D121**`.
+5. **The order.** Widen `_DECISION`; a test of each form first, red on the old pattern.
+6. **The exits.** (a) rewrite every plan to one form - not taken: the plans are history; (b) read every form - taken.
+7. **The search smell.** None.
+8. **The budget.** 15 min with its landing (tooling only, the direct route).
+9. **Done, measured.** The test of each form passes and fails on the old pattern; 405's plan yields the 36 decisions it missed.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a.
+
+### T133 Decisions
+
+- **D123** `plan_bundle._DECISION` matches a decision at a line's start written `**Dnn - `, `- **Dnn - `, `- **Dnn** `, `- **Dnn ` or `**Dnn.`, so `spec-cited.md` carries every cited decision's paragraph. `own` (the blocks' own decisions, left out of spec-cited) reads the same pattern. Rendering: none (tooling).
