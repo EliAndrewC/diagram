@@ -188,6 +188,34 @@ _SIDE_BY_SIDE_DEG = 20.0
 """Research: two paths side by side - research/questions/0081-village-lanes.drawing.html: "A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other as a T" (0081)"""
 
 
+_BEND_OFFSETS_FT = (10.0, 15.0, 20.0, 25.0, 30.0, 40.0)
+"""How far off its middle a gather's refused leg is bent round what stands, nearest first (405 T07, D126).
+
+Research: the bend's offsets - UNRESEARCHED: 0081 has the walker go round what stands, not how far; 10 to 40 ft, a copse's lane buffer and more"""
+
+
+def bent_round(pts: Poly, end: int) -> list[Poly]:
+    """The gather's new leg at `end` (0 or -1) of `pts` bent round what stands: through a waypoint `_BEND_OFFSETS_FT` off the
+    leg's middle, either side, nearest first (405 T07, D126). Asked by `settle_knots` only where the matrix refused the gather's
+    write: seed 57's one admitted gather ran its leg 15 ft past a household's reserved copse seat, and the walker goes round.
+
+    Research:
+        the leg bent round what stands - research/questions/0081-village-lanes.drawing.html: a turn whose straighter way the mapped ground blocks is drawn as walked (the GM 2026-10-17)
+        never through a copse - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the way runs outside the grove or through a gap in it to the house"""
+    seq = list(pts) if end == -1 else list(reversed(pts))
+    if len(seq) < 2 or (span := math.dist(seq[-2], seq[-1])) < 1e-6:
+        return []
+    (ax, ay), (bx, by) = seq[-2], seq[-1]
+    nx, ny = -(by - ay) / span, (bx - ax) / span
+    mx, my = (ax + bx) / 2, (ay + by) / 2
+    out = []
+    for off in _BEND_OFFSETS_FT:
+        for side in (1, -1):
+            bent = [*seq[:-1], (mx + side * off * nx, my + side * off * ny), seq[-1]]
+            out.append(bent if end == -1 else bent[::-1])
+    return out
+
+
 def teed_back(pts: Poly, end: int, other: Poly) -> list[Poly]:
     """Lane `pts` with its `end` (0 or -1) cut WHERE IT COMES ALONGSIDE the `other` lane and teed onto it from there: the run
     of legs before its last that lie within `_SIDE_BY_SIDE_DEG` of the other and within `WEB_SHADOW_FT` of it (the distance
@@ -472,8 +500,9 @@ def settle_knots(s: Any) -> int:
     the next round's draw of the tree (`tree.settle_tree`) keeps the gather - as may any other lane's end, a door path's too
     (Kashikawa: two farms' paths met their street 8.5 ft apart): an end re-aimed at the junction beside it, never a cut. A foot
     the seating left beside a junction where no gathered join was admitted (`gap_ways._way_for`) is gathered here, with the
-    knot's corner taken out of the lane joining the two (`contracted`). Ends the matrix refuses to rewrite (`reshape_lane`)
-    are left, and that knot is not asked again this step. Returns the lanes moved. Each gather joins two nodes into one, so
+    knot's corner taken out of the lane joining the two (`contracted`). A one-lane gather whose write the matrix refuses
+    (`reshape_lane`) has its new leg bent round what stands (`bent_round`, 405 T07: seed 57's leg ran past a household's
+    copse seat); ends no bend writes are left, and that knot is not asked again this step. Returns the lanes moved. Each gather joins two nodes into one, so
     the step ends. The web as it stands is asked once a gather is applied, never once a trial; a trial's whole-web questions
     are answered pair by pair, each pair's answer kept by the two lanes' points (`WebMemo`) - the same verdicts.
 
@@ -573,6 +602,15 @@ def settle_knots(s: Any) -> int:
                 if i < len(lanes) and lanes[i]["pts"] != before[i]:
                     n += 1
                     set_corridor(s.M, lanes[i])
+            if not n and len(edits) == 1:
+                ((i, p),) = edits.items()
+                for bent in bent_round(p, 0 if _pts({"pts": before[i]})[0] != p[0] else -1):
+                    if judge({i: bent}):
+                        apply_pieces(s, {i: [bent]})
+                        if lanes[i]["pts"] != before[i]:
+                            n = 1
+                            set_corridor(s.M, lanes[i])
+                            break
             if not n:
                 refused.append(edits)
             moved += n

@@ -232,6 +232,44 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T07": {
+   "section_sha256": "943dafd7b43cb02c55427574b46420249a7e34b0c10609b27de9d0da3785425c",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D126",
+     "summary": "settle_knots: where the overlap matrix refuses a one-lane gather's write, bend the gather's new last leg round what stands through a waypoint 10-40 ft off the leg's middle (either side, nearest first), each bend judged by the existing gather judge and written only where the matrix admits it; first written kept, otherwise refused as today.",
+     "class": "within",
+     "why": "Amendment 10 ('solve the knots problem inside 405') and FR-003a put the knots family, T07 included, in this feature. The bend fixes seed 57's knot without loosening a constraint: the judge, the matrix, the copse seat and the 25 ft single-point join all stay. It follows 0081's rule that a way the mapped ground blocks is drawn as walked, which fits amendment 7 (follow the research). The offsets are labeled UNRESEARCHED. That is a question for the research ladder, not a narrowing of the request."
+    },
+    {
+     "id": "D127",
+     "summary": "T07's carried claim rows (settle.py::theirs DRIFTED, _clear_link's re-check, Lawful.fault's 15 vs 20 degrees) move to T127; T101 keeps the 20 degrees.",
+     "class": "within",
+     "why": "The rows stay in the feature and nothing is dropped. They move to the task that carries claims findings, which FR-003a/D122 and amendment 10 ('finish it as the last thing in this feature') put last. Moving work between tasks inside the feature narrows nothing the GM asked for."
+    },
+    {
+     "id": "T07-A3a",
+     "summary": "The side-by-side merge (fixed REACH 20/25 ft) is not built here: measured, seed 57's knot is a refused gather, not a merge case.",
+     "class": "within",
+     "why": "Measured 2026-10-23: seed 57 is not the merge's case. Leaving out a mechanism for a case the knot does not present leaves 'solve the knots problem' whole, and the done measure is seed 57 passing with no seed regressed. Aside: the bundle's spec-cited D17 is gencache's coverage hit test, not a merge. The block's 'D17, saved' points at some other D17, which the bundle tool resolved by id alone."
+    },
+    {
+     "id": "T07-A3b",
+     "summary": "Seed 49's refusals (field/farmhouses unreached, refuse_unreached) keep the generator's every-house-reached contract and are not T07's measure.",
+     "class": "within",
+     "why": "This keeps an existing contract the GM never asked to relax. It is not a carve-out from the knots rule: the refusals are unreached-house refusals, not knots. The cohort exit (N=48, no seed regressed) still sees seed 49."
+    },
+    {
+     "id": "T07-A3c",
+     "summary": "needle_loops / needle_joins and the 20 degree needle are kept as they are.",
+     "class": "within",
+     "why": "Nothing changes. The plan reads them as 0081's drawing convention, and the request asks for no change to them."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {

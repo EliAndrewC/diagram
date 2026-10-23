@@ -5,6 +5,7 @@ within 25 ft of one another are joined at a single point") - the knot found on p
 import math
 
 from l7r.diagram.hamletgen.ways import knots as kn
+from l7r.diagram.settlement import seg_dist
 from l7r.diagram.hamletgen.ways.smooth import _KNOT_FT
 
 from ._settle_builders import _S, CONN
@@ -71,6 +72,34 @@ def test_a_gather_the_matrix_refuses_is_left_and_not_asked_again() -> None:
     s.reshape_lane = lambda ln, pts: False
     assert kn.settle_knots(s) == 0
     assert kn.knots(s.M["lanes"]), "left as it was"
+
+
+def test_a_gather_whose_leg_the_matrix_refuses_is_bent_round_what_stands() -> None:
+    """405 T07 (D126), seed 57 in small: the one gather admitted runs its new leg through a reserved copse seat, so the matrix
+    refuses the write; the leg bent round the seat is written, and the knot is gone."""
+    s = _S([CONN, [(-100.0, 150.0), (-100.0, 0.0)], [(-106.0, -150.0), (-106.0, 0.0)]], houses=[(-100.0, 180.0), (-106.0, -180.0)])
+    seat = (-103.0, -75.0)
+    write = s.reshape_lane
+
+    def matrix(ln, pts):  # noqa: ANN001, ANN202
+        if any(seg_dist(*seat, a, b) < 5.0 for a, b in zip(pts, pts[1:], strict=False)):
+            return False
+        return write(ln, pts)
+
+    s.reshape_lane = matrix
+    assert kn.settle_knots(s) == 1
+    assert kn.knots(s.M["lanes"]) == []
+    bent = s.M["lanes"][1]["pts"] if len(s.M["lanes"][1]["pts"]) == 3 else s.M["lanes"][2]["pts"]
+    assert len(bent) == 3 and all(seg_dist(*seat, a, b) >= 5.0 for a, b in zip(bent, bent[1:], strict=False)), "bent round the seat"
+
+
+def test_a_leg_is_bent_off_its_middle_either_side_nearest_first_at_either_end() -> None:
+    run = [(0.0, 100.0), (0.0, 0.0), (40.0, 0.0)]
+    forms = kn.bent_round(run, -1)
+    assert len(forms) == 12 and forms[0] == [(0.0, 100.0), (0.0, 0.0), (20.0, 10.0), (40.0, 0.0)]
+    assert forms[1][2] == (20.0, -10.0) and forms[-1][2] == (20.0, -40.0)
+    assert kn.bent_round(run[::-1], 0)[0] == forms[0][::-1], "the first end bent as the last is"
+    assert kn.bent_round([(0.0, 0.0), (0.0, 0.0)], -1) == [], "no leg, no bend"
 
 
 def test_a_gather_that_would_split_the_web_is_refused() -> None:
