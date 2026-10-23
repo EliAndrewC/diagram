@@ -196,18 +196,24 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       verify: DONE. landed in batch T95+T96+T97+T100: batch 10: the join link's water margin claimed (T95); a hairpin is a turn of more than 140 degrees and a zigzag's turns more than 50, as 0081 says (T96); 0081's doubled tail claimed, its 20 degrees measured and owned by T101 (T97); spec-lint refuses a task id taken twice (T100); seeds 1-48 and pinned rows 54/54
 - [ ] T98 0081's drawing page lets a lane run on the bund between plots and touch a plot's boundary, while `clear_runs` keeps a lane the full `margin` off the crop and `_clear_touch` keeps a join link 7 ft off it: let a lane reach the crop's edge (a crop margin of 0), or record the margin on 0081 as a DEVIATION with its reason (impl-drift, batch 9's crop-claims round, 2026-10-21); also carried from T93: `_clear_touch` keeps a join link the fabric gap (7 ft) off the crop - decide it here with every `clear_runs` crop margin (D85, 2026-10-22) [lands-open]
       research: rendering
-- [ ] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+- [x] T01 (385 T35) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
-- [ ] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      verify: DONE. released unworked by amendment 10 (the GM, 2026-10-23: option 2); the row stays open in 328's ranking, audit/waves.json unchanged (D121)
+- [x] T02 (385 T36) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
-- [ ] T03 (385 T37) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      verify: DONE. released unworked by amendment 10 (the GM, 2026-10-23: option 2); the row stays open in 328's ranking, audit/waves.json unchanged (D121)
+- [x] T03 (385 T37) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
-- [ ] T04 (385 T38) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      verify: DONE. released unworked by amendment 10 (the GM, 2026-10-23: option 2); the row stays open in 328's ranking, audit/waves.json unchanged (D121)
+- [x] T04 (385 T38) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
-- [ ] T05 (385 T39) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      verify: DONE. released unworked by amendment 10 (the GM, 2026-10-23: option 2); the row stays open in 328's ranking, audit/waves.json unchanged (D121)
+- [x] T05 (385 T39) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
-- [ ] T06 (385 T40) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
+      verify: DONE. released unworked by amendment 10 (the GM, 2026-10-23: option 2); the row stays open in 328's ranking, audit/waves.json unchanged (D121)
+- [x] T06 (385 T40) FR-003: a ranking row (chosen at its start, a kind not yet tried where one is left); its retro row [lands-open]
       research: rendering
+      verify: DONE. released unworked by amendment 10 (the GM, 2026-10-23: option 2); the row stays open in 328's ranking, audit/waves.json unchanged (D121)
 - [ ] T07 (385 T12) Carried from T03 by the round arbiter (hour:385-approach-checklist@6, ask:t03-d17-route, ask:t03-seed57-residue): D17's side-by-side merge (saved; F1-F3 merged and seed 49 fixed, six seeds regressed - 7, 24, 37, 51, 52, 57 - because the later settle passes are blind to the junctions it makes), seed 49, seed 55 (lane_knots 1, as at HEAD), seed 57 (lanes 1/13, ends 21.6 ft apart, settle_knots' gather refused by needle_loops; 2 knots against HEAD's 1) and Inashiro F1-F3's glyph-check NEEDS-WORK; done when seed 57 PASSES. Its Approach first asks whether the merge needs a fixed reach at all (REACH 20 then 25 ft is ours), whether the refusals behind seed 49 (a field and farmhouses unreached) rest on research, and whether needle_loops' and needle_joins' rules are research or ours; only then the design that makes the later passes aware of the merge's junctions. Also carried at T03's landing (ask:t03-claims-at-landing): settle.py::theirs DRIFTED - take a lane's own household from fabric.owned_gardens instead of the 80 ft radius, measured on the cohort; Lawful.fault's doubled tail at 15 degrees against 0081's 20 - which number the research fixes, first; clearance.py::_clear_link re-checked once its bundle carries link_survives; its retro row [lands-open]
       research: rendering
 - [x] T08 (385 T111) 0033's drawing page gives a door path only to a farm whose grove stands between it and its street, on the near row; the code lays one for every grove farm its street does not serve (impl-drift aside, T97's round) - settle which, and label it [lands-open]
@@ -258,8 +264,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T23 (385 T142) bund.tip_onto_the_bund returns a spur tip more than 60 ft off, or one whose run-on turns back or is blocked, as it came - short in open ground, against 0014's 'never ends in open ground short of the bund': name the fallback in the claim or make the tip arrive (impl-drift, T33's round) [lands-open]
       research: rendering
       verify: DONE. landed in batch T18+T86+T89+T22+T23: batch 9: only a household's own way, as its record names it (of, serves), runs beside its own garden - every other lane keeps 0246's 7 ft off every garden (T18); the field reached at 0014's 6 ft join, the folded spur too (T22); the join links' keep, the 2 ft end-on-a-way and the spur tip's fallback claimed (T86, T89, T23); seeds 1-48 and pinned rows 54/54
-- [ ] T24 (385 T144) FR-003: a ranking row in place of T32's, whose row turned out dead code (retired in T143) - a live row, chosen at its start; its retro row [lands-open]
+- [x] T24 (385 T144) FR-003: a ranking row in place of T32's, whose row turned out dead code (retired in T143) - a live row, chosen at its start; its retro row [lands-open]
       research: rendering
+      verify: DONE. released unworked by amendment 10 (the GM, 2026-10-23: option 2); the row stays open in 328's ranking, audit/waves.json unchanged (D121)
 - [x] T25 (385 T145) 0043's drawing page, 'How many farmsteads have a wood shed?': 'the share chosen at random for each hamlet from its seed' - seed is the generator's word; reword for a reader (the glossary lists a `seed` variant: check its sense first) (record-format, T34's round) [lands-open]
       research: rendering
       verify: DONE. landed in batch T70+T78+T88+T94+T114+T92+T21+T25+T15+T75+T125+T126: record batch from page sessions 1-5 (0246, 0081, 0014 split to 0284, 0043, 0196, glossary; T15's rule on Mencius and the Tang Code) with every engine claim repointed; T125 the cohort gate names regenerated maps; T126 bund junctions within 0284's 4-6 ft
