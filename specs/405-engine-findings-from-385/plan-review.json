@@ -740,6 +740,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-23",
    "declared": "spec-fidelity"
+  },
+  "## T07 - the knot whose gather the matrix refuses (seed 57)": {
+   "sha256": "574b709613af43f0e4085969cc8ed8cff44ba770d1f7dce7c7f2bbfc9771347e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "975d982fb9d7af84928c101ab24dccfbced08e8ccdef1fd6fcaeeff1bb05275e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Decisions": {
+   "sha256": "dce64b798978e371e448b87c7e888cc8c1f6d1a521381851fd9742e4ac662876",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (re-answered 2026-10-23T09:55Z)": {
+   "sha256": "0c286266fedf3d9dd3f29bacb9742341299f188c9de12b3dc0c4983cdd58b160",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4811,6 +4835,60 @@
      "summary": "No constant moves; nothing fitted into room",
      "class": "within",
      "why": "Unchanged; decides nothing the request or spec constrains."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-23",
+   "blocks": [
+    "## T07 - the knot whose gather the matrix refuses (seed 57)",
+    "### T07 Approach (checklist part A)",
+    "### T07 Approach (re-answered 2026-10-23T09:55Z)",
+    "### T07 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D126",
+     "summary": "Where the overlap matrix refuses a one-lane gather's write in settle_knots' first pass, bend the gather's new last leg through one waypoint 10-40 ft off its middle (12 tries, nearest first), each judged by the existing judge and written only where the matrix admits it; otherwise refused as today.",
+     "class": "within",
+     "why": "Amendment 10 (solve the knots problem inside 405) and FR-003a: this is the fix for T07's own knot, seed 57, measured as a gather refused by the matrix. Offsets are labeled UNRESEARCHED and bounded; no constant moves, nothing is excepted from the request."
+    },
+    {
+     "id": "D128",
+     "summary": "settle_knots' second pass (3 ft join off another household's garden) gathers households' ways only; every other lane keeps the 7 ft gap.",
+     "class": "within",
+     "why": "Brings the existing 405 T114 deviation back to what research 0246 allows, found on impl-drift's round of T07's own change; measured 54/54. Serves solving the knots within the research, narrows nothing the GM asked."
+    },
+    {
+     "id": "D127",
+     "summary": "T07's carried claim rows (settle.py::theirs DRIFTED, _clear_link re-check, Lawful.fault 15 vs 20 degrees) move to T127, and T101 keeps the 20 degree question.",
+     "class": "within",
+     "why": "The rows stay in 405 and are worked before it closes: T127 is the claims-findings task the GM asked to finish last in this feature (amendment 10, D122), and FR-002 keeps found work here. Nothing is dropped from the feature; only its task within the feature changes."
+    },
+    {
+     "id": "A3a",
+     "summary": "The side-by-side merge (its fixed REACH) is not built in T07: seed 57's knot is measured not to be the merge's case.",
+     "class": "within",
+     "why": "T07 is the seed 57 knot; building a merge that does not act on it would be unrequested scope. Not built here is not dropped from the feature (marked saved)."
+    },
+    {
+     "id": "A3b",
+     "summary": "Seed 49's refusals (unreached field and farmhouses) are not loosened; seed 49 is not T07's measure.",
+     "class": "within",
+     "why": "Keeps the generator's every-house-reached contract the GM's request does not ask to change; seed 49's case is not a knot."
+    },
+    {
+     "id": "A3c",
+     "summary": "needle_loops / needle_joins and the 20 degree needle are kept as they are.",
+     "class": "within",
+     "why": "Preserves existing labeled behavior the request does not ask to change; the 15 vs 20 degree question is carried by T101/T127 (D127)."
+    },
+    {
+     "id": "A3-reanswer",
+     "summary": "The bend is asked in the first pass only (keeps the 7 ft fence gap) and no farther off than the leg is long (no hairpin).",
+     "class": "within",
+     "why": "Design limits on D126's own mechanism that keep the bent leg inside the page's gap; they restrict the fix, not the request."
     }
    ]
   }

@@ -188,6 +188,26 @@ _SIDE_BY_SIDE_DEG = 20.0
 """Research: two paths side by side - research/questions/0081-village-lanes.drawing.html: "A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other as a T" (0081)"""
 
 
+def households_only(lanes: Sequence[Mapping[str, Any]], edits: Mapping[int, Poly]) -> bool:
+    """Is every lane at both nodes of a gather a household's way (`ACCESS_ROLE`) - each moved lane, and every lane standing
+    where a moved end was or now is, a tee's lane too (405 T07, D128)? The 3 ft pass asks it: a street, the field way or a
+    spur never moves, so asking only the moved lanes let a household's way come 3 ft off a garden onto one (impl-drift round 2).
+
+    Research: households' ways only - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the 3 ft join is for two households' way ends a few feet apart and unjoined"""
+    spots = []
+    for i, p in edits.items():
+        if lanes[i].get("role") != ACCESS_ROLE:
+            return False
+        was = _pts(lanes[i])
+        spots += [q for e in (0, -1) if was and p and was[e] != p[e] for q in (was[e], p[e])]
+    for j, ln in enumerate(lanes):
+        if j in edits or ln.get("role") == ACCESS_ROLE or len(w := _pts(ln)) < 2:
+            continue
+        if any(seg_dist(x, y, a, b) <= 1.0 for x, y in spots for a, b in zip(w, w[1:], strict=False)):
+            return False
+    return True
+
+
 _BEND_OFFSETS_FT = (10.0, 15.0, 20.0, 25.0, 30.0, 40.0)
 """How far off its middle a gather's refused leg is bent round what stands, nearest first (405 T07, D126).
 
@@ -204,6 +224,8 @@ def bent_round(pts: Poly, end: int) -> list[Poly]:
     Research:
         the leg bent round what stands - research/questions/0081-village-lanes.drawing.html: a turn whose straighter way the mapped ground blocks is drawn as walked (the GM 2026-10-17)
         round a grove, not through it - research/questions/0081-village-lanes.drawing.html: where a grove stands across the straighter way, the walker goes round it
+        how far off - UNRESEARCHED: the waypoint 10 to 40 ft off the leg's middle (`_BEND_OFFSETS_FT`)
+        never farther off than the leg is long - research/questions/0081-village-lanes.drawing.html: a hairpin is refused (the drawing page's 140 degrees, a drawing convention); a waypoint no farther off than its leg is long turns at most 127 degrees
         the bend's form - UNRESEARCHED: one waypoint off the leg's middle, either side, nearest first - the smallest detour tried first, each asked of the gather's judge (its angle rules read as open ground, `forced.py`)"""
     seq = list(pts) if end == -1 else list(reversed(pts))
     if len(seq) < 2 or (span := math.dist(seq[-2], seq[-1])) < 1e-6:
@@ -539,8 +561,8 @@ def settle_knots(s: Any) -> int:
     def judge(edits: dict[int, Poly]) -> bool:
         if edits in refused:
             return False
-        if lawful.fence_gap < WEB_FABRIC_GAP and any(lanes[i].get("role") != ACCESS_ROLE for i in edits):
-            return False  # the 3 ft pass gathers households' ways only (0246; impl-drift, T07 round 1)
+        if lawful.fence_gap < WEB_FABRIC_GAP and not households_only(lanes, edits):
+            return False  # the 3 ft pass gathers households' ways only (0246; impl-drift, T07 rounds 1 and 2)
         if "nets" not in had:
             ways[:] = [_pts(ln) for ln in lanes]
             ids[:] = memo.ids(ways)

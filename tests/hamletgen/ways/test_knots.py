@@ -93,6 +93,18 @@ def test_a_gather_whose_leg_the_matrix_refuses_is_bent_round_what_stands() -> No
     assert len(bent) == 3 and all(seg_dist(*seat, a, b) >= 5.0 for a, b in zip(bent, bent[1:], strict=False)), "bent round the seat"
 
 
+def test_the_3_ft_pass_asks_every_lane_at_both_nodes_be_a_households_way() -> None:
+    """405 T07 (D128, impl-drift round 2): a street never moves, so a household's way moved onto one is no 3 ft gather."""
+    way = {"pts": [[0.0, 100.0], [0.0, 0.0]], "role": kn.ACCESS_ROLE}
+    other = {"pts": [[20.0, 100.0], [20.0, 0.0]], "role": kn.ACCESS_ROLE}
+    street = {"pts": [[-50.0, -10.0], [50.0, -10.0]], "role": "street"}
+    onto = {0: [(0.0, 100.0), (0.0, -10.0)]}
+    assert kn.households_only([way, other], {0: [(0.0, 100.0), (20.0, 0.0)]}), "two households' ways"
+    assert not kn.households_only([way, other, street], onto), "a street where the end now stands"
+    assert not kn.households_only([{**way, "role": "street"}, other], {0: [(0.0, 100.0), (20.0, 0.0)]}), "a moved street"
+    assert kn.households_only([way, street], {0: [(0.0, 100.0), (0.0, 0.0)]}), "no end moved, no node asked"
+
+
 def test_a_leg_is_bent_off_its_middle_either_side_nearest_first_at_either_end() -> None:
     run = [(0.0, 100.0), (0.0, 0.0), (40.0, 0.0)]
     forms = kn.bent_round(run, -1)
@@ -330,6 +342,13 @@ def test_a_knot_the_fence_gap_leaves_is_gathered_at_the_crop_clearance(monkeypat
     for ln in s.M["lanes"][1:]:
         ln["role"] = kn.ACCESS_ROLE
     asked.clear()
+    assert kn.settle_knots(s) == 0, "households' ways that meet the connector: a lane at the node is no household's (round 2)"
+    s = _S([CONN, [(-100.0, 0.0), (-100.0, 100.0)], [(-140.0, 180.0), (-130.0, 100.0)], [(-60.0, 180.0), (-124.0, 100.0)]], houses=[(-140.0, 200.0), (-60.0, 200.0)])
+    for ln in s.M["lanes"][1:]:
+        ln["role"] = kn.ACCESS_ROLE
+    s.M["lanes"][1]["pts"] = [[-100.0, 0.0], [-100.0, 100.0], [-180.0, 100.0]]
+    asked.clear()
+    assert kn.knots(s.M["lanes"])
     assert kn.settle_knots(s) == 1
     assert kn.knots(s.M["lanes"]) == []
     assert asked[0] == WEB_FABRIC_GAP and asked[-1] == WEB_CROP_GAP, "the convention first, the crop clearance after"
