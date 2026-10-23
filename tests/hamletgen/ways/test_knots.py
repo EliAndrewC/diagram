@@ -5,8 +5,8 @@ within 25 ft of one another are joined at a single point") - the knot found on p
 import math
 
 from l7r.diagram.hamletgen.ways import knots as kn
-from l7r.diagram.settlement import seg_dist
 from l7r.diagram.hamletgen.ways.smooth import _KNOT_FT
+from l7r.diagram.settlement import seg_dist
 
 from ._settle_builders import _S, CONN
 
