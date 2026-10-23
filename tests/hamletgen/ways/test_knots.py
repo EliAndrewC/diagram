@@ -258,6 +258,7 @@ def test_an_end_is_teed_back_from_each_earlier_vertex_never_longer() -> None:
     assert kn.teed_back(run, -1, way) == [[(150.0, 30.0), (60.0, 20.0), (60.0, 0.0)]], "cut where it comes alongside (its first leg is 76 ft off)"
     assert kn.teed_back(run[::-1], 0, way) == [[(60.0, 0.0), (60.0, 20.0), (150.0, 30.0)]]
     assert kn.teed_back([(0.0, 0.0), (10.0, 30.0), (0.0, 20.0)], -1, [(-5.0, 0.0), (5.0, 0.0)]) == [], "the leg before the last is not alongside: nothing"
+    assert kn.teed_back([(-50.0, 40.0), (10.0, 0.0), (40.0, 2.0), (40.0, 10.0)], -1, [(0.0, 0.0), (100.0, 0.0)]) == [], "it comes alongside from a vertex on the way: no tee to make"
 
 
 def test_two_ends_a_house_parts_are_no_knot() -> None:
