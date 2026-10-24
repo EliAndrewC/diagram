@@ -232,3 +232,32 @@ def test_a_coverage_report_that_errors_is_named_in_the_run_record() -> None:
     out = "Name  Stmts\nNo source for code: '/x/l7r/gone.py'; see https://coverage.readthedocs.io/x\n"
     assert um.errors(out) == ["coverage-error No source for code: '/x/l7r/gone.py'; see https://coverage.readthedocs.io/x"]
     assert um.errors("Name   Stmts   Miss\nTOTAL  1  0\n") == []
+
+
+def test_a_gate_records_each_phase_and_this_runs_plan(tmp_path) -> None:  # noqa: ANN001
+    """Feature 415 (FR-002, FR-005; the GM 2026-10-24): the run record carries each phase's seconds - the preflight's too,
+    run before `start` - and the plan's mode, reason and counts from THIS run's selection result, never an older one's."""
+    import json
+    import os
+    import time
+
+    g = str(tmp_path)
+    (tmp_path / "gate-baseline").mkdir()
+    result = tmp_path / "gate-baseline" / "result.json"
+    result.write_text(json.dumps({"mode": "full", "reason": "an older run", "selected": 9, "collected": 9}))
+    old = time.time() - 600
+    os.utime(result, (old, old))
+    runstats.phase(g, "preflight", "34", pre=True)
+    runstats.start(g)
+    runstats.phase(g, "static", "12.5")
+    runstats.phase(g, "test", "200")
+    runstats.phase(g, "test", "80")
+    out = runstats.end(g)
+    assert out["phases"] == {"preflight": 34.0, "static": 12.5, "test": 280.0}
+    assert "plan_mode" not in out and "selected" not in out, "an older run's result is not this run's"
+    result.write_text(json.dumps({"mode": "incremental", "reason": "2 engine file(s)", "selected": 143, "collected": 10380}))
+    out = runstats.end(g)
+    assert (out["plan_mode"], out["plan_reason"], out["selected"], out["collected"]) == ("incremental", "2 engine file(s)", 143, 10380)
+    runstats.start(g)
+    assert "phases" not in runstats.end(g), "a new gate starts with no phases"
+    assert runstats.main(["phase", g, "x", "1"]) == 0 and runstats.end(g)["phases"] == {"x": 1.0}
