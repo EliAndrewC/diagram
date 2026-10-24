@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-24T17:24:34Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 282,
+  "result": "failed: test-full",
+  "commit": "56b4c48b6",
+  "first_failure_s": 243.0,
+  "last_failure_s": 243.0,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_speckit_todo.py::test_every_open_feature_in_the_repository_names_known_tags"
+  ],
+  "host": {
+    "load": [
+      7.37,
+      8.14
+    ],
+    "mem_avail_mb": [
+      6893,
+      8209
+    ],
+    "cpu_temp_c": [
+      79.0,
+      101.0
+    ],
+    "stall_s": {
+      "cpu": 3.3,
+      "io": 1.1,
+      "io_full": 0.9,
+      "memory": 0.4
+    },
+    "throttle_ms": {
+      "core": 4322,
+      "package": 2961
+    }
+  }
+}

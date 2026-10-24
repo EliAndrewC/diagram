@@ -31,6 +31,9 @@ a.fnback { font-family: system-ui, sans-serif; margin-left: .35em; }
 /* the glossary (feature 209, GM 2026-09-07 - the map's rule, page.css): a dotted underline marks a defined term;
    hovering it shows the definition in the same box the footnotes use */
 .gl { border-bottom: 1px dotted var(--rule); cursor: help; }
+/* a marked amount of money (feature 413): its box shows its conversion a line at a time */
+span.money[data-def] { border-bottom: 1px dotted var(--rule); cursor: help; }
+#fntip.money { white-space: pre-line; }
 /* feature 292: the link between a research section and the rendering section about it, written by `make record`
    at the start of the heading - floated small to the right of the heading's own line, a way out of the section (GM 2026-09-29) */
 .xref { float: right; margin: .35em 0 0 1em; font-size: .55em; font-weight: normal; }

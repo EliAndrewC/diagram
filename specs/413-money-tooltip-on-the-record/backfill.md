@@ -1,0 +1,295 @@
+# Feature 413: the back-fill's passed-over amounts (plan D6)
+
+Every amount `make money-candidates` lists is marked or named here with the reason it is passed over (`--check` holds it).
+An amount within 25 years of a built era, or with no year the script can find, has its own line; a `*` line judges the rest
+of a fragment whole. Written 2026-10-24 against the vendored table's two eras, `kyoto-1745` and `tokyo-1882`.
+
+Each pass-over is the author's judgment, amount by amount or fragment by fragment, that no built era is close enough to
+borrow; the GM withdrew the 25-year default (#14, 2026-10-24) and diagram#15 will measure a rule. `make money-candidates`
+lists the amounts nearest a built era first, with their distance; the order decided nothing. Where a reason below states a
+distance, it is a fact about the amount, beside the author's judgment.
+
+## Each on its own line
+
+- 0250-what-did-an-unskilled-laborer-earn | 1.0 monme | Kyoto and Kami-Kawarabayashi 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0250-what-did-an-unskilled-laborer-earn | 0.92 monme | Kyoto and Kami-Kawarabayashi 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0250-what-did-an-unskilled-laborer-earn.notes | 1 yen | a conversion factor (1 yen = 25 g of silver), not a sum
+- 0250-what-did-an-unskilled-laborer-earn.notes | 1.0 monme | Kyoto and Kami-Kawarabayashi 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0250-what-did-an-unskilled-laborer-earn.notes | 0.92 monme | Kyoto and Kami-Kawarabayashi 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0251-what-did-farmland-sell-for-against-its-yield | 70 ryo | Musashi 1700; the author judges no built era close enough to borrow, pending diagram#15
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build | 30 ryo | the 1827-1841 rebuilding, its bid and its arithmetic; the author judges no built era close enough to borrow, pending diagram#15
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build | 60 monme | an exchange rate between coins, not a sum paid
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build | 1,800 monme | the 1827-1841 rebuilding, its bid and its arithmetic; the author judges no built era close enough to borrow, pending diagram#15
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build | 3 monme | the 1827-1841 rebuilding, its bid and its arithmetic; the author judges no built era close enough to borrow, pending diagram#15
+- 0256-what-did-a-shrine-roof-and-its-finish-cost | 60 monme | an exchange rate between coins, not a sum paid
+- 0256-what-did-a-shrine-roof-and-its-finish-cost.notes | 1 ryo | an exchange rate between coins, not a sum paid
+- 0256-what-did-a-shrine-roof-and-its-finish-cost.notes | 60 monme | an exchange rate between coins, not a sum paid
+- 0256-what-did-a-shrine-roof-and-its-finish-cost.notes | 5 rin | a sub-unit of silver weight (fun, rin), not the yen's rin
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 3,200 ryo | Iida 1708; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 1.3 monme | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0260-what-did-hiring-a-horse-or-a-porter-cost | 1.2 monme | Osaka 1628; the author judges no built era close enough to borrow, pending diagram#15
+- 0261-what-did-cloth-and-clothing-cost | 15 monme | 1716, in another silver coin (Yotsuho); the author judges no built era close enough to borrow, pending diagram#15
+- 0266-what-did-a-play-or-a-show-cost-to-see | 5 monme | a share of a box price whose year the text leaves open
+- 0266-what-did-a-play-or-a-show-cost-to-see | 1,200 mon | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see | 16 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see | 64 mon | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see | 6,530 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see | 54.5 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see | 285.2 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see | 5.7 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see | 135 mon | Aizu-Wakamatsu, 1787 or after; the author judges no built era close enough to borrow, pending diagram#15
+- 0266-what-did-a-play-or-a-show-cost-to-see | 0.92 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see.notes | 200 mon | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see.notes | 16 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see.notes | 64 mon | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see.notes | 6,530 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see.notes | 2,709.6 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see.notes | 54.5 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see.notes | 285.2 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0266-what-did-a-play-or-a-show-cost-to-see.notes | 5.7 monme | Edo 1714, Kyoto 1802-1804, or a historian's figure over the Funai runs of 1690-1737 rather than one year's sum
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost | 1.5 monme | Fukuchiyama, no year given
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost.notes | 1 monme | Miyazu 1783 or Fukuchiyama with no year given; the author judges no built era close enough to borrow, pending diagram#15
+- 0270-what-did-a-shrines-metal-furnishings-cost | 17 ryo | Takaoka in the 1830s, Kumehara 1830 or Kyoto 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0270-what-did-a-shrines-metal-furnishings-cost | 1,050 monme | Takaoka in the 1830s, Kumehara 1830 or Kyoto 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0270-what-did-a-shrines-metal-furnishings-cost | 2 monme | Takaoka in the 1830s, Kumehara 1830 or Kyoto 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0270-what-did-a-shrines-metal-furnishings-cost | 1 monme | Takaoka in the 1830s, Kumehara 1830 or Kyoto 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0270-what-did-a-shrines-metal-furnishings-cost | 0.92 monme | Takaoka in the 1830s, Kumehara 1830 or Kyoto 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0270-what-did-a-shrines-metal-furnishings-cost | 61.8 monme | an exchange rate between coins, not a sum paid
+- 0270-what-did-a-shrines-metal-furnishings-cost | 4.3 monme | Takaoka in the 1830s, Kumehara 1830 or Kyoto 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0270-what-did-a-shrines-metal-furnishings-cost.notes | 16 ryo | ryo and monme as weights (1 kin = 16 ryo = 160 monme)
+- 0270-what-did-a-shrines-metal-furnishings-cost.notes | 160 monme | ryo and monme as weights (1 kin = 16 ryo = 160 monme)
+- 0270-what-did-a-shrines-metal-furnishings-cost.notes | 1 monme | Takaoka in the 1830s, Kumehara 1830 or Kyoto 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0270-what-did-a-shrines-metal-furnishings-cost.notes | 17 ryo | Takaoka in the 1830s, Kumehara 1830 or Kyoto 1802-1804; the author judges no built era close enough to borrow, pending diagram#15
+- 0273-what-did-salt-cost | 0.92 monme | Kyoto 1802-1804 and its conversion at the rate of 1804, or a blog's undated account of salt inland
+- 0273-what-did-salt-cost | 100 mon | Kyoto 1802-1804 and its conversion at the rate of 1804, or a blog's undated account of salt inland
+- 0273-what-did-salt-cost.notes | 756 mon | part of a sum in gold bu and copper together (1 bu 756 mon); the row has no unit for bu
+- 0273-what-did-salt-cost.notes | 400 mon | part of a sum in gold bu and copper together (1 bu 400 mon); the row has no unit for bu
+- 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost | 180 monme | Kaga before 1614, or 1813; the author judges no built era close enough to borrow, pending diagram#15
+- 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost | 48 ryo | Kaga before 1614, or 1813; the author judges no built era close enough to borrow, pending diagram#15
+- 0276-what-did-a-kitchen-knife-cost | 19 monme | Mimasaka 1665 or Edo 1851; the author judges no built era close enough to borrow, pending diagram#15
+- 0276-what-did-a-kitchen-knife-cost | 8 monme | Mimasaka 1665 or Edo 1851; the author judges no built era close enough to borrow, pending diagram#15
+- 0276-what-did-a-kitchen-knife-cost | 10 monme | Mimasaka 1665 or Edo 1851; the author judges no built era close enough to borrow, pending diagram#15
+- 0276-what-did-a-kitchen-knife-cost.notes | 10 monme | Mimasaka 1665 or Edo 1851; the author judges no built era close enough to borrow, pending diagram#15
+- 0276-what-did-a-kitchen-knife-cost.notes | 5 rin | a sub-unit of silver weight (fun, rin), not the yen's rin
+- 0277-what-was-copper-coin-worth-in-silver | 63.82 monme | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver | 15.19 monme | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver | 4,201 mon | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver | 66 mon | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver | 6 kanmon | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver | 9.26 monme | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver | 108 mon | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 1 ryo | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 63 monme | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 2 rin | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 1 kanmon | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 15 monme | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 9 rin | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 4,201 mon | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 107 monme | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 12 monme | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 6 rin | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 8,460 mon | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 6 kanmon | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0277-what-was-copper-coin-worth-in-silver.notes | 6,500 mon | an exchange rate between coins, not a sum paid (and fun and rin of silver weight)
+- 0279-what-did-charcoal-cost | 466 mon | Edo 1842 or 1716, or the charcoal tax, whose years are not given beside its rates
+- 0279-what-did-charcoal-cost | 500 mon | Edo 1842 or 1716, or the charcoal tax, whose years are not given beside its rates
+- 0279-what-did-charcoal-cost | 8 mon | Edo 1842 or 1716, or the charcoal tax, whose years are not given beside its rates
+- 0279-what-did-charcoal-cost.notes | 8 mon | Edo 1842 or 1716, or the charcoal tax, whose years are not given beside its rates
+- 0279-what-did-charcoal-cost.notes | 12 mon | Edo 1842 or 1716, or the charcoal tax, whose years are not given beside its rates
+- 0037-threshing-and-drying-yards-at-farmhouses-niwa | 100 bu | bu as a measure of area or length, not money
+- 0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.notes | 1 bu | bu as a measure of area or length, not money
+- 0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.notes | 360 bu | bu as a measure of area or length, not money
+- 0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin | 2 ryo | an Edo servant's yearly wage with no year given; the row has no unit for bu
+- 0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin | 2 bu | an Edo servant's yearly wage with no year given; the row has no unit for bu
+- 0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.notes | 2 ryo | an Edo servant's yearly wage with no year given; the row has no unit for bu
+- 0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.notes | 2 bu | an Edo servant's yearly wage with no year given; the row has no unit for bu
+- 0130-market-days-and-the-market-ground-ichi.drawing.notes | 266 bu | bu as a measure of area or length, not money
+- 0130-market-days-and-the-market-ground-ichi.notes | 266 bu | bu as a measure of area or length, not money
+- 0174-fields-and-gardens-inside-a-citys-wall.notes | 1 bu | bu as a measure of area or length, not money
+- 0174-fields-and-gardens-inside-a-citys-wall.notes | 360 bu | bu as a measure of area or length, not money
+- 0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.notes | 2 bu | tsubo, bu and rin as measures of area, not money
+- 0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.notes | 5 rin | tsubo, bu and rin as measures of area, not money
+- 0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.notes | 2 bu | tsubo, bu and rin as measures of area, not money
+- 0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.notes | 5 rin | tsubo, bu and rin as measures of area, not money
+- 0194-the-bell-and-drum-tower-zhonggulou | 4 mon | a bell levy whose year the text does not give
+- 0228-town-monasteries | 10 bu | bu as a measure of area or length, not money
+- 0228-town-monasteries.notes | 10 bu | bu as a measure of area or length, not money
+- 0229-village-temples-tera.drawing.notes | 12 bu | bu as a measure of area or length, not money
+- 0229-village-temples-tera.drawing.notes | 412 bu | bu as a measure of area or length, not money
+- 0229-village-temples-tera.drawing.notes | 4 bu | bu as a measure of area or length, not money
+- 0229-village-temples-tera.drawing.notes | 3 bu | bu as a measure of area or length, not money
+- 0229-village-temples-tera.drawing.notes | 25 bu | bu as a measure of area or length, not money
+- 0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.notes | 100 bu | bu as a measure of area or length, not money
+- 0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.notes | 240 bu | bu as a measure of area or length, not money
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build | 80 ryo | the 1827-1841 rebuilding, its bid and its arithmetic; the author judges no built era close enough to borrow, pending diagram#15
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build | 3 ryo | the 1827-1841 rebuilding, its bid and its arithmetic; the author judges no built era close enough to borrow, pending diagram#15
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build | 11 ryo | the 1827-1841 rebuilding, its bid and its arithmetic; the author judges no built era close enough to borrow, pending diagram#15
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build | 2 bu | the 1827-1841 rebuilding, its bid and its arithmetic; the author judges no built era close enough to borrow, pending diagram#15
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build | 11.5 ryo | the 1827-1841 rebuilding, its bid and its arithmetic; the author judges no built era close enough to borrow, pending diagram#15
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build | 120 ryo | the 1827-1841 rebuilding, its bid and its arithmetic; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 18 monme | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 13,340.93 monme | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 1.2 monme | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 10 monme | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 6.5 monme | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 60 monme | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 1.5 monme | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 200 mon | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 5.98 monme | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 806,113.59 monme | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | 6.7 monme | Osaka 1620-1628 and the river works of 1704; the author judges no built era close enough to borrow, pending diagram#15
+- 0258-what-did-a-shrines-rites-and-furnishings-cost | 225 monme | Morisada's Edo (1830s-1850s) and a Kyoto carver's order of no stated year near a built era
+- 0258-what-did-a-shrines-rites-and-furnishings-cost | 137 monme | Morisada's Edo (1830s-1850s) and a Kyoto carver's order of no stated year near a built era
+- 0258-what-did-a-shrines-rites-and-furnishings-cost | 5.5 monme | Morisada's Edo (1830s-1850s) and a Kyoto carver's order of no stated year near a built era
+- 0258-what-did-a-shrines-rites-and-furnishings-cost | 300 mon | Morisada's Edo (1830s-1850s) and a Kyoto carver's order of no stated year near a built era
+- 0258-what-did-a-shrines-rites-and-furnishings-cost | 60 monme | an exchange rate between coins, not a sum paid
+- 0258-what-did-a-shrines-rites-and-furnishings-cost | 110 mon | an exchange rate between coins, not a sum paid
+- 0259-what-did-a-night-at-an-inn-cost | 3 monme | Morisada's inns of 1837-1853; the author judges no built era close enough to borrow, pending diagram#15
+- 0259-what-did-a-night-at-an-inn-cost | 5 bu | Morisada's inns of 1837-1853; the author judges no built era close enough to borrow, pending diagram#15
+- 0259-what-did-a-night-at-an-inn-cost | 5 monme | Morisada's inns of 1837-1853; the author judges no built era close enough to borrow, pending diagram#15
+- 0259-what-did-a-night-at-an-inn-cost | 2 shu | Morisada's inns of 1837-1853; the author judges no built era close enough to borrow, pending diagram#15
+- 0259-what-did-a-night-at-an-inn-cost | 250 mon | Morisada's inns of 1837-1853; the author judges no built era close enough to borrow, pending diagram#15
+- 0259-what-did-a-night-at-an-inn-cost | 200 mon | Morisada's inns of 1837-1853; the author judges no built era close enough to borrow, pending diagram#15
+- 0259-what-did-a-night-at-an-inn-cost | 248 mon | Morisada's inns of 1837-1853; the author judges no built era close enough to borrow, pending diagram#15
+- 0259-what-did-a-night-at-an-inn-cost | 36 mon | Morisada's inns of 1837-1853; the author judges no built era close enough to borrow, pending diagram#15
+- 0259-what-did-a-night-at-an-inn-cost.notes | 36 mon | Morisada's inns of 1837-1853; the author judges no built era close enough to borrow, pending diagram#15
+- 0261-what-did-cloth-and-clothing-cost | 5 bu | bu as a measure of area or length, not money
+- 0261-what-did-cloth-and-clothing-cost.notes | 5 bu | bu as a measure of area or length, not money
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup | 33 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup | 132 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup | 24 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup | 8 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup | 100 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup | 48 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup | 16 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup | 200 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup | 540 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup | 5 monme | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup.notes | 16 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup.notes | 24 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup.notes | 32 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup.notes | 36 mon | Edo in the Bunsei era (1818-1829) and Morisada's 1830s-1850s, or a page giving no year
+- 0263-what-did-arrows-cost | 1 kanmon | a Sengoku-period reckoning (the 1500s), long before any built era
+- 0263-what-did-arrows-cost | 1,000 mon | a Sengoku-period reckoning (the 1500s), long before any built era
+- 0263-what-did-arrows-cost.notes | 1 kanmon | a Sengoku-period reckoning (the 1500s), long before any built era
+- 0266-what-did-a-play-or-a-show-cost-to-see | 60 monme | the closing years of the shogunate (1860s); the author judges no built era close enough to borrow, pending diagram#15
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost | 3 ryo | the Shibasaki payments of the 1840s; the author judges no built era close enough to borrow, pending diagram#15
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost | 60 monme | an exchange rate between coins, not a sum paid
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost | 1 ryo | the Shibasaki payments of the 1840s; the author judges no built era close enough to borrow, pending diagram#15
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost | 2 bu | the Shibasaki payments of the 1840s; the author judges no built era close enough to borrow, pending diagram#15
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost | 2 shu | the Shibasaki payments of the 1840s; the author judges no built era close enough to borrow, pending diagram#15
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost | 1 shu | the Shibasaki payments of the 1840s; the author judges no built era close enough to borrow, pending diagram#15
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost | 3 bu | the Shibasaki payments of the 1840s; the author judges no built era close enough to borrow, pending diagram#15
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost | 2 ryo | the Shibasaki payments of the 1840s; the author judges no built era close enough to borrow, pending diagram#15
+- 0269-what-did-a-shrines-stonework-cost | 2 bu | the 1840s stonework; the author judges no built era close enough to borrow, pending diagram#15
+- 0269-what-did-a-shrines-stonework-cost | 2 shu | the 1840s stonework; the author judges no built era close enough to borrow, pending diagram#15
+- 0269-what-did-a-shrines-stonework-cost | 60 monme | an exchange rate between coins, not a sum paid
+- 0269-what-did-a-shrines-stonework-cost | 4.75 ryo | the 1840s stonework; the author judges no built era close enough to borrow, pending diagram#15
+- 0269-what-did-a-shrines-stonework-cost | 2 ryo | the 1840s stonework; the author judges no built era close enough to borrow, pending diagram#15
+- 0269-what-did-a-shrines-stonework-cost | 3.75 monme | the 1840s stonework; the author judges no built era close enough to borrow, pending diagram#15
+- 0271-what-did-rites-for-the-dead-and-a-shrines-dedication-cost | 24 mon | a sum of no stated year near a built era
+- 0271-what-did-rites-for-the-dead-and-a-shrines-dedication-cost | 24,000 mon | a sum of no stated year near a built era
+- 0272-what-did-fruit-cost | 16 mon | a price table of the 1800s (Morisada); the author judges no built era close enough to borrow, pending diagram#15
+- 0273-what-did-salt-cost | 6 mon | Kyoto 1802-1804 and its conversion at the rate of 1804, or a blog's undated account of salt inland
+- 0273-what-did-salt-cost | 120 mon | Kyoto 1802-1804 and its conversion at the rate of 1804, or a blog's undated account of salt inland
+- 0273-what-did-salt-cost.notes | 6 mon | Kyoto 1802-1804 and its conversion at the rate of 1804, or a blog's undated account of salt inland
+- 0273-what-did-salt-cost.notes | 10 mon | Kyoto 1802-1804 and its conversion at the rate of 1804, or a blog's undated account of salt inland
+- 0273-what-did-salt-cost.notes | 15 mon | Kyoto 1802-1804 and its conversion at the rate of 1804, or a blog's undated account of salt inland
+- 0273-what-did-salt-cost.notes | 120 mon | Kyoto 1802-1804 and its conversion at the rate of 1804, or a blog's undated account of salt inland
+- 0273-what-did-salt-cost.notes | 300 mon | Kyoto 1802-1804 and its conversion at the rate of 1804, or a blog's undated account of salt inland
+- 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost | 9 monme | Kaga before 1614, or 1813; the author judges no built era close enough to borrow, pending diagram#15
+- 0283-what-did-a-famous-good-cost-far-from-where-it-was-made | 60 monme | a freight standard of the 1800s and the law's rate; the author judges no built era close enough to borrow, pending diagram#15
+- 0283-what-did-a-famous-good-cost-far-from-where-it-was-made.notes | 60 monme | a freight standard of the 1800s and the law's rate; the author judges no built era close enough to borrow, pending diagram#15
+- 0283-what-did-a-famous-good-cost-far-from-where-it-was-made.notes | 240 monme | a freight standard of the 1800s; the author judges no built era close enough to borrow, pending diagram#15
+- 0228-town-monasteries.notes | 14 yen | a land value from a register made in 1963 whose figures read as Meiji-era with no year (0228's own reading); no era is borrowed for an undated Meiji value
+- 0228-town-monasteries.notes | 41 sen | as 14 yen above
+- 0228-town-monasteries.notes | 3 rin | as 14 yen above
+
+## Fragments judged whole
+
+- 0005-rice-paddies-and-their-plots-suiden | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0005-rice-paddies-and-their-plots-suiden.drawing.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0005-rice-paddies-and-their-plots-suiden.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0006-dry-fields-and-their-crops-hatake | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0006-dry-fields-and-their-crops-hatake.drawing.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0006-dry-fields-and-their-crops-hatake.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0022-parcels-and-bunds-inside-a-polder-aze | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0022-parcels-and-bunds-inside-a-polder-aze.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0033-row-villages-resson.drawing.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0033-row-villages-resson.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0036-groves-of-trees-around-farmhouses-yashikirin | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0036-groves-of-trees-around-farmhouses-yashikirin.drawing.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0036-groves-of-trees-around-farmhouses-yashikirin.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0037-threshing-and-drying-yards-at-farmhouses-niwa | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0037-threshing-and-drying-yards-at-farmhouses-niwa.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0118-samurai-house-lots-and-houses-by-rank-bukeyashiki | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0215-village-shrines-where-they-stand-and-how-big-their-grounds-are | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0216-shrines-in-towns-and-cities | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0216-shrines-in-towns-and-cities.drawing.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0216-shrines-in-towns-and-cities.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0228-town-monasteries | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0228-town-monasteries.drawing.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0228-town-monasteries.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0229-village-temples-tera.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0248-how-much-rice-was-a-koku | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0248-how-much-rice-was-a-koku.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0250-what-did-an-unskilled-laborer-earn | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0251-what-did-farmland-sell-for-against-its-yield | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0251-what-did-farmland-sell-for-against-its-yield.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0255-what-did-a-small-shrine-sanctuary-cost-to-build.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0256-what-did-a-shrine-roof-and-its-finish-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0256-what-did-a-shrine-roof-and-its-finish-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0257-what-did-a-torii-stonework-and-earthwork-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0257-what-did-a-torii-stonework-and-earthwork-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0258-what-did-a-shrines-rites-and-furnishings-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0258-what-did-a-shrines-rites-and-furnishings-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0259-what-did-a-night-at-an-inn-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0259-what-did-a-night-at-an-inn-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0260-what-did-hiring-a-horse-or-a-porter-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0260-what-did-hiring-a-horse-or-a-porter-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0261-what-did-cloth-and-clothing-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0261-what-did-cloth-and-clothing-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0262-what-did-sake-cost-by-the-shop-and-by-the-cup.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0265-what-did-it-cost-to-rent-a-room-or-a-house | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0265-what-did-it-cost-to-rent-a-room-or-a-house.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0266-what-did-a-play-or-a-show-cost-to-see | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0266-what-did-a-play-or-a-show-cost-to-see.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0268-what-did-a-shrines-other-sanctuaries-halls-and-finishes-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0269-what-did-a-shrines-stonework-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0269-what-did-a-shrines-stonework-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0270-what-did-a-shrines-metal-furnishings-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0270-what-did-a-shrines-metal-furnishings-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0271-what-did-rites-for-the-dead-and-a-shrines-dedication-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0271-what-did-rites-for-the-dead-and-a-shrines-dedication-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0272-what-did-fruit-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0272-what-did-fruit-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0273-what-did-salt-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0273-what-did-salt-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0275-what-did-a-skilled-craftsman-earn-against-a-laborer | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0275-what-did-a-skilled-craftsman-earn-against-a-laborer.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0276-what-did-a-kitchen-knife-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0276-what-did-a-kitchen-knife-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0277-what-was-copper-coin-worth-in-silver | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0277-what-was-copper-coin-worth-in-silver.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0278-what-did-carrying-stone-cost-by-cart-and-by-porter | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0278-what-did-carrying-stone-cost-by-cart-and-by-porter.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0279-what-did-charcoal-cost | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0279-what-did-charcoal-cost.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0280-what-did-carrying-goods-cost-by-water-against-by-land | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0280-what-did-carrying-goods-cost-by-water-against-by-land.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0281-how-far-did-goods-travel-before-carriage-priced-them-out | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0281-how-far-did-goods-travel-before-carriage-priced-them-out.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0283-what-did-a-famous-good-cost-far-from-where-it-was-made | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0283-what-did-a-famous-good-cost-far-from-where-it-was-made.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0285-how-big-was-a-farmhouses-lot-in-a-clustered-village | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
+- 0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.notes | * | every amount it holds unmarked is dated (by its block) more than 25 years from Kyoto 1745-54 and Tokyo 1882-86, a fact beside the author's judgment that no built era is close enough to borrow, pending diagram#15; feature 412 marks those it gives an era
