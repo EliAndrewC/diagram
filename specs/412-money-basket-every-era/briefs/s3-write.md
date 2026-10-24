@@ -15,6 +15,8 @@ as the pass says, write what the page says, or SILENT). Sessions 1 and 2 wrote t
 Write TWO new money questions, each reserved with `make reserve KIND=question KEY=<heading id>` and tagged as 0250 or 0260
 are:
 
+## Your items
+
 - `B` **"What did a year's necessities and a day's labor cost in China, era by era?"** (new) - one block per era: the official price table after the ruling of 1497 (0272 holds it: rice 25 guan a shi,
   a tael 80 guan - name it, add only what its source adds); Beijing
   1573-1627 (late Ming: the official Beijing prices of 1615 in Gao 2022, rice by reign in Peng via Liu 2022, wage 0.036-0.043

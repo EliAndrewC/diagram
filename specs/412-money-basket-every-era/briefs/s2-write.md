@@ -16,6 +16,8 @@ question 1 into 0273/0279/0265 and the wages into 0250: read `briefs/handoff.md`
 Write TWO new money questions, each reserved with `make reserve KIND=question KEY=<heading id>` and tagged as 0249 or 0277
 are (look at `research/tags.json` and `contents.json`):
 
+## Your items
+
 - `A` **"What did a year's necessities cost in Japan, era by era?"** (new) - one block per era: Osaka 1620-1650; Osaka 1690-1739 (Kumon's rice by decade, Iwahashi; the Genroku-Hoei-Kyoho
   recoinages fall inside it: say so); Kyoto
   1745-1754 (0249 holds Bassino and Ma's basket: name it, add only what the Mitsui series adds); Osaka 1780-1789 (Kumon); Kyoto 1790-1799;
