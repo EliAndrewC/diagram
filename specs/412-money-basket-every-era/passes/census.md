@@ -440,3 +440,18 @@ Only Kyoto 1745-1754 (R 1.49 g/kg; 2.82 g/day) and, loosely, Songjiang (rice but
 
 ### Staples of the basket (soybeans, barley/wheat, buckwheat/millet, other beans, fish, edible oil, lamp oil)
 Appear only in Kyoto 1745-1754 (0249). No other era or place in questions 0248-0283 prices any of them.
+
+## Addendum, 2026-10-24: amounts outside the money questions (record-wide)
+
+The spec-fidelity review of 412 (round 1) found the census swept only 0248-0283, where the issue asks for "every era and place
+the record cites". `scripts/record/money_candidates.py` swept every fragment under `research/questions/`; outside the money
+questions the amounts in money (bu, se and rin as measures of area left out) are:
+
+| question | amount | when, as the text gives it |
+|---|---|---|
+| 0115 (samurai households' servants) | 2 ryo 2 bu a year | Edo period, no year |
+| 0118 (samurai house lots) | 200 ryo, then about 3 ryo, for a well | Edo, reported 1814 |
+| 0185 (inns and cheap lodging) | 3 mon a person (6 for a horse); 6 mon; 24 mon a day plus 16-24 for a futon | 1611; 1658; Edo 1843 |
+| 0194 (bell and drum towers) | 4 mon a ken of frontage | no year |
+| 0216 (shrines in towns and cities) | 5,000 / 3,000 / 2,000 yen | Japan 1897 |
+| 0228 (town monasteries) | land value 14 yen 41 sen 3 rin | Meiji era, no year (a register made in 1963) |

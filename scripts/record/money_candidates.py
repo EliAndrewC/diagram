@@ -4,10 +4,10 @@
 The tooltip converts an amount only when its author marks it (`<span class="money" ...>`, `record/money.py`). This lists
 every amount still unmarked in any fragment under `research/questions/` - questions, drawing pages and their notes - whose
 coin is a unit of an era the vendored table carries, with the years its block names (else its page's heading), those within
-`CLOSE_YEARS` of a built era first. EVERY amount listed is owed a decision (the plan review of 2026-10-24: the duty must not
+`REVIEW_YEARS` of a built era first. EVERY amount listed is owed a decision (the plan review of 2026-10-24: the duty must not
 stop at the ones whose years match): marked, or named in `specs/413-money-tooltip-on-the-record/backfill.md` with the reason
 it is passed over, one line each: `- <file stem> | <amount as written> | <reason>`, or `- <file stem> | * | <reason>` where
-one reason covers every amount the fragment still holds unmarked - never one within CLOSE_YEARS of a built era, each of which
+one reason covers every amount the fragment still holds unmarked - never one within REVIEW_YEARS of a built era, each of which
 is named on its own line.
 
     money_candidates.py           list them                                   `make money-candidates`
@@ -28,7 +28,10 @@ from dataclasses import dataclass
 QUESTIONS = os.path.join("research", "questions")
 TABLE = os.path.join("research", "assets", "money-conversions.json")
 BACKFILL = os.path.join("specs", "413-money-tooltip-on-the-record", "backfill.md")
-CLOSE_YEARS = 25
+#: The window inside which each amount is judged on its own line rather than by a fragment's `*` line. It is a REVIEW window,
+#: not a closeness rule: it allows and refuses no conversion (the GM withdrew the 25-year rule, #14, 2026-10-24; diagram#15
+#: will measure one). Beyond it the author borrows no era until that rule lands - a conservative choice, said in backfill.md.
+REVIEW_YEARS = 25
 #: The period's other Japanese coin words, listed whether or not a built era's row has a unit for them (the plan review of
 #: 2026-10-24: an amount in a coin its row lacks, a gold bu at Kyoto 1745-54, is passed over with that reason, never unseen).
 COINS_ALSO = ("mon", "monme", "kanmon", "ryo", "bu", "shu", "koban", "yen", "sen", "rin")
@@ -49,7 +52,7 @@ class Amount:
     stem: str
     text: str
     years: tuple[int, ...]
-    near: str  # the built era within CLOSE_YEARS of its years, or ""
+    near: str  # the built era within REVIEW_YEARS of its years, or ""
     context: str = ""  # the text around it, the amount in [[ ]]
 
 
@@ -116,7 +119,7 @@ def amounts(root: str = ".") -> list[Amount]:
                     marked[found] -= 1
                     continue
                 coin = found.split()[-1]
-                near = next((e for e, (a, b, units) in eras.items() if coin in units and any(a - CLOSE_YEARS <= y <= b + CLOSE_YEARS for y in years)), "")
+                near = next((e for e, (a, b, units) in eras.items() if coin in units and any(a - REVIEW_YEARS <= y <= b + REVIEW_YEARS for y in years)), "")
                 context = plain[max(0, m.start() - 240) : m.start()] + "[[" + found + "]]" + plain[m.end() : m.end() + 60]
                 out.append(Amount(stem, found, years, near, context))
     return sorted(out, key=lambda a: (a.near == "", a.stem))

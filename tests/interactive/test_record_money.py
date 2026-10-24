@@ -2,7 +2,7 @@
 
 WHAT THESE PROVE. The issue's worked example (20 mon at Kyoto 1745-54 = about $4.07 in goods, $41.71 in wages, 4.2 sen);
 the Rokugani format matches gm-assistant's `conversions.rokugani()`; a range converts both ends; an era is inherited from an
-enclosing element, also across the record's unclosed blocks; a borrowed era says so and is refused past 25 years; every bad
+enclosing element, also across the record's unclosed blocks; a borrowed era says so, and no distance in years is refused (the GM, #14); every bad
 mark is refused, naming the amount; an awaiting era and an unmarked amount pass untouched (the glossary tooltip alone); the
 site build carries the box text and gathers the refusals.
 """
@@ -75,13 +75,12 @@ def test_the_era_is_inherited_across_unclosed_blocks() -> None:
     assert errors == ["q: the amount '3 ryo' names no era - put data-era=\"<era id>\" on it or on an element around it (feature 413)"]
 
 
-def test_a_borrowed_era_says_so_and_is_refused_past_25_years() -> None:
+def test_a_borrowed_era_says_so_and_no_distance_in_years_is_refused() -> None:
+    """The GM withdrew the 25-year rule (#14, 2026-10-24): an era's distance is the author's judgment until #15 measures it."""
     near, errors = money.annotate(_span("20", "mon", "20 mon", ' data-era="kyoto-1745" data-paid="Osaka 1766"'), "q", TABLE)
     assert errors == [] and "at Kyoto 1745-54 prices" in near
-    _, far = money.annotate(_span("20", "mon", "20 mon", ' data-era="kyoto-1745" data-paid="Edo 1804-1830"'), "q", TABLE)
-    assert len(far) == 1 and "more than 25 years" in far[0] and "'20 mon'" in far[0]
-    _, early = money.annotate(_span("20", "mon", "20 mon", ' data-era="kyoto-1745" data-paid="Kyoto 1700"'), "q", TABLE)
-    assert len(early) == 1
+    far, errors = money.annotate(_span("20", "mon", "20 mon", ' data-era="kyoto-1745" data-paid="Edo 1804-1830"'), "q", TABLE)
+    assert errors == [] and "at Kyoto 1745-54 prices" in far
     _, yearless = money.annotate(_span("20", "mon", "20 mon", ' data-era="kyoto-1745" data-paid="Osaka"'), "q", TABLE)
     assert len(yearless) == 1 and "with no year" in yearless[0]
 

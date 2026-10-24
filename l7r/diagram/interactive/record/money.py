@@ -14,9 +14,10 @@ lists it (FR-008), so a typo is never taken for an era to come; such an amount k
 
 THE ERA IS THE AUTHOR'S CHOICE, NEVER THE BUILD'S (the asker, #14: *"no automatic fallback in the build. Choosing the era is
 a judgment the author makes while marking the amount, not something the build infers"*). An amount paid in another place or
-time than its era carries `data-paid="<place> <year>"`; the box then says "at <era> prices", and the build refuses a
-borrowed era more than `CLOSE_YEARS` from it (the asker's default: *"same country and money system, within about 25
-years"* - the money system is checked as the coin being one of the era's units).
+time than its era carries `data-paid="<place> <year>"`; the box then says "at <era> prices". How far an era may be borrowed
+is NOT a check here: the asker's first default, "within about 25 years", was withdrawn by the GM as having no basis (#14,
+2026-10-24), and the rule waits on the measured price stability of diagram#15. The money system is checked as the coin being
+one of the era's units.
 
 Research: money conversion on the record's site - NONE: presentation of gm-assistant's conversion table
 """
@@ -32,8 +33,6 @@ from typing import Any
 
 CONVERSIONS = "money-conversions.json"
 AWAITING = "money-eras-awaiting.json"
-#: How far, in years, a borrowed era may stand from the amount it converts (the asker's default on #14, 2026-10-24).
-CLOSE_YEARS = 25
 #: Rokugani coin, in sen (gm-assistant's `coins.py`: 1 koku = 10 bu = 100 zeni = 1,000 sen; the canon is `l7r.md` "Money").
 COINS = (("koku", 1000), ("bu", 100), ("zeni", 10), ("sen", 1))
 SEN_PER = dict(COINS)
@@ -184,12 +183,8 @@ def _check(own: dict[str, str], stack: list[dict[str, str]], text: str, where: s
     unit = era.get("units", {}).get(coin)
     if unit is None:
         return None, f"{said} names coin {coin!r}, which era {era_id!r} has no unit for (it has: {', '.join(era.get('units', {}))})"
-    if paid is not None:
-        paid_span, era_span = years(paid), years(era.get("years", ""))
-        if paid_span is None:
-            return None, f"{said} has data-paid={paid!r} with no year - write \"<place> <year>\" or \"<place> <year>-<year>\""
-        if era_span is not None and (paid_span[0] > era_span[1] + CLOSE_YEARS or paid_span[1] < era_span[0] - CLOSE_YEARS):
-            return None, f"{said} was paid {paid!r}, more than {CLOSE_YEARS} years from era {era_id!r} ({era.get('years')}) - mark it with a closer era, or leave it unmarked until one is built"
+    if paid is not None and years(paid) is None:
+        return None, f"{said} has data-paid={paid!r} with no year - write \"<place> <year>\" or \"<place> <year>-<year>\""
     return box(amount, text, unit, era, paid is not None), None
 
 

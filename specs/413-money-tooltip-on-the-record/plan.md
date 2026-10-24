@@ -55,7 +55,7 @@ New `l7r/diagram/interactive/record/money.py`:
 - `annotate(markup, where, table) -> (markup, errors)`: for each `span.money`, resolve the era (span, then ancestors: a small
   stack-based scan of the fragment's tags, no HTML parser), check it, and on success add `data-def="<box text>"`. Refused, each
   naming `where` and the span's text: no era; an unknown era not awaiting; a coin not in the era's units; an amount not a number
-  or a range; a `data-paid` year more than 25 years outside the era's span, or a `data-paid` with no year. An awaiting era or no
+  or a range; a `data-paid` with no year. No distance in years is refused (the GM withdrew the 25-year default, #14). An awaiting era or no
   row: the span is left as written (the glossary tooltip only, FR-005). No fallback to another era anywhere.
 - `Build.__init__` annotates each question page and `notes_of` each notes file; their errors join `self.errors`, deduplicated.
 
@@ -85,7 +85,8 @@ money span.
 not inside a `span.money` and whose coin is any coin word of these money systems - every unit of the vendored table and of the
 awaiting list, plus the period's other Japanese coins (`COINS_ALSO`: mon, monme, kanmon, ryo, bu, shu, koban, yen, sen, rin) -
 with its question, its block, and the years its block names, else those its heading names. An amount in a coin its era's row
-has no unit for (a gold bu at Kyoto 1745-54) is listed like any other and passed over with that reason. Amounts whose years fall within 25 years of a built era are listed first; EVERY amount
+has no unit for (a gold bu at Kyoto 1745-54) is listed like any other and passed over with that reason. Amounts whose years fall within 25 years of a built era (`REVIEW_YEARS`, a review window deciding which amounts are judged on
+their own line - not a closeness rule, which allows or refuses no conversion and waits on diagram#15) are listed first; EVERY amount
 listed is owed a decision, whatever its years: marked by hand (D2), or passed over with its reason in
 `specs/413-money-tooltip-on-the-record/backfill.md` (one line per amount: question, amount, reason - "Edo 1804-30, no era
 within 25 years", "no unit for bu in the kyoto-1745 row"); where one reason covers every amount a fragment still holds

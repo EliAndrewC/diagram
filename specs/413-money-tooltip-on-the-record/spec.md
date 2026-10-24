@@ -60,10 +60,11 @@ a judgment the author makes while marking the amount, not something the build in
 
 1. `make record CHECK=1` refuses, naming the fragment and the amount: an era id the vendored table does not have and that is not
    declared as awaiting (FR-008); a coin the era's row has no unit for; an amount that is not a number or a range of two numbers; a marked
-   amount with no era on it or on an ancestor.
-2. A borrowed era is allowed only within the asker's default of "close": the same country and money system (the coin is one of
-   the era's units) and the paid year within 25 years of the era's span (the asker, #14: "same country and money system, within
-   about 25 years"). The build refuses a borrowed mark outside it.
+   amount with no era on it or on an ancestor; a `data-paid` that names no year.
+2. A borrowed era is marked with `data-paid` and its tooltip says so; the build refuses no distance in years. The asker's first
+   default ("within about 25 years") was withdrawn: the GM, through the asker on #14 (2026-10-24), "had no basis, and I withdraw
+   it ... no numeric threshold in the record checks yet"; the closeness rule is diagram#15's research. The money system is held
+   by the coin being one of the era's units.
 
 ### User Story 3 - the table stays current (Priority: P2)
 
@@ -80,15 +81,15 @@ A make target refreshes diagram's copy of the table from gm-assistant; a check s
 
 Every amount already in the record - every fragment under `research/questions/`: questions, drawing pages and their notes,
 not only the money questions (the issue: "each money amount marked with its era") - whose place and years fall within an era
-that has a row, today `kyoto-1745` and `tokyo-1882` under the 25-year rule, is marked in this feature (the 1897 Meiji shrine
+that has a row, today `kyoto-1745` and `tokyo-1882`, is marked in this feature where its author judges the era close enough (the 1897 Meiji shrine
 rules' yen in 0216 are one). Amounts in eras without a row are left for feature 412, which defines those eras and marks their
 amounts, record-wide, as it lands them.
 
 **Acceptance scenarios**:
 
-1. Every amount in any fragment within 25 years of Kyoto 1745-54 or Tokyo 1882-86, in a coin of that era's row, is marked
-   (a script sweeps every fragment and lists the candidates; each kept or passed over by the author with its reason in the
-   task's verify line).
+1. Every amount in any fragment in a coin of a built era's row is decided: marked with the era its author judges close enough,
+   or passed over in `backfill.md` with a reason that states the amount's date and that the author judged no built era close
+   enough to borrow, pending diagram#15's measured rule (a script sweeps every fragment and lists the candidates).
 2. Marking changes no visible words, so it owes no record check (`scripts/record/record_units.py`: words are text with markup
    normalized away); `make record-owed` names nothing for these edits.
 
@@ -146,3 +147,8 @@ amounts, record-wide, as it lands them.
 - spec-fidelity round 2 (2026-10-24): CHANGES REQUIRED - the three round-1 items resolved; tasks.md T03's title still named the
   money questions. Fixed.
 - spec-fidelity round 3 (2026-10-24): FAITHFUL.
+- Amended 2026-10-24 after the GM withdrew the 25-year default (#14, issuecomment-6386744961): US2 scenario 2 and US4 no
+  longer hold a distance in years; the build refuses none.
+- spec-fidelity after the amendment (2026-10-24): CHANGES REQUIRED - US4 scenario 1 restated the withdrawn 25 years as the
+  author's rule; now each amount is marked or passed over by the author's judgment, its date stated. US2 scenario 1 lists the
+  no-year refusal the plan already had.
