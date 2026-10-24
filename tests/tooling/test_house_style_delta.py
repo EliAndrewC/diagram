@@ -138,3 +138,11 @@ def test_a_british_word_inside_a_proper_name_is_not_reported(tmp_path: pathlib.P
     assert not chk.inside_a_name("the Neighbour rule", 4, 13), "one capitalized neighbor is not a name"
     assert not chk.inside_a_name("Mary, Neighbour Parent", 6, 15), "a comma breaks the run"
     assert not chk.inside_a_name("Mary neighbour Parent", 5, 14), "a lowercase hit is prose"
+
+
+def test_a_verbatim_cell_dump_is_exempt_and_nothing_else_by_its_folder() -> None:
+    # feature 412: Kumon's header cell 'price (1 litre)', dumped verbatim for the quote-checks, stopped the gate
+    assert chk.exempt_path("specs/412-money-basket-every-era/measure/kumon_cells_by_address.txt")
+    assert chk.exempt_path("specs/412-money-basket-every-era/measure/coin_walk_rows_raw.txt")
+    assert not chk.exempt_path("specs/412-money-basket-every-era/measure/basket_eras.out.txt")
+    assert not chk.exempt_path("specs/412-money-basket-every-era/measure/basket_eras.py")

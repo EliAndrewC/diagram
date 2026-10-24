@@ -238,6 +238,10 @@ echo "4. the escape hatch works for genuine external waits"
 check "POLL_OK allows a real port wait" ok '# POLL_OK: waiting for the dev server port to open
 until curl -s localhost:8080 >/dev/null; do sleep 2; done'
 check "POLL_OK allows a bare sleep bypass" ok 'command sleep 5  # POLL_OK: external deploy settling'
+# the wait `make page-session` prints (scripts/pages/page_session_runner.py) passes as printed (feature 412: it was refused)
+PS_WAIT=$(grep -o "POLL_OK='a detached page-session queue[^\"]*" "$HERE/../../scripts/pages/page_session_runner.py" | sed 's/{run_log}/\/tmp\/run-x.log/g')
+[ -n "$PS_WAIT" ] && { echo "  ok      the page-session runner prints its wait with the escape"; PASS=$((PASS+1)); } || { echo "  FAIL    the page-session runner's printed wait carries no POLL_OK - the guard refuses it as printed"; FAIL=$((FAIL+1)); }
+check "the page-session runner's printed wait is allowed" ok "$PS_WAIT"
 # GUARD_EDIT_OK: a check for the 2026-09-27 prefilter in guardlog.sh's escape_or_refuse, which skips the
 # python when the token is not in the raw payload. A JSON encoder MAY write the token's letters as \u escapes;
 # the prefilter must then fall through to the full check, which decodes them and still honors the escape.
