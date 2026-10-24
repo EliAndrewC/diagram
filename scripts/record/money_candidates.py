@@ -59,6 +59,7 @@ _HEADING = re.compile(r"<h[12][^>]*>(.*?)</h[12]>", re.S)
 _TAG = re.compile(r"<[^>]+>")
 _MARKED = re.compile(r'<span class="money"[^>]*>(.*?)</span>', re.S)
 _NUMBER = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\d[\d,]*(?:\.\d+)?)?"
+_DOLLAR = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\$?\d[\d,]*(?:\.\d+)?)?"
 _YEAR = re.compile(r"(?<!\d)(1[0-9]{3})(?!\d)")
 _NOTE_MARK = re.compile(r'data-note="([^"]+)"')
 _ROW = re.compile(r"^-\s*(?P<stem>[^|]+?)\s*\|\s*(?P<amount>[^|]+?)\s*\|\s*(?P<reason>.+?)\s*$")
@@ -129,7 +130,8 @@ def amounts(root: str = ".") -> list[Amount]:
     """Every unmarked amount in a coin of these money systems, nearest a built era first (the order decides nothing)."""
     eras = _eras(root)
     coins = sorted({*COINS_ALSO, *CHINA_WORDS, *(c for _, _, units in eras.values() for c in units)}, key=len, reverse=True)
-    amount_re = re.compile(rf"(?<![\w.]){_NUMBER}\s+(?:{'|'.join(map(re.escape, coins))})(?![\w])")
+    # a dollar is written "$1.50" as often as "2 dollars": the sign is a coin word of its own (feature 412, session 6)
+    amount_re = re.compile(rf"(?<![\w.]){_NUMBER}\s+(?:{'|'.join(map(re.escape, coins))})(?![\w])|(?<![\w$])\${_DOLLAR}")
     out: list[Amount] = []
     folder = os.path.join(root, QUESTIONS)
     for name in sorted(os.listdir(folder)):
@@ -154,7 +156,7 @@ def amounts(root: str = ".") -> list[Amount]:
                 if marked[found] > 0:
                     marked[found] -= 1
                     continue
-                coin = CHINA_WORDS.get(found.split()[-1], found.split()[-1])
+                coin = "dollar" if found.startswith("$") else CHINA_WORDS.get(found.split()[-1], found.split()[-1])
                 gaps = [(max(a - y, y - b, 0), e) for e, (a, b, units) in eras.items() if coin in units for y in years]
                 gap, near = min(gaps) if gaps else (None, "")
                 context = plain[max(0, m.start() - 240) : m.start()] + "[[" + found + "]]" + plain[m.end() : m.end() + 60]
