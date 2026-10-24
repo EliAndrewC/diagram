@@ -12,6 +12,8 @@ where one reason, the author's, covers every amount the fragment still holds unm
 
     money_candidates.py           list them                                   `make money-candidates`
     money_candidates.py --check   exit 1 while one is neither marked nor named `make money-candidates CHECK=1`
+    money_candidates.py --all --stem 0255 --context   one question's amounts, passed-over ones tagged, each with its text
+                                                      `make money-candidates ALL=1 Q=0255 CONTEXT=1`
 """
 
 from __future__ import annotations
