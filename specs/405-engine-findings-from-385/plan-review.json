@@ -488,9 +488,9 @@
    "declared": "round-arbiter"
   },
   "### T26 Approach (checklist part A)": {
-   "sha256": "3cae3a3187c501a04327d61c88d109ff63f19e0ac225ba3aead73a2a5bbab6a5",
+   "sha256": "a56fb09c268fa9443c78bd00710e9e5adf4950de19790abe31a03a9548032faf",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-21",
+   "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
   },
   "### T26 Decisions": {
@@ -845,6 +845,18 @@
    "sha256": "db1890a4c3fbb58e51bfe330dcd8f03d6d4cf85d7e7b3e0f4193c4cd32c52d9d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-23",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Approach (re-answered 2026-10-24T13:47Z)": {
+   "sha256": "e79d477795e633dbb2cec948a6760761f90d14ec2f27c3a8bfe4a6d5eaab2172",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Decisions (2026-10-24)": {
+   "sha256": "13c219ae6e24706e8ae83190c7df07b0f38d576eaf82c706aa0bc866ca3ea3f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
   }
  },
@@ -5023,6 +5035,53 @@
      "summary": "needle_loops / needle_joins and the 20 degree needle (a drawing convention of 0081's drawing page) are kept as they are.",
      "class": "within",
      "why": "Leaving existing predicates alone excepts nothing from the request. The 20 degree question is in T127 by D127, so it stays in the feature."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T26 Approach (checklist part A)",
+    "### T26 Approach (re-answered 2026-10-24T13:47Z)",
+    "### T26 Decisions (2026-10-24)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T26-A-part-A",
+     "summary": "Checklist part A (shed a ken off a steading wall, never forward, seats rolled); only change since its CLEAR verdict is the measurement label on item 4",
+     "class": "within",
+     "why": "Text unchanged from the CLEAR reading apart from a one-shot label; serves amendment 10's 'solve the knots problem inside 405' and FR-003a. Its kura-wall and roll lines are superseded by D78 and the re-answered block (a ken off the HOUSE, roll filed as T106) - plan hygiene, not a fidelity question."
+    },
+    {
+     "id": "T26-shed-D78",
+     "summary": "shed_off_a_wall as decided in D78",
+     "class": "within",
+     "why": "Settled by D78 in the accepted record; the block only cites it."
+    },
+    {
+     "id": "D131",
+     "summary": "settle_defer keeps today's DEFER_GAP_FT gap cut unless it would strand the field or a house from the connector's network; then it cuts the lane where it comes alongside a tree lane (cut_alongside, 5 ft walk from each end, within WEB_SHADOW_FT at under 20 degrees) and tees it on, subject to the overlap matrix, tree rules, knots, networks and reach",
+     "class": "within",
+     "why": "Neither request.md nor the spec requires 0081's cut on every defer cut; the 'narrowed' narrows the plan's own first attempt (which knotted seed 26, measured 2026-10-24), not what was asked, and the default it keeps is existing behavior the GM never asked to change. It serves amendment 10 (knots solved in 405) and FR-003a by making T26 land with seed 47 clean."
+    },
+    {
+     "id": "T26-settle_defer-in-task",
+     "summary": "The settle_defer repair is done inside T26 rather than filed as a new task under FR-002",
+     "class": "within",
+     "why": "Judged on FR-002's first line only (spec-index.md). The block records that with T07 and T135 landed, T26's patch leaves seed 47 failing - the cohort fails with T26's change, so the finding is a regression of the task's own change rather than an incidental finding on code it did not touch, and FR-002's filing rule does not reach it on that reading. Either way the work stays in 405, as the GM's rule asks."
+    },
+    {
+     "id": "T26-exit-room",
+     "summary": "Room (wider spacing) not taken as the exit",
+     "class": "within",
+     "why": "Amendment 8 makes room an acceptable route within the research, not a required one; the plan considered it and records it as measured worse on 2026-10-22 (T107)."
+    },
+    {
+     "id": "T26-unresearched-readings",
+     "summary": "'alongside' read within WEB_SHADOW_FT and a 5 ft sampling step, both labeled UNRESEARCHED",
+     "class": "within",
+     "why": "Labeled as unresearched, consistent with D125 and D129; research accuracy is outside fidelity review."
     }
    ]
   }
