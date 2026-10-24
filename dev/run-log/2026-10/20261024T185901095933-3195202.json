@@ -1,0 +1,71 @@
+{
+  "utc": "2026-10-24T18:59:01Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 375,
+  "result": "failed: test-full",
+  "commit": "e4dc6bddd",
+  "first_failure_s": 265.9,
+  "last_failure_s": 354.6,
+  "failed_tests": 817,
+  "failed_names": [
+    "tests/tooling/ci/test_incremental.py::test_plan_returns_a_full_run_when_the_projection_is_over_the_fraction",
+    "tests/tooling/test_incremental_gate.py::test_e_a_landing_runs_what_it_reaches_over_the_fraction",
+    "tests/tooling/test_incremental_gate.py::test_e_over_the_fraction_the_PLANNER_runs_everything_and_keeps_the_trees",
+    "tests/tooling/test_tick_task.py::test_the_cohort_s_workers_fit_the_container_s_memory_limit",
+    "tests/tools/test_glossary_asset.py::test_the_derivation_carries_every_term_with_its_variants_longest_first",
+    "tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[steps_past_revetment]",
+    "tests/tools/test_pack_audit.py::test_vacant_rect_zone_central_when_ringed_by_wall_buildings",
+    "tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[arch_in_plan]",
+    "tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[arch_in_plan]",
+    "tests/tools/test_pack_audit.py::test_vacant_rect_zone_central_when_ringed_by_wall_buildings",
+    "tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[passage_blockers]",
+    "tests/tools/test_pack_audit.py::test_wall_bands_read_from_group_and_from_standalone_lines",
+    "tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[passage_blockers]",
+    "tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[fire_water_distribution]",
+    "tests/tools/test_pack_audit.py::test_wall_bands_read_from_group_and_from_standalone_lines",
+    "tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[fire_water_adrift]",
+    "tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[fire_water_distribution]",
+    "tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[palette_roles]",
+    "tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[fire_water_adrift]",
+    "tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[palette_roles]"
+  ],
+  "host": {
+    "load": [
+      7.45,
+      12.85
+    ],
+    "mem_avail_mb": [
+      5808,
+      6810
+    ],
+    "cpu_temp_c": [
+      73.0,
+      73.0
+    ],
+    "stall_s": {
+      "cpu": 8.2,
+      "io": 3.6,
+      "io_full": 2.5,
+      "memory": 1.1
+    },
+    "throttle_ms": {
+      "core": 1970,
+      "package": 811
+    }
+  },
+  "phases": {
+    "preflight": 27.0,
+    "static": 3.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 1.0,
+    "hooks-test": 82.0,
+    "pytest": 279.0,
+    "test-full": 286.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)",
+  "selected": 10255,
+  "collected": 10255
+}
