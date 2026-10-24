@@ -139,3 +139,5 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
 - spec-fidelity round 2 (2026-10-24): CHANGES REQUIRED - the static rule missed a bare `"scripts"` path component
   (`tests/test_building_types.py`; read loosely now, any mention of the word); `gate-stamp.py` as a full trigger was an
   unmarked exception to the GM's item 1 (dropped: a change to the files it covers shows in the manifest as added or removed).
+- spec-fidelity round 3 (2026-10-24): FAITHFUL - both round-2 changes resolved; its aside (a word match would miss
+  `_scripts`) taken into the plan: the substring `scripts` is matched.
