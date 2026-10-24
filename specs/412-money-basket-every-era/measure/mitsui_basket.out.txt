@@ -1,0 +1,441 @@
+
+== row dump: sheet 'Mitsui Bunko Kyoto T6', 1745-1754, columns salt, firewood, wage
+row 19: 1745 Spring | salt 19.62 | firewood 2.67 | wage 0.83
+row 20: 1745 Fall | salt 25.69 | firewood 2.55 | wage 0.84
+row 21: 1746 Spring | salt 20.23 | firewood 2.55 | wage 0.99
+row 22: 1746 Fall | salt 19.61 | firewood 2.62 | wage 0.72
+row 23: 1747 Spring | salt 18.81 | firewood 2.73 | wage 0.79
+row 24: 1747 Fall | salt 18.67 | firewood 2.76 | wage 0.8
+row 25: 1748 Spring | salt 18.05 | firewood 2.63 | wage 0.95
+row 26: 1748 Fall | salt 19.65 | firewood 2.59 | wage 0.91
+row 27: 1749 Spring | salt 17.13 | firewood 2.56 | wage 0.9
+row 28: 1749 Fall | salt 19.44 | firewood 2.54 | wage 0.9
+row 29: 1750 Spring | salt 15.27 | firewood 2.61 | wage 1.23
+row 30: 1750 Fall | salt 14.81 | firewood 2.58 | wage 1.07
+row 31: 1751 Spring | salt 17.3 | firewood 2.76 | wage 1.31
+row 32: 1751 Fall | salt 14.3 | firewood 2.58 | wage 0.94
+row 33: 1752 Spring | salt 16.1 | firewood 2.42 | wage 0.8
+row 34: 1752 Fall | salt 14.54 | firewood 2.7 | wage 0.85
+row 35: 1753 Spring | salt 16.14 | firewood 2.77 | wage 0.8
+row 36: 1753 Fall | salt 14.65 | firewood 2.66 | wage 0.81
+row 37: 1754 Spring | salt 17.86 | firewood 2.76 | wage 0.85
+row 38: 1754 Fall | salt 17.53 | firewood 2.77 | wage 0.84
+
+== Kyoto 1745-1754, quarterly cells
+salt a koku: mean 17.77, range 14.3-25.69, n 20
+salt a sho: 0.178 monme
+  at an ASSUMED 1.0 kg a liter: a koku 181 kg, 0.0982 monme a kg
+  at an ASSUMED 1.2 kg a liter: a koku 217 kg, 0.0819 monme a kg
+firewood 10 kan: mean 2.640, range 2.42-2.77, n 20
+firewood a kg: 0.0704 monme; a million BTU = 68.1 kg at 15.5 MJ/kg, 4.79 monme
+day wage: mean 0.906, range 0.72-1.31, n 20
+  salt a day's wage bought: 5.1 sho; firewood: 12.9 kg
+
+== row dump: sheet 'Mitsui Bunko Edo T7', 1710-1716, columns charcoal, firewood
+row 9: 1710 Spring | charcoal 7.25 | firewood 2.73
+row 10: 1710 Fall | charcoal 7.41 | firewood 3.0
+row 11: 1711 Spring | charcoal 7.87 | firewood 3.1
+row 12: 1711 Fall | charcoal 9.13 | firewood 3.27
+row 13: 1713 Spring | charcoal '' | firewood ''
+row 14: 1713 Fall | charcoal 10.92 | firewood 3.79
+row 15: 1716 Spring | charcoal 16.64 | firewood 4.67
+row 16: 1716 Fall | charcoal '' | firewood ''
+
+== row dump: sheet 'Mitsui Bunko Edo T7', 1818-1823, columns charcoal, firewood
+row 17: 1818 Spring | charcoal 5.0 | firewood 2.0
+row 18: 1818 Fall | charcoal 4.89 | firewood 2.0
+row 19: 1819 Spring | charcoal 4.91 | firewood 2.0
+row 20: 1819 Fall | charcoal 5.0 | firewood 2.0
+row 21: 1820 Spring | charcoal 5.0 | firewood 2.0
+row 22: 1820 Fall | charcoal 5.0 | firewood 2.0
+row 23: 1821 Spring | charcoal 5.0 | firewood 2.0
+row 24: 1821 Fall | charcoal 5.0 | firewood 2.0
+row 25: 1822 Spring | charcoal 5.0 | firewood 2.0
+row 26: 1822 Fall | charcoal 4.79 | firewood 1.96
+row 27: 1823 Spring | charcoal 5.01 | firewood 1.88
+row 28: 1823 Fall | charcoal '' | firewood ''
+
+== row dump: sheet 'Mitsui Bunko Osaka T8', 1818-1823, columns charcoal, firewood
+row 11: 1818 Spring | charcoal 3.1 | firewood 3.45
+row 12: 1818 Fall | charcoal 3.25 | firewood 3.7
+row 13: 1819 Spring | charcoal 3.25 | firewood 3.45
+row 14: 1819 Fall | charcoal 3.25 | firewood 3.9
+row 15: 1820 Spring | charcoal 3.35 | firewood 3.85
+row 16: 1820 Fall | charcoal 3.7 | firewood 3.8
+row 17: 1821 Spring | charcoal 3.1 | firewood 3.5
+row 18: 1821 Fall | charcoal 3.1 | firewood 3.7
+row 19: 1822 Spring | charcoal 3.1 | firewood 3.3
+row 20: 1822 Fall | charcoal 3.2 | firewood 3.7
+row 21: 1823 Spring | charcoal 3.1 | firewood 3.45
+row 22: 1823 Fall | charcoal '' | firewood ''
+Mitsui Bunko Edo T7 1710-1716: charcoal mean 9.87 (n 6), firewood mean 3.43 (n 6), charcoal / firewood 2.88
+Mitsui Bunko Edo T7 1818-1823: charcoal mean 4.96 (n 11), firewood mean 1.99 (n 11), charcoal / firewood 2.50
+Mitsui Bunko Osaka T8 1710-1716: charcoal mean 4.84 (n 1), firewood mean 5.43 (n 1), charcoal / firewood 0.89
+Mitsui Bunko Osaka T8 1818-1823: charcoal mean 3.23 (n 11), firewood mean 3.62 (n 11), charcoal / firewood 0.89
+
+== Edo salt (塩, a koku) by span, quarterly cells, and the cells of 1842
+Mitsui Bunko Edo T7 1710-1716: mean 41.40, range 35.0-58.01, n 6; a sho 0.414
+Mitsui Bunko Edo T7 1818-1829: mean 15.24, range 14.4-16.2, n 22; a sho 0.152
+Mitsui Bunko Edo T7 1830-1839: mean 21.71, range 15.0-41.0, n 20; a sho 0.217
+Mitsui Bunko Edo T7 1840-1849: mean 28.94, range 23.2-35.23, n 20; a sho 0.289
+Mitsui Bunko Edo T7 1850-1859: mean 35.67, range 33.5-41.0, n 20; a sho 0.357
+
+== row dump: sheet 'Mitsui Bunko Edo T7', 1842-1842, columns salt, charcoal, firewood, wage
+row 65: 1842 Spring | salt 28.51 | charcoal 6.9 | firewood 2.03 | wage 0.88
+row 66: 1842 Fall | salt 28.52 | charcoal 6.99 | firewood 1.95 | wage 0.91
+
+== day wage (日雇賃) by span, quarterly cells
+Mitsui Bunko Kyoto T6 1741-1749: mean 0.861, range 0.72-0.99, n 18
+Mitsui Bunko Kyoto T6 1750-1759: mean 0.880, range 0.79-1.31, n 20
+Mitsui Bunko Kyoto T6 1760-1762: mean 0.800, range 0.8-0.8, n 5
+Mitsui Bunko Kyoto T6 1780-1789: no cell
+Mitsui Bunko Kyoto T6 1791-1799: mean 0.850, range 0.79-0.97, n 18
+Mitsui Bunko Kyoto T6 1800-1809: mean 0.796, range 0.59-1.14, n 20
+Mitsui Bunko Kyoto T6 1810-1819: mean 0.921, range 0.83-1.2, n 20
+Mitsui Bunko Kyoto T6 1820-1829: mean 1.043, range 0.84-1.35, n 18
+Mitsui Bunko Kyoto T6 1830-1839: mean 0.949, range 0.84-1.03, n 20
+Mitsui Bunko Kyoto T6 1840-1849: mean 1.034, range 0.84-1.31, n 20
+Mitsui Bunko Kyoto T6 1850-1859: mean 1.042, range 0.85-1.18, n 20
+Mitsui Bunko Kyoto T6 1860-1867: mean 1.338, range 1.15-1.71, n 13
+Mitsui Bunko Kyoto T6 1868-1871: mean 1.685, range 1.21-2.36, n 8
+Mitsui Bunko Kyoto T6 1804-1829: mean 0.930, range 0.59-1.35, n 50
+Mitsui Bunko Kyoto T6 1830-1844: mean 0.982, range 0.84-1.31, n 30
+Mitsui Bunko Kyoto T6 1818-1859: mean 1.010, range 0.83-1.35, n 82
+Mitsui Bunko Kyoto T6 1872-1879: no cell
+Mitsui Bunko Edo T7 1710-1716: mean 1.750, range 1.5-2.4, n 6
+Mitsui Bunko Edo T7 1818-1829: mean 0.901, range 0.9-0.91, n 22
+Mitsui Bunko Edo T7 1830-1839: mean 0.906, range 0.9-0.93, n 20
+Mitsui Bunko Edo T7 1840-1849: mean 0.913, range 0.88-0.94, n 20
+Mitsui Bunko Edo T7 1850-1859: mean 0.917, range 0.87-0.97, n 20
+Mitsui Bunko Edo T7 1818-1859: mean 0.909, range 0.87-0.97, n 82
+Mitsui Bunko Edo T7 1860-1867: mean 1.183, range 0.95-1.46, n 13
+Mitsui Bunko Edo T7 1868-1871: mean 1.836, range 1.35-2.54, n 7
+Mitsui Bunko Edo T7 1804-1830: mean 0.901, range 0.9-0.91, n 24
+Mitsui Bunko Edo T7 1830-1844: mean 0.906, range 0.88-0.93, n 30
+Mitsui Bunko Edo T7 1872-1879: no cell
+
+== row dump: sheet 'Mitsui Bunko Kyoto T6', 1741-1871, columns wage
+row 11: 1741 Spring | wage 0.8
+row 12: 1741 Fall | wage 0.85
+row 13: 1742 Spring | wage 0.9
+row 14: 1742 Fall | wage 0.91
+row 15: 1743 Spring | wage 0.83
+row 16: 1743 Fall | wage 0.83
+row 17: 1744 Spring | wage 0.86
+row 18: 1744 Fall | wage 0.89
+row 19: 1745 Spring | wage 0.83
+row 20: 1745 Fall | wage 0.84
+row 21: 1746 Spring | wage 0.99
+row 22: 1746 Fall | wage 0.72
+row 23: 1747 Spring | wage 0.79
+row 24: 1747 Fall | wage 0.8
+row 25: 1748 Spring | wage 0.95
+row 26: 1748 Fall | wage 0.91
+row 27: 1749 Spring | wage 0.9
+row 28: 1749 Fall | wage 0.9
+row 29: 1750 Spring | wage 1.23
+row 30: 1750 Fall | wage 1.07
+row 31: 1751 Spring | wage 1.31
+row 32: 1751 Fall | wage 0.94
+row 33: 1752 Spring | wage 0.8
+row 34: 1752 Fall | wage 0.85
+row 35: 1753 Spring | wage 0.8
+row 36: 1753 Fall | wage 0.81
+row 37: 1754 Spring | wage 0.85
+row 38: 1754 Fall | wage 0.84
+row 39: 1755 Spring | wage 0.8
+row 40: 1755 Fall | wage 0.8
+row 41: 1756 Spring | wage 0.8
+row 42: 1756 Fall | wage 0.8
+row 43: 1757 Spring | wage 0.83
+row 44: 1757 Fall | wage 0.81
+row 45: 1758 Spring | wage 0.82
+row 46: 1758 Fall | wage 0.8
+row 47: 1759 Spring | wage 0.84
+row 48: 1759 Fall | wage 0.79
+row 49: 1760 Spring | wage 0.8
+row 50: 1760 Fall | wage 0.8
+row 51: 1761 Spring | wage 0.8
+row 52: 1761 Fall | wage 0.8
+row 53: 1762 Spring | wage 0.8
+row 54: 1762 Fall | wage ''
+row 55: 1791 Spring | wage 0.84
+row 56: 1791 Fall | wage 0.8
+row 57: 1792 Spring | wage 0.88
+row 58: 1792 Fall | wage 0.96
+row 59: 1793 Spring | wage 0.97
+row 60: 1793 Fall | wage 0.83
+row 61: 1794 Spring | wage 0.84
+row 62: 1794 Fall | wage 0.81
+row 63: 1795 Spring | wage 0.94
+row 64: 1795 Fall | wage 0.83
+row 65: 1796 Spring | wage 0.83
+row 66: 1796 Fall | wage 0.79
+row 67: 1797 Spring | wage 0.82
+row 68: 1797 Fall | wage 0.82
+row 69: 1798 Spring | wage 0.9
+row 70: 1798 Fall | wage 0.79
+row 71: 1799 Spring | wage 0.84
+row 72: 1799 Fall | wage 0.81
+row 73: 1800 Spring | wage 0.97
+row 74: 1800 Fall | wage 0.79
+row 75: 1801 Spring | wage 0.82
+row 76: 1801 Fall | wage 0.83
+row 77: 1802 Spring | wage 0.82
+row 78: 1802 Fall | wage 0.8
+row 79: 1803 Spring | wage 0.8
+row 80: 1803 Fall | wage 0.8
+row 81: 1804 Spring | wage 1.14
+row 82: 1804 Fall | wage 1.03
+row 83: 1805 Spring | wage 0.83
+row 84: 1805 Fall | wage 0.69
+row 85: 1806 Spring | wage 0.59
+row 86: 1806 Fall | wage 0.65
+row 87: 1807 Spring | wage 0.61
+row 88: 1807 Fall | wage 0.61
+row 89: 1808 Spring | wage 0.63
+row 90: 1808 Fall | wage 0.74
+row 91: 1809 Spring | wage 0.93
+row 92: 1809 Fall | wage 0.84
+row 93: 1810 Spring | wage 0.91
+row 94: 1810 Fall | wage 0.85
+row 95: 1811 Spring | wage 0.93
+row 96: 1811 Fall | wage 0.84
+row 97: 1812 Spring | wage 0.89
+row 98: 1812 Fall | wage 0.88
+row 99: 1813 Spring | wage 0.99
+row 100: 1813 Fall | wage 0.88
+row 101: 1814 Spring | wage 1.2
+row 102: 1814 Fall | wage 0.87
+row 103: 1815 Spring | wage 0.98
+row 104: 1815 Fall | wage 1.13
+row 105: 1816 Spring | wage 0.95
+row 106: 1816 Fall | wage 0.86
+row 107: 1817 Spring | wage 0.87
+row 108: 1817 Fall | wage 0.87
+row 109: 1818 Spring | wage 0.91
+row 110: 1818 Fall | wage 0.86
+row 111: 1819 Spring | wage 0.93
+row 112: 1819 Fall | wage 0.83
+row 113: 1820 Spring | wage 0.94
+row 114: 1820 Fall | wage 0.84
+row 115: 1821 Spring | wage 0.98
+row 116: 1821 Fall | wage 0.85
+row 117: 1822 Spring | wage 0.93
+row 118: 1822 Fall | wage 0.98
+row 119: 1823 Spring | wage 1.34
+row 120: 1823 Fall | wage ''
+row 121: 1824 Spring | wage 1.09
+row 122: 1824 Fall | wage 1.04
+row 123: 1825 Spring | wage 0.98
+row 124: 1825 Fall | wage 1.04
+row 125: 1826 Spring | wage 1.1
+row 126: 1826 Fall | wage ''
+row 127: 1827 Spring | wage 1.16
+row 128: 1827 Fall | wage 1.01
+row 129: 1828 Spring | wage 1.35
+row 130: 1828 Fall | wage 1.2
+row 131: 1829 Spring | wage 1.08
+row 132: 1829 Fall | wage 0.86
+row 133: 1830 Spring | wage 0.95
+row 134: 1830 Fall | wage 0.87
+row 135: 1831 Spring | wage 0.96
+row 136: 1831 Fall | wage 0.84
+row 137: 1832 Spring | wage 1.03
+row 138: 1832 Fall | wage 0.9
+row 139: 1833 Spring | wage 0.96
+row 140: 1833 Fall | wage 0.89
+row 141: 1834 Spring | wage 0.99
+row 142: 1834 Fall | wage 0.96
+row 143: 1835 Spring | wage 0.94
+row 144: 1835 Fall | wage 0.94
+row 145: 1836 Spring | wage 1.03
+row 146: 1836 Fall | wage 0.97
+row 147: 1837 Spring | wage 0.98
+row 148: 1837 Fall | wage 0.96
+row 149: 1838 Spring | wage 0.94
+row 150: 1838 Fall | wage 0.96
+row 151: 1839 Spring | wage 0.97
+row 152: 1839 Fall | wage 0.94
+row 153: 1840 Spring | wage 0.99
+row 154: 1840 Fall | wage 0.99
+row 155: 1841 Spring | wage 1.23
+row 156: 1841 Fall | wage 0.99
+row 157: 1842 Spring | wage 1.04
+row 158: 1842 Fall | wage 1.12
+row 159: 1843 Spring | wage 0.96
+row 160: 1843 Fall | wage 0.84
+row 161: 1844 Spring | wage 1.31
+row 162: 1844 Fall | wage 1.0
+row 163: 1845 Spring | wage 1.31
+row 164: 1845 Fall | wage 1.01
+row 165: 1846 Spring | wage 1.06
+row 166: 1846 Fall | wage 1.06
+row 167: 1847 Spring | wage 1.07
+row 168: 1847 Fall | wage 0.96
+row 169: 1848 Spring | wage 0.93
+row 170: 1848 Fall | wage 0.88
+row 171: 1849 Spring | wage 1.05
+row 172: 1849 Fall | wage 0.87
+row 173: 1850 Spring | wage 1.08
+row 174: 1850 Fall | wage 0.85
+row 175: 1851 Spring | wage 1.13
+row 176: 1851 Fall | wage 1.04
+row 177: 1852 Spring | wage 1.0
+row 178: 1852 Fall | wage 0.93
+row 179: 1853 Spring | wage 0.95
+row 180: 1853 Fall | wage 0.92
+row 181: 1854 Spring | wage 1.07
+row 182: 1854 Fall | wage 0.95
+row 183: 1855 Spring | wage 1.15
+row 184: 1855 Fall | wage 1.09
+row 185: 1856 Spring | wage 1.16
+row 186: 1856 Fall | wage 0.99
+row 187: 1857 Spring | wage 1.06
+row 188: 1857 Fall | wage 1.08
+row 189: 1858 Spring | wage 1.12
+row 190: 1858 Fall | wage 1.05
+row 191: 1859 Spring | wage 1.18
+row 192: 1859 Fall | wage 1.04
+row 193: 1860 Spring | wage 1.23
+row 194: 1860 Fall | wage ''
+row 195: 1861 Spring | wage 1.35
+row 196: 1861 Fall | wage ''
+row 197: 1862 Spring | wage 1.19
+row 198: 1862 Fall | wage ''
+row 199: 1863 Spring | wage 1.17
+row 200: 1863 Fall | wage 1.2
+row 201: 1864 Spring | wage 1.71
+row 202: 1864 Fall | wage 1.44
+row 203: 1865 Spring | wage 1.22
+row 204: 1865 Fall | wage 1.5
+row 205: 1866 Spring | wage 1.15
+row 206: 1866 Fall | wage 1.49
+row 207: 1867 Spring | wage 1.47
+row 208: 1867 Fall | wage 1.27
+row 209: 1868 Spring | wage 1.32
+row 210: 1868 Fall | wage 1.61
+row 211: 1869 Spring | wage 1.99
+row 212: 1869 Fall | wage 1.79
+row 213: 1870 Spring | wage 1.92
+row 214: 1870 Fall | wage 1.21
+row 215: 1871 Spring | wage 2.36
+row 216: 1871 Fall | wage 1.28
+
+== row dump: sheet 'Mitsui Bunko Edo T7', 1710-1871, columns wage
+row 9: 1710 Spring | wage 1.5
+row 10: 1710 Fall | wage 1.5
+row 11: 1711 Spring | wage 1.5
+row 12: 1711 Fall | wage 1.5
+row 13: 1713 Spring | wage ''
+row 14: 1713 Fall | wage 2.1
+row 15: 1716 Spring | wage 2.4
+row 16: 1716 Fall | wage ''
+row 17: 1818 Spring | wage 0.9
+row 18: 1818 Fall | wage 0.9
+row 19: 1819 Spring | wage 0.9
+row 20: 1819 Fall | wage 0.9
+row 21: 1820 Spring | wage 0.9
+row 22: 1820 Fall | wage 0.9
+row 23: 1821 Spring | wage 0.9
+row 24: 1821 Fall | wage 0.9
+row 25: 1822 Spring | wage 0.9
+row 26: 1822 Fall | wage 0.9
+row 27: 1823 Spring | wage 0.9
+row 28: 1823 Fall | wage ''
+row 29: 1824 Spring | wage 0.91
+row 30: 1824 Fall | wage 0.9
+row 31: 1825 Spring | wage 0.9
+row 32: 1825 Fall | wage 0.9
+row 33: 1826 Spring | wage 0.9
+row 34: 1826 Fall | wage ''
+row 35: 1827 Spring | wage 0.9
+row 36: 1827 Fall | wage 0.91
+row 37: 1828 Spring | wage 0.9
+row 38: 1828 Fall | wage 0.9
+row 39: 1829 Spring | wage 0.9
+row 40: 1829 Fall | wage 0.9
+row 41: 1830 Spring | wage 0.91
+row 42: 1830 Fall | wage 0.9
+row 43: 1831 Spring | wage 0.9
+row 44: 1831 Fall | wage 0.9
+row 45: 1832 Spring | wage 0.9
+row 46: 1832 Fall | wage 0.9
+row 47: 1833 Spring | wage 0.9
+row 48: 1833 Fall | wage 0.91
+row 49: 1834 Spring | wage 0.9
+row 50: 1834 Fall | wage 0.9
+row 51: 1835 Spring | wage 0.9
+row 52: 1835 Fall | wage 0.9
+row 53: 1836 Spring | wage 0.9
+row 54: 1836 Fall | wage 0.93
+row 55: 1837 Spring | wage 0.9
+row 56: 1837 Fall | wage 0.92
+row 57: 1838 Spring | wage 0.91
+row 58: 1838 Fall | wage 0.9
+row 59: 1839 Spring | wage 0.92
+row 60: 1839 Fall | wage 0.92
+row 61: 1840 Spring | wage 0.92
+row 62: 1840 Fall | wage 0.9
+row 63: 1841 Spring | wage 0.91
+row 64: 1841 Fall | wage 0.9
+row 65: 1842 Spring | wage 0.88
+row 66: 1842 Fall | wage 0.91
+row 67: 1843 Spring | wage 0.91
+row 68: 1843 Fall | wage 0.91
+row 69: 1844 Spring | wage 0.91
+row 70: 1844 Fall | wage 0.91
+row 71: 1845 Spring | wage 0.92
+row 72: 1845 Fall | wage 0.93
+row 73: 1846 Spring | wage 0.91
+row 74: 1846 Fall | wage 0.92
+row 75: 1847 Spring | wage 0.91
+row 76: 1847 Fall | wage 0.92
+row 77: 1848 Spring | wage 0.94
+row 78: 1848 Fall | wage 0.92
+row 79: 1849 Spring | wage 0.91
+row 80: 1849 Fall | wage 0.92
+row 81: 1850 Spring | wage 0.95
+row 82: 1850 Fall | wage 0.87
+row 83: 1851 Spring | wage 0.94
+row 84: 1851 Fall | wage 0.88
+row 85: 1852 Spring | wage 0.9
+row 86: 1852 Fall | wage 0.87
+row 87: 1853 Spring | wage 0.94
+row 88: 1853 Fall | wage 0.9
+row 89: 1854 Spring | wage 0.94
+row 90: 1854 Fall | wage 0.9
+row 91: 1855 Spring | wage 0.93
+row 92: 1855 Fall | wage 0.91
+row 93: 1856 Spring | wage 0.95
+row 94: 1856 Fall | wage 0.9
+row 95: 1857 Spring | wage 0.97
+row 96: 1857 Fall | wage 0.9
+row 97: 1858 Spring | wage 0.95
+row 98: 1858 Fall | wage 0.9
+row 99: 1859 Spring | wage 0.95
+row 100: 1859 Fall | wage 0.9
+row 101: 1860 Spring | wage 0.95
+row 102: 1860 Fall | wage ''
+row 103: 1861 Spring | wage 0.98
+row 104: 1861 Fall | wage ''
+row 105: 1862 Spring | wage 0.99
+row 106: 1862 Fall | wage ''
+row 107: 1863 Spring | wage 0.97
+row 108: 1863 Fall | wage 0.96
+row 109: 1864 Spring | wage 0.96
+row 110: 1864 Fall | wage 1.46
+row 111: 1865 Spring | wage 1.35
+row 112: 1865 Fall | wage 1.35
+row 113: 1866 Spring | wage 1.35
+row 114: 1866 Fall | wage 1.35
+row 115: 1867 Spring | wage 1.35
+row 116: 1867 Fall | wage 1.36
+row 117: 1868 Spring | wage 1.39
+row 118: 1868 Fall | wage 2.31
+row 119: 1869 Spring | wage 1.35
+row 120: 1869 Fall | wage 1.41
+row 121: 1870 Spring | wage 1.35
+row 122: 1870 Fall | wage 2.5
+row 123: 1871 Spring | wage 2.54
+row 124: 1871 Fall | wage ''
