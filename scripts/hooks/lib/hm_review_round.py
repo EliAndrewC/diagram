@@ -191,6 +191,19 @@ def feature_of(prompt: str) -> str:
     return m.group(1) if m else ""
 
 
+#: A later round's prompt as this hook rewrote it: the feature it reviews is named in its first line, before any verdict
+#: text quoted below it (which may name other features).
+_REWRITTEN = re.compile(r"MODE 3 \(VERIFY\) - round \d+ of feature (\d{3}-[a-z0-9][a-z0-9-]*)")
+
+
+def reviewed_feature(prompt: str) -> str:
+    """The feature a review's dispatch prompt REVIEWS: a rewritten round names it first; a first round's prompt names it as its
+    first `specs/` path. A prompt that merely MENTIONS another feature - feature 412's round 1 named 413's directory as context
+    (2026-10-24) - reviews the feature it names first, so that review's verdict is never taken as the other's."""
+    m = _REWRITTEN.match(prompt.lstrip())
+    return m.group(1) if m else feature_of(prompt)
+
+
 def _text_of(content: object) -> str:
     if isinstance(content, str):
         return content
@@ -235,7 +248,7 @@ def previous_verdict(transcript_path: str, feature: str) -> tuple[str, str]:
             first = json.loads(lines[0])
         except Exception:
             continue
-        if f"specs/{feature}" not in _text_of((first.get("message") or {}).get("content")):
+        if reviewed_feature(_text_of((first.get("message") or {}).get("content"))) != feature:
             continue
         for raw in reversed(lines):
             try:
