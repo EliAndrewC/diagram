@@ -346,6 +346,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T106": {
+   "section_sha256": "180282d2df687fe8d0c63a1d2c9d730693d0d5e6e7d01f2e8fdddf6a5efd5ebb",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D132-roll",
+     "summary": "The woodpile's four recorded seats in fixture_seats._seats are turned by roll(SALT['woodpile'] + 0.5), and _wood_shed passes the household's roll instead of zero, the way the coop's seats are turned by roll(105.5).",
+     "class": "within",
+     "why": "This is the work D78 filed as T106 ('the roll is filed as T106'), and T106 is one of the knots family that amendment 10 says to solve inside 405 ('Yes solve the knots problem inside 405'). It adds no seat and drops none: the back wall's two and both flanks stay, and the front yard stays excluded under 0043 and D78."
+    },
+    {
+     "id": "D132-flank",
+     "summary": "The two flank seats are pulled back so their front end stands no further forward than the front wall (min(0.1 hh, hh/2 - w/2)), so that D78's shed_off_a_wall admits them.",
+     "class": "within",
+     "why": "D78 is not relaxed. It still requires a ken off every wall, a ken off the house, and no part of the shed past the front wall, and the moved seats are made to satisfy that rule. Without the move the turn could not do what T106 is for: the plan measured (2026-10-24, the unit test on the 46 x 28 ft house) that at 0.1 hh a 24 ft shed's end stood 0.8 ft past the front wall, so D78 refused both flanks on every farm and, with the kura behind, the roll changed nothing. The shed stays beside the house, which is what 0043 allows."
+    },
+    {
+     "id": "D132-labels",
+     "summary": "The rendering labels: GUESS (0043's own) for each household's side being rolled, and UNRESEARCHED, as before, for where the flank seat stands along the wall.",
+     "class": "within",
+     "why": "These are labels on what the page does and does not attest. They change no scope, and the earlier UNRESEARCHED label is kept rather than dropped."
+    },
+    {
+     "id": "T106-exits-done",
+     "summary": "Exit (e), conform; if Sawada or a seed knots again, (b) is measured first. Done means a unit test that is red without the turn, Sawada's pool tests and seeds 1-48 with the pinned rows, make cover-changed, and the landing cohort.",
+     "class": "within",
+     "why": "These checks only show that the requested turn happened and that the knots family stays solved (amendment 10). No new map, tier or behavior comes in with them."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {
@@ -855,6 +887,18 @@
   },
   "### T26 Decisions (2026-10-24)": {
    "sha256": "13c219ae6e24706e8ae83190c7df07b0f38d576eaf82c706aa0bc866ca3ea3f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T106 Approach (checklist part A)": {
+   "sha256": "842dc9b7e0d130bb612463484f14c093c15e7972ab67b6552c07bd123f8f395d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T106 Decisions": {
+   "sha256": "472ab972162b4991b6a8170e2e5bf15010dbbfa98a2b6a33c11f0d726c3fb3bb",
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
@@ -5082,6 +5126,74 @@
      "summary": "'alongside' read within WEB_SHADOW_FT and a 5 ft sampling step, both labeled UNRESEARCHED",
      "class": "within",
      "why": "Labeled as unresearched, consistent with D125 and D129; research accuracy is outside fidelity review."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T106 Approach (checklist part A)",
+    "### T106 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D132",
+     "summary": "fixture_seats._seats turns the woodpile's four recorded seats (back wall two, east and west flanks) by roll(SALT['woodpile'] + 0.5), the household's roll, as the coop's are turned by roll(105.5); _wood_shed passes the household's roll where it passed zero",
+     "class": "within",
+     "why": "This is the work D78 filed as T106 ('the seats are not turned by the household's roll here ... so the roll is filed as T106'), and T106 is one of the knots family the GM directed be solved inside 405 (amendment 10, FR-003a). The seat set and D78's constraints (a ken off the house wall, every wall cleared, never forward of the front) are kept unchanged; only the order the seats are tried in changes. No case is carved out."
+    },
+    {
+     "id": "D132-rendering",
+     "summary": "Rendering label GUESS on 0043's own reading (behind or beside the house, side unattested), each household's side rolled because the page attests no preferred one",
+     "class": "within",
+     "why": "Labels the rendering honestly per the project's standing GUESS/R/O labeling; it adds no behavior and narrows nothing the GM asked for."
+    },
+    {
+     "id": "Approach-6 (exits)",
+     "summary": "Exit (e) conform; if Sawada or a seed knots again, exit (b) measured before anything else",
+     "class": "within",
+     "why": "A process choice inside the checklist FR-001 requires; it does not relax the goal (the knot is to be measured and solved, not accepted)."
+    },
+    {
+     "id": "Approach-9 (done, measured)",
+     "summary": "A unit test that two rolls give two first seats (red without the turn); Sawada's pool tests and seeds 1-48 with pinned rows; make cover-changed; the landing cohort",
+     "class": "within",
+     "why": "Verification that enforces the requested change and that the knots family stays solved; each check fails only if the requested behavior is absent or regresses."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T106 Approach (checklist part A)",
+    "### T106 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D132-roll",
+     "summary": "The woodpile's four recorded seats in fixture_seats._seats are turned by roll(SALT['woodpile'] + 0.5), and _wood_shed passes the household's roll instead of zero, the way the coop's seats are turned by roll(105.5).",
+     "class": "within",
+     "why": "This is the work D78 filed as T106 ('the roll is filed as T106'), and T106 is one of the knots family that amendment 10 says to solve inside 405 ('Yes solve the knots problem inside 405'). It adds no seat and drops none: the back wall's two and both flanks stay, and the front yard stays excluded under 0043 and D78."
+    },
+    {
+     "id": "D132-flank",
+     "summary": "The two flank seats are pulled back so their front end stands no further forward than the front wall (min(0.1 hh, hh/2 - w/2)), so that D78's shed_off_a_wall admits them.",
+     "class": "within",
+     "why": "D78 is not relaxed. It still requires a ken off every wall, a ken off the house, and no part of the shed past the front wall, and the moved seats are made to satisfy that rule. Without the move the turn could not do what T106 is for: the plan measured (2026-10-24, the unit test on the 46 x 28 ft house) that at 0.1 hh a 24 ft shed's end stood 0.8 ft past the front wall, so D78 refused both flanks on every farm and, with the kura behind, the roll changed nothing. The shed stays beside the house, which is what 0043 allows."
+    },
+    {
+     "id": "D132-labels",
+     "summary": "The rendering labels: GUESS (0043's own) for each household's side being rolled, and UNRESEARCHED, as before, for where the flank seat stands along the wall.",
+     "class": "within",
+     "why": "These are labels on what the page does and does not attest. They change no scope, and the earlier UNRESEARCHED label is kept rather than dropped."
+    },
+    {
+     "id": "T106-exits-done",
+     "summary": "Exit (e), conform; if Sawada or a seed knots again, (b) is measured first. Done means a unit test that is red without the turn, Sawada's pool tests and seeds 1-48 with the pinned rows, make cover-changed, and the landing cohort.",
+     "class": "within",
+     "why": "These checks only show that the requested turn happened and that the knots family stays solved (amendment 10). No new map, tier or behavior comes in with them."
     }
    ]
   }

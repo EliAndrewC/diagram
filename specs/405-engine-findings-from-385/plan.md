@@ -311,6 +311,24 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 <!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 <!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 <!-- plan-archive: T26 to T26 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
+### T106 Approach (checklist part A)
+
+1. **The goal, in the world.** No two farms' wood sheds stand at one bearing off their houses: each household's shed takes its first seat - off the back wall or a flank - by the household's own roll, as its coop does.
+2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off a house wall (D78). The coop's seats turned by the household's roll (feature 328). The knots step's gather with the 7 ft garden gap (T107, D83; T114's DEVIATION).
+3. **Where each comes from.** R (0043) and O (the coop's roll, `_seats`).
+4. **Do they describe the world here?** Yes: `_wood_shed` passes `_seats` a roll of zero, so every shed tries the back wall's west seat first; tried in batch 11 the roll knotted Sawada (measured 2026-10-21), and T107 has since landed the gather that knot waited on.
+5. **The order.** `_seats`' woodpile list turned by `roll(SALT["woodpile"] + 0.5)` as the coop's by `roll(105.5)`; the flank seats brought back so D78 admits them; `_wood_shed` takes the household's roll; the claim; a unit test; Sawada and seeds 1-48.
+6. **The exits.** (e) conform; if Sawada or a seed knots again, (b) measured before anything else.
+7. **The search smell.** None.
+8. **The budget.** 45 min with its landing.
+9. **Done, measured.** A unit test: two rolls give two first seats (red without the turn); Sawada's pool tests and seeds 1-48 with the pinned rows pass; `make cover-changed`; the landing cohort.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T106 Decisions
+
+- **D132** `fixture_seats._seats` (woodpile): the four recorded seats - the back wall's two, the east and west flanks - are turned by `roll(SALT["woodpile"] + 0.5)`, the household's roll, as the coop's are by `roll(105.5)`; `_wood_shed` passes the household's `roll` where it passed zero. And the two flank seats stand with their front end no further forward than the front wall (`min(0.1 hh, hh/2 - w/2)`): at 0.1 hh a 24 ft shed's end stood 0.8 ft past it, so `shed_off_a_wall` (D78) refused both flanks on every farm and, with the kura behind, the turn changed nothing (measured 2026-10-24, the unit test on the 46 x 28 ft house). Rendering: GUESS, 0043's own (behind or beside the house, the side unattested), each household's side rolled because the page attests no preferred one; the flank's place along the wall UNRESEARCHED, as before.
+
 ## T127 - the carried claims findings
 
 ### T127 Approach (checklist part A)
