@@ -25,6 +25,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 
@@ -91,9 +92,13 @@ def under_cap(root: Path, feature: str) -> str | None:
             return {}
         return got if isinstance(got, dict) else {}
 
+    # ...BOTH READ FRESH AT EACH CALL (the GM 2026-10-24: "the cap suddenly changes while you're in the middle of working"):
+    # the cap from caps.json as it stands now, and the reading only while its week lasts - past `seven_day_resets_at` it is
+    # last week's figure and decides nothing, as `usage_cap._live_pct` reads it
     latest = load(f"latest-{safe}.json") if sid else {}
     pct = latest.get("seven_day")
-    if not isinstance(pct, (int, float)):
+    resets = latest.get("seven_day_resets_at")
+    if not isinstance(pct, (int, float)) or (isinstance(resets, (int, float)) and time.time() > resets):
         return None
     budget = load(f"budget-{safe}.json") if sid else {}
     soft = (load("caps.json").get(str((latest.get("account") or {}).get("uuid") or "")) or {}).get("cap")

@@ -96,6 +96,13 @@ printf '{"seven_day": 76, "account": {"uuid": "u-1"}}' > "$T/cap/latest-s-1.json
 [ "$rc" = 2 ] && grep -q "the weekly cap is 90% and the 7-day figure is 76%" "$T/err" && ok "under the default soft cap: refused" || no "soft default" "rc=$rc $(cat "$T/err")"
 printf '{"u-1": {"cap": 70}}' > "$T/cap/caps.json"
 ( cd "$C" && SET_DOWN_WHY="the cap is reached" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "past the account's own soft cap: set down" || no "soft set"
+printf '{"u-1": {"cap": 95}}' > "$T/cap/caps.json"
+( cd "$C" && SET_DOWN_WHY="past the usage left" python3 "$SETDOWN" 385 >/dev/null 2>&1 ); [ $? = 2 ] && ok "the cap raised mid-work: refused at the next call" || no "raised cap"
+printf '{"u-1": {"cap": 70}}' > "$T/cap/caps.json"
+( cd "$C" && SET_DOWN_WHY="the cap is reached" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "lowered again: set down at the next call" || no "lowered cap"
+printf '{"u-1": {"cap": 95}}' > "$T/cap/caps.json"
+printf '{"seven_day": 76, "seven_day_resets_at": 1, "account": {"uuid": "u-1"}}' > "$T/cap/latest-s-1.json"
+( cd "$C" && SET_DOWN_WHY="a new week" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "last week's reading decides nothing" || no "stale reading"
 rm -f "$T/cap/latest-s-1.json"
 ( cd "$C" && SET_DOWN_WHY="no reading here" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "no reading: set down" || no "no reading"
 
