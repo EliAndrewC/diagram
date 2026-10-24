@@ -245,6 +245,9 @@ def test_the_gate_reuses_only_on_a_full_plan_and_only_a_test_its_baseline_holds(
     assert not deps.gate_full(str(tmp_path))
     (tmp_path / "plan.json").write_text(_json.dumps({"mode": "full"}), encoding="utf-8")
     assert deps.gate_full(str(tmp_path))
+    # ...and, since feature 415 (D4), an incremental plan a scripts/ change made select the tooling tests
+    (tmp_path / "plan.json").write_text(_json.dumps({"mode": "incremental", "reuse_tooling": True}), encoding="utf-8")
+    assert deps.gate_full(str(tmp_path))
     assert deps.gate_baseline_tests("") is None and deps.gate_baseline_tests(str(tmp_path)) == set(), "no baseline: nothing held"
     (tmp_path / "tests.json").write_text(_json.dumps({"tests/tooling/test_a.py::t1": []}), encoding="utf-8")
     held = deps.gate_baseline_tests(str(tmp_path))
