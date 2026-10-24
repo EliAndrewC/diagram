@@ -81,15 +81,23 @@ printf -- '- [ ] T07 the merge\n' > "$C/specs/385-x/tasks.md"; rm -f "$G/approac
 printf '{"cap": 80.0, "goal": "385 to completion"}' > "$T/cap/budget-s-1.json"
 printf '{"seven_day": 69}' > "$T/cap/latest-s-1.json"
 ( cd "$C" && SET_DOWN_WHY="past the usage left" python3 "$SETDOWN" 385 >/dev/null 2>"$T/err" ); rc=$?
-[ "$rc" = 2 ] && grep -q "armed at 80% and the 7-day figure is 69%" "$T/err" && grep -q "make arbiter-ask SUBJECT=set-down-385" "$T/err" && ok "under the cap: refused, naming the arbiter ask" || no "under cap" "rc=$rc $(cat "$T/err")"
+[ "$rc" = 2 ] && grep -q "the weekly cap is 80% and the 7-day figure is 69%" "$T/err" && grep -q "make arbiter-ask SUBJECT=set-down-385" "$T/err" && ok "under the cap: refused, naming the arbiter ask" || no "under cap" "rc=$rc $(cat "$T/err")"
 printf '{"trigger": "ask:set-down-385", "ruling": "accept", "utc": "2026-10-18T22:30:00Z"}\n' > "$C/specs/385-x/arbiter.jsonl"
 ( cd "$C" && SET_DOWN_WHY="past the usage left" python3 "$SETDOWN" 385 >/dev/null 2>&1 ); [ $? = 2 ] && ok "a ruling before the task-start answers nothing" || no "old cap ruling"
 printf '{"trigger": "ask:set-down-385", "ruling": "accept", "utc": "2026-10-19T01:00:00Z"}\n' >> "$C/specs/385-x/arbiter.jsonl"
 ( cd "$C" && SET_DOWN_WHY="the arbiter ruled it" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "ruled since the task-start: set down" || no "cap ruled"
 rm -f "$C/specs/385-x/arbiter.jsonl"; printf '{"seven_day": 80}' > "$T/cap/latest-s-1.json"
 ( cd "$C" && SET_DOWN_WHY="the cap is reached" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "at the cap: set down" || no "at cap"
-printf '{"seven_day": 50}' > "$T/cap/latest-s-1.json"; rm -f "$T/cap/budget-s-1.json"
-( cd "$C" && SET_DOWN_WHY="not armed here" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "no cap armed: set down" || no "unarmed"
+rm -f "$T/cap/budget-s-1.json"
+
+echo "10. no goal cap (retired, the GM 2026-10-24): the account's weekly soft cap holds the set-down"
+printf '{"seven_day": 76, "account": {"uuid": "u-1"}}' > "$T/cap/latest-s-1.json"
+( cd "$C" && SET_DOWN_WHY="past the usage left" python3 "$SETDOWN" 385 >/dev/null 2>"$T/err" ); rc=$?
+[ "$rc" = 2 ] && grep -q "the weekly cap is 90% and the 7-day figure is 76%" "$T/err" && ok "under the default soft cap: refused" || no "soft default" "rc=$rc $(cat "$T/err")"
+printf '{"u-1": {"cap": 70}}' > "$T/cap/caps.json"
+( cd "$C" && SET_DOWN_WHY="the cap is reached" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "past the account's own soft cap: set down" || no "soft set"
+rm -f "$T/cap/latest-s-1.json"
+( cd "$C" && SET_DOWN_WHY="no reading here" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "no reading: set down" || no "no reading"
 
 echo "set-down-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

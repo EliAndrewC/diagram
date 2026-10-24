@@ -10,11 +10,11 @@ arbiter-ask`: a process stop goes to the arbiter (CLAUDE.md), whose rules ask fi
 settles it. T26 was set down "for the GM to see T107 first" when the arbiter would have ruled the farms wider apart. The escape
 is `SET_DOWN_OK="<reason>"` (the usage cap's wind-down, say), logged by the make target.
 
-A GOAL WITH A USAGE CAP IS WORKED TO THE CAP (the GM 2026-10-23: *"I thought we had tooling to make it so that we didn't stop
+A GOAL IS WORKED TO THE USAGE CAP (the GM 2026-10-23: *"I thought we had tooling to make it so that we didn't stop
 partway through a feature being done when I asked for it to be worked to completion"*). The run of 2026-10-23 set 405 down at
 69% of an armed 80% cap, "past the usage left", and ended its turn on a question at 1:53am with the GM asleep: the Stop hook
-let it, because this command took any reason. While this session's cap (`~/.claude/hooks/usage_cap.py`) is armed and the
-7-day figure is under it, the set-down is refused unless the round arbiter has ruled on a set-down ask since the feature's
+let it, because this command took any reason. While the 7-day figure is under the cap - the weekly soft cap, or a goal's cap where one is still
+armed (`~/.claude/hooks/usage_cap.py`; the GM retired goal caps 2026-10-24) - the set-down is refused unless the round arbiter has ruled on a set-down ask since the feature's
 last task-start - a process stop goes to the arbiter, never to the GM.
 """
 
@@ -77,25 +77,28 @@ def _since_start(root: Path, feature: str) -> str:
 
 
 def under_cap(root: Path, feature: str) -> str | None:
-    """Why the feature may not be set down while this session's usage cap is armed and not reached, or None."""
+    """Why the feature may not be set down while the 7-day figure is under the cap - a goal's armed cap where one is armed,
+    else the account's weekly soft cap (`usage_cap.py cap`, 90% by default; the GM 2026-10-24 retired goal caps for the one
+    global soft cap) - or None."""
     sid = os.environ.get("CLAUDE_CODE_SESSION_ID", "")
     cap_dir = Path(os.environ.get("USAGE_CAP_DIR") or Path.home() / ".claude" / "usage-cap")
     safe = "".join(c if c.isalnum() or c in "_-" else "_" for c in sid)
-    try:
-        budget = json.loads((cap_dir / f"budget-{safe}.json").read_text(encoding="utf-8")) if sid else None
-    except (OSError, ValueError):
-        budget = None
-    if not isinstance(budget, dict) or not isinstance(budget.get("cap"), (int, float)):
-        return None
-    for name in (f"latest-{safe}.json", "latest.json"):
+
+    def load(name: str) -> dict:
         try:
-            pct = json.loads((cap_dir / name).read_text(encoding="utf-8")).get("seven_day")
+            got = json.loads((cap_dir / name).read_text(encoding="utf-8"))
         except (OSError, ValueError):
-            continue
-        if isinstance(pct, (int, float)):
-            break
-    else:
+            return {}
+        return got if isinstance(got, dict) else {}
+
+    latest = load(f"latest-{safe}.json") if sid else {}
+    pct = latest.get("seven_day")
+    if not isinstance(pct, (int, float)):
         return None
+    budget = load(f"budget-{safe}.json") if sid else {}
+    soft = (load("caps.json").get(str((latest.get("account") or {}).get("uuid") or "")) or {}).get("cap")
+    cap = budget.get("cap") if isinstance(budget.get("cap"), (int, float)) else soft if isinstance(soft, (int, float)) else 90.0
+    budget = {"cap": cap}
     if pct >= budget["cap"]:
         return None
     since = _since_start(root, feature)
@@ -107,8 +110,8 @@ def under_cap(root: Path, feature: str) -> str | None:
             continue
         if str(row.get("trigger", "")).startswith("ask:set-down") and _utc(str(row.get("utc"))) >= since:
             return None
-    return (f"set-down: refused - the usage cap is armed at {budget['cap']:g}% and the 7-day figure is {pct:g}%: a goal with a cap "
-            f"is worked to the cap, and the GM may be asleep. Take the next open task; a stop for any other reason goes to the "
+    return (f"set-down: refused - the weekly cap is {budget['cap']:g}% and the 7-day figure is {pct:g}%: a goal is worked to the "
+            f"cap, and the GM may be asleep. Take the next open task; a stop for any other reason goes to the "
             f"round arbiter: make arbiter-ask SUBJECT=set-down-{feature.split('-')[0]} WHY=\"<what blocks every open task, the "
             f"routes measured>\", then make set-down again (escape: SET_DOWN_OK=\"<reason>\")")
 
