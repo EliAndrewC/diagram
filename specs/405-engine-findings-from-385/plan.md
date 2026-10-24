@@ -432,6 +432,27 @@ The Decisions block re-decided only in wording (the research's bound stated as i
 <!-- plan-archive: T128 to T128 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 <!-- plan-archive: T122 to T122 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 <!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-23 (feature 375 FR-044) -->
+## T135 - two gather forms for the knots T26's sheds leave (seeds 24 and 36)
+
+### T135 Approach (checklist part A)
+
+1. **The goal, in the world.** Ends that nearly meet are joined at one point, and a path that would come back along a way to reach that point is cut where it comes alongside, as a walker treads it; a path laid only to join two others stops where it first reaches one.
+2. **The constraints.** 0081: ends within 25 ft joined at a single point; a lane whose end runs back along another way at less than 20 degrees is cut where it comes alongside and meets the other; a lane laid only to join two others ends where it first meets one. The lane law and the web kept whole, as the gather's judge asks them, at the 7 ft fence gap (the 3 ft pass is households' ways only, D128). `knots.py`'s index: never slide a foot along the tree to just past the reach.
+3. **Where each comes from.** R: 0081 (the 25 ft; the 20 degrees and the cut where it comes alongside; the joining lane's first meeting). O: "alongside" read within `WEB_SHADOW_FT` (UNRESEARCHED, as `teed_back` reads it, D125); the order of the forms (UNRESEARCHED, as `next_gather` labels it).
+4. **Do they describe the world here?** Yes, measured 2026-10-23 (T26's patch on main at T07, `make cohort N=48`, then `knot-trace.py` at the 7 ft gap): 51/54 - seed 24, join-orphans lane 16 starts on household way 6's corner 25.0 ft from way 6's end on way 2, and the gathers the judge admits all need the 3 ft gap; moved onto way 6's end with its first corner dropped (its first leg ran back up way 6's last leg), the judge admits it at 7 ft. Seed 36, join-orphans lane 21 ends on household way 5 1.3 ft from its corner, 23.9 ft from way 5's foot on way 4; aimed at the foot its leg closes a sliver with way 5 (`needle_loops`), and ended where it first crosses way 5 (1798.2, 2052.8; 31 ft from the foot) the map is knot-free, measured 2026-10-23 (a prototype in a detached worktree, `make hamlet`). With both forms the cohort is 53/54 with the patch, measured 2026-10-23 (`make cohort N=48`): seed 47 remains, the field way, not a knot.
+5. **The order.** Nothing moves earlier: both forms are the gather's own (`next_gather`), after its existing forms, for a lone movable end.
+6. **The exits.** (a) the 3 ft pass for every lane - refused by D128 (0246 gives it to households' ways); (b) slide the end along the way past the reach - forbidden; (c) room - measured worse on 2026-10-22 (T107); (d) the two forms - taken.
+7. **The search smell.** None new: each form is one cut where the page puts it (where the end comes alongside; where the joining lane first meets a way), judged by the existing judge; each shortens the moved lane, so the gather cannot cycle.
+8. **The budget.** 90 min with its landing.
+9. **Done, measured.** Unit tests of both forms (red without them); seeds 24 and 36 knot-free with T26's patch; `make cohort N=48` on main 54/54 with the fresh block's rate, and the landing cohort.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T135 Decisions
+
+- **D129** `knots.next_gather` gains a form after `teed_back`, `onto_cut_back`: a lone movable end moved onto the other node with each corner whose leg would then run back along a lane at that node (under `_SIDE_BY_SIDE_DEG`, its middle within `WEB_SHADOW_FT`) dropped, nearest the node first - asked of the gather's judge. Rendering: historically accurate - 0081: "A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other"; "alongside" read within `WEB_SHADOW_FT`, UNRESEARCHED (as D125).
+- **D130** `knots.next_gather` gains a last form for a lane laid only to join two others (`JOIN_ROLE`), `joiner_first_meeting`: its end re-aimed at the other node and ended where its last leg first crosses another lane (`settle.shapes._crossing`, more than 1 ft inside both), only where that point stands beyond `_KNOT_FT` of the node - asked of the gather's judge. Rendering: historically accurate - 0081: "A lane laid only to join two others ends where it first meets one, its tail cut however long it is"; ends within 25 ft joined at a single point.
+
 ## T127 - the carried claims findings
 
 ### T127 Approach (checklist part A)

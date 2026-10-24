@@ -280,6 +280,62 @@ def teed_back(pts: Poly, end: int, other: Poly) -> list[Poly]:
     return [run if end == -1 else run[::-1]]
 
 
+def _alongside(legs: Sequence[tuple[Pt, Pt]], a: Pt, b: Pt) -> bool:
+    """Does leg a-b run alongside one of `legs`: its middle within `WEB_SHADOW_FT` of the nearest, at under `_SIDE_BY_SIDE_DEG`
+    to it (405 T135)?
+
+    Research: alongside - UNRESEARCHED: 0081 gives the 20 degrees but no distance; read within `WEB_SHADOW_FT`, as `teed_back` reads it"""
+    mid = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
+    u, v = min(legs, key=lambda uv: seg_dist(mid[0], mid[1], *uv))
+    if seg_dist(mid[0], mid[1], u, v) > WEB_SHADOW_FT:
+        return False
+    turn = abs(math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]) - math.atan2(v[1] - u[1], v[0] - u[0]))) % 180.0
+    return min(turn, 180.0 - turn) < _SIDE_BY_SIDE_DEG
+
+
+def onto_cut_back(pts: Poly, end: int, node: Pt, other: Poly) -> Poly:
+    """Lane `pts` with its `end` (0 or -1) moved onto `node` and each corner whose leg to the node would run back along the
+    `other` lane dropped, nearest the node first (`_alongside`); [] where no corner is dropped (405 T135, D129: seed 24 with
+    T26's sheds - a joining lane moved onto a household way's end ran its first leg back up that way's last leg).
+
+    Research: cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: a lane whose end runs back along another way at less than 20 degrees is cut where it comes alongside and meets the other"""
+    seq = [*(list(pts) if end == -1 else list(pts)[::-1])[:-1], node]
+    legs = list(zip(other, other[1:], strict=False))
+    if not legs:
+        return []
+    cut = seq
+    while len(cut) > 2 and _alongside(legs, cut[-2], cut[-1]):
+        cut = [*cut[:-2], cut[-1]]
+    if cut is seq:
+        return []
+    return cut if end == -1 else cut[::-1]
+
+
+def joiner_first_meeting(lanes: Sequence[Mapping[str, Any]], i: int, end: int, node: Pt) -> Poly:
+    """A lane laid only to join two others (`JOIN_ROLE`), its `end` re-aimed at `node` and ended where that leg first crosses
+    another lane, more than `_JOINT_FT` inside both (`settle.shapes._crossing`) - only where that point stands beyond
+    `_KNOT_FT` of the node; [] otherwise (405 T135, D130: seed 36 with T26's sheds - aimed at a household way's foot, the
+    joining lane closed a sliver with that way; ended where it first crossed it, 31 ft from the foot, no knot is left).
+
+    Research: a joining lane ends where it first meets a way - research/questions/0081-village-lanes.drawing.html: a lane laid only to join two others ends where it first meets one, its tail cut however long it is"""
+    from .settle.shapes import JOIN_ROLE, _crossing  # bound here: `settle` names `settle_knots` in its STEPS
+
+    if lanes[i].get("role") != JOIN_ROLE:
+        return []
+    seq = [*(_pts(lanes[i]) if end == -1 else _pts(lanes[i])[::-1])[:-1], node]
+    if len(seq) < 2:
+        return []
+    a, b = seq[-2], seq[-1]
+    xs = [x for j, ln in enumerate(lanes) if j != i for u, v in zip(_pts(ln), _pts(ln)[1:], strict=False) if (x := _crossing(a, b, u, v)) is not None]
+    if not xs:
+        return []
+    x = min(xs, key=lambda q: math.dist(q, a))
+    if math.dist(x, node) <= _KNOT_FT:
+        return []
+    run = [*seq[:-1], x]
+    return run if end == -1 else run[::-1]
+
+
 def contracted(lanes: Sequence[Mapping[str, Any]], at: Pt, node: Pt, skip: Collection[int], fixed: Callable[[Mapping[str, Any], int], bool] = _fixed) -> dict[int, Poly]:
     """The lanes a knot's stretch is taken out of when its node at `at` is gathered onto `node`: each lane but `skip` with an
     end on `node` and a corner at `at` - the knot's two junctions joined by its last leg - with every inner vertex within
@@ -336,7 +392,9 @@ def next_gather(
         which node a knot gathers at - UNRESEARCHED: the node with fewer ends moves onto the other, the other way round where refused
         a lone end teed onto the other lane - research/questions/0081-village-lanes.drawing.html: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)
         a lone end cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: "the maps cut it where it comes alongside and let it meet the other as a T" (`teed_back`, 405 T134), taken only where its T stands past the knot's reach and the web keeps no more knots
-        which ways a lone end is cut back onto - UNRESEARCHED: a lane at the other node, or the lane its own end stands on"""
+        which ways a lone end is cut back onto - UNRESEARCHED: a lane at the other node, or the lane its own end stands on
+        a lone end moved onto the node, cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees is cut where it comes alongside (`onto_cut_back`, 405 T135)
+        a joining lane ended where it first meets a way - research/questions/0081-village-lanes.drawing.html: a lane laid only to join two others ends where it first meets one (`joiner_first_meeting`, 405 T135)"""
     nodes = end_nodes(lanes, fixed)
     for a, b, _d in knots(lanes, apart):
         order = sorted(((b, a), (a, b)), key=lambda mt: len(nodes[mt[0]][1]))
@@ -377,6 +435,18 @@ def next_gather(
                         and judge({i: form})
                     ):
                         return {i: form}
+        for mover, target in order:  # ...or moved onto the node, its corners that would run back along a way there dropped
+            ends = nodes[mover][1]
+            if len(ends) != 1 or fixed(lanes[ends[0][0]], ends[0][1]):
+                continue
+            i, e = ends[0]
+            for j in sorted({j for j, _f in nodes[target][1] if j != i}):
+                form = onto_cut_back(_pts(lanes[i]), e, nodes[target][0], _pts(lanes[j]))
+                if form and judge({i: form}):
+                    return {i: form}
+            form = joiner_first_meeting(lanes, i, e, nodes[target][0])
+            if form and judge({i: form}):
+                return {i: form}
     return None
 
 

@@ -270,6 +270,38 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T135": {
+   "section_sha256": "0613cf892441c1ba33730d5312471061a8f96f56441096437f31ada4e3b7b453",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D129",
+     "summary": "next_gather gains onto_cut_back after teed_back: a lone movable end moved onto the other node, corners whose leg would run back along a lane there (under _SIDE_BY_SIDE_DEG, middle within WEB_SHADOW_FT) dropped nearest the node first, asked of the gather's judge",
+     "class": "within",
+     "why": "Amendment 10 asks the knots family solved inside 405 (FR-003a); this form is a further way of solving one, rendered from 0081 (ends within 25 ft joined at one point; a lane running back at under 20 degrees cut where it comes alongside). The distance for 'alongside' is a reading of the page, labeled UNRESEARCHED as D125's was. It drops nothing the GM asked for: the form is one more thing the gather can try, and the existing judge still has to admit it."
+    },
+    {
+     "id": "D130",
+     "summary": "next_gather gains a last form, joiner_first_meeting: a JOIN_ROLE lane's end re-aimed at the other node and ended where its last leg first crosses another lane (more than 1 ft inside both), only where that point stands beyond _KNOT_FT of the node, asked of the gather's judge",
+     "class": "within",
+     "why": "Also serves amendment 10 / FR-003a, rendered from 0081's 'a lane laid only to join two others ends where it first meets one'. The beyond-_KNOT_FT condition only stops the form from re-making the knot it is meant to clear. It does not exempt any case from the request or the page, and anything the form does not reach stays a knot that the cohort counts."
+    },
+    {
+     "id": "A5 (the order)",
+     "summary": "both forms placed after the gather's existing forms, nothing moved earlier",
+     "class": "within",
+     "why": "The order is a design choice about how a knot is solved, labeled UNRESEARCHED as next_gather labels it. It narrows nothing that was asked."
+    },
+    {
+     "id": "A6 (the exits)",
+     "summary": "the 3 ft pass for every lane refused (D128), the slide forbidden, room refused as measured worse (T107)",
+     "class": "within",
+     "why": "The 3 ft refusal applies the already-accepted D128 rather than adding a new carve-out, and the slide is forbidden by knots.py's index. Room was the route amendment 8 allowed within the research, and here it was measured and found worse, not ruled out, so declining it does not narrow amendment 8's instruction."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {

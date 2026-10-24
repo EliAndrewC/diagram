@@ -352,3 +352,28 @@ def test_a_knot_the_fence_gap_leaves_is_gathered_at_the_crop_clearance(monkeypat
     assert kn.settle_knots(s) == 1
     assert kn.knots(s.M["lanes"]) == []
     assert asked[0] == WEB_FABRIC_GAP and asked[-1] == WEB_CROP_GAP, "the convention first, the crop clearance after"
+
+
+def test_an_end_moved_onto_the_node_drops_the_corners_that_run_back_along_a_way_there() -> None:
+    """405 T135 (D129), seed 24 in small: moved onto the node, the lane's first leg would run back up the other way's last leg;
+    that corner is dropped (0081: cut where it comes alongside)."""
+    way = [(100.0, 25.0), (0.0, 25.0), (0.0, 0.0)]  # the other way: along, then down onto the node
+    lane = [(-120.0, 60.0), (3.0, 45.0), (2.0, 25.0)]  # its end on the other way's corner, its last leg coming down beside it
+    assert kn.onto_cut_back(lane, -1, (0.0, 0.0), way) == [(-120.0, 60.0), (0.0, 0.0)], "the corner run back along the way dropped"
+    assert kn.onto_cut_back(lane[::-1], 0, (0.0, 0.0), way) == [(0.0, 0.0), (-120.0, 60.0)], "the first end as the last"
+    assert kn.onto_cut_back([(-120.0, -40.0), (-60.0, -40.0)], -1, (0.0, 0.0), way) == [], "nothing alongside: no form"
+    assert kn.onto_cut_back(lane, -1, (0.0, 0.0), []) == []
+
+
+def test_a_joining_lane_is_aimed_at_the_node_and_ended_where_it_first_meets_a_way() -> None:
+    """405 T135 (D130), seed 36 in small: aimed at the node, the joining lane's leg crosses the other way 31 ft from it; it
+    ends there. A lane that is not a joining lane, or a crossing within the knot's reach, gives no form."""
+    way = {"pts": [[10.0, 40.0], [10.0, 140.0]], "role": kn.ACCESS_ROLE}  # crosses the re-aimed leg at (10, 90)
+    joiner = {"pts": [[60.0, 120.0], [2.0, 2.0]], "role": "join-orphans"}
+    under = {"pts": [[40.0, -30.0], [-40.0, 30.0], [-40.0, 60.0]], "role": kn.ACCESS_ROLE}  # the node's lane, met only at the node
+    form = kn.joiner_first_meeting([way, joiner, under], 1, -1, (-40.0, 60.0))
+    assert form == [(60.0, 120.0), (10.0, 90.0)] and math.dist(form[-1], (-40.0, 60.0)) > _KNOT_FT
+    assert kn.joiner_first_meeting([way, {**joiner, "role": kn.ACCESS_ROLE}, under], 1, -1, (-40.0, 60.0)) == []
+    assert kn.joiner_first_meeting([under, joiner], 1, -1, (-40.0, 60.0)) == [], "met only at the node: no form"
+    assert kn.joiner_first_meeting([way, joiner, under], 1, -1, (0.0, 80.0)) == [], "its first meeting within the knot's reach"
+    assert kn.joiner_first_meeting([way, {**joiner, "pts": [[2.0, 2.0], [60.0, 120.0]]}, under], 1, 0, (-40.0, 60.0))[-1] == (60.0, 120.0)

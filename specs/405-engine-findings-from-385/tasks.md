@@ -411,6 +411,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T134 Two knots the settle makes, mended where they are made (amendment 10, knots-2026-10-23.md): settle_ends' re-aim of an end onto a way it crossed before its end tees it at that first crossing (seed 10 with T26's sheds: a join-orphans link teed 12 ft from the track's head), and the gather's last form re-aims a lone end from an earlier vertex onto the way it comes alongside, clear of the knot's reach (fresh seed 717220 with T26's sheds)
       research: rendering
       verify: DONE. landed: the crossing re-aim (a tail under 40 ft, or a joining lane at any length) and the gather's cut where a lane comes alongside: unit tests red without them; seeds 10 and 717220 knot-free with T26's sheds; make cohort N=48 on main 54/54, fresh 8%; claims round 2 IN-STEP, the one MISLABELED relabeled
+- [ ] T135 Two gather forms for the knots T26's sheds leave (amendment 10): an end moved onto the junction with the corners that would run back along a way there dropped (0081: cut where it comes alongside; seed 24), and a lane laid only to join two others re-aimed at the junction and ended where it first meets a way (0081; seed 36) - done when seeds 24 and 36 are knot-free with T26's patch and main's cohort keeps 54/54
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
