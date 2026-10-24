@@ -411,6 +411,8 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
         return 0
 
     monkeypatch.setattr(lb, "make", make)
+    monkeypatch.setattr(lb, "run_gate", lambda root, target, cover: make(root, target))  # the gate in its own session (415 D6)
+    monkeypatch.setattr(lb, "start_cover", lambda root: None)
     monkeypatch.setattr(lb, "engine_delta", lambda root: state["engine"])
     monkeypatch.setattr(lb, "commit_regenerated", lambda root, why: None)
     monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (state["stamp"], state.get("says", "")) if "gate-stamp.py" in str(cmd) else (state["cohort"], ""))
@@ -694,20 +696,49 @@ def test_the_gate_s_own_lint_is_committed_and_any_other_change_left(tmp_path: pa
     assert lb.commit_gate_formatting(repo) == [], "nothing of the gate's left: no commit"
 
 
-def test_the_changed_modules_coverage_is_a_cheap_refusal_with_its_escape(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
-    """The GM 2026-10-24: T135's landing ran `make done` five minutes to find four uncovered lines; `cover_changed.py` asks them
-    in the first pass, its refusal printed with the rest, and COVER_OK passes it."""
+def test_the_changed_modules_coverage_runs_beside_the_gate_and_stops_it(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 415 (FR-004, D6; the GM 2026-10-24): `cover_changed.py` no longer runs before the gate (48 s on T26's landing)
+    but beside it, and a refusal stops the gate at once and refuses the landing with its lines; COVER_OK skips it."""
     lb, d = _land(tmp_path, monkeypatch)
-    said = "cover-changed: l7r/x.py - added lines its tests (tests/x) do not reach: 3\ncover-changed: a test for each"
+    seen: list[list[str]] = []
+    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: seen.append([str(c) for c in cmd]) or (0, str(tmp_path) if "rev-parse" in cmd else ""))
+    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [] and not any("cover_changed.py" in " ".join(c) for c in seen), "not before the gate"
+    monkeypatch.setattr(lb, "COVER_POLL_S", 0.01)
+    cover = lb.start_cover(tmp_path)
+    assert cover is not None and cover[0] in lb.RUNNING
+    cover[0].wait()
+    lb.RUNNING.remove(cover[0])
+    script = tmp_path / "Makefile"
+    script.write_text("slow:\n\tsleep 30\nquick:\n\ttrue\n")
 
-    def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
-        return (1, said) if any("cover_changed.py" in str(c) for c in cmd) else (0, "")
+    class Refused:  # a check that has refused
+        returncode = 1
 
-    monkeypatch.setattr(lb, "run", run)
-    stops = lb.cheap_refusals(tmp_path, d, ["T02"], "x")
-    assert stops and "do not reach: 3" in stops[-1] and "a test for each" in stops[-1]
+        def poll(self) -> int:
+            return 1
+
+    log = tmp_path / "cover.log"
+    log.write_text("cover-changed: l7r/x.py - added lines its tests (tests/x) do not reach: 3\nnoise\n")
+    assert lb.cover_refusal((Refused(), log)) == "cover-changed: l7r/x.py - added lines its tests (tests/x) do not reach: 3"
+    import time  # noqa: PLC0415
+
+    t = time.monotonic()
+    assert lb.run_gate(tmp_path, "slow", (Refused(), log)) == lb.COVER_STOPPED and time.monotonic() - t < 10, "the gate stopped at once"
+    assert lb.run_gate(tmp_path, "quick", None) == 0 and not lb.RUNNING, "a gate with no check beside it runs to its end"
     monkeypatch.setenv("COVER_OK", "a line only the rolls reach")
-    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [], "escaped"
+    assert lb.start_cover(tmp_path) is None
+
+
+def test_the_fresh_block_starts_after_the_push_under_a_lock(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 415 (FR-003, D5): the cohort's fresh block is a rate, never a refusal - it rolls after the push, under a lock a
+    later landing's block waits on, never skipped."""
+    lb, _d = _land(tmp_path, monkeypatch)
+    started: list[list[str]] = []
+    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (0, str(tmp_path)))
+    monkeypatch.setattr(lb.subprocess, "Popen", lambda cmd, **kw: started.append(cmd) or None)
+    log = lb.start_fresh_block(tmp_path)
+    assert log == tmp_path / "land-fresh.log" and started[0][:2] == ["flock", str(tmp_path / "land-fresh.lock")]
+    assert started[0][2:6] == ["make", "--no-print-directory", "cohort", "N=0"] and "FRESH=48" in started[0], "the fresh block alone"
 
 
 def _cover():  # noqa: ANN202 - `gates/cover_changed.py` by path

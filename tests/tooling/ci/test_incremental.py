@@ -20,8 +20,8 @@ from l7r.diagram.ci import incremental, selection
 
 
 def test_changed_classifies_engine_tests_and_tooling() -> None:
-    before = {"engine": {"e/a.py": "1", "e/b.py": "2", "pool/x.json": "9"}, "tests": {"t/test_a.py": "1", "t/conftest.py": "5", "t/_helper.py": "7"}, "tooling": "T"}
-    now = {"engine": {"e/a.py": "1", "e/b.py": "3", "e/c.py": "4"}, "tests": {"t/test_a.py": "2", "t/test_new.py": "8", "t/conftest.py": "5", "t/_helper.py": "6"}, "tooling": "T"}
+    before = {"engine": {"e/a.py": "1", "e/b.py": "2", "pool/x.json": "9"}, "tests": {"t/test_a.py": "1", "t/conftest.py": "5", "t/_helper.py": "7"}, "tooling": "T", "gate_config": "G"}
+    now = {"engine": {"e/a.py": "1", "e/b.py": "3", "e/c.py": "4"}, "tests": {"t/test_a.py": "2", "t/test_new.py": "8", "t/conftest.py": "5", "t/_helper.py": "6"}, "tooling": "T", "gate_config": "G"}
     ch = incremental.changed(before, now)
     assert ch.engine == ("e/b.py", "e/c.py", "pool/x.json") and ch.removed == ("pool/x.json",)
     assert ch.test_modules == ("t/test_a.py", "t/test_new.py") and ch.other_tests == ("t/_helper.py",) and not ch.tooling_moved
@@ -379,7 +379,7 @@ def test_plan_forced_full_and_the_nothing_changed_case(tmp_path: Path, monkeypat
     bdir = tmp_path / "gb"
     bdir.mkdir()
     monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
-    man = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "1"}, "tooling": "T"}
+    man = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "1"}, "tooling": "T", "gate_config": "G"}
     (bdir / incremental.MANIFEST).write_text(json.dumps(man), encoding="utf-8")
     (bdir / incremental.COVERAGE_DB).write_bytes(b"")
     (bdir / incremental.TESTS).write_text(json.dumps({"t/test_a.py::x": []}), encoding="utf-8")
@@ -444,7 +444,7 @@ def test_a_roster_change_plans_a_full_run(tmp_path: Path, monkeypatch: pytest.Mo
     bdir.mkdir()
     monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
     roster = "tests/rolls.py"
-    before = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "1", roster: "1"}, "tooling": "T"}
+    before = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "1", roster: "1"}, "tooling": "T", "gate_config": "G"}
     (bdir / incremental.MANIFEST).write_text(json.dumps(before), encoding="utf-8")
     (bdir / incremental.COVERAGE_DB).write_bytes(b"")
     (bdir / incremental.TESTS).write_text(json.dumps({"t/test_a.py::x": []}), encoding="utf-8")
@@ -551,8 +551,8 @@ def test_plan_returns_a_full_run_when_the_projection_is_over_the_fraction(tmp_pa
     (skill / "t").mkdir(parents=True)
     (skill / "t" / "test_a.py").write_text("", encoding="utf-8")
     monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
-    before = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "1"}, "tooling": "T"}
-    now = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "2"}, "tooling": "T"}
+    before = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "1"}, "tooling": "T", "gate_config": "G"}
+    now = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "2"}, "tooling": "T", "gate_config": "G"}
     (bdir / incremental.MANIFEST).write_text(json.dumps(before), encoding="utf-8")
     (bdir / incremental.COVERAGE_DB).write_bytes(b"")
     (bdir / incremental.TESTS).write_text(json.dumps({f"t/test_a.py::x{k}": [] for k in range(4)}), encoding="utf-8")

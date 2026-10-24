@@ -181,7 +181,7 @@ def pytest_configure(config: pytest.Config) -> None:
     if MODE not in ("record", "reuse", "gate") or os.environ.get("L7R_CACHE_OFF", "") not in ("", "0"):
         return
     if MODE == "gate" and not gate_full(GATE):
-        return  # an incremental plan selects by coverage; only a full plan's tooling tests are this plugin's (plan D31)
+        return  # an incremental plan selects by coverage; a full plan's tooling tests are this plugin's (plan D31), or a scripts/ change's (415 D4)
     config._l7r_deps = True  # type: ignore[attr-defined]  # reuse records too: a landing's run keeps what it ran for the next
     if not hasattr(config, "workerinput"):  # the controller (or a run with no workers): the shared log and the children's path
         d = tempfile.mkdtemp(prefix="l7r-test-deps-")
@@ -204,11 +204,13 @@ SHIM_SRC = SITE / "l7r_file_log.c"
 
 
 def gate_full(bdir: str) -> bool:
-    """Is the gate's plan in `bdir` a FULL one - the run whose tooling tests reuse (plan D31)?"""
+    """Does the gate's plan in `bdir` reuse its tooling tests - a FULL one (plan D31), or, since feature 415 (D4), an incremental
+    one a `scripts/` change made select the tooling tests (`reuse_tooling`)?"""
     try:
-        return bool(bdir) and json.loads((pathlib.Path(bdir) / "plan.json").read_text(encoding="utf-8")).get("mode") == "full"
+        plan = json.loads((pathlib.Path(bdir) / "plan.json").read_text(encoding="utf-8")) if bdir else {}
     except OSError, ValueError:
         return False
+    return plan.get("mode") == "full" or bool(plan.get("reuse_tooling"))
 
 
 def gate_baseline_tests(bdir: str) -> set[str] | None:
