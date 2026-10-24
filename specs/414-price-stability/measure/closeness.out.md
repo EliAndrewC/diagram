@@ -41,3 +41,38 @@ Left out: Kyoto Salt (a unit change in the series from 1791).
 | Burning wood | 5.2% | 6.0% (41) - beyond | 7.8% (41) - beyond |
 | Lamp oil | 16.8% | 8.5% (41) - within | 7.0% (41) - within |
 | Day laborers | 16.0% | 9.7% (41) - within | - |
+
+## China: the same curve and bound (SD of log change between yearly values; n = pairs)
+
+| series | within-era spread (5 yr); limit | 5 yr | 10 yr | 15 yr | 20 yr | 25 yr | 30 yr | 40 yr | 50 yr | no-note bound |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Kishimoto, Suzhou-area rice, taels a shi, 1584-1766 | 72.3% (6); limit 114.0% | 72.3% (6) | 67.8% (3) | 29.7% (3) | 55.3% (3) | - (0) | - (1) | 53.9% (4) | - (1) | - |
+| Allen et al., Beijing bare-bones basket, g of silver (a reconstruction), to 1850 | 6.5% (108); limit 7.4% | 6.5% (108) | 10.0% (103) | 11.6% (98) | 11.8% (93) | 11.1% (88) | 11.6% (83) | 12.4% (73) | 10.3% (63) | 5 yr |
+| Allen et al., Suzhou bare-bones basket, g of silver, to 1850 | 17.1% (99); limit 19.6% | 17.1% (99) | 22.4% (94) | 26.5% (89) | 25.4% (84) | 23.8% (79) | 22.1% (74) | 24.1% (64) | 19.8% (54) | 5 yr |
+| Allen et al., Canton bare-bones basket, g of silver, to 1850 | 14.8% (99); limit 16.9% | 14.8% (99) | 19.2% (94) | 21.8% (89) | 23.3% (84) | 21.4% (79) | 18.6% (74) | 19.9% (64) | 15.1% (54) | 5 yr |
+
+Kishimoto's series has 25 years with a price in 1584-1766.
+
+## China: Allen et al.'s Beijing goods, 1738-1850 - how many values are their own
+
+| good | years | distinct values | years equal to the year before | its ratio to wheat flour, lowest-highest |
+|---|---|---|---|---|
+| (predicated) bread | 113 | 45 | 28 | 0.4921-0.6953 |
+| (predicated) beer | 113 | 54 | 8 | 0.2565-0.3812 |
+| wheat flour | 113 | 43 | 30 | 1.0000-1.0000 |
+| millet | 113 | 44 | 28 | 0.6149-0.8876 |
+| bean flour | 113 | 86 | 14 | 0.6296-0.9273 |
+| corn flour | 113 | 53 | 8 | 0.4003-0.6044 |
+| rice | 113 | 83 | 2 | 0.5354-1.6802 |
+| beans | 113 | 86 | 14 | 0.4864-0.7720 |
+| sorghum | 113 | 54 | 8 | 0.2840-0.4256 |
+| meat | 113 | 43 | 30 | 1.4743-1.4743 |
+| rice wine | 113 | 83 | 2 | 0.7443-2.3355 |
+| edible oil | 113 | 43 | 30 | 2.8986-2.8986 |
+| soap | 113 | 43 | 30 | 1.1957-1.1957 |
+| cloth | 113 | 21 | 92 | 2.8433-5.4835 |
+| candles | 113 | 43 | 30 | 2.3913-2.3913 |
+| lamp oil | 113 | 43 | 30 | 2.3913-2.3913 |
+| fuel | 113 | 82 | 31 | 4.2603-9.9949 |
+
+A good whose ratio to wheat flour is one figure every year is flour's series scaled, not a price series of its own.
