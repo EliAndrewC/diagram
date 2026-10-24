@@ -528,3 +528,19 @@ def test_the_decide_guard_reads_a_block_as_plan_delta_does() -> None:
     assert gate._section_clear(review, reviewed)
     assert gate._section_clear(review, reviewed + "\n"), "a blank line moved: a typo"
     assert not gate._section_clear(review, reviewed.replace("As written.", "A different decision entirely, three new words.")), "a real change"
+
+
+def test_every_block_a_task_s_own_headings_open_is_its_section() -> None:
+    """The GM 2026-10-24 (405 T26): T26's five `### T26 ...` blocks stood under no `## T26` heading, and only the first - its
+    part A - was bundled for review; its re-answered Approach and its Decisions (D131) reached no reviewer. Every own block is
+    kept, in plan order, and a block nested in one already kept is not counted twice."""
+    text = (
+        "# plan\n\n## T24, T26 - an umbrella\n\n### T26 Approach (checklist part A)\n\n1. a\n\n### T26 Decisions\n\n- **D1** x\n\n"
+        "### T26 Approach (re-answered 2026-10-24T13:22Z)\n\n1. b\n\n### T26 Decisions (2026-10-24)\n\n- **D131** y\n\n"
+        "## T07 - the knot\n\n### T07 Approach (checklist part A)\n\n1. c\n\n### T07 Decisions\n\n- **D126** z\n\n## T08 next\n"
+    )
+    secs = gate.task_sections(text)
+    t26 = secs["T26"]
+    assert "part A" in t26 and "**D1**" in t26 and "re-answered" in t26 and "**D131**" in t26, "every own block"
+    assert t26.index("part A") < t26.index("D131") and "an umbrella" not in t26 and "T07" not in t26
+    assert secs["T07"].startswith("## T07") and secs["T07"].count("### T07 Approach") == 1, "a nested block counted once"

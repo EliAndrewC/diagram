@@ -99,19 +99,28 @@ def task_sections(plan_text: str) -> dict[str, str]:
     """`{task id: its section}` - every `##`-`####` heading of the plan naming a task id, to the next heading at its level or
     above (feature 375, FR-003(a), plan D3): the decisions of that task, which a decision preflight rules on alone."""
     heads = [(m.start(), len(m.group(1)), m.group(2)) for m in _HEAD.finditer(plan_text)]
-    own: dict[str, str] = {}
+    own: dict[str, list[tuple[int, int]]] = {}
     mentioned: dict[str, str] = {}
     for i, (at, level, title) in enumerate(heads):
         ids = _TASK_ID.findall(title)
         if not ids:
             continue
-        end = next((a for a, lv, _t in heads[i + 1:] if lv <= level), len(plan_text))
+        end = next((a for a, lv, _t in heads[i + 1 :] if lv <= level), len(plan_text))
         # A TASK'S OWN HEADING WINS (feature 385 T56): a title that BEGINS with the id is that task's section; one that only
         # names it - the umbrella "T04 to T10 - T48, T47's patch, five ranking rows" - took T10's, T47's and T48's preflights
         lead = _TASK_ID.match(title.strip())
         for t in ids:
-            (own if lead and lead.group(0) == t else mentioned).setdefault(t, plan_text[at:end])
-    return {**mentioned, **own}
+            if lead and lead.group(0) == t:
+                # ...AND EVERY ONE OF ITS OWN HEADINGS COUNTS (the GM 2026-10-24, 405 T26): T26's five `### T26 ...` blocks
+                # stand under no `## T26` heading, and only the first - its 10-21 part A - was ever bundled for review, so
+                # its re-answered Approaches and its Decisions (D131) reached no reviewer. A block inside one already kept
+                # (a `### T07 ...` under `## T07 - ...`) is not counted twice.
+                spans = own.setdefault(t, [])
+                if not any(a <= at and end <= b for a, b in spans):
+                    spans.append((at, end))
+            else:
+                mentioned.setdefault(t, plan_text[at:end])
+    return {**mentioned, **{t: "".join(plan_text[a:b] for a, b in spans) for t, spans in own.items()}}
 
 
 def task_current(review: dict, plan_text: str, task: str, history: History | None = None) -> bool:
@@ -185,7 +194,7 @@ def blocks(plan_text: str) -> list[tuple[str, str, int]]:
         end = heads[i + 1].start() if i + 1 < len(heads) else len(plan_text)
         key = m.group(0).strip()
         seen[key] = seen.get(key, 0) + 1
-        out.append((key if seen[key] == 1 else f"{key}#{seen[key]}", plan_text[m.start():end], m.start()))
+        out.append((key if seen[key] == 1 else f"{key}#{seen[key]}", plan_text[m.start() : end], m.start()))
     return out
 
 
@@ -217,7 +226,7 @@ class History:
             self._revs = self._git("log", "--format=%H", self.ref, "--", self.path.name).decode().split()
         yield from self._texts
         while len(self._texts) < len(self._revs):
-            chunk = self._revs[len(self._texts): len(self._texts) + HISTORY_CHUNK]
+            chunk = self._revs[len(self._texts) : len(self._texts) + HISTORY_CHUNK]
             got, i = self._git("cat-file", "--batch", data="".join(f"{r}:{self._rel}\n" for r in chunk).encode()), 0
             for _ in chunk:
                 nl = got.find(b"\n", i)
@@ -227,9 +236,9 @@ class History:
                     i = nl + 1
                     continue
                 size = int(head[2])
-                self._texts.append(got[nl + 1: nl + 1 + size].decode("utf-8", "replace"))
+                self._texts.append(got[nl + 1 : nl + 1 + size].decode("utf-8", "replace"))
                 i = nl + 1 + size + 1
-            yield from self._texts[-len(chunk):]
+            yield from self._texts[-len(chunk) :]
 
     def block(self, key: str, sha: str) -> str | None:
         """The text a block had when its digest was `sha`, as its verdict kept it or from the plan's history; None when neither holds it."""
@@ -348,8 +357,7 @@ def block_status(review: dict, plan_text: str, ruled: set[str], history: History
     return owed, blocked
 
 
-HOW = ("dispatch `spec-fidelity` in its PLAN REVIEW mode with request.md, spec.md and plan.md, then record "
-       "its JSON: make plan-verdict F=<feature> FILE=<json> AS=spec-fidelity")
+HOW = "dispatch `spec-fidelity` in its PLAN REVIEW mode with request.md, spec.md and plan.md, then record its JSON: make plan-verdict F=<feature> FILE=<json> AS=spec-fidelity"
 
 
 def digest(data: bytes) -> str:
@@ -380,20 +388,23 @@ def judge(plan: bytes | None, review_text: str | None, history: History | None =
     owed_keys, blocked = block_status(review, text, ruled, history, done)
     if owed_keys:
         shown = ", ".join(k[:60] for k in owed_keys[:5]) + (f" and {len(owed_keys) - 5} more" if len(owed_keys) > 5 else "")
-        return "plan-review-stale", (f"{len(owed_keys)} block(s) of plan.md changed since their review by more than a typo (feature 375 "
-                                     f"FR-043): {shown} - `make plan-delta F=<n>` builds the review of those blocks alone")
+        return "plan-review-stale", (
+            f"{len(owed_keys)} block(s) of plan.md changed since their review by more than a typo (feature 375 FR-043): {shown} - `make plan-delta F=<n>` builds the review of those blocks alone"
+        )
     if blocked or (review.get("verdict") not in (None, "CLEAR") and not isinstance(review.get("blocks"), dict)):
         narrowing = [d.get("id", "?") for d in review.get("decisions", []) if d.get("ruling") == "NOT LEGITIMATE"]
-        return "plan-review-blocked", (f"the plan review is BLOCKED ({', '.join(narrowing) or 'no ruling named'} ruled "
-                                       f"NOT LEGITIMATE) - withdraw or overrule the decision in plan.md, then {HOW}")
+        return "plan-review-blocked", (f"the plan review is BLOCKED ({', '.join(narrowing) or 'no ruling named'} ruled NOT LEGITIMATE) - withdraw or overrule the decision in plan.md, then {HOW}")
     return None
 
 
 def owed(spec_dir: pathlib.Path) -> tuple[str, str] | None:
     plan, review = spec_dir / "plan.md", spec_dir / RECORD
-    return judge(plan.read_bytes() if plan.is_file() else None,
-                 review.read_text(encoding="utf-8") if review.is_file() else None, History(plan),
-                 (spec_dir / "plan-done.md").read_text(encoding="utf-8") if (spec_dir / "plan-done.md").is_file() else "")
+    return judge(
+        plan.read_bytes() if plan.is_file() else None,
+        review.read_text(encoding="utf-8") if review.is_file() else None,
+        History(plan),
+        (spec_dir / "plan-done.md").read_text(encoding="utf-8") if (spec_dir / "plan-done.md").is_file() else "",
+    )
 
 
 # ---- the escape and the record of it (FR-008) ----------------------------------------------------------
@@ -403,13 +414,11 @@ HERE = pathlib.Path(__file__).resolve().parent
 
 def guard_log(event: str, detail: str, rule: str) -> None:
     """One entry in the guard census, through the same `guardlog.sh` every shell guard uses."""
-    subprocess.run(["bash", "-c", '. "$1/../hooks/lib/guardlog.sh"; guard_log plan-gate "$2" "$3" "$4"', "_", str(HERE),
-                    event, detail[:400], rule], capture_output=True)
+    subprocess.run(["bash", "-c", '. "$1/../hooks/lib/guardlog.sh"; guard_log plan-gate "$2" "$3" "$4"', "_", str(HERE), event, detail[:400], rule], capture_output=True)
 
 
 def reason_ok(reason: str) -> bool:
-    return subprocess.run([sys.executable, str(HERE / "../hooks/lib/hm_escape.py"), "reason-ok"], input=reason,
-                          capture_output=True, text=True).returncode == 0
+    return subprocess.run([sys.executable, str(HERE / "../hooks/lib/hm_escape.py"), "reason-ok"], input=reason, capture_output=True, text=True).returncode == 0
 
 
 def bypass_record(root: pathlib.Path, where: str, why: str) -> None:
@@ -420,11 +429,10 @@ def bypass_record(root: pathlib.Path, where: str, why: str) -> None:
     now = datetime.datetime.now(datetime.UTC)
     log = log / f"{now:%Y-%m}"  # a month folder (2026-10-02)
     log.mkdir(parents=True, exist_ok=True)
-    head = subprocess.run(["git", "-C", str(root), "rev-parse", "--short", "HEAD"], capture_output=True,
-                          text=True).stdout.strip()
+    head = subprocess.run(["git", "-C", str(root), "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
     (log / f"{now:%Y%m%dT%H%M%SZ}-{hashlib.sha256(why.encode()).hexdigest()[:6]}.json").write_text(
-        json.dumps({"utc": f"{now:%Y-%m-%dT%H:%M:%SZ}", "target": f"plan-gate {where}", "commit": head,
-                    "why": why}, indent=2) + "\n", encoding="utf-8")
+        json.dumps({"utc": f"{now:%Y-%m-%dT%H:%M:%SZ}", "target": f"plan-gate {where}", "commit": head, "why": why}, indent=2) + "\n", encoding="utf-8"
+    )
 
 
 def tick_permitted(spec_dir: pathlib.Path, root: pathlib.Path, escape: str | None) -> tuple[bool, str]:
@@ -435,8 +443,10 @@ def tick_permitted(spec_dir: pathlib.Path, root: pathlib.Path, escape: str | Non
     rule, reason = verdict
     if not escape:
         guard_log("blocked", f"{spec_dir.name}: {reason}", rule)
-        return False, (f"tick: refused - {spec_dir.name}'s plan decisions have no current CLEAR review (feature 243).\n"
-                       f"  {reason}\n  A case that is genuinely exempt: PLAN_REVIEW_OK=\"<reason>\", which is recorded.")
+        return False, (
+            f"tick: refused - {spec_dir.name}'s plan decisions have no current CLEAR review (feature 243).\n"
+            f"  {reason}\n  A case that is genuinely exempt: PLAN_REVIEW_OK=\"<reason>\", which is recorded."
+        )
     if not reason_ok(escape):
         guard_log("blocked", escape, "PLAN_REVIEW_OK-no-reason")
         return False, "tick: PLAN_REVIEW_OK needs a REASON, not just a value - two words and eight characters."
@@ -446,6 +456,7 @@ def tick_permitted(spec_dir: pathlib.Path, root: pathlib.Path, escape: str | Non
 
 
 # ---- recording (FR-003, FR-006) ------------------------------------------------------------------------
+
 
 def derive_verdict(decisions: list[dict]) -> str:
     """P2: CLEAR unless a narrowing decision stands ruled NOT LEGITIMATE; refuses a malformed decision."""
@@ -482,9 +493,13 @@ def record_task(spec_dir: pathlib.Path, task: str, review: dict, declared: str, 
     rec_path = spec_dir / RECORD
     # slimmed as it is rewritten (amendment 11, D63): a record converts at its next recording
     out = slim_record(json.loads(rec_path.read_text(encoding="utf-8"))) if rec_path.is_file() else {"feature": spec_dir.name}
-    out.setdefault("tasks", {})[task] = {"section_sha256": review["section_sha256"],  # its text is in git (D63), not copied
-                                         "reviewed": today or datetime.date.today().isoformat(), "declared": declared,
-                                         "decisions": decisions, "verdict": verdict}
+    out.setdefault("tasks", {})[task] = {
+        "section_sha256": review["section_sha256"],  # its text is in git (D63), not copied
+        "reviewed": today or datetime.date.today().isoformat(),
+        "declared": declared,
+        "decisions": decisions,
+        "verdict": verdict,
+    }
     rec_path.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     return out["tasks"][task]
 
@@ -494,16 +509,15 @@ def active_task(root: pathlib.Path) -> tuple[pathlib.Path | None, str]:
     else the first open task of `.specify/feature.json`'s feature; (None, '') when no feature is active."""
     try:
         fd = json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", "")
-    except (OSError, ValueError):
+    except OSError, ValueError:
         return None, ""
     d = root / str(fd).rstrip("/")
     if not fd or not (d / "tasks.md").is_file():
         return None, ""
-    common = subprocess.run(["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-common-dir"],
-                            capture_output=True, text=True).stdout.strip()
+    common = subprocess.run(["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True).stdout.strip()
     try:
         mark = json.loads((pathlib.Path(common) / "active-task").read_text(encoding="utf-8")) if common else {}
-    except (OSError, ValueError):
+    except OSError, ValueError:
         mark = {}
     tasks = (d / "tasks.md").read_text(encoding="utf-8")
     # A MARK NAMING A TICKED TASK IS STALE (feature 385 T54): the hour-19 ruling owed ticked T52 a part B, and the next cohort owed
@@ -543,7 +557,7 @@ def decision_refusal(root: pathlib.Path) -> str:
     text = plan.read_text(encoding="utf-8") if plan.is_file() else ""
     try:
         review = json.loads((d / RECORD).read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+    except OSError, ValueError:
         review = {}
     if task in task_sections(text):
         if wording.wording_only(task_sections(text)[task]):  # T118, D137: nothing decided, nothing to wait for
@@ -552,11 +566,16 @@ def decision_refusal(root: pathlib.Path) -> str:
         # added or changed since needs its own preflight (the advisor's note before batch 3 landed)
         if task_current(review, text, task, History(plan)) or (owed(d) is None and _section_clear(review, task_sections(text)[task], History(plan))):
             return ""
-        return (f"{d.name} {task}: its plan section carries no current CLEAR decision verdict - decide first, then check "
-                f"(feature 375 FR-003a): `make decide F={d.name.split('-')[0]} T={task}` names the review to dispatch")
+        return (
+            f"{d.name} {task}: its plan section carries no current CLEAR decision verdict - decide first, then check "
+            f"(feature 375 FR-003a): `make decide F={d.name.split('-')[0]} T={task}` names the review to dispatch"
+        )
     verdict = owed(d)
-    return "" if verdict is None else (f"{d.name} {task}: the plan has no section for this task and its plan-stage review is "
-                                       f"not current and CLEAR ({verdict[0]}) - decide first (feature 375 FR-003a): {verdict[1]}")
+    return (
+        ""
+        if verdict is None
+        else (f"{d.name} {task}: the plan has no section for this task and its plan-stage review is not current and CLEAR ({verdict[0]}) - decide first (feature 375 FR-003a): {verdict[1]}")
+    )
 
 
 #: a verdict's fields written as given: what the gate matches on, never prose
@@ -576,14 +595,12 @@ def house_style(decisions: object) -> object:
 
 def record(spec_dir: pathlib.Path, review: dict, declared: str, today: str | None = None) -> dict:
     if declared != REVIEWER:
-        raise PermissionError(f"declined: only the `{REVIEWER}` subagent records a plan review (AS={REVIEWER}). "
-                              f"Nothing distinguishes the shells, so this is a declaration, recorded - not a proof.")
+        raise PermissionError(f"declined: only the `{REVIEWER}` subagent records a plan review (AS={REVIEWER}). Nothing distinguishes the shells, so this is a declaration, recorded - not a proof.")
     plan = spec_dir / "plan.md"
     if not plan.is_file():
         raise ValueError(f"{spec_dir.name} has no plan.md to have reviewed")
     if review.get("plan_sha256") != digest(plan.read_bytes()):
-        raise ValueError("plan_sha256 does not match plan.md - the plan changed while it was being reviewed "
-                         "(P1), so this review is of a plan that no longer exists; review it again")
+        raise ValueError("plan_sha256 does not match plan.md - the plan changed while it was being reviewed (P1), so this review is of a plan that no longer exists; review it again")
     decisions = house_style(review.get("decisions"))
     if not isinstance(decisions, list):
         raise ValueError("decisions must be a list (empty when the spec settles everything the plan decides)")
@@ -595,10 +612,16 @@ def record(spec_dir: pathlib.Path, review: dict, declared: str, today: str | Non
     kept = {k: {f: v for f, v in e.items() if f != "section_text"} for k, e in kept.items()}
     when = today or datetime.date.today().isoformat()
     # amendment 11 (D60, D63): a verdict per block, and no copy of the plan - a later typo is measured against git's history
-    out = {"feature": spec_dir.name, "plan_sha256": review["plan_sha256"], **({"tasks": kept} if kept else {}),
-           "blocks": {k: {"sha256": block_digest(body), "verdict": verdict, "reviewed": when}
-                      for k, body, _at in blocks(plan.read_text(encoding="utf-8"))},
-           "reviewed": when, "declared": declared, "decisions": decisions, "verdict": verdict}
+    out = {
+        "feature": spec_dir.name,
+        "plan_sha256": review["plan_sha256"],
+        **({"tasks": kept} if kept else {}),
+        "blocks": {k: {"sha256": block_digest(body), "verdict": verdict, "reviewed": when} for k, body, _at in blocks(plan.read_text(encoding="utf-8"))},
+        "reviewed": when,
+        "declared": declared,
+        "decisions": decisions,
+        "verdict": verdict,
+    }
     (spec_dir / RECORD).write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     return out
 
@@ -608,8 +631,7 @@ def slim_record(review: dict) -> dict:
     their text, no copy of the plan. The verdicts are kept exactly."""
     out = {k: v for k, v in review.items() if k not in ("plan_text",)}
     if "blocks" not in out and isinstance(review.get("plan_text"), str):
-        out["blocks"] = {k: {"sha256": e["sha256"], "verdict": e["verdict"], "reviewed": review.get("reviewed", "")}
-                         for k, e in reviewed_blocks(review).items()}
+        out["blocks"] = {k: {"sha256": e["sha256"], "verdict": e["verdict"], "reviewed": review.get("reviewed", "")} for k, e in reviewed_blocks(review).items()}
     if isinstance(out.get("tasks"), dict):
         out["tasks"] = {k: {f: v for f, v in e.items() if f != "section_text"} for k, e in out["tasks"].items()}
     return out
@@ -643,7 +665,7 @@ def record_blocks(spec_dir: pathlib.Path, review: dict, declared: str, today: st
     for key, sha in named.items():
         if key.startswith(REMOVED):
             if verdict == "CLEAR":
-                out.setdefault("blocks", {}).pop(key[len(REMOVED):], None)
+                out.setdefault("blocks", {}).pop(key[len(REMOVED) :], None)
             continue
         out.setdefault("blocks", {})[key] = {"sha256": sha, "verdict": verdict, "reviewed": when, "declared": declared}
     out.setdefault("block_reviews", []).append({"reviewed": when, "blocks": sorted(named), "verdict": verdict, "decisions": decisions})
@@ -651,8 +673,7 @@ def record_blocks(spec_dir: pathlib.Path, review: dict, declared: str, today: st
     rec_path.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     approach = _approach_gate()
     root = spec_dir.parent.parent
-    owed = [approach.owe(root, spec_dir.name, t, f"re-decided:{key}", "A") for t, key in redecided
-            if approach.checklist(root, plan.read_text(encoding="utf-8")) is not None]
+    owed = [approach.owe(root, spec_dir.name, t, f"re-decided:{key}", "A") for t, key in redecided if approach.checklist(root, plan.read_text(encoding="utf-8")) is not None]
     return {"verdict": verdict, "blocks": sorted(named), "decisions": decisions, **({"approach_owed": owed} if owed else {})}
 
 
@@ -685,9 +706,16 @@ def arbiter_accept(spec_dir: pathlib.Path, trigger: str, today: str | None = Non
         out.setdefault("blocks", {})[key] = {"sha256": sha, "verdict": "CLEAR", "reviewed": when, "declared": "round-arbiter"}
     for key in owed_keys:
         if key.startswith(REMOVED):
-            out.setdefault("blocks", {}).pop(key[len(REMOVED):], None)
-    out.setdefault("block_reviews", []).append({"reviewed": when, "blocks": sorted(named), "verdict": "CLEAR", "declared": "round-arbiter",
-                                                "decisions": [{"id": trigger, "class": "within", "summary": "the round arbiter accepted the plan as it stands"}]})
+            out.setdefault("blocks", {}).pop(key[len(REMOVED) :], None)
+    out.setdefault("block_reviews", []).append(
+        {
+            "reviewed": when,
+            "blocks": sorted(named),
+            "verdict": "CLEAR",
+            "declared": "round-arbiter",
+            "decisions": [{"id": trigger, "class": "within", "summary": "the round arbiter accepted the plan as it stands"}],
+        }
+    )
     rec_path.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     return sorted(named)
 
@@ -734,7 +762,7 @@ def archivable(spec_dir: pathlib.Path) -> list[str]:
     done = set(re.findall(r"^- \[[xX]\] (T\d+[a-z]?)\b", tasks, re.M))
     try:
         review = json.loads((spec_dir / RECORD).read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+    except OSError, ValueError:
         review = {}
     history = History(plan)
     out: list[str] = []
@@ -772,7 +800,7 @@ def archive(spec_dir: pathlib.Path, today: str | None = None) -> list[str]:
     for part in runs:
         if part.startswith(marker):
             n = part.count(marker)
-            ids = [i for s in secs[pos:pos + n] for i in _TASK_ID.findall(s.splitlines()[0])]  # this run's sections, in order
+            ids = [i for s in secs[pos : pos + n] for i in _TASK_ID.findall(s.splitlines()[0])]  # this run's sections, in order
             pos += n
             out.append(f"<!-- plan-archive: {ids[0]} to {ids[-1]} moved to plan-done.md, {when} (feature 375 FR-044) -->\n")
         else:
@@ -786,6 +814,7 @@ def archive(spec_dir: pathlib.Path, today: str | None = None) -> list[str]:
 
 
 # ---- the push (FR-007) ---------------------------------------------------------------------------------
+
 
 def _show(root: pathlib.Path, ref: str, path: str) -> bytes | None:
     run = subprocess.run(["git", "-C", str(root), "show", f"{ref}:{path}"], capture_output=True)
@@ -806,8 +835,12 @@ def push_owed(root: pathlib.Path, rng: str, ref: str = "HEAD") -> list[tuple[str
         if tasks is None or not ticked(tasks.decode("utf-8", "replace")):
             continue
         review = _show(root, ref, f"{feature}/{RECORD}")
-        verdict = judge(_show(root, ref, f"{feature}/plan.md"), review.decode("utf-8") if review is not None else None,
-                        History(root / feature / "plan.md", ref), (_show(root, ref, f"{feature}/plan-done.md") or b"").decode("utf-8", "replace"))
+        verdict = judge(
+            _show(root, ref, f"{feature}/plan.md"),
+            review.decode("utf-8") if review is not None else None,
+            History(root / feature / "plan.md", ref),
+            (_show(root, ref, f"{feature}/plan-done.md") or b"").decode("utf-8", "replace"),
+        )
         if verdict:
             out.append((feature, *verdict))
     return out
@@ -819,8 +852,7 @@ def resolve(feature: str, root: pathlib.Path | None = None) -> pathlib.Path | No
         return pathlib.Path(feature)
     if "/" in feature:  # a path that does not exist is not a feature name to glob for
         return None
-    root = root or pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
-                                               text=True).stdout.strip())
+    root = root or pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip())
     exact = root / "specs" / feature
     if exact.is_dir():
         return exact
@@ -944,7 +976,7 @@ def main(argv: list[str]) -> int:
 
         try:
             review = json.loads((spec_dir / RECORD).read_text(encoding="utf-8"))
-        except (OSError, ValueError):
+        except OSError, ValueError:
             review = {}
         text = (spec_dir / "plan.md").read_text(encoding="utf-8")
         if ahead := _approach_gate().future_refusal(text):  # feature 385 T50: a future stamp is refused before it is reviewed
@@ -968,8 +1000,7 @@ def main(argv: list[str]) -> int:
             print(f"{verdict[0]}\t{verdict[1]}")
         return 1 if verdict else 0
     if argv[:1] == ["push"]:
-        root = pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
-                                           text=True).stdout.strip())
+        root = pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip())
         found = push_owed(root, argv[1] if len(argv) > 1 else "origin/main...HEAD")  # the merge base: see review-gate.sh
         for feature, rule, reason in found:
             print(f"{feature}\t{rule}\t{reason}")
@@ -987,8 +1018,7 @@ def main(argv: list[str]) -> int:
         except (OSError, ValueError) as e:
             print(f"plan-verdict: refused - {e}", file=sys.stderr)
             return 1
-        print(f"plan-verdict: {out['verdict']} recorded in {spec_dir.name}/{RECORD} "
-              f"({len(out['decisions'])} decision(s))")
+        print(f"plan-verdict: {out['verdict']} recorded in {spec_dir.name}/{RECORD} ({len(out['decisions'])} decision(s))")
         return 0
     print(__doc__.split("\n\n")[0], file=sys.stderr)
     return 2
