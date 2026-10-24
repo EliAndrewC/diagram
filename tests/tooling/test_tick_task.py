@@ -775,10 +775,10 @@ def test_the_coverage_check_writes_its_coverage_data_in_its_own_directory(tmp_pa
         return type("R", (), {"stdout": "", "stderr": "", "returncode": 0})()
 
     monkeypatch.setattr(cc.subprocess, "run", run)
-    try:
+    import contextlib  # noqa: PLC0415
+
+    with contextlib.suppress(RuntimeError):  # no report written by the stand-in: the run itself is what is asked
         cc.uncovered(tmp_path, {"l7r/x.py": {1}})
-    except RuntimeError:
-        pass  # no report written by the stand-in: the run itself is what is asked
     data = pathlib.Path(seen["env"]["COVERAGE_FILE"])
     assert data.name == ".coverage" and tmp_path not in data.parents and str(data.parent) != str(pathlib.Path.cwd())
 

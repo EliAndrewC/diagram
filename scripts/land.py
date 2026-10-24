@@ -343,7 +343,7 @@ def refresh_due(root: Path, since: float) -> str:
             return ""
         res = json.loads((bdir / "result.json").read_text(encoding="utf-8"))
         total = len(json.loads((bdir / "tests.json").read_text(encoding="utf-8")))
-    except (OSError, ValueError):
+    except OSError, ValueError:
         return ""
     sel = res.get("selected")
     n = len(sel) if isinstance(sel, list) else int(sel or 0)
@@ -371,7 +371,9 @@ def start_fresh_block(root: Path) -> Path:
     log = gd / "land-fresh.log"
     jobs = max(2, (os.cpu_count() or 4) // 2)
     with log.open("a") as fh:
-        subprocess.Popen(["flock", str(gd / "land-fresh.lock"), "make", "--no-print-directory", "cohort", "N=0", "FRESH=48", f"JOBS={jobs}"], cwd=root, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
+        subprocess.Popen(
+            ["flock", str(gd / "land-fresh.lock"), "make", "--no-print-directory", "cohort", "N=0", "FRESH=48", f"JOBS={jobs}"], cwd=root, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True
+        )
     return log
 
 
