@@ -1,0 +1,279 @@
+{
+ "feature": "416-three-metals",
+ "blocks": {
+  "preamble": {
+   "sha256": "79a8a5704925351626682757d48f841dd1312fdf6ce282a590a5581cd3067ce8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "9c41ee8afd7de31e4e1a128b06874e724292005fe3bb8667fa1df64795d8ed3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "546fcd7fd5f1aedf72b9b312fea4746073b3f708276c4638678f83f13ae319b4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "2af3cd7de4be30e6d9732bc52b389dad863ad614729acaf9de51a1bf175cfedc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - question A, Japan (FR-001, FR-002, FR-003)": {
+   "sha256": "01849f00f7bbc99c47a600913bfb15b28ca31c1ae3d71e31ff10c9f2c9b7384e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - question B, China (FR-001, FR-002, FR-003)": {
+   "sha256": "b0d64eaf13a1adfc84b8ad4999292f68dfab1ca6d9aa0d137522b8474fcfb57d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the implementation check (FR-004)": {
+   "sha256": "83e4f93169ba7162a546d0e5339dd4479ea8f7d251468a890c73335b0cb27cdc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - the reply (FR-001, FR-003, FR-005)": {
+   "sha256": "51ccace659b90e7f294e0518a619292200182590aa2a0e3de7ad161135b69c36",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "31e0cd6af09299fb7503c95313c1d343e553ed2400e8a6045de23d441794ca77",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - question A, Japan (FR-001, FR-002, FR-003)",
+    "## D2 - question B, China (FR-001, FR-002, FR-003)",
+    "## D3 - the implementation check (FR-004)",
+    "## D4 - the reply (FR-001, FR-003, FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary: sessions and sequencing",
+     "summary": "Two write page sessions (A, B) and one check-and-apply session, from the passes, run after 412 and 414; no code, map or canon change.",
+     "class": "within",
+     "why": "How the record is written and in what order; the thread said after 412 and alongside 414 - an ordering choice, not scope. No canon change matches FR-003 (contradictions escalated, not applied)."
+    },
+    {
+     "id": "Technical Context: PDF method",
+     "summary": "Unreadable PDFs downloaded with curl, read with pdftotext, garbled characters bracketed, page images to the checks.",
+     "class": "within",
+     "why": "Method of reading sources; changes nothing the questions cover."
+    },
+    {
+     "id": "Technical Context: named, not repeated (0277, 412, 414, 0265)",
+     "summary": "0277, 412's coin questions and 414's copper wages named, not repeated; 0265 (rents) added to that treatment.",
+     "class": "within",
+     "why": "FR-002 names 0277, 412 and 414 this way. 0265 is a pointer for one sub-item of Q2, and D1(2) and D2(2) still list rents by metal ('rents (0265, both ways)'), so the reply still answers rents; nothing is dropped."
+    },
+    {
+     "id": "Constitution Check",
+     "summary": "Question tasks research: physical with five boxes; record checks green.",
+     "class": "within",
+     "why": "Procedure, no scope."
+    },
+    {
+     "id": "D1(1) Japan legal against market",
+     "summary": "Legal rates 1609/1700/1842 and setters, enforcement from the orders, a prosecution SILENT, the market's straying by period, the fixed-by-count ladder and its effect on weighed silver, the changers' resistance to the nanryo.",
+     "class": "within",
+     "why": "Carries every part of Q1 for Japan. The flat 'a prosecution SILENT' is a reported result of the pass already made (Summary: written from passes/japan.md), carried as still open per FR-001, not a narrowing of the question."
+    },
+    {
+     "id": "D1(2) Japan who priced and paid",
+     "summary": "Pattern by transaction kind and region, wages, rents (0265), taxes, stipends through the fudasashi, shop purchases in copper; fees attested and the uncited 1-2% said to be uncited.",
+     "class": "within",
+     "why": "Every transaction kind the issue lists, and the changers' fees, appear."
+    },
+    {
+     "id": "D1(3) Japan prices by coin",
+     "summary": "Edo 1842 copper-only cuts, Tsugaru coin and note prices, Edo 1854-68 values for one face, Tenpo coin at about 80, premia for old coin, Sengoku bad coin, a gold-payment premium searched (SILENT with the search if none); how fast copper prices followed the rate outside 1842 SILENT.",
+     "class": "within",
+     "why": "Carries Q3. The flat SILENT on copper prices outside 1842 rests on the premise that the Japan pass looked and found nothing (Summary); it is a finding carried as open under FR-001, not a refusal to answer. The record's reply must say so; if the pass did not in fact search (414's Japanese series, if any, included), that premise fails and this becomes a narrowing."
+    },
+    {
+     "id": "D1(4) Japan winners and losers - episodes and figures",
+     "summary": "Q4 for Japan covers 'the four groups ... the recoinage gains, the 1860s silver-west real wage, and what people did'; the Meiwa iron and brass coins and the Tenpo episode, which the request names, and any Japanese tax-burden figure are not named, and no SILENT is recorded for them.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request's Q4 names the episodes ('the Meiwa iron and brass coins; Tenpo; ...') and asks for 'the size of the effect on a laborer's real wage and a tax burden in named episodes'. 'Meiwa' appears in no block; Tenpo appears only under D1(3) as a price item; the one real-wage episode D1(4) names (the 1860s) is not one the request named, and no Japanese tax-burden effect is named. Everywhere else the plan records silence explicitly, so an unrecorded omission reads as a drop, not a finding. Not impossible, not implied by the request, not purpose-defeating. D1(4) should name the Meiwa and Tenpo episodes (and any recoinage it measures), each with its real-wage and tax-burden effect where the sources give it or SILENT with the search."
+    },
+    {
+     "id": "D1/D2 canon line - Q3's canon omitted",
+     "summary": "D1 sets the answers against 'Rokugan's fixed decimal coinage and the money skill's who uses which coin'; D2 'as D1'. Q3's canon - the conversion table that converts each coin through its era's rate into silver, then by the basket - is not named.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-003: each answer is set against ITS question's canon, and the request gives Q3 its own canon with the consequence spelled out ('if copper prices were sticky, a mon amount should be measured against copper prices instead'). The plan names Q1's and Q2's canons only, so the Q3 answer - the one with a direct consequence for the conversion table - is set against nothing. Not impossible, not implied, not purpose-defeating. D1's canon line (and D2's by reference) should name the conversion table for Q3, and Q4 as having no canon yet, as the request states."
+    },
+    {
+     "id": "D2(1)-(4) China",
+     "summary": "Qing first and Ming where found; legal rates, bans, drift, Xianfeng notes and big cash, Ming paper; silver for tax and trade, copper for retail and labor, banks' spreads dated late Qing, retail cash shop's fee SILENT; sticky copper prices and payment-dependent prices, gold payment searched; taxpayers, officials, state, soldiers, merchants and wage earners on 414's inference only, said so.",
+     "class": "within",
+     "why": "Matches 'Qing (and Ming where found)' and carries each of the four questions with the named Qing crisis (Zeng Guofan's doubling for the tax burden). The flat SILENT on the cash shop's fee is a reported pass result carried as open; dating Morse as late Qing and labeling 414's inference are honesty, not narrowing. Searching gold payment in China is extra reach, not a narrowing."
+    },
+    {
+     "id": "D3 implementation check",
+     "summary": "implementation-check.md holds each new question's line.",
+     "class": "within",
+     "why": "FR-004 as written."
+    },
+    {
+     "id": "D4 reply",
+     "summary": "Comment on #16: per figure the fragment file, verdict and what is open; per question the canon standing and any escalation.",
+     "class": "within",
+     "why": "FR-001, FR-003, FR-005 as written."
+    },
+    {
+     "id": "T order",
+     "summary": "Page sessions, implementation check, reply and landing.",
+     "class": "within",
+     "why": "Ordering only."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - question A, Japan (FR-001, FR-002, FR-003)",
+    "## D2 - question B, China (FR-001, FR-002, FR-003)",
+    "## D3 - the implementation check (FR-004)",
+    "## D4 - the reply (FR-001, FR-003, FR-005)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary-sequencing",
+     "summary": "Two questions (A Japan, B Ming/Qing) from two passes; two write sessions and one check session in the sibling clone after 412 and 414; then the reply. No code, map or canon change.",
+     "class": "within",
+     "why": "The diagram's accepted plan comment on #16 says it is worked after 412 and alongside 414; FR-002 sets A and B; nothing asked of the request is dropped."
+    },
+    {
+     "id": "TechContext-named-not-repeated",
+     "summary": "0277's legal rates and market series, 412's coin questions, 414's copper wages and 0265's rents are named, not repeated; unreadable PDFs fetched with curl and read with pdftotext, images to the checks.",
+     "class": "within",
+     "why": "FR-002 requires 0277, 412 and 414 named, not repeated; the request itself says the record already holds 0277's rates and asks for the working of the system beyond them. Reading method is procedure, not scope."
+    },
+    {
+     "id": "Constitution-Check",
+     "summary": "XII research: physical tasks with five boxes; XIII record checks green; XVI built as the spec's FRs.",
+     "class": "within",
+     "why": "Process conformance only; decides no scope."
+    },
+    {
+     "id": "D1-Q1",
+     "summary": "Japan's legal rates (1609, 1700, 1842), who set them, enforcement as the orders print it, prosecution SILENT; market straying by period; fixed-by-count ladder and its effect on weighed silver; changers' resistance to the nanryo.",
+     "class": "within",
+     "why": "Carries every clause of question 1: legal rate, who set it, enforcement, how far and long the market strayed, fixed-by-count against floating. A SILENT verdict on prosecution reports a gap; it does not narrow what is searched."
+    },
+    {
+     "id": "D1-Q2",
+     "summary": "Pattern by transaction kind and region (wholesale/retail, east gold/west silver, wages, rents, taxes, stipends via fudasashi, shop purchases in copper) and the attested fees, the uncited 1-2% flagged as uncited.",
+     "class": "within",
+     "why": "Walks every transaction kind the request lists and the changers' fees; flagging an uncited figure is the citation rule, not a narrowing."
+    },
+    {
+     "id": "D1-Q3",
+     "summary": "Dual prices by coin (Edo 1842, Tsugaru coin/note, Edo 1854-68 face values, Tenpo coin at about 80, premia for old coin, Sengoku bad coin), a gold-payment premium searched and SILENT if none; speed of copper prices following the rate outside 1842 SILENT, the Japan pass having searched and 414's series being in silver.",
+     "class": "within",
+     "why": "Question 3's examples-with-dates and the debased-coin premium/discount are carried; the follow-speed figure is searched and reported as open (FR-001 'what is still open'), with the reason 414 cannot supply it stated. Reporting an unfound figure as SILENT after a search does not narrow the request."
+    },
+    {
+     "id": "D1-Q4",
+     "summary": "The four groups the issue names across the Meiwa iron and brass coins (1769-1778, about 4,000 to 6,000 mon), the Tenpo recoinage and copper's 1830s-40s fall, the Bunsei/Tenpo/Man'en recoinage gains and the 1860s silver-west real wage; per episode the real-wage and tax-burden effect where a source gives one, SILENT with the search where none; what people did.",
+     "class": "within",
+     "why": "Round 1's finding is cured: both episodes the request names for Japan (Meiwa, Tenpo) are now carried with the requested real-wage and tax-burden measures, plus recoinage episodes the request's 'or a recoinage changed a metal's content' covers; SILENT-with-search is reporting, not narrowing."
+    },
+    {
+     "id": "D1-canon",
+     "summary": "Each question set against its own canon: Q1 Rokugan's fixed decimal coinage; Q2 the skill's 'Coins and who uses them'; Q3 the conversion table and the request's sticky-copper consequence; Q4 none yet; stated as material for the GM, contradictions escalated.",
+     "class": "within",
+     "why": "Round 1's finding is cured: the canon line now matches the request's 'Canon beside it' line per question verbatim in substance, and FR-003's escalation is kept."
+    },
+    {
+     "id": "D2-Q1",
+     "summary": "Qing legal rates (1645, 1653), the 1684 ban, 1702 old-coin discount, 1737 brokers and treasury releases, drift to about 2,000 by 1837; Xianfeng notes and big cash; Ming paper's legal rate, gold 1:4, its fall, the bans and their lifting.",
+     "class": "within",
+     "why": "Carries the request's Qing-and-Ming-where-found scope for legal rate, enforcement and market straying."
+    },
+    {
+     "id": "D2-Q2",
+     "summary": "Silver for tax, salt levies, official pay, long-distance trade; copper for retail, salt, labor, materials; the 1436 commutation and Single Whip; tael standards and banks' spreads (Morse, late Qing, dated as such); rents (0265); a retail cash shop's fee SILENT.",
+     "class": "within",
+     "why": "Pattern by transaction kind and changers' spreads as a figure are carried; dating Morse as late Qing and marking a gap SILENT are honesty about coverage, not narrowing."
+    },
+    {
+     "id": "D2-Q3",
+     "summary": "Sticky copper prices (salt 1728, rice about 1850, wages from 414) and the dissent; payment-dependent prices in Xianfeng Beijing; light coin at 70%; paying in gold, the Qing case searched, SILENT if none.",
+     "class": "within",
+     "why": "Carries both halves of question 3 (price by coin; whether copper prices stuck) for China."
+    },
+    {
+     "id": "D2-Q4",
+     "summary": "Taxpayers (Zeng Guofan's doubling; Henan 1905), officials, the state's arrears, soldiers; merchants and wage earners from 414's inference only, said so.",
+     "class": "within",
+     "why": "The Qing silver-dear crisis the request names is the frame; tax-burden figures are given and the wage-earner effect is reported with its evidentiary limit stated rather than dropped. Samurai stipends have no Qing analogue; officials and soldiers on pay stand in their place."
+    },
+    {
+     "id": "D2-canon",
+     "summary": "Each question against its canon as D1, question 3's conversion table included, Qing sticky copper while silver doubled named as the request's case.",
+     "class": "within",
+     "why": "Same per-question canon as the request gives; cures round 1's finding for D2."
+    },
+    {
+     "id": "D3-impl-check",
+     "summary": "implementation-check.md holds each new question's line, no code implements it.",
+     "class": "within",
+     "why": "Carries FR-004."
+    },
+    {
+     "id": "D4-reply",
+     "summary": "Comment on #16: per figure the fragment file, verdict and what is open; per question its canon standing and any escalation.",
+     "class": "within",
+     "why": "Carries FR-001, FR-003 and FR-005."
+    },
+    {
+     "id": "T-order",
+     "summary": "Page sessions, then the implementation check, then the reply and landing.",
+     "class": "within",
+     "why": "Ordering only; decides no scope."
+    }
+   ]
+  }
+ ]
+}
