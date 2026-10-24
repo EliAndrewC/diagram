@@ -634,6 +634,9 @@ land:           ## [project] land one task or several and tick them: every cheap
 cover-changed:  ## [tests] the coverage floor on the engine modules the change touched, in seconds: each added line its mirrored test directory leaves unrun (the GM 2026-10-24)   [BASE=origin/main]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/cover_changed.py" --base "$(or $(BASE),origin/main)"
 
+gate-costs:     ## [performance] what a gate run costs here, from the run records: each run's mode, selection and phases, the fit (fixed + per selected test), the selection's growth between full runs (feature 415)   [SINCE=<utc prefix>]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/gate_costs.py" $(if $(SINCE),--since "$(SINCE)",)
+
 land-stop:       ## [project] stop this tree's running `make land` cleanly - its gate and cohort stop with it (405 T90)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/land.py" --stop
 

@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 185 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 186 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -87,6 +87,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make census</td><td class=a>&ndash;</td><td>the overlap census: comparisons per call of every check the pool&#x27;s rolls run, the ones over the flag named</td></tr>
 <tr><td class=n>make cohort-seeds</td><td class=a>&ndash;</td><td>which cohort seeds found which failure, over how many changes, and the fewest first seeds that find them all (dev/cohort-log/)</td></tr>
+<tr><td class=n>make gate-costs</td><td class=a>SINCE</td><td>what a gate run costs here, from the run records: each run&#x27;s mode, selection and phases, the fit (fixed + per selected test), the selection&#x27;s growth between full runs (feature 415)   [SINCE=&lt;utc prefix&gt;]</td></tr>
 <tr><td class=n>make perf</td><td class=a><div class=ad><span class=an>LABEL=&lt;NNN&gt;-start|&lt;NNN&gt;-end</span><span class=aw>which bookend this snapshot is (default: `adhoc`, which counts as neither)</span></div><div class=ad><span class=an>SCALING=1</span><span class=aw>add the 10-, 20- and 40-household legs - for investigating the algorithm, not routine work</span></div></td><td>take a performance snapshot of the reference hamlet across its seeds, with the machine&#x27;s state at both ends</td></tr>
 <tr><td class=n>make perf-arbiter</td><td class=a>ENV</td><td>an investigation may put a band-3 increase to the round arbiter - nothing waits on it (feature 375 amendment 5)   [ENV=local|codebuild]</td></tr>
 <tr><td class=n>make perf-audit</td><td class=a><div class=ad><span class=an>VERDICT=justified|not-justified|cannot-determine</span><span class=aw>the band-2 adjudication</span></div><div class=ad><span class=an>NECESSARY=&lt;text&gt;</span><span class=aw>is the slowdown necessary?</span></div><div class=ad><span class=an>COMMENSURATE=&lt;text&gt;</span><span class=aw>is it commensurate with the functionality gained?</span></div><div class=ad><span class=an>NO_WAY_AROUND=&lt;text&gt;</span><span class=aw>was there no good way around it?</span></div><div class=ad><span class=an>AS=perf-audit</span><span class=aw>who is recording - only the subagent may pass this</span></div></td><td>an investigation&#x27;s adjudication of a slowdown - the subagent records it</td></tr>

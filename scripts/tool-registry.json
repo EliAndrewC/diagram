@@ -124,6 +124,10 @@
     "cover_changed": {
       "kind": "check",
       "what": "scripts/gates/cover_changed.py - the changed engine modules' added lines asked of their mirrored tests' coverage (make cover-changed, make land's first pass; the GM 2026-10-24); each run recorded passed or refused"
+    },
+    "gate_costs": {
+      "kind": "report",
+      "what": "scripts/measure/gate_costs.py - what a gate run costs, from the run records' phases and plan (make gate-costs; feature 415 T04)"
     }
   }
 }
