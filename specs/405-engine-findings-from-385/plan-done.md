@@ -3027,3 +3027,227 @@ Owed by the cohort record of 2026-10-22T03:45Z (seeds 10, 24, 36, 47 newly faili
 
 <!-- plan-archive: T48 to T48 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 
+<!-- plan-archive: archived 2026-10-24 -->
+### T26 Approach (checklist part A)
+
+1. **The goal, in the world.** A farm's wood shed stands a ken off a wall of its steading - the house's or the kura's - never forward into the dooryard, its first seat turned per household as the coop's is.
+2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off the wall (about 9.5 ft with the wall gap); the coop's seats turned by the household's roll (feature 328).
+3. **Where each comes from.** R (0043) and O (the coop's roll).
+4. **Do they describe the world here?** Yes - T34's rounds, measured 2026-10-21 (impl-drift on `fixture_seats`, T34's rounds): `shed_off_a_wall` clears only the house by the ken while `against_a_wall` accepts the kura (a seat 3.5 ft off the kura); `in_front` refuses only a shed wholly past the front wall; the first seat unrolled; `against_a_wall`'s 1.5 ft tolerance lets a shed stand ~11 ft out, unclaimed. The kura's side (0040) is split to T104.
+5. **The order.** `shed_off_a_wall`: clear of EVERY wall of the steading by the gap and the ken; no part forward of the front wall (`forward_of_front`); against a wall at no tolerance (the seats stand exactly a ken out); `_wood_shed` turns its seat list by the household's roll (`u`, as the coop's); claims; tests; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** 60 min for the batch with its landing.
+9. **Done, measured.** A seat 3.5 ft off the kura, one half forward of the front wall and one 11 ft out are refused (tests); seeds 1-48 and the pinned rows pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T26 Decisions
+
+**D78 - a ken off every wall, never forward.** `shed_off_a_wall(seat, walls, g, px)`: `clears(seat, walls, g + ken)` (every wall, the kura's too), `against_a_wall(seat, walls[:1], g + ken, tol=0.0)` (exactly a ken off the HOUSE - 0043's "a short step off the house"; the claims round: a shed a ken off the kura alone had passed - and the wall places offered off the house's walls only), and `not forward_of_front(seat, hh)` (no part past the front wall, `seat_y + d/2 > hh`). The seats are not turned by the household's roll here: tried, it moved Sawada's farms into a knot the gap keeps from gathering (measured 2026-10-21), so the roll is filed as T106. The kura's side stays as drawn (north) - T104 owns 0040's west for a scattered farm.
+
+<!-- plan-archive: T103 to T103 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T103 to T103 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+### T26 Approach (re-answered 2026-10-21T19:13Z)
+
+1. **The goal, in the world.** A farm's wood shed stands a short step off a wall of its house, clear of its kura by as much, never forward into the dooryard, its first seat turned per household as the coop's is.
+2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off a house wall (about 9.5 ft with the wall gap - the ken the page's GUESS, the gap its DEVIATION).
+3. **Where each comes from.** R (0043) and O (the coop's roll).
+4. **Do they describe the world here?** Yes - T34's rounds, and batch 11's round: a ken off the kura alone had passed, where the page says off the house.
+5. **The order.** `shed_off_a_wall`: against a HOUSE wall at exactly the gap and a ken, clear of every steading wall by as much, no part forward of the front wall; wall places offered off the house's walls only; the seats turned by the household's roll; claims; tests; seeds 1-48.
+6. **The exits.** (e) conform.
+7. **The search smell.** None.
+8. **The budget.** With batch 11.
+9. **Done, measured.** A seat 3.5 ft off the kura, a ken off the kura alone, one half forward of the front wall and one 1.4 ft past the ken are refused (tests); seeds 1-48 and the pinned rows pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T26 Approach (re-answered 2026-10-21T19:24Z)
+
+1. **The goal, in the world.** A farm's wood shed stands a short step off a wall of its house, clear of its kura by as much, never forward into the dooryard.
+2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off a house wall (about 9.5 ft with the wall gap - the ken the page's GUESS, the gap its DEVIATION).
+3. **Where each comes from.** R (0043).
+4. **Do they describe the world here?** Yes - T34's rounds and batch 11's round; and measured 2026-10-21: turning the seats by the household's roll moved Sawada's farms into a knot two households' ways cannot gather without passing 2.7 ft from a neighbor's yard.
+5. **The order.** `shed_off_a_wall`: against a HOUSE wall at exactly the gap and a ken, clear of every steading wall by as much, no part forward of the front wall; wall places off the house's walls only; the seat roll filed as T106; claims; tests; seeds 1-48 and the pool.
+6. **The exits.** (e) conform; the roll filed (T106).
+7. **The search smell.** None - one measured roll of Sawada with and without the seat roll.
+8. **The budget.** With batch 11.
+9. **Done, measured.** A seat 3.5 ft off the kura, a ken off the kura alone, one half forward of the front wall and one 1.4 ft past the ken are refused (tests); Sawada's pool tests pass without the roll (measured); seeds 1-48 and the pinned rows pass.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T26 Approach (re-answered 2026-10-24T13:47Z)
+
+1. **The goal, in the world.** A farm's wood shed stands a short step off a wall of its house, clear of its kura by as much, never forward into the dooryard - and the field keeps its path when the sheds move the steadings: a lane laid only to join two others that runs beside a household's way is cut where it comes alongside and meets that way, as a walker would tread one path.
+2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off a house wall. 0081: two paths running side by side are drawn as one; a lane whose end runs back along another way at under 20 degrees is cut where it comes alongside and meets the other as a T. 0014: a way runs from the network to the field's bund. The overlap matrix (a way off a household's threshing yard); the web kept whole.
+3. **Where each comes from.** R (0043; 0081; 0014). O: "alongside" read within `WEB_SHADOW_FT` (UNRESEARCHED, as D125 and D129 read it); the 5 ft step the walk takes along the lane (UNRESEARCHED, a sampling step).
+4. **Do they describe the world here?** Yes. With T07 and T135 landed, T26's patch leaves only seed 47 failing, measured 2026-10-24 (`make cohort N=48`): the field reached by no way. Traced 2026-10-24 (probes in a detached worktree, `make hamlet`): round 1's `settle_defer` cut a 60 ft gap out of the join-orphans link that carried the field's way - it ran 550 ft from the field's edge beside households' ways 14, 10 and 5 (six tree faults) - and `settle_network` dropped its stranded field half; every field run after was turned down (fabric x228, doubled_tails x12). Cut where it first comes alongside way 14 and teed onto it past that household's threshing yard, the lane keeps one network and the field reached, and seed 47 rolls clean, measured 2026-10-24 (`make hamlet`).
+5. **The order.** `shed_off_a_wall` as decided (D78). Then `settle_defer`: the gap cut as today, unless it would leave the field or a house no longer joined to the connector's network - then the lane is cut where it comes alongside a tree lane, walked from each end, and teed onto it, where the overlap matrix admits the lane and it leaves no fault against the tree, no more knots, the web no more networks, no house and not the field newly unreached. Tried on every defer cut, the tee knotted cohort seed 26, measured 2026-10-24 (`make cohort N=1 SEED=26` in a detached worktree); narrowed so, the cohort with the patch is 54/54, measured 2026-10-24 (`make cohort N=48`).
+6. **The exits.** (a) the field way threaded between the steadings - 507 runs judged over all the settle's rounds, measured 2026-10-24 (a probe on `settle_field` in a detached worktree), one admitted in round 1 and lost with the link, every later one turned down (the last round's tally is the fabric x228, doubled_tails x12 above); (b) room - measured worse on 2026-10-22 (T107); (c) the field path drawn again where the defer strands it (as `drop_stranding` does) - it is the same doubled link, and the shadow rule takes it; (d) the cut where it comes alongside - taken.
+7. **The search smell.** A bounded walk: points 5 ft apart along the lane, from each end, nearest the end first, each asked the matrix and the tree's rules; the first admitted is kept. The cut shortens the lane, so the settle cannot cycle.
+8. **The budget.** 90 min with its landing.
+9. **Done, measured.** The tests as decided (D78), and a unit test of the cut where it comes alongside (red without it); seeds 1-48 and the pinned rows pass with the patch (54/54), the fresh block's rate; `make cover-changed`; the landing cohort.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T26 Decisions (2026-10-24)
+
+- **D131** `tree.settle_defer`: an ordinary lane with a fault against a tree lane is cut `DEFER_GAP_FT` either side of the fault as today - unless that gap would leave the field or a house no longer joined to the connector's network (`strands_the_reach`); then it is cut WHERE IT COMES ALONGSIDE a tree lane (`cut_alongside`: walked from each end in 5 ft steps, the first point within `WEB_SHADOW_FT` of a tree lane's nearest leg at under 20 degrees) and teed onto that lane at its nearest point, where the overlap matrix admits the lane, it then breaks no rule against the tree, the web keeps its knots, its networks, its houses and its field reached (narrowed on the cohort: tried on every cut, it knotted seed 26). Rendering: a map drawing convention, the page's own reading - 0081: "Two paths running side by side are drawn as one. A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other as a T"; "alongside" read within `WEB_SHADOW_FT`, UNRESEARCHED (as D125, D129); the 5 ft step UNRESEARCHED (a sampling step).
+
+<!-- plan-archive: T103 to T105 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
+<!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+### T26 part B (2026-10-22T04:13Z)
+
+Owed by cohort@20261022T034941Z, charged to T26 and T107 together (the in-flight charge built the same night).
+
+1. **What exactly is refusing?** With T107 in the tree (`dev/cohort-log/20261022T041238Z-*`): seed 24 cleared; seed 10 knots that the gather cannot take without a connector hairpin, a bend or a needle loop; seed 36's without a needle loop or a split web; seed 47 refused because the field way's runs are turned down (doubled tails, fabric) - three conflicts, none the fence gap.
+2. **A3 again.** 0043's shed a ken off a house wall: R (a GUESS on the page for the ken). The angle rules: R (0081).
+3. **A4 again.** The shed rule describes the world; the refusals are downstream, in the ways the moved sheds leave.
+4. **Moving something earlier for something later?** Not done: the sheds stay where 0043 puts them.
+5. **Tuning or changing?** Neither yet - T26 stays set aside, its shed change kept as a patch; its three remaining conflicts are written into T26's own box, worked in 405.
+6. **The one-sentence test.** "Why does a shed move a lane?" - its seat moves the steading's free ground, and the way is walked round it.
+7. **The next step is a measurement.** Each remaining seed's gather or field-way refusal traced, as seed 24's was.
+8. **Every route measured?** Room measured at two widths within the research's band, both worse (above).
+9. **After a ruling:** none.
+
+## T107, T26 - a knot's gather where the fence gap would leave it (the GM, 2026-10-21: room first, within the research)
+
+### T107 Approach (checklist part A)
+
+1. **The goal, in the world.** Two households' ways that arrive within 25 ft of each other are walked as one meeting, even where the meeting stands beside a neighbor's garden fence - as paths in a village of abutting lots ran along fences.
+2. **The constraints.** 0081's knot (ends within 25 ft joined at one point); 0246's 7 ft from a lane's middle to another household's garden fence (T18); 0081's crop clearance (a lane may touch a plot's boundary, its middle 3 ft off, `WEB_CROP_GAP`); the lane law's needle, fold, hairpin and bend rules; the web kept whole; seeds 1-48 and the pinned rows.
+3. **Where each comes from.** 0081's knot: R. 0246's 7 ft: O - the page says "a map drawing convention, not a measured figure". The crop clearance: R (0081). The homestead spacing (`grow_gap`, 18 + 2 ft) and the homestead ground: R-bounded - the spacing pass of 2026-10-22 (`spacing-research.md`) puts the attested clustered-village lot at 90-180 tsubo typical, 300-480 rare; the map's 104 ft homestead (305 tsubo) is above the typical range and inside the rare band, so some widening stays within the research.
+4. **Do they describe the world here?** 0081's knot does: seed 24's are two tees 25.0 ft apart on one way. The 7 ft gap does not at a meeting: the gather's diagonal passes 5.7 ft from the neighbor's fence (its tread's edge 4.2 ft off), which no reader of the research would call wrong where lots abut.
+5. **The order.** The gather stays where it is in the settle (after the ways are drawn); nothing placed earlier moves.
+6. **The exits.** (a) refine the O number - taken, for a gather alone; (b) a knot excused where one lane runs between its two tees - not taken: 0081 says within 25 ft; (c) a new gather form - not needed for seed 24; (d) more room - tried first and measured worse: +5 ft and +10 ft of `grow_gap` (about 335 and 365 tsubo, inside the rare band) newly failed six seeds and refused the reference map (`spacing-research.md`), and the research's typical range gives no reason to go wider still; (e) conform - leaves the knot.
+7. **The search smell.** The gather is a search over moved forms against the law; the change narrows one clause of one judge, and runs it only for the knots the convention leaves.
+8. **The budget.** 60 min with its landing.
+9. **Done, measured.** A gather the 7 ft refuses and the crop clearance admits is taken only after the 7 ft pass (test); seeds 1-48 and the pinned rows 54/54 with T107 alone (measured `dev/cohort-log/20261022T040935Z-*`).
+10. **Before moving a constant.** `WEB_FABRIC_GAP` is not moved: `Lawful.fence_gap` defaults to it, and only `settle_knots`' second pass sets `WEB_CROP_GAP`; every other reader (`MIN_WEB_GAP`, `grow_gap`, the seating, every other step's `Lawful`) keeps 7 ft.
+11. **Before fitting things into room.** n/a - nothing is fitted; the room was weighed in A6(d): two widths within the research's band, both measured worse.
+
+### T107 part B (2026-10-22T04:13Z)
+
+Owed by cohort@20261022T034941Z (seeds 8, 18, 20, 36, 41, 47 newly failing, `grow_gap` +5 ft) and cohort@20261022T034510Z (seeds 10, 24, 36, 47, T26 in the tree).
+
+1. **What exactly is refusing?** Looked at, by a trace of the gather's judge: seed 24 - every gather of lane 6's foot and lane 16's tee refused, the diagonal for `fabric` (5.7 ft off garden 13, 5.1 ft off its fixture), the re-aim for `needle_joins`, the cut for splitting the web; seed 36 - `needle_loops` and a split web; seed 10 - `connector_hairpins`, `bends`, `needle_loops`; seed 47 - the field way turned down (doubled_tails x12, fabric x228), not the knots step.
+2. **A3 again.** The 7 ft gap: O, by 0246's own words. The 25 ft knot: R (0081). The homestead room: above the typical attested lot, inside the rare band.
+3. **A4 again.** At seed 24's meeting the gap does not describe the world; the knot does.
+4. **Moving something earlier for something later?** Widening the homesteads would have; within the research's band it was measured, and made the cohort worse.
+5. **Tuning or changing?** Two widths of `grow_gap` measured (+5, +10), both worse: stopped there (B5), back to A6.
+6. **The one-sentence test.** "Why 7 ft?" - a convention, so a meeting the 25 ft rule asks may pass a fence at 0081's crop clearance. "Why not make it bigger?" - it was: two widths within the research's band, both measured worse; the homesteads already stand above the typical attested lot.
+7. **The next step is a measurement.** The cohort with T107 alone, then with T26 on it.
+8. **Every route measured before offering one?** Yes: +5, +10, the crop clearance on every gather (seed 24 cleared, seed 7 newly knotted - an earlier gather admitted at 3 ft reshaped the web), and the crop clearance only for the knots the 7 ft pass leaves (54/54). No question goes to the GM: the research decides it.
+9. **After a ruling:** no ruling.
+
+### T26 part B (2026-10-22T04:13Z)
+
+Owed by cohort@20261022T034941Z, charged to T26 and T107 together (the in-flight charge built the same night).
+
+1. **What exactly is refusing?** With T107 in the tree (`dev/cohort-log/20261022T041238Z-*`): seed 24 cleared; seed 10 knots that the gather cannot take without a connector hairpin, a bend or a needle loop; seed 36's without a needle loop or a split web; seed 47 refused because the field way's runs are turned down (doubled tails, fabric) - three conflicts, none the fence gap.
+2. **A3 again.** 0043's shed a ken off a house wall: R (a GUESS on the page for the ken). The angle rules: R (0081).
+3. **A4 again.** The shed rule describes the world; the refusals are downstream, in the ways the moved sheds leave.
+4. **Moving something earlier for something later?** Not done: the sheds stay where 0043 puts them.
+5. **Tuning or changing?** Neither yet - T26 stays set aside, its shed change kept as a patch; its three remaining conflicts are written into T26's own box, worked in 405.
+6. **The one-sentence test.** "Why does a shed move a lane?" - its seat moves the steading's free ground, and the way is walked round it.
+7. **The next step is a measurement.** Each remaining seed's gather or field-way refusal traced, as seed 24's was.
+8. **Every route measured?** Room measured at two widths within the research's band, both worse (above).
+9. **After a ruling:** none.
+
+### T107 Decisions
+
+**D83 - a knot the fence gap leaves is gathered at the crop clearance.** `settle_knots` gathers in two passes: every knot first with the fence gap as it stands (`Lawful.fence_gap = WEB_FABRIC_GAP`, 7 ft, 0246's convention), then the knots left with `Lawful.fence_gap = WEB_CROP_GAP` (3 ft from the join's middle to another household's garden, 0081's "a lane may touch a plot's boundary"). `fouled_segment` takes the gap (`gap`, default `WEB_FABRIC_GAP`); `Lawful.ground_fault` reads `self.fence_gap`. Only the knots step sets it; every other `Lawful` keeps 7 ft. Labeled: the 7 ft stays a map drawing convention; the gather's 3 ft is historically accurate in the sense 0081 gives (a path may run along a fence), applied where the convention and 0081's knot rule collide - R over O. Measured: the crop clearance on every gather knotted seed 7 (an earlier gather admitted at 3 ft reshaped the web), so it is the second pass only. More room was tried first: two widths of `grow_gap` within the research's band (A6(d), `spacing-research.md`), both measured worse.
+
+### T107 Approach (re-answered 2026-10-22T04:25Z)
+
+The Decisions block re-decided only in wording (the research's bound stated as it is); every answer stands as corrected:
+
+1. **The goal, in the world.** Two households' ways that arrive within 25 ft of each other are walked as one meeting, even where the meeting stands beside a neighbor's garden fence - as paths in a village of abutting lots ran along fences.
+2. **The constraints.** 0081's knot (ends within 25 ft joined at one point); 0246's 7 ft from a lane's middle to another household's garden fence (T18); 0081's crop clearance (a lane may touch a plot's boundary, its middle 3 ft off, `WEB_CROP_GAP`); the lane law's needle, fold, hairpin and bend rules; the web kept whole; seeds 1-48 and the pinned rows.
+3. **Where each comes from.** 0081's knot: R. 0246's 7 ft: O - the page says "a map drawing convention, not a measured figure". The crop clearance: R (0081). The homestead spacing (`grow_gap`, 18 + 2 ft) and the homestead ground: R-bounded - the spacing pass of 2026-10-22 (`spacing-research.md`) puts the attested clustered-village lot at 90-180 tsubo typical, 300-480 rare; the map's 104 ft homestead (305 tsubo) is above the typical range and inside the rare band, so some widening stays within the research.
+4. **Do they describe the world here?** 0081's knot does: seed 24's are two tees 25.0 ft apart on one way. The 7 ft gap does not at a meeting: the gather's diagonal passes 5.7 ft from the neighbor's fence (its tread's edge 4.2 ft off), which no reader of the research would call wrong where lots abut.
+5. **The order.** The gather stays where it is in the settle (after the ways are drawn); nothing placed earlier moves.
+6. **The exits.** (a) refine the O number - taken, for a gather alone; (b) a knot excused where one lane runs between its two tees - not taken: 0081 says within 25 ft; (c) a new gather form - not needed for seed 24; (d) more room - tried first and measured worse: +5 ft and +10 ft of `grow_gap` (about 335 and 365 tsubo, inside the rare band) newly failed six seeds and refused the reference map (`spacing-research.md`), and the research's typical range gives no reason to go wider still; (e) conform - leaves the knot.
+7. **The search smell.** The gather is a search over moved forms against the law; the change narrows one clause of one judge, and runs it only for the knots the convention leaves.
+8. **The budget.** 60 min with its landing.
+9. **Done, measured.** A gather the 7 ft refuses and the crop clearance admits is taken only after the 7 ft pass (test); seeds 1-48 and the pinned rows 54/54 with T107 alone (measured `dev/cohort-log/20261022T040935Z-*`).
+10. **Before moving a constant.** `WEB_FABRIC_GAP` is not moved: `Lawful.fence_gap` defaults to it, and only `settle_knots`' second pass sets `WEB_CROP_GAP`; every other reader (`MIN_WEB_GAP`, `grow_gap`, the seating, every other step's `Lawful`) keeps 7 ft.
+11. **Before fitting things into room.** n/a - nothing is fitted; the room was weighed in A6(d): two widths within the research's band, both measured worse.
+
+<!-- plan-archive: T91 to T91 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+## T113 - the room table (the GM's third process fix, 2026-10-21; the arbiter's tooling_fix on ask:set-down-T26)
+
+### T113 Approach (checklist part A)
+
+1. **The goal, in the world.** When a map fails to fit, the session weighing more room sees each spacing knob's research ceiling and whether widening it grows the band the seats are dealt over, so a room probe measures room and not packing, and farms stay within the attested lot sizes rather than "a mile apart".
+2. **The constraints.** The GM's three fixes of 2026-10-21 (amendment 8); the arbiter's tooling_fix (each row says whether the band grows with its knob); the ceilings of `spacing-research.md`; a tooling fix lands with its test (feature 379).
+3. **Where each comes from.** The GM's words (amendment 8) and the arbiter's ruling: R for the process. The ceilings: R where attested (the 1698 register, Buck, Ushijima), and "unresearched - research question owed" where the pass was SILENT (neighbor spacing).
+4. **Do they describe the world here?** Yes: the +5/+10 ft probes of 2026-10-22 widened `grow_gap` in a fixed seating band, which is exactly what the band column names.
+5. **The order.** Printed where the session meets the question: part B's prompt from a cohort fit failure (`approach_gate.cohort`), and an arbiter ask naming a knot, a refusal or room (`arbiter_bundle.bundle`).
+6. **The exits.** (a) a table in a doc the checklist points to - not taken: remembering to read it is the failure; (b) printed only on fit failures - taken; (c) printed on every part B - not taken: noise on a row or water rule; (d) more room - n/a; (e) conform - n/a.
+7. **The search smell.** None.
+8. **The budget.** 30 min with its landing.
+9. **Done, measured.** A fit failure's part B prints the table, a row-rule failure's does not; an ask naming a knot carries it, one about wording does not (two tests, each red without the wiring).
+10. **Before moving a constant.** No constant moves: the table only states the knobs.
+11. **Before fitting things into room.** n/a - this is the tool that asks it.
+
+<!-- plan-archive: T93 to T93 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T115 to T91 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T116 to T115 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T117 to T115 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T118 to T116 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T108 to T105 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T120 to T120 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T102 to T102 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T109 to T109 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T99 to T99 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T09 to T09 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T78 to T78 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T88 to T88 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T94 to T94 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T114 to T114 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T92 to T92 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T21 to T21 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T25 to T25 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T15 to T15 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T75 to T75 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T125 to T125 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T126 to T126 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T119 to T119 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+
+<!-- plan-archive: T128 to T128 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T122 to T122 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
+<!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-23 (feature 375 FR-044) -->
+## T135 - two gather forms for the knots T26's sheds leave (seeds 24 and 36)
+
+### T135 Approach (checklist part A)
+
+1. **The goal, in the world.** Ends that nearly meet are joined at one point, and a path that would come back along a way to reach that point is cut where it comes alongside, as a walker treads it; a path laid only to join two others stops where it first reaches one.
+2. **The constraints.** 0081: ends within 25 ft joined at a single point; a lane whose end runs back along another way at less than 20 degrees is cut where it comes alongside and meets the other; a lane laid only to join two others ends where it first meets one. The lane law and the web kept whole, as the gather's judge asks them, at the 7 ft fence gap (the 3 ft pass is households' ways only, D128). `knots.py`'s index: never slide a foot along the tree to just past the reach.
+3. **Where each comes from.** R: 0081 (the 25 ft; the 20 degrees and the cut where it comes alongside; the joining lane's first meeting). O: "alongside" read within `WEB_SHADOW_FT` (UNRESEARCHED, as `teed_back` reads it, D125); the order of the forms (UNRESEARCHED, as `next_gather` labels it).
+4. **Do they describe the world here?** Yes, measured 2026-10-23 (T26's patch on main at T07, `make cohort N=48`, then `knot-trace.py` at the 7 ft gap): 51/54 - seed 24, join-orphans lane 16 starts on household way 6's corner 25.0 ft from way 6's end on way 2, and the gathers the judge admits all need the 3 ft gap; moved onto way 6's end with its first corner dropped (its first leg ran back up way 6's last leg), the judge admits it at 7 ft. Seed 36, join-orphans lane 21 ends on household way 5 1.3 ft from its corner, 23.9 ft from way 5's foot on way 4; aimed at the foot its leg closes a sliver with way 5 (`needle_loops`), and ended where it first crosses way 5 (1798.2, 2052.8; 31 ft from the foot) the map is knot-free, measured 2026-10-23 (a prototype in a detached worktree, `make hamlet`). With both forms the cohort is 53/54 with the patch, measured 2026-10-23 (`make cohort N=48`): seed 47 remains, the field way, not a knot.
+5. **The order.** Nothing moves earlier: both forms are the gather's own (`next_gather`), after its existing forms, for a lone movable end.
+6. **The exits.** (a) the 3 ft pass for every lane - refused by D128 (0246 gives it to households' ways); (b) slide the end along the way past the reach - forbidden; (c) room - measured worse on 2026-10-22 (T107); (d) the two forms - taken.
+7. **The search smell.** None new: each form is one cut where the page puts it (where the end comes alongside; where the joining lane first meets a way), judged by the existing judge; each shortens the moved lane, so the gather cannot cycle.
+8. **The budget.** 90 min with its landing.
+9. **Done, measured.** Unit tests of both forms (red without them); seeds 24 and 36 knot-free with T26's patch; `make cohort N=48` on main 54/54 with the fresh block's rate, and the landing cohort.
+10. **Before moving a constant.** None moves.
+11. **Before fitting things into room.** n/a - nothing is fitted.
+
+### T135 Decisions
+
+- **D129** `knots.next_gather` gains a form after `teed_back`, `onto_cut_back`: a lone movable end moved onto the other node with each corner whose leg would then run back along a lane at that node (under `_SIDE_BY_SIDE_DEG`, its middle within `WEB_SHADOW_FT`) dropped, nearest the node first - asked of the gather's judge. Rendering: historically accurate - 0081: "A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other"; "alongside" read within `WEB_SHADOW_FT`, UNRESEARCHED (as D125).
+- **D130** `knots.next_gather` gains a last form for a lane laid only to join two others (`JOIN_ROLE`), `joiner_first_meeting`: its end re-aimed at the other node and ended where its last leg first crosses another lane (`settle.shapes._crossing`, more than 1 ft inside both), only where that point stands beyond `_KNOT_FT` of the node - asked of the gather's judge. Rendering: historically accurate - 0081: "A lane laid only to join two others ends where it first meets one, its tail cut however long it is"; ends within 25 ft joined at a single point.
+
