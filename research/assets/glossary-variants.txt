@@ -427,6 +427,7 @@ castle-rice	castle rice
 catalpa	catalpa
 catalpas	catalpa
 catchment	catchment
+catties	jin
 catty	jin
 causeway	causeway
 causeways	causeway
@@ -622,9 +623,8 @@ cooperage	cooper
 coopered	cooper
 coopers	cooper
 coping	coping
-copper	copper
 copper cash	copper cash
-coppers	copper
+coppers	coppers
 coppice	coppice
 coppiced	coppice
 coppices	coppice
@@ -1113,6 +1113,8 @@ fillet	fillet
 fillets	fillet
 finance commissioner	finance commissioner
 finance commissioners	finance commissioner
+fineness	fineness
+finenesses	fineness
 fines	fines
 fingerling	fingerling
 fingerlings	fingerling

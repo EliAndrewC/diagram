@@ -12825,7 +12825,8 @@
   "def": "A Chinese unit of weight, the catty: a little over a pound.",
   "variants": [
    "jin",
-   "catty"
+   "catty",
+   "catties"
   ],
   "cased": true
  },
@@ -17548,10 +17549,9 @@
    "kuping"
   ]
  },
- "copper": {
+ "coppers": {
   "def": "The copper coin of early-1900s Beijing, worth ten of the old cash: in Beijing's price records a tiao is 100 cash or ten coppers, and in 1918-1919 the exchange shops gave 136 to 140 coppers for a silver dollar.",
   "variants": [
-   "copper",
    "coppers"
   ]
  },
@@ -17575,6 +17575,13 @@
    "MJ",
    "megajoule",
    "megajoules"
+  ]
+ },
+ "fineness": {
+  "def": "The share of pure silver (or gold) in a coin's metal by weight; a silver coin of 80 percent fineness is four-fifths silver, and a baser coin holds less.",
+  "variants": [
+   "fineness",
+   "finenesses"
   ]
  }
 }
