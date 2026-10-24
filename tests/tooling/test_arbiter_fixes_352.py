@@ -301,3 +301,33 @@ def test_an_accept_on_claims_is_recorded_as_their_verdict(tmp_path: pathlib.Path
     assert ca.accept(tmp_path, cur, {}, args) == 0
     assert saved["m.py::f#a claim"]["verdict"] == "IN-STEP" and "ask:x" in saved["m.py::f#a claim"]["note"]
     assert ca.accept(tmp_path, cur, {}, argparse.Namespace(keys="nope", trigger="ask:x")) == 2, "an unknown claim is refused"
+
+
+def test_a_spec_round_bundle_is_the_trigger_s_feature_and_only_its_reviews(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's tooling fix on round:spec-fidelity|413-money-tooltip-on-the-record#1@6 (2026-10-24): the bundle took the
+    ACTIVE feature (by then 414) for 413's spec and request, and counted 412's reviews - which named 413's directory as context -
+    as 413's rounds. The trigger's own feature is bundled, and only reviews OF it are its rounds."""
+    (tmp_path / "clone").mkdir()
+    root = _clone(tmp_path / "clone", "414-active")
+    for f, words in (("413-tip", "THE 413 SPEC"), ("414-active", "THE 414 SPEC")):
+        (root / "specs" / f).mkdir(parents=True)
+        (root / "specs" / f / "spec.md").write_text(words)
+        (root / "specs" / f / "request.md").write_text(words + " REQUEST")
+    assert ab.trigger_feature_dir(root, "round:spec-fidelity|413-tip#1@6") == root / "specs" / "413-tip"
+    assert ab.trigger_feature_dir(root, "round:spec-fidelity|999-none#1@6") is None
+    out = tmp_path / "out"
+    out.mkdir()
+    ab.feature_section(root, out, ab.trigger_feature_dir(root, "round:spec-fidelity|413-tip#1@6"), "round:spec-fidelity|413-tip#1@6")
+    assert (out / "spec.md").read_text() == "THE 413 SPEC" and (out / "request.md").read_text() == "THE 413 SPEC REQUEST"
+    assert ab.reviewed_feature("MODE 2: SPECIFICATION REVIEW. Spec: /c/specs/412-basket/spec.md; its sibling is specs/413-tip/") == "412-basket"
+    assert ab.reviewed_feature("MODE 3 (VERIFY) - round 4 of feature 413-tip, assembled ... specs/412-basket ...") == "413-tip"
+    subs = tmp_path / "transcripts" / "-proj" / "sess" / "subagents"
+    subs.mkdir(parents=True)
+    for n, prompt, reply in (
+        (1, "MODE 2: SPECIFICATION REVIEW of specs/413-tip", "Verdict: FAITHFUL\n"),
+        (2, "MODE 2: SPECIFICATION REVIEW. Spec: /c/specs/412-basket/spec.md; sibling specs/413-tip", "Verdict: NOT FAITHFUL\n\n1. SIBLING.\n"),
+    ):
+        f = subs / f"agent-b{n}.jsonl"
+        f.write_text(json.dumps({"message": {"role": "user", "content": prompt}}) + "\n" + json.dumps({"message": {"role": "assistant", "content": [{"type": "text", "text": reply}]}}) + "\n")
+    text = "".join(ab.spec_rounds(out, "413-tip", tmp_path / "transcripts"))
+    assert "### Round 1: spec-fidelity (FAITHFUL)" in text and "Round 2" not in text and "SIBLING" not in text
