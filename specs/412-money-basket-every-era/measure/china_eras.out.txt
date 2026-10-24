@@ -1,0 +1,128 @@
+== Allen et al. Beijing prices, grams of silver (per kg; oils per liter; cloth per sq m; fuel per M BTU)
+-- 1738-1760
+   wheat flour: 1.408 (1.121-1.681, n 23)
+   millet: 1.044 (0.907-1.233, n 23)
+   bean flour: 1.065 (0.808-1.366, n 23)
+   corn flour: 0.671 (0.554-0.821, n 23)
+   rice (lao mi): 1.322 (0.990-2.017, n 23)
+   beans: 0.839 (0.649-1.098, n 23)
+   sorghum: 0.473 (0.393-0.589, n 23)
+   meat: 2.076 (1.652-2.478, n 23)
+   edible oil: 4.082 (3.248-4.872, n 23)
+   cloth (sq m): 6.145 (6.145-6.145, n 23)
+   lamp oil: 3.368 (2.680-4.019, n 23)
+   fuel (M BTU): 11.200 (11.200-11.200, n 23)
+-- 1745-1754
+   wheat flour: 1.382 (1.201-1.521, n 10)
+   millet: 1.036 (0.935-1.178, n 10)
+   bean flour: 1.059 (0.990-1.122, n 10)
+   corn flour: 0.669 (0.602-0.752, n 10)
+   rice (lao mi): 1.426 (1.212-2.017, n 10)
+   beans: 0.837 (0.769-0.881, n 10)
+   sorghum: 0.475 (0.427-0.540, n 10)
+   meat: 2.038 (1.770-2.242, n 10)
+   edible oil: 4.007 (3.480-4.408, n 10)
+   cloth (sq m): 6.145 (6.145-6.145, n 10)
+   lamp oil: 3.306 (2.871-3.637, n 10)
+   fuel (M BTU): 11.200 (11.200-11.200, n 10)
+-- 1820-1830
+   wheat flour: 1.961 (1.881-2.041, n 11)
+   millet: 1.477 (1.441-1.524, n 11)
+   bean flour: 1.615 (1.571-1.671, n 11)
+   corn flour: 1.005 (0.964-1.046, n 11)
+   rice (lao mi): 1.781 (1.603-2.047, n 11)
+   beans: 1.296 (1.263-1.343, n 11)
+   sorghum: 0.716 (0.687-0.746, n 11)
+   meat: 2.891 (2.773-3.009, n 11)
+   edible oil: 5.684 (5.452-5.916, n 11)
+   cloth (sq m): 6.145 (6.145-6.145, n 11)
+   lamp oil: 4.689 (4.498-4.881, n 11)
+   fuel (M BTU): 9.499 (9.313-9.685, n 11)
+== Allen et al. silver wages, grams a day (Figures2-6: F Beijing, G Suzhou, H Canton)
+   Beijing 1738-1760: 3.255 (3.241-3.270, n 23)
+   Beijing 1820-1830: 2.805 (2.563-3.222, n 7)
+   Suzhou 1750-1799: 3.233 (3.201-3.265, n 50)
+   Canton 1830-1839: -
+== Meng and Gamble, Beijing retail, dollars a 100 catties
+-- 1900-1909
+   flour: 5.726 (4.880-6.410, n 10)
+   wheat: 3.816 (3.330-4.500, n 9)
+   rice: -
+   bean flour: 5.164 (4.840-5.550, n 10)
+   millet retail: 4.462 (3.620-5.010, n 10)
+   corn flour: 3.085 (2.140-3.650, n 10)
+-- 1910-1919
+   flour: 5.783 (4.890-6.770, n 10)
+   wheat: 4.297 (3.810-5.230, n 10)
+   rice: 5.763 (5.350-6.000, n 7)
+   bean flour: 5.678 (4.710-6.600, n 10)
+   millet retail: 4.923 (3.720-5.910, n 10)
+   corn flour: 3.557 (2.850-4.000, n 10)
+== Meng and Gamble, Beijing unskilled construction wage, silver cents a day (with food)
+   1900-1909: 23.380 (19.400-27.200, n 10)
+   1910-1919: 22.240 (19.100-24.200, n 10)
+   1900-1919: 22.810 (19.100-27.200, n 20)
+== Peng's Song decades via Liu, grams of silver a hectoliter
+   961-70: 12.39
+   971-80: 31.12
+   981-90: 11.76
+   991-1000: 14.73
+   1001-10: 22.76
+   1011-20: 11.79
+   1021-30: 12.21
+   1031-40: 19.67
+   1041-50: 47.33
+   1051-60: 16.81
+   1061-70: 25.7
+   1071-80: 55.1
+   1081-90: 32.25
+   1091-110: 35.04
+   1101-10: 59.61
+   1111-20: 45.37
+   1121-30: 265.42
+   1131-40: 243.0
+   1141-50: 30.18
+   1151-60: 42.84
+   1161-70: 44.05
+   1171-80: 36.81
+   1181-90: 44.5
+   1191-120: 63.19
+   1201-10: 96.08
+   1211-20: 45.56
+   1221-30: 49.66
+   1231-40: 37.9
+   1241-50: 37.9
+   1251-60: 37.83
+   mean 961-1120 (to the Jin war): 28.35 (n 16, 11.76-59.61)
+   mean 1001-1100: 27.87 (n 10, 11.79-55.1)
+   mean 1141-1260: 47.21 (n 12, 30.18-96.08)
+   mean all 30 decades: 50.95 (n 30, 11.76-265.42)
+== Cash a tael, from the texts
+   1632 Songjiang (120 wen = 0.1 tael): 1200
+   1671 Songjiang (1,300 wen = 1.1 tael): 1182
+   1672 Songjiang (700 wen = 0.63 tael): 1111
+   1678-79 low (1,000 = 0.93): 1075
+   1678-79 high (1,000 = 0.87): 1149
+   1682 Songjiang (350 wen = 0.315): 1111
+   1690 low (1,000 = 1.03): 971
+   1690 high (1,000 = 1.02): 980
+   c.1628-30 capital (1,000 = 1.2): 833
+   c.1628-30 provinces (1,000 = 0.9): 1111
+   1638 (1,000 = 0.6): 1667
+   Ming Hongzhi (700 to a tael): 700
+   1508 (70 wen = 0.1): 700
+   1525 (7 = 0.01): 700
+   Longqing (8 = 0.01): 800
+   Wanli gold-back first cast (10 = 0.01): 1000
+   Wanli gold-back later (5 = 0.01): 500
+   1628 casting (55 = 0.1): 550
+== Rice in Suzhou-Songjiang (Qian Yong), taels a shi = wen a sheng x 100 / cash a tael
+   mid-Qianlong 14-15 wen at 760-840: 1.67-1.97
+   after 1785, 27-35 wen at 1,300-1,400 (1796): 1.93-2.69
+== Silver
+   a dollar at 0.72 tael x 37 g: 26.64 g
+   a tael at Liu's kuping 36.9 / 37.3 g; Song 37.68 g; Allen 37 g
+   a mace (0.1 tael) at 37 g: 3.7 g; Beijing 1736 75 cash at 800 a tael: 0.0938 tael, 3.47 g
+   grams a 1,000 cash at 37 g a tael: 700 -> 52.9; 800 -> 46.2; 1,000 -> 37.0; 1,200 -> 30.8; 1,300 -> 28.5; 1,400 -> 26.4; 2,000 -> 18.5
+   Gamble rent $5-12 a year = $0.42-1.00 a month = 133-320 g a year
+   Meng-Gamble wage 19.1-27.2 cents x 26.64 g/$: 5.09-7.25 g

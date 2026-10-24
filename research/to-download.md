@@ -4077,3 +4077,51 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [a Google search for the volume](https://www.google.com/search?q=%E9%83%BD%E5%8F%B2%E7%B4%80%E8%A6%81+32+%E6%B1%9F%E6%88%B8%E3%81%AE%E7%89%9B)
 - **Rests on it:** research/questions/0278-what-did-carrying-stone-cost-by-cart-and-by-porter.html (diagram feature 408; asked for by gm-assistant on EliAndrewC/diagram#10) - an Edo-period rate for stone, or any load, by a hired cart, which no public source found gives (also 0260, 0257).
 - Blocked by: in print only; the Tokyo Metropolitan Archives' page for the series lists the contents but no text, and no public scan was found (2026-10-21).
+
+### 320. [money] 林滿紅 (Lin Man-houng), 『銀線：19世紀的世界與中國』 (2011), or its English edition, China Upside Down: Currency, Society, and Ideologies, 1808-1856 (Harvard, 2006), Table 2.6 (silver-copper exchange rates)
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[a WorldCat search for China Upside Down](https://search.worldcat.org/search?q=China+Upside+Down+Lin+Man-houng)**
+- Table 2.6 and the pages around it (pp. 76-77 of the Chinese edition as Liu 2022 cites them): the market rate of copper cash to the tael, year by year or decade by decade, and where each rate was taken.
+- Fallback: [a Google search for the table](https://www.google.com/search?q=%22China+Upside+Down%22+Lin+Man-houng+table+2.6+copper+cash+silver)
+- **Rests on it:** research/questions/0289-what-was-a-tael-a-string-of-cash-and-a-chinese-dollar-worth-in-silver.html (diagram feature 412; asked for by gm-assistant on EliAndrewC/diagram#13) - a market series of cash to the tael, which no readable source gives (also 0288).
+- Blocked by: in print only; no open copy of the table was found (2026-10-24).
+
+### 321. [money] 彭信威 (Peng Xinwei), 『中國貨幣史』 (Shanghai, 1958 and later editions; English: A Monetary History of China, 1994), the rate tables of pp. 608-615 and the notes on the tael's weight, p. 669 nn. 4-7
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[a WorldCat search for the book](https://search.worldcat.org/search?q=%E4%B8%AD%E5%9B%BD%E8%B4%A7%E5%B8%81%E5%8F%B2+%E5%BD%AD%E4%BF%A1%E5%A8%81)**
+- The tables of copper cash to the tael by reign and decade (pp. 608-615 of the Chinese edition), the Song and Ming rice price averages (p. 459), and the notes on the weights of the tael's main units (p. 669, nn. 4-7), with any figure for the fineness of the silver.
+- Fallback: [a Google search for the book](https://www.google.com/search?q=%E5%BD%AD%E4%BF%A1%E5%A8%81+%E4%B8%AD%E5%9C%8B%E8%B2%A8%E5%B9%A3%E5%8F%B2+pdf)
+- **Rests on it:** research/questions/0289-what-was-a-tael-a-string-of-cash-and-a-chinese-dollar-worth-in-silver.html (diagram feature 412; asked for by gm-assistant on EliAndrewC/diagram#13) - cash a tael by era, the tael's fineness, and the Song cash-silver rate behind the record's Song rice (also 0288).
+- Blocked by: in print only; no open copy was found (2026-10-24).
+
+### 322. [money] 嚴中平 (Yan Zhongping) et al., 『中國近代經濟史統計資料選輯』 (Beijing, 1955), Table 31 (the silver-copper rates of a store at Daliu zhen, Ningjin county, Hebei, 1807-1850)
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[a WorldCat search for the book](https://search.worldcat.org/search?q=%E4%B8%AD%E5%9B%BD%E8%BF%91%E4%BB%A3%E7%BB%8F%E6%B5%8E%E5%8F%B2%E7%BB%9F%E8%AE%A1%E8%B5%84%E6%96%99%E9%80%89%E8%BE%91)**
+- Table 31 (p. 38) and its footnote saying two cash were counted as one: the rates of cash to the tael, year by year, 1807-1850.
+- Fallback: [a Google search for the table](https://www.google.com/search?q=%E4%B8%AD%E5%9B%BD%E8%BF%91%E4%BB%A3%E7%BB%8F%E6%B5%8E%E5%8F%B2%E7%BB%9F%E8%AE%A1%E8%B5%84%E6%96%99%E9%80%89%E8%BE%91+%E5%AE%81%E6%B4%A5+%E5%A4%A7%E6%9F%B3%E9%95%87+%E9%93%B6%E9%92%B1%E6%AF%94%E4%BB%B7)
+- **Rests on it:** research/questions/0289-what-was-a-tael-a-string-of-cash-and-a-chinese-dollar-worth-in-silver.html (diagram feature 412; asked for by gm-assistant on EliAndrewC/diagram#13) - a northern market series of cash to the tael, and how the north counted its cash (also 0288).
+- Blocked by: in print only; known here through Allen et al. 2009 (2026-10-24).
+
+### 323. [money] Sidney D. Gamble, "Daily Wages of Unskilled Chinese Laborers, 1807-1902", Far Eastern Quarterly 3.1 (1943), pp. 41-73
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[a JSTOR search for the article](https://www.jstor.org/action/doBasicSearch?Query=%22Daily+Wages+of+Unskilled+Chinese+Laborers%22)**
+- Pp. 41, 44 and 61-69: the fuel store's wage series, the strings of cash to the tael in 1807, 1827, 1862 and 1884, the remark that a tiao was 500 cash before 1860 and 100 after, and the food given to the workers.
+- Fallback: [a Google search for the article](https://www.google.com/search?q=Gamble+%22Daily+Wages+of+Unskilled+Chinese+Laborers%22+1943)
+- **Rests on it:** research/questions/0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.html (diagram feature 412; asked for by gm-assistant on EliAndrewC/diagram#13) - whether the rural Beijing wage is halved, which the two readings of the series disagree on (also 0289, 0250).
+- Blocked by: paywalled (JSTOR); known here only through Allen et al. 2009 (2026-10-24).
