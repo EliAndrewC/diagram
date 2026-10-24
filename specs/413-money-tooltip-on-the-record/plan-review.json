@@ -45,7 +45,7 @@
   },
   "## D3 - the build reads and refuses (FR-003, FR-005)": {
    "sha256": "d18346c9cb92e9ad7029939e00d047203d9cb787f13366d3a9a870f9132b21fa",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
   },
@@ -62,8 +62,8 @@
    "declared": "spec-fidelity"
   },
   "## D6 - the back-fill (FR-006)": {
-   "sha256": "9ae8a61472726458a6c8137fc546c1501ffa250bbdd8dba37befa0aac8c4e44b",
-   "verdict": "BLOCKED",
+   "sha256": "7bf6ee2f91832fe3b14e7cb264c529ac801493eff9e1dd0d80644899a1d6f5d4",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
   },
@@ -81,6 +81,24 @@
   },
   "## T - the order": {
    "sha256": "f746244e26911ee6c3c0f64f944a59e977035b94773316489a0ef01542955133",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach": {
+   "sha256": "28ef9300ed9f7243abc4e83b6703531fa1adf54bb298996a001a037b39af7bce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach": {
+   "sha256": "7502c2388f6621526f958402e58ae434e94e620bac237defc71c184fb95523c0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach": {
+   "sha256": "67ce224de4972e3c323b31c9de9f5d1633e0dac3cea7f827b7a6ef9cafbf559e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
@@ -671,6 +689,111 @@
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
      "why": "This is an exception to the GM's 'no numeric threshold in the record checks yet', argued on the grounds that the window is 'not a closeness rule'. Word level: --check is a check over the record's fragments and fails on a year comparison against a fixed 25. It is part of how the block says the marking is enforced (make record CHECK=1 / make record-owed), so 'it is a back-fill script, not a record check' does not get it out. Purpose level: the GM withdrew 25 because it 'had no basis', guessed that the right span is 'much longer', and sent the number to diagram#15 to be measured, not guessed. Under this gate an amount 30 to 60 years from a built era, the kind the GM suspects can be borrowed, can be waived in bulk by a '*' line with no judgment of its own, and only amounts under 25 years get looked at one by one. The number still decides closeness, only under another name, and the scope of the gate rests on a figure nobody measured. The earlier CLEAR was given to this gate before the request changed and does not carry over; this ruling judges it against the amended request. Fix: --check drops the year comparison. Two shapes are acceptable and the author chooses: '*' lines may cover any unmarked amount in a fragment, or '*' lines are removed and every amount gets its own line."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## D3 - the build reads and refuses (FR-003, FR-005)",
+    "## D6 - the back-fill (FR-006)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D3",
+     "summary": "money.py annotate refuses no era, unknown non-awaiting era, coin not in the era's units, malformed amount, data-paid with no year; refuses no distance in years; awaiting era or no row left as written (glossary only); no fallback to another era",
+     "class": "within",
+     "why": "Unchanged since last round, ruled within. Carries FR-003/FR-005 and matches the GM's correction on #14 (no numeric threshold in the record checks; the author chooses the era) and gm-assistant's 'no automatic fallback in the build'."
+    },
+    {
+     "id": "D6a",
+     "summary": "candidate script sweeps every fragment under research/questions/ for unmarked amounts in any coin word of the table, the awaiting list and COINS_ALSO, with question, block and years; a coin the era's row lacks is listed and passed over with that reason",
+     "class": "within",
+     "why": "Enforcement of FR-006/SC-004: to know every amount in the two eras is marked, every candidate amount must be found. Unchanged from the earlier text."
+    },
+    {
+     "id": "D6b",
+     "summary": "listing names each amount's distance in years from the nearest built era carrying its coin and sorts nearest first; the order decides nothing and no distance is compared",
+     "class": "within",
+     "why": "A presentation order for the author's own judgment, which the GM's correction keeps with the author ('keep marking each amount with the era its author judges right'). It allows, refuses and exempts nothing, so it is not the withdrawn threshold or any numeric threshold in a record check."
+    },
+    {
+     "id": "D6c",
+     "summary": "every listed amount is owed a decision (marked, or passed over with a reason in backfill.md); a '* ' line may cover every amount a fragment still holds unmarked, its reason holding for all of them; --check compares no distance in years and exits 1 while a listed amount is neither marked nor named",
+     "class": "within",
+     "why": "The previous BLOCKED item - --check refusing a '*' line over amounts within 25 years of a built era, the withdrawn 25-year number under another name - is removed: --check now applies no numeric span, as the GM's correction requires ('no numeric threshold in the record checks yet'). The '*' line passes over amounts only with a stated reason, the same pass-over SC-004 already admits per amount, and the duty still covers every listed amount, so FR-006 is not narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T01 Approach",
+    "### T02 Approach",
+    "### T03 Approach"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-refuse-unconvertible",
+     "summary": "The build refuses a mark that cannot be converted (unknown era id, coin the row lacks, malformed amount).",
+     "class": "within",
+     "why": "Diagram's plan on #14 (accepted by gm-assistant as matching the GM) lists exactly these refusals; an era with no row still shows the glossary per FR-005/FR-008, so nothing asked is withheld."
+    },
+    {
+     "id": "T01-paid-without-year",
+     "summary": "A data-paid with no year is refused, because the tooltip must name where and when the amount was paid; no refusal by distance in years.",
+     "class": "within",
+     "why": "Enforces gm-assistant's borrowed-era line ('at Kyoto 1745-54 prices'), which needs the paid place and time; diagram's 16:36 reply lists this refusal; and it explicitly honors the GM's withdrawal ('no numeric threshold in the record checks yet')."
+    },
+    {
+     "id": "T01-rounding-tiers",
+     "summary": "Rounding tiers for the displayed figures are an O-level choice set to reproduce the issue's worked example.",
+     "class": "within",
+     "why": "The request fixes the Rokugani format (gm-assistant's conversions.rokugani) and the worked example ('about $4.07 ... $41.71 ... 4.2 sen'); display rounding that reproduces it is an implementation detail the request leaves to diagram."
+    },
+    {
+     "id": "T01-order",
+     "summary": "Vendored copy, then the build's reading, then the box text.",
+     "class": "within",
+     "why": "Sequencing only; the vendoring and build reading are FR-001/FR-003."
+    },
+    {
+     "id": "T02-box-with-glossary",
+     "summary": "The record's one hover box opens over a marked amount, a line at a time, with the coin's glossary definition beneath.",
+     "class": "within",
+     "why": "The GM: 'a tooltip where we don't just explain that this was the copper coin, but we translate the amount' - the definition stays and the conversion is added."
+    },
+    {
+     "id": "T02-title-inside-note",
+     "summary": "Inside a note already shown in the box, a marked amount's conversion is the span's title instead of the box.",
+     "class": "within",
+     "why": "The request asks for a tooltip carrying the conversion and leaves the mechanism to diagram; a title is a tooltip and the conversion is still shown, so no amount loses what was asked - this is a presentation choice, not a carve-out of coverage."
+    },
+    {
+     "id": "T03-decide-every-amount",
+     "summary": "Every amount already in the record in a built era's coin is either marked with the era its author judges close enough, or passed over with its reason.",
+     "class": "within",
+     "why": "Matches FR-006 and the thread as amended: the author chooses the era (gm-assistant 15:54), no numeric closeness rule (the GM's withdrawal, 16:35), and diagram's 16:36 reply that passed-over reasons state the date and the judgment pending #15."
+    },
+    {
+     "id": "T03-pass-over-non-money-units",
+     "summary": "A rate, a weight or an area unit is passed over with that reason, never marked.",
+     "class": "within",
+     "why": "Read as coin-named units that are not amounts of money (monme as a weight, bu as an area or percentage rate, an exchange ratio): the request marks 'each money amount' by 'the place and decade it was paid in', which these are not. A price per unit (e.g. '12 mon a sho') is a money amount and FR-006 requires it marked; this ruling does not cover passing such a price over."
+    },
+    {
+     "id": "T03-nakasendo-fares",
+     "summary": "Mark the Nakasendo fares, at gm-assistant's request on #13.",
+     "class": "within",
+     "why": "The goal limits the sweep to amounts already in the record, so the fares are amounts FR-006 and diagram's back-fill plan already cover; no new content is added."
+    },
+    {
+     "id": "T03-order",
+     "summary": "After T01 and T02, so each mark is checked by the build.",
+     "class": "within",
+     "why": "Sequencing only."
     }
    ]
   }
