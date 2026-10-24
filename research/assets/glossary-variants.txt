@@ -97,6 +97,9 @@ ashigaru	ashigaru
 ashigaru nagaya	ashigaru-nagaya
 ashigaru-nagaya	ashigaru-nagaya
 ashina	Ashina
+assay	assay
+assayed	assay
+assays	assay
 assessed yield	kokudaka
 assessed yields	kokudaka
 assignation house	assignation house
@@ -234,6 +237,8 @@ bettō	bettō
 bettō-ji	bettō
 betula	Betula
 betweenness centrality	betweenness centrality
+biao	biao
+biao cloth	biao
 bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
 big door	ōdo
@@ -310,6 +315,8 @@ broadcast oilseed stand	broadcast sowing
 broadcast sowing	broadcast sowing
 brush cutter	brush cutter
 brush cutters	brush cutter
+btu	BTU
+btus	BTU
 bu	bu
 bu nongshu	Bu nongshu
 budget model	budget model
@@ -615,7 +622,9 @@ cooperage	cooper
 coopered	cooper
 coopers	cooper
 coping	coping
+copper	copper
 copper cash	copper cash
+coppers	copper
 coppice	coppice
 coppiced	coppice
 coppices	coppice
@@ -957,6 +966,8 @@ egune's	igune
 ei-sen	ei-sen
 eight trigrams	eight trigrams
 eighty-eighth night	eighty-eighth night
+eiraku	Eiraku
+eiraku coin	Eiraku
 eiro	eiro
 eitai kuyo	perpetual memorial
 eitaijima	Eitaijima
@@ -1390,6 +1401,7 @@ goyoba	goyoba
 goyobeya	goyobeya
 goyōba	goyoba
 goza-no-ma	goza-no-ma
+gpih	GPIH
 grain of the paddy	field grain
 grand abbot	grand abbot
 grand abbots	grand abbot
@@ -1771,6 +1783,7 @@ ichi-no-ma	ni-no-ma
 ichi-no-torii	ichi-no-torii
 ichibu	ichibu
 ichibu gold piece	ichibu
+ichibu-gin	ichibu-gin
 ichigami	ichigami
 ichimoji weir	ichimoji-zeki
 ichimoji-zeki	ichimoji-zeki
@@ -2303,6 +2316,7 @@ kune	kune
 kune-gaki	kune
 kuni	kuni
 kunugi	kunugi
+kuping	kuping
 kura	kura
 kuramai	kuramai
 kurayashiki	kurayashiki
@@ -2394,6 +2408,8 @@ li	li
 li of silver	li of silver
 li river	Li River
 liang	liang
+liang-guang	Liang-Guang
+lianguang	Liang-Guang
 liao	Liao dynasty
 liao dynasty	Liao dynasty
 liao dynasty's	Liao dynasty
@@ -2559,6 +2575,8 @@ meander	meander
 meandering	meander
 medake	medake
 medium trunk	mid-trunk
+megajoule	MJ
+megajoules	MJ
 meibutsu	meibutsu
 meiji	Meiji
 meiji restoration	Restoration
@@ -2619,6 +2637,7 @@ military farm colonies	military farm colony
 military farm colony	military farm colony
 military farm-colonies	military farm colony
 military farm-colony	military farm colony
+million btu	BTU
 mimasaka	Mimasaka
 mimasaka province	Mimasaka
 mimizuka	ear mound
@@ -2671,6 +2690,7 @@ mizunomi	mizunomi
 mizunoto	mizunoto
 mizunoto-u	mizunoto-u
 mizuya	mizuya
+mj	MJ
 mlit	MLIT
 mochinoki	mochinoki
 modern consolidation	kochi seiri
@@ -2784,6 +2804,7 @@ nakamon	nakamon
 nakasendo	Nakasendo
 nakasendo shukuson taigaicho	Nakasendo Shukuson Taigaicho
 nakatsugawa	Nakatsugawa
+naked barley	naked barley
 namako	namako-tiled
 namako wall	namako-tiled
 namako walls	namako-tiled
@@ -2797,6 +2818,9 @@ nanjing	Nanking
 nanking	Nanking
 nanmu	nanmu
 nanohana	rape
+nanryo	nanryo
+nanryo nishu	nanryo
+nanryo nishugin	nanryo
 nanushi	shoya
 nara period	Nara period
 nara-period	Nara period
@@ -2972,6 +2996,7 @@ onari-mon	onari-mon
 onbashira	onbashira
 one-and-a-half-mat	tatami
 one-bay	bay
+one-bu silver	ichibu-gin
 onin war	Onin war
 onkura	kura
 onmyodo	onmyodo
@@ -3843,6 +3868,7 @@ son of heaven	Son of Heaven
 song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
+songjiang	Songjiang
 sonsha	sonsha
 soochow	Soochow
 soroban	soroban
@@ -3896,6 +3922,8 @@ staking frame	staking frame
 staking frames	staking frame
 stand age	forest stand
 stand density	forest stand
+standard cash	standard cash
+standard coin	standard cash
 state altar	state altar
 state altars	state altar
 state cult	state cult
@@ -4815,6 +4843,7 @@ zhengyi	Zhengyi
 zhengzhou	Zhengzhou
 zhili	Zhili
 zhilizhou	zhilizhou
+zhiqian	standard cash
 zhizhai shulu jieti	Zhizhai Shulu jieti
 zhonggulou	gulou
 zhonglou	gulou

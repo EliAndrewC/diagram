@@ -124,13 +124,6 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
         rc, out = run(root, [sys.executable, str(HERE / "hooks" / "lib" / "hm_arbiter.py"), "gate-held"])
         if rc:
             stops.append(out.strip().removeprefix("make done: refused - "))
-    # THE CHANGED MODULES' COVERAGE, ASKED IN SECONDS (the GM 2026-10-24): T135's landing ran the gate five minutes to learn
-    # that four lines its own tests did not reach were uncovered; `gates/cover_changed.py` asks each added engine line of the
-    # module's mirrored test directory first. COVER_OK="<reason>" for a line only a roll or another directory reaches
-    if not os.environ.get("COVER_OK"):
-        rc, out = run(root, [sys.executable, str(HERE / "gates" / "cover_changed.py")])
-        if rc:
-            stops.append(" | ".join(ln.strip() for ln in out.splitlines() if ln.startswith("cover-changed:"))[-900:] or out.strip()[-900:])
     for gate in ("claims-gate.sh", "review-gate.sh", "plan-gate.sh"):
         rc, out = run(root, [str(HERE / "gates" / gate)], env)
         if rc:
@@ -283,15 +276,77 @@ def start_cohort(root: Path) -> tuple[subprocess.Popen, Path]:
     return proc, log
 
 
+#: the gates and checks this landing started in their own sessions - stopped with it (`_stopped`, `stop_cohort`)
+RUNNING: list[subprocess.Popen] = []
+#: how often a gate beside the coverage check looks whether the check refused
+COVER_POLL_S = 2.0
+#: a gate stopped because the changed modules' coverage refused
+COVER_STOPPED = 75
+
+
+def start_cover(root: Path) -> tuple[subprocess.Popen, Path] | None:
+    """THE CHANGED MODULES' COVERAGE, BESIDE THE GATE (feature 415 T03, D6; the GM 2026-10-24 - it ran 48 s before the gate on
+    T26's landing): `gates/cover_changed.py` in its own session, its output to a log under the git dir; None under
+    COVER_OK="<reason>" (a line only a roll or another directory reaches)."""
+    if os.environ.get("COVER_OK"):
+        return None
+    log = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git") / "land-cover.log"
+    with log.open("w") as fh:
+        proc = subprocess.Popen([sys.executable, str(HERE / "gates" / "cover_changed.py")], cwd=root, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
+    RUNNING.append(proc)
+    return proc, log
+
+
+def cover_refusal(cover: tuple[subprocess.Popen, Path] | None) -> str:
+    """The coverage check's refusal once it has finished, or "" (it passed, was escaped, or is still running)."""
+    if cover is None or cover[0].poll() is None or not cover[0].returncode:
+        return ""
+    out = cover[1].read_text(errors="replace")
+    return " | ".join(ln.strip() for ln in out.splitlines() if ln.startswith("cover-changed:"))[-900:] or out.strip()[-900:] or "cover-changed refused"
+
+
+def run_gate(root: Path, target: str, cover: tuple[subprocess.Popen, Path] | None) -> int:
+    """`make <target>` in its own session, stopped the moment the coverage check beside it refuses (D6): COVER_STOPPED then."""
+    import signal  # noqa: PLC0415
+    import time  # noqa: PLC0415
+
+    proc = subprocess.Popen(["make", "--no-print-directory", target], cwd=root, start_new_session=True)
+    RUNNING.append(proc)
+    try:
+        while proc.poll() is None:
+            if cover_refusal(cover):
+                os.killpg(proc.pid, signal.SIGTERM)
+                proc.wait()
+                return COVER_STOPPED
+            time.sleep(COVER_POLL_S)
+        return proc.returncode
+    finally:
+        RUNNING.remove(proc)
+
+
+def start_fresh_block(root: Path) -> Path:
+    """THE COHORT'S FRESH BLOCK, AFTER THE PUSH (feature 415 T03, D5; the GM 2026-10-24 - a rate, never a refusal, and T26's
+    landing waited 1.4 min for it past the gate): `make cohort N=0 FRESH=48` in its own session under a lock, so a later
+    landing's block WAITS for a running one, never skipped; its record is committed by the cohort and goes out with the next
+    push. Returns its log."""
+    gd = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git")
+    log = gd / "land-fresh.log"
+    jobs = max(2, (os.cpu_count() or 4) // 2)
+    with log.open("a") as fh:
+        subprocess.Popen(["flock", str(gd / "land-fresh.lock"), "make", "--no-print-directory", "cohort", "N=0", "FRESH=48", f"JOBS={jobs}"], cwd=root, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
+    return log
+
+
 def stop_cohort(proc: subprocess.Popen | None) -> None:
     """The cohort's whole process group ended - a red gate voids what it would record, and no exit leaves it running."""
-    if proc is not None and proc.poll() is None:
-        import contextlib  # noqa: PLC0415
-        import signal  # noqa: PLC0415
+    import contextlib  # noqa: PLC0415
+    import signal  # noqa: PLC0415
 
-        with contextlib.suppress(ProcessLookupError):
-            os.killpg(proc.pid, signal.SIGTERM)
-        proc.wait()
+    for p in [proc, *RUNNING]:
+        if p is not None and p.poll() is None:
+            with contextlib.suppress(ProcessLookupError):
+                os.killpg(p.pid, signal.SIGTERM)
+            p.wait()
 
 
 def commit_records(root: Path) -> None:
@@ -314,11 +369,21 @@ def long_runs(root: Path) -> int:
         cohort, log = None, Path()
         if "done" in targets and engine_delta(root) and run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "check"])[0]:
             cohort, log = start_cohort(root)
+        cover = start_cover(root)
         try:
             for target in targets:
-                print(f"land: the green-gate stamp does not cover this content - make {target}", flush=True)
-                if make(root, target):
+                print(f"land: the green-gate stamp does not cover this content - make {target} (the changed modules' coverage beside it)", flush=True)
+                rc = run_gate(root, target, cover)
+                if rc == COVER_STOPPED:
+                    print(f"land: the changed modules' coverage refused - make {target} stopped, nothing landed:\n  {cover_refusal(cover)}", file=sys.stderr)
+                    return 1
+                if rc:
                     print(f"land: make {target} is red - nothing landed; fix it and run make land again", file=sys.stderr)
+                    return 1
+            if cover is not None:
+                cover[0].wait()
+                if why := cover_refusal(cover):
+                    print(f"land: the changed modules' coverage refused - nothing landed:\n  {why}", file=sys.stderr)
                     return 1
             if cohort is not None:
                 print("land: the gate is green - waiting for the landing cohort beside it", flush=True)
@@ -335,6 +400,14 @@ def long_runs(root: Path) -> int:
         if rc:
             print("land: the gates it named are green, but the green-gate stamp still refuses - nothing landed:\n" + out, file=sys.stderr)
             return 1
+    else:
+        cover = start_cover(root)
+        if cover is not None:
+            cover[0].wait()
+            RUNNING.remove(cover[0])
+            if why := cover_refusal(cover):
+                print(f"land: the changed modules' coverage refused - nothing landed:\n  {why}", file=sys.stderr)
+                return 1
     if engine_delta(root) and run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "check"])[0]:
         print("land: no landing cohort on this engine - make cohort-landing", flush=True)
         if make(root, "cohort-landing"):
@@ -381,11 +454,15 @@ def main(argv: list[str]) -> int:
         return 2
     # A STOPPED LANDING STOPS ITS RUNS (405 T79): Python's default SIGTERM exits without `finally`, so a landing stopped by hand
     # left its gate and the cohort beside it running as orphans (batch 6); raised as SystemExit, the cleanup runs
+    import contextlib  # noqa: PLC0415
     import signal  # noqa: PLC0415
 
     def _stopped(*_a: object) -> None:
         # ...the gate too: `make done` runs in this process's group (the cohort in its own session, stopped by the `finally`)
         signal.signal(signal.SIGTERM, signal.SIG_IGN)
+        for p in RUNNING:  # ...the gate and the coverage check run in their own sessions (feature 415 D6)
+            with contextlib.suppress(ProcessLookupError):
+                os.killpg(p.pid, signal.SIGTERM)
         os.killpg(os.getpgrp(), signal.SIGTERM)
         sys.exit(143)
 
@@ -407,6 +484,7 @@ def main(argv: list[str]) -> int:
         return 2
     if claims:
         print(f"land: the claims round is owed ({claims[0][:160]}) - the gate runs beside it; the push waits for it", flush=True)
+    engine_delta_landed = engine_delta(root)  # the fresh block follows an engine landing, after its push (D5)
     if rc := long_runs(root):
         return rc
     if why := wait_for_claims(root, tasks, d):
@@ -440,6 +518,8 @@ def main(argv: list[str]) -> int:
         print(f"land: the push failed (exit {rc}) - its ticks reverted, nothing landed; fix it and run make land again", file=sys.stderr)
         return rc
     print(f"land: {' '.join(tasks)} landed and ticked")
+    if engine_delta_landed:
+        print(f"land: the cohort's fresh block started after the push - a rate, never a refusal; its log {start_fresh_block(root)}", flush=True)
     return 0
 
 

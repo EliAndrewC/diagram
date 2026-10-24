@@ -17477,5 +17477,104 @@
   "variants": [
    "compactification"
   ]
+ },
+ "Eiraku": {
+  "def": "A Chinese copper coin of the Ming dynasty's Yongle reign (Eiraku in Japanese) that passed in Japan; the law of 1609 valued it at four times the common bita coin.",
+  "variants": [
+   "Eiraku",
+   "Eiraku coin"
+  ]
+ },
+ "assay": {
+  "def": "A test of how much gold or silver a coin actually holds, as against the fineness the mint prescribed for it; the Meiji mint assayed the old Edo-period coins.",
+  "variants": [
+   "assay",
+   "assays",
+   "assayed"
+  ]
+ },
+ "ichibu-gin": {
+  "def": "A silver coin worth one bu, a quarter of a ryo, struck from 1837; four made a ryo, though they held far less silver than a ryo's worth of chogin.",
+  "variants": [
+   "ichibu-gin",
+   "one-bu silver"
+  ]
+ },
+ "nanryo": {
+  "def": "A coin of nearly pure silver (about 98%), first struck in 1772 and worth two shu, so that eight made a ryo.",
+  "variants": [
+   "nanryo",
+   "nanryo nishugin",
+   "nanryo nishu"
+  ]
+ },
+ "biao": {
+  "def": "A wide, fine cotton cloth woven around Songjiang, near Shanghai, in the 1600s; its finest and coarsest grades sold at different prices.",
+  "variants": [
+   "biao",
+   "biao cloth"
+  ]
+ },
+ "BTU": {
+  "def": "British thermal unit, a measure of heat: the energy that warms a pound of water by one degree Fahrenheit. The modern reconstruction prices fuel by the million BTU of heat it gives, so that wood, charcoal and coal can be compared.",
+  "variants": [
+   "BTU",
+   "BTUs",
+   "million BTU"
+  ]
+ },
+ "GPIH": {
+  "def": "The Global Price and Income History Group at the University of California, Davis, which publishes transcribed historical price and wage series as spreadsheets.",
+  "variants": [
+   "GPIH"
+  ]
+ },
+ "naked barley": {
+  "def": "A barley whose husk falls away when it is threshed, so the grain needs no polishing to be eaten.",
+  "variants": [
+   "naked barley"
+  ]
+ },
+ "Liang-Guang": {
+  "def": "The two Guang provinces of Qing China, Guangdong and Guangxi in the far south, governed together under one governor-general; the salt district that supplied them took the same name.",
+  "variants": [
+   "Liang-Guang",
+   "Lianguang"
+  ]
+ },
+ "kuping": {
+  "def": "The Qing treasury's standard weight for silver, the most common in China: a kuping tael was 36.9 grams in the 1500s and 37.3 grams after the mid-1600s. Grain tribute paid in money used a slightly lighter tael, and transit taxes and customs a slightly heavier one.",
+  "variants": [
+   "kuping"
+  ]
+ },
+ "copper": {
+  "def": "The copper coin of early-1900s Beijing, worth ten of the old cash: in Beijing's price records a tiao is 100 cash or ten coppers, and in 1918-1919 the exchange shops gave 136 to 140 coppers for a silver dollar.",
+  "variants": [
+   "copper",
+   "coppers"
+  ]
+ },
+ "standard cash": {
+  "def": "The government's official copper coin, cast at its mints to a set weight. Capital cash, local strings and private or debased cash were all counted against it.",
+  "variants": [
+   "standard cash",
+   "standard coin",
+   "zhiqian"
+  ]
+ },
+ "Songjiang": {
+  "def": "A prefecture of the Lower Yangzi delta, by modern Shanghai, whose cash and rice prices the local writer Ye Mengzhu recorded from the late Ming into the Kangxi reign.",
+  "variants": [
+   "Songjiang"
+  ]
+ },
+ "MJ": {
+  "def": "A megajoule, a modern measure of energy equal to a million joules. Burning a kilogram of seasoned, air-dried wood gives about 15.5 of them.",
+  "variants": [
+   "MJ",
+   "megajoule",
+   "megajoules"
+  ]
  }
 }

@@ -109,7 +109,21 @@ def manifest(root: Path) -> dict[str, Any]:
     # generators and manifests, which the stamp's `*.py` pattern does not see) - a manifest edit is a fallback shape
     engine = sorted({str(p.relative_to(root)) for p in gs._area_files(root, area, patterns)} | {p for p in listed if is_engine(p)})
     tests = sorted(p for p in listed if p.startswith(f"{gs._prefix(area)}tests/"))  # the area is the root, "", since feature 329
-    return {"engine": _blob_ids(root, engine), "tests": _blob_ids(root, tests), "tooling": state.tooling_hash(root)}
+    from l7r.diagram.ci import gate_config
+
+    scripts = [
+        p
+        for p in subprocess.run(["git", "-C", str(root), "ls-files", "-co", "--exclude-standard", "--", "scripts"], capture_output=True, text=True, check=True).stdout.splitlines()
+        if p.strip() and (root / p).is_file()
+    ]
+    return {
+        "engine": _blob_ids(root, engine),
+        "tests": _blob_ids(root, tests),
+        "tooling": state.tooling_hash(root),
+        # ...AND WHAT THE PLANNER READS SINCE FEATURE 415 (D3): the gate's own configuration, and `scripts/` file by file
+        "gate_config": gate_config.config_hash(root),
+        "scripts": _blob_ids(root, sorted(scripts)),
+    }
 
 
 def _blob_ids(root: Path, paths: list[str]) -> dict[str, str]:
@@ -126,7 +140,9 @@ class Changed:
     removed: tuple[str, ...]  # the subset no longer in the tree
     test_modules: tuple[str, ...]  # `test_*.py` files under tests/ that differ, added, or removed
     other_tests: tuple[str, ...]  # any other changed file under tests/ - a fallback shape
-    tooling_moved: bool
+    tooling_moved: bool  # the tooling tests' hash (`state.tooling_hash`) - no longer a reason to run everything (feature 415)
+    gate_config_moved: bool = False  # what decides how the gate's tests run (`gate_config.config_hash`); a baseline without it counts as moved
+    scripts: tuple[str, ...] = ()  # files under scripts/ that differ, added, or removed
 
 
 def changed(before: dict[str, Any], now: dict[str, Any]) -> Changed:
@@ -143,6 +159,8 @@ def changed(before: dict[str, Any], now: dict[str, Any]) -> Changed:
         test_modules=tuple(p for p in tests if is_module(p)),
         other_tests=tuple(p for p in tests if not is_module(p)),
         tooling_moved=before.get("tooling") != now.get("tooling"),
+        gate_config_moved="gate_config" not in before or before.get("gate_config") != now.get("gate_config"),
+        scripts=tuple(diff("scripts")),
     )
 
 
@@ -227,6 +245,7 @@ class Plan:
     baseline_tests: list[str] = field(default_factory=list)
     full_fraction: float = FULL_FRACTION  # the knob `plan()` compares the projection against, carried in the plan file so a run records the value it was judged by
     paths: list[str] = field(default_factory=list)  # the test modules this run may reach - pytest's positional arguments (feature 237, FR-001)
+    reuse_tooling: bool = False  # a scripts/ change selected the tooling tests: they reuse on their recorded reads, as on a full plan (feature 415 D4)
 
     def dump(self) -> dict[str, Any]:
         return self.__dict__
@@ -295,14 +314,21 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
     ch = changed(before, manifest(root))
     if ch.other_tests:  # before the tooling rule: a conftest edit moves the tooling hash too, and the specific reason is the useful one
         return Plan("full", f"a non-module file under tests/ changed: {ch.other_tests[0]}" + (f" (+{len(ch.other_tests) - 1})" if len(ch.other_tests) > 1 else ""))
-    if ch.tooling_moved:
-        return Plan("full", "the tooling changed (Makefile, pyproject, lockfiles, scripts/)")
+    # ...THE GATE'S CONFIGURATION, NOT THE TOOLING (feature 415, D3; the GM 2026-10-24): `scripts/`, a Makefile help line or a
+    # new target moved `tooling_hash` and ran all 10,376 tests for a change that reached 143 (research.md R1)
+    if ch.gate_config_moved:
+        return Plan("full", "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)")
     non_py = [p for p in ch.engine if not p.endswith(".py")]
     if non_py:
         return Plan("full", f"an engine file that is not Python changed: {non_py[0]}")
     closures: dict[str, list[str]] = json.loads(tests.read_text(encoding="utf-8"))
     baseline_tests = sorted(closures)
-    if not ch.engine and not ch.test_modules:
+    scripts_modules: list[str] = []
+    if ch.scripts:  # ...a scripts/ change selects what reads scripts/ (feature 415, D4)
+        from l7r.diagram.ci import gate_config
+
+        scripts_modules = sorted(set(gate_config.tooling_modules(root)) | set(gate_config.scripts_readers(root)))
+    if not ch.engine and not ch.test_modules and not scripts_modules:
         return Plan("incremental", "nothing the baseline exercised has changed", [], [], [], [], baseline_tests, FULL_FRACTION, [])
     hit = import_time_change(root, db, before, ch)
     if hit:
@@ -310,10 +336,11 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
     touched = contexts_touching(db, root, ch.engine)
     affected_tests = sorted({c.split("|", 1)[0] for c in touched if "|" in c and not c.startswith("fixture:")})
     affected_fixtures = sorted({c[len("fixture:") :].split("|", 1)[0] for c in touched if c.startswith("fixture:")})
-    changed_modules = list(ch.test_modules)  # nodeids and the manifest are both repository-relative (feature 329)
+    changed_modules = sorted(set(ch.test_modules) | set(scripts_modules))  # nodeids and the manifest are both repository-relative (feature 329)
     pl = Plan(
         "incremental",
-        f"{len(ch.engine)} engine file(s) and {len(ch.test_modules)} test module(s) changed",
+        f"{len(ch.engine)} engine file(s) and {len(ch.test_modules)} test module(s) changed"
+        + (f", {len(ch.scripts)} scripts/ file(s) ({len(scripts_modules)} module(s) that read scripts/)" if ch.scripts else ""),
         list(ch.engine),
         changed_modules,
         affected_tests,
@@ -321,6 +348,7 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
         baseline_tests,
         FULL_FRACTION,
         existing(root, reachable_modules(affected_tests, changed_modules, affected_fixtures, closures)),
+        reuse_tooling=bool(scripts_modules),
     )
     reached = over_the_fraction(pl, closures)
     if reached > pl.full_fraction * len(baseline_tests):

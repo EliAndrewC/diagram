@@ -1,7 +1,7 @@
 # Brief - feature 412, the basket in every era. Session 3: write (new questions B and D, China)
 
 You are a FRESH session for the record edits of one part of one feature. This brief is the whole of what you need; do not
-read the feature's spec or plan. Work in this clone (`/diagram/.clones/diagram-money`). The project's CLAUDE.md files apply
+read the feature's spec or plan. Work in this clone (`/diagram/.clones/diagram-money-pages`). The project's CLAUDE.md files apply
 to you, the research record's `CLAUDE.md` above all, along with `research/money-requests.md`.
 
 **What is asked.** gm-assistant prices one standard basket in each era the record cites (issue EliAndrewC/diagram#13,
@@ -14,6 +14,8 @@ as the pass says, write what the page says, or SILENT). Sessions 1 and 2 wrote t
 
 Write TWO new money questions, each reserved with `make reserve KIND=question KEY=<heading id>` and tagged as 0250 or 0260
 are:
+
+## Your items
 
 - `B` **"What did a year's necessities and a day's labor cost in China, era by era?"** (new) - one block per era: the official price table after the ruling of 1497 (0272 holds it: rice 25 guan a shi,
   a tael 80 guan - name it, add only what its source adds); Beijing

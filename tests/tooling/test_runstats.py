@@ -258,6 +258,8 @@ def test_a_gate_records_each_phase_and_this_runs_plan(tmp_path) -> None:  # noqa
     result.write_text(json.dumps({"mode": "incremental", "reason": "2 engine file(s)", "selected": 143, "collected": 10380}))
     out = runstats.end(g)
     assert (out["plan_mode"], out["plan_reason"], out["selected"], out["collected"]) == ("incremental", "2 engine file(s)", 143, 10380)
+    result.write_text(json.dumps({"mode": "full", "reason": "r", "selected": ["a::x", "b::y"], "collected": ["a::x", "b::y", "c::z"]}))
+    assert (runstats.end(g)["selected"], runstats.end(g)["collected"]) == (2, 3), "the selection plugin's lists, as counts"
     runstats.start(g)
     assert "phases" not in runstats.end(g), "a new gate starts with no phases"
     assert runstats.main(["phase", g, "x", "1"]) == 0 and runstats.end(g)["phases"] == {"x": 1.0}

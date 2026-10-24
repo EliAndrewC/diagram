@@ -1,7 +1,7 @@
 # Brief - feature 412, the basket in every era. Session 2: write (new questions A and C, Japan)
 
 You are a FRESH session for the record edits of one part of one feature. This brief is the whole of what you need; do not
-read the feature's spec or plan. Work in this clone (`/diagram/.clones/diagram-money`). The project's CLAUDE.md files apply
+read the feature's spec or plan. Work in this clone (`/diagram/.clones/diagram-money-pages`). The project's CLAUDE.md files apply
 to you, the research record's `CLAUDE.md` above all, along with `research/money-requests.md`.
 
 **What is asked.** gm-assistant prices one standard basket in each era the record cites (issue EliAndrewC/diagram#13,
@@ -15,6 +15,8 @@ question 1 into 0273/0279/0265 and the wages into 0250: read `briefs/handoff.md`
 
 Write TWO new money questions, each reserved with `make reserve KIND=question KEY=<heading id>` and tagged as 0249 or 0277
 are (look at `research/tags.json` and `contents.json`):
+
+## Your items
 
 - `A` **"What did a year's necessities cost in Japan, era by era?"** (new) - one block per era: Osaka 1620-1650; Osaka 1690-1739 (Kumon's rice by decade, Iwahashi; the Genroku-Hoei-Kyoho
   recoinages fall inside it: say so); Kyoto

@@ -1,0 +1,50 @@
+{
+  "utc": "2026-10-24T17:58:25Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 280,
+  "result": "failed: test-full",
+  "commit": "e82a5fa16",
+  "first_failure_s": 214.6,
+  "last_failure_s": 217.5,
+  "failed_tests": 2,
+  "failed_names": [
+    "tests/tooling/test_incremental_gate.py::test_e_each_fallback_shape_forces_a_full_run[tooling]",
+    "tests/tooling/test_measured_surface.py::test_ci_is_hashed_now_and_the_other_two_populations_are_untouched"
+  ],
+  "host": {
+    "load": [
+      7.28,
+      9.76
+    ],
+    "mem_avail_mb": [
+      8348,
+      8662
+    ],
+    "cpu_temp_c": [
+      86.0,
+      79.0
+    ],
+    "stall_s": {
+      "cpu": 8.6,
+      "io": 1.2,
+      "io_full": 0.9,
+      "memory": 0.4
+    },
+    "throttle_ms": {
+      "core": 1698,
+      "package": 969
+    }
+  },
+  "phases": {
+    "preflight": 23.0,
+    "static": 1.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 7.0,
+    "pytest": 263.0,
+    "test-full": 271.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/gate/_pool.py (+4)"
+}
