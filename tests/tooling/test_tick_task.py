@@ -762,6 +762,9 @@ def test_cover_changed_reads_the_added_lines_and_the_mirrored_test_directory(tmp
     assert cc.mirrored(tmp_path, "l7r/diagram/a/b.py") == "tests/a"
     assert cc.mirrored(tmp_path, "l7r/diagram/a/deep/c.py") == "tests/a", "climbs to the nearest that exists"
     assert cc.mirrored(tmp_path, "l7r/diagram/z/c.py") == "tests"
+    (tmp_path / "tests" / "tooling" / "ci").mkdir(parents=True)
+    assert cc.mirrored(tmp_path, "l7r/diagram/ci/incremental.py") == "tests/tooling/ci", "the gate's machinery is tested as tooling"
+    assert "tooling" in cc.MARKERS and "not rolls_map" in cc.MARKERS, "the tooling tests asked for by name, no rolls"
 
 
 def test_the_coverage_check_writes_its_coverage_data_in_its_own_directory(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001

@@ -47,9 +47,20 @@ def added_lines(diff: str) -> dict[str, set[int]]:
     return {p: s for p, s in out.items() if s}
 
 
+#: packages whose tests do not mirror them under `tests/` (the gate's own machinery is tested as tooling)
+MIRRORS = {"l7r/diagram/ci/": "tests/tooling/ci"}
+#: the marker expression of the check's run: no map rolls (seconds, not minutes), and the TOOLING tests asked for by name -
+#: `tests/conftest.py` skips the tooling tree on a run that does not ask for it while the tooling is unchanged since the last
+#: green gate, so a `ci/` line only those tests reach read as uncovered (feature 415 T05's landing, `incremental.py`:357)
+MARKERS = "not rolls_map and (tooling or not tooling)"
+
+
 def mirrored(root: Path, path: str) -> str:
     """The test directory that mirrors an engine module: `l7r/diagram/<pkg>/<mod>.py` -> `tests/<pkg>/`, climbing to the nearest
-    one that exists; `tests` at worst."""
+    one that exists; `tests` at worst; a package `MIRRORS` names, its own."""
+    for prefix, tests in MIRRORS.items():
+        if path.startswith(prefix) and (root / tests).is_dir():
+            return tests
     rel = Path(path).relative_to("l7r/diagram") if path.startswith("l7r/diagram/") else Path(path).relative_to("l7r")
     d = Path("tests") / rel.parent
     while d != Path("tests") and not (root / d).is_dir():
@@ -75,7 +86,7 @@ def uncovered(root: Path, added: dict[str, set[int]]) -> dict[str, list[int]]:
             "-p",
             "no:cacheprovider",
             "-m",
-            "not rolls_map",
+            MARKERS,
             "--cov-fail-under=0",
             *(f"--cov={s}" for s in sources),
             f"--cov-report=json:{report}",

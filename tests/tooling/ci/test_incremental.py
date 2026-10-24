@@ -568,6 +568,11 @@ def test_plan_returns_a_full_run_when_the_projection_is_over_the_fraction(tmp_pa
     monkeypatch.setattr(incremental, "contexts_touching", lambda *a: set())
     pl = incremental.plan(tmp_path)
     assert pl.mode == "full" and "fraction" in pl.reason and pl.paths == [], "a full run keeps the trees"
+    # ...unless the planner runs for a landing (feature 415 T05, D8): what the change reaches, however much
+    monkeypatch.setenv("INCR_NO_CUTOFF", "1")
+    pl = incremental.plan(tmp_path)
+    assert pl.mode == "incremental" and pl.paths == ["t/test_a.py"], "a landing runs what it reaches"
+    monkeypatch.delenv("INCR_NO_CUTOFF")
     # and the other side: one changed module holding a small share of the baseline stays incremental, with paths
     (bdir / incremental.TESTS).write_text(json.dumps({f"t/test_{k}.py::x": [] for k in "abcdefghij"}), encoding="utf-8")
     pl = incremental.plan(tmp_path)
