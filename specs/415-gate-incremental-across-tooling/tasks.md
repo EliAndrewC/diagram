@@ -6,8 +6,9 @@
 
 ## Tasks
 
-- [ ] T01 The run record says what ran, why, and where the time went: plan mode, reason and selected count; each phase's seconds (D1, D2; FR-002, FR-005)
+- [x] T01 The run record says what ran, why, and where the time went: plan mode, reason and selected count; each phase's seconds (D1, D2; FR-002, FR-005)
       research: rendering
+      verify: DONE. landed: phases and this run's plan in the gate's run record; runstats tests green (20), the new test red without
 - [ ] T02 A tooling change no longer runs everything: a planner hash of the gate's configuration, the scripts/ readers selected, the tooling tests reused on an incremental plan (D3, D4; FR-001)
       research: rendering
 - [ ] T03 The landing waits only on what can refuse it: the cohort's fresh block after the push, cover-changed beside the gate (D5, D6; FR-003, FR-004)
