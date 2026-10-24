@@ -348,27 +348,33 @@
    "verdict": "CLEAR"
   },
   "T106": {
-   "section_sha256": "f75eda41ca79275644223a368217c4cc82de27cc5c777e7a75aa3374961b4207",
+   "section_sha256": "ad29c77e67cc8fb792612fd2d10d4bcaf5c0217122570047cb243c2d5afac21a",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D132",
-     "summary": "The woodpile seats in fixture_seats._seats are turned by the household's roll(SALT['woodpile'] + 0.5), the way the coop's seats are, and _wood_shed passes the household's roll instead of zero. The flank seats are moved back to min(0.1 hh, hh/2 - w/2) so that D78 accepts them.",
+     "id": "D132 (the turn)",
+     "summary": "the woodpile's four recorded seats turned by the household's roll(SALT['woodpile'] + 0.5), as the coop's by roll(105.5); _wood_shed passes the household's roll where it passed zero",
      "class": "within",
-     "why": "Unchanged since its CLEAR verdict. Turning the shed seats by the household's roll is what T106 is: D78 filed the roll as T106. Pulling the flank seats back is the change that lets the turn do anything. It keeps D78's rule against standing forward of the house, and does not relax it."
+     "why": "This is T106 as filed: D78 records the roll as set down and filed as T106, and amendment 10 has the knots family (T106 named in FR-003a) solved in this feature. Rendering stays 0043's GUESS (behind or beside the house), the side rolled because the page attests none - no departure from the research."
     },
     {
-     "id": "Approach 6 (the exit taken)",
-     "summary": "Seed 7 knotted once the sheds were turned. The plan takes exit (a), giving the gather 0081's tail rule, instead of measuring more room. It cites T107's 2026-10-22 finding that room measured worse for this class of knot.",
+     "id": "D132 (the flanks)",
+     "summary": "the two flank seats stand with their front end no further forward than the front wall, min(0.1 hh, hh/2 - w/2), so D78 admits them",
      "class": "within",
-     "why": "Choosing an exit is choosing a mechanism. It does not narrow anything the GM asked for. Amendment 8 says room within the research is allowed and must not be refused out of hand. It does not require room before a rule taken from the research. Amendment 7 asks the session to follow the research, and (a) does that with 0081's own rule. It is within the request. Whether T107's measurement covers this particular knot (a tee that strands a way, not the fence gap D83 dealt with) is a question for FR-001's checklist, not for fidelity."
+     "why": "Brings the flank seats inside D78's own 'never forward of the front wall' rule rather than relaxing it; without it the turn changed nothing (both flanks refused on every farm), which would defeat T106's purpose. It honors the accepted constraint, it does not except it."
     },
     {
      "id": "D133",
-     "summary": "knots.next_gather: when a lone end's tee onto the other node's lane is refused, the tee is tried again with each lane it would strand cut back to the nearest vertex standing on another way. This applies only where the cut tail is under 40 ft (tails_cut_back, _TAIL_CUT_FT).",
+     "summary": "knots.next_gather: where a lone end's tee is refused, ask again with every lane the tee would strand cut back to its nearest vertex on another way, where the cut tail is under 40 ft (_TAIL_CUT_FT, new)",
      "class": "within",
-     "why": "Amendment 10 and FR-003a require the knots family, T106 included, to be solved in 405. This knot is caused by T106's own change: seed 7 knots only once the sheds are turned, and T106 cannot land while it knots. So fixing it here is T106's own work, not a finding on untouched code that FR-002 would file as a new task. The 40 ft limit is 0081's rule as the page states it ('A tail of under 40 ft beyond a crossing is cut'), so it follows the research and is not a carve-out against it. The case measured (a 34 ft tail) falls inside the rule. Which vertex the tail is cut back to is honestly labeled UNRESEARCHED. D83's two gaps and D78 are left unchanged."
+     "why": "Seed 7's knot is a consequence of T106's own change, so mending it is T106's work rather than a finding on unchanged code for FR-002; amendment 10 asks for the knots problem solved here, and amendment 7 asks that the research be followed - this is 0081's own rule ('a tail of under 40 ft beyond a crossing is cut'), labeled historically accurate, the cut-back vertex labeled UNRESEARCHED. The new constant is the page's figure, not a moved one. Unchanged from the text last judged CLEAR."
+    },
+    {
+     "id": "Exit (a) for seed 7, room (b) not measured (re-answered item 6)",
+     "summary": "seed 7's knot mended by the page's tail rule (a) without first measuring more room (b); the re-answer corrects the first approach's claim that room was measured worse for this knot class (T107's probes measured the fence-gap knot)",
+     "class": "within",
+     "why": "Amendment 8's purpose is that the session not refuse the room route and reach for something 'really, really difficult' instead, while the GM also says room is not to be widened every time something goes wrong. Here the mend is the page's own rule, one bounded extra form of the gather, measured clean on seed 7 and seeds 1-48 with the pinned rows; it neither avoids room for a harder search nor narrows anything the GM asked. The correction of the earlier factual premise is to the good: the first approach's item 6 (still in the section above the re-answer) rested on a measurement that was of a different knot, and the re-answer is what now governs."
     }
    ],
    "verdict": "CLEAR"
@@ -893,6 +899,12 @@
   },
   "### T106 Decisions": {
    "sha256": "3d293bae9c338ccf5928eab4972bb8ec5a7e7fce5293b2b2779e5a4cac7b3299",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T106 Approach (re-answered 2026-10-24T23:04Z)": {
+   "sha256": "1cc318db24845a98cf00ff82e1d26a3edb2052e1070c98f11498328a2417d82b",
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
@@ -5216,6 +5228,41 @@
      "summary": "knots.next_gather: when a lone end's tee onto the other node's lane is refused, the tee is tried again with each lane it would strand cut back to the nearest vertex standing on another way. This applies only where the cut tail is under 40 ft (tails_cut_back, _TAIL_CUT_FT).",
      "class": "within",
      "why": "Amendment 10 and FR-003a require the knots family, T106 included, to be solved in 405. This knot is caused by T106's own change: seed 7 knots only once the sheds are turned, and T106 cannot land while it knots. So fixing it here is T106's own work, not a finding on untouched code that FR-002 would file as a new task. The 40 ft limit is 0081's rule as the page states it ('A tail of under 40 ft beyond a crossing is cut'), so it follows the research and is not a carve-out against it. The case measured (a 34 ft tail) falls inside the rule. Which vertex the tail is cut back to is honestly labeled UNRESEARCHED. D83's two gaps and D78 are left unchanged."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T106 Approach (checklist part A)",
+    "### T106 Approach (re-answered 2026-10-24T23:04Z)",
+    "### T106 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D132 (the turn)",
+     "summary": "the woodpile's four recorded seats turned by the household's roll(SALT['woodpile'] + 0.5), as the coop's by roll(105.5); _wood_shed passes the household's roll where it passed zero",
+     "class": "within",
+     "why": "This is T106 as filed: D78 records the roll as set down and filed as T106, and amendment 10 has the knots family (T106 named in FR-003a) solved in this feature. Rendering stays 0043's GUESS (behind or beside the house), the side rolled because the page attests none - no departure from the research."
+    },
+    {
+     "id": "D132 (the flanks)",
+     "summary": "the two flank seats stand with their front end no further forward than the front wall, min(0.1 hh, hh/2 - w/2), so D78 admits them",
+     "class": "within",
+     "why": "Brings the flank seats inside D78's own 'never forward of the front wall' rule rather than relaxing it; without it the turn changed nothing (both flanks refused on every farm), which would defeat T106's purpose. It honors the accepted constraint, it does not except it."
+    },
+    {
+     "id": "D133",
+     "summary": "knots.next_gather: where a lone end's tee is refused, ask again with every lane the tee would strand cut back to its nearest vertex on another way, where the cut tail is under 40 ft (_TAIL_CUT_FT, new)",
+     "class": "within",
+     "why": "Seed 7's knot is a consequence of T106's own change, so mending it is T106's work rather than a finding on unchanged code for FR-002; amendment 10 asks for the knots problem solved here, and amendment 7 asks that the research be followed - this is 0081's own rule ('a tail of under 40 ft beyond a crossing is cut'), labeled historically accurate, the cut-back vertex labeled UNRESEARCHED. The new constant is the page's figure, not a moved one. Unchanged from the text last judged CLEAR."
+    },
+    {
+     "id": "Exit (a) for seed 7, room (b) not measured (re-answered item 6)",
+     "summary": "seed 7's knot mended by the page's tail rule (a) without first measuring more room (b); the re-answer corrects the first approach's claim that room was measured worse for this knot class (T107's probes measured the fence-gap knot)",
+     "class": "within",
+     "why": "Amendment 8's purpose is that the session not refuse the room route and reach for something 'really, really difficult' instead, while the GM also says room is not to be widened every time something goes wrong. Here the mend is the page's own rule, one bounded extra form of the gather, measured clean on seed 7 and seeds 1-48 with the pinned rows; it neither avoids room for a harder search nor narrows anything the GM asked. The correction of the earlier factual premise is to the good: the first approach's item 6 (still in the section above the re-answer) rested on a measurement that was of a different knot, and the re-answer is what now governs."
     }
    ]
   }

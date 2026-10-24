@@ -331,6 +331,20 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 
 - **D133** `knots.next_gather`: where a lone end's tee onto the other node's lane (`teed_onto`) is refused, it is asked again with every lane the tee would strand - an end on the stretch the tee cuts away - cut back to the nearest vertex before that end standing on another way, where the tail cut is under 40 ft (`tails_cut_back`, `_TAIL_CUT_FT`). Seed 7 with the sheds turned, measured 2026-10-24 (probes in a detached worktree, `make cohort N=1 SEED=7`): two households' ways teed onto the connector 2.2 ft apart, about 20 degrees apart; every gather was refused - the moves for `needle_joins`, the 3 ft pass by `households_only` (the connector at both nodes), the tee of lane 1 onto lane 10 because it stranded a third household's way, which met lane 10 and ran 34 ft on to end on the leg the tee cut away, and the reverse tee for `needle_loops`. With the tail cut back to where that way meets lane 10, the tee is admitted and seed 7 rolls clean (7/7). Rendering: historically accurate as the page states it - 0081: "A tail of under 40 ft beyond a crossing is cut"; which vertex it is cut back to UNRESEARCHED (the nearest the stranded end that stands on another way).
 
+### T106 Approach (re-answered 2026-10-24T23:04Z)
+
+1. **The goal, in the world.** No two farms' wood sheds stand at one bearing off their houses: each household's shed takes its first seat - off the back wall or a flank - by its own roll, as its coop does; and the web the moved steadings leave keeps its knots gathered.
+2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off a house wall (D78). The coop's seats turned by the household's roll (feature 328). 0081: ends within 25 ft joined at one point; a tail of under 40 ft beyond a crossing is cut. D83's two gaps.
+3. **Where each comes from.** R (0043; 0081) and O (the coop's roll, `_seats`).
+4. **Do they describe the world here?** Yes, measured 2026-10-24: the flank seats always stood 0.8 ft forward of the front wall, so D78 refused both (the unit test on the 46 x 28 ft house); and with the sheds turned, cohort seed 7 left two households' ways teed onto the connector 2.2 ft apart, every gather refused - the tee because it stranded a third way whose 34 ft tail ended on the leg it cut away (probes in a detached worktree, `make cohort N=1 SEED=7`).
+5. **The order.** The seats turned and the flanks brought back (D132); the stranded tail cut back to its meeting where the tee is refused (D133); claims; unit tests; seeds 1-48 and the pinned rows.
+6. **The exits.** (e) conform for the seats. For seed 7's knot, (a) the gather given 0081's tail rule (D133). Room (b) was not measured for this knot: T107's room probes (2026-10-22) measured the fence-gap knot, a different one; the page's own rule mends this one without moving a household.
+7. **The search smell.** None: one more form asked where the tee alone is refused, bounded by the lanes ending on the leg it cuts.
+8. **The budget.** 45 min with its landing; spent past it on seed 7's probe.
+9. **Done, measured.** The unit tests (red without each change); seeds 1-48 and the pinned rows 54/54, measured 2026-10-24 (`make cohort N=48`); `make cover-changed`; the claims round; the landing cohort.
+10. **Before moving a constant.** n/a - `_TAIL_CUT_FT` is new, the page's own 40 ft.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
 ## T127 - the carried claims findings
 
 ### T127 Approach (checklist part A)

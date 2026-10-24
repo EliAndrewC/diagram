@@ -392,7 +392,7 @@ def tails_cut_back(lanes: Sequence[Mapping[str, Any]], i: int, old: Poly, new: P
 
     Research:
         a stranded tail cut back to its meeting - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut
-        which vertex it is cut back to - UNRESEARCHED: the nearest the stranded end that stands on another way"""
+        which vertex it is cut back to - UNRESEARCHED: the nearest the stranded end that stands on another way, the teed lane not counted"""
     out: dict[int, Poly] = {}
     for m, ln in enumerate(lanes):
         p = _pts(ln)

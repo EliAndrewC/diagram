@@ -25225,6 +25225,23 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/knots.py::_TAIL_CUT_FT#a tail cut": {
+  "body": "08329fb693c0e8de",
+  "claim": "a tail cut - village-lanes.drawing: a tail of under 40 ft beyond a crossing is cut",
+  "code": "18274e27f3313797",
+  "core": "4f6abb3ccbbe5fc1",
+  "date": "2026-10-24",
+  "note": "40 ft is the page's own \"tail of under 40 ft beyond a crossing\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::_WHOLE_RULES#plumbing": {
   "code": "45f37584081d2cd5",
   "core": "881fa61431772e84",
@@ -25563,10 +25580,28 @@
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#a joining lane ended where it first meets a way": {
   "body": "04c4253b972e77ac",
   "claim": "a joining lane ended where it first meets a way - village-lanes.drawing: a lane laid only to join two others ends where it first meets one (`joiner_first_meeting`, 405 T135)",
-  "code": "7d43dd0fd0b39fbc",
-  "core": "9460a1c6d8719440",
+  "code": "ed2e75f9bdb3f066",
+  "core": "9bf0a731ddf180ff",
   "date": "2026-10-24",
   "note": "the joiner fallback is tried at the knot",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
+  ],
+  "triaged": "2026-10-24",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#a lane the tee strands kept": {
+  "body": "2440b2fad996e4d7",
+  "claim": "a lane the tee strands kept - village-lanes.drawing: a tail of under 40 ft beyond a crossing is cut (`tails_cut_back`, 405 T106), asked only where the tee alone is refused",
+  "code": "dde9f5858d534654",
+  "core": "9bf0a731ddf180ff",
+  "date": "2026-10-24",
+  "note": "tails_cut_back is tried only after the plain tee fails the judge, and it keeps the stranded lane joined where it already meets the web",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -25580,8 +25615,8 @@
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#a lone end cut where it comes alongside": {
   "body": "51a24b9ddd9222d1",
   "claim": "a lone end cut where it comes alongside - village-lanes.drawing: \"the maps cut it where it comes alongside and let it meet the other as a T\" (`teed_back`, 405 T134), taken only where its T stands past the knot's reach and the web keeps no more knots",
-  "code": "e17bf2fdeb127683",
-  "core": "9460a1c6d8719440",
+  "code": "66f5bd98b980956e",
+  "core": "9bf0a731ddf180ff",
   "date": "2026-10-23",
   "note": "teed_back cut at the alongside run; the T must stand past the 25 ft reach and add no knot, keeping ends from nearly meeting",
   "pages": {
@@ -25598,8 +25633,8 @@
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#a lone end moved onto the node, cut where it comes alongside": {
   "body": "04c4253b972e77ac",
   "claim": "a lone end moved onto the node, cut where it comes alongside - village-lanes.drawing: an end running back along another way under 20 degrees is cut where it comes alongside (`onto_cut_back`, 405 T135)",
-  "code": "b3550a2782faca51",
-  "core": "9460a1c6d8719440",
+  "code": "923c1b53004992b6",
+  "core": "9bf0a731ddf180ff",
   "date": "2026-10-24",
   "note": "the end is gathered onto the node (§22) with legs under 20 degrees dropped, \"cut it where it comes alongside\"",
   "pages": {
@@ -25610,15 +25645,16 @@
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#a lone end teed onto the other lane": {
-  "body": "51a24b9ddd9222d1",
+  "body": "2440b2fad996e4d7",
   "claim": "a lone end teed onto the other lane - village-lanes.drawing: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)",
-  "code": "447aa4dbc8a63a3f",
-  "core": "9460a1c6d8719440",
-  "date": "2026-10-23",
-  "note": "teed_onto tried only after both moves are refused (sliver or split web), the end run onto the other's side as a T",
+  "code": "4a14ee24ac53a011",
+  "core": "9bf0a731ddf180ff",
+  "date": "2026-10-24",
+  "note": "the tee is tried only after both moved_onto directions are refused, and runs the end onto the side of a lane at the other node, as the page says",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -25627,14 +25663,13 @@
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
    "0081-village-lanes.drawing.html:b3423a58c3ff2774"
   ],
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": {
   "body": "51a24b9ddd9222d1",
   "claim": "lane ends gathered - village-lanes.drawing: ends within 25 ft meet at one node",
-  "code": "3873dc7293b9c546",
-  "core": "9460a1c6d8719440",
+  "code": "42770647bfaddd4e",
+  "core": "9bf0a731ddf180ff",
   "date": "2026-10-23",
   "note": "ends within _KNOT_FT*KNOT_MARGIN (25 ft) put on one node",
   "pages": {
@@ -25648,12 +25683,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#the order of the last forms": {
-  "body": "04c4253b972e77ac",
+  "body": "2440b2fad996e4d7",
   "claim": "the order of the last forms - UNRESEARCHED: `teed_onto`, then `teed_back`, then `onto_cut_back`, then `joiner_first_meeting` - the end's own approach kept longest first",
-  "code": "c66e88e7b9779f6e",
-  "core": "9460a1c6d8719440",
+  "code": "ff0d7440ee77a30c",
+  "core": "9bf0a731ddf180ff",
   "date": "2026-10-24",
-  "note": "the page gives no order among the T, cut-alongside and joiner forms; the code tries onto_cut_back then joiner_first_meeting for each mover in turn, which matches the claim's order",
+  "note": "the loops run teed_onto (with the new tails-cut variant inside it, which its own claim places), then teed_back, then onto_cut_back, then joiner_first_meeting; the page gives these forms but no order among them",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -25661,17 +25696,18 @@
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#which lanes an end moved onto the node is cut back along": {
   "body": "04c4253b972e77ac",
   "claim": "which lanes an end moved onto the node is cut back along - UNRESEARCHED: the lanes at that node, the ways it would run back along there",
-  "code": "51a96e1073192024",
-  "core": "9460a1c6d8719440",
+  "code": "b1336a787aa74b3d",
+  "core": "9bf0a731ddf180ff",
   "date": "2026-10-24",
   "note": "the code takes the lanes at the target node other than i, as the claim says; the page is silent on which ways",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#which node a knot gathers at": {
-  "code": "839696442954b936",
-  "core": "9460a1c6d8719440",
+  "code": "7671b179693d73f2",
+  "core": "9bf0a731ddf180ff",
   "date": "2026-10-17",
   "note": "the page is silent on which node moves",
   "pages": {},
@@ -25682,12 +25718,13 @@
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#which ways a lone end is cut back onto": {
   "body": "04c4253b972e77ac",
   "claim": "which ways a lone end is cut back onto - UNRESEARCHED: a lane at the other node, or the lane its own end stands on",
-  "code": "e150beb955270135",
-  "core": "9460a1c6d8719440",
+  "code": "be83619fcc32e735",
+  "core": "9bf0a731ddf180ff",
   "date": "2026-10-24",
   "note": "matches the teed_back candidate set (lanes at the other node, plus the lane the mover's node stands on); §25 says only \"another way\" and does not say which ways to try",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::onto_cut_back#cut where it comes alongside": {
@@ -25756,6 +25793,34 @@
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
    "0081-village-lanes.drawing.html:9b3232646d7ce694"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::tails_cut_back#a stranded tail cut back to its meeting": {
+  "body": "54b219f09325435f",
+  "claim": "a stranded tail cut back to its meeting - village-lanes.drawing: a tail of under 40 ft beyond a crossing is cut",
+  "code": "40f9c7b4c51b57e4",
+  "core": "0b5ee785b239c7f2",
+  "date": "2026-10-24",
+  "note": "cuts only where the tail beyond the meeting is under 40 ft (`tail &gt;= _TAIL_CUT_FT` breaks), as the page says",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::tails_cut_back#which vertex it is cut back to": {
+  "body": "54b219f09325435f",
+  "claim": "which vertex it is cut back to - UNRESEARCHED: the nearest the stranded end that stands on another way, the teed lane not counted",
+  "code": "2768d06906069e32",
+  "core": "0b5ee785b239c7f2",
+  "date": "2026-10-24",
+  "note": "the code walks back from the stranded end to the nearest inner vertex on a lane other than i or m, within 40 ft; the page says a short tail beyond a crossing is cut, but not which vertex or whether the teed lane counts",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::teed_back#a lane cut where it comes alongside": {
@@ -52610,8 +52675,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#coop seats": {
-  "code": "56553f2b187946e1",
-  "core": "35c562e9417fd7f0",
+  "code": "7d4a151748b8ee6e",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "beside the house, a GUESS on the page",
   "pages": {
@@ -52621,11 +52686,12 @@
   "rests": [
    "0045-chickens-and-chicken-coops.drawing.html:94909ee119011e40"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#household grave corner": {
-  "code": "12361bf85521d294",
-  "core": "35c562e9417fd7f0",
+  "code": "7b123e753b1c60f7",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "SE or NW first",
   "pages": {
@@ -52636,20 +52702,22 @@
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:b3e7f0b846f18b0f",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:d6a078d4e683edf6"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#household grave off the house's corner": {
-  "code": "7a046a9a962d3aca",
-  "core": "35c562e9417fd7f0",
+  "code": "dce07984c7c995de",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "the cited pages give the plot's corner, SE or NW first, but no distance from the house, so UNRESEARCHED holds for the 14 ft offset",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy": {
-  "code": "dadc98480763ff90",
-  "core": "35c562e9417fd7f0",
+  "code": "6da0e92928e6e1f4",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "away from the house, jittered; behind or beside where there is no privy",
   "pages": {
@@ -52660,11 +52728,12 @@
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:770a6419fbce2b73",
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots": {
-  "code": "410d137cb14f45ae",
-  "core": "35c562e9417fd7f0",
+  "code": "1a727825981ba470",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "the page records the eight set spots",
   "pages": {
@@ -52675,13 +52744,14 @@
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:69009a6eaa9aef08",
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy by the stable": {
   "body": "5aa6ad5698f453ba",
   "claim": "privy by the stable - farm-privies-and-their-night-soil-benjo.drawing: by the stable, at the house's stable end against the front wall's clear strip",
-  "code": "ddd223853b405b65",
-  "core": "35c562e9417fd7f0",
+  "code": "eb6e474d5cc9b6db",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-21",
   "note": "seat at the stable (-x) end against the front wall's gap; \"under the eaves by the stable\"",
   "pages": {
@@ -52691,13 +52761,14 @@
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy in the front yard": {
   "body": "5aa6ad5698f453ba",
   "claim": "privy in the front yard - GUESS farm-privies-and-their-night-soil-benjo.drawing: its edge 8 ft out from the front wall - the wall gap `g` (`WALL_GAP_FT`) and `PRIVY_FRONT_STEP_FT` past it - the page's own guess",
-  "code": "226c29cb3b87f376",
-  "core": "35c562e9417fd7f0",
+  "code": "fe2a1c8701cfac41",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-21",
   "note": "the near edge stands at hh/2 + g + (8 - WALL_GAP_FT), the page's guessed 8 ft out from the front wall",
   "pages": {
@@ -52708,11 +52779,12 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:111af1d739cc6920",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy in the yard off the back wall": {
-  "code": "391f5a2f280c1786",
-  "core": "35c562e9417fd7f0",
+  "code": "58c62d6633f587df",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "the yard seat is WALL_GAP_FT 3.5 + PRIVY_YARD_STEP_FT 6 = 9.5 ft off the back wall, but the page says \"a ken (about 6 ft) off the back wall\"; the claim itself says \"past the page's ken\"",
   "pages": {
@@ -52722,11 +52794,12 @@
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
   ],
+  "triaged": "2026-10-24",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats": {
-  "code": "69bdf93e8cfab397",
-  "core": "35c562e9417fd7f0",
+  "code": "a8e64ab3f16138ec",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "72.7% sunny sector from 18 ft out; the yard, the front and the stable; no barn",
   "pages": {
@@ -52739,11 +52812,12 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:c5d84fdf328cced8",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy sun-side radii": {
-  "code": "c2e2da44e71dc58c",
-  "core": "35c562e9417fd7f0",
+  "code": "9c88440c2fb1cc13",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "the radii run from 18 ft out to privy_sun_reach_ft, matching \"at distances stepping out from 18 ft\" and the 48 ft reach",
   "pages": {
@@ -52755,40 +52829,44 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy sun-side step": {
-  "code": "f420304552367eb3",
-  "core": "35c562e9417fd7f0",
+  "code": "021737f6715ef988",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "the page says the distances step out but gives no step size, so the 4 ft step stays UNRESEARCHED",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#retirement house": {
-  "code": "af0248e17f16c63e",
-  "core": "35c562e9417fd7f0",
+  "code": "c6b26eae8eb27a61",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "nothing in the bundle answers it",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#seat positions along each wall": {
-  "code": "a0889aadb36e90ab",
-  "core": "35c562e9417fd7f0",
-  "date": "2026-10-12",
-  "note": "nothing in the bundle answers it",
+  "body": "c86c3d714e0760da",
+  "claim": "seat positions along each wall - UNRESEARCHED: privy 0.3 / 0.40 / -0.35 hw, coop 0.34 hw spread and 0.3 hh, wood shed 0.25 hw and 0.1 hh, a flank brought back until its front end is at the front wall",
+  "code": "ccc96904821113e1",
+  "core": "1efd820bc25f3627",
+  "date": "2026-10-24",
+  "note": "the fractions match the code (privy 0.3/0.40/-0.35 hw, coop 0.34 hw and ±0.3 hh, wood shed ±0.25 hw), and min(hh*0.1, hh/2 - w/2) keeps a flank shed's front end at the front wall; the pages give the walls but not positions along them",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#shrine corner": {
-  "code": "e20d4003a06af17c",
-  "core": "35c562e9417fd7f0",
+  "code": "c3463cb843fac69e",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "NW 45, NE 35, SW 20",
   "pages": {
@@ -52799,25 +52877,27 @@
    "0219-household-shrines-yashikigami.drawing.html:219399d6edd7b513",
    "0219-household-shrines-yashikigami.drawing.html:2f759729d0a736bd"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#shrine off its corner": {
-  "code": "1e6c7dd3c0cdafaf",
-  "core": "35c562e9417fd7f0",
+  "code": "26b4992fe645c030",
+  "core": "1efd820bc25f3627",
   "date": "2026-10-12",
   "note": "nothing in the bundle answers it",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#wood shed seats": {
-  "body": "5aa6ad5698f453ba",
-  "claim": "wood shed seats - GUESS firewood-stacks-and-sheds-kigoya.drawing: off the back wall and the flanks",
-  "code": "e1d19fc097d1e70d",
-  "core": "35c562e9417fd7f0",
-  "date": "2026-10-19",
-  "note": "the back and flank seats are \"behind or beside the house\", a GUESS the page records",
+  "body": "c86c3d714e0760da",
+  "claim": "wood shed seats - GUESS firewood-stacks-and-sheds-kigoya.drawing: off the back wall and the flanks, the first turned by the household's roll",
+  "code": "e4e8c51396a4eb45",
+  "core": "1efd820bc25f3627",
+  "date": "2026-10-24",
+  "note": "two back-wall seats and two flank seats, the first one picked by the household's roll; flank seats are clamped so they never reach past the front wall, which keeps \"never in the front yard\"; the page records where the shed stands as a GUESS",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
   },
@@ -52825,7 +52905,6 @@
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_sun_sector#sunny-side sector": {
@@ -52864,11 +52943,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#the fallback wall places are tried back wall first, then the west and east flanks, each walked end to end in WALL_SLIDE_FT (4 ft) steps, and the first clear one is taken": {
+  "code": "8bf02d2e52737674",
+  "core": "8bf02d2e52737674",
+  "date": "2026-10-24",
+  "note": "the fallback wall places are tried back wall first, then the west and east flanks, each walked end to end in WALL_SLIDE_FT (4 ft) steps, and the first clear one is taken",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wall places a ken out": {
   "body": "3d4e24e58d228eb6",
   "claim": "wall places a ken out - GUESS firewood-stacks-and-sheds-kigoya.drawing: offered a ken (`WOODSHED_STEP_FT`, the page's GUESS) beyond the wall gap (the page's DEVIATION)",
-  "code": "ca5748082477b9f9",
-  "core": "c1e1aef9fc438613",
+  "code": "ffc0869bfc116b8c",
+  "core": "8bf02d2e52737674",
   "date": "2026-10-24",
   "note": "it offers places at the gap plus a 6 ft ken, about 9.5 ft out, a GUESS with the gap as the page's DEVIATION",
   "pages": {
@@ -52878,15 +52966,16 @@
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats": {
-  "body": "3d4e24e58d228eb6",
+  "body": "8d152757e12f5920",
   "claim": "wood shed seats - GUESS firewood-stacks-and-sheds-kigoya.drawing: behind or beside the house, never the front yard",
-  "code": "3d12210630f9dcc9",
-  "core": "c1e1aef9fc438613",
+  "code": "3ab16024a14ab8ef",
+  "core": "8bf02d2e52737674",
   "date": "2026-10-24",
-  "note": "seats off the back wall and the flanks, with front-yard places filtered out; the page's GUESS",
+  "note": "the shed is offered the back wall and flank seats (first one rolled), then wall places with front-wall places filtered out, and shed_off_a_wall refuses anything forward of the front; the page records the placement as a GUESS",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
   },
@@ -53261,8 +53350,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room joined": {
-  "code": "f8d730de93c97326",
-  "core": "ad39d64e14bca2aa",
+  "code": "863e160b42b3a5dc",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "FixtureUnlaid is raised rather than standing the bath room apart; it is exempt from `keep` as part of the house",
   "pages": {
@@ -53273,11 +53362,12 @@
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
    "0044-baths-on-the-farm-furo.drawing.html:f4b4951f028d4a66"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room's wall per house": {
-  "code": "73195ccfb10c808b",
-  "core": "ad39d64e14bca2aa",
+  "code": "d213b6b0603075a0",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "bath_wall is rolled per house among the attested walls",
   "pages": {
@@ -53289,31 +53379,34 @@
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
    "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part and bath room slide 4 ft": {
-  "code": "efab080340d9ea11",
-  "core": "ad39d64e14bca2aa",
+  "code": "9cc4d55ea1aceae5",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "the questions are silent on both",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no fixture on the door's room": {
-  "code": "1a6c057dd0fca3c6",
-  "core": "ad39d64e14bca2aa",
+  "code": "cb8ecf3d76dd3378",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "nothing cited gives a clear room about the door",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no fixture on the way in": {
-  "code": "658b2a73a1cbb9fb",
-  "core": "ad39d64e14bca2aa",
+  "code": "0e3ce1e93aeac8c7",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "the way in through the front break must stay passable for a lane; the bath room's exemption follows from it being joined to the house",
   "pages": {
@@ -53326,11 +53419,12 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no seat, no persimmon": {
-  "code": "37bf22bfeb347652",
-  "core": "ad39d64e14bca2aa",
+  "code": "57f0239166dc9ae3",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "seat None drops the tree",
   "pages": {
@@ -53340,11 +53434,12 @@
   "rests": [
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:65dfdac106fa4297"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon front or behind": {
-  "code": "886276ffd574b063",
-  "core": "ad39d64e14bca2aa",
+  "code": "722f46518a20a1b6",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "each house rolls against the hamlet's persimmon_front share",
   "pages": {
@@ -53355,11 +53450,12 @@
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:591f08ea01d694fd",
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon in its own grove bands": {
-  "code": "ce90771233076567",
-  "core": "ad39d64e14bca2aa",
+  "code": "bd50a5e41fc79702",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "`fruit` is dropped from `taken` for the persimmon alone",
   "pages": {
@@ -53369,40 +53465,44 @@
   "rests": [
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order": {
-  "code": "5eb4954d33a62a06",
-  "core": "ad39d64e14bca2aa",
+  "code": "320377c92ebd0b73",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "the questions are silent",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#stepped outward": {
-  "code": "8e7a2660082076e3",
-  "core": "ad39d64e14bca2aa",
+  "code": "67bc640d0e50225a",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "the questions are silent on stepping for the general fixture",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the kura's walls too": {
-  "code": "d08e48c8b1028af7",
-  "core": "ad39d64e14bca2aa",
+  "code": "5d6ed79f711cc914",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "the page puts the shed beside or behind the house and is silent on the annex",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the privy's reach": {
-  "code": "2f275d750696236e",
-  "core": "ad39d64e14bca2aa",
+  "code": "7a9f673846fd626e",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-12",
   "note": "within_reach_of at 48 ft, refused by name",
   "pages": {
@@ -53413,13 +53513,14 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2024bed7766a5bb4",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:bc74b262a32416b5"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": {
   "body": "2e6053a878457bd0",
   "claim": "wood shed's walls - GUESS firewood-stacks-and-sheds-kigoya.drawing: the house's walls, a short step off the house - never the byre's or the retirement house's",
-  "code": "7fdbeb17a6c6bef2",
-  "core": "ad39d64e14bca2aa",
+  "code": "5030d59ab1907d20",
+  "core": "933f7b3dadaf8563",
   "date": "2026-10-19",
   "note": "the walls are the house's own walls (plus the kura annex), not the byre's or the retirement house's, matching \"a short step off the house\"",
   "pages": {
@@ -53430,7 +53531,7 @@
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::outward#plumbing": {
