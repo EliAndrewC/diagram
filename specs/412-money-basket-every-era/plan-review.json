@@ -78,6 +78,132 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
+  },
+  "## T01 - question 1 and the Japanese wages (D1)": {
+   "sha256": "8ef68f3044b9b3f920a2230fb0137406d560b1343d67eabbb0c15d5cdd0ec665",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "e78190998c672dc2121e1fdc34ffefc050b5a57e9d8e751d5b742c830c780020",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "e18d227aba672e16dc39bc2d34a30bc5a89c27bb7e4b4a614155ea5b2c3f2468",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - questions A and C, Japan (D2, D3)": {
+   "sha256": "3db82792463cfc8cced9931a059ba11f8f9d678b1105d512e754c532b9b6924a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "df171d98b1173da1610dff7c1a81758d5ff7580fc58e5bcf0f2917437822bdcb",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "fe9b8e6ce619d050b3c0a5a58904582c5a06763d1af76c89a3ca12ec443bcc74",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - questions B and D, China (D4)": {
+   "sha256": "2c6ffa49542cb15b4eb1341cafd202d1a06e318d03f1890021e3c2b4af09912e",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "bf328259c442547e447531347a5a6a8c1acb09d4bcde484bb1486208f480dab5",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "1760b86e93dddc035d46100ba45ed924c351b831bc082697041bba17c79d7d77",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - the implementation check (D6)": {
+   "sha256": "1c71a70035a05e28e91b782069ea2444e5deca70a8fa0d40bd6554552b2bef48",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "3ce4949270324bd18e2a7ad99af7d095703251d143a93c4d9f8478d87f35087a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Decisions": {
+   "sha256": "f87d6fc45e877ff9f31c2e82557642247f1aecfb3e8ce9d6c34392e9714aac46",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T05 - the reply on #13 (D7)": {
+   "sha256": "7221783d44f73cbe65494658cb4d5faa80279b748ecf610ee6276b004b974b61",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "664e380d05128f0f62bac7557b432ab48664563cf3c6cf76acfb7bb44f1ca311",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Decisions": {
+   "sha256": "3953485b2b07dd0747f2136fdc85b583283d126bf9e187ba197c78197dbda8fb",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T06 - the era marks (D5)": {
+   "sha256": "f2dd85ffc62bf0355966be957c337f52e172cc9ab70ffd553a30460c66c2f8d6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "672d36ebaa13b8e4d82a2525829d0ceea299f1f87ba20f2af2a2cf1280896dbb",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Decisions": {
+   "sha256": "72bd5f4e4df850b7dc6ddf704631de9a800aafbd3f52b69e01bd010ca5188527",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T07 - close: report and land": {
+   "sha256": "270f0913d0c7949e3cb2cbf0ff72a7a70c0a57e66528f990e2d8b0a7cdc81769",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "e5423407d8590f743228c05927b4e34c16cee449c6fb42cb73a7d014b0d90ffb",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Decisions": {
+   "sha256": "4ccf0d6126560888ed215c31a2d41f65d78ec6ff62d5f776d52a8b4338b5677a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -271,6 +397,108 @@
      "summary": "Order: page sessions, implementation check, reply and landing, then era marks and a second landing",
      "class": "within",
      "why": "Sequencing only; nothing dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## T01 - question 1 and the Japanese wages (D1)",
+    "## T02 - questions A and C, Japan (D2, D3)",
+    "## T03 - questions B and D, China (D4)",
+    "## T04 - the implementation check (D6)",
+    "## T05 - the reply on #13 (D7)",
+    "## T06 - the era marks (D5)",
+    "## T07 - close: report and land",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "### T07 Approach (checklist part A)",
+    "### T07 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T01-goal-wage-places",
+     "summary": "T01's goal: a reader of 0250 sees the unskilled day wage by decade for Kyoto and Edo; the exits name only the 1780s wages as a written silence.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Question 3 asks for a day wage 'in each era and place of question 2', and FR-002 puts Japan's wages in 0250. The Japanese eras confirmed on #13 include three Osaka rows: osaka-1620, osaka-1700 and osaka-1780. Exit 6's 1780s silence covers osaka-1780. Nothing in the block covers osaka-1620 or osaka-1700, and #13's census already names an Osaka 1620 laborer wage (0.8-1.2 monme, 0257), so 'no source' cannot justify leaving it out. Fix: T01's goal and done line should say that every confirmed Japanese era (all Osaka, Kyoto and Edo rows) gets a day wage in 0250, or a silence written with its search."
+    },
+    {
+     "id": "T01-nearest-dates",
+     "summary": "Question 1's figures for the nearest dates found, an outside figure labeled ATTESTED ONLY FOR its case, and a silence written as a silence (0265's Kyoto rent) instead of a borrowed figure.",
+     "class": "within",
+     "why": "'or the nearest dates found' is the issue's own wording, and the #13 milestone reported Kyoto rent as SILENT, which gm-assistant accepted."
+    },
+    {
+     "id": "T02-japan-A-C",
+     "summary": "The Japanese basket per era goes in 0286 (question A) and the coins in silver in 0287 (question C), over the ids confirmed on #13.",
+     "class": "within",
+     "why": "FR-002 and questions 2 and 4."
+    },
+    {
+     "id": "T02-not-found-and-city",
+     "summary": "A good not found is named as not found per era and not filled from another era; a figure from a source for another city says whose it is.",
+     "class": "within",
+     "why": "Question 2: 'goods not found left out (the engine prices the basket over the goods found and names the rest)'. gm-assistant confirmed osaka-1700 with its city sources named on exactly this footing."
+    },
+    {
+     "id": "T03-china-B-D",
+     "summary": "The Chinese goods and day wage per era go in 0288 and the money in silver in 0289; official prices are labeled ATTESTED ONLY FOR official prices.",
+     "class": "within",
+     "why": "FR-002, and gm-assistant's confirmation of beijing-1500 and beijing-1736 as official prices."
+    },
+    {
+     "id": "T03-tael-dollar",
+     "summary": "0.75 and 0.71 tael a dollar are both stated, and the choice is left to the GM's review.",
+     "class": "within",
+     "why": "Question 4 asks for each unit with its source. This states both, the same 'state the figures, don't pick' approach gm-assistant accepted for the monme constant."
+    },
+    {
+     "id": "T03-arbiter-cap",
+     "summary": "Review rounds on 0288/0289 are capped at round 5 by the arbiter's ruling, with edits through make apply-edits only.",
+     "class": "within",
+     "why": "Review process only; it changes nothing about what the record must answer."
+    },
+    {
+     "id": "T04-D6",
+     "summary": "make impl-check F=412, with each touched question's line in implementation-check.md.",
+     "class": "within",
+     "why": "FR-004."
+    },
+    {
+     "id": "T05-D7",
+     "summary": "One reply on #13 after T01-T03 and T06, covering every census group, every figure, its verdict and fragment file, with the Nakasendo stations named.",
+     "class": "within",
+     "why": "FR-001, FR-005 and FR-006. T07 lands once, so there is one landed batch and one reply at it."
+    },
+    {
+     "id": "T06-out-of-era",
+     "summary": "An amount outside every era's years is passed over with its reason in backfill.md, and is never given a borrowed era gm-assistant did not ask for; osaka-1620 is borrowed for the Takamiya fares and 0185's fees.",
+     "class": "within",
+     "why": "FR-003 covers only amounts whose era this feature defines. The borrows match gm-assistant's words on #13. gm-assistant also confirmed that Kyoto 1652-56 borrows osaka-1620, which the block does not name. The block's own rule allows that borrow, so this does not block, but all three borrows (Takamiya fares, the 1611/1658 fees, Kyoto 1652-56) are owed."
+    },
+    {
+     "id": "T06-0288-0289-untouched",
+     "summary": "The T06 marking session leaves 0288/0289 alone.",
+     "class": "within",
+     "why": "Read as a rule about which session edits these files (T03's arbiter-capped rounds own them, with edits through apply-edits), not as an exclusion of their amounts. FR-003 still requires 0288/0289's amounts in these eras to be marked, by T03's route, and T06's own done line, make money-candidates CHECK=1 exiting 0 across the whole record (SC-003), enforces that. If 0288/0289's amounts went unmarked, this would be a NOT LEGITIMATE narrowing of FR-003."
+    },
+    {
+     "id": "T07-D8",
+     "summary": "Land once T01-T06 are ticked; the GM-review row lands open; feature report written.",
+     "class": "within",
+     "why": "Process only."
     }
    ]
   }
