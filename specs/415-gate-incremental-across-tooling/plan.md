@@ -58,9 +58,23 @@ tooling change end to end. T07 closes.
 10. **Before moving a constant.** `FULL_FRACTION` stays for the gate outside landings; its dropping at landings rests on T04.
 11. **Before fitting things into room.** n/a.
 
+### T05 Approach (re-answered 2026-10-24T18:39Z)
+
+1. **The goal, in the world.** However much a change reaches, the landing runs that and no more; the baseline stays accurate without a landing paying for it.
+2. **The constraints.** R2's numbers; one background refresh at a time; never on a landing's path; the gate outside a landing keeps today's fraction (spec US1 scenario 4 names landings); the box's shared 10 GB memory cap (the refresh is a gate's worth of workers beside the session's own work).
+3. **Where each comes from.** O: the GM's item 6; M: `research.md` R2 (67 s fixed + 12.7 ms per selected test; the selection 1,492 -> 2,657 over three runs since a full one).
+4. **Do they describe the world here?** Yes, measured 2026-10-24 (`make gate-costs`, R2): a landing's incremental test phase costs at most about what a full one does (158 s at 60%, 188 s at 80%, 197 s full), so the cutoff saves a landing nothing; the growth is what costs, a landing paying for every change since the last full run.
+5. **The order.** The landing's gate without the cutoff; the refresh after the push, in a detached worktree; its baseline copied into the clone, the coverage paths rewritten.
+6. **The exits.** (a) refresh in the clone itself - not taken: the session's next edit moves the tree under it and voids the run, and its gate lock would hold the next landing; (b) refresh after every incremental landing - not taken: a full run each time spends ~200 s of the box for a selection of a few hundred tests; (c) the 25% rule in a worktree - taken.
+7. **The search smell.** None.
+8. **The budget.** 120 min with its landing.
+9. **Done, measured.** Unit tests: a landing's plan over the fraction stays incremental; the refresh starts at 25% and not under it, never two at once; its baseline lands in the clone with the paths rewritten and not over a newer one. SC-004.
+10. **Before moving a constant.** `FULL_FRACTION` stays for the gate outside landings; the landing passes `INCR_NO_CUTOFF=1`; the refresh's 25% is R2's.
+11. **Before fitting things into room.** n/a.
+
 ### T05 Decisions
 
-- **D8** To be decided on T04's numbers (amended into the spec as FR-006's rule, and reviewed); the refresh run's record carries its reason (`refresh: <the rule's trigger>`, D2). Rendering: none.
+- **D8** On R2's numbers (spec FR-006, amended): `make land`'s gate runs with `INCR_NO_CUTOFF=1`, which `incremental.plan` reads to skip the `FULL_FRACTION` check (the gate outside a landing keeps it). After a successful push whose gate ran incremental and selected at least `REFRESH_FRACTION` (0.25) of its baseline, `land.py` starts `scripts/gates/refresh_baseline.py` detached: under a lock, it adds a detached worktree at the pushed commit, runs `make done INCR_FORCE="refresh: <n> of <N> baseline tests selected"` there (a fresh worktree has no verification to short-circuit on), and when it is green copies the worktree's `gate-baseline/` into the clone's - each coverage file path rewritten from the worktree's root to the clone's - unless the clone's baseline was saved after the refresh started; it removes the worktree, and copies the run record into the clone's `dev/run-log/`, committed path by path. Rendering: none.
 
 ## T06 - measured end to end (SC-006)
 
