@@ -52,7 +52,11 @@ said where the figure stands.
 
 New. Chogin fineness and pure silver a monme by recoinage; the koban's gold; a ryo and a bu in silver by the market rate (0277's
 Osaka series named; the pre-1787 chronology labeled secondary); the nanryo and ichibu-gin's own silver; Bassino and Ma's 3.11 g
-stated with its basis SILENT and Bassino's GPIH note. The copper rates stay in 0277 (named, not repeated).
+stated with its basis SILENT and Bassino's GPIH note. Mon and kanmon in grams of silver for EVERY Japanese era of D2: where
+0277 holds the market rate (Osaka 1787-1859, Edo 1781-1842, Osaka 1766, Kyoto 1867) it is named and its decade converted at the
+era's chogin; outside it - osaka-1620, osaka-1700, kyoto-1745 before 1766, osaka-1780 before 1787, edo-1860 - question C gives
+the legal rate (the 1609 rate of 50 monme and 4 kanmon a ryo, the 1700 rate of 60 and 4) and the market rate where a source
+read gives one, or SILENT with the search named. osaka-1700's row note names the recoinages of 1695-1714 inside it.
 
 ## D4 - questions B and D, China (FR-002)
 
@@ -64,7 +68,7 @@ jingqian, cash a tael by point rates; a decade series SILENT, its unread sources
 ## D5 - the era marks (FR-003)
 
 Once gm-assistant confirms the ids (#13), each era goes into `research/assets/money-eras-awaiting.json` with its place and
-years; amounts in the record's fragments within 25 years of an era are marked with it (`make money-candidates` lists them,
+years; amounts in the record's fragments are marked with it where their author judges it close enough (`make money-candidates` lists them,
 feature 413's procedure), and `specs/413-money-tooltip-on-the-record/backfill.md`'s lines for them are removed as they are
 marked; the Takamiya-Toriimoto fares of 1665 (0260 and its notes), marked against `kyoto-1745` at gm-assistant's request
 (#13, issuecomment-6386826304), are re-marked to `osaka-1620`. When gm-assistant's table carries an era, `make money-conversions` refreshes the copy and the era leaves the awaiting

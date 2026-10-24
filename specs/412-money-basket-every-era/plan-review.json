@@ -1,0 +1,278 @@
+{
+ "feature": "412-money-basket-every-era",
+ "blocks": {
+  "preamble": {
+   "sha256": "453c8cddb6070fa5cfbf0b61389f631dbbb8d460ede9c90815d55d41651f6608",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "842b1255367c4eb9cd76432153d4c7867ddb9f138c57c0916269077c47db0551",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "5e15e2f4962f9b43162306cb3daba4a70e2f58a32080d18f7981aaf70ac803fe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "a3ea84735aa43805ad6fcd21caf97b83ecc86930760910f9fffc800bbf741c45",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - question 1 and the Japanese wages (FR-001, FR-002)": {
+   "sha256": "b0a3fbec1248f9d352003d0f5f8efd14ceded506807edcb598adcc94fd0d068e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - question A, the basket in Japan era by era (FR-002)": {
+   "sha256": "fc0565896c0a8d620b8bf598bc49f3aa7124eab7ffa4822ffaceb2884430b1bb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - question C, Japanese coins in silver (FR-002)": {
+   "sha256": "767156d881983a268efe948072ee429fc5b9bb795dbd854a6a5eb301ab5a45d0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - questions B and D, China (FR-002)": {
+   "sha256": "633d76a55ec0ce81ceff831a2af576b1a4cb83fbdb80f2234dd5c4bfba8cac2f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - the era marks (FR-003)": {
+   "sha256": "c3a04f9c49bfeb1306e06a072dbac00fa1e755befb0aa4ad82d9d819794644cd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D6 - the implementation check (FR-004)": {
+   "sha256": "4193ffa77b3646041935b20e5782bd50f50801079af888a5e3424ea8ca27c854",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D7 - the replies (FR-001, FR-005, FR-006)": {
+   "sha256": "39ba670cee78dfeea30edd882b63ca17fff9fae7529762a2c9f3df3b76f27f7a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "a21b10bbfada24b31e9c790dea01d6c8e620445686994bfc8577429a486b33a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - question 1 and the Japanese wages (FR-001, FR-002)",
+    "## D2 - question A, the basket in Japan era by era (FR-002)",
+    "## D3 - question C, Japanese coins in silver (FR-002)",
+    "## D4 - questions B and D, China (FR-002)",
+    "## D5 - the era marks (FR-003)",
+    "## D6 - the implementation check (FR-004)",
+    "## D7 - the replies (FR-001, FR-005, FR-006)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary/TechCtx-scope",
+     "summary": "Research-record only: Q1 into 0273/0279/0265, Japan wages into 0250, new questions A-D, three write page sessions plus one check session; no code, map or canon change; GPIH spreadsheets cited by sheet and row; arithmetic by a measure/ script labeled as this project's",
+     "class": "within",
+     "why": "FR-002 placement exactly; the request asks for figures in question files or era tables and nothing in code; labeling derived arithmetic matches the diagram's own reply ('labeled as our assumption')."
+    },
+    {
+     "id": "Constitution/Performance",
+     "summary": "Generator bookends N/A; question tasks research: physical; record checks stay green",
+     "class": "within",
+     "why": "Process conformance only; decides nothing about what the GM asked for."
+    },
+    {
+     "id": "D1-salt-fuel",
+     "summary": "Kyoto 1745-54 salt per koku (Mitsui) with per-kg arithmetic from a stated weight; salt per person: Huang Guoxin for Qing, Japan SILENT with the search; Kyoto firewood by weight and Edo/Osaka charcoal, per-million-BTU as labeled arithmetic",
+     "class": "within",
+     "why": "Q1 asks salt per kg, firewood with its weight to reach a price per million BTU, and salt per person; Q1's region order puts Qing as cross-check, so a Qing figure beside a searched Japan SILENT answers it."
+    },
+    {
+     "id": "D1-room",
+     "summary": "0265: Kyoto/Osaka rent SILENT, Edo 1804-30 named as nearest; nearest figures ATTESTED ONLY FOR their place and years",
+     "class": "within",
+     "why": "Q1 says 'Kyoto (or Osaka) ... or the nearest dates found'; reporting the nearest with its verdict is the request's own fallback."
+    },
+    {
+     "id": "D1-wages",
+     "summary": "0250 gains Mitsui's unskilled day wage by decade for Kyoto and Edo; Edo book rate said so; 1780s and 1872-79 SILENT",
+     "class": "within",
+     "why": "Q3 (wage per era, Japan) and FR-002 (Japan wages in 0250). D2 additionally places a wage beside every Japanese era, so the Mitsui gaps are a source finding, not a cut in which eras get a wage."
+    },
+    {
+     "id": "D2-question-A",
+     "summary": "One table per Japanese era for all ten confirmed ids (osaka-1620 ... edo-1860): each basket good found in its own unit and money with source, goods not found named, the era's day wage beside it; cautions stated",
+     "class": "within",
+     "why": "Q2 'per era and place, a price per unit for each good found (at least rice)... goods not found left out'; the ten ids plus D4's eight plus the pending Song row are every id gm-assistant confirmed (comments 6386690660, 6386826304, 6386920252). The osaka-1700 recoinage row note gm-assistant endorsed is not stated in any block; it is an unstated detail, not an exclusion (aside)."
+    },
+    {
+     "id": "D3-silver-coins",
+     "summary": "Question C: chogin fineness and pure silver a monme by recoinage; koban gold; ryo and bu in silver by market rate (0277's Osaka series named, pre-1787 chronology labeled secondary); nanryo and ichibu-gin; Bassino and Ma's 3.11 g stated with basis SILENT",
+     "class": "within",
+     "why": "Q4's monme, ryo and bu in grams of pure silver, market rate where it moved; with D7's per-era coin column this implements gm-assistant's ruling to convert each era at the coinage in circulation (6386690660)."
+    },
+    {
+     "id": "D3-mon-only-in-0277",
+     "summary": "Mon (and kanmon) in silver handled only by reference: 'The copper rates stay in 0277 (named, not repeated)'; no block gives a mon or kanmon rate a home for the Japanese eras outside 0277's span",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Q4 asks 'mon (and kanmon), monme, ryo and bu in Japan by decade', and the request's own canon line says '0277 has Osaka 1787-1859 and Edo 1781-1842'. Against the ten Japanese eras of D2, that leaves osaka-1620, osaka-1700, kyoto-1745 and most of osaka-1780 (before 1781) and edo-1860 (after 1859) with no mon-to-silver rate written anywhere: D3 gives ryo and bu an explicit pre-1787 chronology but gives mon none, D2 prices goods not coins, and D7's per-era 'coins in grams of silver' column has no record source for mon in those eras. Purpose test: the GM's own example amount, the Takamiya-Toriimoto fares of 40/27/20 mon, is re-marked by D5 to osaka-1620 (as are the 1611/1658 post-station fees in mon), and converting a mon amount at osaka-1620 needs exactly the 1620-1650 mon rate this plan does not write; the 1766 1/66 monme and the 1700 legal rate are a single point and a legal rate, where Q4 asks the market rate where it moved. 'Named, not repeated' is a placement rule for rates 0277 holds, not an impossibility for the rates it lacks, and nothing in the request implies excluding them. Fix (one sentence in D3): state where mon/kanmon in silver lives for each Japanese era outside 0277's 1781-1859 span (written into C or 0277, the market rate where it left the legal one) or that it is recorded SILENT with the search named; if 0277 already holds those eras, the block can say so by name and this clears."
+    },
+    {
+     "id": "D4-question-B",
+     "summary": "Per Chinese era of the spec's list (beijing-1500 ... beijing-1900) each good in its own money, official prices ATTESTED ONLY FOR official prices, Allen et al. ATTESTED ONLY FOR a modern reconstruction, the era's day wage; Song rice by decade with its row id proposed on #13 once written",
+     "class": "within",
+     "why": "Q2/Q3 for China and earlier (Ming, Song 'where it has prices'); the official-price labeling is what gm-assistant confirmed for beijing-1500 and beijing-1736; the Song row follows gm-assistant's confirmation 'with the span you propose once the record writes Song rice'."
+    },
+    {
+     "id": "D4-question-D",
+     "summary": "The tael's weight, the dollar, strings and jingqian, cash a tael by point rates per era; a decade series SILENT with its unread sources listed open",
+     "class": "within",
+     "why": "Q4 asks copper cash, strings and taels 'in Qing and earlier China' per era; 'by decade' attaches to Japan only, so point rates per era answer it, and the SILENT carries its open sources."
+    },
+    {
+     "id": "D5-era-marks",
+     "summary": "After id confirmation, each era into money-eras-awaiting.json; record amounts within 25 years of an era marked with it via make money-candidates; 413 backfill lines removed as marked; Takamiya-Toriimoto fares re-marked from kyoto-1745 to osaka-1620; era leaves the awaiting list when gm-assistant's table carries it",
+     "class": "within",
+     "why": "FR-003 verbatim plus the thread: amounts inside an era are a subset of the 25-year window, and the window beyond the era implements gm-assistant's borrowed-era requests (Nakasendo fares to the nearest built era 'unless the author judges no era close enough'; Kyoto 1652-56 and the 1611/1658 fees borrowing osaka-1620). The re-mark is what the diagram promised in 6386840957."
+    },
+    {
+     "id": "D6-impl-check",
+     "summary": "implementation-check.md holds each touched question's line, no code implements a price",
+     "class": "within",
+     "why": "FR-004 as written."
+    },
+    {
+     "id": "D7-replies",
+     "summary": "A #13 comment at each landing: every census group mapped to a row or none with reason, Nakasendo post stations by name; per figure the fragment file, verdict and what is open; a per-era table for gm-assistant's era files",
+     "class": "within",
+     "why": "FR-001, FR-005, FR-006, and the request's 'a table laid out so you can type it into eras/<id>.json'."
+    },
+    {
+     "id": "T-order",
+     "summary": "Page sessions, implementation check, reply and landing, then era marks once ids confirmed and a second landing",
+     "class": "within",
+     "why": "Sequencing only; FR-005 has replies at each landed batch, and the ids gating marks are already confirmed except the Song row."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - question 1 and the Japanese wages (FR-001, FR-002)",
+    "## D2 - question A, the basket in Japan era by era (FR-002)",
+    "## D3 - question C, Japanese coins in silver (FR-002)",
+    "## D4 - questions B and D, China (FR-002)",
+    "## D5 - the era marks (FR-003)",
+    "## D6 - the implementation check (FR-004)",
+    "## D7 - the replies (FR-001, FR-005, FR-006)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/TC-1",
+     "summary": "Q1 into 0273/0279/0265, Q3 Japanese wages into 0250, four new money questions A-D, written in three write sessions and one check session; no code, map or canon change",
+     "class": "within",
+     "why": "Carries FR-002's placement; the request asks only for figures in the record or era-file tables, not code or canon."
+    },
+    {
+     "id": "TC-2",
+     "summary": "GPIH spreadsheets read cell by cell, cited by sheet and row; cited files archived; arithmetic (decade means, per-kg, per-BTU, grams of silver) computed by a measure/ script and labeled as this project's arithmetic",
+     "class": "within",
+     "why": "Method serving the request's 'with source' and the per-kg / per-million-BTU / grams-of-silver figures it asks for; narrows nothing."
+    },
+    {
+     "id": "Constitution",
+     "summary": "XII research: physical boxes; XIII record checks green; I-XI N/A",
+     "class": "within",
+     "why": "Process conformance; no scope decision."
+    },
+    {
+     "id": "D1",
+     "summary": "Kyoto salt per koku with per-kg arithmetic from a stated weight; salt per person (Qing Huang 2021; Japan SILENT with search); Kyoto firewood by weight and Edo/Osaka charcoal, per-million-BTU arithmetic with an assumed energy figure; Kyoto/Osaka rent SILENT with Edo 1804-30 nearest; Mitsui unskilled day wage by decade for Kyoto and Edo, 1780s and 1872-79 SILENT; nearest figures ATTESTED ONLY FOR their place and years",
+     "class": "within",
+     "why": "Clause by clause Q1 ('or the nearest dates found', 'with its weight, to reach a price per million BTU', salt per person) and Q3; SILENT verdicts report a search that found nothing, which the request's own 'as many as the sources allow' anticipates."
+    },
+    {
+     "id": "D2",
+     "summary": "Question A: one table per Japanese era of the confirmed list (ten ids), each good found in the era's own unit and money with source, goods not found named, the day wage beside each era; named cautions stated where the figure stands",
+     "class": "within",
+     "why": "Q2 verbatim ('each good found ... with its source; goods not found left out', 'in its own money') over every Japanese id gm-assistant confirmed on #13; the wage carries Q3."
+    },
+    {
+     "id": "D3",
+     "summary": "Question C: chogin fineness and pure silver a monme by recoinage; koban gold; ryo and bu in silver by market rate (0277's Osaka series, pre-1787 chronology labeled secondary); nanryo and ichibu-gin silver; Bassino and Ma's 3.11 g with basis SILENT; mon and kanmon in grams of silver for EVERY Japanese era - 0277's market rates converted at the era's chogin where it holds them, elsewhere (osaka-1620, osaka-1700, kyoto-1745 before 1766, osaka-1780 before 1787, edo-1860) the legal rates of 1609 and 1700 plus a market rate where a source read gives one, or SILENT with the search named; osaka-1700's row note names the 1695-1714 recoinages",
+     "class": "within",
+     "why": "Round 1's gap is closed: Q4's 'mon (and kanmon), monme, ryo and bu in Japan by decade' now has a figure or a searched SILENT for every Japanese era, with 'the market rate where it moved from the legal one' honored by giving the legal rate and the market rate wherever a source gives one. Converting at the era's own chogin carries gm-assistant's ruling (6386690660); the osaka-1700 recoinage note carries 6386826304. Converting 0277's rates to grams is a new figure citing 0277, consistent with FR-002's 'named, not repeated'."
+    },
+    {
+     "id": "D4",
+     "summary": "Question B: the eight Chinese eras plus Song rice by decade, official prices ATTESTED ONLY FOR official prices, Allen et al.'s Beijing ATTESTED ONLY FOR a modern reconstruction, each with its day wage; Question D: tael weight, dollar, strings and jingqian, cash a tael by point rates, a decade series SILENT with unread sources listed open",
+     "class": "within",
+     "why": "Q2/Q3 for China over every confirmed id and the Song row gm-assistant accepted; Q4 asks 'by decade' for Japan only, and for China 'copper cash, strings and taels' - point rates with a searched SILENT on a decade series report what the sources allow."
+    },
+    {
+     "id": "D5",
+     "summary": "Era marks once ids confirmed: each era into money-eras-awaiting.json; record amounts marked where their author judges the era close enough (make money-candidates lists them); 413 backfill lines removed as marked; the 1665 Takamiya-Toriimoto fares re-marked from kyoto-1745 to osaka-1620; eras leave the awaiting list when gm-assistant's table carries them",
+     "class": "within",
+     "why": "FR-003 marks every amount whose era this feature defines; 'close enough' governs proximity, and an amount inside an era's years is trivially close, so no in-era amount is excused. The author-judgment test is gm-assistant's own wording on #13 (6386826304: 'unless the author judges no era close enough'); the withdrawn 25-year default is no longer imposed. The 1665 re-mark carries the diagram reply 6386840957 and 6386920252."
+    },
+    {
+     "id": "D6",
+     "summary": "implementation-check.md holds each touched question's line",
+     "class": "within",
+     "why": "FR-004."
+    },
+    {
+     "id": "D7",
+     "summary": "A #13 comment at each landing: every census group mapped to a row or to none with reason, Nakasendo stations by name; per figure the fragment file, verdict, what is open; a per-era table laid out for gm-assistant's era files",
+     "class": "within",
+     "why": "FR-001, FR-005, FR-006; the era-file layout is the request's 'place, years, coins in grams of pure silver, each good's silver price with label and source, an unskilled day wage'."
+    },
+    {
+     "id": "T",
+     "summary": "Order: page sessions, implementation check, reply and landing, then era marks and a second landing",
+     "class": "within",
+     "why": "Sequencing only; nothing dropped."
+    }
+   ]
+  }
+ ]
+}

@@ -102,6 +102,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
+  },
+  "### T04 Approach": {
+   "sha256": "31888fff0d05fd2cc1d5d87e7b35726d4fd53b13a5fc60713a85513686c7ff5f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach": {
+   "sha256": "52590f5bfbe790ed02e851bc2feed05e956fb9972a45f2eb4586e23ed481b623",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -794,6 +806,40 @@
      "summary": "After T01 and T02, so each mark is checked by the build.",
      "class": "within",
      "why": "Sequencing only."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T04 Approach",
+    "### T05 Approach"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T04-content",
+     "summary": "The reply on #14 states how amounts are marked, the awaiting list (era ids marked ahead of their rows), how the copy is refreshed, and how to check it, so gm-assistant can verify from the reply alone.",
+     "class": "within",
+     "why": "FR-007 names marking, refresh and verification; the request leaves vendoring and marking 'diagram's to decide', which asks for the decision to be told. The awaiting list reports what diagram's comment of 15:53 promised (amounts in other eras marked with their era id, to light up when #13 lands), so it informs the asker and drops none of FR-007's three items."
+    },
+    {
+     "id": "T04-close-by-asker",
+     "summary": "Diagram replies and leaves verification and closing of #14 to gm-assistant.",
+     "class": "within",
+     "why": "FR-007 verbatim: gm-assistant verifies and closes the issue."
+    },
+    {
+     "id": "T04-done",
+     "summary": "Done is the reply's comment URL, recorded as the verify line; ordered after T01-T03.",
+     "class": "within",
+     "why": "SC-005 asks for exactly this; ordering after the work it describes narrows nothing."
+    },
+    {
+     "id": "T05-close",
+     "summary": "The feature closes with make feature-report F=413 WRITE=1 writing report.md, T04 and T05 landed by the landing route.",
+     "class": "within",
+     "why": "Project close procedure; adds no behavior and drops no requirement of the request or spec."
     }
    ]
   }

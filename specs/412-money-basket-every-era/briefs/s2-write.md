@@ -41,7 +41,13 @@ are (look at `research/tags.json` and `contents.json`):
   for Osaka 1620-1650, Osaka 1690-1739, Kyoto 1745-1754, Osaka 1780-1789, Kyoto 1790-1799, Kyoto 1800-1817, Edo 1818-1829, 1830-1844, 1850-1859 and 1860-1867, the chogin then
   current (where two circulated side by side, as after a recoinage, say so and give both) and its grams of pure silver a monme,
   with the recoinage dates cited. **Bassino and Ma's 3.11 g a monme**: quote their sentence, say its basis is not
-  given (SILENT), and quote Bassino's GPIH note (3.75 g assumed, the content "uncertain"). The copper rates stay in 0277.
+  given (SILENT), and quote Bassino's GPIH note (3.75 g assumed, the content "uncertain"). **Mon and kanmon in silver for every
+  era of A**: where 0277 holds the market rate (Osaka 1787-1859, Edo 1781-1842, Osaka 1766, Kyoto 1867), name it and convert
+  its decade at the era's chogin (this project's arithmetic); outside it (Osaka 1620-1650, 1690-1739, Kyoto 1745-1765, Osaka
+  1780-1786, the 1860s) give the legal rate (1609: 50 monme and 4 kanmon a ryo; 1700: 60 and 4 - cite the law's page) and the
+  market rate where a source gives one (search: 銭相場 寛永, 銭相場 元禄 宝永, 金銭相場 享保, 銭相場 文久 慶応), or SILENT
+  with the search in the absence note. Osaka 1690-1739's block names the recoinages of 1695-1714 inside it. Kyoto's rows (1745-1754, 1790-1799, 1800-1817) convert
+  mon at Osaka's rate, the nearest market 0277 holds: say so on each row.
 
 **New registry keys** (at most ten this session): Kumon, Kimura, Iwahashi (the GPIH files), the jawiki chogin articles you
 cite (each a key), the koban article, coin-walk - expect eight to ten. If they pass ten, `make reserve`'s eleventh sends the
