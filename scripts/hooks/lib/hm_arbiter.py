@@ -724,7 +724,7 @@ def main(argv: list[str]) -> int:
             print("arbiter-ask: SUBJECT is one short id (letters, digits, . _ -) and WHY the question, two words or more", file=sys.stderr)
             return 2
         if review and review not in REVIEWS and not (review.startswith("claims:") and len(review) > len("claims:")):
-            print(f"arbiter-ask: REVIEW= is spec, plan or claims:<key>,<key> (the review whose verdict the ruling stands as), or left out - not {review!r}", file=sys.stderr)
+            print(f"arbiter-ask: REVIEW= is spec, plan or claims:<key>;<key> (the review whose verdict the ruling stands as), or left out - not {review!r}", file=sys.stderr)
             return 2
         trigger = f"ask:{subject}"
         if trigger in rulings(Path(".").resolve()):

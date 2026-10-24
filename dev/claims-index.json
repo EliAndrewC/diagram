@@ -34405,6 +34405,19 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/tree.py::settle_defer#where the gap would strand the reach, cut where it comes alongside": {
+  "body": "a2236741eac8568a",
+  "claim": "where the gap would strand the reach, cut where it comes alongside - village-lanes.drawing: a lane that wanders over another way at under 20 degrees is cut where it comes alongside and meets the other as a T (a map drawing convention, the page's own reading) - asked only where the defer's own gap would leave the field or a house unreached (the gap itself is the defer's older cut, carried to 405 T127); tried on every cut, the tee knotted cohort seed 26 (measured 2026-10-24, 405 T26)",
+  "code": "ae0233cd2935a466",
+  "core": "c40d357e41d3a236",
+  "date": "2026-10-24",
+  "note": "accepted by the round arbiter (ask:t26-defer-claim), binding; the GM reviews it",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/tree.py::settle_tree#tree lane's room": {
   "body": "5a177589f26a5a2d",
   "claim": "tree lane's room - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a no-build corridor of WEB_CLEARANCE, 9 ft each side of the middle (the 18 ft room)",

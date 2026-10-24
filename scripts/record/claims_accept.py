@@ -22,7 +22,7 @@ def accept(root: Path, cur: dict[str, Any], index: dict[str, dict[str, Any]], ar
     at the code and research they have now - a later edit owes them again, as any verdict (the GM 2026-10-24: T26's landing
     met the claims gate on a claim the arbiter had accepted with no third round, and needed CLAIMS_OK at the landing and again
     at the stop-work push)."""
-    keys = [k for k in args.keys.split(",") if k]
+    keys = [k.strip() for k in args.keys.split(";") if k.strip()]
     missing = [k for k in keys if k not in cur]
     if missing or not keys:
         print(f"claims-accept: no such claim: {', '.join(missing) or '(none named)'}", file=sys.stderr)
