@@ -438,11 +438,13 @@ expect_out "backup/c NOT deleted"
 [ "$(rref "$D" main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && yes_ || no_ "the work did not land"
 # feature 405 T35 (D7): a landing returns once its work is on main; main's renders refresh behind it (T12's push waited 2.5 min)
 D=$(topology bw)
-printf 'render-sync:\n\t@sleep 6; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$D/rendered" > "$D/main/Makefile"
+printf 'render-sync:\n\t@sleep 30; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$D/rendered" > "$D/main/Makefile"
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
 start_s=$(date +%s)
 OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "done with main's render in the background" 0 $?
-[ $(( $(date +%s) - start_s )) -lt 5 ] && [ ! -f "$D/rendered" ] && yes_ || no_ "done waited for the render"
+# the property is that done RETURNS BEFORE THE RENDER: a 30 s render and a 25 s bound (a 6 s render and a 5 s bound failed
+# under load three times on 2026-10-24 - the push alone took ~5 s on a busy box, the render never in the way)
+[ $(( $(date +%s) - start_s )) -lt 25 ] && [ ! -f "$D/rendered" ] && yes_ || no_ "done waited for the render"
 expect_out "render-sync started in the background"
 [ "$(rref "$D" main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && yes_ || no_ "the work did not land"
 for _ in $(seq 1 30); do grep -q '^ok' "$D/main/.clones/.render-sync.status" 2>/dev/null && break; sleep 0.5; done
