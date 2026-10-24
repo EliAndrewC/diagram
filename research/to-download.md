@@ -4090,7 +4090,7 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - **Rests on it:** research/questions/0289-what-was-a-tael-a-string-of-cash-and-a-chinese-dollar-worth-in-silver.html (diagram feature 412; asked for by gm-assistant on EliAndrewC/diagram#13) - a market series of cash to the tael, which no readable source gives (also 0288).
 - Blocked by: in print only; no open copy of the table was found (2026-10-24).
 
-### 321. [money] 彭信威 (Peng Xinwei), 『中國貨幣史』 (Shanghai, 1958 and later editions; English: A Monetary History of China, 1994), the rate tables of pp. 608-615 and the notes on the tael's weight, p. 669 nn. 4-7
+### 321. [money] 彭信威 (Peng Xinwei), 『中國貨幣史』 (Shanghai, 1957 and later editions; English: A Monetary History of China, 1994), the rate tables of pp. 608-615 and the notes on the tael's weight, p. 669 nn. 4-7
 
 - Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
