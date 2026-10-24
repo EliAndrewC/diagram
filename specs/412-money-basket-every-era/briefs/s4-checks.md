@@ -1,0 +1,6 @@
+quote-check round 1: 0250, 0265, 0273, 0279, 0286, 0287, 0288, 0289 (117 notes) - every figure VERBATIM against the GPIH cell dumps; PARTIAL/DIFFERS/unfootnoted findings fixed (Kyoto 1713 wage cell, Edo 1830s salt step, Kimura not called Osaka's, 0287 originals restored to the page, 1651 salt passage, Gao 1615/1736/coal bracket, Gamble 1918-1919, Beijing lamp oil a kg, the rural Beijing wage doubled for food); round 2: 0250 clean
+record-format: 8 questions, round 1 findings applied (18 glossary terms: Eiraku, assay, ichibu-gin, nanryo, biao, BTU, MJ, GPIH, naked barley, Liang-Guang, kuping, coppers, standard cash, Songjiang, fineness; catties on jin); round 2 clean bar the items left owed
+intro-check: 6 questions, 4 INTRO-FIX applied (0286-0289); round 2: 5 INTRO-OK
+translation-check: 0273, 0286, 0287, 0288, 0289 - 6 LOOSE and 1 CANNOT-TELL fixed in round 1; round 2: all FAITHFUL bar 1 LOOSE (0288 Wusong 'regular tax silver') applied
+source-applicability: 28 registry entries, all APPLICABLE-WITH-LIMITS (qian-yong APPLICABLE); write-ups corrected (Kimura's prices mostly Kyoto's per the thesis, Liu 2022 is a regression and superseded by EEH 2024, nanryo order not a market rate, Kumon's Meiji ratios, coin-walk's two books); round 2 on jacks and ma-2004 settled
+source-reader round 2 (on the notes round 1 changed or added): 14 notes in 10 keys, all READ
