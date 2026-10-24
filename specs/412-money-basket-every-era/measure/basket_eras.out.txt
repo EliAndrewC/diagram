@@ -1,0 +1,180 @@
+== Mitsui Bunko (GPIH Japan_1710-1871.xls), quarterly cells, silver monme of account
+   rice, mugi, salt, lamp oil a koku; firewood, charcoal 10 kan; wage a day
+Kyoto T6 1713-1713: rice 151.51 (151.51-151.51, n 1); mugi -; salt 29.33 (29.33-29.33, n 1); firewood 3.82 (3.82-3.82, n 1); lampoil 877.93 (877.93-877.93, n 1); wage 1.19 (1.19-1.19, n 1)
+Edo T7 1710-1716: rice 103.00 (69.92-162.12, n 6); mugi -; salt 41.40 (35-58.01, n 6); charcoal 9.87 (7.25-16.64, n 6); firewood 3.43 (2.73-4.67, n 6); lampoil 430.43 (322.02-641.05, n 6); wage 1.75 (1.5-2.4, n 6)
+Osaka T8 1713-1713: rice 135.90 (135.9-135.9, n 1); mugi -; salt -; charcoal 4.84 (4.84-4.84, n 1); firewood 5.43 (5.43-5.43, n 1); lampoil 772.92 (772.92-772.92, n 1)
+Kyoto T6 1745-1754: rice 71.85 (46.94-87.16, n 20); mugi -; salt 17.77 (14.3-25.69, n 20); firewood 2.64 (2.42-2.77, n 20); lampoil 327.49 (255.8-377.8, n 20); wage 0.91 (0.72-1.31, n 20)
+Kyoto T6 1791-1799: rice 82.97 (60.08-99.31, n 18); mugi 99.57 (94.1-103.81, n 7); salt 6.12 (3.16-7, n 18); firewood 2.79 (2.55-2.84, n 18); lampoil 312.23 (267.08-343.74, n 18); wage 0.85 (0.79-0.97, n 18)
+Kyoto T6 1800-1817: rice 74.47 (59.97-93.45, n 36); mugi -; salt 6.52 (4.3-8.43, n 36); firewood 2.81 (2.65-2.89, n 36); lampoil 270.52 (197.78-329.12, n 36); wage 0.86 (0.59-1.2, n 36)
+Edo T7 1818-1829: rice 70.69 (55.5-93.5, n 22); mugi -; salt 15.24 (14.4-16.2, n 22); charcoal 5.02 (4.79-5.56, n 22); firewood 1.96 (1.87-2.08, n 22); lampoil 283.79 (244.3-349, n 22); wage 0.90 (0.9-0.91, n 22)
+Kyoto T6 1818-1829: rice 73.83 (55.82-106.99, n 22); mugi -; salt 6.33 (5.03-8.41, n 22); firewood 2.81 (2.7-2.83, n 22); lampoil 276.50 (218.97-357.55, n 22); wage 1.01 (0.83-1.35, n 22)
+Osaka T8 1818-1829: rice 72.26 (53.9-96.6, n 22); mugi -; salt 17.22 (14.97-27, n 22); charcoal 3.42 (3.1-3.9, n 22); firewood 3.70 (3.3-4.1, n 22); lampoil 284.08 (250-335, n 22)
+Kyoto T6 1830-1844: rice 101.77 (78-199.48, n 30); mugi 100.38 (64.89-179.2, n 17); salt 7.01 (5.7-10.92, n 30); firewood 2.89 (2.59-3.24, n 30); lampoil 350.60 (259.31-414.21, n 30); wage 0.98 (0.84-1.31, n 30)
+Edo T7 1830-1844: rice 111.46 (73.95-231.25, n 30); mugi 137.90 (98.9-161, n 4); salt 23.90 (15-41, n 30); charcoal 6.42 (5.13-8.13, n 30); firewood 1.99 (1.92-2.16, n 30); lampoil 404.56 (311.99-504.01, n 30); wage 0.91 (0.88-0.93, n 30)
+Osaka T8 1830-1844: rice 106.09 (79.3-205, n 30); mugi 101.71 (58-186, n 12); salt 35.50 (18-55, n 30); charcoal 4.05 (3.4-5.5, n 30); firewood 4.26 (3.5-5.5, n 30); lampoil 386.03 (266-495, n 30)
+Kyoto T6 1850-1859: rice 115.02 (86.5-158.1, n 20); mugi 87.95 (56.67-129.22, n 18); salt 6.22 (5.5-7.5, n 20); firewood 3.25 (3.14-3.51, n 20); lampoil 408.62 (339.98-452.85, n 20); wage 1.04 (0.85-1.18, n 20)
+Edo T7 1850-1859: rice 117.22 (86-142, n 20); mugi 92.80 (85-104, n 6); salt 35.67 (33.5-41, n 20); charcoal 7.33 (6.9-7.94, n 20); firewood 2.08 (2-2.17, n 20); lampoil 461.38 (402-487, n 20); wage 0.92 (0.87-0.97, n 20)
+Osaka T8 1850-1859: rice 113.07 (87.8-152.8, n 20); mugi 106.67 (85-120, n 3); salt 30.80 (25-45, n 20); charcoal 4.25 (3.6-5.9, n 20); firewood 4.72 (4.3-5.1, n 20); lampoil 425.78 (345-460, n 20)
+Kyoto T6 1860-1867: rice 445.04 (146.46-1188.14, n 13); mugi 464.91 (105.43-903.6, n 7); salt 25.80 (7.5-46.5, n 13); firewood 9.49 (3.51-15.01, n 13); lampoil 1051.99 (435.11-2016.5, n 13); wage 1.34 (1.15-1.71, n 13)
+Edo T7 1860-1867: rice 283.17 (139-586, n 13); mugi 252.41 (122.5-437, n 9); salt 82.15 (38.4-127, n 13); charcoal 16.91 (7.94-23.47, n 13); firewood 3.84 (2.23-5.13, n 13); lampoil 873.52 (509.8-1310, n 13); wage 1.18 (0.95-1.46, n 13)
+Osaka T8 1860-1867: rice 490.09 (152-1343, n 13); mugi -; salt 107.15 (30-210, n 13); charcoal 12.33 (4.4-22.8, n 13); firewood 12.37 (4.5-22.5, n 13); lampoil 1226.46 (479-2390, n 13)
+Kyoto salt cells by year, 1741-1762 and 1791-1800 (the drop):
+  row 45: 1758 Spring salt 18.47
+  row 46: 1758 Fall salt 15.55
+  row 47: 1759 Spring salt 17.64
+  row 48: 1759 Fall salt 16.55
+  row 49: 1760 Spring salt 16.76
+  row 50: 1760 Fall salt 15.97
+  row 51: 1761 Spring salt 16.6
+  row 52: 1761 Fall salt 16.02
+  row 53: 1762 Spring salt 17.13
+  row 54: 1762 Fall salt ''
+  row 55: 1791 Spring salt 5.72
+  row 56: 1791 Fall salt 6.82
+  row 57: 1792 Spring salt 6.8
+  row 58: 1792 Fall salt 6.5
+  row 59: 1793 Spring salt 6.5
+  row 60: 1793 Fall salt 7.0
+
+== Kumon (GPIH Japanese Wages.xlsx), sheet Japan, OBSERVED cells only (no yellow fill)
+   wage: a farm servant's year, monme; rice..fish a kg; oils, sake a liter; cloth a tan
+1620-1650: wage 55.7226 (55.0698-75.3075, n 31); rice 0.2234 (0.137533-0.396, n 31)
+1690-1739: wage 78.9066 (48.005-109.935, n 50); rice 0.4447 (0.206667-0.994667, n 50); soy 0.3636 (0.363599-0.363599, n 1); barley 0.2822 (0.138636-0.536023, n 10); cloth 4.2500 (4.2-4.3, n 2)
+1690-1699: wage 79.5276 (75.3075-85.8579, n 10); rice 0.3610 (0.316117-0.466203, n 10)
+1700-1709: wage 93.0810 (85.8579-109.935, n 10); rice 0.4746 (0.262667-0.7, n 10)
+1710-1719: wage 103.7420 (48.005-109.935, n 10); rice 0.7099 (0.270667-0.994667, n 10)
+1720-1729: wage 48.0050 (48.005-48.005, n 10); rice 0.3195 (0.253333-0.480667, n 10); soy 0.3636 (0.363599-0.363599, n 1); barley 0.1875 (0.138636-0.222188, n 5); cloth 4.2500 (4.2-4.3, n 2)
+1730-1739: wage 70.1775 (48.005-92.3499, n 10); rice 0.3585 (0.206667-0.599333, n 10); barley 0.3770 (0.16512-0.536023, n 5)
+1745-1754: wage 113.8977 (92.3499-135.446, n 10); rice 0.3989 (0.28-0.496667, n 10); barley 0.3011 (0.185542-0.465542, n 9); lampoil 1.8104 (1.42174-1.97702, n 10)
+1780-1789: wage 139.7155 (128.874-150.557, n 10); rice 0.4555 (0.297333-0.650667, n 10); soy 0.4662 (0.378143-0.589031, n 9); barley 0.3693 (0.195125-0.673631, n 8); lampoil 1.8888 (1.38205-2.48769, n 6)
+1790-1799: wage 172.8411 (166.757-178.925, n 10); rice 0.4375 (0.349333-0.560667, n 10); soy 0.4509 (0.385415-0.509039, n 6); barley 0.3205 (0.218546-0.425141, n 10); lampoil 1.7261 (1.48457-1.88321, n 9)
+1800-1817: wage 190.2218 (179.65-202.593, n 18); rice 0.4162 (0.355333-0.503333, n 18); soy 0.3680 (0.321422-0.478497, n 16); barley 0.2945 (0.234976-0.35568, n 9); edoil 1.4850 (1.08353-1.91275, n 16); lampoil 1.4955 (1.19379-1.72482, n 18); cloth 6.2062 (6-6.4, n 16)
+1818-1829: wage 184.3788 (172.636-197.525, n 12); rice 0.4103 (0.324667-0.56, n 12); soy 0.4099 (0.294515-0.565033, n 12); barley 0.2840 (0.218654-0.390069, n 10); edoil 1.4447 (1.28254-1.6861, n 12); lampoil 1.5389 (1.29404-1.8769, n 12); cloth 6.0083 (5.7-6.3, n 12)
+1830-1844: wage 201.0005 (183.341-214.135, n 15); rice 0.5704 (0.404-0.98, n 15); soy 0.5623 (0.424684-0.84355, n 15); barley 0.4189 (0.295087-0.754193, n 15); edoil 1.8497 (1.2936-2.40476, n 15); lampoil 1.9382 (1.49084-2.2544, n 15); cloth 7.1667 (6-9, n 15)
+1850-1859: wage 272.8747 (259.585-286.164, n 10); rice 0.6563 (0.498667-0.923333, n 10); soy 0.6738 (0.493768-0.876274, n 10); barley 0.4746 (0.349531-0.6371, n 5); edoil 2.3600 (2.01779-2.65353, n 10); lampoil 2.2589 (1.92259-2.42533, n 10); cloth 7.8500 (7.7-8, n 2)
+1860-1867: wage 476.5768 (355.142-678.968, n 8); rice 2.6880 (0.902667-8.846, n 8); soy 2.2533 (0.799919-4.65407, n 8); barley 0.9771 (0.867606-1.08656, n 2); edoil 6.3491 (2.98522-12.7148, n 8); lampoil 5.3189 (2.40537-10.1608, n 8); cloth 133.0000 (133-133, n 1)
+Imputed (yellow) count by good, 1620-1867:
+  wage: 0 imputed of 248 years
+  rice: 0 imputed of 248 years
+  soy: 161 imputed of 248 years
+  beans: 248 imputed of 248 years
+  barley: 140 imputed of 248 years
+  buckwheat: 248 imputed of 248 years
+  fish: 248 imputed of 248 years
+  edoil: 182 imputed of 248 years
+  sake: 248 imputed of 248 years
+  lampoil: 136 imputed of 248 years
+  cloth: 186 imputed of 248 years
+  row 1620: wage 55.06979, rice 0.1862, soy 0.1861624*, beans 0.117306*, barley 0.1359197*, buckwheat '=D31*0.6'*, fish '=1.46*D31'*, edoil 0.7444546*, sake '=1.39*D31'*, lampoil 0.7444546*, cloth 2.593063*
+  row 1650: wage 75.30746, rice 0.26, soy 0.2599475*, beans 0.1638*, barley 0.1897913*, buckwheat '=D61*0.6'*, fish '=1.46*D61'*, edoil 1.039518*, sake '=1.39*D61'*, lampoil 1.039518*, cloth 3.620819*
+  row 1700: wage 85.85786, rice 0.4442201, soy 0.4441304*, beans 0.2798586*, barley 0.3242657*, buckwheat '=D111*0.6'*, fish '=1.46*D111'*, edoil 1.776056*, sake '=1.39*D111'*, lampoil 1.776056*, cloth 6.18631*
+  row 1720: wage 48.00502, rice 0.4373333, soy 0.437245*, beans 0.27552*, barley 0.3192387*, buckwheat '=D131*0.6'*, fish '=1.46*D131'*, edoil 1.748522*, sake '=1.39*D131'*, lampoil 1.748522*, cloth 6.090403*
+  row 1735: wage 92.34991, rice 0.288, soy 0.2879418*, beans 0.18144*, barley 0.16512, buckwheat '=D146*0.6'*, fish '=1.46*D146'*, edoil 1.151466*, sake '=1.39*D146'*, lampoil 1.151466*, cloth 4.010753*
+  row 1750: wage 135.4455, rice 0.4006667, soy 0.4005858*, beans 0.25242*, barley 0.2661572, buckwheat '=D161*0.6'*, fish '=1.46*D161'*, edoil 1.960905*, sake '=1.39*D161'*, lampoil 1.960905, cloth 5.579775*
+  row 1786: wage 128.8736, rice 0.6506667, soy 0.574487, beans 0.40992*, barley 0.6736314, buckwheat '=D197*0.6'*, fish '=1.46*D197'*, edoil 2.045431*, sake '=1.39*D197'*, lampoil 2.045431, cloth 5.677232*
+  row 1820: wage 172.636, rice 0.402, soy 0.3163314, beans 0.25326*, barley 0.2641715, buckwheat '=D231*0.6'*, fish '=1.46*D231'*, edoil 1.453914, sake '=1.39*D231'*, lampoil 1.416682, cloth 5.8
+  row 1842: wage 214.135, rice 0.4833333, soy 0.4857687, beans 0.3045*, barley 0.381123, buckwheat '=D253*0.6'*, fish '=1.46*D253'*, edoil 1.863, sake '=1.39*D253'*, lampoil 2.139189, cloth 8.8
+  row 1867: wage 678.9676, rice 4.254, soy 4.217752, beans 2.68002*, barley 2.624043*, buckwheat '=D278*0.6'*, fish '=1.46*D278'*, edoil 12.71484, sake '=1.39*D278'*, lampoil 10.16082, cloth 133
+
+== Kimura via Jacks (GPIH Osaka_1600-1650.xls), local-unit cells, silver monme, 1620-1650
+rice /koku: 33.51 (20.63-59.4, n 31) cells [(1620, 27.93), (1621, 35.46), (1622, 30.54), (1623, 27.92), (1624, 25.92), (1625, 20.63), (1626, 26.26), (1627, 33.18), (1628, 27.43), (1629, 24.41), (1630, 24.43), (1631, 24.57), (1632, 29.8), (1633, 29.35), (1634, 34.68), (1635, 40.35), (1636, 47.87), (1637, 59.4), (1638, 50.41), (1639, 33.5), (1640, 33.0), (1641, 48.5), (1642, 57.0), (1643, 37.5), (1644, 31.0), (1645, 30.0), (1646, 27.0), (1647, 24.5), (1648, 28.0), (1649, 29.3), (1650, 39.0)]
+soybeans /koku: 31.03 (22.2-40, n 17) cells [(1625, 25.0), (1627, 24.1), (1629, 29.44), (1630, 22.2), (1631, 26.0), (1632, 26.0), (1633, 34.5), (1634, 31.2), (1635, 29.0), (1636, 40.0), (1639, 40.0), (1640, 35.0), (1643, 40.0), (1644, 33.0), (1645, 32.0), (1647, 34.0), (1648, 26.0)]
+soya /sho: 0.77 (0.5-0.9, n 3) cells [(1631, 0.5), (1636, 0.9), (1637, 0.9)]
+salt /to: 1.08 (0.85-1.54, n 5) cells [(1625, 1.0), (1633, 0.85), (1635, 1.0), (1636, 1.54), (1640, 1.0)]
+oil /sho: 2.41 (1.7-4.4, n 14) cells [(1620, 2.0), (1627, 1.8), (1628, 1.7), (1629, 1.9), (1630, 2.2), (1631, 2.2), (1632, 1.8), (1633, 1.8), (1634, 2.0), (1635, 2.9), (1636, 3.9), (1638, 3.2), (1639, 4.4), (1647, 1.9)]
+sake /to: 5.18 (3.3-9.8, n 17) cells [(1620, 3.3), (1622, 3.7), (1626, 7.0), (1627, 3.9), (1628, 3.9), (1629, 3.6), (1630, 3.32), (1631, 3.33), (1632, 3.5), (1633, 4.57), (1634, 7.0), (1635, 5.55), (1636, 6.95), (1637, 7.5), (1638, 9.8), (1639, 5.08), (1647, 6.0)]
+white cloth /tan: 2.86 (2-3.8, n 16) cells [(1622, 2.0), (1623, 2.8), (1625, 2.6), (1626, 2.8), (1628, 3.0), (1629, 2.4), (1630, 2.15), (1632, 2.6), (1633, 3.0), (1634, 2.2), (1635, 3.5), (1638, 3.5), (1639, 3.1), (1641, 3.8), (1643, 3.2), (1645, 3.1)]
+cloth /tan: 2.55 (2.1-3, n 2) cells [(1630, 2.1), (1632, 3.0)]
+bleached cotton /tan: 10.00 (8-13.5, n 3) cells [(1621, 13.5), (1634, 8.5), (1635, 8.0)]
+
+== Iwahashi (GPIH Japan_rice_P_1620-1867.xls), sheet koku of rice
+1620-1650: Osaka monme -; Hiroshima monme 26.703 (16-50.4, n 31); Edo ryo -; Osaka ryo -; Osaka monme / Osaka ryo (gold rate) -
+1690-1739: Osaka monme 69.928 (31-149.2, n 39); Hiroshima monme 65.696 (37.2-162, n 50); Edo ryo 1.101 (0.61-2.24, n 50); Osaka ryo 0.941 (0.49-1.6, n 23); Osaka monme / Osaka ryo (gold rate) 60.8 (44.6154-119.533, n 23)
+1690-1699: Osaka monme -; Hiroshima monme 50.110 (41.8-70.3, n 10); Edo ryo 0.948 (0.67-1.39, n 10); Osaka ryo -; Osaka monme / Osaka ryo (gold rate) -
+1700-1709: Osaka monme 71.700 (39.4-105, n 9); Hiroshima monme 66.000 (53.4-76.5, n 10); Edo ryo 1.154 (1.01-1.37, n 10); Osaka ryo -; Osaka monme / Osaka ryo (gold rate) -
+1710-1719: Osaka monme 106.480 (40.6-149.2, n 10); Hiroshima monme 107.020 (41.5-162, n 10); Edo ryo 1.610 (0.91-2.24, n 10); Osaka ryo 1.177 (0.91-1.55, n 3); Osaka monme / Osaka ryo (gold rate) 84.6 (44.6154-119.533, n 3)
+1720-1729: Osaka monme 47.930 (38-72.1, n 10); Hiroshima monme 48.000 (39-70, n 10); Edo ryo 0.864 (0.65-1.41, n 10); Osaka ryo 0.868 (0.49-1.41, n 10); Osaka monme / Osaka ryo (gold rate) 57.0 (46.5248-77.551, n 10)
+1730-1739: Osaka monme 53.780 (31-89.9, n 10); Hiroshima monme 57.350 (37.2-98, n 10); Edo ryo 0.930 (0.61-1.56, n 10); Osaka ryo 0.944 (0.53-1.6, n 10); Osaka monme / Osaka ryo (gold rate) 57.5 (51.0145-65.4545, n 10)
+1745-1754: Osaka monme 59.830 (42-74.5, n 10); Hiroshima monme 63.210 (51-81.3, n 10); Edo ryo 1.035 (0.73-1.21, n 10); Osaka ryo 0.956 (0.67-1.17, n 10); Osaka monme / Osaka ryo (gold rate) 62.5 (58.9216-66.7961, n 10)
+1780-1789: Osaka monme 68.320 (44.6-97.6, n 10); Hiroshima monme 67.940 (46.5-89.2, n 10); Edo ryo 1.132 (0.91-1.43, n 10); Osaka ryo 1.168 (0.73-1.75, n 10); Osaka monme / Osaka ryo (gold rate) 58.7 (55.7018-62.4468, n 10)
+1790-1799: Osaka monme 65.630 (52.4-84.1, n 10); Hiroshima monme 68.370 (54.6-87.2, n 10); Edo ryo 1.091 (0.97-1.28, n 10); Osaka ryo 1.074 (0.91-1.27, n 10); Osaka monme / Osaka ryo (gold rate) 61.0 (57.5824-66.2205, n 10)
+1800-1817: Osaka monme 62.433 (53.3-75.5, n 18); Hiroshima monme 64.200 (54.9-75.9, n 18); Edo ryo 0.992 (0.86-1.23, n 18); Osaka ryo 0.962 (0.82-1.2, n 18); Osaka monme / Osaka ryo (gold rate) 65.0 (59.2222-72.8049, n 18)
+1818-1829: Osaka monme 61.550 (48.7-84, n 12); Hiroshima monme 63.942 (48.1-85, n 12); Edo ryo 1.003 (0.86-1.16, n 12); Osaka ryo 0.965 (0.79-1.29, n 12); Osaka monme / Osaka ryo (gold rate) 63.8 (61.5054-66.3291, n 12)
+1830-1844: Osaka monme 85.567 (60.6-147, n 15); Hiroshima monme 85.793 (69.8-127.8, n 15); Edo ryo 1.483 (1.11-3.03, n 15); Osaka ryo 1.334 (0.96-2.31, n 15); Osaka monme / Osaka ryo (gold rate) 64.3 (61.7647-70.3883, n 15)
+1850-1859: Osaka monme 98.450 (74.8-138.5, n 10); Hiroshima monme 103.700 (78.2-152.8, n 9); Edo ryo 1.745 (1.26-2.06, n 10); Osaka ryo 1.454 (1-2.22, n 10); Osaka monme / Osaka ryo (gold rate) 68.1 (62.3874-74.8, n 10)
+1860-1867: Osaka monme 403.200 (135.4-1326.9, n 8); Hiroshima monme -; Edo ryo 1.958 (1.4-2.23, n 4); Osaka ryo 2.025 (1.91-2.19, n 4); Osaka monme / Osaka ryo (gold rate) 75.7 (68.0402-82.0896, n 4)
+  row 1701: Osaka monme 83.2, Osaka ryo ''
+  row 1710: Osaka monme 74.5, Osaka ryo ''
+  row 1720: Osaka monme 65.6, Osaka ryo 1.41
+  row 1736: Osaka monme 47.4, Osaka ryo 0.78
+  row 1750: Osaka monme 60.1, Osaka ryo 1.02
+  row 1786: Osaka monme 97.6, Osaka ryo 1.75
+
+== coin-walk J063 (transcribing 日本史資料総覧 1986): gold monme a ryo, copper kanmon a ryo, mid of range
+1620-1650: gold 60.2 (60.25-60.25, n 1); copper kanmon a ryo -
+1690-1739: gold 58.6 (43.58-77.23, n 35); copper kanmon a ryo 4.230 (2.6585-5.2225, n 34)
+1690-1699: gold 60.0 (52.3-63.745, n 7); copper kanmon a ryo 4.230 (3.78-4.8, n 6)
+1700-1709: gold 58.1 (58-58.25, n 3); copper kanmon a ryo 4.424 (3.9-4.88, n 5)
+1710-1719: gold 63.8 (43.58-77.23, n 6); copper kanmon a ryo 2.901 (2.6585-3.0675, n 4)
+1720-1729: gold 55.5 (45.715-59.15, n 10); copper kanmon a ryo 4.567 (4.208-5.158, n 10)
+1730-1739: gold 57.5 (52.2-59.45, n 9); copper kanmon a ryo 4.337 (2.82-5.2225, n 9)
+1745-1754: gold 61.3 (59.25-66.2, n 10); copper kanmon a ryo 4.447 (4.18-4.925, n 10)
+1780-1789: gold 57.7 (55.175-60.325, n 10); copper kanmon a ryo 5.902 (5.375-6.4, n 10)
+1790-1799: gold 60.2 (55.85-64.95, n 10); copper kanmon a ryo 5.933 (5.445-6.422, n 10)
+1800-1817: gold 64.3 (60.45-66.275, n 18); copper kanmon a ryo 6.688 (6.43-6.927, n 18)
+1818-1829: gold 63.0 (57.725-64.95, n 12); copper kanmon a ryo 6.649 (6.5-6.8275, n 12)
+1830-1844: gold 62.7 (60.4-65.1, n 15); copper kanmon a ryo 6.634 (6.2925-6.99, n 13)
+1850-1859: gold 67.1 (62.2-71.5, n 9); copper kanmon a ryo 6.497 (6.248-6.756, n 7)
+1860-1867: gold 83.6 (72.4-97.95, n 8); copper kanmon a ryo 6.994 (6.548-8.298, n 5)
+1722-1735: gold 57.7 (53.4-59.45, n 14); copper kanmon a ryo 4.772 (4.208-5.2225, n 14)
+1737-1739: gold 55.1 (52.2-58.15, n 3); copper kanmon a ryo 2.897 (2.82-3.01, n 3)
+1740-1749: gold 62.0 (59.3-66.2, n 10); copper kanmon a ryo 4.150 (3.04-4.925, n 10)
+1780-1786: gold 58.4 (55.175-60.325, n 7); copper kanmon a ryo 6.024 (5.605-6.4, n 7)
+1860-1867: gold 83.6 (72.4-97.95, n 8); copper kanmon a ryo 6.994 (6.548-8.298, n 5)
+1855-1859: gold 69.4 (64.25-71.5, n 5); copper kanmon a ryo 6.672 (6.564-6.756, n 4)
+
+== grams of pure silver a monme, a ryo and a mon (this project's arithmetic)
+Keicho: 3.0000 g a monme
+Genroku: 2.4000 g a monme
+Futatsu-takara: 1.8750 g a monme
+Eiji: 1.5000 g a monme
+Mitsu-takara: 1.2000 g a monme
+Yotsu-takara: 0.7500 g a monme
+Shotoku/Kyoho: 3.0000 g a monme
+Genbun: 1.7250 g a monme
+Bunsei: 1.3500 g a monme
+Tenpo: 0.9750 g a monme
+Ansei: 0.4875 g a monme
+Ansei (14%): 0.5250 g a monme
+Osaka 1620-1650, legal 1609: Keicho 3.000 g/monme; 50.0 monme a ryo = 150.0 g a ryo, a bu 37.5 g; 4000 mon a ryo, 80.0 mon a monme, a mon 0.0375 g, a kanmon 37.5 g
+Osaka 1620-1650, c.43 monme (三貨制度): Keicho 3.000 g/monme; 43.0 monme a ryo = 129.0 g a ryo, a bu 32.2 g
+1690-1694 coin-walk: Keicho 3.000 g/monme; 61.7 monme a ryo = 185.2 g a ryo, a bu 46.3 g
+1700 legal: Genroku 2.400 g/monme; 60.0 monme a ryo = 144.0 g a ryo, a bu 36.0 g; 4000 mon a ryo, 66.7 mon a monme, a mon 0.0360 g, a kanmon 36.0 g
+1700 market 47-48 (coin-walk): Genroku 2.400 g/monme; 47.5 monme a ryo = 114.0 g a ryo, a bu 28.5 g; 3710 mon a ryo, 78.1 mon a monme, a mon 0.0307 g, a kanmon 30.7 g
+1722-1735 coin-walk: Shotoku/Kyoho 3.000 g/monme; 57.7 monme a ryo = 173.0 g a ryo, a bu 43.2 g; 4772 mon a ryo, 82.8 mon a monme, a mon 0.0362 g, a kanmon 36.2 g
+1737-1739 coin-walk: Genbun 1.725 g/monme; 55.1 monme a ryo = 95.1 g a ryo, a bu 23.8 g; 2897 mon a ryo, 52.6 mon a monme, a mon 0.0328 g, a kanmon 32.8 g
+Kyoto 1745-1754 coin-walk: Genbun 1.725 g/monme; 61.3 monme a ryo = 105.7 g a ryo, a bu 26.4 g; 4448 mon a ryo, 72.6 mon a monme, a mon 0.0238 g, a kanmon 23.8 g
+Osaka 1780-1786 coin-walk: Genbun 1.725 g/monme; 58.4 monme a ryo = 100.7 g a ryo, a bu 25.2 g; 6024 mon a ryo, 103.2 mon a monme, a mon 0.0167 g, a kanmon 16.7 g
+Osaka 1787-1789 RIEB (0277): Genbun 1.725 g/monme; 55.6 monme a ryo = 95.9 g a ryo, a bu 24.0 g; 5860 mon a ryo, 105.4 mon a monme, a mon 0.0164 g, a kanmon 16.4 g
+Kyoto 1790-1799 at Osaka RIEB (0277): Genbun 1.725 g/monme; 60.6 monme a ryo = 104.5 g a ryo, a bu 26.1 g; 6470 mon a ryo, 106.8 mon a monme, a mon 0.0162 g, a kanmon 16.2 g
+Kyoto 1800-1817 at Osaka RIEB 1800s/1810s (0277): Genbun 1.725 g/monme; 64.4 monme a ryo = 111.2 g a ryo, a bu 27.8 g; 7025 mon a ryo, 109.0 mon a monme, a mon 0.0158 g, a kanmon 15.8 g
+Edo 1818-1829, Osaka RIEB 1820s (0277), Genbun: Genbun 1.725 g/monme; 63.4 monme a ryo = 109.4 g a ryo, a bu 27.3 g; 6880 mon a ryo, 108.5 mon a monme, a mon 0.0159 g, a kanmon 15.9 g
+Edo 1818-1829, Osaka RIEB 1820s (0277), Bunsei: Bunsei 1.350 g/monme; 63.4 monme a ryo = 85.6 g a ryo, a bu 21.4 g; 6880 mon a ryo, 108.5 mon a monme, a mon 0.0124 g, a kanmon 12.4 g
+Edo 1818-1829, Edo mon a ryo 1820s 6,610 (0277): Bunsei 1.350 g/monme; 63.4 monme a ryo = 85.6 g a ryo, a bu 21.4 g; 6610 mon a ryo, 104.3 mon a monme, a mon 0.0129 g, a kanmon 12.9 g
+1830-1844 Osaka RIEB 1830s (0277), Bunsei: Bunsei 1.350 g/monme; 61.8 monme a ryo = 83.4 g a ryo, a bu 20.9 g; 6790 mon a ryo, 109.9 mon a monme, a mon 0.0123 g, a kanmon 12.3 g
+1830-1844 Osaka RIEB 1840-43 (0277), Tenpo: Tenpo 0.975 g/monme; 62.8 monme a ryo = 61.2 g a ryo, a bu 15.3 g; 6790 mon a ryo, 108.1 mon a monme, a mon 0.0090 g, a kanmon 9.0 g
+1850-1859 Osaka RIEB 1850-54 (0277), Tenpo: Tenpo 0.975 g/monme; 64.1 monme a ryo = 62.5 g a ryo, a bu 15.6 g; 6710 mon a ryo, 104.7 mon a monme, a mon 0.0093 g, a kanmon 9.3 g
+1850-1859 Osaka RIEB 1855-59 (0277), Tenpo: Tenpo 0.975 g/monme; 70.9 monme a ryo = 69.1 g a ryo, a bu 17.3 g; 6740 mon a ryo, 95.1 mon a monme, a mon 0.0103 g, a kanmon 10.3 g
+1860-1867 coin-walk, Tenpo: Tenpo 0.975 g/monme; 83.6 monme a ryo = 81.5 g a ryo, a bu 20.4 g; 6994 mon a ryo, 83.7 mon a monme, a mon 0.0116 g, a kanmon 11.6 g
+1860-1867 coin-walk, Ansei: Ansei 0.488 g/monme; 83.6 monme a ryo = 40.7 g a ryo, a bu 10.2 g; 6994 mon a ryo, 83.7 mon a monme, a mon 0.0058 g, a kanmon 5.8 g
+1860-1867 coin-walk, Ansei at 14%: Ansei (14%) 0.525 g/monme; 83.6 monme a ryo = 43.9 g a ryo, a bu 11.0 g; 6994 mon a ryo, 83.7 mon a monme, a mon 0.0063 g, a kanmon 6.3 g
+
+Coins themselves:
+nanryo nishugin 1772: 2.7 monme x 3.75 x 0.9781 = 9.90 g; 8 to the ryo 79.2 g; wiki 21.6 monme a ryo = 81.0 g
+Bunsei nanryo 1824: 2 monme x 3.75 x 0.9796 = 7.35 g; 8 to the ryo 58.8 g
+Tenpo ichibu-gin 1837: 2.3 x 3.75 x 0.9886 = 8.53 g; 4 to the ryo 34.1 g; wiki 9.2 monme = 34.5 g, Tenpo chogin 15.6 monme = 58.5 g
+Ansei ichibu-gin 1859: 2.3 x 3.75 x 0.8936 = 7.71 g; 4 to the ryo 30.8 g
+1773 order: 24 monme pure = 90 g a ryo; 60 monme circulating -> 1.50 g a monme; Genbun prescribed 1.725
+Genbun ryo at 60 monme by fineness: 103.5 g (wiki 27.6 monme = 103.5 g)
+Koban gold: Keicho 15.05 g, Keicho 86.8% 15.49 g, Genroku 10.25 g, Hoei 7.90 g, Shotoku 15.05 g, Kyoho 15.49 g, Genbun 8.62 g, Bunsei 7.40 g, Tenpo 6.39 g, Ansei 5.11 g, Man'en 1.87 g
+Bassino and Ma 3.11 g / 3.75 g = 0.829
