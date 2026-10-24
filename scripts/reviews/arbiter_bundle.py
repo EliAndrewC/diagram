@@ -573,7 +573,7 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
     `allow_missing` gives the reason to bundle anyway (it is printed in the MANIFEST for the arbiter to weigh). `evidence`: the
     files the question cites, copied beside it (`evidence_section`)."""
     owed = ha.owed(root).get(trigger, {})
-    d = ha.feature_dir(root)
+    d = trigger_feature_dir(root, trigger) or ha.feature_dir(root)
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
@@ -673,6 +673,26 @@ def _first_prompt(transcript: Path) -> str:
     return "".join(b.get("text", "") for b in content or [] if isinstance(b, dict))
 
 
+_REVIEWS = re.compile(r"(?:^MODE 3 \(VERIFY\) - round \d+ of (?:feature |specs/)|specs/)(\d+-[a-z0-9][a-z0-9-]*?)(?=[/,\s.']|$)")
+
+
+def reviewed_feature(prompt: str) -> str:
+    """The feature a review's dispatch REVIEWS: a rewritten round names it in its first line; any other names it as its first
+    `specs/` path. A prompt that merely MENTIONS another feature reviews the one it names first (the round arbiter's tooling fix
+    on round:spec-fidelity|413-money-tooltip-on-the-record#1@6: 412's reviews, naming 413's directory as context, were bundled
+    as 413's rounds 4, 6 and 8)."""
+    m = _REVIEWS.search(prompt.lstrip())
+    return m.group(1) if m else ""
+
+
+def trigger_feature_dir(root: Path, trigger: str) -> Path | None:
+    """The feature directory a round trigger names (`round:spec-fidelity|413-money-tooltip-on-the-record#1@6`), if it exists - the
+    same fix: that bundle took the ACTIVE feature (`.specify/feature.json`, by then 414) for 413's spec and request."""
+    m = re.search(r"\|(?:plan:)?(\d+-[a-z0-9][a-z0-9-]*)(?:#|@|$)", trigger)
+    d = root / "specs" / m.group(1) if m else None
+    return d if d is not None and d.is_dir() else None
+
+
 def spec_rounds(out: Path, subject: str, transcripts: Path | None = None) -> list[str]:
     """A spec review's rounds, each reviewer's whole reply beside the MANIFEST (`round-N-spec-fidelity.md`) and its findings
     marked NEW, REPEATED or REVERSING (`mark_rounds`) - the round arbiter's tooling fix on round:spec-fidelity|387-scale-the-
@@ -682,7 +702,7 @@ def spec_rounds(out: Path, subject: str, transcripts: Path | None = None) -> lis
     found = []
     for f in sorted((transcripts or TRANSCRIPTS).glob("*/*/subagents/agent-*.jsonl")):
         prompt = _first_prompt(f)
-        if f"specs/{subject}" in prompt and _SPEC_ROUND.search(prompt) and "MODE 4" not in prompt:
+        if reviewed_feature(prompt) == subject and _SPEC_ROUND.search(prompt) and "MODE 4" not in prompt:
             found.append((f.stat().st_mtime, f))
     if not found:
         return ["- (no spec review dispatch found in the subagent transcripts - read the Review history)\n"]

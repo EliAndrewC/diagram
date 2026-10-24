@@ -88,8 +88,9 @@ amounts, record-wide, as it lands them.
 **Acceptance scenarios**:
 
 1. Every amount in any fragment in a coin of a built era's row is decided: marked with the era its author judges close enough,
-   or passed over in `backfill.md` with a reason that states the amount's date and that the author judged no built era close
-   enough to borrow, pending diagram#15's measured rule (a script sweeps every fragment and lists the candidates).
+   or passed over in `backfill.md` with its reason; where the reason is that no built era is close enough, it states the amount's
+   date (for a `*` line, the years its block names) and that the author judged no built era close enough to borrow, pending
+   diagram#15's measured rule (a script sweeps every fragment and lists the candidates).
 2. Marking changes no visible words, so it owes no record check (`scripts/record/record_units.py`: words are text with markup
    normalized away); `make record-owed` names nothing for these edits.
 
@@ -152,3 +153,5 @@ amounts, record-wide, as it lands them.
 - spec-fidelity after the amendment (2026-10-24): CHANGES REQUIRED - US4 scenario 1 restated the withdrawn 25 years as the
   author's rule; now each amount is marked or passed over by the author's judgment, its date stated. US2 scenario 1 lists the
   no-year refusal the plan already had.
+- spec-fidelity, second round after the amendment (2026-10-24): CHANGES REQUIRED - plan D6's example reason still used the
+  withdrawn rule; US4's reason clause read as covering pass-overs that are not about distance. Both reworded.

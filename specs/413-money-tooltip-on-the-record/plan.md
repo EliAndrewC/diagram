@@ -88,8 +88,7 @@ with its question, its block, and the years its block names, else those its head
 has no unit for (a gold bu at Kyoto 1745-54) is listed like any other and passed over with that reason. Amounts whose years fall within 25 years of a built era (`REVIEW_YEARS`, a review window deciding which amounts are judged on
 their own line - not a closeness rule, which allows or refuses no conversion and waits on diagram#15) are listed first; EVERY amount
 listed is owed a decision, whatever its years: marked by hand (D2), or passed over with its reason in
-`specs/413-money-tooltip-on-the-record/backfill.md` (one line per amount: question, amount, reason - "Edo 1804-30, no era
-within 25 years", "no unit for bu in the kyoto-1745 row"); where one reason covers every amount a fragment still holds
+`specs/413-money-tooltip-on-the-record/backfill.md` (one line per amount: question, amount, reason - "Edo 1804-30; the author judges no built era close enough to borrow, pending diagram#15", "no unit for bu in the kyoto-1745 row"); where one reason covers every amount a fragment still holds
 unmarked, the author may judge the fragment whole in one line, `- <stem> | * | <reason>` - but never an amount within 25 years of a
 built era: `--check` refuses a `*` line from covering those, and each needs its own mark or its own line. The script's `--check` exits 1 while a listed amount is
 neither marked nor named in that file, so the duty cannot stop at the flagged ones.
