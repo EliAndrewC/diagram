@@ -60,6 +60,8 @@ n="$(printf '%s\n' "$OUT" | grep -c 'REFUSED')"
 printf '\nAn OWED claim: `make claims-bundle MODULE=<file>` (or OWED=1), dispatch `impl-drift` on the MANIFEST it prints, save\n' >&2
 printf 'its reply to a file, then `make claims-checked BUNDLE=<dir> REPLY=<file>`. An INTRODUCED finding: fix the code or the\n' >&2
 printf 'claim and re-check it. A CARRY (a page edit'"'"'s finding on unchanged code): `make claims-carry F=<n>` files it as an open\n' >&2
-printf 'task of the feature being landed, and the push goes ahead (feature 385 FR-013). CLAIMS_OK="<why>" discharges every\n' >&2
+printf 'task of the feature being landed, and the push goes ahead (feature 385 FR-013). A claim past its round cap: `make\n' >&2
+printf 'arbiter-ask SUBJECT=<id> WHY="<the rounds>" REVIEW=claims:<key>[,<key>]` - an accept is recorded as its verdict, no\n' >&2
+printf 'escape needed (the GM 2026-10-24). CLAIMS_OK="<why>" discharges every\n' >&2
 printf 'refusal, to dev/bypass-log/.\n\n' >&2
 exit 1

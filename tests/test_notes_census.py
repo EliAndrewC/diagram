@@ -88,3 +88,19 @@ def test_the_pool_notes_state_no_stale_count_in_their_current_prose() -> None:
             assert stale_counts(fh.read(), json.load(mf)) == [], notes
         checked += 1
     assert checked >= 5, "non-vacuity: the hamlets' notes were read"
+
+
+def test_a_regenerated_map_s_census_is_refreshed_with_it(tmp_path) -> None:  # noqa: ANN001
+    """The GM 2026-10-24 (405 T26): the gate regenerated three pool farms and this file's test failed their stale census in the
+    same run; `_pool.obtain_full` now rewrites a regenerated map's census block from its new manifest, under the map's lock."""
+    from l7r.diagram.tools import notes_census
+    from tests.gate import _pool
+
+    manifest = tmp_path / "x.json"
+    manifest.write_text(json.dumps({"houses": [], "lanes": [], "meta": {}}), encoding="utf-8")
+    notes = tmp_path / "x.notes.md"
+    notes.write_text(f"# x\n\n{notes_census.BEGIN}\n- stale\n{notes_census.END}\n", encoding="utf-8")
+    assert _pool.refresh_census(str(manifest)) and "- stale" not in notes.read_text(encoding="utf-8")
+    assert not _pool.refresh_census(str(manifest)), "already current: nothing written"
+    notes.unlink()
+    assert not _pool.refresh_census(str(manifest)), "no notes beside the map: nothing to do"

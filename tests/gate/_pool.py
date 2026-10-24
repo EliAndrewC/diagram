@@ -48,7 +48,32 @@ def obtain_full(gen: str) -> tuple[str, str, float | None]:
     landed, rolled twice in one run, by the sweep and by the lateral test.
     """
     with rollcache._share_lock(rollcache._run_share_path(("pool", gen))):
-        return gencache.gate_obtain(gen)
+        manifest, how, cpu_s = gencache.gate_obtain(gen)
+        if how == "REGENERATED":
+            refresh_census(manifest)
+        return manifest, how, cpu_s
+
+
+def refresh_census(manifest: str) -> bool:
+    """A regenerated map's notes census block rewritten from its new manifest, under the same lock (the GM 2026-10-24: T26's
+    landing regenerated three pool farms, and the same gate run's `tests/test_notes_census.py` failed their stale census -
+    five minutes of gate for `make notes-census`, which a session ran by hand after). True where the notes changed; the landing
+    commits them with the regenerated maps (`land.commit_regenerated`, everything under `pool/`)."""
+    from l7r.diagram.tools import notes_census
+
+    notes = manifest[: -len(".json")] + ".notes.md"
+    if not os.path.exists(notes):
+        return False
+    with open(manifest, encoding="utf-8") as fh:
+        M = json.load(fh)
+    with open(notes, encoding="utf-8") as fh:
+        text = fh.read()
+    new = notes_census.replace(text, M)
+    if new == text:
+        return False
+    with open(notes, "w", encoding="utf-8") as fh:
+        fh.write(new)
+    return True
 
 
 def obtain(gen: str) -> str:

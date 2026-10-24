@@ -544,3 +544,20 @@ def test_every_block_a_task_s_own_headings_open_is_its_section() -> None:
     assert "part A" in t26 and "**D1**" in t26 and "re-answered" in t26 and "**D131**" in t26, "every own block"
     assert t26.index("part A") < t26.index("D131") and "an umbrella" not in t26 and "T07" not in t26
     assert secs["T07"].startswith("## T07") and secs["T07"].count("### T07 Approach") == 1, "a nested block counted once"
+
+
+def test_a_clear_task_section_records_its_blocks_reviewed(tmp_path: pathlib.Path) -> None:
+    """The GM 2026-10-24 (405 T26): `make decide`'s CLEAR on a task's section also records each block inside it, so the landing
+    no longer owes the same text a second, block review (`make plan-delta`); a block outside it, and a verdict not CLEAR, record
+    nothing."""
+    d = feature(tmp_path, plan=PLAN_TASKS)
+    grown = PLAN_TASKS.decode().replace("- the bath 10 x 8 ft\n", "- the bath 10 x 8 ft\n- a second bath\n")
+    (d / "plan.md").write_text(grown)
+    sha = hashlib.sha256(gate.task_sections(grown)["T05"].encode()).hexdigest()
+    narrowing = {**WITHIN, "class": "narrowing", "ruling": "NOT LEGITIMATE"}
+    gate.record_task(d, "T05", {"section_sha256": sha, "decisions": [narrowing]}, "spec-fidelity")
+    assert not json.loads((d / "plan-review.json").read_text()).get("blocks"), "a verdict not CLEAR records no block"
+    gate.record_task(d, "T05", {"section_sha256": sha, "decisions": [WITHIN]}, "spec-fidelity")
+    recorded = json.loads((d / "plan-review.json").read_text())["blocks"]
+    assert set(recorded) == {k for k, _b, _a in gate.blocks(grown) if "T05" in k}, "the section's blocks, and no other"
+    assert all(v["verdict"] == "CLEAR" for v in recorded.values())

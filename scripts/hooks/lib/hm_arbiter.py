@@ -31,6 +31,7 @@ import fcntl
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 from collections.abc import Iterable, Mapping
@@ -463,6 +464,21 @@ def spec_body_sha(d: Path) -> str:
     return hashlib.sha256((head.split("\n", 1)[0] + sep + rest).encode()).hexdigest()
 
 
+def house_styled(obj: Any) -> Any:  # noqa: ANN401 - a ruling's JSON, any shape
+    """A ruling with its text in the house style (American spellings) before it is recorded - the GM 2026-10-24: T26's ruling
+    wrote a British spelling into arbiter.jsonl and gm-review.jsonl, and the gate's preflight refused the landing on it. The edit hooks
+    correct what a session writes; a record a make target writes passes none of them."""
+    import hm_house  # noqa: PLC0415 - the module beside this one
+
+    if isinstance(obj, str):
+        return hm_house.americanize(obj)
+    if isinstance(obj, list):
+        return [house_styled(x) for x in obj]
+    if isinstance(obj, dict):
+        return {k: house_styled(v) for k, v in obj.items()}
+    return obj
+
+
 def spec_ruled(d: Path) -> str:
     """The arbiter's `accept` or `process-fault` on feature `d`'s spec review that stands for its verdict - one ruled on the
     spec as it reads now - or '' (feature 379 amendment 2; `review-gate.sh` asks this)."""
@@ -644,7 +660,7 @@ def main(argv: list[str]) -> int:
     if argv[:1] == ["ruled"] and len(argv) == 5 and argv[3] == "--as":
         root = Path(".").resolve()
         try:
-            row = record_ruling(root, argv[1], json.loads(Path(argv[2]).read_text(encoding="utf-8")), argv[4])
+            row = record_ruling(root, argv[1], house_styled(json.loads(Path(argv[2]).read_text(encoding="utf-8"))), argv[4])
         except PermissionError as e:
             print(f"arbiter-ruled: {e}", file=sys.stderr)
             return 2
@@ -662,6 +678,11 @@ def main(argv: list[str]) -> int:
                 import plan_gate  # noqa: PLC0415
 
                 print(f"arbiter-ruled: {len(plan_gate.arbiter_accept(d, row['trigger']))} plan block(s) recorded CLEAR - the accept is the plan's verdict")
+        claims_review = str(row.get("review") or "")
+        if claims_review.startswith("claims:") and row["ruling"] == "accept":  # the GM 2026-10-24: the accept is the claims' verdict
+            keys = claims_review[len("claims:") :]
+            done = subprocess.run([sys.executable, str(Path(__file__).resolve().parents[2] / "record" / "claims.py"), "--root", str(root), "accept", "--keys", keys, "--trigger", row["trigger"]], capture_output=True, text=True)
+            print((done.stdout + done.stderr).strip())
         if owed:
             print(owed)
         return 0
@@ -669,7 +690,7 @@ def main(argv: list[str]) -> int:
     if argv[:1] == ["ruled-batch"] and len(argv) == 4 and argv[2] == "--as":  # `make arbiter-ruled BATCH=1` (375 FR-017)
         root = Path(".").resolve()
         try:
-            rows = record_batch(root, json.loads(Path(argv[1]).read_text(encoding="utf-8")), argv[3])
+            rows = record_batch(root, house_styled(json.loads(Path(argv[1]).read_text(encoding="utf-8"))), argv[3])
         except PermissionError as e:
             print(f"arbiter-ruled: {e}", file=sys.stderr)
             return 2
@@ -702,8 +723,8 @@ def main(argv: list[str]) -> int:
         if not re.fullmatch(r"[\w.-]+", subject) or len(why.split()) < 2 or len(why) < 8:
             print("arbiter-ask: SUBJECT is one short id (letters, digits, . _ -) and WHY the question, two words or more", file=sys.stderr)
             return 2
-        if review and review not in REVIEWS:
-            print(f"arbiter-ask: REVIEW= is spec or plan (the review whose verdict the ruling stands as), or left out - not {review!r}", file=sys.stderr)
+        if review and review not in REVIEWS and not (review.startswith("claims:") and len(review) > len("claims:")):
+            print(f"arbiter-ask: REVIEW= is spec, plan or claims:<key>,<key> (the review whose verdict the ruling stands as), or left out - not {review!r}", file=sys.stderr)
             return 2
         trigger = f"ask:{subject}"
         if trigger in rulings(Path(".").resolve()):

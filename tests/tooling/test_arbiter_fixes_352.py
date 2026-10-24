@@ -270,3 +270,34 @@ def test_an_ask_naming_a_fit_failure_carries_the_room_table(tmp_path: pathlib.Pa
     assert "## The room table (405 T113)" in text and "| `SEATING_GROUND_FT`" in text
     ha.trip(root, "ask:t27-wording", "ask", "", "May the modal's About tab keep its second paragraph?")
     assert "room table" not in ab.bundle(root, "ask:t27-wording", tmp_path / "out2").read_text()
+
+
+def test_a_ruling_is_recorded_in_the_house_style() -> None:
+    """The GM 2026-10-24 (405 T26): a ruling wrote a British spelling into arbiter.jsonl and gm-review.jsonl, and the gate's preflight
+    refused the landing on it; the recorder americanizes a ruling's text, every field, before it is written."""
+    british = {"why": "the step label" + "led UNRESEARCHED", "what": ["a col" + "our"]}  # built, so the house-style check reads no word
+    got = ha.house_styled({"ruling": "accept", **british, "n": 3})
+    assert got == {"ruling": "accept", "why": "the step labeled UNRESEARCHED", "what": ["a color"], "n": 3}
+
+
+def test_an_accept_on_claims_is_recorded_as_their_verdict(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """The GM 2026-10-24 (405 T26): the claims gate refused a claim the round arbiter had accepted with no third round, at the
+    landing and again at the stop-work push. An accept on an ask filed with REVIEW=claims:<keys> records those claims IN-STEP,
+    at their current fingerprints, citing the ruling."""
+    import argparse
+    import json
+
+    ca = _load("claims_accept")
+    saved: dict = {}
+
+    def bundle(root, cur, keys, out):  # noqa: ANN001, ANN202
+        (out / "units.json").write_text(json.dumps({k: {**cur[k], "uid": k.split("#")[0]} for k in keys}))
+
+    monkeypatch.setattr(ca.claims, "bundle", bundle)
+    monkeypatch.setattr(ca.claims, "save_index", lambda path, rows: saved.update(rows))
+    monkeypatch.setattr(ca.claims, "live_rows", lambda cur, rows: rows)
+    cur = {"m.py::f#a claim": {"code": "c", "core": "k", "research": "r"}}
+    args = argparse.Namespace(keys="m.py::f#a claim", trigger="ask:x")
+    assert ca.accept(tmp_path, cur, {}, args) == 0
+    assert saved["m.py::f#a claim"]["verdict"] == "IN-STEP" and "ask:x" in saved["m.py::f#a claim"]["note"]
+    assert ca.accept(tmp_path, cur, {}, argparse.Namespace(keys="nope", trigger="ask:x")) == 2, "an unknown claim is refused"

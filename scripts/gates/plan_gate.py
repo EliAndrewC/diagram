@@ -215,6 +215,13 @@ def record_task(spec_dir: pathlib.Path, task: str, review: dict, declared: str, 
         "verdict": verdict,
     }
     rec_path.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    # ...AND A CLEAR SECTION IS ITS BLOCKS' REVIEW TOO (the GM 2026-10-24): the reviewer read every block of the section, yet
+    # T26's landing was refused for three of them owing the block review (`make plan-delta`) - a second dispatch of the same
+    # text, four minutes on the landing's path. Each block inside the section is recorded as `record_blocks` records it.
+    if verdict == "CLEAR":
+        inside = {k: block_digest(body) for k, body, _at in blocks(plan.read_text(encoding="utf-8")) if body.strip() and body.strip() in section}
+        if inside:
+            record_blocks(spec_dir, {"blocks": inside, "decisions": decisions}, declared, today)
     return out["tasks"][task]
 
 

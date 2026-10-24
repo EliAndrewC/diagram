@@ -790,6 +790,9 @@ def _parser() -> argparse.ArgumentParser:
     cc.add_argument("--task", default="")
     cc.add_argument("--keys", default="", help="findings a round-arbiter ruling carried, ';'-separated (with --ruling)")
     cc.add_argument("--ruling", default="", help="the arbiter.jsonl trigger that carried --keys")
+    ac = sub.add_parser("accept")
+    ac.add_argument("--keys", required=True, help="the claims a round-arbiter accept stands for, ','-separated")
+    ac.add_argument("--trigger", required=True, help="the arbiter.jsonl trigger whose accept this records")
     cv = sub.add_parser("coverage")
     cv.add_argument("--path", default="", help="only units whose file path contains this")
     ap.add_argument("--root", default=".")
@@ -845,6 +848,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     qdir, store = root / QUESTIONS, load_store(root / STORE)
     if args.cmd == "rekey":  # 405 T58: a file split at the bar keeps its claims' rows
         return _rekey_cmd(root, cur, index)
+    if args.cmd == "accept":  # the round arbiter's accept on claims (the GM 2026-10-24)
+        import claims_accept  # noqa: PLC0415 - the module beside this one
+
+        return claims_accept.accept(root, cur, index, args)
     if args.cmd == "owed":
         # THE GATE'S FORM CHECK, HERE TOO (feature 374 batch 4): a claim whose form is wrong (a GUESS naming the findings page,
         # not its drawing page) failed `test_claims_coverage` at the gate, a tooling test `make quick` never runs - a whole gate
