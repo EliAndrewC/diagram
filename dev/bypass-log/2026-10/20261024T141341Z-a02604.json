@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-24T14:13:41Z",
+  "target": "claims-gate",
+  "commit": "b53a45de8",
+  "why": "CLAIMS_OK: the round arbiter accepted settle_defer's reworded claim with no third round (ask:t26-defer-claim, arbiter.jsonl)"
+}
