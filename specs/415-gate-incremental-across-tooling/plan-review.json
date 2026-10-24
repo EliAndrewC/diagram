@@ -162,6 +162,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
+  },
+  "### T05 part B (2026-10-24T19:22Z)": {
+   "sha256": "21f958518f79d7bdda2e6b2627af74f1064aa88acf9654b96246db653f02f52c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -460,6 +466,33 @@
      "summary": "The next step is one make land for T05, with the three planner tests green and nothing new failing.",
      "class": "within",
      "why": "This is a verification step under the arbiter's continue ruling. It does not alter the measurement basis the GM approved in amendment 1 or any requirement."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T05 part B (2026-10-24T19:22Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05B-1 cover_changed own COVERAGE_FILE",
+     "summary": "cover_changed.py writes its coverage data in its own temporary directory (COVERAGE_FILE) so it no longer collides with the gate workers' coverage data when run beside the gate.",
+     "class": "within",
+     "why": "Item 4 / FR-004 asks for cover-changed to run beside the gate; the two sharing one coverage file broke the gate ('no such table: context'). Isolating the data is what makes the requested parallel arrangement work; it keeps cover-changed beside the gate and does not alter what it checks, what it refuses, or any other item."
+    },
+    {
+     "id": "T05B-2 GATE_MACHINERY routing",
+     "summary": "The round arbiter's tooling fix: a delta touching land.py, scripts/gates/, the Makefile or l7r/diagram/ci/ lands through a gate, never the direct route (land.GATE_MACHINERY).",
+     "class": "within",
+     "why": "Narrows none of the six items or FR-001..FR-008: it does not change when a gate plans full (FR-001), what cover-changed or the cohort do (FR-003/FR-004), or the cutoff (FR-006). It is a guard added on the round arbiter's ruling (red-gate@2026-10-24T19:17:09Z, recorded in arbiter.jsonl), which stands where the GM was asked, so that this feature's landing-machinery changes meet the gate before main as T03's did not. Its reach beyond this feature's own landing-path change is the arbiter's ruling, not the request; noted for the GM's after-landing review of that ruling."
+    },
+    {
+     "id": "T05B-3 green criteria for T05's landing",
+     "summary": "T05's next make land counts green only with no INTERNALERROR or failed test, the three planner tests green by name, and cover_changed.py run beside the gate with real work, its data in its own directory and no stray .coverage* in the clone root.",
+     "class": "within",
+     "why": "Verification only: each condition fails solely when FR-004 (beside the gate, working) or the T05 change is absent or broken. It enforces what was asked and adds no behavior."
     }
    ]
   }
