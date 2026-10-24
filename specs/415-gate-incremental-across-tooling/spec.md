@@ -22,7 +22,7 @@ static phases ~30 s, the test phase 280 s over 10,376 tests), the landing cohort
 two engine files reached 143 of 11,890 baseline tests (1%) in 21 test modules. Tooling lands several times a day, so the
 rule fires on most landings: of October's green gate runs, 286 were full (median 194 s) and 49 incremental (median 42 s).
 A second rule plans `full` when a change reaches more than `FULL_FRACTION` (60%) of the baseline, recorded beside the
-constant as "a knob with its reason; not a measured optimum".
+constant as "a knob with its reason; not a measured optimum". All observed 2026-10-24; method: the landing's log and commit times, the gate's planner asked offline on its baseline, and a count of `dev/run-log/2026-10/`.
 
 ## User Scenarios & Testing
 
@@ -103,12 +103,12 @@ constant as "a knob with its reason; not a measured optimum".
 - **SC-003** (FR-003, FR-004): A landing's log shows the fresh block started after the push and `cover-changed` beside the
   gate; a fixture landing with an uncovered added line is refused and its gate stopped.
 - **SC-004** (FR-006, FR-007): This feature's research records the measured fixed and per-test costs; a landing reaching
-  more than 60% runs incremental; a full gate is started after the push when the refresh rule calls for one, and none
+  more than `FULL_FRACTION` (the constant, 0.6) runs incremental; a full gate is started after the push when the refresh rule calls for one, and none
   while another runs.
 - **SC-005** (FR-008): `make test-file FILE="tests/tooling/ci/ tests/tooling/test_tick_task.py"` and `make hooks-test` pass,
   each new test red without its change.
 - **SC-006** (FR-001, FR-003, FR-004, FR-006): A real engine landing after a tooling change is measured end to end and
-  reported against T26's 8.8 minutes.
+  reported against T26's 8.8 minutes (observed 2026-10-24; method: the landing's log and commit times).
 
 ## Assumptions
 
