@@ -79,3 +79,13 @@ def test_no_table_lists_the_periods_coins_and_no_backfill_names_nothing(tmp_path
     assert mc.passed_over(str(root)) == set()
     (root / "research" / "assets" / "money-conversions.json").write_text(json.dumps({"eras": {"x": {"years": "none", "units": {}}}}), encoding="utf-8")
     assert (mc.amounts(str(root))[0].near, mc.amounts(str(root))[0].gap) == ("", None)
+
+
+def test_an_awaiting_era_counts_as_built_with_every_coin_of_the_period(tmp_path: pathlib.Path) -> None:
+    mc = _mod()
+    root = _repo(tmp_path, "<p>In 1840 a room was 300 monme, and a bu of gold 1 bu.</p>")
+    awaiting = {"edo-1830": {"place": "Edo", "years": "1830-1844"}, "kyoto-1745": {"place": "Kyoto", "years": "1700-1710"}}
+    (root / "research" / "assets" / "money-eras-awaiting.json").write_text(json.dumps(awaiting), encoding="utf-8")
+    found = {a.text: (a.near, a.gap) for a in mc.amounts(str(root))}
+    assert found == {"300 monme": ("edo-1830", 0), "1 bu": ("edo-1830", 0)}, "an awaiting era carries every coin of COINS_ALSO"
+    assert mc._eras(str(root))["kyoto-1745"][:2] == (1745, 1754), "the vendored row wins over an awaiting id it already has"

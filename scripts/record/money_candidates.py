@@ -27,6 +27,9 @@ from dataclasses import dataclass
 
 QUESTIONS = os.path.join("research", "questions")
 TABLE = os.path.join("research", "assets", "money-conversions.json")
+#: The era ids awaiting their row (FR-008): an amount may be marked with one now, so it counts as built here, carrying every coin
+#: of COINS_ALSO until its row names its units (feature 412: the marks pass ran before gm-assistant's rows were vendored).
+AWAITING = os.path.join("research", "assets", "money-eras-awaiting.json")
 BACKFILL = os.path.join("specs", "413-money-tooltip-on-the-record", "backfill.md")
 #: The period's other Japanese coin words, listed whether or not a built era's row has a unit for them (the plan review of
 #: 2026-10-24: an amount in a coin its row lacks, a gold bu at Kyoto 1745-54, is passed over with that reason, never unseen).
@@ -57,12 +60,21 @@ def _plain(markup: str) -> str:
     return re.sub(r"\s+", " ", html.unescape(_TAG.sub("", markup))).strip()
 
 
-def _eras(root: str) -> dict[str, tuple[int, int, frozenset[str]]]:
+def _read(path: str) -> dict:
     try:
-        with open(os.path.join(root, TABLE), encoding="utf-8") as fh:
-            eras = json.load(fh).get("eras", {})
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
     except FileNotFoundError:
         return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _eras(root: str) -> dict[str, tuple[int, int, frozenset[str]]]:
+    """{era id: (first year, last year, its coins)} - the vendored table's eras, then the awaiting ones it does not have yet."""
+    eras = dict(_read(os.path.join(root, TABLE)).get("eras", {}))
+    for era_id, row in _read(os.path.join(root, AWAITING)).items():
+        if era_id not in eras and isinstance(row, dict):
+            eras[era_id] = {"years": row.get("years", ""), "units": dict.fromkeys(COINS_ALSO)}
     out = {}
     for era_id, row in eras.items():
         ys = [int(y) for y in _YEAR.findall(row.get("years", ""))]
