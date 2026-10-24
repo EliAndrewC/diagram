@@ -136,3 +136,17 @@ liu-2022-china-wages-1530-1840, ma-2012-china-money-overview, mingshi-81-qiancha
 - Gamble 1921's gild wages (painters 65 cents, paper-hangers 57-77 cents) and the Dittmer family budget ($100 a year for five).
 - The Academia Sinica Qing grain-price database (mhdb.mh.sinica.edu.tw/foodPrice) for a market rice price in Beijing and Suzhou; Wang Yeh-chien's Yangzi rice series.
 - 圓麥: a dictionary to settle whether it is naked barley (元麥).
+
+## Where work stopped (2026-10-24, the weekly usage cap)
+
+- Sessions s1-s4 done (0286-0289 new; 0250, 0265, 0273, 0279 extended); pulled into `.clones/diagram-money` (merge 5730483f3);
+  backed up to `backup/diagram-money` on GitHub. NOT on main.
+- Next, in order: (1) fix `l7r/diagram/interactive/assets/glossary/25400-copper.json` (filename `copper`, term `coppers`) and
+  `make glossary`; (2) the round-3 checks s4-checks.md's STILL OWED names - each to the round arbiter first (`make
+  arbiter-bundle BATCH=1`), then `make record-owed` clean; (3) Approach blocks for T01-T05 (plan-delta review); (4) `make
+  impl-check F=412`; (5) T06: the confirmed era ids into `research/assets/money-eras-awaiting.json`, the record's amounts marked
+  (the Takamiya fares re-marked to `osaka-1620`), `make money-candidates CHECK=1`; (6) the reply on #13 and `make land`.
+- GM items from s4 (to `escalation-check` first): Kimura's 1620-1650 prices mostly Kyoto's (relabel the era); Liu 2022 superseded
+  by the EEH 2024 article; the Chinese Repository's dollar at about 0.75 tael against the derived 0.71.
+- 414 and 416 are ready to write (specs FAITHFUL, plans CLEAR, briefs in `specs/414-price-stability/briefs/` and
+  `specs/416-three-metals/briefs/`): queue each in `.clones/diagram-money-pages` after pulling this clone into it.
