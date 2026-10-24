@@ -458,3 +458,44 @@ def test_an_ordinary_lane_beside_a_tree_lane_past_a_pitch_defers_at_the_middle_o
     assert not tree.tree_shadow_cuts(short, [[(float(x), float(y)) for x, y in ln["pts"]] for ln in short])
     plain = [{**lanes[0], "role": None}, lanes[1]]
     assert not tree.tree_shadow_cuts(plain, [[(float(x), float(y)) for x, y in ln["pts"]] for ln in plain])
+
+
+def test_a_lane_is_cut_where_it_comes_alongside_a_tree_lane_and_teed_on_it() -> None:
+    """405 T26 (D131), seed 47 in small: walked in from its first end, the lane first comes alongside the tree lane (15 ft off,
+    parallel) at (15, 120); it is cut there and teed onto the tree lane. A refused write is passed over for the next point."""
+    lanes = [
+        {"pts": [[400.0, 0.0], [0.0, 0.0], [-1000.0, 0.0]], "w": 6, "connector": True},
+        {"pts": [[0.0, 0.0], [0.0, 200.0]], "w": 3, "role": ACCESS_ROLE},
+        {"pts": [[300.0, 250.0], [100.0, 220.0], [15.0, 120.0], [15.0, 40.0]], "w": 3},
+    ]
+    M = {"meta": dict(_GEN), "houses": [], "lanes": lanes}
+    assert tree.cut_alongside(M, 2) == [(300.0, 250.0), (100.0, 220.0), (15.0, 120.0), (0.0, 120.0)]
+    later = tree.cut_alongside(M, 2, admit=lambda run: run[-1][1] < 119.0)
+    assert later is not None and later[-1][0] == 0.0 and later[-1][1] < 119.0, "the first admitted point, walking on"
+    assert tree.cut_alongside(M, 2, admit=lambda run: False) is None
+    assert tree.cut_alongside({**M, "lanes": lanes[:2] + [{"pts": [[300.0, 250.0], [100.0, 250.0]], "w": 3}]}, 2) is None, "never alongside"
+
+
+def test_a_cut_strands_the_reach_only_where_the_field_or_a_house_loses_the_network(monkeypatch) -> None:  # noqa: ANN001
+    """405 T26 (D131): the gap is kept unless it leaves the field (or a house) no longer joined to the connector's network."""
+    lanes = [{"pts": [[0.0, 0.0], [-100.0, 0.0]], "w": 6, "connector": True}, {"pts": [[0.0, 0.0], [900.0, 0.0]], "w": 3}]
+    M = {"meta": dict(_GEN), "houses": [], "lanes": lanes}
+    monkeypatch.setattr(law, "field_unreached", lambda m: not any(ln["pts"][-1] == [900.0, 0.0] for ln in m["lanes"]))
+    assert tree.strands_the_reach(M, 1, [[(0.0, 0.0), (400.0, 0.0)], [(460.0, 0.0), (900.0, 0.0)]]), "the field half stranded"
+    assert not tree.strands_the_reach(M, 1, [[(0.0, 0.0), (900.0, 0.0)]]), "nothing stranded"
+
+
+def test_the_defer_tees_only_where_its_gap_would_strand_the_reach(monkeypatch) -> None:  # noqa: ANN001
+    """405 T26 (D131): `settle_defer` cuts its gap as before, and tees where it comes alongside only where the gap strands the
+    field or a house - tried on every cut, the tee knotted cohort seed 26."""
+    s = types.SimpleNamespace(M={"lanes": [{"pts": [[0.0, 0.0], [100.0, 0.0]], "w": 3}]}, admits=lambda *a, **k: True)
+    written: list[dict] = []
+    monkeypatch.setattr(tree, "tree_faults", lambda M: [(0, (50.0, 0.0))])
+    monkeypatch.setattr(tree, "cut_alongside", lambda M, i, admit: (admit([(0.0, 0.0), (10.0, 0.0)]) and [(0.0, 0.0), (10.0, 0.0)]) or None)
+    monkeypatch.setattr(settle, "apply_pieces", lambda s, edits: written.append(edits) or len(edits))
+    monkeypatch.setattr(tree, "strands_the_reach", lambda M, i, gap: True)
+    tree.settle_defer(s)
+    assert written[-1] == {0: [[(0.0, 0.0), (10.0, 0.0)]]}, "teed where the gap would strand"
+    monkeypatch.setattr(tree, "strands_the_reach", lambda M, i, gap: False)
+    tree.settle_defer(s)
+    assert len(written[-1][0]) == 2 and written[-1][0][0][-1][0] < 50.0 < written[-1][0][1][0][0], "the gap, as before"

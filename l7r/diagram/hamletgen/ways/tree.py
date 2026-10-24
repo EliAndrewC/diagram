@@ -32,7 +32,7 @@ from __future__ import annotations
 
 import copy
 import math
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Iterator, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import seg_closest, seg_dist
@@ -542,9 +542,101 @@ DEFER_GAP_FT = 30.0
 Research: defer cut extent - NONE: past the law's own legs"""
 
 
+ALONGSIDE_STEP_FT = 5.0
+"""How far apart the points are that `cut_alongside` asks along a lane, walking in from an end (405 T26, D131).
+
+Research: the walk's step - UNRESEARCHED: a sampling step, finer than a footpath's 3 ft tread is wide only by a little"""
+
+
+def alongside_points(seq: Sequence[Pt], trees: Sequence[tuple[int, Poly]]) -> Iterator[tuple[int, Pt, Pt]]:
+    """Walking `seq` from its first point in `ALONGSIDE_STEP_FT` steps: each (leg, point, foot) where the point stands within
+    `WEB_SHADOW_FT` of a tree lane's nearest leg and the lane's leg there runs under `_SIDE_BY_SIDE_DEG` to it - the foot its
+    nearest point on that tree lane (405 T26, D131).
+
+    Research:
+        side by side - research/questions/0081-village-lanes.drawing.html: a lane that wanders over another way at less than 20 degrees would be walked into one path with it (a map drawing convention, the page's own reading)
+        beside, as the map reads it - UNRESEARCHED: 0081 gives the angle but no distance; read within `WEB_SHADOW_FT` (30 ft, the distance the shadow rule reads two ways together at), as `knots.teed_back` reads it"""
+    from ..consts import WEB_SHADOW_FT
+    from .knots import _SIDE_BY_SIDE_DEG
+
+    for k in range(len(seq) - 1):
+        a, b = seq[k], seq[k + 1]
+        n = max(1, int(math.dist(a, b) // ALONGSIDE_STEP_FT))
+        for t in range(n + 1):
+            x = (a[0] + (b[0] - a[0]) * t / n, a[1] + (b[1] - a[1]) * t / n)
+            for _j, o in trees:
+                u, v = min(zip(o, o[1:], strict=False), key=lambda uv: seg_dist(x[0], x[1], *uv))
+                turn = abs(math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]) - math.atan2(v[1] - u[1], v[0] - u[0]))) % 180.0
+                if seg_dist(x[0], x[1], u, v) <= WEB_SHADOW_FT and min(turn, 180.0 - turn) < _SIDE_BY_SIDE_DEG:
+                    yield k, x, seg_closest(x[0], x[1], u, v)
+
+
+def _joined(M: Mapping[str, Any]) -> dict[str, Any]:
+    """The map with only the lanes joined to the connector's network (`settle.connector_component`): what reaches."""
+    from .settle import connector_component
+
+    keep = connector_component(M.get("lanes") or [])
+    return {**M, "lanes": [ln for k, ln in enumerate(M.get("lanes") or []) if k in keep]}
+
+
+def strands_the_reach(M: Mapping[str, Any], i: int, pieces: Sequence[Poly]) -> bool:
+    """Would lane `i` cut into `pieces` leave the field or a house no longer reached from the connector's network - what
+    `settle_network` keeps of a split web (405 T26, D131)? A piece the cut strands that reaches nothing goes with the network
+    step as before; this asks only after what the map is owed.
+
+    Research: the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the network to the field's bund"""
+    lanes = M["lanes"]
+    trial = {**M, "lanes": [*lanes[:i], *({**lanes[i], "pts": [list(q) for q in pc]} for pc in pieces if len(pc) >= 2), *lanes[i + 1 :]]}
+    now, then = _joined(M), _joined(trial)
+    return law.field_unreached(then) > law.field_unreached(now) or len(unreached_houses(then)) > len(unreached_houses(now))
+
+
+def cut_alongside(M: Mapping[str, Any], i: int, admit: Callable[[Poly], bool] = lambda run: True) -> Poly | None:
+    """Ordinary lane `i` CUT WHERE IT COMES ALONGSIDE a tree lane and teed onto it there (405 T26, D131): walked in from each
+    end (`alongside_points`), the first point whose cut `admit` takes (the overlap matrix, in `settle_defer`) and that leaves
+    the lane no rule broken against the tree (`tree_faults`), the web in no more networks and no more knots (`knots.knots`;
+    cohort seed 26 knotted where it did not), and no house nor the field newly unreached; None where no point does. Cohort seed 47 with T26's sheds: the field's join-orphans link ran 550 ft beside
+    three households' ways; cut where it first came alongside one, past that household's threshing yard, the field kept it.
+
+    Research:
+        cut where it comes alongside, met as a T - research/questions/0081-village-lanes.drawing.html: "the maps cut it where it comes alongside and let it meet the other as a T" (a map drawing convention, the page's own reading)
+        the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the network to the field's bund
+        each end walked, the nearer point first - UNRESEARCHED: the cut that keeps most of the lane's own way"""
+    from .checks import unreached_houses
+
+    lanes = M["lanes"]
+    p = law.lane_pts(lanes[i])
+    trees = [(j, law.lane_pts(ln)) for j, ln in enumerate(lanes) if j != i and is_tree(ln) and len(ln.get("pts") or []) >= 2]
+    from .knots import knots
+
+    nets, field, houses, tied = law.lane_networks(M), law.field_unreached(M), len(unreached_houses(M)), len(knots(lanes))
+    for seq in (list(p), list(p)[::-1]):
+        for k, x, foot in alongside_points(seq, trees):
+            run: list[Pt] = []
+            for q in (*seq[: k + 1], x, foot):
+                if not run or math.dist(q, run[-1]) > 1e-6:
+                    run.append(q)
+            if len(run) < 2 or not admit(run):
+                continue
+            trial = {**M, "lanes": [*lanes[:i], {**lanes[i], "pts": [list(q) for q in run]}, *lanes[i + 1 :]]}
+            if (
+                len(knots(trial["lanes"])) <= tied
+                and not any(j == i for j, _q in tree_faults(trial))
+                and law.lane_networks(trial) <= nets
+                and law.field_unreached(trial) <= field
+                and len(unreached_houses(trial)) <= houses
+            ):
+                return run
+    return None
+
+
 def settle_defer(s: Any) -> int:
     """Every ordinary lane that breaks a rule against a tree lane (`tree_faults`) is cut `DEFER_GAP_FT` either side of the
-    point - the tree is never cut. Returns the lanes cut."""
+    point - the tree is never cut - or, where that gap would leave the field or a house unreached (`strands_the_reach`), cut
+    where it comes alongside a tree lane and teed onto it (`cut_alongside`, 405 T26, D131: tried on every such cut, it knotted
+    cohort seed 26). Returns the lanes cut.
+
+    Research: cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: a lane that wanders over another way at under 20 degrees is cut where it comes alongside and meets the other as a T (a map drawing convention, the page's own reading)"""
     from .settle import apply_pieces, arc_at, cut_around
 
     faults = tree_faults(s.M)
@@ -557,7 +649,16 @@ def settle_defer(s: Any) -> int:
             continue
         p = law.lane_pts(lanes[i])
         k = min(range(len(p) - 1), key=lambda m: seg_dist(q[0], q[1], p[m], p[m + 1]))
-        edits[i] = cut_around(p, arc_at(p, k, seg_closest(q[0], q[1], p[k], p[k + 1])), DEFER_GAP_FT)
+        gap = cut_around(p, arc_at(p, k, seg_closest(q[0], q[1], p[k], p[k + 1])), DEFER_GAP_FT)
+        # ...UNLESS THE GAP WOULD LEAVE A HOUSE OR THE FIELD UNREACHED: then cut where it comes alongside a tree lane, teed on it
+        # (405 T26, D131) - cohort seed 47 with T26's sheds: the gap cut out of the field's join-orphans link stranded its field
+        # half, and the field was reached by no way
+        if strands_the_reach(s.M, i, gap):
+            admit = lambda run, ln=lanes[i]: s.admits("lanes", {**ln, "pts": [[round(float(a), 1), round(float(b), 1)] for a, b in run]}, ignore=ln)  # noqa: E731
+            if (teed := cut_alongside(s.M, i, admit)) is not None:
+                edits[i] = [teed]
+                continue
+        edits[i] = gap
     return apply_pieces(s, edits)
 
 

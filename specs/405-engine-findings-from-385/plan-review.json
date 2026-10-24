@@ -302,6 +302,65 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T26": {
+   "section_sha256": "6d5ed315de192a3d24401f2e4e59ab3e68a9a217f8149a95cd0fabe0b40caa46",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D78",
+     "summary": "shed_off_a_wall: clear of every steading wall by gap+ken, exactly a ken off a HOUSE wall (tol 0), wall places off the house's walls only, no part forward of the front wall",
+     "class": "within",
+     "why": "T26 is a task moved from 385 and worked per FR-001; this is that task's own rule, rendered from 0043's 'a short step off the house', behind or beside, never the front yard. It narrows nothing the GM asked."
+    },
+    {
+     "id": "D78-roll-to-T106",
+     "summary": "the per-household seat roll, in T26's 19:13Z goal, is not done in T26 and is filed as T106 (measured: it moved Sawada's farms into a knot)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows T26's own goal but not the feature: T106 is in the knots family that FR-003a and amendment 10 ('solve the knots problem inside 405') require to be solved in this feature before T127. The work is re-filed in the same feature, on a measured reason, not dropped. FR-002's rule that found work stays here as a new task points the same way."
+    },
+    {
+     "id": "D78-kura-side-to-T104",
+     "summary": "the kura's side stays as drawn (north); 0040's west for a scattered farm is left to T104",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged separately from the roll. It is a different item (where the kura stands, from 0040, not how the shed is seated), and it also goes to a knots-family task (T104) that FR-003a requires to land in 405. Nothing leaves the feature."
+    },
+    {
+     "id": "exit-b-room",
+     "summary": "T26's remaining conflicts are not solved by widening the room between farms (measured worse at two widths within the research band, 2026-10-22, T107); another route is taken",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Amendment 8 named widening within the research bound as the method. That method was carried out (T107 in the tree) and measured worse on the conflicts left. The GM's purpose was a passing cohort without bin-packing and without farms spaced past the research ('not realistic'), so widening further would breach the bound the GM set. Amendment 10 then asks for the knots to be solved in 405 and names no method. Applying the method literally would defeat its stated purpose, and the departure was measured, not assumed."
+    },
+    {
+     "id": "D131",
+     "summary": "tree.settle_defer: when the DEFER_GAP_FT cut would strand the field or a house from the connector's network, the lane is cut where it comes alongside a tree lane (cut_alongside) and teed onto it, if the overlap matrix and the web checks admit it",
+     "class": "within",
+     "why": "Seed 47 fails only with T26's own patch (measured 2026-10-24), so this is the task's own change breaking the cohort and being made to land (FR-001; T26's done-line, seeds 1-48 pass). It is not a finding on code the task left alone, which FR-002 would send to a new task. FR-003a puts T26 in the knots family solved in this feature, and the move is 0081's convention, read the same way as D125 and D129."
+    },
+    {
+     "id": "D131-conditional",
+     "summary": "the tee is applied only where the gap cut would strand the reach, not on every defer cut (on every cut it knotted cohort seed 26)",
+     "class": "within",
+     "why": "This limits how far a 0081 reading reaches, on a measured cohort result. It is not a limit on anything the GM asked for, and the plain cut stays in force wherever the tee does not apply."
+    },
+    {
+     "id": "D131-readings",
+     "summary": "'alongside' read within WEB_SHADOW_FT and a 5 ft walk step, both labeled UNRESEARCHED",
+     "class": "within",
+     "why": "They are parameters of the convention, labeled as D125 and D129 label theirs. Amendment 7 asks the session to settle such readings itself under the project's guidelines."
+    },
+    {
+     "id": "partB-set-aside",
+     "summary": "part B (2026-10-22): sheds stay where 0043 puts them; T26 set aside with its patch kept and its three conflicts written into T26's box, to be worked in 405",
+     "class": "within",
+     "why": "It keeps the researched shed rule rather than moving it to suit later steps, and keeps the work in 405 as FR-003a and amendment 10 require. The 2026-10-24 approach and D131 carry it out."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {
