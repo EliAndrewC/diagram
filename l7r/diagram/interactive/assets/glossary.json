@@ -17583,5 +17583,36 @@
    "fineness",
    "finenesses"
   ]
+ },
+ "numeraire": {
+  "def": "The unit prices and accounts are counted in, whether or not payment is made in it: in Qing China wages were often booked in taels of silver but paid in copper cash.",
+  "variants": [
+   "numeraire"
+  ]
+ },
+ "gold-back": {
+  "def": "A kind of Ming copper cash of the Jiajing and Wanli reigns; the Ming history counts the first Wanli gold-back coins at 10 to 0.01 tael of silver, and fewer as they rose in worth.",
+  "variants": [
+   "gold-back",
+   "gold-back cash"
+  ]
+ },
+ "Board of Revenue": {
+  "def": "The ministry of the Qing government in charge of taxes, granaries and money; in 1731 it proposed how the capital's depots should exchange their cash for silver.",
+  "variants": [
+   "Board of Revenue"
+  ]
+ },
+ "zhongji": {
+  "def": "A kind of Songjiang cotton cloth the local writer Ye Mengzhu names beside biao cloth; in 1684, with cotton cheap, it sold poorly and weavers turned to biao cloth.",
+  "variants": [
+   "zhongji"
+  ]
+ },
+ "Wanli kuaiji lu": {
+  "def": "A book of the Ming state's accounts from the Wanli era, one of the books from which the 1615 prices of salt and coal are taken where the Ministry of Works' handbook gives none.",
+  "variants": [
+   "Wanli kuaiji lu"
+  ]
  }
 }

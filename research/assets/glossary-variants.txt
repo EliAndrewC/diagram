@@ -266,6 +266,7 @@ blyxa	Blyxa
 bo	bo
 board feet	board foot
 board foot	board foot
+board of revenue	Board of Revenue
 board of works	Board of Works
 board wages	board wages
 board-clapper	clapper-board
@@ -1382,6 +1383,8 @@ gokenin	gokenin
 gokumon	gokumon
 gokura	gogura
 gold paper	gold paper
+gold-back	gold-back
+gold-back cash	gold-back
 gongbu changku xuzhi	Gongbu changku xuzhi
 gongxiefang	gongxiefang
 gonin-gumi	five-household group
@@ -2934,6 +2937,7 @@ nuisance trade	nuisance trade
 nuisance trades	nuisance trade
 nukimon	nukimon
 numajiro	numajiro
+numeraire	numeraire
 nuptiality	nuptiality
 nure-en	nure-en
 nuriya	nuriya
@@ -4577,6 +4581,7 @@ wang zhen's	Wang Zhen
 wanghuolou	wanghuolou
 wanli	Wanli era
 wanli era	Wanli era
+wanli kuaiji lu	Wanli kuaiji lu
 wanshu zaji	Wanshu zaji
 wara-nio	warazuka
 waraguro	waraguro
@@ -4848,6 +4853,7 @@ zhilizhou	zhilizhou
 zhiqian	standard cash
 zhizhai shulu jieti	Zhizhai Shulu jieti
 zhonggulou	gulou
+zhongji	zhongji
 zhonglou	gulou
 zhou	department
 zhou dynasty	Zhou dynasty
