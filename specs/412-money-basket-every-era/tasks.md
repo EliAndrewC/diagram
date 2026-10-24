@@ -44,3 +44,6 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 - [ ] T07 Close: report and land
       research: rendering
       verify: landed
+- [ ] GM review (make gm-reviewed F=412) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)

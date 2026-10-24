@@ -387,6 +387,8 @@ cambered beam	cambered beam
 cambered beams	cambered beam
 canal corridor	canal corridor
 canal corridors	canal corridor
+candareen	candareen
+candareens	candareen
 cangue	cangue
 canopy tree	canopy-tree
 canopy trees	canopy-tree
@@ -1945,6 +1947,7 @@ jiaochang	jiaochang
 jiaqing	Jiaqing
 jiaxing	Huzhou-Jiaxing
 jiayou	Jiayou
+jiazhi	Jiazhi
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jikata hanreiroku	Jikata hanreiroku
