@@ -81,7 +81,9 @@ diagnosed and the tooling improved.
   work is a BUG in the guard to fix (it was always a MENTION mistaken for an INVOCATION).
 - `make map GEN=pool/<tier>/<map>/<map>.gen.py` regenerates one map and prints `CACHED` / `REGENERATED` / `FROZEN`;
   `PROFILE=1` adds where its time went. Iterate on that ONE map, `make quick` while iterating, `make test-file FILE=...`
-  for a whole affected file (never a `-k` subset alone), then `make done` once, backgrounded, never polled.
+  for a whole affected file (never a `-k` subset alone), `make cover-changed` (~15 s: every line the change added to an
+  engine module that its mirrored tests leave unrun - `make land` asks it first, escape `COVER_OK`), then `make done` once,
+  backgrounded, never polled.
 - **The cohort, by stage** (feature 386, the GM 2026-10-17): `make cohort` (ten seeds and the pinned rows, ~50 s) after each
   fix; `make cohort-landing` before a GATED landing - seeds 1-48, then a fresh block of 48 that rotates with the engine, ~2 min
   each uncached - which `sync-with-main.sh done` requires on the engine it lands, refusing a seed regressed against main. The

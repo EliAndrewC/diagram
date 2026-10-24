@@ -124,6 +124,13 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
         rc, out = run(root, [sys.executable, str(HERE / "hooks" / "lib" / "hm_arbiter.py"), "gate-held"])
         if rc:
             stops.append(out.strip().removeprefix("make done: refused - "))
+    # THE CHANGED MODULES' COVERAGE, ASKED IN SECONDS (the GM 2026-10-24): T135's landing ran the gate five minutes to learn
+    # that four lines its own tests did not reach were uncovered; `gates/cover_changed.py` asks each added engine line of the
+    # module's mirrored test directory first. COVER_OK="<reason>" for a line only a roll or another directory reaches
+    if not os.environ.get("COVER_OK"):
+        rc, out = run(root, [sys.executable, str(HERE / "gates" / "cover_changed.py")])
+        if rc:
+            stops.append(" | ".join(ln.strip() for ln in out.splitlines() if ln.startswith("cover-changed:"))[-900:] or out.strip()[-900:])
     for gate in ("claims-gate.sh", "review-gate.sh", "plan-gate.sh"):
         rc, out = run(root, [str(HERE / "gates" / gate)], env)
         if rc:
@@ -146,6 +153,38 @@ def commit_escape_records(root: Path) -> None:
         run(root, ["git", "commit", "-q", "-m", "the landing's escape records (make land, 408)", "--", "dev/bypass-log"])
 
 
+def _ruffed(root: Path, path: str, text: str) -> str | None:
+    """`text` as the gate's lint leaves it (`make done`: `ruff check --fix`, then `ruff format`), asked of the file's own path so
+    its configuration applies; None where ruff fails."""
+    out = text
+    for cmd in (["check", "--fix", "--quiet"], ["format", "--quiet"]):
+        done = subprocess.run([sys.executable, "-m", "ruff", *cmd, "--stdin-filename", path, "-"], cwd=root, input=out, capture_output=True, text=True)
+        if done.returncode not in (0, 1) or not done.stdout:
+            return None
+        out = done.stdout
+    return out
+
+
+def commit_gate_formatting(root: Path) -> list[str]:
+    """THE GATE'S OWN LINT IS COMMITTED, NEVER WAITED ON (the GM 2026-10-24, after T07's landing sat 20 min of the claims wait on
+    a test whose imports the gate's `ruff check --fix` had sorted - nothing would ever commit it). Each modified tracked `.py`
+    file whose working copy is exactly its HEAD copy run through the gate's ruff is committed; any other change is left for the
+    wait to name. Returns the paths committed."""
+    paths = [ln[3:] for ln in run(root, ["git", "status", "--porcelain"])[1].splitlines() if ln.startswith(" M ") and ln.endswith(".py")]
+    mine = []
+    for path in paths:
+        rc, head = run(root, ["git", "show", f"HEAD:{path}"])
+        try:
+            now = (root / path).read_text(encoding="utf-8")
+        except OSError:
+            continue
+        if not rc and head != now and _ruffed(root, path, head) == now:
+            mine.append(path)
+    if mine:
+        run(root, ["git", "commit", "-q", "-m", "the gate's own lint and format, committed (make land)", "--", *mine])
+    return mine
+
+
 def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
     """The claims gate passing and the tree clean - the claims round recorded and committed beside the gate - or, past
     `CLAIMS_WAIT_S`, the refusal that still stands (405 T50, D23)."""
@@ -159,6 +198,7 @@ def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
             file_carries(root, d)  # a carry is filed, not waited on (405 T77: batch 5's wait needed `make claims-carry` by hand)
             rc, out = run(root, [str(HERE / "gates" / "claims-gate.sh")], env)
         commit_escape_records(root)
+        commit_gate_formatting(root)
         dirty = run(root, ["git", "status", "--porcelain"])[1].strip()
         if not rc and not dirty:
             return ""
