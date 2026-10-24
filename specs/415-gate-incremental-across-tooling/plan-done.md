@@ -66,3 +66,38 @@
 - **D5** `make cohort-landing` rolls `N=48 FRESH=0` beside the gate; after a successful push, `land.py` starts `make cohort N=0 FRESH=48` detached (its own process group, its log under the git directory), one at a time (a lock file: a later landing's fresh block WAITS for the running one, never skipped), and the landing returns; its record is committed by the cohort as today and goes out with the next push. `cohort_gate.check` asks the landing record for the fixed seeds and pinned rows only (`landing_shaped(..., need_fresh=False)`). Rendering: none.
 - **D6** `land.py` starts `cover_changed.py` beside `make done` (both in their own process groups); when it exits non-zero the gate's group is stopped (as `make land-stop` does) and the landing refused with its lines; `cheap_refusals` no longer runs it. Rendering: none.
 
+<!-- plan-archive: archived 2026-10-24 -->
+## T04 - the gate's costs, measured (FR-007)
+
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** The cutoff and the refresh rule rest on what a gate run costs here, not on a guess.
+2. **The constraints.** Real landings' records (T01's fields), at least three incremental and two full; the host's load at each end is recorded beside each (runstats), and a reading under heavy load is said so.
+3. **Where each comes from.** O: the GM's item 6 ("first measure the fixed cost and the per-test cost on a few real landings").
+4. **Do they describe the world here?** To be measured - this task is the measurement.
+5. **The order.** Collect T01-T03's own landings' records and any other session's; fit seconds = fixed + per-test x selected for the test phase, the other phases read directly; and the merged baseline's drift: after the incremental runs, one full run's baseline compared with the merged one (contexts gained or lost).
+6. **The exits.** n/a.
+7. **The search smell.** None.
+8. **The budget.** 45 min, mostly waiting on landings.
+9. **Done, measured.** `research.md` holds the table of runs, the fit, and the drift count, each figure labeled with its date and method.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T04 Approach (re-answered 2026-10-24T17:08Z)
+
+1. **The goal, in the world.** The cutoff and the refresh rule rest on what a gate run costs here, not on a guess.
+2. **The constraints.** Real landings' records (T01's fields): at least three planned incremental and two full, with the host's load at each end recorded beside each (runstats) and a reading under heavy load said so. T01-T05's own landings change `ci/` and plan full; the incremental samples come from later landings, this session's or another's.
+3. **Where each comes from.** O: the GM's item 6 ("first measure the fixed cost and the per-test cost on a few real landings").
+4. **Do they describe the world here?** To be measured. Read 2026-10-24 (method: `incremental.py`'s docstring, spec D1 of feature 207): the baseline is the LAST FULL RUN, never a merged result - each incremental run selects everything changed since it, so the selection GROWS between full runs; that growth, not drift, is what a refresh resets.
+5. **The order.** Collect the records; fit the test phase's seconds = fixed + per-test x selected; read the other phases directly; and measure the growth: the selected count of each incremental run against the number of landings since its baseline.
+6. **The exits.** n/a.
+7. **The search smell.** None.
+8. **The budget.** 45 min, mostly waiting on landings.
+9. **Done, measured.** `research.md` holds the table of runs, the fit and the growth, each figure labeled with its date and method.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T04 Decisions
+
+- **D7** The measurement is `scripts/measure/gate_costs.py`, reading `dev/run-log/` (T01's fields): the table of runs, the least-squares fit of the test phase's seconds on the selected count, and the selection's growth since each run's baseline (the selected count against the landings since the last full run). Rendering: none.
+
