@@ -372,6 +372,16 @@ def test_e_over_the_fraction_the_PLANNER_runs_everything_and_keeps_the_trees(bas
     assert (bdir / (incremental.GRAPH + ".next")).is_file(), "and its fixture graph beside it (FR-005)"
 
 
+def test_e_a_landing_runs_what_it_reaches_over_the_fraction(baselined: tuple[Path, Path], monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 415 T05 (D8): with INCR_NO_CUTOFF (what `make land`'s gate sets) a plan over the fraction stays incremental."""
+    root, skill = baselined
+    write(skill, "eng/polder.py", POLDER.replace('return "short"', 'return "short"  # edited'))
+    monkeypatch.setattr(incremental, "FULL_FRACTION", 0.1)
+    assert incremental.plan(root).mode == "full", "outside a landing: the fraction still holds"
+    monkeypatch.setenv("INCR_NO_CUTOFF", "1")
+    assert incremental.plan(root).mode == "incremental"
+
+
 def test_nothing_changed_selects_nothing_and_the_run_is_green_on_the_untouched_baseline(baselined: tuple[Path, Path]) -> None:
     """The gate's cheapest shape after the short-circuit: the tree equals the baseline, so nothing is selected,
     pytest would say "no tests ran" (exit 5), the plugin turns that into a green run, and the merged floors judge

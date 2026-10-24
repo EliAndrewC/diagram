@@ -64,7 +64,7 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
    today's (`make cohort-seeds` reads its trend).
 2. `cover-changed` runs beside the gate, not before it; where it finds an uncovered added line, the gate is stopped and the
    landing refused with its message, as today.
-3. Where a landing ran incremental and the baseline is older than the refresh rule allows, a full gate run is started after
+3. Where a landing ran incremental and the refresh rule calls for one, a full gate run is started after
    the push, outside the landing's path, and records a fresh baseline; a later landing never waits on it, and two never run
    at once.
 

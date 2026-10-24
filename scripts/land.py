@@ -21,6 +21,7 @@ done` with `L7R_LAND_TICKS` set carries work and ticks (405 T51). A failed landi
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 import re
 import subprocess
@@ -310,7 +311,8 @@ def run_gate(root: Path, target: str, cover: tuple[subprocess.Popen, Path] | Non
     import signal  # noqa: PLC0415
     import time  # noqa: PLC0415
 
-    proc = subprocess.Popen(["make", "--no-print-directory", target], cwd=root, start_new_session=True)
+    # ...with no FULL_FRACTION cutoff: a landing runs what its change reaches, however much (feature 415 T05, D8)
+    proc = subprocess.Popen(["make", "--no-print-directory", target], cwd=root, start_new_session=True, env={**os.environ, "INCR_NO_CUTOFF": "1"})
     RUNNING.append(proc)
     try:
         while proc.poll() is None:
@@ -322,6 +324,40 @@ def run_gate(root: Path, target: str, cover: tuple[subprocess.Popen, Path] | Non
         return proc.returncode
     finally:
         RUNNING.remove(proc)
+
+
+#: the share of its baseline an incremental landing gate may select before a full run is started after the push (feature 415
+#: T05, D8): at research.md R2's 12.7 ms per selected test, 25% of a ~12,000-test baseline is ~38 s past the 67 s fixed cost,
+#: and the selection grows with every landing until a full run resets it
+REFRESH_FRACTION = 0.25
+
+
+def refresh_due(root: Path, since: float) -> str:
+    """The refresh's reason when THIS landing's gate (its result written since `since`) ran incremental and selected at least
+    `REFRESH_FRACTION` of its baseline's tests; "" otherwise."""
+    bdir = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git") / "gate-baseline"
+    try:
+        if (bdir / "result.json").stat().st_mtime < since:
+            return ""
+        res = json.loads((bdir / "result.json").read_text(encoding="utf-8"))
+        total = len(json.loads((bdir / "tests.json").read_text(encoding="utf-8")))
+    except (OSError, ValueError):
+        return ""
+    sel = res.get("selected")
+    n = len(sel) if isinstance(sel, list) else int(sel or 0)
+    if res.get("mode") != "incremental" or not total or n < REFRESH_FRACTION * total:
+        return ""
+    return f"refresh: {n} of {total} baseline tests selected"
+
+
+def start_refresh(root: Path, reason: str) -> Path:
+    """`gates/refresh_baseline.py` detached, in its own session (feature 415 T05, D8): a full gate in a worktree at the pushed
+    commit, its baseline into the clone's; one at a time under its own lock. Returns its log."""
+    log = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git") / "land-refresh.log"
+    head = run(root, ["git", "rev-parse", "HEAD"])[1].strip()
+    with log.open("a") as fh:
+        subprocess.Popen([sys.executable, str(HERE / "gates" / "refresh_baseline.py"), str(root), head, reason], cwd=root, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
+    return log
 
 
 def start_fresh_block(root: Path) -> Path:
@@ -484,6 +520,9 @@ def main(argv: list[str]) -> int:
         return 2
     if claims:
         print(f"land: the claims round is owed ({claims[0][:160]}) - the gate runs beside it; the push waits for it", flush=True)
+    import time  # noqa: PLC0415
+
+    landing_started = time.time()  # a gate result written since is this landing's own (D8)
     engine_delta_landed = engine_delta(root)  # the fresh block follows an engine landing, after its push (D5)
     if rc := long_runs(root):
         return rc
@@ -520,6 +559,8 @@ def main(argv: list[str]) -> int:
     print(f"land: {' '.join(tasks)} landed and ticked")
     if engine_delta_landed:
         print(f"land: the cohort's fresh block started after the push - a rate, never a refusal; its log {start_fresh_block(root)}", flush=True)
+    if reason := refresh_due(root, landing_started):
+        print(f"land: the gate's baseline is refreshed after the push, in a worktree ({reason}); its log {start_refresh(root, reason)}", flush=True)
     return 0
 
 

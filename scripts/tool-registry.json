@@ -128,6 +128,10 @@
     "gate_costs": {
       "kind": "report",
       "what": "scripts/measure/gate_costs.py - what a gate run costs, from the run records' phases and plan (make gate-costs; feature 415 T04)"
+    },
+    "refresh_baseline": {
+      "kind": "step",
+      "what": "scripts/gates/refresh_baseline.py - the incremental gate's baseline refreshed by a full run in a worktree after a landing's push (feature 415 T05); each run recorded"
     }
   }
 }

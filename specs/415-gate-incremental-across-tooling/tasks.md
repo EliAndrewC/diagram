@@ -15,7 +15,7 @@
 - [x] T03 The landing waits only on what can refuse it: the cohort's fresh block after the push, cover-changed beside the gate (D5, D6; FR-003, FR-004)
       research: rendering
       verify: DONE. landed: fresh block after the push under a lock; cover-changed beside the gate, stopping it on a refusal; 62 landing/cohort/runstats tests green, the new ones red without
-- [x] T04 The gate's fixed and per-test costs and the merged baseline's drift, measured on real landings (D7; FR-007)
+- [x] T04 The gate's fixed and per-test costs and the selection's growth between full runs, measured (D7; FR-007)
       research: rendering
       verify: DONE. landed: research R2: one full and three incremental gate runs measured (67 s fixed + 12.7 ms per selected test, the selection 1,492 -> 2,657 between full runs); make gate-costs and its test
 - [ ] T05 A landing runs what its change reaches; the baseline refreshed off the landing's path, on T04's numbers (D8; FR-006)
