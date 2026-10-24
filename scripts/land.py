@@ -394,14 +394,30 @@ def commit_records(root: Path) -> None:
         run(root, ["git", "commit", "-q", "-m", "the run records (make land)", "--", "dev/cohort-log", "dev/run-log"])
 
 
+#: the paths that decide how a landing and its gate run: a delta touching one is landed through a gate, never the direct route
+#: (the round arbiter's tooling_fix on red-gate@2026-10-24T19:17:09Z, feature 415: T03 put cover_changed.py beside the gate on
+#: the direct route, untested beside a real gate, and two red gates and two rulings followed - ~27 minutes)
+GATE_MACHINERY = re.compile(r"^(scripts/land\.py|scripts/gates/.*|Makefile|l7r/diagram/ci/.*|tests/conftest\.py|tests/_scope\.py)$")
+
+
+def gate_machinery_delta(root: Path) -> list[str]:
+    """The delta's paths that decide how a landing and its gate run (`GATE_MACHINERY`)."""
+    run(root, ["git", "fetch", "-q", "origin"])
+    return [n for n in run(root, ["git", "diff", "--name-only", "origin/main...HEAD"])[1].split() if GATE_MACHINERY.match(n)]
+
+
 def long_runs(root: Path) -> int:
     """Pass 2's runs, each only where its record does not cover this content; 0 when the push may go. The green-gate stamp names
     the gate each stale area owes (make done, make hooks-test, make page-check) and each named one runs - T30-T35's own landing
     owed hooks-test alone, which a `make done` would not have stamped."""
     stamp = [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--check", "origin/main"]
     rc, out = run(root, stamp)
-    if rc:
-        targets = list(dict.fromkeys(NAMED_GATE.findall(out)) or ["done"])
+    machinery = gate_machinery_delta(root)
+    if rc or machinery:
+        targets = list(dict.fromkeys(NAMED_GATE.findall(out)) or ["done"]) if rc else []
+        if machinery and "done" not in targets:  # ...the gate's own machinery changed: it lands through a gate (arbiter 19:17)
+            print(f"land: the delta changes how a landing or its gate runs ({', '.join(machinery[:3])}) - make done, though the stamp would pass it", flush=True)
+            targets.append("done")
         # THE COHORT BESIDE THE GATE (405 T48, D21): they share no work - the gate rolls the five pool maps, the cohort its seeds
         # and rows - and T19's landing spent 4.4 of its 7 minutes on the cohort after a green gate
         cohort, log = None, Path()

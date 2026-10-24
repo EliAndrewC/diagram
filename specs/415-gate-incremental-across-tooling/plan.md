@@ -86,6 +86,20 @@ Owed by the round arbiter's ruling on red-gate@2026-10-24T19:05:23Z (continue).
 8. **Every route measured?** n/a - no route is in question.
 9. **After a ruling:** the arbiter's continue, recorded in `arbiter.jsonl`.
 
+### T05 part B (2026-10-24T19:22Z)
+
+Owed by the round arbiter's ruling on red-gate@2026-10-24T19:17:09Z (continue).
+
+1. **What exactly is refusing?** The 18:59Z and 19:17Z gates share one cause, read correctly only the second time: T03 made `make land` run `cover_changed.py` beside the gate in the same tree, and its coverage data, with no `COVERAGE_FILE` of its own, landed where the gate's workers wrote theirs ("no such table: context"). T03 landed on the direct route, so the two first met at T05's gated landing. The 19:05Z gate's cause (the inherited `INCR_NO_CUTOFF`) was separate and is fixed.
+2. **A3 again.** O: the GM's item 4 (FR-004) still puts `cover-changed` beside the gate; nothing in the constraints moved.
+3. **A4 again.** The decision describes the world; the check and the gate needed separate coverage data.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing: `cover_changed.py` writes its coverage data in its own temporary directory (`COVERAGE_FILE`); and the arbiter's tooling fix - a delta touching `land.py`, `scripts/gates/`, the Makefile or `l7r/diagram/ci/` lands through a gate, never the direct route (`land.GATE_MACHINERY`).
+6. **The one-sentence test.** "Why did the gate lose its coverage tables?" - the check beside it wrote its own coverage data into the same files.
+7. **The next step is a measurement.** One `make land` for T05, counted green only on the ruling's three conditions: no INTERNALERROR and no failed test; the three planner tests green by name; `cover_changed.py` run beside the gate with real work, its data in its own directory, no stray `.coverage*` in the clone root after.
+8. **Every route measured?** n/a.
+9. **After a ruling:** the arbiter's continue and its tooling fix, recorded in `arbiter.jsonl`.
+
 ### T05 Decisions
 
 - **D8** On R2's numbers (spec FR-006, amended): `make land`'s gate runs with `INCR_NO_CUTOFF=1`, which `incremental.plan` reads to skip the `FULL_FRACTION` check (the gate outside a landing keeps it). After a successful push whose gate ran incremental and selected at least `REFRESH_FRACTION` (0.25) of its baseline, `land.py` starts `scripts/gates/refresh_baseline.py` detached: under a lock, it adds a detached worktree at the pushed commit, runs `make done INCR_FORCE="refresh: <n> of <N> baseline tests selected"` there (a fresh worktree has no verification to short-circuit on), and when it is green copies the worktree's `gate-baseline/` into the clone's - each coverage file path rewritten from the worktree's root to the clone's - unless the clone's baseline was saved after the refresh started; it removes the worktree, and copies the run record into the clone's `dev/run-log/`, committed path by path. Rendering: none.
