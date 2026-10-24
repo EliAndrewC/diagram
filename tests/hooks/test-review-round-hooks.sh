@@ -80,6 +80,10 @@ logged first-round && ok "...recorded permitted/first-round" || no "first-round 
 [ -d "$FIX/.git/review-round/301-fixture/snapshot" ] && ok "...under the clone's .git" || no "the state is not under .git"
 
 echo "3. the second dispatch is REWRITTEN into MODE 3 with the verdict and the diff"
+# a NEWER review of another feature that only MENTIONS this one (2026-10-24: 412's round 1 named 413's directory as context,
+# and 413's next round was handed 412's verdict) is never this feature's previous verdict
+transcript "$SUB/agent-0.jsonl" "MODE 2 review of specs/303-other; its sibling is specs/301-fixture" "SIBLING-VERDICT for 303.\n\n**CHANGES REQUIRED**"
+touch -d '2026-06-01' "$SUB/agent-0.jsonl"
 printf '\n**FR-002 - the second requirement.** Added after round 1.\n' >> "$FIX/specs/301-fixture/spec.md"
 ORIG="MODE 3 round 2 of specs/301-fixture. Confirm the item; note the plan review question and any exception in plan.md; check every FR has an SC."
 out=$(agent spec-fidelity "$ORIG")
@@ -89,6 +93,7 @@ P=$(printf '%s' "$out" | prompt_of 2>/dev/null)
 case "$P" in "MODE 3 (VERIFY) - round 2 of feature 301-fixture"*) ok "...the prompt opens with the MODE 3 preamble naming round 2";; *) no "the preamble is missing or names the wrong round" "(${P:0:80})";; esac
 printf '%s' "$P" | grep -q '^+\*\*FR-002' && ok "...carrying the diff of the change" || no "the diff does not show FR-002 added"
 printf '%s' "$P" | grep -q 'FR-001 is vague' && ok "...and the previous verdict verbatim from the transcript" || no "the previous verdict is not in the preamble"
+printf '%s' "$P" | grep -q 'SIBLING-VERDICT' && no "a sibling feature's review was taken as this feature's verdict" || ok "...never a newer review of another feature that only mentions it"
 printf '%s' "$P" | grep -q 'VERBATIM from the reviewer' && ok "...marked as the reviewer's own words" || no "the verdict is not marked verbatim"
 tail_ok=$(printf '%s' "$P" | ORIG="$ORIG" python3 -c 'import os,sys; p=sys.stdin.read(); m="=== The session'"'"'s prompt follows ===\n"; print("yes" if p.endswith(m+os.environ["ORIG"]) else "no")')
 [ "$tail_ok" = yes ] && ok "...and ends with the session's prompt unchanged" || no "the session's prompt was altered or lost"
