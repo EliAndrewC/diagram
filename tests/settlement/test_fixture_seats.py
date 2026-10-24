@@ -91,15 +91,13 @@ def test_the_bath_is_a_room_joined_to_the_house_on_an_attested_wall_or_refused()
     assert not fs.joined_to_house((0.0, HH / 2 + 3.5 + 3.0, 8.0, 6.0), HW, HH) and not fs.joined_to_house((0.0, 0.0, 8.0, 6.0), HW, HH), "off the wall, or inside"
 
 
-def test_the_wood_shed_takes_its_first_seat_by_the_households_roll() -> None:
-    """405 T106: the shed's recorded seats are turned by the household's roll, as the coop's are - two rolls on open ground
-    give two first seats, so no two farms' sheds stand at one bearing off their houses."""
-    seats = {u: fs.lay_fixtures(("woodpile",), HW, HH, [HOUSE], [], YARD, False, lambda salt, u=u: u, fs.FixtureForms(), _px)["woodpile"] for u in (0.0, 0.3, 0.6, 0.9)}  # no kura
-    assert len({(round(q[0], 3), round(q[1], 3)) for q in seats.values()}) == 4, seats
-    assert seats[0.0][0] < 0 < seats[0.3][0] and seats[0.0][1] == seats[0.3][1] < -HH / 2, "the back wall's two, west then east"
-    assert seats[0.6][0] > HW / 2 and seats[0.9][0] < -HW / 2, "then the east and west flanks"
-    flanks = {u: _lay(("woodpile",), ground=(), roll=u, roofs=(HOUSE, KURA))["woodpile"] for u in (0.6, 0.9)}  # the kura takes the back
-    assert flanks[0.6][0] > HW / 2 and flanks[0.9][0] < -HW / 2, "a flank seat stands, its front end at the front wall, never past it"
+def test_the_wood_shed_takes_a_flank_seat_its_front_end_at_the_front_wall() -> None:
+    """405 T106: the flank seats stand with their front end at the front wall, never past it - at 0.1 hh a 24 ft shed reached
+    0.8 ft past it, so `shed_off_a_wall` refused both flanks on every farm. With the kura taking the back, a shed on open
+    ground takes the east flank, the first recorded seat that clears."""
+    shed = _lay(("woodpile",), ground=())["woodpile"]
+    assert shed[0] > HW / 2 and shed[1] + shed[3] / 2 == HH / 2, "the east flank, its front end at the front wall"
+    assert fs.shed_off_a_wall(shed, fs.steading_rects(HW, HH, "N", 1.0), fs.WALL_GAP_FT, _px)
 
 
 def test_the_wood_shed_stands_a_ken_off_a_wall_of_its_house_or_is_refused() -> None:

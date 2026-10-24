@@ -409,7 +409,7 @@ def lay_fixtures(
                 continue
         elif kind == "woodpile":
             walls = steading_rects(hw, hh, "N" if kura else None, px(1.0))  # the house's own walls (0043), never the byre's or the retirement house's
-            seat = _wood_shed(hw, hh, w, d, g, walls, taken, roll, px)
+            seat = _wood_shed(hw, hh, w, d, g, walls, taken, px)
         elif kind == "bath":
             # EACH HOUSE'S OWN WALL (feature 328): the registers count the wall house by house, most beyond the stable wing
             wall = bath_wall(roll(SALT[kind] + 0.25), forms)
@@ -495,7 +495,7 @@ def joined_to_house(seat: Rect, hw: float, hh: float, tol: float = 1e-6) -> bool
     return (abs(gx) <= tol and gy < 0.0) or (abs(gy) <= tol and gx < 0.0)
 
 
-def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequence[Rect], taken: Sequence[Rect], roll: Callable[[float], float], px: Callable[[float], float]) -> Rect:
+def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequence[Rect], taken: Sequence[Rect], px: Callable[[float], float]) -> Rect:
     """The wood shed (feature 280 M21): the recorded seats - off the back wall and the flanks, a ken out - then every place a
     ken off each wall of the house but its front (feature 328: the front wall's places stood in the dooryard); the first that
     clears the parts laid and keeps `shed_off_a_wall`.
@@ -504,7 +504,7 @@ def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequen
         wood shed seats - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: behind or beside the house,
             never the front yard
         wall places a ken out - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: offered a ken (`WOODSHED_STEP_FT`, the page's GUESS) beyond the wall gap (the page's DEVIATION)"""
-    seats = _seats("woodpile", hw, hh, w, d, g, None, None, roll, 0.0, FixtureForms(), px)
+    seats = _seats("woodpile", hw, hh, w, d, g, None, None, lambda _salt: 0.0, 0.0, FixtureForms(), px)
     offered = chain(seats, (q for q in wall_places(walls[:1], w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)) if not forward_of_front(q, hh / 2)))  # the house's walls (0043)
     found = _first((q for q in offered if shed_off_a_wall(q, walls, g, px)), taken, g)
     if found is None:
@@ -684,7 +684,7 @@ def _seats(
         coop seats - research/questions/0045-chickens-and-chicken-coops.drawing.html: the east flank, the back wall or the
             west flank, rolled
         wood shed seats - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: off the back wall and
-            the flanks, the first turned by the household's roll
+            the flanks
         shrine corner - research/questions/0219-household-shrines-yashikigami.drawing.html: NW, NE or SW of the house
         household grave corner - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: SE or NW of the house, then the other two corners
         household grave off the house's corner - UNRESEARCHED: 14 ft out each way (`SHRINE_CORNER_FT`) standing for the plot's corner; no plot's size is recorded with its grave
@@ -742,8 +742,7 @@ def _seats(
         st, back = px(WOODSHED_STEP_FT), -(hh / 2 + g + d / 2)
         side = min(hh * 0.1, hh / 2 - w / 2)  # a flank seat's front end never past the front wall (T106: at 0.1 hh it always was)
         seats = [(-hw * 0.25, back - st, w, d), (hw * 0.25, back - st, w, d), (hw / 2 + g + st + d / 2, side, d, w), (-(hw / 2 + g + st + d / 2), side, d, w)]
-        k = int(roll(SALT[kind] + 0.5) * len(seats)) % len(seats)  # the first seat turned by the household's roll, as the coop's (T106)
-        return seats[k:] + seats[:k]
+        return seats  # not turned by the household's roll: turning them re-deals Sawada into a knot no gather or room mends (405 T106)
     # the household shrine: a plot corner, rolled by compass name (NW the likeliest, 17 of 37; NE the kimon; SW Tokushima);
     # the household grave the same distance off the house's corner, at the SE or NW (0236), then the other two
     off = px(SHRINE_CORNER_FT)
