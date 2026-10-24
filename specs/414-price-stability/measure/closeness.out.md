@@ -29,18 +29,23 @@
 
 Left out: Kyoto Salt (a unit change in the series from 1791).
 
-## Place: the spread to Kyoto against Kyoto's within-era spread, 1818-1858
+## Place: the gap to Kyoto against Kyoto's within-era spread, 1818-1858
 
-| good | Kyoto within-era spread | Edo: SD of log(Edo/Kyoto) | Osaka: SD of log(Osaka/Kyoto) |
+How far the gap MOVED (the SD of the yearly log ratio) and how WIDE it stood (the mean log ratio, as a log percent),
+each against Kyoto's within-era spread. A borrowed city needs no note only where both are within it: a steady gap
+that stands wider than the era's own swing still misprices every amount by that gap.
+
+| good | Kyoto within-era spread | Edo: SD; mean of log(Edo/Kyoto) | Osaka: SD; mean of log(Osaka/Kyoto) |
 |---|---|---|---|
-| White rice | 25.4% | 10.2% (41) - within | 4.4% (41) - within |
-| Salt | 17.1% | 37.5% (41) - beyond | 36.0% (41) - beyond |
-| Miso | 17.7% | 10.6% (41) - within | 8.3% (41) - within |
-| Soy sauce | 7.8% | 16.3% (41) - beyond | 13.1% (41) - beyond |
-| Sake | 21.9% | 22.3% (41) - beyond | 10.4% (41) - within |
-| Burning wood | 5.2% | 6.0% (41) - beyond | 7.8% (41) - beyond |
-| Lamp oil | 16.8% | 8.5% (41) - within | 7.0% (41) - within |
-| Day laborers | 16.0% | 9.7% (41) - within | - |
+| White rice | 25.4% | 10.2%; +2.9% (41) - within | 4.4%; +0.7% (41) - within |
+| Miso | 17.7% | 10.6%; -34.9% (41) - beyond | 8.3%; -21.8% (41) - beyond |
+| Soy sauce | 7.8% | 16.3%; +12.1% (41) - beyond | 13.1%; +17.7% (41) - beyond |
+| Sake | 21.9% | 22.3%; +30.3% (41) - beyond | 10.4%; +6.9% (41) - within |
+| Burning wood | 5.2% | 6.0%; -39.8% (41) - beyond | 7.8%; +35.5% (41) - beyond |
+| Lamp oil | 16.8% | 8.5%; +10.1% (41) - within | 7.0%; +5.5% (41) - within |
+| Day laborers | 16.0% | 9.7%; -10.3% (41) - within | - |
+
+Left out: Kyoto Salt, as above.
 
 ## China: the same curve and bound (SD of log change between yearly values; n = pairs)
 

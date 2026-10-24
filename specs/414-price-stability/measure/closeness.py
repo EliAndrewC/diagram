@@ -9,8 +9,10 @@ gap in years is no larger than that spread, within the spread's own sampling err
 sqrt(2 n), the usual standard error of a standard deviation on n pairs. The no-note bound is the last gap of an unbroken run
 from 5 years (5, 10, 15, 20, 25, 30, 40, 50) that meets this, each gap resting on at least MIN_PAIRS pairs - a gap past the
 first one that fails is not counted, however its SD falls again. For each good and city of Mitsui Bunko (to 1858, before the
-treaty-port break) it prints the curve, the spread, the tolerance and the bound, with the pairs each figure rests on. Place: a city whose spread to Kyoto (the SD of the yearly log
-ratio, 1818-1858) is no larger than the within-era spread needs no note. The breaks (the 1859 opening, a recoinage that changed
+treaty-port break) it prints the curve, the spread, the tolerance and the bound, with the pairs each figure rests on. Place: a city needs no note where
+its gap to Kyoto, 1818-1858, both MOVED no more than the within-era spread (the SD of the yearly log ratio) and STOOD no wider
+than it (the mean log ratio) - a steady gap wider than the era's own swing misprices every amount by that gap (session 3: the
+plan's test was the SD alone, which passed Edo's miso at 29% below Kyoto's). The breaks (the 1859 opening, a recoinage that changed
 the money's silver, a change of money system) are the do-not-convert bound and are not computed here; a numeric limit beyond the
 no-note bound is the GM's choice (plan D4), so the full curve is printed for him.
 
@@ -129,11 +131,14 @@ def main(path: str) -> None:
             limit, bound = no_note(c)
             print(f"| {city} | {good} | {100 * spread:.1f}% ({n5}); limit {100 * limit:.1f}% | " + " | ".join(curve_cells(c)) + f" | {bound} |")
     print("\nLeft out: " + ", ".join(f"{c} {g}" for c, g in sorted(BROKEN)) + " (a unit change in the series from 1791).")
-    print("\n## Place: the spread to Kyoto against Kyoto's within-era spread, 1818-1858\n")
-    print("| good | Kyoto within-era spread | Edo: SD of log(Edo/Kyoto) | Osaka: SD of log(Osaka/Kyoto) |")
+    print("\n## Place: the gap to Kyoto against Kyoto's within-era spread, 1818-1858\n")
+    print("How far the gap MOVED (the SD of the yearly log ratio) and how WIDE it stood (the mean log ratio, as a log percent),")
+    print("each against Kyoto's within-era spread. A borrowed city needs no note only where both are within it: a steady gap")
+    print("that stands wider than the era's own swing still misprices every amount by that gap.\n")
+    print("| good | Kyoto within-era spread | Edo: SD; mean of log(Edo/Kyoto) | Osaka: SD; mean of log(Osaka/Kyoto) |")
     print("|---|---|---|---|")
     for good in GOODS:
-        if good not in data["Kyoto"]:
+        if good not in data["Kyoto"] or ("Kyoto", good) in BROKEN:
             continue
         spread = curve(data["Kyoto"][good])[5][0]
         ky = ms.yearly(data["Kyoto"][good])
@@ -142,11 +147,13 @@ def main(path: str) -> None:
             other = ms.yearly(data[city].get(good, {}))
             r = [math.log(other[t] / ky[t]) for t in range(1818, 1859) if t in other and t in ky]
             if len(r) > 2:
-                sd = statistics.stdev(r)
-                cells.append(f"{100 * sd:.1f}% ({len(r)}) - {'within' if sd <= spread else 'beyond'}")
+                sd, mean = statistics.stdev(r), statistics.mean(r)
+                verdict = "within" if sd <= spread and abs(mean) <= spread else "beyond"
+                cells.append(f"{100 * sd:.1f}%; {100 * mean:+.1f}% ({len(r)}) - {verdict}")
             else:
                 cells.append("-")
         print(f"| {good} | {100 * spread:.1f}% | " + " | ".join(cells) + " |")
+    print("\nLeft out: Kyoto Salt, as above.")
 
 
 if __name__ == "__main__":
