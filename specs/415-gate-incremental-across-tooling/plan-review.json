@@ -156,6 +156,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
+  },
+  "### T05 part B (2026-10-24T19:08Z)": {
+   "sha256": "54c50ab50a22d09d44e9a8542878ad265c3ece3dbab5ac7433e8ee582d05f098",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -421,6 +427,39 @@
      "summary": "Unit tests: over-fraction landing stays incremental; refresh at >=25% and not under; never two at once; baseline copied with paths rewritten and not over a newer one.",
      "class": "within",
      "why": "These enforce FR-006 and SC-004 as FR-008 requires. They are enforcement of the request, not added scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T05 part B (2026-10-24T19:08Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05B-5a",
+     "summary": "The no-cutoff switch becomes a make variable (NO_CUTOFF=1) that the test recipe passes to the planner's call only, instead of an INCR_NO_CUTOFF environment variable that every test in the gate inherits.",
+     "class": "within",
+     "why": "Item 6 / FR-006 asks that a landing's gate run what its change reaches however much; the landing still drops the cutoff, and the change only stops the switch leaking into the tests the gate runs. What the planner does on a landing is unchanged."
+    },
+    {
+     "id": "T05B-5b",
+     "summary": "The T03 test starts a stand-in check rather than the real cover_changed.py, so its nested coverage run no longer overwrites the gate's coverage data.",
+     "class": "within",
+     "why": "FR-004 (item 4) is about land.py running cover-changed beside the gate, stopping the gate when it refuses and refusing the landing. A stand-in that passes or refuses still exercises that orchestration, so FR-008's test of the behavior stays in place and only its isolation from the gate running it changes."
+    },
+    {
+     "id": "T05B-5c",
+     "summary": "The planner tests clear the no-cutoff variable themselves as a backstop.",
+     "class": "within",
+     "why": "This isolates the tests and narrows nothing: the tests keep checking the planner's behavior both with the cutoff and without it, as FR-006 and FR-008 require."
+    },
+    {
+     "id": "T05B-7",
+     "summary": "The next step is one make land for T05, with the three planner tests green and nothing new failing.",
+     "class": "within",
+     "why": "This is a verification step under the arbiter's continue ruling. It does not alter the measurement basis the GM approved in amendment 1 or any requirement."
     }
    ]
   }
