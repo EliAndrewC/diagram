@@ -1,0 +1,71 @@
+{
+  "utc": "2026-10-24T19:17:09Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 331,
+  "result": "failed: test-full",
+  "commit": "692b2130c",
+  "first_failure_s": 283.2,
+  "last_failure_s": 311.0,
+  "failed_tests": 489,
+  "failed_names": [
+    "tests/tooling/test_tick_task.py::test_the_cohort_s_workers_fit_the_container_s_memory_limit",
+    "tests/tools/test_shared.py::test_hoshigaoka_draws_its_hall_at_an_end_and_its_old_sheet_did_not",
+    "tests/tools/test_shared.py::test_postern_approach_keeps_a_way_through_each_opening",
+    "tests/tools/test_shared.py::test_postern_approach_keeps_a_way_through_each_opening",
+    "tests/tools/test_shared.py::test_well_gear_asks_every_tagged_well_for_its_gear",
+    "tests/tools/test_shared.py::test_well_gear_asks_every_tagged_well_for_its_gear",
+    "tests/tools/test_why_placed.py::test_main_runs_both_modes",
+    "tests/tools/test_why_placed.py::test_report_hits_renders_a_record",
+    "tests/tools/test_why_placed.py::test_main_requires_a_target",
+    "tests/tools/test_why_placed.py::test_report_hits_renders_a_record",
+    "tests/tools/test_why_placed.py::test_main_requires_a_target",
+    "tests/waterfields/test_branches_145.py::test_a_sector_the_drain_cuts_short_plants_nothing",
+    "tests/waterfields/test_branches_145.py::test_a_closer_quad_that_would_run_off_the_sheet_is_dropped",
+    "tests/waterfields/test_branches_145.py::test_a_sector_the_drain_cuts_short_plants_nothing",
+    "tests/waterfields/test_branches_145.py::test_the_end_dry_plot_is_split_at_every_grain",
+    "tests/waterfields/test_branches_145.py::test_a_closer_quad_that_would_run_off_the_sheet_is_dropped",
+    "tests/waterfields/test_branches_145.py::test_a_hem_one_boundary_wide_has_no_shared_normal_and_says_so",
+    "tests/waterfields/test_branches_145.py::test_the_end_dry_plot_is_split_at_every_grain",
+    "tests/waterfields/test_branches_145.py::test_dry_plots_draw_the_maps_own_crop_mix",
+    "tests/waterfields/test_branches_145.py::test_a_hem_one_boundary_wide_has_no_shared_normal_and_says_so"
+  ],
+  "host": {
+    "load": [
+      2.5,
+      10.59
+    ],
+    "mem_avail_mb": [
+      6315,
+      7833
+    ],
+    "cpu_temp_c": [
+      102.0,
+      90.0
+    ],
+    "stall_s": {
+      "cpu": 8.5,
+      "io": 3.2,
+      "io_full": 2.3,
+      "memory": 0.6
+    },
+    "throttle_ms": {
+      "core": 38788,
+      "package": 14929
+    }
+  },
+  "phases": {
+    "preflight": 9.0,
+    "static": 1.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 1.0,
+    "hooks-test": 52.0,
+    "pytest": 269.0,
+    "test-full": 276.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)",
+  "selected": 10282,
+  "collected": 10282
+}
