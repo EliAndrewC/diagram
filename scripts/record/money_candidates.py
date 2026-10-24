@@ -30,6 +30,8 @@ TABLE = os.path.join("research", "assets", "money-conversions.json")
 #: The era ids awaiting their row (FR-008): an amount may be marked with one now, so it counts as built here, carrying every coin
 #: of COINS_ALSO until its row names its units (feature 412: the marks pass ran before gm-assistant's rows were vendored).
 AWAITING = os.path.join("research", "assets", "money-eras-awaiting.json")
+#: The awaiting eras' places whose money is these coins; any other place's era carries none of them until its row is vendored.
+JAPAN_PLACES = frozenset({"Edo", "Kyoto", "Osaka"})
 BACKFILL = os.path.join("specs", "413-money-tooltip-on-the-record", "backfill.md")
 #: The period's other Japanese coin words, listed whether or not a built era's row has a unit for them (the plan review of
 #: 2026-10-24: an amount in a coin its row lacks, a gold bu at Kyoto 1745-54, is passed over with that reason, never unseen).
@@ -74,7 +76,10 @@ def _eras(root: str) -> dict[str, tuple[int, int, frozenset[str]]]:
     eras = dict(_read(os.path.join(root, TABLE)).get("eras", {}))
     for era_id, row in _read(os.path.join(root, AWAITING)).items():
         if era_id not in eras and isinstance(row, dict):
-            eras[era_id] = {"years": row.get("years", ""), "units": dict.fromkeys(COINS_ALSO)}
+            # a Chinese place's era will carry wen and taels, never these coins: given them, a Japanese 1600 mon read 0 years
+            # from beijing-1615, and record/money.py takes an awaiting era's coin on trust, so a wrong mark would build
+            coins = COINS_ALSO if row.get("place") in JAPAN_PLACES else ()
+            eras[era_id] = {"years": row.get("years", ""), "units": dict.fromkeys(coins)}
     out = {}
     for era_id, row in eras.items():
         ys = [int(y) for y in _YEAR.findall(row.get("years", ""))]
@@ -154,13 +159,20 @@ def _named(a: Amount, named: set[tuple[str, str]]) -> bool:
 def main(argv: list[str] | None = None, root: str = ".") -> int:
     ap = argparse.ArgumentParser(description="every unmarked amount of money a built era could convert")
     ap.add_argument("--check", action="store_true", help="exit 1 while an amount is neither marked nor named in backfill.md")
+    ap.add_argument("--all", action="store_true", help="list the amounts backfill.md passes over too, each tagged [passed over]")
+    ap.add_argument("--stem", default="", help="only the fragments whose file stem starts with this (a question's number)")
+    ap.add_argument("--context", action="store_true", help="print the text around each amount under it, the amount in [[ ]]")
     args = ap.parse_args(argv)
     named = passed_over(root)
-    owed = [a for a in amounts(root) if not _named(a, named)]
-    for a in owed:
+    found = [a for a in amounts(root) if a.stem.startswith(args.stem)]
+    owed = [a for a in found if not _named(a, named)]
+    for a in found if args.all else owed:
         years = ",".join(map(str, a.years[:4])) or "no year"
         where = f"{a.gap} yr from {a.near}" if a.gap is not None else "no year or no era"
-        print(f"{where:<28} {a.stem} | {a.text} | {years}")
+        tag = " [passed over]" if _named(a, named) else ""
+        print(f"{where:<28} {a.stem} | {a.text} | {years}{tag}")
+        if args.context:
+            print(f"    {a.context}")
     if args.check and owed:
         print(f"money-candidates: {len(owed)} amount(s) neither marked nor named in {BACKFILL} - mark each (feature 413, record/money.py) or add `- <stem> | <amount> | <reason>`", file=sys.stderr)
         return 1

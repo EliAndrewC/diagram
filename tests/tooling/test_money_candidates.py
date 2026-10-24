@@ -84,8 +84,21 @@ def test_no_table_lists_the_periods_coins_and_no_backfill_names_nothing(tmp_path
 def test_an_awaiting_era_counts_as_built_with_every_coin_of_the_period(tmp_path: pathlib.Path) -> None:
     mc = _mod()
     root = _repo(tmp_path, "<p>In 1840 a room was 300 monme, and a bu of gold 1 bu.</p>")
-    awaiting = {"edo-1830": {"place": "Edo", "years": "1830-1844"}, "kyoto-1745": {"place": "Kyoto", "years": "1700-1710"}}
+    awaiting = {"edo-1830": {"place": "Edo", "years": "1830-1844"}, "kyoto-1745": {"place": "Kyoto", "years": "1700-1710"}, "beijing-1820": {"place": "Beijing", "years": "1820-1850"}}
     (root / "research" / "assets" / "money-eras-awaiting.json").write_text(json.dumps(awaiting), encoding="utf-8")
     found = {a.text: (a.near, a.gap) for a in mc.amounts(str(root))}
-    assert found == {"300 monme": ("edo-1830", 0), "1 bu": ("edo-1830", 0)}, "an awaiting era carries every coin of COINS_ALSO"
+    assert found == {"300 monme": ("edo-1830", 0), "1 bu": ("edo-1830", 0)}, "a Japanese place's awaiting era carries every coin of COINS_ALSO, a Chinese one none"
     assert mc._eras(str(root))["kyoto-1745"][:2] == (1745, 1754), "the vendored row wins over an awaiting id it already has"
+
+
+def test_all_lists_the_passed_over_tagged_and_stem_and_context_narrow_and_explain(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    mc = _mod()
+    root = _repo(tmp_path, PAGE)
+    backfill = root / mc.BACKFILL
+    backfill.parent.mkdir(parents=True)
+    backfill.write_text("- 0001-x | 1 bu | a gold coin no row carries\n", encoding="utf-8")
+    mc.main(["--all", "--stem", "0001", "--context"], str(root))
+    out = capsys.readouterr().out
+    assert "0001-x | 1 bu | 1840 [passed over]" in out and "[[20 mon]]" in out
+    mc.main(["--stem", "0002"], str(root))
+    assert "0 amount(s) owed" in capsys.readouterr().out
