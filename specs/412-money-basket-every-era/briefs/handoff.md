@@ -55,3 +55,4 @@ ATTESTED (Mitsui 日雇賃, silver monme a day), `research/questions/0250-what-d
 - 黄国信 2017 《中国经济史研究》 no. 4 (两广盐法志 卷19 「每日口食不过三钱」).
 - 0277's Edo copper table from 1751, for a closer rate than 1766/1804.
 - The archive inbox holds two WAITING downloads (堺市史_1049487_0001 (1).pdf, (2).pdf) and four over-size PDFs, none of this feature's; left for their sessions.
+- Session 1, last: the Mitsui cell dump is kept at specs/412-money-basket-every-era/measure/mitsui_cells_by_address.txt (every non-empty cell, columns A-R, by address) - hand it to the Mitsui quote-check with EXTRA=. SIZE MARGIN: 0273 is about 19,550 bytes and 0279 about 19,080, against the 20,000 cap; a check's EDITs there have roughly 450 and 900 bytes of room before the split rule applies.
