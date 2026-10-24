@@ -284,7 +284,7 @@ def _alongside(legs: Sequence[tuple[Pt, Pt]], a: Pt, b: Pt) -> bool:
     """Does leg a-b run alongside one of `legs`: its middle within `WEB_SHADOW_FT` of the nearest, at under `_SIDE_BY_SIDE_DEG`
     to it (405 T135)?
 
-    Research: alongside - UNRESEARCHED: 0081 gives the 20 degrees but no distance; read within `WEB_SHADOW_FT`, as `teed_back` reads it"""
+    Research: alongside - UNRESEARCHED: 0081 gives the 20 degrees but no distance; read at the leg's middle within `WEB_SHADOW_FT` (30 ft, the distance the shadow rule reads two ways together at) - `teed_back` asks both ends of a leg"""
     mid = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
     u, v = min(legs, key=lambda uv: seg_dist(mid[0], mid[1], *uv))
     if seg_dist(mid[0], mid[1], u, v) > WEB_SHADOW_FT:
@@ -317,7 +317,9 @@ def joiner_first_meeting(lanes: Sequence[Mapping[str, Any]], i: int, end: int, n
     `_KNOT_FT` of the node; [] otherwise (405 T135, D130: seed 36 with T26's sheds - aimed at a household way's foot, the
     joining lane closed a sliver with that way; ended where it first crossed it, 31 ft from the foot, no knot is left).
 
-    Research: a joining lane ends where it first meets a way - research/questions/0081-village-lanes.drawing.html: a lane laid only to join two others ends where it first meets one, its tail cut however long it is"""
+    Research:
+        a joining lane ends where it first meets a way - research/questions/0081-village-lanes.drawing.html: a lane laid only to join two others ends where it first meets one, its tail cut however long it is
+        its first meeting beyond the knot's reach - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point, so a first meeting within the reach would leave the knot it mends"""
     from .settle.shapes import JOIN_ROLE, _crossing  # bound here: `settle` names `settle_knots` in its STEPS
 
     if lanes[i].get("role") != JOIN_ROLE:
@@ -394,7 +396,9 @@ def next_gather(
         a lone end cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: "the maps cut it where it comes alongside and let it meet the other as a T" (`teed_back`, 405 T134), taken only where its T stands past the knot's reach and the web keeps no more knots
         which ways a lone end is cut back onto - UNRESEARCHED: a lane at the other node, or the lane its own end stands on
         a lone end moved onto the node, cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees is cut where it comes alongside (`onto_cut_back`, 405 T135)
-        a joining lane ended where it first meets a way - research/questions/0081-village-lanes.drawing.html: a lane laid only to join two others ends where it first meets one (`joiner_first_meeting`, 405 T135)"""
+        a joining lane ended where it first meets a way - research/questions/0081-village-lanes.drawing.html: a lane laid only to join two others ends where it first meets one (`joiner_first_meeting`, 405 T135)
+        the order of the last forms - UNRESEARCHED: `teed_onto`, then `teed_back`, then `onto_cut_back`, then `joiner_first_meeting` - the end's own approach kept longest first
+        which lanes an end moved onto the node is cut back along - UNRESEARCHED: the lanes at that node, the ways it would run back along there"""
     nodes = end_nodes(lanes, fixed)
     for a, b, _d in knots(lanes, apart):
         order = sorted(((b, a), (a, b)), key=lambda mt: len(nodes[mt[0]][1]))

@@ -25235,6 +25235,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/knots.py::_alongside#alongside": {
+  "body": "bbae7ca169c92cfd",
+  "claim": "alongside - UNRESEARCHED: 0081 gives the 20 degrees but no distance; read within `WEB_SHADOW_FT`, as `teed_back` reads it",
+  "code": "ee5d5dd4701c2909",
+  "core": "21fc703bd46612b8",
+  "date": "2026-10-24",
+  "note": "the label is correct (the 20 degrees comes from §25, and 0081 gives no distance), but \"as `teed_back` reads it\" is not what the code does: `_alongside` tests only the leg's midpoint against `WEB_SHADOW_FT` (`seg_dist(mid...) > WEB_SHADOW_FT`), while `teed_back` requires both ends of the leg to be within it (`any(... > WEB_SHADOW_FT for q in (a, b))`); either make the code match teed_back or reword the claim to say the midpoint is read",
+  "pages": {},
+  "research": "",
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::_fixed#plumbing": {
   "code": "1140513a96a246c7",
   "core": "5b731638bdd948f3",
@@ -25465,6 +25476,30 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/knots.py::joiner_first_meeting#a joining lane ends where it first meets a way": {
+  "body": "407b12bb93781636",
+  "claim": "a joining lane ends where it first meets a way - village-lanes.drawing: a lane laid only to join two others ends where it first meets one, its tail cut however long it is",
+  "code": "8a2237f354cdf1bc",
+  "core": "47be1b52bd085c81",
+  "date": "2026-10-24",
+  "note": "a JOIN_ROLE lane is ended at its first crossing whatever the tail's length, \"ends where it first meets one, its tail cut however long it is\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::joiner_first_meeting#the joiner's first meeting is used only where it stands beyond the knot's 25 ft reach of the node, and is refused within it": {
+  "code": "47be1b52bd085c81",
+  "core": "47be1b52bd085c81",
+  "date": "2026-10-24",
+  "note": "the joiner's first meeting is used only where it stands beyond the knot's 25 ft reach of the node, and is refused within it",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::knots#lane ends gathered": {
   "body": "db8feebb897ad92e",
   "claim": "lane ends gathered - village-lanes.drawing: ends within 25 ft are joined at a single point; the margin a map drawing convention (`gap_ways.KNOT_MARGIN`)",
@@ -25516,13 +25551,48 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#a joining lane ended where it first meets a way": {
+  "body": "04c4253b972e77ac",
+  "claim": "a joining lane ended where it first meets a way - village-lanes.drawing: a lane laid only to join two others ends where it first meets one (`joiner_first_meeting`, 405 T135)",
+  "code": "7d43dd0fd0b39fbc",
+  "core": "9460a1c6d8719440",
+  "date": "2026-10-24",
+  "note": "the joiner fallback is tried at the knot",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#a lone end cut where it comes alongside": {
   "body": "51a24b9ddd9222d1",
   "claim": "a lone end cut where it comes alongside - village-lanes.drawing: \"the maps cut it where it comes alongside and let it meet the other as a T\" (`teed_back`, 405 T134), taken only where its T stands past the knot's reach and the web keeps no more knots",
-  "code": "4ee650506023fd4b",
-  "core": "df46f27645d299fa",
+  "code": "e17bf2fdeb127683",
+  "core": "9460a1c6d8719440",
   "date": "2026-10-23",
   "note": "teed_back cut at the alongside run; the T must stand past the 25 ft reach and add no knot, keeping ends from nearly meeting",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "triaged": "2026-10-24",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#a lone end moved onto the node, cut where it comes alongside": {
+  "body": "04c4253b972e77ac",
+  "claim": "a lone end moved onto the node, cut where it comes alongside - village-lanes.drawing: an end running back along another way under 20 degrees is cut where it comes alongside (`onto_cut_back`, 405 T135)",
+  "code": "b3550a2782faca51",
+  "core": "9460a1c6d8719440",
+  "date": "2026-10-24",
+  "note": "the end is gathered onto the node (§22) with legs under 20 degrees dropped, \"cut it where it comes alongside\"",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -25536,8 +25606,8 @@
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#a lone end teed onto the other lane": {
   "body": "51a24b9ddd9222d1",
   "claim": "a lone end teed onto the other lane - village-lanes.drawing: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)",
-  "code": "2719419380d56f71",
-  "core": "df46f27645d299fa",
+  "code": "447aa4dbc8a63a3f",
+  "core": "9460a1c6d8719440",
   "date": "2026-10-23",
   "note": "teed_onto tried only after both moves are refused (sliver or split web), the end run onto the other's side as a T",
   "pages": {
@@ -25548,13 +25618,14 @@
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
    "0081-village-lanes.drawing.html:b3423a58c3ff2774"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": {
   "body": "51a24b9ddd9222d1",
   "claim": "lane ends gathered - village-lanes.drawing: ends within 25 ft meet at one node",
-  "code": "40612ade51922e95",
-  "core": "df46f27645d299fa",
+  "code": "3873dc7293b9c546",
+  "core": "9460a1c6d8719440",
   "date": "2026-10-23",
   "note": "ends within _KNOT_FT*KNOT_MARGIN (25 ft) put on one node",
   "pages": {
@@ -25564,27 +25635,61 @@
   "rests": [
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
   ],
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#onto_cut_back is tried only against lanes at the other node, not the lane the end's own node stands on (the set the \"which ways\" claim names)": {
+  "code": "9460a1c6d8719440",
+  "core": "9460a1c6d8719440",
+  "date": "2026-10-24",
+  "note": "onto_cut_back is tried only against lanes at the other node, not the lane the end's own node stands on (the set the \"which ways\" claim names)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#the order the gather's last resorts are tried in: teed_onto, then teed_back, then onto_cut_back, then joiner_first_meeting": {
+  "code": "9460a1c6d8719440",
+  "core": "9460a1c6d8719440",
+  "date": "2026-10-24",
+  "note": "the order the gather's last resorts are tried in: teed_onto, then teed_back, then onto_cut_back, then joiner_first_meeting",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#which node a knot gathers at": {
-  "code": "dd7bcb08fc136d29",
-  "core": "df46f27645d299fa",
+  "code": "839696442954b936",
+  "core": "9460a1c6d8719440",
   "date": "2026-10-17",
   "note": "the page is silent on which node moves",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-23",
+  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#which ways a lone end is cut back onto": {
-  "body": "51a24b9ddd9222d1",
+  "body": "04c4253b972e77ac",
   "claim": "which ways a lone end is cut back onto - UNRESEARCHED: a lane at the other node, or the lane its own end stands on",
-  "code": "175dfc481cd281ab",
-  "core": "df46f27645d299fa",
-  "date": "2026-10-23",
-  "note": "the candidate set (lanes at the target node, or the lane the end stands on) is a search scope; the page is silent on it",
+  "code": "e150beb955270135",
+  "core": "9460a1c6d8719440",
+  "date": "2026-10-24",
+  "note": "matches the teed_back candidate set (lanes at the other node, plus the lane the mover's node stands on); §25 says only \"another way\" and does not say which ways to try",
   "pages": {},
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::onto_cut_back#cut where it comes alongside": {
+  "body": "ceffe20e0a303062",
+  "claim": "cut where it comes alongside - village-lanes.drawing: a lane whose end runs back along another way at less than 20 degrees is cut where it comes alongside and meets the other",
+  "code": "665acc63ddd99a61",
+  "core": "82603599ca1fb3da",
+  "date": "2026-10-24",
+  "note": "corners whose leg to the node runs under 20 degrees along the other lane are dropped, and the end meets that lane at the knot's node",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot the fence gap leaves": {
