@@ -384,6 +384,10 @@ _ESCAPES = {
         "environment",
         "a make variable on `make arbiter-bundle` (368's arbiter fix), which a mention cannot set; arbiter_bundle.py holds the two-word reason floor, the firing log via the Makefile's LOGESCAPE, and the reason is printed in the MANIFEST for the arbiter",
     ),
+    "COVER_OK": (
+        "environment",
+        "a make variable on `make land` (the GM 2026-10-24), exported to scripts/land.py, which a mention cannot set; reason floor and the firing log via the Makefile's LOGESCAPE",
+    ),
     "SET_DOWN_OK": ("environment", "a make variable on `make set-down` (feature 405, the GM 2026-10-21), which a mention cannot set; reason floor and the firing log via the Makefile's LOGESCAPE"),
     "PREFLIGHT_OK": ("environment", "a make variable on `make done` (feature 375 FR-004), which a mention cannot set; reason floor and the firing log via the Makefile's LOGESCAPE, as REF_OK"),
     "CLOSE_OK": (
