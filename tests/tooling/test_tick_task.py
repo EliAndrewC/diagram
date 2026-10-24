@@ -762,3 +762,22 @@ def test_cover_changed_reads_the_added_lines_and_the_mirrored_test_directory(tmp
     assert cc.mirrored(tmp_path, "l7r/diagram/a/b.py") == "tests/a"
     assert cc.mirrored(tmp_path, "l7r/diagram/a/deep/c.py") == "tests/a", "climbs to the nearest that exists"
     assert cc.mirrored(tmp_path, "l7r/diagram/z/c.py") == "tests"
+
+
+def test_the_coverage_check_writes_its_coverage_data_in_its_own_directory(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 415 T05's third red gate: beside a landing's gate, in the same tree, the check's run wrote `.coverage` files
+    where the gate's workers wrote theirs; its data goes to its own temporary directory."""
+    cc = _cover()
+    seen: dict = {}
+
+    def run(cmd, cwd=None, capture_output=True, text=True, env=None):  # noqa: ANN001, ANN202
+        seen["env"] = env or {}
+        return type("R", (), {"stdout": "", "stderr": "", "returncode": 0})()
+
+    monkeypatch.setattr(cc.subprocess, "run", run)
+    try:
+        cc.uncovered(tmp_path, {"l7r/x.py": {1}})
+    except RuntimeError:
+        pass  # no report written by the stand-in: the run itself is what is asked
+    data = pathlib.Path(seen["env"]["COVERAGE_FILE"])
+    assert data.name == ".coverage" and tmp_path not in data.parents and str(data.parent) != str(pathlib.Path.cwd())

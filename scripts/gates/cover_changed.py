@@ -18,6 +18,7 @@ not add are never asked - the gate's floor still holds the whole engine.
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import sys
@@ -80,7 +81,10 @@ def uncovered(root: Path, added: dict[str, set[int]]) -> dict[str, list[int]]:
             f"--cov-report=json:{report}",
             *dirs,
         ]
-        done = subprocess.run(cmd, cwd=root, capture_output=True, text=True)
+        # ...ITS COVERAGE DATA IN ITS OWN DIRECTORY (feature 415 T05's third red gate): beside a landing's gate, in the same tree,
+        # its run wrote `.coverage` files where the gate's workers wrote theirs, and the gate's data lost its tables ("no such
+        # table: context", hundreds of errors)
+        done = subprocess.run(cmd, cwd=root, capture_output=True, text=True, env={**os.environ, "COVERAGE_FILE": str(Path(tmp) / ".coverage")})
         if not report.is_file():  # pytest wrote no report: say why, never pass silently
             raise RuntimeError("cover-changed: the tests wrote no coverage report - " + (done.stdout + done.stderr).strip()[-800:])
         files = json.loads(report.read_text(encoding="utf-8")).get("files", {})
