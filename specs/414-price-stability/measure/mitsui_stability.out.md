@@ -95,6 +95,54 @@
 | Osaka | Candle | 13.3% (96) | 14.4% (53) | 33.9% (49) | 42.3% (44) | 31.1% (29) | 31.0% (4) | 1.4% (48) |
 | Osaka | White wheat | 14.9% (22) | 11.9% (11) | 49.4% (6) | 8.7% (4) | - (0) | - (0) | 6.5% (11) |
 
+## Drift: mean change a decade and a century, first to last yearly mean (years spanned)
+
+| city | good | to 1858 | whole |
+|---|---|---|---|
+| Kyoto | White rice | -0.5%/decade, -5%/century (1713-1858) | +5.9%/decade, +77%/century (1713-1871) |
+| Kyoto | Salt | -10.4%/decade, -67%/century (1713-1858) | +1.0%/decade, +10%/century (1713-1871) |
+| Kyoto | Miso | -1.5%/decade, -14%/century (1713-1858) | +9.3%/decade, +144%/century (1713-1871) |
+| Kyoto | Soy sauce | -2.4%/decade, -22%/century (1713-1858) | +8.1%/decade, +117%/century (1713-1871) |
+| Kyoto | Vinegar | -3.9%/decade, -33%/century (1713-1858) | +12.0%/decade, +209%/century (1713-1871) |
+| Kyoto | Sake | -1.7%/decade, -16%/century (1713-1858) | +4.9%/decade, +61%/century (1713-1871) |
+| Kyoto | Tea (zencha) | -5.3%/decade, -42%/century (1713-1831) | -5.3%/decade, -42%/century (1713-1831) |
+| Kyoto | Tobacco | -0.3%/decade, -3%/century (1713-1858) | +8.1%/decade, +117%/century (1713-1871) |
+| Kyoto | Burning wood | -0.6%/decade, -6%/century (1713-1858) | +6.4%/decade, +86%/century (1713-1871) |
+| Kyoto | Lamp oil | -4.7%/decade, -38%/century (1713-1858) | +3.7%/decade, +44%/century (1713-1871) |
+| Kyoto | Day laborers | -0.6%/decade, -6%/century (1713-1858) | +2.7%/decade, +31%/century (1713-1871) |
+| Kyoto | Candle | -5.6%/decade, -44%/century (1741-1858) | +4.2%/decade, +51%/century (1741-1871) |
+| Kyoto | Glutinous rice | +3.5%/decade, +41%/century (1741-1858) | +12.5%/decade, +226%/century (1741-1871) |
+| Kyoto | Mugi | +1.5%/decade, +16%/century (1792-1858) | +19.9%/decade, +515%/century (1792-1871) |
+| Edo | White rice | +3.9%/decade, +47%/century (1710-1858) | +12.2%/decade, +215%/century (1710-1871) |
+| Edo | Glutinous rice | +3.7%/decade, +44%/century (1710-1858) | +13.3%/decade, +248%/century (1710-1871) |
+| Edo | Salt | +0.2%/decade, +2%/century (1710-1858) | +6.8%/decade, +93%/century (1710-1871) |
+| Edo | Miso | +4.0%/decade, +47%/century (1710-1858) | +13.7%/decade, +260%/century (1710-1871) |
+| Edo | Soy sauce | +0.4%/decade, +4%/century (1710-1858) | +9.8%/decade, +154%/century (1710-1871) |
+| Edo | Vinegar | +4.9%/decade, +62%/century (1710-1858) | +16.0%/decade, +341%/century (1710-1871) |
+| Edo | Sake | +5.5%/decade, +70%/century (1710-1858) | +14.0%/decade, +272%/century (1710-1871) |
+| Edo | Tea (zencha) | +0.3%/decade, +3%/century (1710-1858) | +10.0%/decade, +159%/century (1710-1871) |
+| Edo | Tobacco | -3.0%/decade, -26%/century (1710-1858) | +4.3%/decade, +52%/century (1710-1871) |
+| Edo | Charcoal | +0.5%/decade, +5%/century (1710-1858) | +7.4%/decade, +105%/century (1710-1871) |
+| Edo | Burning wood | -2.0%/decade, -18%/century (1710-1858) | +2.5%/decade, +28%/century (1710-1871) |
+| Edo | Lamp oil | +2.0%/decade, +22%/century (1710-1858) | +9.4%/decade, +145%/century (1710-1871) |
+| Edo | Candle | +0.8%/decade, +9%/century (1710-1858) | +6.8%/decade, +93%/century (1710-1871) |
+| Edo | Day laborers | -3.2%/decade, -28%/century (1710-1858) | +3.3%/decade, +39%/century (1710-1871) |
+| Edo | Mugi | -5.2%/decade, -41%/century (1834-1858) | +48.0%/decade, +4939%/century (1834-1869) |
+| Osaka | White rice | +0.1%/decade, +1%/century (1713-1858) | +7.4%/decade, +105%/century (1713-1871) |
+| Osaka | Soy sauce | -1.6%/decade, -15%/century (1713-1858) | +7.9%/decade, +114%/century (1713-1871) |
+| Osaka | Vinegar | -0.8%/decade, -8%/century (1713-1858) | +6.4%/decade, +86%/century (1713-1871) |
+| Osaka | Sake | -2.5%/decade, -22%/century (1713-1858) | +7.0%/decade, +97%/century (1713-1871) |
+| Osaka | Charcoal | -0.1%/decade, -1%/century (1713-1858) | +6.5%/decade, +87%/century (1713-1871) |
+| Osaka | Burning wood | -1.2%/decade, -11%/century (1713-1858) | +6.6%/decade, +90%/century (1713-1871) |
+| Osaka | Lamp oil | -3.7%/decade, -31%/century (1713-1858) | +4.5%/decade, +55%/century (1713-1871) |
+| Osaka | Glutinous rice | +14.9%/decade, +301%/century (1818-1858) | +38.8%/decade, +2559%/century (1818-1871) |
+| Osaka | Salt | +14.6%/decade, +289%/century (1818-1858) | +47.3%/decade, +4721%/century (1818-1871) |
+| Osaka | Miso | +11.9%/decade, +207%/century (1818-1858) | +33.4%/decade, +1680%/century (1818-1871) |
+| Osaka | Tea (zencha) | +0.0%/decade, +0%/century (1818-1858) | +10.9%/decade, +180%/century (1818-1871) |
+| Osaka | Tobacco | +8.6%/decade, +127%/century (1818-1858) | +14.6%/decade, +289%/century (1818-1871) |
+| Osaka | Candle | +4.6%/decade, +57%/century (1818-1858) | +27.8%/decade, +1063%/century (1818-1871) |
+| Osaka | White wheat | +3.6%/decade, +42%/century (1833-1851) | +3.6%/decade, +42%/century (1833-1851) |
+
 ## Spreads between cities, 1818-1858: mean and SD of the log ratio to Kyoto (n = years)
 
 | good | Edo / Kyoto | Osaka / Kyoto |

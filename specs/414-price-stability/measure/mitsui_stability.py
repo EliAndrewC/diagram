@@ -10,7 +10,8 @@ log changes, the one Jacks, O'Rourke and Williamson use (NBER w14748): over half
 5, 10, 25 and 50 years between yearly means (the mean of a year's two seasons; a year with one season takes that one).
 Each lag is computed over the year pairs both present, so a gap in the series shortens a lag's sample rather than bridging
 it. "to 1858" leaves out the treaty-port inflation of 1859-1871; "whole" keeps it. Seasonality: the mean log of autumn
-over spring in the same year. Spreads: per good, the mean and SD of log(Edo/Kyoto) and log(Osaka/Kyoto) in the years
+over spring in the same year. Drift: the mean log change per 10 and per 100 years, as a percent a decade and a century, from
+the first to the last yearly mean of each span (the trend the swing above is measured around). Spreads: per good, the mean and SD of log(Edo/Kyoto) and log(Osaka/Kyoto) in the years
 1818-1858 all three carry. Prices are in each city's own unit per the sheet's headers (the same for the three cities).
 """
 
@@ -92,6 +93,21 @@ def main(path: str) -> None:
                 cells = [f"{pct(v)} ({n})" for k, (v, n) in st.items() if k != "autumn/spring"]
                 m, n = st["autumn/spring"]
                 print(f"| {city} | {good} | " + " | ".join(cells) + f" | {pct(m)} ({n}) |")
+    print("\n## Drift: mean change a decade and a century, first to last yearly mean (years spanned)\n")
+    print("| city | good | to 1858 | whole |")
+    print("|---|---|---|---|")
+    for city, goods in data.items():
+        for good, s in goods.items():
+            cells = []
+            for last in (1858, 1871):
+                y = {t: v for t, v in yearly(s).items() if t <= last}
+                if len(y) < 2:
+                    cells.append("-")
+                    continue
+                a, b = min(y), max(y)
+                per = math.log(y[b] / y[a]) / (b - a)
+                cells.append(f"{100 * (math.exp(10 * per) - 1):+.1f}%/decade, {100 * (math.exp(100 * per) - 1):+.0f}%/century ({a}-{b})")
+            print(f"| {city} | {good} | " + " | ".join(cells) + " |")
     print("\n## Spreads between cities, 1818-1858: mean and SD of the log ratio to Kyoto (n = years)\n")
     print("| good | Edo / Kyoto | Osaka / Kyoto |")
     print("|---|---|---|")
