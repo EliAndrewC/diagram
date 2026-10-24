@@ -214,14 +214,17 @@ the ids are confirmed, and a second landing.
 4. **Do they describe the world here?** Yes: an amount outside every era's years is passed over with its reason, never given a
    borrowed era gm-assistant did not ask for. 0288/0289 are untouched by s5 only because T03's rounds hold those files. Their
    amounts, and every other Chinese amount, are in taels, cash and dollars, coins no era of gm-assistant's table yet carries
-   and `make money-candidates` does not list (its coins are Japanese). So T05 asks on #13 for the Chinese eras' coin keys;
-   until the table carries them, `backfill.md` passes each Chinese question over in one line with that reason, and once it
-   does, the amounts are marked as the Japanese ones were.
+   and `make money-candidates` does not list (its coins are Japanese). The coin keys are gm-assistant's to name: asked on #13
+   (issuecomment-6390793368, proposing `tael`, `cash`, `dollar`) before this task closes. With keys confirmed, the Chinese
+   amounts are marked against the awaiting Chinese eras as the Japanese ones were, and `make money-candidates` is extended to
+   list them; with a deferral gm-assistant confirms on #13, each Chinese question is passed over in `backfill.md` with that
+   reason and the comment's URL.
 5. **The order.** After the ids are confirmed; a session of its own (s5) in its own clone.
 6. **The exits.** Passing an amount over with its reason in `backfill.md`.
 7. **The search smell.** None.
 8. **The budget.** One session.
-9. **Done, measured.** `make money-candidates CHECK=1` exits 0; `make record-owed` names nothing the marks caused.
+9. **Done, measured.** `make money-candidates CHECK=1` exits 0; `make record-owed` names nothing the marks caused; the
+   Chinese amounts marked under the keys gm-assistant confirmed, or a deferral it confirmed on #13 cited in `backfill.md`.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
