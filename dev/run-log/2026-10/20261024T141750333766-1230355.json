@@ -1,0 +1,39 @@
+{
+  "utc": "2026-10-24T14:17:50Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 222,
+  "result": "failed: test-full",
+  "commit": "b53a45de8",
+  "first_failure_s": 150.8,
+  "last_failure_s": 150.9,
+  "failed_tests": 2,
+  "failed_names": [
+    "tests/test_notes_census.py::test_a_notes_census_block_states_the_shipped_manifests_own_counts[inashiro.notes.md]",
+    "tests/test_notes_census.py::test_a_notes_census_block_states_the_shipped_manifests_own_counts[kuwabata.notes.md]"
+  ],
+  "host": {
+    "load": [
+      3.79,
+      7.27
+    ],
+    "mem_avail_mb": [
+      9274,
+      9047
+    ],
+    "cpu_temp_c": [
+      75.0,
+      86.0
+    ],
+    "stall_s": {
+      "cpu": 2.3,
+      "io": 0.4,
+      "io_full": 0.4,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 10870,
+      "package": 6742
+    }
+  }
+}
