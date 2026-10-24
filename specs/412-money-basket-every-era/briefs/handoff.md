@@ -95,3 +95,4 @@ kumon-2022-gpih-japanese-wages, kimura-1987-gpih-osaka-prices, iwahashi-1981-gpi
 - 『旧貨幣表』 and the 1875 Ministry of Finance tables themselves; 『日本史資料総覧』 (1986) itself, to learn whose rates coin-walk copies; Iwahashi 1981 p. 277 (his Osaka gold rates).
 - A copper market rate for 1620-1650 (none found); Kumon's source for 1690s rice; coin-walk's single gold figures of 1708-1713 and 1717-1721, left unconverted because the coin is not named.
 - Saito Osamu 1998 (Kyoto day wages 1773-1790) and Mitsui Bunko 1989 (Osaka tables 1781-1798, 河内木綿 a tan): print only, as session 1 said.
+- Session 2, last: 0287 now carries an absence note for the 1620-1650 copper market (copper-early-absence) and, by pointer to 0277, Osaka's 1766 day (110 g a ryo, 26.2 g a kanmon, 66 mon a monme at Genbun's 1.725 g) and the 1842 reset to 6,500 mon a ryo; no cited passage moved.
