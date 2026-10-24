@@ -664,3 +664,65 @@ def test_land_passes_BOXES_on_to_the_tick(tmp_path: pathlib.Path, monkeypatch) -
     assert lb._box_flag(tt, d, "T02") == ["--boxes"]
     (d / "tasks.md").write_text(VERIFIED, encoding="utf-8")
     assert lb._box_flag(tt, d, "T02") == [], "no open box: no --boxes, which would refuse"
+
+
+def test_the_gate_s_own_lint_is_committed_and_any_other_change_left(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """The GM 2026-10-24: T07's landing waited out the claims wait's 20 min on a test whose imports the gate's `ruff check --fix`
+    had sorted. A file that is its HEAD copy run through the gate's ruff is committed; a real edit is left for the wait to name."""
+    import subprocess  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("land_real", script("land.py"))
+    assert spec and spec.loader
+    lb = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(lb)  # its commands real: the commit is asked of a real repository
+    repo = tmp_path / "repo"
+    (repo / "tests").mkdir(parents=True)
+    (repo / "pyproject.toml").write_text('[tool.ruff.lint]\nselect = ["I"]\n', encoding="utf-8")
+    messy = "import sys\nimport os\n\nprint(os, sys)\n"
+    (repo / "tests" / "test_a.py").write_text(messy, encoding="utf-8")
+    (repo / "tests" / "test_b.py").write_text(messy, encoding="utf-8")
+    env = {"GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
+    for cmd in (["init", "-q"], ["add", "-A"], ["commit", "-q", "-m", "x"]):
+        subprocess.run(["git", "-C", str(repo), *cmd], check=True, env={**__import__("os").environ, **env})
+    monkeypatch.setenv("GIT_AUTHOR_NAME", "t"), monkeypatch.setenv("GIT_AUTHOR_EMAIL", "t@t")
+    monkeypatch.setenv("GIT_COMMITTER_NAME", "t"), monkeypatch.setenv("GIT_COMMITTER_EMAIL", "t@t")
+    (repo / "tests" / "test_a.py").write_text("import os\nimport sys\n\nprint(os, sys)\n", encoding="utf-8")  # the gate's sort
+    (repo / "tests" / "test_b.py").write_text("import os\nimport sys\n\nprint(sys, os)\n", encoding="utf-8")  # an edit too
+    assert lb.commit_gate_formatting(repo) == ["tests/test_a.py"]
+    left = lb.run(repo, ["git", "status", "--porcelain"])[1]
+    assert "test_a.py" not in left and "test_b.py" in left, "the sort committed, the edit left for the wait"
+    assert lb.commit_gate_formatting(repo) == [], "nothing of the gate's left: no commit"
+
+
+def test_the_changed_modules_coverage_is_a_cheap_refusal_with_its_escape(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """The GM 2026-10-24: T135's landing ran `make done` five minutes to find four uncovered lines; `cover_changed.py` asks them
+    in the first pass, its refusal printed with the rest, and COVER_OK passes it."""
+    lb, d = _land(tmp_path, monkeypatch)
+    said = "cover-changed: l7r/x.py - added lines its tests (tests/x) do not reach: 3\ncover-changed: a test for each"
+
+    def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
+        return (1, said) if any("cover_changed.py" in str(c) for c in cmd) else (0, "")
+
+    monkeypatch.setattr(lb, "run", run)
+    stops = lb.cheap_refusals(tmp_path, d, ["T02"], "x")
+    assert stops and "do not reach: 3" in stops[-1] and "a test for each" in stops[-1]
+    monkeypatch.setenv("COVER_OK", "a line only the rolls reach")
+    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [], "escaped"
+
+
+def _cover():  # noqa: ANN202 - `gates/cover_changed.py` by path
+    spec = importlib.util.spec_from_file_location("cover_changed", script("cover_changed.py"))
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_cover_changed_reads_the_added_lines_and_the_mirrored_test_directory(tmp_path: pathlib.Path) -> None:
+    cc = _cover()
+    diff = "+++ b/l7r/diagram/a/b.py\n@@ -3,0 +4,2 @@ def f\n+x\n+y\n@@ -9 +11 @@\n+z\n+++ /dev/null\n@@ -1 +0,0 @@\n"
+    assert cc.added_lines(diff) == {"l7r/diagram/a/b.py": {4, 5, 11}}, "added lines only; a deleted file adds none"
+    (tmp_path / "tests" / "a").mkdir(parents=True)
+    assert cc.mirrored(tmp_path, "l7r/diagram/a/b.py") == "tests/a"
+    assert cc.mirrored(tmp_path, "l7r/diagram/a/deep/c.py") == "tests/a", "climbs to the nearest that exists"
+    assert cc.mirrored(tmp_path, "l7r/diagram/z/c.py") == "tests"

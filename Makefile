@@ -617,9 +617,14 @@ step-back-on:   ## [project] resume the hourly step-back (feature 405 T43)   REA
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/reviews/checkpoint.py switch on --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back resumed - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"
 land: export LAND_NOTE = $(NOTE)
 land: export LAND_BOXES = $(BOXES)
-land:           ## [project] land one task or several and tick them: every cheap refusal first and together, then make done and make cohort-landing where needed, the push, the ticks (feature 405 T33)   F=405 T="T12 [T13]" NOTE="what was verified" [BOXES=1 ticks a physical task's research boxes]
+land: export COVER_OK := $(COVER_OK)
+land:           ## [project] land one task or several and tick them: every cheap refusal first and together (the changed modules' coverage among them), then make done and make cohort-landing where needed, the push, the ticks (feature 405 T33)   F=405 T="T12 [T13]" NOTE="what was verified" [BOXES=1 ticks a physical task's research boxes] [COVER_OK="<reason>"]
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
+	$(if $(COVER_OK),$(LOGESCAPE) COVER_OK "$(COVER_OK)",@:)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/land.py" "$(F)" "$(T)"
+
+cover-changed:  ## [tests] the coverage floor on the engine modules the change touched, in seconds: each added line its mirrored test directory leaves unrun (the GM 2026-10-24)   [BASE=origin/main]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/cover_changed.py" --base "$(or $(BASE),origin/main)"
 
 land-stop:       ## [project] stop this tree's running `make land` cleanly - its gate and cohort stop with it (405 T90)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/land.py" --stop

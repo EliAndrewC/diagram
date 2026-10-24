@@ -120,6 +120,10 @@
     "land": {
       "kind": "check",
       "what": "scripts/land.py - make land / make land-batch: refuses a landing with every cheap refusal named together, else runs what it owes, pushes and ticks; each run recorded passed or refused"
+    },
+    "cover_changed": {
+      "kind": "check",
+      "what": "scripts/gates/cover_changed.py - the changed engine modules' added lines asked of their mirrored tests' coverage (make cover-changed, make land's first pass; the GM 2026-10-24); each run recorded passed or refused"
     }
   }
 }
