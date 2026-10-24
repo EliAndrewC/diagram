@@ -162,10 +162,10 @@ issuecomment-6386826304; `beijing-1500`, confirmed in issuecomment-6386920252) a
   census group to be accounted for, the Nakasendo by name; the census record-wide; FR-002 against the plan. All four applied
   (the row table, FR-006, the census addendum, FR-002).
 - spec-fidelity round 2 (2026-10-24): CHANGES REQUIRED - group 20's reason false (0272's 1497 table: now `beijing-1500`); 0115 and
-  0194 missing from the table (added); `osaka-1620`'s confirmed span widened (restored to 1620-1650, the 1650s mapped to none);
+  0194 missing from the table (added); `osaka-1620`'s confirmed span widened (restored to 1620-1650, Kyoto 1652-56 and the fees of 1611 and 1658 mapped to none);
   FR-006 named by no task (T05 and D7 now name it).
 - spec-fidelity round 3 (2026-10-24): CHANGES REQUIRED - request.md lacked the confirmation comment the spec cites (6386826304);
-  request.md refreshed with the whole thread. The census's 1820s date for the Takamiya fares corrected to 1665.
+  request.md refreshed with the whole thread. The census's wrong date for the Takamiya fares corrected to 1665 (Kanbun 5).
 - spec-fidelity round 4 (2026-10-24): CHANGES REQUIRED - `beijing-1500` still read as proposed, without its confirmed span;
   now confirmed, about 1490-1520, citing 6386920252.
 - spec-fidelity round 5 (2026-10-24): FAITHFUL.
