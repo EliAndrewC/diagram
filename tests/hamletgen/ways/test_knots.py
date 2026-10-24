@@ -361,7 +361,7 @@ def test_an_end_moved_onto_the_node_drops_the_corners_that_run_back_along_a_way_
     lane = [(-120.0, 60.0), (3.0, 45.0), (2.0, 25.0)]  # its end on the other way's corner, its last leg coming down beside it
     assert kn.onto_cut_back(lane, -1, (0.0, 0.0), way) == [(-120.0, 60.0), (0.0, 0.0)], "the corner run back along the way dropped"
     assert kn.onto_cut_back(lane[::-1], 0, (0.0, 0.0), way) == [(0.0, 0.0), (-120.0, 60.0)], "the first end as the last"
-    assert kn.onto_cut_back([(-120.0, -40.0), (-60.0, -40.0)], -1, (0.0, 0.0), way) == [], "nothing alongside: no form"
+    assert kn.onto_cut_back([(-120.0, -40.0), (-90.0, -60.0), (-60.0, -40.0)], -1, (0.0, 0.0), way) == [], "nothing alongside: no form"
     assert kn.onto_cut_back(lane, -1, (0.0, 0.0), []) == []
 
 
@@ -377,3 +377,30 @@ def test_a_joining_lane_is_aimed_at_the_node_and_ended_where_it_first_meets_a_wa
     assert kn.joiner_first_meeting([under, joiner], 1, -1, (-40.0, 60.0)) == [], "met only at the node: no form"
     assert kn.joiner_first_meeting([way, joiner, under], 1, -1, (0.0, 80.0)) == [], "its first meeting within the knot's reach"
     assert kn.joiner_first_meeting([way, {**joiner, "pts": [[2.0, 2.0], [60.0, 120.0]]}, under], 1, 0, (-40.0, 60.0))[-1] == (60.0, 120.0)
+
+
+def _only(expected):  # noqa: ANN001, ANN202 - a judge that admits one gather and no other
+    return lambda edits: edits == expected
+
+
+def test_the_gather_takes_the_end_moved_onto_the_node_cut_where_it_comes_alongside() -> None:
+    """405 T135 (D129): where every earlier form is refused, `next_gather` moves the lone end onto the node with its corner
+    that ran back along a way there dropped."""
+    lanes = [{"pts": [[100.0, 25.0], [0.0, 25.0], [0.0, 0.0]]}, {"pts": [[0.0, 0.0], [0.0, -100.0]]}, {"pts": [[-120.0, 60.0], [3.0, 45.0], [1.0, 22.0]]}]
+    form = kn.onto_cut_back(kn._pts(lanes[2]), -1, (0.0, 0.0), kn._pts(lanes[0]))
+    assert form == [(-120.0, 60.0), (0.0, 0.0)]
+    assert kn.next_gather(lanes, _only({2: form})) == {2: form}
+
+
+def test_the_gather_takes_a_joining_lane_ended_where_it_first_meets_a_way() -> None:
+    """405 T135 (D130): where every earlier form is refused, a joining lane is re-aimed at the node and ended at its first
+    crossing, beyond the knot's reach."""
+    lanes = [
+        {"pts": [[0.0, 0.0], [100.0, 0.0]]},
+        {"pts": [[0.0, 0.0], [0.0, -100.0]]},
+        {"pts": [[60.0, 120.0], [-10.0, 15.0]], "role": "join-orphans"},
+        {"pts": [[30.0, 20.0], [30.0, 140.0]]},
+    ]
+    form = kn.joiner_first_meeting(lanes, 2, -1, (0.0, 0.0))
+    assert form == [(60.0, 120.0), (30.0, 60.0)]
+    assert kn.next_gather(lanes, _only({2: form})) == {2: form}

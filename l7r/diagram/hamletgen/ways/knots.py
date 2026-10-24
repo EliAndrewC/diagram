@@ -325,8 +325,6 @@ def joiner_first_meeting(lanes: Sequence[Mapping[str, Any]], i: int, end: int, n
     if lanes[i].get("role") != JOIN_ROLE:
         return []
     seq = [*(_pts(lanes[i]) if end == -1 else _pts(lanes[i])[::-1])[:-1], node]
-    if len(seq) < 2:
-        return []
     a, b = seq[-2], seq[-1]
     xs = [x for j, ln in enumerate(lanes) if j != i for u, v in zip(_pts(ln), _pts(ln)[1:], strict=False) if (x := _crossing(a, b, u, v)) is not None]
     if not xs:
