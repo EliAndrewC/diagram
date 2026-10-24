@@ -405,8 +405,10 @@
    "Song dynasty",
    "Song-dynasty",
    "Southern Song",
-   "Northern Song"
-  ]
+   "Northern Song",
+   "Song"
+  ],
+  "cased": true
  },
  "Spiraea": {
   "def": "Meadowsweet: the low shrubs that come in on the drier margin of a reed grassland.",
@@ -17613,6 +17615,20 @@
   "def": "A book of the Ming state's accounts from the Wanli era, one of the books from which the 1615 prices of salt and coal are taken where the Ministry of Works' handbook gives none.",
   "variants": [
    "Wanli kuaiji lu"
+  ]
+ },
+ "string of cash": {
+  "def": "A count of Chinese copper cash, on its face a thousand coins, used to state prices and the Ming state's paper money; what a string was worth in silver changed from era to era.",
+  "variants": [
+   "string of cash",
+   "strings of cash"
+  ]
+ },
+ "tiao": {
+  "def": "A string of copper cash used as a unit of account in China. In principle 1,000 coins, but in practice the count varied by region and trade, from 900 to 1,000 in most places down to 100 or 150 in some.",
+  "variants": [
+   "tiao",
+   "tiaos"
   ]
  }
 }

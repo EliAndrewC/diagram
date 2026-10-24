@@ -3871,6 +3871,7 @@ sokohi	sokohi
 solar time	solar time
 solidity	solidity
 son of heaven	Son of Heaven
+song	Song dynasty
 song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
@@ -3975,8 +3976,10 @@ street-town	gaison
 street-village	gaison
 strength stone	chikaraishi
 strength stones	chikaraishi
+string of cash	string of cash
 stringer	stringer
 stringers	stringer
+strings of cash	string of cash
 strip footing	strip footing
 strip footings	strip footing
 stroke	stroke
@@ -4267,6 +4270,8 @@ throwing	throwing
 tian'geng	bund
 tiangeng	bund
 tiangong kaiwu	Tiangong kaiwu
+tiao	tiao
+tiaos	tiao
 ticket salt	ticket salt
 ticket-salt	ticket salt
 tie-rail	tie-rail
