@@ -2,7 +2,7 @@
 # Brief - feature 412, session 4: check and apply
 
 You are a FRESH session for one part of one feature. This brief is the whole of what you need. Work in this clone
-(`/diagram/.clones/diagram-money`); the project's CLAUDE.md files apply to you, the research record's `CLAUDE.md` above all.
+(`/diagram/.clones/diagram-money-pages`); the project's CLAUDE.md files apply to you, the research record's `CLAUDE.md` above all.
 
 **What moved.** Sessions 1-3 wrote question 1 into 0273, 0279 and 0265, the wages into 0250, and four new money questions, and
 their new registry entries, in commits opening `412: `. Its handoff is `specs/412-money-basket-every-era/briefs/handoff.md`,
