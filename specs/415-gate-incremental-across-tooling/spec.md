@@ -38,8 +38,9 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
 3. A change to the lines of the Makefile that decide how the gate's tests run (the recipes of the test targets and the
    variables they read), to `pyproject.toml`'s pytest or coverage sections, or to the gate's own machinery
    (`l7r/diagram/ci/`, `l7r/diagram/pipeline/`, `l7r/diagram/switches.py`, `l7r/diagram/_invocation.py`,
-   `tests/conftest.py`, `tests/_scope.py`, and `scripts/gates/gate-stamp.py`, which decides the files the gate's manifest
-   covers) still plans `full`. A change to a pinned lockfile (`requirements.txt`, `requirements-dev.txt`,
+   `tests/conftest.py`, `tests/_scope.py`) still plans `full`. Every file under `scripts/` plans `incremental`,
+   `scripts/gates/gate-stamp.py` included: where its patterns change which files the gate's manifest covers, those files
+   appear in the manifest as added or removed, which the planner already selects on. A change to a pinned lockfile (`requirements.txt`, `requirements-dev.txt`,
    `requirements-ci.txt`) plans `full` - ADDED: no lockfile is in the tooling hash today, so a dependency change plans
    nothing. Any other Makefile or `pyproject.toml` change does not, nor an edit to a `requirements*.in` alone.
 4. A landing whose change reaches more than 60% of the baseline runs the tests it reaches, not the whole suite; the
@@ -85,7 +86,9 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
   change MUST select the tooling tests (reused on their recorded reads) and every test module outside `tests/tooling/`
   and `tests/hooks/` that reads `scripts/` - decided by a STATIC rule, since nothing records those modules' reads: the
   module's own source, or the source of a module under `tests/` it imports (transitively), names `scripts/` or imports
-  `tests._scripts`.
+  `tests._scripts` - read LOOSELY: any source line of the module, or of such a helper, that mentions the word `scripts`
+  (`tests/test_building_types.py` reaches it as `os.path.join(REPO, "scripts")`) - over-selecting costs a module, missing
+  one makes a `scripts/` change unsafe.
 - **FR-002**: The gate's run record MUST carry the plan's mode, its reason and the count of tests selected.
 - **FR-003**: The landing (`scripts/land.py`) MUST run the cohort's fresh block after the push, outside its path; the fixed
   seeds and pinned rows MUST stay beside the gate with their refusal.
@@ -103,7 +106,8 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
 
 - **SC-001** (FR-001): In a fixture repository, a `scripts/` edit after a baseline plans `incremental` and selects the
   tooling tests and the test modules that read `scripts/`, among them a module outside `tests/tooling/` that reaches
-  `scripts/` only through a `tests/` helper it imports; an edit to `l7r/diagram/ci/`, a test target's recipe,
+  `scripts/` only through a `tests/` helper it imports, and one that reaches it only as `os.path.join(ROOT, "scripts")`;
+  an edit to `l7r/diagram/ci/`, a test target's recipe,
   `pyproject.toml`'s `[tool.coverage.run]` or `requirements.txt` plans `full`; an edit to a Makefile help line or a
   `requirements*.in` plans `incremental`.
 - **SC-002** (FR-002, FR-005): A gate run's record carries `plan_mode`, `plan_reason`, `selected` and `phases` with a
@@ -132,3 +136,6 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
   sources too (narrowed to the pinned files, marked ADDED); "reads `scripts/`" had nothing to decide it from (a static rule
   stated, with a fixture through a helper); "only" dropped the planner's other fallbacks (kept, stated). Its aside taken:
   `scripts/gates/gate-stamp.py` stays a full trigger.
+- spec-fidelity round 2 (2026-10-24): CHANGES REQUIRED - the static rule missed a bare `"scripts"` path component
+  (`tests/test_building_types.py`; read loosely now, any mention of the word); `gate-stamp.py` as a full trigger was an
+  unmarked exception to the GM's item 1 (dropped: a change to the files it covers shows in the manifest as added or removed).
