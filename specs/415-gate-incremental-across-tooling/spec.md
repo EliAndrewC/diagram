@@ -36,9 +36,12 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
 2. An engine change made after a `scripts/` change plans `incremental` over the engine change's reach, plus scenario 1's
    selection for the `scripts/` change.
 3. A change to the lines of the Makefile that decide how the gate's tests run (the recipes of the test targets and the
-   variables they read), to `pyproject.toml`'s pytest or coverage sections, to a requirements file, or to the gate's own
-   machinery (`l7r/diagram/ci/`, `l7r/diagram/pipeline/`, `l7r/diagram/switches.py`, `l7r/diagram/_invocation.py`,
-   `tests/conftest.py`, `tests/_scope.py`) still plans `full`. Any other Makefile or `pyproject.toml` change does not.
+   variables they read), to `pyproject.toml`'s pytest or coverage sections, or to the gate's own machinery
+   (`l7r/diagram/ci/`, `l7r/diagram/pipeline/`, `l7r/diagram/switches.py`, `l7r/diagram/_invocation.py`,
+   `tests/conftest.py`, `tests/_scope.py`, and `scripts/gates/gate-stamp.py`, which decides the files the gate's manifest
+   covers) still plans `full`. A change to a pinned lockfile (`requirements.txt`, `requirements-dev.txt`,
+   `requirements-ci.txt`) plans `full` - ADDED: no lockfile is in the tooling hash today, so a dependency change plans
+   nothing. Any other Makefile or `pyproject.toml` change does not, nor an edit to a `requirements*.in` alone.
 4. A landing whose change reaches more than 60% of the baseline runs the tests it reaches, not the whole suite; the
    baseline is refreshed by a full run outside the landing's path (User Story 3).
 
@@ -76,10 +79,13 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
 
 ### Functional Requirements
 
-- **FR-001**: `incremental.plan` MUST plan `full` for the gate's own machinery and test configuration only - the paths of
-  US1 scenario 3 - and not for a change under `scripts/` or to a Makefile or `pyproject.toml` line outside those. A
-  `scripts/` change MUST select the tooling tests (reused on their recorded reads) and every test module outside
-  `tests/tooling/` and `tests/hooks/` that reads `scripts/`.
+- **FR-001**: Of the paths the tooling hash covers, `incremental.plan` MUST plan `full` only for the gate's own machinery
+  and test configuration (US1 scenario 3), and MUST plan `full` for a change to a pinned lockfile; its other fallbacks (no
+  baseline, a non-Python engine file, a non-module file under `tests/`, an import-time line) are unchanged. A `scripts/`
+  change MUST select the tooling tests (reused on their recorded reads) and every test module outside `tests/tooling/`
+  and `tests/hooks/` that reads `scripts/` - decided by a STATIC rule, since nothing records those modules' reads: the
+  module's own source, or the source of a module under `tests/` it imports (transitively), names `scripts/` or imports
+  `tests._scripts`.
 - **FR-002**: The gate's run record MUST carry the plan's mode, its reason and the count of tests selected.
 - **FR-003**: The landing (`scripts/land.py`) MUST run the cohort's fresh block after the push, outside its path; the fixed
   seeds and pinned rows MUST stay beside the gate with their refusal.
@@ -96,8 +102,10 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
 ## Success Criteria
 
 - **SC-001** (FR-001): In a fixture repository, a `scripts/` edit after a baseline plans `incremental` and selects the
-  tooling tests and the test modules that read `scripts/`; an edit to `l7r/diagram/ci/`, a test target's recipe, or
-  `pyproject.toml`'s `[tool.coverage.run]` plans `full`; an edit to a Makefile help line plans `incremental`.
+  tooling tests and the test modules that read `scripts/`, among them a module outside `tests/tooling/` that reaches
+  `scripts/` only through a `tests/` helper it imports; an edit to `l7r/diagram/ci/`, a test target's recipe,
+  `pyproject.toml`'s `[tool.coverage.run]` or `requirements.txt` plans `full`; an edit to a Makefile help line or a
+  `requirements*.in` plans `incremental`.
 - **SC-002** (FR-002, FR-005): A gate run's record carries `plan_mode`, `plan_reason`, `selected` and `phases` with a
   number of seconds for each phase that ran.
 - **SC-003** (FR-003, FR-004): A landing's log shows the fresh block started after the push and `cover-changed` beside the
@@ -115,4 +123,12 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
 - The tooling tests' own reuse (feature 383 amendment 5) stays as it is; this feature only stops a tooling change from
   forcing the engine tests to run.
 - The fixed seeds and pinned rows keep refusing a regressed seed at the landing; only the fresh block moves.
-- A requirements file stands for the lockfiles the GM's item names (the repository has `requirements*.txt`, no lockfile).
+- The lockfiles the GM's item names are the pinned `requirements*.txt` (`requirements.txt`: "Locked ... Re-lock:
+  pip-compile"); a `requirements*.in` is their source and changes nothing the tests run on until re-locked.
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-24): CHANGES REQUIRED - the lockfile rule was new, not existing, and named the `.in`
+  sources too (narrowed to the pinned files, marked ADDED); "reads `scripts/`" had nothing to decide it from (a static rule
+  stated, with a fixture through a helper); "only" dropped the planner's other fallbacks (kept, stated). Its aside taken:
+  `scripts/gates/gate-stamp.py` stays a full trigger.
