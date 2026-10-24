@@ -178,6 +178,8 @@ def test_a_comment_or_a_rewrap_of_an_entry_page_owes_nothing(
     page.write_text(Q0029.replace("one household", "one  <!-- probe -->household"), encoding="utf-8")
     assert "probe" in page.read_text(encoding="utf-8")
     assert mo.owed(root, base) == [], "a comment and a re-wrap change no words"
+    page.write_text(Q0029.replace("one household", '<span class="money" data-amount="1" data-coin="mon" data-era="edo-1830">one household</span>'), encoding="utf-8")
+    assert mo.owed(root, base) == [], "a money mark around an amount's words changes no words (feature 412)"
     page.write_text(Q0029.replace("one household", "one farming household"), encoding="utf-8")
     assert [s for s, _w, _f in mo.owed(root, base)] == [
         "modal-accuracy:hamlet/farmhouse",
