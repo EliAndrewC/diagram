@@ -25237,14 +25237,14 @@
  },
  "l7r/diagram/hamletgen/ways/knots.py::_alongside#alongside": {
   "body": "bbae7ca169c92cfd",
-  "claim": "alongside - UNRESEARCHED: 0081 gives the 20 degrees but no distance; read within `WEB_SHADOW_FT`, as `teed_back` reads it",
-  "code": "ee5d5dd4701c2909",
+  "claim": "alongside - UNRESEARCHED: 0081 gives the 20 degrees but no distance; read at the leg's middle within `WEB_SHADOW_FT` (30 ft, the distance the shadow rule reads two ways together at) - `teed_back` asks both ends of a leg",
+  "code": "e4c3275fd5a83ddd",
   "core": "21fc703bd46612b8",
   "date": "2026-10-24",
-  "note": "the label is correct (the 20 degrees comes from §25, and 0081 gives no distance), but \"as `teed_back` reads it\" is not what the code does: `_alongside` tests only the leg's midpoint against `WEB_SHADOW_FT` (`seg_dist(mid...) > WEB_SHADOW_FT`), while `teed_back` requires both ends of the leg to be within it (`any(... > WEB_SHADOW_FT for q in (a, b))`); either make the code match teed_back or reword the claim to say the midpoint is read",
+  "note": "the 20 degrees is §25's figure and the page gives no distance, so the 30 ft midpoint reach is correctly UNRESEARCHED",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::_fixed#plumbing": {
   "code": "1140513a96a246c7",
@@ -25492,13 +25492,22 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/knots.py::joiner_first_meeting#the joiner's first meeting is used only where it stands beyond the knot's 25 ft reach of the node, and is refused within it": {
-  "code": "47be1b52bd085c81",
+ "l7r/diagram/hamletgen/ways/knots.py::joiner_first_meeting#its first meeting beyond the knot's reach": {
+  "body": "407b12bb93781636",
+  "claim": "its first meeting beyond the knot's reach - village-lanes.drawing: ends within 25 ft are joined at a single point, so a first meeting within the reach would leave the knot it mends",
+  "code": "eb853c56758b93e9",
   "core": "47be1b52bd085c81",
   "date": "2026-10-24",
-  "note": "the joiner's first meeting is used only where it stands beyond the knot's 25 ft reach of the node, and is refused within it",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "refusing a meeting within the knot's reach follows \"Ends within 25 ft of one another are joined at a single point\"; where §22 and §23 conflict, the code lets §22 win",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::knots#lane ends gathered": {
   "body": "db8feebb897ad92e",
@@ -25638,21 +25647,27 @@
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/knots.py::next_gather#onto_cut_back is tried only against lanes at the other node, not the lane the end's own node stands on (the set the \"which ways\" claim names)": {
-  "code": "9460a1c6d8719440",
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#the order of the last forms": {
+  "body": "04c4253b972e77ac",
+  "claim": "the order of the last forms - UNRESEARCHED: `teed_onto`, then `teed_back`, then `onto_cut_back`, then `joiner_first_meeting` - the end's own approach kept longest first",
+  "code": "c66e88e7b9779f6e",
   "core": "9460a1c6d8719440",
   "date": "2026-10-24",
-  "note": "onto_cut_back is tried only against lanes at the other node, not the lane the end's own node stands on (the set the \"which ways\" claim names)",
+  "note": "the page gives no order among the T, cut-alongside and joiner forms; the code tries onto_cut_back then joiner_first_meeting for each mover in turn, which matches the claim's order",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/knots.py::next_gather#the order the gather's last resorts are tried in: teed_onto, then teed_back, then onto_cut_back, then joiner_first_meeting": {
-  "code": "9460a1c6d8719440",
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#which lanes an end moved onto the node is cut back along": {
+  "body": "04c4253b972e77ac",
+  "claim": "which lanes an end moved onto the node is cut back along - UNRESEARCHED: the lanes at that node, the ways it would run back along there",
+  "code": "51a96e1073192024",
   "core": "9460a1c6d8719440",
   "date": "2026-10-24",
-  "note": "the order the gather's last resorts are tried in: teed_onto, then teed_back, then onto_cut_back, then joiner_first_meeting",
+  "note": "the code takes the lanes at the target node other than i, as the claim says; the page is silent on which ways",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#which node a knot gathers at": {
   "code": "839696442954b936",
