@@ -122,7 +122,7 @@
    "declared": "spec-fidelity"
   },
   "### T05 Decisions": {
-   "sha256": "482d55acc566b5096104534b83f231b0edb151eff9a89cd85297edcee516c349",
+   "sha256": "13db4d0071cfab01a0988ebd79106b9d1ef6c3965c2f64ee8b963f0f44e3a116",
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
@@ -147,6 +147,12 @@
   },
   "### T04 Approach (re-answered 2026-10-24T17:08Z)": {
    "sha256": "ecb0e8bc37d3c974bd9dd46e42d9bee5aabbc300a1074e3d09c497d640c92a36",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (re-answered 2026-10-24T18:39Z)": {
+   "sha256": "e825c9699ef74f623d0fe3f8b1195047895c569559e33b5bc3fc4d233419c02e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
@@ -363,6 +369,58 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "Item 1 says 'the gate measured on the next real landing'; D9 picks the first qualifying one rather than the literal next. Each condition judged separately: 'a scripts/ change since its baseline' is SC-006's 'after a tooling change' (accepted spec). 'Own change does not move gate_config' follows from item 1's own words that test-configuration and lockfile changes 'still do' force full; a landing the GM's rule sends to full cannot show item 1's saving, so measuring it would defeat the measurement's purpose. 'Baseline carries the key' has no anchor in the request or spec; it is an artifact of D3's migration ('a baseline without the key counts as moved, once'), costs at most the one landing after T02, and the plan_mode check keeps it honest. D9 does not say 'engine', which SC-006 requires; the T06 Approach constraint ('a real engine landing after a tooling change') supplies it, so not blocking."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T05 Approach (re-answered 2026-10-24T18:39Z)",
+    "### T05 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05-A2/A10 (cutoff scope)",
+     "summary": "The 60% cutoff (FULL_FRACTION) is dropped for landings only (make land passes INCR_NO_CUTOFF=1); a gate run outside a landing keeps it.",
+     "class": "within",
+     "why": "Item 6 says 'Drop the 60% cutoff from landings', and the spec's US1 scenario 4 names landings. Keeping the cutoff for a gate run outside a landing is the literal scope of the request, not a carve-out from it."
+    },
+    {
+     "id": "T05-A6 exits / D8 refresh rule",
+     "summary": "Refresh after a push only where the landing's gate ran incremental and selected at least REFRESH_FRACTION (0.25) of its baseline. Refreshing after every incremental landing is rejected.",
+     "class": "within",
+     "why": "FR-006 (amended) settles the 25% rule, and the GM's amendment 1 says 'land T05 now with the 25% rule'. The rejected exit is not something the spec required."
+    },
+    {
+     "id": "T05-A6(a)/D8 detached worktree",
+     "summary": "The refresh runs in a detached worktree at the pushed commit, under a lock, started detached by land.py, never in the clone itself.",
+     "class": "within",
+     "why": "FR-006 requires a full run in a detached worktree at the pushed commit, under a lock, after the push and never on a landing's path. Item 6's 'refresh the baseline in the background' is carried by this."
+    },
+    {
+     "id": "D8 refresh invocation",
+     "summary": "The refresh runs `make done INCR_FORCE=\"refresh: <n> of <N> baseline tests selected\"` in the worktree.",
+     "class": "within",
+     "why": "FR-006 gives the reason string verbatim. Forcing full mode through INCR_FORCE is how the spec's 'full gate run' is carried out, and the earlier CLEAR D8 already fixed that the refresh record carries its reason (D2/FR-002)."
+    },
+    {
+     "id": "D8 baseline copy-back",
+     "summary": "On green, the worktree's gate-baseline/ is copied into the clone's with each coverage path rewritten to the clone's root, unless the clone's baseline was saved after the refresh started.",
+     "class": "within",
+     "why": "FR-006 says 'its baseline replaces the clone's, its coverage paths rewritten from the worktree to the clone, unless the clone's baseline is newer'. Measuring 'newer' against the moment the refresh started puts that condition into practice and does not narrow it: any clone baseline saved after the refresh began comes from a run at the same or a later tree."
+    },
+    {
+     "id": "D8 run record and worktree cleanup",
+     "summary": "The worktree is removed. The refresh's run record is copied into the clone's dev/run-log/ and committed path by path.",
+     "class": "within",
+     "why": "This serves item 2 / FR-002 (every full run's reason recorded in the gate's run record) and item 5 / FR-005 for the refresh's own full run. Without the copy, the refresh's record would be lost when the worktree is removed. It adds no behavior the request did not ask for."
+    },
+    {
+     "id": "T05-A9 tests",
+     "summary": "Unit tests: over-fraction landing stays incremental; refresh at >=25% and not under; never two at once; baseline copied with paths rewritten and not over a newer one.",
+     "class": "within",
+     "why": "These enforce FR-006 and SC-004 as FR-008 requires. They are enforcement of the request, not added scope."
     }
    ]
   }

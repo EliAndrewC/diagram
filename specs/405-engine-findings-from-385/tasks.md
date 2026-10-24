@@ -415,6 +415,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
 - [x] T135 Two gather forms for the knots T26's sheds leave (amendment 10): an end moved onto the junction with the corners that would run back along a way there dropped (0081: cut where it comes alongside; seed 24), and a lane laid only to join two others re-aimed at the junction and ended where it first meets a way (0081; seed 36) - done when seeds 24 and 36 are knot-free with T26's patch and main's cohort keeps 54/54
       research: rendering
       verify: DONE. landed: seeds 24 and 36 knot-free with T26's patch: onto_cut_back (D129) and joiner_first_meeting (D130), 0081; main 54/54
+- [ ] T136 Re-measure feature 415's gate costs on real landings (amendment 11): once the next four of this feature's engine tasks have landed through make land, read their landing gates' run records (make gate-costs) and compare them with 415 research.md R2 (67 s fixed + 12.7 ms per selected test, measured on gate runs in the clone) and the 25% refresh rule (scripts/land.py REFRESH_FRACTION); where the real landings disagree, re-fit and amend the rule through 415's spec (FR-006). Worked after those four landings, before T127
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
