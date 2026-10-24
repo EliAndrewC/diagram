@@ -45,9 +45,9 @@ I wrote nothing in any repository. Pages are on the ledger, and I recorded nothi
 **明史 卷80, 食貨四 鹽法** (archived: https://zh.wikisource.org/wiki/明史/卷80)
 - Guan Huaili, 嘉靖13 (1534): 「定價太昂，息不償本，取贏之難也。私鹽四出，官鹽不行，市易之難也……嘗考祖宗時，商人中鹽納價甚輕，而灶戶煎鹽工本甚厚，今鹽價十倍於前，而工本不能十一，何以禁私鹽使不行也？……大抵正鹽賤，則私販自息。」
 - (translation) "The fixed price is too high, so the return does not repay the outlay … Private salt comes from every side and official salt does not move … In the founders' time merchants paid very little for salt and the boilers were paid generously; now the salt price is ten times what it was, while the boilers get not a tenth of it. How can private salt be stopped? … In general, when official salt is cheap, smuggling stops of itself."
-- The "tenfold" is the price merchants paid for licences, not retail.
-- The licence price: 「引價，淮南納銀一兩九錢，淮北一兩五錢」 (translation) "licence price: 1.9 taels in Huainan, 1.5 in Huaibei" (Jiajing). Not converted per jin, because the Ming licence weight was not read in a source.
-- **1617 綱法:** 「巡鹽御史龍遇奇立鹽政綱法，以舊引附見引行，淮南編為十綱，淮北編為十四綱」 (translation) "the salt censor Long Yuqi set up the gang system, moving old licences with current ones; Huainan in ten gang, Huaibei in fourteen". No price effect is given.
+- The "tenfold" is the price merchants paid for licenses, not retail.
+- The license price: 「引價，淮南納銀一兩九錢，淮北一兩五錢」 (translation) "license price: 1.9 taels in Huainan, 1.5 in Huaibei" (Jiajing). Not converted per jin, because the Ming license weight was not read in a source.
+- **1617 綱法:** 「巡鹽御史龍遇奇立鹽政綱法，以舊引附見引行，淮南編為十綱，淮北編為十四綱」 (translation) "the salt censor Long Yuqi set up the gang system, moving old licenses with current ones; Huainan in ten gang, Huaibei in fourteen". No price effect is given.
 
 **Ming retail and the wage beside it.** 高壽仙 2022, 《故宮學刊》 (archived: https://www.dpm.org.cn/Uploads/File/2023/02/10/u63e60647c73ae.pdf)
 - Table 22, Ming against Qing: 「盐每斤[0.006-0.007]//0.012」. The bracketed Ming figure is from 萬曆會計錄 and 宛署雜記; 0273 already has it.
@@ -65,11 +65,11 @@ I wrote nothing in any repository. Pages are on the ledger, and I recorded nothi
 
 **Tao Shu's Huaibei ticket reform (道光12, 1832).**
 - 「蓋淮北舊額未嘗不輕，而由暢運至口岸，每引成本已達十餘兩，價不償本，故官不敵私。今票鹽……每包百斤，出場更不改捆，直抵口岸，除鹽價錢糧外，止加運費一兩，河湖船價一兩，每引五兩有奇，減於綱鹽大半。」
-- (translation) "Huaibei's old quota was never heavy, but by the time salt reached its markets the cost per licence was over 10 taels; the price did not repay the cost, so official salt could not compete with private. Now ticket salt … in 100-jin packages, not rebaled after leaving the works, goes straight to market; besides the salt's price and tax, only 1 tael carriage and 1 tael boat hire are added, a little over 5 taels a licence, more than half below the gang salt."
+- (translation) "Huaibei's old quota was never heavy, but by the time salt reached its markets the cost per license was over 10 taels; the price did not repay the cost, so official salt could not compete with private. Now ticket salt … in 100-jin packages, not rebaled after leaving the works, goes straight to market; besides the salt's price and tax, only 1 tael carriage and 1 tael boat hire are added, a little over 5 taels a license, more than half below the gang salt."
 - On the private trade: 「是法成本既輕，鹽質純淨，而售價又賤，私販無利，皆改領票鹽。」 (translation) "Under this law cost was light, the salt pure and the selling price cheap; smugglers had no profit and all switched to taking tickets."
-- I did not compute this per jin. The source says the reform was "change the route, not the baling" (改道不改捆), and the old licence's weight is not established (0273 declined for the same reason).
+- I did not compute this per jin. The source says the reform was "change the route, not the baling" (改道不改捆), and the old license's weight is not established (0273 declined for the same reason).
 
-**Huainan ticket reform (道光29, 1849).** 「既裁浮費，又多運鹽二百斤，成本輕減過半。故開辦數月，即全運一綱之引，楚西各岸鹽價驟賤，農民歡聲雷動。」 (translation) "With surcharges cut and 200 jin more carried per licence, cost fell by more than half; within months a whole year's licences were shipped, and salt prices in the Hubei, Hunan and Jiangxi markets fell abruptly, to the farmers' loud joy."
+**Huainan ticket reform (道光29, 1849).** 「既裁浮費，又多運鹽二百斤，成本輕減過半。故開辦數月，即全運一綱之引，楚西各岸鹽價驟賤，農民歡聲雷動。」 (translation) "With surcharges cut and 200 jin more carried per license, cost fell by more than half; within months a whole year's licenses were shipped, and salt prices in the Hubei, Hunan and Jiangxi markets fell abruptly, to the farmers' loud joy."
 
 **Changlu, cutting the price to beat smugglers.**
 - 道光28 (1848): 「官鹽價貴，私鹽乘之……其鹽價每斤減制錢二文以敵私」 (translation) "official salt was dear and private salt exploited it … the salt price was cut by 2 cash a jin to beat the smugglers."
@@ -88,10 +88,10 @@ I wrote nothing in any repository. Pages are on the ledger, and I recorded nothi
 - Measured against the Beijing list of 1736 (0273): a laborer's day bought about 8 jin, about 0.13 days per jin.
 - At about 1830, against the rural Beijing copper wage of 88–91 cash (qing.md, a different region): official salt in the Huai markets is about 0.7–0.8 days per jin and private about 0.35, by this pass's arithmetic.
 - The drivers the sources name:
-  - surcharges and carriage costs on the licence (浮費);
+  - surcharges and carriage costs on the license (浮費);
   - silver growing dearer against cash, which squeezed the merchants and led to 1–2 cash surcharges;
   - smuggling, met by 2-cash cuts in 1791 and 1848;
-  - the ticket reforms, which more than halved merchants' cost per licence in 1832 (Huaibei) and 1849 (Huainan) and made prices "fall abruptly".
+  - the ticket reforms, which more than halved merchants' cost per license in 1832 (Huaibei) and 1849 (Huainan) and made prices "fall abruptly".
 
 ### Edo Japan, for contrast
 
