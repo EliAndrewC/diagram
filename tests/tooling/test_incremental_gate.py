@@ -333,7 +333,7 @@ def test_e_no_baseline_is_a_full_run(project: tuple[Path, Path]) -> None:
     [
         ("tests/conftest.py", CONFTEST + "\n# edited\n", "non-module file under tests/"),
         ("pool/hamlets/x/x.json", "{}", "not Python"),
-        ("Makefile", "all:\n\t@echo changed\n", "tooling changed"),
+        ("Makefile", "test:\n\tpython3 -m pytest -x\n", "configuration changed"),  # a test recipe: the gate's configuration (feature 415)
         ("eng/core.py", CORE.replace("def add(a, b):", "def add(a, b, c=0):"), "import time"),
     ],
     ids=["conftest", "manifest", "tooling", "import-time-def-line"],
@@ -426,3 +426,13 @@ def test_the_plans_paths_shrink_what_pytest_COLLECTS_not_just_what_it_runs(basel
     assert len(result["collected"]) < all_collected, f"the arguments did not shrink the collection: {len(result['collected'])} of {all_collected}"
     assert result["selected"] == [n for n in result["collected"] if n in result["selected"]], "the same tests still run"
     assert not (bdir / (incremental.TESTS + ".next")).is_file(), "and a restricted run offers no baseline (FR-004)"
+
+
+def test_e_a_scripts_edit_plans_incremental_not_full(baselined: tuple[Path, Path]) -> None:
+    """Feature 415 (FR-001, the GM 2026-10-24): an edit under `scripts/` used to move the tooling hash and run everything; it
+    now plans incremental, its tooling tests reused on their reads."""
+    root, skill = baselined
+    (root / "scripts").mkdir(exist_ok=True)
+    write(root, "scripts/tool.py", "print('a tool')\n")
+    pl = incremental.plan(root)
+    assert pl.mode == "incremental", pl  # nothing in this fixture reads scripts/, so nothing runs (the selection: test_gate_config.py)
