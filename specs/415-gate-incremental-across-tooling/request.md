@@ -36,7 +36,8 @@ The session added a sixth item, and the GM:
 The session asked (spec review of FR-006's amendment found R2 measured on gate runs in the clone, not on real landings): "Item
 6 says to measure the gate's costs 'on a few real landings' before dropping the cutoff and setting the refresh rule. I
 measured on gate runs in the clone instead (the same gate a landing runs, but without the cohort and coverage check beside it,
-and over probe edits I made and reverted). How should T05 proceed?" The GM chose:
+and over probe edits I made and reverted). How should T05 proceed?" The GM chose the option below (its label and description are the session's wording, which the GM selected; spec
+review round 2 confirmed the choice in the session's transcript, 2026-10-24T18:47Z):
 
 "Accept the clone gate runs" - "Treat the four gate runs I measured as standing in for landings, marked in the spec as a
 departure you approved, and land T05 now with the 25% rule. Faster; the numbers may shift somewhat under a landing's extra
