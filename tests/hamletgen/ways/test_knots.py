@@ -375,6 +375,9 @@ def test_a_joining_lane_is_aimed_at_the_node_and_ended_where_it_first_meets_a_wa
     assert form == [(60.0, 120.0), (10.0, 90.0)] and math.dist(form[-1], (-40.0, 60.0)) > _KNOT_FT
     assert kn.joiner_first_meeting([way, {**joiner, "role": kn.ACCESS_ROLE}, under], 1, -1, (-40.0, 60.0)) == []
     assert kn.joiner_first_meeting([under, joiner], 1, -1, (-40.0, 60.0)) == [], "met only at the node: no form"
+    bent = {"pts": [[60.0, 120.0], [80.0, 60.0], [2.0, 2.0]], "role": "join-orphans"}
+    early = {"pts": [[60.0, 90.0], [100.0, 90.0]], "role": kn.ACCESS_ROLE}  # crosses the joiner's FIRST leg at (70, 90)
+    assert kn.joiner_first_meeting([way, bent, under, early], 1, -1, (-40.0, 60.0)) == [(60.0, 120.0), (70.0, 90.0)], "its first meeting on any leg"
     assert kn.joiner_first_meeting([way, joiner, under], 1, -1, (0.0, 80.0)) == [], "its first meeting within the knot's reach"
     assert kn.joiner_first_meeting([way, {**joiner, "pts": [[2.0, 2.0], [60.0, 120.0]]}, under], 1, 0, (-40.0, 60.0))[-1] == (60.0, 120.0)
 

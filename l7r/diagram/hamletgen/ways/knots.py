@@ -312,8 +312,8 @@ def onto_cut_back(pts: Poly, end: int, node: Pt, other: Poly) -> Poly:
 
 
 def joiner_first_meeting(lanes: Sequence[Mapping[str, Any]], i: int, end: int, node: Pt) -> Poly:
-    """A lane laid only to join two others (`JOIN_ROLE`), its `end` re-aimed at `node` and ended where that leg first crosses
-    another lane, more than `_JOINT_FT` inside both (`settle.shapes._crossing`) - only where that point stands beyond
+    """A lane laid only to join two others (`JOIN_ROLE`), its `end` re-aimed at `node` and ended where it first crosses
+    another lane, walked from its start (any leg, the round arbiter on ask:t135-cannot-tell), more than `_JOINT_FT` inside both (`settle.shapes._crossing`) - only where that point stands beyond
     `_KNOT_FT` of the node; [] otherwise (405 T135, D130: seed 36 with T26's sheds - aimed at a household way's foot, the
     joining lane closed a sliver with that way; ended where it first crossed it, 31 ft from the foot, no knot is left).
 
@@ -325,15 +325,16 @@ def joiner_first_meeting(lanes: Sequence[Mapping[str, Any]], i: int, end: int, n
     if lanes[i].get("role") != JOIN_ROLE:
         return []
     seq = [*(_pts(lanes[i]) if end == -1 else _pts(lanes[i])[::-1])[:-1], node]
-    a, b = seq[-2], seq[-1]
-    xs = [x for j, ln in enumerate(lanes) if j != i for u, v in zip(_pts(ln), _pts(ln)[1:], strict=False) if (x := _crossing(a, b, u, v)) is not None]
-    if not xs:
-        return []
-    x = min(xs, key=lambda q: math.dist(q, a))
-    if math.dist(x, node) <= _KNOT_FT:
-        return []
-    run = [*seq[:-1], x]
-    return run if end == -1 else run[::-1]
+    others = [(u, v) for j, ln in enumerate(lanes) if j != i for u, v in zip(_pts(ln), _pts(ln)[1:], strict=False)]
+    for k in range(len(seq) - 1):  # walked from its start: the first leg that meets a way is where it ends
+        xs = [x for u, v in others if (x := _crossing(seq[k], seq[k + 1], u, v)) is not None]
+        if xs:
+            x = min(xs, key=lambda q: math.dist(q, seq[k]))
+            if math.dist(x, node) <= _KNOT_FT:
+                return []
+            run = [*seq[: k + 1], x]
+            return run if end == -1 else run[::-1]
+    return []
 
 
 def contracted(lanes: Sequence[Mapping[str, Any]], at: Pt, node: Pt, skip: Collection[int], fixed: Callable[[Mapping[str, Any], int], bool] = _fixed) -> dict[int, Poly]:

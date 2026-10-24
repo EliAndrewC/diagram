@@ -25477,12 +25477,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::joiner_first_meeting#a joining lane ends where it first meets a way": {
-  "body": "407b12bb93781636",
+  "body": "dfea537fe0b47a03",
   "claim": "a joining lane ends where it first meets a way - village-lanes.drawing: a lane laid only to join two others ends where it first meets one, its tail cut however long it is",
-  "code": "8a2237f354cdf1bc",
-  "core": "47be1b52bd085c81",
+  "code": "9a15ccdb18a5ab4e",
+  "core": "676f6622f80c21cd",
   "date": "2026-10-24",
-  "note": "a JOIN_ROLE lane is ended at its first crossing whatever the tail's length, \"ends where it first meets one, its tail cut however long it is\"",
+  "note": "the right kind of claim, and cutting the re-aimed lane at the crossing nearest `a` matches \"ends where it first meets one, its tail cut however long it is\"; but the code looks for crossings only on the last re-aimed leg (`a, b = seq[-2], seq[-1]`), so if an earlier leg of a joining lane already crosses another lane, that crossing is the first meeting and is not where the lane is cut; need to know whether a JOIN_ROLE lane's earlier legs can cross another lane (e.g. the code that lays it)",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -25490,24 +25490,25 @@
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/knots.py::joiner_first_meeting#its first meeting beyond the knot's reach": {
-  "body": "407b12bb93781636",
+  "body": "dfea537fe0b47a03",
   "claim": "its first meeting beyond the knot's reach - village-lanes.drawing: ends within 25 ft are joined at a single point, so a first meeting within the reach would leave the knot it mends",
-  "code": "eb853c56758b93e9",
-  "core": "47be1b52bd085c81",
+  "code": "7543798d5559dbf7",
+  "core": "676f6622f80c21cd",
   "date": "2026-10-24",
-  "note": "refusing a meeting within the knot's reach follows \"Ends within 25 ft of one another are joined at a single point\"; where §22 and §23 conflict, the code lets §22 win",
+  "note": "the logic matches the page (`math.dist(x, node) <= _KNOT_FT` gives [] so the end is left to the knot, which joins \"ends within 25 ft ... at a single point\"), but the bundle shows `_KNOT_FT = KNOT_FT` only by name and never its value; need KNOT_FT's value to confirm it is 25 ft",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/knots.py::knots#lane ends gathered": {
   "body": "db8feebb897ad92e",
