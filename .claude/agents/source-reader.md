@@ -145,7 +145,16 @@ NOTE: <a scope or number mismatch, a hedge the entry dropped, a better source yo
 - **NOT-FOUND** - the page fetched but says nothing on the subject.
 
 End with the table: item, verdict, one line. Then stop. No recommendations about the map, no
-rewriting of the entry - the session does that with your quotes in hand.
+rewriting of the entry - the session does that with your quotes in hand. The one exception: a wording that misstates
+what the passage you quote says may carry an EDIT, in the only shape `make apply-edits` reads (any other shape is
+applied by hand; feature 412 round 5 sent `OLD:`/`NEW:` in a code fence):
+
+    EDIT <the ORIGIN path, as the MANIFEST gives it>
+    <<<
+    the exact text now in that file, just long enough to occur once
+    ===
+    the text that should replace it
+    >>>
 
 ## Model
 
