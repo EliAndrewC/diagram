@@ -72,6 +72,20 @@ tooling change end to end. T07 closes.
 10. **Before moving a constant.** `FULL_FRACTION` stays for the gate outside landings; the landing passes `INCR_NO_CUTOFF=1`; the refresh's 25% is R2's.
 11. **Before fitting things into room.** n/a.
 
+### T05 part B (2026-10-24T19:08Z)
+
+Owed by the round arbiter's ruling on red-gate@2026-10-24T19:05:23Z (continue).
+
+1. **What exactly is refusing?** Two red landing gates, two causes in this feature's own tests: a T03 test started the real `cover_changed.py`, whose nested coverage run overwrote the gate's coverage data (817 failed); and three planner tests inherited `INCR_NO_CUTOFF=1`, which T05's landing exported to its whole gate (3 failed).
+2. **A3 again.** O: the GM's item 6 and request amendment 1; nothing in the constraints moved.
+3. **A4 again.** The decisions describe the world; the slips were in how the tests were isolated from the gate running them.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Changing: the flag becomes a make variable (`NO_CUTOFF=1`) the test recipe hands to the planner's call alone, never an environment the tests inherit; the T03 test starts a stand-in check; the planner tests clear the variable as a backstop.
+6. **The one-sentence test.** "Why did the landing go red?" - its own new tests reached the gate that ran them.
+7. **The next step is a measurement.** One `make land` for T05, the three planner tests green and nothing new failing (the ruling's "what").
+8. **Every route measured?** n/a - no route is in question.
+9. **After a ruling:** the arbiter's continue, recorded in `arbiter.jsonl`.
+
 ### T05 Decisions
 
 - **D8** On R2's numbers (spec FR-006, amended): `make land`'s gate runs with `INCR_NO_CUTOFF=1`, which `incremental.plan` reads to skip the `FULL_FRACTION` check (the gate outside a landing keeps it). After a successful push whose gate ran incremental and selected at least `REFRESH_FRACTION` (0.25) of its baseline, `land.py` starts `scripts/gates/refresh_baseline.py` detached: under a lock, it adds a detached worktree at the pushed commit, runs `make done INCR_FORCE="refresh: <n> of <N> baseline tests selected"` there (a fresh worktree has no verification to short-circuit on), and when it is green copies the worktree's `gate-baseline/` into the clone's - each coverage file path rewritten from the worktree's root to the clone's - unless the clone's baseline was saved after the refresh started; it removes the worktree, and copies the run record into the clone's `dev/run-log/`, committed path by path. Rendering: none.

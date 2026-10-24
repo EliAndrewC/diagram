@@ -311,8 +311,10 @@ def run_gate(root: Path, target: str, cover: tuple[subprocess.Popen, Path] | Non
     import signal  # noqa: PLC0415
     import time  # noqa: PLC0415
 
-    # ...with no FULL_FRACTION cutoff: a landing runs what its change reaches, however much (feature 415 T05, D8)
-    proc = subprocess.Popen(["make", "--no-print-directory", target], cwd=root, start_new_session=True, env={**os.environ, "INCR_NO_CUTOFF": "1"})
+    # ...with no FULL_FRACTION cutoff: a landing runs what its change reaches, however much (feature 415 T05, D8) - a make variable
+    # the test recipe hands to the planner's call alone, never an environment the gate's tests inherit (the round arbiter on
+    # red-gate@2026-10-24T19:05: an exported INCR_NO_CUTOFF reached three planner tests and turned them red)
+    proc = subprocess.Popen(["make", "--no-print-directory", target, "NO_CUTOFF=1"], cwd=root, start_new_session=True)
     RUNNING.append(proc)
     try:
         while proc.poll() is None:

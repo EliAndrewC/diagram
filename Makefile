@@ -1206,7 +1206,7 @@ COV_FLOORS =
 # Every floor reports: one that exits first would hide the floors after it.
 test:            ## [tests] {internal} the pytest phase itself (internal - `done` and `test-full` call it, not you)
 	@$(if $(COV_SCOPE),printf 'coverage: %s\n' "$(COV_SCOPE)";,)
-	@$(if $(COV_FLOORS),python3 -m l7r.diagram.ci incremental plan $(if $(INCR_FORCE),full "$(INCR_FORCE)",) || exit 1;,) \
+	@$(if $(COV_FLOORS),$(if $(NO_CUTOFF),INCR_NO_CUTOFF=1 ,)python3 -m l7r.diagram.ci incremental plan $(if $(INCR_FORCE),full "$(INCR_FORCE)",) || exit 1;,) \
 	$(if $(COV_FLOORS),paths=$$(python3 -m l7r.diagram.ci incremental paths 2>/dev/null);,) \
 	$(if $(COV_FLOORS),rm -f "$(ROLL_CENSUS)" "$(ROLL_CENSUS).renders";,) \
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
