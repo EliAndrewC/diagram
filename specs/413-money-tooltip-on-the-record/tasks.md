@@ -15,12 +15,12 @@
 - [x] T03 The back-fill of every amount in the record's fragments (questions, drawing pages and their notes) in the two built eras (D6; FR-006)
       research: rendering
       verify: DONE. landed in batch T01+T02+T03: money tooltip built: vendored conversions (make money-conversions), build marks+refusals (record/money.py), hover verified headless once (box shows conversion, borrowed-era line, coverage, glossary line), 125 amounts marked, every other listed amount named in backfill.md (make money-candidates CHECK=1 clean); record-owed names nothing; make done green
-- [ ] T04 The reply on #14 (D8; FR-007)
+- [x] T04 The reply on #14 (D8; FR-007)
       research: rendering
-      verify: the comment's URL
-- [ ] T05 Close: report and land
+      verify: DONE. landed in batch T04+T05: reply on #14 issuecomment-6387466427, verified and closed by gm-assistant (issuecomment-6387476241); feature report written
+- [x] T05 Close: report and land
       research: rendering
-      verify: landed on the gated route
+      verify: DONE. landed in batch T04+T05: reply on #14 issuecomment-6387466427, verified and closed by gm-assistant (issuecomment-6387476241); feature report written
 - [ ] GM review (make gm-reviewed F=413) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
