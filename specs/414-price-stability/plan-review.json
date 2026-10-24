@@ -1,0 +1,477 @@
+{
+ "feature": "414-price-stability",
+ "blocks": {
+  "preamble": {
+   "sha256": "29bd8afe5f0e69c450f5cee2fc0ed531dbda5e299e4a6e1ff32d909784f68185",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "b611aeb1171f13d2859754edfb92b8f0198ba8b71a83aec3b34a17055f39b86f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "74a2345816a4f3d36019e665d678546e9467da9ad9147d5b396df4506d24ef92",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "2af3cd7de4be30e6d9732bc52b389dad863ad614729acaf9de51a1bf175cfedc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - question A, how steady prices were (FR-001, FR-002 A)": {
+   "sha256": "3dabb0d3f3022e68d836dae2857d07d8d8c7961515c29268b72ad8ec569f2140",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - question B, places (FR-001, FR-002 B)": {
+   "sha256": "20e3a5adcd41b45ffccd16a54c6698b0f4e1ba74d9fde213e036c725c4fa283c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - question C, across periods, salt first (FR-001, FR-002 C)": {
+   "sha256": "fbd21c20e79f3272b9cad564f92c6aba9bd2227616a5ac1cf50b0d27fee36b92",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - question D, the closeness rule (FR-001, FR-002 D, FR-003)": {
+   "sha256": "6982449094e0a759ee17780176a63b21c58deda6a26d34ce9cd0ba54fe72937f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - question E, the modern yardstick (FR-001, FR-002 E)": {
+   "sha256": "7e8a6c046e3eae33185d5d56bbec7d08d0799d25091cbe54cd01c979a92379fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D6 - the implementation check (FR-004)": {
+   "sha256": "047f55cf253f3f21941a65fca8debf8f8ba892eb1adc7e86801d94cfafc45319",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D7 - the reply (FR-001, FR-003, FR-005, FR-006)": {
+   "sha256": "26b037577ed19bb651e61ef8390b5e5bc7e335e54c8fc7cd870f045f2453bdd6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "3fbed984ad9d1f40d6b4e8667f388be3836d1fbb9f366a924ac4e98091a3e4b7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - question A, how steady prices were (FR-001, FR-002 A)",
+    "## D2 - question B, places (FR-001, FR-002 B)",
+    "## D3 - question C, across periods, salt first (FR-001, FR-002 C)",
+    "## D4 - question D, the closeness rule (FR-001, FR-002 D, FR-003)",
+    "## D5 - question E, the modern yardstick (FR-001, FR-002 E)",
+    "## D6 - the implementation check (FR-004)",
+    "## D7 - the reply (FR-001, FR-003, FR-005, FR-006)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary/preamble",
+     "summary": "Five new money questions A-E, written by page sessions in a sibling clone after 412's queue; no code, map or canon change.",
+     "class": "within",
+     "why": "Restates FR-002's five questions; the sequencing behind 412 matches the reply on #15; no canon change is asked for."
+    },
+    {
+     "id": "TC-comparative",
+     "summary": "E's sources carry the comparative kind; the Bank of England and Clark series are not written unless the GM approves (spec acceptance 3).",
+     "class": "within",
+     "why": "Settled by the accepted spec's acceptance 3 (not in the bundle, so taken as the plan cites it); the yardstick the request asks for is the modern fiat-era one, which D5 supplies."
+    },
+    {
+     "id": "TC-osaka-daily-month-only",
+     "summary": "measure/osaka_daily.py computes month to month only from the RIEB DAILY Osaka rice series; day-to-day and week-to-week verdicts rest on the literature alone.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Question 1 names day to day and week to week and asks for 'a standard deviation of log changes where a series allows'. A daily series allows both lags. Confining the script to one lag is a stated choice with no stated or measured reason (not impossible, not implied by the GM, not needed for the request's purpose), and leaves those two scales to come back SILENT if the literature is. Fix: osaka_daily.py computes every lag the series supports (day, week, month), or the plan states the MEASURED reason the series cannot carry day and week (gaps, trading-day structure)."
+    },
+    {
+     "id": "TC-mitsui-lags",
+     "summary": "mitsui_stability.py: SD of log changes at half a year to 50 years, drift, seasonality, city spreads.",
+     "class": "within",
+     "why": "The Mitsui series is half-yearly, so half a year is its floor; century-to-century gets its verdict per D1 from drift and the literature, and drift per century is computed as asked; seasonality covers question 2's seasonal pattern."
+    },
+    {
+     "id": "Performance/Constitution",
+     "summary": "N/A performance; Principle XII research tasks, record checks green.",
+     "class": "within",
+     "why": "No generator change; nothing decided beyond the spec."
+    },
+    {
+     "id": "D1",
+     "summary": "Per scale a verdict from sources and our arithmetic, drift beside swing, shocks dated, per good of acceptance 5 (SILENT with the search where none), copper and silver drift apart, set against question 1's canon with escalation.",
+     "class": "within",
+     "why": "Carries question 1 and the per-good half of question 2 scale by scale; the goods list is the accepted spec's acceptance 5 (not in the bundle)."
+    },
+    {
+     "id": "D2-sources",
+     "summary": "Place spreads: literature co-movement figures, level spreads from Mitsui 1818-1858 by good, 0280-0283 named for distance and carriage, set against question 3's canon.",
+     "class": "within",
+     "why": "Any overlapping window answers 'at one time'; existing questions named not repeated as FR-002 requires."
+    },
+    {
+     "id": "D2-kyoto-salt-break",
+     "summary": "Kyoto's salt series break is named and left out of the level spreads.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A level spread computed across a series break measures the break, not the places; leaving it out is required for the figure to mean what question 3 asks, and the plan names it rather than hiding it."
+    },
+    {
+     "id": "D3",
+     "summary": "Salt in days of an unskilled wage per local unit, period by period with the drivers the sources name, Edo from 0273; Japan and China side by side not converted; other goods from Gao Shouxian, Yueshibian, Peng; set against question 2's canon.",
+     "class": "within",
+     "why": "Days of a wage is one of the two common measures the addition allows; the addition asks across periods, not across countries, so not converting Japan against China narrows nothing asked; 0273 named not repeated."
+    },
+    {
+     "id": "D4-N-bound",
+     "summary": "No note when the gap's SD of log change is no larger than the within-era spread (SD at half the era's span); structural breaks (1859, silver-changing recoinage, change of money system) forbid conversion; place bounds from B's city spreads; size of amount addressed.",
+     "class": "within",
+     "why": "N is taken from a measured swing with a stated basis (the uncertainty the table already accepts), which is what question 4 asks; the money-system break is the request's own 'same money system'; place and amount-size are the request's own sub-questions."
+    },
+    {
+     "id": "D4-M-twice",
+     "summary": "Note band runs to twice the within-era spread; beyond twice, do not convert.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Question 4 asks for N and M 'taken from the measured swings', and the GM's motivating sentence is that a span should be stated only 'if that amount of time is based on something'. The factor 2 is not measured and no basis is offered: it is the withdrawn 'about 25 years' reappearing one level up, and it decides M. Fix: M rests on a measured or stated quantity written beside it (for example the gap at which the SD of log change reaches the between-period differences C measures, or the width of the price range the tooltip prints), or M is put to the GM as his choice with the measured SD-by-lag curve through the escalation-check FR-003 already names."
+    },
+    {
+     "id": "D4-Mitsui-only-basis",
+     "summary": "The rule's method is 'by good class and city, from Mitsui', while its break list ('cash to dollars') puts Chinese amounts in its reach.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Question 4 derives the rule 'from questions 1-3', which run Qing alongside Japan. Year bounds measured on a Japanese series and applied to Song, Ming or Qing conversions are extrapolation with no basis (the GM's own objection); leaving China out unremarked is not what was asked either. Not impossible: A's Qing measured statements (Shiue, Keller-Shiue-Wang) give swings at lags. Fix: the plan says which - derive the Chinese bounds from A's Qing figures, or record the rule for Chinese amounts as open in the reply with the measured reason, per FR-001's 'what is still open'."
+    },
+    {
+     "id": "D5",
+     "summary": "Modern yardstick: US and Japanese CPI since 1971 (drift, annual SD), a staple's 12-month SD, Rolnick and Weber; set beside A.",
+     "class": "within",
+     "why": "The request's fiat-era yardstick, beside the pre-modern figures, as question 1 and the GM's inflation remark ask."
+    },
+    {
+     "id": "D6",
+     "summary": "implementation-check.md lists each new question (no code).",
+     "class": "within",
+     "why": "FR-004."
+    },
+    {
+     "id": "D7",
+     "summary": "Reply on #15: per figure the fragment file, verdict, what is open; the rule and its derivation; the offer to 413 and gm-assistant; per question the canon standing and escalations.",
+     "class": "within",
+     "why": "FR-001, FR-003, FR-005, FR-006 as written."
+    },
+    {
+     "id": "T",
+     "summary": "Order: measure scripts, page sessions s1-s3 then s4 check, implementation check, reply and landing.",
+     "class": "within",
+     "why": "Sequencing only."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - question A, how steady prices were (FR-001, FR-002 A)",
+    "## D2 - question B, places (FR-001, FR-002 B)",
+    "## D3 - question C, across periods, salt first (FR-001, FR-002 C)",
+    "## D4 - question D, the closeness rule (FR-001, FR-002 D, FR-003)",
+    "## D5 - question E, the modern yardstick (FR-001, FR-002 E)",
+    "## D6 - the implementation check (FR-004)",
+    "## D7 - the reply (FR-001, FR-003, FR-005, FR-006)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary/sessions",
+     "summary": "Five questions A-E; three write page sessions and one check session in a sibling clone after 412's queue; no code, map or canon change.",
+     "class": "within",
+     "why": "Process and scope exactly as FR-002 and the #15 reply describe; nothing the request asked is dropped."
+    },
+    {
+     "id": "TC/mitsui_stability",
+     "summary": "mitsui_stability.py computes SD of log changes at half a year to 50 years, drift, seasonality, city spreads.",
+     "class": "within",
+     "why": "The request asks the SD 'where a series allows' plus drift per decade and per century; D1 still owes a century-to-century verdict (drift and sources), so the 50-year arithmetic cap does not remove a scale."
+    },
+    {
+     "id": "TC/osaka_daily",
+     "summary": "osaka_daily.py covers day to day, a week, a month, three and six months and a year from the RIEB daily series.",
+     "class": "within",
+     "why": "Round 1 item 3 fixed: the daily series now carries the request's day-to-day and week-to-week scales."
+    },
+    {
+     "id": "TC/comparative",
+     "summary": "Bank of England and Clark series written only with the GM's approval (spec acceptance 3).",
+     "class": "within",
+     "why": "Settled by the accepted spec; the plan adds nothing."
+    },
+    {
+     "id": "Constitution",
+     "summary": "Constitution check: research tasks, record checks green.",
+     "class": "within",
+     "why": "No decision beyond the spec."
+    },
+    {
+     "id": "D1",
+     "summary": "A verdict per scale the request names (within a day to century), sources plus Mitsui and RIEB arithmetic, drift beside swing, shocks dated, per-good verdicts, copper-silver drift apart, set against canon.",
+     "class": "within",
+     "why": "Walks question 1 and question 2's scales clause by clause."
+    },
+    {
+     "id": "D2/sources",
+     "summary": "Co-movement literature; Mitsui level spreads 1818-1858 by good; 0280-0283 named; town against country from Saito and 0273 (SILENT where none); China levels from Allen et al.'s Beijing, Canton, Suzhou.",
+     "class": "within",
+     "why": "Round 1's quiet item answered: town against country and the three Chinese places the request names are now carried; a castle town falls under town against country and FR-001 forces a verdict on it either way."
+    },
+    {
+     "id": "D2/kyoto-salt",
+     "summary": "Kyoto's salt series break named and left out of the level spreads.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Held from round 1: a level spread across a series break is not a spread between places, so including it would defeat question 3's purpose; the break is named, not hidden."
+    },
+    {
+     "id": "D3/salt-measure",
+     "summary": "Salt in days of an unskilled wage per local unit, period by period; Japan and China side by side, not converted.",
+     "class": "within",
+     "why": "The GM's common measure is the money side (grams of silver or days of a wage) and the plan uses wage-days; the quantity unit was not specified, and the across-periods comparison the addition needs runs within each country's sequence. Each period's local unit should be named in the record."
+    },
+    {
+     "id": "D3/other-goods",
+     "summary": "Other goods across periods, now including Mitsui's goods across the Edo sub-periods with their drivers.",
+     "class": "within",
+     "why": "Round 1's quiet item answered: the addition's Edo sub-periods and drivers (harvests, recoinage, the opening) are carried."
+    },
+    {
+     "id": "D4/no-note",
+     "summary": "No-note bound: a gap whose SD of log change is no larger than the within-era spread the table already accepts.",
+     "class": "within",
+     "why": "Answers the request's N with a stated basis taken from the measured swings."
+    },
+    {
+     "id": "D4/breaks",
+     "summary": "Do not convert across measured structural breaks: the 1859 opening, a silver-changing recoinage, a change of money system.",
+     "class": "within",
+     "why": "The request's own example rule is conditioned on 'the same money system'; breaks are the derivation the question asks for."
+    },
+    {
+     "id": "D4/no-numeric-M",
+     "summary": "No numeric do-not-convert limit set by the project; the measured swing-by-gap curve goes to the GM through escalation-check for his choice.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words: a span is stated 'only if that amount of time is based on something'; round 1 found the factor of two unbased. Handing the measured curve to the GM is the opposite of a quiet carve-out, and 'should not be made at all' is still answered by the breaks. The plan should not foreclose naming a cut if closeness.py shows a measured one."
+    },
+    {
+     "id": "D4/china-longer-gaps",
+     "summary": "China: no-note bound from A's Qing literature figures where they reach; longer gaps 'recorded as open, with the measured reason (no series by lag was read)'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The stated reason is the passes' scope, not an impossibility. The request puts Qing alongside Japan and asks the SD of log changes 'where a series allows'; the #15 reply named the Academia Sinica grain-price database and Allen et al. as such series and promised lag SDs from a script, yet the Technical Context holds no Qing script and D1's arithmetic is Mitsui and RIEB only. Round 1 blocked D4 for resting on Mitsui alone; this records the gap instead of closing it. Fix: measure a Qing series by lag (the database, or Allen et al.'s annual series already read for D2) and derive China's bound from it, or state the measured failure to obtain one - what was tried, when, and why it failed."
+    },
+    {
+     "id": "D4/china-cash-break",
+     "summary": "The copper-silver rate's moves (1807-1880) are a break for an amount in cash.",
+     "class": "within",
+     "why": "Same money-system logic as the breaks; question 1 asks copper against silver drift kept apart."
+    },
+    {
+     "id": "D4/place",
+     "summary": "Place: only the no-note bound read from the city spreads; no note or do-not-convert bound for place, and the escalation carries only the time curve.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request asks 'how far in time and in place ... and how far before it should not be made at all'. The earlier text read 'the same three bounds' from the city spreads; deleting the factor of two also deleted place's outer bounds, and the escalation bullet sends only the swing-by-gap (time) curve to the GM, so place is neither answered nor escalated. Fix: put the measured place spreads to the GM beside the time curve, or state that the breaks are place's do-not-convert bound and any further limit goes to the GM with them."
+    },
+    {
+     "id": "D4/size",
+     "summary": "Bounds vary by amount size only if a source shows small and large amounts moving differently; the rule says which.",
+     "class": "within",
+     "why": "Answers the request's size question from the measurements."
+    },
+    {
+     "id": "D5/scales",
+     "summary": "Modern CPIs and a staple at monthly, 12-month and annual SD; 'the scales below a month SILENT for the modern series read (monthly is their finest)'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Question 1 asks the modern comparison after listing every scale down to within a day; daily modern staple prices (futures, the direct counterpart of Dojima) and daily price indices exist, so the SILENT is declared from the reading scope chosen in the plan, not from a search. Not impossible, not implied by the GM's words, and applying the rule does not defeat the purpose. Fix: read one modern daily series for day, week and within-day, or record the search for one and its result as the SILENT's basis."
+    },
+    {
+     "id": "D6",
+     "summary": "implementation-check.md holds each question's line.",
+     "class": "within",
+     "why": "FR-004."
+    },
+    {
+     "id": "D7",
+     "summary": "The reply on #15 per figure: fragment file, verdict, what is open; the rule, its offer, canon standing, escalations.",
+     "class": "within",
+     "why": "FR-001, FR-003, FR-005, FR-006."
+    },
+    {
+     "id": "T",
+     "summary": "Order: measure scripts, page sessions, implementation check, reply and landing.",
+     "class": "within",
+     "why": "Sequencing only."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - question A, how steady prices were (FR-001, FR-002 A)",
+    "## D2 - question B, places (FR-001, FR-002 B)",
+    "## D3 - question C, across periods, salt first (FR-001, FR-002 C)",
+    "## D4 - question D, the closeness rule (FR-001, FR-002 D, FR-003)",
+    "## D5 - question E, the modern yardstick (FR-001, FR-002 E)",
+    "## D6 - the implementation check (FR-004)",
+    "## D7 - the reply (FR-001, FR-003, FR-005, FR-006)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "TC-sessions",
+     "summary": "Record written by page sessions in a sibling clone after feature 412's queue ends",
+     "class": "within",
+     "why": "Sequencing only; the issue thread itself says 414's write sessions follow 412's. Nothing asked is dropped."
+    },
+    {
+     "id": "TC-arithmetic",
+     "summary": "Mitsui, Osaka daily, Qing (Allen et al. annual city series and the GPIH Chinese rice series, Beijing named as a reconstruction) and closeness scripts, output committed and cited as this project's arithmetic",
+     "class": "within",
+     "why": "Request Q1 asks for an SD of log changes where a series allows, for Edo Japan and Qing China; the Qing script supplies China's lags, which round 2 found missing. Naming Beijing as a reconstruction is honesty about the source, not a narrowing."
+    },
+    {
+     "id": "TC-comparative",
+     "summary": "E's sources are tagged comparative; Bank of England and Clark series not written unless the GM approves",
+     "class": "within",
+     "why": "The request asks for a modern fiat-era yardstick; long-run English series are not asked for, so keeping them out pending approval trims unrequested scope rather than narrowing a request."
+    },
+    {
+     "id": "D1",
+     "summary": "A verdict per scale the request names (within a day through century to century), sources plus this project's arithmetic, drift beside swing, shocks dated, per good a verdict or SILENT with the search, copper-silver kept apart, set against the one-era-one-level canon with escalation",
+     "class": "within",
+     "why": "Walks Q1 and Q2 clause by clause; SILENT after a recorded search is a research result, not a decision to skip a scale."
+    },
+    {
+     "id": "D2-spreads",
+     "summary": "Place spreads from co-movement literature, Mitsui level spreads by good (Kyoto salt's break named and left out), Iwahashi's 14 places with castle towns, 0280-0283 named for distance/carriage, town vs country from Saito and 0273's Kashimo vs Kyoto or SILENT, China from Allen et al.'s Beijing, Canton, Suzhou",
+     "class": "within",
+     "why": "Covers Q3's places (Edo, Osaka, Kyoto, a castle town via Iwahashi, a village; Beijing, the Lower Yangzi, Canton) and drivers. Leaving Kyoto salt's series break out of a level spread, with the break named, protects the measure rather than removing a place or good the GM named."
+    },
+    {
+     "id": "D3",
+     "summary": "Salt in days of an unskilled wage per local unit, Song/Ming/Qing and Edo, with the drivers the sources name (monopoly reach, licences, smuggling, ticket reforms, domain monopolies); Japan and China side by side, not converted; other goods across periods with their drivers",
+     "class": "within",
+     "why": "The GM's addition allows silver grams or wage-days, whichever the sources support, and asks for how far apart the periods were and what drove it, salt first, Japan's salt as contrast. A contrast side by side satisfies that; converting between the two countries was not asked."
+    },
+    {
+     "id": "D4-japan-bounds",
+     "summary": "No-note bound = within-era spread (SD at half the era's span); do-not-convert = structural breaks (1859 opening, recoinage, change of money system); between = a note",
+     "class": "within",
+     "why": "Request Q4's N/M form, with N taken from measured swings and the outer bound from measured breaks, per good class and city."
+    },
+    {
+     "id": "D4-M-to-GM",
+     "summary": "A further numeric time limit beyond which a noted conversion is not made is not set by the project; the measured swing-by-gap curve goes to the GM through escalation-check",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Accepted in round 2 and unchanged. The GM's own words require a span to be stated only if it is based on something; a smooth swing-by-gap curve does not pick out a stopping year, so a number chosen by the project would be the arbitrary figure the GM withdrew. The do-not-convert bound still exists, from the measured breaks, and the curve itself is delivered."
+    },
+    {
+     "id": "D4-china",
+     "summary": "China's no-note bound from qing_stability's lags on Allen et al.'s annual city series beside Shiue, Keller-Shiue-Wang and Lu and Peng; lags the series cannot reach stated with the measured reason; copper-silver moves 1807-1880 a break for cash amounts",
+     "class": "within",
+     "why": "Round 2's item (a) is fixed: China's bound is now derived from a series by lag rather than left open. A lag the data cannot reach, stated with its measured reason, is a research result. The copper-silver break applies the request's own 'same money system' condition."
+    },
+    {
+     "id": "D4-place-outer",
+     "summary": "Place: no-note where a city's spread is within the within-era spread; structural breaks (another money system, a domain's notes) are place's do-not-convert bound; any further limit by distance goes to the GM with the measured city spreads beside the time curve",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 2's item (b) is fixed. Q4 asks how far in place before a conversion should not be made; the plan gives a measured do-not-convert bound (the breaks) and hands only an unmeasured distance cutoff to the GM, with the spreads. That is the same ground as the M ruling: the GM's own words forbid a span or distance that rests on nothing."
+    },
+    {
+     "id": "D4-size",
+     "summary": "Bounds vary by size of amount only if a source shows small and large amounts moving differently; the rule says which",
+     "class": "within",
+     "why": "Answers Q4's size clause directly from the evidence."
+    },
+    {
+     "id": "D4-offer",
+     "summary": "Rule offered to 413's marking and gm-assistant's tooltip; whether it becomes a record check put to the GM",
+     "class": "within",
+     "why": "FR-003; the GM asked that the number rest on something and did not ask for a check, so putting the check to him is faithful."
+    },
+    {
+     "id": "D5",
+     "summary": "Modern yardstick: US and Japanese CPIs since 1971 (drift, monthly/12-month/annual SD), a staple's BLS monthly and 12-month SD, Rolnick and Weber; one daily staple futures settlement series read for scales below a month, or its search recorded and SILENT the result",
+     "class": "within",
+     "why": "Round 2's item (c) is fixed: sub-month scales are no longer SILENT by default; a daily series is sought and SILENT is only the outcome of a recorded search. Matches Q1's 'How does that compare with a modern fiat-money economy?'"
+    },
+    {
+     "id": "D6",
+     "summary": "implementation-check.md holds each new question's line",
+     "class": "within",
+     "why": "FR-004; no code implements a price."
+    },
+    {
+     "id": "D7",
+     "summary": "Reply on #15: per figure the fragment file, verdict and what is open; the rule and its derivation; its offer; per question the canon comparison and any escalation",
+     "class": "within",
+     "why": "FR-001, FR-003, FR-005, FR-006 as the thread promised."
+    },
+    {
+     "id": "T",
+     "summary": "Order: measure scripts, page sessions (s1-s3 write, s4 check), implementation check, reply and landing",
+     "class": "within",
+     "why": "Ordering only. The list names osaka_daily and closeness; mitsui_stability was left off in earlier rounds too, and the dispatch says qing_stability already computes the lags, so leaving it off drops nothing."
+    }
+   ]
+  }
+ ]
+}
