@@ -1,0 +1,53 @@
+{
+  "utc": "2026-10-24T19:05:22Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 259,
+  "result": "failed: test-full",
+  "commit": "79878d80d",
+  "first_failure_s": 167.8,
+  "last_failure_s": 201.5,
+  "failed_tests": 3,
+  "failed_names": [
+    "tests/tooling/ci/test_incremental.py::test_plan_returns_a_full_run_when_the_projection_is_over_the_fraction",
+    "tests/tooling/test_incremental_gate.py::test_e_over_the_fraction_the_PLANNER_runs_everything_and_keeps_the_trees",
+    "tests/tooling/test_incremental_gate.py::test_e_a_landing_runs_what_it_reaches_over_the_fraction"
+  ],
+  "host": {
+    "load": [
+      4.48,
+      13.83
+    ],
+    "mem_avail_mb": [
+      5815,
+      5270
+    ],
+    "cpu_temp_c": [
+      76.0,
+      73.0
+    ],
+    "stall_s": {
+      "cpu": 5.5,
+      "io": 1.8,
+      "io_full": 1.2,
+      "memory": 0.4
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  },
+  "phases": {
+    "preflight": 18.0,
+    "static": 3.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 243.0,
+    "test-full": 253.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)",
+  "selected": 10271,
+  "collected": 10271
+}
