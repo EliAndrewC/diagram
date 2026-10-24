@@ -318,7 +318,7 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 3. **Where each comes from.** R (0043) and O (the coop's roll, `_seats`).
 4. **Do they describe the world here?** Yes: `_wood_shed` passes `_seats` a roll of zero, so every shed tries the back wall's west seat first; tried in batch 11 the roll knotted Sawada (measured 2026-10-21), and T107 has since landed the gather that knot waited on.
 5. **The order.** `_seats`' woodpile list turned by `roll(SALT["woodpile"] + 0.5)` as the coop's by `roll(105.5)`; the flank seats brought back so D78 admits them; `_wood_shed` takes the household's roll; the claim; a unit test; Sawada and seeds 1-48.
-6. **The exits.** (e) conform; if Sawada or a seed knots again, (b) measured before anything else.
+6. **The exits.** (e) conform; if Sawada or a seed knots again, (b) measured before anything else. Seed 7 knotted (measured 2026-10-24, `make cohort N=48`): room was measured worse for this knot class (T107, 2026-10-22), so (a) - the gather given 0081's tail rule for a lane its tee strands (D133).
 7. **The search smell.** None.
 8. **The budget.** 45 min with its landing.
 9. **Done, measured.** A unit test: two rolls give two first seats (red without the turn); Sawada's pool tests and seeds 1-48 with the pinned rows pass; `make cover-changed`; the landing cohort.
@@ -328,6 +328,8 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 ### T106 Decisions
 
 - **D132** `fixture_seats._seats` (woodpile): the four recorded seats - the back wall's two, the east and west flanks - are turned by `roll(SALT["woodpile"] + 0.5)`, the household's roll, as the coop's are by `roll(105.5)`; `_wood_shed` passes the household's `roll` where it passed zero. And the two flank seats stand with their front end no further forward than the front wall (`min(0.1 hh, hh/2 - w/2)`): at 0.1 hh a 24 ft shed's end stood 0.8 ft past it, so `shed_off_a_wall` (D78) refused both flanks on every farm and, with the kura behind, the turn changed nothing (measured 2026-10-24, the unit test on the 46 x 28 ft house). Rendering: GUESS, 0043's own (behind or beside the house, the side unattested), each household's side rolled because the page attests no preferred one; the flank's place along the wall UNRESEARCHED, as before.
+
+- **D133** `knots.next_gather`: where a lone end's tee onto the other node's lane (`teed_onto`) is refused, it is asked again with every lane the tee would strand - an end on the stretch the tee cuts away - cut back to the nearest vertex before that end standing on another way, where the tail cut is under 40 ft (`tails_cut_back`, `_TAIL_CUT_FT`). Seed 7 with the sheds turned, measured 2026-10-24 (probes in a detached worktree, `make cohort N=1 SEED=7`): two households' ways teed onto the connector 2.2 ft apart, about 20 degrees apart; every gather was refused - the moves for `needle_joins`, the 3 ft pass by `households_only` (the connector at both nodes), the tee of lane 1 onto lane 10 because it stranded a third household's way, which met lane 10 and ran 34 ft on to end on the leg the tee cut away, and the reverse tee for `needle_loops`. With the tail cut back to where that way meets lane 10, the tee is admitted and seed 7 rolls clean (7/7). Rendering: historically accurate as the page states it - 0081: "A tail of under 40 ft beyond a crossing is cut"; which vertex it is cut back to UNRESEARCHED (the nearest the stranded end that stands on another way).
 
 ## T127 - the carried claims findings
 
