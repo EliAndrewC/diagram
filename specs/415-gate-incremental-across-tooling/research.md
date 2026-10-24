@@ -40,5 +40,8 @@ s). At the old cutoff, 60% of a 11,954-test baseline, an incremental test phase 
 ms = 158 s against the full run's 197 s; at 80%, about 188 s - so above about 80% running what is reached saves next to nothing.
 
 Observed 2026-10-24; method: the same records, in order. The selection grows between full runs, as the baseline (the last
-full run) predicts: 1,492, then 1,965, then 2,657 as the changes since it accumulated - each later landing pays for every
-earlier landing's change until a full run resets it. That growth, not drift, is what the refresh (T05) must bound.
+full run) predicts: 1,492, then 1,965, then 2,657 as the session's own probe edits accumulated (1, then 2, then 4 engine
+files - staged, not observed across landings) - so each later landing would pay for every earlier change until a full run
+resets it. That growth, not drift, is what the refresh (T05) must bound. These runs stand in for landings, the GM's approved
+departure (request.md amendment 1); a landing runs the fixed cohort and the coverage check beside its gate, so its numbers
+may shift under that load.

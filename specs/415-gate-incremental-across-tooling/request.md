@@ -30,3 +30,14 @@ The session added a sixth item, and the GM:
 6. Drop the 60% cutoff from landings: run what is reached, however much, and refresh the baseline in the background. First
    measure the fixed cost and the per-test cost on a few real landings, so the change rests on numbers rather than a second
    guess.
+
+## Amendment 1 (2026-10-24) - the measurement's basis
+
+The session asked (spec review of FR-006's amendment found R2 measured on gate runs in the clone, not on real landings): "Item
+6 says to measure the gate's costs 'on a few real landings' before dropping the cutoff and setting the refresh rule. I
+measured on gate runs in the clone instead (the same gate a landing runs, but without the cohort and coverage check beside it,
+and over probe edits I made and reverted). How should T05 proceed?" The GM chose:
+
+"Accept the clone gate runs" - "Treat the four gate runs I measured as standing in for landings, marked in the spec as a
+departure you approved, and land T05 now with the 25% rule. Faster; the numbers may shift somewhat under a landing's extra
+load."

@@ -74,7 +74,7 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
 
 1. Before the 60% cutoff is dropped, the gate's fixed cost (what an incremental run of no tests costs) and its per-test
    cost are measured from the run records of real landings (User Story 2), and recorded in this feature's research with
-   the numbers.
+   the numbers - or, as the GM approved 2026-10-24 (request.md amendment 1), from gate runs in the clone standing in for them.
 
 ## Requirements
 
@@ -97,7 +97,7 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
 - **FR-005**: The gate's run record MUST carry each phase's seconds.
 - **FR-006**: A landing's gate MUST run the tests its change reaches however many there are; the baseline MUST be refreshed
   by a full run started after a push when the refresh rule calls for one, never on a landing's path, one at a time. The
-  rule and the dropped cutoff MUST rest on the costs FR-007 measures. THE RULE (amended 2026-10-24 on `research.md` R2, observed 2026-10-24, method: `make gate-costs` over four gate runs:
+  rule and the dropped cutoff MUST rest on the costs FR-007 measures. THE RULE (amended 2026-10-24 on `research.md` R2, observed 2026-10-24, method: `make gate-costs` over four gate runs in the clone standing in for landings, the GM's approved departure - request.md amendment 1:
   the test phase costs about 67 s fixed plus 12.7 ms per selected test, and the selection grows between full runs): after a
   push, where the landing's gate ran incremental and selected at least 25% of its baseline's tests (about 38 s past the fixed
   cost at R2's rate, and rising with every landing until a full run), a full gate run is started in a detached worktree at
@@ -105,7 +105,8 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
   selected`; when it is green its baseline replaces the clone's, its coverage paths rewritten from the worktree to the clone,
   unless the clone's baseline is newer.
 - **FR-007**: The gate's fixed cost and per-test cost MUST be measured from real landings' run records before FR-006's
-  rule is set, and recorded with the numbers.
+  rule is set, and recorded with the numbers. DEPARTURE APPROVED by the GM 2026-10-24 (request.md amendment 1, "Accept the
+  clone gate runs"): four `make done` runs in the clone over real engine edits stand in for landings (`research.md` R2).
 - **FR-008**: Each behavior has a unit test that fails with the change removed.
 
 ## Success Criteria
@@ -148,3 +149,6 @@ constant as "a knob with its reason; not a measured optimum". All observed 2026-
 - spec-fidelity round 3 (2026-10-24): FAITHFUL - both round-2 changes resolved; its aside (a word match would miss
   `_scripts`) taken into the plan: the substring `scripts` is matched.
 - Amendment 2026-10-24 (T05, on R2): FR-006's refresh rule written in, as the plan's D8 said it would be.
+- spec-fidelity round 1 of the amendment pass (2026-10-24): CHANGES REQUIRED - R2 was measured on gate runs in the clone,
+  not real landings (the GM approved them as a departure, request.md amendment 1; FR-007, US4 and FR-006 say so); US3
+  scenario 3 named an age rule the amendment does not set (reworded to "the refresh rule calls for one").
