@@ -8,6 +8,10 @@ You are a FRESH session for one part of one feature. This brief is the whole of 
 their new registry entries, in commits opening `416: `. Its handoff is `specs/416-three-metals/briefs/handoff.md`,
 which names the questions and keys.
 
+**Not yours:** feature 412's units (0250, 0265, 0273, 0279, 0286-0289 and their registry keys) are owed in this clone too,
+because 412 is not yet on main; another session checks them. Check only the units of the questions and keys feature 416's
+handoff names, and leave every 412 unit alone.
+
 ## The procedure (check, apply)
 
 1. `make record-owed` names every unit the delta owes. In the background, in one message, dispatch one agent per owed
