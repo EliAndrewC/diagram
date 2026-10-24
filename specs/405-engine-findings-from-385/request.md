@@ -90,3 +90,9 @@ After the session named the two open questions (the knots family; the ranking ro
 After the session's explanation (option 1: work seven live E3/E4 rows here; option 2: release the seven-row quota, the rows staying open in 328's ranking for a future feature the GM chooses to file):
 
 > Sure go with option 2, then after you remove these from the feature, please wokr on getting this existing feaure through to completion.
+
+## Amendment 11 (2026-10-24) - re-measure the gate's costs on real landings
+
+The GM, after accepting feature 415's gate runs in the clone as standing in for real landings (415 request.md amendment 1):
+
+"Can you add a new task to feature 405 to measure the next few landings and reevaluate just in case the numbers change?  Like maybe after nthe next 4 claims tasks on 405 land then we do that re-measure task on them?"

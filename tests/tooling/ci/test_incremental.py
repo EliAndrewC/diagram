@@ -19,6 +19,13 @@ import pytest
 from l7r.diagram.ci import incremental, selection
 
 
+@pytest.fixture(autouse=True)
+def _outside_a_landing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """These tests run inside `make land`'s own gate, which sets INCR_NO_CUTOFF (feature 415 T05): the planner is tested as it
+    runs outside a landing unless a test sets it."""
+    monkeypatch.delenv("INCR_NO_CUTOFF", raising=False)
+
+
 def test_changed_classifies_engine_tests_and_tooling() -> None:
     before = {"engine": {"e/a.py": "1", "e/b.py": "2", "pool/x.json": "9"}, "tests": {"t/test_a.py": "1", "t/conftest.py": "5", "t/_helper.py": "7"}, "tooling": "T", "gate_config": "G"}
     now = {"engine": {"e/a.py": "1", "e/b.py": "3", "e/c.py": "4"}, "tests": {"t/test_a.py": "2", "t/test_new.py": "8", "t/conftest.py": "5", "t/_helper.py": "6"}, "tooling": "T", "gate_config": "G"}
@@ -561,6 +568,11 @@ def test_plan_returns_a_full_run_when_the_projection_is_over_the_fraction(tmp_pa
     monkeypatch.setattr(incremental, "contexts_touching", lambda *a: set())
     pl = incremental.plan(tmp_path)
     assert pl.mode == "full" and "fraction" in pl.reason and pl.paths == [], "a full run keeps the trees"
+    # ...unless the planner runs for a landing (feature 415 T05, D8): what the change reaches, however much
+    monkeypatch.setenv("INCR_NO_CUTOFF", "1")
+    pl = incremental.plan(tmp_path)
+    assert pl.mode == "incremental" and pl.paths == ["t/test_a.py"], "a landing runs what it reaches"
+    monkeypatch.delenv("INCR_NO_CUTOFF")
     # and the other side: one changed module holding a small share of the baseline stays incremental, with paths
     (bdir / incremental.TESTS).write_text(json.dumps({f"t/test_{k}.py::x": [] for k in "abcdefghij"}), encoding="utf-8")
     pl = incremental.plan(tmp_path)

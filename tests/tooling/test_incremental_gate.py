@@ -32,6 +32,14 @@ from l7r.diagram.ci import incremental
 
 pytestmark = pytest.mark.tooling
 
+
+@pytest.fixture(autouse=True)
+def _outside_a_landing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """These tests run inside `make land`'s own gate, which sets INCR_NO_CUTOFF (feature 415 T05): the planner is tested as it
+    runs outside a landing unless a test sets it."""
+    monkeypatch.delenv("INCR_NO_CUTOFF", raising=False)
+
+
 HERE = Path(__file__).resolve()
 SKILL = HERE.parents[2]
 REPO_ROOT = SKILL
@@ -370,6 +378,16 @@ def test_e_over_the_fraction_the_PLANNER_runs_everything_and_keeps_the_trees(bas
     assert "8 passed" in proc.stdout
     assert (bdir / (incremental.TESTS + ".next")).is_file(), "an unrestricted run may offer the next baseline"
     assert (bdir / (incremental.GRAPH + ".next")).is_file(), "and its fixture graph beside it (FR-005)"
+
+
+def test_e_a_landing_runs_what_it_reaches_over_the_fraction(baselined: tuple[Path, Path], monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 415 T05 (D8): with INCR_NO_CUTOFF (what `make land`'s gate sets) a plan over the fraction stays incremental."""
+    root, skill = baselined
+    write(skill, "eng/polder.py", POLDER.replace('return "short"', 'return "short"  # edited'))
+    monkeypatch.setattr(incremental, "FULL_FRACTION", 0.1)
+    assert incremental.plan(root).mode == "full", "outside a landing: the fraction still holds"
+    monkeypatch.setenv("INCR_NO_CUTOFF", "1")
+    assert incremental.plan(root).mode == "incremental"
 
 
 def test_nothing_changed_selects_nothing_and_the_run_is_green_on_the_untouched_baseline(baselined: tuple[Path, Path]) -> None:

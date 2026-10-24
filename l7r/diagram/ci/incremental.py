@@ -350,6 +350,11 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
         existing(root, reachable_modules(affected_tests, changed_modules, affected_fixtures, closures)),
         reuse_tooling=bool(scripts_modules),
     )
+    # ...A LANDING RUNS WHAT ITS CHANGE REACHES, HOWEVER MUCH (feature 415 T05, D8; the GM 2026-10-24, item 6): measured, an
+    # incremental test phase costs at most about what a full one does (research.md R2) - `make land` sets INCR_NO_CUTOFF and
+    # refreshes the baseline after its push; the gate outside a landing keeps the fraction
+    if os.environ.get("INCR_NO_CUTOFF"):
+        return pl
     reached = over_the_fraction(pl, closures)
     if reached > pl.full_fraction * len(baseline_tests):
         return Plan("full", f"{reached} of {len(baseline_tests)} baseline tests reached, over the {pl.full_fraction:.0%} fraction - running everything and recording a baseline")
