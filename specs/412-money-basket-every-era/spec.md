@@ -72,6 +72,10 @@ each era's coins in grams of pure silver - the fragment file, the verdict and wh
 
 - **SC-001** (FR-001, FR-005, FR-006): every figure of the issue carries a fragment file, a verdict and what is still open in a
   reply on #13, and every census group is mapped to a row or to none with its reason.
+- **SC-003** (FR-003): `make money-candidates CHECK=1` exits 0; each era this feature defines is on
+  `research/assets/money-eras-awaiting.json` or in gm-assistant's table; every amount of money (a sum paid or priced - not a rate
+  between coins, a weight or an area) in the record's fragments within an era's years is marked with that era's id; only amounts
+  outside every era this feature defines may be passed over with their reason.
 - **SC-002** (FR-002, FR-004): `make record-owed` shows no unanswered unit for the touched questions at each landing, and
   `make impl-check F=412` reports nothing missing.
 
@@ -169,3 +173,7 @@ issuecomment-6386826304; `beijing-1500`, confirmed in issuecomment-6386920252) a
 - spec-fidelity round 4 (2026-10-24): CHANGES REQUIRED - `beijing-1500` still read as proposed, without its confirmed span;
   now confirmed, about 1490-1520, citing 6386920252.
 - spec-fidelity round 5 (2026-10-24): FAITHFUL.
+- Amended after round 5 (2026-10-24): SC-003 added for FR-003 (the spec linter: FR-003 was named by no success criterion).
+- New pass, round 1 (2026-10-24): CHANGES REQUIRED - SC-003 let an amount inside an era's years be passed over; now every
+  amount of money within an era's years is marked, pass-overs only outside every era; T06's verify line follows.
+- New pass, round 2 (2026-10-24): FAITHFUL.
