@@ -140,3 +140,12 @@ def test_the_gate_configuration_plans_full_and_the_tooling_hash_alone_does_not(t
     monkeypatch.setattr(incremental, "manifest", lambda root: {**before, "tooling": "U"})
     pl = incremental.plan(tmp_path)
     assert pl.mode == "incremental" and not pl.reuse_tooling and "nothing" in pl.reason
+
+
+def test_a_variable_two_others_read_is_kept_once_and_an_unparseable_helper_reads_nothing(tmp_path: Path) -> None:
+    """The closure meets a variable twice (two that both read it) and keeps one copy; a file under `tests/` that does not parse
+    imports nothing (and still counts where its own text mentions `scripts`)."""
+    text = "A = $(C)\nB = $(C)\nC = 1\ntest:\n\tpython3 -m pytest $(A) $(B)\n"
+    assert gate_config.makefile_test_config(text).count("C = 1") == 1
+    _tree(tmp_path, {"tests/__init__.py": "", "tests/_broken.py": "def (:\n", "tests/test_uses.py": "from tests import _broken\n"})
+    assert gate_config.scripts_readers(tmp_path) == []
