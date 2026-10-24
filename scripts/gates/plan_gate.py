@@ -608,6 +608,27 @@ def _arbiter_accept_cmd(feature: str, trigger: str) -> int:
     return 0
 
 
+def task_start(feature: str, task: str) -> int:
+    """`make task-start`: the task's mark, its start logged, and its feature named in `.specify/feature.json`."""
+    d = resolve(feature)
+    if d is None:
+        print(f"task-start: no single specs/{feature}* directory", file=sys.stderr)
+        return 2
+    common = subprocess.run(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True).stdout.strip()
+    pathlib.Path(common, "active-task").write_text(json.dumps({"feature": d.name, "task": task}) + "\n", encoding="utf-8")
+    # ...AND THE FEATURE NAMED where `active_task` reads it (405 T106): a mark naming another feature than `.specify/feature.json`
+    # is ignored, so a session that started 405's task with 415 still named there had the cohort, `claims-checked` and
+    # `claims-carry` charge 405's work to 415
+    (d.parent.parent / ".specify").mkdir(exist_ok=True)
+    (d.parent.parent / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": f"specs/{d.name}"}, indent=2) + "\n", encoding="utf-8")
+    # ...AND WHEN, for the report's per-task split (feature 385 T02, plan D10): `make feature-report` divides each task's time
+    # at its decision points from here to its tick
+    with pathlib.Path(common, "task-starts.jsonl").open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps({"feature": d.name, "task": task, "utc": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")}) + "\n")
+    print(f"task-start: {d.name} {task} is the active task - its checks need its decisions ruled first (make decide)")
+    return 0
+
+
 def main(argv: list[str]) -> int:
     if argv[:1] == ["arbiter-accept"] and len(argv) == 3:  # feature 385 T16: the arbiter's accept past the plan-round cap
         return _arbiter_accept_cmd(argv[1], argv[2])
@@ -631,23 +652,7 @@ def main(argv: list[str]) -> int:
         print(digest(section.encode()) if argv[0] == "section-sha" else decide_prompt(d, argv[2]))
         return 0
     if argv[:1] == ["task-start"] and len(argv) == 3:
-        d = resolve(argv[1])
-        if d is None:
-            print(f"task-start: no single specs/{argv[1]}* directory", file=sys.stderr)
-            return 2
-        common = subprocess.run(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True).stdout.strip()
-        pathlib.Path(common, "active-task").write_text(json.dumps({"feature": d.name, "task": argv[2]}) + "\n", encoding="utf-8")
-        # ...AND THE FEATURE NAMED where `active_task` reads it (405 T106): a mark naming another feature than `.specify/feature.json`
-        # is ignored, so a session that started 405's task with 415 still named there had the cohort, `claims-checked` and
-        # `claims-carry` charge 405's work to 415
-        (d.parent.parent / ".specify").mkdir(exist_ok=True)
-        (d.parent.parent / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": f"specs/{d.name}"}, indent=2) + "\n", encoding="utf-8")
-        # ...AND WHEN, for the report's per-task split (feature 385 T02, plan D10): `make feature-report` divides each task's time
-        # at its decision points from here to its tick
-        with pathlib.Path(common, "task-starts.jsonl").open("a", encoding="utf-8") as fh:
-            fh.write(json.dumps({"feature": d.name, "task": argv[2], "utc": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")}) + "\n")
-        print(f"task-start: {d.name} {argv[2]} is the active task - its checks need its decisions ruled first (make decide)")
-        return 0
+        return task_start(argv[1], argv[2])
     if argv[:1] == ["record-task"] and len(argv) == 6 and argv[4] == "--as":
         spec_dir = resolve(argv[1])
         if spec_dir is None:
