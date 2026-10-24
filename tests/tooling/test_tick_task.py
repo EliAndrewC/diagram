@@ -704,6 +704,11 @@ def test_the_changed_modules_coverage_runs_beside_the_gate_and_stops_it(tmp_path
     monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: seen.append([str(c) for c in cmd]) or (0, str(tmp_path) if "rev-parse" in cmd else ""))
     assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [] and not any("cover_changed.py" in " ".join(c) for c in seen), "not before the gate"
     monkeypatch.setattr(lb, "COVER_POLL_S", 0.01)
+    # ...a STAND-IN for the check: the real one, started here inside a gate, found the repository and ran a nested coverage
+    # run in it that overwrote the gate's own coverage data (415 T05's first gate: "no such table: context", 812 errors)
+    (tmp_path / "gates").mkdir()
+    (tmp_path / "gates" / "cover_changed.py").write_text("print('cover-changed: a stand-in')\n")
+    monkeypatch.setattr(lb, "HERE", tmp_path)
     cover = lb.start_cover(tmp_path)
     assert cover is not None and cover[0] in lb.RUNNING
     cover[0].wait()
@@ -757,3 +762,48 @@ def test_cover_changed_reads_the_added_lines_and_the_mirrored_test_directory(tmp
     assert cc.mirrored(tmp_path, "l7r/diagram/a/b.py") == "tests/a"
     assert cc.mirrored(tmp_path, "l7r/diagram/a/deep/c.py") == "tests/a", "climbs to the nearest that exists"
     assert cc.mirrored(tmp_path, "l7r/diagram/z/c.py") == "tests"
+
+
+def test_the_coverage_check_writes_its_coverage_data_in_its_own_directory(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 415 T05's third red gate: beside a landing's gate, in the same tree, the check's run wrote `.coverage` files
+    where the gate's workers wrote theirs; its data goes to its own temporary directory."""
+    cc = _cover()
+    seen: dict = {}
+
+    def run(cmd, cwd=None, capture_output=True, text=True, env=None):  # noqa: ANN001, ANN202
+        seen["env"] = env or {}
+        return type("R", (), {"stdout": "", "stderr": "", "returncode": 0})()
+
+    monkeypatch.setattr(cc.subprocess, "run", run)
+    import contextlib  # noqa: PLC0415
+
+    with contextlib.suppress(RuntimeError):  # no report written by the stand-in: the run itself is what is asked
+        cc.uncovered(tmp_path, {"l7r/x.py": {1}})
+    data = pathlib.Path(seen["env"]["COVERAGE_FILE"])
+    assert data.name == ".coverage" and tmp_path not in data.parents and str(data.parent) != str(pathlib.Path.cwd())
+
+
+def test_a_delta_changing_the_gates_machinery_lands_through_a_gate(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """The round arbiter's tooling_fix on red-gate@2026-10-24T19:17:09Z (feature 415): T03 changed how the landing runs its gate
+    and landed on the direct route, untested beside a real gate. A delta touching `land.py`, `scripts/gates/`, the Makefile or
+    `l7r/diagram/ci/` runs `make done` though the green-gate stamp would pass it; a docs delta does not."""
+    lb, _d = _land(tmp_path, monkeypatch)
+    made: list[str] = []
+    delta = {"names": "scripts/gates/cover_changed.py\ndocs/x.md\n"}
+
+    def run(root, cmd, env=None, quiet=True):  # noqa: ANN001, ANN202
+        if "gate-stamp.py" in str(cmd):
+            return (0, "")
+        if cmd[:2] == ["git", "diff"]:
+            return (0, delta["names"])
+        return (0, "")
+
+    monkeypatch.setattr(lb, "run", run)
+    monkeypatch.setattr(lb, "run_gate", lambda root, target, cover: made.append(target) or 0)
+    monkeypatch.setattr(lb, "start_cover", lambda root: None)
+    monkeypatch.setattr(lb, "engine_delta", lambda root: False)
+    monkeypatch.setattr(lb, "commit_regenerated", lambda root, why: None)
+    assert lb.gate_machinery_delta(tmp_path) == ["scripts/gates/cover_changed.py"]
+    assert lb.long_runs(tmp_path) == 0 and made == ["done"], "the machinery changed: through a gate"
+    made.clear(), delta.update(names="docs/x.md\n")
+    assert lb.long_runs(tmp_path) == 0 and made == [], "a docs delta: the stamp decides"

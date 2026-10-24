@@ -21,6 +21,7 @@ done` with `L7R_LAND_TICKS` set carries work and ticks (405 T51). A failed landi
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 import re
 import subprocess
@@ -310,7 +311,10 @@ def run_gate(root: Path, target: str, cover: tuple[subprocess.Popen, Path] | Non
     import signal  # noqa: PLC0415
     import time  # noqa: PLC0415
 
-    proc = subprocess.Popen(["make", "--no-print-directory", target], cwd=root, start_new_session=True)
+    # ...with no FULL_FRACTION cutoff: a landing runs what its change reaches, however much (feature 415 T05, D8) - a make variable
+    # the test recipe hands to the planner's call alone, never an environment the gate's tests inherit (the round arbiter on
+    # red-gate@2026-10-24T19:05: an exported INCR_NO_CUTOFF reached three planner tests and turned them red)
+    proc = subprocess.Popen(["make", "--no-print-directory", target, "NO_CUTOFF=1"], cwd=root, start_new_session=True)
     RUNNING.append(proc)
     try:
         while proc.poll() is None:
@@ -324,6 +328,40 @@ def run_gate(root: Path, target: str, cover: tuple[subprocess.Popen, Path] | Non
         RUNNING.remove(proc)
 
 
+#: the share of its baseline an incremental landing gate may select before a full run is started after the push (feature 415
+#: T05, D8): at research.md R2's 12.7 ms per selected test, 25% of a ~12,000-test baseline is ~38 s past the 67 s fixed cost,
+#: and the selection grows with every landing until a full run resets it
+REFRESH_FRACTION = 0.25
+
+
+def refresh_due(root: Path, since: float) -> str:
+    """The refresh's reason when THIS landing's gate (its result written since `since`) ran incremental and selected at least
+    `REFRESH_FRACTION` of its baseline's tests; "" otherwise."""
+    bdir = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git") / "gate-baseline"
+    try:
+        if (bdir / "result.json").stat().st_mtime < since:
+            return ""
+        res = json.loads((bdir / "result.json").read_text(encoding="utf-8"))
+        total = len(json.loads((bdir / "tests.json").read_text(encoding="utf-8")))
+    except OSError, ValueError:
+        return ""
+    sel = res.get("selected")
+    n = len(sel) if isinstance(sel, list) else int(sel or 0)
+    if res.get("mode") != "incremental" or not total or n < REFRESH_FRACTION * total:
+        return ""
+    return f"refresh: {n} of {total} baseline tests selected"
+
+
+def start_refresh(root: Path, reason: str) -> Path:
+    """`gates/refresh_baseline.py` detached, in its own session (feature 415 T05, D8): a full gate in a worktree at the pushed
+    commit, its baseline into the clone's; one at a time under its own lock. Returns its log."""
+    log = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git") / "land-refresh.log"
+    head = run(root, ["git", "rev-parse", "HEAD"])[1].strip()
+    with log.open("a") as fh:
+        subprocess.Popen([sys.executable, str(HERE / "gates" / "refresh_baseline.py"), str(root), head, reason], cwd=root, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
+    return log
+
+
 def start_fresh_block(root: Path) -> Path:
     """THE COHORT'S FRESH BLOCK, AFTER THE PUSH (feature 415 T03, D5; the GM 2026-10-24 - a rate, never a refusal, and T26's
     landing waited 1.4 min for it past the gate): `make cohort N=0 FRESH=48` in its own session under a lock, so a later
@@ -333,7 +371,9 @@ def start_fresh_block(root: Path) -> Path:
     log = gd / "land-fresh.log"
     jobs = max(2, (os.cpu_count() or 4) // 2)
     with log.open("a") as fh:
-        subprocess.Popen(["flock", str(gd / "land-fresh.lock"), "make", "--no-print-directory", "cohort", "N=0", "FRESH=48", f"JOBS={jobs}"], cwd=root, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
+        subprocess.Popen(
+            ["flock", str(gd / "land-fresh.lock"), "make", "--no-print-directory", "cohort", "N=0", "FRESH=48", f"JOBS={jobs}"], cwd=root, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True
+        )
     return log
 
 
@@ -356,14 +396,30 @@ def commit_records(root: Path) -> None:
         run(root, ["git", "commit", "-q", "-m", "the run records (make land)", "--", "dev/cohort-log", "dev/run-log"])
 
 
+#: the paths that decide how a landing and its gate run: a delta touching one is landed through a gate, never the direct route
+#: (the round arbiter's tooling_fix on red-gate@2026-10-24T19:17:09Z, feature 415: T03 put cover_changed.py beside the gate on
+#: the direct route, untested beside a real gate, and two red gates and two rulings followed - ~27 minutes)
+GATE_MACHINERY = re.compile(r"^(scripts/land\.py|scripts/gates/.*|Makefile|l7r/diagram/ci/.*|tests/conftest\.py|tests/_scope\.py)$")
+
+
+def gate_machinery_delta(root: Path) -> list[str]:
+    """The delta's paths that decide how a landing and its gate run (`GATE_MACHINERY`)."""
+    run(root, ["git", "fetch", "-q", "origin"])
+    return [n for n in run(root, ["git", "diff", "--name-only", "origin/main...HEAD"])[1].split() if GATE_MACHINERY.match(n)]
+
+
 def long_runs(root: Path) -> int:
     """Pass 2's runs, each only where its record does not cover this content; 0 when the push may go. The green-gate stamp names
     the gate each stale area owes (make done, make hooks-test, make page-check) and each named one runs - T30-T35's own landing
     owed hooks-test alone, which a `make done` would not have stamped."""
     stamp = [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--check", "origin/main"]
     rc, out = run(root, stamp)
-    if rc:
-        targets = list(dict.fromkeys(NAMED_GATE.findall(out)) or ["done"])
+    machinery = gate_machinery_delta(root)
+    if rc or machinery:
+        targets = list(dict.fromkeys(NAMED_GATE.findall(out)) or ["done"]) if rc else []
+        if machinery and "done" not in targets:  # ...the gate's own machinery changed: it lands through a gate (arbiter 19:17)
+            print(f"land: the delta changes how a landing or its gate runs ({', '.join(machinery[:3])}) - make done, though the stamp would pass it", flush=True)
+            targets.append("done")
         # THE COHORT BESIDE THE GATE (405 T48, D21): they share no work - the gate rolls the five pool maps, the cohort its seeds
         # and rows - and T19's landing spent 4.4 of its 7 minutes on the cohort after a green gate
         cohort, log = None, Path()
@@ -484,6 +540,9 @@ def main(argv: list[str]) -> int:
         return 2
     if claims:
         print(f"land: the claims round is owed ({claims[0][:160]}) - the gate runs beside it; the push waits for it", flush=True)
+    import time  # noqa: PLC0415
+
+    landing_started = time.time()  # a gate result written since is this landing's own (D8)
     engine_delta_landed = engine_delta(root)  # the fresh block follows an engine landing, after its push (D5)
     if rc := long_runs(root):
         return rc
@@ -520,6 +579,8 @@ def main(argv: list[str]) -> int:
     print(f"land: {' '.join(tasks)} landed and ticked")
     if engine_delta_landed:
         print(f"land: the cohort's fresh block started after the push - a rate, never a refusal; its log {start_fresh_block(root)}", flush=True)
+    if reason := refresh_due(root, landing_started):
+        print(f"land: the gate's baseline is refreshed after the push, in a worktree ({reason}); its log {start_refresh(root, reason)}", flush=True)
     return 0
 
 
