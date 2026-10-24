@@ -224,7 +224,8 @@ def this_runs_plan(gitdir: str, since: float) -> dict:
     except (OSError, ValueError):
         return {}
     out = {f"plan_{k}": res[k] for k in ("mode", "reason") if isinstance(res.get(k), str)}
-    out.update({k: res[k] for k in ("selected", "collected") if isinstance(res.get(k), int)})
+    # ...as counts: the selection plugin writes each as the list of node ids (or, in an older result, the count)
+    out.update({k: len(res[k]) if isinstance(res[k], list) else res[k] for k in ("selected", "collected") if isinstance(res.get(k), (int, list))})
     return out
 
 

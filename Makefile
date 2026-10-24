@@ -178,12 +178,12 @@ cohort:         ## [maps] roll N seeds and report every failure      N=10 [SEED=
 	$(REF_FIRST)
 	$(RUN).tools.cohort_audit --count $(or $(N),10) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),) $(if $(filter-out 0,$(or $(FRESH),$(COHORT_FRESH))),--fresh $(or $(FRESH),$(COHORT_FRESH)) --fresh-from $$(python3 scripts/gates/cohort_gate.py fresh-seed),); rc=$$?; python3 scripts/measure/cohort_known.py --root . --stamp; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; [ $$rc = 0 ] || python3 scripts/measure/cohort_known.py --root .; exit $$rc
 
-cohort-landing: ## [maps] the landing cohort a gated push requires: main's baseline first when its engine has none, then seeds 1-48, the pinned rows and a 48-seed fresh block (a rate, never a refusal) - and what the push will say
+cohort-landing: ## [maps] the landing cohort a gated push requires: main's baseline first when its engine has none, then seeds 1-48 and the pinned rows (the 48-seed fresh block, a rate never a refusal, rolls after the push - feature 415) - and what the push will say
 	@if python3 scripts/gates/cohort_gate.py needs-baseline; then \
 	  b=$$(mktemp -d)/base; echo "cohort-landing: main's engine has no 48-seed record - rolling main's baseline first, in a detached worktree ($$b)"; \
 	  git fetch -q origin 2>/dev/null; git worktree add -q --detach "$$b" origin/main && { $(MAKE) --no-print-directory -C "$$b" cohort N=48 FRESH=0; git worktree remove --force "$$b"; }; \
 	fi
-	-@$(MAKE) --no-print-directory cohort N=48 FRESH=48
+	-@$(MAKE) --no-print-directory cohort N=48 FRESH=0
 	@python3 scripts/gates/cohort_gate.py check
 
 hamlet: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)

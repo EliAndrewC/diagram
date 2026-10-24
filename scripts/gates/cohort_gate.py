@@ -73,11 +73,14 @@ def records(root: pathlib.Path) -> list[dict[str, Any]]:
 
 def pick(root: pathlib.Path, recs: list[dict[str, Any]]) -> dict[str, Any] | None:
     """The newest landing record on HEAD's engine (plan D2)."""
-    return next((r for r in sorted(recs, key=lambda r: str(r.get("utc")), reverse=True) if landing_shaped(r) and on_engine(root, r)), None)
+    # ...its fixed seeds and pinned rows only: the fresh block rolls after the push since feature 415 (D5) - a rate, never a refusal
+    return next((r for r in sorted(recs, key=lambda r: str(r.get("utc")), reverse=True) if landing_shaped(r, need_fresh=False) and on_engine(root, r)), None)
 
 
 def rate_line(rec: dict[str, Any]) -> str:
     block = fresh(rec)
+    if not block:  # the landing record since feature 415 (D5): its fresh block rolls after the push
+        return "cohort-gate: the fresh block rolls after the push - a rate, never a refusal - the trend: make cohort-seeds"
     bad = [int(s["seed"]) for s in block if s.get("verdict") != "pass"]
     first = min(int(s["seed"]) for s in block)
     return (
@@ -100,7 +103,7 @@ def check(root: pathlib.Path) -> tuple[list[str], list[str]]:
     recs = records(root)
     landing = pick(root, recs)
     if landing is None:
-        why = f"no landing cohort ({SEEDS} seeds from seed 1, the pinned rows and a {SEEDS}-seed fresh block) was rolled on the engine being landed - run: {COMMAND}"
+        why = f"no landing cohort ({SEEDS} seeds from seed 1 and the pinned rows) was rolled on the engine being landed - run: {COMMAND}"
         # 405 T125: the gate regenerates a pool map the change moved, which moves the engine key under a cohort already rolled -
         # T09's landing was refused so with 54/54 passed and nothing said of the map
         maps = [ln[3:] for ln in git(root, "status", "--porcelain", "--untracked-files=all", "--", "pool").stdout.splitlines() if ln[3:].endswith(".json")]

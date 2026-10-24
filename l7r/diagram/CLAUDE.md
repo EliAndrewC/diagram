@@ -85,9 +85,9 @@ diagnosed and the tooling improved.
   engine module that its mirrored tests leave unrun - `make land` asks it first, escape `COVER_OK`), then `make done` once,
   backgrounded, never polled.
 - **The cohort, by stage** (feature 386, the GM 2026-10-17): `make cohort` (ten seeds and the pinned rows, ~50 s) after each
-  fix; `make cohort-landing` before a GATED landing - seeds 1-48, then a fresh block of 48 that rotates with the engine, ~2 min
-  each uncached - which `sync-with-main.sh done` requires on the engine it lands, refusing a seed regressed against main. The
-  fresh block is a rate (`make cohort-seeds` keeps its trend), never a refusal.
+  fix; `make cohort-landing` before a GATED landing - seeds 1-48 and the pinned rows, ~2 min uncached - which `sync-with-main.sh
+  done` requires on the engine it lands, refusing a seed regressed against main. `make land` rolls a fresh block of 48 that
+  rotates with the engine AFTER its push (feature 415): a rate (`make cohort-seeds` keeps its trend), never a refusal.
 - `make quick` fails over its own 60 s budget; a test that rolls a map carries `@pytest.mark.rolls_map`
   (`tests/test_markers.py`).
 - Never run a test BESIDE a running gate - two writers on the same pool maps is a source of false RED. The one exception is

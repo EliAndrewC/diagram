@@ -100,13 +100,16 @@ def test_which_records_count(tmp_path: pathlib.Path) -> None:
         _rec(root, "u2", head, 15),  # not from seed 1
         _rec(root, "u3", head, 1, engine_diff="abc"),  # rolled over an uncommitted engine diff
         _rec(root, "u4", "nosuchcommit", 1),
-        _rec(root, "u5", head, 1, fresh=10),  # a per-fix block, not the landing cohort's 48
         _rec(root, "u6", head, 1, households=40),  # a scaling roll
         dict(_rec(root, "u7", head, 1), seeds=[{"seed": 1, "verdict": "pass"}]),  # too few seeds
     ]
     assert cg.pick(root, recs) is None
     landing = _rec(root, "u8", head, 1)
     assert cg.pick(root, [*recs, landing]) == landing
+    # ...and since feature 415 (D5) the fresh block rolls after the push: 48 fixed seeds and the pinned rows are the landing record
+    fixed_only = _rec(root, "u9", head, 1, fresh=0)
+    assert cg.pick(root, [*recs, fixed_only]) == fixed_only
+    assert "after the push" in cg.rate_line(fixed_only)
 
 
 def test_the_check_refuses_a_regression_and_passes_a_pre_existing_failure(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
