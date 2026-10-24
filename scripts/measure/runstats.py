@@ -4,6 +4,8 @@
     runstats.py start <dir>          snapshot the host at the gate's start; clear the failure marks
     runstats.py fail <dir> <phase>   mark a phase that failed, at the moment it finished
     runstats.py end <dir>            print the run-log fields as JSON (empty object on no start)
+    runstats.py phase <dir> <name> <seconds>      a phase of THIS gate run and how long it took (feature 415, FR-005)
+    runstats.py phase-pre <dir> <name> <seconds>  the same, for a phase run before `start` (the preflight); `start` keeps it
 
 `<dir>` is the clone's git directory. `make done` calls all three; `tests/_gate_failures.py` appends
 one `<epoch> test` mark per failed test as pytest reports it, so `first_failure_s` is when the first
@@ -108,9 +110,29 @@ def snapshot(proc: str = PROC, sys_root: str = SYS) -> dict:
     }
 
 
+PHASES = "gate-phases"
+PHASES_PRE = "gate-phases-pre"
+#: where the gate's selection plugin writes what THIS run selected (`l7r.diagram.ci.incremental.RESULT`, feature 207)
+RESULT = os.path.join("gate-baseline", "result.json")
+
+
+def phase(gitdir: str, name: str, seconds: str, pre: bool = False) -> None:
+    """A phase of the gate and its seconds (feature 415, FR-005: the GM, 2026-10-24 - T26's phase table had to be rebuilt
+    by hand from a log). `pre` holds a phase that ran before `start`, which `start` folds in."""
+    with open(os.path.join(gitdir, PHASES_PRE if pre else PHASES), "a") as f:
+        f.write(f"{name} {float(seconds):g}\n")
+
+
 def start(gitdir: str, proc: str = PROC, sys_root: str = SYS) -> None:
     with open(os.path.join(gitdir, START), "w") as f:
         json.dump(snapshot(proc, sys_root), f)
+    pre = _read(os.path.join(gitdir, PHASES_PRE)) or ""
+    with open(os.path.join(gitdir, PHASES), "w") as f:
+        f.write(pre)
+    try:
+        os.remove(os.path.join(gitdir, PHASES_PRE))
+    except FileNotFoundError:
+        pass
     try:
         os.remove(os.path.join(gitdir, FAILURES))
     except FileNotFoundError:
@@ -177,6 +199,32 @@ def end(gitdir: str, proc: str = PROC, sys_root: str = SYS) -> dict:
         host["throttle_ms"] = {k: int(v) for k, v in throttle.items()}
     if host:
         out["host"] = host
+    phases: dict[str, float] = {}
+    for line in (_read(os.path.join(gitdir, PHASES)) or "").splitlines():
+        name, _, secs = line.partition(" ")
+        try:
+            phases[name] = round(phases.get(name, 0.0) + float(secs), 1)
+        except ValueError:
+            continue
+    if phases:
+        out["phases"] = phases
+    out.update(this_runs_plan(gitdir, s["t"]))
+    return out
+
+
+def this_runs_plan(gitdir: str, since: float) -> dict:
+    """The plan's mode and reason and the tests selected and collected - from THIS run's selection result only, one written
+    since the gate started (feature 415, FR-002: the GM asked for the reason for every full run); {} where no test phase
+    ran, so an older run's result is never reported as this one's."""
+    path = os.path.join(gitdir, RESULT)
+    try:
+        if os.path.getmtime(path) < since:
+            return {}
+        res = json.loads(_read(path) or "{}")
+    except (OSError, ValueError):
+        return {}
+    out = {f"plan_{k}": res[k] for k in ("mode", "reason") if isinstance(res.get(k), str)}
+    out.update({k: res[k] for k in ("selected", "collected") if isinstance(res.get(k), int)})
     return out
 
 
@@ -185,6 +233,8 @@ def main(argv: list[str]) -> int:
         start(argv[1])
     elif len(argv) >= 3 and argv[0] == "fail":
         fail(argv[1], argv[2])
+    elif len(argv) >= 4 and argv[0] in ("phase", "phase-pre"):
+        phase(argv[1], argv[2], argv[3], pre=argv[0] == "phase-pre")
     elif len(argv) >= 2 and argv[0] == "end":
         print(json.dumps(end(argv[1])))
     else:

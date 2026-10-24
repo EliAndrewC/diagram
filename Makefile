@@ -54,7 +54,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$(ARBITER_OK)",@h="$$(git rev-parse --show-toplevel)/scripts/hooks/lib/hm_arbiter.py"; [ ! -f "$$h" ] || python3 "$$h" gate-held || exit 1)
 	@l="$$(git rev-parse --show-toplevel)/scripts/gates/gate_lock.py"; [ ! -f "$$l" ] || python3 "$$l" acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
 	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$(PREFLIGHT_OK)",@:)
-	@$(if $(PREFLIGHT_OK),:,p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; })
+	@$(if $(PREFLIGHT_OK),:,p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; tp=$$(date +%s); [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; }; $(RUNSTATS) phase-pre "$$(git rev-parse --absolute-git-dir)" preflight $$(( $$(date +%s) - tp )) 2>/dev/null || true)
 	@p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
 	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write diagram || true; \
@@ -68,16 +68,18 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	rm -f "$$(git rev-parse --absolute-git-dir)/roll-cache-class"; \
 	G=$$(git rev-parse --absolute-git-dir); $(RUNSTATS) start "$$G" 2>/dev/null || true; export L7R_GATE_FAILURES="$$G/gate-failures"; \
 	for phase in static format typecheck; do \
-	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
+	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; ts=$$(date +%s); \
 	  $(MAKE) --no-print-directory $$phase || { fail="$$fail $$phase"; $(RUNSTATS) fail "$$G" $$phase 2>/dev/null; }; \
+	  $(RUNSTATS) phase "$$G" $$phase $$(( $$(date +%s) - ts )) 2>/dev/null || true; \
 	done; \
 	if [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
-	$(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };) \
+	tr=$$(date +%s); $(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };) $(RUNSTATS) phase "$$G" reference $$(( $$(date +%s) - tr )) 2>/dev/null || true; \
 	for phase in hooks-test test-full $(if $(FULL),perf-gate,); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gates/gate-stamp.py" --fresh hooks; then \
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
-	  $(MAKE) --no-print-directory $$phase FROM_DONE=1 || { fail="$$fail $$phase"; $(RUNSTATS) fail "$$G" $$phase 2>/dev/null; }; \
+	  ts=$$(date +%s); $(MAKE) --no-print-directory $$phase FROM_DONE=1 || { fail="$$fail $$phase"; $(RUNSTATS) fail "$$G" $$phase 2>/dev/null; }; \
+	  $(RUNSTATS) phase "$$G" $$phase $$(( $$(date +%s) - ts )) 2>/dev/null || true; \
 	done; \
 	if [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
 	root=$$(git rev-parse --show-toplevel 2>/dev/null); \
@@ -1205,7 +1207,8 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	$(if $(COV_FLOORS),paths=$$(python3 -m l7r.diagram.ci incremental paths 2>/dev/null);,) \
 	$(if $(COV_FLOORS),rm -f "$(ROLL_CENSUS)" "$(ROLL_CENSUS).renders";,) \
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
-	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; fi; ec=$$?; \
+	tpy=$$(date +%s); if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; fi; ec=$$?; \
+	$(if $(COV_FLOORS),$(RUNSTATS) phase "$$(git rev-parse --absolute-git-dir)" pytest $$(( $$(date +%s) - tpy )) 2>/dev/null || true; tfl=$$(date +%s);,) \
 	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
 	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 scripts/measure/uncovered-in-diff.py || true; }; exit $$ec; fi; \
 	if [ -z "$(COV_FLOORS)" ]; then \
@@ -1222,6 +1225,7 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	rc_mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); \
 	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $$([ "$$rc_mode" = full ] && echo full) || cov_ec=1; \
 	[ $$cov_ec -eq 0 ] && { python3 -m l7r.diagram.ci incremental save-baseline || cov_ec=1; }; \
+	$(RUNSTATS) phase "$$(git rev-parse --absolute-git-dir)" floors $$(( $$(date +%s) - tfl )) 2>/dev/null || true; \
 	exit $$cov_ec
 
 INCR_FORCE = $(if $(FULL),FULL=1 requested,$(if $(filter 0,$(INCREMENTAL)),INCREMENTAL=0 requested,))

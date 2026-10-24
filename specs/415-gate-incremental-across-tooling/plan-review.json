@@ -1,0 +1,370 @@
+{
+ "feature": "415-gate-incremental-across-tooling",
+ "blocks": {
+  "preamble": {
+   "sha256": "f71e692fb84067aa9ffea15db2fb2e8f04f3eb3d66ebaa6e016fe67a838eb9a6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "f798c3716a71f1c29404d72ea7b66be47de9e17cdbe479f6f8e1cd1aa71e60e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "8651a7a60e3c906f590e5a7ff6a798fc3bec44a7857d66db148195eeaaad04fa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "0b3e3e516e00fc6f7629a803207c660bd995503abfde7ec5ff41053c0bf25909",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "98a76385eeecde34b18c46022122a1ce6f1fc9968ff40219233e41e9bb404968",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Order": {
+   "sha256": "90e4b93a12f47dd08c573620148391538410b1e81f66f265eac59ef9ea67658e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - the run record says what ran, why, and where the time went (FR-002, FR-005)": {
+   "sha256": "3962f3ee5e844a89fd8a598d9b7fcf603a98c740eb84c41c37144ff9f6616899",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "41954548a6b6921dbe0be343d296c4d9655f74af036a67bffff639bc58e8c953",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "d7dd490e6ee26a09941c4f9e3290122ea73d681781843b06f76ab9c95b5daaa7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - a tooling change no longer runs everything (FR-001)": {
+   "sha256": "00b8a783e08f6de9887bc28f3038cf8f4122ccea04452e63501a389f5fe3eea9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "a61c688995c4a875a8dce9f56bcff79f93fd485b27e9803405998c04f35495fd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "ddec481d5226803cba5423e39d859ff8ea447280fc6c4683f831676217ef9d37",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the landing waits only on what can refuse it (FR-003, FR-004)": {
+   "sha256": "3b0d95aff18ed3668fa39de2415d67bcf2b853a646bf3c93f7683243d2780a2b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "eaef0b0f8b6f21a2bb8c2ab0f16258857e219b3b8295b0cd9803bdcbd5a0569c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "943602fdcf2e385ada1775ef2f87529a9814e745944fa7847827da5093f8ac41",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - the gate's costs, measured (FR-007)": {
+   "sha256": "420aa8844ebd3d221869e5f4b6c508502e796f3217e80114b7298a8dbf483f5c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "12efaec006aacd9994ba6e199f6f1b72ed2bbb217ed83d387170b23273a6d360",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Decisions": {
+   "sha256": "1e48e4e04a7fe349fe3fd9c9bdbec0f23fce4092631428669e6d9ddba94178d2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T05 - a landing runs what its change reaches (FR-006)": {
+   "sha256": "e7073e41ec126f8fa7778ca23e1aa2c34d06bffd31c6a736d4f9876c8a8318e5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "7239f631998e0dc9938982abf85d382e7c93f23bef77d117f0bda7a50f46208e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Decisions": {
+   "sha256": "482d55acc566b5096104534b83f231b0edb151eff9a89cd85297edcee516c349",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T06 - measured end to end (SC-006)": {
+   "sha256": "b5ee88183575f3b40f4ccc82b45e9c038b6f302f1fd125cfa00e0a020603bda3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "ba00df64ddd5df1683bde2c74f87eb96628d8a382534611cb1d4d63bd938b955",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Decisions": {
+   "sha256": "d40d3bcc95fbc0cac54a5a478f1ca025cada5981225e19fdf8a1935957f37821",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (re-answered 2026-10-24T17:08Z)": {
+   "sha256": "ecb0e8bc37d3c974bd9dd46e42d9bee5aabbc300a1074e3d09c497d640c92a36",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## Order",
+    "## Performance bookends",
+    "## Summary",
+    "## T01 - the run record says what ran, why, and where the time went (FR-002, FR-005)",
+    "## T02 - a tooling change no longer runs everything (FR-001)",
+    "## T03 - the landing waits only on what can refuse it (FR-003, FR-004)",
+    "## T04 - the gate's costs, measured (FR-007)",
+    "## T05 - a landing runs what its change reaches (FR-006)",
+    "## T06 - measured end to end (SC-006)",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "runstats.py phase marks; done/test recipes mark each phase; end returns phases",
+     "class": "within",
+     "why": "Implements FR-005 / GM item 5."
+    },
+    {
+     "id": "D2a",
+     "summary": "LOGRUN omits plan_mode/plan_reason/selected when the gate stopped before its test phase (no plan, nothing selected)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically nothing to record: no plan was made and no tests ran, so no full run occurred and GM item 2 ('every full run') is untouched."
+    },
+    {
+     "id": "D2b",
+     "summary": "LOGRUN omits the reason (or reads a plan.json not written by this run) for a full test run that did not go through the planner - e.g. test-full or FR-006's background refresh",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "GM item 2 says the reason for EVERY full run; FR-002 is a MUST. Recording a reason is not impossible (the target knows it is test-full / the refresh). The block's 'left out where its source is absent' is not confined to the no-test-phase case, the plan itself adds a new full run (the refresh), and a stale plan.json from an earlier run would record a wrong reason - the mechanism cannot reach its stated purpose. Fix: every run of the test phase writes this run's plan.json (planner, or the target with its own reason such as test-full / refresh) before LOGRUN reads it, and LOGRUN reads only this run's plan; absence then means only that no tests ran."
+    },
+    {
+     "id": "D3",
+     "summary": "gate_config_hash over ci/, pipeline/, switches.py, _invocation.py, tests/conftest.py, tests/_scope.py, pinned lockfiles, pyproject pytest/coverage tables, Makefile test/test-full recipes and referenced variables minus help comments; plan full on gate_config move, not on tooling alone; missing key counts as moved once",
+     "class": "within",
+     "why": "Carries FR-001 and SC-001 (test target recipe, coverage table, requirements.txt full; help line, requirements*.in incremental). Premise not verifiable from the bundle: every non-lockfile path listed is already in today's TOOLING_PATHS; if one is not, D3 adds a full trigger outside FR-001's 'of the paths the tooling hash covers' and the block must be amended."
+    },
+    {
+     "id": "D4",
+     "summary": "scripts moved, gate_config not: select tests/tooling and tests/hooks modules plus every module (or transitively imported tests/ helper) whose source contains substring 'scripts'; reuse_tooling; gate_full becomes gate_reuses",
+     "class": "within",
+     "why": "FR-001's static loose rule, and the request's parenthetical that tooling tests are reused per test on their reads; the gate_reuses change is the mechanism that reuse requires on an incremental plan."
+    },
+    {
+     "id": "D5",
+     "summary": "cohort-landing runs fixed seeds and pinned rows beside the gate; fresh block started detached after a successful push, one at a time under a lock; cohort_gate.check needs no fresh block on a landing record",
+     "class": "within",
+     "why": "FR-003 / GM item 3. 'One at a time' read as serializing (a later fresh block waits); a lock that dropped a landing's fresh block would narrow FR-003's MUST and is not ruled here."
+    },
+    {
+     "id": "D6",
+     "summary": "cover_changed.py runs beside make done; non-zero stops the gate's group and refuses with its lines; cheap_refusals no longer runs it",
+     "class": "within",
+     "why": "FR-004 / GM item 4."
+    },
+    {
+     "id": "D7",
+     "summary": "scripts/measure/gate_costs.py fits fixed + per-test cost from run records; 'incremental drift' compares a full baseline with the merged one",
+     "class": "within",
+     "why": "FR-007 / GM item 6; the drift count serves FR-006's refresh rule, which the GM asked for."
+    },
+    {
+     "id": "T05-fraction",
+     "summary": "The gate outside a landing keeps FULL_FRACTION; landings pass INCR_NO_CUTOFF=1",
+     "class": "within",
+     "why": "GM item 6: 'Drop the 60% cutoff from landings'."
+    },
+    {
+     "id": "D8",
+     "summary": "Cutoff/refresh rule deferred to T04's numbers, amended into the spec and reviewed",
+     "class": "within",
+     "why": "FR-007 requires the rule to wait on the measurement; decides nothing yet. When re-answered, the refresh's run record must carry its full-run reason (see D2b)."
+    },
+    {
+     "id": "D9a",
+     "summary": "SC-006's measured landing may be T05's own landing",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "T05 edits l7r/diagram/ci/, which D3 puts in gate_config, so its landing plans full by its own change and cannot exhibit FR-001 or FR-006 - the very thing measured against T26's 8.8 minutes. 'The next real landing' is word-plausible; SC-006's class ('an engine landing after a tooling change') and the purpose defeat it. Fix: the measured landing is the first whose own change does not move gate_config, whose baseline already carries the gate_config key, and which has a scripts/ change since its baseline - confirmed by plan_mode incremental in its T01 record."
+    },
+    {
+     "id": "D9b",
+     "summary": "SC-006's measured landing may be feature 405's next task",
+     "class": "within",
+     "why": "An engine landing after a tooling change, as SC-006 asks - provided it meets D9a's criterion (does not move gate_config, baseline carries the key, scripts/ changed since baseline)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## Order",
+    "## Performance bookends",
+    "## Summary",
+    "## T01 - the run record says what ran, why, and where the time went (FR-002, FR-005)",
+    "## T02 - a tooling change no longer runs everything (FR-001)",
+    "## T03 - the landing waits only on what can refuse it (FR-003, FR-004)",
+    "## T04 - the gate's costs, measured (FR-007)",
+    "## T05 - a landing runs what its change reaches (FR-006)",
+    "## T06 - measured end to end (SC-006)",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Approach (re-answered 2026-10-24T17:08Z)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "runstats.py phase marks; done and test recipes mark each phase; end returns phases {name: seconds}",
+     "class": "within",
+     "why": "Request item 5 and FR-005 (each phase's seconds in the run record)."
+    },
+    {
+     "id": "D2",
+     "summary": "every test-phase run writes its own plan (planner's, or its own with a reason for make test-full, INCREMENTAL=0, FULL=1, the background refresh); LOGRUN reads only this run's result and adds plan_mode, plan_reason, selected, collected",
+     "class": "within",
+     "why": "Request item 2 ('the reason for every full run') and FR-002; covering runs that bypass the planner is what 'every full run' requires, not extra scope."
+    },
+    {
+     "id": "D3",
+     "summary": "gate_config_hash over l7r/diagram/ci, pipeline, switches.py, _invocation.py, tests/conftest.py, tests/_scope.py, the pinned lockfiles, pyproject [tool.pytest*]/[tool.coverage*], and the Makefile test/test-full recipes with their variables closed over and ## help comments stripped; plan goes full on gate_config, no longer on the tooling hash alone",
+     "class": "within",
+     "why": "Request item 1 narrows exactly scripts/, the Makefile outside the lines that shape the test run, pyproject outside its pytest and coverage sections, and keeps lockfiles; D3 does each (help line incremental, test recipe full, lockfile full, as SC-001 states). The other paths it keeps as full triggers are today's TOOLING_PATHS, which the request did not ask to narrow. US1 scenario 3, which FR-001 cites for 'the gate's own machinery', was not in the bundle; judged on FR-001's words and the request's four classes."
+    },
+    {
+     "id": "T02-exit-b",
+     "summary": "a second hash for the planner rather than removing scripts/ from tooling_hash, which keeps deciding when tooling tests rerun",
+     "class": "within",
+     "why": "Mechanism choice; FR-001 requires the tooling tests be reused on their recorded reads, which this keeps."
+    },
+    {
+     "id": "D4",
+     "summary": "on a scripts/-only move, select tests/tooling/ and tests/hooks/ modules and every other module whose source or transitively imported tests/ helper contains the substring 'scripts'; reuse_tooling flag deselects tooling tests with unchanged reads, and incremental carry copies their baseline coverage",
+     "class": "within",
+     "why": "FR-001 verbatim, including the loose reading and the transitive helper (SC-001's two named cases); the carry keeps reused tests' coverage, so nothing is dropped."
+    },
+    {
+     "id": "D5",
+     "summary": "cohort-landing runs the fixed seeds and pinned rows (N=48 FRESH=0) beside the gate; the fresh block runs detached after a successful push, one at a time behind a lock that waits rather than skips; cohort_gate accepts a landing record without a fresh block",
+     "class": "within",
+     "why": "Request item 3 and FR-003 (fresh block after the push and off the path; fixed seeds and pinned rows stay beside the gate with their refusal)."
+    },
+    {
+     "id": "D6",
+     "summary": "cover_changed.py runs beside make done; on non-zero exit the gate's group is stopped and the landing refused with its lines; removed from cheap_refusals",
+     "class": "within",
+     "why": "Request item 4 and FR-004."
+    },
+    {
+     "id": "D7",
+     "summary": "scripts/measure/gate_costs.py reads dev/run-log/: table of runs, least-squares fit of test-phase seconds on selected count, and the selection's growth against landings since the last full run",
+     "class": "within",
+     "why": "Request item 6 and FR-007 (fixed and per-test cost from real landings). The growth figure is what the refresh rule FR-006 must rest on; extra measurement in service of the request, not a narrowing."
+    },
+    {
+     "id": "T04-reanswer",
+     "summary": "growth since the last full run replaces 'drift of a merged baseline' (the baseline is the last full run, never merged); at least three planned-incremental and two full samples, incremental ones from later landings",
+     "class": "within",
+     "why": "Corrects the premise the earlier block measured against; still measures the fixed and per-test cost on a few real landings as item 6 asks."
+    },
+    {
+     "id": "T05-scope",
+     "summary": "the landing's gate passes INCR_NO_CUTOFF=1; the gate outside a landing keeps FULL_FRACTION",
+     "class": "within",
+     "why": "Request item 6 says 'drop the 60% cutoff from landings'; SC-004 tests it at a landing. Keeping the fraction elsewhere is the request's own scope."
+    },
+    {
+     "id": "D8",
+     "summary": "the refresh rule deferred to T04's numbers, amended into FR-006 and reviewed then; the refresh run's record carries 'refresh: <trigger>'",
+     "class": "within",
+     "why": "Item 6 and FR-006/FR-007 require the rule to rest on the measured costs; deferral until they exist is what was asked. The amendment will be reviewed on its own."
+    },
+    {
+     "id": "D9",
+     "summary": "T06 measures the first landing whose own change does not move gate_config, whose baseline carries the gate_config key, and which has a scripts/ change since its baseline, confirmed by plan_mode: incremental",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Item 1 says 'the gate measured on the next real landing'; D9 picks the first qualifying one rather than the literal next. Each condition judged separately: 'a scripts/ change since its baseline' is SC-006's 'after a tooling change' (accepted spec). 'Own change does not move gate_config' follows from item 1's own words that test-configuration and lockfile changes 'still do' force full; a landing the GM's rule sends to full cannot show item 1's saving, so measuring it would defeat the measurement's purpose. 'Baseline carries the key' has no anchor in the request or spec; it is an artifact of D3's migration ('a baseline without the key counts as moved, once'), costs at most the one landing after T02, and the plan_mode check keeps it honest. D9 does not say 'engine', which SC-006 requires; the T06 Approach constraint ('a real engine landing after a tooling change') supplies it, so not blocking."
+    }
+   ]
+  }
+ ]
+}
