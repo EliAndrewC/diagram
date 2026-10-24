@@ -340,6 +340,8 @@ def test_the_decide_commands(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyP
     assert gate.main(["task-start", "375", "T06"]) == 0 and json.loads((root / ".git" / "active-task").read_text())["task"] == "T06"
     assert json.loads((root / ".git" / "task-starts.jsonl").read_text().splitlines()[-1])["task"] == "T06", "feature 385 D10: each start logged"
     assert gate.main(["task-start", "999", "T06"]) == 2
+    (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": "specs/415-other"}))
+    assert gate.main(["task-start", "375", "T06"]) == 0 and gate.active_task(root) == (d, "T06"), "405 T106: the started feature is named"
     src = tmp_path / "v.json"
     src.write_text(json.dumps({"section_sha256": sha, "decisions": []}))
     assert gate.main(["record-task", "375", "T05", str(src), "--as", "spec-fidelity"]) == 0
@@ -347,7 +349,7 @@ def test_the_decide_commands(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyP
     assert gate.main(["record-task", "999", "T05", str(src), "--as", "spec-fidelity"]) == 2
     src.write_text("{}")
     assert gate.main(["record-task", "375", "T05", str(src), "--as", "spec-fidelity"]) == 1
-    (root / ".specify").mkdir()
+    (root / ".specify").mkdir(exist_ok=True)  # task-start named its feature there (405 T106)
     (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
     assert gate.main(["decided", str(root)]) == 1 and "T06: its plan section" in capsys.readouterr().out
     assert d.is_dir()
