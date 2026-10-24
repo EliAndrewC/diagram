@@ -19,6 +19,13 @@ import pytest
 from l7r.diagram.ci import incremental, selection
 
 
+@pytest.fixture(autouse=True)
+def _outside_a_landing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """These tests run inside `make land`'s own gate, which sets INCR_NO_CUTOFF (feature 415 T05): the planner is tested as it
+    runs outside a landing unless a test sets it."""
+    monkeypatch.delenv("INCR_NO_CUTOFF", raising=False)
+
+
 def test_changed_classifies_engine_tests_and_tooling() -> None:
     before = {"engine": {"e/a.py": "1", "e/b.py": "2", "pool/x.json": "9"}, "tests": {"t/test_a.py": "1", "t/conftest.py": "5", "t/_helper.py": "7"}, "tooling": "T", "gate_config": "G"}
     now = {"engine": {"e/a.py": "1", "e/b.py": "3", "e/c.py": "4"}, "tests": {"t/test_a.py": "2", "t/test_new.py": "8", "t/conftest.py": "5", "t/_helper.py": "6"}, "tooling": "T", "gate_config": "G"}

@@ -32,6 +32,14 @@ from l7r.diagram.ci import incremental
 
 pytestmark = pytest.mark.tooling
 
+
+@pytest.fixture(autouse=True)
+def _outside_a_landing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """These tests run inside `make land`'s own gate, which sets INCR_NO_CUTOFF (feature 415 T05): the planner is tested as it
+    runs outside a landing unless a test sets it."""
+    monkeypatch.delenv("INCR_NO_CUTOFF", raising=False)
+
+
 HERE = Path(__file__).resolve()
 SKILL = HERE.parents[2]
 REPO_ROOT = SKILL
