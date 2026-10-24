@@ -41,7 +41,7 @@ example of the issue (Kyoto 1745-54, 20 mon = 0.94 g of silver = about $4.07 goo
 
 1. A marked amount whose era has a row shows goods dollars, wage dollars and Rokugani coin, each the per-unit figure times the
    amount; a range ("15-20 ryo") shows both ends.
-2. Rokugani coin follows gm-assistant's `conversions.rokugani()` (in `conversions.py`; the JSON carries no format block): under
+2. Rokugani coin follows gm-assistant's `conversions.rokugani()` (in `conversions.py`; the JSON has no Rokugani display format - its `_format` key describes the fields): under
    10 sen, a tenth of a sen ("4.2 sen"); otherwise the two largest coins it needs, rounded, with "about" when rounded (its
    `coins.everyday()`), 10 sen a zeni, 10 zeni a bu, 10 bu a koku.
 3. When the amount was paid in another place or time than its era row (marked so by the author), the box says so in one line,
@@ -59,7 +59,7 @@ a judgment the author makes while marking the amount, not something the build in
 **Acceptance scenarios**:
 
 1. `make record CHECK=1` refuses, naming the fragment and the amount: an era id the vendored table does not have and that is not
-   declared as awaiting; a coin the era's row has no unit for; an amount that is not a number or a range of two numbers; a marked
+   declared as awaiting (FR-008); a coin the era's row has no unit for; an amount that is not a number or a range of two numbers; a marked
    amount with no era on it or on an ancestor.
 2. A borrowed era is allowed only within the asker's default of "close": the same country and money system (the coin is one of
    the era's units) and the paid year within 25 years of the era's span (the asker, #14: "same country and money system, within
@@ -78,14 +78,17 @@ A make target refreshes diagram's copy of the table from gm-assistant; a check s
 
 ### User Story 4 - the record's existing amounts are marked (Priority: P2)
 
-The amounts already in the money questions (0248-0283, the comparative questions excepted) whose place and years fall within
-an era that has a row - today `kyoto-1745` and `tokyo-1882`, under the 25-year rule - are marked in this feature. Amounts in
-eras without a row are left for feature 412, which defines those eras and marks their amounts as it lands them.
+Every amount already in the record - every fragment under `research/questions/`: questions, drawing pages and their notes,
+not only the money questions (the issue: "each money amount marked with its era") - whose place and years fall within an era
+that has a row, today `kyoto-1745` and `tokyo-1882` under the 25-year rule, is marked in this feature (the 1897 Meiji shrine
+rules' yen in 0216 are one). Amounts in eras without a row are left for feature 412, which defines those eras and marks their
+amounts, record-wide, as it lands them.
 
 **Acceptance scenarios**:
 
-1. Every amount in a money question within 25 years of Kyoto 1745-54 or Tokyo 1882-86, in a coin of that era's row, is marked
-   (a script lists the candidates; each kept or passed over by the author with its reason in the task's verify line).
+1. Every amount in any fragment within 25 years of Kyoto 1745-54 or Tokyo 1882-86, in a coin of that era's row, is marked
+   (a script sweeps every fragment and lists the candidates; each kept or passed over by the author with its reason in the
+   task's verify line).
 2. Marking changes no visible words, so it owes no record check (`scripts/record/record_units.py`: words are text with markup
    normalized away); `make record-owed` names nothing for these edits.
 
@@ -110,19 +113,23 @@ eras without a row are left for feature 412, which defines those eras and marks 
   format), the era's place and years, its basket coverage and goods left out, and its confidence; a borrowed era's line "at
   <place> <years> prices"; the coin's glossary definition beneath.
 - **FR-005**: An amount with no row shows the glossary tooltip only; nothing falls back to another era.
-- **FR-006**: The money questions' amounts in the two eras with rows are marked (US4), changing no visible words.
+- **FR-006**: Every amount in the record's fragments in the two eras with rows is marked (US4), changing no visible words.
+- **FR-008**: An era id gm-assistant has not built yet may be marked only if it is listed, with its place and years, in
+  `research/assets/money-eras-awaiting.json`; this feature creates the list (empty), feature 412 adds each era it defines and
+  removes it once the vendored table carries its row.
 - **FR-007**: The reply on #14 says how amounts are marked, how the copy is refreshed, and how to verify it; gm-assistant
   verifies and closes the issue.
 
 ## Success Criteria
 
-- **SC-001** (FR-002, FR-003, FR-005): a test builds a fragment with a good mark, each kind of bad mark of US2 and an unmarked
-  amount; the build refuses exactly the bad ones, naming each.
+- **SC-001** (FR-002, FR-003, FR-005, FR-008): a test builds a fragment with a good mark, each kind of bad mark of US2, an
+  unmarked amount and one marked with an era the awaiting list holds; the build refuses exactly the bad ones, naming each.
 - **SC-002** (FR-004): a test computes the box's figures for 20 mon at `kyoto-1745` and gets the issue's worked example (about
   $4.07, $41.71, 4.2 sen); the Rokugani format matches gm-assistant's `rokugani()` on 0.5, 9.95, 42, 137 and 1,234 sen.
 - **SC-003** (FR-001): `make money-conversions CHECK=1` exits 0 on a fresh copy and 1 on a stale one.
-- **SC-004** (FR-006): the candidate script lists no unmarked amount in the two eras that the task did not pass over with a
+- **SC-004** (FR-006): the candidate script, sweeping every fragment under `research/questions/`, lists no unmarked amount in the two eras that the task did not pass over with a
   reason; `make record-owed` names nothing for the marking.
+- **SC-005** (FR-007): the reply's URL on #14 is in the task's verify line.
 
 ## Assumptions
 
@@ -132,3 +139,10 @@ eras without a row are left for feature 412, which defines those eras and marks 
 - The site build lives in the engine (`l7r/diagram/interactive/record/`), so this lands on the gated route.
 
 ## Review history
+
+- spec-fidelity round 1 (2026-10-24): CHANGES REQUIRED - the back-fill limited to the money questions (the request covers
+  every amount; 0216's 1897 yen qualify); the `_format` wording; the awaiting declaration unnamed. All three applied (US4,
+  FR-006, SC-004 record-wide; US1 scenario 2 reworded; FR-008).
+- spec-fidelity round 2 (2026-10-24): CHANGES REQUIRED - the three round-1 items resolved; tasks.md T03's title still named the
+  money questions. Fixed.
+- spec-fidelity round 3 (2026-10-24): FAITHFUL.

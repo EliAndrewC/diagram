@@ -24,9 +24,10 @@
     var html = noteHtml(ref);
     if (!html) { return; }
     tip.innerHTML = html; wrapGlossary(tip, false); collapseOriginals(tip); place(ref);
+    tip.querySelectorAll('span.money[data-def]').forEach(function (span) { span.setAttribute('title', moneyText(span)); });
   }
   function place(el) {
-    tip.hidden = false;
+    tip.hidden = false; tip.classList.remove('money');
     var r = el.getBoundingClientRect(); var margin = 8;
     var vw = document.documentElement.clientWidth; var vh = document.documentElement.clientHeight;
     var w = tip.offsetWidth; var h = tip.offsetHeight;
@@ -83,7 +84,9 @@
         if (m.index > last) { frag.appendChild(document.createTextNode(text.slice(last, m.index))); }
         var span = document.createElement('span'); span.className = 'gl'; span.textContent = m[0];
         var def = defs[m[0].toLowerCase()] || '';
-        if (live) {
+        if (live && node.parentNode.closest && node.parentNode.closest('span.money[data-def]')) {
+          // inside a marked amount the word is the amount's: its box shows the conversion and this definition under it
+        } else if (live) {
           span.setAttribute('data-def', def);
           span.addEventListener('mouseenter', function (e) { keep(); tip.textContent = e.currentTarget.getAttribute('data-def'); place(e.currentTarget); });
           span.addEventListener('mouseleave', hideSoon);
@@ -150,6 +153,22 @@
     chip.addEventListener('focus', open);
     chip.addEventListener('mouseleave', hideSoon);
     chip.addEventListener('blur', hideSoon);
+  });
+  // AMOUNTS OF MONEY (feature 413, the GM 2026-10-24 through diagram#14: "we don't just explain that this was the copper
+  // coin, but we translate the amount of money based on different ways of understanding it"): the build writes each marked
+  // amount's conversion into its data-def (record/money.py); it shows in the same box, a line at a time, with the coin's
+  // glossary definition under it. Inside the box (a note shown there) the conversion is the span's title.
+  function moneyText(span) {
+    var coin = defs[(span.getAttribute('data-coin') || '').toLowerCase()];
+    return span.getAttribute('data-def') + (coin ? '\n\n' + coin : '');
+  }
+  document.querySelectorAll('span.money[data-def]').forEach(function (span) {
+    span.setAttribute('tabindex', '0');
+    var open = function () { keep(); tip.textContent = moneyText(span); place(span); tip.classList.add('money'); };
+    span.addEventListener('mouseenter', open);
+    span.addEventListener('focus', open);
+    span.addEventListener('mouseleave', hideSoon);
+    span.addEventListener('blur', hideSoon);
   });
   tip.addEventListener('mouseenter', keep);
   tip.addEventListener('mouseleave', hideSoon);

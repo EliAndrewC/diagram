@@ -23,7 +23,7 @@ import shutil
 import tempfile
 from collections.abc import Iterator, MutableMapping
 
-from l7r.diagram.interactive.record import archive, blocked, store
+from l7r.diagram.interactive.record import archive, blocked, money, store
 from l7r.diagram.interactive.record import contents as ct
 from l7r.diagram.interactive.record import questions as qs
 from l7r.diagram.interactive.record import site_links as links
@@ -234,7 +234,9 @@ class Build:
         self.record_dir = record_dir
         self.record = store.load(record_dir)
         tables = store.shared(self.record, record_dir)
-        self.items = {p.file: _item(store.page_html(self.record, p, record_dir, tables=tables), p.heading_id, p) for p in self.record.pages()}
+        self.money = money.load(record_dir)
+        self.money_errors: list[str] = []
+        self.items = {p.file: _item(self._money(store.page_html(self.record, p, record_dir, tables=tables), p.file), p.heading_id, p) for p in self.record.pages()}
         self.registry = Registry(record_dir)
         try:
             self.catalog = st.Catalog(record_dir, {i.id: i.html for i in self.registry.items()}, canon_keys(record_dir), store.REGISTRY_DIR)
@@ -265,10 +267,16 @@ class Build:
         self.errors += errs
         return out
 
+    def _money(self, markup: str, where: str) -> str:
+        """`markup` with each marked amount's conversion written in (feature 413, `money.py`); its refusals kept once each."""
+        out, errs = money.annotate(markup, where, self.money)
+        self.money_errors += [e for e in errs if e not in self.money_errors]
+        return out
+
     def notes_of(self, page: qs.Page) -> dict[str, str]:
         if page.file not in self.notes:
             try:
-                self.notes[page.file] = store.page_notes(page.file, self.record_dir)
+                self.notes[page.file] = {k: self._money(body, f"{page.file} note {k}") for k, body in store.page_notes(page.file, self.record_dir).items()}
             except RecordError as e:
                 self.errors.append(str(e))
                 self.notes[page.file] = {}
@@ -286,6 +294,7 @@ class Build:
         self.files["nav.js"] = sp.nav_js(sp.nav_tree(self.record, self.items, self.source_nodes()))
         self.errors += archive.refusals(self.record_dir)
         self.errors += blocked.refusals(self.record_dir)
+        self.errors += self.money_errors
         if self.errors:
             raise RecordError("\n  ".join([f"the site does not build ({len(self.errors)} refusal(s)):", *self.errors]))
         return self.files

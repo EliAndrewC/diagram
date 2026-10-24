@@ -271,6 +271,12 @@ record:         ## [docs] build the record's site, research/site/, from its ques
 	$(if $(CHECK),@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/memo_check.py" record,$(RUN).tools.record_asset)
 	$(if $(CHECK),,@python3 "$$(git rev-parse --show-toplevel)/scripts/record/sources.py" mark-filled)
 
+money-conversions: ## [docs] copy gm-assistant's money conversion table into research/assets/money-conversions.json, which the record's build converts each marked amount of money from (feature 413)   CHECK=1: write nothing, exit 1 while the copy is stale
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/money_conversions.py" $(if $(CHECK),--check,)
+
+money-candidates: ## [docs] every amount of money in the record not yet marked for the conversion tooltip, those within 25 years of a built era first; each is marked or passed over with its reason in specs/413-money-tooltip-on-the-record/backfill.md (feature 413)   CHECK=1: exit 1 while one is neither
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/money_candidates.py" $(if $(CHECK),--check,)
+
 source-tags-contract: ## [docs] derive research/source-tags.json's values and explanations into the source-applicability agent's contract (feature 305) - run after editing the vocabulary; a test fails while the block is stale   CHECK=1: write nothing, exit 1 while stale
 	$(RUN).tools.source_tags_contract $(if $(CHECK),--check,)
 

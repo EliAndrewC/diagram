@@ -58,8 +58,9 @@ each era's coins in grams of pure silver - the fragment file, the verdict and wh
 - **FR-002**: New figures are written into the record under the citation rules (research/CLAUDE.md), checked by the record
   checks `make record-owed` names; question 1's figures in 0273 (salt), 0279 (fuel) and 0265 (rent), question 3's in 0250,
   question 4's in 0277 or a companion question, question 2's in a new money question that tables the basket per era.
-- **FR-003**: The amounts in the money questions whose eras this feature defines are marked for feature 413's tooltip with
-  those era ids, once gm-assistant's table carries them.
+- **FR-003**: Every amount in the record's fragments (not only the money questions) whose era this feature defines is marked
+  for feature 413's tooltip with that era id; each era defined is added to `research/assets/money-eras-awaiting.json` (413
+  FR-008) until gm-assistant's table carries its row.
 - **FR-004**: The feature closes with `make impl-check F=412` (money questions: no code implements them).
 - **FR-005**: Replies are posted on #13 at each landed batch; gm-assistant verifies and closes it.
 

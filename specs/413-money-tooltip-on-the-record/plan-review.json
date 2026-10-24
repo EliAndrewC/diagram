@@ -1,0 +1,643 @@
+{
+ "feature": "413-money-tooltip-on-the-record",
+ "blocks": {
+  "preamble": {
+   "sha256": "5bae83dc8c0c89a027f3cc305a7a15ec37028124e4c87b631ce84fbe72b71c68",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "4d355bf498ecf024ff3e8a1d62f69793336933e9dc0ff942d25021edbe74544d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "21d2dee302d3c1f6858aa45e615de15dba657936f1866e39c16829e18028a301",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "4386aec69d65105c8fc0112204e531e0c60993b9d516ce16b85295bf5b5a0c02",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "138d7fddf0b4867b6e1c842bd0a7dfb6aa8d1741a2b093b52021003d6fc89c85",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the vendored table and its refresh (FR-001)": {
+   "sha256": "a5b8b590e493265e820501ccb98c0a1edd94d5a867fbbe2b434e383a4a58ba0f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the mark (FR-002)": {
+   "sha256": "6b215528fa8afa7c81627b1603f7daf6ac064f0458b91b6b8af22bf450f9624a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the build reads and refuses (FR-003, FR-005)": {
+   "sha256": "741bb0fb079fb3f6ccfdc2599abc522ce94983a1f148344748b8babc5744da54",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - the box text (FR-004)": {
+   "sha256": "20508bbeb9991f4a6a7147e4f4bde2fce9d2547a28dfb3431c0394d9021acc6a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - the hover (FR-004)": {
+   "sha256": "b215c71c98ce9c979729fce1955ba812ef3b16586dd6c53146fda7ed73dbb399",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D6 - the back-fill (FR-006)": {
+   "sha256": "c92028a08f5580e583a398bb85a78bbecec358d9520327533f25b03e13bbaa6e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D7 - tests (SC-001 to SC-004)": {
+   "sha256": "18c48c657b5b7821052a5c185746d31bb2b60c0704a36f701da64b0cd12a4eda",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## D8 - the reply (FR-007)": {
+   "sha256": "920a6e6bf62120f276383f8cbb135e26d73b78f3dfa6d8ec3ff6a7e4f951f1d2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "f746244e26911ee6c3c0f64f944a59e977035b94773316489a0ef01542955133",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the vendored table and its refresh (FR-001)",
+    "## D2 - the mark (FR-002)",
+    "## D3 - the build reads and refuses (FR-003, FR-005)",
+    "## D4 - the box text (FR-004)",
+    "## D5 - the hover (FR-004)",
+    "## D6 - the back-fill (FR-006)",
+    "## D7 - tests (SC-001 to SC-004)",
+    "## D8 - the reply (FR-007)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-gated",
+     "summary": "The feature lands on the gated route because the site build is engine code.",
+     "class": "within",
+     "why": "A landing route; it narrows nothing the request or spec asks. The preamble, Performance bookends (N/A, one regex pass per page) and Constitution Check (I-XI N/A, research: rendering) decide nothing the spec left open."
+    },
+    {
+     "id": "TC-no-record-check",
+     "summary": "Wrapping an amount in a span owes no record check, because record_units normalizes markup away.",
+     "class": "within",
+     "why": "A premise about tooling, not a narrowing; D6 verifies it anyway by requiring make record-owed to name nothing for the marking (SC-004)."
+    },
+    {
+     "id": "D1-copy",
+     "summary": "scripts/record/money_conversions.py copies gm-assistant's conversions.json byte for byte from the /host-l7r-repo checkout to research/assets/money-conversions.json; committed; the build never reads gm-assistant; CHECK=1 exits 1 naming the command when they differ.",
+     "class": "within",
+     "why": "Exactly FR-001 and diagram's accepted plan (committed copy refreshed by a make target, a check that flags a stale copy); the request leaves vendoring to diagram."
+    },
+    {
+     "id": "D1-absent-source",
+     "summary": "CHECK=1 exits 0 with a note when gm-assistant's checkout is absent (a container without the mount).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The rule (flag the copy when stale against gm-assistant's main) is physically impossible to apply without the source: there is nothing to compare. The plan does not report the copy fresh - it prints a note that it could not compare - and SC-003's two cases (fresh 0, stale 1) are kept wherever the source exists. A non-zero exit would not detect staleness either; it would only block work in a container that cannot do the comparison. The note must say plainly that no comparison was made."
+    },
+    {
+     "id": "D2-mark",
+     "summary": "Mark form span.money with data-amount (number, commas allowed, or a hyphenated range) and data-coin (a unit key of the era's row); data-era on the span or nearest enclosing element carrying one; data-paid '<place> <year>' or '<place> <year>-<year>' for a borrowed era.",
+     "class": "within",
+     "why": "FR-002 as written; the request leaves the marking form to diagram, and gm-assistant's reply asks the marker to name the era and the tooltip to say when it is borrowed. The listed elements (li, td, table, ul) are examples of an ancestor, not a limit; D3's stack scan resolves any ancestor."
+    },
+    {
+     "id": "D2-awaiting-list",
+     "summary": "An era id not yet built may be written only if listed in research/assets/money-eras-awaiting.json with its place and years.",
+     "class": "within",
+     "why": "Carries FR-008, and serves the accepted plan's 'a record check refuses an unknown era id' while honoring gm-assistant's 'mark it with the era id it will need'."
+    },
+    {
+     "id": "D3-refusals",
+     "summary": "money.py annotate refuses: no era; unknown era not awaiting; coin not in the era's units; amount not a number or range; data-paid year more than 25 years outside the era's span or with no year; errors join self.errors, deduplicated, in one run.",
+     "class": "within",
+     "why": "FR-003 (every bad mark refused in one run, naming each). The 25-year rule is gm-assistant's suggested default for 'close', and its reply grants 'Your record checks can enforce whatever rule you settle on'; not also checking country/money system is inside that latitude. Seam to watch, not a ruling: D3 annotates question pages and notes files, while D6 marks amounts in drawing pages too; if drawing pages are not among the pages Build.__init__ annotates, amounts marked there would get no tooltip and no check - annotate must run over every fragment D6 marks."
+    },
+    {
+     "id": "D3-no-row",
+     "summary": "An awaiting era or one with no row leaves the span as written: glossary tooltip only; no fallback to another era anywhere.",
+     "class": "within",
+     "why": "FR-005 and the issue's own words: 'an amount whose era has no row shows only today's glossary tooltip', and gm-assistant's 'no automatic fallback in the build'."
+    },
+    {
+     "id": "D4-box",
+     "summary": "Box text: line 1 amount with goods dollars, wage dollars and Rokugani coin (range gives each end); line 2 'at <place> <years> prices' if borrowed; line 3 place, years, basket coverage, goods left out; line 4 confidence; dollars to the cent under $100, the dollar under $10,000, three significant figures above; Rokugani by a port of gm-assistant's rokugani(); lines shown with pre-line.",
+     "class": "within",
+     "why": "Every element FR-004 lists and the issue's worked example asks for ($4.07, $41.71, 4.2 sen); the Rokugani format is gm-assistant's conversions.rokugani as the issue specifies. Omitting silver grams is within: the GM asked for goods dollars, wage dollars and Rokugani coin, and gm-assistant accepted diagram's plan which listed exactly those. Rounding and layout are presentation the request leaves open."
+    },
+    {
+     "id": "D5-hover",
+     "summary": "record.js opens the shared box from span.money[data-def] on hover or focus and appends the coin's glossary definition; the coin word's own glossary listener is not added inside a money span; dotted underline in record.css.",
+     "class": "within",
+     "why": "FR-004 including its last clause (the coin's glossary definition beneath), and the request's tooltip that goes beyond 'explain that this was the copper coin' while keeping that explanation."
+    },
+    {
+     "id": "D5-inside-box-title",
+     "summary": "A money span inside a note already shown in the box gets its text as a title instead of opening the box.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The box is one element and is already showing the note the reader is in; opening it from a span inside it would replace that note. The existing glossary words inside the box are handled the same way. The conversion still reaches the reader on hover, which is the request's purpose. Legitimate only because the title carries the same box text, the conversion and its lines (and the coin's glossary line, which FR-004 puts beneath); a title carrying less would not be."
+    },
+    {
+     "id": "D5-no-browser-test",
+     "summary": "No full-page browser test (GM 2026-09-07); the synthetic record.js page test, if one exists, gains a money span.",
+     "class": "within",
+     "why": "Tests are enforcement, not part of the request; no SC asks for a browser test of the hover, and the choice follows a standing GM ruling. It narrows nothing asked."
+    },
+    {
+     "id": "D6-candidate-script",
+     "summary": "make money-candidates lists every unmarked amount in every fragment under research/questions/ (questions, drawing pages, notes) with question, block and the block's years, flagging those within 25 years of a built era.",
+     "class": "within",
+     "why": "The instrument SC-004 names; sweeping every fragment is FR-006's scope (broader than the 0248-0283 of diagram's comment, equal to the spec)."
+    },
+    {
+     "id": "D6-flagged-only-obligation",
+     "summary": "Only FLAGGED amounts (block names a year within 25 years of a built era) must be marked by hand or passed over with a reason; unflagged listed amounts are owed nothing.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-006 requires every amount in the two eras with rows to be marked, and SC-004 requires the script to list no unmarked amount in the two eras not passed over with a reason. The flag keys on years the amount's OWN block names, so an amount in Kyoto 1745-54 or Tokyo 1882 whose year sits in the question's title, heading or a previous block is listed unflagged and, under D6, owed nothing - it stays unconverted while the check passes. None of the grounds holds: judging the unflagged entries is not impossible (the script already lists them), nothing in the GM's words implies leaving them, and the gap defeats the purpose that every amount in a built era converts. Fix: the obligation covers every amount the script lists in a built era - at minimum, an amount whose block names no year is flagged and judged like a flagged one (marked, or passed over with its reason)."
+    },
+    {
+     "id": "D6-other-eras",
+     "summary": "Amounts outside the two built eras need not be marked.",
+     "class": "within",
+     "why": "gm-assistant's reply: 'When no era is close ... leave the amount unmarked or mark it with the era id it will need'; FR-006 covers the two eras."
+    },
+    {
+     "id": "D7-tests",
+     "summary": "test_record_money.py (worked example, Rokugani port vs gm-assistant's output on five values, each D3 refusal, unmarked and awaiting amounts passing, ancestor data-era, borrowed line) and test_money_conversions.py (fresh 0, stale 1, absent 0); each proved red.",
+     "class": "within",
+     "why": "Enforcement of SC-001 to SC-003 and the issue's worked example; the absent-source case follows D1, ruled legitimate."
+    },
+    {
+     "id": "D8-reply",
+     "summary": "A comment on #14 says how amounts are marked, the awaiting list, the refresh command, and how to verify.",
+     "class": "within",
+     "why": "FR-007 as written."
+    },
+    {
+     "id": "T-order",
+     "summary": "Build and tests, then hover, then back-fill, then reply and gated landing.",
+     "class": "within",
+     "why": "Sequencing only; decides nothing the spec left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the vendored table and its refresh (FR-001)",
+    "## D2 - the mark (FR-002)",
+    "## D3 - the build reads and refuses (FR-003, FR-005)",
+    "## D4 - the box text (FR-004)",
+    "## D5 - the hover (FR-004)",
+    "## D6 - the back-fill (FR-006)",
+    "## D7 - tests (SC-001 to SC-004)",
+    "## D8 - the reply (FR-007)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1-copy",
+     "summary": "make money-conversions copies gm-assistant's conversions.json byte for byte into research/assets/money-conversions.json, committed; the build never reads gm-assistant",
+     "class": "within",
+     "why": "FR-001 and the diagram reply's vendoring plan, which gm-assistant accepted."
+    },
+    {
+     "id": "D1-absent-mount",
+     "summary": "--check exits 0 with a note when gm-assistant's checkout is absent",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since round 1, ruling carried forward: with no source to compare against, staleness cannot be measured at all, which is physical impossibility; it prints a note rather than claiming the copy is fresh, and exits 1 whenever the source is present and differs (SC-003)."
+    },
+    {
+     "id": "D2-mark",
+     "summary": "span.money with data-amount (number or range) and data-coin; data-era on the span or nearest ancestor; data-paid for a borrowed era; awaiting era ids only from money-eras-awaiting.json",
+     "class": "within",
+     "why": "Is FR-002 and FR-008; the request leaves the marking form to diagram, and gm-assistant's comment asks for the borrowed-era line, which data-paid carries."
+    },
+    {
+     "id": "D3-refusals",
+     "summary": "money.py annotate refuses no era, an unknown non-awaiting era, a coin not in the era's units, a bad amount, and a data-paid year more than 25 years outside the era or with no year; awaiting or no-row amounts left as written; no fallback",
+     "class": "within",
+     "why": "FR-003 and FR-005; the 25-year bound is gm-assistant's own suggested default for 'close' (same money system, within about 25 years), and 'no automatic fallback' is its answer verbatim."
+    },
+    {
+     "id": "D3-pages",
+     "summary": "question pages and notes files (both halves, via Record.pages()) are annotated",
+     "class": "within",
+     "why": "Round 1's question answered: drawing pages are converted too, as the caller states and D6 now says."
+    },
+    {
+     "id": "D4-box-text",
+     "summary": "four-line box text: amount with goods, wage and Rokugani figures (ranges at each end); borrowed-era line; place, years, coverage and goods left out; confidence; rounding to the cent under $100, the dollar under $10,000, three significant figures above; Rokugani coin by a port of gm-assistant's rokugani()",
+     "class": "within",
+     "why": "FR-004 line for line; the rounding reproduces the worked example ($4.07, $41.71, 4.2 sen); the Rokugani format is the one the request names (conversions.rokugani)."
+    },
+    {
+     "id": "D5-hover",
+     "summary": "record.js opens the existing hover box from span.money[data-def], appends the coin's glossary definition; inside the box the span gets the text as a title; dotted underline; no full-page browser test",
+     "class": "within",
+     "why": "FR-004 including its last clause (the glossary line beneath)."
+    },
+    {
+     "id": "D5-title-in-box",
+     "summary": "inside the box (a note shown in it) a money span shows its text as a title rather than a nested box",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since round 1, ruling carried forward: the title carries the full box text, the coin's glossary line included, so nothing the request asks to show is withheld; a nested box inside the box is the existing pattern record.js already uses for glossary words."
+    },
+    {
+     "id": "D6-sweep-scope",
+     "summary": "the candidate script sweeps every fragment under research/questions/, questions, drawing pages and their notes",
+     "class": "within",
+     "why": "FR-006/SC-004 sweep every fragment; Record.pages() holds both halves, so the sweep covers what the build converts."
+    },
+    {
+     "id": "D6-every-listed-owed",
+     "summary": "every listed amount, whatever its years, is owed a decision: marked, or named with its reason in specs/413-.../backfill.md; near-era amounts listed first; years from the block, else the heading; --check exits 1 while a listed amount is neither marked nor named",
+     "class": "within",
+     "why": "Fixes round 1's finding for the listed set; the --check refusal is enforcement of SC-004 and FR-006, not scope; the list order, year source and backfill.md location are details the spec leaves open."
+    },
+    {
+     "id": "D6-coin-filter",
+     "summary": "the script lists only amounts 'whose coin is a unit of a built era's row'; an amount in any other coin is never listed, so never marked, never named in backfill.md, and invisible to --check",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "New in round 2, and the round-1 failure one layer down. FR-006 covers every amount in the two eras with rows, and SC-004 requires each to be marked or passed over with a reason. An amount in Kyoto 1745-54 written in a coin the kyoto-1745 row has no unit for (gold bu or shu, silver kan/kanme, koban, koku of rice; the row has mon, monme, kanmon, ryo) is in that era, cannot be marked (D3 refuses the coin), and under this filter is never listed, so SC-004 passes for it vacuously because the script defines its own coverage. Marking it is impossible, but listing it and passing it over with the reason 'no unit for <coin> in the kyoto-1745 row' is not, so impossibility excuses only half of the duty and the filter removes both. Purpose test: the back-fill exists so no amount in the record is left unaccounted for, and so the gap is visible when gm-assistant's table gains a unit; a silently dropped amount defeats both. Fix (wording, not redesign): the script's coin vocabulary is every coin word the record uses for money in these monetary systems (at minimum every unit across the whole table and the awaiting list, plus the period's other Japanese denominations), and an amount whose coin is not a unit of its era's row is listed and owed a line in backfill.md with that reason, so --check accounts for it."
+    },
+    {
+     "id": "D7-tests",
+     "summary": "worked example, Rokugani port against gm-assistant's outputs, each D3 refusal, unmarked and awaiting passing, inherited data-era, borrowed line, refresh fresh/stale/absent",
+     "class": "within",
+     "why": "SC-001 to SC-003 and enforcement of FR-001 to FR-005."
+    },
+    {
+     "id": "D8-reply",
+     "summary": "a comment on #14 saying how amounts are marked, the awaiting list, the refresh command and how to verify",
+     "class": "within",
+     "why": "FR-007."
+    },
+    {
+     "id": "T-order",
+     "summary": "build and tests, then hover, then back-fill, then reply and gated landing",
+     "class": "within",
+     "why": "Ordering only; decides nothing about scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the vendored table and its refresh (FR-001)",
+    "## D2 - the mark (FR-002)",
+    "## D3 - the build reads and refuses (FR-003, FR-005)",
+    "## D4 - the box text (FR-004)",
+    "## D5 - the hover (FR-004)",
+    "## D6 - the back-fill (FR-006)",
+    "## D7 - tests (SC-001 to SC-004)",
+    "## D8 - the reply (FR-007)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1-copy",
+     "summary": "make money-conversions copies gm-assistant's conversions.json byte for byte into research/assets/money-conversions.json, committed; the build never reads gm-assistant",
+     "class": "within",
+     "why": "FR-001 and the diagram reply's vendoring plan, which gm-assistant accepted."
+    },
+    {
+     "id": "D1-absent-mount",
+     "summary": "--check exits 0 with a note when gm-assistant's checkout is absent",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since round 1, ruling carried forward: with no source to compare against, staleness cannot be measured at all, which is physical impossibility; it prints a note rather than claiming the copy is fresh, and exits 1 whenever the source is present and differs (SC-003)."
+    },
+    {
+     "id": "D2-mark",
+     "summary": "span.money with data-amount (number or range) and data-coin; data-era on the span or nearest ancestor; data-paid for a borrowed era; awaiting era ids only from money-eras-awaiting.json",
+     "class": "within",
+     "why": "Is FR-002 and FR-008; the request leaves the marking form to diagram, and gm-assistant's comment asks for the borrowed-era line, which data-paid carries."
+    },
+    {
+     "id": "D3-refusals",
+     "summary": "money.py annotate refuses no era, an unknown non-awaiting era, a coin not in the era's units, a bad amount, and a data-paid year more than 25 years outside the era or with no year; awaiting or no-row amounts left as written; no fallback",
+     "class": "within",
+     "why": "FR-003 and FR-005; the 25-year bound is gm-assistant's own suggested default for 'close' (same money system, within about 25 years), and 'no automatic fallback' is its answer verbatim."
+    },
+    {
+     "id": "D3-pages",
+     "summary": "question pages and notes files (both halves, via Record.pages()) are annotated",
+     "class": "within",
+     "why": "Round 1's question answered: drawing pages are converted too, as the caller states and D6 now says."
+    },
+    {
+     "id": "D4-box-text",
+     "summary": "four-line box text: amount with goods, wage and Rokugani figures (ranges at each end); borrowed-era line; place, years, coverage and goods left out; confidence; rounding to the cent under $100, the dollar under $10,000, three significant figures above; Rokugani coin by a port of gm-assistant's rokugani()",
+     "class": "within",
+     "why": "FR-004 line for line; the rounding reproduces the worked example ($4.07, $41.71, 4.2 sen); the Rokugani format is the one the request names (conversions.rokugani)."
+    },
+    {
+     "id": "D5-hover",
+     "summary": "record.js opens the existing hover box from span.money[data-def], appends the coin's glossary definition; inside the box the span gets the text as a title; dotted underline; no full-page browser test",
+     "class": "within",
+     "why": "FR-004 including its last clause (the glossary line beneath)."
+    },
+    {
+     "id": "D5-title-in-box",
+     "summary": "inside the box (a note shown in it) a money span shows its text as a title rather than a nested box",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since round 1, ruling carried forward: the title carries the full box text, the coin's glossary line included, so nothing the request asks to show is withheld; a title inside the box is the pattern record.js already uses for glossary words there (Technical Context)."
+    },
+    {
+     "id": "D6-sweep-scope",
+     "summary": "the candidate script sweeps every fragment under research/questions/, questions, drawing pages and their notes",
+     "class": "within",
+     "why": "FR-006/SC-004 sweep every fragment; Record.pages() holds both halves, so the sweep covers what the build converts."
+    },
+    {
+     "id": "D6-every-listed-owed",
+     "summary": "every listed amount, whatever its years, is owed a decision: marked, or named with its reason in specs/413-.../backfill.md; near-era amounts listed first; years from the block, else the heading; --check exits 1 while a listed amount is neither marked nor named",
+     "class": "within",
+     "why": "Fixes round 1's finding for the listed set; the --check refusal is enforcement of SC-004 and FR-006, not scope; the list order, year source and backfill.md location are details the spec leaves open."
+    },
+    {
+     "id": "D6-coin-filter",
+     "summary": "the script lists only amounts 'whose coin is a unit of a built era's row'; an amount in any other coin is never listed, so never marked, never named in backfill.md, and invisible to --check",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "New in round 2, and the round-1 failure one layer down. FR-006 covers every amount in the two eras with rows, and SC-004 requires each to be marked or passed over with a reason. An amount in Kyoto 1745-54 written in a coin the kyoto-1745 row has no unit for (gold bu or shu, silver kan/kanme, koban, koku of rice; the row has mon, monme, kanmon, ryo) is in that era, cannot be marked (D3 refuses the coin), and under this filter is never listed, so SC-004 passes for it vacuously because the script defines its own coverage. Marking it is impossible, but listing it and passing it over with the reason 'no unit for <coin> in the kyoto-1745 row' is not, so impossibility excuses only half of the duty and the filter removes both. Purpose test: the back-fill exists so no amount in the record is left unaccounted for, and so the gap is visible when gm-assistant's table gains a unit; a silently dropped amount defeats both. Fix (wording, not redesign): the script's coin vocabulary is every coin word the record uses for money in these monetary systems (at minimum every unit across the whole table and the awaiting list, plus the period's other Japanese denominations), and an amount whose coin is not a unit of its era's row is listed and owed a line in backfill.md with that reason, so --check accounts for it."
+    },
+    {
+     "id": "D7-tests",
+     "summary": "worked example, Rokugani port against gm-assistant's outputs, each D3 refusal, unmarked and awaiting passing, inherited data-era, borrowed line, refresh fresh/stale/absent",
+     "class": "within",
+     "why": "SC-001 to SC-003 and enforcement of FR-001 to FR-005."
+    },
+    {
+     "id": "D8-reply",
+     "summary": "a comment on #14 saying how amounts are marked, the awaiting list, the refresh command and how to verify",
+     "class": "within",
+     "why": "FR-007."
+    },
+    {
+     "id": "T-order",
+     "summary": "build and tests, then hover, then back-fill, then reply and gated landing",
+     "class": "within",
+     "why": "Ordering only; decides nothing about scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the vendored table and its refresh (FR-001)",
+    "## D2 - the mark (FR-002)",
+    "## D3 - the build reads and refuses (FR-003, FR-005)",
+    "## D4 - the box text (FR-004)",
+    "## D5 - the hover (FR-004)",
+    "## D6 - the back-fill (FR-006)",
+    "## D7 - tests (SC-001 to SC-004)",
+    "## D8 - the reply (FR-007)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary/TechContext/Perf/Constitution",
+     "summary": "Gated route (engine code); one regex pass per page, no generator change; research: rendering tasks",
+     "class": "within",
+     "why": "Process and context only; decides nothing the request or spec leaves open in a narrowing direction. Unchanged since round 2."
+    },
+    {
+     "id": "D1-copy-from-checkout",
+     "summary": "Byte copy from the gm-assistant checkout, committed; build never reads gm-assistant",
+     "class": "within",
+     "why": "Diagram's own reply (accepted by gm-assistant as matching the GM's ask) planned a committed copy by make target; the request leaves vendoring to diagram. Unchanged."
+    },
+    {
+     "id": "D1-absent-checkout-exits-0",
+     "summary": "--check exits 0 with a note when gm-assistant's checkout is absent",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1-2 ruling stands, block unchanged: staleness cannot be measured against a source that is not mounted (physically impossible), and the note says so rather than claiming fresh."
+    },
+    {
+     "id": "D2-mark-form",
+     "summary": "span.money with data-amount/data-coin; data-era on span or nearest ancestor; data-paid for a borrowed era; awaiting-era list",
+     "class": "within",
+     "why": "Implements FR-002 and FR-008 and the thread's plan (era id on the mark; author picks the era; borrowed era says so). Unchanged."
+    },
+    {
+     "id": "D3-refusals-and-no-fallback",
+     "summary": "Refuse no era, unknown non-awaiting era, coin not in era units, bad amount, data-paid more than 25 years off or without a year; awaiting/no-row amounts keep the glossary only; no fallback",
+     "class": "within",
+     "why": "gm-assistant: no automatic fallback; 'close' default same system within about 25 years; 'your record checks can enforce whatever rule you settle on'. Unchanged."
+    },
+    {
+     "id": "D4-box-text",
+     "summary": "Box lines: goods, wages, Rokugani coin (port of rokugani()), borrowed line, place/years with coverage and goods left out, confidence; rounding rule",
+     "class": "within",
+     "why": "Carries FR-004 and the request's worked example; rounding/format is presentation the request leaves to diagram. Unchanged."
+    },
+    {
+     "id": "D5-hover-no-browser-test",
+     "summary": "record.js opens the box from span.money[data-def], appends the coin's glossary definition; no full-page browser test",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1-2 ruling stands, block unchanged: the omitted full-page browser test is barred by the GM's own standing rule (2026-09-07); the box behavior FR-004 asks for is all carried."
+    },
+    {
+     "id": "D6a-candidate-coin-words",
+     "summary": "Candidate list now covers every coin word of these money systems (table units, awaiting units, COINS_ALSO: mon, monme, kanmon, ryo, bu, shu, koban, yen, sen, rin)",
+     "class": "within",
+     "why": "Answers round 2's block: an amount in a coin the row lacks (gold bu at Kyoto 1745-54) is now listed and owes a decision. Widens, narrows nothing."
+    },
+    {
+     "id": "D6b-no-unit-passed-over",
+     "summary": "An amount in an era with a row but in a coin the row has no unit for (gold bu at kyoto-1745) is passed over with that reason, not marked",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-006 says every amount in the two eras is marked; this one is not. Legitimate because a conversion is physically impossible: the request lists the table's coins per era (mon, monme, kanmon, ryo; yen, sen, rin) and says 'multiply by the amount shown' - there is no per-unit bu rate to multiply, and the request says an amount with no row shows only the glossary tooltip, which is exactly what an unmarked amount shows. The thread's 'refuses an unknown era id or coin' (accepted by gm-assistant as matching the GM's ask) makes marking it a build refusal."
+    },
+    {
+     "id": "D6c-wildcard-far-fragments",
+     "summary": "'- <stem> | * | <reason>' for a fragment whose every unmarked amount is far (more than 25 years) from any built era",
+     "class": "within",
+     "why": "FR-006 binds only amounts in the two eras with rows; gm-assistant allows such amounts to be left unmarked ('when no era is close ... leave the amount unmarked'). Recording that judgment once per fragment rather than once per amount narrows nothing the request asks."
+    },
+    {
+     "id": "D6c-wildcard-near-fragments",
+     "summary": "The same '*' line is accepted, with nothing in D6 refusing it, on a fragment that still holds an unmarked amount within 25 years of a built era",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The condition 'where one reason covers every amount a fragment still holds unmarked' is the author's judgment only; D6's --check exits 1 only while a listed amount is 'neither marked nor named', and a '*' line names every amount in its fragment. So a Kyoto-1750 mon sitting in a fragment of Edo-1800s prices passes --check, SC-004 passes, and FR-006 (every amount in the two eras marked) fails silently. The request makes the era a per-amount judgment ('Choosing the era is a judgment the author makes while marking the amount'), and the flagged class is exactly the set FR-006 binds; a fragment-wide line over it is the mechanism defeating D6's own stated purpose ('so the duty cannot stop at the flagged ones'). Not physically impossible to do per amount, not implied by the request. Fix: --check refuses a '*' line for any fragment that still holds an unmarked amount whose years fall within 25 years of a built era (the ones the script lists first); each such amount owes its own line or its mark."
+    },
+    {
+     "id": "D7-tests",
+     "summary": "Worked example, Rokugani port vs gm-assistant outputs, each D3 refusal, inheritance, borrowed line; refresh-script tests",
+     "class": "within",
+     "why": "Enforces FR-002..FR-005, SC-001..SC-003; enforcement of what was asked. Unchanged."
+    },
+    {
+     "id": "D8-reply",
+     "summary": "Reply on #14: marking, awaiting list, refresh command, how to verify",
+     "class": "within",
+     "why": "FR-007. Unchanged."
+    },
+    {
+     "id": "T-order",
+     "summary": "Build and tests, hover, back-fill, reply and landing",
+     "class": "within",
+     "why": "Sequencing only."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the vendored table and its refresh (FR-001)",
+    "## D2 - the mark (FR-002)",
+    "## D3 - the build reads and refuses (FR-003, FR-005)",
+    "## D4 - the box text (FR-004)",
+    "## D5 - the hover (FR-004)",
+    "## D6 - the back-fill (FR-006)",
+    "## D7 - tests (SC-001 to SC-004)",
+    "## D8 - the reply (FR-007)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Vendored copy refreshed byte for byte from the local gm-assistant checkout; committed; build never reads gm-assistant; --check exits 1 naming the command when stale, exits 0 with a note when the checkout is absent.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request leaves vendoring to diagram ('how diagram vendors the file ... diagram's to decide'); the staleness check is diagram's own promise and FR-001's, and in a container without the source there is nothing to compare against, so a refusal there would block work without checking anything. gm-assistant's own test still guards the source's freshness. Unchanged since round 3, which ruled it the same way."
+    },
+    {
+     "id": "D2",
+     "summary": "Mark form: span.money with data-amount (number or range) and data-coin; era by data-era on the span or nearest ancestor; borrowed era adds data-paid; an unbuilt era id only if listed in money-eras-awaiting.json.",
+     "class": "within",
+     "why": "This is FR-002 and FR-008. It carries the issue's 'each money amount marked with its era' and gm-assistant's 'mark it with the era id it will need'."
+    },
+    {
+     "id": "D3",
+     "summary": "Build annotates each marked span with its box text and refuses, naming each: no era, unknown non-awaiting era, coin not in the era's units, bad amount, data-paid year more than 25 years outside the era or with no year; awaiting/no-row spans left as written; no fallback.",
+     "class": "within",
+     "why": "This is FR-003 and FR-005. The 25-year limit is gm-assistant's suggested default ('within about 25 years ... your record checks can enforce whatever rule you settle on'). 'No automatic fallback in the build' is carried word for word."
+    },
+    {
+     "id": "D4",
+     "summary": "Box text: goods dollars, wage dollars, Rokugani coin (port of rokugani()), borrowed-era line, place/years with basket coverage and goods left out, confidence; rounding rules; lines shown with pre-line.",
+     "class": "within",
+     "why": "This is FR-004 and the issue's terms and worked example ($4.07, $41.71, 4.2 sen). Rounding to the cent under $100 reproduces the example. The borrowed line follows gm-assistant's 'at Kyoto 1745-54 prices'."
+    },
+    {
+     "id": "D5",
+     "summary": "record.js opens the box from span.money[data-def] with the coin's glossary definition appended; a glossary word inside an annotated money span is left to the money box (its own listener not added); no full-page browser test.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The coin word's own glossary tooltip gives way to the money box. That box carries the same glossary definition beneath (FR-004's last clause), so the reader loses nothing the request asked for. The narrowing reaches only spans with data-def, i.e. spans that have a money box. An unannotated span (awaiting era, or no row) has no money box, keeps the glossary listener, and shows today's glossary tooltip as FR-005 requires. Leaving out the browser test follows the GM's standing 2026-09-07 ruling. Round 3 ruled the same way."
+    },
+    {
+     "id": "D6a",
+     "summary": "Candidate script sweeps every fragment under research/questions/ for unmarked amounts in any coin of the table, the awaiting list or COINS_ALSO, with years from block else heading; --check exits 1 while a listed amount is neither marked nor named in backfill.md.",
+     "class": "within",
+     "why": "This enforces FR-006 / SC-004 ('every amount ... is marked'). Its only effect is to make the requested back-fill actually happen, so it serves the request and is not added scope."
+    },
+    {
+     "id": "D6b",
+     "summary": "An amount in a coin its era's row has no unit for (gold bu at Kyoto 1745-54) is passed over with that reason in backfill.md.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A conversion is physically impossible here: the table has no per-unit row for that coin in that era, and FR-005 forbids falling back to another era. Each such amount still gets its own listed decision. Round 3 ruled the same way."
+    },
+    {
+     "id": "D6c",
+     "summary": "A fragment may be judged whole by one '- <stem> | * | <reason>' line, but --check refuses a '*' line covering any amount within 25 years of a built era; each of those needs its own mark or its own line.",
+     "class": "within",
+     "why": "Round 3's fix is in place. A '*' line can now cover only amounts more than 25 years from every built era. D3 refuses a data-paid more than 25 years out, so no such amount can be marked with a built era: none is 'in the two eras with rows', and FR-006 does not owe it. The '*' line is therefore a bookkeeping convenience over amounts the request leaves unmarked ('leave the amount unmarked or mark it with the era id it will need'). Every amount FR-006 could owe, the issue's Osaka 1766 against kyoto-1745 included, still needs its own decision. For the rule to hold as written, an amount whose block and heading name no years cannot be shown to be far, and so must count as not-far (refused from '*'). That is how the plan's words read ('never an amount within 25 years'), and implementation must keep to it."
+    },
+    {
+     "id": "D7",
+     "summary": "Tests: worked example, Rokugani port against gm-assistant's outputs, each D3 refusal, unmarked/awaiting passing, ancestor era, borrowed line; refresh script fresh/stale/absent; each proved red.",
+     "class": "within",
+     "why": "SC-001 to SC-003 enforce what was asked, so they are not added scope."
+    },
+    {
+     "id": "D8",
+     "summary": "A reply on #14 saying how amounts are marked, the awaiting list, the refresh command, and how to verify.",
+     "class": "within",
+     "why": "FR-007; gm-assistant verifies and closes."
+    },
+    {
+     "id": "T",
+     "summary": "Order: build and tests, hover, back-fill, reply and gated landing.",
+     "class": "within",
+     "why": "Sequencing only; it narrows nothing."
+    }
+   ]
+  }
+ ]
+}
