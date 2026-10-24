@@ -417,6 +417,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       verify: DONE. landed: seeds 24 and 36 knot-free with T26's patch: onto_cut_back (D129) and joiner_first_meeting (D130), 0081; main 54/54
 - [ ] T136 Re-measure feature 415's gate costs on real landings (amendment 11): once the next four of this feature's engine tasks have landed through make land, read their landing gates' run records (make gate-costs) and compare them with 415 research.md R2 (67 s fixed + 12.7 ms per selected test, measured on gate runs in the clone) and the 25% refresh rule (scripts/land.py REFRESH_FRACTION); where the real landings disagree, re-fit and amend the rule through feature 415's spec (its refresh rule). Worked after those four landings, before T127
       research: rendering
+- [ ] T137 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#the fallback wall places are tried back wall first, then the west and east flanks, each walked end to end in WALL_SLIDE_FT (4 ft) steps, and the first clear one is taken [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
