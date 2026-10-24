@@ -704,6 +704,11 @@ def test_the_changed_modules_coverage_runs_beside_the_gate_and_stops_it(tmp_path
     monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: seen.append([str(c) for c in cmd]) or (0, str(tmp_path) if "rev-parse" in cmd else ""))
     assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == [] and not any("cover_changed.py" in " ".join(c) for c in seen), "not before the gate"
     monkeypatch.setattr(lb, "COVER_POLL_S", 0.01)
+    # ...a STAND-IN for the check: the real one, started here inside a gate, found the repository and ran a nested coverage
+    # run in it that overwrote the gate's own coverage data (415 T05's first gate: "no such table: context", 812 errors)
+    (tmp_path / "gates").mkdir()
+    (tmp_path / "gates" / "cover_changed.py").write_text("print('cover-changed: a stand-in')\n")
+    monkeypatch.setattr(lb, "HERE", tmp_path)
     cover = lb.start_cover(tmp_path)
     assert cover is not None and cover[0] in lb.RUNNING
     cover[0].wait()
