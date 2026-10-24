@@ -40,27 +40,7 @@ tooling change end to end. T07 closes.
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
-## T03 - the landing waits only on what can refuse it (FR-003, FR-004)
-
-### T03 Approach (checklist part A)
-
-1. **The goal, in the world.** A landing returns once its work is on main, having waited only on the checks that can refuse it.
-2. **The constraints.** The fixed seeds and pinned rows still refuse a regressed seed beside the gate; the fresh block's record still reaches `make cohort-seeds`; an uncovered added line still refuses the landing.
-3. **Where each comes from.** O: the GM's items 3 and 4.
-4. **Do they describe the world here?** Yes, observed 2026-10-24 (method: T26's landing log): the cohort finished 1.4 min after the gate; `cover-changed` took 48 s before the gate started.
-5. **The order.** The cohort split (fixed beside the gate, fresh after the push); `cover-changed` beside the gate with a stop; the cohort gate's record shape.
-6. **The exits.** (a) drop the fresh block - not taken, its trend is read; (b) after the push - taken.
-7. **The search smell.** None.
-8. **The budget.** 90 min with its landing.
-9. **Done, measured.** Unit tests: the fresh block started after a push and not before; a failing `cover-changed` stops the gate and refuses; `cohort_gate.check` takes a landing record with no fresh block. A landing's log shows both.
-10. **Before moving a constant.** None moves.
-11. **Before fitting things into room.** n/a.
-
-### T03 Decisions
-
-- **D5** `make cohort-landing` rolls `N=48 FRESH=0` beside the gate; after a successful push, `land.py` starts `make cohort N=0 FRESH=48` detached (its own process group, its log under the git directory), one at a time (a lock file: a later landing's fresh block WAITS for the running one, never skipped), and the landing returns; its record is committed by the cohort as today and goes out with the next push. `cohort_gate.check` asks the landing record for the fixed seeds and pinned rows only (`landing_shaped(..., need_fresh=False)`). Rendering: none.
-- **D6** `land.py` starts `cover_changed.py` beside `make done` (both in their own process groups); when it exits non-zero the gate's group is stopped (as `make land-stop` does) and the landing refused with its lines; `cheap_refusals` no longer runs it. Rendering: none.
-
+<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
 ## T04 - the gate's costs, measured (FR-007)
 
 ### T04 Approach (checklist part A)
