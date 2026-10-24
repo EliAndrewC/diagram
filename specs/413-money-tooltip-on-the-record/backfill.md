@@ -117,6 +117,22 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0286-what-did-a-years-necessities-cost-in-japan-era-by-era.notes | 900 monme | part of a mintage (525,465 kan 900 monme of Genbun silver issued), coin counted as struck, not a sum paid
 - 0287-how-much-silver-was-a-monme-a-ryo-and-a-bu-coinage-by-coinage | * | coin weights, silver contents, mintages and rates between the coins (monme to the ryo, mon to the monme), not sums paid
 - 0287-how-much-silver-was-a-monme-a-ryo-and-a-bu-coinage-by-coinage.notes | * | coin weights, silver contents, mintages and rates between the coins quoted from the sources, not sums paid
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era | 25 strings | Ming paper money (the 1497 table's strings are notes of the state's paper money, not strings of cash)
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era | 0.584 tael | China 1522-1566, outside every Chinese era's years
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era | 0.036 tael | the Lower Yangzi 1530-1549, outside every Chinese era's years
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era | 0.01 tael | Songjiang salt "after 1651", a span with no end year; the 1651 prices beside it are outside every Chinese era's years
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era | 800 cash | a rate between the coins (cash to the tael), not a sum paid
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era | 760-840 cash | a rate between the coins (cash to the tael), not a sum paid
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era | 0.09 tael | Suzhou 1700, outside every Chinese era's years
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era | 0.0994 tael | Suzhou 1730, outside every Chinese era's years
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 0.1 tael | Songjiang salt of 1651, outside every Chinese era's years
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 0.01 tael | Songjiang salt "from then on" after 1651, a span with no end year
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 80 cash | the "old rule" wage before the 1736 list, with no year
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 800 cash | a rate between the coins (cash to the tael), not a sum paid
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 0.09 taels | Suzhou 1700, outside every Chinese era's years
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 0.0968 taels | the calenderers' wage with no year given beside it (its 1730 and 1772 days are marked or passed over on their own)
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 0.0113 taels | Suzhou 1730, outside every Chinese era's years
+- 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 1 tael | a weight (1 tael = 37.68 grams of silver), not a sum
 
 ## Fragments judged whole
 
@@ -197,3 +213,5 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0283-what-did-a-famous-good-cost-far-from-where-it-was-made.notes | * | what it holds unmarked was passed over by feature 412's marks pass (2026-10-24), each for a reason its Session 5 handoff names: an area, length or weight (bu, se, rin; ryo and monme as weights), a rate between the coins, a gold bu or shu (no era carries them), a sum in Chinese money, or an amount with no year or dated outside every era's years and not one gm-assistant asked to borrow
 - 0285-how-big-was-a-farmhouses-lot-in-a-clustered-village | * | what it holds unmarked was passed over by feature 412's marks pass (2026-10-24), each for a reason its Session 5 handoff names: an area, length or weight (bu, se, rin; ryo and monme as weights), a rate between the coins, a gold bu or shu (no era carries them), a sum in Chinese money, or an amount with no year or dated outside every era's years and not one gm-assistant asked to borrow
 - 0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.notes | * | what it holds unmarked was passed over by feature 412's marks pass (2026-10-24), each for a reason its Session 5 handoff names: an area, length or weight (bu, se, rin; ryo and monme as weights), a rate between the coins, a gold bu or shu (no era carries them), a sum in Chinese money, or an amount with no year or dated outside every era's years and not one gm-assistant asked to borrow
+- 0289-what-was-a-tael-a-string-of-cash-and-a-chinese-dollar-worth-in-silver | * | rates between the coins (cash to the tael, taels to the dollar, cash to the string), a tael's weight in grams, the cash a string counted, not sums paid
+- 0289-what-was-a-tael-a-string-of-cash-and-a-chinese-dollar-worth-in-silver.notes | * | rates between the coins and weights quoted from the sources, not sums paid; its few prices are dated outside every Chinese era's years (Songjiang rice of 1632, Changlu salt "under Kangxi", a span of 1662-1722, and 1889's 500 cash, an example of counting)
