@@ -33743,6 +33743,17 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/tree.py::ALONGSIDE_STEP_FT#the walk's step": {
+  "body": "b4df71c080c616dc",
+  "claim": "the walk's step - UNRESEARCHED: a sampling step, finer than a footpath's 3 ft tread is wide only by a little",
+  "code": "1ae5df0444308657",
+  "core": "f7b8474fd73a4ae7",
+  "date": "2026-10-24",
+  "note": "5 ft is how finely the walk samples the lane for a cut point. A map reader cannot read it off the map as a fact about the place, so the claim should say NONE. Its account is also wrong: 5 ft is coarser than the 3 ft footpath tread, not finer",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/hamletgen/ways/tree.py::CARRY_FT#end set on its host": {
   "body": "3e56624e732aae9a",
   "claim": "end set on its host - village-lanes.drawing: within 20 ft, past the hook leg",
@@ -33806,6 +33817,18 @@
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::_joined#access tree plumbing": {
+  "body": "9be6a2b51531f02c",
+  "claim": "access tree plumbing - NONE",
+  "code": "0bcb3b3addc7aa60",
+  "core": "f1307a7da84c6156",
+  "date": "2026-10-24",
+  "note": "it keeps the lanes in the connector's network; this is plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::_key#access tree plumbing": {
@@ -33965,6 +33988,34 @@
   ],
   "verdict": "DRIFTED"
  },
+ "l7r/diagram/hamletgen/ways/tree.py::alongside_points#beside, as the map reads it": {
+  "body": "5723b8b928d25b4d",
+  "claim": "beside, as the map reads it - UNRESEARCHED: 0081 gives the angle but no distance; read within `WEB_SHADOW_FT` (30 ft, the distance the shadow rule reads two ways together at), as `knots.teed_back` reads it",
+  "code": "fea2e4f21be67867",
+  "core": "db49ce6fa2ea3d58",
+  "date": "2026-10-24",
+  "note": "the page gives the angle but no distance; WEB_SHADOW_FT is 30 as the claim says",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::alongside_points#side by side": {
+  "body": "5723b8b928d25b4d",
+  "claim": "side by side - village-lanes.drawing: a lane that wanders over another way at less than 20 degrees would be walked into one path with it (a map drawing convention, the page's own reading)",
+  "code": "e8bbf4297e5761b8",
+  "core": "db49ce6fa2ea3d58",
+  "date": "2026-10-24",
+  "note": "`< _SIDE_BY_SIDE_DEG` (20) matches \"less than 20 degrees\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/tree.py::as_joined#access tree plumbing": {
   "code": "4661881fdfe73812",
   "core": "c21147847fda0c73",
@@ -33979,6 +34030,58 @@
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::cut_alongside#a tee is refused if it leaves more houses unreached, more networks, or more knots (0081 §16, §22)": {
+  "code": "9932757edf37bc7e",
+  "core": "9932757edf37bc7e",
+  "date": "2026-10-24",
+  "note": "a tee is refused if it leaves more houses unreached, more networks, or more knots (0081 §16, §22)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::cut_alongside#cut where it comes alongside, met as a T": {
+  "body": "96f67b89c4fcb945",
+  "claim": "cut where it comes alongside, met as a T - village-lanes.drawing: \"the maps cut it where it comes alongside and let it meet the other as a T\" (a map drawing convention, the page's own reading)",
+  "code": "43aa0bfdfd068961",
+  "core": "9932757edf37bc7e",
+  "date": "2026-10-24",
+  "note": "the run `seq[:k+1], x, foot` keeps the lane up to where it comes alongside and runs it onto the tree lane as a T",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::cut_alongside#each end walked, the nearer point first": {
+  "body": "96f67b89c4fcb945",
+  "claim": "each end walked, the nearer point first - UNRESEARCHED: the cut that keeps most of the lane's own way",
+  "code": "444b01254c04eb0c",
+  "core": "9932757edf37bc7e",
+  "date": "2026-10-24",
+  "note": "the page does answer which end is cut: \"A household's own way is cut at its far end, never at its door\". The reversed walk (`list(p)[::-1]`) keeps the lane's last end and drops its first, and nothing holds a door end. The unreached-houses count does not stop it when the house is still reached by another lane. The claim should cite 0081 §25, and the code should keep a household way's door end. The account \"keeps most of the lane's own way\" is also wrong: the first point found nearest an end keeps the shortest run",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::cut_alongside#the field reached": {
+  "body": "96f67b89c4fcb945",
+  "claim": "the field reached - bunds-between-the-paddies-aze.drawing: a way runs from the network to the field's bund",
+  "code": "6518e07b8f5002a0",
+  "core": "9932757edf37bc7e",
+  "date": "2026-10-24",
+  "note": "the trial cut is refused if `field_unreached` rises",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+  },
+  "research": "1a1b231001c7410e",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c46ebb5fdc934b56"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::end_faults#access tree plumbing": {
@@ -34276,14 +34379,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/tree.py::settle_defer#access tree plumbing": {
-  "code": "d76e3357cdc5d2b3",
-  "core": "4aed9f3a99534648",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/tree.py::settle_tree#tree lane's room": {
   "body": "5a177589f26a5a2d",
   "claim": "tree lane's room - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a no-build corridor of WEB_CLEARANCE, 9 ft each side of the middle (the 18 ft room)",
@@ -34316,6 +34411,30 @@
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::strands_the_reach#a gap is refused if it leaves a house unreached from the connector's network (0081 §16)": {
+  "code": "c4b5f64fe7027a80",
+  "core": "c4b5f64fe7027a80",
+  "date": "2026-10-24",
+  "note": "a gap is refused if it leaves a house unreached from the connector's network (0081 §16)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::strands_the_reach#the field reached": {
+  "body": "83f949bdf731084f",
+  "claim": "the field reached - bunds-between-the-paddies-aze.drawing: a way runs from the network to the field's bund",
+  "code": "1ab8d5b56ce1fe50",
+  "core": "c4b5f64fe7027a80",
+  "date": "2026-10-24",
+  "note": "it asks whether the field is still reached from the connector's network",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+  },
+  "research": "1a1b231001c7410e",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c46ebb5fdc934b56"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::tree_faults#ordinary lane defers": {
@@ -52698,12 +52817,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wall places a ken out": {
-  "body": "31d670702dec42c1",
-  "claim": "wall places a ken out - GUESS firewood-stacks-and-sheds-kigoya.drawing: offered a ken beyond the wall gap, the gap the page's DEVIATION (`WOODSHED_STEP_FT`)",
-  "code": "e2bc0b2349516784",
-  "core": "2835514bd703c516",
-  "date": "2026-10-19",
-  "note": "the wall places are offered at gap + WOODSHED_STEP_FT, which is 9.5 ft, as the page records",
+  "body": "3d4e24e58d228eb6",
+  "claim": "wall places a ken out - GUESS firewood-stacks-and-sheds-kigoya.drawing: offered a ken (`WOODSHED_STEP_FT`, the page's GUESS) beyond the wall gap (the page's DEVIATION)",
+  "code": "ca5748082477b9f9",
+  "core": "c1e1aef9fc438613",
+  "date": "2026-10-24",
+  "note": "it offers places at the gap plus a 6 ft ken, about 9.5 ft out, a GUESS with the gap as the page's DEVIATION",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
   },
@@ -52711,16 +52830,15 @@
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats": {
-  "body": "31d670702dec42c1",
+  "body": "3d4e24e58d228eb6",
   "claim": "wood shed seats - GUESS firewood-stacks-and-sheds-kigoya.drawing: behind or beside the house, never the front yard",
-  "code": "167579ebc3abfa0c",
-  "core": "2835514bd703c516",
-  "date": "2026-10-19",
-  "note": "the front-wall places are filtered out by in_front, so the shed is \"never in the front yard\"",
+  "code": "3d12210630f9dcc9",
+  "core": "c1e1aef9fc438613",
+  "date": "2026-10-24",
+  "note": "seats off the back wall and the flanks, with front-yard places filtered out; the page's GUESS",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
   },
@@ -52728,7 +52846,6 @@
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::against_a_part#against the farmhouse or one of its outbuildings": {
@@ -53056,21 +53173,13 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::in_dooryard#plumbing": {
-  "code": "2a15fe723487000f",
-  "core": "bb5ceec649246141",
-  "date": "2026-10-03",
-  "note": "geometric predicate, reach passed in",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::in_front#the front yard": {
-  "body": "f52d6981a650c5cf",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::forward_of_front#the front yard": {
+  "body": "464d222ada421aa5",
   "claim": "the front yard - GUESS firewood-stacks-and-sheds-kigoya.drawing: never the front yard",
-  "code": "b6ccb8da8ab7ceb6",
-  "core": "49197633a66343d0",
-  "date": "2026-10-19",
-  "note": "the test for a seat wholly past the front wall carries out the page's \"never in the front yard\", a GUESS",
+  "code": "0f5b8d15c7c60d5b",
+  "core": "08299f9b7e65b333",
+  "date": "2026-10-24",
+  "note": "no part of the seat may stand past the front wall at +hh",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
   },
@@ -53078,7 +53187,14 @@
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "triaged": "2026-10-22",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::in_dooryard#plumbing": {
+  "code": "2a15fe723487000f",
+  "core": "bb5ceec649246141",
+  "date": "2026-10-03",
+  "note": "geometric predicate, reach passed in",
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::joined_to_house#bath room of the house": {
@@ -53328,13 +53444,30 @@
   "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#the ken past the wall gap": {
-  "body": "40bbc7b50b58defd",
-  "claim": "the ken past the wall gap - GUESS firewood-stacks-and-sheds-kigoya.drawing: held at the gap plus `WOODSHED_STEP_FT`, about 9.5 ft as the page records it, behind the found row refuse_unreached#every household reached (the reason at the constant)",
-  "code": "065e505d6a548937",
-  "core": "c164a0c90a58ff1f",
-  "date": "2026-10-19",
-  "note": "the shed must clear the house by g + 6 ft, which is 9.5 ft, as the page records",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#a ken off the house, clear of the kura": {
+  "body": "adb1071c4131e3f0",
+  "claim": "a ken off the house, clear of the kura - GUESS firewood-stacks-and-sheds-kigoya.drawing: a short step off a house wall, and the kura's wall kept as far, a building of its own",
+  "code": "75a0546dd6e1d45d",
+  "core": "4c79a1f7f3c23179",
+  "date": "2026-10-24",
+  "note": "`clears` holds every wall of the steading at the gap plus the ken; the record is silent on the kura, so GUESS is right",
+  "pages": {
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
+  },
+  "research": "fd75aec0c95930d7",
+  "rests": [
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18",
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#no part forward of the front wall": {
+  "body": "adb1071c4131e3f0",
+  "claim": "no part forward of the front wall - GUESS firewood-stacks-and-sheds-kigoya.drawing: never the front yard",
+  "code": "9cb2f7f7e78f5d37",
+  "core": "4c79a1f7f3c23179",
+  "date": "2026-10-24",
+  "note": "`not forward_of_front`",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
   },
@@ -53342,16 +53475,31 @@
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "triaged": "2026-10-22",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#the ken past the wall gap": {
+  "body": "adb1071c4131e3f0",
+  "claim": "the ken past the wall gap - GUESS firewood-stacks-and-sheds-kigoya.drawing: a ken (`WOODSHED_STEP_FT`) past the wall gap, about 9.5 ft out, the ken the page's GUESS and the added gap its DEVIATION - exactly, at no tolerance",
+  "code": "e70cf8d206a580df",
+  "core": "4c79a1f7f3c23179",
+  "date": "2026-10-24",
+  "note": "`clears` at g+ken-eps and `against_a_wall` at g+ken+eps with tol=0 hold the shed exactly 9.5 ft out",
+  "pages": {
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
+  },
+  "research": "fd75aec0c95930d7",
+  "rests": [
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall": {
-  "body": "40bbc7b50b58defd",
+  "body": "adb1071c4131e3f0",
   "claim": "wood shed a ken off a wall - GUESS firewood-stacks-and-sheds-kigoya.drawing: never out across the dooryard",
-  "code": "3d36e1f27abf47e0",
-  "core": "c164a0c90a58ff1f",
-  "date": "2026-10-19",
-  "note": "the shed must stand against a wall and not in_front, so it is never out across the dooryard",
+  "code": "3d5ca25678e9eb9a",
+  "core": "4c79a1f7f3c23179",
+  "date": "2026-10-24",
+  "note": "it stands against the house wall and never in front of it",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
   },
@@ -53359,7 +53507,6 @@
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::steading_rects#storehouse annex": {

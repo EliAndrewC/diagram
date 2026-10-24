@@ -545,7 +545,7 @@ Research: defer cut extent - NONE: past the law's own legs"""
 ALONGSIDE_STEP_FT = 5.0
 """How far apart the points are that `cut_alongside` asks along a lane, walking in from an end (405 T26, D131).
 
-Research: the walk's step - UNRESEARCHED: a sampling step, finer than a footpath's 3 ft tread is wide only by a little"""
+Research: the walk's step - NONE: how finely the walk samples the lane for a cut point (coarser than a footpath's 3 ft tread by 2 ft), nothing read off the map"""
 
 
 def alongside_points(seq: Sequence[Pt], trees: Sequence[tuple[int, Poly]]) -> Iterator[tuple[int, Pt, Pt]]:
@@ -584,7 +584,9 @@ def strands_the_reach(M: Mapping[str, Any], i: int, pieces: Sequence[Poly]) -> b
     `settle_network` keeps of a split web (405 T26, D131)? A piece the cut strands that reaches nothing goes with the network
     step as before; this asks only after what the map is owed.
 
-    Research: the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the network to the field's bund"""
+    Research:
+        the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the network to the field's bund
+        every house reached - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own - a gap that leaves a house no longer joined to the connector's network strands it"""
     lanes = M["lanes"]
     trial = {**M, "lanes": [*lanes[:i], *({**lanes[i], "pts": [list(q) for q in pc]} for pc in pieces if len(pc) >= 2), *lanes[i + 1 :]]}
     now, then = _joined(M), _joined(trial)
@@ -601,7 +603,9 @@ def cut_alongside(M: Mapping[str, Any], i: int, admit: Callable[[Poly], bool] = 
     Research:
         cut where it comes alongside, met as a T - research/questions/0081-village-lanes.drawing.html: "the maps cut it where it comes alongside and let it meet the other as a T" (a map drawing convention, the page's own reading)
         the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the network to the field's bund
-        each end walked, the nearer point first - UNRESEARCHED: the cut that keeps most of the lane's own way"""
+        each end walked, the nearer point first - UNRESEARCHED: the walk from the lane's first end is tried before the walk from its last, and on each the first point found - so the lane is kept from that end up to where it first comes alongside; only ordinary lanes are cut here (`tree_faults` names no tree lane), never a household's own way, so no door end is in question (0081 cuts that at its far end)
+        no more knots - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point - a tee that leaves more knots is refused
+        no house newly unreached - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own - nor one that leaves more networks or a house unreached"""
     from .checks import unreached_houses
 
     lanes = M["lanes"]
@@ -636,7 +640,7 @@ def settle_defer(s: Any) -> int:
     where it comes alongside a tree lane and teed onto it (`cut_alongside`, 405 T26, D131: tried on every such cut, it knotted
     cohort seed 26). Returns the lanes cut.
 
-    Research: cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: a lane that wanders over another way at under 20 degrees is cut where it comes alongside and meets the other as a T (a map drawing convention, the page's own reading)"""
+    Research: cut where it comes alongside, only where the gap strands the reach - DEVIATION research/questions/0081-village-lanes.drawing.html: the page cuts a lane that wanders over another way at under 20 degrees where it comes alongside, meeting the other as a T (a map drawing convention, the page's own reading); the defer cuts its 30 ft gap instead, and cuts where it comes alongside only where the gap would leave the field or a house unreached - tried on every cut, the tee knotted cohort seed 26 (measured 2026-10-24, 405 T26)"""
     from .settle import apply_pieces, arc_at, cut_around
 
     faults = tree_faults(s.M)
