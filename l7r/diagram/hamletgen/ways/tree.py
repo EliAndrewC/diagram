@@ -640,7 +640,7 @@ def settle_defer(s: Any) -> int:
     where it comes alongside a tree lane and teed onto it (`cut_alongside`, 405 T26, D131: tried on every such cut, it knotted
     cohort seed 26). Returns the lanes cut.
 
-    Research: cut where it comes alongside, only where the gap strands the reach - DEVIATION research/questions/0081-village-lanes.drawing.html: the page cuts a lane that wanders over another way at under 20 degrees where it comes alongside, meeting the other as a T (a map drawing convention, the page's own reading); the defer cuts its 30 ft gap instead, and cuts where it comes alongside only where the gap would leave the field or a house unreached - tried on every cut, the tee knotted cohort seed 26 (measured 2026-10-24, 405 T26)"""
+    Research: where the gap would strand the reach, cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: a lane that wanders over another way at under 20 degrees is cut where it comes alongside and meets the other as a T (a map drawing convention, the page's own reading) - asked only where the defer's own gap would leave the field or a house unreached (the gap itself is the defer's older cut, carried to 405 T127); tried on every cut, the tee knotted cohort seed 26 (measured 2026-10-24, 405 T26)"""
     from .settle import apply_pieces, arc_at, cut_around
 
     faults = tree_faults(s.M)

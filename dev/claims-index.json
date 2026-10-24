@@ -34032,14 +34032,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/tree.py::cut_alongside#a tee is refused if it leaves more houses unreached, more networks, or more knots (0081 §16, §22)": {
-  "code": "9932757edf37bc7e",
-  "core": "9932757edf37bc7e",
-  "date": "2026-10-24",
-  "note": "a tee is refused if it leaves more houses unreached, more networks, or more knots (0081 §16, §22)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/ways/tree.py::cut_alongside#cut where it comes alongside, met as a T": {
   "body": "96f67b89c4fcb945",
   "claim": "cut where it comes alongside, met as a T - village-lanes.drawing: \"the maps cut it where it comes alongside and let it meet the other as a T\" (a map drawing convention, the page's own reading)",
@@ -34067,6 +34059,40 @@
   "pages": {},
   "research": "",
   "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::cut_alongside#no house newly unreached": {
+  "body": "96f67b89c4fcb945",
+  "claim": "no house newly unreached - how-our-maps-lay-a-clustered-settlements-lanes.drawing: every other farmhouse is served by a lane of its own - nor one that leaves more networks or a house unreached",
+  "code": "08c5e457c58459a4",
+  "core": "9932757edf37bc7e",
+  "date": "2026-10-24",
+  "note": "a tee is refused if it leaves more networks or more unreached houses, which keeps the one network that reaches every farmhouse",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::cut_alongside#no more knots": {
+  "body": "96f67b89c4fcb945",
+  "claim": "no more knots - village-lanes.drawing: ends within 25 ft are joined at a single point - a tee that leaves more knots is refused",
+  "code": "d222d9f5523073b7",
+  "core": "9932757edf37bc7e",
+  "date": "2026-10-24",
+  "note": "a tee is refused if it leaves more knots (`len(knots(...)) <= tied`), which keeps the rule that ends within 25 ft are joined at one point",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::cut_alongside#the field reached": {
   "body": "96f67b89c4fcb945",
@@ -34413,13 +34439,22 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/tree.py::strands_the_reach#a gap is refused if it leaves a house unreached from the connector's network (0081 §16)": {
-  "code": "c4b5f64fe7027a80",
+ "l7r/diagram/hamletgen/ways/tree.py::strands_the_reach#every house reached": {
+  "body": "83f949bdf731084f",
+  "claim": "every house reached - how-our-maps-lay-a-clustered-settlements-lanes.drawing: every other farmhouse is served by a lane of its own - a gap that leaves a house no longer joined to the connector's network strands it",
+  "code": "d4e9331c8b2b25b5",
   "core": "c4b5f64fe7027a80",
   "date": "2026-10-24",
-  "note": "a gap is refused if it leaves a house unreached from the connector's network (0081 §16)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the code compares unreached houses on the connector-joined network before and after the cut, which is the rule that every other farmhouse is served by the one network",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::strands_the_reach#the field reached": {
   "body": "83f949bdf731084f",
