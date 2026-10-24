@@ -21,3 +21,6 @@
 - [ ] T05 Close: report and land
       research: rendering
       verify: landed on the gated route
+- [ ] GM review (make gm-reviewed F=413) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)

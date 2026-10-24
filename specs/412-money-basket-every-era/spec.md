@@ -93,12 +93,12 @@ passes: the issue, "a price per unit for each good found (at least rice)" and "r
 (`passes/census.md`, the money questions and, in its addendum, every other fragment) names the record's priced groups; each
 is mapped below to its row, or to none with its reason. The thirteen ids confirmed on #13 (issuecomment-6386690660) stand;
 the rows the floor adds (`osaka-1700`, `osaka-1780`, `kyoto-1800`, `songjiang-1680`, a Song row, confirmed on #13 in
-issuecomment-6386826304; and `beijing-1500`, proposed) are marked once confirmed.
+issuecomment-6386826304; `beijing-1500`, confirmed in issuecomment-6386920252) are marked once in the awaiting list.
 
 | census group | row |
 |---|---|
 | 1 Kyoto 1745-54; 2 Kyoto wages; 10 Tama shrine work 1749-70 | `kyoto-1745` (the Tama work after 1770 by year below) |
-| 9 Osaka 1620-28 | `osaka-1620` (1620-1650, as confirmed) |
+| 9 Osaka 1620-28 | `osaka-1620` (1620-1650, as confirmed in issuecomment-6386920252) |
 | 9 Kyoto 1652-56; 0185's 1611 and 1658 fees | none of their own: just outside `osaka-1620`; each may borrow it by the author's judgment |
 | 8 Edo, Kyoto, Funai 1692-1737 | `osaka-1700` (1690-1739; Kumon's Osaka rice by decade) - new |
 | 7 Ako, Edo, Nishinomiya 1781-91 | `osaka-1780` (1780-1789; Kumon) and `kyoto-1790` - new |
@@ -111,7 +111,7 @@ issuecomment-6386826304; and `beijing-1500`, proposed) are marked once confirmed
 | 6 Kashimo, Mino 1763-74 | none: rice for Kashimo SILENT; its amounts may borrow `kyoto-1745` by the author's judgment |
 | 12 the Tokaido and Nakasendo post stations, 1611-1829 (official fares) | none of their own: no rice at the stations; each fare by its year above |
 | 15 coin rates | none: rates, not prices (question 4 answers them) |
-| 20 Ming 1397-1615 | `beijing-1615` (1573-1627); and `beijing-1500` (about 1497: the official price table after the ruling of 1497, rice 25 guan a shi and a tael of silver 80 guan, 0272; ATTESTED ONLY FOR official prices) - new; Ming before 1490: none, no rice found |
+| 20 Ming 1397-1615 | `beijing-1615` (1573-1627); and `beijing-1500` (about 1490-1520, confirmed in issuecomment-6386920252: the official price table after the ruling of 1497, rice 25 guan a shi and a tael of silver 80 guan, 0272; ATTESTED ONLY FOR official prices); Ming before 1490: none, no rice found |
 | 16 Beijing 1736; 17 Beijing rents 1727-31; 18 Qing provinces 1769 | `beijing-1736` (rice by Allen et al.'s reconstruction, labeled) |
 | 21 Canton and the Yangzi delta 1700-1760s | `suzhou-1750` |
 | 22 Songjiang 1630s-1688 | `songjiang-1680` (1670-1690; rice 2 taels a shi in 1680, cash rates) - new |
@@ -164,3 +164,8 @@ issuecomment-6386826304; and `beijing-1500`, proposed) are marked once confirmed
 - spec-fidelity round 2 (2026-10-24): CHANGES REQUIRED - group 20's reason false (0272's 1497 table: now `beijing-1500`); 0115 and
   0194 missing from the table (added); `osaka-1620`'s confirmed span widened (restored to 1620-1650, the 1650s mapped to none);
   FR-006 named by no task (T05 and D7 now name it).
+- spec-fidelity round 3 (2026-10-24): CHANGES REQUIRED - request.md lacked the confirmation comment the spec cites (6386826304);
+  request.md refreshed with the whole thread. The census's 1820s date for the Takamiya fares corrected to 1665.
+- spec-fidelity round 4 (2026-10-24): CHANGES REQUIRED - `beijing-1500` still read as proposed, without its confirmed span;
+  now confirmed, about 1490-1520, citing 6386920252.
+- spec-fidelity round 5 (2026-10-24): FAITHFUL.

@@ -3,12 +3,12 @@
 
 The tooltip converts an amount only when its author marks it (`<span class="money" ...>`, `record/money.py`). This lists
 every amount still unmarked in any fragment under `research/questions/` - questions, drawing pages and their notes - whose
-coin is a unit of an era the vendored table carries, with the years its block names (else its page's heading), those within
-`REVIEW_YEARS` of a built era first. EVERY amount listed is owed a decision (the plan review of 2026-10-24: the duty must not
-stop at the ones whose years match): marked, or named in `specs/413-money-tooltip-on-the-record/backfill.md` with the reason
-it is passed over, one line each: `- <file stem> | <amount as written> | <reason>`, or `- <file stem> | * | <reason>` where
-one reason covers every amount the fragment still holds unmarked - never one within REVIEW_YEARS of a built era, each of which
-is named on its own line.
+coin is a coin word of these money systems, with the years its block names (else its page's heading, or for a note the sentence
+citing it) and how many years it stands from the nearest built era carrying its coin, nearest first. The order decides nothing:
+the GM withdrew the 25-year default (#14, 2026-10-24) and diagram#15 will measure a rule, so no distance in years is compared
+here. EVERY amount listed is owed a decision: marked, or named in `specs/413-money-tooltip-on-the-record/backfill.md` with
+the reason it is passed over, one line each: `- <file stem> | <amount as written> | <reason>`, or `- <file stem> | * | <reason>`
+where one reason, the author's, covers every amount the fragment still holds unmarked.
 
     money_candidates.py           list them                                   `make money-candidates`
     money_candidates.py --check   exit 1 while one is neither marked nor named `make money-candidates CHECK=1`
@@ -28,10 +28,6 @@ from dataclasses import dataclass
 QUESTIONS = os.path.join("research", "questions")
 TABLE = os.path.join("research", "assets", "money-conversions.json")
 BACKFILL = os.path.join("specs", "413-money-tooltip-on-the-record", "backfill.md")
-#: The window inside which each amount is judged on its own line rather than by a fragment's `*` line. It is a REVIEW window,
-#: not a closeness rule: it allows and refuses no conversion (the GM withdrew the 25-year rule, #14, 2026-10-24; diagram#15
-#: will measure one). Beyond it the author borrows no era until that rule lands - a conservative choice, said in backfill.md.
-REVIEW_YEARS = 25
 #: The period's other Japanese coin words, listed whether or not a built era's row has a unit for them (the plan review of
 #: 2026-10-24: an amount in a coin its row lacks, a gold bu at Kyoto 1745-54, is passed over with that reason, never unseen).
 COINS_ALSO = ("mon", "monme", "kanmon", "ryo", "bu", "shu", "koban", "yen", "sen", "rin")
@@ -52,7 +48,8 @@ class Amount:
     stem: str
     text: str
     years: tuple[int, ...]
-    near: str  # the built era within REVIEW_YEARS of its years, or ""
+    near: str  # the nearest built era carrying its coin, or "" (no year, or no era carries it)
+    gap: int | None = None  # years from that era's span, 0 inside it
     context: str = ""  # the text around it, the amount in [[ ]]
 
 
@@ -90,7 +87,7 @@ def _cited_years(folder: str, page: str) -> dict[str, tuple[int, ...]]:
 
 
 def amounts(root: str = ".") -> list[Amount]:
-    """Every unmarked amount in a coin a built era carries, those near a built era first."""
+    """Every unmarked amount in a coin of these money systems, nearest a built era first (the order decides nothing)."""
     eras = _eras(root)
     coins = sorted({*COINS_ALSO, *(c for _, _, units in eras.values() for c in units)}, key=len, reverse=True)
     amount_re = re.compile(rf"(?<![\w.]){_NUMBER}\s+(?:{'|'.join(map(re.escape, coins))})(?![\w])")
@@ -119,10 +116,11 @@ def amounts(root: str = ".") -> list[Amount]:
                     marked[found] -= 1
                     continue
                 coin = found.split()[-1]
-                near = next((e for e, (a, b, units) in eras.items() if coin in units and any(a - REVIEW_YEARS <= y <= b + REVIEW_YEARS for y in years)), "")
+                gaps = [(max(a - y, y - b, 0), e) for e, (a, b, units) in eras.items() if coin in units for y in years]
+                gap, near = min(gaps) if gaps else (None, "")
                 context = plain[max(0, m.start() - 240) : m.start()] + "[[" + found + "]]" + plain[m.end() : m.end() + 60]
-                out.append(Amount(stem, found, years, near, context))
-    return sorted(out, key=lambda a: (a.near == "", a.stem))
+                out.append(Amount(stem, found, years, near, gap=gap, context=context))
+    return sorted(out, key=lambda a: (a.gap is None, a.gap if a.gap is not None else 0, a.stem))
 
 
 def passed_over(root: str = ".") -> set[tuple[str, str]]:
@@ -136,10 +134,9 @@ def passed_over(root: str = ".") -> set[tuple[str, str]]:
 
 def _named(a: Amount, named: set[tuple[str, str]]) -> bool:
     """Passed over by its own line, or by its fragment's `*` line (one reason for every amount the fragment holds)."""
-    # ...never a `*` line for an amount near a built era (the plan review of 2026-10-24, round 3): the era is a judgment made
-    # per amount, so each of those is marked or named on its own line
-    # nor for an amount whose years the script cannot find, which it cannot show to be far (the plan review's round 4)
-    return (a.stem, a.text) in named or (not a.near and bool(a.years) and (a.stem, "*") in named)
+    # a `*` line covers every amount its fragment holds unmarked: no distance in years decides what it may cover (the plan review
+    # of 2026-10-24 after the GM withdrew the 25-year default - a 25-year cut here was the withdrawn number under another name)
+    return (a.stem, a.text) in named or (a.stem, "*") in named
 
 
 def main(argv: list[str] | None = None, root: str = ".") -> int:
@@ -150,7 +147,8 @@ def main(argv: list[str] | None = None, root: str = ".") -> int:
     owed = [a for a in amounts(root) if not _named(a, named)]
     for a in owed:
         years = ",".join(map(str, a.years[:4])) or "no year"
-        print(f"{'NEAR ' + a.near if a.near else 'far':<20} {a.stem} | {a.text} | {years}")
+        where = f"{a.gap} yr from {a.near}" if a.gap is not None else "no year or no era"
+        print(f"{where:<28} {a.stem} | {a.text} | {years}")
     if args.check and owed:
         print(f"money-candidates: {len(owed)} amount(s) neither marked nor named in {BACKFILL} - mark each (feature 413, record/money.py) or add `- <stem> | <amount> | <reason>`", file=sys.stderr)
         return 1

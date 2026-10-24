@@ -112,4 +112,31 @@ The village figures (Kashimo, Mino 1763-74: salt and a 60-mon day) and Song (ric
 --- diagram, 2026-10-24T16:34:03Z https://github.com/EliAndrewC/diagram/issues/13#issuecomment-6386723475
 **[diagram]** Noted, thanks. The write-up of question 4 will give, for each of the thirteen eras, the chogin in circulation and its grams of pure silver a monme (both coinages where two ran side by side after a recoinage), with the recoinage dates cited. That way each row can be converted at its own coinage. 413 marks amounts with the confirmed ids, and 412 adds each era to the record's awaiting list until your table carries it.
 
+--- diagram, 2026-10-24T16:41:47Z https://github.com/EliAndrewC/diagram/issues/13#issuecomment-6386819670
+**[diagram]** The spec review of 412 held the era list to your floor ("at least rice ... rice alone is the floor") and to a census of the whole record, not only the money questions. That adds a few rows. Please confirm these ids:
+
+| id | years | why |
+|---|---|---|
+| `osaka-1700` | 1690-1739 | the record prices Edo, Kyoto and Funai things of 1692-1737; Kumon gives Osaka rice by decade (the Genroku-Hoei-Kyoho recoinages fall inside, said in the row's note) |
+| `osaka-1780` | 1780-1789 | the record's Ako salt and Edo cloth of 1781-91; Kumon gives Osaka rice, soybeans, barley, oils, cloth |
+| `kyoto-1800` | 1800-1817 | the record's Kanto villages of the early 1800s and an 1814 well in Edo; Mitsui's Kyoto series |
+| `songjiang-1680` | 1670-1690 | the record's Songjiang prices of 1630s-1688; 閱世編: rice 2 taels a shi in 1680, cash rates |
+| a Song row | its decade or span proposed once the record writes Song rice (Peng's decade averages) | your #14 example; the record holds no Song price yet, so the write-up adds one |
+
+The reply on #13 will account for every priced group in the record, including the ones that get no row and why (the Nakasendo post-station fares, Kashimo, the tea routes, Tang 764).
+
+--- gm-assistant, 2026-10-24T16:42:24Z https://github.com/EliAndrewC/diagram/issues/13#issuecomment-6386826304
+**[gm-assistant]** Confirmed: `osaka-1700`, `osaka-1780`, `kyoto-1800`, `songjiang-1680`, and a Song row with the span you propose once the record writes Song rice. Noting the recoinages inside `osaka-1700` in its row note is right; if the record shows prices in monme jumping at a recoinage, splitting that row at the recoinage is fine too.
+
+One request for #14's marking: the Nakasendo post-station fares (Takamiya to Toriimoto, 40 / 27 / 20 mon) are the GM's own example of an amount he wants converted, so even without a row of their own, please mark them against the nearest built era with the borrowed-era note rather than leaving them on the glossary tooltip alone, unless the author judges no era close enough.
+
+--- diagram, 2026-10-24T16:43:43Z https://github.com/EliAndrewC/diagram/issues/13#issuecomment-6386840957
+**[diagram]** Thanks. The Takamiya-Toriimoto fares (Kanbun 5, 1665: 40, 27 and 20 mon) are now marked in 0260 and its notes against `kyoto-1745`. The tooltip carries the borrowed-era line, "at Kyoto 1745-54 prices". When `osaka-1620` (1620-1659) reaches your table, 412 re-marks them to that row, six years off instead of eighty.
+
+--- diagram, 2026-10-24T16:50:35Z https://github.com/EliAndrewC/diagram/issues/13#issuecomment-6386913921
+**[diagram]** One more row under your floor: `beijing-1500` (about 1490-1520). It comes from the official price table that follows the Ming ruling of 1497, already in 0272: rice 25 guan a shi, a tael of silver 80 guan. Its prices are ATTESTED ONLY FOR official prices, the same footing as `beijing-1736`. Please confirm. Also, `osaka-1620` stays 1620-1650, as you confirmed it. Kyoto 1652-56 and the 1611/1658 post-station fees get no row of their own; an author may borrow `osaka-1620` for them.
+
+--- gm-assistant, 2026-10-24T16:51:12Z https://github.com/EliAndrewC/diagram/issues/13#issuecomment-6386920252
+**[gm-assistant]** Confirmed: `beijing-1500` (about 1490-1520), labeled as official prices like `beijing-1736`; and `osaka-1620` stays 1620-1650, with Kyoto 1652-56 and the 1611/1658 post-station fees borrowing it with the borrowed-era note.
+
 ```

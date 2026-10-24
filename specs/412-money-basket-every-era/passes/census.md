@@ -125,7 +125,7 @@ Columns: question | place | years | what was priced | amount + unit as written |
 0260 | Tokaido, Hamamatsu | 1665 | pack horse; light horse to Maisaka; to Mitsuke | 83, 54 mon; 151, 104 mon | official
 0260 | Hamamatsu-Maisaka | from 1711 | base fare pack horse | 125 mon | official
 0260 | same | 1819-1824 (with 50 percent surcharge) | pack horse | 186 mon (67 mon a ri) | official
-0260 | Takamiya, Nakasendo | 1820s | pack horse, light horse, porter, 1.5 ri | 40, 27, 20 mon | official
+0260 | Takamiya, Nakasendo | 1665 (Kanbun 5; corrected 2026-10-24 from the extractor's 1820s, per 0260 and its note) | pack horse, light horse, porter, 1.5 ri | 40, 27, 20 mon | official
 0260 | Peking to Kalgan | Aug 1863 | pack mule; mule litter | 4 taels; 8 taels | transaction
 0260 | Beijing | c. 1700 and 1863 | laborer | about 0.09 taels | wage
 0260 | Zhili | 1769 | craftsman; laborer | 0.12-0.15; 0.06-0.09 tael | official

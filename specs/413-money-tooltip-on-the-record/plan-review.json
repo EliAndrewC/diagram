@@ -44,8 +44,8 @@
    "declared": "spec-fidelity"
   },
   "## D3 - the build reads and refuses (FR-003, FR-005)": {
-   "sha256": "741bb0fb079fb3f6ccfdc2599abc522ce94983a1f148344748b8babc5744da54",
-   "verdict": "CLEAR",
+   "sha256": "d18346c9cb92e9ad7029939e00d047203d9cb787f13366d3a9a870f9132b21fa",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
   },
@@ -62,8 +62,8 @@
    "declared": "spec-fidelity"
   },
   "## D6 - the back-fill (FR-006)": {
-   "sha256": "c92028a08f5580e583a398bb85a78bbecec358d9520327533f25b03e13bbaa6e",
-   "verdict": "CLEAR",
+   "sha256": "9ae8a61472726458a6c8137fc546c1501ffa250bbdd8dba37befa0aac8c4e44b",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
   },
@@ -636,6 +636,41 @@
      "summary": "Order: build and tests, hover, back-fill, reply and gated landing.",
      "class": "within",
      "why": "Sequencing only; it narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## D3 - the build reads and refuses (FR-003, FR-005)",
+    "## D6 - the back-fill (FR-006)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D3",
+     "summary": "money.py load/annotate: refuses no era, an unknown era not awaiting, a coin not in the era's units, a malformed amount, a data-paid with no year; refuses no distance in years; awaiting era or no row leaves the glossary tooltip only; no fallback to another era.",
+     "class": "within",
+     "why": "The only change from the text cleared earlier is that the 25-year data-paid refusal is gone, which is what the GM asked for (issuecomment-6386744961: 'no numeric threshold in the record checks yet'). The refusals that remain check presence and validity, not distance, and diagram's reply (issuecomment-6386761199) names them as kept. No fallback carries gm-assistant's 'no automatic fallback in the build' and FR-005."
+    },
+    {
+     "id": "D6a",
+     "summary": "Candidate sweep over every fragment under research/questions/ for coin words of the vendored table, the awaiting list and COINS_ALSO; every listed amount owed a decision (marked, or passed over with its reason in backfill.md); pass-over reason states the date and that the author judged no built era close enough to borrow, pending diagram#15.",
+     "class": "within",
+     "why": "Carries FR-006 and the issue's back-fill plan, which the GM's correction left alone ('keep marking each amount with the era its author judges right'). The reworded reason matches diagram's reply on #14 and has no year threshold in it."
+    },
+    {
+     "id": "D6b",
+     "summary": "Amounts whose years fall within 25 years of a built era (REVIEW_YEARS) are listed first in the candidate output.",
+     "class": "within",
+     "why": "Putting some amounts first in a list refuses nothing and is not a record check, so it is outside the GM's 'no numeric threshold in the record checks'. (Aside, not a finding: sorting nearest-first with no cutoff would order the list without carrying the withdrawn number at all.)"
+    },
+    {
+     "id": "D6c",
+     "summary": "money_candidates.py --check refuses (exits 1) when a fragment-wide '*' pass-over line covers an amount within 25 years of a built era (REVIEW_YEARS); each such amount needs its own mark or its own line.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is an exception to the GM's 'no numeric threshold in the record checks yet', argued on the grounds that the window is 'not a closeness rule'. Word level: --check is a check over the record's fragments and fails on a year comparison against a fixed 25. It is part of how the block says the marking is enforced (make record CHECK=1 / make record-owed), so 'it is a back-fill script, not a record check' does not get it out. Purpose level: the GM withdrew 25 because it 'had no basis', guessed that the right span is 'much longer', and sent the number to diagram#15 to be measured, not guessed. Under this gate an amount 30 to 60 years from a built era, the kind the GM suspects can be borrowed, can be waived in bulk by a '*' line with no judgment of its own, and only amounts under 25 years get looked at one by one. The number still decides closeness, only under another name, and the scope of the gate rests on a figure nobody measured. The earlier CLEAR was given to this gate before the request changed and does not carry over; this ruling judges it against the amended request. Fix: --check drops the year comparison. Two shapes are acceptable and the author chooses: '*' lines may cover any unmarked amount in a fragment, or '*' lines are removed and every amount gets its own line."
     }
    ]
   }

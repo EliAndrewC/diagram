@@ -85,12 +85,12 @@ money span.
 not inside a `span.money` and whose coin is any coin word of these money systems - every unit of the vendored table and of the
 awaiting list, plus the period's other Japanese coins (`COINS_ALSO`: mon, monme, kanmon, ryo, bu, shu, koban, yen, sen, rin) -
 with its question, its block, and the years its block names, else those its heading names. An amount in a coin its era's row
-has no unit for (a gold bu at Kyoto 1745-54) is listed like any other and passed over with that reason. Amounts whose years fall within 25 years of a built era (`REVIEW_YEARS`, a review window deciding which amounts are judged on
-their own line - not a closeness rule, which allows or refuses no conversion and waits on diagram#15) are listed first; EVERY amount
+has no unit for (a gold bu at Kyoto 1745-54) is listed like any other and passed over with that reason. The listing names each amount's distance in years from the nearest built era carrying its coin and lists the nearest first; the
+order decides nothing (no distance in years is compared - the GM withdrew the 25-year default, #14). EVERY amount
 listed is owed a decision, whatever its years: marked by hand (D2), or passed over with its reason in
 `specs/413-money-tooltip-on-the-record/backfill.md` (one line per amount: question, amount, reason - "Edo 1804-30; the author judges no built era close enough to borrow, pending diagram#15", "no unit for bu in the kyoto-1745 row"); where one reason covers every amount a fragment still holds
-unmarked, the author may judge the fragment whole in one line, `- <stem> | * | <reason>` - but never an amount within 25 years of a
-built era: `--check` refuses a `*` line from covering those, and each needs its own mark or its own line. The script's `--check` exits 1 while a listed amount is
+unmarked, the author may judge the fragment whole in one line, `- <stem> | * | <reason>`, the reason holding for every amount
+it covers; `--check` compares no distance in years. The script's `--check` exits 1 while a listed amount is
 neither marked nor named in that file, so the duty cannot stop at the flagged ones.
 The marking is checked by `make record CHECK=1` and `make record-owed` (which must name nothing for it).
 
