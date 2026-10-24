@@ -57,7 +57,7 @@ tooling change end to end. T07 closes.
 ### T01 Decisions
 
 - **D1** `runstats.py phase <dir> <name> <seconds>` appends a phase mark; `end` returns them as `phases: {name: seconds}`. The `done` recipe marks the preflight, each of static, format and typecheck, the reference step, the hooks suite and the test phase; the `test` recipe marks `pytest` and `floors` (merge, carry, the reports, save-baseline) inside it. Rendering: none.
-- **D2** `LOGRUN` adds `plan_mode`, `plan_reason` and `selected` from `<baseline>/plan.json` and the selection plugin's count of tests kept (written beside it by `selection.py` on the controller), each left out where its source is absent. Rendering: none.
+- **D2** Every run of the gate's test phase writes this run's plan before pytest starts - the planner's, or, for a run that does not go through the planner (`make test-full` by hand, `INCREMENTAL=0`, `FULL=1`, T05's background refresh), its own with its reason - and the selection plugin writes its `result.json` (mode, reason, selected, collected) as today. `LOGRUN` reads only THIS run's result (stamped with the run's start, so an older file is never read) and adds `plan_mode`, `plan_reason`, `selected` and `collected`; the fields are left out only when no test phase ran (the gate stopped before it). Rendering: none.
 
 ## T02 - a tooling change no longer runs everything (FR-001)
 
@@ -77,8 +77,8 @@ tooling change end to end. T07 closes.
 
 ### T02 Decisions
 
-- **D3** `state.gate_config_hash(root)`: a content hash over `l7r/diagram/ci/`, `l7r/diagram/pipeline/`, `l7r/diagram/switches.py`, `l7r/diagram/_invocation.py`, `tests/conftest.py`, `tests/_scope.py`, the pinned lockfiles (`requirements.txt`, `requirements-dev.txt`, `requirements-ci.txt`), `pyproject.toml`'s `[tool.pytest*]` and `[tool.coverage*]` tables, and the Makefile's TEST CONFIGURATION - the recipes of `test` and `test-full` and every variable definition they reference, closed over the variables those reference, with each `##` help comment stripped. `incremental.manifest` records it as `gate_config` and the `scripts/` tree's blob ids as `scripts`; `plan` plans `full` when `gate_config` moved (a baseline without the key counts as moved, once) and no longer on `tooling` alone. Rendering: none.
-- **D4** Where `scripts` moved and `gate_config` did not, the plan adds to its changed test modules every test module under `tests/tooling/` and `tests/hooks/`, and every other test module whose source - or the source of a module under `tests/` it imports, transitively - contains the substring `scripts` (spec FR-001 read loosely; a substring, so `tests._scripts` and `"scripts"` both match - spec round 3's aside), and carries `reuse_tooling: true`; `_test_deps.gate_full` becomes `gate_reuses`, true on a full plan or one carrying `reuse_tooling`, so the tooling tests whose recorded reads are unchanged are deselected as on a full plan (their baseline coverage is kept by the merge). Rendering: none.
+- **D3** `state.gate_config_hash(root)`: a content hash over `l7r/diagram/ci/`, `l7r/diagram/pipeline/`, `l7r/diagram/switches.py`, `l7r/diagram/_invocation.py`, `tests/conftest.py`, `tests/_scope.py`, the pinned lockfiles (`requirements.txt`, `requirements-dev.txt`, `requirements-ci.txt`), `pyproject.toml`'s `[tool.pytest*]` and `[tool.coverage*]` tables, and the Makefile's TEST CONFIGURATION - the recipes of `test` and `test-full` and every variable definition they reference, closed over the variables those reference, with each `##` help comment stripped. `incremental.manifest` records it as `gate_config` and the `scripts/` tree's blob ids as `scripts`; `plan` plans `full` when `gate_config` moved (a baseline without the key counts as moved, once) and no longer on `tooling` alone. Every non-lockfile path it names is already in today's `state.TOOLING_PATHS` (`l7r/diagram/ci`, `l7r/diagram/pipeline`, `l7r/diagram/switches.py`, `l7r/diagram/_invocation.py`, `tests/conftest.py`, `tests/_scope.py`, observed 2026-10-24, method: `state.py:172` read), so it adds no reason to run everything beyond the lockfiles the spec marks ADDED. Rendering: none.
+- **D4** Where `scripts` moved and `gate_config` did not, the plan adds to its changed test modules every test module under `tests/tooling/` and `tests/hooks/`, and every other test module whose source - or the source of a module under `tests/` it imports, transitively - contains the substring `scripts` (spec FR-001 read loosely; a substring, so `tests._scripts` and `"scripts"` both match - spec round 3's aside), and carries `reuse_tooling: true`; `_test_deps.gate_full` becomes `gate_reuses`, true on a full plan or one carrying `reuse_tooling`, so the tooling tests whose recorded reads are unchanged are deselected as on a full plan, and `incremental carry` copies their baseline coverage in before the floors on such a plan too (the merge drops a selected test's old contexts, so without the carry a reused test's coverage would be lost). Rendering: none.
 
 ## T03 - the landing waits only on what can refuse it (FR-003, FR-004)
 
@@ -98,7 +98,7 @@ tooling change end to end. T07 closes.
 
 ### T03 Decisions
 
-- **D5** `make cohort-landing` rolls `N=48 FRESH=0` beside the gate; after a successful push, `land.py` starts `make cohort N=0 FRESH=48` detached (its own process group, its log under the git directory), one at a time (a lock file), and the landing returns; its record is committed by the cohort as today and goes out with the next push. `cohort_gate.check` asks the landing record for the fixed seeds and pinned rows only (`landing_shaped(..., need_fresh=False)`). Rendering: none.
+- **D5** `make cohort-landing` rolls `N=48 FRESH=0` beside the gate; after a successful push, `land.py` starts `make cohort N=0 FRESH=48` detached (its own process group, its log under the git directory), one at a time (a lock file: a later landing's fresh block WAITS for the running one, never skipped), and the landing returns; its record is committed by the cohort as today and goes out with the next push. `cohort_gate.check` asks the landing record for the fixed seeds and pinned rows only (`landing_shaped(..., need_fresh=False)`). Rendering: none.
 - **D6** `land.py` starts `cover_changed.py` beside `make done` (both in their own process groups); when it exits non-zero the gate's group is stopped (as `make land-stop` does) and the landing refused with its lines; `cheap_refusals` no longer runs it. Rendering: none.
 
 ## T04 - the gate's costs, measured (FR-007)
@@ -117,9 +117,23 @@ tooling change end to end. T07 closes.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
+### T04 Approach (re-answered 2026-10-24T17:08Z)
+
+1. **The goal, in the world.** The cutoff and the refresh rule rest on what a gate run costs here, not on a guess.
+2. **The constraints.** Real landings' records (T01's fields): at least three planned incremental and two full, with the host's load at each end recorded beside each (runstats) and a reading under heavy load said so. T01-T05's own landings change `ci/` and plan full; the incremental samples come from later landings, this session's or another's.
+3. **Where each comes from.** O: the GM's item 6 ("first measure the fixed cost and the per-test cost on a few real landings").
+4. **Do they describe the world here?** To be measured. Read 2026-10-24 (method: `incremental.py`'s docstring, spec D1 of feature 207): the baseline is the LAST FULL RUN, never a merged result - each incremental run selects everything changed since it, so the selection GROWS between full runs; that growth, not drift, is what a refresh resets.
+5. **The order.** Collect the records; fit the test phase's seconds = fixed + per-test x selected; read the other phases directly; and measure the growth: the selected count of each incremental run against the number of landings since its baseline.
+6. **The exits.** n/a.
+7. **The search smell.** None.
+8. **The budget.** 45 min, mostly waiting on landings.
+9. **Done, measured.** `research.md` holds the table of runs, the fit and the growth, each figure labeled with its date and method.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
 ### T04 Decisions
 
-- **D7** The measurement is `scripts/measure/gate_costs.py`, reading `dev/run-log/` (T01's fields) and printing the table and the least-squares fit, and `incremental drift` (a subcommand comparing a full run's fresh baseline with the merged one it replaced). Rendering: none.
+- **D7** The measurement is `scripts/measure/gate_costs.py`, reading `dev/run-log/` (T01's fields): the table of runs, the least-squares fit of the test phase's seconds on the selected count, and the selection's growth since each run's baseline (the selected count against the landings since the last full run). Rendering: none.
 
 ## T05 - a landing runs what its change reaches (FR-006)
 
@@ -139,7 +153,7 @@ tooling change end to end. T07 closes.
 
 ### T05 Decisions
 
-- **D8** To be decided on T04's numbers (amended into the spec as FR-006's rule, and reviewed). Rendering: none.
+- **D8** To be decided on T04's numbers (amended into the spec as FR-006's rule, and reviewed); the refresh run's record carries its reason (`refresh: <the rule's trigger>`, D2). Rendering: none.
 
 ## T06 - measured end to end (SC-006)
 
@@ -159,4 +173,4 @@ tooling change end to end. T07 closes.
 
 ### T06 Decisions
 
-- **D9** The landing measured is the next engine landing after T05 (T05's own, or 405's next task). Rendering: none.
+- **D9** The landing measured is the first whose own change does not move `gate_config`, whose baseline already carries the `gate_config` key, and which has a `scripts/` change since its baseline - confirmed by `plan_mode: incremental` in its run record (405's next task where it meets this; T01-T05's own landings change `ci/` and run everything). Rendering: none.
