@@ -93,44 +93,5 @@ the ids are confirmed, and a second landing.
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
-## T05 - the reply on #13 (D7)
-
-### T05 Approach (checklist part A)
-
-1. **The goal, in the world.** gm-assistant builds its era files from one comment: every census group, every figure asked, its
-   verdict and fragment file.
-2. **The constraints.** FR-001, FR-005, FR-006 (the Nakasendo stations by name).
-3. **Where each comes from.** O: the issue and the spec's FRs.
-4. **Do they describe the world here?** Yes.
-5. **The order.** After the record settles (T01-T03) and the marks (T06), before the landing's report.
-6. **The exits.** n/a.
-7. **The search smell.** None.
-8. **The budget.** Half an hour.
-9. **Done, measured.** The comment's URL.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T05 Decisions
-
-- **D7** As the section "D7 - the replies" states. Rendering: none.
-
-<!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
-## T07 - close: report and land
-
-### T07 Approach (checklist part A)
-
-1. **The goal, in the world.** The record's new questions and marks are on main and the GM has the feature report.
-2. **The constraints.** `make land`'s refusals; the feature report (`make feature-report F=412 WRITE=1`).
-3. **Where each comes from.** G: the root CLAUDE.md's development workflow.
-4. **Do they describe the world here?** Yes.
-5. **The order.** Last.
-6. **The exits.** n/a.
-7. **The search smell.** None.
-8. **The budget.** Half an hour.
-9. **Done, measured.** Landed on main.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T07 Decisions
-
-- **D8** Land once T01-T06 are ticked; the GM-review row lands open. Rendering: none.
+<!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
+<!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
