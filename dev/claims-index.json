@@ -4988,17 +4988,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/compound.py::_draw_walls_and_gates#its divider": {
-  "body": "b594ba8984cfbe8d",
-  "claim": "its divider - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 6 (court divider 2 ft)",
-  "code": "0b219810af0bcbfb",
-  "core": "1599fe06178ede30",
-  "date": "2026-10-25",
-  "note": "the record is not silent. 0090 calls the divider \"the wall between the two courts\" and says \"the walls are 3 ft thick\", but the code draws it 6 px (2 ft). I read \"the walls\" as including the divider. Either cite 0090 and draw it 3 ft (9 px), or record the 2 ft on the drawing page as a deviation",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
- },
  "l7r/diagram/compound.py::_draw_walls_and_gates#its drawn sizes": {
   "body": "b594ba8984cfbe8d",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 4.5 (half the 9 px wall stroke (WALL_INK_FT, 0092))",
@@ -5010,6 +4999,23 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound.py::_draw_walls_and_gates#its figures against 0090": {
+  "body": "b594ba8984cfbe8d",
+  "claim": "its figures against 0090 - magistrates-compounds-jinya-and-yamen.drawing: 6 (the wall between the two courts drawn 2 ft, where the page's walls are 3 ft thick) - a departure the code keeps until feature 417 T33",
+  "code": "6f10cff3e7ad3f76",
+  "core": "1599fe06178ede30",
+  "date": "2026-10-25",
+  "note": "the court divider is drawn `stroke-width=\"6\"` (2 ft at 3 px/ft), but the page says \"the walls are 3 ft thick\" and puts the middle gate \"in the wall between the two courts\". The page does not record a 2 ft divider as a choice, so this is an unrecorded departure, not a DEVIATION. Either draw it 9 px like the compound wall or have 0090's drawing page record the departure",
+  "pages": {
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+  },
+  "research": "57c4f6365aa66772",
+  "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:3096f9775f2c523a",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/compound.py::_draw_walls_and_gates#its wall widths": {
   "body": "b594ba8984cfbe8d",
@@ -6711,6 +6717,23 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/compound_parts.py::_point_features#its bath": {
+  "body": "218a82747d387cdf",
+  "claim": "its bath - GUESS baths-furo.drawing: the bath against the kitchen's court face, clear of every spine court",
+  "code": "535f3cfc400e23ea",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "0105's drawing page answers this and does not call it a guess: \"it abuts the side of the kitchen that faces its court, and never stands in a garden or a court\". The label should be a question claim on research/questions/0105-baths-furo.drawing.html, not GUESS",
+  "pages": {
+   "0105-baths-furo.drawing.html": "de13b621fc93a424"
+  },
+  "research": "05a5d9db2a9784b9",
+  "rests": [
+   "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
+   "0105-baths-furo.drawing.html:ce969bb3b4eea7b3"
+  ],
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/compound_parts.py::_point_features#its drawn sizes": {
   "body": "218a82747d387cdf",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (bath caption font); 1.5 (bath stroke)",
@@ -6827,11 +6850,27 @@
  },
  "l7r/diagram/compound_parts.py::_point_features#its other wells": {
   "body": "218a82747d387cdf",
-  "claim": "its other wells - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the wells at the stables' face and one in the garden",
-  "code": "2b03c90e34b9c485",
+  "claim": "its other wells - the-formal-entrance-and-a-guests-arrival-genkan.drawing: the stables' well on the service side, as the page has an official compound's well; the garden well in the inner court, off the service side - a departure the code keeps until feature 417 T33",
+  "code": "a2d4ef95c9cd020e",
   "core": "8c04151c078314d9",
   "date": "2026-10-25",
-  "note": "the record is not silent. 0104's drawing page puts an official compound's well \"on its service side or to one side of its front court, never on a guest's path\", and 0091 §127 says a well away from the service side is not supported by the examples. The claim should cite 0104 (and 0091 §127). The stables' well fits that rule; the garden well, in the inner court's formal garden, does not",
+  "note": "the garden well is seated in the inner-court garden (`garden_well`), but the page says \"our plans draw a house's working well on its service side, and an official compound's on its service side or to one side of its front court\". The page does not record the garden-well departure; the stables' well is in step",
+  "pages": {
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "135f046dfe4c1c73"
+  },
+  "research": "20c3b70fa4a4761c",
+  "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:96062b1f534d3f0f"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/compound_parts.py::_point_features#its privy seats": {
+  "body": "218a82747d387cdf",
+  "claim": "its privy seats - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 4.5 (a privy flush on the side wall first); 7 (then the wall ends); 3.5 (the court face last)",
+  "code": "548cce2c56cecf43",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "the figures are misdescribed. 4.5, 7 and 3.5 are the off-face distances `seat()` tries at every face, in that order. They are not the stages. The stages are flush to the side wall (`_flush_privy`), then the wall ends, then the court face. \"The record silent\" is also wrong for the order: 0101 puts privies \"against the compound's service walls\" and \"No privy stands in a courtyard\". The order should cite 0101's drawing page; the three distances stay GUESS (the claim \"its figures guessed on 0101\" already says this)",
   "pages": {},
   "research": "",
   "verdict": "MISLABELED"
@@ -6846,6 +6885,17 @@
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_point_features#its shared privy": {
+  "body": "218a82747d387cdf",
+  "claim": "its shared privy - GUESS: a servants' privy serves the stables' grooms too within GROOMS_PRIVY_FT; 0101 has a servants' row sharing the stables' privy and is silent on the distance",
+  "code": "66f27c50befc4c81",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "the code seats the servants' row first, and stables that have a servants' privy in their court within GROOMS_PRIVY_FT seat none of their own, so the shared privy stands at the servants' row. The page says the reverse: \"a servants' row that lodges by the stables shares the stables' privy\". The 55 ft distance is a guess, and the page is silent on it. Either the code or the page's direction should change",
+  "pages": {},
+  "research": "",
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_point_features#its tub count": {
   "body": "218a82747d387cdf",
@@ -6865,14 +6915,16 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/compound_parts.py::_point_features#no lodgers' privy within GATE_PRIVY_FT (30 ft) of the main gate": {
-  "code": "8c04151c078314d9",
+ "l7r/diagram/compound_parts.py::_point_features#no privy by the gate": {
+  "body": "218a82747d387cdf",
+  "claim": "no privy by the gate - GUESS: no lodgers' privy within GATE_PRIVY_FT of the main gate's opening; no page gives it",
+  "code": "c12400c76517a2b4",
   "core": "8c04151c078314d9",
   "date": "2026-10-25",
-  "note": "no lodgers' privy within GATE_PRIVY_FT (30 ft) of the main gate",
-  "outside": true,
+  "note": "0101's \"near a gate\" means the collectors' service gate. No page keeps a privy off the main gate or gives the 30 ft",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_parts.py::_point_features#no tub at a kura": {
   "body": "218a82747d387cdf",
@@ -6890,33 +6942,6 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/compound_parts.py::_point_features#stables and servants' row share one privy within GROOMS_PRIVY_FT (55 ft)": {
-  "code": "8c04151c078314d9",
-  "core": "8c04151c078314d9",
-  "date": "2026-10-25",
-  "note": "stables and servants' row share one privy within GROOMS_PRIVY_FT (55 ft)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound_parts.py::_point_features#the bath abuts the kitchen's court face, clear of every spine court (0105)": {
-  "code": "8c04151c078314d9",
-  "core": "8c04151c078314d9",
-  "date": "2026-10-25",
-  "note": "the bath abuts the kitchen's court face, clear of every spine court (0105)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound_parts.py::_point_features#the privy seat order: flush on the side wall first, then the wall ends, the court face last (offsets 4.5, 7, 3.5 ft)": {
-  "code": "8c04151c078314d9",
-  "core": "8c04151c078314d9",
-  "date": "2026-10-25",
-  "note": "the privy seat order: flush on the side wall first, then the wall ends, the court face last (offsets 4.5, 7, 3.5 ft)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/compound_parts.py::_roji_parts#gate seat": {
   "code": "408bfc3b6c7c8e61",
@@ -51112,15 +51137,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::deck_glyph#its drawn sizes": {
-  "body": "c8556958aa94f526",
-  "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.7 (log at 7/10 of the deck); 7 (plank seams); 8 (plank seams); 0.3 (crown highlight); 2.4 (rail offset); 0.2 (rail offset); 0.8 (tick length)",
-  "code": "77597e6cd319bfaf",
+  "body": "123cec8456b1fc7e",
+  "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 7 (plank seams); 8 (plank seams); 0.3 (crown highlight); 2.4 (rail offset); 0.2 (rail offset); 0.8 (tick length)",
+  "code": "fe07a065b186750e",
   "core": "9853a5cb036e78cf",
   "date": "2026-10-25",
-  "note": "`r = hw * 0.7` sets the log's girth at 2.8 ft on a 4 ft deck, against the docstring's own \"a foot or so through\". That is a physical size, not a sheet size; 0084 names \"a single log or board\" and gives no girth, so 0.7 should be a GUESS. The seams, highlight, rails and ticks are CONVENTION",
+  "note": "glyph spacing, offsets and tick lengths only",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::deck_glyph#its log girth": {
   "body": "c8556958aa94f526",
@@ -71540,21 +71566,22 @@
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#spacing": {
   "body": "c1be7167136f7fa0",
-  "claim": "spacing - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing: CANOPY_SPACING_FT",
-  "code": "52862af52a945ccc",
+  "claim": "spacing - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing: CANOPY_SPACING_FT 13 (a hill wood's centres about 13 ft apart; a coppice, whose centres the page puts about 8 ft apart, is drawn at it too) - a departure the code keeps until feature 417 T33",
+  "code": "dd1e1ee91ff17040",
   "core": "d3958c0f5ef26090",
   "date": "2026-10-25",
-  "note": "CANOPY_SPACING_FT's value is not in the bundle, and the page gives two spacings (hill wood 13 ft, coppice 8 ft). I need the constant and whether the coppice is drawn through this unit",
+  "note": "every stand is drawn at `self.CANOPY_SPACING_FT` (13 ft), coppice included. The page draws the coppice \"about 1,700 a hectare on 8 ft centers\" and says \"Only the village coppice is drawn from figures of its own\"; it does not record a 13 ft coppice as a departure. Either draw coppice at 8 ft or have the page record the departure",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:02347cd7bad4385d",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:5b4dfd1254dbb70e",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._fringe_blocked#fringe on waste ground only": {
   "body": "b19e0aa5e1003d93",
