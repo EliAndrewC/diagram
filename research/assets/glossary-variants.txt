@@ -1751,6 +1751,8 @@ homestead groves	yashikirin
 hon-byakusho	honbyakusho
 honan	Honan
 honbyakusho	honbyakusho
+honcho shokkan	Honchō shokkan
+honchō shokkan	Honchō shokkan
 honden	honden
 honen	Honen
 honen's	Honen
@@ -2447,6 +2449,7 @@ kyūnin	kyunin
 kyūyō	Kyuyo
 kō	kō
 kō group	kō
+kōeki kokusan kō	Koeki Kokusanko
 kōri	kori
 kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
@@ -2814,6 +2817,7 @@ mokoshi	mokoshi
 mokutachibana	mokutachibana
 momi	momi
 momiage	momiage
+momme	monme
 momoyama	Momoyama
 momoyama period	Momoyama
 mon	mon
@@ -2832,6 +2836,7 @@ morisada manko	Morisada manko
 morisada mankō	Morisada manko
 morohaku	morohaku
 morohaku sake	morohaku
+moromi	moromi
 mortise	mortise and tenon
 mortise and tenon	mortise and tenon
 moso	moso
@@ -4728,6 +4733,7 @@ wakadoshiyori	wakadoshiyori
 wakamiya	Wakamiya
 wakamono-gumi	young men's association
 wakan	Japan House
+wakan sansai zue	Wakan sansai zue
 wakasa	Wakasa
 wakato	wakato
 waki-honjin	waki-honjin
