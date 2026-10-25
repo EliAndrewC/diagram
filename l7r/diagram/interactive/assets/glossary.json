@@ -579,6 +579,7 @@
   "def": "A court's periodic sitting to review cases; the Qing autumn assize decided each year which death sentences would be carried out.",
   "variants": [
    "assize",
+   "assizes",
    "autumn assize"
   ]
  },
@@ -6934,7 +6935,8 @@
   "def": "A late-Edo-period survey of the customs and daily life of Edo, Kyoto and Osaka, compiled by Kitagawa Morisada.",
   "variants": [
    "Morisada manko",
-   "Morisada mankō"
+   "Morisada mankō",
+   "Kinsei fuzokushi"
   ]
  },
  "sho": {
@@ -17099,7 +17101,9 @@
   "def": "coins the shogunate issued in the Tenpo era (1830-1844); put into circulation in great numbers, they drove down the price of copper coin until the shogunate changed its official rate in 1842.",
   "variants": [
    "Tenpo coin",
-   "Tenpo coins"
+   "Tenpo coins",
+   "Tenpo tsuho",
+   "Tenpo mon"
   ]
  },
  "koban": {
@@ -17861,7 +17865,7 @@
   ]
  },
  "copper monme": {
-  "def": "A monme used as a unit of account and paid in copper coin, at a number of mon a domain fixed. Because it was settled in copper, it drifted away from the silver monme as copper's rate moved.",
+  "def": "A monme used as a unit of account and paid in copper coin, at a fixed ratio: a domain short of silver quoted prices in monme and had them paid in copper.",
   "variants": [
    "copper monme",
    "copper monme of account"
@@ -17879,6 +17883,12 @@
   "def": "Urban riots in which crowds wrecked the houses and storehouses of rice dealers and other merchants (uchikowashi).",
   "variants": [
    "smashings"
+  ]
+ },
+ "Ooka Tadasuke": {
+  "def": "A shogunal official in Edo who in 1736 summoned the city's money changers and told them to stop manipulating the rate between gold and silver.",
+  "variants": [
+   "Ooka Tadasuke"
   ]
  }
 }

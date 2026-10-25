@@ -105,6 +105,7 @@ assessed yields	kokudaka
 assignation house	assignation house
 assignation houses	assignation house
 assize	assize
+assizes	assize
 association	plant association
 asuka period	Asuka period
 asunaro	asunaro
@@ -2249,6 +2250,7 @@ kinki	Kinki
 kinki region	Kinki
 kinoe saru	kinoe-saru
 kinoe-saru	kinoe-saru
+kinsei fuzokushi	Morisada manko
 kirime-en	kirime-en
 kirisute-gomen	kirisute-gomen
 kirizuma	gabled roof
@@ -3054,6 +3056,7 @@ one-bu silver	ichibu-gin
 onin war	Onin war
 onkura	kura
 onmyodo	onmyodo
+ooka tadasuke	Ooka Tadasuke
 ooku	ooku
 oona	oona
 open-ended dike	open-ended dike
@@ -4267,8 +4270,10 @@ tenpo	Tenpo era
 tenpo coin	Tenpo coin
 tenpo coins	Tenpo coin
 tenpo era	Tenpo era
+tenpo mon	Tenpo coin
 tenpo reform	Tenpo reforms
 tenpo reforms	Tenpo reforms
+tenpo tsuho	Tenpo coin
 tenpō	Tenpo era
 tenpō era	Tenpo era
 tensho	Tensho
