@@ -1087,6 +1087,9 @@ fan-palm-dike	fan palm
 fang	fang
 fanzi	fanzi
 fao	FAO
+farm gate	farm-gate price
+farm-gate price	farm-gate price
+farm-gate prices	farm-gate price
 farmers' stage	farmers' stage
 farmers' stages	farmers' stage
 farrier	farrier
@@ -1275,6 +1278,7 @@ fubokuwakashō	Fubokuwakasho
 fudai	fudai
 fudai daimyo	fudai
 fudai domains	fudai
+fudakake	fudakake
 fudasashi	fudasashi
 fudo	Fudo
 fudo myoo	Fudo
