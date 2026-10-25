@@ -6,7 +6,8 @@ against the vendored table's two eras, `kyoto-1745` and `tokyo-1882`; redone the
 against the seventeen eras of `research/assets/money-eras-awaiting.json` as well, which marked every amount dated within an
 era's years (or borrowed by gm-assistant's leave on #13) and dropped the lines of the amounts it marked. Its Session 6
 marked the Chinese amounts against the Chinese eras the same day, once gm-assistant confirmed their coins (`tael`, `cash`,
-`dollar`) on #13, and added the lines of the Chinese amounts it passed over.
+`dollar`) on #13, and added the lines of the Chinese amounts it passed over. The bu/shu pass of 2026-10-24 marked the gold
+bu and shu once gm-assistant's table carried them, dropping their lines and the gold clause of the `*` lines.
 
 Each pass-over is the author's judgment: no era is borrowed for an amount dated outside every era's years unless
 gm-assistant asked for it; the GM withdrew the 25-year default (#14, 2026-10-24) and diagram#15 will measure a rule.
