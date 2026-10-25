@@ -27,12 +27,12 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 - [x] T03 Implementation check (D3; FR-003)
       research: rendering
       verify: DONE. landed in batch T01+T02+T03: 0287's 1705-1719 rates and 0289's 1830s cash written and checked (two rounds; the tail closed by arbiter ask:418-round3 accept); record-owed clean; impl-check nothing missing
-- [ ] T04 The reply on #13 (D4; FR-002)
+- [x] T04 The reply on #13 (D4; FR-002)
       research: rendering
-      verify: the comment's URL
-- [ ] T05 Close: report and land
+      verify: DONE. landed in batch T04+T05: reply on #13; report written
+- [x] T05 Close: report and land
       research: rendering
-      verify: landed
+      verify: DONE. landed in batch T04+T05: reply on #13; report written
 - [ ] GM review (make gm-reviewed F=418) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
