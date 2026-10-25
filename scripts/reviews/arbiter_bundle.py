@@ -573,7 +573,7 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
     `allow_missing` gives the reason to bundle anyway (it is printed in the MANIFEST for the arbiter to weigh). `evidence`: the
     files the question cites, copied beside it (`evidence_section`)."""
     owed = ha.owed(root).get(trigger, {})
-    d = trigger_feature_dir(root, trigger) or ha.feature_dir(root)
+    d = trigger_feature_dir(root, trigger) or ha.feature_dir(root, trigger)
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
