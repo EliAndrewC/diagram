@@ -85,6 +85,14 @@ def test_a_unit_the_base_tree_cannot_see_is_known_only_on_the_arbiter_s_recorded
     assert carry.known_drifts(cx, tmp_path) == {KEY: "417 T33"}
 
 
+def test_an_accepted_drift_whose_text_names_no_task_is_known_on_the_accept(tmp_path: pathlib.Path) -> None:
+    _tasks(tmp_path, "- [ ] T33 The audit as the record has it")
+    cx = _cx(tmp_path, "every privy kept 15 ft from a well", "c1")
+    assert carry.known_drifts(cx, tmp_path) == {}, "no task named and no accept: not known"
+    cx.load_index = lambda _p: {KEY: {"verdict": "DRIFTED", "core": "c1", "note": f"the guests' privy unchecked; {carry.ACCEPTED} (ask:x) to land as filed"}}
+    assert carry.known_drifts(cx, tmp_path) == {KEY: "accepted by the round arbiter"}
+
+
 def test_an_accept_keeps_a_label_s_own_semicolon_whole() -> None:
     acc = _load("claims_accept")
     known = {"a.md::S#well (\"x\"; y)": 1, "a.md::S#b": 1}

@@ -176,12 +176,19 @@ def known_drifts(cx: Any, root: Path) -> dict[str, str]:  # noqa: ANN401 - `cx` 
         m = _TASK_NAMED.search(row.claim.account) if row is not None and v.get("verdict") == "DRIFTED" else None
         if m is not None:
             cand[key] = (m.group(1), m.group(2))
+    # ...and a DRIFTED claim the round arbiter ACCEPTED is known on that accept alone, its own text naming no task: the ruling is
+    # the binding answer, and a claim reworded to name its task owes another round its ruling closed (feature 417 T38: ask:417-T38-compound-drifts
+    # accepted eleven, and two whose text named no task stayed introduced)
+    out: dict[str, str] = {
+        key: "accepted by the round arbiter"
+        for key, v in index.items()
+        if key not in cand and cur.get(key) is not None and v.get("verdict") == "DRIFTED" and ACCEPTED in v.get("note", "")
+    }
     if not cand or not mb:
-        return {}
+        return out
     with tempfile.TemporaryDirectory() as tmp:
         cores = cx.base_cores(cx.base_tree(root, mb, Path(tmp)), keep=root)
     rows: dict[tuple[str, str], str] = {}
-    out: dict[str, str] = {}
     for key, (feat, task) in cand.items():
         if (feat, task) not in rows:
             specs = sorted((root / "specs").glob(f"{feat}-*/tasks.md"))

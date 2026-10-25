@@ -5006,15 +5006,11 @@
   "code": "6f10cff3e7ad3f76",
   "core": "1599fe06178ede30",
   "date": "2026-10-25",
-  "note": "the court divider is drawn `stroke-width=\"6\"` (2 ft at 3 px/ft), but the page says \"the walls are 3 ft thick\" and puts the middle gate \"in the wall between the two courts\". The page does not record a 2 ft divider as a choice, so this is an unrecorded departure, not a DEVIATION. Either draw it 9 px like the compound wall or have 0090's drawing page record the departure",
+  "note": "the court divider is drawn `stroke-width=\"6\"` (2 ft at 3 px/ft), but the page says \"the walls are 3 ft thick\" and puts the middle gate \"in the wall between the two courts\". The page does not record a 2 ft divider as a choice, so this is an unrecorded departure, not a DEVIATION. Either draw it 9 px like the compound wall or have 0090's drawing page record the departure; a known drift accepted by the round arbiter (ask:417-T38-compound-drifts) to land as filed",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
   },
   "research": "57c4f6365aa66772",
-  "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:3096f9775f2c523a",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/compound.py::_draw_walls_and_gates#its wall widths": {
@@ -6534,14 +6530,11 @@
   "code": "54d1902874fa557c",
   "core": "7195bec783d8462e",
   "date": "2026-10-25",
-  "note": "the board is drawn 6 x 1.5 ft. The record's frames are \"16 to 18 ft along the road and 5 to 6 ft deep\". The fix is to draw it 16 x 6, or record a deviation; T33 is already named",
+  "note": "the board is drawn 6 x 1.5 ft. The record's frames are \"16 to 18 ft along the road and 5 to 6 ft deep\". The fix is to draw it 16 x 6, or record a deviation; T33 is already named; a known drift accepted by the round arbiter (ask:417-T38-compound-drifts) to land as filed",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
   },
   "research": "050d52f3667c3d19",
-  "rests": [
-   "0190-notice-boards-kosatsuba.html:f20c5e6c7c0b59f6"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_draw_point_parts#its figures against 0190's drawing page": {
@@ -6550,15 +6543,11 @@
   "code": "35bafb7eeb66784a",
   "core": "7195bec783d8462e",
   "date": "2026-10-25",
-  "note": "the board box is 1.5 ft deep (h+3 to h+4.5). The page draws \"a roofed frame 16 ft long and 6 ft deep\", and its search face is 7 x 3. The page records no 6 x 1.5 departure",
+  "note": "the board box is 1.5 ft deep (h+3 to h+4.5). The page draws \"a roofed frame 16 ft long and 6 ft deep\", and its search face is 7 x 3. The page records no 6 x 1.5 departure; a known drift accepted by the round arbiter (ask:417-T38-compound-drifts) to land as filed",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
   "research": "5b977d097fda2bb4",
-  "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
-   "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_draw_point_parts#its figures against 0196": {
@@ -6567,16 +6556,11 @@
   "code": "aa3ed9181e1eabcd",
   "core": "7195bec783d8462e",
   "date": "2026-10-25",
-  "note": "The curb is drawn 7.3 ft square where the page says \"About 4 ft square\". The page's larger-than-life marker covers settlement maps, not building plans, and it records no 7.3 ft departure. Draw the curb at 4 ft, or have the drawing page record the departure (T33)",
+  "note": "The curb is drawn 7.3 ft square where the page says \"About 4 ft square\". The page's larger-than-life marker covers settlement maps, not building plans, and it records no 7.3 ft departure. Draw the curb at 4 ft, or have the drawing page record the departure (T33); a known drift accepted by the round arbiter (ask:417-T38-compound-drifts) to land as filed",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
   "research": "f166979de9325ea9",
-  "rests": [
-   "0196-communal-wells-ido.drawing.html:157e7add410a9655",
-   "0196-communal-wells-ido.drawing.html:c6ac4472c482e557",
-   "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_draw_point_parts#its figures from 0090": {
@@ -6717,15 +6701,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/compound_parts.py::_point_features#every privy kept at least LATRINE_WELL_FT (15 ft) from a well, through `seat(..., avoid=well_boxes)` and `_flush_privy(..., well_boxes)` (0101 §12, a GUESS)": {
-  "code": "8c04151c078314d9",
-  "core": "8c04151c078314d9",
-  "date": "2026-10-25",
-  "note": "every privy kept at least LATRINE_WELL_FT (15 ft) from a well, through `seat(..., avoid=well_boxes)` and `_flush_privy(..., well_boxes)` (0101 §12, a GUESS)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/compound_parts.py::_point_features#its bath": {
   "body": "218a82747d387cdf",
   "claim": "its bath - GUESS baths-furo.drawing: the bath against the kitchen's court face, clear of every spine court",
@@ -6755,20 +6730,30 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/compound_parts.py::_point_features#its figures against 0101's service walls": {
+  "body": "218a82747d387cdf",
+  "claim": "its figures against 0101's service walls - privies-setchin.drawing: the privy flush to a side wall first, then the wall ends, and last a seat on the building's own court face, where the page stands every privy against a service wall and none in a court; the order ours - a departure the code keeps until feature 417 T33",
+  "code": "cda3c6f3e773ff77",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "the court-face fallback (`(court, (0.85, 0.15, 0.5))` passed to `seat(p, PRIVY_FT, ..., (4.5, 7.0, 3.5), ...)`) stands a lodging privy 3.5-7 ft out into its building's court, and the page says \"a privy is never set in one of the courts\". The claim admits it departs from the page but is not labeled DEVIATION, and the page does not record the departure. Either label it DEVIATION and record it on 0101's drawing page, or drop the court-face seat.; a known drift accepted by the round arbiter (ask:417-T38-compound-drifts) to land as filed",
+  "pages": {
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
+  },
+  "research": "ad0c946c19e2af00",
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/compound_parts.py::_point_features#its figures against 0101's shared privy": {
   "body": "218a82747d387cdf",
   "claim": "its figures against 0101's shared privy - privies-setchin.drawing: GROOMS_PRIVY_FT (the stables seat none of their own where the servants' row's privy stands within it, where the page has the servants' row share the stables' privy; the distance a guess) - a departure the code keeps until feature 417 T33",
   "code": "290851c6c0a80bbe",
   "core": "8c04151c078314d9",
   "date": "2026-10-25",
-  "note": "the code seats the servants' row first and skips the stables' own privy when that one stands within GROOMS_PRIVY_FT (`if p.spec.feature == \"stables\" and any(... <= GROOMS_PRIVY_FT ...): continue`). The page says the reverse: \"a servants' row that lodges by the stables shares the stables' privy\". No drawing page records this departure as the project's choice, so it is a tracked drift (T33), not IN-STEP. Separately, the 55 ft is a figure the page never gives, so it should be its own GUESS claim, not part of a question claim",
+  "note": "the code seats the servants' row first and skips the stables' own privy when that one stands within GROOMS_PRIVY_FT (`if p.spec.feature == \"stables\" and any(... <= GROOMS_PRIVY_FT ...): continue`). The page says the reverse: \"a servants' row that lodges by the stables shares the stables' privy\". No drawing page records this departure as the project's choice, so it is a tracked drift (T33), not IN-STEP. Separately, the 55 ft is a figure the page never gives, so it should be its own GUESS claim, not part of a question claim; a known drift accepted by the round arbiter (ask:417-T38-compound-drifts) to land as filed",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
-  "rests": [
-   "0101-privies-setchin.drawing.html:38960fd9975a6f1c"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_point_features#its figures against 0196": {
@@ -6777,16 +6762,11 @@
   "code": "dcaa3641baa1eec3",
   "core": "8c04151c078314d9",
   "date": "2026-10-25",
-  "note": "Same as above: a 7.3 ft curb against \"About 4 ft square\". No apron is drawn either, and the page records no departure (T33)",
+  "note": "Same as above: a 7.3 ft curb against \"About 4 ft square\". No apron is drawn either, and the page records no departure (T33); a known drift accepted by the round arbiter (ask:417-T38-compound-drifts) to land as filed",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
   "research": "f166979de9325ea9",
-  "rests": [
-   "0196-communal-wells-ido.drawing.html:157e7add410a9655",
-   "0196-communal-wells-ido.drawing.html:36ac509adca7b4e4",
-   "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_point_features#its figures against 0196's curb": {
@@ -6795,15 +6775,11 @@
   "code": "386a1354f1a9ce39",
   "core": "8c04151c078314d9",
   "date": "2026-10-25",
-  "note": "The 3.65 ft well boxes are the 7.3 ft curb halved, so they carry the same unrecorded departure from the page's ~4 ft curb (T33)",
+  "note": "The 3.65 ft well boxes are the 7.3 ft curb halved, so they carry the same unrecorded departure from the page's ~4 ft curb (T33); a known drift accepted by the round arbiter (ask:417-T38-compound-drifts) to land as filed",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
   "research": "f166979de9325ea9",
-  "rests": [
-   "0196-communal-wells-ido.drawing.html:157e7add410a9655",
-   "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_point_features#its figures guessed on 0100": {
@@ -6879,31 +6855,37 @@
   "code": "a2d4ef95c9cd020e",
   "core": "8c04151c078314d9",
   "date": "2026-10-25",
-  "note": "the garden well is seated in the inner-court garden (`garden_well`), but the page says \"our plans draw a house's working well on its service side, and an official compound's on its service side or to one side of its front court\". The page does not record the garden-well departure; the stables' well is in step",
+  "note": "the garden well is seated in the inner-court garden (`garden_well`), but the page says \"our plans draw a house's working well on its service side, and an official compound's on its service side or to one side of its front court\". The page does not record the garden-well departure; the stables' well is in step; a known drift accepted by the round arbiter (ask:417-T38-compound-drifts) to land as filed",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "135f046dfe4c1c73"
   },
   "research": "20c3b70fa4a4761c",
-  "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:96062b1f534d3f0f"
-  ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/compound_parts.py::_point_features#its privy order": {
+ "l7r/diagram/compound_parts.py::_point_features#its privy off the wells": {
   "body": "218a82747d387cdf",
-  "claim": "its privy order - privies-setchin.drawing: a privy against a service wall, flush to the side wall first, then the wall ends, the court face last; none in a courtyard",
-  "code": "abad72bac1eb5aec",
+  "claim": "its privy off the wells - GUESS privies-setchin.drawing: every privy kept LATRINE_WELL_FT from a well",
+  "code": "6fef6d372dbe97fe",
   "core": "8c04151c078314d9",
   "date": "2026-10-25",
-  "note": "the page puts lodgers' privies against the service walls, never in a courtyard. Two fallbacks seat a privy away from the wall: the last one, `(court, (0.85, 0.15, 0.5))` at offsets 4.5/7/3.5 ft, puts it out in the building's own court, and the end-face fracs `toward_wall` run to 0.5 and the court end. That is the \"privy loose in the forecourt\" §6 and §8 rule out. The page gives no order at all, so \"flush first, then the ends\" is a GUESS. Either the fallbacks should stop at seats against the wall, or the court-face seat should be claimed as a DEVIATION or GUESS",
+  "note": "the GUESS matches §12's 15 ft, but \"every privy\" is not true. The family privy, the side-wall privy and the end/court-face privies are checked against `well_boxes`, but the guests' privy (`_guest_privy(env, home, taken + zones)`) is never checked against any well. The page says \"A privy stands at least 15 ft from any well\". `_guest_privy` should get the well check, or the claim should leave the guests' privy out.; a known drift accepted by the round arbiter (ask:417-T38-compound-drifts) to land as filed",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
-  "rests": [
-   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
-   "0101-privies-setchin.drawing.html:79397bdd548ce631"
-  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/compound_parts.py::_point_features#its privy per lodging": {
+  "body": "218a82747d387cdf",
+  "claim": "its privy per lodging - privies-setchin.drawing: one privy to each lodging block (the servants' quarters, the stables, the barracks), the servants' row seated first",
+  "code": "8818f2302b4c412e",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "the page has \"a servants' row that lodges by the stables shares the stables' privy\". The code does the reverse: `lodgers` is sorted to seat the servants' row first, and the stables then `continue` without a privy of their own when a servants' privy stands within GROOMS_PRIVY_FT. So \"one privy to each lodging block\" is false for those stables, and the \"servants' row seated first\" order this claim cites the page for is the order the page contradicts. Mark the order as the shared-privy departure, not as page-backed.; a known drift accepted by the round arbiter (ask:417-T38-compound-drifts) to land as filed",
+  "pages": {
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
+  },
+  "research": "ad0c946c19e2af00",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_point_features#its search steps and tolerances": {
@@ -6962,15 +6944,6 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/compound_parts.py::_point_features#one privy to each lodging block (the servants' quarters, the stables, the barracks), the servants' row seated first (0101 §5)": {
-  "code": "8c04151c078314d9",
-  "core": "8c04151c078314d9",
-  "date": "2026-10-25",
-  "note": "one privy to each lodging block (the servants' quarters, the stables, the barracks), the servants' row seated first (0101 §5)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/compound_parts.py::_roji_parts#gate seat": {
   "code": "408bfc3b6c7c8e61",
