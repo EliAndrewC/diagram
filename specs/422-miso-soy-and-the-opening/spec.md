@@ -84,6 +84,7 @@ the same rule is to apply to Edo 1860-67 and Beijing 1900-19 on evidence.
 - spec-fidelity round 1 (2026-10-25): FAITHFUL. Carried forward: Q1's tofu-and-natto remainder of the 52 kg is owed in the
   answer whether or not consumption figures are found (Acceptance 1, the request's "Figure needed").
 - 2026-10-25: gm-assistant's addendum (`request.md`) asks for a sourced modern yield in Q1's answer; added to Scenario 1.
-- spec-fidelity round 2 (verify, 2026-10-25): CHANGES REQUIRED - the modern yield's source was made a condition where the
+- spec-fidelity round 1 after the amendment (verify, 2026-10-25): CHANGES REQUIRED - the modern yield's source was made a condition where the
   addendum says "Ideally"; now "preferably". Applied. The GM's ruling on the soybean split (13 kg miso, 4.6 kg soy sauce, the
   rest whole; beans to product by a sourced modern yield) is in `request.md`'s second addendum: it asks for nothing new.
+- round 2 after the amendment (verify): FAITHFUL.

@@ -32,7 +32,7 @@
    "declared": "spec-fidelity"
   },
   "## D1 - miso and soy sauce: how much, and from how many soybeans (Q1; FR-001; acceptance 1, 5)": {
-   "sha256": "8f04dc82bb9bfcfd77e4c23c5d4f51008eeb4c233dab8b2dfbd4057f4c25042e",
+   "sha256": "c8e4ad3357f2bdf1c39fa74f8dc7d9955ca9f5c90055518ff192f9bb420c5187",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -295,6 +295,57 @@
      "summary": "Checklist part A for each task: citation rules, size cap, session limits, SILENT never estimated, record-owed / impl-check as done.",
      "class": "within",
      "why": "Restate the spec's constraints and done-conditions; decide nothing the request or spec left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## D1 - miso and soy sauce: how much, and from how many soybeans (Q1; FR-001; acceptance 1, 5)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1.a",
+     "summary": "Q1 answered in a new money question beside 0249 (title: how much miso and soy sauce a household used and what they cost era by era); 0249 gets a pointer",
+     "class": "within",
+     "why": "FR-001 places Q1 in a new question beside 0249; the request's Use is the basket's soybean line becoming miso and soy sauce, and Q2 asks the other eras' prices"
+    },
+    {
+     "id": "D1.b",
+     "summary": "First figure: kg of miso and liters of soy sauce per adult-year, each with source and verdict; any household or ration figure divided per adult is labeled as this project's arithmetic",
+     "class": "within",
+     "why": "Q1 'Figure needed' verbatim; labeling the per-adult division adds disclosure, removes nothing"
+    },
+    {
+     "id": "D1.c",
+     "summary": "Failing a consumption figure: soybean per kg of miso and per liter of soy sauce in Edo practice, and the share of household soybeans to miso, soy sauce, tofu and natto",
+     "class": "within",
+     "why": "Q1's own fallback clause, word for word"
+    },
+    {
+     "id": "D1.d",
+     "summary": "The source of Bassino and Ma's 52 kg is reported",
+     "class": "within",
+     "why": "Named in Q1's Leads"
+    },
+    {
+     "id": "D1.e",
+     "summary": "The remainder of the 52 kg left for tofu and natto, or its SILENT, owed in either branch",
+     "class": "within",
+     "why": "Q1 'plus whatever share of the 52 kg is left for tofu and natto'; owing it in both branches widens rather than narrows"
+    },
+    {
+     "id": "D1.f",
+     "summary": "No quantity is estimated",
+     "class": "within",
+     "why": "Request: 'To do that we need quantities, which we will not guess'"
+    },
+    {
+     "id": "D1.g",
+     "summary": "Modern yields (miso per kg dry soybeans, rice-koji; soy sauce per kg soybeans, equal parts wheat) preferably from a Japanese industry or food-science source, any sourced yield given with its source named, proportions stated beside the Edo prescriptions, labeled modern",
+     "class": "within",
+     "why": "The changed passage. The addendum says 'Ideally these come from a Japanese industry or food-science source' and the GM's ruling asks only for 'a sourced modern yield ... with the recipe's proportions'; 'preferably' with source named now matches both exactly, where the earlier 'from a Japanese ... source' was stricter than asked. Keeps both yields, both recipe specifications, the proportions beside Edo, and the source requirement; drops nothing the request requires"
     }
    ]
   }
