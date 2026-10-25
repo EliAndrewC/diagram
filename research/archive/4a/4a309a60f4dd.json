@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:08:42+00:00",
+ "final_url": "https://www.walmart.com/search?q=great+value+20+lb",
+ "first": "4a/4a309a60f4dd/20261025T140841Z",
+ "gm_copies": [],
+ "keys": [
+  "walmart-great-value-20-lb"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "4a/4a309a60f4dd/20261025T140841Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "32d36e312c2463a9f32851ab543b6b5490db9b0f5205f0569ce1c42351d738bd",
+ "url": "https://www.walmart.com/search?q=great+value+20+lb"
+}

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:08:57+00:00",
+ "final_url": "https://www.walmart.com/blocked?url=L3NlYXJjaD9xPWdyZWF0K3ZhbHVlK2Zsb3Vy&uuid=96cf57aa-d07d-11f1-96b1-5e721ce36d6d&vid=&g=b",
+ "first": "4b/4b21ec70881a/20261025T140855Z",
+ "gm_copies": [],
+ "keys": [
+  "walmart-great-value-flour"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "4b/4b21ec70881a/20261025T140855Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "66c4a96d5980f27bcc6ab1a000ee313d3e7d56ca01f4db7d7f803f20018098e4",
+ "url": "https://www.walmart.com/search?q=great+value+flour"
+}

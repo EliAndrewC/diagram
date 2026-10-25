@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:13:01+00:00",
+ "final_url": "https://www.ers.usda.gov/data-products/food-availability-per-capita-data-system",
+ "first": "e7/e74fcb7e9d8a/20261025T141259Z",
+ "gm_copies": [],
+ "keys": [
+  "usda-ers-food-availability"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "e7/e74fcb7e9d8a/20261025T141259Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "57b6c69b033554fea9dd446e7e01b2a5f14574c1e052a25c25499dc4febedf49",
+ "url": "https://www.ers.usda.gov/data-products/food-availability-per-capita-data-system"
+}
