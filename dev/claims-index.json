@@ -33275,6 +33275,24 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a doubled tail ends where it met": {
+  "body": "790029facd41a276",
+  "claim": "a doubled tail ends where it met - village-lanes.drawing: a lane that runs on beside the way it met ends where it met it (`_sweep_doubled_tails`, feature 261)",
+  "code": "bd79cafd6d72decb",
+  "core": "4749eb693dfa62f1",
+  "date": "2026-10-25",
+  "note": "`_sweep_doubled_tails` runs after the trims, so a lane end that runs back alongside another way is cut where it comes alongside and meets it as a T, which the page records as its own map drawing convention",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a further row street's end": {
   "body": "790029facd41a276",
   "claim": "a further row street's end - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (`settle.settle_street_ends`)",
@@ -33291,23 +33309,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a lane end left in open ground is pulled back to something or the lane dropped, against the final network (`tidy_lane_ends` after the joins, `_sweep_dangling_ends`); 0246 §44-§45 back this, but no claim of this unit covers it beyond the frame claim's mention of `tidy_lane_ends": {
-  "code": "4749eb693dfa62f1",
-  "core": "4749eb693dfa62f1",
-  "date": "2026-10-25",
-  "note": "a lane end left in open ground is pulled back to something or the lane dropped, against the final network (`tidy_lane_ends` after the joins, `_sweep_dangling_ends`); 0246 §44-§45 back this, but no claim of this unit covers it beyond the frame claim's mention of `tidy_lane_ends",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a lane that runs on beside the way it met ends where it met it (`_sweep_doubled_tails`, feature 261)": {
-  "code": "4749eb693dfa62f1",
-  "core": "4749eb693dfa62f1",
-  "date": "2026-10-25",
-  "note": "a lane that runs on beside the way it met ends where it met it (`_sweep_doubled_tails`, feature 261)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a row farm's door point": {
   "body": "790029facd41a276",
@@ -33360,6 +33361,23 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
   ],
   "triaged": "2026-10-25",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#an end left in open ground pulled back": {
+  "body": "790029facd41a276",
+  "claim": "an end left in open ground pulled back - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end reaching nothing is pulled back to the last thing it serves, or the lane dropped, against the final network (`tidy_lane_ends` after the joins, then `_sweep_dangling_ends`)",
+  "code": "a67937479417f3d6",
+  "core": "4749eb693dfa62f1",
+  "date": "2026-10-25",
+  "note": "the page records this rule as a GUESS: an end that reaches nothing is pulled back to the last thing it serves (house, field path, bund or way), and a lane that serves nothing is not drawn; `tidy_lane_ends` runs after both joins and `_sweep_dangling_ends` after it",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#belt crossed not followed": {
