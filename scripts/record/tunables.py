@@ -75,14 +75,29 @@ def _stated(value: float, text: str) -> bool:
     return re.search(rf"(?<![\d.]){re.escape(s)}(?![\d])", text) is not None
 
 
+def _units(tree: ast.Module) -> list[ast.FunctionDef | ast.AsyncFunctionDef]:
+    """The functions a claim can sit on: module-level functions and class methods (any depth of class); a function nested in
+    another is not a unit - its numbers are its enclosing unit's (feature 417 T38), where its claims are written."""
+    out: list[ast.FunctionDef | ast.AsyncFunctionDef] = []
+
+    def visit(node: ast.AST) -> None:
+        for child in ast.iter_child_nodes(node):
+            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                out.append(child)
+            elif isinstance(child, ast.ClassDef):
+                visit(child)
+
+    visit(tree)
+    return out
+
+
 def unstated(source: str, unit_text: Mapping[str, str]) -> list[tuple[str, int, float]]:
-    """(function, line, value) for every non-trivial number literal inside a function of `source` that the claims of its unit
-    (`unit_text[function name]`, their labels and accounts) never state; a subscript's index is not a decision."""
+    """(function, line, value) for every non-trivial number literal inside a unit of `source` (a function nested in it
+    included) that the claims of that unit (`unit_text[unit name]`, their labels and accounts) never state; a subscript's
+    index is not a decision."""
     out = []
     tree = ast.parse(source)
-    for fn in ast.walk(tree):
-        if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            continue
+    for fn in _units(tree):
         text = unit_text.get(fn.name, "")
         index_nodes = {id(n) for sub in ast.walk(fn) if isinstance(sub, ast.Subscript) for n in ast.walk(sub.slice)}
         for node in ast.walk(fn):
