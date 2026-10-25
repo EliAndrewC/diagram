@@ -555,7 +555,9 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         its tub count - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2 (two tubs at the kitchen); 1 (one at each other wooden building)
         no tub at a kura - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: an earth-walled kura takes no tub
         its kitchen well - GUESS research/questions/0105-baths-furo.drawing.html: the kitchen's well past the bath, within 20 ft of the kitchen
-        its privy order - research/questions/0101-privies-setchin.drawing.html: a privy against a service wall, flush to the side wall first, then the wall ends, the court face last; none in a courtyard
+        its figures against 0101's service walls - research/questions/0101-privies-setchin.drawing.html: the privy flush to a side wall first, then the wall ends, and last a seat on the building's own court face, where the page stands every privy against a service wall and none in a court; the order ours - a departure the code keeps until feature 417 T33
+        its privy off the wells - GUESS research/questions/0101-privies-setchin.drawing.html: every privy kept LATRINE_WELL_FT from a well
+        its privy per lodging - research/questions/0101-privies-setchin.drawing.html: one privy to each lodging block (the servants' quarters, the stables, the barracks), the servants' row seated first
         its figures against 0101's shared privy - research/questions/0101-privies-setchin.drawing.html: GROOMS_PRIVY_FT (the stables seat none of their own where the servants' row's privy stands within it, where the page has the servants' row share the stables' privy; the distance a guess) - a departure the code keeps until feature 417 T33
         no privy by the gate - GUESS: no lodgers' privy within GATE_PRIVY_FT of the main gate's opening; no page gives it
         its bath - research/questions/0105-baths-furo.drawing.html: the bath against the kitchen's court face, clear of every spine court

@@ -6717,6 +6717,15 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/compound_parts.py::_point_features#every privy kept at least LATRINE_WELL_FT (15 ft) from a well, through `seat(..., avoid=well_boxes)` and `_flush_privy(..., well_boxes)` (0101 §12, a GUESS)": {
+  "code": "8c04151c078314d9",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "every privy kept at least LATRINE_WELL_FT (15 ft) from a well, through `seat(..., avoid=well_boxes)` and `_flush_privy(..., well_boxes)` (0101 §12, a GUESS)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/compound_parts.py::_point_features#its bath": {
   "body": "218a82747d387cdf",
   "claim": "its bath - GUESS baths-furo.drawing: the bath against the kitchen's court face, clear of every spine court",
@@ -6745,6 +6754,22 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_point_features#its figures against 0101's shared privy": {
+  "body": "218a82747d387cdf",
+  "claim": "its figures against 0101's shared privy - privies-setchin.drawing: GROOMS_PRIVY_FT (the stables seat none of their own where the servants' row's privy stands within it, where the page has the servants' row share the stables' privy; the distance a guess) - a departure the code keeps until feature 417 T33",
+  "code": "290851c6c0a80bbe",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "the code seats the servants' row first and skips the stables' own privy when that one stands within GROOMS_PRIVY_FT (`if p.spec.feature == \"stables\" and any(... <= GROOMS_PRIVY_FT ...): continue`). The page says the reverse: \"a servants' row that lodges by the stables shares the stables' privy\". No drawing page records this departure as the project's choice, so it is a tracked drift (T33), not IN-STEP. Separately, the 55 ft is a figure the page never gives, so it should be its own GUESS claim, not part of a question claim",
+  "pages": {
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
+  },
+  "research": "ad0c946c19e2af00",
+  "rests": [
+   "0101-privies-setchin.drawing.html:38960fd9975a6f1c"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_point_features#its figures against 0196": {
   "body": "218a82747d387cdf",
@@ -6864,16 +6889,22 @@
   ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/compound_parts.py::_point_features#its privy seats": {
+ "l7r/diagram/compound_parts.py::_point_features#its privy order": {
   "body": "218a82747d387cdf",
-  "claim": "its privy seats - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 4.5 (a privy flush on the side wall first); 7 (then the wall ends); 3.5 (the court face last)",
-  "code": "548cce2c56cecf43",
+  "claim": "its privy order - privies-setchin.drawing: a privy against a service wall, flush to the side wall first, then the wall ends, the court face last; none in a courtyard",
+  "code": "abad72bac1eb5aec",
   "core": "8c04151c078314d9",
   "date": "2026-10-25",
-  "note": "the figures are misdescribed. 4.5, 7 and 3.5 are the off-face distances `seat()` tries at every face, in that order. They are not the stages. The stages are flush to the side wall (`_flush_privy`), then the wall ends, then the court face. \"The record silent\" is also wrong for the order: 0101 puts privies \"against the compound's service walls\" and \"No privy stands in a courtyard\". The order should cite 0101's drawing page; the three distances stay GUESS (the claim \"its figures guessed on 0101\" already says this)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the page puts lodgers' privies against the service walls, never in a courtyard. Two fallbacks seat a privy away from the wall: the last one, `(court, (0.85, 0.15, 0.5))` at offsets 4.5/7/3.5 ft, puts it out in the building's own court, and the end-face fracs `toward_wall` run to 0.5 and the court end. That is the \"privy loose in the forecourt\" §6 and §8 rule out. The page gives no order at all, so \"flush first, then the ends\" is a GUESS. Either the fallbacks should stop at seats against the wall, or the court-face seat should be claimed as a DEVIATION or GUESS",
+  "pages": {
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
+  },
+  "research": "ad0c946c19e2af00",
+  "rests": [
+   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
+   "0101-privies-setchin.drawing.html:79397bdd548ce631"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_point_features#its search steps and tolerances": {
   "body": "218a82747d387cdf",
@@ -6885,17 +6916,6 @@
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/compound_parts.py::_point_features#its shared privy": {
-  "body": "218a82747d387cdf",
-  "claim": "its shared privy - GUESS: a servants' privy serves the stables' grooms too within GROOMS_PRIVY_FT; 0101 has a servants' row sharing the stables' privy and is silent on the distance",
-  "code": "66f27c50befc4c81",
-  "core": "8c04151c078314d9",
-  "date": "2026-10-25",
-  "note": "the code seats the servants' row first, and stables that have a servants' privy in their court within GROOMS_PRIVY_FT seat none of their own, so the shared privy stands at the servants' row. The page says the reverse: \"a servants' row that lodges by the stables shares the stables' privy\". The 55 ft distance is a guess, and the page is silent on it. Either the code or the page's direction should change",
-  "pages": {},
-  "research": "",
-  "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_point_features#its tub count": {
   "body": "218a82747d387cdf",
@@ -6942,6 +6962,15 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_point_features#one privy to each lodging block (the servants' quarters, the stables, the barracks), the servants' row seated first (0101 §5)": {
+  "code": "8c04151c078314d9",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "one privy to each lodging block (the servants' quarters, the stables, the barracks), the servants' row seated first (0101 §5)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/compound_parts.py::_roji_parts#gate seat": {
   "code": "408bfc3b6c7c8e61",
