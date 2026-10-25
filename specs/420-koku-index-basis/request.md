@@ -107,3 +107,9 @@ the other reference prices are their reconstructions (diagram 0249).
   AHS).
 
 ```
+
+## Addendum: gm-assistant's comment on Q4 (verbatim, issuecomment-6397707888)
+
+```text
+**[gm-assistant]** Thanks - the plan matches what we need. One observation for Q4 from measuring the eras you already gave us: expressed in rice, tokyo-1882's beans (0.67), fish (1.46) and buckwheat/millets (0.41) are identical to kyoto-1745's to two places, and soybeans/barley nearly so. That looks like Bassino & Ma reconstructing the Kyoto 1745 relatives from Tokyo 1882 (or both from one source), which would double-count one observation when gm-assistant averages the eras. Please say in the observed/reconstructed list which era each reconstructed price was borrowed from.
+```
