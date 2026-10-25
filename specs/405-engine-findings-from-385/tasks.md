@@ -421,6 +421,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T138 A lane a knot's tee would strand keeps its short tail cut back to where it meets a way (found by T106 on cohort seed 7 with the sheds turned, 2026-10-24): `knots.tails_cut_back` (D133, 0081's 40 ft tail rule), asked where the tee alone is refused
       research: rendering
+- [ ] T139 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the kura's walls too [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

@@ -52675,26 +52675,29 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#coop seats": {
-  "code": "7d4a151748b8ee6e",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "beside the house, a GUESS on the page",
+  "body": "5aa6ad5698f453ba",
+  "claim": "coop seats - chickens-and-chicken-coops.drawing: the east flank, the back wall or the west flank, rolled",
+  "code": "56553f2b187946e1",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "the two flanks and the back wall, rolled per household, all sit within the page's \"beside the house, by the yard\" (a guess the page records)",
   "pages": {
    "0045-chickens-and-chicken-coops.drawing.html": "09fa83d177b6f5e9"
   },
   "research": "2aa89976080fb73c",
   "rests": [
-   "0045-chickens-and-chicken-coops.drawing.html:94909ee119011e40"
+   "0045-chickens-and-chicken-coops.drawing.html:94909ee119011e40",
+   "0045-chickens-and-chicken-coops.drawing.html:b0fef5ca492e0833"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#household grave corner": {
-  "code": "7b123e753b1c60f7",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "SE or NW first",
+  "body": "5aa6ad5698f453ba",
+  "claim": "household grave corner - where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot: SE or NW of the house, then the other two corners",
+  "code": "12361bf85521d294",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "SE and NW are the two attested plot corners, rolled per household; falling back to NE/SW still puts the grave on \"a corner of a household's own land\"",
   "pages": {
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html": "25f3daa260e791cd"
   },
@@ -52703,53 +52706,53 @@
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:b3e7f0b846f18b0f",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:d6a078d4e683edf6"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#household grave off the house's corner": {
-  "code": "dce07984c7c995de",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "the cited pages give the plot's corner, SE or NW first, but no distance from the house, so UNRESEARCHED holds for the 14 ft offset",
+  "body": "5aa6ad5698f453ba",
+  "claim": "household grave off the house's corner - UNRESEARCHED: 14 ft out each way (`SHRINE_CORNER_FT`) standing for the plot's corner; no plot's size is recorded with its grave",
+  "code": "7a046a9a962d3aca",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "the page names a plot corner but gives no plot size or distance",
   "pages": {},
   "research": "",
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy": {
-  "code": "6da0e92928e6e1f4",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "away from the house, jittered; behind or beside where there is no privy",
+  "body": "5aa6ad5698f453ba",
+  "claim": "manure beyond the privy - manure-heaps-and-compost-kyuhi.drawing: on the side of the privy away from the house, along the line from its center; jittered a few feet; behind or beside the house where there is no privy",
+  "code": "dadc98480763ff90",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "the heap goes along the line from the house center through the privy and out past it, jittered by ±4.5 ft; with no privy it goes behind the house or on its flank",
   "pages": {
    "0042-manure-heaps-and-compost-kyuhi.drawing.html": "88a5a7358b74ffeb"
   },
   "research": "64b079a992498adb",
   "rests": [
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:024dcb0df80d6346",
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:770a6419fbce2b73",
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots": {
-  "code": "1a727825981ba470",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "the page records the eight set spots",
+  "body": "5aa6ad5698f453ba",
+  "claim": "manure heap fallback spots - GUESS manure-heaps-and-compost-kyuhi.drawing: beside the privy at 1.1 and 1.9 of its width, then 10 ft further out; with no privy, at 0.3 of the house's width and depth",
+  "code": "410d137cb14f45ae",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "eight set spots, which the page records as what the map draws; the 1.1/1.9 widths and the 10 ft step are unrecorded guesses",
   "pages": {
    "0042-manure-heaps-and-compost-kyuhi.drawing.html": "88a5a7358b74ffeb"
   },
   "research": "64b079a992498adb",
   "rests": [
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:024dcb0df80d6346",
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:69009a6eaa9aef08",
-   "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:da8c62317c9fef66"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy by the stable": {
@@ -52788,45 +52791,49 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy in the yard off the back wall": {
-  "code": "58c62d6633f587df",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "the yard seat is WALL_GAP_FT 3.5 + PRIVY_YARD_STEP_FT 6 = 9.5 ft off the back wall, but the page says \"a ken (about 6 ft) off the back wall\"; the claim itself says \"past the page's ken\"",
+  "body": "5aa6ad5698f453ba",
+  "claim": "privy in the yard off the back wall - farm-privies-and-their-night-soil-benjo.drawing: held at a ken plus the wall gap (`PRIVY_YARD_STEP_FT`), past the page's ken, behind the found row at the constant",
+  "code": "391f5a2f280c1786",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "the code puts the privy's near edge at g + PRIVY_YARD_STEP_FT = 3.5 + 6 = 9.5 ft off the back wall, but the page reads \"a ken (about 6 ft) off the back wall\" and records no added gap as a deviation (0043 §73 does record one for the wood shed); either record the deviation on 0047 and relabel the claim DEVIATION, or seat the privy at 6 ft",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
   "research": "410a08bb56c17449",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:c5d84fdf328cced8"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats": {
-  "code": "a8e64ab3f16138ec",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "72.7% sunny sector from 18 ft out; the yard, the front and the stable; no barn",
+  "body": "5aa6ad5698f453ba",
+  "claim": "privy seats - farm-privies-and-their-night-soil-benjo.drawing: the sun-side sector on 72.7%, else the attested places a hamlet farm has - the yard, the front, by the stable; not the barn while a hamlet draws none (the open found row `_seats#privy seats - the barn 0047 names`)",
+  "code": "69bdf93e8cfab397",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "the sunny sector is tried on 72.7%, otherwise the yard, front and stable are rolled per house at the hamlet's weights, and the barn's share is spread as the page records",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
   "research": "410a08bb56c17449",
   "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2697271aa3082865",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:c5d84fdf328cced8",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy sun-side radii": {
-  "code": "9c88440c2fb1cc13",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "the radii run from 18 ft out to privy_sun_reach_ft, matching \"at distances stepping out from 18 ft\" and the 48 ft reach",
+  "body": "5aa6ad5698f453ba",
+  "claim": "privy sun-side radii - farm-privies-and-their-night-soil-benjo.drawing: tried from 18 ft (`PRIVY_SUN_MIN_FT`) out to the reach",
+  "code": "c2e2da44e71dc58c",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "radii run from 18 ft out to the 48 ft search bound, nearest first",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
@@ -52836,32 +52843,38 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy sun-side step": {
-  "code": "021737f6715ef988",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "the page says the distances step out but gives no step size, so the 4 ft step stays UNRESEARCHED",
+  "body": "5aa6ad5698f453ba",
+  "claim": "privy sun-side step - UNRESEARCHED: the radii tried 4 ft apart",
+  "code": "f420304552367eb3",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "the page says the search steps out from 18 ft but gives no step size",
   "pages": {},
   "research": "",
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#retirement house": {
-  "code": "c6b26eae8eb27a61",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "nothing in the bundle answers it",
+  "body": "5aa6ad5698f453ba",
+  "claim": "retirement house - UNRESEARCHED: off the back wall or a flank, the side rolled",
+  "code": "af0248e17f16c63e",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "no cited question bears on it",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#retirement house centered on the wall it stands off (x=0 off the back wall, y=0 off a flank)": {
+  "code": "35c562e9417fd7f0",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "retirement house centered on the wall it stands off (x=0 off the back wall, y=0 off a flank)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#seat positions along each wall": {
   "body": "5aa6ad5698f453ba",
@@ -52875,10 +52888,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#shrine corner": {
-  "code": "c3463cb843fac69e",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "NW 45, NE 35, SW 20",
+  "body": "5aa6ad5698f453ba",
+  "claim": "shrine corner - household-shrines-yashikigami.drawing: NW, NE or SW of the house",
+  "code": "e20d4003a06af17c",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "NW 0.45, NE 0.35, SW 0.20, rolled per household, exactly the page's weights",
   "pages": {
    "0219-household-shrines-yashikigami.drawing.html": "0c9da3e6ad2b7eb4"
   },
@@ -52887,20 +52902,17 @@
    "0219-household-shrines-yashikigami.drawing.html:219399d6edd7b513",
    "0219-household-shrines-yashikigami.drawing.html:2f759729d0a736bd"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#shrine off its corner": {
-  "code": "26b4992fe645c030",
-  "core": "1efd820bc25f3627",
-  "date": "2026-10-12",
-  "note": "nothing in the bundle answers it",
+  "body": "5aa6ad5698f453ba",
+  "claim": "shrine off its corner - UNRESEARCHED: 14 ft (`SHRINE_CORNER_FT`) out from the house's corner on both axes",
+  "code": "1e6c7dd3c0cdafaf",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-24",
+  "note": "the page names the homestead's corner but gives no distance or plot size",
   "pages": {},
   "research": "",
-  "rests": [],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#wood shed seats": {
@@ -52955,15 +52967,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#the fallback wall places are tried back wall first, then the west and east flanks, each walked end to end in WALL_SLIDE_FT (4 ft) steps, and the first clear one is taken": {
-  "code": "8bf02d2e52737674",
-  "core": "8bf02d2e52737674",
-  "date": "2026-10-24",
-  "note": "the fallback wall places are tried back wall first, then the west and east flanks, each walked end to end in WALL_SLIDE_FT (4 ft) steps, and the first clear one is taken",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wall places a ken out": {
   "body": "3d4e24e58d228eb6",
   "claim": "wall places a ken out - GUESS firewood-stacks-and-sheds-kigoya.drawing: offered a ken (`WOODSHED_STEP_FT`, the page's GUESS) beyond the wall gap (the page's DEVIATION)",
@@ -52982,20 +52985,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats": {
-  "body": "8d152757e12f5920",
+  "body": "3d4e24e58d228eb6",
   "claim": "wood shed seats - GUESS firewood-stacks-and-sheds-kigoya.drawing: behind or beside the house, never the front yard",
-  "code": "3ab16024a14ab8ef",
-  "core": "8bf02d2e52737674",
+  "code": "3d12210630f9dcc9",
+  "core": "c1e1aef9fc438613",
   "date": "2026-10-24",
-  "note": "the shed is offered the back wall and flank seats (first one rolled), then wall places with front-wall places filtered out, and shed_off_a_wall refuses anything forward of the front; the page records the placement as a GUESS",
+  "note": "seats are off the back wall and the flanks, front-wall places are dropped by forward_of_front, and shed_off_a_wall keeps it out of the front yard",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
   },
   "research": "fd75aec0c95930d7",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18",
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::against_a_part#against the farmhouse or one of its outbuildings": {
@@ -53363,27 +53366,30 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room joined": {
-  "code": "863e160b42b3a5dc",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "FixtureUnlaid is raised rather than standing the bath room apart; it is exempt from `keep` as part of the house",
+  "body": "2e6053a878457bd0",
+  "claim": "bath room joined - baths-on-the-farm-furo.drawing: refused rather than walked out",
+  "code": "f8d730de93c97326",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "the seats must abut the house wall, and FixtureUnlaid is raised rather than a free-standing bath shed being drawn",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
   "research": "59e9ca3130a28b52",
   "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb",
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
    "0044-baths-on-the-farm-furo.drawing.html:f4b4951f028d4a66"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room's wall per house": {
-  "code": "d213b6b0603075a0",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "bath_wall is rolled per house among the attested walls",
+  "body": "2e6053a878457bd0",
+  "claim": "bath room's wall per house - baths-on-the-farm-furo: each house rolls among the three walls (`bath_wall`)",
+  "code": "73195ccfb10c808b",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "bath_wall rolls the stable end, the floored rooms or the main door per house",
   "pages": {
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
@@ -53393,58 +53399,56 @@
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
    "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part and bath room slide 4 ft": {
-  "code": "9cc4d55ea1aceae5",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "the questions are silent on both",
+  "body": "2e6053a878457bd0",
+  "claim": "fixture gap 3.5 ft off every other part and bath room slide 4 ft - UNRESEARCHED: WALL_GAP_FT (3.5 ft) clears the drawn wall of any part a fixture stands by, WALL_SLIDE_FT (4 ft) the bath room's slide along its wall",
+  "code": "efab080340d9ea11",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "no cited question gives either figure",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no fixture on the door's room": {
-  "code": "cb8ecf3d76dd3378",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "nothing cited gives a clear room about the door",
+  "body": "2e6053a878457bd0",
+  "claim": "no fixture on the door's room - UNRESEARCHED: the square about the door in `keep` (`DOOR_ROOM_HALF_FT`)",
+  "code": "1a6c057dd0fca3c6",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "no cited question bears on it",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no fixture on the way in": {
-  "code": "0e3ce1e93aeac8c7",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "the way in through the front break must stay passable for a lane; the bath room's exemption follows from it being joined to the house",
+  "body": "2e6053a878457bd0",
+  "claim": "no fixture on the way in - groves-of-trees-around-farmhouses-yashikirin.drawing: the way in by the open front, through the ring's break - every kind but the bath room kept off `keep`",
+  "code": "658b2a73a1cbb9fb",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "`keep` goes into every kind's taken except the bath room's, so the way in through the front break stays clear",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
   "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no seat, no persimmon": {
-  "code": "57f0239166dc9ae3",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "seat None drops the tree",
+  "body": "2e6053a878457bd0",
+  "claim": "no seat, no persimmon - fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing: the farm keeps none",
+  "code": "37bf22bfeb347652",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "when _persimmon returns None the farm keeps none, never one set far out",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -53452,15 +53456,23 @@
   "rests": [
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:65dfdac106fa4297"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#outward pace of 8 ft (STEP_FT), up to 24 paces (OUT_STEPS, about 192 ft), as the farthest a manure heap, coop, shrine or grave may be pushed from its recorded seat": {
+  "code": "ad39d64e14bca2aa",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "outward pace of 8 ft (STEP_FT), up to 24 paces (OUT_STEPS, about 192 ft), as the farthest a manure heap, coop, shrine or grave may be pushed from its recorded seat",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon front or behind": {
-  "code": "722f46518a20a1b6",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "each house rolls against the hamlet's persimmon_front share",
+  "body": "2e6053a878457bd0",
+  "claim": "persimmon front or behind - fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing: in front of the house or behind it, rolled per house at `forms.persimmon_front`",
+  "code": "886276ffd574b063",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "front or behind is rolled per house against the hamlet's front share, and the sun test sends the tree behind wherever a drying yard lies in front; it is never put on a flank",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -53469,15 +53481,15 @@
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:591f08ea01d694fd",
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon in its own grove bands": {
-  "code": "bd50a5e41fc79702",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "`fruit` is dropped from `taken` for the persimmon alone",
+  "body": "2e6053a878457bd0",
+  "claim": "persimmon in its own grove bands - fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing: it may stand in the grove behind the house - its own grove, no other farm's",
+  "code": "ce90771233076567",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "only this farm's `fruit` bands are lifted for the trunk, and the crown stays off the roofs, so the tree stands at the edge of its own grove",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -53485,60 +53497,59 @@
   "rests": [
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order": {
-  "code": "320377c92ebd0b73",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "the questions are silent",
+  "body": "2e6053a878457bd0",
+  "claim": "seating order - UNRESEARCHED: FIXTURE_ORDER (retirement house, bath, wood shed, privy, manure, coop, shrine, grave, persimmon) is the order the fixtures take seats",
+  "code": "5eb4954d33a62a06",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "no cited question bears on it",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#stepped outward": {
-  "code": "67bc640d0e50225a",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "the questions are silent on stepping for the general fixture",
+  "body": "2e6053a878457bd0",
+  "claim": "stepped outward - UNRESEARCHED: a fixture with no recorded seat free is offered the same seats a pace further out",
+  "code": "8e7a2660082076e3",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "no cited question bears on it",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the kura's walls too": {
-  "code": "5d6ed79f711cc914",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "the page puts the shed beside or behind the house and is silent on the annex",
+  "body": "2e6053a878457bd0",
+  "claim": "the kura's walls too - GUESS: the house's storehouse annex counts as a wall of the house for the shed",
+  "code": "d08e48c8b1028af7",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "the account does not match the code: the kura enters `walls` only for clearance (shed_off_a_wall clears every wall by gap plus ken), while the shed is seated off walls[:1] alone (wall_places and against_a_wall), so the kura is never a wall the shed stands off; the claim should read \"the kura's walls kept clear by the same gap and ken\"",
   "pages": {},
   "research": "",
-  "triage": "touched",
-  "triaged": "2026-10-24",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the privy's reach": {
-  "code": "7a9f673846fd626e",
-  "core": "933f7b3dadaf8563",
-  "date": "2026-10-12",
-  "note": "within_reach_of at 48 ft, refused by name",
+  "body": "2e6053a878457bd0",
+  "claim": "the privy's reach - farm-privies-and-their-night-soil-benjo.drawing: never stepped past 48 ft from its house; a farmstead with no seat within it refuses its privy by name",
+  "code": "2f275d750696236e",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-24",
+  "note": "within_reach_of measures 48 ft from the far corner to the walls, and FixtureUnlaid is raised by name when no seat qualifies",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
   "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2024bed7766a5bb4",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:bc74b262a32416b5"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:bc74b262a32416b5",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": {
