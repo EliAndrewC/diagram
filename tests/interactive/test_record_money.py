@@ -129,10 +129,10 @@ def test_load_reads_the_table_and_a_missing_file_as_empty(tmp_path: pathlib.Path
 
 def test_the_vendored_table_converts_the_worked_example() -> None:
     """The real copy (`make money-conversions`): 20 mon at kyoto-1745 in gm-assistant's feature 223 table (diagram#17
-    issuecomment-6398335706 and -6400592706: goods the range from the geometric to the arithmetic mean, feature 421)."""
+    issuecomment-6398335706 and -6402579852: goods the range from the geometric to the arithmetic mean, feature 421)."""
     table = money.load(str(pathlib.Path(__file__).resolve().parents[2] / "research"))
     out, errors = money.annotate(_span("20", "mon", "20 mon", ' data-era="kyoto-1745"'), "q", table)
-    assert errors == [] and "about $1.53-$3.32 in goods, $37.92 in wages, 3.8 sen in Rokugan" in out
+    assert errors == [] and "about $1.50-$3.32 in goods, $37.92 in wages, 3.8 sen in Rokugan" in out
 
 
 def test_the_site_build_writes_the_box_and_gathers_every_refusal(tmp_path: pathlib.Path) -> None:

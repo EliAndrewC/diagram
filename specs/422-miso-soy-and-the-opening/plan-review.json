@@ -1,0 +1,353 @@
+{
+ "feature": "422-miso-soy-and-the-opening",
+ "blocks": {
+  "preamble": {
+   "sha256": "04340bfc060bd97784a0be74912a600d8e9e54ea29972590fb4ee538df289a82",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "aaf493863f656563c628de459e0fa88fade4310edad0f227eb8c24964d63f05b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "b0e3b7a5ac1758008c2f50a653b4356969c014b596089a56d1ec76b47c0230ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "2af3cd7de4be30e6d9732bc52b389dad863ad614729acaf9de51a1bf175cfedc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - miso and soy sauce: how much, and from how many soybeans (Q1; FR-001; acceptance 1, 5)": {
+   "sha256": "c8e4ad3357f2bdf1c39fa74f8dc7d9955ca9f5c90055518ff192f9bb420c5187",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - miso and soy sauce era by era (Q2; FR-001; acceptance 2)": {
+   "sha256": "6cfce68443a98e8be22b830e46683b9161fbdfc99ae3da6ed15a46a1f04a2714",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the modern miso and soy sauce (Q3; FR-001; acceptance 3)": {
+   "sha256": "16e83b2dd2bc63944581be8f53bdef97a79ca12e18817511dce08f009cf74743",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - what the opening changed (Q4; FR-001; acceptance 4, 5)": {
+   "sha256": "2119ebb859ad18f9fed41f12f18ec8cdfef576e41c9715414a6b2207c0134abd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - the implementation check and the reply (FR-003, FR-004)": {
+   "sha256": "8ce285ef446e9cc45e26298000ce42cc90eccc943803c51a1150defd0f097703",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - Q1 and Q2, miso and soy sauce (D1, D2)": {
+   "sha256": "b43d3434ecc3e73deff45059b001bb4dc72b18da2340d411a1b5aad205cb60ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "1c200e43988d9fe3d502f8090906a95cfd72440032db903dcf6d7de214da166c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "1258af79ce3da540cce5d67cef6f9dfeeedc07573a0edc4ebd8b39ef4c6b06a6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - Q4 and Q3, the opening and the modern prices (D3, D4)": {
+   "sha256": "27ae9e5f9f51cb3f64691e0029bb9fa88148018dd9d152382dafb82392d3abe0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "c38e77fb68862c2618cac3ff7188280f615807f7021de87509e0289007ca1d92",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "47b15436c49eac254a82a5f987e1c1905d0c12992299fc30d9336253d1cf0d05",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the implementation check and the reply (D5)": {
+   "sha256": "36ebb0c0729d6338d0f7bab62dca5478f09644d9fca6626835676819556f336b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "c6c9cf95a750b89a151fb740e988ebabf81186643c7e4fca35cce98f4deb02c0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "ed07cce04f7eb057f1bd369859c2f744f2def76e29cb7b8179a06e9c612170c9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - miso and soy sauce: how much, and from how many soybeans (Q1; FR-001; acceptance 1, 5)",
+    "## D2 - miso and soy sauce era by era (Q2; FR-001; acceptance 2)",
+    "## D3 - the modern miso and soy sauce (Q3; FR-001; acceptance 3)",
+    "## D4 - what the opening changed (Q4; FR-001; acceptance 4, 5)",
+    "## D5 - the implementation check and the reply (FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T01 - Q1 and Q2, miso and soy sauce (D1, D2)",
+    "## T02 - Q4 and Q3, the opening and the modern prices (D3, D4)",
+    "## T03 - the implementation check and the reply (D5)",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-sessions",
+     "summary": "Two write sessions each followed by a check session, in two sibling clones (S1 Q1+Q2, S2 Q4+Q3), then the reply; no code, map or canon change.",
+     "class": "within",
+     "why": "Process only; all four questions stay covered; FR-002's session limits honored."
+    },
+    {
+     "id": "TC-silver-rate",
+     "summary": "Mitsui monme cells converted at the era's coin rate and, beside it, at Bassino and Ma's 3.11 g, each labeled.",
+     "class": "within",
+     "why": "Additive; the request's own 1.28 g/kg and 1.57 g/l figures are at 3.11 g, so both readings are given and nothing is dropped."
+    },
+    {
+     "id": "D1-quantities",
+     "summary": "New money question beside 0249: kg miso and liters soy sauce per adult-year with source and verdict; failing that, soybean per kg miso/liter soy and the household share to miso, soy sauce, tofu, natto; the source of Bassino and Ma's 52 kg; the tofu/natto remainder or its SILENT; no quantity estimated; 0249 gets a pointer.",
+     "class": "within",
+     "why": "Matches Q1 clause by clause, including its 'if no consumption figure exists' branch and the Bassino-Ma lead; 'no quantity is estimated' is the GM's own 'which we will not guess'; placement is FR-001's."
+    },
+    {
+     "id": "D2-eras-table",
+     "summary": "Mitsui miso and soy sauce means for every held era (kyoto-1745/-1790/-1800, edo-1818/-1830/-1850/-1860, osaka-1712/-1706 with their city), monme and grams, n and range; Kimura osaka-1620 'Soya' as headed; tokyo-1882 SILENT with 1887 nearest; Chinese eras SILENT for soy sauce and jiang with searches.",
+     "class": "within",
+     "why": "Answers Q2 for 'any era we hold' and the Chinese jiang question. Note for the write and the FR-003 reply: Q2's figure is grams of silver per kg or per liter, in the 0286/0302 format; D2 says 'monme and grams' without stating the per-kg / per-liter normalization of cells recorded per 10 kan and per koku - the reply owes the request's units."
+    },
+    {
+     "id": "D2-placement",
+     "summary": "Q2's table goes in the same new question as Q1, with pointers in 0301 and 0302, rather than in 0301 and 0302 themselves.",
+     "class": "within",
+     "why": "FR-001 places Q2 'in 0301 and 0302 (or a sibling, by size)'; a new question with pointers from both is a sibling placement, the GM's request does not fix placement, and nothing asked is dropped. Recorded so the departure from FR-001's first option is on the record."
+    },
+    {
+     "id": "D3-modern",
+     "summary": "In 0299, comparative: cheapest household miso (Shirakiku 2.2 lb, Amazon; Walmart tub beside), Walmart's naturally brewed soy sauce with Kikkoman beside, hydrolyzed store brand named as such, USDA and BLS SILENT; each dated, linked, archived.",
+     "class": "within",
+     "why": "Answers Q3 at national US retailers; naming the hydrolyzed brand as such honors 'naturally brewed'; 0299 comparative per FR-001. Note: Q3's figure is a price per kg or per liter; the reply owes the per-unit price, not only pack prices."
+    },
+    {
+     "id": "D4-edo-goods-enumeration",
+     "summary": "Edo 1860-67 per-good verdicts given for rice, lamp oil, zakkoku, soybeans, salt, firewood, wheat and barley; cooking oil, one of the eight goods the request lists, has no verdict.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Q4 asks, of 'rice, salt, lamp oil, firewood, soybeans, barley and wheat, and cooking oil', which were changed, and its figure is 'per era and good, changed ... or not changed, or SILENT', used to mark each good excluded or not. Dropping cooking oil is not impossible (SILENT is always available), is not implied elsewhere (the GM lists cooking oil separately from lamp oil), and defeats the request's purpose of a per-good exclusion decision on evidence. If the same source answers lamp oil and cooking oil, D4 must name cooking oil and say so. Fix: add cooking oil's verdict (changed with evidence, not changed, or SILENT with its search)."
+    },
+    {
+     "id": "D4-edo-verdict-vocabulary",
+     "summary": "Edo verdicts in the record's vocabulary (NOT ATTESTED, ATTESTED ONLY FOR 1859-60, SILENT), Shinbo's prices noted as Kansai's and his ratios as unable to separate trade from money.",
+     "class": "within",
+     "why": "Evidence-graded findings with their limits stated serve 'on evidence rather than our guess'. Note: the request's figure is the ternary changed / not changed / SILENT; the FR-003 reply owes that mapping per good."
+    },
+    {
+     "id": "D4-timing-rule",
+     "summary": "No good is called changed from timing alone.",
+     "class": "within",
+     "why": "Implied by the GM's 'on evidence rather than our guess' (request, Where things stand)."
+    },
+    {
+     "id": "D4-beijing-tokyo",
+     "summary": "Beijing 1900-19 rice and millet SILENT; Tokyo 1882 soybean ratio traced to 1879-95, Kumon's 1879 source switch and the Matsukata deflation, series or grade difference possible, Manchurian imports SILENT.",
+     "class": "within",
+     "why": "Answers both remaining Q4 sub-questions, including the 'opening, grade difference, or something else' alternatives."
+    },
+    {
+     "id": "D5-reply",
+     "summary": "implementation-check.md per touched question; reply on #18 with each figure's fragment and verdict; GM findings through escalation-check.",
+     "class": "within",
+     "why": "FR-003 and FR-004 as written."
+    },
+    {
+     "id": "T01-T03-approach",
+     "summary": "Checklist part A for T01-T03: citation rules, 20,000-byte cap, four questions and ten keys a write, record-owed clean, SILENT never estimated, impl-check and feature report.",
+     "class": "within",
+     "why": "Process and constraints already in the spec and the record rules; T02's exit 'never changed' without evidence matches the request; nothing asked is narrowed beyond D4's enumeration ruled above."
+    },
+    {
+     "id": "Constitution-Performance",
+     "summary": "Constitution check (XII research boxes, XIII record tests green, XVI); performance bookends N/A.",
+     "class": "within",
+     "why": "No decision beyond the spec."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - miso and soy sauce: how much, and from how many soybeans (Q1; FR-001; acceptance 1, 5)",
+    "## D2 - miso and soy sauce era by era (Q2; FR-001; acceptance 2)",
+    "## D3 - the modern miso and soy sauce (Q3; FR-001; acceptance 3)",
+    "## D4 - what the opening changed (Q4; FR-001; acceptance 4, 5)",
+    "## D5 - the implementation check and the reply (FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T01 - Q1 and Q2, miso and soy sauce (D1, D2)",
+    "## T02 - Q4 and Q3, the opening and the modern prices (D3, D4)",
+    "## T03 - the implementation check and the reply (D5)",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/TC-sessions",
+     "summary": "Two write sessions (S1 Q1+Q2, S2 Q4+Q3), each followed by a check-and-apply session, in two sibling clones; then the reply. No code, map or canon change.",
+     "class": "within",
+     "why": "Process only; every one of Q1-Q4 is still answered (FR-002's session limits). Nothing asked is dropped."
+    },
+    {
+     "id": "TC-silver-rate",
+     "summary": "Mitsui monme cells given in grams at the era's coin rate and, beside it, at Bassino and Ma's 3.11 g where 0249 uses it, each labeled.",
+     "class": "within",
+     "why": "Q2 asks grams of silver per era; giving both labeled rates adds nothing outside the request and withholds nothing."
+    },
+    {
+     "id": "D1",
+     "summary": "New question beside 0249: kg miso and l soy sauce per adult-year with source and verdict (household/ration divided per adult labeled as project arithmetic); failing that, Edo-practice soybean per kg miso / l soy sauce and the household soybean shares; the source of Bassino-Ma's 52 kg; the tofu/natto remainder or SILENT in either branch; no quantity estimated; plus the addendum's modern yields (kg miso per kg dry soybeans, rice-koji; l soy sauce per kg soybeans, equal parts wheat) from a Japanese industry or food-science source, proportions stated beside the Edo prescriptions, labeled modern.",
+     "class": "within",
+     "why": "Carries every clause of Q1 (both branches, the 52 kg's source lead, the remainder) and every clause of the addendum (both yields, the recipe, the Japanese-source preference, proportions beside the Edo prescriptions). Labeling the yields modern leaves to the GM the call the addendum reserves to him (whether a modern yield may stand where an Edo one is SILENT); the plan neither substitutes it for an Edo figure nor drops it."
+    },
+    {
+     "id": "D2",
+     "summary": "In the same question: Mitsui miso and soy sauce means per held era (kyoto-1745/-1790/-1800, edo-1818/-1830/-1850/-1860, osaka-1712/-1706 with city named), monme and grams, n and range; edo-1860's in-era rise; Kimura's osaka-1620 'Soya' as headed; tokyo-1882 SILENT, 1887 nearest; Chinese eras SILENT for soy sauce and jiang with searches; pointers in 0301 and 0302.",
+     "class": "within",
+     "why": "Answers Q2's every part: Mitsui series across the held eras, 'any other series' (Kimura), the Chinese eras' soy sauce and 醬. Placing the table in the new Q1 question with pointers in 0301/0302 is a placement choice FR-001 allows ('or a sibling, by size') and removes no content."
+    },
+    {
+     "id": "D3",
+     "summary": "In 0299, comparative: cheapest household miso (Shirakiku 2.2 lb, Amazon) with Walmart's tub beside; Walmart's own naturally brewed soy sauce (15 fl oz) with Kikkoman 40 oz and gallon; hydrolyzed store brand named as such; USDA and BLS SILENT; each dated, linked, archived.",
+     "class": "within",
+     "why": "Q3 asks the cheapest plain household pack at a national US retailer of miso and of naturally brewed soy sauce with link and date; the hydrolyzed brand is named only to show why it is not the answer, which follows the request's 'naturally brewed'. Comparative placement is FR-001."
+    },
+    {
+     "id": "D4",
+     "summary": "New question on what the opening changed. Edo 1860-67 per good: rice NOT ATTESTED; lamp oil and 雑穀 ATTESTED ONLY FOR 1859-60; soybeans SILENT; cooking oil its own named verdict, taking lamp oil's evidence because the basket's edible oil is the same rapeseed oil (0249) and the sources price 水油/種油/白油, or SILENT where sources do not reach; salt, firewood, wheat NOT ATTESTED; barley SILENT; Shinbo's Kansai provenance and money/trade confound said. Beijing 1900-19 rice and millet SILENT. Tokyo 1882 soybean ratio: timing, LTES source switch, Matsukata, series/grade possible, Manchurian-import start SILENT. Nothing called changed from timing alone.",
+     "class": "within",
+     "why": "Round 1's block is cured: all eight Edo goods the request lists (rice, salt, lamp oil, firewood, soybeans, barley, wheat, cooking oil) now each carry a verdict, as do Beijing's two and the Tokyo 1882 question's three named alternatives. Cooking oil taking lamp oil's evidence by name is not a guess and not a carve-out: it is the same commodity the basket already prices as one oil, the inference is stated in the record, and SILENT is kept where the sources do not reach. 'No good called changed from timing alone' is the request's own 'on evidence rather than our guess'."
+    },
+    {
+     "id": "D5",
+     "summary": "implementation-check.md per touched question; reply on #18 with each figure, fragment file and verdict; GM findings through escalation-check.",
+     "class": "within",
+     "why": "FR-003 and FR-004 as written."
+    },
+    {
+     "id": "T01-T03 approaches",
+     "summary": "Checklist part A for each task: citation rules, size cap, session limits, SILENT never estimated, record-owed / impl-check as done.",
+     "class": "within",
+     "why": "Restate the spec's constraints and done-conditions; decide nothing the request or spec left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## D1 - miso and soy sauce: how much, and from how many soybeans (Q1; FR-001; acceptance 1, 5)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1.a",
+     "summary": "Q1 answered in a new money question beside 0249 (title: how much miso and soy sauce a household used and what they cost era by era); 0249 gets a pointer",
+     "class": "within",
+     "why": "FR-001 places Q1 in a new question beside 0249; the request's Use is the basket's soybean line becoming miso and soy sauce, and Q2 asks the other eras' prices"
+    },
+    {
+     "id": "D1.b",
+     "summary": "First figure: kg of miso and liters of soy sauce per adult-year, each with source and verdict; any household or ration figure divided per adult is labeled as this project's arithmetic",
+     "class": "within",
+     "why": "Q1 'Figure needed' verbatim; labeling the per-adult division adds disclosure, removes nothing"
+    },
+    {
+     "id": "D1.c",
+     "summary": "Failing a consumption figure: soybean per kg of miso and per liter of soy sauce in Edo practice, and the share of household soybeans to miso, soy sauce, tofu and natto",
+     "class": "within",
+     "why": "Q1's own fallback clause, word for word"
+    },
+    {
+     "id": "D1.d",
+     "summary": "The source of Bassino and Ma's 52 kg is reported",
+     "class": "within",
+     "why": "Named in Q1's Leads"
+    },
+    {
+     "id": "D1.e",
+     "summary": "The remainder of the 52 kg left for tofu and natto, or its SILENT, owed in either branch",
+     "class": "within",
+     "why": "Q1 'plus whatever share of the 52 kg is left for tofu and natto'; owing it in both branches widens rather than narrows"
+    },
+    {
+     "id": "D1.f",
+     "summary": "No quantity is estimated",
+     "class": "within",
+     "why": "Request: 'To do that we need quantities, which we will not guess'"
+    },
+    {
+     "id": "D1.g",
+     "summary": "Modern yields (miso per kg dry soybeans, rice-koji; soy sauce per kg soybeans, equal parts wheat) preferably from a Japanese industry or food-science source, any sourced yield given with its source named, proportions stated beside the Edo prescriptions, labeled modern",
+     "class": "within",
+     "why": "The changed passage. The addendum says 'Ideally these come from a Japanese industry or food-science source' and the GM's ruling asks only for 'a sourced modern yield ... with the recipe's proportions'; 'preferably' with source named now matches both exactly, where the earlier 'from a Japanese ... source' was stricter than asked. Keeps both yields, both recipe specifications, the proportions beside Edo, and the source requirement; drops nothing the request requires"
+    }
+   ]
+  }
+ ]
+}
