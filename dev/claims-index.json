@@ -12262,22 +12262,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_flexible_clear#pit off every grove": {
-  "body": "56cfcc0b220823b9",
+  "body": "dba04441e84b7025",
   "claim": "pit off every grove - UNRESEARCHED: clear of every farm's grove band",
-  "code": "22b9a7dc83e34a23",
-  "core": "151c658d956263e1",
-  "date": "2026-10-18",
-  "note": "the cited page says nothing on groves; the code makes a box-overlap refusal against every grove band",
+  "code": "5e9c3a2a4183e8df",
+  "core": "28072165103be8c3",
+  "date": "2026-10-25",
+  "note": "placement rule correctly labeled; neither cited page says whether a field pit may stand in a grove band (0046 §14 speaks only of the persimmon in its own grove)",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_flexible_clear#pit on its house's bank": {
   "body": "56cfcc0b220823b9",
   "claim": "pit on its house's bank - villages-beside-their-stream-one-bank-or-both.drawing: no brook between pit and house",
-  "code": "d450501a3c8ae08a",
-  "core": "151c658d956263e1",
+  "code": "b95938670ee544c1",
+  "core": "28072165103be8c3",
   "date": "2026-10-18",
   "note": "across_the_brook refuses a seat whose line to the house crosses a stream; this is the page's rule for every fixture",
   "pages": {
@@ -12288,7 +12287,7 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:6062bfc803d4863c"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_ring#fixture drawing plumbing": {
@@ -42541,18 +42540,6 @@
   "research": "0a880fd17413bbf6",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/overlap/matrix.py::CANOPY_STRUCT_KEYS#no crown on a roof": {
-  "code": "50cf18a5fb22c02f",
-  "core": "5f0390d812181765",
-  "date": "2026-10-03",
-  "note": "matches the cited page",
-  "pages": {
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
-  },
-  "research": "90cf9ff106c766c9",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/overlap/matrix.py::DOJO_QUARTER_PX#dojo near the samurai quarter": {
   "code": "c8d17c8cacbf51c1",
   "core": "c85a6fa8a6054d21",
@@ -42562,14 +42549,6 @@
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
   "research": "8b27404bc31588ce",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/overlap/matrix.py::FOREST_REVEAL_FT#forest reveal": {
-  "code": "a912867c19970461",
-  "core": "0a9205c92e7d0e22",
-  "date": "2026-10-03",
-  "note": "matches the cited page",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/matrix.py::GridIndex#matrix plumbing": {
@@ -42617,14 +42596,6 @@
   "core": "1886066e56136bf8",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical or visible",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/overlap/matrix.py::forest_reveal_x#forest crop": {
-  "code": "b80c8d0245dfd1e5",
-  "core": "e7cebcd4045de737",
-  "date": "2026-10-03",
-  "note": "matches the cited page",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -61600,22 +61571,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._fixtures_in_bands#no fixture in a grove band": {
-  "code": "82a65311f451ef9d",
-  "core": "8fae72afc220d835",
-  "date": "2026-10-03",
-  "note": "no cited page places fixtures relative to bands",
+  "body": "a0a42ceacbd9df99",
+  "claim": "no fixture in a grove band - UNRESEARCHED: its own farm's or a neighbor's, as turned and recorded",
+  "code": "c6d7cf67f7d552d2",
+  "core": "5197b54a8470d080",
+  "date": "2026-10-25",
+  "note": "nothing in the bundle bars the privy, manure heap or shed from a grove band; 0046 §14 covers only the persimmon, which the code leaves out of this rule",
+  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._fixtures_in_bands#persimmon in no other farm's grove": {
-  "code": "b1d7ec710a26be17",
-  "core": "8fae72afc220d835",
+  "code": "6ea8cffadf373c2a",
+  "core": "5197b54a8470d080",
   "date": "2026-10-03",
   "note": "own bands allowed, a neighbor's refused (0046 \"its own grove, no other farm's\")",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._garden_shaded#garden shaded by a house to its south": {

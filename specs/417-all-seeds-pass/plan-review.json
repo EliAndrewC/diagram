@@ -972,6 +972,29 @@
      "why": "D11 sends map-neutral conversions first, and FR-008 requires that every landing passes the fixed cohort, the pinned rows and the pool maps. The patch test fails only when the requested single predicate is not asked, so it enforces FR-006 and is not added scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T18 - the overlap matrix's dead mirrors (R2 G11, first part; FR-006)",
+    "### T18 Approach (checklist part A)",
+    "### T18 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D18",
+     "summary": "Delete matrix.forest_reveal_x, matrix.FOREST_REVEAL_FT and matrix.CANOPY_STRUCT_KEYS (hand-kept mirrors of settlement rules); tests/settlement/test_overlap_taxonomy.py imports forest_reveal_x from l7r.diagram.settlement._geom instead. No rendering change.",
+     "class": "within",
+     "why": "FR-006 says 'a second implementation of a rule is deleted'; a 'Mirror of settlement... (keep in sync)' copy is exactly a second implementation, and CANOPY_STRUCT_KEYS has already drifted (27 vs 34 keys). Pointing the one test at the engine's own function leaves one implementation, which is SC-003. It deletes duplication and does no fixing to make seeds pass, so it falls in the 'turning off automated checks / replacing them' work the GM's 2026-10-25 amendment asked to be finished before stopping. Nothing is narrowed: all three mirrors named are removed."
+    },
+    {
+     "id": "T18-done-guard",
+     "summary": "Done measure (Approach item 9): a test asserts the overlap matrix carries no mirror of an engine rule.",
+     "class": "within",
+     "why": "The test only fails when the thing FR-006 asks for (no second implementation of a rule) is missing from the matrix. It enforces the request and adds no behavior of its own (GM 2026-09-20)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1182,6 +1205,26 @@
      "summary": "runs after T05, moves no map; done means both placers call the predicate, a patch test sees each asked, Inashiro and the grove pool map regenerate unchanged against HEAD, the landing cohort is green",
      "class": "within",
      "why": "D11 sends map-neutral conversions first, and FR-008 requires that every landing passes the fixed cohort, the pinned rows and the pool maps. The patch test fails only when the requested single predicate is not asked, so it enforces FR-006 and is not added scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T18": {
+   "section_sha256": "a4f441de83b38f6ad1bd510c5739fa3d6f27784b7d6f089cdf2879c5c65748f9",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D18",
+     "summary": "Delete matrix.forest_reveal_x, matrix.FOREST_REVEAL_FT and matrix.CANOPY_STRUCT_KEYS (hand-kept mirrors of settlement rules); tests/settlement/test_overlap_taxonomy.py imports forest_reveal_x from l7r.diagram.settlement._geom instead. No rendering change.",
+     "class": "within",
+     "why": "FR-006 says 'a second implementation of a rule is deleted'; a 'Mirror of settlement... (keep in sync)' copy is exactly a second implementation, and CANOPY_STRUCT_KEYS has already drifted (27 vs 34 keys). Pointing the one test at the engine's own function leaves one implementation, which is SC-003. It deletes duplication and does no fixing to make seeds pass, so it falls in the 'turning off automated checks / replacing them' work the GM's 2026-10-25 amendment asked to be finished before stopping. Nothing is narrowed: all three mirrors named are removed."
+    },
+    {
+     "id": "T18-done-guard",
+     "summary": "Done measure (Approach item 9): a test asserts the overlap matrix carries no mirror of an engine rule.",
+     "class": "within",
+     "why": "The test only fails when the thing FR-006 asks for (no second implementation of a rule) is missing from the matrix. It enforces the request and adds no behavior of its own (GM 2026-09-20)."
     }
    ],
    "verdict": "CLEAR"
