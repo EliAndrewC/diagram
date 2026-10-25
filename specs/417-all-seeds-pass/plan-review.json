@@ -120,6 +120,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T40 Approach (checklist part A)": {
+   "sha256": "1fc7066d609ebe9e47f9be660185a29a7b75a4b9ceb223fba20b711162c14aff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2467,6 +2473,45 @@
      "summary": "54 of 54 now carries a one-shot label: observed 2026-10-25, research.md R8, made up of the 48 fixed seeds and the six pinned rows of make cohort-landing, no pool manifest moved.",
      "class": "within",
      "why": "Recording a figure makes no decision. The label has its date and its method, as the figures contract asks, and covers D35's runs (cohort N=48, the pinned rows, the pool maps)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T40 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T40-A.scope",
+     "summary": "T40 deletes only the six settle steps R8 measured as needless (no verdict, no pool manifest moved, alone and together), with the nine dead names make dead-closure finds, weld.py and their tests",
+     "class": "within",
+     "why": "D35 has the NEEDLESS steps deleted together with their tests and dead closure (D23); the other ten of the GM's 16 are not dropped, they stay on D35's conversion route under T31. The GM said to switch off the 16 'in whatever manner you find most efficient ... as per the requirements of this feature', and the accepted D35 is that manner."
+    },
+    {
+     "id": "T40-A.order",
+     "summary": "T40 is T31's first part, landed before the conversions; the four last_resort still-asks stay until T31's landing",
+     "class": "within",
+     "why": "D35 orders the needless deletion first and the per-step conversion of the needed steps after. The four asks are put off to T31's landing, not dropped, so this is sequencing inside D35. The GM left the order to the session ('one at a time or all at once')."
+    },
+    {
+     "id": "T40-A.exit",
+     "summary": "Green landing cohort and pool gate means landed; red means the deletion set is set down whole and recorded with its seeds",
+     "class": "within",
+     "why": "This is D23's own exit word for word (deleted in one landing, set down whole if red, no pass-by-pass iteration), and FR-008 no regression."
+    },
+    {
+     "id": "T40-A.budget",
+     "summary": "One landing",
+     "class": "within",
+     "why": "D23: the needless passes are deleted together in one landing."
+    },
+    {
+     "id": "T40-A.weld-px",
+     "summary": "WELD_PX is removed with weld.py, its only user; no other constant moves",
+     "class": "within",
+     "why": "Part of the dead closure D35/D23 require deleted. No tunable that another placer depends on is changed, so the GM's arbitrary-constants instruction is not engaged."
     }
    ]
   }

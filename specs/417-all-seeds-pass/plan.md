@@ -329,6 +329,21 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
+### T40 Approach (checklist part A)
+
+1. **The goal, in the world.** The settle's rounds no longer run the six steps that repair nothing a placer leaves wrong, and
+   no code they alone used survives them.
+2. **The constraints.** D35, D23; T31's decision preflight (CLEAR); the fixed and pinned seeds; the pool maps unmoved.
+3. **Where each comes from.** G: the GM 2026-10-25 ("switch off the 16 repair steps"). O: R8's measurement and `make dead-closure`.
+4. **Do they describe the world here?** Measured: each step off alone and the six together (R8, observed 2026-10-25).
+5. **The order.** T31's first part, before its conversions; the four `last_resort` still asks stay for T31's landing.
+6. **The exits.** The landing cohort and the pool gate green: landed. Red: the deletion set down with its seeds (D23).
+7. **The search smell.** None: the six are R8's, the nine dead names `make dead-closure`'s.
+8. **The budget.** One landing.
+9. **Done, measured.** The six out of `STEPS`, the nine names and `weld.py` gone with their tests, `make land` green.
+10. **Before moving a constant.** n/a: no constant moves; `WELD_PX` goes with its only user.
+11. **Before fitting things into room.** n/a.
+
 ### T40 (T31's first part, D35): the six settle steps measured needless deleted
 
 - **Approach**: T31's own section, split so its first landing ticks only what it finished (T31's decision preflight ruled CLEAR,
