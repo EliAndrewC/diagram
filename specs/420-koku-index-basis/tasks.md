@@ -8,38 +8,38 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 
 ## Tasks
 
-- [ ] T01 S1+C1: Q1, what was bought, in 0249 (D1; FR-001)
+- [x] T01 S1+C1: Q1, what was bought, in 0249 (D1; FR-001)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: record-owed clean for the touched questions and keys
-- [ ] T02 S1+C1: Q3, the historical rent, in 0265 (D2; FR-001)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed in batch T01+T02+T03+T04: S1-S3 with C1-C3 and the C6 tail: 0249 what was bought (with 0261, 0273, 0279), 0265 the Osaka and Edo rents, 0286 Kyoto salt by the bale, 0301 Japan's eras observed or borrowed, 0302 China's; record-owed clean; impl-check nothing missing
+- [x] T02 S1+C1: Q3, the historical rent, in 0265 (D2; FR-001)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: record-owed clean for the touched questions and keys
-- [ ] T03 S2+C2: Q4, the Japanese eras beyond rice (D3; FR-001)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed in batch T01+T02+T03+T04: S1-S3 with C1-C3 and the C6 tail: 0249 what was bought (with 0261, 0273, 0279), 0265 the Osaka and Edo rents, 0286 Kyoto salt by the bale, 0301 Japan's eras observed or borrowed, 0302 China's; record-owed clean; impl-check nothing missing
+- [x] T03 S2+C2: Q4, the Japanese eras beyond rice (D3; FR-001)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: record-owed clean for the touched questions and keys
-- [ ] T04 S3+C3: Q4, the Chinese eras beyond rice (D4; FR-001)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed in batch T01+T02+T03+T04: S1-S3 with C1-C3 and the C6 tail: 0249 what was bought (with 0261, 0273, 0279), 0265 the Osaka and Edo rents, 0286 Kyoto salt by the bale, 0301 Japan's eras observed or borrowed, 0302 China's; record-owed clean; impl-check nothing missing
+- [x] T04 S3+C3: Q4, the Chinese eras beyond rice (D4; FR-001)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: record-owed clean for the touched questions and keys
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed in batch T01+T02+T03+T04: S1-S3 with C1-C3 and the C6 tail: 0249 what was bought (with 0261, 0273, 0279), 0265 the Osaka and Edo rents, 0286 Kyoto salt by the bale, 0301 Japan's eras observed or borrowed, 0302 China's; record-owed clean; impl-check nothing missing
 - [x] T05 S5+C5: Q5, the method and the poverty-line housing allowance (D5; FR-002a)
       research: physical
       - [x] research pass
