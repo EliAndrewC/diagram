@@ -104,7 +104,7 @@
    "declared": "spec-fidelity"
   },
   "### T02 Approach (checklist part A)": {
-   "sha256": "e2e3ccd5086fde6a7248e892dd10c3760c1b4bca188f8427ac0bb71920cbe1c3",
+   "sha256": "7eb63da9fedc6c0b0e2690ded923edfb7fe54573b32e6c626faed49f481d85e5",
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
@@ -726,6 +726,57 @@
      "summary": "Feature report and make land.",
      "class": "within",
      "why": "Workflow; no scope effect."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02-1 goal",
+     "summary": "T02 delivers, per time scale from within a day to century to century, how far Edo and Qing prices moved good by good with the drift beside each swing (0290), and the modern paper-money yardstick beside it (0291).",
+     "class": "within",
+     "why": "Restates question 1 (every scale the GM listed, trend against swing) and question 2's swing sizes, with the modern fiat comparison the request asks for; nothing in the request is dropped from what T02 says it covers."
+    },
+    {
+     "id": "T02-2/3 England exclusion",
+     "summary": "England's premodern series is not written without the GM's approval; sourced to spec acceptance 3 and research/CLAUDE.md's rule that a comparative source is not sought unless the GM asks for or approves it, routed to him through escalation-check.",
+     "class": "within",
+     "why": "The request asks for Edo Japan and Qing China against a modern fiat-money economy; England's premodern prices appear nowhere in it, so holding them back narrows nothing that was asked, and writing them would be the unrequested scope. The changed text no longer attributes to the request a reason it does not contain (the earlier 'names the US and Japan only'); it now cites a project rule and the spec, labeled G, and sends the question to the GM, which is correct."
+    },
+    {
+     "id": "T02-2 other constraints",
+     "summary": "Citation rules, the 20,000-byte question cap, make record-owed clean, E's sources tagged comparative.",
+     "class": "within",
+     "why": "Project record rules that govern how the asked-for findings are written; they remove no part of the request."
+    },
+    {
+     "id": "T02-4 own money",
+     "summary": "Japan and China figures are kept in their own money, not converted.",
+     "class": "within",
+     "why": "T02's figures are sizes of movement (percentage bands, s.d. of log changes, drift per decade and century), which are unitless and need no conversion. The addition's common measure (grams of silver or days of wage) governs question 2's per-period PRICES, which this block does not claim to write; it is not narrowed here."
+    },
+    {
+     "id": "T02-5 order",
+     "summary": "Write, check and apply; round 3 closed by the arbiter (ask:414-round3, accept).",
+     "class": "within",
+     "why": "Process sequencing; no scope effect."
+    },
+    {
+     "id": "T02-6 exits",
+     "summary": "SILENT with its search where a scale or good has no source; modern scales below a month rest on the one futures series read.",
+     "class": "within",
+     "why": "A sourced absence is the record's standard exit, not a carve-out; the modern sub-month comparison is still made (on a futures series), and the request does not require more than one series per scale."
+    },
+    {
+     "id": "T02-8/9 budget and done",
+     "summary": "One write session plus its share of the check session; done when make record-owed names nothing unanswered for 0290 and 0291.",
+     "class": "within",
+     "why": "Cost and a measured completion test; neither narrows the request."
     }
    ]
   }
