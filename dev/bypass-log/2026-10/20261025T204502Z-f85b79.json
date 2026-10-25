@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-25T20:45:02Z",
+  "target": "entry-gate",
+  "commit": "1c38e60c5",
+  "why": "ENTRY_DRIFT_OK: modal-triage ruled every moved page against these 32 unchanged pop-ups untouched (T36 page sessions; the triage replies recorded with make modal-triaged)"
+}
