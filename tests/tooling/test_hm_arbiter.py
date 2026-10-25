@@ -803,6 +803,8 @@ def test_an_ask_with_no_review_is_recorded_as_before_and_a_review_like_subject_o
     assert "review" not in ha.owed(root)["ask:375-plan-round3"]
     assert ha.main(["ask", "which-route", "which route should the landing take?"]) == 0
     assert "hint" not in capsys.readouterr().out and "review" not in ha.owed(root)["ask:which-route"]
+    assert ha.main(["ask", "375-round3", "may spec-fidelity's round 3 be skipped?", ""]) == 0
+    assert "hint - if this asks about a spec or plan review" in capsys.readouterr().out, "the question's words hint too (420)"
 
 
 def test_make_arbiter_ask_passes_review_through() -> None:
