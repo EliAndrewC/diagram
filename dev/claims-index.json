@@ -41886,10 +41886,10 @@
   "code": "14d7e730a31b41fd",
   "core": "d96ca008324c903f",
   "date": "2026-10-25",
-  "note": "CLEAR_EM = PREFERRED_OFFSET_EM and that value is not in the bundle, so \"half the letter height\" cannot be confirmed; need PREFERRED_OFFSET_EM's definition",
+  "note": "`CLEAR_EM` = `PREFERRED_OFFSET_EM` = 0.5, so `clear` is half the letter height, as the claim says. 0242 fixes that gap only from the caption's own feature, and calls it \"our calibration, not a finding\". It sets no margin to keep off other ink, so GUESS is the right label",
   "pages": {},
   "research": "",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#free space wins": {
   "code": "78f8b5b28784187b",
@@ -70880,21 +70880,21 @@
  },
  "l7r/diagram/waterfields/frame.py::GAP#least spacing between ditch threads": {
   "body": "3be4130b19681022",
-  "claim": "least spacing between ditch threads - GUESS rice-paddies-and-their-plots-suiden.drawing: no least width for a basin, the hamlet basin about 48 ft across its canal; 26 px",
-  "code": "b321023565aa35a9",
+  "claim": "least spacing between ditch threads - rice-paddies-and-their-plots-suiden.drawing: the maps set no least width for a basin, the hamlet basin about 48 ft across its canal - a 26 px floor between threads sets a least column width, a departure the code keeps until feature 417 T34; 26 px",
+  "code": "214186e9b0f57c0b",
   "core": "8c83094ffc1940c2",
   "date": "2026-10-25",
-  "note": "labeled GUESS, but the cited page answers it: \"the maps set no least width for a basin; that would have been the obvious rule, and a wrong one\"; a 26 px floor between threads is a least column width (26-78 ft by tier), so it should be DEVIATION 0005.drawing once the page records it, or the floor dropped",
+  "note": "the claim cites 0005 as its backing, but `GAP = 26.0` keeps a 26 ft least column width, which goes against \"the maps set no least width for a basin ... that would have been the obvious rule, and a wrong one\". The claim admits this is a departure, yet it is not labeled DEVIATION, and the drawing page does not record a thread floor as the project's deliberate choice. Either the 0005 drawing page should record the 26 px floor as a deviation and the claim be relabeled `DEVIATION research/questions/0005-rice-paddies-and-their-plots-suiden.html`, or the code should drop the floor",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
   "research": "69aa78ae06a3c11d",
   "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:70a80197d947bd55",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2"
   ],
-  "triaged": "2026-10-25",
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/frame.py::HEAD_RACE_FT#head race width": {
   "code": "b5442ecb765f1930",
