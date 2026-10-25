@@ -1,0 +1,11 @@
+{
+ "term": "Laspeyres index",
+ "def": "A price comparison that costs the first, or base, place's basket of goods in both places. Set beside the Paasche index, which costs the other place's basket, it gives one end of the range. The two are averaged by their geometric mean into a Fisher index.",
+ "variants": [
+  "Laspeyres index",
+  "Laspeyres",
+  "Laspeyres price index",
+  "Laspeyres indexes",
+  "Laspeyres price indices"
+ ]
+}
