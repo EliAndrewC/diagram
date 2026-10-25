@@ -17,6 +17,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import claims  # noqa: E402 - the module beside this one
 
 
+def accept_line(key: str, was: dict[str, Any], trigger: str) -> str:
+    """The VERDICT line an accept records for one claim. A KNOWN DRIFT STAYS DRIFTED (feature 417, the round arbiter's ruling on
+    ask:417-T29-drifted): an accept that rewrote a DRIFTED claim IN-STEP hid the departure the claim states, and took it out of
+    the list a fixing pass reads; every other verdict the accept stands in for is IN-STEP."""
+    if was.get("verdict") == "DRIFTED":
+        return f"VERDICT {key} DRIFTED - {was.get('note', '')}; a known drift accepted by the round arbiter ({trigger}) to land as filed"
+    return f"VERDICT {key} IN-STEP - accepted by the round arbiter ({trigger}), binding; the GM reviews it"
+
+
 def accept(root: Path, cur: dict[str, Any], index: dict[str, dict[str, Any]], args: argparse.Namespace) -> int:
     """`claims.py accept`: a round-arbiter ACCEPT asked with `REVIEW=claims:<keys>` stands as those claims' verdict, recorded
     at the code and research they have now - a later edit owes them again, as any verdict (the GM 2026-10-24: T26's landing
@@ -30,10 +39,11 @@ def accept(root: Path, cur: dict[str, Any], index: dict[str, dict[str, Any]], ar
     with tempfile.TemporaryDirectory() as tmp:
         claims.bundle(root, cur, keys, Path(tmp))
         units = json.loads((Path(tmp) / "units.json").read_text(encoding="utf-8"))
-    reply = "\n".join(f"VERDICT {k} IN-STEP - accepted by the round arbiter ({args.trigger}), binding; the GM reviews it" for k in keys)
+    reply = "\n".join(accept_line(k, index.get(k) or {}, args.trigger) for k in keys)
     new, msgs = claims.record(index, units, reply, datetime.date.today().isoformat())
     claims.save_index(root / claims.INDEX, claims.live_rows(cur, new))
     for m in msgs:
         print(f"claims-accept: {m}")
-    print(f"claims-accept: {len(keys)} claim(s) recorded IN-STEP on {args.trigger}'s accept")
+    kept = sum(1 for k in keys if (index.get(k) or {}).get("verdict") == "DRIFTED")
+    print(f"claims-accept: {len(keys) - kept} claim(s) recorded IN-STEP and {kept} kept DRIFTED (a known drift) on {args.trigger}'s accept")
     return 0

@@ -139,12 +139,62 @@ def gate(cx: Any, root: Path) -> tuple[list[str], list[str]]:  # noqa: ANN401 - 
     """(refusals, warnings) for the push: owed units, introduced findings and carried ones not yet filed (FR-013, D28);
     pre-existing and filed carried findings warn."""
     refuse, intro, pre, carried = classified(cx, root)
+    # ...A KNOWN DRIFT IS NO INTRODUCED FINDING (feature 417, the round arbiter's ruling on ask:417-T29-drifted): a DRIFTED claim
+    # whose code the landing left as the base had it, and whose own text names an open task row that names it, is drift a
+    # relabel revealed, not drift the landing made - it warns, and the fixing task carries it
+    known = known_drifts(cx, root)
+    intro, revealed = [x for x in intro if _key_of(x) not in known], [x for x in intro if _key_of(x) in known]
+    pre = pre + [f"known drift ({known[_key_of(x)]}): {x}" for x in revealed]
     done = filed(root)
     d = active_feature(root)
     how = f"`make claims-carry F={d.name.split('-', 1)[0]}`" if d is not None else "`make task-start F=<n> T=<Txx>`, then `make claims-carry F=<n>`"
     unfiled = [f"carry: {line} - a finding on code the change left unchanged: file it with {how} (make land files it itself)" for k, line in carried if k not in done]
     warn = [f"carried ({d.name if d else ''} {done[k]}): {line}" for k, line in carried if k in done]
     return refuse + [f"introduced: {x}" for x in intro] + unfiled, [f"pre-existing: {x}" for x in pre] + warn
+
+
+_TASK_NAMED = re.compile(r"feature (\d{3}) (T\d+)")
+#: The words `claims_accept.accept_line` records when the round arbiter accepts a known drift.
+ACCEPTED = "a known drift accepted by the round arbiter"
+
+
+def _key_of(line: str) -> str:
+    """The claim key a classified line (`f"{verdict:<14} {key} - {note}"`) names."""
+    return line[14:].strip().split(" - ", 1)[0].strip()
+
+
+def known_drifts(cx: Any, root: Path) -> dict[str, str]:  # noqa: ANN401 - `cx` is the claims module
+    """key -> `<feature> <task>` for every DRIFTED claim whose unit's code is the merge base's (its core, as `classify` reads it)
+    and whose own text names an OPEN task row of that feature's tasks.md which names the claim's unit - a departure the relabel
+    revealed and the feature filed for fixing, not one the landing made."""
+    cur = cx.current(root)
+    index = cx.load_index(root / cx.INDEX)
+    mb = (cx._git(root, "merge-base", "HEAD", "origin/main") or "").strip()
+    cand: dict[str, tuple[str, str]] = {}
+    for key, v in index.items():
+        row = cur.get(key)
+        m = _TASK_NAMED.search(row.claim.account) if row is not None and v.get("verdict") == "DRIFTED" else None
+        if m is not None:
+            cand[key] = (m.group(1), m.group(2))
+    if not cand or not mb:
+        return {}
+    with tempfile.TemporaryDirectory() as tmp:
+        cores = cx.base_cores(cx.base_tree(root, mb, Path(tmp)), keep=root)
+    rows: dict[tuple[str, str], str] = {}
+    out: dict[str, str] = {}
+    for key, (feat, task) in cand.items():
+        if (feat, task) not in rows:
+            specs = sorted((root / "specs").glob(f"{feat}-*/tasks.md"))
+            box = re.search(rf"^- \[ \] {task} .*$", specs[0].read_text(encoding="utf-8"), re.M) if specs else None
+            rows[(feat, task)] = box.group(0) if box else ""
+        uid = key.rsplit("#", 1)[0]
+        name = uid.split("::", 1)[-1].rsplit(".", 1)[-1]
+        # ...unchanged code, or - where the base tree's scope holds no core for the unit to compare - the round arbiter's own
+        # recorded accept of the drift (`claims_accept.accept_line`), which is the binding answer for those claims
+        same = cores.get(uid) == index[key].get("core") or (cores.get(uid) is None and ACCEPTED in index[key].get("note", ""))
+        if rows[(feat, task)] and re.search(rf"(?<![\w.]){re.escape(name)}(?!\w)", rows[(feat, task)]) and same:
+            out[key] = f"{feat} {task}"
+    return out
 
 
 def classified(cx: Any, root: Path) -> tuple[list[str], list[str], list[str], list[tuple[str, str]]]:  # noqa: ANN401
