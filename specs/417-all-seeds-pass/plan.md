@@ -280,16 +280,20 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
   lattice 14 ft off water where 0055 and 0014 put the path on the bank) are cited with their departures, as above. R9 counts each kind,
   and every claim whose description is reverted after a second wrong verdict - its research label kept (GUESS naming its pass, or the citation), never restored to UNRESEARCHED. Rendering: none.
 
-- **D37 (T36 split at its landing; the unstated numbers after T31)**: T36 lands the relabels of the 476 claims of passes P1-P7
-  (R9 counts them) and labels the 8 no pass looked into by what a further pass, P8, finds. The numbers no claim states (1,809
-  in 149 files, observed 2026-10-25; method: `make tunables INLINE=1 COUNT=1`) - D31 (ii)'s claims, which T29 left listed by
-  file - become a task of their own, T38, done after T31: each is already marked a knob by default and listed file, line and
-  function by `make tunables INLINE=1` on every run, so none goes unmarked meanwhile; T31's deletion removes settle code whose
-  numbers then need no claim; and about 1,800 new claims are many claims rounds, which would hold T31 - the GM's "then" - for
-  hours. What it costs: until T38 lands, those numbers are marked by the listing, not in their units' own claims. Priced and
-  not taken: the claims before T31 (holds the deletion); one claim per file saying every unstated number in it is ours (no
-  check can judge a claim that names no number). Chosen by the session, under D31 (ii)'s "what T29 cannot reach is listed by
-  file". Rendering: none.
+- **D37 (T36 and T38 before T31; a source no page holds yet)**: (a) T36 lands the relabels of the 479 claims D36 left
+  `UNRESEARCHED` (observed 2026-10-25; method: `grep` of ` - UNRESEARCHED` over `l7r`, `pool`, `docs`): 476 are on passes P1-P7's
+  lists (method: the `- ` lines of `evidence/t29/pass-P*.txt`) and 3 are not - `wood_rank.py`'s median house,
+  `castle_civic.py`'s martial hall compound, and `tools/claims.py`'s docstring example of the grammar, which describes no map. The
+  8 claims no pass looked into (6 on the lists, the first two of those 3) go to a further pass, P8 (`evidence/t29/pass-P8-unlooked.md`),
+  and are labeled by what it finds; the grammar example stays as written. (b) A claim a source answers that no page holds yet -
+  37 claims resting on 14 sources (observed 2026-10-25; method: `grep` of T36's heads naming a pass's source rather than a page)
+  - has its source recorded on the page its question belongs to first, through a page session under the record's rules
+  (`make page-session`, as D32 queues page edits), and is cited once the page stands: as a convention where the code follows it,
+  and with its departure stated, landing DRIFTED with its unit named in its T33-T35 row, where the code departs. A GUESS label
+  naming such a source is not used. (c) The numbers no claim states (1,809 in 149 files, observed 2026-10-25; method: `make
+  tunables INLINE=1 COUNT=1`) are given claims in T38, BEFORE T31, as D31 (ii) orders - except those in the code T31 deletes,
+  which no later pass will tweak and so need none; T31's deletion is listed first (its six needless steps' definitions, R8) so
+  T38 skips them. The order is T36, T38, T31. Rendering: none.
 
 ### T36 Approach (checklist part A)
 
@@ -297,13 +301,14 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 2. **The constraints.** D32, D36, D37; the claim grammar; impl-drift's verdicts.
 3. **Where each comes from.** G: the GM 2026-10-25. R: passes P1-P7 (`evidence/t29/`) and P8.
 4. **Do they describe the world here?** Per claim, its pass's reading.
-5. **The order.** After T29, before T31.
+5. **The order.** After T29; then T38; then T31 (D37 c).
 6. **The exits.** Silent or no source could speak: bare GUESS naming the pass. A page answers as a convention: cited. A page
    answers and the code departs: cited with the departure, landing DRIFTED, its unit named in its T33-T35 row. A source no
-   page records yet: GUESS naming the source and, where it departs, its fixing task. Not looked into: pass P8, then as above.
+   page records yet: recorded on its page by a page session first (D37 b), then cited as above. Not looked into: pass P8, then
+   as above.
 7. **The search smell.** No label is changed to make a round pass; a claim impl-drift rules wrong twice keeps its research
    label with its description reverted.
-8. **The budget.** The passes (done), P8, two claims rounds.
+8. **The budget.** The passes (done), P8 (done), the page sessions for the 14 sources, two claims rounds.
 9. **Done, measured.** The landing's claims gate green; R9 with T36's counts.
 10. **Before moving a constant.** n/a - no value moves.
 11. **Before fitting things into room.** n/a.
@@ -333,7 +338,7 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 2. **The constraints.** D35, D22, D23, D11; the fixed and pinned seeds, the pool maps' gate.
 3. **Where each comes from.** G: the GM 2026-10-25 ("switch off the 16 repair steps"). O: the probe's method.
 4. **Do they describe the world here?** Measured per step (R8).
-5. **The order.** After T29 and T36, as the GM ordered; the probe's measurement runs beside them, deciding nothing.
+5. **The order.** After T29, T36 and T38 (D37 c), as the GM ordered; the probe's measurement runs beside them, deciding nothing.
 6. **The exits.** Needless (no fixed or pinned verdict moved, the pool's gate green): deleted together. Needed: a conversion
    decided before code, or an exception ruled by the arbiter.
 7. **The search smell.** One probe a step, no tuning.

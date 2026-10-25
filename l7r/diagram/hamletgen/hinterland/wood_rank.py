@@ -74,7 +74,7 @@ def house_floor(houses: Sequence[Pt], fall: Pt) -> float:
     -inf with no houses.
 
     Research: the houses' height - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a wood below the houses and by the water stands where the record puts grass
-    the median house - UNRESEARCHED: "below the houses" read against their median height, not the lowest house's"""
+    the median house - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P8, 2026-10-25); "below the houses" read against their median height, not the lowest house's"""
     hs = sorted(-(x * fall[0] + y * fall[1]) for x, y in houses)
     if not hs:
         return -math.inf

@@ -294,7 +294,7 @@ class GroundCoverMixin:
 
         Research:
             off the crops - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: every paddy and dry plot padded by the crop margin
-            off the treads - UNRESEARCHED: 4 ft of bare verge along every lane, street and road
+            off the treads - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P8, 2026-10-25); 4 ft of bare verge along every lane, street and road
             off the channels - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: the cut-bank margin off every irrigation channel, streams at their drawn width"""
         bs = self.bscale
         halo_rects, halo_circles = self._urban_keepouts(box)  # the urban-clearance halo (see _urban_keepouts)

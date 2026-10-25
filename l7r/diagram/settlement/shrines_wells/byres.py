@@ -79,7 +79,7 @@ def household_byre_form(s: Any) -> tuple[str | None, float]:
 
     Research:
         byre form knob - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: byre_form
-        household forms only on a nucleated seating - UNRESEARCHED
+        household forms only on a nucleated seating - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the inner stable, a corner of the main house's doma, was widely practiced nationally, in no way tied to the nucleated village - a household byre is drawn only on a nucleated seating, a departure the code keeps until feature 417 T33
     """
     if not getattr(s, "_nucleated", False):
         return None, 0.0

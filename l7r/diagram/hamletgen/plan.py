@@ -401,7 +401,7 @@ def band_extent(households: int, shape: str | None, ground: float | None = None)
 SEAT_STANDOFF = 12.0
 """px from the field margin to the seat band's near edge (`cluster._seat_frame`'s standoff).
 
-Research: standoff from the field - UNRESEARCHED: 12 ft"""
+Research: standoff from the field - research/questions/0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html: a village house stood about 3 ft back from cultivated land (Mino, Tokugawa custom compiled 1892); the seating band's 12 ft is ours; 12 ft"""
 BELT_REACH = 146.0
 """px upwind of the cluster's windward fringe to the belt's far row (`belt_off_canvas` samples 36, 90 and 146).
 
