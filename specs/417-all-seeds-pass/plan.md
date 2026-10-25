@@ -122,8 +122,9 @@ Story 2), the code-size delta (SC-004), the feature report.
    `law.py` imports no lower module's rule but `thread` may not import `law`).
 3. **Where each comes from.** O: FR-006 ("a second implementation of a rule is deleted"), R2 G1, D11 (the copies that agree go
    first: they move no map).
-4. **Do they describe the world here?** Yes: each pair holds the same number for the same research line (0081's 40 ft tail and
-   25 ft join, 0246's 100 ft, 0081's 140 / 50 / 40 bend, 0014's 6 ft join to the bund).
+4. **Do they describe the world here?** Yes, measured 2026-10-25 (each copy's definition read off its module by grep, and
+   its research line beside it): each pair holds the same number for the same research line (0081's 40 ft tail and 25 ft join,
+   0246's 100 ft, 0081's 140 / 50 / 40 bend, 0014's 6 ft join to the bund).
 5. **The order.** After T04; before T16 (the copies that differ) and T06.
 6. **The exits.** A copy whose RULE differs although its number agrees (`clearance._ARM_FT`, a hairpin's arm; `_ZIGZAG_RUN_FT`;
    `joints._SHORT_LEG_FT`, a returning leg; `touch._ALONG_STEP_FT`, a sample spacing) is not merged: different rules.

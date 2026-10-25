@@ -122,7 +122,7 @@
    "declared": "spec-fidelity"
   },
   "### T05 Approach (checklist part A)": {
-   "sha256": "ca866768aedb5978e9350f5e3cca69db16c050d3514ec531eb4b72d03c0485c7",
+   "sha256": "3968b01c3652fe55eca44a3777c7d33a3e20c41d3009d28b69796c38d0f526df",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -762,6 +762,45 @@
      "summary": "consts_ways.FIELD_REACH_FT = 6.0 (0014) is read by thread.SPUR_REACH_FT and law.FIELD_REACH_FT",
      "class": "within",
      "why": "FR-006 and D11: equal copies made one at the rule's recorded value. It is put in consts_ways because the layer order forbids thread importing law, which is about where the constant lives, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T05 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05-1 merge equal-valued copies",
+     "summary": "Each lane rule coded in several places with the same value (40 ft tail, 25 ft join, knot margin 1.0, 100 ft serve, 140/50/40 bend, 6 ft field reach) reads one named constant; the copies are deleted.",
+     "class": "within",
+     "why": "FR-006: 'a second implementation of a rule is deleted'; the GM's 'any rule coded twice' scope (request, 'Yes please')."
+    },
+    {
+     "id": "T05-6 exits",
+     "summary": "Constants whose number agrees but whose rule differs (clearance._ARM_FT, _ZIGZAG_RUN_FT vs the tail, joints._SHORT_LEG_FT, touch._ALONG_STEP_FT) are not merged.",
+     "class": "within",
+     "why": "FR-006 deletes a second implementation of a RULE; a different rule sharing a number is not a second implementation, so leaving it is not a carve-out from what was asked."
+    },
+    {
+     "id": "T05-5 order",
+     "summary": "After T04; before T16 (copies that differ) and T06.",
+     "class": "within",
+     "why": "D11: 'The tasks that move no map go first'; equal-valued merges move no map."
+    },
+    {
+     "id": "T05-9/10 done and no value moves",
+     "summary": "Done when a test asserts each former copy is the one constant and route.py holds no bare 140/50/40, the reference map manifest is unchanged, and the landing cohort is green; no value moves.",
+     "class": "within",
+     "why": "Enforcement of FR-006 and FR-008; D11's landing through make land when FR-008 holds."
+    },
+    {
+     "id": "T05-4 measurement label (the only change)",
+     "summary": "Item 4's claim that each pair holds the same number for the same research line now carries a one-shot label: measured 2026-10-25, by grep of each definition beside its research line.",
+     "class": "within",
+     "why": "A provenance label on an existing factual premise; it changes no decision and narrows nothing."
     }
    ]
   }
