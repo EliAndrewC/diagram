@@ -180,6 +180,8 @@ bannermen	hatamoto
 banners	banner
 banners'	banner
 bansho	bansho
+banshu	Banshu
+banshu's	Banshu
 bansui	bansui
 banta	banta
 banyuechi	banyuechi
@@ -189,6 +191,8 @@ barbicans	barbican
 bare hill	bald hill
 bare hills	bald hill
 bare red hill	bald hill
+bare-bones basket	bare-bones basket
+bare-bones year of goods	bare-bones basket
 baren	baren
 bargeboard	bargeboard
 bargeboards	bargeboard
@@ -272,6 +276,7 @@ board-clapper	clapper-board
 board-wages	board wages
 bobana	bobana
 bochi	bochi
+bocho	Bocho
 bodaiji	bodaiji
 bofurin	bofurin
 bohea	Bohea
@@ -284,6 +289,7 @@ bondservant	bondservant
 bondservants	bondservant
 bondservants'	bondservant
 book of songs	Book of Songs
+book-entry rice	book-entry rice
 boom	boom
 booms	boom
 booting	booting
@@ -390,6 +396,7 @@ cangue	cangue
 canopy tree	canopy-tree
 canopy trees	canopy-tree
 canton	Canton
+canton basket	bare-bones basket
 cao wei	Three Kingdoms
 caoshi	caoshi
 capitalization	capitalize
@@ -431,6 +438,8 @@ catties	jin
 catty	jin
 causeway	causeway
 causeways	causeway
+cbot	CBOT
+cbt	CBOT
 cdr	crude death rate
 cdrs	crude death rate
 celestial order	Celestial Order
@@ -456,6 +465,7 @@ chancellor's	chancellor
 chancellors	chancellor
 chancellors'	chancellor
 chang'an	Chang'an
+changlu	Changlu
 chao	chao
 chaoguan	chaoguan
 charity graveyard	charity graveyard
@@ -588,6 +598,9 @@ combs	comb
 command area	command area
 commanderies	commandery
 commandery	commandery
+commodity money	commodity money
+commodity standard	commodity money
+commodity standards	commodity money
 common cemeteries	common cemetery
 common cemetery	common cemetery
 common graveyard	common cemetery
@@ -630,6 +643,9 @@ coppiced	coppice
 coppices	coppice
 coppicing	coppice
 copse	copse
+correlated	correlation
+correlation	correlation
+correlations	correlation
 corvee	corvee
 corvée	corvee
 cosmopolitan	cosmopolitan lineage
@@ -1089,6 +1105,9 @@ festival host house	festival lodging
 festival lodging	festival lodging
 festival's host house	festival lodging
 fetch	fetch
+fiat	fiat
+fiat money	fiat
+fiat standard	fiat
 fief	fief
 fiefs	fief
 field boat	field boat
@@ -1274,6 +1293,9 @@ furo	furo
 fuse	fuse
 fusekoshi	inverted siphon
 fusuma	fusuma
+futures	futures
+futures contract	futures
+futures contracts	futures
 fuyu	Fuyu
 fuyu persimmon	Fuyu
 föhn	fohn
@@ -1292,6 +1314,7 @@ gabled roof	gabled roof
 gaison	gaison
 galleried mining	siege mining
 game master	GM
+gang salt	gang salt
 gangi	gangi
 gannin	gannin
 gannin bozu	gannin
@@ -1658,6 +1681,8 @@ hoardings	hoarding
 hoei	Hoei
 hogo	hogo
 hoin	hōin
+hoji	Hoji silver
+hoji silver	Hoji silver
 hojo	hojo
 hojo form	hojo
 hojo seibi	hojo seibi
@@ -1739,6 +1764,7 @@ houseman	gokenin
 housemen	gokenin
 houzhaofang	houzhaofang
 hsien	hsien
+huai salt district	Huai salt district
 huaibei	Huaibei
 huainan	Huaibei
 huanghuali	huanghuali
@@ -2411,6 +2437,8 @@ li of silver	li of silver
 li river	Li River
 liang	liang
 liang-guang	Liang-Guang
+lianghuai	Huai salt district
+lianghuai salt	Huai salt district
 lianguang	Liang-Guang
 liao	Liao dynasty
 liao dynasty	Liao dynasty
@@ -2556,6 +2584,7 @@ mao	Mao commentary
 mao commentary	Mao commentary
 maoqu	maoqu
 market god	ichigami
+market integration	market integration
 market-god	ichigami
 martial temple	Martial temple
 martial temples	Martial temple
@@ -2643,6 +2672,8 @@ million btu	BTU
 mimasaka	Mimasaka
 mimasaka province	Mimasaka
 mimizuka	ear mound
+minbusho note	Minbusho notes
+minbusho notes	Minbusho notes
 miner's	siege mining
 ming	Ming dynasty
 ming dynasty	Ming dynasty
@@ -2958,6 +2989,8 @@ odoi	Odoi
 odoko	odoko
 oei	Oei
 offering hall	offering hall
+official convoy	official convoy
+official convoys	official convoy
 official salt	official salt
 offtake	offtake
 offtakes	offtake
@@ -3178,6 +3211,7 @@ ponded-storage irrigation	ponded-storage irrigation
 pongee	pongee
 pool map	the pool
 pool maps	the pool
+poorly integrated	market integration
 post station	shukuba
 post stations	shukuba
 post town	shukuba
@@ -3453,6 +3487,7 @@ root-cut	root-cut
 root-cutting	root-cut
 roson	roson
 rotation period	rotation period
+rough rice	rough rice
 round concrete divider	cylinder divider
 round divider	cylinder divider
 round dividers	cylinder divider
@@ -3511,7 +3546,9 @@ sallying	sortie
 sallyport	sally port
 salt censor	salt censor
 salt censors	salt censor
+salt convoys	official convoy
 salt road	Salt Road
+salt-advance rice	salt-advance rice
 salvage excavation	salvage excavation
 samurai ground	buke-chi
 san no torii	ichi-no-torii
@@ -3908,6 +3945,9 @@ spot fire	spotting
 spot fires	spotting
 spot height	spot height
 spot heights	spot height
+spot price	spot price
+spot rice	spot price
+spot rice price	spot price
 spotting	spotting
 spread footing	footing
 spring and autumn	Spring and Autumn
@@ -3926,6 +3966,10 @@ stand age	forest stand
 stand density	forest stand
 standard cash	standard cash
 standard coin	standard cash
+standard deviation	standard deviation
+standard deviations	standard deviation
+standard error	standard error
+standard errors	standard error
 state altar	state altar
 state altars	state altar
 state cult	state cult
@@ -4035,6 +4079,8 @@ superelevated	superelevation
 superelevates	superelevation
 superelevation	superelevation
 superstructure	superstructure
+supervising secretaries	supervising secretary
+supervising secretary	supervising secretary
 supplement to the farm manual	Bu nongshu
 suruga	Suruga
 suruga province	Suruga
@@ -4056,6 +4102,7 @@ suzaku ōji	Suzaku-oji
 suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
 suzhou	Suzhou
+suzhou basket	bare-bones basket
 sward	sward
 sweep well	well-sweep
 sweep-type well	well-sweep
@@ -4551,6 +4598,7 @@ volatile	volatiles
 volatiles	volatiles
 votive plaque	votive plaque
 votive plaques	votive plaque
+voucher law	voucher law
 wagon inn	wagon inn
 wagon inns	wagon inn
 wagon-inn	wagon inn
@@ -4647,9 +4695,11 @@ weitian	weitian
 well curb	curb
 well house	well-house
 well houses	well-house
+well integrated	market integration
 well sweep	jiegao
 well-house	well-house
 well-houses	well-house
+well-integrated	market integration
 well-sweep	well-sweep
 wellhead	curb
 wellheads	curb
@@ -4675,6 +4725,7 @@ whipper-in	whipper-in
 whippers-in	whipper-in
 white charcoal	white charcoal
 white oak	shirakashi
+white oil	white oil
 white-charcoal	white charcoal
 white-sand court	oshirasu
 white-tawed	shironameshi

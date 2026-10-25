@@ -1,0 +1,8 @@
+{
+ "term": "standard error",
+ "def": "How far a figure measured from a limited sample may be off by chance from the true figure. This record allows twice the standard error before calling two swings different.",
+ "variants": [
+  "standard error",
+  "standard errors"
+ ]
+}
