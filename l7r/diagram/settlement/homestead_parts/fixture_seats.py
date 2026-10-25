@@ -689,7 +689,7 @@ def _seats(
         household grave corner - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: SE or NW of the house, then the other two corners
         household grave off the house's corner - UNRESEARCHED: 14 ft out each way (`SHRINE_CORNER_FT`) standing for the plot's corner; no plot's size is recorded with its grave
         seat positions along each wall - UNRESEARCHED: privy 0.3 / 0.40 / -0.35 hw, coop 0.34 hw spread and
-            0.3 hh, wood shed 0.25 hw and 0.1 hh, a flank brought back until its front end is at the front wall"""
+            0.3 hh, wood shed 0.25 hw and 0.1 hh"""
     if kind == "privy":
         seat = {  # the four attested seats (269 B10); -x is the shed end of the house, where the doma and its stable are
             "yard": (hw * 0.3, -(hh / 2 + g + px(PRIVY_YARD_STEP_FT) + d / 2), w, d),
@@ -740,9 +740,7 @@ def _seats(
         return seats[k:] + seats[:k]
     if kind == "woodpile":  # THE WOOD SHED (feature 280 M21): the old stack's walls, a ken further out - a building of its own
         st, back = px(WOODSHED_STEP_FT), -(hh / 2 + g + d / 2)
-        side = min(hh * 0.1, hh / 2 - w / 2)  # a flank seat's front end never past the front wall (T106: at 0.1 hh it always was)
-        seats = [(-hw * 0.25, back - st, w, d), (hw * 0.25, back - st, w, d), (hw / 2 + g + st + d / 2, side, d, w), (-(hw / 2 + g + st + d / 2), side, d, w)]
-        return seats  # not turned by the household's roll: turning them re-deals Sawada into a knot no gather or room mends (405 T106)
+        return [(-hw * 0.25, back - st, w, d), (hw * 0.25, back - st, w, d), (hw / 2 + g + st + d / 2, hh * 0.1, d, w), (-(hw / 2 + g + st + d / 2), hh * 0.1, d, w)]
     # the household shrine: a plot corner, rolled by compass name (NW the likeliest, 17 of 37; NE the kimon; SW Tokushima);
     # the household grave the same distance off the house's corner, at the SE or NW (0236), then the other two
     off = px(SHRINE_CORNER_FT)
