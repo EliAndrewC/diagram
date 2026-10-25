@@ -803,6 +803,59 @@
      "why": "A provenance label on an existing factual premise; it changes no decision and narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T05 - one lane rule, one constant, where the copies agree (R2 G1, first part; FR-006)",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05-scope",
+     "summary": "T05 merges only the lane-rule copies that hold the same value (TWICE 4, 5, 6, 8, 14); copies that differ go to T16; ordered after T04, before T16 and T06; no value moves",
+     "class": "within",
+     "why": "FR-006 deletes a second implementation of a rule; D11 says the tasks that move no map go first and a rule coded twice with different values is handled separately. Doing the agreeing copies first, at no value change, is that sequencing, not a cut: the differing copies are still owed (T16)."
+    },
+    {
+     "id": "T05-exit-6",
+     "summary": "Constants whose number agrees but whose RULE differs (clearance._ARM_FT, _ZIGZAG_RUN_FT as distinct from the tail, joints._SHORT_LEG_FT, touch._ALONG_STEP_FT) are not merged",
+     "class": "within",
+     "why": "FR-006 removes a second implementation of the SAME rule; two different rules that happen to share a number are not one rule coded twice, so merging them would go beyond FR-006, not narrow it."
+    },
+    {
+     "id": "T05-done",
+     "summary": "Done is a test asserting each former copy is the one constant and route.py holds no bare 140/50/40, the reference map manifest unchanged, the landing cohort green with the same verdicts",
+     "class": "within",
+     "why": "The test only fails if the requested single implementation (FR-006/SC-003) is absent, so it enforces the request; the unchanged manifest and green cohort are FR-008 and D11's land-green condition."
+    },
+    {
+     "id": "D13",
+     "summary": "consts_ways.TAIL_CUT_FT = 40.0 is the one tail constant read by sweeps, bund, settle/shapes, knots, serve and touch",
+     "class": "within",
+     "why": "One implementation of the 40 ft tail rule at its recorded research value (0081), per FR-006 and D11; no value moves. Rendering: none."
+    },
+    {
+     "id": "D14",
+     "summary": "fabric._LANE_JOIN_FT and joints._MEET_FT become consts_ways.LANE_JOIN_FT; knots' own _KNOT_MARGIN deleted for the imported KNOT_MARGIN; sweeps._SERVE_FT becomes consts_ways.WEB_REACH_FT",
+     "class": "within",
+     "why": "Deletes second copies of the same rule at equal values, which is exactly FR-006's 'a second implementation of a rule is deleted'. Rendering: none."
+    },
+    {
+     "id": "D15",
+     "summary": "route.py reads clearance._HAIRPIN_DEG, _ZIGZAG_DEG and _ZIGZAG_RUN_FT in place of its literal 140 / 50 / 40",
+     "class": "within",
+     "why": "The bend rule is coded twice (literal and named constant) at the same values; one implementation per FR-006. Using _ZIGZAG_RUN_FT here is consistent with exit 6, which only keeps it apart from the 40 ft tail, a different rule. Rendering: none."
+    },
+    {
+     "id": "D16",
+     "summary": "A new consts_ways.FIELD_REACH_FT = 6.0 is read by thread.SPUR_REACH_FT and law.FIELD_REACH_FT",
+     "class": "within",
+     "why": "Two copies of the 6 ft field reach (0014) become one constant, per FR-006; placing it in consts_ways is how the layer order (thread may not import law) is respected, a design choice that narrows nothing. Rendering: none."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -936,6 +989,56 @@
      "summary": "Completion is measured by a test on the predicate swap and the FR-008 cohort.",
      "class": "within",
      "why": "Enforcement of FR-006 and FR-008 - a test whose only effect is that the requested single-predicate check works; not unrequested scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T05": {
+   "section_sha256": "94ff97757d6ae9eb51fef36b3b71a5df092bed3b122d5f6de80580213c38f473",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T05-scope",
+     "summary": "T05 merges only the lane-rule copies that hold the same value (TWICE 4, 5, 6, 8, 14); copies that differ go to T16; ordered after T04, before T16 and T06; no value moves",
+     "class": "within",
+     "why": "FR-006 deletes a second implementation of a rule; D11 says the tasks that move no map go first and a rule coded twice with different values is handled separately. Doing the agreeing copies first, at no value change, is that sequencing, not a cut: the differing copies are still owed (T16)."
+    },
+    {
+     "id": "T05-exit-6",
+     "summary": "Constants whose number agrees but whose RULE differs (clearance._ARM_FT, _ZIGZAG_RUN_FT as distinct from the tail, joints._SHORT_LEG_FT, touch._ALONG_STEP_FT) are not merged",
+     "class": "within",
+     "why": "FR-006 removes a second implementation of the SAME rule; two different rules that happen to share a number are not one rule coded twice, so merging them would go beyond FR-006, not narrow it."
+    },
+    {
+     "id": "T05-done",
+     "summary": "Done is a test asserting each former copy is the one constant and route.py holds no bare 140/50/40, the reference map manifest unchanged, the landing cohort green with the same verdicts",
+     "class": "within",
+     "why": "The test only fails if the requested single implementation (FR-006/SC-003) is absent, so it enforces the request; the unchanged manifest and green cohort are FR-008 and D11's land-green condition."
+    },
+    {
+     "id": "D13",
+     "summary": "consts_ways.TAIL_CUT_FT = 40.0 is the one tail constant read by sweeps, bund, settle/shapes, knots, serve and touch",
+     "class": "within",
+     "why": "One implementation of the 40 ft tail rule at its recorded research value (0081), per FR-006 and D11; no value moves. Rendering: none."
+    },
+    {
+     "id": "D14",
+     "summary": "fabric._LANE_JOIN_FT and joints._MEET_FT become consts_ways.LANE_JOIN_FT; knots' own _KNOT_MARGIN deleted for the imported KNOT_MARGIN; sweeps._SERVE_FT becomes consts_ways.WEB_REACH_FT",
+     "class": "within",
+     "why": "Deletes second copies of the same rule at equal values, which is exactly FR-006's 'a second implementation of a rule is deleted'. Rendering: none."
+    },
+    {
+     "id": "D15",
+     "summary": "route.py reads clearance._HAIRPIN_DEG, _ZIGZAG_DEG and _ZIGZAG_RUN_FT in place of its literal 140 / 50 / 40",
+     "class": "within",
+     "why": "The bend rule is coded twice (literal and named constant) at the same values; one implementation per FR-006. Using _ZIGZAG_RUN_FT here is consistent with exit 6, which only keeps it apart from the 40 ft tail, a different rule. Rendering: none."
+    },
+    {
+     "id": "D16",
+     "summary": "A new consts_ways.FIELD_REACH_FT = 6.0 is read by thread.SPUR_REACH_FT and law.FIELD_REACH_FT",
+     "class": "within",
+     "why": "Two copies of the 6 ft field reach (0014) become one constant, per FR-006; placing it in consts_ways is how the layer order (thread may not import law) is respected, a design choice that narrows nothing. Rendering: none."
     }
    ],
    "verdict": "CLEAR"
