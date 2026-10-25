@@ -56553,15 +56553,20 @@
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.share#seats behind the house": {
   "body": "542a6ed10f97c749",
-  "claim": "seats behind the house - groves-of-trees-around-farmhouses-yashikirin: the deep stands stood windward, northwest by default, the house's south left open (0028); the 0.7 is ours; taken nearest a point `FOCUS_DEPTH` (0.7) of the reach behind the house",
-  "code": "6c972ff5663ca36f",
+  "claim": "seats behind the house - groves-of-trees-around-farmhouses-yashikirin: the deep stands stood windward, northwest by default, the house's south left open (0028) - `back` is the house frame's rear whatever the map's wind, a departure the code keeps until feature 417 T33; the 0.7 is ours; taken nearest a point `FOCUS_DEPTH` (0.7) of the reach behind the house",
+  "code": "1e5480fd56743d76",
   "core": "c822d82eeea90695",
   "date": "2026-10-25",
-  "note": "`back` is fixed to the house frame's -y (away from the south-facing front) whatever the map's wind, while the cited finding is that the groves \"stood on the side the wind came from\", and 0036's drawing page lets a declared wind put the deep stands \"on the south and west\". On a non-northerly wind the seats fall leeward (latent: every map so far takes the northwest). Take `back` from the map's windward pair, or say \"behind\" is ours; a known drift accepted by the round arbiter (ask:417-T36-drifted) to land as filed",
+  "note": "`back = (sin th, -cos th)` is fixed to the house frame's rear, whatever the map's wind, but the research puts the deep stands \"on the side the wind came from\" and lets that side change with the region. The drawing page makes the side a per-map knob (\"each map chooses it as a knob ... northwest by default\") and puts the open front \"on the side away from the wind\". The claim admits the departure but is written as a question claim, and neither page records a rear-of-frame placement as a deliberate choice. The claim should read `DEVIATION <0036 drawing page>`, and the drawing page should record the departure until 417 T33, or the code should take `back` from the map's windward. The 0.7 focus depth is also on no page (the drawing's §5 depth is 1.57 house depths), so \"the 0.7 is ours\" should be a GUESS, not part of a question claim",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785"
   },
   "research": "ad1c5b1267ac451b",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:0d8373ca91f4bc07",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:25284bd61428a0e8",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:666cce295d307b2e"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::bundle_parts#plumbing": {
