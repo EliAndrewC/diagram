@@ -83,15 +83,15 @@
   "date": "2026-10-10",
   "note": "1/3/7 count and row recorded as deliberate deviation",
   "pages": {
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html": "fd1a3212a5c01f72"
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html": "6defdd88ddd07f1b"
   },
-  "research": "6d6aec09760b8162",
+  "research": "8025485240a5c12d",
   "rests": [
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:14b0afa330dc0ace",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:b87f514671879229"
   ],
   "section": "8a93256e3dc37d64",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#arch pitch": {
@@ -294,15 +294,16 @@
   "date": "2026-10-25",
   "note": "a plain earth-floored vestibule is tagged genkan, but 0104 finds that in the Edo period genkan \"meant an entrance with a shikidai\", kept for the head of the house and honored guests. The claim also contradicts itself: it cites 0104 and then says 0104 does not bear on it. Tag the entry as a plain entry, or record a DEVIATION on a drawing page",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "52ce328e87da1094",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:38ce75614bcb4467",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a3162f7d1b6545a0"
   ],
   "section": "8a93256e3dc37d64",
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling kitchen floor": {
@@ -577,16 +578,16 @@
   "date": "2026-10-10",
   "note": "first torii where the approach enters the grounds",
   "pages": {
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html": "fd1a3212a5c01f72"
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html": "6defdd88ddd07f1b"
   },
-  "research": "6d6aec09760b8162",
+  "research": "8025485240a5c12d",
   "rests": [
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:5bcf01e1de5d3a96",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:a2df4c9dfafe5647",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:f1f901aac0e0e023"
   ],
   "section": "8a93256e3dc37d64",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#precinct holds the grove": {
@@ -1230,9 +1231,9 @@
   "pages": {
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html": "48d206623f86d1e3",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "135f046dfe4c1c73",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "1e1314546b9c37a0",
+  "research": "d574455814191c8c",
   "rests": [
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html:bd9cbe65b5055f66",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:096177a66b97c551",
@@ -1246,7 +1247,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:ad71105579b890e5"
   ],
   "section": "69ec89f6af1983bd",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#inner-court postern": {
@@ -1495,16 +1496,16 @@
   "date": "2026-10-11",
   "note": "one main genkan, an inner entrance for the household, and the roji form as the alternative",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "52ce328e87da1094",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
   "section": "69ec89f6af1983bd",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars knob": {
@@ -2026,9 +2027,9 @@
   "date": "2026-10-25",
   "note": "the Joge plan labels a main gate and a small gate together; the lesser gate's width is a GUESS",
   "pages": {
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
   },
-  "research": "3bf7bc936cb62419",
+  "research": "204dd8abf686d43e",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:65f0493063abc217",
@@ -2036,6 +2037,7 @@
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:74c4edddb44a6e24"
   ],
   "section": "47a44f581d23ce32",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#guest and service doors": {
@@ -2044,9 +2046,9 @@
   "date": "2026-10-11",
   "note": "open ground inside the gate, or the roji garden path; the kitchen door is the service door",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "52ce328e87da1094",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa",
@@ -2054,7 +2056,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
   "section": "47a44f581d23ce32",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#labels and title block": {
@@ -2668,9 +2670,9 @@
   "date": "2026-10-11",
   "note": "a knob between the two attested forms (Takayama's genkan, Koseki's roji); other blocks enter by the inner entrance",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "52ce328e87da1094",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
@@ -2678,7 +2680,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
   "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#genkan porch size": {
@@ -3186,9 +3188,9 @@
   "date": "2026-10-10",
   "note": "small end of the 6-18 mat span",
   "pages": {
-   "0096-holding-cells-agariya-and-roya.html": "4426e3559e549311"
+   "0096-holding-cells-agariya-and-roya.html": "9d3b6e64f7a3207a"
   },
-  "research": "86def40e24cced5e",
+  "research": "cf5cb4cb4db4d9b8",
   "rests": [
    "0096-holding-cells-agariya-and-roya.html:46d27721497d60b0",
    "0096-holding-cells-agariya-and-roya.html:937c7af5507a1c15",
@@ -3196,7 +3198,7 @@
    "0096-holding-cells-agariya-and-roya.html:f1e5972ca3458ff3"
   ],
   "section": "d9ce188ed9018cc7",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell kept well under the barracks": {
@@ -3207,15 +3209,16 @@
   "date": "2026-10-25",
   "note": "measured cells of 6-18 mats sit far below rowhouses of 80-145 by 12-24 ft",
   "pages": {
-   "0096-holding-cells-agariya-and-roya.html": "4426e3559e549311"
+   "0096-holding-cells-agariya-and-roya.html": "9d3b6e64f7a3207a"
   },
-  "research": "86def40e24cced5e",
+  "research": "cf5cb4cb4db4d9b8",
   "rests": [
    "0096-holding-cells-agariya-and-roya.html:26b59f949f6616b1",
    "0096-holding-cells-agariya-and-roya.html:937c7af5507a1c15",
    "0096-holding-cells-agariya-and-roya.html:f1e5972ca3458ff3"
   ],
   "section": "d9ce188ed9018cc7",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal bales": {
@@ -3275,11 +3278,12 @@
   "date": "2026-10-12",
   "note": "the forecourt as the open ground just inside the main gate, which the entrance faces, matches 0104 and 0116",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16"
   },
-  "research": "0b8c2c5bed6f0207",
+  "research": "43647f1a2e3ea2a1",
   "section": "d9ce188ed9018cc7",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary forms": {
@@ -3736,15 +3740,16 @@
   "date": "2026-10-08",
   "note": "the jail held people; confinement as a sentence only by exception",
   "pages": {
-   "0096-holding-cells-agariya-and-roya.html": "4426e3559e549311"
+   "0096-holding-cells-agariya-and-roya.html": "9d3b6e64f7a3207a"
   },
-  "research": "86def40e24cced5e",
+  "research": "cf5cb4cb4db4d9b8",
   "rests": [
    "0096-holding-cells-agariya-and-roya.html:109065ac6a0ea787",
    "0096-holding-cells-agariya-and-roya.html:798a67666670807f",
    "0096-holding-cells-agariya-and-roya.html:822b7c5e4691c840"
   ],
   "section": "3e5f81b52fb4d9c1",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Period defaults: Edo for the civil, Sengoku for the military#military features default to Sengoku": {
@@ -4171,14 +4176,15 @@
   "date": "2026-10-12",
   "note": "nagaya-mon ~12 ft passage, yakuimon frontage as registered",
   "pages": {
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
   },
-  "research": "3bf7bc936cb62419",
+  "research": "204dd8abf686d43e",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd"
   ],
   "section": "d28e8161b6f37cbb",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#plan scale": {
@@ -4244,16 +4250,16 @@
   "date": "2026-10-12",
   "note": "the page draws the well as a marker bigger than life standing for a curb about 4 ft square; the 22 px figure is a convention, claimed separately as \"well curb size\"",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:157e7add410a9655",
    "0196-communal-wells-ido.drawing.html:6ae8258e9425fcd7",
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
   "section": "d28e8161b6f37cbb",
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#yakuimon pillar": {
@@ -4357,9 +4363,9 @@
   "note": "the gatehouse or the guardroom in the gate range is rolled per plan; 2 ken deep; the 40 ft is a recorded GUESS",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html": "a8c7eafbeafe0423",
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
   },
-  "research": "88216bb2c82f74b3",
+  "research": "044f6a5105e83536",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:45d250045a3b5164",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:77efbd366737e4bc",
@@ -4371,7 +4377,7 @@
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:cd57d3fd287dbd8e"
   ],
   "section": "3c216ad7c4b56d44",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate forms": {
@@ -4380,15 +4386,16 @@
   "date": "2026-10-12",
   "note": "both attested forms, rolled per plan",
   "pages": {
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
   },
-  "research": "3bf7bc936cb62419",
+  "research": "204dd8abf686d43e",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:65f0493063abc217",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd"
   ],
   "section": "3c216ad7c4b56d44",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate on the south wall": {
@@ -4493,14 +4500,14 @@
   "date": "2026-10-12",
   "note": "the page records the indoor well as a GUESS: pulley hung from the beams, beam across the curb and the wheel, no posts, no rolled gear or roof",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef"
   ],
   "section": "21cd88f2ff4a254d",
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#bath-area well": {
@@ -4553,14 +4560,14 @@
   "date": "2026-10-12",
   "note": "an indoor well on the doma takes neither the gear nor the roof, because the house already roofs it",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef"
   ],
   "section": "21cd88f2ff4a254d",
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#stables well": {
@@ -4581,15 +4588,15 @@
   "date": "2026-10-12",
   "note": "valley floor shallow, upland deep, recorded as a GUESS",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:748c5c6851239f64",
    "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
   ],
   "section": "21cd88f2ff4a254d",
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#well count": {
@@ -4632,6 +4639,7 @@
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
   "section": "21cd88f2ff4a254d",
+  "triage": "touched",
   "triaged": "2026-10-17",
   "verdict": "IN-STEP"
  },
@@ -6052,14 +6060,15 @@
   "date": "2026-10-11",
   "note": "the roji is attested only at Koseki; at an office the outdoor way and the middle gate's place are recorded as open",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "52ce328e87da1094",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:64f3adbc05fa69ca",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a90ce998c259c2d5",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_parts.py::_roji_parts#roji wherever a middle gate stands": {
@@ -6068,9 +6077,9 @@
   "date": "2026-10-11",
   "note": "the code always draws the roji when there is a middle gate and a reception room with a veranda. 0104 records two forms of arrival (the genkan at a senior house, the roji at Koseki), and its drawing page says \"a knob chooses between them\". 0104 also never ties a middle gate to a roji: Takayama has a middle gate and a genkan, and the onward way there is left open. The code should roll the form per settlement, or the claim should label the \"middle gate means roji\" trigger GUESS",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "52ce328e87da1094",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:64f3adbc05fa69ca",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
@@ -6078,6 +6087,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:eb0e9d8c6c61a2d0",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_parts.py::_roji_parts#shoe stone": {
@@ -7427,12 +7437,13 @@
   "date": "2026-10-18",
   "note": "the two forms the page records as a knob",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WELL_VERGE_FT#on the lane's verge": {
@@ -7443,12 +7454,13 @@
   "date": "2026-10-18",
   "note": "8 ft, recorded on the page as a GUESS",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WIND_BACK_MIN_DOT#seat's back to the wind": {
@@ -7560,15 +7572,15 @@
   "date": "2026-10-05",
   "note": "patchwork on jori ground recorded as a deviation",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
-  "research": "d79a89e5dea9602a",
+  "research": "04930f84af9cf58e",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:914c46003720293e",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:ea4f43ad90e14d1d"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_fields.py::FRY_FORMS#fry form": {
@@ -7847,12 +7859,13 @@
   "date": "2026-10-05",
   "note": "brook-side supply canal stops short, its degree a calibration",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_FLANKS#brook's flank": {
@@ -7915,10 +7928,10 @@
   "date": "2026-10-03",
   "note": "geometry realizing the offtake angle off the downstream heading",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_WANDER#brook's stray": {
@@ -7993,10 +8006,10 @@
   "date": "2026-10-03",
   "note": "two forms, even odds, the GUESS 0059 records",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::OFFTAKE_DEG#offtake angle": {
@@ -8101,10 +8114,10 @@
   "date": "2026-10-03",
   "note": "full closure of a 7 ft brook, the convention 0059 records",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::WEIR_SKEW_DEG#weir runs diagonally upstream": {
@@ -8116,6 +8129,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
   },
   "research": "572ea6aee895aaef",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -8125,11 +8139,11 @@
   "date": "2026-10-03",
   "note": "four forms at 1.5/2/5/5 ft as 0059 gives (stale comment says reed; 0059 says brushwood, not reed)",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "section": "a792d7c6a362ad0d",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_ways.py::DOOR_FIXTURE_CLEAR_FT#door point off the fixtures": {
@@ -8557,13 +8571,14 @@
   "date": "2026-10-18",
   "note": "the lane-side well is seated once the lanes stand",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#notice board after the frame": {
@@ -8644,12 +8659,13 @@
   "date": "2026-10-25",
   "note": "stage_track and stage_web run before stage_lane_wells",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#washing places after the crossings": {
@@ -13291,14 +13307,15 @@
   "date": "2026-10-13",
   "note": "share's count, floor honored",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432",
    "0219-household-shrines-yashikigami.drawing.html": "0c9da3e6ad2b7eb4"
   },
-  "research": "4b0518138b09a1f4",
+  "research": "d13638f7d30a4081",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:ebc4e65aad857f7b",
    "0219-household-shrines-yashikigami.drawing.html:6595021c1942d896"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_shares#no house sty on a dike-pond hamlet": {
@@ -13322,12 +13339,13 @@
   "date": "2026-10-13",
   "note": "rolled per hamlet within its band",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432"
   },
-  "research": "b1abc6e90397da2b",
+  "research": "36282fa5dbb94656",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:ebc4e65aad857f7b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::household_graves#household graves rolled per hamlet": {
@@ -16299,14 +16317,15 @@
   "date": "2026-10-13",
   "note": "the parts it reads back are what 0028 puts on the farmstead, the grove among them",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432"
   },
-  "research": "b1abc6e90397da2b",
+  "research": "36282fa5dbb94656",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:0b02f5e3492a4ce2",
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:57e17cedabbc7ead"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/sties.py::in_frame#plumbing": {
@@ -16471,13 +16490,14 @@
   "date": "2026-10-18",
   "note": "most=10 matches \"nearest for more than ten households\" and the Karihama \"five to ten houses\"",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/well_seats.py::PairAhead.keeps_ten#the second well held 170 px off the first": {
@@ -16569,12 +16589,13 @@
   "date": "2026-10-18",
   "note": "three/two where fewer than five households, and the fallback, as the page records; the reaches are unanswered",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::WATER_REACH_FT#watering reach": {
@@ -16586,13 +16607,14 @@
   "note": "760 ft",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "ef94d2d96ab46d34",
+  "research": "ca323298c72c7c5e",
   "rests": [
    "0033-row-villages-resson.drawing.html:18c4dc9ae3cbd807",
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::WELL_SEAT_FT#seated a little closer than the check": {
@@ -16610,6 +16632,7 @@
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
+  "triage": "touched",
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::WELL_SERVES_MAX#five to ten houses a well": {
@@ -16620,13 +16643,14 @@
   "date": "2026-10-18",
   "note": "ten, the top of Karihama's five to ten",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::_WELL_DRAWN_R#wellhead drawn extent": {
@@ -16681,13 +16705,13 @@
   "date": "2026-10-17",
   "note": "communal well or surface water within 760 ft",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
   ],
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::extent_past#past the crop": {
@@ -16710,13 +16734,14 @@
   "date": "2026-10-18",
   "note": "the page is silent on how wells divide the houses",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::grid_points#well lattice": {
@@ -16765,12 +16790,13 @@
   "date": "2026-10-18",
   "note": "three, then two at 95, marked fallback, recorded as a deviation",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::lane_and_fallback_wells#the order of the forms": {
@@ -16781,13 +16807,14 @@
   "date": "2026-10-18",
   "note": "lane-side, then cluster, then fallback where neither form seats",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::mark_form#a well's form recorded": {
@@ -16818,13 +16845,14 @@
   "date": "2026-10-18",
   "note": "curb within WELL_VERGE_FT=8 ft of the tread, the page's own 8 ft GUESS",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::own_well_clear#well arithmetic": {
@@ -16844,16 +16872,16 @@
   "note": "grove farms go to grove_water (a channel or own well; a row's shared or per-farm wells by its knob) and are left out of the communal wells",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "a6f2bf92a22119bc",
+  "research": "63885799b21f3c1d",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2872c3eaba51aa4d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b326e625eaeec6d4",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f1b6bb70334abd0d",
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
   ],
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#no well in a household's homestead": {
@@ -16864,15 +16892,16 @@
   "date": "2026-10-18",
   "note": "no pocket for a clustered household; grove farms are left to their own water",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432",
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "cecc2726b8d7b8e0",
+  "research": "783a114de702a509",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:aa9c2b7faa468c9a",
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:b8b213d06a88fd60",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#the wells' siting rolled": {
@@ -16883,13 +16912,14 @@
   "date": "2026-10-18",
   "note": "knob; cluster form before the lanes, lane-side once ways stand",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::reach_wells#a well for every household beyond reach": {
@@ -16900,13 +16930,14 @@
   "date": "2026-10-18",
   "note": "760 ft of a well or open water",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::reach_wells#one more well where one serves more than ten": {
@@ -16917,13 +16948,14 @@
   "date": "2026-10-18",
   "note": "within one well to 2-20 households for a hamlet",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:525a4dfac658db9c",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::reach_wells#the forms' order": {
@@ -16934,12 +16966,13 @@
   "date": "2026-10-18",
   "note": "the same form first, then the other, then the fallback",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::record_over_ten#more than ten to a well, recorded": {
@@ -16950,12 +16983,13 @@
   "date": "2026-10-18",
   "note": "the deviation the page records",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster#among five to ten houses": {
@@ -16966,13 +17000,14 @@
   "date": "2026-10-18",
   "note": "five-house neighborhood",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster#off every lane": {
@@ -16983,13 +17018,14 @@
   "date": "2026-10-18",
   "note": "verge seats refused",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster#the reach widens first": {
@@ -17000,12 +17036,13 @@
   "date": "2026-10-18",
   "note": "the page calls the reach this project's choice, widened before the count",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster#three, then two, only where five cannot be gathered": {
@@ -17016,12 +17053,13 @@
   "date": "2026-10-18",
   "note": "`len(houses) < 5` is the page's \"fewer than five households\"",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#later wells by the worst walk": {
@@ -17055,12 +17093,13 @@
   "date": "2026-10-18",
   "note": "refusing seats past the crop's box enforces \"Every well stands among the houses it serves\"",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#no well serving more than ten": {
@@ -17071,13 +17110,14 @@
   "date": "2026-10-18",
   "note": "seats over WELL_SERVES_MAX=10 rank last, never refused",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#not in the windbreak": {
@@ -17105,13 +17145,14 @@
   "date": "2026-10-18",
   "note": "gap = WELL_SEAT_FT (80 ft) over ftpx, the page's 80 ft GUESS",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#surface water counts": {
@@ -17122,12 +17163,13 @@
   "date": "2026-10-18",
   "note": "760.0/ftpx reach",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#the first well's seat": {
@@ -17160,14 +17202,15 @@
   "date": "2026-10-18",
   "note": "seats need a dwelling near and a neighborhood round them",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#wells apart": {
@@ -17200,13 +17243,14 @@
   "date": "2026-10-18",
   "note": "curb about 5 ft off a 6 ft street's tread, either side",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#fallback seats along the street": {
@@ -17271,13 +17315,14 @@
   "date": "2026-10-18",
   "note": "",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::stage_lane_wells#the old ladder a recorded deviation": {
@@ -17288,12 +17333,13 @@
   "date": "2026-10-18",
   "note": "",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::stage_lane_wells#the other form only after the reach widened": {
@@ -17304,13 +17350,14 @@
   "date": "2026-10-18",
   "note": "both forms attested; the other form taken where the first finds no seat",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::street_turns_at#well arithmetic": {
@@ -17329,12 +17376,13 @@
   "date": "2026-10-18",
   "note": "one or two for a hamlet",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:525a4dfac658db9c"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::worst_after#well arithmetic": {
@@ -19045,9 +19093,10 @@
   "date": "2026-10-03",
   "note": "crosses_mid_run refuses; 0054: \"they join rather than cross\"",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
   },
-  "research": "4409e1905454f5d9",
+  "research": "34d289056db0221b",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::route_refusals#dike crossed only at a gap": {
@@ -19534,10 +19583,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::_pinned#plumbing": {
@@ -19590,10 +19639,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::approach_legs#out of the field": {
@@ -19602,10 +19651,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::approach_legs#screen axis": {
@@ -19633,10 +19682,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::axes_off#descent kept": {
@@ -19715,13 +19764,14 @@
   "date": "2026-10-25",
   "note": "a sweep of 2-3 widths; the cut is capped at 0.3 of the leg, like the drawing page's 35% cap, and the 45 ft is a calibration",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
   },
-  "research": "4409e1905454f5d9",
+  "research": "34d289056db0221b",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.html:146499eea2490781",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.html:4e2a14b0bc705962"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::brook_skirt#crop clearance": {
@@ -19741,13 +19791,14 @@
   "date": "2026-10-05",
   "note": "as the page draws it",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::brook_skirt#head crop yields": {
@@ -19867,13 +19918,14 @@
   "date": "2026-10-07",
   "note": "the brook \"comes down off the high ground\" and \"runs on down that flank to leave the map\"",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::brook_violations#out of the field": {
@@ -19882,13 +19934,14 @@
   "date": "2026-10-07",
   "note": "the brook passes the fan on one side and the fan is \"cut away from the brook\"",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::brook_violations#runs downhill": {
@@ -19923,10 +19976,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::clear_of_field#step": {
@@ -19947,10 +20000,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#full closure": {
@@ -19959,10 +20012,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#oblique weir": {
@@ -19971,10 +20024,10 @@
   "date": "2026-10-03",
   "note": "0059 \"A weir runs diagonally upstream from the intake mouth\"; root at the downstream end on the intake bank",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#seat-search reach": {
@@ -19991,9 +20044,9 @@
   "date": "2026-10-07",
   "note": "rolled per hamlet among the four forms, with thicknesses fence 1.5, gabion 2, frame 5, crib 5 as the page gives them",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:442fecc7028f70a1",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
@@ -20002,6 +20055,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:79deddd4ec0f4b3d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a0772093759304da"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#weir or bare mouth": {
@@ -20010,10 +20064,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#weir skew angle": {
@@ -20045,14 +20099,15 @@
   "date": "2026-10-05",
   "note": "as the page draws it",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::feed_brook#one flank": {
@@ -20061,13 +20116,14 @@
   "date": "2026-10-05",
   "note": "the brook runs on down the one flank it passes",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::feed_brook#round the ditches": {
@@ -20095,13 +20151,14 @@
   "date": "2026-10-11",
   "note": "the brook's bank cuts the race, so the ditch begins at the bank's edge and is not laid over the stream; no gate or boards are drawn",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e347e6f14eb81062",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fa4c88323f4920cb"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::outside_stretches#plumbing": {
@@ -20140,10 +20197,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::settle_course#plumbing": {
@@ -20323,10 +20380,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_course.py::exit_legs#turn onto the fall": {
@@ -20525,10 +20582,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::course_enters#brook skirts the field": {
@@ -20537,10 +20594,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#a joiner's width": {
@@ -20573,13 +20630,14 @@
   "date": "2026-10-08",
   "note": "a crossing away from a confluence is flagged; the research says ditches join rather than cross",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
   },
-  "research": "4409e1905454f5d9",
+  "research": "34d289056db0221b",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.html:557053d2e543df0a",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.html:a3aafd75f942612b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::ditch_strokes#course measurement": {
@@ -20596,10 +20654,10 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "research": "e1b8f27ddc7aab33",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::level_runs_along_frame#level run along the frame": {
@@ -20727,15 +20785,15 @@
   "date": "2026-10-05",
   "note": "brook drawn in from off the map, tapped and running on past the fan",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/comb.py::stage_field#comb grown round the water": {
@@ -20858,13 +20916,14 @@
   "date": "2026-10-05",
   "note": "left/center/right at 1:2:1",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::_admissible#size search": {
@@ -20889,12 +20948,13 @@
   "date": "2026-10-05",
   "note": "the brook-side canal stops short; 0.72 is a degree",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::_fit_at_aspect#fan proportions": {
@@ -21008,13 +21068,14 @@
   "date": "2026-10-05",
   "note": "as the page draws it",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::head_sluice#intake offset": {
@@ -21025,13 +21086,14 @@
   "date": "2026-10-25",
   "note": "`HEAD_OFFSETS` rolls left, center, right at 1:2:1, as the page's GUESS gives it",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::net_bends_acutely#no hairpin ditch": {
@@ -24521,13 +24583,14 @@
   "date": "2026-10-18",
   "note": "a cluster well's obstacle grown by `WELL_VERGE_FT`",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#a house its own owner": {
@@ -42641,14 +42704,15 @@
   "date": "2026-10-12",
   "note": "annex against its own house",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432",
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
-  "research": "1060b7d474ba15e4",
+  "research": "4de8b75ceefd4f15",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::pair_permitted#two annexes of one household": {
@@ -42657,14 +42721,15 @@
   "date": "2026-10-12",
   "note": "one farmstead's parts",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432",
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
-  "research": "1060b7d474ba15e4",
+  "research": "4de8b75ceefd4f15",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::private_well#registry plumbing": {
@@ -42950,15 +43015,16 @@
   "date": "2026-10-12",
   "note": "against their own house",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432",
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
-  "research": "1060b7d474ba15e4",
+  "research": "4de8b75ceefd4f15",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
   "section": "78b7514d353c7639",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::OVERLAP_CLASS#flower beds and resting patches": {
@@ -43027,15 +43093,15 @@
   "note": "no lane across crops, no well on a dry plot",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20",
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "d856f6983d69410a",
+  "research": "01f29ece187120a5",
   "rests": [
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0196-communal-wells-ido.drawing.html:3c550b8df2ea63e9"
   ],
   "section": "78b7514d353c7639",
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::TEMPLE_EXCEPTIONS#temple exceptions": {
@@ -43203,13 +43269,14 @@
   "date": "2026-10-12",
   "note": "across the whole brook",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5"
   ],
   "section": "7bfc685e4b891122",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_LABEL_BY_KIND#geometry and bookkeeping": {
@@ -43531,12 +43598,12 @@
   "date": "2026-10-03",
   "note": "per 0028/0040",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432",
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
-  "research": "1060b7d474ba15e4",
+  "research": "4de8b75ceefd4f15",
   "section": "7aa0abfea7309a5f",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_PERMISSIVE#deferred classes": {
@@ -43568,15 +43635,15 @@
   "date": "2026-10-07",
   "note": "\"No well is drawn out on open common ground\"",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:8b6c0f73372eb433",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
   "section": "2511b669af1f367c",
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_SAME_CLASS_OK#annexes of one household": {
@@ -43585,12 +43652,12 @@
   "date": "2026-10-03",
   "note": "parent-scoped by caller",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432",
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
-  "research": "1060b7d474ba15e4",
+  "research": "4de8b75ceefd4f15",
   "section": "8fc0203d01efbabe",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_SAME_CLASS_OK#watercourses meet": {
@@ -43733,11 +43800,11 @@
   "date": "2026-10-21",
   "note": "the kura annex sits on the west wall (scattered) or north wall (clustered); the grove takes its 2-4 rolled sides, its windward stand about 24 ft off the house, the thin bands beside it",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
-  "research": "8bf4154cb971fb14",
+  "research": "ccb801725b77f33c",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:4451dc738cb1af9d",
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:57e17cedabbc7ead",
@@ -43748,6 +43815,7 @@
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
   "section": "dd8aeb32511d1b19",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#bookkeeping records": {
@@ -43792,7 +43860,7 @@
   "date": "2026-10-18",
   "note": "the log_booms entry exempts \"a cabled chain of floating logs\" that \"FLOATS on the river\". 0210 says \"No floating log boom is drawn\"; what is drawn is moored raft-mats or a pond. Re-word the entry and its claim to the moored stock",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080",
    "0065-washing-places-at-the-waters-edge.drawing.html": "53f6bbd749f189f6",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627",
    "0148-towers-along-the-city-wall-mamian.drawing.html": "27ca7d42e46e076e",
@@ -43801,7 +43869,7 @@
    "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90",
    "0210-timber-yards-and-log-booms-kiba.drawing.html": "f17b51f2d5f34284"
   },
-  "research": "4f90d0da44ab444f",
+  "research": "9630c32be49818ab",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd",
    "0065-washing-places-at-the-waters-edge.drawing.html:8c38dba2f4c10ba6",
@@ -43819,7 +43887,7 @@
    "0210-timber-yards-and-log-booms-kiba.drawing.html:eac260ce154f9535"
   ],
   "section": "dd8aeb32511d1b19",
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#copse and bamboo against a house": {
@@ -44031,15 +44099,15 @@
   "date": "2026-10-18",
   "note": "",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:6d02204b060e2a7f",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
   "section": "dd8aeb32511d1b19",
-  "triaged": "2026-10-21",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard persimmon near its house": {
@@ -44069,14 +44137,14 @@
   "date": "2026-10-21",
   "note": "yard and bed beside the house; bath joined to the house; wood shed about 9.5 ft off the wall; sty against a wall",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72",
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2",
    "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396",
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
   },
-  "research": "cf99e4b488a19096",
+  "research": "f44bb32f4bd1cc53",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809",
@@ -44086,7 +44154,7 @@
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b"
   ],
   "section": "dd8aeb32511d1b19",
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_LINEAR#ground kept clear": {
@@ -44347,9 +44415,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
   },
-  "research": "4409e1905454f5d9",
+  "research": "34d289056db0221b",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/curves.py::fillet_polyline#earth channel bends on a sweep": {
@@ -44358,9 +44427,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
   },
-  "research": "4409e1905454f5d9",
+  "research": "34d289056db0221b",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/curves.py::fillet_polyline#fillet cap and threshold": {
@@ -46031,16 +46101,17 @@
   "date": "2026-10-11",
   "note": "irregular plots and surveyed rows, the rows gated on a planned field",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.html": "a259db98b2978044",
+   "0005-rice-paddies-and-their-plots-suiden.html": "f93aa13e6a29a549",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
-  "research": "d9ed42aaa794ed43",
+  "research": "417d3bbe429eb45a",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.html:00e43b29a7290915",
    "0005-rice-paddies-and-their-plots-suiden.html:816dacced1c6f5b2",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:8e7dc25140e55c18",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b63de3757149f3e3"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#plot_size forms": {
@@ -46403,10 +46474,10 @@
   "date": "2026-10-05",
   "note": "even rows only where a survey laid the field out",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.html": "a259db98b2978044",
+   "0005-rice-paddies-and-their-plots-suiden.html": "f93aa13e6a29a549",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
-  "research": "207bb05cbd8b7254",
+  "research": "1775e4396ed80847",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.html:00e43b29a7290915",
    "0005-rice-paddies-and-their-plots-suiden.html:3067d2fd5a61b385",
@@ -46414,6 +46485,7 @@
    "0005-rice-paddies-and-their-plots-suiden.html:816dacced1c6f5b2",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b63de3757149f3e3"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::_settlement_form_ok#dike-top needs low ground": {
@@ -48261,14 +48333,15 @@
   "date": "2026-10-07",
   "note": "the page draws a storage shed standing free of the house \"on about one in three\" farms (18-27 ft, roof rolled). The claim says no farm carries one, and the page records no such omission. Either draw the shed or have the drawing page record the departure as a DEVIATION.",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432"
   },
-  "research": "b1abc6e90397da2b",
+  "research": "36282fa5dbb94656",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:141d15834d710613",
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:920b0a7a5d0e3cfc"
   ],
   "section": "47b8c2f5d08a0457",
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex": {
@@ -48678,16 +48751,17 @@
   "date": "2026-10-07",
   "note": "4.5 ft and 6.0 ft are the ladder's supply-canal and head-race rungs; 7 ft is 0059's brook; the conflict between the two pages is already logged at the named row",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
-  "research": "43d03d4ffab70ddf",
+  "research": "7e1be684cc5b9ab5",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e9e1c49b84a3b570"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem off rice and water": {
@@ -48817,14 +48891,15 @@
   "date": "2026-10-07",
   "note": "the brook runs on past the sluice only when `to` says so, but 0059 has it always run on (\"The brook runs on past the intake\"; \"never draw a brook taken whole by its ditch\"). Running on should be unconditional",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a931ae1edb39839c",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width": {
@@ -48833,15 +48908,16 @@
   "date": "2026-10-07",
   "note": "`width=self.px(7.0)` is about 4.7 times the 1.5 ft floor, but 0068's drawing page puts \"a village creek at roughly three and a half times it\" (about 5.25 ft); 0059 §92 says 7 ft. Make the ladder's ratio and the 7 ft agree, in the page or in the code",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
-  "research": "43d03d4ffab70ddf",
+  "research": "7e1be684cc5b9ab5",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#fringe and margin widths": {
@@ -48951,15 +49027,16 @@
   "date": "2026-10-08",
   "note": "the intake is snapped onto the brook within the 30 px band, otherwise the feed is declared as coming from the sluice; the brook is tapped at the head of the fan",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fa4c88323f4920cb"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#feed recorded width": {
@@ -49291,13 +49368,14 @@
   "date": "2026-10-25",
   "note": "a spot a priest or geomancer chose, tied to no plot; a random host fits",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html": "d5e2adec9bfc397b"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html": "83d8d1367aa7dcb4"
   },
-  "research": "c0b2cd4155452b98",
+  "research": "87409504c4e6822f",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html:11d63dd1d7b970c9",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html:ae1571949e5e1e6e"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#field pond on a low plot": {
@@ -49484,13 +49562,14 @@
   "date": "2026-10-08",
   "note": "drawn as an earthen bank ring, a wet margin and open water: \"low ground ringed with an embankment and dug out\"",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html": "d5e2adec9bfc397b"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html": "83d8d1367aa7dcb4"
   },
-  "research": "c0b2cd4155452b98",
+  "research": "87409504c4e6822f",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html:9b0e42acdf970f21",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html:ff28b96f143df826"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#reed fringe": {
@@ -49538,12 +49617,13 @@
   "date": "2026-10-25",
   "note": "the legible floor `max(10.0, ...)`/`max(7.0, ...)` draws a pond as small as about 20 x 14 ft, below \"the smallest, about 10 m (~33 ft) on a side\"; the floors and caps are also raw px, not `self.px`, so the size changes with map scale - raise the floor to about 16.5 x 16.5 ft in feet, or record the departure",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html": "d5e2adec9bfc397b"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html": "83d8d1367aa7dcb4"
   },
-  "research": "c0b2cd4155452b98",
+  "research": "87409504c4e6822f",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html:f69963814c648bf4"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._pond_fit#pond inside one plot": {
@@ -50602,10 +50682,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._rows#dry rows": {
@@ -50864,13 +50944,14 @@
   "date": "2026-10-10",
   "note": "at 1 ft/px the 34 px plot gives about 1,500 sq ft, which matches the hamlet basin. But the page sizes basins \"in real feet at whatever scale\", and `plot` is px. I need the ft-per-px of the maps that call water_field and whether callers scale `plot`",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
+  "triaged": "2026-10-25",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#ripe share": {
@@ -53030,12 +53111,13 @@
   "date": "2026-10-13",
   "note": "wood shed 24x12",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432"
   },
-  "research": "b1abc6e90397da2b",
+  "research": "36282fa5dbb94656",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:f8dfd1e35a4d4c4b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#persimmon crown": {
@@ -57374,12 +57456,12 @@
   "date": "2026-10-05",
   "note": "sizes bracket the norm, the grid only evens the rows, no jori squares",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd",
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
-  "research": "a91331dc3c66271b",
+  "research": "6552aac19d729168",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:218358b82a0824e2",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:79b169263a5fb7c3",
@@ -57387,7 +57469,7 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b63de3757149f3e3",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:3bd5e9166c70b8ab"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin.try_place#placement, index and corridor plumbing": {
@@ -59411,12 +59493,13 @@
   "date": "2026-10-18",
   "note": "the page's watering water is \"a channel, pond, stream or moat\", and it says channel water served domestic use; the code drops every irrigation channel and the page nowhere says \"never an irrigation ditch\". Count channels, or record the exclusion as a DEVIATION on the page",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/wet.py::surface_water_within#plumbing": {
@@ -59435,12 +59518,13 @@
   "date": "2026-10-18",
   "note": "same as surface_water_dist: §5 counts \"a channel\", and the lines read only canals, streams and the moat; count channels or record a DEVIATION",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/__init__.py::RollingMixin#package composition": {
@@ -60880,13 +60964,14 @@
   "date": "2026-10-12",
   "note": "the household's rolled kinds, laid in its own frame",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432"
   },
-  "research": "b1abc6e90397da2b",
+  "research": "36282fa5dbb94656",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:ebc4e65aad857f7b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#persimmon may stand in its own grove's bands": {
@@ -62803,10 +62888,10 @@
   "date": "2026-10-03",
   "note": "per-kind share, as 0028",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432"
   },
-  "research": "b1abc6e90397da2b",
-  "triaged": "2026-10-05",
+  "research": "36282fa5dbb94656",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/lot.py::HouseholdLots#storehouse tie": {
@@ -62852,10 +62937,10 @@
   "date": "2026-10-03",
   "note": "per-kind share per 0028; woodpile larger-first, rest shuffled",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432"
   },
-  "research": "b1abc6e90397da2b",
-  "triaged": "2026-10-05",
+  "research": "36282fa5dbb94656",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/lot.py::HouseholdLots.__init__#storehouse tie": {
@@ -62931,10 +63016,10 @@
   "date": "2026-10-03",
   "note": "0028: the storehouse and the sheds go to the larger houses first",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432"
   },
-  "research": "b1abc6e90397da2b",
-  "triaged": "2026-10-05",
+  "research": "36282fa5dbb94656",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/lot.py::LENGTH_FACTORS#farmhouse length range": {
@@ -62999,14 +63084,15 @@
   "date": "2026-10-17",
   "note": "a role household takes no lot, so no stall and no fixtures, where 0028 says \"a headman's carries several\"; neither drawing page records this as a deliberate deviation (dormant on generated hamlets, which have no headman per 0040)",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432"
   },
-  "research": "b1abc6e90397da2b",
+  "research": "36282fa5dbb94656",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:141d15834d710613",
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:18c7cff2cf2cf28a"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/lot.py::household_parts#quota, record and registry plumbing": {
@@ -63027,11 +63113,11 @@
   "date": "2026-10-03",
   "note": "largest by footprint area, ties by the seeded order, as 0040 drawing says",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "a004d9fae82f3432",
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
-  "research": "1060b7d474ba15e4",
-  "triaged": "2026-10-05",
+  "research": "4de8b75ceefd4f15",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/lot.py::quota_carriers#quota, record and registry plumbing": {
@@ -64733,10 +64819,10 @@
   "date": "2026-10-03",
   "note": "0196.drawing: no well on open common ground",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
-  "triaged": "2026-10-17",
+  "research": "f166979de9325ea9",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wellground.py::WellGroundMixin._terrain_fingerprint#plumbing": {
@@ -64753,10 +64839,10 @@
   "date": "2026-10-03",
   "note": "0196.drawing: never out in the fields",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
-  "triaged": "2026-10-17",
+  "research": "f166979de9325ea9",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wellground.py::WellGroundMixin._well_ground_clear#no well in a watercourse or the pond": {
@@ -64787,10 +64873,10 @@
   "date": "2026-10-03",
   "note": "0196.drawing: keeps every well off a dry crop plot",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
-  "triaged": "2026-10-17",
+  "research": "f166979de9325ea9",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wellground.py::WellGroundMixin._well_index#plumbing": {
@@ -64837,13 +64923,13 @@
   "date": "2026-10-13",
   "note": "95 from the nearest wall",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin#plumbing": {
@@ -64860,13 +64946,13 @@
   "date": "2026-10-13",
   "note": "a dwelling within the caller's near, a figure the caller owns",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._place_wells#cell offsets": {
@@ -64885,14 +64971,15 @@
   "date": "2026-10-18",
   "note": "coverage seats within the near reach of an unserved dwelling",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:223bbdbc906575ad",
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._place_wells#standing room demanded": {
@@ -64903,14 +64990,15 @@
   "date": "2026-10-25",
   "note": "`probe = 2 * r + 14` demands a fixed 30 px (30-90 ft by tier), where the page gives an apron \"about 4 ft wider than its curb\" and \"only a small court\"; the page does not record the departure, so T33 or a recorded DEVIATION",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:36ac509adca7b4e4",
    "0196-communal-wells-ido.drawing.html:6d02204b060e2a7f",
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._place_wells#wells inside the blocks, off lanes and compounds": {
@@ -64919,10 +65007,10 @@
   "date": "2026-10-03",
   "note": "a grid inside the blocks, off ways and compounds, as 0196 gives for a city",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
-  "triaged": "2026-10-17",
+  "research": "f166979de9325ea9",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._well_vr#the roof square round the curb": {
@@ -64942,13 +65030,13 @@
   "date": "2026-10-12",
   "note": "the extent it returns is the larger-than-life marker the page calls for; the curb radius it names (9.36 ft) matches",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin.place_wells#scoped well scatter": {
@@ -64978,14 +65066,15 @@
   "date": "2026-10-25",
   "note": "`bm = 8` blocks 8 px round the roof (vroof = px(12.376), larger than the 9.36 ft curb), so a lane cannot come within about 11 ft of the curb even at 1 ft/px, against the page's \"curb within about 8 ft of the tread\"; the page does not record the departure; the claim text also repeats \"8 px round the roof\"",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:36ac509adca7b4e4",
    "0196-communal-wells-ido.drawing.html:6d02204b060e2a7f",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin.well#wellhead marker": {
@@ -65004,6 +65093,7 @@
    "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b",
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
+  "triage": "touched",
   "triaged": "2026-10-17",
   "verdict": "DRIFTED"
  },
@@ -65013,10 +65103,10 @@
   "date": "2026-10-03",
   "note": "0196.drawing via _well_ground_clear",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
-  "triaged": "2026-10-17",
+  "research": "f166979de9325ea9",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin.well_at#standing room demanded": {
@@ -65027,14 +65117,15 @@
   "date": "2026-10-25",
   "note": "`self._fits(x, y, 2 * r + 14, ...)` demands a fixed 30 px (30-90 ft by tier) against \"about 4 ft wider than its curb\" and \"only a small court\"; the page does not record the departure, so T33 or a recorded DEVIATION",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:36ac509adca7b4e4",
    "0196-communal-wells-ido.drawing.html:6d02204b060e2a7f",
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin.well_at#wellhead off the commons": {
@@ -65043,10 +65134,10 @@
   "date": "2026-10-03",
   "note": "0196.drawing",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
-  "triaged": "2026-10-17",
+  "research": "f166979de9325ea9",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::well_gap_to_dwellings#plumbing": {
@@ -67929,9 +68020,10 @@
   "note": "level -> flow_deg None, as 0054",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
   },
-  "research": "afd4dba557ae5631",
+  "research": "bc85d7f4a8c3ca3e",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin._flow_record#flow direction recorded": {
@@ -68941,10 +69033,10 @@
   "date": "2026-10-03",
   "note": "0005: \"a point sharper than 40 degrees\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_CHEVRON_MIN_SOLIDITY#arrowhead notch": {
@@ -68953,10 +69045,10 @@
   "date": "2026-10-03",
   "note": "0005: \"solidity under 0.90\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_EDGE_EPS#bank geometry": {
@@ -68973,10 +69065,10 @@
   "date": "2026-10-03",
   "note": "checker tolerance below the placer's 40; draws nothing",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_GATE_CHEVRON_SOLIDITY#arrowhead notch at the rule": {
@@ -68985,10 +69077,10 @@
   "date": "2026-10-03",
   "note": "checker tolerance below the placer's 0.90; draws nothing",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_GATE_MIN_APEX#needle at the rule": {
@@ -68997,12 +69089,13 @@
   "date": "2026-10-09",
   "note": "a check's line under the placer's 25 deg refusal",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_GATE_MIN_AREA#area floor at the rule": {
@@ -69011,10 +69104,10 @@
   "date": "2026-10-03",
   "note": "checker tolerance below the placer's attested 0.25; draws nothing",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_JOG_CORNER_DEG#a step turns hard": {
@@ -69136,10 +69229,10 @@
   "date": "2026-10-03",
   "note": "0005: \"The maps refuse a point sharper than 25 degrees\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_TOE_MIN_AREA#a quarter of the design cell": {
@@ -69148,16 +69241,16 @@
   "date": "2026-10-09",
   "note": "0.25 of the cell, applied only on the valley-floor fan, is the page's quarter-cell floor and its reasoning",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:2065f2aeadcf896b",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a6d71d623dedcce0"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_TOE_MIN_THICKNESS#least thickness": {
@@ -69166,16 +69259,16 @@
   "date": "2026-10-05",
   "note": "the placer refuses a basin under 0.16 plot widths thick, but the paddy page says \"the maps set no least width for a basin\" and neither page states 0.16 (the bund page's \"same least width as the narrow toe\" is a GUESS with no figure); reconcile the pages and state the figure, or drop the rule",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd",
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
-  "research": "cc6c20b013c16684",
+  "research": "773a5b198e0c5234",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/banks.py::_nearest_segment#bank geometry": {
@@ -69339,10 +69432,10 @@
   "date": "2026-10-03",
   "note": "0005 arrowhead: point and notch together",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::jog_steps#sideways steps": {
@@ -69402,10 +69495,10 @@
   "date": "2026-10-03",
   "note": "interior-angle test of 0005's point",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::polyline_cum#bank geometry": {
@@ -70151,14 +70244,15 @@
   "date": "2026-10-05",
   "note": "the head race runs from the intake on the caller's downstream bearing to the fork, its length the caller's",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
-  "research": "572ea6aee895aaef",
+  "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:8e97e1a3baf26730",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::_comb_skeleton#head race width": {
@@ -70281,10 +70375,10 @@
   "date": "2026-10-03",
   "note": "two plot widths (0005)",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::_comb_threads#second supply canal": {
@@ -70411,13 +70505,13 @@
   "date": "2026-10-05",
   "note": "48 px across and 26-36 px along is the hamlet basin at 1 ft/px",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::carve_comb#default skeleton": {
@@ -70651,13 +70745,14 @@
   "date": "2026-10-25",
   "note": "labeled GUESS, but the cited page answers it: \"the maps set no least width for a basin; that would have been the obvious rule, and a wrong one\"; a 26 px floor between threads is a least column width (26-78 ft by tier), so it should be DEVIATION 0005.drawing once the page records it, or the floor dropped",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2"
   ],
+  "triaged": "2026-10-25",
   "verdict": "MISLABELED"
  },
  "l7r/diagram/waterfields/frame.py::HEAD_RACE_FT#head race width": {
@@ -71469,6 +71564,7 @@
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
+  "triage": "touched",
   "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
@@ -71556,13 +71652,13 @@
   "date": "2026-10-05",
   "note": "the target area in real feet, converted at the map's scale",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::paddy_grain#basin proportion": {
@@ -71662,10 +71758,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::ROW_CELL_SHARE#basin size where the sector narrows": {
@@ -71707,12 +71803,13 @@
   "date": "2026-10-25",
   "note": "past its end the column bund runs `self.F.d` straight down the fall, where the page says a fan's \"bunds converge with it, and the convergence is kept\"; the page does not record the departure, so T34 or a recorded DEVIATION",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#column count": {
@@ -71721,10 +71818,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#column wobble": {
@@ -71750,14 +71847,14 @@
   "date": "2026-10-05",
   "note": "a warped, irregular lattice of rows down a converging fan, never a tidy grid",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#no jori grid on the old plains": {
@@ -71780,13 +71877,13 @@
   "date": "2026-10-05",
   "note": "rows a random 26-36 apart, the design cell's depth",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#row wander": {
@@ -71822,10 +71919,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.sector_of#partition plumbing": {
@@ -71844,12 +71941,13 @@
   "date": "2026-10-25",
   "note": "each thread is extended straight down `self.F.d`, where the page keeps the fan's bunds converging with its drain; the page does not record the departure, so T34 or a recorded DEVIATION",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/partition.py::_column_kept#columns thin to a T": {
@@ -71976,10 +72074,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::region_rings#partition plumbing": {
@@ -72040,12 +72138,13 @@
   "date": "2026-10-09",
   "note": "the 25 deg refusal is 0005's",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_RING#ring canal corridor": {
@@ -72065,12 +72164,13 @@
   "date": "2026-10-09",
   "note": "finds a convex apex under 25 deg; taking the sharpest first is iteration order",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_nearest_band#polder plumbing": {
@@ -72702,13 +72802,14 @@
   "date": "2026-10-09",
   "note": "a refused convex point is cut off until none is left",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::unpoint_parcels#pointed parcel left as bank": {
@@ -72719,13 +72820,14 @@
   "date": "2026-10-25",
   "note": "the claim is labeled GUESS and also calls itself a departure; the page's bare-strip GUESS is written for a fan (\"with the fan's floor drawn under it\"), and dropping a still-pointed polder parcel into bank fill is recorded nowhere; record the polder case on 0005.drawing as GUESS or DEVIATION",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
+  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/ring_rules.py::AREA_FLOOR#smallest basin": {
@@ -72734,10 +72836,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::BASIN_MIN_WIDTH_FT#no least basin width": {
@@ -72746,10 +72848,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::CHEVRON_APEX#arrowhead point": {
@@ -72758,10 +72860,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::CHEVRON_SOLIDITY#arrowhead notch": {
@@ -72770,10 +72872,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::COLLECTOR_REACH#ring plumbing": {
@@ -72790,10 +72892,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::DART_MIN_APEX#dart tip": {
@@ -72802,10 +72904,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::MAX_STEPS#sideways steps": {
@@ -72831,12 +72933,13 @@
   "date": "2026-10-09",
   "note": "a check's line under the placer's 25 deg refusal",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::OVERCOUNT_CEILING#lapped plots allowed": {
@@ -72929,10 +73032,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::as_recorded#ring plumbing": {
@@ -72983,10 +73086,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::fan_context#ring plumbing": {
@@ -73003,10 +73106,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::needle#needle": {
@@ -73015,12 +73118,13 @@
   "date": "2026-10-09",
   "note": "an interior angle under the check's line, the page's tapered point",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::overcount#ring plumbing": {
@@ -73045,10 +73149,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::ring_violations#bund rules": {
@@ -73092,10 +73196,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::self_crossing#ring plumbing": {
@@ -73157,10 +73261,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::under_island#paddy around a grave island": {
@@ -73275,13 +73379,14 @@
   "date": "2026-10-09",
   "note": "every refused point under 25 deg, needles included, is cut off into a headland",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::blunt_points#cut off away from the drain": {
@@ -73290,12 +73395,13 @@
   "date": "2026-10-09",
   "note": "cutting off a point a later cut leaves (a grave island's corner) is recorded in 0005 as a DEVIATION",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::held_faults#held at the placer's lines": {
@@ -73304,16 +73410,16 @@
   "date": "2026-10-09",
   "note": "_TOE_MIN_APEX 25.0, _TOE_MIN_AREA 0.25 of ctx.cell and is_chevron's arrowhead match \"sharper than 25 degrees\", \"a quarter of the design cell\" and the 40 deg / 0.90 arrowhead; is_chevron's thresholds are not inline, so the docstring's 40/0.90 is taken as given",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:2065f2aeadcf896b",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#a point cut off": {
@@ -73322,13 +73428,14 @@
   "date": "2026-10-09",
   "note": "points under 25 deg are cut off, and the piece is kept only if it then holds every line",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#cut before welded": {
@@ -73337,12 +73444,13 @@
   "date": "2026-10-09",
   "note": "cut before weld, recorded as a DEVIATION for later-cut rings; the grave cut is the one caller",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#judged at the placer's lines": {
@@ -73351,15 +73459,16 @@
   "date": "2026-10-09",
   "note": "held_faults carries the 25 deg, quarter-cell and arrowhead rules",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#scrap left bare": {
@@ -73368,12 +73477,13 @@
   "date": "2026-10-09",
   "note": "ground no lawful weld takes stays bare with the fan floor under it",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#scrap welded to its neighbor": {
@@ -73382,16 +73492,16 @@
   "date": "2026-10-09",
   "note": "into the basin it shares the most bund with, per both pages",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd",
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
-  "research": "cc6c20b013c16684",
+  "research": "773a5b198e0c5234",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#staircase split on its hop": {
@@ -73714,17 +73824,17 @@
   "date": "2026-10-09",
   "note": "small, thin or pointed cells grow by merging and are kept only once lawful",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd",
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
-  "research": "8d9acbf3e5659b60",
+  "research": "04982638a8f1dc31",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::opened_union#settle plumbing": {
@@ -73759,13 +73869,14 @@
   "date": "2026-10-09",
   "note": "failing cells are merged into neighbors, and only what no lawful union takes stays bare",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
+  "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::shared_length#settle plumbing": {
@@ -73782,10 +73893,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or label",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "research": "18b908bbb50f7c1f",
-  "triaged": "2026-10-09",
+  "research": "69aa78ae06a3c11d",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::takes#merge kept when lawful": {
@@ -73814,11 +73925,11 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or label",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd",
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
-  "research": "8d9acbf3e5659b60",
-  "triaged": "2026-10-22",
+  "research": "04982638a8f1dc31",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::verdict#toe discipline": {
@@ -73827,10 +73938,10 @@
   "date": "2026-10-09",
   "note": "thin strip at the toe's least width (0014 §38), quarter-cell floor, 25 deg point, arrowhead, all attested; that 0005 §16 sets no least width while 0014 §38 gives the toe one is a disagreement between the two pages, not drift in this code",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd",
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
-  "research": "8d9acbf3e5659b60",
+  "research": "04982638a8f1dc31",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
@@ -73840,7 +73951,7 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::welded#welded union": {
@@ -74278,12 +74389,13 @@
   "date": "2026-10-25",
   "note": "the gears are attested; \"the three-in-four split is a GUESS\"",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/well_gear.py::gear_svg#beam pulley glyph": {
@@ -74292,13 +74404,13 @@
   "date": "2026-10-12",
   "note": "beam across the curb, wheel at its middle, no posts and no roof, which the page records as a GUESS",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef"
   ],
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/well_gear.py::gear_svg#pulley frame glyph": {
@@ -74307,14 +74419,14 @@
   "date": "2026-10-12",
   "note": "two posts and a beam across the curb; the page records the drawn proportions as a GUESS",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:49e76daae7c37a24",
    "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
   ],
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/well_gear.py::gear_svg#roof glyph": {
@@ -74333,14 +74445,14 @@
   "date": "2026-10-12",
   "note": "the pole runs 2*half, as long as the marker is wide, from a post off the curb's corner",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:1e90c0992a2ef55f",
    "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
   ],
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/well_gear.py::water_depth#water depth from the ground": {
@@ -74349,14 +74461,14 @@
   "date": "2026-10-12",
   "note": "rolls between shallow and deep when no landform is recorded",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:748c5c6851239f64",
    "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
   ],
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/well_gear.py::well_gear#gear by depth": {
@@ -74365,13 +74477,13 @@
   "date": "2026-10-12",
   "note": "shallow water takes the sweep and deep water the pulley frame, GEAR_SHARE 0.75; the page attests both gears and the depth rule, and calls the 3-in-4 split a GUESS",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
   ],
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/well_gear.py::well_roofed#a roof on some wells": {
@@ -74380,13 +74492,13 @@
   "date": "2026-10-12",
   "note": "ROOF_SHARE=1/3, rolled per sheet and per well, matches \"about one well in three\", which the page calls a GUESS",
   "pages": {
-   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "530e826bbd37f9c5",
+  "research": "f166979de9325ea9",
   "rests": [
    "0196-communal-wells-ido.drawing.html:c6ac4472c482e557"
   ],
-  "triaged": "2026-10-17",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  }
 }
