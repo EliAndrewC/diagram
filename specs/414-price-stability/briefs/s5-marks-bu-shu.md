@@ -8,7 +8,7 @@ you, the research record's `CLAUDE.md` above all.
 **What is asked.** Feature 412's marks pass (sessions 5 and 6) marked every amount of money dated inside an era's years for
 feature 413's tooltip (`l7r/diagram/interactive/record/money.py`'s docstring is the rule) and PASSED OVER every gold `bu` and
 `shu`, because no era carried those coins then. gm-assistant has since added `bu` and `shu` to every Japanese era of its
-conversion table (diagram#13 issuecomment-6391712228, gm-assistant 2ed9f087); the vendored copy
+conversion table (diagram#13 issuecomment-6391712228, gm-assistant 2ed9f087); the vendored copy (refreshed again for the 21 eras below)
 `research/assets/money-conversions.json` now has them, and `research/assets/money-eras-awaiting.json` is empty (all 19 eras are
 built). Your job: mark every gold bu and shu amount dated within a Japanese era's years, and re-decide the backfill lines that
 passed one over. MARKUP ONLY - never a visible word - so it owes no record check (`make record-owed` must name nothing you
@@ -19,6 +19,25 @@ not marked yet: mark or pass over each exactly as sessions 5 and 6 did (Session 
 `specs/412-money-basket-every-era/briefs/handoff.md` are the precedent), after the bu and shu. Much in them is NOT money by
 the rules below - a price change ("a 2-cash cut"), an index, a rate between coins, a per-unit spread - so read each in its
 sentence. **Leave alone** 0295 onward (feature 416, being written now); add no backfill lines for them.
+
+## Re-marking asked on diagram#13 (gm-assistant, issuecomments 6391712228 and 6392881163; the GM approved the Osaka split)
+
+The vendored table now has 21 eras: `osaka-1700` is split by coinage into `osaka-1695` (1695-1711), `osaka-1700` (1690-1694,
+1712-1735) and `osaka-1736` (1736-1739). Do these BEFORE the bu and shu, each as its own commit, `413: marks - ` messages:
+
+1. **By `data-paid` year, for every `data-era="osaka-1700"` mark** (on the span or on an enclosing element): 1695-1711 ->
+   `osaka-1695`; 1736-1739 -> `osaka-1736`; every other year stays `osaka-1700` (1712-1718 included, for now). A span of years
+   goes by its midpoint (Edo 1710-1713 -> `osaka-1695`; Edo 1710-1716 stays, its midpoint 1713; Funai 1690-1737 stays). An
+   `osaka-1700` mark with NO `data-paid` (gm-assistant names a 43 monme and a 4,300 mon): read its sentence and source for the
+   year and mark it by that year, adding `data-paid` where the place is not Osaka. Write a small script for the mechanical part
+   (in your scratchpad, not the repository) and do the no-`data-paid` ones by hand. An enclosing element whose amounts now split
+   across eras gets `data-era` on each span instead.
+2. **The 1763-1777 amounts now marked `kyoto-1745`**: by the midpoint of their years, the nearer era, keeping `data-paid`:
+   Kashimo 1763-1774, Osaka and Nagasaki 1772-1774, and Miyazu 1777 -> `osaka-1780`; Tama 1764-1770 stays `kyoto-1745` (13
+   years each way).
+3. **Hamamatsu's fare of 1665** borrows `osaka-1620` with `data-paid="Hamamatsu 1665"`, like the Takamiya fares; if it has a
+   backfill line, remove it.
+4. Your handoff lists each re-marked amount's question and its old and new era (counts per rule are enough for rule 1).
 
 ## The tool first
 
