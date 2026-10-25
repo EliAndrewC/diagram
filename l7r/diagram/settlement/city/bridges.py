@@ -334,7 +334,7 @@ def deck_glyph(x: float, y: float, rot: float, span: float, deck_w: float, form:
 
     - `plank`: the planked timber deck, seams across it and a dark rail down each side (the glyph before the knob);
     - `log`: one round trunk, bark brown and rounded at the ends, narrower than the box - a log bridge is a single
-      trunk about a foot or so through, so it fills seven tenths of the deck's width with a highlight along its crown;
+      trunk that fills seven tenths of the deck's width with a highlight along its crown;
     - `earthen`: a deck of trodden earth, the earth's own color between two dark edges, the ends of the logs under it
       ticked along each side - no seams and no rails, which is what tells it from the planked deck at a glance.
 

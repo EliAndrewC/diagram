@@ -821,7 +821,7 @@ def _draw_walls_and_gates(
     Research:
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 4.5 (half the 9 px wall stroke (WALL_INK_FT, 0092))
         its wall widths - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 9 (compound wall drawn 3 ft)
-        its divider - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 6 (court divider 2 ft)
+        its figures against 0090 - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 6 (the wall between the two courts drawn 2 ft, where the page's walls are 3 ft thick) - a departure the code keeps until feature 417 T33
     """
     # compound wall (4 segments; S wall broken by the gate) + divider - each in a `<g stroke=...>` group,
     # the authoring form the audit's gate-opening and divider readers parse (feature 254: the drafts are

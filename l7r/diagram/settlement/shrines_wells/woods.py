@@ -61,7 +61,7 @@ class TreeStandsMixin:
         each filtered so no tree is drawn on a roof or a wellhead.
 
         Research:
-            spacing - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_SPACING_FT
+            spacing - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_SPACING_FT 13 (a hill wood's centres about 13 ft apart; a coppice, whose centres the page puts about 8 ft apart, is drawn at it too) - a departure the code keeps until feature 417 T33
             crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_R_FT, 0.75 to 1.05 of it, emergents 1.05 to 1.4
             emergent share - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25); 18%
             conifer share - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25); 34%

@@ -4988,6 +4988,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/compound.py::_draw_walls_and_gates#its divider": {
+  "body": "b594ba8984cfbe8d",
+  "claim": "its divider - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 6 (court divider 2 ft)",
+  "code": "0b219810af0bcbfb",
+  "core": "1599fe06178ede30",
+  "date": "2026-10-25",
+  "note": "the record is not silent. 0090 calls the divider \"the wall between the two courts\" and says \"the walls are 3 ft thick\", but the code draws it 6 px (2 ft). I read \"the walls\" as including the divider. Either cite 0090 and draw it 3 ft (9 px), or record the 2 ft on the drawing page as a deviation",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/compound.py::_draw_walls_and_gates#its drawn sizes": {
   "body": "b594ba8984cfbe8d",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 4.5 (half the 9 px wall stroke (WALL_INK_FT, 0092))",
@@ -5002,21 +5013,20 @@
  },
  "l7r/diagram/compound.py::_draw_walls_and_gates#its wall widths": {
   "body": "b594ba8984cfbe8d",
-  "claim": "its wall widths - magistrates-compounds-jinya-and-yamen.drawing: 9 (compound wall drawn 3 ft); 6 (court divider 2 ft)",
-  "code": "ce6e9fe15cd77f2e",
+  "claim": "its wall widths - magistrates-compounds-jinya-and-yamen.drawing: 9 (compound wall drawn 3 ft)",
+  "code": "ad025dbbf2f104cf",
   "core": "1599fe06178ede30",
   "date": "2026-10-25",
-  "note": "The 9 px (3 ft) compound wall is 0090's \"the walls are 3 ft thick\". 0090 gives no width for the court divider, so the 6 px (2 ft) divider rests on nothing. That figure should be split off as UNRESEARCHED (or GUESS)",
+  "note": "9 px at 3 px/ft is the page's 3 ft wall",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
   },
   "research": "57c4f6365aa66772",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:3096f9775f2c523a",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:fe00696b6b046c03"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/compound.py::_wall_clearance_ft#clear of the wall's face": {
   "code": "e9bf85c692bca4dc",
@@ -5078,6 +5088,23 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/compound.py::emit_svg#its striking posts": {
+  "body": "7a6fb30bb8c6b5a3",
+  "claim": "its striking posts - GUESS martial-training-grounds-and-dojo.drawing: 2 (two striking posts)",
+  "code": "f12ded564633d2b3",
+  "core": "97c112ab9de63134",
+  "date": "2026-10-25",
+  "note": "the page records the number of posts drawn as a guess",
+  "pages": {
+   "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
+  },
+  "research": "8b27404bc31588ce",
+  "rests": [
+   "0165-martial-training-grounds-and-dojo.drawing.html:87965127e4727867",
+   "0165-martial-training-grounds-and-dojo.drawing.html:d49d656131981f70"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/compound.py::emit_svg#its weapon rack": {
   "body": "7a6fb30bb8c6b5a3",
   "claim": "its weapon rack - martial-training-grounds-and-dojo.drawing: 8 (rack 8 ft long); 2 (rack 2 ft deep), centred on the practice ground's south edge",
@@ -5093,14 +5120,6 @@
    "0165-martial-training-grounds-and-dojo.drawing.html:25d51ab3028051ca"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/compound.py::emit_svg#two striking posts drawn (the count; 0165's drawing page records the number as a guess)": {
-  "code": "97c112ab9de63134",
-  "core": "97c112ab9de63134",
-  "date": "2026-10-25",
-  "note": "two striking posts drawn (the count; 0165's drawing page records the number as a guess)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/compound_example.py::GARDEN_PLOT_FT#vegetable garden plot": {
   "body": "b488401acbb45faf",
@@ -5541,6 +5560,17 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/compound_example.py::county_magistracy_program#its kitchen door fallback": {
+  "body": "a352bbdec4b1a82d",
+  "claim": "its kitchen door fallback - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.3 (the kitchen west door's fallback seat); 0.7 (the other)",
+  "code": "13bff00ce5fcbb4c",
+  "core": "14103fc5d3e18912",
+  "date": "2026-10-25",
+  "note": "the page records the door's place as a guess (it opens west); it gives no seat along the face",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/compound_example.py::county_magistracy_program#its search steps and tolerances": {
   "body": "a352bbdec4b1a82d",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 13 (placement order); 11 (placement order); 5 (placement order)",
@@ -5598,14 +5628,6 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:20e2f5e87070706a"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/compound_example.py::county_magistracy_program#kitchen west door's fallback seats at 0.3 and 0.7 of the face": {
-  "code": "14103fc5d3e18912",
-  "core": "14103fc5d3e18912",
-  "date": "2026-10-25",
-  "note": "kitchen west door's fallback seats at 0.3 and 0.7 of the face",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#maids' room": {
   "code": "b58ac795974f54e7",
@@ -6786,6 +6808,34 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/compound_parts.py::_point_features#its kitchen well": {
+  "body": "218a82747d387cdf",
+  "claim": "its kitchen well - GUESS baths-furo.drawing: the kitchen's well past the bath, within 20 ft of the kitchen",
+  "code": "bfdcf6abe1a0de43",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "past the bath, up to 20 ft out, which the page records as a guess",
+  "pages": {
+   "0105-baths-furo.drawing.html": "de13b621fc93a424"
+  },
+  "research": "05a5d9db2a9784b9",
+  "rests": [
+   "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
+   "0105-baths-furo.drawing.html:c2529d4d294eb292"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_point_features#its other wells": {
+  "body": "218a82747d387cdf",
+  "claim": "its other wells - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the wells at the stables' face and one in the garden",
+  "code": "2b03c90e34b9c485",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "the record is not silent. 0104's drawing page puts an official compound's well \"on its service side or to one side of its front court, never on a guest's path\", and 0091 §127 says a well away from the service side is not supported by the examples. The claim should cite 0104 (and 0091 §127). The stables' well fits that rule; the garden well, in the inner court's formal garden, does not",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/compound_parts.py::_point_features#its search steps and tolerances": {
   "body": "218a82747d387cdf",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 6 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 9 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 12 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 15 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 0.85 (fallback seat order along the court face); 0.15 (fallback seat order along the court face); 0.2 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.8 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.3 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.7 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.4 (fallback seat order along the court face); 0.6 (fallback seat order along the court face); 0.05 (fallback seat order along the court face); 0.95 (fallback seat order along the court face); 0.03 (fallback seat order along the court face); 0.97 (fallback seat order along the court face)",
@@ -6815,16 +6865,14 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/compound_parts.py::_point_features#its wells": {
-  "body": "218a82747d387cdf",
-  "claim": "its wells - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the wells at the kitchen's and the stables' faces and one in the garden",
-  "code": "2c059c6cda66ae2c",
+ "l7r/diagram/compound_parts.py::_point_features#no lodgers' privy within GATE_PRIVY_FT (30 ft) of the main gate": {
+  "code": "8c04151c078314d9",
   "core": "8c04151c078314d9",
   "date": "2026-10-25",
-  "note": "The kitchen well is not \"record silent\": 0105's drawing page records it as a guess (\"past the bath, as far as 20 ft out from the kitchen\"). It should say GUESS research/questions/0105-baths-furo.drawing.html for the kitchen well; the stables' and garden wells stay silent",
-  "pages": {},
+  "note": "no lodgers' privy within GATE_PRIVY_FT (30 ft) of the main gate",
+  "outside": true,
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/compound_parts.py::_point_features#no tub at a kura": {
   "body": "218a82747d387cdf",
@@ -6842,6 +6890,33 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_point_features#stables and servants' row share one privy within GROOMS_PRIVY_FT (55 ft)": {
+  "code": "8c04151c078314d9",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "stables and servants' row share one privy within GROOMS_PRIVY_FT (55 ft)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_parts.py::_point_features#the bath abuts the kitchen's court face, clear of every spine court (0105)": {
+  "code": "8c04151c078314d9",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "the bath abuts the kitchen's court face, clear of every spine court (0105)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_parts.py::_point_features#the privy seat order: flush on the side wall first, then the wall ends, the court face last (offsets 4.5, 7, 3.5 ft)": {
+  "code": "8c04151c078314d9",
+  "core": "8c04151c078314d9",
+  "date": "2026-10-25",
+  "note": "the privy seat order: flush on the side wall first, then the wall ends, the court face last (offsets 4.5, 7, 3.5 ft)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/compound_parts.py::_roji_parts#gate seat": {
   "code": "408bfc3b6c7c8e61",
@@ -10496,16 +10571,22 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#its plot-edge arithmetic": {
+ "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#its plot-edge gap": {
   "body": "4c00b87241b24ea2",
-  "claim": "its plot-edge arithmetic - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 12 (extra west-sun offset of the near face, about 48 px less the 36 ft face)",
-  "code": "f946092f2487fc9a",
+  "claim": "its plot-edge gap - GUESS sunlight-and-shade-on-the-farm.drawing: 12 (the windbreak face's gap off the plots, an average plot's overhang)",
+  "code": "7233f703f1ce4e71",
   "core": "f0d341584f49b8af",
   "date": "2026-10-25",
-  "note": "Not silent: 0038's drawing page records \"The windbreak's face keeps a small gap from the plots. The gap is an average plot's overhang\", which is what the 12 px is. It should be GUESS research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the page records the gap as \"an average plot's overhang\", which is what the 12 is",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:b827c5a10b15cbbc",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#its salts, guards and sentinels": {
   "body": "4c00b87241b24ea2",
@@ -11987,26 +12068,17 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hinterland/parcels/patches.py::seat_off_the_row#a parcel in a row stepped sideways to the nearest admitted seat off it, else refused": {
-  "code": "7b07d3ada467a604",
+ "l7r/diagram/hamletgen/hinterland/parcels/patches.py::seat_off_the_row#stepped off a row": {
+  "body": "58710b21c8083017",
+  "claim": "stepped off a row - GUESS: searched, the record silent (feature 417 T38, 2026-10-25); a parcel in a row is stepped sideways to the nearest admitted seat off it, else refused",
+  "code": "e0c3fb32934386cd",
   "core": "7b07d3ada467a604",
   "date": "2026-10-25",
-  "note": "a parcel in a row stepped sideways to the nearest admitted seat off it, else refused",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/hinterland/parcels/patches.py::seat_off_the_row#woodland scan plumbing": {
-  "body": "928a6c108143cfda",
-  "claim": "woodland scan plumbing - NONE: lattices, indexes, measures and ring geometry",
-  "code": "3c48e463885371df",
-  "core": "7b07d3ada467a604",
-  "date": "2026-10-25",
-  "note": "the inherited NONE covers a placement rule: a parcel in a row is stepped sideways to the nearest admitted seat off it, else refused; should be GUESS beside \"woods not in a ruled line\"",
-  "outside": true,
+  "note": "no cited page speaks to stepping a parcel out of a row",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::_COMPASS#stage plumbing": {
   "code": "d154f474baa3fe0c",
@@ -12089,14 +12161,15 @@
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::plant_the_belt#its clump radius": {
   "body": "56c9ff9be9b1eb34",
-  "claim": "its clump radius - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 14 (belt clump radius for page prediction)",
-  "code": "2ece37eea8ae969a",
+  "claim": "its clump radius - NONE: they decide nothing about the place - 14 (a stand-in clump radius for the page's framing prediction, not a drawn tree)",
+  "code": "728a7382a9c0c57e",
   "core": "d12bc8b00a7fb817",
   "date": "2026-10-25",
-  "note": "need belt_page's use of 14*bscale and the clump radius village_grove draws. If 14 only mirrors the drawn radius it is NONE; if it is the radius, 0072 §41 points to \"How our maps stock woods and size crowns\", which is not in the bundle, so \"record silent\" is unproven",
+  "note": "a stand-in radius used only to predict the frame; nothing is drawn at it",
   "pages": {},
   "research": "",
-  "verdict": "CANNOT-TELL"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::plant_the_belt#its drawn sizes": {
   "body": "56c9ff9be9b1eb34",
@@ -20024,16 +20097,21 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/pondbank.py::seat_free#its fallback stream width": {
+ "l7r/diagram/hamletgen/pondbank.py::seat_free#its figures against 0059": {
   "body": "4aa07b32bd0dbd8a",
-  "claim": "its fallback stream width - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 9 (fallback stream width when a record has no `w`; the brook is drawn 7 ft)",
-  "code": "3564f3c597ba1edd",
+  "claim": "its figures against 0059 - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: 9 (fallback stream width when a record has no `w`, where the page's brook is 7 ft) - a departure the code keeps until feature 417 T34",
+  "code": "a703fb71758bbfba",
   "core": "1b6be475ac108ee7",
   "date": "2026-10-25",
-  "note": "the 0059 drawing page states the brook is 7 ft and sister units cite it for their 7 ft fallback, so GUESS is the wrong class; cite 0059 §407 and use 7 (the code's 9 departs), or record the 9 as a DEVIATION on the page",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the 9 ft fallback stream width, where the page's brook is \"7 ft wide\"; the claim names this and T34 is filed",
+  "pages": {
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
+  },
+  "research": "e1b8f27ddc7aab33",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/pondbank.py::seat_free#no crown on a roof or a wellhead": {
   "body": "4aa07b32bd0dbd8a",
@@ -20723,14 +20801,20 @@
  },
  "l7r/diagram/hamletgen/sink.py::drain_record#its record width": {
   "body": "1f23aea094b62198",
-  "claim": "its record width - NONE: they decide nothing about the place - 2.5 (width written in the drain's connectivity record, a hairline the checks read, not the drawn width)",
-  "code": "b97314c01efa3502",
+  "claim": "its record width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: 2.5 (the drain's width in its record, read by passing_courses as its water, inside the drain's 1.2 to 5.5 ft)",
+  "code": "538215376a895242",
   "core": "4c1cc454bee4e8e8",
   "date": "2026-10-25",
-  "note": "passing_courses reads every channels record, drains included, and seats a washing place at this w/2, so the 2.5 decides a physical width; should cite the 0068 drawing's drain rung (1.2 -> 5.5)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "2.5 ft is inside the drain's 1.2 to 5.5 ft rung",
+  "pages": {
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
+  },
+  "research": "0563a9dcc87ebedc",
+  "rests": [
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:510345478efc1edf",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b60a8b29980e1035"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::drain_run#a drain is a dug ditch": {
   "code": "1ae10b14b1ed0f07",
@@ -21612,16 +21696,21 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/washing.py::passing_courses#its fallback stream width": {
+ "l7r/diagram/hamletgen/washing.py::passing_courses#its figures against 0059": {
   "body": "1398f861ef1b4b5b",
-  "claim": "its fallback stream width - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 9 (fallback stream width, halved; the brook is drawn 7 ft)",
-  "code": "5c09b3a7453b403c",
+  "claim": "its figures against 0059 - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: 9 (fallback stream width, halved, where the page's brook is 7 ft) - a departure the code keeps until feature 417 T34",
+  "code": "16fe9327d2dbf577",
   "core": "6dc81576628ee563",
   "date": "2026-10-25",
-  "note": "the 0059 drawing page's 7 ft brook answers it; code uses 9; cite 0059 §407 and use 7, or record the 9 as a DEVIATION",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the 9 ft fallback stream width (halved), where the page's brook is \"7 ft wide\"; the claim names this and T34 is filed",
+  "pages": {
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
+  },
+  "research": "e1b8f27ddc7aab33",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/washing.py::passing_courses#its figures from 0031": {
   "body": "1398f861ef1b4b5b",
@@ -27486,14 +27575,15 @@
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#its well radius": {
   "body": "f6f52710e7d7e305",
-  "claim": "its well radius - CONVENTION: the well's drawn radius - 8 (a well with no recorded radius)",
-  "code": "9935e20a9e21b348",
+  "claim": "its well radius - NONE: they decide nothing about the place; every well record carries r and vr - 8 (a well with no recorded radius)",
+  "code": "506fe3a687fd9918",
   "core": "005fba1cef0bbd7e",
   "date": "2026-10-25",
-  "note": "CONVENTION is the right kind (0196 calls the marker larger than life), but the fallback `w.get(\"r\", 8.0)`, and its copy for held parts, is 8 where 0196 draws the curb \"at a radius of 9.36 ft\". Use the marker's radius, or label it NONE if every well records r/vr",
+  "note": "the 8 is a fallback that no well record reaches",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#no lane through a farm's grove": {
   "code": "917851046c066b52",
@@ -27568,6 +27658,30 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/fabric.py::_margin_frame.__init__#its margin cap": {
+  "body": "8f2f82ff8d405ec1",
+  "claim": "its margin cap - NONE: they decide nothing about the place - the margin frame capped at half the field's ring",
+  "code": "2794da742b1c6ce1",
+  "core": "8734ee42532ee175",
+  "date": "2026-10-25",
+  "note": "capping the walk at half the ring stops it lapping the field; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/fabric.py::_margin_frame.__init__#its margin reach": {
+  "body": "8f2f82ff8d405ec1",
+  "claim": "its margin reach - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the outline counted as margin within the larger of its span and BUNDLE_PITCH of a house",
+  "code": "b85c0c9a1c5304ed",
+  "core": "8734ee42532ee175",
+  "date": "2026-10-25",
+  "note": "no cited page sets how far from a house the outline counts as margin",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/fabric.py::_margin_frame.__init__#its search steps and tolerances": {
   "body": "8f2f82ff8d405ec1",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 12 (look-ahead vertex count on the envelope walk)",
@@ -27579,15 +27693,6 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/fabric.py::_margin_frame.__init__#margin reach: outline counted as margin within max(span, BUNDLE_PITCH 100 ft) of a house": {
-  "code": "8734ee42532ee175",
-  "core": "8734ee42532ee175",
-  "date": "2026-10-25",
-  "note": "margin reach: outline counted as margin within max(span, BUNDLE_PITCH 100 ft) of a house",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_margin_frame.project#plumbing and geometry": {
   "code": "b2bd936eb2d4e092",
@@ -33947,14 +34052,20 @@
  },
  "l7r/diagram/hamletgen/ways/squaring.py::square_waters#its channel width": {
   "body": "11e0322102e71b18",
-  "claim": "its channel width - CONVENTION: the channel's drawn width - 4 (drawn channel width fallback)",
-  "code": "61b6bf0aff6af63f",
+  "claim": "its channel width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: 4 (drawn channel width fallback, the far supply canal's rung)",
+  "code": "1d97eb60c651db75",
   "core": "41822de8df94e4f6",
   "date": "2026-10-25",
-  "note": "a channel's width is drawn true in feet (0068), not a convention. 4.0 is the far supply canal's rung, so cite 0068 or, if drawn_channels always carry w0, label it NONE",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "4 ft is the far-edge supply canal's rung",
+  "pages": {
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
+  },
+  "research": "0563a9dcc87ebedc",
+  "rests": [
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:4fb1798b8b989581",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7b0f35d3fa44094c"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/squaring.py::square_waters#its figures against 0035's drawing page": {
   "body": "11e0322102e71b18",
@@ -45922,17 +46033,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/overlap/registry.py::element_extents#its drawn way widths": {
-  "body": "47b1a69fbd968592",
-  "claim": "its drawn way widths - CONVENTION: the widths the drawing gives each way, mirrored for the overlap test - 20 (ring road width fallback); 6 (lane width fallback); 30 (road width fallback); 22 (moat width fallback)",
-  "code": "7d1382479ba8db0b",
-  "core": "939b47d3d26659db",
-  "date": "2026-10-25",
-  "note": "the claim says these are \"the widths the drawing gives\", but the moat fallback is 22 where 0068 draws \"a city moat at its real 66 ft\". No hamlet writes a moat or road, so label the dead fallbacks NONE (no producer) as lane_runs does, or use 66",
-  "pages": {},
-  "research": "",
-  "verdict": "DRIFTED"
- },
  "l7r/diagram/overlap/registry.py::element_extents#its search steps and tolerances": {
   "body": "47b1a69fbd968592",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 8 (π/8 angle step); 12 (well polygon vertex count); 16 (pond polygon vertex count)",
@@ -45957,16 +46057,29 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/overlap/registry.py::element_extents#its well radius": {
+ "l7r/diagram/overlap/registry.py::element_extents#its way width fallbacks": {
   "body": "47b1a69fbd968592",
-  "claim": "its well radius - CONVENTION: the well's drawn radius - 8 (well radius fallback)",
-  "code": "1ddab980dd814cd0",
+  "claim": "its way width fallbacks - NONE: they decide nothing about the place; no generator writes a road, ring road or moat, and lanes carry w - 20 (ring road width fallback); 6 (lane width fallback); 30 (road width fallback); 22 (moat width fallback)",
+  "code": "381d3e9f120ba064",
   "core": "939b47d3d26659db",
   "date": "2026-10-25",
-  "note": "the fallback 8.0 is not 0196's 9.36 ft marker radius; use it, or label NONE if r/vr are always recorded",
+  "note": "checker extents; nothing drawn depends on them",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/overlap/registry.py::element_extents#its well radius": {
+  "body": "47b1a69fbd968592",
+  "claim": "its well radius - NONE: they decide nothing about the place; every well record carries r and vr - 8 (well radius fallback)",
+  "code": "f53767fbbad7e5b9",
+  "core": "939b47d3d26659db",
+  "date": "2026-10-25",
+  "note": "the 8 is a fallback that no well record reaches",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::elements#registry plumbing": {
   "code": "29bc8f52a502f327",
@@ -46318,16 +46431,17 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/overlap/reserved.py::seat_radius#its drawn well radius": {
+ "l7r/diagram/overlap/reserved.py::seat_radius#its well radius": {
   "body": "a315c0f02baadf2c",
-  "claim": "its drawn well radius - CONVENTION: the well's drawn radius - 8 (well radius fallback)",
-  "code": "13ebdd3a9386224f",
+  "claim": "its well radius - NONE: they decide nothing about the place; every well record carries r and vr - 8 (well radius fallback)",
+  "code": "312eadd0986d0dba",
   "core": "834896d8c9b77e6a",
   "date": "2026-10-25",
-  "note": "the fallback 8.0 is not 0196's 9.36 ft marker radius; use it, or label NONE if r/vr are always recorded",
+  "note": "the 8 is a fallback that no well record reaches",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/reserved.py::seat_radius#wellhead clearance": {
   "code": "9608fc0bc0377c35",
@@ -51010,23 +51124,15 @@
  },
  "l7r/diagram/settlement/city/bridges.py::deck_glyph#its log girth": {
   "body": "c8556958aa94f526",
-  "claim": "its log girth - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.7 (log at 7/10 of the deck)",
-  "code": "95c0262d3ddc4290",
+  "claim": "its log girth - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.7 (log at 7/10 of the deck; 0084 names a single log and gives no girth)",
+  "code": "f94fa4c32eb11082",
   "core": "9853a5cb036e78cf",
   "date": "2026-10-25",
-  "note": "the docstring cites 0084 for a trunk \"about a foot or so through\", and 0084 is not in the bundle; a sibling claim also labels the same 0.7 CONVENTION. Need 0084 to tell GUESS from a sourced girth",
+  "note": "the claim says 0084 gives no girth, but the unit's own docstring says the trunk is \"about a foot or so through\". 0084 is not in the bundle; I need its text to tell whether it sizes the log",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "CANNOT-TELL"
- },
- "l7r/diagram/settlement/city/bridges.py::deck_glyph#log at seven tenths of the deck": {
-  "code": "6bea0548b8cdb12e",
-  "core": "9853a5cb036e78cf",
-  "date": "2026-10-03",
-  "note": "glyph proportion",
-  "research": "",
-  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::deck_glyph#one glyph per form": {
   "code": "01e520591d1b11df",
@@ -54177,16 +54283,22 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#its dug-back bank": {
+ "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#its figures against 0018": {
   "body": "5adee3f35aae8a9b",
-  "claim": "its dug-back bank - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1 (a dike-pond unit's bank clears the canal by 1 ft)",
-  "code": "2408e4fa435f8a7c",
+  "claim": "its figures against 0018 - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: 1 (a dike-pond unit dug back until its bank clears the canal by 1 ft, where a canal may graze a parcel's edge and the bank stays on the true parcel line) - a departure the code keeps until feature 417 T34",
+  "code": "1b777ab5cd56dfa1",
   "core": "737f52f51af88acd",
   "date": "2026-10-25",
-  "note": "not silent: 0018 says a canal \"may graze a parcel's edge by a foot and a half or so\" and \"the bank stays on the true parcel line\". Cite 0018; the `pen + 1.0` dig-back on any graze contradicts it",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the pond unit is dug back until its bank clears the canal by 1, where the page lets a canal \"graze a parcel's edge\" and keeps the bank \"on the true parcel line\"; the claim names this and T34 is filed",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+  },
+  "research": "dede4a3ae0c4c6d4",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:8cb3b577416449af",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e8fdf34d7bd0e81d"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#its salts, guards and sentinels": {
   "body": "5adee3f35aae8a9b",
@@ -54580,14 +54692,20 @@
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#its converted share": {
   "body": "cbf07a080223db6d",
-  "claim": "its converted share - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.55 (converted share of eligible plots, a share well short of everything)",
-  "code": "cab4379c2833a8cb",
+  "claim": "its converted share - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: 0.55 (converted share of eligible plots, a share well short of everything)",
+  "code": "676cc3633a0b8084",
   "core": "dbb7ab6fe10fdace",
   "date": "2026-10-25",
-  "note": "not silent: 0020 speaks to it (\"a share well short of everything\", Longshan's 18%, a quarter still in rice). Cite 0020 as the unit's own \"converted share\" claim does; 0.55 is a degree within that range",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "0.55 of the eligible plots is a fixed degree inside \"a share well short of everything\"",
+  "pages": {
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
+  },
+  "research": "909bb100e23424ac",
+  "rests": [
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:4af6b4bf821b4dab",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:a7c70511a8272fd4"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#no rape": {
   "body": "cbf07a080223db6d",
@@ -55240,15 +55358,6 @@
   ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#flooded-near-ditch band: within 1.4 plots of the main or drain": {
-  "code": "1dbc88c8837680db",
-  "core": "1dbc88c8837680db",
-  "date": "2026-10-25",
-  "note": "flooded-near-ditch band: within 1.4 plots of the main or drain",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#its figures from 0009": {
   "body": "2b2f05a48c769311",
   "claim": "its figures from 0009 - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: 0.3 (flooded share near the ditches); 0.975 (ripe share, 2.5% on every map where the page has one in twenty on some maps) - a departure the code keeps until feature 417 T34",
@@ -55265,6 +55374,17 @@
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:a7401b1ec92e2d4b"
   ],
   "verdict": "DRIFTED"
+ },
+ "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#its flooded band": {
+  "body": "2b2f05a48c769311",
+  "claim": "its flooded band - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1.4 (the flooded plots within 1.4 plots of the main or drain)",
+  "code": "f06cc81588df3f8b",
+  "core": "1dbc88c8837680db",
+  "date": "2026-10-25",
+  "note": "the page gives a flooded share and the drain collector, but no width for the band",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#its salts, guards and sentinels": {
   "body": "2b2f05a48c769311",
@@ -62550,13 +62670,13 @@
   "research": "",
   "verdict": "MISLABELED"
  },
- "l7r/diagram/settlement/houses.py::HousesMixin.house#its ridge": {
+ "l7r/diagram/settlement/houses.py::HousesMixin.house#its figures against 0029": {
   "body": "643715b98bbd1a66",
-  "claim": "its ridge - farmhouses-minka.drawing: 0.3 (ridge half-length, the ridge at 0.6 of the length)",
-  "code": "f483e0791940cd08",
+  "claim": "its figures against 0029 - farmhouses-minka.drawing: 0.3 (ridge half-length, every house hipped where the page rolls the roof per settlement) - a departure the code keeps until feature 417 T33",
+  "code": "632e5f0c14efbef1",
   "core": "4c884d4213adb035",
   "date": "2026-10-25",
-  "note": "every house gets the fixed 0.6 hipped ridge (`w * 0.30` either side), but the page makes the roof \"a knob, chosen per settlement\": hipped, gabled (a ridge \"running its whole length\") or irimoya. Even the hipped reading leaves out \"a diagonal into each corner\". The ridge should follow a rolled roof form",
+  "note": "the ridge is a fixed ±0.3 w on every house, so every roof reads hipped, where the page makes \"The roof shape ... a knob, chosen per settlement\"; the claim names this and T33 is filed",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
   },
@@ -62590,17 +62710,6 @@
   "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
- "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#its basin shapes": {
-  "body": "195b752c209a213a",
-  "claim": "its basin shapes - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.66 (basin aspect at ftpx >= 2); 1.9 (strip aspect); 32 (hamlet strip); 46 (hamlet strip); 66 (hamlet strip)",
-  "code": "d83c9e77d4c09d6a",
-  "core": "c12cf075945e19b3",
-  "date": "2026-10-25",
-  "note": "the record is not silent: 0005 gives the village basin as \"about 47 ft square\" and the town's as \"58 ft across, on rows 52 to 72 ft apart\", an aspect near 1.0, while the code draws 0.66 at ftpx >= 2. The 0.66 should be a 0005 claim marked as a departure (the hamlet 0.66 and strip figures can stay GUESS)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
- },
  "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#its figures against 0005": {
   "body": "195b752c209a213a",
   "claim": "its figures against 0005 - rice-paddies-and-their-plots-suiden.drawing: 34 (small_irregular basin, under the page's 40 to 60 ft); 20 (small_irregular basin); 40 (small_irregular basin); 70 (large_block basin, past 60 ft); 30 (large_block basin); 44 (large_block basin) - a departure the code keeps until feature 417 T34",
@@ -62614,6 +62723,22 @@
   "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#its figures against 0005's village basin": {
+  "body": "195b752c209a213a",
+  "claim": "its figures against 0005's village basin - rice-paddies-and-their-plots-suiden.drawing: 0.66 (basin aspect at ftpx >= 2, where the village basin is about 47 ft square); 0.72 (large_block aspect at ftpx >= 2) - a departure the code keeps until feature 417 T34",
+  "code": "9e221869fd6d5163",
+  "core": "c12cf075945e19b3",
+  "date": "2026-10-25",
+  "note": "aspect 0.66 and 0.72, where the village basin is \"about 47 ft square\"; the claim names this and T34 is filed",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+  },
+  "research": "69aa78ae06a3c11d",
+  "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
   "verdict": "DRIFTED"
@@ -62645,14 +62770,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#large_block basin aspect 0.72 at ftpx >= 2": {
-  "code": "c12cf075945e19b3",
+ "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#its strip shapes": {
+  "body": "195b752c209a213a",
+  "claim": "its strip shapes - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1.9 (strip aspect); 32 (hamlet strip); 46 (hamlet strip); 66 (hamlet strip)",
+  "code": "77d289c0667b8bce",
   "core": "c12cf075945e19b3",
   "date": "2026-10-25",
-  "note": "large_block basin aspect 0.72 at ftpx >= 2",
-  "outside": true,
+  "note": "the page attests strips but gives them no size",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#paddy plot size and regularity": {
   "code": "76b614bc4c0e57f1",
@@ -64667,14 +64794,20 @@
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its crescent pond pad": {
   "body": "586f39781f692c05",
-  "claim": "its crescent pond pad - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 2 (reeds kept 2 ft plus a tuft's reach off a crescent pond)",
-  "code": "c888da1d380de709",
+  "claim": "its crescent pond pad - reed-beds-and-the-marshs-edge-yoshihara.drawing: 2 (reeds kept 2 ft plus a tuft's reach off a crescent pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34",
+  "code": "c434c2ea1856e023",
   "core": "c2cd04e8c7b38736",
   "date": "2026-10-25",
-  "note": "the record is not silent: 0074 has reeds \"drawn right to the water's edge\", the record's own finding for a pond shore (0061: reeds \"at its shore\"). The 2 ft plus a tuft's reach off a crescent pond is the same departure as the 1.5 ft pond rim and should be labeled as a departure from 0074",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "reeds kept 2 px plus a tuft's reach off a crescent pond (2 px alone on a pond fringe), where the reeds run \"right to the water's edge\"; the claim names this and T34 is filed",
+  "pages": {
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
+  },
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:d4d9c7851e8a97bc",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its figures against 0074": {
   "body": "586f39781f692c05",
@@ -70065,19 +70198,19 @@
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._yard_shed_seat#its figures against 0048": {
   "body": "65edc0f2e0645861",
-  "claim": "its figures against 0048 - draft-oxen-and-horses-and-their-byres-umaya.drawing: 0.3 (back-wall candidate seats at +-0.3 of the house width, where the measured stables stand toward the road and the gate); 0.25 (flank candidate seat 0.25 of the depth toward the back) - a departure the code keeps until feature 417 T33",
-  "code": "49d293979bcae37b",
+  "claim": "its figures against 0048 - draft-oxen-and-horses-and-their-byres-umaya: 0.3 (back-wall candidate seats at +-0.3 of the house width, where the measured stables stand toward the road and the gate); 0.25 (flank candidate seat 0.25 of the depth toward the back) - a departure the code keeps until feature 417 T33",
+  "code": "c3966cdb3218a85d",
   "core": "8a1d2e4811edabca",
   "date": "2026-10-25",
-  "note": "wrong page: \"the two measured Edo-period stables stand toward the road and the gate\" is in 0048.html §366, while the drawing page gives only the 6-12 ft gap. The pointer should be research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, kept as a departure tracked by T33",
+  "note": "seats at ±0.3 of the width on the back wall and 0.25 of the depth toward the back on a flank, where \"the measured stables stand toward the road and the gate\"; the claim names this and T33 is filed",
   "pages": {
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.html": "bba86415b4203d3d"
   },
-  "research": "a75e3ada6edbbc9b",
+  "research": "17d00fe85bc4f6b2",
   "rests": [
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:4890be592fed3ca4"
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.html:693fd938b6510d28"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._yard_shed_seat#its salts, guards and sentinels": {
   "body": "65edc0f2e0645861",
@@ -70115,15 +70248,6 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#at least one byre per settlement (`max(1, round(...))`)": {
-  "code": "c962304513fb481b",
-  "core": "c962304513fb481b",
-  "date": "2026-10-25",
-  "note": "at least one byre per settlement (`max(1, round(...))`)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#byre form knob": {
   "code": "2d1bf357fea2d1f7",
   "core": "c962304513fb481b",
@@ -70159,6 +70283,17 @@
   "core": "c962304513fb481b",
   "date": "2026-10-25",
   "note": "no page gives the clearance round a byre",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#its byre count and search": {
+  "body": "319139e9158cb2e6",
+  "claim": "its byre count and search - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1 (at least one byre per settlement); 16 (the spiral widens 16 px a ring)",
+  "code": "e62fd9dcc0dcbb7b",
+  "core": "c962304513fb481b",
+  "date": "2026-10-25",
+  "note": "the page gives a keeper share but no floor; the 16 px ring is a search step",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -70284,15 +70419,6 @@
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:4890be592fed3ca4"
   ],
   "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#the spiral search widens 16 px a ring": {
-  "code": "c962304513fb481b",
-  "core": "c962304513fb481b",
-  "date": "2026-10-25",
-  "note": "the spiral search widens 16 px a ring",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.reserve_commons_byres#pocket margin": {
   "code": "de9ed59e253e5996",
@@ -71414,22 +71540,21 @@
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#spacing": {
   "body": "c1be7167136f7fa0",
-  "claim": "spacing - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing: CANOPY_SPACING_FT, jittered 42% - 0.42 (position jitter, a share of the step)",
-  "code": "4ef8245925f455fc",
+  "claim": "spacing - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing: CANOPY_SPACING_FT",
+  "code": "52862af52a945ccc",
   "core": "d3958c0f5ef26090",
   "date": "2026-10-25",
-  "note": "the 0080 drawing page gives the center spacing (about 13 ft for a hill wood, about 8 ft for a coppice) but says nothing about how far each tree moves from its grid point, so the 0.42 jitter (`random.uniform(-step * 0.42, step * 0.42)`) has no backing from this page; the claim should keep 0080 for the spacing only and record 0.42 as UNRESEARCHED, or as GUESS on the line with 0.18 and 0.34 if pass N8 searched for it",
+  "note": "CANOPY_SPACING_FT's value is not in the bundle, and the page gives two spacings (hill wood 13 ft, coppice 8 ft). I need the constant and whether the coppice is drawn through this unit",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:5b4dfd1254dbb70e",
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:aad44c6751a44f5f",
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:c42d5b3f4f69bf47",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._fringe_blocked#fringe on waste ground only": {
   "body": "b19e0aa5e1003d93",
@@ -73411,15 +73536,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/town_ways.py::TownWaysMixin.ancestral_hall#entry porch 6 ft deep, set 4 ft into the front wall": {
-  "code": "c47ff61e4b51e143",
-  "core": "c47ff61e4b51e143",
-  "date": "2026-10-25",
-  "note": "entry porch 6 ft deep, set 4 ft into the front wall",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/town_ways.py::TownWaysMixin.ancestral_hall#focal keep-out": {
   "body": "c6c096336a6fb6e0",
   "claim": "focal keep-out - ancestral-halls-in-south-china-villages-citang.drawing: an open forecourt lay between the hall and its pond - only the footprint and 6 px are reserved, no forecourt, a departure the code keeps until feature 417 T35; the footprint plus 6 px is reserved",
@@ -73456,16 +73572,16 @@
   "research": "f0916621502d467b",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/town_ways.py::TownWaysMixin.ancestral_hall#its hall glyph": {
+ "l7r/diagram/settlement/town_ways.py::TownWaysMixin.ancestral_hall#its hall's porch": {
   "body": "c6c096336a6fb6e0",
-  "claim": "its hall glyph - CONVENTION: sizes on the sheet, not in the world - 18 (porch block); 5 (inner eave); 9 (porch block)",
-  "code": "41ef4a1a2ff91f58",
+  "claim": "its hall's porch - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 18 (porch block, in feet); 5 (inner eave, in feet); 9 (porch block); 6 (porch depth); 4 (porch set into the front wall)",
+  "code": "ab0df61da7882a8e",
   "core": "c47ff61e4b51e143",
   "date": "2026-10-25",
-  "note": "\"sizes on the sheet, not in the world\" is false: `self.px(18)`, `px(9)` and `px(5)` turn feet into pixels, so the porch is drawn at 18 ft wide on any scale and the eave line 5 ft in. These are world sizes 0050 does not give; label them GUESS or UNRESEARCHED",
+  "note": "the page gives no porch or eave size",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/town_ways.py::TownWaysMixin.ancestral_hall#porch on the water side": {
   "code": "90b774456fd426d9",
@@ -73478,25 +73594,22 @@
   "research": "ce613c102f884234",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/town_ways.py::TownWaysMixin.market#first stall set 10 ft in from the court's edge": {
-  "code": "7833de9bdc52834e",
-  "core": "7833de9bdc52834e",
-  "date": "2026-10-25",
-  "note": "first stall set 10 ft in from the court's edge",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/settlement/town_ways.py::TownWaysMixin.market#its stall row": {
+ "l7r/diagram/settlement/town_ways.py::TownWaysMixin.market#its figures against 0130": {
   "body": "33ea1db78342a118",
-  "claim": "its stall row - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 6 (stall row offset); 22 (stall pitch); no caller draws the market",
-  "code": "1956bf1bb9954ce7",
+  "claim": "its figures against 0130 - market-days-and-the-market-ground-ichi.drawing: 6 (stall row offset); 22 (stall pitch); 10 (first stall in from the court's edge), where the page draws no stalls; no caller draws the market - a departure the code keeps until feature 417 T35",
+  "code": "0912587749026cf0",
   "core": "7833de9bdc52834e",
   "date": "2026-10-25",
-  "note": "the record is not silent: 0130 says \"No stalls are drawn\" and \"Nothing of the stalls is drawn\". The stall row should be labeled against 0130, or dropped (it has no caller)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "stalls drawn (6 ft row offset, 22 ft pitch, 10 ft inset), where the page says \"No stalls are drawn\"; the claim names this and T35 is filed",
+  "pages": {
+   "0130-market-days-and-the-market-ground-ichi.drawing.html": "4384caa7aedaa10a"
+  },
+  "research": "b7a019486050b1a2",
+  "rests": [
+   "0130-market-days-and-the-market-ground-ichi.drawing.html:bc33bab662adb90b",
+   "0130-market-days-and-the-market-ground-ichi.drawing.html:cb11cae24d13a9e2"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/town_ways.py::TownWaysMixin.market#market glyph": {
   "code": "20b75a72ca2cb679",
@@ -73550,6 +73663,18 @@
   "pages": {},
   "research": "",
   "verdict": "MISLABELED"
+ },
+ "l7r/diagram/settlement/town_ways.py::TownWaysMixin.water_mouth#its pavilion plan": {
+  "body": "c57dd2c25d796b24",
+  "claim": "its pavilion plan - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 6 (a hexagonal pavilion in feet)",
+  "code": "42cb34ab0ce8ac97",
+  "core": "617164fd270b6242",
+  "date": "2026-10-25",
+  "note": "nothing in the bundle speaks to a hexagonal plan",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/town_ways.py::TownWaysMixin.water_mouth#pavilion glyph": {
   "code": "2a58bc2624c32668",
