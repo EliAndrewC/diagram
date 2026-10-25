@@ -79,6 +79,7 @@ _ID = re.compile(r"\b(FR|SC)-(\d{3}[a-z]?)\b")
 # undefined (46 findings on a correct tree, blocking every push) and check 3 silently checked nothing,
 # which is the worse half. The id is still the first thing in the bold span; a title may follow it, the
 # span may wrap a line, and the declaration may be a list item - all three shapes are in the record.
+_RANGE = re.compile(r"\bFR-(\d{3})[a-z]?\s*(?:-|to)\s*FR-(\d{3})[a-z]?\b")
 _DEF = re.compile(r"^(?:[-*+]\s+)?\*\*(FR|SC)-(\d{3}[a-z]?)(?=\*\*|[ .:])[^*]*\*\*", re.M)
 _HEADING = re.compile(r"^##+\s+(.*?)\s*$", re.M)
 # The marker OPENS a line (a list bullet may stand in front of it). Unanchored, the sentence that
@@ -242,6 +243,11 @@ def check_orphans(spec: pathlib.Path) -> list[str]:
         for para in body.split("\n\n"):
             for sc in re.finditer(r"^(?:[-*+]\s+)?\*\*(SC-\d{3}[a-z]?)(?=\*\*|[ .:])[^*]*\*\*(.*)$", para, re.M):
                 named = {f"{k}-{v}" for k, v in _ID.findall(sc.group(2)) if k == "FR"}
+                # A RANGE names every requirement inside it, a lettered one too: "(FR-001-FR-003, FR-005)" covers FR-002a
+                # (2026-10-25: 420's accepted spec read FR-002 and FR-002a as orphans, and editing the spec to list them
+                # would have voided the round arbiter's ruling on it)
+                for lo, hi in _RANGE.findall(sc.group(2)):
+                    named |= {fr for fr in frs if int(lo) <= int(fr[3:6]) <= int(hi)}
                 covered |= named
                 if not named and "(spec-wide)" not in sc.group(2):
                     n = line + para[:sc.start()].count("\n")

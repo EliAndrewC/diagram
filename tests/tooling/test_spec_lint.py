@@ -179,6 +179,12 @@ def test_check_3_an_fr_no_criterion_names(tmp_path: pathlib.Path) -> None:
     assert any("FR-001a is named by no success criterion" in x for x in _lint14(d))
 
 
+def test_check_3_a_range_names_every_requirement_inside_it(tmp_path: pathlib.Path) -> None:
+    """ "(FR-001-FR-002)" covers FR-001a too; without the range FR-001a would be an orphan (420)."""
+    d = _feature(tmp_path, GOOD.replace("(FR-001, FR-001a)", "(FR-001-FR-002)"))
+    assert not any("FR-001a is named by no success criterion" in x for x in _lint14(d))
+
+
 def test_check_3_reads_a_lettered_id_as_its_own(tmp_path: pathlib.Path) -> None:
     """`FR-007a` is not a mention of `FR-007`; the grammar is three digits plus an optional letter."""
     assert lint._ID.findall("see FR-001a and SC-002") == [("FR", "001a"), ("SC", "002")]
