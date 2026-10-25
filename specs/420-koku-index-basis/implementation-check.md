@@ -5,3 +5,5 @@
 - 0279: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'what-did-charcoal-cost|Bassino|monme' l7r pool (only the assembled glossary)
 - 0286: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'years-necessities-cost-in-japan|Kusano|monme' l7r pool (only the assembled glossary)
 - 0301: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'observed-and-which-reconstructed|Kusano|Bassino' l7r pool (only the assembled glossary)
+- 0302: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'observed-and-which-reconstructed-in-china|Timkovski|Hong Liangji' l7r pool (nothing)
+- 0288: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'years-necessities-and-a-days-labor-cost-in-china|Timkovski|tael' l7r pool (only the assembled glossary)
