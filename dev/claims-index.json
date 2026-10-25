@@ -33740,16 +33740,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/stage.py::STEPS#settle plumbing": {
-  "body": "210a53bd49276a59",
+  "body": "da25e2d90d4d6cbc",
   "claim": "settle plumbing - NONE",
-  "code": "37dccac1d813f1ad",
-  "core": "a9c1333fe1369d71",
-  "date": "2026-10-21",
-  "note": "the order of the repair steps, nothing a map reader sees",
+  "code": "48cee8de9efb1afd",
+  "core": "5f45d484dd3d0b4d",
+  "date": "2026-10-25",
+  "note": "the tuple only orders the geometry-cleanup passes; removing six of them sets no size, count, distance, share, form or placement a map reader would read off the map, so NONE is right",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/stage.py::settle_husks#settle plumbing": {

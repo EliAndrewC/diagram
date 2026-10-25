@@ -328,3 +328,14 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 9. **Done, measured.** R8 complete; the needless deleted and landed green; each needed one converted or ruled.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
+
+### T40 (T31's first part, D35): the six settle steps measured needless deleted
+
+- **Approach**: T31's own section, split so its first landing ticks only what it finished (T31's decision preflight ruled CLEAR,
+  2026-10-25): the six steps R8 measured NEEDLESS - `settle_husks` (first and last), `settle_street_ends`, `settle_shadows`,
+  `settle_joins`, `settle_needles`, `prune_the_tree` - dropped from `settle/stage.py` `STEPS`, and the nine names that leaves
+  dead (`make dead-closure`: `settle_shadows`, `drop_stranding`, `settle_needles`, `keeps_the_network`, `left_to_the_tree`,
+  `strands_only_ordinary`, `_on_the_connector`, `weld_corner`, `WELD_PX` with `weld.py`) deleted with their tests. The four
+  still asked by `last_resort` stay defined. T31 keeps the four map-moving steps and the six needed ones.
+  Rendering: none.
+
