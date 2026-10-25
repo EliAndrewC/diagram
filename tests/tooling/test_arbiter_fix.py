@@ -433,3 +433,12 @@ def test_a_fix_filed_under_another_feature_is_found_and_a_refusal_names_what_it_
     assert "searched the active feature (901-y)" in err and TRIGGER in err, "the refusal names where it looked and what is open"
     ha.settle_fix(root, TRIGGER, "declined", "it overhauls a decided process")
     assert ha.open_fixes(root / "specs" / "900-z") == [], "settled in the feature that held it"
+
+
+def test_a_claims_ask_s_ruling_carries_its_claims_so_the_accept_reaches_them(root: pathlib.Path) -> None:
+    """Feature 417 T05 (2026-10-25): an ask filed with `REVIEW=claims:<keys>` was ruled `accept`, but the ruling row kept a
+    review only when it was `spec` or `plan`, so the claims accept never ran and the claims gate went on refusing the push."""
+    keys = "m.py::f#a claim;m.py::g#another"
+    assert ha.trip(root, "ask:x", "ask", "", "a question", review=f"claims:{keys}")
+    row = ha.record_ruling(root, "ask:x", {"ruling": "accept", "why": "no marked line"}, "round-arbiter", "2026-10-25T05:28:25Z")
+    assert row["review"] == f"claims:{keys}"

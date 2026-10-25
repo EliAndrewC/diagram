@@ -360,7 +360,9 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
         **({"tooling_fix_on": fix_on} if fix_on and not fix else {}),
         # a spec review's ruling names the spec it ruled on: the review gate honors it only while the spec still reads so
         # an ask about a review (feature 409) names it, and a spec review's its digest, as a spec round's ruling does
-        **({"review": trig["review"]} if trig.get("review") in REVIEWS else {}),
+        # ...a claims ask's review too (feature 417 T05, 2026-10-25): `REVIEW=claims:<keys>` was dropped here, so the accept the
+        # GM's 2026-10-24 ruling makes the claims' verdict never reached the index and the claims gate went on refusing them
+        **({"review": trig["review"]} if trig.get("review") in REVIEWS or str(trig.get("review") or "").startswith("claims:") else {}),
         **({"spec_sha": spec_body_sha(d)} if trigger.startswith("round:spec-fidelity|") or trig.get("review") == "spec" else {}),
         # a review unit's ruling names the sheet it ruled on, so the review gate honors an accept while the sheet still
         # reads so (feature 374 batch 5: an accepted unit's last verdict was NEEDS-WORK at an older key, and the gate refused)
