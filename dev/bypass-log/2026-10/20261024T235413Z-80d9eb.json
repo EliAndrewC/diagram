@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-24T23:54:13Z",
+  "target": "record-checked",
+  "commit": "4ed3fc6f9",
+  "why": "record-format on record-format:0258: a one-word house-style correction (British to American spelling) inside this project's own translation, which research/CLAUDE.md says follows house style; it restores what the house-style hook wrote and session 5 reverted; no other word, figure or source moved"
+}
