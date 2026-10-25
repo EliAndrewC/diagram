@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T03:18:51+00:00",
+ "final_url": "https://web.archive.org/web/20250514151930id_/https://matsuyama-u-r.repo.nii.ac.jp/record/1605/files/KJ00008731859.pdf",
+ "first": "2c/2c305a9b2135/20261025T031537Z",
+ "gm_copies": [],
+ "keys": [
+  "iwahashi-2010-zenmonme-tsugaru"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "2c/2c305a9b2135/20261025T031850Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "48490296a2df0bb8eb1dba973073b09760bbf36744e68246946e8a21ec356b82",
+ "url": "https://matsuyama-u-r.repo.nii.ac.jp/record/1605/files/KJ00008731859.pdf"
+}
