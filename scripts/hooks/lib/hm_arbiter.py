@@ -754,7 +754,9 @@ def main(argv: list[str]) -> int:
         print(f"arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM, who reviews the ruling after landing; dispatch `round-arbiter` with the MANIFEST below")
         if stands:
             print(f"arbiter-ask: {stands}")
-        elif re.match(r"\d+-(spec|plan)-", subject):
+        elif re.match(r"\d+-(spec|plan)-", subject) or re.search(r"spec-fidelity|plan review|spec review", why, re.I):
+            # the question's words count too (2026-10-25: ask:420-round3 asked about spec-fidelity's round 3 under a
+            # subject without "spec", got no hint, and its accept could not stand as the verdict - the push refused)
             print("arbiter-ask: hint - if this asks about a spec or plan review, ask it with REVIEW=spec or REVIEW=plan, so an accept stands as its verdict (feature 409)")
         return 0
     if argv[:1] == ["fix"] and len(argv) in (4, 5) and argv[1] in ("done", "declined"):
