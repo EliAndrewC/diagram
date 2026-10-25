@@ -399,13 +399,6 @@ def join_leg(path: Sequence[Pt], joined: Sequence[Pt]) -> list[Pt]:
     return list(joined[: len(joined) - len(path) + 1])
 
 
-def nearest_on(line: Sequence[Pt], p: Pt) -> Pt | None:
-    """The point of the polyline `line` nearest `p`; None for a line of fewer than two points."""
-    if len(line) < 2:
-        return None
-    return min((seg_closest(p[0], p[1], a, b) for a, b in zip(line, line[1:], strict=False)), key=lambda q: math.dist(q, p))
-
-
 def joints_along(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> tuple[list[float], list[float]]:
     """The street's cumulative lengths, and the arc length along it of each lane end in `ends` within `touch` of it."""
     arc = [0.0]

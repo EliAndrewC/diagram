@@ -149,3 +149,22 @@ Story 2), the code-size delta (SC-004), the feature report.
 - **D23** The needless passes are deleted together, with their call sites and the tests that only exercised them, in one
   landing; if the landing cohort is then red, the deletion is set down whole and recorded (no pass-by-pass iteration). Maps
   may change (held to the claims and the cohort). Rendering: none.
+
+### T26 part B (2026-10-25T08:19Z)
+
+Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
+
+1. **What exactly is refusing?** The coverage floor only, both runs: lines of surviving definitions whose only covering
+   tests went with the deleted passes - `clearance._clear_touch`'s chord under a foot (a unit test added), `joints._key` and
+   `_rounded` and `street.nearest_on` (no live caller: each kept alive in `make dead-closure` by a name another module
+   defines, `washing.nearest_on` for the last; deleted). Run 1's table named all three; the session fixed two (its miss).
+   The landing cohort was not red.
+2. **A3 again.** No rule moves: the deleted code ran in no roll (dead) or is reached by a unit test.
+3. **A4 again.** n/a - nothing placed changes.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: coverage of what stands, and dead code removed.
+6. **The one-sentence test.** "Why was the gate red?" - the deletion took the only tests of three live helpers' corners and
+   left three dead ones a name collision hid.
+7. **The next step is a measurement.** `make done` once more, inside `make land`.
+8. **Every route measured?** The gate's coverage table lists every uncovered line in one run (the arbiter); none other.
+9. **After a ruling:** continue (red-gate@2026-10-25T08:17:19Z).
