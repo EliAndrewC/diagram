@@ -174,14 +174,6 @@ def keeps_the_web(lanes: Sequence[Mapping[str, Any]], mine: set[int], old: Poly,
     return served(old) <= served(new)
 
 
-def _key(q: Poly) -> tuple[tuple[float, float], ...]:
-    return tuple((float(x), float(y)) for x, y in q)
-
-
-def _rounded(p: Poly) -> list[list[float]]:
-    return [[round(a, 1), round(b, 1)] for a, b in p]
-
-
 _SHORT_LEG_FT = 40.0  # a last leg this short, with the joint beyond it, is a returning leg (0081; 25 ft until feature 328)
 """Research: two turns read as one - research/questions/0081-village-lanes.drawing.html: a returning leg under 40 ft is cut"""
 

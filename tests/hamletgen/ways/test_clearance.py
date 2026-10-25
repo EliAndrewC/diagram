@@ -133,3 +133,12 @@ def test_a_link_is_decided_as_soon_as_it_is_known_with_the_verdict_of_every_samp
                 runs = clear_runs([(0.0, 0.0), b], [[(0.0, 0.0)]], 1.0, step=3.0, floor=0.5, index=stub)  # type: ignore[arg-type]
                 want = any(polyline_len(r) >= need for r in runs)
                 assert link_survives((0.0, 0.0), b, stub.fouled, need) is want, (n, mask, need)
+
+
+def test_a_touch_chord_shorter_than_a_foot_is_clear() -> None:
+    """`_clear_touch` of two points under a foot apart is clear without a scan: there is no chord to foul anything (its
+    callers in the deleted touch pass reached this before feature 417 T26)."""
+    from l7r.diagram.hamletgen.ways.clearance import _clear_touch
+
+    wall = [(0.0, -50.0), (50.0, -50.0), (50.0, 50.0), (0.0, 50.0)]
+    assert _clear_touch((10.0, 0.0), (10.5, 0.0), [wall], [wall], [])
