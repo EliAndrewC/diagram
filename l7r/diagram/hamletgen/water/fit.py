@@ -74,7 +74,7 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
     Research:
         fan acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: the fan solved to the households' acreage, refused outside FIELD_ACRE_BAND
         size and aspect search - NONE
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.06 (the fit's own stopping tolerance, inside the band page 0017 sets); 9 (number of fitting rounds)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.06 (the fit's own stopping tolerance, inside the band page the record sets); 9 (number of fitting rounds)
     """
     best: tuple[tuple[bool, float], CombCarve] | None = None
     # THE ASPECT IS PART OF THE SEARCH, not just a roll. A fan's legality - whether its supply canal

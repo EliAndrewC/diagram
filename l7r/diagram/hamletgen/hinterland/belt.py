@@ -41,7 +41,7 @@ def fringe_profile(uv: Sequence[tuple[float, float]], cols: int, half: float, v_
     cluster happens to lie diagonally to its wind.
 
     Research: belt follows the windward fringe - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: each column stands behind the windward-most house near it
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 40 (column's search window across the wind (rule CITED 0072.drawing))
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 40 (column's search window across the wind (the record))
     """
     raw: list[tuple[float, float | None]] = []
     for k in range(cols + 1):

@@ -352,7 +352,7 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
         polder acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: the grid of modules solved to the households' acreage, refused outside POLDER_ACRE_BAND
         module kept, grid scaled - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: the cell size never stretched, the block grown by modules
         block aspect - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); cols about 0.55 of rows, Enokida's 15 x 8
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.06 (the fit's own tolerance, inside the 12% band page 0017 sets); 9 (number of fitting rounds); 6 (fewest rows in the grid search); 44 (most rows in the grid search)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.06 (the fit's own tolerance, inside the 12% band page the record sets); 9 (number of fitting rounds); 6 (fewest rows in the grid search); 44 (most rows in the grid search)
     """
     # THE ORIGIN IS DERIVED, NOT PINNED. `build_polder` grows its grid from the HIGH corner along the
     # fall and across it, so a fixed corner only works for one fall bearing - at down_deg=0 the same

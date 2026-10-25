@@ -537,7 +537,7 @@ class HousesMixin:
         Off the flood toe / field-adjacency are enforced downstream by `try_place` (each candidate that is not
         field-adjacent or lands on a blocker is simply rejected), so this only has to SHAPE the seed cloud.
         Research: cluster shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round, elongated, crescent or split, with this method's proportions
-            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 0.55 (elongated seed cloud; 0031 attests the levee string but gives no ratio, and the placer sets the drawn width); 1.4 (elongated seed cloud; 0031 attests the levee string but gives no ratio, and the placer sets the drawn width)
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 0.55 (elongated seed cloud; the record attests the levee string but gives no ratio, and the placer sets the drawn width); 1.4 (elongated seed cloud; the record attests the levee string but gives no ratio, and the placer sets the drawn width)
             its figures guessed on 0031 - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 0.22 (crescent spread); 0.95 (crescent depth); 0.42 (split sub-clusters); 0.82 (split sub-clusters); 0.62 (split sub-clusters)
         """
         if shape not in ("round", "elongated", "crescent", "split"):

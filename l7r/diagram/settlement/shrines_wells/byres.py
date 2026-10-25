@@ -435,7 +435,7 @@ class DraftByresMixin:
             no free wall falls back - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the form a knob, rolled per settlement; an inner stable with no free wall drawn as an outer stable, then a free shed at rot 0
             only plain houses keep a byre - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the L-shaped farmhouse common among the better-off households; big farmhouses never own one
             spiral byre off the paddies - research/questions/0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html: a village house stood about 3 ft back from cultivated land; the stall's depth is ours; kept a stall's depth from every field
-            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N8, 2026-10-25) - 30 (30-degree step of the spiral search); 0.25 (the next widening tiers (0.5, 0.25, 0)); 0.75 (spread tier for the shared-shed choice (borrowing itself NOT ATTESTED, P6/0048))
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N8, 2026-10-25) - 30 (30-degree step of the spiral search); 0.25 (the next widening tiers (0.5, 0.25, 0)); 0.75 (spread tier for the shared-shed choice (borrowing itself NOT ATTESTED, P6/the record))
         """
         bs = self.bscale
         # SIZE: a shared byre houses ~1-2 draft animals (an ox / water-buffalo stall is ~2x3 m) plus fodder ->

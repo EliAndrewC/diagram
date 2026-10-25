@@ -119,7 +119,7 @@ def seat_deck(p: Pt, rot: float, span: float, rw: float, wpts: Any, need: float,
     Research:
         deck grown until its corners clear - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: up to 14 steps of 12% of the span
         skewed toward square - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: at most 7 deg, inside the 8 deg a deck may lie off its way
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 6 (a skew step, bounded by 0087's "8 degrees"); 0.12 (growth step of the deck search (0087 has no 12%))
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 6 (a skew step, bounded by the record "8 degrees"); 0.12 (growth step of the deck search (the record has no 12%))
     """
     for grow in range(14):
         wider = span * (1.0 + 0.12 * grow)

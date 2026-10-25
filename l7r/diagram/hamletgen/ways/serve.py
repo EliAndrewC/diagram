@@ -575,7 +575,7 @@ def flank_doors(h: Mapping[str, Any]) -> list[Pt]:
     exception, 2026-09-30) - or none without a yard of its own.
 
     Research: a flank door as fallback - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way runs outside the grove or through a gap in it to the house - a flank door is offered only on a side that faces no grove band, where the front has none
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 0.7 (cosine (about 45 deg) for "faces a grove band"; 0036 gives the rule, not the angle)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 0.7 (cosine (about 45 deg) for "faces a grove band"; the record gives the rule, not the angle)
     """
     from l7r.diagram.settlement.rolling.access import doors_of
 

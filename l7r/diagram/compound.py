@@ -548,7 +548,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
     Research:
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (posts caption font); 20 (title font; title 9 ft above the precinct); 11 (zone caption font); 9 (title font; title 9 ft above the precinct); 12 (scale bar 12 ft above the precinct); 0.8 (rack stroke); 0.6 (mat stroke); 5 (scale bar mid tick, end ticks); 45 (scale note label); 16 (scale bar label); 27 (scale note label); 6 (scale bar's obstacle box); 92 (scale bar's obstacle box); 30 (scale bar's obstacle box); 1.4 (post marker's obstacle box (0165: "a small marker")); 0.7 (post marker's obstacle box (0165: "a small marker"))
         its salts, guards and sentinels - NONE: they decide nothing about the place - 11.4 (caption box round both posts (their places ±0.7)); 14.4 (caption box round both posts (their places ±0.7)); 5.7 (caption box round both posts (their places ±0.7)); 13.3 (caption box round both posts (their places ±0.7)); 0.25 (text box descent/ascent per font size)
-        its figures guessed on 0165 - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: 14 (posts' places on the ground (±5 ft across, 14 and 27 ft in))
+        its figures of ours - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 14 (posts' places on the ground (±5 ft across, 14 and 27 ft in))
     """
     if result.envelope is not None and result.envelope != program.envelope:
         program = replace(program, envelope=result.envelope)
