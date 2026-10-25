@@ -42,6 +42,10 @@
       research: rendering
 - [ ] T15 (R2 G12) The rest: labels' repair and least-cost seat, beads dropped twice, bridges' reseat and refusal, byres' relaxed tiers, wells and pond-stock rules asked twice, the cluster's belt and dry-exit copies, in `l7r/diagram/` (FR-004, FR-005, FR-006, FR-007)
       research: rendering
+- [ ] T17 (R2 G6, first part) A fixture in a grove band, one predicate: `homesteads/fixtures._flexible_clear` and `rolling/fit._fixtures_in_bands` ask `grove_rules.fixture_on_band`, in `l7r/diagram/` (D17; FR-006; no map moves)
+      research: rendering
+- [ ] T18 (R2 G11, first part) The overlap matrix's dead mirrors deleted: `forest_reveal_x`, `FOREST_REVEAL_FT`, `CANOPY_STRUCT_KEYS` (27 keys against the engine's 34), in `l7r/diagram/overlap/matrix.py` (D18; FR-006; no map moves)
+      research: rendering
 - [ ] T20 The fresh block runs inside `make land` before the push and any fresh failure refuses, once a fresh block of 500 passes whole (FR-009, SC-005; after the last engine task)
       research: rendering
 - [ ] T21 Every archetype form's seeds recorded per seed and diffed against HEAD; a newly red unrolled-form seed with no filed row or waiver refuses (FR-011, SC-006; feature 394)

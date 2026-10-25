@@ -147,3 +147,60 @@ Story 2), the code-size delta (SC-004), the feature report.
   Rendering: none.
 - **D16** `consts_ways.FIELD_REACH_FT = 6.0` (0014's join to the bund) is read by `thread.SPUR_REACH_FT` and
   `law.FIELD_REACH_FT`. Rendering: none.
+
+## T17 - a fixture in a grove band, one predicate (R2 G6, first part; FR-006)
+
+### T17 Approach (checklist part A)
+
+1. **The goal, in the world.** "No farm fixture stands in a grove band" is asked by ONE body, `grove_rules.fixture_on_band`,
+   wherever it is asked - the audit, the sty's placer, the field pit's placer and the bundle fit - so the placing and the check
+   cannot disagree.
+2. **The constraints.** `fixture_on_band(f, g)` turns `f`'s box by its `rot` and tests the two centered boxes with strict `<`
+   (its docstring: the sty's placer already asks it, 385 T03 D18). Two copies remain (`inventory/homesteads-water.md`, TWICE):
+   `hamletgen/homesteads/fixtures.py` `_flexible_clear` (a pit's unturned box, inline) and `settlement/rolling/fit.py`
+   `_fixtures_in_bands` (boxes already turned and rounded by `fit_index.recorded_box`, its inline `meet`). The persimmon's own
+   neighbor-grove test (`persimmon_reseat.persimmon_for`) is a crown, which `fixture_on_band` does not judge (a tree has no
+   box) - a different rule, not merged.
+3. **Where each comes from.** O: FR-006, R2 G6, D11.
+4. **Do they describe the world here?** Yes, measured 2026-10-25 (the three bodies read side by side): each copy is the same
+   strict overlap of two centered boxes; the pit's box is unturned (`rot` 0) and the fit's boxes arrive turned, so each copy is
+   `fixture_on_band` on a record with `rot` 0.
+5. **The order.** After T05; moves no map.
+6. **The exits.** The persimmon's crown test stays (item 2).
+7. **The search smell.** None.
+8. **The budget.** 45 min plus the landing.
+9. **Done, measured.** Both placers call `fixture_on_band`; a test patches it and sees each asked; Inashiro and the grove pool
+   map regenerated unchanged against HEAD; the landing cohort green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T17 Decisions
+
+- **D17** `fixtures._flexible_clear` asks `fixture_on_band({"x": q[0], "y": q[1], "w": ext[0], "h": ext[1]}, g)` over
+  `grove_bands(s.M)`; `fit._fixtures_in_bands` asks `fixture_on_band` of each recorded box (as `x, y, w, h`, `rot` 0: already
+  turned) against each band (rounded as it is now). Rendering: none.
+
+## T18 - the overlap matrix's dead mirrors (R2 G11, first part; FR-006)
+
+### T18 Approach (checklist part A)
+
+1. **The goal, in the world.** No hand-kept mirror of an engine rule is left to drift.
+2. **The constraints.** `overlap/matrix.py` keeps `forest_reveal_x`, `FOREST_REVEAL_FT` and `CANOPY_STRUCT_KEYS` as
+   "Mirror of settlement... (keep in sync)"; nothing in `l7r/` or `scripts/` reads them (measured 2026-10-25, grep), one test
+   imports `forest_reveal_x` from the matrix, and `CANOPY_STRUCT_KEYS` has already drifted: 27 keys against the engine's 34
+   (`Settlement._CANOPY_STRUCT_KEYS`; measured 2026-10-25, the two tuples compared in Python).
+3. **Where each comes from.** O: FR-006, R2 G11.
+4. **Do they describe the world here?** Yes (item 2's measurements).
+5. **The order.** After T17; moves no map.
+6. **The exits.** n/a.
+7. **The search smell.** None.
+8. **The budget.** 20 min plus the landing.
+9. **Done, measured.** The three names are gone from the matrix; the test imports `settlement._geom.forest_reveal_x`; a test
+   asserts the matrix carries no mirror; the gate green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T18 Decisions
+
+- **D18** `matrix.forest_reveal_x`, `matrix.FOREST_REVEAL_FT` and `matrix.CANOPY_STRUCT_KEYS` are deleted;
+  `tests/settlement/test_overlap_taxonomy.py` imports `forest_reveal_x` from `l7r.diagram.settlement._geom`. Rendering: none.
