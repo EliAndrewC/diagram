@@ -17754,5 +17754,19 @@
    "Minbusho notes",
    "Minbusho note"
   ]
+ },
+ "Futatsuho": {
+  "def": "\"Two-treasure\" silver: one of the shogunate's debased silver coins of the Hoei years, named for the two 宝 (\"treasure\") characters stamped on it.",
+  "variants": [
+   "Futatsuho",
+   "Futatsuho silver"
+  ]
+ },
+ "Mitsuho": {
+  "def": "\"Three-treasure\" silver: a debased silver coin of the Hoei years, named for the three 宝 (\"treasure\") characters stamped on it, and poorer in fineness than the Hoei issues before it.",
+  "variants": [
+   "Mitsuho",
+   "Mitsuho silver"
+  ]
  }
 }

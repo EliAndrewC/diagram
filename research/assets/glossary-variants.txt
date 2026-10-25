@@ -1293,6 +1293,8 @@ furo	furo
 fuse	fuse
 fusekoshi	inverted siphon
 fusuma	fusuma
+futatsuho	Futatsuho
+futatsuho silver	Futatsuho
 futures	futures
 futures contract	futures
 futures contracts	futures
@@ -2698,6 +2700,8 @@ mishima	Mishima
 miso	miso
 mitochigai	mitochigai
 mitsuba	mitsuba
+mitsuho	Mitsuho
+mitsuho silver	Mitsuho
 mitsui	Mitsui
 mitsui bunko	Mitsui
 mitsui house	Mitsui
