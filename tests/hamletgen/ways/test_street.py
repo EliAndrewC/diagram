@@ -114,37 +114,6 @@ def test_a_further_street_joins_the_row_s_streets_not_the_road() -> None:
     assert first["street_index"] == 0
 
 
-def test_a_street_is_cut_to_its_outermost_joints() -> None:
-    """`to_its_joints` / `cut_between` (feature 291 on 287): the stretch between the outermost lane ends standing on it;
-    unchanged with no joint on it; `trim_streets` re-lays a row's street so and leaves every other lane."""
-    from l7r.diagram.hamletgen.ways.street import cut_between, nearest_on, to_its_joints, trim_streets
-
-    street = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (300.0, 0.0)]
-    assert to_its_joints(street, [(50.0, 2.0), (250.0, -3.0), (150.0, 90.0)], 4.0) == [(50.0, 0.0), (100.0, 0.0), (200.0, 0.0), (250.0, 0.0)]
-    assert to_its_joints(street, [(150.0, 90.0)], 4.0) == street, "no joint on it: as it is"
-    # feature 385 T132 (D147): ONE joint is no stretch - cut at it, the street became two coincident points the matrix admits
-    assert to_its_joints(street, [(150.0, 2.0)], 4.0) == street, "one joint: as it is"
-    assert cut_between(street, [0.0, 100.0, 200.0, 300.0], 0.0, 300.0) == street
-    assert nearest_on(street, (120.0, 30.0)) == (120.0, 0.0) and nearest_on(street[:1], (0.0, 0.0)) is None
-    s = Settlement(400, 200, seed=1)
-    s.meta(name="V", scale="hamlet", ftpx=1)
-    for pts, w, extra in (
-        (street, 6, {"street": True, "street_index": 1}),
-        ([(50.0, 2.0), (50.0, 60.0)], 3, {"serves": [50.0, 90.0]}),
-        ([(250.0, -3.0), (250.0, -60.0)], 3, {"serves": [250.0, -90.0]}),
-        ([(0.0, 150.0), (300.0, 150.0)], 3, {}),
-        ([(0.0, 190.0), (300.0, 190.0)], 6, {"street": True, "street_index": 0}),  # the row's first street, passed by
-    ):
-        s.lane(list(pts), width=w)
-        s.M["lanes"][-1].update(extra)
-    assert trim_streets(s, 4.0) == 1
-    assert s.M["lanes"][0]["pts"][0][0] == 50.0 and s.M["lanes"][0]["pts"][-1][0] == 250.0
-    assert trim_streets(s, 4.0) == 0, "cut already"
-    s.M["lanes"][0]["pts"] = [list(p) for p in street]
-    assert trim_streets(s, 4.0, [(280.0, 10.0), (150.0, 60.0)], 12.0) == 1, "a door 10 ft off the street, taking no path"
-    assert s.M["lanes"][0]["pts"][0][0] == 50.0 and s.M["lanes"][0]["pts"][-1][0] == 280.0, "kept to that door; the far one is no joint"
-
-
 def test_a_street_s_one_end_is_cut_back_to_its_last_joint() -> None:
     """`end_to_its_joint` (feature 293 on 291): the named end only, to the joint nearest it; the other end as it is, and the
     street as it is with no joint on it."""
@@ -347,18 +316,3 @@ def test_new_needles_names_only_the_slivers_the_run_closes() -> None:
     got = new_needles(base, [(0.0, 0.0), (50.0, 3.0), (100.0, 0.0)])
     assert len(got) == 1 and abs(got[0][0] - 50.0) < 5.0
     assert new_needles([*base, {"pts": [(0.0, 0.0), (50.0, 3.0), (100.0, 0.0)]}], [(300.0, 0.0), (300.0, 200.0)]) == []
-
-
-def test_the_row_s_first_street_is_never_cut_by_the_trim() -> None:
-    """405 T54 (D63): the first street (the lowest `street_index` drawn, the one that met the road) runs on off the map as the
-    road into it (0033), so `trim_streets` passes it by, joints or none; a map with no street has no first."""
-    from l7r.diagram.hamletgen.ways.street import first_street, trim_streets
-
-    street = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (300.0, 0.0)]
-    s = Settlement(400, 200, seed=1)
-    s.meta(name="V", scale="hamlet", ftpx=1)
-    for pts, w, extra in ((street, 6, {"street": True, "street_index": 0}), ([(50.0, 2.0), (50.0, 60.0)], 3, {}), ([(250.0, -3.0), (250.0, -60.0)], 3, {})):
-        s.lane(list(pts), width=w)
-        s.M["lanes"][-1].update(extra)
-    assert first_street(s.M["lanes"]) == 0 and first_street([]) is None
-    assert trim_streets(s, 4.0) == 0 and s.M["lanes"][0]["pts"][-1][0] == 300.0, "two joints on it, and still whole"

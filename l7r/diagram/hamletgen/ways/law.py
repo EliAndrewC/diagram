@@ -51,8 +51,8 @@ from .checks import served_network, unreached_houses
 from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, kink_spans
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _crosses_fabric, house_hit
 from .forced import Blocked, forced_meeting, forced_turn, lazy_ground
-from .geom import _TOUCH_GAP, WorkedGround, _components, _seg_cross, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
-from .joints import _HOOK_DEG, _HOOK_FT, at_rank, hairpin_over_a_short_leg, joints, oriented
+from .geom import _HOOK_DEG, _HOOK_FT, _TOUCH_GAP, WorkedGround, _components, _seg_cross, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
+from .joints import at_rank, hairpin_over_a_short_leg, joints, oriented
 from .law_water import (  # noqa: F401 - re-exported: the law's callers reach the water rules and the lane helpers here
     DECK_NEAR_FT as DECK_NEAR_FT,
 )
@@ -200,8 +200,8 @@ Research:
 
 
 CONNECTOR_START_FT = 1.5
-"""A lane end this near the connector's first point meets the connector's START - `fold_the_connector_hairpin`'s own
-figure, so the hairpin the fold repairs and the hairpin this law refuses are one set."""
+"""A lane end this near the connector's first point meets the connector's START - the figure `fold_the_connector_hairpin` repaired by
+until feature 417 T26 took that pass away, kept so the hairpin this law refuses is the set it was."""
 
 # A NEEDLE JOIN - a lane's last leg meeting another way's tread at a shallow angle and running back along it, leaving a
 # sliver of ground between two treads instead of a T (R3; Mizuguchi's 35 ft leg at 16 degrees, a ~250 sq ft needle).

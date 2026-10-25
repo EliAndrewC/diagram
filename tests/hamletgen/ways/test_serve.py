@@ -270,22 +270,6 @@ def test_a_web_lane_shadowing_another_for_a_bundles_pitch_is_refused() -> None:
     assert not _serve._lay_web_lane(s, run, [], [], [], houses=[(600.0, 1200.0)])
 
 
-def test_the_overrun_past_the_connector_is_cut_and_the_connector_left() -> None:
-    """`cut_the_overruns` (feature 261, lifted from `stage_web`): a lane that met the way out and ran on past it to a loose
-    end, under `_PAST_CONNECTOR_FT`, is cut where it met it; the connector itself is never cut, and a lane with nothing to
-    cut is left as it is."""
-    from l7r.diagram.hamletgen.ways.sweeps import _PAST_CONNECTOR_FT
-
-    s = _StubSettlement(lanes=[[(0.0, 100.0), (400.0, 100.0)]])
-    s.M["lanes"].append({"pts": [[0.0, 300.0], [0.0, 100.0 - (_PAST_CONNECTOR_FT - 8.0)]], "w": 3})
-    s.M["lanes"].append({"pts": [[200.0, 400.0], [200.0, 100.0]], "w": 3})
-    hg.ways.cut_the_overruns(s)
-    assert s.M["lanes"][0]["pts"] == [[0.0, 100.0], [400.0, 100.0]], "the connector is left"
-    end = s.M["lanes"][1]["pts"][-1]
-    assert abs(end[1] - 100.0) <= 6.0, "the overrun is cut where it met the way"
-    assert s.M["lanes"][2]["pts"] == [[200.0, 400.0], [200.0, 100.0]], "a lane ending on the way is left"
-
-
 def test_the_late_pass_leaves_a_connector_that_starts_at_the_way_outs_gate() -> None:
     """Feature 287 wave 6 (cohort seeds 34 and 37), as feature 320 keeps it: a connector pulled back to service left the root
     the households' ways reach - 300 ft down the track on seed 34. Where the homesteads stage recorded the way out's gate

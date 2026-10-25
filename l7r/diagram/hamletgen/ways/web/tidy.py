@@ -1,10 +1,9 @@
-"""The web's END TRIMS: collapsed lanes dropped, overruns cut, every lane end tidied to what it serves. Split from `ways/web.py` at the 1,000-line bar (feature 405 T57).
+"""The web's END TRIMS: every lane end tidied to what it serves (the collapsed-lane drop and the overrun cut went in feature 417 T26). Split from `ways/web.py` at the 1,000-line bar (feature 405 T57).
 
 Research: web plumbing - NONE"""
 
 from __future__ import annotations
 
-import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -19,58 +18,6 @@ from .. import law
 from ..bund import run_lanes_on_to_the_bund, worked_ground_of
 from ..fabric import _WEB_MIN_FT, _homestead_polys, _pull_back_to_service
 from ..geom import _components, _trim_to_service, lane_houses, polyline_len, steading_footprints
-from ..sweeps import (
-    cut_past_connector,
-    trim_free_stub,
-)
-
-
-def _drop_collapsed(s: Settlement) -> list[int]:
-    """A way the knot collapse emptied to one point is dropped - emptied, reinked and REMOVED.
-
-    Lifted out of `stage_web` by feature 216 so it can be tested on a plain lane list: the only
-    roll in the gate that reached it was retired, and a hamlet rolled to cover a five-line loop is
-    the shape that feature exists to stop. Returns the indices removed, in the original numbering.
-
-    AND THE HUSK GOES WITH THE INK HERE TOO (settlement-review x2, feature 155). This was the third
-    and last place that emptied a record without removing it, and it was the one that survived the
-    other two being fixed: sawada still shipped a `role=bridge-breaks` record with no points, a
-    bridge the smoothing had collapsed. Removed back-to-front so the earlier indices stay valid.
-    A connector is never dropped, however short - it is the map's way out."""
-    collapsed: list[int] = []
-    for i, ln in enumerate(s.M.get("lanes", [])):
-        p = ln.get("pts") or []
-        if not (ln.get("connector") or ln.get("street")) and (len(p) < 2 or math.dist(p[0], p[-1]) < 1.0 and len(p) == 2):
-            ln["pts"] = []
-            s.reink_lane(i)
-            collapsed.append(i)
-    s.drop_lanes(collapsed)  # record AND ink slot together - see `drop_lanes`
-    return collapsed
-
-
-def cut_the_overruns(s: Settlement) -> None:
-    """A free end's hook is taken off (feature 261: Kuwabata's ring lane, `trim_free_stub`), and a lane that
-    ran on past the connector to a loose end is cut where it met it (`cut_past_connector`); the connector itself is left.
-
-    LIFTED TO MODULE LEVEL (feature 261, the GM's 2026-08-28 ruling on inner functions): it was the tail of `stage_web`,
-    and once main's placer re-laid the pool no shipped roll rewrote a lane here, so the rewrite went uncovered.
-
-    Research: overrun cut - research/questions/0081-village-lanes.drawing.html: a free end's hook, a loose tail under 40 ft past the connector"""
-    for _i, _ln in enumerate(s.M.get("lanes") or []):
-        _p = [(float(x), float(y)) for x, y in _ln.get("pts") or []]
-        _others = [
-            (a, b) for _j, _o in enumerate(s.M.get("lanes") or []) if _j != _i for a, b in zip([tuple(q) for q in _o.get("pts") or []], [tuple(q) for q in (_o.get("pts") or [])[1:]], strict=False)
-        ]
-        _conn = [(a, b) for _o in s.M.get("lanes") or [] if _o.get("connector") for a, b in zip([tuple(q) for q in _o.get("pts") or []], [tuple(q) for q in (_o.get("pts") or [])[1:]], strict=False)]
-        # ...and a lane that ran on past the connector to a loose end is cut where it met it (feature 261: `cut_past_connector`)
-        _q = (
-            trim_free_stub(cut_past_connector(_p, _conn, [sg for sg in _others if sg not in _conn], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]), _others)
-            if not (_ln.get("connector") or _ln.get("street"))
-            else _p
-        )
-        if _q != _p:
-            _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _q]
-            s.reink_lane(_i)
 
 
 def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None:

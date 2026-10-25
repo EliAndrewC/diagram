@@ -5,11 +5,10 @@ Research: plumbing - NONE
 
 from __future__ import annotations
 
-import heapq
 import math
 from collections.abc import Callable, Sequence
 
-from l7r.diagram.settlement import poly_gap, seg_closest, seg_intersect, segments_cross
+from l7r.diagram.settlement import seg_intersect, segments_cross
 
 from ..clearance import FabricIndex, fabric_index
 from ..consts import (
@@ -18,7 +17,7 @@ from ..consts import (
     Poly,
     Pt,
 )
-from .geom import _HOOK_DEG, _HOOK_FT, _turn_deg, fabric_clearance, polyline_len, push_out_of, stroke_quad
+from .geom import _turn_deg, polyline_len, push_out_of
 from .keeper import kept
 
 
@@ -83,88 +82,6 @@ def link_survives(a: Pt, b: Pt, fouled: Callable[[Pt], bool], need: float) -> bo
     return len(run) >= 2 and (length := polyline_len(run)) >= _LINK_FLOOR and length >= need
 
 
-def existing_walk(ways: Sequence[Poly], a: Pt, b: Pt, touch: float) -> float | None:
-    """Shortest walk from `a` to `b` along the ways already drawn, or None when none exists.
-
-    The lane network as a graph: each way is an edge between its two ends, weighted by its own drawn
-    length, and two ends within `touch` of each other are the same junction. An end that lands part
-    way ALONG another way joins it there, at the arc distance to each of that way's ends - which is
-    the case that matters here, since a lane that tees into the middle of another is exactly the
-    shape that makes a bridge redundant.
-
-    Lifted to module level so it can be asked with plain lists (GM 2026-08-28 on testability)."""
-    nodes: list[Pt] = []
-    edges: list[list[tuple[int, float]]] = []
-
-    def _node(p: Pt) -> int:
-        for i, q in enumerate(nodes):
-            if math.dist(p, q) <= touch:
-                return i
-        nodes.append(p)
-        edges.append([])
-        return len(nodes) - 1
-
-    def _link(i: int, j: int, w: float) -> None:
-        if i != j:
-            edges[i].append((j, w))
-            edges[j].append((i, w))
-
-    live = [w for w in ways if len(w) >= 2]
-    ends = [(_node(w[0]), _node(w[-1])) for w in live]
-    for w, (i, j) in zip(live, ends, strict=False):
-        _link(i, j, polyline_len(w))
-    # ...and every end that tees into the MIDDLE of another way joins it THERE, in arc order along
-    # that way. Linking a tee-point only to the way's two ends is not the same graph and quietly
-    # over-states the walk: two spurs teeing into one lane 100 ft apart come out 200 ft apart, routed
-    # out to an end and back, so a redundant loop looks like a worthwhile one.
-    for k, w in enumerate(live):
-        acc = [0.0]
-        for u, v in zip(w, w[1:], strict=False):
-            acc.append(acc[-1] + math.dist(u, v))
-        along: list[tuple[float, int]] = [(0.0, ends[k][0]), (acc[-1], ends[k][1])]
-        for n, p in enumerate(list(nodes)):
-            if n in ends[k]:
-                continue
-            best = None
-            for t, (u, v) in enumerate(zip(w, w[1:], strict=False)):
-                c = seg_closest(p[0], p[1], u, v)
-                d = math.dist(p, c)
-                if best is None or d < best[0]:
-                    best = (d, acc[t] + math.dist(u, c))
-            if best is not None and best[0] <= touch:
-                along.append((best[1], n))
-        along.sort()
-        for (a1, n1), (a2, n2) in zip(along, along[1:], strict=False):
-            _link(n1, n2, a2 - a1)
-
-    src, dst = _node(a), _node(b)
-    if src == dst:
-        return 0.0
-    seen = [math.inf] * len(nodes)
-    seen[src] = 0.0
-    todo = [(0.0, src)]
-    while todo:
-        d, n = heapq.heappop(todo)
-        if n == dst:
-            return d
-        if d > seen[n]:
-            continue
-        for m, w in edges[n]:
-            nd = d + w
-            if nd < seen[m] - 1e-9:
-                seen[m] = nd
-                heapq.heappush(todo, (nd, m))
-    return None
-
-
-_NUB_FT = _HOOK_FT
-"""Research: nub length - research/questions/0081-village-lanes.drawing.html: "A last leg of 12 ft or less turning 90 degrees or more is cut" - the hook's own figures"""
-# ONE RULE WITH THE HOOK (feature 328 wave 42): it was under 9 ft at 60 deg or more, a convention from two settlement-reviews
-# (Sawada's 8.25 ft boot at 87 deg, a 5.74 ft first segment at 88 deg, Kuwabata's 3.1 ft nub at 93 deg); 0081 cuts a last leg of
-# 12 ft or less turning 90 or more, and no page cuts a gentler one, so a 60-89 deg end stretch now stands.
-_NUB_TURN = _HOOK_DEG
-"""Research: nub turn - research/questions/0081-village-lanes.drawing.html: 90 degrees or more, the hook's"""
-
 # THE END SPIKE IS REAL, AND `_NUB_FT` IS THE WRONG LEVER FOR IT - DEFERRED WITH ITS MEASUREMENT
 # (settlement-review, feature 155; constitution Principle XIV's "a deferral is a deliverable").
 #
@@ -188,106 +105,6 @@ _NUB_TURN = _HOOK_DEG
 # the same defect feature 150's junction pass already owns - "a lane ends where it first meets the way,
 # bounded to a 40 ft overrun" - which is passing a lane whose overrun is 156.8 ft because it measures
 # the overrun from the wrong end. The fix belongs there, with the pool rolled behind it, not here.
-
-
-def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
-    """Indices whose SECOND (or second-to-last) vertex is a nub, dropped in place.
-
-    A junction foot is laid on the way it meets; the vertex after it is whatever the lane's own first
-    stretch was. When the splice leaves those two within a few feet of each other AND the lane then turns
-    back on itself, the sheet shows a nub sticking out of the junction rather than a way arriving at it -
-    Kuwabata's connector began (2442.4, 643.0) -> (2444.5, 645.3) with a 93-degree reversal, 3.1 ft of
-    tread drawn as a lump on the knuckle (settlement-review 2026-08-29, error 2's second half).
-
-    Only the vertex AFTER the end is dropped, never the end itself: the end is the foot, and moving it
-    would take the lane off the way it was joined to. Lifted out of the pass below so it can be asked with
-    plain lists (GM 2026-08-28 on testability).
-
-    Research: a lane's end loses its nub - research/questions/0081-village-lanes.drawing.html: a last leg of 12 ft or less turning 90 degrees or more cut, the vertex after the foot
-    """
-
-    def nub_at_head(pts: list[Pt]) -> bool:
-        """Is `pts[1]` a nub - a first stretch of `_NUB_FT` or less that then turns `_NUB_TURN` or more (0081's hook)? (One
-        band: the spike band this once described was never built - see "THE END SPIKE IS REAL" above.)"""
-        if len(pts) < 3:
-            return False
-        a, b, c = pts[0], pts[1], pts[2]
-        ax, ay, bx, by = b[0] - a[0], b[1] - a[1], c[0] - b[0], c[1] - b[1]
-        la, lb = math.hypot(ax, ay), math.hypot(bx, by)
-        if la <= 0.0 or lb <= 1e-9:
-            return False
-        turn = math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (la * lb)))))
-        return la <= _NUB_FT and turn >= _NUB_TURN
-
-    hit: list[int] = []
-    for i, pts in enumerate(ways):
-        changed = False
-        if nub_at_head(pts):
-            del pts[1]
-            changed = True
-        pts.reverse()
-        if nub_at_head(pts):
-            del pts[1]
-            changed = True
-        pts.reverse()  # unconditional, so the lane always comes back in its drawn orientation
-        if changed:
-            hit.append(i)
-    return hit
-
-
-def may_write(old_pts: Sequence[Pt], new_pts: Sequence[Pt], width: float, fabric: Sequence[Poly]) -> bool:
-    """May this rewrite of a lane be committed? JUDGE THE RESULT, NOT JUST THE MOVE.
-
-    A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50). Every rung of
-    the junction pass tests the LINK it is about to draw and none looks at the lane that comes out - so
-    a link that is itself legal, spliced on by `_unjog`/`_unretrace` or by moving another lane's end
-    onto a node, can leave a tread nearer a garden than the router ever put it. Traced on cohort seed
-    18: footpaths drawn 5.2 ft clear of the nearest garden survived the smoother at 5.16 and came out
-    of the pass at 1.21 - `features_do_not_overlap`, lanes x gardens.
-
-    ...NOR PUT A BEND IN IT THAT FEET WOULD NEVER WEAR. Cohort seed 21's footpath was accepted with no
-    bend in it and came out turning 90 degrees and then 60 within 34 ft; `_smooth_web` runs afterwards
-    and cannot take the chord, because the steading the path was threading is still in the way, so the
-    fold ships.
-
-    BOTH RULES ARE "NO WORSE THAN IT WAS", not "good": a rewrite may leave a lane no nearer the fabric
-    than it already was, or than its own keep-out allows - whichever is the more forgiving - and no
-    worse bent than it already was. A lane already inside the bar is never made worse, but is not
-    required to fix itself either, because the pass that is moving it is not the pass that owns it.
-
-    Research:
-        no nearer the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off the fabric, or no nearer than it already was
-        no tread on the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane
-        no new bad bend - research/questions/0081-village-lanes.drawing.html: no hairpin or zigzag added
-    """
-    bar = WEB_FABRIC_GAP  # a lane's middle at least 7 ft from a garden fence (0246); half the width + 2 ft, at least 4, until feature 328
-    if fabric_clearance(new_pts, fabric) < min(fabric_clearance(old_pts, fabric), bar) - 1e-9:
-        return False
-    # ...AND JUDGE THE DRAWN TREAD, NOT ONLY THE CENTERLINE (feature 291, found by the cohort's matrix on seed 20). A
-    # dropped nub left a lane's first leg starting 1.7 ft off a garden bed as before, but running along the bed at a
-    # shallow angle instead of leaving it square - and a square-ended stroke 5 ft wide swings its corner into the bed.
-    # `fabric_clearance` measured 13.9 ft before and 8.3 ft after (it reads the fabric's vertices against the lane, not
-    # its edges) and the centerline distance was 1.7 ft both times, so neither could see it; the stroke can.
-    if stroke_hits(new_pts, width, fabric) - stroke_hits(old_pts, width, fabric):
-        return False
-    return not (_bends_badly(new_pts) and not _bends_badly(old_pts))
-
-
-def stroke_hits(pts: Sequence[Pt], width: float, fabric: Sequence[Poly]) -> set[int]:
-    """Which fabric polygons a lane's drawn tread overlaps: each segment stroked square-ended at half its width, as the
-    overlap matrix reads a lane, against each polygon (`poly_gap`, exact for the convex quads the fabric is made of)."""
-    half = float(width or 5.0) / 2.0
-    hits: set[int] = set()
-    for a, b in zip(pts, pts[1:], strict=False):
-        quad = stroke_quad(a, b, half)
-        x0, x1 = min(p[0] for p in quad), max(p[0] for p in quad)
-        y0, y1 = min(p[1] for p in quad), max(p[1] for p in quad)
-        for k, poly in enumerate(fabric):
-            if k in hits or max(p[0] for p in poly) < x0 or min(p[0] for p in poly) > x1 or max(p[1] for p in poly) < y0 or min(p[1] for p in poly) > y1:
-                continue
-            if poly_gap(quad, list(poly)) <= 0.0:
-                hits.add(k)
-    return hits
 
 
 def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP) -> bool:
@@ -347,8 +164,6 @@ _ZIGZAG_DEG = 50.0
 """Research: zigzag turn - research/questions/0081-village-lanes.drawing.html: two turns past 50 degrees"""
 _ZIGZAG_RUN_FT = 40.0
 """Research: zigzag run - research/questions/0081-village-lanes.drawing.html: within 40 ft of path"""
-_ARM_FT = 40.0
-"""Research: stray tail - research/questions/0081-village-lanes.drawing.html: a tail under 40 ft past a crossing is cut"""
 
 
 @kept
@@ -382,36 +197,6 @@ def kink_spans(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
         if sum(math.dist(p[j], p[j + 1]) for j in range(ka, kb)) <= _ZIGZAG_RUN_FT:
             bad.append(("kinks", ka, kb))
     return bad
-
-
-def _bends_badly(pts: Sequence[Pt]) -> bool:
-    """The shape `lanes_bend_like_paths` refuses (`kink_spans`) - a hairpin, or two 50 degree turns inside 40 ft of path.
-
-    Stated here so a pass that is about to DRAW a run can ask before drawing, rather than leaving the
-    gate to discover it. The thresholds are the check's own, deliberately: a repair that measures
-    something other than what the check measures is the defect this file has now met three times.
-
-    Research: bends like a path - research/questions/0081-village-lanes.drawing.html: the hairpin and zigzag limits"""
-    return bool(kink_spans(pts))
-
-
-def bowtie_cut(pts: Poly, k: int, x: Pt, arm_ft: float = _ARM_FT) -> Poly | None:
-    """A lane crosses another at `x` inside its segment `k`; cut back the SHORT tail past the crossing,
-    which then becomes the junction. `None` when neither side is short enough to be a stray tail.
-
-    LIFTED OUT OF `_smooth_web` (feature 146). The head arm - the crossing near the lane's START, so the
-    beginning is the stray - never ran on a live map; which arm a roll takes is an accident of which
-    direction the lane happened to be recorded in, so the two want asking directly.
-
-    Research: no stub past a crossing - research/questions/0081-village-lanes.drawing.html: a tail under 40 ft is cut
-    """
-    head = polyline_len(pts[: k + 1]) + math.dist(pts[k], x)
-    tail = math.dist(x, pts[k + 1]) + polyline_len(pts[k + 1 :])
-    if tail < arm_ft and tail <= head:
-        return [*pts[: k + 1], x]
-    if head < arm_ft and head < tail:
-        return [x, *pts[k + 1 :]]
-    return None
 
 
 def route_around(poly: Poly, path: Poly, margin: float, rounds: int | None = None) -> Poly | None:

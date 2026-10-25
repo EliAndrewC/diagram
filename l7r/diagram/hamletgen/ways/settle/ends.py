@@ -200,8 +200,8 @@ def drop_stranding(s: Any, k: int) -> int:
 
 def settle_street_ends(s: Any) -> int:
     """A ROW'S STREET, a tree lane no trim cuts, has an end the lane law calls dangling cut back to its last joint
-    (`end_to_its_joint`); returns the streets cut. The web cuts each street to its outermost joints before the settle
-    (`trim_streets`), and a repair or the last resort's drop can take the lane that stood at that joint (feature 293 on 291:
+    (`end_to_its_joint`); returns the streets cut. The web no longer cuts a street before the settle (`trim_streets`, its
+    outermost-joints cut, went in feature 417 T26), and a repair or the last resort's drop can take the lane that stood at that joint (feature 293 on 291:
     cohort seed 903's street ended in a knot of stubs 191 ft past its nearest farm, each counted as reaching the next until
     the law stopped counting a way an end walked away from; the knot dropped, the street's end served nothing and the web
     was refused).

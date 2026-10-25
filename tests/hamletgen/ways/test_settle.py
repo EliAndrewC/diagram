@@ -76,10 +76,8 @@ def test_a_returning_leg_under_40_ft_is_cut_and_a_zigzag_pulled_straight() -> No
 def test_seed_43s_lattice_step_is_a_kink_the_old_bend_test_passed() -> None:
     """Ways W18 (FR-003): two 50 degree turns separated by two short legs - summed 30 ft - kink; the one-segment reading the
     web's passes used to ask let it through."""
-    from l7r.diagram.hamletgen.ways.clearance import _bends_badly
-
     step = [(0.0, 0.0), (100.0, 0.0), (110.0, 12.0), (115.0, 25.0), (215.0, 25.0)]
-    assert _bends_badly(step) and law.bends_badly(step)
+    assert law.bends_badly(step)
     s = _S([CONN, step])
     settle.settle_the_web(s)
     assert law.lanes_that_kink(s.M) == []

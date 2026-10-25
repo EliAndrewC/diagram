@@ -547,8 +547,8 @@ def street_arrives(h: Mapping[str, Any], door: Pt, segs: Sequence[tuple[Pt, Pt]]
 
 def street_anchors(s: Settlement) -> list[Pt]:
     """The point of its own street nearest the house of each row farm that street already serves (`street_arrives`) - where
-    a further street must not be cut back past (`street.trim_streets`, at a reach of a foot: each point stands on its own
-    street). Feature 385 T97 (D125): the trim anchored at a door within 12 ft of its street while a farm took no door path
+    a further street must not be cut back past (at a reach of a foot: each point stands on its own street; `street.trim_streets`
+    asked it until feature 417 T26). Feature 385 T97 (D125): the trim anchored at a door within 12 ft of its street while a farm took no door path
     wherever `street_arrives` held, so a street could be cut back past a farm it served.
 
     Research: a street kept to the last farm it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last house it serves"""

@@ -1,6 +1,6 @@
 """269 E3 (B04, B17): a way that makes for the field runs on to the bund (research/fields/290, research/questions/0081-village-lanes.drawing.html).
 
-`hamletgen/ways/bund.py`, `WorkedGround` in `ways/geom.py`, and `meet_end_to_end` in `ways/joints.py`.
+`hamletgen/ways/bund.py` and `WorkedGround` in `ways/geom.py` (`meet_end_to_end` went in feature 417 T26).
 """
 
 import pytest
@@ -160,20 +160,6 @@ def test_the_ground_falls_back_to_the_envelope_where_the_map_records_no_field() 
     assert B.worked_ground_of(s, [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0)]).inside((500.0, 100.0))
 
 
-def test_two_ends_a_hands_width_apart_are_joined_and_the_connector_is_never_moved() -> None:
-    from l7r.diagram.hamletgen.ways.joints import meet_end_to_end
-
-    s = _StubSettlement(lanes=[[(107.0, 100.0), (107.0, 400.0)], [(0.0, 100.0), (100.0, 100.0)], [(500.0, 500.0), (600.0, 500.0)]])
-    assert meet_end_to_end(s) == 1
-    assert s.M["lanes"][1]["pts"][-1] == [107.0, 100.0], "the footpath's end moved onto the connector's"
-    assert s.M["lanes"][0]["pts"][0] == [107.0, 100.0], "the connector stayed where it was"
-    s.M["lanes"].append({"pts": [[300.0, 300.0], [300.0, 102.0]], "w": 3})  # ends near no other end
-    s.M["lanes"].append({"pts": [[107.0, 250.0], [200.0, 250.0]], "w": 3})  # an end already on a way
-    assert meet_end_to_end(s) == 0
-    s.M["lanes"] = [{"pts": [[0.0, 0.0], [0.0, 1.0]], "connector": True}, {"pts": [[5.0, 0.0]], "w": 3}]
-    assert meet_end_to_end(s) == 0, "a husk is stepped over"
-
-
 def test_the_worked_ground_is_built_once_per_settlement_until_its_registries_grow() -> None:
     from l7r.diagram.hamletgen.ways.geom import memo_ground
 
@@ -211,28 +197,6 @@ def test_an_end_at_the_bund_with_water_between_is_carried_over_it() -> None:
     assert B.over_the_water((398.0, 100.0), (400.0, 100.0), [((398.0, 50.0), (398.0, 150.0)), ((399.0, 50.0), (397.0, 150.0))])[0] > 398.0
     assert B.water_between((395.0, 100.0), (400.0, 100.0), [((398.0, -100.0), (398.0, 400.0))])
     assert not B.water_between((395.0, 100.0), (400.0, 100.0), [((300.0, -100.0), (300.0, 400.0))])
-
-
-def test_a_free_end_run_on_past_its_junction_to_nothing_is_cut_back_to_it() -> None:
-    """`cut_stub_ends` (the 269 landing's review of Mizuguchi): a 28 ft run from a junction to a free end with no house
-    and no bund in reach goes; a run that serves a house, one too long to be a stub, and an end on a way all stay."""
-    ground = WorkedGround([_FIELD])
-    way = [((567.0, 1000.0), (567.0, 1239.4))]
-    spur = [(594.7, 1241.1), (567.0, 1239.4), (570.0, 1300.0), (600.0, 1400.0)]
-    assert B.cut_stub_ends(spur, way, [], WorkedGround([])) == spur[1:]
-    assert B.cut_stub_ends(spur, way, [(600.0, 1260.0)], WorkedGround([])) == spur, "a house beside the end: it serves it"
-    far = [(700.0, 1241.1), *spur[1:]]
-    assert B.cut_stub_ends(far, way, [], WorkedGround([])) == far, "too long a run to be a stub"
-    assert B.cut_stub_ends(spur, [*way, ((594.7, 1200.0), (594.7, 1300.0))], [], ground) == spur, "the end on a way"
-
-
-def test_the_pass_cuts_a_free_end_stub_back_to_its_junction() -> None:
-    """`cut_past_the_junction` on the manifest (feature 280: no pool roll of the re-packed layouts draws such a stub)."""
-    spur = [(594.7, 1241.1), (567.0, 1239.4), (570.0, 1300.0), (600.0, 1400.0)]
-    s = _StubSettlement(lanes=[[(567.0, 1000.0), (567.0, 1239.4)], spur])
-    assert B.cut_past_the_junction(s) == 1
-    assert s.M["lanes"][1]["pts"] == [list(q) for q in spur[1:]]
-    assert B.cut_past_the_junction(s) == 0, "and a second pass finds nothing"
 
 
 def test_a_run_on_crosses_no_dry_plot() -> None:

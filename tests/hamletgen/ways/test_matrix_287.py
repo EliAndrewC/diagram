@@ -46,47 +46,6 @@ def test_the_settle_cuts_a_lane_off_a_bed_and_a_rewrite_the_matrix_refuses_is_no
         lane["pts"] = [[100.0, 300.0], [200.0, 100.0]]  # a write that did not ask is refused by the record itself
 
 
-def test_a_nub_is_kept_where_the_straightened_lane_would_cross_a_bed() -> None:
-    """`_drop_end_nubs` with nothing in the fabric: the straightened run crosses a garden bed the dogleg kept clear of."""
-    from l7r.diagram.hamletgen.ways.sweeps import _drop_end_nubs
-
-    s = Registered(lanes=[[(0.0, 0.0), (2.0, 5.0), (100.0, 5.0)]])
-    s.M["gardens"] = [{"x": 50.0, "y": -1.0, "w": 10.0, "h": 4.0, "rot": 0.0}]
-    _drop_end_nubs(s, [[(900.0, 900.0), (901.0, 900.0), (901.0, 901.0)]])
-    assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == [(0.0, 0.0), (2.0, 5.0), (100.0, 5.0)]
-
-
-def test_a_splice_the_matrix_refuses_draws_the_link_as_its_own_lane() -> None:
-    from l7r.diagram.hamletgen.ways.touch import _join_piece
-
-    s = Registered(lanes=[[(500.0, 500.0), (600.0, 500.0)]], strict=False)
-    lanes = [s.standing.kept("lanes", {"pts": [[0.0, 0.0], [100.0, 0.0]], "w": 5})]
-    s.M["lanes"].append(lanes[0])
-    s.M["gardens"] = [{"x": 100.0, "y": 30.0, "w": 6.0, "h": 6.0, "rot": 0.0}]  # on the link's line (a non-strict map: the link is still laid)
-    link = [(100.0, 0.0), (100.0, 45.0)]
-    _join_piece(s, lanes, 0, [(0.0, 0.0), (100.0, 0.0)], (100.0, 0.0), link, [], [], [], [])
-    assert lanes[0]["pts"] == [[0.0, 0.0], [100.0, 0.0]], "the splice over the bed is refused; the piece stands as it was"
-
-
-def test_a_smoothing_rewrite_the_registry_refuses_is_not_committed() -> None:
-    from l7r.diagram.hamletgen.ways.smooth import admits_lane, commit_lane
-
-    s = _with_bed(lanes=[[(100.0, 300.0), (100.0, 200.0)]])
-    lanes = s.M["lanes"]
-    assert not commit_lane(lanes, 0, [[100.0, 300.0], [200.0, 100.0]], [], [], [], s.reink_lane, admits_lane(s))
-    assert lanes[0]["pts"] == [[100.0, 300.0], [100.0, 200.0]]
-    assert commit_lane(lanes, 0, [[100.0, 300.0], [100.0, 250.0]], [], [], [], s.reink_lane, admits_lane(s))
-
-
-def test_a_connector_fold_onto_a_bed_is_refused() -> None:
-    from l7r.diagram.hamletgen.ways.joints import fold_the_connector_hairpin
-
-    s = Registered(lanes=[[(2055.3, 25.3), (1408.0, -20.4)], [(1929.1, 56.4), (2054.3, 40.0), (2055.3, 25.3)]])
-    s.M["lanes"][0]["connector"] = True
-    s.M["gardens"] = [{"x": 1930.5, "y": 36.0, "w": 6.0, "h": 6.0, "rot": 0.0}]  # under the lane's new link to the connector's side (feature 328)
-    assert fold_the_connector_hairpin(s) == 0
-
-
 def test_a_web_lane_over_a_bed_is_not_drawn() -> None:
     from l7r.diagram.hamletgen.ways.fabric import _draw_web
 

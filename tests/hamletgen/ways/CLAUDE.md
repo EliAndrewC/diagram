@@ -7,9 +7,9 @@ the ones for its own subject. It runs in the quick tier (the top-level tree deci
 
 | file | look here when |
 |---|---|
-| `test_bund.py` | the run-on to the bund (`ways/bund.py`), `WorkedGround`, and `meet_end_to_end` |
+| `test_bund.py` | the run-on to the bund (`ways/bund.py`) and `WorkedGround` |
 | `test_checks.py` | the questions asked ABOUT a finished network - unreached houses, shared treads, crossings that land on crop or water |
-| `test_clearance.py` | may a way BE here - `clear_runs`, `_clear_link`, `_clear_touch`, `may_write`, the bend and nub judgments |
+| `test_clearance.py` | may a way BE here - `clear_runs`, `_clear_link`, `_clear_touch` |
 | `test_corridors.py` | the access tree's roles and the runs the seating reserves (`ways/corridors.py`) |
 | `test_doors.py` | a grove farm reached at its front door - `front_door`, `lay_door_paths`, `own_street` |
 | `test_dry_exit.py` | the flood fill that finds a track out of the frame over standable ground (`ways/dry_exit.py`) |
@@ -18,19 +18,19 @@ the ones for its own subject. It runs in the quick tier (the top-level tree deci
 | `test_forced.py` | a turn or meeting the ground forces breaks no angle rule (`ways/forced.py`): each rule with a house across the straighter way and without |
 | `test_geom.py` | point and segment math on a bare polyline - `polyline_len`, `_turn_deg`, `_components`, the two pushes, `_trim_to_service` |
 | `test_indexed_scans_281.py` | the indexed clearance and route scans, each held to a copy of the old scan kept as its oracle |
-| `test_joints.py` | two lanes meeting end to end - the fold that becomes a T, the jog pulled straight across a chain of joints, the hook taken off a lane end, and the guards (`keeps_the_web`) that refuse a rewrite losing a junction, splitting the web or stranding a farmhouse |
+| `test_joints.py` | two lanes meeting end to end, read as one way, and `keeps_the_web` |
 | `test_knots.py` | lane ends that nearly meet are joined at one point (`ways/knots.py`) and gathered by the settle |
 | `test_last_resort.py` | the settle's last resort: drops ordinary lanes only, and refuses by name what only the tree could mend (`ways/last_resort.py`) |
 | `test_law.py` | THE LANE LAW (`ways/law.py`): each lane-rule predicate on a constructed lane that keeps the rule and one that breaks it, and the `violations` registry |
 | `test_matrix_287.py` | every lane the web lays, re-lays or carries on is admitted by the overlap matrix before it is written |
 | `test_one_constant_per_rule.py` | a lane rule the web wrote in several places with one value reads ONE constant - the tail past a meeting, the join, the serve, the field reach, the bend (feature 417 T05) |
 | `test_route.py` | the router: `_route` going round hard ground, `_unjog`, and the pad multiplier that lets a link take the long way |
-| `test_serve.py` | `_lay_web_lane` - one web lane joins the network or is refused - and the web's late passes (`tidy_lane_ends`, `cut_the_overruns`) |
+| `test_serve.py` | `_lay_web_lane` - one web lane joins the network or is refused - and the web's late trim (`tidy_lane_ends`) |
 | `test_settle.py` | `settle_the_web` (`ways/settle/`): each rule of the lane law provoked on constructed lanes and repaired - steps 1-3, the shapes, ends and joins |
 | `test_settle_reach.py` | the reach the web owes (step 4: a stranded house, a way target, the field way) and `Lawful`, the law asked of a new lane, with the fabric's gaps (split from `test_settle.py` at the 1,000-line bar, 405 T107) |
 | `test_smooth.py` | the smoothing pass (`ways/smooth.py`): the collapse guard for a lane whose every vertex falls inside a knot |
 | `test_street.py` | a row village's streets (`ways/street.py`) and the road its street runs out on |
-| `test_sweeps.py` | the passes that REMOVE or REPAIR - doubled remnants, steading fouls, end nubs, collinear breaks, orphaned pieces |
+| `test_sweeps.py` | the passes that REMOVE or REPAIR - orphaned pieces, dangling ends, doubled tails |
 | `test_thread.py` | the track threaded through the fabric (`ways/thread.py`): the spur's fold, an end out of a grove band, the water count, and `_thread_the_fabric`'s fallbacks - patch `_route` / `_out_of_bands` on `thread` |
 | `test_touch.py` | how a lane end meets the network - `_touch_junctions` and the piece-joining it falls back on |
 | `test_track.py` | STAGE `stage_track` and `connector_track` - the way out of the frame and through the fabric |

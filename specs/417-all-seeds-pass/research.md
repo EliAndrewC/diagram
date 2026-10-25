@@ -99,3 +99,34 @@ SINCE=20261025T041035Z` from its record `dev/cohort-log/20261025T041035Z-base417
 | `refused:BrookRefused`, `refused:NoDryExit` | 1 each |
 
 The lane web (`WebRefused` and `lane_knots`) is in 80 of the 125; seating 13; the row rules 11. The order is the spec's tally's.
+
+## R5 - which of the web's post-lay passes the placers already make needless (T26, D22-D23)
+
+Observed 2026-10-25; method: a detached worktree at `29d29eb1e` with a switch in `ways/web/stage.py` (never landed) that
+replaced a named pass with a no-op at every one of `stage_web`'s call sites; for each pass `make cohort N=48 FRESH=0 JOBS=5`
+(the 48 fixed seeds and the 6 pinned rows) and `make map` of the five pool hamlets, ~3 min a probe
+(`scratchpad/probe_passes.sh`; the logs are the session's, not kept). The baseline, with no pass off, passed 54/54 and
+generated all five pool maps.
+
+| pass turned off (observed 2026-10-25; method: as above) | fixed + pinned | pool maps | verdict |
+|---|---|---|---|
+| `_join_orphan_ways` | 53/54 - Audit-47 `WebRefused` (the field reached by no way) | ok | NEEDED |
+| `tidy_lane_ends` | 52/54 - Audit-23, Audit-29 `WebRefused` (dangling ends the last resort cannot mend) | Mizuguchi refused | NEEDED |
+| `_sweep_dangling_ends` | 53/54 - Audit-24 `lane_knots` (2) | ok | NEEDED |
+| `_sweep_doubled_tails` | 53/54 - Audit-37 `lane_knots` (1) | ok | NEEDED |
+| `_bridge_collinear_breaks`, `_touch_junctions`, `_smooth_web`, `_drop_collapsed`, `_sweep_debris`, `_drop_end_nubs`, `_sweep_steading_fouls`, `_sweep_doubled_remnants`, `_keep_the_route_wide`, `straighten_joints`, `fold_the_connector_hairpin`, `center_lane_ends`, `cut_the_overruns`, `cut_past_the_junction`, `split_at_crossings`, `meet_end_to_end`, `trim_streets`, `resettle_straightened` | 54/54 each | ok each | NEEDLESS |
+| all eighteen NEEDLESS passes off together | 54/54 | ok | NEEDLESS together |
+
+The eighteen were deleted in one landing (D23) with every definition only they reached - `make dead-closure`'s
+`--fixpoint`, 87 names across `bund`, `clearance`, `geom`, `joints`, `smooth`, `street`, `sweeps`, `touch` (now empty,
+deleted) and `web/tidy`, 2,822 engine lines out and 67 in - and the tests that exercised only those (`test_touch.py` and
+`test_smooth.py` emptied and deleted; 1,966 test lines out). Two tests that asked the deleted copy of the bend rule (`clearance._bends_badly`)
+now ask the lane law's (`law.bends_badly`, the same `kink_spans`). On the regenerated pool, Inashiro, Kashikawa and
+Mizuguchi each moved two lanes, Sawada's lanes held (its manifest's settle record moved) and Kuwabata did not change; no house
+moved. A lane's `role` names the pass that last inked it, so the trim is now named (`_pass("tidy")`): the lanes it re-inks said
+`touch` before, after the pass that went.
+
+What it does not show: 54 seeds are the plan's definition of NEEDLESS, and several of these passes were written for one
+map (Mizuguchi, Kashikawa, Sawada, cohort seeds 37, 39, 48). The fresh block after the landing is the rate that says whether
+any of the eighteen mattered on seeds the fixed set does not hold; it is recorded beside R3 below once rolled. The four
+NEEDED passes are set down untouched for T06 and the GM's fixing pass (Approach item 6), with the seeds above.

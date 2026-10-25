@@ -44,8 +44,8 @@ def stream_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
     Consumer note: `_join_orphan_ways` is the pass that needs this - it deliberately passes an EMPTY
     water list today ("a link may go the long way round, and may be planked"), which is exactly why
     it is the pass that can lay a way down the length of a brook (cohort seed 47).
-    `_bridge_collinear_breaks` does NOT: it hands its water to `_route`, which already refuses to
-    cross a watercourse at any angle, so a veto there would be unreachable code.
+    `_bridge_collinear_breaks` did NOT (it went in feature 417 T26): it handed its water to `_route`, which already refuses
+    to cross a watercourse at any angle.
 
     THE BROOK HAS CROSSINGS (feature 261): where `stage_ways` has opened fords (`s.brook_fords`), the stream's
     segments come back with a short gap at each, so the router may carry a way over the brook there - and only

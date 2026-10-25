@@ -173,7 +173,7 @@ def _sweep_doubled_tails(s: Settlement) -> int:
     fixed = 0
     # THE NARROWER TAIL IS CUT, NEVER THE WIDER (settlement-review of Sawada, feature 261): a 6 ft track and a 3 ft
     # straggler ran into the hub side by side, the track was cut, and the route out necked to 69.7 ft of footpath -
-    # the thing `_keep_the_route_wide` exists to prevent, arriving after it ran. Narrow lanes are asked first, and a lane
+    # the thing `_keep_the_route_wide` existed to prevent (until feature 417 T26), arriving after it ran. Narrow lanes are asked first, and a lane
     # is never cut back along a narrower one.
     for i in sorted(range(len(lanes)), key=lambda k: float(lanes[k].get("w") or 3)):
         ln = lanes[i]

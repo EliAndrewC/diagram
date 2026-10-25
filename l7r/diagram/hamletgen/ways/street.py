@@ -399,20 +399,6 @@ def join_leg(path: Sequence[Pt], joined: Sequence[Pt]) -> list[Pt]:
     return list(joined[: len(joined) - len(path) + 1])
 
 
-def to_its_joints(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> list[Pt]:
-    """A street cut back to the stretch between its outermost joints - the points on it nearest each other lane end within
-    `touch` of it (a farm's door path, the join, the road run on from it) - or as it is where fewer than two joints stand on
-    it. Past its last farm's path a street serves nothing the lane law counts (`end_serves`: a farmhouse stands most of a
-    frame off its street), and the settle refuses a tree lane with a dangling end (feature 291 on 287, Mizuguchi).
-
-    Research: street cut to its outermost joints - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back - a further street's (research/questions/0033-row-villages-resson.drawing.html is silent on its ends; its first street runs on and is never asked here); a street with one joint is left whole here, and its dangling end cut back to that joint by `settle.settle_street_ends` once the lane law calls it dangling"""
-    arc, at = joints_along(street, ends, touch)
-    if len(at) < 2:  # ...ONE JOINT IS NO STRETCH (feature 385 T132, D147): cut at it, the street became a point the matrix admits
-        return list(street)
-    lo, hi = min(at), max(at)
-    return cut_between(street, arc, lo, hi)
-
-
 def nearest_on(line: Sequence[Pt], p: Pt) -> Pt | None:
     """The point of the polyline `line` nearest `p`; None for a line of fewer than two points."""
     if len(line) < 2:
@@ -464,35 +450,3 @@ def first_street(lanes: Sequence[Mapping[str, Any]]) -> int | None:
     """The `street_index` of the row's first street - the lowest drawn: streets are laid in index order and only the first laid
     meets the road (`lay_row_streets`); None on a map with no street."""
     return min((int(ln["street_index"]) for ln in lanes if ln.get("street_index") is not None and len(ln.get("pts") or []) >= 2), default=None)
-
-
-def trim_streets(s: Settlement, touch: float, doors: Sequence[Pt] = (), reach: float = 0.0) -> int:
-    """Every planned street of a row (`street_index` set) cut to its joints (`to_its_joints`) - and to each point of `doors`
-    within `reach` of it: the caller's are its served farms' points (`serve.street_anchors`), a farm the street serves without a
-    path of its own. Cut to its paths' joints alone, Mizuguchi's street stopped a frame short of its end farm, whose door stood
-    12 ft off it, and the farm was left off every way (2026-10-01). Returns the streets cut.
-
-    The row's first street (`first_street`) runs on off the map at both ends (`street_runs_out`, the road's two runs) and is
-    passed by, joints or none (405 T54: it had escaped the cut only because the runs' ends stood on its ends); a further street,
-    which joins the first, is cut back to its last way or door.
-
-    Research:
-        the first street runs on - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it
-        a further street cut to its joints - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last way or door it serves
-        a joint's touch - CONVENTION: an end within `touch` of the street stands on it - the caller's `_TOUCH_GAP` (4 ft), the ink's own touch
-        a served farm's point a joint - CONVENTION: a point of `doors` within `reach` of the street is a joint - the caller passes each served farm's point on its own street (`serve.street_anchors`, which carries 0246's serving test and its GUESS) at 1 ft, a contact tolerance like the touch
-        a field path's end a joint - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs on to a field path or another way - a field path is a lane, its end a joint"""
-    lanes = s.M.get("lanes") or []
-    first = first_street(lanes)
-    n = 0
-    for i, ln in enumerate(lanes):
-        if ln.get("street_index") is None or len(ln.get("pts") or []) < 2 or ln.get("street_index") == first:
-            continue  # ...the first street runs on off the map as the road into it (0033): never cut (405 T54, D63)
-        pts = [(float(x), float(y)) for x, y in ln["pts"]]
-        ends = [(float(o["pts"][e][0]), float(o["pts"][e][1])) for j, o in enumerate(lanes) if j != i and len(o.get("pts") or []) >= 2 for e in (0, -1)]
-        ends += [q for d in doors if (q := nearest_on(pts, d)) is not None and math.dist(q, d) <= reach]
-        cut = to_its_joints(pts, ends, touch)
-        if len(cut) >= 2 and cut != pts and s.reshape_lane(ln, cut):
-            s.reink_lane(i)
-            n += 1
-    return n

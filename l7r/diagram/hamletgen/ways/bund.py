@@ -25,7 +25,7 @@ from l7r.diagram.settlement import Settlement, point_in_poly, poly_gap, seg_dist
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
-from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, TAIL_CUT_FT, WAY_END_REACH_FT, Poly, Pt
+from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, WAY_END_REACH_FT, Poly, Pt
 from .checks import drawn_water_segs
 from .fabric import _crosses_fabric, _hits_a_steading, _homestead_polys
 from .geom import _TOUCH_GAP, BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, stroke_quad, worked_ground
@@ -453,64 +453,3 @@ def worked_ground_of(s: Settlement, fallback: Poly) -> WorkedGround:
     """The worked ground of the map as it stands (`worked_ground`), or `fallback` (the plan's envelope) where the manifest
     records no field."""
     return memo_ground(s, "worked", worked_ground) if s.M.get("fields") or s.M.get("dry_plots") else WorkedGround([list(fallback)])
-
-
-_PAST_JUNCTION_FT = TAIL_CUT_FT  # ft: a free end's run past the junction it met, this short, is a stub (a map drawing convention)
-"""Research: stub past a junction - research/questions/0081-village-lanes.drawing.html: under 40 ft is cut"""
-
-
-def cut_past_the_junction(s: Settlement, touch: float = 4.0) -> int:
-    """Cut a lane's FREE end back to the junction it met, where the run past the junction is short and serves nothing: no
-    house within `HOUSE_SERVE_FT` of the end, and not on the worked ground's bund. Returns the lanes cut.
-
-    FOUND AT THE 269 LANDING (settlement-review of Mizuguchi, rounds 1 and 2): the field spur began on the brook bank and
-    ran 28 ft to the junction where another lane met it, then turned over the bridge - a stub reaching nothing, which the
-    end rule counted as served because it stood within reach of the very lane it had just met, and which
-    `trim_free_stub` misses because its corner is a single turn, not a kink (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at the
-    last house it serves).
-
-    Research: no stub past a junction - research/questions/0081-village-lanes.drawing.html: a free end's short run cut back"""
-    lanes = s.M.get("lanes") or []
-    houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
-    ground = worked_ground_of(s, []) if s.M.get("fields") or s.M.get("dry_plots") else WorkedGround([])
-    cuts = 0
-    for i, ln in enumerate(lanes):
-        p = [(float(x), float(y)) for x, y in ln.get("pts") or []]
-        if (ln.get("connector") or ln.get("street")) or len(p) < 3:
-            continue
-        others = _segs_of(lanes, i)
-        q = cut_stub_ends(p, others, houses, ground, touch)
-        if q != p:
-            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in q]
-            s.reink_lane(i)
-            cuts += 1
-    return cuts
-
-
-def cut_stub_ends(p: list[Pt], others: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], ground: WorkedGround, touch: float = 4.0) -> list[Pt]:
-    """`p` with each free end's short run past its first junction cut off (see `cut_past_the_junction`); plain inputs.
-
-    Research:
-        no stub past a junction - research/questions/0081-village-lanes.drawing.html: a tail under 40 ft past a junction cut
-        a stub that serves a house kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 60 ft (`HOUSE_SERVE_FT`), the page's reach for a way serving a farmhouse
-        a stub that reaches the bund kept - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of the worked ground's edge"""
-    from l7r.diagram.settlement import seg_dist
-    from l7r.diagram.settlement.water_ways._helpers import HOUSE_SERVE_FT
-
-    def on_a_way(q: Pt) -> bool:
-        return any(seg_dist(q[0], q[1], a, b) <= touch for a, b in others)
-
-    out = list(p)
-    for _end in range(2):
-        k = next((k for k in range(1, len(out) - 1) if on_a_way(out[k])), None)
-        end = out[0]
-        if (
-            k is not None
-            and not on_a_way(end)
-            and sum(math.dist(out[j], out[j + 1]) for j in range(k)) < _PAST_JUNCTION_FT  # 0081's "under 40 ft", as the other two readers ask it (417 T25, D20)
-            and all(math.dist(end, h) > HOUSE_SERVE_FT for h in houses)
-            and ground.dist(end) > BUND_REACH_FT
-        ):
-            out = out[k:]
-        out.reverse()
-    return out

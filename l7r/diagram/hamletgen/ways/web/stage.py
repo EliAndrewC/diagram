@@ -5,7 +5,6 @@ Research: web plumbing - NONE"""
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import Any
 
 from l7r.diagram.overlap.registry import PLACER_MARGIN_PX
 from l7r.diagram.settlement import Settlement, seg_dist
@@ -23,30 +22,21 @@ from ...consts import (
     Pt,
 )
 from ...plan import SitePlan
-from ..bund import a_way_onto_the_bund, cut_past_the_junction
+from ..bund import a_way_onto_the_bund
 from ..checks import drawn_water_segs
 from ..clearance import clear_runs
 from ..fabric import _LANE_JOIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass
-from ..geom import _TOUCH_GAP, polyline_len
-from ..joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
-from ..serve import _lay_web_lane, lay_door_paths, street_anchors
+from ..geom import polyline_len
+from ..serve import _lay_web_lane, lay_door_paths
 from ..settle import settle_the_web
-from ..smooth import _STUB_REACH_FT, _smooth_web
-from ..street import lay_row_streets, trim_streets
+from ..street import lay_row_streets
 from ..sweeps import (
-    _bridge_collinear_breaks,
-    _drop_end_nubs,
     _join_orphan_ways,
-    _keep_the_route_wide,
     _sweep_dangling_ends,
-    _sweep_debris,
-    _sweep_doubled_remnants,
     _sweep_doubled_tails,
-    _sweep_steading_fouls,
 )
-from ..touch import _touch_junctions
 from .skeleton import _lay_skeleton, _web_cut_lines
-from .tidy import _drop_collapsed, cut_the_overruns, tidy_lane_ends
+from .tidy import tidy_lane_ends
 
 
 def stage_web(s: Settlement, plan: SitePlan) -> None:
@@ -75,20 +65,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.web._reachable_runs
         l7r.diagram.hamletgen.ways.serve._lay_web_lane
         l7r.diagram.hamletgen.ways.sweeps._join_orphan_ways
-        l7r.diagram.hamletgen.ways.sweeps._bridge_collinear_breaks
-        l7r.diagram.hamletgen.ways.touch._touch_junctions
-        l7r.diagram.hamletgen.ways.smooth._smooth_web
-        l7r.diagram.hamletgen.ways.web._drop_collapsed
-        l7r.diagram.hamletgen.ways.sweeps._sweep_debris
-        l7r.diagram.hamletgen.ways.sweeps._drop_end_nubs
-        l7r.diagram.hamletgen.ways.sweeps._sweep_steading_fouls
-        l7r.diagram.hamletgen.ways.sweeps._sweep_doubled_remnants
-        l7r.diagram.hamletgen.ways.sweeps._keep_the_route_wide
-        l7r.diagram.hamletgen.ways.joints.straighten_joints
-        l7r.diagram.hamletgen.ways.joints.center_lane_ends
         l7r.diagram.settlement.Settlement.trim_lane_stubs
         l7r.diagram.hamletgen.ways.bund.run_lanes_on_to_the_bund
-        l7r.diagram.hamletgen.ways.joints.meet_end_to_end
         l7r.diagram.hamletgen.ways.bund.a_way_onto_the_bund
         l7r.diagram.hamletgen.ways.settle.settle_the_web
 
@@ -103,7 +81,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         a web lane's middle off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: WEB_FABRIC_GAP, 7 ft clear of a garden fence (`clear_runs`' tight margin)
         ground cover is not fabric - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane crosses a tree belt and the planting resumes on both sides
         scrub and commons crossed - UNRESEARCHED: a lane may cross grazing scrub and the commons
-        a further row street's end - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (`trim_streets` at `street_anchors`)
+        a further row street's end - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (`settle.settle_street_ends`)
         the web's frame - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH`, 100 ft past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves
         a row village laid without web cuts - research/questions/0033-row-villages-resson.drawing.html: its farms are strung along their street and reach it by a path where their grove is in the way - its ways are its streets and those paths; no back lane or alley is cut among its farms (a map drawing convention)
         web lanes off the water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places
@@ -256,124 +234,34 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # (`specs/287-placer-guarantees/measurements.json`, `straggler-footpaths-off`).
     _pass("join-orphans")
     _join_orphan_ways(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    # ...and close any break where one way was drawn as two.
-    _pass("bridge-breaks")
-    _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    _pass("touch")
-    _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    # ...AND JOIN ORPHANS AGAIN, LAST. The first pass runs before the bridges and the footpaths, so
-    # it can only see the lanes that exist then - on cohort seed 39 that was FOUR of the twelve the
-    # map finishes with, and the eight added afterwards formed a second network of their own. Every
-    # house on that map is within 86 ft of a lane and twelve of them still counted as unreached,
-    # because the lane serving them was not on the network the connector is on. A repair pass that
-    # runs before the things it repairs is not a repair pass.
-    # ...and CLOSE BREAKS again before joining, for the same reason the join runs twice: the
-    # touch pass draws lanes, and a lane drawn after the bridge pass can leave a hole the bridge
-    # pass never saw. On cohort seed 48 the bridge found ZERO candidates and the finished map still
-    # had a 78 ft hole in a street, because the hole did not exist yet when it looked.
-    _pass("bridge-breaks")
-    _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    _pass("join-orphans")
+    # ...AND JOIN ORPHANS AGAIN: on cohort seed 39 the first join saw four of the twelve lanes the map finished with, and the
+    # eight added after it formed a second network of their own. The passes that drew those eight between the two joins went
+    # (feature 417 T26); the second join is kept as measured, the two not yet made one.
     _join_orphan_ways(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    # ...AND TRIM AGAINST THE FINAL NETWORK, ONCE, LAST.
-    #
-    # Every lane is trimmed to service when it is drawn, against the ways and houses that exist AT
-    # THAT MOMENT - and then later passes draw more lanes, join orphans and bridge breaks, none of
-    # which revisits an earlier lane's ends. So a web lane trimmed correctly at draw time can finish
-    # with an end reaching nothing: the ratchet's Cohort-42 shipped a 146 ft web lane whose end stood
-    # 80 ft from the nearest house, just past the 40 ft way / 90 ft house thresholds
-    # `lanes_reach_something` measures.
-    #
-    # Trimming ONLY at the end would be wrong the other way - `_lay_web_lane` needs its ends settled
-    # before the join is computed from them ("TRIM FIRST, JOIN SECOND", above) - so this is a final
-    # pass rather than a replacement, and it only ever SHORTENS. A lane reduced below the debris
-    # floor is dropped, because a way that serves nothing is not a short way, it is not a way.
-    #
-    # NOT `trim_lane_stubs`: that is a different, harsher rule (71 ft floor) meant for a skeleton arm
-    # laid before the houses, and running it here ate the short door paths the web draws - measured
-    # once at 43/48 -> 9/48, when a straggler pass still drew them.
+    # ...AND TRIM AGAINST THE FINAL NETWORK. Every lane is trimmed to service when it is drawn, against the ways and houses
+    # that exist AT THAT MOMENT, and the joins draw more after it: the ratchet's Cohort-42 shipped a 146 ft web lane whose end
+    # stood 80 ft from the nearest house. It only ever SHORTENS; a lane reduced below the debris floor is dropped. NOT
+    # `trim_lane_stubs`: that is a harsher rule (71 ft floor) meant for a skeleton arm, and running it here ate the short door
+    # paths the web draws - measured once at 43/48 -> 9/48. Named, so a lane it re-inks does not say the join drew it.
+    _pass("tidy")
     tidy_lane_ends(s, list(plan.envelope))
-    # LAST: read every lane as a shape and take out what feet would never wear (T32) - after the
-    # trim, because the trim is the last pass that changes a record; then touch once more, because
-    # cutting a hairpin's arm can move an end.
-    _pass("smooth")
-    _smooth_web(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    # AND TOUCH AGAIN (T99 unlock, tripwire seed 37): the smoothing cuts knots and hairpins into stubs,
-    # and a stub that ends 3-30 ft short of the run it left is exactly the gap _touch_junctions closes -
-    # but that pass ran BEFORE the smoothing. A way the knot collapse emptied to one point is dropped first.
-    _drop_collapsed(s)
-    _touch_junctions(
-        s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=_STUB_REACH_FT, only_orphans=True, final=True
-    )  # the stubs the smoothing leaves stop 30-35 ft short (seed 37); a connected web is untouched
-    _pass("touch")
-    _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    # AND SWEEP WHAT IS LEFT (feature 134 T50): the passes above shorten lanes, and `_WEB_MIN_FT` was
-    # only ever asked at draw time. Last, so it judges the tread the map actually ships.
-    _sweep_debris(s)
-    _drop_end_nubs(s, hard_built)  # every pass above can leave a nub at a junction it laid
-    # LAST OF ALL, AFTER THE NUB DROP AND NOT BEFORE IT (feature 155). Placed ahead of them this swept a
-    # foul that did not exist yet: `_drop_end_nubs` shortens a lane, and the END IT LEAVES BEHIND can be
-    # nearer a steading than the one it removed. So the steading sweep has to be the last thing that looks
-    # at a lane, for the same reason the nub drop is placed after everything else.
-    _sweep_steading_fouls(s)
-    # ...AND RE-JOIN WHAT THE TRIMS SEPARATED (settlement-review, feature 155). `_bridge_collinear_breaks`
-    # already runs twice above, but both times BEFORE the trims that can open a break - kashikawa came back
-    # with one route drawn as two and 19.5 ft of bare ground between two ends pointing straight at each
-    # other. Running it once more here closes what this pass opened; it routes against the same obstacle set
-    # as every other join, so it cannot bridge THROUGH a steading, and the sweep below re-checks anyway.
-    # THE REMNANT SWEEP RUNS BEFORE THE LAST BRIDGE, NOT AFTER (settlement-review, feature 155). With
-    # it after, the two passes built and then deleted each other's work: sawada's 37.6 ft remnant left
-    # lane 11 at 1.2 ft and died 11.4 ft from it, which sits inside the restored short-gap band, so the
-    # bridge pass dutifully closed the remnant back onto its own parent - and the remnant sweep then
-    # dropped both, because the bridge's two ends were now also on lane 11. One wasted routing pass and
-    # two husks for a picture that was correct either way.
-    _sweep_doubled_remnants(s)  # doubled ink is debris however long it is
-    _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    _sweep_steading_fouls(s)  # a bridge is a lane too, and it gets the same last look
-    _sweep_doubled_remnants(s)  # ...and a bridge can itself be doubled ink
-    _sweep_dangling_ends(s)  # LAST: an end the passes above left in open ground is pulled back to something, or dropped
-    _sweep_debris(s)  # a fragment the passes above whittled below the floor and left standing alone
-    # A WAY OUT OVER THE BROOK AND BACK is the settle's to mend (`law.way_out_carriers`, `settle_the_web`): the home-bank
-    # re-serve that stood here (feature 261) routed a straggler footpath on the house's own bank, and went with that pass
-    # (feature 287, GM 2026-09-30)
-    _keep_the_route_wide(s, hard_built, walls, list(plan.watercourses) + drawn_water)  # ...and a cart route may not neck to a footpath
-    # AND READ THE JOINTS AS ONE WAY (GM 2026-09-26): two records meeting end to end are one lane to the walker;
-    # a fold there becomes a T and a jog is pulled straight. Last, because every pass above can lay a joint.
-    straighten_joints(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    fold_the_connector_hairpin(s, walls)  # ...and a lane and the connector doubling back over a short leg meet as a T (the 269 landing)
-    # ...AND THE ENDS ARE ASKED ONCE MORE, after the joints are read as one way (feature 261). An end that reached the lane it
-    # was about to be joined to passed the sweep above and was left, after the join, reaching only its own lane: Mizuguchi's
-    # (558, 1096) stood 56 ft from lane 2's end until the two became one lane, and then 104 ft from anything.
+    _sweep_dangling_ends(s)  # an end the trim left in open ground is pulled back to something, or dropped
     _sweep_doubled_tails(s)  # a lane that runs on beside the way it met ends where it met it (feature 261)
     _sweep_dangling_ends(s)
-    # ...AND A LANE THAT ENDS ON ANOTHER STANDS ON ITS CENTERLINE (GM 2026-09-27): an end a few feet off it shows its round cap past the far edge.
-    # A NEEDLE JOIN SQUARED HERE WAS TRIED AND REVERTED (the 269 landing, 2026-09-28): Mizuguchi's orphan join runs 35 ft
-    # back along the skeleton lane at 16 degrees before meeting it, and moving its end to the foot of the vertex before it
-    # (square to the tread) let the tidy trim the skeleton's tail, which had been a gable-end house's nearest way - two
-    # households' ways out then left by another lane and missed the entrance board (`test_an_entrance_board_stands_at_the_
-    # entrance`). Feature 287 relays a needle end in `settle_ends` (`law.needle_ends`, ways W21) instead; a fix here has
-    # to keep the tail's service.
-
-    center_lane_ends(s)
-    cut_the_overruns(s)
-    cut_past_the_junction(s)  # ...and a free end run on past its own junction to nothing (the 269 landing, Mizuguchi)
+    # EIGHTEEN REPAIR PASSES STOOD HERE AND WENT (feature 417 T26, its research R5): `_bridge_collinear_breaks`, `_touch_junctions`,
+    # `_smooth_web`, `_drop_collapsed`, `_sweep_debris`, `_drop_end_nubs`, `_sweep_steading_fouls`, `_sweep_doubled_remnants`,
+    # `_keep_the_route_wide`, `straighten_joints`, `fold_the_connector_hairpin`, `center_lane_ends`, `cut_the_overruns`,
+    # `cut_past_the_junction`, `split_at_crossings`, `meet_end_to_end`, `trim_streets` and the joints read once more after the
+    # settle. Each was turned off alone over the 48 fixed seeds and the pinned rows, then all of them together, and no seed's
+    # verdict and no pool map's moved: the lay and `settle_the_web` already keep what they repaired. Do not re-add one to
+    # mend a seed - the rule it stood in for belongs in the placer (feature 417's principle, its research R4).
+    #
     # ...and a record the joins emptied is not a lane: a husk with no points declares a way nothing draws (a review
     # counted three on Kashikawa and two on Kuwabata) - dropped with its ink slot, the one way lanes leave
-    # ...and a record whose points are all one point is a husk too (Mizuguchi, feature 261: seven three-point records at a
-    # single spot, left by the passes that re-cut the home-bank footpath)
     s.drop_lanes([i for i, ln in enumerate(s.M.get("lanes") or []) if len(ln.get("pts") or []) < 2 or polyline_len([(float(x), float(y)) for x, y in ln["pts"]]) < 1.0])
-    # ...AND THE ENDS ARE TRIMMED TO SERVICE ONCE MORE, LAST (feature 261, once main's placer re-laid the pool): every pass
-    # after the first tidy can leave an end in open ground - the dangling-end sweeps, the joint straightening and the cut
-    # past the connector all reshape lanes - and Kuwabata shipped a skeleton arm into the scrub that the first tidy had
-    # seen as part of a longer lane. The same trim, with the same `keep` for a house whose only way a lane is.
-    split_at_crossings(s)  # a crossing is a junction: recorded as one before the trim judges what each end serves (the 269 landing)
+    # ...AND THE ENDS ARE TRIMMED TO SERVICE ONCE MORE, LAST (feature 261): the dangling-end sweeps reshape lanes, and
+    # Kuwabata shipped a skeleton arm into the scrub that the first tidy had seen as part of a longer lane.
     tidy_lane_ends(s, list(plan.envelope))
-    meet_end_to_end(s, walls)  # ...and two ends the trims left facing each other across a hand's width are joined
-    # ...AND DOUBLED INK IS SWEPT ONCE MORE, AFTER THE SPLIT (feature 293; Sawada in the earlier 293 pass): a join lane laid
-    # to an "orphan" that in fact crossed the web mid-run is the only link at the ink tolerance until `split_at_crossings`
-    # records that crossing as a junction - and from then it is a tread doubled beside another, which both doubled-ink
-    # sweeps above had kept as a link. The same sweep, with the same stranding and one-network refusals.
-    _sweep_doubled_remnants(s)
     # ...AND THE PADDY IS REACHED (269 B04, research/fields/290): where no lane end stands on its bund - the spur swept, or
     # never drawn - the nearest lane runs on to it, or a field path is drawn off the nearest lane; recorded either way
     # ...AND A GROVE FARM IS REACHED AT ITS FRONT DOOR (feature 291 FR-019), LAST: laid before the trims, a door path was cut
@@ -390,9 +278,6 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         # before any door path existed
         _sweep_doubled_tails(s)
         tidy_lane_ends(s, list(plan.envelope), streets=True)
-        # ...and a further street ends at its outermost joint, not past its last farm's path - or the last farm it serves without
-        # one (`street_anchors`, T97: the street's point nearest each such house); the first runs on off the map as the road (0033)
-        trim_streets(s, _TOUCH_GAP, street_anchors(s), 1.0)
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web
     # ...AND THE WEB SETTLES ITSELF, LAST (feature 287, M4): every rule of the lane law is asked of the web as it stands and
@@ -404,7 +289,6 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # ...and its wall-clock seconds stay out of the manifest: a timing written there rewrote all five pool maps on every
     # regeneration with nothing on them moved (287, 2026-09-29); the rounds and the lane counts are the record.
     s.M["meta"]["web_settle"] = {k: v for k, v in settle_the_web(s).items() if k != "seconds"}
-    resettle_straightened(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # THE CORRIDORS HAVE SERVED (feature 287 M8): every way the seating held them for is drawn, so the registry's reservation
     # of them ends here - the notice board may stand beside a way drawn along one, as beside any way
     s.standing.reserved.release_corridors()
@@ -483,14 +367,3 @@ def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -
                 reached.add(j)
                 frontier.append(j)
     return [runs[i] for i in sorted(reached)]
-
-
-def resettle_straightened(s: Settlement, hard: list[Any], walls: Sequence[Any], water: list[Any]) -> None:
-    """THE JOINTS READ AS ONE WAY ONCE MORE, where the settle laid a Z at one (feature 308, Inashiro on the merged engine: a
-    crossing squared near the field spur's end turned it back against the link joined there - `square_every_crossing` runs
-    after the web's joint pass); a joint it rewrites is settled again, and the settle's record replaced. Its wall-clock seconds
-    stay out of the manifest (287, 2026-09-29).
-
-    Research: joints read as one way - research/questions/0081-village-lanes.drawing.html: two lanes meeting end to end are one"""
-    if straighten_joints(s, hard, walls, water):
-        s.M["meta"]["web_settle"] = {k: v for k, v in settle_the_web(s).items() if k != "seconds"}

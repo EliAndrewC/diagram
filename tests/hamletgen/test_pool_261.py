@@ -200,8 +200,8 @@ def test_no_zigzag_straddles_a_joint(gen: str) -> None:
     `lanes_bend_like_paths` asks of a record - no hairpin, no two 50-degree turns inside 40 ft - is asked of the two read
     as one (feature 293, settlement-reviews of Inashiro and Sawada: a Z with one turn each side of the joint passed every
     record-at-a-time check). The engine's own predicate and joint reading, not a restatement."""
-    from l7r.diagram.hamletgen.ways.clearance import _bends_badly
     from l7r.diagram.hamletgen.ways.joints import joints, oriented
+    from l7r.diagram.hamletgen.ways.law import bends_badly as _bends_badly  # the law's one predicate (417 T26: clearance's copy went)
 
     lanes = _manifest(gen)["lanes"]
     for i, ei, j, ej in joints(lanes):
@@ -279,7 +279,8 @@ def test_every_lane_is_drawn_at_its_own_rank(gen: str) -> None:
     way and the spur widened to the track's tread, a 6 ft lane hanging off a 3 ft footpath)."""
     lanes = _manifest(gen)["lanes"]
     ranked = [(i, r, float(ln["w"])) for i, ln in enumerate(lanes) if (r := lane_rank(ln))]
-    assert any(r == "footpath" for _i, r, _w in ranked) or any(ln.get("role") == "touch" for ln in lanes), "non-vacuity: ranked lanes"
+    # non-vacuity: the track out is always ranked; a "touch" lane stood in for a footpath until feature 417 T26 took that pass
+    assert any(r == "track" for _i, r, _w in ranked) and len(ranked) >= 2, "non-vacuity: ranked lanes"
     off = [(i, r, w) for i, r, w in ranked if w != RANK_FT[r]]
     assert not off, f"lanes drawn off their rank (lane, rank, ft): {off}"
 

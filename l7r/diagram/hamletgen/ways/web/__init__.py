@@ -32,19 +32,10 @@ from .stage import (
     lay_reachable_runs as lay_reachable_runs,
 )
 from .stage import (
-    resettle_straightened as resettle_straightened,
-)
-from .stage import (
     seat_wall_reach as seat_wall_reach,
 )
 from .stage import (
     stage_web as stage_web,
-)
-from .tidy import (
-    _drop_collapsed as _drop_collapsed,
-)
-from .tidy import (
-    cut_the_overruns as cut_the_overruns,
 )
 from .tidy import (
     kept_connector as kept_connector,

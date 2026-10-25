@@ -8,14 +8,13 @@ Split from one `ways.py` by feature 173, as LAYERS emitted bottom-up (every cros
 |---|---|
 | `geom.py` | point and segment math on a bare polyline - lengths, turns, crossings, nearest-thing queries, and the two pushes that move a point off something |
 | `checks.py` | the questions asked ABOUT a finished network - which houses are unreached, which lanes share a tread, where a way crosses crop or water it should not |
-| `clearance.py` | may a way BE here - the clear-run scan, the clip, the span and touch tests, the bend/nub judgments, and `may_write`, the guard every rewrite passes |
+| `clearance.py` | may a way BE here - the clear-run scan, the clip, the span and touch tests, the kink spans the lane law asks |
 | `route.py` | the router itself: `_route` finds a way round hard ground, `_unjog` straightens what it found, `_ease_corner` rounds the corners it leaves |
 | `fabric.py` | the settlement fabric a way must respect - the homestead polygons, the margin frame, the fabric-collision probes, and `_draw_web`, the single place a web lane is committed to the map |
-| `sweeps.py` | the passes that REMOVE or REPAIR after the web is laid - doubled remnants, steading fouls, end nubs, necked routes, debris, collinear breaks, orphaned pieces |
+| `sweeps.py` | the passes that REMOVE or REPAIR after the web is laid - orphaned pieces joined, dangling ends, doubled tails (the other fourteen went in feature 417 T26: measured needless) |
 | `tails.py` | the DOUBLED TAIL: a lane end running on beside the way it met is cut back to where it came alongside - unless the cut strands a lane that met the tail; a lane stranded only by the touch gap is carried onto the way (feature 280). Re-exported by `sweeps.py` |
-| `touch.py` | how a lane end meets the network - the whole junction-touching pass and the piece-joining it falls back on |
-| `smooth.py` | the smoothing pass and the connectivity accounting that decides whether a smoothed lane may be committed |
-| `joints.py` | where two lanes meet END TO END - read as one way: a fold at the joint becomes a T, a jog across it is pulled straight, a hook at a lane's end is taken off (`straighten_joints`, GM 2026-09-26); then an end stopping on another lane's tread is set on its centerline (`center_lane_ends`, GM 2026-09-27), and two ends left a hand's width apart are joined (`meet_end_to_end`, 269 E3) |
+| `smooth.py` | the web's piece count (`web_pieces`); the smoothing pass, and `touch.py`'s junction-touching pass, went in feature 417 T26 |
+| `joints.py` | where two lanes meet END TO END - read as one way (`joints`, `as_walked`, `oriented`, GM 2026-09-26) for the lane law; the passes that rewrote joints went in feature 417 T26 |
 | `bund.py` | a way that makes for the field RUNS ON TO THE BUND (269 B04/B17, research/fields/290 and 0081): `WorkedGround`'s run-on target, an end pulled out of the crop, `run_lanes_on_to_the_bund` (inside `tidy_lane_ends`), the spur tip (`tip_onto_the_bund`) and `a_way_onto_the_bund`, the last word of `stage_web` (`meta.field_path`) |
 | `serve.py` | laying one web lane (`_lay_web_lane`): it joins the network, touching it where it joins, or is refused. And a grove farm's DOOR PATH (feature 291): `front_door`, `door_off_fixtures`, `own_street`, `lay_door_paths`. The straggler footpath search that also lived here was dropped by feature 287 (GM 2026-09-30) - a house the web leaves unreached gets its reserved corridor from the settle |
 | [`web/`](web/CLAUDE.md) | STAGE: the lane web - `stage_web` (`web/stage.py`) and the skeleton it starts from. Read `stage.py` first to see the order the passes above run in (split from `web.py` at the bar, 405 T57) |

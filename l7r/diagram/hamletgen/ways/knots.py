@@ -1,7 +1,7 @@
 """Lane ends that nearly meet are joined - asked of the FINISHED web (feature 328 wave 4, glyph-check of Inashiro).
 
 The lane page's rule (research/questions/0081-village-lanes.drawing.html): "Ends within 25 ft of one another are joined at a
-single point, so three lanes never arrive a few feet apart in a knot." `_smooth_web`'s knot pass gathers them, but it runs
+single point, so three lanes never arrive a few feet apart in a knot." `_smooth_web`'s knot pass gathered them (until feature 417 T26), but it ran
 before the settle, and on every pool map since the settle draws each household's way (`tree.settle_tree`, feature 318) the
 web it sees is the connector alone: the knots are laid after it. Inashiro shipped four lane ends within 24 ft at the track's
 head (lanes 7 and 3 T'd onto the track 6 ft apart, 18 and 24 ft from where lane 1 arrives) and lanes 9 and 11 ending 19 ft

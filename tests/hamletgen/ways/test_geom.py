@@ -5,9 +5,9 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.hamletgen.ways import _crosses_fabric, _nearest_seg, _reach, _route, _trim_to_service
+from l7r.diagram.hamletgen.ways import _crosses_fabric, _nearest_seg, _reach, _trim_to_service
 
-from ._builders import _FOLD_BAR, _HAIRPIN, _LONG_HAIRPIN, _TIP_WAY, _StubWeb, _walled_settlement, _webbed
+from ._builders import _walled_settlement
 
 
 def test_a_point_in_the_crop_is_pushed_out_on_the_LOCAL_edge_normal() -> None:
@@ -207,40 +207,6 @@ def test_trim_to_service_counts_ARRIVING_AT_THE_BUND_as_service() -> None:
 # ---- the splice helpers (feature 137 T04) ---------------------------------------------------------
 
 
-def test_unretrace_collapses_an_out_and_back_spur() -> None:
-    """A join link prepended whole doubled back along the piece's own first segment (cohort seed 07):
-    A -> B -> A' -> B -> C is A -> B -> C."""
-    pts = [(0.0, 0.0), (20.0, 0.0), (0.5, 0.0), (20.0, 0.0), (60.0, 0.0)]
-    assert hg.ways._unretrace(pts) == [(0.0, 0.0), (20.0, 0.0), (60.0, 0.0)]
-
-
-def test_unretrace_keeps_a_polyline_that_would_fold_away_entirely() -> None:
-    """A door path whose link ran back past the door is an ugly lane, not an empty one (seed 03)."""
-    pts = [(0.0, 0.0), (20.0, 0.0), (0.0, 0.0)]
-    assert hg.ways._unretrace(pts) == pts
-
-
-def test_stop_at_network_cuts_a_link_where_it_crosses_the_way_it_was_sent_to() -> None:
-    """Tripwire seed 27: the link touched a way at 20 ft and carried on to a `q` a trim later removed."""
-    link = [(0.0, 0.0), (0.0, 30.0), (0.0, 60.0)]
-    way = [((-20.0, 20.0), (20.0, 20.0))]
-    assert hg.ways._stop_at_network(link, way) == [(0.0, 0.0), (0.0, 20.0)]
-
-
-def test_stop_at_network_lands_on_the_way_it_stops_beside() -> None:
-    """A vertex 3 ft off a way is a piece to the web's 4 ft join tolerance once rounded - the cut
-    ends on the way's foot point, not beside it."""
-    link = [(0.0, 0.0), (30.0, 3.0), (60.0, 3.0)]
-    way = [((20.0, 0.0), (40.0, 0.0))]
-    assert hg.ways._stop_at_network(link, way) == [(0.0, 0.0), (30.0, 3.0), (30.0, 0.0)]
-
-
-def test_stop_at_network_leaves_a_link_that_meets_nothing_on_the_way() -> None:
-    link = [(0.0, 0.0), (30.0, 0.0), (60.0, 0.0)]
-    assert hg.ways._stop_at_network(link, []) == link
-    assert hg.ways._stop_at_network(link, [((0.0, 50.0), (60.0, 50.0))]) == link
-
-
 def test_thread_the_fabric_takes_a_detour_when_neither_the_route_nor_the_clip_clears() -> None:
     from l7r.diagram.hamletgen.ways import _homestead_polys, _thread_the_fabric
 
@@ -266,27 +232,6 @@ def test_thread_the_fabric_returns_the_run_untouched_when_there_is_no_fabric() -
     assert _thread_the_fabric(s, a_plan(), [(1.0, 1.0)]) == [(1.0, 1.0)]  # a one-point run is not a run
 
 
-def test_smooth_web_cuts_the_SHORT_arm_off_a_hairpin() -> None:
-    """Feature 146: `_smooth_web`'s hairpin ARM cut, both directions. A lane that doubles back is not a way
-    feet wore. The un-jog pass gets first refusal and replaces the hairpin with its chord where the chord is
-    clear; where it is BLOCKED (a steading in the way, as here) the short arm is cut off instead."""
-    from l7r.diagram.hamletgen.ways import _smooth_web
-
-    block = [[(690.0, 220.0), (790.0, 220.0), (790.0, 250.0), (690.0, 250.0)]]  # across every chord below
-
-    # a short head (30 ft) doubling back into a longer tail: the HEAD goes
-    s1 = _webbed([{"pts": [[700.0, 230.0], [700.0, 200.0], [704.0, 232.0]], "w": 5}])
-    _smooth_web(s1, block, [], [])
-    kept = s1.M["lanes"][0]["pts"]
-    assert len(kept) == 2 and abs(kept[0][1] - 200.0) < 1e-6, kept
-
-    # the mirror: a short TAIL doubling back off a longer head
-    s2 = _webbed([{"pts": [[704.0, 232.0], [700.0, 200.0], [700.0, 230.0]], "w": 5}])
-    _smooth_web(s2, block, [], [])
-    kept2 = s2.M["lanes"][0]["pts"]
-    assert len(kept2) == 2 and abs(kept2[-1][1] - 200.0) < 1e-6, kept2
-
-
 def test_the_cluster_gateway_and_edge_fall_back_when_no_house_is_placed_yet() -> None:
     """Feature 146: both helpers take the cloud's own extent, and both keep a fallback for a caller that
     asks before any house is seated - which the shipped order does not do, and which this file's own comment
@@ -305,93 +250,6 @@ def test_the_cluster_gateway_and_edge_fall_back_when_no_house_is_placed_yet() ->
     assert _cluster_edge_toward(s, (900.0, 500.0), fallback) != fallback
 
 
-def test_a_returning_leg_of_the_cut_length_or_more_is_a_lane_and_is_kept() -> None:
-    """0081: "a returning leg under 40 ft is cut" (`_ARM_FT`). A longer leg is a lane in its own right and is kept, whatever
-    the tip would reach - the measured band past the cap (40-90 ft, feature 134 T50) went with feature 328, its figures on no
-    page. The fixture's head is 82 ft, past the cut length, with a way 38 ft off its apex."""
-    from l7r.diagram.hamletgen.ways import _smooth_web, _turn_deg
-    from l7r.diagram.hamletgen.ways.clearance import _ARM_FT
-
-    assert _turn_deg((620.0, 300.0), (702.0, 300.0), (630.0, 318.0)) >= 140.0, "the fixture really is a hairpin"
-    assert math.dist(tuple(_HAIRPIN[0]), tuple(_HAIRPIN[1])) >= _ARM_FT, "the fixture's arm is past the cut length"
-    for lanes in ([{"pts": [list(p) for p in _HAIRPIN], "w": 5}, dict(_TIP_WAY)], [{"pts": [list(p) for p in _LONG_HAIRPIN], "w": 5}]):
-        s = _webbed(lanes)
-        _smooth_web(s, _FOLD_BAR, [], [])
-        assert s.M["lanes"][0]["pts"] == lanes[0]["pts"], "a returning leg of 40 ft or more is kept"
-
-
-def test_a_lane_whittled_below_the_minimum_and_left_standing_alone_is_swept() -> None:
-    """`draw_web_lane` refuses to draw anything under `_WEB_MIN_FT`, and that rule was asked ONCE, at
-    draw time - while a trim, a hairpin cut and `_stop_at_network` all shorten lanes afterwards.
-    Tripwire seed 27 shipped a 20.5 ft two-point stub standing 31 ft off the nearest lane, in a slot
-    about 7 ft wide that no link the joiner may draw could reach. The husk goes with the ink (feature
-    145's rule from a Sawada review), so the record is deleted rather than left empty."""
-    from l7r.diagram.hamletgen.ways import _sweep_debris
-
-    s = _webbed([{"pts": [[300.0, 300.0], [300.0, 500.0]], "w": 5}, {"pts": [[600.0, 300.0], [614.0, 315.0]], "w": 5}])
-    assert _sweep_debris(s) == 1
-    assert len(s.M["lanes"]) == 1, "the record is deleted with its ink, not left declaring a lane nothing draws"
-    assert s.M["lanes"][0]["pts"][0] == [300.0, 300.0], "the real lane is untouched"
-    assert s.M["meta"]["lane_fragments_dropped"] == 1
-
-
-def test_the_sweep_spares_a_short_lane_that_MEETS_the_web_and_one_that_is_a_houses_only_way() -> None:
-    """Two guards, both load-bearing: a short spur that joins the network is a real lane and not
-    debris, and a stranded fragment that is some farmhouse's only way stays visibly broken rather
-    than stranding the house - `farmhouses_reach_a_way` is the check that should speak in that case."""
-    from l7r.diagram.hamletgen.ways import _sweep_debris
-
-    joined = _webbed([{"pts": [[300.0, 300.0], [300.0, 500.0]], "w": 5}, {"pts": [[300.0, 400.0], [318.0, 404.0]], "w": 5}])
-    assert _sweep_debris(joined) == 0, "a 20 ft spur that touches the web is a lane, not debris"
-    assert len(joined.M["lanes"]) == 2
-
-    only_way = _webbed([{"pts": [[300.0, 300.0], [300.0, 500.0]], "w": 5}, {"pts": [[900.0, 300.0], [914.0, 315.0]], "w": 5}])
-    only_way.M["houses"].append({"x": 930.0, "y": 330.0, "w": 40.0, "h": 25.0})
-    assert _sweep_debris(only_way) == 0, "the fragment is that house's only way"
-    assert len(only_way.M["lanes"]) == 2
-
-
-def test_a_FINER_lattice_walks_a_narrower_corridor_than_a_coarse_one() -> None:
-    """`_route` plans on a lattice and inflates its clearance by half a cell's diagonal
-    (`gap + cell * 0.71`) so that "this cell is free" means every point in it is clear. That is
-    load-bearing - it is what stopped lanes planned at 7 ft from being drawn at 4 - but the cost is
-    charged against the CORRIDOR and it is invisible at the call site: at cell 6 a `_TOUCH_GAP`
-    route really demands 8.26 ft, and at cell 10 a fabric route 14.1 ft. Tripwire seed 27's only way
-    out of a stranded stub was a gap about 7 ft wide, so every rung of the orphan joiner's ladder
-    reported NO ROUTE for a journey that plainly existed, and the caller could only say the piece
-    would not join. Planning the last rung at `_FINE_CELL` is what opens it.
-
-    The relationship is measured rather than predicted: the narrowest gap each cell size can thread
-    is searched for, so the test cannot be wrong about the router's internals - which an earlier
-    version of it was, twice."""
-    from l7r.diagram.hamletgen.ways import _FINE_CELL, _TOUCH_GAP
-
-    def narrowest_passable(cell: float) -> float | None:
-        """Best case over several wall CENTRES, because the lattice samples cell centres and a gap that
-        happens to straddle a sampled column threads at a width one offset to the side does not - noise
-        of up to half a cell, which is the same order as the effect being measured."""
-        return min((_narrowest_at(cell, centre) for centre in (443.0, 444.0, 445.0, 446.0, 447.0)), default=None)
-
-    def _narrowest_at(cell: float, centre: float) -> float:
-        """The smallest half-gap this cell size can plan through, in a wall that seals the search box
-        except for one opening OFFSET from the straight line - offset so the router cannot take its
-        straight-line shortcut and must actually plan."""
-        for half in range(3, 17):
-            wall = [
-                [(300.0, 480.0), (centre - half, 480.0), (centre - half, 520.0), (300.0, 520.0)],
-                [(centre + half, 480.0), (700.0, 480.0), (700.0, 520.0), (centre + half, 520.0)],
-            ]
-            if _route((500.0, 470.0), (500.0, 530.0), wall, [], [], gap=_TOUCH_GAP, pad_mult=2.0, cell=cell):
-                return float(half)
-        return float("inf")
-
-    # against the DETOUR rung's own cell 10, whose effective clearance is 14.1 ft to the fine rung's
-    # 6.13 - a gap far wider than the half-cell of sampling noise, which cell 6 was not.
-    fine, coarse = narrowest_passable(_FINE_CELL), narrowest_passable(10.0)
-    assert fine is not None and coarse is not None and fine != float("inf"), (fine, coarse)
-    assert fine + 2.0 <= coarse, f"a {_FINE_CELL} ft lattice threads a corridor the 10 ft one cannot: {fine} vs {coarse}"
-
-
 def test_web_pieces_counts_connected_lanes_and_ignores_stubs() -> None:
     """Feature 146: `web_pieces` lifted out of `_smooth_web` so it can be asked directly. A lane of fewer
     than two points is not a piece; lanes that touch are one."""
@@ -402,119 +260,6 @@ def test_web_pieces_counts_connected_lanes_and_ignores_stubs() -> None:
     assert web_pieces(touching) == 1
     assert web_pieces(apart) == 2
     assert web_pieces([*apart, {"pts": []}, {"pts": [[5.0, 5.0]]}]) == 2, "an empty or one-point lane is no piece"
-
-
-def test_web_rejoinable_says_whether_the_touch_pass_will_close_a_new_piece() -> None:
-    """Feature 146: `web_rejoinable` lifted out of the same closure. A stub whose end stands within the
-    touch pass's reach of another piece, with a clear straight link, will be closed again - so a rewrite
-    that made it is allowed. A stub out of reach will not, so the rewrite is refused."""
-    from l7r.diagram.hamletgen.ways import _STUB_REACH_FT, web_rejoinable
-
-    spine = {"pts": [[0.0, 0.0], [400.0, 0.0]], "connector": True}
-    near = {"pts": [[200.0, _STUB_REACH_FT - 2.0], [300.0, _STUB_REACH_FT - 2.0]]}
-    far = {"pts": [[200.0, 900.0], [300.0, 900.0]]}
-    assert web_rejoinable([spine, near], [], [], []) is True
-    assert web_rejoinable([spine, far], [], [], []) is False
-    wall = [[(150.0, 2.0), (350.0, 2.0), (350.0, 8.0), (150.0, 8.0)]]  # between the stub and the spine
-    assert web_rejoinable([spine, near], wall, [], []) is False, "in reach, but no clear link"
-    assert web_rejoinable([spine], [], [], []) is True, "one piece has nothing to rejoin"
-
-
-def test_touch_junctions_records_an_orphan_it_can_neither_link_nor_drop() -> None:
-    """The LAST rung of the orphan ladder, and the one a rolled map almost never reaches.
-
-    A piece too far to link (past `_ORPHAN_REACH` = 150 ft) is normally DROPPED - unless dropping it
-    would strand a farmhouse, and then it is kept, visibly broken, with the count in `meta`. The
-    comment at that line says why: deleting it once stranded a house, `farmhouses_reach_a_way` failed,
-    and the driver silently re-rolled the whole map. So the arm has to keep working."""
-    from l7r.diagram.hamletgen.ways import _touch_junctions
-
-    s = _StubWeb(
-        lanes=[
-            {"pts": [[0.0, 0.0], [200.0, 0.0]], "w": 3, "connector": True},
-            {"pts": [[0.0, 900.0], [120.0, 900.0]], "w": 3},  # far past _ORPHAN_REACH from the spine
-        ],
-        houses=[{"x": 60.0, "y": 905.0}],  # served by the orphan alone: 5 ft from it, 900 from the spine
-    )
-    _touch_junctions(s, [], [], [], only_orphans=False)  # type: ignore[arg-type]
-    assert s.M["meta"].get("lane_orphans") == 1, "the piece is KEPT and counted, not deleted under the house"
-    assert len(s.M["lanes"]) == 2, "nothing was dropped"
-
-
-def test_touch_junctions_drops_an_unreachable_piece_that_strands_nobody() -> None:
-    """The rung above: same geometry, no house depending on the fragment, so it goes - record and ink
-    together (`lane_fragments_dropped`), because a lane record nothing draws is the defect."""
-    from l7r.diagram.hamletgen.ways import _touch_junctions
-
-    s = _StubWeb(
-        lanes=[
-            {"pts": [[0.0, 0.0], [200.0, 0.0]], "w": 3, "connector": True},
-            {"pts": [[0.0, 900.0], [120.0, 900.0]], "w": 3},
-        ],
-        houses=[{"x": 60.0, "y": 5.0}],  # on the spine, not the fragment
-    )
-    _touch_junctions(s, [], [], [], only_orphans=False)  # type: ignore[arg-type]
-    assert s.M["meta"].get("lane_fragments_dropped") == 1
-    assert len(s.M["lanes"]) == 1, "the husk goes with the ink"
-
-
-def test_join_piece_prepends_a_link_that_meets_the_piece_at_its_HEAD() -> None:
-    """`_join_piece` appends when the link starts at the piece's tail and PREPENDS, reversed, when it
-    starts at the head. Only the append arm is exercised by the live hamlets - which arm a roll takes
-    is an accident of which end of a stranded stub happened to face the spine."""
-    from l7r.diagram.hamletgen.ways import _join_piece
-
-    piece = [(100.0, 100.0), (160.0, 100.0)]
-    s = _StubWeb(lanes=[{"pts": [[100.0, 100.0], [160.0, 100.0]], "w": 3}])
-    _join_piece(s, s.M["lanes"], 0, piece, (100.0, 100.0), [(100.0, 100.0), (40.0, 100.0)], [], [], [], [])  # type: ignore[arg-type]
-    pts = s.M["lanes"][0]["pts"]
-    assert s.reinked == [0]
-    assert pts[0] == [40.0, 100.0], "the link is reversed onto the FRONT, so the lane still reads end to end"
-    assert pts[-1] == [160.0, 100.0]
-
-
-def test_commit_lane_puts_a_rewrite_back_when_it_breaks_the_web_beyond_repair() -> None:
-    """The revert arm - the reason `commit_lane` exists (feature 137 T03) and the one a clean roll never
-    enters. A cut that splits the web is allowed ONLY while the touch pass could close it again."""
-    from l7r.diagram.hamletgen.ways import commit_lane
-
-    lanes: list = [
-        {"pts": [[0.0, 0.0], [400.0, 0.0]], "w": 3, "connector": True},
-        {"pts": [[200.0, 0.0], [200.0, 60.0], [400.0, 60.0]], "w": 3},  # meets the spine at its head
-    ]
-    reinked: list[int] = []
-    # cutting the second lane back to its far half strands it 200 ft from anything: one more piece,
-    # and no end within the stub reach of another tread, so the touch pass could not mend it
-    assert not commit_lane(lanes, 1, [[900.0, 900.0], [980.0, 900.0]], [], [], [], reinked.append)
-    assert lanes[1]["pts"] == [[200.0, 0.0], [200.0, 60.0], [400.0, 60.0]], "put back exactly as it was"
-    assert reinked == [], "and never re-inked"
-
-
-def test_commit_lane_accepts_a_rewrite_that_keeps_the_web_whole() -> None:
-    from l7r.diagram.hamletgen.ways import commit_lane
-
-    lanes: list = [
-        {"pts": [[0.0, 0.0], [400.0, 0.0]], "w": 3, "connector": True},
-        {"pts": [[200.0, 0.0], [200.0, 60.0], [400.0, 60.0]], "w": 3},
-    ]
-    reinked: list[int] = []
-    assert commit_lane(lanes, 1, [[200.0, 0.0], [200.0, 40.0]], [], [], [], reinked.append)
-    assert reinked == [1]
-
-
-def test_bowtie_cut_takes_the_short_tail_the_short_head_or_neither() -> None:
-    """Which arm a roll takes is an accident of the direction the lane was recorded in, so both are asked
-    directly. `_ARM_FT` is 40 ft: a stray tail past a crossing is cut back TO the crossing."""
-    from l7r.diagram.hamletgen.ways import bowtie_cut
-
-    pts = [(0.0, 0.0), (100.0, 0.0), (120.0, 0.0)]  # crossing inside segment 1, near its far end
-    assert bowtie_cut(pts, 1, (95.0, 0.0)) == [(0.0, 0.0), (100.0, 0.0), (95.0, 0.0)][:2] + [(95.0, 0.0)]
-
-    head = [(0.0, 0.0), (20.0, 0.0), (400.0, 0.0)]  # the crossing sits 5 ft into a 380 ft second leg
-    assert bowtie_cut(head, 1, (25.0, 0.0)) == [(25.0, 0.0), (400.0, 0.0)], "the short HEAD is the stray"
-
-    long_both = [(0.0, 0.0), (300.0, 0.0), (600.0, 0.0)]
-    assert bowtie_cut(long_both, 1, (450.0, 0.0)) is None, "neither side is a stray tail; leave the lane alone"
 
 
 def test_push_clear_of_fabric_returns_the_last_point_tried_when_the_cluster_rings_it_round() -> None:
@@ -530,18 +275,6 @@ def test_push_clear_of_fabric_returns_the_last_point_tried_when_the_cluster_ring
 
     clear = push_clear_of_fabric((0.0, 0.0), (1.0, 0.0), 10.0, [])
     assert clear == pytest.approx((10.0, 0.0)), "nothing in the way: the first point tried"
-
-
-def test_shadowing_lane_asks_whether_a_lane_goes_anywhere() -> None:
-    """A structural yes-or-no, with no dial to leave set too low. Both ends on one way means the
-    lane connects that way to itself."""
-    parent = [(0.0, 0.0), (300.0, 0.0)]
-    assert hg.ways.shadowing_lane([(100.0, 6.6), (144.0, 6.6)], [parent], 30.0) == 0
-    assert hg.ways.shadowing_lane([(100.0, 0.0), (136.0, 11.4)], [parent], 30.0) == 0
-    # a lane that goes somewhere: one end on the parent, the other out in the fields
-    assert hg.ways.shadowing_lane([(100.0, 0.0), (100.0, 120.0)], [parent], 30.0) is None
-    assert hg.ways.shadowing_lane([(0.0, 0.0)], [parent], 30.0) is None  # nothing is a lane
-    assert hg.ways.shadowing_lane([(100.0, 6.6), (144.0, 6.6)], [[(0.0, 0.0)]], 30.0) is None  # nor is the other one
 
 
 def test_trim_to_service_cuts_an_end_that_reaches_nothing() -> None:
@@ -569,31 +302,6 @@ def test_trim_to_service_keeps_the_tail_that_is_a_houses_ONLY_way() -> None:
     assert math.dist(out[-1], outlier) <= WAY_END_REACH_FT, "the point that serves the outlier survived the cut"
     farther = (260.0, 80.0)  # 100 ft off: past the reach, so it keeps nothing (the 100 ft WEB_REACH_FT until feature 328)
     assert math.dist(hg.ways._trim_to_service(run, [], houses, keep=[farther])[-1], farther) > WAY_END_REACH_FT
-
-
-def test_shadow_share_of_a_one_point_lane_is_nothing() -> None:
-    """A record with a single point has no length to share, and the caller asks before it knows that -
-    `_sweep_doubled_remnants` walks every lane on the map, degenerate records included."""
-    from l7r.diagram.hamletgen.ways.geom import shadow_share
-
-    assert shadow_share([(10.0, 10.0)], [[(0.0, 0.0), (100.0, 0.0)]], 8.0) == 0.0
-
-
-def test_touch_junctions_never_drops_the_connector() -> None:
-    """The connector is the track off the map: stranded from the web and serving no house of its own, it is still kept -
-    deleting it shipped cohort seed 15 with no way out and a reach check that passed on what was left (feature 284)."""
-    from l7r.diagram.hamletgen.ways import _touch_junctions
-
-    s = _StubWeb(
-        lanes=[
-            {"pts": [[0.0, 0.0], [200.0, 0.0]], "w": 3},
-            {"pts": [[0.0, 900.0], [120.0, 900.0]], "w": 6, "connector": True},
-        ],
-        houses=[{"x": 60.0, "y": 5.0}],  # on the web, not on the connector
-    )
-    _touch_junctions(s, [], [], [], only_orphans=False)  # type: ignore[arg-type]
-    assert [ln.get("connector") for ln in s.M["lanes"]] == [None, True], "the connector stays, record and all"
-    assert not s.M["meta"].get("lane_fragments_dropped")
 
 
 def test_a_turn_at_a_repeated_vertex_is_no_turn() -> None:

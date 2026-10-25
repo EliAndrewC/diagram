@@ -6,7 +6,6 @@ from l7r.diagram import hamletgen as hg
 from l7r.diagram.settlement import Settlement
 
 from .._builders import a_plan
-from ._builders import AdmitsAll
 
 
 def test_reachable_runs_admits_a_run_that_joins_THROUGH_another_run() -> None:
@@ -162,39 +161,6 @@ def test_an_arm_that_crosses_a_kept_arm_by_accident_is_dropped(monkeypatch: pyte
     assert not s.M.get("lanes"), "an accidental crossing is not inked"
 
 
-def test_a_lane_the_smoothing_collapsed_is_emptied_reinked_and_deleted() -> None:
-    """`_drop_collapsed` (lifted from `stage_web` by feature 216): a non-connector lane the knot
-    collapse left with one point, or two points under a foot apart, is emptied, its ink pulled, and
-    the husk removed back-to-front so the survivors keep their order. The connector is kept whatever
-    its shape - it is the map's way out."""
-    from l7r.diagram.hamletgen.ways import web as _web
-
-    class _S(AdmitsAll):
-        def __init__(self) -> None:
-            self.M: dict = {
-                "lanes": [
-                    {"pts": [[0.0, 0.0]], "connector": True},
-                    {"pts": [[10.0, 10.0]]},
-                    {"pts": [[20.0, 20.0], [20.0, 20.5]]},
-                    {"pts": [[30.0, 30.0], [80.0, 30.0], [80.0, 80.0]]},
-                    {"pts": []},
-                ]
-            }
-            self.reinked: list[int] = []
-
-        def reink_lane(self, i: int) -> None:
-            self.reinked.append(i)
-
-        def drop_lanes(self, idxs: list[int]) -> None:
-            for i in sorted(set(idxs), reverse=True):
-                del self.M["lanes"][i]
-
-    s = _S()
-    assert _web._drop_collapsed(s) == [1, 2, 4]  # type: ignore[arg-type]
-    assert s.reinked == [1, 2, 4], "each collapsed lane is reinked at its ORIGINAL index before any deletion"
-    assert [ln["pts"] for ln in s.M["lanes"]] == [[[0.0, 0.0]], [[30.0, 30.0], [80.0, 30.0], [80.0, 80.0]]]
-
-
 def test_a_lane_that_is_the_only_link_between_two_parts_of_the_web_is_not_dropped() -> None:
     """`unsplitting_drops` (the 269 landing, Inashiro): of two lanes the tidy would drop, the one tying an arm to the web
     stays and the loose one goes."""
@@ -248,24 +214,6 @@ def test_a_skeleton_arm_trimmed_under_the_web_floor_is_no_arm(monkeypatch: pytes
     assert web.served_arm(s, [(0.0, 0.0), (5.0, 0.0), (500.0, 0.0)]) == [], "trimmed to 5 ft: under the floor"
     assert web.served_arm(s, [(0.0, 0.0), (400.0, 0.0), (500.0, 0.0)]) == [(0.0, 0.0), (400.0, 0.0)]
     assert web.served_arm(s, [(0.0, 0.0)]) == [(0.0, 0.0)], "a point is passed through untrimmed"
-
-
-def test_a_joint_the_settle_left_straightened_is_settled_again_and_its_record_replaced(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 308's re-settle, lifted by feature 314: where the joint pass rewrites a joint after the settle, the web is settled
-    again and the record replaced, its seconds left out; where it rewrites none, nothing is settled."""
-    from types import SimpleNamespace
-
-    from l7r.diagram.hamletgen.ways import web as W
-
-    s = SimpleNamespace(M={"meta": {"web_settle": {"rounds": 1}}})
-    settled: list[int] = []
-    monkeypatch.setattr(W.stage, "settle_the_web", lambda s_: settled.append(1) or {"rounds": 2, "seconds": 0.4})
-    monkeypatch.setattr(W.stage, "straighten_joints", lambda *a: 0)
-    W.resettle_straightened(s, [], [], [])  # type: ignore[arg-type]
-    assert not settled and s.M["meta"]["web_settle"] == {"rounds": 1}, "no joint rewritten: nothing settled"
-    monkeypatch.setattr(W.stage, "straighten_joints", lambda *a: 1)
-    W.resettle_straightened(s, [], [], [])  # type: ignore[arg-type]
-    assert settled == [1] and s.M["meta"]["web_settle"] == {"rounds": 2}, "settled again, the seconds kept out"
 
 
 def test_a_skeleton_arm_may_touch_a_plots_boundary_and_keeps_off_the_wet(monkeypatch: pytest.MonkeyPatch) -> None:

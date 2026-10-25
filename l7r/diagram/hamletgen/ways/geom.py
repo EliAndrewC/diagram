@@ -9,7 +9,7 @@ import math
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any, cast
 
-from l7r.diagram.settlement import point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import point_in_poly, rot_rect, seg_closest, seg_dist
 from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
 from l7r.diagram.sitegen.geom import centroid, unit
 
@@ -28,166 +28,12 @@ def _reach(c: Pt, path: Poly) -> float:
     return min(math.dist(c, seg_closest(c[0], c[1], a, b)) for a, b in zip(path, path[1:], strict=False))
 
 
-def _aim_off(prev: Pt, tip: Pt, target: Pt) -> float:
-    """How far off this end's outward heading is from aiming at `target`, in degrees.
-
-    The honest test of "these two ends are one way with a hole in it": each end has to be heading
-    INTO the gap toward the other, which is a statement about each end separately and about the line
-    between them - not a comparison of the two headings with each other."""
-    out = math.degrees(math.atan2(tip[1] - prev[1], tip[0] - prev[0]))
-    aim = math.degrees(math.atan2(target[1] - tip[1], target[0] - tip[0]))
-    return abs((out - aim + 180.0) % 360.0 - 180.0)
-
-
-def shadow_share(pts: Poly, others: Sequence[Poly], gap: float, step: float = 5.0) -> float:
-    """The greatest share of this lane's own length that runs within `gap` of ONE other way.
-
-    The structural test below asks whether a lane leaves a way and returns to it. This asks the other shape of the same
-    defect: a lane that runs ALONGSIDE another for most of itself, whatever its ends do - two treads with a hairline of
-    grass between them, which is what a reader sees. Measured on Sawada after feature 230 moved its web: 75 ft of a 136 ft
-    lane lay within 8 ft of the lane beside it, where main had no such pair; a lane merely leaving along the connector and
-    diverging (Mizuguchi, 22% of 344 ft) is not this and must not be swept."""
-    if len(pts) < 2:
-        return 0.0
-    total = sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1)) or 1.0
-    best = 0.0
-    # THE BOX PRUNES, THE SAMPLING DECIDES (constitution X clause 15): a lane whose bounding box does not come within
-    # `gap` of this one cannot shadow it, and most lanes on a map are that.
-    x0, x1 = min(q[0] for q in pts) - gap, max(q[0] for q in pts) + gap
-    y0, y1 = min(q[1] for q in pts) - gap, max(q[1] for q in pts) + gap
-    for other in others:
-        if len(other) < 2:
-            continue
-        # A REMNANT IS THE SHORTER OF THE PAIR. Without this the test is symmetric and answers yes for the PARENT as well -
-        # a 200 ft remnant covers half of the 400 ft way it doubles - so the sweep dropped the way and kept the remnant
-        # (caught by `_sweep_doubled_remnants`'s own fixture, feature 230 pass 11).
-        if sum(math.dist(other[k], other[k + 1]) for k in range(len(other) - 1)) < total - 1e-9:
-            continue
-        if max(q[0] for q in other) < x0 or min(q[0] for q in other) > x1 or max(q[1] for q in other) < y0 or min(q[1] for q in other) > y1:
-            continue
-        segs = list(zip(other, other[1:], strict=False))
-        near, walked = 0.0, 0.0
-        for k in range(len(pts) - 1):
-            leg = math.dist(pts[k], pts[k + 1])
-            n = max(1, int(leg / step))
-            for m in range(n):
-                f = (m + 0.5) / n
-                q = (pts[k][0] + (pts[k + 1][0] - pts[k][0]) * f, pts[k][1] + (pts[k + 1][1] - pts[k][1]) * f)
-                if min(seg_dist(q[0], q[1], a, b) for a, b in segs) <= gap:
-                    near += leg / n
-                walked += leg / n
-        best = max(best, near / total)
-    return best
-
-
-def shadowing_lane(pts: Poly, others: Sequence[Poly], reach: float) -> int | None:
-    """Index of a way that BOTH of this lane's ends stand on or beside, or None - "it goes nowhere".
-
-    A way earns its ink by connecting one thing to another. A lane whose two ends both land on the same
-    single other way connects that way to itself: whatever the shape in between, no journey uses it that
-    could not be walked along the way it leaves and returns to. That is a STRUCTURAL question with a yes
-    or a no, and it is deliberately not a distance between the two treads.
-
-    THE METRIC FORM OF THIS TEST WAS WRITTEN FIRST AND WAS A NO-OP ON BOTH MAPS IT NAMED (settlement-review
-    x2, feature 155). It asked whether every point of a lane lay within `1.5 * w` - 4.5 ft for a footpath -
-    of another lane. Kashikawa's remnant sits at 6.58 ft and sawada's at 11.4 ft, and the sawada figure was
-    written into the docstring three lines above the constant that rejected it. Sawada's reviewer named the
-    pattern, and it is the one to guard against here: *"calibrating a general rule to the single case that
-    was easiest to measure is the recurring defect on this map, not a coincidence"* - the same shape as the
-    5 ft nub floor shipped for an 8.25 ft boot and the 4.5 ft threshold shipped for a 6.6 ft remnant. A
-    structural predicate has no dial to leave set too low, which is the whole reason to prefer it.
-
-    `reach` is the gate's own "is this end ON that way" tolerance, not a tuning knob.
-
-    Research: a lane that goes nowhere - UNRESEARCHED: both ends on one other way
-    """
-    if len(pts) < 2:
-        return None
-    for j, other in enumerate(others):
-        if len(other) < 2:
-            continue
-        segs = list(zip(other, other[1:], strict=False))
-        if all(min(seg_dist(e[0], e[1], a, b) for a, b in segs) <= reach for e in (pts[0], pts[-1])):
-            return j
-    return None
-
-
 def stroke_quad(a: Pt, b: Pt, half: float) -> Poly:
     """The quad a straight stroke of half-width `half` from `a` to `b` covers, square-ended - the footprint the overlap
     matrix reads for a lane's segment (feature 291)."""
     d = max(math.dist(a, b), 1e-9)
     nx, ny = -(b[1] - a[1]) / d * half, (b[0] - a[0]) / d * half
     return [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
-
-
-def fabric_clearance(pts: Sequence[Pt], fabric: Sequence[Poly]) -> float:
-    """How near a run passes to the settlement's own fabric - infinity when there is none to pass.
-
-    Lifted out of `_touch_junctions` so the rewrite rule below can be asked with plain lists
-    (GM 2026-08-28 on testability); the inner one delegates, so there is ONE body."""
-    if len(pts) < 2 or not fabric:
-        return float("inf")
-    return min(seg_dist(v[0], v[1], a2, b2) for poly in fabric for v in poly for a2, b2 in zip(pts, pts[1:], strict=False))
-
-
-def _stop_at_network(link: Poly, others: list[tuple[Pt, Pt]]) -> Poly:
-    """Cut a join link at the FIRST place it meets one of the ways it was sent to reach.
-
-    A link is routed to a point `q` on the network, and the router is free to run it along or
-    across another way on the road there - tripwire seed 27's link touched lane 8 at 20 ft and
-    carried on for 20 ft more to a `q` on a way that a later trim removed, leaving a hook to
-    nothing beside a shed (feature 137 T03). A link exists to reach the network; the moment it
-    does, the rest is a stub. Cut at a vertex within `_TOUCH_GAP` of one of `others`, or at a
-    crossing. `others` is the TARGET set only - the main component in the orphan ladder, the unmet
-    ways in the touch pass - never the piece's own component: a piece is often several lanes, and
-    cutting at one of them left the reference hamlet's web in pieces on the first try.
-
-    Research: no stub past a junction - research/questions/0081-village-lanes.drawing.html: a joining link ends where it first meets a lane, whatever the tail"""
-    if not others or len(link) < 2:
-        return list(link)
-    out = [link[0]]
-    for t in range(1, len(link)):
-        a, b = link[t - 1], link[t]
-        # `seg_intersect` meets LINES - guard it with `segments_cross`, as every other caller here does,
-        # or the cut lands on the link's own backward extension (the reference hamlet, first try).
-        hits = [x for c, d in others if segments_cross(a, b, c, d) for x in [seg_intersect(a, b, c, d)] if x is not None and math.dist(a, x) > 0.5]
-        if hits:
-            out.append(min(hits, key=lambda x: math.dist(a, x)))
-            return out
-        out.append(b)
-        if t < len(link) - 1:
-            _near = min(((seg_dist(b[0], b[1], c, d), c, d) for c, d in others), key=lambda z: z[0])
-            if _near[0] <= _TOUCH_GAP:
-                # LAND ON THE WAY, not beside it: the web counts two lanes as joined at 4 ft, and a
-                # link cut at a vertex 3.9 ft off rounds to a piece - the first cut of this pass
-                # took the reference hamlet's web apart that way.
-                foot = seg_closest(b[0], b[1], _near[1], _near[2])
-                if math.dist(b, foot) > 0.5:
-                    out.append(foot)
-                return out
-    return out
-
-
-def _unretrace(pts: Poly) -> Poly:
-    """Collapse an out-and-back in a polyline: a vertex whose two neighbors coincide is a spur to
-    nowhere, and both it and the return vertex go. A join link is routed from a piece's END, and the
-    router's first hop is free to land on the piece's own next vertex - so prepending the whole link
-    drew `A -> B -> A' -> B -> ...`, a 180-degree hairpin the eye reads as a loop (cohort seed 07,
-    feature 137 T03: lane 1 went 20 ft out to its old end and 20 ft back). Splicing is the one place
-    this shape is made, so it is undone here rather than by a general smoothing pass.
-
-    Research: no doubling back - research/questions/0081-village-lanes.drawing.html: an out-and-back collapsed"""
-    out = [p for k, p in enumerate(pts) if k == 0 or math.dist(p, pts[k - 1]) > 0.5]
-    k = 1
-    while k < len(out) - 1:
-        if math.dist(out[k - 1], out[k + 1]) <= 2.0:
-            del out[k : k + 2]
-            k = max(1, k - 1)
-        else:
-            k += 1
-    # A polyline that folds away entirely (a door path whose link ran back past the door) is left
-    # as it was drawn: an ugly lane is a lane, an empty one is a hole in the web (cohort seed 03).
-    return out if len(out) >= 2 else list(pts)
 
 
 # A JUNCTION LINK CROSSES NOTHING, BUT IT MAY BRUSH A FENCE. The 29 ft gaps this pass closes are
@@ -262,10 +108,6 @@ def _turn_deg(a: Pt, b: Pt, c: Pt) -> float:
     if n1 < 1e-6 or n2 < 1e-6:
         return 0.0
     return math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2)))))
-
-
-def _plen(pts: Poly) -> float:
-    return sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1))
 
 
 def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly], gap: float = TRACK_FABRIC_GAP) -> Pt:
