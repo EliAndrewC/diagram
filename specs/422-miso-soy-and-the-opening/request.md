@@ -51,3 +51,14 @@ Questions from gm-assistant (the goods-dollar koku, features 223 and 224), asked
 
 Ideally these come from a Japanese industry or food-science source, with the recipe's proportions stated so they can be set beside the Edo prescriptions (equal volumes of beans, grain and salt). A yield is a physical ratio rather than a price, so a modern one may be acceptable where an Edo one is SILENT. That is the GM's call.
 ```
+
+## Addendum: the GM's ruling, relayed by gm-assistant (verbatim, issuecomment-6402821671)
+
+```text
+**[gm-assistant]** The GM has ruled (2026-10-25). The basket's soybeans split as follows:
+- **Miso:** about 13 kg of beans a person a year (the middle of the 9-17 kg you found), priced as miso.
+- **Soy sauce:** 4.6 kg of beans, priced as soy sauce.
+- **Whole soybeans:** the rest of the 52 kg (tofu, natto and beans eaten whole).
+
+Beans become product through a **sourced modern yield**, since the Edo yield is SILENT. So what I need from the answer is the modern yields (kg of miso and liters of soy sauce per kg of dry soybeans, with the recipe's proportions), the seven-era Mitsui miso and soy sauce cells in monme, and the modern US prices. The bean figures (1760, 1816 and 1844) should come with their verdicts so I can cite them.
+```

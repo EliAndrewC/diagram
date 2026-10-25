@@ -23,8 +23,16 @@ rate (`money-conversions.json`, `units.monme.silver_g`, from 0287), labeled; 024
 stay as 0249 states them, and the new question says which rate each figure uses (gm-assistant takes the monme at its era rates:
 #18 issuecomment-6402725625).
 
+**The GM's ruling** (`request.md`, second addendum): the basket's soybeans split into about 13 kg of beans for miso, 4.6 kg for
+soy sauce and the rest whole, converted to product by a sourced modern yield. So the page must give, each with its verdict: the
+bean figures (1760, 1816, 1844), the modern yields with their proportions, and the seven eras' Mitsui cells in monme. Say how the
+findings stand against the ruling; do not restate the ruling as a finding.
+
 **Already in the record - name by file, do not repeat:** 0249 (the basket; feature 420 added the Mitsui Kyoto miso and soy sauce
 of 1745-54 at 3.11 g), 0286 (the Japanese eras), 0301 and 0302 (observed or reconstructed, era by era), 0262 (sake), 0273 (salt).
+
+**Units** (plan review): every price is stated per kg or per liter (Q2's grams of silver a kg or a liter; Q3's dollars a kg or a
+liter), beside the source's own unit.
 
 ## Your items
 
@@ -36,7 +44,8 @@ of 1745-54 at 3.11 g), 0286 (the Japanese eras), 0301 and 0302 (observed or reco
      yield (SILENT); Edo's 1821 soy sauce arrivals only if a readable source names the document, as an upper bound, the population
      assumption stated with its source or left out; Bassino and Ma's 52 kg from their calorie and protein target (their words) and
      their 1921-25 12.9 kg; the tofu and natto remainder as above; and the MODERN yields gm-assistant's addendum asks for (kg of
-     miso per kg of dry soybeans for a rice-koji miso; liters of soy sauce per kg of soybeans with equal parts wheat), from
+     miso per kg of dry soybeans for a rice-koji miso; liters of soy sauce per kg of soybeans with equal parts wheat), preferably
+     from a Japanese industry or food-science source (any sourced yield given with its source named), from
      `passes/q1-yields.md`, each with its source's proportions set beside the Edo prescriptions', labeled modern; whether a
      modern yield may stand in for an Edo one is the GM's call, not the page's.
    - **What they cost, era by era**: a table of the Mitsui means per era (n, mean, range; miso per 10 kan, soy sauce per koku;

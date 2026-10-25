@@ -22,6 +22,9 @@ says, write what it says, or SILENT. Every conversion and ratio is this project'
 to era), 0295 (the three metals; the recoinages of 1859-60), 0286, 0301 and 0302 (feature 420), 0288, 0299 (modern US basket goods,
 comparative).
 
+**Units** (plan review): every price is stated per kg or per liter (Q2's grams of silver a kg or a liter; Q3's dollars a kg or a
+liter), beside the source's own unit.
+
 ## Your items
 
 1. **A new question** in "Money and prices", `subject=money`, its title asking which goods' prices the opening of the ports

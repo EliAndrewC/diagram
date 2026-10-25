@@ -33,7 +33,8 @@ divided per adult is this project's arithmetic, labeled); failing that, the soyb
 Edo-period practice, and the share of a household's soybeans going to miso, soy sauce, tofu and natto; the source of Bassino and
 Ma's 52 kg; and the remainder of the 52 kg left for tofu and natto, or its SILENT (spec review: owed in either branch). No
 quantity is estimated. The addendum's modern yields (kg of miso per kg of dry soybeans, rice-koji miso; liters of soy sauce per kg
-of soybeans, equal parts wheat) from a Japanese industry or food-science source, its proportions stated beside the Edo
+of soybeans, equal parts wheat), preferably from a Japanese industry or food-science source, any sourced yield given with its
+source named, its proportions stated beside the Edo
 prescriptions', labeled modern (`passes/q1-yields.md`). 0249 gets a pointer.
 
 ## D2 - miso and soy sauce era by era (Q2; FR-001; acceptance 2)
