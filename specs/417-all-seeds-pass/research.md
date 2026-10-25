@@ -23,15 +23,79 @@ of 500 is about 23 minutes; zero failures in 500 bounds the true rate under
 
 ## R2 - the inventory (FR-002)
 
-Written by T02: every repair pass, every rule asked only of a finished map, every rule coded twice, and every finished-map
-check the generator runs mid-map, with where it is and which point of the rule it breaks. Seeded from the session's survey of
-2026-10-24 (to be completed, not trusted):
+Observed 2026-10-25 (method: three `Explore` agents on `sonnet` , plan D10, and the session's own sample) - the lane web; the homesteads, homestead parts and water;
+the rest of the engine - each given D3's five searches and five classes. Their replies are kept verbatim in `inventory/`
+(`ways.md`, `homesteads-water.md`, `rest.md`): each entry is `file:function (line) | class | what it does`. The session
+checked a sample of each against the code before taking it (all held: `tails.py` `_ALONG_DEG` 25 against `_DOUBLED_DEG` 15;
+`route.py`'s literal 140 / 50 / 40; the 40 ft tail in `sweeps`, `bund`, `settle/shapes`, `clearance`; `wells.reach_wells`
+asking `dry_households` of the placed map; `persimmon_reseat.give_way`; `belt_law._cut`; `twins.drop_twin_deliveries` after
+the comb draws; `driver.generate` returning `failures=[]`; `belt_polygon`'s ladder falling through to its last rung), and
+ran the three cross-package searches itself (`inventory/cross.md`): every rule `cohort_audit` asks is called by no placer, and
+the placers that mention one carry their own copy - so the audit-only rules are, nearly all, rules coded twice as well.
 
-- the lane web's settle: `hamletgen/ways/settle/stage.py:52` `STEPS` - sixteen repair functions looped to a fixpoint, then
-  `last_resort` (drops ordinary lanes) and `WebRefused`;
-- the passes that repair a laid web: `ways/sweeps.py`, `tails.py`, `joints.py`, `touch.py`, `smooth.py`, `squaring.py`,
-  `weld.py`, `knots.py` (each named in `ways/CLAUDE.md` as a pass after the web is laid);
-- rules asked only of the finished map: `homesteads/row_rules.py` (`row_rules`, `water_rules`, `bamboo_mismatch`),
-  `settlement/homestead_parts/grove_rules.py` (`groves_crossed_by_lanes` and four more), `cohort_audit`'s
-  `farmstead_across_brook`;
-- about fifteen more functions named like repairs in `homesteads/`, `homestead_parts/`, `waterfields/`, `labels/`, unread.
+The classes: P1 not asked before placing; P2 placed then repaired; P3 a finished-map check run in the generator; P4 a drop,
+relaxation, shortfall or refusal where room is the remedy; TWICE a rule coded twice. The groups, each an engine task in
+`tasks.md` (T04-T15), by R1's share of the failures:
+
+| group (observed 2026-10-25; method: the three inventories in `inventory/`) | where | what the inventory found | failures it bears on |
+|---|---|---|---|
+| G1 one lane rule, one predicate | `ways/` | 16 rules coded two to seven times: the doubled-tail angle (25 against 15), the shadow (four bodies), the hook (five), the bend (literals in `route.py`), the 40 ft tail (six), the 25 ft join (seven), the reach to a farmhouse (three), the serve distance, the network tolerance (25 ft against 4 ft), the foul, the dangling end, the street end, the link width, the spur reach, the debris floor | lane_knots, WebRefused |
+| G2 the web laid by the law | `ways/web/stage.py`, `settle/`, `sweeps`, `touch`, `smooth`, `joints`, `tails`, `bund`, `squaring`, `weld`, `knots`, `web/tidy`, `street`, `geom._trim_to_service` | about 25 passes after the lay (several run two or three times) and the settle's 16 steps to a fixpoint (P2); `keeper.unsettled`, `last_resort.lane_breaches` and the reach counts asked of the whole web in the run (P3); `law.LAW` rules with no placer predicate for an ordinary lane - husks, shallow crossings, needle loops, over-and-back, off a ford, oblique, unbridged, undeckable, decks, planks (P1) | lane_knots, WebRefused (about 60%) |
+| G3 refusals and drops in the ways | `last_resort`, `settle/ends`, `track`, `gateway`, `thread`, `route`, `forced`, `reserved.release_seats_along` | ordinary lanes dropped whole, `WebRefused`, `NoDryExit`, spurs given up, angle rules waived where ground blocks, wood seats released (P4) | WebRefused, NoDryExit |
+| G4 seating room | `homesteads/stages`, `capacity`, `growth`, `rolling/gap_ways` | `SiteRefused` on a short margin, `DRY_SPELL` give-up, the rank rounds' drop after round 4, pinched passages across a yard (P4) | SiteRefused (about 15%) |
+| G5 the row village's rules into the row placer | `homesteads/row_rules`, `rows`, `farm_water`, `wells`, `bamboo` | `row_rules`, `water_rules`, `bamboo_mismatch` asked of no candidate (P1); `wells.reach_wells` asking `dry_households` of the placed map (P3); door reach at 8 ft and 12 ft (TWICE); wells over ten recorded, not prevented (P4) | row_rules |
+| G6 the grove rules into the grove placers | `homestead_parts/grove_rules`, `belt_law`, `stands`, `stocking`, `wood_goal`, `grove_fill`, `groves`, `persimmon_reseat`, `rolling/farmsteads`, `fit` | five grove rules asked only by the audit (P1), `fixtures_on_groves` coded four times and `gardens_east_shaded` twice (TWICE); the belt read and repaired as it is planted, trimmed to the wind, copse dropped to stocking and goal, crowns taken out from under a persimmon (P2) | groves_crossed_by_lanes, trees_shading_plots |
+| G7 one stream-crossing rule | `tools/cohort_audit.parts_across_brook` against `_geom/water_index.crosses_a_stream` | the audit's own segment test (TWICE) | farmstead_across_brook |
+| G8 the brook, the sink, the field and the polder | `water/brook`, `brook_course`, `sink`, `water/fit`, `water/polder` | the course repaired then judged, `BrookRefused`; the sink's off-map fallbacks and `SinkRefused`; the field judged as a finished net, `FieldRefused`; the polder's edge wander relaxed, dike gaps added after (P2, P3, P4); the axis test three times, the acute turn three times (TWICE) | BrookRefused, SinkRefused |
+| G9 the paddy cells | `waterfields/settle`, `seams/close`, `ring_rules`, `furrows`, `twins`, `trunks`, `tint`, `polder`, `banks`, `comb` | cells cut then judged, merged or left bare; rings split and welded; twins and stubs deleted after drawing; the needle coded five ways at 15 and 25 degrees, the tract seam at three thresholds (P2, TWICE) | (no seed failure named today) |
+| G10 the hinterland and the land | `hinterland/stages`, `parcels`, `belt`, `land/cover`, `land/wet`, `land/dikes` | dike trees thinned after the yards, holes filled until the bare share passes (P3), woodland regraded, parcel set-backs relaxed, the belt's ladder shipping its last rung fouled, marshes and ways dropped (P2, P4); the frame share three ways (TWICE) | (none named today) |
+| G11 the overlap registry | `overlap/registry`, `matrix`, `taxonomy` | `resync` after every stage and `OverlapRefused` as the backstop (P3, P4); `forest_reveal_x` and the clamp mirrored by hand (TWICE) | OverlapRefused |
+| G12 the rest | `labels/hand_sheet.repair`, `labels/placer`'s least-cost seat, `finish.settle_beads` and the beads dropped twice, `city/bridges` (`UndeckableCrossing`, `_reseat_to_cover`), `byres.draft_byres`' relaxed tiers, `wells._place_wells` (TWICE with `well_at`), `pondstock` asked at reserve and at stage, `cluster.belt_off_canvas` and `seat_has_dry_exit` (TWICE), `washing`, `pondbank`, `marsh` shortfalls | (UndeckableCrossing, a handful) |
+
+Kept (asked before placing; listed in each inventory file under KEPT): the overlap registry's `admits`, `Lawful` and
+`corridor_on_lawful_ground`, `tree.admits`, `_draw_web`, `brook_violations` asked of candidate courses, `sty_seat` (the
+model: it asks the audit's own predicate `fixture_on_band` before placing), `crosses_a_stream`, `bundle_admitted`, and the
+rest the files name. The title's ladder is the one that ends in more room.
+
+**What it says about the work.** The pattern is not one module's: it is in every placer family. The engine tasks are G1-G12;
+G1 and G7, and the parts of every TWICE whose copies hold the SAME value, can be made one predicate without moving a map;
+everything else moves maps.
+
+## R4 - the principle, drafted for the GM (FR-003, D6)
+
+Proposed as a new principle of the constitution, in these words, for the GM to approve or change:
+
+> **XVII. Placed Right, Never Repaired.** Every rule a map keeps is ONE predicate. The placer that could break it asks it of
+> each candidate before the candidate is placed, and places only what it admits. Nothing is placed and then moved, cut,
+> thinned or dropped to make it lawful. A check of the finished map calls the same predicate, runs in the cohort and the
+> tests only - never inside the generator's run - and its firing is an engine defect. Where no candidate is admitted, the
+> answer is more room (the GM, 2026-10-12, "room before packing"), never a relaxed rule, a dropped feature or a refused map.
+> A rule coded in two places is a defect of this principle. (Feature 417; the GM, 2026-10-24: "a general rule that 'place
+> then check' is not something we want **anywhere** in the codebase".)
+
+## R3 - the baseline: 1,000 fresh seeds at main (FR-001, T01)
+
+Observed 2026-10-25; method: `make cohort N=1000 SEED=3000101 FRESH=0 JOBS=5` in a detached worktree at main `14214b115`
+(seeds 3000101-3001100, never rolled before), 58 min 17 s wall under `time -v`; tallied by `make fresh-tally COMMIT=14214b115
+SINCE=20261025T041035Z` from its record `dev/cohort-log/20261025T041035Z-base417-1251124.json`.
+
+| form (observed 2026-10-25; method: as above) | failed | rolled | rate |
+|---|---|---|---|
+| all | 125 | 1,000 | 12.5% |
+| nucleated | 58 | 524 | 11% |
+| dispersed | 10 | 270 | 4% |
+| linear | 57 | 206 | 28% |
+
+| cause (observed 2026-10-25; method: as above; a seed may fail more than one) | seeds |
+|---|---|
+| `refused:WebRefused` | 49 |
+| `lane_knots` | 31 |
+| `refused:SiteRefused` | 13 |
+| `row_rules` | 11 |
+| `refused:OverlapRefused` | 8 |
+| `refused:SinkRefused` | 7 |
+| `groves_crossed_by_lanes` | 4 |
+| `farmstead_across_brook` | 2 |
+| `refused:BrookRefused`, `refused:NoDryExit` | 1 each |
+
+The lane web (`WebRefused` and `lane_knots`) is in 80 of the 125; seating 13; the row rules 11. The order is the spec's tally's.

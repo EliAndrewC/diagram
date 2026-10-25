@@ -28,3 +28,7 @@ After filing, the session asked whether to fold open feature 394 (seed regressio
 `specs/394-seed-regressions-refuse-a-landing/request.md`) into 417, and whether to start the plan:
 
 > Yes fold 394 into 417 then start on 417, thanks.
+
+Mid-feature, 2026-10-25, while T03's inventory was coming in:
+
+> Okay, I'm heading to bed, and I think that rather than having you churn all night on the feature, I want you to do the parts of it up until the point where you, try to actually fix everything. So, definitely finish out doing the tasks that involve, turning off automated checks, and then replacing them with just having the algorithm place correctly in the first place. Etc. Do all of that stuff, and then stop so we can slowly and deliberately go through the actual fixing where we get more seeds to pass, etc.
