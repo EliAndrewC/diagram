@@ -75,3 +75,8 @@ the same rule is to apply to Edo 1860-67 and Beijing 1900-19 on evidence.
 
 - Changing the basket or the conversion table: gm-assistant's.
 - Estimating a quantity no source gives.
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-25): FAITHFUL. Carried forward: Q1's tofu-and-natto remainder of the 52 kg is owed in the
+  answer whether or not consumption figures are found (Acceptance 1, the request's "Figure needed").
