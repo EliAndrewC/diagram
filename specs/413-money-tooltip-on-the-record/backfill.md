@@ -293,3 +293,5 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0299-what-do-the-basket-goods-cost-in-the-us-today-and-how-much-does-an-american-use.notes | * | as its question: modern US dollars of 2025-2026 quoted from the retailer, the farm-price release and a news report, no era carries
 - 0300-what-does-a-square-meter-of-housing-cost-a-year-in-the-us-today | * | feature 420: modern US dollars of 2024-2027 (rents, the voucher rents and building costs, and this project's arithmetic on them), in a coin and a year no era carries
 - 0300-what-does-a-square-meter-of-housing-cost-a-year-in-the-us-today.notes | * | as its question: modern US rents and building costs of 2024-2027 quoted from the agencies and the builders' survey, no era carries
+- 0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.notes | 1 bu | the Chinese length bu (步, 5 or 6 chi) in a quoted definition of the li, not the coin
+- 0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.notes | 360 bu | the same quoted definition: a li of 300 or 360 bu, a length
