@@ -280,40 +280,8 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
   lattice 14 ft off water where 0055 and 0014 put the path on the bank) are cited with their departures, as above. R9 counts each kind,
   and every claim whose description is reverted after a second wrong verdict - its research label kept (GUESS naming its pass, or the citation), never restored to UNRESEARCHED. Rendering: none.
 
-### T28 Approach (checklist part A)
-
-1. **The goal, in the world.** A session fixing a seed sees, for every number it is about to chase, whether the number is the
-   record's or ours.
-2. **The constraints.** D31: no new class; `make tunables` derived from the claims; the checklist's A3; the 47 map-code and 45
-   `pack_audit` constants given claims.
-3. **Where each comes from.** G: the GM 2026-10-25 (D29). O: the tool's shape.
-4. **Do they describe the world here?** n/a - tooling and labels.
-5. **The order.** Before T29's relabels land (the tool reads them), before T31.
-6. **The exits.** A drafted claim impl-drift rules wrong is fixed and re-checked once; a second wrong is reverted to no claim
-   and listed.
-7. **The search smell.** n/a.
-8. **The budget.** The tool and its tests land in one tooling landing; the claims, one claims round.
-9. **Done, measured.** `make tunables` and `INLINE=1` land and are tested (red without); every one of the 92 constants carries
-   a claim impl-drift found IN-STEP; A3 and the doctrine name the tool.
-10. **Before moving a constant.** n/a - no value moves.
-11. **Before fitting things into room.** n/a.
-
-### T29 Approach (checklist part A)
-
-1. **The goal, in the world.** A claim labeled UNRESEARCHED means no one has looked; one a pass found silent says GUESS and
-   which pass.
-2. **The constraints.** D32, D36; the claim grammar; impl-drift's verdicts.
-3. **Where each comes from.** G: the GM 2026-10-25. R: the passes' replies (`evidence/t29/`).
-4. **Do they describe the world here?** Per claim, the pass's reading.
-5. **The order.** The 247 first (this landing), T36 after, both before T31's deletion.
-6. **The exits.** Silent: GUESS. Answered as a convention: cited. Answered with a departure, or contradicted: cited, landing
-   DRIFTED by the round arbiter's ruling, the gap in T32-T35.
-7. **The search smell.** No label is changed to make a round pass; a claim impl-drift rules wrong twice keeps its research label with its description reverted, listed in R9.
-8. **The budget.** The passes (done), three claims rounds.
-9. **Done, measured.** The landing's claims gate green; R9 with the counts.
-10. **Before moving a constant.** n/a - no value moves.
-11. **Before fitting things into room.** n/a.
-
+<!-- plan-archive: T28 to T28 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
+<!-- plan-archive: T29 to T29 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 ### T30 Approach (checklist part A)
 
 1. **The goal, in the world.** A question whether a finding applies to a form, or a choice the record is silent on, never

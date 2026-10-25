@@ -447,3 +447,39 @@ Owed by cohort@20261025T121445Z (18 landing seeds newly failing `track_ends_off_
 8. **Every route measured?** The probe at the end of `stage_web` (R6), the finished manifests in the landing cohort, seed 5's
    manifest from `make hamlet`.
 9. **After a ruling:** no arbiter trigger fired (one refused cohort; the gate was green both times).
+<!-- plan-archive: archived 2026-10-25 -->
+### T28 Approach (checklist part A)
+
+1. **The goal, in the world.** A session fixing a seed sees, for every number it is about to chase, whether the number is the
+   record's or ours.
+2. **The constraints.** D31: no new class; `make tunables` derived from the claims; the checklist's A3; the 47 map-code and 45
+   `pack_audit` constants given claims.
+3. **Where each comes from.** G: the GM 2026-10-25 (D29). O: the tool's shape.
+4. **Do they describe the world here?** n/a - tooling and labels.
+5. **The order.** Before T29's relabels land (the tool reads them), before T31.
+6. **The exits.** A drafted claim impl-drift rules wrong is fixed and re-checked once; a second wrong is reverted to no claim
+   and listed.
+7. **The search smell.** n/a.
+8. **The budget.** The tool and its tests land in one tooling landing; the claims, one claims round.
+9. **Done, measured.** `make tunables` and `INLINE=1` land and are tested (red without); every one of the 92 constants carries
+   a claim impl-drift found IN-STEP; A3 and the doctrine name the tool.
+10. **Before moving a constant.** n/a - no value moves.
+11. **Before fitting things into room.** n/a.
+
+<!-- plan-archive: archived 2026-10-25 -->
+### T29 Approach (checklist part A)
+
+1. **The goal, in the world.** A claim labeled UNRESEARCHED means no one has looked; one a pass found silent says GUESS and
+   which pass.
+2. **The constraints.** D32, D36; the claim grammar; impl-drift's verdicts.
+3. **Where each comes from.** G: the GM 2026-10-25. R: the passes' replies (`evidence/t29/`).
+4. **Do they describe the world here?** Per claim, the pass's reading.
+5. **The order.** The 247 first (this landing), T36 after, both before T31's deletion.
+6. **The exits.** Silent: GUESS. Answered as a convention: cited. Answered with a departure, or contradicted: cited, landing
+   DRIFTED by the round arbiter's ruling, the gap in T32-T35.
+7. **The search smell.** No label is changed to make a round pass; a claim impl-drift rules wrong twice keeps its research label with its description reverted, listed in R9.
+8. **The budget.** The passes (done), three claims rounds.
+9. **Done, measured.** The landing's claims gate green; R9 with the counts.
+10. **Before moving a constant.** n/a - no value moves.
+11. **Before fitting things into room.** n/a.
+
