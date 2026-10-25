@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-25T06:08:09Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 267,
+  "result": "green",
+  "commit": "624fb4a28",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10277,
+  "host": {
+    "load": [
+      2.76,
+      12.54
+    ],
+    "mem_avail_mb": [
+      7523,
+      5895
+    ],
+    "cpu_temp_c": [
+      99.0,
+      78.0
+    ],
+    "stall_s": {
+      "cpu": 3.7,
+      "io": 2.3,
+      "io_full": 1.7,
+      "memory": 0.8
+    },
+    "throttle_ms": {
+      "core": 48952,
+      "package": 16011
+    }
+  },
+  "phases": {
+    "preflight": 10.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 0.0,
+    "reference": 1.0,
+    "pytest": 241.0,
+    "floors": 18.0,
+    "test-full": 263.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/overlap/matrix.py",
+  "collected": 10277
+}
