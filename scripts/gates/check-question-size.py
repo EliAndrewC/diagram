@@ -55,9 +55,17 @@ def question_of(path: pathlib.Path) -> pathlib.Path:
     return path
 
 
+#: A money mark (feature 413) is markup around words already counted: `<span class="money" data-amount=... data-era=...>20
+#: mon</span>` counts as `20 mon`. Feature 412's era marks (markup only, owing no record check) put 0286 from about 14,400 bytes
+#: to 30,546 and eight other questions over the cap without a word of prose changing; a split for markup would part findings
+#: for nothing. ACCEPTED COST (feature 412, the session): a check's bundle still carries the marks (about 70 bytes each), since a
+#: bundle without them would make every EDIT that crosses a mark miss the file it is applied to.
+_MONEY = re.compile(r'<span class="money"[^>]*>(.*?)</span>', re.S)
+
+
 def size(question: pathlib.Path) -> int:
-    """The question's prose, in bytes - its notes and originals are not counted (feature 292)."""
-    return question.stat().st_size
+    """The question's prose, in bytes - its notes and originals are not counted (feature 292), nor its money marks' markup."""
+    return len(_MONEY.sub(r"\1", question.read_text(encoding="utf-8")).encode("utf-8"))
 
 
 def changed(root: pathlib.Path) -> list[pathlib.Path]:
