@@ -74,6 +74,21 @@ def test_inline_numbers_its_unit_never_states_are_found_and_stated_or_trivial_on
     assert [v for _f, _l, v in tu.unstated(SRC, {})] == [14.0, 6.0], "a unit with no claim states nothing"
 
 
+NESTED = '''
+class Placer:
+    def place(self, x):
+        def inner(y):
+            return y + 22.0
+        return inner(x) + 6.0
+'''
+
+
+def test_a_nested_function_s_numbers_are_its_enclosing_unit_s() -> None:
+    found = tu.unstated(NESTED, {"place": "the step - GUESS: 22 ft"})
+    assert [(fn, v) for fn, _line, v in found] == [("place", 6.0)], "22, in the nested inner, is stated by place's claim"
+    assert {fn for fn, _l, _v in tu.unstated(NESTED, {})} == {"place"}, "inner is no unit of its own"
+
+
 def test_the_inline_render_counts_by_file() -> None:
     found = [("l7r/a.py", 3, "f", 14.0), ("l7r/a.py", 9, "g", 6.0), ("l7r/b.py", 2, "h", 7.5)]
     text = tu.render_inline(found)
