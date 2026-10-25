@@ -320,7 +320,7 @@ class SitePlan:
 
         Research:
             head race leaves leaning downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: OFFTAKE_DEG off the fall
-            turned away from the brook's flank - UNRESEARCHED"""
+            turned away from the brook's flank - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: the intake stands on the bank of the land it serves (a modern engineering lecture); the race's turn away from the brook is ours"""
         return self.down_deg - self.brook_side * OFFTAKE_DEG
 
     @property
