@@ -270,6 +270,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T19 part B (2026-10-25T12:26Z)": {
+   "sha256": "bcc49829fcbee020c43a3f53965ab06a0b2557cb1d2aa208034704b320b8dfe1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1619,6 +1625,34 @@
      "summary": "Done measured as at 11:58Z, and T27's task carries D28's dispersed-track question for the GM.",
      "class": "within",
      "why": "D28 itself says the dispersed track's end goes to the GM with T27; recording it on T27's task line implements that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T19 part B (2026-10-25T12:26Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T19B-1 (D28, inner end by distance)",
+     "summary": "track_ends_off_the_web reads the connector's inner end by distance to the other ways, not as the end inside the cropped manifest's W x H.",
+     "class": "within",
+     "why": "A correction that makes the predicate ask what D27(a) already defined (the end nearer the other ways); the W x H reading named the way-out end on a cropped frame, so it was checking the wrong end. The 4 ft JOIN_TOL bar is unchanged and nothing placed changes."
+    },
+    {
+     "id": "T19B-2 (D28, map-with-a-web scope; dispersed track end to the GM via T27)",
+     "summary": "The predicate asks only maps with a web (a lane besides the track and the field spur), so the 13 dispersed seeds are not named; whether the dispersed track's end among the farms is 0081's 'open country' goes to the GM with T27.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "On the request's purpose ('all seeds passing' as a real baseline, the finished-map check being the measurement), the carve-out would be fatal if it hid a failure to get a green cohort. It does not. (1) The rule it carries is 'the track meets the lanes', and a dispersed map has no lanes besides the track and the spur for it to meet, so the rule has no object there. (2) The scope 'on a map with a web' was already in D27(a), which was accepted; D28 applies it and adds no new exemption. (3) The only open question, whether a dispersed track ending 154 ft from the nearest house is acceptable, is not settled by the session. It goes to the GM as T27, so no fidelity question is decided by completing the GM's thought. (4) Before D27, law.dangling_lane_ends exempted the connector on every map, so no dispersed seed is let off a check it used to face. Only one class of case is excepted (dispersed form, no web), so there is no bundling seam."
+    },
+    {
+     "id": "T19B-3 (next step: cohort-landing then make land)",
+     "summary": "Re-run make cohort-landing with the corrected predicate (54 of 54, observed 2026-10-25, record b1133025b), then make land.",
+     "class": "within",
+     "why": "A measurement before the landing, as T19's original steps already required. It is not a new decision."
     }
    ]
   }

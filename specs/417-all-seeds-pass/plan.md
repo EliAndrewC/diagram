@@ -288,3 +288,23 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 9. **Done, measured.** As at 11:58Z; and T27's task carries D28's question about the dispersed track for the GM.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
+
+### T19 part B (2026-10-25T12:26Z)
+
+Owed by cohort@20261025T121445Z (18 landing seeds newly failing `track_ends_off_the_web`).
+
+1. **What exactly is refusing?** The new finished-map check, on two cases the probe could not see (D28): the way-out end of
+   the track read as "inside" the cropped manifest's `W` x `H` (18 seeds), and, read by distance, every dispersed seed (13),
+   whose `stage_web` short-circuits before the probe's log and which lays no web. No other verdict moved; the gate was green.
+2. **A3 again.** Yes: 0081's rule is about a track meeting the lanes; a map with no lanes besides the track and the spur has
+   none to meet, and whether its end is "open country" is the GM's (D28, T27).
+3. **A4 again.** n/a - nothing placed changes.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: the predicate asks what D27(a) defined (the inner end), and the 4 ft bar is unchanged.
+6. **The one-sentence test.** "Why did the cohort refuse?" - the check asked the wrong end on a cropped frame, and asked a
+   form that has no web.
+7. **The next step is a measurement.** `make cohort-landing` with the predicate so read: 54 of 54 (observed 2026-10-25; its
+   record committed as `b1133025b`), then `make land`.
+8. **Every route measured?** The probe at the end of `stage_web` (R6), the finished manifests in the landing cohort, seed 5's
+   manifest from `make hamlet`.
+9. **After a ruling:** no arbiter trigger fired (one refused cohort; the gate was green both times).
