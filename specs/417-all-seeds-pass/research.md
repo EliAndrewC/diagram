@@ -224,3 +224,41 @@ Not followed (print only or unreachable): 道路構造令の解説と運用's �
 quotes its criterion as ">70 degrees"), Thomson and Richardson's original stroke threshold, Helbing's Phys. Rev. E paper,
 USFS / NPS trail junction guidance, arXiv 2511.06747. T16's doubled tail is still set down: the pass supports the page's
 20 as a convention and gives no reason for 25; which value the two roles (`_ALONG_DEG`, `_DOUBLED_DEG`) share is the GM's.
+
+## R8 - the settle's steps, each switched off (T31, D35)
+
+Observed 2026-10-25; method: D35, in the detached worktree `probe31` at the clone's HEAD of that morning, each step's every
+position in `settle/stage.py` `STEPS` filtered out by a line that never lands, then `make cohort N=48 FRESH=0 JOBS=3` and `make
+map` on the five pool hamlets, the manifests compared with `git diff`. The baseline is the landing cohort's 54 of 54 and the
+committed pool. The table fills as the probes run (about 13 min a step at 3 workers).
+
+| step off (observed 2026-10-25; method: as above) | fixed and pinned | pool manifests that moved |
+|---|---|---|
+| (T16: `_ALONG_DEG` and `_DOUBLED_DEG` both at 20) | 53/54 - seed 40 `WebRefused` (a shallow crossing left) | none |
+| `settle_husks` | 54/54 | none |
+| `square_every_crossing` | 54/54 | Inashiro, Sawada |
+| `settle_shapes` | 54/54 | Sawada |
+| `settle_way_outs` | 54/54 | Sawada |
+| `settle_ends` | 53/54 - seed 21 `lane_knots` (2 knots, 19.8 ft) | (see the log) |
+
+## R9 - are the UNRESEARCHED labels true (T29, D32)
+
+Observed 2026-10-25; method: research passes (`research-pass`, the record and the archive first, then the web), one per group of
+claims sharing a question, each given its claim list; their replies are saved verbatim in `evidence/t29/pass-*.md` and their
+claim lists beside them. The 247 of the modules this feature changes went to passes A1, A2, B, C and D (and 30 algorithmic ones
+to no pass, E); the other 476 to P1-P7.
+
+What the passes found, by claim (the 247; observed as above):
+
+| pass | claims | answered by a source | contradicted | searched, silent | no source could speak to it |
+|---|---|---|---|---|---|
+| A1 lane setbacks | 41 | 8 | 7 | 10 | 16 |
+| A2 lane form | 52 | 7 | 0 | 16 | 29 |
+| B seating | 46 | 8 | 0 | 9 | 24 |
+| C fixtures | 49 | 4 | 1 | 13 | 30 |
+| D track, field, water | 29 | 8 | 0 | 12 | 7 |
+
+So the GM's question is answered: most `UNRESEARCHED` labels in these modules were not true of the search - the record had
+already looked for many of them (RECORD-SILENT-BEFORE), and a pass has now looked for the rest. 165 are relabeled bare `GUESS`,
+each account opening with its reason and its pass. The ones a source answers are cited or recorded as the record has them; the
+ones a source contradicts are T32-T35, set down for the fixing pass.

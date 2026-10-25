@@ -1,0 +1,86 @@
+- docs/building-programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach ("the well or basin"; the required item is `well`)
+    <!-- Research: a well as the purification stop beside the approach ("the well or basin"; the required item is `well`) - UNRESEARCHED: a well drawn as the purification stop beside the approach, the page attesting only the basin -->
+- docs/building-programs.md::Country shrine (a village district's shrine)#bell tower band 6-16 by 6-16 ft
+    <!-- Research: bell tower band 6-16 by 6-16 ft - UNRESEARCHED: no account says whether a village shrine kept by a monk had its bell -->
+- docs/building-programs.md::Country shrine (a village district's shrine)#burial ground placed outside the grove
+    <!-- Research: burial ground placed outside the grove - UNRESEARCHED: the burial ground lies outside the grove -->
+- docs/building-programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan
+    <!-- Research: dwelling entry tagged genkan - UNRESEARCHED: Hoshigaoka's sheet tags its dwelling's plain earth-floored entry vestibule as genkan; 0104's genkan is a samurai house's shikidai entrance, which does not bear on a village monk's vestibule -->
+- docs/building-programs.md::Country shrine (a village district's shrine)#dwelling kitchen floor
+    <!-- Research: dwelling kitchen floor - UNRESEARCHED: Hoshigaoka's sheet stipples the whole kitchen as earth floor with the kamado in its middle -->
+- docs/building-programs.md::Country shrine (a village district's shrine)#sacred tree drawn as the biggest crown in the precinct
+    <!-- Research: sacred tree drawn as the biggest crown in the precinct - UNRESEARCHED: no sacred tree's size was found -->
+- docs/building-programs.md::Country shrine (a village district's shrine)#wealth knob roofing
+    <!-- Research: wealth knob roofing - UNRESEARCHED: thatch against tile by wealth -->
+- docs/building-programs.md::Country shrine (a village district's shrine)#well and basin both drawn
+    <!-- Research: well and basin both drawn - UNRESEARCHED: where a map sites the shrine's well elsewhere, the well and the basin are both drawn -->
+- docs/building-programs.md::Magistrate's manor (county magistracy)#alley behind the office hall
+    <!-- Research: alley behind the office hall - UNRESEARCHED: a narrow alley between the hall and the divider wall, which household traffic uses -->
+- docs/building-programs.md::Magistrate's manor (county magistracy)#cart route to granary and stables
+    <!-- Research: cart route to granary and stables - UNRESEARCHED: a cart route from the gates to the granary and stables is required -->
+- docs/building-programs.md::Magistrate's manor (county magistracy)#dais band on the office hall's south face
+    <!-- Research: dais band on the office hall's south face - UNRESEARCHED: the dais band faces south, toward the hearing court -->
+- docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate width
+    <!-- Research: divider gate width - UNRESEARCHED: ~6 ft, narrower than the main gate -->
+- docs/building-programs.md::Magistrate's manor (county magistracy)#garrison emphasis knob
+    <!-- Research: garrison emphasis knob - UNRESEARCHED: armory and watchtower in bandit country -->
+- docs/building-programs.md::Magistrate's manor (county magistracy)#justice-front furniture knob
+    <!-- Research: justice-front furniture knob - UNRESEARCHED: petition window, grievance drum or bell -->
+- docs/building-programs.md::Magistrate's manor (county magistracy)#outer service gate for muck and prisoners
+    <!-- Research: outer service gate for muck and prisoners - UNRESEARCHED: the same gate taking muck and prisoner transfers from a busy outer court -->
+- docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars other than the dojo
+    <!-- Research: resident particulars other than the dojo - UNRESEARCHED: dedication by county type, a relic, a workshop, designed per manor with the GM -->
+- docs/building-programs.md::Magistrate's manor (county magistracy)#service buildings in the outer court
+    <!-- Research: service buildings in the outer court - UNRESEARCHED: the stables, cell and granary in the office court, in front of the divider (0090 puts a jail inside the walls but names no court) -->
+- docs/building-programs.md::Magistrate's manor (county magistracy)#tenure character knob
+    <!-- Research: tenure character knob - UNRESEARCHED: continuity accretes alcove, gardens, oddities -->
+- docs/building-programs.md::Magistrate's manor (county magistracy)#wall display
+    <!-- Research: wall display - UNRESEARCHED: most impressive on the public approach, plainer at the rear -->
+- docs/buildings.md::Checklist for a new diagram#an entrance on every lodging
+    <!-- Research: an entrance on every lodging - UNRESEARCHED: each lodging block drawn with its own entrance so the plan shows how it is entered -->
+- docs/buildings.md::Checklist for a new diagram#clear gateways
+    <!-- Research: clear gateways - UNRESEARCHED: nothing stands in a passage -->
+- docs/buildings.md::Checklist for a new diagram#gate hierarchy
+    <!-- Research: gate hierarchy - UNRESEARCHED: the ceremonial main gate widest -->
+- docs/buildings.md::Composition: perimeter buildings + a named court-spine#perimeter-first placement order
+    <!-- Research: perimeter-first placement order - UNRESEARCHED: N/S rows own the corners, then E/W, then the divider hall -->
+- docs/buildings.md::Fire-water tubs#a short face's tub round the corner nearest its door
+    <!-- Research: a short face's tub round the corner nearest its door - UNRESEARCHED: a 12 ft face leaves no seat beside a 6 ft door and its held approach, so the tub stands on the face round the nearer corner, still within the 10.5 ft -->
+- docs/buildings.md::Fire-water tubs#a tub never on a well glyph; moved to the door's other side
+    <!-- Research: a tub never on a well glyph; moved to the door's other side - UNRESEARCHED: the two point glyphs would smear into one blob, so a tub is moved to the door's other side, or round the corner nearest it -->
+- docs/buildings.md::Fire-water tubs#a tub that does not fit a narrow alley moved to open ground
+    <!-- Research: a tub that does not fit a narrow alley moved to open ground - UNRESEARCHED: a 7.6 px tub does not fit a 9 px alley between two buildings, so it is moved to the door's other side or a seat facing open ground -->
+- docs/buildings.md::Inner court (private / sacred)#genkan porch size
+    <!-- Research: genkan porch size - UNRESEARCHED: ~40x14 px, ~13x4.7 ft -->
+- docs/buildings.md::Inner court (private / sacred)#kamado range size
+    <!-- Research: kamado range size - UNRESEARCHED: ~6 x 2.5 ft with two fire mouths -->
+- docs/buildings.md::Latrines and the rear service strip#privies away from food prep
+    <!-- Research: privies away from food prep - UNRESEARCHED: no page we read sets a privy's distance from a kitchen -->
+- docs/buildings.md::Latrines and the rear service strip#rear service alley
+    <!-- Research: rear service alley - UNRESEARCHED: ~6-10 ft alley when little goes behind -->
+- docs/buildings.md::Outer court (administrative / public)#cell kept well under the barracks
+    <!-- Research: cell kept well under the barracks - UNRESEARCHED: the cell drawn smaller than the barracks; no page ranks them -->
+- docs/buildings.md::Outer court (administrative / public)#hearing cart slot
+    <!-- Research: hearing cart slot - UNRESEARCHED: a cart-passable ~8-10 ft slot south of the hearing court -->
+- docs/buildings.md::Outer court (administrative / public)#kura granary door on the apron
+    <!-- Research: kura granary door on the apron - UNRESEARCHED: the plastered granary's door set on the loading apron, where the carts stand -->
+- docs/buildings.md::Outer court (administrative / public)#practice ground shared with cart staging or muster
+    <!-- Research: practice ground shared with cart staging or muster - UNRESEARCHED: the open ground serves also as cart staging or muster -->
+- docs/buildings.md::Outer court (administrative / public)#tax archive strongroom role
+    <!-- Research: tax archive strongroom role - UNRESEARCHED: ledgers plus coin and in-kind valuables in one kura -->
+- docs/buildings.md::Sacred features#approach width
+    <!-- Research: approach width - UNRESEARCHED: gravel strip ~10 ft wide -->
+- docs/buildings.md::Sacred features#arch dimensions
+    <!-- Research: arch dimensions - UNRESEARCHED: 15 ft beam, 1.2 ft posts, 10.3 ft clear -->
+- docs/buildings.md::Sacred features#kitchen garden at the dwelling
+    <!-- Research: kitchen garden at the dwelling - UNRESEARCHED: the kitchen garden at the dwelling's back -->
+- docs/buildings.md::Sacred features#workshop colonnade
+    <!-- Research: workshop colonnade - UNRESEARCHED: open hatched craft area attached to a shrine -->
+- docs/buildings.md::Wells#a fourth well only for very large compounds
+    <!-- Research: a fourth well only for very large compounds - UNRESEARCHED: no page says how many wells a compound kept by its size -->
+- docs/buildings.md::Wells#garden well
+    <!-- Research: garden well - UNRESEARCHED: in the inner garden -->
+- docs/buildings.md::Wells#stables well
+    <!-- Research: stables well - UNRESEARCHED: just outside the stables for watering -->
+- docs/buildings.md::Wells#well count
+    <!-- Research: well count - UNRESEARCHED: 2-4 wells for ~50 inhabitants and horses -->

@@ -170,3 +170,91 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 9. **After a ruling:** continue (red-gate@2026-10-25T08:17:19Z).
 
 <!-- plan-archive: T19 to T05 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
+
+## The GM's 2026-10-25 afternoon message - T16, T28-T31 (the arbitrary numbers marked, the settle probe)
+
+### Decisions
+
+- **D29 (the GM's word, 2026-10-25, the afternoon)**: the GM: "I accept your recommendation of 20% as the correct angle for
+  the double-tailed rule, but I think we should be careful to document this as an approximation ... we need to avoid falling
+  into the trap where we set a number arbitrarily and then end up going through enormous iterations and difficulty to try to
+  make that number work when the number is arbitrary and not an actual hard requirement ... it's important that in our
+  checklist-based iteration, as we try to fix things, that we have these kinds of numbers marked." ("20%" is degrees.) And:
+  "please proceed with all of this ... and then after all of that, you should switch off the 16 repair steps in whatever
+  manner you find most efficient." This lifts D11's stop line for T16, T28-T31; it does not lift it for seed-by-seed fixing
+  (T06-T15, T27's placer). Rendering: none.
+- **D30 (T16: the doubled tail's one angle)**: `tails._DOUBLED_DEG` and `tails._ALONG_DEG` become ONE constant at 20 deg, the
+  page's (0081), labeled bare `GUESS` - searched, silent (R7) - with the GM's words beside it: a goal, free to move to 15 or 25
+  if that is what the placements or the look need. It is measured on the 54 fixed and pinned seeds and the pool before it
+  lands; if 20 reds a seed that passes today (the comment's seeds 10 and 40, 2026-10-21), the value change is set down, the
+  measurement recorded, and the two stay unmerged at their values (15 and 25), each with the goal of 20 and the measurement
+  beside it - observed 2026-10-25 (method: D35's worktree, both at 20, `make cohort N=48 FRESH=0 JOBS=3` and the pool): seed 40
+  newly refused (`WebRefused`, a shallow crossing left), the pool unchanged - an arbitrary number is not chased
+  (the GM). The `GUESS` label, the GM's words and the pointer to R7 land EITHER WAY: documenting the number as an
+  approximation is the request itself. Rendering: map drawing convention (0081).
+- **D31 (no new claims class; the existing split made honest - T28, T29)**: the claim grammar already has the GM's two
+  categories (`l7r/diagram/tools/claims.py:54-56`): `GUESS` - searched, silent, a value of our own - and `UNRESEARCHED` - not
+  yet searched. So no class is added. What is missing is the use: (a) a derived list of every claim whose value is ours -
+  `GUESS`, `UNRESEARCHED`, `CONVENTION` - with its figure, `make tunables`, read from the claims index (never a hand list,
+  constitution X clause 14); (b) part A item 3 of `docs/approach-checklist.md` names those three labels as **O** - a goal and a
+  knob, never a target to defend - and so too a number no claim states, and points at both `make tunables` and `make
+  tunables INLINE=1` (written 2026-10-25); `docs/research-doctrine.md`'s "unresearched number is a
+  knob" line gains GUESS and CONVENTION; (c) the `UNRESEARCHED` labels are checked for truth (T29); (d) a number with NO
+  claim is the audit's blind spot, so it is counted and listed, in two places (observed 2026-10-25; method: AST walks of
+  `l7r/**/*.py` against `claims.current`, the second now `make tunables INLINE=1`). (i) MODULE CONSTANTS: of 810, 141 carry
+  no claim of their own - 47 in code that draws a map (`compound_model.py` 15, `labels/hand_sheet.py` 11, `compound_parts.py`
+  11, `compound.py` 5, `compound_example.py` 3, `well_gear.py` 1, `settlement/see_through.py` 1), each given a claim in T28;
+  and 94 in the tooling, by file: `tools/pack_audit/` 45 (the sheet audit's tolerances), `tools/` otherwise 23 (perf bands
+  and snapshots, page and marsh audits, census, cohort and roll audits, diffs), `ci/` 10 (cache lifetimes, poll and park
+  seconds, the rate per minute, the incremental fraction, a stub's seconds), `pipeline/` 4 (cache sizes), `interactive/` 3
+  (glossary and archive limits) - each a run's time, cost, cache or an audit's own tolerance; none places or draws anything on
+  a map. Of these, the AUDIT TOLERANCES were checked one by one for whether they decide a verdict the fixing is measured
+  against (observed 2026-10-25; method: reading each constant's use): `tools/pack_audit/`'s 45 DO - they grade a Mode A sheet
+  (a veranda's 3-6 ft, the coverage band, a gate's 5-16 ft, the sun's latitude) - so they get (ii)'s treatment and a claim
+  each in T28, and `tools/pack_audit/` joins `make tunables INLINE=1`'s map code; `cohort_audit.py`'s two (the pinned rows'
+  first seed, how many rolls before an undrawn knob value is reported), `mapcheck.py`'s one (which seeds the tripwire rolls)
+  and `overlap_census.py`'s two (a census flag and its reference size) choose what is rolled or reported, never whether a map
+  passes; the perf bands and snapshots flag time, never a map. (ii) NUMBERS INSIDE FUNCTIONS of the map code (the `MAP_CODE` prefixes of
+  `scripts/record/tunables.py`): 1,793 non-trivial ones in 141 files that their unit's claims never state (trivial: 0-4, 10,
+  100, 90, 180, 360, 255, a half, under 0.001, and subscripts). These are ours by DEFAULT - an unstated number is a knob like
+  a GUESS - and `make tunables INLINE=1` lists them file, line and function, derived each run, so the audit is never stale.
+  Each is given a claim (stated in its unit's account, labeled by what it is) in T29 as the claims of its unit are worked:
+  the 247 units' first, then the rest, before T31's deletion; what T29 cannot reach is listed by file in R9 with the count.
+  (iii) Every `UNRESEARCHED` label T28 or T29 writes is T29's to research, as the 726 are. D28's "goes to the GM" (plan-done.md) is superseded by D33 (b).
+  Rendering: none.
+- **D32 (T29: are the UNRESEARCHED labels true - the order)**: 726 claims are labeled `UNRESEARCHED` (observed 2026-10-25;
+  method: `grep` of `Research:` lines over `l7r`, `pool`, `docs`), 247 of them in the modules this feature changes
+  (`hamletgen/ways`, `homesteads`, `consts_ways`, `cluster`; `make claims-report` filtered). Those 247 go first, grouped by
+  the question they share into research passes (`research-pass`, archive first, then the web), each pass told the claims it
+  covers. A claim a pass answers is cited when the page states it (its page edit queued to a page session under the record's
+  rules); a claim a pass finds silent becomes bare `GUESS` naming the pass in its account; a claim that decides nothing about
+  the place (an algorithmic tolerance, an order of search) becomes `NONE` or `CONVENTION` by what it is. The other 479 are
+  T29's too, done after the 247 and before T31's deletion (the GM: "and then after all of that, you should switch off the
+  16 repair steps"); only the probe's MEASUREMENT runs beside them, since it decides nothing. Rendering: per claim, as above.
+- **D33 (the two questions the GM declined, decided by the record - T27's decision)**: (a) T27's placer: 0246 lays "each
+  household's way ... from its dooryard along the middle of the gaps to the track out or an earlier way, joined at a T", and
+  0081's track "never stops in open country"; no page says where along the track the ways meet it. So by the GM's rule (the
+  record silent: a knob, or what is algorithmically easier) the easier placement is taken: the track is DRAWN from the
+  innermost T its households' ways make, decided once those ways are laid and before the track is drawn - the ways stay as
+  laid. (b) The dispersed form: 0031's drawing page draws "no lane network inside it at all: the road out joins it to the
+  world, and the field paths join the farms to one another", so 0081's rule applies there too: the track's inner end ends at
+  a farm or on a field path. `track_ends_off_the_web` is widened to ask that when T27's placer lands (widened now, it reds the
+  13 dispersed landing seeds, D28). Both are T27's placer work, set down under D11. Rendering: map drawing convention (0081,
+  0031).
+- **D34 (T30: the process gap - two questions that were the record's reached the GM)**: the turn's final message carried
+  four questions and no `escalation-check` ran, which CLAUDE.md requires. The fix is a rule where the check is: two CUT rules
+  in `.claude/agents/escalation-check.md` - a question whether a finding applies to a case, form or map goes to the research
+  pass and the reviewers, never the GM; a choice the record is silent on is a knob or the algorithmically easier route, never
+  the GM - each with the GM's 2026-10-25 words; one line in the root `CLAUDE.md` Research list; and `escalation-check` run on
+  this turn's own final message. Rendering: none.
+- **D35 (T31: the settle's steps, D22's probe)**: each of the 16 named steps of `settle/stage.py` `STEPS` (17 positions:
+  `settle_husks` runs first and last; every position of a name is switched together) is switched off alone, in a detached
+  worktree with a switch that never lands, and `make cohort N=48 FRESH=0 JOBS=3` and the five pool maps are rolled against the
+  same roll with nothing off; then the NEEDLESS ones (no verdict and no pool manifest moved) all off together. `settle_reach`
+  is a placer (it draws the reach the web owes), not a repair: it is probed as the others, and recorded as such. The needless
+  are deleted together with their tests and dead closure (D23), landed through `make land`. Each NEEDED step then gets
+  D11's conversion, decided before its code: its rule asked by the placer that lays what the step mends (the predicate
+  named, the placer named), landed through `make land` once FR-008 holds; only a conversion that cannot land green without
+  seed-by-seed work or room work is recorded with its failing seeds and set down - and that claim, for each step it is made
+  of, is written as an exception and ruled (`make arbiter-ask`), never assumed. Workers at 3, not 5: the containers stood at 9.1 of 10 GB (memwatch, 2026-10-25).
+  Rendering: none.

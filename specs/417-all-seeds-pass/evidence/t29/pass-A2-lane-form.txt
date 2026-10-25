@@ -1,0 +1,104 @@
+- ways/fabric.py::_WEB_MIN_FT#shortest way
+    """Research: shortest way - UNRESEARCHED: a run under 30 ft is debris unless it earns a house"""
+- ways/fabric.py::_draw_web#shortest way
+    """Research: shortest way - UNRESEARCHED: a run under 30 ft is debris unless it earns a house"""
+- ways/geom.py::_trim_to_service#not the way it left
+    not the way it left - UNRESEARCHED: an end does not count as reaching a way the run's other end stands on (within
+- ways/geom.py::steading_footprints#ground cover is no destination
+    ground cover is no destination - UNRESEARCHED: the commons and groves are left out"""
+- ways/law.py::DOORSTEP_MAX#ends one house may absolve
+    Research: ends one house may absolve - UNRESEARCHED: two"""
+- ways/law.py::FRAGMENT_FT#shortest way
+    Research: shortest way - UNRESEARCHED: 30 ft"""
+- ways/law.py::NEEDLE_FT#needle leg
+    """Research: needle leg - UNRESEARCHED: a leg over 20 ft, shorter is the approach to the junction"""
+- ways/law.py::TARGET_REACH_FT#a way target reached
+    Research: a way target reached - UNRESEARCHED: within 14 ft of the served network"""
+- ways/law.py::breaks_through#a leg long enough to break
+    a leg long enough to break - UNRESEARCHED: only a leg over `BREAK_SPAN_FT` (60 ft) with its midpoint in a building counts"""
+- ways/law.py::dangling_lane_ends#a burial ground's edge a lane end's destination
+    a burial ground's edge a lane end's destination - UNRESEARCHED: a way target counts as a farmhouse does
+- ways/law.py::dangling_lane_ends#a way reached only where the lane walked to it
+    a way reached only where the lane walked to it - UNRESEARCHED: a way counts as reached only where the lane's end lies nearer it than its far end does (`_walked_to`) (405 T127)"""
+- ways/law.py::doorstep_ends#no fan of stubs at a door
+    Research: no fan of stubs at a door - UNRESEARCHED: more than two free ends within 80 ft"""
+- ways/law.py::field_unreached#asked on brook maps only
+    asked on brook maps only - UNRESEARCHED: the field reach is asked only where a brook runs, a map whose field is fed otherwise owing none (405 T127)"""
+- ways/law.py::near_misses#a blocked join is no short join
+    a blocked join is no short join - UNRESEARCHED: an end whose span would be blocked, fold or kink more than its own lane is not counted
+- ways/law.py::near_misses#a connector's ends
+    a connector's ends - UNRESEARCHED: never counted as joins that stop short"""
+- ways/law.py::near_misses#which ends count
+    which ends count - UNRESEARCHED: an end counts only where the way it nears lies within `AIM_DEG`, 60 deg, of its heading
+- ways/law.py::needle_ends#needle leg
+    """Research: needle leg - UNRESEARCHED: a leg over 20 ft, shorter is the approach to the junction"""
+- ways/law.py::short_fragments#debris
+    debris - UNRESEARCHED: a lane under 30 ft that earns no house, join, target or end
+- ways/serve.py::DOOR_SHIFT_FT#door step
+    Research: door step - UNRESEARCHED: 4 ft"""
+- ways/serve.py::_lay_web_lane#a healing link kept
+    a healing link kept - UNRESEARCHED: its ends within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), else the gap is left unjoined
+- ways/serve.py::_lay_web_lane#link reach
+    link reach - UNRESEARCHED: a link up to 200 ft to the network
+- ways/serve.py::_lay_web_lane#no way drawn twice
+    Research: no way drawn twice - UNRESEARCHED: refused beside another way, within `WEB_SHADOW_FT` (30 ft), unbroken for more than a bundle pitch"""
+- ways/serve.py::_lay_web_lane#the nearer end joined
+    the nearer end joined - UNRESEARCHED: of a run's two ends, the one nearer the network is the one joined to it
+- ways/serve.py::joined_link#a detour link's reach
+    a detour link's reach - UNRESEARCHED: kept only where it comes within 12 ft of the point and of the network"""
+- ways/serve.py::route_from_door#a first leg out of the door's cell
+    a first leg out of the door's cell - UNRESEARCHED: one or two router cells (10-20 ft) stepped out of a boxed-in door before routing"""
+- ways/serve.py::runs_beside#no way drawn twice
+    Research: no way drawn twice - UNRESEARCHED: refused beside another way, within `WEB_SHADOW_FT` (30 ft), unbroken for more than a bundle pitch"""
+- ways/serve.py::shadowed_by#no way drawn twice
+    Research: no way drawn twice - UNRESEARCHED: refused beside another way, within `WEB_SHADOW_FT` (30 ft), unbroken for more than a bundle pitch"""
+- ways/settle/ends.py::JOIN_BACK_PAD_FT#a deferring end taken back
+    Research: a deferring end taken back - UNRESEARCHED: 5 ft past the join's reach"""
+- ways/settle/ends.py::settle_ends#no fan of stubs at a door
+    no fan of stubs at a door - UNRESEARCHED: past two ends at one house, the farther cut back past the doorstep
+- ways/settle/ends.py::settle_fragments#debris
+    Research: debris - UNRESEARCHED: a lane under 30 ft that earns nothing goes, a tree lane too"""
+- ways/settle/ends.py::settle_joins#a join taken back
+    a join taken back - UNRESEARCHED: an ordinary end whose join breaks a rule against a tree lane, or the overlap matrix refuses, taken back 5 ft past the join's reach (`JOIN_BACK_PAD_FT`), the settle's trims then pulling it to what it serves"""
+- ways/settle/ends.py::settle_shadows#no doubled band
+    Research: no doubled band - UNRESEARCHED: of two ways side by side past a pitch, the shorter ordinary lane goes"""
+- ways/settle/shapes.py::reaimed#an end within a hand's width ends there
+    an end within a hand's width ends there - UNRESEARCHED: a vertex within `_TOUCH_GAP` (4 ft) of the way ends the lane at it, unjoined by ink (405 T127)"""
+- ways/settle/shapes.py::settle_shapes#a fouling segment cut out
+    a fouling segment cut out - UNRESEARCHED: a lane's fouling segment is cut out and the lane split into its two remaining pieces (405 T127)"""
+- ways/sweeps.py::_LINK_DIRECTNESS#network link directness
+    """Research: network link directness - UNRESEARCHED: a link up to 4.0 times its chord"""
+- ways/sweeps.py::_join_orphan_ways#orphan link directness
+    orphan link directness - UNRESEARCHED: a link up to `_LINK_DIRECTNESS` (4) times the gap"""
+- ways/sweeps.py::_sweep_dangling_ends#a whittled lane emptied
+    a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish
+- ways/tails.py::_ALONG_DEG#running with the way
+    """Research: running with the way - UNRESEARCHED: within 25 degrees of parallel"""
+- ways/tails.py::_ALONG_MIN_FT#tail run length
+    """Research: tail run length - UNRESEARCHED: 30 ft beside a way before it is a doubled tail"""
+- ways/tails.py::_sweep_doubled_tails#doubled tail cut
+    doubled tail cut - UNRESEARCHED: a lane running on beside the way it met ends where it came alongside
+- ways/tails.py::_sweep_doubled_tails#narrower tail cut
+    narrower tail cut - UNRESEARCHED: of two tails side by side the narrower is cut, so the through-route keeps its width"""
+- ways/tree.py::admits#free ends at a house
+    free ends at a house - UNRESEARCHED: at most DOORSTEP_MAX (2) free lane ends at a house
+- ways/tree.py::alongside_points#beside, as the map reads it
+    beside, as the map reads it - UNRESEARCHED: 0081 gives the angle but no distance; read within `WEB_SHADOW_FT` (30 ft, the distance the shadow rule reads two ways together at), as `knots.teed_back` reads it"""
+- ways/tree.py::cut_alongside#each end walked, the nearer point first
+    each end walked, the nearer point first - UNRESEARCHED: the walk from the lane's first end is tried before the walk from its last, and on each the first point found - so the lane is kept from that end up to where it first comes alongside; only ordinary lanes are cut here (`tree_faults` names no tree lane), never a household's own way, so no door end is in question (0081 cuts that at its far end)
+- ways/tree.py::prune_the_tree#redundant tree lane pruned
+    redundant tree lane pruned - UNRESEARCHED: no more corridors than the map needs; never a household's own way (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own)
+- ways/tree.py::tree_shadow_cuts#no doubled band
+    Research: no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch, read as the walker reads it"""
+- ways/tree.py::tree_shadows#no doubled band
+    Research: no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch, read as the walker reads it"""
+- ways/tree.py::walked_shadows#no doubled band
+    Research: no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch, read as the walker reads it"""
+- ways/web/skeleton.py::_lay_skeleton#no skeleton under two houses
+    no skeleton under two houses - UNRESEARCHED: a cluster of fewer than two houses lays no skeleton lanes (`len(arcs) < 2`), there being no two houses to join
+- ways/web/skeleton.py::served_arm#shortest arm
+    shortest arm - UNRESEARCHED: an arm under 30 ft (`_WEB_MIN_FT`) is not drawn"""
+- ways/web/tidy.py::tidy_lane_ends#a row's street not dropped for serving nothing
+    a row's street not dropped for serving nothing - UNRESEARCHED: a street is laid as one way along its row and its farms are reached by door paths laid after this pass (feature 291 plan D17), so it is never dropped here
+- ways/web/tidy.py::tidy_lane_ends#shortest lane kept
+    shortest lane kept - UNRESEARCHED: a trim leaving a lane under _WEB_MIN_FT, 30 ft, is not applied, or the lane is dropped

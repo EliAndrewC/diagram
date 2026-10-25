@@ -276,6 +276,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "## The GM's 2026-10-25 afternoon message - T16, T28-T31 (the arbitrary numbers marked, the settle probe)": {
+   "sha256": "b16f5a39c36db9c479cef16c48cc7f5640b330148cbf269f7eec9dfc68140634",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### Decisions": {
+   "sha256": "295589f2e49b1fc384866532d636e8c11e1004a3b3066c77ffd41690b7111df8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1653,6 +1665,294 @@
      "summary": "Re-run make cohort-landing with the corrected predicate (54 of 54, observed 2026-10-25, record b1133025b), then make land.",
      "class": "within",
      "why": "A measurement before the landing, as T19's original steps already required. It is not a new decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## The GM's 2026-10-25 afternoon message - T16, T28-T31 (the arbitrary numbers marked, the settle probe)",
+    "### Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D29",
+     "summary": "The GM's afternoon words lift D11's stop line for T16 and T28-T31, not for seed-by-seed fixing (T06-T15, T27's placer).",
+     "class": "within",
+     "why": "The GM still puts the audit and research 'before we try to actually fix all of the failing seeds', and asks the session to answer the two questions, not to implement T27's placer."
+    },
+    {
+     "id": "D30",
+     "summary": "_DOUBLED_DEG and _ALONG_DEG become one constant at 20 deg, labeled GUESS with the GM's words. It is measured before landing; if 20 reds a seed that passes today, the landing is set down and the constant stays as it is with the goal written beside it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The narrowing is that the accepted 20 deg may not land. FR-008 is a hard requirement and forbids landing a regression. The GM's own words say the 20 is 'arbitrary and not an actual hard requirement' and must not be chased through iterations, and D11 sets down whatever needs seed-by-seed work. Gap to close in the text: 'the constant stays as it is' must not drop what the GM chiefly asked for, the documentation. The GUESS label and the GM's words (approximation, 20 as the goal, free to move to 15 or 25) land whether or not 20 does."
+    },
+    {
+     "id": "D31",
+     "summary": "No new claims class: GUESS (searched, silent) and UNRESEARCHED (not yet searched) already split the GM's two categories. Part A item 3 of the checklist names GUESS/UNRESEARCHED/CONVENTION as O and points at make tunables. The research doctrine line gains GUESS and CONVENTION. The UNRESEARCHED labels are checked for truth (T29).",
+     "class": "within",
+     "why": "The GM made the split conditional: 'it's possible that I've misunderstood the current classification ... in which case ... we don't need a split'. The checklist change is his explicit ask ('should become part of our checklist-based approach'), and checking the labels' truth is T29, which he asked for."
+    },
+    {
+     "id": "D31a",
+     "summary": "The audit of arbitrary numbers is make tunables, a list derived from the claims index of every GUESS/UNRESEARCHED/CONVENTION claim.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM asked for 'an audit of the code to find all of the places where we have this kind of number'. A list read from the claims index is that audit only if every numeric constant in the engine already carries a claim line. The block neither states nor measures that, and this project measures a premise instead of assuming it. As written it narrows 'all of the places' to 'the labeled places', and an unlabeled arbitrary number is exactly what defeats the request's purpose, that future passes know which numbers they may move. Fix: record a measured count (dated, with method) of numeric constants in the engine with no claim line. If it is nonzero, the audit labels those constants too, so that make tunables covers them."
+    },
+    {
+     "id": "D32",
+     "summary": "T29: the 247 UNRESEARCHED claims in this feature's modules go first, grouped into research passes (archive first, then the web) and relabeled cited / GUESS / NONE / CONVENTION by what each pass finds. The other 479 are 'queued in research.md by module, with the count'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM's words cover 'any' number marked unsubstantiated: 'first check our downloaded research ... then please actually perform research for any of those questions that we don't currently have answers for'. He did not limit it to the modules feature 417 touches. Doing the 247 first is an order and is within. But 'queued in research.md' names no owner and reads as a deferral of 479 of the 726 (66%). Cost and time are not fidelity grounds, and 'use all of that time to move forward' tolerates unfinished work without redrawing scope. Fix: the block says the 479 are T29's work, done after the 247 and, per the GM's 'after all of that', ahead of T31, or else states the order actually taken so it can be ruled on."
+    },
+    {
+     "id": "D33",
+     "summary": "The two declined questions decided by the record. (a) T27: the record is silent on where the ways meet the track, so the easier placement is taken: the track is drawn from the innermost T its households' ways make. (b) The dispersed form: 0031 gives it no lane network, so 0081's 'never stops in open country' applies, and the track ends at a farm or on a field path. The predicate is widened when T27's placer lands; both are set down under D11.",
+     "class": "within",
+     "why": "The GM told the session to answer both 'for yourself' and gave the rule (a) applies ('a tunable knob, or ... whatever is algorithmically easier'). (b) answers by the record, as he directed. Implementation stays behind the stop line he kept. Aside: spec D28 still says 'the dispersed track's end goes to the GM with T27'. That line is now stale and should be amended when the spec is next touched."
+    },
+    {
+     "id": "D34",
+     "summary": "T30: the process gap. Two CUT rules go in escalation-check.md (whether a finding applies to a case/form/map goes to research and reviewers; a choice the record is silent on is a knob or the easier route, never the GM), with one line in the root CLAUDE.md Research list, and escalation-check is run on this turn's final message.",
+     "class": "within",
+     "why": "The GM asked that the processes deciding what reaches him be tweaked and the guidelines updated to direct the session this way. These changes do that. Observation, not a ruling: the block's own diagnosis is that escalation-check did not run, and two of its three fixes live inside that check. Only the CLAUDE.md line acts when the check is skipped, so the cause it names is left untouched."
+    },
+    {
+     "id": "D35",
+     "summary": "T31: each of the 16 settle steps is switched off alone in a never-landing worktree (cohort N=48 plus the five pool maps against a baseline), then the needless all off together. The needless are deleted with their tests and dead closure through make land. The needed are recorded with the seeds they fail and set down for T06. settle_reach is probed as a placer; workers at 3.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM asked to 'switch off the 16 repair steps ... allow you to get rid of all of them. As per the requirements of this feature'. His bedtime words asked for 'turning off automated checks, and then replacing them with just having the algorithm place correctly in the first place'. D11 says the FR-004/FR-005 conversions are done and sets one down only when it 'cannot land green without seed-by-seed work or room'. D35 sends every needed step straight to T06, which D29 counts as seed-by-seed fixing, without attempting the conversion, so D11's test is never applied. Nothing makes the conversion impossible, and the 'as you did for the lane web' precedent in the cited D22/D23 covers only deleting needless passes. Fix: each needed step gets D11's conversion (its rule moved into its placer, landed through make land when FR-008 holds). Only a step that cannot land green without seed-by-seed work or FR-007 room is recorded with its seeds and set down. If the session holds that every needed settle step is seed-by-seed work by nature, that is an exception to state and have ruled, not to assume. Probe method, settle_reach's probing and workers at 3 are within."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## The GM's 2026-10-25 afternoon message - T16, T28-T31 (the arbitrary numbers marked, the settle probe)",
+    "### Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D29",
+     "summary": "The GM's afternoon words lift D11's stop line for T16, T28-T31 only; seed-by-seed fixing (T06-T15, T27's placer) stays stopped.",
+     "class": "within",
+     "why": "The afternoon message asks for the audit, the marking, the research, answers to the two questions and the switch-off of the 16 steps 'as you did for the lane web'. It does not withdraw the morning stop line before seed fixing (D11). Answering T27 is asked for. Building T27's placer is not."
+    },
+    {
+     "id": "D30",
+     "summary": "T16: _DOUBLED_DEG and _ALONG_DEG become one constant at 20 deg, labeled GUESS with the GM's words and the R7 pointer. If 20 reds a seed that passes today, the value change is set down and the goal is written beside it. The label, the words and the pointer land either way.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The conditional non-adoption of 20 comes from the GM's own words: 'aim for that 20% as a goal and then just proceed', and 'avoid falling into the trap where we set a number arbitrarily and then end up going through enormous iterations ... to try to make that number work'. The documentation the GM asked for ('leave a comment ... linking to the research that showed that there were no findings') now lands unconditionally, which was the gap in the earlier text. Not blocking: in the fallback, the block should say which value the single merged constant keeps if the two constants differ today. D11, which it cites, governs exactly that case."
+    },
+    {
+     "id": "D31 (a)-(c)",
+     "summary": "No new claims class: GUESS (searched, silent) and UNRESEARCHED (not searched) already split the GM's category. Add make tunables, derived from the claims index, listing GUESS/UNRESEARCHED/CONVENTION with figures. Approach-checklist part A item 3 and the research-doctrine knob line name those labels. T29 checks the UNRESEARCHED labels for truth.",
+     "class": "within",
+     "why": "The GM said: 'it's possible that I've misunderstood the current classification ... In which case, that's fine, and we don't need a split.' The derived list and the checklist line carry 'the documentation of which constants are arbitrary so that future implementation passes know that they can tweak them, which should become part of our checklist-based approach'."
+    },
+    {
+     "id": "D31 (d)",
+     "summary": "The audit of numbers with no claim counts module-level numeric constants only (810, 141 unclaimed). It gives claims to the 47 in map code. It excludes the 94 in ci/, pipeline/, tools/ and interactive/ as deciding nothing about the place. It leaves numbers written inline in functions to 'their unit's claim ... as the grammar already requires'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM asked for 'an audit of the code to find all of the places where we have this kind of number'. The audit's boundary rests on two premises that are asserted, not measured. (1) Inline literals: the grammar requiring a unit's claim to state its numbers is not shown to be enforced, and nobody counted the inline numeric literals in map code that no unit claim states. The block itself calls an unclaimed number 'the audit's blind spot', and an inline threshold no claim mentions is that same blind spot. In a placer, that is where arbitrary numbers usually live. (2) The 94: 'decides nothing about the place' is decided by directory name. pipeline/ and interactive/ are names that could lay out or draw a map, and unlike the 47 they are not listed by file. None of the three tests holds. Walking function bodies is physically possible. The GM's words ('all of the places') do not imply the exclusion. Including them does not defeat the request's purpose, which is that numbers be marked during checklist iteration. Required: (i) count the numeric literals in function bodies of map code, excluding trivial ones by a stated rule (for example 0, 1, -1, 2, indices). Compare each against its unit's claim text, record the count with date and method, and give the unstated ones a claim in T28. (ii) List the 94 by file, as the 47 are, with the measured or stated reason each decides nothing about the map, and move any that does into T28. (iii) One sentence so T29 also covers every UNRESEARCHED label T28 writes. D32 fixes T29 at the 726 counted before T28, and the GM asked research on 'any of those questions that we don't currently have answers for'."
+    },
+    {
+     "id": "D32",
+     "summary": "T29: all 726 UNRESEARCHED claims are researched. The 247 in this feature's modules go first, then the other 479, all before T31's deletion. Passes check the archive first, then the web. Answered claims are cited, silent ones become GUESS, and claims that decide nothing become NONE or CONVENTION. Only the probe's measurement runs beside them.",
+     "class": "within",
+     "why": "The plan follows the GM's order: 'first check our downloaded research' (archive first), 'then please actually perform research' (the web), 'and then after all of that ... switch off the 16 repair steps' (deletion after all 726). Running the probe's measurement alongside switches nothing off in landed code, and the GM left the manner of the switch-off to the session ('whatever manner you find most efficient')."
+    },
+    {
+     "id": "D33",
+     "summary": "The two questions the GM declined are decided from the record. (a) T27's track is drawn from the innermost T its households' ways make; this is the easier placement, because the record is silent. (b) In the dispersed form, the track's inner end lies at a farm or on a field path (0031 plus 0081). Both are implemented with T27's placer, set down under D11.",
+     "class": "within",
+     "why": "The GM: 'you can attempt to answer those two open questions ... for yourself', and 'if our research findings do not indicate that things were any particular way, then we can either make it a tunable knob, or we can just do whatever is algorithmically easier'. The answers are asked for. Building them is seed-by-seed placer work, which D11 still stops."
+    },
+    {
+     "id": "D34",
+     "summary": "T30: two CUT rules in escalation-check.md (applicability questions go to research and the reviewers, not the GM; record-silent choices are a knob or the easier route), one line in the root CLAUDE.md, and escalation-check run on this turn's final message.",
+     "class": "within",
+     "why": "The GM: 'perhaps our checklist-based processes discerning what things get raised to my attention ... need tweaking', and 'If this is not covered by our project guidelines, then we should update the project guidelines to direct you in this way.'"
+    },
+    {
+     "id": "D35",
+     "summary": "T31: each of the 16 named settle steps is probed alone in a detached worktree; the needless ones are deleted together. Each needed step gets D11's conversion, its rule asked by the placer, and lands when FR-008 holds. A conversion that cannot land green without seed-by-seed or room work is recorded and set down, but only as a per-step exception ruled by make arbiter-ask. settle_reach is probed and recorded as a placer. Workers are 3.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM asked for the 16 to be switched off 'as you did for the lane web ... allow you to get rid of all of them. As per the requirements of this feature.' The lane web was done under D11's stop line, which is the GM's own morning words ('stop so we can slowly and deliberately go through the actual fixing'), and the afternoon message does not withdraw it. The possible set-down is therefore implied by the GM's words. It is now judged step by step as an exception rather than assumed, so each case is adjudicated separately. Read literally, settle_reach is one of the 16 named steps and receives the same needed-step conversion: 'recorded as such' exempts nothing, and any exemption of it would need its own ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## The GM's 2026-10-25 afternoon message - T16, T28-T31 (the arbitrary numbers marked, the settle probe)",
+    "### Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D29",
+     "summary": "The GM's afternoon words lift D11's stop line for T16 and T28-T31 only. Seed-by-seed fixing (T06-T15, T27's placer) stays stopped.",
+     "class": "within",
+     "why": "The GM listed exactly these pieces of work ('the audit ..., the documentation ..., any further research ..., attempt to answer those two open questions ..., then switch off the 16 repair steps'). Nothing in the message resumes the seed fixing the morning message stopped."
+    },
+    {
+     "id": "D30",
+     "summary": "T16: the two tail constants become one constant at 20 degrees, labeled GUESS with the GM's words and R7. If 20 reds a seed that passes today, the value change is set down, the measurement is recorded and the value stays, with the goal of 20 written beside it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Keeping the old values when 20 reds a passing seed is in the GM's own words: 'avoid falling into the trap where we set a number arbitrarily and then end up going through enormous iterations ... aim for that 20% as a goal'. It also fits D11, since chasing seed 40 would be seed-by-seed work. The GUESS label, the GM's words and R7 land either way, which is the documentation the GM asked for. Wording note, not a block: the fallback still says 'the constant keeps its value' (singular). After the probe, the two constants keep 15 and 25. The next edit should say the two stay unmerged at 15 and 25, each with the goal of 20 and the seed-40 measurement beside it."
+    },
+    {
+     "id": "D31(a)(b)(c)",
+     "summary": "No new claim class. 'make tunables' is derived from the claims index. The checklist names GUESS, UNRESEARCHED and CONVENTION as O (a goal and a knob) and points at 'make tunables'. The research doctrine line is widened. The UNRESEARCHED labels are checked for truth in T29.",
+     "class": "within",
+     "why": "The GM asked for the split only if the current classes lack it ('In which case, that's fine, and we don't need a split'), and the grammar already carries GUESS versus UNRESEARCHED. The checklist edit is what the GM asked for: 'should become part of our checklist-based approach'."
+    },
+    {
+     "id": "D31(d)(i)-tooling-runtime",
+     "summary": "The tooling constants that set how a run behaves, with no audit tolerance among them: cache lifetimes and sizes, poll and park seconds, rate per minute, incremental fraction, stub seconds, perf bands and snapshots, glossary and archive limits. They are listed by file with what each decides, and given no world claim.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "'This kind of number' is a number the fixing iteration might chase to make work. A cache lifetime or a poll interval is not one: no seed turns red or green on it. These constants are counted and listed by file, so the audit covers them. Only a claim of a place is withheld, and that does not fit them."
+    },
+    {
+     "id": "D31(d)(i)-tooling-audit-tolerances",
+     "summary": "Exempted under the same sentence: tools/pack_audit/'s 45 sheet-audit tolerances, and the 'page and marsh audits, census, cohort and roll audits' inside tools/'s 23. The ground given is 'none places or draws anything on a map'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "One argument is stretched over two unlike classes. 'Places or draws nothing' is not the GM's test. The GM's test is a number arbitrarily set that we 'go through enormous iterations ... to try to make ... work'. An audit tolerance that grades a sheet, a page, a cohort or a roll is a threshold that work on a red seed can end up chasing, whether or not it draws anything. The block never says whether any of these decides a verdict the fixing is measured against: the cohort, the pinned rows, the pool maps, or a check 'make land' runs. Fix, one sentence: state as an observed fact, with its method, that none of these tolerances decides such a verdict. Any that does gets (ii)'s treatment: ours by default, listed where the checklist looks, and given a claim in T29."
+    },
+    {
+     "id": "D31(d)(ii)",
+     "summary": "The 1,793 unstated non-trivial numbers inside functions of map code are ours by default and listed by 'make tunables INLINE=1'. Each is given a claim in T29, the 247 units first. Whatever T29 cannot reach is listed by file, with its count, in R9.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Making 'ours by default' plus a derived list the whole marking would satisfy the GM ('the documentation of which constants are arbitrary so that future implementation passes know that they can tweak them'). That is also the only thing that makes the open-ended 'what T29 cannot reach' carve-out acceptable: the leftover numbers stay marked as knobs. But the marking is visible only through 'make tunables INLINE=1', while (b) points the checklist at plain 'make tunables'. R9 is research, not the checklist. A pass that follows the checklist never sees this category, which defeats the GM's 'which should become part of our checklist-based approach'. Fix: (b)'s checklist item names 'make tunables INLINE=1' and says the unstated numbers it lists are O by default. The other fix is for 'make tunables' to include them by default."
+    },
+    {
+     "id": "D31(d)(iii)",
+     "summary": "Every UNRESEARCHED label written in T28 or T29 is researched in T29, like the 726.",
+     "class": "within",
+     "why": "The GM: 'please actually perform research for any of those questions that we don't currently have answers for'."
+    },
+    {
+     "id": "D32",
+     "summary": "T29's order. The 247 UNRESEARCHED claims in this feature's modules come first, grouped into research passes, archive first and then the web. Each result is cited, GUESS, NONE or CONVENTION by what the pass finds. The other 479 follow, before T31's deletion.",
+     "class": "within",
+     "why": "Archive first is the GM's 'first check our downloaded research'. The web is 'actually perform research'. Doing all 726 before switching off the repair steps follows 'and then after all of that'. Running only the probe's measurement in parallel decides nothing."
+    },
+    {
+     "id": "D33",
+     "summary": "The two questions the GM declined are decided by the record. (a) The track is drawn from the innermost T its households' ways make, since the record is silent and that is the easier placement. (b) A dispersed track ends at a farm or on a field path, and track_ends_off_the_web is widened when T27's placer lands. Both are set down under D11 as T27's placer work.",
+     "class": "within",
+     "why": "The GM: 'attempt to answer those two open questions ... for yourself' and 'if our research findings do not indicate ... we can either make it a tunable knob, or we can just do whatever is algorithmically easier'. (b) applies a quoted page (0031) to the form. Building the placer stays behind D11, which D29 leaves in place."
+    },
+    {
+     "id": "D34",
+     "summary": "T30: two CUT rules in escalation-check.md, one line in CLAUDE.md, and escalation-check run on this turn's final message.",
+     "class": "within",
+     "why": "The GM: 'If this is not covered by our project guidelines, then we should update the project guidelines ... perhaps our checklist-based processes discerning what things get raised to my attention ... need tweaking'."
+    },
+    {
+     "id": "D35",
+     "summary": "T31: each of the 16 steps is switched off alone in a detached worktree and probed against the cohort and the pool. The needless ones are deleted together. Each needed one is converted into its placer, landing through 'make land'. A conversion that cannot land green without seed-by-seed or room work is set down, and each such claim is ruled through 'make arbiter-ask'. JOBS=3 for memory.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The method is the GM's to leave open: 'I don't care whether you do it one at a time or all at once'. Setting a conversion down narrows 'get rid of all of them'. It is allowed because the morning message's stop on seed fixing stands (D11, which D29 leaves in place for seed-by-seed work), and because every set-down is written as an exception and ruled, never assumed. JOBS=3 is an implementation detail."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## The GM's 2026-10-25 afternoon message - T16, T28-T31 (the arbitrary numbers marked, the settle probe)",
+    "### Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D29",
+     "summary": "The GM's afternoon words lift D11's stop line for T16 and T28-T31 only, not for seed-by-seed fixing (T06-T15, T27's placer).",
+     "class": "within",
+     "why": "The GM: 'please proceed with all of this ... and then after all of that, you should switch off the 16 repair steps'. The message asks for the angle documentation, the claims audit, the research and the switch-off. It asks for no seed fixing, which stays under D11."
+    },
+    {
+     "id": "D30-merge",
+     "summary": "_DOUBLED_DEG and _ALONG_DEG become one constant at 20 deg, labeled GUESS with the GM's words and a pointer to R7. The label lands either way.",
+     "class": "within",
+     "why": "The GM accepted 20 for the double-tailed rule and asked that it be documented as an approximation that can change, with a comment linking to the research that found nothing. Landing the label either way is that documentation."
+    },
+    {
+     "id": "D30-fallback",
+     "summary": "If 20 reds a seed that passes today (measured: seed 40 newly WebRefused), the value change is set down and the two constants stay unmerged at 15 and 25, each with the goal of 20 and the measurement beside it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM accepted 20 and the fallback lands 15 and 25, so this narrows. Three things in the bundle justify it. (1) The GM's own words foresee it: 'if it turns out that allowing a 15% angle instead of a 20% one made our placements much, much easier ... I want to be able to do that', and 'avoid ... enormous iterations ... to try to make that number work when the number is arbitrary'. (2) FR-008 forbids landing a change that reds seed 40. (3) D11 says a change that cannot land green without seed-by-seed work is recorded and set down. The goal of 20 and the measurement stay written beside each constant, so the request's purpose (the number marked as an approximation and a goal) is kept. Not trying each constant at 20 alone is not a finding: that would be the chasing the GM ruled out."
+    },
+    {
+     "id": "D31-abc",
+     "summary": "No new claims class (GUESS already means searched and silent; UNRESEARCHED means not yet searched). make tunables lists GUESS, UNRESEARCHED and CONVENTION claims, derived from the claims index. The checklist's part A item 3 names those three labels, and any number no claim states, as O, and points at make tunables and make tunables INLINE=1. research-doctrine gains GUESS and CONVENTION. The UNRESEARCHED labels are checked for truth.",
+     "class": "within",
+     "why": "The GM: 'it's possible that I've misunderstood the current classification ... In which case, that's fine, and we don't need a split'. The existing grammar already makes the split the GM described, so no class is needed. The listing and the checklist entry carry 'the documentation of which constants are arbitrary ... should become part of our checklist-based approach'."
+    },
+    {
+     "id": "D31-d-i-map",
+     "summary": "The 47 module constants with no claim in map-drawing code each get a claim in T28.",
+     "class": "within",
+     "why": "The GM asked for 'the audit of the code for these constants, the documentation of which constants are arbitrary'."
+    },
+    {
+     "id": "D31-d-i-pack-audit",
+     "summary": "pack_audit's 45 tolerances grade a Mode A sheet, so they get (ii)'s treatment and a claim each in T28, and pack_audit joins make tunables INLINE=1's map code.",
+     "class": "within",
+     "why": "These are numbers the fixing is measured against, which is the GM's 'in our checklist-based iteration, as we try to fix things, that we have these kinds of numbers marked'. Bringing them in fixes round 3's finding."
+    },
+    {
+     "id": "D31-d-i-other-tooling",
+     "summary": "The other tooling constants with no claim (tools/ otherwise 23, ci/ 10, pipeline/ 4, interactive/ 3) get no claim of their own. Run time, cost, cache, and what is rolled or reported. The one-by-one check names cohort_audit 2, mapcheck 1, overlap_census 2 and the perf bands and snapshots.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is ruled per case. ci/, pipeline/ and interactive/ (cache lifetimes, poll seconds, glossary limits) and the named tools/ constants (which seeds are rolled, when an undrawn value is reported, a census flag, perf bands) decide nothing about the place and no verdict a fix is measured against, so a claim of their own does not serve the GM's purpose. The one-by-one check is NOT complete as written. Its own list of the 23 also has 'page and marsh audits' and 'diffs', which it never rules on, and the bundle gives no way to check whether a marsh audit grades a map. The ruling rests on (b), added this round, not on the check being complete: 'a number no claim states' is now O in the checklist by rule, so any unclaimed tolerance a fixer meets, named or not, is marked as a knob and not a target to defend. That is the GM's purpose ('these kinds of numbers marked' so the fixing does not chase them). The plan should name page/marsh audits and diffs in the one-by-one sentence, or stop calling the check one by one."
+    },
+    {
+     "id": "D31-d-ii-iii",
+     "summary": "The 1,793 non-trivial numbers inside map-code functions are O by default. make tunables INLINE=1 lists them, derived each run. Each gets a claim in T29 as its unit is worked, the 247 units first, then the rest, before T31; what T29 cannot reach is listed in R9. Every UNRESEARCHED label written goes to T29. D28's 'goes to the GM' is superseded by D33 (b).",
+     "class": "within",
+     "why": "The GM asked to 'find all of the places where we have this kind of number', and anything T29 cannot reach is listed with its count rather than dropped. The supersession carries the GM declining the dispersed-track question: 'that is the kind of question that our processes are supposed to answer'."
+    },
+    {
+     "id": "D32",
+     "summary": "T29 order: the 247 UNRESEARCHED claims in the changed modules first, in research passes (archive first, then the web). Answered claims are cited; silent ones become GUESS; non-place ones become NONE or CONVENTION. The other 479 come after, before T31's deletion. Only the probe's measurement runs alongside.",
+     "class": "within",
+     "why": "The GM: 'first check our downloaded research ... then please actually perform research for any of those questions that we don't currently have answers for', and 'after all of that, you should switch off the 16 repair steps'. The probe's measurement deletes nothing, so running it alongside is not switching the steps off early."
+    },
+    {
+     "id": "D33",
+     "summary": "(a) T27: the record is silent, so the easier placement is taken (the track drawn from the innermost T). (b) The dispersed form: 0031 draws no lane network, so 0081's rule applies and the track ends at a farm or a field path. Both are T27 placer work, set down under D11.",
+     "class": "within",
+     "why": "The GM declined both questions and said to 'attempt to answer those two open questions ... for yourself': 'if our research findings do not indicate that things were any particular way, then we can either make it a tunable knob, or we can just do whatever is algorithmically easier'. Setting the placer work down follows D11, which the GM's message does not lift for T27's placer."
+    },
+    {
+     "id": "D34",
+     "summary": "Two CUT rules in escalation-check.md (a question whether a finding applies goes to research and the reviewers; a choice the record is silent on is a knob or the easier route), a CLAUDE.md line, and escalation-check run on this turn's final message.",
+     "class": "within",
+     "why": "The GM: 'perhaps our checklist-based processes discerning what things get raised to my attention ... need tweaking', and 'If this is not covered by our project guidelines, then we should update the project guidelines'."
+    },
+    {
+     "id": "D35",
+     "summary": "Each of the 16 settle steps is probed off alone in a detached worktree, then the needless ones are deleted together. Each needed step gets D11's conversion. A conversion that cannot land green is set down only as an exception ruled by make arbiter-ask. Workers at 3 because of memory.",
+     "class": "within",
+     "why": "The GM: 'I don't care whether you do it one at a time or all at once ... pick whichever one you believe will be the most efficient way forward and allow you to get rid of all of them'. Any set-down is ruled as an exception, not assumed. Workers at 3 is an operating detail, not a narrowing."
     }
    ]
   }
