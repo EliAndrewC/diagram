@@ -5,7 +5,7 @@ ordinary lanes deferring to it (`tree_faults`, `settle_defer`), and pruned where
 import types
 
 from l7r.diagram.hamletgen.ways import law, settle, tree
-from l7r.diagram.hamletgen.ways.corridors import ACCESS_ROLE, TARGET_ROLE
+from l7r.diagram.hamletgen.ways.corridors import ACCESS_ROLE
 
 from ._builders import AdmitsAll
 
@@ -234,23 +234,6 @@ def test_an_ordinary_lane_breaking_a_rule_against_a_tree_lane_is_cut_never_the_t
     assert sorted(i for i, _q in tree.tree_faults(crowded)) == [2, 3], "three ends at a house: the ordinary ones"
 
 
-def test_a_tree_lane_the_map_no_longer_needs_is_pruned_and_one_it_needs_is_kept() -> None:
-    M = _tree(houses=[_house(300.0, 100.0)], access_corridors=[])
-    M["lanes"] += [
-        {"pts": [[300.0, 80.0], [300.0, 0.0]], "w": 3, "role": ACCESS_ROLE, "of": [300.0, 100.0]},
-    ]
-    s = _S(M)
-    assert tree.prune_the_tree(s) == 0, "the house's way"
-    M["lanes"].append({"pts": [[0.0, 0.0], [260.0, 60.0]], "w": 3})  # an ordinary lane now reaches the house
-    M["access_corridors"] = [{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}]
-    assert tree.prune_the_tree(s) == 0, "a household's own way is never pruned, an ordinary lane reaching its house or not (feature 318)"
-    # ...a tree lane that is no household's way (a way target's spur) goes when the map no longer needs it
-    M["access_corridors"] = []
-    M["lanes"][-2] = {"pts": [[300.0, 80.0], [300.0, 0.0]], "w": 3, "role": TARGET_ROLE}
-    assert tree.prune_the_tree(s) == 1
-    assert tree.prune_the_tree(_S({"lanes": []})) == 0
-
-
 def test_an_end_off_its_host_as_drawn_is_set_on_it_or_carried_on_to_it() -> None:
     """`lanes_of`: where the track out is drawn off the line a corridor was laid against, the corridor's end is set on its foot
     there if a few feet off (a leg that short would hook) and carried on by a leg of its own if farther."""
@@ -281,24 +264,6 @@ def test_an_ordinary_lane_closing_a_sliver_with_a_tree_lane_defers() -> None:
     M = _tree(houses=[], access_corridors=[])
     M["lanes"] += [{"pts": [[100.0, 0.0], [100.0, 200.0]], "w": 3, "role": ACCESS_ROLE}, {"pts": [[100.0, 0.0], [106.0, 100.0], [100.0, 200.0]], "w": 3}]
     assert law.needle_loops(M) and {i for i, _q in tree.tree_faults(M)} == {2}
-
-
-def test_a_corridor_another_hangs_from_is_not_pruned() -> None:
-    M = _tree(
-        houses=[_house(300.0, 100.0), _house(100.0, 100.0)],
-        access_corridors=[{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}, {"pts": [[100.0, 80.0], [100.0, 0.0]], "of": [100.0, 100.0]}],
-    )
-    s = _S(M)
-    assert tree.settle_tree(s) == 2 and M["lanes"][1]["pts"][-1] == [300.0, 0.0]
-    M["lanes"].append({"pts": [[0.0, 0.0], [240.0, 120.0]], "w": 3})  # an ordinary lane now reaches house A from the connector
-    assert tree.prune_the_tree(s) == 0 and M["lanes"][1]["pts"][-1] == [300.0, 0.0], "A's way stays though a lane reaches A (feature 318)"
-    chain = _tree(houses=[_house(300.0, 100.0), _house(200.0, 200.0)])
-    c = _S(chain)
-    tree.settle_tree(c)
-    chain["lanes"].append({"pts": [[0.0, 0.0], [240.0, 120.0]], "w": 3})
-    before = [ln.get("role") for ln in chain["lanes"]]
-    tree.prune_the_tree(c)
-    assert [ln.get("role") for ln in chain["lanes"]].count(ACCESS_ROLE) >= 1 and before.count(ACCESS_ROLE) == 2, "A, which B hangs from, is no leaf"
 
 
 def test_a_tree_that_hands_a_house_more_ends_than_its_doorstep_takes_is_refused(monkeypatch) -> None:
@@ -406,18 +371,6 @@ def test_a_corridor_whose_drawn_form_crosses_another_homestead_is_refused(monkey
     monkeypatch.setattr(tree, "own_clear", lambda s_, run, g: True)
     assert not tree.seating_judge(s)(found, geom), "drawn through another homestead: refused"
     assert tree.seating_drawn(s)(found) == chord, "the drawing `access.reserve` keeps clear"
-
-
-def test_a_house_another_is_reached_across_is_owed_its_way_and_never_pruned_of_it() -> None:
-    """Feature 317 (Inashiro's glyph-check F1): the walk of a household reached across a neighbor's yard goes on along the
-    neighbor's way, so the neighbor's corridor is owed however near the lanes its center stands, and never pruned."""
-    M = _tree(houses=[_house(300.0, 100.0)], access_corridors=[{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}])
-    M["lanes"] += [{"pts": [[0.0, 0.0], [260.0, 60.0]], "w": 3}]
-    assert tree.owed(M) == [0], "every household's way is owed, an ordinary lane reaching its house or not (feature 318)"
-    M["houses"].append({**_house(300.0, 400.0), "reached_across": [300.0, 100.0], "passage_depth": 1})
-    assert tree.passage_anchors(M) == [(300.0, 100.0)] and tree.owed(M) == [0], "...and still when another household is reached across it"
-    M["lanes"].append({"pts": [[300.0, 80.0], [300.0, 0.0]], "w": 3, "role": ACCESS_ROLE, "of": [300.0, 100.0]})
-    assert tree.prune_the_tree(_S(M)) == 0 and any(ln.get("role") == ACCESS_ROLE for ln in M["lanes"]), "its way is not pruned"
 
 
 def test_a_corridor_is_judged_beside_another_as_the_walker_reads_it() -> None:

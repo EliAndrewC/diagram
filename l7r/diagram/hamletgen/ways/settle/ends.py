@@ -17,9 +17,8 @@ from ..corridors import (
 )
 from ..fabric import lane_fabric as _fabric
 from ..forced import lazy_ground
-from ..geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
+from ..geom import _components, _trim_to_service, lane_owner, memo_ground, polyline_len, steading_footprints, worked_ground
 from ..joints import joints, rank_width
-from ..serve import street_anchors
 from ..squaring import (
     _pts,
     cut_at_shallow_crossing,
@@ -27,7 +26,7 @@ from ..squaring import (
 from ..sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 from ..tree import set_corridor, tree_faults
 from .lawful import Lawful
-from .shapes import JOIN_ROLE, _as_end, _back, _ordinary, apply_pieces, fouled_segment, lane_owner, reaimed
+from .shapes import JOIN_ROLE, _as_end, _back, _ordinary, apply_pieces, fouled_segment, reaimed
 
 
 def settle_ends(s: Any) -> int:
@@ -157,39 +156,6 @@ def settle_dangling(s: Any) -> int:
             # two-point skeleton lane dangled through every round and the last resort dropped it - research R11)
         elif trimmed != ways[i] and (i in bad or polyline_len(ways[i]) - polyline_len(trimmed) > TRIM_GRAIN_FT):
             edits[i] = [trimmed]
-    return apply_pieces(s, edits) if edits else 0
-
-
-def settle_street_ends(s: Any) -> int:
-    """A ROW'S STREET, a tree lane no trim cuts, has an end the lane law calls dangling cut back to its last joint
-    (`end_to_its_joint`); returns the streets cut. The web no longer cuts a street before the settle (`trim_streets`, its
-    outermost-joints cut, went in feature 417 T26), and a repair or the last resort's drop can take the lane that stood at that joint (feature 293 on 291:
-    cohort seed 903's street ended in a knot of stubs 191 ft past its nearest farm, each counted as reaching the next until
-    the law stopped counting a way an end walked away from; the knot dropped, the street's end served nothing and the web
-    was refused).
-
-    Its joints: other lanes' ends, its crossings of a way, and each served farm's point (`serve.street_anchors`).
-    Research:
-        an end reaches something seen - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a further street's dangling end cut to its last joint, a lane's end, a way it crosses or the last farm it serves; a joint within `_TOUCH_GAP` (4 ft, the ink's touch - CONVENTION)
-        the first street never cut - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it"""
-    from ..street import end_to_its_joint, first_street  # street.py imports this module's `Lawful`; imported where it is used
-
-    M = s.M
-    lanes = M.get("lanes") or []
-    if not any(ln.get("street_index") is not None for ln in lanes):
-        return 0
-    ways = [_pts(ln) for ln in lanes]
-    anchors = street_anchors(s)
-    edits: dict[int, list[Poly]] = {}
-    first = first_street(lanes)
-    for i, e in law.dangling_lane_ends(M, memo_ground(s, "worked", worked_ground)):
-        if lanes[i].get("street_index") is None or lanes[i].get("street_index") == first:
-            continue  # ...the first street runs on off the map as the road (0033), never pulled back (405 T54, D63)
-        run = edits[i][0] if i in edits else ways[i]
-        crossings = [q for j, o in enumerate(ways) if j != i and len(o) >= 2 for _k, q in law.crossing_points(run, o)]
-        cut = end_to_its_joint(run, [*(o[k] for j, o in enumerate(ways) if j != i and len(o) >= 2 for k in (0, -1)), *crossings, *anchors], _TOUCH_GAP, e)
-        if len(cut) >= 2 and cut != run:
-            edits[i] = [cut]
     return apply_pieces(s, edits) if edits else 0
 
 

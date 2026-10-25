@@ -329,4 +329,55 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
+
+### T31 part B (2026-10-25T23:42Z)
+
+The trigger: the landing cohort (cohort@20261025T234214Z) refused seeds 10, 25 and 37 with `square_every_crossing`,
+`settle_shapes`, `settle_way_outs` and `settle_widths` out of `STEPS` and `last_resort`'s re-asked `settle_street_ends`,
+`settle_joins` (twice), `prune_the_tree`, `settle_widths` and `settle_husks` cut.
+
+1. **What exactly is refusing?** `refuse_unmended` in the last resort: seed 10 `width_steps` (lanes 1, 3; skeleton cross),
+   seed 25 `joins_short` (lane 20 at (2287, 2064); skeleton Y), seed 37 both (skeleton waterside) - each manifest at the refusal
+   in `/tmp/l7r-refused/`. Two rules, the two whose menders (`settle_widths`, `settle_joins`) were cut from the last resort; R8
+   had the four out of `STEPS` alone at 54 of 54, so the cut re-asks are the cause.
+2. **A3 again.** O: `width_steps` and `joins_short` are lane-law rules (`law.py`), not research; their menders are the cut steps.
+3. **A4 again.** They describe the web as laid here: a width step at a skeleton crossing, a join stopping short of its way.
+4. **Moving something placed earlier to suit something later?** No: the measurement restores a mender and moves nothing.
+5. **Tuning or changing?** Neither: one removal measured, then one narrower.
+6. **The one-sentence test.** "The last resort still needs the join and width menders, so they stay until their rules move into
+   the placer" - D35's needed route; it raises no question.
+7. **The next step is a measurement.** The landing cohort with `settle_joins` and `settle_widths` back in the last resort and
+   the rest of the cut kept: does it return to 54 of 54?
+8. **Routes measured?** None offered: the measurement first.
+9. **After a ruling.** None yet.
+
 <!-- plan-archive: T40 to T40 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
+
+### T41 (T31's second part, D35): the four map-moving steps and the last resort's four re-asks deleted
+
+- **Approach**: T31's section, split so its second landing ticks only what it finished. Measured 2026-10-25 (method: the landing
+  cohort, `make cohort-landing JOBS=3`, record `dev/cohort-log/20261025T234826Z-diagram-backlog-3803029.json`, and `make map` on
+  the five pool hamlets compared with `git diff`): with `square_every_crossing`, `settle_shapes`, `settle_way_outs` and
+  `settle_widths` out of `STEPS`, and `settle_husks`, `settle_street_ends` and `prune_the_tree` out of `last_resort`, 54 of 54
+  pass; Inashiro, Kashikawa and Sawada move in their drawing order (`z`) alone, every lane's points unchanged, and one Kashikawa
+  lane's width 5 -> 6 ft, the lane law still kept (the settle refuses a map that breaks it). Cutting `settle_joins` and
+  `settle_widths` from `last_resort` as well refused seeds 10, 25 and 37 (`width_steps`, `joins_short`: T31 part B), so those
+  two stay in `last_resort` - NEEDED, owed D11's conversion under T31. The fourteen names `make dead-closure` then found dead
+  are deleted with their tests. T31 keeps the six needed steps and the last resort's `settle_joins` and `settle_widths`.
+  Rendering: none (no glyph changes; three pool maps redrawn in a new order).
+
+### T41 Approach (checklist part A)
+
+1. **The goal, in the world.** The settle's rounds no longer run the four steps the placers already keep, nor the last resort
+   the three re-asks it does not need, and no code they alone used survives.
+2. **The constraints.** D35, D23, D11; the fixed and pinned seeds; the pool maps held to the lane law.
+3. **Where each comes from.** G: the GM 2026-10-25 ("switch off the 16 repair steps"). O: the measurement above.
+4. **Do they describe the world here?** Measured (the landing cohort and the five pool maps).
+5. **The order.** After T40; before T31's conversions of the needed steps.
+6. **The exits.** The landing cohort and the pool gate green: landed. Red: set down with its seeds (D23).
+7. **The search smell.** None: one removal measured, then one narrower (T31 part B).
+8. **The budget.** One landing.
+9. **Done, measured.** The four out of `STEPS`, the three out of `last_resort`, the fourteen dead names gone, `make land` green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+

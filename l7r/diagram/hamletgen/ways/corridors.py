@@ -5,7 +5,7 @@ gap_ways.py`) and judged whole as lanes (`tree.py`); where no way reaches the fi
 the network to the bund (`field_runs`, `routed_field_runs`, threaded by `field_router`; `settle.settle_field`). Nothing is
 reserved for a way before the houses (feature 320). A TREE LANE (`is_tree`: the connector, a household's way, a way
 target's spur, the field way) is never cut by a settle repair; an ordinary lane that breaks
-a rule against one is cut instead (`tree.settle_defer`), and one the map no longer needs is pruned (`tree.prune_the_tree`).
+a rule against one is cut instead (`tree.settle_defer`).
 
 Research: roles and indexing - NONE
 """

@@ -2,8 +2,6 @@
 lanes, is repaired by `settle_the_web` and asked again of the same predicate the finished-map tests read. Steps 1-3 here; the
 reach the web owes (step 4) and the law asked of a new lane are `test_settle_reach.py` (split at the 1,000-line bar, 405 T107)."""
 
-import math
-
 import pytest
 
 from l7r.diagram.hamletgen.ways import corridors as co
@@ -35,42 +33,7 @@ def test_pieces_replace_a_lane_and_a_lane_with_none_goes() -> None:
 # ---- step 1: every crossing square (ways W11) --------------------------------------------------------------------
 
 
-def test_every_crossing_is_squared_and_a_joint_at_a_moved_end_moves_with_it() -> None:
-    # the lane starts 4 ft short of the brook and crosses it 39 degrees off square - the "left as drawn" case of old
-    s = _S([CONN, [(96.0, 20.0), (300.0, 180.0)], [(96.0, 20.0), (0.0, 0.0)]], streams=[BROOK], drawn_channels=[{"pts": [[400.0, -500.0], [400.0, 500.0]], "w0": 4.0}, {"pts": [[0.0, 0.0]]}])
-    s.M["lanes"].append({"pts": [[1.0, 1.0]]})
-    assert settle.square_every_crossing(s) == 1
-    assert law.oblique_crossings(s.M) == []
-    assert _pts(s, 2)[0] == _pts(s, 1)[0], "the lane that ended where the squared lane began still meets it"
-    assert settle.square_every_crossing(s) == 0, "squaring a squared web changes nothing"
-
-
 # ---- step 2: shapes and crossings --------------------------------------------------------------------------------
-
-
-def test_a_hook_is_relaid_as_a_tee_and_a_free_hook_loses_its_leg() -> None:
-    way = [(0.0, 100.0), (0.0, -100.0)]
-    hooked_on = [(-100.0, 0.0), (8.0, 0.0), (0.0, 6.0)]  # overshoots the way by 8 ft and bends back onto it
-    free = [(-100.0, 300.0), (100.0, 300.0), (95.0, 308.0)]
-    s = _S([_c(*way), hooked_on, free, _c((0.0, 500.0), (100.0, 500.0), (95.0, 508.0))])
-    settle.settle_shapes(s)
-    assert law.hooked_ends(s.M) == []
-    assert min(math.dist(_pts(s, 1)[-1], q) for q in [(0.0, y) for y in range(-100, 101)]) <= law.JOIN_TOL, "still on the way it joined"
-
-
-def test_a_returning_leg_under_40_ft_is_cut_and_a_zigzag_pulled_straight() -> None:
-    """0081 (feature 328): "a returning leg under 40 ft is cut" - a 30 ft one goes, and a 50 ft one too (a lane never doubles
-    back; the page gives no other remedy, a GUESS); "Two turns of more than
-    50 degrees within 40 ft of path ... are pulled straight" - one lane, its two turns dropped (it was cut into two)."""
-    s = _S([CONN, [(0.0, 50.0), (200.0, 50.0), (170.0, 54.0)], [(0.0, 300.0), (100.0, 300.0), (100.0, 320.0), (200.0, 320.0)]])
-    settle.settle_shapes(s)
-    assert law.lanes_that_kink(s.M) == []
-    assert any(ln["pts"] == [[0.0, 50.0], [200.0, 50.0]] for ln in s.M["lanes"]), "the 30 ft returning leg is cut"
-    assert any(ln["pts"] == [[0.0, 300.0], [200.0, 320.0]] for ln in s.M["lanes"]), "the zigzag pulled straight, one lane"
-    from l7r.diagram.hamletgen.ways.settle import _unkinked
-
-    long_back = [(0.0, 50.0), (200.0, 50.0), (150.0, 55.0)]  # a 50 ft returning leg: a lane never doubles back, so it goes too (GUESS)
-    assert _unkinked(long_back, ("doubles back", 1, 1)) == [long_back[:2]]
 
 
 def test_seed_43s_lattice_step_is_a_kink_the_old_bend_test_passed() -> None:
@@ -81,15 +44,6 @@ def test_seed_43s_lattice_step_is_a_kink_the_old_bend_test_passed() -> None:
     s = _S([CONN, step])
     settle.settle_the_web(s)
     assert law.lanes_that_kink(s.M) == []
-
-
-def test_a_brook_crossed_out_and_back_loses_the_far_bank_stretch() -> None:
-    husk = [(1.0, 1.0)]  # which the shape step passes over
-    s = _S([CONN, [(0.0, 0.0), (200.0, 0.0), (200.0, 80.0), (0.0, 80.0)], husk], streams=[BROOK], meta={"ftpx": 1.0, "brook_fords": [[100.0, 0.0], [100.0, 80.0]]})
-    assert law.over_and_back(s.M)
-    settle.settle_shapes(s)
-    assert law.over_and_back(s.M) == []
-    assert all(ln["pts"][0][0] < 100.0 or ln["pts"][-1][0] < 100.0 for ln in s.M["lanes"][1:] if len(ln["pts"]) >= 2), "what is left is on the home bank"
 
 
 def test_a_re_laid_end_meets_its_way_clean_or_not_at_all() -> None:
@@ -114,67 +68,7 @@ def test_an_end_that_crossed_its_way_is_teed_where_it_first_reaches_it() -> None
     assert settle.reaimed(short, tread) == [(100.0, -60.0), (20.0, -40.0), (0.0, -30.0)], "a tail under 40 ft is cut at the crossing"
 
 
-def test_a_crossing_off_a_ford_is_cut_and_one_at_a_ford_stands() -> None:
-    s = _S([CONN, [(0.0, 0.0), (200.0, 0.0)], [(0.0, 200.0), (200.0, 200.0)]], streams=[BROOK], meta={"ftpx": 1.0, "brook_fords": [[100.0, 5.0]]})
-    settle.settle_shapes(s)
-    assert law.off_ford_crossings(s.M) == []
-    assert any(ln["pts"] == [[0.0, 0.0], [200.0, 0.0]] for ln in s.M["lanes"]), "the lane at the ford is untouched"
-
-
-def test_a_crossing_left_oblique_is_cut() -> None:
-    lanes = [CONN, [(0.0, 0.0), (200.0, 150.0)]]
-    s = _S(lanes, streams=[BROOK], meta={"ftpx": 1.0, "brook_fords": [[100.0, 75.0]]})
-    settle.settle_shapes(s)
-    assert law.oblique_crossings(s.M) == []
-    ch = _S(lanes, drawn_channels=[{"pts": [[100.0, -500.0], [100.0, 500.0]], "w0": 4.0}])
-    settle.settle_shapes(ch)
-    assert law.oblique_crossings(ch.M, "channel") == []
-
-
-def test_a_crossing_no_deck_seats_is_squared_and_else_cut() -> None:
-    """Ways W12/W13: `law.undeckable_at` is the placer's own deck solve. A shallow crossing of a field ditch is squared
-    where a square deck seats; one that cannot seat even square - its landing on flooded rice - is cut."""
-    ditch = {"poly": [[0.0, 100.0], [400.0, 110.0]], "w": 4.0, "role": "main"}
-    shallow = [(0.0, 95.0), (400.0, 118.0)]  # two degrees off the ditch's own line
-    s = _S([CONN, shallow], field_ditches=[ditch])
-    assert law.undeckable_crossings(s.M), "the fixture provokes the violation"
-    settle.settle_shapes(s)
-    assert law.undeckable_crossings(s.M) == []
-    ring = [[-50.0, 101.75], [450.0, 114.25], [450.0, 400.0], [-50.0, 400.0]]  # the rice 3 ft past the ditch's line
-    rice = {"outline": ring, "plot_rings": [ring]}
-    wet = _S([CONN, [(200.0, 0.0), (200.0, 300.0)]], field_ditches=[ditch], fields=[rice])
-    assert law.undeckable_crossings(wet.M), "the deck's far landing stands in the rice"
-    settle.settle_shapes(wet)
-    assert law.undeckable_crossings(wet.M) == []
-
-
-def test_a_lane_through_a_neighbors_plot_or_a_building_is_cut_but_not_through_its_own() -> None:
-    yard = {"poly": [[90.0, -10.0], [110.0, -10.0], [110.0, 10.0], [90.0, 10.0]], "of": [300.0, 300.0]}
-    own = {"poly": [[390.0, 190.0], [410.0, 190.0], [410.0, 210.0], [390.0, 210.0]], "of": [400.0, 240.0]}
-    s = _S(
-        [CONN, [(0.0, 0.0), (200.0, 0.0)], [(300.0, 200.0), (400.0, 200.0)], [(0.0, 600.0), (200.0, 600.0)]],
-        houses=[(300.0, 300.0), (400.0, 240.0)],
-        threshing_yards=[yard, own],
-        byres=[{"x": 100.0, "y": 600.0, "w": 10.0, "h": 10.0}],
-    )
-    s.M["lanes"][2]["serves"] = [400.0, 240.0]  # a door path names its household (405 T18)
-    settle.settle_shapes(s)
-    assert [ln["pts"] for ln in s.M["lanes"] if ln["pts"][0] == [300.0, 200.0]] == [[[300.0, 200.0], [400.0, 200.0]]], "a door path crosses its own yard"
-    assert not any(ln["pts"] == [[0.0, 0.0], [200.0, 0.0]] for ln in s.M["lanes"]), "the neighbor's yard is not crossed"
-    assert law.breaks_mid_run(s.M) == []
-
-
 # ---- step 3: the ways out (ways W08) -----------------------------------------------------------------------------
-
-
-def test_no_way_out_crosses_the_brook_twice() -> None:
-    # the connector on the west bank; a house on the west bank whose lanes leave over the brook and come back
-    lanes = [_c((50.0, 0.0), (-1000.0, 0.0)), [(50.0, 0.0), (50.0, 100.0)], [(50.0, 100.0), (150.0, 100.0), (150.0, 300.0), (50.0, 300.0)]]
-    s = _S(lanes, houses=[(40.0, 320.0)], streams=[BROOK], meta={"ftpx": 1.0, "brook_fords": [[100.0, 100.0], [100.0, 300.0]]})
-    assert law.way_outs_crossing(s.M), "the fixture provokes the violation"
-    assert settle.settle_way_outs(s) == 1
-    assert law.way_outs_crossing(s.M) == []
-    assert settle.settle_way_outs(s) == 0
 
 
 def _over_and_back_on_the_tree():
@@ -187,17 +81,6 @@ def _over_and_back_on_the_tree():
         s.M["lanes"].append({"pts": [list(q) for q in pts], "w": 3, "worn": True, **kw})
     s.M["houses"][0]["rot"] = 180.0  # its front faces the field way's end
     return s
-
-
-def test_a_way_out_only_tree_lanes_carry_over_and_back_loses_the_tree_lane_nearest_the_house() -> None:
-    """Ways W08, the tree half: `settle_way_outs` cut only ordinary lanes, so a way out carried over the brook and back on
-    tree lanes alone was left (the kept test's reason). The first tree lane carrying it goes whole; the reach is the next
-    step's to lay again, under `Lawful`."""
-    s = _over_and_back_on_the_tree()
-    assert law.way_outs_crossing(s.M) and all(co.is_tree(s.M["lanes"][i]) for i, _k, _y in law.way_out_carriers(s.M)), "the fixture provokes it on the tree"
-    assert settle.settle_way_outs(s) == 1
-    assert [ln.get("role") for ln in s.M["lanes"]] == [None, "way target"] and law.way_outs_crossing(s.M) == []
-    assert law.way_out_carriers(s.M) == [] and settle.settle_way_outs(s) == 0
 
 
 def test_lawful_refuses_a_tree_lane_that_hands_a_household_a_way_out_over_the_brook_and_back(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -266,49 +149,6 @@ def test_a_lane_whose_first_end_runs_on_beside_a_way_is_cut_there_too() -> None:
     assert law.doubled_tails(s.M) == []
 
 
-def test_a_street_s_dangling_end_is_cut_back_to_its_last_joint() -> None:
-    """`settle_street_ends` (feature 293 on 291, cohort seed 903): a row's street, a tree lane, has the end the law calls
-    dangling cut back to its last joint - the door path's; a map with no street, or a street no end dangles on, is left."""
-    street = ([(0.0, 0.0), (0.0, 200.0), (0.0, 600.0)], {"w": 6})
-    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)], [(-300.0, 0.0), (-300.0, 200.0)], ([(-500.0, -500.0), (-500.0, -400.0)], {"w": 6})], houses=[(100.0, 200.0)])
-    s.M["lanes"][1].update({"street": True, "street_index": 1})
-    s.M["lanes"][-1].update({"street": True, "street_index": 0})  # the row's first street, which the settle passes by
-    assert {(1, -1), (3, -1)} <= set(law.dangling_lane_ends(s.M)), "the street's end, and an ordinary lane's"
-    assert settle.settle_street_ends(s) == 1
-    assert _pts(s, 3)[-1] == (-300.0, 200.0), "an ordinary lane is the other repairs' to trim"
-    assert _pts(s, 1)[-1] == (0.0, 200.0)
-    assert settle.settle_street_ends(s) == 0, "cut already"
-    assert settle.settle_street_ends(_S([CONN, [(0.0, 0.0), (0.0, 600.0)]])) == 0, "no street"
-    lone = _S([CONN, ([(500.0, 300.0), (500.0, 600.0)], {"w": 6})])
-    lone.M["lanes"][1].update({"street": True, "street_index": 0})
-    assert settle.settle_street_ends(lone) == 0, "no joint on it: as it is"
-
-
-def test_a_street_s_dangling_end_keeps_the_last_farm_it_serves(monkeypatch: pytest.MonkeyPatch) -> None:
-    """385 T127 (405 T13, D22): a farm the street serves without a door path stands past its last lane joint - the end is cut
-    back to that farm's point (`street_anchors`, as the web's trim reads it), not to the joint before it."""
-    street = ([(0.0, 0.0), (0.0, 200.0), (0.0, 600.0)], {"w": 6})
-    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)], ([(-500.0, -500.0), (-500.0, -400.0)], {"w": 6})], houses=[(100.0, 200.0)])
-    s.M["lanes"][1].update({"street": True, "street_index": 1})
-    s.M["lanes"][-1].update({"street": True, "street_index": 0})  # the row's first street, which the settle passes by
-    monkeypatch.setattr(settle.ends, "street_anchors", lambda s: [(0.0, 400.0)])
-    assert settle.settle_street_ends(s) == 1
-    assert _pts(s, 1)[-1] == pytest.approx((0.0, 400.0)), "kept to the farm it serves"
-
-
-def test_a_street_s_dangling_end_stops_where_it_crosses_a_way(monkeypatch: pytest.MonkeyPatch) -> None:
-    """405 T49 (D26, T13's round): a street crossing a way mid-run and dangling past it ends at the crossing, on the way
-    (0246 section 6), not back at the joint before it."""
-    street = ([(0.0, 0.0), (0.0, 200.0), (0.0, 600.0)], {"w": 6})
-    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)], [(-100.0, 450.0), (100.0, 450.0)], ([(-500.0, -500.0), (-500.0, -400.0)], {"w": 6})], houses=[(100.0, 200.0)])
-    s.M["lanes"][1].update({"street": True, "street_index": 1})
-    s.M["lanes"][-1].update({"street": True, "street_index": 0})  # the row's first street, which the settle passes by
-    monkeypatch.setattr(settle.ends, "street_anchors", lambda s: [])
-    monkeypatch.setattr(settle.law, "dangling_lane_ends", lambda M, ground: [(1, -1)])
-    assert settle.settle_street_ends(s) == 1
-    assert _pts(s, 1)[-1] == pytest.approx((0.0, 450.0)), "ended on the way it crosses"
-
-
 def _a_link_beside_a_door_path() -> _S:
     s = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 0.0), (15.0, 20.0), (15.0, 250.0)], [(15.0, 250.0), (200.0, 250.0)]])
     s.M["lanes"][1]["serves"] = [0.0, 320.0]  # a door path: a tree lane, never the one that goes
@@ -334,16 +174,6 @@ def test_a_lane_end_in_open_ground_is_trimmed_and_a_lane_serving_nothing_goes() 
 
 
 # ---- step 5: one network (ways W17) and the husks (W04) ----------------------------------------------------------
-
-
-def test_a_piece_off_the_network_goes_and_so_does_a_husk() -> None:
-    s = _S([CONN, [(0.0, 2.0), (0.0, 100.0)], [(0.0, 300.0), (0.0, 400.0)], [(5.0, 5.0)]])
-    assert settle.settle_husks(s) == 1
-    assert settle.settle_network(s) == 1
-    assert law.lane_networks(s.M) == 1 and settle.settle_network(s) == 0
-    headless = _S([[(0.0, 0.0), (0.0, 500.0)], [(300.0, 0.0), (300.0, 50.0)]])
-    settle.settle_network(headless)
-    assert len(headless.M["lanes"]) == 1 and headless.M["lanes"][0]["pts"][1] == [0.0, 500.0], "no connector: the longest network stands"
 
 
 # ---- the loop ----------------------------------------------------------------------------------------------------

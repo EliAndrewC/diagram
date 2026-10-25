@@ -104,4 +104,6 @@
 - [x] T40 (T31's first part, D35) The six settle steps R8 measured needless deleted from STEPS with the names they left dead and their tests, in `l7r/diagram/hamletgen/ways/settle/` (FR-004)
       research: rendering
       verify: DONE. landed: the six settle steps R8 measured needless (each off alone and the six together: 54 of 54, no pool manifest moved) dropped from STEPS, and the nine names make dead-closure found dead (weld.py among them) deleted with their tests; the four last_resort still asks stay for T31
+- [ ] T41 (T31's second part, D35) The four map-moving settle steps and the last resort's three needless re-asks deleted, with the fourteen names they left dead and their tests, in `l7r/diagram/hamletgen/ways/` (FR-004)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=417)

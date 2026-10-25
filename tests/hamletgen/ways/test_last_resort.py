@@ -17,7 +17,7 @@ DOUBLED_BACK = [(0.0, 2.0), (0.0, 200.0), (5.0, 150.0)]
 
 def _no_steps(monkeypatch: pytest.MonkeyPatch) -> None:
     """The last resort's re-asked steps as no-ops, so a case isolates its drops and its refusal."""
-    for name in ("settle_joins", "settle_reach", "settle_knots", "settle_defer", "settle_network", "settle_fragments", "prune_the_tree", "settle_widths", "settle_husks"):
+    for name in ("settle_reach", "settle_knots", "settle_defer", "settle_network", "settle_fragments"):
         monkeypatch.setattr(lr, name, lambda s: 0)
 
 
@@ -176,18 +176,6 @@ def test_a_web_gone_still_with_a_rule_only_the_tree_breaks_is_refused_by_name_ne
     monkeypatch.setattr(settle.stage, "unsettled", lambda M, ground=None: {})
     got = settle.settle_the_web(shipped)
     assert got["rounds"] == 1 and got["changed"] == 0 and law.doubled_tails(shipped.M) == [1]
-
-
-def test_a_web_gone_still_with_an_ordinary_lane_breaking_a_rule_against_the_tree_is_repaired(monkeypatch: pytest.MonkeyPatch) -> None:
-    """The ordinary lane's needle on the connector, with every repair step idle so the first round changes nothing: the
-    exit asks the law, the last resort drops the ordinary lane, and what ships keeps it."""
-    needle = [(-50.0, 150.0), (-120.0, 10.0), (-153.6, 0.4)]
-    s = _S([CONN, needle])
-    assert law.needle_joins(s.M["lanes"]), "the violating case"
-    monkeypatch.setattr(settle.stage, "STEPS", (settle.settle_husks,))
-    got = settle.settle_the_web(s)
-    assert got["rounds"] == 1 and got["changed"] == 0 and got["dropped"] == 1
-    assert settle.unsettled(s.M) == {} and len(s.M["lanes"]) == 1 and s.M["lanes"][0]["connector"]
 
 
 def test_a_refusal_names_what_breaks_each_rule() -> None:
