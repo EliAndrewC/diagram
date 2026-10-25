@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:09:03+00:00",
+ "final_url": "https://www.ers.usda.gov/media/5337/fish-and-shellfish.csv?v=88311",
+ "first": "01/013d0b1057bd/20261025T140902Z",
+ "gm_copies": [],
+ "keys": [
+  "usda-ers-food-availability"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "01/013d0b1057bd/20261025T140902Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "6a85cb3ae5e014cc99d308e24b2534fcb7bbe8cf84ef42da27cf70fdb9a5289a",
+ "url": "https://www.ers.usda.gov/media/5337/fish-and-shellfish.csv?v=88311"
+}

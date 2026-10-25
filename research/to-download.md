@@ -4161,3 +4161,15 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [a Google search for the book](https://www.google.com/search?q=%E4%B8%89%E4%BA%95%E6%96%87%E5%BA%AB+%E8%BF%91%E4%B8%96%E5%BE%8C%E6%9C%9F%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E4%B8%BB%E8%A6%81%E7%89%A9%E4%BE%A1%E3%81%AE%E5%8B%95%E6%85%8B)
 - **Rests on it:** research/questions/0286-what-did-a-years-necessities-cost-in-japan-era-by-era.html (diagram feature 412; asked for by gm-assistant on EliAndrewC/diagram#13) - the Kyoto salt after 1790 marked doubtful, and the charcoal by weight (also 0279, 0273).
 - Blocked by: in print only; no open copy was found (2026-10-24).
+
+### 328. [money] US Bureau of Labor Statistics, "Average Retail Food and Energy Prices, U.S. and Midwest Region" (monthly table), the September 2026 values
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[the BLS table](https://www.bls.gov/regions/mid-atlantic/data/averageretailfoodandenergyprices_usandmidwest_table.htm)**
+- The US city-average prices of long-grain rice, all-purpose flour and dried beans per lb, and piped gas per therm, for September 2026; saved as a PDF or HTML page.
+- Fallback: [a Google search for the table](https://www.google.com/search?q=BLS+%22Average+Retail+Food+and+Energy+Prices%2C+U.S.+and+Midwest+Region%22)
+- **Rests on it:** research/questions/0299-what-do-the-basket-goods-cost-in-the-us-today-and-how-much-does-an-american-use.html (diagram feature 420; asked for by gm-assistant on EliAndrewC/diagram#17) - the government's average shop price of rice and flour, now read only to January 2025 through DBnomics, and of dried beans, now uncited.
+- Blocked by: bls.gov refuses this container (HTTP 403, 2026-10-25); api.bls.gov returned 503.

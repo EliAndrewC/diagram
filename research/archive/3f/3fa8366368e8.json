@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:04:40+00:00",
+ "final_url": "https://www.eia.gov/consumption/residential/data/2020/c&e/xls/ce5.4.xlsx",
+ "first": "3f/3fa8366368e8/20261025T140439Z",
+ "gm_copies": [],
+ "keys": [
+  "eia-btu-recs-2020"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "3f/3fa8366368e8/20261025T140439Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "37eba71bb78195475d7faf41de37618b59c19c05c10d07e58bc00b6a6a8f0bb9",
+ "url": "https://www.eia.gov/consumption/residential/data/2020/c&e/xls/ce5.4.xlsx"
+}

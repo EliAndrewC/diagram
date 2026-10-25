@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:53:06+00:00",
+ "final_url": "https://www.walmart.com/blocked?url=L3NlYXJjaD9xPWdyZWF0K3ZhbHVlK2Nhbm9sYStvaWwrZ2FsbG9u&uuid=c213f3dc-d083-11f1-a805-0c12690ccb75&vid=&g=b",
+ "first": "30/30f02beee2ea/20261025T145305Z",
+ "gm_copies": [],
+ "keys": [
+  "walmart-great-value-canola-oil"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "30/30f02beee2ea/20261025T145305Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "66c4a96d5980f27bcc6ab1a000ee313d3e7d56ca01f4db7d7f803f20018098e4",
+ "url": "https://www.walmart.com/search?q=great+value+canola+oil+gallon"
+}

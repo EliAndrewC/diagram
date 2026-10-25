@@ -1,0 +1,3 @@
+- source-applicability: usda-nass-agricultural-prices-2026-09 (re-judged after C4 changed its limits from 'raw cotton lint' to 'raw cotton', S4b's carried-over quote-check finding) - 1 APPLICABLE-WITH-LIMITS, limits HONEST, no EDITs; the upland cotton glossary definition fixed likewise and the unused lint term removed
+- source-reader, quote-check, record-format, intro-check, translation-check: nothing owed - make record-owed showed every unit of S4 and S4b answered before C4 began (180 owed, 0 unanswered); translation-owed names only 0298 pairs (C5's, answered)
+STILL OWED: nothing (record-owed 0 unanswered; record and glossary tests 2248 passed)
