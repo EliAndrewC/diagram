@@ -112,3 +112,40 @@ Story 2), the code-size delta (SC-004), the feature report.
 
 <!-- plan-archive: T23 to T05 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T25 to T05 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
+
+## T26 - the web's post-lay passes the placers already make needless, measured off and deleted (R2 G2, first part; FR-004, FR-006)
+
+### T26 Approach (checklist part A)
+
+1. **The goal, in the world.** Every pass `stage_web` runs after the lay that changes nothing a placer did not already get right
+   is gone: the web is laid as it stands, with no repair standing in for a rule its placers already keep.
+2. **The constraints.** `ways/web/stage.py` `stage_web` runs about 25 passes after `lay_reachable_runs` (`inventory/ways.md`,
+   web/stage.py), several two or three times: `_join_orphan_ways`, `_bridge_collinear_breaks`, `_touch_junctions`,
+   `tidy_lane_ends`, `_smooth_web`, `_drop_collapsed`, `_sweep_debris`, `_drop_end_nubs`, `_sweep_steading_fouls`,
+   `_sweep_doubled_remnants`, `_sweep_dangling_ends`, `_keep_the_route_wide`, `straighten_joints`,
+   `fold_the_connector_hairpin`, `_sweep_doubled_tails`, `center_lane_ends`, `cut_the_overruns`, `cut_past_the_junction`,
+   `split_at_crossings`, `meet_end_to_end`, `trim_streets`. Which are needless is not known: it is MEASURED, one pass (each of
+   its call sites) turned off at a time.
+3. **Where each comes from.** O: FR-004 (the passes that repair a laid web are deleted), FR-008 (no regression), D11 (land green
+   or set down, never iterate).
+4. **Do they describe the world here?** To be measured.
+5. **The order.** After T23/T25; before T06 (which rebuilds what the needed passes stand in for).
+6. **The exits.** A pass whose removal turns any fixed or pinned seed red, or changes a pool map's verdict, is NEEDED today: it
+   is recorded with the seeds it fails and set down for T06 / the GM's fixing pass, untouched.
+7. **The search smell.** One probe per pass, no tuning: a pass is deleted only as it stands, never adjusted to pass.
+8. **The budget.** About 3 min a probe (48 fixed + 6 pinned seeds at 5 workers, R1's rate), about 21 passes; 1.5 h, background.
+9. **Done, measured.** `research.md` R5: each pass, its probe's fixed-and-pinned result; the needless ones deleted (with their
+   tests), the landing cohort green and the pool maps' verdicts unchanged; a fresh block of 500 after the landing, its rate
+   recorded beside R3.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T26 Decisions
+
+- **D22** Each probe runs in a detached worktree at the landed HEAD, with that pass's call sites in `stage_web` guarded by an
+  environment switch the probe sets (the instrumentation never lands), and rolls `make cohort N=48 FRESH=0` (the fixed seeds
+  and the pinned rows). A pass is NEEDLESS when every seed's verdict is the baseline's; the baseline is the same roll with no
+  pass off. Rendering: none.
+- **D23** The needless passes are deleted together, with their call sites and the tests that only exercised them, in one
+  landing; if the landing cohort is then red, the deletion is set down whole and recorded (no pass-by-pass iteration). Maps
+  may change (held to the claims and the cohort). Rendering: none.
