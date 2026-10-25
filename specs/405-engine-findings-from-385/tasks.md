@@ -419,8 +419,9 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T137 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#the fallback wall places are tried back wall first, then the west and east flanks, each walked end to end in WALL_SLIDE_FT (4 ft) steps, and the first clear one is taken [lands-open]
       research: rendering
-- [ ] T138 A lane a knot's tee would strand keeps its short tail cut back to where it meets a way (found by T106 on cohort seed 7 with the sheds turned, 2026-10-24): `knots.tails_cut_back` (D133, 0081's 40 ft tail rule), asked where the tee alone is refused
+- [x] T138 A lane a knot's tee would strand keeps its short tail cut back to where it meets a way (found by T106 on cohort seed 7 with the sheds turned, 2026-10-24): `knots.tails_cut_back` (D133, 0081's 40 ft tail rule), asked where the tee alone is refused
       research: rendering
+      verify: DONE. landed: a lane a knot's tee would strand keeps its short tail cut back to its meeting (D133, 0081's 40 ft tail rule)
 - [ ] T139 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the kura's walls too [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
