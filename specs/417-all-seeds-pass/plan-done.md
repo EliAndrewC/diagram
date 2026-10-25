@@ -108,3 +108,46 @@
 - **D12** `parts_across_brook` counts the parts `r` (with `of`) for which `crosses_a_stream(r["of"], (r["x"], r["y"]),
   manifest["streams"])`; its local `_cross` is deleted. The streams with fewer than two points are skipped by the predicate
   itself. Rendering: none.
+<!-- plan-archive: archived 2026-10-25 -->
+## T05 - one lane rule, one constant, where the copies agree (R2 G1, first part; FR-006)
+
+### T05 Approach (checklist part A)
+
+1. **The goal, in the world.** Each lane rule the web codes in several places with the SAME value reads one named constant, so
+   a later change to the rule cannot leave a copy behind.
+2. **The constraints.** The copies found by T03 (`inventory/ways.md`, TWICE 4, 5, 6, 8, 14) with equal values: the 40 ft tail
+   past a crossing or junction (`sweeps._PAST_CONNECTOR_FT`, `bund._PAST_JUNCTION_FT`, `settle/shapes._CROSSING_TAIL_FT`,
+   `knots._TAIL_CUT_FT`, the literal `40.0` at `serve.py:234` and `touch.py:286`); the 25 ft join (`fabric._LANE_JOIN_FT`,
+   `joints._MEET_FT`, against `consts_ways.LANE_JOIN_FT`); the knot margin (`knots._KNOT_MARGIN` against the imported
+   `gap_ways.KNOT_MARGIN`, both 1.0); the 100 ft serve (`sweeps._SERVE_FT` against `consts_ways.WEB_REACH_FT`); the bend
+   (`route.py`'s literal 140 / 50 / 40 against `clearance._HAIRPIN_DEG`, `_ZIGZAG_DEG`, `_ZIGZAG_RUN_FT`); the field reach
+   (`thread.SPUR_REACH_FT` and `law.FIELD_REACH_FT`, both 6.0). The layer order of `ways/` (every reference points backwards;
+   `law.py` imports no lower module's rule but `thread` may not import `law`).
+3. **Where each comes from.** O: FR-006 ("a second implementation of a rule is deleted"), R2 G1, D11 (the copies that agree go
+   first: they move no map).
+4. **Do they describe the world here?** Yes, measured 2026-10-25 (each copy's definition read off its module by grep, and
+   its research line beside it): each pair holds the same number for the same research line (0081's 40 ft tail and 25 ft join,
+   0246's 100 ft, 0081's 140 / 50 / 40 bend, 0014's 6 ft join to the bund).
+5. **The order.** After T04; before T16 (the copies that differ) and T06.
+6. **The exits.** A copy whose RULE differs although its number agrees (`clearance._ARM_FT`, a hairpin's arm; `_ZIGZAG_RUN_FT`;
+   `joints._SHORT_LEG_FT`, a returning leg; `touch._ALONG_STEP_FT`, a sample spacing) is not merged: different rules.
+7. **The search smell.** None.
+8. **The budget.** 1 h plus the landing.
+9. **Done, measured.** A test asserts each former copy IS the one constant and that `route.py` holds no bare 140.0 / 50.0 /
+   40.0; the reference map's manifest unchanged against HEAD (`git diff` on its manifest after `make map`); the landing cohort
+   green with the same verdicts.
+10. **Before moving a constant.** No value moves.
+11. **Before fitting things into room.** n/a.
+
+### T05 Decisions
+
+- **D13** `consts_ways.TAIL_CUT_FT = 40.0` (0081: "A tail of under 40 ft beyond a crossing is cut") is the one tail
+  constant; `sweeps`, `bund`, `settle/shapes`, `knots`, `serve` and `touch` read it. Rendering: none.
+- **D14** `fabric._LANE_JOIN_FT` and `joints._MEET_FT` are `consts_ways.LANE_JOIN_FT` (0081's 25 ft); `knots` uses the
+  imported `KNOT_MARGIN` and its own `_KNOT_MARGIN` is deleted; `sweeps._SERVE_FT` is `consts_ways.WEB_REACH_FT`.
+  Rendering: none.
+- **D15** `route.py` asks `clearance._HAIRPIN_DEG`, `_ZIGZAG_DEG` and `_ZIGZAG_RUN_FT` in place of its literals.
+  Rendering: none.
+- **D16** `consts_ways.FIELD_REACH_FT = 6.0` (0014's join to the bund) is read by `thread.SPUR_REACH_FT` and
+  `law.FIELD_REACH_FT`. Rendering: none.
+
