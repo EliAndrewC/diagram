@@ -168,6 +168,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "## T23 - three claims labeled as their pages answer them (T05's claims round, MISLABELED; arbiter ask 417-T05-claims)": {
+   "sha256": "1be53404cad41dfffd3cb5a2a8c0dedf577445a355ad9f7f9f6041f7d301f809",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Approach (checklist part A)": {
+   "sha256": "750dbf6404fee42560714c958147784ecec17b6798cd8ff327134b9eecfd0eb6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Decisions": {
+   "sha256": "ca9ed00c80de8b0565e9ba000b641b6875ff6f4bcede3d313db2c0c44c619b46",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T25 - the bund reach and the stub's tail, one rule each (T05's claims round, outside the change; FR-006)": {
+   "sha256": "168f04b35a82f5f52452c2ab0a634023ae67089762d86a460974a3be2cfebdf6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T25 Approach (checklist part A)": {
+   "sha256": "8f5c7f74d1d45aec6c4b2c16f9d4eeaf57ebec6d2c5174f09c20a91f05ea1087",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T25 Decisions": {
+   "sha256": "5f7ac24ef82ddcaf8efec4f6b10981ba97b9ca3ab0509dcd90661cc8b7eaaaa9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -993,6 +1029,50 @@
      "summary": "Done measure (Approach item 9): a test asserts the overlap matrix carries no mirror of an engine rule.",
      "class": "within",
      "why": "The test only fails when the thing FR-006 asks for (no second implementation of a rule) is missing from the matrix. It enforces the request and adds no behavior of its own (GM 2026-09-20)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T23 - three claims labeled as their pages answer them (T05's claims round, MISLABELED; arbiter ask 417-T05-claims)",
+    "## T25 - the bund reach and the stub's tail, one rule each (T05's claims round, outside the change; FR-006)",
+    "### T23 Approach (checklist part A)",
+    "### T23 Decisions",
+    "### T25 Approach (checklist part A)",
+    "### T25 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D21",
+     "summary": "Relabel three of T05's claims to what their pages say: bund.cut_stub_ends 'a stub that reaches the bund kept' GUESS 0014 (within 6 ft); sweeps._bridge_collinear_breaks 'bridge width' and sweeps._join_orphan_ways 'link width' CONVENTION. Label-only, no map moves.",
+     "class": "within",
+     "why": "Record-keeping for T05's own landing (the claims round on an engine change this feature made), not new claims work and not an engine change, so FR-010's hold is not touched. It changes no behavior, so the GM's 2026-10-25 'stop before fixing seeds' does not reach it. It drops nothing the request asks for."
+    },
+    {
+     "id": "T23-exit-4",
+     "summary": "The fourth mislabeled claim (sweeps._sweep_doubled_remnants 'doubled lane dropped') is not relabeled in T23; its label moves to T24 with the behavior change that makes the label true.",
+     "class": "within",
+     "why": "This is ordering, not a carve-out. The claim is still answered, in T24, and nothing the GM asked for is dropped. Labeling it now would put a claim on the record that reads as drifted against 0081, which would work against the point of the round. It stays within the request only so long as T24 carries the label. T24 is not in this bundle and is not judged here."
+    },
+    {
+     "id": "D19",
+     "summary": "consts_ways.FIELD_REACH_FT is assigned from settlement.water_ways._helpers.BUND_REACH_FT, so the one 6 ft bund reach has one constant, not two 6.0s. The import runs from the higher layer to the lower one.",
+     "class": "within",
+     "why": "FR-006: 'a second implementation of a rule is deleted'. Two constants for one rule is a rule coded twice, and SC-003 asks for one implementation. No value moves."
+    },
+    {
+     "id": "D20",
+     "summary": "bund.cut_stub_ends cuts a free end's tail '< TAIL_CUT_FT' (it was '<= _PAST_JUNCTION_FT'), as settle/shapes.reaimed and sweeps.cut_past_connector already do and as 0081 words it ('under 40 ft'). The value is unchanged; a map moves only where a tail is exactly 40 ft; the affected maps are regenerated.",
+     "class": "within",
+     "why": "FR-006 and SC-003: one rule read three ways is a rule implemented more than once, and this makes the readers ask it the same way. It is rule consolidation, not seed fixing, so it sits inside the 2026-10-25 limit ('turning off automated checks, and then replacing them...'). It excludes nothing from the request. Whether the remaining cut passes are repair passes that FR-006 later deletes belongs to other tasks and is not narrowed here."
+    },
+    {
+     "id": "T25-exit",
+     "summary": "The sweeps comments that give _LANE_JOIN_FT as 30 are left, because they are history notes and not stale.",
+     "class": "within",
+     "why": "Comment text only. No rule, check or requirement is excepted."
     }
    ]
   }

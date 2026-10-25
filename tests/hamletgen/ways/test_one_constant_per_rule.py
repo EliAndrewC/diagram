@@ -40,3 +40,13 @@ def test_route_asks_the_bend_constants_not_literals():
     code = "\n".join(line.split("#", 1)[0] for line in text.splitlines() if not line.strip().startswith(("Research:", '"""')))
     assert not re.search(r"[<>]=\s*(?:140|50|40)\.0\b", code)
     assert (clearance._HAIRPIN_DEG, clearance._ZIGZAG_DEG, clearance._ZIGZAG_RUN_FT) == (140.0, 50.0, 40.0)
+
+
+def test_the_bund_reach_is_the_settlement_s_one_constant_and_the_stub_s_tail_is_under_it():
+    """Feature 417 T25 (D19, D20): the 6 ft bund reach was two 6.0s (`water_ways._helpers.BUND_REACH_FT` and
+    `consts_ways.FIELD_REACH_FT`); and `cut_stub_ends` cut a tail `<=` 40 ft where the page and the other two readers say under."""
+    from l7r.diagram.hamletgen import consts_ways
+
+    assert _reads(consts_ways, "FIELD_REACH_FT", "BUND_REACH_FT")
+    src = (WAYS / "bund.py").read_text(encoding="utf-8")
+    assert "<= _PAST_JUNCTION_FT" not in src and "< _PAST_JUNCTION_FT" in src

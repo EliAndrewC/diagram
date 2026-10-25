@@ -112,7 +112,7 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
         no loop closed - UNRESEARCHED: not where a walk under twice the gap already exists
         a short gap closed at any bearing - research/questions/0081-village-lanes.drawing.html: ends that nearly meet are joined - a break of `_LANE_JOIN_FT` (25 ft) or less, whatever the two ways' bearings
         a bridge as direct as a path - UNRESEARCHED: refused where its route runs over `_PATH_DIRECTNESS` (2) times the gap
-        bridge width - UNRESEARCHED: drawn at the wider of the two ways' widths
+        bridge width - CONVENTION: drawn at the wider of the two ways' widths
         bridge clearance fallback - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: none - the bridge's line keeps 7 ft (`WEB_FABRIC_GAP`) off the fabric or is not drawn"""
     made = 0
     # TWELVE PASSES, not four. Each closure adds a lane whose own ends sit beside existing ones, so a
@@ -264,7 +264,7 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
         orphan joined to the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
         link crosses the brook at a crossing place - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no out-and-back over the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a link crossing the brook twice is refused
-        link width - research/questions/0081-village-lanes.drawing.html: the width of the way it joins
+        link width - CONVENTION: the width of the way it joins
         orphan link directness - UNRESEARCHED: a link up to `_LINK_DIRECTNESS` (4) times the gap"""
     made = 0
     for _ in range(6):

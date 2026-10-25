@@ -493,7 +493,7 @@ def cut_stub_ends(p: list[Pt], others: Sequence[tuple[Pt, Pt]], houses: Sequence
     Research:
         no stub past a junction - research/questions/0081-village-lanes.drawing.html: a tail under 40 ft past a junction cut
         a stub that serves a house kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 60 ft (`HOUSE_SERVE_FT`), the page's reach for a way serving a farmhouse
-        a stub that reaches the bund kept - UNRESEARCHED: within 6 ft of the worked ground's edge"""
+        a stub that reaches the bund kept - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of the worked ground's edge"""
     from l7r.diagram.settlement import seg_dist
     from l7r.diagram.settlement.water_ways._helpers import HOUSE_SERVE_FT
 
@@ -507,7 +507,7 @@ def cut_stub_ends(p: list[Pt], others: Sequence[tuple[Pt, Pt]], houses: Sequence
         if (
             k is not None
             and not on_a_way(end)
-            and sum(math.dist(out[j], out[j + 1]) for j in range(k)) <= _PAST_JUNCTION_FT
+            and sum(math.dist(out[j], out[j + 1]) for j in range(k)) < _PAST_JUNCTION_FT  # 0081's "under 40 ft", as the other two readers ask it (417 T25, D20)
             and all(math.dist(end, h) > HOUSE_SERVE_FT for h in houses)
             and ground.dist(end) > BUND_REACH_FT
         ):

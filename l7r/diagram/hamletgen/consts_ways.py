@@ -6,6 +6,8 @@ Research: way constants plumbing - NONE"""
 
 from __future__ import annotations
 
+from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
+
 # THE NO-BUILD CORRIDOR OF A WEB LANE, in feet - deliberately much tighter than LANE_CLEARANCE.
 #
 # LANE_CLEARANCE (40) is derived for a lane the homesteads FRONT: it is the drawn minka's
@@ -205,8 +207,9 @@ TAIL_CUT_FT = 40.0
 """Research: a tail past a crossing - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut"""
 
 # A WAY JOINING THE BUND (feature 417 T05, D16): an end this near the paddy's edge reaches the field - `thread.SPUR_REACH_FT`
-# and `law.FIELD_REACH_FT` both read it (they were two 6.0s a test held equal).
-FIELD_REACH_FT = 6.0
+# and `law.FIELD_REACH_FT` both read it (they were two 6.0s a test held equal); since T25 (D19) it IS the settlement's
+# `water_ways._helpers.BUND_REACH_FT`, which the lanes and `geom.end_serves` read.
+FIELD_REACH_FT = BUND_REACH_FT  # the settlement's own 6 ft, one constant (417 T25, D19)
 """Research: reaching the field - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end within 6 ft of the paddy's edge joins it"""
 
 # How far off a lane's centerline a frontage seat is offered. This is a PLACEMENT decision and is
