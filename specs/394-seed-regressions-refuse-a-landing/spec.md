@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-19
 
-**Status**: Filed - DEFERRED by the GM until the seeds are expected to pass: not to be planned or worked while many seeds
+**Status**: Superseded by 417 (folded in as its FR-011 and SC-006, the GM 2026-10-24: "Yes fold 394 into 417"). Was: Filed - DEFERRED by the GM until the seeds are expected to pass: not to be planned or worked while many seeds
 fail. Start it once the failing-seed work leaves every rolled form's seeds expected green.
 
 **Approved**: the GM, 2026-10-19, "I would like to file a feature for option one, but I don't actually want to work it now."
