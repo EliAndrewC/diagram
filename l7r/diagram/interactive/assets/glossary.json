@@ -778,7 +778,7 @@
   ]
  },
  "bu": {
-  "def": "A unit of land area the size of a tsubo, about 3.3 square meters; the cadastres give homestead lots in bu. Written after another unit, as in 57 tsubo 2 bu 5 rin, it means a tenth of that unit. In money it is a gold coin, a quarter of a ryo, as in 11 ryo 2 bu.",
+  "def": "A unit of land area the size of a tsubo, about 3.3 square meters; the cadastres give homestead lots in bu. Written after another unit, as in 57 tsubo 2 bu 5 rin, it means a tenth of that unit; in silver, a tenth of a monme, as in 4 monme 2 bu or 9 bu a mat. In money it is a gold coin, a quarter of a ryo, as in 11 ryo 2 bu.",
   "variants": [
    "bu"
   ]
@@ -10880,8 +10880,7 @@
   "variants": [
    "military examination",
    "military examinations",
-   "palace examination",
-   "metropolitan examination"
+   "palace examination"
   ]
  },
  "kizuma": {
@@ -13033,7 +13032,9 @@
   "variants": [
    "sexagenary year",
    "tsuchinoe-ne",
-   "hinoe-inu"
+   "hinoe-inu",
+   "guihai",
+   "wuchen"
   ]
  },
  "band": {
@@ -18049,6 +18050,20 @@
    "FMRs"
   ]
  },
+ "fudakake": {
+  "def": "The Mitsui merchant house's term for the profit rate a store made on goods it bought, given as a percentage of their price.",
+  "variants": [
+   "fudakake"
+  ]
+ },
+ "farm-gate price": {
+  "def": "The price a farmer was paid for produce where it left the farm, before carriage, trade and a shop's markup were added to it.",
+  "variants": [
+   "farm-gate price",
+   "farm-gate prices",
+   "farm gate"
+  ]
+ },
  "milling rate": {
   "def": "The share of a weight of rough rice left as milled rice once the hulls and bran are taken off; the US government's figure for 2010 is 68.86%.",
   "variants": [
@@ -18080,6 +18095,33 @@
   "def": "The National Association of Home Builders, a US builders' trade group that surveys builders on what a new house costs to build.",
   "variants": [
    "NAHB"
+  ]
+ },
+ "sencha": {
+  "def": "A green tea of middling grade, made by steaming and rolling the tender leaves of the season's picking; one of the teas the Mitsui books price in Kyoto.",
+  "variants": [
+   "sencha"
+  ]
+ },
+ "bancha": {
+  "def": "A coarse, cheap green tea made from the larger leaves picked later in the season; one of the teas the Mitsui books price in Kyoto.",
+  "variants": [
+   "bancha"
+  ]
+ },
+ "nankeen": {
+  "def": "A plain cotton cloth of a natural yellowish-brown, woven around Nanjing and named by Europeans for the city.",
+  "variants": [
+   "nankeen",
+   "nankeens",
+   "Nankin"
+  ]
+ },
+ "metropolitan examination": {
+  "def": "The Chinese state's examination held at the capital for those who had passed the provincial one, the second of its three levels, before the palace examination.",
+  "variants": [
+   "metropolitan examination",
+   "metropolitan examinations"
   ]
  }
 }
