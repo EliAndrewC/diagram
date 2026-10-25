@@ -389,6 +389,10 @@ _ESCAPES = {
         "a make variable on `make land` (the GM 2026-10-24), exported to scripts/land.py, which a mention cannot set; reason floor and the firing log via the Makefile's LOGESCAPE",
     ),
     "SET_DOWN_OK": ("environment", "a make variable on `make set-down` (feature 405, the GM 2026-10-21), which a mention cannot set; reason floor and the firing log via the Makefile's LOGESCAPE"),
+    "HOLD_OK": (
+        "environment",
+        "a make variable on `make task-start` (feature 417 T02, plan D4): starts a held feature's NON-engine task; an engine task has no escape; reason floor and the firing log via the Makefile's LOGESCAPE, as PREFLIGHT_OK",
+    ),
     "PREFLIGHT_OK": ("environment", "a make variable on `make done` (feature 375 FR-004), which a mention cannot set; reason floor and the firing log via the Makefile's LOGESCAPE, as REF_OK"),
     "CLOSE_OK": (
         "environment",
