@@ -12149,7 +12149,8 @@
  "Koeki Kokusanko": {
   "def": "A Japanese farm book of the late Edo period; among much else it describes the kunugi cut for Ikeda charcoal.",
   "variants": [
-   "Koeki Kokusanko"
+   "Koeki Kokusanko",
+   "Kōeki kokusan kō"
   ]
  },
  "daiba kunugi": {
@@ -13508,7 +13509,8 @@
  "monme": {
   "def": "A unit of weight, a thousandth of a kan (about 3.75 grams), in which silver money was reckoned in Edo-period Japan.",
   "variants": [
-   "monme"
+   "monme",
+   "momme"
   ]
  },
  "kaso-zu": {
@@ -18125,6 +18127,26 @@
   "variants": [
    "metropolitan examination",
    "metropolitan examinations"
+  ]
+ },
+ "moromi": {
+  "def": "The fermenting mash of soybeans, grain koji, salt and water that is pressed to give soy sauce.",
+  "variants": [
+   "moromi"
+  ]
+ },
+ "Honchō shokkan": {
+  "def": "An Edo-period book on foods, published in 1697, whose recipes include soy sauce.",
+  "variants": [
+   "Honchō shokkan",
+   "Honcho shokkan"
+  ]
+ },
+ "Wakan sansai zue": {
+  "def": "An Edo-period illustrated encyclopedia, finished in 1712. It gives recipes for soy sauce and miso, and says the soy sauce sold in city shops was made with wheat.",
+  "variants": [
+   "Wakan sansai zue",
+   "wakan sansai zue"
   ]
  }
 }
