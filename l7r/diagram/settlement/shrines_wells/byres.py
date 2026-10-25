@@ -307,7 +307,7 @@ class DraftByresMixin:
             outer stable gap - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: YARD_SHED_GAP_FT, a ken, then two
             first wall turned per homestead - NONE: hashed from the seat
             its salts, guards and sentinels - NONE: they decide nothing about the place - 5 (count of the first ring's seats (rotation modulus)); 131 (jitter salt (first wall turned))
-            its figures against 0048 - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: 0.3 (back-wall candidate seats at +-0.3 of the house width, where the measured stables stand toward the road and the gate); 0.25 (flank candidate seat 0.25 of the depth toward the back) - a departure the code keeps until feature 417 T33
+            its figures against 0048 - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: 0.3 (back-wall candidate seats at +-0.3 of the house width, where the measured stables stand toward the road and the gate); 0.25 (flank candidate seat 0.25 of the depth toward the back) - a departure the code keeps until feature 417 T33
         """
         hw, hh, rot = float(h["w"]), float(h["h"]), float(h.get("rot", 0.0) or 0.0)
         hx, hy = float(h["x"]), float(h["y"])
@@ -438,6 +438,7 @@ class DraftByresMixin:
             spiral byre off the paddies - research/questions/0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html: a village house stood about 3 ft back from cultivated land; the stall's depth is ours; kept a stall's depth from every field
             its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N8, 2026-10-25) - 30 (30-degree step of the spiral search); 0.25 (the next widening tiers (0.5, 0.25, 0)); 0.75 (spread tier for the shared-shed choice (borrowing itself NOT ATTESTED, P6/the record))
             its byre clearance - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (a spiral byre keeps 3 px clear all round)
+            its byre count and search - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1 (at least one byre per settlement); 16 (the spiral widens 16 px a ring)
         """
         bs = self.bscale
         # SIZE: a shared byre houses ~1-2 draft animals (an ox / water-buffalo stall is ~2x3 m) plus fodder ->

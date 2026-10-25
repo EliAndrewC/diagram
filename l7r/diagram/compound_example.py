@@ -172,6 +172,7 @@ def county_magistracy_program() -> CompoundProgram:
         its figures from 0097 - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: 35 (four 17.5 ft barracks bays, inside 12-18 ft); 52.5 (the same); 48 (walls between the 14 ft and 17 ft bays); 65 (walls between the 14 ft and 17 ft bays)
         its figures guessed on 0113 - GUESS research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html: 72 (official study's width and place ("room sizes GUESSES")); 41 (official study's width and place ("room sizes GUESSES"))
         its gable doors - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.5 (kitchen west door and stables gable door at the face's middle)
+        its kitchen door fallback - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.3 (the kitchen west door's fallback seat); 0.7 (the other)
     """
     # The main gate is a one-bay yakuimon with an 8 ft frontage and a 7 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
     # 0093); it was a 13 ft opening, the carriage gate the vocabulary once drew. The postern in the west wall,

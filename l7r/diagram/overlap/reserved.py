@@ -72,7 +72,7 @@ def seat_radius(key: str, o: Any, clump: float) -> float | None:
         clump clearances - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
             a building's half diagonal, half a clump and 2 px
         wellhead clearance - CONVENTION: the well's drawn radius, 1.05 clumps and 1 px, so no clump is drawn over the wellhead
-        its drawn well radius - CONVENTION: the well's drawn radius - 8 (well radius fallback)
+        its well radius - NONE: they decide nothing about the place; every well record carries r and vr - 8 (well radius fallback)
     """
     if key in SEAT_OCCUPIERS and "x" in o and "w" in o and "h" in o:
         return 0.5 * math.hypot(float(o["w"]), float(o["h"])) + clump * 0.5 + 2.0

@@ -91,9 +91,9 @@ def element_extents(k: str, o: Any, M: Mapping[str, Any]) -> list[Extent]:
         drawn extents - NONE: reads each record's ink; the fallback widths mirror the drawing
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 2.5 (ward fence line's drawn width)
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 8 (π/8 angle step); 12 (well polygon vertex count); 16 (pond polygon vertex count)
-        its drawn way widths - CONVENTION: the widths the drawing gives each way, mirrored for the overlap test - 20 (ring road width fallback); 6 (lane width fallback); 30 (road width fallback); 22 (moat width fallback)
+        its way width fallbacks - NONE: they decide nothing about the place; no generator writes a road, ring road or moat, and lanes carry w - 20 (ring road width fallback); 6 (lane width fallback); 30 (road width fallback); 22 (moat width fallback)
         its wall width - CONVENTION: the wall's drawn width - 10 (wall stroke width fallback)
-        its well radius - CONVENTION: the well's drawn radius - 8 (well radius fallback)
+        its well radius - NONE: they decide nothing about the place; every well record carries r and vr - 8 (well radius fallback)
     """
     out: list[Extent] = []
     pfield = _MATRIX_PARENT_FIELD.get(k)

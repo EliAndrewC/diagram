@@ -554,7 +554,8 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         its figures guessed on 0100 - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2.6 (as above); 2.5 (as above)
         its tub count - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2 (two tubs at the kitchen); 1 (one at each other wooden building)
         no tub at a kura - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: an earth-walled kura takes no tub
-        its wells - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the wells at the kitchen's and the stables' faces and one in the garden
+        its kitchen well - GUESS research/questions/0105-baths-furo.drawing.html: the kitchen's well past the bath, within 20 ft of the kitchen
+        its other wells - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the wells at the stables' face and one in the garden
     """
     env = program.envelope
     parts: list[str] = []

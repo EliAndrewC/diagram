@@ -550,6 +550,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
         its salts, guards and sentinels - NONE: they decide nothing about the place - 11.4 (caption box round both posts (their places ±0.7)); 14.4 (caption box round both posts (their places ±0.7)); 5.7 (caption box round both posts (their places ±0.7)); 13.3 (caption box round both posts (their places ±0.7)); 0.25 (text box descent/ascent per font size)
         its figures of ours - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 14 (posts' places on the ground (±5 ft across, 14 and 27 ft in))
         its weapon rack - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: 8 (rack 8 ft long); 2 (rack 2 ft deep), centred on the practice ground's south edge
+        its striking posts - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: 2 (two striking posts)
     """
     if result.envelope is not None and result.envelope != program.envelope:
         program = replace(program, envelope=result.envelope)
@@ -819,7 +820,8 @@ def _draw_walls_and_gates(
 
     Research:
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 4.5 (half the 9 px wall stroke (WALL_INK_FT, 0092))
-        its wall widths - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 9 (compound wall drawn 3 ft); 6 (court divider 2 ft)
+        its wall widths - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 9 (compound wall drawn 3 ft)
+        its divider - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 6 (court divider 2 ft)
     """
     # compound wall (4 segments; S wall broken by the gate) + divider - each in a `<g stroke=...>` group,
     # the authoring form the audit's gate-opening and divider readers parse (feature 254: the drafts are

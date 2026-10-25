@@ -227,7 +227,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         connector and field spur lanes cross the belt as a way through, not moved past - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane crosses the belt, the planting resumes either side
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 7 (fewest profile columns); 24 (most profile columns); 44 (push-back step off the crop); 0.88 (belt-shortening step off the crop); 0.74 (belt-shortening step off the crop); 40 (same window as line 48, in belt reach); 11 (lane samples per segment)
         its salts, guards and sentinels - NONE: they decide nothing about the place - 4.29497e+09 (seed mask); 7919 (seed multiplier)
-        its plot-edge arithmetic - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 12 (extra west-sun offset of the near face, about 48 px less the 36 ft face)
+        its plot-edge gap - GUESS research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 12 (the windbreak face's gap off the plots, an average plot's overhang)
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (belt vertices clamped inside the canvas)
     """
     houses = s.M.get("houses", [])

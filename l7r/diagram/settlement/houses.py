@@ -42,7 +42,7 @@ class HousesMixin:
         big farmhouse wing - research/questions/0029-farmhouses-minka.drawing.html: the big house drawn with a wing (0.40 x 0.5 of the house) off its back corner
         ridge at 0.6 of the length - research/questions/0029-farmhouses-minka.drawing.html: the ridge drawn at 0.6 of the house's length, a hipped-roof reading
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.16 (ruin mark); 0.04 (ruin mark); 0.2 (ruin mark)
-            its ridge - research/questions/0029-farmhouses-minka.drawing.html: 0.3 (ridge half-length, the ridge at 0.6 of the length)
+            its figures against 0029 - research/questions/0029-farmhouses-minka.drawing.html: 0.3 (ridge half-length, every house hipped where the page rolls the roof per settlement) - a departure the code keeps until feature 417 T33
             its wing - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.4 (big house wing width); 0.42 (wing set back)
         """
         # POSITION-SEEDED (2026-08-08). A house's wall color is a property of the house, and this
@@ -653,7 +653,8 @@ class HousesMixin:
         asked to leave them untouched, so recalibrating them would only reshuffle vetted maps for no gain.
         Research:
             paddy plot size and regularity - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: 0.72 / 1.0 / 1.35 of the plot norm or a strip, a grid only narrowing the row spread; no jori grid is drawn
-            its basin shapes - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.66 (basin aspect at ftpx >= 2); 1.9 (strip aspect); 32 (hamlet strip); 46 (hamlet strip); 66 (hamlet strip)
+            its figures against 0005's village basin - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 0.66 (basin aspect at ftpx >= 2, where the village basin is about 47 ft square); 0.72 (large_block aspect at ftpx >= 2) - a departure the code keeps until feature 417 T34
+            its strip shapes - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1.9 (strip aspect); 32 (hamlet strip); 46 (hamlet strip); 66 (hamlet strip)
             its figures against 0005 - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 34 (small_irregular basin, under the page's 40 to 60 ft); 20 (small_irregular basin); 40 (small_irregular basin); 70 (large_block basin, past 60 ft); 30 (large_block basin); 44 (large_block basin) - a departure the code keeps until feature 417 T34
             its figures from 0005 - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 48 (medium basin); 26 (medium basin); 36 (medium basin)
             its row spacing - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (a planned grid's row spacing held to mean +-3 ft)

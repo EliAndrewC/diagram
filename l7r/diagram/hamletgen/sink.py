@@ -129,7 +129,7 @@ def drain_record(pts: Sequence[Pt], to: str) -> dict[str, Any]:
     """The `channels` record a drain run along `pts` into `to` is written as (`drain_run`).
 
     Research:
-        its record width - NONE: they decide nothing about the place - 2.5 (width written in the drain's connectivity record, a hairline the checks read, not the drawn width)
+        its record width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 2.5 (the drain's width in its record, read by passing_courses as its water, inside the drain's 1.2 to 5.5 ft)
     """
     return {"poly": [[round(x, 1), round(y, 1)] for x, y in pts], "frm": {"kind": "drain"}, "to": {"kind": to}, "w": 2.5}
 

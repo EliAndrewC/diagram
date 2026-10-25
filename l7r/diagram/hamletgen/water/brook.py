@@ -677,7 +677,7 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
         seat-search reach - GUESS: the bar steps down the brook a foot at a time, past dry ground, no further than the leg to the next vertex
         its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 6 (fallback head-race width, 6.0 ft ("head race ... 6.0"))
         its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (stops division by a tiny sine)
-        its weir bar - CONVENTION: the weir bar drawn just below the race mouth - 1 (1 ft below the half-opening)
+        its weir bar - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1 (the bar's root 1 ft below the race mouth's half-opening, the root at the mouth per 0059)
     """
     if plan.intake != "weir":
         return

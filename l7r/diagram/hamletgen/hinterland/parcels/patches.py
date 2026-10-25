@@ -65,7 +65,7 @@ was "a copse, not a commons", which is what made the roll two-sided - so 120 ft 
 size we have already said does not read. A settlement whose ground genuinely cannot hold one draws
 FEWER parcels rather than smaller ones.
 
-Research: commons legibility floor - CONVENTION: no woodland parcel under 120 ft"""
+Research: commons legibility floor - GUESS: searched, the record silent (feature 417 T38, 2026-10-25); no woodland parcel under 120 ft"""
 
 
 def parcel_bbox_ok(x: float, y: float, hw: float, hh: float, bc: float, bs: float, frame: tuple[float, float, float, float]) -> bool:
@@ -216,7 +216,11 @@ def off_the_row(p: tuple[float, float], centers: Sequence[tuple[float, ...]], fr
 
 def seat_off_the_row(p: tuple[float, float], centers: Sequence[tuple[float, ...]], ok: Any) -> tuple[float, float] | None:
     """`p` itself when it stands in no row with two placed parcels; otherwise the nearest sideways step off the row that
-    `ok` admits and that stands in no row either; otherwise None (feature 261)."""
+    `ok` admits and that stands in no row either; otherwise None (feature 261).
+
+    Research:
+        stepped off a row - GUESS: searched, the record silent (feature 417 T38, 2026-10-25); a parcel in a row is stepped sideways to the nearest admitted seat off it, else refused
+    """
     if not in_a_ruled_line(p, centers):
         return p
     return next((q for q in off_the_row(p, centers) if ok(q) and not in_a_ruled_line(q, centers)), None)

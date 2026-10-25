@@ -340,9 +340,8 @@ def deck_glyph(x: float, y: float, rot: float, span: float, deck_w: float, form:
 
     Research:
         one glyph per form - CONVENTION: seams and rails, a rounded trunk, trodden earth with log ends
-        log at seven tenths of the deck - CONVENTION
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 7 (plank seams); 8 (plank seams); 0.3 (crown highlight); 2.4 (rail offset); 0.2 (rail offset); 0.8 (tick length)
-        its log girth - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.7 (log at 7/10 of the deck)
+        its log girth - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.7 (log at 7/10 of the deck; 0084 names a single log and gives no girth)
     """
     hl, hw = span / 2, deck_w / 2
     g = [f'<g transform="translate({x:.1f},{y:.1f}) rotate({rot:.1f})">']

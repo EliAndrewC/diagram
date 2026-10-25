@@ -73,7 +73,7 @@ def square_waters(M: Mapping[str, Any]) -> list[tuple[Poly, float]]:
 
     Research:
         its figures against 0035's drawing page - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: 8 (stream width fallback, where the page draws a brook 7 ft wide) - a departure the code keeps until feature 417 T34
-        its channel width - CONVENTION: the channel's drawn width - 4 (drawn channel width fallback)
+        its channel width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 4 (drawn channel width fallback, the far supply canal's rung)
     """
     margin = SQUARE_MARGIN_FT / float((M.get("meta") or {}).get("ftpx") or 1.0)
     waters = [([(float(x), float(y)) for x, y in f["poly"]], float(f.get("w", 8.0)) / 2 + margin) for f in M.get("streams") or [] if len(f.get("poly") or ()) >= 2]

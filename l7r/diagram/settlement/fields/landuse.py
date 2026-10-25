@@ -215,7 +215,7 @@ class LandUseMixin:
             the village's split and its inset - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the split rolled per village (`dikepond_split`) and the one inset every reader takes derived from it (`dikepond_inset`)
             overlay colors - CONVENTION: pond and lotus teals
             no rape - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: never drawn beside the rice
-            its converted share - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.55 (converted share of eligible plots, a share well short of everything)
+            its converted share - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: 0.55 (converted share of eligible plots, a share well short of everything)
         """
         if overlay not in ("none", "mulberry_fishpond", "lotus", "tea_fringe"):
             raise ValueError(f"unknown land_use_overlay {overlay!r}")
@@ -439,7 +439,7 @@ class LandUseMixin:
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 2.5 (least bloom radius); 14 (bloom scatter)
             its salts, guards and sentinels - NONE: they decide nothing about the place - 0.7 (dig-back scale floor)
             its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 8 (bank corner fillet reach); 16 (water corner fillet reach)
-            its dug-back bank - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1 (a dike-pond unit's bank clears the canal by 1 ft)
+            its figures against 0018 - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: 1 (a dike-pond unit dug back until its bank clears the canal by 1 ft, where a canal may graze a parcel's edge and the bank stays on the true parcel line) - a departure the code keeps until feature 417 T34
         """
         if overlay == "mulberry_fishpond":
             # 桑基魚塘: a raised MULBERRY DIKE (基, planted) surrounds an inset fish POND (塘, water) whose
