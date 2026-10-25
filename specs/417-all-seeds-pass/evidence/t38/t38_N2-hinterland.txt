@@ -1,0 +1,87 @@
+### l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats
+  line 217 [8]: ("threshing_yards", 8.0),
+  line 218 [8]: ("gardens", 8.0),
+  line 219 [8]: ("farm_sheds", 8.0),
+  line 220 [8]: ("byres", 8.0),
+  line 231 [14]: rects += [(float(o["x"]), float(o["y"]), 2.0 * float(o["r"]), 2.0 * float(o["r"]), px(14.0)) for o in s.M.get("wells", []) if all(isinstance(o.get(f), (int, float)) for f
+  line 237 [1e+09]: rects += [(bx, by, 2.0 * bw, 2.0 * bh, 0.0) for bx, by, bw, bh in s._sun_keepouts((-1e9, -1e9, 1e9, 1e9), BAMBOO_SHADE_FT)]
+### l7r/diagram/hamletgen/hinterland/belt.py::fringe_profile
+  line 48 [40]: width = half * span_f / cols + 40.0
+### l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes
+  line 92 [146]: def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[float, float]], width: float, near: float = 36.0, depth: float = 146.0) -> list[tuple[float,
+### l7r/diagram/hamletgen/hinterland/belt.py::round_the_houses
+  line 194 [15, 7]: ends = {hv + sy * reach * math.sin(math.radians(15.0 * k)) for _hu, hv in uv for k in range(1, 7) for sy in (-1.0, 1.0)}
+### l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon
+  line 274 [24, 7]: COLS = max(7, min(24, int(2 * half / 90.0)))
+  line 276 [4.29497e+09, 7919]: rng = random.Random((plan.spec.seed * 7919) & 0xFFFFFFFF)
+  line 320 [12]: _sun_off = max(0.0, -wx) * (float(getattr(s, "_west_sun_ft", 0.0)) + 12.0)
+  line 329 [11]: for q in [(a[0] + (b[0] - a[0]) * t / 10, a[1] + (b[1] - a[1]) * t / 10) for t in range(11)]
+  line 371 [0.74, 0.88, 44]: for span_f, back in ((1.0, 0.0), (1.0, 22.0), (1.0, 44.0), (0.88, 44.0), (0.74, 60.0), (0.6, 60.0)):
+  line 385 [40]: s.M["meta"]["belt_reach"] = round(math.hypot(BELT_NEAR_FT + BELT_DEPTH_FT + BELT_FAR_RAG_FT + _sun_off + back, half * span_f / COLS + 40.0), 1)
+  line 386 [6]: return [(max(6.0, min(plan.W - 6.0, bx)), max(6.0, min(plan.H - 6.0, by))) for bx, by in belt]
+### l7r/diagram/hamletgen/hinterland/frame.py::brook_beside_the_field
+  line 58 [6]: hw = float(st.get("w", 6)) / 2.0
+### l7r/diagram/hamletgen/hinterland/frame.py::pocket_clear_of_features
+  line 274 [8]: hw = float(o.get("w", 2.0 * float(o.get("vr", o.get("r", 8.0))))) / 2.0
+  line 275 [8]: hh = float(o.get("h", 2.0 * float(o.get("vr", o.get("r", 8.0))))) / 2.0
+  line 277 [18, 19]: boxes += [(float(t[0]) - 19.0, float(t[1]) - 10.0, float(t[0]) + 19.0, float(t[1]) + 18.0) for t in M.get("torii") or []]
+### l7r/diagram/hamletgen/hinterland/frame.py::clear_pocket_spot
+  line 288 [22]: y = vy0 + 22.0
+  line 289 [22]: while y + h <= vy0 + vh - 22.0:
+  line 290 [22]: x = vx0 + 22.0
+  line 291 [22]: while x + w <= vx0 + vw - 22.0:
+  line 294 [24]: x += 24.0
+  line 295 [24]: y += 24.0
+### l7r/diagram/hamletgen/hinterland/frame.py::title_pocket
+  line 299 [190, 300]: def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190.0) -> tuple[float, float, float, float]:
+  line 324 [14, 15]: w, h = max(w, _pw + 15.0), max(h, _ph + 14.0)
+  line 325 [30]: x0, y0, x1, y1 = content_box(s, plan, pad=30.0)
+  line 350 [14, 15]: w, h = _pw + 15.0, _ph + 14.0
+  line 365 [12]: _bw, _bh = (v + 12 for v in s.placard_size(plan.spec.name)[2:4])  # the placard's own size (settlement.title) + 6 px each side
+  line 370 [8]: for _px, _py0, _out in ((_cx0, _cy0 - _bh - 8, -1.0), (_cx1 - _bw, _cy0 - _bh - 8, -1.0), (_cx0, _cy1 + 8, 1.0), (_cx1 - _bw, _cy1 + 8, 1.0)):
+  line 371 [16, 32, 48]: for _shift in (0.0, 16.0, 32.0, 48.0):
+### l7r/diagram/hamletgen/hinterland/parcels.py::fit_square_parcel
+  line 132 [0.7, 0.8]: for sh in (0.9, 0.8, 0.7, 0.6):
+### l7r/diagram/hamletgen/hinterland/parcels.py::parcel_wet_share
+  line 160 [5]: for i in range(5):
+  line 161 [5]: for j in range(5):
+  line 162 [5]: x = x0 + (x1 - x0) * (i + 0.5) / 5
+  line 163 [5]: y = y0 + (y1 - y0) * (j + 0.5) / 5
+  line 166 [25]: return soaked / 25.0
+### l7r/diagram/hamletgen/hinterland/parcels.py::off_the_row
+  line 203 [1.05, 1.5]: return [(p[0] + sgn * k * frac * span * nx, p[1] + sgn * k * frac * span * ny) for k in (1.05, 1.5, 2.0) for sgn in (1.0, -1.0)]
+### l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields
+  line 303 [1e+09]: scored = [(t[0] - 1e9 * k, t[1], t[2]) for t, k in zip(scored, _tiers, strict=True)]
+### l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches
+  line 406 [0.2, 76]: _ladder = 0.90 + 0.20 * s._hjit(plan.W, plan.H, 76.0)
+  line 452 [0.415]: _sb_pad = 0.415 * half if _sb_normal < 80.0 else 0.0  # the diagonal slack (see above); the generous profile keeps its historical thresholds exactly
+  line 475 [16]: sx0, sy0 = max(cbx0 + 16.0, _fx0 - 0.6 * half), max(cby0 + 16.0, _fy0 - 0.6 * half)
+  line 476 [16]: sx1, sy1 = min(cbx1 - 16.0, _fx1 + 0.6 * half), min(cby1 - 16.0, _fy1 + 0.6 * half)
+  line 583 [71]: jx = x + (s._hjit(x, y, 71.0) - 0.5) * step
+  line 584 [72]: jy = y + (s._hjit(x, y, 72.0) - 0.5) * step
+  line 596 [73]: _bi = min(int(s._hjit(x, y, 73.0) * len(_bands)), len(_bands) - 1) if _bands else 0
+  line 597 [0.36]: _f = 0.82 + 0.36 * (((_bands[_bi] if _bands else 0) + 0.5) / max(2, count))
+  line 683 [78]: _bear = math.radians(math.degrees(math.atan2(dy, dx)) + 90.0 + 40.0 * (s._hjit(x, y, 78.0) - 0.5))
+  line 690 [1.2, 77]: _excess = 1.2 * s._hjit(x, y, 77.0)
+  line 692 [0.45, 0.72]: for _step in (1.0, 0.72, 0.45, 0.0):
+  line 751 [1.35, 74]: centers.append((x, y, size * (1.15 + 1.35 * s._hjit(x, y, 74.0))))
+### l7r/diagram/hamletgen/hinterland/parcels.py::_parcel_outline
+  line 755 [12]: def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc: float, bs: float, n: int = 12) -> Poly:
+  line 780 [79, 80]: p1, p2 = 2 * math.pi * s._hjit(x, y, 79.0), 2 * math.pi * s._hjit(x, y, 80.0)
+  line 783 [0.35, 81]: t = 2 * math.pi * (i + 0.35 * (s._hjit(x + i, y, 81.0) - 0.5)) / n
+  line 785 [0.2, 0.25, 0.8]: f = 0.80 + 0.20 * (0.5 + 0.25 * math.sin(2 * t + p1) + 0.25 * math.sin(3 * t + p2))
+### l7r/diagram/hamletgen/hinterland/parcels.py::follow_the_bounds
+  line 897 [19, 20]: lo = next((k / 20.0 for k in range(19, -1, -1) if _clear(k / 20.0)), None)
+  line 901 [0.05]: hi = lo + 0.05
+  line 902 [20]: for _ in range(20):
+### l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_region
+  line 935 [40]: pad = max([normal, sunny]) + half + 40.0
+  line 942 [40]: bands = shapely.box(b[:, 0] - half, b[:, 3] - 40.0 + half, b[:, 2] + half, b[:, 3] + sunny + half + 1.0)
+### l7r/diagram/hamletgen/hinterland/parcels.py::_crop_refuses
+  line 983 [40]: south_of = cy - half > crop.y1 - 40 and crop.x0 - half < cx < crop.x1 + half
+### l7r/diagram/hamletgen/hinterland/stages.py::plant_the_belt
+  line 351 [30]: _fx0, _fx1 = (min(_fx0, min(_bxs) - 30.0), _fx1) if _wx < 0 else (_fx0, max(_fx1, max(_bxs) + 30.0))
+  line 353 [30]: _fy0, _fy1 = (min(_fy0, min(_bys) - 30.0), _fy1) if _wy < 0 else (_fy0, max(_fy1, max(_bys) + 30.0))
+  line 367 [14]: page=belt_page(s, plan, round(14.0 * s.bscale, 1)),
+### l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak
+  line 444 [210]: _rolls = [s._hjit(float(h["x"]), float(h["y"]), 210.0) for h in houses]

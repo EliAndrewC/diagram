@@ -1,0 +1,38 @@
+### l7r/diagram/labels/hand_sheet.py::_path_points
+  line 177 [6, 7]: step = {"M": 2, "L": 2, "T": 2, "H": 1, "V": 1, "C": 6, "S": 4, "Q": 4, "A": 7}.get(cmd.upper(), 0)
+### l7r/diagram/labels/hand_sheet.py::_text_shape
+  line 304 [12]: size = _f(el, "font-size", 12.0)
+### l7r/diagram/labels/hand_sheet.py::leader_to_ink
+  line 450 [1.5]: if ink.is_empty or ink.distance(Point(p.leader[1])) < 1.5:
+### l7r/diagram/labels/hand_sheet.py::_luma
+  line 626 [16]: r, g, b = (int(h[i : i + 2], 16) / 255 for i in (0, 2, 4))
+  line 627 [0.114, 0.299, 0.587]: return 0.299 * r + 0.587 * g + 0.114 * b
+### l7r/diagram/labels/svg.py::leader_svg
+  line 43 [0.08, 0.6]: return f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{stroke}" stroke-width="{max(0.6, 0.08 * size):.2f}" stroke-linecap="round"{_kind(kind)}{ta
+### l7r/diagram/overlap/matrix.py::matrix_violations
+  line 39 [4000]: _mx_w = float(M.get("meta", {}).get("W") or 4000)
+  line 40 [4000]: _mx_h = float(M.get("meta", {}).get("H") or 4000)
+  line 46 [120]: gi = GridIndex(120)
+### l7r/diagram/overlap/registry.py::element_extents
+  line 97 [2.5]: for q in _mx_stroke(o.get("boundary") or [], 2.5):
+  line 125 [8]: r_ = float(o.get("vr") or o.get("r") or 8.0)
+  line 126 [12, 6]: out.append((k, [(o["x"] + r_ * math.cos(i * math.pi / 6), o["y"] + r_ * math.sin(i * math.pi / 6)) for i in range(12)], (round(o["x"], 1), round(o["y"], 1)), None))
+  line 128 [16, 8]: out.append((k, [(o[0] + o[2] * math.cos(a_), o[1] + o[3] * math.sin(a_)) for a_ in [i * math.pi / 8 for i in range(16)]], None, None))
+  line 130 [20, 22, 30, 6]: _w = {"road": float(M.get("road_width") or 30.0), "moat": float(M.get("moat_width") or 22.0), "ring_road": 20.0, "wall": 10.0, "lane": 6.0}[k]
+### l7r/diagram/overlap/registry.py::__init__
+  line 231 [4000]: def __init__(self, M: Mapping[str, Any], W: float = 4000.0, H: float = 4000.0) -> None:
+### l7r/diagram/overlap/reserved.py::seat_radius
+  line 79 [8]: return float(o.get("vr") or o.get("r") or 8.0) + clump * 1.05 + 1.0
+### l7r/diagram/overlap/reserved.py::conflicts
+  line 162 [6]: gap = float(o.get("w") or 6.0) / 2.0 + self.lane_buffer
+### l7r/diagram/overlap/reserved.py::seat_walls
+  line 213 [12]: def seat_walls(self, sides: int = 12, reach: float | None = None) -> list[list[tuple[float, float]]]:
+### l7r/diagram/overlap/taxonomy.py::_mx_same
+  line 775 [1.5]: return math.hypot(float(a[0]) - float(b[0]), float(a[1]) - float(b[1])) <= 1.5
+### l7r/diagram/sitegen/geom.py::crosses_poly
+  line 84 [8, 900]: def crosses_poly(a: Pt, b: Pt, poly: Sequence[Pt], step: float = 8.0, cap: int = 900) -> bool:
+### l7r/diagram/well_gear.py::gear_svg
+  line 91 [3.5]: lx, rx = cx - half - 3.5, cx + half + 0.5
+  line 93 [1.5]: f'<g data-kind="well" data-gear="pulley frame" {at}><circle cx="{lx + 1.5:g}" cy="{cy:g}" r="1.6" fill="{GEAR_INK}"/>'
+  line 94 [1.5]: f'<circle cx="{rx + 1.5:g}" cy="{cy:g}" r="1.6" fill="{GEAR_INK}"/>'
+  line 95 [1.5]: f'<line x1="{lx + 1.5:g}" y1="{cy:g}" x2="{rx + 1.5:g}" y2="{cy:g}" stroke="{GEAR_INK}" stroke-width="2"/></g>'
