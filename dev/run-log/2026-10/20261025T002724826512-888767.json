@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-25T00:27:24Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 356,
+  "result": "green",
+  "commit": "474afb4a5",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10085,
+  "host": {
+    "load": [
+      11.51,
+      14.89
+    ],
+    "mem_avail_mb": [
+      6385,
+      7642
+    ],
+    "cpu_temp_c": [
+      78.0,
+      79.0
+    ],
+    "stall_s": {
+      "cpu": 46.6,
+      "io": 9.0,
+      "io_full": 2.5,
+      "memory": 2.0
+    },
+    "throttle_ms": {
+      "core": 188,
+      "package": 77
+    }
+  },
+  "phases": {
+    "preflight": 21.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 2.0,
+    "reference": 0.0,
+    "pytest": 337.0,
+    "floors": 12.0,
+    "test-full": 351.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/hooks/test-no-poll-hooks.sh",
+  "collected": 10085
+}
