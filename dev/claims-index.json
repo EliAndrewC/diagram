@@ -306,22 +306,22 @@
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling kitchen floor": {
-  "body": "da3b6e8c4f58efc2",
-  "claim": "dwelling kitchen floor - kitchens-daidokoro: as a rule the kamado stood on the doma in Edo houses; a kitchen of earth throughout is not attested; Hoshigaoka's sheet stipples the whole kitchen as earth floor with the kamado in its middle",
-  "code": "7a0834b50791214c",
+  "body": "89562b4bcb943053",
+  "claim": "dwelling kitchen floor - kitchens-daidokoro: as a rule the kamado stood on the doma in Edo houses; a kitchen of earth throughout is not attested - the kitchen is drawn all earth floor, a departure the code keeps until feature 417 T33; Hoshigaoka's sheet stipples the whole kitchen as earth floor with the kamado in its middle",
+  "code": "03756da6078d6477",
   "core": "8a93256e3dc37d64",
   "date": "2026-10-25",
-  "note": "the sheet stipples the whole kitchen as earth floor, which the claim itself admits is not attested. 0107 finds the kamado \"as a rule ... on the doma\" and records kitchens \"of board floor and doma\" or all board floor. Draw a doma with a board floor, or relabel the all-earth kitchen GUESS/DEVIATION",
+  "note": "the code draws a form the page doesn't attest: an all-earth kitchen, where 0107's kitchens are board-floored or \"part board floor and part doma\". The claim admits the departure but no page records it as ours. Either a drawing page records it and the label becomes DEVIATION, or T33 changes the code",
   "pages": {
    "0107-kitchens-daidokoro.html": "1eedc5cf7b1adca7"
   },
   "research": "dba588a7c6856077",
   "rests": [
+   "0107-kitchens-daidokoro.html:10294f430cd37c5b",
    "0107-kitchens-daidokoro.html:22e397b7573f5733",
    "0107-kitchens-daidokoro.html:2acece566f30b66e",
    "0107-kitchens-daidokoro.html:6632640caa3050e2",
-   "0107-kitchens-daidokoro.html:dd0785feac20fb2c",
-   "0107-kitchens-daidokoro.html:f26497cabc1a017a"
+   "0107-kitchens-daidokoro.html:dd0785feac20fb2c"
   ],
   "section": "8a93256e3dc37d64",
   "verdict": "DRIFTED"
@@ -1574,12 +1574,12 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#service buildings in the outer court": {
-  "body": "d358f6b942c435d0",
-  "claim": "service buildings in the outer court - holding-cells-agariya-and-roya: a magistracy's temporary cell stood in the quarter that held its court rooms; the stables and the granary are a GUESS (feature 417 T36 pass P4: the granary north and behind at Pingyao, a source no page records yet); the stables, cell and granary in the office court, in front of the divider (0090 puts a jail inside the walls but names no court)",
-  "code": "cf2189d6e5788c21",
+  "body": "f2a3d0aa545a03c8",
+  "claim": "service buildings in the outer court - holding-cells-agariya-and-roya: a magistracy's temporary cell stood in the quarter that held its court rooms; and 0115 has a stable beside the gate passage, by the servants' quarters; the granary is a GUESS (feature 417 T36 pass P4); the stables, cell and granary in the office court, in front of the divider (0090 puts a jail inside the walls but names no court)",
+  "code": "21fc223afa1a0759",
   "core": "69ec89f6af1983bd",
   "date": "2026-10-25",
-  "note": "the cell's place is in step (0096 §492). The stables are not a GUESS: 0115 finds \"Beside the passage were servants' quarters and a stable\", which puts the stable at the front gate. Cite 0115 for the stables and leave only the granary as GUESS",
+  "note": "0096 backs the cell standing in the court-rooms quarter, and 0090 puts a jail inside the walls. The stable's place rests on \"0115\", which is not a file path, so the bundle has no 0115 findings page to check \"beside the gate passage\" against; the claim should name the file. The granary is a GUESS",
   "pages": {
    "0096-holding-cells-agariya-and-roya.html": "4426e3559e549311"
   },
@@ -1588,7 +1588,7 @@
    "0096-holding-cells-agariya-and-roya.html:46d27721497d60b0"
   ],
   "section": "69ec89f6af1983bd",
-  "verdict": "MISLABELED"
+  "verdict": "CANNOT-TELL"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#shrine smaller than the residence": {
   "code": "aaf18a49e6b4ca74",
@@ -2018,16 +2018,24 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#gate hierarchy": {
-  "body": "c12e646bd6c873de",
-  "claim": "gate hierarchy - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25) - 0093's two widths are both main-gate forms, and no page measures a lesser gate; the ceremonial main gate widest is ours",
-  "code": "9d337c955514e4f2",
+  "body": "8b9f2e558eda6cf1",
+  "claim": "gate hierarchy - the-main-gate-and-its-gatekeepers-nagaya-mon: the Joge drawing of 1869 labels a main gate and a small gate side by side; the lesser gate's width is a GUESS",
+  "code": "8fdb9d8a2e07b53c",
   "core": "47a44f581d23ce32",
   "date": "2026-10-25",
-  "note": "not silent: 0093's Joge drawing of 1869 \"labels a main gate, a small gate\" side by side, which bears on the main gate being the widest. Cite 0093, with the lesser gate's width the GUESS",
-  "pages": {},
-  "research": "",
+  "note": "the Joge plan labels a main gate and a small gate together; the lesser gate's width is a GUESS",
+  "pages": {
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
+  },
+  "research": "3bf7bc936cb62419",
+  "rests": [
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:65f0493063abc217",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:74c4edddb44a6e24"
+  ],
   "section": "47a44f581d23ce32",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#guest and service doors": {
   "code": "70b07f42cac6c0f8",
@@ -3191,15 +3199,22 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell kept well under the barracks": {
-  "code": "fc7d9e87620b8c68",
-  "core": "34da504d027f847c",
-  "date": "2026-10-12",
-  "note": "no cited page ranks the cell",
-  "pages": {},
-  "research": "",
-  "rests": [],
+  "body": "d1a0506fa4783151",
+  "claim": "cell kept well under the barracks - holding-cells-agariya-and-roya: the cell rooms measured are 6 to 18 mats, and 0097's office rowhouses run far longer; no magistracy's own cell is measured; the cell drawn smaller than the barracks; no page ranks them",
+  "code": "854bfcb7725b6877",
+  "core": "d9ce188ed9018cc7",
+  "date": "2026-10-25",
+  "note": "measured cells of 6-18 mats sit far below rowhouses of 80-145 by 12-24 ft",
+  "pages": {
+   "0096-holding-cells-agariya-and-roya.html": "4426e3559e549311"
+  },
+  "research": "86def40e24cced5e",
+  "rests": [
+   "0096-holding-cells-agariya-and-roya.html:26b59f949f6616b1",
+   "0096-holding-cells-agariya-and-roya.html:937c7af5507a1c15",
+   "0096-holding-cells-agariya-and-roya.html:f1e5972ca3458ff3"
+  ],
   "section": "d9ce188ed9018cc7",
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal bales": {
@@ -3418,14 +3433,16 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#kura granary door on the apron": {
-  "code": "fad371aa9fd8da61",
-  "core": "050f0bde3a602b79",
-  "date": "2026-10-10",
-  "note": "no cited question places a kura granary's door; 0116's drawing page gives only the apron's width (a GUESS), not where the door faces, so UNRESEARCHED holds",
+  "body": "d1a0506fa4783151",
+  "claim": "kura granary door on the apron - GUESS: searched, the record silent (feature 417 T36 pass P8, 2026-10-25); the plastered granary's door set on the loading apron, where the carts stand",
+  "code": "38563962a887501e",
+  "core": "d9ce188ed9018cc7",
+  "date": "2026-10-25",
+  "note": "GUESS; neither 0098 page nor 0116 places a granary's door",
   "pages": {},
   "research": "",
+  "rests": [],
   "section": "d9ce188ed9018cc7",
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#office hall": {
@@ -5726,14 +5743,19 @@
  },
  "l7r/diagram/compound_model.py::NOTICE_BOARD_MAX_FT#board by the gate": {
   "body": "de030158c173bca8",
-  "claim": "board by the gate - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); within 40 ft of the opening, this project's figure, so a board beside the road (0190) can face its gate across the Imperial road's 30 ft (0088)",
-  "code": "e8470586290da757",
+  "claim": "board by the gate - magistrates-compounds-jinya-and-yamen.drawing: the notice board stands within about 15 ft of a gate in the wall - it is allowed 40 ft, a departure the code keeps until feature 417 T33; within 40 ft of the opening, this project's figure, so a board beside the road (0190) can face its gate across the Imperial road's 30 ft (0088)",
+  "code": "83da0088df29ff4d",
   "core": "9d1de12bdc5d386c",
   "date": "2026-10-25",
-  "note": "not silent: 0090's drawing page says \"The notice board stands within about 15 ft of a gate in the wall\", and the code allows 40 ft. Cite 0090.drawing and either bring the figure to 15 ft or have the page record 40 ft as a deviation",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`NOTICE_BOARD_MAX_FT = 40.0` against 0090's \"within about 15 ft of a gate in the wall\". 0190 nowhere puts the bench's board across the road from the gate, so either 0090's drawing page records 40 ft as a DEVIATION or the code goes back to about 15 ft",
+  "pages": {
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+  },
+  "research": "57c4f6365aa66772",
+  "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:e53d9fbf1c2a0525"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_model.py::OUTLINE_CLEAR_FT#outline clearance": {
   "body": "e124dfad5eb2914f",
@@ -7608,14 +7630,19 @@
  },
  "l7r/diagram/hamletgen/consts_fields.py::LEFTOVER_FORMS#dike-pond leftover parcels": {
   "body": "ef13f68614a324a5",
-  "claim": "dike-pond leftover parcels - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); rice or pond, even odds",
-  "code": "b6e568f11809ba21",
+  "claim": "dike-pond leftover parcels - GUESS cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: every parcel a pond, or about one parcel in ten left in standing rice, at even odds; rice or pond, even odds",
+  "code": "6e94d2e2ddcee82f",
   "core": "18bdba725ca26f70",
   "date": "2026-10-25",
-  "note": "not silent: 0020's drawing page attests both forms (\"every parcel a pond, or about one parcel in ten left in standing rice\") and records the even odds as its GUESS. It should be `GUESS research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html`",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "both forms rolled, with the even odds recorded as a GUESS on the drawing page",
+  "pages": {
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
+  },
+  "research": "909bb100e23424ac",
+  "rests": [
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_fields.py::LEFTOVER_FORMS#dike-ponds throughout": {
   "code": "b682f0f6e74b00b8",
@@ -7849,20 +7876,14 @@
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_MAX_TURN_DEG#brook never doubles back": {
   "body": "0bf5976b7fa89a1f",
-  "claim": "brook never doubles back - which-way-water-flows-and-how-channels-bend-and-join: a meandering river turns on a radius of two to three times its own width, which the per-vertex cap keeps - a stream's loop back at a larger scale is refused, a departure the code keeps until feature 417 T34; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); no turn over 100 degrees",
-  "code": "309f517443b6917c",
+  "claim": "brook never doubles back - CONVENTION: a map drawing convention - no vertex turns past the cap, so the line reads as one stream; 0054 gives a bend radius of two to three widths and speaks to no loop; no turn over 100 degrees",
+  "code": "6cd7a8332cc45bae",
   "core": "444f866ae8da7cd0",
   "date": "2026-10-25",
-  "note": "0054 gives only a bend radius of two to three widths. It says nothing of a stream looping back or of a per-vertex turn cap, so the departure the claim names is not in it, and the code's own comment calls the cap a drawing convention. It should be UNRESEARCHED, or CONVENTION if it is purely legibility",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
-  },
-  "research": "4409e1905454f5d9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:146499eea2490781",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:4e2a14b0bc705962"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "the cap decides the brook's course on the ground (how sharply it may turn, and that it never doubles back). That is a physical fact about the place, not how it is shown. Label it GUESS (searched: 0054 gives a sweep radius and no turn cap or loop rule)",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_SKIRT#brook outside the crop": {
   "body": "ed0c3f4a2a1bb30d",
@@ -7901,19 +7922,15 @@
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_WANDER#brook's stray": {
   "body": "49576d6fcf95bda8",
-  "claim": "brook's stray - which-way-water-flows-and-how-channels-bend-and-join: a meandering river turns on a radius of two to three times its own width; the 10 ft stray is ours; up to 10 ft past the floor",
-  "code": "644231ce1a4395c7",
+  "claim": "brook's stray - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); up to 10 ft past the floor",
+  "code": "7e001b8a0ff7a36b",
   "core": "e3bbe3a7edb35017",
   "date": "2026-10-25",
-  "note": "0054's bend radius does not decide a 10 ft lateral stray past the floor, and the claim itself says \"the 10 ft stray is ours\". It should be GUESS",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
-  },
-  "research": "4409e1905454f5d9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:146499eea2490781"
-  ],
-  "verdict": "MISLABELED"
+  "note": "GUESS; no page in the bundle sizes a brook's stray",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_WANDER_STEP#brook's meander step": {
   "body": "4ffa3a73fd4c219f",
@@ -8045,14 +8062,20 @@
  },
  "l7r/diagram/hamletgen/consts_water.py::SINKS#sink odds": {
   "body": "3194333cf67c30ec",
-  "claim": "sink odds - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); pond two in three, off the map one",
-  "code": "5cd0f3a065cd3274",
+  "claim": "sink odds - GUESS field-drains-akusuiro.drawing: about two maps in three lay a pond, one in three send the drain off the map; pond two in three, off the map one",
+  "code": "006814306b751443",
   "core": "7d85a26d2d193626",
   "date": "2026-10-25",
-  "note": "\"the record silent\" is untrue: 0060's drawing page records \"about two maps in three lay a pond ... one in three\" as its GUESS. It should be `GUESS research/questions/0060-field-drains-akusuiro.drawing.html`",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "two in three pond, one in three off the map, the odds a GUESS on the drawing page",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:a6dd4c8ccae9300d",
+   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::SINKS#where the runoff goes": {
   "code": "ddca13d410ae0be6",
@@ -9346,20 +9369,19 @@
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::BELT_NEAR_FT#near stand-off": {
   "body": "73ed903bfca5f216",
-  "claim": "near stand-off - shelter-belts-on-a-villages-windward-side-bofurin: a village belt stood outside the houses' own groves (Tarama); the distance is ours; the near face 36 ft behind the fringe",
-  "code": "58f220c8c031f4ed",
+  "claim": "near stand-off - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing: the belt's outline stands back from the row of houses nearest it; the 36 ft is a GUESS; the near face 36 ft behind the fringe",
+  "code": "cdf4f13d3f759b6a",
   "core": "534f1c6a3a270f45",
   "date": "2026-10-25",
-  "note": "0072 never says Tarama's belt stood \"outside the houses' own groves\", only that it rings the settlement. The stand-off rule is 0071's drawing page (\"outline stands back from the row of houses nearest it\"). Cite that page, with the 36 ft as GUESS",
+  "note": "the outline stands back from the nearest houses; the 36 ft is a GUESS",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "186cb571d0ba4842"
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
-  "research": "43fe93a795621ca5",
+  "research": "90cf9ff106c766c9",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:26b57bf473685112",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:62602c4d9790f406"
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:d3ed8cad5ddc7b21"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::BELT_NEAR_RAG_FT#near face rag": {
   "code": "9620d3a6ff392e78",
@@ -9488,19 +9510,19 @@
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#shoulder past the end houses": {
   "body": "4c00b87241b24ea2",
-  "claim": "shoulder past the end houses - shelter-belts-on-a-villages-windward-side-bofurin: a belt can ring the whole village (Tarama); the 90 ft is ours; the band runs 90 ft past the outermost house across the wind",
-  "code": "1bea087b4bd9b618",
+  "claim": "shoulder past the end houses - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing: the belt is a crescent wrapping round the houses' flanks (the page's own choice); the 90 ft is a GUESS; the band runs 90 ft past the outermost house across the wind",
+  "code": "97d41802a7a5170e",
   "core": "f0d341584f49b8af",
   "date": "2026-10-25",
-  "note": "Tarama's ring is a form 0072's drawing page refuses for a village belt (\"The full ring is not rolled\"). The shoulder's backing is 0071's drawing page, a crescent \"wrapping round their flanks\", which that page calls our choice. Cite it, with the 90 ft as GUESS",
+  "note": "a crescent wrapping the flanks, the page's own choice; `half + 90.0` is a GUESS",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "186cb571d0ba4842"
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
-  "research": "43fe93a795621ca5",
+  "research": "90cf9ff106c766c9",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:26b57bf473685112"
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:c491d9aaff941cf5"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::far_envelope#belt geometry": {
   "code": "94a43f94db4cbf56",
@@ -10080,23 +10102,14 @@
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::_CHAIN_OFF#woods not in a ruled line": {
   "body": "2848495c93d86b43",
-  "claim": "woods not in a ruled line - village-fuel-woods-and-their-coppice-satoyama: a village's woods follow the ground, not a ruled line; a third parcel within 0.2 of the span off two others' line",
-  "code": "49082e9592ed47f4",
+  "claim": "woods not in a ruled line - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0077 speaks only of one wood's boundary bending, no page of how several parcels stand to each other; a third parcel within 0.2 of the span off two others' line",
+  "code": "feea532eed4d3bb0",
   "core": "eb3cdf5f0110babc",
   "date": "2026-10-25",
-  "note": "0077 speaks only of one wood's boundary line bending (\"a line that bent\"); nothing on how several parcels stand relative to each other, so the 0.2 collinearity limit should say UNRESEARCHED (or GUESS once a pass searches)",
-  "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html": "56ee60cc8e6df912"
-  },
-  "research": "4dbbaaf344044dd0",
-  "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:88206f546adbfb95",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:984648829d0ee576",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:9da629a09a17a933",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:baa6bc983e411383",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:d905678d3e663d25"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "GUESS; 0077 does not say how several parcels stand to each other",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::_COMMONS_FLOOR_FT#commons legibility floor": {
   "code": "f3f1296e24ae6555",
@@ -10306,23 +10319,14 @@
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::in_a_ruled_line#woods not in a ruled line": {
   "body": "5efffbfbf738a9af",
-  "claim": "woods not in a ruled line - village-fuel-woods-and-their-coppice-satoyama: a village's woods follow the ground, not a ruled line; three parcels off one line by less than 0.2 of their span refused",
-  "code": "67947e8cd2c46f44",
+  "claim": "woods not in a ruled line - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0077 speaks only of one wood's boundary bending, no page of how several parcels stand to each other; three parcels off one line by less than 0.2 of their span refused",
+  "code": "8895df76e7c390fb",
   "core": "b765eae0be5fd10f",
   "date": "2026-10-25",
-  "note": "0077 is about one wood's boundary bending, not about whether three parcels stand in a line; should say UNRESEARCHED",
-  "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html": "56ee60cc8e6df912"
-  },
-  "research": "4dbbaaf344044dd0",
-  "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:88206f546adbfb95",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:984648829d0ee576",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:9da629a09a17a933",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:baa6bc983e411383",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:d905678d3e663d25"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "GUESS; 0077 silent on how parcels are arranged",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::lot_bounds#woodland scan plumbing": {
   "code": "c07273435c36e97c",
@@ -10477,22 +10481,14 @@
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcel count and size": {
   "body": "dc6d399fa6b8a272",
-  "claim": "parcel count and size - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse: a village wood ran 0.06 to 5.3 ha (Hong Kong), which the 250 ft parcel, about 0.58 ha, falls inside; `count` parcels from 250 ft, the ladder scaled 0.9-1.1 per map, rungs 0.8, 0.64, 0.5",
-  "code": "93fda3d7539e45a4",
+  "claim": "parcel count and size - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0071's 0.06 to 5.3 ha are fengshui groves, a different wood, and 0077 gives no coppice lot's size; `count` parcels from 250 ft, the ladder scaled 0.9-1.1 per map, rungs 0.8, 0.64, 0.5",
+  "code": "2c6836c12a08d125",
   "core": "d774bd653e03d206",
   "date": "2026-10-25",
-  "note": "0071's 0.06-5.3 ha and \"about two\" describe fengshui back groves, and the code itself calls the coppice \"a distinct wood from the fengshui grove\"; 0077 gives no area or count for a coppice lot, so the 250 ft, the 0.9-1.1 ladder and its rungs should say GUESS/UNRESEARCHED",
-  "pages": {
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html": "5505f4d0f0752806"
-  },
-  "research": "2b11f5e741f6d139",
-  "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html:44f1bff63d470e59",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html:bc8d18ec46f4536e",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html:e55b4f938bb91648",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html:f42c55289f07eca3"
-  ],
-  "verdict": "MISLABELED"
+  "note": "GUESS; 0077 gives no lot size, and 0071's sizes are for the back grove",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcels kept apart": {
   "body": "dc6d399fa6b8a272",
@@ -10551,23 +10547,14 @@
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods not in a ruled line": {
   "body": "dc6d399fa6b8a272",
-  "claim": "woods not in a ruled line - village-fuel-woods-and-their-coppice-satoyama: a village's woods follow the ground, not a ruled line",
-  "code": "5b228cc84bc0b4d3",
+  "claim": "woods not in a ruled line - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0077 speaks only of one wood's boundary bending, no page of how several parcels stand to each other",
+  "code": "5402868dc3a40f69",
   "core": "d774bd653e03d206",
   "date": "2026-10-25",
-  "note": "the rule (seat_off_the_row, in_a_ruled_line on the ring center) refuses collinear parcels, and 0077 speaks only of one boundary bending; should say UNRESEARCHED",
-  "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html": "56ee60cc8e6df912"
-  },
-  "research": "4dbbaaf344044dd0",
-  "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:88206f546adbfb95",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:984648829d0ee576",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:9da629a09a17a933",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:baa6bc983e411383",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html:d905678d3e663d25"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "GUESS; 0077 silent on how parcels are arranged",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_region#woodland scan plumbing": {
   "code": "e0ed6269a98c2724",
@@ -10787,14 +10774,21 @@
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#share clothed as grazing": {
   "body": "9b23bc01fd986516",
-  "claim": "share clothed as grazing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); holes in the view filled",
-  "code": "292b3de2f0a92064",
+  "claim": "share clothed as grazing - GUESS grass-hills-and-fodder-meadows-kusayama-magusaba.drawing: the dry margins are filled as one continuous band; holes in the view filled",
+  "code": "d446cf9da6eafef8",
   "core": "305c5347fc592175",
   "date": "2026-10-25",
-  "note": "\"holes in the view filled\" as grazing is what 0078's drawing page records, as a GUESS made there (\"the dry margins are filled as one continuous band\"); the claim should name that page, and the share figure itself lives in fill_the_holes, not here",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "dry margins filled as one continuous band, the valley-wide reading recorded as a GUESS",
+  "pages": {
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
+  },
+  "research": "448b6fd5149183a1",
+  "rests": [
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:102c966b25f451df",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:62a92d7e69836347",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:818744ef7d6acb48"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#stage order": {
   "code": "a9f7ca87a34c07e2",
@@ -17482,6 +17476,7 @@
   "date": "2026-10-03",
   "note": "12",
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::SitePlan#spec and plan plumbing": {
@@ -17519,6 +17514,7 @@
   "date": "2026-10-03",
   "note": "nothing cited answers it (0067's no-side-by-side finding is a candidate pointer)",
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::SitePlan.wind#spec and plan plumbing": {
@@ -19427,14 +19423,19 @@
  },
  "l7r/diagram/hamletgen/washing.py::stage_washing#after the ways and crossings": {
   "body": "031dd46ad91730d6",
-  "claim": "after the ways and crossings - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); set last of the ground's features, so each seat is asked of every way, bridge and building already standing; no page orders them",
-  "code": "4e2986b390d92476",
+  "claim": "after the ways and crossings - GUESS washing-places-at-the-waters-edge.drawing: where a lane, a bridge or a building takes the spot, the washing place is moved along the bank; set last of the ground's features, so each seat is asked of every way, bridge and building already standing; no page orders them",
+  "code": "3c01809734ef8a18",
   "core": "9d704b1834566117",
   "date": "2026-10-25",
-  "note": "\"no page orders them\" is wrong: 0065.drawing §112 says \"where a lane, a bridge or a building takes that spot it is moved along the bank\" and records the spot as a GUESS. The claim should be GUESS research/questions/0065-washing-places-at-the-waters-edge.drawing.html",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "GUESS; the page moves a washing place along the bank off a lane, bridge or building and says nothing on order",
+  "pages": {
+   "0065-washing-places-at-the-waters-edge.drawing.html": "53f6bbd749f189f6"
+  },
+  "research": "05b5d29f8bd0d208",
+  "rests": [
+   "0065-washing-places-at-the-waters-edge.drawing.html:8c38dba2f4c10ba6"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/washing.py::washing_form#one at each house where a channel runs past": {
   "code": "719f7215d0b1c985",
@@ -19691,25 +19692,31 @@
  },
  "l7r/diagram/hamletgen/water/brook.py::brook_skirt#corners cut": {
   "body": "853d135eb199d5cc",
-  "claim": "corners cut - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); each station replaced by two points 45 ft (at most 0.3 of the leg) either side, re-floored against the crop",
-  "code": "e11d415fb69eea2b",
+  "claim": "corners cut - which-way-water-flows-and-how-channels-bend-and-join: a stream turns on a radius of two to three times its own width, about 14 to 21 ft at a 7 ft brook; the 45 ft cut is ours; each station replaced by two points 45 ft (at most 0.3 of the leg) either side, re-floored against the crop",
+  "code": "ddb3a06a64980522",
   "core": "9f2f4e45d93f2b8b",
   "date": "2026-10-25",
-  "note": "\"no source could speak to it\" is wrong: 0054 §62 says how tightly a stream turns (\"a radius of two to three times its own width\", about 14-21 ft at the 7 ft brook), and the 45 ft / 0.3 corner cut decides that. The claim should cite 0054.html §62 and say how the 45 ft cut compares",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "a sweep of 2-3 widths; the cut is capped at 0.3 of the leg, like the drawing page's 35% cap, and the 45 ft is a calibration",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
+  },
+  "research": "4409e1905454f5d9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:146499eea2490781",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:4e2a14b0bc705962"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::brook_skirt#crop clearance": {
   "body": "853d135eb199d5cc",
-  "claim": "crop clearance - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every station `skirt` (BROOK_SKIRT, 34 px) outside the cultivated rings and supply canals, in cross-section",
-  "code": "df2c17e95cceeefc",
+  "claim": "crop clearance - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every station `skirt` (BROOK_SKIRT, 34 px) outside the cultivated rings (the plots and dry plots stage_field passes, and the ditch stretches feed_brook adds outside the field on a mid-run crossing - not the supply canals), in cross-section",
+  "code": "8204b239f3734fe9",
   "core": "9f2f4e45d93f2b8b",
   "date": "2026-10-25",
-  "note": "the claim says the skirt clears \"supply canals\", but the caller (stage_field) passes only plots and dry plots (\"NOT the supply canals\"), and feed_brook adds outside-the-field ditch stretches only on a mid-run crossing. The claim should drop the canals or name the ditch stretches; the docstring's \"The supply canals go in too\" is stale",
+  "note": "GUESS; 0059 leaves the brook its margin but gives no figure",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::brook_skirt#flank passage": {
   "code": "93f9aacae2f85f75",
@@ -19797,18 +19804,13 @@
  },
  "l7r/diagram/hamletgen/water/brook.py::brook_violations#no fold-back": {
   "body": "d00c33dd2e1546e9",
-  "claim": "no fold-back - which-way-water-flows-and-how-channels-bend-and-join: a meandering river turns on a radius of two to three times its own width, which the per-vertex cap keeps - a stream's loop back at a larger scale is refused, a departure the code keeps until feature 417 T34; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back",
-  "code": "7bb6a39cbbb28510",
+  "claim": "no fold-back - CONVENTION: a map drawing convention - no vertex turns past the cap, so the line reads as one stream; 0054 gives a bend radius of two to three widths and speaks to no loop; no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back",
+  "code": "79903188d900b1e0",
   "core": "a0828b23a4d1b8f8",
   "date": "2026-10-25",
-  "note": "the claim describes its own departure (\"a meandering stream does loop back ... which the rule refuses\") under a plain question pointer. §62 gives a bend radius, not a per-vertex 100 deg cap, so it does not support \"which the per-vertex cap keeps\". The claim should be DEVIATION 0054, and no page records that departure yet (0054.drawing §38-§42 records no fold-back rule). Its text is also duplicated",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
-  },
-  "research": "4409e1905454f5d9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:146499eea2490781"
-  ],
+  "note": "the `max_turn_deg > BROOK_MAX_TURN_DEG` rule limits the brook's course on the ground, not how it is shown; label it GUESS (0054 gives a bend radius and no turn cap)",
+  "pages": {},
+  "research": "",
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/water/brook.py::brook_violations#no level run": {
@@ -20364,18 +20366,13 @@
  },
  "l7r/diagram/hamletgen/water/brook_course.py::unfold#no fold-back": {
   "body": "27d55446d295f982",
-  "claim": "no fold-back - which-way-water-flows-and-how-channels-bend-and-join: a meandering river turns on a radius of two to three times its own width, which the per-vertex cap keeps - a stream's loop back at a larger scale is refused, a departure the code keeps until feature 417 T34; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); every vertex turning past `limit_deg` (BROOK_MAX_TURN_DEG, 100 deg) dropped, a held tap never",
-  "code": "b4ed7954661fd887",
+  "claim": "no fold-back - CONVENTION: a map drawing convention - no vertex turns past the cap, so the line reads as one stream; 0054 gives a bend radius of two to three widths and speaks to no loop; every vertex turning past `limit_deg` (BROOK_MAX_TURN_DEG, 100 deg) dropped, a held tap never",
+  "code": "c5cd32172b05d1c4",
   "core": "1d098e88e9e919dd",
   "date": "2026-10-25",
-  "note": "same as brook_violations: a self-described departure under a plain question pointer, and §62's bend radius does not bear on a 100 deg per-vertex cap. The claim should be DEVIATION 0054, recorded on 0054.drawing (it is not yet)",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
-  },
-  "research": "4409e1905454f5d9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:146499eea2490781"
-  ],
+  "note": "dropping every vertex past the cap reshapes the brook's course on the ground; label it GUESS (0054 silent on loops and turn caps)",
+  "pages": {},
+  "research": "",
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::AXIS_EPS_DEG#screen-axis segment": {
@@ -21005,14 +21002,20 @@
  },
  "l7r/diagram/hamletgen/water/fit.py::head_sluice#intake offset": {
   "body": "e3ef4d522456db42",
-  "claim": "intake offset - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); rolled from HEAD_OFFSETS",
-  "code": "bdd4230081c9611b",
+  "claim": "intake offset - GUESS where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the intake left, center or right at 1:2:1; rolled from HEAD_OFFSETS",
+  "code": "ada0fbf02caa90f7",
   "core": "51ad4fcb954da7a3",
   "date": "2026-10-25",
-  "note": "the record is not silent: the drawing page records left/center/right at 1:2:1 as a GUESS, which HEAD_OFFSETS' four entries roll exactly; should read GUESS research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`HEAD_OFFSETS` rolls left, center, right at 1:2:1, as the page's GUESS gives it",
+  "pages": {
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
+  },
+  "research": "572ea6aee895aaef",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::net_bends_acutely#no hairpin ditch": {
   "code": "29fc717993f68e04",
@@ -21242,14 +21245,20 @@
  },
  "l7r/diagram/hamletgen/water/polder.py::polder_crossing_caps#crossings where the village lives": {
   "body": "d4c16808e20b628a",
-  "claim": "crossings where the village lives - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); three on the collector the village abuts, one per lateral, none on the feeder or far toe",
-  "code": "47a5abacbd21b771",
+  "claim": "crossings where the village lives - plank-bridges-over-farm-ditches-itabashi.drawing: a crossing stands wherever both ends reach useful ground, a walked dike included - the far toe and the feeder are capped at none on the flank seats, a departure the code keeps until feature 417 T34; at a flank seat three on the collector the village abuts, one per lateral, none on the feeder or far toe; at the head the feeder 3 and the toes 1, at the foot the toes 2 each",
+  "code": "f7c5ea047cec766e",
   "core": "00e326596b5ddad8",
   "date": "2026-10-25",
-  "note": "0084's drawing page answers it: crossings stand wherever both ends reach useful ground (field, settlement or walked dike), and only foot drains and edge drains carry none; zero caps on the far toe and feeder depart from that with no record of it, so this should be a DEVIATION 0084 recorded there or follow §47/§48; the account is also false at the head (feeder 3, toes 1) and the foot (toes 2 each)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "at a flank seat the far toe and the feeder are capped at 0 (`\"feeder\": 0, \"w_toe\": 0`). The page has a crossing \"wherever both ends reach useful ground\"; no page records the per-side cap as ours. Record a DEVIATION or fix in T34",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
+  },
+  "research": "1dd5fd71121f4a06",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b1aeb6949be7d7de"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/water/polder.py::polder_crossing_caps#no plank on the drain": {
   "code": "b5d0569494394e5a",
@@ -44383,14 +44392,20 @@
  },
  "l7r/diagram/settlement/_geom/curves.py::winding#winding path": {
   "body": "c05faa6986aeeae7",
-  "claim": "winding path - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a shallow S of amplitude `amp` rather than a straight line",
-  "code": "ee7c0f82c385d9f4",
+  "claim": "winding path - village-lanes: a path takes the shortest or easiest route, a bend having its reason on the ground - a shallow S with no cause is drawn, a departure the code keeps until feature 417 T32; a shallow S of amplitude `amp` rather than a straight line",
+  "code": "d938a01f133941c4",
   "core": "0c1f9d2ea97f3fa4",
   "date": "2026-10-25",
-  "note": "0081 does speak to a path's line: shortest or easiest route, fewest turns, a bend having a reason on the ground; an S with no cause is not what it finds, so the claim should cite 0081 and be recorded as a DEVIATION or the shape changed",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the shallow S with no cause contradicts 0081: a path takes \"the shortest or most easily walked route\" and a bend has its reason on the ground. No page records the S as ours; DEVIATION or fix in T32",
+  "pages": {
+   "0081-village-lanes.html": "ae63115215c57952"
+  },
+  "research": "880549e43c64bfa2",
+  "rests": [
+   "0081-village-lanes.html:61166eef207b6a38",
+   "0081-village-lanes.html:af871a531b703201"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/_geom/extents.py::forest_frame_span#drawn-extent readers": {
   "code": "cc459dd9c30d1ac1",
@@ -46819,14 +46834,19 @@
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed channel width": {
   "body": "fd0263253db64fbe",
-  "claim": "assumed channel width - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 2.5 px where a record has none (`DEFAULT_W`)",
-  "code": "f294c68a9608ad21",
+  "claim": "assumed channel width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: every width is stored in feet, the same real size on every map, and 0031 records a 2.5 ft channel - the fallback is 2.5 px, not feet, a departure the code keeps until feature 417 T34; 2.5 px where a record has none (`DEFAULT_W`)",
+  "code": "3e2f4e84f6916d53",
   "core": "905067e4a1548e29",
   "date": "2026-10-25",
-  "note": "DEFAULT_W[\"channels\"] = 2.5 is bare px while its siblings go through self.px; 0068 stores every width in feet (\"the same real size on every map\") and 0031 records a 2.5 ft channel, so the claim should cite those and the code use px(2.5)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`\"channels\": 2.5` is in px, not `self.px(2.5)`, against \"Widths are stored in feet ... the same real size on every map\"",
+  "pages": {
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
+  },
+  "research": "0563a9dcc87ebedc",
+  "rests": [
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed ditch width": {
   "code": "99784e758a2e013c",
@@ -46860,14 +46880,19 @@
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#feeder left unplanked": {
   "body": "fd0263253db64fbe",
-  "claim": "feeder left unplanked - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the feeder kept out of `SUPPLY_ROLES`",
-  "code": "c4ba1ecb9ae75d37",
+  "claim": "feeder left unplanked - plank-bridges-over-farm-ditches-itabashi.drawing: a crossing stands wherever both ends reach useful ground, a walked dike included - the feeder is left unplanked at a flank seat, a departure the code keeps until feature 417 T34; by `seg_caps` (feeder 0 at a flank seat, 3 at the head), not by `SUPPLY_ROLES`, which takes the feeder as `main`",
+  "code": "859182a19067aa32",
   "core": "905067e4a1548e29",
   "date": "2026-10-25",
-  "note": "SUPPLY_ROLES is (main, branch, lateral), and stage_polder takes the polder's feeder as the role \"main\" channel, so the feeder is not kept out by SUPPLY_ROLES (only seg_caps feeder 0 does it, and the head seat gives 3); 0084 lays a crossing wherever both ends reach useful ground, a walked dike included, so the claim should cite 0084 and be a recorded DEVIATION or the code follow it",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`seg_caps` gives the feeder 0 planks at a flank seat even where both banks reach useful ground, against \"Both ends of a crossing land on ground worth crossing to\" as the only bar. Unrecorded; DEVIATION or fix in T34",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
+  },
+  "research": "1dd5fd71121f4a06",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#no path leads to a plank": {
   "body": "fd0263253db64fbe",
@@ -47009,14 +47034,20 @@
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#polder crossings by side": {
   "body": "fd0263253db64fbe",
-  "claim": "polder crossings by side - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); seg_caps, none on the feeder, far toe or drain",
-  "code": "a1daf2813b9abc44",
+  "claim": "polder crossings by side - plank-bridges-over-farm-ditches-itabashi.drawing: a crossing stands wherever both ends reach useful ground - zero caps where both banks are useful, a departure the code keeps until feature 417 T34; seg_caps: at a flank seat none on the feeder, far toe or drain; at the head the feeder 3; at the foot the toes 2 each",
+  "code": "5062f0c2153e0da6",
   "core": "905067e4a1548e29",
   "date": "2026-10-25",
-  "note": "\"none on the feeder, far toe or drain\" is true only of the flank seats (head: feeder 3; foot: toes 2 each), and zero caps where both banks are useful depart from 0084's rule unrecorded; should cite 0084 as a DEVIATION or follow it",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "zero caps on the feeder and far toe at a flank seat refuse crossings the page allows wherever both banks are useful. Unrecorded; DEVIATION or fix in T34",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
+  },
+  "research": "1dd5fd71121f4a06",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b1aeb6949be7d7de"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short abutment": {
   "code": "5bbbc9c9c8453257",
@@ -48326,14 +48357,14 @@
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#sty clearance": {
   "body": "bfbaf940b553fadf",
-  "claim": "sty clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); its half-diagonal plus 2 ft from every placed structure and crossing",
-  "code": "52ccccbefab08876",
+  "claim": "sty clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); its half-diagonal plus 2 ft from every placed structure; the crossings it means to clear are read from `footbridges`, a key nothing writes (planks are recorded in `bridges`), so no footbridge is seen - a bug filed in feature 417 T33",
+  "code": "f534eb6c66e81404",
   "core": "b0fb9b0d25098f34",
   "date": "2026-10-25",
-  "note": "the claim says clear of every crossing, but the code reads M[\"footbridges\"] while channel_footbridges records planks in M[\"bridges\"] (foot=True); need whether a \"footbridges\" key exists",
+  "note": "GUESS; 0025 gives no distance between a sty and other structures (the `footbridges` key bug is already filed in T33)",
   "pages": {},
   "research": "",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#sty on the bank": {
   "code": "7e9725cd54f1638e",
@@ -48715,20 +48746,21 @@
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#no resting plot on a dike-pond block": {
   "body": "df5944d77617f562",
-  "claim": "no resting plot on a dike-pond block - paddies-left-to-rest-kataarashi: resting land was over from the Kamakura period on, and dike-ponds arose in the early Ming (0020); its open water is the fabric",
-  "code": "851fe0ae02bca7a8",
+  "claim": "no resting plot on a dike-pond block - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a dike-pond block is drawn as its fish ponds (and 0019), not as rice plots; its open water is the fabric",
+  "code": "bb6ed5043e4dc8db",
   "core": "76bc7a69d90f9e8c",
   "date": "2026-10-25",
-  "note": "\"dike-ponds arose in the early Ming (0020)\" is on no bundled page (neither 0020 nor 0018 dates them); what answers the decision is the fabric, a dike-pond block drawn as fish ponds; cite 0008 drawing §1242 / 0019 drawing §78, §80",
+  "note": "the block is drawn as fish ponds and dikes, not paddy, so nothing there can rest",
   "pages": {
-   "0013-paddies-left-to-rest-kataarashi.html": "f45acd6d576db5ba"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
   },
-  "research": "b52171878617e4e0",
+  "research": "2b8a8213b9c89d51",
   "rests": [
-   "0013-paddies-left-to-rest-kataarashi.html:37ffbf3b9ce5cd66",
-   "0013-paddies-left-to-rest-kataarashi.html:af99e8bec1f33a6c"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:083596e0af6f1902",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:140bedbf9c3f6d56",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:ffcefa561c09cbc3"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#resting plots": {
   "code": "3a91cf24d901ed0e",
@@ -48747,14 +48779,20 @@
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#resting plots off the low row": {
   "body": "df5944d77617f562",
-  "claim": "resting plots off the low row - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); a low or blue plot never rests (the wet ground the pond and overlays take)",
-  "code": "9fea70c56c5c93ef",
+  "claim": "resting plots off the low row - paddies-left-to-rest-kataarashi.drawing: resting is weighted toward the far end of the water's run, with no row excluded - the lowest row never rests, a departure the code keeps until feature 417 T34; a low or blue plot never rests (the wet ground the pond and overlays take)",
+  "code": "675c9bb39bde6d2f",
   "core": "76bc7a69d90f9e8c",
   "date": "2026-10-25",
-  "note": "not silent: 0013's drawing page weights resting toward \"the far end of the water's run\" with no exclusion, and the code excludes exactly the lowest row (`not p.get(\"low\") and p[\"fill\"] != _WF_FLOODED`); cite 0013 drawing §1187 and record the exclusion there (0007 makes that row the wettest ground, not short of water)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`_may` drops every `low` plot, but the page makes the far end of the water's run the likeliest to rest (\"grows the farther down the field's slope it lies\") and records no exclusion; the departure is admitted and tracked to T34 but is not recorded on the drawing page - either let low plots rest or record the exclusion as a DEVIATION",
+  "pages": {
+   "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
+  },
+  "research": "a9a8377184fbd08b",
+  "rests": [
+   "0013-paddies-left-to-rest-kataarashi.drawing.html:04020443e5ffd5a6",
+   "0013-paddies-left-to-rest-kataarashi.drawing.html:11a8f6722d007fca"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook": {
   "code": "3adbbc20688e5ea0",
@@ -49477,11 +49515,11 @@
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._pond_fit#field pond size": {
   "body": "9ca51ba37b119cf8",
-  "claim": "field pond size - ponds-rocks-and-graves-in-the-middle-of-the-fields: the smallest field ponds ran about 33 ft a side; the drawn range is ours; 0.82 of the plot's half-span, 10-46 by 7-32 px, shrunk 0.9 a step",
-  "code": "694831d378ba29a1",
+  "claim": "field pond size - ponds-rocks-and-graves-in-the-middle-of-the-fields: the smallest field ponds ran about 33 ft a side - the legible floor of 10 by 7 px semi-axes draws a pond as small as about 20 by 14 ft, a departure the code keeps until feature 417 T34; 0.82 of the plot's half-span, 10-46 by 7-32 px, shrunk 0.9 a step",
+  "code": "ba3e391e5fe4b580",
   "core": "4fa6421d00f942aa",
   "date": "2026-10-25",
-  "note": "the legible floor `rx >= 10.0 and ry >= 7.0` gives semi-axes, so the smallest pond drawn is about 20 x 14 ft at a foot to the pixel. The page's smallest is \"about 10 m (~33 ft) on a side\". Raise the floor to about 16.5 x 16.5 px semi-axes, or have the page record a smaller pond as a DEVIATION",
+  "note": "the legible floor `max(10.0, ...)`/`max(7.0, ...)` draws a pond as small as about 20 x 14 ft, below \"the smallest, about 10 m (~33 ft) on a side\"; the floors and caps are also raw px, not `self.px`, so the size changes with map scale - raise the floor to about 16.5 x 16.5 ft in feet, or record the departure",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html": "d5e2adec9bfc397b"
   },
@@ -50101,14 +50139,22 @@
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_tea_fringe#tea row direction": {
   "body": "34f4724c547f7bdc",
-  "claim": "tea row direction - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); screen-horizontal whatever the canal or the slope",
-  "code": "270d95d69dfd9b14",
+  "claim": "tea row direction - dry-fields-and-their-crops-hatake.drawing: rows on dry plots are set tract by tract, along the contour or down the fall - tea rows are drawn screen-horizontal, a departure the code keeps until feature 417 T34; screen-horizontal whatever the canal or the slope",
+  "code": "2274d303df86ee1c",
   "core": "ee64473e404bda6f",
   "date": "2026-10-25",
-  "note": "the record is not silent: 0006's drawing page sets row direction on these same dry plots tract by tract, along the contour or down the fall, after the Zuozhuan's rows that \"ran whichever way suited the land\". Fixed screen-horizontal rows ignore that. The claim should cite 0006's drawing page and follow the tract's direction, or that page should record a DEVIATION",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "rows are fixed screen-horizontal (`min(ys) + 6 + i * 8`), where the page sets dry-plot rows \"tract by tract\", along the contour or down to the outfall, turned up to 17 degrees, with plots square to the canal - follow the tract's direction or record a DEVIATION",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+  },
+  "research": "ae8a1665f83d153e",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_tea_fringe#tea row spacing": {
   "body": "34f4724c547f7bdc",
@@ -50845,14 +50891,20 @@
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row bunds staggered": {
   "body": "2b2f05a48c769311",
-  "claim": "row bunds staggered - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); row boundaries rolled per column, so row bunds stagger between columns",
-  "code": "f9427ae9f57fe86a",
+  "claim": "row bunds staggered - how-our-maps-draw-a-bunds-bends-and-corners.drawing: a bund that steps a few feet sideways and carries on parallel is not drawn, under about 30 ft - rows rolled per column stagger the row bunds a few feet across each column bund, a departure the code keeps until feature 417 T34; row boundaries rolled per column, so row bunds stagger between columns",
+  "code": "b1e4ab9e58b3f446",
   "core": "1dbc88c8837680db",
   "date": "2026-10-25",
-  "note": "0284 bears on this: rows rolled per column (`plot * random.uniform(0.85, 1.5)` inside the column loop) put row bunds a few feet apart across each column bund, the bund that \"steps a few feet sideways and carries on parallel\" which the page says is not drawn (under ~30 ft). It should cite 0284's drawing page, and the code drifts from it",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`rows` is re-rolled for every column `k`, so each row bund stops at a column bund and carries on offset by anywhere from 0 to about one plot; that is the sideways step the page refuses (\"steps a few feet sideways and carries on parallel to itself is not drawn\") for every offset under about 30 ft",
+  "pages": {
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html": "f3b637668ad295e9"
+  },
+  "research": "1f4c266f0d09aace",
+  "rests": [
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:0a5c813bdbc4ad64",
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:21b87f2594b3ec18"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#water-first network": {
   "code": "216bb9abfdb01e4a",
@@ -52373,17 +52425,18 @@
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#household grave off the house's corner": {
   "body": "5aa6ad5698f453ba",
-  "claim": "household grave off the house's corner - where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot: a household's grave stood at its plot's corner, southeast or northwest first; the 14 ft is ours; 14 ft out each way (`SHRINE_CORNER_FT`) standing for the plot's corner; no plot's size is recorded with its grave",
-  "code": "7d5b66fb78199aa7",
+  "claim": "household grave off the house's corner - where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot: a household's grave stood at its plot's corner, southeast or northwest first, and also beside the plot, up the slope behind, in the front garden or in a field's corner - only the corner form is drawn, a departure the code keeps until feature 417 T33; the 14 ft is ours; 14 ft out each way (`SHRINE_CORNER_FT`) standing for the plot's corner; no plot's size is recorded with its grave",
+  "code": "5493af3837484824",
   "core": "35c562e9417fd7f0",
   "date": "2026-10-25",
-  "note": "the grave is always seated at a house corner (`corner[first]` over GRAVE_CORNERS), but 0236 attests several forms for a household's own grave: at the plot's SE or NW corner, \"adjoining the plot or close by it, though not within the grounds\", \"part-way up the slope behind the house\", \"in a house's front garden\", \"before the entrance, or in a corner of a field\". Either roll between those forms or say why the corner is the only form drawn",
+  "note": "the page attests several forms (the plot's corner, beside or adjoining the plot, up the slope behind, the front garden, a field's corner), but the code fixes the corner form; per the doctrine it must roll between them. The NE/SW fallback corners are also unattested (§381 gives only SE and NW). Tracked to T33 but not recorded on a page",
   "pages": {
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html": "25f3daa260e791cd"
   },
   "research": "09455ec01c8ca36b",
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:0b95f25fe3bfeb82",
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:7973e247e2735931",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:86f69c66e4e497c4",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:b3e7f0b846f18b0f",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:d6a078d4e683edf6"
@@ -54049,14 +54102,20 @@
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::reseat_clump#the belt stops at a lane it abuts": {
   "body": "72a3b9f7de8ce562",
-  "claim": "the belt stops at a lane it abuts - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a clump blocked by a lane within a clump of the belt's rim is dropped",
-  "code": "b2a30c515e8e182e",
+  "claim": "the belt stops at a lane it abuts - shelter-belts-on-a-villages-windward-side-bofurin: at Fangkeng the flagstone path goes round the grove, not through it; the one-clump rim margin is a GUESS; a clump blocked by a lane within a clump of the belt's rim is dropped",
+  "code": "d1db2aeaa557b4df",
   "core": "3f4cf3d845c9d45d",
   "date": "2026-10-25",
-  "note": "0072's research page speaks to a path along a grove's edge: at Fangkeng \"the flagstone path going round it\", not through it, and the drawing page records the lane crossing. The claim should cite research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html (and the drawing page), with only the one-clump rim margin a GUESS",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the Fangkeng path goes round the grove, so a clump at the rim beside a lane is dropped, not planted over it; the one-clump rim margin is disclosed as a guess",
+  "pages": {
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "186cb571d0ba4842"
+  },
+  "research": "43fe93a795621ca5",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:779c51c61083d514",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:d86d9b12b388242d"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::reseat_clump#the copse re-seats only when displaced": {
   "body": "72a3b9f7de8ce562",
@@ -54071,14 +54130,19 @@
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::reseat_clump#the edges a stand stops at": {
   "body": "72a3b9f7de8ce562",
-  "claim": "the edges a stand stops at - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a clump refused by the crop, open water or a dike bank is dropped, not re-seated",
-  "code": "e28e5bf3eb5a6efa",
+  "claim": "the edges a stand stops at - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing: the paddies, the drying yards and the main road stay open; open water and the dike bank are a GUESS; a clump refused by the crop, open water or a dike bank is dropped, not re-seated",
+  "code": "e3fae26b424fb24b",
   "core": "3f4cf3d845c9d45d",
   "date": "2026-10-25",
-  "note": "the crop edge is answered: \"The paddies, the drying yards and the main road stay open\" and \"the rice lay open to the sun in front of the village\". The claim should cite research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html for the crop, with only open water and the dike bank a GUESS",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the crop stays open as the page says; open water and the dike bank are disclosed as guesses",
+  "pages": {
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
+  },
+  "research": "90cf9ff106c766c9",
+  "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::reseat_clump#the re-seat's reach": {
   "body": "72a3b9f7de8ce562",
@@ -54276,20 +54340,14 @@
  },
  "l7r/diagram/settlement/homestead_parts/grove_sides.py::GROVE_FLANKS#cardinal wind's second face": {
   "body": "8eec2d4a06506e69",
-  "claim": "cardinal wind's second face - groves-of-trees-around-farmhouses-yashikirin.drawing: two sides are the windward pair, as on the Sendai plain, north and west - the second face is rolled at even odds, a departure the code keeps until feature 417 T33; either flank, even odds",
-  "code": "404a6457bac9610b",
+  "claim": "cardinal wind's second face - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25) - 0036 gives the Sendai pair, north and west, and nothing on a cardinal wind's second face (feature 417 T33); either flank, even odds",
+  "code": "1573d24483a1dc45",
   "core": "afd62dd7b8c2f917",
   "date": "2026-10-25",
-  "note": "the claim cites a question for what it calls \"a departure\", but the drawing page records no even-odds roll (\"two sides are the windward pair ... north and west\"; \"northwest by default\"). Relabel as DEVIATION once the page records the roll, or as GUESS if the page is silent on a cardinal wind's second face",
-  "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
-  },
-  "research": "45be621f47448e34",
-  "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:a2869616958ab3d2",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:effd653c04180008"
-  ],
-  "verdict": "MISLABELED"
+  "note": "the regional pairs (Sendai N+W, Tonami S+W, Okinawa N+E) answer to wind regimes, not to a single cardinal wind's second flank; an even-odds roll",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_sides.py::GROVE_SIDES#grove side count": {
   "code": "2af0f05ca2388350",
@@ -54946,20 +55004,14 @@
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_flank#cardinal wind's second face": {
   "body": "fe60cdd9071d585a",
-  "claim": "cardinal wind's second face - groves-of-trees-around-farmhouses-yashikirin.drawing: two sides are the windward pair, as on the Sendai plain, north and west - the second face is rolled at even odds, a departure the code keeps until feature 417 T33; rolled per settlement",
-  "code": "d30fec427f3616e7",
+  "claim": "cardinal wind's second face - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25) - 0036 gives the Sendai pair, north and west, and nothing on a cardinal wind's second face (feature 417 T33); rolled per settlement",
+  "code": "a22b8dd7586036dd",
   "core": "5dd06b12c44e103a",
   "date": "2026-10-25",
-  "note": "same as GROVE_FLANKS: \"a departure\" carried under a question pointer, and 0036's drawing page does not record the even-odds roll. Should be DEVIATION (once the page records it) or GUESS",
-  "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
-  },
-  "research": "45be621f47448e34",
-  "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:a2869616958ab3d2",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:effd653c04180008"
-  ],
-  "verdict": "MISLABELED"
+  "note": "rolled per settlement from the seed and recorded",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_sides#sides rolled per settlement": {
   "code": "e913e24861cc34b5",
@@ -55308,14 +55360,20 @@
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._on_watercourse#no ground cover on open water": {
   "body": "20cabccae7437dc1",
-  "claim": "no ground cover on open water - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); within a watercourse's drawn half-width and a pad",
-  "code": "3eb77bcf72df48de",
+  "claim": "no ground cover on open water - reed-beds-and-the-marshs-edge-yoshihara.drawing: the reeds keep out of the water itself and are drawn right to its edge; the pad is a convention; within a watercourse's drawn half-width and a pad",
+  "code": "097436e2f6670356",
   "core": "9a283c189d2ff49f",
   "date": "2026-10-25",
-  "note": "for the reeds this predicate serves, 0074's drawing page answers it: the reeds \"keep ... out of the water itself\" and are \"drawn right to the water's edge\". The claim should cite research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html, with only the 2 px pad a convention",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "cover is kept off the drawn water, the reeds drawn up to it",
+  "pages": {
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
+  },
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._plant_run#plumbing": {
   "code": "8a45c247614577e3",
@@ -55821,14 +55879,21 @@
  },
  "l7r/diagram/settlement/homestead_parts/stocking.py::stocked_copse#reserved share never a straggler": {
   "body": "e356d1b006c37a66",
-  "claim": "reserved share never a straggler - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a household's reserved share of the wood floor (woods W25) is kept",
-  "code": "829439038ed91c17",
+  "claim": "reserved share never a straggler - groves-of-trees-around-farmhouses-yashikirin.drawing: each farm's wood counts its share of the copse, and the copse is filled to what the farms' own groves leave; a household's reserved share of the wood floor (woods W25) is kept",
+  "code": "d062d9d4c77e1418",
   "core": "d15ab9ebea6dec6d",
   "date": "2026-10-25",
-  "note": "keeping a household's reserved share follows 0036's drawing page: each farm's 6,000-28,000 sq ft wood counts its share of the copse, and \"the copse is filled to what the farms' own groves ... leave\". The claim should cite research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, with only the mechanism ours",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "a household's share of the copse is part of its wood and is never dropped",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:25f4f196d0bea56e",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/tree_shade.py::BAMBOO_SHADE_FT#bamboo shade reach": {
   "code": "755d054a29330d93",
@@ -56053,19 +56118,21 @@
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::FOCUS_DEPTH#wood behind its house": {
   "body": "fa8a18e80d5bd3d3",
-  "claim": "wood behind its house - groves-of-trees-around-farmhouses-yashikirin: the deep stands stood windward, northwest by default, the house's south left open (0028); the 0.7 is ours; centered 0.7 of the reach behind the house's center, the placer's figure",
-  "code": "c68eca274c2933fd",
+  "claim": "wood behind its house - groves-of-trees-around-farmhouses-yashikirin: the deep stands stood windward, northwest by default, the house's south left open (0028) - `back` is the house frame's rear whatever the map's wind, a departure the code keeps until feature 417 T33; the 0.7 is ours; centered 0.7 of the reach behind the house's center, the placer's figure",
+  "code": "52ce1bc6399ccb77",
   "core": "1f4a8b3283286856",
   "date": "2026-10-25",
-  "note": "the 0.7 is declared ours, and the constant itself picks no direction",
+  "note": "the reservation is centered behind the house-frame rear whatever the map's wind, but the deep stand stands windward (Sendai N/W, Tonami S/W, Okinawa N/E); off a north or west wind the block sits on the wrong side - turn it with the wind, or record the departure on the 0036 drawing page",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785"
   },
   "research": "ad1c5b1267ac451b",
   "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:0d8373ca91f4bc07",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:25284bd61428a0e8",
    "0036-groves-of-trees-around-farmhouses-yashikirin.html:666cce295d307b2e"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::LATERAL_WEIGHT#flanks after the back": {
   "body": "9b0da98ee033a0bc",
@@ -57411,6 +57478,7 @@
   "date": "2026-10-03",
   "note": "nothing in the bundle answers it",
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin._stock_woodland#coppice stocking": {
@@ -57457,14 +57525,20 @@
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin._stock_woodland#crowns and pines clear of the crops": {
   "body": "56cd60a09c8259f8",
-  "claim": "crowns and pines clear of the crops - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one",
-  "code": "d9897bbe534eda2d",
+  "claim": "crowns and pines clear of the crops - scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing: the scraggly pines and woodland trees stand back further by their drawn crowns' reach; a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one",
+  "code": "76fe0bae80fb7f21",
   "core": "d11ad5d1993c96a0",
   "date": "2026-10-25",
-  "note": "this GUESS says \"the record silent\", but 0073.drawing states the rule outright: \"the scraggly pines and woodland trees stand back further by their drawn crowns' reach\". The commons unit's claim with the same label already cites it. The claim should cite research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.html. The \"pine its 14 bs tip\" also belongs to commons, not to this unit",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "each throw is refused within the largest crown radius of the crop margin (`sparse(..., _r_hi)`), and the room's grid asks the same lean",
+  "pages": {
+   "0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html": "06f78848d1e6aaf5"
+  },
+  "research": "e4f3bcb67343240f",
+  "rests": [
+   "0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html:af179428f5df43b7",
+   "0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html:bab44f4f90ae6820"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin._stock_woodland#crowns thin to the wood's edge": {
   "body": "56cd60a09c8259f8",
@@ -57520,14 +57594,17 @@
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#a scrub pine's height": {
   "body": "2d618bfd05c6940d",
-  "claim": "a scrub pine's height - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); 9 to 14 ft (`random.uniform(9, 14) * bs`); no page gives a scrub pine's height",
-  "code": "41f8ff89d17c6819",
+  "claim": "a scrub pine's height - grass-hills-and-fodder-meadows-kusayama-magusaba.drawing: grass with thin low pine - drawn 9 to 14 ft, under 0038's least drawn tree of 10 m, a departure the code keeps until feature 417 T34; 9 to 14 ft (`random.uniform(9, 14) * bs`); no page gives a scrub pine's height",
+  "code": "1a0ba21a829429ed",
   "core": "af0dc46ee36e31d1",
   "date": "2026-10-25",
-  "note": "the record is not silent. 0078.drawing attests \"grass with thin low pine\". 0038.drawing counts the scrub pine among trees reckoned at \"a working windbreak's 10 m (~33 ft) - the least height the record draws a tree at\", against the drawn 9-14 ft. The claim should cite 0078.drawing and reconcile with 0038.drawing: either a CONVENTION for the plan-view glyph, or a DEVIATION that 0038 records",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`random.uniform(9, 14) * bs` draws a pine of 9 to 14 ft, where 0038 sets the least height the record draws a tree at to 10 m (~33 ft) and names the scrub pine among those trees; 0078's \"thin low pine\" gives no figure. Either 0038 must except the scrub pine or the claim is a GUESS",
+  "pages": {
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
+  },
+  "research": "448b6fd5149183a1",
+  "rests": [],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#a scrub pine's reach": {
   "body": "2d618bfd05c6940d",
@@ -57813,19 +57890,20 @@
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.woodland_room#crowns on a lattice": {
   "body": "7af1410084469a62",
-  "claim": "crowns on a lattice - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns: a planted wood stood nine trees to a ken square (Morioka), and two paces each way (the Qimin Yaoshu); crowns seated on a regular square lattice at the page's density",
-  "code": "04638b27002c3820",
+  "claim": "crowns on a lattice - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns: a worked wood stood as clumps of stems, not as spaced single trees, the lattice spacings being planted timber's - single crowns on a regular lattice are our fallback, a departure the code keeps until feature 417 T34; crowns seated on a regular square lattice at the page's density",
+  "code": "abf71304979edd1b",
   "core": "f5b6bfa17986c093",
   "date": "2026-10-25",
-  "note": "the code seats a coppice's crowns as single trees on a regular square grid, where 0080 finds \"a worked wood stood as clumps of stems, not as spaced single trees\". The Morioka and Qimin Yaoshu spacings it cites are for planted timber, and 0080.drawing says \"No wood is drawn at the densities timber was planted at\". The lattice should be labeled as our fallback (GUESS or CONVENTION), not as 0080's finding",
+  "note": "single crowns on a square grid, where the page says \"a worked wood stood as clumps of stems, not as spaced single trees\"; the even spacings are planted timber's. Tracked to T34, not recorded as a deviation",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html": "f868268d39aaabdb"
   },
   "research": "4afcf30c97d4e0d4",
   "rests": [
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html:4bc87d8aeb9ffd60",
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html:7c8c5f9317c0ac16",
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html:f4d4da794ef0d914"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html:4d164c103b7f3462",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html:867e9f33c1fb8700",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html:efae49fcdc2494d7"
   ],
   "verdict": "DRIFTED"
  },
@@ -58106,56 +58184,62 @@
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#every dike-top house is the \"plain\" kind at wealth 1.0, where 0029.drawing makes the plan and roof a per-settlement knob and varies house size": {
+ "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#each house turned to the crest's tangent (`rot=ang`), seats spread evenly along the span with a jitter of 18% of a step": {
   "code": "b5b27729ad8ac47c",
   "core": "b5b27729ad8ac47c",
   "date": "2026-10-25",
-  "note": "every dike-top house is the \"plain\" kind at wealth 1.0, where 0029.drawing makes the plan and roof a per-settlement knob and varies house size",
+  "note": "each house turned to the crest's tangent (`rot=ang`), seats spread evenly along the span with a jitter of 18% of a step",
   "outside": true,
   "research": "",
   "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#house platform": {
   "body": "31993559d4a1e11a",
-  "claim": "house platform - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the house plus 14 by 10 ft of widened crest",
-  "code": "0ec574f6a9f70dca",
+  "claim": "house platform - GUESS polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the house and about 14 ft by 10 ft more; the house plus 14 by 10 ft of widened crest",
+  "code": "5be63cba77a20360",
   "core": "b5b27729ad8ac47c",
   "date": "2026-10-25",
-  "note": "not \"record silent\": 0019.drawing records exactly this, \"the house and about 14 ft by 10 ft more, is a GUESS\". Should read GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`hw + px(14)` by `hh + px(10)`, the page's own guess",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:38971cde89340d36"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#no homestead bundle": {
   "body": "31993559d4a1e11a",
-  "claim": "no homestead bundle - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); bare houses, the gardens down on the parcels",
-  "code": "b9f1898b1ceb736b",
+  "claim": "no homestead bundle - GUESS polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: drawing none on the crest; bare houses, the gardens down on the parcels",
+  "code": "a64aee41200e5968",
   "core": "b5b27729ad8ac47c",
   "date": "2026-10-25",
-  "note": "0019.drawing records \"drawing none on the crest is a GUESS\". Should name that drawing page",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "bare houses on the crest, the page's guess",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:512d5c1542aebcb7"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#off the sluice notch": {
   "body": "31993559d4a1e11a",
-  "claim": "off the sluice notch - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); no house within 34 px of a gap",
-  "code": "1fbcefcae5e8ebf1",
+  "claim": "off the sluice notch - GUESS polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: about 34 ft on a hamlet map; no house within 34 px of a gap",
+  "code": "d8158289c9e03792",
   "core": "b5b27729ad8ac47c",
   "date": "2026-10-25",
-  "note": "0019.drawing records \"about 34 ft on a hamlet map ... is a GUESS\". Should name that drawing page",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
- },
- "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#sites spaced evenly along the span, jittered ±18% of a step": {
-  "code": "b5b27729ad8ac47c",
-  "core": "b5b27729ad8ac47c",
-  "date": "2026-10-25",
-  "note": "sites spaced evenly along the span, jittered ±18% of a step",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "34 px is 34 ft at a hamlet's grain and 68 ft at a village's, both the page's",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f8f889ccce299233"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#spacing along the crest": {
   "body": "31993559d4a1e11a",
@@ -59955,11 +60039,11 @@
  },
  "l7r/diagram/settlement/rolling/access.py::round_the_gable#flank path round the gable": {
   "body": "8fc79ad1dc895109",
-  "claim": "flank path round the gable - village-lanes.drawing: a lane's tread keeps 3 ft off a farmhouse wall; the half-width and a foot is ours; carried along the gable past the back wall by a corridor's half-width and a foot",
-  "code": "3dcb022d49f1b449",
+  "claim": "flank path round the gable - village-lanes.drawing: a lane's tread keeps 3 ft off a farmhouse wall - the tread's edge is carried 1 ft past the back wall, a departure the code keeps until feature 417 T33; carried along the gable past the back wall by a corridor's half-width and a foot",
+  "code": "7c5f61da9a0292b6",
   "core": "bf5569b58a42dc50",
   "date": "2026-10-25",
-  "note": "`back = ... + half + 1.0` puts the tread edge 1 ft past the back wall. The cited page keeps a tread \"never inside the 3 ft a lane's tread keeps clear of a house wall\". The offset should be the half-width plus 3 ft (`TREAD_WALL_FT`), or the claim should be a DEVIATION that a drawing page records",
+  "note": "`back = ... + half + 1.0` brings the tread's edge 1 px past the back wall, inside the 3 ft \"a lane's tread keeps clear of a house wall\", which the page says wins over every other margin; the 1.0 is also raw px, not `s.px(...)` - use 3 ft scaled",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -60133,19 +60217,19 @@
  },
  "l7r/diagram/settlement/rolling/bearing.py::MarginBearing#turn with the field margin": {
   "body": "9c659361ae3a0948",
-  "claim": "turn with the field margin - farmhouses-minka.drawing: houses turn with their lane, within about 34 degrees (the Okinawan survey); the field margin standing for the lane is ours; the field margin stands in for that lane before any lane is drawn, a proxy 0029 neither records nor labels",
-  "code": "a483f51f3aff2f2b",
+  "claim": "turn with the field margin - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: each farmhouse faces along the field's edge, not a lane (0029 draws a house turned with its lane, never more than about 30 degrees); the field margin stands in for that lane before any lane is drawn, a proxy 0029 neither records nor labels",
+  "code": "8c6b7cbd8fcd9609",
   "core": "45d47d15b58c96af",
   "date": "2026-10-25",
-  "note": "the claim cites 0029 for a proxy it admits 0029 does not record. Using the field margin in place of the lane is a departure. 0246.drawing records \"faces each farmhouse along the field's edge, not a lane\" as a DEVIATION, and the sibling `__call__` already labels it DEVIATION 0246. The claim should be DEVIATION 0246.drawing. It also misquotes 0029: the page draws \"never more than about 30 degrees\", and 34 is the survey's span",
+  "note": "0246 records facing along the field's edge as a DEVIATION only for \"A village-scale map, unlike a hamlet's\"; on hamlet code the field-margin proxy is unrecorded, as the claim itself admits (\"a proxy 0029 neither records nor labels\") - record it on 0246 or 0029 for hamlets",
   "pages": {
-   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
-  "research": "a3cfa2fba63bb45d",
+  "research": "4473caa26c642d2b",
   "rests": [
-   "0029-farmhouses-minka.drawing.html:bc0fc421a952f357"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/bearing.py::MarginBearing#turn with the lane": {
   "code": "b6a3c16f4f80adab",
@@ -60374,18 +60458,17 @@
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre's flank": {
   "body": "b551821804638c16",
-  "claim": "byre's flank - draft-oxen-and-horses-and-their-byres-umaya: in the Tono L-shaped house the stable joins the lower end and projects off the south side, both mirror forms recorded; away from the garden is ours; the flank away from the garden; the page attests the inner and outer stable, not the side",
-  "code": "0048ee8219e49481",
+  "claim": "byre's flank - draft-oxen-and-horses-and-their-byres-umaya: in the Tono L-shaped house the stable joins the lower end and projects off the south side, both mirror forms recorded - the byre is set at the floored end when the garden is west or southwest, a departure the code keeps until feature 417 T33; away from the garden is ours; the flank away from the garden; the page attests the inner and outer stable, not the side",
+  "code": "0957d06e52ef0121",
   "core": "e7e2a5102650b993",
   "date": "2026-10-25",
-  "note": "`byre_part` puts the byre at +x (the floored-rooms end) whenever the garden is W or SW (`sx = 1.0`), but 0048 has the stable join \"the lower end of the house\" (the -x doma/stable end in the fixture frame). The claim's \"the page attests ... not the side\" is also untrue of §499. Seat it at the lower end (mirrored with the house), or record the departure",
+  "note": "the Tono stable \"joins the lower end of the house and projects off its south side\", but when the garden is west or southwest the byre goes on the floored end; the side follows the garden instead of rolling between the two recorded mirror forms. The claim's tail \"the page attests the inner and outer stable, not the side\" contradicts §908, which attests the side",
   "pages": {
    "0048-draft-oxen-and-horses-and-their-byres-umaya.html": "bba86415b4203d3d"
   },
   "research": "17d00fe85bc4f6b2",
   "rests": [
    "0048-draft-oxen-and-horses-and-their-byres-umaya.html:2a7adc3a48c984b7",
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.html:c8cba5e13f775b9e",
    "0048-draft-oxen-and-horses-and-their-byres-umaya.html:dd5a2f0d071ed5ad"
   ],
   "verdict": "DRIFTED"
@@ -60713,21 +60796,14 @@
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._garden_beds#bed split forms": {
   "body": "2babb08aeaf8ecd2",
-  "claim": "bed split forms - kitchen-gardens-beside-farmhouses-yashikibatake: beds lay before the house, all round it, or on spare ground; the forms and the 6 ft width are ours; half flank the house on opposite walls, the rest stacked (south gardens) or side by side; each bed at least 6 ft (`bscale`) wide",
-  "code": "ecbd3b1df2fb7822",
+  "claim": "bed split forms - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25) - 0039 has where a bed lay, nothing on splitting one; half flank the house on opposite walls, the rest stacked (south gardens) or side by side; each bed at least 6 ft (`bscale`) wide",
+  "code": "b1dcc737feb58aa6",
   "core": "8423f77fec4e5d20",
   "date": "2026-10-25",
-  "note": "0039 gives where a bed lay (before the house, all round it, on spare ground) and nothing on splitting one. The claim itself says \"the forms and the 6 ft width are ours\", so it should be GUESS (record silent), not a 0039 claim",
-  "pages": {
-   "0039-kitchen-gardens-beside-farmhouses-yashikibatake.html": "42f2dbe8af162c57"
-  },
-  "research": "f8e34f56ae425b02",
-  "rests": [
-   "0039-kitchen-gardens-beside-farmhouses-yashikibatake.html:1c7b53980cfd6b8f",
-   "0039-kitchen-gardens-beside-farmhouses-yashikibatake.html:8064d522fa21cd1c",
-   "0039-kitchen-gardens-beside-farmhouses-yashikibatake.html:fa29851ac3f31068"
-  ],
-  "verdict": "MISLABELED"
+  "note": "0039 places the bed but says nothing of splitting it; a guess",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._garden_beds#bed split share": {
   "body": "2babb08aeaf8ecd2",
@@ -61634,14 +61710,19 @@
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._house_too_near_a_neighbor#roofs shed apart": {
   "body": "8278420971ef6224",
-  "claim": "roofs shed apart - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); `FARMHOUSE_EAVE_GAP_FT` (8 ft) plus 2 ft between the rotated corners of two farmhouses; 0029 gives only a 3 ft eave",
-  "code": "794730294688cf1c",
+  "claim": "roofs shed apart - farmhouses-minka.drawing: 3 ft is the gap our maps keep between neighboring houses, and 0246 parts two homesteads by 20 ft - two farmhouses are held 8 + 2 ft apart, a departure the code keeps until feature 417 T33; `FARMHOUSE_EAVE_GAP_FT` (8 ft) plus 2 ft between the rotated corners of two farmhouses; 0029 gives only a 3 ft eave",
+  "code": "3fffc71e3e3fb69e",
   "core": "fca22a5379e8a649",
   "date": "2026-10-25",
-  "note": "not \"record silent\": 0029.drawing names 3 ft as \"the gap our maps already keep between neighboring houses\", and 0246.drawing parts two homesteads by 20 ft. The 8 + 2 ft should cite those pages and be reconciled with them",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`FARMHOUSE_EAVE_GAP_FT + 2.0` holds houses 10 ft apart at the corners, where 0029 sets 3 ft as \"the gap our maps already keep between neighboring houses\"; 0246's 20 ft parts homestead lots, not walls, so the 8 ft is on no page - use 3 ft, or record the 8 ft",
+  "pages": {
+   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
+  },
+  "research": "a3cfa2fba63bb45d",
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:85a8cc308b1e2e3b"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._house_unreachable#keep-out geometry, index and cache plumbing": {
   "code": "e9c3f6e85a717190",
@@ -63243,14 +63324,20 @@
  },
  "l7r/diagram/settlement/rolling/passage.py::reserve_way#the walk reserved as it is seated": {
   "body": "3bb43f6ac91312f3",
-  "claim": "the walk reserved as it is seated - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); the walk kept as no-build ground while the houses are seated, so later houses keep off it",
-  "code": "79af4683e72b84c4",
+  "claim": "the walk reserved as it is seated - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: no way is kept while the houses are seated, the reserve-as-seated recorded there as the village-scale deviation; the walk kept as no-build ground while the houses are seated, so later houses keep off it",
+  "code": "d950ffcc0de0c255",
   "core": "95292eddacb0058b",
   "date": "2026-10-25",
-  "note": "\"no source could speak to it\" is wrong. 0246 sets the walk's rule (\"must keep to the two households' land and cross no house, garden bed, shed or fixture of either\"), and §43 says no way is kept while houses are seated, recording reserve-as-seated as a village-scale DEVIATION. The claim should be DEVIATION 0246.drawing, as its sibling corridor claim is",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "0246 says \"No way is sought or kept while houses are seated\" and \"no path is looked for while it is seated\", recording reserve-as-seated as a deviation only for village-scale maps; a hamlet reserving the walk (`s._access.bar`) during seating has no recorded deviation",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/passage.py::reserve_way#walk not drawn as a lane": {
   "code": "3dee039cffc531fb",
@@ -63578,16 +63665,32 @@
   "research": "",
   "verdict": "UNCLAIMED"
  },
- "l7r/diagram/settlement/rolling/route.py::_route_from#path leaves its own yard once": {
-  "body": "bea3017db31e0ece",
-  "claim": "path leaves its own yard once - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25) - a path cut through a neighbor's yard by custom is on no page (0246); kept off the house, its parts and the neighbors' homesteads, leaving its threshing yard and never crossing it again",
-  "code": "19fa3d8acd057fda",
+ "l7r/diagram/settlement/rolling/route.py::_route_from#a household's path limited to 5 legs (`ROUTE_LEGS`), and none routed beyond 320 px of the tree (`ROUTE_REACH_PX`)": {
+  "code": "b510445a812eab94",
   "core": "b510445a812eab94",
   "date": "2026-10-25",
-  "note": "the GUESS's account says a path cut through a neighbor's yard \"is on no page\", but 0246 has exactly that custom (§44, §45). The rule that a way leaves its dooryard round its own parts, with nothing built on a lane, is 0246's map drawing convention. Should cite 0246.drawing",
-  "pages": {},
+  "note": "a household's path limited to 5 legs (`ROUTE_LEGS`), and none routed beyond 320 px of the tree (`ROUTE_REACH_PX`)",
+  "outside": true,
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/settlement/rolling/route.py::_route_from#path leaves its own yard once": {
+  "body": "bea3017db31e0ece",
+  "claim": "path leaves its own yard once - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a way leaves its dooryard round its own parts, nothing built on a lane, and the custom of cutting through a neighbor's yard is recorded there; kept off the house, its parts and the neighbors' homesteads, leaving its threshing yard and never crossing it again",
+  "code": "6104995f5ae35133",
+  "core": "b510445a812eab94",
+  "date": "2026-10-25",
+  "note": "the way leaves its dooryard round its own parts, keeps off what stands, and its 1.5 + 0.5 ft margin is half the 4 ft lane room",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/route.py::own_parts#a walk crosses nothing of either household": {
   "code": "3c56205e18026a43",
@@ -63873,11 +63976,11 @@
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._commons_pocket_clear#off the paddy": {
   "body": "7fac91a326dd7060",
-  "claim": "off the paddy - a-houses-setback-from-the-road-and-its-eaves-drip-strip: a village house stood about 3 ft back from cultivated land (Mino, 1892); the stall's depth is ours; a stall's depth",
-  "code": "2d5863dde539673a",
+  "claim": "off the paddy - a-houses-setback-from-the-road-and-its-eaves-drip-strip: a village house stood about 3 ft back from cultivated land (Mino, 1892) - the shed's center is held 10.92 ft off, its edge 2.9 to 5.5 ft by side, a departure the code keeps until feature 417 T33; a stall's depth",
+  "code": "26646e556e90d66d",
   "core": "3b8773328c7302c2",
   "date": "2026-10-25",
-  "note": "`beside_a_paddy(x, y, bh, ...)` holds the shed's center 10.92 ft off, which puts its edge 2.9 to 5.5 ft off depending on side. §184 gives about 3 ft. Either hold the edge 3 ft off, or record the stall's depth as ours (GUESS)",
+  "note": "`beside_a_paddy(x, y, bh, ...)` measures from the shed's center. An unturned shed against a paddy edge running diagonally (the comb's edges do) can stand about 1.4 ft off, not the claimed 2.9 ft floor, under the page's \"about 3 ft back from ... cultivated land\". Test the rotated footprint at 3 ft",
   "pages": {
    "0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html": "1e2436bbc7b84bed"
   },
@@ -63909,20 +64012,21 @@
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._courtyard_byre_seat#drip-line gap": {
   "body": "087d97a1a4c27b85",
-  "claim": "drip-line gap - a-houses-setback-from-the-road-and-its-eaves-drip-strip: the drip strip ran 2 to 3 chi (Jiaxiang), 3 chi (Baoding, 1884), about 3 ft (Mino); 3 ft",
-  "code": "ff4134f9bb34fd35",
+  "claim": "drip-line gap - a-houses-setback-from-the-road-and-its-eaves-drip-strip: the drip strip ran 2 to 3 chi (Jiaxiang), 3 chi (Baoding, 1884), about 3 ft (Mino); 3 px, 3 ft at a foot to the pixel",
+  "code": "d70f374898a33211",
   "core": "375ad49787b5fb42",
   "date": "2026-10-25",
-  "note": "`+ 3.0` is raw px while bw/bh go through `self.px`. It is 3 ft only at 1 ft/px; I need to know whether the courtyard byre is ever drawn at ftpx≠1, where the gap leaves 0247's 2-3 chi",
+  "note": "0247's drip strip is a house's own ground at its wall's foot, toward a road or a neighbor. It says nothing of a house and its own stable wing, which 0048 records as \"main body and stable made one in an L\". The 3 ft gap (raw px) needs a DEVIATION against 0048, recorded on its drawing page",
   "pages": {
    "0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html": "1e2436bbc7b84bed"
   },
   "research": "e684250b3d957c26",
   "rests": [
-   "0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html:141927c43d6bc14f",
-   "0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html:e50a9353e1270a68"
+   "0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html:ad5df25c72d32391",
+   "0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html:e50a9353e1270a68",
+   "0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html:f290807b0c9ec8f2"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._courtyard_byre_seat#stable arm abutting the house": {
   "code": "b173548a26e0597a",
@@ -63935,15 +64039,6 @@
   "research": "17d00fe85bc4f6b2",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._courtyard_byre_seat#the stall mouth opens outward, away from the house (`brot`)": {
-  "code": "375ad49787b5fb42",
-  "core": "375ad49787b5fb42",
-  "date": "2026-10-25",
-  "note": "the stall mouth opens outward, away from the house (`brot`)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._draw_byre#open-fronted shed": {
   "code": "8c4c02f9efb60b5a",
@@ -63989,11 +64084,20 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#at least one byre per settlement (`max(1, ...)`)": {
+ "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#a byre's clear margin, 3 px each side (`bw + 6, bh + 6` fit probe)": {
   "code": "c962304513fb481b",
   "core": "c962304513fb481b",
   "date": "2026-10-25",
-  "note": "at least one byre per settlement (`max(1, ...)`)",
+  "note": "a byre's clear margin, 3 px each side (`bw + 6, bh + 6` fit probe)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#at least one byre in every settlement (`max(1, round(...))`)": {
+  "code": "c962304513fb481b",
+  "core": "c962304513fb481b",
+  "date": "2026-10-25",
+  "note": "at least one byre in every settlement (`max(1, round(...))`)",
   "outside": true,
   "research": "",
   "verdict": "UNCLAIMED"
@@ -64091,48 +64195,51 @@
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#shared sheds spread, with borrowers in reach": {
   "body": "319139e9158cb2e6",
-  "claim": "shared sheds spread, with borrowers in reach - draft-oxen-and-horses-and-their-byres-umaya: every arrangement found ties the beast to one keeper, a borrowed beast placed with its borrower - sheds are shared among borrowers in reach, a departure the code keeps until feature 417 T33; minimax, _BORROW_REACH",
-  "code": "73363d9af12e8f9f",
+  "claim": "shared sheds spread, with borrowers in reach - GUESS draft-oxen-and-horses-and-their-byres-umaya.drawing: the shared shed is the page's GUESS form, reached by several households; the minimax and the reach are ours; minimax, _BORROW_REACH",
+  "code": "4bf5ca12d1b2020d",
   "core": "c962304513fb481b",
   "date": "2026-10-25",
-  "note": "0048.drawing records the shared shed as a GUESS form, \"reached by several of them\". The claim should be GUESS 0048.drawing; minimax and _BORROW_REACH are values of ours",
+  "note": "the shared shed and its several reaching households are the page's recorded GUESS; the minimax and the reach are ours",
   "pages": {
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.html": "bba86415b4203d3d"
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
   },
-  "research": "17d00fe85bc4f6b2",
+  "research": "a75e3ada6edbbc9b",
   "rests": [
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.html:326d44905758e4ea",
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.html:f02ad7bb04f76b9d"
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:9dd3e953a6b92d53"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#spiral byre off the paddies": {
   "body": "319139e9158cb2e6",
-  "claim": "spiral byre off the paddies - ground-too-wet-to-build-on: settlements stood on dry levees, the paddy on the back marsh; kept a stall's depth from every field",
-  "code": "4a26715e0334a9f5",
+  "claim": "spiral byre off the paddies - a-houses-setback-from-the-road-and-its-eaves-drip-strip: a village house stood about 3 ft back from cultivated land; the stall's depth is ours; kept a stall's depth from every field",
+  "code": "3f3a4efa7cf14c0c",
   "core": "c962304513fb481b",
   "date": "2026-10-25",
-  "note": "0058 gives no distance. The stall's-depth test (`edge_dist < bh`, edge 2.9 to 5.5 ft off) rests on 0247's \"about 3 ft back from ... cultivated land\", so the distance should point there",
+  "note": "the center is kept bh from every field, which leaves at least about 3 ft from the stall's edge to the field, matching the village setback from cultivated land",
   "pages": {
-   "0058-ground-too-wet-to-build-on.html": "06b0916809851274"
+   "0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html": "1e2436bbc7b84bed"
   },
-  "research": "9765660d8bfe9ffa",
+  "research": "e684250b3d957c26",
   "rests": [
-   "0058-ground-too-wet-to-build-on.html:4e94b3e0279cb002",
-   "0058-ground-too-wet-to-build-on.html:fa7005bf7bd5499e"
+   "0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html:141927c43d6bc14f"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#spiral reach": {
   "body": "319139e9158cb2e6",
-  "claim": "spiral reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); 18 px for a household form, 70 px for a shared shed",
-  "code": "a75d33df72d32fb1",
+  "claim": "spiral reach - draft-oxen-and-horses-and-their-byres-umaya.drawing: the outer stable stands about 6 to 12 ft off the farmhouse wall - the 18 px household reach seats one up to about 18 ft off, a departure the code keeps until feature 417 T33; the 70 px shared reach is a GUESS; 18 px for a household form, 70 px for a shared shed",
+  "code": "b91153acc8e78614",
   "core": "c962304513fb481b",
   "date": "2026-10-25",
-  "note": "the page does speak to the household reach: the outer stable stands \"about 6 to 12 ft off the farmhouse wall\". The 18 px budget from `rr0` seats a yard_shed fallback from about 0.5 to about 18 ft off, past 12 ft. Should cite 0048.drawing; the 70 px commons reach stays a GUESS",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "COURTYARD_REACH 18 px seats an outer stable up to about 18 px past its half-extent (36-54 ft on coarser tiers), where the page says \"about 6 to 12 ft off the farmhouse wall\"; the page does not record the departure, so either make the T33 fix or record a DEVIATION on 0048.drawing",
+  "pages": {
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
+  },
+  "research": "a75e3ada6edbbc9b",
+  "rests": [
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:4890be592fed3ca4"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.reserve_commons_byres#pocket margin": {
   "code": "de9ed59e253e5996",
@@ -64211,22 +64318,19 @@
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::_BORROW_REACH#borrowing distance": {
   "body": "3c572013adf3c102",
-  "claim": "borrowing distance - draft-oxen-and-horses-and-their-byres-umaya: borrowing was placement or hire, as far as other provinces, with no walking reach - a departure the code keeps until feature 417 T33; 120 px",
-  "code": "13bb3a0c10750ae5",
+  "claim": "borrowing distance - GUESS draft-oxen-and-horses-and-their-byres-umaya.drawing: the shared shed reached by several households; the walking reach is ours; 120 px",
+  "code": "f03f3b01c3f0ce53",
   "core": "474b89153ce0450b",
   "date": "2026-10-25",
-  "note": "the walking reach quantifies 0048.drawing's GUESS shed \"reached by several of them\". It is not a departure from the research page. Should be GUESS 0048.drawing; the 120 px is ours",
+  "note": "the page records the shared shed reached by several households as a GUESS and gives no walking distance; 120 px is ours",
   "pages": {
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.html": "bba86415b4203d3d"
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
   },
-  "research": "17d00fe85bc4f6b2",
+  "research": "a75e3ada6edbbc9b",
   "rests": [
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.html:277dddc960228c19",
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.html:326d44905758e4ea",
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.html:d6581b04f7d3a6e6",
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.html:f02ad7bb04f76b9d"
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:9dd3e953a6b92d53"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::_POCKET_WIDENING#pocket band widening": {
   "code": "75047503e856c0af",
@@ -64284,14 +64388,19 @@
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::byre_part#long side along the wall": {
   "body": "4d20b79d90b5d21d",
-  "claim": "long side along the wall - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25)",
-  "code": "de19297e660fdd95",
+  "claim": "long side along the wall - draft-oxen-and-horses-and-their-byres-umaya: the magariya's stable joins the lower end of the house and projects off its south side; for the outer stable, a GUESS",
+  "code": "6064c9bee482ed53",
   "core": "a43aa5e59c873885",
   "date": "2026-10-25",
-  "note": "\"record silent\" is wrong for the inner stable. §209 says the magariya's stable \"joins the lower end ... and projects off its south side\" to make the L, while the arm laid along the gable wall stays within the house's depth. Should cite 0048 §209; the GUESS holds only for the outer stable",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`bh, bw` lays the inner stable's long side flush along the flank wall, but the cited finding is a wing that \"joins the lower end of the house and projects off its south side\" (an L, whose long side runs away from the house); either draw the wing projecting or relabel the claim GUESS/DEVIATION",
+  "pages": {
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.html": "bba86415b4203d3d"
+  },
+  "research": "17d00fe85bc4f6b2",
+  "rests": [
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.html:2a7adc3a48c984b7"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::byre_part#outer stable off the wall": {
   "code": "38b7e02ca8fc2662",
@@ -64345,6 +64454,7 @@
   "date": "2026-10-03",
   "note": "path choice, bundle silent",
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/byres.py::paddy_index#plumbing": {
@@ -64761,14 +64871,21 @@
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._place_wells#standing room demanded": {
   "body": "ecdce4c613d52d23",
-  "claim": "standing room demanded - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25); a fixed 2r + 14 px box",
-  "code": "f59a2143bf5e5ea9",
+  "claim": "standing room demanded - communal-wells-ido.drawing: a paved apron about 4 ft wider than its curb, and each well keeps only a small court - a fixed 2r + 14 px box, 30 to 90 ft by tier, a departure the code keeps until feature 417 T33",
+  "code": "2dde61438836c17d",
   "core": "6301212a5d7a74aa",
   "date": "2026-10-25",
-  "note": "0196.drawing does speak to it: \"a paved apron about 4 ft wider than its curb\" and \"each well keeps only a small court\". The fixed `2 * r + 14` px box demands 30 to 90 real ft by tier. Should cite 0196.drawing",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`probe = 2 * r + 14` demands a fixed 30 px (30-90 ft by tier), where the page gives an apron \"about 4 ft wider than its curb\" and \"only a small court\"; the page does not record the departure, so T33 or a recorded DEVIATION",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+  },
+  "research": "530e826bbd37f9c5",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:36ac509adca7b4e4",
+   "0196-communal-wells-ido.drawing.html:6d02204b060e2a7f",
+   "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._place_wells#wells inside the blocks, off lanes and compounds": {
   "code": "1ff9fbca63cc9590",
@@ -64829,14 +64946,21 @@
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin.well#keep-clear margin": {
   "body": "9b6b58e0f6f127e6",
-  "claim": "keep-clear margin - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); 8 px round the roof",
-  "code": "7addd3e8a6d57561",
+  "claim": "keep-clear margin - communal-wells-ido.drawing: the apron 4 ft past the curb, a small court, a lane-side curb within about 8 ft of the tread - 8 px round the roof, 8 to 24 ft by tier, a departure the code keeps until feature 417 T33; 8 px round the roof",
+  "code": "00945ecb3f1ee982",
   "core": "a3e296f880cd7c1b",
   "date": "2026-10-25",
-  "note": "0196.drawing speaks to the ground round a well: the apron 4 ft past the curb, a small court, a lane-side curb \"within about 8 ft of the tread\". The raw 8 px past the roof (8 to 24 ft) should cite it",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`bm = 8` blocks 8 px round the roof (vroof = px(12.376), larger than the 9.36 ft curb), so a lane cannot come within about 11 ft of the curb even at 1 ft/px, against the page's \"curb within about 8 ft of the tread\"; the page does not record the departure; the claim text also repeats \"8 px round the roof\"",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+  },
+  "research": "530e826bbd37f9c5",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:36ac509adca7b4e4",
+   "0196-communal-wells-ido.drawing.html:6d02204b060e2a7f",
+   "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin.well#wellhead marker": {
   "code": "646e0782e7932739",
@@ -64871,14 +64995,21 @@
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin.well_at#standing room demanded": {
   "body": "12cd511c9dd28bfb",
-  "claim": "standing room demanded - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25); a fixed 2r + 14 px box",
-  "code": "a1f82a3a8cf8f413",
+  "claim": "standing room demanded - communal-wells-ido.drawing: a paved apron about 4 ft wider than its curb, and each well keeps only a small court - a fixed 2r + 14 px box, 30 to 90 ft by tier, a departure the code keeps until feature 417 T33",
+  "code": "7fa1753fbe3e8180",
   "core": "8ac760ac1eeeee25",
   "date": "2026-10-25",
-  "note": "same as _place_wells: the apron and \"only a small court\" answer it, and the fixed 30 px box is 30 to 90 real ft by tier. Should cite 0196.drawing",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`self._fits(x, y, 2 * r + 14, ...)` demands a fixed 30 px (30-90 ft by tier) against \"about 4 ft wider than its curb\" and \"only a small court\"; the page does not record the departure, so T33 or a recorded DEVIATION",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "55b336d3db01dce7"
+  },
+  "research": "530e826bbd37f9c5",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:36ac509adca7b4e4",
+   "0196-communal-wells-ido.drawing.html:6d02204b060e2a7f",
+   "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin.well_at#wellhead off the commons": {
   "code": "977e767b53a89631",
@@ -65071,14 +65202,20 @@
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#no trunk on a lane": {
   "body": "c1be7167136f7fa0",
-  "claim": "no trunk on a lane - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25)",
-  "code": "0436c6760e8a7306",
+  "claim": "no trunk on a lane - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the Tang Code punished whoever planted or tilled a lane, and 0071 keeps groves off the main road",
+  "code": "46823ff3ee0058b5",
   "core": "d3958c0f5ef26090",
   "date": "2026-10-25",
-  "note": "\"no source could speak to it\" is untrue: 0246's drawing page cites the Tang Code \"punishing whoever planted or tilled\" a lane, and 0071's drawing page keeps groves \"off ... the main road\"; the claim should cite 0246.drawing",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "trunks are dropped off every lane tread; this matches the Tang Code ban on planting a lane and the groves kept off the road",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#spacing": {
   "code": "9caea1fc6ea94c34",
@@ -65194,14 +65331,20 @@
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::trees_off_the_treads#no trunk on a lane's tread": {
   "body": "87f412fde9484846",
-  "claim": "no trunk on a lane's tread - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25)",
-  "code": "c085b80731bca09b",
+  "claim": "no trunk on a lane's tread - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the Tang Code punished whoever planted or tilled a lane, and 0071 keeps groves off the main road",
+  "code": "06681351ac7f5a39",
   "core": "0b93a03bf7d30de5",
   "date": "2026-10-25",
-  "note": "0246's drawing page answers it (the Tang Code punished planting a lane; groves are kept off the main road); the claim should cite 0246.drawing, not \"no source could speak to it\"",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "no trunk is left on a tread, matching the Tang Code ban on planting lanes",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/__init__.py::StructuresMixin#plumbing": {
   "body": "df9df3ce45848a69",
@@ -65391,14 +65534,20 @@
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::DWELLING_REACH_FT#dwelling served by a way": {
   "body": "fa27b847bf4df921",
-  "claim": "dwelling served by a way - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); within 150 ft",
-  "code": "9517b94a7065aaf1",
+  "claim": "dwelling served by a way - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a way reaches within 60 ft of the house, 100 ft to a back lane - 150 ft is allowed, a departure the code keeps until feature 417 T32; within 150 ft",
+  "code": "e4a0b3920119c495",
   "core": "d9e8735159ac6ec8",
   "date": "2026-10-25",
-  "note": "0246's drawing page records the project's own figure for a way reaching a farmhouse, \"within 60 ft of the house\" (and 100 ft to a back lane); the claim should cite 0246.drawing, and the 150 ft should either match that figure or be recorded there as a separate measure",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "150 ft, where the page gives a lane end reaching a house \"within 60 ft\" and back lanes bringing every farmhouse \"within 100 ft\"; the page does not record the departure, so T32 or a recorded DEVIATION",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::KOSATSUBA_ANCHOR_BAND_FT#anchored siting band": {
   "body": "6afcc28ee1301aaf",
@@ -66303,14 +66452,20 @@
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#traffic floor": {
   "body": "03c89e4d17b37465",
-  "claim": "traffic floor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); 60% of the busiest seat's count",
-  "code": "214cec5b647dd5c7",
+  "claim": "traffic floor - notice-boards-kosatsuba.drawing: a site whose caption fits outranks one whose does not, and among those the busiest wins - the caption and open ground choose among every seat at 60% of the best count, a departure the code keeps until feature 417 T33; 60% of the busiest seat's count",
+  "code": "3b03ba7549f2964c",
   "core": "367f9dea6d71f505",
   "date": "2026-10-25",
-  "note": "0190's drawing page speaks to this: a site whose caption fits outranks one whose caption does not, \"and among those the busiest wins\"; the code instead lets the caption and the open ground choose among every seat at 60% or more of the best count; the claim should be DEVIATION 0190.drawing, with the 60% floor recorded there",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`0.6 * max(c.busy ...)` sets a floor and lets the caption choose among those seats, where the page says \"a site whose caption fits outranks any whose caption does not, and among those the busiest wins\"; the page does not record the departure, so T33 or a recorded DEVIATION",
+  "pages": {
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
+  },
+  "research": "5b977d097fda2bb4",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
+   "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#anchor reach": {
   "body": "e496a67aa8b02212",
@@ -66874,11 +67029,11 @@
  },
  "l7r/diagram/settlement/town_ways.py::TownWaysMixin.ancestral_hall#focal keep-out": {
   "body": "c6c096336a6fb6e0",
-  "claim": "focal keep-out - ancestral-halls-in-south-china-villages-citang.drawing: an open forecourt lay between the hall and its pond; the 6 px is ours; the footprint plus 6 px is reserved",
-  "code": "7164aefda13940f5",
+  "claim": "focal keep-out - ancestral-halls-in-south-china-villages-citang.drawing: an open forecourt lay between the hall and its pond - only the footprint and 6 px are reserved, no forecourt, a departure the code keeps until feature 417 T35; the footprint plus 6 px is reserved",
+  "code": "1421b2daee1ae3df",
   "core": "c47ff61e4b51e143",
   "date": "2026-10-25",
-  "note": "`_focal_block` reserves only the footprint plus 6 px on every side, which keeps no open ground between the hall and its pond; the page cited says \"the heping, between them is left open\"; either reserve the forecourt here or make the claim a GUESS, as `_focal_block`'s is",
+  "note": "`_focal_block` reserves only the footprint plus 6 px, where the page says the heping between the hall and its pond \"is left open\"; the page does not record the departure, so T35 or a recorded DEVIATION",
   "pages": {
    "0050-ancestral-halls-in-south-china-villages-citang.drawing.html": "1d61d233838b0ea3"
   },
@@ -67614,13 +67769,18 @@
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#short lanes dropped": {
   "body": "11f839b16e08f012",
-  "claim": "short lanes dropped - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on 71 ft - a house lot about 75 ft square (0285) and a 54 ft frontage (0033) bear on it; an internal lane under 71 ft",
-  "code": "df19971bf3b266d7",
+  "claim": "short lanes dropped - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane is left off only when it leads to no house, field, well, shrine, ford or other way - any internal lane under 71 ft is dropped, a departure the code keeps until feature 417 T32; an internal lane under 71 ft",
+  "code": "182df71ec4cf9957",
   "core": "39341fa0bc666a8c",
   "date": "2026-10-25",
-  "note": "`_lane_len(pts) < _LANE_MIN_FT` drops any internal lane under 71 ft after the trim, even one whose ends still reach a house and a way. 0246 leaves off only a lane that \"leads to no house, field, well, shrine, ford or other way\", and gives every other farmhouse \"a lane of its own\". The drop should apply only to a lane that serves nothing, or the claim should record the departure as a DEVIATION of 0246",
-  "pages": {},
-  "research": "",
+  "note": "`_lane_len(pts) < _LANE_MIN_FT` drops any internal lane under 71 ft whatever it reaches, where the page leaves a lane off only when it \"leads to no house, field, well, shrine, ford or other way\"; the page does not record the departure, so T32 or a recorded DEVIATION",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#the track out and the field spur stay whole": {
@@ -69942,14 +70102,22 @@
  },
  "l7r/diagram/waterfields/comb.py::_comb_skeleton#canal A heading": {
   "body": "5692e879cc848a97",
-  "claim": "canal A heading - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); 42 deg off the fall, a dug polyline of 95-125 px segments",
-  "code": "9c9af91de98c2ee5",
+  "claim": "canal A heading - irrigation-canals-and-how-they-are-laid-out-yosuiro: the delivery ditches leave their supply canal at right angles - canal A runs 42 deg off the fall, its deliveries meeting it at about 42 deg, a departure the code keeps until feature 417 T34; 42 deg off the fall, a dug polyline of 95-125 px segments",
+  "code": "25ffd26fc1cfe16f",
   "core": "37b539db980daa07",
   "date": "2026-10-25",
-  "note": "0053 answers this: the comb's delivery ditches leave their supply canals \"at right angles\", and smaller canals meet the canal feeding them at right angles. `DOWN - math.radians(42)` puts the deliveries, which run down the fall, at about 42 degrees to canal A. The claim should be a DEVIATION of 0053 that the page records, or the heading should move toward the contour",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`DOWN - math.radians(42)`, with deliveries running down the fall, makes them meet canal A at about 42 deg, where the research has each smaller canal leave its feeder \"at right angles\", or along and across the contours on a slope, and the drawing page says the comb's canals meet at right angles; neither page records the departure, so T34 or a recorded DEVIATION",
+  "pages": {
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html": "15c735253b0741d9"
+  },
+  "research": "f5e31b13d205192e",
+  "rests": [
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:3a4e1f3ff0855cf4",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:47356b5374b6ea19",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:5a7ca8e5473ab045",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:847c4ed06dbcb7c0"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/comb.py::_comb_skeleton#head race": {
   "code": "2ab6edb234179263",
@@ -70011,25 +70179,34 @@
  },
  "l7r/diagram/waterfields/comb.py::_comb_threads#canal B heading": {
   "body": "2f2f953920c164e1",
-  "claim": "canal B heading - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); 58 deg off the fall",
-  "code": "97d0d97b990ea772",
+  "claim": "canal B heading - irrigation-canals-and-how-they-are-laid-out-yosuiro: the delivery ditches leave their supply canal at right angles - canal B runs 58 deg off the fall, a departure the code keeps until feature 417 T34; 58 deg off the fall",
+  "code": "a7e2a822ee35e3b4",
   "core": "d95c6ccc56e776f3",
   "date": "2026-10-25",
-  "note": "as for canal A: `DOWN + math.radians(58)` sets canal B 58 degrees off the fall, so its deliveries leave at about 58-70 degrees, where 0053 has them leave at right angles. It should be a DEVIATION of 0053 recorded on the page",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`DOWN + math.radians(58)` with deliveries 0 to -0.2 rad off the fall makes junctions of 58-70 deg, not \"at right angles\"; the drawing page asserts right angles; neither page records the departure, so T34 or a recorded DEVIATION",
+  "pages": {
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html": "15c735253b0741d9"
+  },
+  "research": "f5e31b13d205192e",
+  "rests": [
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:3a4e1f3ff0855cf4",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:47356b5374b6ea19",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:5a7ca8e5473ab045"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/comb.py::_comb_threads#canal B tail": {
   "body": "2f2f953920c164e1",
-  "claim": "canal B tail - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); its thread ends 22 px past its last offtake",
-  "code": "829f6fb6f789d318",
+  "claim": "canal B tail - irrigation-canals-and-how-they-are-laid-out-yosuiro: a supply canal runs on to the crop's edge or stops at its last offtake - a 22 px stub past the last offtake is neither, a departure the code keeps until feature 417 T34; its thread ends 22 px past its last offtake",
+  "code": "1005583fbd18c533",
   "core": "d95c6ccc56e776f3",
   "date": "2026-10-25",
-  "note": "0053 answers how a supply canal ends: either a thread run on to the edge of the crop, or a stop at its last offtake. The fixed `+ 22` px stub past the last offtake is neither form unless it lands at the crop's edge. The claim should cite 0053 and say which form it draws",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`bc.ditch_f = max(...) + 22` stops canal B 22 px past its last offtake, which is neither \"ends at that width at the edge of the crop\" nor \"stops at the junction\"; the claim also points to 0053.html, but that finding is on 0053.drawing",
+  "pages": {
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html": "15c735253b0741d9"
+  },
+  "research": "f5e31b13d205192e",
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/comb.py::_comb_threads#delivery length": {
   "body": "2f2f953920c164e1",
@@ -70110,14 +70287,20 @@
  },
  "l7r/diagram/waterfields/comb.py::_comb_threads#sub-ditches": {
   "body": "2f2f953920c164e1",
-  "claim": "sub-ditches - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); each interior delivery splits once, high on its run, diverging 0.5-0.66 rad",
-  "code": "d92c98ab5512f67d",
+  "claim": "sub-ditches - GUESS which-way-water-flows-and-how-channels-bend-and-join.drawing: a branch leaves at 35 degrees, leaning downstream; each interior delivery splits once, high on its run, diverging 0.5-0.66 rad",
+  "code": "7bb9cfd9ef5a26ed",
   "core": "d95c6ccc56e776f3",
   "date": "2026-10-25",
-  "note": "0054's drawing page answers the branch angle: \"A branch is drawn leaving at 35 degrees, a GUESS\", leaning downstream. The code's 0.5-0.66 rad (29-38 degrees) brackets that, so the claim should be `GUESS research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html`, not \"no source could speak to it\"",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the sub heads 0.5-0.66 rad off the fall, on either side but still downhill, centered on the page's 35 deg branch GUESS and leaning downstream; splitting once, high on the run, is ours",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:2ed226ff417b46c1",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::_mk_thread#comb plumbing": {
   "code": "ac5c7d78a3c8a56b",
@@ -70174,6 +70357,15 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/comb.py::carve_comb#default furrow spread 1.1 and grain drift 0 for the dry hem": {
+  "code": "54310dc19637ea2e",
+  "core": "54310dc19637ea2e",
+  "date": "2026-10-25",
+  "note": "default furrow spread 1.1 and grain drift 0 for the dry hem",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/waterfields/comb.py::carve_comb#default grain": {
   "body": "fa82f6023ef5f5dd",
   "claim": "default grain - NONE: 1.0 where a caller passes none; the scripted hamlet passes the principled 2 / ftpx (`hamletgen.consts.GRAIN`), as this docstring explains",
@@ -70195,6 +70387,15 @@
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/comb.py::carve_comb#default land fall 45 deg (`down_deg=45`)": {
+  "code": "54310dc19637ea2e",
+  "core": "54310dc19637ea2e",
+  "date": "2026-10-25",
+  "note": "default land fall 45 deg (`down_deg=45`)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/waterfields/comb.py::carve_comb#default paddy grain": {
   "code": "9ff1c23ba078413a",
@@ -70224,11 +70425,11 @@
  },
  "l7r/diagram/waterfields/comb.py::carve_comb#fan middle": {
   "body": "fa82f6023ef5f5dd",
-  "claim": "fan middle - dry-fields-and-their-crops-hatake.drawing: a fan's middle was often left wild until late, the old heartlands clearing theirs early; the default is a knob of ours; the fan's middle takes the \"cleared\" form by default (`fan_middle`)",
-  "code": "1e325a30c1fcce3d",
+  "claim": "fan middle - dry-fields-and-their-crops-hatake.drawing: a fan's middle was often left wild until late, the old heartlands clearing theirs early; the default is a knob of ours; the fan's middle takes the \"cleared\" form when a caller passes none (`fan_middle`), and the hamlet roll passes the `fan_middle` knob, wild three maps in four",
+  "code": "94d329a5c1e7bc10",
   "core": "54310dc19637ea2e",
   "date": "2026-10-25",
-  "note": "`fan_middle: str = \"cleared\"` fixes one of the two forms 0006 attests, where 0006 says \"each map decides at random\" and leaves the middle wild \"on three maps in four\". The default should be rolled per map. If every caller rolls it, the claim should say so instead",
+  "note": "§586 says \"each map decides at random\", and the function fixes \"cleared\" for any caller that passes none; I need to know which non-hamlet callers (village, city) call carve_comb without `fan_middle`; if any do, that tier fixes one form where two are attested and this is DRIFTED",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
@@ -70237,7 +70438,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:78e339c5e0d9be52",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a4efedb923b01d31"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/waterfields/comb.py::carve_comb#supply canal bank": {
   "body": "fa82f6023ef5f5dd",
@@ -70436,13 +70637,19 @@
  },
  "l7r/diagram/waterfields/frame.py::GAP#least spacing between ditch threads": {
   "body": "3be4130b19681022",
-  "claim": "least spacing between ditch threads - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); 26 px, a plot's width",
-  "code": "52e2763023c82f5f",
+  "claim": "least spacing between ditch threads - GUESS rice-paddies-and-their-plots-suiden.drawing: no least width for a basin, the hamlet basin about 48 ft across its canal; 26 px",
+  "code": "b321023565aa35a9",
   "core": "8c83094ffc1940c2",
   "date": "2026-10-25",
-  "note": "\"26 px, a plot's width\" is false: 0005's hamlet plot is 48 ft across its canal (26-36 ft is the depth along it), and the unit's own comment says 0005's 40-60 ft basin bears on this spacing. The claim should cite 0005's drawing page as a GUESS under its \"no least width for a basin\" and drop \"a plot's width\"",
-  "pages": {},
-  "research": "",
+  "note": "labeled GUESS, but the cited page answers it: \"the maps set no least width for a basin; that would have been the obvious rule, and a wrong one\"; a 26 px floor between threads is a least column width (26-78 ft by tier), so it should be DEVIATION 0005.drawing once the page records it, or the floor dropped",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+  },
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2"
+  ],
   "verdict": "MISLABELED"
  },
  "l7r/diagram/waterfields/frame.py::HEAD_RACE_FT#head race width": {
@@ -71027,14 +71234,20 @@
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band skipped on villages": {
   "body": "f7fb051fb19275fd",
-  "claim": "fork band skipped on villages - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); maps at grain 1.0 or more (a village's and a hamlet's) leave the triangle to the scrub",
-  "code": "f05eb137d06a78b9",
+  "claim": "fork band skipped on villages - dry-fields-and-their-crops-hatake.drawing: the ground just upslope of a supply canal is hemmed in dry crop, and 0010 puts the fork triangle above its canals - left to scrub at grain 1.0 or more, a departure the code keeps until feature 417 T34; maps at grain 1.0 or more (a village's and a hamlet's) leave the triangle to the scrub",
+  "code": "15cfd8ba60131bd1",
   "core": "a970d48d45b25faa",
   "date": "2026-10-25",
-  "note": "the record does speak to it. 0006 hems the ground just upslope of a supply canal, 0053 draws two supply canals, one on each flank, and 0010 reasons that the fork triangle sits above its canals and is dry-crop ground. Leaving it to scrub at grain 1.0 or more is a departure, not silence; the claim should be a DEVIATION of 0006/0010 that a page records",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`if grain < 1.0` leaves a hamlet's or village's fork triangle to scrub, where 0006 hems \"just upslope of the supply canal\" and the triangle is upslope of canal B; 0010's planted triangle is \"On a city map\" only, so the departure rests on reading §584 as covering canal B, and neither page records it; T34 or a recorded DEVIATION",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+  },
+  "research": "ae8a1665f83d153e",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:a4efedb923b01d31",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork triangle planted dry": {
   "code": "f0b51004948247e5",
@@ -71346,25 +71559,38 @@
  },
  "l7r/diagram/waterfields/palette.py::paddy_grain#basin proportion": {
   "body": "a55465c13f96c708",
-  "claim": "basin proportion - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on a rule - one parcel of 1684 ran 16 by 10.5 ken, 0.656 (Kami-Baba, pass P2b); along/across 0.66, the elongation the vetted village paddies read as",
-  "code": "814f0f5659bf5662",
+  "claim": "basin proportion - rice-paddies-and-their-plots-suiden.drawing: a hamlet basin about 48 ft across its canal and 26 to 36 ft along it, about 0.65; along/across 0.66, the elongation the vetted village paddies read as",
+  "code": "b1e585273a970fa5",
   "core": "f011251397859434",
   "date": "2026-10-25",
-  "note": "0005's drawing page records the drawn proportion: a hamlet basin \"about 48 ft across its canal and 26 to 36 ft along it\", along/across about 0.65. The claim should cite 0005's drawing page rather than \"the record silent\"",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "aspect 0.66 reproduces the hamlet basin (48 x 26-36 ft), but with the default PADDY_CELL_ACRES 0.05, the village figure, it gives about 57 x 38 ft where §488 says the village basin is \"about 47 ft square\", and the town's \"58 ft across, on rows 52 to 72 ft apart\" is about 1.07, not 0.66; the claim's \"vetted village paddies read as 0.66\" contradicts the page",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+  },
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:f44fac3d8eec0d4d"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/palette.py::paddy_grain#row variation": {
   "body": "a55465c13f96c708",
-  "claim": "row variation - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the row step +/-16% around its mean",
-  "code": "73af9d5a4cd17d79",
+  "claim": "row variation - rice-paddies-and-their-plots-suiden.drawing: rows 26 to 36 ft along the canal, 31 ft give or take 16%; the row step +/-16% around its mean",
+  "code": "ed1ad1508d56bf0c",
   "core": "f011251397859434",
   "date": "2026-10-25",
-  "note": "0005's 26-36 ft rows are 31 +/- 16%, so the spread is recorded there; the claim should cite 0005's drawing page",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "±16% gives 26-36 ft on the hamlet's 31 ft mean and 52-72 ft on the town's 62 ft mean, as the page states",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+  },
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:f44fac3d8eec0d4d"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::CROSS#partition plumbing": {
   "code": "848f8317cfcc9a60",
@@ -71468,14 +71694,19 @@
  },
  "l7r/diagram/waterfields/partition.py::Sectors.bound#past a thread's end": {
   "body": "5bf4301532292d47",
-  "claim": "past a thread's end - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the column bund runs straight down the fall rather than converging along the drain",
-  "code": "57be6f75ed33aedd",
+  "claim": "past a thread's end - rice-paddies-and-their-plots-suiden.drawing: a fan's bunds converge with its drain, the convergence kept - the column bund runs straight down the fall, a departure the code keeps until feature 417 T34; the column bund runs straight down the fall rather than converging along the drain",
+  "code": "7caa5150d670e459",
   "core": "f0ab7398ed8f78a8",
   "date": "2026-10-25",
-  "note": "0005 answers this: \"its bunds converge with it [the drain]... the convergence is kept\". Running straight down the fall is a departure, which the unit's own comment records as a reverted fix. The claim should be a DEVIATION of 0005 that the drawing page records",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "past its end the column bund runs `self.F.d` straight down the fall, where the page says a fan's \"bunds converge with it, and the convergence is kept\"; the page does not record the departure, so T34 or a recorded DEVIATION",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+  },
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#column count": {
   "code": "9adbffcdde58fc89",
@@ -71600,14 +71831,19 @@
  },
  "l7r/diagram/waterfields/partition.py::Sectors.thread_lines#sector pieces": {
   "body": "27f5e677ac1899bc",
-  "claim": "sector pieces - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); each thread continued straight down the fall until it meets another",
-  "code": "74c545ce32d49a9f",
+  "claim": "sector pieces - rice-paddies-and-their-plots-suiden.drawing: a fan's bunds converge with its drain, the convergence kept - each thread runs on straight down the fall, a departure the code keeps until feature 417 T34; each thread continued straight down the fall until it meets another",
+  "code": "bb96360f146f036b",
   "core": "998b91b93aa6580e",
   "date": "2026-10-25",
-  "note": "the threads are run on straight down the fall, where 0005 has a fan's bunds converge toward its drain, \"the convergence is kept\". The claim should be a DEVIATION of 0005 that the page records",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "each thread is extended straight down `self.F.d`, where the page keeps the fan's bunds converging with its drain; the page does not record the departure, so T34 or a recorded DEVIATION",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+  },
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/partition.py::_column_kept#columns thin to a T": {
   "code": "b2f336d39df7ab60",
@@ -72470,14 +72706,20 @@
  },
  "l7r/diagram/waterfields/polder.py::unpoint_parcels#pointed parcel left as bank": {
   "body": "0bd38efd27ddd362",
-  "claim": "pointed parcel left as bank - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a polder parcel still pointed after its apex is cut is dropped into the bank fill (0005's bare strip is a fan's; polder plots stand apart, so none is taken in)",
-  "code": "70da4171204eb6bf",
+  "claim": "pointed parcel left as bank - GUESS rice-paddies-and-their-plots-suiden.drawing: a refused point is cut off into a headland or taken into the basin beside it, and a bare strip is the page's GUESS - a polder parcel is dropped into the bank fill, not taken in, a departure the code keeps until feature 417 T34; a polder parcel still pointed after its apex is cut is dropped into the bank fill (0005's bare strip is a fan's; polder plots stand apart, so none is taken in)",
+  "code": "242118584b1b357f",
   "core": "69300ec9b866f374",
   "date": "2026-10-25",
-  "note": "0005 drawing §190 does speak to this: a refused point is \"cut off into a headland ... or taken into the basin beside it\", and it records leaving a bare strip as a GUESS. The claim should read `GUESS research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html` and say the polder departs from §190's \"taken into the basin beside it\", a departure the page does not record for polders",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the claim is labeled GUESS and also calls itself a departure; the page's bare-strip GUESS is written for a fan (\"with the fan's floor drawn under it\"), and dropping a still-pointed polder parcel into bank fill is recorded nowhere; record the polder case on 0005.drawing as GUESS or DEVIATION",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+  },
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/ring_rules.py::AREA_FLOOR#smallest basin": {
   "code": "6d95fe652ba4550f",

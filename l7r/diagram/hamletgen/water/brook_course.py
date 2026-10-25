@@ -164,7 +164,7 @@ def unfold(course: Poly, limit_deg: float, hold: Sequence[Pt] = ()) -> Poly:
     vertex before it goes instead (the approach's last wobble), else the one after it. A fold between two held vertices
     has nothing to drop and stays; the brook's placer judges the result and takes its next candidate.
 
-    Research: no fold-back - CONVENTION: a map drawing convention - no vertex turns past the cap, so the line reads as one stream; 0054 gives a bend radius of two to three widths and speaks to no loop; every vertex turning past `limit_deg` (BROOK_MAX_TURN_DEG, 100 deg) dropped, a held tap never
+    Research: no fold-back - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) - 0054 gives a bend radius of two to three widths and no turn cap or loop rule; every vertex turning past `limit_deg` (BROOK_MAX_TURN_DEG, 100 deg) dropped, a held tap never
     """
     out = list(course)
     held = {(float(x), float(y)) for x, y in hold}

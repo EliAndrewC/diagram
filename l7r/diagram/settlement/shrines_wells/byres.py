@@ -122,7 +122,7 @@ def byre_part(hw: float, hh: float, bw: float, bh: float, garden_side: str, form
         inner stable against the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: a 3 ft drip line off the wall, reaching toward the court
         outer stable off the wall - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the caller's gap
         flank away from the garden - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the measured free-standing stables stand toward the road and the gate; drawn on the flank away from the garden
-        long side along the wall - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the magariya's stable joins the lower end of the house and projects off its south side; for the outer stable, a GUESS
+        long side along the wall - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the magariya's stable joins the lower end of the house and projects off its south side - the inner stable's long side is laid flush along the flank wall, a departure the code keeps until feature 417 T33; for the outer stable, a GUESS
     """
     sx = -1.0 if garden_side in ("E", "SE") else 1.0
     if form == "courtyard":
@@ -257,7 +257,7 @@ class DraftByresMixin:
 
         Research:
             stable arm abutting the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the magariya's wing, raked with the house
-            drip-line gap - research/questions/0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html: the drip strip ran 2 to 3 chi (Jiaxiang), 3 chi (Baoding, 1884), about 3 ft (Mino); 3 px, 3 ft at a foot to the pixel
+            drip-line gap - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the main body and stable made one in an L - a 3 px gap is left between them, a departure the code keeps until feature 417 T33 (0247's drip strip is a house's own ground toward a road or neighbor); 3 px, 3 ft at a foot to the pixel
             a side wall, toward the work yard - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: round Tono the stable joins the lower end and projects off the south side, both mirror forms recorded; left wall tried first, then right, not rolled
         """
         hw, hh, rot = float(h["w"]), float(h["h"]), float(h.get("rot", 0.0) or 0.0)

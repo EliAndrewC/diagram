@@ -266,7 +266,7 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
     `crosses_mid_run`, W11 `monotone_down` below the tap.
 
     Research:
-        no fold-back - CONVENTION: a map drawing convention - no vertex turns past the cap, so the line reads as one stream; 0054 gives a bend radius of two to three widths and speaks to no loop; no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
+        no fold-back - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) - 0054 gives a bend radius of two to three widths and no turn cap or loop rule; no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
         no level run - CONVENTION: no run held level along the frame, in any view
         no ruled run - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths are rare (Leopold and Wolman, pass P2a); the rule's bound is looser (feature 417 T34); the straightest run within its bound (`ruled_excess`)
         no screen axis - CONVENTION: no segment along a screen axis, the tap run excepted
