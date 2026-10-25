@@ -35,7 +35,7 @@ A brook width also needed no search: page 0068 records it as already searched, w
 | brook.py::open_race_mouth | 759 | 7 | GUESS 0068.html | fallback brook width ("about 2 m (~7 ft) ... are GUESSES") |
 | brook.py::open_race_mouth | 759 | 8 | NOT-ABOUT-THE-WORLD | match distance: a race starting this near the bank is the one at the tap |
 | brook.py::open_race_mouth | 762 | 0.05 | NONE | tiny tolerance: race not already at the tap |
-| brook.py::open_race_mouth | 765 | 2.5 | CITED 0068.drawing | fallback width for the colour fade at the race mouth ("delivery ditch 2.5"); see lead 4 |
+| brook.py::open_race_mouth | 765 | 2.5 | CITED 0068.drawing | fallback width for the color fade at the race mouth ("delivery ditch 2.5"); see lead 4 |
 | brook.py::weir_glyph | 833 | 0.9 | CONVENTION | weir stake dots: start of their spread along the bar |
 | brook.py::weir_glyph | 833 | 1.8 | CONVENTION | weir stake dots: length of their spread |
 | brook.py::weir_glyph | 839 | 0.2 | CONVENTION | crib weir: inner tick position |

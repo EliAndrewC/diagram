@@ -1,4 +1,4 @@
-I ruled all 128 numbers in `t38_N6-waterfields.txt`. Only one was an open question about the world: how often a dry plot keeps its neighbour's crop (`carve.py:282`, 0.45). My search on it found nothing, so it is **SILENT**. Everything else was settled by the record or decides nothing about the place. I read no web page, so nothing went on the sources ledger.
+I ruled all 128 numbers in `t38_N6-waterfields.txt`. Only one was an open question about the world: how often a dry plot keeps its neighbor's crop (`carve.py:282`, 0.45). My search on it found nothing, so it is **SILENT**. Everything else was settled by the record or decides nothing about the place. I read no web page, so nothing went on the sources ledger.
 
 ## Sources from the record
 
@@ -27,13 +27,13 @@ Research pages are in `/diagram/research/questions/`.
 - **0053 findings page** (as quoted in `_comb_threads`'s claims): "the delivery ditches leave their supply canal at right angles". Canal B's 58° is recorded there as "a departure the code keeps until feature 417 T34".
 - **T29 pass P2b table** (`/diagram/.clones/diagram-backlog/specs/417-all-seeds-pass/evidence/t29/pass-P2b-fields.md`), rows marked not about the world: 40 (cut-back within its run), 56 (sub-ditches), 62 (thread wander), 63 (dug canal course), 69 and 73 (basin size and rows where the sector narrows). Row 45 (neighbor keeps the crop) reads "never searched".
 
-## Search pass: does a dry plot keep its neighbour's crop?
+## Search pass: does a dry plot keep its neighbor's crop?
 
 **SILENT.**
-- **Archive:** I ran `make archive-find` on 作付, 輪作, 畑作, 隣の畑, 同じ作物, 間作, hatake, crop rotation, neighbouring field, neighboring plot, 轮作, 旱地, 相邻 and 插花. I read the hits for 同じ作物 (ja.wikipedia 畑), neighbouring field (IDE paper) and 隣の畑 (MAFF Tarama). None speaks to it: the first is slash-and-burn fallow years, the second is irrigation passing between paddies, the third is island wells.
+- **Archive:** I ran `make archive-find` on 作付, 輪作, 畑作, 隣の畑, 同じ作物, 間作, hatake, crop rotation, neighboring field, neighboring plot, 轮作, 旱地, 相邻 and 插花. I read the hits for 同じ作物 (ja.wikipedia 畑), neighboring field (IDE paper) and 隣の畑 (MAFF Tarama). None speaks to it: the first is slash-and-burn fallow years, the second is irrigation passing between paddies, the third is island wells.
 - **Web:** I ran four queries: 明清 江南 旱地 作物 地块 相邻 种植 布局 插花; 江戸時代 畑 作付 村 隣接 同じ作物 まとまり; 近世 畑 輪作 麦 大豆 粟 一筆ごと 作物 異なる 村絵図; and an English query on Tokugawa upland plots and same-crop blocks. The results carried only background: Li Bozhong on Jiangnan, Huizhou shack people, Musashino upland villages, and 村絵図 as a type of record.
 
-**A mismatch to correct:** the unit's own claim says "GUESS: searched, the record silent (T36 P2b)". P2b row 45 says it was never searched. As of this pass it has been searched, and nothing was found. The code also keeps the neighbour's crop about two times in three (the claim's own reckoning), against 0006's "often of another crop than its neighbor".
+**A mismatch to correct:** the unit's own claim says "GUESS: searched, the record silent (T36 P2b)". P2b row 45 says it was never searched. As of this pass it has been searched, and nothing was found. The code also keeps the neighbor's crop about two times in three (the claim's own reckoning), against 0006's "often of another crop than its neighbor".
 
 ## Table
 
@@ -53,7 +53,7 @@ NAW = NOT-ABOUT-THE-WORLD.
 | banks.py::pointed_ring | 913 | 25 | CITED 0005.drawing | sharpest angle allowed at a basin's point ("sharper than 25 degrees") |
 | carve.py::_dry_fields | 72 | 1.1 | CITED 0006.drawing | default spread is "not steep", so tracts take both row directions; the value only has to be at least 0.3 |
 | carve.py::_dry_fields | 222 | 1e9 | NONE | sentinel fallback |
-| carve.py::_dry_fields | 282 | 0.45 | GUESS 0006.drawing; SILENT this pass | chance a plot re-rolls its crop instead of keeping its neighbour's |
+| carve.py::_dry_fields | 282 | 0.45 | GUESS 0006.drawing; SILENT this pass | chance a plot re-rolls its crop instead of keeping its neighbor's |
 | comb.py::carve_comb | 91 | 45 | NONE | default fall direction; the only caller (`fit.py`) passes `plan.down_deg` |
 | comb.py::carve_comb | 102 | 1.1 | CITED 0006.drawing | same default spread as carve.py:72 (no caller overrides it) |
 | comb.py::finish_comb | 260 | 73733 | NONE | seed salt (0x12005) |
