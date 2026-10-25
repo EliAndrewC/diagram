@@ -104,28 +104,4 @@ Story 2), the code-size delta (SC-004), the feature report.
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
-## T04 - one stream-crossing rule (R2 G7; FR-006)
-
-### T04 Approach (checklist part A)
-
-1. **The goal, in the world.** The cohort's "a farmstead part across the brook from its house" asks the same predicate the
-   placers ask (`_geom/water_index.crosses_a_stream`), so the check and the placing cannot disagree.
-2. **The constraints.** `crosses_a_stream(house, part, streams)` is the one predicate (its docstring: "all three now call
-   this" - the audit's copy was missed); the audit's `parts_across_brook` keeps its part list and its count.
-3. **Where each comes from.** O: FR-006 (a second implementation of a rule is deleted), R2 G7.
-4. **Do they describe the world here?** Yes: the audit's `_cross` is a strict orientation test; `segments_cross` is the same
-   test with one side non-strict, so they differ only for a part or house exactly on a stream's line.
-5. **The order.** First of the engine tasks: it moves no map (the audit is not the generator).
-6. **The exits.** n/a.
-7. **The search smell.** None.
-8. **The budget.** 30 min plus the landing.
-9. **Done, measured.** `cohort_audit.parts_across_brook` calls `crosses_a_stream`; its test pins a part across a reach
-   counted and one on the house's bank not; the landing cohort green (FR-008).
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T04 Decisions
-
-- **D12** `parts_across_brook` counts the parts `r` (with `of`) for which `crosses_a_stream(r["of"], (r["x"], r["y"]),
-  manifest["streams"])`; its local `_cross` is deleted. The streams with fewer than two points are skipped by the predicate
-  itself. Rendering: none.
+<!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->

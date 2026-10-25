@@ -15,8 +15,9 @@
 - [x] T03 The inventory: every repair pass, audit-only rule, rule coded twice, mid-map check and refusal where room is the remedy, each with where it is and the point it breaks; each breaking entry filed here as an engine task; the principle's text drafted for the GM (D3, D6; FR-002, FR-003)
       research: rendering
       verify: DONE. R2: three inventories kept verbatim in inventory/, a sample of each checked against the code, the three cross-package searches run by the session (inventory/cross.md) and reconciled; twelve groups filed as T04-T15; R4: the principle's draft text for the GM
-- [ ] T04 (R2 G7) One stream-crossing rule: `cohort_audit.parts_across_brook`'s own segment test replaced by `_geom/water_index.crosses_a_stream`, the placers' predicate (FR-006; no map moves)
+- [x] T04 (R2 G7) One stream-crossing rule: `cohort_audit.parts_across_brook`'s own segment test replaced by `_geom/water_index.crosses_a_stream`, the placers' predicate (FR-006; no map moves)
       research: rendering
+      verify: DONE. landed: landed: cohort_audit.parts_across_brook asks crosses_a_stream, the placers' predicate; its own segment test deleted (D12); 27 audit tests, the new one pins the predicate asked
 - [ ] T05 (R2 G1) One lane rule, one predicate: each rule `ways/` codes two to seven times made one named predicate or constant, at the lane law's value where the copies differ, in `l7r/diagram/hamletgen/ways/` (FR-005, FR-006)
       research: rendering
 - [ ] T06 (R2 G2) The web laid by the law: an ordinary lane admitted whole by the lane law before it is drawn; the passes after the lay and the settle's repair steps deleted, in `l7r/diagram/hamletgen/ways/` (FR-004, FR-006)
