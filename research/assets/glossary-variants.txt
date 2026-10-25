@@ -1222,6 +1222,9 @@ flow-through irrigation	flow-through irrigation
 flowing-roof	nagare-zukuri
 flowing-roof style	nagare-zukuri
 flume	kakehi
+flush gable roof	flush gable roof
+flush gable roofs	flush gable roof
+flush-gable roof	flush gable roof
 fmr	fair market rent
 fmrs	fair market rent
 foehn	fohn
@@ -1442,7 +1445,6 @@ gold paper	gold paper
 gold-back	gold-back
 gold-back cash	gold-back
 gongbu changku xuzhi	Gongbu changku xuzhi
-gongxiefang	gongxiefang
 gonin-gumi	five-household group
 gono	gōnō
 gorinto	five-ring pagoda
@@ -2540,7 +2542,6 @@ lion	Lion Clan
 lion clan	Lion Clan
 lion-dog	lion-dog
 lion-dogs	lion-dog
-lishe	gongxiefang
 litchi	litchi
 litchis	litchi
 litter	litter
@@ -4740,6 +4741,8 @@ wanli	Wanli era
 wanli era	Wanli era
 wanli kuaiji lu	Wanli kuaiji lu
 wanshu zaji	Wanshu zaji
+war office	war office
+war offices	war office
 wara-nio	warazuka
 waraguro	waraguro
 warazuka	warazuka

@@ -1629,13 +1629,6 @@
    "goemonburo"
   ]
  },
- "gongxiefang": {
-  "def": "A Ming yamen's clerks' lodging: one named courtyard inside the yamen wall where the office's clerks were housed.",
-  "variants": [
-   "gongxiefang",
-   "lishe"
-  ]
- },
  "goten": {
   "def": "A palace: the lord's residence and offices, standing inside the castle's baileys.",
   "variants": [
@@ -18143,6 +18136,21 @@
   "def": "The short upright strut at the center of a torii, between the second beam under the top beam and the tie-beam below it, that holds the arch's tablet, the plaque that can carry the shrine's name or a donor's gift; at Yasaka Shrine in Kokura it is uninscribed.",
   "variants": [
    "gakuzuka"
+  ]
+ },
+ "war office": {
+  "def": "In a Chinese county yamen, the clerks' office for military matters, one of the Six Chambers beside the offices of justice and works; at Pingyao it oversaw the making of weapons and guarded the armory beside the great hall.",
+  "variants": [
+   "war office",
+   "war offices"
+  ]
+ },
+ "flush gable roof": {
+  "def": "A gabled roof whose end walls rise flush with the roof's edge, so the roof does not overhang the gables; in Chinese building a plainer roof form than one with overhanging gables or a hip.",
+  "variants": [
+   "flush gable roof",
+   "flush gable roofs",
+   "flush-gable roof"
   ]
  }
 }
