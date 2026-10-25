@@ -40,22 +40,22 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: record-owed clean for the touched questions and keys
-- [ ] T05 S5+C5: Q5, the method and the poverty-line housing allowance (D5; FR-002a)
+- [x] T05 S5+C5: Q5, the method and the poverty-line housing allowance (D5; FR-002a)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: record-owed clean for the touched questions and keys
-- [ ] T06 S4+C4: Q2, Q3 modern and Q6, the modern goods (D6; FR-002)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed in batch T05+T06: S5+C5: 0298 (how economic historians carry a basket into another time's money; rice as numeraire; the poverty-line housing allowance), S4+C4: 0299 (US goods and quantities) and 0300 (US housing per m2), comparative; record-owed clean; impl-check nothing missing
+- [x] T06 S4+C4: Q2, Q3 modern and Q6, the modern goods (D6; FR-002)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: record-owed clean for the touched questions and keys
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed in batch T05+T06: S5+C5: 0298 (how economic historians carry a basket into another time's money; rice as numeraire; the poverty-line housing allowance), S4+C4: 0299 (US goods and quantities) and 0300 (US housing per m2), comparative; record-owed clean; impl-check nothing missing
 - [ ] T07 Implementation check, the reply on #17 and the report (D7, D8; FR-004, FR-005)
       research: rendering
       verify: make impl-check F=420 nothing missing; reply posted; make feature-report F=420 WRITE=1
