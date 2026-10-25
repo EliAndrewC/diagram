@@ -477,7 +477,8 @@ def main(argv: list[str]) -> int:
                      start_new_session=True, close_fds=True)
     print("page-session: started - each result.json is written when its session ends, and the next session begins")
     print(f"page-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n"
-          f"    until grep -q '^ALL DONE' {run_log}; do sleep 60; done; tail -20 {run_log}")
+          # the escape, as an invocation: the no-poll guard refused this wait without it (feature 412, 2026-10-24)
+          f"    POLL_OK='a detached page-session queue the harness cannot track'; until grep -q '^ALL DONE' {run_log}; do sleep 60; done; tail -20 {run_log}")
     return 0
 
 

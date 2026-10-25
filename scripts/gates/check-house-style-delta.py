@@ -55,6 +55,9 @@ _EXEMPT_NAMES = re.compile(
 #: reproduces. Same principle as a quotation: it is somebody else's text, even when that somebody is
 #: this project's own past (found the first time this check ran over its own delta).
 _EXEMPT_DIRS = ("/.clones/", "/host-l7r-repo/", "/tests/hooks/fixtures/")
+#: a spreadsheet's cells dumped VERBATIM for the checks that read them (`specs/*/measure/*_cells_by_address.txt`, `*_rows_raw.txt`):
+#: the source's own text, a quotation by construction (feature 412: Kumon's header cell 'price (1 litre)' stopped the gate)
+_SOURCE_DUMP = re.compile(r"(^|/)specs/[^/]+/measure/[^/]+_(?:cells_by_address|rows_raw)\.txt$")
 _GM_VERBATIM = re.compile(r"specs/[^/]+/request\.md$")
 
 _CODE = r"```.*?```|`[^`]*`"
@@ -95,7 +98,7 @@ def exempt_spans(text: str, path: str) -> list[tuple[int, int]]:
 
 
 def exempt_path(path: str) -> bool:
-    return bool(_EXEMPT_NAMES.search(path) or _GM_VERBATIM.search(path)
+    return bool(_EXEMPT_NAMES.search(path) or _GM_VERBATIM.search(path) or _SOURCE_DUMP.search(path)
                 or any(d in "/" + path for d in _EXEMPT_DIRS))
 
 
