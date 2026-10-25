@@ -127,6 +127,12 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 0.0968 taels | the calenderers' wage with no year given beside it (its 1730 and 1772 days are marked or passed over on their own)
 - 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 0.0113 taels | Suzhou 1730, outside every Chinese era's years
 - 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 1 tael | a weight (1 tael = 37.68 grams of silver), not a sum
+- 0286-what-did-a-years-necessities-cost-in-japan-era-by-era | 15.6-18.5 monme | Kyoto salt of 1758-1762, outside every era's years (kyoto-1745 ends at 1754)
+- 0302-which-of-a-years-necessities-were-observed-and-which-reconstructed-in-china-era-by-era | 1,100 cash | a rate between the coins (Timkovski's cash to the tael), not a sum paid
+- 0302-which-of-a-years-necessities-were-observed-and-which-reconstructed-in-china-era-by-era | 500 cash | the size of a string of cash, not a sum paid
+- 0302-which-of-a-years-necessities-were-observed-and-which-reconstructed-in-china-era-by-era | 1,000 cash | the size of a string of cash, not a sum paid (the guard's rent of a thousand cash is marked)
+- 0302-which-of-a-years-necessities-were-observed-and-which-reconstructed-in-china-era-by-era | 760-840 cash | a rate between the coins (cash to the tael), not a sum paid
+- 0302-which-of-a-years-necessities-were-observed-and-which-reconstructed-in-china-era-by-era.notes | 200 cash | Hong Liangji's five zhang of cloth, quoted in a note; the prose marks the price by the zhang
 - 0250-what-did-an-unskilled-laborer-earn | 0.04 taels | Li Bozhong's official standard for the Yangzi delta, dated only "the 1600s", a span crossing two Chinese eras
 - 0250-what-did-an-unskilled-laborer-earn | 0.045 taels | farm day wages of the study's eighteenth-century sample: a century crossing every eighteenth-century era
 - 0250-what-did-an-unskilled-laborer-earn | 0.041 taels | the rural Beijing wage of 1807, outside every Chinese era's years
