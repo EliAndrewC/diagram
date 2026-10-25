@@ -600,7 +600,7 @@ BAMBOO_FORMS = ("homestead", "homestead", "thicket", "both", "none")
     where the bamboo stands - research/questions/0075-bamboo-groves-chikurin.drawing.html: farmsteads, a thicket, both or none
     the forms' odds - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); homestead 2 in 5 and the others 1 in 5, where the registry's knob rolls the four evenly; no page gives odds"""
 PLOT_SIZES = ("small_irregular", "medium", "medium", "large_block")
-"""Research: paddy plot size - GUESS research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the page draws the small irregular patchwork and a larger valley-hamlet basin; the three sizes and their odds, small 1, medium 2, large block 1, are ours"""
+"""Research: paddy plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a hamlet basin about 48 ft across its canal and 26 to 36 ft along it, some 40 to 60 ft across, larger (about 0.07 acre) only on a valley hamlet's map - the medium size is the page's; the small (34 ft across) and the large block (70 ft) fall outside 40 to 60 ft, the large block on any hamlet, a departure the code keeps until feature 417 T34; the odds, small 1, medium 2, large block 1, are a GUESS"""
 GRAIN_DRIFTS = (-8, -4, 0, 0, 4, 8)
 """Research: furrow drift - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: -8 to 8 degrees off the contour, turning
     only the dry fields' furrow rows (carve.py theta0); the paddy grain never drifts, and the registry's grain_drift runs -12 to 12"""

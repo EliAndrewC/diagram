@@ -7281,18 +7281,19 @@
   "code": "9275f6ab2d5704c3",
   "core": "0ab0921740b16870",
   "date": "2026-10-25",
-  "note": "I need the code that reads PLOT_SIZES to see what basin size each form draws. §815 fixes the hamlet basin at ~1,500 sq ft (\"the size the hamlet maps keep\") and §814 never draws a one-tan block. If the forms change basin size, the page answers the question and the GUESS label is wrong; a \"large_block\" past a few se would be DRIFTED.",
+  "note": "the claim labels the sizes GUESS, but the page answers them. The medium size is the page's hamlet basin (plot_texture's 1 ft/px branch uses 48 across and 26-36 along, the page's \"about 48 ft across its canal and 26 to 36 ft along it\"), so it should cite the page. Only the 1/2/1 odds are unrecorded, and the page does not record them as a guess. Two sizes drift from the page: small_irregular (34 ft across) and large_block (70 ft across) fall outside \"some 40 to 60 ft across\". The page attests larger basins only \"on a valley hamlet's map\" (about 0.07 acre), but large_block's 70 x ~37 ft is about 0.06 acre, and nothing shown limits it to valley hamlets. The claim should cite the page for medium and the valley-hamlet basin, keep GUESS for the odds and the small size, and either restrict large_block to valley hamlets or record its departure as a DEVIATION.",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
   "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:70a80197d947bd55",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:9fb117ed056503a7",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:cbd7bb1f74a11a17"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/consts.py::REF_CANAL_A#reference fan's canal A": {
   "body": "4e69ac4a5ee9012f",
