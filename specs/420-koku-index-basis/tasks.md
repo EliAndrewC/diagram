@@ -56,9 +56,9 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [x] quote-check confirmed
       - [x] source-applicability confirmed
       verify: DONE. landed in batch T05+T06: S5+C5: 0298 (how economic historians carry a basket into another time's money; rice as numeraire; the poverty-line housing allowance), S4+C4: 0299 (US goods and quantities) and 0300 (US housing per m2), comparative; record-owed clean; impl-check nothing missing
-- [ ] T07 Implementation check, the reply on #17 and the report (D7, D8; FR-004, FR-005)
+- [x] T07 Implementation check, the reply on #17 and the report (D7, D8; FR-004, FR-005)
       research: rendering
-      verify: make impl-check F=420 nothing missing; reply posted; make feature-report F=420 WRITE=1
+      verify: DONE. landed: impl-check nothing missing; the answer on #17 issuecomment-6400437689; report written
 - [ ] GM review (make gm-reviewed F=420) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

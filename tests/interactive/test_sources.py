@@ -105,22 +105,19 @@ def line_urls(cite: str) -> set[str]:
     return out
 
 
-#: The keys whose footnotes may link the exact page of their passage (the GM, 2026-10-19, on Morisada and Gamble only).
-PAGE_KEYS = frozenset({"ruiju-kinsei-fuzokushi-jo", "ruiju-kinsei-fuzokushi-ge", "gamble-burgess-1921-peking-survey"})
-_SHEET = re.compile(r"\.(?:xls|xlsx|csv)(?:[?#].*)?$", re.I)
-
-
 def may_link(key: str, target: str, cite: str, where: str) -> bool:
-    """A footnote (a notes file) may link a URL of its key's citation line other than the first: any of them for a
-    PAGE_KEYS key, a public spreadsheet file for any key. Nowhere else (feature 407)."""
-    if not where.endswith(".notes.html") or target not in line_urls(cite):
-        return False
-    return key in PAGE_KEYS or bool(_SHEET.search(target))
+    """A footnote (a notes file) may link any URL of its key's citation line, the exact page or file its passage is read
+    on (feature 407). Nowhere else. The allowlist this replaced (Morisada and Gamble only) sent each new scanned work to the
+    round arbiter (402, 403, then 420's Timkovski, whose djvu text layer drops the fractions the notes quote: ruling
+    ask:420-timkovski-first-url, the principle of feature 195 - the link is a page where the quote can be read)."""
+    del key  # any key: what admits a link is its place on the citation line
+    return where.endswith(".notes.html") and target in line_urls(cite)
 
 
 def test_a_note_may_link_its_page_or_spreadsheet_and_nothing_else() -> None:
-    """Feature 407: a Morisada or Gamble footnote's second URL passes, any key's spreadsheet file passes, in a notes file;
-    another key's second URL, a URL on no line or only in a comment, and any second URL outside a notes file fail."""
+    """Feature 407, widened by ask:420-timkovski-first-url: in a notes file any key's footnote may link any URL on its
+    citation line (a page image, a spreadsheet file); a URL on no line or only in a comment, and any second URL outside a
+    notes file, fail."""
     cite = '<p>Work. https://example.org/book and https://example.org/book/1/94 https://example.org/ch13.xls <!-- READ; https://hidden.example/x --></p>'
     urls = line_urls(cite)
     assert {"https://example.org/book", "https://example.org/book/1/94", "https://example.org/ch13.xls"} <= urls
@@ -128,7 +125,7 @@ def test_a_note_may_link_its_page_or_spreadsheet_and_nothing_else() -> None:
     page = "https://example.org/book/1/94"
     assert may_link("ruiju-kinsei-fuzokushi-jo", page, cite, "0262-x.notes.html")
     assert may_link("bochum-zhili-wuliao-jiazhi", "https://example.org/ch13.xls", cite, "0260-x.notes.html")
-    assert not may_link("bochum-zhili-wuliao-jiazhi", page, cite, "0260-x.notes.html"), "another key's page"
+    assert may_link("timkovski-1827-travels-vol2", page, cite, "0302-x.notes.html"), "any key's page on its line (420)"
     assert not may_link("ruiju-kinsei-fuzokushi-jo", page, cite, "0262-x.html"), "outside a notes file"
     assert not may_link("ruiju-kinsei-fuzokushi-jo", "https://hidden.example/x", cite, "0262-x.notes.html")
 
