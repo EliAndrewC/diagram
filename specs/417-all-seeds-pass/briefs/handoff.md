@@ -11,3 +11,7 @@
 - source-reader: Murakami 12 READ; L&W 2 READ + 2 wording fixes applied; mizu 4 READ; yashio 3 READ + caveat applied (area-not-outline marked as this project's reading). Recorded with record-checked (yashio was not owed; read with NOT_OWED_OK). quote-check, record-format, translation-check and the modal checks are owed (make record-owed) for the check sessions.
 - New keys: murakami-2014-oblique-weirs, leopold-wolman-1957-channel-patterns (both archived). Outcomes recorded cited:<key> for all four URLs.
 - Leads not followed: Murakami Table 3/Table 1 per case (skew against river width for the narrowest rivers); L&W figure 41 Valley Creek channel width (to count its 500 ft in widths); 0059 findings page over the size cap (20,065), needs a split; archive-inbox WAITING/REFUSED Sakai, Nihon keizaishi, Kibi, Shoton'ya PDFs (not this brief's).
+- Clean SECTION lines (these supersede the annotated ones above):
+- SECTION=0059/how-our-maps-draw-the-intake-and-its-weir-toshuko-and-seki
+- SECTION=0005/rice-paddies-and-their-plots-suiden
+- SECTION=0005/how-our-maps-draw-rice-paddies-and-their-plots-suiden
