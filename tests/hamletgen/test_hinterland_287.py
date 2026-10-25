@@ -444,3 +444,15 @@ def test_a_wood_is_ranked_against_the_houses_median_and_the_field_beside_it() ->
     grid = crop_edge_points([[(0.0, 0.0), (400.0, 0.0), (400.0, -400.0), (0.0, -400.0)]])
     assert field_height_near((450.0, -50.0), fall, grid) >= 300.0, "the field beside it runs up past the nearest point"
     assert field_height_near((0.0, 0.0), fall, crop_edge_points([])) == float("-inf")
+
+
+def test_the_open_ground_region_refuses_a_center_in_a_marsh_grown_by_the_half_side() -> None:
+    """The marsh is grown by `half` (feature 297 B4): a square whose center stands in the marsh, or within `half` of it, is
+    refused, and one clear of it is not; a ring of fewer than three points is no marsh."""
+    from l7r.diagram.hamletgen.hinterland.parcels import open_ground_region
+
+    marsh = [(100.0, 100.0), (200.0, 100.0), (200.0, 200.0), (100.0, 200.0)]
+    region = open_ground_region({}, 20.0, 80.0, 180.0, [], [], [], [], [marsh, [(0.0, 0.0), (1.0, 1.0)]], (0.0, 0.0, 400.0, 400.0))
+    assert region.taken(150.0, 150.0), "a center in the marsh"
+    assert region.taken(215.0, 150.0), "a center within half of the marsh"
+    assert not region.taken(300.0, 300.0), "a center clear of it"
