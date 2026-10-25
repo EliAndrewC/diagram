@@ -942,6 +942,36 @@
      "why": "Enforcement of FR-006/SC-003 only: delete the requested removal and the test has nothing to check. Not unrequested scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T17 - a fixture in a grove band, one predicate (R2 G6, first part; FR-006)",
+    "### T17 Approach (checklist part A)",
+    "### T17 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D17",
+     "summary": "fixtures._flexible_clear and fit._fixtures_in_bands each stop carrying an inline box-overlap test and ask grove_rules.fixture_on_band (pit box unturned, rot 0; fit's recorded boxes already turned, passed with rot 0; bands rounded as now)",
+     "class": "within",
+     "why": "FR-006: 'a second implementation of a rule is deleted' - this deletes two inline copies of 'no farm fixture stands in a grove band' and leaves the one predicate asked by the placers and the audit (SC-003). Keeping the band rounding and passing turned boxes as rot 0 makes the call equivalent to the copies it replaces, so no map moves, which D11 (the GM 2026-10-25: tasks that move no map go first) asks for."
+    },
+    {
+     "id": "T17-persimmon",
+     "summary": "persimmon_reseat.persimmon_for's neighbor-grove test (a crown against a grove) is left out of the merge as a different rule",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged on its own. FR-006 deletes a SECOND implementation of a rule; it does not ask that different rules be merged. fixture_on_band judges a fixture's box, and a tree has no box, so the crown test is not a copy of the fixture rule and cannot be expressed through that predicate without changing what the predicate judges. Leaving it alone takes nothing from the purpose of the request ('a rule coded twice' is gone). The block does not say this test is a mid-map repair or a check on placed things, which FR-006 would delete in any case; it remains a candidate test inside a placer."
+    },
+    {
+     "id": "T17-order",
+     "summary": "runs after T05, moves no map; done means both placers call the predicate, a patch test sees each asked, Inashiro and the grove pool map regenerate unchanged against HEAD, the landing cohort is green",
+     "class": "within",
+     "why": "D11 sends map-neutral conversions first, and FR-008 requires that every landing passes the fixed cohort, the pinned rows and the pool maps. The patch test fails only when the requested single predicate is not asked, so it enforces FR-006 and is not added scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1125,6 +1155,33 @@
      "summary": "A new consts_ways.FIELD_REACH_FT = 6.0 is read by thread.SPUR_REACH_FT and law.FIELD_REACH_FT",
      "class": "within",
      "why": "Two copies of the 6 ft field reach (0014) become one constant, per FR-006; placing it in consts_ways is how the layer order (thread may not import law) is respected, a design choice that narrows nothing. Rendering: none."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T17": {
+   "section_sha256": "089e58dc568a9ff5c3a021b139b59f94b7d2b772b3a1e7a1014e7692ed9e1fba",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D17",
+     "summary": "fixtures._flexible_clear and fit._fixtures_in_bands each stop carrying an inline box-overlap test and ask grove_rules.fixture_on_band (pit box unturned, rot 0; fit's recorded boxes already turned, passed with rot 0; bands rounded as now)",
+     "class": "within",
+     "why": "FR-006: 'a second implementation of a rule is deleted' - this deletes two inline copies of 'no farm fixture stands in a grove band' and leaves the one predicate asked by the placers and the audit (SC-003). Keeping the band rounding and passing turned boxes as rot 0 makes the call equivalent to the copies it replaces, so no map moves, which D11 (the GM 2026-10-25: tasks that move no map go first) asks for."
+    },
+    {
+     "id": "T17-persimmon",
+     "summary": "persimmon_reseat.persimmon_for's neighbor-grove test (a crown against a grove) is left out of the merge as a different rule",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged on its own. FR-006 deletes a SECOND implementation of a rule; it does not ask that different rules be merged. fixture_on_band judges a fixture's box, and a tree has no box, so the crown test is not a copy of the fixture rule and cannot be expressed through that predicate without changing what the predicate judges. Leaving it alone takes nothing from the purpose of the request ('a rule coded twice' is gone). The block does not say this test is a mid-map repair or a check on placed things, which FR-006 would delete in any case; it remains a candidate test inside a placer."
+    },
+    {
+     "id": "T17-order",
+     "summary": "runs after T05, moves no map; done means both placers call the predicate, a patch test sees each asked, Inashiro and the grove pool map regenerate unchanged against HEAD, the landing cohort is green",
+     "class": "within",
+     "why": "D11 sends map-neutral conversions first, and FR-008 requires that every landing passes the fixed cohort, the pinned rows and the pool maps. The patch test fails only when the requested single predicate is not asked, so it enforces FR-006 and is not added scope."
     }
    ],
    "verdict": "CLEAR"
