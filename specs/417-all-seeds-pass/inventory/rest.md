@@ -173,7 +173,7 @@ None of these functions is called by any placer under `l7r/`. Grep finds only co
   - `_record_scatter_frame (606)`: P3 record. Quoted: `self.M["meta"]["scatter_frame_breach"] = _over`. No repair.
   - `self.standing.resync()` at 589 is the last backstop.
   - `RuntimeError` at 551 is a stream-alignment invariant, not room.
-- `finish.py:_caption_lines (295)` / `label (212)`: TWICE with `labels/placer.place`. A second wrap-and-clear judgement against `label_blocker_quads`; "when none is clear the one-liner is" drawn, which is P4.
+- `finish.py:_caption_lines (295)` / `label (212)`: TWICE with `labels/placer.place`. A second wrap-and-clear judgment against `label_blocker_quads`; "when none is clear the one-liner is" drawn, which is P4.
 
 **`title.py`**
 - `title (51)`: P4 ladder, but the final rung is room. The rungs are pocket, blank, cover, four corners, then `_title_band (157)`, which grows the sheet (`set_view(... vh + band)`).
