@@ -40,8 +40,9 @@ drift over centuries, a big swing from year to year.
    standard deviation of annual log changes; the drift as the mean log change a year), the years and how many year pairs it
    rests on, and is reproducible from a script in `specs/419-england-price-yardstick/measure/` with its output beside it.
 3. Each source's stated limits are carried: the Bank of England column's own source note (and that its years before 1661 are
-   Clark's index rescaled, labeled as this project's check); Clark's caveat that his series are subject to revision, and that
-   some of his years are interpolated.
+   Clark's index rescaled, labeled as this project's check); Clark's file's own caveat, that his series are subject to
+   revision; Lindert's note that he interpolated the silver price of the pound for 1699, 1702-1709 and 1711-1717 (carried only
+   if a figure uses that series); and the years each goods series is missing, which Acceptance 2's count of year pairs shows.
 4. The page says, in its own words, that these are yardsticks for players and never the basis of a Rokugani price (the GM's
    words, `request.md`).
 
@@ -74,3 +75,8 @@ drift over centuries, a big swing from year to year.
 - The data files measured on 2026-10-24 (the Bank of England xlsx, sheet A47; the GPIH Clark xls) are re-fetched and
   archived; if either has changed, the figures are re-measured from the archived copy.
 - One write session and one check session (one question, two new keys).
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-25): CHANGES REQUIRED - Acceptance 3 named an interpolation caveat the Clark file does not
+  state; replaced with the file's own caveat, Lindert's silver-price note and the missing years. Applied.
