@@ -651,6 +651,9 @@ coppiced	coppice
 coppices	coppice
 coppicing	coppice
 copse	copse
+cord of firewood	cord
+cord of wood	cord
+cords of wood	cord
 correlated	correlation
 correlation	correlation
 correlations	correlation
@@ -1215,6 +1218,8 @@ flow-through irrigation	flow-through irrigation
 flowing-roof	nagare-zukuri
 flowing-roof style	nagare-zukuri
 flume	kakehi
+fmr	fair market rent
+fmrs	fair market rent
 foehn	fohn
 fohn	fohn
 footing	footing
@@ -1800,6 +1805,7 @@ huainan	Huaibei
 huanghuali	huanghuali
 huc	Huc
 hucheng he	hucheng he
+hud	HUD
 hudou	hudou
 hui	hui
 hui (huizhou) style	Hui style
@@ -2522,6 +2528,7 @@ lingnan	Lingnan
 lingqu	Lingqu
 lingxing gate	lingxing gate
 lingxing gates	lingxing gate
+lint	lint
 lion	Lion Clan
 lion clan	Lion Clan
 lion-dog	lion-dog
@@ -2722,6 +2729,8 @@ military farm colonies	military farm colony
 military farm colony	military farm colony
 military farm-colonies	military farm colony
 military farm-colony	military farm colony
+milling rate	milling rate
+milling rates	milling rate
 million btu	BTU
 mimasaka	Mimasaka
 mimasaka province	Mimasaka
@@ -2885,6 +2894,7 @@ nagewatashi weir	throw-across weir
 nagewatashi-zeki	throw-across weir
 naginata	naginata
 nago	nago
+nahb	NAHB
 nail cover	nail cover
 nail covers	nail cover
 naka-bori	middle moat
@@ -4630,6 +4640,7 @@ unveiling	unveiling
 unveilings	unveiling
 uogashi	uogashi
 uoichiba	uoichiba
+upland cotton	upland cotton
 upland field	hatake
 upland fields	hatake
 upland-field	hatake

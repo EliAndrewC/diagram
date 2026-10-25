@@ -18045,7 +18045,48 @@
   "def": "A benchmark rent the US Department of Housing publishes for each county. Allen found New York's illegal, substandard flats rented at about that level in 2011.",
   "variants": [
    "fair market rent",
-   "Fair Market Rent"
+   "Fair Market Rent",
+   "FMR",
+   "FMRs"
+  ]
+ },
+ "milling rate": {
+  "def": "The share of a weight of rough rice left as milled rice once the hulls and bran are taken off; the US government's figure for 2010 is 68.86%.",
+  "variants": [
+   "milling rate",
+   "milling rates"
+  ]
+ },
+ "lint": {
+  "def": "Cotton's fiber once its seed has been taken out; the US farm price of cotton is by the pound, and the seed is sold apart as cottonseed.",
+  "variants": [
+   "lint"
+  ]
+ },
+ "upland cotton": {
+  "def": "The kind of cotton whose US farm price the government reports each month, by the pound of lint.",
+  "variants": [
+   "upland cotton"
+  ]
+ },
+ "cord": {
+  "def": "A US measure of stacked firewood; the US energy agency counts one cord of wood as 20 million Btu.",
+  "variants": [
+   "cord of wood",
+   "cords of wood",
+   "cord of firewood"
+  ]
+ },
+ "HUD": {
+  "def": "The US Department of Housing and Urban Development, the federal housing agency that sets the fair market rents its housing vouchers pay.",
+  "variants": [
+   "HUD"
+  ]
+ },
+ "NAHB": {
+  "def": "The National Association of Home Builders, a US builders' trade group that surveys builders on what a new house costs to build.",
+  "variants": [
+   "NAHB"
   ]
  }
 }
