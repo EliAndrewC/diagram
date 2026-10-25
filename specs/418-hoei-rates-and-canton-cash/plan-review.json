@@ -1,0 +1,175 @@
+{
+ "feature": "418-hoei-rates-and-canton-cash",
+ "blocks": {
+  "preamble": {
+   "sha256": "ab4f45cf207f085e59cf746b0b3c89814fba1582e847ae8ca06c70e2dba0e0b5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "d87625437a39d882f208ebd272a7f924efb1a7ce2322bff4762198dce9654390",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "7e6c31d088927f11d4b81d5549814e18e9642cd3bf239d8f3e6c6e1f52e6e9f4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "2af3cd7de4be30e6d9732bc52b389dad863ad614729acaf9de51a1bf175cfedc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - Japan, 1705-1719 (FR-001, FR-002; acceptance 1-2)": {
+   "sha256": "03ad81f8a69e6c6a64dbb806485fdbef134115982b4905cc038e3b3789f914f0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - Canton's cash, the 1830s (FR-001, FR-002; acceptance 3)": {
+   "sha256": "38ecad90fb1c0444f7800846563c187dd46ea76d47e016fd48ab500f84d01a4c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the implementation check (FR-003)": {
+   "sha256": "e8e0de4cb3ba37f77b0a66d0597697eefe155fe041184ac01c0f2becffc19e02",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - the reply (FR-002)": {
+   "sha256": "fc207f6c1ecddcae9fda8b8dc2729af9adf84ca0e737232b3cc742c46977580e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T - the order": {
+   "sha256": "3c9aa2a85bd53b93c403041efb235b15938091fe72daf2d4f797033b587195fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - Japan, 1705-1719 (FR-001, FR-002; acceptance 1-2)",
+    "## D2 - Canton's cash, the 1830s (FR-001, FR-002; acceptance 3)",
+    "## D3 - the implementation check (FR-003)",
+    "## D4 - the reply (FR-002)",
+    "## Performance bookends",
+    "## Summary",
+    "## T - the order",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/T: process",
+     "summary": "Research-record only: one write session and one check session in the sibling clone, then the implementation check, then the reply; no code, map or canon change.",
+     "class": "within",
+     "why": "The request asks two research questions. FR-001 sends the findings to the record and FR-003 says no code implements them. The order of work decides nothing the request asked for."
+    },
+    {
+     "id": "Technical Context: sources",
+     "summary": "Kusama's Sanka Zui (NDL 1279564), viewer frames 409-419, read as page images; the Chinese Repository volume texts.",
+     "class": "within",
+     "why": "The request itself points at the coin walk's source chronology, and at the Chinese Repository 'or any readable source'. Naming the sources the search pass found adds no scope."
+    },
+    {
+     "id": "Performance bookends / Constitution Check",
+     "summary": "N/A: no generator change; research tasks use the five boxes; the record checks stay green.",
+     "class": "within",
+     "why": "This follows from the request being research only."
+    },
+    {
+     "id": "D1a: span 1705-1719",
+     "summary": "The section covers 1705-1719, a year either side of the 1706-1718 the GM asked for.",
+     "class": "within",
+     "why": "It is a superset of the years asked for and includes all of them. The two edge years show the coinage changeover the request is about. This widens nothing material and narrows nothing."
+    },
+    {
+     "id": "D1b: rate forms",
+     "summary": "Monme a ryo, with the gold named as Kusama names it; copper as monme a kanmon, and mon a monme derived as 1,000 divided by that figure and labeled as this project's arithmetic.",
+     "class": "within",
+     "why": "The request asks for monme a ryo and for 'mon a monme (or kanmon a ryo)'. Mon a monme is an exact reciprocal of the source's monme a kanmon, and it is labeled as derived. FR-002 asks for the coinage, and the gold is named."
+    },
+    {
+     "id": "D1c: silver named per year",
+     "summary": "Each rate carries the silver it was quoted in: Genroku to 1706, Futatsuho 1706/7-1713, 'current silver' (Eiji, Mitsuho and Yotsuho together) 1714-1717, new silver from the 11th month of 1718.",
+     "class": "within",
+     "why": "This is FR-002's coinage requirement. It also gives the request's 'Hoei and Yotsuho years' split its actual basis."
+    },
+    {
+     "id": "D1d: 1715-1716 SILENT",
+     "summary": "Kusama gives no rates for 1715-1716, and those years are recorded as SILENT.",
+     "class": "within",
+     "why": "This is a finding, not a decision to leave out years the source gives. The request accepts per-year rates 'or as a mean' of the Hoei and Yotsuho years, so the gap does not defeat it. The Yotsuho-years rows (1714, 1717) still exist, and Edo's 1714 and 1717-1718 figures are added."
+    },
+    {
+     "id": "D1e: no separate Eiji/Mitsuho/Yotsuho market rate",
+     "summary": "A separate market rate for each debased silver is recorded as NOT ATTESTED because the market quoted them as one. The legal ratios of 1714 and 1718 are given as the law's split, not the market's.",
+     "class": "within",
+     "why": "This reports what the source says. The request asks for market rates and does not ask for one per silver. Giving the decrees as law keeps the market rate the GM asked for apart from the legal one."
+    },
+    {
+     "id": "D1f: Kusama's city",
+     "summary": "Kusama is placed in Osaka only if a readable source on him says so; otherwise he is 'one merchant's compilation', unplaced.",
+     "class": "within",
+     "why": "This applies the citation rules. It does not narrow the rates the GM asked for. Whether the rates are Osaka's is reported, not assumed."
+    },
+    {
+     "id": "D1g: Edo rates from Japanese Wikipedia",
+     "summary": "Edo's rates for 1714 and 1717-1718 are added from jawiki, ATTESTED ONLY FOR what jawiki states, with its printed sources named as unread.",
+     "class": "within",
+     "why": "These are further readable rates for the years asked for, with their limits labeled. They are additions to the answer, not a carve-out."
+    },
+    {
+     "id": "D1h: coin-walk table and 0277 pointer",
+     "summary": "The coin-walk table is named as a derivative. 0277 gets a pointer to the new copper rates rather than a copy.",
+     "class": "within",
+     "why": "The request names the coin walk's chronology as a possible source, so saying what it is answers that. FR-001 sends copper to 0277 only 'if copper's own rows belong there', and a pointer is within that condition."
+    },
+    {
+     "id": "D1i: revise '1706-1721 mixed coins, not converted'",
+     "summary": "The page's '1706-1721 mixed coins, not converted' is revised to what is now known.",
+     "class": "within",
+     "why": "The request quotes that line as the gap it wants filled. Revising it with the new findings is what the request asks for."
+    },
+    {
+     "id": "D2: Canton's cash",
+     "summary": "0289 gets the Chinese Repository's findings: Canton 1837, about 1,000 cash a dollar (ATTESTED ONLY FOR cash per dollar); the 1835-36 review calling '1,000 cash = 1 tael' nominal; Xu Naiji's 1,200-1,300 cash a tael (empire-wide); other places ATTESTED ONLY FOR their place. Canton's own cash per tael is SILENT, with the volumes read and the leads not followed listed. A per-tael figure from 1,000 a dollar at 0.71-0.72 tael a dollar is labeled as this project's arithmetic.",
+     "class": "within",
+     "why": "The GM asked whether the Chinese Repository or any readable source gives Canton's own cash rate. The plan answers yes, with a Canton-specific rate (per dollar) and a labeled conversion to the tael. Recording SILENT for a direct per-tael figure, with the search and its unfollowed leads disclosed, reports how far the search went. It does not exclude a case the GM asked to have covered. If the GM wants the leads followed, the disclosure lets them ask."
+    },
+    {
+     "id": "D3: implementation check",
+     "summary": "implementation-check.md holds each touched question's line; no code implements a rate.",
+     "class": "within",
+     "why": "This is FR-003."
+    },
+    {
+     "id": "D4: the reply",
+     "summary": "The #13 reply gives the per-year rates with their silver and gold and which silver passed. It gives the two means only if gm-assistant asks. It gives Canton's figures, the SILENT and what the Chinese Repository gives.",
+     "class": "within",
+     "why": "The request reads 'For each year, OR as a mean of the Hoei and Yotsuho years', so per-year rows satisfy it on their own. The spec index's SC-002 says the same: 'each year's rates (or the two means)'. Offering the means on request takes nothing away from what was asked."
+    }
+   ]
+  }
+ ]
+}
