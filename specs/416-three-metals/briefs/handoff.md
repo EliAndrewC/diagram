@@ -44,3 +44,40 @@ jawiki-kanei-tsuho, jawiki-tenpo-tsuho, jawiki-kanezukai, jawiki-erizeni, jawiki
 - kotobank 石代納 (499601): the conversion prices for money tax (Kanto upland eino below the rice price, Kansai's third in silver at the castle-town price plus a markup, "cheap kokudai" in bad years) - from a search summary, not read.
 - Osaka University discussion paper 2204R2 on the shogunate's rate policy (Arai Hakuseki, Kawai Hisatsune, Matsudaira Sadanobu).
 - The pass's list: 新保博 on the Osaka copper rate; 新保・斎藤 1989; 岩橋勝 「近世三貨制度の成立と崩壊」 and 『近世貨幣と経済発展』 ch. 3; 三上隆三 on the four-mon coin and nanryo; Crawcour and Yamamura 1970; 中川すがね on copper changers; Kuroda 2008; 浦長瀬隆 on deeds by currency; 太宰春台『経済録』; the Edo-Tokyo Museum's 1853 day-laborer wage ledger; the 1865 premium order itself and the 1773 nanryo order text; kotobank 両替 and 銭両替 (the copper changers' counts, 584 in Edo 1718, 1,161 in Osaka c. 1850), jawiki 撰銭令 and 匁銭.
+
+## Session 2
+
+- SECTION=0296/were-silver-and-copper-one-money-or-two-in-ming-and-qing-china
+- Fragment: `research/questions/0296-were-silver-and-copper-one-money-or-two-in-ming-and-qing-china.html` (notes and originals beside it). 18,129 bytes of prose against the 20,000 cap.
+
+### Verdicts by figure (issue #16, China)
+
+- Q1 Qing legal rates (700 a tael in 1645, then 1,000; 1,000 the one rule by 1653, set by a court conference) and enforcement (a ban on fewer than 1,000 some years after 1684; treasury cash released; official brokers 1737; 800 in the capital before 1748): ATTESTED (清史稿 卷124). Market: 880-770 in late Kangxi, often 2,000 after the 1837 edict: ATTESTED. Old light coin at 0.7 tael a thousand (1702): ATTESTED.
+- Q1 Xianfeng: notes set at 2,000 cash a tael, up to half of a tax in notes and three-tenths in big coin, penalties: ATTESTED; the rate's date is "the 1850s" (the text sets it after the 1854 entry). The capital's shops paid seven-tenths in cash for notes; big coins dropped in order, the ten-cash passing for 2 and not outside the gates: ATTESTED. Notes at 3% of face by 1861 (Morse): ATTESTED; cash notes at 2.6-5.2% by mid-1861 (Wei Jianyou, at second hand through Chen Zhonghai 2016): ATTESTED ONLY FOR a second-hand report.
+- Q1 Ming: 1375 paper at 1,000 cash = 1 tael of silver, 4 strings = 1 tael of gold; the coin-only rule for 100 cash or less and the 3:7 commercial tax two years later; the fall (160 cash a string in the 1390s, 16% of face, our arithmetic; a tenth under Yongle; 50 strings a shi early Xuande; under one cash by Chenghua); the bans (1397, 1404, Xuande's fine, the 1435 relaxation, 1448, the Tianshun lifting): ATTESTED (明史 卷81). 1389 in Jiangxi and Fujian, 2,000-cash note for 500 cash: ATTESTED ONLY FOR a second-hand report (the Ming annals through Chen Zhonghai).
+- Q2 the split (silver for tax, salt levies, salaries, long-distance trade; copper for retail, household salt, labor and materials): ATTESTED (明史 卷81 from 1435; Chen et al. 2026; 清史稿 卷421; 清史稿 卷123 for 1728). Tax set in silver (1436 commutation, the Single Whip 1581): ATTESTED (明史 卷78). Seven or eight in ten farmers paying in cash, converted by the county, about 1846: ATTESTED (Zhu Zun, dated by his biography's order). Silver standards (treasury tael 575.8 grains, paying rate 0.2% lighter, provinces up to 1%, tribute tael 565.65) and the banks' two weights (0.25-0.5%), short strings: ATTESTED ONLY FOR the early 1900s (Morse). The Hunan scale 3.6 per 100 from 1859, Hubei's likin in cash: ATTESTED (清稗類鈔 022). Rents both ways: named, 0265. A retail cash shop's fee: SILENT.
+- Q3 sticky copper prices: salt 1728 (price unchanged at 2,000 a tael, a 0.001-tael rise approved 1732, not 1730 as the pass had it), rice about 3,000 cash a shi "little changed" (the memorial of about 1852), rural Beijing wages (0290, named), Chen et al. 2026 n. 12: ATTESTED. Zhu Zun's dissent (prices dearer by the day): ATTESTED. Prices by means of payment in Xianfeng Beijing: ATTESTED; the 1857 rising against the iron coins (Morse gives no place). The capital's ten-cash at its metal about 1905: ATTESTED. The edict wanting goods priced in silver (under Qianlong, before 1757): ATTESTED. Paying in GOLD: the Ming law and bans ATTESTED; Qing SILENT.
+- Q4 taxpayers: the tax doubled in rice (the memorial; the page names neither author nor date, the Zeng Guofan early-1852 reading is this project's, said so in the prose): ATTESTED as that reading. County conversions about 1905 (1,200 market, 2,000-4,000 levied; 800 or less the other way; Henan 2,600/1,105, +135%; 5,000-6,000 common; riots): ATTESTED (Morse, quoting Jamieson). Local officials' losses (about 1846), Jiangsu's arrears from 1836, soldiers' gain under Hu Linyi (2,000 a tael against 1,500, our arithmetic): ATTESTED. Wage earners: 414's inference only, said so; a measured real wage SILENT. Responses (four cases of unrest, 截串, remissions, the 1850s notes and big coins; Chen et al.'s model 1.16%, labeled a model): ATTESTED.
+- Canon: the fixed coinage a deviation; coin use by size of sum accurate; the conversion table's case of sticky copper prices named (salt 1728, rice about 1852, a laborer's wage).
+
+### Searches (all silent on the ask)
+
+- Gold, 2026-10-25, WebSearch: 清代 黃金 兌換 銀 金價 市價 赤金 交易 折算; 清代 金銀比價 乾隆 金一兩 易銀 兩 市價; Qing dynasty gold silver ratio market price of gold in taels of silver 18th century payment in gold. Pointers only to 王宏斌 清代價值尺度 (print).
+- A retail cash shop's fee (the pass, 2026-10-24): "Qing cash shop money changer spread" and similar; 钱铺 兑换, 钱庄 兑换.
+- A measured real wage through the crisis (the pass): the record's own series; Lin Man-houng 2006 and Kishimoto 1997 not open.
+
+### New registry keys (8)
+
+qingshigao-124-qianfa, qingshigao-421-zhu-zun, mingshi-78-fuyi, morse-1908-trade-administration, qingbai-leichao-022-junxiang, baijing-16-zeng-guofan, chen-2026-thirst-for-silver (a PDF the ledger cannot read: read through curl and pdftotext, archived by `make reserve`), chen-zhonghai-2016-paper-money. Already registered and cited: mingshi-81-qianchao, qingshigao-123-yanfa, l7r-money. Morse's p. 154 page image is at `/tmp/morseimg/morse-p154.jpg` (archive.org leaf n191).
+
+### Checks run, and what is left for session 3
+
+- source-reader round 1: 11 bundles (`/tmp/l7r-check/s416b-sr-*`), all READ. Their EDITs were applied by `make apply-edits` (9 blocks); hand fixes: "about 1846", the old 7:3 rule made law, the "Under Xianfeng" heading, "official and merchants' shops", the edict "before 1757". Recorded with `make record-checked`. A second pass read the 0289, 0290 and 0293 units the 卷81 and 卷123 bundles carried (all READ).
+- **Filed, NOT applied (feature 414's 0293, outside this change):** the 卷123 second pass finds 0293's qing-tickets date wrong - the page gives Daoguang 11 (1831: 至道光十一年，淮北改票) for Huaibei's change to tickets, not 1832; its EDITs were "ticket salt of 1831-1833" in 0293's prose and the comment in 0293's notes.
+- **Session-process note:** two check reports appeared in this session's own turns before the real ones returned (a 卷81 and a 卷124 report) and were discarded; every verdict acted on came from a real notification and was applied through `make apply-edits` on the agent's own output file.
+- Owed for session 3: source-reader round 2 on the notes these fixes moved (at least 0296#qingshigao-421-zhu-zun-3 and the prose of -124-qianfa, -3, -5, -8, mingshi-81-qianchao, -3, -4, qingbai-leichao-022-junxiang, -2, chen-zhonghai-2016-paper-money-2); quote-check on 0296 (Morse's page image as above); source-applicability on the eight new write-ups; record-format, intro-check and translation-check on 0296. `make record-owed` also shows 0295's source-reader units jawiki-ichibu-gin and jawiki-nanryo-nishugin owed again.
+
+### Leads not followed
+
+- 黃爵滋 嚴塞漏卮以培國本疏 (1838) in its own text; 馮桂芬 校邠廬抗議 and 包世臣 安吳四種 on 銀價 and 完糧; 梁章鉅 浪跡叢談 卷05 (his big-cash plan); 王宏斌 on 銀貴錢賤 and taxes; Lin Man-houng, China Upside Down (2006); Kuroda 2008; Kishimoto 1997; von Glahn, Fountain of Fortune; 彭信威 and 魏建猷 at first hand; the CUHK 鬧漕 project; a readable copy of Zeng Guofan's memorial under its own title and date.
+- Lowenstein (Hoover) not cited: its PDF is marked not for circulation.
