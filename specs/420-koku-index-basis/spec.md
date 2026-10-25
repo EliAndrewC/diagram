@@ -61,8 +61,8 @@ then, retail now). The GM also asks what these baskets are used to compute in ac
 1. Every figure each question names gets a verdict - ATTESTED, ATTESTED ONLY FOR <the narrower case>, NOT ATTESTED or SILENT -
    SILENT with its search; a reconstruction is never written as an observation, and each era's observed-or-reconstructed list
    says which source each observed price comes from and, for each reconstructed or borrowed price, the era or source it was
-   borrowed from (gm-assistant's addendum, `request.md`: kyoto-1745's relatives that come from early Meiji would otherwise be
-   counted twice beside tokyo-1882).
+   borrowed from (gm-assistant's addendum, `request.md`: kyoto-1745's relatives may come from early Meiji, or share a source
+   with tokyo-1882, and would then be counted twice).
 2. Q1's market level is stated per good from the source of the price the record cites (Mitsui's purchase books, a market floor,
    a shop); a markup is given only where a source states one.
 3. Q2 and Q3's modern prices are each a dated observation with its link, archived, labeled with the date seen; a retail price
@@ -85,8 +85,8 @@ then, retail now). The GM also asks what these baskets are used to compute in ac
   section, their sources of the kind `comparative` (research/CLAUDE.md, "Comparative money sources": the GM asks for them
   here), each such page saying it never sets a Rokugani price.
 - **FR-002a**: The method (Q5, with Q3's world-poverty-line housing allowance, a method figure) is a money question
-  (`subject=money`) in "Money and prices", as `research/money-requests.md` prescribes: a comparative source is "not a
-  cross-cultural method", and Q5's rice-as-numeraire answer bears on how Rokugan's prices are set (Q4's Use). Its sources are
+  (`subject=money`) in "Money and prices", as `research/money-requests.md` prescribes; a comparative source is "not a
+  cross-cultural method" (`research/CLAUDE.md`, "Comparative money sources"), and Q5's rice-as-numeraire answer bears on how Rokugan's prices are set (Q4's Use). Its sources are
   tagged by what they are (scholarship, institutional), not `comparative`, and it carries no "never sets a Rokugani price"
   disclaimer.
 - **FR-003**: The work runs in page sessions of at most four questions and ten new registry keys a write, each followed by a
@@ -121,3 +121,5 @@ then, retail now). The GM also asks what these baskets are used to compute in ac
   (2) Q5 (and the poverty-line housing allowance) homed in "Money and prices" as a money question, its sources not
   `comparative`, the disclaimer kept to the comparative pages (FR-002a); (3) Q5 asks which papers, the three named among them.
   Applied, with gm-assistant's addendum on Q4 (Acceptance 1: the era each borrowed price came from).
+- round 2 (verify): CHANGES REQUIRED - Acceptance 1's reason worded as gm-assistant's suspicion, not fact; FR-002a's quote
+  credited to research/CLAUDE.md. Applied.
