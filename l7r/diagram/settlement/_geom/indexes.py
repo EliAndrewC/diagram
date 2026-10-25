@@ -252,6 +252,9 @@ class PointGrid:
     _MAX_SPAN = 64  # cells per axis before an item is oversized (64 * 128px = 8,192px - wider than any canvas we draw)
 
     def __init__(self, cell: float = 128.0) -> None:
+        """Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 128 (spatial-index cell); 32 (point-grid cell); 64 (ring-index cell)
+        """
         self.cell = cell
         self.buckets: dict[tuple[int, int], list[Any]] = {}
         self.oversized: list[Any] = []
@@ -463,7 +466,11 @@ class RingIndex:
         """`inside` for arrays of points at once (feature 278, FR-008) - the same verdict, point for point: a point
         inside the polygon shrunk by a margin is surely in, one outside it grown by the margin surely out, and one between
         is asked of `inside` itself; a ring shapely would not read as a valid polygon asks `inside` of every point in its
-        box."""
+        box.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (boundary tolerance)
+        """
         import numpy as np
         import shapely
         from shapely.geometry import Polygon
@@ -618,7 +625,11 @@ class KeepoutGrid:
         each kind's shapes buffered in one array call; an item whose box misses every point cannot refuse one, and a
         scatter's grid holds the whole map's keep-outs while its throws cover one parcel. Kept per (`extra`, `within`). A
         ring that is not a valid polygon is drawn as its even-odd region (`_parity_region`), which is what
-        `RingIndex.inside` counts, so it is shrunk and grown like any other."""
+        `RingIndex.inside` counts, so it is shrunk and grown like any other.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (the same margin); 0.02 (arc chord-error margin)
+        """
         key = (*extra, *within)
         if key in self._trees:
             return cast(tuple[Any, Any], self._trees[key])

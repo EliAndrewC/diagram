@@ -41,6 +41,7 @@ def fringe_profile(uv: Sequence[tuple[float, float]], cols: int, half: float, v_
     cluster happens to lie diagonally to its wind.
 
     Research: belt follows the windward fringe - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: each column stands behind the windward-most house near it
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 40 (column's search window across the wind (rule CITED 0072.drawing))
     """
     raw: list[tuple[float, float | None]] = []
     for k in range(cols + 1):
@@ -102,6 +103,7 @@ def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[fl
         belt keeps its depth past a back lane - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: moved upwind past a lane inside the band
         belt into the marsh as alder - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: a shelter belt's trees in the marsh drawn as alder, so the band moves into it
         lane clearance - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); BELT_LANE_CLEAR_FT
+        its figures from 0071 - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: 146 (default near face + depth)
     """
     out: list[tuple[float, float]] = []
     for v, u in cols:
@@ -174,6 +176,7 @@ def round_the_houses(cols: Sequence[tuple[float, float]], uv: Sequence[tuple[flo
     Research:
         near face clear of every house - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the back grove's outline stands back from the houses nearest it, all along the face
         stand-off reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); `reach` from each house
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 7 (arc sample count bound); 15 (arc sampling step, degrees)
     """
     if len(cols) < 2:
         return list(cols)
@@ -222,6 +225,10 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         off the crop - research/questions/0038-sunlight-and-shade-on-the-farm.html: a tree shades one tree's height (the Qimin Yaoshu), about 33 ft - the belt stands 20 px off the crop at its nearest, a departure the code keeps until feature 417 T33; stands back 22-60 px, then shortens to 0.6 of its span
         no belt under three houses - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25)
         connector and field spur lanes cross the belt as a way through, not moved past - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane crosses the belt, the planting resumes either side
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 7 (fewest profile columns); 24 (most profile columns); 44 (push-back step off the crop); 0.88 (belt-shortening step off the crop); 0.74 (belt-shortening step off the crop); 40 (same window as line 48, in belt reach); 11 (lane samples per segment)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 4.29497e+09 (seed mask); 7919 (seed multiplier)
+        its figures from 0071 - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: 12 (extra west-sun offset of the near face)
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (belt vertices clamped inside the canvas)
     """
     houses = s.M.get("houses", [])
     if len(houses) < 3:

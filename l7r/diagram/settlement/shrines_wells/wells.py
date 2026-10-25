@@ -73,6 +73,7 @@ class WellsMixin:
             wellhead marker - research/questions/0196-communal-wells-ido.drawing.html: a round curb of 9.36 ft radius under a square roof on every well
             cistern-well on the aqueduct - research/questions/0141-the-capitals-aqueduct-josui.drawing.html: kind recorded when declared
             keep-clear margin - research/questions/0196-communal-wells-ido.drawing.html: the apron 4 ft past the curb, a small court, a lane-side curb within about 8 ft of the tread - 8 px round the roof, 8 to 24 ft by tier, a departure the code keeps until feature 417 T33; 8 px round the roof
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.47 (dark water's radius within the curb glyph)
         """
         # THE WELL IS A LOCATION MARKER, NOT A TO-SCALE FOOTPRINT (GM ruling 2026-07-21). A real stone
         # well curb is ~3-4 ft - sub-glyph at every map scale - so the wellhead denotes the well's
@@ -118,6 +119,7 @@ class WellsMixin:
             wellhead off the commons - research/questions/0196-communal-wells-ido.drawing.html
             ground fit for a wellhead - research/questions/0196-communal-wells-ido.drawing.html: _well_ground_clear
             standing room demanded - research/questions/0196-communal-wells-ido.drawing.html: a paved apron about 4 ft wider than its curb, and each well keeps only a small court - a fixed 2r + 14 px box, 30 to 90 ft by tier, a departure the code keeps until feature 417 T33
+            its figures against 0196 - research/questions/0196-communal-wells-ido.drawing.html: 8 (default clearance radius r (2r+14 box)) - a departure the code keeps until feature 417 T33
         """
         if self._in_scrub_cover(x, y) or not self._well_ground_clear(x, y):
             return False
@@ -172,6 +174,7 @@ class WellsMixin:
         would drop wells beside the samurai compounds, which keep no public wells).
 
         Research: scoped well scatter - NONE: delegates to _place_wells
+            its figures against 0196 - research/questions/0196-communal-wells-ido.drawing.html: 8 (default clearance radius r) - a departure the code keeps until feature 417 T33
         """
         # SCOPED (2026-08-08): well siting jitters over a grid; keyed on the bbox it covers.
         with self.rng_scope("place_wells", *bbox), self.frozen_terrain():  # one well index for the whole scatter, not one revalidation per candidate seat

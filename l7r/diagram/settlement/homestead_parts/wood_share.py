@@ -159,6 +159,7 @@ def ground_blocks(s: Settlement, clump: float) -> GroveBlocks:
             12 px plus the clump's radius off a paddy, 12 off a dry plot
         copse off the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
         copse off open water - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); half-width plus the clump's radius
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 9 (stream width fallback, never reached); 2.5 (channel width fallback, never reached); 22 (moat width fallback; no production moat)
     """
     cr, m = clump / 2.0, BAR_MARGIN_PX
     water = [(st["poly"], st.get("w", 9) / 2 + cr + m) for st in s.M.get("streams", [])]
@@ -193,6 +194,8 @@ def open_water_discs(M: Mapping[str, Any], clump: float) -> list[tuple[float, fl
 
     Research:
         copse off ponds and sacred ground - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); each plus 0.90 of the clump
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N9, 2026-10-25) - 0.9 (copse keeps 0.90 of a clump off ponds and sacred ground)
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 19 (torii glyph half-extent); 14 (torii glyph half-extent)
     """
     reach = clump * 0.90 + BAR_MARGIN_PX
     out = [(float(o["x"]), float(o["y"]), 0.5 * math.hypot(float(o["w"]), float(o["h"])) + reach) for k in ("religious", "shrines") for o in M.get(k) or [] if "w" in o and "h" in o]
@@ -254,6 +257,7 @@ class WoodShares:
             copse clump size - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); `COPSE_CLUMP_BS`, 22 bscale units, the copse's clump
             copse seat pitch - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); `SEAT_PITCH_BS`, the clump radius times the square root of two, so the reserved crowns cover every point of a cell
             seat off a lane - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the corridor's half plus the copse's lane buffer; no page read gives how far a way kept off a farmhouse's grove
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (index cell); 0.45 (floor under `crown_reach`, as at grove_fill:135)
         """
         self.clump = COPSE_CLUMP_BS * s.bscale
         self.cr = round(self.clump / 2.0, 1)  # the radius the planted copse records and `wood_canopy` counts at
@@ -304,6 +308,7 @@ class WoodShares:
             within a dooryard's reach - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the
                 reach the caller gives, 90 ft
             on its house's bank - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: a homestead's wood stood on its own lot; no seat across a stream from its house
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (seats kept 6 px off the sheet's edge)
         """
         if not (6.0 <= x <= self.W - 6.0 and 6.0 <= y <= self.H - 6.0):
             return True

@@ -329,6 +329,7 @@ def _draw_laid(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]
     """Declare the hamlet's fixture rolls and draw every fixture the seating laid, holding back the flexible form.
 
     Research: which pits go to the field - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: on a pit hamlet, each house's position hash against the rolled field share
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 102.7 (jitter salt (manure pit share))
     """
     forms = getattr(s, "_fixture_forms", None) or fixture_forms(s.seed, plan.manure_form)
     meta = s.M["meta"]

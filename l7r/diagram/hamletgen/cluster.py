@@ -65,7 +65,9 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
     cluster plus its windbreak will occupy. Returns 0.0 for a clear back and 1.0 for one entirely
     under the hem.
 
-    Research: depth sampled behind the margin - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); 2.6 band depths, the cluster and its belt"""
+    Research: depth sampled behind the margin - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); 2.6 band depths, the cluster and its belt
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 7 (sample count along the back (claim: T29 pass E))
+    """
     if not dry_plots:
         return 0.0
     ax, ay = -out[1], out[0]
@@ -98,7 +100,9 @@ def belt_off_canvas(center: Pt, along: Pt, out: Pt, lat: float, dep: float, wind
 
     Research:
         belt's depth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a back wood drawn 80 to 120 ft deep, a convention (the band's 36 to 146 ft is `BELT_NEAR_FT` + `BELT_DEPTH_FT` 100 + `BELT_FAR_RAG_FT`)
-        belt's distance upwind - GUESS: the near face 36 ft behind the fringe (`BELT_NEAR_FT`), whatever the wind; these samples only ask for room on the canvas - where the clumps stand, and the 50 ft sun rule that moves a west grove's inner edge out, is the belt's own placer's"""
+        belt's distance upwind - GUESS: the near face 36 ft behind the fringe (`BELT_NEAR_FT`), whatever the wind; these samples only ask for room on the canvas - where the clumps stand, and the 50 ft sun rule that moves a west grove's inner edge out, is the belt's own placer's
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 0.45 (lateral sample position across the belt); 0.9 (outer lateral sample position)
+    """
     wx, wy = unit(*wind)
     px, py = -wy, wx
     reach = abs(wx * along[0] + wy * along[1]) * lat + abs(wx * out[0] + wy * out[1]) * dep  # the fringe, upwind of the middle
@@ -116,7 +120,10 @@ def seat_has_dry_exit(plan: SitePlan, start: Pt, toe: Poly | None = None, wet: S
 
     Research:
         dry way out of the seat - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground
-        tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft"""
+        tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 16 (pond disc drawn as a 16-gon)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (pi/8 step of the same 16-gon)
+    """
     from .ways.dry_exit import EXIT_CELL_FT, dry_exit
     from .ways.track import wet_grown_by_the_lane
 
@@ -141,7 +148,11 @@ def straight_exit(start: Pt, walls: Sequence[tuple[Poly, float]], lines: Sequenc
     from `start` off the canvas that keeps every wall at its margin plus one and a half cells, and every water line at
     one and three quarter cells. Every cell such a run passes through then has its center clear of the fill's own
     blocking distances (a wall's margin plus half a cell's diagonal, a line's one cell), and the cells a straight run
-    passes through are joined, so the fill would find its way out along it. False says nothing: the fill decides."""
+    passes through are joined, so the fill would find its way out along it. False says nothing: the fill decides.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 1.75 (water-line margin in cells, same reason); 1.5 (wall margin in cells, so the quick test is sufficient for the flood fill)
+    """
     from shapely import LineString, Polygon
 
     polys = [(Polygon(p), m) for p, m in walls if len(p) >= 3]
@@ -205,7 +216,9 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), toe: Poly | Non
         brook reach on the band - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the 30 ft - homesteads faced their channel (Takamine 1977, pass B); a band point within 30 ft of the brook counts as on the water
         belt room on the canvas - CONVENTION: scored, refused past BELT_ROOM_MAX_OFF
         band on the canvas - CONVENTION: the seat center at least half the band's length (`lat`, the band's semi-axis along the field) inside the frame
-        dry way out - research/questions/0081-village-lanes.drawing.html: a walled-in head is refused"""
+        dry way out - research/questions/0081-village-lanes.drawing.html: a walled-in head is refused
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 0.3 (seat refused past 0.30 of its back under crop); 0.6 (lateral sample, reed-fringe share); 0.45 (lateral sample, brook on the band); 0.9 (outer lateral sample, brook on the band); 34 (middle sample depth, brook on the band)
+    """
     env = plan.envelope
     cen = centroid(env)
     dx, dy = plan.fall
@@ -481,7 +494,9 @@ def _fork_spur(spur_pts: Poly, kept: list[tuple[Poly, Poly]]) -> Poly:
     the new start lies ON the arm, so the same intersection comes straight back on the next pass
     - a hit at the current start is the fork already made, not a crossing left to cure.
 
-    Research: field spur forks from the lane - research/questions/0081-village-lanes.drawing.html: a lane meets another's side as a T and a tail under 40 ft beyond a crossing is cut - the spur's run is cut at any length on the near side of an arm, a departure the code keeps until feature 417 T32; starts at its crossing with an arm"""
+    Research: field spur forks from the lane - research/questions/0081-village-lanes.drawing.html: a lane meets another's side as a T and a tail under 40 ft beyond a crossing is cut - the spur's run is cut at any length on the near side of an arm, a departure the code keeps until feature 417 T32; starts at its crossing with an arm
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 8 (cap on passes (stops the loop)); 14 (match tolerance: a hit this near the spur's end is not a fork)
+    """
     for _pass in range(8):
         _cut = False
         if len(spur_pts) < 2:

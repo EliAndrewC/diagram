@@ -81,7 +81,9 @@ def mulberry_row_ts(band: float) -> list[float]:
     `MULBERRY_ROW_FT`, at least two (feature 280, settlement-review of Kuwabata: the bank widened to 23 ft kept two rows
     and the bushes thinned from one per 23 sq ft to one per 47).
 
-    Research: rows across the bank - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: one per MULBERRY_ROW_FT, at least two"""
+    Research: rows across the bank - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: one per MULBERRY_ROW_FT, at least two
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 0.08 (rows held off the water and bank edges); 0.84 (span of the band the rows fill)
+    """
     n = max(2, round(band / MULBERRY_ROW_FT))
     return [0.08 + 0.84 * (k + 0.5) / n for k in range(n)]
 
@@ -212,7 +214,9 @@ class LandUseMixin:
             patches for dike-ponds - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: clustered on a partial dike-pond overlay
             the village's split and its inset - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the split rolled per village (`dikepond_split`) and the one inset every reader takes derived from it (`dikepond_inset`)
             overlay colors - CONVENTION: pond and lotus teals
-            no rape - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: never drawn beside the rice"""
+            no rape - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: never drawn beside the rice
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.55 (converted share of eligible plots)
+        """
         if overlay not in ("none", "mulberry_fishpond", "lotus", "tea_fringe"):
             raise ValueError(f"unknown land_use_overlay {overlay!r}")
         self.M["meta"]["land_use_overlay"] = overlay
@@ -351,7 +355,9 @@ class LandUseMixin:
         Research:
             tea rows - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: on the dry hem above the highest ditch
             tea row spacing - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html: Fortune saw tea bushes planted in rows about four feet apart - the rows are drawn 8 ft apart, a departure the code keeps until feature 417 T34; rows 8 px apart, a 2.4 px stroke
-            tea row direction - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: rows on dry plots are set tract by tract, along the contour or down the fall - tea rows are drawn screen-horizontal, a departure the code keeps until feature 417 T34; screen-horizontal whatever the canal or the slope"""
+            tea row direction - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: rows on dry plots are set tract by tract, along the contour or down the fall - tea rows are drawn screen-horizontal, a departure the code keeps until feature 417 T34; screen-horizontal whatever the canal or the slope
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 6 (first tea row's set-in from the plot edge)
+        """
         n = 0
         for dp in net["dry_plots"]:
             ys = [p[1] for p in dp["poly"]]
@@ -367,7 +373,12 @@ class LandUseMixin:
 
         Returns the leftover plots, which the land_use record reports.
 
-        Research: leftovers as standing rice - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: dike-ponds convert some of the low plots and leave the rest in rice; an unconverted parcel of a wholesale block is drawn as rice"""
+        Research: leftovers as standing rice - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: dike-ponds convert some of the low plots and leave the rest in rice; an unconverted parcel of a wholesale block is drawn as rice
+            its figures guessed on 0014 - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: 2.5 (water set in from the bund)
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 12 (leftover waterline fillet reach)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (seed multiplier); 13 (seed multiplier)
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 4.5 (shoot pitch, dry leftover)
+        """
         leftover_plots: list[Any] = []
         if overlay == "mulberry_fishpond" and eligible == "all":
             chosen_ids = {id(c) for c in chosen}
@@ -424,7 +435,11 @@ class LandUseMixin:
             pond unit - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: bank at the parcel line, water inset the map's own (`dikepond_inset`), dug back off a canal
             bank as a ring - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the band between bank and water lit as the dike
             fry pond turbid - research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: FRY_WATER for a fry pond
-            lotus field - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a teal plot with three blooms"""
+            lotus field - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a teal plot with three blooms
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 2.5 (least bloom radius); 14 (bloom scatter)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.7 (dig-back scale floor)
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 8 (bank corner fillet reach); 16 (water corner fillet reach)
+        """
         if overlay == "mulberry_fishpond":
             # 桑基魚塘: a raised MULBERRY DIKE (基, planted) surrounds an inset fish POND (塘, water) whose
             # dug corners are ROUNDED - an earthen pond erodes to a rounded outline, never the poured-
@@ -522,7 +537,12 @@ class LandUseMixin:
             tea hedges - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: two hedges 2.8 px wide, three steps drawn and two left open
             fruit trees - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: one line along the bank at 18 ft, crowns r 4-5 px
             tea and fruit off the canal - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); tea hedges kept 3.0 px and fruit trees 5.5 px off a canal centerline
-            bank mottle - CONVENTION: earth patches every 30 px"""
+            bank mottle - CONVENTION: earth patches every 30 px
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.4 (scale floor); 1e+09 (sentinel); 20 (channel-index bbox pad)
+            its figures guessed on 0026 - GUESS research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: 0.32 (inner tea hedge's place across the band); 0.7 (outer tea hedge's place across the band); 2.5 (tea hedge walk step)
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (mottle rx max); 6 (mottle ry max)
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 1.3 (mulberry crown jitter)
+        """
         n = len(poly)
         mids = [((poly[i][0] + poly[(i + 1) % n][0]) / 2, (poly[i][1] + poly[(i + 1) % n][1]) / 2) for i in range(n)]
         apo = sum(math.hypot(mx - cx, my - cy) for mx, my in mids) / n
@@ -615,6 +635,7 @@ class LandUseMixin:
         Research:
             dike-pond patches - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: grown from one seed per nine plots by nearest neighbor
             lotus draw - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: an even draw from the low plots
+            its figures guessed on 0005 - GUESS research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 9 (one seed plot per nine converted)
         """
         if take >= len(eligible):
             return list(eligible)

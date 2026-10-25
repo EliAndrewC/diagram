@@ -146,6 +146,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         the track's stretch the ways join - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); within `JOIN_FAR_FT` of the homesteads' extent and the track's start, so no way joins it past the frame
         the declared cluster shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the cluster's shape rolled by chance, the page's own rule, and declared as the drawing resolves it, where the record has a hamlet's shape follow its dry ground
         a grove farm's own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: drawn in its grove where the `bamboo` knob is homestead or both
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 45 (meta count threshold for a quarter turn)
     """
     # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
     # ridge; the noon figure is 21. The engine's rule is opt-in and this is where the scripted tier
@@ -465,6 +466,10 @@ def _seat_households_as(s: Settlement, plan: SitePlan, single_file: bool) -> tup
         the line's reach - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); the whole ring of the field, not held to the seat's 1.3-bound reach (ours, and it refused the far side's farms)
         the line's offer - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: every household in the line and none in ranks behind it (`front_cap` the households, `_rows_seated`) - the whole line hugged to the field edge in single file; the seats are the ring's own, a farmstead's width apart
         the shed counted in the standoff, the garden not - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); the page places neither the shed nor the beds against the paddy; the shed is held at the wall's gap with the house, and the garden's side, chosen later by the sun, is left free to stand nearer
+        its figures from 0029 - research/questions/0029-farmhouses-minka.drawing.html: 1.35 (largest house rolled); 1.1 (largest house rolled); 46 (largest house rolled); 28 (largest house rolled)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 4.29497e+09 (seed hash multiplier and mask); 2.65444e+09 (seed hash multiplier and mask)
+        its figures guessed on 0031 - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 1.9 (fallback crescent aspect band); 4.2 (fallback crescent aspect band)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 1.5 (length of the way-out test line)
     """
     seat = plan.seat
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,
@@ -818,6 +823,9 @@ def _seat_rank_rounds(s: Settlement, plan: SitePlan, placed: int, rng: random.Ra
         a rank grown along the field - GUESS: no source gives it, (feature 417 T29 pass E2, 2026-10-25); once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch out along it at the rank's depth
         the rescue's offer along the field - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); in the rescue rounds the seats along the field are offered first - a pitch beyond each end house, half-seats half a pitch out at that house's own depth and a `_rank_step` more
         a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the step adds `SUN_CORRIDOR_FT` by its north-south share, a spacing that offers seats near clear sun; the full 39 ft south of every yard and bed is held by the placer's own sun rule (`fit._sun_corridor_ok`, both ways), which refuses a seat that would stand in it
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 7 (number of seating rounds); 30 (rescue cloud candidate count); 6 (rescue cloud candidate count); 0.22 (rescue band widening per round); 0.16 (rescue band widening per round)
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N3, 2026-10-25) - 0.2 (seat nudged up to 0.1 pitch either way)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 14 (jitter salt (rank depth)); 13 (jitter salt)
     """
     seat = plan.seat
     ax, ay = seat["along"]

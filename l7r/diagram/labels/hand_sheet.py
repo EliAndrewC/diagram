@@ -169,7 +169,11 @@ class Shape:
 
 def _path_points(d: str) -> list[Pt]:
     """A path's vertices - absolute and relative move, line, horizontal and vertical steps, and the end points of
-    curves; enough for the handful of paths the sheets draw (roads and banks)."""
+    curves; enough for the handful of paths the sheets draw (roads and banks).
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (SVG C-command argument count); 7 (SVG A-command argument count)
+    """
     pts: list[Pt] = []
     x = y = 0.0
     for cmd, args in re.findall(r"([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)", d):
@@ -301,6 +305,9 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
 
 
 def _text_shape(el: ET.Element, m: Affine, kind: str) -> Shape:
+    """Research:
+    its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 12 (default font size)
+    """
     size = _f(el, "font-size", 12.0)
     spans = [t for t in el.iter(f"{SVG}tspan")]
     lines = [(t.text or "").strip() for t in spans] if spans else [(el.text or "").strip()]
@@ -439,7 +446,11 @@ def _band(a: Pt, b: Pt, half: float) -> Poly:
 def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
     """A leader ends on the drawn thing it names, not on the box around its parts: a barge moored by lines and three
     pines are boxed with empty water or ground in the box's corner, and a leader to the corner named nothing (feature
-    283 - the tax barge's and the old pines' leaders ended 5-6 ft short)."""
+    283 - the tax barge's and the old pines' leaders ended 5-6 ft short).
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)
+    """
     from shapely.geometry import LineString, Point, Polygon
     from shapely.ops import nearest_points, unary_union
 
@@ -617,7 +628,11 @@ DARK_INK = "#3A2E1C"
 
 
 def _luma(fill: str | None) -> float:
-    """A `#rgb` or `#rrggbb` fill's luma (0 black, 1 white); anything else - none, a pattern - reads as 0.5."""
+    """A `#rgb` or `#rrggbb` fill's luma (0 black, 1 white); anything else - none, a pattern - reads as 0.5.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.114 (Rec.601 luma weight (blue)); 16 (hex base); 0.299 (Rec.601 luma weight (red)); 0.587 (Rec.601 luma weight (green))
+    """
     m = re.fullmatch(r"#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})", (fill or "").strip())
     if not m:
         return 0.5

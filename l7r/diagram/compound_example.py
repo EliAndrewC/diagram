@@ -69,7 +69,12 @@ GARDEN_PLOT_FT: tuple[float, float] = (36.0, 30.0)
 
 def garden_zones(site: str) -> tuple[CourtZone, ...]:
     """The vegetable garden as the site rolled draws it: the plot in the kitchen yard west of the house with the yard's
-    working ground beside the kitchen named, or - on a parcel of its own - no plot inside the walls, the yard whole."""
+    working ground beside the kitchen named, or - on a parcel of its own - no plot inside the walls, the yard whole.
+
+    Research:
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N13, 2026-10-25) - 14 (whole kitchen yard when the plot is off-site); 25 (whole kitchen yard when the plot is off-site); 66 (whole kitchen yard when the plot is off-site); 62 (whole kitchen yard when the plot is off-site); 54 (service yard's bounds by the kitchen); 26 (service yard's bounds by the kitchen)
+        its figures guessed on 0109 - GUESS research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: 40 (plot's corner in the kitchen yard (site cited, place in it ours))
+    """
     if site == "west of the residence":
         return (CourtZone("vegetable garden", 14.0, 40.0, *GARDEN_PLOT_FT), CourtZone("service yard", 54.0, 25.0, 26.0, 62.0))
     return (CourtZone("service yard", 14.0, 25.0, 66.0, 62.0),)
@@ -78,7 +83,13 @@ def garden_zones(site: str) -> tuple[CourtZone, ...]:
 def servants_row(form: str) -> BuildingSpec:
     """The county draft's servants' row on the street (south) wall, 60 x 15 ft (a GUESS), in the entry form rolled: four
     dwellings of 15 ft each with its door, or one common room behind one door (0097's two forms). 60 ft since feature 374
-    wave 128 (it was 76): the 40 ft gatehouse beside the gate takes the wall's room, and the stable keeps its seat west of it."""
+    wave 128 (it was 76): the 40 ft gatehouse beside the gate takes the wall's room, and the stable keeps its seat west of it.
+
+    Research:
+        its figures guessed on 0097 - GUESS research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: 60 (common-room form's size); 15 (common-room form's size); 0.375 (door at each 15 ft dwelling's middle); 0.625 (door at each 15 ft dwelling's middle); 0.875 (door at each 15 ft dwelling's middle); 30 (walls of four 15 ft dwellings (claim stale: five)); 45 (walls of four 15 ft dwellings (claim stale: five))
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 6 (placement order)
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N13, 2026-10-25) - 0.17 (west door moved off its middle for the privy)
+    """
     if form == SERVANTS_FORMS[1]:
         return BuildingSpec(
             "servants' row",
@@ -147,6 +158,17 @@ def county_magistracy_program() -> CompoundProgram:
         cell door - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); toward the cell's west end, so its approach leaves the barracks' south dwelling the ground for its own door
         maids' room - GUESS research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: the maids and kitchen hands under the main roof at the kitchen end, as the Aizu chief retainer's house kept the rooms of the maids and servants in the house; which servants slept there, and its 10 x 10 ft, GUESSES
         barracks dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: the barracks divided into four dwellings of 17.5 ft, a door each on its court face; four a GUESS in the 12-18 ft bays
+        its figures guessed on 0091 - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: 102 (garden's corner at the house's garden face (the veranda line)); 35.5 (garden's corner at the house's garden face (the veranda line)); 46.5 (garden depth to y 82 (claim says 46)); 22 (rear yard depth)
+        its figures guessed on 0099 - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: 50.5 (hearing court centered on the hall, at its south face (90 + 38 + 2.5 stand-off))
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N13, 2026-10-25) - 131 (yard from the hearing court's east end); 130.5 (yard from the hearing court's east end); 57.5 (yard from the hearing court's east end); 0.3 (cell door toward its west end); 0.8 (last door moved off its middle for the cell)
+        its figures guessed on 0104 - GUESS research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: 130 (forecourt's corner inside the gate, east of the gatehouse); 166 (forecourt's corner inside the gate, east of the gatehouse); 0.7 (end-face doors on the front room)
+        its figures from 0165 - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: 190 (practice ground beside the barracks ("beside its guards' quarters")); 126 (practice ground beside the barracks ("beside its guards' quarters"))
+        its figures guessed on 0116 - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 188 (cart yard's corner before the service gate); 177 (cart yard's corner before the service gate)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 13 (placement order); 11 (placement order); 5 (placement order)
+        its figures guessed on 0107 - GUESS research/questions/0107-kitchens-daidokoro.drawing.html: 0.35 (residence rear door at the kitchen end); 0.4 (residence rear door at the kitchen end)
+        its figures guessed on 0097 - GUESS research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: 0.085 (door at each bay's middle (one door each, cited)); 0.274 (door at each bay's middle (one door each, cited)); 0.482 (door at each bay's middle (one door each, cited)); 0.689 (door at each bay's middle (one door each, cited)); 0.896 (door at each bay's middle (one door each, cited)); 0.125 (barracks doors at bay middles); 0.375 (barracks doors at bay middles); 0.625 (barracks doors at bay middles); 35 (walls of four 17.5 ft dwellings); 52.5 (walls of four 17.5 ft dwellings)
+        its figures from 0097 - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: 48 (walls between the 14 ft and 17 ft bays); 65 (walls between the 14 ft and 17 ft bays)
+        its figures guessed on 0113 - GUESS research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html: 72 (official study's width and place ("room sizes GUESSES")); 41 (official study's width and place ("room sizes GUESSES"))
     """
     # The main gate is a one-bay yakuimon with an 8 ft frontage and a 7 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
     # 0093); it was a 13 ft opening, the carriage gate the vocabulary once drew. The postern in the west wall,

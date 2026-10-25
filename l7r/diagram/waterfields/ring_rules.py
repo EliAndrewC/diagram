@@ -446,7 +446,11 @@ def fan_context(
     as `_comb_record_ditches` will record them - points and widths rounded to 0.1 px, a point repeating its predecessor
     dropped - and the design cell as `_comb_record_field` records it. So the placer's context and the gate's (which
     reads the recorded `field_ditches` and `cell`) are one: supply strokes are every channel but the drain, and the
-    collector is the drain."""
+    collector is the drain.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (duplicate-point tolerance)
+    """
 
     def recorded(c: dict[str, Any]) -> dict[str, Any]:
         pts = [q for i, q in enumerate(c["pts"]) if i == 0 or math.dist(q, c["pts"][i - 1]) > 0.05]

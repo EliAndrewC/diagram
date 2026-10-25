@@ -79,6 +79,7 @@ def free_seats(s: Settlement, center: Pt, step: float | None = None, field: Sequ
         the exhaustive seat order - research/questions/0029-farmhouses-minka.drawing.html: every legal grid point on the canvas, nearest the seat first
         about as near, nearer the fields - research/questions/0029-farmhouses-minka.drawing.html: a tie broken by nearness to the field
         about as near - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); one grid pitch
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (seat grid inset 6 px from the sheet edge)
     """
     pitch = BUNDLE_PITCH * (FREE_SEAT_STEP if step is None else step)
     x0, y0, x1, y1 = 6.0, 6.0, float(s.W) - 6.0, float(s.H) - 6.0

@@ -48,6 +48,8 @@ def exit_legs(out: Sequence[Pt], fall: Pt, W: float, H: float) -> list[Pt]:
         exit span - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); max(120, the distance to the edge down the fall) + 260
         turn onto the fall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); four legs of 0.22-0.26 of the span, blending 0.3, 0.6, 0.85, 1.0 from the course's heading onto the fall, no wander
         exit leg bend - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); each leg starting on the page bent once at its middle, alternating sides (`exit_bend`)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel (no edge on this axis))
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.15 (cutoff: the course's heading still runs downhill)
     """
     dx, dy = fall
     lx, ly = out[-1]
@@ -289,6 +291,7 @@ def round_the_brooks(s: Settlement) -> None:
     (`join_vertices`), so the rounding cannot draw the brook away from the mouth the record says joins it.
 
     Research: plumbing - NONE: stage ordering, the rounding itself is `finished_course`'s
+        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 7 (fallback brook width (same guess as line 759))
     """
     chans = [c for c in s.M.get("channels") or [] if len(c.get("poly") or ()) >= 2]
     heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in chans if (c.get("frm") or {}).get("kind") == "stream"]

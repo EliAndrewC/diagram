@@ -88,6 +88,7 @@ def pond_fringe_ring(cx: float, cy: float, rx: float, ry: float, margin: float, 
        thins them.
 
     Research: pond reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round the shore at the caller's margin
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 16 (ring vertex count)
     """
     return [(cx + (rx + margin) * math.cos(a), cy + (ry + margin) * math.sin(a)) for a in [i * math.pi / (n / 2) for i in range(n)]]
 
@@ -100,7 +101,11 @@ if TYPE_CHECKING:
 
 
 def _ellipse(pond: Any, n: int = 64) -> Any:
-    """The open water as a polygon: `M['pond']` is (cx, cy, rx, ry)."""
+    """The open water as a polygon: `M['pond']` is (cx, cy, rx, ry).
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 64 (pond polygon vertex count)
+    """
     _load_shapely()
     cx, cy, rx, ry = (float(v) for v in pond[:4])
     return ShapelyPolygon([(cx + rx * math.cos(2 * math.pi * k / n), cy + ry * math.sin(2 * math.pi * k / n)) for k in range(n)])
@@ -219,7 +224,11 @@ def _keyholed(g: Any) -> Any:
 def pond_cut(blocks: Any, pond: Any, slack: float = 25.0) -> list[Any]:
     """`blocks` with the pond's own no-build box - a block holding the pond's ellipse and reaching no more than `slack` past
     its box on any side - replaced by the ellipse itself (feature 299): the box keeps buildings off the water, and a marsh
-    cut by it showed a rectangle round an oval pond. Every other block is kept as it is."""
+    cut by it showed a rectangle round an oval pond. Every other block is kept as it is.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 25 (slack when matching the pond's own box)
+    """
     if not pond:
         return list(blocks)
     cx, cy, rx, ry = (float(v) for v in pond[:4])
@@ -302,7 +311,11 @@ def marsh_ground(M: Any, only: Any = None, but: Any = ()) -> list[list[Pt]]:
 
 def ellipse_ring(cx: float, cy: float, rx: float, ry: float, n: int = 32) -> list[tuple[float, float]]:
     """An ellipse as an `n`-gon through its rim (feature 297): how a round keep-out - a crescent pond, the pond's water - is filed
-    into a `KeepoutGrid` as a ring, its pad the query's own."""
+    into a `KeepoutGrid` as a ring, its pad the query's own.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 32 (ring vertex count)
+    """
     return [(cx + rx * math.cos(2 * math.pi * k / n), cy + ry * math.sin(2 * math.pi * k / n)) for k in range(n)]
 
 
@@ -343,7 +356,10 @@ class WetGroundMixin:
                 open; the uncut edge's alder and willow carr is never rolled
             reeds off the mounds - research/questions/0061-reservoir-ponds-tameike.drawing.html: no reed or tint on a dike crest or a pond bank
             no-build marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: every marsh but a pond fringe is no-build ground
-            reed tile - CONVENTION: the drawn ground filled with the reed tile"""
+            reed tile - CONVENTION: the drawn ground filled with the reed tile
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (prefilter reach for crests near the box); 5 (keep-out grid slot id); 6 (keep-out grid slot id)
+            its figures from 0074 - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 1.5 (bare rim the reeds keep off the pond)
+        """
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")
         # THE RECORD SAYS WHAT THE INK SAYS (feature 150 T54 residue, settlement-review 2026-08-29). The
@@ -493,7 +509,9 @@ class WetGroundMixin:
         `defense` belt is exempt (its approach IS a causeway, and few constricted approaches are the point
         of it).
 
-        Research: ways stop short of the marsh - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: a way's ends walked back off the reeds, the defensive belt's causeway exempt"""
+        Research: ways stop short of the marsh - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: a way's ends walked back off the reeds, the defensive belt's causeway exempt
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 6 (way end counts as soaked within 6 px); 30 (shortest leg before dropping it); 24 (walk-back step)
+        """
         wet = marsh_ground(self.M, but=("defense",))
         if not wet or len(pts) < 2:  # a caller may hand over an already-clipped stub; there is nothing to walk back
             return pts
@@ -544,7 +562,10 @@ class WetGroundMixin:
             toe band edge - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: 90 ft above the local lowest field, smoothed over three stations
             toe band width - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: as wide as the fields plus 90 ft each side
             flaring flanks - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: part of the straight-band deviation, the band's ends bow outward downhill as seepage spreads
-            flare size - GUESS: each side out to 1.5 pad past the shoulder on a t**1.6 profile"""
+            flare size - GUESS: each side out to 1.5 pad past the shoulder on a t**1.6 profile
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 120 (bleed past the canvas edge)
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 24 (cross-slope station step floor); 0.2 (flank sample station); 0.4 (flank sample station); 0.6 (flank sample station); 0.8 (flank sample station)
+        """
         if down_deg is None:
             down_deg = self.M.get("meta", {}).get("down_deg", 90)
         polys = self.field_polys
@@ -636,7 +657,9 @@ def surface_water_dist(M: Any, x: float, y: float) -> float:
     NOT included: the caller asking "does this house need a well" must not have the answer
     pre-empted by the wells it is deciding to dig.
 
-    Research: watered by surface water - research/questions/0196-communal-wells-ido.drawing.html: canals, streams, the moat and the pond, never an irrigation ditch"""
+    Research: watered by surface water - research/questions/0196-communal-wells-ido.drawing.html: canals, streams, the moat and the pond, never an irrigation ditch
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel distance)
+    """
     # AN IRRIGATION DITCH IS NOT DOMESTIC WATER (ruled 2026-08-18; settlement-review, Sawada, found
     # the mechanism and did the research pass). This used to count `channels` too, and that made the
     # answer depend on WHICH MANIFEST KEY a watercourse happened to be recorded under rather than on

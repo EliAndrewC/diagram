@@ -109,6 +109,9 @@ def _meets_a_mark(end: tuple[float, float], reach: float, ms: list[Mark]) -> boo
 
 
 def _frame(svg: str) -> tuple[float, float, float, float] | None:
+    """Research:
+    its salts, guards and sentinels - NONE: they decide nothing about the place - 5 (regex group range)
+    """
     m = _VIEWBOX.search(svg)
     if not m:
         return None

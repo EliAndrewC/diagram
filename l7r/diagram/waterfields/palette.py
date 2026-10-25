@@ -44,6 +44,8 @@ def paddy_grain(ftpx: float, target_acres: float = PADDY_CELL_ACRES, aspect: flo
         basin area - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the target area in real feet, converted at the map's scale
         basin proportion - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a hamlet basin about 48 ft across its canal and 26 to 36 ft along it, about 0.65 - the village basin is about 47 ft square and the town's about 1.07, yet 0.66 is drawn at every tier, a departure the code keeps until feature 417 T34; along/across 0.66
         row variation - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: rows 26 to 36 ft along the canal, 31 ft give or take 16%; the row step +/-16% around its mean
+        its figures from 0005 - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 0.16 (row step ±16% (26 to 36 ft, so 31 ft ±16%))
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 43560 (square feet in an acre)
     """
     target_px2 = target_acres * 43560.0 / (ftpx * ftpx)
     across = math.sqrt(target_px2 / aspect)
@@ -143,6 +145,8 @@ def organic_parcel(
     Research:
         corners rounded - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: each corner filleted with its own reach on each leg, from all but square to a broad sweep, the arc roughened
         edges wander - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html, research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each straight run offset by eye, capped at `bow` of its length and a tenth of it
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 5 (most arc samples); 0.42 (keeps a corner cut inside its edge (validity guard)); 0.1 (a run's wander capped at a tenth of its own length (spike guard)); 0.8 (sample density of the arc)
+        its figures guessed on 0284 - GUESS research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: 0.18 (roughening of the arc (page gives no amount)); 0.12 (smallest corner fillet ("all but square")); 2.2 (largest fillet ("a broad sweep")); 0.7 (most likely fillet)
     """
     n = len(poly)
     if n < 3:

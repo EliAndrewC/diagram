@@ -132,7 +132,11 @@ def welded(u: Any) -> Any:
 
 
 def shared_length(a: Any, b: Any) -> float:
-    """How much of `a`'s outline runs along `b` (within 0.2 px) - 0 where shapely refuses the geometry."""
+    """How much of `a`'s outline runs along `b` (within 0.2 px) - 0 where shapely refuses the geometry.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (buffer tolerance)
+    """
     import shapely
 
     try:
@@ -226,7 +230,9 @@ class Fabric:
         40-household seed missed one (`soak/40-4.json`). The cells added since the index was built are kept (`late`) and asked
         by their box; a failing cell may now merge into a split part, and the union is judged by `verdict` as any other.
 
-        Research: neighbors by the shared bund - NONE: plumbing, the merge's order is `merge`'s claim"""
+        Research: neighbors by the shared bund - NONE: plumbing, the merge's order is `merge`'s claim
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (buffer tolerance)
+        """
         me = self.alive[i]
         owners = {j for jj in self.tree.query(me.buffer(0.2)) if (j := self.find(self.ids[int(jj)])) != i and j in self.alive}
         bx0, by0, bx1, by1 = me.buffer(0.2).bounds

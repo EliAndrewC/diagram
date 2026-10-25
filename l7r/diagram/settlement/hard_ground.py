@@ -32,6 +32,7 @@ class HardGroundMixin:
         Research:
             marsh is no-build - research/questions/0058-ground-too-wet-to-build-on.html: every drawn marsh polygon is hard ground
             crop and ditches are no-build - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a footprint may not touch a dry plot, nor come within the ditch's half-width plus 2 px
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 1.5 (field-ditch `w` fallback (comb ditches carry `w`))
         """
         dp, fd = self.M.get("dry_plots", []) or [], self.M.get("field_ditches", []) or []
         key = (len(dp), len(fd), len(self.hard_polys), len(self.wet_polys))

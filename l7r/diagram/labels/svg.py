@@ -35,7 +35,11 @@ def caption_svg(p: Placement, size: float, style: str, fill: str, kind: str = ""
 
 def leader_svg(p: Placement, size: float, stroke: str, kind: str = "", mark: bool = False) -> str:
     """The leader line for a placement that has one, else the empty string. `mark` tags it `data-leader="1"`, which is
-    how a placed hand-drawn sheet's leaders are told from its drawn lines."""
+    how a placed hand-drawn sheet's leaders are told from its drawn lines.
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.6 (thinnest leader stroke); 0.08 (leader stroke as a share of font size)
+    """
     if p.leader is None:
         return ""
     (x1, y1), (x2, y2) = p.leader

@@ -130,7 +130,11 @@ def _box(name: str, a: dict[str, str], dx: float, dy: float) -> tuple[float, flo
 
 @lru_cache(maxsize=16)
 def marks(svg: str) -> tuple[Mark, ...]:
-    """Every drawn element of the sheet in document order (definitions skipped), each with its kind and lineage."""
+    """Every drawn element of the sheet in document order (definitions skipped), each with its kind and lineage.
+
+    Research:
+        its cache size - NONE: a memo's size, which decides nothing about the place - 16
+    """
     out: list[Mark] = []
 
     def visit(node: Node, kind: str | None, lineage: tuple[str, ...], paint: dict[str, str], dx: float, dy: float) -> None:

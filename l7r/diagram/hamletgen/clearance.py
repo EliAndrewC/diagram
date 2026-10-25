@@ -161,6 +161,9 @@ class FabricIndex:
         # vertices. Seed 25's web stage: 1.19M `fouled` calls, 30.8M `seg_dist`, 35 of the roll's 51 s.
         # A RingIndex per polygon answers inside/margin from the edges near the point; verdicts are
         # unchanged (its docstring), `fouled_brute` remains the oracle.
+        """Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 16 (floor on the spatial-index cell)
+        """
         entries: list[tuple[int, Any, float, tuple[float, float, float, float]]] = []
         for group, gm in ((obstacles, margin), (tight, tight_margin)):
             for o in group:

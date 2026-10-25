@@ -86,6 +86,7 @@ class ToriiAvenueMixin:
             arches spread over the ascent - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: from 6% to 86% of its length, not 12 ft apart nor 12 ft off the hall
             ascent path width - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); an 8 px stroke, about 24 ft at a city's 3 ft/px
             ascent path centerline - CONVENTION: a dashed centerline and its color
+            its figures against 0220 - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 0.06 (arches spread from 6% to 86% of the ascent); 0.8 (arches spread from 6% to 86% of the ascent) - a departure the code keeps until feature 417 T35
         """
         seg = [math.hypot(ascent[i + 1][0] - ascent[i][0], ascent[i + 1][1] - ascent[i][1]) for i in range(len(ascent) - 1)]
         tot = sum(seg)

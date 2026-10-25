@@ -175,7 +175,9 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         a healing link kept - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); its ends within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), else the gap is left unjoined
         a link takes its way's width - CONVENTION
         the nearer end joined - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); of a run's two ends, the one nearer the network is the one joined to it
-        web lane width - research/questions/0081-village-lanes.drawing.html: a web lane drawn 3 ft wide, the footpath's tread"""
+        web lane width - research/questions/0081-village-lanes.drawing.html: a web lane drawn 3 ft wide, the footpath's tread
+        its figures guessed on 0081 - GUESS research/questions/0081-village-lanes.drawing.html: 0.6 (a run refused when over 60% shadowed)
+    """
     segs = _net_segs(s)
     if len(run) < 2:
         return False
@@ -414,7 +416,9 @@ def band_grow(gap: float) -> float:
     off the trees, the room counted once (feature 385 T98: grown by the whole 11 ft a side and then routed at the footpath's
     gap on top, the middle stood 18 ft off at 7 ft, and cohort seed 22's two linear farms had no lawful door path).
 
-    Research: the room off a grove counted once - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a 3 ft tread and 9.5 ft each side, the grow and the router's gap summing to it"""
+    Research: the room off a grove counted once - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a 3 ft tread and 9.5 ft each side, the grow and the router's gap summing to it
+        its figures from 0036 - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: 1.5 (half the footpath's tread)
+    """
     return max(0.0, 2.0 * (1.5 + GROVE_WORKING_ROOM_FT - gap))
 
 
@@ -570,7 +574,9 @@ def flank_doors(h: Mapping[str, Any]) -> list[Pt]:
     the gable) - on the grove's open side, so in practice a two-sided grove's (spec-fidelity's condition on FR-019's
     exception, 2026-09-30) - or none without a yard of its own.
 
-    Research: a flank door as fallback - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way runs outside the grove or through a gap in it to the house - a flank door is offered only on a side that faces no grove band, where the front has none"""
+    Research: a flank door as fallback - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way runs outside the grove or through a gap in it to the house - a flank door is offered only on a side that faces no grove band, where the front has none
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 0.7 (cosine (about 45 deg) for "faces a grove band"; 0036 gives the rule, not the angle)
+    """
     from l7r.diagram.settlement.rolling.access import doors_of
 
     g = h.get("geom") or {}
@@ -606,7 +612,9 @@ def route_from_door(door: Pt, q: Pt, hard: list[Poly], walls: Sequence[Poly], wa
 
     Research:
         door path off the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed `gap` (`FOOTPATH_FABRIC_GAP`, 7 ft) off the fabric, a footpath's middle 7 ft clear of a garden fence
-        a first leg out of the door's cell - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); one or two router cells (10-20 ft) stepped out of a boxed-in door before routing"""
+        a first leg out of the door's cell - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); one or two router cells (10-20 ft) stepped out of a boxed-in door before routing
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (eight compass directions (the step itself already GUESS T29 A2))
+    """
     path = _route(door, q, hard, walls, water, gap=gap)
     if len(path) >= 2:
         return path

@@ -146,6 +146,7 @@ def settle_tract_seams(plots: list[dict[str, Any]], theta0: float | None = None)
         turn kept to the two ways - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each tract along the contour or down to its outfall, leaned by up to TRACT_LEAN_RAD
         every seam reads - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a tract whose seam with an earlier neighbor would not read is turned whole
         hemmed-in tract joins a neighbor - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: it takes the closest neighbor's number and heading, a larger tract
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 0.025 (rotation search step); 64 (rotation search count)
     """
     ps = [p for p in plots if p.get("poly") and p.get("theta") is not None and p.get("tract") is not None]
     if len(ps) < 2:

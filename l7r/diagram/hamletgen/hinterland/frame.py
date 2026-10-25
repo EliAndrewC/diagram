@@ -44,7 +44,11 @@ def brook_beside_the_field(s: Settlement) -> list[tuple[float, float, float, flo
     flank (about 45 px on the pool), and is what lets the margin be wide enough not to fight the skirt. ONE body, read by
     `stage_frame` and by `scatter_frame`, because the scatter throws inside a PREDICTION of the frame and a reservation
     one of them did not know about is a view past the prediction (`test_no_shipped_hamlet_breaches_its_scatter_frame`,
-    which is how this was found)."""
+    which is how this was found).
+
+    Research:
+        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 6 (brook width if a record lacks w)
+    """
     from ..consts import BROOK_FRAME_MARGIN  # noqa: PLC0415 - kept beside its one use
 
     rings = [list(f.get("outline") or []) for f in s.M.get("fields") or []] + [list(d.get("poly") or []) for d in s.M.get("dry_plots") or []]
@@ -258,7 +262,11 @@ TITLE_GLYPH_KEYS = ("cemeteries", "religious", "shrines", "wells", "kosatsuba")
 def pocket_clear_of_features(pocket: tuple[float, float, float, float], M: Any, clearance: float) -> bool:
     """THE ONE PREDICATE of the title pocket's keep-clear (feature 287, water W58): the pocket (x0, y0, x1, y1), grown by
     `clearance` each way, meets no feature glyph's box (`TITLE_GLYPH_KEYS`, a record's `w`/`h` or its drawn radius) and
-    no torii (recorded as a bare point, its glyph about 38 x 28)."""
+    no torii (recorded as a bare point, its glyph about 38 x 28).
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 19 (torii glyph box half-width); 18 (torii glyph box below the point); 8 (default glyph radius (box height))
+    """
     # ...AND COVERS NOTHING THE SEATING RESERVED (feature 287 M8, `overlap/reserved.py`): no household's wood seat within the
     # copse's crown of it (the copse refuses a clump inside the pocket grown by its radius - cohort 1-60 lost 95 seats so)
     # and no access corridor through it
@@ -282,7 +290,12 @@ def clear_pocket_spot(s: Settlement, window: tuple[float, float, float, float], 
     """The first box of `w` x `h` in `window` (x, y, w, h), scanned as `title()` scans (`Settlement._blank_label_spot`: 22 px
     in from the window, a 24 px step, top to bottom and left to right), that clears every title obstacle AND keeps
     `clearance` from every feature glyph (`pocket_clear_of_features`) - the pocket search's own scan, so the keep-clear is
-    decided where the pocket is chosen (feature 287, water W58). None where no box does."""
+    decided where the pocket is chosen (feature 287, water W58). None where no box does.
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 22 (title scan inset (right))
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 24 (title scan y step)
+    """
     obs = s._title_obstacles(planned=planned)
     vx0, vy0, vw, vh = window
     y = vy0 + 22.0
@@ -310,7 +323,11 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
     (40 ft) from every feature glyph - 300 x 190 first (or the placard plus a margin, if larger), then the placard's own
     size plus a margin (`Settlement.placard_size`) - and where neither fits inside the content, a
     placard-sized box just outside it: above-left, above-right, below-left, then below-right. It is a reservation, not
-    a placement: `title()` still does its own search and may well sit somewhere else."""
+    a placement: `title()` still does its own search and may well sit somewhere else.
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 300 (title pocket width); 190 (title pocket height); 30 (content box pad on the sheet); 15 (smaller pocket margin, width); 14 (smaller pocket margin, height); 12 (placard + 6 px each side); 16 (outward label shift); 32 (outward label shift); 48 (outward label shift); 8 (outside pocket offset from content)
+    """
     # RESERVED ONCE (feature 150, Kuwabata seed 21): four callers ask for the pocket at four stages, and each
     # ask re-ran the blank-box search against the obstacles of ITS moment - the belt was dented around one
     # answer, the coppice kept out of another, and the frame's answer (after the crop, with the belt and the

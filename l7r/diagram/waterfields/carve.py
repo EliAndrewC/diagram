@@ -112,6 +112,9 @@ def _dry_fields(
         end plot split - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a dry plot's size - an end cell stretched past 1.35 plot widths by the snap to the canal's length is halved, at every grain
         off the water and the frame - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html, research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: held at 0.5 px of a supply stroke's painted edge, short of the page's bank (its half-width plus `CANAL_BERM_FT`) - at the bank the freed ground re-lays Inashiro's toe marsh with a sharp corner on open ground; the found row waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm
         keep-out and frame margin - NONE: a cell in a keep-out or within 12 px of the frame is dropped
+        its figures from 0006 - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 1.1 (default spread is "not steep", so tracts take both row directions; the value only has to be at least 0.3)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel fallback)
+        its figures guessed on 0006 - GUESS research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 0.45 (chance a plot re-rolls its crop instead of keeping its neighbor's)
     """
     plots = []
     plot = plot * g  # the along-canal parcel width and the 36px row depth below are REAL-FEET

@@ -26,6 +26,7 @@ def trees_off_the_treads(trees: Sequence[tuple[float, float, float, str]], lanes
     stand's, so a wood no lane reaches asks nothing.
 
     Research: no trunk on a lane's tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the Tang Code punished whoever planted or tilled a lane, and 0071 keeps groves off the main road
+        its figures from 0081 - research/questions/0081-village-lanes.drawing.html: 6 (lane width when a record has no w)
     """
     from ..homestead_parts.stands import trunk_on_tread  # noqa: PLC0415 - kept beside its one use
 
@@ -70,6 +71,7 @@ class TreeStandsMixin:
             no trunk on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the Tang Code punished whoever planted or tilled a lane, and 0071 keeps groves off the main road
             fringe crowns drawn outside the stand's outline - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a worked wood's shrubs were cut and its edge kept as grass - a fringe of advance growth is drawn outside the stand, a departure the code keeps until feature 417 T34; `_stand_fringe` outliers give the wood a soft edge; the 0080 drawing page is silent on a wood's fringe
             no crown under another's canopy - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown is never seated under another's canopy
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N8, 2026-10-25) - 0.18 (share of emergent crowns); 0.34 (share of conifers); 0.42 (share of conifers)
         """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
@@ -124,7 +126,11 @@ class TreeStandsMixin:
         """Every crown ALREADY RECORDED on the map (M['tree_crowns'], any stand or clump) that reaches into
         the box - the seed for a new stand's seating, so neighboring stands and the belt's overlapping
         clumps see each other's crowns. Checked per stand only, 53 of Inashiro's crowns still sat wholly
-        inside a crown of the NEXT clump (measured 2026-08-28)."""
+        inside a crown of the NEXT clump (measured 2026-08-28).
+
+        Research:
+            its figures from 0080 - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: 1.4 (reach padded by the largest crown)
+        """
         tc = self.M.get("tree_crowns") or []
         out: list[tuple[float, float, float]] = []
         pad = 2.0 * self.px(self.CANOPY_R_FT) * 1.4  # the largest crown either side of the box's edge (a 12 ft emergent just outside it was missed at the clump's own 9 px reach: 73 seats, 2026-08-28)
@@ -162,6 +168,8 @@ class TreeStandsMixin:
             thickets, not a sprinkle - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); a mask about five crowns across
             fringe crown size and conifer share - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); 0.55 to 0.95 of the radius, 30% conifer
             fringe tree spacing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); 1.15 x 1.7 steps, jittered 0.55 step
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N8, 2026-10-25) - 0.12 (thicket mask about 5 crowns across: 58% seeded, the rest at 0.12); 0.3 (fringe conifer share); 0.42 (thicket mask about 5 crowns across: 58% seeded, the rest at 0.12); 1.4 (thinning exponent away from the wood's edge); 5 (thicket mask about 5 crowns across: 58% seeded, the rest at 0.12)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 31 (jitter salt (thicket mask))
         """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]

@@ -246,7 +246,11 @@ def composition_plan(result: PlaceResult, margin_ft: float = DRAFT_MARGIN_FT) ->
     at `ox + x * FTPX` to the whole pixel), so the audit's grid measures - `coverage`, `perimeter_hugging_pct` - read the
     composition the way they read the drawn sheet. The point features the draft adds later (the bath and the
     privies) are not in it: they are seated around the masses and add built ground (measured on both generated drafts,
-    2026-09-29: the drawn sheet's coverage 1.2 points over the masses' alone)."""
+    2026-09-29: the drawn sheet's coverage 1.2 points over the masses' alone).
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (title band above the precinct)
+    """
     from .tools.pack_audit.parse import ParsedPlan, Rect
 
     assert result.envelope is not None, "place() records the envelope it placed in"
@@ -539,7 +543,13 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
 
     The parchment margin is the checklist's ~15-25 px (7 ft = 21 px; `viewbox_cropped` holds every
     sheet to it, the drafts included since feature 254); the top adds the title band and the scale bar. The compound is
-    drawn at the envelope its buildings were placed in (`PlaceResult.envelope`, feature 287 H29a)."""
+    drawn at the envelope its buildings were placed in (`PlaceResult.envelope`, feature 287 H29a).
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (posts caption font); 20 (title font; title 9 ft above the precinct); 11 (zone caption font); 9 (title font; title 9 ft above the precinct); 12 (scale bar 12 ft above the precinct); 0.8 (rack stroke); 0.6 (mat stroke); 5 (scale bar mid tick, end ticks); 45 (scale note label); 16 (scale bar label); 27 (scale note label); 6 (scale bar's obstacle box); 92 (scale bar's obstacle box); 30 (scale bar's obstacle box); 1.4 (post marker's obstacle box (0165: "a small marker")); 0.7 (post marker's obstacle box (0165: "a small marker"))
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 11.4 (caption box round both posts (their places ±0.7)); 14.4 (caption box round both posts (their places ±0.7)); 5.7 (caption box round both posts (their places ±0.7)); 13.3 (caption box round both posts (their places ±0.7)); 0.25 (text box descent/ascent per font size)
+        its figures guessed on 0165 - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: 14 (posts' places on the ground (±5 ft across, 14 and 27 ft in))
+    """
     if result.envelope is not None and result.envelope != program.envelope:
         program = replace(program, envelope=result.envelope)
     env = program.envelope
@@ -691,7 +701,11 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
 def _draw_buildings(result: PlaceResult, rect: Callable[..., str], caption: Callable[..., str], px: Callable[[float, float], tuple[float, float]], parts: list[str]) -> None:
     """Draw every placed building - its fill, its rooms, veranda and dais, its outline and its name - into `parts`, through
     `emit_svg`'s own `rect` and `caption` (lifted out of it by feature 370, the 100-statement cap; the same order, so the
-    same SVG and the same caption requests)."""
+    same SVG and the same caption requests).
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (dais caption font); 5 (name goes in a rear alley at least 5 ft wide); 6 (name fit margin, smaller font); 1.2 (veranda stroke); 7 (clerk caption font); 0.9 ("every room named" test for where the name goes); 0.25 (stable passage fill inset); 0.8 (stall stroke)
+    """
     ox, oy = px(0.0, 0.0)
     for p in result.placed:  # buildings
         fill, stroke = KINDS.get(p.spec.kind, KINDS["service"])
@@ -800,7 +814,11 @@ def _draw_walls_and_gates(
     parts: list[str],
 ) -> None:
     """Draw the compound wall, the court divider and every gate's posts into `parts`, each an obstacle to the captions
-    (lifted out of `emit_svg` by feature 370, the 100-statement cap; the same order, so the same SVG)."""
+    (lifted out of `emit_svg` by feature 370, the 100-statement cap; the same order, so the same SVG).
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 4.5 (half the 9 px wall stroke (WALL_INK_FT, 0092))
+    """
     # compound wall (4 segments; S wall broken by the gate) + divider - each in a `<g stroke=...>` group,
     # the authoring form the audit's gate-opening and divider readers parse (feature 254: the drafts are
     # swept by the gate like the hand-drawn sheets, so they are drawn the way the checks read)

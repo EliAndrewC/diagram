@@ -136,7 +136,11 @@ def _dais(p: Placed) -> Box:
 
 
 def _lattice(p: Placed) -> list[Box]:
-    """A cell's lattice front as (x1, y1, x2, y2) bars: 1.5 ft long, across its court face, every 2 ft along it."""
+    """A cell's lattice front as (x1, y1, x2, y2) bars: 1.5 ft long, across its court face, every 2 ft along it.
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (the same, on an east or west face)
+    """
     nx, ny, fx, fy, length = _face(p, _court_side(p))
     out: list[Box] = []
     for i in range(1, int(length / 2.0)):
@@ -204,7 +208,11 @@ def _hatch(env: Envelope, box: Box) -> Box | None:
 def _clerk_seats(dais: Box, side: str) -> list[Box]:
     """The two clerks' positions flanking a dais on the building's `side` (its court face), each 8 ft along the face
     and 5 ft deep, flush on that face and 2 ft off the dais (docs/buildings.md "Office hall": two clerk positions flanking
-    the dais; the size a GUESS, Ochiba's band drawn smaller)."""
+    the dais; the size a GUESS, Ochiba's band drawn smaller).
+
+    Research:
+        its figures guessed on 0099 - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: 5 (clerk seat depth)
+    """
     x, y, x2, y2 = dais
     if side in ("N", "S"):
         top = y2 - 5.0 if side == "S" else y
@@ -216,7 +224,11 @@ def _clerk_seats(dais: Box, side: str) -> list[Box]:
 def _mats(z: CourtZone) -> list[Box]:
     """The straw mats on a hearing court's floor (research buildings 440 'Who sat where at a hearing, and on what?'):
     the accused's, ~6 x 3 ft, at the center a third of the way in from the dais; the plaintiff's behind to one side and
-    the village officials' (12 ft, several kneeling) behind to the other - spacing a GUESS, as the hand sheets draw them."""
+    the village officials' (12 ft, several kneeling) behind to the other - spacing a GUESS, as the hand sheets draw them.
+
+    Research:
+        its figures guessed on 0099 - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: 16 (plaintiff's and officials' mats' places ("spacing … a GUESS")); 6 (plaintiff's and officials' mats' places ("spacing … a GUESS")); 9 (plaintiff's and officials' mats' places ("spacing … a GUESS")); 22 (plaintiff's and officials' mats' places ("spacing … a GUESS"))
+    """
     cx, fy = z.x_ft + z.w_ft / 2, z.y_ft + z.h_ft / 3
     return [(cx - 3.0, fy, cx + 3.0, fy + 3.0), (cx - 16.0, fy + 6.0, cx - 10.0, fy + 9.0), (cx + 10.0, fy + 6.0, cx + 22.0, fy + 9.0)]
 
@@ -262,7 +274,11 @@ FLUSH_PRIVY_GAP_FT: float = 1.5
 def _flush_privy(env: Envelope, p: Placed, boxes: list[Box], avoid: tuple[Box, ...]) -> Box | None:
     """A privy flush against the compound side wall a building's end stands by, just beyond the building on its court
     side - the service wall its pit is emptied through; None where the building stands by no side wall or the ground
-    is taken."""
+    is taken.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 5 (threshold for a building "standing by" a side wall)
+    """
     court = _court_side(p)
     face = WALL_INK_FT / 2 + WALL_FACE_CLEAR_FT  # a foot or two clear of the wall's face (feature 374 wave 134)
     reach = 5.0  # a building this near a side wall stands by it
@@ -396,7 +412,11 @@ def garden_well(env: Envelope, garden: CourtZone, taken: Sequence[Box]) -> tuple
     """The garden well's center: the first seat, from the garden's north-east corner westward along its north edge and
     then down its east edge, whose curb stands inside the garden and clear of everything already seated (`_is_clear`'s
     1 ft margin) - None where the garden holds no such seat (feature 287 wave 6, homes H29b: the well was stamped at the
-    corner whether or not the corner was free)."""
+    corner whether or not the corner was free).
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 1.35 (leftover arithmetic, (10 − 7.3)/2; the well itself SEARCHED-SILENT building-programs.md:37)
+    """
     lo, hi = garden.x_ft + WELL_HALF_FT + 1.35, garden.x2 - WELL_HALF_FT - 1.35
     top, bot = garden.y_ft + WELL_HALF_FT + 1.35, garden.y2 - WELL_HALF_FT - 1.35
     seats = [(hi - k, top) for k in range(int(hi - lo) + 1)] + [(hi, top + k) for k in range(1, int(bot - top) + 1)]
@@ -425,7 +445,11 @@ _CORNER_IN_FT = 1.5
 
 def beside_door_fracs(p: Placed, side: str, door: tuple[float, float]) -> tuple[float, ...]:
     """The fracs along `p`'s `side` face either side of the door centered at `door` (feet), nearest first, kept by the face:
-    where the draft seats a fire-water tub at its building's entrance (research 0100)."""
+    where the draft seats a fire-water tub at its building's entrance (research 0100).
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.15 (slack past a face's end)
+    """
     _nx, ny, fx, fy, length = _face(p, side)
     at = (door[0] - fx) if ny else (door[1] - fy)
     fracs = [(at + sign * d) / length for d in _BESIDE_DOOR_FT for sign in (-1, 1)]
@@ -439,7 +463,11 @@ def beside_door_fracs(p: Placed, side: str, door: tuple[float, float]) -> tuple[
 def round_the_corner(p: Placed, side: str, door: tuple[float, float]) -> list[tuple[str, float]]:
     """The seats round the corners of `p` beside its door on `side`: each face meeting `side`, at the end nearest `side`,
     `_CORNER_IN_FT` in - kept only where a tub 2.5 ft out stands by the door (`tub_by_its_door`). For a face too short to
-    seat a tub beside its door (a gatehouse's 12 ft end, feature 372 wave 106). (face, frac) pairs."""
+    seat a tub beside its door (a gatehouse's 12 ft end, feature 372 wave 106). (face, frac) pairs.
+
+    Research:
+        its figures guessed on 0100 - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2.5 (tub's distance off the face)
+    """
     out: list[tuple[str, float]] = []
     for adj in ("N", "S") if side in ("E", "W") else ("W", "E"):
         nx, ny, fx, fy, length = _face(p, adj)
@@ -483,7 +511,9 @@ def _shrine_tree(env: Envelope, result: PlaceResult, taken: list[Box]) -> tuple[
     Research:
         a tree beside the compound's shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: "Every compound our maps draw has one modest shrine, in a corner of its grounds beside a tree" - a household kept its god in a corner of its lot, at a small shrine or an old tree taken as its seat, and our maps give the compound's shrine the tree as well
         the tree's seat - GUESS: off the shrine's end face toward its wall, then the court face, the crown 2 ft clear of the hall; no source says on which side of a household's shrine its tree stood, or how near (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html)
-        the crown's size - GUESS: 20 ft across; no source sizes a household god's tree (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html)"""
+        the crown's size - GUESS: 20 ft across; no source sizes a household god's tree (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html)
+        its figures guessed on 0218 - GUESS research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: 0.85 (tree seats toward the corner); 0.15 (tree seats toward the corner)
+    """
     shrine = next((p for p in result.placed if p.spec.feature == "compound shrine"), None)
     if shrine is None:
         return None
@@ -510,7 +540,17 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     and the house's service part (feature 267): the bath as a small addition abutting the kitchen's court face (the
     kitchen itself is an ell the placer abuts to the house, `BuildingSpec.joins`). The placer arranges the wall-ranging masses; these follow them, each
     seated at the first spot along its building's court face that is CLEAR of every mass and of every
-    feature already seated - a draft swept by the gate carries the whole program, not the masses alone."""
+    feature already seated - a draft swept by the gate carries the whole program, not the masses alone.
+
+    Research:
+        its figures guessed on 0101 - GUESS research/questions/0101-privies-setchin.drawing.html: 7 (privy center off the building's face); 4.5 (privy center off the building's face); 3.5 (privy center off the building's face)
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (bath caption font); 1.5 (bath stroke)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 6 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 9 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 12 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 15 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 0.85 (fallback seat order along the court face); 0.15 (fallback seat order along the court face); 0.2 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.8 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.3 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.7 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.4 (fallback seat order along the court face); 0.6 (fallback seat order along the court face); 0.05 (fallback seat order along the court face); 0.95 (fallback seat order along the court face); 0.03 (fallback seat order along the court face); 0.97 (fallback seat order along the court face)
+        its figures guessed on 0105 - GUESS research/questions/0105-baths-furo.drawing.html: 20 (kitchen well as far as 20 ft out)
+        its figures guessed on 0196 - GUESS research/questions/0196-communal-wells-ido.drawing.html: 7.3 (well curb square)
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N13, 2026-10-25) - 3.65 (well boxes privies keep off)
+        its figures guessed on 0100 - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2.6 (as above); 2.5 (as above)
+    """
     env = program.envelope
     parts: list[str] = []
     taken: list[tuple[float, float, float, float]] = [(p.x_ft, p.y_ft, p.x2, p.y2) for p in result.placed]
@@ -714,7 +754,18 @@ def _draw_point_parts(
 ) -> None:
     """Draw the point features `_point_features` seated - the wells, the privies with their hatches, the fire-water
     tubs under one caption, and the notice board by the gate (lifted out of it by feature 370, the 100-statement cap;
-    same order, so the same ink and the same caption seats)."""
+    same order, so the same ink and the same caption seats).
+
+    Research:
+        its figures against 0190 - research/questions/0190-notice-boards-kosatsuba.html: 6 (caption box is the board's wrong size); 1.5 (caption box is the board's wrong size) - a departure the code keeps until feature 417 T33
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 7 (board caption font); 0.6 (board stroke); 1.2 (curb stroke); 0.8 (privy stroke)
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N13, 2026-10-25) - 7.3 (caption box is the curb); 3.65 (caption box is the curb)
+        its figures from 0090 - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 8 (board 8-14 ft west of the gate's edge)
+        its figures guessed on 0101 - GUESS research/questions/0101-privies-setchin.drawing.html: 5 (caption box is the privy); 2.5 (caption box is the privy)
+        its figures guessed on 0100 - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2.54 (tubs caption box); 1.27 (tubs caption box)
+        its figures from 0090's findings - research/questions/0090-magistrates-compounds-jinya-and-yamen.html: 14 (caption box at the board)
+        its figures against 0190's drawing page - research/questions/0190-notice-boards-kosatsuba.drawing.html: 4.5 (board's far edge (3 + 1.5 ft depth; the record draws 6 ft deep)) - a departure the code keeps until feature 417 T33
+    """
     depth = water_depth(seed)  # a generated draft records no landform: its water depth rolls from its name (0196's drawing page)
     for i, (cx, cy) in enumerate(wells, 1):
         parts.append(rect(cx - 3.65, cy - 3.65, 7.3, 7.3, "#9C8C70", "#5C4830", 1.2, "", "well"))
@@ -753,7 +804,10 @@ def _roji_parts(program: CompoundProgram, result: PlaceResult, taken: list[Box],
         stepping stones - GUESS: the walled garden path drawn as stepping stones of 2 x 1.33 ft (Hayakawa's form); the record names the path, not its stones
         shoe stone - GUESS: a 4 x 1.67 ft shoe stone at the veranda's edge, centered on the reception room, where the path arrives; the record names none
         gate seat - CONVENTION: the path starts 2.5 ft off the divider at the middle gate's midpoint and ends 2 ft out from the court face, keeping the stones clear of the walls
-        roji wherever a middle gate stands - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: drawn wherever the program has a middle gate and a reception room with a veranda; 0104 records two forms of a guest's arrival, the genkan (Takayama) and the roji (Koseki), and this code does not roll between them"""
+        roji wherever a middle gate stands - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: drawn wherever the program has a middle gate and a reception room with a veranda; 0104 records two forms of a guest's arrival, the genkan (Takayama) and the roji (Koseki), and this code does not roll between them
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.8 (shoe-stone stroke)
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N13, 2026-10-25) - 0.67 (stone half-depth)
+    """
     env = program.envelope
     mid = _middle_gate(env, result.placed)
     host = next((p for p in result.placed if p.spec.engawa_ft and any(r[0] == "reception room" for r in p.spec.rooms)), None)

@@ -200,7 +200,11 @@ class CaptionProbesMixin:
         self: Settlement, text: str, subject: Subject, p: Placement, size: float, italic: bool, weight: str, color: str, cls: ClsTag, markup: bool = False
     ) -> Placement:
         """Draw one caption where the placer put it - its words and its leader - and add it to the phase's index.
-        A caption whose seat was PROVED before the phase (the notice board's, labels L4) is drawn here verbatim."""
+        A caption whose seat was PROVED before the phase (the notice board's, labels L4) is drawn here verbatim.
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.6 (leader stroke); 0.08 (leader stroke)
+        """
         if self._label_index is None:
             self._label_index = self.label_obstacles()
         ref = subject_ref(subject, p)
@@ -227,7 +231,11 @@ class CaptionProbesMixin:
         caption group (the overlap taxonomy's `_LABEL_GROUP`; a `buildings` record its own `kind` word) so a caption
         naming that group may lie on it, and a civic record with a name of its own is marked `named` (FR-014). WAYS
         (500 each): the lanes, the road, the streams and the drawn channels, at their drawn half-widths. Ground cover,
-        fields and land parcels are free space and are not indexed at all."""
+        fields and land parcels are free space and are not indexed at all.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (tuple index); 26 (road fallback); 9 (stream fallback)
+        """
         obstacles: list[Obstacle] = []
         for key, recs in self.M.items():
             if key in LABEL_GROUND_KEYS or key == "labels" or not isinstance(recs, list):
@@ -281,7 +289,11 @@ class CaptionProbesMixin:
 
     def _defense_lines(self: Settlement) -> list[tuple[list[Pt], float]]:  # type: ignore[misc]
         """The rampart and the moat as closed polylines with their drawn half-widths - obstacles a caption must not lie
-        across (GM 2026-08-10: a caption on the wall reads as naming the defenses)."""
+        across (GM 2026-08-10: a caption on the wall reads as naming the defenses).
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 4.5 (wall half-width (no wall)); 22 (moat fallback)
+        """
         out: list[tuple[list[Pt], float]] = []
         wall = self.M.get("wall") or []
         if len(wall) >= 3:
@@ -305,7 +317,11 @@ class CaptionProbesMixin:
         self._label_queue.append(("field_name", (label, box)))
 
     def _draw_field_name_label(self: Settlement, label: str, box: tuple[float, float, float, float]) -> None:  # type: ignore[misc]
-        """Draw one queued field-name caption - the markup the field drawers used to emit inline, seated by the placer."""
+        """Draw one queued field-name caption - the markup the field drawers used to emit inline, seated by the placer.
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 15 (font size)
+        """
         x0, y0, x1, y1 = box
         self._draw_seated_caption(label, Subject("area", ((x0, y0), (x1, y0), (x1, y1), (x0, y1))), 15, False, "bold", "#33301E", None, markup=True)
 

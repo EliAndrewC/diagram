@@ -258,6 +258,9 @@ class _Thread:
         decay: float = 110.0,
         fallback: Poly | _Thread | None = None,
     ) -> None:
+        """Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 110 (thread relax distance)
+        """
         self.u0, self.f0 = u, f
         self.u = u
         self.drift = drift  # du/df at takeoff (from the ditch's dug heading)
@@ -299,7 +302,11 @@ def _at_f(F: _Frame, pts: Poly, f: float) -> Pt:
 
 
 def _f_at_u(F: _Frame, pts: Poly, u: float) -> float | None:
-    """Fall of a u-monotone polyline at contour coordinate u (clamped; None outside range)."""
+    """Fall of a u-monotone polyline at contour coordinate u (clamped; None outside range).
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 20 (range tolerance)
+    """
     uf = [F.to_uf(*p) for p in pts]
     us, fs = [q[0] for q in uf], [q[1] for q in uf]
     if not (min(us[0], us[-1]) - 20 <= u <= max(us[0], us[-1]) + 20):

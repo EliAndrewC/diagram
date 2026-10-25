@@ -45,7 +45,11 @@ def torii_glyph_dims(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, 
 def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, float]:
     """True drawn half-extents (x half-width, y-up, y-down) of a `_torii` glyph at scale `ftpx`, plus a small
     stroke pad - used to FRAME torii (`content_view`) and to keep captions and neighbors off them. Follows
-    `torii_glyph_dims`: the beam spans +/-s2 and the glyph's depth is its post side, centered on the seat."""
+    `torii_glyph_dims`: the beam spans +/-s2 and the glyph's depth is its post side, centered on the seat.
+
+    Research:
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N12, 2026-10-25) - 16 (torii span, live via `registry.py:135`; T29 P7's 2.5 to 5.87 m brackets 16 ft)
+    """
     s2, _beam, post, _p2 = torii_glyph_dims(ftpx, span_ft)
     pad = 2.0  # stroke half-width + a hair, so the frame never clips the vermilion
     return s2 + pad, post / 2 + pad, post / 2 + pad
@@ -59,7 +63,11 @@ def wall_runs(M: Manifest) -> list[tuple[str, Poly, float]]:
     ward fence (plus the short wall-stroke caps where it abuts the rampart), and the perimeter of
     every walled compound - manor, governor's mansion, merchant estate, mausoleum. The half-widths
     are the DRAWN stroke half-widths (city_wall's 11 px rampart, ward's 5 px fence and 11 px cap,
-    each compound's recorded wall_w), so the test is against the ink actually on the page."""
+    each compound's recorded wall_w), so the test is against the ink actually on the page.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 5.5 (rampart and wall-cap stroke half-width (no wall written)); 2.5 (ward-fence stroke half-width (no wards written))
+    """
     runs: list[tuple[str, Poly, float]] = []
     ring = M.get("wall")
     if ring:

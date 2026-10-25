@@ -115,7 +115,11 @@ def lane_breaches(s: Any, every: bool = False) -> dict[int, list[str]]:
 def foul_part(p: Any, w: float, houses: Any, yards: Any, solid: Any, fixtures: Any, M: Any, owner: Any = None) -> str:
     """Which part of `fouled_segment` a fouling lane breaks, for a refusal (feature 385 T03, plan D16): seed 21's five lanes
     were refused for `fabric` while none came within 2.9 ft of anything in the manifest - the fence gap, a farmhouse, a
-    building, a fixture or the overlap matrix (with the standing keys it names) each says where to look."""
+    building, a fixture or the overlap matrix (with the standing keys it names) each says where to look.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.4 (widening for a diagnostic matrix query (names the reason))
+    """
     if fouled_segment(p, w, houses, yards, solid, owner=owner) is not None:
         if any(house_hit([a, b], w, houses) for a, b in zip(p, p[1:], strict=False)):
             return "on a farmhouse"

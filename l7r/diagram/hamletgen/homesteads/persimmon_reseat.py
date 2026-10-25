@@ -103,7 +103,9 @@ def give_way(s: Settlement, x: float, y: float, r: float, bands: Sequence[Sequen
     `r`: from the drawing (its clump's circle), from the record of crowns (`tree_crowns`) and from the conifers' list; the
     number taken out.
 
-    Research: the grove gives way round it - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the grove's trees give way round the farm's persimmon, wholly - no crown's edge under its disc, as the seating's grove gives way"""
+    Research: the grove gives way round it - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the grove's trees give way round the farm's persimmon, wholly - no crown's edge under its disc, as the seating's grove gives way
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (float tolerance, matching an SVG circle)
+    """
 
     def under(cx: float, cy: float, cr: float) -> bool:
         return in_bands(cx, cy, bands) and math.hypot(cx - x, cy - y) < cr + r + 0.2

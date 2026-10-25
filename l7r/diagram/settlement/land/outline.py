@@ -56,7 +56,11 @@ SIMPLIFY_FT = 1.0
 def natural_outline(poly: Any, seed: int, bs: float = 1.0) -> list[tuple[float, float]]:
     """`poly`'s outline rounded and waved - within `poly` (the module's note). The wave's four lengths and phases are rolled from
     `seed` (a lead, two slower ones, `WAVE_LEAD_FT`, and a short one, `WAVE_SHORT_FT`); each length is fitted to a whole number of waves round the outline, so it closes without a step. Returns the shaped
-    exterior, or `poly` itself where shapely cannot read it as an area."""
+    exterior, or `poly` itself where shapely cannot read it as an area.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 12 (fewest wave sample points); 5 (smallest rounding radius the search tries); 8 (buffer curve resolution)
+    """
     import numpy as np
     from shapely.geometry import Polygon
     from shapely.geometry.polygon import orient

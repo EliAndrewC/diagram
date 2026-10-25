@@ -213,7 +213,9 @@ def _field_archetype_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
 def _toward(frm: Pt, to: Pt, dist: float) -> Pt:
     """A point `dist` along the way from `frm` to `to`, never past 45% of the run - so a fillet leg
     piled onto a short plot edge still leaves that edge with a middle.
-    Research: geometry - NONE"""
+    Research: geometry - NONE
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.45 (leg cap ("geometry - NONE"))
+    """
     vx, vy = to[0] - frm[0], to[1] - frm[1]
     ln = math.hypot(vx, vy) or 1.0
     dd = min(dist, ln * 0.45)
@@ -470,6 +472,8 @@ def skeleton_layout(kind: str, cx: float, cy: float, ex: float, ey: float) -> di
         skeleton shapes - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y, cross, waterside
         headman at the skeleton's focal point - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the head, the T-junction, the fork, a quadrant by the cross, the water
         gateway at the low foot - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the downslope end of the skeleton
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N12, 2026-10-25) - 0.4 (headman's quadrant at the cross); 0.2 (Y fork and headman, 0.2 down); 0.12 (headman near a spine's head); 0.22 (headman's quadrant at the cross)
+        its figures guessed on 0031 - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 0.7 (spread of the Y's arms)
     """
     top, bot = cy - ey, cy + ey
     if kind == "spine":  # one lane along the margin; headman at the high HEAD, gateway at the low foot
@@ -588,7 +592,9 @@ def bridge_carried_ways(M: Any) -> list[tuple[Any, float]]:
     case that shows it guarantees AGREEMENT, not CORRECTNESS. Re-adding the missing keys on both
     sides would have reproduced exactly the same silent symmetry the next time a key was added, so
     the sets are derived ONCE, here, and consumed by both.
-    Research: the ways a bridge may carry - NONE: every recorded way, with fallback widths"""
+    Research: the ways a bridge may carry - NONE: every recorded way, with fallback widths
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 30 (road fallback (claim: "with fallback widths - NONE")); 26 (roads fallback); 8 (ring-road fallback); 6 (lane fallback (lanes carry `w`))
+    """
     carried: list[tuple[Any, float]] = []
     if M.get("road"):
         carried.append((M["road"], M.get("road_width", 30)))
@@ -606,7 +612,9 @@ def bridge_carried_ways(M: Any) -> list[tuple[Any, float]]:
 def bridge_crossed_waters(M: Any) -> list[tuple[Any, float]]:
     """Every WATERCOURSE a way may have to be carried over, as (points, width). See
     `bridge_carried_ways` for why both sides read this one function.
-    Research: the waters a way may cross - NONE: every recorded watercourse but an undrawn conduit"""
+    Research: the waters a way may cross - NONE: every recorded watercourse but an undrawn conduit
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 9 (stream fallback (streams carry `w`)); 4.2 (channel and field-ditch fallback (both carry `w`)); 12 (canal fallback (no producer)); 22 (moat fallback); 40 (river fallback (no producer)); 8 (aqueduct fallback); 26 (castle-moat fallback)
+    """
     waters: list[tuple[Any, float]] = []
     for s in M.get("streams", []):
         waters.append((s["poly"], s.get("w", 9)))
@@ -719,7 +727,9 @@ def crop_boxes(M: Any, city: bool, ftpx: float, W: float, H: float) -> list[tupl
     the same manifest source). The two crops take DIFFERENT sets by design - a city frames on
     its moat ring, satellites and labels while its paddy fans and farmhouses clip at the edge -
     so the `city` flag selects which.
-    Research: what sets the frame - CONVENTION: hard features, torii, row streets, fields, the pond, the belt's face and house shelter, a forest's reveal"""
+    Research: what sets the frame - CONVENTION: hard features, torii, row streets, fields, the pond, the belt's face and house shelter, a forest's reveal
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 5 (tuple index)
+    """
     from .core import Settlement  # lazy: runtime class-attr read, import cycle otherwise
 
     out: list[tuple[float, float, float, float, str]] = []

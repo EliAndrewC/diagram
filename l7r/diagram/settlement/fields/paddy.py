@@ -118,7 +118,9 @@ def rest_plots(cands: Sequence[tuple[Sequence[Pt], float]], rng: random.Random, 
 
     Research:
         rest weighting and spacing - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: favoring the far end of the fall, kept apart
-        rest basin floor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); no basin smaller than the median candidate rests"""
+        rest basin floor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); no basin smaller than the median candidate rests
+        its figures guessed on 0013 - GUESS research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: 0.05 (least weight at the near end)
+    """
     if not cands:
         return []
     areas = [_ring_area(r) for r, _f in cands]
@@ -149,7 +151,9 @@ class PaddyMixin:
     def _taxfree_plots(self: Settlement, interior: Any, taxfree: int) -> None:  # type: ignore[misc]
         """Mark `taxfree` scattered interior paddy plots vermilion (a priestess's / temple's tax-free land).
 
-        Research: tax-free plot ink - research/questions/0231-temple-fields-jochi.drawing.html: a vermilion tint and outline, spread across the field"""
+        Research: tax-free plot ink - research/questions/0231-temple-fields-jochi.drawing.html: a vermilion tint and outline, spread across the field
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 40 (sort bin for spreading)
+        """
         if not interior:
             return
         interior = sorted(interior, key=lambda t: (round(t[2] / 40), t[1]))  # spread them across the field
@@ -175,7 +179,9 @@ class PaddyMixin:
 
         Research:
             unruled shoots - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a sparse random scatter, or a jittered grid at `pitch`
-            flooded sheen - CONVENTION: two pale lines on a flooded plot"""
+            flooded sheen - CONVENTION: two pale lines on a flooded plot
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 22 (shoot-dot cap); 0.1 (grid dropout); 80 (px² per shoot dot)
+        """
         xs = [q[0] for q in poly]
         ys = [q[1] for q in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
@@ -209,6 +215,8 @@ class PaddyMixin:
             dry rows - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a dry plot drawn in ridged rows at a random angle per plot
             row spacing - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 13 px
             row ink - CONVENTION: dashed olive 0.8 stroke
+            its figures against 0006 - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 0.6 (random row angle per plot, ±34°) - a departure the code keeps until feature 417 T34
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.85 (row opacity)
         """
         xq = [p[0] for p in quad]
         yq = [p[1] for p in quad]
@@ -258,7 +266,10 @@ class PaddyMixin:
         grazing on it (`PADDY_REST`). Recorded in `fallow_patches` with its ring and its `field` (`rest_record`), and counted
         in `meta.paddy_rested`. Only a basin `resting_plots` offered - one the registry admits - is rested.
 
-        Research: resting plot drawn - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: a whole basin of grass with tufts of grazing"""
+        Research: resting plot drawn - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: a whole basin of grass with tufts of grazing
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (seed multiplier); 13 (seed multiplier)
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 900 (tufts per px² (decoration))
+        """
         from l7r.diagram.waterfields import AZE
 
         pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)
@@ -300,7 +311,12 @@ class PaddyMixin:
             canal widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: main 3.3, drain 3.0, lateral 2.0, feed and outfall 2.6 px, untapered
             each plot's green - CONVENTION: picked at random from RICE_GREENS, three near-identical greens of rice at one stage, so the paddy reads as one crop
             row bunds staggered - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a bund that steps a few feet sideways and carries on parallel is not drawn, under about 30 ft - rows rolled per column stagger the row bunds a few feet across each column bund, a departure the code keeps until feature 417 T34; row boundaries rolled per column, so row bunds stagger between columns
-            ripe share - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 2.5% of rice plots ripe"""
+            ripe share - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 2.5% of rice plots ripe
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 52 (outline wobble); 0.6 (how near the edge a plot goes dry); 0.62 (dry grain vs soy share); 0.08 (edge-dryness jitter)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 6.28 (2π); 7 (seed multiplier); 13 (seed multiplier); 1.7 (phase decorrelation)
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 0.55 (last-column threshold); 14 (lateral sampling step)
+            its figures from 0009 - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 0.3 (flooded share near the ditches); 0.975 (ripe share)
+        """
         outline, bbox = _wf_outline(shape, amp)
         x0, y0, x1, y1 = bbox
         smoothed = smooth_points(outline)
@@ -434,7 +450,9 @@ class PaddyMixin:
         Research:
             feed and outfall's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: each channel 2.6 px, a pond feeder at roughly twice the floor
             feed and outfall's seat - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the main fed from the source at its nearest point 11 px or more inside the field, the drain emptied at its point nearest the outlet
-            feed and outfall meander - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); each channel drawn with an 8 px meander (`amp=8`)"""
+            feed and outfall meander - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); each channel drawn with an 8 px meander (`amp=8`)
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 14 (fallback interior clearance)
+        """
         x0, y0, x1, y1 = bbox
         safe = [(t[1], t[2]) for t in interior if edge_dist(t[1], t[2], smoothed) >= 14] or [((x0 + x1) / 2, (y0 + y1) / 2)]
         msafe = [q for q in main_pts if edge_dist(q[0], q[1], smoothed) >= 11] or main_pts or safe
@@ -468,7 +486,10 @@ class PaddyMixin:
         endpoints jut outside, then smoothed to kill the acute turns a sharply bending boundary
         would otherwise put in them.
 
-        Research: main and drain - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: along the high and low boundaries, 0.7 of a plot inside"""
+        Research: main and drain - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: along the high and low boundaries, 0.7 of a plot inside
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 6 (boundary scan step); 11 (sampling step)
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 1.4 (depth a field needs to carry a main and a drain)
+        """
         us = [min(ous) + i * 11 for i in range(int((max(ous) - min(ous)) / 11) + 1)] + [max(ous)]
         main_pts: list[Pt] = []
         drain_pts: list[Pt] = []

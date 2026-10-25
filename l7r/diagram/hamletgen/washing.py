@@ -75,6 +75,9 @@ def passing_courses(M: Mapping[str, Any]) -> list[tuple[list[Pt], float]]:
     stream or ditch that passes the houses, the shared footing "on the channel or stream bank".
 
     Research: a stream, a ditch or a channel - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: where a stream or ditch passes the houses, a shared one on the channel or stream bank
+        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 9 (fallback stream half-width base)
+        its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 6 (fallback channel width); 1.5 (fallback field-ditch width)
+        its figures from 0031 - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 2.5 (fallback farm-channel width)
     """
     out = [([(float(a), float(b)) for a, b in st["poly"]], float(st.get("w", 9.0)) / 2.0) for st in M.get("streams") or [] if len(st.get("poly") or []) >= 2]
     out += [([(float(a), float(b)) for a, b in c["poly"]], float(c.get("w", 6.0)) / 2.0) for c in M.get("channels") or [] if len(c.get("poly") or []) >= 2]
@@ -177,7 +180,9 @@ def each_house_places(s: Settlement, M: Mapping[str, Any]) -> list[dict[str, Any
 
     Research:
         one step at each house on the channel - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: where a channel runs past the houses, one step at each house on it
-        slid at most 16 ft - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); a step in its own dooryard, so no farther along the channel than 16 ft"""
+        slid at most 16 ft - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); a step in its own dooryard, so no farther along the channel than 16 ft
+        its figures from 0031 - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 2.5 (fallback farm-channel width at the step)
+    """
     out: list[dict[str, Any]] = []
     for ch in M.get("farm_channels") or []:
         pts = [(float(a), float(b)) for a, b in ch.get("poly") or ch.get("pts") or []]
@@ -199,7 +204,9 @@ def each_house_places(s: Settlement, M: Mapping[str, Any]) -> list[dict[str, Any
 def draw_washing_place(s: Settlement, rec: Mapping[str, Any]) -> None:
     """A footing of pale stone with its steps: a small quad turned to the bank, two step lines across it.
 
-    Research: drawn as a stone footing - CONVENTION: a pale stone quad with step lines, the footing's real size"""
+    Research: drawn as a stone footing - CONVENTION: a pale stone quad with step lines, the footing's real size
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (step lines at plus and minus one sixth of the footing)
+    """
     x, y, w, h, rot = float(rec["x"]), float(rec["y"]), float(rec["w"]), float(rec["h"]), math.radians(float(rec["rot"]))
     ux, uy, nx, ny = math.cos(rot), math.sin(rot), -math.sin(rot), math.cos(rot)
 

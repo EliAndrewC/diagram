@@ -179,7 +179,11 @@ def household_reach(s: Settlement, q: Pt, largest: tuple[float, float]) -> Reach
     well pocket), its own house from the lot's size ladder and its own kura (`_try_place_bundle`'s reading of the lot), the
     rolls keyed on `q` as the seat search keys them; taken down after (`seat_parts_done`). A household with no lot (no lots
     installed) is taken at the largest house the roll can take, the kura reserved. The fixtures are sought round the
-    household's OWN walls, so no larger house bounds them (measured, research R9) - the household's own envelope does."""
+    household's OWN walls, so no larger house bounds them (measured, research R9) - the household's own envelope does.
+
+    Research:
+        its figures from 0029 - research/questions/0029-farmhouses-minka.drawing.html: 46 (base house 46 x 28 ft); 28 (base house 46 x 28 ft)
+    """
     lot = household_parts(s, q[0], q[1], "plain", None)[0]
     try:
         hw, hh, shed = (s.px(46) * lot[0], s.px(28) * lot[1], bool(lot[2])) if lot is not None else (largest[0], largest[1], True)
@@ -203,7 +207,11 @@ def seat_refused(s: Settlement, q: Pt, house: tuple[float, float]) -> bool:
 
 def next_house(s: Settlement, largest: tuple[float, float]) -> tuple[float, float]:
     """The house (w, h) the next plain household will build: its lot's rung of the size ladder (`household_parts` reads the
-    same lot), or the largest the roll can take where no lots are installed."""
+    same lot), or the largest the roll can take where no lots are installed.
+
+    Research:
+        its figures from 0029 - research/questions/0029-farmhouses-minka.drawing.html: 46 (base house 46 x 28 ft); 28 (base house 46 x 28 ft)
+    """
     lots = getattr(s, "_lots", None)
     k = sum(1 for h in s.M["houses"] if h.get("kind") == "plain")
     lot = lots.lot(k) if lots is not None else None
@@ -302,6 +310,7 @@ def grow_jitter(ndir: int) -> float:
     """The direction jitter, degrees either way, at `ndir` directions: `GROW_JITTER_DEG` at eight, scaled with the step.
 
     Research: direction jitter - GUESS: scaled with the step, so neighboring directions never cross
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 8 (reference direction count for jitter scaling)
     """
     return GROW_JITTER_DEG * 8.0 / ndir
 
@@ -312,6 +321,7 @@ def grow_level(level: int) -> tuple[int, tuple[float, ...]]:
     radius stops it).
 
     Research: the growth's widening past the table - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); a ring half the least distance further each level, a search breadth
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 16 (search directions past the table (already GUESS T29 B))
     """
     if level < len(GROW_LEVELS):
         return GROW_LEVELS[level]

@@ -87,6 +87,9 @@ class AccessTree:
     __slots__ = ("_along", "_targets", "bars", "grid", "half", "routed", "segs", "tried")
 
     def __init__(self, half: float) -> None:
+        """Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 128 (spatial-index cell)
+        """
         self.half = half
         self.segs: list[tuple[Pt, Pt]] = []
         self.grid = PointGrid(128.0)

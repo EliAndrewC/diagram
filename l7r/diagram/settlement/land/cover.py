@@ -55,7 +55,9 @@ def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
     """The settlement's scrub keep-out as rings: each farmstead's own outline - its house and the parts nearest it -
     grown by `margin`, and the outline of each pair of farmsteads within `FARMSTEAD_NEIGHBOR_FT` (feature 261).
 
-    Research: no scrub among the farmsteads - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); each farmstead and its parts, and each near pair, grown by the margin"""
+    Research: no scrub among the farmsteads - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); each farmstead and its parts, and each near pair, grown by the margin
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 45 (angle step growing each point by the margin (octagon))
+    """
     hs = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or [] if "x" in h]
     if not hs:
         return []
@@ -295,7 +297,9 @@ class GroundCoverMixin:
         Research:
             off the crops - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: every paddy and dry plot padded by the crop margin
             off the treads - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P8, 2026-10-25); 4 ft of bare verge along every lane, street and road
-            off the channels - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: the cut-bank margin off every irrigation channel, streams at their drawn width"""
+            off the channels - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: the cut-bank margin off every irrigation channel, streams at their drawn width
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N11, 2026-10-25) - 14 (crop keep-out prefilter reach, the tallest pine's tip)
+        """
         bs = self.bscale
         halo_rects, halo_circles = self._urban_keepouts(box)  # the urban-clearance halo (see _urban_keepouts)
         corridors = self._corridor_buffers(
@@ -403,7 +407,10 @@ class GroundCoverMixin:
             a scrub pine's height - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: grass with thin low pine - drawn 9 to 14 ft, under 0038's least drawn tree of 10 m, a departure the code keeps until feature 417 T34; 9 to 14 ft (`random.uniform(9, 14) * bs`); no page gives a scrub pine's height
             claimed but undrawn - CONVENTION: a bare render records the ground and draws nothing
             woodland no-build - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a woodland parcel made no-build ground
-            no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
+            no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 3.6 (pine glyph branch length); 1.1 (pine trunk stroke width); 0.45 (pine glyph first branch height); 0.25 (pine glyph branch spacing up the trunk)
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N11, 2026-10-25) - 6000 (one pine throw per 6,000 sq ft)
+        """
         # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to
         # show ... small pine trees and such growing out of the marshland in exactly the same pattern as
         # ... outside of the marshland? my guess is that that is a mistake"*). It was: only the toe-side
@@ -649,7 +656,9 @@ class GroundCoverMixin:
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
             woodland stocked to read - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a woodland parcel carries at least `WOODLAND_MIN_CROWNS` (5) crowns, so it reads as a wood
             crowns thin to the wood's edge - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a throw within the feather of the parcel's edge is kept with chance (d / feather) ** 0.6
-            no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
+            no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 6 (throw cap, six times the crown target)
+        """
         x0, y0, x1, y1 = box
         _wd_crowns = 0
         # A TARGET, NOT AN ATTEMPT COUNT (settlement-review x3, 2026-08-18 round 2 - Inashiro,
@@ -763,7 +772,10 @@ class GroundCoverMixin:
             scrub ring - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: scrub on the frame strips round the cultivated ground and the toe's flank
             interior voids grazed - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the ground a fan leaves inside its own box clothed as rough grazing
             no cover among the houses - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); 44 px round each farmstead, or each homestead on a dispersed map
-            woodland per map - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the coppice patches added by the generator, not here"""
+            woodland per map - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the coppice patches added by the generator, not here
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 120 (scrub band bleed past the canvas edge)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (fallback footprint width); 30 (fallback footprint height)
+        """
         if down_deg is None:
             down_deg = self.M.get("meta", {}).get("down_deg", 90)
         polys = self.field_polys

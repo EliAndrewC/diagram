@@ -21,7 +21,12 @@ class WaterClipMixin:
         extend one that sits just outside (the sluice foot) - so its bed straddles the rim and COVERS it at
         the mouth: a clean JOIN, without the channel drawing a colored line across the open water. No-op
         when there is no pond. (The rim renders in the water EDGE layer, below every bed, so the covering
-        works.)"""
+        works.)
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 24 (bisection count)
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 1.35 ("just outside the rim" tolerance)
+        """
         p = self.M.get("pond")
         if not p:
             return pts
@@ -62,7 +67,11 @@ class WaterClipMixin:
         the open moat water. `capr` is the stroke's CAP RADIUS (half the drawn width): the round
         linecap inks that far PAST the endpoint, so the inset must back off by it - without this a
         7px tap's mouth plunged to ~4px of the moat centerline and read as a foreign line crossing
-        half the band (GM 2026-07-23, Tango). No-op when there is no moat."""
+        half the band (GM 2026-07-23, Tango). No-op when there is no moat.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 22 (moat fallback)
+        """
         moat = self.M.get("moat")
         if not moat or len(pts) < 2:
             return pts
@@ -106,7 +115,11 @@ class WaterClipMixin:
         """Snap a channel endpoint that meets the RIVER onto the river bed's edge - the same clean
         confluence `_clip_to_moat` gives a moat tap (added 2026-07-23 with the mouths-not-crossings
         rule: Nagahara's fne1 tap started ON the Hayakawa centerline and drew across the half-band).
-        No-op when there is no river."""
+        No-op when there is no river.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (river fallback)
+        """
         rv = self.M.get("river")
         if not rv or not rv.get("pts") or len(pts) < 2:
             return pts
@@ -161,7 +174,11 @@ class WaterClipMixin:
         bank still printed a rounded plug of its own bed colour inside the receiving stream - a bead across
         the joint, which is the opposite of the GM's "water just flows". `_clip_to_moat` and `_clip_to_river`
         have pulled their endpoints back by `capr` since they were written; a stream confluence simply never
-        got the argument, and the caller passed it to those two and not to this one."""
+        got the argument, and the caller passed it to those two and not to this one.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel); 4.5 (initial value, overwritten); 9 (stream fallback)
+        """
         streams = self.M.get("streams", [])
         if not streams or len(pts) < 2:
             return pts
@@ -239,6 +256,7 @@ class WaterClipMixin:
             bends swept - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: filleted at 2.5 channel widths
             taper along the run - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: w0 to w1 by the square-root law
             ditch class - NONE: the caller's, from the record's role
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (taper tolerance)
         """
         pts = self._clip_to_stream(self._clip_to_river(self._clip_to_moat(self._clip_to_pond(pts), capr=max(w0, w1) / 2), capr=max(w0, w1) / 2), capr=max(w0, w1) / 2)
         # ROUND THE BENDS: an earthen ditch turns on a swept curve, never a mitred corner (see

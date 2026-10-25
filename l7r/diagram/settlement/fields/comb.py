@@ -206,7 +206,10 @@ class CombMixin:
                 own, a quarter of corners left bare
             how far a pile swells - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); each fillet bulges 0.15-0.45 of its chord into the basin (405 T127)
             only where bunds cross - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); only a node where three or more plot corners meet is piled; T-stubs and field-edge corners
-                are left bare (405 T127)"""
+                are left bare (405 T127)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 16 (hex base of the seed hash); 0.25 (Bézier sample point); 0.75 (Bézier sample point)
+            its figures from 0284 - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: 1.1 (pile floored just above the drawn bund width)
+        """
         from l7r.diagram.waterfields import AZE, aze_w
 
         cells: dict[tuple[int, int], list[list[tuple[float, float] | list[tuple[int, int]]]]] = {}
@@ -640,7 +643,9 @@ class CombMixin:
             ditch net over the paddies - CONVENTION: drawn in the late block, ring trunk last
             drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a dug drain run curving out of the collector at most 55 degrees a turn, then down the fall off the map at the collector's tail width
             outfall corridor - research/questions/0058-ground-too-wet-to-build-on.drawing.html: 33 ft no-build either side of the outfall run on town and city maps; a hamlet or village relies on the below-the-drain rule
-            outfall recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at the width it is inked, the drain's tail width"""
+            outfall recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at the width it is inked, the drain's tail width
+            its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 5.5 (fallback outfall width)
+        """
         # The ditch net ALWAYS goes to the LATE water block (GM 2026-07-21: Hoshizora's canals
         # "rendering below the rice paddies"). In the shared block - anchored at the FIRST water
         # call - the net composites UNDER any plots painted after that anchor: a town/city stream
@@ -689,7 +694,11 @@ class CombMixin:
 
     def _comb_record_field(self: Settlement, net: dict[str, Any], name: str) -> None:  # type: ignore[misc]
         """Assemble and append this fan's M['fields'] record: envelope, per-plot dims, drain-hem rings,
-        plot rings in draw order and the bead points."""
+        plot rings in draw order and the bead points.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 30 (manifest band for recording plots near the drain)
+        """
         env = [[round(x, 1), round(y, 1)] for x, y in net["envelope"]]
         exs, eys = [p[0] for p in env], [p[1] for p in env]
         pvx = [v[0] for p in net["plots"] for v in p["poly"]]
@@ -792,7 +801,11 @@ class CombMixin:
         shipped a ditch whose last two points are identical, and on two of them the whole record WAS that duplicate
         plus a lead: Inashiro's was 3.2 ft of "main" and Mizuguchi's 21.9, each drawn as its own stroke, each a hover
         region a reader could meet, each reading on the sheet as a blunt stub of ditch stopping in the bare hem. What
-        is dropped here is only ink nothing is losing: a run under a foot has no course to show."""
+        is dropped here is only ink nothing is losing: a run under a foot has no course to show.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (duplicate-point tolerance)
+        """
         for c in net["channels"]:
             _pts = [q for i, q in enumerate(c["pts"]) if i == 0 or math.dist(q, c["pts"][i - 1]) > 0.05]
             rec = {"poly": [[round(x, 1), round(y, 1)] for x, y in _pts], "role": c["role"], "field": name, "w": round(c["w"], 1), "w_tail": round(c.get("w_tail", c["w"]), 1)}
@@ -813,7 +826,9 @@ class CombMixin:
             feed joins the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake snapped onto a brook within 30 px, else sourced at the sluice
             feed runs downhill - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a feed whose net travel is level or uphill is refused, and the snap onto a stream taken only where it still runs down (`runs_downhill`)
             a stream of no recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: taken as the village brook's 7 ft in the mouth-in-the-water test, as `stream` draws it
-            feed recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at the drawn width of the channel it traces - the comb's head race, or the polder's main canal from the reservoir's rim (feature 328: both were recorded at the head race's 6.0)"""
+            feed recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at the drawn width of the channel it traces - the comb's head race, or the polder's main canal from the reservoir's rim (feature 328: both were recorded at the head race's 6.0)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 70 (step from the fork into the crop); 12 (clearance test for the pulled end); 20 (bow off the chord); 14 (pull off the edge)
+        """
         if source.get("kind") != "cascade":
             hr = net["channels"][0]["pts"]
             fork = hr[-1]

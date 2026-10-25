@@ -29,7 +29,9 @@ def placard_height(fs: float = 30) -> float:
     """The title placard's height for a name drawn at `fs` before `PLACARD_TEXT_SCALE` - the name's line, the scale bar with its
     two captions, and the padding. It does not depend on the name; the width does (`FinishMixin.placard_size`). The hamlet's
     title band allowance and pocket rise are derived from it (`hamletgen/hinterland/frame.py`), so the card cannot outgrow them.
-    Research: placard size - CONVENTION: map furniture, sized from its measured text"""
+    Research: placard size - CONVENTION: map furniture, sized from its measured text
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 30 (title font); 1.2 (placard height); 46 (placard height)
+    """
     k = PLACARD_TEXT_SCALE
     return fs * k * 1.2 + 46 * k + 2 * PLACARD_PAD * k
 
@@ -42,7 +44,9 @@ class TitleMixin:
         its size, which `title()` draws and the hamlet's title pocket reserves (`hamletgen/hinterland/frame.py`). The pocket
         restated the formula by hand until feature 319, so a change to the card's text size would have left the two apart.
         `fs` is the name's size before `PLACARD_TEXT_SCALE`.
-        Research: placard size - CONVENTION: map furniture, sized from its measured text"""
+        Research: placard size - CONVENTION: map furniture, sized from its measured text
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 30 (font); 1.2 (line height)
+        """
         k = PLACARD_TEXT_SCALE
         tw, th = self._text_width(name, fs * k) + 4, fs * k * 1.2  # MEASURED text box (+4 breathing room) - see _text_width
         pad = PLACARD_PAD * k
@@ -68,7 +72,12 @@ class TitleMixin:
         so the block stays legible no matter what ground cover it lands over (the satoyama ring put
         scrub speckle nearly everywhere a title can sit, and ink-on-scrub was hard to read). The
         searched and recorded box is the PLACARD's extent, so the clearance check gates the whole
-        card; `title_has_placard` gates its presence (a manifest without one predates the card)."""
+        card; `title_has_placard` gates its presence (a manifest without one predates the card).
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 30 (corner insets); 12 (bar text); 16 (corner insets); 3.5 (inner frame); 7 (inner frame); 5 (bar ticks); 33 (scale-bar box); 17 (bar text); 31 (ftpx text)
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 8 (spot-search step)
+        """
         k = PLACARD_TEXT_SCALE  # the name and the bar's captions drawn for reading (GM 2026-10-03); the bar stays 100 map-px
         tw, th, bw, bh, PAD = self.placard_size(name, fs)  # the searched box: the whole placard
         fs = fs * k
@@ -164,7 +173,12 @@ class TitleMixin:
         the band under the map; and where a way crosses the whole of both, the map's ink is clipped at the frame it had
         (`meta.neatline`: a title panel outside the map's neatline - a map drawing convention), which leaves the band
         blank by construction. A band inside the map is map, and its bare ground is clothed as the view's was
-        (`refill_the_view`) - cover the placard may stand on, as on every other rung. Returns the placard's top-left."""
+        (`refill_the_view`) - cover the placard may stand on, as on every other rung. Returns the placard's top-left.
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 32 (band height); 30 (fallback seat); 16 (fallback seat)
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 8 (scan step)
+        """
         band = bh + 32
         for north in (True, False):
             # ...NEVER ON A FLANK A WATERWARD REED STRIP RUNS OFF (feature 287, water W43): the band there would show ground past
@@ -209,7 +223,11 @@ class TitleMixin:
         belt is about to be planted on is a reservation that costs the belt rather than the title: on Kuwabata it
         took the pocket out of the belt's windward third and cut 34 of its 87 clumps, to hold ground that was empty
         only because the trees had not been drawn yet. It is empty for the RESERVATION and not for the title's own
-        search, which runs after the belt and reads the clumps themselves."""
+        search, which runs after the belt and reads the clumps themselves.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (board-size fallback); 14 (board-size fallback)
+        """
         rects: list[Any] = []
         polys: list[Any] = []
         lines: list[Any] = []
@@ -321,7 +339,12 @@ class TitleMixin:
         """Scan the window (top-to-bottom, left-to-right) for the first box of size (tw, th) that clears every
         feature; returns its (x, y) top-left, or None if the map is too full. With `cover_ok` the belt, the
         bamboo and the woodland commons are not obstacles (the placard may sit on cover, never on a
-        building, a plot, a field, water, a lane or a label - `title_clear_of_features`, feature 137)."""
+        building, a plot, a field, water, a lane or a label - `title_clear_of_features`, feature 137).
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 22 (sheet margin)
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 24 (scan step)
+        """
         obs = self._title_obstacles(cover_ok=cover_ok, planned=planned)
         y = vy0 + margin
         while y + th <= vy0 + vh - margin:

@@ -236,7 +236,11 @@ def _bold_char_w(text: str) -> float:
 
 
 def _parse_labels(text: str) -> list[Label]:
-    """Text labels with an estimated bbox (from font-size x string length) + draw-order pos."""
+    """Text labels with an estimated bbox (from font-size x string length) + draw-order pos.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.78 (font ascent figure)
+    """
     out: list[Label] = []
     for m in _TEXT_RE.finditer(text):
         attrs = dict(_ATTR_RE.findall(m.group(1)))
@@ -405,7 +409,11 @@ def rooms_folded(buildings: tuple[Rect, ...]) -> tuple[Rect, ...]:
 
 
 def parse_svg(text: str) -> ParsedPlan:
-    """Parse an SVG into interior / building / open-feature / point-glyph rects + labels + walls."""
+    """Parse an SVG into interior / building / open-feature / point-glyph rects + labels + walls.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 5 (regex group range)
+    """
     rects = _rects(text)
     interior = tuple(r for r in rects if r.precinct)
     if not interior:

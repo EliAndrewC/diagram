@@ -68,7 +68,11 @@ def wrap_line_deg(d: float) -> float:
 def wrap_square_deg(d: float) -> float:
     """A lane's turn as a rectangular house follows it, folded into [-45, 45): a house stands square to its lane with
     its front or with its gable, so a lane at 80 degrees to the axis turns the house -10, not 80 - which the spread
-    would only have clamped to its edge (the pile-up at +-30 the Sawada review found)."""
+    would only have clamped to its edge (the pile-up at +-30 the Sawada review found).
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 45 (a square's quarter-turn fold (geometry))
+    """
     return (d + 45.0) % 90.0 - 45.0
 
 
@@ -97,6 +101,9 @@ class MarginBearing:
     """
 
     def __init__(self, ring: Sequence[Pt], along_deg: float) -> None:
+        """Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (spatial-index cell)
+        """
         pts = [(float(a), float(b)) for a, b in ring]
         self.along = along_deg
         self.samples: list[Pt] = []
@@ -111,7 +118,11 @@ class MarginBearing:
         self.span = max(1, int(FOLLOW_HALF_SPAN_PX // _SAMPLE_PX))
 
     def nearest(self, x: float, y: float) -> int | None:
-        """The index of the ring sample nearest (x, y) within `FOLLOW_REACH_PX`, or None."""
+        """The index of the ring sample nearest (x, y) within `FOLLOW_REACH_PX`, or None.
+
+        Research:
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N8, 2026-10-25) - 64 (first search radius, doubled up to the reach)
+        """
         pad = 64.0
         while pad <= FOLLOW_REACH_PX * 2:
             near = [it for it in self.grid.near(x, y, pad) if math.hypot(it[1] - x, it[2] - y) <= pad]
@@ -149,6 +160,7 @@ def house_rot(jit: Callable[[float, float, float], float], x: float, y: float, c
     Research:
         farmhouse bearing - research/questions/0029-farmhouses-minka.drawing.html: common bearing plus the lane's turn plus a
             by-eye spread, held under 30 degrees by a soft limit; no quarter-turned house
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 11 (jitter salts (triangular spread)); 14 (jitter salts (triangular spread))
     """
     kx, ky = round(x / KEY_CELL_PX) * KEY_CELL_PX, round(y / KEY_CELL_PX) * KEY_CELL_PX
     spread = (jit(kx, ky, 11.0) + jit(kx, ky, 14.0) - 1.0) * BEARING_JITTER_DEG  # triangular: most houses near the lane

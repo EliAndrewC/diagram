@@ -207,6 +207,7 @@ def monotone_down(course: Sequence[Pt], fall: Pt, slack: float = 0.01) -> bool:
     """Does every step of `course` run down the fall (or level) - the brook below its tap carrying the runoff on
     downhill (water:W11).
     Research: runs downhill - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every step below the tap runs down the fall
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.01 (rounding slack in the "runs downhill" test)
     """
     us = [p[0] * fall[0] + p[1] * fall[1] for p in course]
     return all(b >= a - slack for a, b in zip(us, us[1:], strict=False))
@@ -241,7 +242,11 @@ def reserved_box(course: Sequence[Pt], plan: SitePlan) -> tuple[float, float, fl
       `_comb_draw_hem` drops a plot the brook's own band crosses (`hem_on_water`, the course with a bund's margin), so
       the plots it would drop are left out here by the same predicate.
 
-    A view is a box, so it holds the box round them all."""
+    A view is a box, so it holds the box round them all.
+
+    Research:
+        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 9 (brook width in the keep-off band; doesn't match: the page and `comb.py` use 7 (lead 1))
+    """
     from l7r.diagram.settlement.fields.comb import WetLines, hem_on_water  # noqa: PLC0415 - the settlement package imports late here
 
     net = plan.net or {}

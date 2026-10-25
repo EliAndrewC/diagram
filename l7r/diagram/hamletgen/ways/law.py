@@ -793,7 +793,9 @@ def field_unreached(M: Mapping[str, Any]) -> bool:
     Research:
         a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: on brook maps
         asked on brook maps only - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); the field reach is asked only where a brook runs, a map whose field is fed otherwise owing
-            none (405 T127)"""
+            none (405 T127)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 128 (spatial-index cell)
+    """
     if not _brooks(M):
         return False
     rings = [f["outline"] for f in M.get("fields") or [] if f.get("outline")] + [d["poly"] for d in M.get("dry_plots") or [] if d.get("poly")]

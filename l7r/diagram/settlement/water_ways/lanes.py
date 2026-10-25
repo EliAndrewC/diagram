@@ -134,6 +134,7 @@ class LanesMixin:
         Research:
             lane strokes - CONVENTION: a soft shoulder and an earth tread; the legacy lane a dashed center line
             junctions as one surface - CONVENTION: every shoulder under every tread
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 2.5 (worn-earth halo stroke)
         """
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
         if worn:
@@ -245,6 +246,7 @@ class LanesMixin:
             short lanes dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane is left off only when it leads to no house, field, well, shrine, ford or other way - any internal lane under 71 ft is dropped, a departure the code keeps until feature 417 T32; an internal lane under 71 ft
             the track out and the field spur stay whole - research/questions/0081-village-lanes.drawing.html
             a row street stays whole - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it, its ends not pulled back as a lane's are
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.01 (divide-by-zero guard)
         """
         way_reach = self.px(60.0) if way_reach is None else way_reach  # 0246: within 60 ft of another way, at the map's scale
         # 0246's two reaches, at the map's scale (feature 328 wave 67: they were read as pixels, right only at 1 ft/px)

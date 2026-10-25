@@ -390,7 +390,9 @@ def left_to_the_tree(M: Mapping[str, Any], i: int) -> bool:
     band stayed; that house had no corridor drawn only because the stray lane reached it first. Its way was laid and judged
     lawful by the gap pass, so the band goes and the house is reached by its own way.
 
-    Research: every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a stray lane goes where the house's own way, laid in the gaps once the last house stands, will reach it"""
+    Research: every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a stray lane goes where the house's own way, laid in the gaps once the last house stands, will reach it
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1.5 (point-match tolerance)
+    """
     from .corridors import _on_the_connector
 
     lanes = M.get("lanes") or []
@@ -723,7 +725,11 @@ def rejoined(run: Poly, waters: Sequence[tuple[Poly, float]]) -> Poly:
     `settle.square_waters` lists them), far enough out to stand clear of the water: `checks.square_crossings` replaces the
     crossing's segment by a square leg joined straight to the segment's far end, so without them a long run moved along the
     whole of its length after the crossing - cohort seed 8's exit strip, over a channel, moved under every corridor hanging
-    from it. The tree's runs are squared as they are drawn, and each corridor meets its host where the host still runs."""
+    from it. The tree's runs are squared as they are drawn, and each corridor meets its host where the host still runs.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (floor on sin, a divide-by-zero guard)
+    """
     from l7r.diagram.settlement import seg_intersect, segments_cross
 
     from .checks import SQUARE_LEG_PAD

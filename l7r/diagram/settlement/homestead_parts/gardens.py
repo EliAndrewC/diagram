@@ -22,6 +22,7 @@ class GardensMixin:
         Research:
             bed glyph - CONVENTION: a tilled fill with three rows of greens
             turned with its house - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); the bed takes the farmhouse's rake
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (plant dots kept 4 in from the bed glyph's ends)
         """
         x0, y0 = -w / 2, -h / 2
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
@@ -54,6 +55,7 @@ class GardensMixin:
                 beds, measured as one garden
             hand-worked outline - CONVENTION: an irregular quad, jitter 0.18 for one bed and 0.13 for a split
             turned with its house - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); each bed takes the farmhouse's rake
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 71 (quad jitter salts); 5 (quad jitter salts)
         """
         jit = 0.18 if len(beds) == 1 else 0.13
         for i, (bx, by, bw, bh) in enumerate(beds):

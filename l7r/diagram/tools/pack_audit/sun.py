@@ -74,7 +74,11 @@ class Caster:
 
 
 def sun_at(hour: float, lat_deg: float = LAT_DEG, decl_deg: float = DECL_DEG) -> tuple[float, float]:
-    """The sun's (elevation, azimuth) in degrees at solar `hour`; azimuth clockwise from north."""
+    """The sun's (elevation, azimuth) in degrees at solar `hour`; azimuth clockwise from north.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 15 (degrees per hour, solar noon); 12 (degrees per hour, solar noon)
+    """
     h = math.radians(15.0 * (hour - 12.0))
     la, d = math.radians(lat_deg), math.radians(decl_deg)
     el = math.asin(math.sin(la) * math.sin(d) + math.cos(la) * math.cos(d) * math.cos(h))
@@ -95,7 +99,11 @@ def shadow(caster: Caster, el_deg: float, az_deg: float) -> BaseGeometry:
 
 
 def lit_hours(bed: Polygon, casters: list[Caster], half_shade: bool = False) -> float:
-    """Hours of the day at least LIT_SHARE of the bed is in direct sun (for a half-shade bed a tree's shadow is dappled light)."""
+    """Hours of the day at least LIT_SHARE of the bed is in direct sun (for a half-shade bed a tree's shadow is dappled light).
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 24 (hours in a day)
+    """
     from shapely.ops import unary_union
 
     hours = 0.0
@@ -134,7 +142,11 @@ def gardens(plan: ParsedPlan, text: str) -> list[tuple[Rect, bool]]:
 
 def casters(plan: ParsedPlan, text: str, bed: Polygon) -> list[Caster]:
     """Everything the sheet draws that stands up: its buildings, its walls (the compound's and its court dividers) and its
-    trees - never the bed itself, nor what NOT_STANDING names."""
+    trees - never the bed itself, nor what NOT_STANDING names.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 16 (circle buffer resolution)
+    """
     from shapely.geometry import Point
 
     kinds = element_kinds(text)
@@ -152,7 +164,11 @@ def casters(plan: ParsedPlan, text: str, bed: Polygon) -> list[Caster]:
 
 
 def shaders(bed: Polygon, cs: list[Caster], half_shade: bool = False) -> list[str]:
-    """What takes the bed's sun: the casters whose shadow reaches it in some daylight half hour, by what they are."""
+    """What takes the bed's sun: the casters whose shadow reaches it in some daylight half hour, by what they are.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 24 (hours in a day)
+    """
     hit: dict[str, int] = {}
     steps = int(24 / STEP_H)
     for c in cs:

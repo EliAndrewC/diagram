@@ -89,7 +89,11 @@ def crosses_poly(a: Pt, b: Pt, poly: Sequence[Pt], step: float = 8.0, cap: int =
     to the frame, so 60 samples is one every 67 px and the test steps clean over a field lobe. The
     map then ships a brook drawn through the rice with the router insisting it had checked
     (`streams_avoid_fields`). One sample every 8 px is under the width of anything it is testing
-    against, and the cap keeps a stray off-canvas endpoint from turning this into a million tests."""
+    against, and the cap keeps a stray off-canvas endpoint from turning this into a million tests.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 8 (sampling step); 900 (sample cap)
+    """
     ring = list(poly)
     # EXACT edge intersection first, which is what `streams_avoid_fields` and its siblings use. A
     # sampled containment test cannot see a segment that clips a thin sliver of the outline - it

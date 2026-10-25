@@ -139,6 +139,9 @@ def build_polder(
         toe ends on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each toe end snapped onto the nearer trunk and run 3 ft on along its centerline, at the map's scale
         lattice unbent by default - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder takes `mosaic` 0, its surveyed grid unbroken into a mosaic; the dike-pond block passes its own mosaic, and every caller its fitted `edge_wander` (claimed at the hamlet's `_polder_candidate`)
         acreage reckoned - NONE: the cropped area reckoned at the map's scale (area x ftpx squared / 43560)
+        its figures guessed on 0284 - GUESS research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: 0.1 (module line bows up to a tenth of a module ("this project's setting"))
+        its figures from 0022 - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: 0.52 (share of modules split in two (the mix gives about 3.1 mu a parcel)); 0.16 (share split in three); 0.12 (share merged along the fall)
+        its figures guessed on 0022 - GUESS research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: 1.5 (half of the 3 ft walking-bund gap ("this project's setting"))
     """
     R = random.Random(seed)
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))  # downhill (row) unit
@@ -232,6 +235,9 @@ def _polder_lattice(
         dike-pond mosaic - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift of the interior lattice fading to nothing at the edge, `mosaic` of 0.32 module
         each line wanders - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: every row and column line bowed on its own, up to `line_wander` of a module, off the boundary lines
         ring corridor - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the parcels inset so the ring canal runs inside the dike on every side
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 24301 (seed salt (0x5EED)); 12377 (seed salt (0x3059)); 4606 (seed salt (0x11FE))
+        its figures guessed on 0284 - GUESS research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: 0.9 (column-bow frequency, low end); 2.3 (column-bow frequency, high end); 0.35 (least bow of a column line)
+        its figures guessed on 0019 - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: 0.05 (block tilt); 0.6 (mosaic harmonic weight); 0.4 (fall-warp harmonic weight); 1.3 (mosaic frequency); 1.1 (mosaic frequency); 2.1 (mosaic frequency); 1.9 (mosaic frequency); 0.8 (cross-warp frequency); 1.7 (cross-warp frequency); 0.7 (fall-warp frequency); 1.6 (fall-warp frequency)
     """
     dx, dy = d_unit
     ux, uy = u_unit
@@ -374,6 +380,7 @@ def _polder_parcels(
         gap is what runs in it - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: the corridor gap on column lines, the walking-bund gap between strips of one module
         hand-piled outlines - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: each parcel softened by `organic_parcel`
         low rows wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the two lowest rows FLOODED
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 47710 (seed salt (0x0BA5E))
     """
 
     def lerp(a: tuple[float, float], b: tuple[float, float], f: float) -> tuple[float, float]:
@@ -447,7 +454,11 @@ def _polder_parcels(
 
 def _polder_envelope(grid: _GridFn, span_s: float, span_t: float) -> Poly:
     """Densify the envelope so the edge-wander CURVATURE is carried into the drawn field, the perimeter dike
-    that follows it, and the recorded outline - 4 bare corners would read as straight edges between them."""
+    that follows it, and the recorded outline - 4 bare corners would read as straight edges between them.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 12 (the same)
+    """
     _ecorn = [(0.0, 0.0), (0.0, span_t), (span_s, span_t), (span_s, 0.0)]
     envelope = []
     for _i in range(4):
@@ -476,6 +487,9 @@ def _polder_ring(R: random.Random, grid: _GridFn, span_s: float, span_t: float) 
         gentle waver - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: each side bowed up to 3.5 px, tapered at its ends
         rounded corners - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: each corner filleted at 0.9 of the corridor
         inlet high - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the sluice at the northwest corner
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 7 (the same (range end)); 6 (corner-arc samples)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1.7 (phase step between sides)
+        its figures guessed on 0019 - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: 2.2 (ring-canal waver frequency ("waver gently … a drawing convention"))
     """
     fi, di = _RING * 0.5, span_s - _RING * 0.5  # feeder / drain inner-toe s-lines
     phf = R.uniform(0, math.tau)
@@ -571,6 +585,7 @@ def _polder_channels(
         crossings cluster - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the settlement-side toe tagged as the side crossings cluster on
         inlet stub and sluice notch - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the stub 52 grid units past the ring, the outfall's first leg 40, the notch _RING * 0.9 in - grid units, not feet at the map's scale (the ranked row `channel widths`' E3 work)
         floor inside the ring - CONVENTION: the green floor drawn to the ring canal, not the dike
+        its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 0.8 (a lateral's head capped at 0.8 of its canal)
     """
 
     def _mk(pts_st: list[tuple[float, float]], role: str, w: float, wt: float) -> dict[str, Any]:
@@ -768,7 +783,11 @@ def _thin(ring: list[tuple[Pt, bool]], tol: float = 0.4) -> Poly:
     """Drop the samples the densify added back out: a point within `tol` of the line between its
     neighbors carries no shape. A point MOVED onto the water's edge is locked - thinning those away put the parcels back in the ditch (44 stroke samples) and flattened the wander until `polder_parcels_are_organic` fired. The pass works at 4 ft to find the water; the ring it hands back
     is the wandered outline again (~30-60 points), not a 200-point polyline in every manifest and every
-    drawn `<polygon>`."""
+    drawn `<polygon>`.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.4 (simplify tolerance)
+    """
     out: Poly = []
     for i, (q, lock) in enumerate(ring):
         a = out[-1] if out else ring[-1][0]
@@ -816,6 +835,7 @@ def _polder_close(plots: list[dict[str, Any]], channels: list[dict[str, Any]], s
     Research:
         no acute stub - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a trailing leg turning back under 90 deg is dropped
         parcels off the drain - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: lifted onto the collector's bank at its own widths
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 5 (fallback drain width if no drain exists (every polder draws one)); 0.75 (test for trimming a trailing stub leg)
     """
     # THE PARCELS STOP AT THE COLLECTOR'S BANK. `hem_to_bank`'s own docstring names this engine as
     # one of the three that need the pass - "the collector IS the polder's bottom side, so the
@@ -865,7 +885,11 @@ def clean_polder_parcels(net: dict[str, Any]) -> dict[str, Any]:  # noqa: D401
     """Run the parcel/channel cleanup on a block built with `clean_parcels=False`, and re-measure its
     acreage (feature 150 T55). `fit_polder` bisects with up to 45 candidate blocks and only one of them
     is drawn, so the cleanup - which densifies every outline against every nearby channel - runs on the
-    WINNER rather than on all 45: measured, 15 s of gen became 41 s when every candidate paid for it."""
+    WINNER rather than on all 45: measured, 15 s of gen became 41 s when every candidate paid for it.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 43560 (square feet in an acre)
+    """
     _plots_clear_of_channels(net["plots"], net["channels"], float(net.get("ftpx", 1.0)))
     unpoint_parcels(net["plots"])  # the cleanup moves outlines, so the apex pass runs again after it (feature 287, water W19)
     net["acres"] = sum(_poly_area(p["poly"]) for p in net["plots"]) * float(net.get("ftpx", 1.0)) ** 2 / 43560

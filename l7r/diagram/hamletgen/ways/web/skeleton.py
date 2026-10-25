@@ -47,7 +47,9 @@ def water_along_side(brooks: Sequence[Poly], to_map: Any, lat: float, dep: float
     average. A pure function of its inputs, so the lane shape's offer is tested with plain polylines.
 
     Research:
-        water along the cluster - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a brook within WATER_ALONG_FT of a flank over WATER_ALONG_SHARE of it"""
+        water along the cluster - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a brook within WATER_ALONG_FT of a flank over WATER_ALONG_SHARE of it
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 9 (nine sample points along a flank); 8 (nine sample points along a flank)
+    """
     if not brooks:
         return None
     best: tuple[float, int] | None = None
@@ -301,6 +303,7 @@ def _web_cut_lines(plan: SitePlan, frame: _margin_frame, arcs: list[float], stan
         a web lane's span - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs only along the houses it serves - those within WEB_REACH_FT (100 ft) of its cut, of every house but one reached across a neighbor's yard (owed no lane; `stage_web` leaves those out of the arcs and stands)
         the side lanes' reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the page gives WEB_REACH_FT (100 ft) for back lanes; the side-lane form reuses it, the page silent there
         a tie's run past the back lanes - GUESS: a cross lane runs the back lanes' own 30 ft pad (`pad`) past the outermost of them; no page gives a distance
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 40 (vertex spacing to follow the curve); 13 (13 vertices per lateral); 9 (nine vertices per tie); 12 (13 vertices per lateral); 8 (nine vertices per tie)
     """
     pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall; a tie runs as far past the outermost back lane
 

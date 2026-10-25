@@ -84,7 +84,11 @@ def aligned_tilt(rot: float) -> float:
     180, 270) keeps a level caption. Such a thing has a horizontal edge, so level text is aligned
     with it - the rule is "aligned with the thing", and a 90-degree box read level is; it is also
     what keeps every level caption in the pool byte-identical. Everything else - the notice board at
-    -122.8, a 72-degree road, a 102-degree yard - carries its exact angle."""
+    -122.8, a 72-degree road, a 102-degree yard - carries its exact angle.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (angle tolerance)
+    """
     t = (rot + 90.0) % 180.0 - 90.0
     if abs(t) < 0.05 or abs(abs(t) - 90.0) < 0.05:
         return 0.0
@@ -134,7 +138,11 @@ def label_quad(L: Sequence[Any]) -> Poly:
     (what `_record_label` has always written); a TILTED caption (element [7], degrees - see
     `label_tilt`) is that box rotated about its own center, exactly the SVG transform `label()`
     emits, so a check reads the true glyph run straight off the record. A level record returns
-    its plain corners."""
+    its plain corners.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (tuple index)
+    """
     x0, y0, x1, y1 = float(L[0]), float(L[1]), float(L[2]), float(L[3])
     cs: Poly = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
     t = float(L[7]) if len(L) > 7 and L[7] else 0.0

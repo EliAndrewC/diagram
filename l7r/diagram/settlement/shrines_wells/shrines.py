@@ -22,6 +22,7 @@ class ShrineHallsMixin:
         Research:
             hall size - research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html: 62 x 42 ft default
             vermilion hall glyph - CONVENTION
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (vermilion band in the hall glyph)
         """
         w, h = self.px(w_ft), self.px(h_ft)
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y - h / 2:.0f}" width="{w}" height="{h}" rx="3" fill="#C9876C" stroke="#6B2A18" stroke-width="2"/>')

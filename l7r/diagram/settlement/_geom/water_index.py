@@ -26,6 +26,9 @@ class WaterIndex:
     __slots__ = ("cell", "grid", "segs")
 
     def __init__(self, M: dict[str, Any], cell: float = 128.0) -> None:
+        """Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 128 (index cell)
+        """
         self.segs: list[tuple[Pt, Pt, float]] = []
         for key, default in _SOURCES:
             for rec in M.get(key) or []:

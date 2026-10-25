@@ -39,6 +39,7 @@ class MoatMixin:
             frame span - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the drawing page's GUESS, a field sluice about 16 to 24 ft - 20 ft at the map's scale where no span is given; a wider channel bank to bank; the span drawn true
             timbers and drum at the glyph floor - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: posts, board and drum at fixed pixel thicknesses, larger than life (CONVENTION)
             caption - CONVENTION: 9 pt italic
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 10.8 (glyph normalizer (span is 0179's 20 ft)); 9.2 (board inside the span); 4.4 (crossbeam); 13 (label offset); 4.6 (board inside the span); 5.4 (label reference box); 4.2 (label reference box)
         """
         span = self.px(20.0) if span is None else span  # a field sluice about 16 to 24 ft (0179): 20 ft at the map's scale
         rec: dict[str, float] = {"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1), "span": round(span, 1)}  # the matrix sizes the gate's box from its span
@@ -93,6 +94,7 @@ class MoatMixin:
             cut clearance - NONE: half the road width plus 10 px, the glyph's own margin
             undrawn conduit to the moat - NONE: to the nearest moat vertex, a 12 px wind
             conduit corridor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 33 px
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 20 (ring-road fallback (unit dead)); 24 (bisection count); 2.5 (undrawn conduit width (unit dead))
         """
         ring = self.M.get("ring_road") or []
         moat = self.M.get("moat") or []

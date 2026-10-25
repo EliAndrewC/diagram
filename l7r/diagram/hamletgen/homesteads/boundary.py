@@ -187,6 +187,9 @@ class SiteCorridors:
     __slots__ = ("center", "full", "hole_grid", "holes", "rings", "ring_pts", "water")
 
     def __init__(self, corridors: tuple[list[Seg], list[Seg]], outline: tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]]] | None = None, cell: float = 128.0) -> None:
+        """Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 128 (spatial-index cell)
+        """
         self.ring_pts: list[list[tuple[float, float]]] = [list(r) for r in (outline[0] if outline else [])]  # the rings as points, for the front row's ground push (feature 227)
         water, registered = corridors
         self.water = list(water)  # the water courses as segments with their clearance, for the front row's push across a brook (feature 261)
@@ -235,7 +238,11 @@ class SiteCorridors:
 
 
 def _vertex_grid(ring: Any) -> PointGrid:
-    """A ring's vertices, each filed at its own point, for "which vertices lie in this box" (feature 276)."""
+    """A ring's vertices, each filed at its own point, for "which vertices lie in this box" (feature 276).
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 32 (spatial-index cell)
+    """
     grid = PointGrid(32.0)
     grid.extend([(float(x), float(y), float(x), float(y), float(x), float(y)) for x, y in ring])
     return grid

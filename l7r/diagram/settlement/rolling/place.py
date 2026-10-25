@@ -75,7 +75,11 @@ class PlacerMixin:
         a part's nine points on surely-taken static ground (with a site boundary installed, `_rect_blocked` IS the
         nine-point test, whichever `fields` it is asked with), the bbox off the canvas or the bounding ring, the bbox within
         the 2 px margin of a placed box, and the three sun rules. Each is a conjunct of the order-independent
-        `_bundle_fits`, so a YES here is its NO; what survives gets the whole test, as before."""
+        `_bundle_fits`, so a YES here is its NO; what survives gets the whole test, as before.
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (sheet-edge margin)
+        """
         fg = getattr(self, "_free_ground", None)
         if fg is not None:
             parts = [part_box(geom, k) for k in ("yard", "shed")] + list(geom.get("groves") or ()) + list(part_box(geom, "gardens"))  # as drawn (269 B18)
@@ -100,6 +104,7 @@ class PlacerMixin:
         Research:
             dispersed farm packed toward field and neighbor - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the first slide, 2 px steps up to 48 toward the bund, while it fits
             dispersed farm packed against its nearest neighbor - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each homestead keeps its own spacing, and 0285 has scattered farms 100 to 200 m apart - a dispersed farm is slid against its neighbor, a departure the code keeps until feature 417 T33; the second slide, toward the nearest neighbor, where 0031 has a scattered homestead keep its own spacing
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 1.5 (stop tolerance (arrived at the target))
         """
         for _ in range(48):
             tgt = target_fn(cx, cy)
@@ -146,6 +151,7 @@ class PlacerMixin:
         Research:
             row farm kept on its lot - research/questions/0033-row-villages-resson.drawing.html: within a row the seat is nudged at most one step and never slid
             nearest seat that fits - NONE: a spiral of offsets to 91 px from the seed
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N8, 2026-10-25) - 7 (spiral ring step 7 px, out to 91 px (one ring for an exact row seat)); 15 (spiral ring step 7 px, out to 91 px (one ring for an exact row seat)); 92 (spiral ring step 7 px, out to 91 px (one ring for an exact row seat)); 12 (12 directions per ring); 6 (pi/6 step between those directions)
         """
         offsets = [(0, 0)]
         # A ROW'S SEAT IS EXACT (feature 291 plan D15, `hamletgen/homesteads/rows.py`): the row planned each frame one lot
@@ -210,6 +216,7 @@ class PlacerMixin:
             a tight seat only on landlocked land - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: taken only where some layout walks to the neighbor's yard and none has a way of its own (`passage.landlocked`)
             a seat refused unless its yard opens onto lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no way is sought for a household while it is seated; its dooryard must open onto the ground the lanes are laid in (`SeatRegion.opens`)
             the village roll's corridor - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a roll with no seat region (a village's) asks for a corridor candidate instead (`seat_reaches_tree`)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 12 (jitter salt (which hand the garden goes on))
         """
         self._seat_search["placer_calls"] += 1
         # THE UNION FIRST, ONE RECTANGLE: the box around every configuration (`_bundle_envelope`). Where it fits - the
@@ -309,7 +316,11 @@ class PlacerMixin:
 
     def _house_box_refused(self: Settlement, box: tuple[float, float, float, float]) -> bool:  # type: ignore[misc]
         """Is a box refused on the grounds that only grow with it - the canvas margin, a reserved corridor, two or more placed
-        boxes (`_envelope_blocked`'s own tests and margins)? Then so is every box that holds it."""
+        boxes (`_envelope_blocked`'s own tests and margins)? Then so is every box that holds it.
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (sheet-edge margin)
+        """
         cx, cy, w, h = box
         if cx - w / 2 < 6 or cx + w / 2 > self.W - 6 or cy - h / 2 < 6 or cy + h / 2 > self.H - 6:
             return True

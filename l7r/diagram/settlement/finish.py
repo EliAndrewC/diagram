@@ -35,7 +35,11 @@ def caption_record_box(text: str, lines: Sequence[str], x: float, y: float, size
     the reservation and the record cannot drift (this engine's oldest rule).
 
     A ONE-LINE caption keeps `_record_label`'s own default box, which is measured on the WHOLE text
-    rather than on the line list, and is what every shipped manifest carries."""
+    rather than on the line list, and is what every shipped manifest carries.
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.55 (glyph advance); 0.275 (box center); 1.05 (line pitch); 1.15 (line pitch); 0.8 (text box); 0.25 (text box)
+    """
     n = len(lines)
     if n == 1:
         w = len(text) * size * 0.55
@@ -179,6 +183,9 @@ class FinishMixin:
     def _record_label(  # type: ignore[misc]
         self: Settlement, x: float, y: float, text: str, size: float, anchor: str, z: int, ref: Sequence[float], rot: float = 0.0, box: tuple[float, float, float, float] | None = None
     ) -> None:
+        """Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.55 (advance); 0.8 (box); 0.25 (box)
+        """
         w = len(text) * size * 0.55  # rough serif advance; slightly generous so near-misses flag
         x0 = x - w / 2 if anchor == "middle" else (x - w if anchor == "end" else x)
         # record the TEXT (element [5]) too, so the gate can verify a zone/neighborhood label actually
@@ -233,6 +240,9 @@ class FinishMixin:
         # feature the caption names, or of the area a district caption stands in - is a REQUIRED keyword, so a
         # caption with no subject is a TypeError at its call site rather than a record the gate has to find;
         # an explicit None or a malformed box is refused here the same way.
+        """Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 12 (font size); 1.15 (pitch); 0.55 (advance); 0.275 (center)
+        """
         if ref is None or len(ref) != 4:
             raise TypeError(f"label({text!r}): a caption must name its subject - ref is the (x0, y0, x1, y1) box of what it names, got {ref!r}")
         # NOTHING IS DRAWN UNTIL THE LABEL PHASE (feature 157, GM 2026-08-29). Every caption queues
@@ -307,7 +317,11 @@ class FinishMixin:
         WHAT COUNTS AS OVERLAP: the caption's block, rotated about its center by `tilt` exactly as
         the SVG is, against `label_blocker_quads()` - every recorded footprint (rotation-aware AABBs) and
         every caption already on the sheet - with the separating-axis test, so a tilted block is
-        judged by its true quad rather than by a bounding box that would wrap for nothing."""
+        judged by its true quad rather than by a bounding box that would wrap for nothing.
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.15 (pitch); 0.55 (advance); 1.05 (box height); 0.275 (center)
+        """
         words = text.split()
         if len(words) < 2:
             return [text]
@@ -352,7 +366,11 @@ class FinishMixin:
         rebuild dirtied all 16 tracked pool manifests at once, with no code change behind it. Which
         engine is not the point (both are within a pixel of what resvg draws, under 12px of padding) -
         being a pure function of the font FILE is, so the pool stays byte-reproducible on any
-        container. `test_text_width_is_pinned_to_the_basic_layout_engine` holds the pin."""
+        container. `test_text_width_is_pinned_to_the_basic_layout_engine` holds the pin.
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.62 (advance)
+        """
         try:
             from PIL import ImageFont
 
@@ -440,6 +458,9 @@ class FinishMixin:
         # more. Nothing records water after this line, so every bead ink slot is rewritten here from the runs that
         # survive `bead_drowned` over the final registry - FIRST, while the slots still index `self.out` as they did when
         # the beads were drawn (the flushes and splices below move them).
+        """Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 2600 (PNG width)
+        """
         self.settle_beads()
         # BACKSTOP for the deferred canopy: crop_to_view / crop_city normally flush it, but a map
         # that frames to the bare canvas never calls either (Hoshizora), and a queued stand that is
@@ -606,7 +627,11 @@ class FinishMixin:
     def _record_scatter_frame(self: Settlement) -> None:  # type: ignore[misc]
         """Record the tightest frame any scatter threw within and the view's overhang past it, per side (`finish`'s
         verification of the scatter frame - the why is at its call; lifted out of `finish` by feature 370, the
-        100-statement cap)."""
+        100-statement cap).
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel)
+        """
         if self._scatter_frames:
             _tight = (
                 max(f[0] for f, _b in self._scatter_frames),
@@ -706,7 +731,11 @@ class FinishMixin:
         oblique, so the real italic faces (fonts-dejavu-extra) must be installed or every
         italic label silently renders upright.
         A no-op (with a warning) when resvg is absent - the skill cannot render at all
-        without it, so that is a host-setup problem, not a generation bug."""
+        without it, so that is a host-setup problem, not a generation bug.
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 2600 (PNG width)
+        """
         from l7r.diagram import _census  # noqa: PLC0415 - render-time only
 
         _census.record("render", what="png", base=os.path.basename(basepath))  # the gate refuses a render from a test not marked as one of rendering (feature 213)

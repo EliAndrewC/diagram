@@ -66,7 +66,9 @@ def seated_parts(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     Research:
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the track out keeps off every homestead's house, yard, beds, well, sheds and fixtures as they will be drawn
         the track off the wood seats - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: each seat an octagon of the reach a lane keeps off it (`seat_walls`); no page read shows a lane between a farmhouse and its own grove
-        a persimmon by its trunk alone - GUESS: held off by `TRUNK_FT`, the crown free to overhang the track"""
+        a persimmon by its trunk alone - GUESS: held off by `TRUNK_FT`, the crown free to overhang the track
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (octagon standing in for a circle)
+    """
     out: list[tuple[Poly, Pt | None, str]] = []
     for h in s.M.get("houses") or []:
         boxes = (h.get("geom") or {}).get("boxes") or {}

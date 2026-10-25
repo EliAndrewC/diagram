@@ -88,6 +88,9 @@ def element_extents(k: str, o: Any, M: Mapping[str, Any]) -> list[Extent]:
     the widths a record does not carry (the road's, the moat's) and the scale a torii's box is drawn at.
 
     Research: drawn extents - NONE: reads each record's ink; the fallback widths mirror the drawing
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 2.5 (ward fence line's drawn width)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 8 (π/8 angle step); 12 (well polygon vertex count); 16 (pond polygon vertex count)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 20 (ring road width fallback); 6 (lane width fallback); 30 (road width fallback); 22 (moat width fallback)
     """
     out: list[Extent] = []
     pfield = _MATRIX_PARENT_FIELD.get(k)
@@ -229,6 +232,9 @@ class Standing:
     `admits`, its yes/no). `M` is the manifest whose widths and scale the extractor reads (`element_extents`)."""
 
     def __init__(self, M: Mapping[str, Any], W: float = 4000.0, H: float = 4000.0) -> None:
+        """Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 4000 (default sheet size)
+        """
         self.M = M
         self.W, self.H = float(W), float(H)
         self._bins: dict[tuple[int, int], list[int]] = {}

@@ -110,7 +110,9 @@ def brook_fords(brook: Sequence[Pt], spacing: float, bend_deg: float) -> list[Pt
 def brook_boxes(brook: tuple[Pt, ...]) -> tuple[tuple[Pt, Pt, float, float, float, float], ...]:
     """Each leg of the brook with its bounding box (x0, x1, y0, y1) - built once a brook (`ford_crossing`'s prefilter).
 
-    Research: plumbing - NONE: a memo of the legs' boxes"""
+    Research: plumbing - NONE: a memo of the legs' boxes
+        its cache size - NONE: a memo's size, which decides nothing about the place - 64
+    """
     return tuple((a, b, min(a[0], b[0]), max(a[0], b[0]), min(a[1], b[1]), max(a[1], b[1])) for a, b in zip(brook, brook[1:], strict=False))
 
 
@@ -119,7 +121,9 @@ def ford_leg(f: Pt, brook: tuple[Pt, ...]) -> tuple[Pt, Pt]:
     """The brook's segment nearest the ford `f` - asked once a ford (feature 320, perf-audit: `settle_field` asked it of
     every network point, 703k `seg_dist` calls on cohort seed 39 at 10 households, half the step's time).
 
-    Research: plumbing - NONE: a memo of the nearest segment"""
+    Research: plumbing - NONE: a memo of the nearest segment
+        its cache size - NONE: a memo's size, which decides nothing about the place - 256
+    """
     return min(zip(brook, brook[1:], strict=False), key=lambda ab: seg_dist(f[0], f[1], ab[0], ab[1]))
 
 

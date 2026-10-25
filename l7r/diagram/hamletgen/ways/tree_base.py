@@ -66,7 +66,11 @@ class Ends:
         self.by_house: dict[int, set[tuple[int, int]]] = {}
 
     def nearest(self, end: Pt, extra: Mapping[str, Any] | None = None) -> tuple[int, float]:
-        """The index and distance of `end`'s nearest house - the first of the nearest - `extra` counted last."""
+        """The index and distance of `end`'s nearest house - the first of the nearest - `extra` counted last.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (first search radius, grown until a house is found)
+        """
         best, dist = -1, math.inf
         if self.houses:
             r = 64.0

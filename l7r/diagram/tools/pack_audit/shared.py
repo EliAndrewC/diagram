@@ -111,7 +111,11 @@ _PATH_CMD_RE = re.compile(r"([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)")
 def _path_points(d: str) -> tuple[list[float], list[float]]:
     """The ABSOLUTE points a path visits - the coordinates after an upper-case command. A relative
     command's offsets (a lower-case `q 3 -8 -2 -14` on a steam plume) are not coordinates and are
-    skipped rather than read as ink at negative x, which is what a plain number scan did."""
+    skipped rather than read as ink at negative x, which is what a plain number scan did.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (SVG arc arguments); 6 (SVG arc arguments)
+    """
     xs: list[float] = []
     ys: list[float] = []
     for cmd, body in _PATH_CMD_RE.findall(d):
@@ -150,7 +154,11 @@ def ink_bounds(text: str, plan: ParsedPlan, canvas_area: float = 0.0) -> tuple[f
     every path, each shifted by the `translate(...)` of its ancestors; definitions (patterns, symbols,
     markers) draw nothing where they stand and are skipped, and a rect covering most of the canvas is the
     parchment background, not ink. The same walk as `scripts/reviews/size_table.py`'s, for the same reason: a glyph
-    authored in local coordinates inside a translated group is ink where the group puts it, not at the origin."""
+    authored in local coordinates inside a translated group is ink where the group puts it, not at the origin.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.55 (character width figure)
+    """
     try:
         root = ET.fromstring(text)
     except ET.ParseError:
@@ -212,7 +220,11 @@ def ink_bounds(text: str, plan: ParsedPlan, canvas_area: float = 0.0) -> tuple[f
 
 
 def viewbox_cropped(text: str, plan: ParsedPlan, max_margin_px: float = CROP_MAX_MARGIN_PX, tol_px: float = CROP_TOL_PX) -> list[str]:
-    """The viewBox is cropped to the ink: no side leaves more than the checklist's border of empty parchment."""
+    """The viewBox is cropped to the ink: no side leaves more than the checklist's border of empty parchment.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 5 (regex group range)
+    """
     m = _VIEWBOX_RE.search(text)
     if not m:
         return ["no viewBox on the sheet"]
@@ -634,7 +646,11 @@ def well_gear(text: str) -> list[str]:
     `data-gear` group whose `data-at` is the curb's center (within 2 px). A basin or a lantern sharing the stone's color is
     not a well. An indoor well's gear is the beam pulley and it has no roof; an open-air well's is never the beam pulley; a
     roof is an unfilled outline standing on its four posts, drawn over the curb (a filled square under it reads as the
-    page's paved apron - glyph-check, batch 6)."""
+    page's paved apron - glyph-check, batch 6).
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 15 (smallest curb marker read as a well (px))
+    """
     from .parse import WELL_FILL
 
     gears = [(m[1], float(m[2]), float(m[3])) for m in _GEAR_RE.finditer(text)]

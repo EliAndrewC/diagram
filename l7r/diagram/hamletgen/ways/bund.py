@@ -371,7 +371,9 @@ def squared_step(q: Pt, to: Pt, water: Sequence[tuple[Pt, Pt]], tol_deg: float =
     water's far side as far out as `to` stood (Kashikawa, settlement-review 2026-09-30: a field path's short step crossed
     the brook 45 degrees off square, too near its end for the crossings stage to square it).
 
-    Research: square crossing - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: within 10 degrees"""
+    Research: square crossing - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: within 10 degrees
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N4, 2026-10-25) - 3.5 (the least the square leg runs past the water's centerline)
+    """
     from l7r.diagram.settlement import seg_intersect
 
     hit = next(((c, d) for c, d in water if segments_cross(q, to, c, d)), None)

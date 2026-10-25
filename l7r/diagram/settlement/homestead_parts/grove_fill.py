@@ -54,6 +54,8 @@ def grove_blocks(
         groves off the households' wood seats - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); every grove but the copse kept off each household's reserved copse seat (`reserved_seat_keepouts`)
         clumps off a dike bank - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); no clump based on a dike's bank
         the title's pocket kept clear - CONVENTION: clumps kept a crown off the pocket reserved for the map's name
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 19 (torii glyph half-extent ("glyph spans x +/-19")); 14 (torii glyph half-extent ("glyph spans x +/-19"))
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.45 (floor under `crown_reach` (the drawn crown's reach); the tread rule itself is GUESS in `_corridor_buffers); 9 (stream width fallback, never reached); 2.5 (channel width fallback, never reached); 22 (moat width fallback; no production moat)
     """
     from .stands import crown_reach, deep_marsh, reserved_seat_keepouts  # noqa: PLC0415 - `stands` imports this module
 
@@ -271,7 +273,10 @@ def reseat_clump(
         the re-seat's reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a refused belt clump is offered up to 2.2 grid steps away, eight bearings a ring
         the copse re-seats only when displaced - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a sparse grove re-seats only where another grove's canopy displaced it; any other refusal leaves the gap
         the belt stops at a lane it abuts - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: at Fangkeng the flagstone path goes round the grove, not through it; the one-clump rim margin is a GUESS; a clump blocked by a lane within a clump of the belt's rim is dropped
-        the edges a stand stops at - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the paddies, the drying yards and the main road stay open; open water and the dike bank are a GUESS; a clump refused by the crop, open water or a dike bank is dropped, not re-seated"""
+        the edges a stand stops at - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the paddies, the drying yards and the main road stay open; open water and the dike bank are a GUESS; a clump refused by the crop, open water or a dike bank is dropped, not re-seated
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N9, 2026-10-25) - 0.6 (re-seat search radii ladder); 1.4 (re-seat search radii ladder); 1.8 (re-seat search radii ladder); 45 (re-seat search bearing step)
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.9 ("any ink on the page" frame test)
+    """
     # INTERIOR ONLY FOR A LANE, and this cost seed 10 a round. The rule reads "a clump blocked
     # near the polygon's own rim is at the belt's edge, where stopping is correct" - true of a
     # lane, false of everything else. A belt is 110 px deep and a clump is 28, so demanding
@@ -367,6 +372,8 @@ def close_belt_gaps(
     Research:
         belt deep and whole - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: interior gaps over `_BELT_GAP_FT`, 30 ft at every grain, filled
         clumps off lanes - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: where a lane crosses the belt the planting resumes on both sides
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N9, 2026-10-25) - 6 (gap-fill round cap); 0.34 (fractions along a gap tried); 0.66 (fractions along a gap tried); 0.22 (fractions along a gap tried); 0.78 (fractions along a gap tried); 33 (depth samples across the band); 32 (the same, as intervals)
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.9 ("any ink on the page" frame test)
     """
     if role == "windbreak" and len(seated) >= 2:
         _wv = _belt_axis(seated)

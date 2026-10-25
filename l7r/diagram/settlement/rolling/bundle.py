@@ -47,6 +47,8 @@ class BundleGeomMixin:
             bed split forms - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25) - 0039 has where a bed lay, nothing on splitting one; half flank the house on opposite walls, the rest stacked (south gardens) or side by side; each bed at least 6 ft (`bscale`) wide
             beds one household's garden - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: the beds together held to the garden's size range
             beds on sunny sides - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: never the north back
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N8, 2026-10-25) - 0.26 (about 1 in 4 households split the garden); 0.55 (the same flanking-bed width)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (jitter salt); 9 (jitter salt)
         """
         bs = self.bscale
         jx, jy = seat if seat is not None else (hx, hy)  # the household's seat when one is being sought (feature 276, D10)
@@ -217,6 +219,7 @@ class BundleGeomMixin:
             outer stable off the wall - GUESS research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the yard-shed byre set `YARD_SHED_GAP_FT[0]` (6 ft) off the house, the near end of the page's guessed 6 to 12 ft
             dispersed farm's grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the farm's own grove on its rolled sides, turned to the wind
             south band kept off the yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: on a sun-keeping map the south band stands `CANOPY_SHADE_FT` plus 1.7 x 1.15 crown radii beyond the yard
+            its figures from 0039 - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: 0.25 (garden depth jittered up to 1.25x)
         """
         gap = self.px(3)  # 3 ft between a house and its yard/garden, at this map's ftpx
         gw, gh = 0.48 * hw, 0.85 * hh  # garden - tight to the house, scales with wealth
@@ -346,6 +349,7 @@ class BundleGeomMixin:
             persimmon out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: held 50 ft off yards and beds at the seat's own rake, re-checked as drawn (`fit._persimmon_sun_conflict`)
             a grove farm's way in kept clear - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way-in strip (`way_in_strip`) and the door's room (`door_room`, UNRESEARCHED in size) handed to the fixtures as `keep`
             the door's room past the yard - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); `DOOR_OUT_FT` (8 ft) past the yard's far edge, where the web's door path starts (`ways/serve.front_door`)
+            its figures from 0029 - research/questions/0029-farmhouses-minka.drawing.html: 5 (+-5 degree rake where no hamlet bearing is set)
         """
         kinds = getattr(self, "_household_fixtures", None) or ()
         if not kinds:

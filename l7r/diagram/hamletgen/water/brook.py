@@ -125,6 +125,8 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
         tap run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: straight on down the fall below the tap, never floored, so the race leaves off the brook's downstream heading
         tap run length - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); BROOK_TAP_RUN, 70 px
         corners cut - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a stream turns on a radius of two to three times its own width, about 14 to 21 ft at a 7 ft brook; the 45 ft cut is ours; each station replaced by two points 45 ft (at most 0.3 of the leg) either side, re-floored against the crop
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 40 (how far the crop check looks either side of a station, beyond the stride); 12 (the narrower look-around for a cut corner point)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel floor (-1e9, no baseline))
     """
     dx, dy = plan.fall
     px, py = -dy * side, dx * side
@@ -315,6 +317,7 @@ def axes_off(course: Sequence[Pt], away: Pt, sluice: Pt, fall: Pt, eps: float = 
     Research:
         screen axis - CONVENTION: a segment a wander stride or longer within AXIS_EPS_DEG of an axis tilted to twice it, no ceiling, the tap run excepted
         descent kept - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a segment across the fall tilted down it only where its neighbor still runs downhill
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.3 (cutoff: can the flank direction tilt this segment, or is it across the fall)
     """
     out = list(course)
     tap, pinned = _pinned(out, sluice)
@@ -353,6 +356,7 @@ def bend_at(course: Sequence[Pt], span: Sequence[Pt], need: Callable[[Pt], tuple
     (0054: strictly under 90; feature 328 retired the 8 ft dip `BEND_DIP_FT` allowed), so such a run takes no bend.
 
     Research: bend placement - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); one bend at the middle of the run's longest segment, the smaller clearing offset, at most half the segment, outside the field
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 8 (match distance: a segment this near the run counts as part of it)
     """
     tap, _pinned_ = _pinned(course, sluice)
     along = [k for k in range(len(course) - 1) if k not in (tap, tap + 1) and _dist_to_course(((course[k][0] + course[k + 1][0]) / 2, (course[k][1] + course[k + 1][1]) / 2), span) <= 8.0]
@@ -376,6 +380,7 @@ def bend_runs(course: Sequence[Pt], plan: SitePlan, sluice: Pt, away: Pt) -> Pol
         level runs broken - CONVENTION: a bend in every level run along the frame, the longest first
         ruled runs broken - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); a bend in the straightest run while it is over its bound
         bend across the fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a run the flank's normal cannot leave takes no dip down the fall, the next leg never climbing; such a run takes no bend
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.3 (cutoff: does a straight run lie across the fall)
     """
     W, H = float(plan.W), float(plan.H)
     out = list(course)
@@ -409,6 +414,7 @@ def level_offsets(level: float, axis: int, away: Pt) -> Callable[[Pt], tuple[flo
     breaks the run from its first vertex.
 
     Research: level bend depth - CONVENTION: the bend clears the run's level by LEVEL_TOL_FT and 1.5 ft
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.3 (floor on a divisor (stops division by near-zero))
     """
     av = away[axis] if abs(away[axis]) >= 0.3 else math.copysign(0.3, away[axis] or 1.0)
     return lambda p: ((level + LEVEL_TOL_FT + 1.5 - p[axis]) / av, (level - LEVEL_TOL_FT - 1.5 - p[axis]) / av)
@@ -419,6 +425,7 @@ def chord_offsets(a: Pt, b: Pt, away: Pt) -> Callable[[Pt], tuple[float, float]]
     half off the chord's line, either side (water:W03), measured from the line, not from the course under the point.
 
     Research: ruled bend depth - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the bend clears the chord by RULED_TOL_FT and 1.5 ft
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.3 (floor on a divisor (stops division by near-zero))
     """
     L = math.dist(a, b) or 1.0
     n = (-(b[1] - a[1]) / L, (b[0] - a[0]) / L)
@@ -541,6 +548,7 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
         one flank - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the rolled flank `plan.brook_side` only, the other never a candidate
         approach bearing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); bearings tried outward from straight upslope in 10 deg steps to 70 either side
         round the ditches - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a skirt crossing a ditch mid-run is laid again round the ditches' outside stretches
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 420 (shortest distance to the approach's start point, which is always off the canvas); 8 (the same, upper end); 7 (the same bearing search, round-the-field pass)
     """
     dx, dy = plan.fall
     base = math.degrees(math.atan2(-dy, -dx))  # upslope
@@ -666,6 +674,8 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
         full closure - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar crosses the whole brook, a map drawing convention
         bar size - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: WEIR_HALF_FT half-length, WEIR_THICK_FT of its form thick
         seat-search reach - GUESS: the bar steps down the brook a foot at a time, past dry ground, no further than the leg to the next vertex
+        its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 6 (fallback head-race width, 6.0 ft ("head race ... 6.0"))
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (stops division by a tiny sine)
     """
     if plan.intake != "weir":
         return
@@ -749,8 +759,14 @@ def open_race_mouth(s: Settlement, sluice: Pt) -> None:
     with a pond `clip` is not moved (its bed is re-emitted at flush from the early list); a hamlet's brook has none.
     The race's first `RACE_TAPER_FT` taper from the brook's hue to the supply hue (feature 355, `race_taper`): drawn in the
     supply hue from the bank, the dug race read as the principal watercourse at close zoom (measured on Sawada 2026-10-11).
-    Research: bare intake mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race opens out of the brook's bank, no gate or boards drawn
-    Research: race mouth hue taper - CONVENTION: the race's first 30 ft drawn from the brook's hue to the supply hue, so the dug ditch does not read as the river"""
+    Research:
+        bare intake mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race opens out of the brook's bank, no gate or boards drawn
+        race mouth hue taper - CONVENTION: the race's first 30 ft drawn from the brook's hue to the supply hue, so the dug ditch does not read as the river
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 8 (match distance: a race starting this near the bank is the one at the tap)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (tiny tolerance: race not already at the tap)
+        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 7 (fallback brook width ("about 2 m (~7 ft) ... are GUESSES"))
+        its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 2.5 (fallback width for the color fade at the race mouth ("delivery ditch 2.5"); see lead 4)
+    """
     tap = (float(sluice[0]), float(sluice[1]))
     brook = next((st for st in s.M.get("streams", []) if any(math.dist(tap, (float(q[0]), float(q[1]))) < 0.5 for q in st["poly"])), None)
     entry = next((w for w in s.water if w["rec"] is brook and w.get("clip") is None), None) if brook is not None else None
@@ -818,7 +834,9 @@ def weir_glyph(form: str, poly: Sequence[Pt], c: Pt, along: Pt, down: Pt, half: 
     - `frame`, stakes and logs packed with clay: clay brown-gray, the logs drawn along it and the stakes as dots;
     - `gabion`, stone-filled baskets: gray, the baskets' seams across it and the weave hatched on the diagonal;
     - `fence`, stakes with brushwood woven between them: a thin straw-colored band with its stakes as dark dots.
-    Research: weir glyph - CONVENTION: per-form fill, ticks, stakes and an upstream lip inside the bar"""
+    Research: weir glyph - CONVENTION: per-form fill, ticks, stakes and an upstream lip inside the bar
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.7 (frame weir: stake dot radius); 0.2 (crib weir: inner tick position); 0.62 (crib weir: outer tick position); 0.8 (frame weir: log stroke width); 5 (frame weir: stake dot count); 1.6 (upstream lip: widest allowed); 0.95 (frame weir: log line extent); 0.45 (frame weir: log line offset); 0.6 (basket weir: seam stroke width); 0.4 (basket weir: weave stroke width); 6 (fence weir: stake dot count); 0.55 (fence weir: stake dot radius); 1.2 (upstream lip: width as a share of half the bar's thickness); 0.25 (basket weir: inner weave position); 0.75 (basket weir: outer weave position); 0.12 (basket weir: weave slant); 0.9 (weir stake dots: start of their spread along the bar); 1.8 (weir stake dots: length of their spread)
+    """
     cx, cy = c
     ax, ay = along
     hx, hy = down

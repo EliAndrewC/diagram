@@ -65,7 +65,9 @@ def gear_svg(cx: float, cy: float, half: float, gear: str, roofed: bool, indoor:
         sweep glyph - research/questions/0196-communal-wells-ido.drawing.html: a pole about as long as the marker is wide crossing the curb from a post outside it
         pulley frame glyph - research/questions/0196-communal-wells-ido.drawing.html: two posts and a beam across the curb; the drawn proportions a GUESS
         beam pulley glyph - GUESS research/questions/0196-communal-wells-ido.drawing.html: an indoor well's pulley hung from its building's beams, drawn as the beam across the curb and the wheel at its middle, no posts and no roof; no page names an indoor well's gear
-        roof glyph - CONVENTION: an unfilled outline (a path, so it buries nothing) 4 px outside the curb on four corner posts, drawn over the curb, so it reads as a roof standing over the well and not as the paved apron the same page draws"""
+        roof glyph - CONVENTION: an unfilled outline (a path, so it buries nothing) 4 px outside the curb on four corner posts, drawn over the curb, so it reads as a roof standing over the well and not as the paved apron the same page draws
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 3.5 (pulley frame's left post offset); 1.5 (crossbar end offset)
+    """
     at = f'data-at="{cx:g},{cy:g}"'
     if indoor:
         return (

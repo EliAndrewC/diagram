@@ -23,7 +23,11 @@ from .keeper import kept
 
 def link_index(hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP) -> FabricIndex:
     """The fabric index `_clear_link` asks with these grounds and this gap - built once by a caller that tests many links
-    (feature 284, FR-002)."""
+    (feature 284, FR-002).
+
+    Research:
+        its figures against 0055 - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html: 14 (link held 14 ft off water lines) - a departure the code keeps until feature 417 T32
+    """
     return fabric_index(hard, WEB_HARD_GAP, walls, gap, water, 14.0)
 
 
@@ -298,7 +302,9 @@ def clear_runs(
         off the wet ground - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); the full margin; 0081 keeps a track off wet ground and gives no distance
         threads between steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off the fabric by default
         lane off a water line - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a path runs on the bank of every grade of field channel, and the bund is a path - the lane is held 14 ft off a water line, a departure the code keeps until feature 417 T32; 14 ft by default (`line_margin`)
-        shortest lane - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); a run under 70 ft by default is not a lane"""
+        shortest lane - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); a run under 70 ft by default is not a lane
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 8 (sampling step along a run)
+    """
     if not obstacles and not lines and not tight:
         return [list(pts)]
 
@@ -349,7 +355,9 @@ def clip_to_clear(pts: Poly, obstacles: Sequence[Poly], margin: float, step: flo
     Research:
         an arm stops at the crop - research/questions/0081-village-lanes.drawing.html: a lane ends where the crop begins
         lane off a water line - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a path runs on the bank of every grade of field channel, and the bund is a path - the lane is held 14 ft off a water line, a departure the code keeps until feature 417 T32; 14 ft by default
-        shortest arm - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); under 70 ft is not drawn"""
+        shortest arm - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); under 70 ft is not drawn
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 8 (sampling step)
+    """
     if not obstacles and not lines:
         return pts
 

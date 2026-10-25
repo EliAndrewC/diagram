@@ -31,7 +31,9 @@ def stream_segment_index(streams: Any) -> PointGrid:
 
     Research:
         keep-out geometry, index and cache plumbing - NONE: the segments and their widened boxes in a `PointGrid`
-        stream keep-out at half-width plus 5 px - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); `hw` = w / 2 + 5, the distance `rect_touches_stream` decides by"""
+        stream keep-out at half-width plus 5 px - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); `hw` = w / 2 + 5, the distance `rect_touches_stream` decides by
+        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 9 (stream width when a record has no w)
+    """
     grid = PointGrid()
     for f in streams:
         poly = f.get("poly") or []
@@ -265,7 +267,11 @@ class BundleFitMixin:
         old battery otherwise), when a reserved access corridor runs through it (`AccessTree.covers_box`) or when two or
         more placed boxes overlap it; and the ONE placed box `(cx, cy, w, h)`
         when that box alone overlaps it on clear ground, so the placer can make its single computed move. The
-        placed-box margin is the 2 px `_bundle_side_fits` always kept."""
+        placed-box margin is the 2 px `_bundle_side_fits` always kept.
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (envelope kept 6 px off the sheet edge)
+        """
         self._seat_search["rects"] += 1
         cx, cy, w, h = env
         if cx - w / 2 < 6 or cx + w / 2 > self.W - 6 or cy - h / 2 < 6 or cy + h / 2 > self.H - 6:
@@ -805,7 +811,11 @@ class BundleFitMixin:
         """The fit checks that DO move with the garden side (via the bundle bbox): in-bounds, inside any
         bounding ring, the garden bed(s) clear of every paddy/block/lane, and the whole bbox clear of every
         placed homestead. A layout whose lot's bath room or wood shed found no seat (`unlaid`, `FixtureUnlaid`, feature 280
-        M21/M22 carried into feature 287) is refused: the envelope admits a household only with room for every part it keeps."""
+        M21/M22 carried into feature 287) is refused: the envelope admits a household only with room for every part it keeps.
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (the same sheet-edge margin)
+        """
         if geom.get("unlaid"):
             return False
         cx, cy, W, H = geom["bbox"]
@@ -899,7 +909,9 @@ class BundleFitMixin:
         where it is drawn (`KeepoutsMixin._sun_keepouts`, `CANOPY_SHADE_FT`), whatever seat a farm takes.
 
         Research: yard's drying strip - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band in the yard's southern sun, a seating preference
-            yard's drying strip width - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the project's sun figures leave 39 ft open before a yard - the strip is 22 ft, a departure the code keeps until feature 417 T33; the 22 px strip in `shades`, a width 0038 does not give"""
+            yard's drying strip width - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the project's sun figures leave 39 ft open before a yard - the strip is 22 ft, a departure the code keeps until feature 417 T33; the 22 px strip in `shades`, a width 0038 does not give
+            its figures against 0038 - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 11 (center of the 22 px sun strip south of a yard) - a departure the code keeps until feature 417 T33
+        """
 
         def shades(grove: Any, yard: Any) -> bool:
             cyx, cyy = yard[0], yard[1] + yard[3] / 2 + 11

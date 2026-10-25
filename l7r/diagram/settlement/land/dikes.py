@@ -78,7 +78,10 @@ def dike_band(inner_env: Any, seed: int, width: tuple[float, float] = (14.0, 40.
 
     Research:
         dike width - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: 14-40 ft, swelling and pinching along the ring
-        faces - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the outer face follows the water in curves, the inner hugs the fields"""
+        faces - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the outer face follows the water in curves, the inner hugs the fields
+        its figures from 0027 - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: 0.16 (fine width-wave amplitude); 0.22 (middle width-wave amplitude); 0.26 (broad width-wave amplitude); 5 (fine wave's harmonic)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 34 (densifying step along the dike's inner face)
+    """
     R = random.Random(seed)
     pts = list(inner_env)
     if pts and pts[0] == pts[-1]:
@@ -203,7 +206,11 @@ class DikeMixin:
             mulberry row - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: a quarter out from the fields, 4.4 px apart, crowns r 2.2-3.6
             rows on the faces - DEVIATION research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html
             no building on the dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: houses and groves kept off the band
-            dike label - CONVENTION: named on a clear stretch away from the village"""
+            dike label - CONVENTION: named on a clear stretch away from the village
+            its figures from 0027 - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: 0.74 (willow row's place across the band); 0.26 (mulberry row's place across the band)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 29 (seed salt (0x1D))
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.7 (mottle throw count per px of bbox); 13 (mottle ellipse max rx); 9 (mottle ellipse max ry); 1.4 (willow wander off its row line); 1.2 (mulberry wander off its row line); 200 (label siting penalty on the village's side); 1000 (label siting score: prefer the north side)
+        """
         from l7r.diagram.waterfields import BUND
 
         dense, inner_s, outer_s, w_seen, (cx, cy) = dike_band(inner_env, seed, width)
@@ -354,7 +361,9 @@ class DikeMixin:
             posts past the banks - GUESS: 2 ft past each bank where the gate spans a wider channel
             gate on its watercourse - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: snapped onto the drawn course within 20 ft of the cut, else at the cut
             gate glyph at the polder cut - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the field sluice glyph,
-                its frame drawn true at the span passed"""
+                its frame drawn true at the span passed
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel distance)
+        """
         n_gates = 0
         for dk in self.M.get("dikes", []):
             crest = [(float(c[0]), float(c[1])) for c in dk.get("crest") or []]
@@ -413,7 +422,11 @@ class DikeMixin:
             spacing along the crest - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); neighbors at least 1.15 house widths apart
             house platform - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the house and about 14 ft by 10 ft more; the house plus 14 by 10 ft of widened crest
             off the sluice notch - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: about 34 ft on a hamlet map; no house within 34 px of a gap
-            no homestead bundle - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: drawing none on the crest; bare houses, the gardens down on the parcels"""
+            no homestead bundle - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: drawing none on the crest; bare houses, the gardens down on the parcels
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 3358 (seed salt (0xD1E))
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N11, 2026-10-25) - 0.18 (house seat jitter along the crest)
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.32 (platform mottle spread (width)); 0.28 (platform mottle spread (height)); 8 (platform mottle rx max); 5 (platform mottle ry max / rx min)
+        """
         from l7r.diagram.waterfields import BUND
 
         dk = self.M["dikes"][dike]

@@ -298,7 +298,9 @@ class FixtureSitingMixin:
             nearness tie-break - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); score less a third of the offset
             least offset off the tread - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 ft from the edge of the road to the board drawn (its footing), not to the face tested
             farthest seat off the road - GUESS research/questions/0190-notice-boards-kosatsuba.drawing.html: up to 60 ft (KOSATSUBA_WAY_REACH_FT), the project's own figure
-            sampling lattice - NONE: 12 px along, 5 px out"""
+            sampling lattice - NONE: 12 px along, 5 px out
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 26 (top sheet margin)
+        """
         lim = KOSATSUBA_WAY_REACH_FT / ftpx
         verge = KOSATSUBA_VERGE_FT / ftpx + 1e-6
         half = math.hypot(w, h) / 2
@@ -437,7 +439,9 @@ class FixtureSitingMixin:
             board may stand in shade - research/questions/0190-notice-boards-kosatsuba.drawing.html: shaded seats admitted
             open ground preferred - GUESS: shaded seats only where no open one fits
             anchored board band - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); within `KOSATSUBA_ANCHOR_BAND_FT`, 60 ft, of the nearest seat to the anchor
-            handover band - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); an entrance board within `KOSATSUBA_HANDOVER_BAND_FT`, 20 ft, of the nearest seat to the handover"""
+            handover band - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); an entrance board within `KOSATSUBA_HANDOVER_BAND_FT`, 20 ft, of the nearest seat to the handover
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 0.6 (traffic floor)
+        """
         anchor = kosatsuba_anchor(self.M, placement, self.ftpx) if lane_tier else None
         # an entrance board keeps only the ground within its reach (`entrance_seat_ok`): the whole band is fitted there alone
         ground = (anchor[0], anchor[1], (KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT) / ftpx + 1e-6) if ENTRANCE_PRUNE and anchor is not None and placement == "entrance" else None

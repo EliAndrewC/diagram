@@ -65,7 +65,7 @@ def test_a_seat_below_the_houses_on_dry_ground_is_kept_by_its_tier(monkeypatch) 
     """Feature 374 wave 120: the ranking reads the field alone - the slope, then the level, any seat kept."""
     from types import SimpleNamespace
 
-    from l7r.diagram.hamletgen.hinterland import parcels
+    from l7r.diagram.hamletgen.hinterland.parcels import patches as parcels
 
     tiers = {(1.0, 1.0): 0, (2.0, 2.0): 1, (3.0, 3.0): 1}
     monkeypatch.setattr(parcels, "woodland_tier", lambda p, *a: tiers[p])
@@ -92,7 +92,7 @@ def test_every_drawn_wood_was_asked_the_water_rule_at_its_own_square(monkeypatch
     """Feature 374 wave 120 (the plan review): the water rule is in the scan's one qualification (`_ok`), so a seat the nudge,
     the row step, the size roll or the aspect steps move is asked it again at its own square. A refusal patched over the
     canvas's east half keeps every drawn wood west of the line, its whole square included; unpatched, woods stand east too."""
-    from l7r.diagram.hamletgen.hinterland import parcels
+    from l7r.diagram.hamletgen.hinterland.parcels import patches as parcels
     from l7r.diagram.settlement import Settlement
     from l7r.diagram.settlement.land.cover import ring_center
 

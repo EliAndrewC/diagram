@@ -74,6 +74,7 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
     Research:
         fan acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: the fan solved to the households' acreage, refused outside FIELD_ACRE_BAND
         size and aspect search - NONE
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.06 (the fit's own stopping tolerance, inside the band page 0017 sets); 9 (number of fitting rounds)
     """
     best: tuple[tuple[bool, float], CombCarve] | None = None
     # THE ASPECT IS PART OF THE SEARCH, not just a roll. A fan's legality - whether its supply canal
@@ -191,6 +192,8 @@ def _fit_at_aspect(
         fan cut away from the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook-side supply canal BROOK_FAN_TRIM (0.72) short
         size search - NONE: the multiplier bracketed and predicted
         fan proportions - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); REF_FIELD_FALL 1,150 ft, flank canals REF_CANAL_A 1,250-1,450 and REF_CANAL_B 680-800 ft, Ikegami's hand-drawn fan
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.35 (lower end of the size-multiplier search range); 2.2 (upper end of the size-multiplier search range); 0.03 (stop when the range is narrower than about one plot row)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.001 (tiny clamp for the probe at the range's top)
     """
     lo, hi = 0.35, 2.2
     best: tuple[tuple[bool, float], CombCarve] | None = None
@@ -305,7 +308,11 @@ def _predict_k(pts: list[tuple[float, float]], target: float, lo: float, hi: flo
 
     Useless means: the two acreages coincide (a flat in the lumpy curve - no slope to follow), an
     acreage of zero (nothing carved), or a prediction outside the open bracket (the curve is not
-    the power law where it matters, so the bracket's own halving takes over, exactly as before)."""
+    the power law where it matters, so the bracket's own halving takes over, exactly as before).
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.2 (lowest believable exponent in the size prediction); 6 (highest believable exponent in the size prediction)
+    """
     (k1, a1) = pts[-1]
     if a1 <= 0:
         return (lo + hi) / 2.0
@@ -358,6 +365,7 @@ def tail_dangles(net: Mapping[str, Any], margin: float = 18.0) -> bool:
     """Does any supply-canal end fall outside the fan's planted extent? See `fit_field`.
 
     Research: supply tail dies in the crop - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: no free supply end more than 18 px outside the plots
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 5 (match distance: two canal ends this close count as one)
     """
     xs = [v[0] for p in net["plots"] for v in p["poly"]]
     ys = [v[1] for p in net["plots"] for v in p["poly"]]

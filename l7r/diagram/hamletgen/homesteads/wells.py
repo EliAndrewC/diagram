@@ -93,7 +93,9 @@ def mark_form(s: Any, x: float, y: float, form: str) -> None:
     """Record on the well just drawn at (x, y) the form that seated it (feature 374 wave 154) - `pocket`, `cluster`, `lane`
     or `fallback` - where the manifest holds it.
 
-    Research: a well's form recorded - NONE: the manifest's record of which form seated each well"""
+    Research: a well's form recorded - NONE: the manifest's record of which form seated each well
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.06 (float tolerance, matching the well record)
+    """
     for w in reversed((getattr(s, "M", None) or {}).get("wells") or []):
         if abs(float(w["x"]) - round(x, 1)) < 0.06 and abs(float(w["y"]) - round(y, 1)) < 0.06:
             w["form"] = form
@@ -173,7 +175,11 @@ def own_well_clear(s: Settlement, x: float, y: float, half: float, boxes: Sequen
     """May a farm's own wellhead of drawn half-size `half` stand at (x, y)? Tested by FOOTPRINT: its box a 2 ft gap off
     every reserved box (`boxes`: the placed boxes but the farm's own frame, and the grove bands), and the engine's own
     ground tests - no water, crop or bog (`_well_ground_clear`), no scrub cover, nothing blocked. `well_at` asks `_fits`,
-    whose circumscribed circle round a 150 ft grove band covered most of the farm it shelters (Kashikawa: 0 wells)."""
+    whose circumscribed circle round a 150 ft grove band covered most of the farm it shelters (Kashikawa: 0 wells).
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 55 (wellhead kept off the sheet edges); 88 (wellhead kept off the sheet edges); 26 (wellhead kept off the sheet edges)
+    """
     if x < 55 or y < 88 or x > s.W - 55 or y > s.H - 26:
         return False
     if s._in_scrub_cover(x, y) or not s._well_ground_clear(x, y) or s._in_blocked(x, y):
@@ -233,6 +239,7 @@ def shared_row_wells(s: Settlement, houses: Sequence[Mapping[str, Any]], streets
         no well in a street bend - GUESS: no shared well at a mark where the street turns `BEND_WELL_DEG` (30 degrees) or more within `BEND_LOOK_FT` (40 ft, the zigzag run) on either side; no page gives a bend rule for wells
         fallback seats along the street - GUESS: a seat tried at the mark, then a half and a quarter lot either way along the street; no page gives the offsets
         a farm counted to each street within two farmstead frames - GUESS: every street within two frames of it, not only the nearest (`d <= 2.0 * frame_w`); no page gives how far a row's farm may stand from its street
+        its figures from 0033 - research/questions/0033-row-villages-resson.drawing.html: 240 (fallback frame width)
     """
     if not streets or not houses:
         return 0
@@ -353,6 +360,7 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
         no well in a household's homestead - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0196-communal-wells-ido.drawing.html: the well shared off the farmstead, by the lane or among the houses, never a pocket inside one household's homestead
         grove farms take their own water - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a dispersed farm draws from its own channel or well, not the shared-well rule of towns, so every grove farm takes its own water (`grove_water`) and is left out of the communal wells
         the wells' siting rolled - research/questions/0196-communal-wells-ido.drawing.html: by the lane or among the houses, a knob; the cluster form seated before the lanes, the lane-side form tried beside the track first and seated on a lane's verge once the lanes stand
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 11 (lattice step, lane-side seats)
     """
     grove_farms = [h for h in houses if (h.get("geom") or {}).get("groves")]
     if grove_farms:
@@ -412,6 +420,8 @@ def seat_wells(
         no well over a household's wood floor - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); no well seated over a household's reserved wood-floor seats
         later wells by the worst walk - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); ranked by the worst-served household's walk after the dig, in 66 px buckets, the crop's overreach added 1:1
         ties among later wells - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); the belt, then the crop's overreach, then the exact worst walk, then the want_near-th nearest house
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 22 (default lattice step); 120 (sweep box pad)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.01 (divide-by-zero guard)
     """
     new: list[Pt] = []
     if not houses or len(placed) >= want:
@@ -672,7 +682,10 @@ def seat_cluster(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, An
         among five to ten houses - research/questions/0196-communal-wells-ido.drawing.html: the cluster form in the open ground among five to ten houses, off every lane
         the reach widens first - GUESS research/questions/0196-communal-wells-ido.drawing.html: how far round a seat the five may stand is this project's choice - 190, 300, 520 px, then 760 ft - widened before the count gives way
         off every lane - research/questions/0196-communal-wells-ido.drawing.html: the cluster well off every lane, its verge included (`on_a_verge`)
-        three, then two, only where five cannot be gathered - research/questions/0196-communal-wells-ido.drawing.html: a household is still owed a well within reach"""
+        three, then two, only where five cannot be gathered - research/questions/0196-communal-wells-ido.drawing.html: a household is still owed a well within reach
+        its figures from 0196 - research/questions/0196-communal-wells-ido.drawing.html: 5 (fewer than five households: three, then two)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.01 (divide-by-zero guard)
+    """
     reach = max(520.0, 760.0 / max(plan.ftpx, 0.01))
     verge = on_a_verge(s)
     off_lanes = lambda x, y: not verge(x, y)  # noqa: E731 - off every lane, its verge included (0196), where lanes stand
@@ -756,7 +769,9 @@ def reach_wells(s: Settlement, plan: SitePlan) -> None:
     Research:
         a well for every household beyond reach - research/questions/0196-communal-wells-ido.drawing.html: every household within 760 ft of a well or open water, one more shared well where the houses spread past the hamlet's one or two
         one more well where one serves more than ten - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses a Karihama well served, a hamlet's wells as many as one to 2-20 households
-        the forms' order - research/questions/0196-communal-wells-ido.drawing.html: the rolled siting first, the other form, then the fallback (`lane_and_fallback_wells`)"""
+        the forms' order - research/questions/0196-communal-wells-ido.drawing.html: the rolled siting first, the other form, then the fallback (`lane_and_fallback_wells`)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 11 (lattice step)
+    """
     houses = [h for h in s.M.get("houses") or [] if not (h.get("geom") or {}).get("groves") and h.get("kind") != "abandoned"]
     added = over = 0
     last = len(houses) + 1
@@ -811,7 +826,9 @@ def lane_and_fallback_wells(s: Settlement, plan: SitePlan, owed: tuple[int, Sequ
 
     Research:
         the order of the forms - research/questions/0196-communal-wells-ido.drawing.html: the lane-side form on a verge once the lanes stand, the other form where no verge has room
-        the fallback - DEVIATION research/questions/0196-communal-wells-ido.drawing.html: among three houses, then two, at the 95 ft, where neither form finds a seat, marked `fallback`"""
+        the fallback - DEVIATION research/questions/0196-communal-wells-ido.drawing.html: among three houses, then two, at the 95 ft, where neither form finds a seat, marked `fallback`
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 11 (lattice step)
+    """
     want, tried = owed
     houses = [h for h in s.M.get("houses") or [] if not (h.get("geom") or {}).get("groves")]
     placed = [(float(w["x"]), float(w["y"])) for w in s.M.get("wells") or [] if not w.get("private") and not w.get("shrine")]

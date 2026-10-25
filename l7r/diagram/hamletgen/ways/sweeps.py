@@ -68,7 +68,9 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
         link crosses the brook at a crossing place - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no out-and-back over the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a link crossing the brook twice is refused
         link width - CONVENTION: the widest way within `_LANE_JOIN_FT` of the link (the orphan's and the network's at least)
-        orphan link directness - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); a link up to `_LINK_DIRECTNESS` (4) times the gap"""
+        orphan link directness - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); a link up to `_LINK_DIRECTNESS` (4) times the gap
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 6 (rounds of the orphan sweep); 14 (lattice cell for the retry route)
+    """
     made = 0
     for _ in range(6):
         ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
@@ -157,7 +159,9 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
 def farm_bands(M: Mapping[str, Any]) -> list[Poly]:
     """A farm's own wood, which no carried end crosses: its grove bands (`groves`) as rotated rectangles, and the dooryard copse's
     clumps (`village_groves` role `copse`, each a household's share) as octagons of the clump radius `r` - not the shelter belt.
-    Research: a farm's own wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: its grove and its share of the copse, one wood"""
+    Research: a farm's own wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: its grove and its share of the copse, one wood
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (octagon for a copse clump)
+    """
     bands = [rot_rect(float(g["x"]), float(g["y"]), float(g["w"]), float(g["h"]), float(g.get("rot") or 0.0)) for g in M.get("groves") or [] if g.get("w")]
     for g in M.get("village_groves") or []:
         r = float(g.get("r") or 0.0)

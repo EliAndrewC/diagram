@@ -375,7 +375,11 @@ def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
     the drain outfall until it clears the crop, and then clamps it to the canvas. At 1.75x the clamp
     started winning, which puts the pond back on the paddy and its ditch running uphill - four
     checks failing on a third of a cohort, all from one number. Trimming the canvas needs the CROP
-    to be trimmed instead, not the ground the map still uses."""
+    to be trimmed instead, not the ground the map still uses.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 0.4 (the generator's measured fan fill; working canvas, cropped away); 50 (canvas rounded to 50)
+    """
     field_px2 = target_acres * SQ_FT_PER_ACRE / (ftpx * ftpx)
     span = math.sqrt(field_px2 / 0.40)
     side = int(round(span * 2.0 / 50.0) * 50)
@@ -390,7 +394,9 @@ def band_extent(households: int, shape: str | None, ground: float | None = None)
     Research:
         band area - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); households times HOMESTEAD_GROUND_FT squared; 0037 sizes only the yard
         band aspect by shape - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); CLUSTER_BAND_ASPECT
-        band floors and caps - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); half-depth 112 to 300 ft, half-length 240 to 1,100 ft"""
+        band floors and caps - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); half-depth 112 to 300 ft, half-length 240 to 1,100 ft
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 1100 (cap on the band's half-length)
+    """
     asp = CLUSTER_BAND_ASPECT.get(shape or "crescent", 3.0)
     g = HOMESTEAD_GROUND_FT if ground is None else ground
     dep = max(112.0, min(math.sqrt(households * (g**2) / (asp * math.pi)), 300.0))
@@ -470,7 +476,9 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         knob rolls - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: cluster_shape, lane_skeleton, plot_size and grain_drift rolled per hamlet; each table's own claim in consts
         harvest weather default - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled unless declared
         canvas - NONE: the field's square, the fan's overhang and the seat's room, cropped later
-        grove sides refused outside two to four - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: two, three or four sides"""
+        grove sides refused outside two to four - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: two, three or four sides
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 50 (canvas rounded to 50)
+    """
     # A POLDER IS LAID TO THE CARDINAL SURVEY GRID, so its fall is rolled from the four cardinals
     # rather than the eight compass points. This is not a workaround for `polder_fills_its_bbox`
     # (which a diagonal block fails, correctly - a rotated rectangle cannot fill an axis-aligned

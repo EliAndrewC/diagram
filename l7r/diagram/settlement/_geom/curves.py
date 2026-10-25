@@ -45,7 +45,9 @@ def fillet_polyline(pts: Poly, radius: float, steps: int = 6, min_turn_deg: floa
     Research:
         earth channel bends on a sweep - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: every interior corner filleted
         bend radius scales with width - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: callers pass ~2.5x the drawn width
-        fillet cap and threshold - NONE: 35% of each leg, corners under 8 degrees left alone"""
+        fillet cap and threshold - NONE: 35% of each leg, corners under 8 degrees left alone
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (samples per fillet ("curve plumbing - NONE")); 0.35 (fillet cap per leg (the claim: "fillet cap and threshold - NONE"))
+    """
     if len(pts) < 3 or radius <= 0:
         return [(float(x), float(y)) for x, y in pts]
     out: Poly = [(float(pts[0][0]), float(pts[0][1]))]
@@ -71,6 +73,9 @@ def fillet_polyline(pts: Poly, radius: float, steps: int = 6, min_turn_deg: floa
 
 
 def smooth_closed(pts: Poly) -> str:
+    """Research:
+    its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (Catmull-Rom to Bezier constant)
+    """
     n = len(pts)
     d = f'M{pts[0][0]:.1f},{pts[0][1]:.1f}'
     for i in range(n):
@@ -83,7 +88,11 @@ def smooth_closed(pts: Poly) -> str:
 
 def smooth_points(pts: Poly, steps: int = 10) -> Poly:
     """Sample the rendered (Catmull-Rom) boundary so the manifest matches what's
-    drawn - the curve bows inward of the raw vertices (a hard-won lesson)."""
+    drawn - the curve bows inward of the raw vertices (a hard-won lesson).
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (the same constant)
+    """
     n = len(pts)
     out = []
     for i in range(n):
@@ -102,7 +111,9 @@ def smooth_points(pts: Poly, steps: int = 10) -> Poly:
 def organic_bbox(bbox: Any, amp: float) -> Poly:
     """Semi-rectangular core with lobes (outgrowths) and bays (indentations).
 
-    Research: organic outline - CONVENTION: lobes and bays so a drawn parcel reads hand-made"""
+    Research: organic outline - CONVENTION: lobes and bays so a drawn parcel reads hand-made
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.35 (first-sample damping (no caller)); 0.18 (outline jitter (no caller))
+    """
     x0, y0, x1, y1 = bbox
     edges = [((x0, y0), (x1, y0), (0, -1)), ((x1, y0), (x1, y1), (1, 0)), ((x1, y1), (x0, y1), (0, 1)), ((x0, y1), (x0, y0), (-1, 0))]
     pts = []
@@ -122,7 +133,9 @@ def organic_poly(base: Poly, amp: float) -> Poly:
     """Organic-ize an arbitrary base polygon (handles concave shapes like a V):
     densify each edge and jitter the samples; smoothing rounds it.
 
-    Research: organic outline - CONVENTION: jittered edges so a drawn parcel reads hand-made"""
+    Research: organic outline - CONVENTION: jittered edges so a drawn parcel reads hand-made
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 150 (densify step (no caller))
+    """
     pts = []
     n = len(base)
     for i in range(n):
@@ -138,7 +151,9 @@ def organic_poly(base: Poly, amp: float) -> Poly:
 def winding(start: Pt, end: Pt, amp: float = 15, n: int = 2) -> Poly:
     """A gently winding path from start to end (a shallow S, not a straight line).
 
-    Research: winding path - research/questions/0081-village-lanes.html: a path takes the shortest or easiest route, a bend having its reason on the ground - a shallow S with no cause is drawn, a departure the code keeps until feature 417 T32; a shallow S of amplitude `amp` rather than a straight line"""
+    Research: winding path - research/questions/0081-village-lanes.html: a path takes the shortest or easiest route, a bend having its reason on the ground - a shallow S with no cause is drawn, a departure the code keeps until feature 417 T32; a shallow S of amplitude `amp` rather than a straight line
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 15 (default amplitude; only dead `channel()` calls it (channel's own 15 is GUESS, T36 P2b))
+    """
     sx, sy = start
     ex, ey = end
     dx, dy = ex - sx, ey - sy

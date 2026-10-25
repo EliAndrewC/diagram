@@ -62,7 +62,11 @@ def crossing_points(p: Poly, course: Poly) -> list[tuple[int, Pt]]:
     THE COURSE INDEXED ONCE (constitution X clause 15): a household's way out is sampled every 10 ft and a brook runs to
     hundreds of segments, so every pair was millions of tests a map (`settle_the_web`'s way-out step, 4.3 s of Kashikawa's
     5.0). The grid only prunes - a course segment whose box cannot meet the run segment's cannot cross it - and the same
-    test decides, in the same order."""
+    test decides, in the same order.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (spatial-index cell)
+    """
     grid = PointGrid(64.0)
     grid.extend((j, c, d, min(c[0], d[0]), min(c[1], d[1]), max(c[0], d[0]), max(c[1], d[1])) for j, (c, d) in enumerate(zip(course, course[1:], strict=False)))
     out = []

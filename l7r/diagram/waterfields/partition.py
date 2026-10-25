@@ -135,6 +135,9 @@ class Sectors:
     """
 
     def __init__(self, F: _Frame, threads: list[_Thread], region: Any, R: random.Random, RW: random.Random, plot_across: float, row_step: tuple[float, float], g: float) -> None:
+        """Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 20 (overrun past the region)
+        """
         self.F, self.threads, self.region = F, threads, region
         self.R, self.RW, self.plot_across, self.row_step, self.g = R, RW, plot_across, row_step, g
         minx, miny, maxx, maxy = region.bounds
@@ -164,6 +167,7 @@ class Sectors:
         """Every thread, and each continued straight down the fall past its own end until it meets another thread.
 
         Research: sector pieces - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a fan's bunds converge with its drain, the convergence kept - each thread runs on straight down the fall, a departure the code keeps until feature 417 T34; each thread continued straight down the fall until it meets another
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 40 (overrun of the extension)
         """
         import shapely
         from shapely.geometry import LineString
@@ -196,6 +200,9 @@ class Sectors:
             no jori grid on the old plains - DEVIATION research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:
                 the warped lattice on every valley_paddy map, the long-settled western plains included; never the jori grid
             tip row dropped - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a row at the tip narrower than `MIN_ROW` (0.45) of the lesser of a plot width and the sector's median width is dropped
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 6 (first row back at the root); 12 (width samples); 13 (the same (range end)); 40 (line overrun)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 6.28 (phase range (about 2π))
+            its figures guessed on 0284 - GUESS research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: 70 (wavelength of the column-line wobble); 47 (wavelength of the row drift)
         """
         F, g, R, row_step, across = self.F, self.g, self.R, self.row_step, self.plot_across
         f_lo = max(_root_f(A, F), _root_f(B, F)) + 6 * g
@@ -256,6 +263,7 @@ class Sectors:
         it along the contour at the sector's own row falls (call `grid_lines` for the sector first).
 
         Research: strip past the outer thread - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: columns a plot width apart parallel to the thread, rows at the sector's falls
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 40 (line overrun)
         """
         F, across = self.F, self.plot_across
         f_mid = sum(self.rows) / len(self.rows)
@@ -309,6 +317,7 @@ def _column_kept(width: float, nsub: int, j: int, across: float) -> bool:
     sector holds fewer than two thirds of the columns it divides - nested, so a dropped column ends in a T on a row bund.
 
     Research: columns thin to a T - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a dropped column ends at a T-junction on a row bund
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 1.5 (thin columns once there are 1.5× too many)
     """
     n_here = max(1, round(width / across))
     step = 1

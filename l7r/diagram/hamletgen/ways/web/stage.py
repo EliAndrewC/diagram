@@ -297,7 +297,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
 
 def seat_wall_reach(s: Settlement) -> float:
     """The radius a reserved seat is walled at for the web (`stage_web`): the copse's lane buffer about it, a footpath's
-    half-tread and the placer's margin, less the fabric margin every web pass keeps off a wall - never under a foot."""
+    half-tread and the placer's margin, less the fabric margin every web pass keeps off a wall - never under a foot.
+
+    Research:
+        its figures from 0081 - research/questions/0081-village-lanes.html: 1.5 (half the footpath's tread)
+    """
     return max(1.0, s.standing.reserved.lane_buffer + 1.5 + PLACER_MARGIN_PX - WEB_FABRIC_GAP)
 
 
@@ -327,7 +331,9 @@ def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -
     passes and killed a cohort worker outright. The prefilter is the index and the stride is the
     resolution; neither decides anything, which is the project's standing rule for both.
 
-    Research: islands never drawn - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network grown from the skeleton"""
+    Research: islands never drawn - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network grown from the skeleton
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 8 (sample stride ("the stride is the resolution"))
+    """
     runs = [r for r in cands if len(r) >= 2]
     if not runs:
         return []

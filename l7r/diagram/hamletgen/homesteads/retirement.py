@@ -121,6 +121,7 @@ def retirement_glyph(cx: float, cy: float, w: float, d: float, rot: float) -> st
     its door on the face away from the farmhouse (local +y).
 
     Research: retirement house glyph - CONVENTION: the farmhouse's two-tone thatch and ridge, smaller
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.28 (ridge-line length in the glyph); 1.6 (door mark offset in the glyph)
     """
     return (
         f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">'

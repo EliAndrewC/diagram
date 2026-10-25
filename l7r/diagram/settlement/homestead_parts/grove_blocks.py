@@ -135,7 +135,11 @@ class GroveBlocks:
         (the corridors at their buffers) and the LOCAL obstacles a belt is planted around (the occupancy circles, the sun
         rectangles). A clump's ground is read off them and nothing else: which family refuses it decides whether it is dropped or
         re-seated. Conservative (every shape grown by `region.GROW` cells): a clump at a family's very margin may be refused,
-        never one seated on a keep-out."""
+        never one seated on a keep-out.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (raster window pad)
+        """
         if self._region is None:
             from .._geom.region import Region
 
@@ -207,6 +211,9 @@ class Seats:
     __slots__ = ("grid", "r2", "reach")
 
     def __init__(self, reach: float) -> None:
+        """Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 16 (spatial-index cell floor)
+        """
         self.reach = reach
         self.r2 = reach**2  # `(step * 0.55) ** 2` and `(clump * 0.5) ** 2` were the originals - the same power, once
         # A CELL THE SIZE OF THE REACH (feature 278, FR-010). At the default 128 px a query read every clump seated in a

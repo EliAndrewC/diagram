@@ -69,7 +69,9 @@ def street_run_out(street: Sequence[Pt], width: float, height: float, beyond: fl
     along its last leg until `beyond` past the edge. The end chosen is the one whose run to the edge is shorter. (Here, beside
     the street's span, since feature 304 took `track.py` over the 1,000-line bar; `track.stage_track` calls it.)
 
-    Research: street runs on as the road - research/questions/0033-row-villages-resson.drawing.html, research/questions/0081-village-lanes.drawing.html: straight on along its last leg off the nearer sheet edge"""
+    Research: street runs on as the road - research/questions/0033-row-villages-resson.drawing.html, research/questions/0081-village-lanes.drawing.html: straight on along its last leg off the nearer sheet edge
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 60 (run carried past the sheet's edge)
+    """
 
     a, b = street_runs_out(street, width, height, beyond)
     return a[1] if a[0] <= b[0] else b[1]
@@ -78,7 +80,9 @@ def street_run_out(street: Sequence[Pt], width: float, height: float, beyond: fl
 def run_to_edge(end: Pt, prev: Pt, width: float, height: float, beyond: float = 60.0) -> tuple[float, list[Pt]]:
     """How far `end` stands from the sheet's edge straight on along the leg from `prev`, and that run carried `beyond` past it.
 
-    Research: run plumbing - NONE"""
+    Research: run plumbing - NONE
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 60 (same)
+    """
     dx, dy = end[0] - prev[0], end[1] - prev[1]
     m = math.hypot(dx, dy) or 1.0
     ux, uy = dx / m, dy / m
@@ -93,7 +97,9 @@ def street_runs_out(street: Sequence[Pt], width: float, height: float, beyond: f
     last leg): the road it runs on as leaves by the nearer (`street_run_out`), and the street runs on off the map at the other
     end too (feature 328 wave 5) - the street stands for the road the row stands on, which does not stop at the row's last farm.
 
-    Research: street runs on off the map - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it; it stands for the road the row stands on"""
+    Research: street runs on off the map - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it; it stands for the road the row stands on
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 60 (same)
+    """
     return run_to_edge(street[0], street[min(8, len(street) - 1)], width, height, beyond), run_to_edge(street[-1], street[max(-9, -len(street))], width, height, beyond)
 
 

@@ -57,7 +57,9 @@ def bank_seats(s: Settlement, pond: tuple[float, float, float, float]) -> list[P
     Research:
         on the bank, beyond the reeds - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds at the shore, the embankment beyond them
         sparsely - GUESS: one tree about every 30 ft of bank (`POND_BANK_PITCH_FT`)
-        each seat jittered - GUESS: up to a quarter pitch along the ring and across the bank's play by its position - trees planted irregularly, not in a ruled row, within the page's one about every 30 ft"""
+        each seat jittered - GUESS: up to a quarter pitch along the ring and across the bank's play by its position - trees planted irregularly, not in a ruled row, within the page's one about every 30 ft
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 67 (_hjit` salt); 61 (_hjit` salt)
+    """
     cx, cy, rx, ry = pond
     off = SINK_FRINGE + s.px(POND_BANK_CROWN_FT)
     play = s.px(POND_BANK_FT) - 2 * s.px(POND_BANK_CROWN_FT)  # the room the crown leaves across the bank
@@ -82,7 +84,9 @@ def seat_free(s: Settlement, x: float, y: float, r: float) -> bool:
         no crown on a roof or a wellhead - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: against a wall, never on it
         out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html: no canopy over a yard's or bed's sun ground; the bank mulberry is the manual's shade tree for cattle (0061), a canopy tree, not 0038's field mulberry trained as low bushes, which the rule exempts
         no trunk in the reeds - research/questions/0061-reservoir-ponds-tameike.drawing.html: the reeds stand at the shore, the bank beyond them
-        no trunk on a way, crop or water - research/questions/0061-reservoir-ponds-tameike.drawing.html: a tree left out where its trunk would stand on a lane, the crop or the water - off every tread, paddy, dry plot and marsh, and a stream's half-width and a foot"""
+        no trunk on a way, crop or water - research/questions/0061-reservoir-ponds-tameike.drawing.html: a tree left out where its trunk would stand on a lane, the crop or the water - off every tread, paddy, dry plot and marsh, and a stream's half-width and a foot
+        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 9 (fallback stream width when a record has no `w)
+    """
     if not (r <= x <= s.W - r and r <= y <= s.H - r):
         return False
     box = (x - r, y - r, x + r, y + r)

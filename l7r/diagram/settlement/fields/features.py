@@ -33,14 +33,20 @@ def grave_form(seed: int) -> str:
     """The field grave's form on this hamlet - the knob research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html records: "island" (inside a plot, the Chinese form) or "corner" (in a plot's corner
     against its bunds, the Japanese form), even odds, since no source weighs one against the other.
 
-    Research: field grave form - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: island or corner, even odds"""
+    Research: field grave form - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: island or corner, even odds
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 4.29497e+09 (32-bit seed mask)
+    """
     return "island" if random.Random((seed ^ _GRAVE_FORM_SALT) & 0xFFFFFFFF).random() < 0.5 else "corner"
 
 
 def turning_corners(poly: Sequence[Pt], min_deg: float = 45.0) -> list[int]:
     """The vertices of `poly` where its outline turns through more than `min_deg` - its real corners. A comb plot
     carries extra vertices ALONG its sides where a neighbor's bund meets it, and a grave seated at one of those stood
-    mid-edge beside a ditch, reading as no corner at all (Kashikawa, 2026-09-27). Every vertex if none turns."""
+    mid-edge beside a ditch, reading as no corner at all (Kashikawa, 2026-09-27). Every vertex if none turns.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 45 (turn that counts as a real corner)
+    """
     n = len(poly)
     out = []
     for i in range(n):
@@ -113,7 +119,9 @@ def carve_around_grave(plots: list[dict[str, Any]], disc: tuple[float, float, fl
 
     Research:
         paddy carved round the grave - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no basin runs under the mound
-        island host halved - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); the host basin split along its long axis through the mound, a bund run to the island"""
+        island host halved - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); the host basin split along its long axis through the mound, a bund run to the island
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (cut tolerance)
+    """
     from shapely.geometry import LineString, Point, Polygon
     from shapely.ops import split
 
@@ -186,7 +194,9 @@ def _mound_meets_pond(disc: tuple[float, float, float], ponds: Sequence[dict[str
     """Whether a grave's mound (its disc) would stand in a field pond: the disc's outline meets the pond's rim, or either
     center lies inside the other - an island is dry ground, never drawn in open water.
 
-    Research: grave off the pond - research/questions/0058-ground-too-wet-to-build-on.drawing.html: a grave stands on dry ground"""
+    Research: grave off the pond - research/questions/0058-ground-too-wet-to-build-on.drawing.html: a grave stands on dry ground
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 32 (ring sampling); 16 (ring sampling)
+    """
     cx, cy, r = disc
     ring = [(cx + r * math.cos(a * math.pi / 16), cy + r * math.sin(a * math.pi / 16)) for a in range(32)]
     return any(
@@ -219,7 +229,9 @@ class FieldFeaturesMixin:
 
         Research:
             pond glyph - CONVENTION: blue fill, a dark rim and an inner sheen
-            pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: about 3 ft at the map's scale, twice the 1.5 ft floor"""
+            pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: about 3 ft at the map's scale, twice the 1.5 ft floor
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 12 (inner sheen inset)
+        """
         refuse_unadmitted(self.M, "pond", [cx, cy, rx, ry])
         if stream_curve:
             # the pond's feeder runs at the lateral/ditch tier - a thin line near the channel weight,
@@ -271,6 +283,7 @@ class FieldFeaturesMixin:
             rock outcrop's host plot - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); any plot of the field, chosen at random
             field grave's host plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: a single grave stood in the open field where a priest or a geomancer chose, tied to no plot; the host plot is ours; a plot chosen at random, then the plots after it in list order
             field grave rate - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: 0.3 on valley, terrace and ribbon fields
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 4.29497e+09 (seed mask); 39633 (substream salt 0x9AD1)
         """
         if self.M.get("meta", {}).get("scale") in ("town", *CITY_TIER_SCALES):
             # the in-field flourishes (low-pocket pond, rock outcrop, rare grave island) are VILLAGE-scale
@@ -369,7 +382,9 @@ class FieldFeaturesMixin:
         Research:
             field pond glyph - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: a dish pond, low ground ringed with an embankment and dug out
             reed fringe - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a fringe of reeds inside the low plot
-            bank, margin and water proportions - GUESS: the water 72% of the outline where the margin keeps POND_MARGIN_PX, the reeds midway across the margin"""
+            bank, margin and water proportions - GUESS: the water 72% of the outline where the margin keeps POND_MARGIN_PX, the reeds midway across the margin
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (half-length of a reed mark); 8 (count of reed marks)
+        """
         fit = self._pond_fit(plot, rings)
         if fit is None:
             return False
@@ -402,7 +417,9 @@ class FieldFeaturesMixin:
 
         Research:
             pond inside one plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: the whole rim inside its low plot, crossing no ring
-            field pond size - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: the smallest field ponds ran about 33 ft a side - the legible floor of 10 by 7 px semi-axes draws a pond as small as about 20 by 14 ft, a departure the code keeps until feature 417 T34; 0.82 of the plot's half-span, 10-46 by 7-32 px, shrunk 0.9 a step"""
+            field pond size - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: the smallest field ponds ran about 33 ft a side - the legible floor of 10 by 7 px semi-axes draws a pond as small as about 20 by 14 ft, a departure the code keeps until feature 417 T34; 0.82 of the plot's half-span, 10-46 by 7-32 px, shrunk 0.9 a step
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 12 (rim sampling); 24 (rim sampling)
+        """
         poly = [(float(x), float(y)) for x, y in plot["poly"]]
         _, _, hx, hy = self._plot_center_span(poly)
         cx, cy = _centroid(poly)
@@ -446,7 +463,10 @@ class FieldFeaturesMixin:
 
         Research:
             outcrop off-center - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: within 0.3 of the plot's half-span of its middle
-            outcrop size - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); 2-4 boulders r 3.5-6.5 px"""
+            outcrop size - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); 2-4 boulders r 3.5-6.5 px
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 7 (boulder scatter, x); 5 (boulder scatter, y)
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.4 (lit-crown highlight path); 0.1 (lit-crown highlight path); 0.2 (lit-crown highlight path)
+        """
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         cx += rng.uniform(-hx * 0.3, hx * 0.3)
         cy += rng.uniform(-hy * 0.3, hy * 0.3)
@@ -482,7 +502,10 @@ class FieldFeaturesMixin:
         Research:
             corner grave - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: a mound in a plot's corner, against its bunds
             corner grave size - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: eighteen paces round, by the rule of 1372, about 22 to 28 ft a side if square - a ceiling on the grave's whole ground; the rule gives no height for a commoner's mound; mound 13 x 9 px
-            corner grave stones - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) - 0008 gives no stone count; one or two stones"""
+            corner grave stones - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) - 0008 gives no stone count; one or two stones
+            its narrowly attested figures - GUESS: searched (feature 417 T38 pass N7, 2026-10-25), attested only for another case - 6.5 (first stone's height; ATTESTED ONLY FOR officials (明史 卷60); SILENT for a commoner); 3.5 (second stone's height; ATTESTED ONLY FOR officials (明史 卷60); SILENT for a commoner (this pass))
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 1.6 (second stone's offset across); 2.2 (first stone's offset / second's base step)
+        """
         at = rng.choice(turning_corners(plot["poly"]))
         cx, cy = (round(v, 1) for v in corner_seat(plot["poly"], at))
         disc = (cx, cy, 6.5 + GRAVE_BANK_PX)
@@ -516,7 +539,10 @@ class FieldFeaturesMixin:
         Research:
             grave island - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: a mound inside a plot
             basins carved round the island - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no ring passes under the mound
-            grave island size - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: eighteen paces round, by the rule of 1372, about 22 to 28 ft a side if square - a ceiling on the grave's whole ground; the rule gives no height for a commoner's mound - the mound has no cap, its 18 px floor 36 ft across at a village's 2 ft to the pixel, past that ceiling, a departure the code keeps until feature 417 T34; the island 1.1 of the plot's half-span on each axis, at least 18 x 12 px, growing with the plot; mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones"""
+            grave island size - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: eighteen paces round, by the rule of 1372, about 22 to 28 ft a side if square - a ceiling on the grave's whole ground; the rule gives no height for a commoner's mound - the mound has no cap, its 18 px floor 36 ft across at a village's 2 ft to the pixel, past that ceiling, a departure the code keeps until feature 417 T34; the island 1.1 of the plot's half-span on each axis, at least 18 x 12 px, growing with the plot; mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 9 (least mound half-width); 6 (least mound half-height)
+            its narrowly attested figures - GUESS: searched (feature 417 T38 pass N7, 2026-10-25), attested only for another case - 8 (stone half-width (2.6 wide); ATTESTED ONLY FOR officials (stele 2.2 chi wide at the least); SILENT for a commoner); 5 (second stone's height; ATTESTED ONLY FOR officials (明史 卷60); SILENT for a commoner); 6.5 (stone half-width (2.6 wide); ATTESTED ONLY FOR officials (stele 2.2 chi wide at the least); SILENT for a commoner); 1.3 (stone half-width (2.6 wide); ATTESTED ONLY FOR officials (stele 2.2 chi wide at the least); SILENT for a commoner)
+        """
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         cx, cy = round(cx, 1), round(cy, 1)
         rx, ry = max(9.0, hx * 0.55), max(6.0, hy * 0.55)
@@ -551,7 +577,9 @@ class FieldFeaturesMixin:
 
         Research:
             pond inset and rounded - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: inset inside its bank, the parcel scaled about its centroid
-            corners eased - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a fillet of the caller's reach, jittered 0.8 to 1.15, at every corner"""
+            corners eased - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a fillet of the caller's reach, jittered 0.8 to 1.15, at every corner
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.4 (scale floor); 0.45 (fillet cap as a share of the edge); 0.25 (quadratic midpoint sample)
+        """
         n = len(poly)
         cx = sum(q[0] for q in poly) / n
         cy = sum(q[1] for q in poly) / n

@@ -123,6 +123,7 @@ def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly]
     Research:
         track gateway off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, walked out until clear
         gateway clearance - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (`TRACK_FABRIC_GAP`) by default, a lane's middle off a garden fence
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 24 (step count walking out until clear); 6 (step length of that walk)
     """
     # EACH POLYGON'S BOX, ONCE (feature 284, FR-009): a point farther than `gap` outside a polygon's box is farther than
     # `gap` from its ring, so only the polygons whose widened box holds the point are asked - the same verdict.
@@ -137,7 +138,11 @@ def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly]
 
 def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt, ab_eps: float = 0.02) -> Pt | None:
     """Where segment a-b crosses segment c-d STRICTLY inside both (never at an end), else None. `ab_eps` is how far
-    inside a-b, as a share of it, a crossing must lie."""
+    inside a-b, as a share of it, a crossing must lie.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.02 (float tolerance)
+    """
     r = (b[0] - a[0], b[1] - a[1])
     q = (d[0] - c[0], d[1] - c[1])
     den = r[0] * q[1] - r[1] * q[0]

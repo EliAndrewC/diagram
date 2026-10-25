@@ -149,7 +149,11 @@ def _perimeter_band(g: _Grids, depth_cells: int) -> Grid:
 
 
 def perimeter_hugging_pct(plan: ParsedPlan, depth_ft: float = 25.0, cell: int = 2) -> float:
-    """Fraction of building footprint sitting within depth_ft of a wall (high = a good ring)."""
+    """Fraction of building footprint sitting within depth_ft of a wall (high = a good ring).
+
+    Research:
+        its figures guessed on 0116 - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 25 ("one building-depth" from a wall)
+    """
     g = _grids(plan, cell)
     band = _perimeter_band(g, max(1, int(depth_ft * FTPX / cell)))
     built = 0
@@ -199,6 +203,10 @@ def top_vacant_rects(
 
     Each is tagged zone="central" (courtyard - good) or "perimeter" (a gap in the
     wall ring - slack) by whether its centroid sits in the perimeter band.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 150 (smallest vacant rect reported)
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N13, 2026-10-25) - 25 (perimeter band depth)
     """
     g = _grids(plan, cell)
     band = _perimeter_band(g, max(1, int(perimeter_depth_ft * FTPX / cell)))

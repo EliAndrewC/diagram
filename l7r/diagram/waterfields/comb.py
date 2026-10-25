@@ -170,6 +170,8 @@ def carve_comb(
         fan middle - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a fan's middle was often left wild until late, the old heartlands clearing theirs early; the default is a knob of ours; the fan's middle takes the "cleared" form when a caller passes none (`fan_middle`); its one caller, the hamlet's `fit_field`, always passes the `fan_middle` knob, wild three maps in four
         supply canal bank - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: the plots hem onto a bank beside each supply canal where the caller asks (`supply_banks`; the scripted hamlet always does), off by default for a caller that draws its own
         default grain - NONE: 1.0 where a caller passes none; the scripted hamlet passes the principled 2 / ftpx (`hamletgen.consts.GRAIN`), as this docstring explains
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 45 (default fall direction; the only caller (`fit.py`) passes `plan.down_deg)
+        its figures from 0006 - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 1.1 (same default spread as carve.py:72 (no caller overrides it))
     """
     R = random.Random(seed)
     F = _Frame(down_deg)
@@ -249,6 +251,7 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
         one rice green - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: every plot drawn from RICE_GREENS
         furrows vary - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: neighboring dry plots owe a seam only where the spread is 0.3 rad or more
         paddy acreage scale - NONE: measured at a fixed 2 ft/px (4 sq ft per px^2) whatever the grain, 4x high at 1 ft/px unless the caller rescales
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 43560 (square feet in an acre); 73733 (seed salt (0x12005))
     """
     R, F, channels, envelope, a_pts, dpts, grain = c.R, c.F, c.channels, c.envelope, c.a_pts, c.dpts, c.grain
     W, H, down_deg, plot_across, row_step, fork, bc, threads, brook = c.W, c.H, c.down_deg, c.plot_across, c.row_step, c.fork, c.bc, c.threads, c.brook
@@ -338,6 +341,10 @@ def _mk_thread(
     decay: float = 110.0,
     fallback: Poly | _Thread | None = None,
 ) -> _Thread:
+    """Research:
+    its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 110 (how far down the fall a ditch's takeoff heading relaxes); 1.2 (heading clamp that keeps tan() finite)
+    its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (floor on cos (divide guard))
+    """
     tu, tf = F.to_uf(px, py)
     h = max(-1.2, min(1.2, heading - DOWN))
     # du/df = -tan(h): a heading LEFT of the fall line (h<0) moves u POSITIVE
@@ -374,6 +381,9 @@ def _comb_skeleton(
         head race width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: HEAD_RACE_FT
         supply along the high margin - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: canal A dug cross-slope from the fork
         canal A heading - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: the delivery ditches leave their supply canal at right angles - canal A runs 42 deg off the fall, its deliveries meeting it at about 42 deg, a departure the code keeps until feature 417 T34; 42 deg off the fall, a dug polyline of 95-125 px segments
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 0.045 (canal A's heading wobble per segment)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (wobble of a polyline that is thrown away (only its random draw is kept)); 120 (segment length of the same thrown-away polyline)
+        its figures against 0053 - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: 58 (canal B's heading off the fall; the polyline here is thrown away, but `bc` reuses the 58) - a departure the code keeps until feature 417 T34
     """
     # head-race: the intake -> the division point (bunsuiguchi), on the caller's bearing or down the fall.
     # Every width below goes through `chan_px`, which converts a TRUE width in feet to pixels at
@@ -417,6 +427,7 @@ def _comb_threads(
         canal B delivery takeoff - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each heads -0.2 to 0 rad off the fall, 58-70 deg off its canal
         canal B tail - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: a supply canal runs on to the crop's edge or stops at its last offtake - a 22 px stub past the last offtake is neither, a departure the code keeps until feature 417 T34; its thread ends 22 px past its last offtake
         delivery widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: capped at DELIVERY_PARENT_FRAC of the canal there, a sub at SUB_PARENT_FRAC of its delivery's head
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 170 (canal B thread's relax distance); 0.24 (sub-ditch takeoff, low end of its share of the run); 0.38 (the same, high end); 40 (fallback if canal B has no offtake (its claim guarantees one))
     """
     # canal B is itself the far-side boundary thread (its dug prefix IS the canal)
     bc = _mk_thread(F, DOWN, fork[0], fork[1], DOWN + math.radians(58), R.uniform(*canal_b_len), decay=170.0)
@@ -483,6 +494,7 @@ def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread]
         field depth - research/questions/0010-farmland-around-towns-and-cities.drawing.html: capped at `field_fall`, else grown downhill off the frame
         outfall margin - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a capped field held inside the frame with a low-side margin for the outfall and brook
         ditch thread spacing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); GAP 26 px between threads, a child offset 0.55 GAP
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 300 (march overrun past the frame); 60 (off-frame margin that stops the march)
     """
     for t in threads:
         t.pts = [F.to_xy(t.u0, t.f0)]
@@ -608,6 +620,8 @@ def _comb_brook(R: random.Random, F: _Frame, dpts: Poly, W: float, H: float) -> 
         a run on from the outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a drain is a dug channel that reaches a watercourse, never a brook of its own - it runs on as a ditch to the map's edge from an outfall inside the frame, none where the drain reaches the edge
         the run's first heading - research/questions/0060-field-drains-akusuiro.drawing.html: the drain's own exit heading at the outfall, from which the drawn run curves out of the collector (`outfall_run`, at most 55 degrees a turn)
         brook course - NONE: the course traced past the first heading is not drawn - the settlement layer reads only the start and first heading (`outfall_run` draws the rest straight downhill)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 14 (is the outfall inside the frame)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (the same); 88 (step length, as line 627); 72 (the same); 105 (downhill step of the undrawn course); 12 (edge stop of the undrawn course); 22 (cross-slope jitter of the undrawn course)
     """
     outfall = dpts[-1]  # the drain's downhill (highest-u) end
     brook = []
@@ -689,6 +703,7 @@ def _comb_canal_pieces(F: _Frame, threads: list[_Thread], bc: _Thread, a_pts: Po
         no delivery at the fork - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: a delivery starting within 40 px of the fork is not drawn
         delivery narrows - research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html: from its capped head to DELIVERY_FT's tail
         no twin deliveries - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: a delivery running beside another course is dropped
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 7 (the same (range end)); 6 (samples per canal piece)
     """
     first = len(channels)
     cuts = [0.0] + list(offtakes_a) + [1.0]

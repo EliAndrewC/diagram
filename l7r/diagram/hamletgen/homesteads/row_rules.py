@@ -48,7 +48,11 @@ def _frame(h: Mapping[str, Any]) -> tuple[float, float, float, float] | None:
 
 
 def continuous(pieces: Sequence[Sequence[Sequence[float]]], tol: float = 1.5) -> bool:
-    """Do these polylines join end to end (or end on another's tread) into ONE way? True for one piece or none."""
+    """Do these polylines join end to end (or end on another's tread) into ONE way? True for one piece or none.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 1.5 (join tolerance between street pieces)
+    """
     if len(pieces) <= 1:
         return True
     comp = list(range(len(pieces)))
@@ -78,6 +82,7 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
         far-row holding drawn - research/questions/0033-row-villages-resson.drawing.html: every reserved holding drawn behind its farm
         way ends on its own street - research/questions/0033-row-villages-resson.drawing.html: its street within 0246's reach of the house or its built ground (`street_arrives`), or a door path to it
         door reach of a street - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farm needs no door path where its street's point nearest the house stands within 60 ft of it or 12 ft of its built ground (`serve.street_arrives`)
+        its figures from 0033 - research/questions/0033-row-villages-resson.drawing.html: 240 (fallback frame depth (half-frame test))
     """
     meta = M.get("meta") or {}
     plans = M.get("row_street_plans") or []

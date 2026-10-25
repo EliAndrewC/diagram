@@ -11,7 +11,9 @@ def grove_stocked(clumps: Any, w: float, h: float, floor: float = 1.5) -> bool:
     """THE ONE PREDICATE of `test_every_recorded_grove_holds_trees` (feature 287, woods W15): a recorded grove holds at least
     `floor` clumps per 100,000 sq px of its recorded w x h - a grove that declares an extent and draws almost nothing in it
     leaves the dooryards it should have greened bare.
-    Research: a recorded grove is stocked - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); at least 1.5 clumps per 100,000 sq px of its extent"""
+    Research: a recorded grove is stocked - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); at least 1.5 clumps per 100,000 sq px of its extent
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 100000 (the unit of the stocking floor (per 100,000 sq px); the 1.5 floor is the recorded GUESS)
+    """
     return w * h <= 0 or len(clumps) * 1e5 / (w * h) >= floor
 
 
@@ -96,7 +98,9 @@ def crown_cover(seats: Sequence[tuple[float, float, float]]) -> list[list[list[f
     for the stand (feature 328 wave 71: Inashiro's page lit 'windbreak' over the belt's whole box, an empty arm included,
     where no crown stood; the page takes a record's `cover` over its `poly`).
 
-    Research: hit region of the crowns drawn - CONVENTION: what the page lights is what the map draws"""
+    Research: hit region of the crowns drawn - CONVENTION: what the page lights is what the map draws
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 12 (buffer arc segments)
+    """
     from shapely.geometry import Point
     from shapely.ops import unary_union
 

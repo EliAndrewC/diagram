@@ -768,7 +768,11 @@ def matrix_policy(ka: str, kb: str) -> str | None:
 
 def _mx_same(a: Any, b: Any) -> bool:
     """Does a parent reference point at this record? Tolerant, because a parent is stored as a
-    rounded coordinate pair and the child's own id is rounded independently."""
+    rounded coordinate pair and the child's own id is rounded independently.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1.5 (same-point tolerance)
+    """
     if a is None or b is None:
         return False
     if isinstance(a, (list, tuple)) and isinstance(b, (list, tuple)) and len(a) == 2 and len(b) == 2:

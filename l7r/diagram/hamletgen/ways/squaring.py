@@ -69,7 +69,11 @@ def squared_against(q: Poly, course: Poly, half: float) -> Poly:
 
 
 def square_waters(M: Mapping[str, Any]) -> list[tuple[Poly, float]]:
-    """(course, half-width plus the leg's margin) for the brook and every drawn channel - what `stage_crossings` squared."""
+    """(course, half-width plus the leg's margin) for the brook and every drawn channel - what `stage_crossings` squared.
+
+    Research:
+        its figures against 0035 - research/questions/0035-villages-beside-their-stream-one-bank-or-both.html: 8 (stream width fallback) - a departure the code keeps until feature 417 T32
+    """
     margin = SQUARE_MARGIN_FT / float((M.get("meta") or {}).get("ftpx") or 1.0)
     waters = [([(float(x), float(y)) for x, y in f["poly"]], float(f.get("w", 8.0)) / 2 + margin) for f in M.get("streams") or [] if len(f.get("poly") or ()) >= 2]
     waters += [([(float(x), float(y)) for x, y in c["pts"]], float(c.get("w0", 4.0)) / 2 + margin) for c in M.get("drawn_channels") or [] if len(c.get("pts") or ()) >= 2]

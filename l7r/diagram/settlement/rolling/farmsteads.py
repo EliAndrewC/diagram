@@ -60,6 +60,7 @@ class FarmsteadFlushMixin:
         it (`_household_bamboo`); a map that never set it - the hand-drawn tiers - keeps the windbreak's bamboo as before.
 
         Research: farms keeping their own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: about three in five, rolled per position, under the settlement's bamboo knob
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 95 (jitter salt (bamboo prevalence))
         """
         on = getattr(self, "_household_bamboo", None)
         return True if on is None else bool(on) and self._hjit(hx, hy, 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE
@@ -149,6 +150,7 @@ class FarmsteadFlushMixin:
         Research:
             east shade band - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a neighbor's grove just east of a garden shades it
             east shade band width - research/questions/0038-sunlight-and-shade-on-the-farm.html: a tree shades the ground to its east one tree's height (the Qimin Yaoshu), about 33 ft, and the drawing page 50 ft - the band is 22 ft, a departure the code keeps until feature 417 T33; the reach 22 px (`bscale`) east of the garden's east edge, a figure 0038 does not give
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 1.5 (tolerance for matching the garden's own grove arms)
         """
         band = 22 * self.bscale
         out: list[Any] = []

@@ -194,7 +194,11 @@ def convex_hull(pts: Sequence[Pt]) -> Poly:
 def ring_offset(ring: Sequence[Pt], out: float, inward: float) -> Poly:
     """A coarse keep-out around a closed centerline: each vertex pushed `out` along the outward normal (away
     from the centroid) and `inward` the other way, joined as one ring of 2n vertices (feature 140: the polder
-    dike's 2,880-vertex smoothed band is replaced, for PLACEMENT only, by this ring around its crest)."""
+    dike's 2,880-vertex smoothed band is replaced, for PLACEMENT only, by this ring around its crest).
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.25 (divide-by-zero guard on the miter); 1.5 (miter clamp (geometry))
+    """
     n = len(ring)
     # OUTWARD BY WINDING, never by a centroid test: in a concave pocket the edge that faces the centroid is the one
     # whose outward normal points AT it, and a centroid test turned that edge inside out (one chord vertex of a
@@ -275,7 +279,11 @@ def keepout_ring(chain: Sequence[Pt], covered: Sequence[Pt], eps: float, filled:
 
     AT MOST `KEEPOUT_CHORD_CAP` CHORDS (feature 287, homes H27; the GM's "a couple of dozen"): the simplification's
     tolerance grows by half again until the chain takes no more - containment is untouched, because the push is the
-    MEASURED reach of every covered point from whatever chords result."""
+    MEASURED reach of every covered point from whatever chords result.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1.5 (tolerance widened on retry)
+    """
     tol = eps
     chords = simplify_ring(chain, tol)
     while not filled and len(chords) > KEEPOUT_CHORD_CAP:  # the dike's band; a field is held by its facing chains' cap
@@ -329,7 +337,11 @@ FACING_CHORD_CAP = 12
 def facing_chains(outline: Sequence[Pt], seat: Pt, eps: float) -> list[list[Chord]]:
     """`_facing_chains` held to `FACING_CHORD_CAP` chords (feature 287, homes H27): where the outline simplifies to more,
     the tolerance - and with it the push that keeps the drawn outline behind every chord - grows by half again until
-    the chains take no more. A cap reached only by a triangle's chains always holds."""
+    the chains take no more. A cap reached only by a triangle's chains always holds.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1.5 (tolerance widened on retry)
+    """
     tol = eps
     chains = _facing_chains(outline, seat, tol)
     while sum(len(c) for c in chains) > FACING_CHORD_CAP:

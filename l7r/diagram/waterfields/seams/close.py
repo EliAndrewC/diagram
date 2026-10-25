@@ -130,6 +130,7 @@ def blunt_points(poly: Polygon, min_deg: float) -> Polygon | None:
     Research:
         a point cut off - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a point the maps refuse is cut off into a headland (along the drain, on the page)
         cut off away from the drain - DEVIATION research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the same cut at a refused point something cut into a basin after its fan was laid out leaves (a grave island's corner), recorded there as this project's choice
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 0.45 (cut kept within 45% of each leg (validity guard))
     """
     from shapely.geometry.polygon import orient
 
@@ -178,6 +179,7 @@ def _weld_within_rules(scrap: Polygon, plots: list[dict[str, Any]], geoms: list[
     px only when that stays a simple polygon.
 
     Research: weld host - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the lawful neighbor sharing the most bund, else bare
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.4 (buffer tolerance); 0.02 (buffer tolerance); 0.05 (simplify tolerance)
     """
     reach = scrap.buffer(0.4)
     grown = scrap.buffer(0.02)

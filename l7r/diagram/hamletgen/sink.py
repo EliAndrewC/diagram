@@ -126,7 +126,11 @@ def drain_run(s: Settlement, pts: Poly, to: str) -> None:
 
 
 def drain_record(pts: Sequence[Pt], to: str) -> dict[str, Any]:
-    """The `channels` record a drain run along `pts` into `to` is written as (`drain_run`)."""
+    """The `channels` record a drain run along `pts` into `to` is written as (`drain_run`).
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 2.5 (width written in the drain's connectivity record)
+    """
     return {"poly": [[round(x, 1), round(y, 1)] for x, y in pts], "frm": {"kind": "drain"}, "to": {"kind": to}, "w": 2.5}
 
 
@@ -153,7 +157,10 @@ def pond_clear_of_crop(plan: SitePlan, center: Pt, prx: float, pry: float) -> bo
     """The pond clear of the crop, on the field's envelope: no rim point inside the crop, no crop vertex inside the
     pond (the two tests `pond_setback` walks with).
 
-    Research: tameike clear of the paddy - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot"""
+    Research: tameike clear of the paddy - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 12 (pi/12 rim step)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 24 (rim sample count)
+    """
     env = list(plan.envelope)
     rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
     if any(point_in_poly(center[0] + prx * ux, center[1] + pry * uy, env) for ux, uy in rim):
@@ -171,7 +178,9 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
 
     Research:
         pond downslope of the outfall - research/questions/0060-field-drains-akusuiro.drawing.html: the nearest seat at the field's foot
-        set-back margins - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); at least the rim plus 46 ft, a 12 ft cushion, 12 ft off the brook"""
+        set-back margins - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); at least the rim plus 46 ft, a 12 ft cushion, 12 ft off the brook
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 14 (step of the walk downslope); 900 (walk's ceiling; the real limit, `POND_SETBACK_LIMIT` 300, is SEARCHED-SILENT (T36 pass P2a)); 24 (rim sample count)
+    """
     dx, dy = plan.fall
     env = list(plan.envelope)
     rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
@@ -282,7 +291,10 @@ def hull_route(plan: SitePlan, out: Pt, heading: Pt, brook: Sequence[Pt], pad: f
     Research:
         constructed route - NONE: hull geometry under route_refusals' rules
         hull standoff - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the drain skirts the field's hull 12 ft off
-        ends at the brook or off the map - research/questions/0060-field-drains-akusuiro.drawing.html"""
+        ends at the brook or off the map - research/questions/0060-field-drains-akusuiro.drawing.html
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 260 (off-canvas leg length ("its length is free")); 40 (cap on lengthening tries); 400 (lengthening step off the canvas)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 100000 (ray length sentinel)
+    """
     from shapely.geometry import LineString, Point, Polygon  # noqa: PLC0415 - bound on first use
 
     fall = plan.fall
@@ -358,7 +370,9 @@ def _through_the_crop(plan: SitePlan, out: Pt, q: Pt) -> bool:
     is walked from the outfall until it is clear of the envelope; leaving within `BROOK_JOIN_LEAD` of the
     run is the field's own edge and is exempt, and the rest of the route is judged in full.
 
-    Research: drain not through the rice - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the first 0.3 of the run exempt as the field's edge"""
+    Research: drain not through the rice - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the first 0.3 of the run exempt as the field's edge
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 20 (samples along the run); 21 (range bound for the same samples)
+    """
     lead = next((t / 20.0 for t in range(21) if not point_in_poly(out[0] + (q[0] - out[0]) * t / 20.0, out[1] + (q[1] - out[1]) * t / 20.0, plan.envelope)), 1.0)
     if lead > BROOK_JOIN_LEAD:
         return True
@@ -464,6 +478,8 @@ def pond_run(out: Pt, heading: Pt, pond: Pt, fall: Pt) -> Poly:
     Research:
         bowed ditch - CONVENTION: up to 10 ft off the chord, so it reads as dug earth
         led round a pond behind - CONVENTION: a cubic past 100 degrees off the heading
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 0.45 (cubic's handle length, measured to keep bends at or under 36 degrees); 12 (curve sampled at twelfths); 13 (range bound for the same samples)
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N5, 2026-10-25) - 0.08 (drain's bow off the chord, 0.08 of the run, at most 10 ft)
     """
     tx, ty = pond[0] - out[0], pond[1] - out[1]
     dist = math.hypot(tx, ty)
@@ -610,7 +626,11 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
         reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: a fringe of reeds at the shore
         reed fringe width - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a 44 ft ring
         no building on the water - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 10 ft round the pond's box
-        bowed ditch - CONVENTION"""
+        bowed ditch - CONVENTION
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 12 (bearing swings tried (claim: route search is NONE)); 24 (bearing swings tried (claim: route search is NONE)); 40 (how far back up the drain the start may move to sit inside the field); 60 (a search step or candidate the pass ruled with its row); 38 (bearing swings tried (claim: route search is NONE)); 54 (a search step or candidate the pass ruled with its row); 260 (run carried off the canvas); 20 (pond clamped 20 inside the working canvas); 70 (junction distances, first sweep); 110 (junction distances, first sweep); 160 (a search step or candidate the pass ruled with its row); 300 (junction distances, wider sweep); 400 (a search step or candidate the pass ruled with its row); 120 (floor on the run to the edge)
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N5, 2026-10-25) - 0.08 (drain-to-brook bow, as at line 476)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel)
+    """
     name = f"{plan.spec.name.lower()}-paddies"
     out = drain_outfall(s, name)
     if out is None:

@@ -294,7 +294,11 @@ def keep_refused(M: Mapping[str, Any], name: str) -> str:
 
 
 def _run_stages(s: Settlement, plan: SitePlan) -> None:
-    """Every stage, in order, inside the roll's scope."""
+    """Every stage, in order, inside the roll's scope.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (profile print threshold, in seconds)
+    """
     if not os.environ.get(STAGE_PROFILE_ENV):
         with roll_scope(plan.spec):
             for stage in STAGES:
@@ -418,7 +422,12 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
 
 def cohort_specs(count: int, first_seed: int = 1, households: int | None = None) -> list[HamletSpec]:
     """The specs a cohort rolls: consecutive seeds, zero-padded names, the household ladder unless a count
-    is given. Public so the gate can roll a cohort member through the roll cache one at a time (feature 135)."""
+    is given. Public so the gate can roll a cohort member through the roll cache one at a time (feature 135).
+
+    Research:
+        its figures from 0001 - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: 11 (cohort household span, 10 to 20)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (seed multiplier stepping through the span)
+    """
     return [
         HamletSpec(
             name=f"Cohort-{first_seed + i:02d}",

@@ -46,6 +46,7 @@ def trunk_on_tread(x: float, y: float, lanes: Any) -> bool:
     (x, y) stands on a lane's TREAD - within the lane's own half-width of its centerline, the width read from the lane (GM 2026-09-12: a trunk beside
     a footpath is what a path looks like; one inside it is a tree in the path). `lanes` are manifest lane records (`pts`, `w`).
     Research: no trunk within a lane's half-width - CANON: the GM's ruling of 2026-09-12, no question
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (lane width fallback, never reached)
     """
     from .._geom import seg_dist
 
@@ -137,7 +138,11 @@ def deep_marsh(rings: Any, margin: float) -> list[list[tuple[float, float]]]:
 def reserved_seat_keepouts(seats: Sequence[tuple[float, float]], clump: float, bs: float) -> list[tuple[float, float, float]]:
     """THE ONE PREDICATE of a grove leaving a reserved copse seat free (feature 287, woods W25), as keep-out discs: a clump
     of `clump` stands off each seat by the copse's own displacement test (`village_grove`'s `occ_grove`: the other grove's
-    recorded radius plus 0.9 of the copse's clump), `BAR_MARGIN_PX` stricter, so the copse finds the seat undisplaced."""
+    recorded radius plus 0.9 of the copse's clump), `BAR_MARGIN_PX` stricter, so the copse finds the seat undisplaced.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.9 (mirrors the copse's own displacement test (the 0.90 is SEARCHED-SILENT at wood_share:197))
+    """
     from .wood_share import BAR_MARGIN_PX, COPSE_CLUMP_BS
 
     r = round(clump / 2, 1) + COPSE_CLUMP_BS * bs * 0.90 + BAR_MARGIN_PX
@@ -159,7 +164,10 @@ class StandsMixin:
         stand's ring filled with it (feature 298); no solid fill, per the no-solid-fill rule for cover. `role` is "homestead" (a strip beside a farmstead that keeps one) or
         "thicket" (the take-yabu behind the back row). Recorded in M['bamboo_stands'] (bbox + role + poly);
         the marks are decoration keyed to the stand (positional randomness).
-        Research: bamboo stand glyph - research/questions/0075-bamboo-groves-chikurin.drawing.html: area to scale, culm marks a convention on a 7 bscale grid"""
+        Research: bamboo stand glyph - research/questions/0075-bamboo-groves-chikurin.drawing.html: area to scale, culm marks a convention on a 7 bscale grid
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.86 (staggered row step of the glyph grid); 0.6 (jitter of the glyph grid (0075 drawing))
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 91 (salts); 92 (salts)
+        """
         pts = [(float(a), float(b)) for a, b in poly]
         xs, ys = [q[0] for q in pts], [q[1] for q in pts]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
@@ -253,7 +261,10 @@ class StandsMixin:
             belt a windward hook - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: ends trimmed to the wind's quarter
             belt deep and whole - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: interior gaps over `_BELT_GAP_FT`, 30 ft at every grain, filled
             clumps off lanes - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: where a lane crosses the belt the planting resumes on both sides
-            copse stragglers dropped to its stocking - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); `stocked_copse` drops the farthest clumps until the copse holds half a clump plus 4 px"""
+            copse stragglers dropped to its stocking - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); `stocked_copse` drops the farthest clumps until the copse holds half a clump plus 4 px
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N9, 2026-10-25) - 0.25 (refill grid offsets); 0.75 (refill grid offsets)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 21 (salt); 0.7071 (northwest wind fallback; the caller always passes the wind); 23 (salt); 24 (salt)
+        """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)

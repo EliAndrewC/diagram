@@ -34,7 +34,10 @@ def set_crossing(brook: Sequence[Pt], radius: float, cost: float) -> None:
 
     Research:
         crossing the brook is charged - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html:
-            `cost` to enter the band, so a way keeps to its own bank unless crossing saves more"""
+            `cost` to enter the band, so a way keeps to its own bank unless crossing saves more
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 20 (spatial-index cell floor)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 5 (brook sampling step)
+    """
     # CELLS A HAIR WIDER THAN THE BAND (feature 281, FR-003). The samples were filed in 20 px cells and an ask read every
     # cell within the radius - 25 dict lookups at the ford's 30 px, 1,638,800 of them on Kashikawa's routes, nearly all
     # empty. A sample within `radius` of a point lies at most one cell away when the cell is WIDER than the radius (strictly,
@@ -64,7 +67,11 @@ def in_brook_band(p: Pt) -> bool:
 
 def _new_crossing(path: Sequence[Pt], i: int, j: int) -> bool:
     """Would pulling path[i..j] straight enter the brook's band where the lattice route between them stayed out of it -
-    a crossing the toll was paid to avoid, taken back by the string-pull?"""
+    a crossing the toll was paid to avoid, taken back by the string-pull?
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 5 (sampling step of the straight pull)
+    """
     if any(in_brook_band(q) for q in path[i : j + 1]):
         return False
     (ax, ay), (bx, by) = path[i], path[j]
@@ -98,7 +105,11 @@ def lattice_search(
     A* TOWARD THE GOAL WAS TRIED AND WITHDRAWN (feature 284, FR-001, specs/284 research R6). With the straight-line heuristic
     it returns a path of the same cost but, where two lattice paths tie, often the other one, and the maps it moves re-roll a
     little more often. Measured alone over the pool and cohort seeds 1-24 on the engine as it ships, it was 5.0 s under this
-    search's mean against a run-to-run spread of 8.9 s - not faster beyond the noise, while moving maps."""
+    search's mean against a run-to-run spread of 8.9 s - not faster beyond the noise, while moving maps.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+18 (sentinel)
+    """
     sx, sy = start
     gx, gy = goal
     dist = {(sx, sy): 0.0}
@@ -186,7 +197,10 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
         clear of the crop - research/questions/0081-village-lanes.drawing.html: half the widest tread off the crop (`WEB_CROP_GAP`, carried by the crop polygons) at each cell's center, unpadded so a way can come up to the bund (padded half a cell as the walls are, cohort Audit-10's field way could not); every link the pull takes is tested at that gap, and a lattice step it keeps as it is is asked of the crop's outline (`crosses_the_crop`) - a route that would cut a crop corner is no route
         clear of the toe and marsh - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); 8 ft (`WEB_HARD_GAP`)
         lattice off the water - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a path runs on the channel's bank and the bund is a path - the router keeps its lattice 14 ft off the water lines, a departure the code keeps until feature 417 T32
-        a brook crossing tolled - GUESS research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the search charges a crossing (`_CROSSING["cost"]`) and the pull refuses a shortcut that adds one (`_new_crossing`)"""
+        a brook crossing tolled - GUESS research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the search charges a crossing (`_CROSSING["cost"]`) and the pull refuses a shortcut that adds one (`_new_crossing`)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 0.75 (search-box pad as a share of span); 80 (least search-box pad); 90000 (lattice cell budget)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.71 (half a cell's diagonal (geometry))
+    """
     cell = ROUTE_CELL if cell is None else cell  # the standard lattice unless a caller asks a finer one
     span = math.dist(start, goal)
     if span < 1.0:

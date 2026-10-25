@@ -49,7 +49,9 @@ class CastleCivicMixin:
         DEFERRED to the label phase: seating a caption at call time judges it against half a map (Tango's north gate
         market caption took the flank that later filled with the execution ground).
 
-        Research: caption seat - CONVENTION: the one placer's ranked positions"""
+        Research: caption seat - CONVENTION: the one placer's ranked positions
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 9 (caption font size)
+        """
         if box is None:
             raise ValueError(f"place_caption({text!r}) got no subject box - the feature it names placed nothing")
         x0, y0, x1, y1 = (float(v) for v in box)

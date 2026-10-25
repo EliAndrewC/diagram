@@ -119,6 +119,7 @@ def seat_deck(p: Pt, rot: float, span: float, rw: float, wpts: Any, need: float,
     Research:
         deck grown until its corners clear - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: up to 14 steps of 12% of the span
         skewed toward square - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: at most 7 deg, inside the 8 deg a deck may lie off its way
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 6 (a skew step, bounded by 0087's "8 degrees"); 0.12 (growth step of the deck search (0087 has no 12%))
     """
     for grow in range(14):
         wider = span * (1.0 + 0.12 * grow)
@@ -340,6 +341,7 @@ def deck_glyph(x: float, y: float, rot: float, span: float, deck_w: float, form:
     Research:
         one glyph per form - CONVENTION: seams and rails, a rounded trunk, trodden earth with log ends
         log at seven tenths of the deck - CONVENTION
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.7 (log at 7/10 of the deck); 7 (plank seams); 8 (plank seams); 0.3 (crown highlight); 2.4 (rail offset); 0.2 (rail offset); 0.8 (tick length)
     """
     hl, hw = span / 2, deck_w / 2
     g = [f'<g transform="translate({x:.1f},{y:.1f}) rotate({rot:.1f})">']
@@ -508,6 +510,7 @@ class BridgesMixin:
             both banks reach useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             one rolled form - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: FOOTBRIDGE_FORM
             slide resolution - NONE: max(8, length/40) px, the check's own
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 41 (taper sample count)
         """
         plank_w = self.px(4.0) if plank_w is None else plank_w  # a footplank about 4 ft wide (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html)
 
@@ -696,6 +699,7 @@ class BridgesMixin:
         is a maximum, so neither the order of the hits nor a hit met twice changes it.
 
         Research: water under the deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the joins of ditches rule a seat out; measured as the widest water under it, corners 2 ft past it
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.02 (divide-by-zero guard)
         """
         _da = math.radians(deck)
         _dux, _duy = math.cos(_da), math.sin(_da)

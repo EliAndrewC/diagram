@@ -43,7 +43,10 @@ def outfall_run(b0: Sequence[float], b1: Sequence[float], fall: Sequence[float],
     Feature 328: the run turned down the fall at one corner of up to ~90 degrees where the exit ran cross-slope; 0060's
     drawing page has the run curve out of the collector, at most 55 degrees (`JUNCTION_TURN_MAX_DEG` on the hamlet).
 
-    Research: drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: on along the drain's exit, curving onto the fall at most 55 degrees a turn, then straight down the fall off the map"""
+    Research: drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: on along the drain's exit, curving onto the fall at most 55 degrees a turn, then straight down the fall off the map
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 70 (straight lead before the curve)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 520 (reach that carries the run off the sheet)
+    """
     run = _curved_run(b0, b1, fall, lead, lead / 2, reach, turn_max)
     if runs_downhill(run, fall):
         return run

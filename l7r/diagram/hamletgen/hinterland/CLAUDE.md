@@ -7,7 +7,7 @@ Split from one `hinterland.py` by feature 173, as LAYERS emitted bottom-up (ever
 | file | look here when |
 |---|---|
 | `frame.py` | the drawn frame's own geometry - the content box and the pocket the title sits in, which both the bamboo seats and the windbreak must keep clear of |
-| `parcels.py` | open ground: whether a parcel fits, how big a square one can be, its drawn outline, and `open_ground_patches` - the search that places them all |
+| `parcels/` | a package since feature 417 T38 (the 1,000-line bar; `__init__` re-exports every name, a monkeypatch patches `parcels.patches` or `parcels.bounds`): `patches.py` the open-ground scan, `bounds.py` a lot's line along what bounds it and the open region. Open ground: whether a parcel fits, how big a square one can be, its drawn outline, and `open_ground_patches` - the search that places them all |
 | `crossing.py` | whether a walk from the houses crosses the field - `reached_across` (the outline) and `crossed_through` (through it, on the level) - lifted out of `parcels.py` at the 1,000-line bar (feature 328), re-exported there |
 | `wood_rank.py` | where a fuel wood ranks: the field edge sampled once, the field's height beside a seat, the houses' median floor and `woodland_tier` - lifted out of `parcels.py` at the 1,000-line bar (feature 328), re-exported there |
 | `bamboo.py` | where a bamboo thicket may stand and the seats found for it |

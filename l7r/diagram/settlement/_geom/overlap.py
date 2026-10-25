@@ -118,7 +118,11 @@ def poly_gap(p: Poly, q: Poly) -> float:
     """The true gap in px between two convex quads - 0.0 if they overlap or touch.
 
     For two non-intersecting convex polygons the closest approach always involves a vertex of one
-    and an edge of the other, so the four vertex-to-edge minima are exact, not an approximation."""
+    and an edge of the other, so the four vertex-to-edge minima are exact, not an approximation.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+18 (sentinel)
+    """
     if rects_overlap(p, q):
         return 0.0
     best = 1e18

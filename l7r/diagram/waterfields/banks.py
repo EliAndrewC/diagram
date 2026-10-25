@@ -89,6 +89,7 @@ def drain_bank_clearance(q: Pt, dpts: Poly, dv: Pt, w0: float, w1: float, cum: l
     'Placement and its check must read the SAME manifest source'.
 
     Research: bank of the collector - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: half the drain's drawn width there plus half a bund
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel starting distance)
     """
     off, cx, cy, arc, past, nrm = 1e9, 0.0, 0.0, 0.0, False, (0.0, 0.0)
     for i in range(len(dpts) - 1):
@@ -139,7 +140,11 @@ def supply_bank_clearance(q: Pt, pts: Poly, w0: float, w1: float, cum: list[floa
 def _nearest_segment(q: Pt, pts: Poly, cum: list[float], which: Any) -> tuple[float, Pt, float, bool, Pt]:
     """The nearest of the segments `which` names (indices into `pts`, in order - ties go to the first,
     as the full walk always resolved them): `(gap, foot, arc, past, nrm)`. ONE body for the full walk
-    and the indexed walk (`StrokeIndex`), so the two cannot drift."""
+    and the indexed walk (`StrokeIndex`), so the two cannot drift.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel)
+    """
     off, foot, arc, past, nrm = 1e9, (0.0, 0.0), 0.0, False, (0.0, 1.0)
     last = len(pts) - 2
     for i in which:
@@ -193,6 +198,9 @@ class StrokeIndex:
     __slots__ = ("cell", "cells", "cum", "pts", "reach", "w0", "w1")
 
     def __init__(self, pts: Poly, w0: float, w1: float, cum: list[float], reach: float, cell: float = 64.0) -> None:
+        """Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (spatial-index cell)
+        """
         self.pts, self.w0, self.w1, self.cum, self.reach, self.cell = pts, w0, w1, cum, reach, cell
         self.cells: dict[tuple[int, int], list[int]] = {}
         for i in range(len(pts) - 1):
@@ -334,6 +342,7 @@ def off_with_the_fall(q: Pt, dpts: Poly, gap: float, need: float) -> Pt:
     stands `need` off the centerline, on the side it already lies (`gap`'s sign; the segment's left where it lies on it).
 
     Research: off at right angles - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: a bund abuts the ditch and never stands in its water
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel)
     """
     best, foot, nrm = 1e9, (0.0, 0.0), (0.0, 1.0)
     for i in range(len(dpts) - 1):
@@ -663,6 +672,7 @@ def hem_on_paddy(quad: Poly, paddy_outline: Poly) -> bool:
     only real interpenetration counts.
 
     Research: no dry plot on rice - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a hem plot lapping onto a fan's paddy is dropped
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 0.85 (shrinks the quad before the overlap test, so a plot just touching the paddy is kept)
     """
     cx = sum(p[0] for p in quad) / len(quad)
     cy = sum(p[1] for p in quad) / len(quad)
@@ -691,6 +701,7 @@ def round_channel_joints(channels: list[dict[str, Any]], min_turn_deg: float = 8
     bank, and the main running past it is not turning there anyway.
 
     Research: swept bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a circular arc of about 2.5 channel widths' radius, the radius capped at 35% of the straight run on either side, a turn under 8 deg or a junction left sharp
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 6 (samples along a rounded bend)
     """
     ends: dict[tuple[float, float], list[tuple[int, int]]] = {}
     for i, c in enumerate(channels):
@@ -727,6 +738,8 @@ def swept_bend(P: Pt, u0: Pt, u1: Pt, interior: float, radius: float, run: float
     Research:
         swept bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a bend of about 2.5 channel widths' radius, the radius capped at 35% of the straight run on either side
         cut-back within its run - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a hairpin (a turn over ~137 deg) drawn tighter than the 2.5-width radius so its tangent point stays within 90% of its run; the 90% is this project's margin
+        its figures from 0054 - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: 0.35 (bend radius capped at 35% of the run ("capped at 35% of the straight run"))
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 0.9 (a hairpin's tangent point kept within 90% of its run)
     """
     half = (math.pi - interior) / 2
     r = min(radius, 0.35 * run, 0.9 * run / math.tan(half))
@@ -878,6 +891,7 @@ def jog_vertices(ring: Poly, g: float) -> list[tuple[Pt, Pt]]:
     shipped Inashiro, 78 hits against 28 for the directed test, the extra 50 all end walls.
 
     Research: a bund never steps sideways - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a run, a short hop across the wall, the run resuming the same way
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 5 (too few vertices for a run, a hop and the run resuming)
     """
     ring = dedup_ring(ring, 0.5)
     n = len(ring)
@@ -925,6 +939,7 @@ def pointed_ring(poly: Poly, min_deg: float = 25.0) -> bool:
     placer-stricter-than-gate calibration as the supply-bank margins.
 
     Research: tapers to a point - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: an interior angle sharper than `min_deg`
+        its figures from 0005 - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 25 (sharpest angle allowed at a basin's point ("sharper than 25 degrees"))
     """
     n = len(poly)
     for i in range(n):

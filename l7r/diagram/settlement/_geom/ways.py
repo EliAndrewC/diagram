@@ -50,7 +50,11 @@ PLANK_VILLAGE_REACH = 55.0  # a bank within this of a dwelling reaches the VILLA
 def lane_runs(M: Manifest) -> list[tuple[Poly, float]]:
     """Every traveled way on the map as (polyline, bed half-width): the major/Imperial roads, the
     town streets, the earth alleys, and the city ring road. Deliberately NOT walls, fences or
-    watercourses - this answers "what could someone walk or cart along here"."""
+    watercourses - this answers "what could someone walk or cart along here".
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 30 (road_width fallback (N9: never set)); 26 (roads `w` fallback (no producer)); 18 (town-street fallback (no producer)); 6 (alley fallback (no producer)); 20 (ring-road fallback (no producer))
+    """
     runs: list[tuple[Poly, float]] = []
     roads: Any = M.get("roads")
     if not roads and M.get("road"):
@@ -80,6 +84,9 @@ def way_beds(M: Manifest) -> list[tuple[Poly, float]]:
     the ring road), so a seat clipping an alley was proposed rather than refused and had to be
     hand-sited (Tango, reported by another session 2026-07-27). The gate caught it after the fact -
     the overlap matrix forbids SOLID x WAY - so this closes the PLACEMENT half of the same rule.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (lane `w` fallback (lanes carry `w`))
     """
     runs = lane_runs(M)
     if M.get("lane") and not M.get("lanes"):

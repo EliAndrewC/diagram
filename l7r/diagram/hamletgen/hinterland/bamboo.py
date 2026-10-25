@@ -196,6 +196,8 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         irregular outline - CONVENTION: a hard but not ruled edge inside the tested rect
         just beyond the back row - research/questions/0075-bamboo-groves-chikurin.drawing.html: the stand's near edge within THICKET_ROW_DEPTH_FT, 30 ft, of the back row's back edge, its calibration
         search reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); the first search walks THICKET_REACH_FT, 220 ft, from the target, so a thicket may stand that far past the row's ends before the search falls back to the whole back row
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N2, 2026-10-25) - 8 (thicket kept 8 ft off a byre); 14 (thicket kept 14 ft off a well)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (unbounded box for sun keep-outs)
     """
     forms = ["thicket"] if plan.bamboo in ("thicket", "both") else []
     houses = s.M.get("houses", [])

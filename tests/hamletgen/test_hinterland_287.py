@@ -11,9 +11,10 @@ import math
 import pytest
 
 from l7r.diagram.hamletgen import hinterland
-from l7r.diagram.hamletgen.hinterland import parcels
 from l7r.diagram.hamletgen.hinterland.bamboo import BAMBOO_SAMPLE_FT, bamboo_seats, stand_samples
 from l7r.diagram.hamletgen.hinterland.frame import TITLE_POCKET_CLEAR_FT, clear_pocket_spot, pocket_clear_of_features
+from l7r.diagram.hamletgen.hinterland.parcels import bounds as lot_lines
+from l7r.diagram.hamletgen.hinterland.parcels import patches as parcels
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.settlement.land.cover import ring_center
 
@@ -349,7 +350,7 @@ def test_a_stamped_ring_across_a_brook_does_not_follow_it_and_the_cut_ring_does(
     parallel to the brook (a run of at least two), the ones already beyond reach are untouched, and the predicate holds."""
     s = Settlement(1000, 1000, seed=3)
     bounds = parcels.lot_bounds([], [_BROOK], [], 80.0)
-    line, reach = parcels.STREAM_LOT_LINE, parcels.LOT_BOUND_REACH
+    line, reach = lot_lines.STREAM_LOT_LINE, lot_lines.LOT_BOUND_REACH
     c = (420.0, 500.0)
     stamped = parcels._parcel_outline(s, c[0], c[1], 160.0, 90.0, 1.0, 0.0)
     assert min(p[0] for p in stamped) < 300.0, "the case: the stamped ring wanders across the brook"
@@ -404,7 +405,7 @@ def test_the_scan_draws_every_lot_following_the_brook_beside_it() -> None:
     got = _scan_by_brook(plan, brook)
     bounds = parcels.lot_bounds([], [brook], [], 80.0)
     assert got and all(parcels.lot_follows_its_bounds(r, bounds) for r in got)
-    band = parcels.STREAM_LOT_LINE + parcels.LOT_BOUND_REACH
+    band = lot_lines.STREAM_LOT_LINE + lot_lines.LOT_BOUND_REACH
     assert any(sum(1 for q in r if abs(abs(q[0] - brook[0][0]) - band) <= 1.0) >= 2 for r in got), "a lot's line runs along the brook"
 
 
@@ -415,7 +416,7 @@ def test_the_scan_refuses_a_ring_that_does_not_follow_its_bounds_and_takes_the_n
     asked: list[list] = []
     real = parcels.lot_follows_its_bounds
 
-    def _first_refused(ring, bounds, reach=parcels.LOT_BOUND_REACH):  # type: ignore[no-untyped-def]
+    def _first_refused(ring, bounds, reach=lot_lines.LOT_BOUND_REACH):  # type: ignore[no-untyped-def]
         asked.append(ring)
         return False if len(asked) == 1 else real(ring, bounds, reach)
 

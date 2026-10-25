@@ -116,7 +116,10 @@ def _blocked_cells(walls: Sequence[tuple[Poly, float]], lines: Sequence[tuple[Pt
 @lru_cache(maxsize=8)
 def _blocked_memo(walls: tuple[tuple[tuple[Pt, ...], float], ...], lines: tuple[tuple[Pt, Pt], ...], x0: float, y0: float, nx: int, ny: int, cell: float) -> frozenset[tuple[int, int]]:
     """`_blocked_cells`, REMEMBERED by what it reads: the seat search asks every margin of a site with the same walls and
-    water lines (cohort seed 44: 0.8 s rebuilding the one raster per margin), and only the start differs."""
+    water lines (cohort seed 44: 0.8 s rebuilding the one raster per margin), and only the start differs.
+    Research:
+        its cache size - NONE: a memo's size, which decides nothing about the place - 8
+    """
     return frozenset(_blocked_cells([(list(p), m) for p, m in walls], list(lines), x0, y0, nx, ny, cell))
 
 

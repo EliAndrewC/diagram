@@ -38,7 +38,9 @@ class KeepoutsMixin:
         trees, scrub, and other vegetation must not be drawn ON. Returns [(polyline, buffer), ...].
 
         Research:
-            no vegetation on a tread - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); every lane, street, alley, ring road and road at its half-width"""
+            no vegetation on a tread - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); every lane, street, alley, ring road and road at its half-width
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (lane width fallback; lanes always record `w); 20 (ring-road width fallback; no production ring road); 30 (road width fallback; no production road)
+        """
         corr = [([tuple(p) for p in ln["pts"]], ln.get("w", 6) / 2 + extra) for ln in self.M.get("lanes", [])]
         corr += [([tuple(p) for p in s["pts"]], s.get("w", 10) / 2 + extra) for s in self.M.get("town_streets", [])]
         # alleys + the city ring road are ways too (GM 2026-07-24: yard furniture kept off "roads"
@@ -62,7 +64,11 @@ class KeepoutsMixin:
         ground-cover scatters' pre-boxed grids provably test the same geometry. `channel_margin`
         widens the IRRIGATION courses only (channels + drawn laterals, never streams) - the commons
         scatter passes the cut-bank margin here (_BANK_MARGIN_FT says why banks are bare and why a
-        natural stream bank is not)."""
+        natural stream bank is not).
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (uniform-vs-taper tolerance); 6 (channel width fallback, never reached)
+        """
         out: list[tuple[Any, float]] = [(wc["poly"], wc.get("w", 6) / 2 + pad) for wc in self.M.get("streams", [])]
         out += [(wc["poly"], wc.get("w", 6) / 2 + pad + channel_margin) for wc in self.M.get("channels", [])]
         for ch in self.M.get("drawn_channels", []):
@@ -397,7 +403,9 @@ class KeepoutsMixin:
         circles) for the ground-cover scatters' per-point tests.
 
         Research:
-            swept halo - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); no ground cover within 30 ft of a structure, 20 ft of a wellhead, 8 ft of a yard or bed"""
+            swept halo - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); no ground cover within 30 ft of a structure, 20 ft of a wellhead, 8 ft of a yard or bed
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (prefilter pad for wells)
+        """
         bx0, by0, bx1, by1 = bbox
         rects: list[tuple[float, float, float, float]] = []
         for keys, halo_ft in ((self._HALO_STRUCT_KEYS, self._HALO_STRUCT_FT), (self._HALO_PLOT_KEYS, self._HALO_PLOT_FT)):

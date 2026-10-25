@@ -80,7 +80,11 @@ def grass_tile(bs: float, brush: bool = True, keep: float = 1.0, name: str | Non
     """The scrub's tile: brush dots and three-bladed tufts of grass at the commons' density (`commons`, `grass_scatter` as it
     was): a dot `#94A063` r 1.5-2.4, a tuft three `#A7A860` blades 2.4-4.2 long within 0.45 rad of upright. `brush=False` is
     the grass under a wood's edge: the same tufts, no brush dot (0077: no brush in a wood; feature 328 wave 57); `keep` the share
-    of the tufts kept (the inner half of that band, where the grass thins), `name` the pattern's kind."""
+    of the tufts kept (the inner half of that band, where the grass thins), `name` the pattern's kind.
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (brush dot min radius); 2.4 (blade min length); 0.45 (blade lean); 4.2 (blade reach for wrapping at the tile edge)
+    """
     import numpy as np
 
     side = COVER_TILE_FT * bs
@@ -156,7 +160,9 @@ def reed_tile(bs: float) -> str:
     """The marsh's tile: the pale wet tint (`#9FBBAE` at 0.14, r 15-28), the standing-water glints (`#C2D6CE` ellipses) and the
     reed tufts - four near-vertical `#6E9377` blades 4-7 long within 0.2 rad of upright - at the marsh's densities (`marsh`).
 
-    Research: reed tile - CONVENTION: tint, glints and reed tufts at the marsh's densities"""
+    Research: reed tile - CONVENTION: tint, glints and reed tufts at the marsh's densities
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.2 (reed lean); 2.6 (glint min rx); 4.6 (glint max rx); 1.2 (glint min ry); 7 (reed wrap reach); 15 (tint min radius cap); 0.6 (tint min radius share)
+    """
     import numpy as np
 
     from .wet import MARSH_TINT_R
@@ -203,7 +209,9 @@ BAMBOO_SHADE = 0.18
 def bamboo_tile(bs: float) -> str:
     """A bamboo stand's tile: `bamboo_mark` (two culms and a leafy fork, 5-8 ft tall) on the stand's own jittered grid.
 
-    Research: bamboo mark - research/questions/0075-bamboo-groves-chikurin.drawing.html: the modern map's bamboo symbol on a 7 ft grid over the thicket's shade"""
+    Research: bamboo mark - research/questions/0075-bamboo-groves-chikurin.drawing.html: the modern map's bamboo symbol on a 7 ft grid over the thicket's shade
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.6 (culm mark y jitter); 11 (bamboo mark wrap reach)
+    """
     import numpy as np
 
     from ..homestead_parts.groves import BAMBOO_CULM, bamboo_mark
@@ -266,7 +274,11 @@ def _clump_centers(rng: Any, side: float, n: int, spread: float) -> tuple[Any, A
 
 
 def reed_overlay_tile(bs: float) -> str:
-    """The marsh's overlay (feature 299): a few dense reed clumps and small open-water patches, sparse, at `REED_OVERLAY_TILE_FT`."""
+    """The marsh's overlay (feature 299): a few dense reed clumps and small open-water patches, sparse, at `REED_OVERLAY_TILE_FT`.
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.2 (reed lean); 8 (glint count); 5 (reed min length); 6 (glint min rx); 4.5 (glint max ry)
+    """
     import numpy as np
 
     side = REED_OVERLAY_TILE_FT * bs
@@ -285,7 +297,11 @@ def reed_overlay_tile(bs: float) -> str:
 
 
 def grass_overlay_tile(bs: float) -> str:
-    """The scrub's overlay (feature 299): a few dense clumps of grass with a brush dot or two, sparse, at `OVERLAY_TILE_FT`."""
+    """The scrub's overlay (feature 299): a few dense clumps of grass with a brush dot or two, sparse, at `OVERLAY_TILE_FT`.
+
+    Research:
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.45 (blade lean); 2.8 (blade min length); 4.6 (blade max length); 1.8 (dot min radius); 2.6 (dot max radius)
+    """
     import numpy as np
 
     side = OVERLAY_TILE_FT * bs
@@ -314,7 +330,9 @@ FRINGE_FT = 30.0
 def fringe_tile(bs: float) -> str:
     """The scrub-marsh fringe's tile: grass and reed tufts at half density each, a few pale tint patches, at the base repeat.
 
-    Research: fringe tile - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: grass and reed tufts at half density each"""
+    Research: fringe tile - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: grass and reed tufts at half density each
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.45 (grass lean); 0.2 (reed lean); 2.4 (grass min length); 4.2 (grass max length); 7 (reed max length); 18 (tint max radius)
+    """
     import numpy as np
 
     side = COVER_TILE_FT * bs
@@ -343,7 +361,9 @@ BANK_FT = 6.0
 def reed_bank_tile(bs: float) -> str:
     """The bank band's tile: reed tufts at about three times the marsh's density, a shade darker, at the base repeat.
 
-    Research: bank tile - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds at three times the marsh's density, a shade darker"""
+    Research: bank tile - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds at three times the marsh's density, a shade darker
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.2 (reed lean); 4.5 (reed min length); 7.5 (reed max length)
+    """
     import numpy as np
 
     side = COVER_TILE_FT * bs
@@ -389,7 +409,9 @@ def cover_rings(shape: Any, tolerance: float = 0.25) -> list[list[tuple[float, f
     `tolerance` (a quarter foot: a buffered keep-out's arcs carry eight points a quarter-circle the fill cannot show) and at the
     record's grain, 0.1. Drawn as one even-odd path, the holes are bare.
 
-    Research: plumbing - NONE: pattern and path assembly"""
+    Research: plumbing - NONE: pattern and path assembly
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.25 (simplify tolerance)
+    """
     out: list[list[tuple[float, float]]] = []
     for g in getattr(shape, "geoms", [shape]):
         if g.geom_type == "Polygon":

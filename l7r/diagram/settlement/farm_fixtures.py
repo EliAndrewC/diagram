@@ -161,6 +161,7 @@ class FarmFixturesMixin:
             fixture glyphs - CONVENTION: the privy's jar, the shed's log ends, the cauldron, the coop's slats, the shrine's torii, the grave's stones
             household grave - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: a household's grave on its own land, at the plot's corner
             pig sty on the farmstead - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: a small pig sty against the farmhouse or an outbuilding, drawn with the dike-pond sty's glyph
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.22 (slats); 0.2 (tie beam); 3.2 (torii posts); 0.17 (slats); 0.4 (torii posts); 0.3 (grave stones); 1.1 (stone rects); 0.25 (coop niches); 0.9 (slats); 0.24 (cauldron); 2.6 (small torii offset); 0.8 (niche lines); 0.62 (grave stones); 0.05 (grave stones); 0.12 (grave stones); 0.36 (grave stones); 0.28 (grave stones); 1.5 (lintel overhang); 1.8 (tie beam); 0.6 (torii posts); 0.35 (shrine ridge); 0.18 (stone rects)
         """
         if kind not in FIXTURE_FT:
             raise ValueError(f"unknown farm fixture kind {kind!r}")
@@ -238,6 +239,8 @@ class FarmFixturesMixin:
         Research:
             persimmon crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html: one crown of PERSIMMON_CROWN_FT
             fruit dots - CONVENTION: four jittered orange dots
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 107 (salt); 107.5 (salt and hash offsets); 107.9 (salt and hash offsets); 13 (salt and hash offsets); 7 (salt and hash offsets); 11 (salt and hash offsets); 5 (salt and hash offsets)
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.92 (dot radii); 45 (dot angles); 34 (dot angles); 0.44 (dot radii); 0.16 (dot radii); 0.24 (dot radii); 0.14 (dot size)
         """
         r = self.px(PERSIMMON_CROWN_FT)
         g = [f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="#94A23A" stroke="#5A6A26" stroke-width="0.8"/>']
@@ -280,7 +283,9 @@ def sty_parts(x0: float, y0: float, w: float, h: float, edge: str) -> list[str]:
     Research:
         a shed with a pen beside it - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: a small ridged shed with a railed pen beside it
         the shed's share - GUESS: the shed on 0.55 of the sty's length, the pen the rest; no page gives it
-        sty glyph - CONVENTION: the dark roof and its pale ridge, the pen's earth fill, its solid rails and the rail across"""
+        sty glyph - CONVENTION: the dark roof and its pale ridge, the pen's earth fill, its solid rails and the rail across
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.8 (ridge inset)
+    """
     sw = w * 0.55
     return [
         f'<rect x="{x0 + sw:.1f}" y="{y0:.1f}" width="{w - sw:.1f}" height="{h:.1f}" fill="#CDB58A" stroke="{edge}" stroke-width="0.9"/>',  # the pen
@@ -299,6 +304,7 @@ class PondStockMixin:
         Research:
             sty on the bank - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: the dike is field ground the sty may stand on
             sty clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); its half-diagonal plus 2 ft from every placed structure; the crossings it means to clear are read from `footbridges`, a key nothing writes (planks are recorded in `bridges`), so no footbridge is seen - a bug filed in feature 417 T33
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 6 (stand-in size for a record with no `w` (as T29 C))
         """
         w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
         half = math.hypot(w, h) / 2 + self.px(2.0)

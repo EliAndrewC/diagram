@@ -186,7 +186,11 @@ def outermost_join(track: Sequence[tuple[float, float]], others: Sequence[Sequen
     The other ways' segments are INDEXED once (feature 281, FR-004): each 5 ft sample walked every segment of every way -
     209,131 `seg_dist` on Sawada. A sample farther than the reach from a segment's box is farther than the reach from the
     segment, so the segments whose box widened by the reach holds the sample are every one the test can accept; the reach
-    is padded by 1e-6 so a way at EXACTLY the reach, which the closed test accepts, stays inside its widened box."""
+    is padded by 1e-6 so a way at EXACTLY the reach, which the closed test accepts, stays inside its widened box.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 5 (sample step)
+    """
     index = seg_reach_index([(o, 0.0) for o in others], KOSATSUBA_HANDOVER_PX + 1e-6)
     for a, b in zip(track, track[1:], strict=False):
         n = max(1, int(math.dist(a, b) // step))
@@ -257,6 +261,7 @@ def kosatsuba_anchor(M: Any, placement: str, ftpx: float = 1.0) -> tuple[float, 
         reaching the houses - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way reaches a farmhouse within 60 ft of it; the code counts the approach within `KOSATSUBA_ENTRANCE_REACH_FT`, 60 ft
         an approach that never arrives - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); anchored at its point nearest the houses
         a bridgehead anchored at its bridge - research/questions/0190-notice-boards-kosatsuba.drawing.html: at `bridgehead_anchor`'s bridge
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 5 (sample step)
     """
     houses = [(float(h["x"]), float(h["y"])) for h in (M.get("houses") or []) if "x" in h]
     if not houses or placement == "center":
@@ -327,7 +332,11 @@ def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float
     are one junction; each dwelling's nearest sample within `reach` walks the shortest route through them to the connector's
     OUTER end (settlement-review of Inashiro: routed to the handover first and then out, a lane that met the track below the
     handover was walked up to it and back, and every route passed a board there by construction). Empty when the map has
-    no handover."""
+    no handover.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 7 (graph join tolerance)
+    """
     import heapq
 
     hand = kosatsuba_handover(M)
@@ -433,6 +442,9 @@ class RouteReach:
     __slots__ = ("grid", "n")
 
     def __init__(self, routes: Sequence[Sequence[tuple[float, float]]]) -> None:
+        """Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 32 (grid cell)
+        """
         self.n = len(routes)
         self.grid = PointGrid(cell=32.0)
         self.grid.extend((k, float(q[0]), float(q[1]), float(q[0]), float(q[1]), float(q[0]), float(q[1])) for k, r in enumerate(routes) for q in r)

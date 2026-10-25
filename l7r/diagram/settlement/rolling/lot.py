@@ -102,7 +102,11 @@ def size_ladder(seed: int, n: int) -> list[tuple[float, float]]:
 
 
 def house_aspect_bound() -> float:
-    """The longest-to-widest a ladder rung can draw: the longest length over the shallowest depth."""
+    """The longest-to-widest a ladder rung can draw: the longest length over the shallowest depth.
+
+    Research:
+        its figures from 0029 - research/questions/0029-farmhouses-minka.drawing.html: 46 (base house in the length/depth bound); 28 (base house in the length/depth bound)
+    """
     return (46.0 * LENGTH_FACTORS[1]) / (28.0 * DEPTH_FACTORS[0])
 
 
@@ -228,7 +232,11 @@ def held_part_records(hx: float, hy: float, well: Any, fixtures: Any, vr: float)
     """(key, record) for each part a household's seating laid that stands HELD until it is drawn: the well pocket as its
     wellhead (`well`, its center, or None) and each fixture of `HELD_KINDS` as its seat's box (`fixtures`: (kind, box)
     pairs, the box (cx, cy, w, h) as drawn). The ONE form both the hold (`hold_laid_parts`) and the seat's question
-    (`bundle_admitted`) use, so the part asked of the registry is the part held there."""
+    (`bundle_admitted`) use, so the part asked of the registry is the part held there.
+
+    Research:
+        its figures against 0196 - research/questions/0196-communal-wells-ido.drawing.html: 8 (the held well's clearance radius r) - a departure the code keeps until feature 417 T33
+    """
     out: list[tuple[str, dict[str, Any]]] = []
     if well is not None:
         out.append(("wells", {"x": round(float(well[0]), 1), "y": round(float(well[1]), 1), "r": 8, "vr": vr}))

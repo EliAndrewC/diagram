@@ -58,6 +58,7 @@ def courtyard_annex_span(hw: float, hh: float, bh: float) -> float:
     anybody's homestead, whatever the manifest declares.
 
     Research: annex span - NONE: the house's half-extent, the byre's half-depth and COURTYARD_REACH
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N8, 2026-10-25) - 0.55 (a step just past the byre's half-depth in the span bound)
     """
     return max(hw, hh) / 2 + bh * 0.55 + COURTYARD_REACH
 
@@ -139,7 +140,11 @@ POCKET_TREE_CLEAR_FT = 50.0
 
 def paddy_index(polys: Any) -> PointGrid:
     """The paddy outlines filed by their bounding boxes, for `beside_a_paddy` to ask only the ones near a point (feature 304,
-    plan D6). Built once per reservation: the field does not change while the pockets are laid."""
+    plan D6). Built once per reservation: the field does not change while the pockets are laid.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 128 (spatial-index cell)
+    """
     grid = PointGrid(128.0)
     grid.extend([(ff, min(p[0] for p in ff), min(p[1] for p in ff), max(p[0] for p in ff), max(p[1] for p in ff)) for ff in polys if ff])
     return grid
@@ -301,6 +306,8 @@ class DraftByresMixin:
             outer stable a ken off the back wall or a flank - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the measured stables stand toward the road and the gate; seated off the back wall or a flank
             outer stable gap - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: YARD_SHED_GAP_FT, a ken, then two
             first wall turned per homestead - NONE: hashed from the seat
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 5 (count of the first ring's seats (rotation modulus)); 131 (jitter salt (first wall turned))
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N8, 2026-10-25) - 0.3 (back-wall candidate seats at +-0.3 of the house width); 0.25 (flank candidate seat 0.25 of the depth toward the back)
         """
         hw, hh, rot = float(h["w"]), float(h["h"]), float(h.get("rot", 0.0) or 0.0)
         hx, hy = float(h["x"]), float(h["y"])
@@ -347,6 +354,7 @@ class DraftByresMixin:
             on dry ground off the paddies - research/questions/0058-ground-too-wet-to-build-on.html: settlements stood on dry levees, the paddy on the back marsh
             no roof under a yard persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html: the persimmon casts shade over the house in summer - a byre roof is refused under it, a departure the code keeps until feature 417 T33
             clear of the homestead's other parts - NONE: overlap
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (float tolerance (its own house))
         """
         hx, hy = float(h["x"]), float(h["y"])
         if self._in_blocked(cx, cy) or self._near_corridor(cx, cy):
@@ -381,6 +389,7 @@ class DraftByresMixin:
         dark stall mouth along the front, distinct from the solid gray kura storehouse and from a dwelling.
 
         Research: open-fronted shed - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: plank roof, shaded stall mouth, two posts
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.3 (the two posts' places in the glyph); 0.7 (the two posts' places in the glyph); 0.02 (post stroke ends); 0.4 (stall-mouth band in the glyph); 0.08 (ridge line offset); 0.42 (post stroke ends)
         """
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.1f})">']
         g.append(f'<rect x="{-w / 2:.1f}" y="{-h / 2:.1f}" width="{w:.1f}" height="{h:.1f}" rx="1.6" fill="#B0905E" stroke="#59431F" stroke-width="1.1"/>')  # thatch/plank roof
@@ -426,6 +435,7 @@ class DraftByresMixin:
             no free wall falls back - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the form a knob, rolled per settlement; an inner stable with no free wall drawn as an outer stable, then a free shed at rot 0
             only plain houses keep a byre - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the L-shaped farmhouse common among the better-off households; big farmhouses never own one
             spiral byre off the paddies - research/questions/0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html: a village house stood about 3 ft back from cultivated land; the stall's depth is ours; kept a stall's depth from every field
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N8, 2026-10-25) - 30 (30-degree step of the spiral search); 0.25 (the next widening tiers (0.5, 0.25, 0)); 0.75 (spread tier for the shared-shed choice (borrowing itself NOT ATTESTED, P6/0048))
         """
         bs = self.bscale
         # SIZE: a shared byre houses ~1-2 draft animals (an ox / water-buffalo stall is ~2x3 m) plus fodder ->

@@ -191,7 +191,11 @@ def strip_face(strip: Sequence[Sequence[float]], dikes: tuple[float, float, floa
 
 def band_to_edge(strip: Sequence[Sequence[float]], face: str, view: Sequence[float], past: float = 20.0) -> list[tuple[float, float]]:
     """The wild ground between a strip's outer edge on `face` and the view's edge there, `past` beyond it, over the strip's
-    own extent along the flank - lapping the strip by two feet so the two are one ground."""
+    own extent along the flank - lapping the strip by two feet so the two are one ground.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 20 (overshoot past the view's edge (as pass-N1 ruled `stage_waterward`))
+    """
     vx0, vy0, vw, vh = (float(v) for v in view)
     xs, ys = [float(q[0]) for q in strip], [float(q[1]) for q in strip]
     if face in ("W", "E"):

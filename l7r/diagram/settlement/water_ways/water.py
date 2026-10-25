@@ -125,6 +125,7 @@ class WaterBodiesMixin:
             stream width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 2 m (~7 ft) for a village brook, drawn 7 ft at the map's scale by default
             bed and sheen - CONVENTION: a blue bed, a lighter butt-capped mid-current sheen
             houses kept off the stream - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); a no-build corridor of max(30, half-width + 20) px
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.35 (sheen stroke)
         """
         width = self.px(7.0) if width is None else width  # a village brook about 7 ft wide (0068), at the map's scale
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)

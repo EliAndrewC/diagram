@@ -273,6 +273,7 @@ def over_a_conifer(x: float, y: float, r: float, conifers: Sequence[tuple[float,
     ink's rounding: the SVG writes a crown to 0.1 px, so the placer asks a little wider than the test that reads the ink.
 
     Research: conifer reads on top - CONVENTION: a lesser crown painted over a conifer is not drawn
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (ink rounding slack)
     """
     return any((x - cx) ** 2 + (y - cy) ** 2 < (CROWN_OVER_SHARE * (r + cr) + slack) ** 2 for cx, cy, cr in conifers)
 
@@ -293,6 +294,7 @@ def bamboo_mark(x: float, y: float, bs: float, tall: float, lean: float) -> str:
     are the two positional rolls in [0, 1): a mark 5-8 ft tall, leaning up to 0.8 ft.
 
     Research: bamboo mark - research/questions/0075-bamboo-groves-chikurin.drawing.html: paired culm strokes and a leafy fork
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 5 (culm mark height (glyph; 0075 drawing: marks a convention)); 1.6 (leaf-fork strokes and width); 0.6 (second culm's lean and length, stroke width); 0.8 (leaf-fork strokes and width); 0.9 (second culm's lean and length, stroke width); 2.4 (leaf-fork strokes and width); 0.4 (leaf-fork strokes and width); 1.2 (leaf-fork strokes and width); 2.2 (leaf-fork strokes and width); 2.6 (leaf-fork strokes and width)
     """
     h = (5.0 + 3.0 * tall) * bs
     ln = (lean - 0.5) * 1.6 * bs
@@ -364,6 +366,7 @@ class GrovesMixin:
             row conifer size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: RANK_CONIFER_S, 1.0 to 1.1 of the mean radius, inside the page's 0.75 to 1.4
             row conifer off a wellhead - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: no crown round a wellhead in a belt (`_canopy_keepouts`' circles)
             crown under no crown - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (index cell); 97 (salt); 95 (salt); 96 (salt)
         """
         line = belt_centerline(seated, self.px(RANK_BIN_FT))
         # THE BELT'S HALF-DEPTH FROM THE CENTERLINE'S NEAR SEGMENTS (feature 306, the GM: a check against many things means
@@ -485,6 +488,8 @@ class GrovesMixin:
             clump glyph - CONVENTION: one disc per crown, conifers dark and painted last, no trunks
             conifer-led clump's lesser share - GUESS: a conifer-led clump throws LESSER_ROLL_SHARE (0.1) of its crowns as lesser broadleaf, and at least one - 0072's drawing page names the lesser broadleaf among the rows, no page its share
             lesser broadleaf crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: LESSER_BROADLEAF_S, 0.75 to 0.85 of the mean radius (the page's 0.75 to 1.4)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 9 (prefilter pad, floor under the true crown reach); 93 (salts); 94 (salts); 5 (seed multiplier); 0.2 (ink rounding slack)
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N9, 2026-10-25) - 0.6 (scatter of decorative crowns about even steps along a band; no source could speak to it)
         """
         # SCOPED (2026-08-08): a homestead grove's crowns are decoration keyed to the grove itself.
         with self.rng_scope("grove", cx, cy, w, h):

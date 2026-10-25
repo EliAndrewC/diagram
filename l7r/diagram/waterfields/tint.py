@@ -74,6 +74,7 @@ def mark_low(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, row_st
         low ground - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the low ground begins at the plots whose foot lies on the collector
         low ground depth - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); within LOW_ROWS (two) row steps of the collector
         wet plots on the drain - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: FLOOD_SAMPLE of the plots fronting the collector tinted (`fronts`)
+        its figures from 0007 - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: 0.25 (quarter-plot reach, the code's test of "whose foot lies on the drain")
     """
     import shapely
     from shapely.geometry import LineString, Polygon
@@ -101,7 +102,9 @@ def fronts(poly: Any, line: Any, plot_across: float) -> bool:
     """Does `poly` front `line` - half a plot's width of its own edge within a quarter plot of the line? Measuring the LINE near
     the plot instead (the first cut) is a distance test in disguise: a single corner near a long drain cuts a chord of it.
 
-    Research: fronting the drain - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the plots whose foot lies on the drain"""
+    Research: fronting the drain - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the plots whose foot lies on the drain
+        its figures from 0007 - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: 0.25 (the same test of fronting the drain)
+    """
     return bool(poly.exterior.intersection(line.buffer(0.25 * plot_across)).length >= FRONTAGE_SHARE * plot_across)
 
 
@@ -113,6 +116,7 @@ def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: f
     Research:
         pointed plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a needle, a truncated point or an apex under 25 deg loses the tint
         one wet plot at least - CONVENTION: when the draw leaves no plot on the drain blue, the most basin-like plot ON THE DRAIN is tinted, so the map still shows the class it declares (0007 drawing records blue as a sample, not this floor)
+        its figures from 0007 - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: 0.25 (the same, for the tint floor)
     """
     import shapely
     from shapely.geometry import LineString, Polygon

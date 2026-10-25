@@ -294,6 +294,8 @@ def plant_the_belt(s: Settlement, plan: SitePlan) -> None:
         belt windward and embracing - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: planted on the band, crowns within the band's reach of a farmhouse
         belt clipped at the page edge - CONVENTION: only crowns wholly off the frame dropped
         dented round the title - CONVENTION
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 30 (frame opened past belt (y))
+        its figures guessed on 0080 - GUESS research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: 14 (belt clump radius for page prediction)
     """
     if not plan.belt:
         return
@@ -387,6 +389,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         copse sized by the homestead woods - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: each homestead's wood rolled in the register's range, the copse filled to what the belt and groves leave
         no copse without a belt or a reserved seat - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: every farm that keeps a wood is given 6,000 to 28,000 sq ft of trees, its share of the copse counted - a map with no belt and no reserved seat draws no copse, a departure the code keeps until feature 417 T33; a map with neither draws no copse
         among-the-houses copse box - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); the box is the cluster's oriented footprint padded 16 ft
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 210 (jitter salt)
     """
     _seats = reserved_seats(s)
     if not plan.belt and not _seats:

@@ -27,7 +27,12 @@ def matrix_violations(M: Mapping[str, Any]) -> list[tuple[str, str, float, float
     The same two functions the registry of what stands asks at record time (feature 287 M8, `registry.py`): the
     extractor `element_extents` and the pair test `pair_forbidden`, whose conditional permissions depend on the two
     RECORDS rather than on their classes alone (an annex on its own parent, two annexes of one household, a trade
-    work's private well inside its own court). The finished map is judged by what the placer was held to."""
+    work's private well inside its own court). The finished map is judged by what the placer was held to.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 120 (spatial index cell)
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 4000 (default sheet height)
+    """
     ext = matrix_extents(M)
     priv = {pw for w_ in M.get("wells", []) or [] if (pw := private_well(w_))}
     boxes = [box_of(p) for _k, p, _i, _pa in ext]

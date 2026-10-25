@@ -23,7 +23,12 @@ class GroundMixin:
         """Seat and draw the Imperial road's caption in the label phase, by the ONE placer (feature 266): a LINE
         subject - the road's centerline at its drawn half-width - so the name runs along the road, above it before
         below it, never upside down, nearest the authored anchor first (psu-geog486-point-labels; research/contents.json#map-conventions,
-        "Labels on maps (cartographic label placement)"). The anchor is a HINT for where along the road, never a distance."""
+        "Labels on maps (cartographic label placement)"). The anchor is a HINT for where along the road, never a distance.
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 12 (font size)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 26 (road fallback)
+        """
         text, lx, ly = self._road_label
         rd = [(float(p[0]), float(p[1])) for p in self.M.get("road") or []]
         half = float(self.M.get("road_width") or 26) / 2

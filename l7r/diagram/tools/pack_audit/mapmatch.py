@@ -168,7 +168,11 @@ def _features(key: str, cls: str, recs: Any) -> list[MapFeature]:
 
 @lru_cache(maxsize=8)
 def load_map(path: str) -> dict[str, Any]:
-    """The map's recorded manifest, read once per path (the sweep asks for the same map per sheet)."""
+    """The map's recorded manifest, read once per path (the sweep asks for the same map per sheet).
+
+    Research:
+        its cache size - NONE: a memo's size, which decides nothing about the place - 8
+    """
     with open(path, encoding="utf-8") as fh:
         loaded: dict[str, Any] = json.load(fh)
     return loaded
@@ -193,6 +197,9 @@ class Transform:
         return self.map_ox + (sx - self.sheet_ox) * k, self.map_oy + (sy - self.sheet_oy) * k
 
     def frame(self, text: str) -> tuple[float, float, float, float] | None:
+        """Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 5 (regex group range)
+        """
         m = _VIEWBOX_RE.search(text)
         if not m:
             return None

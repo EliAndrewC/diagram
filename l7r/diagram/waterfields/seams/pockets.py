@@ -155,6 +155,7 @@ def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: floa
         command area - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: no paddy below the collector's bank or upslope of the supply canal, a canal watering only the ground below it
         set-back from the canal - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the planted ground starts 4 grain (8 ft) down the fall from the canal's centerline
         collector extended level - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); past its drawn ends the command area's low edge runs on at the end's fall
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 64 (least sample count); 6 (sampling step)
     """
     _load_shapely()
     x0, y0, x1, y1 = field.bounds

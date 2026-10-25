@@ -21,7 +21,11 @@ from .seats import cluster_aspect
 def water_push(water: Sequence[tuple[Pt, Pt, float]], center: Pt, n: Pt, half_lat: float, near: float, far: float) -> float:
     """How far a box must move along `n` so that no water course (`(a, b, clearance)` segments) lies within its clearance
     of the box: the box spans `near`-`far` along `n` and `half_lat` either side of `center` across it. Zero when clear.
-    Each segment is sampled every 8 ft, which is finer than any clearance the courses carry (half-width + 5)."""
+    Each segment is sampled every 8 ft, which is finer than any clearance the courses carry (half-width + 5).
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 8 (water segment sampled every 8 ft)
+    """
     lx, ly = -n[1], n[0]
     push = 0.0
     for a, b, clr in water:

@@ -141,6 +141,7 @@ def _obstacles(s: Settlement, h: Mapping[str, Any]) -> tuple[list[Poly], list[Po
     Research:
         routed round the farm - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round buildings, yards, gardens and other groves; through its own grove
         walled off lanes, wells and crop - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); every lane, other farms' well pockets and the crop and paddy plots walled
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N3, 2026-10-25) - 6 (well pocket = well-house + 3 ft a side, walled from channels)
     """
     from ..ways.geom import steading_footprints, stroke_quad  # local: the ways are a later stage
 

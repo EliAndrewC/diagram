@@ -105,6 +105,7 @@ def household_bamboo(
         row farm's bamboo to the south - research/questions/0033-row-villages-resson.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: on a
             row village that rolled the second form and a map whose farmsteads keep bamboo, every farm the grove row across its street shelters
             keeps it, a band along its south side (`south_band`)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel box: the whole map); 95 (jitter salt (prevalence roll)); 96 (jitter salt (strip candidates))
     """
     out: list[Poly] = []
     keeps = plan.bamboo in ("homestead", "both")
@@ -373,7 +374,9 @@ def household_bamboo_wanted(s: Settlement, plan: SitePlan, houses: Sequence[Mapp
 
     Research:
         which farms keep bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: `HOUSEHOLD_BAMBOO_PREVALENCE` by each house's position hash
-        a sheltered row farm keeps bamboo - research/questions/0033-row-villages-resson.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: the bamboo set south where a row of grove farms across the road broke the wind, on a map whose farmsteads keep bamboo"""
+        a sheltered row farm keeps bamboo - research/questions/0033-row-villages-resson.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: the bamboo set south where a row of grove farms across the road broke the wind, on a map whose farmsteads keep bamboo
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 95 (same salt, the count)
+    """
     if plan.bamboo not in ("homestead", "both"):
         return 0
     return sum(1 for h in houses if h.get("sheltered") or (s._hjit(float(h["x"]), float(h["y"]), 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE and not (h.get("geom") or {}).get("groves")))
@@ -430,6 +433,9 @@ class Footing:
     __slots__ = ("dry", "rings", "water")
 
     def __init__(self, s: Settlement, fields: Sequence[Poly], marsh: Sequence[Poly]) -> None:
+        """Research:
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N3, 2026-10-25) - 6 (6 ft pad off paddy/marsh rings); 0.6 (crown box padded 0.6 ft)
+        """
         self.rings: PointGrid = boxed_grid(boxed_rings([p for p in list(fields) + list(marsh) if len(p) >= 3], 6.0))
         dry = [[(float(a), float(b)) for a, b in o.get("poly") or []] for o in s.M.get("dry_plots", [])]
         self.dry: PointGrid = boxed_grid(boxed_rings([p for p in dry if len(p) >= 3], 3.0))
@@ -516,7 +522,11 @@ class StripNear:
             raise AssertionError(f"StripNear is stale: what it filed changed mid-pass ({self._filed} -> {self._state()})")
 
     def count(self, cx: float, cy: float, cw: float, ch: float) -> int:
-        """How many items a strip here is tested against (SC-001's count)."""
+        """How many items a strip here is tested against (SC-001's count).
+
+        Research:
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 6 (prefilter reach, the widest pad)
+        """
         pad = max(cw, ch) / 2 + 6.0
         return sum(len(g.near(cx, cy, pad)) for g in (self.placed(), self.houses, self.kinds, self.segs, self.crowns))
 
@@ -547,6 +557,8 @@ def _strip_blocked(
         what a strip or fixture keeps off - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); the pads, 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond
         no lane across it - research/questions/0075-bamboo-groves-chikurin.drawing.html: no lane or well is drawn across a strip; a tread within its half-width of a corner, or crossing an edge, refuses it
         off the notice board, byres and retirement houses - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); 6 ft off each, as off wells and sheds
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 30 (strip kept 30 px off the sheet edge)
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N3, 2026-10-25) - 0.6 (strip 0.6 ft clear of a crown)
     """
     if cx - cw / 2 < 30 or cy - ch / 2 < 30 or cx + cw / 2 > s.W - 30 or cy + ch / 2 > s.H - 30:
         return True

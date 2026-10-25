@@ -40,7 +40,9 @@ class HousesMixin:
         """Research: farmhouse glyph - research/questions/0029-farmhouses-minka.drawing.html: one rectangle under a ridge line with a door mark, the big and abandoned variants
         farmhouse tones - CONVENTION: wall tones by position, the abandoned house's dashed outline, the gray annex's color
         big farmhouse wing - research/questions/0029-farmhouses-minka.drawing.html: the big house drawn with a wing (0.40 x 0.5 of the house) off its back corner
-        ridge at 0.6 of the length - research/questions/0029-farmhouses-minka.drawing.html: the ridge drawn at 0.6 of the house's length, a hipped-roof reading"""
+        ridge at 0.6 of the length - research/questions/0029-farmhouses-minka.drawing.html: the ridge drawn at 0.6 of the house's length, a hipped-roof reading
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.3 (ridge line); 0.4 (door mark); 0.16 (ruin mark); 0.04 (ruin mark); 0.2 (ruin mark); 0.42 (door mark)
+        """
         # POSITION-SEEDED (2026-08-08). A house's wall color is a property of the house, and this
         # was the single most-executed stream draw in the engine - one per house, on every map - so
         # it moved the whole sequence for everything drawn afterwards.
@@ -270,7 +272,9 @@ class HousesMixin:
         rot: float | None = None,
         top: float = 88.0,
     ) -> bool:
-        """Research: building spacing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 4 px between collision circles (exact boxes where both are declared)"""
+        """Research: building spacing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 4 px between collision circles (exact boxes where both are declared)
+        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 88 (top sheet margin); 55 (side and bottom sheet margins); 26 (side and bottom sheet margins)
+        """
         if x < 55 or x > self.W - 55 or y < top or y > self.H - 26:
             return False
         if self.bound and not point_in_poly(x, y, self.bound):  # stay inside a bounding ring (city wall)
@@ -358,7 +362,11 @@ class HousesMixin:
         """Deterministic per-position pseudo-random in [0,1) from (x,y,salt) - jitters a homestead's parts
         (house aspect, garden/yard size + shape) WITHOUT a global RNG draw, so it never ripples other
         placement or household counts (position-seeded, exactly like the wealth tier). Real villages were
-        never rows of copy-pasted identical farmsteads; this gives each one its own proportions."""
+        never rows of copy-pasted identical farmsteads; this gives each one its own proportions.
+
+        Research:
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 43758.5 (hash constants); 7.373 (hash constants); 12.9898 (hash constants); 4.1414 (hash constants)
+        """
         v = math.sin(x * 12.9898 + y * 4.1414 + salt * 7.373) * 43758.5453
         return v - math.floor(v)
 
@@ -372,7 +380,9 @@ class HousesMixin:
         POSITION-SEEDED: a pure function of the seat's coordinates (see `_hjit`), so the placer knows the exact quad
         before it commits. A hamlet sets `_house_bearing` (269 B18, research/homesteads/400): the common bearing and the
         lane's turn (`rolling/bearing.py`); elsewhere the old +/-5 degree rake stands.
-        Research: farmhouse rake - research/questions/0029-farmhouses-minka.drawing.html: the hamlet's bearing rule, else +-5 degrees by position"""
+        Research: farmhouse rake - research/questions/0029-farmhouses-minka.drawing.html: the hamlet's bearing rule, else +-5 degrees by position
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 11 (salt)
+        """
         if self._house_bearing is None:
             return self._hjit(cx, cy, 11.0) * 10.0 - 5.0
         return house_rot(self._hjit, cx, cy, self._house_bearing, self._bearing_follow)
@@ -391,7 +401,9 @@ class HousesMixin:
         should be parallel with the house"* - with each corner pulled on its own, the edge facing the house ran
         up to 3 degrees off the house's wall, and the gap read wider at one end). The other edges keep their
         irregularity.
-        Research: hand-laid plot outlines - research/questions/0029-farmhouses-minka.drawing.html: corners pulled in by position, the edge toward the house straight and parallel"""
+        Research: hand-laid plot outlines - research/questions/0029-farmhouses-minka.drawing.html: corners pulled in by position, the edge toward the house straight and parallel
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.19 (salt step)
+        """
         hw, hh = w / 2.0, h / 2.0
         pulls = [(self._hjit(cx, cy, salt + i * 0.19) * jit, self._hjit(cx, cy, salt + i * 0.19 + 0.5) * jit) for i in range(4)]  # each corner its own inward pull
         if level in ("N", "S"):
@@ -423,7 +435,9 @@ class HousesMixin:
         Research:
             farmhouse size - research/questions/0029-farmhouses-minka.drawing.html: 46 x 28 ft base, by the lot's ladder or 0.85-1.35 x 0.90-1.10; dispersed 0.9 / 1.0 / 1.12 by position, big 64 x 40
             storehouse - research/questions/0040-farm-storehouses-kura.drawing.html: one farm in eight by count (else by position), the headman always, on the north wall
-            a farmhouse no longer than 2.7:1 - research/questions/0029-farmhouses-minka.drawing.html: `FARMHOUSE_MAX_ASPECT`, the length and depth jitter's 1.3-2.7 bar; a caller's longer house is refused"""
+            a farmhouse no longer than 2.7:1 - research/questions/0029-farmhouses-minka.drawing.html: `FARMHOUSE_MAX_ASPECT`, the length and depth jitter's 1.3-2.7 bar; a caller's longer house is refused
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (depth spread 0.90 to 1.10; the branch is dead (0029 would cite it)); 30 (0.9 / 1.0 / 1.12 tier split; the branch is dead); 53 (hash multipliers); 29 (hash multipliers); 80 (0.9 / 1.0 / 1.12 tier split; the branch is dead)
+        """
         # a farmhouse shares the MAP'S building grain (bscale): at village/hamlet scale bscale is
         # 1.0 (full size), but a town/city compresses its urban buildings, and a peasant farmhouse
         # must not render LARGER than the samurai and merchant houses inside the walls - so it
@@ -522,7 +536,10 @@ class HousesMixin:
           - `split`     - two sub-hamlets on either flank (two dry patches flanking the arable).
         Off the flood toe / field-adjacency are enforced downstream by `try_place` (each candidate that is not
         field-adjacent or lands on a blocker is simply rejected), so this only has to SHAPE the seed cloud.
-        Research: cluster shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round, elongated, crescent or split, with this method's proportions"""
+        Research: cluster shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round, elongated, crescent or split, with this method's proportions
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 0.55 (elongated seed cloud; 0031 attests the levee string but gives no ratio, and the placer sets the drawn width); 1.4 (elongated seed cloud; 0031 attests the levee string but gives no ratio, and the placer sets the drawn width)
+            its figures guessed on 0031 - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 0.22 (crescent spread); 0.95 (crescent depth); 0.42 (split sub-clusters); 0.82 (split sub-clusters); 0.62 (split sub-clusters)
+        """
         if shape not in ("round", "elongated", "crescent", "split"):
             raise ValueError(f"unknown cluster_shape {shape!r}; expected round / elongated / crescent / split")
         if record:
@@ -572,6 +589,7 @@ class HousesMixin:
                              (NEVER straight down into the wet central toe below the drain).
           - `on_rise`      - a dry knoll off a high corner (a rise standing a little out of the plain).
         Research: cluster position - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: six margins of the field, the cluster along the margin, depth capped at 118 px
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.6 (lateral and depth fractions (no caller)); 0.34 (lateral and depth fractions (no caller)); 22 (clearance (no caller)); 0.3 (lateral offsets (no caller)); 0.45 (valley-mouth offset (no caller))
         """
         if position not in ("high_margin", "valley_head", "mid_margin", "flank", "valley_mouth", "on_rise"):
             raise ValueError(f"unknown cluster_position {position!r}")
@@ -627,7 +645,11 @@ class HousesMixin:
         long-and-narrow (aspect > 1). The ft/px=1 HAMLETS (the only maps that reach this at that scale, via
         the scripted hamlet's `stage_field`) stay on the LEGACY px grain: they already render in-band (~0.02-0.06 acre) and the GM
         asked to leave them untouched, so recalibrating them would only reshuffle vetted maps for no gain.
-        Research: paddy plot size and regularity - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: 0.72 / 1.0 / 1.35 of the plot norm or a strip, a grid only narrowing the row spread; no jori grid is drawn"""
+        Research: paddy plot size and regularity - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: 0.72 / 1.0 / 1.35 of the plot norm or a strip, a grid only narrowing the row spread; no jori grid is drawn
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.66 (basin aspect at ftpx >= 2 (unreached)); 1.9 (strip aspect (unreached)); 32 (hamlet strip (never rolled or fixed)); 46 (hamlet strip (never rolled or fixed)); 66 (hamlet strip (never rolled or fixed))
+            its figures guessed on 0005 - GUESS research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 34 (small_irregular basin); 20 (small_irregular basin); 40 (small_irregular basin)
+            its figures from 0005 - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 48 (medium basin); 70 (large_block basin); 26 (medium basin); 36 (medium basin); 30 (large_block basin); 44 (large_block basin)
+        """
         from l7r.diagram.waterfields import PADDY_CELL_ACRES, paddy_grain
 
         if plot_size not in ("small_irregular", "medium", "large_block", "strip"):

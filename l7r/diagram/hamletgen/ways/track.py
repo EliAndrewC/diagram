@@ -507,7 +507,9 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), wet: 
         track drawn taut - research/questions/0081-village-lanes.drawing.html: every lane pulled taut like a string - the candidate a straight run from the gateway past the frame
         track off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: kept `TRACK_FABRIC_GAP` (7 ft) off the steadings
         track clear of the pond and the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the water only at a crossing place, and with none on its line the track leaves on its own bank - the fallback keeps the best bearing even where it crosses, a departure the code keeps until feature 417 T32; the pond, the drain brook and the watercourses scored with the crop, a crossing tolerated only in the fallback
-        the gateway off the crop - research/questions/0081-village-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane may touch a plot's boundary and the field path runs onto the outer bund - the gateway is held 12 ft off the crop, a departure the code keeps until feature 417 T32; stepped 12 ft clear of the crop (`pull_clear(..., 12.0)`), so the track does not start on a paddy's edge"""
+        the gateway off the crop - research/questions/0081-village-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane may touch a plot's boundary and the field path runs onto the outer bund - the gateway is held 12 ft off the crop, a departure the code keeps until feature 417 T32; stepped 12 ft clear of the crop (`pull_clear(..., 12.0)`), so the track does not start on a paddy's edge
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 9 (41 bearings at 9 deg steps); 21 (41 bearings at 9 deg steps); 20 (41 bearings at 9 deg steps)
+    """
     # PAST THE FRAME ON EVERY BEARING: a fixed 4,000 ft stopped short of a 5,600 ft canvas's far edge (feature 328 wave 46,
     # found when the taut track first took an eastward bearing). The canvas' diagonal reached it, but every later pass samples
     # the whole connector (`field_runs` asked `run_on_target` 53% more often, batch 1's pair), so each bearing runs to the
@@ -644,7 +646,11 @@ def past_the_frame(start: Pt, theta: float, w: float, h: float) -> float:
 
 def wet_grown_by_the_lane(w: Poly) -> Poly:
     """A wet polygon grown 8 px along its own outward normals (`ring_offset`) - 8 ft on a hamlet's sheet (1 ft a px),
-    the web's own bar off wet ground (`WEB_HARD_GAP`), so the sweep scores the tread the gate measures (`connector_track`)."""
+    the web's own bar off wet ground (`WEB_HARD_GAP`), so the sweep scores the tread the gate measures (`connector_track`).
+
+    Research:
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N4, 2026-10-25) - 8 (wet ground grown 8 ft (`WEB_HARD_GAP` written as a literal))
+    """
     return list(ring_offset(w, 8.0, 0.0)[: len(w)])
 
 
@@ -751,7 +757,9 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
         where on a channel it crosses - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); anywhere the fill finds; the settle squares the crossing (`squaring.square_every_crossing`)
         the track's flank - research/questions/0081-village-lanes.drawing.html: it leaves downslope past the end of the wet ground, on the flank the cluster already sits on - the fill takes the shortest way off any frame edge instead, a known gap carried to 405 T111
         only the brook gapped at its crossing places - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the crossing places stand on the brook; a drawn channel or the drain is crossed only as the last resort (on a deck, 0084)
-        brook crossed at its crossing places - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook by the settle (`squaring.square_every_crossing`, the connector's too)"""
+        brook crossed at its crossing places - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook by the settle (`squaring.square_every_crossing`, the connector's too)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.71 (half a cell's diagonal); 16 (16-gon for the pond disc)
+    """
     # ...A FARM'S GROVE BAND AT A FOOTPATH'S GAP, over a grid fine enough to pass between two (feature 291 on 287): dispersed
     # farms stand a lane's room (32 ft) apart, and at the track's gap on the 20 ft grid every way between them was walled -
     # cohort seeds 5 and 16 had no dry exit at all

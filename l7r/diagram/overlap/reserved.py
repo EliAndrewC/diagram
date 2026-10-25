@@ -72,6 +72,7 @@ def seat_radius(key: str, o: Any, clump: float) -> float | None:
         clump clearances - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
             a building's half diagonal, half a clump and 2 px
         wellhead clearance - CONVENTION: the well's drawn radius, 1.05 clumps and 1 px, so no clump is drawn over the wellhead
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (well radius fallback)
     """
     if key in SEAT_OCCUPIERS and "x" in o and "w" in o and "h" in o:
         return 0.5 * math.hypot(float(o["w"]), float(o["h"])) + clump * 0.5 + 2.0
@@ -137,6 +138,7 @@ class Reservations:
         Research:
             access corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a household's way kept clear, but its own parts - every one placed before the ways are reserved (feature 320), and its way laid round them
             wood seats - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: a reserved copse seat kept off occupied ground and a lane's buffer - in every account of a farmhouse grove found, the way runs outside the grove or through a gap in it to the house
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (lane width fallback)
         """
         if not self:
             return []
@@ -212,7 +214,11 @@ class Reservations:
 
     def seat_walls(self, sides: int = 12, reach: float | None = None) -> list[list[tuple[float, float]]]:
         """Each seat's lane keep-out as a polygon, circumscribing a circle of `reach` (the copse's lane buffer by default) -
-        the walls a router threads a way between, so the run it finds is one the seats admit."""
+        the walls a router threads a way between, so the run it finds is one the seats admit.
+
+        Research:
+            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 12 (keep-out polygon sides)
+        """
         r = self.lane_buffer if reach is None else reach
         return [
             [(sx + r * math.cos(2 * math.pi * k / sides) / math.cos(math.pi / sides), sy + r * math.sin(2 * math.pi * k / sides) / math.cos(math.pi / sides)) for k in range(sides)]

@@ -47,6 +47,7 @@ def _comb_dry_and_beans(
         seams settled - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: every band's tracts read apart where the rows spread
         bund beans - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: beads along a share of the paddy bunds
         dry acreage scale - NONE: the manifest's `dry_acres`, at the map's own scale (2 / grain ft a pixel); no stage reads it
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 43560 (square feet in an acre)
     """
     # The hem's stand-off is derived from the SUPPLY strokes' drawn banks (`CANAL_BERM_FT`), so the
     # drawn channels have to be in hand - they are, because this pass runs after `_comb_canal_pieces`
@@ -182,6 +183,7 @@ def middle_reserve(
     Research:
         the wild middle as reserve - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: hem columns along the canal above the toe, off the paddy and the drawn hem
         clearing order - GUESS: nearest the toe first
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 32 (seed bits)
     """
     cut = toe_cut(F, fork, paddies)
     run = middle_stretch(F, a_pts, cut) if cut is not None else []

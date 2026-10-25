@@ -154,7 +154,7 @@ def test_a_seat_whose_rotated_parcel_cannot_fit_the_window_is_dropped(monkeypatc
     # layer further in. So prove the setup DOES seat parcels first; only then does taking them away
     # mean the drop path ran.
     assert _scan(), "the control scan seated nothing, so a later empty result would prove nothing"
-    monkeypatch.setattr(hinterland.parcels, "WOODLAND_BBOX_FLOOR", 1.01)  # feature 173: the floor and its reader both live in hinterland/parcels.py now
+    monkeypatch.setattr(hinterland.parcels.patches, "WOODLAND_BBOX_FLOOR", 1.01)  # feature 173: the floor and its reader both live in hinterland/parcels.py now
     assert _scan() == [], "an unsatisfiable window floor must drop every parcel, not draw one the crop will cut off"
 
 
@@ -603,8 +603,8 @@ def test_a_third_parcel_with_no_ground_off_the_row_is_not_seated(monkeypatch: py
     it qualifies (`seat_off_the_row` returns None - asked of every seat, which it passes through when it is in no row) no
     parcel is seated there. Forced here because the pool's rolls reach it
     only by the accident of a layout, and a feature 261 re-seat moved Inashiro off it."""
-    monkeypatch.setattr(hg.hinterland.parcels, "crossed_through_many", lambda field, frm, tos, share=0.5: [True] * len(tos))  # the row rule's test, not the field's side (feature 328)
-    from l7r.diagram.hamletgen.hinterland import parcels
+    monkeypatch.setattr(hg.hinterland.parcels.patches, "crossed_through_many", lambda field, frm, tos, share=0.5: [True] * len(tos))  # the row rule's test, not the field's side (feature 328)
+    from l7r.diagram.hamletgen.hinterland.parcels import patches as parcels
 
     plan = a_plan()
 
@@ -773,7 +773,7 @@ def test_the_scan_refuses_a_ring_the_wet_share_fails_and_takes_the_next_seat(mon
         asked.append(ring)
         return 1.0 if len(asked) == 1 else 0.0
 
-    monkeypatch.setattr(hinterland.parcels, "parcel_wet_share", _first_is_wet)
+    monkeypatch.setattr(hinterland.parcels.patches, "parcel_wet_share", _first_is_wet)
     got = _scan()
     assert asked[0] not in got, "the wet ring is not drawn"
     assert got, "the scan went on to the next seat"
@@ -933,7 +933,7 @@ def test_a_walk_through_a_row_holding_is_beyond_the_fields(monkeypatch: pytest.M
     def _through(field, frm, tos, share=0.0):  # type: ignore[no-untyped-def]
         return [field is not plan.envelope] * len(tos)
 
-    monkeypatch.setattr(hinterland.parcels, "crossed_through_many", _through)
+    monkeypatch.setattr(hinterland.parcels.patches, "crossed_through_many", _through)
 
     def _scan(holdings: list) -> list:
         s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)

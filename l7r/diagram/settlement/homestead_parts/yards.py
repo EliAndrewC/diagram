@@ -47,7 +47,11 @@ MAT_JITTER_DEG = 10.0  # up to 10 degrees where the neighbors leave room: at 6 a
 
 
 def _mat_hash(r: int, c: int, salt: float) -> float:
-    """A deterministic draw in [0, 1) for the mat in row `r`, column `c` - positional, like `Settlement._hjit`."""
+    """A deterministic draw in [0, 1) for the mat in row `r`, column `c` - positional, like `Settlement._hjit`.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 43758.5 (hash constants); 37.719 (hash constants); 12.9898 (hash constants); 78.233 (hash constants)
+    """
     v = math.sin(r * 12.9898 + c * 78.233 + salt * 37.719) * 43758.5453
     return v - math.floor(v)
 
@@ -205,7 +209,11 @@ def floor_grid(xs: list[float], ys: list[float], poly: list[tuple[float, float]]
     """`[[point_in_poly(x, y, poly) and edge_dist(x, y, poly) >= clear for y in ys] for x in xs]` as a boolean array, point
     for point (feature 284): a point inside the floor shrunk by `clear` plus a margin is surely clear, one outside it shrunk
     by `clear` minus the margin surely not, and a point between - within the margin of the line, where a buffer's chords and
-    rounding could disagree with the exact test - is asked the exact test itself."""
+    rounding could disagree with the exact test - is asked the exact test itself.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.02 (buffer arc error margin)
+    """
     import numpy as np  # bound on first use: no heavy library at import time (feature 237)
     import shapely
     from shapely.geometry import Polygon
@@ -492,6 +500,8 @@ class ThreshingYardsMixin:
             yard glyph - CONVENTION: a tamped earthen fill, straw mats, a gold line of sheaves with post dots
             rack by the house - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: where the harvest
                 weather is changeable; the side rolled per yard
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.25 (mat glyphs kept a quarter foot off the rack (mats are a convention)); 0.55 (rack post dot radius)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 997 (salt and multiplier); 53 (salt); 61 (salt and multiplier)
         """
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
         local = [(px - cx, py - cy) for px, py in poly]
@@ -572,6 +582,7 @@ class ThreshingYardsMixin:
             allotted yards - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: every yard
                 the median, a knob
             ordinary minka - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 46 x 28 ft
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 23 (salts); 29 (salts); 31 (salts); 37 (salts); 43 (salts); 47 (salts)
         """
         import math as _m
 
@@ -631,6 +642,8 @@ class ThreshingYardsMixin:
             swept outline - CONVENTION: a slightly irregular quad, jitter 0.10
             a yard on every farm - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: every rice and dry-field farm keeps a yard; work yards are off only on the mulberry dike-fishpond hamlet (`s._work_yards`)
             no floor without rice - CANON: the GM's ruling of 2026-08-28, no threshing floor on the no-rice (mulberry dike-fishpond) hamlet; it records a forecourt and draws no floor
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.1 (outline jitter, recorded "swept outline - CONVENTION: jitter 0.10")
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 41 (salt)
         """
         ox, oy, yw, yh = spot
         # THE EDGE THAT FACES THE HOUSE IS LEVEL (GM 2026-09-26): north on every bundled homestead, where the yard

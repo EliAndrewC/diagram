@@ -117,6 +117,7 @@ class BeltReading:
                 (2 r) of the frame, which clips it
             tips not judged - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
                 a belt tapers at its ends
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 2e+09 (sentinel frame when no view is recorded); 1e+09 (sentinel frame when no view is recorded)
         """
         wx, wy = wind
         px, py = -wy, wx
@@ -328,7 +329,11 @@ class BeltReading:
 
 def reading_of(m: Any) -> BeltReading | None:
     """The finished map's belt, read as the placer read it: the manifest's windbreak crowns on and off the page, its
-    houses, its lanes and brook, its recorded view and the band's reach (`meta.belt_reach`, W19). None without a belt."""
+    houses, its lanes and brook, its recorded view and the band's reach (`meta.belt_reach`, W19). None without a belt.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 14 (belt clump radius fallback; `r` is always recorded)
+    """
     g = next((g for g in m.get("village_groves") or [] if g.get("role") == "windbreak"), None)
     if g is None or not (g.get("clumps") or g.get("clumps_offpage")) or not m.get("houses"):
         return None
@@ -354,7 +359,11 @@ def belt_holes(m: Any) -> list[tuple[float, float]]:
 def _offers(rd: BeltReading, v_lo: float, v_hi: float, band_uv: Sequence[Pt], step: float = 8.0) -> list[Pt]:
     """The seats (u, v) offered across the stretch [v_lo, v_hi] across the wind: every `step` along the wind from the band's
     near face to `BELT_PUSH_BACK_FT` past its far face there (the band's vertices within a bin of the stretch), at three
-    places across the stretch, the band's middle first and outward."""
+    places across the stretch, the band's middle first and outward.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N9, 2026-10-25) - 8 (step between offered seats along the wind); 0.25 (where across a stretch seats are offered); 0.75 (where across a stretch seats are offered)
+    """
     near = [u for u, v in band_uv if v_lo - DEPTH_BIN_FT <= v <= v_hi + DEPTH_BIN_FT]
     if not near:
         near = [u for u, _v in rd.cl]
@@ -385,7 +394,11 @@ def _deepen(rd: BeltReading, b: int, band_uv: Sequence[Pt], seat: Callable[[floa
 
 
 def _close(rd: BeltReading, a: float, b: float, band_uv: Sequence[Pt], seat: Callable[[float, float], Pt | None]) -> list[Pt]:
-    """Seats that close the opening (a, b) across the wind to steps of at most `_BELT_GAP_FT`, the widest part first."""
+    """Seats that close the opening (a, b) across the wind to steps of at most `_BELT_GAP_FT`, the widest part first.
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N9, 2026-10-25) - 6 (offers kept 6 in from a gap's two ends)
+    """
     vs = [a, b]
     got: list[Pt] = []
     tried: set[tuple[float, float]] = set()
