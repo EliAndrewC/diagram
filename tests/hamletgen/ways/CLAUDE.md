@@ -23,6 +23,7 @@ the ones for its own subject. It runs in the quick tier (the top-level tree deci
 | `test_last_resort.py` | the settle's last resort: drops ordinary lanes only, and refuses by name what only the tree could mend (`ways/last_resort.py`) |
 | `test_law.py` | THE LANE LAW (`ways/law.py`): each lane-rule predicate on a constructed lane that keeps the rule and one that breaks it, and the `violations` registry |
 | `test_matrix_287.py` | every lane the web lays, re-lays or carries on is admitted by the overlap matrix before it is written |
+| `test_one_constant_per_rule.py` | a lane rule the web wrote in several places with one value reads ONE constant - the tail past a meeting, the join, the serve, the field reach, the bend (feature 417 T05) |
 | `test_route.py` | the router: `_route` going round hard ground, `_unjog`, and the pad multiplier that lets a link take the long way |
 | `test_serve.py` | `_lay_web_lane` - one web lane joins the network or is refused - and the web's late passes (`tidy_lane_ends`, `cut_the_overruns`) |
 | `test_settle.py` | `settle_the_web` (`ways/settle/`): each rule of the lane law provoked on constructed lanes and repaired - steps 1-3, the shapes, ends and joins |

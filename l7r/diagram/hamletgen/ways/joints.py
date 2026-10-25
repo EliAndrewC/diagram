@@ -38,7 +38,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 from l7r.diagram.settlement.rolling.access import TREAD_WALL_FT
 
-from ..consts import WEB_CLEARANCE, Poly, Pt
+from ..consts import LANE_JOIN_FT, WEB_CLEARANCE, Poly, Pt
 from .clearance import _HAIRPIN_DEG, _bends_badly, _clear_link, _clear_touch, kink_spans
 from .fabric import _homestead_polys
 from .geom import _HOOK_DEG, _HOOK_FT, _TOUCH_GAP, _seg_cross, _turn_deg
@@ -544,7 +544,7 @@ def center_lane_ends(s: Settlement) -> int:
 # TWO ENDS THIS NEAR ARE ONE WAY WITH A HOLE IN IT: the lane page's own figure, "ends within 25 ft of one another are
 # joined at a single point" (feature 328; it was 11.5 ft, a steading's keep-out plus two half-treads, on no page) - and
 # wider than `_TOUCH_GAP`, where `center_lane_ends` already sets an end on the tread it stops on.
-_MEET_FT = 25.0
+_MEET_FT = LANE_JOIN_FT  # feature 417 T05: the one constant
 """Research: ends that nearly meet - research/questions/0081-village-lanes.drawing.html: within 25 ft, joined at a single point"""
 
 

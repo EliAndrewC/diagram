@@ -16,6 +16,7 @@ from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import (
+    FIELD_REACH_FT,
     FOOTPATH_FABRIC_GAP,
     GROVE_WORKING_ROOM_FT,
     TRACK_FABRIC_GAP,
@@ -44,7 +45,7 @@ Research: the connector off a grove band - research/questions/0036-groves-of-tre
 
 # how near the field a spur's end must stand to have reached it - `law.FIELD_REACH_FT`, which this layer cannot import (a test
 # holds the two equal, 405 T22: one distance for the law and the placer)
-SPUR_REACH_FT = 6.0
+SPUR_REACH_FT = FIELD_REACH_FT  # feature 417 T05: the one constant
 """Research: spur reaches the field - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end within 6 ft of the paddy's edge is drawn as joining it"""
 
 

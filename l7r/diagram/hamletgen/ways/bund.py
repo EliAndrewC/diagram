@@ -25,7 +25,7 @@ from l7r.diagram.settlement import Settlement, point_in_poly, poly_gap, seg_dist
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
-from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, WAY_END_REACH_FT, Poly, Pt
+from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, TAIL_CUT_FT, WAY_END_REACH_FT, Poly, Pt
 from .checks import drawn_water_segs
 from .fabric import _crosses_fabric, _hits_a_steading, _homestead_polys
 from .geom import _TOUCH_GAP, BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, stroke_quad, worked_ground
@@ -455,7 +455,7 @@ def worked_ground_of(s: Settlement, fallback: Poly) -> WorkedGround:
     return memo_ground(s, "worked", worked_ground) if s.M.get("fields") or s.M.get("dry_plots") else WorkedGround([list(fallback)])
 
 
-_PAST_JUNCTION_FT = 40.0  # ft: a free end's run past the junction it met, this short, is a stub (a map drawing convention)
+_PAST_JUNCTION_FT = TAIL_CUT_FT  # ft: a free end's run past the junction it met, this short, is a stub (a map drawing convention)
 """Research: stub past a junction - research/questions/0081-village-lanes.drawing.html: under 40 ft is cut"""
 
 

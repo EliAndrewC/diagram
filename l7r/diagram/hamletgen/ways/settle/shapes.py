@@ -14,7 +14,7 @@ from l7r.diagram.settlement._knobs import bridge_crossed_waters
 from l7r.diagram.settlement.city.bridges import flooded_ground
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
 
-from ...consts import WEB_CLEARANCE, WEB_FABRIC_GAP, Poly, Pt
+from ...consts import TAIL_CUT_FT, WEB_CLEARANCE, WEB_FABRIC_GAP, Poly, Pt
 from .. import law
 from ..arcs import arc_at, cut_around, sub_run
 from ..checks import square_crossings
@@ -327,7 +327,7 @@ JOIN_ROLE = "join-orphans"
 
 Research: a lane laid only to join two others - research/questions/0081-village-lanes.drawing.html: "A lane laid only to join two others ends where it first meets one" (0081)"""
 
-_CROSSING_TAIL_FT = 40.0
+_CROSSING_TAIL_FT = TAIL_CUT_FT  # feature 417 T05: the one constant
 """Research: a tail beyond a crossing - research/questions/0081-village-lanes.drawing.html: "A tail of under 40 ft beyond a crossing is cut" (0081)"""
 
 

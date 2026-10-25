@@ -198,6 +198,17 @@ Research: a lane end arrives at a steading - GUESS research/questions/0246-how-o
 LANE_JOIN_FT = 25.0
 """Research: two lanes as one network - research/questions/0081-village-lanes.drawing.html: treads within 25 ft count as one network, the page's join reach"""
 
+# A TAIL PAST A MEETING (feature 417 T05, D13): the one figure for a lane's run beyond the crossing or junction it overran -
+# cut when shorter. It was written six times (`sweeps._PAST_CONNECTOR_FT`, `bund._PAST_JUNCTION_FT`,
+# `settle.shapes._CROSSING_TAIL_FT`, `knots._TAIL_CUT_FT`, and a bare 40.0 in `serve` and `touch`), all 40.
+TAIL_CUT_FT = 40.0
+"""Research: a tail past a crossing - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut"""
+
+# A WAY JOINING THE BUND (feature 417 T05, D16): an end this near the paddy's edge reaches the field - `thread.SPUR_REACH_FT`
+# and `law.FIELD_REACH_FT` both read it (they were two 6.0s a test held equal).
+FIELD_REACH_FT = 6.0
+"""Research: reaching the field - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end within 6 ft of the paddy's edge joins it"""
+
 # How far off a lane's centerline a frontage seat is offered. This is a PLACEMENT decision and is
 # deliberately not derived from LANE_CLEARANCE, which is the corridor rule: fronting a lane excuses
 # a seat from the corridor's setback (that is what `skip` means to `_near_corridor`), so the row's

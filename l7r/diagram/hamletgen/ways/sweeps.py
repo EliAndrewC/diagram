@@ -12,6 +12,7 @@ from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rec
 
 from ..consts import (
     STEADING_ARRIVAL_FT,
+    TAIL_CUT_FT,
     WEB_FABRIC_GAP,
     WEB_REACH_FT,
     Poly,
@@ -378,7 +379,7 @@ def trim_free_stub(pts: list[Pt], others: Sequence[tuple[Pt, Pt]], touch: float 
     return out
 
 
-_PAST_CONNECTOR_FT = 40.0  # ft: a lane's loose tail under this past its crossing of the connector overran the junction
+_PAST_CONNECTOR_FT = TAIL_CUT_FT  # ft: a lane's loose tail under this past its crossing of the connector overran the junction
 """Research: overrun past the connector - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut (80 ft until feature 328)"""
 
 
@@ -940,7 +941,7 @@ _DOUBLED_SHARE = 0.5  # ...and a lane running that close for half its own length
 """Research: doubled share - CONVENTION: half the lane's length"""
 _REACH_FT = 60.0  # ft: `WAY_END_REACH_FT`, the reach to another way; here the reach a home-bank drop and a dooryard carry look within
 """Research: end reach to a way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 60 ft"""
-_SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
+_SERVE_FT = WEB_REACH_FT  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
 """Research: a way serves a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 100 ft, as back lanes bring every farmhouse within 100 ft of one"""
 
 

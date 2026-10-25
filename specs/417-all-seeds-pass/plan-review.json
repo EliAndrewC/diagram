@@ -114,6 +114,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "## T05 - one lane rule, one constant, where the copies agree (R2 G1, first part; FR-006)": {
+   "sha256": "64c6b3f8c5a5fb54414569ce66c138af78ee4d3e8e2ba4eb115f99641df109ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "ca866768aedb5978e9350f5e3cca69db16c050d3514ec531eb4b72d03c0485c7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Decisions": {
+   "sha256": "4325f57e6853f011bfcbebe385b9178a13b2f19224fcb52a0b809b0edecec8ba",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -685,6 +703,65 @@
      "summary": "Completion is measured by a test on the predicate swap and the FR-008 cohort.",
      "class": "within",
      "why": "Enforcement of FR-006 and FR-008 - a test whose only effect is that the requested single-predicate check works; not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T05 - one lane rule, one constant, where the copies agree (R2 G1, first part; FR-006)",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05-scope",
+     "summary": "T05 makes each lane rule coded in several places with the SAME value read one named constant; it is labeled the FIRST part of R2 G1 and does not itself merge the code that applies the rule",
+     "class": "within",
+     "why": "FR-006 deletes a second implementation of a rule and SC-003 asks for one implementation per rule. A shared constant is a step toward that, not a substitute for it, and the heading says 'first part' rather than claiming FR-006 is met. Within as a first step only: if a later block counted a shared constant as the deletion FR-006 requires, that would be a narrowing and would need a MODE 1 ruling."
+    },
+    {
+     "id": "T05-order",
+     "summary": "the copies that agree go first; the copies that differ go to T16, after T04 and before T06",
+     "class": "within",
+     "why": "D11 (the GM 2026-10-25): the tasks that move no map go first, and a rule coded twice with different values is made one at the lane law's value. This changes the order only; the differing copies are moved to T16, not dropped."
+    },
+    {
+     "id": "T05-exit",
+     "summary": "a constant whose number matches but whose RULE differs (clearance._ARM_FT, _ZIGZAG_RUN_FT against the 40 ft tail, joints._SHORT_LEG_FT, touch._ALONG_STEP_FT) is not merged",
+     "class": "within",
+     "why": "FR-006 deletes a second implementation OF A RULE. Two different rules that happen to share a number are not one rule coded twice, so this exit just follows the requirement's own definition and excludes nothing it covers. _ZIGZAG_RUN_FT is still made one with route.py's literal 40 (D15). It is only kept apart from the tail constant."
+    },
+    {
+     "id": "T05-no-value-moves",
+     "summary": "no value changes; done when a test shows each former copy IS the constant and route.py holds no bare 140/50/40, the reference manifest is unchanged, and the landing cohort is green with the same verdicts",
+     "class": "within",
+     "why": "Equal values merged under D11 and FR-008 at the landing. The test only fails if the duplication FR-006 removes comes back, so it enforces the request rather than adding scope."
+    },
+    {
+     "id": "D13",
+     "summary": "consts_ways.TAIL_CUT_FT = 40.0 (0081) is the one tail constant read by sweeps, bund, settle/shapes, knots, serve, touch",
+     "class": "within",
+     "why": "FR-006 and D11: equal copies made one at the rule's recorded value (0081)."
+    },
+    {
+     "id": "D14",
+     "summary": "fabric._LANE_JOIN_FT and joints._MEET_FT become consts_ways.LANE_JOIN_FT (25 ft); knots._KNOT_MARGIN deleted in favor of the imported KNOT_MARGIN; sweeps._SERVE_FT becomes consts_ways.WEB_REACH_FT",
+     "class": "within",
+     "why": "FR-006: a second copy deleted, with no value moved (D11)."
+    },
+    {
+     "id": "D15",
+     "summary": "route.py reads clearance._HAIRPIN_DEG, _ZIGZAG_DEG and _ZIGZAG_RUN_FT instead of its literals 140/50/40",
+     "class": "within",
+     "why": "FR-006: the bend rule's numbers held once. Importing a private name across modules is a design question, not a fidelity one."
+    },
+    {
+     "id": "D16",
+     "summary": "consts_ways.FIELD_REACH_FT = 6.0 (0014) is read by thread.SPUR_REACH_FT and law.FIELD_REACH_FT",
+     "class": "within",
+     "why": "FR-006 and D11: equal copies made one at the rule's recorded value. It is put in consts_ways because the layer order forbids thread importing law, which is about where the constant lives, not a narrowing."
     }
    ]
   }

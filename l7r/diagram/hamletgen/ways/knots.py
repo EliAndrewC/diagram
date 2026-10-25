@@ -22,7 +22,7 @@ from typing import Any
 from l7r.diagram.settlement import seg_closest, seg_dist
 from l7r.diagram.settlement.rolling.gap_ways import KNOT_MARGIN
 
-from ..consts import WEB_CROP_GAP, WEB_FABRIC_GAP, WEB_SHADOW_FT, Poly, Pt
+from ..consts import TAIL_CUT_FT, WEB_CROP_GAP, WEB_FABRIC_GAP, WEB_SHADOW_FT, Poly, Pt
 from .corridors import ACCESS_ROLE, FIELD_ROLE, TARGET_ROLE
 from .forced import ground
 from .geom import polyline_len
@@ -378,7 +378,7 @@ def carried(lanes: Sequence[Mapping[str, Any]], old: Poly, new: Poly, skip: Cont
     return out
 
 
-_TAIL_CUT_FT = 40.0
+_TAIL_CUT_FT = TAIL_CUT_FT  # feature 417 T05: the one constant
 """How long a tail a gather may cut off a lane it strands (405 T106, D133): under 40 ft, the page's own figure.
 
 Research: a tail cut - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut"""
@@ -759,7 +759,6 @@ def settle_knots(s: Any) -> int:
     return moved
 
 
-_KNOT_MARGIN = 1.0  # the page's own reach (feature 328); the slide the 1.5 caught is gone
 """How many knot reaches apart two junctions on one lane still count as a knot: 1.0, the page's own reach and no margin past
 it. It was 1.5, to catch a foot slid along a lane to just past the reach (glyph-check round 2 of feature 328 wave 4, Inashiro:
 lane 13's foot slid 16.7 ft along lane 11 to 25.18 ft from its end); that slide is gone, and at 1.0 a pair past 25 ft is no
@@ -797,12 +796,12 @@ def lane_knots(lanes: Sequence[Mapping[str, Any]], M: Mapping[str, Any] | None =
     for a in range(len(ends)):
         for b in range(a + 1, len(ends)):
             d = math.dist(ends[a][1], ends[b][1])
-            if root(a) == root(b) or frozenset((root(a), root(b))) in spans or d > _KNOT_MARGIN * _KNOT_FT or (apart and apart(ends[a][1], ends[b][1])):
+            if root(a) == root(b) or frozenset((root(a), root(b))) in spans or d > KNOT_MARGIN * _KNOT_FT or (apart and apart(ends[a][1], ends[b][1])):
                 continue
             # ...A DOOR END TEED ON ITS OWN LANE is no knot (`door_end_teed`, the predicate the gather search asks too)
             if any(door_end_teed(lanes, ends[x][0], 0 if x % 2 == 0 else -1, sum(root(z) == root(x) for z in range(len(ends))) == 1, ends[y][1]) for x, y in ((a, b), (b, a))):
                 continue
-            # (two JUNCTIONS on one lane up to `_KNOT_MARGIN` reaches apart were counted here too; at the margin's 1.0 every pair
+            # (two JUNCTIONS on one lane up to `KNOT_MARGIN` reaches apart were counted here too; at the margin's 1.0 every pair
             # left is within `_KNOT_FT`, so that clause could never add one and is gone - feature 328 wave 94, the coverage floor)
             out.append((ends[a][0], ends[a][1], ends[b][0], ends[b][1], round(d, 1)))
     return out

@@ -20,6 +20,8 @@
       verify: DONE. landed: landed: cohort_audit.parts_across_brook asks crosses_a_stream, the placers' predicate; its own segment test deleted (D12); 27 audit tests, the new one pins the predicate asked
 - [ ] T05 (R2 G1) One lane rule, one predicate: each rule `ways/` codes two to seven times made one named predicate or constant, at the lane law's value where the copies differ, in `l7r/diagram/hamletgen/ways/` (FR-005, FR-006)
       research: rendering
+- [ ] T16 (R2 G1, second part) The lane rules whose copies DIFFER made one at the rule's recorded value, in `l7r/diagram/hamletgen/ways/` - the doubled tail (the sweep's 25 deg against the law's 15, the page's 20; 405 T101's known gap, held), the shadow (four bodies), the hook (five), the reach to a farmhouse (three), the network tolerance (25 ft against 4 ft), the foul, the dangling end, the street end, the link width (FR-006). Set down 2026-10-25 under D11 for the doubled tail: no page records the value its two roles should share; each other rule waits on its own recorded value
+      research: rendering
 - [ ] T06 (R2 G2) The web laid by the law: an ordinary lane admitted whole by the lane law before it is drawn; the passes after the lay and the settle's repair steps deleted, in `l7r/diagram/hamletgen/ways/` (FR-004, FR-006)
       research: rendering
 - [ ] T07 (R2 G3) The ways' drops and refusals: ordinary lanes dropped, `WebRefused`, `NoDryExit`, spurs given up, angle rules waived, wood seats released, in `l7r/diagram/hamletgen/ways/` (FR-007)

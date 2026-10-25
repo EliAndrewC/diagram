@@ -65,6 +65,7 @@ from .consts_water import WEIR_SKEW_DEG as WEIR_SKEW_DEG
 from .consts_water import WEIR_THICK_FT as WEIR_THICK_FT
 from .consts_ways import DOOR_FIXTURE_CLEAR_FT as DOOR_FIXTURE_CLEAR_FT
 from .consts_ways import DOOR_STEP_FT as DOOR_STEP_FT
+from .consts_ways import FIELD_REACH_FT as FIELD_REACH_FT
 from .consts_ways import FOOTPATH_FABRIC_GAP as FOOTPATH_FABRIC_GAP
 from .consts_ways import GROVE_WORKING_ROOM_FT as GROVE_WORKING_ROOM_FT
 from .consts_ways import LANE_FRONTAGE_STANDOFF as LANE_FRONTAGE_STANDOFF
@@ -73,6 +74,7 @@ from .consts_ways import MIN_WEB_GAP as MIN_WEB_GAP
 from .consts_ways import SPUR_SETBACK as SPUR_SETBACK
 from .consts_ways import STEADING_ARRIVAL_FT as STEADING_ARRIVAL_FT
 from .consts_ways import SUN_CORRIDOR_FT as SUN_CORRIDOR_FT
+from .consts_ways import TAIL_CUT_FT as TAIL_CUT_FT
 from .consts_ways import TRACK_FABRIC_GAP as TRACK_FABRIC_GAP
 from .consts_ways import WAY_END_REACH_FT as WAY_END_REACH_FT
 

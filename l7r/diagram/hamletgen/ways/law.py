@@ -45,6 +45,7 @@ from l7r.diagram.settlement.homestead_parts.fixture_seats import TRUNK_FT
 from l7r.diagram.settlement.rolling.access import TREAD_HALF_FT
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
 
+from ..consts import FIELD_REACH_FT as _FIELD_REACH_FT
 from ..consts import WEB_FABRIC_GAP, Poly, Pt
 from .checks import served_network, unreached_houses
 from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, kink_spans
@@ -187,7 +188,7 @@ BREAK_SPAN_FT = 60.0
 (`lanes_do_not_break_mid_run`): the tread was drawn across the solid, or it vanished there and resumed beyond.
 Research: no tread through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a segment over 60 ft"""
 
-FIELD_REACH_FT = 6.0
+FIELD_REACH_FT = _FIELD_REACH_FT  # feature 417 T05: the one constant
 """On a brook map one of the hamlet's own ways (not the track out) comes this near the field - its paddy or its dry hem -
 the reach `lanes_reach_something` asks of the field (feature 261, FR-012). 60 ft until 405 T22: no 0014 page states it, and
 0014 draws the path JOINING the bund, a lane end within 6 ft of the paddy's edge read as joining it. `track.SPUR_REACH_FT`

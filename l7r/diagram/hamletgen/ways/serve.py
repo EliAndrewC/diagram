@@ -23,6 +23,7 @@ from ..consts import (
     DOOR_STEP_FT,
     FOOTPATH_FABRIC_GAP,
     GROVE_WORKING_ROOM_FT,
+    TAIL_CUT_FT,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
@@ -231,7 +232,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             # one lane arriving with a tail, and which side carried on past is not always the same one. Written
             # as a choice rather than a pair of branches so neither side is a line only one map shape reaches.
             head, tail = polyline_len(run[: k + 1]), polyline_len(run[k:])
-            run = run[: k + 1] if tail < 40.0 else (run[k:] if head < 40.0 else run)
+            run = run[: k + 1] if tail < TAIL_CUT_FT else (run[k:] if head < TAIL_CUT_FT else run)
             # ...AND JOINED AT A SINGLE POINT WHERE IT ARRIVES (feature 328, 0081: ends within 25 ft are joined at a single point):
             # it was drawn where it was cut, or whole, up to 25 ft off the network. A cut end is carried onto the way by
             # `joined_link`; a run kept whole has its arriving vertex snapped onto its foot; else the run is not drawn

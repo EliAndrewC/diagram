@@ -13,6 +13,7 @@ from l7r.diagram.settlement._geom.indexes import PointGrid
 
 from ..consts import (
     STEADING_ARRIVAL_FT,
+    TAIL_CUT_FT,
     WAY_END_REACH_FT,
     WEB_FABRIC_GAP,
     Poly,
@@ -283,7 +284,7 @@ def _touch_junctions(
                             _sx, _sy = _a0[0] + (_b0[0] - _a0[0]) * _t * 3.0 / _span0, _a0[1] + (_b0[1] - _a0[1]) * _t * 3.0 / _span0
                             _f = min((seg_closest(_sx, _sy, a, b) for a, b in _os_k), key=lambda z: math.dist((_sx, _sy), z))
                             if (
-                                math.dist((_sx, _sy), _f) <= _TOUCH_GAP and polyline_len([(_sx, _sy), *_run[_si + 1 :]]) < 40.0
+                                math.dist((_sx, _sy), _f) <= _TOUCH_GAP and polyline_len([(_sx, _sy), *_run[_si + 1 :]]) < TAIL_CUT_FT
                             ):  # only a SHORT overrun is cut (Kuwabata's was 32 ft); a long run past a way it grazes is a route, not a hook
                                 _cut_at = (_si, _f)
                                 break

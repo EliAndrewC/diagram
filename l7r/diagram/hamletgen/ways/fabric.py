@@ -15,6 +15,7 @@ from l7r.diagram.sitegen.geom import centroid, unit
 
 from ..consts import (
     BUNDLE_PITCH,
+    LANE_JOIN_FT,
     WEB_CLEARANCE,
     WEB_REACH_FT,
     WELL_VERGE_FT,
@@ -273,7 +274,7 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
 # far as the gate is concerned, and demanding better only threw away paths that served their house.
 # Since feature 328 it is the lane page's own join reach, "ends within 25 ft of one another are joined at a single point"
 # (it was 30, on no page).
-_LANE_JOIN_FT = 25.0
+_LANE_JOIN_FT = LANE_JOIN_FT  # feature 417 T05: the one constant
 """Research: join tolerance - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another are joined"""
 
 # A GAP THIS SHORT BETWEEN TWO NEAR-COLLINEAR ENDS IS ONE WAY DRAWN AS TWO. 150 ft is about a

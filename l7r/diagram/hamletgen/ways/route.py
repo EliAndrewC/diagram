@@ -18,7 +18,7 @@ from ..consts import (
     Poly,
     Pt,
 )
-from .clearance import _clear_link, _clear_touch, link_index
+from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, _clear_link, _clear_touch, link_index
 from .geom import _turn_deg
 
 # THE BROOK'S BAND AND WHAT ENTERING IT COSTS, for the roll being drawn (feature 261). `_route` has a dozen callers and
@@ -314,7 +314,7 @@ def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tupl
     out = list(path)
     k = 1
     while k < len(out) - 1:
-        if _turn_deg(out[k - 1], out[k], out[k + 1]) >= 140.0:
+        if _turn_deg(out[k - 1], out[k], out[k + 1]) >= _HAIRPIN_DEG:
             if _clear_touch(out[k - 1], out[k + 1], hard, walls, water, gap):
                 del out[k]
                 k = max(1, k - 1)
@@ -324,7 +324,12 @@ def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tupl
                 out[k : k + 1] = eased
                 k = max(1, k - 1)
                 continue
-        if k < len(out) - 2 and _turn_deg(out[k - 1], out[k], out[k + 1]) >= 50.0 and _turn_deg(out[k], out[k + 1], out[k + 2]) >= 50.0 and math.dist(out[k], out[k + 1]) <= 40.0:
+        if (
+            k < len(out) - 2
+            and _turn_deg(out[k - 1], out[k], out[k + 1]) >= _ZIGZAG_DEG
+            and _turn_deg(out[k], out[k + 1], out[k + 2]) >= _ZIGZAG_DEG
+            and math.dist(out[k], out[k + 1]) <= _ZIGZAG_RUN_FT
+        ):
             if _clear_touch(out[k - 1], out[k + 2], hard, walls, water, gap):
                 del out[k : k + 2]
                 k = max(1, k - 1)
@@ -390,7 +395,7 @@ def _ease_corner(a: Pt, apex: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly]
         off = _EASE_FT * i / _EASE_STEPS
         for sign in (apex_side, -apex_side):
             cand = (mx + px * off * sign, my + py * off * sign)
-            if _turn_deg(a, cand, b) >= 140.0:
+            if _turn_deg(a, cand, b) >= _HAIRPIN_DEG:
                 continue  # the eased corner must not itself be a hairpin
             if _clear_touch(a, cand, hard, walls, water) and _clear_touch(cand, b, hard, walls, water):
                 return [cand]
