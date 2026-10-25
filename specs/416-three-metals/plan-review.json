@@ -60,6 +60,96 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
+  },
+  "## T01 - question A, Japan's three monies (D1)": {
+   "sha256": "6e2662e67b1d5e3dfc5f52fc679adb29542b487b19d27e7c76d7b411215a16a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "03df641710c368de385378ad20c5ac1d0ff907afd37a27d0f22f9e4d80791dab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "8bccf9c92f83ef41205dec6814b496ed32ba0e797389c254eb73f01fabc43b52",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - question B, China's silver and copper (D2)": {
+   "sha256": "312c67700fd014189b84c802643532fba97aefc01f89a1cb3e1e72c134d06cc7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "e12f17c5e3cb3e46a796c3f0f8065234abbdb1cb35b2ec153393ee5cb649d06e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "194bbf0b4f61165587d6d6a64b4869038762df12d3e88b7e41e0df9a09b5c0ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the implementation check (D3)": {
+   "sha256": "7d06a167b5f6ec11f64940438f381143504af901874f90621eaa52c0028b830c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "3b5c2346121da001f91530d231031575137de4346299cac5632a2e73098b0173",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "1f5bd38738f480aee14f598926107cc75e2332b339b0f456740a29f8d50fe54b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - the reply on #16 (D4)": {
+   "sha256": "61e09fb8bf5bb254226ccb085795036c3d877c30df9110cdda16ad6fca20ea76",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "7a9026b9f85b69e058603f4408d932ddcf5ad2b61034b3b48eb34548e9243a7a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Decisions": {
+   "sha256": "902e05dad9ffd51934836cc72043e8f2a18cd2134826ef43ec992cfd6b6187e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T05 - close: report and land": {
+   "sha256": "f3a9c7437d63588610d97a3308658a6bf4a01cb04443e891b4ec2d619f1f2a38",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "d4ec5c53710bae31305bf27f0fb0fb84635730090cf33b6b9e6a0fdfe0fa8bb1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Decisions": {
+   "sha256": "169f64e5e4c8d401b9599684e5b8c81bf6ab7b181f26d4d1559f95b0a1cb7d5b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -272,6 +362,83 @@
      "summary": "Page sessions, then the implementation check, then the reply and landing.",
      "class": "within",
      "why": "Ordering only; decides no scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T01 - question A, Japan's three monies (D1)",
+    "## T02 - question B, China's silver and copper (D2)",
+    "## T03 - the implementation check (D3)",
+    "## T04 - the reply on #16 (D4)",
+    "## T05 - close: report and land",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-scope",
+     "summary": "T01 answers the four questions of #16 for Edo Japan, in order, each set against its canon; the canon (l7r.md 'Money') is read, not edited.",
+     "class": "within",
+     "why": "The issue asks Japan first with all four questions, and says the research is so the GM 'can decide how much of that to import'; leaving the canon unedited leaves that decision with the GM, as FR-003 requires."
+    },
+    {
+     "id": "T01-labels",
+     "summary": "A changer's fee computed from a rate is labeled this project's arithmetic; a reading only one source gives (Kano's fee, Iwahashi's premium) is set beside the other reading.",
+     "class": "within",
+     "why": "Labeling, under the record's citation rules. Q2 asks for the changers' fees as a percentage and Q3 for premiums; neither is dropped."
+    },
+    {
+     "id": "T01-silent-exits",
+     "summary": "Where no source answers (a premium for paying in gold; a prosecution under the legal rate; a Meiwa-An'ei real wage in copper; a measured tax burden) the answer is SILENT with the search, not a borrowed figure.",
+     "class": "within",
+     "why": "Every sub-question is still searched and reported, and the exit applies only where the search finds no source. The issue asks what 'the actual reality was'. A borrowed figure would misstate that, and the accepted reply on #16 already says Q4 is 'measured where the sources allow'. No question or figure is dropped from scope."
+    },
+    {
+     "id": "T01-order",
+     "summary": "Write (s1), check and apply (s3), round-3 tail closed by the arbiter (ask:416-round4), then the marks (s4); done is record-owed clean for 0295 and money-candidates CHECK=1.",
+     "class": "within",
+     "why": "Process and the record's checks (FR-002). The scope of what is answered does not change."
+    },
+    {
+     "id": "T02-scope",
+     "summary": "The same four answers for Ming and Qing China: legal cash rates and enforcement, Xianfeng notes and big cash, Ming paper; silver for tax and trade against copper for retail and wages; sticky copper prices; who won and lost in the silver crisis.",
+     "class": "within",
+     "why": "The issue asks for Qing, and Ming where found, beside Japan. Q4 names the Qing 'silver dear, copper cheap' crisis and recoinages that changed a metal's content (the Xianfeng big cash is one), and the accepted reply named Ming paper money. Nothing is added beyond those."
+    },
+    {
+     "id": "T02-labels-and-exits",
+     "summary": "A late-Qing standard (Morse) is dated as such; a second-hand report is labeled ATTESTED ONLY FOR; SILENT with the search for paying in gold under the Qing, a retail cash shop's fee and a measured real wage; the wage earners' case is said to be feature 414's inference.",
+     "class": "within",
+     "why": "Each one is provenance labeling, or an honest exit after a search. No question is removed, and the inference is labeled as an inference rather than presented as a measurement."
+    },
+    {
+     "id": "T03-impl-check",
+     "summary": "Each new question gets its line in implementation-check.md; make impl-check F=416 reports nothing missing; no code decides a coin's worth.",
+     "class": "within",
+     "why": "This is FR-004, a project rule for research features. It adds no behavior and narrows nothing in the request."
+    },
+    {
+     "id": "T04-reply",
+     "summary": "The reply on #16 gives every figure its fragment file, verdict and what is open; each answer stands against its canon; GM items go through escalation-check first.",
+     "class": "within",
+     "why": "FR-001, FR-003 and FR-005, which carry the issue's 'Figure needed' and 'Canon beside it' lines. The escalation route is a project rule and does not narrow the request."
+    },
+    {
+     "id": "T05-land",
+     "summary": "Write the feature report and land.",
+     "class": "within",
+     "why": "Closing steps of the workflow, with no decision about scope."
     }
    ]
   }

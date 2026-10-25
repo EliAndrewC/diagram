@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-25T05:01:54Z",
+  "target": "record-checked",
+  "commit": "8ce2b2be2",
+  "why": "translation-check on translation-check:0295#iwahashi-2010-zenmonme-tsugaru translation-check:0295#saito-1993-bakumatsu-wages-2: round 3 clean (92 pairs FAITHFUL, record-format clean); the only later change is two source-reader wording EDITs vetted against the originals; closed by arbiter ask:416-round4"
+}
