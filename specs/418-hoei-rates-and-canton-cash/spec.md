@@ -48,14 +48,15 @@ fineness passed at once. And `canton-1835` borrows its cash rate from rural Beij
   names: the 1706-1718 rates in 0287 (how much silver was a monme, a ryo and a bu, coinage by coinage) and, if copper's own rows
   belong there, 0277 (what copper coin was worth in silver); Canton's cash rate in 0289 (what a tael, a string of cash and a
   Chinese dollar were worth in silver). No new question unless a finding fits none of these.
-- **FR-002**: Every rate the reply gives carries its fragment file, its verdict and its coinage; the reply is posted on #13.
+- **FR-002**: Every rate the reply gives carries its fragment file, its verdict and its coinage (a rate quoted in silver, its silver
+  coinage; a kanmon-a-ryo rate, its gold coinage where the source names one); the reply is posted on #13.
 - **FR-003**: The feature closes with `make impl-check F=418` (money questions: no code implements them).
 
 ## Success Criteria
 
 - **SC-001** (FR-001, FR-003): `make record-owed` shows no unanswered unit for the touched questions at landing; `make
   impl-check F=418` reports nothing missing.
-- **SC-002** (FR-002): a reply on #13 gives each year's rates (or the two means) with their coinage, and Canton's rate or its
+- **SC-002** (FR-002): a reply on #13 gives each year's rates (or the two means) with their coinage as Acceptance 1 requires, and Canton's rate or its
   SILENT, and says what the *Chinese Repository* gives on it, or that it gives none.
 
 ## Assumptions
