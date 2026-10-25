@@ -504,29 +504,29 @@ outside the elbow pass's reach, so the squaring is idempotent (a map drawing con
 
 
 def track_ends_off_the_web(M: Mapping[str, Any]) -> list[tuple[int, int, float]]:
-    """(lane index, end, feet off) for every end of the TRACK OUT that stands inside the canvas more than `_TOUCH_GAP` (the
-    law's `JOIN_TOL`) from every other lane: a track that stops short of the ways it serves. A FINISHED-MAP check, asked by
-    the cohort only (`tools/cohort_audit.py`) and never by the settle (constitution XIX; feature 417 D27): its placer is
-    feature 417 T27's. The off-canvas end is the track's way out and is not asked.
+    """(lane index, end, feet off) for every TRACK OUT whose inner end - the end nearer the other ways - stands more than
+    `_TOUCH_GAP` (the law's `JOIN_TOL`) from every one of them: a track that stops short of the ways it serves. A
+    FINISHED-MAP check, asked by the cohort only (`tools/cohort_audit.py`) and never by the settle (constitution XIX; feature
+    417 D27): its placer is feature 417 T27's. The other end is the track's way out and is not asked - read by distance, not
+    by the canvas, because the finished manifest's frame is cropped about the content and its `W` / `H` need not bound the
+    lanes (the first form, asking every end inside `W` x `H`, named the way-out end of 18 of the 54 landing seeds). ONLY A
+    MAP WITH A WEB IS ASKED - a lane besides the track and the field spur: a dispersed hamlet lays none, and its track ends
+    among the farms with no way to meet (every dispersed seed of the 54, seed 5's 154 ft from the nearest house; whether
+    that is open country is the GM's, feature 417 D27).
 
     Research:
         the track meets the lanes - research/questions/0081-village-lanes.drawing.html: never stops in open country, its inner
             end on the way it joins"""
-    meta = M.get("meta") or {}
-    W, H = float(meta.get("W", 0.0) or 0.0), float(meta.get("H", 0.0) or 0.0)
     lanes = M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    web = any(not (ln.get("connector") or ln.get("spur")) for ln in lanes)
     out = []
     for i, ln in enumerate(lanes):
         p = ways[i]
-        if not ln.get("connector") or len(p) < 2:
-            continue
         segs = [sg for k, o in enumerate(ways) if k != i for sg in zip(o, o[1:], strict=False)]
-        for e in (0, -1):
-            q = p[e]
-            if not (0.0 <= q[0] <= W and 0.0 <= q[1] <= H):
-                continue
-            d = min((seg_dist(q[0], q[1], a, b) for a, b in segs), default=math.inf)
-            if d > _TOUCH_GAP:
-                out.append((i, e, round(d, 1)))
+        if not ln.get("connector") or len(p) < 2 or not segs or not web:
+            continue
+        d, e = min((min(seg_dist(p[e][0], p[e][1], a, b) for a, b in segs), e) for e in (0, -1))
+        if d > _TOUCH_GAP:
+            out.append((i, e, round(d, 1)))
     return out

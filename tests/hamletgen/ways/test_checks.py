@@ -195,10 +195,15 @@ def test_a_household_reached_across_a_neighbor_s_yard_is_reached_where_its_neigh
 
 def test_a_track_whose_inner_end_stops_short_of_the_ways_is_named_and_one_on_them_is_not() -> None:
     """`track_ends_off_the_web` (feature 417 D27; 0081: the track never stops in open country): the track's inner end 30 ft
-    past the lane that meets it is named; on the lane, or within the 4 ft touch, it is not; the off-canvas end is never asked."""
+    past the lane that meets it is named; on the lane, or within the 4 ft touch, it is not; the way-out end is never asked,
+    wherever the frame stands (a cropped manifest's `W` / `H` need not bound it); a map with no other way is not asked."""
     lane = {"pts": [[100.0, 0.0], [100.0, 200.0]]}
-    short = {"meta": {"W": 400.0, "H": 400.0}, "lanes": [{"pts": [[130.0, 100.0], [-50.0, 100.0]], "connector": True}, lane]}
-    on = {"meta": {"W": 400.0, "H": 400.0}, "lanes": [{"pts": [[102.0, 100.0], [-50.0, 100.0]], "connector": True}, lane]}
+    short = {"meta": {"W": 400.0, "H": 400.0}, "lanes": [{"pts": [[130.0, 100.0], [300.0, 100.0]], "connector": True}, lane]}
+    on = {"meta": {"W": 400.0, "H": 400.0}, "lanes": [{"pts": [[102.0, 100.0], [300.0, 100.0]], "connector": True}, lane]}
     assert track_ends_off_the_web(short) == [(0, 0, 30.0)]
-    assert track_ends_off_the_web(on) == []
-    assert track_ends_off_the_web({"meta": {"W": 400.0, "H": 400.0}, "lanes": [lane]}) == [], "no track, nothing asked"
+    assert track_ends_off_the_web(on) == [], "the way-out end 200 ft off, inside the frame, is not asked"
+    assert track_ends_off_the_web({"lanes": [{"pts": [[0.0, 0.0], [50.0, 0.0]], "connector": True}]}) == [], "no web, nothing asked"
+    assert track_ends_off_the_web({"lanes": [lane]}) == [], "no track, nothing asked"
+    spur = {"pts": [[100.0, 0.0], [100.0, 200.0]], "spur": True}
+    dispersed = {"lanes": [{"pts": [[130.0, 100.0], [300.0, 100.0]], "connector": True}, spur]}
+    assert track_ends_off_the_web(dispersed) == [], "a map with no web (the track and the field spur alone) is not asked"
