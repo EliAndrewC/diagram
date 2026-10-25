@@ -16,8 +16,7 @@ Guesses:
 - The mound's size, about half the plot's width, with two or three stones: no field grave was found measured; the graves of one Edo-period temple graveyard ran about 2 to 8 ft long, and a Ming rule of 1372 capped a commoner's grave ground at 18 paces round, about 22 to 28 ft a side, a ceiling rather than a measure.
 - That the grave stands in a flooded paddy plot: the field graves of the Yangzi delta stood in working fields, but no source says what those fields grew.
 
-Depiction: The map draws the grave as a small raised mound of earth in the middle of a paddy plot, with two or three stones set
-one behind another, unequal in height. Its plot is split in two through the mound, as if a bund were run out to it, and each half
+Depiction: The map draws the grave as a small raised mound of earth in the middle of a paddy plot. Its plot is split in two through the mound, as if a bund were run out to it, and each half
 stops short of the mound, so no flooded basin runs under the grave.
 
 Name: A grave island inside a plot

@@ -24,7 +24,7 @@ Guesses:
 
 Depiction: The map shows the paddies at one moment of the rice year, high summer, the basins flooded and the rice green;
 the midsummer drain, the winter crop and the straw ricks are left for seasonal maps not yet drawn. The rice is drawn in
-one green because a district of the plains transplanted within about ten days, so its paddies stood largely at one stage
+one green, save the odd plot some maps draw still flooded or ripening early, because a district of the plains transplanted within about ten days, so its paddies stood largely at one stage
 of growth. Each basin is drawn small, at its real size in feet, never the large rectangles of modern land consolidation,
 and none is drawn as a needle-sharp point, an arrowhead or a scrap too small to level and wall. The rice is drawn as a
 loose scatter of shoots in no ruled rows: a sample of the planting, since at its real spacing one dot a plant would fill
