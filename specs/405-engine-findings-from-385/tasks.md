@@ -320,7 +320,7 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
       research: rendering
       verify: DONE. landed: batch 12: the joint's mend claimed UNRESEARCHED beside 0081's zigzag rule; settle_ends' unwidthed lane claimed as 0081's footpath (T105)
-- [ ] T106 Turn a wood shed's four recorded seats by the household's roll, as the coop's are (T26's fourth note): tried in batch 11, it moved Sawada's farms so two households' ways ended 22.9 ft apart unjoined - the knot's gather refused for passing 2.7 ft from a neighbor's yard (0246's 7 ft gap) or splitting the web; land it once the knots step has a gather that keeps the gap, or the farms the room (measured 2026-10-21) [lands-open]
+- [ ] T106 Turn a wood shed's four recorded seats by the household's roll, as the coop's are (T26's fourth note): tried in batch 11, it moved Sawada's farms so two households' ways ended 22.9 ft apart unjoined - the knot's gather refused for passing 2.7 ft from a neighbor's yard (0246's 7 ft gap) or splitting the web; land it once the knots step has a gather that keeps the gap, or the farms the room (measured 2026-10-21) [lands-open] - tried again 2026-10-24 (specs/405-engine-findings-from-385/t106-knots.md): with T07, T135 and D133 the cohort was 54/54 but Sawada knotted (lane 11 tees 22.9 ft from lane 6's tee, every gather refused); room per the round arbiter (ask:t106-sawada-knot) - SEATING_GROUND_FT and grow_gap +5/+10/+15 ft cleared Sawada but dealt 1/1/3 cohort knots, HOMESTEAD_GROUND_FT 117 broke Inashiro, 130 left 47/54; the flank seats brought back alone re-dealt seeds 2, 13, 18 - so set down again (route (b))
       research: rendering
       research: rendering
 - [x] T107 The knots step cannot gather two households' ways whose join would pass within 0246's 7 ft of a neighbor's garden (T18 keeps that gap off every garden but a way's own): any reshuffle of the farms exposes it - T26's wood-shed rule, measured 2026-10-21, left knots on cohort seeds 10, 24, 36 (and 47 refused) without the seat roll, and on Sawada with it. Find a gather that keeps the gap (a meeting point clear of the gardens, a tee onto the side away from them), or give the farms the room (room before packing); T26 and T106 wait on it [lands-open]
@@ -416,6 +416,13 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
       verify: DONE. landed: seeds 24 and 36 knot-free with T26's patch: onto_cut_back (D129) and joiner_first_meeting (D130), 0081; main 54/54
 - [ ] T136 Re-measure feature 415's gate costs on real landings (amendment 11): once the next four of this feature's engine tasks have landed through make land, read their landing gates' run records (make gate-costs) and compare them with 415 research.md R2 (67 s fixed + 12.7 ms per selected test, measured on gate runs in the clone) and the 25% refresh rule (scripts/land.py REFRESH_FRACTION); where the real landings disagree, re-fit and amend the rule through feature 415's spec (its refresh rule). Worked after those four landings, before T127
+      research: rendering
+- [ ] T137 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#the fallback wall places are tried back wall first, then the west and east flanks, each walked end to end in WALL_SLIDE_FT (4 ft) steps, and the first clear one is taken [lands-open]
+      research: rendering
+- [x] T138 A lane a knot's tee would strand keeps its short tail cut back to where it meets a way (found by T106 on cohort seed 7 with the sheds turned, 2026-10-24): `knots.tails_cut_back` (D133, 0081's 40 ft tail rule), asked where the tee alone is refused
+      research: rendering
+      verify: DONE. landed: a lane a knot's tee would strand keeps its short tail cut back to its meeting (D133, 0081's 40 ft tail rule)
+- [ ] T139 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the kura's walls too [lands-open]
       research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering

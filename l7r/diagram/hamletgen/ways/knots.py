@@ -378,6 +378,44 @@ def carried(lanes: Sequence[Mapping[str, Any]], old: Poly, new: Poly, skip: Cont
     return out
 
 
+_TAIL_CUT_FT = 40.0
+"""How long a tail a gather may cut off a lane it strands (405 T106, D133): under 40 ft, the page's own figure.
+
+Research: a tail cut - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut"""
+
+
+def tails_cut_back(lanes: Sequence[Mapping[str, Any]], i: int, old: Poly, new: Poly) -> dict[int, Poly]:
+    """Every other lane with an end on the stretch of `old` that `new` no longer runs along, cut back to the nearest vertex
+    before that end that stands on another way (any but lane `i`), where the tail cut off is under `_TAIL_CUT_FT` - a lane
+    the tee would strand kept joined where it already meets the web (405 T106, D133: seed 7 with the sheds turned, a
+    household's way reached a neighbor's way and ran 34 ft on to end on the leg the knot's tee cut away).
+
+    Research:
+        a stranded tail cut back to its meeting - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut
+        which vertex it is cut back to - UNRESEARCHED: the nearest the stranded end that stands on another way, the teed lane not counted"""
+    out: dict[int, Poly] = {}
+    for m, ln in enumerate(lanes):
+        p = _pts(ln)
+        if m == i or len(p) < 3:
+            continue
+        for e in (0, -1):
+            if not (_on(old, p[e]) and not _on(new, p[e])):
+                continue
+            seq = p if e == -1 else p[::-1]
+            others = [_pts(o) for k, o in enumerate(lanes) if k not in (i, m)]
+            tail = 0.0
+            for k in range(len(seq) - 2, 0, -1):
+                tail += math.dist(seq[k], seq[k + 1])
+                if tail >= _TAIL_CUT_FT:
+                    break
+                if any(_on(o, seq[k]) for o in others):
+                    run = seq[: k + 1]
+                    out[m] = run if e == -1 else run[::-1]
+                    break
+            break
+    return out
+
+
 def next_gather(
     lanes: Sequence[Mapping[str, Any]], judge: Callable[[dict[int, Poly]], bool], fixed: Callable[[Mapping[str, Any], int], bool] = _fixed, apart: Apart | None = None
 ) -> dict[int, Poly] | None:
@@ -392,6 +430,7 @@ def next_gather(
         lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
         which node a knot gathers at - UNRESEARCHED: the node with fewer ends moves onto the other, the other way round where refused
         a lone end teed onto the other lane - research/questions/0081-village-lanes.drawing.html: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)
+        a lane the tee strands kept - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut (`tails_cut_back`, 405 T106), asked only where the tee alone is refused
         a lone end cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: "the maps cut it where it comes alongside and let it meet the other as a T" (`teed_back`, 405 T134), taken only where its T stands past the knot's reach and the web keeps no more knots
         which ways a lone end is cut back onto - UNRESEARCHED: a lane at the other node, or the lane its own end stands on
         a lone end moved onto the node, cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees is cut where it comes alongside (`onto_cut_back`, 405 T135)
@@ -424,6 +463,8 @@ def next_gather(
                 for form in teed_onto(_pts(lanes[i]), e, _pts(lanes[j])):
                     if judge({i: form}):
                         return {i: form}
+                    if (cut := tails_cut_back(lanes, i, _pts(lanes[i]), form)) and judge(both := {i: form, **cut}):
+                        return both  # the tee keeps a lane it would strand, its short tail cut back to its meeting (D133)
         for mover, target in order:  # ...or teed from an EARLIER vertex onto the lane it comes alongside, clear of the knot
             ends = nodes[mover][1]
             if len(ends) != 1 or fixed(lanes[ends[0][0]], ends[0][1]):
