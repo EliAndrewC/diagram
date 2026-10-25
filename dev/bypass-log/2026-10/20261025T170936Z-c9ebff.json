@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-25T17:09:36Z",
+  "target": "record-checked",
+  "commit": "19a775eb8",
+  "why": "source-applicability on source-applicability:murakami-2014-oblique-weirs: the only change since round 1 is the round's own EDIT plus 'per cent' -> 'percent' (American spelling); no claim moved"
+}
