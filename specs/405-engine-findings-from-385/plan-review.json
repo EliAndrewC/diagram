@@ -378,6 +378,26 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T138": {
+   "section_sha256": "6e23200ebdc20b3bf68020c6ddb58a9ad2ad9c2a54f8e09152949d117e22130a",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D133",
+     "summary": "knots.next_gather: where a lone end's tee onto the other node's lane (teed_onto) is refused for stranding a third lane, it is asked again with each stranded lane's tail (an end on the stretch the tee cuts away) cut back to the nearest vertex before that end standing on another way, when the tail cut is under 40 ft (tails_cut_back, _TAIL_CUT_FT)",
+     "class": "within",
+     "why": "Amendment 10 asks for the knots problem to be solved inside 405 (FR-003a, T106 is in the knots family). D133 adds one more gather form inside the knot step. It leaves D83's two passes and its judge unchanged, and it takes its threshold from 0081's own rule ('a tail of under 40 ft beyond a crossing is cut'), so it narrows nothing the GM asked for or the spec settled. Applying the cut only where a tee is refused is a bounded use of the page's rule. It does not carve out a case the request covers, because the request is to solve the knots, not to apply 0081's tail rule everywhere. The vertex it cuts back to is labeled UNRESEARCHED in the open, a disclosure and not an exception. The figures (2.2 ft, about 20 degrees, 34 ft, 7/7) carry a one-shot label: measured 2026-10-24, probes in a detached worktree, make cohort N=1 SEED=7."
+    },
+    {
+     "id": "T138 approach: order, exits, done",
+     "summary": "order tails_cut_back -> next_gather -> claims -> unit test -> seeds 1-48 and pinned rows on main seats; exit (e) conform; done measured by the red-without-it unit test, seeds, cover-changed, claims round, landing cohort; 20 min budget",
+     "class": "within",
+     "why": "This is FR-001's checklist part A worked as 385 worked its tasks. None of it narrows the request: the checks enforce the fix and the budget is process."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "blocks": {
@@ -905,6 +925,18 @@
   },
   "### T106 Approach (re-answered 2026-10-24T23:04Z)": {
    "sha256": "1cc318db24845a98cf00ff82e1d26a3edb2052e1070c98f11498328a2417d82b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T138 Approach (checklist part A)": {
+   "sha256": "502f20d0972fbaed951767204799cb4bc0536ceb2571de2342727a9536c614e3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T138 Decisions": {
+   "sha256": "d0d601b42276b4e59ce0c1a09796fcdb36b9be54f92d80f356e5a3c2c772791d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
@@ -5263,6 +5295,28 @@
      "summary": "seed 7's knot mended by the page's tail rule (a) without first measuring more room (b); the re-answer corrects the first approach's claim that room was measured worse for this knot class (T107's probes measured the fence-gap knot)",
      "class": "within",
      "why": "Amendment 8's purpose is that the session not refuse the room route and reach for something 'really, really difficult' instead, while the GM also says room is not to be widened every time something goes wrong. Here the mend is the page's own rule, one bounded extra form of the gather, measured clean on seed 7 and seeds 1-48 with the pinned rows; it neither avoids room for a harder search nor narrows anything the GM asked. The correction of the earlier factual premise is to the good: the first approach's item 6 (still in the section above the re-answer) rested on a measurement that was of a different knot, and the re-answer is what now governs."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T138 Approach (checklist part A)",
+    "### T138 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D133",
+     "summary": "knots.next_gather: where a lone end's tee onto the other node's lane (teed_onto) is refused for stranding a third lane, it is asked again with each stranded lane's tail (an end on the stretch the tee cuts away) cut back to the nearest vertex before that end standing on another way, when the tail cut is under 40 ft (tails_cut_back, _TAIL_CUT_FT)",
+     "class": "within",
+     "why": "Amendment 10 asks for the knots problem to be solved inside 405 (FR-003a, T106 is in the knots family). D133 adds one more gather form inside the knot step. It leaves D83's two passes and its judge unchanged, and it takes its threshold from 0081's own rule ('a tail of under 40 ft beyond a crossing is cut'), so it narrows nothing the GM asked for or the spec settled. Applying the cut only where a tee is refused is a bounded use of the page's rule. It does not carve out a case the request covers, because the request is to solve the knots, not to apply 0081's tail rule everywhere. The vertex it cuts back to is labeled UNRESEARCHED in the open, a disclosure and not an exception. The figures (2.2 ft, about 20 degrees, 34 ft, 7/7) carry a one-shot label: measured 2026-10-24, probes in a detached worktree, make cohort N=1 SEED=7."
+    },
+    {
+     "id": "T138 approach: order, exits, done",
+     "summary": "order tails_cut_back -> next_gather -> claims -> unit test -> seeds 1-48 and pinned rows on main seats; exit (e) conform; done measured by the red-without-it unit test, seeds, cover-changed, claims round, landing cohort; 20 min budget",
+     "class": "within",
+     "why": "This is FR-001's checklist part A worked as 385 worked its tasks. None of it narrows the request: the checks enforce the fix and the budget is process."
     }
    ]
   }
