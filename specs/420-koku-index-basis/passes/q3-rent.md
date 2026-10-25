@@ -17,7 +17,7 @@ https://ocu-omu.repo.nii.ac.jp/record/2015149/files/111H0000001-37-14.pdf
 
 - **The rate is monthly, and the floor is counted in mats.** Tani works the rates out for the Kyōmachibori 4-chōme houses rebuilt in Kaei 5 (1852):
   「裏借家の家賃 建家 220.5匁(0.7匁×315.0畳) 空地 33.67匁(0.7匁×48.1坪)となり，計算上は表借家151.97匁，裏借家254.17匁，合計406.14匁が1カ月の家賃収入になる予定である。」
-  "Back houses: buildings 220.5 monme (0.7 monme × 315.0 mats), vacant ground 33.67 monme (0.7 × 48.1 tsubo). On paper, 151.97 monme from the front houses and 254.17 from the back, 406.14 monme in all, was to be the month's rent income." (translation)
+  "Back houses: for the structures, 220.5 monme (0.7 monme × 315.0 mats), vacant ground 33.67 monme (0.7 × 48.1 tsubo). On paper, 151.97 monme from the front houses and 254.17 from the back, 406.14 monme in all, was to be the month's rent income." (translation)
 
 - **How much was actually collected (no rent amount given).** 「常安裏町の家賃記録を整理すると，表借家の回収率は平均95%，裏借家は80%となっている」
   "From Jōan-uramachi's rent records, front houses' rent was collected at 95% on average and back houses' at 80%." (translation)
