@@ -137,3 +137,45 @@
 
 - **D6** As the section "D6 - the implementation check" states. Rendering: none.
 
+<!-- plan-archive: archived 2026-10-24 -->
+## T06 - the reply on #15 (D7)
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** gm-assistant can verify every figure of #15 and its addition from the reply alone, and close it.
+2. **The constraints.** FR-001 (per figure: fragment file, verdict, what is open), FR-003 (the rule offered to 413 and
+   gm-assistant), FR-006 (each answer against its canon), SC-001-SC-004; GM items through `escalation-check` first.
+3. **Where each comes from.** O: the spec's FRs from the issue; G: CLAUDE.md (escalation-check before the GM).
+4. **Do they describe the world here?** Yes.
+5. **The order.** After the pages and the implementation check; escalation-check on the GM items before posting.
+6. **The exits.** n/a.
+7. **The search smell.** None.
+8. **The budget.** One reply.
+9. **Done, measured.** The comment's URL.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T06 Decisions
+
+- **D7** As the section "D7 - the reply" states. Rendering: none.
+
+<!-- plan-archive: archived 2026-10-24 -->
+## T07 - close: report and land
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** The feature's findings on main, its report written.
+2. **The constraints.** `make land`'s refusals; `make feature-report F=414 WRITE=1`.
+3. **Where each comes from.** G: CLAUDE.md, Development workflow.
+4. **Do they describe the world here?** Yes.
+5. **The order.** After the reply.
+6. **The exits.** n/a.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** Landed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T07 Decisions
+
+- none beyond D1-D7. Rendering: none.

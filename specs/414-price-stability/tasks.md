@@ -38,12 +38,12 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 - [x] T05 Implementation check (D6; FR-004)
       research: rendering
       verify: DONE. landed in batch T01+T02+T03+T04+T05: 0290-0294 written and checked (rounds 1-2; round 3 closed by arbiter ask:414-round3 accept); record-owed clean; the eight measure scripts rerun with identical output; impl-check nothing missing
-- [ ] T06 The reply on #15 (D7; FR-001, FR-003, FR-005, FR-006)
+- [x] T06 The reply on #15 (D7; FR-001, FR-003, FR-005, FR-006)
       research: rendering
-      verify: the comment's URL
-- [ ] T07 Close: report and land
+      verify: DONE. landed in batch T06+T07: reply on #15 issuecomment-6393001474 and the GM comment 6393001655; report written
+- [x] T07 Close: report and land
       research: rendering
-      verify: landed
+      verify: DONE. landed in batch T06+T07: reply on #15 issuecomment-6393001474 and the GM comment 6393001655; report written
 - [ ] GM review (make gm-reviewed F=414) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
