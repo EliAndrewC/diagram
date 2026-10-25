@@ -2896,6 +2896,9 @@ nando	nando
 nando-gamae	nando-gamae
 nanhai	Nanhai
 nanjing	Nanking
+nankeen	nankeen
+nankeens	nankeen
+nankin	nankeen
 nanking	Nanking
 nanmu	nanmu
 nanohana	rape
