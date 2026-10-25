@@ -3,8 +3,8 @@ Taoist priest or a geomancer chose, beside the small burial grounds that lineage
 Chinese graves stood in every conceivable position in a field, whatever the trouble to cultivation; in Jiangnan the graves of
 rich households took good farmland and feng shui ground. Whether any stood in flooded paddy is not recorded.
 
-Such a grave was a mound of earth standing in the crop: a column of soldiers marching into Shanghai from Wusong in 1842
-reported graves in every field, as mounds of earth.
+Such a grave was a mound of earth standing in the crop: in 1842, on the road from Wusong into Shanghai, there were
+graves in every field, as mounds of earth.
 
 How many there were can no longer be known, but where the custom held they seem to have been common rather than rare. In the 1920s graves
 took about 2.6 percent of the farmland in five level-land districts surveyed, and as much as 9 percent on the fertile land of

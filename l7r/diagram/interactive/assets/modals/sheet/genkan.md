@@ -11,7 +11,9 @@ gate. Where an intendant's office and residence shared a compound, at Takayama, 
 Not every house had one, and it marked standing. The houses of senior retainers did; a village headman was allowed a
 shikidai where other farmers were not; and at Kakegawa's castle palace only the lord and senior retainers came in by the
 formal porch. A middle-rank house could do without, and bring its guest through a middle gate and along a walled garden
-path to the reception room's veranda. How large an ordinary house's genkan was is not recorded; at the council hall a small domain built at its Sayama seat in 1775, the genkan was 8 mats and its shikidai probably about 12 by 9 ft, and at Kawagoe's castle palace, a great lord's, the great entrance and carriage porch ran 19 by 5 ken, about 113 by 30 ft.
+path to the reception room's veranda.
+
+How large an ordinary house's genkan was is not recorded; at the council hall a small domain built at its Sayama seat in 1775, the genkan was 8 mats and its shikidai probably about 12 by 9 ft, and at Kawagoe's castle palace, a great lord's, the great entrance and carriage porch ran 19 by 5 ken, about 113 by 30 ft.
 
 Guesses:
 - Its size on the plans, about 10 to 11 ft across and 4 to 6 ft deep, with a step 4 to 5 ft wide: no account read gives the
