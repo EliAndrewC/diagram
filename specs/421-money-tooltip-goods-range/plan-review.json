@@ -117,6 +117,51 @@
      "why": "Process and verification of the requested change only; no scope added or removed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T01 - the goods range in the hover box (FR-001, FR-002)",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Goods ends are first amount end x goods_dollars and last amount end x goods_dollars_high, formatted by _dollars (one precision from the larger end, joined by '-').",
+     "class": "within",
+     "why": "FR-001 sets the goods text as goods_dollars to goods_dollars_high times the amount, formatted as the existing dollar ranges are, with one precision for both ends joined by '-'. The request asks for the range from central to high ('goods_dollars to goods_dollars_high'). For a single amount both ends use the same amount, which gives the request's example shape ($1.54-$3.32). For an amount range, pairing the low end with the central reading and the high end with the high reading gives the full span and drops neither end. Neither path shows one goods figure without the other, which matches the request's 'never shows one goods figure without the other'. Nothing is excepted."
+    },
+    {
+     "id": "D2",
+     "summary": "The money.py docstring's 'goods dollars (what it bought)' becomes the range from the central (geometric) to the high (arithmetic) reading.",
+     "class": "within",
+     "why": "FR-002 asks for this docstring change. 'Central to high' is the request's own wording. The parenthetical labels are factual: gm-assistant's own diagram#17 comment (issuecomment-6398335706) says the high reading is the arithmetic mean, and the central one is the geometric mean (gm-assistant feature 223). They add no behavior and do not narrow the request."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "217fac265391564dbf2df4493a41ca97cddfe118323827e23a5bc6f2dbecaa3e",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Goods ends are first amount end x goods_dollars and last amount end x goods_dollars_high, formatted by _dollars (one precision from the larger end, joined by '-').",
+     "class": "within",
+     "why": "FR-001 sets the goods text as goods_dollars to goods_dollars_high times the amount, formatted as the existing dollar ranges are, with one precision for both ends joined by '-'. The request asks for the range from central to high ('goods_dollars to goods_dollars_high'). For a single amount both ends use the same amount, which gives the request's example shape ($1.54-$3.32). For an amount range, pairing the low end with the central reading and the high end with the high reading gives the full span and drops neither end. Neither path shows one goods figure without the other, which matches the request's 'never shows one goods figure without the other'. Nothing is excepted."
+    },
+    {
+     "id": "D2",
+     "summary": "The money.py docstring's 'goods dollars (what it bought)' becomes the range from the central (geometric) to the high (arithmetic) reading.",
+     "class": "within",
+     "why": "FR-002 asks for this docstring change. 'Central to high' is the request's own wording. The parenthetical labels are factual: gm-assistant's own diagram#17 comment (issuecomment-6398335706) says the high reading is the arithmetic mean, and the central one is the geometric mean (gm-assistant feature 223). They add no behavior and do not narrow the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }
