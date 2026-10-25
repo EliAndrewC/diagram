@@ -17953,5 +17953,30 @@
   "variants": [
    "Higo rice"
   ]
+ },
+ "consumer price index": {
+  "def": "A single yearly figure for the price of the goods households buy, set to 100 in a chosen base year, so its rise or fall from one year to the next measures how prices as a whole moved; the Bank of England's runs from 1209 to 2016, joined from several compilers' series.",
+  "variants": [
+   "consumer price index",
+   "consumer price indices",
+   "CPI",
+   "cost of living index",
+   "price index"
+  ]
+ },
+ "Office for National Statistics": {
+  "def": "Britain's official statistics office, whose figures the Bank of England's price index follows from 1914 on.",
+  "variants": [
+   "Office for National Statistics",
+   "ONS"
+  ]
+ },
+ "hundredweight": {
+  "def": "An English unit of weight, 112 pounds (about 51 kilograms), the unit Clark's series prices salt in.",
+  "variants": [
+   "hundredweight",
+   "cwt",
+   "hundredweights"
+  ]
  }
 }
