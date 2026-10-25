@@ -40,6 +40,7 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
             the web, which serves the ways it joins (405 T15)
         a tail kept as a house's only way - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: never for a household reached across a neighbor's land, owed none (`geom.lane_houses`)
         the track out not trimmed here - research/questions/0081-village-lanes.drawing.html: the track out is laid by its own placer (`stage_track`), and whether its end meets the ways is asked of the finished map (`checks.track_ends_off_the_web`)
+        a row's street not dropped for serving nothing - UNRESEARCHED: a street is laid as one way along its row and its farms are reached by door paths laid after this pass (feature 291 plan D17), so it is never dropped here
         shortest lane kept - UNRESEARCHED: a trim leaving a lane under _WEB_MIN_FT, 30 ft, is not applied, or the lane is dropped
         only-way reach - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house with no other way within WEB_REACH_FT, 100 ft, keeps its tail
     """
