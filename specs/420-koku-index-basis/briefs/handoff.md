@@ -1,0 +1,26 @@
+## Session S1
+- SECTION=0249/kyoto-basket-what-was-bought (new section; the bullets "Only the rice and lamp-oil prices..." and "What kind of beans and cloth?" folded into it)
+- SECTION=0265/rent-edo (new bullets: the Minami-Denmacho rents by the tsubo; the 1848 carpenter; "And in Kyoto, or nearer 1750?" replacing "And in Kyoto or Osaka?"), SECTION=0265/rent-osaka (new), and the opening paragraph and intro
+- SECTION=0261/cloth-cotton (new bullet "What cloth, and at which market, does that price stand for?")
+- SECTION=0273/salt-kyoto-1745 (new bullet "What salt, and at which market?"), SECTION=0273/salt-japan (the Otsukawa dealer's margin now computed; the units-decision note's comment says why)
+- SECTION=0279/charcoal-firewood-by-weight (new bullet "What firewood, and at which market?")
+- Q1 rice: form ATTESTED (white rice); market level ATTESTED ONLY FOR the "retail" label on the Mitsui Kyoto account books (paper and GPIH heading; the Japanese title not read) - 0249
+- Q1 soybeans: form ATTESTED (the beans, standing for miso, soy sauce, tofu, natto; Osaka beans "of above average quality"); level: the paper's Mitsui Table 3 is the Mitsui volume's Osaka market-price table (相場表) of 1757-1773, a READING (the NDL answer names the tables, not their goods) - 0249
+- Q1 other beans: species SILENT - 0249
+- Q1 barley and wheat, buckwheat and millets: ATTESTED as grain, priced by farm-gate ratios to paddy (1874-1901) x retail rice 1882-86; no market level of 1745 - 0249
+- Q1 fish: ATTESTED as salmon and cod by a wholesale fish-to-rice ratio 1882-86 x retail rice; fresh/salted/dried NOT ATTESTED; a Kyoto/Osaka commoner's fish c. 1745 SILENT; Edo 1860 sardines and salmon ATTESTED ONLY FOR one low-paid samurai, a blog's hedged paraphrase - 0249
+- Q1 oils: ATTESTED rapeseed for lamp and table, sesame "more a condiment" - 0249
+- Q1 cloth: ATTESTED plain cotton ("cotton linen"), Osaka 1840-49 from Miyamoto 1963 (not read); weave, width and market level SILENT - 0249, 0261
+- Q1 salt and firewood: named only as salt (塩) by the koku and firewood (薪) by 10 kan, no grade or kind; level ATTESTED ONLY FOR the retail label - 0273, 0279
+- Q1 miso and soy sauce, Mitsui Kyoto 1745-54 (unused by the paper): ATTESTED cells; means this project's arithmetic: miso 15.43 monme/10 kan (12.2-18.54), about 1.28 g silver a kg; soy sauce 91.06 monme a koku (82.63-98.22), about 1.57 g a liter, at 3.11 g a monme; specs/420-koku-index-basis/measure/mitsui_miso.py and .out.txt - 0249
+- Q1 markup: SILENT for Kyoto and Osaka c. 1745 (every good); ATTESTED ONLY FOR the Mitsui Edo cotton store's profit rates (札掛; Ise 2.6/3.9/2.1%, Osaka 4.4/4.2/3.5%, Owari-Mikawa 3.3/5.8/3.0%; a 1798 note 4-5% to 11-12%; retail not stated) - 0249, 0261; and the Otsukawa village salt dealer, 1842, about 5 to 11% (this project's arithmetic at 0277's Edo and Osaka rates of 1842) - 0273
+- Q3 Osaka: ATTESTED ONLY FOR Mitsui's Osaka houses, 0.9 monme a mat a month front and 0.7 back from 1814 and again in 1846 (month by the author's own sums); the 1832 letter-book's average 0.7/0.9 a half tsubo; the author assumes it held into 1848-54 - 0265
+- Q3 room: a 9-shaku-by-2-ken room (3 tsubo, 6 mats) at 0.7 = about 4.2 monme a month, this project's arithmetic, assuming a mat is half a tsubo and the whole floor billed by the mat - 0265
+- Q3 Edo: ATTESTED, Minami-Denmacho 1-2 chome, back-tsubo house rent 3.3-3.8 monme a month (Kansei) and 3.7-5.0 (1840), front ground rent 3.8-4.5 and 4.0-5.5 (table; the text says up to 5.0); per tsubo read from the heads - 0265
+- Q3 the 1848 carpenter (柳菴雑筆, via Kobayashi 2017): the same 5.4 a day and 10 a month as the Bunsei account, so not a second rent (a reading) - 0265
+- Q3 Kyoto: SILENT for any year; Kyoto and Osaka c. 1745: SILENT - 0265
+- Searches: the q1 and q3 passes' (named in the absence comments); archive-find on all eight sources; Tani fetched by curl (source-pages could not read the PDF) and read on page images pp. 166-168; Washizaki Table 5 read on the p. 114 image; eight source-reader reads before writing, all READ (the ledger rows written)
+- New keys: tani-1989-osaka-shakuya (1). Write-ups changed (owe source-applicability): sakai-hanshiro-bakumatsu, washizaki-2012-edo-lot-yields, kobayashi-2017-kahei-shi, shimomukai-mitsui-cotton, ndl-crd-cotton-prices, bassino-2006-gpih-mitsui, bassino-ma-2005 (Used for, and limits where the new use lay outside them)
+- Download list: #327 McClain and Wakita, Osaka (for 0265)
+- Leads not followed: Fujimoto 1978 (Osaka rent register 1764-72); Ito Munehiro on Kyoto rentals; Kagawa, 近世三井経営史の研究; Tani 1988; the 所以者何 itself; Miyamoto 1963 pp. 208-210; the Mitsui 1989 volume (on the list as #326); Oishi 1966's 1842 oil and fish returns (page images needed); Morisada vol. 6 on tofu, miso and sardine sellers; Saito 1993's Edo "retail" title (not cited); the Matsue rents (castle town, judged not worth a line beside the Osaka and Edo figures); the GPIH Osaka "White wheat" column; Kumon's GPIH sheet label (outside the items)
+- Money marks: Osaka 1814 as kyoto-1800 (paid Osaka 1814); 1832 as edo-1830 (paid Osaka 1832); 1852 as edo-1850 (paid Osaka 1852); Kansei Edo as kyoto-1790 (paid Edo 1789-1801); 1840 Edo as edo-1830; Otsukawa 1842 as edo-1830; the 1846 and 1848 amounts left unmarked as numbers outside every era; money-candidates CHECK=1 exits 0

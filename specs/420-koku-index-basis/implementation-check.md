@@ -1,0 +1,5 @@
+- 0249: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'kyoto-laborers-year-of-goods|Bassino|monme' l7r pool (only the assembled glossary)
+- 0261: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'cloth-and-clothing-cost|Bassino|monme' l7r pool (only the assembled glossary)
+- 0265: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'rent-a-room-or-a-house|tanachin|monme' l7r pool (only the assembled glossary)
+- 0273: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'what-did-salt-cost|Bassino|monme' l7r pool (only the assembled glossary)
+- 0279: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'what-did-charcoal-cost|Bassino|monme' l7r pool (only the assembled glossary)
