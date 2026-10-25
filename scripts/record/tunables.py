@@ -53,8 +53,10 @@ def tunables(rows: Mapping[str, Any], path: str = "", figures_only: bool = True)
     return sorted(out, key=lambda t: (OURS.index(t[0]), t[1]))
 
 
-#: The code that draws a map (D31 (d)); the tooling under `ci/`, `pipeline/`, `tools/` and `interactive/` decides nothing about the place.
+#: The code that draws a map, and the audit that grades a Mode A sheet (D31 (d)); the rest of `tools/`, and `ci/`, `pipeline/` and
+#: `interactive/`, choose what is rolled or reported, or time a run - never whether a map passes.
 MAP_CODE = (
+    "l7r/diagram/tools/pack_audit/",
     "l7r/diagram/hamletgen/",
     "l7r/diagram/settlement/",
     "l7r/diagram/waterfields/",
