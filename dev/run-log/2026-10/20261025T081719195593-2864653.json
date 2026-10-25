@@ -1,0 +1,51 @@
+{
+  "utc": "2026-10-25T08:17:19Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 198,
+  "result": "failed: test-full",
+  "commit": "3d12319ad",
+  "first_failure_s": 191.9,
+  "last_failure_s": 197.1,
+  "failed_names": [
+    "uncovered l7r/diagram/hamletgen/ways/street.py:404-406"
+  ],
+  "host": {
+    "load": [
+      2.9,
+      8.37
+    ],
+    "mem_avail_mb": [
+      8815,
+      8115
+    ],
+    "cpu_temp_c": [
+      101.0,
+      78.0
+    ],
+    "stall_s": {
+      "cpu": 2.3,
+      "io": 0.1,
+      "io_full": 0.1,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 38057,
+      "package": 12905
+    }
+  },
+  "phases": {
+    "preflight": 10.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 176.0,
+    "floors": 17.0,
+    "test-full": 195.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/hamletgen/ways/CLAUDE.md",
+  "selected": 9840,
+  "collected": 9840
+}
