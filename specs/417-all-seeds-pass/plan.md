@@ -340,7 +340,7 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
   them out of it: `last_resort` re-asks the settle's steps once its rounds run out (FR-005), R8 measured only the `STEPS` positions,
   so its calls are T31's - each re-asked step leaves `last_resort` with that step's own conversion or deletion, and these four,
   needless in the rounds, are cut from `last_resort` and deleted in T31's landing, measured there as R8 measured the rounds.
-  T31 keeps the four map-moving steps, the six needed ones and `last_resort`'s re-asked steps. R8 holds both of D35's runs: each
-  step off alone, and the six off together (54 of 54, no pool manifest moved).
+  T31 keeps the four whose removal moved a pool map - needed under D35 and owed its conversion - the six needed ones and `last_resort`'s re-asked steps. R8 holds both of D35's runs: each
+  step off alone, and the six off together (observed 2026-10-25, research.md R8: 54 of 54 - the 48 fixed seeds and the six pinned rows of `make cohort-landing` - and no pool manifest moved).
   Rendering: none.
 

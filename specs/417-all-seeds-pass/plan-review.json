@@ -114,6 +114,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T40 (T31's first part, D35): the six settle steps measured needless deleted": {
+   "sha256": "142b50dc21555daac4805c89b48d9452a2fc73a0be1b1f3cb990e2987c8cf857",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2397,6 +2403,39 @@
      "why": "Room work is forbidden by D11 (no FR-007 room work until the GM resumes it). D37 (c) exempts constants in the deleted code from claims. Each conversion is 'decided before its code' as its own decision under D35/D11, so any constant a conversion carries is handled there, with D11's one-value rule. This section moves none."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T40 (T31's first part, D35): the six settle steps measured needless deleted"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T40-split",
+     "summary": "T31 split so its first landing (T40) ticks only the deletion of the six steps R8 measured needless",
+     "class": "within",
+     "why": "Sequencing only. The GM delegated it in so many words (2026-10-25: 'I don't care whether you do it one at a time or all at once. That is an implementation detail'). Nothing D35 asks for is dropped. The rest stays with T31."
+    },
+    {
+     "id": "T40-delete-six",
+     "summary": "settle_husks (both positions), settle_street_ends, settle_shadows, settle_joins, settle_needles, prune_the_tree dropped from settle/stage.py STEPS; the nine names left dead (make dead-closure) and weld.py deleted with their tests",
+     "class": "within",
+     "why": "This is D35's 'the needless are deleted together with their tests and dead closure (D23)'. The closure comes from a run (make dead-closure), not from memory. The list checks out: the six needless steps minus the four last_resort still calls leaves settle_shadows and settle_needles, and those are exactly the two of the six that appear among the nine dead names."
+    },
+    {
+     "id": "T40-four-in-last-resort",
+     "summary": "the four needless steps still called by last_resort (settle_husks, settle_street_ends, settle_joins, prune_the_tree) stay defined until T31 takes them out of last_resort, then are cut and deleted in T31's landing, measured as R8 measured the rounds",
+     "class": "within",
+     "why": "This is the passage that was BLOCKED last time, when the text kept the four alive with no end. Three things now carry it. (a) It commits flatly to cutting them from last_resort and deleting them in T31's landing. (b) A re-asked step that T31's measurement finds needed goes to D35's own conversion branch ('that step's own conversion or deletion'), so no keep is invented. (c) The interim state is a sequencing choice the GM delegated. The premise 'still called by last_resort' is measured: it is the fact the dead-closure run used to leave them out of the nine. With any of (a)-(c) missing this would be a narrowing."
+    },
+    {
+     "id": "T40-last-resort-to-T31",
+     "summary": "last_resort's re-asking of the settle's steps once its rounds run out (FR-005) is assigned to T31, because R8 measured only the STEPS positions",
+     "class": "within",
+     "why": "D35's probe switches off STEPS positions. last_resort's calls are a path the probe did not measure. Handing that path to T31, with each step's conversion or deletion, gives T31 scope D35 never covered. It cuts nothing. FR-005 (each rule asked by its placer) is carried, not narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2849,43 +2888,36 @@
    "verdict": "CLEAR"
   },
   "T40": {
-   "section_sha256": "3a8ccbcbd1e45cea89c22bbaebf1c77acdfc7c001b3864f025613eb00ee558aa",
+   "section_sha256": "142b50dc21555daac4805c89b48d9452a2fc73a0be1b1f3cb990e2987c8cf857",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "T40-split",
-     "summary": "T31's section split so its first landing (T40) ticks only the deletion of the needless steps; T31 keeps the four map-moving and six needed steps",
+     "summary": "T31 split so its first landing (T40) ticks only the deletion of the six steps R8 measured needless",
      "class": "within",
-     "why": "Sequencing only. D35 already orders it this way (needless deleted together first, then each NEEDED step converted), and nothing in D35 is dropped: the remaining ten stay in T31. Count check: 6 + 4 + 6 = 16 named steps."
+     "why": "Sequencing only. The GM delegated it in so many words (2026-10-25: 'I don't care whether you do it one at a time or all at once. That is an implementation detail'). Nothing D35 asks for is dropped. The rest stays with T31."
     },
     {
-     "id": "T40-steps-off",
-     "summary": "The six steps R8 measured NEEDLESS (settle_husks at both positions, settle_street_ends, settle_shadows, settle_joins, settle_needles, prune_the_tree) dropped from settle/stage.py STEPS",
+     "id": "T40-delete-six",
+     "summary": "settle_husks (both positions), settle_street_ends, settle_shadows, settle_joins, settle_needles, prune_the_tree dropped from settle/stage.py STEPS; the nine names left dead (make dead-closure) and weld.py deleted with their tests",
      "class": "within",
-     "why": "This is D35's 'the NEEDLESS ones ... are deleted' and the GM's 'switch off the 16 repair steps in whatever manner you find most efficient'. Both settle_husks positions go together, as D35 requires. The NEEDLESS premise comes from the block's citation of R8. Under the bundle-only rule it was not re-run here, and the block does not say whether D35's second probe (all needless off together) was the run R8 recorded."
+     "why": "This is D35's 'the needless are deleted together with their tests and dead closure (D23)'. The closure comes from a run (make dead-closure), not from memory. The list checks out: the six needless steps minus the four last_resort still calls leaves settle_shadows and settle_needles, and those are exactly the two of the six that appear among the nine dead names."
     },
     {
-     "id": "T40-dead-closure",
-     "summary": "The nine names the drop leaves dead (make dead-closure: settle_shadows, drop_stranding, settle_needles, keeps_the_network, left_to_the_tree, strands_only_ordinary, _on_the_connector, weld_corner, WELD_PX with weld.py) deleted with their tests",
+     "id": "T40-four-in-last-resort",
+     "summary": "the four needless steps still called by last_resort (settle_husks, settle_street_ends, settle_joins, prune_the_tree) stay defined until T31 takes them out of last_resort, then are cut and deleted in T31's landing, measured as R8 measured the rounds",
      "class": "within",
-     "why": "D35: 'deleted together with their tests and dead closure (D23)'. This is that clause, named by a tool rather than chosen by hand."
+     "why": "This is the passage that was BLOCKED last time, when the text kept the four alive with no end. Three things now carry it. (a) It commits flatly to cutting them from last_resort and deleting them in T31's landing. (b) A re-asked step that T31's measurement finds needed goes to D35's own conversion branch ('that step's own conversion or deletion'), so no keep is invented. (c) The interim state is a sequencing choice the GM delegated. The premise 'still called by last_resort' is measured: it is the fact the dead-closure run used to leave them out of the nine. With any of (a)-(c) missing this would be a narrowing."
     },
     {
-     "id": "T40-last-resort-keeps-four",
-     "summary": "Four of the six needless steps (settle_husks, settle_street_ends, settle_joins, prune_the_tree) stay defined because last_resort still calls them",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "D35 says the needless are deleted, and the GM asked for the repair steps to be got rid of ('allow you to get rid of all of them. As per the requirements of this feature'), under a rule that place-then-check exists nowhere. Leaving these four in STEPS's absence while last_resort still calls them keeps four repair functions reachable on some maps. R8 measured them as STEPS positions and never measured last_resort's calls, so 'measured NEEDLESS' does not cover their survival there. The only reason the block gives is that existing code still calls them, which by itself does not justify an exception. 'Dead closure' fits D35's words, but the purpose of D35 is that the repair stops running, and keeping these four defeats it. The block also never says what becomes of last_resort: whether it is one of the ten steps T31 keeps, or which FR or task removes it or its calls. Either of two fixes turns this into a legitimate sequencing decision. (a) The block names the task and requirement that remove last_resort, or its calls to these four, and says the four are deleted in that same landing. (b) T40 cuts last_resort's calls and deletes the four now."
-    },
-    {
-     "id": "T40-rendering",
-     "summary": "Rendering: none",
+     "id": "T40-last-resort-to-T31",
+     "summary": "last_resort's re-asking of the settle's steps once its rounds run out (FR-005) is assigned to T31, because R8 measured only the STEPS positions",
      "class": "within",
-     "why": "Deleting steps measured as moving no verdict and no pool manifest has nothing to render. This matches D35's 'Rendering: none'."
+     "why": "D35's probe switches off STEPS positions. last_resort's calls are a path the probe did not measure. Handing that path to T31, with each step's conversion or deletion, gives T31 scope D35 never covered. It cuts nothing. FR-005 (each rule asked by its placer) is carried, not narrowed."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
