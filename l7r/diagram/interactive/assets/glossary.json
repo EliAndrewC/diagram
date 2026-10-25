@@ -17583,5 +17583,176 @@
    "fineness",
    "finenesses"
   ]
+ },
+ "spot price": {
+  "def": "At the Dojima rice exchange in Osaka, the price of rice bought to change hands now, as against book-entry rice, which was traded on the books for later settlement.",
+  "variants": [
+   "spot price",
+   "spot rice",
+   "spot rice price"
+  ]
+ },
+ "book-entry rice": {
+  "def": "At the Dojima rice exchange, rice bought and sold on the exchange's books for settlement at the end of a trading period without any rice being handed over - Osaka's futures market, beside the spot trade.",
+  "variants": [
+   "book-entry rice"
+  ]
+ },
+ "Hoji silver": {
+  "def": "The shogunate's debased silver coin of the Hoei years (1706-1711), named for the character 宝 stamped on it; in 1713 a koku of rice cost about 155 monme in it, against 121 in Genroku silver and 96 in the old Keicho silver.",
+  "variants": [
+   "Hoji silver",
+   "Hoji"
+  ]
+ },
+ "white oil": {
+  "def": "Rapeseed oil refined to a clear, clean-burning lamp oil, priced in Shinbo's Osaka table beside the cruder seed oil.",
+  "variants": [
+   "white oil"
+  ]
+ },
+ "bare-bones basket": {
+  "def": "Robert Allen's measure of the least a person could live on for a year - a fixed list of grain, meat, oil, cloth, fuel, lamp oil and candles - priced at one city's prices, in grams of silver per man per year.",
+  "variants": [
+   "bare-bones basket",
+   "Suzhou basket",
+   "Canton basket",
+   "bare-bones year of goods"
+  ]
+ },
+ "Changlu": {
+  "def": "The Qing salt district on the Bohai coast around Tianjin, supplying Zhili and Henan, whose salt sold at a price the state set.",
+  "variants": [
+   "Changlu"
+  ]
+ },
+ "standard deviation": {
+  "def": "A measure of how far a run of figures typically strays from its average. Taken here of the logged changes in a price, it reads roughly as the typical percentage move from one period to the next.",
+  "variants": [
+   "standard deviation",
+   "standard deviations"
+  ]
+ },
+ "commodity money": {
+  "def": "Money that is gold or silver, or can be exchanged for them at a fixed rate, so that its value rests on the metal - the opposite of paper money.",
+  "variants": [
+   "commodity money",
+   "commodity standard",
+   "commodity standards"
+  ]
+ },
+ "fiat": {
+  "def": "Money that is not gold or silver and cannot be exchanged for them at a fixed rate, worth what its issuer and users accept - the paper money every major currency has been since 1971.",
+  "variants": [
+   "fiat",
+   "fiat money",
+   "fiat standard"
+  ]
+ },
+ "futures": {
+  "def": "Contracts traded on an exchange to buy or sell a set amount of a good at a set price on a later date. Their price moves each trading day with what traders expect the good to fetch.",
+  "variants": [
+   "futures",
+   "futures contract",
+   "futures contracts"
+  ]
+ },
+ "rough rice": {
+  "def": "Rice as it comes from threshing, still in its husk, before milling - the form in which rice futures are traded in Chicago.",
+  "variants": [
+   "rough rice"
+  ]
+ },
+ "CBOT": {
+  "def": "The Chicago Board of Trade, the exchange where rough rice futures are traded.",
+  "variants": [
+   "CBOT",
+   "CBT"
+  ]
+ },
+ "market integration": {
+  "def": "How closely separate markets' prices were tied together by trade: where markets were well integrated, a change in one market's price soon showed in the others.",
+  "variants": [
+   "market integration",
+   "well integrated",
+   "well-integrated",
+   "poorly integrated"
+  ]
+ },
+ "Banshu": {
+  "def": "Harima province, in western Japan just west of Osaka and Kobe, around the castle town of Himeji.",
+  "variants": [
+   "Banshu",
+   "Banshu's"
+  ]
+ },
+ "Bocho": {
+  "def": "Suo and Nagato provinces taken together, at the western tip of Honshu: the Mori family's domain, often called Choshu.",
+  "variants": [
+   "Bocho"
+  ]
+ },
+ "correlation": {
+  "def": "A measure, from -1 to 1, of how closely two price series rose and fell together: near 1 they moved in step, near 0 one told nothing about the other.",
+  "variants": [
+   "correlation",
+   "correlations",
+   "correlated"
+  ]
+ },
+ "Huai salt district": {
+  "def": "The Qing salt district of the coastal salt works north and south of the Huai River (Huaibei and Huainan) and the markets assigned to their salt, which reached up the Yangzi to Jiangxi, Hubei and Hunan.",
+  "variants": [
+   "Huai salt district",
+   "Lianghuai",
+   "Lianghuai salt"
+  ]
+ },
+ "voucher law": {
+  "def": "A Song salt arrangement under which merchants paid the state for vouchers they redeemed for salt at the works, then carried and sold the salt themselves.",
+  "variants": [
+   "voucher law"
+  ]
+ },
+ "official convoy": {
+  "def": "Salt carried and sold by the Song state itself in its own shipments, in place of the voucher law; in Fujian in 1181 its price stood above private salt's.",
+  "variants": [
+   "official convoy",
+   "official convoys",
+   "salt convoys"
+  ]
+ },
+ "supervising secretary": {
+  "def": "A Ming official attached to one of the six ministries to examine its business, who could memorialize the throne on it.",
+  "variants": [
+   "supervising secretary",
+   "supervising secretaries"
+  ]
+ },
+ "gang salt": {
+  "def": "Under the Qing salt monopoly before Tao Shu's reform, salt shipped under the old license system by merchants who held their markets as a fixed right; Huaibei's ticket salt of 1832-1833 cost more than half less a license.",
+  "variants": [
+   "gang salt"
+  ]
+ },
+ "salt-advance rice": {
+  "def": "Rice a domain advanced to its salt makers, repaid in salt; Kanazawa took its salt this way from about the Kan'ei years (1624-1644) and sold it through wholesalers across its territory.",
+  "variants": [
+   "salt-advance rice"
+  ]
+ },
+ "standard error": {
+  "def": "How far a figure measured from a limited sample may be off by chance from the true figure. This record allows twice the standard error before calling two swings different.",
+  "variants": [
+   "standard error",
+   "standard errors"
+  ]
+ },
+ "Minbusho notes": {
+  "def": "Paper money issued by the early Meiji government's Minbusho, one of its ministries. When the yen replaced the ryo in 1871, these notes were exchanged at 1 ryo = 1 yen.",
+  "variants": [
+   "Minbusho notes",
+   "Minbusho note"
+  ]
  }
 }
