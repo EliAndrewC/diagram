@@ -1518,6 +1518,7 @@ guard city	guard city
 guardian deities	thirty guardian deities
 guardian dog	lion-dog
 guardian dogs	lion-dog
+guihai	sexagenary year
 guinea	guinea
 guineas	guinea
 gulou	gulou
@@ -4856,6 +4857,7 @@ wrought iron	wrought iron
 wu ding	Wu Ding
 wubei zhi	Wubei Zhi
 wubian	Wubian
+wuchen	sexagenary year
 wudu	wudu
 wujing zongyao	Wujing Zongyao
 wuliao jiazhi zeli	Wuliao jiazhi zeli
