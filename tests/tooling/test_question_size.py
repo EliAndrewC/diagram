@@ -53,3 +53,12 @@ def test_every_question_page_of_the_record_is_found() -> None:
     root = REPO
     found = qs.every(root)
     assert len(found) > 400 and all(p.parent.name == "questions" for p in found)
+
+
+def test_a_money_mark_counts_as_its_words_not_its_markup(tmp_path: pathlib.Path) -> None:
+    # feature 412: the era marks, markup only, put 0286 from about 14,400 bytes to 30,546 without a word of prose changing
+    qs = _load()
+    q = tmp_path / "research" / "questions" / "0412-a.html"
+    q.parent.mkdir(parents=True)
+    q.write_text('<p>a fare of <span class="money" data-amount="20" data-coin="mon" data-era="osaka-1620" data-paid="Takamiya 1665">20 mon</span>.</p>', encoding="utf-8")
+    assert qs.size(q) == len("<p>a fare of 20 mon.</p>")
