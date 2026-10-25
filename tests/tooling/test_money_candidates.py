@@ -87,8 +87,32 @@ def test_an_awaiting_era_counts_as_built_with_every_coin_of_the_period(tmp_path:
     awaiting = {"edo-1830": {"place": "Edo", "years": "1830-1844"}, "kyoto-1745": {"place": "Kyoto", "years": "1700-1710"}, "beijing-1820": {"place": "Beijing", "years": "1820-1850"}}
     (root / "research" / "assets" / "money-eras-awaiting.json").write_text(json.dumps(awaiting), encoding="utf-8")
     found = {a.text: (a.near, a.gap) for a in mc.amounts(str(root))}
-    assert found == {"300 monme": ("edo-1830", 0), "1 bu": ("edo-1830", 0)}, "a Japanese place's awaiting era carries every coin of COINS_ALSO, a Chinese one none"
+    assert found == {"300 monme": ("edo-1830", 0), "1 bu": ("edo-1830", 0)}, "a Japanese place's awaiting era carries every coin of COINS_ALSO, a Chinese one none of them"
     assert mc._eras(str(root))["kyoto-1745"][:2] == (1745, 1754), "the vendored row wins over an awaiting id it already has"
+
+
+def test_a_chinese_era_carries_the_chinese_coins_and_a_japanese_era_none_of_them(tmp_path: pathlib.Path) -> None:
+    mc = _mod()
+    page = (
+        "<p>In 1750 a laborer earned 50 wen a day, a coat cost 1.2 taels, a hat 3 mace and a jar 14 cents.</p>\n"
+        "<p>In 1835 a passage cost 2 dollars and 3 strings of cash, a room $1.50 and a boat $5-$10.</p>\n<p>In 1840 a tea bowl cost 2 taels.</p>\n"
+    )
+    root = _repo(tmp_path, page)
+    awaiting = {
+        "suzhou-1750": {"place": "Suzhou", "years": "1750-1799"},
+        "canton-1835": {"place": "Canton", "years": "1830-1839"},
+        "edo-1830": {"place": "Edo", "years": "1830-1844"},
+    }
+    (root / "research" / "assets" / "money-eras-awaiting.json").write_text(json.dumps(awaiting), encoding="utf-8")
+    found = {a.text: (a.near, a.gap) for a in mc.amounts(str(root))}
+    assert found["50 wen"] == ("suzhou-1750", 0) and found["1.2 taels"] == ("suzhou-1750", 0) and found["3 mace"] == ("suzhou-1750", 0)
+    assert found["3 strings"] == ("canton-1835", 0), "a string of cash is found, and owed inside a Chinese era"
+    assert found["2 taels"] == ("canton-1835", 1), "a tael inside a Japanese era's years is not offered that era"
+    assert found["14 cents"] == ("canton-1835", 80) and found["2 dollars"] == ("canton-1835", 0), "dollar only at Canton or Beijing"
+    assert found["$1.50"] == ("canton-1835", 0) and found["$5-$10"] == ("canton-1835", 0), "a dollar sign is a coin word"
+    eras = mc._eras(str(root))
+    assert eras["suzhou-1750"][2] == {"tael", "cash"} and eras["canton-1835"][2] == {"tael", "cash", "dollar"}
+    assert not eras["edo-1830"][2] & set(mc.CHINA_COINS), "a Japanese era carries no Chinese coin"
 
 
 def test_all_lists_the_passed_over_tagged_and_stem_and_context_narrow_and_explain(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:

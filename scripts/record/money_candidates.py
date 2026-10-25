@@ -38,6 +38,20 @@ BACKFILL = os.path.join("specs", "413-money-tooltip-on-the-record", "backfill.md
 #: The period's other Japanese coin words, listed whether or not a built era's row has a unit for them (the plan review of
 #: 2026-10-24: an amount in a coin its row lacks, a gold bu at Kyoto 1745-54, is passed over with that reason, never unseen).
 COINS_ALSO = ("mon", "monme", "kanmon", "ryo", "bu", "shu", "koban", "yen", "sen", "rin")
+#: The Chinese awaiting eras' coins, as gm-assistant confirmed them on diagram#13 (issuecomment-6390801447): `tael` (silver),
+#: `cash` (copper; a string marked as its count) and `dollar` (the foreign silver dollar, cents its hundredths).
+CHINA_COINS = ("tael", "cash", "dollar")
+#: The places whose awaiting era carries them; the dollar only where it circulated in an era's years (Canton's 1830s trade,
+#: Beijing's 1900s), never the inland Lower Yangzi eras of the 1680s and 1750s.
+CHINA_PLACES = frozenset({"Beijing", "Songjiang", "Suzhou", "Canton"})
+DOLLAR_PLACES = frozenset({"Canton", "Beijing"})
+#: Each Chinese coin word the scanner finds, and the coin it is marked in: mace and candareens are tenths and hundredths of a
+#: tael, wen, strings, guan and tiao count cash, cents are hundredths of a dollar. A Japanese word is its own coin.
+CHINA_WORDS = {
+    "tael": "tael", "taels": "tael", "mace": "tael", "candareen": "tael", "candareens": "tael",
+    "cash": "cash", "wen": "cash", "string": "cash", "strings": "cash", "guan": "cash", "tiao": "cash",
+    "dollar": "dollar", "dollars": "dollar", "cent": "dollar", "cents": "dollar",
+}
 
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _BLOCK = re.compile(r"<(p|li|blockquote|td|dd|h[1-4])\b([^>]*)>(.*?)(?:</\1>|(?=<(?:p|li|blockquote|td|dd|h[1-4])\b)|\Z)", re.S)
@@ -45,6 +59,7 @@ _HEADING = re.compile(r"<h[12][^>]*>(.*?)</h[12]>", re.S)
 _TAG = re.compile(r"<[^>]+>")
 _MARKED = re.compile(r'<span class="money"[^>]*>(.*?)</span>', re.S)
 _NUMBER = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\d[\d,]*(?:\.\d+)?)?"
+_DOLLAR = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\$?\d[\d,]*(?:\.\d+)?)?"
 _YEAR = re.compile(r"(?<!\d)(1[0-9]{3})(?!\d)")
 _NOTE_MARK = re.compile(r'data-note="([^"]+)"')
 _ROW = re.compile(r"^-\s*(?P<stem>[^|]+?)\s*\|\s*(?P<amount>[^|]+?)\s*\|\s*(?P<reason>.+?)\s*$")
@@ -78,9 +93,15 @@ def _eras(root: str) -> dict[str, tuple[int, int, frozenset[str]]]:
     eras = dict(_read(os.path.join(root, TABLE)).get("eras", {}))
     for era_id, row in _read(os.path.join(root, AWAITING)).items():
         if era_id not in eras and isinstance(row, dict):
-            # a Chinese place's era will carry wen and taels, never these coins: given them, a Japanese 1600 mon read 0 years
+            # a Chinese place's era carries the Chinese coins, never the Japanese: given them, a Japanese 1600 mon read 0 years
             # from beijing-1615, and record/money.py takes an awaiting era's coin on trust, so a wrong mark would build
-            coins = COINS_ALSO if row.get("place") in JAPAN_PLACES else ()
+            place = row.get("place")
+            if place in JAPAN_PLACES:
+                coins: tuple[str, ...] = COINS_ALSO
+            elif place in CHINA_PLACES:
+                coins = tuple(c for c in CHINA_COINS if c != "dollar" or place in DOLLAR_PLACES)
+            else:
+                coins = ()
             eras[era_id] = {"years": row.get("years", ""), "units": dict.fromkeys(coins)}
     out = {}
     for era_id, row in eras.items():
@@ -108,8 +129,9 @@ def _cited_years(folder: str, page: str) -> dict[str, tuple[int, ...]]:
 def amounts(root: str = ".") -> list[Amount]:
     """Every unmarked amount in a coin of these money systems, nearest a built era first (the order decides nothing)."""
     eras = _eras(root)
-    coins = sorted({*COINS_ALSO, *(c for _, _, units in eras.values() for c in units)}, key=len, reverse=True)
-    amount_re = re.compile(rf"(?<![\w.]){_NUMBER}\s+(?:{'|'.join(map(re.escape, coins))})(?![\w])")
+    coins = sorted({*COINS_ALSO, *CHINA_WORDS, *(c for _, _, units in eras.values() for c in units)}, key=len, reverse=True)
+    # a dollar is written "$1.50" as often as "2 dollars": the sign is a coin word of its own (feature 412, session 6)
+    amount_re = re.compile(rf"(?<![\w.]){_NUMBER}\s+(?:{'|'.join(map(re.escape, coins))})(?![\w])|(?<![\w$])\${_DOLLAR}")
     out: list[Amount] = []
     folder = os.path.join(root, QUESTIONS)
     for name in sorted(os.listdir(folder)):
@@ -134,7 +156,7 @@ def amounts(root: str = ".") -> list[Amount]:
                 if marked[found] > 0:
                     marked[found] -= 1
                     continue
-                coin = found.split()[-1]
+                coin = "dollar" if found.startswith("$") else CHINA_WORDS.get(found.split()[-1], found.split()[-1])
                 gaps = [(max(a - y, y - b, 0), e) for e, (a, b, units) in eras.items() if coin in units for y in years]
                 gap, near = min(gaps) if gaps else (None, "")
                 context = plain[max(0, m.start() - 240) : m.start()] + "[[" + found + "]]" + plain[m.end() : m.end() + 60]
