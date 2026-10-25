@@ -116,7 +116,7 @@
    "declared": "spec-fidelity"
   },
   "### T40 (T31's first part, D35): the six settle steps measured needless deleted": {
-   "sha256": "142b50dc21555daac4805c89b48d9452a2fc73a0be1b1f3cb990e2987c8cf857",
+   "sha256": "ef7bfb027857d3f7324e100adfa1f4f9ac8282a3a6812dc18895fb06cc4fdafc",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -2434,6 +2434,39 @@
      "summary": "last_resort's re-asking of the settle's steps once its rounds run out (FR-005) is assigned to T31, because R8 measured only the STEPS positions",
      "class": "within",
      "why": "D35's probe switches off STEPS positions. last_resort's calls are a path the probe did not measure. Handing that path to T31, with each step's conversion or deletion, gives T31 scope D35 never covered. It cuts nothing. FR-005 (each rule asked by its placer) is carried, not narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T40 (T31's first part, D35): the six settle steps measured needless deleted"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T40-split",
+     "summary": "T31 split so its first landing deletes only the six steps R8 measured needless (no verdict and no pool manifest moved) from STEPS, with the nine names make dead-closure finds dead and their tests.",
+     "class": "within",
+     "why": "D35 says exactly this: the needless are deleted together with their tests and dead closure (D23), landed through make land. The GM: switch off the 16 repair steps in whatever manner is most efficient - one at a time or all at once is left to the session."
+    },
+    {
+     "id": "T40-last-resort-four",
+     "summary": "The four needless steps last_resort still calls stay defined until T31 cuts them from last_resort and deletes them, measured there as R8 measured the rounds.",
+     "class": "within",
+     "why": "Unchanged from the earlier CLEAR text. It postpones the deletion to T31's landing and does not exempt anything from it: they are still cut and deleted, and they are not dead closure while last_resort calls them. R8 measured only the STEPS positions, so measuring the last_resort calls before cutting them follows D35's rule that a step is deleted only once it is measured needless."
+    },
+    {
+     "id": "T40-four-pool-moving",
+     "summary": "The four steps whose removal moved a pool map are named as needed under D35 and owed their conversion in T31.",
+     "class": "within",
+     "why": "D35 defines needless as no verdict AND no pool manifest moved, so a step that moves a pool map is needed by D35's own test, and D35 gives every needed step D11's conversion. The new wording makes it explicit that these four are converted and not left in place, which closes the earlier note rather than narrowing anything. 6 needless + 4 pool-moving + 6 needed = the 16 named steps, so no step goes missing."
+    },
+    {
+     "id": "T40-figure",
+     "summary": "54 of 54 now carries a one-shot label: observed 2026-10-25, research.md R8, made up of the 48 fixed seeds and the six pinned rows of make cohort-landing, no pool manifest moved.",
+     "class": "within",
+     "why": "Recording a figure makes no decision. The label has its date and its method, as the figures contract asks, and covers D35's runs (cohort N=48, the pinned rows, the pool maps)."
     }
    ]
   }
