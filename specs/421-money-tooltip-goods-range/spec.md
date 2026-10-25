@@ -53,3 +53,4 @@ box (feature 413, `l7r/diagram/interactive/record/money.py`) shows only the cent
 - spec-fidelity round 1 (2026-10-25): CHANGES REQUIRED - the single-figure fallback for a row without `goods_dollars_high`
   went against "the toolkit page never shows one goods figure without the other" and rested on no measured table (105 of 105
   units carry the field); removed (option a). Applied.
+- round 2 (verify): FAITHFUL.
