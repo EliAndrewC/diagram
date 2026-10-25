@@ -80,3 +80,4 @@ drift over centuries, a big swing from year to year.
 
 - spec-fidelity round 1 (2026-10-25): CHANGES REQUIRED - Acceptance 3 named an interpolation caveat the Clark file does not
   state; replaced with the file's own caveat, Lindert's silver-price note and the missing years. Applied.
+- round 2 (verify): FAITHFUL.
