@@ -21586,21 +21586,21 @@
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/checks.py::track_ends_off_the_web#the track meets the lanes": {
-  "body": "6948d8148d6213d8",
+  "body": "b688904b11dc5931",
   "claim": "the track meets the lanes - village-lanes.drawing: never stops in open country, its inner end on the way it joins",
-  "code": "0a75d734c160735b",
-  "core": "5e0d10bed54f1af3",
+  "code": "935b5dae1aeea5b1",
+  "core": "c94b52160b33c092",
   "date": "2026-10-25",
-  "note": "flags an in-canvas end of the track out that stands off every other way, so the track never stops in open country; the 4 ft `_TOUCH_GAP` is the ink-join tolerance (plumbing)",
+  "note": "the track's inner end must touch another way (a 4 ft join tolerance, which is plumbing); this matches \"never stops in open country\", the track running \"on out of the cluster\", and spur and track forming one through-route",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:34425c991aa27503",
    "0081-village-lanes.drawing.html:df440690bbce9cb6"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::unreached_houses#dispersed hamlet exempt": {
