@@ -74,8 +74,8 @@
    "declared": "round-arbiter"
   },
   "### Decisions (the work's own shape, 2026-10-25T11:05Z)": {
-   "sha256": "ed85a0ce334fc65d9e72ed40caa653dbb2f4be48f7382983c04cb62f477eaf7c",
-   "verdict": "BLOCKED",
+   "sha256": "8ba7866eb32fe1cb52bab609769a7776f002c2be7b7de911224be5216325d9ff",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
   },
@@ -98,14 +98,14 @@
    "declared": "round-arbiter"
   },
   "### T31 Approach (checklist part A)": {
-   "sha256": "362f64fde2b4cb61a9f1091cb0c1cc9a45d38590574ac9888cbdb544fc9b8b52",
+   "sha256": "4c89746443f50efc3b7223ea72df177a4d46a85262efb46c0c61de3a8b20b255",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T36 Approach (checklist part A)": {
-   "sha256": "50bceca134f1865f7c97b28a26a0946f2c1475053264596b95a78a2ccfb0904e",
-   "verdict": "BLOCKED",
+   "sha256": "883840fc9104249920c74a966b6dd4d8fee24f5cf33be1efd85b289ac09fe92b",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
   }
@@ -1958,6 +1958,91 @@
      "summary": "T36 approach otherwise: goal (every claim says truthfully what research found); order after T29, before T31; exits for silent (bare GUESS naming the pass), convention (cited), page answers with the code departing (cited, DRIFTED, unit in T33-T35); not looked into goes to P8; no label changed to pass a round; a claim ruled wrong twice keeps its research label with its description reverted; budget; done = claims gate green, R9 counts.",
      "class": "within",
      "why": "Each traces to D32 and D36 (both CLEAR) and to the GM's 'actually perform research' and 'then' ordering. No value moves."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### Decisions (the work's own shape, 2026-10-25T11:05Z)",
+    "### T31 Approach (checklist part A)",
+    "### T36 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D36-split",
+     "summary": "T29 lands the 247 modules' claims and their inline numbers now; the other 479 UNRESEARCHED claims and the other modules' inline numbers become T36, done the same way before T31's deletion.",
+     "class": "within",
+     "why": "D32 already orders the 479 after the 247 and before T31; the GM's order (research, then switch off the 16 repair steps after all of that) is kept. Only the task label moves."
+    },
+    {
+     "id": "D36-drifted",
+     "summary": "A claim a page answers but the code departs from is cited and lands DRIFTED, filed in T32-T35, code unchanged; the gate's refusal of an introduced DRIFTED claim is put to the round arbiter.",
+     "class": "within",
+     "why": "The GM named this category himself (drifted from the research, needs to be fixed at some point); D11's stop line holds the fixing. The plan asks the arbiter for the gate exception rather than granting itself one, and refuses a label that hides the departure."
+    },
+    {
+     "id": "D36-E-mechanics",
+     "summary": "Pass E's 19 mechanics claims become bare GUESS naming pass E (where D32 said NONE or CONVENTION), listed by make tunables.",
+     "class": "within",
+     "why": "Widens rather than narrows: it marks more numbers as ours and tweakable, which is the GM's stated purpose (documentation of which constants are arbitrary so future passes know they can tweak them). A departure from a plan decision, not from the request or a spec FR."
+    },
+    {
+     "id": "D36-E2",
+     "summary": "Pass E's 8 claims that shape how the hamlet and lanes look go to research pass E2 and are labeled by what it finds; a claim recording a page already searched is GUESS naming that page; the 3 a page answers are cited with their departures.",
+     "class": "within",
+     "why": "The GM: perform research for any of those questions we don't currently have answers for; mark the searched-and-silent ones in the second category."
+    },
+    {
+     "id": "D36-revert",
+     "summary": "A claim whose description impl-drift rules wrong twice has its description reverted and keeps its research label, never restored to UNRESEARCHED; R9 counts each kind.",
+     "class": "within",
+     "why": "Keeps the label truthful about what research found (the GM's split) and stops iteration; narrows nothing asked."
+    },
+    {
+     "id": "D37a-P8",
+     "summary": "Of the 479: 476 are on P1-P7's lists, 3 are not; the 8 no pass looked into (6 on the lists plus wood_rank's median house and castle_civic's martial hall compound) go to pass P8.",
+     "class": "within",
+     "why": "The GM: things we simply have not looked into are to be researched."
+    },
+    {
+     "id": "D37a-grammar-example",
+     "summary": "tools/claims.py's docstring example of the claim grammar keeps its UNRESEARCHED label as written.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It describes no map and states no number in the code; it illustrates the label syntax. Relabeling it would defeat its own purpose, and the GM's purpose (marking the code's arbitrary numbers for future passes) cannot reach it. Only one item, and it is of a different class from the other 478."
+    },
+    {
+     "id": "D37b-source-to-page",
+     "summary": "A claim a source answers that no page holds yet (37 claims, 14 sources) has its source recorded on its page by a page session first, then is cited: as a convention where the code follows it, DRIFTED with its T33-T35 unit where the code departs; no GUESS label naming such a source.",
+     "class": "within",
+     "why": "Corrects the earlier BLOCKED text, which put GUESS (searched and silent) on claims a source answers. The GM: check our downloaded research; mark the second category only where research really found nothing."
+    },
+    {
+     "id": "D37c-T38-before-T31",
+     "summary": "The 1,809 unstated inline numbers are given claims in T38, before T31; the order is T36, T38, T31.",
+     "class": "within",
+     "why": "Restores the GM's order (the audit and documentation of the constants, then after all of that switch off the 16 repair steps) and D31 (ii)'s before-T31 ordering, which the earlier BLOCKED text had reversed."
+    },
+    {
+     "id": "D37c-deleted-code-exception",
+     "summary": "T38 skips the inline numbers in the code T31 deletes (the six needless steps' definitions, R8), listed first so T38 can skip them.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Presumed not legitimate; lifted by the GM's own purpose clause: the documentation is 'so that future implementation passes know that they can tweak them', and the GM ordered this code removed before any fixing starts, so no future pass meets these numbers. The exception covers only the needless steps' definitions; the needed steps' rules move into placers, their numbers do meet future passes, and T38 covers them. Condition it rests on: the exception is 'the code T31 deletes'. If the deletion is set down whole (D23), nothing was deleted, so nothing is excepted, and those numbers are live and owed claims before the fixing resumes. T38 will already be ticked by then, so that obligation has to be carried forward explicitly; nothing will reopen T38 on its own."
+    },
+    {
+     "id": "T36-approach",
+     "summary": "T36's checklist: order after T29 then T38 then T31; exits per D36/D37 (silent: GUESS naming the pass; convention: cited; departure: cited, DRIFTED; source not on a page: page session first; not looked into: P8); budget adds the 14 sources' page sessions.",
+     "class": "within",
+     "why": "Restates D36/D37 above, including the corrected exit for a source no page holds; no new narrowing."
+    },
+    {
+     "id": "T31-order",
+     "summary": "T31 runs after T29, T36 and T38; the probe's measurement runs beside them, deciding nothing.",
+     "class": "within",
+     "why": "The GM: switch off the 16 repair steps after all of that. The rest of the block is unchanged from its CLEAR verdict."
     }
    ]
   }

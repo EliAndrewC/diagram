@@ -164,7 +164,7 @@ def unfold(course: Poly, limit_deg: float, hold: Sequence[Pt] = ()) -> Poly:
     vertex before it goes instead (the approach's last wobble), else the one after it. A fold between two held vertices
     has nothing to drop and stays; the brook's placer judges the result and takes its next candidate.
 
-    Research: no fold-back - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - a meander's bends run 2 to 3 widths in radius (pass P2a), which the per-vertex cap keeps; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); every vertex turning past `limit_deg` (BROOK_MAX_TURN_DEG, 100 deg) dropped, a held tap never
+    Research: no fold-back - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a meandering river turns on a radius of two to three times its own width, which the per-vertex cap keeps - a stream's loop back at a larger scale is refused, a departure the code keeps until feature 417 T34; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); every vertex turning past `limit_deg` (BROOK_MAX_TURN_DEG, 100 deg) dropped, a held tap never
     """
     out = list(course)
     held = {(float(x), float(y)) for x, y in hold}

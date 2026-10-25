@@ -266,7 +266,7 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
     `crosses_mid_run`, W11 `monotone_down` below the tap.
 
     Research:
-        no fold-back - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - a meander's bends run 2 to 3 widths in radius (pass P2a), which the per-vertex cap keeps; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
+        no fold-back - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a meandering river turns on a radius of two to three times its own width, which the per-vertex cap keeps - a stream's loop back at a larger scale is refused, a departure the code keeps until feature 417 T34; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
         no level run - CONVENTION: no run held level along the frame, in any view
         no ruled run - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths are rare (Leopold and Wolman, pass P2a); the rule's bound is looser (feature 417 T34); the straightest run within its bound (`ruled_excess`)
         no screen axis - CONVENTION: no segment along a screen axis, the tap run excepted

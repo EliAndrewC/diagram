@@ -350,7 +350,7 @@ class LandUseMixin:
 
         Research:
             tea rows - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: on the dry hem above the highest ditch
-            tea row spacing - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on a page - tea rows stood about 4 ft apart (Fortune 1843, pass P2b), against 8 (feature 417 T34); rows 8 px apart, a 2.4 px stroke
+            tea row spacing - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html: Fortune saw tea bushes planted in rows about four feet apart - the rows are drawn 8 ft apart, a departure the code keeps until feature 417 T34; rows 8 px apart, a 2.4 px stroke
             tea row direction - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); screen-horizontal whatever the canal or the slope"""
         n = 0
         for dp in net["dry_plots"]:
