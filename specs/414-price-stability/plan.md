@@ -150,7 +150,8 @@ The reply and the landing.
    20,000-byte question cap; `make record-owed` clean; E's sources tagged `comparative`; England's premodern series not written
    without the GM's approval (spec acceptance 3).
 3. **Where each comes from.** O: the issue (`request.md`, A and E); G: research/CLAUDE.md; G: the England exclusion is the
-   spec's acceptance 3 (the GM's request names the US and Japan only).
+   spec's acceptance 3 and research/CLAUDE.md's rule that a comparative source is not sought unless the GM asks for or approves
+   it; it goes to him through escalation-check.
 4. **Do they describe the world here?** Yes; Japan and China figures are kept in their own money, not converted.
 5. **The order.** Write (s1), check and apply (s4), round 3 closed by the arbiter (ask:414-round3, accept).
 6. **The exits.** SILENT with its search where a scale or good has no source (the modern scales below a month beyond the one
