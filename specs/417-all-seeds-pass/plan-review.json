@@ -110,8 +110,8 @@
    "declared": "spec-fidelity"
   },
   "### T38 Approach (checklist part A)": {
-   "sha256": "feae956ab8a0bfda1824749dc7f4d36fd686685829dd30d5472bfe9c48177c16",
-   "verdict": "BLOCKED",
+   "sha256": "7cd4364a8a0fa455cfbe021e56b345e75dca22adf1a33ecf89e725e8b930cd97",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
   }
@@ -2197,6 +2197,158 @@
      "summary": "make tunables INLINE=1 COUNT=1 lists none outside the skipped code; the claims gate green.",
      "class": "within",
      "why": "Measures exactly D37 (c)'s requirement."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T38 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T38-1 every number stated and labeled",
+     "summary": "Every number the map code holds is stated in its unit's claims and labeled by what it is, so a later pass knows which it may tweak and which were looked into.",
+     "class": "within",
+     "why": "The GM's 'audit of the code for these constants, the documentation of which constants are arbitrary so that future implementation passes know that they can tweak them'; D31 (ii), D37 (c)."
+    },
+    {
+     "id": "T38-4a NONE for salt, sentinel, seed multiplier",
+     "summary": "A jitter salt, a sentinel or a seed's multiplier is stated and labeled NONE (decides nothing about the place).",
+     "class": "within",
+     "why": "Not an exclusion: each is still stated in its unit's claims and labeled by what it is. The GM's category is a number set as a target about the map that a placement then struggles to meet; a hash salt or sentinel is no such target, and tweaking one to make a seed pass would be seed-fitting, not the knob the GM described. The block now keeps a search's step or count OFF NONE (item 4, last sentence), which was the reach the earlier text overstepped."
+    },
+    {
+     "id": "T38-4b CONVENTION for drawn sizes and strokes",
+     "summary": "A drawn size or stroke (a sheet-drawing convention) is labeled CONVENTION.",
+     "class": "within",
+     "why": "CONVENTION is one of D31 (a)'s three labels on make tunables, so these stay marked as ours and tweakable, as the GM asked. Read as sheet drawing (glyph, label, stroke), not a size in the world, which item 4 routes to the record check under 'a size'."
+    },
+    {
+     "id": "T38-4c record check first, then GUESS or UNRESEARCHED, then research passes",
+     "summary": "Every other number (distance, size, share, search step or count) is checked against the record: cited where a page gives it, GUESS naming the page where the page records it searched and silent, otherwise UNRESEARCHED; UNRESEARCHED ones go to research passes grouped by shared question (D31 (iii)) and are relabeled by what each pass finds.",
+     "class": "within",
+     "why": "This is the GM's instruction nearly word for word: 'we should first check our downloaded research to see whether ... they are things that we have looked into but not been able to find, or ... simply have not looked into ... then please actually perform research for any of those questions'. It replaces the earlier text's blanket GUESS, which labeled numbers searched-and-silent without checking."
+    },
+    {
+     "id": "T38-4d search step or count never NONE",
+     "summary": "A search's step or count stays on make tunables' list, never labeled NONE.",
+     "class": "within",
+     "why": "Keeps a placement knob marked tweakable, which is the purpose of the GM's request (avoid iterating hard against an arbitrary number)."
+    },
+    {
+     "id": "T38-5 order and skipping code T31 deletes",
+     "summary": "T38 runs after T36 and before T31; numbers in the code T31 deletes are skipped (none listed there, observed 2026-10-25).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Already in the accepted spec as D37 (c). Implied by the GM's own purpose clause: the documentation is 'so that future implementation passes know that they can tweak them', and code the feature deletes has no future pass, so the skip leaves no number a later pass will meet unlabeled; it does not gut the purpose. The order matches the GM's sequence (audit and research, then switch off the repair steps). It is also measured empty: no numbers fall in the skipped code."
+    },
+    {
+     "id": "T38-6a nested function's numbers in enclosing unit's claims",
+     "summary": "A nested function's numbers are stated in its enclosing unit's claims, which make tunables reads.",
+     "class": "within",
+     "why": "Where a number is stated, not whether; every number is still stated and labeled."
+    },
+    {
+     "id": "T38-6b split a file past 1,000 lines, never trim",
+     "summary": "A file the claims push past the line bar is split into a package, never trimmed.",
+     "class": "within",
+     "why": "Keeps every claim; nothing documented is dropped to fit."
+    },
+    {
+     "id": "T38-6c residue listed in R9",
+     "summary": "What the research passes cannot settle is listed by file in R9 with the count (D31 (ii)).",
+     "class": "within",
+     "why": "A report of what remains, not an exemption: item 9's done line still requires make tunables INLINE=1 to list no unstated number, every UNRESEARCHED number is still sent to a pass, and an unsettled one keeps a label and stays on make tunables. The GM's own words allow for unfinished work ('or at least use all of that time in order to move forward')."
+    },
+    {
+     "id": "T38-7 no number moves",
+     "summary": "The search smell: no value changes; the earlier 'keeps its label with its description reverted' clause is gone.",
+     "class": "within",
+     "why": "The task documents and labels; it does not tune. Dropping the earlier clause removes a carve-out."
+    },
+    {
+     "id": "T38-8/9 budget and done measure",
+     "summary": "1,289 distinct numbers in 506 functions (one-shot labeled); done when make tunables INLINE=1 COUNT=1 lists none outside the skipped code and the claims gate is green.",
+     "class": "within",
+     "why": "Measures the requested outcome, with nothing added to it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T38 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T38-1 every number stated and labeled",
+     "summary": "Every number the map code holds is stated in its unit's claims and labeled by what it is, so a later pass knows which it may tweak and which were looked into.",
+     "class": "within",
+     "why": "The GM's 'audit of the code for these constants, the documentation of which constants are arbitrary so that future implementation passes know that they can tweak them'; D31 (ii), D37 (c)."
+    },
+    {
+     "id": "T38-4a NONE for salt, sentinel, seed multiplier",
+     "summary": "A jitter salt, a sentinel or a seed's multiplier is stated and labeled NONE (decides nothing about the place).",
+     "class": "within",
+     "why": "Not an exclusion: each is still stated in its unit's claims and labeled by what it is. The GM's category is a number set as a target about the map that a placement then struggles to meet; a hash salt or sentinel is no such target, and tweaking one to make a seed pass would be seed-fitting, not the knob the GM described. The block now keeps a search's step or count OFF NONE (item 4, last sentence), which was the reach the earlier text overstepped."
+    },
+    {
+     "id": "T38-4b CONVENTION for drawn sizes and strokes",
+     "summary": "A drawn size or stroke (a sheet-drawing convention) is labeled CONVENTION.",
+     "class": "within",
+     "why": "CONVENTION is one of D31 (a)'s three labels on make tunables, so these stay marked as ours and tweakable, as the GM asked. Read as sheet drawing (glyph, label, stroke), not a size in the world, which item 4 routes to the record check under 'a size'."
+    },
+    {
+     "id": "T38-4c record check first, then GUESS or UNRESEARCHED, then research passes",
+     "summary": "Every other number (distance, size, share, search step or count) is checked against the record: cited where a page gives it, GUESS naming the page where the page records it searched and silent, otherwise UNRESEARCHED; UNRESEARCHED ones go to research passes grouped by shared question (D31 (iii)) and are relabeled by what each pass finds.",
+     "class": "within",
+     "why": "This is the GM's instruction nearly word for word: 'we should first check our downloaded research to see whether ... they are things that we have looked into but not been able to find, or ... simply have not looked into ... then please actually perform research for any of those questions'. It replaces the earlier text's blanket GUESS, which labeled numbers searched-and-silent without checking."
+    },
+    {
+     "id": "T38-4d search step or count never NONE",
+     "summary": "A search's step or count stays on make tunables' list, never labeled NONE.",
+     "class": "within",
+     "why": "Keeps a placement knob marked tweakable, which is the purpose of the GM's request (avoid iterating hard against an arbitrary number)."
+    },
+    {
+     "id": "T38-5 order and skipping code T31 deletes",
+     "summary": "T38 runs after T36 and before T31; numbers in the code T31 deletes are skipped (none listed there, observed 2026-10-25).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Already in the accepted spec as D37 (c). Implied by the GM's own purpose clause: the documentation is 'so that future implementation passes know that they can tweak them', and code the feature deletes has no future pass, so the skip leaves no number a later pass will meet unlabeled; it does not gut the purpose. The order matches the GM's sequence (audit and research, then switch off the repair steps). It is also measured empty: no numbers fall in the skipped code."
+    },
+    {
+     "id": "T38-6a nested function's numbers in enclosing unit's claims",
+     "summary": "A nested function's numbers are stated in its enclosing unit's claims, which make tunables reads.",
+     "class": "within",
+     "why": "Where a number is stated, not whether; every number is still stated and labeled."
+    },
+    {
+     "id": "T38-6b split a file past 1,000 lines, never trim",
+     "summary": "A file the claims push past the line bar is split into a package, never trimmed.",
+     "class": "within",
+     "why": "Keeps every claim; nothing documented is dropped to fit."
+    },
+    {
+     "id": "T38-6c residue listed in R9",
+     "summary": "What the research passes cannot settle is listed by file in R9 with the count (D31 (ii)).",
+     "class": "within",
+     "why": "A report of what remains, not an exemption: item 9's done line still requires make tunables INLINE=1 to list no unstated number, every UNRESEARCHED number is still sent to a pass, and an unsettled one keeps a label and stays on make tunables. The GM's own words allow for unfinished work ('or at least use all of that time in order to move forward')."
+    },
+    {
+     "id": "T38-7 no number moves",
+     "summary": "The search smell: no value changes; the earlier 'keeps its label with its description reverted' clause is gone.",
+     "class": "within",
+     "why": "The task documents and labels; it does not tune. Dropping the earlier clause removes a carve-out."
+    },
+    {
+     "id": "T38-8/9 budget and done measure",
+     "summary": "1,289 distinct numbers in 506 functions (one-shot labeled); done when make tunables INLINE=1 COUNT=1 lists none outside the skipped code and the claims gate is green.",
+     "class": "within",
+     "why": "Measures the requested outcome, with nothing added to it."
     }
    ]
   }
