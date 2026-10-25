@@ -123,3 +123,23 @@
 - **D4** As the section "D4 - the eras beyond rice, China" states. Rendering: none.
 <!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-25 -->
+## T07 - the implementation check and the reply (D7, D8)
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** gm-assistant can verify each answer and close #17.
+2. **The constraints.** `make impl-check F=420`; `escalation-check` on what bears on the canon.
+3. **Where each comes from.** G: root CLAUDE.md; O: `request.md`.
+4. **Do they describe the world here?** Yes.
+5. **The order.** After T01-T06 land.
+6. **The exits.** None.
+7. **The search smell.** None: research, not a fit.
+8. **The budget.** Minutes.
+9. **Done, measured.** `make impl-check F=420` reports nothing missing; the reply posted; `make feature-report F=420 WRITE=1`.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T07 Decisions
+
+- **D7-D8** As the sections "D7" and "D8" state. Rendering: none.
