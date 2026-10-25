@@ -280,6 +280,34 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
   lattice 14 ft off water where 0055 and 0014 put the path on the bank) are cited with their departures, as above. R9 counts each kind,
   and every claim whose description is reverted after a second wrong verdict - its research label kept (GUESS naming its pass, or the citation), never restored to UNRESEARCHED. Rendering: none.
 
+- **D37 (T36 split at its landing; the unstated numbers after T31)**: T36 lands the relabels of the 476 claims of passes P1-P7
+  (R9 counts them) and labels the 8 no pass looked into by what a further pass, P8, finds. The numbers no claim states (1,809
+  in 149 files, observed 2026-10-25; method: `make tunables INLINE=1 COUNT=1`) - D31 (ii)'s claims, which T29 left listed by
+  file - become a task of their own, T38, done after T31: each is already marked a knob by default and listed file, line and
+  function by `make tunables INLINE=1` on every run, so none goes unmarked meanwhile; T31's deletion removes settle code whose
+  numbers then need no claim; and about 1,800 new claims are many claims rounds, which would hold T31 - the GM's "then" - for
+  hours. What it costs: until T38 lands, those numbers are marked by the listing, not in their units' own claims. Priced and
+  not taken: the claims before T31 (holds the deletion); one claim per file saying every unstated number in it is ours (no
+  check can judge a claim that names no number). Chosen by the session, under D31 (ii)'s "what T29 cannot reach is listed by
+  file". Rendering: none.
+
+### T36 Approach (checklist part A)
+
+1. **The goal, in the world.** Every claim outside the 247's modules says truthfully what research found.
+2. **The constraints.** D32, D36, D37; the claim grammar; impl-drift's verdicts.
+3. **Where each comes from.** G: the GM 2026-10-25. R: passes P1-P7 (`evidence/t29/`) and P8.
+4. **Do they describe the world here?** Per claim, its pass's reading.
+5. **The order.** After T29, before T31.
+6. **The exits.** Silent or no source could speak: bare GUESS naming the pass. A page answers as a convention: cited. A page
+   answers and the code departs: cited with the departure, landing DRIFTED, its unit named in its T33-T35 row. A source no
+   page records yet: GUESS naming the source and, where it departs, its fixing task. Not looked into: pass P8, then as above.
+7. **The search smell.** No label is changed to make a round pass; a claim impl-drift rules wrong twice keeps its research
+   label with its description reverted.
+8. **The budget.** The passes (done), P8, two claims rounds.
+9. **Done, measured.** The landing's claims gate green; R9 with T36's counts.
+10. **Before moving a constant.** n/a - no value moves.
+11. **Before fitting things into room.** n/a.
+
 <!-- plan-archive: T28 to T28 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T29 to T29 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 ### T30 Approach (checklist part A)

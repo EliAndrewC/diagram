@@ -6825,12 +6825,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#the along-row span": {
-  "body": "d7c933c9e52bb209",
-  "claim": "the along-row span - UNRESEARCHED: 100 ft, the step along a row and the grids' spacing; the rows themselves stand `_rank_step` apart, 0038's house, yard and 39 ft of sun",
-  "code": "df2f3d24061605b9",
+  "body": "fd02100bafca1879",
+  "claim": "the along-row span - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 100 ft, the step along a row and the grids' spacing; the rows themselves stand `_rank_step` apart, 0038's house, yard and 39 ft of sun",
+  "code": "112e621d332805a7",
   "core": "444f866ae8da7cd0",
-  "date": "2026-10-18",
-  "note": "the 100 ft step along a row is a planning figure. 0037 says nothing about east-west spacing, so UNRESEARCHED is right.",
+  "date": "2026-10-25",
+  "note": "the bundle's pages give no spacing along a row, so a guess fits",
   "pages": {},
   "research": "",
   "rests": [],
@@ -8455,39 +8455,37 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#pond-bank trees after the wells": {
-  "body": "baf2e84b25807fb2",
-  "claim": "pond-bank trees after the wells - UNRESEARCHED: seated against the houses, ways and wells already standing, before the hinterland's scrub and copse fill round them (`stage_pond_bank`)",
-  "code": "f46e7ca0f1737c6d",
+  "body": "d39945486f7ad70e",
+  "claim": "pond-bank trees after the wells - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); seated against the houses, ways and wells already standing, before the hinterland's scrub and copse fill round them (`stage_pond_bank`)",
+  "code": "80882c8c659155a4",
   "core": "b084280cc46a20dc",
-  "date": "2026-10-18",
-  "note": "",
+  "date": "2026-10-25",
+  "note": "0061's drawing page answers the \"after\" half: a bank tree \"is left out where its crown would fall on a roof, a wellhead ... or its trunk on a lane\", so \"a crowded bank carries fewer trees\", which means the trees are seated against what stands; should cite research/questions/0061-reservoir-ponds-tameike.drawing.html for that and stay GUESS only for coming before the scrub and copse",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the ground's cover after every built thing": {
-  "body": "baf2e84b25807fb2",
-  "claim": "the ground's cover after every built thing - UNRESEARCHED: the hinterland, the woodland, the windbreak and the bamboo fill the ground the built things left, the bamboo over the scrub that kept out of its stands",
-  "code": "a8f5776243cdf1f8",
+  "body": "d39945486f7ad70e",
+  "claim": "the ground's cover after every built thing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); the hinterland, the woodland, the windbreak and the bamboo fill the ground the built things left, the bamboo over the scrub that kept out of its stands",
+  "code": "887e5f9d249459dc",
   "core": "b084280cc46a20dc",
-  "date": "2026-10-18",
-  "note": "no cited question rules on the order of the ground's cover",
+  "date": "2026-10-25",
+  "note": "no bundled page orders the cover against the built things",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#track before the wells": {
-  "body": "baf2e84b25807fb2",
-  "claim": "track before the wells - UNRESEARCHED: a well dug where the track already runs",
-  "code": "17e231f77e64bc78",
+  "body": "d39945486f7ad70e",
+  "claim": "track before the wells - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); a well dug where the track already runs",
+  "code": "047cf8101211ce51",
   "core": "b084280cc46a20dc",
-  "date": "2026-10-18",
-  "note": "0196 orders the lane-side well after the lanes, not after the track",
+  "date": "2026-10-25",
+  "note": "0196's drawing page sets this order: the lanes \"are drawn after its farmsteads ... so a lane-side well is seated once the lanes stand\"; should cite research/questions/0196-communal-wells-ido.drawing.html, not GUESS \"the record silent\"",
   "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#washing places after the crossings": {
   "body": "baf2e84b25807fb2",
@@ -8524,12 +8522,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#waterward fringe before the houses": {
-  "body": "baf2e84b25807fb2",
-  "claim": "waterward fringe before the houses - UNRESEARCHED: a polder's reed fringe outside the dike laid before the houses and the track, which treat it as wet ground",
-  "code": "435645c0eab5fab4",
+  "body": "d39945486f7ad70e",
+  "claim": "waterward fringe before the houses - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a polder's reed fringe outside the dike laid before the houses and the track, which treat it as wet ground",
+  "code": "ffbb0fc8e5865ecc",
   "core": "b084280cc46a20dc",
-  "date": "2026-10-18",
-  "note": "0019 records the fringe but not its order",
+  "date": "2026-10-25",
+  "note": "0246 keeps lanes off wet ground but gives no order for laying a polder's fringe",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -17100,13 +17098,19 @@
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec#default households": {
   "body": "774c3cb4b910ab5b",
-  "claim": "default households - UNRESEARCHED: 15 when none declared (REF_HOUSEHOLDS), Ikegami's count",
-  "code": "725d3ceaec3dbfa5",
+  "claim": "default households - the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital: a hamlet is 10 to 20 households (the GM's canon); 15 is its middle; 15 when none declared (REF_HOUSEHOLDS), Ikegami's count",
+  "code": "b9cf59700abab25b",
   "core": "82fd70bbd9f76907",
-  "date": "2026-10-18",
-  "note": "15 sits inside the attested 10-20 band",
-  "pages": {},
-  "research": "",
+  "date": "2026-10-25",
+  "note": "15 sits inside the setting's \"10 to 20 households\", a fixed point on a range the page attests",
+  "pages": {
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html": "44a3744ac1eacfe3"
+  },
+  "research": "f86a0d6160742f02",
+  "rests": [
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:ae7bccfe6787b993",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:d5c69abd5ed40829"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#hamlet household band": {
@@ -17742,15 +17746,14 @@
  },
  "l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#after the houses, ways and wells": {
   "body": "6a4e34e411421072",
-  "claim": "after the houses, ways and wells - UNRESEARCHED: seated against what stands, before the hinterland's scrub and copse",
-  "code": "da3d35ad2d550479",
+  "claim": "after the houses, ways and wells - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); seated against what stands, before the hinterland's scrub and copse",
+  "code": "98a0f48ccaff9228",
   "core": "94525cb266553268",
-  "date": "2026-10-18",
-  "note": "the staging order is unresearched; the page is silent",
+  "date": "2026-10-25",
+  "note": "0061's drawing page answers it: trees are left out where a crown would fall on a roof or wellhead or a trunk on a lane, so they are seated against what stands; should cite research/questions/0061-reservoir-ponds-tameike.drawing.html, with GUESS only for coming before the hinterland's scrub and copse",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#no two crowns overlap": {
   "body": "6a4e34e411421072",
@@ -18188,11 +18191,11 @@
  },
  "l7r/diagram/hamletgen/sink.py::SINK_FRINGE#reed fringe width": {
   "body": "d4803ee2a331e3a4",
-  "claim": "reed fringe width - UNRESEARCHED: a 44 ft ring",
-  "code": "a392fd02f2423d30",
+  "claim": "reed fringe width - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a 44 ft ring",
+  "code": "6883e516c9774ddf",
   "core": "8b791e6a9595beb5",
-  "date": "2026-10-18",
-  "note": "no width given",
+  "date": "2026-10-25",
+  "note": "0061 gives no fringe width, only \"even where the fringe is narrow\"",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -18471,14 +18474,13 @@
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#no building on the water": {
   "body": "84d0dc57d1df3109",
-  "claim": "no building on the water - UNRESEARCHED: 10 ft round the pond's box",
-  "code": "6c81f571e32af072",
+  "claim": "no building on the water - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 10 ft round the pond's box",
+  "code": "36067eef7ce094cf",
   "core": "82c5696cf249ea91",
-  "date": "2026-10-18",
-  "note": "",
+  "date": "2026-10-25",
+  "note": "no bundled page gives a no-build margin round the water itself; the bank's dry ring is a separate rule",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#off-map route search": {
@@ -18562,11 +18564,11 @@
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#reed fringe width": {
   "body": "84d0dc57d1df3109",
-  "claim": "reed fringe width - UNRESEARCHED: a 44 ft ring",
-  "code": "1ebd2003b3953838",
+  "claim": "reed fringe width - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a 44 ft ring",
+  "code": "f962ca1c587ab69f",
   "core": "82c5696cf249ea91",
-  "date": "2026-10-18",
-  "note": "",
+  "date": "2026-10-25",
+  "note": "0061 gives reeds at the shore but no width",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -42843,15 +42845,22 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#flower bed against the town wall": {
-  "code": "6b0c1d2dce235436",
+  "body": "34d0af49622166ed",
+  "claim": "flower bed against the town wall - road-bridges-over-rivers-and-canals-hashi: a road ran along the wall's inner foot - a flower bed is allowed against it, a departure the code keeps until feature 417 T35; a bed laid flush inside the rampart",
+  "code": "98e1210e3cf0b5b2",
   "core": "42c4daf6c4994c8d",
-  "date": "2026-10-08",
-  "note": "no question in the bundle answers it",
-  "pages": {},
-  "research": "",
-  "rests": [],
+  "date": "2026-10-25",
+  "note": "0087 is about bridges and nowhere says \"a road ran along the wall's inner foot\" (it only has Suzhou's roads beside its canals); should be UNRESEARCHED, or DEVIATION on a wall page that records the flush bed",
+  "pages": {
+   "0087-road-bridges-over-rivers-and-canals-hashi.html": "6214900c485ce68f"
+  },
+  "research": "7130d211185f9e43",
+  "rests": [
+   "0087-road-bridges-over-rivers-and-canals-hashi.html:82fa7a829f178a19",
+   "0087-road-bridges-over-rivers-and-canals-hashi.html:a5b10b37237b65dc"
+  ],
   "section": "42c4daf6c4994c8d",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#merchant estate court": {
   "code": "7e8b68c725868142",
@@ -42870,15 +42879,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#moat against the rampart": {
-  "code": "c34500c77fe8c2e4",
+  "body": "34d0af49622166ed",
+  "claim": "moat against the rampart - city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe: the moat stood about thirty paces out (Wujing Zongyao), 7 to 10 m at Qufu - the moat is allowed against the rampart's foot, a departure the code keeps until feature 417 T35; wall x moat permitted, the moat lying against the rampart's foot",
+  "code": "4c35fec8a37371da",
   "core": "42c4daf6c4994c8d",
-  "date": "2026-10-08",
-  "note": "the city moat's offset from the wall is not answered in the bundle (0139 §195 is the castle's moat)",
-  "pages": {},
-  "research": "",
-  "rests": [],
+  "date": "2026-10-25",
+  "note": "the claim admits a departure but is labeled as following 0151; the code lets the moat touch the rampart where 0151 puts it \"about thirty paces from the main wall\", 7-10 m out at Qufu and 3.5 m at Guide; should be DEVIATION on 0151's drawing page, recorded there, or DRIFTED if that page does not record it",
+  "pages": {
+   "0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.html": "1cd34fdb687256ed"
+  },
+  "research": "48b066d551b5f378",
+  "rests": [
+   "0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.html:c146f2049387abf9"
+  ],
   "section": "42c4daf6c4994c8d",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#one object under two keys": {
   "code": "c2a3cbb0799d8b93",
@@ -43025,13 +43040,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_PERMISSIVE#house or field on cover": {
-  "code": "6bde88bd9aace460",
+  "body": "5c8c1d39dcadfe2b",
+  "claim": "house or field on cover - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); built on, the cover stopping there",
+  "code": "98e292a0fef56520",
   "core": "2511b669af1f367c",
-  "date": "2026-10-07",
-  "note": "no bundle question answers whether a house or field may stand on commons, pasture or marsh",
+  "date": "2026-10-25",
+  "note": "no bundled page says whether houses or fields stand on scrub or pasture",
   "pages": {},
   "research": "",
-  "rests": [],
   "section": "2511b669af1f367c",
   "verdict": "IN-STEP"
  },
@@ -48923,11 +48939,11 @@
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._rounded_pond#corners eased": {
   "body": "3f8e86692bad3142",
-  "claim": "corners eased - UNRESEARCHED: a fillet of the caller's reach, jittered 0.8 to 1.15, at every corner",
-  "code": "a84f65c7ab05983e",
+  "claim": "corners eased - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a fillet of the caller's reach, jittered 0.8 to 1.15, at every corner",
+  "code": "d12e6d94072d15b1",
   "core": "edb9c619ca0295e5",
-  "date": "2026-10-18",
-  "note": "nothing on the page covers corner fillets; UNRESEARCHED is right",
+  "date": "2026-10-25",
+  "note": "0018 says \"ponds of uneven shape\" and gives no corner form or fillet",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -49582,14 +49598,13 @@
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#tea and fruit off the canal": {
   "body": "577fe014560f0802",
-  "claim": "tea and fruit off the canal - UNRESEARCHED: tea hedges kept 3.0 px and fruit trees 5.5 px off a canal centerline",
-  "code": "a6e2e34e245e132f",
+  "claim": "tea and fruit off the canal - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); tea hedges kept 3.0 px and fruit trees 5.5 px off a canal centerline",
+  "code": "6c5ae7f65b1b0153",
   "core": "5f0c1e578f694bb4",
-  "date": "2026-10-18",
-  "note": "the canal rule on the page covers mulberry bushes only; nothing gives a canal clearance for tea or fruit",
+  "date": "2026-10-25",
+  "note": "0018's canal rule covers only the mulberry bush's center, and 0026 gives no canal clearance for tea or fruit",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#tea hedges": {
