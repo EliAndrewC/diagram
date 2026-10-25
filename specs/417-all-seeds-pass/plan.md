@@ -258,3 +258,90 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
   seed-by-seed work or room work is recorded with its failing seeds and set down - and that claim, for each step it is made
   of, is written as an exception and ruled (`make arbiter-ask`), never assumed. Workers at 3, not 5: the containers stood at 9.1 of 10 GB (memwatch, 2026-10-25).
   Rendering: none.
+
+### Decisions (the work's own shape, 2026-10-25T11:05Z)
+
+- **D36 (T29 split at its landing)**: T29 lands the 247 claims of the modules this feature changes (passes A1-D and E, R9), the
+  numbers no claim states inside those modules listed by `make tunables INLINE=1 UNDER=...`, and T16's two angle claims; the
+  other 479 `UNRESEARCHED` claims (observed 2026-10-25; method: `grep` of ` - UNRESEARCHED` over `l7r`, `pool`, `docs`
+  after the first relabels - 580, less the 101 left in the 247's modules) and the inline numbers of the other modules are a
+  new task, T36, done the same way before T31's deletion. A started task holds every landing until it is ticked (feature 405
+  T32), so the split is what lets the 247's relabels and T28's claims land now. A claim whose page answers it but whose code
+  departs from the page is CITED, and lands with the DRIFTED verdict impl-drift gives it - the record's mark that the code has
+  drifted from the research and needs fixing (the GM 2026-10-25) - each filed in T32-T35 with its page and pass; the code is
+  not changed. The claims gate refuses an introduced DRIFTED claim, so landing them is put to the round arbiter
+  (`make arbiter-ask`) as the exception it is, never by keeping a label that hides the departure. Pass E's 30 claims (observed 2026-10-25; method: a keyword sort of the 247 before the
+  passes, listed in `evidence/t29/pass-E-algorithmic.txt`) are split by what each decides. The MECHANICS (a search order, a
+  tie-break, which node, vertex, side or lane, a trim's step, a salt, a retry's breadth - 19) are bare `GUESS`, naming E as
+  the passes' no-source claims name their pass, so `make tunables` lists them. The ones that SHAPE how the hamlet and its
+  lanes look (the ranks' jitter, lean, growth and gap fill; a corner's easing; a bend round what stands; the bamboo's slide -
+  8) go to a research pass, E2, and are labeled by what it finds; a claim whose text records a page already searched is
+  `GUESS` naming that page. The 3 that a page answers (two read "beside" at 30 ft where 0081 measures 20 degrees, one keeps a
+  lattice 14 ft off water where 0055 and 0014 put the path on the bank) are cited with their departures, as above. R9 counts each kind,
+  and every claim whose description is reverted after a second wrong verdict - its research label kept (GUESS naming its pass, or the citation), never restored to UNRESEARCHED. Rendering: none.
+
+### T28 Approach (checklist part A)
+
+1. **The goal, in the world.** A session fixing a seed sees, for every number it is about to chase, whether the number is the
+   record's or ours.
+2. **The constraints.** D31: no new class; `make tunables` derived from the claims; the checklist's A3; the 47 map-code and 45
+   `pack_audit` constants given claims.
+3. **Where each comes from.** G: the GM 2026-10-25 (D29). O: the tool's shape.
+4. **Do they describe the world here?** n/a - tooling and labels.
+5. **The order.** Before T29's relabels land (the tool reads them), before T31.
+6. **The exits.** A drafted claim impl-drift rules wrong is fixed and re-checked once; a second wrong is reverted to no claim
+   and listed.
+7. **The search smell.** n/a.
+8. **The budget.** The tool and its tests land in one tooling landing; the claims, one claims round.
+9. **Done, measured.** `make tunables` and `INLINE=1` land and are tested (red without); every one of the 92 constants carries
+   a claim impl-drift found IN-STEP; A3 and the doctrine name the tool.
+10. **Before moving a constant.** n/a - no value moves.
+11. **Before fitting things into room.** n/a.
+
+### T29 Approach (checklist part A)
+
+1. **The goal, in the world.** A claim labeled UNRESEARCHED means no one has looked; one a pass found silent says GUESS and
+   which pass.
+2. **The constraints.** D32, D36; the claim grammar; impl-drift's verdicts.
+3. **Where each comes from.** G: the GM 2026-10-25. R: the passes' replies (`evidence/t29/`).
+4. **Do they describe the world here?** Per claim, the pass's reading.
+5. **The order.** The 247 first (this landing), T36 after, both before T31's deletion.
+6. **The exits.** Silent: GUESS. Answered as a convention: cited. Answered with a departure, or contradicted: cited, landing
+   DRIFTED by the round arbiter's ruling, the gap in T32-T35.
+7. **The search smell.** No label is changed to make a round pass; a claim impl-drift rules wrong twice keeps its research label with its description reverted, listed in R9.
+8. **The budget.** The passes (done), three claims rounds.
+9. **Done, measured.** The landing's claims gate green; R9 with the counts.
+10. **Before moving a constant.** n/a - no value moves.
+11. **Before fitting things into room.** n/a.
+
+### T30 Approach (checklist part A)
+
+1. **The goal, in the world.** A question whether a finding applies to a form, or a choice the record is silent on, never
+   reaches the GM.
+2. **The constraints.** D34.
+3. **Where each comes from.** G: the GM 2026-10-25.
+4. **Do they describe the world here?** n/a.
+5. **The order.** Before this turn's final message.
+6. **The exits.** n/a.
+7. **The search smell.** n/a.
+8. **The budget.** Done (landed as tooling, main `fef7b611f`); the check run on the final message.
+9. **Done, measured.** escalation-check's tests 4-5 and the CLAUDE.md line on main; escalation-check run on this turn's
+   final message, its verdict applied.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T31 Approach (checklist part A)
+
+1. **The goal, in the world.** The settle repairs nothing a placer already gets right: every step that changes no verdict is
+   gone; every needed one has its rule moved into the placer that lays what it mends, or is ruled an exception.
+2. **The constraints.** D35, D22, D23, D11; the fixed and pinned seeds, the pool maps' gate.
+3. **Where each comes from.** G: the GM 2026-10-25 ("switch off the 16 repair steps"). O: the probe's method.
+4. **Do they describe the world here?** Measured per step (R8).
+5. **The order.** After T29 and T36, as the GM ordered; the probe's measurement runs beside them, deciding nothing.
+6. **The exits.** Needless (no fixed or pinned verdict moved, the pool's gate green): deleted together. Needed: a conversion
+   decided before code, or an exception ruled by the arbiter.
+7. **The search smell.** One probe a step, no tuning.
+8. **The budget.** 16 probes at about 13 min (3 workers, observed 2026-10-25); the deletion a T26-sized landing.
+9. **Done, measured.** R8 complete; the needless deleted and landed green; each needed one converted or ruled.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.

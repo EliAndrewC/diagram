@@ -38,178 +38,10 @@
    "declared": "spec-fidelity"
   },
   "## Order": {
-   "sha256": "00b3e81f3b9ecce6cb1b22ea2b93c04e5b85f2717d21cddc8092289bb144c4a1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-24",
-   "declared": "spec-fidelity"
-  },
-  "## T01 - the baseline and the tally (FR-001)": {
-   "sha256": "15edceb61275c0c78c11707829e0c4a2b17adec0a479c23ace9c754a0ec0e2fc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-24",
-   "declared": "spec-fidelity"
-  },
-  "### T01 Approach (checklist part A)": {
-   "sha256": "8814b1d101d5ecc242b3720d71d528c353df35b662a74c03a6f87e84d8a09d0c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-24",
-   "declared": "spec-fidelity"
-  },
-  "### T01 Decisions": {
-   "sha256": "fce0d026a5ce38013df8a2d93a8c31f438317b19a3d4755237c907d74efec2a8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-24",
-   "declared": "spec-fidelity"
-  },
-  "## T02 - the hold made (FR-010)": {
-   "sha256": "ac922e1012bcc5ef49dc93b08a083270e0245356075c453f9bc13473a39bb0d8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-24",
-   "declared": "spec-fidelity"
-  },
-  "### T02 Approach (checklist part A)": {
-   "sha256": "acdc7552b69469fee9afbcf4d4d4a3739a82cef81a8b9024edf68c9f2a90660a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-24",
-   "declared": "spec-fidelity"
-  },
-  "### T02 Decisions": {
-   "sha256": "ec2e10e133cf90522ddb94d510f62d341d7746fe5f0bc63d5636ce2fb6a3dfc6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-24",
-   "declared": "spec-fidelity"
-  },
-  "## T03 - the inventory (FR-002, FR-003)": {
-   "sha256": "de89985c302b0afdee9e374e995a96725d5fa88a1c470c4ab86d4de20a9d87cc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-24",
-   "declared": "spec-fidelity"
-  },
-  "### T03 Approach (checklist part A)": {
-   "sha256": "beb6da4f47dff3a28cf72382756faa0ce90b9e829afa3bd8074ff85af69eeed4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-24",
-   "declared": "spec-fidelity"
-  },
-  "### T03 Decisions": {
-   "sha256": "eb1c98ed71b9724d789459d1169d9b53b7d91d4cd6ca6bd896b022f491864a39",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-24",
-   "declared": "spec-fidelity"
-  },
-  "## T04 - one stream-crossing rule (R2 G7; FR-006)": {
-   "sha256": "f53c976158b1f160f8c78ca3283a5b92342606279e5a3e600564037aceac8cf7",
+   "sha256": "080fa132871323ccd4105b7b868d8479716e8a79c335db4c1a71533b284013bc",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T04 Approach (checklist part A)": {
-   "sha256": "8adaebaf47bb5c6cdc2b3c5df7c89a63b346744dda07e4ec97848c619908bd1d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T04 Decisions": {
-   "sha256": "dedee7a2a17c70f2aee0b19e08a3f27713f5289c2a5402bde6ed7516737c41b7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "## T05 - one lane rule, one constant, where the copies agree (R2 G1, first part; FR-006)": {
-   "sha256": "64c6b3f8c5a5fb54414569ce66c138af78ee4d3e8e2ba4eb115f99641df109ea",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T05 Approach (checklist part A)": {
-   "sha256": "3968b01c3652fe55eca44a3777c7d33a3e20c41d3009d28b69796c38d0f526df",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T05 Decisions": {
-   "sha256": "4325f57e6853f011bfcbebe385b9178a13b2f19224fcb52a0b809b0edecec8ba",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "## T17 - a fixture in a grove band, one predicate (R2 G6, first part; FR-006)": {
-   "sha256": "46483afe27682e6e2c667ea17ac14ce87d1cbccad18cd7a7c07443d98a667ad7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T17 Approach (checklist part A)": {
-   "sha256": "58a994f633b2d5308c22e6edddd56e53f982c139fe633874815e4c5c11ec7c12",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T17 Decisions": {
-   "sha256": "c5665f9ccbcb3bc325ac815ee2a483a01b35d3a8e8344e9797c4dbe06bfb7f1d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "## T18 - the overlap matrix's dead mirrors (R2 G11, first part; FR-006)": {
-   "sha256": "31a33828e848404b07779fa9b15767f404eb7a09307d965b87decec5d08ec46b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T18 Approach (checklist part A)": {
-   "sha256": "90164aba0c83be28bbdcb98efd5f776c3b23c7a288ea663ba7a9186a3a23b9ac",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T18 Decisions": {
-   "sha256": "a1d740a3727646efabff42703883034bbca9b2f20afe413d6487b8696ba58302",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "## T23 - three claims labeled as their pages answer them (T05's claims round, MISLABELED; arbiter ask 417-T05-claims)": {
-   "sha256": "1be53404cad41dfffd3cb5a2a8c0dedf577445a355ad9f7f9f6041f7d301f809",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T23 Approach (checklist part A)": {
-   "sha256": "750dbf6404fee42560714c958147784ecec17b6798cd8ff327134b9eecfd0eb6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T23 Decisions": {
-   "sha256": "22111c2088556a3fb14bd7b2b6bc5183fc9ea835f5cf14158816fe2ecc97b144",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "## T25 - the bund reach and the stub's tail, one rule each (T05's claims round, outside the change; FR-006)": {
-   "sha256": "168f04b35a82f5f52452c2ab0a634023ae67089762d86a460974a3be2cfebdf6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T25 Approach (checklist part A)": {
-   "sha256": "8f5c7f74d1d45aec6c4b2c16f9d4eeaf57ebec6d2c5174f09c20a91f05ea1087",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T25 Decisions": {
-   "sha256": "5f7ac24ef82ddcaf8efec4f6b10981ba97b9ca3ab0509dcd90661cc8b7eaaaa9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T23 Approach (re-answered 2026-10-25T06:18Z)": {
-   "sha256": "3818a2ed411f872446a993e60ee6f361a55b58ae9608fa7b153589bb771bde17",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## T26 - the web's post-lay passes the placers already make needless, measured off and deleted (R2 G2, first part; FR-004, FR-006)": {
    "sha256": "ce523d8935a28d8260ea306d299d3b02aba8093fb9f5729a5d354177f5bafff8",
@@ -224,58 +56,10 @@
    "declared": "spec-fidelity"
   },
   "### T26 Decisions": {
-   "sha256": "76d1b7bbb55e6e611bc1e89dbe72bfaead02618027944d85009bbfa10bf69a0c",
+   "sha256": "a15d9770aefe0faa64f9edb62613700ae944382c388f0df24f5bd7690c8b60db",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "## T19 - the track out never stops in open country (T05's claims round, DRIFTED; FR-004)": {
-   "sha256": "344a1d4983ef9c7caaa1dc8e39dd1e762d1f5ea66f26d27024708626def3f2b9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T19 Approach (checklist part A)": {
-   "sha256": "0dc4dcbbe04d8905435dbeaff09df8d40432820ab901119985293b4ce09f342d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T19 Decisions": {
-   "sha256": "3fa6286a572b9539cbf976d2512d4b7846fcd97f3f234125caef8d58b9e51a0b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "## T24 - withdrawn (moot since T26)": {
-   "sha256": "95c3990d97f191abb3c17c0b1250c6e441b3bdf6e633da5d4b6bdb2b1f3c15b7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T24 Approach (checklist part A)": {
-   "sha256": "dad23604377abd91bd954d5f8468265e2fa8f00363ea396c3a6f00b0f71c8247",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T19 Approach (re-answered 2026-10-25T11:58Z)": {
-   "sha256": "18d201ba02359f503571a05e710ed78c89ce0c674b9b75593de375f25d25545a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T19 Approach (re-answered 2026-10-25T12:23Z)": {
-   "sha256": "04f5225a56c6706ecb5554391ee422df8c6a7d0115d79e4ee908ec84981fad51",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T19 part B (2026-10-25T12:26Z)": {
-   "sha256": "bcc49829fcbee020c43a3f53965ab06a0b2557cb1d2aa208034704b320b8dfe1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## The GM's 2026-10-25 afternoon message - T16, T28-T31 (the arbitrary numbers marked, the settle probe)": {
    "sha256": "b16f5a39c36db9c479cef16c48cc7f5640b330148cbf269f7eec9dfc68140634",
@@ -284,10 +68,40 @@
    "declared": "spec-fidelity"
   },
   "### Decisions": {
-   "sha256": "295589f2e49b1fc384866532d636e8c11e1004a3b3066c77ffd41690b7111df8",
+   "sha256": "470d32d1cd8bebf4cfe8a20b85332efcdeee459dcc84f8b2506aa804f7741398",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
+  },
+  "### Decisions (the work's own shape, 2026-10-25T11:05Z)": {
+   "sha256": "ef221f2a53ef4dc6baf0fb1ee0fc0303e8da9ff93d0a47bdf75bdb9e28e2e304",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "round-arbiter"
+  },
+  "### T28 Approach (checklist part A)": {
+   "sha256": "36c710cd17ebe34222ca1c0697f149d6093b32914bc83c8c607026b83ce9e9f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "round-arbiter"
+  },
+  "### T29 Approach (checklist part A)": {
+   "sha256": "3a2c721a4f540f112ec0adf04450f893a99f2099893e43c99878a9ea9144c7af",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "round-arbiter"
+  },
+  "### T30 Approach (checklist part A)": {
+   "sha256": "a6d82c6a45ba42265a1c0c5b6f07a2bceccaa0c3f0b8e1bab203dd15eded5402",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "round-arbiter"
+  },
+  "### T31 Approach (checklist part A)": {
+   "sha256": "362f64fde2b4cb61a9f1091cb0c1cc9a45d38590574ac9888cbdb544fc9b8b52",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -1953,6 +1767,142 @@
      "summary": "Each of the 16 settle steps is probed off alone in a detached worktree, then the needless ones are deleted together. Each needed step gets D11's conversion. A conversion that cannot land green is set down only as an exception ruled by make arbiter-ask. Workers at 3 because of memory.",
      "class": "within",
      "why": "The GM: 'I don't care whether you do it one at a time or all at once ... pick whichever one you believe will be the most efficient way forward and allow you to get rid of all of them'. Any set-down is ruled as an exception, not assumed. Workers at 3 is an operating detail, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### Decisions (the work's own shape, 2026-10-25T11:05Z)",
+    "### T28 Approach (checklist part A)",
+    "### T29 Approach (checklist part A)",
+    "### T30 Approach (checklist part A)",
+    "### T31 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D36 (a) T29 split into T29 (the 247) and T36 (the rest)",
+     "summary": "T29 lands the 247 claims of this feature's modules, their inline numbers and T16's two angle claims now; the remaining claims and other modules' inline numbers become T36, done the same way before T31's deletion.",
+     "class": "within",
+     "why": "Moving work between task ids keeps D32's order and the GM's: all of the research and labels come before the repair steps are switched off ('and then after all of that, you should switch off the 16 repair steps'), and T31 item 5 holds T31 until T29 and T36 are both done. No claim leaves scope. Aside, not a ruling: D36 says 'the other 476' but D32 says 726 total, 247 + 479. T36 has to cover every UNRESEARCHED claim outside the 247, whatever the current count is, so reconcile 476 with 479 against a fresh grep before T36 is scoped."
+    },
+    {
+     "id": "D36 (b) / T29 item 6 'answered with a departure, or contradicted'",
+     "summary": "A claim whose page answers it but whose code departs from the page (or which the page contradicts) keeps main's text (UNRESEARCHED), and the departure goes to T32-T35 only, so no DRIFTED claim lands.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM's request is that labels say truthfully what research has found: UNRESEARCHED split from searched-and-silent, and the record already has, in the GM's words, 'a way to mark that we have realized that [the code drifted from] the research and needs to be fixed at some point'. The GM asked that these numbers be marked so that checklist-based fixing knows what it may tune. A claim whose research is done and whose page states a value, left labeled UNRESEARCHED, is false on both counts. It contradicts T29's own goal (item 1: 'UNRESEARCHED means no one has looked'). make tunables (D31 a) lists it as a free knob even though the record states its value. And T36 or a later pass would research it again. The only reason given is that citing it 'would land a DRIFTED claim', and a hard landing is a reason of implementation cost, not impossibility. Marking drift is not fixing it, so FR-010 and D11's stop line are not touched. Nothing in the GM's words implies leaving these claims at main's text, and the GM named drift as a state the record carries. The phrase 'an arbitrary relabel is never bought with a hidden departure' argues against a false citation, which nobody proposed; it does not argue for keeping a false UNRESEARCHED. What it should say instead: such a claim lands with the claim grammar's mark for a known departure from the record (the GM's third category), naming the page, the pass and its T32-T35 row, and the engine is not changed. If the grammar has no mark that can land for a known drift, that is the question to put to the arbiter (make arbiter-ask) as an exception. The plan does not get to settle it by leaving the label at UNRESEARCHED. Either way the number of such claims goes into R9."
+    },
+    {
+     "id": "T29 item 7 (a claim ruled wrong twice goes back to main's text)",
+     "summary": "Budget exit: a drafted claim impl-drift rules wrong twice is reverted, not iterated.",
+     "class": "within",
+     "why": "It is a bounded stop against iterating, consistent with D11's 'never iterated on', and it is not a policy about what research found. Make it list each reverted claim in R9, as T28 item 6 does ('reverted to no claim and listed'), so that a claim which was researched and then reverted is not silently presented as unlooked."
+    },
+    {
+     "id": "T28 approach",
+     "summary": "make tunables / INLINE=1 landed and tested; the 47 map-code and 45 pack_audit constants given claims checked by impl-drift; land before T29's relabels and before T31; a claim wrong twice reverted and listed.",
+     "class": "within",
+     "why": "This carries D31 (a), (b) and (d)(i), which already settle it, and answers the GM's 'audit of the code to find all of the places where we have this kind of number' and 'should become part of our checklist-based approach'. The order and exit add no scope and narrow none."
+    },
+    {
+     "id": "T30 approach",
+     "summary": "D34's rules landed as tooling on main; escalation-check run on this turn's final message and its verdict applied.",
+     "class": "within",
+     "why": "This is D34 as accepted, and it answers the GM's 'our checklist-based processes ... need tweaking'."
+    },
+    {
+     "id": "T31 approach",
+     "summary": "Probe each of the 16 steps (D35/D22), delete the needless together (D23), and give each needed step a conversion decided before its code or an exception ruled by the arbiter; after T29 and T36; 3 workers.",
+     "class": "within",
+     "why": "The GM: 'switch off the 16 repair steps ... whichever one you believe will be the most efficient ... get rid of all of them. As per the requirements of this feature.' D35 already settles the method, and the arbiter ruling a needed step as an exception is D35's own rule, not a new carve-out. The order follows the GM's 'after all of that'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### Decisions (the work's own shape, 2026-10-25T11:05Z)",
+    "### T28 Approach (checklist part A)",
+    "### T29 Approach (checklist part A)",
+    "### T30 Approach (checklist part A)",
+    "### T31 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D36(a) split",
+     "summary": "T29 lands the 247 claims of the changed modules (passes A1-D, E), their inline numbers and T16's two angle claims; the other 479 UNRESEARCHED claims and the other modules' inline numbers become T36, done the same way before T31's deletion.",
+     "class": "within",
+     "why": "Task bookkeeping that keeps the GM's order ('and then after all of that, you should switch off the 16 repair steps') and D31(ii)/D32's '247 first, then the rest, before T31'. The figures agree (726-247 = 479 = 580-101) and carry date and method."
+    },
+    {
+     "id": "D36(b) departing claims",
+     "summary": "A claim whose page answers it but whose code departs is CITED and lands DRIFTED, the gap filed in T32-T35 with page and pass, code unchanged; the gate's refusal of an introduced DRIFTED claim is put to the round arbiter as an exception, never hidden behind a kept label.",
+     "class": "within",
+     "why": "The GM named this mark himself: 'a way to mark that we have realized that [we have drifted from] the research and needs to be fixed at some point'. Not changing code keeps D11/D29's stop line on seed fixing. The gate exception goes to the arbiter, which is the right place for it. This fixes last round's NOT LEGITIMATE (keeping main's text hid the departure)."
+    },
+    {
+     "id": "D36(c)-i pass E, mechanics",
+     "summary": "Pass E's claims that are pure mechanics (search order, tie-breaks, which node/vertex/side/lane, the trim's 4 ft step, STY_SALT's roll, retry and rescue breadth, the rank rounds' order, the gather's order of forms, back_fouled's sample depth, settle_ends' re-aim, squaring's kept side, thread's exit side) are judged by the session from their code and relabeled as no-source, without a research pass.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows D32's 'grouped into research passes' and the GM's 'actually perform research for any of those questions'. But for an order of search or a tie-break no research question exists, so the rule cannot apply. D32 already gives these NONE/CONVENTION 'by what it is', and the GM's words cover the silent case: 'we can either make it a tunable knob, or we can just do whatever is algorithmically easier'."
+    },
+    {
+     "id": "D36(c)-ii pass E, place-shaping and already-searched",
+     "summary": "The same session-judged no-source relabel applied to the pass-E claims that set how the hamlet and its lanes look, or whose own text records a page already searched: rank jitter and the cloud's lean toward the field at 0.75, the rank grown along the field, front-row gaps over 1.45 pitches filled at the row's depth, rank depth jitter's size, _EASE_FT (a corner eased up to 24 ft), _BEND_OFFSETS_FT and bent_round's 10-40 ft (text: '0081 has the walker go round what stands, not how far'), STRIP_SEATS' slide (text: 'the page gives no slide').",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "One justification ('an algorithm's order, search breadth or tolerance', from a keyword sort) is stretched over two unlike classes. These claims decide what the place looks like, which D32's own test ('decides nothing about the place') leaves out of no-source. The GM's T16 words settle that visual geometry gets a research pass, even a general non-premodern one ('We basically want something that doesn't look wrong, visually'), not a session's reading of code. The ones whose text records a page consulted are searched-and-silent, the GM's second category (GUESS naming the pass that searched), not no-source. The plan also never says which label 'as the passes' no-source claims were' produces; if it is NONE, these leave make tunables (D31(a) lists GUESS, UNRESEARCHED, CONVENTION), which defeats 'so that future implementation passes know that they can tweak them'. Fix: send the place-shaping ones to a research pass (archive, then web, per D32) or label the already-searched ones GUESS naming their page, and name the label E's mechanics receive."
+    },
+    {
+     "id": "T28 exit 6",
+     "summary": "A drafted claim for one of the 92 unclaimed constants that impl-drift rules wrong twice is reverted to no claim and listed.",
+     "class": "within",
+     "why": "Nothing false is written: a number no claim states is ours by default and listed by make tunables INLINE=1 (D31(ii)), so the GM's marking purpose survives. The budget wording changed since last round; that is not a fidelity matter."
+    },
+    {
+     "id": "T29 exit 7 / D36 last sentence",
+     "summary": "A 247 claim that impl-drift rules wrong twice goes back to main's text, counted and listed in R9.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Unlike T28's exit, main's text for these claims is an UNRESEARCHED label. After a pass has searched the claim, the reverted label says 'not yet searched', which is the very label the GM asked to split ('there is a difference between something that we have not done a research pass on versus something that we have done a research pass on and have found no conclusive evidence about'). It also goes against T29's own 'No label is changed to make a round pass'. A wrong verdict is about whether the description matches the code, not about what the pass found, so keeping the pass's label (GUESS naming the pass, or the citation) on main's description, or carrying the claim into T36 before T31, is possible. Listing it in R9 does not make the label true. Fix: revert the description only, never the research label."
+    },
+    {
+     "id": "T30",
+     "summary": "Unchanged since last judged: D34's two CUT rules in escalation-check, the CLAUDE.md line (landed fef7b611f), escalation-check run on this turn's final message.",
+     "class": "within",
+     "why": "Carries the GM's 'our checklist-based processes discerning what things get raised to my attention ... need tweaking' as D34 states it; nothing narrowed."
+    },
+    {
+     "id": "T31",
+     "summary": "Unchanged since last judged: each of the 16 settle steps probed alone (D35/D22), the needless ones deleted together (D23), the needed ones converted before code or ruled by the arbiter, after T29 and T36.",
+     "class": "within",
+     "why": "The GM: 'switch off the 16 repair steps ... I don't care whether you do it one at a time or all at once', and only 'after all of that'. The order holds and the arbiter path is D35's. Nothing narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## Order",
+    "### Decisions",
+    "### Decisions (the work's own shape, 2026-10-25T11:05Z)",
+    "### T26 Decisions",
+    "### T28 Approach (checklist part A)",
+    "### T29 Approach (checklist part A)",
+    "### T30 Approach (checklist part A)",
+    "### T31 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:417-all-seeds-pass#T29@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }

@@ -259,6 +259,10 @@ What the passes found, by claim (the 247; observed as above):
 | D track, field, water | 29 | 8 | 0 | 12 | 7 |
 
 So the GM's question is answered: most `UNRESEARCHED` labels in these modules were not true of the search - the record had
-already looked for many of them (RECORD-SILENT-BEFORE), and a pass has now looked for the rest. 165 are relabeled bare `GUESS`,
-each account opening with its reason and its pass. The ones a source answers are cited or recorded as the record has them; the
-ones a source contradicts are T32-T35, set down for the fixing pass.
+already looked for many of them (RECORD-SILENT-BEFORE), and a pass has now looked for the rest. Of the 247, the first landing
+(observed 2026-10-25; method: `git diff` of the landing, the claims rounds' verdicts in `dev/claims-index.json`) relabels 138
+bare `GUESS`, each account opening with its reason and its pass; cites 8 to the drawing page that answers them (or names the
+page whose GUESS they extend), as impl-drift showed; labels T16's two angles `CANON` for the GM's ruling; and leaves the rest at
+main's text: the ones a source answers but the code departs from (citing would expose the departure) and the ones a source
+contradicts, all in T32-T35 for the fixing pass. The other 476 (P1-P7) are matched to their passes' verdicts (393 of 476 by
+unit and label; 272 silent or no-source) and go in a second batch.
