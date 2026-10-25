@@ -132,6 +132,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "## T17 - a fixture in a grove band, one predicate (R2 G6, first part; FR-006)": {
+   "sha256": "46483afe27682e6e2c667ea17ac14ce87d1cbccad18cd7a7c07443d98a667ad7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Approach (checklist part A)": {
+   "sha256": "58a994f633b2d5308c22e6edddd56e53f982c139fe633874815e4c5c11ec7c12",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Decisions": {
+   "sha256": "c5665f9ccbcb3bc325ac815ee2a483a01b35d3a8e8344e9797c4dbe06bfb7f1d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T18 - the overlap matrix's dead mirrors (R2 G11, first part; FR-006)": {
+   "sha256": "31a33828e848404b07779fa9b15767f404eb7a09307d965b87decec5d08ec46b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Approach (checklist part A)": {
+   "sha256": "90164aba0c83be28bbdcb98efd5f776c3b23c7a288ea663ba7a9186a3a23b9ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Decisions": {
+   "sha256": "a1d740a3727646efabff42703883034bbca9b2f20afe413d6487b8696ba58302",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -854,6 +890,56 @@
      "summary": "A new consts_ways.FIELD_REACH_FT = 6.0 is read by thread.SPUR_REACH_FT and law.FIELD_REACH_FT",
      "class": "within",
      "why": "Two copies of the 6 ft field reach (0014) become one constant, per FR-006; placing it in consts_ways is how the layer order (thread may not import law) is respected, a design choice that narrows nothing. Rendering: none."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T17 - a fixture in a grove band, one predicate (R2 G6, first part; FR-006)",
+    "## T18 - the overlap matrix's dead mirrors (R2 G11, first part; FR-006)",
+    "### T17 Approach (checklist part A)",
+    "### T17 Decisions",
+    "### T18 Approach (checklist part A)",
+    "### T18 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T17-D17a",
+     "summary": "fixtures._flexible_clear and fit._fixtures_in_bands stop carrying their own inline box-overlap and ask grove_rules.fixture_on_band, so one body answers 'no farm fixture in a grove band' for the audit and every placer.",
+     "class": "within",
+     "why": "FR-006: 'a second implementation of a rule is deleted'; SC-003 one implementation asked by placer and check. The two copies are measured (2026-10-25, bodies read side by side) to be the same strict overlap, so this is no rule coded twice with different values and D11's value-choosing clause does not arise; it moves no map and lands through make land, inside D11's stop line."
+    },
+    {
+     "id": "T17-D17b",
+     "summary": "The fit asks the predicate of boxes already turned and rounded by fit_index.recorded_box (passed as rot 0) and of bands 'rounded as it is now'.",
+     "class": "within",
+     "why": "This is the input each placer already holds, not a second value of the rule (the rule's value - strict overlap, zero clearance - is the one body's). Keeping it moves no map, which D11 orders first; nothing in FR-006 or the GM's words asks the representation of a placer's inputs to change."
+    },
+    {
+     "id": "T17-persimmon",
+     "summary": "persimmon_reseat.persimmon_for's neighbor-grove test is left alone: a crown, not a fixture box, a different rule.",
+     "class": "within",
+     "why": "Not a carve-out from FR-006: the rule T17 merges is about farm fixtures' boxes, and a tree crown is not a case of it (fixture_on_band cannot judge a crown - a tree has no box). The block claims only that it is not merged into this predicate, not that it is exempt from FR-006; if the crown test is itself a rule coded twice, FR-006 still owes its deletion through the inventory."
+    },
+    {
+     "id": "T17-done",
+     "summary": "Done-test patches fixture_on_band and sees each placer ask it; Inashiro and the grove pool map regenerate unchanged; landing cohort green.",
+     "class": "within",
+     "why": "Enforcement of FR-006 and FR-008 (no regression); a check whose only effect is that the requested single predicate is actually asked."
+    },
+    {
+     "id": "T18-D18",
+     "summary": "Delete overlap/matrix.py's hand-kept mirrors forest_reveal_x, FOREST_REVEAL_FT, CANOPY_STRUCT_KEYS (unread by l7r/ and scripts/, CANOPY_STRUCT_KEYS already drifted 27 vs 34); the one test importing forest_reveal_x imports the engine's settlement._geom copy.",
+     "class": "within",
+     "why": "FR-006: a rule coded twice is deleted, leaving the engine's one implementation; the measured drift is exactly the failure FR-006 exists to remove. Deleting unread names moves no map (D11 order)."
+    },
+    {
+     "id": "T18-test",
+     "summary": "A test asserts the matrix carries no mirror.",
+     "class": "within",
+     "why": "Enforcement of FR-006/SC-003 only: delete the requested removal and the test has nothing to check. Not unrequested scope."
     }
    ]
   }
