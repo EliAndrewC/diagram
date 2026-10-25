@@ -8,17 +8,17 @@ The question task is `research: physical` with its five boxes; the rest are `res
 
 ## Tasks
 
-- [ ] T01 s1+s2: England's prices under commodity money, the new question and 0291's pointer (D1-D3; FR-001, FR-002)
+- [x] T01 s1+s2: England's prices under commodity money, the new question and 0291's pointer (D1-D3; FR-001, FR-002)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: record-owed clean for the new question, 0291 and the two sources; measure/england.py reproduces its output
-- [ ] T02 Implementation check (D4; FR-003)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed in batch T01+T02: 0297 (English prices 1209-1914, comparative) written and checked in two sessions, 0291 points to it; two comparative keys; record-owed clean; impl-check nothing missing; measure/england.py reproduces its output
+- [x] T02 Implementation check (D4; FR-003)
       research: rendering
-      verify: make impl-check F=419 reports nothing missing
+      verify: DONE. landed in batch T01+T02: 0297 (English prices 1209-1914, comparative) written and checked in two sessions, 0291 points to it; two comparative keys; record-owed clean; impl-check nothing missing; measure/england.py reproduces its output
 - [ ] T03 The reply on #15 and the report (D5; FR-002)
       research: rendering
       verify: the comment posted; make feature-report F=419 WRITE=1
