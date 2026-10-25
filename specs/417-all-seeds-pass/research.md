@@ -130,3 +130,31 @@ What it does not show: 54 seeds are the plan's definition of NEEDLESS, and sever
 map (Mizuguchi, Kashikawa, Sawada, cohort seeds 37, 39, 48). The fresh block after the landing is the rate that says whether
 any of the eighteen mattered on seeds the fixed set does not hold; it is recorded beside R3 below once rolled. The four
 NEEDED passes are set down untouched for T06 and the GM's fixing pass (Approach item 6), with the seeds above.
+
+### R5's fresh block - 500 fresh seeds at the landing (beside R3)
+
+Observed 2026-10-25; method: `make cohort N=500 SEED=3001101 FRESH=0 JOBS=5` in a detached worktree at main `3d01065b3`
+(T26 landed; seeds 3001101-3001600, never rolled before), 19 min 8 s wall under `time -v`; tallied by `make fresh-tally
+COMMIT=3d01065b3 SINCE=20261025T084714Z` from its record `dev/cohort-log/20261025T084714Z-fresh417-2900116.json`. The
+landing's own fresh block of 48 passed (`dev/cohort-log/20261025T082938Z-diagram-backlog-2896409.json`).
+
+| form (observed 2026-10-25; method: as above) | failed | rolled | rate | R3 at `14214b115` |
+|---|---|---|---|---|
+| all | 59 | 500 | 12% (11.8%) | 12.5% |
+| nucleated | 22 | 226 | 10% | 11% |
+| dispersed | 4 | 170 | 2% | 4% |
+| linear | 33 | 104 | 32% | 28% |
+
+| cause (observed 2026-10-25; method: as above; a seed may fail more than one) | seeds | per 1,000 | R3 per 1,000 |
+|---|---|---|---|
+| `refused:WebRefused` | 20 | 40 | 49 |
+| `lane_knots` | 14 | 28 | 31 |
+| `refused:SiteRefused` | 11 | 22 | 13 |
+| `row_rules` | 7 | 14 | 11 |
+| `refused:OverlapRefused` | 3 | 6 | 8 |
+| `farmstead_across_brook` | 2 | 4 | 2 |
+| `groves_crossed_by_lanes`, `refused:NoDryExit` | 1 each | 2 each | 4, 1 |
+
+Read: deleting the eighteen passes moved no rate past its sampling noise (500 seeds at 12% carry about +/-3 points at two
+standard errors; every form and cause is inside it). The lane web's causes are not higher; linear (104 seeds) and seating
+are the noisiest cells. The rate is the same problem it was, with 2,822 fewer engine lines in it.
