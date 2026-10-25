@@ -32,7 +32,7 @@
    "declared": "spec-fidelity"
   },
   "## D1 - what was bought (Q1; FR-001; acceptance 1, 2, 6)": {
-   "sha256": "6e2e074d7283da435511f467de54c535414eb6bfbf2b6218f0e22759744269fd",
+   "sha256": "05ec9b04f4a66eefbda4eef5b66a737d10c77c3d418560d44a68e3a5f697d7f9",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -44,13 +44,13 @@
    "declared": "spec-fidelity"
   },
   "## D3 - the eras beyond rice, Japan (Q4; FR-001; acceptance 1, 4)": {
-   "sha256": "8ee3cd7b62c72205d9b8a235c5747935faf2a5b80399140f9f89a0e3d4f3bc40",
+   "sha256": "b7327133d72b21714bfcdad14ed17c89ac6ac76dc6686d388c685ee39fbe930b",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
   },
   "## D4 - the eras beyond rice, China (Q4; FR-001; acceptance 1, 4)": {
-   "sha256": "0011c0a44f96c4486af5f09ff4e69470458548477de97361e73fbd149825507d",
+   "sha256": "7a293071fafeb36f1e9fc573e4f1f21535ff08dd305ec80975384aae9db9285d",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -62,7 +62,7 @@
    "declared": "spec-fidelity"
   },
   "## D6 - the modern goods (Q2, Q3's modern US candidates, Q6; FR-002; acceptance 3, 6)": {
-   "sha256": "55bfe301ef777cde3bb5bebaaa0db1e415b976f681c16b715f8ee40f80dbfac9",
+   "sha256": "a89ad6cf194e7f5c00b206f34ab6efc5e7f79266e74b69357e7b1b6d567077e6",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -86,7 +86,7 @@
    "declared": "spec-fidelity"
   },
   "### T01 Approach (checklist part A)": {
-   "sha256": "64f34b2a57ad17be713fb5cb0d0382bac98901e09a8080942b7a3e04346da112",
+   "sha256": "838aec64ea4d9e3a82dbf16c0dfbc61b03845eadc358199b02d154feb7a6603a",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -314,6 +314,115 @@
      "summary": "Five write sessions plus check sessions via make page-session in two sibling clones run side by side; passes as leads, not citations",
      "class": "within",
      "why": "Execution arrangement under FR-003's session limits; changes nothing about what is answered."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - what was bought (Q1; FR-001; acceptance 1, 2, 6)",
+    "## D2 - the historical rent (Q3; FR-001; acceptance 1, 6)",
+    "## D3 - the eras beyond rice, Japan (Q4; FR-001; acceptance 1, 4)",
+    "## D4 - the eras beyond rice, China (Q4; FR-001; acceptance 1, 4)",
+    "## D5 - the method (Q5, with the poverty-line housing allowance; FR-002a; acceptance 5, 6)",
+    "## D6 - the modern goods (Q2, Q3's modern US candidates, Q6; FR-002; acceptance 3, 6)",
+    "## D7 - the implementation check (FR-005)",
+    "## D8 - the reply (FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T01 - Q1, what was bought, in 0249 (D1)",
+    "## T02 - Q3, the historical rent, in 0265 (D2)",
+    "## T03 - Q4, the Japanese eras beyond rice (D3)",
+    "## T04 - Q4, the Chinese eras beyond rice (D4)",
+    "## T05 - Q5, the method and the poverty-line housing allowance (D5)",
+    "## T06 - Q2, Q3 modern and Q6, the modern goods (D6)",
+    "## T07 - the implementation check and the reply (D7, D8)",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "### T07 Approach (checklist part A)",
+    "### T07 Decisions",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "preamble/Summary/Technical Context/Performance bookends/Constitution Check",
+     "summary": "Research-record feature from passes already run; five write+check sessions in two sibling clones; reply via escalation-check; no code/map/canon change.",
+     "class": "within",
+     "why": "Execution logistics for answering Q1-Q6 as FR-001..FR-005 require; decides nothing the request or spec constrains differently."
+    },
+    {
+     "id": "D1",
+     "summary": "0249 a section per basket good: form/quality per Bassino & Ma Table 3, market level per price, Mitsui miso/shoyu as observed alternatives, markups SILENT/ATTESTED ONLY FOR, fish eaten SILENT; siblings 0261/0273/0279 carry their own good's finding; other eras delegated to D3/D4 tables.",
+     "class": "within",
+     "why": "Covers Q1's per-good form, quality, wholesale/retail and markup for c. 1745, and the round-1 sibling finding (FR-001 'where a good has one') is fixed. Its other-eras clause is only as good as D3/D4's column set; that gap is ruled under D3-columns, not here."
+    },
+    {
+     "id": "D2",
+     "summary": "0265: Osaka Mitsui rents 1814/1846, Edo back-lot rents, labeled arithmetic for a 9x2 room, Kyoto and c. 1745 SILENT with leads named.",
+     "class": "within",
+     "why": "Answers Q3's historical rent with room size, or SILENT with the search, as asked."
+    },
+    {
+     "id": "D3-columns",
+     "summary": "D3 (and D4 'in the same shape') defines the per-era table as soybeans, fish, cloth, salt, fuel and housing only; D1 now routes Q1's other-eras form/market level for every basket good into those cells.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "New in round 2, created by the fix: D1 now delegates Q1's '(and where it differs, the other eras)' for EACH basket good to D3/D4's cells, but rice, barley/wheat, buckwheat/millets, beans and the oils have no column there. Q4's second clause asks 'per era, which of ITS goods are observed and which are reconstructed or borrowed' and its Figure needed is 'a per-era list of observed vs reconstructed goods', unqualified; the six are the GM-side list only for Q4's first question. The addendum names beans, buckwheat/millets and barley (three not columns) and asks the list to say where each was borrowed from. D3's parenthetical naming kyoto-1745's beans and grains assumes cells the table definition does not give. Not impossible, not implied by the request, and it defeats the addendum's purpose (no double-counting when averaging every good). Fix: D3 says the per-era table carries every good the era prices - rice, the grains, beans and the oils as columns beside Q4's six - each cell with its observed/reconstructed/borrowed-from status and its form and market level where they differ from 1745; D4 inherits by 'same shape'."
+    },
+    {
+     "id": "D3-rest",
+     "summary": "New question beside 0286, cells observed/reconstructed/borrowed-from/held-unused/absent, new prices in 0286 format, Kyoto salt bale revision, Edo-period fish SILENT, per-cell form and market level where different from 1745.",
+     "class": "within",
+     "why": "Q4's figures and gm-assistant's addendum (borrowed-from), plus Q1's other eras for the goods it holds; FR-001's placement."
+    },
+    {
+     "id": "D4",
+     "summary": "New question beside 0288 in D3's shape: Timkovski 1821 Peking, Changzhou cloth ATTESTED ONLY FOR, Beijing fish as secondary reports, official/market kept apart, per-cell form/market level vs 1745, beijing-1500 SILENT.",
+     "class": "within",
+     "why": "Q4's 'China beside it' and Q1's other eras; its column set inherits D3's and is covered by the D3-columns ruling."
+    },
+    {
+     "id": "D5",
+     "summary": "New money question: what baskets compute, index choice (Fisher, spread as uncertainty), one figure or several, which papers put a basket into modern money, rice as numeraire with weaknesses, poverty-line housing allowance; derived rules labeled.",
+     "class": "within",
+     "why": "Q5 clause by clause and Q3's poverty-line allowance, placed and tagged as FR-002a requires."
+    },
+    {
+     "id": "D6",
+     "summary": "Comparative question(s): per good the like-for-like US product at retail and at wholesale where the historical price is wholesale, dated with links; housing candidates per m2-year with what each measures; US adult yearly quantities; never sets a Rokugani price; snapshot never edited.",
+     "class": "within",
+     "why": "Q2, Q3's modern candidates (now with 'what each measures', its Figure needed) and Q6; FR-002; 'never edited, a corrected one is a new snapshot' is the request's own words."
+    },
+    {
+     "id": "D7",
+     "summary": "implementation-check.md holds each touched question's line.",
+     "class": "within",
+     "why": "FR-005."
+    },
+    {
+     "id": "D8",
+     "summary": "Reply on #17 per question with figures, fragment, verdict, open items, verification; canon-bearing findings through escalation-check.",
+     "class": "within",
+     "why": "FR-004."
+    },
+    {
+     "id": "T01-T07 Approach and Decisions",
+     "summary": "Checklists and decision pointers restating D1-D8; T01 item 9 now names the siblings each carrying its own finding.",
+     "class": "within",
+     "why": "No decision beyond the D sections they point at; T06's 'nearest, with what differs' exit serves Q2's like-for-like purpose."
     }
    ]
   }

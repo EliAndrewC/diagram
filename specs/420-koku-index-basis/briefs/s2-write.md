@@ -17,7 +17,8 @@ the pass says, write what the page says, or SILENT. Every figure this project co
 
 1. **A new question beside 0286** (0286 is near the size cap), `subject=money`, in "Money and prices", its title asking which of
    a year's necessities were observed and which reconstructed, era by era, in Japan. A table per era (or one table, eras as
-   rows) of soybeans, fish, cotton cloth, salt, fuel and housing: each cell observed (source and city), observed in another city
+   rows) of every good the era prices - rice, barley and wheat, buckwheat and millets, soybeans, other beans, fish,
+   edible and lamp oil, cotton cloth, salt, fuel and housing: each cell observed (source and city), observed in another city
    (which), reconstructed, borrowed (the era or source it came from: kyoto-1745's beans, grains and fish from early-Meiji ratios
    per Bassino and Ma's Table 3 note; its soybeans set equal to rice; Kumon's soybeans Osaka's, Bassino and Ma's Table 3 note
    naming Osaka from 1757; tokyo-1882's from LTES Tokyo retail), held in the record but unused by the era, or absent. New

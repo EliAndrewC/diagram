@@ -53,7 +53,8 @@ there.
 
 ## D3 - the eras beyond rice, Japan (Q4; FR-001; acceptance 1, 4)
 
-A new question beside 0286: per Japanese era, a table of soybeans, fish, cloth, salt, fuel and housing, each cell observed (its
+A new question beside 0286: per Japanese era, a table of every good the era prices - rice, barley and wheat, buckwheat
+and millets, soybeans, other beans, fish, edible and lamp oil, cloth, salt, fuel and housing - each cell observed (its
 source and city), reconstructed, borrowed (the era or source borrowed from, gm-assistant's addendum: kyoto-1745's beans, grains
 and fish from early Meiji ratios; its soybeans set equal to rice; Kumon's soybeans Osaka's, chained to other cities), held in
 the record but unused, or absent; new prices in 0286's format. The Kyoto salt unit: from 1791 the Mitsui Kyoto books price salt

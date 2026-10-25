@@ -16,7 +16,8 @@ the pass says, write what the page says, or SILENT. Every figure this project co
 ## Your items
 
 1. **A new question beside 0288**, `subject=money`, in "Money and prices", in the same shape as the Japanese one if it exists:
-   per Chinese era, soybeans or beans, fish, cotton cloth, salt, fuel and housing, each cell observed (official or market,
+   per Chinese era, every good the era prices - rice or other grain, soybeans or beans, fish, oil, cotton
+   cloth, salt, fuel and housing - each cell observed (official or market,
    kept apart; source and place; and, where it differs from the Japanese 1745 basket's, the good's form and the price's
    market level, or SILENT with the search), reconstructed (Allen et al. 2011), borrowed (from where), held in the record but unused by the
    era (the pass lists those: 1615 cloth, 1736 cloth and salt, songjiang-1680 cloth and firewood, canton-1835 salted fish,
