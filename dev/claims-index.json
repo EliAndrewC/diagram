@@ -7277,23 +7277,22 @@
  },
  "l7r/diagram/hamletgen/consts.py::PLOT_SIZES#paddy plot size": {
   "body": "ccf7f623a5dacaa5",
-  "claim": "paddy plot size - GUESS rice-paddies-and-their-plots-suiden.drawing: the page draws the small irregular patchwork and a larger valley-hamlet basin; the three sizes and their odds, small 1, medium 2, large block 1, are ours",
-  "code": "9275f6ab2d5704c3",
+  "claim": "paddy plot size - rice-paddies-and-their-plots-suiden.drawing: a hamlet basin about 48 ft across its canal and 26 to 36 ft along it, some 40 to 60 ft across, larger (about 0.07 acre) only on a valley hamlet's map - the medium size is the page's; the small (34 ft across) and the large block (70 ft) fall outside 40 to 60 ft, the large block on any hamlet, a departure the code keeps until feature 417 T34; the odds, small 1, medium 2, large block 1, are a GUESS",
+  "code": "5d63ca2f5288b96f",
   "core": "0ab0921740b16870",
   "date": "2026-10-25",
-  "note": "the claim labels the sizes GUESS, but the page answers them. The medium size is the page's hamlet basin (plot_texture's 1 ft/px branch uses 48 across and 26-36 along, the page's \"about 48 ft across its canal and 26 to 36 ft along it\"), so it should cite the page. Only the 1/2/1 odds are unrecorded, and the page does not record them as a guess. Two sizes drift from the page: small_irregular (34 ft across) and large_block (70 ft across) fall outside \"some 40 to 60 ft across\". The page attests larger basins only \"on a valley hamlet's map\" (about 0.07 acre), but large_block's 70 x ~37 ft is about 0.06 acre, and nothing shown limits it to valley hamlets. The claim should cite the page for medium and the valley-hamlet basin, keep GUESS for the odds and the small size, and either restrict large_block to valley hamlets or record its departure as a DEVIATION.",
+  "note": "Medium (48 ft across, 26-36 ft along) matches the page (\"about 48 ft across its canal and 26 to 36 ft along it\"), and the 1/2/1 odds are rightly a GUESS. But the claim itself says the code goes outside the page's \"some 40 to 60 ft across\": small_irregular is 34 ft and large_block is 70 ft (in plot_texture's ftpx=1 branch). It also says large_block is drawn on any hamlet, where the page has the larger paddy (0.07 acre) \"on a valley hamlet's map\" only. The page does not record this departure as deliberate, and relabeling it DEVIATION would fail for the same reason. One of two fixes: the 0005 drawing page records the 34/70 ft hamlet basins (and large_block on non-valley hamlets) as a DEVIATION, or the code keeps small and large inside 40-60 ft and draws large_block only on a valley hamlet",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
   "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:70a80197d947bd55",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:9fb117ed056503a7",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a1eff65b097cc456"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/consts.py::REF_CANAL_A#reference fan's canal A": {
   "body": "4e69ac4a5ee9012f",
@@ -48379,12 +48378,13 @@
   "date": "2026-10-13",
   "note": "the yashiki's listed outbuildings",
   "pages": {
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.html": "2f98e739d9ff02ad"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.html": "427c6fb6dfe133cb"
   },
-  "research": "c31bbe822b715147",
+  "research": "526311ce94ba3665",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.html:601a65de3b17cea1"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FarmFixturesMixin.persimmon#fruit dots": {
