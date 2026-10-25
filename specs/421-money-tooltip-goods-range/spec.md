@@ -39,10 +39,11 @@ box (feature 413, `l7r/diagram/interactive/record/money.py`) shows only the cent
 
 - **FR-001**: The hover box's goods text is `goods_dollars` to `goods_dollars_high` times the amount, formatted as the existing
   dollar ranges are (one precision for both ends, joined by "-"); without `goods_dollars_high` it is one figure.
-- **FR-002**: The record's money section rules (`research/CLAUDE.md`) that describe the hover box say it shows the goods range.
+- **FR-002**: The module's own description of the hover box (`money.py`'s docstring, the one place that states what the box
+  shows) says the goods figure is a range from the central to the high reading.
 
 ## Success Criteria
 
 - **SC-001** (FR-001): the record money tests pin the worked example, an amount range and the no-high fallback; `make done`
   is green at the landing.
-- **SC-002** (FR-002): `make record CHECK=1` is clean and the doc names the range.
+- **SC-002** (FR-002): `make record CHECK=1` is clean and the docstring names the range.
