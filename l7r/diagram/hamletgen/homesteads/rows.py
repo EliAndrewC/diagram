@@ -71,7 +71,8 @@ def hard_ground(field: Poly, rings: Sequence[Sequence[Pt]] = (), water: Sequence
     the field alone: offset from the field only, Mizuguchi's first street ran between its brook and its paddy and the
     farms stood across the water.
 
-    Research: street off all no-build ground - UNRESEARCHED: the field, the hem, marsh, pond and every water course at its clearance
+    Research: street off all no-build ground - research/questions/0081-village-lanes.drawing.html: every way keeps off a marsh's reeds and never crosses row crops; the street held off the field, the hem and the marsh
+        street off the pond and the water - GUESS: searched, no source gives a clearance and the pages are silent on one (feature 417 T29 pass F, 2026-10-25) - the sources point against one, a row's street dug beside its canal (0033) and a post town's channel in its street; the pond's and the water courses' clearances beside the field's are ours, filed in feature 417 T32
     """
     from shapely.geometry import LineString, Polygon
     from shapely.ops import unary_union
@@ -176,7 +177,7 @@ def row_seats(line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: str,
     Research:
         farm spacing - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: one frame apart (its longer side), or the lot's frontage where narrower
         one side or both - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: the far side only, or both sides of the street
-        seat order - UNRESEARCHED: from the line's middle outward, alternating ends
+        seat order - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); from the line's middle outward, alternating ends
     """
     if len(line) < 2:
         return []
@@ -274,7 +275,7 @@ FOOTPATH_DOOR_OUT_FT = DOOR_STEP_FT + 4.0
 and the 4 ft this figure held over it before feature 385 T96 derived it, less the fraction of a foot the frame's pad
 differs by) - the door `door_clear` tests.
 
-Research: door point past the yard's front - UNRESEARCHED: 12 ft past the yard's front edge (`DOOR_STEP_FT` and 4 ft)"""
+Research: door point past the yard's front - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); 12 ft past the yard's front edge (`DOOR_STEP_FT` and 4 ft)"""
 
 DOOR_ROOM_FT = 16.0
 """The room a farm's front door needs off the hard ground for a way to start from: the door's own standing room and most
@@ -291,7 +292,7 @@ def door_clear(frame: tuple[float, float, float, float], front: Sequence[float],
 
     Research:
         way in at the open front - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the door on the lee face the grove leaves open
-        door point out past the front - UNRESEARCHED: set `FOOTPATH_DOOR_OUT_FT` (12 ft) past the frame's front edge, where `front_door` uses 8 ft
+        door point out past the front - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); set `FOOTPATH_DOOR_OUT_FT` (12 ft) past the frame's front edge, where `front_door` uses 8 ft
     """
     if hard is None:
         return True
@@ -544,12 +545,12 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
         farms to a street - research/questions/0033-row-villages-resson.drawing.html: a full street gets a further street set out parallel beside it, never a second row behind
         farms one frame apart, never more than 240 ft - research/questions/0033-row-villages-resson.drawing.html: the row steps one frame, `lot = min(fw, ROW_FRONTAGE_MAX_FT)`, lot against lot and never past Santome's 240 ft lots
         the next street past the last one's holdings - research/questions/0033-row-villages-resson.drawing.html: each further street is set out past the last street's frames and their holdings (`row_offsets(..., hold_depth + gap)`), its own gap off the street as `frame off the street`
-        holding set behind its frame - UNRESEARCHED: the strip starts half the 15 ft gap (7.5 ft) behind its farm's frame; the page (0033 drawing) says only that it is drawn behind each farm
+        holding set behind its frame - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); the strip starts half the 15 ft gap (7.5 ft) behind its farm's frame; the page (0033 drawing) says only that it is drawn behind each farm
         at most MAX_STREETS (6) parallel streets - GUESS: six streets at most (research/questions/0033-row-villages-resson.drawing.html)
-        front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front - UNRESEARCHED: the 16 ft door room `DOOR_ROOM_FT` declares; no cited page measures a door's ground
-        frame off the street - UNRESEARCHED: half the street plus half `FIELD_KEEP_FT`, 15 ft off its centerline
+        front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); the 16 ft door room `DOOR_ROOM_FT` declares; no cited page measures a door's ground
+        frame off the street - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); half the street plus half `FIELD_KEEP_FT`, 15 ft off its centerline
         first street on the hard ground's edge - research/questions/0033-row-villages-resson.drawing.html: the first street runs along the stretch of the hard ground's edge that holds the most clear frames (`best_row_line`)
-        streets rounded at a corner - UNRESEARCHED: a street is rounded on the inside of a corner at `street_bend_radius_ft`
+        streets rounded at a corner - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); a street is rounded on the inside of a corner at `street_bend_radius_ft`
         the leeward row marked sheltered - research/questions/0033-row-villages-resson.drawing.html: on a street with farms on both sides, where the settlement rolled the sheltered form (`row_shelter`), a farm with its street and the grove row beyond it to windward (`sheltered_by_the_row_across`) is seated as a full farm and marked `sheltered`
     """
     want = plan.spec.households

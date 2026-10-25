@@ -11,6 +11,7 @@ from __future__ import annotations
 
 #: at or above this effective opacity a mark is solid
 SOLID = 0.95
+"""Research: solid opacity threshold - NONE: an effective opacity of 0.95 or more counts as solid in the see-through check."""
 
 #: class key -> (the faintest effective opacity its marks are drawn at, why the mark is see-through)
 SEE_THROUGH: dict[str, tuple[float, str]] = {

@@ -24,6 +24,7 @@ from .tagged import marks
 # neither rect inside the other. Tuned on the five pool sheets (2026-09-19): the largest legitimate
 # lap on them is a joining corridor's end.
 OVERLAP_SHARE: float = 0.30
+"""Research: building overlap share - NONE: an overlap over 0.30 of the smaller footprint is an accident, a tolerance tuned on the pool sheets."""
 # The coverage band: the record's "~37-42%" (research/contents.json#compounds, the packing entry) is the page's
 # own measurement of jin'ya plans with no readable source, and the same entry gives Takayama at ~33%
 # built (1,000 of 3,000 tsubo) as a figure that rests on no page read. Both are the page's own; the
@@ -34,18 +35,26 @@ OVERLAP_SHARE: float = 0.30
 # FEATURE 372 WAVE 105: the floor follows 0116's drawing page as corrected on 2026-10-01 - about 30-42%, the bottom the one
 # office measured (Takayama's floors ~31% of its site); the 33 above was read off the entry before that correction.
 COVERAGE_FLOOR: float = 0.30
+"""Research: building coverage floor - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: a compound's buildings cover about 30-42% of its walled ground; the bottom, 30%, is near Takayama's ~31% of floor against site."""
 COVERAGE_CEILING: float = 0.42
+"""Research: building coverage ceiling - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the top of the 30-42% coverage range, 42%, is the project's estimate from plans, which the page records as a guess."""
 COVERAGE_TOL: float = 0.02
+"""Research: coverage tolerance - GUESS: two points either side of the band, for the page's "about" 30-42%; no page gives the slack."""
 # The hugging floor is DERIVED, not typed from a source: the five pool sheets measure 51-58% of
 # building footprint within 25 ft of a wall (m:hugging-floor, feature 254), and one building pulled
 # into the center of a court costs about six points, so the floor sits one such building under the
 # lowest shipped value. Nothing read gives a historical figure for it; the ring is the composition
 # rule (docs/buildings.md, "Composition"), and this is its measurable form.
 HUGGING_FLOOR: float = 0.45
+"""Research: wall-hugging floor - GUESS: at least 0.45 of building footprint stands within 25 ft of a wall; derived from the pool sheets (51-58%) and no source gives a historical figure."""
 CROP_MAX_MARGIN_PX: float = 25.0  # the checklist's "~15-25 px border" on each side of the viewBox
+"""Research: sheet crop margin - CONVENTION: a drawn sheet keeps at most a 25 px border on each side of the viewBox, the checklist's 15-25 px."""
 CROP_TOL_PX: float = 5.0
+"""Research: crop tolerance - NONE: 5 px of slack on the crop margin, an audit pixel tolerance."""
 GATE_MIN_FT: float = 5.0  # narrower is not a passage anyone drives or walks through
+"""Research: narrowest gate - GUESS: a wall opening under 5 ft is not a passage anyone drives or walks through; the record's gates run 6 to 12 ft (0093) and no page gives the audit's floor."""
 GATE_MAX_FT: float = 16.0  # wider is a structure's width, not a passage's (the gate lesson of 2026-07), unless a structure spans it
+"""Research: widest gate - GUESS: a wall opening over 16 ft is a structure's width, not a passage's; no page sets a widest gate; the record's Japanese gates run 6 to 12 ft (0093) and a yamen's 18-24 ft is a guess there."""
 
 _VIEWBOX_RE = re.compile(r'viewBox="\s*([\-\d.]+)\s+([\-\d.]+)\s+([\d.]+)\s+([\d.]+)\s*"')
 _NUM_RE = re.compile(r"-?\d+(?:\.\d+)?")
@@ -122,6 +131,7 @@ def _path_points(d: str) -> tuple[list[float], list[float]]:
 
 
 PARCHMENT_SHARE: float = 0.9  # a rect covering this much of the viewBox is the background, not ink
+"""Research: background rect share - NONE: a rect covering 0.9 of the viewBox is the parchment background, not ink, a parser classification."""
 _SKIP_TAGS = {"defs", "pattern", "symbol", "clipPath", "mask", "marker"}
 _TRANSLATE_RE = re.compile(r"translate\(\s*(-?[\d.]+)[\s,]*(-?[\d.]+)?\s*\)")
 
@@ -296,7 +306,9 @@ def two_court_zoning(plan: ParsedPlan) -> list[str]:
 # --- the country shrine's own checks (feature 254, D8) - each reads a DECLARED feature by id ---
 
 AXIS_TOL_FT: float = 3.0  # the sanctuary's center may stray this far from the approach axis
+"""Research: shrine axis tolerance - GUESS: no page says how exactly a sanctuary sat on its approach's axis; its center may stray 3 ft from it."""
 EDGE_TOL_FT: float = 2.0  # the arch stands AT the precinct edge: within this of it
+"""Research: arch edge tolerance - GUESS: no page gives it; the arch stands within 2 ft of the precinct edge."""
 
 
 def _one(plan: ParsedPlan, ident: str) -> Rect | None:
@@ -412,6 +424,7 @@ def one_compound_shrine(text: str) -> list[str]:
 
 
 STALL_FT: tuple[float, float] = (4.5, 7.5)  # one ken (~6 ft) a stall, with a drawing's play either side
+"""Research: stall width band - research/questions/0108-stables-umaya.drawing.html: a stall is one ken (~6 ft) wide, as the page draws it, with 4.5 to 7.5 ft allowed for a drawing's play."""
 
 
 def stall_width(text: str) -> list[str]:
@@ -440,6 +453,7 @@ def stall_width(text: str) -> list[str]:
 
 
 HALL_MIN_SPAN_FT: float = 6.0  # an open stretch of the building shorter than this is a partition's gap, not the hall
+"""Research: hall span floor - GUESS: no page gives it; an open stretch of a building under 6 ft (one ken) is a partition's gap, not the hall."""
 
 
 def _dwelling_spans(text: str, hall: Rect, along_x: bool) -> list[tuple[float, float]]:
@@ -544,7 +558,9 @@ def trees_overlap(plan: ParsedPlan, tol: float = WALL_OVERLAP_MIN_PX) -> list[st
 # A building STRADDLING the wall's ink is not counted - that is the wall-broken-around-a-structure idiom (Ubame's parley
 # room), not a sealed gate. Both lengths are a GUESS: a person walks a 3 ft way, and 6 ft is one ken before the wall.
 APPROACH_FT: float = 6.0
+"""Research: gateway approach depth - GUESS: a wall opening keeps a clear strip 6 ft deep, one ken before the wall, on each face; no page gives it."""
 CLEAR_FT: float = 3.0
+"""Research: gateway clear run - GUESS: the gateway approach keeps a clear run of 3 ft, room for a carrier and a handcart; no page gives it."""
 
 
 def postern_approach(plan: ParsedPlan) -> list[str]:
@@ -576,6 +592,7 @@ def postern_approach(plan: ParsedPlan) -> list[str]:
 # The tree is a crown tagged `sacred tree`, a part of the compound shrine, its trunk within SHRINE_TREE_FT of the hall's
 # walls. The 15 ft is a GUESS: no source gives how near the tree stood; it lets a ~20 ft crown clear the hall it stands by.
 SHRINE_TREE_FT: float = 15.0
+"""Research: shrine tree reach - GUESS: the compound shrine's tree trunk stands within 15 ft of the hall's walls; no source gives how near the tree stood."""
 
 
 def shrine_tree(text: str) -> list[str]:

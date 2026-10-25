@@ -20,6 +20,7 @@ _TORII = re.compile(r'<g\b[^>]*data-kind="torii"[^>]*>(.*?)</g>', re.S)
 
 # A door's edge within this of its building's wall is ON the wall (the stroke's half-width, as `floating_doors` allows)
 DOOR_WALL_TOL_PX = 1.5
+"""Research: door on wall tolerance - NONE: a door's edge within 1.5 px of its building's wall is on the wall, the stroke's half-width."""
 
 
 def _box(attrs: str) -> tuple[float, float, float, float] | None:

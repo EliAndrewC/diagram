@@ -373,7 +373,11 @@ auto-loads when a session edits the record; the archive and the download list ar
   wider spacing - while the map stays within the research, never hours of packing (*"the far easier thing is to make the
   homesteads slightly bigger. Things were pretty spread out in premodern times!"*). A number set only to implement against
   (an UNRESEARCHED or convenience size, reach or band) is a knob to move, never a target to defend; the round arbiter asks this
-  of every ruling.
+  of every ruling. So is a `GUESS` (searched, the record silent) and a `CONVENTION`, and a number no claim states at all: `make
+  tunables` lists the first three, `make tunables INLINE=1` the last (feature 417 T28; the GM, 2026-10-25: *"we need to avoid
+  falling into the trap where we set a number arbitrarily and then end up going through enormous iterations and difficulty to
+  try to make that number work when the number is arbitrary and not an actual hard requirement"*). A fixing pass that moves one
+  says so at the point of change.
 - A `research record` feature closes only with its findings checked against the code (feature 378, GM 2026-10-10): each
   question whose findings it changed is cited (its findings page, not only its drawing page) by a `Research:` claim of
   the code that decides it, checked by

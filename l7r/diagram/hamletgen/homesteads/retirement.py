@@ -148,7 +148,7 @@ def retirement_houses(s: Settlement, plan: SitePlan) -> int:
 
     Research:
         family form declared - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: none on one roof, the rolled share on the retirement form, never counted a household
-        which households keep one - UNRESEARCHED: owners in an order rolled from the seed, not by wealth
+        which households keep one - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25) on a region's share - a source (Kakimochi 1885, pass C) has most households keep one, small ones too, by custom not wealth; no page records it yet (feature 417 T33); owners in an order rolled from the seed, not by wealth
     """
     form = s.M["meta"]["family_form"] = s.resolve("family_form")
     s.M.setdefault("retirement_houses", [])

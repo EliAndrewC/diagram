@@ -19,11 +19,11 @@ from .keeper import kept
 _ALONG_FT = 14.0  # ft: two centerlines this close read as one tread doubled - a 6 ft way's width plus its soft shoulders
 """Research: doubled tread distance - CONVENTION: centerlines within 14 ft read as one tread"""
 _ALONG_MIN_FT = 30.0  # ft: shorter than this, running beside a way is just the approach to the junction
-"""Research: tail run length - UNRESEARCHED: 30 ft beside a way before it is a doubled tail"""
+"""Research: tail run length - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); 30 ft beside a way before it is a doubled tail"""
 _ALONG_DEG = 25.0  # deg: nearer to parallel than this, the lane is running WITH the way, not meeting it
-"""Research: running with the way - UNRESEARCHED: within 25 degrees of parallel"""
+"""Research: running with the way - CANON: the GM's ruling of 2026-10-25 - the doubled tail's angle is a goal of 20, "arbitrary and not an actual hard requirement", free to move to 15 or 25 if placement or the look needs it; asked here at 25, beside 0081's drawing-page convention of 20, because both at 20 refuse cohort seed 40 (feature 417 D30, observed 2026-10-25)"""
 _DOUBLED_DEG = 15.0  # deg: a finished tail this near parallel is one tread doubled (Kuwabata's ran at ~3, Sawada's at 9.5); between
-"""Research: doubled tail angle - research/questions/0081-village-lanes.drawing.html: an end running back along another way at less than 20 degrees - asked here at 15, a known gap: at 20 cohort seeds 10 and 40 were refused (a household's way read as doubled, a shallow crossing left), the side-by-side family carried to 405 T101 (measured 2026-10-21)"""
+"""Research: doubled tail angle - CANON: the GM's ruling of 2026-10-25 - the angle is a goal of 20, "arbitrary and not an actual hard requirement", free to move to 15 or 25 if placement or the look needs it; asked here at 15, departing from the 20 that 0081's drawing page draws as its convention, because both at 20 refuse cohort seed 40 (a shallow crossing left; feature 417 D30, observed 2026-10-25); no source gives where a meeting stops reading as a junction (feature 417 R7)"""
 # this and `_ALONG_DEG` the sweep still cuts it, to the crossing it overran, which then stands as a shallow Y - a junction, not a
 # doubling (Inashiro's straggler meets its join lane at 21.6 degrees)
 _CROSS_BACK_FT = 40.0  # ft: a crossing this close before the cut is the junction the doubled tail overran (Sawada's was 24)
@@ -167,8 +167,8 @@ def _sweep_doubled_tails(s: Settlement) -> int:
     sample alongside and the end snapped onto the way, so the two meet in one junction. Each end is asked in turn.
 
     Research:
-        doubled tail cut - UNRESEARCHED: a lane running on beside the way it met ends where it came alongside
-        narrower tail cut - UNRESEARCHED: of two tails side by side the narrower is cut, so the through-route keeps its width"""
+        doubled tail cut - research/questions/0081-village-lanes.drawing.html: the lane is cut where it comes alongside and meets the other as a T, a household's own way cut at its far end, never at its door - both ends of every lane are asked, a household's way at its door too, a departure the code keeps until feature 417 T32; a lane running on beside the way it met ends where it came alongside
+        narrower tail cut - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); of two tails side by side the narrower is cut, so the through-route keeps its width"""
     lanes = s.M.get("lanes") or []
     fixed = 0
     # THE NARROWER TAIL IS CUT, NEVER THE WIDER (settlement-review of Sawada, feature 261): a 6 ft track and a 3 ft

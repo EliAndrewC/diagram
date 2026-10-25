@@ -42,7 +42,7 @@ def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt, tu
 
     Research:
         track leaves downslope - research/questions/0081-village-lanes.drawing.html: from the cluster's downslope edge (or a bearing turned off it)
-        gateway clear of what stands - UNRESEARCHED: `TRACK_FABRIC_GAP` plus 8 px past the farthest house, well or yard
+        gateway clear of what stands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a track passing outside the cluster keeps 7 ft off every part of a homestead - the gateway is walked out from the house centers (8 px its first step) until it clears all that stands by that gap (`push_clear_of_fabric`)
     """
     hs = s.M.get("houses") or []
     if not hs:
@@ -75,7 +75,7 @@ def gate_out_of_the_field(envelope: Poly, gate: Pt) -> Pt:
 
     Research:
         connector starts off the crop - research/questions/0081-village-lanes.drawing.html: the start pushed out of the field envelope
-        setback from the field - UNRESEARCHED: `SPUR_SETBACK` 17 ft clear of the field envelope"""
+        setback from the field - research/questions/0081-village-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane may touch a plot's boundary and the field path runs onto the outer bund - the way out is set 17 ft back from the field, a departure the code keeps until feature 417 T32; `SPUR_SETBACK` 17 ft clear of the field envelope"""
     return push_out_of(envelope, gate, SPUR_SETBACK)
 
 
@@ -98,7 +98,7 @@ def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt, fabric: list[P
 
     Research:
         spur starts facing the field - research/questions/0081-village-lanes.drawing.html: on the cluster's edge toward its target
-        spur origin clear of the houses - UNRESEARCHED: `TRACK_FABRIC_GAP` plus 8 px past the farthest house toward the target
+        spur origin clear of the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the spur and the track keep 7 ft off every part of a homestead - the origin is walked out from a house center (8 px its first step) until it clears all that stands by that gap (`push_clear_of_fabric`)
         origin on the houses' bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: stopped
             14 px plus half the brook short of it (the router's figure, not the page's), the brook crossed squarely on a plank bridge at a crossing place
     """

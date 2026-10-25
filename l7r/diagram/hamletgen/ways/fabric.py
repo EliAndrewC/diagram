@@ -288,7 +288,7 @@ _LANE_JOIN_FT = LANE_JOIN_FT  # feature 417 T05: the one constant
 # 20 ft fragments, left behind when the end-trim pulled a path back to its last serving point. A
 # 4 ft mark fronts nobody and reads as a speck of clipping debris. 30 ft is under half a door path.
 _WEB_MIN_FT = 30.0
-"""Research: shortest way - UNRESEARCHED: a run under 30 ft is debris unless it earns a house"""
+"""Research: shortest way - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); a run under 30 ft is debris unless it earns a house"""
 
 
 def _net_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
@@ -365,13 +365,13 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     brings a house inside the reach that is outside it now, it is a way, whatever its length.
 
     Research:
-        shortest way - UNRESEARCHED: under 30 ft drawn only where it brings a house within 100 ft
+        shortest way - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); under 30 ft drawn only where it brings a house within 100 ft
         no join link through a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane
         web lanes seat no house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the farmhouses placed first, the lanes
             among them after
         web lane's no-build corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE`, the lane's 18 ft room (9 ft each side of its middle), recorded beside the lane
         no lane over a bed or a fixture - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way goes round its own garden beds and fixtures and crosses none
-        no lane over a grave - UNRESEARCHED: a web lane is refused where the overlap matrix forbids a way on a burial ground
+        no lane over a grave - GUESS: searched, no page bears on a lane over a grave (feature 417 T29 pass A1, 2026-10-25) - the Yoro code keeps burial off roads, not yet on a page
         web lane width - research/questions/0081-village-lanes.drawing.html: 3 ft by default, the footpath's tread"""
     if len(pts) < 2:
         return False

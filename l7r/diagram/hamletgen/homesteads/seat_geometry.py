@@ -75,7 +75,7 @@ def shapes_drawn_at(drawn: float) -> list[str]:
 
     Research:
         shapes a drawing admits - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the shapes the page names (lump, string, crescent, split)
-        aspect bands and round first - UNRESEARCHED: round 1.0-2.0, crescent and split 1.9-4.2, elongated 2.8-12; another shape only past round's ceiling; past every band, the nearest band's
+        aspect bands and round first - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); round 1.0-2.0, crescent and split 1.9-4.2, elongated 2.8-12; another shape only past round's ceiling; past every band, the nearest band's
     """
     ceiling = CLUSTER_DRAWN_ASPECT["round"][1]
     held = [k for k, (lo, hi) in CLUSTER_DRAWN_ASPECT.items() if (lo if k == "round" else max(lo, ceiling + 1e-9)) <= drawn <= hi]
@@ -89,7 +89,7 @@ def in_a_shapes_band(houses: Sequence[dict[str, Any]]) -> bool:
     could only name the nearest band, which the drawing breaks. Nothing is refused for it (feature 318: the 12:1 refusal that
     took a seating back went with every other take-back); the declared shape records what was drawn (`declare_cluster_shape`).
 
-    Research: a cluster's longest draw - UNRESEARCHED: past the longest band's ceiling (`CLUSTER_DRAWN_ASPECT`, 12:1), read and refusing nothing
+    Research: a cluster's longest draw - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); past the longest band's ceiling (`CLUSTER_DRAWN_ASPECT`, 12:1), read and refusing nothing
     """
     drawn = cluster_aspect([h["x"] for h in houses] or [0.0], [h["y"] for h in houses] or [0.0])
     return any(lo <= drawn <= hi for lo, hi in CLUSTER_DRAWN_ASPECT.values())

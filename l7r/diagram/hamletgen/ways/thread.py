@@ -85,8 +85,8 @@ def _out_of_bands(p: Pt, bands: Sequence[Poly], toward: Pt) -> Pt:
     the side it was heading for rather than into the yard behind (seed 11). A point already clear comes back untouched.
 
     Research:
-        a track's end out of the grove bands - UNRESEARCHED: set 8 ft (`FOOTPATH_FABRIC_GAP` + 1) clear of a grove band
-        which side it leaves by - UNRESEARCHED: walked toward the run's other end, or pushed out the nearest edge, whichever lands nearer it"""
+        a track's end out of the grove bands - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane keeps a footpath's clearance and working room off the trees, about 22 ft of opening (about 11 ft to its middle) - the track's end is set only 8 ft clear of a band, a departure the code keeps until feature 417 T32; set 8 ft (`FOOTPATH_FABRIC_GAP` + 1) clear of a grove band
+        which side it leaves by - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); walked toward the run's other end, or pushed out the nearest edge, whichever lands nearer it"""
     if not any(point_in_poly(p[0], p[1], band) for band in bands):
         return p
     # walked in 2 px steps, asking containment as well as the gap: `push_clear_of_fabric` asks only the distance to the
@@ -143,7 +143,7 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
             `CONNECTOR_BAND_GAP_FT` (0036's working room past the connector's half-width, 12.5 ft) off the trees - the
             spur's too, half a foot more than its own 2.5 ft half-tread would need; the router's hard index holds the
             line about 13.5 ft off (`WEB_HARD_GAP` on the grown band), more room than the page's "about", never less
-        detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster
+        detour swing - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); the midpoint swung 40, 80, 140 then 220 px out from the cluster
         never across a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: routed round
             the bands, else only the part clear of them kept
         the track's route walled - research/questions/0081-village-lanes.drawing.html: never across row crops or the flooded paddy, and off wet ground (the field, crop, toe band and wet ground walled - a defense belt's reeds too, since no map draws a causeway: 405 T09)

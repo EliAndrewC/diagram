@@ -269,9 +269,9 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         row road over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the ford that makes the walk shortest, each leg threaded to its landing (`thread_over_the_ford`)
         track off the map - research/questions/0081-village-lanes.drawing.html: from the gateway, out of the field, to the frame
         track off the wet - research/questions/0081-village-lanes.drawing.html: the toe band and every drawn marsh are wet
-        spur clip margin - UNRESEARCHED: the spur clipped 12 ft off the dry plots (0081 lets a lane touch a plot's boundary, and gives no clearance)
-        toe-band margin - UNRESEARCHED: the spur clipped 12 ft off the toe band
-        spur tip set back - UNRESEARCHED: SPUR_SETBACK, 17 ft off the field outline's vertex
+        spur clip margin - research/questions/0081-village-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane may touch a plot's boundary and the field path runs onto the outer bund - the spur is clipped 12 ft short, a departure the code keeps until feature 417 T32; the spur clipped 12 ft off the dry plots (0081 lets a lane touch a plot's boundary, and gives no clearance)
+        toe-band margin - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); the spur clipped 12 ft off the toe band
+        spur tip set back - GUESS: the page is silent on the 17 ft, only the point the tip's candidates are scored to; the drawn tip is carried onto the paddy's outer bund (`tip_onto_the_bund`), as 0014 has the field path join it
         connector width - research/questions/0081-village-lanes.drawing.html: the track out 6 ft (`CONNECTOR_WIDTH`), valley and polder alike
         field spur width - research/questions/0081-village-lanes.drawing.html: the field spur 5 ft (`SPUR_WIDTH`), a spur's rank
         lane clearance - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps 7 ft clear of a garden fence; the connector and spur keep `LANE_CLEARANCE`, 7 ft from the lane's middle, a footprint held to it at its corners
@@ -501,13 +501,13 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), wet: 
     Research:
         track out off the wet - research/questions/0081-village-lanes.drawing.html: away from the field leaning downslope, wet
             ground refused first, run past the frame
-        leaning downslope - UNRESEARCHED: the ideal bearing weighs 0.55 away from the field and 0.85 downslope
+        leaning downslope - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25) on the weights - the way out leaves at the water mouth, running with the stream (Wang, Ming-Qing Huizhou, pass D), which the lean follows; the ideal bearing weighs 0.55 away from the field and 0.85 downslope
         wet, then steadings, then crop - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: wet ground and crop refused (0081), no tread on a steading (0246)
         the three ranked - NONE: search order; wet and steaded bearings are both refused in the end
         track drawn taut - research/questions/0081-village-lanes.drawing.html: every lane pulled taut like a string - the candidate a straight run from the gateway past the frame
         track off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: kept `TRACK_FABRIC_GAP` (7 ft) off the steadings
-        track clear of the pond and the brook - UNRESEARCHED: the pond, the drain brook and the watercourses scored with the crop, a crossing tolerated only in the fallback
-        the gateway off the crop - UNRESEARCHED: stepped 12 ft clear of the crop (`pull_clear(..., 12.0)`), so the track does not start on a paddy's edge"""
+        track clear of the pond and the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the water only at a crossing place, and with none on its line the track leaves on its own bank - the fallback keeps the best bearing even where it crosses, a departure the code keeps until feature 417 T32; the pond, the drain brook and the watercourses scored with the crop, a crossing tolerated only in the fallback
+        the gateway off the crop - research/questions/0081-village-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane may touch a plot's boundary and the field path runs onto the outer bund - the gateway is held 12 ft off the crop, a departure the code keeps until feature 417 T32; stepped 12 ft clear of the crop (`pull_clear(..., 12.0)`), so the track does not start on a paddy's edge"""
     # PAST THE FRAME ON EVERY BEARING: a fixed 4,000 ft stopped short of a 5,600 ft canvas's far edge (feature 328 wave 46,
     # found when the taut track first took an eastward bearing). The canvas' diagonal reached it, but every later pass samples
     # the whole connector (`field_runs` asked `run_on_target` 53% more often, batch 1's pair), so each bearing runs to the
@@ -669,9 +669,9 @@ def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequen
             else the dry exit
         never stopping in open country - research/questions/0081-village-lanes.drawing.html: the track out never stops in open country, so a
             threaded run that no longer reaches its far end, past the frame, takes the dry exit (405 T124)
-        gives up a wood seat as last resort - UNRESEARCHED: the seats the way out crosses are released; the accounts read have a
+        gives up a wood seat as last resort - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25); the seats the way out crosses are released; the accounts read have a
             farm's own way in through a gap in its grove, and none covers a through-way taking a household's wood seat
-        connector's berth off the field - UNRESEARCHED: bent round the field at `SPUR_SETBACK`, 17 ft off its envelope"""
+        connector's berth off the field - research/questions/0081-village-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane may touch a plot's boundary and the field path runs onto the outer bund - the track is held 17 ft off the field, a departure the code keeps until feature 417 T32; bent round the field at `SPUR_SETBACK`, 17 ft off its envelope"""
     from .settle import square_run  # the web's last pass sits above this layer
 
     around = route_around(plan.envelope, track, SPUR_SETBACK)
@@ -742,13 +742,13 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
     Research:
         dry exit off the wet - research/questions/0081-village-lanes.drawing.html: walled by the marsh, the steadings and the field
         the track off the steadings - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: 7 ft off every steading (`TRACK_FABRIC_GAP`), a lane's middle off a garden fence
-        the track off the wet - UNRESEARCHED: the wet ground grown 8 ft (`wet_grown_by_the_lane`)
-        pond berth - UNRESEARCHED: 80 ft past the pond's larger half-axis
+        the track off the wet - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground (a convention there, no distance given); the 8 ft is ours; the wet ground grown 8 ft (`wet_grown_by_the_lane`)
+        pond berth - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25); 80 ft past the pond's larger half-axis
         grove band gap - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane keeps a footpath's clearance and some working room off the trees; `CONNECTOR_BAND_GAP_FT`, 0036's 9.5 ft working room plus the connector's half-width (12.5 ft), on a finer grid
         track start out of the grove bands - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walked out of grove bands by `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width) and the fill's cell slack, the wall the fill puts round each band
         a drawn channel crossed on a deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: where a way crosses a stream or ditch the map draws a timber deck as wide as the way (the settle seats it)
-        a channel crossed last - UNRESEARCHED: the fill crosses a drawn channel only where no way out keeps to the ground between them; 0084 does not say when a way crosses a ditch rather than going round
-        where on a channel it crosses - UNRESEARCHED: anywhere the fill finds; the settle squares the crossing (`squaring.square_every_crossing`)
+        a channel crossed last - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25); the fill crosses a drawn channel only where no way out keeps to the ground between them; 0084 does not say when a way crosses a ditch rather than going round
+        where on a channel it crosses - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); anywhere the fill finds; the settle squares the crossing (`squaring.square_every_crossing`)
         the track's flank - research/questions/0081-village-lanes.drawing.html: it leaves downslope past the end of the wet ground, on the flank the cluster already sits on - the fill takes the shortest way off any frame edge instead, a known gap carried to 405 T111
         only the brook gapped at its crossing places - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the crossing places stand on the brook; a drawn channel or the drain is crossed only as the last resort (on a deck, 0084)
         brook crossed at its crossing places - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook by the settle (`squaring.square_every_crossing`, the connector's too)"""

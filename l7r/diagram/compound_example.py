@@ -42,7 +42,9 @@ GATE_FORMS: tuple[str, str] = ("one-bay gate", "gate range")
 #: counted between post centers), so the real passage is the frontage less ONE pillar; no yakuimon pillar was found measured, so
 #: ~1 ft is a GUESS. This draft takes an 8 ft frontage. The drawn ~2 ft posts are a convention outside the real passage.
 YAKUIMON_FRONTAGE_FT: float = 8.0
+"""Research: one-bay gate frontage - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: a one-bay gate is drawn about 6 to 8.5 ft wide, the frontage of the three registered examples taken between pillar centers; this draft takes 8 ft."""
 YAKUIMON_PILLAR_FT: float = 1.0
+"""Research: one-bay gate pillar - GUESS research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the passage is the frontage less one pillar of about 1 ft, a guess because no page measures a one-bay gate's pillar."""
 GATE_W_FT: dict[str, float] = {"one-bay gate": YAKUIMON_FRONTAGE_FT - YAKUIMON_PILLAR_FT, "gate range": 12.0}
 GATE_FORM: str = random.Random(zlib.crc32(b"county-magistracy-example:main gate form")).choice(GATE_FORMS)
 
@@ -62,6 +64,7 @@ GARDEN_SITE: str = random.Random(zlib.crc32(b"county-magistracy-example:vegetabl
 #: 36 x 30 ft (1,080 sq ft). The field form, over about half the grounds (~27,000 of 54,000 sq ft), cannot stand in an
 #: inner court of 24,300 sq ft before anything is built in it, so the room rules it out (T21's plan review).
 GARDEN_PLOT_FT: tuple[float, float] = (36.0, 30.0)
+"""Research: vegetable garden plot - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the low form of the garden size knob is a soup-greens plot of about 100 sq m (~1,076 sq ft), drawn 36 x 30 ft (1,080 sq ft)."""
 
 
 def garden_zones(site: str) -> tuple[CourtZone, ...]:

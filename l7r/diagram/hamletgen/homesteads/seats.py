@@ -49,7 +49,7 @@ def front_row(
     Following the outline also draws better - a farming hamlet's front row bends with the field edge
     the way a real one does, rather than ruling a straight line across a curved margin.
 
-    Research: a row fronting the field - UNRESEARCHED: the first seats offered one pitch apart along the field's outline, center-out
+    Research: a row fronting the field - GUESS: the page is silent on a pitch - 0285 gives a homestead about 104 ft of ground a side, and the 100 ft pitch is ours, about it; center-out as 0029 seats the place open nearest the cluster
     """
     # THE ENVELOPE WALK IS RETIRED (feature 226, at the gate's coverage floor): every hamlet builds a site boundary
     # before this runs, so the row is always offset from its chains; the walk along the paddy's own outline (one seat
@@ -79,7 +79,7 @@ def _front_row_from_chains(
 
     Research:
         house off the paddy - research/questions/0029-farmhouses-minka.drawing.html: the wall rule's gap plus a foot, past the homestead's reach toward the chord
-        a row fronting the field - UNRESEARCHED: seats one pitch apart along the chains within the cluster's stretch, center-out
+        a row fronting the field - GUESS: the page is silent on a pitch - 0285 gives a homestead about 104 ft of ground a side, and the 100 ft pitch is ours, about it; center-out as 0029 seats the place open nearest the cluster
     """
     seat = plan.seat
     ax, ay = seat["along"]
@@ -144,8 +144,8 @@ def lane_frontage(s: Settlement, seat: Mapping[str, Any], step: float = 86.0, co
     different archetype).
 
     Research:
-        houses front their lanes - UNRESEARCHED: seats every 86 ft on both verges of each internal lane
-        frontage seat off the lane - UNRESEARCHED: `LANE_FRONTAGE_STANDOFF` (70 ft) off the lane's centerline
+        houses front their lanes - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse is seated before any lane is laid, the planned Imperial road excepted, and 0033 has a row's farms along a street laid out before them - a seat is offered along an internal lane already laid, a departure the code keeps until feature 417 T32
+        frontage seat off the lane - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the setback (0081, 0028); `LANE_FRONTAGE_STANDOFF` (70 ft) off the lane's centerline
     """
     out: list[Pt] = []
     off = LANE_FRONTAGE_STANDOFF

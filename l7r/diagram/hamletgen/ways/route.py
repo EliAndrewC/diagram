@@ -184,9 +184,9 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
             steadings, then pulled taut like a string
         clear of the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line 7 ft off by default (the page's fence to the middle of the lane), a tread's edge 5.5 ft
         clear of the crop - research/questions/0081-village-lanes.drawing.html: half the widest tread off the crop (`WEB_CROP_GAP`, carried by the crop polygons) at each cell's center, unpadded so a way can come up to the bund (padded half a cell as the walls are, cohort Audit-10's field way could not); every link the pull takes is tested at that gap, and a lattice step it keeps as it is is asked of the crop's outline (`crosses_the_crop`) - a route that would cut a crop corner is no route
-        clear of the toe and marsh - UNRESEARCHED: 8 ft (`WEB_HARD_GAP`)
-        lattice off the water - UNRESEARCHED: 14 ft off the water lines
-        a brook crossing tolled - UNRESEARCHED: the search charges a crossing (`_CROSSING["cost"]`) and the pull refuses a shortcut that adds one (`_new_crossing`)"""
+        clear of the toe and marsh - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); 8 ft (`WEB_HARD_GAP`)
+        lattice off the water - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a path runs on the channel's bank and the bund is a path - the router keeps its lattice 14 ft off the water lines, a departure the code keeps until feature 417 T32
+        a brook crossing tolled - GUESS research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the search charges a crossing (`_CROSSING["cost"]`) and the pull refuses a shortcut that adds one (`_new_crossing`)"""
     cell = ROUTE_CELL if cell is None else cell  # the standard lattice unless a caller asks a finer one
     span = math.dist(start, goal)
     if span < 1.0:
@@ -359,7 +359,7 @@ def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tupl
 # cut. 24 ft is three paces past the widest homestead gap the fabric leaves; beyond that the detour
 # stops being the same way and the router should have found another line.
 _EASE_FT = 24.0
-"""Research: how far a corner is eased - UNRESEARCHED: up to 24 ft off its apex"""
+"""Research: how far a corner is eased - CONVENTION: a drawing smoothing of the map's - Smith (1899) has village streets turning suddenly, (feature 417 T29 pass E2, 2026-10-25); up to 24 ft off its apex"""
 _EASE_STEPS = 6
 
 

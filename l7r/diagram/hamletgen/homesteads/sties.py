@@ -35,10 +35,10 @@ WALL_KEYS = ("retirement_houses", "storehouses", "byres", "farm_sheds")
 """Research: the outbuildings - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the farmhouse or one of its outbuildings - the retirement house, the storehouse, the byre, the shed, and the wood shed among the fixtures"""
 
 STY_SALT = 109.0
-"""Research: each farm's own first place - UNRESEARCHED: the walk round its walls begins at the household's position roll, so no two farms stand their sty alike"""
+"""Research: each farm's own first place - NONE: 109.0 is a hash salt for the walk's first place; another value only reshuffles which farm takes which side"""
 
 ALIGN_TOL_DEG = 10.0
-"""Research: a part square to its house - UNRESEARCHED: within 10 degrees of the house's rake, a wall the sty may stand against"""
+"""Research: a part square to its house - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); within 10 degrees of the house's rake, a wall the sty may stand against"""
 
 
 def to_frame(p: tuple[float, float], house: Mapping[str, Any]) -> tuple[float, float]:
@@ -100,8 +100,9 @@ def sty_seat(s: Settlement, house: Mapping[str, Any]) -> dict[str, Any] | None:
 
     Research:
         against the farmhouse or an outbuilding - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: on the household's own plot
-        the gap, the step and the rake - UNRESEARCHED: the fixtures' 3.5 ft wall gap off the plot's other parts (`WALL_GAP_FT`), places 4 ft apart along each wall (`WALL_SLIDE_FT`), the sty raked with its house
-        no sty in a grove band - UNRESEARCHED: no page keeps a sty off a farm's grove band; the placer asks the check's own predicate (`grove_rules.fixture_on_band`), every band as recorded (feature 385 T03, cohort seed 45)
+        the gap and the step - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); the fixtures' 3.5 ft wall gap off the plot's other parts (`WALL_GAP_FT`), places 4 ft apart along each wall (`WALL_SLIDE_FT`)
+        the sty raked with its house - research/questions/0029-farmhouses-minka.drawing.html: the homestead turns as one about the middle of the house
+        no sty in a grove band - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); no page keeps a sty off a farm's grove band; the placer asks the check's own predicate (`grove_rules.fixture_on_band`), every band as recorded (feature 385 T03, cohort seed 45)
         the sty's size - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: drawn 8 by 6 ft (`STY_FT`)"""
     walls, parts = farmstead(s.M, house)
     w, d = s.px(STY_FT[0]), s.px(STY_FT[1])
@@ -136,7 +137,7 @@ def stage_sties(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         about two households in three - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the share counted to the households; none on a dike-pond hamlet, whose sties stand on its ponds
-        passed to the next household - UNRESEARCHED: a household with no place gives its sty to the next that keeps none, so the hamlet draws the share's count wherever its walls allow"""
+        passed to the next household - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); a household with no place gives its sty to the next that keeps none, so the hamlet draws the share's count wherever its walls allow"""
     houses = list(s.M.get("houses") or [])
     share = fixture_shares(s.seed, plan.field_archetype)["sty"]
     carriers = quota_carriers(s.seed, "sty", len(houses), share)

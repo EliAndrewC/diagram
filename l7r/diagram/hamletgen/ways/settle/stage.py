@@ -30,7 +30,7 @@ def settle_reach(s: Any) -> int:
     Research:
         every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every household's way, laid once the last house stands, drawn as a lane of its own
         the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs to the field's bund
-        a path runs to the graves - UNRESEARCHED: claimed at `settle_targets`"""
+        a path runs to the graves - GUESS: searched, no page draws a path to the graves (feature 417 T29 pass A1, 2026-10-25) - 0224's notes have the graves and their paths cleaned in a modern account"""
     drawn = settle_tree(s)  # every household's way, reached or not (feature 318, `tree.owed`); each drawn once
     if not (unreached_houses(s.M) or law.unreached_targets(s.M) or law.field_unreached(s.M)):
         return drawn

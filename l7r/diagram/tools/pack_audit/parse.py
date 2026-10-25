@@ -20,6 +20,7 @@ COURT_FLOORS: frozenset[str] = frozenset({"url(#oshirasu-sand)", "url(#court-cob
 ROOF_STROKES: frozenset[str] = frozenset({"#5A3F1E"})
 OPEN_PATTERNS: frozenset[str] = frozenset({"url(#garden-stipple)", "url(#vegetable-rows)", "url(#keiko-earth)"}) | COURT_FLOORS
 MIN_BLDG_AREA_PX: float = 500.0  # ~55 sqft; below this it is furniture, not a building mass. Lowered
+"""Research: building area floor - GUESS: no page gives a least building footprint; a rect under 500 px2 (about 55 sq ft) is furniture, not a building mass."""
 # from 900 (2026-07-21): the glyph-doctrine retirement shrank real buildings to TRUE size - an 11x7 ft
 # modest shrine is 693 px2 - and the old floor silently dropped them from coverage/adjacency, emitting
 # a false "fire tub adrift" on Hayakawa (the tub sits 1.8 ft off the shrine the tool stopped seeing).
@@ -54,6 +55,7 @@ _CIRCLE_TAG_RE = re.compile(r"<circle\b([^>]*)>")
 _FENCE_GROUP_RE = re.compile(r'<g\b[^>]*\bid="fence"[^>]*>(.*?)</g>', re.DOTALL)
 _DEFS_RE = re.compile(r"<defs\b.*?</defs>", re.DOTALL)
 MIN_TREE_R_PX: float = 4.0  # the glyph floor: a canopy-green dot smaller than this is a pattern's stipple, not a tree
+"""Research: tree radius floor - NONE: a canopy-green dot under 4 px radius is a pattern's stipple, not a tree, an audit glyph floor."""
 # building. A tub is meant to stand ~1.7-2 ft OFF the wall, so unlike a wall-abutting structure it has
 # no legitimate flush case - any real contact is a defect and this is a rounding floor, not a
 # tolerance. Same 0.5 px floor as WALL_OVERLAP_MIN_PX and for the same reason: emit rounding and
@@ -74,8 +76,11 @@ def _unescape(s: str) -> str:
 
 
 CHAR_W_FRAC: float = 0.55  # a serif glyph's advance width as a fraction of font-size (bbox estimate)
+"""Research: caption character width - NONE: a serif glyph advances 0.55 of the font size, a text-width estimate for the bbox."""
 CHAR_W_BOLD: float = 0.72  # bold ALL-CAPS band labels (RESIDENCE, HEARING COURT) run widest
+"""Research: bold caps character width - NONE: bold all-caps labels advance 0.72 em per character, a text-width figure measured by rendering."""
 CHAR_W_BOLD_MIXED: float = 0.60  # ...but mixed-case bold (building names) is much narrower than caps.
+"""Research: bold mixed-case character width - NONE: bold mixed-case names advance 0.60 em per character, a text-width figure measured by rendering."""
 # Measured 2026-07-25 by rendering real pool strings through resvg/DejaVu Serif and reading the ink
 # extents: at 0.72 the all-caps band labels land at 0.95-0.99x of true width (right), while
 # mixed-case bold came out 1.26-1.27x (way over). That 26% phantom width was enough to make the
@@ -84,6 +89,7 @@ CHAR_W_BOLD_MIXED: float = 0.60  # ...but mixed-case bold (building names) is mu
 # mixed-case at 0.96-1.06x: still biased slightly LONG, which is the safe direction for a check that
 # is looking for overlaps.
 CAPS_RATIO: float = 0.8  # a label with >= this share of upper-case letters is a caps label
+"""Research: caps label share - NONE: a label with 0.8 or more of its letters upper-case is a caps label, a parser classification."""
 WELL_FILL = "#9C8C70"  # well-curb stone
 WALL_STROKE = "#2D2A24"  # the compound wall (and gate posts / well-mouths share this dark ink)
 _WALL_GROUP_RE = re.compile(rf'<g stroke="{re.escape(WALL_STROKE)}"[^>]*>(.*?)</g>', re.DOTALL)
@@ -96,6 +102,7 @@ DARK_FILLS: frozenset[str] = frozenset({"#2D2A24", "#3A2010", "#3A2418", "#1A141
 # OPEN_PATTERNS) painted over a privy. A palette grows; "drawn later, covers it" does not.
 FURNITURE_MAX_AREA_PX: float = MIN_BLDG_AREA_PX  # a rect below the building floor is furniture
 DOOR_MAX_AREA_PX: float = 250.0  # a door glyph is small (a kura door); bigger dark rects are hearths/blocks
+"""Research: door glyph area ceiling - NONE: a dark rect over 250 px2 is a hearth or block, not a door, a parser classification."""
 
 # --- structures vs wall ink (a structure may ABUT a wall, never occupy it) ---
 # Every roofed/built footprint color, with NO area floor: the motivating defect was a 26x8 px

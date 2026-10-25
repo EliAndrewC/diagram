@@ -148,7 +148,7 @@ PIT_FIELD_SHARE_BAND = (0.02, 0.85)
 PIT_FIELD_REACH_FT = 160.0  # how far from the house the field or road edge is looked for: the household's NEAREST paddy or road (GUESS)
 """Research: field pit reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the nearest paddy or road within 160 ft"""
 _PIT_EDGE_CLEAR_FT = 8.0  # off the paddy's edge: the placer's 6 ft paddy margin plus two (the pit stands on the bund-side ground)
-"""Research: pit off the paddy edge - UNRESEARCHED: 8 ft"""
+"""Research: pit off the paddy edge - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25) on the setback - a source (Sunami 2011, pass C) puts field pits at the field's corner or on its bund, against this 8 ft; to be recorded on 0042 and fixed (feature 417 T33); 8 ft"""
 _PIT_CANDIDATES = 8  # the nearest edge points tried, nearest first
 # THE BATH ROOM'S THREE SEATS (feature 280 M22, research/homesteads/740): joined to the main house beside its main door, at
 # the far end of its stable wing (the house's -x end, where the doma and its stable are), or joined to its floored rooms (the
@@ -406,9 +406,9 @@ def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, A
     Research:
         a lane between pit and house allowed - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the pit stands at the field or road, the laid seat where none is clear
         field pit's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: within `PIT_FIELD_REACH_FT` (160 ft) of the house, the page's GUESS
-        field pit off a lane - UNRESEARCHED: 3 ft clear of a lane's edge (its half-width plus 3 ft), so the pit stands beside the way, not on it
-        field pit off the edge - UNRESEARCHED: set `_PIT_EDGE_CLEAR_FT` (8 ft) in from the paddy or road edge - the placer's 6 ft paddy margin plus two, on the bund-side ground; no page says how far from the field a pit stood
-        field pit size - UNRESEARCHED: drawn 3.5 ft square
+        field pit off a lane - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25) on the 3 ft - pits stood along the roads (Sunami 2011, pass C); 3 ft clear of a lane's edge (its half-width plus 3 ft), so the pit stands beside the way, not on it
+        field pit off the edge - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25) on the setback - pits stood at the field's corner or on its bund (Sunami 2011, pass C), against this; feature 417 T33; set `_PIT_EDGE_CLEAR_FT` (8 ft) in from the paddy or road edge - the placer's 6 ft paddy margin plus two, on the bund-side ground; no page says how far from the field a pit stood
+        field pit size - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25) on the shape - a pit just over 1 m across, a 3-shaku tub (Sunami 2011, pass C), round where this is square; feature 417 T33; drawn 3.5 ft square
     """
     if not pending:
         return 0
@@ -467,7 +467,7 @@ def _flexible_clear(s: Settlement, h: Mapping[str, Any], q: Pt, ext: tuple[float
 
     Research:
         pit on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: no brook between pit and house
-        pit off every grove - UNRESEARCHED: clear of every farm's grove band
+        pit off every grove - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); clear of every farm's grove band
     """
     hx, hy = float(h["x"]), float(h["y"])
     if _strip_blocked(s, q[0], q[1], ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing, near=near):

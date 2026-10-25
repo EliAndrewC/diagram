@@ -140,7 +140,7 @@ def _obstacles(s: Settlement, h: Mapping[str, Any]) -> tuple[list[Poly], list[Po
 
     Research:
         routed round the farm - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round buildings, yards, gardens and other groves; through its own grove
-        walled off lanes, wells and crop - UNRESEARCHED: every lane, other farms' well pockets and the crop and paddy plots walled
+        walled off lanes, wells and crop - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); every lane, other farms' well pockets and the crop and paddy plots walled
     """
     from ..ways.geom import steading_footprints, stroke_quad  # local: the ways are a later stage
 
@@ -175,10 +175,10 @@ def farm_channel(s: Settlement, h: Mapping[str, Any], courses: Sequence[Sequence
     Research:
         a channel into the grounds - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the shortest route found from the nearest sources
         no way back drawn - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the channel stops in the dooryard
-        crosses no other water - UNRESEARCHED: a route crossing other drawn water more than 6 ft past its mouth is refused
+        crosses no other water - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); a route crossing other drawn water more than 6 ft past its mouth is refused
         where the channel ends - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: in the dooryard, `DOORYARD_STEP_FT` (6 ft) off the yard, one step
-        channel corridor - UNRESEARCHED: a 4 ft no-build corridor along each channel
-        how far a channel's source is sought - UNRESEARCHED: 20 ft steps, 60 ft spread, widened fourfold where the nearest find nothing
+        channel corridor - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); a 4 ft no-build corridor along each channel
+        how far a channel's source is sought - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); 20 ft steps, 60 ft spread, widened fourfold where the nearest find nothing
     """
     from ..ways.route import _route  # local: the ways are a later stage
 
@@ -263,7 +263,7 @@ def farm_channels(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> list[Ma
     whose only irrigation water is the field's head, drew 1 channel in 11 without it and 11 in 11 with it.
 
     Research:
-        farms nearest the water first - UNRESEARCHED: the order channels are laid
+        farms nearest the water first - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); the order channels are laid
         led off an earlier channel - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each drawn channel a source for the next
         a farm no channel reaches - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: returned for a well of its own
         washing places - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: a farm's channel is one of the

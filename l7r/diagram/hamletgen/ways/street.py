@@ -44,8 +44,8 @@ def row_reach(houses: Sequence[Mapping[str, Any]]) -> tuple[float, float]:
     end farms (half a frame) - the widest farm's frame (`geom.bbox`), or the nucleated pitch where none is recorded.
 
     Research:
-        a farm's own street - UNRESEARCHED: a farm within 1.5 frames of the street is its own
-        street run past its end farms - UNRESEARCHED: half a frame past the end farms at both ends of the span; the run off the map is `street_run_out`'s road (0033)
+        a farm's own street - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); a farm within 1.5 frames of the street is its own
+        street run past its end farms - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); half a frame past the end farms at both ends of the span; the run off the map is `street_run_out`'s road (0033)
         a farm frame where none is recorded - research/questions/0033-row-villages-resson.drawing.html: `ROW_FRAME_FT`, the middle of a row holding's 220 to 260 ft"""
     fw = max((max(float(b[2]), float(b[3])) for b in (((h.get("geom") or {}).get("bbox")) for h in houses) if b), default=ROW_FRAME_FT)
     return 1.5 * fw, fw / 2
@@ -193,7 +193,9 @@ def brook_bounds(line: Sequence[Pt], arc: Sequence[float], first: float, last: f
     road runs out from there (`track.stage_track` reads the same span), over the brook at a ford as every way crosses it.
     A crossing BETWEEN farms is left to the street: its farms stand on both banks.
 
-    Research: street end short of the brook - UNRESEARCHED: the run past an end farm stops a ford's landing short of a brook crossing"""
+    Research: street end short of the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the water only at one of its crossing places; the street stops short of the crossing
+        street end's stand-off - GUESS: `FORD_LANDING_FT` (22 ft) short of the crossing, a stand-off of ours; 0035, which gives the crossing places, is silent on the distance (searched, feature 417 T29 pass D)
+        a crossing between the end farms - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the water only at a crossing place - a brook crossing between the end farms is left in the street, a departure the code keeps until feature 417 T32"""
     if len(brook) < 2 or len(line) < 2:
         return lo, hi
     at = [arc[k] + math.dist(line[k], x) for k, x in law.crossing_points([(float(p[0]), float(p[1])) for p in line], [(float(p[0]), float(p[1])) for p in brook])]
@@ -211,7 +213,7 @@ def thread(path: Sequence[Pt], walls: Sequence[Poly], hard: list[Poly], water: l
 
     Research:
         street threaded round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
-        street's berth off the steadings - UNRESEARCHED: routed half a tread plus 1 ft (5 ft), then 7 ft, off the steadings"""
+        street's berth off the steadings - research/questions/0081-village-lanes.drawing.html: a tread keeps 3 ft off a farmhouse wall, and 0246 a lane's middle 7 ft off a garden fence - the street is routed 5 ft, then 7 ft, off the steadings from its line, a departure the code keeps until feature 417 T32; routed half a tread plus 1 ft (5 ft), then 7 ft, off the steadings"""
     clear = [p for p in path if not _crosses_fabric([p, p], walls, half)]
     if len(clear) < 2:
         return list(clear)
@@ -259,7 +261,7 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
 
     Research:
         one street per planned row - research/questions/0033-row-villages-resson.drawing.html: further streets laid beside the first
-        further street joins the streets - UNRESEARCHED: only the first street takes the road, a further one joins a street laid
+        further street joins the streets - research/questions/0033-row-villages-resson.drawing.html: a planned row's roads ran in a grid, like the squares of a go board (Santome); only the first street takes the road, a further one joins a street laid
         street join width - CONVENTION: streets are drawn 6 ft wide (research/questions/0033-row-villages-resson.drawing.html); the join is drawn at the street's 6 ft tread
         street join unhooked - research/questions/0081-village-lanes.drawing.html: a lane's end loses its hook
         street join closing no sliver - research/questions/0081-village-lanes.drawing.html: lanes meet as a T, so a join closing a sliver (`closes_a_needle`) is refused and searched for as a door path is"""

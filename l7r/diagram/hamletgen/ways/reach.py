@@ -42,7 +42,7 @@ def settle_targets(s: Any, lawful: Judge) -> int:
     target no such run reaches stays unreached - never drawn to by a least-bad spur (FR-005) - and the settle's report
     names it.
 
-    Research: a path runs to the graves - UNRESEARCHED: the shortest lawful straight spur from the network, once"""
+    Research: a path runs to the graves - GUESS: searched, no page draws a path to the graves (feature 417 T29 pass A1, 2026-10-25) - 0224's notes have the graves and their paths cleaned in a modern account"""
     M = s.M
     done = {tuple(ln["to"]) for ln in M.get("lanes") or [] if ln.get("role") == TARGET_ROLE and ln.get("to")}
     n = 0
@@ -73,7 +73,7 @@ def settle_field(s: Any, lawful: Judge) -> int:
         the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the network to the field's bund
         over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: square, at the ford that makes the walk shortest
         field way width - research/questions/0081-village-lanes.drawing.html: drawn `BRANCH_WIDTH` (5 ft) wide, the field spur's tread
-        the paddy's edge tried first - UNRESEARCHED: the field way is tried to the paddy's edge before the dry hem's (`paddy_ground`, then
+        the paddy's edge tried first - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25); the field way is tried to the paddy's edge before the dry hem's (`paddy_ground`, then
             `worked_ground`), where 0014 lets a lane end on either (405 T127)"""
     M = s.M
     if not law.field_unreached(M):

@@ -1,0 +1,154 @@
+- l7r/diagram/compound_example.py::county_magistracy_program#cell door
+    cell door - UNRESEARCHED: toward the cell's west end, so its approach leaves the barracks' south dwelling the ground for its own door
+- l7r/diagram/compound_example.py::county_magistracy_program#gatehouse door
+    gatehouse door - UNRESEARCHED: the gatehouse's door on the gate passage, where the gatekeepers watch
+- l7r/diagram/compound_model.py::NOTICE_BOARD_MAX_FT#board by the gate
+    Research: board by the gate - UNRESEARCHED: within 40 ft of the opening, this project's figure, so a board beside the road (0190) can face its gate across the Imperial road's 30 ft (0088)"""
+- l7r/diagram/hamletgen/consts.py::BAMBOO_FORMS#the forms' odds
+    the forms' odds - UNRESEARCHED: homestead 2 in 5 and the others 1 in 5, where the registry's knob rolls the four evenly; no page gives odds"""
+- l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#the along-row span
+    Research: the along-row span - UNRESEARCHED: 100 ft, the step along a row and the grids' spacing; the rows themselves stand `_rank_step` apart, 0038's house, yard and 39 ft of sun"""
+- l7r/diagram/hamletgen/consts.py::CLUSTER_SPAN_FACTOR#cluster's reach along the field edge
+    """Research: cluster's reach along the field edge - UNRESEARCHED: 1.6 of the band's half-extent"""
+- l7r/diagram/hamletgen/consts.py::FAN_ASPECTS#fan aspect
+    """Research: fan aspect - UNRESEARCHED: 0.88 to 1.16 fall against canal, rolled"""
+- l7r/diagram/hamletgen/consts.py::REF_CANAL_A#reference fan's canal A
+    """Research: reference fan's canal A - UNRESEARCHED: 1,250 to 1,450 ft, Ikegami's hand-drawn fan"""
+- l7r/diagram/hamletgen/consts.py::REF_CANAL_B#reference fan's canal B
+    """Research: reference fan's canal B - UNRESEARCHED: 680 to 800 ft, Ikegami's hand-drawn fan"""
+- l7r/diagram/hamletgen/consts.py::REF_FIELD_FALL#reference fan's fall
+    """Research: reference fan's fall - UNRESEARCHED: 1,150 ft, Ikegami's hand-drawn fan"""
+- l7r/diagram/hamletgen/consts_fields.py::LEFTOVER_FORMS#dike-pond leftover parcels
+    dike-pond leftover parcels - UNRESEARCHED: rice or pond, even odds
+- l7r/diagram/hamletgen/driver.py::STAGES#pond-bank trees after the wells
+    pond-bank trees after the wells - UNRESEARCHED: seated against the houses, ways and wells already standing, before the hinterland's scrub and copse fill round them (`stage_pond_bank`)
+- l7r/diagram/hamletgen/driver.py::STAGES#the ground's cover after every built thing
+    the ground's cover after every built thing - UNRESEARCHED: the hinterland, the woodland, the windbreak and the bamboo fill the ground the built things left, the bamboo over the scrub that kept out of its stands
+- l7r/diagram/hamletgen/driver.py::STAGES#track before the wells
+    track before the wells - UNRESEARCHED: a well dug where the track already runs
+- l7r/diagram/hamletgen/driver.py::STAGES#waterward fringe before the houses
+    waterward fringe before the houses - UNRESEARCHED: a polder's reed fringe outside the dike laid before the houses and the track, which treat it as wet ground
+- l7r/diagram/hamletgen/frame.py::stage_crossings#ditch footbridge spacing
+    ditch footbridge spacing - UNRESEARCHED: 300 ft on a comb, 320 ft on a polder
+- l7r/diagram/hamletgen/frame.py::stage_crossings#polder crossing caps
+    polder crossing caps - UNRESEARCHED: planks on the settlement-side toe collector, as the hand-authored polders had them
+- l7r/diagram/hamletgen/plan.py::HamletSpec#default households
+    default households - UNRESEARCHED: 15 when none declared (REF_HOUSEHOLDS), Ikegami's count
+- l7r/diagram/hamletgen/plan.py::SEAT_STANDOFF#standoff from the field
+    Research: standoff from the field - UNRESEARCHED: 12 ft"""
+- l7r/diagram/hamletgen/plan.py::SitePlan.head_deg#turned away from the brook's flank
+    turned away from the brook's flank - UNRESEARCHED"""
+- l7r/diagram/hamletgen/plan.py::band_extent#band area
+    band area - UNRESEARCHED: households times HOMESTEAD_GROUND_FT squared; 0037 sizes only the yard
+- l7r/diagram/hamletgen/plan.py::band_extent#band aspect by shape
+    band aspect by shape - UNRESEARCHED: CLUSTER_BAND_ASPECT
+- l7r/diagram/hamletgen/plan.py::band_extent#band floors and caps
+    band floors and caps - UNRESEARCHED: half-depth 112 to 300 ft, half-length 240 to 1,100 ft"""
+- l7r/diagram/hamletgen/plan.py::offtakes_for#delivery-ditch count and fractions
+    delivery-ditch count and fractions - UNRESEARCHED: 2, 3 or 4 by household band (OFFTAKE_LADDER)"""
+- l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#after the houses, ways and wells
+    after the houses, ways and wells - UNRESEARCHED: seated against what stands, before the hinterland's scrub and copse"""
+- l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#at least one sty where one fits
+    at least one sty where one fits - UNRESEARCHED: the share rounded up to one, the floor of one not on the page
+- l7r/diagram/hamletgen/washing.py::each_house_places#slid at most 16 ft
+    slid at most 16 ft - UNRESEARCHED: a step in its own dooryard, so no farther along the channel than 16 ft"""
+- l7r/diagram/hamletgen/washing.py::shared_places#its nearest water
+    its nearest water - UNRESEARCHED: a household washes at the passing water nearest it; no page says which of two it used
+- l7r/diagram/hamletgen/washing.py::stage_washing#after the ways and crossings
+    Research: after the ways and crossings - UNRESEARCHED: set last of the ground's features, so each seat is asked of every way, bridge and building already standing; no page orders them"""
+- l7r/diagram/labels/placer.py::moved_inward#moved inward
+    Research: moved inward - UNRESEARCHED: shifted by the least that brings it inside the frame, centered where the frame is narrower (0241's caption moved inward is the crop's, not a fixed frame's)"""
+- l7r/diagram/labels/placer.py::place#caption clearance
+    caption clearance - UNRESEARCHED: half the caption's letter height (`CLEAR_EM`) kept off other ink - 0242 sets that gap only from the caption's own feature, as its calibration
+- l7r/diagram/labels/placer.py::place#no seat in the frame
+    no seat in the frame - UNRESEARCHED: a caption with no seat inside the frame takes the first seat beside it, moved inward until it fits (`moved_inward`)
+- l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#flower bed against the town wall
+    flower bed against the town wall - UNRESEARCHED: a bed laid flush inside the rampart
+- l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#moat against the rampart
+    moat against the rampart - UNRESEARCHED: wall x moat permitted, the moat lying against the rampart's foot
+- l7r/diagram/overlap/taxonomy.py::_MATRIX_PERMISSIVE#house or field on cover
+    house or field on cover - UNRESEARCHED: built on, the cover stopping there
+- l7r/diagram/settlement/_geom/curves.py::winding#winding path
+    Research: winding path - UNRESEARCHED: a shallow S of amplitude `amp` rather than a straight line"""
+- l7r/diagram/settlement/_geom/village.py::FARMHOUSE_EAVE_GAP_FT#farmhouse wall-to-wall clearance
+    """Research: farmhouse wall-to-wall clearance - UNRESEARCHED: 8 ft, two drip lines and a footpath"""
+- l7r/diagram/settlement/_geom/walls.py::torii_glyph_dims#post set-in
+    post set-in - UNRESEARCHED: posts at 12/19 of the beam's half-span (the kasagi's overhang)"""
+- l7r/diagram/settlement/_geom/walls.py::torii_glyph_dims#top beam width
+    top beam width - UNRESEARCHED: 1.4 ft, floored at 1.9 px
+- l7r/diagram/settlement/_geom/walls.py::torii_glyph_dims#torii span
+    torii span - UNRESEARCHED: 16 ft default
+- l7r/diagram/settlement/_geom/walls.py::torii_seat_on_wall#torii stands clear of every wall
+    Research: torii stands clear of every wall - UNRESEARCHED: an arch's box may not reach a wall run"""
+- l7r/diagram/settlement/_geom/ways.py::PLANK_VILLAGE_REACH#footplank reaches the village
+    """Research: footplank reaches the village - UNRESEARCHED: a bank within 55 px of a dwelling counts as worth crossing to"""
+- l7r/diagram/settlement/_knobs.py::<module>#hamlet default values
+    hamlet default values - UNRESEARCHED: high_margin, round, spine, corner_NW, medium plots, organic, 0 drift, alleys, homestead bamboo
+- l7r/diagram/settlement/_knobs.py::skeleton_layout#gateway at the low foot
+    gateway at the low foot - UNRESEARCHED: the downslope end of the skeleton
+- l7r/diagram/settlement/_knobs.py::skeleton_layout#headman at the skeleton's focal point
+    headman at the skeleton's focal point - UNRESEARCHED: the head, the T-junction, the fork, a quadrant by the cross, the water
+- l7r/diagram/settlement/city/bridges.py::BridgesMixin._plank_reaches_useful_ground#bank and village reach
+    bank and village reach - UNRESEARCHED: PLANK_BANK_REACH past the end, PLANK_VILLAGE_REACH to a house
+- l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed channel width
+    assumed channel width - UNRESEARCHED: 2.5 px where a record has none (`DEFAULT_W`)
+- l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#feeder left unplanked
+    feeder left unplanked - UNRESEARCHED: the feeder kept out of `SUPPLY_ROLES`
+- l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off groves
+    off groves - UNRESEARCHED: a farm's grove rules a seat out
+- l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#polder crossings by side
+    polder crossings by side - UNRESEARCHED: seg_caps, none on the feeder, far toe or drain
+- l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short stub stepped over
+    short stub stepped over - UNRESEARCHED: under 140 px, no plank
+- l7r/diagram/settlement/city/knobs.py::machi_mouths#suburb wards outside the mesh
+    suburb wards outside the mesh - UNRESEARCHED: out-wall machi districts get no mouths
+- l7r/diagram/settlement/city/moat.py::MoatMixin.inwall_drain_outfall#conduit corridor
+    conduit corridor - UNRESEARCHED: 33 px
+- l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#sty clearance
+    sty clearance - UNRESEARCHED: its half-diagonal plus 2 ft from every placed structure and crossing
+- l7r/diagram/settlement/hard_ground.py::HardGroundMixin._hard_ground#crop and ditches are no-build
+    crop and ditches are no-build - UNRESEARCHED: a footprint may not touch a dry plot, nor come within the ditch's half-width plus 2 px
+- l7r/diagram/settlement/houses.py::HousesMixin._fits#building spacing
+    """Research: building spacing - UNRESEARCHED: 4 px between collision circles (exact boxes where both are declared)"""
+- l7r/diagram/settlement/houses.py::HousesMixin._in_blocked#seat set-back from dry plots and hills
+    seat set-back from dry plots and hills - UNRESEARCHED: the center 12 px off a dry plot or a hill or pond ellipse"""
+- l7r/diagram/settlement/land/cover.py::FARMSTEAD_NEIGHBOR_FT#shared ground between farmsteads
+    """Research: shared ground between farmsteads - UNRESEARCHED: two within 140 ft keep the ground between them clear of scrub"""
+- l7r/diagram/settlement/land/cover.py::GroundCoverMixin._commons_keep#off the treads
+    off the treads - UNRESEARCHED: 4 ft of bare verge along every lane, street and road
+- l7r/diagram/settlement/land/cover.py::GroundCoverMixin._stock_woodland#crowns and pines clear of the crops
+    crowns and pines clear of the crops - UNRESEARCHED: a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one
+- l7r/diagram/settlement/land/cover.py::GroundCoverMixin._stock_woodland#crowns thin to the wood's edge
+    crowns thin to the wood's edge - UNRESEARCHED: a throw within the feather of the parcel's edge is kept with chance (d / feather) ** 0.6
+- l7r/diagram/settlement/land/cover.py::GroundCoverMixin._stock_woodland#woodland stocked to read
+    woodland stocked to read - UNRESEARCHED: a woodland parcel carries at least `WOODLAND_MIN_CROWNS` (5) crowns, so it reads as a wood
+- l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#a scrub pine's height
+    a scrub pine's height - UNRESEARCHED: 9 to 14 ft (`random.uniform(9, 14) * bs`); no page gives a scrub pine's height
+- l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#a scrub pine's reach
+    a scrub pine's reach - UNRESEARCHED: `PINE_SPREAD_BS` (4.6 ft) as the pine's crown radius in the sun test
+- l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#woodland no-build
+    woodland no-build - UNRESEARCHED: a woodland parcel made no-build ground
+- l7r/diagram/settlement/land/cover.py::GroundCoverMixin.fill_the_holes#bare-share cap
+    bare-share cap - UNRESEARCHED: `BARE_SHARE_CAP` (0.35) of the view may stay bare"""
+- l7r/diagram/settlement/land/cover.py::GroundCoverMixin.woodland_room#crowns on a lattice
+    crowns on a lattice - UNRESEARCHED: crowns seated on a regular square lattice at the page's density
+- l7r/diagram/settlement/land/cover.py::farmstead_keepouts#no scrub among the farmsteads
+    Research: no scrub among the farmsteads - UNRESEARCHED: each farmstead and its parts, and each near pair, grown by the margin"""
+- l7r/diagram/settlement/land/dikes.py::DIKE_GAP_HW#cut width
+    cut width - UNRESEARCHED: 15 px either side of a sluice or crossing, a 30 px gap"""
+- l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#house platform
+    house platform - UNRESEARCHED: the house plus 14 by 10 ft of widened crest
+- l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#no homestead bundle
+    no homestead bundle - UNRESEARCHED: bare houses, the gardens down on the parcels"""
+- l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#off the sluice notch
+    off the sluice notch - UNRESEARCHED: no house within 34 px of a gap
+- l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#spacing along the crest
+    spacing along the crest - UNRESEARCHED: neighbors at least 1.15 house widths apart
+- l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the dooryards
+    reeds off the dooryards - UNRESEARCHED: no reed inside the urban-clearance halo round dooryards
+- l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#tread keep-out width
+    tread keep-out width - UNRESEARCHED: 3 bs either side of every way
+- l7r/diagram/settlement/town_ways.py::TownWaysMixin.ancestral_hall#focal keep-out
+    focal keep-out - UNRESEARCHED: the footprint plus 6 px is reserved
+- l7r/diagram/settlement/town_ways.py::TownWaysMixin.water_mouth#pavilion size
+    pavilion size - UNRESEARCHED: a hexagon of 22 ft radius

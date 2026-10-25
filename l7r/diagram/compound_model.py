@@ -9,8 +9,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 FTPX: float = 3.0  # 3 px = 1 ft (emit-time only)
+"""Research: feet to pixels - NONE: the emit scale of 3 px to 1 ft, a pixel scale."""
 FIRE_GAP_FT: float = 7.0  # default gap between hugging buildings (a real fire-gap)
+"""Research: fire gap between hugging buildings - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the default gap between buildings is 7 (feet), inside the page's 6-8 ft for wooden service buildings, a figure the page marks as the project's guess."""
 WALL_MARGIN_FT: float = 3.0  # a building's inset from the very corner / wall stroke
+"""Research: building inset from wall - GUESS research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: a building stands 3 ft from a compound wall's centerline, the wall's 1.5 ft half-thickness plus the 1.5 ft face clearance that page records as its guess."""
 # A wall is a built object with real thickness, drawn to scale and CENTERED on the boundary it
 # marks - so half of it stands inside the interior, and ground the wall occupies is not ground a
 # building can stand on. A hugging building therefore abuts the wall's INNER FACE (inset by half
@@ -19,12 +22,16 @@ WALL_MARGIN_FT: float = 3.0  # a building's inset from the very corner / wall st
 # (GM caught the hand-authored version of this on Ochiba, 2026-07-24; the check that now guards
 # it is pack_audit.structures_on_walls, and docs/buildings.md "Walls and gates" carries the rule).
 WALL_INK_FT: float = 3.0  # compound wall: 9 px at 3 px = 1 ft
+"""Research: compound wall thickness - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: a building plan draws the compound wall 3 ft thick, the heavier real form (rammed-earth tsuijibei up to ~1 m), a map drawing convention."""
 DIVIDER_INK_FT: float = 2.0  # internal court divider: 6 px
+"""Research: court divider thickness - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: the lighter wall perhaps 1 ft to about 2 ft thick against the 3 ft compound wall; the internal court divider drawn two feet thick (6 px), the lighter form of the two (that a divider takes it is ours)"""
 OUTLINE_CLEAR_FT: float = 0.5  # a hair beyond the ink, so the wall does not swallow the BUILDING'S
+"""Research: outline clearance - CONVENTION: a building stands 0.5 ft beyond the wall ink so the wall does not swallow its outline stroke."""
 # own outline stroke (a rect drawn exactly flush loses its edge under the wall and reads as merging
 # into it). 0.5 ft matches the gap the hand-authored Ochiba leaves between its servants' quarters
 # and the north wall - the house style this rule was reverse-engineered from.
 WALL_FACE_CLEAR_FT: float = 1.5  # a building backing a wall stands a foot or two clear of its FACE, its eaves nearly touching
+"""Research: clearance from wall face - GUESS research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: a building backing a wall stands a foot or two off its face, eaves nearly touching; 1.5 ft is the middle of that range, which the page records as a guess."""
 # (feature 374 wave 134, research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html; the spacing a GUESS there):
 # 1.5 ft, the middle of it - 3 ft from a compound wall's centerline, 2.5 ft from a divider's. pack_audit's structures_on_walls
 # holds the least of it, a foot.
@@ -61,7 +68,9 @@ ROOFED_ZONES: dict[str, tuple[str, float]] = {"oshirasu": ("#5A3F1E", 2.0)}
 # no roofed court's measurements were found (docs/buildings.md "Hearing court"); two ken is a common bay for an open
 # post-and-beam front. Each post is drawn 1 ft square, at true size.
 ROOF_POST_BAY_FT: float = 12.0
+"""Research: roofed court post spacing - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: the posts along the hearing court's open side stand two ken (~12 ft) apart, a figure the page records as the project's guess."""
 ROOF_POST_FT: float = 1.0
+"""Research: roofed court post size - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: each post of the hearing court's open side is drawn 1 ft square, a size the page records as the project's guess."""
 # The bath (feature 267 R09, research/questions/0105-baths-furo.html 'Baths (furo)': a room of the residence or a small addition to it on its
 # service side, by the kitchen and its well - no bath as a building of its own was found). 10 x 8 ft (pass 6: the whole
 # house is held to research 0091's 49-tsubo house, ~1,740 sq ft; it was 15 x 12, then 12 x 10) - below the
@@ -115,15 +124,19 @@ DOOR_KINDS: frozenset[str] = frozenset(
 )
 # The fracs along a face a door is tried at, the middle first: a tub or a well holds a face's ends or middle.
 DOOR_FRACS: tuple[float, ...] = (0.5, 0.3, 0.7, 0.2, 0.8, 0.1, 0.9)
+"""Research: door seat order - GUESS: no page says where along a face a door stood; a door stands at the middle of a face where it is free, else toward its ends (the fractions tried, middle first)."""
 # The stepping stones of the roji from the middle gate to the reception's veranda (R07): one stone every 4.5 ft, each
 # ~2 x 1.33 ft, and the shoe stone (kutsunugi-ishi) at the veranda 4 x 1.67 ft - the spacing and sizes a GUESS, drawn
 # as Hayakawa draws its roji.
 STONE_STEP_FT: float = 4.5
+"""Research: roji stepping-stone spacing - GUESS: stepping stones of the roji from the middle gate to the reception veranda are 4.5 ft apart, a spacing no page in the record gives."""
 # A privy (latrine) is drawn 5 ft square, a one-seat outhouse (the size the drafts have always drawn; a GUESS). One stands
 # no nearer a well than LATRINE_WELL_FT: 15 ft is a GUESS - no separation distance was read; the hand sheets' reviews
 # moved a stable-yard privy ~27 ft off its well (Ubame, 2026-07-25), and the draft's stood 5 ft from its well.
 PRIVY_FT: float = 5.0
+"""Research: privy size - GUESS research/questions/0101-privies-setchin.drawing.html: a privy is drawn 5 ft square, a one-seat privy; no source gives a privy's size."""
 LATRINE_WELL_FT: float = 15.0
+"""Research: privy distance from a well - GUESS research/questions/0101-privies-setchin.drawing.html: a privy stands at least 15 ft from any well; the record holds no separation distance."""
 
 
 @dataclass(frozen=True)
@@ -246,7 +259,9 @@ class CompoundProgram:
 
 TUB_MAX_GAP_FT: float = 3.5
 """How far from its building a fire-water tub may stand (feature 287, homes H29b): the number `pack_audit`'s
-`fire_water_adrift` registers - a gutter-fed tub hugs its eaves - held equal to it by a test."""
+`fire_water_adrift` registers - a gutter-fed tub hugs its eaves - held equal to it by a test.
+
+Research: fire-water tub reach from its building - GUESS: a gutter-fed tub stands within 3.5 ft of its building's eaves; 0100 puts tubs beside a building's door and is silent on the distance."""
 
 TUB_DOOR_MAX_FT: float = 10.5
 """How far a fire-water tub's center may stand from a door of the building it serves (feature 372 wave 106): research 0100
@@ -254,7 +269,9 @@ keeps standing water at a wooden building's ENTRANCE, so a tub stands beside a d
 at one 6 ft door set the figure: along the face, the door's half-width and the foot its approach keeps (4 ft), the
 draft's 1 ft clearance, the near tub (2.6 ft), another foot and the far tub's half (1.3 ft) - 9.9 ft - at 2.5 ft out, ~10.2
 ft; a short face's tub round the corner nearest its door stands ~8.6 ft off. The 10.5 ft is a CONVENTION of this project;
-the number `pack_audit`'s `tubs_off_their_doors` registers, held equal to it by sharing this name."""
+the number `pack_audit`'s `tubs_off_their_doors` registers, held equal to it by sharing this name.
+
+Research: fire-water tub reach from a door - GUESS: a tub's center stands within 10.5 ft of a door of its building, a figure fixed by the kitchen's two tubs beside a 6 ft door; 0100 puts tubs beside a door and is silent on the distance."""
 
 NOTICE_BOARD_MAX_FT: float = 40.0
 """How far from the main gate's opening the compound's notice board may stand (feature 287, homes H29b): the number

@@ -47,9 +47,9 @@ def settle_ends(s: Any) -> int:
         two paths side by side become one - research/questions/0081-village-lanes.drawing.html: a lane crossing another at under 20 degrees cut at the crossing (`cut_at_shallow_crossing`)
         a household's way moved at its foot - research/questions/0081-village-lanes.drawing.html: "cut at its far end, never at its door"
         a foot re-aimed only onto lawful ground - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the walker goes round a garden or yard, a way runs along the middle of the gaps
-        which of a folded pair is re-aimed - UNRESEARCHED: the shorter record as the T; two bare legs lose the shorter
+        which of a folded pair is re-aimed - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); the shorter record as the T; two bare legs lose the shorter
         a lane with no width judged as a footpath - research/questions/0081-village-lanes.drawing.html: a lane with no recorded width is judged at the footpath's 3 ft
-        no fan of stubs at a door - UNRESEARCHED: past two ends at one house, the farther cut back past the doorstep
+        no fan of stubs at a door - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25) - one main door served a minka's household (JAANUS, Edo period, pass A2); no page gives how many ends meet at one; past two ends at one house, the farther cut back past the doorstep
         a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 60 ft of the house or
             12 ft of its built ground reaches it on any side; one that reaches nothing is trimmed to service (`settle_dangling`)"""
     M = s.M
@@ -170,7 +170,7 @@ def settle_shadows(s: Any) -> int:
     test sees (feature 293 on 291: a touch lane of Kashikawa's ran 106 ft within 30 ft of a join-orphans remnant, the two
     diverging at 22 degrees from one corner to one street).
 
-    Research: no doubled band - UNRESEARCHED: of two ways side by side past a pitch, the shorter ordinary lane goes"""
+    Research: no doubled band - research/questions/0081-village-lanes.drawing.html: two paths side by side are drawn as one, the lane cut where it comes alongside (a convention) - the settle drops the shorter lane whole, a departure the code keeps until feature 417 T32; of two ways side by side past a pitch, the shorter ordinary lane goes"""
     ways = [_pts(ln) for ln in s.M.get("lanes") or []]
     ordinary = set(_ordinary(s.M))
     for i in range(len(ways)):  # ...a tree lane too, beside an ordinary one: a door path is tree, the lane it doubles not
@@ -247,7 +247,7 @@ def settle_joins(s: Any) -> int:
 
     Research:
         ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: carried onto the way
-        a join taken back - UNRESEARCHED: an ordinary end whose join breaks a rule against a tree lane, or the overlap matrix refuses, taken back 5 ft past the join's reach (`JOIN_BACK_PAD_FT`), the settle's trims then pulling it to what it serves"""
+        a join taken back - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); an ordinary end whose join breaks a rule against a tree lane, or the overlap matrix refuses, taken back 5 ft past the join's reach (`JOIN_BACK_PAD_FT`), the settle's trims then pulling it to what it serves"""
     edits: dict[int, list[Poly]] = {}
     # A TREE LANE'S END IS CARRIED ONTO ITS WAY AS ANY LANE'S IS: the span only adds tread, over walkable ground, meeting the
     # way clean (`law.near_misses`), and the lane it reaches is an ordinary one the tree's joint then binds
@@ -284,7 +284,7 @@ JOIN_BACK_PAD_FT = 5.0
 """How far past a join's reach (`law.JOIN_REACH_FT`) an ordinary end that defers to a tree lane is taken back
 (`settle_joins`), so it no longer makes for the way it stopped short of.
 
-Research: a deferring end taken back - UNRESEARCHED: 5 ft past the join's reach"""
+Research: a deferring end taken back - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); 5 ft past the join's reach"""
 
 
 def settle_needles(s: Any) -> int:
@@ -361,7 +361,7 @@ def settle_fragments(s: Any) -> int:
     termination argument stands: the drop shortens the web, and `short_fragments` names only a lane whose loss leaves no
     house, target or field newly unreached, so step 4 does not draw it again.
 
-    Research: debris - UNRESEARCHED: a lane under 30 ft that earns nothing goes, a tree lane too"""
+    Research: debris - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); a lane under 30 ft that earns nothing goes, a tree lane too"""
     gone = law.short_fragments(s.M, memo_ground(s, "worked", worked_ground))[:1]  # the web's one ground (the perf-audit of 308)
     if gone:
         s.drop_lanes(gone)

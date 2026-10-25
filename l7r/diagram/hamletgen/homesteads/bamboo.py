@@ -96,12 +96,12 @@ def household_bamboo(
         strip size - research/questions/0075-bamboo-groves-chikurin.drawing.html: `HOUSEHOLD_BAMBOO_FT`, a strip 22 x 16 ft
         side rolled, then the others - research/questions/0075-bamboo-groves-chikurin.drawing.html: the weighted side first, the rest in listed order
         a grove farm's bamboo in its grove - research/questions/0075-bamboo-groves-chikurin.drawing.html: no strip, counted for the grove
-        strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, `PART_GAP_FT` off every seated part
+        strip clearances - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); 6 ft off the walls and every lane, `PART_GAP_FT` off every seated part
         strip out of the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: kept 50 ft (bamboo's reach) off every yard's and bed's sun
-        strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
+        strip off the copse seats - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); off every household's reserved copse seats by the bamboo keep-out
         strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
         strip seated after the lanes - CANON: seated after the web; no page gives an order, and the GM ruled it an implementation detail (2026-10-12: "the ordering is an implementation detail") so long as no lane crosses a strip
-        a stepped strip its own farm's - UNRESEARCHED: none seated nearer another house's center than its own
+        a stepped strip its own farm's - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); none seated nearer another house's center than its own
         row farm's bamboo to the south - research/questions/0033-row-villages-resson.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: on a
             row village that rolled the second form and a map whose farmsteads keep bamboo, every farm the grove row across its street shelters
             keeps it, a band along its south side (`south_band`)
@@ -173,7 +173,7 @@ def own_ground(ground: StripGround, lanes: Sequence[Mapping[str, Any]], house: P
     across from its house: a farm's own path to its street runs between its house and its south bamboo, as the path to a farm's
     front does (feature 374 wave 153: every sheltered band on valley seed 3 stood across its own door path).
 
-    Research: its own path no bar - UNRESEARCHED: the household's own door path parts no farm from its bamboo; a public lane still does"""
+    Research: its own path no bar - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); the household's own door path parts no farm from its bamboo; a public lane still does"""
     keep = [k for k, ln in enumerate(ln for ln in lanes if len(ln.get("pts") or []) >= 2) if not (ln.get("serves") and math.dist((float(ln["serves"][0]), float(ln["serves"][1])), house) < 0.5)]
     return ground._replace(lanes=[ground.lanes[k] for k in keep if k < len(ground.lanes)])
 
@@ -209,8 +209,8 @@ def band_spans(g: Mapping[str, Any], boxes: Sequence[Sequence[float]]) -> list[t
 
     Research:
         as wide as the farmstead - research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0033-row-villages-resson.drawing.html: a band as wide as the farmstead, all along its south side
-        inside its own side groves - UNRESEARCHED: the frame less its west and east grove bands, the farmstead's width within its grove
-        a farm with no frame - UNRESEARCHED: its house, yard and beds across"""
+        inside its own side groves - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); the frame less its west and east grove bands, the farmstead's width within its grove
+        a farm with no frame - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); its house, yard and beds across"""
     own = (min(float(b[0]) - float(b[2]) / 2 for b in boxes), max(float(b[0]) + float(b[2]) / 2 for b in boxes))
     bbox = g.get("bbox")
     if not bbox:
@@ -250,8 +250,8 @@ def strip_candidates(h: Mapping[str, Any], wind: Pt, px: Any, roll: float) -> It
 
     Research:
         side rolled, then the others - research/questions/0075-bamboo-groves-chikurin.drawing.html: the weighted side first, the rest in listed order
-        the shed side - UNRESEARCHED: local -x, the doma and stable end, or behind the house where the kura stands on the north wall
-        the near seat - UNRESEARCHED: 6 ft off the wall, the strip's long side along it"""
+        the shed side - research/questions/0075-bamboo-groves-chikurin.drawing.html: bamboo stood beside the shed, from the west round to the north; the doma and stable end is ours
+        the near seat - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); 6 ft off the wall, the strip's long side along it"""
     hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
     sw, sh = px(HOUSEHOLD_BAMBOO_FT[0]), px(HOUSEHOLD_BAMBOO_FT[1])
     th = math.radians(float(h.get("rot", 0.0)))
@@ -279,12 +279,12 @@ def strip_refused(s: Settlement, cx: float, cy: float, cw: float, ch: float, hou
     stream or a lane from its `house`?
 
     Research:
-        strip clearances - UNRESEARCHED: `PART_GAP_FT` (2 ft) off every seated part, and through `_strip_blocked` 2 ft off other houses (the 6 ft off the walls is `strip_candidates`')
+        strip clearances - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); `PART_GAP_FT` (2 ft) off every seated part, and through `_strip_blocked` 2 ft off other houses (the 6 ft off the walls is `strip_candidates`')
         strip out of the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: kept 50 ft (bamboo's reach) off every yard's and bed's sun
-        strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
+        strip off the copse seats - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); off every household's reserved copse seats by the bamboo keep-out
         strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
-        no strip in the belt - UNRESEARCHED: no strip with its center or a corner inside the belt (`in_belt`)
-        the strip on its house's side of a lane - UNRESEARCHED: no lane's centerline between a house and its strip (`across_a_lane`)"""
+        no strip in the belt - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); no strip with its center or a corner inside the belt (`in_belt`)
+        the strip on its house's side of a lane - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); no lane's centerline between a house and its strip (`across_a_lane`)"""
     hx, hy = house
     g = ground
     if _strip_blocked(s, cx, cy, cw, ch, hx, hy, g.fields, g.marsh, g.pond, g.lanes, g.footing, g.skip, near=g.near) or in_belt(g.belt, cx, cy, cw, ch):
@@ -314,18 +314,18 @@ Research: strip reach - GUESS research/questions/0075-bamboo-groves-chikurin.dra
 STRIP_SEATS = tuple((float(k), float(j)) for k in range(STRIP_STEPS_OUT + 1) for j in (0, 1, -1))
 """Research:
     strip seats - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: each step out, the side's own seat first
-    the slide along the side - UNRESEARCHED: slid one strip's width one way and the other; the page gives no slide"""
+    the slide along the side - GUESS: searched, the record silent (0075 gives the sides only), (feature 417 T29 pass E2, 2026-10-25); slid one strip's width one way and the other; the page gives no slide"""
 
 PART_GAP_FT = 2.0
 """How far a strip keeps off a homestead's seated part - the gap `_strip_blocked` keeps off a placed box.
 
-Research: off the seated parts - UNRESEARCHED: 2 ft, the gap a strip keeps off any placed box"""
+Research: off the seated parts - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); 2 ft, the gap a strip keeps off any placed box"""
 
 
 def parts_hit(cx: float, cy: float, cw: float, ch: float, parts: Sequence[Poly], gap: float) -> bool:
     """Does the `cw` x `ch` strip centered (`cx`, `cy`) come within `gap` of any part's box (its ring's bounding box)?
 
-    Research: off the seated parts - UNRESEARCHED: the strip and a part's box, `gap` apart"""
+    Research: off the seated parts - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); the strip and a part's box, `gap` apart"""
     for ring in parts:
         xs, ys = [p[0] for p in ring], [p[1] for p in ring]
         if cx + cw / 2 + gap > min(xs) and cx - cw / 2 - gap < max(xs) and cy + ch / 2 + gap > min(ys) and cy - ch / 2 - gap < max(ys):
@@ -341,8 +341,8 @@ def seat_strips(s: Settlement, plan: SitePlan) -> int:
 
     Research:
         strip seated after the lanes - CANON: seated after the web; no page gives an order, and the GM ruled it an implementation detail (2026-10-12: "the ordering is an implementation detail") so long as no lane crosses a strip
-        off the grove farms' bands - UNRESEARCHED: every grove farm's band a part the strip keeps off
-        the ground between held clear - UNRESEARCHED: the strip and its hull to the house held as fabric for the lanes laid after"""
+        off the grove farms' bands - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); every grove farm's band a part the strip keeps off
+        the ground between held clear - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); the strip and its hull to the house held as fabric for the lanes laid after"""
     from ..hinterland.belt import belt_polygon  # local: the hinterland imports this package
 
     parts = [p for p, _own, kind in seated_parts(s) if kind != "wood seats"]  # the wood seats: `stand_spares_seats`, as before
@@ -382,7 +382,7 @@ def household_bamboo_wanted(s: Settlement, plan: SitePlan, houses: Sequence[Mapp
 def between(house: Pt, strip: Sequence[Pt]) -> Poly:
     """The ground between a house's center and its strip: the convex hull of the center and the strip's corners.
 
-    Research: no lane between a house and its bamboo - UNRESEARCHED: the hull of the house's center and the strip's corners; no page says how far a lane keeps off a farm's bamboo"""
+    Research: no lane between a house and its bamboo - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); the hull of the house's center and the strip's corners; no page says how far a lane keeps off a farm's bamboo"""
     from shapely.geometry import (
         MultiPoint,  # noqa: PLC0415
         Polygon,  # noqa: PLC0415
@@ -408,7 +408,7 @@ def in_belt(belt: Sequence[Pt] | None, cx: float, cy: float, cw: float, ch: floa
     stands are drawn after the belt's crowns, so a strip in the belt painted its culms over the conifers - the reverse of the
     belt's own order, conifers over the bamboo between them (269 B30; settlement-review of Inashiro, feature 280).
 
-    Research: no strip in the belt - UNRESEARCHED: no strip seated with its center or a corner inside the belt
+    Research: no strip in the belt - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); no strip seated with its center or a corner inside the belt
     """
     if not belt or len(belt) < 3:
         return False
@@ -456,14 +456,14 @@ class StripNear:
 
     Research:
         what a strip keeps off, found near it - NONE: plumbing; the clearances are `_strip_blocked`'s claims
-        a fixture with no recorded size - UNRESEARCHED: taken as 16 ft across (`r` 8), as `_strip_blocked` always took it"""
+        a fixture with no recorded size - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); taken as 16 ft across (`r` 8), as `_strip_blocked` always took it"""
 
     __slots__ = ("_filed", "crowns", "houses", "kinds", "lanes", "s", "segs")
 
     def __init__(self, s: Settlement, lanes: Sequence[tuple[Poly, float]]) -> None:
         """Every item of what stands, filed by its box.
 
-        Research: a fixture with no recorded size - UNRESEARCHED: taken as 16 ft across (`r` 8), as `_strip_blocked` always took it"""
+        Research: a fixture with no recorded size - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); taken as 16 ft across (`r` 8), as `_strip_blocked` always took it"""
         self.s, self.lanes = s, lanes
         houses = []
         for o in s.M.get("houses", []):
@@ -544,9 +544,9 @@ def _strip_blocked(
 
     Research:
         off the paddy - research/questions/0075-bamboo-groves-chikurin.drawing.html: no stand on a paddy
-        what a strip or fixture keeps off - UNRESEARCHED: the pads, 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond
+        what a strip or fixture keeps off - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); the pads, 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond
         no lane across it - research/questions/0075-bamboo-groves-chikurin.drawing.html: no lane or well is drawn across a strip; a tread within its half-width of a corner, or crossing an edge, refuses it
-        off the notice board, byres and retirement houses - UNRESEARCHED: 6 ft off each, as off wells and sheds
+        off the notice board, byres and retirement houses - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); 6 ft off each, as off wells and sheds
     """
     if cx - cw / 2 < 30 or cy - ch / 2 < 30 or cx + cw / 2 > s.W - 30 or cy + ch / 2 > s.H - 30:
         return True

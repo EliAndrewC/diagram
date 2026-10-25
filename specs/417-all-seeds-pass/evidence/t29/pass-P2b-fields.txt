@@ -1,0 +1,170 @@
+- l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing built or planted on a dry plot
+    nothing built or planted on a dry plot - UNRESEARCHED: each drawn hem plot registered as blocked ground (`block_polys`) and dry ground (`dry_polys`)
+- l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#no resting plot on a dike-pond block
+    no resting plot on a dike-pond block - UNRESEARCHED: its open water is the fabric
+- l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#resting plots off the low row
+    resting plots off the low row - UNRESEARCHED: a low or blue plot never rests (the wet ground the pond and overlays take)
+- l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#fringe and margin widths
+    fringe and margin widths - UNRESEARCHED: 40 px of reed fringe, a 10 px no-build margin
+- l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#how far a pile swells
+    how far a pile swells - UNRESEARCHED: each fillet bulges 0.15-0.45 of its chord into the basin (405 T127)
+- l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#only where bunds cross
+    only where bunds cross - UNRESEARCHED: only a node where three or more plot corners meet is piled; T-stubs and field-edge corners
+- l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#field grave's host plot
+    field grave's host plot - UNRESEARCHED: a plot chosen at random, then the plots after it in list order
+- l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#rock outcrop's host plot
+    rock outcrop's host plot - UNRESEARCHED: any plot of the field, chosen at random
+- l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_corner_grave#corner grave size
+    corner grave size - UNRESEARCHED: mound 13 x 9 px, one or two stones"""
+- l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_grave_island#grave island size
+    grave island size - UNRESEARCHED: mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones"""
+- l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_rock#outcrop size
+    outcrop size - UNRESEARCHED: 2-4 boulders r 3.5-6.5 px"""
+- l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._pond_fit#field pond size
+    field pond size - UNRESEARCHED: 0.82 of the plot's half-span, 10-46 by 7-32 px, shrunk 0.9 a step"""
+- l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._rounded_pond#corners eased
+    corners eased - UNRESEARCHED: a fillet of the caller's reach, jittered 0.8 to 1.15, at every corner"""
+- l7r/diagram/settlement/fields/features.py::carve_around_grave#island host halved
+    island host halved - UNRESEARCHED: the host basin split along its long axis through the mound, a bund run to the island"""
+- l7r/diagram/settlement/fields/features.py::stone_dx#stone offset
+    Research: stone offset - UNRESEARCHED: 4.5 px to one side a stone"""
+- l7r/diagram/settlement/fields/features.py::stone_steps#stone stagger
+    Research: stone stagger - UNRESEARCHED: each stone 3 ft then 3.5 ft more behind the last, scaled to the mound"""
+- l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_tea_fringe#tea row direction
+    tea row direction - UNRESEARCHED: screen-horizontal whatever the canal or the slope"""
+- l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_tea_fringe#tea row spacing
+    tea row spacing - UNRESEARCHED: rows 8 px apart, a 2.4 px stroke
+- l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#tea and fruit off the canal
+    tea and fruit off the canal - UNRESEARCHED: tea hedges kept 3.0 px and fruit trees 5.5 px off a canal centerline
+- l7r/diagram/settlement/fields/paddy.py::PaddyMixin._wf_feed#feed and outfall meander
+    feed and outfall meander - UNRESEARCHED: each channel drawn with an 8 px meander (`amp=8`)"""
+- l7r/diagram/settlement/fields/paddy.py::PaddyMixin._wf_feed#feed and outfall's seat
+    feed and outfall's seat - UNRESEARCHED: the main fed from the source at its nearest point 11 px or more inside the field, the drain emptied at its point nearest the outlet
+- l7r/diagram/settlement/fields/paddy.py::PaddyMixin.fallow_field#fallow field
+    """Research: fallow field - UNRESEARCHED: a whole field drawn fallow in a dashed organic outline"""
+- l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#canals set in from the edges
+    canals set in from the edges - UNRESEARCHED: the main and the drain 1.4 plots inside the field's high and low edges, a lateral's ends 0.7 plot in
+- l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#lateral spacing
+    lateral spacing - UNRESEARCHED: a lateral every 4-6 columns
+- l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row bunds staggered
+    row bunds staggered - UNRESEARCHED: row boundaries rolled per column, so row bunds stagger between columns
+- l7r/diagram/settlement/fields/paddy.py::_wf_outline#field outline
+    Research: field outline - UNRESEARCHED: an organic outline wobbled amp px round the given box or polygon"""
+- l7r/diagram/settlement/fields/paddy.py::rest_plots#rest basin floor
+    rest basin floor - UNRESEARCHED: no basin smaller than the median candidate rests"""
+- l7r/diagram/settlement/water_ways/_helpers.py::_FRAY_DEG#fraying track
+    """Research: fraying track - UNRESEARCHED: two ways meeting under 20 degrees are one track, not a junction"""
+- l7r/diagram/settlement/water_ways/_helpers.py::_LANE_MIN_FT#shortest lane
+    """Research: shortest lane - UNRESEARCHED: an internal lane under 71 ft, one homestead's frontage, is dropped"""
+- l7r/diagram/settlement/water_ways/_helpers.py::fan_rival#one approach per house
+    Research: one approach per house - UNRESEARCHED: a second end within the fan spread and bearing of another is the same approach drawn twice"""
+- l7r/diagram/settlement/water_ways/_helpers.py::junction_floor#a crossing at 20 degrees
+    a crossing at 20 degrees - UNRESEARCHED: a way crossing the lane at 20 degrees or more counts as a junction
+- l7r/diagram/settlement/water_ways/focal.py::FocalMixin._focal_block#focal keep-out
+    Research: focal keep-out - UNRESEARCHED: the footprint plus 6 px on every side"""
+- l7r/diagram/settlement/water_ways/focal.py::FocalMixin.mill#wheel glyph
+    wheel glyph - UNRESEARCHED: an 18 ft wheel (9 ft radius) set 5 ft off the house; 0064 gives no wheel size and seats the wheel in a short race
+- l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#one end per house and bearing
+    one end per house and bearing - UNRESEARCHED: a second end within 60 ft and 25 degrees of another fronting the same house is trimmed
+- l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#short lanes dropped
+    short lanes dropped - UNRESEARCHED: an internal lane under 71 ft
+- l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.channel#ditch winding
+    ditch winding - UNRESEARCHED: an auto-routed ditch winds with a 15 px amplitude by default
+- l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.channel#houses kept off the channel
+    houses kept off the channel - UNRESEARCHED: a 33 px no-build corridor
+- l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#houses kept off the stream
+    houses kept off the stream - UNRESEARCHED: a no-build corridor of max(30, half-width + 20) px
+- l7r/diagram/waterfields/banks.py::floor_overhang#past the drain's ends
+    past the drain's ends - UNRESEARCHED: the drain line extended level beyond both ends, ground down-fall of it unplanted
+- l7r/diagram/waterfields/banks.py::swept_bend#cut-back within its run
+    cut-back within its run - UNRESEARCHED: a hairpin (a turn over ~137 deg) drawn tighter than the 2.5-width radius so its tangent point stays within 90% of its run; the 90% is this project's margin
+- l7r/diagram/waterfields/carve.py::_dry_fields#end plot floor
+    end plot floor - UNRESEARCHED: the tiling stops 0.6 of a plot short of the canal's end, so the last plot is at least 0.6 of a plot wide
+- l7r/diagram/waterfields/carve.py::_dry_fields#hem depth
+    hem depth - UNRESEARCHED: the default `band`, 70-132 px past the measuring line, each column a ragged depth within it - at a hamlet's 1 ft/px 70-132 ft; no page gives a hamlet's hem depth (0010's 140 to 265 ft is a city field's head hem, which no kept map draws)
+- l7r/diagram/waterfields/carve.py::_dry_fields#hem depth from a caller
+    hem depth from a caller - UNRESEARCHED: a band the caller passes (the fork band, the wild middle) at its own depth
+- l7r/diagram/waterfields/carve.py::_dry_fields#measuring line
+    measuring line - UNRESEARCHED: the band measured from 8 g px (16 ft) off the canal's line, the berm inside it, so the planted depth is 8 g + band less the berm
+- l7r/diagram/waterfields/carve.py::_dry_fields#neighbor keeps the crop
+    neighbor keeps the crop - UNRESEARCHED: a plot keeps the last plot's crop with a 55% chance, more once a re-roll lands on the same crop (about 0.66 on an even mix, up to about 0.8 on a lopsided one)
+- l7r/diagram/waterfields/comb.py::_comb_drain#collector above the frame
+    collector above the frame - UNRESEARCHED: the fitted collector lifted to stand 40 px (unscaled) above the frame's bottom edge
+- l7r/diagram/waterfields/comb.py::_comb_drain#set below the ditch ends
+    set below the ditch ends - UNRESEARCHED: 32-48 px below the deepest end, the outfall 40 px past the last
+- l7r/diagram/waterfields/comb.py::_comb_drain#straight last leg
+    straight last leg - UNRESEARCHED: no jittered sample within `DRAIN_MIN_LEG` (84 px) of the outfall
+- l7r/diagram/waterfields/comb.py::_comb_march#ditch thread spacing
+    ditch thread spacing - UNRESEARCHED: GAP 26 px between threads, a child offset 0.55 GAP
+- l7r/diagram/waterfields/comb.py::_comb_march#outfall margin
+    outfall margin - UNRESEARCHED: a capped field held inside the frame with a low-side margin for the outfall and brook
+- l7r/diagram/waterfields/comb.py::_comb_skeleton#canal A heading
+    canal A heading - UNRESEARCHED: 42 deg off the fall, a dug polyline of 95-125 px segments
+- l7r/diagram/waterfields/comb.py::_comb_threads#canal B heading
+    canal B heading - UNRESEARCHED: 58 deg off the fall
+- l7r/diagram/waterfields/comb.py::_comb_threads#canal B tail
+    canal B tail - UNRESEARCHED: its thread ends 22 px past its last offtake
+- l7r/diagram/waterfields/comb.py::_comb_threads#delivery length
+    delivery length - UNRESEARCHED: 420-620 px off canal A, 340-560 off canal B
+- l7r/diagram/waterfields/comb.py::_comb_threads#sub-ditch length
+    sub-ditch length - UNRESEARCHED: 300-430 px
+- l7r/diagram/waterfields/comb.py::_comb_threads#sub-ditches
+    sub-ditches - UNRESEARCHED: each interior delivery splits once, high on its run, diverging 0.5-0.66 rad
+- l7r/diagram/waterfields/comb.py::carve_comb#default bund-bean share
+    default bund-bean share - UNRESEARCHED: 0.28 of the bunds carry a bean row
+- l7r/diagram/waterfields/comb.py::carve_comb#default hem depth
+    default hem depth - UNRESEARCHED: the dry hem 70-132 px deep
+- l7r/diagram/waterfields/comb.py::carve_comb#default skeleton
+    default skeleton - UNRESEARCHED: canal A 1250-1450 px, canal B 680-800 px, offtakes at 0.22/0.45/0.68/0.88 and 0.45/0.8 of their canals
+- l7r/diagram/waterfields/comb.py::carve_comb#fan middle
+    fan middle - UNRESEARCHED: the fan's middle takes the "cleared" form by default (`fan_middle`)
+- l7r/diagram/waterfields/frame.py::GAP#least spacing between ditch threads
+    """Research: least spacing between ditch threads - UNRESEARCHED: 26 px, a plot's width"""
+- l7r/diagram/waterfields/frame.py::_Thread.step#thread wander
+    """Research: thread wander - UNRESEARCHED: the takeoff heading relaxing over `decay` px of fall, +/-0.1 of the fall step of jitter a step"""
+- l7r/diagram/waterfields/frame.py::_dug_polyline#dug canal course
+    Research: dug canal course - UNRESEARCHED: long straight segments with a small random heading change at each, kept 25 px off the frame
+- l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band depth
+    fork band depth - UNRESEARCHED: 0.6 of the hem's depth
+- l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band skipped on villages
+    fork band skipped on villages - UNRESEARCHED: maps at grain 1.0 or more (a village's and a hamlet's) leave the triangle to the scrub
+- l7r/diagram/waterfields/palette.py::paddy_grain#basin proportion
+    basin proportion - UNRESEARCHED: along/across 0.66, the elongation the vetted village paddies read as
+- l7r/diagram/waterfields/palette.py::paddy_grain#row variation
+    row variation - UNRESEARCHED: the row step +/-16% around its mean
+- l7r/diagram/waterfields/partition.py::MIN_ROW#narrow tip left one basin
+    Research: narrow tip left one basin - UNRESEARCHED: no row cut where the sector is under 0.45 plot widths (0005 gives no such width)
+- l7r/diagram/waterfields/partition.py::ROW_CELL_SHARE#basin size where the sector narrows
+    Research: basin size where the sector narrows - UNRESEARCHED: a row cut once its cell reaches 0.6 of the design cell (0005 gives no such share)
+- l7r/diagram/waterfields/partition.py::Sectors.bound#past a thread's end
+    Research: past a thread's end - UNRESEARCHED: the column bund runs straight down the fall rather than converging along the drain
+- l7r/diagram/waterfields/partition.py::Sectors.grid_lines#tip row dropped
+    tip row dropped - UNRESEARCHED: a row at the tip narrower than `MIN_ROW` (0.45) of a plot width is dropped
+- l7r/diagram/waterfields/partition.py::Sectors.thread_lines#sector pieces
+    Research: sector pieces - UNRESEARCHED: each thread continued straight down the fall until it meets another
+- l7r/diagram/waterfields/partition.py::_rows_kept#rows where the sector narrows
+    Research: rows where the sector narrows - UNRESEARCHED: a row kept once its cell reaches ROW_CELL_SHARE of a design cell
+- l7r/diagram/waterfields/polder.py::_RING#ring canal corridor
+    """Research: ring canal corridor - UNRESEARCHED: 18 px reserved inside the dike on all four sides"""
+- l7r/diagram/waterfields/polder.py::_polder_channels#crossings cluster
+    crossings cluster - UNRESEARCHED: the settlement-side toe tagged as the side crossings cluster on
+- l7r/diagram/waterfields/polder.py::_polder_channels#inlet stub and sluice notch
+    inlet stub and sluice notch - UNRESEARCHED: the stub 52 grid units past the ring, the outfall's first leg 40, the notch _RING * 0.9 in - grid units, not feet at the map's scale (the ranked row `channel widths`' E3 work)
+- l7r/diagram/waterfields/polder.py::_polder_parcels#split positions
+    split positions - UNRESEARCHED: one cut at 0.38-0.62 or two at 0.26-0.4 and 0.6-0.74, across or along the fall at even odds
+- l7r/diagram/waterfields/polder.py::build_polder#polder size
+    polder size - UNRESEARCHED: 11 rows by 6 columns of modules by default
+- l7r/diagram/waterfields/polder.py::unpoint_parcels#pointed parcel left as bank
+    pointed parcel left as bank - UNRESEARCHED: a polder parcel still pointed after its apex is cut is dropped into the bank fill (0005's bare strip is a fan's; polder plots stand apart, so none is taken in)
+- l7r/diagram/waterfields/seams/close.py::HEADLAND_PX#the headland's width
+    """Research: the headland's width - UNRESEARCHED: a refused point is cut off where the basin is this many px across"""
+- l7r/diagram/waterfields/seams/pockets.py::_outside_command#collector extended level
+    collector extended level - UNRESEARCHED: past its drawn ends the command area's low edge runs on at the end's fall
+- l7r/diagram/waterfields/tint.py::LOW_ROWS#low ground depth
+    Research: low ground depth - UNRESEARCHED: plots within two row steps of the collector are low ground
+- l7r/diagram/waterfields/tint.py::mark_low#low ground depth
+    Research: low ground depth - UNRESEARCHED: plots within two row steps of the collector are low ground
+- l7r/diagram/waterfields/trunks.py::SHARP_TURN_DEG#no hard corner on the collector
+    Research: no hard corner on the collector - UNRESEARCHED: a turn of 100 deg or more is refused, water piling against the far bank
+- l7r/diagram/waterfields/twins.py::drop_twin_deliveries#which one goes
+    which one goes - UNRESEARCHED: the delivery that leaves the other, else the shorter; a supply canal never
