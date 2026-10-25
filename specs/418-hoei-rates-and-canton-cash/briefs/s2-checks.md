@@ -1,0 +1,10 @@
+- quote-check 0287 (Kusama on the k409-k419 images): r1 28 VERBATIM, 1 PARTIAL (1714 months), 1 locator (p. 822), 1 unfootnoted - applied; r2 5 marks misplaced - moved by hand (Sources: his entries); 『三貨図彙』 link declined (19,997 of 20,000 bytes; its notes link the NDL copy)
+- quote-check 0289: r1 25 VERBATIM, 29 SUPPORTS, 1 EDIT (vol5 OCR 1600 vs image 1500); r2 3 PARTIAL - 'London' and 'villagers' applied, the Gao 1737 translation edit declined (the original quoted shows the memorial)
+- quote-check 0277: 0 owed notes, 0 unfootnoted
+- record-format 0277: 0 in the change; 5 VOCABULARY outside filed (ichibu-ban, Kan'ei tsuho, nibu/nishu/isshu, Kitahama, fun)
+- record-format 0287: r1 8 VOCABULARY - Sanka zui, Kenji gold, Eiji silver, Higo rice (own wording), intercalary month added; kanme and the -takara variants by hand; bita REFUSED (reserved in diagram-research); r2 the 1620-1650 row applied, kusama-sanka-zui-7 bracket remark clarified by hand
+- record-format 0289: r1 sycee, mace added, mow and Keenlung variants by hand; r2 'large cash' GLOSSARY not applied (round 3 owed)
+- translation-check 0287: r1 120 pairs, 2 LOOSE applied; r2 120 FAITHFUL
+- source-reader 0289 vol2, vol5-2, vol1: all READ; vol2 r2 one tightening applied; the two arithmetic notes declared by REASON (grounds notes, no source)
+- source-applicability: jawiki x3 HONEST; kusama edition limit added; vol1 dated autumn 1831 (0289 row and note too); vol2 Lindsay's coast-wide remark, not Nan'ao (0289 too), r2 poorer classes; vol4 Gordon's memorandum, 'nominal' is ours, r2 720 a dollar coincides with 1,000 a tael; vol5 issue months; vol6 the per-dollar 1,000 is ours
+STILL OWED: third rounds, to the round arbiter first (make arbiter-bundle TRIGGER=...@3): quote-check q:0287 (the moved marks, 0287#unfootnoted), record-format q:0287 and q:0289 (plus 0289's 'large cash' GLOSSARY), translation-check q:0287 (kusama-sanka-zui-7's remark); bita gloss in diagram-research; the Taiwan/Lindsay-original leads as in the handoff

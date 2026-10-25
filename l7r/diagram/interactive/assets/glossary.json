@@ -2784,7 +2784,8 @@
  "mu": {
   "def": "A Chinese land unit of about 667 square meters, roughly a fifteenth of a hectare.",
   "variants": [
-   "mu"
+   "mu",
+   "mow"
   ]
  },
  "muenzuka": {
@@ -6624,7 +6625,8 @@
  "Qianlong": {
   "def": "The reign of the Qing emperor Qianlong, 1736-1796.",
   "variants": [
-   "Qianlong"
+   "Qianlong",
+   "Keenlung"
   ]
  },
  "stone lantern": {
@@ -16665,7 +16667,9 @@
   "def": "A silver coin first minted in 1711, the most debased of the Edo period, so a price in it ran higher than the same price in better silver.",
   "variants": [
    "Yotsuho silver",
-   "Yotsuho"
+   "Yotsuho",
+   "Yotsu-takara",
+   "Hoei Yotsu-takara"
   ]
  },
  "copper cash": {
@@ -17823,14 +17827,18 @@
   "def": "\"Two-treasure\" silver: one of the shogunate's debased silver coins of the Hoei years, named for the two 宝 (\"treasure\") characters stamped on it.",
   "variants": [
    "Futatsuho",
-   "Futatsuho silver"
+   "Futatsuho silver",
+   "Futatsu-takara",
+   "Hoei Futatsu-takara"
   ]
  },
  "Mitsuho": {
   "def": "\"Three-treasure\" silver: a debased silver coin of the Hoei years, named for the three 宝 (\"treasure\") characters stamped on it, and poorer in fineness than the Hoei issues before it.",
   "variants": [
    "Mitsuho",
-   "Mitsuho silver"
+   "Mitsuho silver",
+   "Mitsu-takara",
+   "Hoei Mitsu-takara"
   ]
  },
  "likin": {
@@ -17895,6 +17903,54 @@
   "def": "The Hunan Army's own weight of the tael (Xiang is a name for Hunan): from 1859, 103.6 of its taels to 100 of the treasury's.",
   "variants": [
    "Xiang scale"
+  ]
+ },
+ "sycee": {
+  "def": "Chinese silver cast in ingots and paid by weight rather than counted as coin; its weight and purity varied, so a tael of it was worth what the market made it.",
+  "variants": [
+   "sycee"
+  ]
+ },
+ "mace": {
+  "def": "A Chinese weight of silver and money of account, a tenth of a tael; at Canton in 1835 a mace was about fourteen cents.",
+  "variants": [
+   "mace"
+  ]
+ },
+ "Sanka zui": {
+  "def": "Kusama Naokata's history of money, prices, finance and trade from antiquity to the Edo period, in 44 books, written over twenty years and completed in 1815; the title means roughly \"the three currencies illustrated\", meaning gold, silver and copper.",
+  "variants": [
+   "Sanka zui",
+   "三貨図彙"
+  ]
+ },
+ "Kenji gold": {
+  "def": "the Hoei koban of 1710, named for the character 乾 (ken) stamped on it; at 2.5 monme it weighed about half a Keicho koban, and the decree of 1714 set two Kenji ryo to one Keicho or new ryo.",
+  "variants": [
+   "Kenji gold",
+   "Kenji"
+  ]
+ },
+ "Eiji silver": {
+  "def": "the second Hoei chogin, issued in the third month of 1710 at 40% silver, named for the character 永 (ei) stamped on it; from 1714 it passed with the Mitsu-takara and Yotsu-takara silver as \"current silver\".",
+  "variants": [
+   "Eiji silver",
+   "Eiji",
+   "Hoei Eiji"
+  ]
+ },
+ "intercalary month": {
+  "def": "an extra month that the lunar calendar inserted in some years to keep step with the seasons, named after the month it repeats.",
+  "variants": [
+   "intercalary month",
+   "intercalary fifth month",
+   "intercalary"
+  ]
+ },
+ "Higo rice": {
+  "def": "Rice of Higo province, in Kyushu, one of the grades whose price Kusama Naokata gives year by year.",
+  "variants": [
+   "Higo rice"
   ]
  }
 }
