@@ -138,6 +138,17 @@ The repair passes, any rule coded twice and the checks the generator runs mid-ma
   415 D5's "a rate, never a refusal", under which the fresh block runs after the push).
 - **FR-010 (the claims work on hold)**: no task of a claims feature that changes the engine - 405, 372, 384 and any other
   claims feature the session finds - is started until this feature closes.
+- **FR-011 (feature 394, folded in - the GM 2026-10-24: "Yes fold 394 into 417")**: with FR-009, and as 394 specified:
+  every archetype form's seeds - the unrolled field forms (polder, dike-pond: `ROLLED_ARCHETYPES` holds only the valley
+  fan) as well as the rolled ones - are run and recorded per seed, keyed on the engine (a cached seed is not rerun); a
+  landing's seeds are compared with HEAD's, and newly red seeds are listed with their form and failure; the gated route
+  refuses a NEWLY red seed (green at HEAD, red at the landing) that no filed row (in an open feature) or arbiter waiver names,
+  the refusal naming the seed, its form and the command to file the row or ask the arbiter; a seed red at
+  HEAD and still red is not refused, one red at HEAD and green at the landing is reported fixed, and a form new to the
+  archetypes is recorded, not judged, on its first landing. 394's deferral ("once we are in a place where we think that all
+  seeds should pass, then I want that feature to be implemented") is met by building it after SC-001. FR-011's exemptions (a filed row or waiver, a seed already red at HEAD) apply
+  only to the forms FR-008 and FR-009 do not hold to zero - the unrolled field forms; a rolled-form seed that fails is refused
+  under FR-008 / FR-009 whatever HEAD shows or a row says.
 
 ### Key Entities
 
@@ -152,9 +163,13 @@ The repair passes, any rule coded twice and the checks the generator runs mid-ma
 - **SC-003**: every rule has one implementation, asked by its placer and by its finished-map check.
 - **SC-004**: the engine is smaller at close than at start, by the lines of the passes deleted.
 - **SC-005**: a landing that makes a fresh seed fail is refused.
+- **SC-006** (394's SC-001/SC-002): a test landing that turns one unrolled-form seed red with no filed row is refused,
+  naming the seed and its form; the same landing with a filed row naming it lands.
 
 ## Assumptions
 
+- The unrolled field forms (polder, dike-pond) are guarded against regression (FR-011); turning them on, and holding them
+  to zero failures, is a later choice, as `ROLLED_ARCHETYPES`' own note says ("opt-in until their cohort is green").
 - The cohort's sizes, forms and pins are the population "any seed" means; a new form or tier is a later feature's.
 - The fixed 48 stay the landing gate; the fresh block is added beside them, not in place of them.
 - Speed is a flag, never a gate (375 amendment 5); a by-construction placer may be slower and is mentioned if it is.
@@ -174,3 +189,8 @@ The repair passes, any rule coded twice and the checks the generator runs mid-ma
 - spec-fidelity round 3 (2026-10-24): CHANGES REQUIRED - the hold was spliced into the middle of 384's status sentence, so
   "until 385 closes" followed the GM's quote; the sentence rejoined, the hold after it.
 - spec-fidelity round 4 (2026-10-24): FAITHFUL.
+- spec-fidelity amendment round 1 (2026-10-24, the 394 fold): CHANGES REQUIRED - FR-011's exemptions (a filed row, a seed
+  red at HEAD) conflicted with FR-008/FR-009's zero on the rolled forms (now limited to the unrolled field forms); the fold
+  dropped 394's listing with form and failure, "in an open feature" and the refusal naming the form (restored; SC-006 names
+  the form).
+- spec-fidelity amendment round 2 (2026-10-24): FAITHFUL.

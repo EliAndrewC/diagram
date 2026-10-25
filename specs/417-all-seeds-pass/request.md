@@ -23,3 +23,8 @@ predicate (it is the measurement, and it sees a later stage breaking what an ear
 any rule coded twice, and the checks the generator runs mid-map. "Shall I file the feature with this scope?"
 
 > Yes please
+
+After filing, the session asked whether to fold open feature 394 (seed regressions refuse a landing; its request is
+`specs/394-seed-regressions-refuse-a-landing/request.md`) into 417, and whether to start the plan:
+
+> Yes fold 394 into 417 then start on 417, thanks.
