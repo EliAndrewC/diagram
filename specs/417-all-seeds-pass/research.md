@@ -177,7 +177,10 @@ settle step's effect on the track's end logged.
 | where the trace puts it | `settle_reach`, every one: the households' ways are drawn to `near_the_cluster`'s stretch of the track, not its start |
 | the fresh block's rate (`make fresh-tally COMMIT=a81dd7ee9 SINCE=20261025T114923Z`) | 61 of 500 (12%): nucleated 10%, dispersed 4%, linear 30% - beside R3's 12.5% and R5's 11.8% |
 
-The six (seeds 3001615, 3001629, 3001674, 3001847, 3002028, 3002062) are all nucleated with a way out's gate. The pull-back
+The six (seeds 3001615, 3001629, 3001674, 3001847, 3002028, 3002062) are all nucleated with a way out's gate. At the first landing the finished-map check, asked of every end inside the manifest's `W` x `H`, named 18 of the 54
+landing seeds' way-out ends (the frame is cropped about the content); read by distance it named all 13 dispersed seeds,
+whose track ends among the farms with no web to meet (seed 5: 154 ft from the nearest house center) - so it asks only a map
+with a web, and the dispersed track's end goes to the GM (D28). So read, the landing cohort is 54 of 54. The pull-back
 is deleted as needless; the rule becomes a finished-map predicate the cohort asks (D27 (a)), and its placer is T27.
 
 ## R7 - the angle at which two ways stop reading as a junction (T16's research pass, the GM 2026-10-25)

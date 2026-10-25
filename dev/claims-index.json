@@ -21600,6 +21600,7 @@
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:df440690bbce9cb6"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::unreached_houses#dispersed hamlet exempt": {

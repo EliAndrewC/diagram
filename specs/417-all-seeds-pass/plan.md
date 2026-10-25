@@ -232,14 +232,24 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
   it, and all six passed every check, because the law exempts the connector (`law.dangling_lane_ends`). A per-step trace of
   the six puts it in the settle's `settle_reach`: it draws the household ways to the stretch of the track near the cluster
   (`homesteads/household_ways.near_the_cluster`), not to the track's start. So:
-  (a) the rule becomes ONE predicate, `checks.track_ends_off_the_web(M)` - each connector end inside the canvas more than
-  `JOIN_TOL` from every other lane - asked of the finished map by the cohort only (`tools/cohort_audit.py`'s list beside
+  (a) the rule becomes ONE predicate, `checks.track_ends_off_the_web(M)` - a connector's inner end (the end nearer the
+  other ways) more than `JOIN_TOL` from every other lane, on a map with a web (a lane besides the track and the field
+  spur) - asked of the finished map by the cohort only (`tools/cohort_audit.py`'s list beside
   `groves_crossed_by_lanes`, which the settle never reads, so no map is refused for it; constitution XIX), with a two-sided
   unit test; the claim "the track meets the lanes" moves to it;
   (b) the placer that keeps the rule is a choice between two placements - the track drawn from where its households' ways
   meet it, or the ways laid to the track's start - and is set down as T27 for the GM's fixing pass (D11), with the six
   seeds. The fixed and pinned seeds and the pool maps were all at 0.0 ft, so (a) moves no landing verdict; it names a
   fresh failure the record could not see. Rendering: map drawing convention (0081's track-out entry).
+
+- **D28 (the predicate's scope, measured at the first landing, 2026-10-25)**: the first form asked every connector end inside
+  the finished manifest's `W` x `H` and named the way-out end on 18 of the 54 landing seeds (observed 2026-10-25; method: `make
+  land F=417 T=T19`'s landing cohort; the frame is cropped about the content, so `W` / `H` need not bound the lanes); the
+  inner end is read by distance instead. Read so, it named every dispersed seed of the 54 (13; observed the same day, `make
+  cohort-landing`): the dispersed form lays no web, only the track and the field spur, and its track ends among the farms
+  (seed 5's 154 ft from the nearest house center, read from `make hamlet` seed 5's manifest). Whether that is 0081's "open
+  country" is not this task's to rule: the predicate asks only a map with a web, the dispersed track's end goes to the GM
+  with T27, and the landing cohort is 54 of 54 so read. Rendering: map drawing convention (0081's track-out entry).
 
 ### T19 Approach (re-answered 2026-10-25T11:58Z)
 
@@ -262,3 +272,19 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 11. **Before fitting things into room.** n/a.
 
 <!-- plan-archive: T24 to T26 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
+
+### T19 Approach (re-answered 2026-10-25T12:23Z)
+
+1. **The goal, in the world.** As re-answered at 11:58Z.
+2. **The constraints.** As at 11:58Z, and D28: the predicate reads the track's inner end by distance (the finished
+   manifest's frame is cropped about the content) and asks only a map with a web; the dispersed form lays none.
+3. **Where each comes from.** O: FR-004, constitution XIX, D27, D28.
+4. **Do they describe the world here?** Yes, measured (R6, D28).
+5. **The order.** As before.
+6. **The exits.** The landing cohort is 54 of 54 with the predicate so read (D28); the deletion and the predicate land
+   together, or are set down whole (D11).
+7. **The search smell.** No tuning: D28's change follows what the predicate asks, not a seed; the bar stays the 4 ft touch.
+8. **The budget.** As before.
+9. **Done, measured.** As at 11:58Z; and T27's task carries D28's question about the dispersed track for the GM.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.

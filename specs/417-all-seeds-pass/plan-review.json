@@ -242,7 +242,7 @@
    "declared": "spec-fidelity"
   },
   "### T19 Decisions": {
-   "sha256": "2caad73dc31e13945fd77afe847a3601bc3510df5919c61a7f9bb573be6ba011",
+   "sha256": "3fa6286a572b9539cbf976d2512d4b7846fcd97f3f234125caef8d58b9e51a0b",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -261,6 +261,12 @@
   },
   "### T19 Approach (re-answered 2026-10-25T11:58Z)": {
    "sha256": "18d201ba02359f503571a05e710ed78c89ce0c674b9b75593de375f25d25545a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Approach (re-answered 2026-10-25T12:23Z)": {
+   "sha256": "04f5225a56c6706ecb5554391ee422df8c6a7d0115d79e4ee908ec84981fad51",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -1521,6 +1527,98 @@
      "summary": "make land F=417 T=T19, make dead-closure, then a fresh block of 500 from seed 3002101 in the background, where the predicate should name about R6's rate.",
      "class": "within",
      "why": "D1's block size after an engine landing. These steps measure the requested behavior only and add no new behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T19 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D24",
+     "summary": "T19 worked now, before any seed fix, by the switch-off probe the report proposed; the settle-steps probe goes back to the GM; behavior may change where 0081 says so.",
+     "class": "within",
+     "why": "Unchanged since CLEAR; carries the GM's 2026-10-25 words ('T19 should be worked now before we start on the seed fixes, in the manner you suggest') and reads them no wider."
+    },
+    {
+     "id": "D25",
+     "summary": "The probe in D22's form: call off vs on over the fixed, pinned and pool seeds, and a count of inner ends more than JOIN_TOL off the web over those and a fresh 500.",
+     "class": "within",
+     "why": "Unchanged since CLEAR; D22's own form, measuring before deleting."
+    },
+    {
+     "id": "D26",
+     "summary": "The if-NEEDED placer, superseded by D27(b).",
+     "class": "within",
+     "why": "Unchanged since CLEAR; superseded and carries no live decision."
+    },
+    {
+     "id": "D27-pass",
+     "summary": "The pull-back is NEEDLESS (54/54 unchanged, pool byte-identical, 0 of 412 off the web), so the call, its helpers and tests are deleted.",
+     "class": "within",
+     "why": "Unchanged since CLEAR; deleting a repair pass the probe shows does nothing is FR-004 / SC-004."
+    },
+    {
+     "id": "D27(a)",
+     "summary": "The rule becomes one predicate, checks.track_ends_off_the_web, now worded as the connector's INNER end (the end nearer the other ways, by distance) more than JOIN_TOL from every other lane, asked of the finished map by the cohort only.",
+     "class": "within",
+     "why": "The inner-end wording replaces 'each connector end inside the canvas', which the landing showed names the way-out end because the cropped W x H does not bound the lanes (18 of 54). D25 and D27 already defined the rule on the INNER end, so this makes the predicate ask what the accepted rule asks; it is a correction of the predicate's mechanism, not a change of the rule. FR-006: one finished-map check per rule, in the cohort only, refusing no map. Its 'on a map with a web (a lane besides the track and the field spur)' clause is the narrowing, and it is ruled under D28."
+    },
+    {
+     "id": "D27(b)",
+     "summary": "The placer that keeps the rule (track drawn from where the ways meet it, or the ways laid to the track's start) is set down as T27 for the GM's fixing pass, with the six seeds.",
+     "class": "within",
+     "why": "Unchanged since CLEAR; D11 stops work on the seeds themselves and sends it to the GM."
+    },
+    {
+     "id": "D28",
+     "summary": "The predicate asks only maps with a web (a lane besides the track and the field spur); the dispersed form, which lays no web and whose track ends among the farms, is not asked, and whether that end is 0081's 'open country' goes to the GM with T27.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the earlier CLEAR wording ('each connector end ... from every other lane'), which would have asked the 13 dispersed seeds of the 54 about their track. The deciding point: the accepted rule was built and measured on maps with a web. D27's finding came from the 377 fresh maps that reached the end of stage_web, and the dispersed form's stage_web stops before that log, so the dispersed case was never inside the measured scope. Excluding it is therefore not a carve-out from a rule that covered it. It declines to extend a rule to a case the rule was never measured on, and it records that case (13 of 54; seed 5's end 154 ft from the nearest house center) and sends it to the GM with T27. The GM's stop line backs this (D11: 'one with no recorded value waits for the GM'), because whether a dispersed track ending among the farms is 0081's 'open country' has no recorded value. Purpose check: the predicate still names the six nucleated failures it was built to catch, so the finished-map check remains the measurement the request asked for, and the open case stays on the GM's record rather than being dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T19 Approach (re-answered 2026-10-25T12:23Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T19-A2a",
+     "summary": "The predicate track_ends_off_the_web reads the connector's inner end by distance (the end nearer the other ways), not by whether it lies inside the manifest's W x H.",
+     "class": "within",
+     "why": "D27(a) already defines the inner end as 'the end nearer the other ways'; the W x H form misread the way-out end on 18 of 54 seeds because the frame is cropped about the content (D28). Reading by distance is implementing the accepted definition correctly, not changing what the rule asks."
+    },
+    {
+     "id": "T19-A2b",
+     "summary": "The predicate is asked only of a map with a web; the dispersed form lays none (track and field spur only), so its 13 landing seeds are outside its scope.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The rule is 'the track meets the lanes'; on a map with no lane besides the track and the field spur there is nothing for the track to meet, so applying it literally is physically impossible rather than merely awkward. The scope 'on a map with a web' is already in accepted D27(a), and the plan does not drop the dispersed case: the separate question it raises (is a track ending 154 ft from the nearest house 0081's 'open country') is sent to the GM on T27, which is what the GM's stop line asks for ('stop so we can slowly and deliberately go through the actual fixing'; D11). It does not gut the request's purpose: no repair pass is kept and no failing seed is hidden by tuning."
+    },
+    {
+     "id": "T19-A6",
+     "summary": "Exit: the landing cohort 54 of 54 with the predicate so read; the deletion and the predicate land together or are set down whole.",
+     "class": "within",
+     "why": "FR-008 and D11 settle this: a conversion lands through make land when the fixed cohort, pinned rows and pool maps hold, or is recorded and set down, never iterated on."
+    },
+    {
+     "id": "T19-A7",
+     "summary": "No tuning: the bar stays the 4 ft touch (JOIN_TOL); D28's change follows the predicate's definition, not a seed.",
+     "class": "within",
+     "why": "Keeps the accepted tolerance; no constant moves and no per-seed fit, consistent with D11 and FR-007."
+    },
+    {
+     "id": "T19-A9",
+     "summary": "Done measured as at 11:58Z, and T27's task carries D28's dispersed-track question for the GM.",
+     "class": "within",
+     "why": "D28 itself says the dispersed track's end goes to the GM with T27; recording it on T27's task line implements that."
     }
    ]
   }
