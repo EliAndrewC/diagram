@@ -242,7 +242,7 @@
    "declared": "spec-fidelity"
   },
   "### T19 Decisions": {
-   "sha256": "29f7663fe04cfdf1acf821b059d14c50fb34c13688d055883949f22989abfe74",
+   "sha256": "2caad73dc31e13945fd77afe847a3601bc3510df5919c61a7f9bb573be6ba011",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -255,6 +255,12 @@
   },
   "### T24 Approach (checklist part A)": {
    "sha256": "dad23604377abd91bd954d5f8468265e2fa8f00363ea396c3a6f00b0f71c8247",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Approach (re-answered 2026-10-25T11:58Z)": {
+   "sha256": "18d201ba02359f503571a05e710ed78c89ce0c674b9b75593de375f25d25545a",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -1443,6 +1449,78 @@
      "summary": "T24 is closed as moot: the pass it concerned (sweeps._sweep_doubled_remnants) was measured needless and deleted with its claim in T26; done is measured by a grep that finds no definition",
      "class": "within",
      "why": "The GM 2026-10-25: 'You can also close T24 if it is moot.' The block says why it is moot (T26's deletion, research R5) and gives a measured done condition."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T19 Approach (re-answered 2026-10-25T11:58Z)",
+    "### T19 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D24",
+     "summary": "D11 lifted for T19 only, by the switch-off probe the report proposed; the probe of the settle's steps goes back to the GM; behavior may change where 0081 says so.",
+     "class": "within",
+     "why": "The GM's 2026-10-25 words: 'Changing behavior is fine as long as it is in line with our research, so T19 should be worked now before we start on the seed fixes, in the manner you suggest as the next step.' Reading the lift as T19's alone, and leaving the separate settle probe to the GM, takes nothing the GM granted and adds nothing he did not; unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "D25",
+     "summary": "The probe in D22's form: (a) the pull-back call switched off in a never-landing worktree, fixed/pinned cohort and the five pool maps against the baseline; (b) count of pull-back returns and finished maps with the connector's inner end more than JOIN_TOL (4 ft) off the web, on those seeds and a fresh 500.",
+     "class": "within",
+     "why": "It is the method D24 reads the GM as approving (D22's switch-off probe applied to T19's pass); the 4 ft carries its source and date. Unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "D26 (superseded marker)",
+     "summary": "The in-T19 placer (a run laid to the track's inner end by lay_reachable_runs) is marked superseded by D27(b): the off-web ends come from settle_reach, not the pull-back, and their placer is chosen with the GM in T27.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken alone the marker narrows T19: D26's own trigger (a finished map with the track's inner end off the web) did occur, in six fresh seeds, and D26 would have fixed them inside T19. The exception is implied by the GM's own words. His lift is for T19 'before we start on the seed fixes'. The overnight instruction says to stop 'so we can slowly and deliberately go through the actual fixing where we get more seeds to pass'. The six are fresh-seed failures caused by a different placer (settle_reach), and fixing them is that fixing pass. The repair pass T19 targets, the pull-back, is deleted whole, so the request's purpose (no place-then-repair) is served, not gutted. Choosing between the two placements in D27(b) is left to the GM rather than settled by the session. That is the opposite of a session carving out its own case. The marker only records what D27(b) already said under its CLEAR verdict."
+    },
+    {
+     "id": "D27 (findings, deletion)",
+     "summary": "The pull-back is NEEDLESS (54/54 fixed and pinned seeds unchanged, pool manifests byte-identical, 0 of 412 connectors returned off the web), so the call, _pull_back_to_service, kept_connector and their tests are deleted.",
+     "class": "within",
+     "why": "FR-004 and the request: delete the passes that repair a laid web. A measured needless repair pass is deleted outright. Figures carry their observation date and method."
+    },
+    {
+     "id": "D27(a)",
+     "summary": "The rule 'the track meets the lanes' becomes one predicate, checks.track_ends_off_the_web(M), asked of the finished map by the cohort only, never refusing a map, with a two-sided unit test.",
+     "class": "within",
+     "why": "The request's accepted scope keeps 'one finished-map check per rule, in the cohort and the tests only', and FR-006/SC-003 ask for one implementation per rule. Its home in checks.py rather than law.py is code layout, not fidelity: the law exempts the connector today, so this is not yet a lane-law rule FR-004 places in law.py. T27's placer is to ask this same predicate. Unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "D27(b)",
+     "summary": "The placer that keeps the rule (the track drawn from where its households' ways meet it, or the ways laid to the track's start) is set down as T27 for the GM's fixing pass, with the six seeds.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground as the D26 marker: the GM held seed-fixing work for a deliberate pass with him (D11) and lifted the hold for T19 only, 'before we start on the seed fixes'. The six are fresh failures that a different placer causes. The fix is a choice between two behaviors, and it is handed to the GM, not decided by the session. It does not preserve the repair pass the GM asked to remove. Unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "Approach 2 (predicate in checks.py, cohort-only reader)",
+     "summary": "The predicate goes in checks.py, layered below the law, because law.py is at 993 lines (wc -l, read 2026-10-25); only tools/cohort_audit.py reads it.",
+     "class": "within",
+     "why": "This repeats D27(a)'s placement with a stated reason. It keeps the finished-map check in the cohort and the tests only, as the request's accepted scope says. Which file holds the predicate is design, not a fidelity question."
+    },
+    {
+     "id": "Approach 6 (exits)",
+     "summary": "The deletion lands with the predicate; if the landing cohort is not green, the landing is set down whole (D11).",
+     "class": "within",
+     "why": "FR-008 and D11's set-down-never-iterate rule, applied as written."
+    },
+    {
+     "id": "Approach 7 (no tuning)",
+     "summary": "The predicate's bar is the law's existing touch gap (_TOUCH_GAP, 4 ft); no new constant.",
+     "class": "within",
+     "why": "It reuses the recorded value, as D11 asks for a rule's value."
+    },
+    {
+     "id": "Approach 8-9 (budget, done)",
+     "summary": "make land F=417 T=T19, make dead-closure, then a fresh block of 500 from seed 3002101 in the background, where the predicate should name about R6's rate.",
+     "class": "within",
+     "why": "D1's block size after an engine landing. These steps measure the requested behavior only and add no new behavior."
     }
    ]
   }

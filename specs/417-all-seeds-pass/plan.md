@@ -213,7 +213,7 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
   and `ways/geom.py:51` `_TOUCH_GAP = 4.0`) from every other lane, and each FINISHED map (after
   `settle_the_web`) whose connector inner end is that far off the web, over the same seeds and a fresh block of 500. A
   case that never occurs in a finished map is closed by the settle, and the drift goes with the code. Rendering: none.
-- **D26 (if NEEDED, the placer; SUPERSEDED by D27, which measured its premise false - the pull-back is not what leaves an end off the web, so no run is built here)**: the track is laid before the web (`stage_track`), so the connector is never moved
+- **D26 (if NEEDED, the placer; SUPERSEDED by D27(b): the finished maps with the track off the web are drawn so by `settle_reach`, not the pull-back, and their placer is chosen with the GM in T27)**: the track is laid before the web (`stage_track`), so the connector is never moved
   after it is laid: the WEB meets it. Where the count finds a finished map with the track's inner end off the web, that end
   is a point the web's lay must reach - a run laid to it when the web is laid (`lay_reachable_runs`, beside the skeleton
   that already reads the connector as network), asked of `Lawful` before it is drawn like every web lane - and the
@@ -248,7 +248,7 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
    is a named failure; drawing it right is T27's.
 2. **The constraints.** D27: the pull-back changed nothing measured; the six fresh tracks that stop short are drawn so by
    `settle_reach` (the households' ways laid to `near_the_cluster`'s stretch); the law exempts the connector, and `law.py`
-   is at 993 lines, so the predicate goes in `checks.py` (layered below the law) and is read only by `tools/cohort_audit.py`.
+   is at 993 lines (`wc -l l7r/diagram/hamletgen/ways/law.py`, read 2026-10-25), so the predicate goes in `checks.py` (layered below the law) and is read only by `tools/cohort_audit.py`.
 3. **Where each comes from.** O: FR-004, constitution XIX (a finished-map check in the cohort and the tests only), D27.
 4. **Do they describe the world here?** Yes, measured (R6).
 5. **The order.** As before.
