@@ -27,13 +27,16 @@ fineness passed at once. And `canton-1835` borrows its cash rate from rural Beij
 ## User Scenarios & Testing
 
 1. gm-assistant reads, for each year 1706-1718 (or as a mean of the Hoei years and the Yotsuho/Shotoku years), the market rate
-   of silver to gold and of copper to silver, each named by the silver coinage it is quoted in, and builds `osaka-1712` and
+   of silver to gold (monme a ryo) and of copper to silver (mon a monme) or to gold (kanmon a ryo), each rate quoted in silver
+   named by the silver coinage it is quoted in, and builds `osaka-1712` and
    replaces `osaka-1695`'s borrowed 1706-1711 rates.
-2. gm-assistant reads Canton's own cash-per-tael rate for the 1830s from a readable source, or a SILENT with its search.
+2. gm-assistant reads Canton's own cash-per-tael rate for the 1830s, searched first in the *Chinese Repository* (its 1830s
+   volumes) and then any other readable source, or a SILENT with its search.
 
 **Acceptance**:
-1. Each rate is quoted from a readable page, with the silver coinage it is quoted in (Keicho, Genroku, Hoei Futatsuho,
-   Eiji, Mitsuho, Yotsuho, the new Shotoku silver); a year whose rate is given in several coinages gives each.
+1. Each rate is quoted from a readable page; a rate quoted in silver names the silver coinage it is quoted in (Keicho,
+   Genroku, Hoei Futatsuho, Eiji, Mitsuho, Yotsuho, the new Shotoku silver), and a year whose rate is given in several coinages
+   gives each; a kanmon-a-ryo rate names its gold coinage only where the source does.
 2. Where gm-assistant needs one rate per year and the source gives several, the record says which coinage passed most in Osaka
    that year if a source says so, and otherwise gives them all and says no source picks one.
 3. Canton's rate is ATTESTED with its year, source and whether it is copper cash per tael of silver at Canton itself; a rate
@@ -53,7 +56,7 @@ fineness passed at once. And `canton-1835` borrows its cash rate from rural Beij
 - **SC-001** (FR-001, FR-003): `make record-owed` shows no unanswered unit for the touched questions at landing; `make
   impl-check F=418` reports nothing missing.
 - **SC-002** (FR-002): a reply on #13 gives each year's rates (or the two means) with their coinage, and Canton's rate or its
-  SILENT.
+  SILENT, and says what the *Chinese Repository* gives on it, or that it gives none.
 
 ## Assumptions
 
