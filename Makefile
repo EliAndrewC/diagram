@@ -754,6 +754,9 @@ claims-coverage: ## [project] every unit with no research claim, a malformed cla
 claims-report: ## [project] the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" report
 
+tunables: ## [project] every claim whose value is ours - GUESS (searched, silent), UNRESEARCHED, CONVENTION - with its figure: a goal and a knob a fixing pass may move (feature 417 T28)   [UNDER=<file or dir>] [ALL=1 keeps claims with no figure] [COUNT=1] [INLINE=1 lists the numbers inside functions no claim states]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/tunables.py" --root "$$(git rev-parse --show-toplevel)" $(if $(UNDER),--path $(UNDER),) $(if $(filter 1,$(ALL)),--all,) $(if $(filter 1,$(COUNT)),--count,) $(if $(filter 1,$(INLINE)),--inline,)
+
 impl-check: ## [project] a research-record feature's changed questions, each with the claims citing it and their verdicts, and what its close still owes (feature 378)   F=<n>
 	@if [ -z "$(F)" ]; then printf 'make impl-check: F=<feature number> is required - e.g. make impl-check F=343\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/impl_check.py" "$(F)"
