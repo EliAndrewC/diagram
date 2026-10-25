@@ -8,25 +8,25 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 
 ## Tasks
 
-- [ ] T01 s1+s2: Japan's market rates of 1705-1719 in 0287 (D1; FR-001, FR-002)
+- [x] T01 s1+s2: Japan's market rates of 1705-1719 in 0287 (D1; FR-001, FR-002)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: make record-owed clean for 0287
-- [ ] T02 s1+s2: Canton's cash in the 1830s in 0289 (D2; FR-001, FR-002)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed in batch T01+T02+T03: 0287's 1705-1719 rates and 0289's 1830s cash written and checked (two rounds; the tail closed by arbiter ask:418-round3 accept); record-owed clean; impl-check nothing missing
+- [x] T02 s1+s2: Canton's cash in the 1830s in 0289 (D2; FR-001, FR-002)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: make record-owed clean for 0289
-- [ ] T03 Implementation check (D3; FR-003)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed in batch T01+T02+T03: 0287's 1705-1719 rates and 0289's 1830s cash written and checked (two rounds; the tail closed by arbiter ask:418-round3 accept); record-owed clean; impl-check nothing missing
+- [x] T03 Implementation check (D3; FR-003)
       research: rendering
-      verify: make impl-check F=418 reports nothing missing
+      verify: DONE. landed in batch T01+T02+T03: 0287's 1705-1719 rates and 0289's 1830s cash written and checked (two rounds; the tail closed by arbiter ask:418-round3 accept); record-owed clean; impl-check nothing missing
 - [ ] T04 The reply on #13 (D4; FR-002)
       research: rendering
       verify: the comment's URL
