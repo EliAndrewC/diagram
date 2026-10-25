@@ -8,7 +8,7 @@
 
 **Affects**: research record
 
-**Approved**: the GM, 2026-10-25, "yes"
+**Approved**: the GM, 2026-10-25, "you should treat features that I have asked to be filed as automatic approval, and therefore you should not ask in the future" (his answer on #15: "yes")
 
 The GM's answer on #15 (relayed by gm-assistant, `request.md`) approves what feature 414's acceptance 3 held back: England's
 premodern series are "not sought out unless the GM asks for it or approves it" (research/CLAUDE.md, "Comparative money
