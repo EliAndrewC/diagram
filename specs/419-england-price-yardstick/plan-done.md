@@ -46,3 +46,23 @@
 
 - **D4** As the section "D4 - the implementation check" states. Rendering: none.
 
+<!-- plan-archive: archived 2026-10-25 -->
+## T03 - the reply and the landing (D5)
+
+### T03 Approach (checklist part A)
+
+1. **The goal, in the world.** gm-assistant can verify the landing and close #15.
+2. **The constraints.** The reply names the fragment file and the verify commands.
+3. **Where each comes from.** O: `request.md` ("Please post here when it lands").
+4. **Do they describe the world here?** Yes.
+5. **The order.** After T01 and T02 land.
+6. **The exits.** None.
+7. **The search smell.** None.
+8. **The budget.** Minutes.
+9. **Done, measured.** The comment is posted; `make feature-report F=419 WRITE=1` written.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T03 Decisions
+
+- **D5** As the section "D5 - the reply" states. Rendering: none.

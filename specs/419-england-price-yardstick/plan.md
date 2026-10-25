@@ -57,22 +57,4 @@ A comment on #15: the drift and the swing, the fragment file, and how to verify 
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
-## T03 - the reply and the landing (D5)
-
-### T03 Approach (checklist part A)
-
-1. **The goal, in the world.** gm-assistant can verify the landing and close #15.
-2. **The constraints.** The reply names the fragment file and the verify commands.
-3. **Where each comes from.** O: `request.md` ("Please post here when it lands").
-4. **Do they describe the world here?** Yes.
-5. **The order.** After T01 and T02 land.
-6. **The exits.** None.
-7. **The search smell.** None.
-8. **The budget.** Minutes.
-9. **Done, measured.** The comment is posted; `make feature-report F=419 WRITE=1` written.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T03 Decisions
-
-- **D5** As the section "D5 - the reply" states. Rendering: none.
+<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->

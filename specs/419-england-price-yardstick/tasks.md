@@ -19,9 +19,9 @@ The question task is `research: physical` with its five boxes; the rest are `res
 - [x] T02 Implementation check (D4; FR-003)
       research: rendering
       verify: DONE. landed in batch T01+T02: 0297 (English prices 1209-1914, comparative) written and checked in two sessions, 0291 points to it; two comparative keys; record-owed clean; impl-check nothing missing; measure/england.py reproduces its output
-- [ ] T03 The reply on #15 and the report (D5; FR-002)
+- [x] T03 The reply on #15 and the report (D5; FR-002)
       research: rendering
-      verify: the comment posted; make feature-report F=419 WRITE=1
+      verify: DONE. landed: reply on #15 issuecomment-6397225543; report written
 - [ ] GM review (make gm-reviewed F=419) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
