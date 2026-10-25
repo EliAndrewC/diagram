@@ -83,6 +83,16 @@ flag, never a gate (375 amendment 5): a by-construction placer that is slower is
 - **D6 (the principle)**: FR-003's text is drafted by T03 and goes to the GM; the constitution is amended only with the GM's
   words. Rendering: none.
 
+- **D11 (the stop line, the GM 2026-10-25, ruled by spec-fidelity MODE 1)**: the GM: "definitely finish out doing the tasks
+  that involve, turning off automated checks, and then replacing them with just having the algorithm place correctly in the
+  first place ... and then stop so we can slowly and deliberately go through the actual fixing where we get more seeds to
+  pass". So the FR-004/FR-005/FR-006 conversions are done; a rule coded twice with different values is made one at the lane
+  law's (or the rule's own recorded) value, and one with no recorded value waits for the GM; each conversion lands through
+  `make land` when FR-008 holds (the fixed cohort, the pinned rows, the pool maps), its fresh rate recorded either way; one
+  that cannot land green without seed-by-seed work or room (FR-007) is recorded and set down, never iterated on. No work aimed
+  at the fresh rate, no FR-007 room work, no T20/T21 until the GM resumes it. The tasks that move no map go first. Rendering:
+  none.
+
 ## Order
 
 T01 measure (D1, D2). T02 the hold guard (D4) - small tooling, lands alone. T03 the inventory (D3) and the principle's draft
@@ -91,3 +101,7 @@ T01 measure (D1, D2). T02 the hold guard (D4) - small tooling, lands alone. T03 
 two tasks after the last engine task: the fresh block before the push (FR-009), and every archetype form against HEAD (FR-011,
 SC-006). The last task closes: 1,000 fresh seeds, T106's seat turn re-applied (User
 Story 2), the code-size delta (SC-004), the feature report.
+
+<!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
+<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
+<!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->

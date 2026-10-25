@@ -39,6 +39,7 @@ from l7r.diagram import hamletgen as hg  # noqa: E402
 from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, row_rules, water_rules  # noqa: E402
 from l7r.diagram.hamletgen.ways.knots import lane_knots  # noqa: E402
 from l7r.diagram.overlap import matrix_violations  # noqa: E402
+from l7r.diagram.settlement._geom.water_index import crosses_a_stream  # noqa: E402 - the same-bank rule's one predicate (feature 417 T04)
 from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves, gardens_east_shaded, grove_sides_missing, groves_crossed_by_lanes, groves_off_windward  # noqa: E402
 from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT, CANOPY_SHADE_FT, bamboo_shading_plots, trees_shading_plots  # noqa: E402
 from l7r.diagram.tools.cohort_roll import ROLL_TARGET, Refusal, roll_or_refusal  # noqa: E402 - imported by NAME, so one class in every process (cohort_roll's docstring)
@@ -48,17 +49,11 @@ _PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_shed
 
 def parts_across_brook(manifest: dict) -> int:
     """How many farmstead parts stand across a stream from the house they belong to (feature 261 FR-013 / SC-009): a part
-    that names its house (`of`) whose straight line to it crosses a reach of any stream."""
-
-    def _cross(a: Sequence[float], b: Sequence[float], c: Sequence[float], d: Sequence[float]) -> bool:
-        def _o(p: Sequence[float], q: Sequence[float], r: Sequence[float]) -> float:
-            return (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
-
-        return _o(a, b, c) * _o(a, b, d) < 0 and _o(c, d, a) * _o(c, d, b) < 0
-
-    brooks = [s["poly"] for s in manifest.get("streams") or [] if len(s.get("poly") or ()) >= 2]
+    that names its house (`of`) whose straight line to it crosses a reach of any stream. Asked by the placers' own predicate,
+    `crosses_a_stream` (feature 417 T04, D12: the audit's copy of the segment test was the rule coded a fourth time)."""
+    streams = manifest.get("streams") or []
     parts = [r for k in _PART_KEYS for r in manifest.get(k) or [] if r.get("of")]
-    return sum(1 for r in parts if any(_cross((r["x"], r["y"]), r["of"], b[i], b[i + 1]) for b in brooks for i in range(len(b) - 1)))
+    return sum(1 for r in parts if crosses_a_stream(r["of"], (r["x"], r["y"]), streams))
 
 
 # THE ROW VILLAGE'S KNOBS, EACH VALUE ROLLED FOR CERTAIN (feature 291 plan D19; SC-007, SC-008): with the linear form two

@@ -222,6 +222,15 @@ def test_roll_one_reports_farmstead_parts_across_the_brook_and_an_offwind_seat(m
     assert ca.parts_across_brook({}) == 0
 
 
+def test_the_audit_asks_the_placers_own_same_bank_predicate(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 417 T04 (D12): the cohort's "across the brook" is `crosses_a_stream`, the predicate the placers ask - one rule,
+    one body - so the check and the placing cannot disagree."""
+    asked: list[tuple] = []
+    monkeypatch.setattr(ca, "crosses_a_stream", lambda house, part, streams: asked.append((tuple(house), part)) or True)
+    assert ca.parts_across_brook({"streams": [], "gardens": [{"x": 1.0, "y": 2.0, "of": [3.0, 4.0]}]}) == 1
+    assert asked == [((3.0, 4.0), (1.0, 2.0))]
+
+
 def test_roll_one_reports_the_matrix_and_the_grove_rules(monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 291: the cohort's verdict reads the overlap matrix and the grove predicates on every roll - the retired
     battery had been the only thing that saw 126's grove defects."""
