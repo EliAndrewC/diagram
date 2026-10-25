@@ -1341,6 +1341,7 @@ gable-fronted	tsumairi
 gabled	gabled roof
 gabled roof	gabled roof
 gaison	gaison
+gakuzuka	gakuzuka
 galleried mining	siege mining
 game master	GM
 gang salt	gang salt
