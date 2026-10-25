@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-25T23:08:21Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 296,
+  "result": "green",
+  "commit": "7597e29e4",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10130,
+  "host": {
+    "load": [
+      6.59,
+      11.5
+    ],
+    "mem_avail_mb": [
+      4542,
+      6062
+    ],
+    "cpu_temp_c": [
+      87.0,
+      72.0
+    ],
+    "stall_s": {
+      "cpu": 9.6,
+      "io": 2.8,
+      "io_full": 1.7,
+      "memory": 1.0
+    },
+    "throttle_ms": {
+      "core": 2226,
+      "package": 860
+    }
+  },
+  "phases": {
+    "preflight": 29.0,
+    "static": 3.0,
+    "format": 0.0,
+    "typecheck": 2.0,
+    "reference": 0.0,
+    "pytest": 268.0,
+    "floors": 14.0,
+    "test-full": 289.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/waterfields/frame.py",
+  "collected": 10130
+}
