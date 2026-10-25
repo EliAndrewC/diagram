@@ -83,6 +83,16 @@ flag, never a gate (375 amendment 5): a by-construction placer that is slower is
 - **D6 (the principle)**: FR-003's text is drafted by T03 and goes to the GM; the constitution is amended only with the GM's
   words. Rendering: none.
 
+- **D11 (the stop line, the GM 2026-10-25, ruled by spec-fidelity MODE 1)**: the GM: "definitely finish out doing the tasks
+  that involve, turning off automated checks, and then replacing them with just having the algorithm place correctly in the
+  first place ... and then stop so we can slowly and deliberately go through the actual fixing where we get more seeds to
+  pass". So the FR-004/FR-005/FR-006 conversions are done; a rule coded twice with different values is made one at the lane
+  law's (or the rule's own recorded) value, and one with no recorded value waits for the GM; each conversion lands through
+  `make land` when FR-008 holds (the fixed cohort, the pinned rows, the pool maps), its fresh rate recorded either way; one
+  that cannot land green without seed-by-seed work or room (FR-007) is recorded and set down, never iterated on. No work aimed
+  at the fresh rate, no FR-007 room work, no T20/T21 until the GM resumes it. The tasks that move no map go first. Rendering:
+  none.
+
 ## Order
 
 T01 measure (D1, D2). T02 the hold guard (D4) - small tooling, lands alone. T03 the inventory (D3) and the principle's draft
@@ -118,30 +128,7 @@ Story 2), the code-size delta (SC-004), the feature report.
   first seed is above the fixed range and the pinned rows (`cohort_gate`'s fresh start); one seed counted once per commit.
   Rendering: none.
 
-## T02 - the hold made (FR-010)
-
-### T02 Approach (checklist part A)
-
-1. **The goal, in the world.** No engine task of a held claims feature can be started while 417 is open.
-2. **The constraints.** `make task-start` is the one place a task becomes active (`plan_gate.task_start`).
-3. **Where each comes from.** O: FR-010 and D4.
-4. **Do they describe the world here?** Yes: a landing needs the active task, and the active task comes only from task-start.
-5. **The order.** Second, small, lands alone (`make land-tooling`).
-6. **The exits.** `HOLD_OK` for a non-engine task only.
-7. **The search smell.** None.
-8. **The budget.** 45 min.
-9. **Done, measured.** 405, 372 and 384 carry the ON HOLD status (all three marked 2026-10-24); a test starts a 405 engine
-   task and is refused, naming 417; a `HOLD_OK` on it is refused; a non-engine
-   task with `HOLD_OK` starts; each red without the guard.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T02 Decisions
-
-- **D9** A held feature is one whose `**Status**` line holds `ON HOLD` and `until feature NNN`; NNN open by `speckit-todo`'s
-  own open/closed rule. An engine task is one whose text names a path under `l7r/` or `pool/`, or whose `research:` line is
-  `physical`, or that names a decision whose plan section names such a path; unsure counts as engine. Rendering: none.
-
+<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
 ## T03 - the inventory (FR-002, FR-003)
 
 ### T03 Approach (checklist part A)
@@ -169,3 +156,29 @@ Story 2), the code-size delta (SC-004), the feature report.
   tree - every `cohort_audit` rule with its callers in `l7r/`; every caller of `law.violations`, `lane_violators`,
   `row_rules`, `grove_rules` and the overlap matrix inside the generator's run; every pair of functions judging one rule -
   and their hits reconciled against R2 before T03 is done. Rendering: none.
+
+## T04 - one stream-crossing rule (R2 G7; FR-006)
+
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** The cohort's "a farmstead part across the brook from its house" asks the same predicate the
+   placers ask (`_geom/water_index.crosses_a_stream`), so the check and the placing cannot disagree.
+2. **The constraints.** `crosses_a_stream(house, part, streams)` is the one predicate (its docstring: "all three now call
+   this" - the audit's copy was missed); the audit's `parts_across_brook` keeps its part list and its count.
+3. **Where each comes from.** O: FR-006 (a second implementation of a rule is deleted), R2 G7.
+4. **Do they describe the world here?** Yes: the audit's `_cross` is a strict orientation test; `segments_cross` is the same
+   test with one side non-strict, so they differ only for a part or house exactly on a stream's line.
+5. **The order.** First of the engine tasks: it moves no map (the audit is not the generator).
+6. **The exits.** n/a.
+7. **The search smell.** None.
+8. **The budget.** 30 min plus the landing.
+9. **Done, measured.** `cohort_audit.parts_across_brook` calls `crosses_a_stream`; its test pins a part across a reach
+   counted and one on the house's bank not; the landing cohort green (FR-008).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T04 Decisions
+
+- **D12** `parts_across_brook` counts the parts `r` (with `of`) for which `crosses_a_stream(r["of"], (r["x"], r["y"]),
+  manifest["streams"])`; its local `_cross` is deleted. The streams with fewer than two points are skipped by the predicate
+  itself. Rendering: none.
