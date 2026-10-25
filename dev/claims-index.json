@@ -52686,6 +52686,7 @@
   "rests": [
    "0045-chickens-and-chicken-coops.drawing.html:94909ee119011e40"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -52702,6 +52703,7 @@
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:b3e7f0b846f18b0f",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:d6a078d4e683edf6"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -52712,6 +52714,7 @@
   "note": "the cited pages give the plot's corner, SE or NW first, but no distance from the house, so UNRESEARCHED holds for the 14 ft offset",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -52728,6 +52731,7 @@
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:770a6419fbce2b73",
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -52744,6 +52748,7 @@
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:69009a6eaa9aef08",
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -52794,6 +52799,7 @@
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "DRIFTED"
  },
@@ -52812,6 +52818,7 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:c5d84fdf328cced8",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -52829,6 +52836,7 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -52839,6 +52847,7 @@
   "note": "the page says the distances step out but gives no step size, so the 4 ft step stays UNRESEARCHED",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -52850,16 +52859,17 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#seat positions along each wall": {
-  "body": "c86c3d714e0760da",
-  "claim": "seat positions along each wall - UNRESEARCHED: privy 0.3 / 0.40 / -0.35 hw, coop 0.34 hw spread and 0.3 hh, wood shed 0.25 hw and 0.1 hh, a flank brought back until its front end is at the front wall",
-  "code": "ccc96904821113e1",
-  "core": "1efd820bc25f3627",
+  "body": "5aa6ad5698f453ba",
+  "claim": "seat positions along each wall - UNRESEARCHED: privy 0.3 / 0.40 / -0.35 hw, coop 0.34 hw spread and 0.3 hh, wood shed 0.25 hw and 0.1 hh",
+  "code": "a0889aadb36e90ab",
+  "core": "35c562e9417fd7f0",
   "date": "2026-10-24",
-  "note": "the fractions match the code (privy 0.3/0.40/-0.35 hw, coop 0.34 hw and ±0.3 hh, wood shed ±0.25 hw), and min(hh*0.1, hh/2 - w/2) keeps a flank shed's front end at the front wall; the pages give the walls but not positions along them",
+  "note": "fractions match the code (privy 0.3/0.40/-0.35 hw, coop 0.34 hw spread and 0.3 hh, wood shed 0.25 hw and 0.1 hh); no cited page gives a seat's position along its wall",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -52877,6 +52887,7 @@
    "0219-household-shrines-yashikigami.drawing.html:219399d6edd7b513",
    "0219-household-shrines-yashikigami.drawing.html:2f759729d0a736bd"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -52888,16 +52899,17 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#wood shed seats": {
-  "body": "c86c3d714e0760da",
-  "claim": "wood shed seats - GUESS firewood-stacks-and-sheds-kigoya.drawing: off the back wall and the flanks, the first turned by the household's roll",
-  "code": "e4e8c51396a4eb45",
-  "core": "1efd820bc25f3627",
+  "body": "5aa6ad5698f453ba",
+  "claim": "wood shed seats - GUESS firewood-stacks-and-sheds-kigoya.drawing: off the back wall and the flanks",
+  "code": "e1d19fc097d1e70d",
+  "core": "35c562e9417fd7f0",
   "date": "2026-10-24",
-  "note": "two back-wall seats and two flank seats, the first one picked by the household's roll; flank seats are clamped so they never reach past the front wall, which keeps \"never in the front yard\"; the page records where the shed stands as a GUESS",
+  "note": "back wall and both flanks, none in front, a ken past the wall gap; the page records this as a GUESS",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
   },
@@ -52983,6 +52995,7 @@
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::against_a_part#against the farmhouse or one of its outbuildings": {
@@ -53362,6 +53375,7 @@
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
    "0044-baths-on-the-farm-furo.drawing.html:f4b4951f028d4a66"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -53379,6 +53393,7 @@
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
    "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -53390,6 +53405,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -53401,6 +53417,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -53419,6 +53436,7 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -53434,6 +53452,7 @@
   "rests": [
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:65dfdac106fa4297"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -53450,6 +53469,7 @@
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:591f08ea01d694fd",
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -53465,6 +53485,7 @@
   "rests": [
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -53476,6 +53497,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -53487,6 +53509,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -53497,6 +53520,7 @@
   "note": "the page puts the shed beside or behind the house and is silent on the annex",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },
@@ -53513,6 +53537,7 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2024bed7766a5bb4",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:bc74b262a32416b5"
   ],
+  "triage": "touched",
   "triaged": "2026-10-24",
   "verdict": "IN-STEP"
  },

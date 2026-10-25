@@ -918,7 +918,7 @@
    "declared": "spec-fidelity"
   },
   "### T106 Decisions": {
-   "sha256": "3d293bae9c338ccf5928eab4972bb8ec5a7e7fce5293b2b2779e5a4cac7b3299",
+   "sha256": "9d8aa721986e8aefb7ff649aac3d9aee61373136e1b2a591a6e51a2bdbc92a5a",
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
@@ -5317,6 +5317,27 @@
      "summary": "order tails_cut_back -> next_gather -> claims -> unit test -> seeds 1-48 and pinned rows on main seats; exit (e) conform; done measured by the red-without-it unit test, seeds, cover-changed, claims round, landing cohort; 20 min budget",
      "class": "within",
      "why": "This is FR-001's checklist part A worked as 385 worked its tasks. None of it narrows the request: the checks enforce the fix and the budget is process."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T106 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D132",
+     "summary": "Woodpile seats turned by the household's roll (roll(SALT['woodpile']+0.5)); flank seats' front end held no further forward than the front wall (min(0.1 hh, hh/2 - w/2)) so D78 stops refusing both flanks.",
+     "class": "within",
+     "why": "Unchanged word for word from the text judged CLEAR. It carries out T106, the turn D78 filed, one of the knots family that FR-003a and amendment 10 ('solve the knots problem inside 405') keep in this feature. It holds 0043's rule and D78's never-forward test rather than relaxing either."
+    },
+    {
+     "id": "D133-moved",
+     "summary": "D133 (knots.next_gather tail cut-back under 40 ft) is taken out of T106's block and moved to T138, which lands on its own; T106 is set down again by route (b) of ask:t106-sawada-knot.",
+     "class": "within",
+     "why": "A relocation, not a removal. The decision stays in feature 405 under T138 and its substance is not cut. Setting T106 down drops nothing from the request: FR-003a and SC-003 still need T106 landed before T127, and nothing in this block lets T106 leave the feature or land without the knot fix. No clause of the request (amendment 10 included) says which task carries the knot fix. One thing this block cannot settle: T138's block, which now carries D133, has to be judged on its own when it changes."
     }
    ]
   }
