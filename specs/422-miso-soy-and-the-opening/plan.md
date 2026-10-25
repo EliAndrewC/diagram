@@ -67,26 +67,7 @@ series or grade difference possible, the start of Manchurian imports SILENT. No 
 `implementation-check.md` holds each touched question's line; the reply on #18 gives each figure with its fragment file and
 verdict; findings for the GM go through `escalation-check` first.
 
-## T01 - Q1 and Q2, miso and soy sauce (D1, D2)
-
-### T01 Approach (checklist part A)
-
-1. **The goal, in the world.** gm-assistant can replace the basket's soybean line with miso and soy sauce at sourced quantities and average their prices across the eras that record them.
-2. **The constraints.** The record's citation rules (a verbatim passage on a readable page, or SILENT with its search); the 20,000-byte question cap; at most four questions and ten new keys a write; `make record-owed` clean; the spec's acceptance 1-5.
-3. **Where each comes from.** O: the four questions (`request.md`); G: research/CLAUDE.md, research/money-requests.md.
-4. **Do they describe the world here?** Yes; household and ration figures are ATTESTED ONLY FOR their place and time; the Mitsui cells are a merchant house's purchases.
-5. **The order.** S1 write, C1 check (marks clone).
-6. **The exits.** A quantity no source gives is SILENT, never estimated.
-7. **The search smell.** None: research, not a fit.
-8. **The budget.** One write session and one check session.
-9. **Done, measured.** `make record-owed` names nothing unanswered for the new question, 0249, 0301 and 0302.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T01 Decisions
-
-- **D1-D2** As the sections "D1" and "D2" state. Rendering: none.
-<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
+<!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 ## T03 - the implementation check and the reply (D5)
 
 ### T03 Approach (checklist part A)
