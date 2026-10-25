@@ -18126,5 +18126,20 @@
    "metropolitan examination",
    "metropolitan examinations"
   ]
+ },
+ "hydrolyzed soy protein": {
+  "def": "Soy protein broken down with chemicals instead of being brewed and fermented. It is a quicker way to make soy sauce than the traditional method.",
+  "variants": [
+   "hydrolyzed soy protein",
+   "chemically hydrolyzed soy protein",
+   "hydrolyzed soy proteins",
+   "chemically hydrolyzed soy proteins"
+  ]
+ },
+ "mizuabura": {
+  "def": "A liquid oil. In the Edo oil trade, rapeseed oil pressed for lamp oil, the main oil of the period with cottonseed white oil; the word could also mean a liquid hair oil.",
+  "variants": [
+   "水油"
+  ]
  }
 }
