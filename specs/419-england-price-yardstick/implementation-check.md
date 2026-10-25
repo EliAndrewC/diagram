@@ -1,0 +1,2 @@
+- 0297: no code implements it - a comparative money question, consumed by no generator; searched: grep -rn -i 'clark\|bank of england\|england_1209\|english prices\|how-steady-were-english-prices' l7r pool (the only hits are coordinate digits in pool/hamlets/*.json)
+- 0291: no code implements it - a comparative money question, consumed by no generator; searched: grep -rn 'how-steady-are-prices-today\|0291' l7r pool (the only hits are coordinate digits in pool/hamlets/*.json)
