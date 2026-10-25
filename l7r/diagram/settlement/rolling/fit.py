@@ -12,6 +12,7 @@ from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, eave_gap, edg
 from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_violated, facing_chains, keepout_ring
 from .._geom.water_index import crosses_a_stream
 from ..farm_fixtures import PERSIMMON_CROWN_FT
+from ..homestead_parts.grove_rules import fixture_on_band
 from ..homestead_parts.tree_shade import CANOPY_SHADE_FT, crown_shades
 from .access import access_corridor, legs
 from .lot import bundle_admitted
@@ -596,7 +597,8 @@ class BundleFitMixin:
             if g and g is not geom:
                 bands += list(g.get("groves") or ())
         bands = [(round(float(b[0]), 1), round(float(b[1]), 1), float(b[2]), float(b[3])) for b in bands]
-        meet = lambda f, b: abs(f[0] - b[0]) < (f[2] + b[2]) / 2 and abs(f[1] - b[1]) < (f[3] + b[3]) / 2  # noqa: E731
+        # ...BY THE CHECK'S OWN PREDICATE (feature 417 T17, D17): each box arrives turned, so it is asked with no turn of its own
+        meet = lambda f, b: fixture_on_band(dict(zip("xywh", f, strict=True)), dict(zip("xywh", b, strict=True)))  # noqa: E731
         return any(meet(f, b) for f in fixtures for b in bands) or (tree is not None and any(meet(tree, b) for b in bands if (b[0], b[1]) not in own))
 
     def _on_the_access(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]

@@ -51,6 +51,7 @@ from l7r.diagram.settlement.homestead_parts.fixture_seats import (
 from l7r.diagram.settlement.homestead_parts.fixture_seats import (
     privy_sun_reach_ft as privy_sun_reach_ft,
 )
+from l7r.diagram.settlement.homestead_parts.grove_rules import fixture_on_band, grove_bands
 from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
@@ -471,12 +472,9 @@ def _flexible_clear(s: Settlement, h: Mapping[str, Any], q: Pt, ext: tuple[float
     hx, hy = float(h["x"]), float(h["y"])
     if _strip_blocked(s, q[0], q[1], ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing, near=near):
         return False
-    # ...nor in any farm's grove band (feature 291 on 287: `grove_rules.fixtures_on_groves`, the same boxes)
-    if any(
-        abs(q[0] - float(g["x"])) < (ext[0] + float(g["w"])) / 2 and abs(q[1] - float(g["y"])) < (ext[1] + float(g["h"])) / 2
-        for g in s.M.get("groves") or ()
-        if all(k in g for k in ("x", "y", "w", "h"))
-    ):
+    # ...nor in any farm's grove band (feature 291 on 287), asked by the check's own predicate (feature 417 T17, D17)
+    pit = {"x": q[0], "y": q[1], "w": ext[0], "h": ext[1]}
+    if any(fixture_on_band(pit, g) for g in grove_bands(s.M)):
         return False
     return not across_the_brook(s, (hx, hy), q)
 
