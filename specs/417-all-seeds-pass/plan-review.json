@@ -2045,6 +2045,81 @@
      "why": "The GM: switch off the 16 repair steps after all of that. The rest of the block is unchanged from its CLEAR verdict."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T36 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T36.1 goal",
+     "summary": "Every claim outside the 247's modules is labeled with what research actually found (the 479 left UNRESEARCHED by D36).",
+     "class": "within",
+     "why": "GM 2026-10-25: check whether UNRESEARCHED claims were looked into, research those not looked into, and mark the looked-into-but-nothing-found ones; D36/D37(a) put the 479 in T36."
+    },
+    {
+     "id": "T36.6a exit: silent",
+     "summary": "A pass that found nothing (or where no source could speak) gives bare GUESS naming the pass.",
+     "class": "within",
+     "why": "This is the GM's 'research pass done, no conclusive evidence, picked something arbitrary' category; D32 settles the label."
+    },
+    {
+     "id": "T36.6b exit: page answers, code follows",
+     "summary": "Cited as a convention.",
+     "class": "within",
+     "why": "GM: mark when implementation is based on research; D37(b)."
+    },
+    {
+     "id": "T36.6c exit: page answers, code departs",
+     "summary": "Cited with the departure stated, lands DRIFTED, its unit named in its T33-T35 row; code not changed here.",
+     "class": "within",
+     "why": "GM names the existing 'drifted from the research and needs to be fixed at some point' mark; D36 and D37(b) settle cited-with-DRIFTED, the code unchanged, and filing in T33-T35. The block omits D36's arbiter step for an introduced DRIFTED claim, but D36 is a listed constraint and the block does not contradict it."
+    },
+    {
+     "id": "T36.6d exit: source not yet on a page",
+     "summary": "A page session records the source on its page first (D37 b), then the claim is cited as above; no GUESS naming such a source.",
+     "class": "within",
+     "why": "D37(b) verbatim; serves the GM's 'say truthfully what research found'."
+    },
+    {
+     "id": "T36.6e exit: not looked into",
+     "summary": "Pass P8 researches it, then it is labeled as above.",
+     "class": "within",
+     "why": "GM: 'please actually perform research for any of those questions that we don't currently have answers for'; D37(a)."
+    },
+    {
+     "id": "T36.5 order",
+     "summary": "After T29, then T38, then T31.",
+     "class": "within",
+     "why": "GM: 'after all of that, you should switch off the 16 repair steps'; D37 sets T36, T38, T31."
+    },
+    {
+     "id": "T36.7 search smell",
+     "summary": "No label changed to make a round pass; a claim impl-drift rules wrong twice keeps its research label, description reverted.",
+     "class": "within",
+     "why": "D36 settles it; it keeps every label truthful, which is the request's purpose, and never restores UNRESEARCHED."
+    },
+    {
+     "id": "T36.8 budget",
+     "summary": "P1-P8 done, page sessions for the 14 sources, two claims rounds.",
+     "class": "within",
+     "why": "A cost estimate; it narrows nothing asked. The 14 restates D37(b)'s labeled count."
+    },
+    {
+     "id": "T36.9 done",
+     "summary": "The landing's claims gate green; R9 with T36's counts.",
+     "class": "within",
+     "why": "Measures the requested relabelling; R9 is D36's report."
+    },
+    {
+     "id": "T36.10 no constant moves",
+     "summary": "n/a - no value moves; inline numbers are T38's (D37 c).",
+     "class": "within",
+     "why": "D36 says the code is not changed; D37(c) moves the unlabeled numbers to T38, which is still before T31 as the GM ordered."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2373,6 +2448,80 @@
      "summary": "research.md R5 records each pass's probe result; after the landing a fresh block of 500 is run and its rate recorded beside R3; no work aimed at that rate.",
      "class": "within",
      "why": "D11: each conversion's 'fresh rate recorded either way', and 'no work aimed at the fresh rate'. 500 matches the size SC-001 sets for the fresh block."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T36": {
+   "section_sha256": "1c4a1dae590eb8256f77033cc148cd17d37be928c66198bfc2758484ed21f6ab",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T36.1 goal",
+     "summary": "Every claim outside the 247's modules is labeled with what research actually found (the 479 left UNRESEARCHED by D36).",
+     "class": "within",
+     "why": "GM 2026-10-25: check whether UNRESEARCHED claims were looked into, research those not looked into, and mark the looked-into-but-nothing-found ones; D36/D37(a) put the 479 in T36."
+    },
+    {
+     "id": "T36.6a exit: silent",
+     "summary": "A pass that found nothing (or where no source could speak) gives bare GUESS naming the pass.",
+     "class": "within",
+     "why": "This is the GM's 'research pass done, no conclusive evidence, picked something arbitrary' category; D32 settles the label."
+    },
+    {
+     "id": "T36.6b exit: page answers, code follows",
+     "summary": "Cited as a convention.",
+     "class": "within",
+     "why": "GM: mark when implementation is based on research; D37(b)."
+    },
+    {
+     "id": "T36.6c exit: page answers, code departs",
+     "summary": "Cited with the departure stated, lands DRIFTED, its unit named in its T33-T35 row; code not changed here.",
+     "class": "within",
+     "why": "GM names the existing 'drifted from the research and needs to be fixed at some point' mark; D36 and D37(b) settle cited-with-DRIFTED, the code unchanged, and filing in T33-T35. The block omits D36's arbiter step for an introduced DRIFTED claim, but D36 is a listed constraint and the block does not contradict it."
+    },
+    {
+     "id": "T36.6d exit: source not yet on a page",
+     "summary": "A page session records the source on its page first (D37 b), then the claim is cited as above; no GUESS naming such a source.",
+     "class": "within",
+     "why": "D37(b) verbatim; serves the GM's 'say truthfully what research found'."
+    },
+    {
+     "id": "T36.6e exit: not looked into",
+     "summary": "Pass P8 researches it, then it is labeled as above.",
+     "class": "within",
+     "why": "GM: 'please actually perform research for any of those questions that we don't currently have answers for'; D37(a)."
+    },
+    {
+     "id": "T36.5 order",
+     "summary": "After T29, then T38, then T31.",
+     "class": "within",
+     "why": "GM: 'after all of that, you should switch off the 16 repair steps'; D37 sets T36, T38, T31."
+    },
+    {
+     "id": "T36.7 search smell",
+     "summary": "No label changed to make a round pass; a claim impl-drift rules wrong twice keeps its research label, description reverted.",
+     "class": "within",
+     "why": "D36 settles it; it keeps every label truthful, which is the request's purpose, and never restores UNRESEARCHED."
+    },
+    {
+     "id": "T36.8 budget",
+     "summary": "P1-P8 done, page sessions for the 14 sources, two claims rounds.",
+     "class": "within",
+     "why": "A cost estimate; it narrows nothing asked. The 14 restates D37(b)'s labeled count."
+    },
+    {
+     "id": "T36.9 done",
+     "summary": "The landing's claims gate green; R9 with T36's counts.",
+     "class": "within",
+     "why": "Measures the requested relabelling; R9 is D36's report."
+    },
+    {
+     "id": "T36.10 no constant moves",
+     "summary": "n/a - no value moves; inline numbers are T38's (D37 c).",
+     "class": "within",
+     "why": "D36 says the code is not changed; D37(c) moves the unlabeled numbers to T38, which is still before T31 as the GM ordered."
     }
    ],
    "verdict": "CLEAR"
