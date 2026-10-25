@@ -336,6 +336,11 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
   `settle_joins`, `settle_needles`, `prune_the_tree` - dropped from `settle/stage.py` `STEPS`, and the nine names that leaves
   dead (`make dead-closure`: `settle_shadows`, `drop_stranding`, `settle_needles`, `keeps_the_network`, `left_to_the_tree`,
   `strands_only_ordinary`, `_on_the_connector`, `weld_corner`, `WELD_PX` with `weld.py`) deleted with their tests. The four
-  still asked by `last_resort` stay defined. T31 keeps the four map-moving steps and the six needed ones.
+  still asked by `last_resort` (`settle_husks`, `settle_street_ends`, `settle_joins`, `prune_the_tree`) stay defined until T31 takes
+  them out of it: `last_resort` re-asks the settle's steps once its rounds run out (FR-005), R8 measured only the `STEPS` positions,
+  so its calls are T31's - each re-asked step leaves `last_resort` with that step's own conversion or deletion, and these four,
+  needless in the rounds, are cut from `last_resort` and deleted in T31's landing, measured there as R8 measured the rounds.
+  T31 keeps the four map-moving steps, the six needed ones and `last_resort`'s re-asked steps. R8 holds both of D35's runs: each
+  step off alone, and the six off together (54 of 54, no pool manifest moved).
   Rendering: none.
 
