@@ -167,6 +167,7 @@ balks	baulk
 bamboo grass	sasa
 bamboo-grass	sasa
 ban-hinin	banta
+bancha	bancha
 band	band
 bands	band
 banfang	banfang
@@ -3713,6 +3714,7 @@ sen	sen
 senba-koki	senbakoki
 senbakoki	senbakoki
 senbon torii	Senbon Torii
+sencha	sencha
 sendai	Sendai
 sendai plain	Sendai
 sengisho	sengisho
