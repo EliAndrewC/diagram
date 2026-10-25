@@ -133,6 +133,22 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 0.0968 taels | the calenderers' wage with no year given beside it (its 1730 and 1772 days are marked or passed over on their own)
 - 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 0.0113 taels | Suzhou 1730, outside every Chinese era's years
 - 0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.notes | 1 tael | a weight (1 tael = 37.68 grams of silver), not a sum
+- 0250-what-did-an-unskilled-laborer-earn | 0.04 taels | Li Bozhong's official standard for the Yangzi delta, dated only "the 1600s", a span crossing two Chinese eras
+- 0250-what-did-an-unskilled-laborer-earn | 0.045 taels | farm day wages of the study's eighteenth-century sample: a century crossing every eighteenth-century era
+- 0250-what-did-an-unskilled-laborer-earn | 0.041 taels | the rural Beijing wage of 1807, outside every Chinese era's years
+- 0250-what-did-an-unskilled-laborer-earn | 0.1 taels | Canton's VOC wages "spanning the eighteenth century", a century crossing every eighteenth-century era
+- 0250-what-did-an-unskilled-laborer-earn | 0.0456 taels | the Yangzi delta baseline of 1700, outside every Chinese era's years
+- 0250-what-did-an-unskilled-laborer-earn | 0.024 taels | Canton's rice "in the mid-1700s": Canton has no era of those years, and borrowing an inland era for a Canton price was not asked
+- 0250-what-did-an-unskilled-laborer-earn.notes | 0.045 taels | farm day wages of the study's eighteenth-century sample, a century crossing every eighteenth-century era
+- 0250-what-did-an-unskilled-laborer-earn.notes | 0.06 taels | Li Bozhong's Yangzi delta wages of "the seventeenth century", a span crossing two Chinese eras
+- 0250-what-did-an-unskilled-laborer-earn.notes | 0.04 taels | Li Bozhong's official standard of "the seventeenth century", a span crossing two Chinese eras
+- 0250-what-did-an-unskilled-laborer-earn.notes | 0.1 taels | Canton's VOC wages "spanning the eighteenth century", a century crossing every eighteenth-century era
+- 0250-what-did-an-unskilled-laborer-earn.notes | 0.0456 taels | the Yangzi delta baseline of 1700, outside every Chinese era's years
+- 0250-what-did-an-unskilled-laborer-earn.notes | 0.024 taels | rice in Canton or millet in Beijing "in the middle of the eighteenth century", two places and no year
+- 0264-what-did-paper-and-ink-cost.notes | 180 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0264-what-did-paper-and-ink-cost.notes | 140 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0264-what-did-paper-and-ink-cost.notes | 80 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0264-what-did-paper-and-ink-cost.notes | 60 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
 
 ## Fragments judged whole
 
@@ -215,3 +231,5 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.notes | * | what it holds unmarked was passed over by feature 412's marks pass (2026-10-24), each for a reason its Session 5 handoff names: an area, length or weight (bu, se, rin; ryo and monme as weights), a rate between the coins, a gold bu or shu (no era carries them), a sum in Chinese money, or an amount with no year or dated outside every era's years and not one gm-assistant asked to borrow
 - 0289-what-was-a-tael-a-string-of-cash-and-a-chinese-dollar-worth-in-silver | * | rates between the coins (cash to the tael, taels to the dollar, cash to the string), a tael's weight in grams, the cash a string counted, not sums paid
 - 0289-what-was-a-tael-a-string-of-cash-and-a-chinese-dollar-worth-in-silver.notes | * | rates between the coins and weights quoted from the sources, not sums paid; its few prices are dated outside every Chinese era's years (Songjiang rice of 1632, Changlu salt "under Kangxi", a span of 1662-1722, and 1889's 500 cash, an example of counting)
+- 0263-what-did-arrows-cost | * | the Ming and early Qing arrow prices and wages it holds unmarked are dated outside every Chinese era's years (1646, 1650, 1727) or carry no year (the late Ming fiscal book, Tan Lun's estimate, the Ming musket costing)
+- 0263-what-did-arrows-cost.notes | * | as its question: dated outside every Chinese era's years (1646, 1650, 1727) or with no year (the late Ming fiscal book, Tan Lun's estimate, the Ming musket costing, the "old rule" wages before the 1736 list)
