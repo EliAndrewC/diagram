@@ -1,0 +1,238 @@
+{
+ "feature": "419-england-price-yardstick",
+ "blocks": {
+  "preamble": {
+   "sha256": "eefc7522e1608835716b6d635bbbc79b25a475dd0e4eda64ff5925569bf1b3cc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "647c24fa1e756c03c812faeac26f7d99fe0e2469c86cd25173d1ffdfd65ae432",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "40e161c1bc0d8577447b622d229f3847e26e3b1ce5542ef26087d49ea9a2cd23",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "f3c2bc776cf281254861743afb4fe071b6814882a65e51c783990b9485d191b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the question (FR-001; acceptance 1, 3, 4)": {
+   "sha256": "6be480cd833503bc244298aa94037b4c98af123e6173c151174929cb6a3dcad3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the figures (FR-002; acceptance 2)": {
+   "sha256": "6d3e5daec04ef55d1f485d68a9bd936bd6317aa4da9a6c1414448f619d69003f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - 0291 (FR-001)": {
+   "sha256": "1930fca8c45598434df0c423f183fd26cf8ccfcbbe024ad185b95c178e9538d0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - the implementation check (FR-003)": {
+   "sha256": "280adb35295941ce8ec07d04a03feca1da7607a120f96d0ba6e2e448258a5315",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - the reply (FR-002)": {
+   "sha256": "ee6db82b85242ef90d003a1c99f8f6fa0523ced8491039ad42b8528d411ea163",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - England's prices under commodity money, the new question and 0291's pointer (D1, D2, D3)": {
+   "sha256": "56149d64a78dc906021dbd3c9ba24115a1e730a1773fab6511332024252a54b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "e40bddbb162ec7e5b24dd8517e0772f04ea39a1ecb3185e0cd30e42e4f304385",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "c38b9c84cad180728a754efd412c052ffdaccb98c0b465baa50a89c7e2068b48",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - the implementation check (D4)": {
+   "sha256": "3bc3ea79400c3249de82a7883ed0b62ad9b77221886986534dbead190d12fb3e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "d2c5194c734efe6a93c082ddc20f81f1e5c9fed757f3f7288ea29d72006069e7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "ed60582c23d75ba466432ed77fc25898ec68764f16e1777e4912afdebc87a1b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the reply and the landing (D5)": {
+   "sha256": "052283f1cadfd010e951fc979a85b64b3806bde295bf73137a05e3a1bb70dedc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "408d41afbca9a936e8d31cbb20ca88f46b428eabf0071ba24368e11c31e10a73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "38486debf80084dc038779d73835cc421e08e96522f713519f8deca8fe328887",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the question (FR-001; acceptance 1, 3, 4)",
+    "## D2 - the figures (FR-002; acceptance 2)",
+    "## D3 - 0291 (FR-001)",
+    "## D4 - the implementation check (FR-003)",
+    "## D5 - the reply (FR-002)",
+    "## Performance bookends",
+    "## Summary",
+    "## T01 - England's prices under commodity money, the new question and 0291's pointer (D1, D2, D3)",
+    "## T02 - the implementation check (D4)",
+    "## T03 - the reply and the landing (D5)",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-question",
+     "summary": "One new question in comparative-money, tagged subject=comparative,money, titled on how steady English prices were before paper money.",
+     "class": "within",
+     "why": "Carries the request's 'in the existing Comparative money: other societies section' and FR-001's one new question; the title's commodity-money framing is the request's (0291's) own drift/swing split."
+    },
+    {
+     "id": "D1-sections",
+     "summary": "Sections: drift (BoE price level by period and century, pre-1661 shown to be Clark's index rescaled), swing (SD by period, years moving >10%, Clark's goods and wages with year pairs), beside Edo/Qing/today as pointers to 0290/0291.",
+     "class": "within",
+     "why": "The request's 'little drift and a big swing from year to year' and 'the same split as Edo and the Qing'; both named series are used, neither is dropped."
+    },
+    {
+     "id": "D1-sources-comparative",
+     "summary": "The two sources registered with the kind comparative.",
+     "class": "within",
+     "why": "The request: 'add the Bank of England's millennium dataset and Clark's series to the record as comparative sources ... under the comparative rules'."
+    },
+    {
+     "id": "D1-clark-caveat-and-blanks",
+     "summary": "Clark's limit stated as the file's own caveat; his blank years dropped from year pairs, each figure counting its pairs.",
+     "class": "within",
+     "why": "Method of reporting the requested figures honestly under the citation rules; narrows nothing asked."
+    },
+    {
+     "id": "D1-lindert-not-carried",
+     "summary": "Lindert's interpolated silver price of the pound is not used and so not carried.",
+     "class": "within",
+     "why": "The request asks for the two datasets as sources of a drift/swing yardstick; both are registered and used for that. Not quoting one interpolated column the request never names removes nothing the GM asked for."
+    },
+    {
+     "id": "D1-flat-pairs-as-observation",
+     "summary": "Flat year pairs given as this project's observation, never as interpolation, since the file does not say.",
+     "class": "within",
+     "why": "Citation-rule honesty about an unstated property; within."
+    },
+    {
+     "id": "D1-yardstick-words",
+     "summary": "The page itself says these are a yardstick for players and never the basis of a Rokugani price.",
+     "class": "within",
+     "why": "The request verbatim: 'they are yardsticks ... They are never the basis of a Rokugani price.'"
+    },
+    {
+     "id": "D2-figures",
+     "summary": "Every figure from measure/england.out.md, labeled this project's arithmetic with series, measure, years and year pairs; nothing computed in the page session.",
+     "class": "within",
+     "why": "FR-002 / acceptance 2; enforcement of the record's rules, not new scope."
+    },
+    {
+     "id": "D3-0291-pointer",
+     "summary": "0291's 'Beside the premodern figures' gains a pointer; its source comment drops 'wait on the GM's approval and are not written here'.",
+     "class": "within",
+     "why": "FR-001; the GM has now approved, so the waiting note is obsolete. The request itself cites 0291."
+    },
+    {
+     "id": "D4-impl-check",
+     "summary": "implementation-check.md holds the touched questions' lines; make impl-check F=419.",
+     "class": "within",
+     "why": "FR-003; standing closure rule for a research feature."
+    },
+    {
+     "id": "D5-reply",
+     "summary": "A comment on #15 with drift, swing, fragment file and how to verify.",
+     "class": "within",
+     "why": "The request: 'Please post here when it lands'; FR-002."
+    },
+    {
+     "id": "TC-data-archive",
+     "summary": "The two files (byte-identical to 414's fetch) archived by the write session with reserved source keys so links resolve.",
+     "class": "within",
+     "why": "Needed to add the sources to the record under the citation rules; within."
+    },
+    {
+     "id": "Process-sessions",
+     "summary": "One write session and one check-and-apply session via make page-session in the sibling clone diagram-money-marks, then the reply.",
+     "class": "within",
+     "why": "Process only; decides no scope."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "A figure the script does not give is not written; a limit neither file states is not claimed.",
+     "class": "within",
+     "why": "Citation-rule discipline; narrows nothing asked."
+    },
+    {
+     "id": "T01-applicability",
+     "summary": "Comparative kind and section confine the sources to money questions; source-applicability judges them on England's own terms.",
+     "class": "within",
+     "why": "The request's 'under the comparative rules (feature 391)' and 'never the basis of a Rokugani price'."
+    }
+   ]
+  }
+ ]
+}
