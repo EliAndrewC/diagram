@@ -1,16 +1,19 @@
 {
- "captured": "2026-10-19T18:37:26+00:00",
- "final_url": "https://glim-re.repo.nii.ac.jp/record/202/files/keizai_2_2_69_128.pdf",
+ "captured": "2026-10-25T00:54:09+00:00",
+ "final_url": "https://web.archive.org/web/20240917185525id_/https://glim-re.repo.nii.ac.jp/record/202/files/keizai_2_2_69_128.pdf",
  "first": "71/714c023c43be/20261019T183549Z",
  "gm_copies": [],
  "keys": [
   "oishi-1966-tenpo13-bukka-kakiage"
  ],
- "notes": [],
- "outcome": "partial",
- "path": "71/714c023c43be/20261019T183725Z",
+ "notes": [
+  "0277-what-was-copper-coin-worth-in-silver.notes.html",
+  "0279-what-did-charcoal-cost.notes.html"
+ ],
+ "outcome": "archived-earlier-snapshot",
+ "path": "71/714c023c43be/20261025T005408Z",
  "reason": "HTTP 406",
  "revision": "",
- "sha256": "f3f3a2b772fc88392c6efc02d9c01c222d22aea9c87dbcf32ee591d8beaa2ae9",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
  "url": "https://glim-re.repo.nii.ac.jp/record/202/files/keizai_2_2_69_128.pdf"
 }
