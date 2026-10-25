@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-25T00:50:45Z",
+  "target": "record-checked",
+  "commit": "6dacc386b",
+  "why": "source-reader on source-reader:0290#allen-wage source-reader:0290#saito-1993-wages: round-arbiter ruling on round:source-reader|q:0290@5 (/tmp/l7r-check/arbiter-ruling/q0290-round5.json): allen-wage and saito-1993-wages owe no round 2 - their changes are round 1's own EDITs applied as written"
+}

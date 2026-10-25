@@ -78,6 +78,132 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
+  },
+  "## T01 - the measure scripts (D1, D4)": {
+   "sha256": "c9d2478b1f30039002f573a3b548756e60b556df4a086ef786bded6cda40d27c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "1e02f8e1f8cff1a3ce6e0af8d45d5d93093bf5b099563077a3f13d53c9fc18a7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "6b429dcf569feb67320782027761059646d8c11d55aa6d335358c4741d93495d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - questions A and E (D1, D5)": {
+   "sha256": "2a6f6afe081e1ede8df11966d0a455a98047b7762dd4edcdbdb95c6fd505834b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "7eb63da9fedc6c0b0e2690ded923edfb7fe54573b32e6c626faed49f481d85e5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "bb44a5004065242d68fca094659b08e55b76120badde657bc7ff3c1a7a9dd6fd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - questions B and C (D2, D3)": {
+   "sha256": "c2b2a3fe99bc067bf41431d088b9fab6d6e6f9c46b54661901623ccd2e76ac53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "35bd4cb0640a3ab14b08a771dcb7f893383f9a22a2ef4a24bab610128a8941bc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "334e6608e3d4fd9b5a81c760868bd975bda9e3e77227a96f45b1172fe7e0f090",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - question D, the closeness rule (D4)": {
+   "sha256": "5bd0ac198db1cf2319349fb30f7168b45f2a6d0ed0507b20d48a0dba170cf130",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "b9a0d3b6e46e8021f61b2d7bd550fd1668b534c9f41c14418fa60f7fafb290e3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Decisions": {
+   "sha256": "fd47cb1f1c007a82aa6ca2d98231f25fe2aa5952e159d20d3c963909f95dcf13",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T05 - the implementation check (D6)": {
+   "sha256": "2e1d02c80926d15d0177f52f0f2275f8e0ff2ba27771c9c59d88478b5a98de46",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "6575a6615f99e897a1bebec514c62d417c61aa19d8dd62b5656649714a7bc391",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Decisions": {
+   "sha256": "ef63d936e84fae34cc2a3428d7bc004a7cfe4f1ce0bffaf96c4223a8b9497530",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T06 - the reply on #15 (D7)": {
+   "sha256": "09efbc143b8c4c43b52368238028d171e0c4f86f2a623f2f8a60ebf7cd189015",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "f0d7e36155d0ef94de6186b8b1c69d3a0c0119403afcd70fb777b86fa290410b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Decisions": {
+   "sha256": "785235d9bdb43301d994e932afa609723869166432a88f64d7f97d8132c54946",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T07 - close: report and land": {
+   "sha256": "270f0913d0c7949e3cb2cbf0ff72a7a70c0a57e66528f990e2d8b0a7cdc81769",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "2f2fb95c082b508ce1e68a176f3537ea7f4bcc34849e5f587b684dc21f130c00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Decisions": {
+   "sha256": "edacdb029f2c3d1988da697b566edda5afe4e7d01253f213e6483c991c256fce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -470,6 +596,187 @@
      "summary": "Order: measure scripts, page sessions (s1-s3 write, s4 check), implementation check, reply and landing",
      "class": "within",
      "why": "Ordering only. The list names osaka_daily and closeness; mitsui_stability was left off in earlier rounds too, and the dispatch says qing_stability already computes the lags, so leaving it off drops nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## T01 - the measure scripts (D1, D4)",
+    "## T02 - questions A and E (D1, D5)",
+    "## T03 - questions B and C (D2, D3)",
+    "## T04 - question D, the closeness rule (D4)",
+    "## T05 - the implementation check (D6)",
+    "## T06 - the reply on #15 (D7)",
+    "## T07 - close: report and land",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "### T07 Approach (checklist part A)",
+    "### T07 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-layout",
+     "summary": "One script per measure under measure/, its *.out.md beside it, each rerun from archived inputs and labeled this project's arithmetic.",
+     "class": "within",
+     "why": "Carries Q1's 'standard deviation of log changes where a series allows' as diagram's own reply on #15 promised (a script in the feature, labeled as our arithmetic). Method, not scope."
+    },
+    {
+     "id": "T01-rough-rice-copy",
+     "summary": "Rough-rice figures rest on the session copy of the Yahoo JSON until an archive capture succeeds.",
+     "class": "within",
+     "why": "A provenance state, not a scope decision; it belongs under FR-001's 'what is still open' in the reply."
+    },
+    {
+     "id": "T01-exit-unreachable-lag",
+     "summary": "A lag a series cannot reach is reported with its measured reason (years, gaps), not filled.",
+     "class": "within",
+     "why": "Q1 asks for a figure 'where a series allows'; reporting the measured reason a lag is unreachable answers that clause rather than narrowing it."
+    },
+    {
+     "id": "T01-D4-place-test",
+     "summary": "closeness.py's place test tightened: a city passes only if both the SD of its gap AND the average gap fall within the within-era spread.",
+     "class": "within",
+     "why": "Stricter, derived from a measured case, inside Q4's 'how far ... in place'. The one figure with a unit here (Edo miso 29% below Kyoto) has no m: key but is covered by T01 item 9's dated rerun of all eight scripts (2026-10-24, archived inputs) and the route named (closeness.py docstring, 0294); I treated that label as a route back to the run."
+    },
+    {
+     "id": "T02-england-excluded",
+     "summary": "England's premodern series named as found and left unwritten pending the GM.",
+     "class": "within",
+     "why": "Keeps unrequested scope out: the request asks for the Edo/Qing series and 'a modern fiat-money economy' as yardstick, and nothing premodern-English. NOTE: the block's stated reason, 'the GM's request names the US and Japan only', is not what request.md says; it names no country for the yardstick. The effect is within; the reason should rest on the request's actual words."
+    },
+    {
+     "id": "T02-modern-submonth-silent",
+     "summary": "Modern scales below a month beyond the one futures series read are SILENT with their search.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows Q1's 'how does that compare with a modern fiat-money economy' at the sub-month scales. Legitimate as a search exit: the record's rule is SILENT with the search recorded, and a daily rice-futures series against Dojima is like-for-like. Aside, not a finding: daily online-price indices (Billion Prices Project / PriceStats) are the kind of modern overall-level source the recorded search should show as tried; that is for the record checks."
+    },
+    {
+     "id": "T02-T03-not-converted",
+     "summary": "Japan and China figures kept in their own money and set side by side, not converted between them (no sho-to-weight figure found); periods compared in days of a laborer's wage.",
+     "class": "within",
+     "why": "The addition asks for each good's price per period 'in a common measure (grams of silver, or days of an unskilled wage, whichever the sources support)'. Its purpose is comparing periods within each polity, and days of a wage is one of the GM's two named measures. Converting between Japan and China is not asked."
+    },
+    {
+     "id": "T03-wage-labeling",
+     "summary": "A second-hand or rural wage is labeled ATTESTED ONLY FOR its case.",
+     "class": "within",
+     "why": "Citation discipline under research/CLAUDE.md; no scope effect."
+    },
+    {
+     "id": "T03-exit-monopoly-and-1830-salt",
+     "summary": "Absence notes for the monopolies' price effect and for why Edo salt doubled after 1830.",
+     "class": "within",
+     "why": "Ruled apart from the village item (the bundle sets unlike things under one sentence). The addition asks for the drivers 'where the sources say'; an absence note where they do not say is the GM's own limit."
+    },
+    {
+     "id": "T03-exit-village-vs-city",
+     "summary": "Absence note where no source sets a good's village and city prices side by side.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows Q3's 'town against country (... a village)'. Legitimate as a search exit: a sourced figure cannot be given where no source sets the two side by side, and the record answers that with an absence note and its search instead of an invented spread."
+    },
+    {
+     "id": "T04-numeric-limit-to-GM",
+     "summary": "The rule is this project's derivation (within-era spread at half the era's span plus twice its standard error, with money-system breaks as the do-not-convert line); a further numeric time limit is not set here and goes to the GM through escalation-check with the curve.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows Q4's example form, which asks for an M as well as an N. Legitimate because the GM's own words carry the exception ('only say an amount of time like that if that amount of time is based on something'); his e.g. names 'the same money system', which supports breaks as the do-not-convert line; and diagram's reply on #15 ('your N/M form will be followed where the measurements support it') stood without objection. This holds only if the curve (measure/closeness.out.md) actually reaches the GM in the reply, as T04 item 9 says it will. NOTE: the block gives FR-003 as its basis, but FR-003 is about whether the rule becomes a record check, not about a numeric limit; the ruling rests on the request's words, not on that FR."
+    },
+    {
+     "id": "T04-qing-no-bound",
+     "summary": "The Qing goods other than the baskets give no bound (Beijing's are flour times a fixed figure; Kishimoto's rice too sparse), and the page says so.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows Q4's 'per good class'. Legitimate as a data limit and not a choice, provided 0294 states the reason in measured form (T01's exit: years, gaps) rather than as 'too sparse' alone."
+    },
+    {
+     "id": "T04-exit-amount-size-silent",
+     "summary": "Whether the rule differs by the size of the amount is left SILENT: no series is priced by lot size.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows Q4's 'or by the size of the amount'. Legitimate: with no series priced by lot size the question cannot be measured at all (impossible, not just awkward), and SILENT with its search is the record's answer."
+    },
+    {
+     "id": "T05-impl-check",
+     "summary": "make impl-check F=414; no code decides a price or a borrowing distance.",
+     "class": "within",
+     "why": "FR-004."
+    },
+    {
+     "id": "T06-reply",
+     "summary": "Reply on #15 per FR-001/FR-003/FR-006 and SC-001-SC-004, with escalation-check run on the GM items before posting.",
+     "class": "within",
+     "why": "Carries FR-001, FR-003, FR-005, FR-006. Coverage note, not a finding: these blocks do not name Q2's seasonal pattern or 'did wages stick'. Those rest on the D-sections outside this bundle, and this CLEAR does not cover them."
+    },
+    {
+     "id": "T07-land",
+     "summary": "Feature report and make land.",
+     "class": "within",
+     "why": "Workflow; no scope effect."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02-1 goal",
+     "summary": "T02 delivers, per time scale from within a day to century to century, how far Edo and Qing prices moved good by good with the drift beside each swing (0290), and the modern paper-money yardstick beside it (0291).",
+     "class": "within",
+     "why": "Restates question 1 (every scale the GM listed, trend against swing) and question 2's swing sizes, with the modern fiat comparison the request asks for; nothing in the request is dropped from what T02 says it covers."
+    },
+    {
+     "id": "T02-2/3 England exclusion",
+     "summary": "England's premodern series is not written without the GM's approval; sourced to spec acceptance 3 and research/CLAUDE.md's rule that a comparative source is not sought unless the GM asks for or approves it, routed to him through escalation-check.",
+     "class": "within",
+     "why": "The request asks for Edo Japan and Qing China against a modern fiat-money economy; England's premodern prices appear nowhere in it, so holding them back narrows nothing that was asked, and writing them would be the unrequested scope. The changed text no longer attributes to the request a reason it does not contain (the earlier 'names the US and Japan only'); it now cites a project rule and the spec, labeled G, and sends the question to the GM, which is correct."
+    },
+    {
+     "id": "T02-2 other constraints",
+     "summary": "Citation rules, the 20,000-byte question cap, make record-owed clean, E's sources tagged comparative.",
+     "class": "within",
+     "why": "Project record rules that govern how the asked-for findings are written; they remove no part of the request."
+    },
+    {
+     "id": "T02-4 own money",
+     "summary": "Japan and China figures are kept in their own money, not converted.",
+     "class": "within",
+     "why": "T02's figures are sizes of movement (percentage bands, s.d. of log changes, drift per decade and century), which are unitless and need no conversion. The addition's common measure (grams of silver or days of wage) governs question 2's per-period PRICES, which this block does not claim to write; it is not narrowed here."
+    },
+    {
+     "id": "T02-5 order",
+     "summary": "Write, check and apply; round 3 closed by the arbiter (ask:414-round3, accept).",
+     "class": "within",
+     "why": "Process sequencing; no scope effect."
+    },
+    {
+     "id": "T02-6 exits",
+     "summary": "SILENT with its search where a scale or good has no source; modern scales below a month rest on the one futures series read.",
+     "class": "within",
+     "why": "A sourced absence is the record's standard exit, not a carve-out; the modern sub-month comparison is still made (on a futures series), and the request does not require more than one series per scale."
+    },
+    {
+     "id": "T02-8/9 budget and done",
+     "summary": "One write session plus its share of the check session; done when make record-owed names nothing unanswered for 0290 and 0291.",
+     "class": "within",
+     "why": "Cost and a measured completion test; neither narrows the request."
     }
    ]
   }
