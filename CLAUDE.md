@@ -56,6 +56,10 @@ Constitution XII. One line each here; the full text of every rule, with its feat
 
 - A question about how a place was built, farmed, planted or lived in is a RESEARCH question: run the search pass (the
   `research-pass` agent runs one) before deciding, before asking the GM, and before writing "guess".
+- Whether a finding APPLIES to a case, form or map is the record's and the reviewers' to rule, never the GM's; where the record is
+  silent on a choice, take a knob or the algorithmically easier route and say which (GM 2026-10-25; `escalation-check` tests 4-5).
+- A `GUESS`, `UNRESEARCHED` or `CONVENTION` value, and a number no claim states, is a goal and a knob, never a target to defend:
+  `make tunables` (GM 2026-10-25, feature 417 T28).
 - The ARCHIVE before the web: `make archive-inbox`, then `make archive-find`. Every cited page is archived in the PRIVATE
   `EliAndrewC/diagram-research`; never link or copy it anywhere public.
 - Geography resolves China first, Japan as tiebreaker; the GM's canon overrides both.

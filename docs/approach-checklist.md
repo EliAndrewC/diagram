@@ -22,7 +22,12 @@ Answer each in writing in the task's plan section. One line each is enough where
    `Research:` claim cites), **G** (a GM ruling: quote and date it), or **O** (ours: an implementation detail or a
    convenience). Find it - grep the claim, `git log -S` the number - before answering. An **O** constraint is a knob to move,
    never a target to defend (CLAUDE.md, "Room before packing"; *the 700 ft reach was O, and hours went into meeting it* -
-   audit #1, four cases). For a **G**, quote the words and ask how hard they are: a preference ("all else being equal, try
+   audit #1, four cases). **A claim that cites a page is not R by that alone**: a `GUESS` (searched, the record silent), an
+   `UNRESEARCHED` and a `CONVENTION` value is **O** - a goal, free to move when it makes placement easier or the map read
+   better - and so is a number no claim states. `make tunables UNDER=<the files the task touches>` lists the first three,
+   `make tunables INLINE=1 UNDER=...` the last; read them before tuning anything to meet one (feature 417 T28; the GM,
+   2026-10-25: *"avoid falling into the trap where we set a number arbitrarily and then end up going through enormous
+   iterations and difficulty to try to make that number work"*). For a **G**, quote the words and ask how hard they are: a preference ("all else being equal, try
    this first") is a tie-break, not a limit (audit #10: *"My 'ruling' on preferring to stay close was not a hard
    requirement"*).
 4. **What each R or G rule describes, and whether it holds here.** Research usually describes the typical case. Does the
