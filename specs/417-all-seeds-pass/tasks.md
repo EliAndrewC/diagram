@@ -6,13 +6,15 @@
 
 ## Tasks
 
-- [ ] T01 The baseline: 1,000 fresh seeds at main by form and cause, and `make fresh-tally` (D1, D2; FR-001)
+- [x] T01 The baseline: 1,000 fresh seeds at main by form and cause, and `make fresh-tally` (D1, D2; FR-001)
       research: rendering
+      verify: DONE. landed: make fresh-tally (2 tests, red without); R3: 125 of 1,000 fresh seeds fail at main 14214b115 (12.5%) - nucleated 11%, dispersed 4%, linear 28%; WebRefused 49, lane_knots 31, SiteRefused 13, row_rules 11
 - [x] T02 The hold made: `make task-start` refuses a task of a feature ON HOLD until an open feature closes; `HOLD_OK` only for a non-engine task (D4; FR-010)
       research: rendering
       verify: DONE. landed: make task-start refuses a held feature's task, naming the feature it waits on; an engine task (an engine path or module named, research: physical, or nothing named outside the engine) has no escape; HOLD_OK starts a non-engine one. 405, 372 and 384 are held by 417 (a wrapped status line read whole); 7 tests, red without the refusal and without the paragraph read; live: 405 T106 refused
-- [ ] T03 The inventory: every repair pass, audit-only rule, rule coded twice, mid-map check and refusal where room is the remedy, each with where it is and the point it breaks; each breaking entry filed here as an engine task; the principle's text drafted for the GM (D3, D6; FR-002, FR-003)
+- [x] T03 The inventory: every repair pass, audit-only rule, rule coded twice, mid-map check and refusal where room is the remedy, each with where it is and the point it breaks; each breaking entry filed here as an engine task; the principle's text drafted for the GM (D3, D6; FR-002, FR-003)
       research: rendering
+      verify: DONE. R2: three inventories kept verbatim in inventory/, a sample of each checked against the code, the three cross-package searches run by the session (inventory/cross.md) and reconciled; twelve groups filed as T04-T15; R4: the principle's draft text for the GM
 - [ ] T04 (R2 G7) One stream-crossing rule: `cohort_audit.parts_across_brook`'s own segment test replaced by `_geom/water_index.crosses_a_stream`, the placers' predicate (FR-006; no map moves)
       research: rendering
 - [ ] T05 (R2 G1) One lane rule, one predicate: each rule `ways/` codes two to seven times made one named predicate or constant, at the lane law's value where the copies differ, in `l7r/diagram/hamletgen/ways/` (FR-005, FR-006)

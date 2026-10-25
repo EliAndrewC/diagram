@@ -646,6 +646,47 @@
      "why": "Implementation of FR-006 for this rule; nothing beyond what the spec asks."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T04 - one stream-crossing rule (R2 G7; FR-006)",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D12",
+     "summary": "cohort_audit.parts_across_brook counts the parts r (with of) for which crosses_a_stream(r['of'], (r['x'], r['y']), manifest['streams']); the audit's local _cross is deleted; streams with fewer than two points are skipped by the predicate itself; no rendering change.",
+     "class": "within",
+     "why": "FR-006 verbatim: each finished-map check calls its placer's predicate and a second implementation of a rule is deleted; the GM's own words ('delete ... any rule coded twice', 'keep one finished-map check per rule, in the cohort and the tests only, calling the placer's own predicate'). The audit stays in the cohort, which FR-006 keeps."
+    },
+    {
+     "id": "A2 (the audit keeps its part list and its count)",
+     "summary": "parts_across_brook keeps its output shape - the list of parts across the brook and their count.",
+     "class": "within",
+     "why": "The finished-map check is kept as the measurement (GM-approved scope, FR-006); keeping its report while swapping its predicate removes nothing the request asked for and adds nothing."
+    },
+    {
+     "id": "A4 (on-the-line semantics follow the placer)",
+     "summary": "The audit's strict _cross and segments_cross differ only for a part or house exactly on a stream's line; after the swap the audit takes the placer's answer for that case.",
+     "class": "within",
+     "why": "This is the point of FR-006: the check and the placing cannot disagree. Taking the placer's predicate wholesale, edge case included, is what was asked; keeping the audit's strict variant would be the second implementation FR-006 deletes."
+    },
+    {
+     "id": "A5 (order: first engine task, moves no map)",
+     "summary": "T04 runs first among the engine tasks because the audit is not the generator and no map moves.",
+     "class": "within",
+     "why": "Sequencing only; inside the GM's 2026-10-25 instruction to finish the tasks that replace automated checks with correct placement before stopping, and FR-008 (no regression) holds trivially for a change that moves no map."
+    },
+    {
+     "id": "A9 (done: a test pins one part across a reach counted and one on the house's bank not; landing cohort green)",
+     "summary": "Completion is measured by a test on the predicate swap and the FR-008 cohort.",
+     "class": "within",
+     "why": "Enforcement of FR-006 and FR-008 - a test whose only effect is that the requested single-predicate check works; not unrequested scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -741,6 +782,44 @@
      "summary": "Reading split by package (ways; homesteads and homestead_parts; waterfields; overlap registry; the rest), each by an Explore agent on sonnet given D3's whole method (five searches, the four points plus coded-twice); every reported entry checked by the session against the code before entering R2; the three cross-package searches (cohort_audit rules with callers in l7r/, callers of law.violations / lane_violators / row_rules / grove_rules / overlap matrix inside the run, pairs of functions judging one rule) run by the session over the whole tree and reconciled against R2. Rendering none.",
      "class": "within",
      "why": "A division of labour, not of scope: the partition ends in 'the rest', so the whole tree is read, matching the GM's 'anywhere in the codebase' and FR-002's 'every'. Each agent gets all of D3's searches and classes, the cross-package searches D3 names are run whole-tree rather than per package (so a package boundary cannot hide a caller or a twin), and the session's code check of every reported entry keeps D3's 'found, not remembered' (an agent's claim is not an entry). 'Rendering: none' matches D3."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T04": {
+   "section_sha256": "766f2a28f2c5d33ba4328ebe7c3a14093c86127c52e702f9703b7a7606dabf8d",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D12",
+     "summary": "cohort_audit.parts_across_brook counts the parts r (with of) for which crosses_a_stream(r['of'], (r['x'], r['y']), manifest['streams']); the audit's local _cross is deleted; streams with fewer than two points are skipped by the predicate itself; no rendering change.",
+     "class": "within",
+     "why": "FR-006 verbatim: each finished-map check calls its placer's predicate and a second implementation of a rule is deleted; the GM's own words ('delete ... any rule coded twice', 'keep one finished-map check per rule, in the cohort and the tests only, calling the placer's own predicate'). The audit stays in the cohort, which FR-006 keeps."
+    },
+    {
+     "id": "A2 (the audit keeps its part list and its count)",
+     "summary": "parts_across_brook keeps its output shape - the list of parts across the brook and their count.",
+     "class": "within",
+     "why": "The finished-map check is kept as the measurement (GM-approved scope, FR-006); keeping its report while swapping its predicate removes nothing the request asked for and adds nothing."
+    },
+    {
+     "id": "A4 (on-the-line semantics follow the placer)",
+     "summary": "The audit's strict _cross and segments_cross differ only for a part or house exactly on a stream's line; after the swap the audit takes the placer's answer for that case.",
+     "class": "within",
+     "why": "This is the point of FR-006: the check and the placing cannot disagree. Taking the placer's predicate wholesale, edge case included, is what was asked; keeping the audit's strict variant would be the second implementation FR-006 deletes."
+    },
+    {
+     "id": "A5 (order: first engine task, moves no map)",
+     "summary": "T04 runs first among the engine tasks because the audit is not the generator and no map moves.",
+     "class": "within",
+     "why": "Sequencing only; inside the GM's 2026-10-25 instruction to finish the tasks that replace automated checks with correct placement before stopping, and FR-008 (no regression) holds trivially for a change that moves no map."
+    },
+    {
+     "id": "A9 (done: a test pins one part across a reach counted and one on the house's bank not; landing cohort green)",
+     "summary": "Completion is measured by a test on the predicate swap and the FR-008 cohort.",
+     "class": "within",
+     "why": "Enforcement of FR-006 and FR-008 - a test whose only effect is that the requested single-predicate check works; not unrequested scope."
     }
    ],
    "verdict": "CLEAR"
