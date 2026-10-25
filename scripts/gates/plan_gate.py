@@ -28,6 +28,7 @@ from __future__ import annotations
 import datetime
 import hashlib
 import json
+import os
 import pathlib
 import re
 import subprocess
@@ -613,6 +614,14 @@ def task_start(feature: str, task: str) -> int:
     d = resolve(feature)
     if d is None:
         print(f"task-start: no single specs/{feature}* directory", file=sys.stderr)
+        return 2
+    # ...NOT A HELD FEATURE'S TASK (feature 417 T02, plan D4/D9): the hold is asked where a task becomes active
+    import plan_hold  # noqa: PLC0415
+
+    plan = d / "plan.md"
+    section = task_sections(plan.read_text(encoding="utf-8")).get(task) if plan.is_file() else None
+    if why := plan_hold.refusal(d, task, section, os.environ.get("HOLD_OK", "")):
+        print(why, file=sys.stderr)
         return 2
     common = subprocess.run(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True).stdout.strip()
     pathlib.Path(common, "active-task").write_text(json.dumps({"feature": d.name, "task": task}) + "\n", encoding="utf-8")
