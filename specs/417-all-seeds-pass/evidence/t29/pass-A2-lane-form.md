@@ -108,7 +108,7 @@ Ledger outcomes recorded: ifeng rejected, Azumino unreadable. Kotobank, JAANUS a
 ## Leads not followed
 
 - Yanagita's 『葬送習俗語彙』 and local folk records under 葬式道 / 葬道, for a fixed funeral path in a village.
-- The Xi Songbi village paper (defensive village lanes, analysed by "交叉节点", junction nodes), for counts of T against cross junctions; I only had its abstract.
+- The Xi Songbi village paper (defensive village lanes, analyzed by "交叉节点", junction nodes), for counts of T against cross junctions; I only had its abstract.
 - The Azumino 「岩原山澤付道程覚」 (a late-Edo record of routes into the commons mountain), behind the unreadable map PDF.
 - Chinese 出殡 不走回头路 (a funeral not returning by the same road), the Chinese side of the roundabout procession.
 

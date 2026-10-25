@@ -10,7 +10,7 @@ I went through all 77 claims in `pass-P7-other.txt`. The record already answered
    - The record's own 0087 drawing already runs a ring road just inside the rampart, and 0015 calls Hirameki's chrysanthemum field a deliberate departure from history.
 
    NOT ATTESTED: ground at the wall's inner foot was a road.
-4. **The water-mouth pavilion, a hexagon of 22 ft radius** (`town_ways.py::water_mouth#pavilion size`; the unit is ft, since `pr = self.px(r)`). This is not contradicted, but no source supports it. The record's 0071 attests a grove at the water mouth and no pavilion at all. Three searches found no measured village pavilion. A 44 ft-wide hexagon is far larger than an ordinary pavilion; that comparison is my judgement, not something a page gave me.
+4. **The water-mouth pavilion, a hexagon of 22 ft radius** (`town_ways.py::water_mouth#pavilion size`; the unit is ft, since `pr = self.px(r)`). This is not contradicted, but no source supports it. The record's 0071 attests a grove at the water mouth and no pavilion at all. Three searches found no measured village pavilion. A 44 ft-wide hexagon is far larger than an ordinary pavilion; that comparison is my judgment, not something a page gave me.
 
 ## Sources read this pass
 
@@ -120,7 +120,7 @@ Key prefix `l7r/diagram/` is dropped.
 ## Leads not followed
 
 - Five world questions are still open, neither in the record nor searched: the 12 ft house-to-field standoff, a house's turn away from the brook, the 4 ft bare verge along lanes, and the cell's and the gatehouse's door sides (beyond the two gatehouse searches).
-- funes.world "Jiangyong Mingfeng pavilion": the search summary called it an octagon with 6 m sides, but it is a three-storey tower and may not be a water-mouth pavilion. Not read.
+- funes.world "Jiangyong Mingfeng pavilion": the search summary called it an octagon with 6 m sides, but it is a three-story tower and may not be a water-mouth pavilion. Not read.
 - funes.world "road pavilion in Jiaohu village, Shanggao": might give a village pavilion's size. Not read.
 - Kitakyushu torii's build date: try the Fukuoka prefecture designation register.
 - Japan's side of the moat question: the ja.wikipedia 堀 and 総構 pages are already in 0151's notes; the berm between castle wall and moat (inukashiri) was not checked.

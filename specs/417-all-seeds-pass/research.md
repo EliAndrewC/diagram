@@ -230,7 +230,7 @@ USFS / NPS trail junction guidance, arXiv 2511.06747. T16's doubled tail is stil
 Observed 2026-10-25; method: D35, in the detached worktree `probe31` at the clone's HEAD of that morning, each step's every
 position in `settle/stage.py` `STEPS` filtered out by a line that never lands, then `make cohort N=48 FRESH=0 JOBS=3` and `make
 map` on the five pool hamlets, the manifests compared with `git diff`. The baseline is the landing cohort's 54 of 54 and the
-committed pool. The table fills as the probes run (about 13 min a step at 3 workers).
+committed pool. The probes took about 13 min a step at 3 workers.
 
 | step off (observed 2026-10-25; method: as above) | fixed and pinned | pool manifests that moved |
 |---|---|---|
@@ -239,7 +239,28 @@ committed pool. The table fills as the probes run (about 13 min a step at 3 work
 | `square_every_crossing` | 54/54 | Inashiro, Sawada |
 | `settle_shapes` | 54/54 | Sawada |
 | `settle_way_outs` | 54/54 | Sawada |
-| `settle_ends` | 53/54 - seed 21 `lane_knots` (2 knots, 19.8 ft) | (see the log) |
+| `settle_ends` | 53/54 - seed 21 `lane_knots` (2 knots, 19.8 ft) | none |
+| `settle_street_ends` | 54/54 | none |
+| `settle_shadows` | 54/54 | none |
+| `settle_joins` | 54/54 | none |
+| `settle_needles` | 54/54 | none |
+| `settle_reach` (a placer: the reach the web owes) | every seed refused | all five refused |
+| `settle_defer` | 53/54 - seed 47 `WebRefused` | Inashiro, Sawada |
+| `settle_network` | 43/54 - 11 seeds `WebRefused` | Inashiro; Mizuguchi and Sawada refused |
+| `settle_fragments` | 53/54 - seed 36 `lane_knots` | Sawada |
+| `prune_the_tree` | 54/54 | none |
+| `settle_knots` | 41/54 - 13 seeds `lane_knots` | Inashiro |
+| `settle_widths` | 54/54 | Inashiro, Kashikawa, Sawada |
+
+So, by D35: six steps change nothing measured - `settle_husks`, `settle_street_ends`, `settle_shadows`, `settle_joins`,
+`settle_needles`, `prune_the_tree` - and are NEEDLESS; four keep every fixed and pinned verdict but move a pool map -
+`square_every_crossing`, `settle_shapes`, `settle_way_outs`, `settle_widths` - so whether they are needless is the pool gate's
+to say; six are NEEDED - `settle_ends`, `settle_defer`, `settle_network`, `settle_fragments`, `settle_knots`, and
+`settle_reach`, which is not a repair but the placer of the reach the web owes. The needless all off together, and with the
+four, were probed together (observed 2026-10-25; method: as above): the six off together, 54 of 54 and no pool manifest
+moved - NEEDLESS together; the ten off together (the six and the four), 54 of 54, with Inashiro, Kashikawa and Sawada moving -
+whether those three still pass is the pool gate's at the deletion's landing. The six are deleted first (T31); the four go with
+them only if the gate passes the moved maps, or are set down with their maps named.
 
 ## R9 - are the UNRESEARCHED labels true (T29, D32)
 
