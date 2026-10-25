@@ -1,0 +1,444 @@
+## Mitsui Bunko Kyoto T6: header rows 4-6, columns H and I
+  row 4: H='Miso' I='Soy sauce'
+  row 5: H='10 kan' I='1 koku'
+  row 6: H='Silver monme' I='Silver monme'
+
+### Mitsui Bunko Kyoto T6 / osaka-1712 (1712-1718), 1.5 g a monme
+  row 9 1713 Spring: miso '' soy ''
+  row 10 1713 Fall: miso 31.74 soy 123.1
+  miso: n=1 sum 31.74 mean 31.74 range 31.74-31.74 monme a 10 kan; at 1.5 g: 1.270 g a kg (range 1.270-1.270); at 3.11 g: 2.632
+  soy sauce: n=1 sum 123.10 mean 123.10 range 123.1-123.1 monme a koku; at 1.5 g: 1.021 g a liter (range 1.021-1.021); at 3.11 g: 2.116
+
+### Mitsui Bunko Kyoto T6 / kyoto-1745 (1745-1754), 1.725 g a monme
+  row 19 1745 Spring: miso 15.02 soy 82.63
+  row 20 1745 Fall: miso 17.05 soy 91.5
+  row 21 1746 Spring: miso 17.13 soy 83.39
+  row 22 1746 Fall: miso 17.0 soy 89.15
+  row 23 1747 Spring: miso 16.75 soy 89.84
+  row 24 1747 Fall: miso 17.63 soy 89.7
+  row 25 1748 Spring: miso 18.54 soy 89.11
+  row 26 1748 Fall: miso 17.85 soy 89.33
+  row 27 1749 Spring: miso 15.92 soy 89.48
+  row 28 1749 Fall: miso 16.49 soy 89.09
+  row 29 1750 Spring: miso 15.95 soy 93.52
+  row 30 1750 Fall: miso 14.86 soy 95.44
+  row 31 1751 Spring: miso 15.08 soy 97.83
+  row 32 1751 Fall: miso 13.89 soy 98.22
+  row 33 1752 Spring: miso 14.17 soy 96.77
+  row 34 1752 Fall: miso 13.2 soy 94.99
+  row 35 1753 Spring: miso 13.36 soy 90.19
+  row 36 1753 Fall: miso 12.2 soy 88.65
+  row 37 1754 Spring: miso 13.09 soy 92.21
+  row 38 1754 Fall: miso 13.5 soy 90.18
+  miso: n=20 sum 308.68 mean 15.43 range 12.2-18.54 monme a 10 kan; at 1.725 g: 0.710 g a kg (range 0.561-0.853); at 3.11 g: 1.280
+  soy sauce: n=20 sum 1821.22 mean 91.06 range 82.63-98.22 monme a koku; at 1.725 g: 0.868 g a liter (range 0.788-0.937); at 3.11 g: 1.566
+
+### Mitsui Bunko Kyoto T6 / kyoto-1790 (1790-1799), 1.725 g a monme
+  row 55 1791 Spring: miso 16.95 soy 77.45
+  row 56 1791 Fall: miso 19.15 soy 79.22
+  row 57 1792 Spring: miso 19.56 soy 77.0
+  row 58 1792 Fall: miso 18.96 soy 77.98
+  row 59 1793 Spring: miso 20.58 soy 76.97
+  row 60 1793 Fall: miso 16.55 soy 78.8
+  row 61 1794 Spring: miso 17.9 soy 76.83
+  row 62 1794 Fall: miso 17.82 soy 78.22
+  row 63 1795 Spring: miso 17.74 soy 76.64
+  row 64 1795 Fall: miso 19.11 soy 77.93
+  row 65 1796 Spring: miso 18.79 soy 76.21
+  row 66 1796 Fall: miso 17.93 soy 77.55
+  row 67 1797 Spring: miso 18.63 soy 75.8
+  row 68 1797 Fall: miso 18.59 soy 86.6
+  row 69 1798 Spring: miso 19.41 soy 77.52
+  row 70 1798 Fall: miso 18.13 soy 71.37
+  row 71 1799 Spring: miso 17.19 soy 68.94
+  row 72 1799 Fall: miso 17.18 soy 70.78
+  miso: n=18 sum 330.17 mean 18.34 range 16.55-20.58 monme a 10 kan; at 1.725 g: 0.844 g a kg (range 0.761-0.947); at 3.11 g: 1.521
+  soy sauce: n=18 sum 1381.81 mean 76.77 range 68.94-86.6 monme a koku; at 1.725 g: 0.732 g a liter (range 0.657-0.826); at 3.11 g: 1.320
+
+### Mitsui Bunko Kyoto T6 / kyoto-1800 (1800-1817), 1.725 g a monme
+  row 73 1800 Spring: miso 18.42 soy 68.0
+  row 74 1800 Fall: miso 18.25 soy 69.13
+  row 75 1801 Spring: miso 19.5 soy 67.96
+  row 76 1801 Fall: miso 17.48 soy 69.57
+  row 77 1802 Spring: miso 17.39 soy 67.13
+  row 78 1802 Fall: miso 17.96 soy 69.53
+  row 79 1803 Spring: miso 18.46 soy 66.94
+  row 80 1803 Fall: miso 17.58 soy 67.58
+  row 81 1804 Spring: miso 16.62 soy 62.36
+  row 82 1804 Fall: miso 14.08 soy 63.91
+  row 83 1805 Spring: miso 19.14 soy 61.94
+  row 84 1805 Fall: miso 15.95 soy 64.45
+  row 85 1806 Spring: miso 18.42 soy 64.59
+  row 86 1806 Fall: miso 15.23 soy 74.68
+  row 87 1807 Spring: miso 17.1 soy 75.16
+  row 88 1807 Fall: miso 18.39 soy 75.57
+  row 89 1808 Spring: miso 18.57 soy 71.76
+  row 90 1808 Fall: miso 18.28 soy 74.99
+  row 91 1809 Spring: miso 18.99 soy 68.92
+  row 92 1809 Fall: miso 16.61 soy 68.79
+  row 93 1810 Spring: miso 17.15 soy 68.75
+  row 94 1810 Fall: miso 15.07 soy 69.37
+  row 95 1811 Spring: miso 15.72 soy 68.5
+  row 96 1811 Fall: miso 15.77 soy 68.5
+  row 97 1812 Spring: miso 16.1 soy 67.95
+  row 98 1812 Fall: miso 13.38 soy 69.09
+  row 99 1813 Spring: miso 15.57 soy 69.29
+  row 100 1813 Fall: miso 14.13 soy 68.33
+  row 101 1814 Spring: miso 18.09 soy 70.11
+  row 102 1814 Fall: miso 16.7 soy 69.04
+  row 103 1815 Spring: miso 18.2 soy 69.49
+  row 104 1815 Fall: miso 16.23 soy 69.82
+  row 105 1816 Spring: miso 17.74 soy 69.77
+  row 106 1816 Fall: miso 17.11 soy 69.79
+  row 107 1817 Spring: miso 18.74 soy 70.88
+  row 108 1817 Fall: miso 17.81 soy 70.17
+  miso: n=36 sum 615.93 mean 17.11 range 13.38-19.5 monme a 10 kan; at 1.725 g: 0.787 g a kg (range 0.615-0.897); at 3.11 g: 1.419
+  soy sauce: n=36 sum 2481.81 mean 68.94 range 61.94-75.57 monme a koku; at 1.725 g: 0.657 g a liter (range 0.591-0.721); at 3.11 g: 1.185
+
+### Mitsui Bunko Kyoto T6 / edo-1818 (1818-1829), 1.35 g a monme
+  row 109 1818 Spring: miso 18.85 soy 71.02
+  row 110 1818 Fall: miso 17.7 soy 71.61
+  row 111 1819 Spring: miso 18.65 soy 71.03
+  row 112 1819 Fall: miso 16.28 soy 71.14
+  row 113 1820 Spring: miso 16.11 soy 69.42
+  row 114 1820 Fall: miso 17.42 soy 70.79
+  row 115 1821 Spring: miso 16.57 soy 71.44
+  row 116 1821 Fall: miso 16.37 soy 69.61
+  row 117 1822 Spring: miso 17.48 soy 70.32
+  row 118 1822 Fall: miso 16.25 soy 72.59
+  row 119 1823 Spring: miso 20.79 soy 71.93
+  row 120 1823 Fall: miso '' soy ''
+  row 121 1824 Spring: miso 20.75 soy 71.64
+  row 122 1824 Fall: miso 19.0 soy 70.77
+  row 123 1825 Spring: miso 20.05 soy 70.77
+  row 124 1825 Fall: miso 18.52 soy 71.71
+  row 125 1826 Spring: miso 23.78 soy 71.12
+  row 126 1826 Fall: miso '' soy ''
+  row 127 1827 Spring: miso 17.39 soy 69.76
+  row 128 1827 Fall: miso 17.17 soy 69.73
+  row 129 1828 Spring: miso 18.67 soy 71.92
+  row 130 1828 Fall: miso 20.56 soy 70.1
+  row 131 1829 Spring: miso 22.95 soy 72.18
+  row 132 1829 Fall: miso 22.15 soy 72.56
+  miso: n=22 sum 413.46 mean 18.79 range 16.11-23.78 monme a 10 kan; at 1.35 g: 0.677 g a kg (range 0.580-0.856); at 3.11 g: 1.559
+  soy sauce: n=22 sum 1563.16 mean 71.05 range 69.42-72.59 monme a koku; at 1.35 g: 0.530 g a liter (range 0.518-0.542); at 3.11 g: 1.222
+
+### Mitsui Bunko Kyoto T6 / edo-1830 (1830-1844), 0.975 g a monme
+  row 133 1830 Spring: miso 20.41 soy 76.16
+  row 134 1830 Fall: miso 21.42 soy 72.3
+  row 135 1831 Spring: miso 22.49 soy 73.38
+  row 136 1831 Fall: miso 21.4 soy 76.51
+  row 137 1832 Spring: miso 20.09 soy 83.59
+  row 138 1832 Fall: miso 21.8 soy 83.79
+  row 139 1833 Spring: miso 22.81 soy 83.76
+  row 140 1833 Fall: miso 22.18 soy 84.33
+  row 141 1834 Spring: miso 26.09 soy 83.64
+  row 142 1834 Fall: miso 23.76 soy 76.18
+  row 143 1835 Spring: miso 21.95 soy 77.5
+  row 144 1835 Fall: miso 23.57 soy 75.4
+  row 145 1836 Spring: miso 22.21 soy 79.33
+  row 146 1836 Fall: miso 25.8 soy 77.8
+  row 147 1837 Spring: miso 29.5 soy 88.2
+  row 148 1837 Fall: miso 39.85 soy 78.6
+  row 149 1838 Spring: miso 27.49 soy 81.12
+  row 150 1838 Fall: miso 37.09 soy 78.41
+  row 151 1839 Spring: miso 30.44 soy 87.08
+  row 152 1839 Fall: miso 32.81 soy 78.56
+  row 153 1840 Spring: miso 24.71 soy 83.28
+  row 154 1840 Fall: miso 27.52 soy 79.12
+  row 155 1841 Spring: miso 22.78 soy 71.55
+  row 156 1841 Fall: miso 25.29 soy 75.99
+  row 157 1842 Spring: miso 24.9 soy 75.11
+  row 158 1842 Fall: miso 24.86 soy 72.86
+  row 159 1843 Spring: miso 22.66 soy 71.85
+  row 160 1843 Fall: miso 24.5 soy 70.4
+  row 161 1844 Spring: miso 23.33 soy 70.33
+  row 162 1844 Fall: miso 22.63 soy 72.68
+  miso: n=30 sum 756.34 mean 25.21 range 20.09-39.85 monme a 10 kan; at 0.975 g: 0.655 g a kg (range 0.522-1.036); at 3.11 g: 2.091
+  soy sauce: n=30 sum 2338.81 mean 77.96 range 70.33-88.2 monme a koku; at 0.975 g: 0.420 g a liter (range 0.379-0.475); at 3.11 g: 1.340
+
+### Mitsui Bunko Kyoto T6 / edo-1850 (1850-1859), 0.975 g a monme
+  row 173 1850 Spring: miso 27.07 soy 73.56
+  row 174 1850 Fall: miso 31.69 soy 77.79
+  row 175 1851 Spring: miso 31.55 soy 80.97
+  row 176 1851 Fall: miso 31.0 soy 80.01
+  row 177 1852 Spring: miso 26.0 soy 77.97
+  row 178 1852 Fall: miso 30.71 soy 77.13
+  row 179 1853 Spring: miso 28.12 soy 80.1
+  row 180 1853 Fall: miso 31.39 soy 76.55
+  row 181 1854 Spring: miso 31.11 soy 84.55
+  row 182 1854 Fall: miso 29.0 soy 80.0
+  row 183 1855 Spring: miso 29.35 soy 81.86
+  row 184 1855 Fall: miso 30.82 soy 77.0
+  row 185 1856 Spring: miso 26.77 soy 81.87
+  row 186 1856 Fall: miso 27.89 soy 78.57
+  row 187 1857 Spring: miso 27.6 soy 89.25
+  row 188 1857 Fall: miso 28.04 soy 89.83
+  row 189 1858 Spring: miso 26.1 soy 82.57
+  row 190 1858 Fall: miso 24.82 soy 89.66
+  row 191 1859 Spring: miso 20.93 soy 88.51
+  row 192 1859 Fall: miso 30.67 soy 92.07
+  miso: n=20 sum 570.63 mean 28.53 range 20.93-31.69 monme a 10 kan; at 0.975 g: 0.742 g a kg (range 0.544-0.824); at 3.11 g: 2.366
+  soy sauce: n=20 sum 1639.82 mean 81.99 range 73.56-92.07 monme a koku; at 0.975 g: 0.442 g a liter (range 0.396-0.496); at 3.11 g: 1.410
+
+### Mitsui Bunko Kyoto T6 / edo-1860 (1860-1867), 0.4875 g a monme
+  row 193 1860 Spring: miso 34.51 soy 95.07
+  row 194 1860 Fall: miso '' soy ''
+  row 195 1861 Spring: miso 49.93 soy 150.26
+  row 196 1861 Fall: miso '' soy ''
+  row 197 1862 Spring: miso 47.35 soy 133.48
+  row 198 1862 Fall: miso '' soy ''
+  row 199 1863 Spring: miso 52.37 soy 145.4
+  row 200 1863 Fall: miso 69.34 soy 150.5
+  row 201 1864 Spring: miso 59.17 soy 153.16
+  row 202 1864 Fall: miso 67.7 soy 205.61
+  row 203 1865 Spring: miso 60.76 soy 283.84
+  row 204 1865 Fall: miso 103.26 soy 301.51
+  row 205 1866 Spring: miso 169.32 soy 350.98
+  row 206 1866 Fall: miso 203.52 soy 418.98
+  row 207 1867 Spring: miso 207.95 soy 600.04
+  row 208 1867 Fall: miso 178.99 soy 486.59
+  miso: n=13 sum 1304.17 mean 100.32 range 34.51-207.95 monme a 10 kan; at 0.4875 g: 1.304 g a kg (range 0.449-2.703); at 3.11 g: 8.320
+  soy sauce: n=13 sum 3475.42 mean 267.34 range 95.07-600.04 monme a koku; at 0.4875 g: 0.720 g a liter (range 0.256-1.617); at 3.11 g: 4.596
+## Mitsui Bunko Edo T7: header rows 4-6, columns H and I
+  row 4: H='Miso' I='Soy sauce'
+  row 5: H='10 kan' I='1 koku'
+  row 6: H='Silver monme' I='Silver monme'
+
+### Mitsui Bunko Edo T7 / osaka-1706 (1706-1711), 1.875 g a monme
+  row 9 1710 Spring: miso 12.6 soy 106.09
+  row 10 1710 Fall: miso 11.6 soy 104.88
+  row 11 1711 Spring: miso 12.29 soy 101.12
+  row 12 1711 Fall: miso 12.7 soy 105.44
+  miso: n=4 sum 49.19 mean 12.30 range 11.6-12.7 monme a 10 kan; at 1.875 g: 0.615 g a kg (range 0.580-0.635); at 3.11 g: 1.020
+  soy sauce: n=4 sum 417.53 mean 104.38 range 101.12-106.09 monme a koku; at 1.875 g: 1.082 g a liter (range 1.048-1.100); at 3.11 g: 1.795
+
+### Mitsui Bunko Edo T7 / osaka-1712 (1712-1718), 1.5 g a monme
+  row 13 1713 Spring: miso '' soy ''
+  row 14 1713 Fall: miso 19.26 soy 135.06
+  row 15 1716 Spring: miso 26.08 soy 275.43
+  row 16 1716 Fall: miso '' soy ''
+  miso: n=2 sum 45.34 mean 22.67 range 19.26-26.08 monme a 10 kan; at 1.5 g: 0.907 g a kg (range 0.770-1.043); at 3.11 g: 1.880
+  soy sauce: n=2 sum 410.49 mean 205.25 range 135.06-275.43 monme a koku; at 1.5 g: 1.702 g a liter (range 1.120-2.284); at 3.11 g: 3.529
+
+### Mitsui Bunko Edo T7 / edo-1818 (1818-1829), 1.35 g a monme
+  row 17 1818 Spring: miso 13.0 soy 69.0
+  row 18 1818 Fall: miso 13.0 soy 69.5
+  row 19 1819 Spring: miso 13.0 soy 67.5
+  row 20 1819 Fall: miso 13.0 soy 70.0
+  row 21 1820 Spring: miso 12.5 soy 67.9
+  row 22 1820 Fall: miso 13.0 soy 69.0
+  row 23 1821 Spring: miso 12.4 soy 66.59
+  row 24 1821 Fall: miso 13.0 soy 71.58
+  row 25 1822 Spring: miso 12.4 soy 69.65
+  row 26 1822 Fall: miso 13.2 soy 71.74
+  row 27 1823 Spring: miso 12.4 soy 67.2
+  row 28 1823 Fall: miso '' soy ''
+  row 29 1824 Spring: miso 12.3 soy 68.1
+  row 30 1824 Fall: miso 13.0 soy 70.4
+  row 31 1825 Spring: miso 12.2 soy 67.65
+  row 32 1825 Fall: miso 13.0 soy 70.1
+  row 33 1826 Spring: miso 13.4 soy 67.2
+  row 34 1826 Fall: miso '' soy ''
+  row 35 1827 Spring: miso 13.3 soy 68.0
+  row 36 1827 Fall: miso 12.8 soy 71.4
+  row 37 1828 Spring: miso 13.0 soy 65.8
+  row 38 1828 Fall: miso 13.5 soy 71.5
+  row 39 1829 Spring: miso 12.0 soy 64.0
+  row 40 1829 Fall: miso 13.6 soy 71.8
+  miso: n=22 sum 283.00 mean 12.86 range 12.0-13.6 monme a 10 kan; at 1.35 g: 0.463 g a kg (range 0.432-0.490); at 3.11 g: 1.067
+  soy sauce: n=22 sum 1515.61 mean 68.89 range 64.0-71.8 monme a koku; at 1.35 g: 0.514 g a liter (range 0.478-0.536); at 3.11 g: 1.184
+
+### Mitsui Bunko Edo T7 / edo-1830 (1830-1844), 0.975 g a monme
+  row 41 1830 Spring: miso 13.2 soy 68.27
+  row 42 1830 Fall: miso 13.0 soy 73.1
+  row 43 1831 Spring: miso 13.0 soy 67.92
+  row 44 1831 Fall: miso 12.5 soy 73.0
+  row 45 1832 Spring: miso 13.0 soy 68.2
+  row 46 1832 Fall: miso 13.0 soy 75.3
+  row 47 1833 Spring: miso 13.0 soy 70.3
+  row 48 1833 Fall: miso 15.2 soy 77.0
+  row 49 1834 Spring: miso 14.8 soy 77.7
+  row 50 1834 Fall: miso 15.7 soy 70.43
+  row 51 1835 Spring: miso 15.5 soy 76.0
+  row 52 1835 Fall: miso 16.4 soy 78.03
+  row 53 1836 Spring: miso 17.0 soy 76.1
+  row 54 1836 Fall: miso 21.5 soy 84.7
+  row 55 1837 Spring: miso 23.4 soy 100.4
+  row 56 1837 Fall: miso 21.09 soy 105.52
+  row 57 1838 Spring: miso 20.43 soy 106.8
+  row 58 1838 Fall: miso 25.5 soy 115.0
+  row 59 1839 Spring: miso 22.5 soy 103.2
+  row 60 1839 Fall: miso 21.0 soy 108.83
+  row 61 1840 Spring: miso 21.0 soy 94.6
+  row 62 1840 Fall: miso 20.5 soy 89.62
+  row 63 1841 Spring: miso 20.4 soy 94.21
+  row 64 1841 Fall: miso 19.5 soy 97.5
+  row 65 1842 Spring: miso 19.0 soy 95.6
+  row 66 1842 Fall: miso 18.0 soy 86.53
+  row 67 1843 Spring: miso 18.0 soy 92.7
+  row 68 1843 Fall: miso 18.0 soy 95.0
+  row 69 1844 Spring: miso 18.0 soy 94.4
+  row 70 1844 Fall: miso 18.0 soy 95.0
+  miso: n=30 sum 531.12 mean 17.70 range 12.5-25.5 monme a 10 kan; at 0.975 g: 0.460 g a kg (range 0.325-0.663); at 3.11 g: 1.468
+  soy sauce: n=30 sum 2610.96 mean 87.03 range 67.92-115.0 monme a koku; at 0.975 g: 0.469 g a liter (range 0.366-0.620); at 3.11 g: 1.496
+
+### Mitsui Bunko Edo T7 / edo-1850 (1850-1859), 0.975 g a monme
+  row 81 1850 Spring: miso 21.0 soy 103.0
+  row 82 1850 Fall: miso 21.0 soy 107.0
+  row 83 1851 Spring: miso 21.0 soy 107.0
+  row 84 1851 Fall: miso 21.0 soy 106.0
+  row 85 1852 Spring: miso 21.0 soy 95.5
+  row 86 1852 Fall: miso 21.0 soy 106.0
+  row 87 1853 Spring: miso 21.0 soy 104.0
+  row 88 1853 Fall: miso 22.0 soy 104.2
+  row 89 1854 Spring: miso 21.0 soy 103.5
+  row 90 1854 Fall: miso 21.0 soy 104.2
+  row 91 1855 Spring: miso 21.0 soy 103.5
+  row 92 1855 Fall: miso 20.0 soy 103.8
+  row 93 1856 Spring: miso 20.0 soy 102.5
+  row 94 1856 Fall: miso 21.0 soy 106.5
+  row 95 1857 Spring: miso 21.0 soy 105.0
+  row 96 1857 Fall: miso 21.0 soy 106.0
+  row 97 1858 Spring: miso 22.0 soy 112.0
+  row 98 1858 Fall: miso 21.0 soy 111.8
+  row 99 1859 Spring: miso 20.0 soy 111.5
+  row 100 1859 Fall: miso 22.0 soy 111.0
+  miso: n=20 sum 420.00 mean 21.00 range 20.0-22.0 monme a 10 kan; at 0.975 g: 0.546 g a kg (range 0.520-0.572); at 3.11 g: 1.742
+  soy sauce: n=20 sum 2114.00 mean 105.70 range 95.5-112.0 monme a koku; at 0.975 g: 0.570 g a liter (range 0.515-0.604); at 3.11 g: 1.817
+
+### Mitsui Bunko Edo T7 / edo-1860 (1860-1867), 0.4875 g a monme
+  row 101 1860 Spring: miso 25.0 soy 118.0
+  row 102 1860 Fall: miso '' soy ''
+  row 103 1861 Spring: miso 31.0 soy 140.0
+  row 104 1861 Fall: miso '' soy ''
+  row 105 1862 Spring: miso 31.0 soy 146.0
+  row 106 1862 Fall: miso '' soy ''
+  row 107 1863 Spring: miso 30.0 soy 159.0
+  row 108 1863 Fall: miso 30.0 soy 189.77
+  row 109 1864 Spring: miso 30.0 soy 190.0
+  row 110 1864 Fall: miso 36.0 soy 191.6
+  row 111 1865 Spring: miso 45.0 soy 240.0
+  row 112 1865 Fall: miso 54.0 soy 256.0
+  row 113 1866 Spring: miso 68.0 soy 256.0
+  row 114 1866 Fall: miso 67.0 soy 285.0
+  row 115 1867 Spring: miso 85.0 soy 285.0
+  row 116 1867 Fall: miso 81.0 soy 321.0
+  miso: n=13 sum 613.00 mean 47.15 range 25.0-85.0 monme a 10 kan; at 0.4875 g: 0.613 g a kg (range 0.325-1.105); at 3.11 g: 3.911
+  soy sauce: n=13 sum 2777.37 mean 213.64 range 118.0-321.0 monme a koku; at 0.4875 g: 0.576 g a liter (range 0.318-0.865); at 3.11 g: 3.673
+## Mitsui Bunko Osaka T8: header rows 4-6, columns H and I
+  row 4: H='Miso' I='Soy sauce'
+  row 5: H='10 kan' I='1 koku'
+  row 6: H='Silver Monme' I='Silver Monme'
+
+### Mitsui Bunko Osaka T8 / osaka-1712 (1712-1718), 1.5 g a monme
+  row 9 1713 Spring: miso '' soy ''
+  row 10 1713 Fall: miso '' soy 120.0
+  miso: no cells
+  soy sauce: n=1 sum 120.00 mean 120.00 range 120.0-120.0 monme a koku; at 1.5 g: 0.995 g a liter (range 0.995-0.995); at 3.11 g: 2.063
+
+### Mitsui Bunko Osaka T8 / edo-1818 (1818-1829), 1.35 g a monme
+  row 11 1818 Spring: miso 15.0 soy 80.0
+  row 12 1818 Fall: miso 15.0 soy 80.0
+  row 13 1819 Spring: miso 15.0 soy 80.0
+  row 14 1819 Fall: miso 15.0 soy 75.0
+  row 15 1820 Spring: miso 15.0 soy 80.0
+  row 16 1820 Fall: miso 15.0 soy 75.0
+  row 17 1821 Spring: miso 15.0 soy 80.0
+  row 18 1821 Fall: miso 15.0 soy 75.0
+  row 19 1822 Spring: miso 15.0 soy 80.0
+  row 20 1822 Fall: miso 15.0 soy 75.0
+  row 21 1823 Spring: miso 15.0 soy 80.0
+  row 22 1823 Fall: miso '' soy ''
+  row 23 1824 Spring: miso 15.0 soy 80.0
+  row 24 1824 Fall: miso 15.0 soy 75.0
+  row 25 1825 Spring: miso 15.0 soy 80.0
+  row 26 1825 Fall: miso 15.0 soy 75.0
+  row 27 1826 Spring: miso 17.0 soy 80.0
+  row 28 1826 Fall: miso '' soy ''
+  row 29 1827 Spring: miso 16.0 soy 80.0
+  row 30 1827 Fall: miso 15.0 soy 75.0
+  row 31 1828 Spring: miso 16.0 soy 80.0
+  row 32 1828 Fall: miso 17.0 soy 75.0
+  row 33 1829 Spring: miso 18.0 soy 80.0
+  row 34 1829 Fall: miso 17.0 soy 75.0
+  miso: n=22 sum 341.00 mean 15.50 range 15.0-18.0 monme a 10 kan; at 1.35 g: 0.558 g a kg (range 0.540-0.648); at 3.11 g: 1.285
+  soy sauce: n=22 sum 1715.00 mean 77.95 range 75.0-80.0 monme a koku; at 1.35 g: 0.582 g a liter (range 0.560-0.597); at 3.11 g: 1.340
+
+### Mitsui Bunko Osaka T8 / edo-1830 (1830-1844), 0.975 g a monme
+  row 35 1830 Spring: miso 17.0 soy 80.0
+  row 36 1830 Fall: miso 17.0 soy 75.0
+  row 37 1831 Spring: miso 17.5 soy 80.0
+  row 38 1831 Fall: miso 18.0 soy 75.0
+  row 39 1832 Spring: miso 17.0 soy 80.0
+  row 40 1832 Fall: miso 18.0 soy 75.0
+  row 41 1833 Spring: miso 18.0 soy 80.0
+  row 42 1833 Fall: miso 21.0 soy 85.0
+  row 43 1834 Spring: miso 19.0 soy 90.0
+  row 44 1834 Fall: miso 19.0 soy 85.0
+  row 45 1835 Spring: miso 16.0 soy 85.0
+  row 46 1835 Fall: miso 18.0 soy 85.0
+  row 47 1836 Spring: miso 18.0 soy 85.0
+  row 48 1836 Fall: miso 24.5 soy 85.0
+  row 49 1837 Spring: miso 32.0 soy 120.0
+  row 50 1837 Fall: miso 25.0 soy 130.0
+  row 51 1838 Spring: miso 21.0 soy 120.0
+  row 52 1838 Fall: miso 26.0 soy 120.0
+  row 53 1839 Spring: miso 21.0 soy 120.0
+  row 54 1839 Fall: miso 19.0 soy 120.0
+  row 55 1840 Spring: miso 20.0 soy 120.0
+  row 56 1840 Fall: miso 20.0 soy 120.0
+  row 57 1841 Spring: miso 20.0 soy 120.0
+  row 58 1841 Fall: miso 20.0 soy 120.0
+  row 59 1842 Spring: miso 19.0 soy 120.0
+  row 60 1842 Fall: miso 20.0 soy 95.0
+  row 61 1843 Spring: miso 19.0 soy 100.0
+  row 62 1843 Fall: miso 20.0 soy 95.0
+  row 63 1844 Spring: miso 19.0 soy 100.0
+  row 64 1844 Fall: miso 20.0 soy 95.0
+  miso: n=30 sum 599.00 mean 19.97 range 16.0-32.0 monme a 10 kan; at 0.975 g: 0.519 g a kg (range 0.416-0.832); at 3.11 g: 1.656
+  soy sauce: n=30 sum 2960.00 mean 98.67 range 75.0-130.0 monme a koku; at 0.975 g: 0.532 g a liter (range 0.404-0.701); at 3.11 g: 1.696
+
+### Mitsui Bunko Osaka T8 / edo-1850 (1850-1859), 0.975 g a monme
+  row 75 1850 Spring: miso 20.0 soy 95.0
+  row 76 1850 Fall: miso 25.0 soy 95.0
+  row 77 1851 Spring: miso 22.0 soy 95.0
+  row 78 1851 Fall: miso 20.0 soy 95.0
+  row 79 1852 Spring: miso 22.0 soy 95.0
+  row 80 1852 Fall: miso 23.0 soy 95.0
+  row 81 1853 Spring: miso 23.0 soy 95.0
+  row 82 1853 Fall: miso 24.0 soy 95.0
+  row 83 1854 Spring: miso 25.0 soy 95.0
+  row 84 1854 Fall: miso 23.0 soy 95.0
+  row 85 1855 Spring: miso 23.0 soy 95.0
+  row 86 1855 Fall: miso 22.0 soy 95.0
+  row 87 1856 Spring: miso 23.0 soy 95.0
+  row 88 1856 Fall: miso 22.0 soy 95.0
+  row 89 1857 Spring: miso 22.0 soy 95.0
+  row 90 1857 Fall: miso 22.0 soy 95.0
+  row 91 1858 Spring: miso 23.0 soy 95.0
+  row 92 1858 Fall: miso 24.0 soy 95.0
+  row 93 1859 Spring: miso 23.5 soy 95.0
+  row 94 1859 Fall: miso 25.0 soy 95.0
+  miso: n=20 sum 456.50 mean 22.82 range 20.0-25.0 monme a 10 kan; at 0.975 g: 0.593 g a kg (range 0.520-0.650); at 3.11 g: 1.893
+  soy sauce: n=20 sum 1900.00 mean 95.00 range 95.0-95.0 monme a koku; at 0.975 g: 0.512 g a liter (range 0.512-0.512); at 3.11 g: 1.633
+
+### Mitsui Bunko Osaka T8 / edo-1860 (1860-1867), 0.4875 g a monme
+  row 95 1860 Spring: miso 25.0 soy 100.0
+  row 96 1860 Fall: miso '' soy ''
+  row 97 1861 Spring: miso 31.0 soy 155.0
+  row 98 1861 Fall: miso '' soy ''
+  row 99 1862 Spring: miso 25.0 soy 135.0
+  row 100 1862 Fall: miso '' soy ''
+  row 101 1863 Spring: miso 29.0 soy 150.0
+  row 102 1863 Fall: miso 33.0 soy 160.0
+  row 103 1864 Spring: miso 33.0 soy 150.0
+  row 104 1864 Fall: miso 53.0 soy 180.0
+  row 105 1865 Spring: miso 59.0 soy 225.0
+  row 106 1865 Fall: miso 68.0 soy 250.0
+  row 107 1866 Spring: miso 85.0 soy 350.0
+  row 108 1866 Fall: miso 118.0 soy 495.0
+  row 109 1867 Spring: miso 118.0 soy 670.0
+  row 110 1867 Fall: miso 118.0 soy 670.0
+  miso: n=13 sum 795.00 mean 61.15 range 25.0-118.0 monme a 10 kan; at 0.4875 g: 0.795 g a kg (range 0.325-1.534); at 3.11 g: 5.072
+  soy sauce: n=13 sum 3690.00 mean 283.85 range 100.0-670.0 monme a koku; at 0.4875 g: 0.765 g a liter (range 0.269-1.806); at 3.11 g: 4.880

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T20:48:15+00:00",
+ "final_url": "https://web.archive.org/web/20210809162648id_/http://sts.kahaku.go.jp/diversity/document/system/pdf/040.pdf",
+ "first": "a1/a1a244984648/20261025T204813Z",
+ "gm_copies": [],
+ "keys": [
+  "oguri-2008-shoyu-gijutsu"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "a1/a1a244984648/20261025T204813Z",
+ "reason": "HTTP 429",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://web.archive.org/web/2020id_/https://sts.kahaku.go.jp/diversity/document/system/pdf/040.pdf"
+}
