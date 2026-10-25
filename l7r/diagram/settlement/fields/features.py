@@ -402,7 +402,7 @@ class FieldFeaturesMixin:
 
         Research:
             pond inside one plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: the whole rim inside its low plot, crossing no ring
-            field pond size - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: the smallest field ponds ran about 33 ft a side; the drawn range is ours; 0.82 of the plot's half-span, 10-46 by 7-32 px, shrunk 0.9 a step"""
+            field pond size - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: the smallest field ponds ran about 33 ft a side - the legible floor of 10 by 7 px semi-axes draws a pond as small as about 20 by 14 ft, a departure the code keeps until feature 417 T34; 0.82 of the plot's half-span, 10-46 by 7-32 px, shrunk 0.9 a step"""
         poly = [(float(x), float(y)) for x, y in plot["poly"]]
         _, _, hx, hy = self._plot_center_span(poly)
         cx, cy = _centroid(poly)
@@ -515,7 +515,7 @@ class FieldFeaturesMixin:
         Research:
             grave island - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: a mound inside a plot
             basins carved round the island - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no ring passes under the mound
-            grave island size - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on a page - the Ming code gave a commoner's grave 18 bu round (pass P2b), a ceiling the 13 by 9 ft mound fits inside; mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones"""
+            grave island size - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); the island 1.1 of the plot's half-span on each axis, at least 18 x 12 px, growing with the plot; mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones"""
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         cx, cy = round(cx, 1), round(cy, 1)
         rx, ry = max(9.0, hx * 0.55), max(6.0, hy * 0.55)

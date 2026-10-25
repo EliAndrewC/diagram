@@ -42,7 +42,7 @@ def _comb_dry_and_beans(
         dry hem above the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the hem laid upslope of supply canal A
         fork triangle planted dry - research/questions/0010-farmland-around-towns-and-cities.drawing.html: on a city's coarse grain (`grain < 1.0`) a second band along canal B's stretch above its first offtake
         fork band depth - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); 0.6 of the hem's depth
-        fork band skipped on villages - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); maps at grain 1.0 or more (a village's and a hamlet's) leave the triangle to the scrub
+        fork band skipped on villages - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the ground just upslope of a supply canal is hemmed in dry crop, and 0010 puts the fork triangle above its canals - left to scrub at grain 1.0 or more, a departure the code keeps until feature 417 T34; maps at grain 1.0 or more (a village's and a hamlet's) leave the triangle to the scrub
         wild middle - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a wild fan keeps its drawn hem on the toe, the middle held in reserve
         seams settled - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: every band's tracts read apart where the rows spread
         bund beans - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: beads along a share of the paddy bunds

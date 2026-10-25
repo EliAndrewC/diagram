@@ -223,7 +223,7 @@ def _route_from(
 ) -> tuple[Pt, ...] | None:
     """One door's routed path (`routed_corridors`), or None.
 
-    Research: path leaves its own yard once - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25) - a path cut through a neighbor's yard by custom is on no page (0246); kept off the house, its parts and the neighbors' homesteads, leaving its threshing yard and never crossing it again
+    Research: path leaves its own yard once - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way leaves its dooryard round its own parts, nothing built on a lane, and the custom of cutting through a neighbor's yard is recorded there; kept off the house, its parts and the neighbors' homesteads, leaving its threshing yard and never crossing it again
     """
     from .access import PART_MARGIN_FT, TREAD_HALF_FT, doubles_back, leaves_its_yard
 

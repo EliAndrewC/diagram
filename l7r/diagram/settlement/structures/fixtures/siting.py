@@ -433,7 +433,7 @@ class FixtureSitingMixin:
             placement chooses the ground - research/questions/0190-notice-boards-kosatsuba.html: entrance, frontage or center
             roadside first - research/questions/0190-notice-boards-kosatsuba.drawing.html: only verge seats where any fit
             entrance board on the approach - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); approach seats preferred at a handover
-            traffic floor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); 60% of the busiest seat's count
+            traffic floor - research/questions/0190-notice-boards-kosatsuba.drawing.html: a site whose caption fits outranks one whose does not, and among those the busiest wins - the caption and open ground choose among every seat at 60% of the best count, a departure the code keeps until feature 417 T33; 60% of the busiest seat's count
             board may stand in shade - research/questions/0190-notice-boards-kosatsuba.drawing.html: shaded seats admitted
             open ground preferred - GUESS: shaded seats only where no open one fits
             anchored board band - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); within `KOSATSUBA_ANCHOR_BAND_FT`, 60 ft, of the nearest seat to the anchor

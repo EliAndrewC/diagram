@@ -64,7 +64,7 @@ BROOK_SKIRT = 34.0
 # The course's variety comes from the field's own outline, which it now follows at this distance, and the walk
 # only keeps it off a ruled line.
 BROOK_WANDER = 10.0
-"""Research: brook's stray - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a meandering river turns on a radius of two to three times its own width; the 10 ft stray is ours; up to 10 ft past the floor"""
+"""Research: brook's stray - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); up to 10 ft past the floor"""
 BROOK_WANDER_STEP = 10.0
 """Research: brook's meander step - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 10 ft"""
 # HOW FAR PAST THE FIELD's own bounds a station may sit, px - the belt to the skirt's braces, and sized to the
@@ -178,7 +178,7 @@ FORD_BEND_DEG = 20.0
 # more than this. The pool's brooks turn at most 41-53 deg anywhere on their meandered courses; 100 deg is well above that
 # and well below the 113-131 deg folds the exit has produced at the frame edge. A map drawing convention.
 BROOK_MAX_TURN_DEG = 100.0
-"""Research: brook never doubles back - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a meandering river turns on a radius of two to three times its own width, which the per-vertex cap keeps - a stream's loop back at a larger scale is refused, a departure the code keeps until feature 417 T34; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); no turn over 100 degrees"""
+"""Research: brook never doubles back - CONVENTION: a map drawing convention - no vertex turns past the cap, so the line reads as one stream; 0054 gives a bend radius of two to three widths and speaks to no loop; no turn over 100 degrees"""
 
 # A BROOK TURNS ON A CURVE (feature 261, settlement-review of Sawada): every corner of the drawn course is filleted at this
 # many widths of its drawn bed, the ratio the ditches have been drawn at since 2026-07-25 (`fillet_polyline`,
@@ -207,5 +207,5 @@ SINKS = ("pond", "pond", "offmap")
 
 Research:
     where the runoff goes - research/questions/0060-field-drains-akusuiro.drawing.html: a pond at the foot (a GUESS there) or off the map
-    sink odds - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); pond two in three, off the map one
+    sink odds - GUESS research/questions/0060-field-drains-akusuiro.drawing.html: about two maps in three lay a pond, one in three send the drain off the map; pond two in three, off the map one
 """

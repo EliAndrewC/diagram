@@ -112,7 +112,7 @@ def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[fl
 
 
 BELT_NEAR_FT = 36.0  # ft behind the fringe the band's near face stands
-"""Research: near stand-off - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: a village belt stood outside the houses' own groves (Tarama); the distance is ours; the near face 36 ft behind the fringe"""
+"""Research: near stand-off - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the belt's outline stands back from the row of houses nearest it; the 36 ft is a GUESS; the near face 36 ft behind the fringe"""
 # THE BAND'S DEPTH BEFORE THE RAG, near face to far, and the rag on each face. The near face is roughened along its length
 # and pushed only OUT of the band, 0-`BELT_NEAR_RAG_FT`; the far face moves up to `BELT_FAR_RAG_FT` either way. A band
 # laid 100 ft deep so draws 90-115 ft where the fringe lies square to the wind - inside the record's 80-120 ft
@@ -217,7 +217,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     Research:
         one village belt for the clustered form only - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: none where every farm carries its own grove
         belt on the windward fringe - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a band hugging the cluster's windward profile, never behind its center
-        shoulder past the end houses - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: a belt can ring the whole village (Tarama); the 90 ft is ours; the band runs 90 ft past the outermost house across the wind
+        shoulder past the end houses - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the belt is a crescent wrapping round the houses' flanks (the page's own choice); the 90 ft is a GUESS; the band runs 90 ft past the outermost house across the wind
         off the afternoon sun-lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the near face moved back by the west sun lane, scaled by the wind's westward share
         off the crop - research/questions/0038-sunlight-and-shade-on-the-farm.html: a tree shades one tree's height (the Qimin Yaoshu), about 33 ft - the belt stands 20 px off the crop at its nearest, a departure the code keeps until feature 417 T33; stands back 22-60 px, then shortens to 0.6 of its span
         no belt under three houses - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25)

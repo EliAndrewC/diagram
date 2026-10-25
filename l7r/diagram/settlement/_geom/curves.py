@@ -138,7 +138,7 @@ def organic_poly(base: Poly, amp: float) -> Poly:
 def winding(start: Pt, end: Pt, amp: float = 15, n: int = 2) -> Poly:
     """A gently winding path from start to end (a shallow S, not a straight line).
 
-    Research: winding path - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a shallow S of amplitude `amp` rather than a straight line"""
+    Research: winding path - research/questions/0081-village-lanes.html: a path takes the shortest or easiest route, a bend having its reason on the ground - a shallow S with no cause is drawn, a departure the code keeps until feature 417 T32; a shallow S of amplitude `amp` rather than a straight line"""
     sx, sy = start
     ex, ey = end
     dx, dy = ex - sx, ey - sy

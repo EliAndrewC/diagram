@@ -42,8 +42,8 @@ def paddy_grain(ftpx: float, target_acres: float = PADDY_CELL_ACRES, aspect: flo
 
     Research:
         basin area - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the target area in real feet, converted at the map's scale
-        basin proportion - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on a rule - one parcel of 1684 ran 16 by 10.5 ken, 0.656 (Kami-Baba, pass P2b); along/across 0.66, the elongation the vetted village paddies read as
-        row variation - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the row step +/-16% around its mean
+        basin proportion - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a hamlet basin about 48 ft across its canal and 26 to 36 ft along it, about 0.65; along/across 0.66, the elongation the vetted village paddies read as
+        row variation - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: rows 26 to 36 ft along the canal, 31 ft give or take 16%; the row step +/-16% around its mean
     """
     target_px2 = target_acres * 43560.0 / (ftpx * ftpx)
     across = math.sqrt(target_px2 / aspect)

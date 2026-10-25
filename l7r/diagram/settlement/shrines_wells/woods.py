@@ -25,7 +25,7 @@ def trees_off_the_treads(trees: Sequence[tuple[float, float, float, str]], lanes
     predicate of "no tree is planted in a path") - asked only of the lanes whose box comes within a half-width of the
     stand's, so a wood no lane reaches asks nothing.
 
-    Research: no trunk on a lane's tread - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25)
+    Research: no trunk on a lane's tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the Tang Code punished whoever planted or tilled a lane, and 0071 keeps groves off the main road
     """
     from ..homestead_parts.stands import trunk_on_tread  # noqa: PLC0415 - kept beside its one use
 
@@ -67,7 +67,7 @@ class TreeStandsMixin:
             no crown on a roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a clump drawn on a roof hides the building
             no crown on a wellhead - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25)
             no crown on a plot's sun ground - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: _sun_keepouts
-            no trunk on a lane - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25)
+            no trunk on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the Tang Code punished whoever planted or tilled a lane, and 0071 keeps groves off the main road
             fringe crowns drawn outside the stand's outline - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a worked wood's shrubs were cut and its edge kept as grass - a fringe of advance growth is drawn outside the stand, a departure the code keeps until feature 417 T34; `_stand_fringe` outliers give the wood a soft edge; the 0080 drawing page is silent on a wood's fringe
             no crown under another's canopy - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown is never seated under another's canopy
         """

@@ -270,8 +270,8 @@ def reseat_clump(
         a seat refused for the sun set deeper - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a crown refused in a plot's sun is set deeper in the stand rather than dropped
         the re-seat's reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a refused belt clump is offered up to 2.2 grid steps away, eight bearings a ring
         the copse re-seats only when displaced - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a sparse grove re-seats only where another grove's canopy displaced it; any other refusal leaves the gap
-        the belt stops at a lane it abuts - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a clump blocked by a lane within a clump of the belt's rim is dropped
-        the edges a stand stops at - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a clump refused by the crop, open water or a dike bank is dropped, not re-seated"""
+        the belt stops at a lane it abuts - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: at Fangkeng the flagstone path goes round the grove, not through it; the one-clump rim margin is a GUESS; a clump blocked by a lane within a clump of the belt's rim is dropped
+        the edges a stand stops at - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the paddies, the drying yards and the main road stay open; open water and the dike bank are a GUESS; a clump refused by the crop, open water or a dike bank is dropped, not re-seated"""
     # INTERIOR ONLY FOR A LANE, and this cost seed 10 a round. The rule reads "a clump blocked
     # near the polygon's own rim is at the belt's edge, where stopping is correct" - true of a
     # lane, false of everything else. A belt is 110 px deep and a clump is 28, so demanding

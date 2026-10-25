@@ -299,7 +299,7 @@ class PaddyMixin:
             plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: columns 0.9-1.35 and rows 0.85-1.5 of the grain, 34 px by default
             canal widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: main 3.3, drain 3.0, lateral 2.0, feed and outfall 2.6 px, untapered
             each plot's green - CONVENTION: picked at random from RICE_GREENS, three near-identical greens of rice at one stage, so the paddy reads as one crop
-            row bunds staggered - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); row boundaries rolled per column, so row bunds stagger between columns
+            row bunds staggered - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a bund that steps a few feet sideways and carries on parallel is not drawn, under about 30 ft - rows rolled per column stagger the row bunds a few feet across each column bund, a departure the code keeps until feature 417 T34; row boundaries rolled per column, so row bunds stagger between columns
             ripe share - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 2.5% of rice plots ripe"""
         outline, bbox = _wf_outline(shape, amp)
         x0, y0, x1, y1 = bbox

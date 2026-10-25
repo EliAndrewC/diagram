@@ -314,7 +314,7 @@ def reserve_way(s: Settlement, rec: dict[str, Any], geom: Any, at: Pt) -> None:
     Research:
         walk not drawn as a lane - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the walk is recorded and kept clear, never drawn
         the corridor reserved as it is seated - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the older village maps find, and so reserve, each path as they seat a house
-        the walk reserved as it is seated - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); the walk kept as no-build ground while the houses are seated, so later houses keep off it
+        the walk reserved as it is seated - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no way is kept while the houses are seated, the reserve-as-seated recorded there as the village-scale deviation; the walk kept as no-build ground while the houses are seated, so later houses keep off it
     """
     if geom.get("access") is not None:
         reserve(s, geom["access"], at)

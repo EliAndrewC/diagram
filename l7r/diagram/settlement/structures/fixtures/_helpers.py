@@ -135,7 +135,7 @@ DWELLING_REACH_FT = 150.0
 """How far from a way a dwelling may stand and still be walked out by it - `departure_routes`' `reach`, one number for
 both, so the entrance and the routes it must be passed by cannot disagree.
 
-Research: dwelling served by a way - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); within 150 ft"""
+Research: dwelling served by a way - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way reaches within 60 ft of the house, 100 ft to a back lane - 150 ft is allowed, a departure the code keeps until feature 417 T32; within 150 ft"""
 
 
 def dwellings_joining(M: Any, track: Sequence[tuple[float, float]], houses: Sequence[tuple[float, float]]) -> list[tuple[float, float]]:

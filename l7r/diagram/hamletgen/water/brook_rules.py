@@ -96,14 +96,14 @@ def straightest_run(pts: Sequence[Pt], tol: float) -> float:
     of its line - the pool test's `_straightest`, lifted (water:W03) and made quadratic: from each start, the bearings a
     chord may take narrow with every vertex passed (a vertex `r` out allows those within asin(tol / r) of its own), and
     once none is left no longer chord from that start can qualify.
-    Research: straight run - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths, about 70 ft here, are rare (Leopold and Wolman, pass P2a), which holding a natural brook off a long chord follows; the W03 chord a natural brook is held off
+    Research: straight run - NONE: the longest chord within a tolerance, geometry that decides nothing itself (the decision is RULED_TOL_FT's and RULED_SHARE's); the W03 chord a natural brook is held off
     """
     return straightest_chord(pts, tol)[0]
 
 
 def straightest_chord(pts: Sequence[Pt], tol: float) -> tuple[float, int, int]:
     """`straightest_run` with the chord's two vertex indices - what the placer's repair bends at the middle of.
-    Research: straight run - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths, about 70 ft here, are rare (Leopold and Wolman, pass P2a), which holding a natural brook off a long chord follows; the W03 chord a natural brook is held off
+    Research: straight run - NONE: the longest chord within a tolerance, geometry that decides nothing itself (the decision is RULED_TOL_FT's and RULED_SHARE's); the W03 chord a natural brook is held off
     """
     best, at = 0.0, (0, 0)
     for i, (ax, ay) in enumerate(pts):

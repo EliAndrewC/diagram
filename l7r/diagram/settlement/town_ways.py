@@ -24,7 +24,7 @@ class TownWaysMixin:
             hall size - research/questions/0050-ancestral-halls-in-south-china-villages-citang.html, research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: 110 x 74 ft by default
             porch on the water side - research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: the entry porch faces +y, the water
             hall glyph - CONVENTION: an inner eave line and a dark porch block
-            focal keep-out - research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: an open forecourt lay between the hall and its pond; the 6 px is ours; the footprint plus 6 px is reserved
+            focal keep-out - research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: an open forecourt lay between the hall and its pond - only the footprint and 6 px are reserved, no forecourt, a departure the code keeps until feature 417 T35; the footprint plus 6 px is reserved
         """
         pw, ph = self.px(w), self.px(h)
         self.add(f'<rect x="{x - pw / 2:.1f}" y="{y - ph / 2:.1f}" width="{pw:.1f}" height="{ph:.1f}" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2.4" rx="2"/>')

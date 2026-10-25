@@ -221,7 +221,7 @@ def stage_washing(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.washing.shared_places
         l7r.diagram.hamletgen.washing.each_house_places
 
-    Research: after the ways and crossings - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); set last of the ground's features, so each seat is asked of every way, bridge and building already standing; no page orders them"""
+    Research: after the ways and crossings - GUESS research/questions/0065-washing-places-at-the-waters-edge.drawing.html: where a lane, a bridge or a building takes the spot, the washing place is moved along the bank; set last of the ground's features, so each seat is asked of every way, bridge and building already standing; no page orders them"""
     form = washing_form(plan, s.M)
     places = each_house_places(s, s.M) if form == "each_house" else shared_places(s, s.M)
     for rec in places:

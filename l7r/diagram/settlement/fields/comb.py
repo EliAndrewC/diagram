@@ -463,8 +463,8 @@ class CombMixin:
 
         Research:
             resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: whole basins, weighted along the fan's fall
-            resting plots off the low row - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); a low or blue plot never rests (the wet ground the pond and overlays take)
-            no resting plot on a dike-pond block - research/questions/0013-paddies-left-to-rest-kataarashi.html: resting land was over from the Kamakura period on, and dike-ponds arose in the early Ming (0020); its open water is the fabric
+            resting plots off the low row - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: resting is weighted toward the far end of the water's run, with no row excluded - the lowest row never rests, a departure the code keeps until feature 417 T34; a low or blue plot never rests (the wet ground the pond and overlays take)
+            no resting plot on a dike-pond block - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a dike-pond block is drawn as its fish ponds (and 0019), not as rice plots; its open water is the fabric
             blue plot class - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a plot of the drain-side row painted
                 FLOODED is classed wet paddy, the tint marking ground, not season; the comb paints FLOODED nowhere else (`waterfields/tint.py`)"""
         from l7r.diagram.waterfields import AZE  # noqa: I001 - FLOODED is aliased for the picture record below

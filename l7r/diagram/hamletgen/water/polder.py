@@ -178,7 +178,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         header reservoir - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: outside the dike, uphill at the ring canal's head
-        reservoir size - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a fixed 82 x 54 ft ellipse whatever the acreage; 0061 sizes a reservoir pond by the paddy it waters only for a field on high ground whose pond is its only water, and no page sizes a polder's source, the wild water its inlet sluice draws from (searched 0061, 0017, 0019, 0020)
+        reservoir size - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); an ellipse of semi-axes 82 by 54 px (164 by 108 px across), fixed in px whatever the acreage or the scale; 0061 sizes a reservoir pond by the paddy it waters only for a field on high ground whose pond is its only water, and no page sizes a polder's source, the wild water its inlet sluice draws from (searched 0061, 0017, 0019, 0020)
         dike-pond conversion - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a village drawn as dike-ponds throughout is rolled between every parcel a pond (leftover pond, 1.0) and about one parcel in ten left in standing rice (leftover rice, DIKEPOND_CONVERSION 0.9), the one in ten a calibrated liberty between none and Jiujiang's two tenths
         pond layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond block is drawn as a mosaic, its lattice bent by POND_LAYOUT_MOSAIC 0.5 (a calibrated liberty set on the Kuwabata map), and a rice polder keeps the surveyed grid (0.0); a dike-pond hamlet that rolls the chessboard of ponds (POND_LAYOUTS) is drawn at the grid end (0.0) too
         polder fabric - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: POLDER_FABRIC by archetype, a rice polder's 190 ft modules mostly split into two or three strips and a few merged along the fall, with a 3 ft walking bund and 8 ft ditch corridor (gap 1.5/4.0 a side), and a dike-pond's 160 ft modules mostly merged in pairs with about 22 ft gaps both ways (11/11)
@@ -674,7 +674,7 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
 
     Research:
         no plank on the drain - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: none over the drain at the field's foot
-        crossings where the village lives - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); three on the collector the village abuts, one per lateral, none on the feeder or far toe
+        crossings where the village lives - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, a walked dike included - the far toe and the feeder are capped at none on the flank seats, a departure the code keeps until feature 417 T34; at a flank seat three on the collector the village abuts, one per lateral, none on the feeder or far toe; at the head the feeder 3 and the toes 1, at the foot the toes 2 each
     """
     f = polder_flanks(plan)
     if f["cluster"] == f["plus"]:

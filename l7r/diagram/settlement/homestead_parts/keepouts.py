@@ -88,7 +88,7 @@ class KeepoutsMixin:
         (fld_b / cor_b); verdicts are identical either way (the grid prunes, it never decides).
 
         Research:
-            no ground cover on open water - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); within a watercourse's drawn half-width and a pad"""
+            no ground cover on open water - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: the reeds keep out of the water itself and are drawn right to its edge; the pad is a convention; within a watercourse's drawn half-width and a pad"""
         if near is not None:
             if boxed_seg_hit(px, py, near(px, py)):
                 return True

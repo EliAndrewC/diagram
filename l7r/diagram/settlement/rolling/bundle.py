@@ -44,7 +44,7 @@ class BundleGeomMixin:
 
         Research:
             bed split share - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); about one household in four splits its plot into two beds
-            bed split forms - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.html: beds lay before the house, all round it, or on spare ground; the forms and the 6 ft width are ours; half flank the house on opposite walls, the rest stacked (south gardens) or side by side; each bed at least 6 ft (`bscale`) wide
+            bed split forms - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25) - 0039 has where a bed lay, nothing on splitting one; half flank the house on opposite walls, the rest stacked (south gardens) or side by side; each bed at least 6 ft (`bscale`) wide
             beds one household's garden - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: the beds together held to the garden's size range
             beds on sunny sides - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: never the north back
         """
@@ -213,7 +213,7 @@ class BundleGeomMixin:
             storehouse on the north wall - DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall, a convention the page records against the record
             storehouse seam - CONVENTION: the north-wall kura annex reserved 1 ft off the house wall
             byre beside the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the keeper's stall beside the house
-            byre's flank - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: in the Tono L-shaped house the stable joins the lower end and projects off the south side, both mirror forms recorded; away from the garden is ours; the flank away from the garden; the page attests the inner and outer stable, not the side
+            byre's flank - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: in the Tono L-shaped house the stable joins the lower end and projects off the south side, both mirror forms recorded - the byre is set at the floored end when the garden is west or southwest, a departure the code keeps until feature 417 T33; away from the garden is ours; the flank away from the garden; the page attests the inner and outer stable, not the side
             outer stable off the wall - GUESS research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the yard-shed byre set `YARD_SHED_GAP_FT[0]` (6 ft) off the house, the near end of the page's guessed 6 to 12 ft
             dispersed farm's grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the farm's own grove on its rolled sides, turned to the wind
             south band kept off the yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: on a sun-keeping map the south band stands `CANOPY_SHADE_FT` plus 1.7 x 1.15 crown radii beyond the yard

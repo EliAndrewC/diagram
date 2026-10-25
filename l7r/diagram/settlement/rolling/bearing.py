@@ -92,7 +92,7 @@ class MarginBearing:
 
     Research:
         turn with the lane - research/questions/0029-farmhouses-minka.drawing.html: a house turns with the curve of the lane it stands on
-        turn with the field margin - research/questions/0029-farmhouses-minka.drawing.html: houses turn with their lane, within about 34 degrees (the Okinawan survey); the field margin standing for the lane is ours; the field margin stands in for that lane before any lane is drawn, a proxy
+        turn with the field margin - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each farmhouse faces along the field's edge, not a lane (0029 draws a house turned with its lane, never more than about 30 degrees); the field margin stands in for that lane before any lane is drawn, a proxy
             0029 neither records nor labels
     """
 

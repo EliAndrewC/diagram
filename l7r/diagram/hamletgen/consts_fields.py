@@ -157,7 +157,7 @@ LEFTOVER_FORMS = ("rice", "pond")
 
 Research:
     dike-ponds throughout - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a wholesale village
-    dike-pond leftover parcels - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); rice or pond, even odds
+    dike-pond leftover parcels - GUESS research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: every parcel a pond, or about one parcel in ten left in standing rice, at even odds; rice or pond, even odds
 """
 POND_LAYOUT_MOSAIC = 0.5
 """Research: mosaic strength - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: 0.5, the lattice bent out of line"""

@@ -427,7 +427,7 @@ class GrovesMixin:
         """Which flank completes a cardinal wind's windward pair (`grove_sides.windward_pair`): the map's own
         `meta.grove_flank`, else rolled from its seed and recorded.
 
-        Research: cardinal wind's second face - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: two sides are the windward pair, as on the Sendai plain, north and west - the second face is rolled at even odds, a departure the code keeps until feature 417 T33; rolled per settlement
+        Research: cardinal wind's second face - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25) - 0036 gives the Sendai pair, north and west, and nothing on a cardinal wind's second face (feature 417 T33); rolled per settlement
         """
         meta = self.M["meta"]
         if meta.get("grove_flank") is None:

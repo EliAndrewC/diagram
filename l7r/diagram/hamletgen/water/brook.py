@@ -118,13 +118,13 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
 
     Research:
         flank passage - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: below the tap the course passes the fan on the flank `side` and runs on down it
-        crop clearance - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every station `skirt` (BROOK_SKIRT, 34 px) outside the cultivated rings and supply canals, in cross-section
+        crop clearance - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every station `skirt` (BROOK_SKIRT, 34 px) outside the cultivated rings (the plots and dry plots stage_field passes, and the ditch stretches feed_brook adds outside the field on a mid-run crossing - not the supply canals), in cross-section
         head crop yields - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); a crop ring reaching within one skirt of the fan's head is left out of the profile
         meander - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the offset strays above the floor on `_wander`, over `steps` (16) stations
         on the sheet - CONVENTION: stations held inside the field's bounds grown by BROOK_FRAME_MARGIN; past half its stations the course leaves at the first the box binds
         tap run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: straight on down the fall below the tap, never floored, so the race leaves off the brook's downstream heading
         tap run length - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); BROOK_TAP_RUN, 70 px
-        corners cut - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); each station replaced by two points 45 ft (at most 0.3 of the leg) either side, re-floored against the crop
+        corners cut - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a stream turns on a radius of two to three times its own width, about 14 to 21 ft at a 7 ft brook; the 45 ft cut is ours; each station replaced by two points 45 ft (at most 0.3 of the leg) either side, re-floored against the crop
     """
     dx, dy = plan.fall
     px, py = -dy * side, dx * side
@@ -266,7 +266,7 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
     `crosses_mid_run`, W11 `monotone_down` below the tap.
 
     Research:
-        no fold-back - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a meandering river turns on a radius of two to three times its own width, which the per-vertex cap keeps - a stream's loop back at a larger scale is refused, a departure the code keeps until feature 417 T34; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
+        no fold-back - CONVENTION: a map drawing convention - no vertex turns past the cap, so the line reads as one stream; 0054 gives a bend radius of two to three widths and speaks to no loop; no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
         no level run - CONVENTION: no run held level along the frame, in any view
         no ruled run - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths are rare (Leopold and Wolman, pass P2a); the rule's bound is looser (feature 417 T34); the straightest run within its bound (`ruled_excess`)
         no screen axis - CONVENTION: no segment along a screen axis, the tap run excepted

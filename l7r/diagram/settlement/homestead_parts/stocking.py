@@ -21,7 +21,7 @@ def stocked_copse(clumps: list[tuple[float, float]], pad: float, kept: frozenset
     far above the floor. A clump in `kept` - a household's reserved share of the wood floor (woods W25) - is never a straggler: the drop stops when only kept clumps are left.
     Research:
         copse clumps farthest from the centroid dropped until stocked - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25)
-        reserved share never a straggler - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a household's reserved share of the wood floor (woods W25) is kept"""
+        reserved share never a straggler - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: each farm's wood counts its share of the copse, and the copse is filled to what the farms' own groves leave; a household's reserved share of the wood floor (woods W25) is kept"""
     out = list(clumps)
     while len(out) > 1:
         xs, ys = [c[0] for c in out], [c[1] for c in out]

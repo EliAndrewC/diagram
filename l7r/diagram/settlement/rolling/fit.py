@@ -540,7 +540,7 @@ class BundleFitMixin:
         front of it is a PREFILTER - it over-states both extents, so it can only admit a pair the
         exact test then rejects.
 
-        Research: roofs shed apart - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); `FARMHOUSE_EAVE_GAP_FT` (8 ft) plus 2 ft between the rotated corners of two farmhouses; 0029 gives only a 3 ft eave"""
+        Research: roofs shed apart - research/questions/0029-farmhouses-minka.drawing.html: 3 ft is the gap our maps keep between neighboring houses, and 0246 parts two homesteads by 20 ft - two farmhouses are held 8 + 2 ft apart, a departure the code keeps until feature 417 T33; `FARMHOUSE_EAVE_GAP_FT` (8 ft) plus 2 ft between the rotated corners of two farmhouses; 0029 gives only a 3 ft eave"""
         lim = self.px(FARMHOUSE_EAVE_GAP_FT + 2.0)
         cx, cy, w, h = rect
         cand = {"x": cx, "y": cy, "w": w, "h": h, "rot": self._house_rot(cx, cy)}  # the candidate as `eave_gap` reads a record

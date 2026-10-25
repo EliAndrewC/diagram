@@ -167,7 +167,7 @@ def parcel_wet_share(ring: Sequence[Pt], marshes: Sequence[list[Pt]]) -> float:
 
 
 _CHAIN_OFF = 0.2  # a third parcel within this fraction of the span off the line through two others stands in their row
-"""Research: woods not in a ruled line - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a village's woods follow the ground, not a ruled line; a third parcel within 0.2 of the span off two others' line"""
+"""Research: woods not in a ruled line - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0077 speaks only of one wood's boundary bending, no page of how several parcels stand to each other; a third parcel within 0.2 of the span off two others' line"""
 
 
 def in_a_ruled_line(p: tuple[float, float], centers: Sequence[tuple[float, ...]], frac: float = _CHAIN_OFF) -> bool:
@@ -176,7 +176,7 @@ def in_a_ruled_line(p: tuple[float, float], centers: Sequence[tuple[float, ...]]
     CHAIN the 2026-08-18 reviews recorded: the monotone score still seats each parcel on the first legal ground along the
     crop's keep-out edge, and Inashiro's three stood 5 ft off one line over 1,104 ft, Kashikawa's in a column.
 
-    Research: woods not in a ruled line - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a village's woods follow the ground, not a ruled line; three parcels off one line by less than 0.2 of their span refused
+    Research: woods not in a ruled line - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0077 speaks only of one wood's boundary bending, no page of how several parcels stand to each other; three parcels off one line by less than 0.2 of their span refused
     """
     for i in range(len(centers)):
         for j in range(i + 1, len(centers)):
@@ -340,7 +340,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     "where is there still room" is a question about the map as it stands at that moment.
 
     Research:
-        parcel count and size - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: a village wood ran 0.06 to 5.3 ha (Hong Kong), which the 250 ft parcel, about 0.58 ha, falls inside; `count` parcels from 250 ft, the ladder scaled 0.9-1.1 per map, rungs 0.8, 0.64, 0.5
+        parcel count and size - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0071's 0.06 to 5.3 ha are fengshui groves, a different wood, and 0077 gives no coppice lot's size; `count` parcels from 250 ft, the ladder scaled 0.9-1.1 per map, rungs 0.8, 0.64, 0.5
         crop set-back - research/questions/0038-sunlight-and-shade-on-the-farm.html: a tree shades one tree's height to its east, west and north (the Qimin Yaoshu), about 33 ft, which the set-backs clear; 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
         parcels kept apart - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); each one's exclusion 1.15-2.5 of the size
         aspect and bearing - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); up to 2.2:1, laid across the fall within 20 deg
@@ -350,7 +350,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the ring inside the view
         scan seat window - CONVENTION: a seat's center may sit up to 0.6 of the half-size outside the predicted frame, 0.8 of the square's box inside it
         title pocket kept clear - CONVENTION: the title pocket (frame.title_pocket) is a keep rectangle no wood's square may enter
-        woods not in a ruled line - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a village's woods follow the ground, not a ruled line
+        woods not in a ruled line - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0077 speaks only of one wood's boundary bending, no page of how several parcels stand to each other
         nearest seat preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the nearest slope beyond the fields
         per-parcel size bands - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); 0.82-1.18 of the half-size by band, then a 0.84 smaller try
         scan reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); confined to 210 px past the content box

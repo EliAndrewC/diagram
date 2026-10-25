@@ -72,7 +72,7 @@ class WellsMixin:
         Research:
             wellhead marker - research/questions/0196-communal-wells-ido.drawing.html: a round curb of 9.36 ft radius under a square roof on every well
             cistern-well on the aqueduct - research/questions/0141-the-capitals-aqueduct-josui.drawing.html: kind recorded when declared
-            keep-clear margin - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); 8 px round the roof
+            keep-clear margin - research/questions/0196-communal-wells-ido.drawing.html: the apron 4 ft past the curb, a small court, a lane-side curb within about 8 ft of the tread - 8 px round the roof, 8 to 24 ft by tier, a departure the code keeps until feature 417 T33; 8 px round the roof
         """
         # THE WELL IS A LOCATION MARKER, NOT A TO-SCALE FOOTPRINT (GM ruling 2026-07-21). A real stone
         # well curb is ~3-4 ft - sub-glyph at every map scale - so the wellhead denotes the well's
@@ -117,7 +117,7 @@ class WellsMixin:
         Research:
             wellhead off the commons - research/questions/0196-communal-wells-ido.drawing.html
             ground fit for a wellhead - research/questions/0196-communal-wells-ido.drawing.html: _well_ground_clear
-            standing room demanded - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25); a fixed 2r + 14 px box
+            standing room demanded - research/questions/0196-communal-wells-ido.drawing.html: a paved apron about 4 ft wider than its curb, and each well keeps only a small court - a fixed 2r + 14 px box, 30 to 90 ft by tier, a departure the code keeps until feature 417 T33
         """
         if self._in_scrub_cover(x, y) or not self._well_ground_clear(x, y):
             return False
@@ -185,7 +185,7 @@ class WellsMixin:
             cell offsets - NONE: the center, then four at 0.26 of the spacing
             a dwelling within reach - research/questions/0196-communal-wells-ido.drawing.html: the caller's near
             no dwelling left without a well - research/questions/0196-communal-wells-ido.drawing.html: the coverage pass, six seats at 0.45 to 0.6 of near
-            standing room demanded - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25); a fixed 2r + 14 px box
+            standing room demanded - research/questions/0196-communal-wells-ido.drawing.html: a paved apron about 4 ft wider than its curb, and each well keeps only a small court - a fixed 2r + 14 px box, 30 to 90 ft by tier, a departure the code keeps until feature 417 T33
         """
         x0, y0, x1, y1 = bbox
         # a modest footprint => wells sit in the courtyards, not crammed on a lane. The SAME box

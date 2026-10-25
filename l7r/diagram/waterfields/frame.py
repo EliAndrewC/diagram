@@ -13,7 +13,7 @@ Poly = list[Pt]  # a polyline / polygon as a list of points
 DF = 30.0  # fall step of the lockstep march (px)
 """Research: march step - NONE: the fall step the threads advance by"""
 GAP = 26.0  # threads never pinch closer than this - a plot must fit between them
-"""Research: least spacing between ditch threads - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); 26 px, a plot's width"""
+"""Research: least spacing between ditch threads - GUESS research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: no least width for a basin, the hamlet basin about 48 ft across its canal; 26 px"""
 # A FIX THAT FAILED (feature 328 wave 85, 2026-10-09): 0005's basin is some 40 to 60 ft across its ditch, so the floor was
 # derived from it - `plot_across` (48 px) and 40/48 of it - and passed into `_comb_march`. Every comb hamlet moved and the
 # 48-seed cohort went 48 -> 45 and 48 -> 44 (Kashikawa refused by its lane web at the 40 ft floor). Reverted; the row is E3,

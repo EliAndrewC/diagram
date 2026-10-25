@@ -346,7 +346,7 @@ class GroundCoverMixin:
 
 
         Research:
-            crowns on a lattice - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html: a planted wood stood nine trees to a ken square (Morioka), and two paces each way (the Qimin Yaoshu); crowns seated on a regular square lattice at the page's density
+            crowns on a lattice - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html: a worked wood stood as clumps of stems, not as spaced single trees, the lattice spacings being planted timber's - single crowns on a regular lattice are our fallback, a departure the code keeps until feature 417 T34; crowns seated on a regular square lattice at the page's density
         Research: coppice stocking grid - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown every COMMONS_SPACING_FT on dry ground, none under another"""
         xs, ys = [float(q[0]) for q in poly], [float(q[1]) for q in poly]
         x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
@@ -400,7 +400,7 @@ class GroundCoverMixin:
             a scrub pine's reach - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); `PINE_SPREAD_BS` (4.6 ft) as the pine's crown radius in the sun test
             edge feather - CONVENTION: the scatter thins over 42 bs at the parcel's edge
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
-            a scrub pine's height - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); 9 to 14 ft (`random.uniform(9, 14) * bs`); no page gives a scrub pine's height
+            a scrub pine's height - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: grass with thin low pine - drawn 9 to 14 ft, under 0038's least drawn tree of 10 m, a departure the code keeps until feature 417 T34; 9 to 14 ft (`random.uniform(9, 14) * bs`); no page gives a scrub pine's height
             claimed but undrawn - CONVENTION: a bare render records the ground and draws nothing
             woodland no-build - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a woodland parcel made no-build ground
             no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
@@ -645,7 +645,7 @@ class GroundCoverMixin:
             coppice stocking - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown to COMMONS_SPACING_FT squared, COMMONS_CROWN_R_FT across
             no crown under another - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown centered under one already seated is not drawn
             coppice stops at the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: no woody growth inside a marsh but the belt's alder, so no coppice crown is seated in one
-            crowns and pines clear of the crops - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one
+            crowns and pines clear of the crops - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: the scraggly pines and woodland trees stand back further by their drawn crowns' reach; a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
             woodland stocked to read - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a woodland parcel carries at least `WOODLAND_MIN_CROWNS` (5) crowns, so it reads as a wood
             crowns thin to the wood's edge - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a throw within the feather of the parcel's edge is kept with chance (d / feather) ** 0.6

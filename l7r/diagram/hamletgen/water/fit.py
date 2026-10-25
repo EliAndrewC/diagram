@@ -344,7 +344,7 @@ def head_sluice(plan: SitePlan) -> tuple[Pt, str]:
     Research:
         intake at the field's high head - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the sluice on the fall axis upslope of the field
         head set-back - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 0.36 of the field span upslope of the canvas center
-        intake offset - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); rolled from HEAD_OFFSETS
+        intake offset - GUESS research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake left, center or right at 1:2:1; rolled from HEAD_OFFSETS
     """
     dx, dy = plan.fall
     cx, cy = plan.W / 2.0, plan.H / 2.0

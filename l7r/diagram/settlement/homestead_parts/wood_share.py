@@ -72,7 +72,7 @@ BAR_MARGIN_PX = 0.5
 #: record's "the windward grove at the back" (research/contents.json#homesteads, the yashikirin's north and west): the figures are
 #: the placer's, not the record's.
 FOCUS_DEPTH = 0.7
-"""Research: wood behind its house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: the deep stands stood windward, northwest by default, the house's south left open (0028); the 0.7 is ours; centered 0.7 of the reach behind the house's center, the placer's figure"""
+"""Research: wood behind its house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: the deep stands stood windward, northwest by default, the house's south left open (0028) - `back` is the house frame's rear whatever the map's wind, a departure the code keeps until feature 417 T33; the 0.7 is ours; centered 0.7 of the reach behind the house's center, the placer's figure"""
 LATERAL_WEIGHT = 2.0
 """Research: flanks after the back - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a foot aside costs twice a foot deeper"""
 

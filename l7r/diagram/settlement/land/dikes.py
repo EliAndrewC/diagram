@@ -411,9 +411,9 @@ class DikeMixin:
             dike-top village - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: houses in single file on the crest
             dike-top house size - research/questions/0029-farmhouses-minka.drawing.html: 46 x 28 ft
             spacing along the crest - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); neighbors at least 1.15 house widths apart
-            house platform - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the house plus 14 by 10 ft of widened crest
-            off the sluice notch - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); no house within 34 px of a gap
-            no homestead bundle - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); bare houses, the gardens down on the parcels"""
+            house platform - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the house and about 14 ft by 10 ft more; the house plus 14 by 10 ft of widened crest
+            off the sluice notch - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: about 34 ft on a hamlet map; no house within 34 px of a gap
+            no homestead bundle - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: drawing none on the crest; bare houses, the gardens down on the parcels"""
         from l7r.diagram.waterfields import BUND
 
         dk = self.M["dikes"][dike]

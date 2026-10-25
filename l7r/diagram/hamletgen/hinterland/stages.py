@@ -110,7 +110,7 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
         scrub past the fields - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open scrub the dominant cover outside the crops and woods
         no scrub under a worked wood - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: brush and pine stop at every wood's line
         bare ground as rough grazing - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: rough grazing on dry marginal ground
-        share clothed as grazing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); holes in the view filled
+        share clothed as grazing - GUESS research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the dry margins are filled as one continuous band; holes in the view filled
         grass ground form - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the grass hill (open scrub) or the
             floodplain (open meadow, `grass_ground`) from the land; on a grass-hill map, now and then, a small grass hill above one paddy (`paddy_grass`)
         stage order - NONE

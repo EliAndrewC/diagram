@@ -435,7 +435,7 @@ def round_the_gable(geom: Any, door: Pt, half: float) -> Pt:
     gable, parallel to the house's front-to-yard axis, past the back wall by a corridor's half-width and a foot - so the
     leg beside the house clears it and the turn stands behind its corner, not behind its wall.
 
-    Research: flank path round the gable - research/questions/0081-village-lanes.drawing.html: a lane's tread keeps 3 ft off a farmhouse wall; the half-width and a foot is ours; carried along the gable past the back wall by a corridor's half-width and a foot
+    Research: flank path round the gable - research/questions/0081-village-lanes.drawing.html: a lane's tread keeps 3 ft off a farmhouse wall - the tread's edge is carried 1 ft past the back wall, a departure the code keeps until feature 417 T33; carried along the gable past the back wall by a corridor's half-width and a foot
     """
     boxes = geom.get("boxes") or {}
     yard = boxes.get("yard") or geom.get("yard")
