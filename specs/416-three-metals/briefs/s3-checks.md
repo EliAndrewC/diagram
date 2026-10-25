@@ -9,3 +9,4 @@
 - translation-check 0296: r1 1 LOOSE; r2 2 LOOSE (canal transport, as a rule); r3 55 FAITHFUL.
 - intro-check 0295, 0296: INTRO-OK both.
 STILL OWED: record-format:0295 and translation-check:0295#iwahashi-2010-zenmonme-tsugaru, #saito-1993-bakumatsu-wages-2 (re-owed by round 3's two source-reader wording EDITs: 'breakdown of the money held', 'not so large in amount'; a 4th round goes to the arbiter); feature 412's units untouched; filed for 414: 0293's 1831 ticket-salt date; not checked here: impl-drift/claims for 0295-0296 (none named owed).
+- Correction and close: l7r-money's registry link is not open - feature 307 rules that the GM's campaign-notes keys keep their registry link (declined, as ruled). make claims-owed: no claim owed; make impl-check F=416: nothing missing; 0295 and 0296 under the size cap.
