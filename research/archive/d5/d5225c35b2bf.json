@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:52:37+00:00",
+ "final_url": "https://www.walmart.com/blocked?url=L3NlYXJjaD9xPWdyZWF0K3ZhbHVlK3NhcmRpbmVz&uuid=b08abc91-d083-11f1-8400-87f4251ad3e8&vid=&g=b",
+ "first": "d5/d5225c35b2bf/20261025T145236Z",
+ "gm_copies": [],
+ "keys": [
+  "walmart-great-value-sardines"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "d5/d5225c35b2bf/20261025T145236Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "66c4a96d5980f27bcc6ab1a000ee313d3e7d56ca01f4db7d7f803f20018098e4",
+ "url": "https://www.walmart.com/search?q=great+value+sardines"
+}

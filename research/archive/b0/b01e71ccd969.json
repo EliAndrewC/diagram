@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:53:50+00:00",
+ "final_url": "https://www.walmart.com/blocked?url=L3NlYXJjaD9xPWNoYXJjb2FsK2JyaXF1ZXRz&uuid=dc5e0583-d083-11f1-bf4f-026e6ce8e2a2&vid=&g=b",
+ "first": "b0/b01e71ccd969/20261025T145349Z",
+ "gm_copies": [],
+ "keys": [
+  "walmart-charcoal-briquets"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "b0/b01e71ccd969/20261025T145349Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "66c4a96d5980f27bcc6ab1a000ee313d3e7d56ca01f4db7d7f803f20018098e4",
+ "url": "https://www.walmart.com/search?q=charcoal+briquets"
+}

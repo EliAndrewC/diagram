@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:53:36+00:00",
+ "final_url": "https://www.walmart.com/blocked?url=L3NlYXJjaD9xPWlvZGl6ZWQrc2FsdCtwaWNrbGluZytzYWx0&uuid=d3a464a2-d083-11f1-b206-c699e42e27fd&vid=&g=b",
+ "first": "ff/ffdc57040a9f/20261025T145334Z",
+ "gm_copies": [],
+ "keys": [
+  "walmart-iodized-pickling-salt"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "ff/ffdc57040a9f/20261025T145334Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "66c4a96d5980f27bcc6ab1a000ee313d3e7d56ca01f4db7d7f803f20018098e4",
+ "url": "https://www.walmart.com/search?q=iodized+salt+pickling+salt"
+}
