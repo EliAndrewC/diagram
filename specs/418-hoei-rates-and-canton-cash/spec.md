@@ -65,3 +65,10 @@ fineness passed at once. And `canton-1835` borrows its cash rate from rural Beij
   yearly rates in several silver coinages for 1706-1718 (seen 2026-10-24); its own sources, and any other readable rate table,
   are searched before it is relied on alone.
 - One write session and one check session (under four questions, under ten new keys).
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-24): CHANGES REQUIRED - name the *Chinese Repository* (Scenario 2, SC-002); carry "or kanmon
+  a ryo" (Scenario 1, Acceptance 1). Applied, 0ad9a3bd5.
+- round 2 (verify): CHANGES REQUIRED - FR-002 and SC-002 to carry Acceptance 1's kanmon-a-ryo exception. Applied, 472e9ad34.
+- round 3 (verify): FAITHFUL.
