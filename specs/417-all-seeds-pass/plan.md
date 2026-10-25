@@ -353,7 +353,7 @@ The trigger: the landing cohort (cohort@20261025T234214Z) refused seeds 10, 25 a
 
 <!-- plan-archive: T40 to T40 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 
-### T41 (T31's second part, D35): the four map-moving steps and the last resort's four re-asks deleted
+### T41 (T31's second part, D35): the four map-moving steps and the last resort's three needless re-asks deleted
 
 - **Approach**: T31's section, split so its second landing ticks only what it finished. Measured 2026-10-25 (method: the landing
   cohort, `make cohort-landing JOBS=3`, record `dev/cohort-log/20261025T234826Z-diagram-backlog-3803029.json`, and `make map` on
