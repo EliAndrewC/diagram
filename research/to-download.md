@@ -4161,3 +4161,15 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [a Google search for the book](https://www.google.com/search?q=%E4%B8%89%E4%BA%95%E6%96%87%E5%BA%AB+%E8%BF%91%E4%B8%96%E5%BE%8C%E6%9C%9F%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E4%B8%BB%E8%A6%81%E7%89%A9%E4%BE%A1%E3%81%AE%E5%8B%95%E6%85%8B)
 - **Rests on it:** research/questions/0286-what-did-a-years-necessities-cost-in-japan-era-by-era.html (diagram feature 412; asked for by gm-assistant on EliAndrewC/diagram#13) - the Kyoto salt after 1790 marked doubtful, and the charcoal by weight (also 0279, 0273).
 - Blocked by: in print only; no open copy was found (2026-10-24).
+
+### 327. [money] James L. McClain and Wakita Osamu, eds., *Osaka: The Merchants' Capital of Early Modern Japan* (Cornell University Press, 1999), its chapters on Osaka's townspeople and rented housing
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[the Cornell University Press page for the book](https://www.cornellpress.cornell.edu/book/9780801436307/osaka/)**
+- An Osaka rent of a back-tenement room, or of a rented house by its size, for the mid-1700s or the nearest years; and what an Osaka tenant paid besides the rent. The GM owns the book in print.
+- Fallback: [a Google search for the book](https://www.google.com/search?q=McClain+Wakita+%22Osaka%3A+The+Merchants%27+Capital+of+Early+Modern+Japan%22)
+- **Rests on it:** research/questions/0265-what-did-it-cost-to-rent-a-room-or-a-house.html (diagram feature 420; asked for by gm-assistant on EliAndrewC/diagram#17, Q3) - Osaka rents found only from 1814 (Tani 1989), none for 1745-1754.
+- Blocked by: in print only; no open copy was found (2026-10-25).
