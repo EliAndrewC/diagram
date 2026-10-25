@@ -29,22 +29,10 @@ from dataclasses import dataclass
 
 QUESTIONS = os.path.join("research", "questions")
 TABLE = os.path.join("research", "assets", "money-conversions.json")
-#: The era ids awaiting their row (FR-008): an amount may be marked with one now, so it counts as built here, carrying every coin
-#: of COINS_ALSO until its row names its units (feature 412: the marks pass ran before gm-assistant's rows were vendored).
-AWAITING = os.path.join("research", "assets", "money-eras-awaiting.json")
-#: The awaiting eras' places whose money is these coins; any other place's era carries none of them until its row is vendored.
-JAPAN_PLACES = frozenset({"Edo", "Kyoto", "Osaka"})
 BACKFILL = os.path.join("specs", "413-money-tooltip-on-the-record", "backfill.md")
 #: The period's other Japanese coin words, listed whether or not a built era's row has a unit for them (the plan review of
-#: 2026-10-24: an amount in a coin its row lacks, a gold bu at Kyoto 1745-54, is passed over with that reason, never unseen).
+#: 2026-10-24: an amount in a coin no row names, a koban, is passed over with that reason, never unseen).
 COINS_ALSO = ("mon", "monme", "kanmon", "ryo", "bu", "shu", "koban", "yen", "sen", "rin")
-#: The Chinese awaiting eras' coins, as gm-assistant confirmed them on diagram#13 (issuecomment-6390801447): `tael` (silver),
-#: `cash` (copper; a string marked as its count) and `dollar` (the foreign silver dollar, cents its hundredths).
-CHINA_COINS = ("tael", "cash", "dollar")
-#: The places whose awaiting era carries them; the dollar only where it circulated in an era's years (Canton's 1830s trade,
-#: Beijing's 1900s), never the inland Lower Yangzi eras of the 1680s and 1750s.
-CHINA_PLACES = frozenset({"Beijing", "Songjiang", "Suzhou", "Canton"})
-DOLLAR_PLACES = frozenset({"Canton", "Beijing"})
 #: Each Chinese coin word the scanner finds, and the coin it is marked in: mace and candareens are tenths and hundredths of a
 #: tael, wen, strings, guan and tiao count cash, cents are hundredths of a dollar. A Japanese word is its own coin.
 CHINA_WORDS = {
@@ -53,6 +41,8 @@ CHINA_WORDS = {
     "dollar": "dollar", "dollars": "dollar", "cent": "dollar", "cents": "dollar",
 }
 
+_MACRON = re.compile(r"\b(?:ryō|shū)(?![\w])")
+_UNMACRON = str.maketrans("ōū", "ou")
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _BLOCK = re.compile(r"<(p|li|blockquote|td|dd|h[1-4])\b([^>]*)>(.*?)(?:</\1>|(?=<(?:p|li|blockquote|td|dd|h[1-4])\b)|\Z)", re.S)
 _HEADING = re.compile(r"<h[12][^>]*>(.*?)</h[12]>", re.S)
@@ -76,7 +66,8 @@ class Amount:
 
 
 def _plain(markup: str) -> str:
-    return re.sub(r"\s+", " ", html.unescape(_TAG.sub("", markup))).strip()
+    # a coin written with its macron is the same coin: 0251's notes write "ryō", and a "2 shū" is a shu (feature 414)
+    return _MACRON.sub(lambda m: m.group(0).translate(_UNMACRON), re.sub(r"\s+", " ", html.unescape(_TAG.sub("", markup))).strip())
 
 
 def _read(path: str) -> dict:
@@ -89,20 +80,10 @@ def _read(path: str) -> dict:
 
 
 def _eras(root: str) -> dict[str, tuple[int, int, frozenset[str]]]:
-    """{era id: (first year, last year, its coins)} - the vendored table's eras, then the awaiting ones it does not have yet."""
-    eras = dict(_read(os.path.join(root, TABLE)).get("eras", {}))
-    for era_id, row in _read(os.path.join(root, AWAITING)).items():
-        if era_id not in eras and isinstance(row, dict):
-            # a Chinese place's era carries the Chinese coins, never the Japanese: given them, a Japanese 1600 mon read 0 years
-            # from beijing-1615, and record/money.py takes an awaiting era's coin on trust, so a wrong mark would build
-            place = row.get("place")
-            if place in JAPAN_PLACES:
-                coins: tuple[str, ...] = COINS_ALSO
-            elif place in CHINA_PLACES:
-                coins = tuple(c for c in CHINA_COINS if c != "dollar" or place in DOLLAR_PLACES)
-            else:
-                coins = ()
-            eras[era_id] = {"years": row.get("years", ""), "units": dict.fromkeys(coins)}
+    """{era id: (first year, last year, its coins)} - the vendored table's eras, each carrying the units its row names."""
+    # the awaiting eras were read here too, each given its place's coins, until every era's row was vendored (feature 414's
+    # bu and shu pass, 2026-10-24: money-eras-awaiting.json is empty); an era listed there again counts as no era here
+    eras = _read(os.path.join(root, TABLE)).get("eras", {})
     out = {}
     for era_id, row in eras.items():
         ys = [int(y) for y in _YEAR.findall(row.get("years", ""))]
