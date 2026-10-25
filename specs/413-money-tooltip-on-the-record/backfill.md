@@ -161,6 +161,7 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost.notes | 60 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
 - 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost.notes | 800 cash | a rate between the coins (800 cash to 1 tael), not a sum paid
 - 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost.notes | 1 tael | a rate between the coins (800 cash to 1 tael), not a sum paid
+- 0281-how-far-did-goods-travel-before-carriage-priced-them-out | 90 cash | the Tang canal of 764, outside every Chinese era's years
 
 ## Fragments judged whole
 
@@ -245,3 +246,5 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0289-what-was-a-tael-a-string-of-cash-and-a-chinese-dollar-worth-in-silver.notes | * | rates between the coins and weights quoted from the sources, not sums paid; its few prices are dated outside every Chinese era's years (Songjiang rice of 1632, Changlu salt "under Kangxi", a span of 1662-1722, and 1889's 500 cash, an example of counting)
 - 0263-what-did-arrows-cost | * | the Ming and early Qing arrow prices and wages it holds unmarked are dated outside every Chinese era's years (1646, 1650, 1727) or carry no year (the late Ming fiscal book, Tan Lun's estimate, the Ming musket costing)
 - 0263-what-did-arrows-cost.notes | * | as its question: dated outside every Chinese era's years (1646, 1650, 1727) or with no year (the late Ming fiscal book, Tan Lun's estimate, the Ming musket costing, the "old rule" wages before the 1736 list)
+- 0282-how-did-tea-travel-and-what-did-it-cost-at-the-end-of-the-road | * | its Chinese amounts left unmarked are dated outside every Chinese era's years (Rockhill's Sichuan of 1889, the rural Beijing wage of 1880, Parkes's Kalgan caravans of 1854) or carry no year (the Tsaidam price, the Ming license fees, the Ming costing's wages, the Qing farm standard of "the 1600s"), or are a rate between the coins (0.32 tael to the rupee)
+- 0282-how-did-tea-travel-and-what-did-it-cost-at-the-end-of-the-road.notes | * | as its question: Parkes's caravan rates and chests of 1854 and Rockhill's prices of 1889, outside every Chinese era's years, and the Ming tea license fees, with no year
