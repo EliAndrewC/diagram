@@ -1,4 +1,4 @@
-"""The overlap MATRIX (was: shared gate helpers, overlap policy): matrix_violations, check_ring_road_clear, matrix_extents, GridIndex, forest_reveal_x, torii_halfbox, FOREST_REVEAL_FT, CANOPY_STRUCT_KEYS, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py).
+"""The overlap MATRIX (was: shared gate helpers, overlap policy): matrix_violations, check_ring_road_clear, matrix_extents, GridIndex, torii_halfbox, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py).
 
 Research: matrix plumbing - NONE: extraction, indexing and pair tests over the taxonomy
 """
@@ -123,55 +123,9 @@ class GridIndex:
         return list(seen.values())
 
 
-def forest_reveal_x(forest: Poly, edge: Any, reveal: float, w: float) -> list[float]:
-    """Mirror of settlement.forest_reveal_x (keep in sync): the x-values a canvas-filling FOREST
-    contributes to the frame. The wood is drawn to the canvas edge, but the crop reveals only the
-    tree line plus `reveal` px of canopy behind it - deeper in it is identical crowns, and holding
-    the frame open for them is wasted image. This is the crop rule, so crop_hugs_content (which
-    gates how tight the crop is) has to measure by exactly the same rule.
+# (the forest reveal and the roofed-structure keys are the engine's own - `settlement._geom.forest_reveal_x`, `Settlement.FOREST_REVEAL_FT`,
+# `Settlement._CANOPY_STRUCT_KEYS`; the hand-kept mirrors here, read by nothing and already 7 keys behind, went with feature 417 T18)
 
-    Research: forest crop - CONVENTION: the frame shows the tree line and a strip of canopy behind it
-    """
-    if not edge:
-        return [min(max(p[0], 0), w) for p in forest]
-    ex = [min(max(p[0], 0), w) for p in edge]
-    return ex + [min(x + reveal, w) for x in ex]
-
-
-FOREST_REVEAL_FT = 110.0  # mirrors settlement.FOREST_REVEAL_FT - how deep the crop reveals a canvas-filling wood
-"""Research: forest reveal - CONVENTION: 110 ft of canopy behind the tree line"""
-
-# Mirrors settlement._CANOPY_STRUCT_KEYS (keep in sync): every ROOFED structure a tree may not be drawn on.
-CANOPY_STRUCT_KEYS = (
-    "houses",
-    "farm_fixtures",
-    "buildings",
-    "storehouses",
-    "flophouses",
-    "byres",
-    "farm_sheds",
-    "retirement_houses",
-    "religious",
-    "shrines",
-    "manors",
-    "ministries",
-    "inspection_stations",
-    "merchant_estates",
-    "fire_towers",
-    "drum_towers",
-    "breweries",
-    "pawnshops",
-    "bathhouses",
-    "oil_presses",
-    "kilns",
-    "farriers",
-    "mausoleums",
-    "gate_structs",
-    "wall_towers",
-    "martial_halls",
-    "dojos",
-)
-"""Research: no crown on a roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a clump stands against a building, never on it"""
 
 DOJO_QUARTER_PX = 260.0
 """Research: dojo near the samurai quarter - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: within 260 px, about 780 ft at the city rung"""

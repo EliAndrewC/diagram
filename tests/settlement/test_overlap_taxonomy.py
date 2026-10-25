@@ -15,7 +15,6 @@ import pytest
 from l7r.diagram.overlap.matrix import (
     GridIndex,
     edge_dist,
-    forest_reveal_x,
     matrix_extents,
     matrix_violations,
     poly_gap,
@@ -37,6 +36,7 @@ from l7r.diagram.overlap.taxonomy import (
     seg_intersect,
     segments_cross,
 )
+from l7r.diagram.settlement._geom import forest_reveal_x  # the engine's own (feature 417 T18: the matrix's mirror is gone)
 
 
 def test_two_SOLID_features_may_never_overlap_and_the_answer_is_None() -> None:
@@ -410,3 +410,12 @@ def test_a_named_key_pair_is_allowed_by_its_own_reason() -> None:
     from l7r.diagram.overlap.taxonomy import matrix_policy
 
     assert "SPRINGS FROM the quay face" in (matrix_policy("quays", "jetties") or "")
+
+
+def test_the_matrix_keeps_no_mirror_of_an_engine_rule() -> None:
+    """Feature 417 T18 (D18; FR-006): the matrix's hand-kept copies of the forest reveal and the roofed-structure keys were read
+    by nothing and had drifted (27 keys against the engine's 34); the engine's own are the only ones."""
+    from l7r.diagram.overlap import matrix
+
+    for name in ("forest_reveal_x", "FOREST_REVEAL_FT", "CANOPY_STRUCT_KEYS"):
+        assert not hasattr(matrix, name), f"matrix.{name} is a mirror of the engine's own"
