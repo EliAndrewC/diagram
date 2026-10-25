@@ -529,3 +529,34 @@ Owed by cohort@20261025T121445Z (18 landing seeds newly failing `track_ends_off_
 
 <!-- plan-archive: T28 to T28 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T29 to T29 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-25 -->
+### T40 Approach (checklist part A)
+
+1. **The goal, in the world.** The settle's rounds no longer run the six steps that repair nothing a placer leaves wrong, and
+   no code they alone used survives them.
+2. **The constraints.** D35, D23; T31's decision preflight (CLEAR); the fixed and pinned seeds; the pool maps unmoved.
+3. **Where each comes from.** G: the GM 2026-10-25 ("switch off the 16 repair steps"). O: R8's measurement and `make dead-closure`.
+4. **Do they describe the world here?** Measured: each step off alone and the six together (R8, observed 2026-10-25).
+5. **The order.** T31's first part, before its conversions; the four `last_resort` still asks stay for T31's landing.
+6. **The exits.** The landing cohort and the pool gate green: landed. Red: the deletion set down with its seeds (D23).
+7. **The search smell.** None: the six are R8's, the nine dead names `make dead-closure`'s.
+8. **The budget.** One landing.
+9. **Done, measured.** The six out of `STEPS`, the nine names and `weld.py` gone with their tests, `make land` green.
+10. **Before moving a constant.** n/a: no constant moves; `WELD_PX` goes with its only user.
+11. **Before fitting things into room.** n/a.
+
+### T40 (T31's first part, D35): the six settle steps measured needless deleted
+
+- **Approach**: T31's own section, split so its first landing ticks only what it finished (T31's decision preflight ruled CLEAR,
+  2026-10-25): the six steps R8 measured NEEDLESS - `settle_husks` (first and last), `settle_street_ends`, `settle_shadows`,
+  `settle_joins`, `settle_needles`, `prune_the_tree` - dropped from `settle/stage.py` `STEPS`, and the nine names that leaves
+  dead (`make dead-closure`: `settle_shadows`, `drop_stranding`, `settle_needles`, `keeps_the_network`, `left_to_the_tree`,
+  `strands_only_ordinary`, `_on_the_connector`, `weld_corner`, `WELD_PX` with `weld.py`) deleted with their tests. The four
+  still asked by `last_resort` (`settle_husks`, `settle_street_ends`, `settle_joins`, `prune_the_tree`) stay defined until T31 takes
+  them out of it: `last_resort` re-asks the settle's steps once its rounds run out (FR-005), R8 measured only the `STEPS` positions,
+  so its calls are T31's - each re-asked step leaves `last_resort` with that step's own conversion or deletion, and these four,
+  needless in the rounds, are cut from `last_resort` and deleted in T31's landing, measured there as R8 measured the rounds.
+  T31 keeps the four whose removal moved a pool map - needed under D35 and owed its conversion - the six needed ones and `last_resort`'s re-asked steps. R8 holds both of D35's runs: each
+  step off alone, and the six off together (observed 2026-10-25, research.md R8: 54 of 54 - the 48 fixed seeds and the six pinned rows of `make cohort-landing` - and no pool manifest moved).
+  Rendering: none.
+
