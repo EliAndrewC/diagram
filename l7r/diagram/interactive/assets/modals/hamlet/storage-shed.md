@@ -28,4 +28,4 @@ Name: storage shed
 Covers: `houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)
 Sources: sekkei-sya-sayama-kura, kotobank-dozo, bunka-sado-tsuchiya-dozo, dozo-jawiki, boso-no-mura-kazusa, oamishirasato-choshi-kaoku, minami-alps-nishikawa-dozo, tsuchiya-makabe-dozo
 Entry: research/questions/0040-farm-storehouses-kura.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html, research/questions/0117-doorways-and-doors-to.html
-Drawing: research/questions/0040-farm-storehouses-kura.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html
+Drawing: research/questions/0040-farm-storehouses-kura.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html
