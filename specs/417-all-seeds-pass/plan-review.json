@@ -1,0 +1,291 @@
+{
+ "feature": "417-all-seeds-pass",
+ "blocks": {
+  "preamble": {
+   "sha256": "f8a3703240b16c9a88061391151d10ed16c3c6006239aab55bb9fee18941825c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "e8bed56e01ba75152d76e4ed8af1d6f37e05d9cef29cd43684ee6fd4a9c4c4ad",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "a0c9a932702d5ddfc492e3c68bc366656c027f8e9acf12c258b29b8538b980b3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "fef7d6828075f8164a1bef5728edbde66dca27076e8e1d97f7511a14bbeefc75",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "98f5e1b8d0349d5a56c61929298170de68e625dee965b8439c60199251c2355a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "62bb5b1e40aa11e069ad799472ca0646eedbc7c0b36c41550fcbd9918b374de3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## Order": {
+   "sha256": "00b3e81f3b9ecce6cb1b22ea2b93c04e5b85f2717d21cddc8092289bb144c4a1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## Decisions",
+    "## Order",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Fresh block of 500 after each engine landing (background), 1,000 at T01 and close; SC-001's N = 500; the landing's own FR-009 fresh block stays the cohort gate's 48.",
+     "class": "within",
+     "why": "SC-001 leaves N to the plan at least 500, and 500 meets that. The FR-009 block being 48 is settled by the spec: FR-009's parenthetical names feature 415 D5's fresh block, which is FRESH=48, and only moves it before the push. Nothing in the request names a size. This should not be argued again."
+    },
+    {
+     "id": "D2",
+     "summary": "make fresh-tally reads dev/cohort-log and prints the pooled fresh rate by form and cause.",
+     "class": "within",
+     "why": "This is a measuring instrument for FR-001 and SC-001. It changes no behavior."
+    },
+    {
+     "id": "D3",
+     "summary": "The inventory's discovery method, with each entry sorted into pattern 1 (asked before placing, kept), 2 (placed then repaired) or 3 (asked only of the finished map), plus its share of R1's failures.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 requires each entry to state which of the rule's FOUR points it breaks. Those points are: asked of a candidate before placing; nothing placed and then repaired; a finished-map check only as a backstop (by the GM's amendment, in the cohort and tests only); and where no candidate is admitted, more room. The three patterns have no slot for point 4. A placer that drops, relaxes or refuses where the remedy is room (last_resort.py dropping ordinary lanes or raising WebRefused, SiteRefused, OverlapRefused as a backstop at record time) is not labeled as a point-4 breach. A rule coded twice is found ('every pair of functions judging one rule') but fits none of the patterns, and neither does a finished-map check run mid-map. XVI says the inventory decides the engine tasks, so an entry with no label is work with no task. That defeats FR-007, FR-006 and SC-003, and the GM's 'where else is this part of our algorithm?'. Nothing makes it necessary and nothing in the GM's words implies it. Fix: the patterns can stay as a grouping, but each entry must record which of the four points it breaks (or that it is coded twice). The discovery list must also name the sites where a placer that finds no admitted candidate drops, relaxes or refuses instead of being given room."
+    },
+    {
+     "id": "D4",
+     "summary": "make task-start refuses a task of a feature marked ON HOLD until feature NNN closes; HOLD_OK=\"<reason>\" is a recorded escape.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The guard enforces FR-010, which is in scope. The escape is a carve-out of FR-010, which is absolute for claims tasks that change the engine. One use of the escape is implied by FR-010's own words 'that changes the engine': starting a NON-engine task of a held feature, which the guard over-blocks because it refuses every task. But D4 does not scope the escape, so any reason unlocks any task, including the engine tasks the GM put on hold ('put our claims work on hold ... before we start making adjustments'). Fix, one clause: HOLD_OK admits only a task that does not change the engine; using it on an engine task of a held feature breaks FR-010 and is not an escape."
+    },
+    {
+     "id": "D5",
+     "summary": "Engine tasks ordered by share of R1's failures (lane web, seating room, row/brook/grove rules, the rest), each designed in its Approach first.",
+     "class": "within",
+     "why": "The spec leaves the order open. The order changes nothing about what gets done, because every inventory group still gets a task."
+    },
+    {
+     "id": "D6",
+     "summary": "FR-003's principle text drafted at T03 and sent to the GM; the constitution amended only with the GM's words.",
+     "class": "within",
+     "why": "This is FR-003 as written ('in text the GM approves')."
+    },
+    {
+     "id": "CC-XII",
+     "summary": "A rule that cannot be asked before placing is a research question and goes to the record first.",
+     "class": "within",
+     "why": "As written, this does not exempt the rule from the request's 'anywhere'. It sends the case to research instead of keeping the rule audit-only. If such a rule then STAYS a finished-map-only check or a repair, that is an exception and needs its own MODE 1 ruling against the request."
+    },
+    {
+     "id": "CC-XIII",
+     "summary": "Baseline is T01's 1,000-seed block plus the fixed 48; before SC-001 a rebuild may re-deal maps provided the fresh rate does not rise, each newly failing seed diagnosed.",
+     "class": "within",
+     "why": "FR-009 makes the fresh-seed refusal start only once SC-001 is met, and FR-008 keeps the fixed, pinned and pool seeds passing at every landing, which the plan keeps. The 'rate must not rise' condition is an extra constraint the plan adds, not a relaxation."
+    },
+    {
+     "id": "CC-VI/X/XIV",
+     "summary": "Per-task verification (reference map, make land, fresh 500); overlap through built-once indexes; deleted code deletes its tests; found defects become tasks here.",
+     "class": "within",
+     "why": "These are the project's standing practices, applied to the spec's FRs. They narrow nothing that was asked."
+    },
+    {
+     "id": "Order",
+     "summary": "T01 measure, T02 hold guard, T03 inventory + principle draft, T04+ engine work by D5, T10 FR-009, T11 FR-011/SC-006, T12 close: 1,000 fresh, T106's seat turn re-applied (User Story 2), SC-004 delta, report.",
+     "class": "within",
+     "why": "The guards come after the engine work, as FR-009 and FR-011 require ('once SC-001 is met', 'after SC-001'). T12 re-applies feature 405's T106 seat turn before 417 closes. FR-010 holds 405's engine tasks until then, and the request puts 405's resumption after 417. The block cites the spec's User Story 2, which this bundle does not contain, so I could not check from here whether the spec settles it. I pass it on that citation: as a 417 robustness test it serves 'algorithms are brittle'. If User Story 2 does not say this, it is a narrowing of FR-010 and needs a ruling."
+    },
+    {
+     "id": "Summary/TechContext/Perf",
+     "summary": "Restatement of D1-D6; code map; perf bookends at T04 and T12, speed a flag not a gate.",
+     "class": "within",
+     "why": "These record facts and practice. They make no decision the spec leaves open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Constitution Check",
+    "## Decisions",
+    "## Order",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Fresh block of 500 after each engine landing, 1,000 at T01 and close; SC-001's N is 500; the landing's own fresh block (FR-009) stays the cohort gate's 48.",
+     "class": "within",
+     "why": "SC-001 sets N at least 500 and leaves the number to the plan; 500 is its floor. FR-009 names 'the fresh block', which is feature 415 D5's FRESH=48 (quoted in spec-cited), so 48 is the spec's size, not a plan narrowing of 'all seeds pass'. The 500/1,000 blocks are extra measurement inside 417 serving FR-001 and SC-001."
+    },
+    {
+     "id": "D2",
+     "summary": "make fresh-tally reads dev/cohort-log records and prints the pooled fresh rate by form and cause.",
+     "class": "within",
+     "why": "Tooling for FR-001's measurement, reproducing the spec's gap method; adds no behavior."
+    },
+    {
+     "id": "D3",
+     "summary": "Inventory found by search (STEPS, after-the-web passes, cohort_audit rules and their callers, mid-map callers of the law/row/grove/overlap checks, pairs judging one rule, every refusal/drop site where room is the remedy); each entry records which of the four points it breaks or that its rule is coded twice, with its R1 share; a non-breaking entry is kept with its predicate; every breaking entry becomes a task.",
+     "class": "within",
+     "why": "Covers all four of FR-002's categories and FR-007's room sites; the four points are the rule the GM agreed (point 3 'run in the generator' matches 'keep one finished-map check per rule, in the cohort and the tests only'); every breaking entry being a task closes round 1's finding that classification could leave entries unworked. FR-002 also asks each entry's location ('where it is'); D3's search yields it but does not list it among the recorded fields - T03 must record it. A missing field, not a narrowing."
+    },
+    {
+     "id": "D4",
+     "summary": "make task-start refuses a task of a feature marked ON HOLD until an open feature closes; HOLD_OK admits only a non-engine task (judged by the task's research: line); an engine task of a held feature has no escape.",
+     "class": "within",
+     "why": "FR-010 forbids starting an engine-changing task of a claims feature until 417 closes; D4 now gives that no escape, closing round 1's finding. Holding non-engine tasks by default is stricter than FR-010 and matches the GM's 'put our claims work on hold'. Two premises are not verifiable from the bundle and the implementation must make them hold: the research: line must reliably mark every engine task (a mislabelled engine task would pass HOLD_OK), and the guard reaches only features marked ON HOLD, so 'any other claims feature the session finds' is enforced once found and marked."
+    },
+    {
+     "id": "D5",
+     "summary": "Engine tasks ordered by share of R1's failures: lane web, seating room, row/brook/grove rules into placers, then the rest; each task's design decided in its Approach first.",
+     "class": "within",
+     "why": "The spec leaves order open; the lane web first is what the session proposed and the GM accepted. Ordering narrows nothing - every inventory entry is still worked."
+    },
+    {
+     "id": "D6",
+     "summary": "FR-003's principle text drafted at T03 and the constitution amended only with the GM's words.",
+     "class": "within",
+     "why": "FR-003 verbatim: 'in text the GM approves'."
+    },
+    {
+     "id": "Summary-guards-after-SC001",
+     "summary": "The landing guards (FR-009 fresh block before the push, FR-011 forms against HEAD) go on once a fresh block of 500 passes whole.",
+     "class": "within",
+     "why": "FR-009 'once SC-001 is met'; FR-011 meets 394's deferral by building after SC-001."
+    },
+    {
+     "id": "Perf-bookends",
+     "summary": "make perf at start and end; speed is a flag, never a gate.",
+     "class": "within",
+     "why": "Restates the standing rule (375 amendment 5); narrows nothing in this request."
+    },
+    {
+     "id": "CC-VI",
+     "summary": "Each engine task runs the reference map, make land, and a background fresh block of 500 after its landing.",
+     "class": "within",
+     "why": "Before SC-001 the spec does not gate fresh seeds at landing (FR-009 starts after SC-001); FR-008's fixed/pinned/pool regression gate stays."
+    },
+    {
+     "id": "CC-XII-rule-not-askable",
+     "summary": "Lane-law rules and research claims are not altered, only asked earlier; a rule that cannot be asked before placing is a research question and goes to the record first.",
+     "class": "within",
+     "why": "Within only because D3 makes every breaking entry a task regardless; the clause routes a hard case to research, it does not keep a repair pass. A later plan-delta that uses this clause to keep a place-then-repair pass or a generator-run finished-map check is a narrowing of the GM's 'not something we want anywhere' and is owed its own MODE 1 ruling."
+    },
+    {
+     "id": "CC-XIII-rate-must-not-rise",
+     "summary": "During rebuilds that re-deal maps, the fresh rate must not rise and each newly failing fresh seed is diagnosed in the task's notes; fixed or pinned regressions block a landing.",
+     "class": "within",
+     "why": "Stricter than the spec, which does not gate fresh seeds before SC-001; it addresses the GM's 'making some seeds pass just ends up breaking other seeds' rather than excusing it, and FR-008 is untouched."
+    },
+    {
+     "id": "CC-XIV-found-work",
+     "summary": "A defect found in code a task does not change becomes a task in 417.",
+     "class": "within",
+     "why": "Keeps found work in scope; narrows nothing."
+    },
+    {
+     "id": "Order-task-per-group",
+     "summary": "T01 measure, T02 hold guard, T03 inventory and principle draft, T04 onward one engine task per inventory group, T10 FR-009, T11 FR-011/SC-006, T12 close (1,000 fresh, T106 seat turn, SC-004 delta, report).",
+     "class": "within",
+     "why": "One task per group is granularity, provided every breaking entry of D3 lands in some task, which D3 requires. The fixed T10-T12 numbering leaves six engine slots; plan-delta adds tasks as found, so it is drafting, not a cap on scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## Decisions",
+    "## Order",
+    "## Performance bookends",
+    "## Technical Context"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "TC-target",
+     "summary": "Technical Context: the lane web's size now a labeled one-shot count; the reference map's time stated as the cohort's own 60 s budget; the single-artifact target (Inashiro, then cohort and a fresh block) unchanged",
+     "class": "within",
+     "why": "Descriptive context and figure labeling only; the two-step engine task (reference map, then cohort and fresh block) serves FR-001/SC-001 as judged CLEAR before."
+    },
+    {
+     "id": "Perf-bookends",
+     "summary": "perf bookends at T04 and at the close, the close now 'the last task' instead of T12; speed a flag, never a gate",
+     "class": "within",
+     "why": "Renumbering only; nothing the request or spec asks is narrowed, and speed was never a requirement of the request."
+    },
+    {
+     "id": "D1",
+     "summary": "fresh block of 500 after each engine landing, 1,000 at T01 and the close, SC-001's N = 500, the landing's own block stays 48; timings now labeled (2.8 s a seed, one-shot 2026-10-24)",
+     "class": "within",
+     "why": "Sets N at the spec's floor of 500 (SC-001 'at least 500'); the timing change is a label only. The 48-seed in-landing block is the FR-009 gate; SC-001's N governs the 'all seeds pass' measure, as judged CLEAR in round 2."
+    },
+    {
+     "id": "D2",
+     "summary": "a fresh-seed tally script reading the cohort logs by form and cause",
+     "class": "within",
+     "why": "Unchanged; serves FR-001's measurement."
+    },
+    {
+     "id": "D3",
+     "summary": "the inventory's method, each entry now recording its location (file and function) as well as the point it breaks and its share of failures; every breaking entry becomes a task",
+     "class": "within",
+     "why": "Adding the location widens what each entry carries; it narrows nothing. The inventory answers the GM's 'Where else is this part of our algorithm?' and FR-002."
+    },
+    {
+     "id": "D4",
+     "summary": "the hold enforced by make task-start on features whose status line says ON HOLD until 417 closes; reaches each claims feature once its status says so, each one found later marked when found; HOLD_OK admits only non-engine tasks; no escape for an engine task",
+     "class": "within",
+     "why": "FR-010 holds engine-changing tasks of 405, 372, 384 and any claims feature the session finds; the plan obliges marking each found feature when found, so the status-line mechanism reaches every feature FR-010 names (372 and 384 already marked beside 405). Admitting non-engine tasks is FR-010's own scope ('that changes the engine'), not a carve-out."
+    },
+    {
+     "id": "D5",
+     "summary": "engine tasks ordered by share of R1's failures (lane web, seating room, row/brook/grove rules, the rest), each designed in its Approach first",
+     "class": "within",
+     "why": "Unchanged but for figure labels; the lane web first is what the GM approved ('the lane web first' was proposed and accepted with 'Yes please')."
+    },
+    {
+     "id": "D6",
+     "summary": "FR-003's principle drafted by T03 and amended into the constitution only with the GM's words",
+     "class": "within",
+     "why": "Unchanged; FR-003 requires text the GM approves."
+    },
+    {
+     "id": "Order",
+     "summary": "T01 measure, T02 hold guard, T03 inventory and principle draft, T04 onward engine tasks numbered as the inventory needs, then the two guard tasks (FR-009 fresh block before the push; FR-011/SC-006 every form against HEAD), then the closing task (1,000 seeds, T106's seat turn re-applied, SC-004 delta, report)",
+     "class": "within",
+     "why": "Removing the fixed T10-T12 numbers lets the engine work run as many tasks as the inventory finds; every task the earlier Order carried is still present in the same sequence. FR-009 and FR-011 still follow SC-001's engine work, as FR-009 ('once SC-001 is met') and FR-011 ('building it after SC-001') require."
+    }
+   ]
+  }
+ ]
+}
