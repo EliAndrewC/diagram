@@ -137,7 +137,7 @@ def stage_pond_bank(s: Settlement, plan: SitePlan) -> None:
     Research:
         the two trees in turn - GUESS: 0061 names mulberry and cudrania, not their order; they alternate round the ring
         no two crowns overlap - CONVENTION: a tree kept two crown radii from the last, so each reads as one tree
-        after the houses, ways and wells - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); seated against what stands, before the hinterland's scrub and copse"""
+        after the houses, ways and wells - research/questions/0061-reservoir-ponds-tameike.drawing.html: a bank tree is left out where its crown would fall on a roof or a wellhead, or its trunk on a lane, so the trees are seated against what stands; coming before the hinterland's scrub and copse is ours; seated against what stands, before the hinterland's scrub and copse"""
     form = pond_bank(plan)
     if not form or plan.sink_pond is None:
         return

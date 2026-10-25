@@ -375,7 +375,7 @@ def lay_fixtures(
     wall of its steading, each named - a refusal, never a room walked out into the yard (feature 280 M21, M22).
 
     Research:
-        fixture gap 3.5 ft off every other part and bath room slide 4 ft - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); WALL_GAP_FT (3.5 ft) clears the drawn wall of any part a fixture stands by, WALL_SLIDE_FT (4 ft) the bath room's slide along its wall
+        fixture gap 3.5 ft off every other part and bath room slide 4 ft - DEVIATION research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the gap of about 3.5 ft our maps keep between a house wall and anything built in its yard; the 4 ft slide is ours; WALL_GAP_FT (3.5 ft) clears the drawn wall of any part a fixture stands by, WALL_SLIDE_FT (4 ft) the bath room's slide along its wall
         seating order - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); FIXTURE_ORDER (retirement house, bath, wood shed, privy, manure, coop, shrine, grave, persimmon) is the order the fixtures take seats
         stepped outward - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a fixture with no recorded seat free is offered the same seats a pace further out
         the privy's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: never stepped past 48 ft from its house; a farmstead with no seat within it refuses its privy by name
@@ -680,7 +680,7 @@ def _seats(
             behind or beside the house where there is no privy
         manure heap fallback spots - GUESS research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: beside the privy at 1.1 and 1.9
             of its width, then 10 ft further out; with no privy, at 0.3 of the house's width and depth
-        retirement house - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25) on the back wall - a retirement house stood on its main house's flank (Yokota 1820; Wang and Ochiai, Meiji; pass P1); the side roll is ours; off the back wall or a flank, the side rolled
+        retirement house - research/questions/0047-farm-privies-and-their-night-soil-benjo.html: storehouses and retirement houses stood to the southwest and west of the house (Wang and Ochiai, Meiji) - the side is rolled evenly over the back wall and both flanks, a departure the code keeps until feature 417 T33; off the back wall or a flank, the side rolled
         coop seats - research/questions/0045-chickens-and-chicken-coops.drawing.html: the east flank, the back wall or the
             west flank, rolled
         wood shed seats - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: off the back wall and

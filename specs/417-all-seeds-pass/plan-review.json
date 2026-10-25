@@ -74,10 +74,10 @@
    "declared": "round-arbiter"
   },
   "### Decisions (the work's own shape, 2026-10-25T11:05Z)": {
-   "sha256": "ef221f2a53ef4dc6baf0fb1ee0fc0303e8da9ff93d0a47bdf75bdb9e28e2e304",
-   "verdict": "CLEAR",
+   "sha256": "ed85a0ce334fc65d9e72ed40caa653dbb2f4be48f7382983c04cb62f477eaf7c",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-25",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T28 Approach (checklist part A)": {
    "sha256": "36c710cd17ebe34222ca1c0697f149d6093b32914bc83c8c607026b83ce9e9f1",
@@ -102,6 +102,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "round-arbiter"
+  },
+  "### T36 Approach (checklist part A)": {
+   "sha256": "50bceca134f1865f7c97b28a26a0946f2c1475053264596b95a78a2ccfb0904e",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1903,6 +1909,55 @@
      "id": "round:spec-fidelity|plan:417-all-seeds-pass#T29@3",
      "class": "within",
      "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### Decisions (the work's own shape, 2026-10-25T11:05Z)",
+    "### T36 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D36",
+     "summary": "T29 split at its landing; the 479 other UNRESEARCHED claims to T36 before T31; departures cited and landed DRIFTED via the arbiter; pass E split into mechanics (GUESS) and shape (pass E2).",
+     "class": "within",
+     "why": "Text unchanged from the version judged CLEAR (diffed against earlier.md). Carried forward."
+    },
+    {
+     "id": "D37-a",
+     "summary": "T36 relabels the claims of passes P1-P7 and puts the 8 claims no pass looked into to a further pass, P8.",
+     "class": "within",
+     "why": "The GM: 'please actually perform research for any of those questions that we don't currently have answers for'; D32 makes the other UNRESEARCHED claims T29's (now T36's) before T31's deletion. Figure note: '476' and '8' carry no date+method or m: key, only 'R9 counts them', and 476+8=484 (or 468+8 if 476 includes the 8) does not match D36's measured remainder of 479. Record the count with its method and reconcile it with 479."
+    },
+    {
+     "id": "D37-b",
+     "summary": "Numbers in settle code that T31 deletes are given no claim.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's stated purpose, 'the documentation of which constants are arbitrary so that future implementation passes know that they can tweak them': a number in code T31 deletes has no future pass to tell. This covers only numbers that T31 actually deletes."
+    },
+    {
+     "id": "D37-c",
+     "summary": "The unstated numbers in code that survives T31 (most of the 1,809) get their claims in a new task, T38, AFTER T31, with only the make tunables INLINE=1 listing marking them meanwhile.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM ordered the audit, 'the documentation of which constants are arbitrary', and the research ahead of the deletion: 'And then after all of that, you should switch off the 16 repair steps'. Accepted D31 (ii) carries that order ('the 247 units' first, then the rest, before T31's deletion') and already had the listing in view when it still required claims before T31. D37's reasons are cost ('many claims rounds, which would hold T31 ... for hours'; it priced 'the claims before T31' and declined it because it 'holds the deletion') and efficiency, and MODE 1 excludes both. Doing it before T31 is not physically impossible, and it would not defeat the request's purpose. D37 relies on D31 (ii)'s 'what T29 cannot reach is listed by file', but that clause covers numbers T29 is unable to reach, and D37 states 'Chosen by the session'. A deliberate deferral of the whole set is not 'cannot reach'. The listing marks every unstated number as a knob by default, so a number that research does back would also be shown as tweakable. That is the opposite of the GM's split between numbers looked into and numbers not looked into. T38 also has no bound putting it before the seed fixing, which is when the GM said the marks matter ('as we try to fix things'). Remedy: keep the survivors' claims before T31, as D31 (ii) says, or take the deferral to the GM."
+    },
+    {
+     "id": "T36-A6-source",
+     "summary": "Exit 'A source no page records yet: GUESS naming the source and, where it departs, its fixing task.'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The grammar defines GUESS as 'searched, silent, a value of our own' (D31). A claim that a source answers is not silent. Labeling it GUESS erases the distinction the GM asked for, between what was researched and found nothing and what has a basis. make tunables would then list a sourced number as a free knob. Accepted D32 already gives the route: 'A claim a pass answers is cited when the page states it (its page edit queued to a page session under the record's rules)'. Where the source departs from the code, D36 rules 'never by keeping a label that hides the departure', and a GUESS label hides a departure that cited-DRIFTED would show. Remedy: record the source as a page (queue the page edit, as D32 says), then cite it, landing DRIFTED where the code departs. Nothing in the bundle shows that citing is impossible."
+    },
+    {
+     "id": "T36-A-rest",
+     "summary": "T36 approach otherwise: goal (every claim says truthfully what research found); order after T29, before T31; exits for silent (bare GUESS naming the pass), convention (cited), page answers with the code departing (cited, DRIFTED, unit in T33-T35); not looked into goes to P8; no label changed to pass a round; a claim ruled wrong twice keeps its research label with its description reverted; budget; done = claims gate green, R9 counts.",
+     "class": "within",
+     "why": "Each traces to D32 and D36 (both CLEAR) and to the GM's 'actually perform research' and 'then' ordering. No value moves."
     }
    ]
   }

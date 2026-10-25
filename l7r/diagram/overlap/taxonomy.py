@@ -669,7 +669,7 @@ Research:
     castle moat bridge - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: a deck over the castle's own moat to its gate
     castle bridge at its gate tower - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: the moat deck lands at the gate it leads to
     merchant estate court - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a walled court round its house
-    flower bed against the town wall - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.html: a road ran along the wall's inner foot - a flower bed is allowed against it, a departure the code keeps until feature 417 T35; a bed laid flush inside the rampart
+    flower bed against the town wall - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25) on a page - a patrol road ran along a city wall's inner foot (the Ming 西顺城街 and Tang 东顺城街, modern accounts, pass P7), against a bed flush with the rampart (feature 417 T35); a bed laid flush inside the rampart
 """
 
 # A record naming its PARENT may overlap that parent and nothing else - strictly stronger than the
