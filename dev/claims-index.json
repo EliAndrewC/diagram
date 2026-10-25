@@ -1579,16 +1579,17 @@
   "code": "733bb8e04f743adf",
   "core": "69ec89f6af1983bd",
   "date": "2026-10-25",
-  "note": "the cell in the office court matches 0096 (\"stood in the quarter that held its court rooms\"), and the granary GUESS stands (0098 and 0116 do not place it), but the stable's place \"beside the gate passage\" rests on 0115's findings page, which is not in the bundle (0115's drawing page says only that the grooms keep the stable's own room); I need research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html",
+  "note": "The cell goes in the office court because 0096 puts the Edo town magistracy's temporary cell \"in the quarter that held its court rooms\". The stable goes at the front because 0115 says \"Beside the passage were servants' quarters and a stable\". No page we read places the granary, so GUESS is the right label for it. 0090 puts a jail inside the walls without naming a court, which matches what the claim says.",
   "pages": {
    "0096-holding-cells-agariya-and-roya.html": "4426e3559e549311"
   },
   "research": "86def40e24cced5e",
   "rests": [
-   "0096-holding-cells-agariya-and-roya.html:46d27721497d60b0"
+   "0096-holding-cells-agariya-and-roya.html:46d27721497d60b0",
+   "0096-holding-cells-agariya-and-roya.html:bc94fea1004fa3d9"
   ],
   "section": "69ec89f6af1983bd",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#shrine smaller than the residence": {
   "code": "aaf18a49e6b4ca74",
