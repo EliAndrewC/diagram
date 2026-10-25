@@ -17828,5 +17828,57 @@
    "Mitsuho",
    "Mitsuho silver"
   ]
+ },
+ "likin": {
+  "def": "A Qing tax on goods in transit and in trade, levied by the provinces from the 1850s to pay for the wars of the time; by 1859 it was the bulk of Hubei's revenue.",
+  "variants": [
+   "likin"
+  ]
+ },
+ "dango": {
+  "def": "Small rice-flour dumplings, sold several to a skewer; a skewer of five sold for 5 mon until the four-mon coin came out.",
+  "variants": [
+   "dango"
+  ]
+ },
+ "nishu-gin": {
+  "def": "The two-shu silver coin, worth an eighth of a ryo by count; the nanryo was the first of them, cast from 1772.",
+  "variants": [
+   "nishu-gin",
+   "nishugin"
+  ]
+ },
+ "isshu-gin": {
+  "def": "The one-shu silver coin, worth a sixteenth of a ryo by count.",
+  "variants": [
+   "isshu-gin"
+  ]
+ },
+ "kanme": {
+  "def": "A weight of silver of 1,000 monme. Weighed silver was reckoned in kan, monme and fun.",
+  "variants": [
+   "kanme"
+  ]
+ },
+ "copper monme": {
+  "def": "A monme used as a unit of account and paid in copper coin, at a number of mon a domain fixed. Because it was settled in copper, it drifted away from the silver monme as copper's rate moved.",
+  "variants": [
+   "copper monme",
+   "copper monme of account"
+  ]
+ },
+ "Tanuma period": {
+  "def": "The years from about 1767 to 1786, when Tanuma Okitsugu directed the shogunate's government; years of copper's fall, famine, risings and urban riots.",
+  "variants": [
+   "Tanuma period",
+   "Tanuma years",
+   "Tanuma"
+  ]
+ },
+ "smashings": {
+  "def": "Urban riots in which crowds wrecked the houses and storehouses of rice dealers and other merchants (uchikowashi).",
+  "variants": [
+   "smashings"
+  ]
  }
 }
