@@ -229,7 +229,7 @@ def _mats(z: CourtZone) -> list[Box]:
 
     Research:
         its figures guessed on 0099 - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: 16 (plaintiff's and officials' mats' places ("spacing … a GUESS")); 6 (plaintiff's and officials' mats' places ("spacing … a GUESS")); 9 (plaintiff's and officials' mats' places ("spacing … a GUESS")); 22 (plaintiff's and officials' mats' places ("spacing … a GUESS"))
-        its mats - research/questions/0099-the-hearing-court-shirasu.drawing.html: 6 (accused's mat 6 ft); 3 (3 ft deep); 10 (side mats off the centre)
+        its mats - research/questions/0099-the-hearing-court-shirasu.drawing.html: 6 (accused's mat 6 ft); 3 (3 ft deep); 10 (side mats off the center)
     """
     cx, fy = z.x_ft + z.w_ft / 2, z.y_ft + z.h_ft / 3
     return [(cx - 3.0, fy, cx + 3.0, fy + 3.0), (cx - 16.0, fy + 6.0, cx - 10.0, fy + 9.0), (cx + 10.0, fy + 6.0, cx + 22.0, fy + 9.0)]

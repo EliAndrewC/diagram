@@ -5109,7 +5109,7 @@
  },
  "l7r/diagram/compound.py::emit_svg#its weapon rack": {
   "body": "7a6fb30bb8c6b5a3",
-  "claim": "its weapon rack - martial-training-grounds-and-dojo.drawing: 8 (rack 8 ft long); 2 (rack 2 ft deep), centred on the practice ground's south edge",
+  "claim": "its weapon rack - martial-training-grounds-and-dojo.drawing: 8 (rack 8 ft long); 2 (rack 2 ft deep), centered on the practice ground's south edge",
   "code": "86de29bbfb35f100",
   "core": "97c112ab9de63134",
   "date": "2026-10-25",
@@ -6686,7 +6686,7 @@
  },
  "l7r/diagram/compound_parts.py::_mats#its mats": {
   "body": "89c791991fc044ef",
-  "claim": "its mats - the-hearing-court-shirasu.drawing: 6 (accused's mat 6 ft); 3 (3 ft deep); 10 (side mats off the centre)",
+  "claim": "its mats - the-hearing-court-shirasu.drawing: 6 (accused's mat 6 ft); 3 (3 ft deep); 10 (side mats off the center)",
   "code": "ddd1374dbc1aa524",
   "core": "e3e04efba4a1dce1",
   "date": "2026-10-25",
@@ -71568,7 +71568,7 @@
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#spacing": {
   "body": "c1be7167136f7fa0",
-  "claim": "spacing - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing: CANOPY_SPACING_FT 13 (a hill wood's centres about 13 ft apart; a coppice, whose centres the page puts about 8 ft apart, is drawn at it too) - a departure the code keeps until feature 417 T33",
+  "claim": "spacing - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing: CANOPY_SPACING_FT 13 (a hill wood's centers about 13 ft apart; a coppice, whose centers the page puts about 8 ft apart, is drawn at it too) - a departure the code keeps until feature 417 T33",
   "code": "dd1e1ee91ff17040",
   "core": "d3958c0f5ef26090",
   "date": "2026-10-25",
