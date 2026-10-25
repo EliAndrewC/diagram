@@ -8,14 +8,14 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 
 ## Tasks
 
-- [ ] T01 S1+C1: Q1 and Q2, miso and soy sauce (D1, D2; FR-001)
+- [x] T01 S1+C1: Q1 and Q2, miso and soy sauce (D1, D2; FR-001)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: record-owed clean for the touched questions and keys
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed: S1+C1 and its tail: 0303 how much miso and soy sauce a household used (beans for miso 1760 and 1816, for soy sauce 1844; modern yields; the 52 kg's source) and what they cost era by era (Mitsui, seven eras; China silent); pointers in 0249, 0301, 0302; record-owed clean
 - [x] T02 S2+C2: Q4 the opening and Q3 the modern prices (D3, D4; FR-001)
       research: physical
       - [x] research pass
