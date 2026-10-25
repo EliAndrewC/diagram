@@ -1,0 +1,27 @@
+A47. Wages and prices!A1='Back to front page'
+A47. Wages and prices!B1='A47. Wages and Prices 1209-2016'
+A47. Wages and prices!B3='Composite Average Weekly Earnings series'
+A47. Wages and prices!D3='Consumer Price Index (CPI) -  preferred measure'
+A47. Wages and prices!BG3='Consumer Price indices'
+A47. Wages and prices!A4='Coverage'
+A47. Wages and prices!B4='England/GB'
+A47. Wages and prices!D4='GB/UK(GB+NI)'
+A47. Wages and prices!BG4='England'
+A47. Wages and prices!A5='Source'
+A47. Wages and prices!B5='NB based on English daily wage rates prior to 1750.  See real earnings sheet for measures which adjust for days worked per week over this period.'
+A47. Wages and prices!D5="1661-1750, Schumpeter-Gilboy index from Mitchell(1988), 1750-1770 from Crafts and Mills (1991), 1770-1882, Feinstein (1998), 1882-1914 Feinstein (1991),1914-1949 from ONS (O'Donoghue et al (2004)), 1949-2014 CPI (ONS)"
+A47. Wages and prices!BG5='Clark (2009,2014)'
+A47. Wages and prices!B6='£'
+A47. Wages and prices!D6='Spliced index 2015=100'
+A47. Wages and prices!BG6=' Cost of Living Index, 1860-9=100'
+A47. Wages and prices!A7=1209
+A47. Wages and prices!D7=0.08239185211478409
+A47. Wages and prices!BG7=6.544197349118789
+A47. Wages and prices!A458=1660
+A47. Wages and prices!D458=0.8345504740210948
+A47. Wages and prices!BG458=66.28644531726322
+A47. Wages and prices!A459=1661
+A47. Wages and prices!D459=0.8957845557308087
+A47. Wages and prices!BG459=71.15012910291425
+A47. Wages and prices!A814=2016
+A47. Wages and prices!D814=100.65975
