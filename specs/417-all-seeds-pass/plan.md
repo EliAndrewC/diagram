@@ -132,10 +132,28 @@ Story 2), the code-size delta (SC-004), the feature report.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
+### T23 Approach (re-answered 2026-10-25T06:18Z)
+
+1. **The goal, in the world.** Unchanged: each claim says what its page says.
+2. **The constraints.** As before, with impl-drift's round 1 (2026-10-25): the link-width claim's new text, "the width of the
+   way it joins", described less than the code does - `_join_orphan_ways` takes the widest lane within `_LANE_JOIN_FT` of the
+   link - so the label now states that.
+3. **Where each comes from.** O: the arbiter's ruling on ask 417-T05-claims; impl-drift's round 1 on T23.
+4. **Do they describe the world here?** Yes, measured 2026-10-25 (impl-drift quoted the code's `max(...)` over the lanes within
+   reach).
+5. **The order.** Unchanged.
+6. **The exits.** Unchanged (the fourth claim in T24).
+7. **The search smell.** None.
+8. **The budget.** Unchanged.
+9. **Done, measured.** The three claims IN-STEP in their claims round.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
 ### T23 Decisions
 
 - **D21** `bund.cut_stub_ends#a stub that reaches the bund kept - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of the worked ground's edge`;
-  `sweeps._bridge_collinear_breaks#bridge width - CONVENTION`; `sweeps._join_orphan_ways#link width - CONVENTION`. Rendering:
+  `sweeps._bridge_collinear_breaks#bridge width - CONVENTION`; `sweeps._join_orphan_ways#link width - CONVENTION: the widest way within `_LANE_JOIN_FT` of the link` (impl-drift, round 1: the
+  code takes the widest lane within the join reach, not only the way it joins). Rendering:
   none.
 
 ## T25 - the bund reach and the stub's tail, one rule each (T05's claims round, outside the change; FR-006)

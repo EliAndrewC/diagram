@@ -7472,8 +7472,8 @@
  "l7r/diagram/hamletgen/consts_ways.py::FIELD_REACH_FT#reaching the field": {
   "body": "3b8e81476be7e797",
   "claim": "reaching the field - GUESS bunds-between-the-paddies-aze.drawing: an end within 6 ft of the paddy's edge joins it",
-  "code": "3377dae6f4e214a8",
-  "core": "5efeb905b7d48b3f",
+  "code": "2160502c131af404",
+  "core": "2387df28c0fd4d70",
   "date": "2026-10-25",
   "note": "6 ft is the page's guess at how near counts as joining the paddy's edge",
   "pages": {
@@ -7483,6 +7483,7 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:c46ebb5fdc934b56"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_ways.py::FOOTPATH_FABRIC_GAP#footpath off a plot": {
@@ -20938,21 +20939,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::cut_stub_ends#a stub that reaches the bund kept": {
-  "body": "b6c5b3fa774f71d3",
-  "claim": "a stub that reaches the bund kept - UNRESEARCHED: within 6 ft of the worked ground's edge",
-  "code": "0a452df727bc585e",
-  "core": "21be8e11b5c9fb2b",
+  "body": "150840e25192ba20",
+  "claim": "a stub that reaches the bund kept - GUESS bunds-between-the-paddies-aze.drawing: within 6 ft of the worked ground's edge",
+  "code": "551bed722008ed14",
+  "core": "f2df40dee64e2b84",
   "date": "2026-10-25",
-  "note": "accepted by the round arbiter (ask:417-T05-claims), binding; the GM reviews it",
-  "pages": {},
-  "research": "",
+  "note": "6 ft from the worked ground, recorded as a GUESS for both the paddy edge and the dry hem",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+  },
+  "research": "1a1b231001c7410e",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c46ebb5fdc934b56"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::cut_stub_ends#a stub that serves a house kept": {
   "body": "b6c5b3fa774f71d3",
   "claim": "a stub that serves a house kept - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 60 ft (`HOUSE_SERVE_FT`), the page's reach for a way serving a farmhouse",
-  "code": "d775329a4d1105fa",
-  "core": "b7d171c92f55a503",
+  "code": "d9d4c7ab9cde8ae9",
+  "core": "f2df40dee64e2b84",
   "date": "2026-10-22",
   "note": "60 ft to the house, the page's reach to a farmhouse",
   "pages": {
@@ -20962,25 +20968,24 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::cut_stub_ends#no stub past a junction": {
-  "body": "b6c5b3fa774f71d3",
+  "body": "150840e25192ba20",
   "claim": "no stub past a junction - village-lanes.drawing: a tail under 40 ft past a junction cut",
-  "code": "b84743840fef95f6",
-  "core": "21be8e11b5c9fb2b",
+  "code": "ec7fdeab65b45d8a",
+  "core": "f2df40dee64e2b84",
   "date": "2026-10-25",
-  "note": "a free end's run of 40 ft or less past its first meeting with another way is cut",
+  "note": "the bundle gives no value for `TAIL_CUT_FT` (only `_PAST_JUNCTION_FT = TAIL_CUT_FT`), and only the comment on the `+` line says 40; I need TAIL_CUT_FT's value to confirm \"a tail of under 40 ft beyond a crossing is cut\" (`<` matches \"under\")",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
-   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
-   "0081-village-lanes.drawing.html:65ad16eace199d92"
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/bund.py::off_the_fixtures#off the fixtures": {
   "code": "f7886542e133acf2",
@@ -26130,12 +26135,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#a dry plot's edge arrived at": {
-  "body": "3f984f9db471948a",
+  "body": "96ccd603113fe0e3",
   "claim": "a dry plot's edge arrived at - village-lanes.drawing: a lane runs along the edge of the hem of dry fields and the spur stops at the hem's edge; the 6 ft read as joining it is 0014's GUESS (`the reach`)",
-  "code": "7b4eaee68eeefd3c",
-  "core": "bf7ae0560a9528f0",
-  "date": "2026-10-22",
-  "note": "6 ft, and 0014 extends its GUESS to the dry hem's edge",
+  "code": "f67b9c47df551b3c",
+  "core": "5dff386a19a72de9",
+  "date": "2026-10-25",
+  "note": "the lane keeps to the hem's edge and the spur stops there; the same 6 ft holds for the dry hem as a GUESS",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -26144,16 +26149,15 @@
    "0081-village-lanes.drawing.html:f2368e271306e3c2",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
-  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#a way reaches the field": {
-  "body": "3f984f9db471948a",
+  "body": "96ccd603113fe0e3",
   "claim": "a way reaches the field - bunds-between-the-paddies-aze.drawing: a way runs from the hamlet to the field's outer bund",
-  "code": "89830ac6a87ab2f4",
-  "core": "bf7ae0560a9528f0",
-  "date": "2026-10-22",
-  "note": "field path runs to the outer bund and joins it",
+  "code": "c954c7df6eddb6f3",
+  "core": "5dff386a19a72de9",
+  "date": "2026-10-25",
+  "note": "the field path runs to the paddy's outer bund and joins it",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
@@ -26161,16 +26165,15 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:c46ebb5fdc934b56"
   ],
-  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#the reach": {
-  "body": "3f984f9db471948a",
+  "body": "96ccd603113fe0e3",
   "claim": "the reach - GUESS bunds-between-the-paddies-aze.drawing: a lane end that stops within 6 ft of the paddy's edge is drawn as joining it",
-  "code": "c617404ea01d01af",
-  "core": "bf7ae0560a9528f0",
-  "date": "2026-10-22",
-  "note": "6 ft recorded as the page's GUESS, paddy edge and dry hem alike",
+  "code": "904c8b9ab8acb637",
+  "core": "5dff386a19a72de9",
+  "date": "2026-10-25",
+  "note": "6 ft (BUND_REACH_FT) recorded as a GUESS for joining",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
@@ -26178,7 +26181,6 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:c46ebb5fdc934b56"
   ],
-  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::FIXTURE_PAD_FT#fixture pad": {
@@ -31254,11 +31256,11 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge width": {
   "body": "9d941c176b1d101c",
-  "claim": "bridge width - UNRESEARCHED: drawn at the wider of the two ways' widths",
-  "code": "0e7e444f51b95608",
+  "claim": "bridge width - CONVENTION: drawn at the wider of the two ways' widths",
+  "code": "5c9853ae001af8f2",
   "core": "a5e05f19638f265e",
   "date": "2026-10-25",
-  "note": "accepted by the round arbiter (ask:417-T05-claims), binding; the GM reviews it",
+  "note": "int(max(wa, wb)); the page classes lane widths as a map drawing convention",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -31327,19 +31329,14 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link width": {
   "body": "4d08660856e1939e",
-  "claim": "link width - village-lanes.drawing: the width of the way it joins",
-  "code": "668f7b51c5f7a063",
+  "claim": "link width - CONVENTION: the width of the way it joins",
+  "code": "64d1d7e463bd5978",
   "core": "19d5c3ae87e32c5d",
   "date": "2026-10-25",
-  "note": "0081 gives widths by role only and never says a link takes the width of the way it joins, so the cited page does not back this rule. It should be CONVENTION, as `join_width` labels the same rule",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:91a5765af6230403"
-  ],
-  "verdict": "MISLABELED"
+  "note": "the claim says \"the width of the way it joins\", but the code (`max(... for _l in lanes if _net_reach(link, _l) <= _LANE_JOIN_FT)`, default 3) takes the widest of every lane within LANE_JOIN_FT of the link: at least the orphan's and the network way's, plus any third lane the routed link passes near. The claim should say \"the widest way within LANE_JOIN_FT of the link\", or the code should take only the network way's width",
+  "pages": {},
+  "research": "",
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#no out-and-back over the brook": {
   "body": "4d08660856e1939e",
@@ -32074,12 +32071,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::SPUR_REACH_FT#spur reaches the field": {
-  "body": "70334cea49d635e2",
+  "body": "1c3dae4a5a2d2343",
   "claim": "spur reaches the field - GUESS bunds-between-the-paddies-aze.drawing: a lane end within 6 ft of the paddy's edge is drawn as joining it",
-  "code": "8d0f7fbcb4d4ab4b",
-  "core": "915acedc06c7a312",
-  "date": "2026-10-22",
-  "note": "6 ft, which the page records as a GUESS",
+  "code": "1478c100e9114931",
+  "core": "5bf522cca04a5729",
+  "date": "2026-10-25",
+  "note": "FIELD_REACH_FT, which is BUND_REACH_FT, 6 ft, a recorded GUESS",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
@@ -32087,7 +32084,6 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:c46ebb5fdc934b56"
   ],
-  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_inner#the ends drawn in": {

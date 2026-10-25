@@ -264,7 +264,7 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
         orphan joined to the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
         link crosses the brook at a crossing place - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no out-and-back over the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a link crossing the brook twice is refused
-        link width - CONVENTION: the width of the way it joins
+        link width - CONVENTION: the widest way within `_LANE_JOIN_FT` of the link (the orphan's and the network's at least)
         orphan link directness - UNRESEARCHED: a link up to `_LINK_DIRECTNESS` (4) times the gap"""
     made = 0
     for _ in range(6):

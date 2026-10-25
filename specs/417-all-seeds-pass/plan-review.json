@@ -182,7 +182,7 @@
    "declared": "spec-fidelity"
   },
   "### T23 Decisions": {
-   "sha256": "ca9ed00c80de8b0565e9ba000b641b6875ff6f4bcede3d313db2c0c44c619b46",
+   "sha256": "22111c2088556a3fb14bd7b2b6bc5183fc9ea835f5cf14158816fe2ecc97b144",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -201,6 +201,12 @@
   },
   "### T25 Decisions": {
    "sha256": "5f7ac24ef82ddcaf8efec4f6b10981ba97b9ca3ab0509dcd90661cc8b7eaaaa9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Approach (re-answered 2026-10-25T06:18Z)": {
+   "sha256": "3818a2ed411f872446a993e60ee6f361a55b58ae9608fa7b153589bb771bde17",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -1075,6 +1081,94 @@
      "why": "Comment text only. No rule, check or requirement is excepted."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T23 - three claims labeled as their pages answer them (T05's claims round, MISLABELED; arbiter ask 417-T05-claims)",
+    "### T23 Approach (checklist part A)",
+    "### T23 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D21",
+     "summary": "Relabel three of T05's claims to what their pages say: bund.cut_stub_ends#a stub that reaches the bund kept as GUESS 0014 (within 6 ft of the edge); sweeps._bridge_collinear_breaks#bridge width and sweeps._join_orphan_ways#link width as CONVENTION (0081's lane widths by role, as serve.join_width already labels the same rule). Label-only, no rendering change, no map moves.",
+     "class": "within",
+     "why": "Labels on this feature's own T05 work so its claims round passes; no engine behavior changes, so FR-010's hold on claims features that change the engine is untouched, and it moves no map, so it stays short of the 'actual fixing' the GM's 2026-10-25 amendment held back. It narrows nothing the request asked for."
+    },
+    {
+     "id": "T23-exit-fourth-claim",
+     "summary": "The fourth MISLABELED claim, sweeps._sweep_doubled_remnants#doubled lane dropped, is not relabeled here; its label goes with the behavior change in T24, because citing 0081 would leave it drifted against the page's cut-to-a-T.",
+     "class": "within",
+     "why": "A routing of one claim to the task that changes its behavior, not a carve-out: the claim is still resolved, by T24, and nothing in the request or spec is excluded. Labeling it here alone would record a claim its code does not meet, which is the reverse of the task's goal."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T25 - the bund reach and the stub's tail, one rule each (T05's claims round, outside the change; FR-006)",
+    "### T25 Approach (checklist part A)",
+    "### T25 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D19",
+     "summary": "consts_ways.FIELD_REACH_FT is assigned from settlement.water_ways._helpers.BUND_REACH_FT (imported downward, settlement being the lower layer), so the one 6 ft bund reach has one definition instead of two 6.0s",
+     "class": "within",
+     "why": "FR-006 'a second implementation of a rule is deleted'; the request's 'any rule coded twice' is deleted (the session's scope the GM approved with 'Yes please'). No value moves, so it changes no seed and fixes none, which keeps it on the side of the 2026-10-25 instruction to finish replacing checks and coding before stopping, not on the seed-fixing side."
+    },
+    {
+     "id": "D20",
+     "summary": "bund.cut_stub_ends cuts a free end's run '< TAIL_CUT_FT' instead of '<= _PAST_JUNCTION_FT', matching settle/shapes.reaimed and sweeps.cut_past_connector and research 0081's 'under 40 ft'; value unchanged, a map moves only where a tail is exactly 40 ft",
+     "class": "within",
+     "why": "Three readers of one 40 ft tail rule where one is worded differently, through a different constant, is the 'rule coded more than once' FR-006 removes; aligning it to the research's wording is the rule's own definition, not a carve-out. The behavior change is confined to the exact-40 ft boundary and is gated by FR-008 (the plan's 'landing cohort green', pool maps regenerated). It is not seed-fixing work the GM's 2026-10-25 message deferred."
+    },
+    {
+     "id": "T25-exit-6",
+     "summary": "the sweeps comments that name _LANE_JOIN_FT as 30 are left as history notes, not edited",
+     "class": "within",
+     "why": "Comments recording when code was written are not a rule or a second implementation of one; FR-006 and the request do not reach them, so leaving them narrows nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T23 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D21",
+     "summary": "Provenance labels for three T23 dimensions: bund.cut_stub_ends keeps a stub reaching the bund within 6 ft of the worked ground's edge (GUESS, research question 0014); sweeps._bridge_collinear_breaks bridge width (CONVENTION); sweeps._join_orphan_ways link width (CONVENTION), now stated as the widest way within _LANE_JOIN_FT of the link to match the code (impl-drift round 1). Rendering: none.",
+     "class": "within",
+     "why": "The only change since CLEAR is the link-width label, reworded to state what the code already does; it moves no rule, removes no case, and carves out nothing from the request or the spec. Choosing the widest lane within the join reach is a parameter of the placer's own construction (place correctly in the first place, FR-005/FR-007), not a repair pass or a finished-map check, and not a narrowing of 'all seeds passing' or of the place-then-check rule. The other two labels are unchanged from the text that was ruled CLEAR."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T23 Approach (re-answered 2026-10-25T06:18Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T23-relabel-link-width",
+     "summary": "The link-width claim's label is reworded to state what _join_orphan_ways does (the widest lane within _LANE_JOIN_FT of the link), rather than 'the width of the way it joins'; the code is not changed.",
+     "class": "within",
+     "why": "The block's own goal is that each claim says what its page says; correcting a label that described less than the code does serves that goal, changes no engine behavior (so FR-010's hold and the GM's 2026-10-25 'stop before fixing' amendment are untouched), and narrows nothing in the request or the spec."
+    },
+    {
+     "id": "T23-done-measure",
+     "summary": "Done when the three claims read IN-STEP in their claims round; the fourth claim stays in T24 (exit unchanged).",
+     "class": "within",
+     "why": "A completion test for the relabel itself; deferring the fourth claim to T24 is a carry-over unchanged from the earlier approach and drops no claim from the feature."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1305,6 +1399,52 @@
      "summary": "Done measure (Approach item 9): a test asserts the overlap matrix carries no mirror of an engine rule.",
      "class": "within",
      "why": "The test only fails when the thing FR-006 asks for (no second implementation of a rule) is missing from the matrix. It enforces the request and adds no behavior of its own (GM 2026-09-20)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T23": {
+   "section_sha256": "d721c892db15f555c587b8a3c0b543e0416ba0667a79f691c66f950892a212b5",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D21",
+     "summary": "Relabel three of T05's claims to what their pages say: bund.cut_stub_ends#a stub that reaches the bund kept as GUESS 0014 (within 6 ft of the edge); sweeps._bridge_collinear_breaks#bridge width and sweeps._join_orphan_ways#link width as CONVENTION (0081's lane widths by role, as serve.join_width already labels the same rule). Label-only, no rendering change, no map moves.",
+     "class": "within",
+     "why": "Labels on this feature's own T05 work so its claims round passes; no engine behavior changes, so FR-010's hold on claims features that change the engine is untouched, and it moves no map, so it stays short of the 'actual fixing' the GM's 2026-10-25 amendment held back. It narrows nothing the request asked for."
+    },
+    {
+     "id": "T23-exit-fourth-claim",
+     "summary": "The fourth MISLABELED claim, sweeps._sweep_doubled_remnants#doubled lane dropped, is not relabeled here; its label goes with the behavior change in T24, because citing 0081 would leave it drifted against the page's cut-to-a-T.",
+     "class": "within",
+     "why": "A routing of one claim to the task that changes its behavior, not a carve-out: the claim is still resolved, by T24, and nothing in the request or spec is excluded. Labeling it here alone would record a claim its code does not meet, which is the reverse of the task's goal."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T25": {
+   "section_sha256": "88c2ecc013134e2f70c964dc1b4b14fce799d6242657a000206a8f537d7be08a",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D19",
+     "summary": "consts_ways.FIELD_REACH_FT is assigned from settlement.water_ways._helpers.BUND_REACH_FT (imported downward, settlement being the lower layer), so the one 6 ft bund reach has one definition instead of two 6.0s",
+     "class": "within",
+     "why": "FR-006 'a second implementation of a rule is deleted'; the request's 'any rule coded twice' is deleted (the session's scope the GM approved with 'Yes please'). No value moves, so it changes no seed and fixes none, which keeps it on the side of the 2026-10-25 instruction to finish replacing checks and coding before stopping, not on the seed-fixing side."
+    },
+    {
+     "id": "D20",
+     "summary": "bund.cut_stub_ends cuts a free end's run '< TAIL_CUT_FT' instead of '<= _PAST_JUNCTION_FT', matching settle/shapes.reaimed and sweeps.cut_past_connector and research 0081's 'under 40 ft'; value unchanged, a map moves only where a tail is exactly 40 ft",
+     "class": "within",
+     "why": "Three readers of one 40 ft tail rule where one is worded differently, through a different constant, is the 'rule coded more than once' FR-006 removes; aligning it to the research's wording is the rule's own definition, not a carve-out. The behavior change is confined to the exact-40 ft boundary and is gated by FR-008 (the plan's 'landing cohort green', pool maps regenerated). It is not seed-fixing work the GM's 2026-10-25 message deferred."
+    },
+    {
+     "id": "T25-exit-6",
+     "summary": "the sweeps comments that name _LANE_JOIN_FT as 30 are left as history notes, not edited",
+     "class": "within",
+     "why": "Comments recording when code was written are not a rule or a second implementation of one; FR-006 and the request do not reach them, so leaving them narrows nothing that was asked."
     }
    ],
    "verdict": "CLEAR"
