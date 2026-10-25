@@ -210,6 +210,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "## T26 - the web's post-lay passes the placers already make needless, measured off and deleted (R2 G2, first part; FR-004, FR-006)": {
+   "sha256": "ce523d8935a28d8260ea306d299d3b02aba8093fb9f5729a5d354177f5bafff8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Approach (checklist part A)": {
+   "sha256": "e963b390d8147cd4ef8827573f9736698ca347830960ca996d7669ae23994006",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Decisions": {
+   "sha256": "76d1b7bbb55e6e611bc1e89dbe72bfaead02618027944d85009bbfa10bf69a0c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1191,6 +1209,53 @@
      "summary": "The fourth claim (_sweep_doubled_remnants doubled lane dropped) is not relabeled here; its label moves with the behavior in T24.",
      "class": "within",
      "why": "Unchanged from the block last judged CLEAR. It defers a claim to the task that owns its behavior, not out of the feature, so nothing the GM asked for is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T26 - the web's post-lay passes the placers already make needless, measured off and deleted (R2 G2, first part; FR-004, FR-006)",
+    "### T26 Approach (checklist part A)",
+    "### T26 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T26-scope",
+     "summary": "T26 deletes only the post-lay stage_web passes measured needless; a pass whose removal reddens a fixed/pinned seed or moves a pool map's verdict is recorded with its seeds and set down, untouched, for T06 (which rebuilds what it stands in for) / the GM's fixing pass.",
+     "class": "within",
+     "why": "FR-004 deletes every pass that repairs a laid web; T26 is labeled its first part and hands the rest to T06, the conversion that replaces a needed pass with placing correctly. D11 (GM 2026-10-25) is the governing stop line: conversions land when FR-008 holds and are recorded and set down when they cannot without seed-by-seed work. Nothing is excused from FR-004; the needed passes are deferred to the task that converts them, not exempted."
+    },
+    {
+     "id": "T26-order",
+     "summary": "T26 runs after T23/T25 and before T06.",
+     "class": "within",
+     "why": "Sequencing inside the feature's task list; it removes no requirement. Pure deletion of needless passes ahead of the rebuild is the order the work naturally takes."
+    },
+    {
+     "id": "T26-no-tuning",
+     "summary": "One probe per pass; a pass is deleted only as it stands, never adjusted to make it pass.",
+     "class": "within",
+     "why": "Carries D11 directly: 'never iterated on', 'no work aimed at the fresh rate'."
+    },
+    {
+     "id": "D22",
+     "summary": "Each probe runs in a detached worktree at landed HEAD with that pass's call sites switched off by an env guard that never lands, rolling make cohort N=48 FRESH=0 (fixed + pinned); NEEDLESS = every seed's verdict equals the no-pass-off baseline.",
+     "class": "within",
+     "why": "A measurement method for FR-004's deletion held to FR-008's landing bar. Pool maps are not in the probe but are in the landing bar (Approach 6 and 9, D23's landing cohort), so FR-008 is fully held at the landing. Judging needless on the fixed and pinned seeds rather than fresh seeds is what D11 ruled: land when FR-008 holds, the fresh rate recorded either way. The instrumentation stays out of the engine."
+    },
+    {
+     "id": "D23",
+     "summary": "The needless passes are deleted together, with their call sites and the tests that only exercised them, in one landing; if the landing cohort is red, the whole deletion is set down and recorded, with no pass-by-pass search. Maps may change, held to the claims and the cohort.",
+     "class": "within",
+     "why": "Deleting a repair pass together with its tests is what FR-004/FR-006 and SC-004 ask for, and what the GM asked for in the request ('extra code to maintain, extra tests'). Setting the whole deletion down when it is red, rather than bisecting subsets, is D11's 'recorded and set down, never iterated on'. 'Maps may change' is held to FR-008 (cohort, pinned, pool, claims), the requirement the GM approved as the bar."
+    },
+    {
+     "id": "T26-done",
+     "summary": "Done: research.md R5 records each pass's probe result; the needless passes are deleted, the landing cohort is green and the pool maps' verdicts are unchanged; a 500-seed fresh block after the landing, its rate recorded beside R3.",
+     "class": "within",
+     "why": "D11: 'its fresh rate recorded either way'; FR-008 is the landing bar. Recording the rate is not work aimed at the rate."
     }
    ]
   }
