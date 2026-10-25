@@ -180,7 +180,14 @@ settle step's effect on the track's end logged.
 The six (seeds 3001615, 3001629, 3001674, 3001847, 3002028, 3002062) are all nucleated with a way out's gate. At the first landing the finished-map check, asked of every end inside the manifest's `W` x `H`, named 18 of the 54
 landing seeds' way-out ends (the frame is cropped about the content); read by distance it named all 13 dispersed seeds,
 whose track ends among the farms with no web to meet (seed 5: 154 ft from the nearest house center; observed 2026-10-25; method: its `make hamlet` manifest) - so it asks only a map
-with a web, and the dispersed track's end goes to the GM (D28). So read, the landing cohort is 54 of 54. The pull-back
+with a web, and the dispersed track's end goes to the GM (D28). So read, the landing cohort is 54 of 54.
+
+The fresh block after the landing (observed 2026-10-25; method: `make cohort N=500 SEED=3002101 FRESH=0 JOBS=5` in a
+detached worktree at main `61477aa49`; `make fresh-tally COMMIT=61477aa49 SINCE=20261025T131035Z`): 56 of 500 failed (11%) -
+nucleated 24 of 240 (10%), dispersed 6 of 162 (4%), linear 26 of 98 (27%); by cause `lane_knots` 18, `refused:WebRefused`
+12, `refused:SiteRefused` 11, `row_rules` 7, `farmstead_across_brook` 3, `groves_crossed_by_lanes` 2, `track_ends_off_the_web`
+2, `refused:OverlapRefused` 1, `refused:SinkRefused` 1. Beside R3's 12.5% and R5's 11.8%, inside the noise; the new check
+names 2 seeds the record could not see before (T27's). The pull-back
 is deleted as needless; the rule becomes a finished-map predicate the cohort asks (D27 (a)), and its placer is T27.
 
 ## R7 - the angle at which two ways stop reading as a junction (T16's research pass, the GM 2026-10-25)
