@@ -1,3 +1,4 @@
+<!-- page-load: kind=assertions -->
 # Brief - feature 418, the Hoei and Shotoku market rates and Canton's cash. Session 1: write
 
 You are a FRESH session for the record edits of one part of one feature. This brief is the whole of what you need; do not
