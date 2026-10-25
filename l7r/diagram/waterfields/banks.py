@@ -265,7 +265,7 @@ def floor_overhang(pts: Poly, dpts: Poly, down_deg: float) -> list[float]:
 
     Research:
         command area ends at the collector - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the drain on the field's lowest line, ground down-fall of it unplanted
-        past the drain's ends - UNRESEARCHED: the drain line extended level beyond both ends, ground down-fall of it unplanted
+        past the drain's ends - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the drain line extended level beyond both ends, ground down-fall of it unplanted
     """
     F = _Frame(down_deg)
     u0 = F.to_uf(*dpts[0])[0]
@@ -726,7 +726,7 @@ def swept_bend(P: Pt, u0: Pt, u1: Pt, interior: float, radius: float, run: float
 
     Research:
         swept bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a bend of about 2.5 channel widths' radius, the radius capped at 35% of the straight run on either side
-        cut-back within its run - UNRESEARCHED: a hairpin (a turn over ~137 deg) drawn tighter than the 2.5-width radius so its tangent point stays within 90% of its run; the 90% is this project's margin
+        cut-back within its run - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a hairpin (a turn over ~137 deg) drawn tighter than the 2.5-width radius so its tangent point stays within 90% of its run; the 90% is this project's margin
     """
     half = (math.pi - interior) / 2
     r = min(radius, 0.35 * run, 0.9 * run / math.tan(half))

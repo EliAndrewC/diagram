@@ -86,7 +86,7 @@ def trim_receding_ends(cols: Sequence[tuple[float, float]], drop: float) -> list
 
 
 BELT_LANE_CLEAR_FT = 12.0  # ft: a belt whose band a lane runs along stands this far beyond the lane's tread
-"""Research: belt clear of a back lane - UNRESEARCHED: 12 ft beyond the tread"""
+"""Research: belt clear of a back lane - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); 12 ft beyond the tread"""
 
 
 def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[float, float]], width: float, near: float = 36.0, depth: float = 146.0) -> list[tuple[float, float]]:
@@ -101,7 +101,7 @@ def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[fl
     Research:
         belt keeps its depth past a back lane - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: moved upwind past a lane inside the band
         belt into the marsh as alder - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: a shelter belt's trees in the marsh drawn as alder, so the band moves into it
-        lane clearance - UNRESEARCHED: BELT_LANE_CLEAR_FT
+        lane clearance - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); BELT_LANE_CLEAR_FT
     """
     out: list[tuple[float, float]] = []
     for v, u in cols:
@@ -112,7 +112,7 @@ def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[fl
 
 
 BELT_NEAR_FT = 36.0  # ft behind the fringe the band's near face stands
-"""Research: near stand-off - UNRESEARCHED: the near face 36 ft behind the fringe"""
+"""Research: near stand-off - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the belt's outline stands back from the row of houses nearest it; the 36 ft is a GUESS; the near face 36 ft behind the fringe"""
 # THE BAND'S DEPTH BEFORE THE RAG, near face to far, and the rag on each face. The near face is roughened along its length
 # and pushed only OUT of the band, 0-`BELT_NEAR_RAG_FT`; the far face moves up to `BELT_FAR_RAG_FT` either way. A band
 # laid 100 ft deep so draws 90-115 ft where the fringe lies square to the wind - inside the record's 80-120 ft
@@ -173,7 +173,7 @@ def round_the_houses(cols: Sequence[tuple[float, float]], uv: Sequence[tuple[flo
 
     Research:
         near face clear of every house - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the back grove's outline stands back from the houses nearest it, all along the face
-        stand-off reach - UNRESEARCHED: `reach` from each house
+        stand-off reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); `reach` from each house
     """
     if len(cols) < 2:
         return list(cols)
@@ -217,10 +217,10 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     Research:
         one village belt for the clustered form only - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: none where every farm carries its own grove
         belt on the windward fringe - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a band hugging the cluster's windward profile, never behind its center
-        shoulder past the end houses - UNRESEARCHED: the band runs 90 ft past the outermost house across the wind
+        shoulder past the end houses - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the belt is a crescent wrapping round the houses' flanks (the page's own choice); the 90 ft is a GUESS; the band runs 90 ft past the outermost house across the wind
         off the afternoon sun-lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the near face moved back by the west sun lane, scaled by the wind's westward share
-        off the crop - UNRESEARCHED: stands back 22-60 px, then shortens to 0.6 of its span
-        no belt under three houses - UNRESEARCHED
+        off the crop - research/questions/0038-sunlight-and-shade-on-the-farm.html: a tree shades one tree's height (the Qimin Yaoshu), about 33 ft - the belt stands 20 px off the crop at its nearest, a departure the code keeps until feature 417 T33; stands back 22-60 px, then shortens to 0.6 of its span
+        no belt under three houses - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25)
         connector and field spur lanes cross the belt as a way through, not moved past - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane crosses the belt, the planting resumes either side
     """
     houses = s.M.get("houses", [])

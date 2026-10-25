@@ -51,7 +51,7 @@ MIN_ROW = 0.45
 own median width): past that the tip is one basin, not a stack of slivers cut and then merged (specs/302 research R2, a map
 drawing convention).
 
-Research: narrow tip left one basin - UNRESEARCHED: no row cut where the sector is under 0.45 plot widths (0005 gives no such width)
+Research: narrow tip left one basin - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); no row cut where the sector is under 0.45 plot widths (0005 gives no such width)
 """
 
 HUG_ROW = 0.5
@@ -72,7 +72,7 @@ ROW_CELL_SHARE = 0.6
 """A row is cut where the cell it closes reaches this share of a design cell at the sector's local width (`_rows_kept`): every row
 on ground a plot wide or wider, fewer where it narrows - a map drawing convention, so a strip's cells are basins, not slivers.
 
-Research: basin size where the sector narrows - UNRESEARCHED: a row cut once its cell reaches 0.6 of the design cell (0005 gives no such share)
+Research: basin size where the sector narrows - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a row cut once its cell reaches 0.6 of the design cell (0005 gives no such share)
 """
 
 CROSS = 0.5
@@ -152,7 +152,7 @@ class Sectors:
         web refused); a first run also crashed five seeds on a one-point thread. Reverted; the row is E3 (a change that ripples
         into placement), its work the layout that broke (m:wave81-run-on-reverted; the patch is in the spec's audit/reverted/).
 
-        Research: past a thread's end - UNRESEARCHED: the column bund runs straight down the fall rather than converging along the drain
+        Research: past a thread's end - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a fan's bunds converge with its drain, the convergence kept - the column bund runs straight down the fall, a departure the code keeps until feature 417 T34; the column bund runs straight down the fall rather than converging along the drain
         """
         end = T.pts[-1]
         f_end = self.F.to_uf(*end)[1]
@@ -163,7 +163,7 @@ class Sectors:
     def thread_lines(self) -> list[Any]:
         """Every thread, and each continued straight down the fall past its own end until it meets another thread.
 
-        Research: sector pieces - UNRESEARCHED: each thread continued straight down the fall until it meets another
+        Research: sector pieces - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a fan's bunds converge with its drain, the convergence kept - each thread runs on straight down the fall, a departure the code keeps until feature 417 T34; each thread continued straight down the fall until it meets another
         """
         import shapely
         from shapely.geometry import LineString
@@ -195,7 +195,7 @@ class Sectors:
                 a warped lattice of row bunds crossing column bunds
             no jori grid on the old plains - DEVIATION research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:
                 the warped lattice on every valley_paddy map, the long-settled western plains included; never the jori grid
-            tip row dropped - UNRESEARCHED: a row at the tip narrower than `MIN_ROW` (0.45) of a plot width is dropped
+            tip row dropped - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a row at the tip narrower than `MIN_ROW` (0.45) of the lesser of a plot width and the sector's median width is dropped
         """
         F, g, R, row_step, across = self.F, self.g, self.R, self.row_step, self.plot_across
         f_lo = max(_root_f(A, F), _root_f(B, F)) + 6 * g
@@ -291,7 +291,7 @@ def _rows_kept(rows: list[float], widths: list[float], nsub: int, across: float,
     still wider than `tip`. Wide ground keeps every row; a strip half a plot wide keeps every other one. (A spacing set once per
     sector, from its median width, spaced the rows three steps apart down a sector that was narrow for only half its span.)
 
-    Research: rows where the sector narrows - UNRESEARCHED: a row kept once its cell reaches ROW_CELL_SHARE of a design cell
+    Research: rows where the sector narrows - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a row kept once its cell reaches ROW_CELL_SHARE of a design cell
     """
     design = across * sum(row_step) / 2
     kept = {0}

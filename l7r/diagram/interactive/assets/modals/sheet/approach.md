@@ -5,9 +5,9 @@ approach was meant to purify the ground it covered, and beside it stood the plac
 mouth before they prayed. At a village shrine it ran through the shrine's own wood, kept so as to surround the approach as
 well as the halls.
 
-An arch was a gift, from a shrine's parishioners together or from a single donor, so a shrine's arches recorded what its
-worshippers gave, not its size. Before 1868 an ordinary shrine's arches, where they can be dated, stood singly; a row of
-donated arches is known only at the great Inari shrine of Fushimi, where the custom arose in the Edo period. In Rokugan any
+An arch was a gift, from a shrine's parishioners together or from a single donor.
+Before 1868 an ordinary shrine's arches, where they can be dated, stood singly; a row of
+donated arches dated to before 1868 is known only at the great Inari shrine of Fushimi, where the custom arose in the Edo period. In Rokugan any
 shrine's approach may pass under one arch or a row of three or seven, numbers that carry power in the setting, seven most of
 all.
 

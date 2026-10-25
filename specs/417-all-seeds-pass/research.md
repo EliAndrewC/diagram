@@ -296,3 +296,13 @@ the claims gate admits a known drift since this landing's tooling fix), each fil
 that answers them as a convention, or are T16's two `CANON` angles. `UNRESEARCHED` is left on 479 claims elsewhere - their
 passes (P1-P7) have run and are saved; their relabels are T36. `make tunables` lists GUESS 455, UNRESEARCHED 283 and CONVENTION
 111 with a figure; `make tunables INLINE=1` 1,823 unstated numbers in 149 files.
+
+T36's count (observed 2026-10-25; method: `git diff` from T29's landing over `l7r/` and `docs/`, the claims rounds' verdicts in
+`dev/claims-index.json`): the 479 are relabeled from passes P1-P8 - 117 bare `GUESS` where a pass searched and found nothing, 213
+bare `GUESS` where no source could speak to the number (a value of ours), 150 cited to the page that answers them (`DEVIATION`
+or `GUESS <page>` where the page records it as its own), and of those 80 state the code's departure from their page and land
+DRIFTED, each unit named in its T32-T35 row. The 14 sources the passes found that no page held were put on their pages first
+by three page sessions with their check sessions (`briefs/s1-write.md` to `c3-check.md`, handoff `briefs/handoff.md`), and the
+claims resting on them cited there. One `UNRESEARCHED` label is left in the engine, the grammar example in `tools/claims.py`'s
+docstring (D37 a). The claims rounds took six impl-drift rounds over about 480 claims; the record checks the page sessions owed
+(the pop-ups whose pages moved, the moved pages' format, quotes and translations) ran to their end.

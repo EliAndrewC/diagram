@@ -1,0 +1,80 @@
+### l7r/diagram/hamletgen/water/brook.py::brook_skirt
+  line 170 [40]: floor = _crop_edge(segs, u, stride + 40.0, v0) + skirt
+  line 251 [12, 1e+09]: cfloor = _crop_edge(segs, cu, 12.0, -1e9) + skirt
+### l7r/diagram/hamletgen/water/brook.py::axes_off
+  line 331 [0.3]: if cross >= 0.3:
+### l7r/diagram/hamletgen/water/brook.py::bend_at
+  line 358 [8]: along = [k for k in range(len(course) - 1) if k not in (tap, tap + 1) and _dist_to_course(((course[k][0] + course[k + 1][0]) / 2, (course[k][1] + course[k + 1][1]) / 2), 
+### l7r/diagram/hamletgen/water/brook.py::bend_runs
+  line 391 [0.3]: v = away if abs(away[axis]) >= 0.3 else plan.fall  # a level the flank's normal cannot leave takes no dip down the fall (cap 0): the next leg would climb
+  line 401 [0.3]: v = away if abs(away[0] * (b[1] - a[1]) - away[1] * (b[0] - a[0])) >= 0.3 * run else plan.fall  # a run ACROSS the fall bends down it
+### l7r/diagram/hamletgen/water/brook.py::level_offsets
+  line 413 [0.3]: av = away[axis] if abs(away[axis]) >= 0.3 else math.copysign(0.3, away[axis] or 1.0)
+### l7r/diagram/hamletgen/water/brook.py::chord_offsets
+  line 426 [0.3]: an = an if abs(an) >= 0.3 else math.copysign(0.3, an or 1.0)
+### l7r/diagram/hamletgen/water/brook.py::feed_brook
+  line 517 [420]: def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float = 420.0) -> Poly:
+  line 553 [7, 8]: for swing in sorted((10.0 * k for k in range(-7, 8)), key=abs):
+  line 567 [7, 8]: for swing in sorted((10.0 * k for k in range(-7, 8)), key=abs):
+### l7r/diagram/hamletgen/water/brook.py::draw_intake
+  line 693 [6]: _race_w = float(_race.get("w", 6.0)) if _race else 6.0
+  line 694 [0.2]: _mouth = _race_w / max(math.sin(math.radians(OFFTAKE_DEG)), 0.2)
+### l7r/diagram/hamletgen/water/brook.py::open_race_mouth
+  line 759 [7, 8]: reach = float(brook.get("w", 7)) / 2.0 + 8.0  # a race trimmed at this bank starts within this of the tap
+  line 762 [0.05]: if pts and 0.05 < math.dist(tap, (float(pts[0][0]), float(pts[0][1]))) <= reach:
+  line 765 [2.5]: w["bed"] += race_taper([(float(q[0]), float(q[1])) for q in pts], s.px(RACE_TAPER_FT), float(w["rec"].get("w0", w["rec"].get("w", 2.5))), f"race-mouth-{k}")
+### l7r/diagram/hamletgen/water/brook.py::weir_glyph
+  line 833 [0.9, 1.8]: return "".join(f'<circle cx="{at(-0.9 + 1.8 * k / (n - 1), v)[0]:.1f}" cy="{at(-0.9 + 1.8 * k / (n - 1), v)[1]:.1f}" r="{r}" fill="{fill}"/>' for k in range(n))
+  line 839 [0.2, 0.62, 0.7]: body += [line(at(t, -1.0), at(t, 1.0), "#6E6A60", 0.7) for t in (-0.62, -0.2, 0.2, 0.62)]
+  line 841 [0.45, 0.8, 0.95]: body += [line(at(-0.95, v), at(0.95, v), "#6B5238", 0.8) for v in (-0.45, 0.45)]  # the logs laid along the stakes
+  line 842 [0.7, 5]: body.append(dots(0.0, 5, 0.7, "#4E3A26"))  # the stakes holding them
+  line 844 [0.6]: body += [line(at(t, -1.0), at(t, 1.0), "#6E6A60", 0.6) for t in (-0.5, 0.0, 0.5)]  # one basket to the next
+  line 845 [0.12, 0.25, 0.4, 0.75]: body += [line(at(t - 0.12, -1.0), at(t + 0.12, 1.0), "#7E7A70", 0.4) for t in (-0.75, -0.25, 0.25, 0.75)]  # the weave
+  line 847 [0.55, 6]: body.append(dots(0.0, 6, 0.55, "#4E3A26"))
+  line 849 [1.2, 1.6]: f'<line x1="{poly[3][0]:.1f}" y1="{poly[3][1]:.1f}" x2="{poly[2][0]:.1f}" y2="{poly[2][1]:.1f}" stroke="#8FA6AE" stroke-width="{min(1.6, 1.2 * half_t):.1f}" stroke-lineca
+### l7r/diagram/hamletgen/water/brook_course.py::exit_legs
+  line 55 [1e+09]: edge = [((W if dx > 0 else 0.0) - lx) / dx if abs(dx) > 1e-6 else 1e9, ((H if dy > 0 else 0.0) - ly) / dy if abs(dy) > 1e-6 else 1e9]
+  line 66 [0.15]: heading = _h if _h[0] * dx + _h[1] * dy > 0.15 else (dx, dy)
+### l7r/diagram/hamletgen/water/brook_course.py::round_the_brooks
+  line 300 [7]: s.round_stream(rec, drawn_course(course, heads, joins, float(rec.get("w") or 7.0)))
+### l7r/diagram/hamletgen/water/brook_rules.py::monotone_down
+  line 206 [0.01]: def monotone_down(course: Sequence[Pt], fall: Pt, slack: float = 0.01) -> bool:
+### l7r/diagram/hamletgen/water/brook_rules.py::reserved_box
+  line 250 [9]: wet = WetLines([([(float(x), float(y)) for x, y in course], 9.0 / 2 + 3.0)])  # filed once, asked per hem plot
+### l7r/diagram/hamletgen/water/fit.py::fit_field
+  line 45 [0.06, 9]: def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_step: tuple[float, float], tolerance: float = 0.06, rounds: int = 9, fan_middle: str = "clear
+### l7r/diagram/hamletgen/water/fit.py::_fit_at_aspect
+  line 195 [0.35, 2.2]: lo, hi = 0.35, 2.2
+  line 231 [0.001]: k = min(max(k, lo + 1e-3), hi - 1e-3)
+  line 280 [0.03]: if hi - lo < 0.03:
+  line 288 [0.001]: k = hi - 1e-3  # the probe: the largest fan this aspect can draw
+### l7r/diagram/hamletgen/water/fit.py::_predict_k
+  line 315 [0.2, 6]: k = k1 * (target / a1) ** (1.0 / p) if 0.2 < p < 6.0 else k1 * math.sqrt(target / a1)
+### l7r/diagram/hamletgen/water/fit.py::tail_dangles
+  line 378 [5]: free = [q for q in ends if sum(1 for r in ends if math.hypot(q[0] - r[0], q[1] - r[1]) < 5.0) == 1]
+### l7r/diagram/hamletgen/water/polder.py::reservoir_clear_of_crop
+  line 42 [96]: n = 96
+### l7r/diagram/hamletgen/water/polder.py::walk_pond_uphill
+  line 57 [12]: def walk_pond_uphill(pond: tuple[float, float, float, float], envelope: list[Any], ux: float, uy: float, step: float = 12.0) -> tuple[float, float, float, float]:
+### l7r/diagram/hamletgen/water/polder.py::dike_gaps_at_channels
+  line 99 [64]: grid = PointGrid(64.0)
+### l7r/diagram/hamletgen/water/polder.py::inlet_to_rim
+  line 132 [30]: for _ in range(30):
+### l7r/diagram/hamletgen/water/polder.py::stage_polder
+  line 295 [109]: _dseed = plan.spec.seed ^ 0x6D
+### l7r/diagram/hamletgen/water/polder.py::fit_polder
+  line 334 [0.06, 9]: def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int = 9, fabric: Mapping[str, Any] | None = None, mosaic: float = 0.0) -> dict[str, Any]:
+  line 370 [44, 6]: lo, hi = 6, 44
+### l7r/diagram/hamletgen/water/polder.py::_nearest_pair
+  line 423 [45, 6]: ((r, c) for r in range(6, 45) for c in range(max(4, round(r * 0.45)), max(4, round(r * 0.65)) + 1) if (r, c) not in tried),
+### l7r/diagram/hamletgen/water/polder.py::_polder_candidate
+  line 462 [0.12, 0.2, 0.3, 0.4]: for wander in (0.5, 0.4, 0.3, 0.2, 0.12):
+### l7r/diagram/hamletgen/water/polder.py::dike_face
+  line 531 [32]: def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 32, cut: float = 0.0, cuts: Sequence[Pt] = (), cut_hw: float = DIKE_GAP_HW) -> Poly:
+### l7r/diagram/hamletgen/water/polder.py::stage_waterward
+  line 634 [20, 30]: ylo, yhi = y0 - 30.0, y1 + 20.0
+  line 635 [20, 30]: xlo, xhi = x0 - 30.0, x1 + 20.0
+  line 652 [20]: "W": [(max(-20.0, x0 - d), ylo), *dike_face(pts, "W", ylo, yhi, cut=cut, cuts=by_flank["W"]), (max(-20.0, x0 - d), yhi)],
+  line 653 [20]: "E": [(min(W + 20.0, x1 + d), ylo), *dike_face(pts, "E", ylo, yhi, cut=cut, cuts=by_flank["E"]), (min(W + 20.0, x1 + d), yhi)],
+  line 654 [20]: "N": [(xlo, max(-20.0, y0 - d)), *dike_face(pts, "N", xlo, xhi, cut=cut, cuts=by_flank["N"]), (xhi, max(-20.0, y0 - d))],
+  line 655 [20]: "S": [(xlo, min(H + 20.0, y1 + d)), *dike_face(pts, "S", xlo, xhi, cut=cut, cuts=by_flank["S"]), (xhi, min(H + 20.0, y1 + d))],

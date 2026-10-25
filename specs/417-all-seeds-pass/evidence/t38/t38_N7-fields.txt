@@ -1,0 +1,110 @@
+### l7r/diagram/settlement/fields/comb.py::bund_junctions
+  line 220 [0.75]: if abs(cxy[0] - x) < 0.75 and abs(cxy[1] - y) < 0.75:
+  line 231 [16]: rng = random.Random(int(hashlib.md5(name.encode()).hexdigest()[:8], 16))  # str hash() is salted per process - a map must redraw identically
+  line 232 [1.1]: base = max(2.5 / self.ftpx, aze_w(self.ftpx) * 1.1)  # ~5 ft of piled earth, floored at the drawn aze
+  line 240 [0.25]: if rng.random() < 0.25:
+  line 251 [0.25, 0.75]: f"{(1 - f) ** 2 * a[0] + 2 * (1 - f) * f * cx_ + f * f * b[0]:.1f},{(1 - f) ** 2 * a[1] + 2 * (1 - f) * f * cy_ + f * f * b[1]:.1f}" for f in (0.0, 0.25, 0.5, 0.75, 1.0)
+### l7r/diagram/settlement/fields/comb.py::_comb_draw_ditches
+  line 676 [5.5]: _dw = next((float(_c.get("w_tail", _c["w"])) for _c in net["channels"] if _c.get("role") == "drain"), 5.5)
+### l7r/diagram/settlement/fields/comb.py::_comb_record_field
+  line 725 [30]: _band = 30.0 + max(_dch["w"], _dch.get("w_tail", _dch["w"]))
+### l7r/diagram/settlement/fields/comb.py::_comb_record_ditches
+  line 797 [0.05]: _pts = [q for i, q in enumerate(c["pts"]) if i == 0 or math.dist(q, c["pts"][i - 1]) > 0.05]
+### l7r/diagram/settlement/fields/comb.py::_comb_source_channel
+  line 822 [70]: din = (fork[0] + dx * 70, fork[1] + dy * 70)
+  line 842 [12]: if point_in_poly(din[0], din[1], _env_in) and _din_d >= 12.0:
+  line 862 [14]: din = (_q_in[0] + _nx_in * 14.0, _q_in[1] + _ny_in * 14.0)
+  line 892 [20]: midx, midy = (start[0] + din[0]) / 2 - vy / vl * 20, (start[1] + din[1]) / 2 + vx / vl * 20
+### l7r/diagram/settlement/fields/features.py::grave_form
+  line 37 [4.29497e+09]: return "island" if random.Random((seed ^ _GRAVE_FORM_SALT) & 0xFFFFFFFF).random() < 0.5 else "corner"
+### l7r/diagram/settlement/fields/features.py::turning_corners
+  line 40 [45]: def turning_corners(poly: Sequence[Pt], min_deg: float = 45.0) -> list[int]:
+### l7r/diagram/settlement/fields/features.py::carve_around_grave
+  line 125 [0.2]: cut = Point(cx, cy).buffer(r / math.cos(math.pi / _CUT_SIDES) + 0.2, quad_segs=_CUT_SIDES // 4)
+### l7r/diagram/settlement/fields/features.py::_mound_meets_pond
+  line 191 [16, 32]: ring = [(cx + r * math.cos(a * math.pi / 16), cy + r * math.sin(a * math.pi / 16)) for a in range(32)]
+### l7r/diagram/settlement/fields/features.py::pond
+  line 236 [12]: sheen=f'<ellipse cx="{cx}" cy="{cy}" rx="{rx - 12}" ry="{ry - 10}" fill="none" stroke="#B6CAD8" stroke-width="1"/>',  # inner highlight
+### l7r/diagram/settlement/fields/features.py::_paddy_features
+  line 285 [39633, 4.29497e+09]: rng = random.Random((self.seed ^ 0x9AD1) & 0xFFFFFFFF)
+### l7r/diagram/settlement/fields/features.py::_plot_pond
+  line 392 [1.5]: f'<line x1="{cx + mx * math.cos(a):.1f}" y1="{cy + my * math.sin(a) + 1.5:.1f}" x2="{cx + mx * math.cos(a):.1f}" y2="{cy + my * math.sin(a) - 1.5:.1f}" stroke="{POND_REED
+  line 393 [8]: for a in [i * math.pi / 4 + math.pi / 8 for i in range(8)]
+### l7r/diagram/settlement/fields/features.py::_pond_fit
+  line 424 [12, 24]: rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
+### l7r/diagram/settlement/fields/features.py::_plot_rock
+  line 455 [5, 7]: bx, by = cx + rng.uniform(-7, 7), cy + rng.uniform(-5, 5)
+  line 458 [0.1, 0.2, 0.4]: boulders += f'<path d="M{bx - r * 0.5:.1f},{by - r * 0.2:.1f} q{r * 0.4:.1f},{-r * 0.5:.1f} {r:.1f},{-r * 0.1:.1f}" fill="none" stroke="#C6BEB2" stroke-width="0.8"/>'  # 
+### l7r/diagram/settlement/fields/features.py::_plot_corner_grave
+  line 487 [6.5]: disc = (cx, cy, 6.5 + GRAVE_BANK_PX)
+  line 498 [1.6, 2.2, 3.5, 6.5]: sx, base, h = ((-2.2, -1.0, 6.5), (1.6, 2.2, 3.5))[i]
+### l7r/diagram/settlement/fields/features.py::_plot_grave_island
+  line 521 [6, 9]: rx, ry = max(9.0, hx * 0.55), max(6.0, hy * 0.55)
+  line 537 [5, 6.5, 8]: h = (8.0, 5.0, 6.5)[i]
+  line 539 [1.3]: markers += f'<rect x="{mx - 1.3:.1f}" y="{by - h:.1f}" width="2.6" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
+### l7r/diagram/settlement/fields/features.py::_rounded_pond
+  line 559 [0.4]: scale = max(0.4, 1.0 - inset / max(1.0, apo))
+  line 565 [0.45]: dd = min(dist, ln * 0.45)
+  line 579 [0.25]: mid = (0.25 * a_in[j][0] + 0.5 * ins[j][0] + 0.25 * b_out[j][0], 0.25 * a_in[j][1] + 0.5 * ins[j][1] + 0.25 * b_out[j][1])
+### l7r/diagram/settlement/fields/landuse.py::mulberry_row_ts
+  line 86 [0.08, 0.84]: return [0.08 + 0.84 * (k + 0.5) / n for k in range(n)]
+### l7r/diagram/settlement/fields/landuse.py::apply_land_use
+  line 156 [0.55]: fraction: float = 0.55,
+### l7r/diagram/settlement/fields/landuse.py::_landuse_tea_fringe
+  line 358 [6]: self._rows_cut_to_plot(dp["poly"], [min(ys) + 6 + i * 8 for i in range(int((max(ys) - min(ys)) / 8))], 'stroke="#5C7A3E" stroke-width="2.4" opacity="0.75"', "tea")
+### l7r/diagram/settlement/fields/landuse.py::_landuse_repaint_leftovers
+  line 379 [13, 7]: random.seed(int(sum(x for x, _ in p["poly"]) * 7 + sum(y for _, y in p["poly"]) * 13))
+  line 391 [12, 2.5]: fd, fpoly = self._rounded_pond(p["poly"], inset=2.5, reach=12.0, rng=rng)
+  line 395 [4.5]: self._paddy_surface(fpoly, fpts, flooded=True, pitch=4.5)
+  line 399 [4.5]: self._paddy_surface(p["poly"], pts, flooded=False, pitch=4.5)  # jittered-grid mottle, ~3-6 px between shoots (GM 2026-07-23)
+### l7r/diagram/settlement/fields/landuse.py::_landuse_draw_plot
+  line 445 [2.5]: _sc = 1.0 + 2.5 / max(1.0, _dm)
+  line 469 [0.7]: _s2 = max(0.7, 1.0 - (pen + 1.0) / max(1.0, _dm))
+  line 471 [8]: bd, bpoly = self._rounded_pond(qpoly, inset=0.0, reach=8.0, rng=rng)
+  line 472 [16]: wd, wpoly = self._rounded_pond(qpoly, inset=getattr(self, "dikepond_inset", DIKEPOND_WATER_INSET), reach=16.0, rng=rng)
+  line 501 [14, 2.5]: self.add("".join(f'<circle cx="{cx + rng.uniform(-14, 14):.1f}" cy="{cy + rng.uniform(-10, 10):.1f}" r="{rng.uniform(2.5, 4):.1f}" fill="#C98BA6" opacity="0.85"/>' for _ 
+### l7r/diagram/settlement/fields/landuse.py::_mulberry_rows
+  line 532 [0.4]: s_w = max(0.4, 1.0 - inset / apo)  # the water-edge homothety (matches _rounded_pond's inset)
+  line 548 [20]: px0, px1 = min(q[0] for q in poly) - 20, max(q[0] for q in poly) + 20
+  line 549 [20]: py0, py1 = min(q[1] for q in poly) - 20, max(q[1] for q in poly) + 20
+  line 553 [1e+09]: best = 1e9
+  line 563 [6, 8]: g.append(f'<ellipse cx="{mx + rng.uniform(-3, 3):.1f}" cy="{my + rng.uniform(-3, 3):.1f}" rx="{rng.uniform(4, 8):.1f}" ry="{rng.uniform(3, 6):.1f}" fill="{mcol}" opacity=
+  line 573 [1.3]: jx, jy = x + rng.uniform(-1.3, 1.3), y + rng.uniform(-1.3, 1.3)
+  line 583 [0.32, 0.7]: for t in (0.32, 0.70):
+  line 584 [2.5]: pts_ = walk(s_w + t * (s_b - s_w), 2.5)
+### l7r/diagram/settlement/fields/landuse.py::_pick_overlay_plots
+  line 624 [9]: n_seeds = max(1, round(take / 9))  # a handful of households started digging, not everyone at once
+### l7r/diagram/settlement/fields/outfall.py::outfall_run
+  line 37 [520, 70]: def outfall_run(b0: Sequence[float], b1: Sequence[float], fall: Sequence[float], lead: float = 70.0, reach: float = 520.0, turn_max: float = 55.0) -> list[Pt]:
+### l7r/diagram/settlement/fields/paddy.py::rest_plots
+  line 134 [0.05]: pick = rng.choices(pool, weights=[0.05 + ((fs[i] - f0) / span) ** REST_FAR_POWER for i in pool])[0]
+### l7r/diagram/settlement/fields/paddy.py::_taxfree_plots
+  line 155 [40]: interior = sorted(interior, key=lambda t: (round(t[2] / 40), t[1]))  # spread them across the field
+### l7r/diagram/settlement/fields/paddy.py::_paddy_surface
+  line 163 [22]: def _paddy_surface(self: Settlement, poly: Poly, pts: str, flooded: bool, cap: int = 22, pitch: float | None = None) -> None:  # type: ignore[misc]
+  line 189 [80]: n = min(cap, max(3, int((x1 - x0) * (y1 - y0) / 80)))  # sparse irregular shoots (the transplant mottle); cap=22 suits ~0.05-ac comb cells
+  line 198 [0.1]: if random.random() > 0.1:
+### l7r/diagram/settlement/fields/paddy.py::_rows
+  line 218 [0.6]: theta = random.uniform(-0.6, 0.6)  # per-plot row angle
+  line 225 [0.85]: spacing, stroke, wdt, dash, op = 13, '#7E9B54', 0.8, ' stroke-dasharray="1,3"', 0.85
+### l7r/diagram/settlement/fields/paddy.py::rest_basin
+  line 267 [13, 7]: rng = random.Random(int(abs(cx) * 7 + abs(cy) * 13))  # positional: the tufts are decoration and move nothing else
+  line 270 [900]: for _ in range(max(3, int(_ring_area(poly) / 900))):
+### l7r/diagram/settlement/fields/paddy.py::water_field
+  line 279 [52]: self: Settlement, shape: Any, label: Any, name: str, source: Any, drain: Any, amp: float = 52, taxfree: int = 0, plot: float = 34, label_xy: Any = None, drain_anchor: Any
+  line 325 [13, 7]: random.seed(int(abs(x0) * 7 + abs(y0) * 13 + abs(x1) * 3 + len(name)))
+  line 333 [0.55]: while ub[-1] < umax - plot * 0.55:
+  line 336 [6.28]: phase = [random.uniform(0, 6.28) for _ in ub]
+  line 341 [1.7]: return ub[i] + 5.0 * math.sin(f / 66.0 + phase[i]) + 3.0 * math.sin(f / 29.0 + phase[i] * 1.7)
+  line 355 [0.6]: while rows[-1] < fmax - plot * 0.6:
+  line 367 [0.08, 0.6]: if un_irrig or edgef + random.uniform(-0.08, 0.08) > 0.6:
+  line 368 [0.62]: crop = 'dry' if random.random() < 0.62 else 'soy'
+  line 376 [0.3]: if near_ditch and ro < 0.3:
+  line 378 [0.975]: elif ro > 0.975:
+  line 412 [14]: mid = [_uf_xy(uline(li, f), f) for f in [tf + i * 14 for i in range(1, int((bf - tf) / 14) + 1)] if f < bf]
+### l7r/diagram/settlement/fields/paddy.py::_wf_feed
+  line 439 [14]: safe = [(t[1], t[2]) for t in interior if edge_dist(t[1], t[2], smoothed) >= 14] or [((x0 + x1) / 2, (y0 + y1) / 2)]
+### l7r/diagram/settlement/fields/paddy.py::_wf_main_drain
+  line 472 [11]: us = [min(ous) + i * 11 for i in range(int((max(ous) - min(ous)) / 11) + 1)] + [max(ous)]
+  line 476 [6]: t, bt = self._wf_bnd(smoothed, fmin, fmax, u, fmin, 6), self._wf_bnd(smoothed, fmin, fmax, u, fmax, -6)
+  line 477 [1.4]: if t is not None and bt is not None and bt - t > plot * 1.4:

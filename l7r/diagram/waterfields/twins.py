@@ -134,7 +134,7 @@ def drop_twin_deliveries(channels: list[dict[str, Any]], first: int, ftpx: float
 
     Research:
         twin delivery dropped - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: the delivery that would run as a twin is not drawn, its plots watered over the bund
-        which one goes - UNRESEARCHED: the delivery that leaves the other, else the shorter; a supply canal never
+        which one goes - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the delivery that leaves the other, else the shorter; a supply canal never
     """
     from shapely.geometry import LineString
 

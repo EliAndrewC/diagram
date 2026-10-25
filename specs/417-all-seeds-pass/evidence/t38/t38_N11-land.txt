@@ -1,0 +1,86 @@
+### l7r/diagram/settlement/land/cover.py::farmstead_keepouts
+  line 71 [45]: return convex_hull([(x + margin * math.cos(math.radians(a)), y + margin * math.sin(math.radians(a))) for x, y in pts for a in range(0, 360, 45)])
+### l7r/diagram/settlement/land/cover.py::_commons_keep
+  line 329 [14]: keep.rings(list(self.field_polys) + list(self.dry_polys), pad=crop_pad, slot=1, reach=14 * bs)
+### l7r/diagram/settlement/land/cover.py::commons
+  line 557 [6000]: for _ in range(max(2, int(area / (6000 * bs * bs)))):  # a few SCRAGGLY hill pines (sparse, individual, open)
+  line 570 [1.1]: (px - bs, py - th - bs, px + bs, py + bs, f'<line x1="{px:.1f}" y1="{py:.1f}" x2="{px:.1f}" y2="{py - th:.1f}" stroke="#7A6A48" stroke-width="{1.1 * bs:.1f}"/>')
+  line 573 [0.25, 0.45, 3.6]: ly, sp = py - th * (0.45 + 0.25 * k), (3.6 - k) * bs
+### l7r/diagram/settlement/land/cover.py::_stock_woodland
+  line 686 [6]: for _ in range(_wd_target * 6):
+### l7r/diagram/settlement/land/cover.py::hinterland
+  line 810 [30, 40]: hw, hh = r.get("w", 40) / 2 + m, r.get("h", 30) / 2 + m
+  line 815 [120]: BLEED = 120  # a band reaches the canvas edge + this bleed, NOT `outer` beyond it
+### l7r/diagram/settlement/land/dikes.py::dike_band
+  line 93 [34]: steps = max(3, int(math.hypot(b[0] - a[0], b[1] - a[1]) / 34))
+  line 112 [0.16, 0.22, 0.26, 5]: wf = 0.5 + 0.26 * math.sin(u * 2 + ph0) + 0.22 * math.sin(u * 3 + ph1) + 0.16 * math.sin(u * 5 + ph2)
+### l7r/diagram/settlement/land/dikes.py::perimeter_dike
+  line 253 [29]: random.seed(seed ^ 0x1D)
+  line 255 [0.7]: for _ in range(int((bx1 - bx0 + by1 - by0) * 0.7)):
+  line 260 [13, 9]: rx, ry = random.uniform(5, 13), random.uniform(4, 9)
+  line 289 [0.74]: for wx, wy in _row_walk(0.74, 8.5):  # the WILLOW row rides the outer (water) face - pollarded, larger crowns
+  line 291 [1.4]: tx, ty, tr = wx + random.uniform(-1.4, 1.4), wy + random.uniform(-1.4, 1.4), random.uniform(3.5, 5.5)
+  line 294 [0.26]: for mx2, my2 in _row_walk(0.26, 4.4):  # the MULBERRY row on the inner face - coppiced, same form as the pond banks
+  line 296 [1.2]: g.append(f'<circle cx="{mx2 + random.uniform(-1.2, 1.2):.1f}" cy="{my2 + random.uniform(-1.2, 1.2):.1f}" r="{random.uniform(2.2, 3.6):.1f}" fill="{mcol2}" opacity="0.85"/
+  line 335 [1000, 200]: best = max(outer_s, key=lambda p: (p[1] < cy) * 1000 - abs(p[0] - cx) - (200 if (p[0] - cx) * (hx - cx) > 0 else 0))
+### l7r/diagram/settlement/land/dikes.py::dike_gates
+  line 366 [1e+09]: sx, sy, sd, sw = gx, gy, 1e9, 0.0
+### l7r/diagram/settlement/land/dikes.py::dike_top_houses
+  line 441 [3358]: random.seed(seed ^ 0xD1E)
+  line 445 [0.18]: sa = s0 + (i + 0.5) * step + random.uniform(-0.18, 0.18) * step
+  line 456 [0.28, 0.32]: mx, my = random.uniform(-pw * 0.32, pw * 0.32), random.uniform(-ph * 0.28, ph * 0.28)
+  line 458 [5, 8]: g.append(f'<ellipse cx="{mx:.1f}" cy="{my:.1f}" rx="{random.uniform(4, 8):.1f}" ry="{random.uniform(3, 5):.1f}" fill="{mcol}" opacity="0.4"/>')
+### l7r/diagram/settlement/land/outline.py::natural_outline
+  line 70 [5]: while r >= 5.0 * bs:
+  line 71 [8]: trial = _largest(laid.buffer(-r, quad_segs=8).buffer(r, quad_segs=8))
+  line 79 [12]: n = max(12, int(length / (WAVE_STEP_FT * bs)))
+### l7r/diagram/settlement/land/tiles.py::grass_tile
+  line 90 [1.5, 2.4]: r_dot = rng.uniform(1.5, 2.4, n) * bs
+  line 91 [0.45, 2.4, 4.2]: ang, blen = rng.uniform(-0.45, 0.45, (n, 3)), rng.uniform(2.4, 4.2, (n, 3)) * bs
+  line 105 [4.2]: blades.append(_wrapped(side, side, lambda px, py, tips=tips: "".join(f"M{px:.1f},{py:.1f}l{tx:.1f},{ty:.1f}" for tx, ty in tips), x, y, 4.2 * bs))
+### l7r/diagram/settlement/land/tiles.py::reed_tile
+  line 168 [0.6, 15]: for x, y, r in zip(rng.uniform(0, side, n_tint), rng.uniform(0, side, n_tint), rng.uniform(min(15.0, MARSH_TINT_R * 0.6), MARSH_TINT_R, n_tint) * bs, strict=True):
+  line 173 [1.2, 2.6, 4.6]: rx, ry = rng.uniform(2.6, 4.6, n) * bs, rng.uniform(1.2, 2.0, n) * bs
+  line 174 [0.2, 7]: ang, bl = rng.uniform(-0.2, 0.2, (n, 4)), rng.uniform(4.0, 7.0, (n, 4)) * bs
+  line 182 [7]: reeds.append(_wrapped(side, side, lambda px, py, tips=tips: "".join(f"M{px:.1f},{py:.1f}l{tx:.1f},{ty:.1f}" for tx, ty in tips), x, y, 7.0 * bs))
+### l7r/diagram/settlement/land/tiles.py::bamboo_tile
+  line 217 [0.6]: x = step * (col + (0.5 if row % 2 == 0 else 1.0)) + (float(rng.random()) - 0.5) * step * 0.6
+  line 218 [0.6]: y = step * BAMBOO_ROW * (row + 0.5) + (float(rng.random()) - 0.5) * step * 0.6
+  line 220 [11]: marks.append(_wrapped(w, h, lambda px, py, tall=tall, lean=lean: bamboo_mark(px, py, bs, tall, lean), x % w, y, 11.0 * bs))
+### l7r/diagram/settlement/land/tiles.py::reed_overlay_tile
+  line 276 [0.2, 5, 8]: reeds = _tufts(side, xs, ys, rng.uniform(-0.2, 0.2, (n, 4)), rng.uniform(5.0, 8.0, (n, 4)) * bs)
+  line 278 [4.5, 6, 8]: for x, y, a, b in zip(rng.uniform(0, side, 8), rng.uniform(0, side, 8), rng.uniform(6.0, 10.0, 8) * bs, rng.uniform(3.0, 4.5, 8) * bs, strict=True):
+### l7r/diagram/settlement/land/tiles.py::grass_overlay_tile
+  line 295 [0.45, 2.8, 4.6]: blades = _tufts(side, xs, ys, rng.uniform(-0.45, 0.45, (n, 3)), rng.uniform(2.8, 4.6, (n, 3)) * bs)
+  line 297 [1.8, 2.6]: for x, y, r in zip(rng.uniform(0, side, 2), rng.uniform(0, side, 2), rng.uniform(1.8, 2.6, 2) * bs, strict=True):
+### l7r/diagram/settlement/land/tiles.py::fringe_tile
+  line 323 [0.45, 2.4, 4.2]: grass = _tufts(side, rng.uniform(0, side, ng), rng.uniform(0, side, ng), rng.uniform(-0.45, 0.45, (ng, 3)), rng.uniform(2.4, 4.2, (ng, 3)) * bs)
+  line 324 [0.2, 7]: reeds = _tufts(side, rng.uniform(0, side, nr), rng.uniform(0, side, nr), rng.uniform(-0.2, 0.2, (nr, 4)), rng.uniform(4.0, 7.0, (nr, 4)) * bs)
+  line 326 [18]: for x, y, r in zip(rng.uniform(0, side, nt), rng.uniform(0, side, nt), rng.uniform(10.0, 18.0, nt) * bs, strict=True):
+### l7r/diagram/settlement/land/tiles.py::reed_bank_tile
+  line 352 [0.2, 4.5, 7.5]: reeds = _tufts(side, rng.uniform(0, side, n), rng.uniform(0, side, n), rng.uniform(-0.2, 0.2, (n, 4)), rng.uniform(4.5, 7.5, (n, 4)) * bs)
+### l7r/diagram/settlement/land/tiles.py::cover_rings
+  line 387 [0.25]: def cover_rings(shape: Any, tolerance: float = 0.25) -> list[list[tuple[float, float]]]:
+### l7r/diagram/settlement/land/wet.py::pond_fringe_ring
+  line 72 [16]: def pond_fringe_ring(cx: float, cy: float, rx: float, ry: float, margin: float, n: int = 16) -> list[tuple[float, float]]:
+### l7r/diagram/settlement/land/wet.py::_ellipse
+  line 102 [64]: def _ellipse(pond: Any, n: int = 64) -> Any:
+### l7r/diagram/settlement/land/wet.py::pond_cut
+  line 219 [25]: def pond_cut(blocks: Any, pond: Any, slack: float = 25.0) -> list[Any]:
+### l7r/diagram/settlement/land/wet.py::ellipse_ring
+  line 303 [32]: def ellipse_ring(cx: float, cy: float, rx: float, ry: float, n: int = 32) -> list[tuple[float, float]]:
+### l7r/diagram/settlement/land/wet.py::marsh
+  line 420 [40]: _reach = max(_pads) + 40.0
+  line 451 [5]: keep.rings([ellipse_ring(pond[0], pond[1], pond[2], pond[3])], slot=5, reach=max(_pads))
+  line 452 [6]: keep.rings([ellipse_ring(pond[0], pond[1] + MARSH_TUFT_R * bs, pond[2], pond[3])], slot=6)
+  line 465 [1.5]: bare = keep.shape((0.0, pad, pad, 0.0, pond_pad, min(pad, 1.5), None), (x0, y0, x1, y1))
+### l7r/diagram/settlement/land/wet.py::trim_off_marsh
+  line 486 [6]: def trim_off_marsh(self: Settlement, pts: Any, margin: float = 6.0) -> Any:  # type: ignore[misc]
+  line 515 [30]: if d <= 30.0:  # this whole leg is wet: drop it
+  line 523 [24]: out[-1] = (b[0] - (b[0] - a[0]) / d * 24.0, b[1] - (b[1] - a[1]) / d * 24.0)
+### l7r/diagram/settlement/land/wet.py::toe_band
+  line 560 [120]: bleed = 120.0
+  line 593 [24]: step = max(24.0, pad / 3)
+  line 624 [0.2, 0.4, 0.6, 0.8]: return [(uu * ux + vv * dx, uu * uy + vv * dy) for t in (0.2, 0.4, 0.6, 0.8, 1.0) for uu, vv in [(u_end + sign * 1.5 * pad * t**1.6, v_end + (v_out - v_end) * t)]]
+### l7r/diagram/settlement/land/wet.py::surface_water_dist
+  line 660 [1e+09]: d = 1e9

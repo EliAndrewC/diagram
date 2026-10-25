@@ -4750,3 +4750,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-25 | source-reader | 422-c2-r2-amazon-miso | clean | 5 READ | nothing | - | applied or filed as specs/422-miso-soy-and-the-opening/briefs/c2-checks.md | 17 s | 56k in (49k cached) / 1.5k out |
 | 2026-10-25 | source-reader | 422-c2-r2-bassino-ma-2005 | findings | 3 READ; Table 3 is on p. 237 | paperwork | yes | applied or filed as specs/422-miso-soy-and-the-opening/briefs/c2-checks.md | 30 s | 81k in (61k cached) / 2.7k out |
 | 2026-10-25 | source-reader | 422-c2-r2-bernhofen-brown-2004 | clean | 5 READ | nothing | - | applied or filed as specs/422-miso-soy-and-the-opening/briefs/c2-checks.md | 39 s | 114k in (99k cached) / 3.6k out |
+| 2026-10-25 | impl-drift | claims-t36r11 | findings | impl-drift: 1 claim - DRIFTED 1; UNCLAIMED 0 | judgment | - | applied or filed as impl-drift wood share seat: DRIFTED (T33) records | 29 s | 59k in (37k cached) / 1.8k out |

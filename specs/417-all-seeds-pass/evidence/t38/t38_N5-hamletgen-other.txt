@@ -1,0 +1,77 @@
+### l7r/diagram/hamletgen/clearance.py::__init__
+  line 187 [16]: self.cell = cell if cell is not None else max(2.0 * max(margin, tight_margin, line_margin), extents[len(extents) // 2], 16.0)
+### l7r/diagram/hamletgen/cluster.py::back_fouled
+  line 61 [7]: def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reach: float = 2.6, samples: int = 7) -> float:
+### l7r/diagram/hamletgen/cluster.py::belt_off_canvas
+  line 106 [0.45, 0.9]: pts = [(center[0] + wx * (reach + d) + px * span * t, center[1] + wy * (reach + d) + py * span * t) for d in (36.0, 90.0, 146.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
+### l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit
+  line 128 [16, 8]: walls.append(([(px + r * math.cos(k * math.pi / 8), py + r * math.sin(k * math.pi / 8)) for k in range(16)], 80.0))
+### l7r/diagram/hamletgen/cluster.py::straight_exit
+  line 153 [1.5, 1.75]: if all(p.distance(ray) >= m + 1.5 * cell for p, m in polys) and all(s.distance(ray) >= 1.75 * cell for s in segs):
+### l7r/diagram/hamletgen/cluster.py::seat_cluster
+  line 247 [0.6, 34]: if any(point_in_poly(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t, env) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.6, 0.0, 0.6)):
+  line 257 [0.3]: if back_fouled(mid, (nx, ny), dep, dry_plots) > 0.30:
+  line 288 [0.6, 34]: _wet_pts = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.6, 0.0, 0.6)]
+  line 324 [0.45, 0.9, 34]: _bp = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
+### l7r/diagram/hamletgen/cluster.py::_fork_spur
+  line 485 [8]: for _pass in range(8):
+  line 493 [14]: if _hit is not None and math.dist(_hit, spur_pts[-1]) > 14.0 and math.dist(_hit, spur_pts[_si]) > 1.0:
+### l7r/diagram/hamletgen/driver.py::_run_stages
+  line 321 [0.05]: if dur >= 0.05:
+### l7r/diagram/hamletgen/driver.py::cohort_specs
+  line 426 [11, 7]: households=households if households is not None else 10 + ((first_seed + i) * 7) % 11,
+### l7r/diagram/hamletgen/frame.py::band_to_edge
+  line 192 [20]: def band_to_edge(strip: Sequence[Sequence[float]], face: str, view: Sequence[float], past: float = 20.0) -> list[tuple[float, float]]:
+### l7r/diagram/hamletgen/plan.py::canvas_for
+  line 380 [0.4]: span = math.sqrt(field_px2 / 0.40)
+  line 381 [50]: side = int(round(span * 2.0 / 50.0) * 50)
+### l7r/diagram/hamletgen/plan.py::band_extent
+  line 397 [1100]: lat = max(240.0, min(households * (g**2) / (math.pi * dep), 1100.0))
+### l7r/diagram/hamletgen/plan.py::plan_site
+  line 512 [50]: W = H = int(round((span * (1.0 + 2.0 * FAN_OVERHANG) + 2.0 * seat_room(spec.households, _cluster_shape)) / 50.0) * 50)
+### l7r/diagram/hamletgen/pondbank.py::bank_seats
+  line 71 [61]: a += (s._hjit(px, py, 61.0) - 0.5) * 0.5 * 2 * math.pi / n
+  line 72 [67]: d = s._hjit(px, py, 67.0) * play
+### l7r/diagram/hamletgen/pondbank.py::seat_free
+  line 101 [9]: if any(seg_dist(x, y, p, q) < float(st.get("w", 9.0)) / 2 + 1.0 for p, q in zip(pts, pts[1:], strict=False)):
+### l7r/diagram/hamletgen/pondstock.py::_bank_seats
+  line 76 [0.125, 0.25, 0.375, 0.625, 0.75, 0.875]: return ranked((0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875))
+### l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat
+  line 142 [16]: s.block_polys.append([(x + reach * math.cos(math.tau * k / 16), y + reach * math.sin(math.tau * k / 16)) for k in range(16)])
+### l7r/diagram/hamletgen/sink.py::drain_record
+  line 130 [2.5]: return {"poly": [[round(x, 1), round(y, 1)] for x, y in pts], "frm": {"kind": "drain"}, "to": {"kind": to}, "w": 2.5}
+### l7r/diagram/hamletgen/sink.py::pond_clear_of_crop
+  line 158 [12, 24]: rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
+### l7r/diagram/hamletgen/sink.py::pond_setback
+  line 164 [14, 900]: def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 14.0, limit: float = 900.0) -> float:
+  line 177 [24]: rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
+### l7r/diagram/hamletgen/sink.py::hull_route
+  line 294 [100000]: hits = LineString([out, (out[0] + heading[0] * 1e5, out[1] + heading[1] * 1e5)]).intersection(edge)
+  line 314 [260]: reach = to_edge(q, fall, float(plan.W), float(plan.H)) + 260.0
+  line 316 [40]: for _ in range(40):  # the leg down the fall is off the canvas, so its length is free
+  line 320 [400]: reach += 400.0
+### l7r/diagram/hamletgen/sink.py::_through_the_crop
+  line 362 [20, 21]: lead = next((t / 20.0 for t in range(21) if not point_in_poly(out[0] + (q[0] - out[0]) * t / 20.0, out[1] + (q[1] - out[1]) * t / 20.0, plan.envelope)), 1.0)
+### l7r/diagram/hamletgen/sink.py::pond_run
+  line 476 [0.08]: bow = min(10.0, 0.08 * dist)
+  line 497 [0.45]: k = 0.45 * dist
+  line 505 [12, 13]: for u in [n / 12.0 for n in range(13)]
+### l7r/diagram/hamletgen/sink.py::lay_sink
+  line 631 [0.08]: bow = min(10.0, 0.08 * math.hypot(join[0] - out[0], join[1] - out[1]))  # dug earth, not a ruled connector; proportional keeps the turn obtuse at any length
+  line 671 [12, 24, 40, 60]: for back_off in (0.0, 12.0, 24.0, 40.0, 60.0):
+  line 693 [12, 24, 38, 54]: _swings = (0, 12, -12, 24, -24, 38, -38, 54, -54)
+  line 694 [110, 160, 70]: _first = ((bd, sw, j) for sw in _swings for bd in (exit_deg, head_deg) for j in (70.0, 110.0, 160.0, 230.0))
+  line 695 [300, 400]: _wider = ((bd, sw, j) for j in (300.0, 400.0) for sw in _swings for bd in (exit_deg, head_deg))
+  line 703 [1e+09]: ((plan.W if math.cos(th) > 0 else 0.0) - mid[0]) / math.cos(th) if abs(math.cos(th)) > 1e-6 else 1e9,
+  line 704 [1e+09]: ((plan.H if math.sin(th) > 0 else 0.0) - mid[1]) / math.sin(th) if abs(math.sin(th)) > 1e-6 else 1e9,
+  line 706 [120, 260]: run_here = max(120.0, min(spans)) + 260.0
+  line 799 [20]: clamped = (max(prx + 20.0, min(plan.W - prx - 20.0, pcx)), max(pry + 20.0, min(plan.H - pry - 20.0, pcy)))
+### l7r/diagram/hamletgen/washing.py::passing_courses
+  line 79 [9]: out = [([(float(a), float(b)) for a, b in st["poly"]], float(st.get("w", 9.0)) / 2.0) for st in M.get("streams") or [] if len(st.get("poly") or []) >= 2]
+  line 80 [6]: out += [([(float(a), float(b)) for a, b in c["poly"]], float(c.get("w", 6.0)) / 2.0) for c in M.get("channels") or [] if len(c.get("poly") or []) >= 2]
+  line 81 [1.5]: out += [([(float(a), float(b)) for a, b in d["poly"]], float(d.get("w", 1.5)) / 2.0) for d in M.get("field_ditches") or [] if len(d.get("poly") or []) >= 2]
+  line 83 [2.5]: ([(float(a), float(b)) for a, b in ch.get("poly") or ch.get("pts") or []], float(ch.get("w", 2.5)) / 2.0)
+### l7r/diagram/hamletgen/washing.py::each_house_places
+  line 189 [2.5]: rec = footing([prev, end], end, 0, s.px(float(ch.get("w", 2.5))) / 2.0, house, s.px(shift), s.px)
+### l7r/diagram/hamletgen/washing.py::draw_washing_place
+  line 211 [6]: steps = "".join(f"M{at(-w / 2, k * h / 6)[0]:.1f},{at(-w / 2, k * h / 6)[1]:.1f}L{at(w / 2, k * h / 6)[0]:.1f},{at(w / 2, k * h / 6)[1]:.1f}" for k in (-1, 1))

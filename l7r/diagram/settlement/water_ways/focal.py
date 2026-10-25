@@ -30,7 +30,7 @@ class FocalMixin:
         Research:
             mill-house size - research/questions/0064-water-mills-suisha.drawing.html: 30 x 24 ft by default
             mill seat beside moving water - research/questions/0064-water-mills-suisha.drawing.html: beside a watercourse with fall, the wheel on the water side
-            wheel glyph - UNRESEARCHED: an 18 ft wheel (9 ft radius) set 5 ft off the house; 0064 gives no wheel size and seats the wheel in a short race
+            wheel glyph - research/questions/0064-water-mills-suisha.html: the Shinguruma wheel, 4.8 m (about 15.7 ft) across, is called large (the 1959 rebuild of a mill founded 1808) - an 18 ft wheel is drawn, a departure the code keeps until feature 417 T34; an 18 ft wheel (9 ft radius) set 5 ft off the house, in a short race
             wheel drawing - CONVENTION: an eight-spoked ring
         """
         pw, ph = self.px(w), self.px(h)
@@ -49,7 +49,7 @@ class FocalMixin:
 
     def _focal_block(self: Settlement, x: float, y: float, pw: float, ph: float) -> None:  # type: ignore[misc]
         """Reserve a focal footprint as a placement keep-out (so a later farmstead can never overlap it).
-        Research: focal keep-out - UNRESEARCHED: the footprint plus 6 px on every side"""
+        Research: focal keep-out - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the footprint plus 6 px on every side"""
         self.placed.append((x, y, pw, ph))
         self.block_polys.append([(x - pw / 2 - 6, y - ph / 2 - 6), (x + pw / 2 + 6, y - ph / 2 - 6), (x + pw / 2 + 6, y + ph / 2 + 6), (x - pw / 2 - 6, y + ph / 2 + 6)])
 

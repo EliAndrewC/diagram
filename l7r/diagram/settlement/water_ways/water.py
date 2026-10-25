@@ -124,7 +124,7 @@ class WaterBodiesMixin:
             every course declares its flow - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: authored upstream-first
             stream width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 2 m (~7 ft) for a village brook, drawn 7 ft at the map's scale by default
             bed and sheen - CONVENTION: a blue bed, a lighter butt-capped mid-current sheen
-            houses kept off the stream - UNRESEARCHED: a no-build corridor of max(30, half-width + 20) px
+            houses kept off the stream - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); a no-build corridor of max(30, half-width + 20) px
         """
         width = self.px(7.0) if width is None else width  # a village brook about 7 ft wide (0068), at the map's scale
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
@@ -203,8 +203,8 @@ class WaterBodiesMixin:
         Research:
             ditch width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: 2.5 px by default, the legibility floor
             ditch class - NONE: drainage when it leaves a drain, else irrigation
-            houses kept off the channel - UNRESEARCHED: a 33 px no-build corridor
-            ditch winding - UNRESEARCHED: an auto-routed ditch winds with a 15 px amplitude by default
+            houses kept off the channel - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); a 33 px no-build corridor
+            ditch winding - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); an auto-routed ditch winds with a 15 px amplitude by default
         """
         poly = [(p[0], p[1]) for p in pts] if pts else winding(start, end, amp=amp)
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in poly)

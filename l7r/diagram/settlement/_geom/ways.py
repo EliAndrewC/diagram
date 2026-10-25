@@ -41,7 +41,7 @@ LANDING_FT = 10.0  # a CARRIED deck runs this many REAL feet of deck onto dry gr
 # its ends on the bank (GM 2026-07-22), so footplanks do NOT take this landing.
 """Research: carried deck landing - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: 10 ft of deck past the water each bank"""
 PLANK_VILLAGE_REACH = 55.0  # a bank within this of a dwelling reaches the VILLAGE (a place worth crossing to)
-"""Research: footplank reaches the village - UNRESEARCHED: a bank within 55 px of a dwelling counts as worth crossing to"""
+"""Research: footplank reaches the village - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a bank within 55 px of a dwelling counts as worth crossing to"""
 
 
 """Research: lane alongside the fence not barred - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: within 25 degrees of the fence"""

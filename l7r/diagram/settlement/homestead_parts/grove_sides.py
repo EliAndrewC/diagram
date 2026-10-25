@@ -33,7 +33,7 @@ GROVE_SIDES_FLOOD = (2,) * 15 + (3,) * 9 + (4,) * 16
 # ...and for a map whose declared wind is a single cardinal, which flank completes the windward pair (`windward_pair`):
 # rolled per settlement, even odds - nothing says which.
 GROVE_FLANKS = (-1, 1)
-"""Research: cardinal wind's second face - UNRESEARCHED: either flank, even odds"""
+"""Research: cardinal wind's second face - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25) - 0036 gives the Sendai pair, north and west, and nothing on a cardinal wind's second face (feature 417 T33); either flank, even odds"""
 
 # A THIN BAND IS ONE TREE DEEP: two mean crown radii (`CANOPY_R_FT` = 8.5 ft, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html). The sides of a grove away from the wind are a band of lesser trees (Tonami's east side: flowering trees,
 # persimmon, fig; its west-to-north side hackberry and alder), far thinner than the windward stand (1.57 house depths -

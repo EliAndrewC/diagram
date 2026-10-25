@@ -155,7 +155,7 @@ predates it): the thicket marks the edge of the houses it stands behind, so a se
 along the back row. Where none fits within it, the band just beyond the back row is searched along its whole length
 (`THICKET_ROW_DEPTH_FT`, `bamboo_seats`).
 
-Research: thicket reach - UNRESEARCHED: 220 ft along the band from the target before the row's whole length"""
+Research: thicket reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); 220 ft along the band from the target before the row's whole length"""
 
 
 THICKET_ROW_DEPTH_FT = 30.0
@@ -166,7 +166,7 @@ deep in the page, far from every house).
 
 Research:
     thicket just beyond the back row - research/questions/0075-bamboo-groves-chikurin.drawing.html: on every pass, measured from the row's back edge
-    thicket row depth figure - UNRESEARCHED: 30 ft, this project's measure of just beyond the row"""
+    thicket row depth figure - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); 30 ft, this project's measure of just beyond the row"""
 
 
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
@@ -187,15 +187,15 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         thicket kept off every household's reserved copse seats - research/questions/0075-bamboo-groves-chikurin.drawing.html: the dooryard copse draws no bamboo; a farm's bamboo is a stand of its own
         thicket kept out of every plot's sun at BAMBOO_SHADE_FT 50 ft (0038 drawing) - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: no clump, bamboo included, within 50 ft east, west or south of a yard or bed (and research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html)
         thicket size - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: 84 by 58 ft, drawn at full size only
-        no stand where the full stand fits nowhere - UNRESEARCHED
+        no stand where the full stand fits nowhere - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25)
         off crop and water - research/questions/0075-bamboo-groves-chikurin.drawing.html: refused on paddy, marsh and pond, on dry ground
-        watercourse margin - UNRESEARCHED: kept a watercourse's half-width plus 3 ft off it
-        off the dry plots - UNRESEARCHED: refused on the dry crop's plots too
-        crop and water pads - UNRESEARCHED: 12 ft off the crop, 6 ft off marsh, 30 ft off the pond
-        keep-out pads - UNRESEARCHED: 2-20 ft round houses, retirement houses, yards, gardens, sheds, byres, wells, the notice board, persimmons, groves, lanes, belt and woods
+        watercourse margin - research/questions/0075-bamboo-groves-chikurin.html: bamboo was planted on river banks to hold the soil; the 3 ft is ours; kept a watercourse's half-width plus 3 ft off it
+        off the dry plots - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); refused on the dry crop's plots too
+        crop and water pads - research/questions/0075-bamboo-groves-chikurin.html: bamboo dies in a wet low field and was raised 2 to 3 chi; the 12, 6 and 30 ft are ours, the pond pad past the record, which plants bamboo on riverside ground; 12 ft off the crop, 6 ft off marsh, 30 ft off the pond
+        keep-out pads - research/questions/0075-bamboo-groves-chikurin.html: bamboo stood right behind or against the house; the 2 to 20 ft are ours; 2-20 ft round houses, retirement houses, yards, gardens, sheds, byres, wells, the notice board, persimmons, groves, lanes, belt and woods
         irregular outline - CONVENTION: a hard but not ruled edge inside the tested rect
         just beyond the back row - research/questions/0075-bamboo-groves-chikurin.drawing.html: the stand's near edge within THICKET_ROW_DEPTH_FT, 30 ft, of the back row's back edge, its calibration
-        search reach - UNRESEARCHED: the first search walks THICKET_REACH_FT, 220 ft, from the target, so a thicket may stand that far past the row's ends before the search falls back to the whole back row
+        search reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); the first search walks THICKET_REACH_FT, 220 ft, from the target, so a thicket may stand that far past the row's ends before the search falls back to the whole back row
     """
     forms = ["thicket"] if plan.bamboo in ("thicket", "both") else []
     houses = s.M.get("houses", [])

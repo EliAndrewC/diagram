@@ -48,14 +48,14 @@ if TYPE_CHECKING:
 
 
 FARMSTEAD_NEIGHBOR_FT = 140.0  # ft: two farmsteads this near share the ground between them - a lane, a gap a copse fills
-"""Research: shared ground between farmsteads - UNRESEARCHED: two within 140 ft keep the ground between them clear of scrub"""
+"""Research: shared ground between farmsteads - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); two within 140 ft keep the ground between them clear of scrub"""
 
 
 def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
     """The settlement's scrub keep-out as rings: each farmstead's own outline - its house and the parts nearest it -
     grown by `margin`, and the outline of each pair of farmsteads within `FARMSTEAD_NEIGHBOR_FT` (feature 261).
 
-    Research: no scrub among the farmsteads - UNRESEARCHED: each farmstead and its parts, and each near pair, grown by the margin"""
+    Research: no scrub among the farmsteads - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); each farmstead and its parts, and each near pair, grown by the margin"""
     hs = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or [] if "x" in h]
     if not hs:
         return []
@@ -265,7 +265,7 @@ class GroundCoverMixin:
 
         Research:
             unclaimed ground grazed - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the largest bare blocks laid as grazing (a floodplain's as meadow) until the cap holds
-            bare-share cap - UNRESEARCHED: `BARE_SHARE_CAP` (0.35) of the view may stay bare"""
+            bare-share cap - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); `BARE_SHARE_CAP` (0.35) of the view may stay bare"""
         vars(self)["_fills_holes"] = True  # ...and the view the finish grows for the title is clothed the same way (`refill_the_view`)
         probe = {**self.M, "_planned_cover": [[(float(q[0]), float(q[1])) for q in p] for p in planned]}
         bare, total = bare_cells(probe, view)
@@ -294,7 +294,7 @@ class GroundCoverMixin:
 
         Research:
             off the crops - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: every paddy and dry plot padded by the crop margin
-            off the treads - UNRESEARCHED: 4 ft of bare verge along every lane, street and road
+            off the treads - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P8, 2026-10-25); 4 ft of bare verge along every lane, street and road
             off the channels - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: the cut-bank margin off every irrigation channel, streams at their drawn width"""
         bs = self.bscale
         halo_rects, halo_circles = self._urban_keepouts(box)  # the urban-clearance halo (see _urban_keepouts)
@@ -346,7 +346,7 @@ class GroundCoverMixin:
 
 
         Research:
-            crowns on a lattice - UNRESEARCHED: crowns seated on a regular square lattice at the page's density
+            crowns on a lattice - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html: a worked wood stood as clumps of stems, not as spaced single trees, the lattice spacings being planted timber's - single crowns on a regular lattice are our fallback, a departure the code keeps until feature 417 T34; crowns seated on a regular square lattice at the page's density
         Research: coppice stocking grid - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown every COMMONS_SPACING_FT on dry ground, none under another"""
         xs, ys = [float(q[0]) for q in poly], [float(q[1]) for q in poly]
         x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
@@ -397,12 +397,12 @@ class GroundCoverMixin:
             marsh edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: grass thins into the reeds, brush and pines stop at the marsh
             wood edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no brush or pine in a wood, grass only WOOD_FRINGE_FT under its edge, thinning inward (its inner half at `WOOD_FRINGE_THIN_KEEP`)
             crowns and pines clear of the crops - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: they stand back as far as their crowns spread, so nothing leans over a crop - a crown its largest radius, a pine its 14 bs tip
-            a scrub pine's reach - UNRESEARCHED: `PINE_SPREAD_BS` (4.6 ft) as the pine's crown radius in the sun test
+            a scrub pine's reach - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); `PINE_SPREAD_BS` (4.6 ft) as the pine's crown radius in the sun test
             edge feather - CONVENTION: the scatter thins over 42 bs at the parcel's edge
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
-            a scrub pine's height - UNRESEARCHED: 9 to 14 ft (`random.uniform(9, 14) * bs`); no page gives a scrub pine's height
+            a scrub pine's height - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: grass with thin low pine - drawn 9 to 14 ft, under 0038's least drawn tree of 10 m, a departure the code keeps until feature 417 T34; 9 to 14 ft (`random.uniform(9, 14) * bs`); no page gives a scrub pine's height
             claimed but undrawn - CONVENTION: a bare render records the ground and draws nothing
-            woodland no-build - UNRESEARCHED: a woodland parcel made no-build ground
+            woodland no-build - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a woodland parcel made no-build ground
             no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
         # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to
         # show ... small pine trees and such growing out of the marshland in exactly the same pattern as
@@ -645,10 +645,10 @@ class GroundCoverMixin:
             coppice stocking - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown to COMMONS_SPACING_FT squared, COMMONS_CROWN_R_FT across
             no crown under another - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown centered under one already seated is not drawn
             coppice stops at the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: no woody growth inside a marsh but the belt's alder, so no coppice crown is seated in one
-            crowns and pines clear of the crops - UNRESEARCHED: a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one
+            crowns and pines clear of the crops - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: the scraggly pines and woodland trees stand back further by their drawn crowns' reach; a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
-            woodland stocked to read - UNRESEARCHED: a woodland parcel carries at least `WOODLAND_MIN_CROWNS` (5) crowns, so it reads as a wood
-            crowns thin to the wood's edge - UNRESEARCHED: a throw within the feather of the parcel's edge is kept with chance (d / feather) ** 0.6
+            woodland stocked to read - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a woodland parcel carries at least `WOODLAND_MIN_CROWNS` (5) crowns, so it reads as a wood
+            crowns thin to the wood's edge - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a throw within the feather of the parcel's edge is kept with chance (d / feather) ** 0.6
             no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
         x0, y0, x1, y1 = box
         _wd_crowns = 0
@@ -762,7 +762,7 @@ class GroundCoverMixin:
             marsh at the toe - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the reed marsh on the downhill toe band
             scrub ring - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: scrub on the frame strips round the cultivated ground and the toe's flank
             interior voids grazed - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the ground a fan leaves inside its own box clothed as rough grazing
-            no cover among the houses - UNRESEARCHED: 44 px round each farmstead, or each homestead on a dispersed map
+            no cover among the houses - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); 44 px round each farmstead, or each homestead on a dispersed map
             woodland per map - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the coppice patches added by the generator, not here"""
         if down_deg is None:
             down_deg = self.M.get("meta", {}).get("down_deg", 90)

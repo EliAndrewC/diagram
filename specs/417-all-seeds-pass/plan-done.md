@@ -483,3 +483,22 @@ Owed by cohort@20261025T121445Z (18 landing seeds newly failing `track_ends_off_
 10. **Before moving a constant.** n/a - no value moves.
 11. **Before fitting things into room.** n/a.
 
+<!-- plan-archive: archived 2026-10-25 -->
+### T36 Approach (checklist part A)
+
+1. **The goal, in the world.** Every claim outside the 247's modules says truthfully what research found.
+2. **The constraints.** D32, D36, D37; the claim grammar; impl-drift's verdicts.
+3. **Where each comes from.** G: the GM 2026-10-25. R: passes P1-P7 (`evidence/t29/`) and P8.
+4. **Do they describe the world here?** Per claim, its pass's reading.
+5. **The order.** After T29; then T38; then T31 (D37 c).
+6. **The exits.** Silent or no source could speak: bare GUESS naming the pass. A page answers as a convention: cited. A page
+   answers and the code departs: cited with the departure, landing DRIFTED, its unit named in its T33-T35 row. A source no
+   page records yet: recorded on its page by a page session first (D37 b), then cited as above. Not looked into: pass P8, then
+   as above.
+7. **The search smell.** No label is changed to make a round pass; a claim impl-drift rules wrong twice keeps its research
+   label with its description reverted.
+8. **The budget.** The passes (done), P8 (done), the page sessions for the 14 sources, two claims rounds.
+9. **Done, measured.** The landing's claims gate green; R9 with T36's counts.
+10. **Before moving a constant.** n/a - no value moves.
+11. **Before fitting things into room.** n/a.
+

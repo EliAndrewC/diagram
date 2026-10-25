@@ -127,7 +127,7 @@ def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None
     what should have happened instead of the park: the ladder is a decision about numbers, and it can
     be asked about numbers.
 
-    Research: shrink before dropping - UNRESEARCHED: a square parcel tried at 0.9-0.6 of its size, never under the floor
+    Research: shrink before dropping - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); a square parcel tried at 0.9-0.6 of its size, never under the floor
     """
     for sh in (0.9, 0.8, 0.7, 0.6):
         cand = max(half * sh, floor_half)
@@ -167,7 +167,7 @@ def parcel_wet_share(ring: Sequence[Pt], marshes: Sequence[list[Pt]]) -> float:
 
 
 _CHAIN_OFF = 0.2  # a third parcel within this fraction of the span off the line through two others stands in their row
-"""Research: woods not in a ruled line - UNRESEARCHED: a third parcel within 0.2 of the span off two others' line"""
+"""Research: woods not in a ruled line - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0077 speaks only of one wood's boundary bending, no page of how several parcels stand to each other; a third parcel within 0.2 of the span off two others' line"""
 
 
 def in_a_ruled_line(p: tuple[float, float], centers: Sequence[tuple[float, ...]], frac: float = _CHAIN_OFF) -> bool:
@@ -176,7 +176,7 @@ def in_a_ruled_line(p: tuple[float, float], centers: Sequence[tuple[float, ...]]
     CHAIN the 2026-08-18 reviews recorded: the monotone score still seats each parcel on the first legal ground along the
     crop's keep-out edge, and Inashiro's three stood 5 ft off one line over 1,104 ft, Kashikawa's in a column.
 
-    Research: woods not in a ruled line - UNRESEARCHED: three parcels off one line by less than 0.2 of their span refused
+    Research: woods not in a ruled line - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0077 speaks only of one wood's boundary bending, no page of how several parcels stand to each other; three parcels off one line by less than 0.2 of their span refused
     """
     for i in range(len(centers)):
         for j in range(i + 1, len(centers)):
@@ -220,7 +220,7 @@ def _patch_keepouts(
     (lifted out of it by feature 370, the 100-statement cap; the same reads in the same order).
 
     Research:
-        keep-outs - UNRESEARCHED: 150 px from houses, 90 from wells, 120 past the pond, 70 from lanes, 60 from streams, 110 round the belt and the houses
+        keep-outs - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); 150 px from houses, 90 from wells, 120 past the pond, 70 from lanes, 60 from streams, 110 round the belt and the houses
         title pocket kept clear - CONVENTION: the title pocket (frame.title_pocket) is a keep rectangle no wood's square may enter
         no wood on the marsh - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: low ground by a river or marsh is left to grass, so the drawn marsh (`marsh_ground`) is a keep-out
     """
@@ -275,7 +275,7 @@ def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, 
     Research:
         where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, the slope higher than the fields first, then the level beside them
         below the houses on dry ground - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked as any seat; by the water it is refused in the scan's qualification (`open_ground_patches`, `low_by_the_water`)
-        the fields beside a seat - UNRESEARCHED: the field edge within `FIELD_BESIDE_FT` (300 ft) past the nearest point, in the map's px
+        the fields beside a seat - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); the field edge within `FIELD_BESIDE_FT` (300 ft) past the nearest point, in the map's px
         beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; the walk from the houses runs through the field on every tier (`crossed_through`) - the paddy or a row holding, research/questions/0033-row-villages-resson.drawing.html's house lot, then field, then woodland - the seat also higher than the fields beside it where the ground slopes
     """
     ccx, ccy = cc
@@ -340,22 +340,22 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     "where is there still room" is a question about the map as it stands at that moment.
 
     Research:
-        parcel count and size - UNRESEARCHED: `count` parcels from 250 ft, the ladder scaled 0.9-1.1 per map, rungs 0.8, 0.64, 0.5
-        crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
-        parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
-        aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
+        parcel count and size - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0071's 0.06 to 5.3 ha are fengshui groves, a different wood, and 0077 gives no coppice lot's size; `count` parcels from 250 ft, the ladder scaled 0.9-1.1 per map, rungs 0.8, 0.64, 0.5
+        crop set-back - research/questions/0038-sunlight-and-shade-on-the-farm.html: a tree shades one tree's height to its east, west and north (the Qimin Yaoshu), about 33 ft, which the set-backs clear; 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
+        parcels kept apart - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); each one's exclusion 1.15-2.5 of the size
+        aspect and bearing - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); up to 2.2:1, laid across the fall within 20 deg
         line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH (45 ft, the page's "within about 45 ft", its GUESS) of a lane, brook or field the line runs alongside
         mostly dry - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no sample of the parcel in marsh (WET_SHARE_CAP 0)
         low ground by the water - GUESS research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a square below the houses refused within LOW_BY_WATER_FT (46 ft) of a river or marsh, measured from its corners (half the side times the square root of two)
         on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the ring inside the view
         scan seat window - CONVENTION: a seat's center may sit up to 0.6 of the half-size outside the predicted frame, 0.8 of the square's box inside it
         title pocket kept clear - CONVENTION: the title pocket (frame.title_pocket) is a keep rectangle no wood's square may enter
-        woods not in a ruled line - UNRESEARCHED
+        woods not in a ruled line - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0077 speaks only of one wood's boundary bending, no page of how several parcels stand to each other
         nearest seat preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the nearest slope beyond the fields
-        per-parcel size bands - UNRESEARCHED: 0.82-1.18 of the half-size by band, then a 0.84 smaller try
-        scan reach - UNRESEARCHED: confined to 210 px past the content box
-        a ring with room for a wood - UNRESEARCHED: a ring with room for fewer than `WOODLAND_MIN_CROWNS` (5) crowns is refused as a wood
-        commons legibility floor - UNRESEARCHED: a ring under 120 ft is dropped rather than drawn smaller (fewer, never smaller)
+        per-parcel size bands - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); 0.82-1.18 of the half-size by band, then a 0.84 smaller try
+        scan reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); confined to 210 px past the content box
+        a ring with room for a wood - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); a ring with room for fewer than `WOODLAND_MIN_CROWNS` (5) crowns is refused as a wood
+        commons legibility floor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); a ring under 120 ft is dropped rather than drawn smaller (fewer, never smaller)
     """
     # IN THE MAP'S PIXELS (feature 328 batch 3, impl-drift): the parcel size and the commons' legibility floor are feet, and every
     # length the scan compares them with is px - equal at a hamlet's 1 ft/px, wrong at any other grain
@@ -796,9 +796,9 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
 # the record does attest as rectilinear (the Musashino strip holdings) is a settlement form and is not drawn here.
 
 LANE_LOT_LINE = 70.0  # px from a lane's centerline: the scan's own lane keep-out (`open_ground_patches`), the lot's line along it
-"""Research: lot line along a lane - UNRESEARCHED: 70 px from its centerline"""
+"""Research: lot line along a lane - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); 70 px from its centerline"""
 STREAM_LOT_LINE = 60.0  # px from a brook's centerline: the scan's own stream keep-out, the lot's line along it
-"""Research: lot line along a brook - UNRESEARCHED: 60 px from its centerline"""
+"""Research: lot line along a brook - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); 60 px from its centerline"""
 LOT_BOUND_REACH = 45.0
 """How near (px, 1 ft at the hamlet scale) a lot's outline must come to a feature's line before the line bounds it.
 
@@ -975,7 +975,7 @@ def _crop_refuses(center: Pt, half: float, crop: RingIndex, normal: float = 80.0
     crop could apply (+1 px of slack), and the refusal is the expression the scan ran - `d - half <
     set-back` on the true distance - so the verdict is the same to the bit.
 
-    Research: crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side
+    Research: crop set-back - research/questions/0038-sunlight-and-shade-on-the-farm.html: a tree shades one tree's height to its east, west and north (the Qimin Yaoshu), about 33 ft, which the set-backs clear; 80 px, 180 px on the crop's sunny side
     """
     cx, cy = center
     if crop.inside(cx, cy):

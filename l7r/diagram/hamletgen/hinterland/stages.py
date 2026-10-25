@@ -110,7 +110,7 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
         scrub past the fields - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open scrub the dominant cover outside the crops and woods
         no scrub under a worked wood - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: brush and pine stop at every wood's line
         bare ground as rough grazing - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: rough grazing on dry marginal ground
-        share clothed as grazing - UNRESEARCHED: holes in the view filled
+        share clothed as grazing - GUESS research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the dry margins are filled as one continuous band; holes in the view filled
         grass ground form - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the grass hill (open scrub) or the
             floodplain (open meadow, `grass_ground`) from the land; on a grass-hill map, now and then, a small grass hill above one paddy (`paddy_grass`)
         stage order - NONE
@@ -237,7 +237,7 @@ def stock_woodland(s: Settlement, patch: Sequence[Any]) -> None:
     records it (`meta.woodland_regraded`). Measured over cohort seeds 1-60 on 2026-09-29: no parcel's room was re-read
     at the draw and the fewest crowns a wood recorded was 134, so the refusal is a guarantee, not a path any map takes.
 
-    Research: under-stocked parcel regraded - UNRESEARCHED: under WOODLAND_MIN_CROWNS the parcel is drawn as grazing
+    Research: under-stocked parcel regraded - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); under WOODLAND_MIN_CROWNS the parcel is drawn as grazing
     """
     from l7r.diagram.settlement.land.cover import WOODLAND_MIN_CROWNS  # noqa: PLC0415 - kept beside its one use
 
@@ -385,8 +385,8 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         copse reach from a house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: within COPSE_HOUSE_REACH_FT (90 ft), a dooryard's reach
         copse on the house's own bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: each farmstead stands whole on one bank (a GUESS recorded there)
         copse sized by the homestead woods - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: each homestead's wood rolled in the register's range, the copse filled to what the belt and groves leave
-        no copse without a belt or a reserved seat - UNRESEARCHED: a map with neither draws no copse
-        among-the-houses copse box - UNRESEARCHED: the box is the cluster's oriented footprint padded 16 ft
+        no copse without a belt or a reserved seat - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: every farm that keeps a wood is given 6,000 to 28,000 sq ft of trees, its share of the copse counted - a map with no belt and no reserved seat draws no copse, a departure the code keeps until feature 417 T33; a map with neither draws no copse
+        among-the-houses copse box - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); the box is the cluster's oriented footprint padded 16 ft
     """
     _seats = reserved_seats(s)
     if not plan.belt and not _seats:

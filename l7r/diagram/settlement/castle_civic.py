@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 """Research: hall size - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: one long building about 124 x 35 ft"""
 
-"""Research: martial hall compound - UNRESEARCHED: 130 x 124 ft, the hall across its north, the master's house and the archery lane south of it"""
+"""Research: martial hall compound - research/questions/0165-martial-training-grounds-and-dojo.html: a master's practice hall at his own house was the private dojo's form - the master's house is drawn inside the martial hall's compound, a departure the code keeps until feature 417 T35; the size and the hall across the north are ours; 130 x 124 ft, the hall across its north, the master's house and the archery lane south of it"""
 
 
 class CastleCivicMixin:

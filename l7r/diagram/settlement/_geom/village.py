@@ -37,4 +37,4 @@ def village_population(rng: random.Random) -> int:
 # a placer and its check drift into disagreeing, which this engine has on record several times.
 # The placer adds its own hair of margin on top; the gate measures this figure exactly.
 FARMHOUSE_EAVE_GAP_FT = 8.0
-"""Research: farmhouse wall-to-wall clearance - UNRESEARCHED: 8 ft, two drip lines and a footpath"""
+"""Research: farmhouse wall-to-wall clearance - research/questions/0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html: a house's drip ground ran 2 to 3 chi and its eaves 2.2 chi (north China, Qing); the footpath between is ours; 8 ft, two drip lines and a footpath"""

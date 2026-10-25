@@ -100,7 +100,7 @@ class HamletSpec:
     complete, gate-passing hamlet.
 
     Research:
-        default households - UNRESEARCHED: 15 when none declared (REF_HOUSEHOLDS), Ikegami's count
+        default households - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html: a hamlet is 10 to 20 households (the GM's canon); 15 is its middle; 15 when none declared (REF_HOUSEHOLDS), Ikegami's count
         declared fields honored, the rest rolled - NONE: the spec's plumbing; each knob table carries its own claim in consts"""
 
     name: str
@@ -320,7 +320,7 @@ class SitePlan:
 
         Research:
             head race leaves leaning downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: OFFTAKE_DEG off the fall
-            turned away from the brook's flank - UNRESEARCHED"""
+            turned away from the brook's flank - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: the intake stands on the bank of the land it serves (a modern engineering lecture); the race's turn away from the brook is ours"""
         return self.down_deg - self.brook_side * OFFTAKE_DEG
 
     @property
@@ -342,7 +342,7 @@ def offtakes_for(households: int) -> tuple[tuple[float, ...], tuple[float, ...]]
 
     Research:
         delivery ditches by size - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the second canal feeds at least one
-        delivery-ditch count and fractions - UNRESEARCHED: 2, 3 or 4 by household band (OFFTAKE_LADDER)"""
+        delivery-ditch count and fractions - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 2, 3 or 4 by household band (OFFTAKE_LADDER)"""
     for ceiling, a, b in OFFTAKE_LADDER:
         if households < ceiling:
             return a, b
@@ -388,9 +388,9 @@ def band_extent(households: int, shape: str | None, ground: float | None = None)
     (`households * HOMESTEAD_GROUND_FT^2`, the ground a homestead takes), so the shape sets only the band's aspect.
 
     Research:
-        band area - UNRESEARCHED: households times HOMESTEAD_GROUND_FT squared; 0037 sizes only the yard
-        band aspect by shape - UNRESEARCHED: CLUSTER_BAND_ASPECT
-        band floors and caps - UNRESEARCHED: half-depth 112 to 300 ft, half-length 240 to 1,100 ft"""
+        band area - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); households times HOMESTEAD_GROUND_FT squared; 0037 sizes only the yard
+        band aspect by shape - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); CLUSTER_BAND_ASPECT
+        band floors and caps - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); half-depth 112 to 300 ft, half-length 240 to 1,100 ft"""
     asp = CLUSTER_BAND_ASPECT.get(shape or "crescent", 3.0)
     g = HOMESTEAD_GROUND_FT if ground is None else ground
     dep = max(112.0, min(math.sqrt(households * (g**2) / (asp * math.pi)), 300.0))
@@ -401,7 +401,7 @@ def band_extent(households: int, shape: str | None, ground: float | None = None)
 SEAT_STANDOFF = 12.0
 """px from the field margin to the seat band's near edge (`cluster._seat_frame`'s standoff).
 
-Research: standoff from the field - UNRESEARCHED: 12 ft"""
+Research: standoff from the field - research/questions/0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html: a village house stood about 3 ft back from cultivated land (Mino, Tokugawa custom compiled 1892); the seating band's 12 ft is ours; 12 ft"""
 BELT_REACH = 146.0
 """px upwind of the cluster's windward fringe to the belt's far row (`belt_off_canvas` samples 36, 90 and 146).
 

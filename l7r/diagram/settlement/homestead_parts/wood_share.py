@@ -72,9 +72,9 @@ BAR_MARGIN_PX = 0.5
 #: record's "the windward grove at the back" (research/contents.json#homesteads, the yashikirin's north and west): the figures are
 #: the placer's, not the record's.
 FOCUS_DEPTH = 0.7
-"""Research: wood behind its house - UNRESEARCHED: centered 0.7 of the reach behind the house's center, the placer's figure"""
+"""Research: wood behind its house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: the deep stands stood windward, northwest by default, the house's south left open (0028) - `back` is the house frame's rear whatever the map's wind, a departure the code keeps until feature 417 T33; the 0.7 is ours; centered 0.7 of the reach behind the house's center, the placer's figure"""
 LATERAL_WEIGHT = 2.0
-"""Research: flanks after the back - UNRESEARCHED: a foot aside costs twice a foot deeper"""
+"""Research: flanks after the back - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a foot aside costs twice a foot deeper"""
 
 #: The strip the morning lane runs east of a garden bed: 50 ft (`grove_rules.EAST_REACH_FT`), drawn at the hamlet's 1 ft a px.
 EAST_LANE_FT = 50.0
@@ -93,7 +93,7 @@ def copse_keepouts(
     Research:
         clump beside, never on, a building - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
             half the diagonal plus the clump's radius and 2 px
-        copse off the wellhead - UNRESEARCHED: its drawn half-size plus 1.05 clumps
+        copse off the wellhead - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); its drawn half-size plus 1.05 clumps
         plots' sun strips - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the copse's own SEAT keep-outs
             (`village_grove`): a tree's 50 ft (`CANOPY_SHADE_FT`) south of each yard and bed, `EAST_LANE_FT` (50 ft) east of each yard and bed down to 50 ft below it, and west and southwest
             of each yard and bed at the map's afternoon lane; the page's 50 ft round every crown is held at the planting
@@ -158,7 +158,7 @@ def ground_blocks(s: Settlement, clump: float) -> GroveBlocks:
         copse off the crops - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
             12 px plus the clump's radius off a paddy, 12 off a dry plot
         copse off the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
-        copse off open water - UNRESEARCHED: half-width plus the clump's radius
+        copse off open water - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); half-width plus the clump's radius
     """
     cr, m = clump / 2.0, BAR_MARGIN_PX
     water = [(st["poly"], st.get("w", 9) / 2 + cr + m) for st in s.M.get("streams", [])]
@@ -192,7 +192,7 @@ def open_water_discs(M: Mapping[str, Any], clump: float) -> list[tuple[float, fl
     287 M8).
 
     Research:
-        copse off ponds and sacred ground - UNRESEARCHED: each plus 0.90 of the clump
+        copse off ponds and sacred ground - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); each plus 0.90 of the clump
     """
     reach = clump * 0.90 + BAR_MARGIN_PX
     out = [(float(o["x"]), float(o["y"]), 0.5 * math.hypot(float(o["w"]), float(o["h"])) + reach) for k in ("religious", "shrines") for o in M.get(k) or [] if "w" in o and "h" in o]
@@ -251,8 +251,8 @@ class WoodShares:
                 as `village_grove` keeps it, so the reservation keeps what the planting keeps
             afternoon lane as the copse plants - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the map's
                 `west_sun_lane` west and southwest of each yard and bed, as the copse plants it; none where it declares none
-            copse clump size - UNRESEARCHED: `COPSE_CLUMP_BS`, 22 bscale units, the copse's clump
-            copse seat pitch - UNRESEARCHED: `SEAT_PITCH_BS`, the clump radius times the square root of two, so the reserved crowns cover every point of a cell
+            copse clump size - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); `COPSE_CLUMP_BS`, 22 bscale units, the copse's clump
+            copse seat pitch - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); `SEAT_PITCH_BS`, the clump radius times the square root of two, so the reserved crowns cover every point of a cell
             seat off a lane - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the corridor's half plus the copse's lane buffer; no page read gives how far a way kept off a farmhouse's grove
         """
         self.clump = COPSE_CLUMP_BS * s.bscale
@@ -303,7 +303,7 @@ class WoodShares:
         Research:
             within a dooryard's reach - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the
                 reach the caller gives, 90 ft
-            on its house's bank - UNRESEARCHED: no seat across a stream from its house
+            on its house's bank - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: a homestead's wood stood on its own lot; no seat across a stream from its house
         """
         if not (6.0 <= x <= self.W - 6.0 and 6.0 <= y <= self.H - 6.0):
             return True
@@ -331,7 +331,7 @@ class WoodShares:
         Research:
             each household's floor reserved - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
                 crowns covering the floor on ground no other household holds, or the seat refused
-            seats behind the house - UNRESEARCHED: taken nearest a point `FOCUS_DEPTH` (0.7) of the reach behind the house
+            seats behind the house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: the deep stands stood windward, northwest by default, the house's south left open (0028) - `back` is the house frame's rear whatever the map's wind, a departure the code keeps until feature 417 T33; the 0.7 is ours; taken nearest a point `FOCUS_DEPTH` (0.7) of the reach behind the house
         """
         hx, hy = float(geom["house"][0]), float(geom["house"][1])
         th = math.radians(rot)
@@ -443,6 +443,6 @@ def well_keepout(s: Settlement) -> float:
     """The disc a wellhead keeps the dooryard copse's clumps out of, from its center (`village_grove`'s `vr + 1.05 clumps
     + 1`), `BAR_MARGIN_PX` stricter.
 
-    Research: copse off the wellhead - UNRESEARCHED: drawn half-size plus 1.05 clumps and 1 px
+    Research: copse off the wellhead - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); drawn half-size plus 1.05 clumps and 1 px
     """
     return float(s._well_vr()) + COPSE_CLUMP_BS * s.bscale * 1.05 + 1.0 + BAR_MARGIN_PX

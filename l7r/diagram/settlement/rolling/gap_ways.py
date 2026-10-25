@@ -83,11 +83,11 @@ GAP_LEGS = 12
 #: A way coming within this of a way already laid joins it there, at a T, rather than running beside it: under the shadow rule's
 #: 30 ft (`WEB_SHADOW_FT`, a way beside another past a pitch), MEASURED (research R4: 10 of 14 refusals were the doubled band).
 JOIN_FT = 25.0
-"""Research: ways join at a T - UNRESEARCHED: a 25 ft join radius, under the 30 ft shadow; the T itself is the drawing page's"""
+"""Research: ways join at a T - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); a 25 ft join radius, under the 30 ft shadow; the T itself is the drawing page's"""
 #: ...and where a way joined there breaks the tree's lane law, it is tried joined farther off (`JOIN_FAR_FT`), then run on to the way
 #: out, the first the law admits taken (MEASURED, research R5).
 JOIN_FAR_FT = 45.0
-"""Research: a farther join - UNRESEARCHED: a way joins a way laid before it at a T; tried 45 ft off where the nearer join breaks the lane law"""
+"""Research: a farther join - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); a way joins a way laid before it at a T; tried 45 ft off where the nearer join breaks the lane law"""
 
 #: Ends of ways this close are joined at ONE point (`gathered_foot`): the lane page's knot reach.
 KNOT_FT = 25.0
@@ -206,7 +206,7 @@ def flood(L: Layers, segs: Sequence[tuple[Pt, Pt]], rings: Sequence[tuple[int, i
     Research:
         a way keeps to the middle of its gap - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: along the middle of the gaps
         the shortest or easiest way - research/questions/0081-village-lanes.drawing.html: a worn path takes the shortest or easiest way
-        how hard it keeps the middle - UNRESEARCHED: `CENTER_WEIGHT` (3) over `CENTER_CELLS` (3) (405 T127)
+        how hard it keeps the middle - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); `CENTER_WEIGHT` (3) over `CENTER_CELLS` (3) (405 T127)
     """
     import numpy as np
 
@@ -313,7 +313,7 @@ def trace(L: Layers, dist: Any, pred: Any, laid: Any, start: tuple[int, int], tr
 
     Research:
         ways join at a T - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane meets another at a T, never beside it
-        join reach - UNRESEARCHED: a way joins an earlier one it comes within `JOIN_FT` of
+        join reach - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); a way joins an earlier one it comes within `JOIN_FT` of
     """
     path: list[Pt] = []
     u, v = start
@@ -405,7 +405,7 @@ def lay_the_ways(s: Settlement) -> tuple[int, int]:
         households' ways laid in order, nearest the way out first - GUESS: a search order, so a nearer household's way is there for a farther one to join
         a household no way reaches is pinched across its nearest reached neighbor's yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: reached across a neighbor's land, whose own way is always drawn
         a passage a laid way makes unnecessary is ended - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one that a way reaches is given it and is no longer reached across its neighbor
-        a later way's join reach - UNRESEARCHED: an earlier way within `JOIN_FT` (25 ft), then `JOIN_FAR_FT` (45 ft)
+        a later way's join reach - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); an earlier way within `JOIN_FT` (25 ft), then `JOIN_FAR_FT` (45 ft)
         a way's search ring - NONE: each way sought within the corridor's half-width and `RING_CELLS` cells round its homestead, a bound on the search
     """
     tree = getattr(s, "_access", None)

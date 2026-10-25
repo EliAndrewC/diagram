@@ -38,7 +38,7 @@ class SinkRefused(RuntimeError):
 SINK_FRINGE = 44.0
 """The tail pond's reed fringe, out from its shore; the bank's trees stand beyond it (`pondbank`).
 
-Research: reed fringe width - UNRESEARCHED: a 44 ft ring"""
+Research: reed fringe width - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a 44 ft ring"""
 
 
 def drain_outfall(s: Settlement, name: str) -> Pt | None:
@@ -171,7 +171,7 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
 
     Research:
         pond downslope of the outfall - research/questions/0060-field-drains-akusuiro.drawing.html: the nearest seat at the field's foot
-        set-back margins - UNRESEARCHED: at least the rim plus 46 ft, a 12 ft cushion, 12 ft off the brook"""
+        set-back margins - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); at least the rim plus 46 ft, a 12 ft cushion, 12 ft off the brook"""
     dx, dy = plan.fall
     env = list(plan.envelope)
     rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
@@ -214,12 +214,12 @@ BROOK_JOIN_TRUNK = 150.0
 #: trims a brook's leading vertices before it judges one (`streams_avoid_fields`). Anything past this is a
 #: ditch driven through the rice.
 BROOK_JOIN_LEAD = 0.3
-"""Research: crop lead tolerance - UNRESEARCHED: 0.3 of the drain's run may lie in the rice as the field's own edge"""
+"""Research: crop lead tolerance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 0.3 of the drain's run may lie in the rice as the field's own edge"""
 #: How far the confluence must have FALLEN below the outfall, px. A drain runs downhill into the brook it
 #: joins, and a junction level with the outfall is neither a fall nor a join; a stride of the collector's
 #: own tail width is enough to read as one on the sheet.
 BROOK_JOIN_DESCENT = 20.0
-"""Research: confluence fallen below the outfall - UNRESEARCHED: 20 ft down the fall"""
+"""Research: confluence fallen below the outfall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 20 ft down the fall"""
 
 
 def drawn_brook(s: Settlement, plan: SitePlan) -> Poly:
@@ -245,7 +245,7 @@ def route_refusals(plan: SitePlan, out: Pt, heading: Pt, anchored: bool, route: 
 
     Research:
         junction turn - research/questions/0060-field-drains-akusuiro.drawing.html: at most JUNCTION_TURN_MAX_DEG
-        not through the rice - UNRESEARCHED: no interior vertex or leg in the field
+        not through the rice - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); no interior vertex or leg in the field
         runs downhill - research/questions/0060-field-drains-akusuiro.drawing.html: a fifth of the run down the fall
         with the drainage bearing - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: under 90 degrees off the water's flow
         brook not crossed mid-run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: ditches join rather than cross
@@ -281,7 +281,7 @@ def hull_route(plan: SitePlan, out: Pt, heading: Pt, brook: Sequence[Pt], pad: f
 
     Research:
         constructed route - NONE: hull geometry under route_refusals' rules
-        hull standoff - UNRESEARCHED: the drain skirts the field's hull 12 ft off
+        hull standoff - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the drain skirts the field's hull 12 ft off
         ends at the brook or off the map - research/questions/0060-field-drains-akusuiro.drawing.html"""
     from shapely.geometry import LineString, Point, Polygon  # noqa: PLC0415 - bound on first use
 
@@ -358,7 +358,7 @@ def _through_the_crop(plan: SitePlan, out: Pt, q: Pt) -> bool:
     is walked from the outfall until it is clear of the envelope; leaving within `BROOK_JOIN_LEAD` of the
     run is the field's own edge and is exempt, and the rest of the route is judged in full.
 
-    Research: drain not through the rice - UNRESEARCHED: the first 0.3 of the run exempt as the field's edge"""
+    Research: drain not through the rice - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the first 0.3 of the run exempt as the field's edge"""
     lead = next((t / 20.0 for t in range(21) if not point_in_poly(out[0] + (q[0] - out[0]) * t / 20.0, out[1] + (q[1] - out[1]) * t / 20.0, plan.envelope)), 1.0)
     if lead > BROOK_JOIN_LEAD:
         return True
@@ -390,11 +390,11 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
 
     Research:
         drain joins the passing brook - research/questions/0060-field-drains-akusuiro.drawing.html: drainage returned to the river
-        join reach - UNRESEARCHED: 420 ft from the outfall
+        join reach - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 420 ft from the outfall
         confluence below the outfall - research/questions/0060-field-drains-akusuiro.drawing.html: fallen BROOK_JOIN_DESCENT, the run downhill
         trunk below the junction - CONVENTION: BROOK_JOIN_TRUNK on the canvas
         not on a corner of the brook - CONVENTION
-        the nearest fallen point, off the crop - UNRESEARCHED: the drain to the brook never crosses the crop, and the nearest fallen candidate is the confluence"""
+        the nearest fallen point, off the crop - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the drain to the brook never crosses the crop, and the nearest fallen candidate is the confluence"""
     dx, dy = plan.fall
     found: list[tuple[float, Pt]] = []
     legs = list(zip(plan.brook, plan.brook[1:], strict=False))
@@ -525,8 +525,8 @@ def pond_seat(plan: SitePlan, out: Pt, prx: float, pry: float, heading: Pt | Non
 
     Research:
         pond in a pocket below the fields - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot
-        sways across the fall - UNRESEARCHED: 0.9 and 1.8 long radii
-        set-back limit - UNRESEARCHED: POND_SETBACK_LIMIT
+        sways across the fall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 0.9 and 1.8 long radii
+        set-back limit - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); POND_SETBACK_LIMIT
         ditch runs downhill, not over the brook - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html"""
     for sway in (0.0, -0.9 * prx, 0.9 * prx, -1.8 * prx, 1.8 * prx):
         moved = (out[0] - plan.fall[1] * sway, out[1] + plan.fall[0] * sway)
@@ -608,8 +608,8 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
         pond reference size - GUESS research/questions/0060-field-drains-akusuiro.drawing.html: about 230 by 150 ft at 15 households (116 x 74 ft radii), grown with the hamlet by the square root
         too far below, no pond - GUESS research/questions/0060-field-drains-akusuiro.drawing.html: a pond that would sit far below the fields sends the drain off the map (how far is pond_seat's set-back limit)
         reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: a fringe of reeds at the shore
-        reed fringe width - UNRESEARCHED: a 44 ft ring
-        no building on the water - UNRESEARCHED: 10 ft round the pond's box
+        reed fringe width - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a 44 ft ring
+        no building on the water - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 10 ft round the pond's box
         bowed ditch - CONVENTION"""
     name = f"{plan.spec.name.lower()}-paddies"
     out = drain_outfall(s, name)

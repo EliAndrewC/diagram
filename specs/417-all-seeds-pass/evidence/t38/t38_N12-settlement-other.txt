@@ -1,0 +1,292 @@
+### l7r/diagram/settlement/_geom/curves.py::fillet_polyline
+  line 20 [6]: def fillet_polyline(pts: Poly, radius: float, steps: int = 6, min_turn_deg: float = 8.0) -> Poly:
+  line 62 [0.35]: d = min(radius, 0.35 * l0, 0.35 * l1)
+### l7r/diagram/settlement/_geom/curves.py::smooth_closed
+  line 78 [6]: c1 = (p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6)
+  line 79 [6]: c2 = (p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6)
+### l7r/diagram/settlement/_geom/curves.py::smooth_points
+  line 91 [6]: c1 = (p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6)
+  line 92 [6]: c2 = (p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6)
+### l7r/diagram/settlement/_geom/curves.py::organic_bbox
+  line 114 [0.18]: jt = random.uniform(-amp * 0.18, amp * 0.18)
+  line 116 [0.35]: off *= 0.35
+### l7r/diagram/settlement/_geom/curves.py::organic_poly
+  line 131 [150]: segs = max(1, int(math.hypot(bx - ax, by - ay) / 150))
+### l7r/diagram/settlement/_geom/curves.py::winding
+  line 138 [15]: def winding(start: Pt, end: Pt, amp: float = 15, n: int = 2) -> Poly:
+### l7r/diagram/settlement/_geom/indexes.py::__init__
+  line 254 [128]: def __init__(self, cell: float = 128.0) -> None:
+  line 303 [32]: self.grid = PointGrid(32.0)
+  line 433 [64]: def __init__(self, ring: Any, cell: float = 64.0) -> None:
+  line 770 [128]: def __init__(self, rects: Any, polys: Any, lines: Any, cell: float = 128.0) -> None:
+  line 831 [128]: def __init__(self, rects: Any, lanes: Any, polys: Any, cell: float = 128.0) -> None:
+### l7r/diagram/settlement/_geom/indexes.py::inside_many
+  line 478 [0.05]: core, hull = poly.buffer(-0.05), poly.buffer(0.05)
+### l7r/diagram/settlement/_geom/indexes.py::_trees_for
+  line 681 [0.02, 0.05]: m = 0.05 + 0.02 * r  # the margin: over the chord error of shapely's 8-a-quarter arcs, and the boundary itself
+  line 692 [0.05]: m = 0.05
+### l7r/diagram/settlement/_geom/labels.py::aligned_tilt
+  line 89 [0.05]: if abs(t) < 0.05 or abs(abs(t) - 90.0) < 0.05:
+### l7r/diagram/settlement/_geom/labels.py::label_quad
+  line 140 [7]: t = float(L[7]) if len(L) > 7 and L[7] else 0.0
+### l7r/diagram/settlement/_geom/overlap.py::poly_gap
+  line 124 [1e+18]: best = 1e18
+### l7r/diagram/settlement/_geom/primitives.py::ring_offset
+  line 224 [0.25]: scale = 1.0 / max(0.25, mx * n1[0] + my * n1[1])
+  line 226 [1.5]: inner.append((b[0] - mx * inward * min(scale, 1.5), b[1] - my * inward * min(scale, 1.5)))  # a gentler miter inward: enough for a drawn crest's corners, short of a fold
+### l7r/diagram/settlement/_geom/primitives.py::keepout_ring
+  line 282 [1.5]: tol *= 1.5
+### l7r/diagram/settlement/_geom/primitives.py::facing_chains
+  line 336 [1.5]: tol *= 1.5
+### l7r/diagram/settlement/_geom/walls.py::torii_halfbox
+  line 45 [16]: def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, float]:
+### l7r/diagram/settlement/_geom/walls.py::wall_runs
+  line 67 [5.5]: runs.append(("the city wall", pts + [pts[0]], 5.5))
+  line 69 [2.5]: runs.append((f"the {wd.get('name', 'ward')} ward fence", [(float(p[0]), float(p[1])) for p in wd["boundary"]], 2.5))
+  line 71 [5.5]: runs.append(("a ward fence wall-cap", [(float(p[0]), float(p[1])) for p in cap.get("pts", [])], 5.5))
+### l7r/diagram/settlement/_geom/water_index.py::__init__
+  line 28 [128]: def __init__(self, M: dict[str, Any], cell: float = 128.0) -> None:
+### l7r/diagram/settlement/_geom/ways.py::lane_runs
+  line 57 [30]: roads = [{"pts": M["road"], "w": M.get("road_width", 30)}]
+  line 59 [26]: runs.append(([(float(p[0]), float(p[1])) for p in rd["pts"]], float(rd.get("w", 26)) / 2))
+  line 61 [18]: runs.append(([(float(p[0]), float(p[1])) for p in st["pts"]], float(st.get("w", 18)) / 2))
+  line 63 [6]: runs.append(([(float(p[0]), float(p[1])) for p in al["pts"]], float(al.get("w", 6)) / 2))
+  line 65 [20]: runs.append(([(float(p[0]), float(p[1])) for p in M["ring_road"]], float(M.get("ring_road_width", 20)) / 2))
+### l7r/diagram/settlement/_geom/ways.py::way_beds
+  line 88 [8]: runs.append(([(float(p[0]), float(p[1])) for p in ln["pts"]], float(ln.get("w", 8)) / 2))
+### l7r/diagram/settlement/_knobs.py::_toward
+  line 219 [0.45]: dd = min(dist, ln * 0.45)
+### l7r/diagram/settlement/_knobs.py::skeleton_layout
+  line 477 [0.12]: return {"kind": kind, "lanes": lanes, "headman": (cx, top + ey * 0.12), "gateway": (cx, bot)}
+  line 479 [0.4]: cj = cy - ey * 0.4
+  line 483 [0.2]: fy = cy + ey * 0.2
+  line 484 [0.7]: lanes = [[(cx - ex * 0.7, top), (cx, fy)], [(cx + ex * 0.7, top), (cx, fy)], [(cx, fy), (cx, bot)]]
+  line 488 [0.22, 0.4]: return {"kind": kind, "lanes": lanes, "headman": (cx - ex * 0.4, cy - ey * 0.22), "gateway": (cx, bot), "market": (cx, cy)}
+### l7r/diagram/settlement/_knobs.py::bridge_carried_ways
+  line 594 [30]: carried.append((M["road"], M.get("road_width", 30)))
+  line 596 [26]: carried.append((rd["pts"], rd.get("w", 26)))
+  line 598 [8]: carried.append((M["ring_road"], M.get("ring_road_width", 8)))
+  line 602 [6]: carried.append((ln["pts"], ln.get("w", 6)))
+### l7r/diagram/settlement/_knobs.py::bridge_crossed_waters
+  line 612 [9]: waters.append((s["poly"], s.get("w", 9)))
+  line 615 [4.2]: waters.append((c["poly"], c.get("w", 4.2)))
+  line 617 [4.2]: waters.append((d["poly"], d.get("w", 4.2)))
+  line 619 [12]: waters.append((cn["poly"], cn.get("w", 12)))
+  line 621 [22]: waters.append((M["moat"], M.get("moat_width", 22)))
+  line 627 [40]: waters.append((riv.get("pts") or riv["poly"], riv.get("w", 40)))
+  line 630 [26]: waters.append((c2["moat"], c2.get("moat_width", 26)))
+  line 632 [8]: waters.append((aq["poly"], aq.get("w", 8)))
+### l7r/diagram/settlement/_knobs.py::crop_boxes
+  line 763 [5]: out.append((_la[0], _la[2], _la[1], _la[3], f"label {lb[5]!r}" if len(lb) > 5 else f"labels[{i}]"))
+### l7r/diagram/settlement/castle_civic.py::place_caption
+  line 35 [9]: size: float = 9,
+### l7r/diagram/settlement/city/bridges.py::seat_deck
+  line 124 [0.12]: wider = span * (1.0 + 0.12 * grow)
+  line 130 [6]: for sk in (2.0, 4.0, 6.0, 7.0):
+  line 133 [0.12]: wider = span * (1.0 + 0.12 * grow)
+### l7r/diagram/settlement/city/bridges.py::deck_glyph
+  line 347 [0.7]: r = hw * 0.7
+  line 349 [0.3]: g.append(f'<line x1="{-hl + r:.1f}" y1="{-r * 0.3:.1f}" x2="{hl - r:.1f}" y2="{-r * 0.3:.1f}" stroke="#B08A5C" stroke-width="0.6"/>')  # its crown catching the light
+  line 352 [7]: step = max(3.0, span / 7)  # the log ends showing along each edge
+  line 356 [0.8]: g.append(f'<line x1="{sx:.1f}" y1="{ey - 0.8:.1f}" x2="{sx:.1f}" y2="{ey + 0.8:.1f}" stroke="#6B5130" stroke-width="0.8"/>')
+  line 360 [7, 8]: step = max(7, span / 8)  # plank seams across the deck
+  line 365 [2.4]: g.append(f'<rect x="{-hl:.1f}" y="{-hw - 2.4:.1f}" width="{span:.1f}" height="2.6" fill="#5A3F1E"/>')  # the two side rails
+  line 366 [0.2]: g.append(f'<rect x="{-hl:.1f}" y="{hw - 0.2:.1f}" width="{span:.1f}" height="2.6" fill="#5A3F1E"/>')
+### l7r/diagram/settlement/city/bridges.py::channel_footbridges
+  line 582 [41]: _lw = [taper_w(w, w_tail, k2 / 40.0) for k2 in range(41)]
+### l7r/diagram/settlement/city/bridges.py::_widen_for_confluence
+  line 728 [0.02]: under.append((ow + 2.0 * (2.0 / self.ftpx) + plank_w * _cos) / max(_sin, 0.02) + 1.0)
+### l7r/diagram/settlement/city/moat.py::sluice_gate
+  line 53 [10.8]: _sk = span / 10.8
+  line 55 [4.6, 9.2]: g.append(f'<rect x="{-4.6 * _sk:.1f}" y="-1.4" width="{9.2 * _sk:.1f}" height="2.8" fill="#8A7050" stroke="{wc}" stroke-width="1.0"/>')  # the lifted board
+  line 56 [5.4]: g.append(f'<rect x="{-5.4 * _sk:.1f}" y="-2.0" width="2.0" height="4.0" fill="{wc}"/>')  # posts, ON the banks when span is given
+  line 57 [5.4]: g.append(f'<rect x="{5.4 * _sk - 2.0:.1f}" y="-2.0" width="2.0" height="4.0" fill="{wc}"/>')
+  line 63 [4.4]: g.append(f'<line x1="{-4.4 * _sk:.1f}" y1="-3.1" x2="{4.4 * _sk:.1f}" y2="-3.1" stroke="{wc}" stroke-width="1.2"/>')  # the crossbeam walkway
+  line 71 [13]: lx_, ly_ = label_xy if label_xy else (x, y - 13)
+  line 72 [4.2, 5.4]: self.label(lx_, ly_, label, 9, italic=True, color="#3A352C", ref=(x - 5.4 * _sk, y - 4.2, x + 5.4 * _sk, y + 2.0))
+### l7r/diagram/settlement/city/moat.py::inwall_drain_outfall
+  line 108 [20]: cl = self.M.get("ring_road_width", 20) / 2 + 10.0
+  line 120 [24]: for _ in range(24):
+  line 138 [2.5]: self.M["channels"].append({"poly": poly, "frm": _frm, "to": {"kind": "moat"}, "w": 2.5, "drawn": False})
+### l7r/diagram/settlement/core.py::__init__
+  line 63 [1180, 1820, 23]: def __init__(self: Settlement, W: int = 1820, H: int = 1180, seed: int = 23) -> None:
+### l7r/diagram/settlement/farm_fixtures.py::farm_fixture
+  line 179 [0.2, 0.22, 0.4]: g.append(f'<circle cx="{x0 + min(w, h) * 0.4:.1f}" cy="{h * 0.22:.1f}" r="{min(w, h) * 0.2:.1f}" fill="#3E2A12" stroke="#D8C08C" stroke-width="0.5"/>')
+  line 184 [0.3]: g.append(f'<line x1="{x0 + 1:.1f}" y1="{y0 + h * 0.3:.1f}" x2="{-x0 - 1:.1f}" y2="{y0 + h * 0.3:.1f}" stroke="#D8C08C" stroke-width="0.9"/>')  # the ridge
+  line 185 [3.2]: n = max(3, int(w / 3.2))  # log ends large enough to read at the fit zoom (settlement-review of Mizuguchi, feature 280)
+  line 187 [0.3, 0.4]: g.append(f'<circle cx="{x0 + (i + 0.5) * w / n:.1f}" cy="{-y0 - min(h, 4.0) * 0.4:.1f}" r="{min(h, 4.0) * 0.3:.1f}" fill="#E6CC96" stroke="#5A4326" stroke-width="0.4"/>')
+  line 191 [1.1]: g.append(f'<circle cx="0" cy="0" r="{w / 2 - 1.1:.1f}" fill="#4A3418"/>')  # the dark mouth
+  line 195 [0.17]: for k in (-0.5, -0.17, 0.17, 0.5):
+  line 196 [0.22, 0.8, 0.9]: g.append(f'<line x1="{k * w * 0.8 - 0.9:.1f}" y1="{h * 0.22:.1f}" x2="{k * w * 0.8 + 0.9:.1f}" y2="{-h * 0.22:.1f}" stroke="#C9A874" stroke-width="0.6"/>')
+  line 199 [0.24]: g.append(f'<circle cx="0" cy="0" r="{min(w, h) * 0.24:.1f}" fill="#3E3E3E"/>')  # the iron cauldron
+  line 202 [0.25]: for k in (-0.25, 0.0, 0.25):  # the slats/niches of the enclosure
+  line 203 [0.8]: g.append(f'<line x1="{k * w:.1f}" y1="{y0 + 0.8:.1f}" x2="{k * w:.1f}" y2="{-y0 - 0.8:.1f}" stroke="{edge}" stroke-width="0.6"/>')
+  line 211 [0.05, 0.12, 0.28, 0.3, 0.36, 0.62]: for sx, base, sh in ((-0.28, -0.05, 0.62), (0.05, 0.12, 0.5), (0.3, 0.3, 0.36)):
+  line 212 [0.18, 1.1]: g.append(f'<rect x="{sx * w - 1.1:.1f}" y="{base * h - sh * h + h * 0.18:.1f}" width="2.2" height="{sh * h:.1f}" rx="0.8" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.
+  line 215 [0.35]: g.append(f'<line x1="{x0 + 1:.1f}" y1="{y0 + h * 0.35:.1f}" x2="{-x0 - 1:.1f}" y2="{y0 + h * 0.35:.1f}" stroke="#F2C9B0" stroke-width="1"/>')  # the ridge
+  line 216 [2.6]: ty = -y0 + 2.6  # a little torii standing before the door: two posts, a lintel wider than the hall, and the tie beam
+  line 217 [1.5]: g.append(f'<line x1="{x0 - 1.5:.1f}" y1="{ty:.1f}" x2="{-x0 + 1.5:.1f}" y2="{ty:.1f}" stroke="{SHRINE_RED}" stroke-width="1.6"/>')
+  line 222 [0.2, 1.8]: g.append(f'<line x1="{x0 - 0.2:.1f}" y1="{ty + 1.8:.1f}" x2="{-x0 + 0.2:.1f}" y2="{ty + 1.8:.1f}" stroke="{SHRINE_RED}" stroke-width="0.8"/>')
+  line 223 [0.4, 0.6, 3.2]: g.append(f'<line x1="{x0 + 0.6:.1f}" y1="{ty - 0.4:.1f}" x2="{x0 + 0.6:.1f}" y2="{ty + 3.2:.1f}" stroke="{SHRINE_RED}" stroke-width="1.1"/>')
+  line 224 [0.4, 0.6, 3.2]: g.append(f'<line x1="{-x0 - 0.6:.1f}" y1="{ty - 0.4:.1f}" x2="{-x0 - 0.6:.1f}" y2="{ty + 3.2:.1f}" stroke="{SHRINE_RED}" stroke-width="1.1"/>')
+### l7r/diagram/settlement/farm_fixtures.py::persimmon
+  line 251 [107]: _j = self._hjit(cx, cy, 107.0)
+  line 253 [107.5, 13, 34, 45, 7]: a = math.radians(45 + 90 * k + 34.0 * (self._hjit(cx + k * 13.0, cy - k * 7.0, 107.5) - 0.5))
+  line 254 [0.16, 0.24, 0.44, 0.92, 107.9, 11, 5]: _rad = r * (0.44 + 0.24 * self._hjit(cx - k * 11.0, cy + k * 5.0, 107.9)) * (0.92 + 0.16 * _j)
+  line 255 [0.14]: g.append(f'<circle cx="{cx + _rad * math.cos(a):.1f}" cy="{cy + _rad * math.sin(a):.1f}" r="{max(1.0, r * 0.14):.1f}" fill="#E07B22"/>')
+### l7r/diagram/settlement/farm_fixtures.py::sty_parts
+  line 289 [0.8]: f'<line x1="{x0 + 0.8:.1f}" y1="{y0 + h / 2:.1f}" x2="{x0 + sw - 0.8:.1f}" y2="{y0 + h / 2:.1f}" stroke="#C9A874" stroke-width="0.9"/>',  # its ridge
+### l7r/diagram/settlement/farm_fixtures.py::pond_fixture_fits
+  line 307 [6]: if "x" in o and math.hypot(float(o["x"]) - cx, float(o["y"]) - cy) < half + math.hypot(float(o.get("w", 6)), float(o.get("h", 6))) / 2:
+### l7r/diagram/settlement/finish.py::caption_record_box
+  line 41 [0.55]: w = len(text) * size * 0.55
+  line 43 [0.25, 0.8]: return (x0, y - size * 0.8, x0 + w, y + size * 0.25)
+  line 44 [0.55]: w_ = max(len(ln) for ln in lines) * size * 0.55
+  line 46 [0.275]: cy_ = y - size * 0.275
+  line 47 [1.05, 1.15]: half = (size * 1.05 + (n - 1) * size * 1.15) / 2
+### l7r/diagram/settlement/finish.py::_record_label
+  line 182 [0.55]: w = len(text) * size * 0.55  # rough serif advance; slightly generous so near-misses flag
+  line 188 [0.25, 0.8]: bx0, by0, bx1, by1 = box if box is not None else (x0, y - size * 0.8, x0 + w, y + size * 0.25)
+### l7r/diagram/settlement/finish.py::label
+  line 217 [12]: size: float = 12,
+  line 275 [1.15]: lh = size * 1.15  # line pitch: the one-line box is 1.05 em tall, and a hair of lead between lines
+  line 276 [0.55]: w_ = max(len(ln) for ln in lines) * size * 0.55
+  line 278 [0.275]: cx_, cy_ = x0_ + w_ / 2, y - size * 0.275  # the one-line box's center; a wrapped block keeps it
+### l7r/diagram/settlement/finish.py::_caption_lines
+  line 315 [1.15]: lh = size * 1.15
+  line 319 [0.55]: w_ = max(len(ln) for ln in lines) * size * 0.55
+  line 321 [1.05]: h_ = size * 1.05 + (n - 1) * lh
+  line 322 [0.275]: cy_ = y - size * 0.275
+### l7r/diagram/settlement/finish.py::_text_width
+  line 362 [0.62]: return len(s) * fs * 0.62
+### l7r/diagram/settlement/finish.py::finish
+  line 437 [2600]: def finish(self: Settlement, basepath: str, render: bool = True, png_width: int = 2600) -> int:  # type: ignore[misc]
+### l7r/diagram/settlement/finish.py::_record_scatter_frame
+  line 620 [1e+09]: _over = [-1e9, -1e9, -1e9, -1e9]
+  line 625 [1e+09]: if max(_over) > -1e9:
+### l7r/diagram/settlement/finish.py::render_png
+  line 692 [2600]: def render_png(self: Settlement, basepath: str, width: int = 2600) -> None:  # type: ignore[misc]
+### l7r/diagram/settlement/hard_ground.py::_hard_ground
+  line 47 [1.5]: hw = float(ch.get("w") or 1.5) / 2 + 2.0
+### l7r/diagram/settlement/houses.py::house
+  line 82 [0.3]: g.append(f'<line x1="{-w * 0.30:.1f}" y1="0" x2="{w * 0.30:.1f}" y2="0" stroke="{ridge}" stroke-width="2"/>')
+  line 84 [0.4, 0.42]: g.append(f'<rect x="{x0 - 1:.1f}" y="{y0 - h * 0.42:.1f}" width="{w * 0.40:.1f}" height="{h * 0.5:.1f}" rx="3" fill="{light}" stroke="{edge}" stroke-width="1.3"/>')
+  line 86 [0.04, 0.16, 0.2]: g.append(f'<polygon points="{-w * 0.16:.1f},{-h * 0.16:.1f} {w * 0.16:.1f},{-h * 0.04:.1f} {-w * 0.04:.1f},{h * 0.2:.1f}" fill="#6E6452" opacity="0.7"/>')
+### l7r/diagram/settlement/houses.py::_fits
+  line 271 [88]: top: float = 88.0,
+  line 274 [26, 55]: if x < 55 or x > self.W - 55 or y < top or y > self.H - 26:
+### l7r/diagram/settlement/houses.py::_hjit
+  line 362 [12.9898, 4.1414, 43758.5, 7.373]: v = math.sin(x * 12.9898 + y * 4.1414 + salt * 7.373) * 43758.5453
+### l7r/diagram/settlement/houses.py::_house_rot
+  line 377 [11]: return self._hjit(cx, cy, 11.0) * 10.0 - 5.0
+### l7r/diagram/settlement/houses.py::_quad
+  line 396 [0.19]: pulls = [(self._hjit(cx, cy, salt + i * 0.19) * jit, self._hjit(cx, cy, salt + i * 0.19 + 0.5) * jit) for i in range(4)]  # each corner its own inward pull
+### l7r/diagram/settlement/houses.py::_try_place_bundle
+  line 465 [0.2]: hh = self.px(28) * (0.90 + self._hjit(x, y, 2.0) * 0.2)  # depth factor  [0.90, 1.10]
+  line 468 [29, 53]: t = int(abs(x) * 53 + abs(y) * 29) % 100
+  line 469 [30, 80]: wf = 1.0 if kind == "big" else (0.9 if t < 30 else (1.12 if t >= 80 else 1.0))
+### l7r/diagram/settlement/houses.py::cluster_seeds
+  line 537 [0.55, 1.4]: out.append((cx + math.cos(a) * r * ex * 0.55, cy + math.sin(a) * r * ey * 1.4))
+  line 547 [0.22]: bx = cx + t * ex * 0.5 + math.cos(a) * ex * 0.22 * depth
+  line 548 [0.95]: by = cy + (t * t - 0.5) * ey * 0.5 + math.sin(a) * ey * 0.95 * depth
+  line 552 [0.42, 0.62, 0.82]: out.append((cx + side * ex * 0.62 + math.cos(a) * r * ex * 0.42, cy + math.sin(a) * r * ey * 0.82))
+### l7r/diagram/settlement/houses.py::cluster_anchor
+  line 556 [0.34, 0.6]: self: Settlement, position: str, field_bbox: tuple[float, float, float, float], down_deg: float, lateral_frac: float = 0.6, depth_frac: float = 0.34
+  line 589 [22]: clr = dep + 22.0  # the along-slope clearance: the cluster's near edge sits `pad`-ish off the paddy, whole cluster clear
+  line 597 [0.3]: s, t = -(ad + clr), -au * 0.3
+  line 599 [0.3]: s, t = -(ad + clr), au * 0.3
+  line 603 [0.45]: s, t = ad * 0.45, au + clr  # low-ish AND pushed to the dry lateral shoulder, never the central toe
+  line 605 [0.3]: s, t = -(ad + clr), au * 0.3
+### l7r/diagram/settlement/houses.py::plot_texture
+  line 640 [0.66]: "small_irregular": (PADDY_CELL_ACRES * 0.72, 0.66),
+  line 641 [0.66]: "medium": (PADDY_CELL_ACRES, 0.66),
+  line 643 [1.9]: "strip": (PADDY_CELL_ACRES, 1.9),
+  line 648 [20, 34, 40]: "small_irregular": (34.0, (20.0, 40.0)),
+  line 649 [26, 36, 48]: "medium": (48.0, (26.0, 36.0)),
+  line 650 [30, 44, 70]: "large_block": (70.0, (30.0, 44.0)),
+  line 651 [32, 46, 66]: "strip": (32.0, (46.0, 66.0)),
+### l7r/diagram/settlement/structures/captions.py::_draw_placement
+  line 216 [0.08, 0.6]: self.add_label(f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{color}" stroke-width="{max(0.6, 0.08 * size):.2f}" stroke-linecap="round"/>', cls=
+### l7r/diagram/settlement/structures/captions.py::label_obstacles
+  line 266 [6]: elif kind == "kosatsuba" and len(payload) > 6 and payload[6] is not None:
+  line 273 [26]: ways.append(Way(tuple((float(p[0]), float(p[1])) for p in self.M["road"]), float(self.M.get("road_width") or 26) / 2))
+  line 276 [9]: ways.append(Way(tuple((float(p[0]), float(p[1])) for p in st["poly"]), float(st.get("w") or 9) / 2))
+### l7r/diagram/settlement/structures/captions.py::_defense_lines
+  line 288 [4.5]: out.append(([(float(p[0]), float(p[1])) for p in wall] + [(float(wall[0][0]), float(wall[0][1]))], 4.5))
+  line 291 [22]: out.append(([(float(p[0]), float(p[1])) for p in moat] + [(float(moat[0][0]), float(moat[0][1]))], float(self.M.get("moat_width", 22)) / 2))
+### l7r/diagram/settlement/structures/captions.py::_draw_field_name_label
+  line 310 [15]: self._draw_seated_caption(label, Subject("area", ((x0, y0), (x1, y0), (x1, y1), (x0, y1))), 15, False, "bold", "#33301E", None, markup=True)
+### l7r/diagram/settlement/structures/fixtures/_helpers.py::outermost_join
+  line 182 [5]: def outermost_join(track: Sequence[tuple[float, float]], others: Sequence[Sequence[tuple[float, float]]], step: float = 5.0) -> tuple[float, float] | None:
+### l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor
+  line 304 [5]: steps = max(1, int(seg / 5.0))
+### l7r/diagram/settlement/structures/fixtures/_helpers.py::departure_routes
+  line 324 [7]: def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float = DWELLING_REACH_FT) -> list[list[tuple[float, float]]]:
+### l7r/diagram/settlement/structures/fixtures/_helpers.py::__init__
+  line 437 [32]: self.grid = PointGrid(cell=32.0)
+### l7r/diagram/settlement/structures/fixtures/siting.py::_route_seats
+  line 336 [26]: and self._fits(x, y, w, h, corridors=False, top=26.0)
+### l7r/diagram/settlement/structures/fixtures/siting.py::_board_for
+  line 467 [0.6]: floor = 0.0 if anchor is not None else 0.6 * max(c.busy for c in cands)
+### l7r/diagram/settlement/structures/ground.py::_finish_road_label
+  line 29 [26]: half = float(self.M.get("road_width") or 26) / 2
+  line 30 [12]: p = self._draw_seated_caption(text, Subject("line", tuple(rd), half_width=half, hint=(float(lx), float(ly))), 12, True, "bold", "#5A4326", None)
+### l7r/diagram/settlement/title.py::placard_height
+  line 28 [30]: def placard_height(fs: float = 30) -> float:
+  line 34 [1.2, 46]: return fs * k * 1.2 + 46 * k + 2 * PLACARD_PAD * k
+### l7r/diagram/settlement/title.py::placard_size
+  line 40 [30]: def placard_size(self: Settlement, name: str, fs: float = 30) -> tuple[float, float, float, float, float]:  # type: ignore[misc]
+  line 47 [1.2]: tw, th = self._text_width(name, fs * k) + 4, fs * k * 1.2  # MEASURED text box (+4 breathing room) - see _text_width
+### l7r/diagram/settlement/title.py::title
+  line 51 [30]: def title(self: Settlement, name: str, fs: float = 30, prefer: tuple[float, float, float, float] | None = None) -> None:  # type: ignore[misc]
+  line 89 [8]: spot = self._blank_label_spot(prefer[0], prefer[1], prefer[2] - prefer[0], prefer[3] - prefer[1], bw, bh, margin=2.0, step=8.0)
+  line 102 [16, 30]: corners = [(vx0 + 30, vy0 + 16), (vx0 + vw - bw - 30, vy0 + 16), (vx0 + 30, vy0 + vh - bh - 16), (vx0 + vw - bw - 30, vy0 + vh - bh - 16)]
+  line 127 [3.5, 7]: f'<rect x="{px0 + 3.5:.0f}" y="{py0 + 3.5:.0f}" width="{bw - 7:.0f}" height="{bh - 7:.0f}" rx="5" fill="none" stroke="#BCAA7E" stroke-width="0.8"/></g>',
+  line 131 [12]: bx0, bx1, by = pcx - bar_px / 2, pcx + bar_px / 2, y + th + 12 * k  # bar CENTERED under the name, on the placard's axis
+  line 139 [33, 5]: self.M["scalebar"] = {"ft": bar_ft, "ftpx": self.ftpx, "bbox": [round(bx0, 1), round(by - 5, 1), round(bx1, 1), round(by + 33 * k, 1)]}
+  line 146 [5]: f'<line x1="{bx0:.0f}" y1="{by - 5:.0f}" x2="{bx0:.0f}" y2="{by + 5:.0f}"/>'
+  line 147 [5]: f'<line x1="{bx1:.0f}" y1="{by - 5:.0f}" x2="{bx1:.0f}" y2="{by + 5:.0f}"/>'
+  line 152 [12, 17]: self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17 * k:.0f}" text-anchor="middle" font-size="{12 * k:g}" fill="#3A2E1C">{bar_ft} ft</text>', cls="-")
+  line 154 [31]: f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31 * k:.0f}" text-anchor="middle" font-size="{10 * k:g}" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>', 
+### l7r/diagram/settlement/title.py::_title_band
+  line 168 [32]: band = bh + 32
+  line 175 [16]: y = vy0 - band + 16 if north else vy0 + vh + 16
+  line 176 [30]: x = vx0 + 30
+  line 177 [30]: while x + bw <= vx0 + vw - 30:
+  line 187 [8]: x += 8
+  line 191 [16, 30]: return (vx0 + 30, vy0 - band + 16)
+### l7r/diagram/settlement/title.py::_title_obstacles
+  line 284 [8]: _wr = float(o.get("vr", o.get("r", 8.0))) + 4.0
+  line 287 [14, 8]: _kw, _kh = float(o.get("w", 14.0)) / 2 + 4.0, float(o.get("h", 8.0)) / 2 + 4.0
+### l7r/diagram/settlement/title.py::_blank_label_spot
+  line 319 [22, 24]: self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24, cover_ok: bool = False, planned: Any = ()
+### l7r/diagram/settlement/town_ways.py::ancestral_hall
+  line 32 [5]: f'<rect x="{x - pw / 2 + self.px(5):.1f}" y="{y - ph / 2 + self.px(5):.1f}" width="{pw - self.px(10):.1f}" height="{ph - self.px(10):.1f}" fill="none" stroke="#6B4F2A" st
+  line 34 [18, 9]: self.add(f'<rect x="{x - self.px(9):.1f}" y="{y + ph / 2 - self.px(4):.1f}" width="{self.px(18):.1f}" height="{self.px(6):.1f}" fill="#5A3F1E"/>')  # entry porch on the w
+### l7r/diagram/settlement/town_ways.py::water_mouth
+  line 52 [6]: pts = " ".join(f"{x + pr * math.cos(a):.1f},{y + pr * math.sin(a):.1f}" for a in [math.pi / 6 + i * math.pi / 3 for i in range(6)])
+  line 54 [0.42]: self.add(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{pr * 0.42:.1f}" fill="none" stroke="#6B2A18" stroke-width="1.2"/>')
+### l7r/diagram/settlement/town_ways.py::market
+  line 75 [22, 6]: f'<rect x="{x - pw / 2 + self.px(10) + i * self.px(22):.1f}" y="{y - self.px(6):.1f}" width="{self.px(14):.1f}" height="{self.px(12):.1f}" fill="#C9A57A" stroke="#6B4F2A"
+### l7r/diagram/settlement/water_ways/_helpers.py::_pull_back
+  line 88 [8]: def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, min_len: float = 0.0, near: Any = None) -> list[Pt]:
+### l7r/diagram/settlement/water_ways/clipping.py::_clip_to_pond
+  line 35 [24]: for _ in range(24):
+  line 49 [1.35]: elif rad(out[0]) < 1.35:  # just outside (the sluice foot): prepend the rim point
+### l7r/diagram/settlement/water_ways/clipping.py::_clip_to_moat
+  line 69 [22]: hw = self.M.get("moat_width", 22) / 2
+### l7r/diagram/settlement/water_ways/clipping.py::_clip_to_river
+  line 114 [40]: hw = rv.get("w", 40) / 2
+### l7r/diagram/settlement/water_ways/clipping.py::_clip_to_stream
+  line 171 [1e+09, 4.5]: bd, bhw = 1e9, 4.5
+  line 174 [9]: hw = st.get("w", 9) / 2
+### l7r/diagram/settlement/water_ways/clipping.py::field_channel
+  line 251 [0.2]: if abs(w1 - w0) < 0.2:
+### l7r/diagram/settlement/water_ways/focal.py::mill
+  line 43 [8]: f'<line x1="{wx:.1f}" y1="{wy:.1f}" x2="{wx + wr * math.cos(a):.1f}" y2="{wy + wr * math.sin(a):.1f}" stroke="#5A3F1E" stroke-width="1"/>' for a in [i * math.pi / 4 for i
+### l7r/diagram/settlement/water_ways/lanes.py::_lane_ink_at
+  line 140 [2.5]: edge = f'<path d="{dd}" fill="none" stroke="#A98C58" stroke-width="{width + 2.5:.1f}" opacity="0.4" stroke-linejoin="round" stroke-linecap="round"/>'  # soft worn-earth s
+### l7r/diagram/settlement/water_ways/lanes.py::trim_lane_stubs
+  line 346 [0.01]: if _lane_len(pts) < _LANE_MIN_FT / max(float(self.M["meta"].get("ftpx", 1) or 1), 0.01):
+### l7r/diagram/settlement/water_ways/water.py::stream
+  line 146 [0.35]: sheen_t = f'<path d="{{dd}}" fill="none" stroke="#B6CAD8" stroke-width="{max(2, width * 0.35):.0f}" stroke-linejoin="round" stroke-linecap="butt"/>'

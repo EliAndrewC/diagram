@@ -31,7 +31,7 @@ def stream_segment_index(streams: Any) -> PointGrid:
 
     Research:
         keep-out geometry, index and cache plumbing - NONE: the segments and their widened boxes in a `PointGrid`
-        stream keep-out at half-width plus 5 px - UNRESEARCHED: `hw` = w / 2 + 5, the distance `rect_touches_stream` decides by"""
+        stream keep-out at half-width plus 5 px - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); `hw` = w / 2 + 5, the distance `rect_touches_stream` decides by"""
     grid = PointGrid()
     for f in streams:
         poly = f.get("poly") or []
@@ -174,7 +174,7 @@ class BundleFitMixin:
         changes length (all are laid before the homestead solve, then static). Lets _rect_on_water skip a
         whole course - and then an individual segment - whose neighborhood the rect cannot reach.
 
-        Research: water line keep-out - UNRESEARCHED: half the line's width (channel 2.5, ditch 7, stream 9 px by default) plus 5 px"""
+        Research: water line keep-out - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); half the line's width (channel 2.5, ditch 7, stream 9 px by default) plus 5 px"""
         chans = self.M.get("channels", [])
         ditches = self.M.get("field_ditches", [])
         streams = self.M.get("streams", [])
@@ -220,7 +220,7 @@ class BundleFitMixin:
         the solver leaves room the check then confirms. The GROVE is exempt (it may hug a bund). Bbox
         pre-filters (per course, then per segment) skip the seg_dist / crossing math for anything far off.
 
-        Research: solid parts off running water - UNRESEARCHED: house, yard, garden and shed held off every irrigation line; the grove exempt"""
+        Research: solid parts off running water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.html: a channel ran alongside the house (Harie) and into its grounds (0031), and houses stood on the water (0065) - solid parts are held off running water, a departure the code keeps until feature 417 T33; house, yard, garden and shed held off every irrigation line; the grove exempt"""
         cx, cy, w, h = rect
         gc = self._rect_corners(rect)
         pts = gc + [(cx, cy)]
@@ -306,8 +306,8 @@ class BundleFitMixin:
         ditches; the registry's admission of every part; the house off a tread, its eave gap and reachable ground; and its share of the wood floor (`WoodShares.share`).
 
         Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the whole farmstead (house, yard, garden beds, storehouse, byre, well) and its fixtures held off every paddy polygon by all the ground it covers
-            beds off every ditch - UNRESEARCHED: each garden bed held off every irrigation line at the corridor `_rect_on_water` keeps
-            persimmon held off the paddy by its trunk - UNRESEARCHED: a 4 ft trunk box held off every field polygon, its crown free to overhang
+            beds off every ditch - research/questions/0035-villages-beside-their-stream-one-bank-or-both.html: a channel ran alongside the house (Harie) and into its grounds (0031) - beds are held off every ditch, a departure the code keeps until feature 417 T33; each garden bed held off every irrigation line at the corridor `_rect_on_water` keeps
+            persimmon held off the paddy by its trunk - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); a 4 ft trunk box held off every field polygon, its crown free to overhang
             a tight seat only by passage - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: admitted only with a walk across the neighbor's yard, refused where its yard opens onto lane ground of its own (`passage.opens`)
             no path searched while houses are seated - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no way is sought for a household while it is seated; the yard's opening onto lane ground the one check
             the village roll's corridor search - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a roll with no seat region (a village's) keeps the corridor search"""
@@ -463,7 +463,7 @@ class BundleFitMixin:
         paddies. The GROVE (fields=False) may HUG a paddy bund, so it is tested against everything BUT the
         fields and the water lines.
 
-        Research: grove may hug a paddy bund - UNRESEARCHED: the grove tested against everything but the fields and the water lines"""
+        Research: grove may hug a paddy bund - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); the grove tested against everything but the fields and the water lines"""
         if self._site_chains is not None:
             return self._site_blocks_rect(rect)  # feature 226: the one outline instead of the five scans below
         if self._rect_hits(rect, self.block_polys):
@@ -540,7 +540,7 @@ class BundleFitMixin:
         front of it is a PREFILTER - it over-states both extents, so it can only admit a pair the
         exact test then rejects.
 
-        Research: roofs shed apart - UNRESEARCHED: `FARMHOUSE_EAVE_GAP_FT` (8 ft) plus 2 ft between the rotated corners of two farmhouses; 0029 gives only a 3 ft eave"""
+        Research: roofs shed apart - research/questions/0029-farmhouses-minka.drawing.html: 3 ft is the gap our maps keep between neighboring houses, and 0246 parts two homesteads by 20 ft - two farmhouses are held 8 + 2 ft apart, a departure the code keeps until feature 417 T33; `FARMHOUSE_EAVE_GAP_FT` (8 ft) plus 2 ft between the rotated corners of two farmhouses; 0029 gives only a 3 ft eave"""
         lim = self.px(FARMHOUSE_EAVE_GAP_FT + 2.0)
         cx, cy, w, h = rect
         cand = {"x": cx, "y": cy, "w": w, "h": h, "rot": self._house_rot(cx, cy)}  # the candidate as `eave_gap` reads a record
@@ -575,7 +575,7 @@ class BundleFitMixin:
         three cohort seeds (feature 291 on 287).
 
         Research:
-            no fixture in a grove band - UNRESEARCHED: its own farm's or a neighbor's, as turned and recorded
+            no fixture in a grove band - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); its own farm's or a neighbor's, as turned and recorded
             persimmon in no other farm's grove - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: its own grove gives way round it"""
         boxes = (geom.get("boxes") or {}).get("fixtures") or {}
         if not boxes:
@@ -779,7 +779,7 @@ class BundleFitMixin:
         drawn (`KeepoutsMixin._sun_keepouts`, feature 310).
 
         Research: bed's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band just east of a bed, a seating preference
-            bed's morning-sun reach - UNRESEARCHED: the reach 22 px (`bscale`) east of the bed, a figure 0038 does not give"""
+            bed's morning-sun reach - research/questions/0038-sunlight-and-shade-on-the-farm.html: a tree shades the ground to its east one tree's height (the Qimin Yaoshu), about 33 ft, and the drawing page 50 ft - the band is 22 ft, a departure the code keeps until feature 417 T33; the reach 22 px (`bscale`) east of the bed, a figure 0038 does not give"""
         new_groves = tuple(geom.get("groves") or ())
         if not new_groves:  # a nucleated bundle, on a map whose farms carry no grove
             return False
@@ -899,7 +899,7 @@ class BundleFitMixin:
         where it is drawn (`KeepoutsMixin._sun_keepouts`, `CANOPY_SHADE_FT`), whatever seat a farm takes.
 
         Research: yard's drying strip - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band in the yard's southern sun, a seating preference
-            yard's drying strip width - UNRESEARCHED: the 22 px strip in `shades`, a width 0038 does not give"""
+            yard's drying strip width - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the project's sun figures leave 39 ft open before a yard - the strip is 22 ft, a departure the code keeps until feature 417 T33; the 22 px strip in `shades`, a width 0038 does not give"""
 
         def shades(grove: Any, yard: Any) -> bool:
             cyx, cyy = yard[0], yard[1] + yard[3] / 2 + 11

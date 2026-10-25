@@ -204,8 +204,8 @@ class CombMixin:
                 fillet leg 2-3 ft from the vertex (0.8-1.2 of 2.5 ft), floored at the drawn aze (405 T126)
             pile by quadrant - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: a fillet per corner, each leg drawn on its
                 own, a quarter of corners left bare
-            how far a pile swells - UNRESEARCHED: each fillet bulges 0.15-0.45 of its chord into the basin (405 T127)
-            only where bunds cross - UNRESEARCHED: only a node where three or more plot corners meet is piled; T-stubs and field-edge corners
+            how far a pile swells - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); each fillet bulges 0.15-0.45 of its chord into the basin (405 T127)
+            only where bunds cross - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); only a node where three or more plot corners meet is piled; T-stubs and field-edge corners
                 are left bare (405 T127)"""
         from l7r.diagram.waterfields import AZE, aze_w
 
@@ -349,7 +349,7 @@ class CombMixin:
             plot size and crop - NONE: taken from the net as the comb builder laid them
             coarse-grain top-up - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the reserve plots `_coarse_grain_top_up` returns are drawn after the refused plots, by the same refusal rule
             fallback watercourse widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: where a record carries no width, a channel 4.5 ft and a canal 6 ft (0068), a brook 7 ft (0059's brook) - at the map's scale; 0068's brook narrower than the head race it feeds is the open conflict, the found row comb.py::CombMixin._comb_draw_source#feeder brook narrower than the head race
-            nothing built or planted on a dry plot - UNRESEARCHED: each drawn hem plot registered as blocked ground (`block_polys`) and dry ground (`dry_polys`)
+            nothing built or planted on a dry plot - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); each drawn hem plot registered as blocked ground (`block_polys`) and dry ground (`dry_polys`)
             dry plot ink - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the crop's own fill, furrowed, a tan edge"""
         from l7r.diagram.waterfields import hem_on_paddy
 
@@ -463,8 +463,8 @@ class CombMixin:
 
         Research:
             resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: whole basins, weighted along the fan's fall
-            resting plots off the low row - UNRESEARCHED: a low or blue plot never rests (the wet ground the pond and overlays take)
-            no resting plot on a dike-pond block - UNRESEARCHED: its open water is the fabric
+            resting plots off the low row - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: resting is weighted toward the far end of the water's run, with no row excluded - the lowest row never rests, a departure the code keeps until feature 417 T34; a low or blue plot never rests (the wet ground the pond and overlays take)
+            no resting plot on a dike-pond block - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a dike-pond block is drawn as its fish ponds (and 0019), not as rice plots; its open water is the fabric
             blue plot class - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a plot of the drain-side row painted
                 FLOODED is classed wet paddy, the tint marking ground, not season; the comb paints FLOODED nowhere else (`waterfields/tint.py`)"""
         from l7r.diagram.waterfields import AZE  # noqa: I001 - FLOODED is aliased for the picture record below
@@ -605,7 +605,7 @@ class CombMixin:
 
         Research:
             source pond - research/questions/0061-reservoir-ponds-tameike.drawing.html: a tameike at the sluice, a reed fringe and a no-build block round it
-            fringe and margin widths - UNRESEARCHED: 40 px of reed fringe, a 10 px no-build margin
+            fringe and margin widths - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); 40 px of reed fringe, a 10 px no-build margin
             pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: about 3 ft at the map's scale, twice the 1.5 ft floor
             planted pond bank - research/questions/0061-reservoir-ponds-tameike.drawing.html: every bank drawn bare; the bank planted sparsely with mulberry and cudrania is never rolled
             feeder brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a stream from the map's edge to the sluice, on past it where `to` says

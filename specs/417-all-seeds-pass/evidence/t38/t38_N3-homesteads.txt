@@ -1,0 +1,107 @@
+### l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo
+  line 125 [1e+09]: sun=s._sun_keepouts((-1e9, -1e9, 1e9, 1e9), BAMBOO_SHADE_FT),
+  line 136 [95]: if not h.get("sheltered") and s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
+  line 147 [96]: offers = south_band(h, px) if h.get("sheltered") else strip_candidates(h, plan.wind, px, s._hjit(hx, hy, 96.0))
+### l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo_wanted
+  line 379 [95]: return sum(1 for h in houses if h.get("sheltered") or (s._hjit(float(h["x"]), float(h["y"]), 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE and not (h.get("geom") or {}).get("groves
+### l7r/diagram/hamletgen/homesteads/bamboo.py::__init__
+  line 433 [6]: self.rings: PointGrid = boxed_grid(boxed_rings([p for p in list(fields) + list(marsh) if len(p) >= 3], 6.0))
+  line 491 [0.6]: tx, ty, r = float(tc[k]), float(tc[k + 1]), float(tc[k + 2]) + 0.6
+### l7r/diagram/hamletgen/homesteads/bamboo.py::count
+  line 520 [6]: pad = max(cw, ch) / 2 + 6.0
+### l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked
+  line 551 [30]: if cx - cw / 2 < 30 or cy - ch / 2 < 30 or cx + cw / 2 > s.W - 30 or cy + ch / 2 > s.H - 30:
+  line 602 [0.6]: if max(abs(cx - tx) - cw / 2, 0.0) ** 2 + max(abs(cy - ty) - ch / 2, 0.0) ** 2 < (tr + 0.6) ** 2:
+### l7r/diagram/hamletgen/homesteads/boundary.py::__init__
+  line 189 [128]: def __init__(self, corridors: tuple[list[Seg], list[Seg]], outline: tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]]] | None = None, cell: float = 1
+### l7r/diagram/hamletgen/homesteads/boundary.py::_vertex_grid
+  line 239 [32]: grid = PointGrid(32.0)
+### l7r/diagram/hamletgen/homesteads/capacity.py::free_seats
+  line 84 [6]: x0, y0, x1, y1 = 6.0, 6.0, float(s.W) - 6.0, float(s.H) - 6.0
+### l7r/diagram/hamletgen/homesteads/farm_water.py::_obstacles
+  line 156 [6]: vr = 2.0 * float(s._well_vr()) + s.px(6.0)
+### l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_laid
+  line 365 [102.7]: if kind == "manure" and pit_field_share > 0.0 and s._hjit(hx, hy, 102.7) < pit_field_share:
+### l7r/diagram/hamletgen/homesteads/growth.py::household_reach
+  line 185 [28, 46]: hw, hh, shed = (s.px(46) * lot[0], s.px(28) * lot[1], bool(lot[2])) if lot is not None else (largest[0], largest[1], True)
+### l7r/diagram/hamletgen/homesteads/growth.py::next_house
+  line 210 [28, 46]: return (s.px(46) * lot[0], s.px(28) * lot[1]) if lot is not None else largest
+### l7r/diagram/hamletgen/homesteads/growth.py::grow_jitter
+  line 306 [8]: return GROW_JITTER_DEG * 8.0 / ndir
+### l7r/diagram/hamletgen/homesteads/growth.py::grow_level
+  line 318 [16]: return 16, (GROW_LEVELS[-1][1][-1] + 0.5 * (level - len(GROW_LEVELS) + 1),)
+### l7r/diagram/hamletgen/homesteads/household_ways.py::seated_parts
+  line 81 [8]: ring = [(math.cos(k * math.pi / 4.0), math.sin(k * math.pi / 4.0)) for k in range(8)]
+### l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::give_way
+  line 109 [0.2]: return in_bands(cx, cy, bands) and math.hypot(cx - x, cy - y) < cr + r + 0.2
+  line 130 [0.2]: return _CIRCLE.sub(lambda m: "" if any(abs(tx + float(m.group(1)) - gx) < 0.2 and abs(ty + float(m.group(2)) - gy) < 0.2 for gx, gy in gone) else m.group(0), text)
+### l7r/diagram/hamletgen/homesteads/region.py::smallest_sides
+  line 217 [28, 46]: hw, hh = s.px(46) * LENGTH_FACTORS[0], s.px(28) * DEPTH_FACTORS[0]
+### l7r/diagram/hamletgen/homesteads/retirement.py::retirement_glyph
+  line 130 [0.28]: f'<line x1="{-w * 0.28:.1f}" y1="0" x2="{w * 0.28:.1f}" y2="0" stroke="#E2CB98" stroke-width="1.5"/>'
+  line 131 [1.6]: f'<rect x="-2.5" y="{d / 2 - 1.6:.1f}" width="5" height="2.6" fill="#5A4326" opacity="0.85"/>'
+### l7r/diagram/hamletgen/homesteads/row_rules.py::continuous
+  line 50 [1.5]: def continuous(pieces: Sequence[Sequence[Sequence[float]]], tol: float = 1.5) -> bool:
+### l7r/diagram/hamletgen/homesteads/row_rules.py::row_rules
+  line 97 [240]: size = max(fr[2], fr[3]) if fr else 240.0  # the house may stand at its frame's far side from the street
+  line 122 [240]: w = max(fr[2], fr[3]) if fr else 240.0
+  line 124 [240]: if s1 == s2 and abs(u1 - u2) < w / 2 and abs(v1 - v2) > (min(fr[2], fr[3]) if fr else 240.0) / 2:
+### l7r/diagram/hamletgen/homesteads/rows.py::_normal_away
+  line 100 [5]: a = Point(p[0] + n1[0] * 5.0, p[1] + n1[1] * 5.0).distance(hard)
+  line 101 [5]: b = Point(p[0] - n1[0] * 5.0, p[1] - n1[1] * 5.0).distance(hard)
+### l7r/diagram/hamletgen/homesteads/rows.py::street_line
+  line 121 [8]: n = max(2, int(length / 8.0) + 1)
+  line 127 [8]: n = max(2, int(length / 8.0) + 1)
+  line 146 [8]: m_ = max(2, int(full / 8.0) + 1)
+### l7r/diagram/hamletgen/homesteads/rows.py::holding_clear
+  line 264 [0.25]: if clipped.is_empty or clipped.area < q.area * 0.25:
+### l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings
+  line 365 [100000]: band = Polygon(holding_quad((mx + nrm[0] * (lo + hi) / 2, my + nrm[1] * (lo + hi) / 2), t, nrm, 1e5, hi - lo)).intersection(poly)
+### l7r/diagram/hamletgen/homesteads/rows.py::best_row_line
+  line 505 [16]: samples: int = 16,
+### l7r/diagram/hamletgen/homesteads/rows.py::seat_rows
+  line 583 [30]: bounds = (30.0, 30.0, float(s.W) - 30.0, float(s.H) - 30.0)
+### l7r/diagram/hamletgen/homesteads/seat_geometry.py::water_push
+  line 30 [8]: k = max(1, int(math.dist(a, b) / 8.0))
+### l7r/diagram/hamletgen/homesteads/seats.py::front_row
+  line 32 [46]: standoff: float | None = 46.0,
+### l7r/diagram/hamletgen/homesteads/seats.py::_front_row_from_chains
+  line 120 [64]: if len(out) > 64:
+  line 121 [64]: step = len(out) / 64.0
+  line 122 [64]: out = [out[int(i * step)] for i in range(64)]
+### l7r/diagram/hamletgen/homesteads/seats.py::lane_frontage
+  line 138 [86]: def lane_frontage(s: Settlement, seat: Mapping[str, Any], step: float = 86.0, connector: bool = False) -> list[Pt]:
+### l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads
+  line 263 [45]: s.M["meta"]["house_quarter_turns"] = sum(1 for h in s.M.get("houses") or [] if abs(wrap_line_deg(float(h.get("rot", 0.0)) - (s._house_bearing or 0.0))) > 45.0)
+### l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as
+  line 491 [1.1, 1.35, 28, 46]: _house_max = (s.px(46) * 1.35, s.px(28) * 1.10)  # the LARGEST house `_try_place_bundle` rolls: the front row's computed standoff clears it
+  line 496 [2.65444e+09, 4.29497e+09]: rng = random.Random((plan.spec.seed * 2654435761) & 0xFFFFFFFF)
+  line 563 [1.5]: _length = bound * 1.5 + BUNDLE_PITCH
+  line 633 [1.9, 4.2]: _lo_a, _hi_a = CLUSTER_DRAWN_ASPECT.get(plan.cluster_shape or "crescent", (1.9, 4.2))
+### l7r/diagram/hamletgen/homesteads/stages.py::_seat_rank_rounds
+  line 849 [7]: for attempt in range(7):
+  line 853 [0.16, 0.22]: wlat, wdep = lat * (1.0 + 0.22 * attempt), dep * (1.0 + 0.16 * attempt)
+  line 905 [30, 6]: want = plan.spec.households * 6 + 30
+  line 916 [0.2, 13]: _jittered = [(_q[0] + ax * (s._hjit(_q[0], _q[1], 13.0) - 0.5) * BUNDLE_PITCH * 0.2, _q[1] + ay * (s._hjit(_q[0], _q[1], 13.0) - 0.5) * BUNDLE_PITCH * 0.2) for _q in _off
+  line 949 [14]: _dj = (s._hjit(_sx4, _sy4, 14.0) - 0.5) * BUNDLE_PITCH * RANK_DEPTH_JITTER if attempt < 4 and not _along_the_field and plan.lane_web == "alleys" else 0.0
+### l7r/diagram/hamletgen/homesteads/wells.py::mark_form
+  line 98 [0.06]: if abs(float(w["x"]) - round(x, 1)) < 0.06 and abs(float(w["y"]) - round(y, 1)) < 0.06:
+### l7r/diagram/hamletgen/homesteads/wells.py::own_well_clear
+  line 177 [26, 55, 88]: if x < 55 or y < 88 or x > s.W - 55 or y > s.H - 26:
+### l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells
+  line 243 [240]: frame_w = max((max(float(b[2]), float(b[3])) for b in ((h.get("geom") or {}).get("bbox") for h in houses) if b), default=s.px(240.0))
+### l7r/diagram/hamletgen/homesteads/wells.py::place_wells
+  line 379 [11]: seat_wells(s, plan, houses, placed, want, THREE_THEN_TWO, "lane", seat_ok=on_a_verge(s), step=11.0)
+### l7r/diagram/hamletgen/homesteads/wells.py::seat_wells
+  line 395 [22]: step: float = 22.0,
+  line 419 [0.01]: gap = gap or WELL_SEAT_FT / max(plan.ftpx, 0.01)
+  line 457 [0.01]: _sw_reach = 760.0 / max(plan.ftpx, 0.01)
+  line 498 [120]: pad = 120.0
+### l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster
+  line 676 [0.01]: reach = max(520.0, 760.0 / max(plan.ftpx, 0.01))
+  line 679 [5]: new = seat_wells(s, plan, houses, placed, want, ((190.0, 5), (300.0, 5), (520.0, 5), (reach, 5)), "cluster", seat_ok=off_lanes)
+  line 680 [5]: if len(placed) < want and len(houses) < 5:
+### l7r/diagram/hamletgen/homesteads/wells.py::reach_wells
+  line 774 [11]: seat_wells(s, plan, houses, placed, want, THREE_THEN_TWO, "lane", seat_ok=on_a_verge(s), step=11.0)
+### l7r/diagram/hamletgen/homesteads/wells.py::lane_and_fallback_wells
+  line 824 [11]: seat_wells(s, plan, houses, placed, want, THREE_THEN_TWO, "lane", seat_ok=on_a_verge(s), step=11.0)
