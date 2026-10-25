@@ -1,0 +1,49 @@
+{
+  "utc": "2026-10-25T19:14:56Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 254,
+  "result": "green",
+  "commit": "35aa30ccb",
+  "cache": "cold",
+  "mode": "full",
+  "selected": 10598,
+  "host": {
+    "load": [
+      2.32,
+      8.46
+    ],
+    "mem_avail_mb": [
+      7141,
+      8926
+    ],
+    "cpu_temp_c": [
+      100.0,
+      101.0
+    ],
+    "stall_s": {
+      "cpu": 2.7,
+      "io": 7.4,
+      "io_full": 5.7,
+      "memory": 1.1
+    },
+    "throttle_ms": {
+      "core": 61206,
+      "package": 26102
+    }
+  },
+  "phases": {
+    "preflight": 17.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 7.0,
+    "hooks-test": 2.0,
+    "pytest": 228.0,
+    "floors": 9.0,
+    "test-full": 241.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/compound.py",
+  "collected": 10598
+}
