@@ -50,7 +50,7 @@ The silver rates are each era's own `units.monme.silver_g` in `money-conversions
 
 **E. China, all archived.** These show what the lists do price, and that soy sauce and 醬 are absent:
 - **Timkovski, Peking 1821** (`88/88311ca5eebd`): 「Salt, ditto - 20」「Vinegar, a bottle - 11」「Mustard - 65」. The full list of provisions has no soy, 醬 or bean paste.
-- **Gao Shouxian on 《九卿议定物料价值》** (Qing, presented 1736, compared with the Ming 《工部厂库须知》; dpm.org.cn PDF, archive `d7/d7234ae5c7ec`), 表1 副食品: 「鸡蛋每个0.001；蜂蜜每斤0.16；醋每斤0.009；盐每斤0.012；碱每斤0.02；花椒每斤0.08；香油每斤0.044」. (translation) eggs 0.001 tael each; honey 0.16 a jin; vinegar 0.009 a jin; salt 0.012 a jin; lye 0.02 a jin; Sichuan pepper 0.08 a jin; sesame oil 0.044 a jin. The only 酱 in the paper are 「酱色碗」 (brown-glazed bowls) and 「做酱模子每个0.072」 (a mould for making 醬, 0.072 each): a tool, not the food.
+- **Gao Shouxian on 《九卿议定物料价值》** (Qing, presented 1736, compared with the Ming 《工部厂库须知》; dpm.org.cn PDF, archive `d7/d7234ae5c7ec`), 表1 副食品: 「鸡蛋每个0.001；蜂蜜每斤0.16；醋每斤0.009；盐每斤0.012；碱每斤0.02；花椒每斤0.08；香油每斤0.044」. (translation) eggs 0.001 tael each; honey 0.16 a jin; vinegar 0.009 a jin; salt 0.012 a jin; lye 0.02 a jin; Sichuan pepper 0.08 a jin; sesame oil 0.044 a jin. The only 酱 in the paper are 「酱色碗」 (brown-glazed bowls) and 「做酱模子每个0.072」 (a mold for making 醬, 0.072 each): a tool, not the food.
 - **Chinese Repository vol. II (1834), Canton imports and exports** (`c9/c985642abacb`): 「Soy. This is a condiment made of a species of bean which grows in China and Japan. … It improves much by age.」 Neighbouring entries carry prices ("from $4 to $5 per pecul"); the soy entry has none.
 
 ## 2. Verdict

@@ -41,3 +41,13 @@ Questions from gm-assistant (the goods-dollar koku, features 223 and 224), asked
 - **Use:** a changed good is marked `excluded` in its era file and leaves Rokugan's cross-era mean.
 
 ```
+
+## Addendum: gm-assistant's ask for a modern yield (verbatim, issuecomment-6402815472)
+
+```text
+**[gm-assistant]** Thanks, this is the crux. I'm taking it to the GM. Whichever way he rules, it would help if the answer included a **sourced modern yield**:
+- kg of miso per kg of dry soybeans, for a traditional rice-koji miso;
+- liters of soy sauce per kg of soybeans, for traditional brewing with equal parts wheat.
+
+Ideally these come from a Japanese industry or food-science source, with the recipe's proportions stated so they can be set beside the Edo prescriptions (equal volumes of beans, grain and salt). A yield is a physical ratio rather than a price, so a modern one may be acceptable where an Edo one is SILENT. That is the GM's call.
+```

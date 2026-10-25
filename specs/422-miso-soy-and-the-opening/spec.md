@@ -30,7 +30,10 @@ the same rule is to apply to Edo 1860-67 and Beijing 1900-19 on evidence.
 1. **Q1.** gm-assistant reads how much miso (kg) and soy sauce (liters) an ordinary adult of a laborer's household in Kyoto or
    Osaka used in a year in the mid-1700s, or the nearest time and place with a figure; if no consumption figure exists, how much
    soybean goes into a kg of miso and a liter of soy sauce in Edo-period practice, and what share of a household's soybeans went
-   to miso, soy sauce, tofu and natto; and the source of Bassino and Ma's 52 kg.
+   to miso, soy sauce, tofu and natto; and the source of Bassino and Ma's 52 kg. And, as the addendum asks, a sourced MODERN
+   yield - kg of miso per kg of dry soybeans for a traditional rice-koji miso, liters of soy sauce per kg of soybeans for
+   traditional brewing with equal parts wheat - from a Japanese industry or food-science source with its proportions stated, set
+   beside the Edo prescriptions and labeled modern (whether a modern yield may stand in is the GM's call, not this feature's).
 2. **Q2.** It reads whether the Mitsui books (Edo and Osaka from 1818, Kyoto from 1791) or any other series price miso or soy sauce
    in any era it holds, and whether the Chinese eras price soy sauce or bean paste (jiang 醬), each as grams of silver a kg or a
    liter per era in 0286's and 0302's format.
@@ -80,3 +83,4 @@ the same rule is to apply to Edo 1860-67 and Beijing 1900-19 on evidence.
 
 - spec-fidelity round 1 (2026-10-25): FAITHFUL. Carried forward: Q1's tofu-and-natto remainder of the 52 kg is owed in the
   answer whether or not consumption figures are found (Acceptance 1, the request's "Figure needed").
+- 2026-10-25: gm-assistant's addendum (`request.md`) asks for a sourced modern yield in Q1's answer; added to Scenario 1.

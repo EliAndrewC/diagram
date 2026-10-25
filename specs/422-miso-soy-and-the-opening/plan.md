@@ -32,7 +32,9 @@ Its first part: kg of miso and liters of soy sauce per adult-year, each with its
 divided per adult is this project's arithmetic, labeled); failing that, the soybean in a kg of miso and a liter of soy sauce in
 Edo-period practice, and the share of a household's soybeans going to miso, soy sauce, tofu and natto; the source of Bassino and
 Ma's 52 kg; and the remainder of the 52 kg left for tofu and natto, or its SILENT (spec review: owed in either branch). No
-quantity is estimated. 0249 gets a pointer.
+quantity is estimated. The addendum's modern yields (kg of miso per kg of dry soybeans, rice-koji miso; liters of soy sauce per kg
+of soybeans, equal parts wheat) from a Japanese industry or food-science source, its proportions stated beside the Edo
+prescriptions', labeled modern (`passes/q1-yields.md`). 0249 gets a pointer.
 
 ## D2 - miso and soy sauce era by era (Q2; FR-001; acceptance 2)
 
@@ -52,7 +54,9 @@ USDA and BLS SILENT. Each dated, linked and archived.
 
 A new money question, its title asking which goods' prices the opening of the ports changed. Edo 1860-67, per good: rice NOT
 ATTESTED as a trade effect (the treaties' export ban; its rise late and tied to money by Shinbo); lamp oil and 雑穀 ATTESTED ONLY
-FOR 1859-60, from an encyclopedia; soybeans SILENT on a trade tie; salt, firewood and wheat NOT ATTESTED; barley SILENT; Shinbo's
+FOR 1859-60, from an encyclopedia; soybeans SILENT on a trade tie; cooking oil named with its own verdict (the basket's edible oil is the same rapeseed oil
+as its lamp oil, 0249; the 水油 the edict names and Shinbo's 種油 and 白油 are what the sources price, so cooking oil takes lamp
+oil's evidence, said by name, or SILENT where the sources do not reach it); salt, firewood and wheat NOT ATTESTED; barley SILENT; Shinbo's
 prices Kansai's, and his period ratios unable to separate trade from money (said). Beijing 1900-19: rice and millet SILENT. Tokyo
 1882's soybeans: the low ratio holds 1879-95, starts at Kumon's 1879 source switch to LTES, deepens in the Matsukata deflation; a
 series or grade difference possible, the start of Manchurian imports SILENT. No good is called changed from timing alone.
