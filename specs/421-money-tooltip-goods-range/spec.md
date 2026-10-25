@@ -29,7 +29,6 @@ box (feature 413, `l7r/diagram/interactive/record/money.py`) shows only the cent
    `goods_dollars_high`: for 20 mon at kyoto-1745, "about $1.54-$3.32 in goods, $37.92 in wages, 3.8 sen in Rokugan".
 2. An amount that is itself a range (two ends) reads its goods from the low end at `goods_dollars` to the high end at
    `goods_dollars_high`, one range, both ends at one precision as today.
-3. An era row without `goods_dollars_high` (an older table) reads as today, one goods figure.
 
 **Acceptance**:
 1. The worked example above reads exactly so from the vendored table.
@@ -38,12 +37,19 @@ box (feature 413, `l7r/diagram/interactive/record/money.py`) shows only the cent
 ## Requirements
 
 - **FR-001**: The hover box's goods text is `goods_dollars` to `goods_dollars_high` times the amount, formatted as the existing
-  dollar ranges are (one precision for both ends, joined by "-"); without `goods_dollars_high` it is one figure.
+  dollar ranges are (one precision for both ends, joined by "-"). There is no single-figure path: the table carries
+  `goods_dollars_high` on every unit (gm-assistant feature 223), and the test fixtures carry it too.
 - **FR-002**: The module's own description of the hover box (`money.py`'s docstring, the one place that states what the box
   shows) says the goods figure is a range from the central to the high reading.
 
 ## Success Criteria
 
-- **SC-001** (FR-001): the record money tests pin the worked example, an amount range and the no-high fallback; `make done`
+- **SC-001** (FR-001): the record money tests pin the worked example and an amount range; `make done`
   is green at the landing.
 - **SC-002** (FR-002): `make record CHECK=1` is clean and the docstring names the range.
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-25): CHANGES REQUIRED - the single-figure fallback for a row without `goods_dollars_high`
+  went against "the toolkit page never shows one goods figure without the other" and rested on no measured table (105 of 105
+  units carry the field); removed (option a). Applied.
