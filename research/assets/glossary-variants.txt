@@ -2528,7 +2528,6 @@ lingnan	Lingnan
 lingqu	Lingqu
 lingxing gate	lingxing gate
 lingxing gates	lingxing gate
-lint	lint
 lion	Lion Clan
 lion clan	Lion Clan
 lion-dog	lion-dog

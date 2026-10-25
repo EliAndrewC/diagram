@@ -18056,14 +18056,8 @@
    "milling rates"
   ]
  },
- "lint": {
-  "def": "Cotton's fiber once its seed has been taken out; the US farm price of cotton is by the pound, and the seed is sold apart as cottonseed.",
-  "variants": [
-   "lint"
-  ]
- },
  "upland cotton": {
-  "def": "The kind of cotton whose US farm price the government reports each month, by the pound of lint.",
+  "def": "The kind of cotton whose US farm price the government reports each month, by the pound.",
   "variants": [
    "upland cotton"
   ]
