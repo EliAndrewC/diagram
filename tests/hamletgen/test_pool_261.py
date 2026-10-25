@@ -209,7 +209,8 @@ def test_no_zigzag_straddles_a_joint(gen: str) -> None:
         assert _bends_badly(x) or _bends_badly(y) or not _bends_badly([*x, *y[1:]]), f"lanes {i} and {j} zigzag across their joint at {x[-1]}"
 
 
-from l7r.diagram.hamletgen.ways.knots import _KNOT_MARGIN, lane_knots  # noqa: E402 - the knot verdict lives in the engine (feature 328 wave 93: the cohort reads it too)
+from l7r.diagram.hamletgen.ways.knots import KNOT_MARGIN as _KNOT_MARGIN  # noqa: E402 - the one margin (feature 417 T05)
+from l7r.diagram.hamletgen.ways.knots import lane_knots  # noqa: E402 - the knot verdict lives in the engine (feature 328 wave 93: the cohort reads it too)
 
 # THE KNOTS NO LAWFUL GATHER REACHES YET (feature 328 wave 4, measured): on these two maps every single-point gather of the
 # remaining knots runs a way along another, through a yard, or off the network, so they wait for the ranked found row that
