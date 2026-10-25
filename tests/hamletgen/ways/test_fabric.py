@@ -5,8 +5,8 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.hamletgen.ways import _crosses_fabric, _fabric_hits, _margin_frame, _pull_back_to_service
-from l7r.diagram.settlement import Settlement, seg_dist
+from l7r.diagram.hamletgen.ways import _crosses_fabric, _fabric_hits, _margin_frame
+from l7r.diagram.settlement import Settlement
 
 from .._builders import a_plan, a_seat
 from ._builders import _hamlet_for_ways, _StubSettlement
@@ -128,36 +128,6 @@ def test_fabric_hits_counts_steadings_rather_than_answering_yes_or_no() -> None:
     assert _fabric_hits(run, [near_a, near_b, far], 16.0) == 2
     assert _fabric_hits(run, [far], 16.0) == 0
     assert _fabric_hits(run, (), 16.0) == 0
-
-
-def test_a_connector_end_inside_the_canvas_is_pulled_back_ONTO_the_way_it_joins() -> None:
-    """The blind stub feature 128 shipped, and the two halves of not shipping it again.
-
-    The run starts deep inside the settlement, passes a lane, and continues off the frame. The inner
-    end must come back to TOUCH that lane - not merely to within the join bar, which is what left
-    Mizuguchi 27 ft short - and the off-canvas end must not be touched at all, because reaching the
-    frame is the connector's other job."""
-    run = [(500.0, 100.0), (100.0, 100.0), (-400.0, 100.0)]
-    segs = [((300.0, 0.0), (300.0, 200.0))]
-    out = _pull_back_to_service(run, segs, [], lambda q: 0.0 <= q[0] <= 1000.0 and 0.0 <= q[1] <= 1000.0)
-    assert out[-1] == (-400.0, 100.0), "the off-canvas end must survive untouched"
-    assert round(seg_dist(out[0][0], out[0][1], *segs[0]), 6) == 0.0, "the inner end must TOUCH the way"
-
-
-def test_a_connector_that_joins_NOTHING_is_left_alone_rather_than_deleted() -> None:
-    """A hamlet whose track genuinely meets no lane is a real map to look at, not one to shorten."""
-    run = [(500.0, 100.0), (-400.0, 100.0)]
-    out = _pull_back_to_service(run, [((0.0, 5000.0), (100.0, 5000.0))], [], lambda q: 0.0 <= q[0] <= 1000.0)
-    assert out == run
-
-
-def test_pull_back_to_service_leaves_an_end_that_already_reaches_a_way() -> None:
-    """`serves` - the tread's own reach test. Whether it is ever ASKED depends on where the connector
-    stops, so on the live hamlets it never was."""
-    run = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]
-    segs = [((200.0, -10.0), (200.0, 10.0))]  # a lane crossing the tread's far end
-    out = _pull_back_to_service(run, segs, [], lambda _q: True)
-    assert out[-1] == pytest.approx((200.0, 0.0)), "the end stands ON a way; nothing is pulled back"
 
 
 def test_crosses_fabric_sees_a_corner_that_stands_beside_a_segment_without_crossing_it() -> None:

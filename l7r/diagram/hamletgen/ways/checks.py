@@ -501,3 +501,32 @@ def square_crossings(pts: Sequence[Pt], brook: Sequence[Pt], half: float) -> lis
 SQUARE_LEG_PAD = 1.0
 """How far past `half` the square leg reaches each side of the water, in feet - enough that the leg's own points stand
 outside the elbow pass's reach, so the squaring is idempotent (a map drawing convention)."""
+
+
+def track_ends_off_the_web(M: Mapping[str, Any]) -> list[tuple[int, int, float]]:
+    """(lane index, end, feet off) for every end of the TRACK OUT that stands inside the canvas more than `_TOUCH_GAP` (the
+    law's `JOIN_TOL`) from every other lane: a track that stops short of the ways it serves. A FINISHED-MAP check, asked by
+    the cohort only (`tools/cohort_audit.py`) and never by the settle (constitution XIX; feature 417 D27): its placer is
+    feature 417 T27's. The off-canvas end is the track's way out and is not asked.
+
+    Research:
+        the track meets the lanes - research/questions/0081-village-lanes.drawing.html: never stops in open country, its inner
+            end on the way it joins"""
+    meta = M.get("meta") or {}
+    W, H = float(meta.get("W", 0.0) or 0.0), float(meta.get("H", 0.0) or 0.0)
+    lanes = M.get("lanes") or []
+    ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    out = []
+    for i, ln in enumerate(lanes):
+        p = ways[i]
+        if not ln.get("connector") or len(p) < 2:
+            continue
+        segs = [sg for k, o in enumerate(ways) if k != i for sg in zip(o, o[1:], strict=False)]
+        for e in (0, -1):
+            q = p[e]
+            if not (0.0 <= q[0] <= W and 0.0 <= q[1] <= H):
+                continue
+            d = min((seg_dist(q[0], q[1], a, b) for a, b in segs), default=math.inf)
+            if d > _TOUCH_GAP:
+                out.append((i, e, round(d, 1)))
+    return out

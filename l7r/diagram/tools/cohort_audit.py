@@ -37,6 +37,7 @@ if HERE not in sys.path:
 
 from l7r.diagram import hamletgen as hg  # noqa: E402
 from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, row_rules, water_rules  # noqa: E402
+from l7r.diagram.hamletgen.ways.checks import track_ends_off_the_web  # noqa: E402
 from l7r.diagram.hamletgen.ways.knots import lane_knots  # noqa: E402
 from l7r.diagram.overlap import matrix_violations  # noqa: E402
 from l7r.diagram.settlement._geom.water_index import crosses_a_stream  # noqa: E402 - the same-bank rule's one predicate (feature 417 T04)
@@ -164,6 +165,7 @@ def roll_how(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[t
         ("groves_off_windward", groves_off_windward(_M)),
         ("gardens_east_shaded", gardens_east_shaded(_M)),
         ("groves_crossed_by_lanes", groves_crossed_by_lanes(_M)),
+        ("track_ends_off_the_web", track_ends_off_the_web(_M)),  # feature 417 D27: 0081, never stops in open country
         ("fixtures_on_groves", fixtures_on_groves(_M)),
         ("row_rules", row_rules(_M)),
         ("water_rules", water_rules(_M)),

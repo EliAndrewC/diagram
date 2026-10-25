@@ -32,3 +32,7 @@ After filing, the session asked whether to fold open feature 394 (seed regressio
 Mid-feature, 2026-10-25, while T03's inventory was coming in:
 
 > Okay, I'm heading to bed, and I think that rather than having you churn all night on the feature, I want you to do the parts of it up until the point where you, try to actually fix everything. So, definitely finish out doing the tasks that involve, turning off automated checks, and then replacing them with just having the algorithm place correctly in the first place. Etc. Do all of that stuff, and then stop so we can slowly and deliberately go through the actual fixing where we get more seeds to pass, etc.
+
+The next morning, 2026-10-25, answering the session's report (dictated; "prionciple" = principle, "onthe" = on the):
+
+> Changing behavior is fine as long as it is in line with our research, so T19 should be worked now before we start on the seed fixes, in the manner you suggest as the next step.  You can also close T24 if it is moot.  It sounds like T16 could use a research pass; this might not even be a research pass on premodern societies per se (since I doubt we will find sources for this - though it would be great if we could), but rather a general research pass onthe angles at which footpaths and lanes and country roads tend to intersect.  We basically want something that doesn't look wrong, visually, to a person looking at the map.  I also approve the new prionciple for the constitution.

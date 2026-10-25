@@ -168,3 +168,113 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 7. **The next step is a measurement.** `make done` once more, inside `make land`.
 8. **Every route measured?** The gate's coverage table lists every uncovered line in one run (the arbiter); none other.
 9. **After a ruling:** continue (red-gate@2026-10-25T08:17:19Z).
+
+## T19 - the track out never stops in open country (T05's claims round, DRIFTED; FR-004)
+
+### T19 Approach (checklist part A)
+
+1. **The goal, in the world.** The track out runs from the settlement's own ways off the map: its inner end is ON a lane of
+   the web, never in the grass short of one (0081: "It never stops in open country, which would read as a path to nowhere").
+2. **The constraints.** `fabric._pull_back_to_service`, called once from `web/tidy.tidy_lane_ends` (the `kept_connector`
+   branch; skipped where the connector starts at the way out's gate), walks the connector's inner end onto the nearest way.
+   It leaves the end where it is in two cases (impl-drift, `evidence/impl-T05.txt`): nothing within `_LANE_JOIN_FT`, and a
+   snap that would foul the fabric. `kept_connector` then keeps the unpulled run if the pulled one breaks through a
+   building. Whether either case reaches a FINISHED map is not known: the settle runs after it (one network, the ways out).
+   Measured 2026-10-25 from the five pool manifests (each connector's inner end to the nearest other lane): 0.0 ft on all
+   six connectors.
+3. **Where each comes from.** O: FR-004 (a pass that repairs a laid web is deleted, or its rule asked by the placer), the
+   GM 2026-10-25 (D24), 0081's track-out entry.
+4. **Do they describe the world here?** To be measured (D25).
+5. **The order.** After T26, before the seed fixes (the GM).
+6. **The exits.** Both delete the pull-back call, `_pull_back_to_service`, `kept_connector` and the tests only they
+   exercise (FR-004). NEEDLESS (D25: no fixed, pinned or pool verdict moves with the call off, and no finished map's inner
+   end is off the web): that alone, and the claim "the track meets the lanes" is moved to what makes the end touch. NEEDED:
+   the deletion lands with D26's placer, never with a refusal.
+7. **The search smell.** One probe off and one count; no tuning of `_LANE_JOIN_FT` or the fabric gap to make a seed pass.
+8. **The budget.** About 3 min a probe (T26's probes, one-shot 2026-10-25: 48 fixed + 6 pinned seeds at 5 workers, then
+   the five pool maps), 2 probes; a fresh block of 500 after the landing (D1), background.
+9. **Done, measured.** `research.md` R6: the probe's verdicts, the count of inner ends left off the web (in the pull-back,
+   and in the finished map), the change made, the landing cohort green, and the fresh block beside R3 and R5.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T19 Decisions
+
+- **D24 (the GM lifts D11 for T19, 2026-10-25)**: the GM: "Changing behavior is fine as long as it is in line with our
+  research, so T19 should be worked now before we start on the seed fixes, in the manner you suggest as the next step."
+  Read as: T19 is worked now, before any seed fix, by the method the report proposed as the next step - T26's switch-off
+  probe on the fixed seeds, the pinned rows and the pool, applied here to T19's own pass. It is not read as a go-ahead for
+  the probe of the settle's steps the report also proposed; that goes back to the GM. The behavior may change where 0081
+  says so. Rendering: none.
+- **D25 (the probe, D22's form)**: in a detached worktree at HEAD, an environment switch that never lands (a) skips the
+  `_pull_back_to_service` call (the connector kept as placed) and rolls `make cohort N=48 FRESH=0 JOBS=5` and `make map` on
+  the five pool hamlets against the same roll with nothing off; and (b) with nothing off, counts each roll where the
+  pull-back returns an inner end more than `JOIN_TOL` (4 ft, read 2026-10-25 from `ways/law.py:133` `JOIN_TOL = _TOUCH_GAP`
+  and `ways/geom.py:51` `_TOUCH_GAP = 4.0`) from every other lane, and each FINISHED map (after
+  `settle_the_web`) whose connector inner end is that far off the web, over the same seeds and a fresh block of 500. A
+  case that never occurs in a finished map is closed by the settle, and the drift goes with the code. Rendering: none.
+- **D26 (if NEEDED, the placer; SUPERSEDED by D27, which measured its premise false - the pull-back is not what leaves an end off the web, so no run is built here)**: the track is laid before the web (`stage_track`), so the connector is never moved
+  after it is laid: the WEB meets it. Where the count finds a finished map with the track's inner end off the web, that end
+  is a point the web's lay must reach - a run laid to it when the web is laid (`lay_reachable_runs`, beside the skeleton
+  that already reads the connector as network), asked of `Lawful` before it is drawn like every web lane - and the
+  pull-back's deletion lands with it. No pass after the lay re-lays the connector or the run, and no map is refused for it
+  (constitution XIX, room before packing). Which seeds need it, and whether `lay_reachable_runs` already has room for the
+  run, is what the count shows; a seed it cannot serve without room work is recorded and set down (D11). Rendering: map
+  drawing convention (0081's track-out entry).
+- **D27 (what the probe found, 2026-10-25; it splits D25's two findings)**: THE PASS IS NEEDLESS. Observed 2026-10-25;
+  method: D25 in the worktree `probe19` at `a81dd7ee9` - with the call off, 54 of 54 fixed and pinned seeds passed as with
+  it on and the five pool manifests came out byte-identical (`cmp`); with it on, of the 412 connectors it was asked about
+  (58 fixed, pinned and pool, 354 in the fresh block of seeds 3001601-3002100), it returned none with an inner end more than
+  `JOIN_TOL` off the web. So the call, `_pull_back_to_service`, `kept_connector` and their tests are deleted, and so is the
+  claim "the track out runs off the map" there (`law.dangling_lane_ends` carries it). BUT THE RULE IS BROKEN BY ANOTHER
+  PLACER. Same observation: 6 of the 377 fresh maps that reached the end of `stage_web` (seeds 3001615, 3001629, 3001674,
+  3001847, 3002028 and 3002062, all nucleated, all with a way out's gate) end the track 25-66 ft past the last way to meet
+  it, and all six passed every check, because the law exempts the connector (`law.dangling_lane_ends`). A per-step trace of
+  the six puts it in the settle's `settle_reach`: it draws the household ways to the stretch of the track near the cluster
+  (`homesteads/household_ways.near_the_cluster`), not to the track's start. So:
+  (a) the rule becomes ONE predicate, `checks.track_ends_off_the_web(M)` - each connector end inside the canvas more than
+  `JOIN_TOL` from every other lane - asked of the finished map by the cohort only (`tools/cohort_audit.py`'s list beside
+  `groves_crossed_by_lanes`, which the settle never reads, so no map is refused for it; constitution XIX), with a two-sided
+  unit test; the claim "the track meets the lanes" moves to it;
+  (b) the placer that keeps the rule is a choice between two placements - the track drawn from where its households' ways
+  meet it, or the ways laid to the track's start - and is set down as T27 for the GM's fixing pass (D11), with the six
+  seeds. The fixed and pinned seeds and the pool maps were all at 0.0 ft, so (a) moves no landing verdict; it names a
+  fresh failure the record could not see. Rendering: map drawing convention (0081's track-out entry).
+
+### T19 Approach (re-answered 2026-10-25T11:58Z)
+
+1. **The goal, in the world.** As before: the track out ends on the web, never in the grass. What T19 delivers toward it:
+   the pull-back that never kept it there is gone, and the rule is one predicate the cohort asks, so a track that stops short
+   is a named failure; drawing it right is T27's.
+2. **The constraints.** D27: the pull-back changed nothing measured; the six fresh tracks that stop short are drawn so by
+   `settle_reach` (the households' ways laid to `near_the_cluster`'s stretch); the law exempts the connector, and `law.py`
+   is at 993 lines, so the predicate goes in `checks.py` (layered below the law) and is read only by `tools/cohort_audit.py`.
+3. **Where each comes from.** O: FR-004, constitution XIX (a finished-map check in the cohort and the tests only), D27.
+4. **Do they describe the world here?** Yes, measured (R6).
+5. **The order.** As before.
+6. **The exits.** The deletion lands with the predicate; the landing cohort stays green because every fixed and pinned
+   seed and pool map is at 0.0 ft (R6). If it is not green, the landing is set down whole (D11).
+7. **The search smell.** No tuning: the predicate's bar is the touch the law already uses (`_TOUCH_GAP`, 4 ft).
+8. **The budget.** The landing, then a fresh block of 500 from seed 3002101 (D1), background.
+9. **Done, measured.** `make land F=417 T=T19` green; `make dead-closure` clean; R6 with the fresh block after the landing,
+   where `track_ends_off_the_web` should name about the six of R6's block's rate.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+## T24 - withdrawn (moot since T26)
+
+### T24 Approach (checklist part A)
+
+1. **The goal, in the world.** A doubled lane cut where it comes alongside, not dropped whole (0081). Withdrawn: no pass
+   drops a doubled lane whole any more.
+2. **The constraints.** `sweeps._sweep_doubled_remnants`, the pass T24 was about, was measured needless and deleted with its
+   claim in T26 (research.md R5).
+3. **Where each comes from.** The GM 2026-10-25: "You can also close T24 if it is moot."
+4. **Do they describe the world here?** n/a - nothing left to change.
+5. **The order.** n/a.
+6. **The exits.** n/a.
+7. **The search smell.** n/a.
+8. **The budget.** n/a.
+9. **Done, measured.** `grep -rn "def _sweep_doubled_remnants" l7r/` finds nothing (T26's deletion; `stage.py` names it only in the comment that records the deletion).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.

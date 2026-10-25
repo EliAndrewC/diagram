@@ -6,10 +6,10 @@ Research: plumbing and geometry - NONE
 from __future__ import annotations
 
 import math
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
+from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_dist, segments_cross
 from l7r.diagram.settlement.rolling.access import TREAD_WALL_FT
 from l7r.diagram.sitegen.geom import centroid, unit
 
@@ -23,7 +23,7 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
-from .geom import _TOUCH_GAP, _nearest_seg, _reach, polyline_len
+from .geom import _reach, polyline_len
 
 
 class _margin_frame:  # noqa: N801 - used as a callable coordinate map, not as a type
@@ -414,99 +414,6 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     # the old ones is how the cluster starts sprawling again.
     s.M["lanes"][-1]["web"] = True
     return True
-
-
-def _pull_back_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], inside: Callable[[Pt], bool], fabric: Sequence[Poly] = (), gap: float = _TOUCH_GAP) -> Poly:
-    """Pull a CONNECTOR's inside-the-canvas end back to where it last meets the settlement.
-
-    A connector is exempt from `_trim_to_service` because it legitimately runs off the frame - and
-    that exemption, applied to both its ends, is what let feature 128 ship a blind stub. With the
-    track drawn after the houses, `_thread_the_fabric` clips its inner end at the fabric; the web is
-    laid later still, so at clip time there is no junction to stop at and the tread simply ends in
-    open ground. Measured by review across the live tier: overshoot past the innermost junction was
-    0.0 ft on all four hamlets before this feature, and afterwards 191.5 ft on Mizuguchi and 252.8 ft
-    on Sawada. The gate cannot see it - `lanes_reach_something` is the rule for exactly this and it
-    skips anything flagged `connector`, because a connector's end is normally off-canvas.
-
-    So: only an end INSIDE the canvas is pulled back, and only as far as the first point that reaches
-    the network. The off-canvas end is never touched, because reaching the frame is the connector's
-    other job (`connector_lane_runs_off_edge`). An end that finds nothing to reach is LEFT ALONE
-    rather than deleted - a hamlet whose track genuinely joins nothing is a real map to look at, not
-    a map to silently shorten, and Kashikawa is currently that map.
-
-    Research:
-        the track meets the lanes - research/questions/0081-village-lanes.drawing.html: never stops in open country, its
-            inner end pulled back to touch the way it joins
-        the track out runs off the map - research/questions/0081-village-lanes.drawing.html: the off-canvas end untouched"""
-
-    # A CONNECTOR ARRIVES AT THE WAYS, NOT MERELY NEAR A HOUSE, which is the one place its rule is
-    # stricter than `lanes_reach_something`'s. That check accepts a farmhouse within 90 ft, and it is
-    # right to for an internal lane - a house FRONTS the lane it stands on. A road from the next
-    # valley does not front anything: it meets the village's lanes, and the houses meet those. Left
-    # with the house clause in, Mizuguchi's tread stopped 85.5 ft from a house center - inside the
-    # 90 ft bar, so nothing trimmed - and 164 ft past the lane it should have joined, which is
-    # exactly the picture the review objected to: a track petering out in the grass.
-    # A second copy of the trim pass's `serves` predicate stood here with no callers at all - dead since
-    # this function stopped deciding whether an end reaches and started walking it to the closest
-    # approach instead. Removed (feature 146); the live one is in `_trim_blunt_ends` above.
-    out = list(run)
-    for _end in (0, -1):
-        pts = out if _end == 0 else out[::-1]
-        # An end that ALREADY reaches is still walked, not skipped: reaching within the join bar and
-        # TOUCHING are different pictures, and Kashikawa's tread stopped 6 ft short of the lane it
-        # met - inside every check's tolerance and visibly a gap at 1 px = 1 ft.
-        if not inside(pts[0]):
-            continue
-        # WALK ON TO THE CLOSEST APPROACH, THEN TOUCH. Cutting at the FIRST point inside the join bar
-        # leaves the tread stopping `_LANE_JOIN_FT` short of the way it is joining - measured at 27.3
-        # ft on Mizuguchi and 28.6 on Sawada, which at 1 px = 1 ft is a plainly visible hole. The bar
-        # is what makes a junction FINDABLE; it is not where the ink should end. So keep sampling
-        # while the distance is still falling, then snap the surviving end onto the nearest segment,
-        # which is the same "a junction is contact" rule `_lay_web_lane` applies to a web lane.
-        cut: Pt | None = None
-        best = float("inf")
-        seg_at: tuple[Pt, Pt] | None = None
-        k_at = 0
-        # EVERY approach that joins, not only the closest one (feature 134 T50). The closest is still
-        # preferred - it is the first one tried - but when it is the one that fouls a steading, a
-        # slightly longer approach that does not is a far better answer than abandoning the junction.
-        opts: list[tuple[float, Pt, tuple[Pt, Pt], int]] = []
-        for k in range(len(pts) - 1):
-            a, b = pts[k], pts[k + 1]
-            steps = max(1, int(math.dist(a, b) / 4.0))
-            for j in range(steps + 1):
-                q = (a[0] + (b[0] - a[0]) * j / steps, a[1] + (b[1] - a[1]) * j / steps)
-                d, sg = _nearest_seg(q, segs)
-                if d <= _LANE_JOIN_FT and sg is not None:
-                    opts.append((d, q, sg, k))
-                if d < best:
-                    best, cut, seg_at, k_at = d, q, sg, k
-                elif cut is not None and best <= _LANE_JOIN_FT:
-                    break  # past the closest approach and already joined - stop here
-            if cut is not None and best <= _LANE_JOIN_FT and best < _nearest_seg(pts[k + 1], segs)[0]:
-                break
-        if cut is not None and seg_at is not None and best <= _LANE_JOIN_FT:
-            for _d, _q, _sg, _k in sorted(opts, key=lambda t: t[0]):
-                _snap = seg_closest(_q[0], _q[1], _sg[0], _sg[1])
-                _try = [_snap, *pts[_k + 1 :]] if _end == 0 else [*pts[_k + 1 :][::-1], _snap]
-                if len(_try) >= 2 and not (fabric and _crosses_fabric(_try, fabric, gap)):
-                    cut, seg_at, k_at = _q, _sg, _k
-                    break
-            cut = seg_closest(cut[0], cut[1], seg_at[0], seg_at[1])
-            cand = [cut, *pts[k_at + 1 :]] if _end == 0 else [*pts[k_at + 1 :][::-1], cut]
-            # THE SNAP MAY NOT UNDO THE THREADING (feature 134 T50, 2026-08-28). This moves the
-            # connector's inner end onto the lane it joins, and until now it did so with no idea what
-            # else is standing there - while `_thread_the_fabric`, which ran earlier in the same
-            # stage, had already routed and clipped that very end clear of every steading. So the
-            # last pass to touch the run quietly put back what the pass before it existed to remove:
-            # on cohort seed 18 the threaded end stood 18.0 ft off the nearest fabric and the snap
-            # landed it 0.8 ft from a garden's corner, well inside the 6 ft the overlap matrix gives
-            # every lane, and `features_do_not_overlap` read it as lanes x gardens. The junction is
-            # worth having, but not at the price of drawing through the vegetables: take the snap
-            # only when it does not foul anything the threading had cleared.
-            if not fabric or not _crosses_fabric(cand, fabric, gap) or _crosses_fabric(out, fabric, gap):
-                out = cand
-    return out
 
 
 def _fabric_hits(run: Poly, fabric: Sequence[Poly], gap: float) -> int:

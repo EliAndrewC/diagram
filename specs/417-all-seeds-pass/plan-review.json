@@ -228,6 +228,36 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "## T19 - the track out never stops in open country (T05's claims round, DRIFTED; FR-004)": {
+   "sha256": "344a1d4983ef9c7caaa1dc8e39dd1e762d1f5ea66f26d27024708626def3f2b9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Approach (checklist part A)": {
+   "sha256": "0dc4dcbbe04d8905435dbeaff09df8d40432820ab901119985293b4ce09f342d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Decisions": {
+   "sha256": "29f7663fe04cfdf1acf821b059d14c50fb34c13688d055883949f22989abfe74",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T24 - withdrawn (moot since T26)": {
+   "sha256": "95c3990d97f191abb3c17c0b1250c6e441b3bdf6e633da5d4b6bdb2b1f3c15b7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T24 Approach (checklist part A)": {
+   "sha256": "dad23604377abd91bd954d5f8468265e2fa8f00363ea396c3a6f00b0f71c8247",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1311,6 +1341,108 @@
      "summary": "research.md R5 records each pass's probe result; after the landing a fresh block of 500 is run and its rate recorded beside R3; no work aimed at that rate.",
      "class": "within",
      "why": "D11: each conversion's 'fresh rate recorded either way', and 'no work aimed at the fresh rate'. 500 matches the size SC-001 sets for the fresh block."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T19 - the track out never stops in open country (T05's claims round, DRIFTED; FR-004)",
+    "### T19 Approach (checklist part A)",
+    "### T19 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D24a",
+     "summary": "T19 is worked now, before any seed fix, by T26's switch-off probe applied to T19's own pass; behavior may change where 0081 says so",
+     "class": "within",
+     "why": "The GM's sentence names T19 as its object ('T19 should be worked now before we start on the seed fixes'), lifts the behavior bar on the condition 'in line with our research' (0081 is that research), and 'in the manner you suggest' reads naturally as the method the report proposed - the switch-off probe. Every part of D24a is a clause of that sentence."
+    },
+    {
+     "id": "D24b",
+     "summary": "The GM's words are not read as approving the report's proposed probe of the final settle step's repairs; that question goes back to the GM",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This declines one possible reading of the GM's words, so it is ruled. The reading D24 takes is implied by the GM's own words: the subject of the sentence is T19, and 'manner' names a method, not a second task. Reading the sentence as also approving the settle-step probe, which the report offered as 'your call', would mean finishing the GM's thought for him. The settle-step probe is not dropped or decided against. It is put back to the GM as a question, so nothing he asked for is withheld and nothing he did not ask for is started."
+    },
+    {
+     "id": "A6-exits",
+     "summary": "Both exits delete the pull-back call, _pull_back_to_service, kept_connector and their tests; NEEDLESS = deletion alone, NEEDED = deletion lands with D26's placer, never a refusal",
+     "class": "within",
+     "why": "FR-004: passes that repair a laid web are deleted, or their rule is asked by the placer. A pull-back that moves a laid connector's end afterwards is such a pass. 'Never with a refusal' follows FR-007 and the approved principle."
+    },
+    {
+     "id": "A7-A5",
+     "summary": "No tuning of _LANE_JOIN_FT or the fabric gap; order after T26 and before the seed fixes",
+     "class": "within",
+     "why": "The order is the GM's ('before we start on the seed fixes'). Not tuning constants keeps T19 off seed-by-seed work, which D11 still sets down."
+    },
+    {
+     "id": "D25",
+     "summary": "D22-form probe: pull-back call off vs nothing off on the fixed cohort, pinned rows and pool maps; plus a count of inner ends off the web (beyond JOIN_TOL) in the pull-back and in finished maps over those seeds and a fresh 500",
+     "class": "within",
+     "why": "This is the method D24a reads from the GM's words, applied to T19's pass. The count over the fresh 500 is measurement that decides NEEDLESS or NEEDED for the requested deletion. It does not aim at the fresh rate and it starts no new behavior."
+    },
+    {
+     "id": "D26",
+     "summary": "If NEEDED: the connector is never moved after it is laid; the web's lay reaches the track's inner end as a run asked of Lawful before drawing; no later pass, no refusal; a seed needing room work is recorded and set down",
+     "class": "within",
+     "why": "FR-004 (rule asked by the placer, nothing repaired after laying), the approved principle (constitution XIX), FR-007, and D11's set-down of room work, which the GM kept ('before we start on the seed fixes'). Rendering follows 0081's track-out entry, which is the research the GM's condition names."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T24 - withdrawn (moot since T26)",
+    "### T19 Decisions",
+    "### T24 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D24",
+     "summary": "T19 is worked now, before any seed fix, by T26's switch-off probe; the settle-steps probe goes back to the GM",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; the GM's own words 2026-10-25 ('T19 should be worked now before we start on the seed fixes, in the manner you suggest as the next step')."
+    },
+    {
+     "id": "D25",
+     "summary": "The probe: switch off _pull_back_to_service in a detached worktree, roll the fixed cohort and the pool against a baseline, and count off-web connector ends on the finished maps over those seeds and a fresh block of 500",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; D22's form, the measurement FR-004 and FR-006 call for."
+    },
+    {
+     "id": "D26",
+     "summary": "If needed, the web's lay reaches the track's inner end (lay_reachable_runs), asked of Lawful before it is drawn; no pass after the lay",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict. D27 now finds its premise (that the pull-back is what leaves an end off the web) false and sets the placer work down as T27, so D26 is superseded rather than carried out; it still names no exception."
+    },
+    {
+     "id": "D27-delete",
+     "summary": "The pull-back pass is NEEDLESS (54 of 54 seeds unchanged, the five pool manifests byte-identical, 0 of 412 connectors returned off the web); the call, _pull_back_to_service, kept_connector and their tests are deleted, with their claim moved to law.dangling_lane_ends, which already carries it",
+     "class": "within",
+     "why": "FR-004 and D22: a repair pass measured needless by D22's own test is deleted; that is the GM's 'turning off automated checks, and then replacing them with just having the algorithm place correctly in the first place', and SC-004."
+    },
+    {
+     "id": "D27a",
+     "summary": "The rule 'the track meets the lanes' becomes ONE predicate, checks.track_ends_off_the_web(M), asked of the finished map by the cohort only (never read by the settle, so no map is refused for it), with a two-sided unit test; the claim moves to it",
+     "class": "within",
+     "why": "This is the scope the GM said 'Yes please' to: one finished-map check per rule, in the cohort and the tests only, as the measurement, with no check run mid-map. It also enforces the request's goal ('all seeds passing') by making visible six fresh failures the law's connector exemption hid. It moves no landing verdict (the fixed and pinned seeds and the pool are all at 0.0 ft), so FR-008 holds; the fresh rate is recorded as D11 asks. What it leaves undone is checked, not waved through: the approved scope and SC-003 have the check calling the PLACER's predicate, and no placer asks track_ends_off_the_web yet. That is exactly the half D27b sets down as T27, so the pair is coherent; T27's placer should ask this same predicate."
+    },
+    {
+     "id": "D27b",
+     "summary": "The placer that would keep the rule (settle_reach draws household ways to the stretch near the cluster, not to the track's start) is a choice between two placements; it is set down as T27 for the GM's fixing pass with the six fresh seeds, not fixed in T19",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words imply it, through a decision already accepted. D24, CLEAR last round, reads the GM's lift as covering T19's own pass and sends the probe of the settle's steps back to the GM; D27 traces the breaker to settle_reach, a settle step, so its fix is outside the lift. The GM's words bound it the same way: 'T19 should be worked now before we start on the seed fixes', and the stop line, 'stop so we can slowly and deliberately go through the actual fixing where we get more seeds to pass'. D11 agrees: the six fail only in the fresh block, so fixing them is work aimed at the fresh rate, held back until the GM resumes it. That it is 'a choice between two placements' is the plan's reason for deferring, not a ground of legitimacy. The deferral hides nothing: D27a makes the six failures visible in the cohort and T27 records them by seed."
+    },
+    {
+     "id": "T24-withdrawn",
+     "summary": "T24 is closed as moot: the pass it concerned (sweeps._sweep_doubled_remnants) was measured needless and deleted with its claim in T26; done is measured by a grep that finds no definition",
+     "class": "within",
+     "why": "The GM 2026-10-25: 'You can also close T24 if it is moot.' The block says why it is moot (T26's deletion, research R5) and gives a measured done condition."
     }
    ]
   }

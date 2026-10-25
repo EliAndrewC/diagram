@@ -1,4 +1,4 @@
-"""The web's END TRIMS: every lane end tidied to what it serves (the collapsed-lane drop and the overrun cut went in feature 417 T26). Split from `ways/web.py` at the 1,000-line bar (feature 405 T57).
+"""The web's END TRIMS: every lane end tidied to what it serves (the collapsed-lane drop and the overrun cut went in feature 417 T26, the connector's pull-back in T19). Split from `ways/web.py` at the 1,000-line bar (feature 405 T57).
 
 Research: web plumbing - NONE"""
 
@@ -12,11 +12,9 @@ from l7r.diagram.settlement import Settlement, seg_dist
 from ...consts import (
     WEB_REACH_FT,
     Poly,
-    Pt,
 )
-from .. import law
 from ..bund import run_lanes_on_to_the_bund, worked_ground_of
-from ..fabric import _WEB_MIN_FT, _homestead_polys, _pull_back_to_service
+from ..fabric import _WEB_MIN_FT
 from ..geom import _components, _trim_to_service, lane_houses, polyline_len, steading_footprints
 
 
@@ -41,20 +39,14 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
             one, that serves nothing is not drawn (the page's GUESS, on Mencius 14.21 and the Tang Code art. 404) - unless it is the only link in
             the web, which serves the ways it joins (405 T15)
         a tail kept as a house's only way - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: never for a household reached across a neighbor's land, owed none (`geom.lane_houses`)
-        connector at the gate kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the track out starts on the cluster's edge with every household's way laid to it, so a connector starting at the way out's gate is never trimmed
+        the track out not trimmed here - research/questions/0081-village-lanes.drawing.html: the track out is laid by its own placer (`stage_track`), and whether its end meets the ways is asked of the finished map (`checks.track_ends_off_the_web`)
         shortest lane kept - UNRESEARCHED: a trim leaving a lane under _WEB_MIN_FT, 30 ft, is not applied, or the lane is dropped
         only-way reach - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house with no other way within WEB_REACH_FT, 100 ft, keeps its tail
     """
     _final_houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
     _owed = lane_houses(s.M)  # the houses a lane may be kept as the only way to
     _final_steadings = steading_footprints(s.M)  # a tread that stops at a dooryard has arrived there (feature 227 D11)
-    _W, _H = float((s.M.get("meta") or {}).get("W", s.W)), float((s.M.get("meta") or {}).get("H", s.H))
 
-    def _inside(q: Pt) -> bool:
-        return 0.0 <= q[0] <= _W and 0.0 <= q[1] <= _H
-
-    _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # what the connector's end must stay clear of, as `_thread_the_fabric` left it
-    _solid_now = law.solid_boxes(s.M)  # ...and the buildings' boxes its legs may not run through (`law.breaks_through`)
     _nowhere: list[int] = []  # lanes that serve nothing at either end - dropped after the loop, back to front
     # THE FIELD AS DRAWN, not the plan's envelope (feature 261): an end serves the field where it reaches the paddy a reader
     # sees - the bar the pool's lane-end test holds - and the envelope stands well out from it on a polder, so a skeleton
@@ -90,23 +82,20 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
         # are named so the tidy-up cannot strand one (cohort seed 39's farmhouse, `_trim_to_service`).
         # ...never a household reached across a neighbor's yard, which is owed no way of its own (`geom.lane_houses`, feature 317)
         _keep = [_h for _h in _owed if all(seg_dist(_h[0], _h[1], _a, _b) > WEB_REACH_FT for _a, _b in _others)]
-        # ...BUT A CONNECTOR THAT STARTS AT THE WAY OUT'S GATE STAYS THERE (feature 320; the exit strip's rule before it, feature
-        # 287 wave 6): every household's way reaches the track out at the gate, and pulled back to service the start left them
-        # all off the network (the reference hamlet: 85 ft)
-        if _ln.get("connector") and s.M.get("way_out_gate"):
+        # ...BUT THE TRACK OUT STAYS AS IT WAS LAID (feature 320; the exit strip's rule before it, feature 287 wave 6): every
+        # household's way reaches it at the way out's gate, and pulled back to service its start left them all off the network
+        # (the reference hamlet: 85 ft). Its inner end's walk on to the network (`_pull_back_to_service`) went in feature 417
+        # T19: measured needless - with it off no fixed, pinned or pool verdict moved and no finished map's end was off the web
+        if _ln.get("connector"):
             continue
-        _kept = (
-            kept_connector(_pts, _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now), _solid_now)
-            if _ln.get("connector")
-            else _trim_to_service(_pts, _others, _final_houses, _ground, keep=_keep, steadings=_final_steadings)
-        )
+        _kept = _trim_to_service(_pts, _others, _final_houses, _ground, keep=_keep, steadings=_final_steadings)
         if len(_kept) >= 2 and polyline_len(_kept) >= _WEB_MIN_FT and _kept != _pts:
             _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _kept]
             # AND THE INK WITH IT - see `Settlement.reink_lane`. Shortening the record alone left the
             # drawn lane longer than the checked one, which is the quietest kind of wrong there is.
             s.reink_lane(_i)
         elif (
-            not (_ln.get("connector") or _ln.get("street"))
+            not _ln.get("street")
             and (
                 len(_kept) < 2
                 # trimmed to a nub too short to be a lane (Kashikawa's field spur kept 2 ft past the tread it stopped on) that is
@@ -142,10 +131,3 @@ def unsplitting_drops(lanes: Sequence[Mapping[str, Any]], drops: Sequence[int]) 
         if networks(gone | {i}) <= networks(gone):
             gone.add(i)
     return sorted(gone)
-
-
-def kept_connector(pts: Poly, pulled: Poly, solid: Sequence[tuple[float, float, float, float]]) -> Poly:
-    """The connector as the late pass leaves it: `pulled` (its inner end walked on to the network, `_pull_back_to_service`)
-    unless a leg of that runs through a building (`law.breaks_through` over `solid`), where the connector stays as placed
-    (`pts`) - the pull-back is a tidy-up, and the connector's placer decided it runs through nothing (ways: break-mid-run)."""
-    return list(pts) if law.breaks_through(pulled, solid) else pulled

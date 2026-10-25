@@ -469,20 +469,6 @@ def _stop_at_closest_approach(run: Poly, near: Sequence[Pt]) -> Poly:
     return out
 
 
-def _nearest_seg(q: Pt, segs: Sequence[tuple[Pt, Pt]]) -> tuple[float, tuple[Pt, Pt] | None]:
-    """The distance from `q` to the way network, and WHICH segment of it - the two are one answer.
-
-    Returned together on purpose: a caller that finds the distance and then re-derives the segment is
-    two expressions that can disagree, which is the skill's standing rule about a diagnostic that
-    restates what it observed."""
-    best, at = float("inf"), None
-    for a, b in segs:
-        d = seg_dist(q[0], q[1], a, b)
-        if d < best:
-            best, at = d, (a, b)
-    return best, at
-
-
 def _net_reach(path: Poly, segs: Sequence[tuple[Pt, Pt]]) -> float:
     """How near a candidate path comes to the EXISTING way network, at its nearest point."""
     return min(seg_dist(q[0], q[1], a, b) for q in path for a, b in segs)

@@ -158,3 +158,59 @@ landing's own fresh block of 48 passed (`dev/cohort-log/20261025T082938Z-diagram
 Read: deleting the eighteen passes moved no rate past its sampling noise (500 seeds at 11.8% (observed 2026-10-25; method: the block above) carry about +/-3 points at two
 standard errors; every form and cause is inside it). The lane web's causes are not higher; linear (104 seeds) and seating
 are the noisiest cells. The rate is the same problem it was, with 2,822 fewer engine lines in it.
+
+## R6 - the track out's pull-back, measured off (T19, D25-D27)
+
+Observed 2026-10-25; method: D25, in the detached worktree `probe19` at `a81dd7ee9`, with an environment switch and a log
+that never land: `make cohort N=48 FRESH=0 JOBS=5` and `make map` on the five pool hamlets with the call on, then off; then
+`make cohort N=500 SEED=3001601 FRESH=0 JOBS=5` with it on, logging every connector end the pull-back returns and every
+connector end once `settle_the_web` is done; then the six seeds whose finished track ended off the web, one by one, with each
+settle step's effect on the track's end logged.
+
+| what (observed 2026-10-25; method: as above) | result |
+|---|---|
+| fixed and pinned seeds, call off against on | 54 of 54 pass both ways |
+| pool manifests, call off against on | all five byte-identical |
+| connectors the pull-back returned more than 4 ft off the web | 0 of 412 (58 fixed, pinned and pool; 354 fresh) |
+| finished maps with the track's inner end more than 4 ft off the web | fixed, pinned and pool 0; fresh 6 of 377, at 25.2-65.8 ft |
+| those six seeds' cohort verdicts | all pass (the law exempts the connector) |
+| where the trace puts it | `settle_reach`, every one: the households' ways are drawn to `near_the_cluster`'s stretch of the track, not its start |
+| the fresh block's rate (`make fresh-tally COMMIT=a81dd7ee9 SINCE=20261025T114923Z`) | 61 of 500 (12%): nucleated 10%, dispersed 4%, linear 30% - beside R3's 12.5% and R5's 11.8% |
+
+The six (seeds 3001615, 3001629, 3001674, 3001847, 3002028, 3002062) are all nucleated with a way out's gate. The pull-back
+is deleted as needless; the rule becomes a finished-map predicate the cohort asks (D27 (a)), and its placer is T27.
+
+## R7 - the angle at which two ways stop reading as a junction (T16's research pass, the GM 2026-10-25)
+
+The GM: "a general research pass on the angles at which footpaths and lanes and country roads tend to intersect. We
+basically want something that doesn't look wrong, visually, to a person looking at the map." Run 2026-10-25 by the
+`research-pass` agent (archive first, then the web; every page read is on `research/source-attempts.jsonl`). The question:
+below what angle does a lane end meeting another way read as one way drawn double rather than a junction, and at what
+angles do real paths, lanes and roads meet. The three values in the code: the law's 15 deg (`tails._DOUBLED_DEG`), the
+sweep's 25 deg (`tails._ALONG_DEG`), the page's 20 (0081, "Two paths running side by side are drawn as one").
+
+**SILENT on the threshold.** No source gives an angle below which a meeting stops reading as a junction. What bears:
+
+| source | what it says | reading |
+|---|---|---|
+| 說文, quoted in 齊民要術 卷第一 (c. 544) | "田 ... 象四口，十，阡陌之制也" - the 十 is the system of field paths (translation) | ATTESTED ONLY FOR planned field paths crossing square |
+| 条里制 (suido-ishizue.jp) | the jōri grid of 1-chō squares, its axes on the main slope "とその直交方向" (and at right angles to it) | ATTESTED ONLY FOR planned paddy grids, 90 deg |
+| Helbing, Keltsch and Molnár, Nature 1997 (arXiv cond-mat/9805158) | "junctions of two trails which smoothly merge into one trail"; trails "begin to bundle, especially where different trails meet" | ATTESTED: trodden footpaths make shallow, smooth Y-merges, and near-parallel trails bundle into one (0081's own reason); no angle |
+| Iowa DOT 6A-8, citing the AASHTO Green Book ch. 9 and NCHRP 279 | "intersection angles between 60º and 120º as acceptable"; "75º to 90º ... wherever possible" | ATTESTED ONLY FOR modern vehicle roads (a sight-line floor, not a footpath's) |
+| Azumino city road standard | 「道路の交差角は原則として４５度以上」 (crossing angle as a rule 45 deg or more) | ATTESTED ONLY FOR modern municipal roads |
+| Crucitti, Porta, Strano et al. (arXiv 1211.0259) | junction angles "a double peak ... around ... 90 and 180 degrees" | ATTESTED: 90 (a crossing) and 180 (straight on) dominate; no shallowest angle readable |
+| CartAGen `strokes_roads`; Esri "Merge Divided Roads" | a fork within 45 deg of straight carries the same stroke; near-parallel roads within a merge distance are drawn as one | ATTESTED ONLY FOR the convention that near-parallel lines are drawn as one; distance, not angle |
+
+**What it means for the rule.** The road floors (45-75 deg) are sight lines for drivers and do not apply to a footpath,
+and Helbing shows the shallow merge is a real trodden form - so the evidence argues against raising the cut to 25 deg,
+which would read more real Y-merges as doubled, and for keeping it low (15-20). Whether two lines read as doubled depends
+on how fast they part relative to their width as well as on the angle: a lane leaving another at an angle gains one lane
+width of separation every 1/sin of it, about 3.9 widths of run at 15 deg, 2.9 at 20, 2.4 at 25 (the project's arithmetic,
+not sourced). Labels: the 15/20/25 choice stays a **map drawing convention**, as 0081 already labels its 20; "field paths in
+a planned grid cross square" can carry **historically accurate** (說文 via 齊民要術, 条里); anything about how unplanned
+village lanes meet stays a **guess**.
+
+Not followed (print only or unreachable): 道路構造令の解説と運用's 平面交差 chapter, the DMRB CD 123 full text (a WSP note
+quotes its criterion as ">70 degrees"), Thomson and Richardson's original stroke threshold, Helbing's Phys. Rev. E paper,
+USFS / NPS trail junction guidance, arXiv 2511.06747. T16's doubled tail is still set down: the pass supports the page's
+20 as a convention and gives no reason for 25; which value the two roles (`_ALONG_DEG`, `_DOUBLED_DEG`) share is the GM's.

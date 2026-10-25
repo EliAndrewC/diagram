@@ -235,8 +235,8 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
                 return cand  # pragma: no cover - the swing ladder's accepted detour; no cohort cluster presents the obstacle it clears [174: KEPT, not deletable - it is the ladder's SUCCESS path, not a guard]
         # A DEAD END, MEASURED (feature 134 T50): a ladder that walked run[0] outward too, on the
         # theory that the offending leg was the first one and nothing above can move it. It changed
-        # no map, because this function was never the one at fault - see `_pull_back_to_service`,
-        # which moves a connector's inner end AFTER this has cleared it.
+        # no map, because this function was never the one at fault - the fault was `_pull_back_to_service`
+        # moving a connector's inner end AFTER this had cleared it (that pass went in feature 417 T19).
     kept = out if len(out) >= 2 else run  # the run the grove fallback weighs its crossings against
     # ...AND NEVER ACROSS A FARM'S GROVE (feature 291). Where neither the threaded route nor the swing clears every steading,
     # the clipped run - or the run as it came - went back across grove bands (the spur and the connector, cohort seeds 1, 5,

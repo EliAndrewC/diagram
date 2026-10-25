@@ -8,6 +8,6 @@ the task calls for.**
 | file | look here when |
 |---|---|
 | `skeleton.py` | the cluster's SKELETON, laid after the houses (`_lay_skeleton`, `served_arm`, the rolled shape and the water side) and the web's cut lines (`_web_cut_lines`) |
-| `tidy.py` | the web's END TRIMS: `tidy_lane_ends`, a connector's kept end (`kept_connector`) |
+| `tidy.py` | the web's END TRIMS: `tidy_lane_ends` (the track out is not trimmed; its pull-back, `kept_connector`, went in feature 417 T19: measured needless) |
 | `stage.py` | `stage_web` itself - read it first to see the order the passes run in - and the runs it lays and resettles |
 | `__init__.py` | the re-exports only; never add logic here |

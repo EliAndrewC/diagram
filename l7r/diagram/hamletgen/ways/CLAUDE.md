@@ -7,7 +7,7 @@ Split from one `ways.py` by feature 173, as LAYERS emitted bottom-up (every cros
 | file | look here when |
 |---|---|
 | `geom.py` | point and segment math on a bare polyline - lengths, turns, crossings, nearest-thing queries, and the two pushes that move a point off something |
-| `checks.py` | the questions asked ABOUT a finished network - which houses are unreached, which lanes share a tread, where a way crosses crop or water it should not |
+| `checks.py` | the questions asked ABOUT a finished network - which houses are unreached, which lanes share a tread, where a way crosses crop or water it should not, and a track out that stops short of the ways (`track_ends_off_the_web`, asked by the cohort only - feature 417 D27; never add it to the law the settle reads, which would refuse the map) |
 | `clearance.py` | may a way BE here - the clear-run scan, the clip, the span and touch tests, the kink spans the lane law asks |
 | `route.py` | the router itself: `_route` finds a way round hard ground, `_unjog` straightens what it found, `_ease_corner` rounds the corners it leaves |
 | `fabric.py` | the settlement fabric a way must respect - the homestead polygons, the margin frame, the fabric-collision probes, and `_draw_web`, the single place a web lane is committed to the map |

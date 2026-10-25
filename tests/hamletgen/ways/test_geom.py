@@ -5,7 +5,7 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.hamletgen.ways import _crosses_fabric, _nearest_seg, _reach, _trim_to_service
+from l7r.diagram.hamletgen.ways import _crosses_fabric, _reach, _trim_to_service
 
 from ._builders import _walled_settlement
 
@@ -125,15 +125,6 @@ def test_closest_approach_keeps_a_tread_that_walks_away_from_its_ONLY_house() ->
 
     assert _stop_at_closest_approach([(0.0, 0.0), (50.0, 0.0)], [(-10.0, 30.0)]) == [(0.0, 0.0), (50.0, 0.0)]
     assert _stop_at_closest_approach([(0.0, 0.0), (0.0, 0.0)], [(-10.0, 30.0)]) == [(0.0, 0.0), (0.0, 0.0)]
-
-
-def test_nearest_seg_returns_the_distance_AND_the_segment_it_belongs_to() -> None:
-    """One expression, one answer - a caller must not re-derive which segment was nearest."""
-    segs = [((0.0, 0.0), (100.0, 0.0)), ((0.0, 200.0), (100.0, 200.0))]
-    d, sg = _nearest_seg((50.0, 10.0), segs)
-    assert round(d, 6) == 10.0
-    assert sg == segs[0]
-    assert _nearest_seg((0.0, 0.0), []) == (float("inf"), None)
 
 
 # ---- the dooryard a tread arrives at (feature 227 D11) --------------------------------------------

@@ -38,9 +38,6 @@ from .stage import (
     stage_web as stage_web,
 )
 from .tidy import (
-    kept_connector as kept_connector,
-)
-from .tidy import (
     tidy_lane_ends as tidy_lane_ends,
 )
 from .tidy import (

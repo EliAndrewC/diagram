@@ -39,11 +39,9 @@ from .fabric import _fabric_hits as _fabric_hits
 from .fabric import _hits_a_steading as _hits_a_steading
 from .fabric import _homestead_polys as _homestead_polys
 from .fabric import _margin_frame as _margin_frame
-from .fabric import _pull_back_to_service as _pull_back_to_service
 from .geom import _TOUCH_GAP as _TOUCH_GAP
 from .geom import WorkedGround as WorkedGround
 from .geom import _components as _components
-from .geom import _nearest_seg as _nearest_seg
 from .geom import _net_reach as _net_reach
 from .geom import _reach as _reach
 from .geom import _trim_to_service as _trim_to_service

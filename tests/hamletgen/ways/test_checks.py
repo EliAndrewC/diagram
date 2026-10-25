@@ -1,7 +1,7 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.hamletgen.ways.checks import brook_fords, gap_segments, served_network, stream_segs, unreached_houses
+from l7r.diagram.hamletgen.ways.checks import brook_fords, gap_segments, served_network, stream_segs, track_ends_off_the_web, unreached_houses
 
 from .._builders import SQUARE
 
@@ -191,3 +191,14 @@ def test_a_household_reached_across_a_neighbor_s_yard_is_reached_where_its_neigh
     d = {"x": 900.0, "y": 1150.0, "reached_across": [900.0, 900.0], "passage_depth": 1}
     got = unreached_houses({"meta": meta, "houses": [c, b, a, far, d], "lanes": lanes})
     assert sorted((x, y) for x, y, _d in got) == [(900, 900), (900, 1150)], "B and C by the chain; D's neighbor is unreached"
+
+
+def test_a_track_whose_inner_end_stops_short_of_the_ways_is_named_and_one_on_them_is_not() -> None:
+    """`track_ends_off_the_web` (feature 417 D27; 0081: the track never stops in open country): the track's inner end 30 ft
+    past the lane that meets it is named; on the lane, or within the 4 ft touch, it is not; the off-canvas end is never asked."""
+    lane = {"pts": [[100.0, 0.0], [100.0, 200.0]]}
+    short = {"meta": {"W": 400.0, "H": 400.0}, "lanes": [{"pts": [[130.0, 100.0], [-50.0, 100.0]], "connector": True}, lane]}
+    on = {"meta": {"W": 400.0, "H": 400.0}, "lanes": [{"pts": [[102.0, 100.0], [-50.0, 100.0]], "connector": True}, lane]}
+    assert track_ends_off_the_web(short) == [(0, 0, 30.0)]
+    assert track_ends_off_the_web(on) == []
+    assert track_ends_off_the_web({"meta": {"W": 400.0, "H": 400.0}, "lanes": [lane]}) == [], "no track, nothing asked"
