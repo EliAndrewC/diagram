@@ -57,6 +57,16 @@ call WebFetch '{"url":"https://example.org/a","prompt":"the pond depth"}'
 grep -q 'additionalContext' "$T/out" && grep -q 'the dike width' "$T/out" && ok "a second read is told the first" || no "no context"
 call Bash '{"command":"curl -sL http://example.net/p"}'
 grep -q '"route": "bash"' "$LOG" && grep -q 'curl -sL http://example.net/p' "$LOG" && ok "a curl is recorded with its command" || no "curl not recorded"
+call Bash '{"command":"curl -sL -o a.pdf https://example.net/q.pdf; ls"}'
+grep -q '"raw": "https://example.net/q.pdf"' "$LOG" && ! grep -q '"raw": "https://example.net/q.pdf;' "$LOG" && ok "a URL ending the command keeps no ;" || no "the ; was kept" "$(tail -1 "$LOG")"
+before=$(lines)
+call Bash '{"command":"for n in 3 9; do curl -sL -o x$n https://example.net/p-$n.pdf; done"}'
+[ "$(lines)" -eq "$before" ] && ok "a URL built from a shell variable is not recorded" || no "recorded p-\$n" "$(tail -1 "$LOG")"
+before=$(lines)
+call Bash '{"command":"python3 - <<'"'"'EOF'"'"'\ns = \" curl -sL https://example.net/h\"\nEOF"}'
+[ "$(lines)" -eq "$before" ] && ok "a curl named in a heredoc body is not recorded" || no "recorded a heredoc mention" "$(tail -1 "$LOG")"
+call Bash '{"command":"python3 - <<'"'"'EOF'"'"'\ns = \" curl -sL https://grokipedia.com/page/X\"\nEOF"}'
+[ "$(rc)" -eq 2 ] && ok "...but a blocked domain in one is still refused" || no "heredoc block passed" "(rc=$(rc))"
 before=$(lines)
 call Bash '{"command":"make source-pages OUT=/tmp/x URL=https://example.org/b QUESTION=0012 SOUGHT=y"}'
 [ "$(lines)" -eq "$before" ] && ok "a make route records itself, not twice" || no "the hook recorded a make route"

@@ -34,6 +34,7 @@ import sources as src  # noqa: E402
 FETCHER = re.compile(r"(?:^|[\s;&|(`$])(?:curl|wget|lynx|w3m|xh|https?)\s|python3?\s+-m\s+urllib")
 MAKE_FETCH = re.compile(r"(?:^|[\s;&|(])make\s+(?:-[Cs]\s*\S+\s+)*(?:source-pages|archive|archive-sources|reserve|source-outcome|quote-verbatim)\b")
 URL = re.compile(r"(?:https?://)?(?:[a-z0-9-]+\.)+[a-z]{2,}(?:/[^\s'\"<>)]*)?", re.I)
+HEREDOC = re.compile(r"<<-?\s*(['\"]?)(\w+)\1[^\n]*\n.*?^\s*\2\s*$", re.S | re.M)
 HTTP_URL = re.compile(r"https?://[^\s'\"<>)]+", re.I)
 SOUGHT_CHARS = 300
 
@@ -70,7 +71,12 @@ def decide(payload: dict) -> dict:
         if not (fetcher or maker):
             return {"decision": "pass", "context": ""}
         urls = URL.findall(cmd) if maker else HTTP_URL.findall(cmd) or URL.findall(cmd)
-        sought, record = cmd.strip(), fetcher and not maker
+        # ...as the shell will fetch them: a `;` or `&` ending the command is not the URL's, and a URL built from a shell
+        # variable (`noudou-$n.pdf` in a loop) is no page anyone can open (feature 417's T16 pass logged both)
+        urls = [u.rstrip(";&|") for u in urls if "$" not in u]
+        # ...but a fetch named only in a heredoc's body is a script's TEXT (a Python edit writing a test with a curl in it), so
+        # it is refused if blocked yet never logged as an attempt (feature 417: the hook's own test edit was logged)
+        sought, record = cmd.strip(), fetcher and not maker and bool(FETCHER.search(HEREDOC.sub("", cmd)))
     else:
         return {"decision": "pass", "context": ""}
     for u in urls:
