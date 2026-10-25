@@ -24,7 +24,7 @@ def torii_plan_svg(tx: float, ty: float, ftpx: float, span_ft: float = 16.0) -> 
 
     Research:
         arch drawn in plan - CONVENTION: beam bar, posts proud of it
-        default span - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25) on a page - torii ran a beam of 5.87 m (Kitakyushu, undated) and posts 2.5 m apart (Kawataka, about 1600, 0220; pass P6), the order of this size; 16 ft
+        default span - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: from about 8 ft between the posts at a country shrine to about 18 ft at a shrine of the city of Sendai, on the three stone arches found measured; pass P6), the order of this size; 16 ft
     """
     s2, beam, post, p2 = torii_glyph_dims(ftpx, span_ft)
     return (
@@ -47,9 +47,9 @@ class ToriiAvenueMixin:
         (stroke convention - see SKILL.md "to scale"), never a footprint license.
 
         Research:
-            arch span - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25) on a page - torii ran a beam of 5.87 m (Kitakyushu, undated) and posts 2.5 m apart (Kawataka, about 1600, 0220; pass P6), the order of this size; 16 ft default
+            arch span - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: from about 8 ft between the posts at a country shrine to about 18 ft at a shrine of the city of Sendai, on the three stone arches found measured; pass P6), the order of this size; 16 ft default
             arch in plan - CONVENTION
-            never in a barrier - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25) on a page - torii stood as parts of sacred fences (Encyclopedia of Shinto, pass P6), against this (feature 417 T35); raises
+            never in a barrier - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: a torii can be built into a sacred fence, the tamagaki (the Encyclopedia of Shinto) - a torii is refused in a barrier, a departure the code keeps until feature 417 T35; raises
         """
         wall = torii_seat_on_wall(self.M, tx, ty, self.ftpx)  # an arch never stands IN a barrier - see the wall_runs block
         if wall:

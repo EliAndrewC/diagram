@@ -316,7 +316,7 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 <!-- Research: kitchen garden at the dwelling - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the keeper's plot stands near the hall, on open ground that gets its sun - the garden is fixed at the dwelling's back, a departure the code keeps until feature 417 T33; the kitchen garden at the dwelling's back -->
 <!-- Research: hall and dwelling order - GUESS: the hall end toward the arch, the dwelling end behind -->
 <!-- Research: arch in plan - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft pitch -->
-<!-- Research: arch dimensions - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25) on a page - one torii ran a 2.5 m span and 2.8 m height (pass P4), smaller than these (feature 417 T33); 15 ft beam, 1.2 ft posts, 10.3 ft clear -->
+<!-- Research: arch dimensions - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: from about 8 ft between the posts at a country shrine to about 18 ft at a shrine of the city of Sendai, on the three stone arches found measured; one stands 2.5 m between its posts and 2.8 m high (Kawataka); 15 ft beam, 1.2 ft posts, 10.3 ft clear -->
 <!-- Research: approach width - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); gravel strip ~10 ft wide -->
 <!-- Research: precinct unenclosed - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html: no fence or hedge round the precinct -->
 <!-- Research: bare precinct earth - research/questions/0224-ground-swept-clear-around-shrines-and-graves.html: plain fill, no rake lines -->

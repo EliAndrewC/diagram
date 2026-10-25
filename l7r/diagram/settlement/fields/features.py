@@ -481,7 +481,7 @@ class FieldFeaturesMixin:
 
         Research:
             corner grave - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: a mound in a plot's corner, against its bunds
-            corner grave size - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on a page - the Ming code gave a commoner's grave 18 bu round (pass P2b), a ceiling the 13 by 9 ft mound fits inside; mound 13 x 9 px, one or two stones"""
+            corner grave size - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: eighteen paces round, by the rule of 1372, about 22 to 28 ft a side if square - a ceiling on the grave's whole ground; the rule gives no height for a commoner's mound; mound 13 x 9 px, one or two stones"""
         at = rng.choice(turning_corners(plot["poly"]))
         cx, cy = (round(v, 1) for v in corner_seat(plot["poly"], at))
         disc = (cx, cy, 6.5 + GRAVE_BANK_PX)
@@ -515,7 +515,7 @@ class FieldFeaturesMixin:
         Research:
             grave island - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: a mound inside a plot
             basins carved round the island - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no ring passes under the mound
-            grave island size - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); the island 1.1 of the plot's half-span on each axis, at least 18 x 12 px, growing with the plot; mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones"""
+            grave island size - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: eighteen paces round, by the rule of 1372, about 22 to 28 ft a side if square - a ceiling on the grave's whole ground; the rule gives no height for a commoner's mound; the island 1.1 of the plot's half-span on each axis, at least 18 x 12 px, growing with the plot; mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones"""
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         cx, cy = round(cx, 1), round(cy, 1)
         rx, ry = max(9.0, hx * 0.55), max(6.0, hy * 0.55)

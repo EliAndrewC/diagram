@@ -148,7 +148,7 @@ class FixtureForms:
         persimmon front share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
             0.7 by default
         manure form - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: heap by default, or pit
-        retirement house size and gaps - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25) on the gaps - a source (Kakimochi 1885, pass P1) has retirement houses of 3 to 15 tsubo, which 7.5 sits inside; no page records it yet; 18 x 15 ft, 6 or 12 ft off the house"""
+        retirement house size and gaps - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: eight of 16 households kept a retirement house, at 3 to 15 tsubo, a 9 tsubo one a middling one, all but one 2.5 ken (~15 ft) deep or less; no page gives how far from the main house it stood; 18 x 15 ft, 6 or 12 ft off the house"""
 
     privy_weights: tuple[tuple[str, float], ...] = (("stable", 0.35), ("yard", 0.30), ("front", 0.20), ("barn", 0.15))  # the page's order (feature 328 wave 61: the places were misassigned)
     bath_stable_share: float = 0.8
@@ -197,7 +197,7 @@ def fixture_ft(kind: str, forms: FixtureForms, roll: Callable[[float], float] | 
         coop size - research/questions/0045-chickens-and-chicken-coops.drawing.html: 5 x 5 ft
         shrine size - research/questions/0219-household-shrines-yashikigami.drawing.html: 6 x 6 ft, larger than life
         manure pit size - research/questions/0042-manure-heaps-and-compost-kyuhi.html: 3.5 ft, inside the night-soil jar's mouth of about 3-5 ft
-        retirement house size - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25) on the gaps - a source (Kakimochi 1885, pass P1) has retirement houses of 3 to 15 tsubo, which 7.5 sits inside; no page records it yet; 18 x 15 ft"""
+        retirement house size - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: eight of 16 households kept a retirement house, at 3 to 15 tsubo, a 9 tsubo one a middling one, all but one 2.5 ken (~15 ft) deep or less; no page gives how far from the main house it stood; 18 x 15 ft"""
     if kind == "privy" and roll is not None:
         return PRIVY_SIZES_FT[int(roll(101.3) * len(PRIVY_SIZES_FT)) % len(PRIVY_SIZES_FT)]
     if kind == "bath" and roll is not None:

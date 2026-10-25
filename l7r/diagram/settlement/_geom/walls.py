@@ -32,10 +32,10 @@ def torii_glyph_dims(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, 
     a 12 ft pitch).
 
     Research:
-        torii span - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25) on a page - torii posts stood 2.5 m apart (early Edo) and 5.53 m (Kameoka 1683, pass P7); the span sits between; 16 ft default
+        torii span - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: from about 8 ft between the posts at a country shrine to about 18 ft at a shrine of the city of Sendai, on the three stone arches found measured; the span sits between; 16 ft default
         top beam width - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); 1.4 ft, floored at 1.9 px
         posts proud of the beam - CONVENTION: 1.35x the beam, squares beside the bar
-        post set-in - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25) on a page - one torii's posts stand at 0.615 of its beam (Kitakyushu, undated, pass P7), against 12/19; posts at 12/19 of the beam's half-span (the kasagi's overhang)"""
+        post set-in - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: one arch's posts stand about six-tenths (0.615) of its beam apart (Kokura, undated; the page's arithmetic); posts at 12/19 of the beam's half-span (the kasagi's overhang)"""
     s2 = (span_ft / ftpx) / 2
     beam = max(1.4 / ftpx, 1.9)
     post = beam * 1.35
