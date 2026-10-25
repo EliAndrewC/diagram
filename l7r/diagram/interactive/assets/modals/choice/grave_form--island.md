@@ -23,5 +23,5 @@ stops short of the mound, so no flooded basin runs under the grave.
 Name: A grave island inside a plot
 Covers: `meta.grave_form = island`
 Sources: henriot-shanghai-graves, buck-1930-farm-economy, feng-yizhong-jiangnan
-Entry: research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html
+Entry: research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, research/questions/0235-village-burial-grounds-bochi.html
 Drawing: research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html
