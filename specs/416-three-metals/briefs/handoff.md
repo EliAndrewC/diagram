@@ -34,7 +34,7 @@ jawiki-kanei-tsuho, jawiki-tenpo-tsuho, jawiki-kanezukai, jawiki-erizeni, jawiki
 
 - source-reader: all 16 bundles (`/tmp/l7r-check/s416-sr-*`), round 1, fixes applied and recorded. CAUTION: `make record-checked` also marked units of other questions that shared those bundles as answered, though the agents read only 0295's: 0287#jawiki-sanka-seido(-2,-3), 0294#domain-notes, 0294#domain-notes-rate, 0294#yen-1871, 0290#saito-1993-wages. (0287#jawiki-nanryo-nishugin and 0287#jawiki-ichibu-gin WERE read.) Those belong to 412 and 414's check sessions.
 - The source-reader EDIT on 412's registry entry `34190-jawiki-nanryo-nishugin.html` (the 60-monme reckoning is the article's, not the changers') was applied; it owes source-applicability.
-- The 17 source-reader passes have no review-ledger row: `make ledger-owed WRITE=...` could not trace them to 416 (their prompts' first 100 characters name no question). Add them by hand or pass LEDGER_ROWS_OK at the push.
+- The 17 source-reader passes' review-ledger rows were added by hand (`make ledger-owed WRITE=...` could not trace them to 416: their prompts' first 100 characters name no question).
 - Owed for session 3: quote-check (Q=0295; Oishi's page images at `/tmp/claude-1000/oimg`, printed pp. 69, 70, 73, 74, 128 = PDF pages 1, 2, 5, 6, 59), source-applicability on the nine new write-ups, kotobank-nengu-sekai-daihyakka and 34190-jawiki-nanryo-nishugin, record-format and intro-check on 0295, translation-check.
 
 ### Leads not followed
