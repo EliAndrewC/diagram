@@ -83,3 +83,10 @@ def test_a_unit_the_base_tree_cannot_see_is_known_only_on_the_arbiter_s_recorded
     assert carry.known_drifts(cx, tmp_path) == {}, "no base core and no accept: not known"
     cx.load_index = lambda _p: {KEY: {"verdict": "DRIFTED", "core": "c1", "note": f"80 ft; {carry.ACCEPTED} (ask:x) to land as filed"}}
     assert carry.known_drifts(cx, tmp_path) == {KEY: "417 T33"}
+
+
+def test_an_accept_keeps_a_label_s_own_semicolon_whole() -> None:
+    acc = _load("claims_accept")
+    known = {"a.md::S#well (\"x\"; y)": 1, "a.md::S#b": 1}
+    assert acc.split_semicolon_keys('a.md::S#well ("x"; y);a.md::S#b', known) == ['a.md::S#well ("x"; y)', "a.md::S#b"]
+    assert acc.split_semicolon_keys("a.md::S#b;nope", known) == ["a.md::S#b", "nope"], "an unknown piece is named alone"

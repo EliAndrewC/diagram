@@ -49,22 +49,17 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`)": {
-  "body": "7c15e2a207833e08",
+  "body": "fc89e259430af22f",
   "claim": "a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`) - inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai: the stop beside the approach was a stone basin for rinsing the hands and mouth - a well is drawn in its place, a departure the code keeps until feature 417 T33; a well drawn as the purification stop beside the approach, the page attesting only the basin",
   "code": "7f8ce6bbc0ce50ce",
-  "core": "8a93256e3dc37d64",
+  "core": "5b4e84495735a410",
   "date": "2026-10-25",
-  "note": "the required item is `well`, but 0222 finds \"a stone basin for rinsing the hands and mouth by the approach\" and its drawing page draws \"a plain stone basin\"; it records no well-for-basin departure. Make the required item a basin, or have the drawing page record the departure and relabel the claim DEVIATION",
+  "note": "the required item is `well`, but 0222 finds \"a stone basin for rinsing the hands and mouth by the approach\" and its drawing page draws \"a plain stone basin\"; it records no well-for-basin departure. Make the required item a basin, or have the drawing page record the departure and relabel the claim DEVIATION; a known drift accepted by the round arbiter (ask:417-T36-drifted) to land as filed",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
   "research": "704fffd977ae2d80",
-  "rests": [
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:4bec9f4f1782de45",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:b3ef50530e7ace96"
-  ],
   "section": "5b4e84495735a410",
-  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#approach width about 10 ft": {
@@ -291,45 +286,31 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
-  "body": "7c15e2a207833e08",
+  "body": "fc89e259430af22f",
   "claim": "dwelling entry tagged genkan - the-formal-entrance-and-a-guests-arrival-genkan: in the Edo period a genkan was an entrance with a shikidai, kept for the head of the house and honored guests - a plain earth-floored vestibule is tagged genkan, a departure the code keeps until feature 417 T33; Hoshigaoka's sheet tags its dwelling's plain earth-floored entry vestibule as genkan; 0104's genkan is a samurai house's shikidai entrance, which does not bear on a village monk's vestibule",
   "code": "e5a3a1d8b65559e6",
-  "core": "8a93256e3dc37d64",
+  "core": "5b4e84495735a410",
   "date": "2026-10-25",
-  "note": "a plain earth-floored vestibule is tagged genkan, but 0104 finds that in the Edo period genkan \"meant an entrance with a shikidai\", kept for the head of the house and honored guests. The claim also contradicts itself: it cites 0104 and then says 0104 does not bear on it. Tag the entry as a plain entry, or record a DEVIATION on a drawing page",
+  "note": "a plain earth-floored vestibule is tagged genkan, but 0104 finds that in the Edo period genkan \"meant an entrance with a shikidai\", kept for the head of the house and honored guests. The claim also contradicts itself: it cites 0104 and then says 0104 does not bear on it. Tag the entry as a plain entry, or record a DEVIATION on a drawing page; a known drift accepted by the round arbiter (ask:417-T36-drifted) to land as filed",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
   "research": "8310727e0f879d15",
-  "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:38ce75614bcb4467",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a3162f7d1b6545a0"
-  ],
   "section": "5b4e84495735a410",
-  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling kitchen floor": {
-  "body": "89562b4bcb943053",
+  "body": "fc89e259430af22f",
   "claim": "dwelling kitchen floor - kitchens-daidokoro: as a rule the kamado stood on the doma in Edo houses; a kitchen of earth throughout is not attested - the kitchen is drawn all earth floor, a departure the code keeps until feature 417 T33; Hoshigaoka's sheet stipples the whole kitchen as earth floor with the kamado in its middle",
   "code": "03756da6078d6477",
-  "core": "8a93256e3dc37d64",
+  "core": "5b4e84495735a410",
   "date": "2026-10-25",
-  "note": "the code draws a form the page doesn't attest: an all-earth kitchen, where 0107's kitchens are board-floored or \"part board floor and part doma\". The claim admits the departure but no page records it as ours. Either a drawing page records it and the label becomes DEVIATION, or T33 changes the code",
+  "note": "the code draws a form the page doesn't attest: an all-earth kitchen, where 0107's kitchens are board-floored or \"part board floor and part doma\". The claim admits the departure but no page records it as ours. Either a drawing page records it and the label becomes DEVIATION, or T33 changes the code; a known drift accepted by the round arbiter (ask:417-T36-drifted) to land as filed",
   "pages": {
    "0107-kitchens-daidokoro.html": "1eedc5cf7b1adca7"
   },
   "research": "dba588a7c6856077",
-  "rests": [
-   "0107-kitchens-daidokoro.html:10294f430cd37c5b",
-   "0107-kitchens-daidokoro.html:22e397b7573f5733",
-   "0107-kitchens-daidokoro.html:2acece566f30b66e",
-   "0107-kitchens-daidokoro.html:6632640caa3050e2",
-   "0107-kitchens-daidokoro.html:dd0785feac20fb2c"
-  ],
   "section": "5b4e84495735a410",
-  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling privy": {
@@ -1203,19 +1184,16 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#garrison emphasis knob": {
-  "body": "49e9f4b98149517d",
+  "body": "51c23c5eee00e4f0",
   "claim": "garrison emphasis knob - the-main-gate-and-its-gatekeepers-nagaya-mon: the Kaibara jin'ya's gate range held a gun store, an armory at an ordinary seat - and the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen has Pingyao's armory in the great hall's west end bay - an armory is drawn only in bandit country, a departure the code keeps until feature 417 T33; the watchtower silent (feature 417 T33); armory and watchtower in bandit country",
   "code": "ae7f4efb62c04846",
   "core": "69ec89f6af1983bd",
   "date": "2026-10-25",
-  "note": "the doc draws an armory only in bandit country, but Kaibara's gate range \"held a gun store\" at an ordinary seat and Pingyao \"kept the armory\" with no standing barracks; an armory belongs at every seat (feature 417 T33 has the fix)",
+  "note": "the doc draws an armory only in bandit country, but Kaibara's gate range \"held a gun store\" at an ordinary seat and Pingyao \"kept the armory\" with no standing barracks; an armory belongs at every seat (feature 417 T33 has the fix); a known drift accepted by the round arbiter (ask:417-T36-drifted) to land as filed",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
   },
   "research": "204dd8abf686d43e",
-  "rests": [
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:1ea447d061b586d2"
-  ],
   "section": "69ec89f6af1983bd",
   "verdict": "DRIFTED"
  },
@@ -1281,14 +1259,11 @@
   "code": "b8406493605e921a",
   "core": "69ec89f6af1983bd",
   "date": "2026-10-25",
-  "note": "0093 attests only the grievance drum at the gate (\"Both county yamen we read of kept a drum at the main gate\"). Knob 8 can leave the drum out and also offers a petition window or a bell, which no page attests, and no drawing page records the departure. The claim states the departure honestly, but it is a drift for T33 to fix, not a recorded DEVIATION. Until then the knob should keep the drum and drop the unattested forms.",
+  "note": "0093 attests only the grievance drum at the gate (\"Both county yamen we read of kept a drum at the main gate\"). Knob 8 can leave the drum out and also offers a petition window or a bell, which no page attests, and no drawing page records the departure. The claim states the departure honestly, but it is a drift for T33 to fix, not a recorded DEVIATION. Until then the knob should keep the drum and drop the unattested forms.; a known drift accepted by the round arbiter (ask:417-T36-drifted) to land as filed",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
   },
   "research": "204dd8abf686d43e",
-  "rests": [
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:b680d0c8517aa6d7"
-  ],
   "section": "69ec89f6af1983bd",
   "verdict": "DRIFTED"
  },
@@ -1418,19 +1393,16 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#outer service gate for muck and prisoners": {
-  "body": "49e9f4b98149517d",
+  "body": "51c23c5eee00e4f0",
   "claim": "outer service gate for muck and prisoners - holding-cells-agariya-and-roya: Pingyao's west ghost door of the ceremonial gate was used for prisoners - a separate outer gate is drawn for them, a departure the code keeps until feature 417 T33; the muck silent (feature 417 T33); the same gate taking muck and prisoner transfers from a busy outer court",
   "code": "12853f9dbe388330",
   "core": "69ec89f6af1983bd",
   "date": "2026-10-25",
-  "note": "prisoners at Pingyao \"had to go through the ghost door\", a side door of the ceremonial gate, yet the doc draws a separate outer gate for them (feature 417 T33 has the fix)",
+  "note": "prisoners at Pingyao \"had to go through the ghost door\", a side door of the ceremonial gate, yet the doc draws a separate outer gate for them (feature 417 T33 has the fix); a known drift accepted by the round arbiter (ask:417-T36-drifted) to land as filed",
   "pages": {
    "0096-holding-cells-agariya-and-roya.html": "9d3b6e64f7a3207a"
   },
   "research": "cf5cb4cb4db4d9b8",
-  "rests": [
-   "0096-holding-cells-agariya-and-roya.html:e4a42ce7451d31ca"
-  ],
   "section": "69ec89f6af1983bd",
   "verdict": "DRIFTED"
  },
@@ -1598,20 +1570,16 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#service buildings in the outer court": {
-  "body": "49e9f4b98149517d",
+  "body": "51c23c5eee00e4f0",
   "claim": "service buildings in the outer court - holding-cells-agariya-and-roya: a magistracy's temporary cell stood in the quarter that held its court rooms; and servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin has a stable beside the gate passage, by the servants' quarters; and the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen has Pingyao's granary behind the offices - the granary is drawn in the outer court, a departure the code keeps until feature 417 T33; the stables, cell and granary in the office court, in front of the divider (0090 puts a jail inside the walls but names no court)",
   "code": "7c50a5f681b3f945",
   "core": "69ec89f6af1983bd",
   "date": "2026-10-25",
-  "note": "the cell in the court quarter matches §59 and §67, but Pingyao's granary stood \"north of them\", behind the offices, where the doc draws it in the outer court (feature 417 T33); the 0115 findings page the stable rests on is not in the bundle, and the drawing page's §159 puts the grooms in the stable's own room, not by the gate passage",
+  "note": "the cell in the court quarter matches §59 and §67, but Pingyao's granary stood \"north of them\", behind the offices, where the doc draws it in the outer court (feature 417 T33); the 0115 findings page the stable rests on is not in the bundle, and the drawing page's §159 puts the grooms in the stable's own room, not by the gate passage; a known drift accepted by the round arbiter (ask:417-T36-drifted) to land as filed",
   "pages": {
    "0096-holding-cells-agariya-and-roya.html": "9d3b6e64f7a3207a"
   },
   "research": "cf5cb4cb4db4d9b8",
-  "rests": [
-   "0096-holding-cells-agariya-and-roya.html:46d27721497d60b0",
-   "0096-holding-cells-agariya-and-roya.html:5f4b550c07fe660d"
-  ],
   "section": "69ec89f6af1983bd",
   "verdict": "DRIFTED"
  },
@@ -2712,14 +2680,11 @@
   "code": "8057b8d975933a4f",
   "core": "9c074481721a23c6",
   "date": "2026-10-25",
-  "note": "the Sayama shikidai is about 12 by 9 ft, but the porch is drawn about 13 by 4.7 ft (feature 417 T33 has the fix)",
+  "note": "the Sayama shikidai is about 12 by 9 ft, but the porch is drawn about 13 by 4.7 ft (feature 417 T33 has the fix); a known drift accepted by the round arbiter (ask:417-T36-drifted) to land as filed",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
   "research": "8310727e0f879d15",
-  "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:e1ec5330d5eb4b91"
-  ],
   "section": "9c074481721a23c6",
   "verdict": "DRIFTED"
  },
@@ -56592,14 +56557,11 @@
   "code": "6c972ff5663ca36f",
   "core": "c822d82eeea90695",
   "date": "2026-10-25",
-  "note": "`back` is fixed to the house frame's -y (away from the south-facing front) whatever the map's wind, while the cited finding is that the groves \"stood on the side the wind came from\", and 0036's drawing page lets a declared wind put the deep stands \"on the south and west\". On a non-northerly wind the seats fall leeward (latent: every map so far takes the northwest). Take `back` from the map's windward pair, or say \"behind\" is ours",
+  "note": "`back` is fixed to the house frame's -y (away from the south-facing front) whatever the map's wind, while the cited finding is that the groves \"stood on the side the wind came from\", and 0036's drawing page lets a declared wind put the deep stands \"on the south and west\". On a non-northerly wind the seats fall leeward (latent: every map so far takes the northwest). Take `back` from the map's windward pair, or say \"behind\" is ours; a known drift accepted by the round arbiter (ask:417-T36-drifted) to land as filed",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785"
   },
   "research": "ad1c5b1267ac451b",
-  "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.html:666cce295d307b2e"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::bundle_parts#plumbing": {
