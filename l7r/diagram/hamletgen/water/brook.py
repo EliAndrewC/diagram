@@ -268,7 +268,7 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
     Research:
         no fold-back - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) - 0054 gives a bend radius of two to three widths and no turn cap or loop rule; no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
         no level run - CONVENTION: no run held level along the frame, in any view
-        no ruled run - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths are rare (Leopold and Wolman, pass P2a); the rule's bound is looser (feature 417 T34); the straightest run within its bound (`ruled_excess`)
+        no ruled run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width - the rule's bound is looser, a departure the code keeps until feature 417 T34; the straightest run within its bound (`ruled_excess`)
         no screen axis - CONVENTION: no segment along a screen axis, the tap run excepted
         out of the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the course never enters the field's envelope
         off-map ends - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the source and the mouth both off the canvas
@@ -662,7 +662,7 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     Research: weir or bare mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: `plan.intake` rolled per map, nothing drawn on an open hamlet
         weir form rolled among four (s.resolve("weir_form")), 0059's four forms at even odds - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the four weir forms on small water, rolled at even odds (the even roll a GUESS)
         oblique weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar slants upstream from the intake bank, its root at the mouth's downstream lip
-        weir skew angle - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - weirs stood skewed a mean 30 degrees, 5 to 78 (Murakami, pass P2a); no page records it yet; WEIR_SKEW_DEG, 30 deg
+        weir skew angle - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: about 30 degrees, the average of the old oblique weirs still standing (river weirs, 5 to 78); WEIR_SKEW_DEG, 30 deg
         full closure - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar crosses the whole brook, a map drawing convention
         bar size - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: WEIR_HALF_FT half-length, WEIR_THICK_FT of its form thick
         seat-search reach - GUESS: the bar steps down the brook a foot at a time, past dry ground, no further than the leg to the next vertex

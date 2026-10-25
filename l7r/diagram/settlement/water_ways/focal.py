@@ -30,7 +30,7 @@ class FocalMixin:
         Research:
             mill-house size - research/questions/0064-water-mills-suisha.drawing.html: 30 x 24 ft by default
             mill seat beside moving water - research/questions/0064-water-mills-suisha.drawing.html: beside a watercourse with fall, the wheel on the water side
-            wheel glyph - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on 0064 - the Shinguruma wheel, 4.8 m (about 15.7 ft), is called large (pass P2b, the 1959 rebuild), against 18 ft (feature 417 T34); an 18 ft wheel (9 ft radius) set 5 ft off the house; 0064 gives no wheel size and seats the wheel in a short race
+            wheel glyph - research/questions/0064-water-mills-suisha.html: the Shinguruma wheel, 4.8 m (about 15.7 ft) across, is called large (the 1959 rebuild of a mill founded 1808) - an 18 ft wheel is drawn, a departure the code keeps until feature 417 T34; an 18 ft wheel (9 ft radius) set 5 ft off the house, in a short race
             wheel drawing - CONVENTION: an eight-spoked ring
         """
         pw, ph = self.px(w), self.px(h)
