@@ -2,19 +2,22 @@
 
 ## R1 - what a fresh block costs, and what it finds (measured 2026-10-24)
 
-Method: `make cohort N=100 SEED=3000001 FRESH=0 JOBS=12` at main `b3f6738c2` (no engine diff), under `/usr/bin/time -v`;
+Observed 2026-10-24. Method: `make cohort N=100 SEED=3000001 FRESH=0 JOBS=12` at main `b3f6738c2` (no engine diff), under `/usr/bin/time -v`;
 seeds 3000001-3000100 were never rolled before. Host: 22 CPUs, load 1.3 at the start, 15 GB with the containers' 10 GB cap.
 
-| block | wall | per seed | peak RSS of the make | failed |
+Observed 2026-10-24; method: that run's `time -v` and its log:
+
+| block (observed 2026-10-24; method: `time -v`) | wall | per seed | peak RSS of the make | failed |
 |---|---|---|---|---|
 | 100 fresh + 6 pinned | 4 min 41 s | 2.8 s | 136 MB (the workers are children) | 9 of 100 (9%) |
 
-The nine: `lane_knots` (3000015, 3000054, 3000066), `WebRefused` (3000047, 3000053), `BrookRefused` (3000019),
+Observed 2026-10-24; method: that run's log. The nine: `lane_knots` (3000015, 3000054, 3000066), `WebRefused` (3000047, 3000053), `BrookRefused` (3000019),
 `SiteRefused` (3000069), `groves_crossed_by_lanes` + `lane_knots` (3000078), `row_rules` (3000086). The same causes, in the
 same order, as the spec's tally over 2,544 seeds (14%); the lower rate is within one block's spread (the logged 48-seed blocks
 ran 6-21%).
 
-**What it decides (D1).** A block of 500 is about 23 minutes at 12 workers; zero failures in 500 bounds the true rate under
+**What it decides (D1).** From the run observed 2026-10-24 (method above; 2.8 s of wall time a seed with 12 workers running): a block
+of 500 is about 23 minutes; zero failures in 500 bounds the true rate under
 0.6% at 95% (the rule of three, 3/500). A block of 1,000 is about 47 minutes and bounds it under 0.3%. 500 is SC-001's N;
 1,000 is the closing measure.
 

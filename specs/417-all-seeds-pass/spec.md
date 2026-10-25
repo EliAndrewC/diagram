@@ -158,13 +158,19 @@ The repair passes, any rule coded twice and the checks the generator runs mid-ma
 
 ## Success Criteria
 
-- **SC-001**: no failures on the agreed fresh block across every form (0 of N; N in the plan, at least 500).
-- **SC-002**: the lane web has no repair loop: a settled web needs no changes after it is laid.
-- **SC-003**: every rule has one implementation, asked by its placer and by its finished-map check.
-- **SC-004**: the engine is smaller at close than at start, by the lines of the passes deleted.
-- **SC-005**: a landing that makes a fresh seed fail is refused.
-- **SC-006** (394's SC-001/SC-002): a test landing that turns one unrolled-form seed red with no filed row is refused,
+- **SC-001** (FR-001, FR-004, FR-005, FR-006, FR-007): no failures on the agreed fresh block across every form (0 of N; N in the plan, at least 500).
+- **SC-002** (FR-004): the lane web has no repair loop: a settled web needs no changes after it is laid.
+- **SC-003** (FR-005, FR-006): every rule has one implementation, asked by its placer and by its finished-map check.
+- **SC-004** (FR-004, FR-006): the engine is smaller at close than at start, by the lines of the passes deleted.
+- **SC-005** (FR-009): a landing that makes a fresh seed fail is refused.
+- **SC-006** (FR-011; 394's SC-001/SC-002): a test landing that turns one unrolled-form seed red with no filed row is refused,
   naming the seed and its form; the same landing with a filed row naming it lands.
+- **SC-007** (FR-002, FR-003, FR-010): the inventory lists every repair pass, rule asked only of a finished map, rule
+  coded more than once and finished-map check run inside the generator, each with where it is and which of the rule's four
+  points it breaks, and every entry that breaks a point has a task; the principle is in the
+  constitution in the GM's approved words, and `make task-start` refuses an engine task of a held feature.
+- **SC-008** (FR-008): every engine landing of this feature passes the fixed cohort, the pinned rows and the pool maps, and
+  the research-claims round (`make land`).
 
 ## Assumptions
 
@@ -194,3 +200,6 @@ The repair passes, any rule coded twice and the checks the generator runs mid-ma
   dropped 394's listing with form and failure, "in an open feature" and the refusal naming the form (restored; SC-006 names
   the form).
 - spec-fidelity amendment round 2 (2026-10-24): FAITHFUL.
+- spec-fidelity SC round 1 (2026-10-24, spec-lint's FR names on each SC): CHANGES REQUIRED - SC-001 cannot measure FR-008
+  (now SC-008); SC-007's first clause measured only the tasks (now FR-002 in full). Aside taken: SC-004 names FR-004.
+- spec-fidelity SC round 2 (2026-10-24): FAITHFUL.
