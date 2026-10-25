@@ -16676,7 +16676,10 @@
  "copper cash": {
   "def": "China's round bronze coin with a square hole, the wen; the Beijing list of 1736 counts 800 to a tael of silver.",
   "variants": [
-   "copper cash"
+   "copper cash",
+   "thsian",
+   "tchoki",
+   "tchek"
   ]
  },
  "ukiyo-zoshi": {

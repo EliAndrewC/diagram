@@ -4304,6 +4304,8 @@ tax-free plot	tax-free plot
 tayu	tayu
 tayū	tayu
 tazuke kusayama	kusayama
+tchek	copper cash
+tchoki	copper cash
 tea garden	tea garden
 tea gardens	tea garden
 tedai	tedai
@@ -4411,6 +4413,7 @@ through-passage	through-passage plan
 through-passage plan	through-passage plan
 throw-across weir	throw-across weir
 throwing	throwing
+thsian	copper cash
 tian'geng	bund
 tiangeng	bund
 tiangong kaiwu	Tiangong kaiwu
