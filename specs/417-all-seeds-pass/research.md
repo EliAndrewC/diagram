@@ -155,6 +155,6 @@ landing's own fresh block of 48 passed (`dev/cohort-log/20261025T082938Z-diagram
 | `farmstead_across_brook` | 2 | 4 | 2 |
 | `groves_crossed_by_lanes`, `refused:NoDryExit` | 1 each | 2 each | 4, 1 |
 
-Read: deleting the eighteen passes moved no rate past its sampling noise (500 seeds at 12% carry about +/-3 points at two
+Read: deleting the eighteen passes moved no rate past its sampling noise (500 seeds at 11.8% (observed 2026-10-25; method: the block above) carry about +/-3 points at two
 standard errors; every form and cause is inside it). The lane web's causes are not higher; linear (104 seeds) and seating
 are the noisiest cells. The rate is the same problem it was, with 2,822 fewer engine lines in it.
