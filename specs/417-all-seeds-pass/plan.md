@@ -316,20 +316,23 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 ### T38 Approach (checklist part A)
 
 1. **The goal, in the world.** Every number the map code holds is stated in its unit's claims and labeled by what it is, so a
-   later pass knows which it may tweak (the GM 2026-10-25).
-2. **The constraints.** D31 (ii), D37 (c); the claim grammar; impl-drift's verdicts.
-3. **Where each comes from.** G: the GM 2026-10-25. O: the listing `make tunables INLINE=1`.
-4. **Do they describe the world here?** Per number, by what it is: a drawn size or stroke is a map drawing convention
-   (`CONVENTION`); a jitter salt, a search's step or count, a sentinel or a seed's multiplier decides nothing about the place
-   (`NONE`); every other figure is a value of ours, a knob (`GUESS`), cited where a page gives it.
+   later pass knows which it may tweak, and which were looked into (the GM 2026-10-25).
+2. **The constraints.** D31 (ii) and (iii), D37 (c); the claim grammar; impl-drift's verdicts.
+3. **Where each comes from.** G: the GM 2026-10-25. O: the listing `make tunables INLINE=1`. R: the record and research passes.
+4. **Do they describe the world here?** Per number, by what it is. A jitter salt, a sentinel or a seed's multiplier decides
+   nothing about the place: `NONE`. A drawn size or stroke: `CONVENTION`. Every other number - a distance, a size, a share,
+   a search's step or count - is checked against the record first: cited where a page gives it; `GUESS` naming the page
+   where the page records it searched and silent; otherwise `UNRESEARCHED`, and the `UNRESEARCHED` ones go to research
+   passes grouped by the question they share (D31 (iii)), then labeled by what each pass finds, as T36's were. A search's
+   step or count is never `NONE`: it stays on `make tunables`' list.
 5. **The order.** After T36; before T31; the numbers in the code T31 deletes skipped (none were listed there, observed
    2026-10-25; method: the listing filtered to `ways/settle/`).
-6. **The exits.** Each unit's numbers go into its own claims (a nested function's into its enclosing unit's, and
-   `make tunables` folds a nested function's numbers into the unit that holds it, so the listing reads the claims where they
-   are written).
-7. **The search smell.** No number moves; a claim impl-drift rules wrong twice keeps its label with its description reverted.
+6. **The exits.** Each unit's numbers go into its own claims (a nested function's into its enclosing unit's, which `make
+   tunables` reads since the fold landed). A file the claims push past the 1,000-line bar is split into a package, never
+   trimmed. What the passes cannot settle is listed by file in R9 with the count (D31 (ii)).
+7. **The search smell.** No number moves.
 8. **The budget.** 1,289 distinct numbers in 506 functions (observed 2026-10-25; method: the listing, de-duplicated by file,
-   function and value); a claims round over the units.
+   function and value); the record check, the passes, and a claims round over the units.
 9. **Done, measured.** `make tunables INLINE=1 COUNT=1` lists none outside the skipped code; the claims gate green.
 10. **Before moving a constant.** n/a - no value moves.
 11. **Before fitting things into room.** n/a.
