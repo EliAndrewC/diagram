@@ -1,0 +1,122 @@
+{
+ "feature": "421-money-tooltip-goods-range",
+ "blocks": {
+  "preamble": {
+   "sha256": "3c25451e73a165ceb40da146677f13f0150a84bbbca838806e0ac0955523701f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "b30fc10421c0722e488cc32cb6a734b5fa036478b88a94e219699498704c1ad7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "9ea8c887be931c7815f00df4a79c275c76e4d8eb368a4f1ae521ff0e7b5e5724",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "87f853c2f0011ce9e66bc0a0f479a1bac5b53db1c25ddaf45812aa347b143920",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "a9e99c0035ba088962b27ec554293f436143ce0964ea5b814d75f819f1805157",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - the goods range in the hover box (FR-001, FR-002)": {
+   "sha256": "a46b2ff2592c7665fcde1b07eb0a0b8b350ddc05776476fea45cd48a41dfbbce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "7f7456cdb8225ce0ac523a07626f4070928d3163abdf103faf09dd02ac966db1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "c1e050b65746b67b8bb48b7d527213b1bc795673f449fe97ad6e606d622c183e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - the reply and the report": {
+   "sha256": "d6ad13ca10a4f5fdc9e3de87a257fbce0da2412769d081f93f9483a6772ff39b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "5e64a3f0eb3d1b2343674d5c9548e396ec305613aa0fd23c37a4b6792fe4fb55",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "d905c1846e1a849ebf928c2ac3912d4a00c63149905066859cf43f0da194a416",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## Constitution Check",
+    "## Performance bookends",
+    "## Summary",
+    "## T01 - the goods range in the hover box (FR-001, FR-002)",
+    "## T02 - the reply and the report",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Goods ends are first amount end x goods_dollars to last amount end x goods_dollars_high, formatted by the existing _dollars range formatter (one precision, joined by '-')",
+     "class": "within",
+     "why": "Exactly FR-001 and the request's 'goods_dollars to goods_dollars_high' range, central to high; for a single amount both ends use the same amount, matching the suggested '$1.54-$3.32'; for an amount range it spans lowest to highest, which keeps the range a range."
+    },
+    {
+     "id": "D2",
+     "summary": "The module docstring's goods description becomes the range from the central (geometric) to the high (arithmetic) reading",
+     "class": "within",
+     "why": "FR-002; serves the request's 'central to high'."
+    },
+    {
+     "id": "D3",
+     "summary": "One comment on diagram#17 naming the commit and what to look at; feature report written",
+     "class": "within",
+     "why": "Answers the requester on the thread the request came from; no behavior added."
+    },
+    {
+     "id": "T01-exit",
+     "summary": "No fallback: a unit missing goods_dollars_high fails the build like any missing key; test fixtures gain goods_dollars_high",
+     "class": "within",
+     "why": "FR-001's 'no single-figure path' stated as such; the fixture change only enforces the requested range (GM 2026-09-20 enforcement rule)."
+    },
+    {
+     "id": "TC-landing",
+     "summary": "Gated landing via make land / make done; performance bookends N/A; research claim stays NONE",
+     "class": "within",
+     "why": "Process and verification of the requested change only; no scope added or removed."
+    }
+   ]
+  }
+ ]
+}
