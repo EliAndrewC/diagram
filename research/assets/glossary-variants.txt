@@ -105,6 +105,7 @@ assessed yields	kokudaka
 assignation house	assignation house
 assignation houses	assignation house
 assize	assize
+assizes	assize
 association	plant association
 asuka period	Asuka period
 asunaro	asunaro
@@ -640,6 +641,8 @@ coopered	cooper
 coopers	cooper
 coping	coping
 copper cash	copper cash
+copper monme	copper monme
+copper monme of account	copper monme
 coppers	coppers
 coppice	coppice
 coppiced	coppice
@@ -761,6 +764,7 @@ dajokan	Daijokan
 dake	dake
 dakyu	dakyu
 dali	Dali
+dango	dango
 danka	danna-dera
 danna-ba	kusaba
 danna-dera	danna-dera
@@ -1939,6 +1943,7 @@ ishikawa method	Ishikawa method
 ishikawa-method	Ishikawa method
 island field	island field
 island fields	island field
+isshu-gin	isshu-gin
 ita-bune	ita-bune
 itabashi	itabashi
 itami	Itami
@@ -2128,6 +2133,7 @@ kangxi	Kangxi
 kanjo bugyo	finance commissioner
 kanjo-nawa	kanjo-nawa
 kanjo-tsuri	kanjo-nawa
+kanme	kanme
 kanmon	kanmon
 kannon	Kannon
 kannon biraki	kannon-biraki
@@ -2244,6 +2250,7 @@ kinki	Kinki
 kinki region	Kinki
 kinoe saru	kinoe-saru
 kinoe-saru	kinoe-saru
+kinsei fuzokushi	Morisada manko
 kirime-en	kirime-en
 kirisute-gomen	kirisute-gomen
 kirizuma	gabled roof
@@ -2461,6 +2468,7 @@ lifang	lifang
 light bamboo	light bamboo
 lijia	lijia
 lijin	lijin
+likin	likin
 limner	limner
 limners	limner
 lineage	lineage
@@ -2933,6 +2941,8 @@ niomon	Niomon
 nippo jisho	Nippo Jisho
 nipponica	Nipponica
 nishijin	Nishijin
+nishu-gin	nishu-gin
+nishugin	nishu-gin
 niter bed	nitre bed
 niter beds	nitre bed
 nitre bed	nitre bed
@@ -3046,6 +3056,7 @@ one-bu silver	ichibu-gin
 onin war	Onin war
 onkura	kura
 onmyodo	onmyodo
+ooka tadasuke	Ooka Tadasuke
 ooku	ooku
 oona	oona
 open-ended dike	open-ended dike
@@ -3901,6 +3912,7 @@ sluice share	sluice share
 sluice shares	sluice share
 sluices	sluice
 small rent	topsoil owner
+smashings	smashings
 snow-viewing lantern	yukimi
 so village	so village
 so villages	so village
@@ -4198,6 +4210,9 @@ tangible cultural property	Tangible Cultural Property
 tango-no-kami	Tango-no-kami
 tangpu	tangpu
 tani-ike	valley pond
+tanuma	Tanuma period
+tanuma period	Tanuma period
+tanuma years	Tanuma period
 taper law	taper law
 tarama	Tarama
 tartary	Tartary
@@ -4255,8 +4270,10 @@ tenpo	Tenpo era
 tenpo coin	Tenpo coin
 tenpo coins	Tenpo coin
 tenpo era	Tenpo era
+tenpo mon	Tenpo coin
 tenpo reform	Tenpo reforms
 tenpo reforms	Tenpo reforms
+tenpo tsuho	Tenpo coin
 tenpō	Tenpo era
 tenpō era	Tenpo era
 tensho	Tensho
@@ -4774,6 +4791,7 @@ wusong	Wusong
 xianfeng	Xianfeng
 xiang	xiang
 xiang river	Xiang River
+xiang scale	Xiang scale
 xiang seven, li three	Lingqu
 xiang-gan	Xiang-Gan
 xiangcang	shecang
