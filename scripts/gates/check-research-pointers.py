@@ -78,7 +78,8 @@ class Mapping:
         walk(contents["sections"])
         names = sorted({k.split(" ")[0] for k in self.numbers}, key=len, reverse=True)
         alt = "|".join(re.escape(n) for n in names) or "(?!)"
-        self.number = re.compile(rf"(?<![\w/.-])({alt})[ /](\d{{3}})(?![\d]|-[a-z0-9])")
+        # a decimal is a quantity, never a page number: "buildings 220.5 monme" in a translated rent (420, 2026-10-25, refused twice)
+        self.number = re.compile(rf"(?<![\w/.-])({alt})[ /](\d{{3}})(?![\d]|-[a-z0-9]|\.\d)")
         dirs = "|".join(re.escape(n) for n in sorted(self.pages, key=len, reverse=True)) or "(?!)"
         #: A retired page directory named without its trailing slash, as code builds a path to it.
         #: A retired page named by its Markdown file, as the record was before feature 194.
@@ -269,6 +270,7 @@ def selftest() -> int:
         assert problems("water 120 and water/120", mapping) == ["`water 120` - a question's old page and number; it is now 0412", "`water/120` - a question's old page and number; it is now 0412"]
         assert "now 0413" in problems("water 015", mapping)[0], "a page name and number naming a drawing page"
         assert problems("water 121, water 120-130, 120 water", mapping) == [], "a number that names no question, a range, and prose"
+        assert problems("water 120.5 monme", mapping) == [], "a decimal is a quantity, not a page number"
         assert problems("make check-bundle PAGE=water SECTION=120", mapping)[0].endswith("name `Q=0412`")
         assert "name `IN=water`" in problems("make record-prepass PAGE=water", mapping)[0]
         assert problems("PAGE=water SECTION=121", mapping, landed_spec=True) == [], "in a landed spec a retired number names no question"
