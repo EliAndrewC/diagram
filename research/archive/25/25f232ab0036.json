@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:04:07+00:00",
+ "final_url": "https://www.census.gov/housing/hvs/files/qtr226/Q226press.pdf",
+ "first": "25/25f232ab0036/20261025T140403Z",
+ "gm_copies": [],
+ "keys": [
+  "census-hvs-ahs-housing"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "25/25f232ab0036/20261025T140403Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "6e011ce75551304f08cf0d5c2a2934b9afbeafd6554fad24b6c959d3535977e5",
+ "url": "https://www.census.gov/housing/hvs/files/qtr226/Q226press.pdf"
+}

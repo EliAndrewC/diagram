@@ -7,3 +7,8 @@
 - 0301: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'observed-and-which-reconstructed|Kusano|Bassino' l7r pool (only the assembled glossary)
 - 0302: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'observed-and-which-reconstructed-in-china|Timkovski|Hong Liangji' l7r pool (nothing)
 - 0288: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'years-necessities-and-a-days-labor-cost-in-china|Timkovski|tael' l7r pool (only the assembled glossary)
+# Feature 420: what code implements each touched question (feature 378)
+
+- 0298: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'welfare ratio\|laspeyres\|paasche\|fisher index\|numeraire\|basic-needs\|0298-how-do-economic' l7r pool (only the glossary's numeraire term matches, no engine code)
+- 0299: no code implements it - a comparative money question, consumed by gm-assistant's money skill; searched: grep -rn 'milling rate\|per capita availability\|prices received\|great value\|cord of wood' l7r pool (only the glossary's new terms match, no engine code)
+- 0300: no code implements it - a comparative money question, consumed by gm-assistant's money skill; searched: grep -rn 'asking rent\|fair market rent\|FMR\|construction cost\|square meter of housing' l7r pool (only the glossary's terms match, no engine code)

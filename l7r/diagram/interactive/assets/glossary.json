@@ -17979,6 +17979,76 @@
    "hundredweights"
   ]
  },
+ "geometric mean": {
+  "def": "The square root of two results multiplied together: a middle value between them that leans toward neither. Economic historians take it of the two answers a pair of baskets gives, and the result is called a Fisher index.",
+  "variants": [
+   "geometric mean",
+   "geometric average",
+   "geometric means"
+  ]
+ },
+ "Laspeyres index": {
+  "def": "A price comparison that costs the first, or base, place's basket of goods in both places. Set beside the Paasche index, which costs the other place's basket, it gives one end of the range. The two are averaged by their geometric mean into a Fisher index.",
+  "variants": [
+   "Laspeyres index",
+   "Laspeyres",
+   "Laspeyres price index",
+   "Laspeyres indexes",
+   "Laspeyres price indices"
+  ]
+ },
+ "Paasche index": {
+  "def": "A price comparison that costs the second place's basket of goods in both places, the partner of the Laspeyres index. How far the two differ is a standard measure of how uncertain a comparison between the places is.",
+  "variants": [
+   "Paasche index",
+   "Paasche",
+   "Paasche price index",
+   "Paasche indexes",
+   "Paasche price indices"
+  ]
+ },
+ "PPP": {
+  "def": "Purchasing power parity: an exchange rate between two currencies set by what each buys in its own country, not by the money market. Allen's poverty lines avoid it by pricing the same needs in each place's own prices.",
+  "variants": [
+   "PPP",
+   "purchasing power parity",
+   "PPPs"
+  ]
+ },
+ "ICP": {
+  "def": "The International Comparison Program: an international survey of prices across countries, run in rounds (2005, 2011). Modern comparisons of countries' price levels rest on it, and Allen's 2016 draft found its rents too incomplete to use.",
+  "variants": [
+   "ICP",
+   "ICP2011"
+  ]
+ },
+ "LTES": {
+  "def": "Long-Term Economic Statistics, a series of Japanese historical statistics. Bassino and Ma take a second day laborers' wage series from it and set it beside the Mitsui house's.",
+  "variants": [
+   "LTES"
+  ]
+ },
+ "linear programming": {
+  "def": "A method of finding the cheapest mix of foods, at local prices, that meets a fixed set of nutritional needs. Allen's poverty lines solve it separately for each place and year.",
+  "variants": [
+   "linear programming",
+   "diet problem"
+  ]
+ },
+ "GDP deflator": {
+  "def": "A price index covering everything an economy produces, not one household's basket. MeasuringWorth offers it as one of the yardsticks for bringing an old price forward.",
+  "variants": [
+   "GDP deflator"
+  ]
+ },
+ "fair market rent": {
+  "def": "A benchmark rent the US Department of Housing publishes for each county. Allen found New York's illegal, substandard flats rented at about that level in 2011.",
+  "variants": [
+   "fair market rent",
+   "FMR",
+   "FMRs"
+  ]
+ },
  "fudakake": {
   "def": "The Mitsui merchant house's term for the profit rate a store made on goods it bought, given as a percentage of their price.",
   "variants": [
@@ -17991,6 +18061,39 @@
    "farm-gate price",
    "farm-gate prices",
    "farm gate"
+  ]
+ },
+ "milling rate": {
+  "def": "The share of a weight of rough rice left as milled rice once the hulls and bran are taken off; the US government's figure for 2010 is 68.86%.",
+  "variants": [
+   "milling rate",
+   "milling rates"
+  ]
+ },
+ "upland cotton": {
+  "def": "The kind of cotton whose US farm price the government reports each month, by the pound.",
+  "variants": [
+   "upland cotton"
+  ]
+ },
+ "cord": {
+  "def": "A US measure of stacked firewood; the US energy agency counts one cord of wood as 20 million Btu.",
+  "variants": [
+   "cord of wood",
+   "cords of wood",
+   "cord of firewood"
+  ]
+ },
+ "HUD": {
+  "def": "The US Department of Housing and Urban Development, the federal housing agency that sets the fair market rents its housing vouchers pay.",
+  "variants": [
+   "HUD"
+  ]
+ },
+ "NAHB": {
+  "def": "The National Association of Home Builders, a US builders' trade group that surveys builders on what a new house costs to build.",
+  "variants": [
+   "NAHB"
   ]
  },
  "sencha": {

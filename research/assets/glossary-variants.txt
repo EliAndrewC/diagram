@@ -652,6 +652,9 @@ coppiced	coppice
 coppices	coppice
 coppicing	coppice
 copse	copse
+cord of firewood	cord
+cord of wood	cord
+cords of wood	cord
 correlated	correlation
 correlation	correlation
 correlations	correlation
@@ -833,6 +836,7 @@ dharma halls	dharma hall
 diameter at breast height	DBH
 dian	dian
 diao	diao
+diet problem	linear programming
 digital daijisen	Digital Daijisen
 dike-pond	dike-pond
 dike-ponds	dike-pond
@@ -1072,6 +1076,7 @@ extensive farming	extensive agriculture
 extramural	extramural
 fabric	building fabric
 fabric is later	building fabric
+fair market rent	fair market rent
 fairway	fairway
 fall line	fall line
 fan foot	fan foot
@@ -1217,6 +1222,8 @@ flow-through irrigation	flow-through irrigation
 flowing-roof	nagare-zukuri
 flowing-roof style	nagare-zukuri
 flume	kakehi
+fmr	fair market rent
+fmrs	fair market rent
 foehn	fohn
 fohn	fohn
 footing	footing
@@ -1371,6 +1378,7 @@ gate-town	monzen
 gazetted	gazetted
 gazetteer	gazetteer
 gazetteers	gazetteer
+gdp deflator	GDP deflator
 gejo	degawari
 gempukku	gempukku
 gempuku	gempukku
@@ -1392,6 +1400,9 @@ geomancer	geomancy
 geomancers	geomancy
 geomancy	geomancy
 geomantic	geomancy
+geometric average	geometric mean
+geometric mean	geometric mean
+geometric means	geometric mean
 geostrophic	geostrophic
 geshunin	geshunin
 geta	geta
@@ -1799,6 +1810,7 @@ huainan	Huaibei
 huanghuali	huanghuali
 huc	Huc
 hucheng he	hucheng he
+hud	HUD
 hudou	hudou
 hui	hui
 hui (huizhou) style	Hui style
@@ -1847,6 +1859,8 @@ ichigami	ichigami
 ichimoji weir	ichimoji-zeki
 ichimoji-zeki	ichimoji-zeki
 ichirizuka	ichirizuka
+icp	ICP
+icp2011	ICP
 ido	ido
 ido-yakata	idoyakata
 idobata	idobata
@@ -2449,6 +2463,11 @@ landrace	landrace
 landraces	landrace
 large cash	standard cash
 large rent	subsoil owner
+laspeyres	Laspeyres index
+laspeyres index	Laspeyres index
+laspeyres indexes	Laspeyres index
+laspeyres price index	Laspeyres index
+laspeyres price indices	Laspeyres index
 later hojo	Later Hojo
 later wei	Later Wei
 lateral	lateral
@@ -2504,6 +2523,7 @@ lineage chancellors	chancellor
 lineage village	lineage village
 lineage villages	lineage village
 lineages	lineage
+linear programming	linear programming
 linear village	ressen
 linear villages	ressen
 lined canal	lined canal
@@ -2564,6 +2584,7 @@ lower residence	lower mansion
 lower residences	lower mansion
 lower yangtze	Lower Yangzi
 lower yangzi	Lower Yangzi
+ltes	LTES
 lu guimeng	Lu Guimeng
 luban ruler	Luban ruler
 luban rulers	Luban ruler
@@ -2712,6 +2733,8 @@ military farm colonies	military farm colony
 military farm colony	military farm colony
 military farm-colonies	military farm colony
 military farm-colony	military farm colony
+milling rate	milling rate
+milling rates	milling rate
 million btu	BTU
 mimasaka	Mimasaka
 mimasaka province	Mimasaka
@@ -2875,6 +2898,7 @@ nagewatashi weir	throw-across weir
 nagewatashi-zeki	throw-across weir
 naginata	naginata
 nago	nago
+nahb	NAHB
 nail cover	nail cover
 nail covers	nail cover
 naka-bori	middle moat
@@ -3147,6 +3171,11 @@ oxbow lake	ox-bow lake
 oxbow lakes	ox-bow lake
 oyaike	oyaike
 oyako-ike	stacked pond
+paasche	Paasche index
+paasche index	Paasche index
+paasche indexes	Paasche index
+paasche price index	Paasche index
+paasche price indices	Paasche index
 pacific high	Pacific High
 pacification commission	Pacification Commission
 pacification commissioner	Pacification Commission
@@ -3284,6 +3313,8 @@ postilion	postillion
 postilions	postillion
 postillion	postillion
 postillions	postillion
+ppp	PPP
+ppps	PPP
 preceptor	preceptor
 preceptor's	preceptor
 preceptors	preceptor
@@ -3326,6 +3357,7 @@ puddled	puddling
 puddling	puddling
 pupa	pupae
 pupae	pupae
+purchasing power parity	PPP
 purlin	purlin
 purlins	purlin
 purple robe	purple robe
@@ -4616,6 +4648,7 @@ unveiling	unveiling
 unveilings	unveiling
 uogashi	uogashi
 uoichiba	uoichiba
+upland cotton	upland cotton
 upland field	hatake
 upland fields	hatake
 upland-field	hatake

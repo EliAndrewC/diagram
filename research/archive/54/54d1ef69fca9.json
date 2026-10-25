@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:07:53+00:00",
+ "final_url": "https://esmis.nal.usda.gov/sites/default/release-files/796084/agpr0926.txt",
+ "first": "54/54d1ef69fca9/20261025T140752Z",
+ "gm_copies": [],
+ "keys": [
+  "usda-nass-agricultural-prices-2026-09"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "54/54d1ef69fca9/20261025T140752Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "0320fa5ab090921b531e23eaeda878cc21521a2119182a22ffd71015140bddea",
+ "url": "https://esmis.nal.usda.gov/sites/default/release-files/796084/agpr0926.txt"
+}

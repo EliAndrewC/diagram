@@ -1,0 +1,8 @@
+{
+ "term": "linear programming",
+ "def": "A method of finding the cheapest mix of foods, at local prices, that meets a fixed set of nutritional needs. Allen's poverty lines solve it separately for each place and year.",
+ "variants": [
+  "linear programming",
+  "diet problem"
+ ]
+}

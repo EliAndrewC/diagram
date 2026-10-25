@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T14:52:22+00:00",
+ "final_url": "https://www.walmart.com/blocked?url=L3NlYXJjaD9xPWh1bGxlZCttaWxsZXQrcGVhcmwrYmFybGV5&uuid=a7d1530e-d083-11f1-8eb8-026e6ce8e2a2&vid=&g=b",
+ "first": "72/7263752f247c/20261025T145221Z",
+ "gm_copies": [],
+ "keys": [
+  "walmart-hulled-millet-pearl-barley"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "72/7263752f247c/20261025T145221Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "66c4a96d5980f27bcc6ab1a000ee313d3e7d56ca01f4db7d7f803f20018098e4",
+ "url": "https://www.walmart.com/search?q=hulled+millet+pearl+barley"
+}
