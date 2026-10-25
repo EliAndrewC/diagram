@@ -20944,10 +20944,10 @@
   "code": "0a452df727bc585e",
   "core": "21be8e11b5c9fb2b",
   "date": "2026-10-25",
-  "note": "the 0014 drawing page answers this: \"A lane end that stops within 6 ft of the paddy's edge is drawn as joining it\", and the same 6 ft holds at the dry hem; the label should be GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html, not UNRESEARCHED",
+  "note": "accepted by the round arbiter (ask:417-T05-claims), binding; the GM reviews it",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::cut_stub_ends#a stub that serves a house kept": {
   "body": "b6c5b3fa774f71d3",
@@ -23505,16 +23505,12 @@
   "code": "eca71edaf07089b6",
   "core": "50ec6b753d12c962",
   "date": "2026-10-25",
-  "note": "two cases leave the track stopping in open ground, where the page says \"It never stops in open country\". (1) An inner end with nothing within `_LANE_JOIN_FT` is \"LEFT ALONE\". (2) When the snap would cross the fabric, the snap is refused (`if not fabric or not _crosses_fabric(cand, ...)`) and the end stays short of the way it joins. Either the code should refuse such a track, or the page should record this as a DEVIATION",
+  "note": "accepted by the round arbiter (ask:417-T05-claims), binding; the GM reviews it",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:16df95fc169329f7",
-   "0081-village-lanes.drawing.html:df440690bbce9cb6"
-  ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track out runs off the map": {
   "body": "fae8e7c604beaf72",
@@ -31263,10 +31259,10 @@
   "code": "0e7e444f51b95608",
   "core": "a5e05f19638f265e",
   "date": "2026-10-25",
-  "note": "0081 sets lane widths by role as a map drawing convention (\"the cluster's spine and its spur to the fields 5 ft\"). A bridge that closes a gap in one way takes that way's width, so the claim should be CONVENTION citing research/questions/0081-village-lanes.drawing.html, not UNRESEARCHED",
+  "note": "accepted by the round arbiter (ask:417-T05-claims), binding; the GM reviews it",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#no loop closed": {
   "body": "9d941c176b1d101c",
@@ -31670,10 +31666,10 @@
   "code": "c6571546cb009d0f",
   "core": "21cb13b4801c5866",
   "date": "2026-10-25",
-  "note": "0081 answers the side-by-side case: \"Two paths running side by side are drawn as one ... the maps cut it where it comes alongside and let it meet the other as a T\". The code drops the whole lane instead (`ln[\"pts\"] = []`). The claim should cite research/questions/0081-village-lanes.drawing.html, and the drop then reads as DRIFTED against that cut",
+  "note": "accepted by the round arbiter (ask:417-T05-claims), binding; the GM reviews it",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#no house stranded": {
   "body": "934a8114ea3fb020",
