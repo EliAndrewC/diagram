@@ -7,8 +7,8 @@ court rooms. An intendant's compound generally held a jail too, though Takayama'
 In Rokugan torture to win a confession is forbidden by the written law and torturers are very rare, so a magistracy
 keeps no room built for interrogation.
 
-What a magistracy's temporary cell looked like is not recorded. The great jails' cells were rooms reckoned in tatami
-mats; at Edo's Tenmacho jail each had a privy about 3 ft across.
+What a Japanese magistracy's temporary cell looked like is not recorded; one Chinese county's gazetteer of the Kangxi reign gives its whole jail as two rooms, a heavy one inside the ceremonial gate and a light one beside the county hall. The great jails' cells were rooms reckoned in tatami
+mats; at Edo's Tenmacho jail the cells of 15 and 18 mats each had a privy about 3 ft across.
 
 The great jails' single cell rooms ran from Osaka's 6 mats, about 12 by 9 ft, to the 18 mats, about 18 by 18 ft, of
 Edo's Tenmacho jail, each shared by several prisoners; over a hundred could be packed into Edo's great cell of 30 mats.

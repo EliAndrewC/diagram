@@ -7,7 +7,7 @@ Before modern times the paddies were small, irregular plots, fitted to the land 
 by piece; the tidy grid of rectangles came only with land consolidation from the 1870s, though the western plains kept
 the ancient jori grid. The rice was transplanted into the flooded mud in no ruled rows. A sixth-century Chinese manual
 already had the paddy drained to firm the roots and again before the rice ripened, and some Edo-period farmers drained it in
-midsummer. After the harvest the straw went into ricks, and a paddy that drained well carried winter barley or wheat; a
+midsummer. After the harvest the straw went into ricks, and a paddy that drained well, where it could be manured, might carry winter barley or wheat; a
 wet one grew rice alone.
 
 A paddy parcel in the land surveys of the 1600s ran from about a tenth of an acre to under half an acre, and terraced

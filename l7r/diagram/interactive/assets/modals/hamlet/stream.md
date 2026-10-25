@@ -12,8 +12,8 @@ over them, or on a planked deck. A settlement might stand on both banks of a bro
 beside it on one bank; neither form was the rule. A larger river ran past a settlement and could be the boundary
 between villages.
 
-How wide a village's brook ran is not recorded. For scale, a dug main canal ran from about 6 ft to about 36 ft wide,
-and the finest ditch, the one that watered a single paddy, about a foot.
+How wide a village's brook ran is not recorded. For scale, a large dug main canal ran about 36 ft wide, and rules of 1537 for one canal named a channel width of about 6 ft,
+and the finest ditch, the one that watered a single paddy, probably about a foot.
 
 Guesses:
 - Its width, about 7 ft (2 m): no account, from before modern times or after, gives the width of a village's brook, so

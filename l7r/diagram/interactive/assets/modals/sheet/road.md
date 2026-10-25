@@ -13,7 +13,7 @@ such as Hakone; most of the Five Highways ran about 18 to 24 ft. Through Hiroshi
 15 ft. How wide the road was just before an official's gate, or a lane to a side gate, is not recorded.
 
 Guesses:
-- A lane to a side or cart gate about 6 ft wide where carts use it: no lane's width was found, and the Edo hand cart's bed
+- A lane to a side or cart gate about 6 ft wide where carts use it: no lane to an official's gate was found measured; the farm roads of a paddy replanned in 1869 were about 6 ft, a field road is traditionally given as 3 ft, and the Edo hand cart's bed
   was about 8 by 2.5 ft, so six feet leaves room for the wheels.
 
 Depiction: The plan draws the road as a band of bare ground running from the sheet's edge to the main gate, and narrower
