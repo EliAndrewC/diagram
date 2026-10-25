@@ -68,8 +68,8 @@ def seat_paddy_grass(s: Settlement, plan: SitePlan) -> Poly | None:
     Research:
         about the paddy's own size - GUESS research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one plot's own area, the size a GUESS the page names
         on the slope above it - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: upslope of the plot, against the fall
-        its shape - UNRESEARCHED: an axis-aligned square, not turned to the slope; no record gives a grass hill's shape
-        which paddy - UNRESEARCHED: the first of the field's top plots with room above it, not rolled; no record says which paddy kept one
+        its shape - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); an axis-aligned square, not turned to the slope; no record gives a grass hill's shape
+        which paddy - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); the first of the field's top plots with room above it, not rolled; no record says which paddy kept one
         off its paddy - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: at least `GRASS_GAP_FT` (6 ft) off the plot as seated (`clear_of_plot`), the bund and its cut strip kept bare"""
     fields = s.M.get("fields") or []
     plots = [p for f in fields for p in (f.get("plot_rings") or [])]  # each plot's ring (`plots` is its compact record)

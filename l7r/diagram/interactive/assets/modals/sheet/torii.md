@@ -1,20 +1,21 @@
 About: A torii was the open gateway that marked where a shrine's sacred ground began; the ground inside it was revered as the
 kami's. A shrine's approach passed under one or more on its way to the hall, the first standing where the approach entered the
-shrine's grounds; several were counted from the outermost in, the first, second and third. A village
-shrine most likely had a single arch. A small shrine below a shrine's rank had none or a very small one, and a household's
+shrine's grounds; several were counted from the outermost in, the first, second and third.
+A small shrine below a shrine's rank had none or a very small one, and a household's
 shrine seldom had one; an arch there was a mark of care, not a fixture. Two shrines on one ground could share the arch at its
 edge, which marked everything inside it, or a lesser shrine could have its own.
 
 An arch could be of stone: early dated ones at ordinary shrines are stone gates of the 1600s, one perhaps older. How
-tall an ordinary arch stood is not recorded, nor how far one stood before its hall.
+far one stood before its hall is not recorded. The few measured are of stone: one at a country shrine, of the late Muromachi or early Edo period, stands about 9 ft high and 8 ft between its posts, and two city shrines' stand about 15 and 20 ft high.
 
-An arch was a gift, from a shrine's parishioners together or from one donor. From the Edo period worshippers gave arches in
-thanks for a prayer answered; at the great Inari shrine of Fushimi, each bearing its giver's name, they now number some
+An arch was a gift, from a shrine's parishioners together or from one donor. At the great Inari shrine of Fushimi, from the Edo period, worshippers gave arches in
+thanks for a prayer answered; each bears its giver's name, and they now number some
 10,000 along its mountain paths. An ordinary shrine's known arches before 1868 stood singly; rows there are modern. In Rokugan an
 ordinary shrine's approach may run under one, three or seven arches, numbers that carry power in the setting, seven most of
 all.
 
 Guesses:
+- That a village shrine had a single arch: no count of shrines' arches was found; a shrine, unlike a small wayside shrine, had one, and numbered gates belong to great shrines.
 - How far a compound shrine's arch stands before its hall, about 5 ft where the plan is tight and up to 12 ft where there is
   room: no distance from any torii to its hall was found.
 - That a row of arches before a country shrine stands 12 ft apart, its innermost 12 ft off the hall: the one small rural row

@@ -279,7 +279,7 @@ NOTICE_BOARD_MAX_FT: float = 40.0
 set while boards stood against the wall): the gate opens straight onto the road it stands on (0088), so its board stands
 beside that road on the far verge facing the gate (0190), across as much as the Imperial road's 30 ft.
 
-Research: board by the gate - UNRESEARCHED: within 40 ft of the opening, this project's figure, so a board beside the road (0190) can face its gate across the Imperial road's 30 ft (0088)"""
+Research: board by the gate - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: the notice board stands within about 15 ft of a gate in the wall - it is allowed 40 ft, a departure the code keeps until feature 417 T33; within 40 ft of the opening, this project's figure, so a board beside the road (0190) can face its gate across the Imperial road's 30 ft (0088)"""
 
 
 @dataclass(frozen=True)

@@ -7,7 +7,7 @@ Before modern times the paddies were small, irregular plots, fitted to the land 
 by piece; the tidy grid of rectangles came only with land consolidation from the 1870s, though the western plains kept
 the ancient jori grid. The rice was transplanted into the flooded mud in no ruled rows. A sixth-century Chinese manual
 already had the paddy drained to firm the roots and again before the rice ripened, and some Edo-period farmers drained it in
-midsummer. After the harvest the straw went into ricks, and a paddy that drained well carried winter barley or wheat; a
+midsummer. After the harvest the straw went into ricks, and a paddy that drained well, where it could be manured, might carry winter barley or wheat; a
 wet one grew rice alone.
 
 A paddy parcel in the land surveys of the 1600s ran from about a tenth of an acre to under half an acre, and terraced
@@ -24,7 +24,7 @@ Guesses:
 
 Depiction: The map shows the paddies at one moment of the rice year, high summer, the basins flooded and the rice green;
 the midsummer drain, the winter crop and the straw ricks are left for seasonal maps not yet drawn. The rice is drawn in
-one green because a district of the plains transplanted within about ten days, so its paddies stood largely at one stage
+one green, save the odd plot some maps draw still flooded or ripening early, because a district of the plains transplanted within about ten days, so its paddies stood largely at one stage
 of growth. Each basin is drawn small, at its real size in feet, never the large rectangles of modern land consolidation,
 and none is drawn as a needle-sharp point, an arrowhead or a scrap too small to level and wall. The rice is drawn as a
 loose scatter of shoots in no ruled rows: a sample of the planting, since at its real spacing one dot a plant would fill

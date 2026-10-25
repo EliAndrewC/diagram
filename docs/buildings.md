@@ -138,18 +138,18 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 <!-- Research: office hall - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html: ~120 x 28 ft block (Ochiba's; Hayakawa 113 x 28, Ubame 110 x 28), inside the 80-150 by 20-45 ft band whose proportions are a GUESS; backing the divider, day office and study behind, dais band in front, courtroom a room of it -->
 <!-- Research: clerk positions at the dais - DEVIATION research/questions/0099-the-hearing-court-shirasu.drawing.html: two clerk positions flanking the dais in the front band, level with it, not in a room of their own before it as at Edo -->
 <!-- Research: hearing court - research/questions/0099-the-hearing-court-shirasu.html: roofed, white gravel or river cobbles, south of the dais, size a guess -->
-<!-- Research: hearing cart slot - UNRESEARCHED: a cart-passable ~8-10 ft slot south of the hearing court -->
+<!-- Research: hearing cart slot - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); a cart-passable ~8-10 ft slot south of the hearing court -->
 <!-- Research: hearing mats - research/questions/0099-the-hearing-court-shirasu.html: accused at the center, plaintiff and village officials behind -->
 <!-- Research: hearing mat size - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: the accused's mat ~6x3 ft, the project's own guess; the 3 by 6 ft of a farm threshing mat is a borrowed figure -->
-<!-- Research: kura granary door on the apron - UNRESEARCHED: the plastered granary's door set on the loading apron, where the carts stand -->
+<!-- Research: kura granary door on the apron - GUESS: searched, the record silent (feature 417 T36 pass P8, 2026-10-25); the plastered granary's door set on the loading apron, where the carts stand -->
 <!-- Research: tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a records kura of no more than ~450 sq ft, drawn 24 x 18 ft (its shape a GUESS) -->
-<!-- Research: tax archive strongroom role - UNRESEARCHED: ledgers plus coin and in-kind valuables in one kura -->
+<!-- Research: tax archive strongroom role - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html: the Takayama book storehouse held records only, and 0123 has Pingyao keep its money, grain tax and arms inside the great hall, its granary behind the offices - one kura is drawn for ledgers, coin and valuables, a departure the code keeps until feature 417 T33; ledgers plus coin and in-kind valuables in one kura -->
 <!-- Research: stables - research/questions/0108-stables-umaya.html, research/questions/0108-stables-umaya.drawing.html: a warrior's small stable three bays long, its one-bay stalls on board floors, the earth passage (kusa-no-ma) before them running its length, the grooms' room (tozamurai) across the passage; ~18 x 24 ft, the depths and the 2-4 horses GUESSES -->
 <!-- Research: stable stall width - research/questions/0108-stables-umaya.drawing.html: a stall one bay, one ken (~6 ft) wide, by convention; `stall_width` holds it -->
 <!-- Research: stable passage and grooms' quarters - research/questions/0108-stables-umaya.drawing.html: an earth-floored passage before the stalls and the grooms' room in the stable, on every sheet -->
 <!-- Research: stable below barracks - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: stable drawn smaller than the barracks; no page says where a stable ranked among an office's buildings -->
 <!-- Research: cell - research/questions/0096-holding-cells-agariya-and-roya.html: ~12 x 10 ft remand cell, small end of the 6-18 mat span, shared by several prisoners -->
-<!-- Research: cell kept well under the barracks - UNRESEARCHED: the cell drawn smaller than the barracks; no page ranks them -->
+<!-- Research: cell kept well under the barracks - research/questions/0096-holding-cells-agariya-and-roya.html: the cell rooms measured are 6 to 18 mats, and 0097's office rowhouses run far longer; no magistracy's own cell is measured; the cell drawn smaller than the barracks; no page ranks them -->
 <!-- Research: granary kept under a residence block - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the ceiling tied to the granary-weight knob - a staging store's granary held below the residence, a terminal store's allowed to be the largest building, as Takayama's rice store was; the tie to the rice held a guess from the one office measured -->
 <!-- Research: tax archive drawn with white-plaster fill, heavy stroke and dark door mark - CONVENTION: the sealed kura shown plastered, distinct from the vented granary slats -->
 
@@ -161,7 +161,7 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 <!-- Research: one storehouse at the office - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: one storehouse at a county office, any row at the town's river landing -->
 <!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: swept patch with a weapon rack and striking posts, no hall -->
 <!-- Research: practice ground placement - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a practice ground beside the guards' quarters -->
-<!-- Research: practice ground shared with cart staging or muster - UNRESEARCHED: the open ground serves also as cart staging or muster -->
+<!-- Research: practice ground shared with cart staging or muster - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); the open ground serves also as cart staging or muster -->
 
 <!-- Research: practice ground striking posts - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: 1-2 posts, ~1 ft across, drawn as small markers; the page records the number drawn as a guess and the marker as a convention -->
 <!-- Research: practice ground weapon rack - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: ~8x2 ft rack flush against the adjacent wall -->
@@ -193,9 +193,9 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 <!-- Research: suites as labeled zones - CONVENTION: each labeled area compresses several rooms -->
 <!-- Research: engawa - research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html: a strip 3-6 ft deep (9-18 px), half a ken to one ken, Katsura's widths, free to change from face to face (ACCURATE; pack_audit veranda_depths); which faces carry it a knob rolled per sheet between the garden face alone and a continuous veranda along two or three faces, never all four (both forms attested); the garden face drawn at the wider end a GUESS (0102's drawing page) -->
 <!-- Research: genkan - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: on the office hall or none with a roji path, a knob; other blocks by informal doors -->
-<!-- Research: genkan porch size - UNRESEARCHED: ~40x14 px, ~13x4.7 ft -->
+<!-- Research: genkan porch size - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: a shikidai about 12 by 9 ft in the one example found measured (Sayama; the depth is the page's reading) - the porch is drawn about 13 by 4.7 ft, a departure the code keeps until feature 417 T33; ~40x14 px, ~13x4.7 ft -->
 <!-- Research: kitchen - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: part of the house, an ell projecting from one side (0091; the kitchen's door and kamado are 0107's); about 24 x 18 ft, the one kitchen measured (the Kuchiba house's east wing, about 12 tsubo, ~440 sq ft, about a sixth of that house) taken as the size whatever the size of the house, not as a share of it - the GUESS 0091's drawing page records; the kitchen band w 18-24 by h 14-18 ft (buildings/types.json) keeps it under that measure; kamado range; smaller than a living block -->
-<!-- Research: kamado range size - UNRESEARCHED: ~6 x 2.5 ft with two fire mouths -->
+<!-- Research: kamado range size - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); ~6 x 2.5 ft with two fire mouths -->
 <!-- Research: bath - research/questions/0105-baths-furo.html, research/questions/0105-baths-furo.drawing.html: a room or small addition on the service side by kitchen and well; drawn 10 x 8 ft, a GUESS (0105's drawing page: no page gives a bath's size) -->
 <!-- Research: an enlarged bath as a resident particular - GUESS research/questions/0105-baths-furo.drawing.html: a plan may draw its bath larger, up to about 18 by 12 ft, as one of its resident's particulars -->
 <!-- Research: kitchen abuts the house, no corridor - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: no covered corridor joins a kitchen to the house - a middle-rank house was one block with almost no corridors, its kitchen projecting from one side, so the kitchen abuts the house as an ell (Hayakawa's and Ubame's covered ways removed, feature 374 wave 113) -->
@@ -219,12 +219,12 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 
 ### Wells
 
-<!-- Research: well count - UNRESEARCHED: 2-4 wells for ~50 inhabitants and horses -->
+<!-- Research: well count - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); 2-4 wells for ~50 inhabitants and horses -->
 <!-- Research: kitchen well - GUESS research/questions/0105-baths-furo.drawing.html: on a hand-drawn plan inside the kitchen, on a generated one past the bath within 20 ft of the kitchen; no page places a samurai kitchen's well -->
-<!-- Research: garden well - UNRESEARCHED: in the inner garden -->
-<!-- Research: stables well - UNRESEARCHED: just outside the stables for watering -->
+<!-- Research: garden well - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); in the inner garden -->
+<!-- Research: stables well - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); just outside the stables for watering -->
 <!-- Research: bath-area well - GUESS research/questions/0105-baths-furo.drawing.html: optional, the kitchen well usually serves the bath (0105's own reading) -->
-<!-- Research: a fourth well only for very large compounds - UNRESEARCHED: no page says how many wells a compound kept by its size -->
+<!-- Research: a fourth well only for very large compounds - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); no page says how many wells a compound kept by its size -->
 <!-- Research: well glyph - research/questions/0196-communal-wells-ido.drawing.html: a square curb and mouth with its lifting gear over it - a sweep or a pulley frame, weighted by the water's depth - and a roof on about one well in three, each rolled per sheet (l7r/diagram/well_gear.py; `well_gear` in pack_audit) -->
 <!-- Research: water depth from the landform - GUESS research/questions/0196-communal-wells-ido.drawing.html: a valley floor or river plain shallow, an upland or terrace deep; a sheet whose notes record no landform rolls it -->
 <!-- Research: no roof on a well indoors - research/questions/0196-communal-wells-ido.drawing.html: a well inside a building (a kitchen's doma) is under its building's roof, so a rolled roof is not drawn -->
@@ -251,11 +251,11 @@ A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 <!-- Research: the reception's shoe stone is its entrance - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: no genkan, the guest enters at the reception's veranda (0104); its tub beside the stone its guests step up from, declared id="shoe-stone" (0100) -->
 <!-- Research: a bath's tub judged by no door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a bath is entered from the house, so its tub stands on its yard side -->
 <!-- Research: no tub on the roof - DEVIATION research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: water was kept on the roof too, not drawn - no tub stands inside a building's outline (the GM's ruling of 2026-07-25/26), so the entrance is the one seat -->
-<!-- Research: a short face's tub round the corner nearest its door - UNRESEARCHED: a 12 ft face leaves no seat beside a 6 ft door and its held approach, so the tub stands on the face round the nearer corner, still within the 10.5 ft -->
-<!-- Research: a tub that does not fit a narrow alley moved to open ground - UNRESEARCHED: a 7.6 px tub does not fit a 9 px alley between two buildings, so it is moved to the door's other side or a seat facing open ground -->
+<!-- Research: a short face's tub round the corner nearest its door - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P4, 2026-10-25); a 12 ft face leaves no seat beside a 6 ft door and its held approach, so the tub stands on the face round the nearer corner, still within the 10.5 ft -->
+<!-- Research: a tub that does not fit a narrow alley moved to open ground - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P4, 2026-10-25); a 7.6 px tub does not fit a 9 px alley between two buildings, so it is moved to the door's other side or a seat facing open ground -->
 <!-- Research: tub clear of the footprint - CANON: the GM's ruling of 2026-07-25, tightened 2026-07-26, no part of a tub glyph in a building's footprint (the downspout discharges and the bucket line forms outside the wall) -->
 <!-- Research: tub seat off the wall - CONVENTION: the glyph seated ~2.2 px (~0.7 ft at 3 px = 1 ft) off the wall, its outline clear of the wall's ink -->
-<!-- Research: a tub never on a well glyph; moved to the door's other side - UNRESEARCHED: the two point glyphs would smear into one blob, so a tub is moved to the door's other side, or round the corner nearest it -->
+<!-- Research: a tub never on a well glyph; moved to the door's other side - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P4, 2026-10-25); the two point glyphs would smear into one blob, so a tub is moved to the door's other side, or round the corner nearest it -->
 
 <!-- Research: no tub at the plaster kura - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: none at the kura, one may stand at a wooden granary -->
 
@@ -277,7 +277,7 @@ See the "Fire discipline" grounding entry for the why.
 <!-- Research: privy count - research/questions/0101-privies-setchin.drawing.html: one per functional zone, ~3-4 -->
 <!-- Research: privy size - GUESS research/questions/0101-privies-setchin.drawing.html: 5 ft square (15 px), a one-seat privy -->
 <!-- Research: privies away from water - GUESS research/questions/0101-privies-setchin.drawing.html: at least 15 ft from any well -->
-<!-- Research: privies away from food prep - UNRESEARCHED: no page we read sets a privy's distance from a kitchen -->
+<!-- Research: privies away from food prep - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); no page we read sets a privy's distance from a kitchen -->
 <!-- Research: privy glyph - CONVENTION: a gray square labeled latrine, apart from the tan buildings (0101's drawing page) -->
 <!-- Research: rear strip the service zone - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the formal garden to the south (found on the question page), the shady north rear the service side -->
 <!-- Research: storehouses in the rear strip - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: the household's dozo stood behind the house -->
@@ -286,7 +286,7 @@ See the "Fire discipline" grounding entry for the why.
 <!-- Research: servants in the rear strip - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: a large household's menservants and gatekeeper in a range on its street edge, never a rowhouse behind the house, its grooms in the stable's grooms' room (research/questions/0108-stables-umaya.html), its maids and kitchen hands under the main roof (the Aizu house's rooms of the maids and servants; that the maids slept there a GUESS); the rear strip keeps the stores -->
 <!-- Research: rear kitchen garden by the sun - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: only where it gets six hours -->
 <!-- Research: named rear yard - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: open working ground with storehouses beyond, the Higuchi house -->
-<!-- Research: rear service alley - UNRESEARCHED: ~6-10 ft alley when little goes behind -->
+<!-- Research: rear service alley - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); ~6-10 ft alley when little goes behind -->
 
 Very small gray squares, 5 ft (15 px) a side - a one-seat privy (research/questions/0101-privies-setchin.drawing.html; its size a GUESS) - labeled `latrine`, away from food prep and water sources. Count and placement follow how households and night-soil actually worked (building-review sanitation sweep, 2026-07):
 
@@ -307,17 +307,17 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 <!-- Research: hall shrine under half a residence - GUESS: 0116's drawing page ranks a compound's shrine hall below its residence; how far below is a further guess -->
 <!-- Research: more than one kami in a hall - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: a second kami's form, one hall or a shrine of its own, a knob rolled per sheet; Hayakawa's river kami and Ubame's wood kami roll one hall, and Hayakawa's hall keeps an Ebisu altar besides -->
 <!-- Research: shrine vermilion edging - CONVENTION: the compound shrine and the hall shrine edged vermilion, the shrine color 0219's drawing page records as a drawing convention -->
-<!-- Research: workshop colonnade - UNRESEARCHED: open hatched craft area attached to a shrine -->
+<!-- Research: workshop colonnade - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); open hatched craft area attached to a shrine -->
 <!-- Research: the whole sacred complex held to at most ~2/3 of the residence - GUESS: 0116's drawing page ranks a compound's shrine hall below its residence, itself a guess; the hall plus any workshop at most ~2/3 of the residence is a further guess; the hall's own ceiling is the claim above -->
 
 <!-- Research: sanctuary - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html: honden of 1 or 3 bays (one bay ~6 ft square, Hie's 2 bays ~12 x 6 ft) at the back on the approach axis; its width a knob rolled per sheet among the three -->
 <!-- Research: hall and dwelling - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html, research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html: one roof, the dwelling with its kitchen and writing room -->
 <!-- Research: privy at the dwelling - GUESS: the privy at the dwelling's back corner, following the farmhouse -->
-<!-- Research: kitchen garden at the dwelling - UNRESEARCHED: the kitchen garden at the dwelling's back -->
+<!-- Research: kitchen garden at the dwelling - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the keeper's plot stands near the hall, on open ground that gets its sun - the garden is fixed at the dwelling's back, a departure the code keeps until feature 417 T33; the kitchen garden at the dwelling's back -->
 <!-- Research: hall and dwelling order - GUESS: the hall end toward the arch, the dwelling end behind -->
 <!-- Research: arch in plan - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft pitch -->
-<!-- Research: arch dimensions - UNRESEARCHED: 15 ft beam, 1.2 ft posts, 10.3 ft clear -->
-<!-- Research: approach width - UNRESEARCHED: gravel strip ~10 ft wide -->
+<!-- Research: arch dimensions - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: from about 8 ft between the posts at a country shrine to about 18 ft at a shrine of the city of Sendai, on the three stone arches found measured; one stands 2.5 m between its posts and 2.8 m high (Kawataka), its one measured post 0.47 m (~1.5 ft) thick - the posts are drawn 1.2 ft, a departure the code keeps until feature 417 T33; 15 ft beam, 1.2 ft posts, 10.3 ft clear -->
+<!-- Research: approach width - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); gravel strip ~10 ft wide -->
 <!-- Research: precinct unenclosed - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html: no fence or hedge round the precinct -->
 <!-- Research: bare precinct earth - research/questions/0224-ground-swept-clear-around-shrines-and-graves.html: plain fill, no rake lines -->
 <!-- Research: grave markers - research/questions/0235-village-burial-grounds-bochi.drawing.html: rows of ~2x1 ft markers -->
@@ -358,7 +358,7 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 <!-- Research: office front, residence rear - DEVIATION research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: outer office court, inner residence court behind a divider - the yamen's order, kept for every plan as a deliberate simplification (at Takayama the residence stood beside the office) -->
 <!-- Research: buildings ring the edges - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: court centers held open, ~60% open -->
 <!-- Research: named court spine - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: forecourt, hearing court (oshirasu), garden and the ground between the courts stay open -->
-<!-- Research: perimeter-first placement order - UNRESEARCHED: N/S rows own the corners, then E/W, then the divider hall -->
+<!-- Research: perimeter-first placement order - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P4, 2026-10-25); N/S rows own the corners, then E/W, then the divider hall -->
 <!-- Research: second rank - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the rear rank holds stores (the Higuchi house's storehouse behind the main house); servants lodge on the street edge, never in a rear rank -->
 <!-- Research: coverage band - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: ~30-42% -->
 <!-- Research: few large masses - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: rooms gathered into a few connected buildings -->
@@ -401,8 +401,8 @@ The sweep (`tests/test_mode_a_sheets.py`) picks the tier up from the declaration
 <!-- Research: guest and service doors - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: guest entrances feed a court or garden -->
 <!-- Research: size hierarchy - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: office hall, residence, rowhouse; the residence the largest domestic building, kitchen, bath and shrine hall below it; stable below the barracks; small storehouses well below the rowhouse; the grain storehouse by the rice held -->
 <!-- Research: cell below the barracks - GUESS: no page sizes a jail cell against the guards' quarters --><!-- Research: packing coverage - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: ~30-42%, fire gaps ~6-8 ft, kura ~6-10 ft, apron ~15-20 ft -->
-<!-- Research: clear gateways - UNRESEARCHED: nothing stands in a passage -->
-<!-- Research: gate hierarchy - UNRESEARCHED: the ceremonial main gate widest -->
+<!-- Research: clear gateways - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P4, 2026-10-25); nothing stands in a passage -->
+<!-- Research: gate hierarchy - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the Joge drawing of 1869 labels a main gate and a small gate side by side; the lesser gate's width is a GUESS -->
 <!-- Research: structures clear of wall ink - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html -->
 <!-- Research: maids' room - GUESS research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: the checklist's maids' room under the main roof at the kitchen end, as the Aizu chief retainer's house kept the rooms of its maids and servants in the house; that the maids slept there a GUESS -->
 <!-- Research: privies and rear strip - research/questions/0101-privies-setchin.drawing.html: the house's two privies built into it (the family's place a GUESS), ~3-4 a compound (a GUESS); the rear strip filled, a GUESS on research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html -->
@@ -429,7 +429,7 @@ Before declaring done (Mode A):
 - [ ] Every opening's INK width matches the width its comment claims: read `tools/pack_audit/`'s GATE OPENINGS section figure by figure (a square cap eats 1.5 ft per end - see "Walls and gates"), and confirm the hierarchy holds with the ceremonial main gate widest
 - [ ] No structure standing in a wall: `tools/pack_audit/`'s STRUCTURE/WALL section reports "all N structures clear the wall ink" (see "Walls and gates" - buildings back a wall, porches, sheds, privies and well curbs included; a structure that IS part of the wall gets the wall broken around it)
 <!-- Research: checklist tub seat - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: each fire-water tub outside its building, beside a door of it (the ~2 px clearance a drawing convention) -->
-<!-- Research: an entrance on every lodging - UNRESEARCHED: each lodging block drawn with its own entrance so the plan shows how it is entered -->
+<!-- Research: an entrance on every lodging - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P4, 2026-10-25); each lodging block drawn with its own entrance so the plan shows how it is entered -->
 - [ ] Privies ~one per zone (~3-4), and the house's two - the guests' behind the reception, the family's at a back corner - ATTACHED to it; rear (north) service strip filled (stores + utility) or narrowed to an alley; the maids' room under the main roof at the kitchen end, not a wide empty band; every lodging block (family block, karo's house, guest house) has a drawn entrance
 - [ ] Fire-water tubs (~8-12) distributed across the wooden buildings, kitchen weighted (2); each OUTSIDE its building beside a door of it (`pack_audit` TUBS OFF THEIR DOORS), against the wall (~2 px clear; no part of the glyph in the footprint, not even a straddle - `pack_audit` TUB IN BUILDING); NOT a token pair, and NOT at the fireproof plaster kura (fire-water sweep)
 - [ ] Practice ground in the outer court beside the watch's lodging (swept patch + weapon rack + striking posts), sized to the resident platoon at ~90-135 sqft per drilling samurai; NO dojo building unless it is a recorded Ochiba-slot particular

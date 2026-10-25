@@ -21,7 +21,7 @@ from ..homestead_parts.grove_sides import E, N, S, Turn, W, turn_face, turns_axe
 # plot's sun ground, `CANOPY_SHADE_FT` (feature 310, `KeepoutsMixin._sun_keepouts`).
 YARD_SUN_STRIP = 22.0
 """Research: yard drying strip kept from bands - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the yard seated with its grove's bands clear, a seating preference
-yard drying strip width - UNRESEARCHED: a 22 px strip south of the yard, a width 0038 does not give"""
+yard drying strip width - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the project's sun figures leave 39 ft open before a yard - the strip is 22 ft, a departure the code keeps until feature 417 T33; a 22 px strip south of the yard, a width 0038 does not give"""
 # THE WAY IN THROUGH A RING. A grove round all four sides must still let the farm be reached: its front band is broken
 # once, at the yard's middle, for a way wide enough that a lane can be ROUTED through it - the router keeps a footpath's
 # fabric gap plus 0.71 of its planning cell off every band on each side, 22.2 ft at its 10 ft cell (measured on cohort
@@ -95,11 +95,11 @@ def canonical_farmstead(
         yard on the south front - research/questions/0029-farmhouses-minka.drawing.html, research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: the yard before the house's south wall, 3 ft (`gap`) off it
         garden placement - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: against the east wall, or beside the yard when the map keeps the sun
         thin bands clear of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: east band past the garden's reach (`sun_east`, 50 ft), south band past the yard's strip (`yard_sun`: the 50 ft canopy reach and a crown on a map keeping the sun - every scripted hamlet opts in, `stages.py`'s `sun_corridor`; the 22 ft `YARD_SUN_STRIP` default only where a hand map never opted in)
-        south strip off an unkept yard - UNRESEARCHED: the 22 ft `YARD_SUN_STRIP` default, run only on a hand map that never opted into the sun corridor (0038 exempts those maps and gives 39 ft and 50 ft, never 22)
+        south strip off an unkept yard - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); the 22 ft `YARD_SUN_STRIP` default, run only on a hand map that never opted into the sun corridor (0038 exempts those maps and gives 39 ft and 50 ft, never 22)
         service strip - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the windward stand `back` (`SERVICE_STRIP_FT`, 24 ft) off the back and windward end walls, sized to seat a wood shed
         deep bands off the works - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the west and north bands `gap` + `back` off the westmost and northmost house, yard, bed or well; where that ground lies in a plot's 50 ft reach (0038) its crowns are culled where the band is drawn (`groves.py`, `_sun_keepouts`), so the band's GROUND may lie there and its trees never do
         way in through a ring - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one `way_in` (`WAY_IN_FT`, 36 ft) break at the front band's middle, sized so a lane can be routed through
-        wellhead off the house's front wall - UNRESEARCHED: a well pocket beside a shallow yard moved down until its wellhead stands `gap` / 3 (1 ft) clear of the house's front wall
+        wellhead off the house's front wall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); a well pocket beside a shallow yard moved down until its wellhead stands `gap` / 3 (1 ft) clear of the house's front wall
         well pocket in the dooryard - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: beside the yard on its west, off the way in (where on the lot is a GUESS)
     """
     gw, gh = garden

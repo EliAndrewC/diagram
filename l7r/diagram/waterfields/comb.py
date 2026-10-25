@@ -163,11 +163,11 @@ def carve_comb(
         water passes plot to plot - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: below each delivery's end the plots take their water over the bunds
         water first - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the head race, canals, ditch threads and drain laid before any plot, the paddies cut between them
         bends swept before clearing - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every continuation rounded before any ground is cleared against it
-        default skeleton - UNRESEARCHED: canal A 1250-1450 px, canal B 680-800 px, offtakes at 0.22/0.45/0.68/0.88 and 0.45/0.8 of their canals
+        default skeleton - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); canal A 1250-1450 px, canal B 680-800 px, offtakes at 0.22/0.45/0.68/0.88 and 0.45/0.8 of their canals
         default paddy grain - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: strips 48 px across, rows 26-36 px apart
-        default hem depth - UNRESEARCHED: the dry hem 70-132 px deep
-        default bund-bean share - UNRESEARCHED: 0.28 of the bunds carry a bean row
-        fan middle - UNRESEARCHED: the fan's middle takes the "cleared" form by default (`fan_middle`)
+        default hem depth - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); the dry hem 70-132 px deep
+        default bund-bean share - research/questions/0014-bunds-between-the-paddies-aze.html: beans were sown on the bund after the rice was transplanted, and often grown; the 0.28 share is ours; 0.28 of the bunds carry a bean row
+        fan middle - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a fan's middle was often left wild until late, the old heartlands clearing theirs early; the default is a knob of ours; the fan's middle takes the "cleared" form when a caller passes none (`fan_middle`); its one caller, the hamlet's `fit_field`, always passes the `fan_middle` knob, wild three maps in four
         supply canal bank - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: the plots hem onto a bank beside each supply canal where the caller asks (`supply_banks`; the scripted hamlet always does), off by default for a caller that draws its own
         default grain - NONE: 1.0 where a caller passes none; the scripted hamlet passes the principled 2 / ftpx (`hamletgen.consts.GRAIN`), as this docstring explains
     """
@@ -373,7 +373,7 @@ def _comb_skeleton(
         head race - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: from the intake on the caller's bearing, or straight down the fall, `head_len` px to the fork
         head race width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: HEAD_RACE_FT
         supply along the high margin - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: canal A dug cross-slope from the fork
-        canal A heading - UNRESEARCHED: 42 deg off the fall, a dug polyline of 95-125 px segments
+        canal A heading - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: the delivery ditches leave their supply canal at right angles - canal A runs 42 deg off the fall, its deliveries meeting it at about 42 deg, a departure the code keeps until feature 417 T34; 42 deg off the fall, a dug polyline of 95-125 px segments
     """
     # head-race: the intake -> the division point (bunsuiguchi), on the caller's bearing or down the fall.
     # Every width below goes through `chan_px`, which converts a TRUE width in feet to pixels at
@@ -408,14 +408,14 @@ def _comb_threads(
 
     Research:
         second supply canal - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: canal B down the other flank, feeding at least one delivery
-        canal B heading - UNRESEARCHED: 58 deg off the fall
+        canal B heading - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: the delivery ditches leave their supply canal at right angles - canal B runs 58 deg off the fall, a departure the code keeps until feature 417 T34; 58 deg off the fall
         offtake spacing - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: an offtake within two plot widths of another, or of canal B, is skipped
         delivery takeoff - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each delivery heads down the fall, -0.15 to +0.1 rad, off a canal running 42 deg off it
-        delivery length - UNRESEARCHED: 420-620 px off canal A, 340-560 off canal B
-        sub-ditches - UNRESEARCHED: each interior delivery splits once, high on its run, diverging 0.5-0.66 rad
-        sub-ditch length - UNRESEARCHED: 300-430 px
+        delivery length - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); 420-620 px off canal A, 340-560 off canal B
+        sub-ditches - GUESS research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a branch leaves at 35 degrees, leaning downstream; each interior delivery splits once, high on its run, diverging 0.5-0.66 rad
+        sub-ditch length - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); 300-430 px
         canal B delivery takeoff - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each heads -0.2 to 0 rad off the fall, 58-70 deg off its canal
-        canal B tail - UNRESEARCHED: its thread ends 22 px past its last offtake
+        canal B tail - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: a supply canal runs on to the crop's edge or stops at its last offtake - a 22 px stub past the last offtake is neither, a departure the code keeps until feature 417 T34; its thread ends 22 px past its last offtake
         delivery widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: capped at DELIVERY_PARENT_FRAC of the canal there, a sub at SUB_PARENT_FRAC of its delivery's head
     """
     # canal B is itself the far-side boundary thread (its dug prefix IS the canal)
@@ -481,8 +481,8 @@ def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread]
     Research:
         no channel crosses another - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: threads marched in lockstep, never crossing
         field depth - research/questions/0010-farmland-around-towns-and-cities.drawing.html: capped at `field_fall`, else grown downhill off the frame
-        outfall margin - UNRESEARCHED: a capped field held inside the frame with a low-side margin for the outfall and brook
-        ditch thread spacing - UNRESEARCHED: GAP 26 px between threads, a child offset 0.55 GAP
+        outfall margin - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a capped field held inside the frame with a low-side margin for the outfall and brook
+        ditch thread spacing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); GAP 26 px between threads, a child offset 0.55 GAP
     """
     for t in threads:
         t.pts = [F.to_xy(t.u0, t.f0)]
@@ -528,11 +528,11 @@ def _comb_drain(R: random.Random, F: _Frame, threads: list[_Thread], W: float, H
     Research:
         collector on the low line - research/questions/0060-field-drains-akusuiro.drawing.html: dug below the deepest delivery ends, starting at the first delivery's bottom
         across the slope - research/questions/0060-field-drains-akusuiro.drawing.html: a fitted line falling 0.06-0.35 per unit along the contour toward its outfall
-        set below the ditch ends - UNRESEARCHED: 32-48 px below the deepest end, the outfall 40 px past the last
+        set below the ditch ends - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); 32-48 px below the deepest end, the outfall 40 px past the last
         wandering line - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: sampled every 120-170 ft with up to 6 ft of jitter, at the map's scale
         drain widens - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: DRAIN_FT, a thread at its head, full at the outfall
-        straight last leg - UNRESEARCHED: no jittered sample within `DRAIN_MIN_LEG` (84 px) of the outfall
-        collector above the frame - UNRESEARCHED: the fitted collector lifted to stand 40 px (unscaled) above the frame's bottom edge
+        straight last leg - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); no jittered sample within `DRAIN_MIN_LEG` (84 px) of the outfall
+        collector above the frame - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the fitted collector lifted to stand 40 px (unscaled) above the frame's bottom edge
     """
     bots = []
     for t in threads:

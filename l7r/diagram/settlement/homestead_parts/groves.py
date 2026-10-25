@@ -44,7 +44,7 @@ ALDER_GREENS = ("#5E7F6A", "#6B8A74")  # the alder crowns' tint (a map drawing c
 HOUSEHOLD_BAMBOO_PREVALENCE = 0.6
 """Research: farms with bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: three in five"""
 GROVE_CLUMP_CROWNS = 28  # how many crowns' ground one piece of a band holds where `band_clumps` cuts it (`farmsteads`)
-"""Research: crowns a band piece holds - UNRESEARCHED: a band cut along its length into pieces of 28 crowns' ground, so every band is drawn at the one density"""
+"""Research: crowns a band piece holds - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a band cut along its length into pieces of 28 crowns' ground, so every band is drawn at the one density"""
 GROVE_CROWN_SQFT = 107_639.0 / 600.0  # real sq ft of clump per crown: 600 trees a hectare, one to ~180 sq ft (0080)
 """Research: grove crown density - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per ~180 sq ft (600 a hectare), in real feet at every grain - it was 48 sq px at the town grain scaled by the building grain, ~71 sq ft a crown on a hamlet (feature 328)"""
 
@@ -427,7 +427,7 @@ class GrovesMixin:
         """Which flank completes a cardinal wind's windward pair (`grove_sides.windward_pair`): the map's own
         `meta.grove_flank`, else rolled from its seed and recorded.
 
-        Research: cardinal wind's second face - UNRESEARCHED: rolled per settlement
+        Research: cardinal wind's second face - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25) - 0036 gives the Sendai pair, north and west, and nothing on a cardinal wind's second face (feature 417 T33); rolled per settlement
         """
         meta = self.M["meta"]
         if meta.get("grove_flank") is None:
@@ -472,7 +472,7 @@ class GrovesMixin:
                 fruit broadleaf, no conifer
             crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: the
                 mean crown radius, 0.75 to 1.4 of it, a conifer as wide as a broadleaf
-            thin band end to end - UNRESEARCHED: a thin band's few trees spread along its length
+            thin band end to end - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); a thin band's few trees spread along its length
             crown over no roof or wellhead - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: no crown on a building, and none round a wellhead in a belt
             bamboo patch forced - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: a farm grove keeps its bamboo as a patch inside it, an item there drawn as bamboo in any mix
             crowns out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every mark held out of the sun ground, bamboo at BAMBOO_SHADE_FT

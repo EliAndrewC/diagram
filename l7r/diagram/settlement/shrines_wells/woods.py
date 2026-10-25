@@ -25,7 +25,7 @@ def trees_off_the_treads(trees: Sequence[tuple[float, float, float, str]], lanes
     predicate of "no tree is planted in a path") - asked only of the lanes whose box comes within a half-width of the
     stand's, so a wood no lane reaches asks nothing.
 
-    Research: no trunk on a lane's tread - UNRESEARCHED
+    Research: no trunk on a lane's tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the Tang Code punished whoever planted or tilled a lane, and 0071 keeps groves off the main road
     """
     from ..homestead_parts.stands import trunk_on_tread  # noqa: PLC0415 - kept beside its one use
 
@@ -62,13 +62,13 @@ class TreeStandsMixin:
         Research:
             spacing - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_SPACING_FT, jittered 42%
             crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_R_FT, 0.75 to 1.05 of it, emergents 1.05 to 1.4
-            emergent share - UNRESEARCHED: 18%
-            conifer share - UNRESEARCHED: 34%
+            emergent share - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25); 18%
+            conifer share - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25); 34%
             no crown on a roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a clump drawn on a roof hides the building
-            no crown on a wellhead - UNRESEARCHED
+            no crown on a wellhead - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25)
             no crown on a plot's sun ground - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: _sun_keepouts
-            no trunk on a lane - UNRESEARCHED
-            fringe crowns drawn outside the stand's outline - UNRESEARCHED: `_stand_fringe` outliers give the wood a soft edge; the 0080 drawing page is silent on a wood's fringe
+            no trunk on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the Tang Code punished whoever planted or tilled a lane, and 0071 keeps groves off the main road
+            fringe crowns drawn outside the stand's outline - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a worked wood's shrubs were cut and its edge kept as grass - a fringe of advance growth is drawn outside the stand, a departure the code keeps until feature 417 T34; `_stand_fringe` outliers give the wood a soft edge; the 0080 drawing page is silent on a wood's fringe
             no crown under another's canopy - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown is never seated under another's canopy
         """
         xs = [p[0] for p in poly]
@@ -140,7 +140,7 @@ class TreeStandsMixin:
 
         Research:
             no crown under another - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
-            dominants seat first - UNRESEARCHED: biggest crown first, a smaller one yields
+            dominants seat first - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); biggest crown first, a smaller one yields
         """
         kept: list[tuple[float, float, float, str]] = []
         for t in sorted(trees, key=lambda t: -t[2]):
@@ -157,11 +157,11 @@ class TreeStandsMixin:
         Each fringe tree becomes a block poly, so a later farmstead cannot land on it.
 
         Research:
-            a fringe of advance growth outside the wood - UNRESEARCHED
-            fringe band and thinning - UNRESEARCHED: 2.6 steps deep, thinning with distance
-            thickets, not a sprinkle - UNRESEARCHED: a mask about five crowns across
-            fringe crown size and conifer share - UNRESEARCHED: 0.55 to 0.95 of the radius, 30% conifer
-            fringe tree spacing - UNRESEARCHED: 1.15 x 1.7 steps, jittered 0.55 step
+            a fringe of advance growth outside the wood - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a worked wood's shrubs were cut and its edge kept as grass - a fringe of advance growth is drawn outside the stand, a departure the code keeps until feature 417 T34
+            fringe band and thinning - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); 2.6 steps deep, thinning with distance
+            thickets, not a sprinkle - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); a mask about five crowns across
+            fringe crown size and conifer share - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); 0.55 to 0.95 of the radius, 30% conifer
+            fringe tree spacing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); 1.15 x 1.7 steps, jittered 0.55 step
         """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
@@ -210,7 +210,7 @@ class TreeStandsMixin:
         blocking, a field or dry plot, open water, or a way. The wood's margin grows on waste
         ground, never in the crop or on the road.
 
-        Research: fringe on waste ground only - UNRESEARCHED: off blocks, crops, water and ways
+        Research: fringe on waste ground only - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.html: fields and channels were kept cut, uncut cleared land going to scrub; the masks are ours; off blocks, crops, water and ways
         """
         if any(point_in_poly(tx, ty, b) for b in self.block_polys):
             return True

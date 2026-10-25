@@ -1,0 +1,10 @@
+quote-check 0005 (3 rounds): r1 3 JOINED-WRONG fixed (iwamuro, yashio, both pages) and the unsupported gloss 'the survey's se was somewhat larger than today's' removed (both pages); r2 clean; r3 after source-reader's scope fix 9 READABLE/VERBATIM/SUPPORTS, clean
+quote-check 0054: 2 PARTIAL fixed by EDIT ('American' dropped; the thalweg definition quoted from the page, gloss clause dropped)
+quote-check 0059: 1 PARTIAL fixed (the 2008-2012 field survey confirmed survivors, not the slant), 1 unfootnoted claim given the -2 note's marker
+quote-check 0064: 5 SUPPORTS; 1 unfootnoted wheel-size sentence given the mizu-no-bunka-28-suisha-7 marker
+record-format 0005 (3 rounds): r1 1 consistency fix ('a village map's 0.05-acre basin'); r2, r3 clean. 0054 (2 rounds): r1 1 SESSION NOTE moved to a comment; r2 clean. 0059 and 0064 (2 rounds each): clean; 0064's 'in the present day' for 1959 kept (the period vocabulary)
+translation-check 0059: 4 FAITHFUL, 1 LOOSE fixed (など as 'such causes as'); 0064: 4 FAITHFUL
+source-applicability leopold-wolman-1957-channel-patterns: APPLICABLE-WITH-LIMITS, limits HONEST; murakami-2014-oblique-weirs: 1 limit MISSING (survivor sample) fixed by EDIT, 'per cent' made 'percent' by hand, re-check answered with REASON
+source-reader (owed by the join fixes): iwamuro-kenchicho 15 READ, 2 scope fixes applied (the range is of the transcribed entries, not the whole register); yashio-kenchi 7 READ
+outside the change (not fixed): 0005 Konosu method glossary term, 'grain'; tabayashi-1987 and mizu-no-bunka-28-suisha-6 JOINED-WRONG; yashio 'its area' by inference (label (4)面積 not quoted); iwamuro and yashio registry write-ups' unsupported rod and area-increase remarks; 0054 drawing note 'read as page images'; 0059 scour sluice, headwork, fish mouth, Great/Little Balance glossary gaps; 0064 husking mill
+STILL OWED: 64 modal units (modal-accuracy, -gaps, -references and -depiction on the 0005, 0054, 0059 and 0064 kinds; start with make modal-triage) - not in this brief's procedure; 0059 findings page over the size cap (20,065 bytes), needs a split

@@ -178,13 +178,13 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         header reservoir - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: outside the dike, uphill at the ring canal's head
-        reservoir size - UNRESEARCHED: a fixed 82 x 54 ft ellipse whatever the acreage; 0061 sizes a reservoir pond by the paddy it waters only for a field on high ground whose pond is its only water, and no page sizes a polder's source, the wild water its inlet sluice draws from (searched 0061, 0017, 0019, 0020)
+        reservoir size - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); an ellipse of semi-axes 82 by 54 px (164 by 108 px across), fixed in px whatever the acreage or the scale; 0061 sizes a reservoir pond by the paddy it waters only for a field on high ground whose pond is its only water, and no page sizes a polder's source, the wild water its inlet sluice draws from (searched 0061, 0017, 0019, 0020)
         dike-pond conversion - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a village drawn as dike-ponds throughout is rolled between every parcel a pond (leftover pond, 1.0) and about one parcel in ten left in standing rice (leftover rice, DIKEPOND_CONVERSION 0.9), the one in ten a calibrated liberty between none and Jiujiang's two tenths
         pond layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond block is drawn as a mosaic, its lattice bent by POND_LAYOUT_MOSAIC 0.5 (a calibrated liberty set on the Kuwabata map), and a rice polder keeps the surveyed grid (0.0); a dike-pond hamlet that rolls the chessboard of ponds (POND_LAYOUTS) is drawn at the grid end (0.0) too
         polder fabric - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: POLDER_FABRIC by archetype, a rice polder's 190 ft modules mostly split into two or three strips and a few merged along the fall, with a 3 ft walking bund and 8 ft ditch corridor (gap 1.5/4.0 a side), and a dike-pond's 160 ft modules mostly merged in pairs with about 22 ft gaps both ways (11/11)
         perimeter dike gapped at crossings - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: cut wherever a channel or recorded course crosses it
         dike uncaptioned - CONVENTION: the scripted tier draws the perimeter dike without a label
-        ditch corridors - UNRESEARCHED: every ditch segment not wholly in the crop a 30 px no-build corridor
+        ditch corridors - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every ditch segment not wholly in the crop a 30 px no-build corridor
     """
     # BOTH polder archetypes come through here (feature 150): the fabric table sets the module and
     # the parcel mix, the knob sets the arrangement, and the dike-pond's overlay is applied once the
@@ -346,7 +346,7 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
     Research:
         polder acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: the grid of modules solved to the households' acreage, refused outside POLDER_ACRE_BAND
         module kept, grid scaled - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: the cell size never stretched, the block grown by modules
-        block aspect - UNRESEARCHED: cols about 0.55 of rows, Enokida's 15 x 8
+        block aspect - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); cols about 0.55 of rows, Enokida's 15 x 8
     """
     # THE ORIGIN IS DERIVED, NOT PINNED. `build_polder` grows its grid from the HIGH corner along the
     # fall and across it, so a fixed corner only works for one fall bearing - at down_deg=0 the same
@@ -417,7 +417,7 @@ def _nearest_pair(tried: Mapping[tuple[int, int], Any], per_cell: float, miss: A
     """The untried (rows, cols) block of the archetype's aspect band (cols 0.45-0.65 of rows, Enokida's 15x8 at 0.53)
     whose acreage `per_cell` predicts nearest the target, the nearer to the 0.55 aspect on a tie.
 
-    Research: block aspect band - UNRESEARCHED: cols 0.45-0.65 of rows, nearest 0.55 on a tie
+    Research: block aspect band - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); cols 0.45-0.65 of rows, nearest 0.55 on a tie
     """
     return min(
         ((r, c) for r in range(6, 45) for c in range(max(4, round(r * 0.45)), max(4, round(r * 0.65)) + 1) if (r, c) not in tried),
@@ -554,7 +554,7 @@ def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 3
     step now reads the record alone (bins beyond the ring's own span still keep the extreme - the
     strip runs a little past the dike's ends, and there is no cut there).
 
-    Research: strip at the dike's outer face - UNRESEARCHED: the reeds stop at the outermost face, stepping in through a notch
+    Research: strip at the dike's outer face - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); the reeds stop at the outermost face, stepping in through a notch
     """
     horiz = flank in ("W", "E")
     ai, fi = (1, 0) if horiz else (0, 1)  # bin ALONG `ai`; the face is the extreme on `fi`
@@ -674,7 +674,7 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
 
     Research:
         no plank on the drain - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: none over the drain at the field's foot
-        crossings where the village lives - UNRESEARCHED: three on the collector the village abuts, one per lateral, none on the feeder or far toe
+        crossings where the village lives - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, a walked dike included - the far toe and the feeder are capped at none on the flank seats, a departure the code keeps until feature 417 T34; at a flank seat three on the collector the village abuts, one per lateral, none on the feeder or far toe; at the head the feeder 3 and the toes 1, at the foot the toes 2 each
     """
     f = polder_flanks(plan)
     if f["cluster"] == f["plus"]:

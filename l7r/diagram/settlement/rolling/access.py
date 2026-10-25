@@ -189,7 +189,7 @@ def doors_of(geom: Any, half: float = 0.0) -> list[Pt]:
 #: The turns off the seat's outward bearing an exit strip is tried at, in degrees, nearest first, where the strip straight
 #: out is refused by the ground: a quarter turn either way at most, so the way out still leaves the cluster away from its field.
 EXIT_TURNS_DEG = (0.0, 15.0, -15.0, 30.0, -30.0, 45.0, -45.0, 60.0, -60.0, 75.0, -75.0, 90.0, -90.0)
-"""Research: bearing out turns - UNRESEARCHED: at most a quarter turn off the seat's outward bearing, in 15 degree steps"""
+"""Research: bearing out turns - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); at most a quarter turn off the seat's outward bearing, in 15 degree steps"""
 
 
 def exit_bearing(s: Settlement, center: Pt, out: Pt, length: float) -> Pt | None:
@@ -248,7 +248,7 @@ def house_gap(s: Settlement) -> float:
 
     Research:
         a corridor off its own house - research/questions/0081-village-lanes.drawing.html: the line a 3 ft footpath's half-tread (`TREAD_HALF_FT`) and the 3 ft a tread keeps off a farmhouse wall (`TREAD_WALL_FT`) off the wall, 5 ft in all with the margin
-        the corridor's margin - UNRESEARCHED: `PART_MARGIN_FT`, half a foot more"""
+        the corridor's margin - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); `PART_MARGIN_FT`, half a foot more"""
     return s.px(TREAD_HALF_FT + TREAD_WALL_FT + PART_MARGIN_FT)
 
 
@@ -347,7 +347,7 @@ def _standing_clear(s: Settlement, a: Pt, b: Pt) -> bool:
     """Research:
     no path corridor within its half-width of any placed footprint - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a path, so the corridor clears every placed footprint by its half-width
     corridor geometry, memo and search plumbing - NONE: the site raster, the reach index and the exact gap
-    path refused over a household's reserved grove seats - UNRESEARCHED: `wood.corridor_bars` refuses a corridor across them"""
+    path refused over a household's reserved grove seats - research/questions/0081-village-lanes.drawing.html: a path goes round a grove, never across one (0036, 0072); `wood.corridor_bars` refuses a corridor across them"""
     half = s._access.half
     # THE SITE'S RASTER FIRST: the site ground is what refuses most corridors (seed 44: 82,801 of the 106,061 refused), and
     # a sample in a surely taken cell refuses one with a lookup (`site_edge_samples`)
@@ -435,7 +435,7 @@ def round_the_gable(geom: Any, door: Pt, half: float) -> Pt:
     gable, parallel to the house's front-to-yard axis, past the back wall by a corridor's half-width and a foot - so the
     leg beside the house clears it and the turn stands behind its corner, not behind its wall.
 
-    Research: flank path round the gable - UNRESEARCHED: carried along the gable past the back wall by a corridor's half-width and a foot
+    Research: flank path round the gable - research/questions/0081-village-lanes.drawing.html: a lane's tread keeps 3 ft off a farmhouse wall - the tread's edge is carried 1 ft past the back wall, a departure the code keeps until feature 417 T33; carried along the gable past the back wall by a corridor's half-width and a foot
     """
     boxes = geom.get("boxes") or {}
     yard = boxes.get("yard") or geom.get("yard")
@@ -565,7 +565,7 @@ def past_the_yard(run: Any, yard: Any, half: float) -> list[Pt] | None:
     under feature 284's probes). The corridor leaves its yard once (`leaves_its_yard`), so the run past it is the reserved
     ground. None where the run never comes that near the yard or ends on it.
 
-    Research: path not drawn on its own yard - UNRESEARCHED: the drawn path starts where it leaves the threshing yard
+    Research: path not drawn on its own yard - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); the drawn path starts where it leaves the threshing yard
     """
     from shapely.geometry import LineString, Point, Polygon
 
@@ -624,7 +624,7 @@ def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tu
 
     Research:
         a corridor's order - research/questions/0081-village-lanes.drawing.html: as few turns as the plots allow - each door's straight leg before a flank door's round the gable
-        path leaves its own yard - UNRESEARCHED: the tread kept 0.5 ft clear of the yard it leaves (`leaves_its_yard`)
+        path leaves its own yard - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); the tread kept 0.5 ft clear of the yard it leaves (`leaves_its_yard`)
     """
     doors = doors_of(geom, tree.half)
     turns = {door: round_the_gable(geom, door, tree.half) for door in doors[2:]}
@@ -674,7 +674,7 @@ def leaves_its_yard(corridor: tuple[Pt, ...], yard: Any, gap: float, step: float
     (`corridors.door_ends`); a corridor from a flank door back across the yard (cohort seed 48) was a way the matrix refuses
     anywhere along the yard, so the house was left with none.
 
-    Research: path leaves its yard once - UNRESEARCHED: a corridor that re-enters its own threshing yard is refused
+    Research: path leaves its yard once - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); a corridor that re-enters its own threshing yard is refused
     """
     if yard is None:
         return True

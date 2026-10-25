@@ -167,16 +167,16 @@ STAGES = (
 Research:
     water, then field, then sink - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: the field shaped by its water, the drain along its field's low line
     homesteads before lanes - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every lane drawn after the farmhouses
-    track before the wells - UNRESEARCHED: a well dug where the track already runs
+    track before the wells - research/questions/0196-communal-wells-ido.drawing.html: the lanes are drawn after the farmsteads, so a lane-side well is seated once the lanes stand; a well dug where the track already runs
     lane-side wells after the web - research/questions/0196-communal-wells-ido.drawing.html: a clustered hamlet's lane-side well seated on a lane's verge once the lanes stand (`stage_lane_wells`)
     web after everything that reserves ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the web drawn last, round what stood first; each household's own way is laid and reserved at the end of the homesteads stage, once the last house stands, so the later stages keep off it
     pig sties after the crossings - CANON: the GM's ruling of 2026-10-12, the order an implementation detail where the placement keeps to the research; each sty is seated where no way runs, as research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html has a household's way go round its fixtures, and in the bundle it moved the seating and the web refused maps (m:w151-sty-room)
-    the ground's cover after every built thing - UNRESEARCHED: the hinterland, the woodland, the windbreak and the bamboo fill the ground the built things left, the bamboo over the scrub that kept out of its stands
-    pond-bank trees after the wells - UNRESEARCHED: seated against the houses, ways and wells already standing, before the hinterland's scrub and copse fill round them (`stage_pond_bank`)
+    the ground's cover after every built thing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); the hinterland, the woodland, the windbreak and the bamboo fill the ground the built things left, the bamboo over the scrub that kept out of its stands
+    pond-bank trees after the wells - research/questions/0061-reservoir-ponds-tameike.drawing.html: a bank tree is left out where its crown would fall on a roof or a wellhead, or its trunk on a lane, so the trees are seated against what stands; coming before the hinterland's scrub and copse is ours; seated against the houses, ways and wells already standing, before the hinterland's scrub and copse fill round them (`stage_pond_bank`)
     washing places after the crossings - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: where a lane, a bridge or a building takes a footing's spot it is moved along the bank, so they stand first
     notice board last - research/questions/0190-notice-boards-kosatsuba.drawing.html: placed once everything else stands
     notice board after the frame - research/questions/0190-notice-boards-kosatsuba.drawing.html: placed after the map is cropped to its frame (the GM's ruling of 2026-08-29)
-    waterward fringe before the houses - UNRESEARCHED: a polder's reed fringe outside the dike laid before the houses and the track, which treat it as wet ground
+    waterward fringe before the houses - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a polder's reed fringe outside the dike laid before the houses and the track, which treat it as wet ground
     labels last - CONVENTION
 """
 

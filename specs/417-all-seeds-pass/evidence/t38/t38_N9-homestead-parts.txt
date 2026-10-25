@@ -1,0 +1,126 @@
+### l7r/diagram/settlement/homestead_parts/belt_law.py::__init__
+  line 140 [1e+09, 2e+09]: x0, y0, w, h = (float(c) for c in (view or (-1e9, -1e9, 2e9, 2e9)))  # no view recorded: no frame
+### l7r/diagram/settlement/homestead_parts/belt_law.py::reading_of
+  line 338 [14]: g.get("clumps") or [], g.get("clumps_offpage") or [], float(g.get("r", 14.0)), m["houses"], wind_unit(meta["windward"]), ways, meta.get("view"), meta.get("belt_reach"), g
+### l7r/diagram/settlement/homestead_parts/belt_law.py::_offers
+  line 354 [8]: def _offers(rd: BeltReading, v_lo: float, v_hi: float, band_uv: Sequence[Pt], step: float = 8.0) -> list[Pt]:
+  line 365 [0.25, 0.75]: vs = [v_lo + (v_hi - v_lo) * f for f in (0.5, 0.25, 0.75)]
+### l7r/diagram/settlement/homestead_parts/belt_law.py::_close
+  line 399 [6]: for u, v in _offers(rd, x + 6.0, y - 6.0, band_uv):
+### l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft
+  line 205 [104.3]: return (float(round(lo + (hi - lo) * roll(104.3))), BATH_DEPTH_FT)
+### l7r/diagram/settlement/homestead_parts/fixture_seats.py::against_a_wall
+  line 256 [1.5]: def against_a_wall(seat: Sequence[float], rects: Sequence[Rect], g: float, tol: float = 1.5) -> bool:
+### l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures
+  line 415 [0.25]: wall = bath_wall(roll(SALT[kind] + 0.25), forms)
+### l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_seats
+  line 549 [0.25]: "stable_end": [(-side, 0.0, d, w), (-side, -hh * 0.25, d, w), (-side, hh * 0.25, d, w)],
+  line 550 [0.25]: "floored_rooms": [(side, 0.0, d, w), (side, -hh * 0.25, d, w), (side, hh * 0.25, d, w)],
+### l7r/diagram/settlement/homestead_parts/fixture_seats.py::_sun_sector
+  line 648 [64]: @lru_cache(maxsize=64)
+  line 658 [1125, 2026, 75]: for b in range(1125, 2026, 75):  # 112.5 to 202.5 degrees, tenths
+### l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats
+  line 696 [0.4]: "front": (hw * 0.40, hh / 2 + g + px(PRIVY_FRONT_STEP_FT) + d / 2, w, d),
+  line 722 [102.4, 9]: pout = abs(ux) * privy[2] / 2 + abs(uy) * privy[3] / 2 + g + abs(ux) * w / 2 + abs(uy) * d / 2 + px(9.0) * (roll(102.4) - 0.5)
+  line 737 [105.9]: cjx = hw * 0.34 * (roll(105.9) - 0.5) * 2.0
+  line 739 [105.5]: k = int(roll(105.5) * len(seats)) % len(seats)
+### l7r/diagram/settlement/homestead_parts/fixture_seats.py::_persimmon
+  line 800 [0.75]: front = [(sx * reach * 0.75, reach * 0.75) for sx in (1.0, -1.0)] + [(0.0, reach)]
+  line 801 [0.75]: back = [(sx * reach * 0.75, -reach * 0.75) for sx in (1.0, -1.0)] + [(0.0, -reach)]
+### l7r/diagram/settlement/homestead_parts/gardens.py::_draw_garden
+  line 35 [8]: px = x0 + 4 + (w - 8) * (k + 0.5) / 3
+### l7r/diagram/settlement/homestead_parts/gardens.py::_attach_garden
+  line 60 [5, 71]: flat = self._quad(bx, by, bw, bh, jit, 71.0 + i * 5.0)
+### l7r/diagram/settlement/homestead_parts/grove_blocks.py::regions
+  line 145 [40]: window = (min(xs) - reach - 40.0, min(ys) - reach - 40.0, max(xs) + reach + 40.0, max(ys) + reach + 40.0)
+### l7r/diagram/settlement/homestead_parts/grove_blocks.py::__init__
+  line 215 [16]: self.grid = PointGrid(cell=max(16.0, 2.0 * reach))
+### l7r/diagram/settlement/homestead_parts/grove_fill.py::grove_blocks
+  line 91 [14, 19]: occ += [(t[0], t[1] + 4, math.hypot(19, 14) + clump * 0.90) for t in s.M.get("torii", [])]
+  line 135 [0.45]: corr = s._corridor_buffers(max(clump * 0.45 + 4, crown_reach(clump, s.px(RANK_JITTER_FT) if role == "windbreak" else 0.0, lift=crown_lift(bs))))
+  line 166 [9]: water_lines = [(st_["poly"], st_.get("w", 9) / 2) for st_ in s.M.get("streams", [])]
+  line 167 [2.5]: water_lines += [(c_["poly"], c_.get("w", 2.5) / 2) for c_ in s.M.get("channels", [])]
+  line 169 [22]: water_lines.append((s.M["moat"], s.M.get("moat_width", 22) / 2))
+### l7r/diagram/settlement/homestead_parts/grove_fill.py::reseat_clump
+  line 332 [0.6, 1.4, 1.8]: for _nr in (step * 0.6, step * 1.0, step * 1.4, step * 1.8, step * 2.2):
+  line 333 [45]: for _na in range(0, 360, 45):
+  line 337 [0.9]: if within is not None and (ax + clump * 0.9 < within[0] or ax - clump * 0.9 > within[2] or ay + clump * 0.9 < within[1] or ay - clump * 0.9 > within[3]):
+### l7r/diagram/settlement/homestead_parts/grove_fill.py::close_belt_gaps
+  line 380 [6]: for _ in range(6):  # a 94 ft gap needs three rounds; six is headroom, and it stops when nothing lands
+  line 426 [0.22, 0.34, 0.66, 0.78]: for _f in (0.5, 0.34, 0.66, 0.22, 0.78):
+  line 429 [33]: for _k in range(33):
+  line 430 [32]: _d = _d0 + (_d1 - _d0) * _k / 32
+  line 435 [0.9]: if within is not None and (_qx + clump * 0.9 < within[0] or _qx - clump * 0.9 > within[2] or _qy + clump * 0.9 < within[1] or _qy - clump * 0.9 > within[3]):
+### l7r/diagram/settlement/homestead_parts/groves.py::over_a_conifer
+  line 269 [0.2]: def over_a_conifer(x: float, y: float, r: float, conifers: Sequence[tuple[float, float, float]], slack: float = 0.2) -> bool:
+### l7r/diagram/settlement/homestead_parts/groves.py::bamboo_mark
+  line 297 [5]: h = (5.0 + 3.0 * tall) * bs
+  line 298 [1.6]: ln = (lean - 0.5) * 1.6 * bs
+  line 299 [1.2]: tx, ty = x - 1.2 * bs + ln, y - h
+  line 301 [0.6, 0.8, 0.9, 1.2]: f'<path d="M{x - 1.2 * bs:.1f},{y:.1f} l{ln:.1f},{-h:.1f} M{x + 1.2 * bs:.1f},{y:.1f} l{-ln * 0.6:.1f},{-h * 0.8:.1f}" stroke="{BAMBOO_CULM}" stroke-width="{0.9 * bs:.2f}
+  line 302 [0.4, 0.8, 1.2, 1.6, 2.2, 2.4, 2.6]: f'<path d="M{tx:.1f},{ty:.1f} l{-2.2 * bs:.1f},{-1.6 * bs:.1f} M{tx:.1f},{ty:.1f} l{2.4 * bs:.1f},{-1.2 * bs:.1f} M{tx:.1f},{ty:.1f} l{0.4 * bs:.1f},{-2.6 * bs:.1f}" stro
+### l7r/diagram/settlement/homestead_parts/groves.py::_belt_ranks
+  line 380 [64]: rects, circs = PointGrid(64.0), PointGrid(64.0)
+  line 397 [95]: x = rx + (self._hjit(rx, ry, 95.0) - 0.5) * 2 * jit
+  line 398 [96]: y = ry + (self._hjit(rx, ry, 96.0) - 0.5) * 2 * jit
+  line 399 [97]: rr = base * (lo + (hi - lo) * self._hjit(rx, ry, 97.0))
+### l7r/diagram/settlement/homestead_parts/groves.py::_draw_grove
+  line 494 [5]: random.seed(int(abs(cx) * 5 + abs(cy) * 3 + round(w)))
+  line 537 [0.6]: t = 0.5 if n == 1 else (k if k in (0, n - 1) else k + 0.6 * jig) / (n - 1)  # ends pinned, the rest near their steps
+  line 565 [9]: _cpad = max(9.0 * bs, self.px(self.CANOPY_R_FT) * CROWN_S[1] + 1.0)
+  line 634 [0.2]: if any(math.hypot(cx + px - tx, cy + py - lift - ty) < tr + rr + 0.2 for tx, ty, tr in _trees):
+  line 706 [93, 94]: culms.append(bamboo_mark(px, py, bs, self._hjit(bx, by, 93.0), self._hjit(bx, by, 94.0)))
+### l7r/diagram/settlement/homestead_parts/keepouts.py::_corridor_buffers
+  line 42 [6]: corr = [([tuple(p) for p in ln["pts"]], ln.get("w", 6) / 2 + extra) for ln in self.M.get("lanes", [])]
+  line 48 [20]: corr.append(([tuple(p) for p in self.M["ring_road"]], self.M.get("ring_road_width", 20) / 2 + extra))
+  line 50 [30]: corr.append(([tuple(p) for p in self.M["road"]], self.M.get("road_width", 30) / 2 + extra))
+### l7r/diagram/settlement/homestead_parts/keepouts.py::_watercourse_segs
+  line 66 [6]: out: list[tuple[Any, float]] = [(wc["poly"], wc.get("w", 6) / 2 + pad) for wc in self.M.get("streams", [])]
+  line 67 [6]: out += [(wc["poly"], wc.get("w", 6) / 2 + pad + channel_margin) for wc in self.M.get("channels", [])]
+  line 72 [0.2]: if abs(w1 - w0) < 0.2:  # drawn as ONE stroke at w0 (field_channel's uniform branch)
+### l7r/diagram/settlement/homestead_parts/keepouts.py::_urban_keepouts
+  line 414 [40]: circles = [(o["x"], o["y"], o.get("vr", o["r"]) + wh) for o in self.M.get("wells", []) if bx0 - 40 <= o["x"] <= bx1 + 40 and by0 - 40 <= o["y"] <= by1 + 40]
+### l7r/diagram/settlement/homestead_parts/stands.py::trunk_on_tread
+  line 53 [6]: seg_dist(x, y, (float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) < float(ln.get("w", 6)) / 2.0
+### l7r/diagram/settlement/homestead_parts/stands.py::reserved_seat_keepouts
+  line 143 [0.9]: r = round(clump / 2, 1) + COPSE_CLUMP_BS * bs * 0.90 + BAR_MARGIN_PX
+### l7r/diagram/settlement/homestead_parts/stands.py::bamboo_stand
+  line 174 [0.6, 91, 92]: jx, jy = x + (self._hjit(x, y, 91.0) - 0.5) * step * 0.6, y + (self._hjit(x, y, 92.0) - 0.5) * step * 0.6
+  line 177 [0.86]: y += step * 0.86
+### l7r/diagram/settlement/homestead_parts/stands.py::village_grove
+  line 348 [21]: jx = gx + (self._hjit(gx, gy, 21.0) - 0.5) * step  # jitter the grid so the stand + its edge read ragged
+  line 407 [0.25, 0.75]: for _ox, _oy in ((0.5, 0.0), (0.0, 0.5), (0.5, 0.5), (0.25, 0.25), (0.75, 0.25), (0.25, 0.75), (0.75, 0.75)) if area is not None else ():
+  line 414 [23]: jx = gx + (self._hjit(gx, gy, 23.0) - 0.5) * step
+  line 415 [24]: jy = gy + (self._hjit(gx, gy, 24.0) - 0.5) * step
+  line 486 [0.7071]: seated = settle_the_belt(seated, r=round(clump / 2, 1), houses=_houses, wind=wind or (-0.7071, -0.7071), ways=_ways, page=page, band=poly, seat=_settle_seat, reach=reach,
+### l7r/diagram/settlement/homestead_parts/stocking.py::grove_stocked
+  line 15 [100000]: return w * h <= 0 or len(clumps) * 1e5 / (w * h) >= floor
+### l7r/diagram/settlement/homestead_parts/stocking.py::crown_cover
+  line 103 [12]: discs = [Point(x, y).buffer(r, 12) for x, y, r in seats if r > 0]
+### l7r/diagram/settlement/homestead_parts/wood_share.py::ground_blocks
+  line 164 [9]: water = [(st["poly"], st.get("w", 9) / 2 + cr + m) for st in s.M.get("streams", [])]
+  line 165 [2.5]: water += [(ch["poly"], ch.get("w", 2.5) / 2 + cr + m) for ch in s.M.get("channels", [])]
+  line 167 [22]: water.append((s.M["moat"], s.M.get("moat_width", 22) / 2 + cr + m))
+### l7r/diagram/settlement/homestead_parts/wood_share.py::open_water_discs
+  line 197 [0.9]: reach = clump * 0.90 + BAR_MARGIN_PX
+  line 199 [14, 19]: out += [(float(t[0]), float(t[1]) + 4.0, math.hypot(19.0, 14.0) + reach) for t in M.get("torii") or []]
+### l7r/diagram/settlement/homestead_parts/wood_share.py::__init__
+  line 272 [0.45]: self.lane_gap = corridor_half + max(self.clump * 0.45 + 4, crown_reach(self.clump, lift=crown_lift(s.bscale))) + BAR_MARGIN_PX
+  line 276 [64]: self.bars = PointGrid(64.0)  # the keep-outs of every admitted homestead: ("c", cx, cy, r) and ("r", x0, y0, x1, y1)
+  line 277 [64]: self.seats = PointGrid(64.0)  # every reserved seat
+  line 435 [64]: self.grid = PointGrid(64.0)
+### l7r/diagram/settlement/homestead_parts/wood_share.py::seat_barred
+  line 308 [6]: if not (6.0 <= x <= self.W - 6.0 and 6.0 <= y <= self.H - 6.0):
+### l7r/diagram/settlement/homestead_parts/yards.py::_mat_hash
+  line 51 [12.9898, 37.719, 43758.5, 78.233]: v = math.sin(r * 12.9898 + c * 78.233 + salt * 37.719) * 43758.5453
+### l7r/diagram/settlement/homestead_parts/yards.py::floor_grid
+  line 218 [0.02]: margin = max(1e-6, clear * 0.02)  # past the chord error of a buffer's arcs at a reflex corner (under 0.5% of `clear`)
+### l7r/diagram/settlement/homestead_parts/yards.py::_draw_threshing_yard
+  line 500 [53]: rack = rack_segment(w, h, rot, self.ftpx, 1 if self._hjit(cx, cy, 53.0) < 0.5 else -1) if self._house_racks else None
+  line 501 [0.25]: pad = 0.25 / self.ftpx  # the mats keep a quarter foot off the rack - a wider margin cost the smallest yards a column
+  line 503 [61, 997]: mats = mat_cells(w, h, local, self.ftpx, keep, salt=round(self._hjit(cx, cy, 61.0) * 997.0, 3))  # the yard's own draw
+  line 514 [0.55]: g.append(f'<circle cx="{x:.2f}" cy="{y0 + (y1 - y0) * i / n:.2f}" r="{hw * 0.55:.2f}" fill="#5A3F1E"/>')
+### l7r/diagram/settlement/homestead_parts/yards.py::_yard_area_ft2
+  line 588 [23, 29, 31, 37, 43, 47]: z = (sum(self._hjit(hx, hy, k) for k in (23.0, 29.0, 31.0, 37.0, 43.0, 47.0)) - 3.0) / _m.sqrt(0.5)
+### l7r/diagram/settlement/homestead_parts/yards.py::_attach_yard
+  line 641 [0.1, 41]: flat = self._quad(ox, oy, yw, yh, 0.10, 41.0, level=_facing)

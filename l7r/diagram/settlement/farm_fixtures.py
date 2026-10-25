@@ -298,7 +298,7 @@ class PondStockMixin:
 
         Research:
             sty on the bank - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: the dike is field ground the sty may stand on
-            sty clearance - UNRESEARCHED: its half-diagonal plus 2 ft from every placed structure and crossing
+            sty clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); its half-diagonal plus 2 ft from every placed structure; the crossings it means to clear are read from `footbridges`, a key nothing writes (planks are recorded in `bridges`), so no footbridge is seen - a bug filed in feature 417 T33
         """
         w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
         half = math.hypot(w, h) / 2 + self.px(2.0)

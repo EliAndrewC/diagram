@@ -1,0 +1,42 @@
+### l7r/diagram/settlement/shrines_wells/byres.py::courtyard_annex_span
+  line 62 [0.55]: return max(hw, hh) / 2 + bh * 0.55 + COURTYARD_REACH
+### l7r/diagram/settlement/shrines_wells/byres.py::paddy_index
+  line 143 [128]: grid = PointGrid(128.0)
+### l7r/diagram/settlement/shrines_wells/byres.py::_yard_shed_seat
+  line 310 [0.3]: seats += [(fx * hw, -(hh / 2 + gap + bh / 2), 0.0) for fx in (0.0, -0.3, 0.3)]
+  line 311 [0.25]: seats += [(sx * (hw / 2 + gap + bh / 2), fy * hh, 90.0) for fy in (0.0, -0.25) for sx in (-1.0, 1.0)]
+  line 312 [131, 5]: k = int(self._hjit(hx, hy, 131.0) * 5) % 5  # the first ring's five seats, turned
+### l7r/diagram/settlement/shrines_wells/byres.py::_byre_clear_of_all_but
+  line 372 [0.05]: if _key == "houses" and abs(float(_o["x"]) - hx) < 0.05 and abs(float(_o["y"]) - hy) < 0.05:
+### l7r/diagram/settlement/shrines_wells/byres.py::_draw_byre
+  line 395 [0.02, 0.4]: g.append(f'<rect x="{-w / 2 + 2:.1f}" y="{h * 0.02:.1f}" width="{w - 4:.1f}" height="{h * 0.4:.1f}" rx="1" fill="#4E4030"/>')  # the shaded open stall mouth
+  line 396 [0.3, 0.7]: for _pf in (0.30, 0.70):  # the two posts carrying the open front
+  line 398 [0.02, 0.42]: g.append(f'<line x1="{_pxq:.1f}" y1="{h * 0.02:.1f}" x2="{_pxq:.1f}" y2="{h * 0.42:.1f}" stroke="#8A7350" stroke-width="0.9"/>')
+  line 399 [0.08]: g.append(f'<line x1="{-w / 2 + 2:.1f}" y1="{-h * 0.08:.1f}" x2="{w / 2 - 2:.1f}" y2="{-h * 0.08:.1f}" stroke="#59431F" stroke-width="0.8" opacity="0.6"/>')  # roof ridge
+### l7r/diagram/settlement/shrines_wells/byres.py::draft_byres
+  line 563 [0.75]: _near = [q for q in _pool if min(math.hypot(q["x"] - bx, q["y"] - by) for bx, by in out) >= _best * 0.75]
+  line 564 [0.25]: for _tier in (0.5, 0.25, 0.0):
+  line 589 [30]: for a in range(0, 360, 30):
+### l7r/diagram/settlement/shrines_wells/shrines.py::shrine
+  line 29 [8]: self.add(f'<rect x="{x - w / 2:.0f}" y="{y + h / 2 - 8:.0f}" width="{w}" height="8" fill="#A03020"/>')
+### l7r/diagram/settlement/shrines_wells/torii.py::torii_even
+  line 107 [0.06, 0.8]: tx, ty = along(0.06 + 0.80 * i / max(count - 1, 1))  # one arch stands at the foot; `count - 1` divided by zero (found by the feature-316 audit)
+### l7r/diagram/settlement/shrines_wells/wells.py::well
+  line 92 [0.47]: self.add(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{vcurb * 0.47:.1f}" fill="#2E4C58"/>', cls="well")  # dark water in the shaft
+### l7r/diagram/settlement/shrines_wells/wells.py::well_at
+  line 106 [8]: def well_at(self: Settlement, x: float, y: float, r: float = 8, shrine: bool = False) -> bool:  # type: ignore[misc]
+### l7r/diagram/settlement/shrines_wells/wells.py::place_wells
+  line 162 [8]: def place_wells(self: Settlement, bbox: Any, spacing: float, r: float = 8, near: Any = None, coverage: bool = True, kind: str | None = None) -> list[Pt]:  # type: ignore[
+### l7r/diagram/settlement/shrines_wells/woods.py::trees_off_the_treads
+  line 39 [6]: h = float(ln.get("w", 6)) / 2.0
+### l7r/diagram/settlement/shrines_wells/woods.py::_draw_stand
+  line 85 [0.42]: tx = xx + random.uniform(-step * 0.42, step * 0.42)
+  line 86 [0.42]: ty = yy + random.uniform(-step * 0.42, step * 0.42)
+  line 87 [0.18]: big = random.random() < 0.18
+  line 88 [0.34]: kind = "conifer" if random.random() < 0.34 else "broadleaf"
+### l7r/diagram/settlement/shrines_wells/woods.py::_crowns_near
+  line 130 [1.4]: pad = 2.0 * self.px(self.CANOPY_R_FT) * 1.4  # the largest crown either side of the box's edge (a 12 ft emergent just outside it was missed at the clump's own 9 px reach:
+### l7r/diagram/settlement/shrines_wells/woods.py::_stand_fringe
+  line 177 [0.3]: kind = "conifer" if random.random() < 0.3 else "broadleaf"
+  line 183 [0.12, 0.42, 31, 5]: thicket = 1.0 if self._hjit(round(tx / (step * 5)), round(ty / (step * 5)), 31.0) > 0.42 else 0.12
+  line 184 [1.4]: if gap > band or keep > thicket * (1 - gap / band) ** 1.4:  # thins out with distance from the wood

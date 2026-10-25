@@ -65,7 +65,7 @@ class SeedFormsMixin:
         form is typing-gated to Lion lands / a declared canal.) `try_place` then keeps each seed field-adjacent
         and off blockers, so the row packs cleanly along the waterfront.
 
-        Research: water town fronting a canal - UNRESEARCHED: houses on alternate banks at a fixed offset, evenly spaced along the canal
+        Research: water town fronting a canal - research/questions/0065-washing-places-at-the-waters-edge.html: houses lined the water continuously, the street before and the river behind, and 0035 has both banks built - houses are seated on alternating banks at an even spacing, a departure the code keeps until feature 417 T33; houses on alternate banks at a fixed offset, evenly spaced along the canal
         """
         if record:
             self.M["meta"]["settlement_form"] = form

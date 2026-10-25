@@ -65,12 +65,12 @@ def _mat_corners(x: float, y: float, mw: float, mh: float, a: float) -> list[tup
 RACK_WIDTH_FT = 2.5
 """Research: rack drawn wide - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: 2.5 ft, thicker than its poles"""
 RACK_INSET_FT = 2.0  # from the yard's front (house-facing) edge
-"""Research: rack off the house-facing edge - UNRESEARCHED: 2 ft"""
+"""Research: rack off the house-facing edge - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); 2 ft"""
 # ...but only 1 ft from its SIDE, so the rack stands in the slack the centered mat rows leave at the yard's flanks and does
 # not take a column of mats: at 2 ft it cost the smallest yards a third of their floor (Sawada's 20 x 14 ft yard drew 4 mats
 # of a floor of 6, the gate, 2026-09-28).
 RACK_SIDE_INSET_FT = 1.0
-"""Research: rack off the yard's side - UNRESEARCHED: 1 ft"""
+"""Research: rack off the yard's side - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); 1 ft"""
 RACK_MIN_FT = 4.0  # shorter than this and it is not drawn: a side clipped by the map-south rule to a stub reads as litter
 """Research: shortest rack drawn - CONVENTION: 4 ft"""
 RACK_CLEAR_FT = 0.25  # the rack stops this far north of the yard's midline (the manifest rounds to 0.1 px)
@@ -601,7 +601,7 @@ class ThreshingYardsMixin:
         one without the other makes the placer clear a different rect than the map draws.
 
         Research:
-            yard aspect - UNRESEARCHED: 1.45 wide to deep
+            yard aspect - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); 1.45 wide to deep
         """
         import math as _m
 

@@ -1,5 +1,5 @@
 About: A storehouse (kura) was a farm's fireproof store, built to keep a household's goods safe from fire and theft;
-one on Sado island held grain. Nobody lived in it, and it came to be a sign of wealth.
+one on Sado island held grain, and until 1789 a headman's storehouse often held the village's tax rice. It came to be a sign of wealth.
 
 It was a small, solid block, commonly two stories high. Its walls were earth, laid coat after coat on a lattice of bamboo
 and palm rope to 8 to 12 in (20 to 30 cm) thick and finished in lime plaster. It was roofed in tile - one headman-class farm's
@@ -10,7 +10,7 @@ seem to have stood free of it.
 The commonest size, in one district west of Edo, was about 15 by 18 ft; a village east of Edo had two of about 12 by 18
 ft. A farm built one only once money had accumulated, so most farms had none. In that village of sixteen households, at
 the end of the Edo period, two had a storehouse, both, it seems, among its leading families and with the second and third
-largest houses, though the largest house had none. West of Edo, farms are said to have owned storehouses only from the last
+largest houses, though the largest house had none. In that district west of Edo, farms seem to have owned storehouses only from the last
 years of the shogunate.
 
 Guesses:
@@ -27,5 +27,5 @@ real storehouses were.
 Name: storage shed
 Covers: `houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)
 Sources: sekkei-sya-sayama-kura, kotobank-dozo, bunka-sado-tsuchiya-dozo, dozo-jawiki, boso-no-mura-kazusa, oamishirasato-choshi-kaoku, minami-alps-nishikawa-dozo, tsuchiya-makabe-dozo
-Entry: research/questions/0040-farm-storehouses-kura.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0117-doorways-and-doors-to.html
-Drawing: research/questions/0040-farm-storehouses-kura.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html
+Entry: research/questions/0040-farm-storehouses-kura.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html, research/questions/0117-doorways-and-doors-to.html
+Drawing: research/questions/0040-farm-storehouses-kura.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html

@@ -513,7 +513,7 @@ _MATRIX_PERMISSIVE = {
 
 Research:
     no well on common ground - research/questions/0196-communal-wells-ido.drawing.html: no well drawn out on open common ground as the normal case, though _OVERLAP_LINEAR keeps structures off commons, pastures and marshes
-    house or field on cover - UNRESEARCHED: built on, the cover stopping there
+    house or field on cover - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); built on, the cover stopping there
     deferred classes - NONE: vegetation, the ring road, records and paddy are decided by their own rules
 """
 
@@ -661,7 +661,7 @@ _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
 Research:
     pier from the quay - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html: springs from the faced bank
     ways and water through the rampart - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html, research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: at a gate or a water gate
-    moat against the rampart - UNRESEARCHED: wall x moat permitted, the moat lying against the rampart's foot
+    moat against the rampart - research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.html: the moat stood about thirty paces out (Wujing Zongyao), 7 to 10 m at Qufu - the moat is allowed against the rampart's foot, a departure the code keeps until feature 417 T35; wall x moat permitted, the moat lying against the rampart's foot
     castle towers on the rampart - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: a corner tower stands on the works
     arch over its approach - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: spans the sando
     one object under two keys - NONE: a hall as religious and shrines, a gate tower twice
@@ -669,7 +669,7 @@ Research:
     castle moat bridge - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: a deck over the castle's own moat to its gate
     castle bridge at its gate tower - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: the moat deck lands at the gate it leads to
     merchant estate court - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a walled court round its house
-    flower bed against the town wall - UNRESEARCHED: a bed laid flush inside the rampart
+    flower bed against the town wall - research/questions/0149-the-street-along-the-inside-of-a-city-wall-shunchengjie.html: walled Chinese cities ran a street along the inside of the rampart, a patrol road by the Ming at Tongzhou - a bed is allowed flush against the rampart, a departure the code keeps until feature 417 T35; a bed laid flush inside the rampart
 """
 
 # A record naming its PARENT may overlap that parent and nothing else - strictly stronger than the

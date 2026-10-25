@@ -1,0 +1,152 @@
+### l7r/diagram/compound.py::composition_plan
+  line 254 [8]: ox, oy = margin_ft * FTPX, (margin_ft + 8.0) * FTPX
+### l7r/diagram/compound.py::emit_svg
+  line 547 [8]: oy = (margin_ft + 8.0) * FTPX
+  line 609 [0.25, 0.8]: obstacles.append(Obstacle(((x - hw, y - size * 0.8), (x + hw, y - size * 0.8), (x + hw, y + size * 0.25), (x - hw, y + size * 0.25)), WEIGHT_OBSTACLE))
+  line 624 [20, 9]: plain(env.w_ft / 2, -9, program.title, 20, False, "#3A2E1C"),
+  line 629 [0.8]: zstroke, zsw = ("none", 0.0) if z.name in UNFENCED_ZONES else ROOFED_ZONES.get(z.name, ("#9C7A40", 0.8))
+  line 631 [11]: caption("area", z.x_ft, z.y_ft, z.w_ft, z.h_ft, ZONE_CAPTIONS.get(z.name, z.name), 11, True, "#5C4318", zk)
+  line 638 [0.6]: parts += [rect(mx, my, mx2 - mx, my2 - my, "#C8B078", "#7A5430", 0.6) for mx, my, mx2, my2 in mats]
+  line 642 [8]: caption("point", ax, ay, ax2 - ax, ay2 - ay, "straw mats", 8, True, "#7A5C30", "kneeling positions", names=tuple(sid for _b, sid in drawn[first:]))
+  line 659 [0.8, 8]: parts.append(rect(z.x_ft + z.w_ft / 2 - 4, z.y2 - 2, 8, 2, "#8C6F3E", "#4A3318", 0.8, "", "weapon rack"))
+  line 660 [11.4, 13.3, 14.4, 5.7, 8]: caption("point", z.x_ft + z.w_ft / 2 - 5.7, z.y_ft + 13.3, 11.4, 14.4, "striking posts", 8, True, "#5C4830", "striking posts", names=("post-0", "post-1"))
+  line 661 [14, 27, 5]: for k, (dx_ft, dy_ft) in enumerate(((-5.0, 14.0), (5.0, 27.0))):
+  line 663 [0.7, 1.4]: obstacles.append(Obstacle(box(cx - 0.7, cy - 0.7, 1.4, 1.4), WEIGHT_OBSTACLE))
+  line 669 [12]: sx, sy = ox, oy - 12 * FTPX
+  line 671 [45, 5]: f'<g stroke="#3A2E1C" data-kind="-"><line x1="{sx:.0f}" y1="{sy:.0f}" x2="{sx + 90:.0f}" y2="{sy:.0f}" stroke-width="2"/><line x1="{sx:.0f}" y1="{sy - 5:.0f}" x2="{sx:.0f
+  line 673 [16, 45]: parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 16:.0f}" text-anchor="middle" font-size="10" fill="#3A2E1C" data-kind="-">30 ft</text>')
+  line 674 [27, 45]: parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 27:.0f}" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830" data-kind="-">(3 px = 1 ft)</text>')
+  line 675 [30, 6, 92]: obstacles.append(Obstacle(((sx - 2, sy - 6), (sx + 92, sy - 6), (sx + 92, sy + 30), (sx - 2, sy + 30)), WEIGHT_OBSTACLE))  # the scale bar
+### l7r/diagram/compound.py::_draw_buildings
+  line 701 [6, 8]: size = 10 if len(p.spec.name) * 10 * BOLD_CHAR_W_EM <= p.spec.w_ft * FTPX - 6 else 8
+  line 721 [0.25]: parts.append(rect(ax + 0.25, ay + 0.25, ax2 - ax - 0.5, ay2 - ay - 0.5, "#B8A07A", "none", 0))
+  line 723 [0.8]: f'<line x1="{ox + a * FTPX:.0f}" y1="{oy + b * FTPX:.0f}" x2="{ox + c * FTPX:.0f}" y2="{oy + d * FTPX:.0f}" stroke="{stroke}" stroke-width="{0.8 if dash else 1}"{' stroke
+  line 742 [8]: caption("area", p.x_ft + rx, p.y_ft + ry, rw, rh, ROOM_CAPTIONS.get(rkind, rkind), 8, False, "#3A2E1C", rkind)
+  line 747 [1.2]: parts.append(rect(ex, ey, ex2 - ex, ey2 - ey, KINDS["plain"][0], stroke, 1.2, "", "engawa"))
+  line 751 [8]: caption("area", dx, dy, dx2 - dx, dy2 - dy, "magistrate's dais", 8, False, "#FFFAE6", "magistrate's dais")
+  line 759 [7]: caption("area", sx0, sy0, sx1 - sx0, sy1 - sy0, "clerk", 7, False, "#3A2E1C", "clerks' seats")
+  line 765 [0.9]: full = sum(r[3] * r[4] for r in p.spec.rooms) >= 0.9 * p.spec.w_ft * (p.spec.h_ft - p.spec.engawa_ft)
+  line 766 [5]: if full and p.spec.inset_ft >= 5.0:
+### l7r/diagram/compound.py::_draw_walls_and_gates
+  line 815 [4.5]: obstacles.append(Obstacle(tuple(stroke_band(px(x1, y1), px(x2, y2), 4.5)), WEIGHT_OBSTACLE))  # the wall, 9 px drawn
+### l7r/diagram/compound_example.py::garden_zones
+  line 74 [14, 25, 26, 40, 54, 62]: return (CourtZone("vegetable garden", 14.0, 40.0, *GARDEN_PLOT_FT), CourtZone("service yard", 54.0, 25.0, 26.0, 62.0))
+  line 75 [14, 25, 62, 66]: return (CourtZone("service yard", 14.0, 25.0, 66.0, 62.0),)
+### l7r/diagram/compound_example.py::servants_row
+  line 86 [60]: 60.0,
+  line 87 [15]: 15.0,
+  line 90 [6]: 6,
+  line 93 [0.17, 0.375, 0.625, 0.875]: door_fracs=(0.17, 0.375, 0.625, 0.875),  # the west door off its middle: there its approach met the servants' privy
+  line 94 [15, 30, 45]: bays=(15.0, 30.0, 45.0),
+  line 96 [15, 6, 60]: return BuildingSpec("servants' row", "service", 60.0, 15.0, "outer", "S", 6, feature="servants' quarters", door_fracs=(0.5,))
+### l7r/diagram/compound_example.py::county_magistracy_program
+  line 169 [102, 35.5, 46.5]: CourtZone("garden", 102.0, 35.5, 124.0, 46.5),  # feature 374 wave 113: from the kitchen ell's east face (the house's west end), the house 7 ft west
+  line 179 [22]: CourtZone("rear yard", 38.0, 3.0, 37.0, 22.0),
+  line 188 [131, 50.5]: "oshirasu", 50.5, 131.0, 80.0, 26.0
+  line 193 [130, 166]: CourtZone("forecourt", 130.0, 166.0, 55.0, 31.0),
+  line 202 [126, 190]: CourtZone("practice ground", 190.0, 126.0, 33.0, 42.0),
+  line 208 [130.5, 131, 57.5]: CourtZone("yard", 130.5, 131.0, 57.5, 33.0),  # y 131 since pass 6: the office hall is 38 ft deep; x 130.5 since feature 374 wave 134, from the re-centered hearing court'
+  line 213 [177, 188]: "cart yard", 188.0, 177.0, 37.0, 20.0
+  line 257 [0.3, 0.35, 0.4]: door_fracs=(0.3, 0.35, 0.4),
+  line 271 [13]: b("storehouse (W)", "kura", 16.0, 19.0, "inner", "N", order=13, feature="storehouse"),
+  line 284 [0.3, 0.7, 11]: b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7), inset_ft=8.5, joins="residence"),
+  line 314 [41, 72]: rooms=(("clerks' room", 0.0, 0.0, 30.0, 20.0), ("day office", 30.0, 0.0, 42.0, 20.0), ("official study", 72.0, 0.0, 41.0, 20.0)),
+  line 320 [0.7, 0.8]: door_fracs=(0.8, 0.7),
+  line 349 [0.085, 0.274, 0.482, 0.689, 0.896]: door_fracs=(0.085, 0.274, 0.482, 0.689, 0.896),  # the karo's 14 ft bay and four 17 ft bays, a door at each bay's middle (0097: bays ~12-18 ft, each a dwelling with its d
+  line 350 [48, 65]: bays=(14.0, 31.0, 48.0, 65.0),  # the walls between them (feature 374 batch 4, building-review N1)
+  line 377 [0.125, 0.375, 0.625, 0.8]: door_fracs=(0.125, 0.375, 0.625, 0.8),  # the last off its dwelling's middle: the cell stands at the face's south end
+  line 378 [35, 52.5]: bays=(17.5, 35.0, 52.5),
+  line 387 [0.3]: b("cell", "cell", 12.0, 10.0, "outer", "S", order=1, feature="cell", door_fracs=(0.3, 0.5)),
+  line 403 [5]: b("stables", "service", 18.0, 24.0, "outer", "S", order=5, feature="stables", door_face="W", door_fracs=(0.5,)),  # its west gable since wave 128: the gatehouse stands a 
+### l7r/diagram/compound_parts.py::_lattice
+  line 145 [1.5]: out.append((fx + a, fy, fx + a, fy - 1.5 * ny))
+  line 147 [1.5]: out.append((fx, fy + a, fx - 1.5 * nx, fy + a))
+### l7r/diagram/compound_parts.py::_clerk_seats
+  line 210 [5]: top = y2 - 5.0 if side == "S" else y
+  line 211 [5]: return [(x - 10.0, top, x - 2.0, top + 5.0), (x2 + 2.0, top, x2 + 10.0, top + 5.0)]
+  line 212 [5]: left = x2 - 5.0 if side == "E" else x
+  line 213 [5]: return [(left, y - 10.0, left + 5.0, y - 2.0), (left, y2 + 2.0, left + 5.0, y2 + 10.0)]
+### l7r/diagram/compound_parts.py::_mats
+  line 221 [16, 22, 6, 9]: return [(cx - 3.0, fy, cx + 3.0, fy + 3.0), (cx - 16.0, fy + 6.0, cx - 10.0, fy + 9.0), (cx + 10.0, fy + 6.0, cx + 22.0, fy + 9.0)]
+### l7r/diagram/compound_parts.py::_flush_privy
+  line 268 [5]: reach = 5.0  # a building this near a side wall stands by it
+### l7r/diagram/compound_parts.py::garden_well
+  line 400 [1.35]: lo, hi = garden.x_ft + WELL_HALF_FT + 1.35, garden.x2 - WELL_HALF_FT - 1.35
+  line 401 [1.35]: top, bot = garden.y_ft + WELL_HALF_FT + 1.35, garden.y2 - WELL_HALF_FT - 1.35
+### l7r/diagram/compound_parts.py::beside_door_fracs
+  line 435 [0.15]: slack = 0.15 / length
+### l7r/diagram/compound_parts.py::round_the_corner
+  line 448 [2.5]: tub = (fx + length * frac, fy + ny * 2.5) if ny else (fx + nx * 2.5, fy + length * frac)
+### l7r/diagram/compound_parts.py::_shrine_tree
+  line 494 [0.15, 0.85]: toward_wall = (0.85, 0.5, 0.15) if wall in ("S", "E") else (0.15, 0.5, 0.85)
+### l7r/diagram/compound_parts.py::_point_features
+  line 560 [1.5]: parts.append(rect(bx, by, BATH_W_FT, BATH_H_FT, KINDS["service"][0], KINDS["service"][1], 1.5, "", "bath"))
+  line 561 [8]: caption("area", bx, by, BATH_W_FT, BATH_H_FT, "bath", 8, False, "#3A2E1C", "bath")
+  line 570 [7]: caption("point", tx - r, ty - r, 2 * r, 2 * r, "shrine tree", 7, True, "#3A4A28", "sacred tree", names=("shrine-tree",))
+  line 578 [12, 15, 20, 6, 9]: offs = (6.0, 9.0, 12.0, 15.0, 20.0) if p.spec.feature == "stables" else (9.0, 12.0, 15.0, 20.0, 6.0)
+  line 579 [0.2, 0.3, 0.7, 0.8, 7.3]: if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.2, 0.8, 0.3, 0.7, 0.5), offs)):
+  line 598 [3.65]: well_boxes = tuple((wx - 3.65, wy - 3.65, wx + 3.65, wy + 3.65) for wx, wy in wells)
+  line 645 [0.15, 0.85]: toward_wall = (0.85, 0.5, 0.15) if wall in ("S", "E") else (0.15, 0.5, 0.85)
+  line 650 [0.15, 0.85]: for side, fracs in ((ends[0], toward_wall[:1]), (ends[1], toward_wall[:1]), (ends[0], toward_wall), (ends[1], toward_wall), (court, (0.85, 0.15, 0.5))):
+  line 651 [3.5, 4.5, 7]: if v := seat(p, PRIVY_FT, fracs, (4.5, 7.0, 3.5), side, well_boxes, (*zones, gate_hold)):
+  line 678 [0.15, 0.85]: toward_court = (0.85, 0.5, 0.15) if court in ("S", "E") else (0.15, 0.5, 0.85)
+  line 685 [2.5, 2.6]: tub = next((t for side, c in doors.get(p.spec.name, []) if (t := seat(p, 2.6, beside_door_fracs(p, side, c), (2.5,), side))), None)
+  line 687 [2.5, 2.6]: tub = tub or next((t for adj, frac in corners if (t := seat(p, 2.6, (frac,), (2.5,), adj))), None)
+  line 688 [0.03, 0.05, 0.15, 0.4, 0.6, 0.85, 0.95, 0.97, 2.5, 2.6]: tub = tub or seat(p, 2.6, (0.15, 0.85, 0.4, 0.6, 0.05, 0.95, 0.03, 0.97), (2.5,))
+  line 691 [2.5, 2.6]: tub = tub or seat(p, 2.6, toward_court, (2.5,), ends[1]) or seat(p, 2.6, toward_court, (2.5,), ends[0])
+### l7r/diagram/compound_parts.py::_draw_point_parts
+  line 720 [1.2, 3.65, 7.3]: parts.append(rect(cx - 3.65, cy - 3.65, 7.3, 7.3, "#9C8C70", "#5C4830", 1.2, "", "well"))
+  line 721 [3.65]: parts.append(gear_svg(ox + cx * FTPX, oy + cy * FTPX, 3.65 * FTPX, well_gear(seed, i, depth), well_roofed(seed, i)))
+  line 722 [3.65, 7.3, 8]: caption("point", cx - 3.65, cy - 3.65, 7.3, 7.3, "well", 8, True, "#3A2E1C", "well")
+  line 724 [0.8, 2.5, 5]: parts.append(rect(cx - 2.5, cy - 2.5, 5.0, 5.0, "#7E726A", "#4A3318", 0.8, "", "latrine", whole))
+  line 725 [2.5]: if hatch := _hatch(env, (cx - 2.5, cy - 2.5, cx + 2.5, cy + 2.5)):
+  line 728 [2.5, 5, 7]: caption("point", cx - 2.5, cy - 2.5, 5.0, 5.0, "latrine", 7, True, "#3A2E1C", "latrine")
+  line 734 [1.27, 2.54]: rect(tx - 1.27, ty - 1.27, 2.54, 2.54, "none", "none", 0)  # registers the tub; its drawn circle follows
+  line 739 [1.27, 2.54, 7]: caption("point", tx - 1.27, ty - 1.27, 2.54, 2.54, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs", names=tuple(f"tub-{k}" for k in range(len(tubs))))  # declare
+  line 741 [14, 4.5, 8]: assert board_by_the_gate(env, (gl - 14.0, env.h_ft + 3.0, gl - 8.0, env.h_ft + 4.5)), "the board stands 8 ft west of the gate, by construction"
+  line 742 [0.6, 1.5, 14, 6]: parts.append(rect(gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "#4A3318", "#2D2A24", 0.6, "", "notice board"))
+  line 743 [1.5, 14, 6, 7]: caption("point", gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "notice board", 7, True, "#3A2E1C", "notice board")
+### l7r/diagram/compound_parts.py::_roji_parts
+  line 769 [0.67]: rect(x - 1.0, y - 0.67, 2.0, 1.33, "none", "none", 0)  # registers the stone with the captions; its ellipse follows
+  line 771 [0.8]: parts.append(rect(*shoe, "#9C9488", "#5C5448", 0.8, "shoe-stone"))  # declared: the reception's entrance (pack_audit)
+### l7r/diagram/tools/pack_audit/checks.py::aligned_gaps
+  line 533 [15, 30]: if ox >= 30 and c.y >= a.y2 and 15 <= (c.y - a.y2) <= 90:
+  line 546 [15, 30]: if oy >= 30 and c.x >= a.x2 and 15 <= (c.x - a.x2) <= 90:
+  line 561 [15]: if not any(abs(gp.mx - o.mx) < 15 and abs(gp.my - o.my) < 15 for o in out):
+### l7r/diagram/tools/pack_audit/checks.py::gap_tag
+  line 570 [8]: return "tight" if gap.ft <= 8 else "LOOSE (wooden >8 ft)"
+### l7r/diagram/tools/pack_audit/grids.py::perimeter_hugging_pct
+  line 151 [25]: def perimeter_hugging_pct(plan: ParsedPlan, depth_ft: float = 25.0, cell: int = 2) -> float:
+### l7r/diagram/tools/pack_audit/grids.py::top_vacant_rects
+  line 195 [150]: min_area_sqft: float = 150.0,
+  line 196 [25]: perimeter_depth_ft: float = 25.0,
+### l7r/diagram/tools/pack_audit/mapmatch.py::load_map
+  line 169 [8]: @lru_cache(maxsize=8)
+### l7r/diagram/tools/pack_audit/mapmatch.py::frame
+  line 199 [5]: x, y, w, h = (float(m.group(i)) for i in range(1, 5))
+### l7r/diagram/tools/pack_audit/parse.py::_parse_labels
+  line 262 [0.78]: top = y - fs * 0.78
+### l7r/diagram/tools/pack_audit/parse.py::parse_svg
+  line 425 [5]: x1, y1, x2, y2 = (float(ln.group(i)) for i in range(1, 5))
+  line 433 [5]: x1, y1, x2, y2 = (float(ln.group(i)) for i in range(1, 5))
+  line 443 [5]: x1, y1, x2, y2 = (float(ln.group(i)) for i in range(1, 5))
+### l7r/diagram/tools/pack_audit/roads.py::_frame
+  line 115 [5]: x, y, w, h = (float(m.group(i)) for i in range(1, 5))
+### l7r/diagram/tools/pack_audit/shared.py::_path_points
+  line 127 [6, 7]: for k in range(0, len(nums) - 6, 7):
+### l7r/diagram/tools/pack_audit/shared.py::ink_bounds
+  line 194 [0.55]: w = 0.55 * fs * len(content)
+### l7r/diagram/tools/pack_audit/shared.py::viewbox_cropped
+  line 219 [5]: vx, vy, vw, vh = (float(m.group(i)) for i in range(1, 5))
+### l7r/diagram/tools/pack_audit/shared.py::well_gear
+  line 644 [15]: if m.tag != "rect" or m.kind != "well" or m.paint.get("fill") != WELL_FILL or min(m.w, m.h) < 15.0:
+### l7r/diagram/tools/pack_audit/sun.py::sun_at
+  line 78 [12, 15]: h = math.radians(15.0 * (hour - 12.0))
+### l7r/diagram/tools/pack_audit/sun.py::lit_hours
+  line 102 [24]: steps = int(24 / STEP_H)
+### l7r/diagram/tools/pack_audit/sun.py::casters
+  line 150 [16]: out += [Caster(Point(t.x + t.w / 2, t.y + t.h / 2).buffer(t.w / 2, 16), TREE_FT, "trees", tree=True) for t in plan.trees]
+### l7r/diagram/tools/pack_audit/sun.py::shaders
+  line 157 [24]: steps = int(24 / STEP_H)
+### l7r/diagram/tools/pack_audit/tagged.py::marks
+  line 131 [16]: @lru_cache(maxsize=16)

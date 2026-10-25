@@ -47,6 +47,22 @@ def run(root: Path, cmd: list[str], env: dict[str, str] | None = None, quiet: bo
     return out.returncode, (out.stdout or "") + (out.stderr or "") if quiet else ""
 
 
+def revert_ticks(root: Path, tick_sha: str) -> str:
+    """Put a failed push's ticks back with a new commit (nothing rewritten), and say what happened. A push whose pull stopped on a
+    merge conflict leaves the merge in progress, and git refuses the revert then (2026-10-25, 422 T02: the message said "its ticks
+    reverted" while the tick commit stood, and the retry found T02 already ticked) - so the revert's own exit code decides the
+    message."""
+    rc, out = run(root, ["git", "revert", "--no-edit", tick_sha])
+    if not rc:
+        return "its ticks reverted, nothing landed; fix it and run make land again"
+    why = out.strip().splitlines()[0] if out.strip() else f"git revert exited {rc}"
+    return (
+        f"its ticks could NOT be reverted ({why}): the tick commit {tick_sha[:9]} stands in the clone. Resolve what the push "
+        "left (a merge in progress: fix the conflicts and commit), then push it with scripts/sync-with-main.sh done - the tick "
+        f"goes with it - or drop it with git revert --no-edit {tick_sha[:9]}"
+    )
+
+
 def write_ledger(root: Path, d: Path) -> None:
     """The ledger rows the push would name as owed, written and committed: the plan reviews' (385 T72) and every other pass
     traced to this feature - its claims round's above all (405 T39, D13). Asked in the first pass, and again after the claims
@@ -573,8 +589,7 @@ def main(argv: list[str]) -> int:
         )
         return rc
     if rc:
-        run(root, ["git", "revert", "--no-edit", tick_sha])  # a new commit, nothing rewritten: the tasks read open again
-        print(f"land: the push failed (exit {rc}) - its ticks reverted, nothing landed; fix it and run make land again", file=sys.stderr)
+        print(f"land: the push failed (exit {rc}) - {revert_ticks(root, tick_sha)}", file=sys.stderr)
         return rc
     print(f"land: {' '.join(tasks)} landed and ticked")
     if engine_delta_landed:

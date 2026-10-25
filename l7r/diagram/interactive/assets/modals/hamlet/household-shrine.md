@@ -8,7 +8,7 @@ and even a torii. Some households marked the god's place with a tree or a stone 
 the plot - most often the northwest or the northeast, though in one region usually the southwest.
 
 A stone shrine was a small box: one in Tokushima stands about 16 in (40 cm) wide, deep and high, with a round stone inside
-held to be the god's own body. In the twentieth century they were rare, at least in the northeast: in a town there in 1972,
+held to be the god's own body. In the one twentieth-century count, they were rare: in a town of the northeast in 1972,
 about one house in a hundred had one.
 
 Guesses:

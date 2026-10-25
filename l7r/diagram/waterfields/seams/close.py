@@ -117,7 +117,7 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
 
 
 HEADLAND_PX = 4.0
-"""Research: the headland's width - UNRESEARCHED: a refused point is cut off where the basin is this many px across"""
+"""Research: the headland's width - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a refused point is cut off where the basin is this many px across"""
 
 
 def blunt_points(poly: Polygon, min_deg: float) -> Polygon | None:

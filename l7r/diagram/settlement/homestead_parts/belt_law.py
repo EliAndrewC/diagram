@@ -50,7 +50,7 @@ Research:
 """
 DEPTH_BIN_FT = 40.0  # the stretch across the wind a depth is read over - about a crown and a half
 BELT_PUSH_BACK_FT = 60.0  # how far past the band's far face a thin column may be planted: `belt_polygon`'s own ladder tops out at 60 ft back
-"""Research: repair push-back - UNRESEARCHED: a thin stretch planted up to 60 ft past the band's far face"""
+"""Research: repair push-back - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a thin stretch planted up to 60 ft past the band's far face"""
 SETTLE_ROUNDS = 12  # rounds that may add seats before the removing phase; each round re-reads the page the belt sets
 BELT_DESIGN_DEPTH_FT = 110.0  # the band `belt_polygon` draws, 36..146 ft behind the fringe: a belt standing against the page has a crown this near its edge
 """The depth of the band `belt_polygon` draws.
@@ -409,7 +409,7 @@ def _cut(rd: BeltReading, seated: list[Pt], v1: float, v2: float) -> list[Pt]:
     with them - the belt stands where it can be deep and whole (plan D8), and the longer run is the one kept.
 
     Research:
-        belt ended at a flaw - UNRESEARCHED: the side with more crowns kept
+        belt ended at a flaw - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); the side with more crowns kept
     """
     uv = [rd.uv(*c) for c in seated]
     left = sum(1 for _u, v in uv if v < v1)

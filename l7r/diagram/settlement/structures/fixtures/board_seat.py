@@ -227,8 +227,8 @@ def entrance_seat_ok(seat: BoardSeat, anchor: tuple[float, float], reach: RouteR
     household's way out within `KOSATSUBA_HANDOVER_BAND_FT`.
 
     Research:
-        entrance board near the entrance - UNRESEARCHED: within 120 ft of the entrance anchor (60 ft reach and a 60 ft band); 0190 gives no distance
-        passed by every way out - UNRESEARCHED: every household's departure within 20 ft"""
+        entrance board near the entrance - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); within 120 ft of the entrance anchor (60 ft reach and a 60 ft band); 0190 gives no distance
+        passed by every way out - research/questions/0190-notice-boards-kosatsuba.html: a notice board was set where every passer-by met it; the 20 ft is ours; every household's departure within 20 ft"""
     if math.hypot(seat.x - anchor[0], seat.y - anchor[1]) > (KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT) / ftpx:
         return False
     return reach is None or reach.missed(seat.x, seat.y, KOSATSUBA_HANDOVER_BAND_FT / ftpx) == 0

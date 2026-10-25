@@ -1,0 +1,48 @@
+### l7r/diagram/settlement/rolling/access.py::__init__
+  line 92 [128]: self.grid = PointGrid(128.0)
+  line 103 [128]: self.bars = PointGrid(128.0)
+### l7r/diagram/settlement/rolling/bearing.py::wrap_square_deg
+  line 72 [45]: return (d + 45.0) % 90.0 - 45.0
+### l7r/diagram/settlement/rolling/bearing.py::__init__
+  line 109 [64]: self.grid = PointGrid(64.0)
+### l7r/diagram/settlement/rolling/bearing.py::nearest
+  line 115 [64]: pad = 64.0
+### l7r/diagram/settlement/rolling/bearing.py::house_rot
+  line 154 [11, 14]: spread = (jit(kx, ky, 11.0) + jit(kx, ky, 14.0) - 1.0) * BEARING_JITTER_DEG  # triangular: most houses near the lane
+### l7r/diagram/settlement/rolling/bundle.py::_garden_beds
+  line 53 [0.26, 8]: if self._hjit(jx, jy, 8.0) >= 0.26:  # the common case: one undivided plot
+  line 58 [0.55, 9]: if self._hjit(jx, jy, 9.0) < 0.5 and gw * 0.55 >= 6 * bs:
+  line 59 [0.55]: pw = gw * 0.55
+### l7r/diagram/settlement/rolling/bundle.py::_bundle_layout
+  line 267 [0.25]: gw = min(gw * (1.0 + self._hjit(sx, sy, 3.0) * 0.25), self.px(44))  # garden [1.00,1.25]x, capped at 44 ft (44 x 34 = 1,496 sq ft, under 0039's 1,507)
+  line 268 [0.25]: gh = min(gh * (1.0 + self._hjit(sx, sy, 4.0) * 0.25), self.px(34))
+### l7r/diagram/settlement/rolling/bundle.py::_lay_fixtures
+  line 374 [5]: lo, hi = (-5.0, 5.0) if bearing is None else (bearing - BEARING_SPREAD_DEG, bearing + BEARING_SPREAD_DEG)
+### l7r/diagram/settlement/rolling/farmsteads.py::_farm_rolls_bamboo
+  line 65 [95]: return True if on is None else bool(on) and self._hjit(hx, hy, 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE
+### l7r/diagram/settlement/rolling/farmsteads.py::_east_trees
+  line 156 [1.5]: if any(abs(tx - ox) < 1.5 and abs(ty - oy) < 1.5 for ox, oy, _, _ in own):
+### l7r/diagram/settlement/rolling/fit.py::stream_segment_index
+  line 38 [9]: hw = float(f.get("w", 9.0)) / 2 + 5
+### l7r/diagram/settlement/rolling/fit.py::_envelope_blocked
+  line 271 [6]: if cx - w / 2 < 6 or cx + w / 2 > self.W - 6 or cy - h / 2 < 6 or cy + h / 2 > self.H - 6:
+### l7r/diagram/settlement/rolling/fit.py::_bundle_side_fits
+  line 812 [6]: if cx - W / 2 < 6 or cx + W / 2 > self.W - 6 or cy - H / 2 < 6 or cy + H / 2 > self.H - 6:
+### l7r/diagram/settlement/rolling/fit.py::_yard_sun_conflict
+  line 905 [11]: cyx, cyy = yard[0], yard[1] + yard[3] / 2 + 11
+### l7r/diagram/settlement/rolling/lot.py::house_aspect_bound
+  line 106 [28, 46]: return (46.0 * LENGTH_FACTORS[1]) / (28.0 * DEPTH_FACTORS[0])
+### l7r/diagram/settlement/rolling/lot.py::held_part_records
+  line 234 [8]: out.append(("wells", {"x": round(float(well[0]), 1), "y": round(float(well[1]), 1), "r": 8, "vr": vr}))
+### l7r/diagram/settlement/rolling/place.py::_bundle_refused
+  line 85 [6]: if cx - W / 2 < 6 or cx + W / 2 > self.W - 6 or cy - H / 2 < 6 or cy + H / 2 > self.H - 6:
+### l7r/diagram/settlement/rolling/place.py::_slide
+  line 110 [1.5]: if dist < 1.5:
+### l7r/diagram/settlement/rolling/place.py::_place_bundle_dispersed
+  line 156 [15, 7, 92]: for r in range(7, 15 if exact else 92, 7):
+  line 157 [12]: for k in range(12):
+  line 158 [6]: a = k * math.pi / 6
+### l7r/diagram/settlement/rolling/place.py::_place_bundle_nucleated
+  line 295 [12]: _hand = (rank % 2) ^ (1 if self._hjit(cx, cy, 12.0) < 0.5 else 0)
+### l7r/diagram/settlement/rolling/place.py::_house_box_refused
+  line 314 [6]: if cx - w / 2 < 6 or cx + w / 2 > self.W - 6 or cy - h / 2 < 6 or cy + h / 2 > self.H - 6:

@@ -1,0 +1,144 @@
+### l7r/diagram/waterfields/banks.py::drain_bank_clearance
+  line 93 [1e+09]: off, cx, cy, arc, past, nrm = 1e9, 0.0, 0.0, 0.0, False, (0.0, 0.0)
+### l7r/diagram/waterfields/banks.py::_nearest_segment
+  line 143 [1e+09]: off, foot, arc, past, nrm = 1e9, (0.0, 0.0), 0.0, False, (0.0, 1.0)
+### l7r/diagram/waterfields/banks.py::__init__
+  line 195 [64]: def __init__(self, pts: Poly, w0: float, w1: float, cum: list[float], reach: float, cell: float = 64.0) -> None:
+### l7r/diagram/waterfields/banks.py::off_with_the_fall
+  line 338 [1e+09]: best, foot, nrm = 1e9, (0.0, 0.0), (0.0, 1.0)
+### l7r/diagram/waterfields/banks.py::hem_on_paddy
+  line 669 [0.85]: sq = [(cx + (px - cx) * 0.85, cy + (py - cy) * 0.85) for px, py in quad]
+### l7r/diagram/waterfields/banks.py::round_channel_joints
+  line 676 [6]: def round_channel_joints(channels: list[dict[str, Any]], min_turn_deg: float = 8.0, steps: int = 6) -> None:
+### l7r/diagram/waterfields/banks.py::swept_bend
+  line 732 [0.35, 0.9]: r = min(radius, 0.35 * run, 0.9 * run / math.tan(half))
+### l7r/diagram/waterfields/banks.py::jog_vertices
+  line 884 [5]: if n < 5:
+### l7r/diagram/waterfields/banks.py::pointed_ring
+  line 913 [25]: def pointed_ring(poly: Poly, min_deg: float = 25.0) -> bool:
+### l7r/diagram/waterfields/carve.py::_dry_fields
+  line 72 [1.1]: furrow_spread: float = 1.1,
+  line 222 [1e+09]: return best or past_best or (1e9, 0.0)
+  line 282 [0.45]: if R.random() < 0.45:
+### l7r/diagram/waterfields/comb.py::carve_comb
+  line 91 [45]: down_deg: float = 45,
+  line 102 [1.1]: furrow_spread: float = 1.1,
+### l7r/diagram/waterfields/comb.py::finish_comb
+  line 260 [73733]: sectors = Sectors(F, threads, c.region, R, random.Random(c.seed ^ 0x12005), plot_across, row_step, grain)
+  line 267 [43560]: acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560  # 1px=2ft -> 4 sq ft/px^2
+### l7r/diagram/waterfields/comb.py::_mk_thread
+  line 338 [110]: decay: float = 110.0,
+  line 342 [1.2]: h = max(-1.2, min(1.2, heading - DOWN))
+  line 344 [0.2]: return _Thread(tu, tf, -math.tan(h), tf + ditch_len * max(0.2, math.cos(h)), decay, fallback)
+### l7r/diagram/waterfields/comb.py::_comb_skeleton
+  line 388 [0.045]: a_pts = _dug_polyline(R, F, fork[0], fork[1], DOWN - math.radians(42), R.uniform(*canal_a_len), 0.045, (95, 125), W, H)
+  line 392 [0.05, 120, 58]: _b_pts = _dug_polyline(R, F, fork[0], fork[1], DOWN + math.radians(58), R.uniform(*canal_b_len), 0.05, (90, 120), W, H)
+### l7r/diagram/waterfields/comb.py::_comb_threads
+  line 422 [170]: bc = _mk_thread(F, DOWN, fork[0], fork[1], DOWN + math.radians(58), R.uniform(*canal_b_len), decay=170.0)
+  line 462 [0.24, 0.38]: f_at = th.f0 + (th.ditch_f - th.f0) * R.uniform(0.24, 0.38)
+  line 474 [40]: bc.ditch_f = max([e[0] for e in spawns if e[1] is bc], default=bc.f0 + 40) + 22
+### l7r/diagram/waterfields/comb.py::_comb_march
+  line 494 [300]: f_stop = max(F.to_uf(0, 0)[1], F.to_uf(W, 0)[1], F.to_uf(0, H)[1], F.to_uf(W, H)[1]) + 300
+  line 518 [60]: if all(not (-60 < F.to_xy(t.u, f)[0] < W + 60 and -60 < F.to_xy(t.u, f)[1] < H + 60) for t in threads):
+### l7r/diagram/waterfields/comb.py::_comb_brook
+  line 614 [14]: if 14 < outfall[0] < W - 14 and 14 < outfall[1] < H - 14:
+  line 622 [40]: for i in range(40):
+  line 627 [22, 40, 88]: ou += (1 - w) * eu * 88 + w * R.uniform(-22, 40)
+  line 628 [105, 72, 88]: of += (1 - w) * ef * 88 + w * R.uniform(72, 105)  # w->1 quickly: pure downhill off the map
+  line 631 [12]: if not (12 < p[0] < W - 12 and 12 < p[1] < H - 12):
+### l7r/diagram/waterfields/comb.py::_comb_canal_pieces
+  line 697 [6, 7]: piece = [_point_along(a_pts, cuts[i] + (cuts[i + 1] - cuts[i]) * t / 6) for t in range(7)]
+### l7r/diagram/waterfields/frame.py::__init__
+  line 258 [110]: decay: float = 110.0,
+### l7r/diagram/waterfields/frame.py::_f_at_u
+  line 305 [20]: if not (min(us[0], us[-1]) - 20 <= u <= max(us[0], us[-1]) + 20):
+### l7r/diagram/waterfields/furrows.py::settle_tract_seams
+  line 157 [0.025, 64]: shifts = [k * 0.025 * s for k in range(1, 64) for s in (1, -1)]
+### l7r/diagram/waterfields/hem.py::_comb_dry_and_beans
+  line 103 [43560]: dry_acres = sum(_poly_area(p["poly"]) for p in dry_plots) * (2.0 / grain) ** 2 / 43560  # at the map's own scale: grain is 2 / ftpx
+### l7r/diagram/waterfields/hem.py::middle_reserve
+  line 192 [32]: random.Random(R.getrandbits(32)),
+### l7r/diagram/waterfields/palette.py::paddy_grain
+  line 35 [0.16]: def paddy_grain(ftpx: float, target_acres: float = PADDY_CELL_ACRES, aspect: float = 0.66, spread: float = 0.16) -> tuple[float, tuple[float, float]]:
+  line 48 [43560]: target_px2 = target_acres * 43560.0 / (ftpx * ftpx)
+### l7r/diagram/waterfields/palette.py::organic_parcel
+  line 131 [5]: arc: int = 5,
+  line 154 [0.42]: dd = min(dist, ln * 0.42)  # never eat more than the edge can spare, so slivers stay valid
+  line 176 [0.12, 0.7, 2.2]: ra, rb = fillet * rng.triangular(0.12, 2.2, 0.7), fillet * rng.triangular(0.12, 2.2, 0.7)
+  line 186 [0.18]: rough = reach[i] * 0.18  # the arc is a slumped mud shoulder, not a drafted curve
+  line 192 [0.8]: steps = max(1, min(arc, int(reach[i] * 0.8)))
+  line 205 [0.1]: amp = min(bow * ln, bow_cap, ln * 0.1)
+### l7r/diagram/waterfields/partition.py::__init__
+  line 141 [20]: self.f_bottom = max(F.to_uf(x, y)[1] for x, y in ((minx, miny), (maxx, miny), (maxx, maxy), (minx, maxy))) + 20
+### l7r/diagram/waterfields/partition.py::thread_lines
+  line 175 [40]: reach = max(0.0, self.f_bottom - self.F.to_uf(*end)[1]) + 40.0
+### l7r/diagram/waterfields/partition.py::grid_lines
+  line 201 [6]: f_lo = max(_root_f(A, F), _root_f(B, F)) + 6 * g
+  line 203 [12, 13]: span_fs = [f_lo + (f_hi0 - f_lo) * i / 12 for i in range(13)] if f_hi0 > f_lo else [f_lo]
+  line 209 [6.28]: phase = [R.uniform(0, 6.28) for _ in range(nsub + 2)]
+  line 210 [6.28]: rphase = [self.RW.uniform(0, 6.28) for _ in range(nsub + 2)]
+  line 213 [6]: rows = [(f_lo if f_top is None else min(f_lo, f_top)) - 6 * g]
+  line 223 [70]: wob = 5.0 * math.sin(fv / 70 + phase[j])
+  line 225 [47]: rw = rowamp * math.sin(fv / 47 + rphase[j]) * math.sin(math.pi * ft)
+  line 251 [40]: lines.append(_extend(run, 40.0) if len(run) == len(rows) else run)
+### l7r/diagram/waterfields/partition.py::outer_lines
+  line 267 [40]: return [_extend(ln, 40.0) for ln in lines]
+### l7r/diagram/waterfields/partition.py::_column_kept
+  line 315 [1.5]: while nsub / step > n_here * 1.5 and step < nsub:
+### l7r/diagram/waterfields/polder.py::build_polder
+  line 73 [0.12, 0.16, 0.52]: parcel_mix: tuple[float, float, float] = (0.52, 0.16, 0.12),
+  line 78 [0.1]: line_wander: float = 0.10,
+  line 147 [1.5]: gap = (1.5 / ftpx, 4.0 / ftpx) if gap is None else gap  # a 3 ft bund and an 8 ft corridor at the map's scale (0022)
+### l7r/diagram/waterfields/polder.py::_polder_lattice
+  line 252 [24301]: Rw = random.Random(seed ^ 0x5EED)
+  line 253 [0.9]: ac = af = cell * 0.9 * edge_wander  # cross / fall wander amplitude (~a module at edge_wander ~ 1)
+  line 254 [0.05]: tilt_s, tilt_t = Rw.uniform(-1, 1) * 0.05 * edge_wander, Rw.uniform(-1, 1) * 0.05 * edge_wander
+  line 260 [0.4, 0.6, 0.8, 1.7]: return tilt_s * s + ac * (0.6 * math.sin(math.tau * 0.8 * z + cp1) + 0.4 * math.sin(math.tau * 1.7 * z + cp2))
+  line 264 [0.4, 0.6, 0.7, 1.6]: return tilt_t * t + af * (0.6 * math.sin(math.tau * 0.7 * z + fp1) + 0.4 * math.sin(math.tau * 1.6 * z + fp2))
+  line 300 [12377]: Rm = random.Random(seed ^ 0x3059)
+  line 309 [0.6, 1.3, 2.1]: ds = _mamp * taper * (math.sin(math.tau * 1.3 * zr + _mph[0]) + 0.6 * math.sin(math.tau * 2.1 * zc + _mph[1]))
+  line 310 [0.6, 1.1, 1.9]: dt = _mamp * taper * (math.sin(math.tau * 1.1 * zc + _mph[2]) + 0.6 * math.sin(math.tau * 1.9 * zr + _mph[3]))
+  line 327 [4606]: RW = random.Random(seed ^ 0x11FE)
+  line 329 [0.35, 0.9, 2.3]: _rowp = [(RW.uniform(0.35, 1.0) * _lwa * RW.choice((-1.0, 1.0)), RW.uniform(0, math.tau), RW.uniform(0.9, 2.3)) for _ in range(rows + 1)]
+  line 330 [0.35, 0.9, 2.3]: _colp = [(RW.uniform(0.35, 1.0) * _lwa * RW.choice((-1.0, 1.0)), RW.uniform(0, math.tau), RW.uniform(0.9, 2.3)) for _ in range(cols + 1)]
+### l7r/diagram/waterfields/polder.py::_polder_parcels
+  line 401 [47710]: RO = random.Random(seed ^ 0x0BA5E)
+### l7r/diagram/waterfields/polder.py::_polder_envelope
+  line 455 [12]: for _k in range(12):
+  line 456 [12]: envelope.append(grid(_ea[0] + (_eb[0] - _ea[0]) * _k / 12, _ea[1] + (_eb[1] - _ea[1]) * _k / 12))
+### l7r/diagram/waterfields/polder.py::_polder_ring
+  line 493 [2.2]: w = amp * math.sin(math.pi * i / m2) * math.sin(ph + 2.2 * math.pi * i / m2)
+  line 518 [6, 7]: run = [(a0[0] + (a1[0] - a0[0]) * k / 6, a0[1] + (a1[1] - a0[1]) * k / 6) for k in range(7)]
+  line 519 [1.7]: run = waver(run, "s" if abs(d0[0]) > abs(d0[1]) else "t", 3.5, phf + i * 1.7)  # gentle waver
+  line 521 [6, 7]: sides_st.append(run + [_bz(a1, c1, b1, k / 6) for k in range(1, 7)])
+### l7r/diagram/waterfields/polder.py::_polder_channels
+  line 611 [0.8]: _toe[_key] = min(float(_toe[_key]), max(MIN_CHANNEL_PX, 0.8 * _fw))
+  line 647 [0.8]: _head = min(chan_px(2.5, g), max(MIN_CHANNEL_PX, 0.8 * _fw))
+### l7r/diagram/waterfields/polder.py::_thin
+  line 767 [0.4]: def _thin(ring: list[tuple[Pt, bool]], tol: float = 0.4) -> Poly:
+### l7r/diagram/waterfields/polder.py::_polder_close
+  line 853 [0.75]: if _ang >= 90.0 or _n2 > 0.75 * _n1:
+  line 857 [5]: _dw = next((float(_c.get("w", 5.0)) for _c in channels if _c.get("role") == "drain"), 5.0)
+### l7r/diagram/waterfields/polder.py::clean_polder_parcels
+  line 871 [43560]: net["acres"] = sum(_poly_area(p["poly"]) for p in net["plots"]) * float(net.get("ftpx", 1.0)) ** 2 / 43560
+### l7r/diagram/waterfields/ring_rules.py::fan_context
+  line 452 [0.05]: pts = [q for i, q in enumerate(c["pts"]) if i == 0 or math.dist(q, c["pts"][i - 1]) > 0.05]
+### l7r/diagram/waterfields/seams/close.py::blunt_points
+  line 147 [0.45]: d = min(HEADLAND_PX / (2 * math.sin(ang / 2)), 0.45 * lu, 0.45 * lv)
+### l7r/diagram/waterfields/seams/close.py::_weld_within_rules
+  line 182 [0.4]: reach = scrap.buffer(0.4)
+  line 183 [0.02]: grown = scrap.buffer(0.02)
+  line 193 [0.05]: simplified = merged.simplify(0.05)
+### l7r/diagram/waterfields/seams/pockets.py::_outside_command
+  line 171 [6, 64]: _n_u = max(64, int((uhi - ulo) / 6.0))
+### l7r/diagram/waterfields/settle.py::shared_length
+  line 139 [0.2]: return float(a.boundary.intersection(b.buffer(0.2)).length)
+### l7r/diagram/waterfields/settle.py::neighbors
+  line 231 [0.2]: owners = {j for jj in self.tree.query(me.buffer(0.2)) if (j := self.find(self.ids[int(jj)])) != i and j in self.alive}
+  line 232 [0.2]: bx0, by0, bx1, by1 = me.buffer(0.2).bounds
+### l7r/diagram/waterfields/tint.py::mark_low
+  line 91 [0.25]: if d <= 0.25 * plot_across and fronts(poly, line, plot_across) and R.random() < FLOOD_SAMPLE:
+### l7r/diagram/waterfields/tint.py::fronts
+  line 105 [0.25]: return bool(poly.exterior.intersection(line.buffer(0.25 * plot_across)).length >= FRONTAGE_SHARE * plot_across)
+### l7r/diagram/waterfields/tint.py::judge_tint
+  line 162 [0.25]: elif not _wrong and _pg.area > 0.0 and (_to_collector[_k] <= 0.25 * plot_across if _collector is not None else p.get("low")):

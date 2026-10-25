@@ -41,8 +41,8 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         every crossing decked - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way over water gets a deck, square
-        ditch footbridge spacing - UNRESEARCHED: 300 ft on a comb, 320 ft on a polder
-        polder crossing caps - UNRESEARCHED: planks on the settlement-side toe collector, as the hand-authored polders had them
+        ditch footbridge spacing - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); 300 ft on a comb, 320 ft on a polder
+        polder crossing caps - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); planks on the settlement-side toe collector, as the hand-authored polders had them
         dike gates at cuts - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a sluice gate at every cut of the perimeter dike
     """
     # THE LANES ARE ALREADY SQUARE (feature 287, M4c): every way crosses the brook and every drawn channel square, and so

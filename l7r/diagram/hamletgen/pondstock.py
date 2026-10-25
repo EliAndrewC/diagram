@@ -176,7 +176,7 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
             with a privy built over it
         no duck pen - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: ducks herded in the rice, the pen modern
         sty count - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a quarter to a half of households
-        at least one sty where one fits - UNRESEARCHED: the share rounded up to one, the floor of one not on the page
+        at least one sty where one fits - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the share rounded up to one, the floor of one not on the page
         no seat in reach, no sty - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a household with no pond within that reach keeps none; the hamlet is drawn with none and says why (`meta.pond_stock.none_why`)
         one sty per pond, nursery ponds none - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: nearest the houses first
         sty on the near half - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html

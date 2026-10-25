@@ -125,7 +125,7 @@ def shared_places(s: Settlement, M: Mapping[str, Any]) -> list[dict[str, Any]]:
 
     Research:
         one for every few households on that bank - GUESS research/questions/0065-washing-places-at-the-waters-edge.drawing.html: one for every few households on that bank
-        its nearest water - UNRESEARCHED: a household washes at the passing water nearest it; no page says which of two it used
+        its nearest water - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); a household washes at the passing water nearest it; no page says which of two it used
         nearest the households it serves - GUESS research/questions/0065-washing-places-at-the-waters-edge.drawing.html: at the point nearest the middle of those households, on their side of the water"""
     reach = s.px(PASS_REACH_FT)
     courses = passing_courses(M)
@@ -177,7 +177,7 @@ def each_house_places(s: Settlement, M: Mapping[str, Any]) -> list[dict[str, Any
 
     Research:
         one step at each house on the channel - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: where a channel runs past the houses, one step at each house on it
-        slid at most 16 ft - UNRESEARCHED: a step in its own dooryard, so no farther along the channel than 16 ft"""
+        slid at most 16 ft - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); a step in its own dooryard, so no farther along the channel than 16 ft"""
     out: list[dict[str, Any]] = []
     for ch in M.get("farm_channels") or []:
         pts = [(float(a), float(b)) for a, b in ch.get("poly") or ch.get("pts") or []]
@@ -221,7 +221,7 @@ def stage_washing(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.washing.shared_places
         l7r.diagram.hamletgen.washing.each_house_places
 
-    Research: after the ways and crossings - UNRESEARCHED: set last of the ground's features, so each seat is asked of every way, bridge and building already standing; no page orders them"""
+    Research: after the ways and crossings - GUESS research/questions/0065-washing-places-at-the-waters-edge.drawing.html: where a lane, a bridge or a building takes the spot, the washing place is moved along the bank; set last of the ground's features, so each seat is asked of every way, bridge and building already standing; no page orders them"""
     form = washing_form(plan, s.M)
     places = each_house_places(s, s.M) if form == "each_house" else shared_places(s, s.M)
     for rec in places:

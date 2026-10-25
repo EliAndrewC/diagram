@@ -21,7 +21,7 @@ def reached_across(field: Poly, frm: Pt, to: Pt) -> bool:
 
 
 REAL_CROSSING_SHARE = 0.5
-"""Research: a real crossing - UNRESEARCHED: the walk inside the field at least half the field's depth along it"""
+"""Research: a real crossing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); the walk inside the field at least half the field's depth along it"""
 
 
 def crossed_through(field: Poly, frm: Pt, to: Pt, share: float = REAL_CROSSING_SHARE) -> bool:

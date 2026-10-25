@@ -280,6 +280,46 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
   lattice 14 ft off water where 0055 and 0014 put the path on the bank) are cited with their departures, as above. R9 counts each kind,
   and every claim whose description is reverted after a second wrong verdict - its research label kept (GUESS naming its pass, or the citation), never restored to UNRESEARCHED. Rendering: none.
 
+- **D37 (T36 and T38 before T31; a source no page holds yet)**: (a) T36 lands the relabels of the 479 claims D36 left
+  `UNRESEARCHED` (observed 2026-10-25; method: `grep` of ` - UNRESEARCHED` over `l7r`, `pool`, `docs`): 476 are on passes P1-P7's
+  lists (method: the `- ` lines of `evidence/t29/pass-P*.txt`) and 3 are not - `wood_rank.py`'s median house,
+  `castle_civic.py`'s martial hall compound, and `tools/claims.py`'s docstring example of the grammar, which describes no map. The
+  8 claims no pass looked into (6 on the lists, the first two of those 3) go to a further pass, P8 (`evidence/t29/pass-P8-unlooked.md`),
+  and are labeled by what it finds; the grammar example stays as written. (b) A claim a source answers that no page holds yet -
+  37 claims resting on 14 sources (observed 2026-10-25; method: `grep` of T36's heads naming a pass's source rather than a page)
+  - has its source recorded on the page its question belongs to first, through a page session under the record's rules
+  (`make page-session`, as D32 queues page edits), and is cited once the page stands: as a convention where the code follows it,
+  and with its departure stated, landing DRIFTED with its unit named in its T33-T35 row, where the code departs. A GUESS label
+  naming such a source is not used. (c) The numbers no claim states (1,809 in 149 files, observed 2026-10-25; method: `make
+  tunables INLINE=1 COUNT=1`) are given claims in T38, BEFORE T31, as D31 (ii) orders - except those in the code T31 deletes,
+  which no later pass will tweak and so need none; T31's deletion is listed first (its six needless steps' definitions, R8) so
+  T38 skips them. The order is T36, T38, T31. Rendering: none.
+
+<!-- plan-archive: T36 to T36 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
+### T38 Approach (checklist part A)
+
+1. **The goal, in the world.** Every number the map code holds is stated in its unit's claims and labeled by what it is, so a
+   later pass knows which it may tweak, and which were looked into (the GM 2026-10-25).
+2. **The constraints.** D31 (ii) and (iii), D37 (c); the claim grammar; impl-drift's verdicts.
+3. **Where each comes from.** G: the GM 2026-10-25. O: the listing `make tunables INLINE=1`. R: the record and research passes.
+4. **Do they describe the world here?** Per number, by what it is. A jitter salt, a sentinel or a seed's multiplier decides
+   nothing about the place: `NONE`. A drawn size or stroke: `CONVENTION`. Every other number - a distance, a size, a share,
+   a search's step or count - is checked against the record first: cited where a page gives it; `GUESS` naming the page
+   where the page records it searched and silent; otherwise `UNRESEARCHED`, and the `UNRESEARCHED` ones go to research
+   passes grouped by the question they share (D31 (iii)), then labeled by what each pass finds, as T36's were. A search's
+   step or count is never `NONE`: it stays on `make tunables`' list.
+5. **The order.** After T36; before T31; the numbers in the code T31 deletes skipped (none were listed there, observed
+   2026-10-25; method: the listing filtered to `ways/settle/`).
+6. **The exits.** Each unit's numbers go into its own claims (a nested function's into its enclosing unit's, which `make
+   tunables` reads since the fold landed). A file the claims push past the 1,000-line bar is split into a package, never
+   trimmed. What the passes cannot settle is listed by file in R9 with the count (D31 (ii)).
+7. **The search smell.** No number moves.
+8. **The budget.** 1,289 distinct numbers in 506 functions (observed 2026-10-25; method: the listing, de-duplicated by file,
+   function and value); the record check, the passes, and a claims round over the units.
+9. **Done, measured.** `make tunables INLINE=1 COUNT=1` lists none outside the skipped code; the claims gate green.
+10. **Before moving a constant.** n/a - no value moves.
+11. **Before fitting things into room.** n/a.
+
 <!-- plan-archive: T28 to T28 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T29 to T29 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 ### T30 Approach (checklist part A)
@@ -305,7 +345,7 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 2. **The constraints.** D35, D22, D23, D11; the fixed and pinned seeds, the pool maps' gate.
 3. **Where each comes from.** G: the GM 2026-10-25 ("switch off the 16 repair steps"). O: the probe's method.
 4. **Do they describe the world here?** Measured per step (R8).
-5. **The order.** After T29 and T36, as the GM ordered; the probe's measurement runs beside them, deciding nothing.
+5. **The order.** After T29, T36 and T38 (D37 c), as the GM ordered; the probe's measurement runs beside them, deciding nothing.
 6. **The exits.** Needless (no fixed or pinned verdict moved, the pool's gate green): deleted together. Needed: a conversion
    decided before code, or an exception ruled by the arbiter.
 7. **The search smell.** One probe a step, no tuning.

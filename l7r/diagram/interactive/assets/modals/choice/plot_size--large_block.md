@@ -16,8 +16,8 @@ Guesses:
 - How often a settlement's paddies come out large rather than small, middling or in strips: no source counts how many
   villages had which.
 
-Depiction: The map draws a large-plotted field's basins about a third larger than the ordinary basin, about 0.07 acre,
-half the Kami-Baba parcel, and never at the quarter-acre block of Meiji consolidation; how regular their lines are is a
+Depiction: The map draws a large-plotted field's basins at about 0.07 acre, a third larger than a village map's ordinary 0.05-acre basin,
+half the Kami-Baba parcel, and never at the quarter-acre block of Meiji consolidation; on a village map, how regular their lines are is a
 separate choice on the title card.
 
 Name: The paddy plots' size: large blocks

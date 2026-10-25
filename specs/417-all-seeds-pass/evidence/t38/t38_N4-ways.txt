@@ -1,0 +1,98 @@
+### l7r/diagram/hamletgen/ways/bund.py::squared_step
+  line 390 [3.5]: beyond = max(3.5, (to[0] - x[0]) * nx + (to[1] - x[1]) * ny)
+### l7r/diagram/hamletgen/ways/checks.py::brook_boxes
+  line 109 [64]: @functools.lru_cache(maxsize=64)
+### l7r/diagram/hamletgen/ways/checks.py::ford_leg
+  line 117 [256]: @functools.lru_cache(maxsize=256)
+### l7r/diagram/hamletgen/ways/clearance.py::link_index
+  line 27 [14]: return fabric_index(hard, WEB_HARD_GAP, walls, gap, water, 14.0)
+### l7r/diagram/hamletgen/ways/clearance.py::clear_runs
+  line 260 [8]: step: float = 8.0,
+### l7r/diagram/hamletgen/ways/clearance.py::clip_to_clear
+  line 334 [8]: def clip_to_clear(pts: Poly, obstacles: Sequence[Poly], margin: float, step: float = 8.0, lines: Sequence[tuple[Pt, Pt]] = (), line_margin: float = 14.0) -> Poly:
+### l7r/diagram/hamletgen/ways/corridors.py::__init__
+  line 158 [64]: self.water = PointGrid(64.0)
+  line 160 [64]: self.edges = PointGrid(64.0)
+  line 165 [64]: g = self.grids[kind] = PointGrid(64.0)
+### l7r/diagram/hamletgen/ways/corridors.py::_shortest_runs
+  line 283 [64]: band = 64.0
+### l7r/diagram/hamletgen/ways/corridors.py::field_router
+  line 436 [1.5]: if own is None or not owner_point(owner) or math.dist((float(owner[0]), float(owner[1])), own) > 1.5:
+### l7r/diagram/hamletgen/ways/dry_exit.py::_blocked_memo
+  line 116 [8]: @lru_cache(maxsize=8)
+### l7r/diagram/hamletgen/ways/fabric.py::__init__
+  line 70 [12]: look = 12
+### l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys
+  line 235 [8]: r = max(float(w.get("r", 8.0)), float(w.get("vr", 0.0)))
+  line 240 [8]: out.append(([(float(w["x"]) + r * math.cos(math.pi * k / 4), float(w["y"]) + r * math.sin(math.pi * k / 4)) for k in range(8)], None, "wells"))
+  line 265 [8]: r = max(float(rec.get("r", 8.0)), float(rec.get("vr", 0.0)))
+  line 266 [8]: out.append(([(float(rec["x"]) + r * math.cos(math.pi * k / 4), float(rec["y"]) + r * math.sin(math.pi * k / 4)) for k in range(8)], None, "wells"))
+### l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric
+  line 130 [24]: for _ in range(24):
+  line 134 [6]: edge += 6.0
+### l7r/diagram/hamletgen/ways/geom.py::_seg_cross
+  line 138 [0.02]: def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt, ab_eps: float = 0.02) -> Pt | None:
+  line 149 [0.02]: eps = 0.02
+### l7r/diagram/hamletgen/ways/last_resort.py::foul_part
+  line 128 [0.4]: hits = sorted({c[1] for k in range(len(p) - 1) for c in st.conflicts("lanes", {"pts": [list(p[k]), list(p[k + 1])], "w": w + 0.4})}) if st is not None else []
+### l7r/diagram/hamletgen/ways/law.py::field_unreached
+  line 800 [128]: grid = PointGrid(128.0)
+### l7r/diagram/hamletgen/ways/law_water.py::crossing_points
+  line 66 [64]: grid = PointGrid(64.0)
+### l7r/diagram/hamletgen/ways/route.py::set_crossing
+  line 43 [20]: cell = max(20.0, radius + 1.0)
+  line 46 [5]: n = max(1, int(math.dist(a, b) // 5.0))
+### l7r/diagram/hamletgen/ways/route.py::_new_crossing
+  line 71 [5]: n = max(1, int(math.dist(path[i], path[j]) // 5.0))
+### l7r/diagram/hamletgen/ways/route.py::lattice_search
+  line 120 [1e+18]: if d > seen((ix, iy), 1e18):
+  line 155 [1e+18]: if nd < seen((jx, jy), 1e18):
+### l7r/diagram/hamletgen/ways/route.py::_route
+  line 162 [0.75]: def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], cell: float | None = None, gap: float = WEB_FABRIC_GAP, pad_mult: flo
+  line 199 [80]: pad = max(80.0, span * pad_mult)
+  line 210 [90000]: if nx * ny > 90000:
+  line 224 [0.71]: _plan_gap = gap + cell * 0.71
+### l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane
+  line 209 [0.6]: if _near > 0.6 * len(run) or _worst_ft > BUNDLE_PITCH:
+### l7r/diagram/hamletgen/ways/serve.py::band_grow
+  line 418 [1.5]: return max(0.0, 2.0 * (1.5 + GROVE_WORKING_ROOM_FT - gap))
+### l7r/diagram/hamletgen/ways/serve.py::flank_doors
+  line 585 [0.7]: return not any((vx * fx + vy * fy) / n > 0.7 for fx, fy in faces)
+### l7r/diagram/hamletgen/ways/serve.py::route_from_door
+  line 614 [8]: steps = [(door[0] + r * math.cos(k * math.pi / 4), door[1] + r * math.sin(k * math.pi / 4)) for k in range(8)]
+### l7r/diagram/hamletgen/ways/squaring.py::square_waters
+  line 74 [8]: waters = [([(float(x), float(y)) for x, y in f["poly"]], float(f.get("w", 8.0)) / 2 + margin) for f in M.get("streams") or [] if len(f.get("poly") or ()) >= 2]
+### l7r/diagram/hamletgen/ways/street.py::street_run_out
+  line 67 [60]: def street_run_out(street: Sequence[Pt], width: float, height: float, beyond: float = 60.0) -> list[Pt]:
+### l7r/diagram/hamletgen/ways/street.py::run_to_edge
+  line 78 [60]: def run_to_edge(end: Pt, prev: Pt, width: float, height: float, beyond: float = 60.0) -> tuple[float, list[Pt]]:
+### l7r/diagram/hamletgen/ways/street.py::street_runs_out
+  line 91 [60]: def street_runs_out(street: Sequence[Pt], width: float, height: float, beyond: float = 60.0) -> tuple[tuple[float, list[Pt]], tuple[float, list[Pt]]]:
+### l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways
+  line 73 [6]: for _ in range(6):
+  line 117 [14]: _try = _route(cand[1], cand[2], hard, walls, stream_segs(s), gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=14.0)
+### l7r/diagram/hamletgen/ways/sweeps.py::farm_bands
+  line 165 [8]: bands += [[(float(c[0]) + r * math.cos(k * math.pi / 4), float(c[1]) + r * math.sin(k * math.pi / 4)) for k in range(8)] for c in g.get("clumps") or []]
+### l7r/diagram/hamletgen/ways/track.py::connector_track
+  line 558 [20, 21, 9]: for swing in sorted((9.0 * k for k in range(-20, 21)), key=abs):
+### l7r/diagram/hamletgen/ways/track.py::wet_grown_by_the_lane
+  line 648 [8]: return list(ring_offset(w, 8.0, 0.0)[: len(w)])
+### l7r/diagram/hamletgen/ways/track.py::connector_dry_exit
+  line 767 [16]: walls.append(([(px + r * math.cos(k * math.pi / 8), py + r * math.sin(k * math.pi / 8)) for k in range(16)], 80.0))
+  line 780 [0.71]: start = clear_of_bands(start, [list(b) for b in bands], CONNECTOR_BAND_GAP_FT + 0.71 * GROVE_EXIT_CELL_FT + 1.0)
+### l7r/diagram/hamletgen/ways/tree.py::left_to_the_tree
+  line 406 [1.5]: return bool(lost) and all(any(math.dist(h, c) <= 1.5 for c in reserved) for h in lost)
+### l7r/diagram/hamletgen/ways/tree.py::rejoined
+  line 746 [0.2]: reach = (max(half, _ZIGZAG_RUN_FT / 2.0 + 1.0) + SQUARE_LEG_PAD + REJOIN_PAD_FT) / max(sin, 0.2)
+### l7r/diagram/hamletgen/ways/tree_base.py::nearest
+  line 72 [64]: r = 64.0
+### l7r/diagram/hamletgen/ways/web/skeleton.py::water_along_side
+  line 55 [8, 9]: pts = [to_map((side * lat, -dep + 2.0 * dep * i / 8.0)) for i in range(9)]
+### l7r/diagram/hamletgen/ways/web/skeleton.py::_web_cut_lines
+  line 327 [12, 13]: lines.append([frame(cut, d0 + (d1 - d0) * i / 12.0) for i in range(13)])
+  line 335 [40]: n = max(4, int((a1 - a0) / 40.0))
+  line 355 [8, 9]: lines.append([frame(tie, lo_c + (hi_c - lo_c) * i / 8.0) for i in range(9)])
+### l7r/diagram/hamletgen/ways/web/stage.py::seat_wall_reach
+  line 301 [1.5]: return max(1.0, s.standing.reserved.lane_buffer + 1.5 + PLACER_MARGIN_PX - WEB_FABRIC_GAP)
+### l7r/diagram/hamletgen/ways/web/stage.py::_reachable_runs
+  line 334 [8]: stride = max(1, int(_LANE_JOIN_FT / 8.0))

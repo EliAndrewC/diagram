@@ -124,7 +124,7 @@ class HousesMixin:
 
     def _in_blocked(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
         """Research: seat set-back from fields, dry plots and hills - research/questions/0029-farmhouses-minka.drawing.html: the center 14 px off a field
-        seat set-back from dry plots and hills - UNRESEARCHED: the center 12 px off a dry plot or a hill or pond ellipse"""
+        seat set-back from dry plots and hills - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); the center 12 px off a dry plot or a hill or pond ellipse"""
         # bbox pre-filter (cached, same idea as _rect_hits): a point outside a polygon's bbox - expanded by
         # the 14px field set-back - can neither be inside it nor within 14px of an edge, so skip the O(vertices)
         # point_in_poly / edge_dist. Matters for the one big field envelope and a city's many block polys.
@@ -270,7 +270,7 @@ class HousesMixin:
         rot: float | None = None,
         top: float = 88.0,
     ) -> bool:
-        """Research: building spacing - UNRESEARCHED: 4 px between collision circles (exact boxes where both are declared)"""
+        """Research: building spacing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 4 px between collision circles (exact boxes where both are declared)"""
         if x < 55 or x > self.W - 55 or y < top or y > self.H - 26:
             return False
         if self.bound and not point_in_poly(x, y, self.bound):  # stay inside a bounding ring (city wall)
