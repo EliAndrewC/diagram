@@ -10,6 +10,10 @@ part), which names the questions and keys.
 **Not yours:** any unit outside the new question, 0286 and the registry keys that handoff section names (another part of this feature, or
 another feature, may be owed in this clone; leave it alone).
 
+**Also confirm (the round arbiter's ruling ask:420-plan-round3):** the era table gives every good the era prices its own
+column (rice, barley and wheat, buckwheat and millets, soybeans, other beans, the oils, beside fish, cloth, salt, fuel and
+housing) and names, for each reconstructed or borrowed price, the era or source it came from; a gap is fixed as an EDIT.
+
 ## The procedure (check, apply)
 
 1. `make record-owed` names every unit the delta owes. In the background, in one message, dispatch one agent per owed
