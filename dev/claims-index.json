@@ -15135,6 +15135,15 @@
   "research": "",
   "verdict": "UNCLAIMED"
  },
+ "l7r/diagram/hamletgen/homesteads/seats.py::lane_frontage#candidate seats spaced every 86 ft along a lane (step=86.0)": {
+  "code": "d46bacd25e845ace",
+  "core": "d46bacd25e845ace",
+  "date": "2026-10-25",
+  "note": "candidate seats spaced every 86 ft along a lane (step=86.0)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/homesteads/seats.py::lane_frontage#frontage seat off the lane": {
   "body": "6d6b80b6e8a539fe",
   "claim": "frontage seat off the lane - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the setback (0081, 0028); `LANE_FRONTAGE_STANDOFF` (70 ft) off the lane's centerline",
@@ -15146,25 +15155,41 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/seats.py::lane_frontage#frontage seats offered every 86 ft along a lane (`step=86.0`)": {
+ "l7r/diagram/hamletgen/homesteads/seats.py::lane_frontage#houses front their lanes": {
+  "body": "6d6b80b6e8a539fe",
+  "claim": "houses front their lanes - how-our-maps-lay-a-clustered-settlements-lanes.drawing: every farmhouse is seated before any lane is laid, the planned Imperial road excepted, and 0033 has a row's farms along a street laid out before them - a seat is offered along an internal lane already laid, a departure the code keeps until feature 417 T32",
+  "code": "cb1dde5bb7989876",
+  "core": "d46bacd25e845ace",
+  "date": "2026-10-25",
+  "note": "The cited page finds \"the maps seat every farmhouse before they lay any lane\". It makes an exception only for a planned Imperial road, and it lays the track out only \"once the last house stands\". The code does the opposite: it offers seats along lanes already laid, and with connector=True it offers seats along the track out (lines 31-44). The claim admits this is a departure, but it cites the page as if the code followed it. The page does not record this departure; its only recorded DEVIATIONS are the village-scale path-finding and the field-edge facing. The claim's other support, 0033, is not in the bundle. Either the claim should be DEVIATION backed by a drawing-page entry that records this departure, or the code should seat houses before lanes (feature 417 T32).",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/homesteads/seats.py::lane_frontage#seats offered from the cluster's center outward, so lanes fill from the busy end": {
   "code": "d46bacd25e845ace",
   "core": "d46bacd25e845ace",
   "date": "2026-10-25",
-  "note": "frontage seats offered every 86 ft along a lane (`step=86.0`)",
+  "note": "seats offered from the cluster's center outward, so lanes fill from the busy end",
   "outside": true,
   "research": "",
   "verdict": "UNCLAIMED"
  },
- "l7r/diagram/hamletgen/homesteads/seats.py::lane_frontage#houses front their lanes": {
-  "body": "6d6b80b6e8a539fe",
-  "claim": "houses front their lanes - GUESS: no page seats a house along a lane already laid - 0246 seats every farmhouse before any lane, and 0033 has a planned row's houses front its street",
-  "code": "28b82584b13fa59d",
+ "l7r/diagram/hamletgen/homesteads/seats.py::lane_frontage#the track out is left unlined for a nucleated hamlet and lined for a linear one (choice of form by connector)": {
+  "code": "d46bacd25e845ace",
   "core": "d46bacd25e845ace",
   "date": "2026-10-25",
-  "note": "a bundled page does answer this, so a bare GUESS cannot stand: 0246 has \"seat every farmhouse before they lay any lane\" with the planned Imperial road as the exception, and 0033 has a row's farms along \"a street laid out before the farms\". The connector=True branch should cite 0033 (§147, §149) and 0246 §70's planned-road exception; the internal-lane branch should be a DEVIATION of 0246 §70 that the page records, or not offered",
-  "pages": {},
+  "note": "the track out is left unlined for a nucleated hamlet and lined for a linear one (choice of form by connector)",
+  "outside": true,
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::FORM_BOUND#a row's reach": {
   "code": "e69bf3af2c4302f2",
