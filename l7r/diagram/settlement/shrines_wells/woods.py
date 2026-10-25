@@ -61,7 +61,7 @@ class TreeStandsMixin:
         each filtered so no tree is drawn on a roof or a wellhead.
 
         Research:
-            spacing - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_SPACING_FT, jittered 42%
+            spacing - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_SPACING_FT, jittered 42% - 0.42 (position jitter, a share of the step)
             crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_R_FT, 0.75 to 1.05 of it, emergents 1.05 to 1.4
             emergent share - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25); 18%
             conifer share - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25); 34%
@@ -71,7 +71,7 @@ class TreeStandsMixin:
             no trunk on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the Tang Code punished whoever planted or tilled a lane, and 0071 keeps groves off the main road
             fringe crowns drawn outside the stand's outline - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a worked wood's shrubs were cut and its edge kept as grass - a fringe of advance growth is drawn outside the stand, a departure the code keeps until feature 417 T34; `_stand_fringe` outliers give the wood a soft edge; the 0080 drawing page is silent on a wood's fringe
             no crown under another's canopy - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown is never seated under another's canopy
-            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N8, 2026-10-25) - 0.18 (share of emergent crowns); 0.34 (share of conifers); 0.42 (share of conifers)
+            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N8, 2026-10-25) - 0.18 (share of emergent crowns); 0.34 (share of conifers)
         """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]

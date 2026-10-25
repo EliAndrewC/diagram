@@ -473,7 +473,7 @@ def skeleton_layout(kind: str, cx: float, cy: float, ex: float, ey: float) -> di
         headman at the skeleton's focal point - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the head, the T-junction, the fork, a quadrant by the cross, the water
         gateway at the low foot - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the downslope end of the skeleton
         its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N12, 2026-10-25) - 0.4 (headman's quadrant at the cross); 0.2 (Y fork and headman, 0.2 down); 0.12 (headman near a spine's head); 0.22 (headman's quadrant at the cross)
-        its figures guessed on 0031 - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 0.7 (spread of the Y's arms)
+        its arm spread - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.7 (spread of the Y's arms)
     """
     top, bot = cy - ey, cy + ey
     if kind == "spine":  # one lane along the margin; headman at the high HEAD, gateway at the low foot
@@ -593,7 +593,7 @@ def bridge_carried_ways(M: Any) -> list[tuple[Any, float]]:
     sides would have reproduced exactly the same silent symmetry the next time a key was added, so
     the sets are derived ONCE, here, and consumed by both.
     Research: the ways a bridge may carry - NONE: every recorded way, with fallback widths
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 30 (road fallback (claim: "with fallback widths - NONE")); 26 (roads fallback); 8 (ring-road fallback); 6 (lane fallback (lanes carry `w`))
+        its salts, guards and sentinels - NONE: they decide nothing about the place; no generator writes M['road'] since feature 392 (it is set to None and never written) - 30 (road fallback); 26 (roads fallback); 8 (ring-road fallback); 6 (lane fallback (lanes carry `w`))
     """
     carried: list[tuple[Any, float]] = []
     if M.get("road"):
@@ -613,7 +613,7 @@ def bridge_crossed_waters(M: Any) -> list[tuple[Any, float]]:
     """Every WATERCOURSE a way may have to be carried over, as (points, width). See
     `bridge_carried_ways` for why both sides read this one function.
     Research: the waters a way may cross - NONE: every recorded watercourse but an undrawn conduit
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 9 (stream fallback (streams carry `w`)); 4.2 (channel and field-ditch fallback (both carry `w`)); 12 (canal fallback (no producer)); 22 (moat fallback); 40 (river fallback (no producer)); 8 (aqueduct fallback); 26 (castle-moat fallback)
+        its salts, guards and sentinels - NONE: they decide nothing about the place; no hamlet generator writes a moat, aqueduct or castle - 9 (stream fallback (streams carry `w`)); 4.2 (channel and field-ditch fallback (both carry `w`)); 12 (canal fallback (no producer)); 22 (moat fallback (no producer)); 40 (river fallback (no producer)); 8 (aqueduct fallback (no producer)); 26 (castle-moat fallback (no producer))
     """
     waters: list[tuple[Any, float]] = []
     for s in M.get("streams", []):

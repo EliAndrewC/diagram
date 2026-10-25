@@ -295,7 +295,7 @@ def plant_the_belt(s: Settlement, plan: SitePlan) -> None:
         belt clipped at the page edge - CONVENTION: only crowns wholly off the frame dropped
         dented round the title - CONVENTION
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 30 (frame opened past belt (y))
-        its figures guessed on 0080 - GUESS research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: 14 (belt clump radius for page prediction)
+        its clump radius - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 14 (belt clump radius for page prediction)
     """
     if not plan.belt:
         return

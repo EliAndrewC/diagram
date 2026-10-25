@@ -86,7 +86,9 @@ def servants_row(form: str) -> BuildingSpec:
     wave 128 (it was 76): the 40 ft gatehouse beside the gate takes the wall's room, and the stable keeps its seat west of it.
 
     Research:
-        its figures of ours - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 60 (common-room form's size); 15 (common-room form's size); 0.375 (door at each 15 ft dwelling's middle); 0.625 (door at each 15 ft dwelling's middle); 0.875 (door at each 15 ft dwelling's middle); 30 (walls of four 15 ft dwellings (claim stale: five)); 45 (walls of four 15 ft dwellings (claim stale: five))
+        its figures of ours - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 60 (common-room form's size); 0.375 (door at each 15 ft dwelling's middle); 0.625 (door at each 15 ft dwelling's middle); 0.875 (door at each 15 ft dwelling's middle)
+        its figures from 0097 - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: 30 (walls of four 15 ft dwellings, inside 12-18 ft bays); 45 (the same)
+        its depth - GUESS research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: 15 (common-room form's depth)
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 6 (placement order)
         its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N13, 2026-10-25) - 0.17 (west door moved off its middle for the privy)
     """
@@ -166,9 +168,10 @@ def county_magistracy_program() -> CompoundProgram:
         its figures guessed on 0116 - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 188 (cart yard's corner before the service gate); 177 (cart yard's corner before the service gate)
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 13 (placement order); 11 (placement order); 5 (placement order)
         its figures guessed on 0107 - GUESS research/questions/0107-kitchens-daidokoro.drawing.html: 0.35 (residence rear door at the kitchen end); 0.4 (residence rear door at the kitchen end)
-        its figures of ours - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.085 (door at each bay's middle (one door each, cited)); 0.274 (door at each bay's middle (one door each, cited)); 0.482 (door at each bay's middle (one door each, cited)); 0.689 (door at each bay's middle (one door each, cited)); 0.896 (door at each bay's middle (one door each, cited)); 0.125 (barracks doors at bay middles); 0.375 (barracks doors at bay middles); 0.625 (barracks doors at bay middles); 35 (walls of four 17.5 ft dwellings); 52.5 (walls of four 17.5 ft dwellings)
-        its figures from 0097 - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: 48 (walls between the 14 ft and 17 ft bays); 65 (walls between the 14 ft and 17 ft bays)
+        its figures of ours - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.085 (door at each bay's middle (one door each, cited)); 0.274 (door at each bay's middle); 0.482 (door at each bay's middle); 0.689 (door at each bay's middle); 0.896 (door at each bay's middle); 0.125 (barracks doors at bay middles); 0.375 (barracks doors at bay middles); 0.625 (barracks doors at bay middles)
+        its figures from 0097 - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: 35 (four 17.5 ft barracks bays, inside 12-18 ft); 52.5 (the same); 48 (walls between the 14 ft and 17 ft bays); 65 (walls between the 14 ft and 17 ft bays)
         its figures guessed on 0113 - GUESS research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html: 72 (official study's width and place ("room sizes GUESSES")); 41 (official study's width and place ("room sizes GUESSES"))
+        its gable doors - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.5 (kitchen west door and stables gable door at the face's middle)
     """
     # The main gate is a one-bay yakuimon with an 8 ft frontage and a 7 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
     # 0093); it was a 13 ft opening, the carriage gate the vocabulary once drew. The postern in the west wall,

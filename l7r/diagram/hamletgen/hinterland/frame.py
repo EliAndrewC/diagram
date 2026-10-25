@@ -47,7 +47,7 @@ def brook_beside_the_field(s: Settlement) -> list[tuple[float, float, float, flo
     which is how this was found).
 
     Research:
-        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 6 (brook width if a record lacks w)
+        its frame box - NONE: they decide nothing about the place - 6 (brook width if a record lacks w, sizing only the frame's reserved box)
     """
     from ..consts import BROOK_FRAME_MARGIN  # noqa: PLC0415 - kept beside its one use
 

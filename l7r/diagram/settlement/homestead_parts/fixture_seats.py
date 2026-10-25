@@ -547,7 +547,8 @@ def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float, yard: 
         bath room seat fallback - GUESS: where the rolled wall has no room the other attested walls are tried in table order; 0044 gives each house's place and its share but no fallback
         places along each wall - research/questions/0044-baths-on-the-farm-furo.html: the bath stood by the main door, at the stable wing's far end or by the floored rooms; the 0.22 is ours; 0.22 of the house either side of the door or just past the yard; an end
             wall's middle and quarters
-        its figures guessed on 0044 - GUESS research/questions/0044-baths-on-the-farm-furo.drawing.html: 0.25 (the same, on the floored-rooms end wall)
+        its wall points - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.25 (the bath room's quarter points on the floored-rooms and stable-end walls)
+        its bath set-out - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (bath room 3 ft past the yard's side on the front wall)
     """
     front, side = hh / 2 + d / 2, hw / 2 + d / 2
     # ...AND JUST PAST THE YARD'S SIDES (`yard`: its center x and half-width in the house frame), still on the front wall: the
@@ -813,6 +814,8 @@ def _persimmon(hw: float, hh: float, taken: Sequence[Rect], roofs: Sequence[Rect
         crown over no roof - CONVENTION: the crown kept off every roof so the building stays visible
         within the dooryard - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: paced out no farther than `PERSIMMON_DOORYARD_FT`, else none
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N9, 2026-10-25) - 0.75 (the same, behind the house)
+        its trunk gap - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 2 (trunk kept 2 ft clear of every part)
+        its seat ring - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1 (first seat ring 1 ft past the crown's pad)
     """
     r = px(PERSIMMON_CROWN_FT)
     trunk = px(TRUNK_FT)

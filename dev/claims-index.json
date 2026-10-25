@@ -75334,6 +75334,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/banks.py::round_channel_joints#its search steps and tolerances": {
+  "body": "f8b98deb96f7ee3c",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 6 (samples along a rounded bend)",
+  "code": "f6d1d3ba30c097f6",
+  "core": "0977c043a3452212",
+  "date": "2026-10-25",
+  "note": "how many points sample the bend; no source covers it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/banks.py::round_channel_joints#swept bends": {
   "code": "f1a948632d963072",
   "core": "0977c043a3452212",
@@ -75381,6 +75393,34 @@
   "core": "3867c8326d97689c",
   "date": "2026-10-25",
   "note": "`0.9 * run / tan(half)` binds only on a turn over about 137.3 degrees, within 0054's 35% cap; the 90% margin is ours",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/banks.py::swept_bend#its figures from 0054": {
+  "body": "972c2c3a2a173c24",
+  "claim": "its figures from 0054 - which-way-water-flows-and-how-channels-bend-and-join.drawing: 0.35 (bend radius capped at 35% of the run (\"capped at 35% of the straight run\"))",
+  "code": "100b411e4575c57b",
+  "core": "3867c8326d97689c",
+  "date": "2026-10-25",
+  "note": "0.35 of the shorter run is the page's cap",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/banks.py::swept_bend#its search steps and tolerances": {
+  "body": "972c2c3a2a173c24",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 0.9 (a hairpin's tangent point kept within 90% of its run)",
+  "code": "bfcf523b047416c0",
+  "core": "3867c8326d97689c",
+  "date": "2026-10-25",
+  "note": "the 90% hairpin margin is the project's own; the page is silent on it",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -75585,6 +75625,52 @@
   "core": "2e369053dd2cb340",
   "date": "2026-10-25",
   "note": "takes the caller's band as is",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/carve.py::_dry_fields#its figures from 0006": {
+  "body": "7ff036fd14069075",
+  "claim": "its figures from 0006 - dry-fields-and-their-crops-hatake.drawing: 1.1 (default spread is \"not steep\", so tracts take both row directions; the value only has to be at least 0.3)",
+  "code": "4e74bf4911f34636",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-25",
+  "note": "1.1 goes into `tract_ways`, whose body is not in the bundle; the code shown only compares it against 0.3, but if `tract_ways` uses it as a spread in radians, 1.1 rad (about 63 deg) is far past the page's \"turned up to about 17 degrees\". Need `tract_ways`",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+  },
+  "research": "ae8a1665f83d153e",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:2c9808eceb0cc72a",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
+  ],
+  "verdict": "CANNOT-TELL"
+ },
+ "l7r/diagram/waterfields/carve.py::_dry_fields#its figures guessed on 0006": {
+  "body": "7ff036fd14069075",
+  "claim": "its figures guessed on 0006 - GUESS dry-fields-and-their-crops-hatake.drawing: 0.45 (chance a plot re-rolls its crop instead of keeping its neighbor's)",
+  "code": "0c5ec3d1bd442d12",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-25",
+  "note": "0006 nowhere records the 0.45 re-roll (or any neighbor-keeps rate) as a guess, and §42 does bear on it: a hem plot is \"often of another crop than its neighbor\", while the code keeps the neighbor's crop about 0.66 of the time. It should be plain GUESS (record silent) checked against §42, or the page should record the figure",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+  },
+  "research": "ae8a1665f83d153e",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:a97455eb3aeed622"
+  ],
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/waterfields/carve.py::_dry_fields#its salts, guards and sentinels": {
+  "body": "7ff036fd14069075",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel fallback)",
+  "code": "5cb84ff95766b2e4",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-25",
+  "note": "a 1e9 sentinel",
   "pages": {},
   "research": "",
   "rests": [],
@@ -75796,6 +75882,30 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/comb.py::_comb_brook#its salts, guards and sentinels": {
+  "body": "052f8efbe71831db",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (the same); 88 (step length, as line 627); 72 (the same); 105 (downhill step of the undrawn course); 12 (edge stop of the undrawn course); 22 (cross-slope jitter of the undrawn course)",
+  "code": "92832cc4e337f0b1",
+  "core": "2bfcd4e258b23d77",
+  "date": "2026-10-25",
+  "note": "shapes an undrawn course; only the start and the first heading are read",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/comb.py::_comb_brook#its search steps and tolerances": {
+  "body": "052f8efbe71831db",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 14 (is the outfall inside the frame)",
+  "code": "1139daa360dc6c26",
+  "core": "2bfcd4e258b23d77",
+  "date": "2026-10-25",
+  "note": "frame margin for \"is the outfall inside\"; no source covers it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/comb.py::_comb_brook#the run's first heading": {
   "code": "a6d67a87a61e55ae",
   "core": "2bfcd4e258b23d77",
@@ -75820,6 +75930,18 @@
    "0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html": "fffdea8d8ea0c9ee"
   },
   "research": "7b7ec68aadb810d3",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/comb.py::_comb_canal_pieces#its search steps and tolerances": {
+  "body": "e555ee8de74e6576",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 7 (the same (range end)); 6 (samples per canal piece)",
+  "code": "430c13ce60af721e",
+  "core": "44b61a033a24518c",
+  "date": "2026-10-25",
+  "note": "samples per piece",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::_comb_canal_pieces#no delivery at the fork": {
@@ -76014,6 +76136,18 @@
   "research": "547d1c1f54d952f0",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/comb.py::_comb_march#its search steps and tolerances": {
+  "body": "5954c3a5a7ac6b35",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 300 (march overrun past the frame); 60 (off-frame margin that stops the march)",
+  "code": "f92feb17bc4f504d",
+  "core": "c8236b47200f3549",
+  "date": "2026-10-25",
+  "note": "overrun and stop margin, all off the frame",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/comb.py::_comb_march#no channel crosses another": {
   "code": "159768f57d5cbd5a",
   "core": "c8236b47200f3549",
@@ -76082,6 +76216,42 @@
   },
   "research": "0563a9dcc87ebedc",
   "triaged": "2026-10-05",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/comb.py::_comb_skeleton#its figures against 0053": {
+  "body": "5692e879cc848a97",
+  "claim": "its figures against 0053 - irrigation-canals-and-how-they-are-laid-out-yosuiro: 58 (canal B's heading off the fall; the polyline here is thrown away, but `bc` reuses the 58) - a departure the code keeps until feature 417 T34",
+  "code": "8e128d347e64694c",
+  "core": "37b539db980daa07",
+  "date": "2026-10-25",
+  "note": "in this unit the 58 only heads `_b_pts`, a polyline that is thrown away (only its random draw is kept), so here it decides nothing drawn. It should be NONE like the 0.05/120 beside it; the drawn 58 is `_comb_threads`' own literal (its \"canal B heading\" claim)",
+  "pages": {
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html": "15c735253b0741d9"
+  },
+  "research": "f5e31b13d205192e",
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/waterfields/comb.py::_comb_skeleton#its salts, guards and sentinels": {
+  "body": "5692e879cc848a97",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (wobble of a polyline that is thrown away (only its random draw is kept)); 120 (segment length of the same thrown-away polyline)",
+  "code": "ba9270b25ac0a4a9",
+  "core": "37b539db980daa07",
+  "date": "2026-10-25",
+  "note": "parameters of the discarded polyline",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/comb.py::_comb_skeleton#its search steps and tolerances": {
+  "body": "5692e879cc848a97",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 0.045 (canal A's heading wobble per segment)",
+  "code": "ac09f579e85237d8",
+  "core": "37b539db980daa07",
+  "date": "2026-10-25",
+  "note": "canal A's wobble; 0053 is silent on how straight a canal runs",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::_comb_skeleton#supply along the high margin": {
@@ -76186,6 +76356,17 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/comb.py::_comb_threads#its search steps and tolerances": {
+  "body": "2f2f953920c164e1",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 170 (canal B thread's relax distance); 0.24 (sub-ditch takeoff, low end of its share of the run); 0.38 (the same, high end); 40 (fallback if canal B has no offtake (its claim guarantees one))",
+  "code": "0cb006c02cc9c5b5",
+  "core": "d95c6ccc56e776f3",
+  "date": "2026-10-25",
+  "note": "relax distance, the sub-ditch's 0.24-0.38 takeoff and the 40 fallback; nothing cited answers them",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/comb.py::_comb_threads#offtake spacing": {
   "code": "785af536e7b5b747",
   "core": "d95c6ccc56e776f3",
@@ -76237,6 +76418,30 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:2ed226ff417b46c1",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/comb.py::_mk_thread#its salts, guards and sentinels": {
+  "body": "ce55a470318172be",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (floor on cos (divide guard))",
+  "code": "2d9f8472f745cac0",
+  "core": "2d2b5d68c0a852b3",
+  "date": "2026-10-25",
+  "note": "the cos floor never binds under the 1.2 clamp",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/comb.py::_mk_thread#its search steps and tolerances": {
+  "body": "ce55a470318172be",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 110 (how far down the fall a ditch's takeoff heading relaxes); 1.2 (heading clamp that keeps tan() finite)",
+  "code": "7ce66a89ce990f65",
+  "core": "2d2b5d68c0a852b3",
+  "date": "2026-10-25",
+  "note": "relax distance and heading clamp; the clamp binds on no heading the callers pass",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::carve_comb#bends swept before clearing": {
@@ -76351,6 +76556,35 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/comb.py::carve_comb#its figures from 0006": {
+  "body": "fa82f6023ef5f5dd",
+  "claim": "its figures from 0006 - dry-fields-and-their-crops-hatake.drawing: 1.1 (same default spread as carve.py:72 (no caller overrides it))",
+  "code": "f4ebdcee484e83be",
+  "core": "54310dc19637ea2e",
+  "date": "2026-10-25",
+  "note": "the same 1.1 flows into `tract_ways`; need its body to tell whether 1.1 is only a threshold or a lean past §47's 17 deg",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+  },
+  "research": "ae8a1665f83d153e",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:2c9808eceb0cc72a",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
+  ],
+  "verdict": "CANNOT-TELL"
+ },
+ "l7r/diagram/waterfields/comb.py::carve_comb#its salts, guards and sentinels": {
+  "body": "fa82f6023ef5f5dd",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 45 (default fall direction; the only caller (`fit.py`) passes `plan.down_deg)",
+  "code": "82b0a3832c0cf90f",
+  "core": "54310dc19637ea2e",
+  "date": "2026-10-25",
+  "note": "a default the only caller overrides",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/comb.py::carve_comb#supply canal bank": {
   "body": "fa82f6023ef5f5dd",
   "claim": "supply canal bank - where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing: the plots hem onto a bank beside each supply canal where the caller asks (`supply_banks`; the scripted hamlet always does), off by default for a caller that draws its own",
@@ -76407,6 +76641,18 @@
   },
   "research": "ae8a1665f83d153e",
   "triaged": "2026-10-11",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/comb.py::finish_comb#its salts, guards and sentinels": {
+  "body": "c4b0365f482f26db",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 43560 (square feet in an acre); 73733 (seed salt (0x12005))",
+  "code": "0115af4b8244220b",
+  "core": "cfcd59b545a158c5",
+  "date": "2026-10-25",
+  "note": "unit conversion and a seed salt",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::finish_comb#one rice green": {
@@ -76645,6 +76891,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/frame.py::_Thread.__init__#its search steps and tolerances": {
+  "body": "0d20a7f5c974127f",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 110 (thread relax distance)",
+  "code": "fcb9968764cb7718",
+  "core": "3b214d126c010b0b",
+  "date": "2026-10-25",
+  "note": "default relax distance",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/frame.py::_Thread.step#thread wander": {
   "body": "9aa58fa2c7650d1c",
   "claim": "thread wander - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the takeoff heading relaxing over `decay` px of fall, +/-0.1 of the fall step of jitter a step",
@@ -76686,6 +76944,18 @@
   "note": "segments, wobble and the 25 px frame margin as claimed; its corners are swept later",
   "pages": {},
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/frame.py::_f_at_u#its search steps and tolerances": {
+  "body": "76c6eada22fa0921",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 20 (range tolerance)",
+  "code": "89eb536261430c49",
+  "core": "8ee95423920be256",
+  "date": "2026-10-25",
+  "note": "slack in the range test",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::_falls#frame geometry": {
@@ -76942,6 +77212,17 @@
   "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/furrows.py::settle_tract_seams#its search steps and tolerances": {
+  "body": "c9d7a76fc04ac3cc",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 0.025 (rotation search step); 64 (rotation search count)",
+  "code": "df82a1be6b947904",
+  "core": "1972452ae8a3df1e",
+  "date": "2026-10-25",
+  "note": "step and count of the rotation search",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/furrows.py::settle_tract_seams#turn kept to the two ways": {
   "code": "33123d7d5f00dd63",
   "core": "1972452ae8a3df1e",
@@ -77159,6 +77440,18 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#its salts, guards and sentinels": {
+  "body": "f7fb051fb19275fd",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 43560 (square feet in an acre)",
+  "code": "336630d3d8f3b3e3",
+  "core": "a970d48d45b25faa",
+  "date": "2026-10-25",
+  "note": "unit conversion",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#seams settled": {
   "code": "f36bf8b20e8d3871",
   "core": "a970d48d45b25faa",
@@ -77221,6 +77514,18 @@
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/hem.py::middle_reserve#its salts, guards and sentinels": {
+  "body": "aa1022d5855be043",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 32 (seed bits)",
+  "code": "cc8fbdebae92a5c6",
+  "core": "2a55d11390c2c3ea",
+  "date": "2026-10-25",
+  "note": "seed bits",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::middle_reserve#the wild middle as reserve": {
@@ -77439,6 +77744,34 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/palette.py::organic_parcel#its figures guessed on 0284": {
+  "body": "f838eb99a508c8a4",
+  "claim": "its figures guessed on 0284 - GUESS how-our-maps-draw-a-bunds-bends-and-corners.drawing: 0.18 (roughening of the arc (page gives no amount)); 0.12 (smallest corner fillet (\"all but square\")); 2.2 (largest fillet (\"a broad sweep\")); 0.7 (most likely fillet)",
+  "code": "f0b8ddcf8f586c0f",
+  "core": "0f1f4fe4539c34a6",
+  "date": "2026-10-25",
+  "note": "fits the page's wide spread from all but square to a broad sweep and its roughened arc, both recorded as a GUESS",
+  "pages": {
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html": "f3b637668ad295e9"
+  },
+  "research": "1f4c266f0d09aace",
+  "rests": [
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:8dc325794a232600"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/palette.py::organic_parcel#its search steps and tolerances": {
+  "body": "f838eb99a508c8a4",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 5 (most arc samples); 0.42 (keeps a corner cut inside its edge (validity guard)); 0.1 (a run's wander capped at a tenth of its own length (spike guard)); 0.8 (sample density of the arc)",
+  "code": "a4bb0a05ddfeed95",
+  "core": "0f1f4fe4539c34a6",
+  "date": "2026-10-25",
+  "note": "sampling and guards against invalid outlines",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/palette.py::paddy_grain#basin area": {
   "code": "c21bb974938546e5",
   "core": "f011251397859434",
@@ -77470,6 +77803,35 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
   "verdict": "DRIFTED"
+ },
+ "l7r/diagram/waterfields/palette.py::paddy_grain#its figures from 0005": {
+  "body": "a55465c13f96c708",
+  "claim": "its figures from 0005 - rice-paddies-and-their-plots-suiden.drawing: 0.16 (row step ±16% (26 to 36 ft, so 31 ft ±16%))",
+  "code": "3d11d4fab4730c3b",
+  "core": "f011251397859434",
+  "date": "2026-10-25",
+  "note": "31 ft +/-16% gives 26-36 ft, and the town's 52-72 ft fits too",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+  },
+  "research": "69aa78ae06a3c11d",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:5feacc8ae5435e1f",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/palette.py::paddy_grain#its salts, guards and sentinels": {
+  "body": "a55465c13f96c708",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 43560 (square feet in an acre)",
+  "code": "b8b7df19a0cf926b",
+  "core": "f011251397859434",
+  "date": "2026-10-25",
+  "note": "unit conversion",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::paddy_grain#row variation": {
   "body": "a55465c13f96c708",
@@ -77579,6 +77941,18 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/partition.py::Sectors.__init__#its search steps and tolerances": {
+  "body": "dc272552572e3a8a",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 20 (overrun past the region)",
+  "code": "a9cb71d54a1632c3",
+  "core": "6775e61d0210dab8",
+  "date": "2026-10-25",
+  "note": "overrun past the region",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/partition.py::Sectors.bound#past a thread's end": {
   "body": "5bf4301532292d47",
   "claim": "past a thread's end - rice-paddies-and-their-plots-suiden.drawing: a fan's bunds converge with its drain, the convergence kept - the column bund runs straight down the fall, a departure the code keeps until feature 417 T34; the column bund runs straight down the fall rather than converging along the drain",
@@ -77623,6 +77997,47 @@
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:59cd42eeeea80de5",
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:9b9af18ba1394922"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#its figures guessed on 0284": {
+  "body": "c77819b0d65b0c4e",
+  "claim": "its figures guessed on 0284 - GUESS how-our-maps-draw-a-bunds-bends-and-corners.drawing: 70 (wavelength of the column-line wobble); 47 (wavelength of the row drift)",
+  "code": "028ba670924415ea",
+  "core": "bdb3da07f20a9d62",
+  "date": "2026-10-25",
+  "note": "0284 records neither wavelength as a guess: §381 describes the valley-fan row drift but gives no figure and labels nothing a guess, and no block covers a valley fan's column wobble (§380 is about polder lines). It should be GUESS (record silent), or the page should record both figures",
+  "pages": {
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html": "f3b637668ad295e9"
+  },
+  "research": "1f4c266f0d09aace",
+  "rests": [
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:46a74d279097fa68",
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:9b9af18ba1394922"
+  ],
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#its salts, guards and sentinels": {
+  "body": "c77819b0d65b0c4e",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 6.28 (phase range (about 2π))",
+  "code": "f264e606be70a834",
+  "core": "bdb3da07f20a9d62",
+  "date": "2026-10-25",
+  "note": "phase range",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#its search steps and tolerances": {
+  "body": "c77819b0d65b0c4e",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 6 (first row back at the root); 12 (width samples); 13 (the same (range end)); 40 (line overrun)",
+  "code": "81cb1167188b3eb5",
+  "core": "bdb3da07f20a9d62",
+  "date": "2026-10-25",
+  "note": "root offset, width samples and overrun",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#lattice, not patchwork": {
@@ -77697,6 +78112,18 @@
   "research": "",
   "verdict": "MISLABELED"
  },
+ "l7r/diagram/waterfields/partition.py::Sectors.outer_lines#its search steps and tolerances": {
+  "body": "be9b8cc783a97562",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 40 (line overrun)",
+  "code": "9aaefb29d2cca982",
+  "core": "9ea4850e5c7643c3",
+  "date": "2026-10-25",
+  "note": "overrun",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/partition.py::Sectors.outer_lines#strip past the outer thread": {
   "code": "5b060132825b9d6c",
   "core": "9ea4850e5c7643c3",
@@ -77715,6 +78142,18 @@
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/partition.py::Sectors.thread_lines#its search steps and tolerances": {
+  "body": "27f5e677ac1899bc",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 40 (overrun of the extension)",
+  "code": "b23b4206827d2191",
+  "core": "998b91b93aa6580e",
+  "date": "2026-10-25",
+  "note": "overrun",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.thread_lines#sector pieces": {
@@ -77744,6 +78183,18 @@
   },
   "research": "1a1b231001c7410e",
   "triaged": "2026-10-22",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/partition.py::_column_kept#its search steps and tolerances": {
+  "body": "dc81069a44d57b1f",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 1.5 (thin columns once there are 1.5× too many)",
+  "code": "bd35e27f32add372",
+  "core": "3b7aaad4bc3c851f",
+  "date": "2026-10-25",
+  "note": "the thinning ratio; nothing cited answers it",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::_extend#partition plumbing": {
@@ -78052,6 +78503,22 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/polder.py::_polder_channels#its figures from 0068": {
+  "body": "543b102f569861da",
+  "claim": "its figures from 0068 - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: 0.8 (a lateral's head capped at 0.8 of its canal)",
+  "code": "b08cf6f2464ae027",
+  "core": "25e2018cda700745",
+  "date": "2026-10-25",
+  "note": "0.8 of the feeder's width where the lateral or toe leaves it, as the page has it",
+  "pages": {
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
+  },
+  "research": "0563a9dcc87ebedc",
+  "rests": [
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:9002217b9f41f63a"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/polder.py::_polder_channels#laterals join on the trunk": {
   "code": "20ed262e4ef473f6",
   "core": "25e2018cda700745",
@@ -78113,6 +78580,18 @@
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/polder.py::_polder_close#its search steps and tolerances": {
+  "body": "4c3a274a72ec8ccd",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 5 (fallback drain width if no drain exists (every polder draws one)); 0.75 (test for trimming a trailing stub leg)",
+  "code": "8aecfd30a473b7f1",
+  "core": "cab20c5ec09586f7",
+  "date": "2026-10-25",
+  "note": "fallback width and the stub-leg ratio",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/polder.py::_polder_close#no acute stub": {
   "code": "dbaa342e31a35a94",
   "core": "cab20c5ec09586f7",
@@ -78134,6 +78613,18 @@
   },
   "research": "39036ea15e57c448",
   "triaged": "2026-10-05",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::_polder_envelope#its search steps and tolerances": {
+  "body": "7b7f8cb81885c679",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 12 (the same)",
+  "code": "98e38c26b68561ff",
+  "core": "9513ec365912cd36",
+  "date": "2026-10-25",
+  "note": "densify samples",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_lattice#dike-pond mosaic": {
@@ -78181,6 +78672,52 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
   ],
   "triaged": "2026-10-12",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::_polder_lattice#its figures guessed on 0019": {
+  "body": "bd97d68b2f96cd01",
+  "claim": "its figures guessed on 0019 - GUESS polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: 0.05 (block tilt); 0.6 (mosaic harmonic weight); 0.4 (fall-warp harmonic weight); 1.3 (mosaic frequency); 1.1 (mosaic frequency); 2.1 (mosaic frequency); 1.9 (mosaic frequency); 0.8 (cross-warp frequency); 1.7 (cross-warp frequency); 0.7 (fall-warp frequency); 1.6 (fall-warp frequency)",
+  "code": "c33898cf7b822789",
+  "core": "70308a3b6706890c",
+  "date": "2026-10-25",
+  "note": "fits the page's gentle waver (a drawing convention) and its mosaic, whose strength is a recorded calibrated liberty",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:2c50ae22cb97ead3",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::_polder_lattice#its figures guessed on 0284": {
+  "body": "bd97d68b2f96cd01",
+  "claim": "its figures guessed on 0284 - GUESS how-our-maps-draw-a-bunds-bends-and-corners.drawing: 0.9 (column-bow frequency, low end); 2.3 (column-bow frequency, high end); 0.35 (least bow of a column line)",
+  "code": "a4693fe474b303eb",
+  "core": "70308a3b6706890c",
+  "date": "2026-10-25",
+  "note": "fits each line's own bow, recorded as the project's setting",
+  "pages": {
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html": "f3b637668ad295e9"
+  },
+  "research": "1f4c266f0d09aace",
+  "rests": [
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:9b9af18ba1394922"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::_polder_lattice#its salts, guards and sentinels": {
+  "body": "bd97d68b2f96cd01",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 24301 (seed salt (0x5EED)); 12377 (seed salt (0x3059)); 4606 (seed salt (0x11FE))",
+  "code": "c0cf5741583d94bd",
+  "core": "70308a3b6706890c",
+  "date": "2026-10-25",
+  "note": "seed salts",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_lattice#node jitter": {
@@ -78241,6 +78778,18 @@
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:9b9af18ba1394922",
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:de5f537983379a58"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::_polder_parcels#its salts, guards and sentinels": {
+  "body": "b708e38abad34012",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 47710 (seed salt (0x0BA5E))",
+  "code": "59505ffcc85e6947",
+  "core": "98db341a532bc8c5",
+  "date": "2026-10-25",
+  "note": "seed salt",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_parcels#low rows wet": {
@@ -78306,6 +78855,46 @@
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/polder.py::_polder_ring#its figures guessed on 0019": {
+  "body": "e05ce088fa05fd94",
+  "claim": "its figures guessed on 0019 - GUESS polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: 2.2 (ring-canal waver frequency (\"waver gently … a drawing convention\"))",
+  "code": "2267c85deda4e801",
+  "core": "c1722e65c9204f7e",
+  "date": "2026-10-25",
+  "note": "fits the gentle waver, a drawing convention",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:2c50ae22cb97ead3"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::_polder_ring#its salts, guards and sentinels": {
+  "body": "e05ce088fa05fd94",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1.7 (phase step between sides)",
+  "code": "06b27381765dfe33",
+  "core": "c1722e65c9204f7e",
+  "date": "2026-10-25",
+  "note": "phase step",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::_polder_ring#its search steps and tolerances": {
+  "body": "e05ce088fa05fd94",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 7 (the same (range end)); 6 (corner-arc samples)",
+  "code": "5177d9c3d1075b86",
+  "core": "c1722e65c9204f7e",
+  "date": "2026-10-25",
+  "note": "run and fillet samples",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/polder.py::_polder_ring#ring canal inside the dike": {
   "code": "2b46a7dc6482a852",
   "core": "c1722e65c9204f7e",
@@ -78328,6 +78917,18 @@
   },
   "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::_thin#its salts, guards and sentinels": {
+  "body": "ae818be74c3c44ab",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.4 (simplify tolerance)",
+  "code": "9464a7b0edbd96e4",
+  "core": "eba1e727aac1542e",
+  "date": "2026-10-25",
+  "note": "simplify tolerance; points moved onto the water are locked",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::along_trunk#polder plumbing": {
@@ -78389,6 +78990,57 @@
   "rests": [
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:8dc325794a232600",
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:de5f537983379a58"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::build_polder#its figures from 0022": {
+  "body": "1b168aa4a83ea4ef",
+  "claim": "its figures from 0022 - parcels-and-bunds-inside-a-polder-aze.drawing: 0.52 (share of modules split in two (the mix gives about 3.1 mu a parcel)); 0.16 (share split in three); 0.12 (share merged along the fall)",
+  "code": "4ee56a9d32f750d3",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-25",
+  "note": "with merges, about 1.55 parcels a bay on a module of about 5.2 mu, after the ring inset, gives about 3.1-3.3 mu net; most modules split into two or three, a few merge",
+  "pages": {
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+  },
+  "research": "5b339210163f008f",
+  "rests": [
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:12a3ae71eb49cdf8",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::build_polder#its figures guessed on 0022": {
+  "body": "1b168aa4a83ea4ef",
+  "claim": "its figures guessed on 0022 - GUESS parcels-and-bunds-inside-a-polder-aze.drawing: 1.5 (half of the 3 ft walking-bund gap (\"this project's setting\"))",
+  "code": "866a1b0011cd7e85",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-25",
+  "note": "the inset of 1.5 on each side gives the 3 ft walking bund the page records as a GUESS",
+  "pages": {
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+  },
+  "research": "5b339210163f008f",
+  "rests": [
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:2121aaffee2cc5ab",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::build_polder#its figures guessed on 0284": {
+  "body": "1b168aa4a83ea4ef",
+  "claim": "its figures guessed on 0284 - GUESS how-our-maps-draw-a-bunds-bends-and-corners.drawing: 0.1 (module line bows up to a tenth of a module (\"this project's setting\"))",
+  "code": "38e49265e361b3a2",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-25",
+  "note": "a bow up to 0.10 of the module, the project's setting",
+  "pages": {
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html": "f3b637668ad295e9"
+  },
+  "research": "1f4c266f0d09aace",
+  "rests": [
+   "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:9b9af18ba1394922"
   ],
   "verdict": "IN-STEP"
  },
@@ -78533,6 +79185,18 @@
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:d0ef52fff21446f2",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::clean_polder_parcels#its salts, guards and sentinels": {
+  "body": "ca603378bcd1b745",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 43560 (square feet in an acre)",
+  "code": "c6dabea7527d48b6",
+  "core": "f8182f8ec2134ac5",
+  "date": "2026-10-25",
+  "note": "unit conversion",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::end_on_centerline#join on the centerline": {
@@ -78850,6 +79514,18 @@
   "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/ring_rules.py::fan_context#its salts, guards and sentinels": {
+  "body": "92072703510f7bd9",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (duplicate-point tolerance)",
+  "code": "f67e03974b35d0d0",
+  "core": "e8ae23b3dc17ec4b",
+  "date": "2026-10-25",
+  "note": "duplicate-point tolerance",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/ring_rules.py::narrow#width floor": {
   "code": "4c6b4c6915b1cb74",
   "core": "f3be8e7d08d0983c",
@@ -79108,6 +79784,18 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/seams/close.py::_weld_within_rules#its salts, guards and sentinels": {
+  "body": "3c71833e09f3bbea",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.4 (buffer tolerance); 0.02 (buffer tolerance); 0.05 (simplify tolerance)",
+  "code": "8111b2f492b9208d",
+  "core": "c4a17c6e4a194681",
+  "date": "2026-10-25",
+  "note": "buffer and simplify tolerances",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/seams/close.py::_weld_within_rules#weld host": {
   "code": "9270e372119638b2",
   "core": "c4a17c6e4a194681",
@@ -79152,6 +79840,18 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
   "triaged": "2026-10-25",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/seams/close.py::blunt_points#its search steps and tolerances": {
+  "body": "839e446cc27a64e0",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 0.45 (cut kept within 45% of each leg (validity guard))",
+  "code": "d6c14903d026d98c",
+  "core": "3a16b2f22f5111ae",
+  "date": "2026-10-25",
+  "note": "validity guard on the cut",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::held_faults#held at the placer's lines": {
@@ -79374,6 +80074,18 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/seams/pockets.py::_outside_command#its search steps and tolerances": {
+  "body": "4d5e30430889ef54",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 64 (least sample count); 6 (sampling step)",
+  "code": "1681f8fd14ffdb93",
+  "core": "90423d96149bcd97",
+  "date": "2026-10-25",
+  "note": "sampling density",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/seams/pockets.py::_outside_command#set-back from the canal": {
   "code": "7325b67133fa85d5",
   "core": "90423d96149bcd97",
@@ -79483,6 +80195,18 @@
   },
   "research": "1a1b231001c7410e",
   "triaged": "2026-10-22",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/settle.py::Fabric.neighbors#its salts, guards and sentinels": {
+  "body": "24162bc0ea0e5315",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (buffer tolerance)",
+  "code": "72fff98bbd3230f9",
+  "core": "518813ad30ac1cea",
+  "date": "2026-10-25",
+  "note": "buffer tolerance",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::Fabric.neighbors#neighbors by the shared bund": {
@@ -79627,6 +80351,18 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221"
   ],
   "triaged": "2026-10-25",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/settle.py::shared_length#its salts, guards and sentinels": {
+  "body": "bf83600b6b5b3534",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (buffer tolerance)",
+  "code": "8605171182061f2c",
+  "core": "12d5edebc636e54e",
+  "date": "2026-10-25",
+  "note": "buffer tolerance",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::takes#merge bounded": {
@@ -79780,6 +80516,39 @@
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/tint.py::fronts#its figures from 0007": {
+  "body": "b4f055efe371f504",
+  "claim": "its figures from 0007 - wet-paddies-that-never-drain-shitsuden.drawing: 0.25 (the same test of fronting the drain)",
+  "code": "dda2133d1ef096ac",
+  "core": "bd1df5f70b823e43",
+  "date": "2026-10-25",
+  "note": "a quarter plot's reach is a calibration of \"whose foot lies on the drain\"",
+  "pages": {
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
+  },
+  "research": "45d05a93011e034b",
+  "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/tint.py::judge_tint#its figures from 0007": {
+  "body": "736628d6c88771ba",
+  "claim": "its figures from 0007 - wet-paddies-that-never-drain-shitsuden.drawing: 0.25 (the same, for the tint floor)",
+  "code": "00fbfa1c6c3853e5",
+  "core": "f5e7d358f5c86915",
+  "date": "2026-10-25",
+  "note": "the claim calls this \"the same\" test as `fronts`, but `_to_collector[_k] <= 0.25 * plot_across` is a least-distance test, so a plot touching the drain at one corner qualifies. That is the test `fronts` documents as wrong, against 0007's plots \"whose foot lies on the drain\". Use `fronts` here, or reword the claim as a distance test",
+  "pages": {
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
+  },
+  "research": "45d05a93011e034b",
+  "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/tint.py::judge_tint#one wet plot at least": {
   "code": "5c9afc1acb42b57a",

@@ -96,7 +96,7 @@ def _normal_away(hard: Any, p: Pt, t: Pt) -> Pt:
     """The unit normal to tangent `t` at `p` that points away from the hard ground.
 
     Research:
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 5 (probe step to orient the normal)
+        its probe - NONE: they decide nothing about the place - 5 (probe step to orient the normal)
     """
     from shapely.geometry import Point
 
@@ -564,6 +564,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
         streets rounded at a corner - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); a street is rounded on the inside of a corner at `street_bend_radius_ft`
         the leeward row marked sheltered - research/questions/0033-row-villages-resson.drawing.html: on a street with farms on both sides, where the settlement rolled the sheltered form (`row_shelter`), a farm with its street and the grove row beyond it to windward (`sheltered_by_the_row_across`) is seated as a full farm and marked `sheltered`
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 30 (holdings clipped 30 px inside the sheet)
+        its street run - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the street laid one lot longer than its row, with two lots of slack, kept half a frame inside the sheet
     """
     want = plan.spec.households
     field = [(float(x), float(y)) for x, y in (plan.envelope or [])]

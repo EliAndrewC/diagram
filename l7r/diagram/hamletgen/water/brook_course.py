@@ -291,7 +291,7 @@ def round_the_brooks(s: Settlement) -> None:
     (`join_vertices`), so the rounding cannot draw the brook away from the mouth the record says joins it.
 
     Research: plumbing - NONE: stage ordering, the rounding itself is `finished_course`'s
-        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 7 (fallback brook width (same guess as line 759))
+        its fallback brook width - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: 7 (fallback brook width, the page's 7 ft brook)
     """
     chans = [c for c in s.M.get("channels") or [] if len(c.get("poly") or ()) >= 2]
     heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in chans if (c.get("frm") or {}).get("kind") == "stream"]

@@ -46,7 +46,8 @@ def fillet_polyline(pts: Poly, radius: float, steps: int = 6, min_turn_deg: floa
         earth channel bends on a sweep - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: every interior corner filleted
         bend radius scales with width - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: callers pass ~2.5x the drawn width
         fillet cap and threshold - NONE: 35% of each leg, corners under 8 degrees left alone
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (samples per fillet ("curve plumbing - NONE")); 0.35 (fillet cap per leg (the claim: "fillet cap and threshold - NONE"))
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (samples per fillet)
+        its fillet cap - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.35 (fillet cap per leg, tightening a short leg's bend)
     """
     if len(pts) < 3 or radius <= 0:
         return [(float(x), float(y)) for x, y in pts]

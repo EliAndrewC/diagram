@@ -527,6 +527,7 @@ def aligned_gaps(plan: ParsedPlan) -> list[Gap]:
     Research:
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 30 (reporting window: 10 ft shared edge, gaps from 5 ft)
         its salts, guards and sentinels - NONE: they decide nothing about the place - 15 (dedupe radius)
+        its reported gap - NONE: they decide nothing about the place - 90 (upper bound on the reported gap, a report window)
     """
     b = plan.buildings
     raw: list[Gap] = []
@@ -573,6 +574,7 @@ def gap_tag(gap: Gap) -> str:
 
     Research:
         its figures guessed on 0116 - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 8 (wooden gap over 8 ft is loose)
+        its loose gap - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 10 (a kura fire-gap over 10 ft is loose)
     """
     if gap.kura:
         return "fire-gap OK (kura)" if gap.ft <= 10 else "LOOSE (kura gap >10 ft)"

@@ -202,7 +202,7 @@ class Sectors:
             tip row dropped - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a row at the tip narrower than `MIN_ROW` (0.45) of the lesser of a plot width and the sector's median width is dropped
             its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 6 (first row back at the root); 12 (width samples); 13 (the same (range end)); 40 (line overrun)
             its salts, guards and sentinels - NONE: they decide nothing about the place - 6.28 (phase range (about 2π))
-            its figures guessed on 0284 - GUESS research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: 70 (wavelength of the column-line wobble); 47 (wavelength of the row drift)
+            its wobble wavelengths - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 70 (wavelength of the column-line wobble); 47 (wavelength of the row drift)
         """
         F, g, R, row_step, across = self.F, self.g, self.R, self.row_step, self.plot_across
         f_lo = max(_root_f(A, F), _root_f(B, F)) + 6 * g

@@ -667,7 +667,8 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     because a half-river closure - the common old form - is a pixel or two at a 7 ft brook. Each form's thickness is
     `WEIR_THICK_FT`'s, with its class beside it.
 
-    Research: weir or bare mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: `plan.intake` rolled per map, nothing drawn on an open hamlet
+    Research:
+        weir or bare mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: `plan.intake` rolled per map, nothing drawn on an open hamlet
         weir form rolled among four (s.resolve("weir_form")), 0059's four forms at even odds - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the four weir forms on small water, rolled at even odds (the even roll a GUESS)
         oblique weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar slants upstream from the intake bank, its root at the mouth's downstream lip
         weir skew angle - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: about 30 degrees, the average of the old oblique weirs still standing (river weirs, 5 to 78); WEIR_SKEW_DEG, 30 deg
@@ -676,6 +677,7 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
         seat-search reach - GUESS: the bar steps down the brook a foot at a time, past dry ground, no further than the leg to the next vertex
         its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 6 (fallback head-race width, 6.0 ft ("head race ... 6.0"))
         its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (stops division by a tiny sine)
+        its weir bar - CONVENTION: the weir bar drawn just below the race mouth - 1 (1 ft below the half-opening)
     """
     if plan.intake != "weir":
         return
@@ -764,8 +766,8 @@ def open_race_mouth(s: Settlement, sluice: Pt) -> None:
         race mouth hue taper - CONVENTION: the race's first 30 ft drawn from the brook's hue to the supply hue, so the dug ditch does not read as the river
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 8 (match distance: a race starting this near the bank is the one at the tap)
         its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (tiny tolerance: race not already at the tap)
-        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 7 (fallback brook width ("about 2 m (~7 ft) ... are GUESSES"))
-        its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 2.5 (fallback width for the color fade at the race mouth ("delivery ditch 2.5"); see lead 4)
+        its fallback brook width - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: 7 (fallback brook width, the page's 7 ft brook)
+        its figures against 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 2.5 (fallback width for the color fade at the race mouth, the delivery ditch's where the matched race is the 6.0 ft head race) - a departure the code keeps until feature 417 T34
     """
     tap = (float(sluice[0]), float(sluice[1]))
     brook = next((st for st in s.M.get("streams", []) if any(math.dist(tap, (float(q[0]), float(q[1]))) < 0.5 for q in st["poly"])), None)

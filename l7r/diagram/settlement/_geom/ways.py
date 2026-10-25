@@ -53,7 +53,7 @@ def lane_runs(M: Manifest) -> list[tuple[Poly, float]]:
     watercourses - this answers "what could someone walk or cart along here".
 
     Research:
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 30 (road_width fallback (N9: never set)); 26 (roads `w` fallback (no producer)); 18 (town-street fallback (no producer)); 6 (alley fallback (no producer)); 20 (ring-road fallback (no producer))
+        its salts, guards and sentinels - NONE: they decide nothing about the place; no generator writes M['road'] since feature 392 (it is set to None and never written) - 30 (road_width fallback); 26 (roads `w` fallback (no producer)); 18 (town-street fallback (no producer)); 6 (alley fallback (no producer)); 20 (ring-road fallback (no producer))
     """
     runs: list[tuple[Poly, float]] = []
     roads: Any = M.get("roads")

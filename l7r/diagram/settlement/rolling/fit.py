@@ -32,7 +32,7 @@ def stream_segment_index(streams: Any) -> PointGrid:
     Research:
         keep-out geometry, index and cache plumbing - NONE: the segments and their widened boxes in a `PointGrid`
         stream keep-out at half-width plus 5 px - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); `hw` = w / 2 + 5, the distance `rect_touches_stream` decides by
-        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 9 (stream width when a record has no w)
+        its fallback - NONE: they decide nothing about the place - 9 (stream width when a record has no w)
     """
     grid = PointGrid()
     for f in streams:
@@ -271,6 +271,7 @@ class BundleFitMixin:
 
         Research:
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (envelope kept 6 px off the sheet edge)
+            its least gap - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 2 (at least 2 ft between a homestead envelope and any placed box)
         """
         self._seat_search["rects"] += 1
         cx, cy, w, h = env
@@ -815,6 +816,7 @@ class BundleFitMixin:
 
         Research:
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (the same sheet-edge margin)
+            its least gap - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 2 (at least 2 ft between neighboring homestead boxes)
         """
         if geom.get("unlaid"):
             return False

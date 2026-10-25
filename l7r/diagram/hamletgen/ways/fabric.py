@@ -40,6 +40,7 @@ class _margin_frame:  # noqa: N801 - used as a callable coordinate map, not as a
     def __init__(self, plan: SitePlan, span: float, near: Sequence[Pt] = ()) -> None:
         """Research:
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 12 (look-ahead vertex count on the envelope walk)
+            its margin cap - NONE: they decide nothing about the place - the margin frame capped at half the field's ring
         """
         env, seat = plan.envelope, plan.seat
         ax, ay = seat["along"]
@@ -191,6 +192,7 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
         the farms' bamboo strips as fabric - research/questions/0075-bamboo-groves-chikurin.drawing.html: the lanes keep off the strip; the ground between it and its house is `seat_strips`' own claim
         a house its own owner - GUESS: each house is entered with itself as owner, so a reader may free it for a route starting beside it (`field_router`'s release); `_hits_a_steading` keeps every house corner off a tread apart - the 3 ft a tread keeps off a farmhouse wall (0081) is not kept there, carried to 405 T119
         its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (octagon)
+        its well radius - CONVENTION: the well's drawn radius - 8 (a well with no recorded radius)
     """
     out: list[tuple[Poly, Pt | None, str]] = []
     for h in s.M.get("houses", []):

@@ -32,7 +32,7 @@ class FocalMixin:
             mill seat beside moving water - research/questions/0064-water-mills-suisha.drawing.html: beside a watercourse with fall, the wheel on the water side
             wheel glyph - research/questions/0064-water-mills-suisha.html: the Shinguruma wheel, 4.8 m (about 15.7 ft) across, is called large (the 1959 rebuild of a mill founded 1808) - an 18 ft wheel is drawn, a departure the code keeps until feature 417 T34; an 18 ft wheel (9 ft radius) set 5 ft off the house, in a short race
             wheel drawing - CONVENTION: an eight-spoked ring
-            its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (spokes (mill not reached; claim CONVENTION))
+            its wheel glyph - CONVENTION: sizes on the sheet, not in the world - 8 (spokes)
         """
         pw, ph = self.px(w), self.px(h)
         dx, dy = {"E": (1.0, 0.0), "W": (-1.0, 0.0), "N": (0.0, -1.0), "S": (0.0, 1.0)}[wheel_side]

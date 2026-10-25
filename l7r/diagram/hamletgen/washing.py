@@ -75,7 +75,7 @@ def passing_courses(M: Mapping[str, Any]) -> list[tuple[list[Pt], float]]:
     stream or ditch that passes the houses, the shared footing "on the channel or stream bank".
 
     Research: a stream, a ditch or a channel - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: where a stream or ditch passes the houses, a shared one on the channel or stream bank
-        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 9 (fallback stream half-width base)
+        its fallback stream width - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 9 (fallback stream width, halved; the brook is drawn 7 ft)
         its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 6 (fallback channel width); 1.5 (fallback field-ditch width)
         its figures from 0031 - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 2.5 (fallback farm-channel width)
     """

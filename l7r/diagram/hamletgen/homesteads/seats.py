@@ -148,7 +148,7 @@ def lane_frontage(s: Settlement, seat: Mapping[str, Any], step: float = 86.0, co
     Research:
         houses front their lanes - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse is seated before any lane is laid, the planned Imperial road excepted, and 0033 has a row's farms along a street laid out before them - a seat is offered along an internal lane already laid, a departure the code keeps until feature 417 T32
         frontage seat off the lane - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the setback (0081, 0028); `LANE_FRONTAGE_STANDOFF` (70 ft) off the lane's centerline
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 86 (step between frontage seats)
+        its seat pitch - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 86 (step between frontage seats)
     """
     out: list[Pt] = []
     off = LANE_FRONTAGE_STANDOFF

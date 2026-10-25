@@ -81,6 +81,7 @@ def dike_band(inner_env: Any, seed: int, width: tuple[float, float] = (14.0, 40.
         faces - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the outer face follows the water in curves, the inner hugs the fields
         its figures from 0027 - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: 0.16 (fine width-wave amplitude); 0.22 (middle width-wave amplitude); 0.26 (broad width-wave amplitude); 5 (fine wave's harmonic)
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 34 (densifying step along the dike's inner face)
+        its width noise - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (dike width noise +-3 ft); 3 (inner face wobble up to 3 ft outward)
     """
     R = random.Random(seed)
     pts = list(inner_env)

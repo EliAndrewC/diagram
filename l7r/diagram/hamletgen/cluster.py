@@ -121,7 +121,7 @@ def seat_has_dry_exit(plan: SitePlan, start: Pt, toe: Poly | None = None, wet: S
     Research:
         dry way out of the seat - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground
         tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 16 (pond disc drawn as a 16-gon)
+        its polygon - NONE: they decide nothing about the place - 16 (pond disc drawn as a 16-gon)
         its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (pi/8 step of the same 16-gon)
     """
     from .ways.dry_exit import EXIT_CELL_FT, dry_exit
@@ -151,7 +151,7 @@ def straight_exit(start: Pt, walls: Sequence[tuple[Poly, float]], lines: Sequenc
     passes through are joined, so the fill would find its way out along it. False says nothing: the fill decides.
 
     Research:
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 1.75 (water-line margin in cells, same reason); 1.5 (wall margin in cells, so the quick test is sufficient for the flood fill)
+        its margins - NONE: they decide nothing about the place - 1.75 (water-line margin in cells, so the quick test is sufficient for the flood fill); 1.5 (wall margin in cells, the same)
     """
     from shapely import LineString, Polygon
 
@@ -495,7 +495,8 @@ def _fork_spur(spur_pts: Poly, kept: list[tuple[Poly, Poly]]) -> Poly:
     - a hit at the current start is the fork already made, not a crossing left to cure.
 
     Research: field spur forks from the lane - research/questions/0081-village-lanes.drawing.html: a lane meets another's side as a T and a tail under 40 ft beyond a crossing is cut - the spur's run is cut at any length on the near side of an arm, a departure the code keeps until feature 417 T32; starts at its crossing with an arm
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 8 (cap on passes (stops the loop)); 14 (match tolerance: a hit this near the spur's end is not a fork)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 8 (cap on passes (stops the loop))
+        its figures against 0081 - research/questions/0081-village-lanes.drawing.html: 14 (a hit this near the spur's end is not a fork, so a stub of 14 ft or less stands where the page cuts a tail under 40 ft) - a departure the code keeps until feature 417 T32
     """
     for _pass in range(8):
         _cut = False

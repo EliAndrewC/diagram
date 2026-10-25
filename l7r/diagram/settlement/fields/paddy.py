@@ -315,7 +315,7 @@ class PaddyMixin:
             its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 52 (outline wobble); 0.6 (how near the edge a plot goes dry); 0.62 (dry grain vs soy share); 0.08 (edge-dryness jitter)
             its salts, guards and sentinels - NONE: they decide nothing about the place - 6.28 (2π); 7 (seed multiplier); 13 (seed multiplier); 1.7 (phase decorrelation)
             its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 0.55 (last-column threshold); 14 (lateral sampling step)
-            its figures from 0009 - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 0.3 (flooded share near the ditches); 0.975 (ripe share)
+            its figures from 0009 - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 0.3 (flooded share near the ditches); 0.975 (ripe share, 2.5% on every map where the page has one in twenty on some maps) - a departure the code keeps until feature 417 T34
         """
         outline, bbox = _wf_outline(shape, amp)
         x0, y0, x1, y1 = bbox

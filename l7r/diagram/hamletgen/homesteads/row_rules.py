@@ -51,7 +51,7 @@ def continuous(pieces: Sequence[Sequence[Sequence[float]]], tol: float = 1.5) ->
     """Do these polylines join end to end (or end on another's tread) into ONE way? True for one piece or none.
 
     Research:
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 1.5 (join tolerance between street pieces)
+        its join tolerance - NONE: they decide nothing about the place - 1.5 (join tolerance between street pieces)
     """
     if len(pieces) <= 1:
         return True

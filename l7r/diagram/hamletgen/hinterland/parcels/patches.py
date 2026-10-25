@@ -370,6 +370,8 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 0.2 (per-map ladder spread 0.9-1.1); 0.415 (√2−1 diagonal slack, geometry); 0.72 (aspect-ladder step); 0.45 (aspect-ladder step); 16 (scan window inset from content box); 0.36 (size-band spread 0.82-1.18); 1.35 (exclusion radius 1.15-2.5× size)
         its salts, guards and sentinels - NONE: they decide nothing about the place - 76 (jitter salt); 77 (jitter salt); 71 (jitter salt); 72 (jitter salt); 73 (jitter salt); 78 (jitter salt (bearing)); 74 (jitter salt)
         its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N2, 2026-10-25) - 1.2 (lot elongation up to 2.2:1)
+        its lattice - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 90 (lattice step, and the nudge of up to half a step off it)
+        its canvas hold - NONE: they decide nothing about the place - 40 (seat held 40 px plus the half-size off the canvas edge)
     """
     # IN THE MAP'S PIXELS (feature 328 batch 3, impl-drift): the parcel size and the commons' legibility floor are feet, and every
     # length the scan compares them with is px - equal at a hamlet's 1 ft/px, wrong at any other grain
@@ -790,8 +792,8 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
     holdings of a shinden dry-upland village, which are a settlement form, not a woodlot knob.
 
     Research: wandering edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: radius 0.80-1.00 of the ellipse on two low harmonics, never a rectangle
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 12 (outline vertex count)
-        its figures from 0077 - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: 0.8 (minimum edge radius share); 0.2 (edge radius wander range); 0.35 (vertex angle wander); 0.25 (harmonic amplitude)
+        its outline - CONVENTION: sizes on the sheet, not in the world - 12 (outline vertex count)
+        its wandering edge - CONVENTION: the lot's edge wanders, a map drawing convention (0077's drawing page) - 0.8 (minimum edge radius share); 0.2 (edge radius wander range); 0.35 (vertex angle wander); 0.25 (harmonic amplitude)
         its salts, guards and sentinels - NONE: they decide nothing about the place - 79 (jitter salt); 80 (jitter salt); 81 (jitter salt)
     """
     p1, p2 = 2 * math.pi * s._hjit(x, y, 79.0), 2 * math.pi * s._hjit(x, y, 80.0)

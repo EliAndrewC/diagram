@@ -644,7 +644,7 @@ class CombMixin:
             drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a dug drain run curving out of the collector at most 55 degrees a turn, then down the fall off the map at the collector's tail width
             outfall corridor - research/questions/0058-ground-too-wet-to-build-on.drawing.html: 33 ft no-build either side of the outfall run on town and city maps; a hamlet or village relies on the below-the-drain rule
             outfall recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at the width it is inked, the drain's tail width
-            its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 5.5 (fallback outfall width)
+            its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 5.5 (fallback outfall width, given in px where the page stores widths in feet) - a departure the code keeps until feature 417 T34
         """
         # The ditch net ALWAYS goes to the LATE water block (GM 2026-07-21: Hoshizora's canals
         # "rendering below the rice paddies"). In the shared block - anchored at the FIRST water

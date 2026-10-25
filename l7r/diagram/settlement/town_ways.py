@@ -25,7 +25,7 @@ class TownWaysMixin:
             porch on the water side - research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: the entry porch faces +y, the water
             hall glyph - CONVENTION: an inner eave line and a dark porch block
             focal keep-out - research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: an open forecourt lay between the hall and its pond - only the footprint and 6 px are reserved, no forecourt, a departure the code keeps until feature 417 T35; the footprint plus 6 px is reserved
-            its salts, guards and sentinels - NONE: they decide nothing about the place - 18 (porch block (no caller; claim CONVENTION)); 5 (inner eave (no caller; claim CONVENTION)); 9 (porch block (no caller; claim CONVENTION))
+            its hall glyph - CONVENTION: sizes on the sheet, not in the world - 18 (porch block); 5 (inner eave); 9 (porch block)
         """
         pw, ph = self.px(w), self.px(h)
         self.add(f'<rect x="{x - pw / 2:.1f}" y="{y - ph / 2:.1f}" width="{pw:.1f}" height="{ph:.1f}" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2.4" rx="2"/>')
@@ -48,7 +48,7 @@ class TownWaysMixin:
             a pavilion at the water mouth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: a pavilion drawn (the page attests a grove there, no pavilion)
             pavilion size - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); a hexagon of 22 ft radius
             pavilion glyph - CONVENTION: a hexagon with an inner ring
-            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.42 (inner ring (no caller)); 6 (hexagon (no caller; claim CONVENTION))
+            its pavilion glyph - CONVENTION: sizes on the sheet, not in the world - 0.42 (inner ring); 6 (hexagon)
         """
         pr = self.px(r)
         pts = " ".join(f"{x + pr * math.cos(a):.1f},{y + pr * math.sin(a):.1f}" for a in [math.pi / 6 + i * math.pi / 3 for i in range(6)])
@@ -68,7 +68,7 @@ class TownWaysMixin:
             market ground - research/questions/0130-market-days-and-the-market-ground-ichi.drawing.html: an open court 120 x 84 ft by default
             stalls drawn - research/questions/0130-market-days-and-the-market-ground-ichi.drawing.html: a row of 14 x 12 ft stalls, one per 34 ft of width
             market glyph - CONVENTION: a dashed packed-earth court
-            its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (stall pitch and offset (no caller; 0130 draws no stalls)); 22 (stall pitch and offset (no caller; 0130 draws no stalls))
+            its stall row - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 6 (stall row offset); 22 (stall pitch); no caller draws the market
         """
         pw, ph = self.px(w), self.px(h)
         cid = self._cid("mkt")

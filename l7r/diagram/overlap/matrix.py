@@ -31,7 +31,7 @@ def matrix_violations(M: Mapping[str, Any]) -> list[tuple[str, str, float, float
 
     Research:
         its salts, guards and sentinels - NONE: they decide nothing about the place - 120 (spatial index cell)
-        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 4000 (default sheet height)
+        its index box - NONE: they decide nothing about the place - 4000 (default sheet height, a clamp that changes no verdict)
     """
     ext = matrix_extents(M)
     priv = {pw for w_ in M.get("wells", []) or [] if (pw := private_well(w_))}

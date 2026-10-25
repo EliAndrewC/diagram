@@ -116,7 +116,7 @@ def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: f
     Research:
         pointed plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a needle, a truncated point or an apex under 25 deg loses the tint
         one wet plot at least - CONVENTION: when the draw leaves no plot on the drain blue, the most basin-like plot ON THE DRAIN is tinted, so the map still shows the class it declares (0007 drawing records blue as a sample, not this floor)
-        its figures from 0007 - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: 0.25 (the same, for the tint floor)
+        its figures against 0007 - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: 0.25 (the tint floor's least-distance test, which takes a plot touching the drain at a corner where the page tints plots whose foot lies on the drain) - a departure the code keeps until feature 417 T34
     """
     import shapely
     from shapely.geometry import LineString, Polygon

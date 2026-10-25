@@ -79,6 +79,7 @@ class PlacerMixin:
 
         Research:
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (sheet-edge margin)
+            its least gap - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 2 (2 px least gap between a homestead's bbox and a placed box)
         """
         fg = getattr(self, "_free_ground", None)
         if fg is not None:
@@ -320,6 +321,7 @@ class PlacerMixin:
 
         Research:
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (sheet-edge margin)
+            its least gap - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 2 (2 px least gap between a house box and placed boxes)
         """
         cx, cy, w, h = box
         if cx - w / 2 < 6 or cx + w / 2 > self.W - 6 or cy - h / 2 < 6 or cy + h / 2 > self.H - 6:

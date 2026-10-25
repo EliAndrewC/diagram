@@ -85,7 +85,7 @@ def seat_free(s: Settlement, x: float, y: float, r: float) -> bool:
         out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html: no canopy over a yard's or bed's sun ground; the bank mulberry is the manual's shade tree for cattle (0061), a canopy tree, not 0038's field mulberry trained as low bushes, which the rule exempts
         no trunk in the reeds - research/questions/0061-reservoir-ponds-tameike.drawing.html: the reeds stand at the shore, the bank beyond them
         no trunk on a way, crop or water - research/questions/0061-reservoir-ponds-tameike.drawing.html: a tree left out where its trunk would stand on a lane, the crop or the water - off every tread, paddy, dry plot and marsh, and a stream's half-width and a foot
-        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 9 (fallback stream width when a record has no `w)
+        its fallback stream width - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 9 (fallback stream width when a record has no `w`; the brook is drawn 7 ft)
     """
     if not (r <= x <= s.W - r and r <= y <= s.H - r):
         return False

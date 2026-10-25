@@ -505,6 +505,7 @@ class FieldFeaturesMixin:
             corner grave stones - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) - 0008 gives no stone count; one or two stones
             its narrowly attested figures - GUESS: searched (feature 417 T38 pass N7, 2026-10-25), attested only for another case - 6.5 (first stone's height; ATTESTED ONLY FOR officials (明史 卷60); SILENT for a commoner); 3.5 (second stone's height; ATTESTED ONLY FOR officials (明史 卷60); SILENT for a commoner (this pass))
             its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 1.6 (second stone's offset across); 2.2 (first stone's offset / second's base step)
+            its corner stones - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 2.4 (stone width); 1.0 (first stone's base)
         """
         at = rng.choice(turning_corners(plot["poly"]))
         cx, cy = (round(v, 1) for v in corner_seat(plot["poly"], at))
@@ -540,8 +541,8 @@ class FieldFeaturesMixin:
             grave island - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: a mound inside a plot
             basins carved round the island - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no ring passes under the mound
             grave island size - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: eighteen paces round, by the rule of 1372, about 22 to 28 ft a side if square - a ceiling on the grave's whole ground; the rule gives no height for a commoner's mound - the mound has no cap, its 18 px floor 36 ft across at a village's 2 ft to the pixel, past that ceiling, a departure the code keeps until feature 417 T34; the island 1.1 of the plot's half-span on each axis, at least 18 x 12 px, growing with the plot; mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones
-            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 9 (least mound half-width); 6 (least mound half-height)
-            its narrowly attested figures - GUESS: searched (feature 417 T38 pass N7, 2026-10-25), attested only for another case - 8 (stone half-width (2.6 wide); ATTESTED ONLY FOR officials (stele 2.2 chi wide at the least); SILENT for a commoner); 5 (second stone's height; ATTESTED ONLY FOR officials (明史 卷60); SILENT for a commoner); 6.5 (stone half-width (2.6 wide); ATTESTED ONLY FOR officials (stele 2.2 chi wide at the least); SILENT for a commoner); 1.3 (stone half-width (2.6 wide); ATTESTED ONLY FOR officials (stele 2.2 chi wide at the least); SILENT for a commoner)
+            its figures against 0008 - DEVIATION research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: 9 (least mound half-width); 6 (least mound half-height), a floor under the page's 22-28 ft ceiling
+            its narrowly attested figures - GUESS: searched (feature 417 T38 pass N7, 2026-10-25), attested only for another case - 8 (first stone's height; ATTESTED ONLY FOR officials; SILENT for a commoner); 5 (second stone's height; ATTESTED ONLY FOR officials (明史 卷60); SILENT for a commoner); 6.5 (third stone's height; ATTESTED ONLY FOR officials; SILENT for a commoner); 1.3 (stone half-width (2.6 wide); ATTESTED ONLY FOR officials (stele 2.2 chi wide at the least); SILENT for a commoner)
         """
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         cx, cy = round(cx, 1), round(cy, 1)

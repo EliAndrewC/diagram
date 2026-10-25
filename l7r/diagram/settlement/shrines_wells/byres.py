@@ -307,7 +307,7 @@ class DraftByresMixin:
             outer stable gap - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: YARD_SHED_GAP_FT, a ken, then two
             first wall turned per homestead - NONE: hashed from the seat
             its salts, guards and sentinels - NONE: they decide nothing about the place - 5 (count of the first ring's seats (rotation modulus)); 131 (jitter salt (first wall turned))
-            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N8, 2026-10-25) - 0.3 (back-wall candidate seats at +-0.3 of the house width); 0.25 (flank candidate seat 0.25 of the depth toward the back)
+            its figures against 0048 - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: 0.3 (back-wall candidate seats at +-0.3 of the house width, where the measured stables stand toward the road and the gate); 0.25 (flank candidate seat 0.25 of the depth toward the back) - a departure the code keeps until feature 417 T33
         """
         hw, hh, rot = float(h["w"]), float(h["h"]), float(h.get("rot", 0.0) or 0.0)
         hx, hy = float(h["x"]), float(h["y"])
@@ -355,6 +355,7 @@ class DraftByresMixin:
             no roof under a yard persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html: the persimmon casts shade over the house in summer - a byre roof is refused under it, a departure the code keeps until feature 417 T33
             clear of the homestead's other parts - NONE: overlap
             its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (float tolerance (its own house))
+            its least gaps - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 2 (2 px between an annex and its homestead's other parts); 1 (1 px past a persimmon's crown)
         """
         hx, hy = float(h["x"]), float(h["y"])
         if self._in_blocked(cx, cy) or self._near_corridor(cx, cy):
@@ -436,6 +437,7 @@ class DraftByresMixin:
             only plain houses keep a byre - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the L-shaped farmhouse common among the better-off households; big farmhouses never own one
             spiral byre off the paddies - research/questions/0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html: a village house stood about 3 ft back from cultivated land; the stall's depth is ours; kept a stall's depth from every field
             its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N8, 2026-10-25) - 30 (30-degree step of the spiral search); 0.25 (the next widening tiers (0.5, 0.25, 0)); 0.75 (spread tier for the shared-shed choice (borrowing itself NOT ATTESTED, P6/the record))
+            its byre clearance - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (a spiral byre keeps 3 px clear all round)
         """
         bs = self.bscale
         # SIZE: a shared byre houses ~1-2 draft animals (an ox / water-buffalo stall is ~2x3 m) plus fodder ->

@@ -215,7 +215,7 @@ class LandUseMixin:
             the village's split and its inset - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the split rolled per village (`dikepond_split`) and the one inset every reader takes derived from it (`dikepond_inset`)
             overlay colors - CONVENTION: pond and lotus teals
             no rape - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: never drawn beside the rice
-            its salts, guards and sentinels - NONE: they decide nothing about the place - 0.55 (converted share of eligible plots)
+            its converted share - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.55 (converted share of eligible plots, a share well short of everything)
         """
         if overlay not in ("none", "mulberry_fishpond", "lotus", "tea_fringe"):
             raise ValueError(f"unknown land_use_overlay {overlay!r}")
@@ -374,7 +374,7 @@ class LandUseMixin:
         Returns the leftover plots, which the land_use record reports.
 
         Research: leftovers as standing rice - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: dike-ponds convert some of the low plots and leave the rest in rice; an unconverted parcel of a wholesale block is drawn as rice
-            its figures guessed on 0014 - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: 2.5 (water set in from the bund)
+            its figures from 0014 - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: 2.5 (water set in from the bund, inside the walking bund's 2-5 ft)
             its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 12 (leftover waterline fillet reach)
             its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (seed multiplier); 13 (seed multiplier)
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 4.5 (shoot pitch, dry leftover)
@@ -439,6 +439,7 @@ class LandUseMixin:
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 2.5 (least bloom radius); 14 (bloom scatter)
             its salts, guards and sentinels - NONE: they decide nothing about the place - 0.7 (dig-back scale floor)
             its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 8 (bank corner fillet reach); 16 (water corner fillet reach)
+            its dug-back bank - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1 (a dike-pond unit's bank clears the canal by 1 ft)
         """
         if overlay == "mulberry_fishpond":
             # 桑基魚塘: a raised MULBERRY DIKE (基, planted) surrounds an inset fish POND (塘, water) whose

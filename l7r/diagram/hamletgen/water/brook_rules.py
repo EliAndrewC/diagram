@@ -245,7 +245,8 @@ def reserved_box(course: Sequence[Pt], plan: SitePlan) -> tuple[float, float, fl
     A view is a box, so it holds the box round them all.
 
     Research:
-        its figures guessed on 0068 - GUESS research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 9 (brook width in the keep-off band; doesn't match: the page and `comb.py` use 7 (lead 1))
+        its figures against the drawn brook - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 9 (brook width in the keep-off band, where the unit's own BROOK_DRAWN_W is 7) - a departure the code keeps until feature 417 T34
+        its bund margin - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (the hem-drop band's 3 ft beyond the brook's half width)
     """
     from l7r.diagram.settlement.fields.comb import WetLines, hem_on_water  # noqa: PLC0415 - the settlement package imports late here
 

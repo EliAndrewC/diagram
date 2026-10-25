@@ -152,7 +152,7 @@ def perimeter_hugging_pct(plan: ParsedPlan, depth_ft: float = 25.0, cell: int = 
     """Fraction of building footprint sitting within depth_ft of a wall (high = a good ring).
 
     Research:
-        its figures guessed on 0116 - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 25 ("one building-depth" from a wall)
+        its band depth - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 25 ("one building-depth" from a wall)
     """
     g = _grids(plan, cell)
     band = _perimeter_band(g, max(1, int(depth_ft * FTPX / cell)))

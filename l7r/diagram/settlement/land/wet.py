@@ -358,7 +358,8 @@ class WetGroundMixin:
             no-build marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: every marsh but a pond fringe is no-build ground
             reed tile - CONVENTION: the drawn ground filled with the reed tile
             its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (prefilter reach for crests near the box); 5 (keep-out grid slot id); 6 (keep-out grid slot id)
-            its figures from 0074 - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 1.5 (bare rim the reeds keep off the pond)
+            its figures against 0074 - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 1.5 (bare rim the reeds keep off the pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34
+            its crescent pond pad - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 2 (reeds kept 2 ft plus a tuft's reach off a crescent pond)
         """
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")

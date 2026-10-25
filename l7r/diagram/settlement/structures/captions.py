@@ -292,7 +292,8 @@ class CaptionProbesMixin:
         across (GM 2026-08-10: a caption on the wall reads as naming the defenses).
 
         Research:
-            its salts, guards and sentinels - NONE: they decide nothing about the place - 4.5 (wall half-width (no wall)); 22 (moat fallback)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 22 (moat fallback)
+            its rampart half-width - CONVENTION: the rampart's drawn half-width - 4.5 (wall half-width)
         """
         out: list[tuple[list[Pt], float]] = []
         wall = self.M.get("wall") or []

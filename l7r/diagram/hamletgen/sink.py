@@ -129,7 +129,7 @@ def drain_record(pts: Sequence[Pt], to: str) -> dict[str, Any]:
     """The `channels` record a drain run along `pts` into `to` is written as (`drain_run`).
 
     Research:
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 2.5 (width written in the drain's connectivity record)
+        its record width - NONE: they decide nothing about the place - 2.5 (width written in the drain's connectivity record, a hairline the checks read, not the drawn width)
     """
     return {"poly": [[round(x, 1), round(y, 1)] for x, y in pts], "frm": {"kind": "drain"}, "to": {"kind": to}, "w": 2.5}
 

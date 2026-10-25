@@ -179,6 +179,7 @@ def own_well_clear(s: Settlement, x: float, y: float, half: float, boxes: Sequen
 
     Research:
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 55 (wellhead kept off the sheet edges); 88 (wellhead kept off the sheet edges); 26 (wellhead kept off the sheet edges)
+        its well gap - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 2 (wellhead kept 2 ft off every reserved box)
     """
     if x < 55 or y < 88 or x > s.W - 55 or y > s.H - 26:
         return False

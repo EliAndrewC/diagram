@@ -26,7 +26,7 @@ def link_index(hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt
     (feature 284, FR-002).
 
     Research:
-        its figures against 0055 - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html: 14 (link held 14 ft off water lines) - a departure the code keeps until feature 417 T32
+        its figures against 0055 - DEVIATION research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html: 14 (link held 14 ft off water lines, where a path ran on the bank of every grade of field channel) - a departure the code keeps until feature 417 T32
     """
     return fabric_index(hard, WEB_HARD_GAP, walls, gap, water, 14.0)
 

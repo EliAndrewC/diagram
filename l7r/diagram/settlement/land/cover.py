@@ -408,8 +408,9 @@ class GroundCoverMixin:
             claimed but undrawn - CONVENTION: a bare render records the ground and draws nothing
             woodland no-build - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a woodland parcel made no-build ground
             no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun
-            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 3.6 (pine glyph branch length); 1.1 (pine trunk stroke width); 0.45 (pine glyph first branch height); 0.25 (pine glyph branch spacing up the trunk)
-            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N11, 2026-10-25) - 6000 (one pine throw per 6,000 sq ft)
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.1 (pine trunk stroke width); 0.45 (pine glyph first branch height); 0.25 (pine glyph branch spacing up the trunk)
+            its pine spread - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3.6 (pine branch length, drawn at true height)
+            its pine throws - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: 6000 (one pine throw per 6,000 sq ft, the scrub pines' density)
         """
         # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to
         # show ... small pine trees and such growing out of the marshland in exactly the same pattern as

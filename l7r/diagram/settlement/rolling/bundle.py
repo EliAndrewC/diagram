@@ -47,7 +47,7 @@ class BundleGeomMixin:
             bed split forms - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25) - 0039 has where a bed lay, nothing on splitting one; half flank the house on opposite walls, the rest stacked (south gardens) or side by side; each bed at least 6 ft (`bscale`) wide
             beds one household's garden - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: the beds together held to the garden's size range
             beds on sunny sides - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: never the north back
-            its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N8, 2026-10-25) - 0.26 (about 1 in 4 households split the garden); 0.55 (the same flanking-bed width)
+            its figures against 0039 - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: 0.26 (about 1 in 4 households split the garden); 0.55 (each flanking bed 0.55 of the garden, so the two pass the 1,507 sq ft ceiling) - a departure the code keeps until feature 417 T33
             its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (jitter salt); 9 (jitter salt)
         """
         bs = self.bscale

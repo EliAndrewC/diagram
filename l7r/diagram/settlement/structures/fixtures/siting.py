@@ -440,7 +440,7 @@ class FixtureSitingMixin:
             open ground preferred - GUESS: shaded seats only where no open one fits
             anchored board band - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); within `KOSATSUBA_ANCHOR_BAND_FT`, 60 ft, of the nearest seat to the anchor
             handover band - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); an entrance board within `KOSATSUBA_HANDOVER_BAND_FT`, 20 ft, of the nearest seat to the handover
-            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 0.6 (traffic floor)
+            its figures against 0190 - research/questions/0190-notice-boards-kosatsuba.drawing.html: 0.6 (traffic floor, where the page ranks a fitting caption and then the busiest site) - a departure the code keeps until feature 417 T33
         """
         anchor = kosatsuba_anchor(self.M, placement, self.ftpx) if lane_tier else None
         # an entrance board keeps only the ground within its reach (`entrance_seat_ok`): the whole band is fitted there alone

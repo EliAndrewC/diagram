@@ -468,7 +468,7 @@ def _seat_households_as(s: Settlement, plan: SitePlan, single_file: bool) -> tup
         the shed counted in the standoff, the garden not - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); the page places neither the shed nor the beds against the paddy; the shed is held at the wall's gap with the house, and the garden's side, chosen later by the sun, is left free to stand nearer
         its figures from 0029 - research/questions/0029-farmhouses-minka.drawing.html: 1.35 (largest house rolled); 1.1 (largest house rolled); 46 (largest house rolled); 28 (largest house rolled)
         its salts, guards and sentinels - NONE: they decide nothing about the place - 4.29497e+09 (seed hash multiplier and mask); 2.65444e+09 (seed hash multiplier and mask)
-        its figures guessed on 0031 - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 1.9 (fallback crescent aspect band); 4.2 (fallback crescent aspect band)
+        its crescent aspect - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1.9 (fallback crescent aspect band); 4.2 (fallback crescent aspect band)
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 1.5 (length of the way-out test line)
     """
     seat = plan.seat

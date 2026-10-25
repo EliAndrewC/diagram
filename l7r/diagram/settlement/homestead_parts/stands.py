@@ -141,7 +141,7 @@ def reserved_seat_keepouts(seats: Sequence[tuple[float, float]], clump: float, b
     recorded radius plus 0.9 of the copse's clump), `BAR_MARGIN_PX` stricter, so the copse finds the seat undisplaced.
 
     Research:
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.9 (mirrors the copse's own displacement test (the 0.90 is SEARCHED-SILENT at wood_share:197))
+        its keep-off - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.9 (another grove's clumps kept 0.90 of a copse clump off a reserved copse seat)
     """
     from .wood_share import BAR_MARGIN_PX, COPSE_CLUMP_BS
 
@@ -263,7 +263,8 @@ class StandsMixin:
             clumps off lanes - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: where a lane crosses the belt the planting resumes on both sides
             copse stragglers dropped to its stocking - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); `stocked_copse` drops the farthest clumps until the copse holds half a clump plus 4 px
             its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N9, 2026-10-25) - 0.25 (refill grid offsets); 0.75 (refill grid offsets)
-            its salts, guards and sentinels - NONE: they decide nothing about the place - 21 (salt); 0.7071 (northwest wind fallback; the caller always passes the wind); 23 (salt); 24 (salt)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 21 (salt); 23 (salt); 24 (salt)
+            its northwest fallback - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: 0.7071 (northwest wind fallback; the caller always passes the wind)
         """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]

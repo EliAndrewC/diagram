@@ -48,7 +48,7 @@ def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, flo
     `torii_glyph_dims`: the beam spans +/-s2 and the glyph's depth is its post side, centered on the seat.
 
     Research:
-        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N12, 2026-10-25) - 16 (torii span, live via `registry.py:135`; T29 P7's 2.5 to 5.87 m brackets 16 ft)
+        its torii span - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: 16 (torii span, inside the 8 to 18 ft spans)
     """
     s2, _beam, post, _p2 = torii_glyph_dims(ftpx, span_ft)
     pad = 2.0  # stroke half-width + a hair, so the frame never clips the vermilion

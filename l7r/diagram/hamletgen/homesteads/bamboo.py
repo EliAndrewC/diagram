@@ -434,7 +434,7 @@ class Footing:
 
     def __init__(self, s: Settlement, fields: Sequence[Poly], marsh: Sequence[Poly]) -> None:
         """Research:
-        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N3, 2026-10-25) - 6 (6 ft pad off paddy/marsh rings); 0.6 (crown box padded 0.6 ft)
+        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N3, 2026-10-25) - 6 (6 ft pad off paddy/marsh rings); 3 (pad off dry plots); 4 (watercourse reach a strip keeps off)
         """
         self.rings: PointGrid = boxed_grid(boxed_rings([p for p in list(fields) + list(marsh) if len(p) >= 3], 6.0))
         dry = [[(float(a), float(b)) for a, b in o.get("poly") or []] for o in s.M.get("dry_plots", [])]
@@ -469,7 +469,9 @@ class StripNear:
     def __init__(self, s: Settlement, lanes: Sequence[tuple[Poly, float]]) -> None:
         """Every item of what stands, filed by its box.
 
-        Research: a fixture with no recorded size - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); taken as 16 ft across (`r` 8), as `_strip_blocked` always took it"""
+        Research: a fixture with no recorded size - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); taken as 16 ft across (`r` 8), as `_strip_blocked` always took it
+            its crown pad - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.6 (a crown's box padded 0.6 ft)
+        """
         self.s, self.lanes = s, lanes
         houses = []
         for o in s.M.get("houses", []):
@@ -525,7 +527,7 @@ class StripNear:
         """How many items a strip here is tested against (SC-001's count).
 
         Research:
-            its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 6 (prefilter reach, the widest pad)
+            its prefilter - NONE: they decide nothing about the place - 6 (prefilter reach, the widest pad)
         """
         pad = max(cw, ch) / 2 + 6.0
         return sum(len(g.near(cx, cy, pad)) for g in (self.placed(), self.houses, self.kinds, self.segs, self.crowns))

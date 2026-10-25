@@ -212,6 +212,7 @@ def _clerk_seats(dais: Box, side: str) -> list[Box]:
 
     Research:
         its figures guessed on 0099 - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: 5 (clerk seat depth)
+        its clerks' seats - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 10 (clerks' seats along the face); 2 (off the dais)
     """
     x, y, x2, y2 = dais
     if side in ("N", "S"):
@@ -228,6 +229,7 @@ def _mats(z: CourtZone) -> list[Box]:
 
     Research:
         its figures guessed on 0099 - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: 16 (plaintiff's and officials' mats' places ("spacing … a GUESS")); 6 (plaintiff's and officials' mats' places ("spacing … a GUESS")); 9 (plaintiff's and officials' mats' places ("spacing … a GUESS")); 22 (plaintiff's and officials' mats' places ("spacing … a GUESS"))
+        its mats - research/questions/0099-the-hearing-court-shirasu.drawing.html: 6 (accused's mat 6 ft); 3 (3 ft deep); 10 (side mats off the centre)
     """
     cx, fy = z.x_ft + z.w_ft / 2, z.y_ft + z.h_ft / 3
     return [(cx - 3.0, fy, cx + 3.0, fy + 3.0), (cx - 16.0, fy + 6.0, cx - 10.0, fy + 9.0), (cx + 10.0, fy + 6.0, cx + 22.0, fy + 9.0)]
@@ -547,9 +549,12 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (bath caption font); 1.5 (bath stroke)
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 6 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 9 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 12 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 15 (well's search ladder (stables' well SEARCHED-SILENT building-programs.md:37)); 0.85 (fallback seat order along the court face); 0.15 (fallback seat order along the court face); 0.2 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.8 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.3 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.7 (well beside the door, not before it (no page places one, building-programs.md:105)); 0.4 (fallback seat order along the court face); 0.6 (fallback seat order along the court face); 0.05 (fallback seat order along the court face); 0.95 (fallback seat order along the court face); 0.03 (fallback seat order along the court face); 0.97 (fallback seat order along the court face)
         its figures guessed on 0105 - GUESS research/questions/0105-baths-furo.drawing.html: 20 (kitchen well as far as 20 ft out)
-        its figures guessed on 0196 - GUESS research/questions/0196-communal-wells-ido.drawing.html: 7.3 (well curb square)
-        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N13, 2026-10-25) - 3.65 (well boxes privies keep off)
+        its figures against 0196 - research/questions/0196-communal-wells-ido.drawing.html: 7.3 (well curb square, where the page's curb is about 4 ft square with a 4 ft apron) - a departure the code keeps until feature 417 T33
+        its figures against 0196's curb - research/questions/0196-communal-wells-ido.drawing.html: 3.65 (well boxes privies keep off, the 7.3 ft curb halved) - a departure the code keeps until feature 417 T33
         its figures guessed on 0100 - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2.6 (as above); 2.5 (as above)
+        its tub count - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2 (two tubs at the kitchen); 1 (one at each other wooden building)
+        no tub at a kura - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: an earth-walled kura takes no tub
+        its wells - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the wells at the kitchen's and the stables' faces and one in the garden
     """
     env = program.envelope
     parts: list[str] = []
@@ -759,12 +764,14 @@ def _draw_point_parts(
     Research:
         its figures against 0190 - research/questions/0190-notice-boards-kosatsuba.html: 6 (caption box is the board's wrong size); 1.5 (caption box is the board's wrong size) - a departure the code keeps until feature 417 T33
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 7 (board caption font); 0.6 (board stroke); 1.2 (curb stroke); 0.8 (privy stroke)
-        its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N13, 2026-10-25) - 7.3 (caption box is the curb); 3.65 (caption box is the curb)
+        its figures against 0196 - research/questions/0196-communal-wells-ido.drawing.html: 7.3 (caption box is the curb, drawn 7.3 ft where the page's curb is about 4 ft square); 3.65 (the same, halved) - a departure the code keeps until feature 417 T33
         its figures from 0090 - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 8 (board 8-14 ft west of the gate's edge)
         its figures guessed on 0101 - GUESS research/questions/0101-privies-setchin.drawing.html: 5 (caption box is the privy); 2.5 (caption box is the privy)
         its figures guessed on 0100 - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2.54 (tubs caption box); 1.27 (tubs caption box)
-        its figures from 0090's findings - research/questions/0090-magistrates-compounds-jinya-and-yamen.html: 14 (caption box at the board)
+        its figures from 0090's drawing page - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 14 (caption box at the board, within about 15 ft of the gate)
         its figures against 0190's drawing page - research/questions/0190-notice-boards-kosatsuba.drawing.html: 4.5 (board's far edge (3 + 1.5 ft depth; the record draws 6 ft deep)) - a departure the code keeps until feature 417 T33
+        its board set-out - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (notice board 3 ft south of the south wall's line)
+        its tub glyph - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 3.8 (tub drawn about 2.5 ft across)
     """
     depth = water_depth(seed)  # a generated draft records no landform: its water depth rolls from its name (0196's drawing page)
     for i, (cx, cy) in enumerate(wells, 1):

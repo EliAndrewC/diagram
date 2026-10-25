@@ -40,7 +40,11 @@ Bound = tuple[list[tuple[Pt, Pt]], float, "Poly | None"]  # (segments, the lot's
 def lot_bounds(lanes: Sequence[Sequence[Pt]], streams: Sequence[Sequence[Pt]], crops: Sequence[Poly], crop_setback: float) -> list[Bound]:
     """The features a coppice lot's line may follow (woods W26): each lane and brook as its segments at the scan's keep-out,
     each field ring as its closed edge at the set-back the scan seated the lot with (a point inside a field is on the wrong
-    side of its line)."""
+    side of its line).
+
+    Research:
+        its lot lines - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a lot's line follows a brook, a lane or a field's edge it comes near, at the scan's keep-outs
+    """
 
     def _segs(pts: Sequence[Pt], closed: bool) -> list[tuple[Pt, Pt]]:
         ps = [(float(p[0]), float(p[1])) for p in pts]
@@ -105,7 +109,7 @@ def follow_the_bounds(ring: Sequence[Pt], center: Pt, bounds: Sequence[Bound], r
     A vertex no point of its ray can clear (the center itself too near) is left, and the predicate refuses the ring.
 
     Research: line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: vertices pulled in until they run alongside the feature
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 0.05 (bisection bracket); 20 (bisection iterations); 19 (coarse search start)
+        its bisection - NONE: they decide nothing about the place - 0.05 (bisection bracket); 20 (bisection iterations); 19 (coarse search start)
     """
     out: Poly = []
     cx, cy = center

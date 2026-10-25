@@ -171,7 +171,7 @@ def carve_comb(
         supply canal bank - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: the plots hem onto a bank beside each supply canal where the caller asks (`supply_banks`; the scripted hamlet always does), off by default for a caller that draws its own
         default grain - NONE: 1.0 where a caller passes none; the scripted hamlet passes the principled 2 / ftpx (`hamletgen.consts.GRAIN`), as this docstring explains
         its salts, guards and sentinels - NONE: they decide nothing about the place - 45 (default fall direction; the only caller (`fit.py`) passes `plan.down_deg)
-        its figures from 0006 - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 1.1 (same default spread as carve.py:72 (no caller overrides it))
+        its figures from 0006 - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 1.1 (same default spread as carve.py (no caller overrides it); `tract_ways` leans by min(TRACT_LEAN_RAD, spread), so it only sets not-steep)
     """
     R = random.Random(seed)
     F = _Frame(down_deg)
@@ -383,7 +383,7 @@ def _comb_skeleton(
         canal A heading - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: the delivery ditches leave their supply canal at right angles - canal A runs 42 deg off the fall, its deliveries meeting it at about 42 deg, a departure the code keeps until feature 417 T34; 42 deg off the fall, a dug polyline of 95-125 px segments
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 0.045 (canal A's heading wobble per segment)
         its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (wobble of a polyline that is thrown away (only its random draw is kept)); 120 (segment length of the same thrown-away polyline)
-        its figures against 0053 - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: 58 (canal B's heading off the fall; the polyline here is thrown away, but `bc` reuses the 58) - a departure the code keeps until feature 417 T34
+        its discarded heading - NONE: they decide nothing about the place - 58 (canal B's heading on a polyline thrown away; only its random draw is kept)
     """
     # head-race: the intake -> the division point (bunsuiguchi), on the caller's bearing or down the fall.
     # Every width below goes through `chan_px`, which converts a TRUE width in feet to pixels at
