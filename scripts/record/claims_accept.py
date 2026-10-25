@@ -26,12 +26,28 @@ def accept_line(key: str, was: dict[str, Any], trigger: str) -> str:
     return f"VERDICT {key} IN-STEP - accepted by the round arbiter ({trigger}), binding; the GM reviews it"
 
 
+def split_semicolon_keys(text: str, known: Any) -> list[str]:  # noqa: ANN401 - a mapping of claim keys
+    """The claim keys a `;`-separated `text` names. A label may hold a `;` of its own (`("the well or basin"; the required item
+    is `well`)`, feature 417 T36's accept), so the pieces are joined back into the LONGEST run that is a `known` key, as
+    `claims.split_keys` does for commas; a piece no run makes known is returned alone, for the caller to name as unknown."""
+    parts = text.split(";")
+    keys: list[str] = []
+    i = 0
+    while i < len(parts):
+        j = next((j for j in range(len(parts), i, -1) if ";".join(parts[i:j]).strip() in known), i + 1)
+        key = ";".join(parts[i:j]).strip()
+        if key:
+            keys.append(key)
+        i = j
+    return keys
+
+
 def accept(root: Path, cur: dict[str, Any], index: dict[str, dict[str, Any]], args: argparse.Namespace) -> int:
     """`claims.py accept`: a round-arbiter ACCEPT asked with `REVIEW=claims:<keys>` stands as those claims' verdict, recorded
     at the code and research they have now - a later edit owes them again, as any verdict (the GM 2026-10-24: T26's landing
     met the claims gate on a claim the arbiter had accepted with no third round, and needed CLAIMS_OK at the landing and again
     at the stop-work push)."""
-    keys = [k.strip() for k in args.keys.split(";") if k.strip()]
+    keys = split_semicolon_keys(args.keys, cur)
     missing = [k for k in keys if k not in cur]
     if missing or not keys:
         print(f"claims-accept: no such claim: {', '.join(missing) or '(none named)'}", file=sys.stderr)
