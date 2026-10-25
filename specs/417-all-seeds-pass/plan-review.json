@@ -108,6 +108,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T38 Approach (checklist part A)": {
+   "sha256": "feae956ab8a0bfda1824749dc7f4d36fd686685829dd30d5472bfe9c48177c16",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2118,6 +2124,79 @@
      "summary": "n/a - no value moves; inline numbers are T38's (D37 c).",
      "class": "within",
      "why": "D36 says the code is not changed; D37(c) moves the unlabeled numbers to T38, which is still before T31 as the GM ordered."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T38 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T38-1 goal",
+     "summary": "Every number the map code holds is stated in its unit's claims and labeled by what it is, so a later pass knows which it may tweak.",
+     "class": "within",
+     "why": "The GM 2026-10-25: 'the documentation of which constants are arbitrary so that future implementation passes know that they can tweak them'; D31 (ii), D37 (c)."
+    },
+    {
+     "id": "T38-4a CONVENTION for drawn sizes and strokes",
+     "summary": "A drawn size or stroke is labeled CONVENTION (a map drawing convention).",
+     "class": "within",
+     "why": "Labeled by what it is (D31 (ii)); CONVENTION stays on make tunables' list of values that are ours (D31 (a)), so a later pass still sees it as tweakable."
+    },
+    {
+     "id": "T38-4b NONE for salts, sentinels, seed multipliers",
+     "summary": "A jitter salt, a sentinel or a seed's multiplier is labeled NONE (decides nothing about the place).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These figures describe nothing in the world and no fixing pass tunes a map through them; labeling them NONE is labeling by what they are, and dropping them from the tunables view loses nothing the GM's purpose needs."
+    },
+    {
+     "id": "T38-4c NONE for a search's step or count",
+     "summary": "A search's step or count is labeled NONE, which takes it off make tunables' list (D31 (a) lists GUESS, UNRESEARCHED, CONVENTION only).",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Unlike a salt or a sentinel, a search's step or count decides whether a candidate is found - exactly the knob a seed-fixing pass reaches for (FR-007's room, the GM's 'so that future implementation passes know that they can tweak them' and 'in our checklist-based iteration, as we try to fix things, that we have these kinds of numbers marked'). Bundled with the salts under one justification; it is a different class. It must be labeled so it stays on the tunables view (GUESS or CONVENTION, as what it is)."
+    },
+    {
+     "id": "T38-4d every other figure GUESS by default",
+     "summary": "Every figure that is not a drawing convention or NONE is labeled GUESS, 'cited where a page gives it'; no step decides GUESS versus UNRESEARCHED, and no UNRESEARCHED label is ever written.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "D31 defines GUESS as 'searched, silent' and UNRESEARCHED as 'not yet searched'. The GM asked precisely for that split to be made truthfully: 'first check our downloaded research to see whether ... they are things that we have looked into but not been able to find, or if they are things that we simply have not looked into', then 'actually perform research for any of those questions that we don't currently have answers for'. A page not giving a value is not evidence the question was searched, so the rubric writes 'searched, silent' onto unsearched numbers, and with no UNRESEARCHED ever written D31 (iii)'s research follow-up can never fire. Word-plausible (D31 (ii)'s 'a knob like a GUESS' is about knob status, not the label; its operative words are 'labeled by what it is'), purpose-fatal. Also: a number a page gives is cited, not a GUESS (D37 (b): a GUESS label naming a source is not used). Fix: per number, check the downloaded research for its question; cited where a page gives it, GUESS where the question was searched and the pages are silent, UNRESEARCHED where it was not searched, the last going to research per D31 (iii)."
+    },
+    {
+     "id": "T38-5 order and skip",
+     "summary": "After T36, before T31; numbers in the code T31 deletes are skipped (none listed there, observed 2026-10-25).",
+     "class": "within",
+     "why": "Settled by D37 (c): 'The order is T36, T38, T31', and the code T31 deletes needs no claims."
+    },
+    {
+     "id": "T38-6 nested functions fold into the enclosing unit",
+     "summary": "A nested function's numbers go into its enclosing unit's claims, and make tunables folds a nested function's numbers into that unit.",
+     "class": "within",
+     "why": "Makes the listing read the claims where they are written - the check enforcing what is asked, not new scope."
+    },
+    {
+     "id": "T38-7 search smell: twice-wrong claim keeps its label, description reverted",
+     "summary": "No number moves; a claim impl-drift rules wrong twice keeps its label with its description reverted.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A new claim has no earlier description to revert to, so the number is left unstated or stated with a label a reviewer ruled wrong - the opposite of the truthful marking the GM asked for, and in conflict with item 9's 'claims gate green'. D31 (ii) already gives the exit for what the pass cannot settle: list it by file in R9 with the count. 'No number moves' is within (no value is asked to change)."
+    },
+    {
+     "id": "T38-8 budget",
+     "summary": "1,289 distinct numbers in 506 functions (observed 2026-10-25, the listing de-duplicated by file, function and value); a claims round over the units.",
+     "class": "within",
+     "why": "A sizing figure with its date and method; it differs from D37 (c)'s 1,809 by method (distinct versus raw), not by scope."
+    },
+    {
+     "id": "T38-9 done, measured",
+     "summary": "make tunables INLINE=1 COUNT=1 lists none outside the skipped code; the claims gate green.",
+     "class": "within",
+     "why": "Measures exactly D37 (c)'s requirement."
     }
    ]
   }
