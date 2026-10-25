@@ -313,6 +313,27 @@ Owed by red-gate@2026-10-25T08:17:19Z (the round arbiter: continue).
 10. **Before moving a constant.** n/a - no value moves.
 11. **Before fitting things into room.** n/a.
 
+### T38 Approach (checklist part A)
+
+1. **The goal, in the world.** Every number the map code holds is stated in its unit's claims and labeled by what it is, so a
+   later pass knows which it may tweak (the GM 2026-10-25).
+2. **The constraints.** D31 (ii), D37 (c); the claim grammar; impl-drift's verdicts.
+3. **Where each comes from.** G: the GM 2026-10-25. O: the listing `make tunables INLINE=1`.
+4. **Do they describe the world here?** Per number, by what it is: a drawn size or stroke is a map drawing convention
+   (`CONVENTION`); a jitter salt, a search's step or count, a sentinel or a seed's multiplier decides nothing about the place
+   (`NONE`); every other figure is a value of ours, a knob (`GUESS`), cited where a page gives it.
+5. **The order.** After T36; before T31; the numbers in the code T31 deletes skipped (none were listed there, observed
+   2026-10-25; method: the listing filtered to `ways/settle/`).
+6. **The exits.** Each unit's numbers go into its own claims (a nested function's into its enclosing unit's, and
+   `make tunables` folds a nested function's numbers into the unit that holds it, so the listing reads the claims where they
+   are written).
+7. **The search smell.** No number moves; a claim impl-drift rules wrong twice keeps its label with its description reverted.
+8. **The budget.** 1,289 distinct numbers in 506 functions (observed 2026-10-25; method: the listing, de-duplicated by file,
+   function and value); a claims round over the units.
+9. **Done, measured.** `make tunables INLINE=1 COUNT=1` lists none outside the skipped code; the claims gate green.
+10. **Before moving a constant.** n/a - no value moves.
+11. **Before fitting things into room.** n/a.
+
 <!-- plan-archive: T28 to T28 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T29 to T29 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 ### T30 Approach (checklist part A)
