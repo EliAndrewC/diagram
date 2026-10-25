@@ -59,8 +59,9 @@
 - [x] T25 (T05's claims round, outside the change; arbiter ask 417-T05-claims) `water_ways/_helpers.BUND_REACH_FT` is a second 6.0 of `consts_ways.FIELD_REACH_FT` (read by `bund.cut_stub_ends` and `geom.end_serves`); `cut_stub_ends` tests its tail with `<=` where the other two read `<` against "under 40 ft"; comments in `sweeps` still give `_LANE_JOIN_FT` as 30 where the claims say 25, in `l7r/diagram/hamletgen/ways/` (FR-006)
       research: rendering
       verify: DONE. landed in batch T23+T25: landed: T23 - three claims labeled as their pages answer them (cut_stub_ends GUESS 0014; bridge width and link width CONVENTION, the link's worded to the code) (D21); T25 - FIELD_REACH_FT is the settlement's BUND_REACH_FT, one 6 ft constant (D19), and cut_stub_ends cuts a tail under 40 ft as the page and the other readers do (D20); a test holds both; the five pool hamlets regenerated unchanged. Claims: 8 + 2 IN-STEP
-- [ ] T26 (R2 G2, first part) The web's post-lay passes the placers already make needless: each turned off and measured on the fixed and pinned seeds; the needless deleted, the needed recorded and set down, in `l7r/diagram/hamletgen/ways/web/stage.py` (D22, D23; FR-004, FR-006)
+- [x] T26 (R2 G2, first part) The web's post-lay passes the placers already make needless: each turned off and measured on the fixed and pinned seeds; the needless deleted, the needed recorded and set down, in `l7r/diagram/hamletgen/ways/web/stage.py` (D22, D23; FR-004, FR-006)
       research: rendering
+      verify: DONE. landed: the eighteen post-lay web passes the probes found needless deleted with what only they reached (R5: each off alone and all together, 54/54, pool generated); the four needed set down
 - [ ] T20 The fresh block runs inside `make land` before the push and any fresh failure refuses, once a fresh block of 500 passes whole (FR-009, SC-005; after the last engine task)
       research: rendering
 - [ ] T21 Every archetype form's seeds recorded per seed and diffed against HEAD; a newly red unrolled-form seed with no filed row or waiver refuses (FR-011, SC-006; feature 394)
