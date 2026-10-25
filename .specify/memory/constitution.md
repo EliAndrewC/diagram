@@ -1,7 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.30.0 → 2.31.0
+Version change: 2.31.0 → 2.32.0
+
+Version 2.32.0 (amended 2026-10-25, feature 417 FR-003): a new Principle XIX, "Placed Right, Never Repaired" - every rule a
+map keeps is one predicate, asked by its placer of each candidate before placing; no place-then-repair; finished-map checks
+in the cohort and tests only; no admitted candidate means more room. The text is research.md R4's draft, numbered XIX
+(XVII and XVIII were taken). The GM, 2026-10-25: "I also approve the new principle for the constitution." Dependent
+template: the plan template's Constitution Check gains XIX. MINOR (a new principle).
 
 Version 2.31.0 (amended 2026-10-18, feature 387 amendment 1): Principle X clause 15's "maps may move" widens from a placer,
 fill or scatter to EVERY change made for speed - the GM: "anytime we are trying to make things faster, it's always okay for
@@ -1994,6 +2000,26 @@ correction rather than making it.
 **Enforcement**: `scripts/hooks/readme-hooks.sh` intercepts a Write or Edit to any `README*`, and any
 shell command that writes one. It carries no silent escape - a genuine exception is the GM's to make.
 
+### XIX. Placed Right, Never Repaired
+
+**Every rule a map keeps is ONE predicate. The placer that could break it asks it of each candidate before the
+candidate is placed, and places only what it admits.** Nothing is placed and then moved, cut, thinned or dropped to
+make it lawful. A check of the finished map calls the same predicate, runs in the cohort and the tests only - never
+inside the generator's run - and its firing is an engine defect. Where no candidate is admitted, the answer is more room
+(the GM, 2026-10-12, "room before packing"), never a relaxed rule, a dropped feature or a refused map. A rule coded in two
+places is a defect of this principle.
+
+The GM, 2026-10-24: *"a general rule that 'place then check' is not something we want **anywhere** in the codebase"*;
+approved in these words 2026-10-25: *"I also approve the new principle for the constitution."* (Feature 417, research.md
+R4.)
+
+**What the codebase holds against it today** is feature 417's inventory (`specs/417-all-seeds-pass/research.md` R2): every
+repair pass, audit-only rule, rule coded twice, mid-map check and refusal where room is the remedy, each filed as an engine
+task.
+
+**Enforcement**: the Constitution Check gate in every plan; `make dead-closure` for what a deletion leaves behind. Not yet
+held by a guard - a guard that told a repair from a placement by reading code would fire on correct work.
+
 ## Technical Standards
 
 **Languages and runtimes**
@@ -2291,4 +2317,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.31.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-18
+**Version**: 2.32.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-25

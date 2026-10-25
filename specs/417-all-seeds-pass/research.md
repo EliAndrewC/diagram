@@ -63,7 +63,7 @@ everything else moves maps.
 
 ## R4 - the principle, drafted for the GM (FR-003, D6)
 
-Proposed as a new principle of the constitution, in these words, for the GM to approve or change:
+Proposed as a new principle of the constitution, in these words, for the GM to approve or change. APPROVED 2026-10-25 (the GM: "I also approve the new principle for the constitution.") and entered as Principle XIX, constitution 2.32.0 - XVII and XVIII were already taken, so the numeral below is the draft's:
 
 > **XVII. Placed Right, Never Repaired.** Every rule a map keeps is ONE predicate. The placer that could break it asks it of
 > each candidate before the candidate is placed, and places only what it admits. Nothing is placed and then moved, cut,

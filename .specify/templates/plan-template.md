@@ -190,6 +190,14 @@ approval before /speckit-tasks may run.
     AND each newly-failing check must be individually diagnosed in the plan's
     closing notes.
 
+- **XIX. Placed Right, Never Repaired**: Does the feature
+  place, move or remove anything on a map? If yes, the plan MUST name, for
+  each rule the placement keeps, the ONE predicate its placer asks of every
+  candidate before placing - and MUST NOT add a pass that moves, cuts, thins
+  or drops what was placed, a finished-map check inside the generator's run,
+  or a second copy of a rule. Where no candidate is admitted, the plan gives
+  more room; it never relaxes the rule or refuses the map.
+
 Document each gate's status in a short bulleted Constitution Check section
 in the plan output before proceeding to Phase 0.
 
