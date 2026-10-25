@@ -2435,6 +2435,7 @@ land-sharing system	warichi
 land-stewards	steward
 landrace	landrace
 landraces	landrace
+large cash	standard cash
 large rent	subsoil owner
 later hojo	Later Hojo
 later wei	Later Wei
