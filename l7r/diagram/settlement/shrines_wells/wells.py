@@ -57,7 +57,7 @@ class WellsMixin:
 
         Research:
             wellhead marker larger than life - research/questions/0196-communal-wells-ido.drawing.html: the curb `well()` draws at a 9.36 ft radius, about 19 ft across, is the page's marker
-            the roof square round the curb - research/questions/0196-communal-wells-ido.drawing.html: about 12 sq m (~130 sq ft) at the one Edo-period well house found measured, a samurai household's, not a village well; the marker is drawn larger than life; the marker is drawn larger than life; 12.376 ft half-size (24.75 ft across), 11.9 x bscale on the legacy tiers; the page (0196 drawing) gives no roof size
+            the roof square round the curb - research/questions/0196-communal-wells-ido.drawing.html: about 12 sq m (~130 sq ft) at the one Edo-period well house found measured, a samurai household's, not a village well; the marker is drawn larger than life; 12.376 ft half-size (24.75 ft across), 11.9 x bscale on the legacy tiers
         """
         return self.px(12.376) if self._toscale() else 11.9 * self.bscale
 

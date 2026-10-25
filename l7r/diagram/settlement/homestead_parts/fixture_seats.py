@@ -148,7 +148,8 @@ class FixtureForms:
         persimmon front share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
             0.7 by default
         manure form - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: heap by default, or pit
-        retirement house size and gaps - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: eight of 16 households kept a retirement house, at 3 to 15 tsubo, a 9 tsubo one a middling one, all but one 2.5 ken (~15 ft) deep or less; no page gives how far from the main house it stood; 18 x 15 ft, 6 or 12 ft off the house"""
+        retirement house size and gaps - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: eight of 16 households kept a retirement house, at 3 to 15 tsubo, a 9 tsubo one a middling one, all but one 2.5 ken (~15 ft) deep or less; no page gives how far from the main house it stood; 18 x 15 ft
+        retirement house gaps - GUESS research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: no page gives how far from the main house it stood; 6 or 12 ft off the house"""
 
     privy_weights: tuple[tuple[str, float], ...] = (("stable", 0.35), ("yard", 0.30), ("front", 0.20), ("barn", 0.15))  # the page's order (feature 328 wave 61: the places were misassigned)
     bath_stable_share: float = 0.8
