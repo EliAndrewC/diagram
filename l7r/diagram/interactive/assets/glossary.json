@@ -778,7 +778,7 @@
   ]
  },
  "bu": {
-  "def": "A unit of land area the size of a tsubo, about 3.3 square meters; the cadastres give homestead lots in bu. Written after another unit, as in 57 tsubo 2 bu 5 rin, it means a tenth of that unit. In money it is a gold coin, a quarter of a ryo, as in 11 ryo 2 bu.",
+  "def": "A unit of land area the size of a tsubo, about 3.3 square meters; the cadastres give homestead lots in bu. Written after another unit, as in 57 tsubo 2 bu 5 rin, it means a tenth of that unit; in silver, a tenth of a monme, as in 4 monme 2 bu or 9 bu a mat. In money it is a gold coin, a quarter of a ryo, as in 11 ryo 2 bu.",
   "variants": [
    "bu"
   ]
@@ -17977,6 +17977,20 @@
    "hundredweight",
    "cwt",
    "hundredweights"
+  ]
+ },
+ "fudakake": {
+  "def": "The Mitsui merchant house's term for the profit rate a store made on goods it bought, given as a percentage of their price.",
+  "variants": [
+   "fudakake"
+  ]
+ },
+ "farm-gate price": {
+  "def": "The price a farmer was paid for produce where it left the farm, before carriage, trade and a shop's markup were added to it.",
+  "variants": [
+   "farm-gate price",
+   "farm-gate prices",
+   "farm gate"
   ]
  }
 }
