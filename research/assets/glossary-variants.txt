@@ -478,6 +478,8 @@ charity graveyards	charity graveyard
 charity ground	charity graveyard
 charity grounds	charity graveyard
 chaya	chaya
+chemically hydrolyzed soy protein	hydrolyzed soy protein
+chemically hydrolyzed soy proteins	hydrolyzed soy protein
 chen fu	Chen Fu
 cheng-zhu	Cheng-Zhu Neo-Confucianism
 cheng-zhu neo-confucianism	Cheng-Zhu Neo-Confucianism
@@ -1835,6 +1837,8 @@ huzhou-jiaxing	Huzhou-Jiaxing
 hyakusho denki	Hyakusho Denki
 hyakushodai	hyakushodai
 hyakushōdai	hyakushodai
+hydrolyzed soy protein	hydrolyzed soy protein
+hydrolyzed soy proteins	hydrolyzed soy protein
 hydrophilic	hydrophilic
 hydroseral	hydrosere
 hydrosere	hydrosere
@@ -5075,6 +5079,7 @@ zōkibayashi	zokibayashi
 梁間	hari-ma
 横木	yokogi
 水口林	water-mouth
+水油	mizuabura
 清明上河図	Qingming Shanghe Tu
 田打車	tauchiguruma
 畑永法	hata-ei
