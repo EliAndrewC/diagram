@@ -1,16 +1,18 @@
 {
- "captured": "2026-10-25T20:48:15+00:00",
+ "captured": "2026-10-25T21:02:35+00:00",
  "final_url": "https://web.archive.org/web/20210809162648id_/http://sts.kahaku.go.jp/diversity/document/system/pdf/040.pdf",
  "first": "a1/a1a244984648/20261025T204813Z",
  "gm_copies": [],
  "keys": [
   "oguri-2008-shoyu-gijutsu"
  ],
- "notes": [],
- "outcome": "partial",
- "path": "a1/a1a244984648/20261025T204813Z",
- "reason": "HTTP 429",
+ "notes": [
+  "0303-how-much-miso-and-soy-sauce-did-a-household-use-and-what-did-they-cost-era-by-era.notes.html"
+ ],
+ "outcome": "archived",
+ "path": "a1/a1a244984648/20261025T210233Z",
+ "reason": "",
  "revision": "",
- "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "sha256": "4b6c79b230782558d2fb2b3eb6b9f069850aec721be68d4841d232e6e24f2313",
  "url": "https://web.archive.org/web/2020id_/https://sts.kahaku.go.jp/diversity/document/system/pdf/040.pdf"
 }
