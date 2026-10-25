@@ -152,10 +152,11 @@ A note is one of THREE forms:
   the original-language page, not an English rendering that is on no page. Never a paywall, a login wall or a
   search summary.
   A cell of a public spreadsheet (an .xls, .xlsx or .csv anyone can download) is a readable page: the note quotes the
-  cell, names its sheet and row, and may link the file itself. A Morisada (`ruiju-kinsei-fuzokushi-jo`, `-ge`) or Gamble
-  (`gamble-burgess-1921-peking-survey`) footnote may link the exact page of its passage (an NDL koma, a page image). Each
-  such URL is first put on the key's citation line; every other link stays the line's first URL (the GM, 2026-10-19,
-  feature 407).
+  cell, names its sheet and row, and may link the file itself. Any footnote may link the exact page of its passage (an
+  NDL koma, a page image) where the line's first URL does not show the quoted words - a text layer that drops them, as
+  Timkovski's djvu drops his fractions. Each such URL is first put on the key's citation line; every other link stays the
+  line's first URL (the GM, 2026-10-19, feature 407, for Morisada and Gamble; widened to any work by the round arbiter,
+  ask:420-timkovski-first-url).
 - **ABSENCE**: `no publicly readable source<!-- searched YYYY-MM-DD: what was tried -->` then what the search found,
   visible - a list of `<span class="pass">` items (`pass sub` nested) where it is several things (feature 292, GM
   2026-09-29: the search log is for a session, so it is a comment; the reader sees the one opening sentence
