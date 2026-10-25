@@ -2704,7 +2704,8 @@ meshimori-onna	meshimori
 meso scale	meso scale
 meso-scale	meso scale
 metamorphosis fengshui	metamorphosis fengshui
-metropolitan examination	military examination
+metropolitan examination	metropolitan examination
+metropolitan examinations	metropolitan examination
 mexican	Mexican dollar
 mexican dollar	Mexican dollar
 mexican dollars	Mexican dollar

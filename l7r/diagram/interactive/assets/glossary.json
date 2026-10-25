@@ -10880,8 +10880,7 @@
   "variants": [
    "military examination",
    "military examinations",
-   "palace examination",
-   "metropolitan examination"
+   "palace examination"
   ]
  },
  "kizuma": {
@@ -18116,6 +18115,13 @@
    "nankeen",
    "nankeens",
    "Nankin"
+  ]
+ },
+ "metropolitan examination": {
+  "def": "The Chinese state's examination held at the capital for those who had passed the provincial one, the second of its three levels, before the palace examination.",
+  "variants": [
+   "metropolitan examination",
+   "metropolitan examinations"
   ]
  }
 }
