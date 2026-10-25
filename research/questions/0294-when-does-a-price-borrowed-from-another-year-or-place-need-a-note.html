@@ -1,0 +1,73 @@
+<h2 id="when-does-a-price-borrowed-from-another-year-or-place-need-a-note">When does a price borrowed from another year or place need a note?</h2>
+<!-- tags: subject=money; setting=city; level=counts-and-measurements -->
+<!-- feature 414, 2026-10-24: written for gm-assistant's money skill (EliAndrewC/diagram#15, question 4): how far in time and place an amount may be converted at another era's or place's rates before the conversion should say so, and how far before it should not be made at all, by good class and by the size of the amount. The rule is this project's derivation: no source states one (the Japan, Qing and modern passes, specs/414-price-stability/passes/). Every bound is specs/414-price-stability/measure/closeness.py and its .out.md; the swings it rests on are 0290's, the city gaps 0292's. -->
+<!-- Evidence: derivation (the rule itself: the within-era spread as the tolerance, the no-note bound, the breaks as the do-not-convert bound, the place test); arithmetic (every bound and every place gap, from the Mitsui, Allen and Kishimoto files); accurate (the breaks' sources: Shinbo, Saito, Lu and Peng, the 三貨制度 article); silence (a rule stated by any source; a difference by the size of an amount) -->
+<p class="intro">Rokugan's money rules convert an amount at one era's prices, and an amount paid in another year or place names the era it borrows. No source the searches found says how far such a borrowing may reach, so the rule below is this project's own, built from how far prices were measured to move from year to year in Edo-period Japan and Qing China, and from city to city in Edo-period Japan.</p>
+<p>An era's prices already stand for every year of the era, so a borrowed price needs no note while it is no further off than the era's own years are from one another. For rice in Kyoto that holds for about 25 years; for steady goods such as firewood and soy sauce, whose own swing is small, only about 5; for the cost of a Chinese laborer's basic goods, about 5.<sup class="fn" data-note="closeness-arithmetic"></sup><sup class="fn" data-note="closeness-china-arithmetic"></sup> Across a break in the money, such as the opening of Japan's ports in 1859<sup class="fn" data-note="shinbo-trend"></sup> or a recoinage, a price is not borrowed at all, however near the year.<sup class="fn" data-note="rule-decision"></sup></p>
+
+<h3 id="borrowed-price-rule">How the rule is built</h3>
+<ul>
+<li><strong>No source states a rule for how far a price may be borrowed.</strong><br>The searches of the Japanese, Chinese and modern literature found none.<sup class="fn" data-note="rule-absence"></sup> Everything below is this project's derivation, from the measured swings.</li>
+<li><strong>An era's own years already carry a swing.</strong><br>An era of ten years, such as Kyoto's of 1745-1754, converts any of its years at one price level, so a year may lie up to five years from the era's middle. How far prices moved over five years is therefore the uncertainty every conversion already accepts; an era of another length takes half its own span. For Kyoto's rice that swing is 25.4%, a standard deviation of log changes over 80 pairs of years.<sup class="fn" data-note="closeness-arithmetic"></sup></li>
+<li><strong>No note while a longer gap swings no more than that.</strong><br>A borrowed year needs no note while prices moved over its gap no more than over the era's own five years, allowing for the sampling error of that figure (twice its standard error). The bound is the last gap, counting up from five years, at which every gap so far passes, each resting on at least 20 pairs of years.<sup class="fn" data-note="closeness-arithmetic"></sup></li>
+<li><strong>Beyond that bound, the conversion is made with a note.</strong><br>The note says which era's prices were borrowed and that prices had moved since.<sup class="fn" data-note="rule-decision"></sup></li>
+<li><strong>Where a noted conversion should stop being made is left undecided.</strong><br>Beyond the no-note bound the measured swing rises slowly and unevenly with the gap, without a point where it jumps, so the measurements mark no further limit.<sup class="fn" data-note="closeness-arithmetic"></sup><!-- The swing at every gap, good by good and city by city, is in the table of this project's arithmetic (closeness.out.md), for that choice to be made on. --><!-- left to the GM (feature 414, 2026-10-24, FR-003, through escalation-check): the further numeric limit, the plan's "M", is not set by this project; the curve is specs/414-price-stability/measure/closeness.out.md --></li>
+</ul>
+
+<h3 id="borrowed-price-japan">Japan: how far each good borrows without a note</h3>
+<p>The Mitsui merchant house's account books price the same goods in Kyoto, Edo and Osaka.<sup class="fn" data-note="mitsui-data"></sup> The no-note bound in years for each, to 1858, by this project's arithmetic:<sup class="fn" data-note="closeness-arithmetic"></sup></p>
+<table>
+<thead><tr><th>good</th><th>Kyoto</th><th>Edo</th><th>Osaka</th></tr></thead>
+<tbody>
+<tr><td>white rice</td><td>25</td><td>20</td><td>10</td></tr>
+<tr><td>salt</td><td>left out</td><td>20</td><td>5</td></tr>
+<tr><td>miso</td><td>15</td><td>20</td><td>10</td></tr>
+<tr><td>soy sauce</td><td>5</td><td>20</td><td>5</td></tr>
+<tr><td>sake</td><td>50</td><td>20</td><td>10</td></tr>
+<tr><td>firewood</td><td>5</td><td>20</td><td>20</td></tr>
+<tr><td>charcoal</td><td>not priced</td><td>20</td><td>20</td></tr>
+<tr><td>lamp oil</td><td>5</td><td>10</td><td>20</td></tr>
+<tr><td>day laborer's wage</td><td>15</td><td>20</td><td>not priced</td></tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Rice in Kyoto: about 25 years.</strong><br>Over five years Kyoto's rice moved by 25.4%, and the tolerance, that swing plus twice its standard error, is 29.4%. Over 10 to 25 years it moved by 27.6% to 29.0%, and over 30 years by 31.3%, past the tolerance.<sup class="fn" data-note="closeness-arithmetic"></sup></li>
+<li><strong>A good's bound is measured against its own swing, so a steady good's is short.</strong><br>Kyoto's firewood moved by only 5.2% over five years, so its tolerance is 6.0%, and at ten years it moved by 6.2%. Its bound is five years though it stays the steadiest good at every gap: 11.7% over 30 years, against 31.3% for rice. Soy sauce (7.8% over five years, 10.6% over ten) and lamp oil (16.8% and 19.9%) are short for the same reason.<sup class="fn" data-note="closeness-arithmetic"></sup></li>
+<li><strong>Why do Edo's and Osaka's bounds stop at 20 years or less?</strong><br>Their books run 1818-1858, with only a few earlier years, so a gap of 25 years has 16 pairs, too few to measure. Edo's 20 years is that limit, not a swing: its goods moved about as much at 20 years as at five, or less. Osaka's rice (10 years) and its salt and soy sauce (5) are swings: over 15 years Osaka's rice moved by 35.5%, past a tolerance of 33.9%.<sup class="fn" data-note="closeness-arithmetic"></sup></li>
+<li><strong>Kyoto's salt is left out.</strong><br>Kyoto's salt price falls to about a third between 1762 and 1791 and stays there, which reads as a change of unit, so no bound is measured across it.<sup class="fn" data-note="mitsui-salt"></sup></li>
+</ul>
+
+<h3 id="borrowed-price-china">China: the same bound</h3>
+<ul>
+<li><strong>The cost of a laborer's basic goods: about 5 years in Suzhou and Canton.</strong><br>The cost of a bare-bones year of goods in grams of silver<sup class="fn" data-note="allen-baskets"></sup> moved by 17.1% over five years in Suzhou, 99 pairs of years, against a tolerance of 19.6%, and by 22.4% over ten; Canton's by 14.8%, against 16.9%, and 19.2%. Beijing's, whose goods are in part fixed multiples of one another (below), gives five years too.<sup class="fn" data-note="closeness-china-arithmetic"></sup></li>
+<li><strong>Good by good: open.</strong><br>The Suzhou and Canton figures are the cost of a whole basket. The only good-by-good yearly prices in the same files are Beijing's, and they are not Beijing's own: its meat, edible oil, soap, candles and lamp oil are its wheat flour's price times one fixed figure in every year of 1738-1850, and its cloth holds the same price in 93 of those 113 years.<sup class="fn" data-note="allen-beijing-goods"></sup><sup class="fn" data-note="beijing-goods-arithmetic"></sup></li>
+<li><strong>Rice alone, from the market: too sparse to measure.</strong><br>A historian's series of Suzhou-area rice prices gives 25 years with a price in 1584-1766,<sup class="fn" data-note="kishimoto-data"></sup> which makes 6 pairs five years apart, 3 ten years apart and none 25 years apart.<sup class="fn" data-note="closeness-china-arithmetic"></sup></li>
+</ul>
+
+<h3 id="borrowed-price-breaks">Breaks: where a price is not borrowed at all</h3>
+<p>A break moves prices or the money itself for good, so a price borrowed across one is wrong by the break, whatever the gap in years. Each is this project's do-not-convert bound.<sup class="fn" data-note="rule-decision"></sup></p>
+<ul>
+<li><strong>The opening of Japan's ports in 1859.</strong><br>The price level in 1859-1867 averaged 239% above its level of 1830-1858.<sup class="fn" data-note="shinbo-trend"></sup></li>
+<li><strong>A recoinage that changed the silver in the coin.</strong><br>The shogunate's debasement of 1818-1829 and the famine of 1833-1838 made real wages in the Kinai extremely volatile for the two decades after 1820.<sup class="fn" data-note="saito-2003-recoinage"></sup> How much silver each recoinage left in a monme is in <a href="0287-how-much-silver-was-a-monme-a-ryo-and-a-bu-coinage-by-coinage.html">How much silver was a monme, a ryo and a bu, coinage by coinage?</a></li>
+<li><strong>A change of money system.</strong><br>Japan's New Currency Act of 1871 made the yen equal to the ryo,<sup class="fn" data-note="yen-1871"></sup> so the units carried over, but its years are already past the break of 1859. China's tael, cash and dollar are in <a href="0289-what-was-a-tael-a-string-of-cash-and-a-chinese-dollar-worth-in-silver.html">What was a tael, a string of cash and a Chinese dollar worth in silver?</a></li>
+<li><strong>A domain's own paper notes.</strong><br>Domain notes circulated beside the coin, but no paper money passed throughout Japan,<sup class="fn" data-note="domain-notes"></sup> and when the notes were bought in, each domain's were exchanged at the market rate of the time, which followed its finances.<sup class="fn" data-note="domain-notes-rate"></sup></li>
+<li><strong>In China, an amount in copper cash borrows the cash rate's moves too.</strong><br>Cash stood not far from 1,000 to the tael of silver in the 1700s and over 2,000 around 1850,<sup class="fn" data-note="lupeng-cash"></sup> so a cash amount is not converted across a move in that rate; what copper fetched in Japan is in <a href="0277-what-was-copper-coin-worth-in-silver.html">What was copper coin worth in silver?</a></li>
+</ul>
+
+<h3 id="borrowed-price-place">Borrowing another city's price</h3>
+<ul>
+<li><strong>A city borrows without a note where its gap to the era's city moved, and stood, within the era's own swing.</strong><br>The same test as for years, set against Kyoto, the city of the Kyoto era, for 1818-1858: a borrowed city's price must have moved against Kyoto's no more than Kyoto's own five-year swing, and stood on average no further from it. A steady gap that stands wider still misprices every amount by that gap.<sup class="fn" data-note="place-arithmetic"></sup><!-- session 3, 2026-10-24: the plan's place test was the SD of the gap alone, which passed Edo's miso at 29% below Kyoto's; the average gap was added so a wide steady gap is not borrowed silently --></li>
+<li><strong>Rice and lamp oil borrow between the three cities without a note.</strong><br>Edo's rice stood 3% above Kyoto's and moved against it by 10.2%, Osaka's 1% above and by 4.4%, against Kyoto's own 25.4%; lamp oil stood 6-11% above and moved by 7.0-8.5%, against 16.8%. The Edo day wage (10% below, moving by 9.7%, against 16.0%) and Osaka's sake also pass.<sup class="fn" data-note="place-arithmetic"></sup></li>
+<li><strong>Miso, soy sauce, firewood and Edo's sake need a note.</strong><br>Miso stood 20-29% below Kyoto's, against a swing of 17.7%, and firewood a third below in Edo and 43% above in Osaka, against 5.2%; soy sauce moved against Kyoto's by 13.1-16.3%, against 7.8%.<sup class="fn" data-note="place-arithmetic"></sup> How far apart places stood more widely is in <a href="0292-how-far-apart-were-prices-from-one-city-or-village-to-the-next.html">How far apart were prices from one city or village to the next?</a></li>
+<li><strong>The breaks above bound place too.</strong><br>A place on another money, or paying in its domain's notes, is not borrowed for another's.<sup class="fn" data-note="rule-decision"></sup></li>
+</ul>
+
+<h3 id="borrowed-price-size">The size of the amount</h3>
+<ul>
+<li><strong>Does a large amount borrow less well than a small one? SILENT.</strong><br>No source read and no series measured shows large and small amounts of the same good moving differently, so the bounds do not vary by size.<sup class="fn" data-note="size-absence"></sup> The nearest finding is that Osaka's wholesale and Kyoto's retail prices of the same goods moved almost in parallel.<sup class="fn" data-note="shinbo-parallel"></sup> An amount paid in copper rather than silver is the break above, not a matter of size.</li>
+</ul>
+
+<h3 id="borrowed-price-canon">Against the setting's money rules</h3>
+<ul>
+<li><strong>The rule is a guide to the era an author picks for an amount.</strong><br>The record's money tooltip converts each amount at the era its author names and says when that era is borrowed, but how far an era is borrowed is the author's choice.<!-- the tooltip refuses a coin that is not one of the era's units, so a change of money system cannot pass --> The bounds above say how far that choice reaches without a note: Kyoto's rice 25 years, its steady goods 5, Qing baskets 5, and never across a break.<sup class="fn" data-note="closeness-arithmetic"></sup><sup class="fn" data-note="closeness-china-arithmetic"></sup><!-- the tooltip: l7r/diagram/interactive/record/money.py (feature 413): the era is the author's choice, data-paid names a borrowed era, and "How far an era may be borrowed is NOT a check here" until this rule --></li>
+</ul>

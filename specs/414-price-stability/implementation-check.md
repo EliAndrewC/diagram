@@ -1,0 +1,7 @@
+# Feature 414 - implementation check (research/CLAUDE.md, "A finding is checked against the code")
+
+- 0290: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i -E 'price.?stab|volatil|price level|inflation' l7r pool (only l7r/diagram/interactive/record/money.py, whose docstring says the borrowing rule waits on diagram#15 and checks none)
+- 0291: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i -E 'price.?stab|volatil|price level|inflation|fiat|cpi' l7r pool (the same single docstring mention)
+- 0292: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i -E 'price.?spread|between cities|place to place' l7r pool --include=*.py (nothing)
+- 0293: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i -E 'salt monopol|dynasty to dynasty|era to era' l7r pool --include=*.py (nothing)
+- 0294: no code implements it - consumed by gm-assistant's money skill and offered to feature 413's marking; searched: grep -rn -i -E 'borrow|closeness|data-paid' l7r pool --include=*.py (only l7r/diagram/interactive/record/money.py, which names a borrowed era with data-paid and checks the coin is one of the era's units, but whose docstring says how far an era may be borrowed is not a check there; make money-candidates' ordering of amounts 'within 25 years of a built era' (Makefile) is the withdrawn default, not this rule)

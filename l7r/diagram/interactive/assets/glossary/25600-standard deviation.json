@@ -1,0 +1,8 @@
+{
+ "term": "standard deviation",
+ "def": "A measure of how far a run of figures typically strays from its average. Taken here of the logged changes in a price, it reads roughly as the typical percentage move from one period to the next.",
+ "variants": [
+  "standard deviation",
+  "standard deviations"
+ ]
+}

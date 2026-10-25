@@ -1,0 +1,9 @@
+{
+ "term": "correlation",
+ "def": "A measure, from -1 to 1, of how closely two price series rose and fell together: near 1 they moved in step, near 0 one told nothing about the other.",
+ "variants": [
+  "correlation",
+  "correlations",
+  "correlated"
+ ]
+}

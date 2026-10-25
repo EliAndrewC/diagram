@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-24T22:49:54+00:00",
+ "final_url": "https://api.db.nomics.world/v22/series?series_ids=BLS/cu/CUUR0000SA0,BLS/ap/APU0000701312,BLS/ap/APU0000701111,BLS/ap/APU0000708111,STATJP/CPIa/001,STATJP/CPIm/001,STATJP/CPIm/003&observations=1&format=json",
+ "first": "8e/8e7bbf52f73e/20261024T224953Z",
+ "gm_copies": [],
+ "keys": [
+  "dbnomics-bls-statjp-cpi"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "8e/8e7bbf52f73e/20261024T224953Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "c62e2358d6b9600ffd04c7fd6ad18bf6bb605072710c314b12fc947b2b4b06a3",
+ "url": "https://api.db.nomics.world/v22/series?series_ids=BLS/cu/CUUR0000SA0,BLS/ap/APU0000701312,BLS/ap/APU0000701111,BLS/ap/APU0000708111,STATJP/CPIa/001,STATJP/CPIm/001,STATJP/CPIm/003&observations=1&format=json"
+}
