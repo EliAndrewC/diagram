@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-25T05:02:41Z",
+  "target": "record-checked",
+  "commit": "0efff55f5",
+  "why": "record-format on record-format:0293: only a year corrected, 1832 to 1831 (Daoguang 11), the source-reader EDIT feature 416's session 2 filed on 0293#qing-tickets; no word, term or sentence changed, so nothing for a vocabulary check to read"
+}
