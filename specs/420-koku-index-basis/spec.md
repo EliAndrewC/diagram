@@ -123,3 +123,4 @@ then, retail now). The GM also asks what these baskets are used to compute in ac
   Applied, with gm-assistant's addendum on Q4 (Acceptance 1: the era each borrowed price came from).
 - round 2 (verify): CHANGES REQUIRED - Acceptance 1's reason worded as gm-assistant's suspicion, not fact; FR-002a's quote
   credited to research/CLAUDE.md. Applied.
+- round 3: accepted by the round arbiter, ask:420-round3, 2026-10-25.
