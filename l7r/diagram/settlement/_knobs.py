@@ -22,7 +22,7 @@ Research:
     byre_form weights - GUESS: 0.6 inner, 0.3 yard shed, 0.1 commons
     caravan_inn_form forms - research/questions/0184-inns-hatago-and-carters-inns.html, research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html, research/questions/0184-inns-hatago-and-carters-inns.drawing.html: wagon or hatago, rolled evenly, never by the settlement's house form
     hamlet knobs unrolled - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet rolls its cluster's shape, lane pattern, plot size and dry-row drift from its own tables (hamletgen/plan.py); the settlement knobs here keep their defaults
-    hamlet default values - UNRESEARCHED: high_margin, round, spine, corner_NW, medium plots, organic, 0 drift, alleys, homestead bamboo
+    hamlet default values - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); high_margin, round, spine, corner_NW, medium plots, organic, 0 drift, alleys, homestead bamboo
 """
 
 import hashlib
@@ -468,8 +468,8 @@ def skeleton_layout(kind: str, cx: float, cy: float, ex: float, ey: float) -> di
 
     Research:
         skeleton shapes - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y, cross, waterside
-        headman at the skeleton's focal point - UNRESEARCHED: the head, the T-junction, the fork, a quadrant by the cross, the water
-        gateway at the low foot - UNRESEARCHED: the downslope end of the skeleton
+        headman at the skeleton's focal point - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the head, the T-junction, the fork, a quadrant by the cross, the water
+        gateway at the low foot - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the downslope end of the skeleton
     """
     top, bot = cy - ey, cy + ey
     if kind == "spine":  # one lane along the margin; headman at the high HEAD, gateway at the low foot

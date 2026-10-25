@@ -27,7 +27,7 @@ class WellGroundMixin:
         """The three grids `_well_ground_clear` queries - watercourse segments, dry plots, paddy
         wet rings - each item boxed so a query pads by the wellhead radius alone.
 
-        Research: fallback channel widths - UNRESEARCHED: stream 9, channel 2.5, field ditch 1.5, canal 14 px
+        Research: fallback channel widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a field ditch about 1.5 ft, a lateral about 3, a brook about 7 (a GUESS), canals 26 to 36 ft; the fallbacks are ours; stream 9, channel 2.5, field ditch 1.5, canal 14 px
         """
         recs = {key: self.M.get(key, []) or [] for key in ("streams", "channels", "field_ditches", "canals", "dry_plots")}
         water = []
@@ -168,7 +168,7 @@ class WellGroundMixin:
 
         Research:
             no well in the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html
-            no well in a watercourse or the pond - UNRESEARCHED: the drawn head off the water
+            no well in a watercourse or the pond - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); the drawn head off the water
             no well on a dry crop plot - research/questions/0196-communal-wells-ido.drawing.html
             no well in a paddy - research/questions/0196-communal-wells-ido.drawing.html
         """

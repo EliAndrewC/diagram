@@ -92,7 +92,7 @@ class MoatMixin:
             drain drops through a sluice into a culvert - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: cut short of the patrol road, never through the wall
             cut clearance - NONE: half the road width plus 10 px, the glyph's own margin
             undrawn conduit to the moat - NONE: to the nearest moat vertex, a 12 px wind
-            conduit corridor - UNRESEARCHED: 33 px
+            conduit corridor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 33 px
         """
         ring = self.M.get("ring_road") or []
         moat = self.M.get("moat") or []

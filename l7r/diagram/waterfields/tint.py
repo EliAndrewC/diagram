@@ -38,7 +38,7 @@ LOW_ROWS = 2
 """How many row steps from the collector count as low ground: the carve marked the bottom TWO levels (a wet backswamp with width,
 not a one-plot hem - a calibrated liberty, see `apply_land_use`).
 
-Research: low ground depth - UNRESEARCHED: plots within two row steps of the collector are low ground
+Research: low ground depth - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); plots within two row steps of the collector are low ground
 """
 
 
@@ -72,7 +72,7 @@ def mark_low(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, row_st
 
     Research:
         low ground - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the low ground begins at the plots whose foot lies on the collector
-        low ground depth - UNRESEARCHED: within LOW_ROWS (two) row steps of the collector
+        low ground depth - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); within LOW_ROWS (two) row steps of the collector
         wet plots on the drain - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: FLOOD_SAMPLE of the plots fronting the collector tinted (`fronts`)
     """
     import shapely

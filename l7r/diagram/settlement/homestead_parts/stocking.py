@@ -11,7 +11,7 @@ def grove_stocked(clumps: Any, w: float, h: float, floor: float = 1.5) -> bool:
     """THE ONE PREDICATE of `test_every_recorded_grove_holds_trees` (feature 287, woods W15): a recorded grove holds at least
     `floor` clumps per 100,000 sq px of its recorded w x h - a grove that declares an extent and draws almost nothing in it
     leaves the dooryards it should have greened bare.
-    Research: a recorded grove is stocked - UNRESEARCHED: at least 1.5 clumps per 100,000 sq px of its extent"""
+    Research: a recorded grove is stocked - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); at least 1.5 clumps per 100,000 sq px of its extent"""
     return w * h <= 0 or len(clumps) * 1e5 / (w * h) >= floor
 
 
@@ -20,8 +20,8 @@ def stocked_copse(clumps: list[tuple[float, float]], pad: float, kept: frozenset
     recorded at (its clumps' box grown by `pad`) is `grove_stocked` (feature 287, woods W15). It terminates: one clump's extent is a square of `2 * pad`,
     far above the floor. A clump in `kept` - a household's reserved share of the wood floor (woods W25) - is never a straggler: the drop stops when only kept clumps are left.
     Research:
-        copse clumps farthest from the centroid dropped until stocked - UNRESEARCHED
-        reserved share never a straggler - UNRESEARCHED: a household's reserved share of the wood floor (woods W25) is kept"""
+        copse clumps farthest from the centroid dropped until stocked - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25)
+        reserved share never a straggler - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a household's reserved share of the wood floor (woods W25) is kept"""
     out = list(clumps)
     while len(out) > 1:
         xs, ys = [c[0] for c in out], [c[1] for c in out]

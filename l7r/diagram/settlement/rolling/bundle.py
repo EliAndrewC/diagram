@@ -43,8 +43,8 @@ class BundleGeomMixin:
         fragment. Total bed area stays in the saien band (`garden_area_within_norms`). Returns (cx,cy,w,h) rects.
 
         Research:
-            bed split share - UNRESEARCHED: about one household in four splits its plot into two beds
-            bed split forms - UNRESEARCHED: half flank the house on opposite walls, the rest stacked (south gardens) or side by side; each bed at least 6 ft (`bscale`) wide
+            bed split share - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); about one household in four splits its plot into two beds
+            bed split forms - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.html: beds lay before the house, all round it, or on spare ground; the forms and the 6 ft width are ours; half flank the house on opposite walls, the rest stacked (south gardens) or side by side; each bed at least 6 ft (`bscale`) wide
             beds one household's garden - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: the beds together held to the garden's size range
             beds on sunny sides - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: never the north back
         """
@@ -194,26 +194,26 @@ class BundleGeomMixin:
         `grove_faces` beside it, when dispersed).
 
         Research:
-            house-to-part gap - UNRESEARCHED: 3 ft between the house and its yard and garden
+            house-to-part gap - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); 3 ft between the house and its yard and garden
             garden size - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: 0.48 x 0.85 of the house, jittered up to 1.25x, capped at 44 x 34 ft (dispersed 42 x 30), under 0039's 1,507 sq ft
             yard before the south wall - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html, research/questions/0029-farmhouses-minka.drawing.html: the rolled yard, centered on the front
             headman keeps an ordinary yard and garden - research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html: the caps hold a big house's parts to an ordinary farm's
             no grove of its own in a cluster - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a nucleus shelters behind one village belt
             garden side - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: southeast, southwest, east or west of the house
             garden morning-sun reach - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band within 50 ft (`EAST_REACH_FT`) east of a garden across its height
-            forecourt kept on a no-rice farm - UNRESEARCHED: the yard's ground reserved where no threshing floor is drawn
+            forecourt kept on a no-rice farm - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.html: the drying yard was also the work yard, a fifth of the lot (Imabari 1924); no page ties the yard to rice alone; the yard's ground reserved where no threshing floor is drawn
             frame padded for a lane - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: half `LANE_ROOM_FT` (16 ft) on every side, so neighbors' groves stand 32 ft apart
             service strip - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the windward stand `SERVICE_STRIP_FT` (24 ft) off the back and windward end walls, sized to seat a wood shed
             thin band - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a grove side away from the wind one tree deep, `THIN_BAND_FT` 17 ft (two 0080 mean crown radii)
             way in through a ring - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one `WAY_IN_FT` (36 ft) break at the front band's middle, sized so a lane can be routed through
             byre footprint - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: `BYRE_FT`, 16.12 x 10.92 ft
             byre off the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: `YARD_SHED_GAP_FT[0]`, 6 ft, off the house
-            dispersed well pocket - UNRESEARCHED: the wellhead plus a 3 ft margin, `2 * _well_vr() + px(6.0)`
-            south band off an unkept yard - UNRESEARCHED: `YARD_SUN_STRIP`, 22, unscaled, where the map keeps no sun
+            dispersed well pocket - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); the wellhead plus a 3 ft margin, `2 * _well_vr() + px(6.0)`
+            south band off an unkept yard - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the project's sun figures leave 39 ft open before a yard - the strip is 22 ft, a departure the code keeps until feature 417 T33; `YARD_SUN_STRIP`, 22, unscaled, where the map keeps no sun
             storehouse on the north wall - DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall, a convention the page records against the record
             storehouse seam - CONVENTION: the north-wall kura annex reserved 1 ft off the house wall
             byre beside the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the keeper's stall beside the house
-            byre's flank - UNRESEARCHED: the flank away from the garden; the page attests the inner and outer stable, not the side
+            byre's flank - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: in the Tono L-shaped house the stable joins the lower end and projects off the south side, both mirror forms recorded; away from the garden is ours; the flank away from the garden; the page attests the inner and outer stable, not the side
             outer stable off the wall - GUESS research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the yard-shed byre set `YARD_SHED_GAP_FT[0]` (6 ft) off the house, the near end of the page's guessed 6 to 12 ft
             dispersed farm's grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the farm's own grove on its rolled sides, turned to the wind
             south band kept off the yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: on a sun-keeping map the south band stands `CANOPY_SHADE_FT` plus 1.7 x 1.15 crown radii beyond the yard
@@ -345,7 +345,7 @@ class BundleGeomMixin:
             persimmon may stand in its own grove's bands - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: fruit=bands, the persimmon is not held out of its own farm's grove bands
             persimmon out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: held 50 ft off yards and beds at the seat's own rake, re-checked as drawn (`fit._persimmon_sun_conflict`)
             a grove farm's way in kept clear - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way-in strip (`way_in_strip`) and the door's room (`door_room`, UNRESEARCHED in size) handed to the fixtures as `keep`
-            the door's room past the yard - UNRESEARCHED: `DOOR_OUT_FT` (8 ft) past the yard's far edge, where the web's door path starts (`ways/serve.front_door`)
+            the door's room past the yard - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); `DOOR_OUT_FT` (8 ft) past the yard's far edge, where the web's door path starts (`ways/serve.front_door`)
         """
         kinds = getattr(self, "_household_fixtures", None) or ()
         if not kinds:

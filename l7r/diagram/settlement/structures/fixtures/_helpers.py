@@ -59,7 +59,7 @@ others, and then hands the choice to the caption and roadside preferences that a
 Making it TIGHTER would let a caption-blocked seat win on a foot of proximity; making it LOOSER would
 let the traffic term drag the board off the anchor, which is the defect this feature exists to fix.
 
-Research: anchored siting band - UNRESEARCHED: 60 ft from the best seat, the board's siting distance reused"""
+Research: anchored siting band - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); 60 ft from the best seat, the board's siting distance reused"""
 
 
 def bridges_on_a_way(M: Any, ftpx: float = 1.0) -> list[dict[str, Any]]:
@@ -70,7 +70,7 @@ def bridges_on_a_way(M: Any, ftpx: float = 1.0) -> list[dict[str, Any]]:
 
     Research:
         a bridge end on a way - research/questions/0190-notice-boards-kosatsuba.html: every named site on a road or street, the foot of a bridge among them
-        within the board's band - UNRESEARCHED: a bridge counts within KOSATSUBA_ANCHOR_BAND_FT (60 ft) of a way"""
+        within the board's band - research/questions/0190-notice-boards-kosatsuba.html: a bridge's foot is an attested seat for a notice board; the 60 ft is ours; a bridge counts within KOSATSUBA_ANCHOR_BAND_FT (60 ft) of a way"""
     ways = [[(float(x), float(y)) for x, y in w.get("pts") or []] for w in [*(M.get("lanes") or []), *(M.get("roads") or [])] if isinstance(w, dict)]
     road = M.get("road")
     if isinstance(road, dict) and road.get("pts"):
@@ -128,14 +128,14 @@ at the handover, so a board beside it is passed by all of them; the wider anchor
 preferences carry the board 70-100 ft off it, onto a lane two of Kashikawa's households and one of Sawada's never took
 (feature 261). 20 ft is the board's own verge off the tread plus a board's length either way along it.
 
-Research: entrance board beside the handover - UNRESEARCHED: within 20 ft of where every departure passes"""
+Research: entrance board beside the handover - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); within 20 ft of where every departure passes"""
 
 
 DWELLING_REACH_FT = 150.0
 """How far from a way a dwelling may stand and still be walked out by it - `departure_routes`' `reach`, one number for
 both, so the entrance and the routes it must be passed by cannot disagree.
 
-Research: dwelling served by a way - UNRESEARCHED: within 150 ft"""
+Research: dwelling served by a way - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); within 150 ft"""
 
 
 def dwellings_joining(M: Any, track: Sequence[tuple[float, float]], houses: Sequence[tuple[float, float]]) -> list[tuple[float, float]]:
@@ -255,7 +255,7 @@ def kosatsuba_anchor(M: Any, placement: str, ftpx: float = 1.0) -> tuple[float, 
         board placements - research/questions/0190-notice-boards-kosatsuba.html: center, entrance, or the headman's gate (frontage)
         entrance anchor - research/questions/0190-notice-boards-kosatsuba.html: the handover, else where the approach first reaches a dwelling
         reaching the houses - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way reaches a farmhouse within 60 ft of it; the code counts the approach within `KOSATSUBA_ENTRANCE_REACH_FT`, 60 ft
-        an approach that never arrives - UNRESEARCHED: anchored at its point nearest the houses
+        an approach that never arrives - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); anchored at its point nearest the houses
         a bridgehead anchored at its bridge - research/questions/0190-notice-boards-kosatsuba.drawing.html: at `bridgehead_anchor`'s bridge
     """
     houses = [(float(h["x"]), float(h["y"])) for h in (M.get("houses") or []) if "x" in h]

@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 
 _FRAY_DEG = 20.0  # below this the two ways are the same track fraying, not a junction (see trim_lane_stubs)
-"""Research: fraying track - UNRESEARCHED: two ways meeting under 20 degrees are one track, not a junction"""
+"""Research: fraying track - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); two ways meeting under 20 degrees are one track, not a junction"""
 
 
 def _angle_between(run: Any, other: Any) -> float:
@@ -35,7 +35,7 @@ def _angle_between(run: Any, other: Any) -> float:
 
 
 _LANE_MIN_FT = 71.0  # one homestead's frontage: below this a lane can front nobody (see trim_lane_stubs)
-"""Research: shortest lane - UNRESEARCHED: an internal lane under 71 ft, one homestead's frontage, is dropped"""
+"""Research: shortest lane - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on 71 ft - a house lot about 75 ft square (0285) and a 54 ft frontage (0033) bear on it; an internal lane under 71 ft, one homestead's frontage, is dropped"""
 
 # A LANE THAT SERVES A FARMHOUSE ENDS AT ITS DOORYARD (269 B17, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html - "a lane that serves a farmhouse
 # ends at that house's dooryard, or runs on to reach something a reader can see"; how close counts as serving is the
@@ -178,7 +178,7 @@ def junction_floor(pts: list[Pt], lanes: Any, drop: Any, way_reach: float, me: i
 
     Research:
         junction kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network; a trim never cuts past a junction
-        a crossing at 20 degrees - UNRESEARCHED: a way crossing the lane at 20 degrees or more counts as a junction
+        a crossing at 20 degrees - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a way crossing the lane at 20 degrees or more counts as a junction
     """
     acc, keep = 0.0, 0.0
     for n in range(len(pts) - 1):
@@ -206,7 +206,7 @@ def fan_rival(lanes: Any, q: Pt, bearing: float, house: Pt, mine: float, me: int
     only these values from the closure, and a test can now hand it two lane dicts instead of building a
     settlement whose web happens to fan.
 
-    Research: one approach per house - UNRESEARCHED: a second end within the fan spread and bearing of another is the same approach drawn twice"""
+    Research: one approach per house - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a second end within the fan spread and bearing of another is the same approach drawn twice"""
     for k, other in enumerate(lanes):
         if k == me or len(other.get("pts") or []) < 2:
             continue

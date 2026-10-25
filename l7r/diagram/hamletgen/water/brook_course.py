@@ -22,16 +22,16 @@ from ..consts import BROOK_BEND_WIDTHS, BROOK_WANDER, BROOK_WANDER_STEP, Poly, P
 from .brook_rules import BROOK_DRAWN_W, to_edge, turn_deg
 
 EXIT_BEND_FRAC = 0.12  # an exit leg's midpoint bend, as a share of the leg ...
-"""Research: exit leg bend - UNRESEARCHED: an exit leg still on the page bends aside at its middle by 0.12 of its length"""
+"""Research: exit leg bend - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); an exit leg still on the page bends aside at its middle by 0.12 of its length"""
 EXIT_BEND_MAX_FT = 60.0  # ... at most this far aside
-"""Research: exit bend cap - UNRESEARCHED: the exit leg's bend at most 60 ft aside"""
+"""Research: exit bend cap - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the exit leg's bend at most 60 ft aside"""
 
 
 def exit_bend(start: tuple[float, float], heading: tuple[float, float], leg: float, side: float) -> tuple[float, float]:
     """The midpoint of an exit leg from `start` along `heading` for `leg` ft, set aside by `EXIT_BEND_FRAC` of the leg
     (at most `EXIT_BEND_MAX_FT`) on `side` (+1 or -1) - one gentle bend in a leg the page still shows (feature 261).
 
-    Research: exit leg bend - UNRESEARCHED: one bend at the leg's middle, EXIT_BEND_FRAC of the leg and at most EXIT_BEND_MAX_FT aside
+    Research: exit leg bend - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); one bend at the leg's middle, EXIT_BEND_FRAC of the leg and at most EXIT_BEND_MAX_FT aside
     """
     off = side * min(EXIT_BEND_MAX_FT, EXIT_BEND_FRAC * leg)
     return (start[0] + heading[0] * leg / 2 - heading[1] * off, start[1] + heading[1] * leg / 2 + heading[0] * off)
@@ -45,9 +45,9 @@ def exit_legs(out: Sequence[Pt], fall: Pt, W: float, H: float) -> list[Pt]:
 
     Research:
         off-map mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the course runs on down the fall and its last leg is carried 60 past the canvas edge
-        exit span - UNRESEARCHED: max(120, the distance to the edge down the fall) + 260
-        turn onto the fall - UNRESEARCHED: four legs of 0.22-0.26 of the span, blending 0.3, 0.6, 0.85, 1.0 from the course's heading onto the fall, no wander
-        exit leg bend - UNRESEARCHED: each leg starting on the page bent once at its middle, alternating sides (`exit_bend`)
+        exit span - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); max(120, the distance to the edge down the fall) + 260
+        turn onto the fall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); four legs of 0.22-0.26 of the span, blending 0.3, 0.6, 0.85, 1.0 from the course's heading onto the fall, no wander
+        exit leg bend - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); each leg starting on the page bent once at its middle, alternating sides (`exit_bend`)
     """
     dx, dy = fall
     lx, ly = out[-1]
@@ -97,7 +97,7 @@ def _wander(rng: random.Random, stray: float, swing: int) -> tuple[float, int]:
     and stepping at least `BROOK_WANDER_STEP / 4` keeps every station's offset different from the last, so
     no two consecutive vertices can share a bearing and none can lie on an axis.
 
-    Research: meander - UNRESEARCHED: a seeded reflecting walk across the fall between 0 and BROOK_WANDER (10 px), stepping BROOK_WANDER_STEP / 4 to BROOK_WANDER_STEP
+    Research: meander - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a seeded reflecting walk across the fall between 0 and BROOK_WANDER (10 px), stepping BROOK_WANDER_STEP / 4 to BROOK_WANDER_STEP
     """
     step = rng.uniform(BROOK_WANDER_STEP / 4.0, BROOK_WANDER_STEP) * swing
     nxt = stray + step
@@ -139,7 +139,7 @@ def _v_within(u: float, floor: float, want: float, d: Pt, p: Pt, box: tuple[floa
 
     Research:
         on the sheet - CONVENTION: the station's offset capped so it stays inside `box`, the field's bounds grown by BROOK_FRAME_MARGIN
-        crop clearance wins - UNRESEARCHED: never below `floor`, the crop clearance, where the two disagree
+        crop clearance wins - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); never below `floor`, the crop clearance, where the two disagree
     """
     hi = want
     for coord, lo_b, hi_b in ((0, box[0], box[2]), (1, box[1], box[3])):
@@ -164,7 +164,7 @@ def unfold(course: Poly, limit_deg: float, hold: Sequence[Pt] = ()) -> Poly:
     vertex before it goes instead (the approach's last wobble), else the one after it. A fold between two held vertices
     has nothing to drop and stays; the brook's placer judges the result and takes its next candidate.
 
-    Research: no fold-back - UNRESEARCHED: every vertex turning past `limit_deg` (BROOK_MAX_TURN_DEG, 100 deg) dropped, a held tap never
+    Research: no fold-back - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - a meander's bends run 2 to 3 widths in radius (pass P2a), which the per-vertex cap keeps; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); every vertex turning past `limit_deg` (BROOK_MAX_TURN_DEG, 100 deg) dropped, a held tap never
     """
     out = list(course)
     held = {(float(x), float(y)) for x, y in hold}

@@ -241,8 +241,8 @@ class LanesMixin:
             meeting another way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of it
             not fraying into it - research/questions/0081-village-lanes.drawing.html: at 20 degrees or more - a lane beside another at less is walked into one path
                 (405 T127)
-            one end per house and bearing - UNRESEARCHED: a second end within 60 ft and 25 degrees of another fronting the same house is trimmed
-            short lanes dropped - UNRESEARCHED: an internal lane under 71 ft
+            one end per house and bearing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a second end within 60 ft and 25 degrees of another fronting the same house is trimmed
+            short lanes dropped - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on 71 ft - a house lot about 75 ft square (0285) and a 54 ft frontage (0033) bear on it; an internal lane under 71 ft
             the track out and the field spur stay whole - research/questions/0081-village-lanes.drawing.html
             a row street stays whole - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it, its ends not pulled back as a lane's are
         """

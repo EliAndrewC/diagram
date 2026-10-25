@@ -21,7 +21,7 @@ class GardensMixin:
 
         Research:
             bed glyph - CONVENTION: a tilled fill with three rows of greens
-            turned with its house - UNRESEARCHED: the bed takes the farmhouse's rake
+            turned with its house - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); the bed takes the farmhouse's rake
         """
         x0, y0 = -w / 2, -h / 2
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
@@ -53,7 +53,7 @@ class GardensMixin:
             split into beds - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: one or two
                 beds, measured as one garden
             hand-worked outline - CONVENTION: an irregular quad, jitter 0.18 for one bed and 0.13 for a split
-            turned with its house - UNRESEARCHED: each bed takes the farmhouse's rake
+            turned with its house - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); each bed takes the farmhouse's rake
         """
         jit = 0.18 if len(beds) == 1 else 0.13
         for i, (bx, by, bw, bh) in enumerate(beds):

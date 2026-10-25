@@ -487,23 +487,23 @@ class BridgesMixin:
 
         Research:
             supply ditches only - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector or drain, the foot drains and diagonal edge drains
-            feeder left unplanked - UNRESEARCHED: the feeder kept out of `SUPPLY_ROLES`
+            feeder left unplanked - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the feeder kept out of `SUPPLY_ROLES`
             no path leads to a plank - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             one near the middle, more on a long run - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one per 320 px of the run wide enough
-            short stub stepped over - UNRESEARCHED: under 140 px, no plank
+            short stub stepped over - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); under 140 px, no plank
             only water too wide to step across - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: worth_planking judges the ditch by its widest point, and the seats whose water earns a board are tried first (`seat_order`)
             square across the ditch - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             plank width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: about 4 ft (`px(4)`), a single-file crossing
             short abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the local width plus `PLANK_ABUTMENT`, 5.5 ft, so a 2.5 ft ditch takes an 8 ft deck
-            polder crossings by side - UNRESEARCHED: seg_caps, none on the feeder, far toe or drain
+            polder crossings by side - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); seg_caps, none on the feeder, far toe or drain
             a join rules a seat out - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the joins of ditches rule a seat out and the span stays about 8 ft
             off the homes - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             off dry crops and gardens - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: houses, crops and other crossings rule a seat out, and the widest seat left takes the crossing (`seat_order`)
-            off groves - UNRESEARCHED: a farm's grove rules a seat out
+            off groves - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a farm's grove rules a seat out
             a seat nearer a drain refused - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector or drain (`plank_on_supply`)
             assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at its head where a record has none (`DEFAULT_W`)
             assumed brook width - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a brook 7 ft wide where a record has none (`DEFAULT_W`)
-            assumed channel width - UNRESEARCHED: 2.5 px where a record has none (`DEFAULT_W`)
+            assumed channel width - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 2.5 px where a record has none (`DEFAULT_W`)
             not on another deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             both banks reach useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             one rolled form - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: FOOTBRIDGE_FORM
@@ -773,7 +773,7 @@ class BridgesMixin:
 
         Research:
             both banks reach useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: field, dry plot, dike crest or a dwelling
-            bank and village reach - UNRESEARCHED: PLANK_BANK_REACH past the end, PLANK_VILLAGE_REACH to a house
+            bank and village reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); PLANK_BANK_REACH past the end, PLANK_VILLAGE_REACH to a house
         """
         a = math.radians(deck_deg)
         ux, uy = math.cos(a), math.sin(a)

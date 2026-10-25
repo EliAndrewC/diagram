@@ -113,7 +113,7 @@ def carve_around_grave(plots: list[dict[str, Any]], disc: tuple[float, float, fl
 
     Research:
         paddy carved round the grave - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no basin runs under the mound
-        island host halved - UNRESEARCHED: the host basin split along its long axis through the mound, a bund run to the island"""
+        island host halved - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); the host basin split along its long axis through the mound, a bund run to the island"""
     from shapely.geometry import LineString, Point, Polygon
     from shapely.ops import split
 
@@ -168,7 +168,7 @@ def stone_steps(n: int, rx: float, ry: float) -> list[float]:
     third stone's base 2 ft off a mound under 10 ft tall, in the rice; a clamp per stone then set the third level with the
     second, which the stagger rule refuses (round 2).
 
-    Research: stone stagger - UNRESEARCHED: each stone 3 ft then 3.5 ft more behind the last, scaled to the mound"""
+    Research: stone stagger - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); each stone 3 ft then 3.5 ft more behind the last, scaled to the mound"""
     steps = [3.0 + i * 3.5 for i in range(n)]
     room = [ry * math.sqrt(max(0.0, 1.0 - (stone_dx(i) / rx) ** 2)) * STONE_INSET if rx > 0 else 0.0 for i in range(n)]
     scale = min([1.0] + [r / st for r, st in zip(room, steps, strict=True)])
@@ -178,7 +178,7 @@ def stone_steps(n: int, rx: float, ry: float) -> list[float]:
 def stone_dx(i: int) -> float:
     """Stone `i`'s offset across the mound from its center (the stagger's step to one side).
 
-    Research: stone offset - UNRESEARCHED: 4.5 px to one side a stone"""
+    Research: stone offset - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); 4.5 px to one side a stone"""
     return -4.0 + i * 4.5
 
 
@@ -268,8 +268,8 @@ class FieldFeaturesMixin:
             field pond rate - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: 0.55 where a low plot can hold one
             field pond on a low plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: tried over the low plots in random order
             rock outcrops - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: terraces always, ribbon valleys half the time, 1-3 a field
-            rock outcrop's host plot - UNRESEARCHED: any plot of the field, chosen at random
-            field grave's host plot - UNRESEARCHED: a plot chosen at random, then the plots after it in list order
+            rock outcrop's host plot - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); any plot of the field, chosen at random
+            field grave's host plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: a single grave stood in the open field where a priest or a geomancer chose, tied to no plot; the host plot is ours; a plot chosen at random, then the plots after it in list order
             field grave rate - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: 0.3 on valley, terrace and ribbon fields
         """
         if self.M.get("meta", {}).get("scale") in ("town", *CITY_TIER_SCALES):
@@ -402,7 +402,7 @@ class FieldFeaturesMixin:
 
         Research:
             pond inside one plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: the whole rim inside its low plot, crossing no ring
-            field pond size - UNRESEARCHED: 0.82 of the plot's half-span, 10-46 by 7-32 px, shrunk 0.9 a step"""
+            field pond size - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: the smallest field ponds ran about 33 ft a side; the drawn range is ours; 0.82 of the plot's half-span, 10-46 by 7-32 px, shrunk 0.9 a step"""
         poly = [(float(x), float(y)) for x, y in plot["poly"]]
         _, _, hx, hy = self._plot_center_span(poly)
         cx, cy = _centroid(poly)
@@ -446,7 +446,7 @@ class FieldFeaturesMixin:
 
         Research:
             outcrop off-center - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: within 0.3 of the plot's half-span of its middle
-            outcrop size - UNRESEARCHED: 2-4 boulders r 3.5-6.5 px"""
+            outcrop size - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); 2-4 boulders r 3.5-6.5 px"""
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         cx += rng.uniform(-hx * 0.3, hx * 0.3)
         cy += rng.uniform(-hy * 0.3, hy * 0.3)
@@ -481,7 +481,7 @@ class FieldFeaturesMixin:
 
         Research:
             corner grave - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: a mound in a plot's corner, against its bunds
-            corner grave size - UNRESEARCHED: mound 13 x 9 px, one or two stones"""
+            corner grave size - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on a page - the Ming code gave a commoner's grave 18 bu round (pass P2b), a ceiling the 13 by 9 ft mound fits inside; mound 13 x 9 px, one or two stones"""
         at = rng.choice(turning_corners(plot["poly"]))
         cx, cy = (round(v, 1) for v in corner_seat(plot["poly"], at))
         disc = (cx, cy, 6.5 + GRAVE_BANK_PX)
@@ -515,7 +515,7 @@ class FieldFeaturesMixin:
         Research:
             grave island - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: a mound inside a plot
             basins carved round the island - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no ring passes under the mound
-            grave island size - UNRESEARCHED: mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones"""
+            grave island size - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on a page - the Ming code gave a commoner's grave 18 bu round (pass P2b), a ceiling the 13 by 9 ft mound fits inside; mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones"""
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         cx, cy = round(cx, 1), round(cy, 1)
         rx, ry = max(9.0, hx * 0.55), max(6.0, hy * 0.55)
@@ -550,7 +550,7 @@ class FieldFeaturesMixin:
 
         Research:
             pond inset and rounded - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: inset inside its bank, the parcel scaled about its centroid
-            corners eased - UNRESEARCHED: a fillet of the caller's reach, jittered 0.8 to 1.15, at every corner"""
+            corners eased - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a fillet of the caller's reach, jittered 0.8 to 1.15, at every corner"""
         n = len(poly)
         cx = sum(q[0] for q in poly) / n
         cy = sum(q[1] for q in poly) / n

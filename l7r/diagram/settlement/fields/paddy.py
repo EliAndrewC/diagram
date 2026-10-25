@@ -59,7 +59,7 @@ def _wf_outline(shape: Any, amp: float) -> tuple[list[Pt], tuple[float, ...]]:
     """A water-first field's organic outline and its bounding box, from a box or a polygon (lifted out of `water_field`
     by feature 370, the 100-statement cap).
 
-    Research: field outline - UNRESEARCHED: an organic outline wobbled amp px round the given box or polygon"""
+    Research: field outline - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); an organic outline wobbled amp px round the given box or polygon"""
     if len(shape) == 4 and all(isinstance(v, (int, float)) for v in shape):
         return organic_bbox(tuple(shape), amp), tuple(shape)
     outline = organic_poly(list(shape), amp)
@@ -118,7 +118,7 @@ def rest_plots(cands: Sequence[tuple[Sequence[Pt], float]], rng: random.Random, 
 
     Research:
         rest weighting and spacing - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: favoring the far end of the fall, kept apart
-        rest basin floor - UNRESEARCHED: no basin smaller than the median candidate rests"""
+        rest basin floor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); no basin smaller than the median candidate rests"""
     if not cands:
         return []
     areas = [_ring_area(r) for r, _f in cands]
@@ -290,16 +290,16 @@ class PaddyMixin:
 
         Research:
             water-first network - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: a main along the high edge, laterals down the fall, a drain at the low edge
-            lateral spacing - UNRESEARCHED: a lateral every 4-6 columns
+            lateral spacing - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); a lateral every 4-6 columns
             column bund wanders - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: each column's bund wanders off its line by two sines (5 px over a 66 px period, 3 px over 29) as it runs down the fall
             row bunds run straight - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: the bunds across the fall drawn straight, only the column bunds wandering
-            canals set in from the edges - UNRESEARCHED: the main and the drain 1.4 plots inside the field's high and low edges, a lateral's ends 0.7 plot in
+            canals set in from the edges - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the main and the drain 1.4 plots inside the field's high and low edges, a lateral's ends 0.7 plot in
             dry where water fails - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: above the main, below the drain and at the margins, 62% dry grain and the rest soy
             flooded near the ditches - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 30% of plots near the main or drain painted flooded
             plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: columns 0.9-1.35 and rows 0.85-1.5 of the grain, 34 px by default
             canal widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: main 3.3, drain 3.0, lateral 2.0, feed and outfall 2.6 px, untapered
             each plot's green - CONVENTION: picked at random from RICE_GREENS, three near-identical greens of rice at one stage, so the paddy reads as one crop
-            row bunds staggered - UNRESEARCHED: row boundaries rolled per column, so row bunds stagger between columns
+            row bunds staggered - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); row boundaries rolled per column, so row bunds stagger between columns
             ripe share - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 2.5% of rice plots ripe"""
         outline, bbox = _wf_outline(shape, amp)
         x0, y0, x1, y1 = bbox
@@ -433,8 +433,8 @@ class PaddyMixin:
 
         Research:
             feed and outfall's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: each channel 2.6 px, a pond feeder at roughly twice the floor
-            feed and outfall's seat - UNRESEARCHED: the main fed from the source at its nearest point 11 px or more inside the field, the drain emptied at its point nearest the outlet
-            feed and outfall meander - UNRESEARCHED: each channel drawn with an 8 px meander (`amp=8`)"""
+            feed and outfall's seat - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the main fed from the source at its nearest point 11 px or more inside the field, the drain emptied at its point nearest the outlet
+            feed and outfall meander - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); each channel drawn with an 8 px meander (`amp=8`)"""
         x0, y0, x1, y1 = bbox
         safe = [(t[1], t[2]) for t in interior if edge_dist(t[1], t[2], smoothed) >= 14] or [((x0 + x1) / 2, (y0 + y1) / 2)]
         msafe = [q for q in main_pts if edge_dist(q[0], q[1], smoothed) >= 11] or main_pts or safe
@@ -488,7 +488,7 @@ class PaddyMixin:
         return smooth(main_pts), smooth(drain_pts)
 
     def fallow_field(self: Settlement, bbox: Any, name: str, amp: float = 34) -> None:  # type: ignore[misc]
-        """Research: fallow field - UNRESEARCHED: a whole field drawn fallow in a dashed organic outline"""
+        """Research: fallow field - research/questions/0013-paddies-left-to-rest-kataarashi.html: resting land lay mixed among worked plots, not as one tract - a whole field is drawn fallow, a departure the code keeps until feature 417 T34; a whole field drawn fallow in a dashed organic outline"""
         outline = organic_bbox(bbox, amp)
         d = smooth_closed(outline)
         self.add(f'<path d="{d}" fill="url(#fallow)" stroke="#9C7A40" stroke-width="1.8" stroke-dasharray="6,4"/>')

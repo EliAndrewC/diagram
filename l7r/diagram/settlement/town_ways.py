@@ -24,7 +24,7 @@ class TownWaysMixin:
             hall size - research/questions/0050-ancestral-halls-in-south-china-villages-citang.html, research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: 110 x 74 ft by default
             porch on the water side - research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: the entry porch faces +y, the water
             hall glyph - CONVENTION: an inner eave line and a dark porch block
-            focal keep-out - UNRESEARCHED: the footprint plus 6 px is reserved
+            focal keep-out - research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: an open forecourt lay between the hall and its pond; the 6 px is ours; the footprint plus 6 px is reserved
         """
         pw, ph = self.px(w), self.px(h)
         self.add(f'<rect x="{x - pw / 2:.1f}" y="{y - ph / 2:.1f}" width="{pw:.1f}" height="{ph:.1f}" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2.4" rx="2"/>')
@@ -45,7 +45,7 @@ class TownWaysMixin:
         Research:
             water-mouth seat - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: at the stream's exit, where the caller seats it
             a pavilion at the water mouth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: a pavilion drawn (the page attests a grove there, no pavilion)
-            pavilion size - UNRESEARCHED: a hexagon of 22 ft radius
+            pavilion size - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); a hexagon of 22 ft radius
             pavilion glyph - CONVENTION: a hexagon with an inner ring
         """
         pr = self.px(r)

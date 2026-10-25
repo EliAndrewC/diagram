@@ -13,7 +13,7 @@ Poly = list[Pt]  # a polyline / polygon as a list of points
 DF = 30.0  # fall step of the lockstep march (px)
 """Research: march step - NONE: the fall step the threads advance by"""
 GAP = 26.0  # threads never pinch closer than this - a plot must fit between them
-"""Research: least spacing between ditch threads - UNRESEARCHED: 26 px, a plot's width"""
+"""Research: least spacing between ditch threads - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); 26 px, a plot's width"""
 # A FIX THAT FAILED (feature 328 wave 85, 2026-10-09): 0005's basin is some 40 to 60 ft across its ditch, so the floor was
 # derived from it - `plot_across` (48 px) and 40/48 of it - and passed into `_comb_march`. Every comb hamlet moved and the
 # 48-seed cohort went 48 -> 45 and 48 -> 44 (Kashikawa refused by its lane web at the 40 ft floor). Reverted; the row is E3,
@@ -274,7 +274,7 @@ class _Thread:
         self.head_ft: float = DELIVERY_FT[0]
 
     def step(self, f: float, R: random.Random) -> float:
-        """Research: thread wander - UNRESEARCHED: the takeoff heading relaxing over `decay` px of fall, +/-0.1 of the fall step of jitter a step"""
+        """Research: thread wander - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the takeoff heading relaxing over `decay` px of fall, +/-0.1 of the fall step of jitter a step"""
         k = math.exp(-max(0.0, f - self.f0) / self.decay)
         return self.u + (self.drift * k + R.uniform(-0.10, 0.10)) * DF
 
@@ -439,7 +439,7 @@ def _dug_polyline(
 ) -> Poly:
     """A hand-dug canal: few long segments, tiny heading changes (obtuse only).
 
-    Research: dug canal course - UNRESEARCHED: long straight segments with a small random heading change at each, kept 25 px off the frame
+    Research: dug canal course - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); long straight segments with a small random heading change at each, kept 25 px off the frame
     """
     pts = [(x, y)]
     trav = 0.0

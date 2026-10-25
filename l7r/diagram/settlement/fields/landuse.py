@@ -350,8 +350,8 @@ class LandUseMixin:
 
         Research:
             tea rows - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: on the dry hem above the highest ditch
-            tea row spacing - UNRESEARCHED: rows 8 px apart, a 2.4 px stroke
-            tea row direction - UNRESEARCHED: screen-horizontal whatever the canal or the slope"""
+            tea row spacing - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25) on a page - tea rows stood about 4 ft apart (Fortune 1843, pass P2b), against 8 (feature 417 T34); rows 8 px apart, a 2.4 px stroke
+            tea row direction - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); screen-horizontal whatever the canal or the slope"""
         n = 0
         for dp in net["dry_plots"]:
             ys = [p[1] for p in dp["poly"]]
@@ -521,7 +521,7 @@ class LandUseMixin:
             mulberry bushes - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: crowns r 2.2-3.6 px at a 4.4 px pitch, none centered within 3.5 px of a canal
             tea hedges - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: two hedges 2.8 px wide, three steps drawn and two left open
             fruit trees - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: one line along the bank at 18 ft, crowns r 4-5 px
-            tea and fruit off the canal - UNRESEARCHED: tea hedges kept 3.0 px and fruit trees 5.5 px off a canal centerline
+            tea and fruit off the canal - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); tea hedges kept 3.0 px and fruit trees 5.5 px off a canal centerline
             bank mottle - CONVENTION: earth patches every 30 px"""
         n = len(poly)
         mids = [((poly[i][0] + poly[(i + 1) % n][0]) / 2, (poly[i][1] + poly[(i + 1) % n][1]) / 2) for i in range(n)]

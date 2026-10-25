@@ -24,7 +24,7 @@ def torii_plan_svg(tx: float, ty: float, ftpx: float, span_ft: float = 16.0) -> 
 
     Research:
         arch drawn in plan - CONVENTION: beam bar, posts proud of it
-        default span - UNRESEARCHED: 16 ft
+        default span - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25) on a page - torii ran a beam of 5.87 m (Kitakyushu, undated) and posts 2.5 m apart (Kawataka, about 1600, 0220; pass P6), the order of this size; 16 ft
     """
     s2, beam, post, p2 = torii_glyph_dims(ftpx, span_ft)
     return (
@@ -47,9 +47,9 @@ class ToriiAvenueMixin:
         (stroke convention - see SKILL.md "to scale"), never a footprint license.
 
         Research:
-            arch span - UNRESEARCHED: 16 ft default
+            arch span - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25) on a page - torii ran a beam of 5.87 m (Kitakyushu, undated) and posts 2.5 m apart (Kawataka, about 1600, 0220; pass P6), the order of this size; 16 ft default
             arch in plan - CONVENTION
-            never in a barrier - UNRESEARCHED: raises
+            never in a barrier - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25) on a page - torii stood as parts of sacred fences (Encyclopedia of Shinto, pass P6), against this (feature 417 T35); raises
         """
         wall = torii_seat_on_wall(self.M, tx, ty, self.ftpx)  # an arch never stands IN a barrier - see the wall_runs block
         if wall:
@@ -69,7 +69,7 @@ class ToriiAvenueMixin:
         Research:
             arch count - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: one at each interior vertex the caller gives
             arch spacing on the path - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft apart, the innermost 12 ft off the hall; set by the caller's vertices instead
-            ascent path width - UNRESEARCHED: an 8 px stroke, about 24 ft at a city's 3 ft/px
+            ascent path width - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); an 8 px stroke, about 24 ft at a city's 3 ft/px
             ascent path centerline - CONVENTION: a dashed centerline and its color
         """
         dstr = 'M' + ' L'.join(f'{x},{y}' for x, y in ascent)
@@ -84,7 +84,7 @@ class ToriiAvenueMixin:
         Research:
             arch count - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: the caller's count
             arches spread over the ascent - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: from 6% to 86% of its length, not 12 ft apart nor 12 ft off the hall
-            ascent path width - UNRESEARCHED: an 8 px stroke, about 24 ft at a city's 3 ft/px
+            ascent path width - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); an 8 px stroke, about 24 ft at a city's 3 ft/px
             ascent path centerline - CONVENTION: a dashed centerline and its color
         """
         seg = [math.hypot(ascent[i + 1][0] - ascent[i][0], ascent[i + 1][1] - ascent[i][1]) for i in range(len(ascent) - 1)]

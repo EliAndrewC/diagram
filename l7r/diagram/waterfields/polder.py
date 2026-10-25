@@ -16,7 +16,7 @@ from .palette import FLOODED, RICE_GREENS, organic_parcel
 from .ring_rules import needle as _needle
 
 _RING = 18.0  # the inner-toe ring-canal corridor width in (s, t) px (see _polder_lattice's RING note)
-"""Research: ring canal corridor - UNRESEARCHED: 18 px reserved inside the dike on all four sides"""
+"""Research: ring canal corridor - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); 18 px reserved inside the dike on all four sides"""
 
 
 BANK_FT = 5.0
@@ -130,7 +130,7 @@ def build_polder(
     Research:
         polder layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a diked block, a ring canal inside the dike, water crossing only at an inlet and an outfall sluice
         module size - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: `cell` px modules, by default the page's 190 ft at the map's `ftpx`
-        polder size - UNRESEARCHED: 11 rows by 6 columns of modules by default
+        polder size - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.html: polders averaged about 580 mu in 1897; the 363 mu here falls below that one average; 11 rows by 6 columns of modules by default
         parcel mix - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: most modules split into two or three strips, a few merged along the fall
         gaps - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a walking bund between rows and between strips, a ditch corridor between columns, by default 3 ft and 8 ft at the map's scale
         low rows wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: every low plot tinted - the two lowest rows, no merge straddling the band
@@ -370,7 +370,7 @@ def _polder_parcels(
 
     Research:
         splits and merges - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: per `parcel_mix`, merges along the fall never across a column line
-        split positions - UNRESEARCHED: one cut at 0.38-0.62 or two at 0.26-0.4 and 0.6-0.74, across or along the fall at even odds
+        split positions - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); one cut at 0.38-0.62 or two at 0.26-0.4 and 0.6-0.74, across or along the fall at even odds
         gap is what runs in it - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: the corridor gap on column lines, the walking-bund gap between strips of one module
         hand-piled outlines - research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html: each parcel softened by `organic_parcel`
         low rows wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the two lowest rows FLOODED
@@ -568,8 +568,8 @@ def _polder_channels(
         laterals join on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each tip set on the trunk's drawn line
         sluices through the dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: an inlet stub to the pond and an outfall brook from the drain's middle, the dike notched at each
         settlement-side toe - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the east toe, the village on the dry ground just off the dike to the east
-        crossings cluster - UNRESEARCHED: the settlement-side toe tagged as the side crossings cluster on
-        inlet stub and sluice notch - UNRESEARCHED: the stub 52 grid units past the ring, the outfall's first leg 40, the notch _RING * 0.9 in - grid units, not feet at the map's scale (the ranked row `channel widths`' E3 work)
+        crossings cluster - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the settlement-side toe tagged as the side crossings cluster on
+        inlet stub and sluice notch - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the stub 52 grid units past the ring, the outfall's first leg 40, the notch _RING * 0.9 in - grid units, not feet at the map's scale (the ranked row `channel widths`' E3 work)
         floor inside the ring - CONVENTION: the green floor drawn to the ring canal, not the dike
     """
 
@@ -931,7 +931,7 @@ def unpoint_parcels(plots: list[dict[str, Any]]) -> None:
 
     Research:
         no parcel tapers to a point - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a convex apex under 25 deg (`POLDER_APEX_DEG`) cut off until none is left
-        pointed parcel left as bank - UNRESEARCHED: a polder parcel still pointed after its apex is cut is dropped into the bank fill (0005's bare strip is a fan's; polder plots stand apart, so none is taken in)
+        pointed parcel left as bank - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a polder parcel still pointed after its apex is cut is dropped into the bank fill (0005's bare strip is a fan's; polder plots stand apart, so none is taken in)
     """
     kept: list[dict[str, Any]] = []
     for p in plots:

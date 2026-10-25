@@ -38,7 +38,7 @@ class KeepoutsMixin:
         trees, scrub, and other vegetation must not be drawn ON. Returns [(polyline, buffer), ...].
 
         Research:
-            no vegetation on a tread - UNRESEARCHED: every lane, street, alley, ring road and road at its half-width"""
+            no vegetation on a tread - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); every lane, street, alley, ring road and road at its half-width"""
         corr = [([tuple(p) for p in ln["pts"]], ln.get("w", 6) / 2 + extra) for ln in self.M.get("lanes", [])]
         corr += [([tuple(p) for p in s["pts"]], s.get("w", 10) / 2 + extra) for s in self.M.get("town_streets", [])]
         # alleys + the city ring road are ways too (GM 2026-07-24: yard furniture kept off "roads"
@@ -88,7 +88,7 @@ class KeepoutsMixin:
         (fld_b / cor_b); verdicts are identical either way (the grid prunes, it never decides).
 
         Research:
-            no ground cover on open water - UNRESEARCHED: within a watercourse's drawn half-width and a pad"""
+            no ground cover on open water - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); within a watercourse's drawn half-width and a pad"""
         if near is not None:
             if boxed_seg_hit(px, py, near(px, py)):
                 return True
@@ -327,7 +327,7 @@ class KeepoutsMixin:
         Research:
             no crown on a roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
                 against a wall, never on it; held here are roofs, while the yards and beds are held by `_sun_keepouts` (50 ft, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html)
-            no crown on a wellhead - UNRESEARCHED: a crown may not cover a wellhead
+            no crown on a wellhead - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a crown may not cover a wellhead
             burial ground's middle - GUESS: 0.9 of its half-extent kept clear of crowns"""
         bx0, by0, bx1, by1 = bbox
         rects: list[tuple[float, float, float, float]] = []
@@ -397,7 +397,7 @@ class KeepoutsMixin:
         circles) for the ground-cover scatters' per-point tests.
 
         Research:
-            swept halo - UNRESEARCHED: no ground cover within 30 ft of a structure, 20 ft of a wellhead, 8 ft of a yard or bed"""
+            swept halo - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); no ground cover within 30 ft of a structure, 20 ft of a wellhead, 8 ft of a yard or bed"""
         bx0, by0, bx1, by1 = bbox
         rects: list[tuple[float, float, float, float]] = []
         for keys, halo_ft in ((self._HALO_STRUCT_KEYS, self._HALO_STRUCT_FT), (self._HALO_PLOT_KEYS, self._HALO_PLOT_FT)):

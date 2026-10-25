@@ -20,7 +20,7 @@ def machi_mouths(M: Any) -> list[tuple[float, float]]:
 
     Research:
         a gate at every ward mouth - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.html: every street entering a machi district
-        suburb wards outside the mesh - UNRESEARCHED: out-wall machi districts get no mouths
+        suburb wards outside the mesh - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.html: the 1488 barriers stood in the gate suburbs too - suburb wards are given no ward-gate mouths, a departure the code keeps until feature 417 T35; out-wall machi districts get no mouths
         mouth merge radius - NONE: crossings within 40 px are one entry
     """
     wall = M.get("wall")

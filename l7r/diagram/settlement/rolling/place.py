@@ -99,7 +99,7 @@ class PlacerMixin:
 
         Research:
             dispersed farm packed toward field and neighbor - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the first slide, 2 px steps up to 48 toward the bund, while it fits
-            dispersed farm packed against its nearest neighbor - UNRESEARCHED: the second slide, toward the nearest neighbor, where 0031 has a scattered homestead keep its own spacing
+            dispersed farm packed against its nearest neighbor - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each homestead keeps its own spacing, and 0285 has scattered farms 100 to 200 m apart - a dispersed farm is slid against its neighbor, a departure the code keeps until feature 417 T33; the second slide, toward the nearest neighbor, where 0031 has a scattered homestead keep its own spacing
         """
         for _ in range(48):
             tgt = target_fn(cx, cy)
@@ -205,7 +205,7 @@ class PlacerMixin:
 
         Research:
             garden side chosen by the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: fewest shaded beds, then the south corners before the walls
-            left or right garden - UNRESEARCHED: within a tier the side is decided by position, about even
+            left or right garden - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); within a tier the side is decided by position, about even
             one computed move off a neighbor - NONE: the measured overlap plus 2 px, once
             a tight seat only on landlocked land - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: taken only where some layout walks to the neighbor's yard and none has a way of its own (`passage.landlocked`)
             a seat refused unless its yard opens onto lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no way is sought for a household while it is seated; its dooryard must open onto the ground the lanes are laid in (`SeatRegion.opens`)

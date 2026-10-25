@@ -32,10 +32,10 @@ def torii_glyph_dims(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, 
     a 12 ft pitch).
 
     Research:
-        torii span - UNRESEARCHED: 16 ft default
-        top beam width - UNRESEARCHED: 1.4 ft, floored at 1.9 px
+        torii span - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25) on a page - torii posts stood 2.5 m apart (early Edo) and 5.53 m (Kameoka 1683, pass P7); the span sits between; 16 ft default
+        top beam width - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); 1.4 ft, floored at 1.9 px
         posts proud of the beam - CONVENTION: 1.35x the beam, squares beside the bar
-        post set-in - UNRESEARCHED: posts at 12/19 of the beam's half-span (the kasagi's overhang)"""
+        post set-in - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25) on a page - one torii's posts stand at 0.615 of its beam (Kitakyushu, undated, pass P7), against 12/19; posts at 12/19 of the beam's half-span (the kasagi's overhang)"""
     s2 = (span_ft / ftpx) / 2
     beam = max(1.4 / ftpx, 1.9)
     post = beam * 1.35
@@ -119,7 +119,7 @@ def torii_seat_on_wall(M: Manifest, tx: float, ty: float, ftpx: float, runs: lis
     Asked of ONE candidate seat before it is drawn; `runs` caches wall_runs(M) across a sweep. The
     arch's extent is torii_halfbox - the same true-scale glyph box the crop and frame checks use.
 
-    Research: torii stands clear of every wall - UNRESEARCHED: an arch's box may not reach a wall run"""
+    Research: torii stands clear of every wall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); an arch's box may not reach a wall run"""
     txh, tyu, tyd = torii_halfbox(ftpx)
     for lbl, pts, half in wall_runs(M) if runs is None else runs:
         if _box_hits_run((tx - txh, ty - tyu, tx + txh, ty + tyd), pts, half):

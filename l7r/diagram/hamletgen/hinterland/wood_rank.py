@@ -38,7 +38,7 @@ def crop_edge_points(crops: Sequence[Poly], every: float = _EDGE_SAMPLE) -> Fiel
 
 
 FIELD_BESIDE_FT = 300.0
-"""Research: the fields beside a wood - UNRESEARCHED: the field edge within 300 ft past the nearest point, about a wood's own span"""
+"""Research: the fields beside a wood - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); the field edge within 300 ft past the nearest point, about a wood's own span"""
 
 FIELD_REACH_PX = 8192.0
 """How far a seat looks for field ground at all: past it, the seat has none beside it (-inf). Research: plumbing - NONE: the

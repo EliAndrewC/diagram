@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 
 _BORROW_REACH = 120.0  # a neighbor this close can walk over and borrow the team (see draft_byres)
-"""Research: borrowing distance - UNRESEARCHED: 120 px"""
+"""Research: borrowing distance - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: borrowing was placement or hire, as far as other provinces, with no walking reach - a departure the code keeps until feature 417 T33; 120 px"""
 
 # HOW MANY HOUSEHOLDS KEEP A BEAST, on the two household forms (269 B16, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html): "from the early
 # eighteenth century only about half the farm households of Bizen kept an ox or a horse at all - the same share as in
@@ -122,7 +122,7 @@ def byre_part(hw: float, hh: float, bw: float, bh: float, garden_side: str, form
         inner stable against the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: a 3 ft drip line off the wall, reaching toward the court
         outer stable off the wall - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the caller's gap
         flank away from the garden - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the measured free-standing stables stand toward the road and the gate; drawn on the flank away from the garden
-        long side along the wall - UNRESEARCHED
+        long side along the wall - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25)
     """
     sx = -1.0 if garden_side in ("E", "SE") else 1.0
     if form == "courtyard":
@@ -134,7 +134,7 @@ def byre_part(hw: float, hh: float, bw: float, bh: float, garden_side: str, form
 #: (`BUNDLE_PITCH`, 100 ft) - every household's corridor comes to the exit strip, so the ground either side of it is
 #: its approach, not a shed's (feature 287 M8). A map drawing convention.
 POCKET_TREE_CLEAR_FT = 50.0
-"""Research: shed pocket off the access strips - UNRESEARCHED: 50 ft past their half-width"""
+"""Research: shed pocket off the access strips - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); 50 ft past their half-width"""
 
 
 def paddy_index(polys: Any) -> PointGrid:
@@ -166,7 +166,7 @@ class DraftByresMixin:
 
         Research:
             shared sheds among the houses - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: commons_byre_target pockets in the seat band
-            spread farthest-first - UNRESEARCHED: the first nearest the band's middle
+            spread farthest-first - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); the first nearest the band's middle
             pocket margin - NONE: 3 px round the shed's box
         """
         bw, bh = round(self.px(BYRE_FT[0]), 1), round(self.px(BYRE_FT[1]), 1)
@@ -206,8 +206,8 @@ class DraftByresMixin:
 
         Research:
             sheds apart - GUESS: COMMONS_BYRE_GAP
-            off the paddy - UNRESEARCHED: a stall's depth
-            off the access strips - UNRESEARCHED: POCKET_TREE_CLEAR_FT
+            off the paddy - research/questions/0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html: a village house stood about 3 ft back from cultivated land (Mino, 1892); the stall's depth is ours; a stall's depth
+            off the access strips - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); POCKET_TREE_CLEAR_FT
         """
         if any(math.hypot(x - p[0], y - p[1]) <= COMMONS_BYRE_GAP for p in pockets):
             return False
@@ -257,7 +257,7 @@ class DraftByresMixin:
 
         Research:
             stable arm abutting the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the magariya's wing, raked with the house
-            drip-line gap - UNRESEARCHED: 3 ft
+            drip-line gap - research/questions/0247-a-houses-setback-from-the-road-and-its-eaves-drip-strip.html: the drip strip ran 2 to 3 chi (Jiaxiang), 3 chi (Baoding, 1884), about 3 ft (Mino); 3 ft
             a side wall, toward the work yard - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: round Tono the stable joins the lower end and projects off the south side, both mirror forms recorded; left wall tried first, then right, not rolled
         """
         hw, hh, rot = float(h["w"]), float(h["h"]), float(h.get("rot", 0.0) or 0.0)
@@ -343,9 +343,9 @@ class DraftByresMixin:
         not occupy, and this engine's standing rule is that gap verdicts read footprints.
 
         Research:
-            on its house's bank - UNRESEARCHED
-            on dry ground off the paddies - UNRESEARCHED
-            no roof under a yard persimmon - UNRESEARCHED
+            on its house's bank - GUESS: searched, the record silent (feature 417 T36 pass P6, 2026-10-25)
+            on dry ground off the paddies - research/questions/0058-ground-too-wet-to-build-on.html: settlements stood on dry levees, the paddy on the back marsh
+            no roof under a yard persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html: the persimmon casts shade over the house in summer - a byre roof is refused under it, a departure the code keeps until feature 417 T33
             clear of the homestead's other parts - NONE: overlap
         """
         hx, hy = float(h["x"]), float(h["y"])
@@ -420,12 +420,12 @@ class DraftByresMixin:
             keepers on the household forms - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: byre_keeper_share
             shared sheds on the commons form - GUESS: the caller's fraction, default 0.2, gap 64 px
             byre size - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: 16.12 x 10.92 ft, 15.5 x 10.5 x bscale on the legacy tiers
-            owners ranked by wealth, then footprint - UNRESEARCHED
-            shared sheds spread, with borrowers in reach - UNRESEARCHED: minimax, _BORROW_REACH
-            spiral reach - UNRESEARCHED: 18 px for a household form, 70 px for a shared shed
+            owners ranked by wealth, then footprint - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the L-shaped house with its stable was common among the upper households, and about half of Bizen's kept a beast; the ranking is ours
+            shared sheds spread, with borrowers in reach - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: every arrangement found ties the beast to one keeper, a borrowed beast placed with its borrower - sheds are shared among borrowers in reach, a departure the code keeps until feature 417 T33; minimax, _BORROW_REACH
+            spiral reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P6, 2026-10-25); 18 px for a household form, 70 px for a shared shed
             no free wall falls back - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the form a knob, rolled per settlement; an inner stable with no free wall drawn as an outer stable, then a free shed at rot 0
             only plain houses keep a byre - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the L-shaped farmhouse common among the better-off households; big farmhouses never own one
-            spiral byre off the paddies - UNRESEARCHED: kept a stall's depth from every field
+            spiral byre off the paddies - research/questions/0058-ground-too-wet-to-build-on.html: settlements stood on dry levees, the paddy on the back marsh; kept a stall's depth from every field
         """
         bs = self.bscale
         # SIZE: a shared byre houses ~1-2 draft animals (an ox / water-buffalo stall is ~2x3 m) plus fodder ->

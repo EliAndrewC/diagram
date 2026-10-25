@@ -335,8 +335,8 @@ class WetGroundMixin:
             pond fringe role - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round a pond's shore
             polder waterside role - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a reed fringe along the polder's water side
             bare treads - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: every trodden way kept bare through the reeds in every role (the record gives the defensive belt's causeway)
-            tread keep-out width - UNRESEARCHED: 3 bs either side of every way
-            reeds off the dooryards - UNRESEARCHED: no reed inside the urban-clearance halo round dooryards
+            tread keep-out width - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 3 bs either side of every way
+            reeds off the dooryards - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); no reed inside the urban-clearance halo round dooryards
             edge shaped - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: rounded and waved, a pond fringe left as laid
             reeds to the water and the paddy - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds stand at the water's edge and meet the paddy
             marsh edge form - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: every edge cut and

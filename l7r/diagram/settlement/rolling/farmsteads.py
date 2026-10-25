@@ -148,7 +148,7 @@ class FarmsteadFlushMixin:
 
         Research:
             east shade band - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a neighbor's grove just east of a garden shades it
-            east shade band width - UNRESEARCHED: the reach 22 px (`bscale`) east of the garden's east edge, a figure 0038 does not give
+            east shade band width - research/questions/0038-sunlight-and-shade-on-the-farm.html: a tree shades the ground to its east one tree's height (the Qimin Yaoshu), about 33 ft, and the drawing page 50 ft - the band is 22 ft, a departure the code keeps until feature 417 T33; the reach 22 px (`bscale`) east of the garden's east edge, a figure 0038 does not give
         """
         band = 22 * self.bscale
         out: list[Any] = []

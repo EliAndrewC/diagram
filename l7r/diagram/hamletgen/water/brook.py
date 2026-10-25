@@ -118,13 +118,13 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
 
     Research:
         flank passage - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: below the tap the course passes the fan on the flank `side` and runs on down it
-        crop clearance - UNRESEARCHED: every station `skirt` (BROOK_SKIRT, 34 px) outside the cultivated rings and supply canals, in cross-section
-        head crop yields - UNRESEARCHED: a crop ring reaching within one skirt of the fan's head is left out of the profile
-        meander - UNRESEARCHED: the offset strays above the floor on `_wander`, over `steps` (16) stations
+        crop clearance - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every station `skirt` (BROOK_SKIRT, 34 px) outside the cultivated rings and supply canals, in cross-section
+        head crop yields - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); a crop ring reaching within one skirt of the fan's head is left out of the profile
+        meander - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the offset strays above the floor on `_wander`, over `steps` (16) stations
         on the sheet - CONVENTION: stations held inside the field's bounds grown by BROOK_FRAME_MARGIN; past half its stations the course leaves at the first the box binds
         tap run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: straight on down the fall below the tap, never floored, so the race leaves off the brook's downstream heading
-        tap run length - UNRESEARCHED: BROOK_TAP_RUN, 70 px
-        corners cut - UNRESEARCHED: each station replaced by two points 45 ft (at most 0.3 of the leg) either side, re-floored against the crop
+        tap run length - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); BROOK_TAP_RUN, 70 px
+        corners cut - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); each station replaced by two points 45 ft (at most 0.3 of the leg) either side, re-floored against the crop
     """
     dx, dy = plan.fall
     px, py = -dy * side, dx * side
@@ -266,9 +266,9 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
     `crosses_mid_run`, W11 `monotone_down` below the tap.
 
     Research:
-        no fold-back - UNRESEARCHED: no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
+        no fold-back - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - a meander's bends run 2 to 3 widths in radius (pass P2a), which the per-vertex cap keeps; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
         no level run - CONVENTION: no run held level along the frame, in any view
-        no ruled run - UNRESEARCHED: the straightest run within its bound (`ruled_excess`)
+        no ruled run - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths are rare (Leopold and Wolman, pass P2a); the rule's bound is looser (feature 417 T34); the straightest run within its bound (`ruled_excess`)
         no screen axis - CONVENTION: no segment along a screen axis, the tap run excepted
         out of the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the course never enters the field's envelope
         off-map ends - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the source and the mouth both off the canvas
@@ -352,7 +352,7 @@ def bend_at(course: Sequence[Pt], span: Sequence[Pt], need: Callable[[Pt], tuple
     on the W08 unit case: 280 ft straight), the fall itself with a cap of 0 - no dip, since the next leg would climb
     (0054: strictly under 90; feature 328 retired the 8 ft dip `BEND_DIP_FT` allowed), so such a run takes no bend.
 
-    Research: bend placement - UNRESEARCHED: one bend at the middle of the run's longest segment, the smaller clearing offset, at most half the segment, outside the field
+    Research: bend placement - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); one bend at the middle of the run's longest segment, the smaller clearing offset, at most half the segment, outside the field
     """
     tap, _pinned_ = _pinned(course, sluice)
     along = [k for k in range(len(course) - 1) if k not in (tap, tap + 1) and _dist_to_course(((course[k][0] + course[k + 1][0]) / 2, (course[k][1] + course[k + 1][1]) / 2), span) <= 8.0]
@@ -374,7 +374,7 @@ def bend_runs(course: Sequence[Pt], plan: SitePlan, sluice: Pt, away: Pt) -> Pol
 
     Research:
         level runs broken - CONVENTION: a bend in every level run along the frame, the longest first
-        ruled runs broken - UNRESEARCHED: a bend in the straightest run while it is over its bound
+        ruled runs broken - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); a bend in the straightest run while it is over its bound
         bend across the fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a run the flank's normal cannot leave takes no dip down the fall, the next leg never climbing; such a run takes no bend
     """
     W, H = float(plan.W), float(plan.H)
@@ -418,7 +418,7 @@ def chord_offsets(a: Pt, b: Pt, away: Pt) -> Callable[[Pt], tuple[float, float]]
     """For a straight run on the chord a-b: the two offsets along `away` that set a point `RULED_TOL_FT` and a foot and a
     half off the chord's line, either side (water:W03), measured from the line, not from the course under the point.
 
-    Research: ruled bend depth - UNRESEARCHED: the bend clears the chord by RULED_TOL_FT and 1.5 ft
+    Research: ruled bend depth - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the bend clears the chord by RULED_TOL_FT and 1.5 ft
     """
     L = math.dist(a, b) or 1.0
     n = (-(b[1] - a[1]) / L, (b[0] - a[0]) / L)
@@ -438,7 +438,7 @@ def clear_of_field(course: Sequence[Pt], envelope: Sequence[Pt], away: Pt, sluic
 
     Research:
         out of the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a segment inside the field moved out across the fall
-        step - UNRESEARCHED: 6 px a step, at most 60, the tap run and the ends not moved
+        step - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 6 px a step, at most 60, the tap run and the ends not moved
     """
     out = list(course)
     ring = list(envelope)
@@ -480,10 +480,10 @@ def approach_legs(plan: SitePlan, sluice: Pt, th: float, run: float) -> Poly | N
 
     Research:
         off-map source - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: upslope on bearing `th`, to the canvas edge and 60 more, at least `run`
-        approach bow - UNRESEARCHED: the midpoint set 26 px aside
-        approach wobble - UNRESEARCHED: three points at 0.45, 0.68, 0.86 toward the tap, each seeded within +-16 px aside
+        approach bow - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the midpoint set 26 px aside
+        approach wobble - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); three points at 0.45, 0.68, 0.86 toward the tap, each seeded within +-16 px aside
         out of the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: refused where its chord runs through the rice
-        intake reach - UNRESEARCHED: the last 40 px into the tap not tested against the crop
+        intake reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the last 40 px into the tap not tested against the crop
         screen axis - CONVENTION: off the screen axes as the course below the tap
     """
     d = (math.cos(th), math.sin(th))
@@ -539,7 +539,7 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
     Research:
         brook course - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: from an off-map source upslope, tapped at the fan's head on one bank, on down that flank and off the map
         one flank - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the rolled flank `plan.brook_side` only, the other never a candidate
-        approach bearing - UNRESEARCHED: bearings tried outward from straight upslope in 10 deg steps to 70 either side
+        approach bearing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); bearings tried outward from straight upslope in 10 deg steps to 70 either side
         round the ditches - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a skirt crossing a ditch mid-run is laid again round the ditches' outside stretches
     """
     dx, dy = plan.fall
@@ -582,7 +582,7 @@ def round_the_field(plan: SitePlan, sluice: Pt, th: float, run: float) -> Poly:
 
     Research:
         off-map source - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: on bearing `th`, to the canvas edge and 60 more, at least `run`
-        approach bow - UNRESEARCHED: a clear way set 26 px aside at its middle
+        approach bow - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); a clear way set 26 px aside at its middle
     """
     d = (math.cos(th), math.sin(th))
     reach = max(run, to_edge(sluice, d, float(plan.W), float(plan.H)) + 60.0)
@@ -605,7 +605,7 @@ def around_the_field(envelope: Sequence[Pt], start: Pt, goal: Pt, pad: float = B
 
     Research:
         out of the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the shortest course from the source to the tap clear of the field
-        clearance - UNRESEARCHED: `pad` (half BROOK_SKIRT, 17 px), the last `intake` 40 ft into the tap exempt
+        clearance - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on the figure - a stream keeps its margin (0059, no figure); `pad` (half BROOK_SKIRT, 17 px), the last `intake` 40 ft into the tap exempt
     """
     from shapely.geometry import LineString, Polygon  # noqa: PLC0415 - bound on first use
 
@@ -662,7 +662,7 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     Research: weir or bare mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: `plan.intake` rolled per map, nothing drawn on an open hamlet
         weir form rolled among four (s.resolve("weir_form")), 0059's four forms at even odds - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the four weir forms on small water, rolled at even odds (the even roll a GUESS)
         oblique weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar slants upstream from the intake bank, its root at the mouth's downstream lip
-        weir skew angle - UNRESEARCHED: WEIR_SKEW_DEG, 30 deg
+        weir skew angle - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - weirs stood skewed a mean 30 degrees, 5 to 78 (Murakami, pass P2a); no page records it yet; WEIR_SKEW_DEG, 30 deg
         full closure - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar crosses the whole brook, a map drawing convention
         bar size - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: WEIR_HALF_FT half-length, WEIR_THICK_FT of its form thick
         seat-search reach - GUESS: the bar steps down the brook a foot at a time, past dry ground, no further than the leg to the next vertex

@@ -126,7 +126,7 @@ class FixtureSitingMixin:
         when any of the four lists changes length, the same rule `_water_obstacles` uses) with each
         segment's own half-width; a probe measures only its cell's segments. Same predicate, same answer.
 
-        Research: fixture out of the water - UNRESEARCHED: no point fixture on a stream, channel or ditch"""
+        Research: fixture out of the water - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); no point fixture on a stream, channel or ditch"""
         from l7r.diagram.settlement._geom.water_index import water_index
 
         return water_index(self).clear(x, y, half)
@@ -168,7 +168,7 @@ class FixtureSitingMixin:
             probe size - research/questions/0190-notice-boards-kosatsuba.drawing.html: the search tests a 7 x 3 ft face, smaller than the frame drawn
             facing search pad - NONE: `WayFacing`'s index radius (the 60 ft band plus the probe's full diagonal, generous) prunes the nearest-way search and never decides it - a seat with no way inside it scans every segment
             siting default - research/questions/0190-notice-boards-kosatsuba.drawing.html: `frontage`, the busiest frontage, where a map rolled no `kosatsuba_siting` (a scripted hamlet always rolls one)
-            off every way's bed - UNRESEARCHED: the probe kept h/2 + 3 px off each way's bed
+            off every way's bed - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); the probe kept h/2 + 3 px off each way's bed
             the caption proved against the board - research/questions/0190-notice-boards-kosatsuba.drawing.html: proved clear of the board DRAWN (its footing, `vw` x `vh`, passed as the half-extents `vw / 2`, `vh / 2` the three caption steps take), so a caption drawn as proved never stands on it"""
         meta = self.M["meta"]
         if not meta.get("kosatsuba", True):
@@ -293,9 +293,9 @@ class FixtureSitingMixin:
             an approach seat faces the approach - research/questions/0190-notice-boards-kosatsuba.drawing.html: squared to the road it faces, here the way out every departure passes
             off the tread, out of water, in view - research/questions/0190-notice-boards-kosatsuba.drawing.html: never in the roadbed
             seat scored by traffic - research/questions/0190-notice-boards-kosatsuba.drawing.html: dwellings and buildings near each seat
-            the nearer weighted - UNRESEARCHED: a building within the inner radius counts three times, once in each radius and once more
-            traffic radii - UNRESEARCHED: 260 px and 150 px, in pixels at every scale
-            nearness tie-break - UNRESEARCHED: score less a third of the offset
+            the nearer weighted - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a building within the inner radius counts three times, once in each radius and once more
+            traffic radii - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); 260 px and 150 px, in pixels at every scale
+            nearness tie-break - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); score less a third of the offset
             least offset off the tread - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 ft from the edge of the road to the board drawn (its footing), not to the face tested
             farthest seat off the road - GUESS research/questions/0190-notice-boards-kosatsuba.drawing.html: up to 60 ft (KOSATSUBA_WAY_REACH_FT), the project's own figure
             sampling lattice - NONE: 12 px along, 5 px out"""
@@ -378,12 +378,12 @@ class FixtureSitingMixin:
         Research:
             main ways only - research/questions/0190-notice-boards-kosatsuba.drawing.html: roads and main streets where the map has any
             no main way, the whole network - research/questions/0190-notice-boards-kosatsuba.drawing.html
-            service lanes last - UNRESEARCHED: web lanes and the connector only where nothing else stands or an anchor needs them
-            anchor reach - UNRESEARCHED: lanes within 120 ft of the anchor admitted
+            service lanes last - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); web lanes and the connector only where nothing else stands or an anchor needs them
+            anchor reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); lanes within 120 ft of the anchor admitted
             recorded widths - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: each road at the width it was drawn (the highway 30 ft on every sheet, a lesser one at its own); a record with none at the 30 ft `road` draws by default
             street fallback width - research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: a main street with no recorded width at the 24 ft `street` draws by default
             lane fallback width - research/questions/0081-village-lanes.drawing.html: a lane with no recorded width taken at the footpath's 3 ft
-            the approach flagged for an entrance only - UNRESEARCHED: the track out counts as the approach a seat is squared to only for an entrance board at a handover; 0190 squares a board to the road it faces but names no entrance placement"""
+            the approach flagged for an entrance only - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); the track out counts as the approach a seat is squared to only for an entrance board at a handover; 0190 squares a board to the road it faces but names no entrance placement"""
         routes: list[tuple[list[Pt], float, bool]] = []
         if self.M.get("road"):  # each road at its RECORDED width (`road`'s `road_width`, every `roads` record's `w`, in pixels)
             routes.append(([(p[0], p[1]) for p in self.M["road"]], float(self.M.get("road_width") or self.lw(ROAD_W_FT)), False))
@@ -432,12 +432,12 @@ class FixtureSitingMixin:
         Research:
             placement chooses the ground - research/questions/0190-notice-boards-kosatsuba.html: entrance, frontage or center
             roadside first - research/questions/0190-notice-boards-kosatsuba.drawing.html: only verge seats where any fit
-            entrance board on the approach - UNRESEARCHED: approach seats preferred at a handover
-            traffic floor - UNRESEARCHED: 60% of the busiest seat's count
+            entrance board on the approach - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); approach seats preferred at a handover
+            traffic floor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); 60% of the busiest seat's count
             board may stand in shade - research/questions/0190-notice-boards-kosatsuba.drawing.html: shaded seats admitted
             open ground preferred - GUESS: shaded seats only where no open one fits
-            anchored board band - UNRESEARCHED: within `KOSATSUBA_ANCHOR_BAND_FT`, 60 ft, of the nearest seat to the anchor
-            handover band - UNRESEARCHED: an entrance board within `KOSATSUBA_HANDOVER_BAND_FT`, 20 ft, of the nearest seat to the handover"""
+            anchored board band - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); within `KOSATSUBA_ANCHOR_BAND_FT`, 60 ft, of the nearest seat to the anchor
+            handover band - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); an entrance board within `KOSATSUBA_HANDOVER_BAND_FT`, 20 ft, of the nearest seat to the handover"""
         anchor = kosatsuba_anchor(self.M, placement, self.ftpx) if lane_tier else None
         # an entrance board keeps only the ground within its reach (`entrance_seat_ok`): the whole band is fitted there alone
         ground = (anchor[0], anchor[1], (KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT) / ftpx + 1e-6) if ENTRANCE_PRUNE and anchor is not None and placement == "entrance" else None

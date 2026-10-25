@@ -154,7 +154,7 @@ LANE_CLEARANCE = 7.0
 # lateral coverage failure, not the depth failure the ledger had assumed. See
 # specs/123-lane-web-and-cluster-shape/research.md R2.
 CLUSTER_SPAN_FACTOR = 1.6
-"""Research: cluster's reach along the field edge - UNRESEARCHED: 1.6 of the band's half-extent"""
+"""Research: cluster's reach along the field edge - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 1.6 of the band's half-extent"""
 
 CLUSTER_ROW_SPAN = {"round": 1.2, "crescent": 1.6, "elongated": 2.6, "split": 1.6}
 """How far the FRONT ROW wraps along the field outline, per rolled `cluster_shape`, as a multiple of
@@ -221,7 +221,7 @@ BUNDLE_PITCH = 100.0
 distance between rows: the ranks stand `homesteads.stages._rank_step` apart - a homestead's depth and the yard's 39 ft of sun
 (`SUN_CORRIDOR_FT`), 0038's "rows set 92 ft apart" (feature 385 T09: this claim once called 100 ft the row pitch, on 0038).
 
-Research: the along-row span - UNRESEARCHED: 100 ft, the step along a row and the grids' spacing; the rows themselves stand `_rank_step` apart, 0038's house, yard and 39 ft of sun"""
+Research: the along-row span - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 100 ft, the step along a row and the grids' spacing; the rows themselves stand `_rank_step` apart, 0038's house, yard and 39 ft of sun"""
 
 # THE GROUND ONE HOMESTEAD TAKES, as the side of a square (feature 280 M16 merged into feature 287, 2026-09-29): the seat
 # band's AREA (`plan.band_extent`, `households x HOMESTEAD_GROUND_FT^2`, which also sizes the canvas's room for the seat).
@@ -288,11 +288,11 @@ HOUSEHOLD_BAND = (10, 20)
 # thing that makes a comb read as a comb - is a constant of the tier and only its area varies.
 REF_HOUSEHOLDS = 15
 REF_FIELD_FALL = 1150.0
-"""Research: reference fan's fall - UNRESEARCHED: 1,150 ft, Ikegami's hand-drawn fan"""
+"""Research: reference fan's fall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 1,150 ft, Ikegami's hand-drawn fan"""
 REF_CANAL_A = (1250.0, 1450.0)
-"""Research: reference fan's canal A - UNRESEARCHED: 1,250 to 1,450 ft, Ikegami's hand-drawn fan"""
+"""Research: reference fan's canal A - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 1,250 to 1,450 ft, Ikegami's hand-drawn fan"""
 REF_CANAL_B = (680.0, 800.0)
-"""Research: reference fan's canal B - UNRESEARCHED: 680 to 800 ft, Ikegami's hand-drawn fan"""
+"""Research: reference fan's canal B - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 680 to 800 ft, Ikegami's hand-drawn fan"""
 
 # ...and its ASPECT is rolled, which matters more than it sounds. `fit_field` scales the reference
 # fan by one multiplier, so without this every hamlet of a given household count and fall direction
@@ -303,7 +303,7 @@ REF_CANAL_B = (680.0, 800.0)
 # acreage solve is untouched) and changes the shape: a long narrow valley fan against a broad
 # shallow one.
 FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
-"""Research: fan aspect - UNRESEARCHED: 0.88 to 1.16 fall against canal, rolled"""
+"""Research: fan aspect - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 0.88 to 1.16 fall against canal, rolled"""
 
 # The fall bearings a rolled hamlet may sit on: the eight compass points, in the engine's screen
 # convention (0 = east, 90 = south). The GM's water-flow doctrine says the bearing is a fact about
@@ -598,7 +598,7 @@ FARM_WATERS = ("channel", "well")
 BAMBOO_FORMS = ("homestead", "homestead", "thicket", "both", "none")
 """Research:
     where the bamboo stands - research/questions/0075-bamboo-groves-chikurin.drawing.html: farmsteads, a thicket, both or none
-    the forms' odds - UNRESEARCHED: homestead 2 in 5 and the others 1 in 5, where the registry's knob rolls the four evenly; no page gives odds"""
+    the forms' odds - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); homestead 2 in 5 and the others 1 in 5, where the registry's knob rolls the four evenly; no page gives odds"""
 PLOT_SIZES = ("small_irregular", "medium", "medium", "large_block")
 """Research: paddy plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: small 1, medium 2, large block 1"""
 GRAIN_DRIFTS = (-8, -4, 0, 0, 4, 8)

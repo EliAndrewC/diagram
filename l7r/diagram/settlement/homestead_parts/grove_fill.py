@@ -38,21 +38,21 @@ def grove_blocks(
 
     Research:
         clump off buildings - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: half the diagonal plus the clump's radius and 2 px
-        wellhead canopy keep-out - UNRESEARCHED: a wellhead kept its drawn half-size plus 1.05 clumps and 1 px off
+        wellhead canopy keep-out - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a wellhead kept its drawn half-size plus 1.05 clumps and 1 px off
         copse off the whole marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: woody cover on the dry ground above the marsh, so the copse is kept off all of it
         off the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the south strip, the west lane and every crown's sun ground
         belt off the deep marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: based in the reed margin at most
         copse off the bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: each stand grown by `copse_bamboo_reach` (two crowns)
-        canopy kept 0.9 clump off shrines, torii and ponds - UNRESEARCHED
+        canopy kept 0.9 clump off shrines, torii and ponds - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25)
         clumps kept 12 px plus a crown off paddies and 12 px off dry plots - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the crops stay open; the 12 px and the crown UNRESEARCHED
-        clumps off streams, channels and the moat - UNRESEARCHED: clumps kept a crown off streams, channels and the moat
+        clumps off streams, channels and the moat - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); clumps kept a crown off streams, channels and the moat
         clumps off the road - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the copse and the groves kept off the main road
         clumps off lanes - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: where a lane crosses the belt the planting resumes on both sides
-        clump crown-reach margin off a way - UNRESEARCHED: the crown reach kept clear of lanes, streets and the road, the margin's width
+        clump crown-reach margin off a way - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); the crown reach kept clear of lanes, streets and the road, the margin's width
         clumps off the gardens' east - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown within 50 ft (`EAST_REACH_FT`) east of a yard or bed, from its north edge down to 50 ft below its south edge
-        one grove off another's - UNRESEARCHED: one grove's clumps kept off another's by the sum of their canopy reaches
-        groves off the households' wood seats - UNRESEARCHED: every grove but the copse kept off each household's reserved copse seat (`reserved_seat_keepouts`)
-        clumps off a dike bank - UNRESEARCHED: no clump based on a dike's bank
+        one grove off another's - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); one grove's clumps kept off another's by the sum of their canopy reaches
+        groves off the households' wood seats - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); every grove but the copse kept off each household's reserved copse seat (`reserved_seat_keepouts`)
+        clumps off a dike bank - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); no clump based on a dike's bank
         the title's pocket kept clear - CONVENTION: clumps kept a crown off the pocket reserved for the map's name
     """
     from .stands import crown_reach, deep_marsh, reserved_seat_keepouts  # noqa: PLC0415 - `stands` imports this module
@@ -268,10 +268,10 @@ def reseat_clump(
     Research:
         a belt plants round a local obstacle - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane through the belt and a wellhead in it are planted round, the wall resuming
         a seat refused for the sun set deeper - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a crown refused in a plot's sun is set deeper in the stand rather than dropped
-        the re-seat's reach - UNRESEARCHED: a refused belt clump is offered up to 2.2 grid steps away, eight bearings a ring
-        the copse re-seats only when displaced - UNRESEARCHED: a sparse grove re-seats only where another grove's canopy displaced it; any other refusal leaves the gap
-        the belt stops at a lane it abuts - UNRESEARCHED: a clump blocked by a lane within a clump of the belt's rim is dropped
-        the edges a stand stops at - UNRESEARCHED: a clump refused by the crop, open water or a dike bank is dropped, not re-seated"""
+        the re-seat's reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a refused belt clump is offered up to 2.2 grid steps away, eight bearings a ring
+        the copse re-seats only when displaced - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a sparse grove re-seats only where another grove's canopy displaced it; any other refusal leaves the gap
+        the belt stops at a lane it abuts - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a clump blocked by a lane within a clump of the belt's rim is dropped
+        the edges a stand stops at - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a clump refused by the crop, open water or a dike bank is dropped, not re-seated"""
     # INTERIOR ONLY FOR A LANE, and this cost seed 10 a round. The rule reads "a clump blocked
     # near the polygon's own rim is at the belt's edge, where stopping is correct" - true of a
     # lane, false of everything else. A belt is 110 px deep and a clump is 28, so demanding

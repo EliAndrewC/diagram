@@ -11,7 +11,7 @@ from __future__ import annotations
 # Calibrated against the drawn ponds: an ordinary set-back lands well under 200 px, and the case
 # that motivated the limit was 575. See `stage_sink`.
 POND_SETBACK_LIMIT = 300.0
-"""Research: tameike set-back limit - UNRESEARCHED: 300 ft below the outfall"""
+"""Research: tameike set-back limit - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 300 ft below the outfall"""
 
 # THE INTAKE, AND THE BROOK THAT RUNS ON PAST IT (feature 230, GM 2026-09-12; researched -
 # research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html). A brook does not
@@ -55,7 +55,7 @@ OFFTAKE_DEG = 35.0
 # canal hems that margin, which is the two-overlapping-water-lines catch in a new place. The walk's step is
 # what breaks both; its amplitude is a drawing judgment, not a researched figure.
 BROOK_SKIRT = 34.0
-"""Research: brook outside the crop - UNRESEARCHED: 34 ft floor"""
+"""Research: brook outside the crop - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 34 ft floor"""
 # ...and how far outside THAT floor the course may stray. Small, and bounded by the frame rather than by
 # taste: the sheet is cropped to its hard content and a watercourse is deliberately not content (it "clips at
 # the edge, trailing off as more map this way" - the crop (`content_view`)), so a brook that strays more than the
@@ -64,9 +64,9 @@ BROOK_SKIRT = 34.0
 # The course's variety comes from the field's own outline, which it now follows at this distance, and the walk
 # only keeps it off a ruled line.
 BROOK_WANDER = 10.0
-"""Research: brook's stray - UNRESEARCHED: up to 10 ft past the floor"""
+"""Research: brook's stray - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on the amplitude - a meander's wavelength runs about 11 widths, its bends 2 to 3 widths in radius (pass P2a); up to 10 ft past the floor"""
 BROOK_WANDER_STEP = 10.0
-"""Research: brook's meander step - UNRESEARCHED: 10 ft"""
+"""Research: brook's meander step - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 10 ft"""
 # HOW FAR PAST THE FIELD's own bounds a station may sit, px - the belt to the skirt's braces, and sized to the
 # crop margin (`CROP_MARGIN`, 48) so that a station inside this box is inside the picture. On a map whose land
 # falls on a diagonal the first cut bounded the offset in the FALL's frame, which is not the frame the sheet is
@@ -151,7 +151,7 @@ OFFTAKE_LADDER: tuple[tuple[int, tuple[float, ...], tuple[float, ...]], ...] = (
 Research:
     delivery ditches by size - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: canal B always feeds one
     canal B's single delivery ditch at 0.55-0.6 (0053 drawing: the second canal feeds at least one) - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the second canal feeds at least one delivery ditch; its position is UNRESEARCHED
-    delivery-ditch count and positions - UNRESEARCHED: 2, 3 or 4 offtakes under 11, 21 and 99 households, the last at 0.93
+    delivery-ditch count and positions - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 2, 3 or 4 offtakes under 11, 21 and 99 households, the last at 0.93
 """
 
 # THE BROOK IS CROSSED WHERE A WAY NEEDS TO CROSS IT (feature 261, the GM 2026-09-27: "fix the placement algorithm
@@ -178,7 +178,7 @@ FORD_BEND_DEG = 20.0
 # more than this. The pool's brooks turn at most 41-53 deg anywhere on their meandered courses; 100 deg is well above that
 # and well below the 113-131 deg folds the exit has produced at the frame edge. A map drawing convention.
 BROOK_MAX_TURN_DEG = 100.0
-"""Research: brook never doubles back - UNRESEARCHED: no turn over 100 degrees"""
+"""Research: brook never doubles back - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - a meander's bends run 2 to 3 widths in radius (pass P2a), which the cap keeps; a meandering stream does loop back at a larger scale, which the rule refuses (feature 417 T34); no turn over 100 degrees"""
 
 # A BROOK TURNS ON A CURVE (feature 261, settlement-review of Sawada): every corner of the drawn course is filleted at this
 # many widths of its drawn bed, the ratio the ditches have been drawn at since 2026-07-25 (`fillet_polyline`,
@@ -207,5 +207,5 @@ SINKS = ("pond", "pond", "offmap")
 
 Research:
     where the runoff goes - research/questions/0060-field-drains-akusuiro.drawing.html: a pond at the foot (a GUESS there) or off the map
-    sink odds - UNRESEARCHED: pond two in three, off the map one
+    sink odds - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); pond two in three, off the map one
 """

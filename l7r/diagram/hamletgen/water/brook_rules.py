@@ -42,11 +42,11 @@ LEVEL_TOL_FT = 4.0  # ... that holds one coordinate within this ...
 LEVEL_MAX_RUN_FT = 150.0  # ... for longer than this runs ruled along the frame (the GM on Sawada, 2026-08-26)
 """Research: level run length - CONVENTION: over 150 ft along the frame is refused"""
 RULED_TOL_FT = 3.1  # water:W03 - a straight run: every vertex within this of its chord ...
-"""Research: straight run tolerance - UNRESEARCHED: every vertex within 3.1 ft of its chord"""
+"""Research: straight run tolerance - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every vertex within 3.1 ft of its chord"""
 RULED_SHARE = 0.4  # ... may cover at most this share of the brook's length on the page ...
-"""Research: straight run share - UNRESEARCHED: at most 0.4 of the brook's length in view"""
+"""Research: straight run share - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths, about 70 ft here, are rare (Leopold and Wolman, pass P2a), against this share (feature 417 T34); at most 0.4 of the brook's length in view"""
 RULED_MIN_LEN_FT = 300.0  # ... once that length is at least this (settlement-review of Sawada, round 0ae309f0)
-"""Research: straight run floor - UNRESEARCHED: the share rule applies from 300 ft of brook in view"""
+"""Research: straight run floor - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths, about 70 ft here, are rare (Leopold and Wolman, pass P2a), against this 300 ft floor (feature 417 T34); the share rule applies from 300 ft of brook in view"""
 AXIS_EPS_DEG = 1.6  # water:W04 - a segment of a wander stride or more this near a screen axis is a ruled line
 """Research: screen-axis segment - CONVENTION: a segment within 1.6 deg of a screen axis reads as ruled"""
 BROOK_DRAWN_W = 7.0  # the width `draw_comb_field` draws a hamlet's brook at (`settlement/fields/comb.py`, `stream(width=7)`)
@@ -96,14 +96,14 @@ def straightest_run(pts: Sequence[Pt], tol: float) -> float:
     of its line - the pool test's `_straightest`, lifted (water:W03) and made quadratic: from each start, the bearings a
     chord may take narrow with every vertex passed (a vertex `r` out allows those within asin(tol / r) of its own), and
     once none is left no longer chord from that start can qualify.
-    Research: straight run - UNRESEARCHED: the W03 chord a natural brook is held off
+    Research: straight run - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths, about 70 ft here, are rare (Leopold and Wolman, pass P2a), which holding a natural brook off a long chord follows; the W03 chord a natural brook is held off
     """
     return straightest_chord(pts, tol)[0]
 
 
 def straightest_chord(pts: Sequence[Pt], tol: float) -> tuple[float, int, int]:
     """`straightest_run` with the chord's two vertex indices - what the placer's repair bends at the middle of.
-    Research: straight run - UNRESEARCHED: the W03 chord a natural brook is held off
+    Research: straight run - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths, about 70 ft here, are rare (Leopold and Wolman, pass P2a), which holding a natural brook off a long chord follows; the W03 chord a natural brook is held off
     """
     best, at = 0.0, (0, 0)
     for i, (ax, ay) in enumerate(pts):
@@ -124,7 +124,7 @@ def straightest_chord(pts: Sequence[Pt], tol: float) -> tuple[float, int, int]:
 def ruled_share_ok(course: Sequence[Pt], view: Sequence[float], tol: float = RULED_TOL_FT, share: float = RULED_SHARE, min_len: float = RULED_MIN_LEN_FT) -> bool:
     """No straight run covers more than `share` of the course's length inside the view, when that length is at least
     `min_len` - the pool test's whole body (water:W03).
-    Research: straight run share - UNRESEARCHED: no straight run over RULED_SHARE of the brook in view
+    Research: straight run share - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on a page - straight runs past ten widths, about 70 ft here, are rare (Leopold and Wolman, pass P2a), against this share (feature 417 T34); no straight run over RULED_SHARE of the brook in view
     """
     x0, y0, w, h = (float(v) for v in view)
     on = [p for p in course if x0 <= p[0] <= x0 + w and y0 <= p[1] <= y0 + h]

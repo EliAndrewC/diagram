@@ -40,7 +40,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     Research:
         comb grown round the water - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the fan fitted to its head race, fed at the high head
         brook fed past the intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook drawn from off the map to the tap and on past the fan
-        ditch corridors - UNRESEARCHED: every ditch stretch outside the crop a 30 px no-build corridor
+        ditch corridors - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every ditch stretch outside the crop a 30 px no-build corridor
     """
     if plan.field_archetype in POLDER_ARCHETYPES:
         stage_polder(s, plan)

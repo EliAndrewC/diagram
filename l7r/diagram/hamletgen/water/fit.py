@@ -190,7 +190,7 @@ def _fit_at_aspect(
     Research:
         fan cut away from the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook-side supply canal BROOK_FAN_TRIM (0.72) short
         size search - NONE: the multiplier bracketed and predicted
-        fan proportions - UNRESEARCHED: REF_FIELD_FALL 1,150 ft, flank canals REF_CANAL_A 1,250-1,450 and REF_CANAL_B 680-800 ft, Ikegami's hand-drawn fan
+        fan proportions - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); REF_FIELD_FALL 1,150 ft, flank canals REF_CANAL_A 1,250-1,450 and REF_CANAL_B 680-800 ft, Ikegami's hand-drawn fan
     """
     lo, hi = 0.35, 2.2
     best: tuple[tuple[bool, float], CombCarve] | None = None
@@ -320,7 +320,7 @@ def _predict_k(pts: list[tuple[float, float]], target: float, lo: float, hi: flo
 
 HEAD_OFFSETS: tuple[tuple[str, float], ...] = (("head_left", -0.24), ("head_center", -0.05), ("head_center", 0.05), ("head_right", 0.24))
 """Research:
-    intake offset on the head margin - UNRESEARCHED: left, center or right, at -0.24, +/-0.05 or +0.24 of the field span across the fall
+    intake offset on the head margin - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); left, center or right, at -0.24, +/-0.05 or +0.24 of the field span across the fall
     water source position rolled - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: every hamlet rolls where its water comes in (head_left, head_center, head_right, weighted 1:2:1 by the tuple's entries)
 """
 
@@ -343,8 +343,8 @@ def head_sluice(plan: SitePlan) -> tuple[Pt, str]:
 
     Research:
         intake at the field's high head - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the sluice on the fall axis upslope of the field
-        head set-back - UNRESEARCHED: 0.36 of the field span upslope of the canvas center
-        intake offset - UNRESEARCHED: rolled from HEAD_OFFSETS
+        head set-back - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 0.36 of the field span upslope of the canvas center
+        intake offset - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); rolled from HEAD_OFFSETS
     """
     dx, dy = plan.fall
     cx, cy = plan.W / 2.0, plan.H / 2.0

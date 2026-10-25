@@ -44,7 +44,7 @@ COMMON_BEARING_DEG = 11.25
 # half a bundle pitch each way, so one ragged outline vertex does not turn a house, and a bend the width of two homesteads
 # does. A map drawing convention.
 FOLLOW_HALF_SPAN_PX = 48.0
-"""Research: lane bend a house reads - UNRESEARCHED: 48 px of the margin either side, read as the lane's bend"""
+"""Research: lane bend a house reads - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); 48 px of the margin either side, read as the lane's bend"""
 _SAMPLE_PX = 8.0
 # A house within FOLLOW_FULL_PX of the margin stands on the lane that runs along it and follows its whole turn; past
 # that the pull fades to nothing at FOLLOW_REACH_PX, so a house two rows back follows the lanes of its own row rather
@@ -52,9 +52,9 @@ _SAMPLE_PX = 8.0
 # version followed the margin out to 400 px at full strength, and the settlement-review of Sawada at the 269 landing
 # (2026-09-28) found houses 340-400 ft off the margin turned by it, 9 of 16 of them at the spread's edge.
 FOLLOW_FULL_PX = 96.0
-"""Research: full lane turn within reach - UNRESEARCHED: the margin's whole turn within 96 px of it"""
+"""Research: full lane turn within reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); the margin's whole turn within 96 px of it"""
 FOLLOW_REACH_PX = 240.0
-"""Research: lane turn fades out - UNRESEARCHED: the margin's pull fades to none at 240 px"""
+"""Research: lane turn fades out - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); the margin's pull fades to none at 240 px"""
 # The per-house draws key on the seat rounded to this many px (a map drawing convention): a front-row seat moved a pixel or
 # two by the rake's own reach keeps the rake it was moved for.
 KEY_CELL_PX = 4.0
@@ -92,7 +92,7 @@ class MarginBearing:
 
     Research:
         turn with the lane - research/questions/0029-farmhouses-minka.drawing.html: a house turns with the curve of the lane it stands on
-        turn with the field margin - UNRESEARCHED: the field margin stands in for that lane before any lane is drawn, a proxy
+        turn with the field margin - research/questions/0029-farmhouses-minka.drawing.html: houses turn with their lane, within about 34 degrees (the Okinawan survey); the field margin standing for the lane is ours; the field margin stands in for that lane before any lane is drawn, a proxy
             0029 neither records nor labels
     """
 
@@ -128,7 +128,7 @@ class MarginBearing:
 
         Research:
             lane turn from the margin - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farmhouse turns with its lane, but every house stands before any lane, so the curve of the field's margin stands in
-            folded square and faded - UNRESEARCHED: a house square to the margin by front or gable, the turn in full near it and fading behind
+            folded square and faded - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); a house square to the margin by front or gable, the turn in full near it and fading behind
         """
         k = self.nearest(x, y)
         if k is None or len(self.samples) < 3:
