@@ -985,6 +985,8 @@ egune's	igune
 ei-sen	ei-sen
 eight trigrams	eight trigrams
 eighty-eighth night	eighty-eighth night
+eiji	Eiji silver
+eiji silver	Eiji silver
 eiraku	Eiraku
 eiraku coin	Eiraku
 eiro	eiro
@@ -1296,6 +1298,7 @@ furo	furo
 fuse	fuse
 fusekoshi	inverted siphon
 fusuma	fusuma
+futatsu-takara	Futatsuho
 futatsuho	Futatsuho
 futatsuho silver	Futatsuho
 futures	futures
@@ -1632,6 +1635,7 @@ high loom	high loom
 high looms	high loom
 high-loom	high loom
 high-volatile	volatiles
+higo rice	Higo rice
 hikae-no-ma	hikae-no-ma
 hikan	hikan
 hiki	hiki
@@ -1686,6 +1690,10 @@ ho:go	hogo
 hoarding	hoarding
 hoardings	hoarding
 hoei	Hoei
+hoei eiji	Eiji silver
+hoei futatsu-takara	Futatsuho
+hoei mitsu-takara	Mitsuho
+hoei yotsu-takara	Yotsuho silver
 hogo	hogo
 hoin	hōin
 hoji	Hoji silver
@@ -1892,6 +1900,9 @@ intendants	daikan
 intensive agriculture	intensive farming
 intensive farming	intensive farming
 inter	inter
+intercalary	intercalary month
+intercalary fifth month	intercalary month
+intercalary month	intercalary month
 interceptor	interceptor
 interceptor channel	interceptor
 interlinear	interlinear
@@ -2128,6 +2139,7 @@ kangxi	Kangxi
 kanjo bugyo	finance commissioner
 kanjo-nawa	kanjo-nawa
 kanjo-tsuri	kanjo-nawa
+kanme	kan
 kanmon	kanmon
 kannon	Kannon
 kannon biraki	kannon-biraki
@@ -2193,6 +2205,7 @@ kazusa	Kazusa
 kazusa province	Kazusa
 ke	ke
 kebiishi	kebiishi
+keenlung	Qianlong
 kegare	kegare
 keian	hitoyado
 keibodan	keibodan
@@ -2210,6 +2223,8 @@ kenchi-cho	kenchicho
 kenchicho	kenchicho
 kengyo	kengyō
 kengyō	kengyō
+kenji	Kenji gold
+kenji gold	Kenji gold
 kenmonshu	Kenmonshu
 kenrei shuchi	Kenrei Shuchi
 kera	kera
@@ -2542,6 +2557,7 @@ lychees	litchi
 lying willow	lying willow
 lùlu	lulu
 lüshi chunqiu	Lushi chunqiu
+mace	mace
 machi	machi
 machi-bikeshi	machi-bikeshi
 machi-bugyo	town magistrate
@@ -2705,6 +2721,7 @@ mise	mise
 mishima	Mishima
 miso	miso
 mitochigai	mitochigai
+mitsu-takara	Mitsuho
 mitsuba	mitsuba
 mitsuho	Mitsuho
 mitsuho silver	Mitsuho
@@ -2769,6 +2786,7 @@ moso	moso
 moto-kiba	Eitaijima
 motojime	motojime
 mount koya	Kōyasan
+mow	mu
 mozi	Mozi
 mu	mu
 muen	muenzuka
@@ -3588,6 +3606,7 @@ sangyuan	Sangyuan polder
 sangyuan polder	Sangyuan polder
 sanheyuan	sanheyuan
 sanjūbanshin	thirty guardian deities
+sanka zui	Sanka zui
 sankin-kotai	alternate attendance
 sankyoson	sankyoson
 sanmai	sanmai
@@ -4126,6 +4145,7 @@ swi	SWI
 swing bucket	hudou
 sword hunt	sword hunt
 sword hunts	sword hunt
+sycee	sycee
 sōchinju	sōchinju
 sōja	soja
 sōtō	Sōtō
@@ -4867,6 +4887,7 @@ yoshizu	yoshizu
 yosui	yosui
 yosuiro	yosui
 yotsu	yotsu
+yotsu-takara	Yotsuho silver
 yotsuho	Yotsuho silver
 yotsuho silver	Yotsuho silver
 youfang	aburaya
@@ -4961,6 +4982,7 @@ zōkibayashi	zokibayashi
 ホオノキ	hoonoki
 ミズオオバコ	Ottelia
 三富新田	Santome
+三貨図彙	Sanka zui
 合掌造り	gassho
 四間取り	four-room type
 圃場整備	hojo seibi
