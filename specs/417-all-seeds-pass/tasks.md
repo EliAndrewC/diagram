@@ -46,6 +46,14 @@
       research: rendering
 - [ ] T18 (R2 G11, first part) The overlap matrix's dead mirrors deleted: `forest_reveal_x`, `FOREST_REVEAL_FT`, `CANOPY_STRUCT_KEYS` (27 keys against the engine's 34), in `l7r/diagram/overlap/matrix.py` (D18; FR-006; no map moves)
       research: rendering
+- [ ] T19 (T05's claims round, DRIFTED; arbiter ask 417-T05-claims) The track out stops in open country: `fabric._pull_back_to_service` leaves an inner end alone when nothing is within `_LANE_JOIN_FT`, and refuses a snap that would cross the fabric, against 0081's "It never stops in open country" (`evidence/impl-T05.txt`), in `l7r/diagram/hamletgen/ways/fabric.py` (FR-004; a behavior change - waits for the GM's fixing pass, D11)
+      research: rendering
+- [ ] T23 (T05's claims round, MISLABELED; arbiter ask 417-T05-claims) Four labels corrected: `bund.cut_stub_ends#a stub that reaches the bund kept` to GUESS 0014 (6 ft); `sweeps._bridge_collinear_breaks#bridge width` and `sweeps._join_orphan_ways#link width` to CONVENTION 0081; `sweeps._sweep_doubled_remnants#doubled lane dropped` to cite 0081 (`evidence/impl-T05.txt`), in `l7r/diagram/hamletgen/ways/` (label-only)
+      research: rendering
+- [ ] T24 (T05's claims round; arbiter ask 417-T05-claims) A doubled lane is dropped whole where 0081 cuts it where it comes alongside and lets it meet the other as a T: `sweeps._sweep_doubled_remnants`, in `l7r/diagram/hamletgen/ways/sweeps.py` (FR-004; a behavior change - waits for the GM's fixing pass, D11)
+      research: rendering
+- [ ] T25 (T05's claims round, outside the change; arbiter ask 417-T05-claims) `water_ways/_helpers.BUND_REACH_FT` is a second 6.0 of `consts_ways.FIELD_REACH_FT` (read by `bund.cut_stub_ends` and `geom.end_serves`); `cut_stub_ends` tests its tail with `<=` where the other two read `<` against "under 40 ft"; comments in `sweeps` still give `_LANE_JOIN_FT` as 30 where the claims say 25, in `l7r/diagram/hamletgen/ways/` (FR-006)
+      research: rendering
 - [ ] T20 The fresh block runs inside `make land` before the push and any fresh failure refuses, once a fresh block of 500 passes whole (FR-009, SC-005; after the last engine task)
       research: rendering
 - [ ] T21 Every archetype form's seeds recorded per seed and diffed against HEAD; a newly red unrolled-form seed with no filed row or waiver refuses (FR-011, SC-006; feature 394)

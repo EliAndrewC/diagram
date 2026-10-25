@@ -1,0 +1,36 @@
+impl-drift: 27 claims - IN-STEP 22, DRIFTED 1, MISLABELED 4; UNCLAIMED 0
+
+VERDICT l7r/diagram/hamletgen/consts_ways.py::FIELD_REACH_FT#reaching the field IN-STEP - 6 ft is the page's guess at how near counts as joining the paddy's edge [§9]
+VERDICT l7r/diagram/hamletgen/consts_ways.py::TAIL_CUT_FT#a tail past a crossing IN-STEP - 40 ft, the page's figure for a tail past a crossing; the page calls it a drawing convention [§40, §45]
+VERDICT l7r/diagram/hamletgen/ways/bund.py::cut_stub_ends#a stub that reaches the bund kept MISLABELED - the 0014 drawing page answers this: "A lane end that stops within 6 ft of the paddy's edge is drawn as joining it", and the same 6 ft holds at the dry hem; the label should be GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html, not UNRESEARCHED [§9]
+VERDICT l7r/diagram/hamletgen/ways/bund.py::cut_stub_ends#no stub past a junction IN-STEP - a free end's run of 40 ft or less past its first meeting with another way is cut [§40, §45]
+VERDICT l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track meets the lanes DRIFTED - two cases leave the track stopping in open ground, where the page says "It never stops in open country". (1) An inner end with nothing within `_LANE_JOIN_FT` is "LEFT ALONE". (2) When the snap would cross the fabric, the snap is refused (`if not fabric or not _crosses_fabric(cand, ...)`) and the end stays short of the way it joins. Either the code should refuse such a track, or the page should record this as a DEVIATION [§30, §32]
+VERDICT l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track out runs off the map IN-STEP - an end outside the canvas is skipped and never touched [§30]
+VERDICT l7r/diagram/hamletgen/ways/joints.py::keeps_the_web#one network IN-STEP - the rewrite is refused if any lane end would lose its contact or the web would split into more pieces [§46, §61]
+VERDICT l7r/diagram/hamletgen/ways/serve.py::join_width#a link takes its way's width IN-STEP - the page itself calls lane widths a map drawing convention [§18]
+VERDICT l7r/diagram/hamletgen/ways/settle/shapes.py::reaimed#an end within a hand's width ends there IN-STEP - the pages give no figure for a 4 ft touch [§]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#a bridge as direct as a path IN-STEP - the page says a path takes the shortest way but gives no ratio, so the 2x limit is unresearched [§34]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge width MISLABELED - 0081 sets lane widths by role as a map drawing convention ("the cluster's spine and its spur to the fields 5 ft"). A bridge that closes a gap in one way takes that way's width, so the claim should be CONVENTION citing research/questions/0081-village-lanes.drawing.html, not UNRESEARCHED [§18]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#no loop closed IN-STEP - the pages say nothing about a second route [§]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#one way drawn as two is joined IN-STEP - the pages cover only joins within 25 ft and ends with something between them; they give no figure for 150 ft or 15 degrees [§39, §43]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link width MISLABELED - 0081 gives widths by role only and never says a link takes the width of the way it joins, so the cited page does not back this rule. It should be CONVENTION, as `join_width` labels the same rule [§18]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#orphan link directness IN-STEP - the pages give no detour ratio [§]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a link another lane ends on kept IN-STEP - the pull-back stops where another lane's end rests (`_tails`), and a short lane in that position is not emptied (`_held`) [§61]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a whittled lane emptied IN-STEP - the pages give no minimum lane length [§52]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#dooryard carry reach IN-STEP - the page gives only an end's 60 ft reach; 120 ft is unresearched [§51]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#the track out and streets exempt IN-STEP - connector and street lanes are skipped [§30, §83]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#debris length IN-STEP - the pages give no length for a fragment [§]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#isolated fragment dropped IN-STEP - a fragment that stands alone is dropped [§46, §59]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#no house stranded IN-STEP - reads `lane_houses` at the page's 100 ft serving check [§46, §49, §56]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#doubled lane dropped MISLABELED - 0081 answers the side-by-side case: "Two paths running side by side are drawn as one ... the maps cut it where it comes alongside and let it meet the other as a T". The code drops the whole lane instead (`ln["pts"] = []`). The claim should cite research/questions/0081-village-lanes.drawing.html, and the drop then reads as DRIFTED against that cut [§42, §52]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#no house stranded IN-STEP - the drop is refused if any owed house would lose its only way within 100 ft [§46, §49, §56]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#web kept one network IN-STEP - the drop is refused if it would add a component [§46, §61]
+VERDICT l7r/diagram/hamletgen/ways/sweeps.py::cut_past_connector#overrun past the connector cut IN-STEP - a loose tail under 40 ft is cut, and never one that is a house's only way [§33, §40]
+VERDICT l7r/diagram/hamletgen/ways/web/stage.py::_reachable_runs#islands never drawn IN-STEP - only runs reachable from the skeleton are kept [§58, §59, §61]
+
+OUTSIDE THE CHANGE
+- l7r/diagram/hamletgen/ways/bund.py | cut_stub_ends | reads `BUND_REACH_FT` (water_ways/_helpers.py, 6.0) where the new `consts_ways.FIELD_REACH_FT` (6.0) is the same bund reach; `geom.end_serves` reads `BUND_REACH_FT` too. That leaves a second 6.0 of the kind T05 set out to unify.
+- l7r/diagram/hamletgen/ways/bund.py | cut_stub_ends | the tail test is `<= _PAST_JUNCTION_FT`, while `reaimed` and `cut_past_connector` use `<` against the page's "under 40 ft". All three read the same TAIL_CUT_FT.
+- l7r/diagram/hamletgen/ways/sweeps.py | _bridge_collinear_breaks | a comment says `_LANE_JOIN_FT` is 30, but the claim "a short gap closed at any bearing" says 25 ft. One of the two is stale.
+- l7r/diagram/hamletgen/ways/sweeps.py | _sweep_doubled_remnants | comments give `_LANE_JOIN_FT` as 30 and "the gate's 40 ft REACH figure", while the docstring says "both ends within 25 ft". The comments may be stale.
+- l7r/diagram/hamletgen/ways/serve.py | join_width | a link next to the track out takes its 6 ft width, the width 0081 §18 gives only to the track out.
