@@ -4173,3 +4173,15 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [a Google search for the table](https://www.google.com/search?q=BLS+%22Average+Retail+Food+and+Energy+Prices%2C+U.S.+and+Midwest+Region%22)
 - **Rests on it:** research/questions/0299-what-do-the-basket-goods-cost-in-the-us-today-and-how-much-does-an-american-use.html (diagram feature 420; asked for by gm-assistant on EliAndrewC/diagram#17) - the government's average shop price of rice and flour, now read only to January 2025 through DBnomics, and of dried beans, now uncited.
 - Blocked by: bls.gov refuses this container (HTTP 403, 2026-10-25); api.bls.gov returned 503.
+
+### 329. [money] James L. McClain and Wakita Osamu, eds., *Osaka: The Merchants' Capital of Early Modern Japan* (Cornell University Press, 1999), its chapters on Osaka's townspeople and rented housing
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[the Cornell University Press page for the book](https://www.cornellpress.cornell.edu/book/9780801436307/osaka/)**
+- An Osaka rent of a back-tenement room, or of a rented house by its size, for the mid-1700s or the nearest years; and what an Osaka tenant paid besides the rent. The GM owns the book in print.
+- Fallback: [a Google search for the book](https://www.google.com/search?q=McClain+Wakita+%22Osaka%3A+The+Merchants%27+Capital+of+Early+Modern+Japan%22)
+- **Rests on it:** research/questions/0265-what-did-it-cost-to-rent-a-room-or-a-house.html (diagram feature 420; asked for by gm-assistant on EliAndrewC/diagram#17, Q3) - Osaka rents found only from 1814 (Tani 1989), none for 1745-1754.
+- Blocked by: in print only; no open copy was found (2026-10-25).

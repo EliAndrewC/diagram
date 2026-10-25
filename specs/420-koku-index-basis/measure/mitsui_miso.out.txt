@@ -1,0 +1,44 @@
+== header rows 1-8, columns 0-17
+row 1: 0:'Mitsui Bunko' | 2:'Local physical units' | 3:'白米' | 4:'麦' | 5:'餅米' | 6:'塩' | 7:'味噌' | 8:'醤油' | 9:'酢' | 10:'酒' | 11:'煎茶' | 12:'煙草' | 13:'薪' | 14:'水油' | 15:'蝋燭' | 16:'日雇賃' | 17:'Local physical units'
+row 2: 0:'Table 6' | 2:'Local monetary unit (unit-prices in silver monme)' | 3:'1石ニ付' | 4:'1石ニ付' | 5:'1石ニ付' | 6:'1石ニ付' | 7:'10貫匁ニ付' | 8:'1石ニ付' | 9:'1石ニ付' | 10:'1石ニ付' | 11:'1斤ニ付' | 12:'1斤ニ付' | 13:'10貫匁ニ付' | 14:'1石ニ付' | 15:'100匁ニ付' | 16:'1人ニ付' | 17:'Local monetary unit (unit-prices in silver monme)'
+row 3: 0:'KYOTO' | 2:'Quarterly' | 3:'銀匁' | 4:'銀匁' | 5:'銀匁' | 6:'銀匁' | 7:'銀匁' | 8:'銀匁' | 9:'銀匁' | 10:'銀匁' | 11:'銀匁' | 12:'銀匁' | 13:'銀匁' | 14:'銀匁' | 15:'銀匁' | 16:'銀匁' | 17:'Yearly'
+row 4: 3:'White rice' | 4:"Mugi (wheat; see note on 'mugi' on the sheet sources and conversion)" | 5:'Glutinous rice' | 6:'Salt' | 7:'Miso' | 8:'Soy sauce' | 9:'Vinegar' | 10:'Sake' | 11:'Tea (zencha)' | 12:'Tobacco' | 13:'Burning wood' | 14:'Lamp oil' | 15:'Candle' | 16:'Day laborers'
+row 5: 3:'1 koku' | 4:'1 koku' | 5:'1 koku' | 6:'1 koku' | 7:'10 kan' | 8:'1 koku' | 9:'1 koku' | 10:'1 koku' | 11:'1 kin' | 12:'1 kin' | 13:'10 kan' | 14:'1 koku' | 15:'100 monme' | 16:'Per day'
+row 6: 3:'Silver monme' | 4:'Silver monme' | 5:'Silver monme' | 6:'Silver monme' | 7:'Silver monme' | 8:'Silver monme' | 9:'Silver monme' | 10:'Silver monme' | 11:'Silver monme' | 12:'Silver monme' | 13:'Silver monme' | 14:'Silver monme' | 15:'Silver monme' | 16:'Silver monme'
+row 7: 3:'Kyoto' | 4:'Kyoto' | 5:'Kyoto' | 6:'Kyoto' | 7:'Kyoto' | 8:'Kyoto' | 9:'Kyoto' | 10:'Kyoto' | 11:'Kyoto' | 12:'Kyoto' | 13:'Kyoto' | 14:'Kyoto' | 15:'Kyoto' | 16:'Kyoto'
+row 8: 3:'Quarterly average' | 4:'Quarterly average' | 5:'Quarterly average' | 6:'Quarterly average' | 7:'Quarterly average' | 8:'Quarterly average' | 9:'Quarterly average' | 10:'Quarterly average' | 11:'Quarterly average' | 12:'Quarterly average' | 13:'Quarterly average' | 14:'Quarterly average' | 15:'Quarterly average' | 16:'Quarterly average'
+
+== row dump, 1745-1754: rice (col 3), salt (col 6), miso (col 7), soy sauce (col 8), firewood (col 13), lamp oil (col 14), wage (col 16)
+row 19: 1745 Spring | rice 69.13 | salt 19.62 | miso 15.02 | soy sauce 82.63 | firewood 2.67 | lamp oil 313.88 | wage 0.83
+row 20: 1745 Fall | rice 83.31 | salt 25.69 | miso 17.05 | soy sauce 91.5 | firewood 2.55 | lamp oil 362.28 | wage 0.84
+row 21: 1746 Spring | rice 87.16 | salt 20.23 | miso 17.13 | soy sauce 83.39 | firewood 2.55 | lamp oil 328.78 | wage 0.99
+row 22: 1746 Fall | rice 86.02 | salt 19.61 | miso 17.0 | soy sauce 89.15 | firewood 2.62 | lamp oil 343.2 | wage 0.72
+row 23: 1747 Spring | rice 76.98 | salt 18.81 | miso 16.75 | soy sauce 89.84 | firewood 2.73 | lamp oil 332.03 | wage 0.79
+row 24: 1747 Fall | rice 84.97 | salt 18.67 | miso 17.63 | soy sauce 89.7 | firewood 2.76 | lamp oil 322.48 | wage 0.8
+row 25: 1748 Spring | rice 81.91 | salt 18.05 | miso 18.54 | soy sauce 89.11 | firewood 2.63 | lamp oil 326.17 | wage 0.95
+row 26: 1748 Fall | rice 80.9 | salt 19.65 | miso 17.85 | soy sauce 89.33 | firewood 2.59 | lamp oil 377.8 | wage 0.91
+row 27: 1749 Spring | rice 76.38 | salt 17.13 | miso 15.92 | soy sauce 89.48 | firewood 2.56 | lamp oil 375.94 | wage 0.9
+row 28: 1749 Fall | rice 70.46 | salt 19.44 | miso 16.49 | soy sauce 89.09 | firewood 2.54 | lamp oil 339.31 | wage 0.9
+row 29: 1750 Spring | rice 76.05 | salt 15.27 | miso 15.95 | soy sauce 93.52 | firewood 2.61 | lamp oil 336.7 | wage 1.23
+row 30: 1750 Fall | rice 78.05 | salt 14.81 | miso 14.86 | soy sauce 95.44 | firewood 2.58 | lamp oil 372.72 | wage 1.07
+row 31: 1751 Spring | rice 75.26 | salt 17.3 | miso 15.08 | soy sauce 97.83 | firewood 2.76 | lamp oil 352.55 | wage 1.31
+row 32: 1751 Fall | rice 74.24 | salt 14.3 | miso 13.89 | soy sauce 98.22 | firewood 2.58 | lamp oil 333.42 | wage 0.94
+row 33: 1752 Spring | rice 65.76 | salt 16.1 | miso 14.17 | soy sauce 96.77 | firewood 2.42 | lamp oil 329.12 | wage 0.8
+row 34: 1752 Fall | rice 62.71 | salt 14.54 | miso 13.2 | soy sauce 94.99 | firewood 2.7 | lamp oil 316.19 | wage 0.85
+row 35: 1753 Spring | rice 54.28 | salt 16.14 | miso 13.36 | soy sauce 90.19 | firewood 2.77 | lamp oil 306.21 | wage 0.8
+row 36: 1753 Fall | rice 52.91 | salt 14.65 | miso 12.2 | soy sauce 88.65 | firewood 2.66 | lamp oil 266.73 | wage 0.81
+row 37: 1754 Spring | rice 46.94 | salt 17.86 | miso 13.09 | soy sauce 92.21 | firewood 2.76 | lamp oil 258.56 | wage 0.85
+row 38: 1754 Fall | rice 53.62 | salt 17.53 | miso 13.5 | soy sauce 90.18 | firewood 2.77 | lamp oil 255.8 | wage 0.84
+
+== means of the quarterly cells, 1745-1754
+rice: mean 71.852, range 46.94-87.16, n 20
+salt: mean 17.770, range 14.3-25.69, n 20
+miso: mean 15.434, range 12.2-18.54, n 20
+soy sauce: mean 91.061, range 82.63-98.22, n 20
+firewood: mean 2.640, range 2.42-2.77, n 20
+lamp oil: mean 327.493, range 255.8-377.8, n 20
+wage: mean 0.906, range 0.72-1.31, n 20
+
+miso a kg at 3.11 g a monme: mean 1.28 g, range 1.01-1.54
+soy sauce a liter: mean 1.57 g, range 1.42-1.69
+miso a kg in monme: 0.412; soy sauce a sho (1/100 koku): 0.911 monme

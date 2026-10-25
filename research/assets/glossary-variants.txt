@@ -167,6 +167,7 @@ balks	baulk
 bamboo grass	sasa
 bamboo-grass	sasa
 ban-hinin	banta
+bancha	bancha
 band	band
 bands	band
 banfang	banfang
@@ -1092,6 +1093,9 @@ fan-palm-dike	fan palm
 fang	fang
 fanzi	fanzi
 fao	FAO
+farm gate	farm-gate price
+farm-gate price	farm-gate price
+farm-gate prices	farm-gate price
 farmers' stage	farmers' stage
 farmers' stages	farmers' stage
 farrier	farrier
@@ -1282,6 +1286,7 @@ fubokuwakashō	Fubokuwakasho
 fudai	fudai
 fudai daimyo	fudai
 fudai domains	fudai
+fudakake	fudakake
 fudasashi	fudasashi
 fudo	Fudo
 fudo myoo	Fudo
@@ -1513,6 +1518,7 @@ guard city	guard city
 guardian deities	thirty guardian deities
 guardian dog	lion-dog
 guardian dogs	lion-dog
+guihai	sexagenary year
 guinea	guinea
 guineas	guinea
 gulou	gulou
@@ -2698,7 +2704,8 @@ meshimori-onna	meshimori
 meso scale	meso scale
 meso-scale	meso scale
 metamorphosis fengshui	metamorphosis fengshui
-metropolitan examination	military examination
+metropolitan examination	metropolitan examination
+metropolitan examinations	metropolitan examination
 mexican	Mexican dollar
 mexican dollar	Mexican dollar
 mexican dollars	Mexican dollar
@@ -2915,6 +2922,9 @@ nando	nando
 nando-gamae	nando-gamae
 nanhai	Nanhai
 nanjing	Nanking
+nankeen	nankeen
+nankeens	nankeen
+nankin	nankeen
 nanking	Nanking
 nanmu	nanmu
 nanohana	rape
@@ -3741,6 +3751,7 @@ sen	sen
 senba-koki	senbakoki
 senbakoki	senbakoki
 senbon torii	Senbon Torii
+sencha	sencha
 sendai	Sendai
 sendai plain	Sendai
 sengisho	sengisho
@@ -4847,6 +4858,7 @@ wrought iron	wrought iron
 wu ding	Wu Ding
 wubei zhi	Wubei Zhi
 wubian	Wubian
+wuchen	sexagenary year
 wudu	wudu
 wujing zongyao	Wujing Zongyao
 wuliao jiazhi zeli	Wuliao jiazhi zeli
