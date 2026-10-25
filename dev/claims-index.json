@@ -26711,14 +26711,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/corridors.py::_on_the_connector#roles and indexing": {
-  "code": "37cb1477acf0e207",
-  "core": "786ae9a2e0aec985",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/corridors.py::_poly_box#roles and indexing": {
   "code": "775f36e87fc0f83c",
   "core": "71c9c222e0be9e7c",
@@ -27181,26 +27173,6 @@
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/corridors.py::strands_only_ordinary#one network": {
-  "body": "b62807ccc2f06c75",
-  "claim": "one network - how-our-maps-lay-a-clustered-settlements-lanes.drawing: lanes stranded off the connector's network dropped where no farmhouse loses its way (`unreached_houses`, which counts a household reached across a neighbor's land reached through its neighbor's chain)",
-  "code": "b9ed0bc6e6606dca",
-  "core": "16b0a4d0f1c8faeb",
-  "date": "2026-10-22",
-  "note": "stranded ordinary lanes are dropped only where no farmhouse loses its way; a household reached across a neighbor's land counts as reached",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
-  },
-  "research": "4473caa26c642d2b",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
-  ],
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
@@ -32690,39 +32662,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle/ends.py::drop_stranding#the field reached": {
-  "body": "e3038b0df5478859",
-  "claim": "the field reached - bunds-between-the-paddies-aze.drawing: the field path drawn again",
-  "code": "c4acaaffae8c23af",
-  "core": "19d1710ab80f19d2",
-  "date": "2026-10-22",
-  "note": "the field path drawn again through a_way_onto_the_bund",
-  "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
-  },
-  "research": "1a1b231001c7410e",
-  "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:c46ebb5fdc934b56"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/settle/ends.py::keeps_the_network#one network": {
-  "code": "afb2feb0d674c1c9",
-  "core": "a41fa8926d99615f",
-  "date": "2026-10-05",
-  "note": "a repair splits nothing and strands no farmhouse",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
-  },
-  "research": "4473caa26c642d2b",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
-  ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/settle/ends.py::rewidth#settle plumbing": {
   "body": "117fff2e957afd21",
   "claim": "settle plumbing - NONE",
@@ -32933,22 +32872,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle/ends.py::settle_needles#a sliver welded shut": {
-  "code": "ebb44a10e487a5ed",
-  "core": "d981e27a66c3c49d",
-  "date": "2026-10-03",
-  "note": "0081 calls lane cleanup limits drawing conventions",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/settle/ends.py::settle_needles#needle of grass opened": {
-  "code": "a4331c5fd4f18341",
-  "core": "d981e27a66c3c49d",
-  "date": "2026-10-03",
-  "note": "a doubled way cleaned up",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_network#one network": {
   "code": "3d24741772dc89bc",
   "core": "2708112982f2c609",
@@ -32964,19 +32887,6 @@
   ],
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/settle/ends.py::settle_shadows#no doubled band": {
-  "body": "fd35f986c048d3b3",
-  "claim": "no doubled band - village-lanes.drawing: two paths side by side are drawn as one, the lane cut where it comes alongside (a convention) - the settle drops the shorter lane whole, a departure the code keeps until feature 417 T32; of two ways side by side past a pitch, the shorter ordinary lane goes",
-  "code": "fd714bce97541514",
-  "core": "643dcb1ac6d2d802",
-  "date": "2026-10-25",
-  "note": "`apply_pieces(s, {k: []})` drops the shorter lane whole, where the page will \"cut it where it comes alongside and let it meet the other as a T\"; the test is also angle-free [§37]; a known drift accepted by the round arbiter (ask:417-T29-drifted) to land as filed",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_street_ends#an end reaches something seen": {
   "body": "17da0e4bf8f90288",
@@ -33839,6 +33749,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/stage.py::settle_husks#settle plumbing": {
@@ -36995,36 +36906,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/tree.py::left_to_the_tree#every farmhouse served": {
-  "body": "fa631e2b4f77d665",
-  "claim": "every farmhouse served - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a stray lane goes where the house's own way, laid in the gaps once the last house stands, will reach it",
-  "code": "a11c048f8b6b02a0",
-  "core": "f98f1f2f8898eaba",
-  "date": "2026-10-22",
-  "note": "a stray lane may go only where every house it alone reached has its own reserved way",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
-  },
-  "research": "4473caa26c642d2b",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
-  ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/tree.py::left_to_the_tree#its salts, guards and sentinels": {
-  "body": "fa631e2b4f77d665",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1.5 (point-match tolerance)",
-  "code": "5a9b4bf48a9ec858",
-  "core": "f98f1f2f8898eaba",
-  "date": "2026-10-25",
-  "note": "1.5 point-match tolerance",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/tree.py::others_clear#nothing built on a lane": {
   "body": "a9039a860f536a7c",
   "claim": "nothing built on a lane - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a way clears every other homestead, as the web will lay it",
@@ -38919,30 +38800,6 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/weld.py::WELD_PX#a sliver, not ground": {
-  "code": "8e0d1da1e0c537f1",
-  "core": "6f1b8dc9cc6bf543",
-  "date": "2026-10-03",
-  "note": "noding tolerance, no physical meaning",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/weld.py::_at#weld plumbing": {
-  "code": "606f701462f06c0b",
-  "core": "94d8958f24ca314b",
-  "date": "2026-10-03",
-  "note": "arc-length lookup",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/weld.py::weld_corner#two ways that meet share a vertex": {
-  "code": "b2ef4f93a8da9fee",
-  "core": "7fa6b21de3c44fbe",
-  "date": "2026-10-03",
-  "note": "moves a corner by up to 2 px, which no reader can see",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/choices.py::CHOICE_DIR#choice plumbing": {

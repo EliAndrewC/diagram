@@ -60,7 +60,6 @@ from ..corridors import _poly_box as _poly_box
 from ..corridors import building_quads as building_quads
 from ..corridors import is_tree as is_tree
 from ..corridors import open_ground_rings as open_ground_rings
-from ..corridors import strands_only_ordinary as strands_only_ordinary
 from ..corridors import through_a_building as through_a_building
 from ..fabric import _crosses_fabric as _crosses_fabric
 from ..fabric import house_hit as house_hit
@@ -93,28 +92,22 @@ from ..squaring import square_waters as square_waters
 from ..sweeps import _DOUBLED_DEG as _DOUBLED_DEG
 from ..sweeps import along_tail as along_tail
 from ..sweeps import cut_at_tail as cut_at_tail
-from ..tree import left_to_the_tree as left_to_the_tree
 from ..tree import prune_the_tree as prune_the_tree
 from ..tree import set_corridor as set_corridor
 from ..tree import settle_defer as settle_defer
 from ..tree import settle_tree as settle_tree
 from ..tree import tree_faults as tree_faults
-from ..weld import weld_corner as weld_corner
 from . import ends, lawful, shapes, stage  # noqa: F401 - the submodules by name: a test patches a name where it is looked up
 from .ends import JOIN_BACK_PAD_FT as JOIN_BACK_PAD_FT
 from .ends import TRIM_GRAIN_FT as TRIM_GRAIN_FT
 from .ends import _join_admitted as _join_admitted
 from .ends import connector_component as connector_component
-from .ends import drop_stranding as drop_stranding
-from .ends import keeps_the_network as keeps_the_network
 from .ends import rewidth as rewidth
 from .ends import settle_dangling as settle_dangling
 from .ends import settle_ends as settle_ends
 from .ends import settle_fragments as settle_fragments
 from .ends import settle_joins as settle_joins
-from .ends import settle_needles as settle_needles
 from .ends import settle_network as settle_network
-from .ends import settle_shadows as settle_shadows
 from .ends import settle_street_ends as settle_street_ends
 from .ends import settle_widths as settle_widths
 from .ends import with_edits as with_edits

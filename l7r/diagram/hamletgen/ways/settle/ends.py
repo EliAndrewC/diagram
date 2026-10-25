@@ -11,24 +11,21 @@ from typing import Any
 from ...consts import Poly
 from .. import law
 from ..arcs import sub_run
-from ..checks import unreached_houses
 from ..corridors import (
     ACCESS_ROLE,
     is_tree,
-    strands_only_ordinary,
 )
 from ..fabric import lane_fabric as _fabric
 from ..forced import lazy_ground
 from ..geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from ..joints import joints, rank_width
-from ..serve import shadowed_by, street_anchors
+from ..serve import street_anchors
 from ..squaring import (
     _pts,
     cut_at_shallow_crossing,
 )
 from ..sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
-from ..tree import left_to_the_tree, set_corridor, tree_faults
-from ..weld import weld_corner
+from ..tree import set_corridor, tree_faults
 from .lawful import Lawful
 from .shapes import JOIN_ROLE, _as_end, _back, _ordinary, apply_pieces, fouled_segment, lane_owner, reaimed
 
@@ -163,41 +160,6 @@ def settle_dangling(s: Any) -> int:
     return apply_pieces(s, edits) if edits else 0
 
 
-def settle_shadows(s: Any) -> int:
-    """AN ORDINARY LANE RUNNING BESIDE ANOTHER WAY PAST A PITCH GOES (`shadowed_by`, `_lay_web_lane`'s own refusal - a lane
-    that shadows another is a doubled band): of the two, the shorter ordinary lane where the web keeps its networks without
-    it (`keeps_the_network`), one a round. Asked of the finished web because the join and touch passes lay lanes no shadow
-    test sees (feature 293 on 291: a touch lane of Kashikawa's ran 106 ft within 30 ft of a join-orphans remnant, the two
-    diverging at 22 degrees from one corner to one street).
-
-    Research: no doubled band - research/questions/0081-village-lanes.drawing.html: two paths side by side are drawn as one, the lane cut where it comes alongside (a convention) - the settle drops the shorter lane whole, a departure the code keeps until feature 417 T32; of two ways side by side past a pitch, the shorter ordinary lane goes"""
-    ways = [_pts(ln) for ln in s.M.get("lanes") or []]
-    ordinary = set(_ordinary(s.M))
-    for i in range(len(ways)):  # ...a tree lane too, beside an ordinary one: a door path is tree, the lane it doubles not
-        if (j := shadowed_by(ways, i)) is not None:
-            for k in sorted({i, j} & ordinary, key=lambda n: polyline_len(ways[n])):
-                if keeps_the_network(s.M, k, []) or left_to_the_tree(s.M, k):  # ...a house it reached gets its reserved way
-                    return apply_pieces(s, {k: []})
-                if strands_only_ordinary(s.M, k):  # ...or with the ordinary lanes it alone joined (`strands_only_ordinary`)
-                    return drop_stranding(s, k)
-    return 0
-
-
-def drop_stranding(s: Any, k: int) -> int:
-    """Lane `k` taken away with the ordinary lanes it alone joined to the network (`settle_network`); where that took the
-    web's way to the field, the field path is drawn again as `stage_web` drew it (`bund.a_way_onto_the_bund`, 269 B04), and
-    the rounds settle it - Kashikawa's field path left with its link, and the field had no way (feature 304).
-
-    Research: the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the field path drawn again"""
-    from ..bund import a_way_onto_the_bund  # bund.py reads this module's neighbors; imported where it is used
-
-    reached = not law.field_unreached(s.M)
-    n = apply_pieces(s, {k: []}) + settle_network(s)
-    if reached and law.field_unreached(s.M):
-        s.M.setdefault("meta", {})["field_path"] = a_way_onto_the_bund(s)
-    return n
-
-
 def settle_street_ends(s: Any) -> int:
     """A ROW'S STREET, a tree lane no trim cuts, has an end the lane law calls dangling cut back to its last joint
     (`end_to_its_joint`); returns the streets cut. The web no longer cuts a street before the settle (`trim_streets`, its
@@ -287,34 +249,6 @@ JOIN_BACK_PAD_FT = 5.0
 Research: a deferring end taken back - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); 5 ft past the join's reach"""
 
 
-def settle_needles(s: Any) -> int:
-    """Step 5b (homes H39): a way drawn twice round a needle of grass, or along the same ground (`law.needle_loops`), is
-    opened - the shortest ordinary lane on the needle loses its stretch along it (the pieces either side kept), so the
-    other way is the one walked. The cut must SPLIT NOTHING - the web in no more networks and no farmhouse newly unreached
-    (cohort seed 31: a cut taken at the needle's corner took the junction three lanes hung from, and nine lanes fell off the
-    network with thirteen houses) - so the shortest lane whose cut keeps both is cut, and a needle no cut opens that way
-    waits for the next round. One cut a round; a needle bounded by the tree alone is left to the tree (it is drawn once per
-    house and meets the network at its first contact, so it closes no loop of its own).
-
-    Research:
-        needle of grass opened - CONVENTION: the shortest ordinary lane on it loses its stretch along it
-        a sliver welded shut - CONVENTION: a corner moved onto the tread beside it (`weld.weld_corner`)"""
-    from shapely.geometry import LineString
-
-    M = s.M
-    lanes = M.get("lanes") or []
-    for face, bounding in law.needle_loops(M):
-        for i in sorted((k for k in bounding if not is_tree(lanes[k])), key=lambda k: polyline_len(_pts(lanes[k]))):
-            rest = LineString(_pts(lanes[i])).difference(face.exterior.buffer(1.0))
-            parts = [rest] if rest.geom_type == "LineString" else list(getattr(rest, "geoms", []))
-            pieces = [[(float(x), float(y)) for x, y in g.coords] for g in parts if g.geom_type == "LineString" and not g.is_empty]
-            if keeps_the_network(M, i, pieces):
-                return apply_pieces(s, {i: pieces})
-        if (welded := weld_corner(lanes, face, bounding)) is not None:  # a sliver where two ways meet: one vertex, no face (`weld.py`)
-            return apply_pieces(s, {k: [p] for k, p in welded.items()})
-    return 0
-
-
 def with_edits(M: Mapping[str, Any], edits: Mapping[int, Sequence[Poly]]) -> dict[str, Any]:
     """`M` as `apply_pieces` would leave it after `edits`, its lane indices kept: each edited lane's first piece in place (a
     lane with none left empty rather than removed) and the further pieces appended."""
@@ -324,24 +258,6 @@ def with_edits(M: Mapping[str, Any], edits: Mapping[int, Sequence[Poly]]) -> dic
         lanes[i]["pts"] = [list(q) for q in pieces[0]] if pieces else []
         extra += [{"pts": [list(q) for q in p]} for p in pieces[1:]]
     return {**M, "lanes": [*lanes, *extra]}
-
-
-def keeps_the_network(M: Mapping[str, Any], i: int, pieces: Sequence[Poly]) -> bool:
-    """Would lane `i` redrawn as `pieces` SPLIT NOTHING - the web in no more networks (`law.lane_networks`), no farmhouse
-    newly unreached (`unreached_houses`), and every other lane joined to the connector's network still joined to it
-    (`connector_component`, what `settle_network` keeps)? A repair that moves a lane's end asks it: another way's end on the
-    stretch it moves is left hanging otherwise (cohort seed 31: a backbone's end carried round a gable took the tread three
-    lanes stood on, and nine lanes fell off the network with thirteen houses).
-
-    Research: one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a repair splits nothing and strands no farmhouse"""
-    lanes = M.get("lanes") or []
-    joined = connector_component(lanes)
-    others = [k for k in range(len(lanes)) if k != i]
-    trial = {**M, "lanes": [*(lanes[k] for k in others), *({"pts": q} for q in pieces if len(q) >= 2 and polyline_len(q) >= 1.0)]}
-    kept = connector_component(trial["lanes"])
-    if sum(1 for n, k in enumerate(others) if k in joined and n in kept) != len(joined - {i}):
-        return False  # the cheap question first: the reach below grows the served network lane by lane
-    return law.lane_networks(trial) <= law.lane_networks(M) and len(unreached_houses(trial)) <= len(unreached_houses(M))
 
 
 def connector_component(lanes: Sequence[Mapping[str, Any]]) -> set[int]:

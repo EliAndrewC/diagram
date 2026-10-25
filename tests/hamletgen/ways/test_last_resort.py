@@ -257,5 +257,4 @@ def test_the_last_resort_joins_a_way_the_reach_drew_before_the_network_rule() ->
     import inspect
 
     assert "settle_reach, settle_joins, settle_knots, settle_defer, settle_network" in " ".join(inspect.getsource(lr.last_resort).split())
-    steps = list(settle.STEPS)
-    assert steps.index(settle.settle_joins) < steps.index(settle.settle_reach), "the settle's own rounds keep their order: joining after the reach there added lane knots (cohort seed 57, 1 -> 4)"
+    assert settle.settle_joins not in settle.STEPS, "the settle's own rounds no longer join (feature 417 T31, measured needless there); only the last resort does"

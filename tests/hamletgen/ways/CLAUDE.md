@@ -34,6 +34,5 @@ the ones for its own subject. It runs in the quick tier (the top-level tree deci
 | `test_track.py` | STAGE `stage_track` and `connector_track` - the way out of the frame and through the fabric |
 | `test_tree.py` | the access tree as lanes (`ways/tree.py`): `admits`, `settle_tree`, `tree_faults`, `settle_defer`, pruning |
 | `test_web.py` | STAGE `stage_web` and the skeleton it starts from - the settlement form roll and the dispersed short-circuit |
-| `test_weld.py` | the corner weld (`ways/weld.py`) |
 | `_settle_builders.py` | the constructed settlement the settle's suites share - `_S`, `_c`, `_pts`, `BROOK`, `CONN`, `_GEN` |
 | `_builders.py` | the shared fixtures - `_lanes`, `_StubSettlement`, `_walled_settlement`, `_webbed`, `AdmitsAll`. The wider hamlet builders (`SQUARE`, `a_plan`) still come from `tests/hamletgen/_builders.py` one level up |

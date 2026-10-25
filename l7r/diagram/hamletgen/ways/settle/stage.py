@@ -16,8 +16,8 @@ from ..reach import settle_field, settle_targets
 from ..squaring import (
     square_every_crossing,
 )
-from ..tree import prune_the_tree, settle_defer, settle_tree
-from .ends import settle_ends, settle_fragments, settle_joins, settle_needles, settle_network, settle_shadows, settle_street_ends, settle_widths
+from ..tree import settle_defer, settle_tree
+from .ends import settle_ends, settle_fragments, settle_network, settle_widths
 from .lawful import Lawful
 from .shapes import SETTLE_ROUNDS, settle_shapes, settle_way_outs
 
@@ -49,24 +49,21 @@ def settle_husks(s: Any) -> int:
 # ---- the loop ----------------------------------------------------------------------------------------------------------
 
 
+# SIX STEPS STOOD HERE AND WENT (feature 417 T31, research.md R8): `settle_husks` (first and last), `settle_street_ends`,
+# `settle_shadows`, `settle_joins`, `settle_needles` and `prune_the_tree` were each switched off and measured - and all six off
+# together - on the 48 fixed seeds, the pinned rows and the five pool maps: no verdict and no pool manifest moved. Their rules
+# are kept by the placers before them. Do not re-add one to mend a seed: a seed that needs one is a placer's defect (constitution XIX).
 STEPS = (
-    settle_husks,
     square_every_crossing,
     settle_shapes,
     settle_way_outs,
     settle_ends,
-    settle_street_ends,
-    settle_shadows,
-    settle_joins,
-    settle_needles,
     settle_reach,
     settle_defer,
     settle_network,
     settle_fragments,
-    prune_the_tree,
     settle_knots,
     settle_widths,
-    settle_husks,
 )
 
 

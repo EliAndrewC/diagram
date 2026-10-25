@@ -380,34 +380,6 @@ def set_corridor(M: dict[str, Any], ln: Mapping[str, Any]) -> bool:
     return True
 
 
-def left_to_the_tree(M: Mapping[str, Any], i: int) -> bool:
-    """Would taking ordinary lane `i` away keep every other lane on the connector's network and the web in no more networks,
-    leaving unreached only farmhouses whose way the gap pass laid (`gap_ways`, feature 318) - which the settle then draws as
-    judged (`owed`, `settle_tree`)? `settle.keeps_the_network` asks that no house be newly unreached at all.
-
-    WHY (feature 306, Sawada): a join-orphans lane ran 105 ft within 30 ft of the exit strip - the doubled band
-    `settle_shadows` takes away - but it was the one way reaching a farmhouse, so the web was not kept without it and the
-    band stayed; that house had no corridor drawn only because the stray lane reached it first. Its way was laid and judged
-    lawful by the gap pass, so the band goes and the house is reached by its own way.
-
-    Research: every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a stray lane goes where the house's own way, laid in the gaps once the last house stands, will reach it
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 1.5 (point-match tolerance)
-    """
-    from .corridors import _on_the_connector
-
-    lanes = M.get("lanes") or []
-    others = [k for k in range(len(lanes)) if k != i]
-    if (_on_the_connector(lanes, range(len(lanes))) - {i}) - _on_the_connector(lanes, others):
-        return False
-    trial = {**M, "lanes": [lanes[k] for k in others]}
-    if law.lane_networks(trial) > law.lane_networks(M):
-        return False
-    before = {(x, y) for x, y, _d in unreached_houses(M)}
-    lost = [(x, y) for x, y, _d in unreached_houses(trial) if (x, y) not in before]
-    reserved = [r["of"] for r in tree_records(M) if r["role"] == ACCESS_ROLE and r["of"] is not None]
-    return bool(lost) and all(any(math.dist(h, c) <= 1.5 for c in reserved) for h in lost)
-
-
 def owed(M: Mapping[str, Any]) -> list[int]:
     """The reserved runs the web owes a lane: EVERY HOUSEHOLD'S WAY (feature 318, FR-014: each household's way is laid once every
     house stands, in the gaps - `settlement/rolling/gap_ways.py` - and every farmhouse not reached across a neighbor's yard is

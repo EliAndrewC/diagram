@@ -2351,6 +2351,52 @@
      "why": "Measures the requested outcome, with nothing added to it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T31 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T31-1/6a",
+     "summary": "The needless steps (D35's probe: no fixed or pinned verdict moved, the pool maps' gate green) are deleted together in one landing.",
+     "class": "within",
+     "why": "The GM's 2026-10-25 amendment: 'switch off the 16 repair steps ... get rid of all of them ... one at a time or all at once ... whichever ... most efficient'. D35/D23 already settle deletion together with tests and dead closure, through make land. The plan's 'the pool's gate green' is read as D35's 'no pool manifest moved'; where the two differ, D35 governs, and a looser test would delete more, not less, so it narrows nothing the GM asked."
+    },
+    {
+     "id": "T31-1/6b",
+     "summary": "A needed step gets D11's conversion (its rule asked by the placer that lays what it mends), decided before code; a step whose conversion cannot land green without seed-by-seed or room work is recorded with its failing seeds, set down, and ruled as an exception by the arbiter, step by step.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Setting a step down leaves less than 'get rid of all of them', so it is a narrowing. It is implied by the GM's own words: the 2026-10-25 amendment says 'as per the requirements of this feature', and the earlier 2026-10-25 stop line says to convert checks into correct placement and 'then stop so we can slowly and deliberately go through the actual fixing where we get more seeds to pass'. FR-008 (no regression) also means a conversion that is not green cannot land at all. It is bounded the way it has to be: a conversion first, the exception only when the conversion cannot land green, each step written as its own exception and ruled by make arbiter-ask, never assumed. Item 6's bare 'or' must be read with D35's order, conversion first, not as a free choice."
+    },
+    {
+     "id": "T31-5",
+     "summary": "T31 runs after T29, T36 and T38 (D37 c); the per-step probe (a detached worktree whose switch never lands) runs beside them and decides nothing.",
+     "class": "within",
+     "why": "The GM: 'And then after all of that, you should switch off the 16 repair steps.' The switching-off that the GM orders last is the deletion and conversion, and those stay after T36/T38. D37 (c) already relies on R8 naming the needless steps before T38, so T38 can skip them. A measurement that never lands and moves no map does not reorder the GM's sequence."
+    },
+    {
+     "id": "T31-7/8",
+     "summary": "One probe a step, no tuning; 3 workers; about 13 min a probe (observed 2026-10-25).",
+     "class": "within",
+     "why": "D35 fixes one switch-off a step and workers at 3 (memwatch, 2026-10-25). The budget is an estimate with a dated observation and decides nothing about scope."
+    },
+    {
+     "id": "T31-9",
+     "summary": "Done: R8 complete; the needless deleted and landed green; each needed step converted or ruled.",
+     "class": "within",
+     "why": "This restates D35's exits. D23's red exit (deletion set down whole and recorded if the landing cohort is red) is carried by citing D23 in item 2. Nothing is dropped."
+    },
+    {
+     "id": "T31-10/11",
+     "summary": "Before moving a constant: n/a; before fitting things into room: n/a.",
+     "class": "within",
+     "why": "Room work is forbidden by D11 (no FR-007 room work until the GM resumes it). D37 (c) exempts constants in the deleted code from claims. Each conversion is 'decided before its code' as its own decision under D35/D11, so any constant a conversion carries is handled there, with D11's one-value rule. This section moves none."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2753,6 +2799,51 @@
      "summary": "n/a - no value moves; inline numbers are T38's (D37 c).",
      "class": "within",
      "why": "D36 says the code is not changed; D37(c) moves the unlabeled numbers to T38, which is still before T31 as the GM ordered."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T31": {
+   "section_sha256": "4c89746443f50efc3b7223ea72df177a4d46a85262efb46c0c61de3a8b20b255",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T31-1/6a",
+     "summary": "The needless steps (D35's probe: no fixed or pinned verdict moved, the pool maps' gate green) are deleted together in one landing.",
+     "class": "within",
+     "why": "The GM's 2026-10-25 amendment: 'switch off the 16 repair steps ... get rid of all of them ... one at a time or all at once ... whichever ... most efficient'. D35/D23 already settle deletion together with tests and dead closure, through make land. The plan's 'the pool's gate green' is read as D35's 'no pool manifest moved'; where the two differ, D35 governs, and a looser test would delete more, not less, so it narrows nothing the GM asked."
+    },
+    {
+     "id": "T31-1/6b",
+     "summary": "A needed step gets D11's conversion (its rule asked by the placer that lays what it mends), decided before code; a step whose conversion cannot land green without seed-by-seed or room work is recorded with its failing seeds, set down, and ruled as an exception by the arbiter, step by step.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Setting a step down leaves less than 'get rid of all of them', so it is a narrowing. It is implied by the GM's own words: the 2026-10-25 amendment says 'as per the requirements of this feature', and the earlier 2026-10-25 stop line says to convert checks into correct placement and 'then stop so we can slowly and deliberately go through the actual fixing where we get more seeds to pass'. FR-008 (no regression) also means a conversion that is not green cannot land at all. It is bounded the way it has to be: a conversion first, the exception only when the conversion cannot land green, each step written as its own exception and ruled by make arbiter-ask, never assumed. Item 6's bare 'or' must be read with D35's order, conversion first, not as a free choice."
+    },
+    {
+     "id": "T31-5",
+     "summary": "T31 runs after T29, T36 and T38 (D37 c); the per-step probe (a detached worktree whose switch never lands) runs beside them and decides nothing.",
+     "class": "within",
+     "why": "The GM: 'And then after all of that, you should switch off the 16 repair steps.' The switching-off that the GM orders last is the deletion and conversion, and those stay after T36/T38. D37 (c) already relies on R8 naming the needless steps before T38, so T38 can skip them. A measurement that never lands and moves no map does not reorder the GM's sequence."
+    },
+    {
+     "id": "T31-7/8",
+     "summary": "One probe a step, no tuning; 3 workers; about 13 min a probe (observed 2026-10-25).",
+     "class": "within",
+     "why": "D35 fixes one switch-off a step and workers at 3 (memwatch, 2026-10-25). The budget is an estimate with a dated observation and decides nothing about scope."
+    },
+    {
+     "id": "T31-9",
+     "summary": "Done: R8 complete; the needless deleted and landed green; each needed step converted or ruled.",
+     "class": "within",
+     "why": "This restates D35's exits. D23's red exit (deletion set down whole and recorded if the landing cohort is red) is carried by citing D23 in item 2. Nothing is dropped."
+    },
+    {
+     "id": "T31-10/11",
+     "summary": "Before moving a constant: n/a; before fitting things into room: n/a.",
+     "class": "within",
+     "why": "Room work is forbidden by D11 (no FR-007 room work until the GM resumes it). D37 (c) exempts constants in the deleted code from claims. Each conversion is 'decided before its code' as its own decision under D35/D11, so any constant a conversion carries is handled there, with D11's one-value rule. This section moves none."
     }
    ],
    "verdict": "CLEAR"

@@ -346,20 +346,6 @@ def test_an_end_on_the_connectors_tread_is_drawn_where_the_seating_judged_it() -
         assert lanes[0]["pts"][-1] == end, (tread, lanes)
 
 
-def test_an_ordinary_lane_whose_drop_leaves_only_reserved_houses_unreached_is_left_to_the_tree() -> None:
-    """`left_to_the_tree` (feature 306, Sawada): the one way reaching houses A and B, both with reserved corridors, may go
-    (the settle then draws their corridors); not one reaching house C, which has none, nor one another lane hangs from, nor
-    one whose drop leaves nothing to the tree."""
-    con = {"pts": [[0.0, 0.0], [-1000.0, 0.0]], "w": 6, "connector": True}
-    x, y = {"pts": [[0.0, 0.0], [300.0, 80.0]], "w": 3}, {"pts": [[0.0, 0.0], [600.0, 580.0]], "w": 3}
-    assert tree.left_to_the_tree(_tree(lanes=[con, x]), 1), "A and B are the tree's"
-    assert not tree.left_to_the_tree(_tree(lanes=[con, y]), 1), "C has no reserved corridor"
-    assert not tree.left_to_the_tree(_tree(lanes=[con, x, {"pts": [[300.0, 80.0], [310.0, 400.0]], "w": 3}]), 1), "it strands a lane"
-    assert not tree.left_to_the_tree(_tree(lanes=[con, x, {"pts": [[0.0, -5.0], [-400.0, -5.0]], "w": 3}]), 2), "nothing left to the tree"
-    apart = [con, {"pts": [[500.0, 900.0], [600.0, 900.0]], "w": 3}, {"pts": [[600.0, 900.0], [700.0, 900.0]], "w": 3}, {"pts": [[700.0, 900.0], [800.0, 900.0]], "w": 3}]
-    assert not tree.left_to_the_tree(_tree(lanes=apart), 2), "it splits a piece off the connector's network in two"
-
-
 def test_the_tree_is_asked_again_with_its_ends_joined_as_the_web_joins_them() -> None:
     """Feature 317, plan D6: a free end that stops short of a way it makes for is carried onto it (`law.near_misses`, as the
     settle's `settle_joins` carries it) - feature 314 R12's corridor start, 15 ft from another's end, closed a sliver once

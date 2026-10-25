@@ -58,30 +58,6 @@ def test_an_end_behind_a_house_reaches_it_and_is_left() -> None:
     assert _pts(s, 1) == lane
 
 
-def test_a_needle_of_grass_is_opened_on_its_shorter_lane() -> None:
-    """Homes H39 (the backlog's 2c, since closed): two ways forking and rejoining round a sliver of ground - the shorter lane loses its
-    stretch along the needle, and no loop that thin is left."""
-    s = _S([CONN, [(-300.0, 0.0), (-250.0, 110.0), (-250.0, 200.0)], [(-280.0, 0.0), (-250.0, 110.0)]])
-    assert law.needle_loops(s.M)
-    assert settle.settle_needles(s) == 1
-    assert law.needle_loops(s.M) == [] and polyline(_pts(s, 1)) > 200.0, "the longer way stands"
-    tree = _S([CONN, ([(-300.0, 0.0), (-250.0, 110.0)], {}), ([(-280.0, 0.0), (-250.0, 110.0)], {})])
-    for ln in tree.M["lanes"][1:]:
-        ln["role"] = "access"
-    assert settle.settle_needles(tree) == 0, "a needle bounded by the tree alone is the tree's"
-
-
-def test_a_sliver_where_two_tree_ways_meet_is_welded() -> None:
-    """Cohort seed 22 (feature 315): two access corridors meeting with one corner 0.4 px past the other's tread - no cut may
-    open it (both are the tree), so the corner is welded onto the tread and the web closes no face there."""
-    s = _S([CONN, ([(-541.0, 41.0), (-461.0, 51.0), (-366.0, 116.0)], {}), ([(-536.0, -118.0), (-536.0, 42.0), (-326.0, 32.0)], {})])
-    for ln in s.M["lanes"][1:]:
-        ln["role"] = "access"
-    assert law.needle_loops(s.M), "found: the sliver"
-    assert settle.settle_needles(s) == 2
-    assert law.needle_loops(s.M) == [] and _pts(s, 2)[1] in _pts(s, 1), "one shared vertex"
-
-
 def polyline(p):
     return sum(math.dist(a, b) for a, b in zip(p, p[1:], strict=False))
 
@@ -189,16 +165,6 @@ def test_a_routed_field_way_is_drawn_where_no_straight_run_keeps_the_law() -> No
         return len(calls) > 120
 
     assert settle.settle_field(s, law_) == 1 and len(calls) > 120, "every straight run refused, a routed one drawn"
-
-
-def test_a_repair_that_would_split_the_web_is_known_before_it_is_made() -> None:
-    """`keeps_the_network` (cohort seed 31: a backbone's end carried round a gable took the tread three lanes stood on and
-    nine fell off the network), asked of the web as this round's earlier repairs leave it (`with_edits`)."""
-    s = _S([CONN, [(0.0, 0.0), (0.0, 200.0)], [(-100.0, 200.0), (100.0, 200.0)]])
-    assert settle.keeps_the_network(s.M, 1, [[(0.0, 0.0), (10.0, 100.0), (0.0, 200.0)]]), "the junction kept: nothing hangs"
-    assert not settle.keeps_the_network(s.M, 1, [[(0.0, 0.0), (0.0, 150.0)]]), "cut short of it: the cross lane falls off"
-    work = settle.with_edits(s.M, {1: [[(0.0, 0.0), (0.0, 150.0)], [(5.0, 5.0), (5.0, 9.0)]], 2: []})
-    assert [ln["pts"] for ln in work["lanes"]][1:] == [[[0.0, 0.0], [0.0, 150.0]], [], [[5.0, 5.0], [5.0, 9.0]]]
 
 
 def test_a_lane_over_a_fixture_is_cut_and_no_tree_lane_is_laid_over_one() -> None:
