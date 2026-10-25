@@ -60,6 +60,96 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "## T01 - Japan's market rates of 1705-1719 in 0287 (D1)": {
+   "sha256": "6ca55d2133dcd546048b75cd44b6f2878871c623c173385719a5f03ce2c6dbda",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "2ddac796ac84a54dd65cd621cf9c3f74c98d9ba587edd487713f34c3c4f19e14",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "da30ffa365b4ac35bbc42fa8b4f07027c7f896ef7ccf822dde8fe96f64186232",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - Canton's cash in the 1830s in 0289 (D2)": {
+   "sha256": "d3c9fb6d10e2602d8b0e96e6bbcf8bb8ba5733e459f8badb07ff0bb86d788b70",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "939a149e00268fcf1aaf02f9c6acdaae60326208eae4ca95e5b998cd9653d0d7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "ed7729937db280e03c9f35f23d76163d25b96275eb91582753c3181e9245df97",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the implementation check (D3)": {
+   "sha256": "7d06a167b5f6ec11f64940438f381143504af901874f90621eaa52c0028b830c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "7bc4dfc8ec9cf9055d26c4562530dbd974e8b27d5d76b2004d98cc809d18c723",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "1f5bd38738f480aee14f598926107cc75e2332b339b0f456740a29f8d50fe54b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - the reply on #13 (D4)": {
+   "sha256": "4cdeaaefd959bb59d732eec8f93ebd1e79e5f01e63a1cea2d2b046d2a849bde1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "6bbb50b15e020db9f598ad62cf2b7260f22fb378d7be083dfa71f3d28e1b8de3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Decisions": {
+   "sha256": "902e05dad9ffd51934836cc72043e8f2a18cd2134826ef43ec992cfd6b6187e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T05 - close: report and land (D1-D4)": {
+   "sha256": "abf28e0e53b4f6b7e16cff1feabee895f9bde0d9efd5d626888873e3db7018ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "b5277a356a6a802e6cded8295ea21b0503d3741d7fcc40a7ce8a218cb7f5a882",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Decisions": {
+   "sha256": "169f64e5e4c8d401b9599684e5b8c81bf6ab7b181f26d4d1559f95b0a1cb7d5b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -168,6 +258,101 @@
      "summary": "The #13 reply gives the per-year rates with their silver and gold and which silver passed. It gives the two means only if gm-assistant asks. It gives Canton's figures, the SILENT and what the Chinese Repository gives.",
      "class": "within",
      "why": "The request reads 'For each year, OR as a mean of the Hoei and Yotsuho years', so per-year rows satisfy it on their own. The spec index's SC-002 says the same: 'each year's rates (or the two means)'. Offering the means on request takes nothing away from what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T01 - Japan's market rates of 1705-1719 in 0287 (D1)",
+    "## T02 - Canton's cash in the 1830s in 0289 (D2)",
+    "## T03 - the implementation check (D3)",
+    "## T04 - the reply on #13 (D4)",
+    "## T05 - close: report and land (D1-D4)",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-span",
+     "summary": "T01 covers 1705-1719 where the request asks 1706-1718.",
+     "class": "within",
+     "why": "A superset of the requested years by one year at each end, the boundary years of the Hoei and Kyoho changes; nothing asked is dropped."
+    },
+    {
+     "id": "T01-sources",
+     "summary": "T01 item 4: Kusama's Osaka compilation labeled ATTESTED ONLY FOR that place and compiler; Edo rates from jawiki with their printed sources named as unread.",
+     "class": "within",
+     "why": "Source labeling under the record's citation rules; it narrows no clause of the request, which asks for monme a ryo and mon a monme by year from 'any readable source'. Which sources were reached (the coin walk's chronology included) is a research-ladder matter, not fidelity."
+    },
+    {
+     "id": "T01-silent-1715-1716",
+     "summary": "T01 item 6: 1715-1716 reported SILENT in Kusama rather than interpolated.",
+     "class": "within",
+     "why": "The request asks for market rates; an interpolated figure is not a market rate. Reporting a source's silence is the answer the citation rules require when the source is silent, not a choice that withholds anything attested."
+    },
+    {
+     "id": "T01-yotsuho",
+     "summary": "T01 item 6: no separate Yotsuho market rate (NOT ATTESTED) rather than one derived from the decrees.",
+     "class": "within",
+     "why": "The request asks for a mean of the Hoei and Yotsuho YEARS, which the per-year rows over 1711-1714 carry; a rate for Yotsuho silver as a distinct coinage would only be fabricated from decree values, which are not market rates. FR-002 requires the coinage the source names, and an absence of a source is stated rather than invented."
+    },
+    {
+     "id": "T01-0277",
+     "summary": "T01 item 9: record-owed checked clean for 0277 as well as 0287.",
+     "class": "within",
+     "why": "A second page held to the record checks is at most a widening; the request names the coin page ('Your coin page leaves 1706-1721 mixed coins') as the thing whose gap is at issue. The bundle does not show what 0277 is; nothing in it narrows the request."
+    },
+    {
+     "id": "T01/T02-order",
+     "summary": "Items 5: write, check and apply, the round-2 tail closed by the arbiter (ask:418-round3, accept).",
+     "class": "within",
+     "why": "Process; decides nothing about what is answered."
+    },
+    {
+     "id": "T02-per-tael-arithmetic",
+     "summary": "T02 item 4: a per-tael figure computed from Canton's per-dollar rate, labeled this project's arithmetic; a rate from elsewhere labeled ATTESTED ONLY FOR its place.",
+     "class": "within",
+     "why": "The request asks for Canton's own cash rate; Canton's per-dollar rate is that, and the derived per-tael figure is offered labeled as derivation rather than as an attested rate. Nothing asked is withheld."
+    },
+    {
+     "id": "T02-silent",
+     "summary": "T02 item 6: Canton's own cash per tael SILENT, with the volumes searched and leads not followed.",
+     "class": "within",
+     "why": "The request asks whether the Chinese Repository or any readable source gives it; SC-002 contemplates exactly 'Canton's rate or its SILENT' and what the Repository gives. A searched absence answers the question as asked."
+    },
+    {
+     "id": "T03-impl-check",
+     "summary": "T03: the implementation check, each touched question's line in implementation-check.md.",
+     "class": "within",
+     "why": "FR-003 carries it; no behavior beyond the spec."
+    },
+    {
+     "id": "T04-means",
+     "summary": "T04 item 6: the two means left to gm-assistant; the per-year rows meet the request's either-or, with 1715-1716 SILENT.",
+     "class": "within",
+     "why": "The request says 'For each year, OR as a mean of the Hoei and Yotsuho years', and SC-002 repeats 'each year's rates (or the two means)'. The requester names either form as acceptable, so taking the per-year form is a choice the request grants, not a narrowing of it. The two SILENT years do not defeat that horn: they are the source's silence, which no form of answer can fill with an attested rate, and a mean computed over the same rows would carry the same gap less visibly. The per-year rows also let gm-assistant compute either mean, which serves the request's stated purpose (building osaka-1712 and replacing osaka-1695's borrowed 1706-1711 rates)."
+    },
+    {
+     "id": "T05-close",
+     "summary": "T05: the feature report and make land; no decision beyond D1-D4.",
+     "class": "within",
+     "why": "Standard close; decides nothing about what is answered."
+    },
+    {
+     "id": "D1-D4-references",
+     "summary": "The Decisions blocks (T01-T04) each defer to a section 'D1'..'D4' that is not in this bundle.",
+     "class": "within",
+     "why": "Those sections are not among the changed blocks, so this review rules only on the decisions these blocks state; the reference lines themselves decide nothing."
     }
    ]
   }
