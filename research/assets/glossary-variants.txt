@@ -2200,6 +2200,7 @@ kariyasu	kariyasu
 karo	karo
 karō	karo
 kasagake	kasagake
+kasagi	kasagi
 kasane-ike	stacked pond
 kasasuge	kasasuge
 kashi	kashi
@@ -2874,12 +2875,16 @@ myoden landlords	myoden
 myoga	myoga
 myoji-taito	myoji-taito
 myojin	Myojin
+myojin torii	Myojin type
+myojin type	Myojin type
+myojin-type	Myojin type
 myoken	Myōken
 myoshu	myoshu
 mypedia	Mypedia
 myōden	myoden
 myōga	myoga
 myōjin	Myojin
+myōjin torii	Myojin type
 myōken	Myōken
 myōshu	myoshu
 naca	NACA
