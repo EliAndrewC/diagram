@@ -289,3 +289,21 @@
   reach, its research line kept where it now stands. Rendering: none.
 - **D20** `bund.cut_stub_ends` cuts a free end's run `< TAIL_CUT_FT` past its first junction, as the other two readers do and
   as 0081 words it ("under 40 ft"); the value is unchanged. Rendering: none.
+<!-- plan-archive: archived 2026-10-25 -->
+## T24 - withdrawn (moot since T26)
+
+### T24 Approach (checklist part A)
+
+1. **The goal, in the world.** A doubled lane cut where it comes alongside, not dropped whole (0081). Withdrawn: no pass
+   drops a doubled lane whole any more.
+2. **The constraints.** `sweeps._sweep_doubled_remnants`, the pass T24 was about, was measured needless and deleted with its
+   claim in T26 (research.md R5).
+3. **Where each comes from.** The GM 2026-10-25: "You can also close T24 if it is moot."
+4. **Do they describe the world here?** n/a - nothing left to change.
+5. **The order.** n/a.
+6. **The exits.** n/a.
+7. **The search smell.** n/a.
+8. **The budget.** n/a.
+9. **Done, measured.** `grep -rn "def _sweep_doubled_remnants" l7r/` finds nothing (T26's deletion; `stage.py` names it only in the comment that records the deletion).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
