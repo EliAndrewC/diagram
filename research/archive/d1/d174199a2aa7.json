@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T20:44:39+00:00",
+ "final_url": "https://www.walmart.com/blocked?url=L3NlYXJjaD9xPW1pc28rcGFzdGU=&uuid=de6c64b1-d0b4-11f1-807d-f881457a205e&vid=&g=b",
+ "first": "d1/d174199a2aa7/20261025T204438Z",
+ "gm_copies": [],
+ "keys": [
+  "walmart-miso-paste"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "d1/d174199a2aa7/20261025T204438Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "dd164b244d2ab63072fbb3bd186993934b06eda93fb1b0527a283027ebf741ac",
+ "url": "https://www.walmart.com/search?q=miso+paste"
+}

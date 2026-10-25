@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T20:43:53+00:00",
+ "final_url": "https://www.walmart.com/search?q=great+value+soy+sauce",
+ "first": "aa/aacd811b13a4/20261025T204352Z",
+ "gm_copies": [],
+ "keys": [
+  "walmart-great-value-soy-sauce"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "aa/aacd811b13a4/20261025T204352Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "5d00487000e11afdda31bf35669edae78777dd5dd859774dcab1ce1ef61399fe",
+ "url": "https://www.walmart.com/search?q=great+value+soy+sauce"
+}

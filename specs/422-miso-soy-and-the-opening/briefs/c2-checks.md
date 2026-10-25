@@ -1,0 +1,7 @@
+- quote-check: 0304 r1 25 notes (16 SUPPORTS, 4 PARTIAL: shinbo-money, bb-weather, bb-wax, bassino-ma-tokyo) - 3 EDITs applied, the 1820 clause cut by hand; r2 4 notes SUPPORTS, tokyo-soy-absence widened. 0299 r1 8 notes (2 PARTIAL: walmart-miso, tastingtable-kroger; 1 JOINED-WRONG) - EDITs applied, the 'cheapest' miso sentence reworded by hand; r2 SUPPORTS
+- record-format: 0299 r1 1 VOCABULARY (hydrolyzed soy protein tooltip added), r2 clean; 0304 r1 3 VOCABULARY + 3 other (EDITs applied; 水油 tooltip worded by hand to keep its hair-oil sense; the Tokyo ratio's uncited comparison with earlier eras dropped), r2 3 other (EDITs applied), r3 clean
+- intro-check: 0304 INTRO-OK in r1 and r2
+- translation-check: 0304 r1 29 pairs, 1 LOOSE (shinbo-table4, retranslated); r2 29 FAITHFUL
+- source-applicability: 9 write-ups, each APPLICABLE-WITH-LIMITS, EDITs applied (missing limits, two What-it-is fixes); kotobank-mizuabura r2 limits OVERSTATED, EDIT applied
+- source-reader (re-owed by quote-check's added passages): bassino-ma-tokyo, bb-wax, bb-weather, amazon-miso all READ
+STILL OWED: none for C2 (make record-owed: 0 unanswered). Leads, not done: Bassino and Ma p. 236 say the 1750-1884 fall in lamp oil and soybeans was 'possibly associated' with the opening (outside 1859-67, not on 0304); Kumon's own 1849-1871 soybean/rice cells (0.70-1.81) could give the Tokyo section a sourced comparison with earlier years; 'pearled' in 0299 (outside the change) has no tooltip; 種油's seed is unsourced

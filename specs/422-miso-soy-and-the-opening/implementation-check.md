@@ -1,0 +1,2 @@
+- 0304: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i 'opening of the ports\|0304-which-goods\|soybean.*rice' l7r pool
+- 0299: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i 'miso\|soy sauce\|0299-what-do-the-basket' l7r pool

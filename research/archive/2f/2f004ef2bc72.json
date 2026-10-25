@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T20:44:08+00:00",
+ "final_url": "https://www.walmart.com/blocked?url=L3NlYXJjaD9xPXNveStzYXVjZStuYXR1cmFsbHkrYnJld2Vk&uuid=cc25f98b-d0b4-11f1-b679-bcd38f72dd2e&vid=&g=b",
+ "first": "2f/2f004ef2bc72/20261025T204407Z",
+ "gm_copies": [],
+ "keys": [
+  "walmart-soy-sauce-naturally-brewed"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "2f/2f004ef2bc72/20261025T204407Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "dd164b244d2ab63072fbb3bd186993934b06eda93fb1b0527a283027ebf741ac",
+ "url": "https://www.walmart.com/search?q=soy+sauce+naturally+brewed"
+}
