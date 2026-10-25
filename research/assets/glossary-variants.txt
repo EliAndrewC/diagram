@@ -4791,6 +4791,7 @@ wusong	Wusong
 xianfeng	Xianfeng
 xiang	xiang
 xiang river	Xiang River
+xiang scale	Xiang scale
 xiang seven, li three	Lingqu
 xiang-gan	Xiang-Gan
 xiangcang	shecang
