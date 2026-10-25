@@ -28,8 +28,9 @@ the pass says, write what the page says, or SILENT. Every figure this project co
    the sheet and label them this project's). Markups: SILENT for Kyoto and Osaka c. 1745, with the search; ATTESTED ONLY FOR
    Mitsui's Edo cotton store, 1790s-1840s (Shimomukai, its 札掛 rates) and a village salt seller in Owari, 1842 (0273's Handa
    passage; the margin is this project's arithmetic). What a commoner's fish was: SILENT for Kyoto and Osaka; the Edo 1860 diary
-   only as ATTESTED ONLY FOR one low-stipend samurai, from a modern paraphrase. One pointer sentence each in 0261, 0273 and 0279
-   where its good's form or level is now stated in 0249.
+   only as ATTESTED ONLY FOR one low-stipend samurai, from a modern paraphrase. In 0261 (cloth), 0273 (salt) and 0279
+   (charcoal and firewood), each good's own finding written on its page: its form and quality and the market level of the
+   price the basket uses, with the same citations (not only a pointer to 0249).
 2. **0265: the Osaka and Edo rents.** Mitsui's Osaka rental houses, 0.7 monme a mat a month for a back house and 0.9 for a
    front, from 1814 and again in 1846 (Tani 1989, read on its page images or text); the 『所以者何』 average beside it (Tani's note
    11 dates it); Edo's back-lot rents of the Kansei years and 1840 (Washizaki 2012, Table 5, read from the page image); the 1848

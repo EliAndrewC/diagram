@@ -24,7 +24,10 @@ the pass says, write what the page says, or SILENT. Every figure this project co
    observed prices in 0286's format (grams of pure silver a unit at the era's coin, its label, its source): the Edo rents of the
    Kansei years and 1840 and the Osaka 1814 rates only if session S1 has not already written them into 0265 (then point to
    0265); the 1887 GPIH figures only as nearest, not observed for tokyo-1882. Fish: SILENT for every Edo-period era with the
-   search (every Kumon fish cell is imputed).
+   search (every Kumon fish cell is imputed). Each cell also says, where it differs from 1745's (session S1's section in 0249
+   on each good's form and market level), the good's form and the price's market level - Kumon's Osaka figures 相場
+   (wholesale) quotations where the pass dates them to the Mitsui Bunko tables, the Mitsui books purchases, salt and charcoal by
+   the bale in Kyoto from 1791, tokyo-1882 LTES retail - or SILENT with the search where no source says.
 2. **0286: Kyoto's salt from 1791.** The Mitsui Kyoto books price salt by the bale from 1791, and hard charcoal by the bale too
    (Kusano 1996, p. 41, read on its page image); revise "Kyoto's salt from 1791 is doubtful" to the unit change, give the
    koku-equivalent means only as this project's arithmetic at Kusano's 3 to 2 sho a bale, labeled as his own assumption, with

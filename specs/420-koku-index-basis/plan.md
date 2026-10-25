@@ -38,7 +38,9 @@ both lamp and table; cloth plain cotton by the tan); and the market level of eac
 the same GPIH sheet and unused by the paper, are given as the observed alternatives to the soybean proxy. Markups: SILENT for
 Kyoto and Osaka about 1745; ATTESTED ONLY FOR Mitsui's Edo cotton store (2-12%, Shimomukai) and a village salt seller in Owari,
 1842 (this project's arithmetic). What urban commoners ate of fish: SILENT for Kyoto and Osaka; the Edo 1860 diary as
-ATTESTED ONLY FOR one low-stipend samurai. Siblings get a pointer where a good has a page (0261, 0273, 0279).
+ATTESTED ONLY FOR one low-stipend samurai. Each sibling page where a good has one (0261 cloth, 0273 salt, 0279 charcoal and
+fuel) carries its own good's form and market-level finding, not only a pointer (spec FR-001). For the other eras, where a
+good's form or market level differs from 1745, the per-era tables of D3 and D4 say so (or SILENT with the search).
 
 ## D2 - the historical rent (Q3; FR-001; acceptance 1, 6)
 
@@ -56,13 +58,17 @@ source and city), reconstructed, borrowed (the era or source borrowed from, gm-a
 and fish from early Meiji ratios; its soybeans set equal to rice; Kumon's soybeans Osaka's, chained to other cities), held in
 the record but unused, or absent; new prices in 0286's format. The Kyoto salt unit: from 1791 the Mitsui Kyoto books price salt
 by the bale (Kusano 1996), so 0286's "Kyoto's salt from 1791 is doubtful" is revised to the unit change, the bale size labeled
-as Kusano's own assumption. Fish: SILENT for every Edo-period era, with the search.
+as Kusano's own assumption. Fish: SILENT for every Edo-period era, with the search. Each cell also says, where it differs from
+1745's (D1), the good's form and the price's market level (Q1's "and where it differs, the other eras"): wholesale 相場
+quotations against purchase books, salt and charcoal by the bale from 1791, LTES retail for 1882; SILENT with the search where
+no source says.
 
 ## D4 - the eras beyond rice, China (Q4; FR-001; acceptance 1, 4)
 
 A new question beside 0288, in the same shape: Timkovski's Peking prices of 1821 for beijing-1820 (salt, fish, fuel, cloth by
 the piece, a rent), the Changzhou cloth recollection for suzhou-1750 (ATTESTED ONLY FOR a neighboring prefecture's rounded
-memory), the Beijing fish of the 1590s-1602 only as secondary reports; official and market prices kept apart; beijing-1500
+memory), the Beijing fish of the 1590s-1602 only as secondary reports; official and market prices kept apart; each cell's form and market level where it
+differs from the Japanese 1745 basket's (Q1's "other eras"), or SILENT with the search; beijing-1500
 SILENT; prices already in the record but unused by an era named as such.
 
 ## D5 - the method (Q5, with the poverty-line housing allowance; FR-002a; acceptance 5, 6)
@@ -80,7 +86,7 @@ Moatsos's basic-needs lines from the modern pass.
 
 A new question (or two, by size) in "Comparative money: other societies": per basket good, the modern US like-for-like product
 at retail under the snapshot rule and at wholesale where the historical price is wholesale, each a dated observation with its
-link; the housing candidates per m² a year; a US adult's yearly quantity of each good. Each page says it never sets a Rokugani
+link; the housing candidates per m² a year, each with what it measures (Q3); a US adult's yearly quantity of each good. Each page says it never sets a Rokugani
 price; a finding that would change a snapshot price is reported for a new snapshot, never edited into it.
 
 ## D7 - the implementation check (FR-005)
@@ -104,7 +110,8 @@ bear on the canon (the snapshot, the eleven-good table, the Kyoto salt unit) thr
 6. **The exits.** A form or markup no source states is SILENT with its search.
 7. **The search smell.** None: research, not a fit.
 8. **The budget.** One write session and one check session.
-9. **Done, measured.** `make record-owed` names nothing unanswered for 0249 and its siblings.
+9. **Done, measured.** `make record-owed` names nothing unanswered for 0249 and its siblings (0261, 0273, 0279), each
+   carrying its good's own finding.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
