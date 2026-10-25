@@ -20977,15 +20977,16 @@
   "code": "ec7fdeab65b45d8a",
   "core": "f2df40dee64e2b84",
   "date": "2026-10-25",
-  "note": "the bundle gives no value for `TAIL_CUT_FT` (only `_PAST_JUNCTION_FT = TAIL_CUT_FT`), and only the comment on the `+` line says 40; I need TAIL_CUT_FT's value to confirm \"a tail of under 40 ft beyond a crossing is cut\" (`<` matches \"under\")",
+  "note": "the strict `< _PAST_JUNCTION_FT` (TAIL_CUT_FT = 40.0) is the page's \"tail of under 40 ft beyond a crossing is cut\"; the page's join-only exception is not this unit's case",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
-   "0081-village-lanes.drawing.html:2ca0b4939aee735d"
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::off_the_fixtures#off the fixtures": {
   "code": "f7886542e133acf2",
@@ -31329,14 +31330,14 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link width": {
   "body": "4d08660856e1939e",
-  "claim": "link width - CONVENTION: the width of the way it joins",
-  "code": "64d1d7e463bd5978",
+  "claim": "link width - CONVENTION: the widest way within `_LANE_JOIN_FT` of the link (the orphan's and the network's at least)",
+  "code": "cdb126c64513d89f",
   "core": "19d5c3ae87e32c5d",
   "date": "2026-10-25",
-  "note": "the claim says \"the width of the way it joins\", but the code (`max(... for _l in lanes if _net_reach(link, _l) <= _LANE_JOIN_FT)`, default 3) takes the widest of every lane within LANE_JOIN_FT of the link: at least the orphan's and the network way's, plus any third lane the routed link passes near. The claim should say \"the widest way within LANE_JOIN_FT of the link\", or the code should take only the network way's width",
+  "note": "the page counts lane widths as a map drawing convention; the code draws the link at the widest way within 25 ft of it, default 3 ft, and the orphan's and the network's ways are always among them",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#no out-and-back over the brook": {
   "body": "4d08660856e1939e",

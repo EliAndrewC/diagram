@@ -1169,6 +1169,30 @@
      "why": "A completion test for the relabel itself; deferring the fourth claim to T24 is a carry-over unchanged from the earlier approach and drops no claim from the feature."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T23 - three claims labeled as their pages answer them (T05's claims round, MISLABELED; arbiter ask 417-T05-claims)",
+    "### T23 Approach (checklist part A)",
+    "### T23 Approach (re-answered 2026-10-25T06:18Z)",
+    "### T23 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D21",
+     "summary": "Relabel three claims from T05's claims round: bund.cut_stub_ends stub-kept as GUESS 0014 (within 6 ft of the worked ground's edge); _bridge_collinear_breaks bridge width as CONVENTION; _join_orphan_ways link width as CONVENTION, its text now stating that the code takes the widest way within _LANE_JOIN_FT of the link (impl-drift round 1). Label-only, no rendering or map change.",
+     "class": "within",
+     "why": "The only change since the CLEAR verdict is the link-width label's text, corrected to describe what the code already does (max over lanes within the join reach) rather than less than it does. It changes no behavior and moves no map, so it neither narrows nor adds to the request; it is bookkeeping of the feature's own claims round, and label-only work stays inside the GM's 2026-10-25 instruction to stop short of the seed-fixing work."
+    },
+    {
+     "id": "T23-exit-fourth-claim",
+     "summary": "The fourth claim (_sweep_doubled_remnants doubled lane dropped) is not relabeled here; its label moves with the behavior in T24.",
+     "class": "within",
+     "why": "Unchanged from the block last judged CLEAR. It defers a claim to the task that owns its behavior, not out of the feature, so nothing the GM asked for is dropped."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1404,21 +1428,21 @@
    "verdict": "CLEAR"
   },
   "T23": {
-   "section_sha256": "d721c892db15f555c587b8a3c0b543e0416ba0667a79f691c66f950892a212b5",
+   "section_sha256": "67a2b876fa7bd7a1208d10994de5cb23e8bc8eecfdcebc2cde0ae06afd9505fc",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "D21",
-     "summary": "Relabel three of T05's claims to what their pages say: bund.cut_stub_ends#a stub that reaches the bund kept as GUESS 0014 (within 6 ft of the edge); sweeps._bridge_collinear_breaks#bridge width and sweeps._join_orphan_ways#link width as CONVENTION (0081's lane widths by role, as serve.join_width already labels the same rule). Label-only, no rendering change, no map moves.",
+     "summary": "Relabel three claims from T05's claims round: bund.cut_stub_ends stub-kept as GUESS 0014 (within 6 ft of the worked ground's edge); _bridge_collinear_breaks bridge width as CONVENTION; _join_orphan_ways link width as CONVENTION, its text now stating that the code takes the widest way within _LANE_JOIN_FT of the link (impl-drift round 1). Label-only, no rendering or map change.",
      "class": "within",
-     "why": "Labels on this feature's own T05 work so its claims round passes; no engine behavior changes, so FR-010's hold on claims features that change the engine is untouched, and it moves no map, so it stays short of the 'actual fixing' the GM's 2026-10-25 amendment held back. It narrows nothing the request asked for."
+     "why": "The only change since the CLEAR verdict is the link-width label's text, corrected to describe what the code already does (max over lanes within the join reach) rather than less than it does. It changes no behavior and moves no map, so it neither narrows nor adds to the request; it is bookkeeping of the feature's own claims round, and label-only work stays inside the GM's 2026-10-25 instruction to stop short of the seed-fixing work."
     },
     {
      "id": "T23-exit-fourth-claim",
-     "summary": "The fourth MISLABELED claim, sweeps._sweep_doubled_remnants#doubled lane dropped, is not relabeled here; its label goes with the behavior change in T24, because citing 0081 would leave it drifted against the page's cut-to-a-T.",
+     "summary": "The fourth claim (_sweep_doubled_remnants doubled lane dropped) is not relabeled here; its label moves with the behavior in T24.",
      "class": "within",
-     "why": "A routing of one claim to the task that changes its behavior, not a carve-out: the claim is still resolved, by T24, and nothing in the request or spec is excluded. Labeling it here alone would record a claim its code does not meet, which is the reverse of the task's goal."
+     "why": "Unchanged from the block last judged CLEAR. It defers a claim to the task that owns its behavior, not out of the feature, so nothing the GM asked for is dropped."
     }
    ],
    "verdict": "CLEAR"
