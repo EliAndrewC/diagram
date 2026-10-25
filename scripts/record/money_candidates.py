@@ -49,7 +49,7 @@ DOLLAR_PLACES = frozenset({"Canton", "Beijing"})
 #: tael, wen, strings, guan and tiao count cash, cents are hundredths of a dollar. A Japanese word is its own coin.
 CHINA_WORDS = {
     "tael": "tael", "taels": "tael", "mace": "tael", "candareen": "tael", "candareens": "tael",
-    "cash": "cash", "wen": "cash", "string": "cash", "strings": "cash", "guan": "cash", "tiao": "cash",
+    "cash": "cash", "wen": "cash", "string": "cash", "strings": "cash", "guan": "cash", "tiao": "cash", "diao": "cash",
     "dollar": "dollar", "dollars": "dollar", "cent": "dollar", "cents": "dollar",
 }
 

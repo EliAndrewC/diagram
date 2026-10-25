@@ -94,7 +94,7 @@ def test_an_awaiting_era_counts_as_built_with_every_coin_of_the_period(tmp_path:
 def test_a_chinese_era_carries_the_chinese_coins_and_a_japanese_era_none_of_them(tmp_path: pathlib.Path) -> None:
     mc = _mod()
     page = (
-        "<p>In 1750 a laborer earned 50 wen a day, a coat cost 1.2 taels, a hat 3 mace and a jar 14 cents.</p>\n"
+        "<p>In 1750 a laborer earned 50 wen a day, a coat cost 1.2 taels, a hat 3 mace and a jar 14 cents; a room 2 diao.</p>\n"
         "<p>In 1835 a passage cost 2 dollars and 3 strings of cash, a room $1.50 and a boat $5-$10.</p>\n<p>In 1840 a tea bowl cost 2 taels.</p>\n"
     )
     root = _repo(tmp_path, page)
@@ -106,6 +106,7 @@ def test_a_chinese_era_carries_the_chinese_coins_and_a_japanese_era_none_of_them
     (root / "research" / "assets" / "money-eras-awaiting.json").write_text(json.dumps(awaiting), encoding="utf-8")
     found = {a.text: (a.near, a.gap) for a in mc.amounts(str(root))}
     assert found["50 wen"] == ("suzhou-1750", 0) and found["1.2 taels"] == ("suzhou-1750", 0) and found["3 mace"] == ("suzhou-1750", 0)
+    assert found["2 diao"] == ("suzhou-1750", 0), "diao, 0265's spelling of tiao, is a string of cash"
     assert found["3 strings"] == ("canton-1835", 0), "a string of cash is found, and owed inside a Chinese era"
     assert found["2 taels"] == ("canton-1835", 1), "a tael inside a Japanese era's years is not offered that era"
     assert found["14 cents"] == ("canton-1835", 80) and found["2 dollars"] == ("canton-1835", 0), "dollar only at Canton or Beijing"
