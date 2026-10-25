@@ -174,8 +174,8 @@ def kink_spans(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
 
     ONE BEND PREDICATE (feature 287, ways W18, FR-003). The web's passes asked a one-segment reading here - two big turns
     separated by ONE short segment - while the finished-map tests summed the run between them, so a lattice step of two
-    short legs passed every pass and failed the test (seed 43). The test's reading is the rule; `law.kinks` and every pass
-    that asks `_bends_badly` now read this one body.
+    short legs passed every pass and failed the test (seed 43). The test's reading is the rule; `law.kinks` reads this one body
+    (`_bends_badly`, the passes' copy, went with them in feature 417 T26).
 
     Research:
         no hairpin - research/questions/0081-village-lanes.drawing.html: a turn of more than 140 degrees

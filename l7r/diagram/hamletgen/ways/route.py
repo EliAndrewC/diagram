@@ -74,7 +74,7 @@ def _new_crossing(path: Sequence[Pt], i: int, j: int) -> bool:
 
 ROUTE_CELL = 10.0
 """The router's standard lattice cell, in px - every call that does not ask a finer one (the deliberately fine lattices - 5,
-6, `_FINE_CELL`, the sweeps' own - are not it). KEPT AT 10 BY MEASUREMENT (feature 284, B2, specs/284 research R4): cells
+6, the sweeps' `_FINE_CELL` until feature 417 T26 - are not it). KEPT AT 10 BY MEASUREMENT (feature 284, B2, specs/284 research R4): cells
 12, 14, 16 and 18 over the pool, the toys and cohort seeds 1-24 each stranded houses the 10 px lattice did not (12: 8
 unreached over every attempt against 5, on cohort seed 08 and Sawada), and no coarser cell was faster in all, so the
 coarser lattice was withdrawn. A stranding costs a whole re-roll, which is more than the router's share of a roll."""

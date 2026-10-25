@@ -16,8 +16,8 @@ WHERE THE PLACER AND ITS TEST READ A RULE DIFFERENTLY, the predicate is the TEST
 it (the ways phase of feature 287):
 
 - the BEND (`bends_badly`): the tests sum the path between two 50 degree turns; `clearance._bends_badly`, which the web's
-  passes ask, tested two turns separated by ONE segment - a lattice step of two short legs passed it and failed the test.
-  Both now read `clearance.kink_spans`.
+  passes asked, tested two turns separated by ONE segment - a lattice step of two short legs passed it and failed the test.
+  Both read `clearance.kink_spans` (and the passes' copy went with them, feature 417 T26).
 - the FORD (`off_ford_crossings`): the test allowed 45 ft from a recorded ford; the router gaps the brook at `FORD_HALF`
   (30 ft). The 45 ft was slack for `round_the_brooks` moving the course after the fords were set; the pool passes at the
   one constant, so the predicate reads `FORD_HALF` and the slack is gone.
