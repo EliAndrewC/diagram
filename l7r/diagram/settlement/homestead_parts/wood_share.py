@@ -331,7 +331,7 @@ class WoodShares:
         Research:
             each household's floor reserved - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
                 crowns covering the floor on ground no other household holds, or the seat refused
-            seats behind the house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: the deep stands stood windward, northwest by default, the house's south left open (0028); the 0.7 is ours; taken nearest a point `FOCUS_DEPTH` (0.7) of the reach behind the house
+            seats behind the house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: the deep stands stood windward, northwest by default, the house's south left open (0028) - `back` is the house frame's rear whatever the map's wind, a departure the code keeps until feature 417 T33; the 0.7 is ours; taken nearest a point `FOCUS_DEPTH` (0.7) of the reach behind the house
         """
         hx, hy = float(geom["house"][0]), float(geom["house"][1])
         th = math.radians(rot)
