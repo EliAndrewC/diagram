@@ -1258,6 +1258,61 @@
      "why": "D11: 'its fresh rate recorded either way'; FR-008 is the landing bar. Recording the rate is not work aimed at the rate."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## T26 - the web's post-lay passes the placers already make needless, measured off and deleted (R2 G2, first part; FR-004, FR-006)",
+    "### T26 Approach (checklist part A)",
+    "### T26 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T26-scope (goal + exit 6)",
+     "summary": "T26 deletes only the post-lay stage_web passes measured NEEDLESS; a pass whose removal turns a fixed/pinned seed red (or moves a pool map's verdict) is recorded with its seeds and set down, untouched, for T06 / the GM's fixing pass.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-004 asks that every pass repairing a laid web be deleted; T26 deletes only part of them now. That is implied by the GM's own words of 2026-10-25 ('do all of that stuff, and then stop so we can slowly and deliberately go through the actual fixing where we get more seeds to pass'), as D11 carries them: a conversion that cannot land green without seed-by-seed work is recorded and set down, never iterated on. A pass whose deletion turns seeds red is exactly that fixing work. The purpose survives: no needed pass is kept by preference, each is recorded for T06, which rebuilds in the placers what it stands in for (FR-004/FR-006), or for the GM."
+    },
+    {
+     "id": "D22-method",
+     "summary": "One probe per pass, run in a detached worktree at landed HEAD; that pass's call sites are switched off by an environment switch that never lands; each probe rolls make cohort N=48 FRESH=0 against an all-passes-on baseline.",
+     "class": "within",
+     "why": "This is how the measurement is taken, and the instrument never lands. It settles nothing the request or spec leaves open about what is built. The 'one probe, no tuning' rule (item 7) applies D11's 'never iterated on'."
+    },
+    {
+     "id": "D22-criterion",
+     "summary": "A pass is NEEDLESS when every fixed and pinned seed keeps its baseline verdict with the pass off; maps may differ.",
+     "class": "within",
+     "why": "The test is FR-008's landing condition, so it decides only WHEN a deletion FR-004 already asks for can land under D11, not WHETHER it is owed. A looser bar deletes more repair passes, which moves toward the request. Aside, not a fidelity finding: the probe as D22 states it does not roll the pool maps, though exit 6 counts a pool-map verdict change as NEEDED. Under D23 the landing's FR-008 run would still catch such a pass, so nothing slips through."
+    },
+    {
+     "id": "D23-together",
+     "summary": "The needless passes, their call sites and the tests that only exercised them are deleted together in one landing; if that landing is red the whole deletion is set down and recorded, with no pass-by-pass iteration.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In that one contingency it leaves undeleted passes FR-004 asks to delete, and it does not bisect the set. D11 (the GM's stop line, already ruled in MODE 1) says such a conversion is 'recorded and set down, never iterated on'. The GM asked that the fixing be done 'slowly and deliberately' with them, not overnight. Untangling which joint deletions interact is that fixing, so stopping is what the GM asked for, not a departure from it. Deleting the tests that only exercised deleted code goes with FR-004's deletion and SC-004's smaller engine."
+    },
+    {
+     "id": "D23-maps-change",
+     "summary": "Maps may change as a result of the deletions, held to the claims and the cohort.",
+     "class": "within",
+     "why": "FR-004 deletes passes that change laid webs, so maps moving is the requested effect. FR-008 (cohort, pinned rows, pool maps, research claims) is the bar held, as the spec says."
+    },
+    {
+     "id": "T26-order",
+     "summary": "T26 runs after T23/T25 and before T06.",
+     "class": "within",
+     "why": "This is ordering inside the feature. D11 puts the tasks that move no map first, and T26 moves maps, so it comes after them. T06 is a FR-004 conversion that D11 keeps in scope."
+    },
+    {
+     "id": "T26-done",
+     "summary": "research.md R5 records each pass's probe result; after the landing a fresh block of 500 is run and its rate recorded beside R3; no work aimed at that rate.",
+     "class": "within",
+     "why": "D11: each conversion's 'fresh rate recorded either way', and 'no work aimed at the fresh rate'. 500 matches the size SC-001 sets for the fresh block."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1534,6 +1589,58 @@
      "summary": "the sweeps comments that name _LANE_JOIN_FT as 30 are left as history notes, not edited",
      "class": "within",
      "why": "Comments recording when code was written are not a rule or a second implementation of one; FR-006 and the request do not reach them, so leaving them narrows nothing that was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T26": {
+   "section_sha256": "bbf50a0a18938ffeb460db8b2c36618641552bd95ca51c2dd7c84a9aa4b380a6",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T26-scope (goal + exit 6)",
+     "summary": "T26 deletes only the post-lay stage_web passes measured NEEDLESS; a pass whose removal turns a fixed/pinned seed red (or moves a pool map's verdict) is recorded with its seeds and set down, untouched, for T06 / the GM's fixing pass.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-004 asks that every pass repairing a laid web be deleted; T26 deletes only part of them now. That is implied by the GM's own words of 2026-10-25 ('do all of that stuff, and then stop so we can slowly and deliberately go through the actual fixing where we get more seeds to pass'), as D11 carries them: a conversion that cannot land green without seed-by-seed work is recorded and set down, never iterated on. A pass whose deletion turns seeds red is exactly that fixing work. The purpose survives: no needed pass is kept by preference, each is recorded for T06, which rebuilds in the placers what it stands in for (FR-004/FR-006), or for the GM."
+    },
+    {
+     "id": "D22-method",
+     "summary": "One probe per pass, run in a detached worktree at landed HEAD; that pass's call sites are switched off by an environment switch that never lands; each probe rolls make cohort N=48 FRESH=0 against an all-passes-on baseline.",
+     "class": "within",
+     "why": "This is how the measurement is taken, and the instrument never lands. It settles nothing the request or spec leaves open about what is built. The 'one probe, no tuning' rule (item 7) applies D11's 'never iterated on'."
+    },
+    {
+     "id": "D22-criterion",
+     "summary": "A pass is NEEDLESS when every fixed and pinned seed keeps its baseline verdict with the pass off; maps may differ.",
+     "class": "within",
+     "why": "The test is FR-008's landing condition, so it decides only WHEN a deletion FR-004 already asks for can land under D11, not WHETHER it is owed. A looser bar deletes more repair passes, which moves toward the request. Aside, not a fidelity finding: the probe as D22 states it does not roll the pool maps, though exit 6 counts a pool-map verdict change as NEEDED. Under D23 the landing's FR-008 run would still catch such a pass, so nothing slips through."
+    },
+    {
+     "id": "D23-together",
+     "summary": "The needless passes, their call sites and the tests that only exercised them are deleted together in one landing; if that landing is red the whole deletion is set down and recorded, with no pass-by-pass iteration.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In that one contingency it leaves undeleted passes FR-004 asks to delete, and it does not bisect the set. D11 (the GM's stop line, already ruled in MODE 1) says such a conversion is 'recorded and set down, never iterated on'. The GM asked that the fixing be done 'slowly and deliberately' with them, not overnight. Untangling which joint deletions interact is that fixing, so stopping is what the GM asked for, not a departure from it. Deleting the tests that only exercised deleted code goes with FR-004's deletion and SC-004's smaller engine."
+    },
+    {
+     "id": "D23-maps-change",
+     "summary": "Maps may change as a result of the deletions, held to the claims and the cohort.",
+     "class": "within",
+     "why": "FR-004 deletes passes that change laid webs, so maps moving is the requested effect. FR-008 (cohort, pinned rows, pool maps, research claims) is the bar held, as the spec says."
+    },
+    {
+     "id": "T26-order",
+     "summary": "T26 runs after T23/T25 and before T06.",
+     "class": "within",
+     "why": "This is ordering inside the feature. D11 puts the tasks that move no map first, and T26 moves maps, so it comes after them. T06 is a FR-004 conversion that D11 keeps in scope."
+    },
+    {
+     "id": "T26-done",
+     "summary": "research.md R5 records each pass's probe result; after the landing a fresh block of 500 is run and its rate recorded beside R3; no work aimed at that rate.",
+     "class": "within",
+     "why": "D11: each conversion's 'fresh rate recorded either way', and 'no work aimed at the fresh rate'. 500 matches the size SC-001 sets for the fresh block."
     }
    ],
    "verdict": "CLEAR"
