@@ -647,7 +647,8 @@ land-batch:     ## [project] the same command as make land (feature 385 T117's n
 
 task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict (feature 375)   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-start: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" task-start "$(F)" "$(T)"
+	$(if $(HOLD_OK),$(LOGESCAPE) HOLD_OK "$(HOLD_OK)",@:)
+	@HOLD_OK="$(HOLD_OK)" python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" task-start "$(F)" "$(T)"
 
 decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375)   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make decide: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
@@ -1114,6 +1115,9 @@ census:           ## [performance] the overlap census: comparisons per call of e
 .PHONY: review-yield cohort-seeds task-add set-down where-time land-batch fix-yield
 review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/review_yield.py" $(if $(SINCE),--since $(SINCE),)
+
+fresh-tally:      ## [performance] seeds nobody has used: the failed share pooled, by form and by cause (feature 417)   [COMMIT=<sha prefix>] [SINCE=<UTC stamp>]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/fresh_tally.py" $(if $(COMMIT),--commit "$(COMMIT)",) $(if $(SINCE),--since "$(SINCE)",)
 
 cohort-seeds:     ## [performance] which cohort seeds found which failure, over how many changes, and the fewest first seeds that find them all (dev/cohort-log/)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/cohort_seeds.py"
