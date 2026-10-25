@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-25T23:08:41Z",
+  "target": "entry-gate",
+  "commit": "2614783d3",
+  "why": "ENTRY_DRIFT_OK: no modal or page this delta changes names a moved section; the claims round ran over every changed claim"
+}
