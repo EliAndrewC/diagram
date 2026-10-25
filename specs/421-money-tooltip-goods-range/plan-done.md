@@ -26,3 +26,23 @@
 - **D2** The docstring's "goods dollars (what it bought)" becomes the range from the central (geometric) to the high
   (arithmetic) reading. Rendering: none.
 
+<!-- plan-archive: archived 2026-10-25 -->
+## T02 - the reply and the report
+
+### T02 Approach (checklist part A)
+
+1. **The goal, in the world.** gm-assistant can verify the tooltip.
+2. **The constraints.** The reply names the commit and what to look at.
+3. **Where each comes from.** O: `request.md`.
+4. **Do they describe the world here?** Yes.
+5. **The order.** After T01 lands.
+6. **The exits.** None.
+7. **The search smell.** None.
+8. **The budget.** Minutes.
+9. **Done, measured.** The comment posted; `make feature-report F=421 WRITE=1`.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T02 Decisions
+
+- **D3** One comment on #17. Rendering: none.
