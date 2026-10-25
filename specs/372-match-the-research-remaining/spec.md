@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-10
 
-**Status**: Draft (specified 2026-10-10 from its filed form)
+**Status**: Draft (specified 2026-10-10 from its filed form); ON HOLD from 2026-10-24 until feature 417 (all seeds pass) closes - the GM: "we might want to put our claims work on hold"
 
 **Owed at**: now
 

@@ -241,76 +241,42 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 <!-- plan-archive: T97 to T100 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T100 to T97 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
 <!-- plan-archive: T100 to T100 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T26 Approach (checklist part A)
-
-1. **The goal, in the world.** A farm's wood shed stands a ken off a wall of its steading - the house's or the kura's - never forward into the dooryard, its first seat turned per household as the coop's is.
-2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off the wall (about 9.5 ft with the wall gap); the coop's seats turned by the household's roll (feature 328).
-3. **Where each comes from.** R (0043) and O (the coop's roll).
-4. **Do they describe the world here?** Yes - T34's rounds, measured 2026-10-21 (impl-drift on `fixture_seats`, T34's rounds): `shed_off_a_wall` clears only the house by the ken while `against_a_wall` accepts the kura (a seat 3.5 ft off the kura); `in_front` refuses only a shed wholly past the front wall; the first seat unrolled; `against_a_wall`'s 1.5 ft tolerance lets a shed stand ~11 ft out, unclaimed. The kura's side (0040) is split to T104.
-5. **The order.** `shed_off_a_wall`: clear of EVERY wall of the steading by the gap and the ken; no part forward of the front wall (`forward_of_front`); against a wall at no tolerance (the seats stand exactly a ken out); `_wood_shed` turns its seat list by the household's roll (`u`, as the coop's); claims; tests; seeds 1-48.
-6. **The exits.** (e) conform.
-7. **The search smell.** None.
-8. **The budget.** 60 min for the batch with its landing.
-9. **Done, measured.** A seat 3.5 ft off the kura, one half forward of the front wall and one 11 ft out are refused (tests); seeds 1-48 and the pinned rows pass.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T26 Decisions
-
-**D78 - a ken off every wall, never forward.** `shed_off_a_wall(seat, walls, g, px)`: `clears(seat, walls, g + ken)` (every wall, the kura's too), `against_a_wall(seat, walls[:1], g + ken, tol=0.0)` (exactly a ken off the HOUSE - 0043's "a short step off the house"; the claims round: a shed a ken off the kura alone had passed - and the wall places offered off the house's walls only), and `not forward_of_front(seat, hh)` (no part past the front wall, `seat_y + d/2 > hh`). The seats are not turned by the household's roll here: tried, it moved Sawada's farms into a knot the gap keeps from gathering (measured 2026-10-21), so the roll is filed as T106. The kura's side stays as drawn (north) - T104 owns 0040's west for a scattered farm.
-
-<!-- plan-archive: T103 to T103 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T103 to T103 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-### T26 Approach (re-answered 2026-10-21T19:13Z)
-
-1. **The goal, in the world.** A farm's wood shed stands a short step off a wall of its house, clear of its kura by as much, never forward into the dooryard, its first seat turned per household as the coop's is.
-2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off a house wall (about 9.5 ft with the wall gap - the ken the page's GUESS, the gap its DEVIATION).
-3. **Where each comes from.** R (0043) and O (the coop's roll).
-4. **Do they describe the world here?** Yes - T34's rounds, and batch 11's round: a ken off the kura alone had passed, where the page says off the house.
-5. **The order.** `shed_off_a_wall`: against a HOUSE wall at exactly the gap and a ken, clear of every steading wall by as much, no part forward of the front wall; wall places offered off the house's walls only; the seats turned by the household's roll; claims; tests; seeds 1-48.
-6. **The exits.** (e) conform.
-7. **The search smell.** None.
-8. **The budget.** With batch 11.
-9. **Done, measured.** A seat 3.5 ft off the kura, a ken off the kura alone, one half forward of the front wall and one 1.4 ft past the ken are refused (tests); seeds 1-48 and the pinned rows pass.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T26 Approach (re-answered 2026-10-21T19:24Z)
-
-1. **The goal, in the world.** A farm's wood shed stands a short step off a wall of its house, clear of its kura by as much, never forward into the dooryard.
-2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off a house wall (about 9.5 ft with the wall gap - the ken the page's GUESS, the gap its DEVIATION).
-3. **Where each comes from.** R (0043).
-4. **Do they describe the world here?** Yes - T34's rounds and batch 11's round; and measured 2026-10-21: turning the seats by the household's roll moved Sawada's farms into a knot two households' ways cannot gather without passing 2.7 ft from a neighbor's yard.
-5. **The order.** `shed_off_a_wall`: against a HOUSE wall at exactly the gap and a ken, clear of every steading wall by as much, no part forward of the front wall; wall places off the house's walls only; the seat roll filed as T106; claims; tests; seeds 1-48 and the pool.
-6. **The exits.** (e) conform; the roll filed (T106).
-7. **The search smell.** None - one measured roll of Sawada with and without the seat roll.
-8. **The budget.** With batch 11.
-9. **Done, measured.** A seat 3.5 ft off the kura, a ken off the kura alone, one half forward of the front wall and one 1.4 ft past the ken are refused (tests); Sawada's pool tests pass without the roll (measured); seeds 1-48 and the pinned rows pass.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T26 Approach (re-answered 2026-10-24T13:47Z)
-
-1. **The goal, in the world.** A farm's wood shed stands a short step off a wall of its house, clear of its kura by as much, never forward into the dooryard - and the field keeps its path when the sheds move the steadings: a lane laid only to join two others that runs beside a household's way is cut where it comes alongside and meets that way, as a walker would tread one path.
-2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off a house wall. 0081: two paths running side by side are drawn as one; a lane whose end runs back along another way at under 20 degrees is cut where it comes alongside and meets the other as a T. 0014: a way runs from the network to the field's bund. The overlap matrix (a way off a household's threshing yard); the web kept whole.
-3. **Where each comes from.** R (0043; 0081; 0014). O: "alongside" read within `WEB_SHADOW_FT` (UNRESEARCHED, as D125 and D129 read it); the 5 ft step the walk takes along the lane (UNRESEARCHED, a sampling step).
-4. **Do they describe the world here?** Yes. With T07 and T135 landed, T26's patch leaves only seed 47 failing, measured 2026-10-24 (`make cohort N=48`): the field reached by no way. Traced 2026-10-24 (probes in a detached worktree, `make hamlet`): round 1's `settle_defer` cut a 60 ft gap out of the join-orphans link that carried the field's way - it ran 550 ft from the field's edge beside households' ways 14, 10 and 5 (six tree faults) - and `settle_network` dropped its stranded field half; every field run after was turned down (fabric x228, doubled_tails x12). Cut where it first comes alongside way 14 and teed onto it past that household's threshing yard, the lane keeps one network and the field reached, and seed 47 rolls clean, measured 2026-10-24 (`make hamlet`).
-5. **The order.** `shed_off_a_wall` as decided (D78). Then `settle_defer`: the gap cut as today, unless it would leave the field or a house no longer joined to the connector's network - then the lane is cut where it comes alongside a tree lane, walked from each end, and teed onto it, where the overlap matrix admits the lane and it leaves no fault against the tree, no more knots, the web no more networks, no house and not the field newly unreached. Tried on every defer cut, the tee knotted cohort seed 26, measured 2026-10-24 (`make cohort N=1 SEED=26` in a detached worktree); narrowed so, the cohort with the patch is 54/54, measured 2026-10-24 (`make cohort N=48`).
-6. **The exits.** (a) the field way threaded between the steadings - 507 runs judged over all the settle's rounds, measured 2026-10-24 (a probe on `settle_field` in a detached worktree), one admitted in round 1 and lost with the link, every later one turned down (the last round's tally is the fabric x228, doubled_tails x12 above); (b) room - measured worse on 2026-10-22 (T107); (c) the field path drawn again where the defer strands it (as `drop_stranding` does) - it is the same doubled link, and the shadow rule takes it; (d) the cut where it comes alongside - taken.
-7. **The search smell.** A bounded walk: points 5 ft apart along the lane, from each end, nearest the end first, each asked the matrix and the tree's rules; the first admitted is kept. The cut shortens the lane, so the settle cannot cycle.
-8. **The budget.** 90 min with its landing.
-9. **Done, measured.** The tests as decided (D78), and a unit test of the cut where it comes alongside (red without it); seeds 1-48 and the pinned rows pass with the patch (54/54), the fresh block's rate; `make cover-changed`; the landing cohort.
-10. **Before moving a constant.** n/a - no constant moves in this task.
-11. **Before fitting things into room.** n/a - nothing is fitted in this task.
-
-### T26 Decisions (2026-10-24)
-
-- **D131** `tree.settle_defer`: an ordinary lane with a fault against a tree lane is cut `DEFER_GAP_FT` either side of the fault as today - unless that gap would leave the field or a house no longer joined to the connector's network (`strands_the_reach`); then it is cut WHERE IT COMES ALONGSIDE a tree lane (`cut_alongside`: walked from each end in 5 ft steps, the first point within `WEB_SHADOW_FT` of a tree lane's nearest leg at under 20 degrees) and teed onto that lane at its nearest point, where the overlap matrix admits the lane, it then breaks no rule against the tree, the web keeps its knots, its networks, its houses and its field reached (narrowed on the cohort: tried on every cut, it knotted seed 26). Rendering: a map drawing convention, the page's own reading - 0081: "Two paths running side by side are drawn as one. A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other as a T"; "alongside" read within `WEB_SHADOW_FT`, UNRESEARCHED (as D125, D129); the 5 ft step UNRESEARCHED (a sampling step).
-
-<!-- plan-archive: T103 to T105 moved to plan-done.md, 2026-10-21 (feature 375 FR-044) -->
-<!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
-<!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-22 (feature 375 FR-044) -->
 <!-- plan-archive: T26 to T26 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
+### T106 Approach (checklist part A)
+
+1. **The goal, in the world.** No two farms' wood sheds stand at one bearing off their houses: each household's shed takes its first seat - off the back wall or a flank - by the household's own roll, as its coop does.
+2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off a house wall (D78). The coop's seats turned by the household's roll (feature 328). The knots step's gather with the 7 ft garden gap (T107, D83; T114's DEVIATION).
+3. **Where each comes from.** R (0043) and O (the coop's roll, `_seats`).
+4. **Do they describe the world here?** Yes: `_wood_shed` passes `_seats` a roll of zero, so every shed tries the back wall's west seat first; tried in batch 11 the roll knotted Sawada (measured 2026-10-21), and T107 has since landed the gather that knot waited on.
+5. **The order.** `_seats`' woodpile list turned by `roll(SALT["woodpile"] + 0.5)` as the coop's by `roll(105.5)`; the flank seats brought back so D78 admits them; `_wood_shed` takes the household's roll; the claim; a unit test; Sawada and seeds 1-48.
+6. **The exits.** (e) conform; if Sawada or a seed knots again, (b) measured before anything else. Seed 7 knotted (measured 2026-10-24, `make cohort N=48`): room was measured worse for this knot class (T107, 2026-10-22), so (a) - the gather given 0081's tail rule for a lane its tee strands (D133).
+7. **The search smell.** None.
+8. **The budget.** 45 min with its landing.
+9. **Done, measured.** A unit test: two rolls give two first seats (red without the turn); Sawada's pool tests and seeds 1-48 with the pinned rows pass; `make cover-changed`; the landing cohort.
+10. **Before moving a constant.** n/a - no constant moves in this task.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+### T106 Decisions
+
+- **D132** `fixture_seats._seats` (woodpile): the four recorded seats - the back wall's two, the east and west flanks - are turned by `roll(SALT["woodpile"] + 0.5)`, the household's roll, as the coop's are by `roll(105.5)`; `_wood_shed` passes the household's `roll` where it passed zero. And the two flank seats stand with their front end no further forward than the front wall (`min(0.1 hh, hh/2 - w/2)`): at 0.1 hh a 24 ft shed's end stood 0.8 ft past it, so `shed_off_a_wall` (D78) refused both flanks on every farm and, with the kura behind, the turn changed nothing (measured 2026-10-24, the unit test on the 46 x 28 ft house). Rendering: GUESS, 0043's own (behind or beside the house, the side unattested), each household's side rolled because the page attests no preferred one; the flank's place along the wall UNRESEARCHED, as before.
+
+- **D133** moved to T138 (it lands alone; T106 set down again by route (b) of ask:t106-sawada-knot, 2026-10-24).
+
+### T106 Approach (re-answered 2026-10-24T23:04Z)
+
+1. **The goal, in the world.** No two farms' wood sheds stand at one bearing off their houses: each household's shed takes its first seat - off the back wall or a flank - by its own roll, as its coop does; and the web the moved steadings leave keeps its knots gathered.
+2. **The constraints.** 0043 (GUESS there): the shed behind or beside the house, never the front yard, a ken off a house wall (D78). The coop's seats turned by the household's roll (feature 328). 0081: ends within 25 ft joined at one point; a tail of under 40 ft beyond a crossing is cut. D83's two gaps.
+3. **Where each comes from.** R (0043; 0081) and O (the coop's roll, `_seats`).
+4. **Do they describe the world here?** Yes, measured 2026-10-24: the flank seats always stood 0.8 ft forward of the front wall, so D78 refused both (the unit test on the 46 x 28 ft house); and with the sheds turned, cohort seed 7 left two households' ways teed onto the connector 2.2 ft apart, every gather refused - the tee because it stranded a third way whose 34 ft tail ended on the leg it cut away (probes in a detached worktree, `make cohort N=1 SEED=7`).
+5. **The order.** The seats turned and the flanks brought back (D132); the stranded tail cut back to its meeting where the tee is refused (D133); claims; unit tests; seeds 1-48 and the pinned rows.
+6. **The exits.** (e) conform for the seats. For seed 7's knot, (a) the gather given 0081's tail rule (D133). Room (b) was not measured for this knot: T107's room probes (2026-10-22) measured the fence-gap knot, a different one; the page's own rule mends this one without moving a household.
+7. **The search smell.** None: one more form asked where the tee alone is refused, bounded by the lanes ending on the leg it cuts.
+8. **The budget.** 45 min with its landing; spent past it on seed 7's probe.
+9. **Done, measured.** The unit tests (red without each change); seeds 1-48 and the pinned rows 54/54, measured 2026-10-24 (`make cohort N=48`); `make cover-changed`; the claims round; the landing cohort.
+10. **Before moving a constant.** n/a - `_TAIL_CUT_FT` is new, the page's own 40 ft.
+11. **Before fitting things into room.** n/a - nothing is fitted in this task.
+
+<!-- plan-archive: T138 to T138 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
 ## T127 - the carried claims findings
 
 ### T127 Approach (checklist part A)

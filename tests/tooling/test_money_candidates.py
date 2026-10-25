@@ -1,7 +1,7 @@
 """`scripts/record/money_candidates.py` - every unmarked amount of money a built era could convert (feature 413, plan D6).
 
 The amount nearest a built era is listed first, with its distance; a marked amount, a compound one inside a mark ("9 ryo 2 bu")
-included, is not listed; a note takes the years of the sentence that cites it; a coin no row carries (a gold bu) is still
+included, is not listed; a note takes the years of the sentence that cites it; a coin no row carries (a koban) is still
 listed; `--check` passes only when every listed amount is marked or named, a `*` line covering every amount of its fragment -
 no distance in years decides what it may cover (the GM withdrew the 25-year default, #14)."""
 
@@ -79,3 +79,54 @@ def test_no_table_lists_the_periods_coins_and_no_backfill_names_nothing(tmp_path
     assert mc.passed_over(str(root)) == set()
     (root / "research" / "assets" / "money-conversions.json").write_text(json.dumps({"eras": {"x": {"years": "none", "units": {}}}}), encoding="utf-8")
     assert (mc.amounts(str(root))[0].near, mc.amounts(str(root))[0].gap) == ("", None)
+
+
+def test_a_coin_with_its_macron_is_found_as_the_coin(tmp_path: pathlib.Path) -> None:
+    mc = _mod()
+    found = {a.text: (a.near, a.gap) for a in mc.amounts(str(_repo(tmp_path, "<p>In 1750 a mat cost 2 shū and a roof 3 ryō.</p>")))}
+    assert found == {"2 shu": ("", None), "3 ryo": ("kyoto-1745", 0)}, "ryō and shū are ryo and shu (the test row carries no shu)"
+
+
+def test_an_awaiting_era_is_no_era_here(tmp_path: pathlib.Path) -> None:
+    mc = _mod()
+    root = _repo(tmp_path, "<p>In 1840 a room was 300 mon.</p>")
+    (root / "research" / "assets" / "money-eras-awaiting.json").write_text(json.dumps({"edo-1830": {"place": "Edo", "years": "1830-1844"}}), encoding="utf-8")
+    assert [(a.text, a.near, a.gap) for a in mc.amounts(str(root))] == [("300 mon", "kyoto-1745", 86)], "every era's row is vendored now"
+
+
+def test_the_chinese_coin_words_count_as_their_coin_and_an_era_offers_only_its_own_units(tmp_path: pathlib.Path) -> None:
+    mc = _mod()
+    page = (
+        "<p>In 1750 a laborer earned 50 wen a day, a coat cost 1.2 taels, a hat 3 mace and a jar 14 cents; a room 2 diao.</p>\n"
+        "<p>In 1835 a passage cost 2 dollars and 3 strings of cash, a room $1.50 and a boat $5-$10.</p>\n<p>In 1840 a tea bowl cost 2 taels.</p>\n"
+    )
+    root = _repo(tmp_path, page)
+    eras = {
+        "suzhou-1750": {"years": "1750-1799", "units": {"tael": {}, "cash": {}}},
+        "canton-1835": {"years": "1830-1839", "units": {"tael": {}, "cash": {}, "dollar": {}}},
+        "edo-1830": {"years": "1830-1844", "units": {"mon": {}, "ryo": {}, "bu": {}}},
+    }
+    (root / "research" / "assets" / "money-conversions.json").write_text(json.dumps({"eras": eras}), encoding="utf-8")
+    found = {a.text: (a.near, a.gap) for a in mc.amounts(str(root))}
+    assert found["50 wen"] == ("suzhou-1750", 0) and found["1.2 taels"] == ("suzhou-1750", 0) and found["3 mace"] == ("suzhou-1750", 0)
+    assert found["2 diao"] == ("suzhou-1750", 0), "diao, 0265's spelling of tiao, is a string of cash"
+    assert found["3 strings"] == ("canton-1835", 0), "a string of cash is found, and owed inside a Chinese era"
+    assert found["2 taels"] == ("canton-1835", 1), "a tael inside a Japanese era's years is not offered that era"
+    assert found["14 cents"] == ("canton-1835", 80) and found["2 dollars"] == ("canton-1835", 0), "a dollar only where a row carries it"
+    assert found["$1.50"] == ("canton-1835", 0) and found["$5-$10"] == ("canton-1835", 0), "a dollar sign is a coin word"
+    eras = mc._eras(str(root))
+    assert eras["suzhou-1750"][2] == {"tael", "cash"} and eras["canton-1835"][2] == {"tael", "cash", "dollar"}
+    assert not eras["edo-1830"][2] & {"tael", "cash", "dollar"}, "a Japanese era carries no Chinese coin"
+
+
+def test_all_lists_the_passed_over_tagged_and_stem_and_context_narrow_and_explain(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    mc = _mod()
+    root = _repo(tmp_path, PAGE)
+    backfill = root / mc.BACKFILL
+    backfill.parent.mkdir(parents=True)
+    backfill.write_text("- 0001-x | 1 bu | a gold coin no row carries\n", encoding="utf-8")
+    mc.main(["--all", "--stem", "0001", "--context"], str(root))
+    out = capsys.readouterr().out
+    assert "0001-x | 1 bu | 1840 [passed over]" in out and "[[20 mon]]" in out
+    mc.main(["--stem", "0002"], str(root))
+    assert "0 amount(s) owed" in capsys.readouterr().out

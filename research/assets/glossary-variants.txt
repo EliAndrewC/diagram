@@ -270,6 +270,7 @@ blyxa	Blyxa
 bo	bo
 board feet	board foot
 board foot	board foot
+board of revenue	Board of Revenue
 board of works	Board of Works
 board wages	board wages
 board-clapper	clapper-board
@@ -392,6 +393,8 @@ cambered beam	cambered beam
 cambered beams	cambered beam
 canal corridor	canal corridor
 canal corridors	canal corridor
+candareen	candareen
+candareens	candareen
 cangue	cangue
 canopy tree	canopy-tree
 canopy trees	canopy-tree
@@ -1407,6 +1410,8 @@ gokenin	gokenin
 gokumon	gokumon
 gokura	gogura
 gold paper	gold paper
+gold-back	gold-back
+gold-back cash	gold-back
 gongbu changku xuzhi	Gongbu changku xuzhi
 gongxiefang	gongxiefang
 gonin-gumi	five-household group
@@ -1970,6 +1975,7 @@ jiaochang	jiaochang
 jiaqing	Jiaqing
 jiaxing	Huzhou-Jiaxing
 jiayou	Jiayou
+jiazhi	Jiazhi
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jikata hanreiroku	Jikata hanreiroku
@@ -2969,6 +2975,7 @@ nuisance trade	nuisance trade
 nuisance trades	nuisance trade
 nukimon	nukimon
 numajiro	numajiro
+numeraire	numeraire
 nuptiality	nuptiality
 nure-en	nure-en
 nuriya	nuriya
@@ -3908,6 +3915,7 @@ sokohi	sokohi
 solar time	solar time
 solidity	solidity
 son of heaven	Son of Heaven
+song	Song dynasty
 song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
@@ -4019,8 +4027,10 @@ street-town	gaison
 street-village	gaison
 strength stone	chikaraishi
 strength stones	chikaraishi
+string of cash	string of cash
 stringer	stringer
 stringers	stringer
+strings of cash	string of cash
 strip footing	strip footing
 strip footings	strip footing
 stroke	stroke
@@ -4314,6 +4324,8 @@ throwing	throwing
 tian'geng	bund
 tiangeng	bund
 tiangong kaiwu	Tiangong kaiwu
+tiao	tiao
+tiaos	tiao
 ticket salt	ticket salt
 ticket-salt	ticket salt
 tie-rail	tie-rail
@@ -4629,6 +4641,7 @@ wang zhen's	Wang Zhen
 wanghuolou	wanghuolou
 wanli	Wanli era
 wanli era	Wanli era
+wanli kuaiji lu	Wanli kuaiji lu
 wanshu zaji	Wanshu zaji
 wara-nio	warazuka
 waraguro	waraguro
@@ -4903,6 +4916,7 @@ zhilizhou	zhilizhou
 zhiqian	standard cash
 zhizhai shulu jieti	Zhizhai Shulu jieti
 zhonggulou	gulou
+zhongji	zhongji
 zhonglou	gulou
 zhou	department
 zhou dynasty	Zhou dynasty

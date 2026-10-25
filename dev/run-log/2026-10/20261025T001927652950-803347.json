@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-25T00:19:27Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 445,
+  "result": "failed: test-full",
+  "commit": "ec328d584",
+  "first_failure_s": 372.4,
+  "last_failure_s": 372.4,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_speckit_todo.py::test_the_real_tree_answers_in_under_two_seconds"
+  ],
+  "host": {
+    "load": [
+      7.87,
+      23.69
+    ],
+    "mem_avail_mb": [
+      6561,
+      6878
+    ],
+    "cpu_temp_c": [
+      77.0,
+      73.0
+    ],
+    "stall_s": {
+      "cpu": 46.7,
+      "io": 15.5,
+      "io_full": 6.8,
+      "memory": 1.8
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  },
+  "phases": {
+    "preflight": 31.0,
+    "static": 4.0,
+    "format": 0.0,
+    "typecheck": 2.0,
+    "reference": 1.0,
+    "hooks-test": 78.0,
+    "pytest": 348.0,
+    "test-full": 360.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/hooks/test-no-poll-hooks.sh",
+  "selected": 10085,
+  "collected": 10085
+}

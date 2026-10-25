@@ -297,6 +297,17 @@ def page_words(text: str) -> str:
     return " ".join(re.sub(r"<!--.*?-->", "", text, flags=re.S).split())
 
 
+#: A money mark (feature 413's tooltip, `record/money.py`) around an amount's own words: markup, never a word.
+_MONEY_MARK = re.compile(r'<span class="money"[^>]*>(.*?)</span>', re.S)
+
+
+def page_words_unmarked(text: str) -> str:
+    """`page_words` with every money mark unwrapped to the words inside it: a page whose amounts were only marked did not
+    move (feature 412's marks pass, 2026-10-24: marking 0185's lodging fees made six pop-ups owe a triage of words that
+    had not changed)."""
+    return page_words(_MONEY_MARK.sub(r"\1", text))
+
+
 def digest(parts: Sequence[str]) -> str:
     return hashlib.sha256("\x1f".join(parts).encode()).hexdigest()[:16]
 
@@ -377,8 +388,8 @@ def owed(root: pathlib.Path, base: str, uid: str = "") -> list[tuple[str, str, s
         changed_pages = {
             f
             for f in changed_pages
-            if page_words(old.get(f, ""))
-            != page_words(
+            if page_words_unmarked(old.get(f, ""))
+            != page_words_unmarked(
                 (root / f).read_text(encoding="utf-8") if (root / f).is_file() else ""
             )
         }

@@ -72,10 +72,23 @@ def common_dir(root: Path) -> Path:
     return g
 
 
-def feature_dir(root: Path) -> Path | None:
-    """The active feature: a page session's own (`L7R_FEATURE_DIRECTORY`, set by the page-session runner from its brief's
-    directory), else the session's exported `SPECIFY_FEATURE` when its directory exists, else `.specify/feature.json`. Without the first, feature 343's page session filed its round ruling under
-    378, the feature the clone's main session had last worked (2026-10-10)."""
+def asked_feature(root: Path, trigger: str) -> Path | None:
+    """The feature an ask names by its SUBJECT's leading number (`ask:414-round3` -> `specs/414-*`), when exactly one directory
+    has that number: `ask:414-round3` was filed under 416, the clone's active feature, so 414's ruling sat in 416's
+    arbiter.jsonl and GM review (2026-10-24)."""
+    m = re.match(r"ask:(\d{3})-", trigger)
+    dirs = sorted((root / "specs").glob(f"{m.group(1)}-*/")) if m else []
+    return dirs[0] if len(dirs) == 1 else None
+
+
+def feature_dir(root: Path, trigger: str = "") -> Path | None:
+    """The active feature: the feature an ask names (`asked_feature`), else a page session's own (`L7R_FEATURE_DIRECTORY`, set
+    by the page-session runner from its brief's directory), else the session's exported `SPECIFY_FEATURE` when its directory
+    exists, else `.specify/feature.json`. Without the page session's own, feature 343's page session filed its round ruling
+    under 378, the feature the clone's main session had last worked (2026-10-10)."""
+    asked = asked_feature(root, trigger) if trigger else None
+    if asked is not None:
+        return asked
     own = os.environ.get("L7R_FEATURE_DIRECTORY", "").strip().rstrip("/")
     if own:
         return root / own
@@ -114,7 +127,7 @@ def aside(root: Path) -> list[str]:
 def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float | None = None, review: str = "") -> bool:
     """Record a trigger once (a second firing of a trigger already owed or ruled changes nothing); True when it is new. `review`
     names the spec or plan review an ask is about (feature 409), so its ruling stands as that review's verdict."""
-    if trigger in rulings(root):
+    if trigger in rulings(root, trigger):
         return False
     path = common_dir(root) / OWED
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -126,7 +139,7 @@ def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float
         state = _load(path)
         if trigger in state:
             return False
-        d = feature_dir(root)
+        d = feature_dir(root, trigger)
         # the feature it fired in: the owed file is the clone's, one for every feature, and a trigger ruled in its own feature
         # was swept into the next feature's batch (352's 0036 batch carried feature 368's three q:0047 triggers, 2026-10-11,
         # the arbiter's tooling fix) - `mine` keeps each feature to its own. GUARD_EDIT_OK: feature 352, the round arbiter's
@@ -143,9 +156,9 @@ def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float
     return True
 
 
-def rulings(root: Path) -> dict[str, dict[str, Any]]:
-    """`{trigger: its ruling}` of the active feature (`specs/<feature>/arbiter.jsonl`)."""
-    d = feature_dir(root)
+def rulings(root: Path, trigger: str = "") -> dict[str, dict[str, Any]]:
+    """`{trigger: its ruling}` of the active feature (`specs/<feature>/arbiter.jsonl`), or of the feature `trigger` names."""
+    d = feature_dir(root, trigger)
     out: dict[str, dict[str, Any]] = {}
     f = d / "arbiter.jsonl" if d else None
     for line in f.read_text(encoding="utf-8").splitlines() if f and f.is_file() else []:
@@ -307,7 +320,7 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     ruled with them, as a batch (FR-017) - not alone."""
     if declared != "round-arbiter":
         raise PermissionError("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, recorded, not a proof")
-    if trigger in rulings(root):
+    if trigger in rulings(root, trigger):
         raise ValueError(f"{trigger} is already ruled - one ruling per trigger, binding; the session neither re-asks nor overrules")
     others = [t for t in batch_triggers(root) if t != trigger]
     if not batch and trigger in batch_triggers(root, [trigger]) and others:
@@ -325,7 +338,7 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     if ruling["ruling"] == "process-fault" and not fix and not fix_on:  # feature 379 FR-001: the fault IS the fix, made and held
         raise ValueError("a `process-fault` ruling names its fault as `tooling_fix` - one sentence: the tool and the change")
     measure = fix_measure_of(ruling) if fix else {}
-    d = feature_dir(root)
+    d = feature_dir(root, trigger)
     if d is None:
         raise ValueError("no active feature (.specify/feature.json) to record the ruling in")
     when = now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -681,7 +694,11 @@ def main(argv: list[str]) -> int:
         claims_review = str(row.get("review") or "")
         if claims_review.startswith("claims:") and row["ruling"] == "accept":  # the GM 2026-10-24: the accept is the claims' verdict
             keys = claims_review[len("claims:") :]
-            done = subprocess.run([sys.executable, str(Path(__file__).resolve().parents[2] / "record" / "claims.py"), "--root", str(root), "accept", "--keys", keys, "--trigger", row["trigger"]], capture_output=True, text=True)
+            done = subprocess.run(
+                [sys.executable, str(Path(__file__).resolve().parents[2] / "record" / "claims.py"), "--root", str(root), "accept", "--keys", keys, "--trigger", row["trigger"]],
+                capture_output=True,
+                text=True,
+            )
             print((done.stdout + done.stderr).strip())
         if owed:
             print(owed)
@@ -727,7 +744,7 @@ def main(argv: list[str]) -> int:
             print(f"arbiter-ask: REVIEW= is spec, plan or claims:<key>;<key> (the review whose verdict the ruling stands as), or left out - not {review!r}", file=sys.stderr)
             return 2
         trigger = f"ask:{subject}"
-        if trigger in rulings(Path(".").resolve()):
+        if trigger in rulings(Path(".").resolve(), trigger):
             print(f"arbiter-ask: {trigger} is already ruled - one ruling per trigger, binding; ask a new SUBJECT for a new question", file=sys.stderr)
             return 1
         stands = f"(REVIEW={review}: an accept stands as the {review} review's verdict)" if review else ""

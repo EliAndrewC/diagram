@@ -809,3 +809,21 @@ def test_make_arbiter_ask_passes_review_through() -> None:
     repo = pathlib.Path(__file__).resolve().parents[2]
     dry = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-ask", "SUBJECT=s", "WHY=why it is asked", "REVIEW=plan"], capture_output=True, text=True, check=False).stdout
     assert 'hm_arbiter.py ask "s" "why it is asked" "plan"' in dry
+
+
+def test_an_ask_naming_a_feature_by_number_is_filed_under_that_feature(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """2026-10-24: `ask:414-round3`, asked while the clone's active feature was 416, was filed and ruled under 416."""
+    root = _clone(tmp_path)
+    for name in ("375-x", "414-price-stability"):
+        (root / "specs" / name).mkdir(parents=True)
+    monkeypatch.chdir(root)
+    assert ha.main(["ask", "414-round3", "may the sixteen units close on round 2?"]) == 0
+    assert ha.owed(root)["ask:414-round3"]["feature"] == "414-price-stability"
+    ruling = root / "r.json"
+    ruling.write_text(json.dumps({"ruling": "accept", "why": "round 2 found only wording"}))
+    assert ha.main(["ruled", "ask:414-round3", str(ruling), "--as", "round-arbiter"]) == 0
+    d = root / "specs" / "414-price-stability"
+    assert "ask:414-round3" in (d / "arbiter.jsonl").read_text() and (d / "gm-review.jsonl").is_file()
+    assert not (root / "specs" / "375-x" / "arbiter.jsonl").exists(), "the active feature holds none of it"
+    assert ha.main(["ask", "414-round3", "may the sixteen units close on round 2?"]) == 1, "already ruled, found in 414"
+    assert ha.feature_dir(root, "ask:which-route") == root / "specs" / "375-x", "an ask naming no feature stays with the active one"

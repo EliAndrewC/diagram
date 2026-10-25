@@ -106,3 +106,11 @@ escalation.
 
 1. The measure scripts (osaka_daily, closeness). 2. The page sessions (s1-s3 write; s4 check). 3. The implementation check. 4.
 The reply and the landing.
+
+<!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
+<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
+<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
+<!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
+<!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
+<!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
+<!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->

@@ -4125,3 +4125,39 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [a Google search for the article](https://www.google.com/search?q=Gamble+%22Daily+Wages+of+Unskilled+Chinese+Laborers%22+1943)
 - **Rests on it:** research/questions/0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.html (diagram feature 412; asked for by gm-assistant on EliAndrewC/diagram#13) - whether the rural Beijing wage is halved, which the two readings of the series disagree on (also 0289, 0250).
 - Blocked by: paywalled (JSTOR); known here only through Allen et al. 2009 (2026-10-24).
+
+### 324. [money] Ziang Liu, "Wages, Labour Market, and Living Standards in China, 1530-1840", Explorations in Economic History 92 (2024), its Table 9 (the half-century wage estimates)
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[a ScienceDirect search for the article](https://www.sciencedirect.com/search?qs=Wages%2C%20Labour%20Market%2C%20and%20Living%20Standards%20in%20China%2C%201530-1840)**
+- The published half-century day wages of the unskilled Lower Yangzi building laborer (Table 9), which revise the 2022 working paper's Table 8 that the record cites, and the article's statement of the tael's weight and the capital's double-counted cash.
+- Fallback: [a Google search for the article](https://www.google.com/search?q=%22Wages%2C+Labour+Market%2C+and+Living+Standards+in+China%2C+1530-1840%22+Explorations+in+Economic+History)
+- **Rests on it:** research/questions/0288-what-did-a-years-necessities-and-a-days-labor-cost-in-china-era-by-era.html (diagram feature 412; asked for by gm-assistant on EliAndrewC/diagram#13) - the late-Ming and Qing Lower Yangzi day wages, now cited from the working paper (also 0250, 0289).
+- Blocked by: paywalled (Elsevier); the working paper is the public version read (2026-10-24).
+
+### 325. [money] 斎藤修 (Saito Osamu), 『賃金と労働と生活水準：日本経済史における18-20世紀』 (Iwanami Shoten, 1998), its Kyoto day-wage series for 1773-1790
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[a CiNii Books search for the book](https://ci.nii.ac.jp/books/search?q=%E8%B3%83%E9%87%91%E3%81%A8%E5%8A%B4%E5%83%8D%E3%81%A8%E7%94%9F%E6%B4%BB%E6%B0%B4%E6%BA%96)**
+- A Kyoto laborer's day wage for the 1770s and 1780s, the decades the Mitsui books leave empty (no entries 1763-1790), in silver monme, with its source.
+- Fallback: [a Google search for the book](https://www.google.com/search?q=%E6%96%8E%E8%97%A4%E4%BF%AE+%E8%B3%83%E9%87%91%E3%81%A8%E5%8A%B4%E5%83%8D%E3%81%A8%E7%94%9F%E6%B4%BB%E6%B0%B4%E6%BA%96)
+- **Rests on it:** research/questions/0250-what-did-an-unskilled-laborer-earn.html (diagram feature 412; asked for by gm-assistant on EliAndrewC/diagram#13) - the day wage of the 1780s, now SILENT, the wage of the `osaka-1780` era.
+- Blocked by: in print only; no open copy was found (2026-10-24).
+
+### 326. [money] 三井文庫 (Mitsui Bunko), ed., 『近世後期における主要物価の動態』 (University of Tokyo Press, 1989, enlarged edition), the Kyoto, Edo and Osaka retail price tables
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[a CiNii Books search for the book](https://ci.nii.ac.jp/books/search?q=%E8%BF%91%E4%B8%96%E5%BE%8C%E6%9C%9F%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E4%B8%BB%E8%A6%81%E7%89%A9%E4%BE%A1%E3%81%AE%E5%8B%95%E6%85%8B)**
+- The printed tables behind Bassino's GPIH Mitsui file: the unit of 薪 and 炭 (10 kan), the Osaka charcoal cells of 1818-1823 that read cheaper than firewood, Kyoto salt from 1791 (a third of Edo's and Osaka's, read as a unit or grade change), and the Osaka tables of 1781-1798.
+- Fallback: [a Google search for the book](https://www.google.com/search?q=%E4%B8%89%E4%BA%95%E6%96%87%E5%BA%AB+%E8%BF%91%E4%B8%96%E5%BE%8C%E6%9C%9F%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E4%B8%BB%E8%A6%81%E7%89%A9%E4%BE%A1%E3%81%AE%E5%8B%95%E6%85%8B)
+- **Rests on it:** research/questions/0286-what-did-a-years-necessities-cost-in-japan-era-by-era.html (diagram feature 412; asked for by gm-assistant on EliAndrewC/diagram#13) - the Kyoto salt after 1790 marked doubtful, and the charcoal by weight (also 0279, 0273).
+- Blocked by: in print only; no open copy was found (2026-10-24).

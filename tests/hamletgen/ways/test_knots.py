@@ -407,3 +407,21 @@ def test_the_gather_takes_a_joining_lane_ended_where_it_first_meets_a_way() -> N
     form = kn.joiner_first_meeting(lanes, 2, -1, (0.0, 0.0))
     assert form == [(60.0, 120.0), (30.0, 60.0)]
     assert kn.next_gather(lanes, _only({2: form})) == {2: form}
+
+
+def test_a_lane_a_tee_would_strand_has_its_short_tail_cut_back_to_where_it_meets_a_way() -> None:
+    """405 T106 (D133), cohort seed 7 with the sheds turned: a third way met the connector and ran 22 ft on to end on the leg
+    the knot's tee cuts away - the tee alone strands it, so it is asked with that tail cut back to the meeting (0081: a tail
+    of under 40 ft beyond a crossing is cut); a tail of 40 ft or more is never cut, nor a lane whose end the tee keeps."""
+    lanes = [_ln((0.0, 0.0), (100.0, 0.0), connector=True), _ln((40.0, 60.0), (10.0, 10.0)), _ln((25.0, -80.0), (25.0, 0.0), (16.0, 20.0))]
+    both = {1: [(40.0, 60.0), (40.0, 0.0)], 2: [(25.0, -80.0), (25.0, 0.0)]}
+    assert kn.next_gather(lanes, lambda e: e == both) == both
+    old, new = [(40.0, 60.0), (10.0, 10.0)], [(40.0, 60.0), (40.0, 0.0)]
+    far = _ln((-80.0, 50.0), (0.0, 50.0), (34.0, 50.0))  # 34 ft past the meeting: cut
+    long = _ln((-80.0, 50.0), (-10.0, 50.0), (34.0, 50.0))  # 44 ft past it: kept whole
+    kept = _ln((-80.0, 60.0), (40.0, 60.0))  # its end on the tee's own vertex
+    wall = _ln((0.0, 200.0), (0.0, -100.0))
+    cut = kn.tails_cut_back([wall, {"pts": old}, far, long, kept], 1, old, new)
+    assert cut == {2: [(-80.0, 50.0), (0.0, 50.0)]}, cut
+    rev = kn.tails_cut_back([wall, {"pts": old}, _ln((34.0, 50.0), (0.0, 50.0), (-80.0, 50.0))], 1, old, new)
+    assert rev == {2: [(0.0, 50.0), (-80.0, 50.0)]}, "the same tail at the lane's start"

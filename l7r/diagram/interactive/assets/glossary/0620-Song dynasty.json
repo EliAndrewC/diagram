@@ -5,6 +5,8 @@
   "Song dynasty",
   "Song-dynasty",
   "Southern Song",
-  "Northern Song"
- ]
+  "Northern Song",
+  "Song"
+ ],
+ "cased": true
 }

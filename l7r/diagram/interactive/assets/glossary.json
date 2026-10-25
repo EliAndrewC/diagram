@@ -405,8 +405,10 @@
    "Song dynasty",
    "Song-dynasty",
    "Southern Song",
-   "Northern Song"
-  ]
+   "Northern Song",
+   "Song"
+  ],
+  "cased": true
  },
  "Spiraea": {
   "def": "Meadowsweet: the low shrubs that come in on the drier margin of a reed grassland.",
@@ -17582,6 +17584,64 @@
   "variants": [
    "fineness",
    "finenesses"
+  ]
+ },
+ "numeraire": {
+  "def": "The unit prices and accounts are counted in, whether or not payment is made in it: in Qing China wages were often booked in taels of silver but paid in copper cash.",
+  "variants": [
+   "numeraire"
+  ]
+ },
+ "gold-back": {
+  "def": "A kind of Ming copper cash of the Jiajing and Wanli reigns; the Ming history counts the first Wanli gold-back coins at 10 to 0.01 tael of silver, and fewer as they rose in worth.",
+  "variants": [
+   "gold-back",
+   "gold-back cash"
+  ]
+ },
+ "Board of Revenue": {
+  "def": "The ministry of the Qing government in charge of taxes, granaries and money; in 1731 it proposed how the capital's depots should exchange their cash for silver.",
+  "variants": [
+   "Board of Revenue"
+  ]
+ },
+ "zhongji": {
+  "def": "A kind of Songjiang cotton cloth the local writer Ye Mengzhu names beside biao cloth; in 1684, with cotton cheap, it sold poorly and weavers turned to biao cloth.",
+  "variants": [
+   "zhongji"
+  ]
+ },
+ "Wanli kuaiji lu": {
+  "def": "A book of the Ming state's accounts from the Wanli era, one of the books from which the 1615 prices of salt and coal are taken where the Ministry of Works' handbook gives none.",
+  "variants": [
+   "Wanli kuaiji lu"
+  ]
+ },
+ "string of cash": {
+  "def": "A count of Chinese copper cash, on its face a thousand coins, used to state prices and the Ming state's paper money; what a string was worth in silver changed from era to era.",
+  "variants": [
+   "string of cash",
+   "strings of cash"
+  ]
+ },
+ "tiao": {
+  "def": "A string of copper cash used as a unit of account in China. In principle 1,000 coins, but in practice the count varied by region and trade, from 900 to 1,000 in most places down to 100 or 150 in some.",
+  "variants": [
+   "tiao",
+   "tiaos"
+  ]
+ },
+ "Jiazhi": {
+  "def": "The Ministry of Works' list of what goods and labor were worth, weighed by the ministry and the Nine Chief Ministers on Beijing's market prices and submitted to the emperor in 1736.",
+  "variants": [
+   "Jiazhi"
+  ]
+ },
+ "candareen": {
+  "def": "A Chinese unit of weight and money, a hundredth of a tael and a tenth of a mace; the name Western traders at Canton used for it.",
+  "variants": [
+   "candareen",
+   "candareens"
   ]
  },
  "spot price": {

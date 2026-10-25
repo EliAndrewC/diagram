@@ -12,6 +12,8 @@ where one reason, the author's, covers every amount the fragment still holds unm
 
     money_candidates.py           list them                                   `make money-candidates`
     money_candidates.py --check   exit 1 while one is neither marked nor named `make money-candidates CHECK=1`
+    money_candidates.py --all --stem 0255 --context   one question's amounts, passed-over ones tagged, each with its text
+                                                      `make money-candidates ALL=1 Q=0255 CONTEXT=1`
 """
 
 from __future__ import annotations
@@ -29,15 +31,25 @@ QUESTIONS = os.path.join("research", "questions")
 TABLE = os.path.join("research", "assets", "money-conversions.json")
 BACKFILL = os.path.join("specs", "413-money-tooltip-on-the-record", "backfill.md")
 #: The period's other Japanese coin words, listed whether or not a built era's row has a unit for them (the plan review of
-#: 2026-10-24: an amount in a coin its row lacks, a gold bu at Kyoto 1745-54, is passed over with that reason, never unseen).
+#: 2026-10-24: an amount in a coin no row names, a koban, is passed over with that reason, never unseen).
 COINS_ALSO = ("mon", "monme", "kanmon", "ryo", "bu", "shu", "koban", "yen", "sen", "rin")
+#: Each Chinese coin word the scanner finds, and the coin it is marked in: mace and candareens are tenths and hundredths of a
+#: tael, wen, strings, guan and tiao count cash, cents are hundredths of a dollar. A Japanese word is its own coin.
+CHINA_WORDS = {
+    "tael": "tael", "taels": "tael", "mace": "tael", "candareen": "tael", "candareens": "tael",
+    "cash": "cash", "wen": "cash", "string": "cash", "strings": "cash", "guan": "cash", "tiao": "cash", "diao": "cash",
+    "dollar": "dollar", "dollars": "dollar", "cent": "dollar", "cents": "dollar",
+}
 
+_MACRON = re.compile(r"\b(?:ryō|shū)(?![\w])")
+_UNMACRON = str.maketrans("ōū", "ou")
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _BLOCK = re.compile(r"<(p|li|blockquote|td|dd|h[1-4])\b([^>]*)>(.*?)(?:</\1>|(?=<(?:p|li|blockquote|td|dd|h[1-4])\b)|\Z)", re.S)
 _HEADING = re.compile(r"<h[12][^>]*>(.*?)</h[12]>", re.S)
 _TAG = re.compile(r"<[^>]+>")
 _MARKED = re.compile(r'<span class="money"[^>]*>(.*?)</span>', re.S)
 _NUMBER = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\d[\d,]*(?:\.\d+)?)?"
+_DOLLAR = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\$?\d[\d,]*(?:\.\d+)?)?"
 _YEAR = re.compile(r"(?<!\d)(1[0-9]{3})(?!\d)")
 _NOTE_MARK = re.compile(r'data-note="([^"]+)"')
 _ROW = re.compile(r"^-\s*(?P<stem>[^|]+?)\s*\|\s*(?P<amount>[^|]+?)\s*\|\s*(?P<reason>.+?)\s*$")
@@ -54,15 +66,24 @@ class Amount:
 
 
 def _plain(markup: str) -> str:
-    return re.sub(r"\s+", " ", html.unescape(_TAG.sub("", markup))).strip()
+    # a coin written with its macron is the same coin: 0251's notes write "ryō", and a "2 shū" is a shu (feature 414)
+    return _MACRON.sub(lambda m: m.group(0).translate(_UNMACRON), re.sub(r"\s+", " ", html.unescape(_TAG.sub("", markup))).strip())
+
+
+def _read(path: str) -> dict:
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except FileNotFoundError:
+        return {}
+    return data if isinstance(data, dict) else {}
 
 
 def _eras(root: str) -> dict[str, tuple[int, int, frozenset[str]]]:
-    try:
-        with open(os.path.join(root, TABLE), encoding="utf-8") as fh:
-            eras = json.load(fh).get("eras", {})
-    except FileNotFoundError:
-        return {}
+    """{era id: (first year, last year, its coins)} - the vendored table's eras, each carrying the units its row names."""
+    # the awaiting eras were read here too, each given its place's coins, until every era's row was vendored (feature 414's
+    # bu and shu pass, 2026-10-24: money-eras-awaiting.json is empty); an era listed there again counts as no era here
+    eras = _read(os.path.join(root, TABLE)).get("eras", {})
     out = {}
     for era_id, row in eras.items():
         ys = [int(y) for y in _YEAR.findall(row.get("years", ""))]
@@ -89,8 +110,9 @@ def _cited_years(folder: str, page: str) -> dict[str, tuple[int, ...]]:
 def amounts(root: str = ".") -> list[Amount]:
     """Every unmarked amount in a coin of these money systems, nearest a built era first (the order decides nothing)."""
     eras = _eras(root)
-    coins = sorted({*COINS_ALSO, *(c for _, _, units in eras.values() for c in units)}, key=len, reverse=True)
-    amount_re = re.compile(rf"(?<![\w.]){_NUMBER}\s+(?:{'|'.join(map(re.escape, coins))})(?![\w])")
+    coins = sorted({*COINS_ALSO, *CHINA_WORDS, *(c for _, _, units in eras.values() for c in units)}, key=len, reverse=True)
+    # a dollar is written "$1.50" as often as "2 dollars": the sign is a coin word of its own (feature 412, session 6)
+    amount_re = re.compile(rf"(?<![\w.]){_NUMBER}\s+(?:{'|'.join(map(re.escape, coins))})(?![\w])|(?<![\w$])\${_DOLLAR}")
     out: list[Amount] = []
     folder = os.path.join(root, QUESTIONS)
     for name in sorted(os.listdir(folder)):
@@ -115,7 +137,7 @@ def amounts(root: str = ".") -> list[Amount]:
                 if marked[found] > 0:
                     marked[found] -= 1
                     continue
-                coin = found.split()[-1]
+                coin = "dollar" if found.startswith("$") else CHINA_WORDS.get(found.split()[-1], found.split()[-1])
                 gaps = [(max(a - y, y - b, 0), e) for e, (a, b, units) in eras.items() if coin in units for y in years]
                 gap, near = min(gaps) if gaps else (None, "")
                 context = plain[max(0, m.start() - 240) : m.start()] + "[[" + found + "]]" + plain[m.end() : m.end() + 60]
@@ -142,13 +164,20 @@ def _named(a: Amount, named: set[tuple[str, str]]) -> bool:
 def main(argv: list[str] | None = None, root: str = ".") -> int:
     ap = argparse.ArgumentParser(description="every unmarked amount of money a built era could convert")
     ap.add_argument("--check", action="store_true", help="exit 1 while an amount is neither marked nor named in backfill.md")
+    ap.add_argument("--all", action="store_true", help="list the amounts backfill.md passes over too, each tagged [passed over]")
+    ap.add_argument("--stem", default="", help="only the fragments whose file stem starts with this (a question's number)")
+    ap.add_argument("--context", action="store_true", help="print the text around each amount under it, the amount in [[ ]]")
     args = ap.parse_args(argv)
     named = passed_over(root)
-    owed = [a for a in amounts(root) if not _named(a, named)]
-    for a in owed:
+    found = [a for a in amounts(root) if a.stem.startswith(args.stem)]
+    owed = [a for a in found if not _named(a, named)]
+    for a in found if args.all else owed:
         years = ",".join(map(str, a.years[:4])) or "no year"
         where = f"{a.gap} yr from {a.near}" if a.gap is not None else "no year or no era"
-        print(f"{where:<28} {a.stem} | {a.text} | {years}")
+        tag = " [passed over]" if _named(a, named) else ""
+        print(f"{where:<28} {a.stem} | {a.text} | {years}{tag}")
+        if args.context:
+            print(f"    {a.context}")
     if args.check and owed:
         print(f"money-candidates: {len(owed)} amount(s) neither marked nor named in {BACKFILL} - mark each (feature 413, record/money.py) or add `- <stem> | <amount> | <reason>`", file=sys.stderr)
         return 1

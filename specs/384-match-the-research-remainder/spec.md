@@ -5,7 +5,7 @@
 **Created**: 2026-10-13
 
 **Status**: Filed - the open work of feature 374 (itself 372's and 328's remainder), moved here at the GM's word; its front (the lane law, the four failing seeds, T48, T47) moved to feature 385 on 2026-10-17; not resumed
-until 385 closes ("How it starts")
+until 385 closes ("How it starts"); ON HOLD from 2026-10-24 until feature 417 (all seeds pass) closes - the GM: "we might want to put our claims work on hold"
 
 **Approved**: the GM, 2026-10-13, "move all of the remaining work to a new feature and then close out this feature and land it on main"
 
