@@ -149,6 +149,18 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0264-what-did-paper-and-ink-cost.notes | 140 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
 - 0264-what-did-paper-and-ink-cost.notes | 80 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
 - 0264-what-did-paper-and-ink-cost.notes | 60 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0275-what-did-a-skilled-craftsman-earn-against-a-laborer.notes | 180 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0275-what-did-a-skilled-craftsman-earn-against-a-laborer.notes | 140 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0275-what-did-a-skilled-craftsman-earn-against-a-laborer.notes | 80 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0275-what-did-a-skilled-craftsman-earn-against-a-laborer.notes | 60 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0275-what-did-a-skilled-craftsman-earn-against-a-laborer.notes | 0.04 taels | the arms-making regulation of 1813, outside every Chinese era's years
+- 0275-what-did-a-skilled-craftsman-earn-against-a-laborer.notes | 0.010 taels | the arms-making regulation of 1813, outside every Chinese era's years
+- 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost.notes | 180 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost.notes | 140 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost.notes | 80 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost.notes | 60 cash | the "old rule" long-day and short-day wages that the 1736 list replaced, with no year
+- 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost.notes | 800 cash | a rate between the coins (800 cash to 1 tael), not a sum paid
+- 0274-what-did-hemp-cloth-and-a-shrines-amulets-cost.notes | 1 tael | a rate between the coins (800 cash to 1 tael), not a sum paid
 
 ## Fragments judged whole
 
