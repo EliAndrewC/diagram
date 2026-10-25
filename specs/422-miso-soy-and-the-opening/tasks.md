@@ -16,14 +16,14 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: record-owed clean for the touched questions and keys
-- [ ] T02 S2+C2: Q4 the opening and Q3 the modern prices (D3, D4; FR-001)
+- [x] T02 S2+C2: Q4 the opening and Q3 the modern prices (D3, D4; FR-001)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: record-owed clean for the touched questions and keys
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed: S2+C2: 0304 which goods the opening changed (Edo 1860-67 good by good, Beijing 1900-19, Tokyo 1882's soybeans), 0299 modern miso and soy sauce (comparative); record-owed clean
 - [ ] T03 Implementation check, the reply on #18 and the report (D5; FR-003, FR-004)
       research: rendering
       verify: make impl-check F=422 nothing missing; reply posted; make feature-report F=422 WRITE=1

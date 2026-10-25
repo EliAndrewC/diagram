@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-25T20:44:24+00:00",
+ "final_url": "https://www.walmart.com/blocked?url=L3NlYXJjaD9xPWtpa2tvbWFuK3NveStzYXVjZStnYWxsb24=&uuid=d4f22490-d0b4-11f1-b769-d61d990c41d2&vid=&g=b",
+ "first": "09/09ab764c4d87/20261025T204422Z",
+ "gm_copies": [],
+ "keys": [
+  "walmart-kikkoman-soy-sauce-gallon"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "09/09ab764c4d87/20261025T204422Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "dd164b244d2ab63072fbb3bd186993934b06eda93fb1b0527a283027ebf741ac",
+ "url": "https://www.walmart.com/search?q=kikkoman+soy+sauce+gallon"
+}
