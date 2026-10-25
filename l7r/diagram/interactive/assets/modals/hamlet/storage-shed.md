@@ -10,7 +10,7 @@ seem to have stood free of it.
 The commonest size, in one district west of Edo, was about 15 by 18 ft; a village east of Edo had two of about 12 by 18
 ft. A farm built one only once money had accumulated, so most farms had none. In that village of sixteen households, at
 the end of the Edo period, two had a storehouse, both, it seems, among its leading families and with the second and third
-largest houses, though the largest house had none. West of Edo, farms seem to have owned storehouses only from the last
+largest houses, though the largest house had none. In that district west of Edo, farms seem to have owned storehouses only from the last
 years of the shogunate.
 
 Guesses:
