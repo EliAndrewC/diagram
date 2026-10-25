@@ -42,6 +42,60 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
+  },
+  "## T01 - the baseline and the tally (FR-001)": {
+   "sha256": "15edceb61275c0c78c11707829e0c4a2b17adec0a479c23ace9c754a0ec0e2fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "8814b1d101d5ecc242b3720d71d528c353df35b662a74c03a6f87e84d8a09d0c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "fce0d026a5ce38013df8a2d93a8c31f438317b19a3d4755237c907d74efec2a8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - the hold made (FR-010)": {
+   "sha256": "ac922e1012bcc5ef49dc93b08a083270e0245356075c453f9bc13473a39bb0d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "acdc7552b69469fee9afbcf4d4d4a3739a82cef81a8b9024edf68c9f2a90660a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "ec2e10e133cf90522ddb94d510f62d341d7746fe5f0bc63d5636ce2fb6a3dfc6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the inventory (FR-002, FR-003)": {
+   "sha256": "de89985c302b0afdee9e374e995a96725d5fa88a1c470c4ab86d4de20a9d87cc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "beb6da4f47dff3a28cf72382756faa0ce90b9e829afa3bd8074ff85af69eeed4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "eb1c98ed71b9724d789459d1169d9b53b7d91d4cd6ca6bd896b022f491864a39",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -284,6 +338,125 @@
      "summary": "T01 measure, T02 hold guard, T03 inventory and principle draft, T04 onward engine tasks numbered as the inventory needs, then the two guard tasks (FR-009 fresh block before the push; FR-011/SC-006 every form against HEAD), then the closing task (1,000 seeds, T106's seat turn re-applied, SC-004 delta, report)",
      "class": "within",
      "why": "Removing the fixed T10-T12 numbers lets the engine work run as many tasks as the inventory finds; every task the earlier Order carried is still present in the same sequence. FR-009 and FR-011 still follow SC-001's engine work, as FR-009 ('once SC-001 is met') and FR-011 ('building it after SC-001') require."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## T01 - the baseline and the tally (FR-001)",
+    "## T02 - the hold made (FR-010)",
+    "## T03 - the inventory (FR-002, FR-003)",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D7",
+     "summary": "T01 baseline is seeds 3000101-3001100 (1,000) rolled FRESH=0 at main in a detached worktree, five workers",
+     "class": "within",
+     "why": "D1 sets 1,000 at T01; the size and the at-main, no-diff constraint are kept. Five workers instead of D1's twelve moves only the wall clock, not N or what is measured."
+    },
+    {
+     "id": "D8",
+     "summary": "make fresh-tally takes COMMIT= and SINCE=, defines which records count as fresh, one seed counted once per commit",
+     "class": "within",
+     "why": "The instrument for FR-001's rate 'by form and by cause, at the start and after each task that changes the engine'. It counts seeds the gate has never used and narrows nothing the spec asked to measure."
+    },
+    {
+     "id": "T01-done",
+     "summary": "T01 done = research R3 holds the 1,000-seed table by form and cause, with a test that is red without it",
+     "class": "within",
+     "why": "FR-001's start measurement. The test only enforces that the requested table exists (enforcement of the request, not scope)."
+    },
+    {
+     "id": "T02-order",
+     "summary": "T02 lands second, alone, via make land-tooling; HOLD_OK only for a non-engine task",
+     "class": "within",
+     "why": "Same as D4: HOLD_OK admits only a non-engine task, and an engine task of a held feature has no escape."
+    },
+    {
+     "id": "D9",
+     "summary": "Held feature = Status line holds ON HOLD and 'until feature NNN', NNN open by speckit-todo's rule; engine task = names a path under l7r/ or pool/, or research: physical, or names a decision whose plan section names such a path; unsure counts as engine",
+     "class": "within",
+     "why": "A superset of D4's test (D4 checks the research: line, D9 adds paths and decision references and defaults to engine when unsure). Refusing more can only strengthen FR-010's hold; it makes no claims-feature engine task startable that D4 would refuse. It sits within the GM's 'put our claims work on hold'. Note: the hold reaches a feature only once its Status line is marked (D4). FR-010 names 405, 372 and 384, and these blocks do not say 372 and 384 get marked. T02's test uses 405 only. The session must mark all three. The blocks do not decide against it, so this is not ruled a narrowing."
+    },
+    {
+     "id": "T03-order-and-grouping",
+     "summary": "T03 after T01 (its causes rank the entries); one task per breaking group; the principle's draft text in R4 for the GM",
+     "class": "within",
+     "why": "D3: 'Every entry that breaks a point becomes a task'. Grouping still puts each breaking entry in a task. FR-003: 'in text the GM approves', and the draft goes to the GM. Ranking by R1/T01 causes matches D3's 'its share of R1's failures'."
+    },
+    {
+     "id": "D10",
+     "summary": "The inventory reading is split by package (ways, homesteads/homestead_parts, waterfields, overlap registry, the rest), each package read by a sonnet Explore agent given 'D3's four questions'; the session checks each REPORTED entry against the code",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 asks that EVERY repair pass, finished-map-only rule, rule coded more than once and in-generator check be listed. D3 makes that a method of enumerated searches: (1) every STEPS function and after-the-web pass; (2) every cohort_audit rule with its callers inside l7r/; (3) every caller of law.violations, lane_violators, row_rules, grove_rules and the overlap matrix inside the generator's run; (4) every pair of functions judging one rule; (5) every no-candidate drop/relax/refuse site. Entries are classed against the four points OR as 'its rule is coded twice'. D10 narrows this in two ways. (a) 'D3's four questions' does not match D3. There are four points plus a fifth class, coded-twice, and five searches. Whichever four are meant, one of D3's searches is not asked: coded-twice if the four are the points, the refusal sites if they are FR-002's four kinds. (b) Searches (2), (3) and (4) cross package lines. They follow a rule into cohort_audit, a check function to its callers inside the generator, and one rule to its second implementation. The likeliest duplicate, a rule in a placer package and again in the audit or check, lands in two different agents' reads, and neither sees the pair. The session checking each reported entry keeps a fetched claim out of R2 but finds nothing no agent reported, so completeness ('every', SC-007) is lost. A per-package split is not impossible to square with D3, so the narrowing is not forced. Fix: give each agent D3's full search list, coded-twice named. The session runs searches (2), (3) and (4) over the whole tree itself and reconciles their hits against R2 before T03 is done."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-24",
+   "blocks": [
+    "## T01 - the baseline and the tally (FR-001)",
+    "## T02 - the hold made (FR-010)",
+    "## T03 - the inventory (FR-002, FR-003)",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D7",
+     "summary": "Baseline is 1,000 fresh seeds 3000101-3001100 at main in a detached worktree, FRESH=0, five workers for memory.",
+     "class": "within",
+     "why": "Carries FR-001's start-of-feature measurement at D1's T01 size of 1,000 on main's engine with no diff; the worker count is execution, not scope."
+    },
+    {
+     "id": "D8",
+     "summary": "make fresh-tally filters by COMMIT=/SINCE=, defines which records' seeds count as fresh, one seed counted once per commit.",
+     "class": "within",
+     "why": "The instrument FR-001 needs to read a fresh-seed rate by form and cause; the freshness rule keeps fixed-range and pinned seeds out, which is what 'fresh' means in the request."
+    },
+    {
+     "id": "T01-approach",
+     "summary": "T01 first; done when R3 holds the 1,000-seed table by form and cause and the tally's test is red without it.",
+     "class": "within",
+     "why": "Matches FR-001 and D1; the test enforces the requested measurement."
+    },
+    {
+     "id": "D9",
+     "summary": "Held = Status line with ON HOLD and 'until feature NNN', NNN open by speckit-todo's rule; engine task = names a path under l7r/ or pool/, or research: physical, or names a decision whose plan section names such a path; unsure counts as engine.",
+     "class": "within",
+     "why": "Implements D4's status-line trigger; the engine-task test is broader than D4's research:-line check and resolves doubt toward holding, so it widens FR-010's reach rather than narrowing it."
+    },
+    {
+     "id": "T02-approach",
+     "summary": "Guard in make task-start, landed alone by land-tooling; HOLD_OK only for a non-engine task; done when 405, 372 and 384 carry ON HOLD and the refusal/HOLD_OK tests are red without the guard.",
+     "class": "within",
+     "why": "FR-010 names 405, 372 and 384 and D4 requires the hold to reach a feature through its status line; the done line now marks all three, and the tests only enforce the requested hold."
+    },
+    {
+     "id": "D10",
+     "summary": "Per-package Explore agents on sonnet run D3's five searches and five classes, every reported entry checked against the code by the session; the session itself runs the three cross-package searches (cohort_audit rules and callers, callers of the mid-map checks, pairs judging one rule) over the whole tree and reconciles their hits against R2 before T03 is done.",
+     "class": "within",
+     "why": "Round 1's defect is cured: the agents now carry the coded-twice class and all five searches, and the searches a package split cannot see whole are run over the whole tree by the session and reconciled. The remaining two searches (stage.py STEPS / after-the-web passes, and no-candidate drop sites) are local to a placer or a file and the package partition (with 'the rest') covers the tree. Delegating the reading under that method does not reduce what FR-002/D3 require to be listed."
+    },
+    {
+     "id": "T03-approach",
+     "summary": "Inventory after T01 (its causes rank entries); non-breaking entries kept with their predicate; done when R2 is complete, one task per breaking group is in tasks.md, and the principle's draft text is in R4 for the GM.",
+     "class": "within",
+     "why": "Follows FR-002, D3 (kept-with-predicate, every breaking entry becomes a task - grouped entries are still each carried by a task) and FR-003 (text for the GM to approve)."
     }
    ]
   }
