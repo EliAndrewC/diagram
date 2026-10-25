@@ -287,3 +287,12 @@ page whose GUESS they extend), as impl-drift showed; labels T16's two angles `CA
 main's text: the ones a source answers but the code departs from (citing would expose the departure) and the ones a source
 contradicts, all in T32-T35 for the fixing pass. The other 476 (P1-P7) are matched to their passes' verdicts (393 of 476 by
 unit and label; 272 silent or no-source) and go in a second batch.
+
+The landing's final count (observed 2026-10-25; method: `grep` over `l7r/` and `make tunables`, at the landing's tree): every
+one of the 247 claims of the modules this feature changes now says what research found - none is left `UNRESEARCHED` there;
+185 are bare `GUESS` naming the pass that searched (A1, A2, B, C, D, E, E2, F); 32 cite the page that answers them and state the
+code's departure from it, landing DRIFTED as the record's mark of a known drift (the round arbiter's accept, ask:417-T29-drifted;
+the claims gate admits a known drift since this landing's tooling fix), each filed by unit in T32 or T33; the rest cite the page
+that answers them as a convention, or are T16's two `CANON` angles. `UNRESEARCHED` is left on 479 claims elsewhere - their
+passes (P1-P7) have run and are saved; their relabels are T36. `make tunables` lists GUESS 455, UNRESEARCHED 283 and CONVENTION
+111 with a figure; `make tunables INLINE=1` 1,823 unstated numbers in 149 files.

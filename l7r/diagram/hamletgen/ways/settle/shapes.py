@@ -38,7 +38,7 @@ pool map settles in one or two (T55's measurement), so eight is a bound, not a t
 CROSSING_GAP_FT = 2.0
 """How far past the water's edge each piece of a cut crossing stops - the lane ends on the bank, not in the water.
 
-Research: a cut crossing ends on the bank - UNRESEARCHED: 2 ft past the water's edge"""
+Research: a cut crossing ends on the bank - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); 2 ft past the water's edge"""
 
 # ---- a lane as a run of arc length -----------------------------------------------------------------------------------
 
@@ -117,7 +117,7 @@ def fouled_segment(
         no tread on a farmhouse - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
         off another household's garden - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line within `gap`, `WEB_FABRIC_GAP` (7 ft) unless the caller passes another
         a knot's join beside a fence - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the knots step's second pass passes 3 ft (`WEB_CROP_GAP`'s value) for the page's 7 ft - the exception the page records, with its reason (405 T114)
-        off another household's yard - UNRESEARCHED: the garden fence's gap (`gap`, 7 ft unless the caller passes another) held off a yard too; no page sets a gap from a yard
+        off another household's yard - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the 7 ft a track passing outside the cluster keeps off every part of a homestead, a threshing yard among them, extended here to an inner lane; the garden fence's gap (`gap`, 7 ft unless the caller passes another) held off a yard too
         no long leg through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `law.breaks_through`
         off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its own household's too
         what the overlap matrix forbids - NONE: each pair is claimed in the matrix"""
@@ -176,7 +176,7 @@ def _crossing_fault(M: Mapping[str, Any], i: int, p: Poly, wet: Sequence[Poly]) 
 def _cut_gap(M: Mapping[str, Any], x: Pt) -> float:
     """Half the width of the widest recorded water within reach of the crossing `x` - where its bank stands.
 
-    Research: lane cut at the water's bank - UNRESEARCHED: a lane cut at a water crossing stops half the widest nearby water's width off the crossing, 3 ft where none is recorded"""
+    Research: lane cut at the water's bank - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); a lane cut at a water crossing stops half the widest nearby water's width off the crossing, 3 ft where none is recorded"""
     near = [
         float(w) / 2
         for wpts, w in bridge_crossed_waters(M)
@@ -209,7 +209,7 @@ def settle_shapes(s: Any) -> int:
         a lane's end loses its hook - research/questions/0081-village-lanes.drawing.html: re-laid as a T where it joins a way, else cut
         no hairpin or zigzag - research/questions/0081-village-lanes.drawing.html: cut as `_unkinked` cuts it
         crossings and fouls - NONE: claimed at `_crossing_fault` and `fouled_segment`
-        a fouling segment cut out - UNRESEARCHED: a lane's fouling segment is cut out and the lane split into its two remaining pieces
+        a fouling segment cut out - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); a lane's fouling segment is cut out and the lane split into its two remaining pieces
             (405 T127)"""
     M = s.M
     lanes = M.get("lanes") or []
@@ -344,7 +344,7 @@ def reaimed(seq: Poly, tread: Poly, connector: bool = False, joiner: bool = Fals
     Research:
         a lane meets another as a T - research/questions/0081-village-lanes.drawing.html: the end re-laid, never longer
         a tail beyond a crossing cut - research/questions/0081-village-lanes.drawing.html: "A tail of under 40 ft beyond a crossing is cut. A lane laid only to join two others ends where it first meets one, its tail cut however long it is"
-        an end within a hand's width ends there - UNRESEARCHED: a vertex within `_TOUCH_GAP` (4 ft) of the way ends the lane at it, unjoined
+        an end within a hand's width ends there - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); a vertex within `_TOUCH_GAP` (4 ft) of the way ends the lane at it, unjoined
             by ink (405 T127)"""
     # ...A TAIL BEYOND A CROSSING (0081): cut where the lane first crossed the way - under 40 ft, or any length for a joiner
     for k in range(len(seq) - 2):

@@ -33,7 +33,7 @@ the bound for a lane crossing the same course several times."""
 SQUARE_MARGIN_FT = 6.0
 """The square leg's reach past the water's half-width (`stage_crossings`' own figure, moved here with the squaring).
 
-Research: the square leg - UNRESEARCHED: 6 ft past the water's half-width"""
+Research: the square leg - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); 6 ft past the water's half-width"""
 
 
 def squared_against(q: Poly, course: Poly, half: float) -> Poly:
@@ -141,7 +141,7 @@ def cut_at_shallow_crossing(lanes: Sequence[Mapping[str, Any]], m: int, o: int, 
     Research:
         two paths side by side become one - research/questions/0081-village-lanes.drawing.html: the lane cut where it comes alongside, meeting the other as a T
         a household's way keeps its door - research/questions/0081-village-lanes.drawing.html: "cut at its far end, never at its door"
-        which side an ordinary lane keeps - UNRESEARCHED: its longer side; a household's way is cut only onto the connector or a tree lane"""
+        which side an ordinary lane keeps - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); its longer side; a household's way is cut only onto the connector or a tree lane"""
     from .corridors import ACCESS_ROLE, is_tree  # bound here: `corridors` sits beside this module's callers
     from .joints import keeps_the_web
 

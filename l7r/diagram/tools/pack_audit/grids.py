@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from .parse import ParsedPlan, Rect
 
 FTPX: float = 3.0  # 3 px = 1 ft
+"""Research: feet to pixels - NONE: the audit's 3 px to 1 ft scale, a pixel scale."""
 # not a structure standing in the masonry. The pool's tightest LEGITIMATE clearance is 0.5 px
 # (Hayakawa's south-wall stables/gatehouse row) and the smallest real defect found was 3 px, so
 # this threshold has ~1 px of margin on the passing side and 6x on the failing side.

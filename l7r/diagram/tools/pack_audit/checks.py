@@ -18,18 +18,27 @@ from .parse import WALL_KIND, WALL_STROKE, ParsedPlan, Rect
 # tubs and its board by `tub_by_its_eaves` / `board_by_a_gate`, and `fire_water_adrift` / `notice_board_adrift` below
 # call the same two predicates, so a generated sheet cannot seat what this audit would flag.
 TUB_WELL_MIN_PX: float = 1.0  # a fire-water tub overlapping a well glyph by more than this sits ON it
+"""Research: tub-on-well overlap - NONE: a fire-water tub overlapping a well glyph by more than 1 px sits on it, an audit pixel tolerance."""
 TUB_BLDG_MIN_PX: float = 0.5  # ...and reaching this far past a building's edge, it is drawn INTO the
+"""Research: tub-in-building overlap - NONE: a tub reaching 0.5 px past a building's edge is drawn into it, an audit pixel tolerance."""
 OCCLUSION_MIN_PX: float = 3.0  # a later feature must cover at least this much of a foreground item to count
+"""Research: occlusion size - NONE: a later feature must cover 3 px of a foreground item to count as occluding it, an audit pixel tolerance."""
 # (privy, door, board, hearth, stilt, mat) - foreground that belongs ABOVE the fills.
 PASSAGE_DEPTH_PX: float = 9.0  # the gateway zone reaches 3 ft in front of and behind the wall ink -
+"""Research: gateway zone depth - GUESS: the gateway zone reaches 9 px (3 ft) in front of and behind the wall ink, the strip where a stone would block a cart track; no page gives it."""
 # a stone set just inside or just outside the masonry is still in the track a cart drives through
 PASSAGE_CLEAR_MIN_PX: float = 0.5  # sub-pixel contact is a flush jamb (a gate post abutting the
+"""Research: passage contact floor - NONE: contact under 0.5 px in a passage is a flush jamb plus emit rounding, an audit pixel tolerance."""
 # opening edge) plus integer-emit rounding, not an object standing in the passage
 OPENING_MAX_PX: float = 80.0  # a wider gap in the wall is a structural break (a wall drawn around a
+"""Research: wall opening ceiling - GUESS: no page sets it; a gap wider than 80 px (about 27 ft at 3 px to the foot) in a wall is a structural break, not a gate - a gate-width ceiling above the record's 18-24 ft yamen gatehouse."""
 # building that IS part of it), not a gate - see `wall_openings`
 DOOR_FLUSH_TOL_PX: float = 1.5  # a door within this of a building edge reads as ON the wall
+"""Research: door flush tolerance - NONE: a door within 1.5 px of a building edge reads as on the wall, an audit pixel tolerance."""
 DOOR_NEAR_PX: float = 12.0  # a door candidate this close to an edge is TRYING to be in the wall (vs a deep interior marker)
+"""Research: door near-edge reach - NONE: a door candidate within 12 px of an edge is trying to be in the wall, an audit pixel tolerance."""
 WALL_OVERLAP_MIN_PX: float = 0.5  # sub-pixel contact is a flush abutment + integer-emit rounding,
+"""Research: wall overlap floor - NONE: contact under 0.5 px with a wall is a flush abutment plus emit rounding, an audit pixel tolerance."""
 
 
 @dataclass(frozen=True)
@@ -455,6 +464,7 @@ class StructureOnWall:
 # is held here across the wall's thickness, never past a segment's ends (a gate range standing in a wall broken around it, flush
 # with the segments' cut ends, is no structure off the wall). The spacing is the record's GUESS.
 WALL_FACE_CLEAR_FT: float = 1.0
+"""Research: least clearance from wall face - GUESS research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: the audit holds a structure at least 1 ft off the wall's face, the least of the page's 'a foot or two', which the page records as a guess."""
 
 
 def _with_clearance(band: Rect, clear: float) -> Rect:

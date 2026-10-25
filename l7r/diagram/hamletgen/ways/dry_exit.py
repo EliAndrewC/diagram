@@ -33,7 +33,7 @@ EXIT_CELL_FT = 20.0
 ft between two marshes is no dry exit anyone would take), coarse enough that a canvas of a few thousand feet is tens of
 thousands of cells.
 
-Research: narrowest dry neck - UNRESEARCHED: a neck under 20 ft is not taken"""
+Research: narrowest dry neck - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); a neck under 20 ft is not taken"""
 
 EXIT_OVERSHOOT_FT = 400.0
 """How far past the canvas edge the returned track runs on, so the crop trims it rather than it stopping short (the

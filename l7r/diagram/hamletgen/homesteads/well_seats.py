@@ -88,7 +88,7 @@ class PairAhead:
 
         Research:
             no well serving more than ten - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses each dug well served at Karihama
-            the second well held 170 px off the first - UNRESEARCHED: the pair's spacing, `seat_wells`' own "wells apart"; no page gives a hamlet's wells' spacing"""
+            the second well held 170 px off the first - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); the pair's spacing, `seat_wells`' own "wells apart"; no page gives a hamlet's wells' spacing"""
         import numpy as np
 
         if not len(self.sx):

@@ -39,7 +39,7 @@ def persimmon_for(s: Settlement, h: Mapping[str, Any], forms: FixtureForms) -> d
         persimmon in the dooryard - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: by the seat search every persimmon takes, front or behind
         out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: its own plots' and its neighbors', `CANOPY_SHADE_FT`
         its own grove gives way - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: its own grove's bands open to it, its own grove's crowns no bar (taken out after, `give_way`)
-        under no other stand's conifer - UNRESEARCHED: a persimmon is refused under the crown of any other stand's conifer; the page records nothing for other stands
+        under no other stand's conifer - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); a persimmon is refused under the crown of any other stand's conifer; the page records nothing for other stands
         in no other farm's grove - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: a neighbor's grove refuses the tree"""
     g = h.get("geom") or {}
     if not g.get("house"):
@@ -139,7 +139,7 @@ def reseat_persimmons(s: Settlement, houses: Sequence[dict[str, Any]], target: i
 
     Research:
         the rolled count honored - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the per-hamlet 80 to 95 in 100 share; each tree short of the hamlet's rolled count offered to a household without one
-        which household takes it - UNRESEARCHED: the next in the houses' own order that has a seat"""
+        which household takes it - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); the next in the houses' own order that has a seat"""
     if not getattr(s, "_sun_corridor_ft", 0.0):
         return 0
     short = target - sum(1 for h in houses for f in h.get("fixtures") or () if f.get("kind") == "persimmon")

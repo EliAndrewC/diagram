@@ -37,7 +37,7 @@ from .route import _route
 # paddy is legitimately indirect, and the thing being bought is the difference between a dozen houses
 # reachable and a dozen houses not.
 _LINK_DIRECTNESS = 4.0
-"""Research: network link directness - UNRESEARCHED: a link up to 4.0 times its chord"""
+"""Research: network link directness - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); a link up to 4.0 times its chord"""
 
 
 def brook_crossings(pts: Sequence[Pt], s: Settlement) -> int:
@@ -68,7 +68,7 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
         link crosses the brook at a crossing place - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no out-and-back over the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a link crossing the brook twice is refused
         link width - CONVENTION: the widest way within `_LANE_JOIN_FT` of the link (the orphan's and the network's at least)
-        orphan link directness - UNRESEARCHED: a link up to `_LINK_DIRECTNESS` (4) times the gap"""
+        orphan link directness - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); a link up to `_LINK_DIRECTNESS` (4) times the gap"""
     made = 0
     for _ in range(6):
         ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
@@ -186,8 +186,8 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         kept whole for a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane whose pull-back would leave a farmhouse with no way is restored whole, its unserving end carried to a dooryard where an owed house stands within the carry's reach and no grove band is in the way, and otherwise left where it was drawn - the page pulls back an end that reaches nothing and does not say what gives when that would strand a house
         grove band not crossed - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0033-row-villages-resson.drawing.html: no lane runs through a farm's own wood - its grove and its share of the dooryard copse, one wood (0036) - the way runs outside the grove or through a gap in it - so an end is not carried across one
         walked on to the house it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at the dooryard - an end that reaches walks back along its own lane, while it still reaches, to its closest approach to the nearest owed house within 120 ft (2 x `_REACH_FT`); never while within 60 ft (`_REACH_FT`) of another way - not the one its far end stands on (405 T82)
-        dooryard carry reach - UNRESEARCHED: up to 120 ft (2 x `_REACH_FT`); the page gives a lane end's reach (60 ft), not a carry's
-        a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish
+        dooryard carry reach - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); up to 120 ft (2 x `_REACH_FT`); the page gives a lane end's reach (60 ft), not a carry's
+        a whittled lane emptied - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish
         a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the page's check that every farmhouse has a way within 100 ft (`_SERVE_FT`): a lane that is some house's only way within it is kept; the page's 60 ft / 12 ft is what a lane END is held to, not this (405 T75)"""
     lanes = s.M.get("lanes") or []
     owed = lane_houses(s.M)  # the houses an end serves, is kept for or carried to: a household reached across a yard is owed none (feature 317)

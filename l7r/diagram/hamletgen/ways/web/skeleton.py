@@ -105,18 +105,18 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         skeleton form - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the rolled lane shape
         clear of crop, wet and water - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane never crosses row crops and keeps off wet ground
         skeleton arm over the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: an inner arm crossing the brook takes the ford that makes its walk shortest, square to the reach
-        skeleton arm off the ditches - UNRESEARCHED: an inner arm clipped at the ditches and drawn channels, never crossing one
+        skeleton arm off the ditches - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a path runs on the bank of every grade of field channel, and the bund is a path - a skeleton arm never crosses a ditch, a departure the code keeps until feature 417 T32; an inner arm clipped at the ditches and drawn channels, never crossing one
         spine along the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the spine spans the houses' own extent - a lane follows the houses and runs only along those it serves
         spine centered on the houses - GUESS: on the houses' arc midpoint and mean stand
-        no accidental crossing - UNRESEARCHED: an arm that would cross an arm already kept, by accident of the template, is not laid (`_arm_crossing_accidental`)
+        no accidental crossing - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); an arm that would cross an arm already kept, by accident of the template, is not laid (`_arm_crossing_accidental`)
         skeleton margin off the crop - research/questions/0081-village-lanes.drawing.html: a lane may touch a plot's boundary - the arm clipped at its tread's edge (half its 5 ft width) off the field and the dry plots
-        skeleton margin off the wet and the ditches - UNRESEARCHED: 20 px off the toe band and the marsh, 14 px off the drawn water (`clip_to_clear`'s line margin)
+        skeleton margin off the wet and the ditches - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); 20 px off the toe band and the marsh, 14 px off the drawn water (`clip_to_clear`'s line margin)
         routed round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
         skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft
         skeleton drawn worn - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: narrow, packed earth, no centerline (`worn=True`)
-        no skeleton under two houses - UNRESEARCHED: a cluster of fewer than two houses lays no skeleton lanes (`len(arcs) < 2`), there being no two houses to join
+        no skeleton under two houses - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); a cluster of fewer than two houses lays no skeleton lanes (`len(arcs) < 2`), there being no two houses to join
         skeleton arm's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle 7 ft clear of a garden fence; each arm registers `LANE_CLEARANCE`, 7 ft from its middle, a footprint held to it at its corners
-        skeleton span floor - UNRESEARCHED: each half-extent floored at half a bundle pitch (50 ft), a pitch across; a run under 70 ft dropped by `clip_to_clear`, an arm under 30 ft (`_WEB_MIN_FT`) not laid
+        skeleton span floor - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); each half-extent floored at half a bundle pitch (50 ft), a pitch across; a run under 70 ft dropped by `clip_to_clear`, an arm under 30 ft (`_WEB_MIN_FT`) not laid
         skeleton arm trimmed back to the last point serving a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing pulled back to the last house it serves
         skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps at least 7 ft clear of a garden fence"""
     if len(arcs) < 2:
@@ -277,7 +277,7 @@ def served_arm(s: Settlement, arm: Poly) -> Poly:
 
     Research:
         skeleton arm trimmed to service - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing pulled back to the houses it serves; one reaching a way drawn so far or the bund stays
-        shortest arm - UNRESEARCHED: an arm under 30 ft (`_WEB_MIN_FT`) is not drawn"""
+        shortest arm - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); an arm under 30 ft (`_WEB_MIN_FT`) is not drawn"""
     if len(arm) >= 2:
         # ...JUDGED AGAINST WHAT IT REACHES (405 T63, D40): the ways drawn so far and the bund too, not the houses alone - 0246 pulls
         # back only an end that reaches nothing, and an arm ending on the connector, the spur or the bund was cut back to its last house

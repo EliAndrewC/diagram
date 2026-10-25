@@ -31,23 +31,34 @@ from .grids import FTPX
 from .parse import ParsedPlan, Rect
 
 LAT_DEG: float = 38.0  # the record's latitude for every shadow it casts (research 0038)
+"""Research: sun latitude - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: shadows are cast at 38 degrees north, the temperate middle of the empire the maps are set in."""
 DECL_DEG: float = -8.5  # the shoulder month: at 38N it gives the record's 3pm sun, 27-28 deg high at azimuth ~232 (0038)
+"""Research: sun declination - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a solar declination of -8.5 degrees gives, at 38 N, the page's 3 pm sun 27 degrees high in the southwest, late in autumn."""
 STEP_H: float = 0.5  # the day walked in half hours
+"""Research: sun step - NONE: the day is walked in half-hour steps, a measuring grain."""
 LIT_SHARE: float = 0.5  # a half hour is lit when at least half the bed is out of shadow (homesteads 044, a guess)
+"""Research: lit share of a bed - GUESS research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: an hour counts as lit when at least half the bed is out of shadow; the page records the counting as a guess."""
 SUN_BED_H: float = 6.0  # sun crops - daikon, eggplant, cucumber, beans - want about 6 hours or more (homesteads 044)
+"""Research: sun bed hours - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a kitchen bed of sun crops such as daikon must get 6 hours of direct sun in autumn."""
 HALF_SHADE_BED_H: float = 3.0  # half-shade crops do with 3 to 4 (homesteads 044)
+"""Research: half-shade bed hours - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a bed of half-shade crops needs 3 hours of direct sun (3 to 4 for such crops)."""
 BUILDING_FT: float = 20.0  # the farmhouse ridge the record casts a building's shadow from (homesteads 043) - a least height
+"""Research: building shadow height - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a building casts its shadow from the farmhouse ridge, about 20 ft, the least height the record gives."""
 WALL_FT: float = 1.6 / 0.3048  # the surviving earth wall's 1.6 m (buildings 490)
 TREE_FT: float = 10.0 / 0.3048  # a working, pruned belt's 10 m (0038); an untended stand is 15-28 m
 SMALL_BUILDING_FT: float = 6.0  # a roofed thing under SMALL_BUILDING_SQFT - a privy, a hokora, a covered way - at the least height a person stands under (a guess)
+"""Research: small roofed thing height - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every building casts from the farmhouse ridge's 20 ft, with no smaller class - a roofed thing under SMALL_BUILDING_SQFT casts from 6 ft, a departure the code keeps until feature 417 T33; a roofed thing under SMALL_BUILDING_SQFT (a privy, a hokora, a covered way) casts a shadow from 6 ft, the least height a person stands under; no page gives it."""
 SMALL_BUILDING_SQFT: float = 100.0
+"""Research: small roofed thing area - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every building casts from the farmhouse ridge's 20 ft, with no smaller class - a roofed thing under 100 sq ft counts as small, a departure the code keeps until feature 417 T33; a roofed thing under 100 sq ft counts as small for its shadow height; no page gives the cutoff."""
 # What a sheet draws that does not stand up to cast a garden's shadow: ground and water features, a building's own parts (under
 # its roof, which casts for them) and furniture below head height. Everything else the parser counts as a structure casts.
 NOT_STANDING: frozenset[str] = frozenset(
     {"basin", "door", "engawa", "hearth", "notice board", "weapon rack", "stone lantern", "tax barge", "magistrate's dais", "clerks' seats", "well", "shrine altar", "wood-kami altar"}
 )
 MIN_SUN_DEG: float = 3.0  # below this the sun is on the horizon: its shadows run off the sheet and it grows nothing
+"""Research: sun floor - NONE: below 3 degrees the sun is on the horizon and its shadows run off the sheet, a computation cutoff."""
 MIN_BED_PX: float = 300.0  # a garden element smaller than this (a label box, a border tick) is not a bed
+"""Research: bed area floor - NONE: a garden element under 300 px2 is a label box or border tick, not a bed, a parser classification."""
 GARDEN_KIND = "vegetable garden"
 _BED_ATTR = re.compile(r'data-bed="([^"]+)"')
 

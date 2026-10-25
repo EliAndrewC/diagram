@@ -54,7 +54,7 @@ class SeatRegion:
         """The two rasters over `window` (the module's account).
 
         Research:
-            no way of its own across a water course within its clearance - UNRESEARCHED: the courses painted onto lane ground at the corridor test's own clearance
+            no way of its own across a water course within its clearance - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); the courses painted onto lane ground at the corridor test's own clearance
             a way of its own decided on lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a dooryard that opens onto the ground the lanes are laid in, connected to the track out
         """
         self.s, self.window, self.cell = s, window, cell

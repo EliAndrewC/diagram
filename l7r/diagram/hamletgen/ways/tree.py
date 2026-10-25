@@ -199,7 +199,7 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
         no sliver between the tree's lanes - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined (`as_joined`), two paths side by side are drawn as one (no needle, `needle_loops`), no stub run on past a crossing (no doubled tail)
         way out crosses each brook once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no doubled band - research/questions/0081-village-lanes.drawing.html: two paths running side by side are drawn as one, and two lanes met end to end are read as one (`walked_shadows`) - an access lane may not run beside another past a pitch
-        free ends at a house - UNRESEARCHED: at most DOORSTEP_MAX (2) free lane ends at a house
+        free ends at a house - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25) - one main door served a minka's household (JAANUS, Edo period, pass A2); no page gives how many ends meet at one; at most DOORSTEP_MAX (2) free lane ends at a house
         track out's width as judged - research/questions/0081-village-lanes.drawing.html: the track out's stub judged at 6 ft, the track out as drawn"""
     from .tree_base import base_for
 
@@ -305,7 +305,7 @@ def walked_shadows(lanes: Sequence[Mapping[str, Any]]) -> bool:
     """Does the way the last lane is read as (`joints.as_walked`: the lanes met end to end joined) run beside another way
     past a pitch, or another beside it (`tree_shadows`, on the walked ways)?
 
-    Research: no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch, read as the walker reads it"""
+    Research: no doubled band - research/questions/0081-village-lanes.drawing.html: two paths running side by side are drawn as one, measured at less than 20 degrees and cut where the lane comes alongside - the test is 30 ft for more than a pitch, with no angle, cutting mid-stretch, a departure the code keeps until feature 417 T32; an access lane may not run beside another past a pitch, read as the walker reads it"""
     from .joints import as_walked  # joints reaches the web's smoothing; imported here, where the seating asks it
 
     ways, owner = as_walked(lanes)
@@ -317,7 +317,7 @@ def walked_shadows(lanes: Sequence[Mapping[str, Any]]) -> bool:
 def tree_shadows(ways: Sequence[Sequence[Pt]]) -> bool:
     """Does the last way run beside another past a pitch, or another beside it (`serve.shadowed_by`, way against way)?
 
-    Research: no doubled band - UNRESEARCHED: a way may not run beside another past a pitch"""
+    Research: no doubled band - research/questions/0081-village-lanes.drawing.html: two paths running side by side are drawn as one, measured at less than 20 degrees and cut where the lane comes alongside - the test is 30 ft for more than a pitch, with no angle, cutting mid-stretch, a departure the code keeps until feature 417 T32; a way may not run beside another past a pitch"""
     from .serve import shadowed_by  # serve reaches the web's draw; imported here, where the seating asks it
 
     last = len(ways) - 1
@@ -508,7 +508,7 @@ def tree_shadow_cuts(lanes: Sequence[Mapping[str, Any]], ways: Sequence[Sequence
     a tree lane beside it (`serve.shadowed_by`, way against way): the middle of the ordinary lane's longest stretch within
     `WEB_SHADOW_FT` of the tree lane - where a cut of `DEFER_GAP_FT` either side leaves no stretch past the pitch.
 
-    Research: no doubled band - UNRESEARCHED: an ordinary lane may not run beside a tree lane for more than a bundle pitch; the ordinary lane defers"""
+    Research: no doubled band - research/questions/0081-village-lanes.drawing.html: two paths running side by side are drawn as one, measured at less than 20 degrees and cut where the lane comes alongside - the test is 30 ft for more than a pitch, with no angle, cutting mid-stretch, a departure the code keeps until feature 417 T32; an ordinary lane may not run beside a tree lane for more than a bundle pitch; the ordinary lane defers"""
     from .serve import WEB_SHADOW_FT, sampled, shadowed_by
 
     out: list[tuple[int, int, Pt]] = []
@@ -555,7 +555,7 @@ def alongside_points(seq: Sequence[Pt], trees: Sequence[tuple[int, Poly]]) -> It
 
     Research:
         side by side - research/questions/0081-village-lanes.drawing.html: a lane that wanders over another way at less than 20 degrees would be walked into one path with it (a map drawing convention, the page's own reading)
-        beside, as the map reads it - UNRESEARCHED: 0081 gives the angle but no distance; read within `WEB_SHADOW_FT` (30 ft, the distance the shadow rule reads two ways together at), as `knots.teed_back` reads it"""
+        beside, as the map reads it - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); 0081 gives the angle but no distance; read within `WEB_SHADOW_FT` (30 ft, the distance the shadow rule reads two ways together at), as `knots.teed_back` reads it"""
     from ..consts import WEB_SHADOW_FT
     from .knots import _SIDE_BY_SIDE_DEG
 
@@ -603,7 +603,7 @@ def cut_alongside(M: Mapping[str, Any], i: int, admit: Callable[[Poly], bool] = 
     Research:
         cut where it comes alongside, met as a T - research/questions/0081-village-lanes.drawing.html: "the maps cut it where it comes alongside and let it meet the other as a T" (a map drawing convention, the page's own reading)
         the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the network to the field's bund
-        each end walked, the nearer point first - UNRESEARCHED: the walk from the lane's first end is tried before the walk from its last, and on each the first point found - so the lane is kept from that end up to where it first comes alongside; only ordinary lanes are cut here (`tree_faults` names no tree lane), never a household's own way, so no door end is in question (0081 cuts that at its far end)
+        each end walked, the nearer point first - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); the walk from the lane's first end is tried before the walk from its last, and on each the first point found - so the lane is kept from that end up to where it first comes alongside; only ordinary lanes are cut here (`tree_faults` names no tree lane), never a household's own way, so no door end is in question (0081 cuts that at its far end)
         no more knots - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point - a tee that leaves more knots is refused
         no house newly unreached - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own - nor one that leaves more networks or a house unreached"""
     from .checks import unreached_houses
@@ -672,7 +672,7 @@ def prune_the_tree(s: Any) -> int:
     A household's own way never goes (feature 318), so what may is a way target's spur or the field way, which nothing hangs from. One a round, as a fragment: two can each be redundant only while the other stands.
 
     Research:
-        redundant tree lane pruned - UNRESEARCHED: no more corridors than the map needs; never a household's own way (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own)
+        redundant tree lane pruned - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane that serves nothing is not drawn (the page's GUESS, on Mencius and the Tang code); the pruning count is ours; no more corridors than the map needs; never a household's own way (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own)
         the way of a household another is reached across - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its corridor never pruned, as no household's own way is
         street and door path never pruned - research/questions/0033-row-villages-resson.drawing.html: the way a row's farms are reached by"""
     M = s.M

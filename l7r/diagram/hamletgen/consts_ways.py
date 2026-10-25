@@ -96,14 +96,14 @@ DOOR_STEP_FT = 8.0
 household's own dooryard, not a fence gap: 0246 lets a household's own way run beside its own fence. The value the door held
 as `FOOTPATH_FABRIC_GAP` + 4 before feature 385 T96.
 
-Research: door step - UNRESEARCHED: 8 ft past the yard, in the household's own dooryard"""
+Research: door step - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); 8 ft past the yard, in the household's own dooryard"""
 
 DOOR_FIXTURE_CLEAR_FT = 5.0
 """How far the door point is kept off the farm's own fixtures and the grove bands round it (`ways/serve.door_off_fixtures`)
 - the point a door path starts from; the path from it keeps `FOOTPATH_FABRIC_GAP` off every garden fence. The value it held
 as `FOOTPATH_FABRIC_GAP` + 1 before feature 385 T96.
 
-Research: door point off the fixtures - UNRESEARCHED: 5 ft clear of the fixtures and grove bands, in the household's own dooryard"""
+Research: door point off the fixtures - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); 5 ft clear of the fixtures and grove bands, in the household's own dooryard"""
 
 # HOW FAR A WEB LANE STAYS OFF THE CROP, THE TOE AND THE MARSH, in feet.
 #
@@ -122,7 +122,7 @@ Research: door point off the fixtures - UNRESEARCHED: 5 ft clear of the fixtures
 # 6 ft streets and joins routed on the same ground stood 1.5 ft on the crop, impl-drift), as 0081's drawing page lets it; the crop polygons carry that gap themselves
 # (`clearance.Gapped`), so every reader handed the hard ground keeps each part at its own.
 WEB_HARD_GAP = 8.0
-"""Research: web lane off the toe and marsh - UNRESEARCHED: 8 ft; the record says only that a lane keeps off wet ground"""
+"""Research: web lane off the toe and marsh - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); 8 ft; the record says only that a lane keeps off wet ground"""
 WEB_CROP_GAP = 3.0
 """Research: web lane against the crop - research/questions/0081-village-lanes.drawing.html: a lane may touch a plot's boundary - its middle half the widest tread laid on this ground (a row street's or a join's 6 ft) off the field and the dry plots, so no tread's edge passes the boundary"""
 
@@ -222,8 +222,8 @@ LANE_FRONTAGE_STANDOFF = 70.0
 """How far off a lane's centerline a frontage seat is offered.
 
 Research:
-    farmsteads front a lane - UNRESEARCHED: a seat offered off a lane, which the page gives no figure for
-    frontage seat off the lane - UNRESEARCHED: 70 ft off the centerline, with a dooryard's working margin the page does not give
+    farmsteads front a lane - GUESS: searched, the record silent on the 70 ft (feature 417 T29 pass B, 2026-10-25); 0081's 3 ft from a tread to a wall is a floor this keeps
+    frontage seat off the lane - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 70 ft off the centerline, with a dooryard's working margin the page does not give
 """
 
 # How far outside the paddy's outline a field spur's tip stops. The lane is drawn 5 px wide and
