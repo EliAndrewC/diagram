@@ -224,3 +224,75 @@ Not followed (print only or unreachable): 道路構造令の解説と運用's �
 quotes its criterion as ">70 degrees"), Thomson and Richardson's original stroke threshold, Helbing's Phys. Rev. E paper,
 USFS / NPS trail junction guidance, arXiv 2511.06747. T16's doubled tail is still set down: the pass supports the page's
 20 as a convention and gives no reason for 25; which value the two roles (`_ALONG_DEG`, `_DOUBLED_DEG`) share is the GM's.
+
+## R8 - the settle's steps, each switched off (T31, D35)
+
+Observed 2026-10-25; method: D35, in the detached worktree `probe31` at the clone's HEAD of that morning, each step's every
+position in `settle/stage.py` `STEPS` filtered out by a line that never lands, then `make cohort N=48 FRESH=0 JOBS=3` and `make
+map` on the five pool hamlets, the manifests compared with `git diff`. The baseline is the landing cohort's 54 of 54 and the
+committed pool. The probes took about 13 min a step at 3 workers.
+
+| step off (observed 2026-10-25; method: as above) | fixed and pinned | pool manifests that moved |
+|---|---|---|
+| (T16: `_ALONG_DEG` and `_DOUBLED_DEG` both at 20) | 53/54 - seed 40 `WebRefused` (a shallow crossing left) | none |
+| `settle_husks` | 54/54 | none |
+| `square_every_crossing` | 54/54 | Inashiro, Sawada |
+| `settle_shapes` | 54/54 | Sawada |
+| `settle_way_outs` | 54/54 | Sawada |
+| `settle_ends` | 53/54 - seed 21 `lane_knots` (2 knots, 19.8 ft) | none |
+| `settle_street_ends` | 54/54 | none |
+| `settle_shadows` | 54/54 | none |
+| `settle_joins` | 54/54 | none |
+| `settle_needles` | 54/54 | none |
+| `settle_reach` (a placer: the reach the web owes) | every seed refused | all five refused |
+| `settle_defer` | 53/54 - seed 47 `WebRefused` | Inashiro, Sawada |
+| `settle_network` | 43/54 - 11 seeds `WebRefused` | Inashiro; Mizuguchi and Sawada refused |
+| `settle_fragments` | 53/54 - seed 36 `lane_knots` | Sawada |
+| `prune_the_tree` | 54/54 | none |
+| `settle_knots` | 41/54 - 13 seeds `lane_knots` | Inashiro |
+| `settle_widths` | 54/54 | Inashiro, Kashikawa, Sawada |
+
+So, by D35: six steps change nothing measured - `settle_husks`, `settle_street_ends`, `settle_shadows`, `settle_joins`,
+`settle_needles`, `prune_the_tree` - and are NEEDLESS; four keep every fixed and pinned verdict but move a pool map -
+`square_every_crossing`, `settle_shapes`, `settle_way_outs`, `settle_widths` - so whether they are needless is the pool gate's
+to say; six are NEEDED - `settle_ends`, `settle_defer`, `settle_network`, `settle_fragments`, `settle_knots`, and
+`settle_reach`, which is not a repair but the placer of the reach the web owes. The needless all off together, and with the
+four, were probed together (observed 2026-10-25; method: as above): the six off together, 54 of 54 and no pool manifest
+moved - NEEDLESS together; the ten off together (the six and the four), 54 of 54, with Inashiro, Kashikawa and Sawada moving -
+whether those three still pass is the pool gate's at the deletion's landing. The six are deleted first (T31); the four go with
+them only if the gate passes the moved maps, or are set down with their maps named.
+
+## R9 - are the UNRESEARCHED labels true (T29, D32)
+
+Observed 2026-10-25; method: research passes (`research-pass`, the record and the archive first, then the web), one per group of
+claims sharing a question, each given its claim list; their replies are saved verbatim in `evidence/t29/pass-*.md` and their
+claim lists beside them. The 247 of the modules this feature changes went to passes A1, A2, B, C and D (and 30 algorithmic ones
+to no pass, E); the other 476 to P1-P7.
+
+What the passes found, by claim (the 247; observed as above):
+
+| pass | claims | answered by a source | contradicted | searched, silent | no source could speak to it |
+|---|---|---|---|---|---|
+| A1 lane setbacks | 41 | 8 | 7 | 10 | 16 |
+| A2 lane form | 52 | 7 | 0 | 16 | 29 |
+| B seating | 46 | 8 | 0 | 9 | 24 |
+| C fixtures | 49 | 4 | 1 | 13 | 30 |
+| D track, field, water | 29 | 8 | 0 | 12 | 7 |
+
+So the GM's question is answered: most `UNRESEARCHED` labels in these modules were not true of the search - the record had
+already looked for many of them (RECORD-SILENT-BEFORE), and a pass has now looked for the rest. Of the 247, the first landing
+(observed 2026-10-25; method: `git diff` of the landing, the claims rounds' verdicts in `dev/claims-index.json`) relabels 138
+bare `GUESS`, each account opening with its reason and its pass; cites 8 to the drawing page that answers them (or names the
+page whose GUESS they extend), as impl-drift showed; labels T16's two angles `CANON` for the GM's ruling; and leaves the rest at
+main's text: the ones a source answers but the code departs from (citing would expose the departure) and the ones a source
+contradicts, all in T32-T35 for the fixing pass. The other 476 (P1-P7) are matched to their passes' verdicts (393 of 476 by
+unit and label; 272 silent or no-source) and go in a second batch.
+
+The landing's final count (observed 2026-10-25; method: `grep` over `l7r/` and `make tunables`, at the landing's tree): every
+one of the 247 claims of the modules this feature changes now says what research found - none is left `UNRESEARCHED` there;
+185 are bare `GUESS` naming the pass that searched (A1, A2, B, C, D, E, E2, F); 32 cite the page that answers them and state the
+code's departure from it, landing DRIFTED as the record's mark of a known drift (the round arbiter's accept, ask:417-T29-drifted;
+the claims gate admits a known drift since this landing's tooling fix), each filed by unit in T32 or T33; the rest cite the page
+that answers them as a convention, or are T16's two `CANON` angles. `UNRESEARCHED` is left on 479 claims elsewhere - their
+passes (P1-P7) have run and are saved; their relabels are T36. `make tunables` lists GUESS 455, UNRESEARCHED 283 and CONVENTION
+111 with a figure; `make tunables INLINE=1` 1,823 unstated numbers in 149 files.

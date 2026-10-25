@@ -1,6 +1,6 @@
 """`record/money.py` - the conversion of a marked amount of money, shown on hover (feature 413, diagram#14).
 
-WHAT THESE PROVE. The issue's worked example (20 mon at Kyoto 1745-54 = about $4.07 in goods, $41.71 in wages, 4.2 sen);
+WHAT THESE PROVE. The issue's worked example (20 mon at Kyoto 1745-54 = about $4.07 in goods, $41.71 in wages, 4.2 sen; its goods a range to the high reading since feature 421);
 the Rokugani format matches gm-assistant's `conversions.rokugani()`; a range converts both ends; an era is inherited from an
 enclosing element, also across the record's unclosed blocks; a borrowed era says so, and no distance in years is refused (the GM, #14); every bad
 mark is refused, naming the amount; an awaiting era and an unmarked amount pass untouched (the glossary tooltip alone); the
@@ -24,8 +24,8 @@ KYOTO = {
     "basket_coverage": "the whole basket",
     "goods_left_out": [],
     "units": {
-        "mon": {"silver_g": 0.04712, "goods_dollars": 0.203442, "wage_dollars": 2.085311, "rokugan_sen": 0.208719},
-        "ryo": {"silver_g": 186.6, "goods_dollars": 805.649085, "wage_dollars": 8258.042553, "rokugan_sen": 826.550336},
+        "mon": {"silver_g": 0.04712, "goods_dollars": 0.203442, "goods_dollars_high": 0.406884, "wage_dollars": 2.085311, "rokugan_sen": 0.208719},
+        "ryo": {"silver_g": 186.6, "goods_dollars": 805.649085, "goods_dollars_high": 1611.29817, "wage_dollars": 8258.042553, "rokugan_sen": 826.550336},
     },
 }
 TOKYO = {
@@ -33,7 +33,7 @@ TOKYO = {
     "years": "1882-1886",
     "basket_coverage": "9 of 12 goods",
     "goods_left_out": ["Salt", "Fuel", "Housing"],
-    "units": {"yen": {"silver_g": 25.0, "goods_dollars": 73.9, "wage_dollars": 693.3, "rokugan_sen": 130.5}},
+    "units": {"yen": {"silver_g": 25.0, "goods_dollars": 73.9, "goods_dollars_high": 147.8, "wage_dollars": 693.3, "rokugan_sen": 130.5}},
 }
 TABLE = money.Table({"kyoto-1745": KYOTO, "tokyo-1882": TOKYO}, {"beijing-1736": {"place": "Beijing", "years": "1736-1760"}})
 
@@ -45,7 +45,7 @@ def _span(amount: str, coin: str, text: str, extra: str = "") -> str:
 def test_the_issues_worked_example() -> None:
     out, errors = money.annotate(f'<p data-era="kyoto-1745">It cost {_span("20", "mon", "20 mon")}.</p>', "q", TABLE)
     assert errors == []
-    assert "20 mon: about $4.07 in goods, $41.71 in wages, 4.2 sen in Rokugan" in out
+    assert "20 mon: about $4.07-$8.14 in goods, $41.71 in wages, 4.2 sen in Rokugan" in out
     assert "Kyoto 1745-1754: the whole basket" in out and "Salt, fuel and housing are guesses." in out
     assert "at Kyoto" not in out  # its own era: no borrowed line
 
@@ -64,7 +64,7 @@ def test_fmt_of_nothing_and_dollars() -> None:
 def test_a_range_converts_both_ends_and_the_coverage_names_what_is_left_out() -> None:
     out, errors = money.annotate(f'<li data-era="tokyo-1882">{_span("1-2", "yen", "1-2 yen")}</li>', "q", TABLE)
     assert errors == []
-    assert "1-2 yen: about $74-$148 in goods, $693-$1,387 in wages, 1 bu 3 zeni to about 2 bu 6 zeni in Rokugan" in out
+    assert "1-2 yen: about $74-$296 in goods, $693-$1,387 in wages, 1 bu 3 zeni to about 2 bu 6 zeni in Rokugan" in out
     assert "Tokyo 1882-1886: 9 of 12 goods; leaves out salt, fuel, housing" in out
 
 
@@ -129,10 +129,10 @@ def test_load_reads_the_table_and_a_missing_file_as_empty(tmp_path: pathlib.Path
 
 def test_the_vendored_table_converts_the_worked_example() -> None:
     """The real copy (`make money-conversions`): 20 mon at kyoto-1745 in gm-assistant's feature 223 table (diagram#17
-    issuecomment-6398335706: goods now the spending-weighted geometric mean, $1.54 where the arithmetic gave $3.32)."""
+    issuecomment-6398335706: goods the range from the geometric to the arithmetic mean, feature 421)."""
     table = money.load(str(pathlib.Path(__file__).resolve().parents[2] / "research"))
     out, errors = money.annotate(_span("20", "mon", "20 mon", ' data-era="kyoto-1745"'), "q", table)
-    assert errors == [] and "about $1.54 in goods, $37.92 in wages, 3.8 sen in Rokugan" in out
+    assert errors == [] and "about $1.54-$3.32 in goods, $37.92 in wages, 3.8 sen in Rokugan" in out
 
 
 def test_the_site_build_writes_the_box_and_gathers_every_refusal(tmp_path: pathlib.Path) -> None:
@@ -145,7 +145,7 @@ def test_the_site_build_writes_the_box_and_gathers_every_refusal(tmp_path: pathl
     mark = _span("20", "mon", "20 mon", ' data-era="kyoto-1745"')
     fr.edit(rec, "0002-bridges.html", "One span.", f"One span, {mark}.")
     files = site.build(str(rec))
-    assert "20 mon: about $4.07 in goods" in files["q/bridges.html"] and "20 mon: about $4.07 in goods" in files["all.html"]
+    assert "20 mon: about $4.07-$8.14 in goods" in files["q/bridges.html"] and "20 mon: about $4.07-$8.14 in goods" in files["all.html"]
     fr.edit(rec, "0002-bridges.html", "kyoto-1745", "kyoto-1754")
     with pytest.raises(RecordError) as e:
         site.build(str(rec))

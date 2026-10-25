@@ -158,7 +158,7 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
     Research:
         a scattered farm's own water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: its channel ends in its frame, or, where no channel reaches it, its own well in its frame (a well off its way in on a `well` map)
         a row's water - research/questions/0033-row-villages-resson.drawing.html: own wells, or every farm within `WATER_REACH_FT` of a shared one
-        well in the way in - UNRESEARCHED: a private well within 12 ft of the house-to-door line counts as in the way
+        well in the way in - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); a private well within 12 ft of the house-to-door line counts as in the way
     """
     meta = M.get("meta") or {}
     form = meta.get("settlement_form")

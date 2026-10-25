@@ -407,11 +407,11 @@ def seat_wells(
         no well serving more than ten - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses each dug well served at Karihama; a seat that keeps every well at ten or fewer ranked first
         not in the windbreak - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: belt seats sorted last, never refused
         surface water counts - research/questions/0196-communal-wells-ido.drawing.html: a house within 760 ft (over the map's ft per px) of surface water needs no well
-        wells apart - UNRESEARCHED: 170 px between wells
+        wells apart - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); 170 px between wells
         no well past the crop - research/questions/0196-communal-wells-ido.drawing.html: every well stands among the houses it serves; refused where the wellhead would widen the crop
-        no well over a household's wood floor - UNRESEARCHED: no well seated over a household's reserved wood-floor seats
-        later wells by the worst walk - UNRESEARCHED: ranked by the worst-served household's walk after the dig, in 66 px buckets, the crop's overreach added 1:1
-        ties among later wells - UNRESEARCHED: the belt, then the crop's overreach, then the exact worst walk, then the want_near-th nearest house
+        no well over a household's wood floor - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); no well seated over a household's reserved wood-floor seats
+        later wells by the worst walk - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); ranked by the worst-served household's walk after the dig, in 66 px buckets, the crop's overreach added 1:1
+        ties among later wells - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); the belt, then the crop's overreach, then the exact worst walk, then the want_near-th nearest house
     """
     new: list[Pt] = []
     if not houses or len(placed) >= want:

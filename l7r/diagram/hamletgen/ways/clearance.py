@@ -34,7 +34,7 @@ def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: li
     Research:
         link clear of the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the link's line 7 ft off a garden fence (the page's fence to the middle of the lane), its edge 5.5 ft
         link clear of the crop - research/questions/0081-village-lanes.drawing.html: half the widest tread off the crop (`WEB_CROP_GAP`)
-        link clear of the wet ground and the water - UNRESEARCHED: 8 ft off the toe and marsh, 14 ft off water"""
+        link clear of the wet ground and the water - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a path runs on the bank of every grade of field channel, and the bund is a path - the link is held 14 ft off the water, a departure the code keeps until feature 417 T32; 8 ft off the toe and marsh, 14 ft off water"""
     span = math.dist(a, b)
     if span < 1.0:
         return True
@@ -132,8 +132,8 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
         junction link margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (`WEB_FABRIC_GAP`) off the fabric, or the caller's
         a join link never on the crop - research/questions/0081-village-lanes.drawing.html: a lane never crosses row crops
         a join link off the crop at the gap - DEVIATION research/questions/0081-village-lanes.drawing.html: the page lets a lane run on the bund and touch a plot's boundary; the link keeps the fabric's 7 ft (`gap`) off the crop - the departure the page is yet to record (405 T98)
-        a join link off the wet ground at the gap - UNRESEARCHED: the link keeps the fabric's 7 ft off the toe and the marsh, where a lane's link keeps 8 ft (`_clear_link`); no page gives either
-        a join link off the water - UNRESEARCHED: 14 ft off the water lines (`clear_runs`' `line_margin`), as `_clear_link`
+        a join link off the wet ground at the gap - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); the link keeps the fabric's 7 ft off the toe and the marsh, where a lane's link keeps 8 ft (`_clear_link`); no page gives either
+        a join link off the water - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a path runs on the bank of every grade of field channel, and the bund is a path - the join link is held 14 ft off the water, a departure the code keeps until feature 417 T32; 14 ft off the water lines (`clear_runs`' `line_margin`), as `_clear_link`
         a join link off every garden - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gap is kept from another household's garden and a household's own way may run beside its own; a link joins a way to the network and belongs to no one household, so no garden is its own"""
     span = math.dist(a, b)
     if span < 1.0:
@@ -295,10 +295,10 @@ def clear_runs(
 
     Research:
         off the crop - DEVIATION research/questions/0081-village-lanes.drawing.html: the page lets a lane run on the bund and touch a plot's boundary; the run keeps the full `margin` off the crop - the departure the page is yet to record (405 T98)
-        off the wet ground - UNRESEARCHED: the full margin; 0081 keeps a track off wet ground and gives no distance
+        off the wet ground - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); the full margin; 0081 keeps a track off wet ground and gives no distance
         threads between steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off the fabric by default
-        lane off a water line - UNRESEARCHED: 14 ft by default (`line_margin`)
-        shortest lane - UNRESEARCHED: a run under 70 ft by default is not a lane"""
+        lane off a water line - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a path runs on the bank of every grade of field channel, and the bund is a path - the lane is held 14 ft off a water line, a departure the code keeps until feature 417 T32; 14 ft by default (`line_margin`)
+        shortest lane - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); a run under 70 ft by default is not a lane"""
     if not obstacles and not lines and not tight:
         return [list(pts)]
 
@@ -348,8 +348,8 @@ def clip_to_clear(pts: Poly, obstacles: Sequence[Poly], margin: float, step: flo
 
     Research:
         an arm stops at the crop - research/questions/0081-village-lanes.drawing.html: a lane ends where the crop begins
-        lane off a water line - UNRESEARCHED: 14 ft by default
-        shortest arm - UNRESEARCHED: under 70 ft is not drawn"""
+        lane off a water line - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a path runs on the bank of every grade of field channel, and the bund is a path - the lane is held 14 ft off a water line, a departure the code keeps until feature 417 T32; 14 ft by default
+        shortest arm - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); under 70 ft is not drawn"""
     if not obstacles and not lines:
         return pts
 

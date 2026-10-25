@@ -1,0 +1,58 @@
+- ways/bund.py::RunOnBlocks.__init__#across commons and village groves
+    across commons and village groves - UNRESEARCHED: left out of the blocking fabric, crossed freely
+- ways/cluster_edge.py::_cluster_edge_toward#spur origin clear of the houses
+    spur origin clear of the houses - UNRESEARCHED: `TRACK_FABRIC_GAP` plus 8 px past the farthest house toward the target
+- ways/cluster_edge.py::_cluster_gateway#gateway clear of what stands
+    gateway clear of what stands - UNRESEARCHED: `TRACK_FABRIC_GAP` plus 8 px past the farthest house, well or yard
+- ways/cluster_edge.py::gate_out_of_the_field#setback from the field
+    setback from the field - UNRESEARCHED: `SPUR_SETBACK` 17 ft clear of the field envelope"""
+- ways/corridors.py::FORD_LANDING_FT#ford landing
+    ford landing - UNRESEARCHED: 22 ft each side of the brook (`FORD_LANDING_FT`)"""
+- ways/corridors.py::GABLE_MARGIN_FT#gable margin
+    Research: gable margin - UNRESEARCHED: 6 ft off the house's wall"""
+- ways/corridors.py::ROUTED_FIELD_STARTS#field path from the network
+    Research: field path from the network - UNRESEARCHED: six starts 30 ft apart, a search breadth"""
+- ways/corridors.py::ROUTED_START_GAP_FT#field path from the network
+    Research: field path from the network - UNRESEARCHED: six starts 30 ft apart, a search breadth"""
+- ways/corridors.py::_run_from#no run-on past the far landing
+    no run-on past the far landing - UNRESEARCHED: the straight run is offered as found, and the lane law's crossing rule cuts a crossing made off a ford before any is drawn (`settle._crossing_fault`, 0035); behavior as before feature 387, which moved this out of `field_runs` unchanged"""
+- ways/corridors.py::routed_field_runs#ford landing
+    ford landing - UNRESEARCHED: 22 ft each side of the brook (`FORD_LANDING_FT`)"""
+- ways/dry_exit.py::EXIT_CELL_FT#narrowest dry neck
+    Research: narrowest dry neck - UNRESEARCHED: a neck under 20 ft is not taken"""
+- ways/gateway.py::GATEWAY_TURNS_DEG#turned gateway bearings
+    Research: turned gateway bearings - UNRESEARCHED: 30, 60 then 90 degrees either side of the downslope"""
+- ways/gateway.py::gateway_track#a walled-in gateway
+    a walled-in gateway - UNRESEARCHED: from a gateway turned off the downslope"""
+- ways/law_water.py::short_decks#assumed channel width
+    assumed channel width - UNRESEARCHED: 3 ft where none is recorded"""
+- ways/reach.py::settle_field#the paddy's edge tried first
+    the paddy's edge tried first - UNRESEARCHED: the field way is tried to the paddy's edge before the dry hem's (`paddy_ground`, then `worked_ground`), where 0014 lets a lane end on either (405 T127)"""
+- ways/thread.py::_out_of_bands#a track's end out of the grove bands
+    a track's end out of the grove bands - UNRESEARCHED: set 8 ft (`FOOTPATH_FABRIC_GAP` + 1) clear of a grove band
+- ways/thread.py::_thread_the_fabric#detour swing
+    detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster
+- ways/track.py::_connector_through#connector's berth off the field
+    connector's berth off the field - UNRESEARCHED: bent round the field at `SPUR_SETBACK`, 17 ft off its envelope"""
+- ways/track.py::_connector_through#gives up a wood seat as last resort
+    gives up a wood seat as last resort - UNRESEARCHED: the seats the way out crosses are released; the accounts read have a farm's own way in through a gap in its grove, and none covers a through-way taking a household's wood seat
+- ways/track.py::connector_dry_exit#a channel crossed last
+    a channel crossed last - UNRESEARCHED: the fill crosses a drawn channel only where no way out keeps to the ground between them; 0084 does not say when a way crosses a ditch rather than going round
+- ways/track.py::connector_dry_exit#pond berth
+    pond berth - UNRESEARCHED: 80 ft past the pond's larger half-axis
+- ways/track.py::connector_dry_exit#the track off the wet
+    the track off the wet - UNRESEARCHED: the wet ground grown 8 ft (`wet_grown_by_the_lane`)
+- ways/track.py::connector_dry_exit#where on a channel it crosses
+    where on a channel it crosses - UNRESEARCHED: anywhere the fill finds; the settle squares the crossing (`squaring.square_every_crossing`)
+- ways/track.py::connector_track#leaning downslope
+    leaning downslope - UNRESEARCHED: the ideal bearing weighs 0.55 away from the field and 0.85 downslope
+- ways/track.py::connector_track#the gateway off the crop
+    the gateway off the crop - UNRESEARCHED: stepped 12 ft clear of the crop (`pull_clear(..., 12.0)`), so the track does not start on a paddy's edge"""
+- ways/track.py::connector_track#track clear of the pond and the brook
+    track clear of the pond and the brook - UNRESEARCHED: the pond, the drain brook and the watercourses scored with the crop, a crossing tolerated only in the fallback
+- ways/track.py::stage_track#spur clip margin
+    spur clip margin - UNRESEARCHED: the spur clipped 12 ft off the dry plots (0081 lets a lane touch a plot's boundary, and gives no clearance)
+- ways/track.py::stage_track#spur tip set back
+    spur tip set back - UNRESEARCHED: SPUR_SETBACK, 17 ft off the field outline's vertex
+- ways/track.py::stage_track#toe-band margin
+    toe-band margin - UNRESEARCHED: the spur clipped 12 ft off the toe band

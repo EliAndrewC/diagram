@@ -235,7 +235,9 @@ def place(program: CompoundProgram) -> PlaceResult:
 
 
 DRAFT_MARGIN_FT = 7.0
-"""The draft's parchment margin (`emit_svg`'s default): the checklist's ~15-25 px, 7 ft = 21 px."""
+"""The draft's parchment margin (`emit_svg`'s default): the checklist's ~15-25 px, 7 ft = 21 px.
+
+Research: draft margin - CONVENTION: the parchment margin of a draft sheet is 7 ft, 21 px at 3 px to the foot, inside the checklist's 15-25 px border."""
 
 
 def composition_plan(result: PlaceResult, margin_ft: float = DRAFT_MARGIN_FT) -> Any:
@@ -343,20 +345,28 @@ def stroke_band(a: tuple[float, float], b: tuple[float, float], half: float) -> 
 
 BOLD_CHAR_W_EM = 0.60
 """A bold mixed-case name's advance per character, in ems - the width the pack audit measured by rendering the pool's
-bold building names (`tools/pack_audit/parse.py` CHAR_W_BOLD_MIXED, 2026-07-25)."""
+bold building names (`tools/pack_audit/parse.py` CHAR_W_BOLD_MIXED, 2026-07-25).
+
+Research: bold name width - NONE: a bold mixed-case name advances 0.60 em per character, a text-measuring figure taken by rendering the pool's names."""
 
 CAPTION_ROOM = 40.0
 """How far below the drawn canvas a draft's caption may stand, in px (feature 266): room for one caption line beside
-the notice board outside the gate. The canvas grows to hug whatever is placed there."""
+the notice board outside the gate. The canvas grows to hug whatever is placed there.
+
+Research: caption room - CONVENTION: the canvas may grow 40 px below the drawing for one caption line beside the notice board, a sheet-layout allowance."""
 
 
 CAPTION_GROWTHS = 3
 """How many `CAPTION_ROOM` steps the draft's foot may grow for a caption with no clean seat (feature 287, labels L15) -
-past that the program itself is refused (plan D7)."""
+past that the program itself is refused (plan D7).
+
+Research: caption growths - NONE: the foot may grow by at most 3 CAPTION_ROOM steps before the program is refused, a loop count."""
 
 CAPTION_REPAIR_EM = 2.0
 """How near a stranded caption's subject a seated caption must stand to be lifted for it, in ems of the stranded caption
-plus that caption's own length - `labels.hand_sheet.REPAIR`, the hand sheets' repair, on the generated sheets."""
+plus that caption's own length - `labels.hand_sheet.REPAIR`, the hand sheets' repair, on the generated sheets.
+
+Research: caption repair reach - CONVENTION: a seated caption within 2 ems of a stranded caption's subject (plus its length) is lifted to free a seat, a label-placement reach."""
 
 Request = tuple[str, Subject, float, bool, str, str]
 

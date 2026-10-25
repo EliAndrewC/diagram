@@ -49,7 +49,7 @@ def stroke_quad(a: Pt, b: Pt, half: float) -> Poly:
 # corner - clear of the footprint, inside the tread's ink (`features_do_not_overlap`, lanes vs
 # gardens, feature 133 T41). A junction link may still brush a fence; it may not paint on it.
 _TOUCH_GAP = 4.0
-"""Research: a junction link may brush a fence - UNRESEARCHED: 4 ft off footprints"""
+"""Research: a junction link may brush a fence - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 4 ft off footprints"""
 
 
 def _components(ways: Sequence[Poly], touch: float) -> list[int]:
@@ -187,7 +187,7 @@ def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
 
     Research:
         a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the buildings, yard and garden
-        ground cover is no destination - UNRESEARCHED: the commons and groves are left out"""
+        ground cover is no destination - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the commons and groves are left out"""
     out: list[Poly] = []
     for key in ("houses", "byres", "farm_sheds", "retirement_houses"):
         for r in M.get(key) or []:  # type: ignore[union-attr]
@@ -369,8 +369,8 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     Research:
         pulled back to the last house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: ends trimmed to what
             serves
-        the trim's step - UNRESEARCHED: walked in 4 ft at a time; the page gives no step
-        not the way it left - UNRESEARCHED: an end does not count as reaching a way the run's other end stands on (within
+        the trim's step - NONE: walked in 4 ft at a time, the trim's resolution, deciding nothing about the place
+        not the way it left - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); an end does not count as reaching a way the run's other end stands on (within
             `_TOUCH_GAP`) - it walked away from it (the settlement-review of Mizuguchi, feature 261); the page records no such case
         an outlying house keeps its way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end serving a house no other way reaches is kept within 60 ft of it (`WAY_END_REACH_FT`), or 12 ft of its built ground (`end_serves`)
         a short way beside its houses kept whole - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way whose two ends are served only by the same houses is not cut toward them at either end ("a tread comes from somewhere else"), so an end may stand up to 60 ft past its house; the page pulls an end back to the last house it serves and is silent on a way with the same houses at both ends"""

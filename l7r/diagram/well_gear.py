@@ -17,6 +17,7 @@ import zlib
 WATER_DEPTHS: tuple[str, str] = ("shallow", "deep")
 GEARS: tuple[str, str] = ("sweep", "pulley frame")
 GEAR_SHARE: float = 0.75  # the depth's own gear on about three wells in four: a GUESS on the drawing page
+"""Research: well gear share - GUESS research/questions/0196-communal-wells-ido.drawing.html: the depth's own lifting gear (sweep on shallow, pulley frame on deep water) is drawn on about three wells in four; the gears are attested, the three-in-four split is the page's guess."""
 ROOF_SHARE: float = 1.0 / 3.0  # a roof over about one well in three: a GUESS on the drawing page
 
 GEAR_INK = "#5A3F1E"

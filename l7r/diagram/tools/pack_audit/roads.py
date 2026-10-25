@@ -35,6 +35,7 @@ DESTINATION_KINDS: frozenset[str] = frozenset({"well", "precinct clearing"})
 #: A road may be this much wider than the gate it feeds: a GUESS - the 3 px authoring grain (1 ft at 3 px = 1 ft), so a
 #: road drawn on the grid next to an opening measured off the ink is not refused for a pixel.
 ROAD_GATE_TOL_FT: float = 1.0
+"""Research: road wider than gate - NONE: a road may be 1 ft wider than the gate it feeds, the 3 px authoring grain."""
 _VIEWBOX = re.compile(r'viewBox="\s*([\-\d.]+)\s+([\-\d.]+)\s+([\d.]+)\s+([\d.]+)\s*"')
 
 

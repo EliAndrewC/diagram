@@ -1,0 +1,92 @@
+- cluster.py::_arm_crossing_accidental#arms cross only where the layout does
+    Research: arms cross only where the layout does - UNRESEARCHED: within 40 ft of the raw crossing"""
+- cluster.py::_fork_spur#field spur forks from the lane
+    Research: field spur forks from the lane - UNRESEARCHED: starts at its crossing with an arm"""
+- cluster.py::_seat_center#standoff from the field
+    Research: standoff from the field - UNRESEARCHED: 12 ft"""
+- cluster.py::_seat_frame#standoff from the field
+    Research: standoff from the field - UNRESEARCHED: 12 ft"""
+- cluster.py::below_drain#toe band
+    toe band - UNRESEARCHED: 18 ft past the drain line, within 150 ft of it"""
+- cluster.py::margin_candidates#45 degree bar
+    45 degree bar - UNRESEARCHED: WIND_BACK_MIN_DOT, tier 0; 0072 gives no tolerance
+- cluster.py::margin_candidates#back turned off a flank
+    back turned off a flank - UNRESEARCHED: tier 1, at most 45 degrees off the margin's normal"""
+- cluster.py::seat_cluster#band area
+    band area - UNRESEARCHED: households times the homestead's ground; 0037 sizes only the yard
+- cluster.py::seat_cluster#brook reach on the band
+    brook reach on the band - UNRESEARCHED: a band point within 30 ft of the brook counts as on the water
+- cluster.py::seat_cluster#clear ground behind
+    clear ground behind - UNRESEARCHED: refused past 0.30 of the back under dry crop
+- cluster.py::seat_cluster#dry hem penalty
+    dry hem penalty - UNRESEARCHED: 1.6 within two band depths, plus 2.5 times the back's foul
+- cluster.py::seat_cluster#reed-fringe share weight
+    reed-fringe share weight - UNRESEARCHED: 2.5 times the band's share in the reeds
+- cluster.py::seat_cluster#wind and upslope weights
+    wind and upslope weights - UNRESEARCHED: 1.0 for facing the wind, 0.8 for upslope
+- cluster.py::seat_has_dry_exit#tameike berth
+    tameike berth - UNRESEARCHED: 80 ft"""
+- consts_ways.py::LANE_FRONTAGE_STANDOFF#farmsteads front a lane
+    farmsteads front a lane - UNRESEARCHED: a seat offered off a lane, which the page gives no figure for
+- consts_ways.py::LANE_FRONTAGE_STANDOFF#frontage seat off the lane
+    frontage seat off the lane - UNRESEARCHED: 70 ft off the centerline, with a dooryard's working margin the page does not give
+- homesteads/capacity.py::free_seats#about as near
+    about as near - UNRESEARCHED: one grid pitch
+- homesteads/growth.py::GROW_LEVELS#the growth's widening
+    """Research: the growth's widening - UNRESEARCHED: 8, then 12, then 16 directions at rings 1.0 to 2.0 times the least distance, a search breadth (measured: feature 308 R5)"""
+- homesteads/growth.py::grow_level#the growth's widening past the table
+    Research: the growth's widening past the table - UNRESEARCHED: a ring half the least distance further each level, a search breadth
+- homesteads/growth.py::grow_the_margin#first house against the field
+    first house against the field - UNRESEARCHED: the free ground nearest the seat's center
+- homesteads/growth.py::grow_the_margin#the growth's widening
+    """Research: the growth's widening - UNRESEARCHED: 8, then 12, then 16 directions at rings 1.0 to 2.0 times the least distance, a search breadth (measured: feature 308 R5)"""
+- homesteads/region.py::SeatRegion.__init__#no way of its own across a water course within its clearance
+    no way of its own across a water course within its clearance - UNRESEARCHED: the courses painted onto lane ground at the corridor test's own clearance
+- homesteads/rows.py::FOOTPATH_DOOR_OUT_FT#door point past the yard's front
+    Research: door point past the yard's front - UNRESEARCHED: 12 ft past the yard's front edge (`DOOR_STEP_FT` and 4 ft)"""
+- homesteads/rows.py::door_clear#door point out past the front
+    door point out past the front - UNRESEARCHED: set `FOOTPATH_DOOR_OUT_FT` (12 ft) past the frame's front edge, where `front_door` uses 8 ft
+- homesteads/rows.py::hard_ground#street off all no-build ground
+    Research: street off all no-build ground - UNRESEARCHED: the field, the hem, marsh, pond and every water course at its clearance
+- homesteads/rows.py::row_seats#seat order
+    seat order - UNRESEARCHED: from the line's middle outward, alternating ends
+- homesteads/rows.py::seat_rows#frame off the street
+    frame off the street - UNRESEARCHED: half the street plus half `FIELD_KEEP_FT`, 15 ft off its centerline
+- homesteads/rows.py::seat_rows#front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front
+    front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front - UNRESEARCHED: the 16 ft door room `DOOR_ROOM_FT` declares; no cited page measures a door's ground
+- homesteads/rows.py::seat_rows#holding set behind its frame
+    holding set behind its frame - UNRESEARCHED: the strip starts half the 15 ft gap (7.5 ft) behind its farm's frame; the page (0033 drawing) says only that it is drawn behind each farm
+- homesteads/rows.py::seat_rows#streets rounded at a corner
+    streets rounded at a corner - UNRESEARCHED: a street is rounded on the inside of a corner at `street_bend_radius_ft`
+- homesteads/seat_geometry.py::in_a_shapes_band#a cluster's longest draw
+    Research: a cluster's longest draw - UNRESEARCHED: past the longest band's ceiling (`CLUSTER_DRAWN_ASPECT`, 12:1), read and refusing nothing
+- homesteads/seat_geometry.py::shapes_drawn_at#aspect bands and round first
+    aspect bands and round first - UNRESEARCHED: round 1.0-2.0, crescent and split 1.9-4.2, elongated 2.8-12; another shape only past round's ceiling; past every band, the nearest band's
+- homesteads/seats.py::_front_row_from_chains#a row fronting the field
+    Research: a row fronting the field - UNRESEARCHED: the first seats offered one pitch apart along the field's outline, center-out
+- homesteads/seats.py::front_row#a row fronting the field
+    Research: a row fronting the field - UNRESEARCHED: the first seats offered one pitch apart along the field's outline, center-out
+- homesteads/seats.py::lane_frontage#frontage seat off the lane
+    frontage seat off the lane - UNRESEARCHED: `LANE_FRONTAGE_STANDOFF` (70 ft) off the lane's centerline
+- homesteads/seats.py::lane_frontage#houses front their lanes
+    houses front their lanes - UNRESEARCHED: seats every 86 ft on both verges of each internal lane
+- homesteads/stages.py::_seat_households_as#the front row's offer
+    the front row's offer - UNRESEARCHED: at most 12 front-row seats offered on a form other than a row
+- homesteads/stages.py::_seat_households_as#the line's reach
+    the line's reach - UNRESEARCHED: the whole ring of the field, not held to the seat's 1.3-bound reach (ours, and it refused the far side's farms)
+- homesteads/stages.py::_seat_households_as#the seating band
+    the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding
+- homesteads/stages.py::_seat_households_as#the shed counted in the standoff, the garden not
+    the shed counted in the standoff, the garden not - UNRESEARCHED: the page places neither the shed nor the beds against the paddy; the shed is held at the wall's gap with the house, and the garden's side, chosen later by the sun, is left free to stand nearer
+- homesteads/stages.py::stage_homesteads#the track's stretch the ways join
+    the track's stretch the ways join - UNRESEARCHED: within `JOIN_FAR_FT` of the homesteads' extent and the track's start, so no way joins it past the frame
+- ways/street.py::brook_bounds#street end short of the brook
+    Research: street end short of the brook - UNRESEARCHED: the run past an end farm stops a ford's landing short of a brook crossing"""
+- ways/street.py::lay_row_streets#further street joins the streets
+    further street joins the streets - UNRESEARCHED: only the first street takes the road, a further one joins a street laid
+- ways/street.py::row_reach#a farm's own street
+    a farm's own street - UNRESEARCHED: a farm within 1.5 frames of the street is its own
+- ways/street.py::row_reach#street run past its end farms
+    street run past its end farms - UNRESEARCHED: half a frame past the end farms at both ends of the span; the run off the map is `street_run_out`'s road (0033)
+- ways/street.py::thread#street's berth off the steadings
+    street's berth off the steadings - UNRESEARCHED: routed half a tread plus 1 ft (5 ft), then 7 ft, off the steadings"""

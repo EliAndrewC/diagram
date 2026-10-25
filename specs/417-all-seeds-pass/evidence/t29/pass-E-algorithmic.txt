@@ -1,0 +1,60 @@
+- cluster.py::back_fouled#depth sampled behind the margin
+    Research: depth sampled behind the margin - UNRESEARCHED: 2.6 band depths, the cluster and its belt"""
+- homesteads/bamboo.py::STRIP_SEATS#the slide along the side
+    the slide along the side - UNRESEARCHED: slid one strip's width one way and the other; the page gives no slide"""
+- homesteads/stages.py::_seat_households_as#a pushed front seat's retry
+    a pushed front seat's retry - UNRESEARCHED: a front seat pushed across the brook retried a quarter pitch either way along the row
+- homesteads/stages.py::_seat_households_as#the seating's reach
+    the seating's reach - UNRESEARCHED: a front-row seat within 1.3 times `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, and a rescue round's seat within `FORM_BOUND` times it; the four rank rounds are held only by their depth (the row's plus four rank steps at most), and the exhaustive pass by the legal ground
+- homesteads/stages.py::_seat_rank_rounds#a rank grown along the field
+    a rank grown along the field - UNRESEARCHED: once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch out along it at the rank's depth
+- homesteads/stages.py::_seat_rank_rounds#rank depth jitter's size
+    rank depth jitter's size - UNRESEARCHED: a rank seat moved up to half of `RANK_DEPTH_JITTER` of a pitch nearer or farther, in the rounds before the rescue
+- homesteads/stages.py::_seat_rank_rounds#rank jitter and the cloud's lean
+    rank jitter and the cloud's lean - UNRESEARCHED: seats nudged up to a tenth of a pitch along the band; the cloud leaned toward the field at 0.75
+- homesteads/stages.py::_seat_rank_rounds#the front row's gaps and the rescue's widening
+    the front row's gaps and the rescue's widening - UNRESEARCHED: a front-row gap over 1.45 pitches filled at the row's depth; the rescue band widened 22% and 16% a round
+- homesteads/stages.py::_seat_rank_rounds#the ranks' rounds
+    the ranks' rounds - UNRESEARCHED: round k stands at the row's depth plus k steps, center-out, four rank rounds then three rescue rounds
+- homesteads/stages.py::_seat_rank_rounds#the rescue's offer along the field
+    the rescue's offer along the field - UNRESEARCHED: in the rescue rounds the seats along the field are offered first - a pitch beyond each end house, half-seats half a pitch out at that house's own depth and a `_rank_step` more
+- homesteads/stages.py::_seat_rank_rounds#the seating's reach
+    the seating's reach - UNRESEARCHED: a front-row seat within 1.3 times `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, and a rescue round's seat within `FORM_BOUND` times it; the four rank rounds are held only by their depth (the row's plus four rank steps at most), and the exhaustive pass by the legal ground
+- homesteads/sties.py::STY_SALT#each farm's own first place
+    """Research: each farm's own first place - UNRESEARCHED: the walk round its walls begins at the household's position roll, so no two farms stand their sty alike"""
+- homesteads/wells.py::seat_wells#ties among later wells
+    ties among later wells - UNRESEARCHED: the belt, then the crop's overreach, then the exact worst walk, then the want_near-th nearest house
+- ways/gateway.py::turned_gateway_track#the nearest turn first
+    Research: the nearest turn first - UNRESEARCHED: the first bearing whose sweep finds a dry way out"""
+- ways/geom.py::_trim_to_service#the trim's step
+    the trim's step - UNRESEARCHED: walked in 4 ft at a time; the page gives no step
+- ways/knots.py::_BEND_OFFSETS_FT#the bend's offsets
+    Research: the bend's offsets - UNRESEARCHED: 0081 has the walker go round what stands, not how far; 10 to 40 ft, a copse's lane buffer and more"""
+- ways/knots.py::_alongside#alongside
+    Research: alongside - UNRESEARCHED: 0081 gives the 20 degrees but no distance; read at the leg's middle within `WEB_SHADOW_FT` (30 ft, the distance the shadow rule reads two ways together at) - `teed_back` asks both ends of a leg"""
+- ways/knots.py::bent_round#how far off
+    how far off - UNRESEARCHED: the waypoint 10 to 40 ft off the leg's middle (`_BEND_OFFSETS_FT`)
+- ways/knots.py::bent_round#the bend's form
+    the bend's form - UNRESEARCHED: one waypoint off the leg's middle, either side, nearest first - the smallest detour tried first, each asked of the gather's judge (its angle rules read as open ground, `forced.py`)"""
+- ways/knots.py::next_gather#the order of the last forms
+    the order of the last forms - UNRESEARCHED: `teed_onto`, then `teed_back`, then `onto_cut_back`, then `joiner_first_meeting` - the end's own approach kept longest first
+- ways/knots.py::next_gather#which lanes an end moved onto the node is cut back along
+    which lanes an end moved onto the node is cut back along - UNRESEARCHED: the lanes at that node, the ways it would run back along there"""
+- ways/knots.py::next_gather#which node a knot gathers at
+    which node a knot gathers at - UNRESEARCHED: the node with fewer ends moves onto the other, the other way round where refused
+- ways/knots.py::next_gather#which ways a lone end is cut back onto
+    which ways a lone end is cut back onto - UNRESEARCHED: a lane at the other node, or the lane its own end stands on
+- ways/knots.py::tails_cut_back#which vertex it is cut back to
+    which vertex it is cut back to - UNRESEARCHED: the nearest the stranded end that stands on another way, the teed lane not counted"""
+- ways/knots.py::teed_back#beside, as the map reads it
+    beside, as the map reads it - UNRESEARCHED: 0081 gives the angle but no distance; read within `WEB_SHADOW_FT` (30 ft), the distance the shadow rule reads two ways together at"""
+- ways/route.py::_EASE_FT#how far a corner is eased
+    """Research: how far a corner is eased - UNRESEARCHED: up to 24 ft off its apex"""
+- ways/route.py::_route#lattice off the water
+    lattice off the water - UNRESEARCHED: 14 ft off the water lines
+- ways/settle/ends.py::settle_ends#which of a folded pair is re-aimed
+    which of a folded pair is re-aimed - UNRESEARCHED: the shorter record as the T; two bare legs lose the shorter
+- ways/squaring.py::cut_at_shallow_crossing#which side an ordinary lane keeps
+    which side an ordinary lane keeps - UNRESEARCHED: its longer side; a household's way is cut only onto the connector or a tree lane"""
+- ways/thread.py::_out_of_bands#which side it leaves by
+    which side it leaves by - UNRESEARCHED: walked toward the run's other end, or pushed out the nearest edge, whichever lands nearer it"""

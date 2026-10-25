@@ -1,0 +1,78 @@
+- l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._byre_clear_of_all_but#no roof under a yard persimmon
+    no roof under a yard persimmon - UNRESEARCHED
+- l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._byre_clear_of_all_but#on dry ground off the paddies
+    on dry ground off the paddies - UNRESEARCHED
+- l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._byre_clear_of_all_but#on its house's bank
+    on its house's bank - UNRESEARCHED
+- l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._commons_pocket_clear#off the access strips
+    """Research: shed pocket off the access strips - UNRESEARCHED: 50 ft past their half-width"""
+- l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._commons_pocket_clear#off the paddy
+    off the paddy - UNRESEARCHED: a stall's depth
+- l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._courtyard_byre_seat#drip-line gap
+    drip-line gap - UNRESEARCHED: 3 ft
+- l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#owners ranked by wealth, then footprint
+    owners ranked by wealth, then footprint - UNRESEARCHED
+- l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#shared sheds spread, with borrowers in reach
+    shared sheds spread, with borrowers in reach - UNRESEARCHED: minimax, _BORROW_REACH
+- l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#spiral byre off the paddies
+    spiral byre off the paddies - UNRESEARCHED: kept a stall's depth from every field
+- l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#spiral reach
+    spiral reach - UNRESEARCHED: 18 px for a household form, 70 px for a shared shed
+- l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.reserve_commons_byres#spread farthest-first
+    spread farthest-first - UNRESEARCHED: the first nearest the band's middle
+- l7r/diagram/settlement/shrines_wells/byres.py::POCKET_TREE_CLEAR_FT#shed pocket off the access strips
+    """Research: shed pocket off the access strips - UNRESEARCHED: 50 ft past their half-width"""
+- l7r/diagram/settlement/shrines_wells/byres.py::_BORROW_REACH#borrowing distance
+    """Research: borrowing distance - UNRESEARCHED: 120 px"""
+- l7r/diagram/settlement/shrines_wells/byres.py::byre_part#long side along the wall
+    long side along the wall - UNRESEARCHED
+- l7r/diagram/settlement/shrines_wells/byres.py::household_byre_form#household forms only on a nucleated seating
+    household forms only on a nucleated seating - UNRESEARCHED
+- l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin._torii#arch span
+    arch span - UNRESEARCHED: 16 ft default
+- l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin._torii#never in a barrier
+    never in a barrier - UNRESEARCHED: raises
+- l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin.torii_even#ascent path width
+    ascent path width - UNRESEARCHED: an 8 px stroke, about 24 ft at a city's 3 ft/px
+- l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin.torii_path#ascent path width
+    ascent path width - UNRESEARCHED: an 8 px stroke, about 24 ft at a city's 3 ft/px
+- l7r/diagram/settlement/shrines_wells/torii.py::torii_plan_svg#default span
+    default span - UNRESEARCHED: 16 ft
+- l7r/diagram/settlement/shrines_wells/wellground.py::WellGroundMixin._build_well_index#fallback channel widths
+    Research: fallback channel widths - UNRESEARCHED: stream 9, channel 2.5, field ditch 1.5, canal 14 px
+- l7r/diagram/settlement/shrines_wells/wellground.py::WellGroundMixin._well_ground_clear#no well in a watercourse or the pond
+    no well in a watercourse or the pond - UNRESEARCHED: the drawn head off the water
+- l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._place_wells#standing room demanded
+    standing room demanded - UNRESEARCHED: a fixed 2r + 14 px box
+- l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._well_vr#the roof square round the curb
+    the roof square round the curb - UNRESEARCHED: 12.376 ft half-size (24.75 ft across), 11.9 x bscale on the legacy tiers; the page (0196 drawing) gives no roof size
+- l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin.well#keep-clear margin
+    keep-clear margin - UNRESEARCHED: 8 px round the roof
+- l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin.well_at#standing room demanded
+    standing room demanded - UNRESEARCHED: a fixed 2r + 14 px box
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._canopy_seats#dominants seat first
+    dominants seat first - UNRESEARCHED: biggest crown first, a smaller one yields
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#conifer share
+    conifer share - UNRESEARCHED: 34%
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#emergent share
+    emergent share - UNRESEARCHED: 18%
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#fringe crowns drawn outside the stand's outline
+    fringe crowns drawn outside the stand's outline - UNRESEARCHED: `_stand_fringe` outliers give the wood a soft edge; the 0080 drawing page is silent on a wood's fringe
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#no crown on a wellhead
+    no crown on a wellhead - UNRESEARCHED
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#no trunk on a lane
+    no trunk on a lane - UNRESEARCHED
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._fringe_blocked#fringe on waste ground only
+    Research: fringe on waste ground only - UNRESEARCHED: off blocks, crops, water and ways
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._stand_fringe#a fringe of advance growth outside the wood
+    a fringe of advance growth outside the wood - UNRESEARCHED
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._stand_fringe#fringe band and thinning
+    fringe band and thinning - UNRESEARCHED: 2.6 steps deep, thinning with distance
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._stand_fringe#fringe crown size and conifer share
+    fringe crown size and conifer share - UNRESEARCHED: 0.55 to 0.95 of the radius, 30% conifer
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._stand_fringe#fringe tree spacing
+    fringe tree spacing - UNRESEARCHED: 1.15 x 1.7 steps, jittered 0.55 step
+- l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._stand_fringe#thickets, not a sprinkle
+    thickets, not a sprinkle - UNRESEARCHED: a mask about five crowns across
+- l7r/diagram/settlement/shrines_wells/woods.py::trees_off_the_treads#no trunk on a lane's tread
+    Research: no trunk on a lane's tread - UNRESEARCHED

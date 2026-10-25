@@ -1,0 +1,98 @@
+- consts_ways.py::DOOR_FIXTURE_CLEAR_FT#door point off the fixtures
+    Research: door point off the fixtures - UNRESEARCHED: 5 ft clear of the fixtures and grove bands, in the household's own dooryard"""
+- homesteads/bamboo.py::PART_GAP_FT#off the seated parts
+    Research: off the seated parts - UNRESEARCHED: 2 ft, the gap a strip keeps off any placed box"""
+- homesteads/bamboo.py::StripNear#a fixture with no recorded size
+    a fixture with no recorded size - UNRESEARCHED: taken as 16 ft across (`r` 8), as `_strip_blocked` always took it"""
+- homesteads/bamboo.py::StripNear.__init__#a fixture with no recorded size
+    a fixture with no recorded size - UNRESEARCHED: taken as 16 ft across (`r` 8), as `_strip_blocked` always took it"""
+- homesteads/bamboo.py::_strip_blocked#off the notice board, byres and retirement houses
+    off the notice board, byres and retirement houses - UNRESEARCHED: 6 ft off each, as off wells and sheds
+- homesteads/bamboo.py::_strip_blocked#what a strip or fixture keeps off
+    what a strip or fixture keeps off - UNRESEARCHED: the pads, 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond
+- homesteads/bamboo.py::band_spans#a farm with no frame
+    a farm with no frame - UNRESEARCHED: its house, yard and beds across"""
+- homesteads/bamboo.py::band_spans#inside its own side groves
+    inside its own side groves - UNRESEARCHED: the frame less its west and east grove bands, the farmstead's width within its grove
+- homesteads/bamboo.py::between#no lane between a house and its bamboo
+    Research: no lane between a house and its bamboo - UNRESEARCHED: the hull of the house's center and the strip's corners; no page says how far a lane keeps off a farm's bamboo"""
+- homesteads/bamboo.py::household_bamboo#a stepped strip its own farm's
+    a stepped strip its own farm's - UNRESEARCHED: none seated nearer another house's center than its own
+- homesteads/bamboo.py::household_bamboo#strip clearances
+    strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, `PART_GAP_FT` off every seated part
+- homesteads/bamboo.py::household_bamboo#strip off the copse seats
+    strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
+- homesteads/bamboo.py::in_belt#no strip in the belt
+    no strip in the belt - UNRESEARCHED: no strip with its center or a corner inside the belt (`in_belt`)
+- homesteads/bamboo.py::own_ground#its own path no bar
+    Research: its own path no bar - UNRESEARCHED: the household's own door path parts no farm from its bamboo; a public lane still does"""
+- homesteads/bamboo.py::parts_hit#off the seated parts
+    Research: off the seated parts - UNRESEARCHED: 2 ft, the gap a strip keeps off any placed box"""
+- homesteads/bamboo.py::seat_strips#off the grove farms' bands
+    off the grove farms' bands - UNRESEARCHED: every grove farm's band a part the strip keeps off
+- homesteads/bamboo.py::seat_strips#the ground between held clear
+    the ground between held clear - UNRESEARCHED: the strip and its hull to the house held as fabric for the lanes laid after"""
+- homesteads/bamboo.py::strip_candidates#the near seat
+    the near seat - UNRESEARCHED: 6 ft off the wall, the strip's long side along it"""
+- homesteads/bamboo.py::strip_candidates#the shed side
+    the shed side - UNRESEARCHED: local -x, the doma and stable end, or behind the house where the kura stands on the north wall
+- homesteads/bamboo.py::strip_refused#no strip in the belt
+    no strip in the belt - UNRESEARCHED: no strip with its center or a corner inside the belt (`in_belt`)
+- homesteads/bamboo.py::strip_refused#strip clearances
+    strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, `PART_GAP_FT` off every seated part
+- homesteads/bamboo.py::strip_refused#strip off the copse seats
+    strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
+- homesteads/bamboo.py::strip_refused#the strip on its house's side of a lane
+    the strip on its house's side of a lane - UNRESEARCHED: no lane's centerline between a house and its strip (`across_a_lane`)"""
+- homesteads/farm_water.py::_obstacles#walled off lanes, wells and crop
+    walled off lanes, wells and crop - UNRESEARCHED: every lane, other farms' well pockets and the crop and paddy plots walled
+- homesteads/farm_water.py::farm_channel#channel corridor
+    channel corridor - UNRESEARCHED: a 4 ft no-build corridor along each channel
+- homesteads/farm_water.py::farm_channel#crosses no other water
+    crosses no other water - UNRESEARCHED: a route crossing other drawn water more than 6 ft past its mouth is refused
+- homesteads/farm_water.py::farm_channel#how far a channel's source is sought
+    how far a channel's source is sought - UNRESEARCHED: 20 ft steps, 60 ft spread, widened fourfold where the nearest find nothing
+- homesteads/farm_water.py::farm_channels#farms nearest the water first
+    farms nearest the water first - UNRESEARCHED: the order channels are laid
+- homesteads/fixtures.py::_PIT_EDGE_CLEAR_FT#pit off the paddy edge
+    """Research: pit off the paddy edge - UNRESEARCHED: 8 ft"""
+- homesteads/fixtures.py::_draw_pending#field pit off a lane
+    field pit off a lane - UNRESEARCHED: 3 ft clear of a lane's edge (its half-width plus 3 ft), so the pit stands beside the way, not on it
+- homesteads/fixtures.py::_draw_pending#field pit off the edge
+    field pit off the edge - UNRESEARCHED: set `_PIT_EDGE_CLEAR_FT` (8 ft) in from the paddy or road edge - the placer's 6 ft paddy margin plus two, on the bund-side ground; no page says how far from the field a pit stood
+- homesteads/fixtures.py::_draw_pending#field pit size
+    field pit size - UNRESEARCHED: drawn 3.5 ft square
+- homesteads/fixtures.py::_flexible_clear#pit off every grove
+    pit off every grove - UNRESEARCHED: clear of every farm's grove band
+- homesteads/persimmon_reseat.py::persimmon_for#under no other stand's conifer
+    under no other stand's conifer - UNRESEARCHED: a persimmon is refused under the crown of any other stand's conifer; the page records nothing for other stands
+- homesteads/persimmon_reseat.py::reseat_persimmons#which household takes it
+    which household takes it - UNRESEARCHED: the next in the houses' own order that has a seat"""
+- homesteads/retirement.py::retirement_houses#which households keep one
+    which households keep one - UNRESEARCHED: owners in an order rolled from the seed, not by wealth
+- homesteads/row_rules.py::water_rules#well in the way in
+    well in the way in - UNRESEARCHED: a private well within 12 ft of the house-to-door line counts as in the way
+- homesteads/sties.py::ALIGN_TOL_DEG#a part square to its house
+    """Research: a part square to its house - UNRESEARCHED: within 10 degrees of the house's rake, a wall the sty may stand against"""
+- homesteads/sties.py::stage_sties#passed to the next household
+    passed to the next household - UNRESEARCHED: a household with no place gives its sty to the next that keeps none, so the hamlet draws the share's count wherever its walls allow"""
+- homesteads/sties.py::sty_seat#no sty in a grove band
+    no sty in a grove band - UNRESEARCHED: no page keeps a sty off a farm's grove band; the placer asks the check's own predicate (`grove_rules.fixture_on_band`), every band as recorded (feature 385 T03, cohort seed 45)
+- homesteads/sties.py::sty_seat#the gap, the step and the rake
+    the gap, the step and the rake - UNRESEARCHED: the fixtures' 3.5 ft wall gap off the plot's other parts (`WALL_GAP_FT`), places 4 ft apart along each wall (`WALL_SLIDE_FT`), the sty raked with its house
+- homesteads/well_seats.py::PairAhead.keeps_ten#the second well held 170 px off the first
+    the second well held 170 px off the first - UNRESEARCHED: the pair's spacing, `seat_wells`' own "wells apart"; no page gives a hamlet's wells' spacing"""
+- homesteads/wells.py::seat_wells#later wells by the worst walk
+    later wells by the worst walk - UNRESEARCHED: ranked by the worst-served household's walk after the dig, in 66 px buckets, the crop's overreach added 1:1
+- homesteads/wells.py::seat_wells#no well over a household's wood floor
+    no well over a household's wood floor - UNRESEARCHED: no well seated over a household's reserved wood-floor seats
+- homesteads/wells.py::seat_wells#wells apart
+    wells apart - UNRESEARCHED: 170 px between wells
+- ways/law.py::fixture_quads#under the crown, not the trunk
+    Research: under the crown, not the trunk - UNRESEARCHED: the persimmon's trunk box a wall, its crown not"""
+- ways/serve.py::door_off_fixtures#the door's steps
+    the door's steps - UNRESEARCHED: `DOOR_SHIFT_FT` (4 ft) at a time, up to `tries` (8) each way
+- ways/serve.py::door_path#its margin off the fixtures
+    its margin off the fixtures - UNRESEARCHED: its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)
+- ways/serve.py::lay_door_paths#door path off the house and the fixtures
+    door path off the house and the fixtures - UNRESEARCHED: it starts 8 ft past its yard (`DOOR_STEP_FT`) and keeps 5 ft clear of the fixtures (`DOOR_FIXTURE_CLEAR_FT`)

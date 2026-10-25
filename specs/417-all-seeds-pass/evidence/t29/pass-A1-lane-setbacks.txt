@@ -1,0 +1,82 @@
+- consts_ways.py::DOOR_STEP_FT#door step
+    Research: door step - UNRESEARCHED: 8 ft past the yard, in the household's own dooryard"""
+- consts_ways.py::WEB_HARD_GAP#web lane off the toe and marsh
+    """Research: web lane off the toe and marsh - UNRESEARCHED: 8 ft; the record says only that a lane keeps off wet ground"""
+- ways/checks.py::PathChecker.violations#drain brook never crossed
+    drain brook never crossed - UNRESEARCHED: avoided outright, not bridged
+- ways/checks.py::PathChecker.violations#no deck on crop
+    no deck on crop - UNRESEARCHED: a crossing within 14 ft of a crop polygon fouls
+- ways/checks.py::PathChecker.violations#pond kept off
+    pond kept off - UNRESEARCHED: 80 ft past the pond's larger half-axis
+- ways/checks.py::crossing_lands_on_crop#no deck on crop
+    no deck on crop - UNRESEARCHED: a crossing within 14 ft of a crop polygon fouls
+- ways/checks.py::path_violations#drain brook never crossed
+    drain brook never crossed - UNRESEARCHED: avoided outright, not bridged
+- ways/checks.py::path_violations#no deck on crop
+    no deck on crop - UNRESEARCHED: a crossing within 14 ft of a crop polygon fouls
+- ways/checks.py::path_violations#pond kept off
+    pond kept off - UNRESEARCHED: 80 ft past the pond's larger half-axis
+- ways/clearance.py::_clear_link#link clear of the wet ground and the water
+    link clear of the wet ground and the water - UNRESEARCHED: 8 ft off the toe and marsh, 14 ft off water"""
+- ways/clearance.py::_clear_touch#a join link off the water
+    a join link off the water - UNRESEARCHED: 14 ft off the water lines (`clear_runs`' `line_margin`), as `_clear_link`
+- ways/clearance.py::_clear_touch#a join link off the wet ground at the gap
+    a join link off the wet ground at the gap - UNRESEARCHED: the link keeps the fabric's 7 ft off the toe and the marsh, where a lane's link keeps 8 ft (`_clear_link`); no page gives either
+- ways/clearance.py::clear_runs#lane off a water line
+    lane off a water line - UNRESEARCHED: 14 ft by default (`line_margin`)
+- ways/clearance.py::clear_runs#off the wet ground
+    off the wet ground - UNRESEARCHED: the full margin; 0081 keeps a track off wet ground and gives no distance
+- ways/clearance.py::clear_runs#shortest lane
+    shortest lane - UNRESEARCHED: a run under 70 ft by default is not a lane"""
+- ways/clearance.py::clip_to_clear#lane off a water line
+    lane off a water line - UNRESEARCHED: 14 ft by default (`line_margin`)
+- ways/clearance.py::clip_to_clear#shortest arm
+    shortest arm - UNRESEARCHED: under 70 ft is not drawn"""
+- ways/fabric.py::_draw_web#no lane over a grave
+    no lane over a grave - UNRESEARCHED: a web lane is refused where the overlap matrix forbids a way on a burial ground
+- ways/geom.py::_TOUCH_GAP#a junction link may brush a fence
+    """Research: a junction link may brush a fence - UNRESEARCHED: 4 ft off footprints"""
+- ways/law.py::DOORSTEP_FT#a dooryard's reach for the settle
+    Research: a dooryard's reach for the settle - UNRESEARCHED: 80 ft from the house's center; 0246's own reach is 60 ft of the house or 12 ft of its built ground"""
+- ways/law.py::span_walkable#a span off a threshing yard
+    a span off a threshing yard - UNRESEARCHED: the garden fence's 7 ft (`WEB_FABRIC_GAP`) held off a threshing yard too; no page sets a gap from a yard
+- ways/law.py::unreached_targets#a path runs to the graves
+    Research: a path runs to the graves - UNRESEARCHED: within 14 ft of the burial ground's edge"""
+- ways/reach.py::settle_targets#a path runs to the graves
+    Research: a path runs to the graves - UNRESEARCHED: the shortest lawful straight spur from the network, once"""
+- ways/route.py::_route#a brook crossing tolled
+    a brook crossing tolled - UNRESEARCHED: the search charges a crossing (`_CROSSING["cost"]`) and the pull refuses a shortcut that adds one (`_new_crossing`)"""
+- ways/route.py::_route#clear of the toe and marsh
+    clear of the toe and marsh - UNRESEARCHED: 8 ft (`WEB_HARD_GAP`)
+- ways/serve.py::_lay_web_lane#how far inside a belt
+    how far inside a belt - UNRESEARCHED: a run over 60 ft inside a belt refused
+- ways/serve.py::_lay_web_lane#link off the toe and marsh
+    link off the toe and marsh - UNRESEARCHED: kept 8 ft off them (`WEB_HARD_GAP`)
+- ways/serve.py::flank_doors#a flank door as fallback
+    Research: a flank door as fallback - UNRESEARCHED: a dooryard flank facing no grove band"""
+- ways/serve.py::lay_door_paths#a flank door only where the front has none
+    a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front
+- ways/serve.py::lay_door_paths#a flank door with open yard to the front
+    a flank door with open yard to the front - UNRESEARCHED: only a flank with open ground - no house, no grove band - between it and the front door (`front_to_flank_open`)"""
+- ways/settle/shapes.py::CROSSING_GAP_FT#a cut crossing ends on the bank
+    Research: a cut crossing ends on the bank - UNRESEARCHED: 2 ft past the water's edge"""
+- ways/settle/shapes.py::_cut_gap#lane cut at the water's bank
+    Research: lane cut at the water's bank - UNRESEARCHED: a lane cut at a water crossing stops half the widest nearby water's width off the crossing, 3 ft where none is recorded"""
+- ways/settle/shapes.py::fouled_segment#off another household's yard
+    off another household's yard - UNRESEARCHED: the garden fence's gap (`gap`, 7 ft unless the caller passes another) held off a yard too; no page sets a gap from a yard
+- ways/settle/stage.py::settle_reach#a path runs to the graves
+    a path runs to the graves - UNRESEARCHED: claimed at `settle_targets`"""
+- ways/squaring.py::SQUARE_MARGIN_FT#the square leg
+    Research: the square leg - UNRESEARCHED: 6 ft past the water's half-width"""
+- ways/sweeps.py::_sweep_dangling_ends#dooryard carry reach
+    dooryard carry reach - UNRESEARCHED: up to 120 ft (2 x `_REACH_FT`); the page gives a lane end's reach (60 ft), not a carry's
+- ways/web/skeleton.py::_lay_skeleton#no accidental crossing
+    no accidental crossing - UNRESEARCHED: an arm that would cross an arm already kept, by accident of the template, is not laid (`_arm_crossing_accidental`)
+- ways/web/skeleton.py::_lay_skeleton#skeleton arm off the ditches
+    skeleton arm off the ditches - UNRESEARCHED: an inner arm clipped at the ditches and drawn channels, never crossing one
+- ways/web/skeleton.py::_lay_skeleton#skeleton margin off the wet and the ditches
+    skeleton margin off the wet and the ditches - UNRESEARCHED: 20 px off the toe band and the marsh, 14 px off the drawn water (`clip_to_clear`'s line margin)
+- ways/web/skeleton.py::_lay_skeleton#skeleton span floor
+    skeleton span floor - UNRESEARCHED: each half-extent floored at half a bundle pitch (50 ft), a pitch across; a run under 70 ft dropped by `clip_to_clear`, an arm under 30 ft (`_WEB_MIN_FT`) not laid
+- ways/web/stage.py::stage_web#scrub and commons crossed
+    scrub and commons crossed - UNRESEARCHED: a lane may cross grazing scrub and the commons

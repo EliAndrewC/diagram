@@ -66,7 +66,9 @@ BUSY_FILLS: frozenset[str] = frozenset({"url(#vegetable-rows)"})
 INNER COURT, its seat above the house taken by the storehouses, went onto the kitchen garden's furrows)."""
 
 DARK = 0.3
-"""Ink this dark (0-1 luma) or darker is dark to a caption."""
+"""Ink this dark (0-1 luma) or darker is dark to a caption.
+
+Research: dark ink threshold - CONVENTION: ink of luma 0.3 or darker counts as dark to a caption, so a caption reads against it."""
 
 WEIGHT_TEXT = 10 * WEIGHT_OBSTACLE
 
@@ -76,11 +78,13 @@ least cost, and at one weight for all ink it chose a seat on Ubame's border name
 mats - words on words are the one overlap a reader cannot see past."""
 
 ELONGATED = 3.0
+"""Research: elongated area ratio - CONVENTION: an area 3 times taller than wide has its name run along it; a calibration (the river band is ~7x)."""
 
 """How much taller than wide an area is before its name runs along it (a calibration: the river band is ~7x)."""
 
 Affine = tuple[float, float, float, float, float, float]
 IDENTITY: Affine = (1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+"""Research: identity transform - NONE: the identity affine matrix."""
 
 
 def _mul(m: Affine, n: Affine) -> Affine:
@@ -454,11 +458,15 @@ def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
 
 BLOCK_PX = 2000.0
 """A part big enough to be a block of a building (about 220 sq ft): a notice board's legs, a sanctuary's steps or a mat
-are parts of one thing, not blocks that can stand in echelon."""
+are parts of one thing, not blocks that can stand in echelon.
+
+Research: block part size - NONE: a part of 2000 px2 (about 220 sq ft) or more counts as a block of a building to the caption placer, not a sub-part."""
 STEPPED = 0.85
 """How much of its box a multi-part subject must fill to be named against the box: under it the parts leave an empty
 corner (Hayakawa's residence, two blocks in echelon), and a caption and its leader set against the box land in that
-corner, on nothing (feature 283 - RESIDENCE's leader ended 4 ft short of the house, under INNER COURT)."""
+corner, on nothing (feature 283 - RESIDENCE's leader ended 4 ft short of the house, under INNER COURT).
+
+Research: stepped subject fill - NONE: a multi-part subject filling under 0.85 of its box is named against its parts, not the box, a caption-placer test."""
 
 
 def _box_within(a: Poly, b: Poly) -> bool:
@@ -480,7 +488,9 @@ def _area(poly: Poly) -> float:
 
 GLYPH_MAX_PX = 600.0
 """The largest drawn thing a leader may not end against, in px (a well's curb is 24 x 24): a tub, a stone, a basin -
-beside the feature a leader names, the tip would name it instead. A building is larger and is what leaders point at."""
+beside the feature a leader names, the tip would name it instead. A building is larger and is what leaders point at.
+
+Research: leader-end glyph size - CONVENTION: a drawn thing up to 600 px2 (a well curb is 24 x 24) is a glyph a leader may not end against, so a caption's leader names the building."""
 
 
 def leader_blockers(shapes: list[Shape], skip: set[int], placed: list[tuple[list[Shape], Placement]], sub: Subject, own_parts: list[Shape] | None = None) -> ObstacleIndex:
@@ -526,7 +536,9 @@ def leader_blockers(shapes: list[Shape], skip: set[int], placed: list[tuple[list
 
 WALL_HALF_PX = 2.0
 """A dark stroke this wide (half-width, px) or wider is a wall to a leader: the sheets' walls and court dividers are 6-9
-px strokes; a partition, a rope or a hatching line is 1 px or less."""
+px strokes; a partition, a rope or a hatching line is 1 px or less.
+
+Research: wall stroke test - NONE: a dark stroke 2 px or more in half-width is a wall to a leader; sheet walls are 6-9 px, partitions 1 px or less."""
 
 
 #: Width per character, in ems, of a hand sheet's captions by their face (feature 267). The standard's 0.55 holds for the
@@ -534,7 +546,9 @@ px strokes; a partition, a rope or a hatching line is 1 px or less."""
 #: CHAR_W_BOLD for bold caps is 0.72), bold adds ~0.04, and letter-spacing adds its own width per character - the Inari
 #: shrine's bold, spaced name was seated a third too narrow, its first letter under the karo's house.
 CAPS_W_EM = 0.70
+"""Research: caps caption width - NONE: a hand sheet's all-caps captions run about 0.70 em per character, a text-measuring figure."""
 BOLD_W_EM = 0.04
+"""Research: bold caption width - NONE: bold adds about 0.04 em per character to a caption's width, a text-measuring figure."""
 
 
 def _as_head(caps: list[Shape], cw: float, per: list[list[str]]) -> list[str]:
@@ -594,7 +608,9 @@ def _line_centers(p: Placement, sizes: list[float], counts: list[int]) -> list[P
 
 
 LIGHT = 0.75
-"""A fill this light (0-1 luma) is a caption chosen to read on dark ink; it reads on nothing else."""
+"""A fill this light (0-1 luma) is a caption chosen to read on dark ink; it reads on nothing else.
+
+Research: light fill threshold - CONVENTION: a fill of luma 0.75 or lighter is a caption chosen to read on dark ink."""
 
 DARK_INK = "#3A2E1C"
 """The sheets' caption ink."""
@@ -832,7 +848,9 @@ def repair(done: dict[int, Seated], boxes: dict[int, tuple[float, float, float, 
 REPAIR = 2.0
 """How far from a stranded caption's subject a neighbor is lifted to free a seat for it: this many ems of its size, plus
 the caption's own length - the near rings, where the standard's preferred seats lie (a calibration: at the standard's
-whole reach, eight ems, a lift was tried for every caption in a court)."""
+whole reach, eight ems, a lift was tried for every caption in a court).
+
+Research: caption repair reach - CONVENTION: a neighbor within 2 ems of a stranded caption's subject (plus the caption's length) is lifted to free a seat; a calibration of the placer."""
 
 
 def fits_inside(caps: list[Shape], own: list[Shape]) -> bool:

@@ -37,7 +37,9 @@ from .parse import ParsedPlan, Rect
 from .tagged import marks
 
 MAP_GRAIN_PX: float = 15.0  # m:map-grain (research.md R1): a POSITION is the same feature within this
+"""Research: map position grain - NONE: a position matches the same feature within 15 px, an audit matching tolerance."""
 SIZE_GRAIN_PX: float = 1.0  # a SIDE matches within the map's own resolution: the map records a footprint to the px and a sheet draws it exactly
+"""Research: map size grain - NONE: a side matches within 1 px, the map's own resolution."""
 SKILL_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))  # pack_audit -> tools -> diagram -> l7r -> the skill
 _VIEWBOX_RE = re.compile(r'viewBox="\s*([\-\d.]+)\s+([\-\d.]+)\s+([\d.]+)\s+([\d.]+)\s*"')
 

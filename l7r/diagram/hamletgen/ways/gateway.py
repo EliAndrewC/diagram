@@ -30,7 +30,7 @@ def gateway_track(
 
     Research:
         track off the map - research/questions/0081-village-lanes.drawing.html: swept from the gateway to the frame
-        a walled-in gateway - UNRESEARCHED: from a gateway turned off the downslope"""
+        a walled-in gateway - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25); from a gateway turned off the downslope"""
     gate = clear_of_what_stands(s, gate)
     try:
         return connector_track(plan, gate, avoid=avoid, wet=wet, waters=waters, fabric=fabric)
@@ -41,7 +41,7 @@ def gateway_track(
 GATEWAY_TURNS_DEG = (30.0, -30.0, 60.0, -60.0, 90.0, -90.0)
 """The bearings off the downslope a walled-in gateway is sought on, nearest first (feature 315, `turned_gateway_track`).
 
-Research: turned gateway bearings - UNRESEARCHED: 30, 60 then 90 degrees either side of the downslope"""
+Research: turned gateway bearings - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25) on the turns - the base bearing downslope follows the water-mouth way out (Wang, pass D); 30, 60 then 90 degrees either side of the downslope"""
 
 
 def turned_gateway_track(
@@ -50,7 +50,7 @@ def turned_gateway_track(
     """The track from the first gateway, on a bearing turned off the downslope (`GATEWAY_TURNS_DEG`), whose sweep finds a dry way out
     of the frame; refused where none does, as the downslope gateway was.
 
-    Research: the nearest turn first - UNRESEARCHED: the first bearing whose sweep finds a dry way out"""
+    Research: the nearest turn first - research/questions/0081-village-lanes.drawing.html: the track turns along the contour only where the fan leaves no dry ground - the first bearing whose sweep finds a dry way out, the nearest turn first and the 90-degree turns last"""
     for deg in GATEWAY_TURNS_DEG:
         gate = gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, band_gate, deg))
         with contextlib.suppress(NoDryExit):

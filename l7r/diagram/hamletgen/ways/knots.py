@@ -211,7 +211,7 @@ def households_only(lanes: Sequence[Mapping[str, Any]], edits: Mapping[int, Poly
 _BEND_OFFSETS_FT = (10.0, 15.0, 20.0, 25.0, 30.0, 40.0)
 """How far off its middle a gather's refused leg is bent round what stands, nearest first (405 T07, D126).
 
-Research: the bend's offsets - UNRESEARCHED: 0081 has the walker go round what stands, not how far; 10 to 40 ft, a copse's lane buffer and more"""
+Research: the bend's offsets - GUESS: searched, the record silent on how far a path bowed round what stood, (feature 417 T29 pass E2, 2026-10-25); 0081 has the walker go round what stands, not how far; 10 to 40 ft, a copse's lane buffer and more"""
 
 
 def bent_round(pts: Poly, end: int) -> list[Poly]:
@@ -224,9 +224,9 @@ def bent_round(pts: Poly, end: int) -> list[Poly]:
     Research:
         the leg bent round what stands - research/questions/0081-village-lanes.drawing.html: a turn whose straighter way the mapped ground blocks is drawn as walked (the GM 2026-10-17)
         round a grove, not through it - research/questions/0081-village-lanes.drawing.html: where a grove stands across the straighter way, the walker goes round it
-        how far off - UNRESEARCHED: the waypoint 10 to 40 ft off the leg's middle (`_BEND_OFFSETS_FT`)
+        how far off - GUESS: searched, the record silent on how far a path bowed round what stood, (feature 417 T29 pass E2, 2026-10-25); the waypoint 10 to 40 ft off the leg's middle (`_BEND_OFFSETS_FT`)
         never farther off than the leg is long - research/questions/0081-village-lanes.drawing.html: a hairpin is refused (the drawing page's 140 degrees, a drawing convention); a waypoint no farther off than its leg is long turns at most 127 degrees
-        the bend's form - UNRESEARCHED: one waypoint off the leg's middle, either side, nearest first - the smallest detour tried first, each asked of the gather's judge (its angle rules read as open ground, `forced.py`)"""
+        the bend's form - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); one waypoint off the leg's middle, either side, nearest first - the smallest detour tried first, each asked of the gather's judge (its angle rules read as open ground, `forced.py`)"""
     seq = list(pts) if end == -1 else list(reversed(pts))
     if len(seq) < 2 or (span := math.dist(seq[-2], seq[-1])) < 1e-6:
         return []
@@ -253,7 +253,8 @@ def teed_back(pts: Poly, end: int, other: Poly) -> list[Poly]:
 
     Research:
         a lane cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: "Two paths running side by side are drawn as one. A lane whose end runs back along another way at less than 20 degrees ... the maps cut it where it comes alongside and let it meet the other as a T"
-        beside, as the map reads it - UNRESEARCHED: 0081 gives the angle but no distance; read within `WEB_SHADOW_FT` (30 ft), the distance the shadow rule reads two ways together at"""
+        beside, as the map reads it - research/questions/0081-village-lanes.drawing.html: two paths running side by side are drawn as one, at less than 20 degrees (`alongside`)
+        beside's reach - GUESS: 0081 gives the angle and is silent on a distance; both ends within `WEB_SHADOW_FT` (30 ft)"""
     seq = list(pts) if end == -1 else list(pts)[::-1]
     legs = list(zip(other, other[1:], strict=False))
     if len(seq) < 3 or not legs:
@@ -284,7 +285,8 @@ def _alongside(legs: Sequence[tuple[Pt, Pt]], a: Pt, b: Pt) -> bool:
     """Does leg a-b run alongside one of `legs`: its middle within `WEB_SHADOW_FT` of the nearest, at under `_SIDE_BY_SIDE_DEG`
     to it (405 T135)?
 
-    Research: alongside - UNRESEARCHED: 0081 gives the 20 degrees but no distance; read at the leg's middle within `WEB_SHADOW_FT` (30 ft, the distance the shadow rule reads two ways together at) - `teed_back` asks both ends of a leg"""
+    Research: alongside - research/questions/0081-village-lanes.drawing.html: two paths running side by side are drawn as one, at less than 20 degrees (`_SIDE_BY_SIDE_DEG`)
+        alongside's reach - GUESS: 0081 gives the angle and is silent on a distance; read at the leg's middle within `WEB_SHADOW_FT` (30 ft)"""
     mid = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
     u, v = min(legs, key=lambda uv: seg_dist(mid[0], mid[1], *uv))
     if seg_dist(mid[0], mid[1], u, v) > WEB_SHADOW_FT:
@@ -392,7 +394,7 @@ def tails_cut_back(lanes: Sequence[Mapping[str, Any]], i: int, old: Poly, new: P
 
     Research:
         a stranded tail cut back to its meeting - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut
-        which vertex it is cut back to - UNRESEARCHED: the nearest the stranded end that stands on another way, the teed lane not counted"""
+        which vertex it is cut back to - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut - back to the nearest vertex of the stranded end that stands on another way, the teed lane not counted (it no longer runs there)"""
     out: dict[int, Poly] = {}
     for m, ln in enumerate(lanes):
         p = _pts(ln)
@@ -428,15 +430,15 @@ def next_gather(
 
     Research:
         lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
-        which node a knot gathers at - UNRESEARCHED: the node with fewer ends moves onto the other, the other way round where refused
+        which node a knot gathers at - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); the node with fewer ends moves onto the other, the other way round where refused
         a lone end teed onto the other lane - research/questions/0081-village-lanes.drawing.html: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)
         a lane the tee strands kept - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut (`tails_cut_back`, 405 T106), asked only where the tee alone is refused
         a lone end cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: "the maps cut it where it comes alongside and let it meet the other as a T" (`teed_back`, 405 T134), taken only where its T stands past the knot's reach and the web keeps no more knots
-        which ways a lone end is cut back onto - UNRESEARCHED: a lane at the other node, or the lane its own end stands on
+        which ways a lone end is cut back onto - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); a lane at the other node, or the lane its own end stands on
         a lone end moved onto the node, cut where it comes alongside - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees is cut where it comes alongside (`onto_cut_back`, 405 T135)
         a joining lane ended where it first meets a way - research/questions/0081-village-lanes.drawing.html: a lane laid only to join two others ends where it first meets one (`joiner_first_meeting`, 405 T135)
-        the order of the last forms - UNRESEARCHED: `teed_onto`, then `teed_back`, then `onto_cut_back`, then `joiner_first_meeting` - the end's own approach kept longest first
-        which lanes an end moved onto the node is cut back along - UNRESEARCHED: the lanes at that node, the ways it would run back along there"""
+        the order of the last forms - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); `teed_onto`, then `teed_back`, then `onto_cut_back`, then `joiner_first_meeting` - the end's own approach kept longest first
+        which lanes an end moved onto the node is cut back along - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); the lanes at that node, the ways it would run back along there"""
     nodes = end_nodes(lanes, fixed)
     for a, b, _d in knots(lanes, apart):
         order = sorted(((b, a), (a, b)), key=lambda mt: len(nodes[mt[0]][1]))

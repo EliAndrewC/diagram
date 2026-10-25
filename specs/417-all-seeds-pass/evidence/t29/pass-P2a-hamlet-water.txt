@@ -1,0 +1,128 @@
+- l7r/diagram/hamletgen/consts_water.py::BROOK_MAX_TURN_DEG#brook never doubles back
+    """Research: brook never doubles back - UNRESEARCHED: no turn over 100 degrees"""
+- l7r/diagram/hamletgen/consts_water.py::BROOK_SKIRT#brook outside the crop
+    """Research: brook outside the crop - UNRESEARCHED: 34 ft floor"""
+- l7r/diagram/hamletgen/consts_water.py::BROOK_WANDER#brook's stray
+    """Research: brook's stray - UNRESEARCHED: up to 10 ft past the floor"""
+- l7r/diagram/hamletgen/consts_water.py::BROOK_WANDER_STEP#brook's meander step
+    """Research: brook's meander step - UNRESEARCHED: 10 ft"""
+- l7r/diagram/hamletgen/consts_water.py::OFFTAKE_LADDER#delivery-ditch count and positions
+    delivery-ditch count and positions - UNRESEARCHED: 2, 3 or 4 offtakes under 11, 21 and 99 households, the last at 0.93
+- l7r/diagram/hamletgen/consts_water.py::POND_SETBACK_LIMIT#tameike set-back limit
+    """Research: tameike set-back limit - UNRESEARCHED: 300 ft below the outfall"""
+- l7r/diagram/hamletgen/consts_water.py::SINKS#sink odds
+    sink odds - UNRESEARCHED: pond two in three, off the map one
+- l7r/diagram/hamletgen/sink.py::BROOK_JOIN_DESCENT#confluence fallen below the outfall
+    """Research: confluence fallen below the outfall - UNRESEARCHED: 20 ft down the fall"""
+- l7r/diagram/hamletgen/sink.py::BROOK_JOIN_LEAD#crop lead tolerance
+    """Research: crop lead tolerance - UNRESEARCHED: 0.3 of the drain's run may lie in the rice as the field's own edge"""
+- l7r/diagram/hamletgen/sink.py::SINK_FRINGE#reed fringe width
+    Research: reed fringe width - UNRESEARCHED: a 44 ft ring"""
+- l7r/diagram/hamletgen/sink.py::_through_the_crop#drain not through the rice
+    Research: drain not through the rice - UNRESEARCHED: the first 0.3 of the run exempt as the field's edge"""
+- l7r/diagram/hamletgen/sink.py::brook_join#join reach
+    join reach - UNRESEARCHED: 420 ft from the outfall
+- l7r/diagram/hamletgen/sink.py::brook_join#the nearest fallen point, off the crop
+    the nearest fallen point, off the crop - UNRESEARCHED: the drain to the brook never crosses the crop, and the nearest fallen candidate is the confluence"""
+- l7r/diagram/hamletgen/sink.py::hull_route#hull standoff
+    hull standoff - UNRESEARCHED: the drain skirts the field's hull 12 ft off
+- l7r/diagram/hamletgen/sink.py::lay_sink#no building on the water
+    no building on the water - UNRESEARCHED: 10 ft round the pond's box
+- l7r/diagram/hamletgen/sink.py::lay_sink#reed fringe width
+    Research: reed fringe width - UNRESEARCHED: a 44 ft ring"""
+- l7r/diagram/hamletgen/sink.py::pond_seat#set-back limit
+    set-back limit - UNRESEARCHED: POND_SETBACK_LIMIT
+- l7r/diagram/hamletgen/sink.py::pond_seat#sways across the fall
+    sways across the fall - UNRESEARCHED: 0.9 and 1.8 long radii
+- l7r/diagram/hamletgen/sink.py::pond_setback#set-back margins
+    set-back margins - UNRESEARCHED: at least the rim plus 46 ft, a 12 ft cushion, 12 ft off the brook"""
+- l7r/diagram/hamletgen/sink.py::route_refusals#not through the rice
+    not through the rice - UNRESEARCHED: no interior vertex or leg in the field
+- l7r/diagram/hamletgen/water/brook.py::approach_legs#approach bow
+    approach bow - UNRESEARCHED: the midpoint set 26 px aside
+- l7r/diagram/hamletgen/water/brook.py::approach_legs#approach wobble
+    approach wobble - UNRESEARCHED: three points at 0.45, 0.68, 0.86 toward the tap, each seeded within +-16 px aside
+- l7r/diagram/hamletgen/water/brook.py::approach_legs#intake reach
+    intake reach - UNRESEARCHED: the last 40 px into the tap not tested against the crop
+- l7r/diagram/hamletgen/water/brook.py::around_the_field#clearance
+    crop clearance - UNRESEARCHED: every station `skirt` (BROOK_SKIRT, 34 px) outside the cultivated rings and supply canals, in cross-section
+- l7r/diagram/hamletgen/water/brook.py::bend_at#bend placement
+    Research: bend placement - UNRESEARCHED: one bend at the middle of the run's longest segment, the smaller clearing offset, at most half the segment, outside the field
+- l7r/diagram/hamletgen/water/brook.py::bend_runs#ruled runs broken
+    ruled runs broken - UNRESEARCHED: a bend in the straightest run while it is over its bound
+- l7r/diagram/hamletgen/water/brook.py::brook_skirt#corners cut
+    corners cut - UNRESEARCHED: each station replaced by two points 45 ft (at most 0.3 of the leg) either side, re-floored against the crop
+- l7r/diagram/hamletgen/water/brook.py::brook_skirt#crop clearance
+    crop clearance - UNRESEARCHED: every station `skirt` (BROOK_SKIRT, 34 px) outside the cultivated rings and supply canals, in cross-section
+- l7r/diagram/hamletgen/water/brook.py::brook_skirt#head crop yields
+    head crop yields - UNRESEARCHED: a crop ring reaching within one skirt of the fan's head is left out of the profile
+- l7r/diagram/hamletgen/water/brook.py::brook_skirt#meander
+    meander - UNRESEARCHED: the offset strays above the floor on `_wander`, over `steps` (16) stations
+- l7r/diagram/hamletgen/water/brook.py::brook_skirt#tap run length
+    tap run length - UNRESEARCHED: BROOK_TAP_RUN, 70 px
+- l7r/diagram/hamletgen/water/brook.py::brook_violations#no fold-back
+    no fold-back - UNRESEARCHED: no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
+- l7r/diagram/hamletgen/water/brook.py::brook_violations#no ruled run
+    no ruled run - UNRESEARCHED: the straightest run within its bound (`ruled_excess`)
+- l7r/diagram/hamletgen/water/brook.py::chord_offsets#ruled bend depth
+    Research: ruled bend depth - UNRESEARCHED: the bend clears the chord by RULED_TOL_FT and 1.5 ft
+- l7r/diagram/hamletgen/water/brook.py::clear_of_field#step
+    step - UNRESEARCHED: 6 px a step, at most 60, the tap run and the ends not moved
+- l7r/diagram/hamletgen/water/brook.py::draw_intake#weir skew angle
+    weir skew angle - UNRESEARCHED: WEIR_SKEW_DEG, 30 deg
+- l7r/diagram/hamletgen/water/brook.py::feed_brook#approach bearing
+    approach bearing - UNRESEARCHED: bearings tried outward from straight upslope in 10 deg steps to 70 either side
+- l7r/diagram/hamletgen/water/brook.py::round_the_field#approach bow
+    approach bow - UNRESEARCHED: the midpoint set 26 px aside
+- l7r/diagram/hamletgen/water/brook_course.py::EXIT_BEND_FRAC#exit leg bend
+    """Research: exit leg bend - UNRESEARCHED: an exit leg still on the page bends aside at its middle by 0.12 of its length"""
+- l7r/diagram/hamletgen/water/brook_course.py::EXIT_BEND_MAX_FT#exit bend cap
+    """Research: exit bend cap - UNRESEARCHED: the exit leg's bend at most 60 ft aside"""
+- l7r/diagram/hamletgen/water/brook_course.py::_v_within#crop clearance wins
+    crop clearance wins - UNRESEARCHED: never below `floor`, the crop clearance, where the two disagree
+- l7r/diagram/hamletgen/water/brook_course.py::_wander#meander
+    Research: meander - UNRESEARCHED: a seeded reflecting walk across the fall between 0 and BROOK_WANDER (10 px), stepping BROOK_WANDER_STEP / 4 to BROOK_WANDER_STEP
+- l7r/diagram/hamletgen/water/brook_course.py::exit_bend#exit leg bend
+    """Research: exit leg bend - UNRESEARCHED: an exit leg still on the page bends aside at its middle by 0.12 of its length"""
+- l7r/diagram/hamletgen/water/brook_course.py::exit_legs#exit leg bend
+    """Research: exit leg bend - UNRESEARCHED: an exit leg still on the page bends aside at its middle by 0.12 of its length"""
+- l7r/diagram/hamletgen/water/brook_course.py::exit_legs#exit span
+    exit span - UNRESEARCHED: max(120, the distance to the edge down the fall) + 260
+- l7r/diagram/hamletgen/water/brook_course.py::exit_legs#turn onto the fall
+    turn onto the fall - UNRESEARCHED: four legs of 0.22-0.26 of the span, blending 0.3, 0.6, 0.85, 1.0 from the course's heading onto the fall, no wander
+- l7r/diagram/hamletgen/water/brook_course.py::unfold#no fold-back
+    Research: no fold-back - UNRESEARCHED: every vertex turning past `limit_deg` (BROOK_MAX_TURN_DEG, 100 deg) dropped, a held tap never
+- l7r/diagram/hamletgen/water/brook_rules.py::RULED_MIN_LEN_FT#straight run floor
+    """Research: straight run floor - UNRESEARCHED: the share rule applies from 300 ft of brook in view"""
+- l7r/diagram/hamletgen/water/brook_rules.py::RULED_SHARE#straight run share
+    """Research: straight run share - UNRESEARCHED: at most 0.4 of the brook's length in view"""
+- l7r/diagram/hamletgen/water/brook_rules.py::RULED_TOL_FT#straight run tolerance
+    """Research: straight run tolerance - UNRESEARCHED: every vertex within 3.1 ft of its chord"""
+- l7r/diagram/hamletgen/water/brook_rules.py::ruled_share_ok#straight run share
+    """Research: straight run share - UNRESEARCHED: at most 0.4 of the brook's length in view"""
+- l7r/diagram/hamletgen/water/brook_rules.py::straightest_chord#straight run
+    Research: straight run - UNRESEARCHED: the W03 chord a natural brook is held off
+- l7r/diagram/hamletgen/water/brook_rules.py::straightest_run#straight run
+    Research: straight run - UNRESEARCHED: the W03 chord a natural brook is held off
+- l7r/diagram/hamletgen/water/comb.py::stage_field#ditch corridors
+    ditch corridors - UNRESEARCHED: every ditch stretch outside the crop a 30 px no-build corridor
+- l7r/diagram/hamletgen/water/fit.py::HEAD_OFFSETS#intake offset on the head margin
+    intake offset on the head margin - UNRESEARCHED: left, center or right, at -0.24, +/-0.05 or +0.24 of the field span across the fall
+- l7r/diagram/hamletgen/water/fit.py::_fit_at_aspect#fan proportions
+    fan proportions - UNRESEARCHED: REF_FIELD_FALL 1,150 ft, flank canals REF_CANAL_A 1,250-1,450 and REF_CANAL_B 680-800 ft, Ikegami's hand-drawn fan
+- l7r/diagram/hamletgen/water/fit.py::head_sluice#head set-back
+    head set-back - UNRESEARCHED: 0.36 of the field span upslope of the canvas center
+- l7r/diagram/hamletgen/water/fit.py::head_sluice#intake offset
+    intake offset - UNRESEARCHED: rolled from HEAD_OFFSETS
+- l7r/diagram/hamletgen/water/polder.py::_nearest_pair#block aspect band
+    Research: block aspect band - UNRESEARCHED: cols 0.45-0.65 of rows, nearest 0.55 on a tie
+- l7r/diagram/hamletgen/water/polder.py::dike_face#strip at the dike's outer face
+    Research: strip at the dike's outer face - UNRESEARCHED: the reeds stop at the outermost face, stepping in through a notch
+- l7r/diagram/hamletgen/water/polder.py::fit_polder#block aspect
+    block aspect - UNRESEARCHED: cols about 0.55 of rows, Enokida's 15 x 8
+- l7r/diagram/hamletgen/water/polder.py::polder_crossing_caps#crossings where the village lives
+    crossings where the village lives - UNRESEARCHED: three on the collector the village abuts, one per lateral, none on the feeder or far toe
+- l7r/diagram/hamletgen/water/polder.py::stage_polder#ditch corridors
+    ditch corridors - UNRESEARCHED: every ditch segment not wholly in the crop a 30 px no-build corridor
+- l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size
+    reservoir size - UNRESEARCHED: a fixed 82 x 54 ft ellipse whatever the acreage; 0061 sizes a reservoir pond by the paddy it waters only for a field on high ground whose pond is its only water, and no page sizes a polder's source, the wild water its inlet sluice draws from (searched 0061, 0017, 0019, 0020)

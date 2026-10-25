@@ -73,7 +73,7 @@ GROW_JITTER_FRAC = 0.12
 #: tie-break thing for the real speedup"): one level of sixteen directions at three rings offered at once, nearest the field first,
 #: tried and refused the near-field seats the field hemmed in (seed 4: 281 seats offered against 80) - withdrawn (research R1, R4).
 GROW_LEVELS: tuple[tuple[int, tuple[float, ...]], ...] = ((8, (1.0,)), (12, (1.0, 1.5)), (16, (1.25, 1.75, 2.0)))
-"""Research: the growth's widening - UNRESEARCHED: 8, then 12, then 16 directions at rings 1.0 to 2.0 times the least distance, a search breadth (measured: feature 308 R5)"""
+"""Research: the growth's widening - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); 8, then 12, then 16 directions at rings 1.0 to 2.0 times the least distance, a search breadth (measured: feature 308 R5)"""
 #: The width of the rings of distance from the margin's seat center inside which the growth counts two seats EQUAL (feature 318,
 #: FR-003a, the GM: "all else being equal, try this first"), and tries the one nearer the field first: a GUESS - about the parting
 #: between two neighbors' houses, so a ring holds the seats one growth step offers and no more. A distance on a continuous scale
@@ -311,7 +311,7 @@ def grow_level(level: int) -> tuple[int, tuple[float, ...]]:
     the least distance further out each level (feature 318: the cluster grows at its edge until every household stands; no
     radius stops it).
 
-    Research: the growth's widening past the table - UNRESEARCHED: a ring half the least distance further each level, a search breadth
+    Research: the growth's widening past the table - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); a ring half the least distance further each level, a search breadth
     """
     if level < len(GROW_LEVELS):
         return GROW_LEVELS[level]
@@ -368,10 +368,10 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, largest: tuple[f
         the order of growth - research/questions/0029-farmhouses-minka.drawing.html: nearest the seat first (`grow_key`)
         the spacing jitter - GUESS: each seat up to `GROW_JITTER_FRAC` farther than the lane's room, its direction jittered (`grow_jitter`), so the lump is irregular
         nearer the field breaking ties - research/questions/0029-farmhouses-minka.drawing.html: nearer the field only among seats in the same ring (the GM's ruling of 2026-10-03, feature 318 amendment 3)
-        first house against the field - UNRESEARCHED: the free ground nearest the seat's center
+        first house against the field - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on a figure - one Aizu village has the first branch house before the stem house, the later ones round it (Namihira 1984, pass B); the free ground nearest the seat's center
         tight seats for a passage household - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: offered round each house a passage may cross while the settlement's share has room, beside the ordinary seats
         a neighbor's land - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its footprint as the growth parts it (`land_box`), which the household's land must adjoin
-        the growth's widening - UNRESEARCHED: 8, then 12, then 16 directions (`GROW_LEVELS`), then one ring further each level, while households are left and the canvas offers seats (`grow_level`)
+        the growth's widening - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); 8, then 12, then 16 directions (`GROW_LEVELS`), then one ring further each level, while households are left and the canvas offers seats (`grow_level`)
     """
     want = plan.spec.households
     cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])

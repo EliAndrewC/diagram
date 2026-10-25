@@ -36,7 +36,7 @@ def below_drain(pt: Pt, drain: Poly, dx: float, dy: float, band: float = 150.0) 
 
     Research:
         wet side of the drain - research/questions/0058-ground-too-wet-to-build-on.drawing.html: downslope of the drain, within its span across the slope
-        toe band - UNRESEARCHED: 18 ft past the drain line, within 150 ft of it"""
+        toe band - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the figures - houses stood at a slope's foot, above the paddy (0031; Otsubo, modern, pass B); 18 ft past the drain line, within 150 ft of it"""
     ax, ay = -dy, dx  # across the slope
     across = pt[0] * ax + pt[1] * ay
     down = pt[0] * dx + pt[1] * dy
@@ -65,7 +65,7 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
     cluster plus its windbreak will occupy. Returns 0.0 for a clear back and 1.0 for one entirely
     under the hem.
 
-    Research: depth sampled behind the margin - UNRESEARCHED: 2.6 band depths, the cluster and its belt"""
+    Research: depth sampled behind the margin - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); 2.6 band depths, the cluster and its belt"""
     if not dry_plots:
         return 0.0
     ax, ay = -out[1], out[0]
@@ -116,7 +116,7 @@ def seat_has_dry_exit(plan: SitePlan, start: Pt, toe: Poly | None = None, wet: S
 
     Research:
         dry way out of the seat - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground
-        tameike berth - UNRESEARCHED: 80 ft"""
+        tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft"""
     from .ways.dry_exit import EXIT_CELL_FT, dry_exit
     from .ways.track import wet_grown_by_the_lane
 
@@ -191,18 +191,18 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), toe: Poly | Non
     Research:
         seat on the field's margin - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: higher, drier ground beside the paddy
         back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the margin facing the northwest unless declared
-        band area - UNRESEARCHED: households times the homestead's ground; 0037 sizes only the yard
+        band area - research/questions/0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html: a clustered village's house lots ran about 90 to 180 tsubo; the band's area is ours; households times the homestead's ground; 0037 sizes only the yard
         no drain rule at the seat - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster
-        clear ground behind - UNRESEARCHED: refused past 0.30 of the back under dry crop
+        clear ground behind - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); refused past 0.30 of the back under dry crop
         not on the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html: seat and anchor off the marsh below the fields
         not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from research/questions/0058-ground-too-wet-to-build-on.drawing.html, which does not count the fringe as marsh
         seat standoff from the field - GUESS: the seat band centered `dep` + 12 ft out from the field margin, the 12 ft the gap between the field's edge and the houses, which no page gives
-        reed-fringe share weight - UNRESEARCHED: 2.5 times the band's share in the reeds
-        wind and upslope weights - UNRESEARCHED: 1.0 for facing the wind, 0.8 for upslope
-        dry hem penalty - UNRESEARCHED: 1.6 within two band depths, plus 2.5 times the back's foul
+        reed-fringe share weight - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); 2.5 times the band's share in the reeds
+        wind and upslope weights - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); 1.0 for facing the wind, 0.8 for upslope
+        dry hem penalty - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); 1.6 within two band depths, plus 2.5 times the back's foul
         brook across the band - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: scored down, never refused
         brook penalty weight - GUESS: 3.0
-        brook reach on the band - UNRESEARCHED: a band point within 30 ft of the brook counts as on the water
+        brook reach on the band - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the 30 ft - homesteads faced their channel (Takamine 1977, pass B); a band point within 30 ft of the brook counts as on the water
         belt room on the canvas - CONVENTION: scored, refused past BELT_ROOM_MAX_OFF
         band on the canvas - CONVENTION: the seat center at least half the band's length (`lat`, the band's semi-axis along the field) inside the frame
         dry way out - research/questions/0081-village-lanes.drawing.html: a walled-in head is refused"""
@@ -377,8 +377,8 @@ def margin_candidates(env: Poly, cen: Pt, wind: Pt) -> list[tuple[Pt, Pt, int]]:
 
     Research:
         back faces the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html
-        45 degree bar - UNRESEARCHED: WIND_BACK_MIN_DOT, tier 0; 0072 gives no tolerance
-        back turned off a flank - UNRESEARCHED: tier 1, at most 45 degrees off the margin's normal"""
+        45 degree bar - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the bar - 0029's 34 degrees is a house's turn off its neighbors, a different quantity; WIND_BACK_MIN_DOT, tier 0; 0072 gives no tolerance
+        back turned off a flank - research/questions/0029-farmhouses-minka.drawing.html: the Okinawan slope survey has houses a quarter turn off the fall line, facing south - the cap is 45 degrees, a departure the code keeps until feature 417 T33; tier 1, at most 45 degrees off the margin's normal"""
     out: list[tuple[Pt, Pt, int]] = []
     n = len(env)
     for i in range(n):
@@ -402,7 +402,7 @@ def margin_candidates(env: Poly, cen: Pt, wind: Pt) -> list[tuple[Pt, Pt, int]]:
 def _seat_center(anchor: Pt, out: Pt, dep: float) -> Pt:
     """The band's center on a margin: its half-depth and the standoff out from the margin's midpoint.
 
-    Research: standoff from the field - UNRESEARCHED: 12 ft"""
+    Research: standoff from the field - GUESS research/questions/0029-farmhouses-minka.drawing.html: 12 ft"""
     return (anchor[0] + out[0] * (dep + 12.0), anchor[1] + out[1] * (dep + 12.0))
 
 
@@ -410,7 +410,7 @@ def _seat_frame(anchor: Pt, out: Pt, lat: float, dep: float, wind: Pt) -> dict[s
     """The seat frame on one margin: its center, the along and away units, the band's half-extents, the anchor, and
     whether its back is off the wind.
 
-    Research: standoff from the field - UNRESEARCHED: 12 ft, the band's near edge hugging the field"""
+    Research: standoff from the field - GUESS research/questions/0029-farmhouses-minka.drawing.html: our maps draw farmhouses 10 to 13 ft from the paddy, a figure the page builds from guesses; 12 ft; 12 ft, the band's near edge hugging the field"""
     wx, wy = wind
     along = (-out[1], out[0])
     # THE BAND'S NEAR EDGE HUGS THE FIELD. The standoff is the front row's own depth and no more, and
@@ -459,7 +459,7 @@ def _arm_crossing_accidental(arm: Poly, raw: Poly, kept: list[tuple[Poly, Poly]]
     only where the RAW pair crosses within ~40 px of it - existence alone is not enough, since a
     raw stem poked through its bar "crosses" at the hub while the clipped X sat 87 px away.
 
-    Research: arms cross only where the layout does - UNRESEARCHED: within 40 ft of the raw crossing"""
+    Research: arms cross only where the layout does - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); within 40 ft of the raw crossing"""
     for k_arm, k_raw in kept:
         _h = _arm_hit(arm, k_arm)
         if _h is None:
@@ -481,7 +481,7 @@ def _fork_spur(spur_pts: Poly, kept: list[tuple[Poly, Poly]]) -> Poly:
     the new start lies ON the arm, so the same intersection comes straight back on the next pass
     - a hit at the current start is the fork already made, not a crossing left to cure.
 
-    Research: field spur forks from the lane - UNRESEARCHED: starts at its crossing with an arm"""
+    Research: field spur forks from the lane - research/questions/0081-village-lanes.drawing.html: a lane meets another's side as a T and a tail under 40 ft beyond a crossing is cut - the spur's run is cut at any length on the near side of an arm, a departure the code keeps until feature 417 T32; starts at its crossing with an arm"""
     for _pass in range(8):
         _cut = False
         if len(spur_pts) < 2:

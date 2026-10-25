@@ -46,6 +46,7 @@ ENTRANCE_KINDS: frozenset[str] = frozenset({"door", "genkan"})
 #: Two blocks within this of each other are one building (a wing, a corridor, a porch): a MAP DRAWING CONVENTION - the
 #: sheets join a building's blocks flush, and a pixel is integer-emit rounding (the `WALL_OVERLAP_MIN_PX` reasoning).
 JOIN_PX: float = 1.0
+"""Research: block join distance - NONE: two blocks within 1 px are one building, which is integer-emit rounding."""
 
 
 def structure_marks(svg: str) -> list[Mark]:
@@ -113,6 +114,7 @@ ATTACHED_PX: float = 0.5 * FTPX
 #: three or four" (research 0101 'Privies (setchin)'). The record itself calls that count "this project's guess
 #: rather than a finding", so the 3 is a GUESS (plan D11).
 PRIVY_MIN: int = 3
+"""Research: least privies on a county manor - GUESS research/questions/0101-privies-setchin.drawing.html: at least 3 privies, the low end of the project's three or four per compound; the page records the count as the project's guess."""
 
 
 def privies_by_zone(svg: str, minimum: int = PRIVY_MIN) -> list[str]:
@@ -157,6 +159,7 @@ TUB_KINDS: tuple[str, ...] = (
 )
 #: The kitchen's tubs: "weighted to the kitchen (2)" (docs/building-programs.md; the record's reasoning, not a page's words).
 KITCHEN_TUBS: int = 2
+"""Research: kitchen tub count - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: the kitchen gets two fire-water tubs, one at each major wooden building and two at the kitchen, whose fire burns all day."""
 
 
 def _ft_box(m: Mark) -> tuple[float, float, float, float]:
@@ -255,8 +258,10 @@ def sheet_furniture(svg: str) -> list[str]:
 #: A veranda's depth in feet: half a ken to one ken, the widths of Katsura's verandas (research/questions/0102-verandas-and-
 #: storm-shutters-engawa-and-amado.drawing.html 'How wide is a drawn veranda?'), ACCURATE; free to change from face to face.
 VERANDA_FT: tuple[float, float] = (3.0, 6.0)
+"""Research: veranda depth band - research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html: a drawn veranda is 3 to 6 ft deep, half a ken to one ken, the widths of Katsura's verandas."""
 #: Half a pixel either side: a strip is drawn on whole or half pixels at 3 px to the foot.
 VERANDA_TOL_PX: float = 0.5
+"""Research: veranda depth tolerance - NONE: half a pixel either side, since strips are drawn on whole or half pixels."""
 
 
 def veranda_depths(svg: str, band: tuple[float, float] = VERANDA_FT) -> list[str]:

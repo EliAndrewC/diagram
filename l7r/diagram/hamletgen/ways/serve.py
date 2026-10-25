@@ -65,7 +65,7 @@ def shadowed_by(ways: Sequence[Sequence[Pt]], i: int) -> int | None:
     (`shadow_measure`, way against way) - or None: `_lay_web_lane`'s refusal, asked of a finished lane (`settle_shadows`).
     Only a way whose box comes within `WEB_SHADOW_FT` of this one's is measured.
 
-    Research: no way drawn twice - UNRESEARCHED: refused beside another way, within `WEB_SHADOW_FT` (30 ft), unbroken for more than a bundle pitch"""
+    Research: no way drawn twice - research/questions/0081-village-lanes.drawing.html: two paths running side by side are drawn as one, measured at less than 20 degrees (a convention) - the test is 30 ft for more than a pitch, with no angle, a departure the code keeps until feature 417 T32; refused beside another way, within `WEB_SHADOW_FT` (30 ft), unbroken for more than a bundle pitch"""
     p = ways[i]
     if len(p) < 2:
         return None
@@ -78,7 +78,7 @@ def runs_beside(p: Sequence[Pt], run: Sequence[Pt], o: Sequence[Pt]) -> bool:
     `BUNDLE_PITCH`? Only a way whose box comes within `WEB_SHADOW_FT` of `p`'s is measured. `shadowed_by`'s pair test, asked
     pair by pair by a caller that keeps the answers (`knots.WebMemo`).
 
-    Research: no way drawn twice - UNRESEARCHED: within `WEB_SHADOW_FT` (30 ft), unbroken for more than a bundle pitch"""
+    Research: no way drawn twice - research/questions/0081-village-lanes.drawing.html: two paths running side by side are drawn as one, measured at less than 20 degrees (a convention) - the test is 30 ft for more than a pitch, with no angle, a departure the code keeps until feature 417 T32; within `WEB_SHADOW_FT` (30 ft), unbroken for more than a bundle pitch"""
     x0, y0 = min(q[0] for q in p) - WEB_SHADOW_FT, min(q[1] for q in p) - WEB_SHADOW_FT
     x1, y1 = max(q[0] for q in p) + WEB_SHADOW_FT, max(q[1] for q in p) + WEB_SHADOW_FT
     if len(o) < 2 or max(q[0] for q in o) < x0 or min(q[0] for q in o) > x1 or max(q[1] for q in o) < y0 or min(q[1] for q in o) > y1:
@@ -95,7 +95,7 @@ def joined_link(p: Pt, q: Pt, hard: list[Poly], walls: list[Poly], water: list[t
     Research:
         a near end joined - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another joined at a single point, or the lane not drawn
         a detour link's margins - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft off a wall (`WEB_FABRIC_GAP`); the hard ground at its own gap - the crop at a half-tread (`WEB_CROP_GAP`, 0081), the toe and marsh 8 ft (`WEB_HARD_GAP`, UNRESEARCHED)
-        a detour link's reach - UNRESEARCHED: kept only where it comes within 12 ft of the point and of the network"""
+        a detour link's reach - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); kept only where it comes within 12 ft of the point and of the network"""
     if math.dist(p, q) <= 1e-6:
         return [p]
     if _clear_link(p, q, hard, walls, water):
@@ -163,18 +163,18 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         a web lane joins the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, or not drawn
         trimmed to what it serves - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane, or a stretch of one, that serves nothing is not drawn - the run
             trimmed to the houses it serves before it is joined (`_trim_to_service`) (405 T127)
-        no way drawn twice - UNRESEARCHED: a run refused over 60% of it, or a bundle pitch unbroken, beside a way
+        no way drawn twice - research/questions/0081-village-lanes.drawing.html: two paths running side by side are drawn as one, measured at less than 20 degrees (a convention) - the test is 30 ft for more than a pitch, with no angle, a departure the code keeps until feature 417 T32; a run refused over 60% of it, or a bundle pitch unbroken, beside a way
         not along a shelter belt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane kept through a belt, not along it
-        how far inside a belt - UNRESEARCHED: a run over 60 ft inside a belt refused
+        how far inside a belt - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); a run over 60 ft inside a belt refused
         a tail past the junction cut - research/questions/0081-village-lanes.drawing.html: under 40 ft
-        link reach - UNRESEARCHED: a link up to 200 ft to the network
+        link reach - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); a link up to 200 ft to the network
         arrived at the network - research/questions/0081-village-lanes.drawing.html: a run within 25 ft of it (`_LANE_JOIN_FT`) is joined at a single point - its end carried onto the way, a whole run's arriving vertex snapped, or a link drawn - and not drawn where no link is walkable
         link off walls - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft off a wall (`WEB_FABRIC_GAP`), a garden fence's 7 ft to a lane's middle
-        link off the toe and marsh - UNRESEARCHED: kept 8 ft off them (`WEB_HARD_GAP`)
+        link off the toe and marsh - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); kept 8 ft off them (`WEB_HARD_GAP`)
         link against the crop - research/questions/0081-village-lanes.drawing.html: half the widest tread off it (`WEB_CROP_GAP`, carried by the crop polygons), so a link drawn at its way's width keeps its tread off the crop
-        a healing link kept - UNRESEARCHED: its ends within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), else the gap is left unjoined
+        a healing link kept - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); its ends within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), else the gap is left unjoined
         a link takes its way's width - CONVENTION
-        the nearer end joined - UNRESEARCHED: of a run's two ends, the one nearer the network is the one joined to it
+        the nearer end joined - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); of a run's two ends, the one nearer the network is the one joined to it
         web lane width - research/questions/0081-village-lanes.drawing.html: a web lane drawn 3 ft wide, the footpath's tread"""
     segs = _net_segs(s)
     if len(run) < 2:
@@ -332,9 +332,9 @@ def front_door(h: Mapping[str, Any], clear: float) -> Pt | None:
 
 
 DOOR_SHIFT_FT = 4.0
-"""How far a door on a fixture is stepped along the front at a time (`door_off_fixtures`). A placement rule, not a drawing convention: no page gives the step, so it is UNRESEARCHED (feature 328 wave 90, impl-drift).
+"""How far a door on a fixture is stepped along the front at a time (`door_off_fixtures`). A placement rule, not a drawing convention: no page gives the step, so it is a GUESS (feature 328 wave 90, impl-drift; searched, feature 417 T29).
 
-Research: door step - UNRESEARCHED: 4 ft"""
+Research: door step - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); 4 ft"""
 
 
 def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, step: float = DOOR_SHIFT_FT, tries: int = 8, arrives: Any = None) -> Pt | None:
@@ -347,7 +347,7 @@ def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, st
 
     Research:
         no path from inside a fixture - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the door stepped along the front
-        the door's steps - UNRESEARCHED: `DOOR_SHIFT_FT` (4 ft) at a time, up to `tries` (8) each way
+        the door's steps - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); `DOOR_SHIFT_FT` (4 ft) at a time, up to `tries` (8) each way
         a stepped door still arrives - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: taken only where a path's end there still reaches its farm (`arrives`)"""
     from l7r.diagram.settlement import edge_dist
 
@@ -454,10 +454,10 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
             a GUESS there
         off the fixtures and grove bands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walls to the path
         no path to a household reached across a yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: it shows no lane of its own
-        door path off the house and the fixtures - UNRESEARCHED: it starts 8 ft past its yard (`DOOR_STEP_FT`) and keeps 5 ft clear of the fixtures (`DOOR_FIXTURE_CLEAR_FT`)
+        door path off the house and the fixtures - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); it starts 8 ft past its yard (`DOOR_STEP_FT`) and keeps 5 ft clear of the fixtures (`DOOR_FIXTURE_CLEAR_FT`)
         door path off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a footpath's clearance and some working room kept off the trees on each side, `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread (about 22 ft of the opening), counted once: the band grown by `band_grow` and the path routed at its gap keep its middle 11 ft off the trees
-        a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front
-        a flank door with open yard to the front - UNRESEARCHED: only a flank with open ground - no house, no grove band - between it and the front door (`front_to_flank_open`)"""
+        a flank door only where the front has none - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); a door path leaves from a flank of the dooryard only where no lawful path leaves the front
+        a flank door with open yard to the front - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); only a flank with open ground - no house, no grove band - between it and the front door (`front_to_flank_open`)"""
     from .checks import served_network  # local: checks sits above serve in this package's layers
     from .law import fixture_quads  # local: the law sits above serve too
     from .settle import Lawful  # local: the settle sits above serve too
@@ -570,7 +570,7 @@ def flank_doors(h: Mapping[str, Any]) -> list[Pt]:
     the gable) - on the grove's open side, so in practice a two-sided grove's (spec-fidelity's condition on FR-019's
     exception, 2026-09-30) - or none without a yard of its own.
 
-    Research: a flank door as fallback - UNRESEARCHED: a dooryard flank facing no grove band"""
+    Research: a flank door as fallback - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way runs outside the grove or through a gap in it to the house - a flank door is offered only on a side that faces no grove band, where the front has none"""
     from l7r.diagram.settlement.rolling.access import doors_of
 
     g = h.get("geom") or {}
@@ -606,7 +606,7 @@ def route_from_door(door: Pt, q: Pt, hard: list[Poly], walls: Sequence[Poly], wa
 
     Research:
         door path off the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed `gap` (`FOOTPATH_FABRIC_GAP`, 7 ft) off the fabric, a footpath's middle 7 ft clear of a garden fence
-        a first leg out of the door's cell - UNRESEARCHED: one or two router cells (10-20 ft) stepped out of a boxed-in door before routing"""
+        a first leg out of the door's cell - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); one or two router cells (10-20 ft) stepped out of a boxed-in door before routing"""
     path = _route(door, q, hard, walls, water, gap=gap)
     if len(path) >= 2:
         return path
@@ -649,7 +649,7 @@ def door_path(
             else routed and pulled taut
         no sliver with the ways it meets - research/questions/0081-village-lanes.drawing.html: lanes meet as a T, so a door path closing a sliver (`closes_a_needle`) is refused
         a door path off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a household's way goes round its own garden beds and fixtures
-        its margin off the fixtures - UNRESEARCHED: its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)
+        its margin off the fixtures - GUESS research/questions/0081-village-lanes.drawing.html: the 3 ft the page keeps a tread off a farmstead's other buildings (its sheds, byre and retirement house, a GUESS there), extended here to the fixtures; its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)
         off the grove bands on every test - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the bands (grown by `band_grow`) held `FOOTPATH_FABRIC_GAP` off by the step, the pull and the kept path, 0036's 11 ft
         the fallback at the law's gap - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed again at `WEB_FABRIC_GAP` (7 ft off a garden fence) and stepped only on lawful ground
         water on the way - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a straight step crosses no water, and a routed path is squared where it crosses (`square_run`)"""

@@ -144,7 +144,8 @@ class RunOnBlocks:
             off the wet ground - research/questions/0081-village-lanes.drawing.html: the marsh and the wet toe block
             off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, the built ground blocks
             off the crop - research/questions/0081-village-lanes.drawing.html: the dry plots block
-            across commons and village groves - UNRESEARCHED: left out of the blocking fabric, crossed freely
+            across commons and village groves - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane must still get through the village's shelter belt (`village_groves`); a farm's own grove stays in the blocking fabric
+            the commons crossed - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the commons are ground a way crosses, as `_homestead_polys` has them
             off the fixtures - GUESS: farmstead fixtures block a run-on, padded `FIXTURE_PAD_FT` (0.5 ft) (405 T127)"""
         self.s = s
         self.water = drawn_water_segs(s)

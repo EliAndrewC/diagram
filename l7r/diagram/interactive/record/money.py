@@ -4,8 +4,11 @@ The GM, 2026-10-24, through gm-assistant: *"I think that I am going to want a to
 this was the copper coin, but we translate the amount of money based on different ways of understanding it."* So an
 amount the author marks - `<span class="money" data-amount="20" data-coin="mon">20 mon</span>`, its era named by
 `data-era` on the span or on the nearest element around it that carries one - is converted here, at build time, into the
-text its hover box shows: goods dollars (what it bought), wage dollars (the same share of a laborer's day) and Rokugani
-coin, each the per-unit figure of gm-assistant's table times the amount ("Multiply by the amount shown", the issue).
+text its hover box shows: goods dollars (what it bought) as a range from the central reading to the high one, wage dollars
+(the same share of a laborer's day) and Rokugani coin, each the per-unit figure of gm-assistant's table times the amount
+("Multiply by the amount shown", the issue). The goods range is feature 421 (diagram#17): gm-assistant's feature 223 made
+`goods_dollars` the central reading (the spending-weighted geometric mean) and added `goods_dollars_high` (the arithmetic
+mean throughout), and "the toolkit page never shows one goods figure without the other", so neither does this box.
 
 THE TABLE IS GM-ASSISTANT'S. `research/assets/money-conversions.json` is a copy of its
 `webapp/l7r/money/data/conversions.json`, refreshed by `make money-conversions` (`scripts/record/money_conversions.py`);
@@ -135,7 +138,7 @@ def _dollars(ends: tuple[float, ...]) -> str:
 
 def box(amount: tuple[float, ...], label: str, unit: dict[str, Any], era: dict[str, Any], borrowed: bool) -> str:
     """The hover box's text for one amount (one figure, or the two ends of a range) at one era's row."""
-    goods = _dollars(tuple(a * unit["goods_dollars"] for a in amount))
+    goods = _dollars((amount[0] * unit["goods_dollars"], amount[-1] * unit["goods_dollars_high"]))
     wages = _dollars(tuple(a * unit["wage_dollars"] for a in amount))
     sen = " to ".join(rokugani(a * unit["rokugan_sen"]) for a in amount)
     lines = [f"{label}: about {goods} in goods, {wages} in wages, {sen} in Rokugan"]

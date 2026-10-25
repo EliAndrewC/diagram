@@ -1,0 +1,82 @@
+- l7r/diagram/hamletgen/hinterland/bamboo.py::THICKET_REACH_FT#thicket reach
+    Research: thicket reach - UNRESEARCHED: 220 ft along the band from the target before the row's whole length"""
+- l7r/diagram/hamletgen/hinterland/bamboo.py::THICKET_ROW_DEPTH_FT#thicket row depth figure
+    thicket row depth figure - UNRESEARCHED: 30 ft, this project's measure of just beyond the row"""
+- l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#crop and water pads
+    crop and water pads - UNRESEARCHED: 12 ft off the crop, 6 ft off marsh, 30 ft off the pond
+- l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#keep-out pads
+    keep-out pads - UNRESEARCHED: 2-20 ft round houses, retirement houses, yards, gardens, sheds, byres, wells, the notice board, persimmons, groves, lanes, belt and woods
+- l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#no stand where the full stand fits nowhere
+    no stand where the full stand fits nowhere - UNRESEARCHED
+- l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#off the dry plots
+    off the dry plots - UNRESEARCHED: refused on the dry crop's plots too
+- l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#search reach
+    search reach - UNRESEARCHED: the first search walks THICKET_REACH_FT, 220 ft, from the target, so a thicket may stand that far past the row's ends before the search falls back to the whole back row
+- l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#watercourse margin
+    watercourse margin - UNRESEARCHED: kept a watercourse's half-width plus 3 ft off it
+- l7r/diagram/hamletgen/hinterland/belt.py::BELT_LANE_CLEAR_FT#belt clear of a back lane
+    """Research: belt clear of a back lane - UNRESEARCHED: 12 ft beyond the tread"""
+- l7r/diagram/hamletgen/hinterland/belt.py::BELT_NEAR_FT#near stand-off
+    """Research: near stand-off - UNRESEARCHED: the near face 36 ft behind the fringe"""
+- l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#no belt under three houses
+    no belt under three houses - UNRESEARCHED
+- l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#off the crop
+    off the crop - UNRESEARCHED: stands back 22-60 px, then shortens to 0.6 of its span
+- l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#shoulder past the end houses
+    shoulder past the end houses - UNRESEARCHED: the band runs 90 ft past the outermost house across the wind
+- l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#lane clearance
+    lane clearance - UNRESEARCHED: BELT_LANE_CLEAR_FT
+- l7r/diagram/hamletgen/hinterland/belt.py::round_the_houses#stand-off reach
+    stand-off reach - UNRESEARCHED: `reach` from each house
+- l7r/diagram/hamletgen/hinterland/crossing.py::REAL_CROSSING_SHARE#a real crossing
+    """Research: a real crossing - UNRESEARCHED: the walk inside the field at least half the field's depth along it"""
+- l7r/diagram/hamletgen/hinterland/paddy_grass.py::seat_paddy_grass#its shape
+    its shape - UNRESEARCHED: an axis-aligned square, not turned to the slope; no record gives a grass hill's shape
+- l7r/diagram/hamletgen/hinterland/paddy_grass.py::seat_paddy_grass#which paddy
+    which paddy - UNRESEARCHED: the first of the field's top plots with room above it, not rolled; no record says which paddy kept one
+- l7r/diagram/hamletgen/hinterland/parcels.py::LANE_LOT_LINE#lot line along a lane
+    """Research: lot line along a lane - UNRESEARCHED: 70 px from its centerline"""
+- l7r/diagram/hamletgen/hinterland/parcels.py::STREAM_LOT_LINE#lot line along a brook
+    """Research: lot line along a brook - UNRESEARCHED: 60 px from its centerline"""
+- l7r/diagram/hamletgen/hinterland/parcels.py::_CHAIN_OFF#woods not in a ruled line
+    """Research: woods not in a ruled line - UNRESEARCHED: a third parcel within 0.2 of the span off two others' line"""
+- l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#the fields beside a seat
+    the fields beside a seat - UNRESEARCHED: the field edge within `FIELD_BESIDE_FT` (300 ft) past the nearest point, in the map's px
+- l7r/diagram/hamletgen/hinterland/parcels.py::_crop_refuses#crop set-back
+    crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
+- l7r/diagram/hamletgen/hinterland/parcels.py::_patch_keepouts#keep-outs
+    keep-outs - UNRESEARCHED: 150 px from houses, 90 from wells, 120 past the pond, 70 from lanes, 60 from streams, 110 round the belt and the houses
+- l7r/diagram/hamletgen/hinterland/parcels.py::fit_square_parcel#shrink before dropping
+    Research: shrink before dropping - UNRESEARCHED: a square parcel tried at 0.9-0.6 of its size, never under the floor
+- l7r/diagram/hamletgen/hinterland/parcels.py::in_a_ruled_line#woods not in a ruled line
+    """Research: woods not in a ruled line - UNRESEARCHED: a third parcel within 0.2 of the span off two others' line"""
+- l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#a ring with room for a wood
+    a ring with room for a wood - UNRESEARCHED: a ring with room for fewer than `WOODLAND_MIN_CROWNS` (5) crowns is refused as a wood
+- l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#aspect and bearing
+    aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
+- l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#commons legibility floor
+    commons legibility floor - UNRESEARCHED: a ring under 120 ft is dropped rather than drawn smaller (fewer, never smaller)
+- l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#crop set-back
+    crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
+- l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcel count and size
+    parcel count and size - UNRESEARCHED: `count` parcels from 250 ft, the ladder scaled 0.9-1.1 per map, rungs 0.8, 0.64, 0.5
+- l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcels kept apart
+    parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
+- l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#per-parcel size bands
+    per-parcel size bands - UNRESEARCHED: 0.82-1.18 of the half-size by band, then a 0.84 smaller try
+- l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan reach
+    scan reach - UNRESEARCHED: confined to 210 px past the content box
+- l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods not in a ruled line
+    """Research: woods not in a ruled line - UNRESEARCHED: a third parcel within 0.2 of the span off two others' line"""
+- l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#share clothed as grazing
+    share clothed as grazing - UNRESEARCHED: holes in the view filled
+- l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#among-the-houses copse box
+    among-the-houses copse box - UNRESEARCHED: the box is the cluster's oriented footprint padded 16 ft
+- l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#no copse without a belt or a reserved seat
+    no copse without a belt or a reserved seat - UNRESEARCHED: a map with neither draws no copse
+- l7r/diagram/hamletgen/hinterland/stages.py::stock_woodland#under-stocked parcel regraded
+    Research: under-stocked parcel regraded - UNRESEARCHED: under WOODLAND_MIN_CROWNS the parcel is drawn as grazing
+- l7r/diagram/hamletgen/hinterland/wood_rank.py::FIELD_BESIDE_FT#the fields beside a wood
+    """Research: the fields beside a wood - UNRESEARCHED: the field edge within 300 ft past the nearest point, about a wood's own span"""
+- l7r/diagram/settlement/land/cover.py::GroundCoverMixin.hinterland#no cover among the houses
+    no cover among the houses - UNRESEARCHED: 44 px round each farmstead, or each homestead on a dispersed map

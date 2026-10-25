@@ -149,8 +149,11 @@ def _lattice(p: Placed) -> list[Box]:
 
 
 STALL_FT: float = 6.0  # one ken, a warrior's stall one bay wide (0108's drawing page)
+"""Research: stall width - research/questions/0108-stables-umaya.drawing.html: a warrior's stall was one bay wide and our maps take a bay as one ken, so a stall is drawn about 6 ft wide."""
 PASSAGE_FT: float = 6.0  # the earth-floored passage (kusa-no-ma) before the stalls; its depth a GUESS
+"""Research: stable passage depth - GUESS: the earth-floored passage before the stalls is 6 ft deep; the record has the passage but gives no depth."""
 GROOMS_ROOM_FT: float = 9.0  # the grooms' matted room (tozamurai) across the passage; its depth a GUESS
+"""Research: grooms' room depth - GUESS: the grooms' matted room is 9 ft deep; the record has the grooms' quarters but gives no depth."""
 
 
 def _stable_parts(p: Placed) -> tuple[Box, list[tuple[float, float, float, float, bool]]]:
@@ -253,6 +256,7 @@ def _guest_privy(env: Envelope, home: Placed, boxes: list[Box]) -> Box | None:
 #: wall's face clearance grew a foot and the servants' privy, set 2 ft out, no longer fit the 7 ft between the long-house's end
 #: and the servants' row. The gap is a drawing convention (a privy's own eaves).
 FLUSH_PRIVY_GAP_FT: float = 1.5
+"""Research: flush privy gap - GUESS: no page gives it; a privy flush to a side wall stands 1.5 ft beyond its building's court face, room for the privy's own eaves."""
 
 
 def _flush_privy(env: Envelope, p: Placed, boxes: list[Box], avoid: tuple[Box, ...]) -> Box | None:
@@ -301,9 +305,13 @@ def _door(env: Envelope, p: Placed, boxes: list[Box], side: str = "") -> tuple[B
 
 GROOMS_PRIVY_FT: float = 55.0
 """How far a servants' privy may stand from the stables and still serve their grooms too (pass 6 merged the two at ~49 ft
-apart; feature 374 wave 124 kept the stables' own where the servants' range stood ~106 ft away). A drawing convention."""
+apart; feature 374 wave 124 kept the stables' own where the servants' range stood ~106 ft away). A drawing convention.
+
+Research: shared privy reach - GUESS: a servants' privy serves the stables' grooms too when within 55 ft; 0101 has a servants' row sharing the stables' privy and is silent on the distance."""
 GATE_PRIVY_FT: float = 30.0
-"""How far a lodgers' privy keeps from the main gate's opening along the south wall (feature 374 batch 4, plan R4-3; a GUESS)."""
+"""How far a lodgers' privy keeps from the main gate's opening along the south wall (feature 374 batch 4, plan R4-3; a GUESS).
+
+Research: lodgers' privy distance from the gate - GUESS: a lodgers' privy keeps 30 ft from the main gate's opening along the south wall; no page gives it."""
 
 
 def _gap(a: Box, b: Box) -> float:
@@ -379,7 +387,9 @@ def requires(program: CompoundProgram, kind: str) -> bool:
 
 
 WELL_HALF_FT = 3.65
-"""Half a well curb's side: the draft draws every well as a 7.3 ft square (`_point_features`)."""
+"""Half a well curb's side: the draft draws every well as a 7.3 ft square (`_point_features`).
+
+Research: well curb half-side - GUESS: the draft draws every well curb as a 7.3 ft square (half-side 3.65 ft), about 1.8 times the real curb of about 4 ft square that 0196 gives; the page is silent on how a building plan draws the curb, so the enlargement is ours, as the settlement map's marker is (feature 417 T28; the gap is T33's)"""
 
 
 def garden_well(env: Envelope, garden: CourtZone, taken: Sequence[Box]) -> tuple[float, float] | None:
@@ -407,8 +417,10 @@ def tub_by_its_eaves(tub: tuple[float, float], host: Box) -> bool:
 # plus a foot, 4 ft), the seat's 1 ft clearance and the tub's own half (1.3 ft), then farther - the last the kitchen's second
 # tub beside its first (TUB_DOOR_MAX_FT) - each still inside TUB_DOOR_MAX_FT at 2.5 ft out
 _BESIDE_DOOR_FT: tuple[float, ...] = (6.35, 7.0, 8.0, 10.0)
+"""Research: tub offsets beside a door - GUESS: no page gives it; a fire-water tub stands 6.35-10 ft along the face from its door's center (6.35, 7, 8, 10 ft tried in order), each inside TUB_DOOR_MAX_FT."""
 # the corner seat's distance in from the corner nearest a door, on the face round that corner
 _CORNER_IN_FT = 1.5
+"""Research: tub corner seat - GUESS: no page gives it; a corner tub stands 1.5 ft in from the corner nearest its door."""
 
 
 def beside_door_fracs(p: Placed, side: str, door: tuple[float, float]) -> tuple[float, ...]:
@@ -458,7 +470,9 @@ def board_by_the_gate(env: Envelope, board: Box) -> bool:
 
 
 SHRINE_TREE_CROWN_FT: float = 20.0  # the shrine's tree's crown across; a GUESS (no source sizes a household god's tree)
+"""Research: shrine tree crown - GUESS: the compound shrine's tree has a crown 20 ft across; no source sizes a household god's tree."""
 SHRINE_TREE_CLEAR_FT: float = 2.0  # its crown clear of the hall, every mass and the wall's ink (half the 3 ft wall, and a little)
+"""Research: shrine tree clearance - GUESS: the tree's crown stands 2 ft clear of the hall, every mass and the wall's ink, the wall's half-thickness and a little more; no page gives it."""
 
 
 def _shrine_tree(env: Envelope, result: PlaceResult, taken: list[Box]) -> tuple[float, float] | None:

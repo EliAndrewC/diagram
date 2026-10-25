@@ -203,12 +203,12 @@ def path_violations(path: Poly, avoid: Sequence[Poly], pond: tuple[float, float,
     is also what a real track does - you ford a ditch where it is narrow and square.
 
     Research:
-        pond kept off - UNRESEARCHED: 80 ft past the pond's larger half-axis
-        drain brook never crossed - UNRESEARCHED: avoided outright, not bridged
+        pond kept off - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); 80 ft past the pond's larger half-axis
+        drain brook never crossed - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the lanes among the houses cross a ditch where their line takes them, a crossing landing on cultivated ground, wet or dry - the drain brook is never crossed, a departure the code keeps until feature 417 T32; avoided outright, not bridged
         off the crop - research/questions/0081-village-lanes.drawing.html: no segment through an avoid polygon
         square over water - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: no crossing under
             42 degrees
-        no deck on crop - UNRESEARCHED: a crossing within 14 ft of a crop polygon fouls
+        no deck on crop - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the lanes among the houses cross a ditch where their line takes them, a crossing landing on cultivated ground, wet or dry - a deck landing on crop is refused, a departure the code keeps until feature 417 T32; a crossing within 14 ft of a crop polygon fouls
         two decks too close - CONVENTION: crossings under 46 ft apart counted, decks drawn over each other"""
     bad = 0
     for i in range(len(path) - 1):
@@ -258,12 +258,12 @@ class PathChecker:
         """`path_violations` for one path, asked of the indexed geometry.
 
         Research:
-            pond kept off - UNRESEARCHED: 80 ft past the pond's larger half-axis
-            drain brook never crossed - UNRESEARCHED: avoided outright, not bridged
+            pond kept off - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); 80 ft past the pond's larger half-axis
+            drain brook never crossed - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the lanes among the houses cross a ditch where their line takes them, a crossing landing on cultivated ground, wet or dry - the drain brook is never crossed, a departure the code keeps until feature 417 T32; avoided outright, not bridged
             off the crop - research/questions/0081-village-lanes.drawing.html: no segment through an avoid polygon
             square over water - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: no crossing
                 under 42 degrees
-            no deck on crop - UNRESEARCHED: a crossing within 14 ft of a crop fouls
+            no deck on crop - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the lanes among the houses cross a ditch where their line takes them, a crossing landing on cultivated ground, wet or dry - a deck landing on crop is refused, a departure the code keeps until feature 417 T32; a crossing within 14 ft of a crop fouls
             two decks too close - CONVENTION: crossings under 46 ft apart counted
         """
         bad = 0
@@ -316,7 +316,7 @@ def crossing_lands_on_crop(a: Pt, b: Pt, p: Pt, q: Pt, crops: Sequence[Poly], pa
     (`features_do_not_overlap` reports it as a dry_plots/bridges pair). The way is free to cross the
     same ditch a little further along where the crop stops - which is where the bund is anyway.
 
-    Research: no deck on crop - UNRESEARCHED: within 14 ft of a dry plot"""
+    Research: no deck on crop - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the lanes among the houses cross a ditch where their line takes them, a crossing landing on cultivated ground, wet or dry - a deck landing on crop is refused, a departure the code keeps until feature 417 T32; within 14 ft of a dry plot"""
     hit = seg_intersect(a, b, p, q)
     if hit is None:
         return False

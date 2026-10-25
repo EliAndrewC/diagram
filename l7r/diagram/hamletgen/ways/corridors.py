@@ -192,7 +192,7 @@ GABLE_MARGIN_FT = 6.0
 """How far off its own house's wall a field route may run beside its own steading (`field_router`): clear of the eaves by more
 than a tread's half-width and the house-hit margin (`house_hit`: 1.5 + 2 ft).
 
-Research: gable margin - UNRESEARCHED: 6 ft off the house's wall"""
+Research: gable margin - GUESS: no page sets a route's line off a gable; 0081 keeps a tread at least 3 ft off a farmhouse wall, a floor the 6 ft keeps"""
 
 
 def samples_along(segs: Sequence[tuple[Pt, Pt]], step: float = BRANCH_STEP_FT) -> list[Pt]:
@@ -247,7 +247,7 @@ def _run_from(q: Pt, ground: WorkedGround, half: float, brook: tuple[Pt, ...], f
             the paddy's edge
         over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: square,
             at the ford that makes the walk shortest
-        no run-on past the far landing - UNRESEARCHED: the straight run is offered as found, and the lane law's crossing rule cuts
+        no run-on past the far landing - GUESS: no source could speak to it and no page speaks to the run-on, a value of ours (feature 417 T29 pass D, 2026-10-25); the straight run is offered as found, and the lane law's crossing rule cuts
             a crossing made off a ford before any is drawn (`settle._crossing_fault`, 0035); behavior as before feature 387, which
             moved this out of `field_runs` unchanged"""
     tgt = run_on_target(q, ground, half, reach=math.inf)
@@ -311,13 +311,13 @@ against a neighbor's yard: with no field's corridor reserved before the houses, 
 stand among the steadings. Six starts at the four nearest fords found four lawful runs there (0.36 s, asked only once no
 straight run keeps the law).
 
-Research: field path from the network - UNRESEARCHED: six starts 30 ft apart, a search breadth"""
+Research: field path from the network - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); six starts 30 ft apart, a search breadth"""
 
 ROUTED_START_GAP_FT = 30.0
 """How far apart the starts a routed field way is tried from stand (`ROUTED_FIELD_STARTS`): a farmstead's yard width, so two
 starts do not leave from the same dooryard.
 
-Research: field path from the network - UNRESEARCHED: 30 ft between starts, a search breadth"""
+Research: field path from the network - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); 30 ft between starts, a search breadth"""
 
 
 def owner_point(owner: Any) -> bool:
@@ -348,7 +348,7 @@ def routed_field_runs(
             steadings when no straight run keeps the law
         over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the
             fords nearest the network, crossed square
-        ford landing - UNRESEARCHED: 22 ft each side of the brook (`FORD_LANDING_FT`)"""
+        ford landing - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25); 22 ft each side of the brook (`FORD_LANDING_FT`)"""
     pts = samples_along(segs)
     if not pts:
         return []
@@ -386,7 +386,7 @@ FORD_LANDING_FT = 22.0
 Research:
     square at the ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the path runs
         square to the brook through the landing
-    ford landing - UNRESEARCHED: 22 ft each side of the brook"""
+    ford landing - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25); 22 ft each side of the brook"""
 
 
 def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:

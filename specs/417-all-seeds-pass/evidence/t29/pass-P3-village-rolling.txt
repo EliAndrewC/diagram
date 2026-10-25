@@ -1,0 +1,88 @@
+- l7r/diagram/settlement/rolling/access.py::EXIT_TURNS_DEG#bearing out turns
+    """Research: bearing out turns - UNRESEARCHED: at most a quarter turn off the seat's outward bearing, in 15 degree steps"""
+- l7r/diagram/settlement/rolling/access.py::_house_candidates#path leaves its own yard
+    path leaves its own yard - UNRESEARCHED: the tread kept 0.5 ft clear of the yard it leaves (`leaves_its_yard`)
+- l7r/diagram/settlement/rolling/access.py::_standing_clear#path refused over a household's reserved grove seats
+    path refused over a household's reserved grove seats - UNRESEARCHED: `wood.corridor_bars` refuses a corridor across them"""
+- l7r/diagram/settlement/rolling/access.py::house_gap#the corridor's margin
+    the corridor's margin - UNRESEARCHED: `PART_MARGIN_FT`, half a foot more"""
+- l7r/diagram/settlement/rolling/access.py::leaves_its_yard#path leaves its yard once
+    Research: path leaves its yard once - UNRESEARCHED: a corridor that re-enters its own threshing yard is refused
+- l7r/diagram/settlement/rolling/access.py::past_the_yard#path not drawn on its own yard
+    Research: path not drawn on its own yard - UNRESEARCHED: the drawn path starts where it leaves the threshing yard
+- l7r/diagram/settlement/rolling/access.py::round_the_gable#flank path round the gable
+    Research: flank path round the gable - UNRESEARCHED: carried along the gable past the back wall by a corridor's half-width and a foot
+- l7r/diagram/settlement/rolling/bearing.py::FOLLOW_FULL_PX#full lane turn within reach
+    """Research: full lane turn within reach - UNRESEARCHED: the margin's whole turn within 96 px of it"""
+- l7r/diagram/settlement/rolling/bearing.py::FOLLOW_HALF_SPAN_PX#lane bend a house reads
+    """Research: lane bend a house reads - UNRESEARCHED: 48 px of the margin either side, read as the lane's bend"""
+- l7r/diagram/settlement/rolling/bearing.py::FOLLOW_REACH_PX#lane turn fades out
+    """Research: lane turn fades out - UNRESEARCHED: the margin's pull fades to none at 240 px"""
+- l7r/diagram/settlement/rolling/bearing.py::MarginBearing#turn with the field margin
+    turn with the field margin - UNRESEARCHED: the field margin stands in for that lane before any lane is drawn, a proxy
+- l7r/diagram/settlement/rolling/bearing.py::MarginBearing.__call__#folded square and faded
+    folded square and faded - UNRESEARCHED: a house square to the margin by front or gable, the turn in full near it and fading behind
+- l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre's flank
+    byre's flank - UNRESEARCHED: the flank away from the garden; the page attests the inner and outer stable, not the side
+- l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed well pocket
+    dispersed well pocket - UNRESEARCHED: the wellhead plus a 3 ft margin, `2 * _well_vr() + px(6.0)`
+- l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#forecourt kept on a no-rice farm
+    forecourt kept on a no-rice farm - UNRESEARCHED: the yard's ground reserved where no threshing floor is drawn
+- l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#house-to-part gap
+    house-to-part gap - UNRESEARCHED: 3 ft between the house and its yard and garden
+- l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band off an unkept yard
+    south band off an unkept yard - UNRESEARCHED: `YARD_SUN_STRIP`, 22, unscaled, where the map keeps no sun
+- l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._garden_beds#bed split forms
+    bed split forms - UNRESEARCHED: half flank the house on opposite walls, the rest stacked (south gardens) or side by side; each bed at least 6 ft (`bscale`) wide
+- l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._garden_beds#bed split share
+    bed split share - UNRESEARCHED: about one household in four splits its plot into two beds
+- l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#the door's room past the yard
+    the door's room past the yard - UNRESEARCHED: `DOOR_OUT_FT` (8 ft) past the yard's far edge, where the web's door path starts (`ways/serve.front_door`)
+- l7r/diagram/settlement/rolling/dispersed.py::YARD_SUN_STRIP#yard drying strip width
+    yard drying strip width - UNRESEARCHED: a 22 px strip south of the yard, a width 0038 does not give"""
+- l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#south strip off an unkept yard
+    south strip off an unkept yard - UNRESEARCHED: the 22 ft `YARD_SUN_STRIP` default, run only on a hand map that never opted into the sun corridor (0038 exempts those maps and gives 39 ft and 50 ft, never 22)
+- l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#wellhead off the house's front wall
+    wellhead off the house's front wall - UNRESEARCHED: a well pocket beside a shallow yard moved down until its wellhead stands `gap` / 3 (1 ft) clear of the house's front wall
+- l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._east_trees#east shade band width
+    east shade band width - UNRESEARCHED: the reach 22 px (`bscale`) east of the garden's east edge, a figure 0038 does not give
+- l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._fixtures_in_bands#no fixture in a grove band
+    no fixture in a grove band - UNRESEARCHED: its own farm's or a neighbor's, as turned and recorded
+- l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._garden_sun_conflict#bed's morning-sun reach
+    bed's morning-sun reach - UNRESEARCHED: the reach 22 px (`bscale`) east of the bed, a figure 0038 does not give"""
+- l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._house_too_near_a_neighbor#roofs shed apart
+    Research: roofs shed apart - UNRESEARCHED: `FARMHOUSE_EAVE_GAP_FT` (8 ft) plus 2 ft between the rotated corners of two farmhouses; 0029 gives only a 3 ft eave"""
+- l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#beds off every ditch
+    beds off every ditch - UNRESEARCHED: each garden bed held off every irrigation line at the corridor `_rect_on_water` keeps
+- l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#persimmon held off the paddy by its trunk
+    persimmon held off the paddy by its trunk - UNRESEARCHED: a 4 ft trunk box held off every field polygon, its crown free to overhang
+- l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._rect_blocked#grove may hug a paddy bund
+    Research: grove may hug a paddy bund - UNRESEARCHED: the grove tested against everything but the fields and the water lines"""
+- l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._rect_on_water#solid parts off running water
+    Research: solid parts off running water - UNRESEARCHED: house, yard, garden and shed held off every irrigation line; the grove exempt"""
+- l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._water_obstacles#water line keep-out
+    Research: water line keep-out - UNRESEARCHED: half the line's width (channel 2.5, ditch 7, stream 9 px by default) plus 5 px"""
+- l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._yard_sun_conflict#yard's drying strip width
+    yard's drying strip width - UNRESEARCHED: the 22 px strip in `shades`, a width 0038 does not give"""
+- l7r/diagram/settlement/rolling/fit.py::stream_segment_index#stream keep-out at half-width plus 5 px
+    stream keep-out at half-width plus 5 px - UNRESEARCHED: `hw` = w / 2 + 5, the distance `rect_touches_stream` decides by"""
+- l7r/diagram/settlement/rolling/gap_ways.py::JOIN_FAR_FT#a farther join
+    """Research: a farther join - UNRESEARCHED: a way joins a way laid before it at a T; tried 45 ft off where the nearer join breaks the lane law"""
+- l7r/diagram/settlement/rolling/gap_ways.py::JOIN_FT#ways join at a T
+    """Research: ways join at a T - UNRESEARCHED: a 25 ft join radius, under the 30 ft shadow; the T itself is the drawing page's"""
+- l7r/diagram/settlement/rolling/gap_ways.py::flood#how hard it keeps the middle
+    how hard it keeps the middle - UNRESEARCHED: `CENTER_WEIGHT` (3) over `CENTER_CELLS` (3) (405 T127)
+- l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#a later way's join reach
+    a later way's join reach - UNRESEARCHED: an earlier way within `JOIN_FT` (25 ft), then `JOIN_FAR_FT` (45 ft)
+- l7r/diagram/settlement/rolling/gap_ways.py::trace#join reach
+    join reach - UNRESEARCHED: a way joins an earlier one it comes within `JOIN_FT` of
+- l7r/diagram/settlement/rolling/passage.py::reserve_way#the walk reserved as it is seated
+    the walk reserved as it is seated - UNRESEARCHED: the walk kept as no-build ground while the houses are seated, so later houses keep off it
+- l7r/diagram/settlement/rolling/place.py::PlacerMixin._place_bundle_nucleated#left or right garden
+    left or right garden - UNRESEARCHED: within a tier the side is decided by position, about even
+- l7r/diagram/settlement/rolling/place.py::PlacerMixin._slide#dispersed farm packed against its nearest neighbor
+    dispersed farm packed against its nearest neighbor - UNRESEARCHED: the second slide, toward the nearest neighbor, where 0031 has a scattered homestead keep its own spacing
+- l7r/diagram/settlement/rolling/route.py::_route_from#path leaves its own yard once
+    Research: path leaves its own yard once - UNRESEARCHED: kept off the house, its parts and the neighbors' homesteads, leaving its threshing yard and never crossing it again
+- l7r/diagram/settlement/rolling/seeds.py::SeedFormsMixin.waterfront_seeds#water town fronting a canal
+    Research: water town fronting a canal - UNRESEARCHED: houses on alternate banks at a fixed offset, evenly spaced along the canal
