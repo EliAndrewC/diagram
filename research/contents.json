@@ -1,4 +1,5 @@
 {
+ "opening": "<p>This record is the research behind two parts of the L7R toolkit. <a href=\"https://l7r-gm-assistant.fly.dev/maps\">The maps</a> - the settlement maps and building plans - take their layout and their features from it: every kind of thing a map draws links here to the questions it rests on. <a href=\"https://l7r-gm-assistant.fly.dev/money\">The money pages</a> say what things cost in Rokugan by way of what they cost in Edo Japan and Qing China, and cite the prices, wages and coin rates recorded here.</p>\n<p>Each question gives its answer with the passages it rests on, quoted from sources a reader can open, and says plainly where history is silent and where a figure is our own arithmetic or a guess.</p>",
  "sections": [
   {
    "id": "tiers",

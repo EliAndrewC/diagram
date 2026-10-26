@@ -177,6 +177,18 @@ def load_contents(record_dir: str, vocab: Vocabulary) -> list[Section]:
     return [_section(s, vocab, None, seen) for s in data["sections"]]
 
 
+def load_opening(record_dir: str) -> str:
+    """`contents.json`'s `opening`: the HTML the record's home page opens with, under its title - what the research is for
+    (feature 424, the GM 2026-10-25: "open with an explanation of what this research is for, i.e. our maps and our money
+    stuff"). Its words live here, in the record's data, so a wording change is a record edit and not an engine change. Absent,
+    the page has no opening; anything but text is refused by name."""
+    data = _read_json(record_dir, CONTENTS)
+    opening = data.get("opening", "") if isinstance(data, dict) else ""
+    if not isinstance(opening, str):
+        raise ContentsError(f"{CONTENTS}: `opening` is the home page's opening, as HTML text")
+    return opening
+
+
 def walk(sections: list[Section]) -> list[Section]:
     """Every section, depth-first in contents order - the order a question's home is looked for in."""
     out: list[Section] = []
