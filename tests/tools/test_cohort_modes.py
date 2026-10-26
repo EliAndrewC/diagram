@@ -148,3 +148,12 @@ def test_a_partial_run_skips_the_cohort_wide_checks_it_cannot_answer(monkeypatch
     capsys.readouterr()
     ca.audit(3, 1, jobs=1, households=10, last_failed=True)
     assert "0/1 passed the whole gate" in capsys.readouterr().out
+
+
+def test_the_landing_asks_the_cohort_a_developer_runs_so_it_serves_every_seed_rolled_before() -> None:
+    """FR-012 (User Story 3b, the GM: "run the seeds locally and then do a make landing"): `make cohort-landing` rolls exactly
+    `make cohort N=48 FRESH=0` - the same seeds, sizes and pinned rows - so each seed's stored roll (keyed on what it runs,
+    T03) is served; measured 2026-10-26: a full run then the landing, rolled 0 of 54 (research R6)."""
+    recipe = (Path(__file__).resolve().parents[2] / "Makefile").read_text(encoding="utf-8").split("\ncohort-landing:", 1)[1].split("\n\n", 1)[0]
+    assert "$(MAKE) --no-print-directory cohort N=48 FRESH=0" in recipe
+    assert not any(mode in recipe for mode in ("FAILED_FIRST", "LAST_FAILED", "EXITFIRST")), "the landing judges every seed (FR-008)"

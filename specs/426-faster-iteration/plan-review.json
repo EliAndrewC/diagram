@@ -120,6 +120,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
+  },
+  "### T02 part B (2026-10-26T12:15Z)": {
+   "sha256": "5204c75141b07265467683a1280fd6fd6bad1716d1ce0824295e5972824f8894",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -521,6 +527,33 @@
      "summary": "Close: the feature report with its numbers shown to the GM.",
      "class": "within",
      "why": "The constitution's close; adds no scope to the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T02 part B (2026-10-26T12:15Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02B-1 code-id module home",
+     "summary": "Move the code-id module from l7r/ to scripts/gates/ beside gate-stamp.py, leaving an engine shim at l7r/diagram/pipeline/codeid.py; no behavior change.",
+     "class": "within",
+     "why": "Placement of the hasher FR-003/FR-004 already require, so the gate's fixture repos (which copy scripts/) can load it; the docstring-blind key, its sites and its coverage are unchanged. Nothing the GM asked for (docstring-free keys, an audit of every hashing site) is narrowed."
+    },
+    {
+     "id": "T02B-2 raw-branch unit test",
+     "summary": "Add one unit test covering gencache._split_sources' raw (interactive/) branch so the 100% floor holds.",
+     "class": "within",
+     "why": "Brings the changed code under the existing full coverage floor rather than exempting it; enforcement of the requested cache-key change, no scope removed."
+    },
+    {
+     "id": "T02B-3 next step and escalation",
+     "summary": "Re-run make land as the measurement; the round arbiter ruled continue, and a third distinct red returns to it.",
+     "class": "within",
+     "why": "Process for this landing only; no requirement or gate is relaxed and the full floor and hook suites still judge the result."
     }
    ]
   }
