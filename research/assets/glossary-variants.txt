@@ -946,6 +946,9 @@ drip line	drip line
 drip lines	drip line
 drip strip	dishui
 drip strips	dishui
+drop spindle	drop spindle
+drop spindles	drop spindle
+drop-spindle	drop spindle
 drum tower	drum tower
 drum towers	drum tower
 dry edge	dry edge
@@ -962,6 +965,7 @@ dry-field conversion	kanden
 drying yard	drying yard
 drying yards	drying yard
 ds/m	dS/m
+duan	duan
 duck landing	duck landing
 duck landings	duck landing
 dujiangyan	Dujiangyan
@@ -983,6 +987,8 @@ earth-god shrine	tudi miao
 earth-rammer	earth-rammer
 earth-rammer's	earth-rammer
 earth-rammers	earth-rammer
+earthing up	earthing up
+earthing-up	earthing up
 earthramming	earth-rammer
 eastern capital	Dongjing
 eastern han	Han dynasty
@@ -1429,6 +1435,8 @@ geta	geta
 geza	geza
 ghusl	ghusl
 ginmisho	ginmisho
+ginned	ginned cotton
+ginned cotton	ginned cotton
 gion	Gion festival
 gion festival	Gion festival
 gion festivals	Gion festival
@@ -1889,6 +1897,7 @@ ichigami	ichigami
 ichimoji weir	ichimoji-zeki
 ichimoji-zeki	ichimoji-zeki
 ichirizuka	ichirizuka
+ichiryo gusoku	ichiryo gusoku
 icp	ICP
 icp2011	ICP
 ido	ido
@@ -3290,6 +3299,7 @@ perched	perched river
 perched river	perched river
 perched, silt-choked river	perched river
 percolation	percolation
+perilla	perilla
 periodic market	periodic market
 periodic markets	periodic market
 periodic-market	periodic market
@@ -3425,6 +3435,8 @@ purlins	purlin
 purple robe	purple robe
 purveyor merchant	purveyor merchant
 purveyor merchants	purveyor merchant
+put-out	put-out
+putting-out	put-out
 px	px
 qi	qi
 qian	qian
@@ -3553,6 +3565,7 @@ resson	ressen
 rest stop	tateba
 rest stops	tateba
 restoration	Restoration
+ret	retting
 retainer	retainer
 retainer terrace	row house
 retainer terraces	row house
@@ -3561,7 +3574,10 @@ retirement house	inkyo
 retirement houses	inkyo
 retiring house	retiring house
 retiring houses	retiring house
+rets	retting
 retsuson	ressen
+retted	retting
+retting	retting
 return flow	return flow
 reverse-kesa	kesa
 revetment	revetment
@@ -4035,6 +4051,8 @@ six fang	Six Chambers
 six ministries	Six Ministries
 six-day market	rokusai-ichi
 six-day markets	rokusai-ichi
+sized	sizing
+sizing	sizing
 skimmer wall	skimmer wall
 skirt roof	mokoshi
 skirt roofs	mokoshi
@@ -4815,6 +4833,10 @@ ward-and-market	ward-and-market system
 ward-and-market system	ward-and-market system
 wari-tetsu	wari-tetsu
 warichi	warichi
+warp	warp
+warp-weighted loom	warp-weighted loom
+warp-weighted looms	warp-weighted loom
+warps	warp
 warren	warren
 warrens	warren
 warring states	Warring States
@@ -4866,6 +4888,8 @@ wayside halls	tsujido
 wazi	wazi
 weathering	weathering
 weblio	weblio
+weft	weft
+wefts	weft
 wei-tian	weitian
 weilongwu	weilongwu
 weir	weir
@@ -5096,6 +5120,7 @@ zhou	department
 zhou dynasty	Zhou dynasty
 zhou-dynasty	Zhou dynasty
 zhouli	Zhouli
+zhu	zhu
 zhu yuanzhang	Taizu
 zhuque dajie	Suzaku-oji
 zicheng	zicheng

@@ -18436,5 +18436,95 @@
   "variants": [
    "araihari"
   ]
+ },
+ "put-out": {
+  "def": "Work given out to farm households to do at home, often in the slack farming season, and handed back to whoever gave it out - unlike work a household did under its own management.",
+  "variants": [
+   "put-out",
+   "putting-out"
+  ]
+ },
+ "retting": {
+  "def": "Soaking cut hemp or ramie stalks in water until the fiber loosens from the woody stem, the step before it is split and spun.",
+  "variants": [
+   "retting",
+   "ret",
+   "retted",
+   "rets"
+  ]
+ },
+ "ginned cotton": {
+  "def": "Raw cotton with its seeds combed out, ready to be fluffed and spun - the form merchants paid the Niikawa weavers in, and the starting point of every cloth time on this page.",
+  "variants": [
+   "ginned cotton",
+   "ginned"
+  ]
+ },
+ "sizing": {
+  "def": "Stiffening yarn with a starch paste before weaving, so the threads stand the pull of the loom.",
+  "variants": [
+   "sizing",
+   "sized"
+  ]
+ },
+ "duan": {
+  "def": "A Chinese bolt of cloth, the piece woven as one length and the unit a weaver's day was counted in.",
+  "variants": [
+   "duan"
+  ]
+ },
+ "zhu": {
+  "def": "A Chinese weight, one twenty-fourth of a liang - about 1.5 grams.",
+  "variants": [
+   "zhu"
+  ]
+ },
+ "warp-weighted loom": {
+  "def": "An upright loom whose warp threads hang down from a top beam and are held taut by stone or clay weights tied to their lower ends; the loom of Viking Age and earlier northern Europe, never used in Japan.",
+  "variants": [
+   "warp-weighted loom",
+   "warp-weighted looms"
+  ]
+ },
+ "warp": {
+  "def": "The lengthwise threads of a cloth, set up on the loom before weaving begins; the weft is passed over and under them.",
+  "variants": [
+   "warp",
+   "warps"
+  ]
+ },
+ "weft": {
+  "def": "The crosswise thread of a cloth, passed back and forth through the warp one line at a time.",
+  "variants": [
+   "weft",
+   "wefts"
+  ]
+ },
+ "drop spindle": {
+  "def": "A weighted stick, spun by hand and hanging free from the yarn, that twists loose fiber into thread as it turns; the oldest way of spinning, slower than a spinning wheel.",
+  "variants": [
+   "drop spindle",
+   "drop spindles",
+   "drop-spindle"
+  ]
+ },
+ "earthing up": {
+  "def": "heaping soil around the base of a growing crop's stems, to steady the plants and smother weeds.",
+  "variants": [
+   "earthing up",
+   "earthing-up"
+  ]
+ },
+ "ichiryo gusoku": {
+  "def": "a farming samurai of Tosa under the Chosokabe house, who worked his own land and kept one suit of armor ready to answer a call to arms; the name means \"one set of armor\".",
+  "variants": [
+   "ichiryo gusoku"
+  ]
+ },
+ "perilla": {
+  "def": "an herb of the mint family (egoma), grown in Japan for its oil-bearing seed.",
+  "variants": [
+   "perilla"
+  ]
  }
 }
