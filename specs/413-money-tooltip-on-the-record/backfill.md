@@ -312,4 +312,4 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0308-what-did-an-entertainer-or-a-troupe-earn.notes | 3 ryo | the Ura village entry of 1867 printed as 金三両壱歩九分九厘, with no monme between the bu and the bun, so its total cannot be read
 - 0308-what-did-an-entertainer-or-a-troupe-earn.notes | 1 bu | the same 1867 entry, unreadable as a total
 - 0308-what-did-an-entertainer-or-a-troupe-earn.notes | 9 rin | the same 1867 entry, unreadable as a total
-- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.notes | 160 monme | inside the English rendering of a quoted passage; the page's own prose marks the same sum
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.notes | 160 monme | inside the English rendering of a quoted passage, the same figure the page's prose gives
