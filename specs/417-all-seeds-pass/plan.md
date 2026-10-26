@@ -662,7 +662,8 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
 
 - **Approach**: T48 deleted the settle's `square_every_crossing`; four placers still lay a run without squaring it where it
   crosses the brook or a drawn channel - the skeleton arms (`web/skeleton.py`, `_lay_skeleton`), the web lanes
-  (`fabric._draw_web`), the bund and track spurs (`bund.py`, `track.py`'s drawn spur) and the field way (`reach.py`). Each asks
+  (`fabric._draw_web`), the bund and track spurs (`bund.py`, `track.py`'s drawn spur), the field way (`reach.py`) and the connector's dry exit
+  (`track.connector_dry_exit`'s runs, returned unsquared at `track.py`'s two fallbacks - found by T48's impl-drift). Each asks
   `squaring.square_run` of its run before it commits it (as `tree.lanes_of`, the door paths and the connector already do), the
   run then judged as squared by the placer's own tests (`admits_lane`, `Lawful`). A placer whose ways are shown by measurement
   never to cross water (no crossing on any fixed, pinned or fresh seed and none possible by construction) owes nothing, its
