@@ -42,13 +42,18 @@ households bought instead, and the historiography of why the record is thin.
 3. **Q3, the fiber chain in hours.** Hours per stage (growing, preparing, spinning, weaving, dyeing, sewing) for a robe or a
    bolt (tan) in hemp, cotton and silk; a household's robes or bolts a year and how much cloth it bought. A measured modern craft
    or experimental rate is a COMPARATIVE source where no period figure exists.
-4. **Q4, city households.** How much household work a single laborer in a back tenement (nagaya) did, against a laborer or
-   artisan with a family in a house of their own; what each bought that a farm household made (used clothing, cooked food,
-   washing, mending, firewood, water), the trades that sold it and their prices.
+4. **Q4, city households.** The GM's main question: home-work days or hours a year (or a share of the year) for a single
+   laborer in a back tenement (nagaya), against a laborer or artisan with a family, or an extended family, in a house of their
+   own - each with its verdict or SILENT with its search - and who in that household did the unpaid work (from 0004's
+   household composition); what each bought that a farm household made (used clothing, cooked food, washing, mending, firewood,
+   water), the trades that sold it and their prices.
 5. **Q5, other workers' days off.** What a live-in servant, a merchant house's clerk, a guard or a porter did on days not
-   worked for pay: rest, their own household's work, or a side trade.
+   worked for pay: rest, their own household's work, or a side trade; and their home-work days or hours where any account
+   gives them.
 6. **Q6, the proverb.** Whether a Chinese (or Japanese) proverb says that no one who rises before dawn 360 days a year will fail
-   to make the family rich; its original text, or SILENT.
+   to make the family rich; its original text, or SILENT. If found, whose saying it was (the kind of source and its audience:
+   farm households, merchants, scholars), which tests the GM's guess that it is a farming proverb; if not found, that question
+   stays open.
 7. **Q7, why the record is thin.** What historians say about why women's unpaid household work in Tokugawa Japan and Ming/Qing
    China was rarely recorded, with author, and which kinds of source they use to reconstruct it.
 
@@ -84,3 +89,9 @@ households bought instead, and the historiography of why the record is thin.
 ## Out of scope
 
 - Editing the canon, and building the Money page (gm-assistant's).
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-26): CHANGES REQUIRED - (1) Q4 names home-work days or hours a year for both city households,
+  Q5 the same where any account exists; (2) Q6 reports whose saying the proverb was, testing the GM's farming guess; (3) Q4
+  says "a family, or an extended family" and who in it did the unpaid work: all applied.
