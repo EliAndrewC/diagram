@@ -86,6 +86,19 @@ does sometimes ask ("what went wrong", "why did that take so long", a tooling po
 requested) - check the session's instructions and the GM's own recent messages in the draft's context
 before cutting on this ground, and say which you found.
 
+## An OFFER is not a decision item - judge it by significance
+
+The GM, 2026-10-26 (feature 429 amendment 1): *"offers are different from questions. Like saying that you made a decision
+but then offering to reverse it if I think it's a good idea ... without that actually being a question that is floated for
+me, that is all perfectly fine ... except insofar as I think that offer should only be made if it crosses a certain
+threshold of significance. Because if you offer to reverse literally every single decision that is made, then that is
+overwhelming."* An offer (a decision already made or work already done, offered back - "I kept X; I can switch to Y if
+you'd rather") is NOT held to the five tests below, and is never a GM review item. Judge it KEEP only when the decision
+it offers back might otherwise have been floated as a question: it changes what ships or what the GM will see, and a
+reasonable GM could want it the other way. CUT an offer of a routine choice, and CUT down a message that offers back
+most of its decisions to the one or two that clear the bar. An offer the draft words as a question ("Shall I switch to
+Y?") after the work was already decided is REWRITE to the offer form.
+
 ## The five tests a DECISION item must pass
 
 Apply these in order. An item that fails any one of them is a CUT, and you say which test it failed.

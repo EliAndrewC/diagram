@@ -10,8 +10,8 @@ dispatched since the GM's last message.
 The detector was measured on past final messages before it shipped (`specs/429-memory-rules-as-guards/research.md`):
 a line outside code, block quotes and quoted text that carries an ask phrase, or ends in "?" with "you"/"your"/"I".
 
-Usage: hm_gm_question.py judge < stop payload  ->  prints the first asking line and exits 1 when the turn owes the
-filter; exits 0 otherwise.
+Usage: hm_gm_question.py judge < stop payload  ->  prints `ask<TAB>line` (a question for the GM) or `offer<TAB>line`
+(only offers: the filter's significance test, amendment 1) and exits 1 when the turn owes the filter; exits 0 otherwise.
 """
 
 from __future__ import annotations
@@ -25,25 +25,45 @@ CODE = re.compile(r"`[^`\n]*`")
 QUOTED = re.compile(r'"[^"\n]*"|“[^”\n]*”')
 ASK = re.compile(
     r"\b(should I|shall I|do you want|would you (like|prefer|rather)|want me to|which (one|of|would|do you)|your call"
-    r"|or should (I|we)|do you agree|is that (ok|okay|right|what you)|can you confirm|let me know (if|whether|which)"
+    r"|or should (I|we)|do you agree|is that (ok|okay|right|what you)|can you confirm|let me know (whether|which)"
     r"|say (go|the word|yes)|for you to (decide|approve|choose|pick|confirm|rule)|approve or decline|ask (of )?you"
-    r"|needs your (words|approval|decision|ruling|go-ahead|call|answer)|waiting (on|for) (you|your)|yours to (decide|call|choose)|if you (want|like|prefer)\b[^.]*\b(I|me)\b)\b",
+    r"|needs your (words|approval|decision|ruling|go-ahead|call|answer)|waiting (on|for) (you|your)"
+    r"|yours to (decide|call|choose))\b",
+    re.I,
+)
+# Amendment 1 (the GM, 2026-10-26): an OFFER - a decision already made, offered back - is not a question. It still owes
+# the filter's SIGNIFICANCE test ("that offer should only be made if it crosses a certain threshold of significance").
+OFFER = re.compile(
+    r"\b(if you('d| would)? (want|like|prefer|rather)|let me know if|happy to|say so and I'll|easy to (revert|reverse|undo)"
+    r"|I can (also |easily )?(revert|reverse|undo|switch|change|restore|raise|add|drop|re-?run|put (it|them) back))\b",
     re.I,
 )
 FILTER = "escalation-check"
 
 
-def asks(text: str) -> list[str]:
-    """Every line of the message that puts a question or decision to its reader."""
-    hits = []
+def _lines(text: str):
     for line in FENCE.sub("", text or "").splitlines():
         s = line.strip()
-        if s.startswith(">"):
-            continue
-        s = QUOTED.sub("", CODE.sub("", s))
-        if ASK.search(s) or (s.endswith("?") and re.search(r"\b(you|your|I)\b", s)):
-            hits.append(s[:200])
-    return hits
+        if not s.startswith(">"):
+            yield QUOTED.sub("", CODE.sub("", s))
+
+
+def classify(text: str) -> tuple[list[str], list[str]]:
+    """(the lines that ASK the reader, the lines that only OFFER): an ask line wins over an offer on the same line."""
+    ask, offer = [], []
+    for s in _lines(text):
+        if ASK.search(s):
+            ask.append(s[:200])
+        elif OFFER.search(s):
+            offer.append(s[:200])
+        elif s.endswith("?") and re.search(r"\b(you|your|I)\b", s):
+            ask.append(s[:200])
+    return ask, offer
+
+
+def asks(text: str) -> list[str]:
+    """Every line of the message that puts a question or decision to its reader."""
+    return classify(text)[0]
 
 
 def _records_backward(path: str, chunk: int = 1 << 20):
@@ -103,10 +123,10 @@ def main() -> int:
         payload = json.load(sys.stdin) or {}
     except Exception:
         return 0
-    hits = asks(payload.get("last_assistant_message") or "")
-    if not hits or filtered_since_gm(payload.get("transcript_path") or ""):
+    ask, offer = classify(payload.get("last_assistant_message") or "")
+    if not (ask or offer) or filtered_since_gm(payload.get("transcript_path") or ""):
         return 0
-    print(hits[0])
+    print(f"ask\t{ask[0]}" if ask else f"offer\t{offer[0]}")
     return 1
 
 

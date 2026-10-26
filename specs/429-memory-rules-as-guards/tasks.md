@@ -24,3 +24,5 @@ none: tooling only - hooks, a measurement script and docs; no drawing or placeme
 - [x] T06 Found while working: `make guard-edit` granted no hook in `scripts/hooks/` (plan T06, D171)
       research: rendering
       verify: DONE. tests/hooks/test-guard-file-hooks.sh 53/53 with the scripts/hooks/ case, 52/53 on the unfixed pattern
+- [ ] T07 Amendment 1: offers are not questions but owe the significance test - `hm_gm_question.classify`, the OFFER refusal, escalation-check's offer section, R3 (FR-006, SC-006)
+      research: rendering
