@@ -33,7 +33,7 @@ def at(c: str) -> dict:
 
 
 def main() -> int:
-    commits = [ln.split() for ln in git("log", "--since=2026-10-04", "--format=%h %p", "--", "dev/claims-index.json").splitlines()]
+    commits = [ln.split() for ln in git("log", "--since=2026-10-04", "--until=2026-10-26T23:59:59", "--format=%h %p", "--", "dev/claims-index.json").splitlines()]
     c = Counter()
     found = []
     for cur, *parents in commits:
