@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-26T00:41:32+00:00",
+ "final_url": "https://www.pgm.org.cn/pgm/xsyjou/200905/09b229c3dc224f7c9d56161babe0693d.shtml",
+ "first": "d9/d96869bde83d/20261026T004131Z",
+ "gm_copies": [],
+ "keys": [
+  "pgm-wangfu-yanxi"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "d9/d96869bde83d/20261026T004131Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "7b206c497f95e9cc23a32a0f031269a2f9cb08ec1c8d9c787bc199942a7a15ff",
+ "url": "https://www.pgm.org.cn/pgm/xsyjou/200905/09b229c3dc224f7c9d56161babe0693d.shtml"
+}
