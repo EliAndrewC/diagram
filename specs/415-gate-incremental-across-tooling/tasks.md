@@ -30,4 +30,4 @@
 - [x] T07 Close: report and land
       research: rendering
       verify: DONE. landed: report.md written by make feature-report F=415 WRITE=1, its close section names SC-006's measurement (R3) and D12's open item
-- [ ] GM review (make gm-reviewed F=415)
+- [x] GM review (make gm-reviewed F=415)
