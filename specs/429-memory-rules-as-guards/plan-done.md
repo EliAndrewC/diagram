@@ -143,3 +143,28 @@ with `--only` for its own map.
 ### T06 Decisions
 
 **D171 - `_GUARD` reads `/scripts/(hooks/)?<name>-hooks.sh`**, so both layouts are guards and a suite stays excluded.
+<!-- plan-archive: archived 2026-10-26 -->
+## T07 - amendment 1: offers are not questions, but owe a significance test (FR-006, SC-006)
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** The GM sees an offer only when the decision it hands back mattered, and never as a question.
+2. **The constraints.** FR-006; FR-002's question branch unchanged.
+3. **Where each comes from.** G: amendment 1 in `request.md`; O: `research.md` R3.
+4. **Do they describe the world here?** Yes: R3, three-way labels.
+5. **The order.** the detector's split, the refusal text, escalation-check's offer section, the suite, R3.
+6. **The exits.** an offer-only message refused once with the significance instruction; an ask wins on a mixed message.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** `tests/hooks/test-escalation-hooks.sh` section 10 green; R3's counts.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T07 Decisions
+
+**D172 - one detector, two kinds of line; one filter, two instructions.** `hm_gm_question.classify` returns ask lines and
+offer-only lines (an ask on the same line wins); `judge` prints `ask` or `offer` with the first line. An offer still owes
+the once-per-message `escalation-check`, because the GM's threshold of significance is a judgment the filter makes
+(its offer section: KEEP a decision that might otherwise have been floated as a question, CUT a routine one, cut a message
+offering back most of its decisions down to the one or two that clear the bar). No count cap: a pattern cannot weigh
+significance.
