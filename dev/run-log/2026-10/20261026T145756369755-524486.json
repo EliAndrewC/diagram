@@ -1,0 +1,53 @@
+{
+  "utc": "2026-10-26T14:57:56Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 341,
+  "result": "failed: test-full",
+  "commit": "60587dbde",
+  "first_failure_s": 272.3,
+  "last_failure_s": 275.9,
+  "failed_tests": 2,
+  "failed_names": [
+    "tests/tooling/test_incremental_gate.py::test_e_each_fallback_shape_forces_a_full_run[manifest]",
+    "tests/tooling/test_measured_surface.py::test_ci_is_hashed_now_and_the_other_two_populations_are_untouched"
+  ],
+  "host": {
+    "load": [
+      2.19,
+      15.03
+    ],
+    "mem_avail_mb": [
+      8979,
+      8133
+    ],
+    "cpu_temp_c": [
+      100.0,
+      101.0
+    ],
+    "stall_s": {
+      "cpu": 8.6,
+      "io": 2.3,
+      "io_full": 1.5,
+      "memory": 0.4
+    },
+    "throttle_ms": {
+      "core": 473579,
+      "package": 170509
+    }
+  },
+  "phases": {
+    "preflight": 14.0,
+    "static": 1.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 6.0,
+    "hooks-test": 113.0,
+    "pytest": 211.0,
+    "test-full": 220.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)",
+  "selected": 10587,
+  "collected": 10587
+}
