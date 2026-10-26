@@ -138,6 +138,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T31 part B (2026-10-25T23:42Z)": {
+   "sha256": "97d12c81732f1fc8e99ed20ad9a9742e9059a07a64f5951716117b43503052d6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2570,6 +2576,27 @@
      "summary": "After T40, before T31's conversions; landed through make land on the landing cohort and pool gate, set down whole with its seeds if red; one landing.",
      "class": "within",
      "why": "D35 orders deletion of the needless before conversion of the needed; D23 sets the red exit; FR-008/D11 the gate."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T31 part B (2026-10-25T23:42Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T31B-1 diagnosis",
+     "summary": "The three refused seeds are refuse_unmended firing for width_steps and joins_short, the two rules whose menders (settle_widths, settle_joins) were cut from last_resort's re-asks; the four steps out of STEPS alone held 54 of 54 at R8, so the cut re-asks are named as the cause.",
+     "class": "within",
+     "why": "A finding about what refuses, read off the refusal manifests; it decides nothing the spec left open, and its causal inference is the hypothesis item 7 measures rather than an assumption acted on."
+    },
+    {
+     "id": "T31B-7 next step",
+     "summary": "Re-run the landing cohort with settle_joins and settle_widths restored to the last resort and the rest of the cut kept, to see whether it returns to 54 of 54.",
+     "class": "within",
+     "why": "D35 (accepted spec) already routes a NEEDED step to D11's conversion (its rule asked by the placer that lays what it mends) rather than deletion, and only after measurement; restoring two menders shown needed, pending that conversion, is that route, not a carve-out. It keeps the rest of the cut, so it does not preserve repair behavior beyond what the measurement shows needed, and FR-004/the GM's 'get rid of all of them' are still served by the conversion D35 owes. Nothing is set down: a conversion that cannot land green must still be written as an exception and ruled under D35."
     }
    ]
   }
