@@ -24,13 +24,15 @@ sheets follows the research.
 ## Requirements
 
 - **FR-001**: the Hayakawa sheet draws a house within the research's 49-67 tsubo, and whatever on the Hayakawa sheet does not
-  correspond to the research is brought to it - building coverage against 0116's band (`research.md` R2) among it -
-  every review its changes owe run on their occasion.
+  correspond to the research is brought to it - building coverage against 0116's band (`research.md` R2) among it, and the
+  sheet's own texts that size or label the house (its notes, lines 59 and 75, and its SVG, line 281) - every review its
+  changes owe run on their occasion.
 - **FR-002**: the Ochiba and Ubame sheets record the large house as a DEVIATION with the GM's reason (a significantly
-  wealthier magistrate), replacing the GUESS label, in every place found by `grep -rniE "residence wing|wing length|tsubo"
-  docs/buildings.md pool/magistracies` (2026-10-26): among them `docs/buildings.md` lines 17 and
-  23 (whose Ochiba wing length no longer matches the sheet, `research.md` R1), Hayakawa's notes (lines 59, 75)
-  and SVG (line 281), and Ubame's notes (line 109, whose "keeps to the 49-tsubo residence" R1's measurement contradicts).
+  wealthier magistrate), replacing the GUESS label, in every hit of `grep -rniE "residence wing|wing length|tsubo"
+  docs/buildings.md pool/magistracies` (2026-10-26) that labels or sizes the magistrate's house on those two sheets or in
+  `docs/buildings.md`: among them `docs/buildings.md` lines 17 and 23 (whose Ochiba wing length no longer matches the sheet,
+  `research.md` R1), and Ochiba's notes (line 65) and Ubame's (line 109), whose "keeps to the 49-tsubo residence" R1's
+  measurement contradicts.
 - **FR-003**: the procedure for a NEW magistracy sheet sizes the house by the research, a larger house only as a recorded
   deviation with its reason, and keeps the sheet within 0116's coverage band (how, the plan's); found by `grep -rniE
   "ochiba|template|residence" docs/usage.md docs/buildings.md docs/building-programs.md l7r/diagram/compound_example.py
@@ -76,3 +78,19 @@ sheets follows the research.
   corridor; Hayakawa 288x76 and 242x76 plus the 10x34 corridor), the kitchen's outer rect (72x54 on all three) and
   the bath rect. Excluded: zone sub-rects, engawa strips, privies, and Hayakawa's 90x30 kitchen rect at (400,160.5),
   which is not the house's. Record these as measurements.
+- spec-fidelity round 2 (2026-10-26, VERIFY): CHANGES REQUIRED - items (1), (2), (4) and (5) RESOLVED: FR-001/FR-002 name
+  Hayakawa corrected and Ochiba and Ubame kept, FR-004 and 433#0 quote Ubame's "rich posting, broke incumbent" in full;
+  FR-001 drops the causal condition and SC-001 covers every element the research speaks to; FR-003 names its grep, reaches
+  docs/usage.md:5, :41 and :119 (read, they make Ochiba the template), docs/buildings.md's "Compound programs" and
+  docs/building-programs.md, and keeps 0116's band; spec-lint passes and R1/R2 carry their date and method. Item (3) PARTLY
+  RESOLVED, and the remainder is round 1's own misdirection: (1) FR-002 puts Hayakawa's notes :59, :75 and SVG :281 under
+  "the Ochiba and Ubame sheets record the large house as a DEVIATION ... in every place found by", which tells the
+  implementer to write a deviation into the sheet the GM said "should be corrected". Those three passages belong to FR-001
+  (they go false when the house is redrawn and are brought to the research then); FR-002's reach is the Ochiba and Ubame
+  sheets and docs/buildings.md only. Moving SVG :281 also fixes a false claim: FR-002's grep does not hit it (re-run this
+  round). And the grep also hits pool/magistracies/county-magistracy-example and ochiba-roundtrip-test, which do not draw
+  the large house, so "every place found by" needs its filter: every hit that labels or sizes the magistrate's house on
+  a kept sheet or in docs/buildings.md. (Ochiba notes :65 carries the same "keeps to the 49-tsubo residence" as Ubame
+  :109; the grep reaches it, so no change, but the implementer should know.) Read in full: the round's diff, request.md,
+  gm-review.jsonl, spec.md :1-14, docs/buildings.md :15-30, hayakawa notes :57-60 and :74-76, hayakawa SVG :281, ubame
+  notes :107-110, docs/usage.md :5, :41, :119; the FR-002 and FR-003 greps re-run.
