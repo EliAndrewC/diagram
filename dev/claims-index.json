@@ -36616,8 +36616,8 @@
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lane tread by role": {
   "body": "baa9038b76b09baf",
   "claim": "tree lane tread by role - village-lanes.drawing: house access 3 ft",
-  "code": "1c9fd6418a925816",
-  "core": "032f2d2d4505ff2b",
+  "code": "763d4ec61e61764e",
+  "core": "f3c88b06930e37a4",
   "date": "2026-10-18",
   "note": "through lane_record, access lanes get 3 ft and branch lanes 5 ft, as the page sets",
   "pages": {
@@ -36627,7 +36627,7 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lanes assembled": {
@@ -36639,6 +36639,7 @@
   "note": "assembly only; the squaring rule belongs to settle.square_run",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::others_clear#nothing built on a lane": {
