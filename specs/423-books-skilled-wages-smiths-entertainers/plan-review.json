@@ -1,0 +1,214 @@
+{
+ "feature": "423-books-skilled-wages-smiths-entertainers",
+ "blocks": {
+  "preamble": {
+   "sha256": "eb573fd84c29677ef1ced8e23165ac7a760ee2c0b998be045770c6011652ecd7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "637440c90e5749a186a20a73af085e0961ad27343027bf6a44a7a6357e4fdcda",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "6a8144679b4b8bbd8e976d71440365abf9598737b1dce43aeeac240cf6a2f2b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "2af3cd7de4be30e6d9732bc52b389dad863ad614729acaf9de51a1bf175cfedc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - books (Q1; FR-001)": {
+   "sha256": "4acd9e126332ffdc55776cecb139649e143c9f62b52100e81f017b413bbc69f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - skilled and trusted labor (Q2; FR-001)": {
+   "sha256": "24634a47fb580a4c5b04184ee5e0828e840cef8c59e665ab171a819f7684a5ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - a maker's income (Q3; FR-001)": {
+   "sha256": "55848e6c03a109c9cb9fc00f39ea6c9a4e1ffcd02903ce205530b7f6f5c570cc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - entertainers (Q4; FR-001)": {
+   "sha256": "c70e4d7e34eec4320c34ddddd9da28b89130ebd6573417b9f6fab4c85c046869",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - the implementation check and the reply (FR-003, FR-004)": {
+   "sha256": "be85eb71c48c6532893dd70ec51094fb7ae74db25f437f97242b21d49b1fb293",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - Q1 books and Q3 a smith's accounts (D1, D3)": {
+   "sha256": "e2c914fb196dc1311d4a818cd07c56d17db49671d40802cbd09ff4a23b1f15df",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "14f6618057a968b9abff668af86bdd9e3aa3eadf8d6713b7732b1ed408d19767",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "735a51e619bc12408b154e0c5c55710af41ea3a53c451dcab84bdc93fea5bf13",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - Q2 skilled and trusted labor and Q4 entertainers (D2, D4)": {
+   "sha256": "c906de33138b15c885d483a2870dc4183fb128377aa33604d2ae81806ef0b138",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "b796bd9c0aaa5d22a8803c040a8ac456531a40410b743872254a812e2cb5a2b3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "ab8343e949851f1f568e1dbb8f2880d83336c8c95657954f9b9bef397cacaaab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the implementation check and the reply (D5)": {
+   "sha256": "36ebb0c0729d6338d0f7bab62dca5478f09644d9fca6626835676819556f336b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "5cb21c757f29215cf5e5771a3d34868618d49da34fd48ecc7f3db191f500c457",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "ed07cce04f7eb057f1bd369859c2f744f2def76e29cb7b8179a06e9c612170c9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - books (Q1; FR-001)",
+    "## D2 - skilled and trusted labor (Q2; FR-001)",
+    "## D3 - a maker's income (Q3; FR-001)",
+    "## D4 - entertainers (Q4; FR-001)",
+    "## D5 - the implementation check and the reply (FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## T01 - Q1 books and Q3 a smith's accounts (D1, D3)",
+    "## T02 - Q2 skilled and trusted labor and Q4 entertainers (D2, D4)",
+    "## T03 - the implementation check and the reply (D5)",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/sessions",
+     "summary": "Two write sessions (S1: Q1+Q3; S2: Q2+Q4), each followed by a check-and-apply session, in two sibling clones; then the reply; no code, map or canon change.",
+     "class": "within",
+     "why": "Execution arrangement for all four questions; nothing the request asks for is dropped. 'No code, map or canon change' matches a research request that asks only for figures."
+    },
+    {
+     "id": "Technical Context/passes-are-leads",
+     "summary": "Search passes are leads, not citations; each write session reads every passage before citing it and corrects mis-recorded ledger outcomes.",
+     "class": "within",
+     "why": "A stricter way to answer the same questions; removes nothing from the request."
+    },
+    {
+     "id": "D1",
+     "summary": "Q1 as a new money question: kibyoshi retail per 5-leaf volume (two tertiary figures unreconciled), Tenpo gokan/yomihon trade prices labeled wholesale, lending fees per volume; classic/primer/reference volume price SILENT with its search; Japanese copyist rate SILENT, lumped fair-copy fee given as such; China beside: late-Ming prices per volume/juan, hand copy under 0.4 tael, Siku copyists 1,000 characters a day; canon contrast.",
+     "class": "within",
+     "why": "Each item of request section 1 (booklet, ordinary bound volume, loan, copyist's rate and daily output, Japan first with China beside) is carried, either as a figure or as SILENT with its search. SILENT with a search is how the record answers 'do we know', not a removal of the item; the request's 'Do we know what books cost?' is answered by it. Japan-first/China-beside is the request's own region order, not comparative scope under FR-001."
+    },
+    {
+     "id": "D2",
+     "summary": "Q2 in 0275 or a sibling: live-in clerk by seniority, scribe by the day, armed escort of goods/cash and biaoju per day or trip, household cook, lord's cook, lady's maid with in-kind part; Kanazawa lead confirmed/narrowed/contradicted and cited from its own work; canon contrast.",
+     "class": "within",
+     "why": "Restates request section 2 item by item (a, b, c, in-kind part, the Kanazawa lead, canon) with nothing removed."
+    },
+    {
+     "id": "D3",
+     "summary": "Q3 as a new question beside 0276: tool price vs iron (Qing Beijing 1736 government list ATTESTED ONLY FOR that; Japan 1822 Sakai hoe and 1841 Echizen repairs, iron in rice per kan, any ratio stated as project arithmetic, unreconciled where sources are); charcoal in the itinerant model; output a year (Takefu aggregate, Sakai tobacco knives a night); gross and net income SILENT; crew size ATTESTED; rice payment ATTESTED ONLY FOR 20th c.; Edo carpenter's year as second case, third-hand.",
+     "class": "within",
+     "why": "Every element of request section 3 (price vs input, items a year, gross and net, apprentices/journeymen, a second craft) is carried as a figure or SILENT with its search. The second case is one the request itself offers (a carpenter-master). Labeling cross-source ratios as this project's arithmetic is a qualifier on an answer, not a narrowing."
+    },
+    {
+     "id": "D4",
+     "summary": "Q4 beside 0266 or in it: traveling troupe takings per performance and year and sharing, street performer's day, star actor's yearly pay, traveling/rural troupe size, costume (ordinary and fine), shamisen, flute, tsuzumi; Japan first, China beside; canon contrast (county troupe 5-10, market day, magistrate's manor; hinin).",
+     "class": "within",
+     "why": "Restates request section 4 clause by clause with nothing removed."
+    },
+    {
+     "id": "D5",
+     "summary": "implementation-check.md holds each touched question's line; reply on #19 gives each figure with fragment and verdict, figures the E0169-E0193 estimates can be graded against; GM findings through escalation-check.",
+     "class": "within",
+     "why": "Implements FR-003/FR-004; grading the estimates is named in the request itself."
+    },
+    {
+     "id": "T01 Approach",
+     "summary": "S1 write then C1 check in the marks clone; citation rules, 20,000-byte cap, four questions/ten keys per write; SILENT never estimated; disagreeing sources both given; done when record-owed is clean for the two new questions.",
+     "class": "within",
+     "why": "Operational constraints and exits consistent with the request and FR-002; no item of Q1 or Q3 is excluded."
+    },
+    {
+     "id": "T02 Approach",
+     "summary": "S2 write then C2 check in the pages clone after the Q2/Q4 passes; same constraints; Kanazawa lead cited only from its own work; done when record-owed clean for the touched questions.",
+     "class": "within",
+     "why": "Operational; carries all of Q2 and Q4."
+    },
+    {
+     "id": "T03 Approach",
+     "summary": "After T01 and T02: make impl-check F=423, escalation-check, reply posted, feature-report.",
+     "class": "within",
+     "why": "Implements FR-003/FR-004."
+    },
+    {
+     "id": "Constitution Check / Performance bookends",
+     "summary": "Principles I-XI and performance bookends N/A (no generator change); question tasks research: physical; record tests green.",
+     "class": "within",
+     "why": "Settles process gates only; decides nothing about what the request asked."
+    }
+   ]
+  }
+ ]
+}
