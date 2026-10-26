@@ -19,8 +19,9 @@ none: tooling only - the review queue's scripts, hooks, agent contracts and docs
       verify: DONE. landed in batch T01+T02+T03: T01: question rows owed/kept/cut, make gm-question and gm-escalated, the GM's decisions read from kept questions alone, an override's Held flag or held key no decision (test_gm_review 11/11); T02: only for_gm (any trigger) and declined fixes reach the GM, as owed questions, prose handing him a decision refused without for_gm (test_hm_arbiter 41, test_arbiter_fix 20, test_checkpoint 19); T03: a push with an owed question refused (push_checks gm-questions), a kept question not named in the final message refuses the turn's end once (test-escalation-hooks 38/38)
 - [ ] T04 E(b) pop-ups that share a paragraph: the bamboo and shelter batch replayed and measured, then the cascade cut (D6; FR-005, SC-004)
       research: rendering
-- [ ] T05 E(a) claims after a page edit: the 0081 edit's triage measured, then the triage narrowed where the measure shows (D7; FR-005, SC-004)
+- [x] T05 E(a) claims after a page edit: the 0081 edit's triage measured, then the triage narrowed where the measure shows (D7; FR-005, SC-004)
       research: rendering
+      verify: DONE. landed: make claims-triage clears every claim owed a triage only by a page move whose rested-on blocks stand (row field cleared), the rest triaged as before (no-rests rows, code and section triages); test_claims_scoping 23/23 (red on the old claims.py), test_claims_index 36, test_known_drift 12; R3: 7 findings in 5,304 re-checks priced, ruled not material (ask:432-t05-triage-price); the 0081 edit's triage 271 -> 35
 - [x] T06 The backlog cleared with the GM's words; 374#60, 385#40 and 397#10 carried on as kept questions (D8; FR-006, SC-005)
       research: rendering
       verify: DONE. landed: all 465 open rows marked reviewed with the GM's words (36 features; 385, 407, 412 and 413 row by row, their boxes held by their own implementation check); 374#60, 385#40 and 397#10 carried as kept questions 374#90, 385#107, 397#11; make gm-review lists exactly 3 decisions and 0 rows to review; test_gm_review 12/12 (a new row reopens a ticked box)

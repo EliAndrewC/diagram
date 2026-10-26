@@ -1162,6 +1162,7 @@ field roads	sakuba-michi
 field to field	tagoshi kangai
 field-to-field	tagoshi kangai
 field-to-field irrigation	tagoshi kangai
+fifth watch	night watch
 filature	filature
 filatures	filature
 fillet	fillet
@@ -1852,12 +1853,14 @@ huller	hulling
 hullers	hulling
 hulling	hulling
 hundred articles	hundred articles
+hundred poets	Hundred Poets
 hundredweight	hundredweight
 hundredweights	hundredweight
 hutong	hutong
 hutongs	hutong
 huzhou	Huzhou-Jiaxing
 huzhou-jiaxing	Huzhou-Jiaxing
+hyakunin isshu	Hundred Poets
 hyakusho denki	Hyakusho Denki
 hyakushodai	hyakushodai
 hyakushōdai	hyakushodai
@@ -1942,6 +1945,7 @@ initiate	initiate
 initiates	initiate
 inkyo	inkyo
 inland sea	Setouchi
+inner city	Inner City
 inner moat	uchibori
 inner moats	uchibori
 inshu	Inshu
@@ -3171,6 +3175,7 @@ one-bu silver	ichibu-gin
 onin war	Onin war
 onkura	kura
 onmyodo	onmyodo
+onna daigaku	Onna daigaku
 ons	Office for National Statistics
 ooka tadasuke	Ooka Tadasuke
 ooku	ooku
@@ -3203,6 +3208,7 @@ out-to-out	out-to-out
 outcaste	outcaste
 outcastes	outcaste
 oute	ote-mon
+outer city	Outer City
 outer daimyo	tozama
 outer daimyos	tozama
 outer moat	outer moat
@@ -3960,6 +3966,7 @@ sho	sho
 shobodan	shobodan
 shochiku	Shochiku
 shochu	shochu
+shogi	shogi
 shogun	shogun
 shogunal village	shogunal village
 shogunal villages	shogunal village
@@ -4025,6 +4032,7 @@ silver carp	silver carp
 simpson index	SI
 single range	main range
 single straight range	main range
+single whip reform	Single Whip Reform
 sishu	sishu
 site coefficient	site coefficient
 site coefficients	site coefficient
@@ -5012,6 +5020,7 @@ yokogi	yokogi
 yokogi-uchi	yokogi
 yomadori	four-room type
 yomihon	yomihon
+yomikudashi	yomikudashi
 yonai	yonai
 yonai money	yonai
 yongzheng	Yongzheng

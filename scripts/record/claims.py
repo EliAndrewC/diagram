@@ -732,6 +732,32 @@ def _rekey_cmd(root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]]
     return 0
 
 
+def _triage_cmd(args: argparse.Namespace, root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]], qdir: Path, store: dict[str, Any]) -> int:
+    """`claims-triage`: clear the claims a page move alone owes (feature 432), then triage the rest of what a triage owes."""
+    due = owed(cur, index, qdir, store)
+    # ...a page moved and no block the claim rests on did: cleared, not triaged (feature 432, FR-005 a). A row with no `rests`
+    # may rest on any block of the page, so it keeps the triage (the plan review's note on D7)
+    pages = [k for k, why in due if why == "triage" and (index.get(k) or {}).get("rests")]
+    if pages:
+        index, snaps = claims_triage.clear_page_moves(cur, index, pages, qdir, datetime.date.today().isoformat())
+        save_index(root / INDEX, live_rows(cur, index))
+        save_store(root / STORE, {**store, **snaps})
+        print(f"claims-triage: {len(pages)} claim(s) cleared without a triage - a page each cites moved and no block it rests on did (feature 432, FR-005 a)")
+    keys = [k for k, why in due if why in TRIAGED and k not in pages]
+    if not keys:
+        print("claims-triage: no claim is owed a triage")
+        return 0
+    if len(keys) <= TRIAGE_SKIP_MAX:
+        return _small_triage(root, keys, args.out)
+    tout = Path(args.out) if args.out else DEFAULT_OUT / "claims-triage"
+    print(triage_bundle(cur, index, store, keys, qdir, tout))
+    claims_flight.mark(root, tout)  # in flight until `claims-triaged` records its reply (feature 426 D1)
+    print(
+        f"claims-triage: {len(keys)} claim(s); dispatch the `claims-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`"
+    )
+    return 0
+
+
 def _triaged_cmd(args: argparse.Namespace, root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]], qdir: Path, store: dict[str, Any]) -> int:
     """`claims-triaged`: record a triage reply - the claims it names go on to impl-drift, the rest are cleared."""
     data = json.loads((Path(args.bundle) / "triage.json").read_text(encoding="utf-8"))
@@ -832,19 +858,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(sum(1 for _k, why in owed(cur, index, qdir, store) if why in TRIAGED))
         return 0
     if args.cmd == "triage":
-        keys = [k for k, why in owed(cur, index, qdir, store) if why in TRIAGED]
-        if not keys:
-            print("claims-triage: no claim is owed a triage")
-            return 0
-        if len(keys) <= TRIAGE_SKIP_MAX:
-            return _small_triage(root, keys, args.out)
-        tout = Path(args.out) if args.out else DEFAULT_OUT / "claims-triage"
-        print(triage_bundle(cur, index, store, keys, qdir, tout))
-        claims_flight.mark(root, tout)  # in flight until `claims-triaged` records its reply (feature 426 D1)
-        print(
-            f"claims-triage: {len(keys)} claim(s); dispatch the `claims-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`"
-        )
-        return 0
+        return _triage_cmd(args, root, cur, index, qdir, store)
     if args.cmd == "triaged":
         return _triaged_cmd(args, root, cur, index, qdir, store)
     if args.cmd == "report":

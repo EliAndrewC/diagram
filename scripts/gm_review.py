@@ -516,7 +516,7 @@ def main(argv: list[str]) -> int:
             sys.stdout.write(explain(root, *argv[1:]))
         elif argv[:1] == ["accept"] and len(argv) == 4:
             accept(_feature(root, argv[1]), argv[2], argv[3])
-            print("accept: recorded for the GM's review after landing")
+            print("accept: recorded - a row the GM may read and overturn (make gm-review)")
         elif argv[:1] == ["reviewed"] and len(argv) in (2, 4):
             ov = int(argv[2]) if len(argv) == 4 else None
             to = _feature(root, argv[3]) if len(argv) == 4 else None

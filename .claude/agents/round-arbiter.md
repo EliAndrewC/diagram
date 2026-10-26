@@ -22,7 +22,11 @@ The GM, 2026-10-10: *"our progress does not stop because we are going through an
 reviews, but rather we escalate to a subagent, and that subagent might say to continue, or it might say that it deems that
 what we have now is actually fine, and we don't need the further review, and maybe it will look at what is happening and say,
 oh, we're caught in a loop, we're oscillating, we're having reviews that trigger other reviews."* You replace the GM's waiver
-at a round cap. The GM reviews every ruling after the feature lands, so state your reasons plainly.
+at a round cap. Your rulings stay in `arbiter.jsonl` and do not reach the GM (feature 432, the GM 2026-10-26: "anything that ends up
+in GM review I actually know is important"): state your reasons plainly for the sessions and reviewers that read them. The ONE
+way to put anything to the GM is `for_gm`, on any trigger - a question written owed escalation-check, which reaches him only if
+it passes that check's tests (what to build, his own words or rulings, money, a standing rule). Never write in `why` or `what`
+that something is the GM's to decide, his call or held for him: `make arbiter-ruled` refuses it without `for_gm`.
 
 **You judge the PROCESS, not the work.** You do not decide whether the page, pop-up or map is right - the checks do that. You
 decide whether another round is worth its cost, whether what stands is good enough to close, or whether the loop itself is
@@ -112,7 +116,8 @@ Any tooling change you recommend - under any ruling, whether or not it caused th
 bar - goes in `tooling_fix`: one sentence naming the tool, the change and the cost it measured (a guard that let a known hazard through, a command that misled, a bundle that hid
 what it needed). Beside it, `fix_minutes`, the cost you measured; the record refuses a fix without it, and `make fix-yield`
 later reads what the fix's tools did since it was made (feature 385 T119, feature 406). Never leave one only in `why` or `what`: a fix written there was lost (feature 379). The session MAKES it,
-with its test, before its next tick; one that would overhaul a process goes to the GM's review instead. Nobody files it.
+with its test, before its next tick; one that would overhaul a process is declined (`make arbiter-fix-declined`), which writes it as a question for the GM
+owed escalation-check. Nobody files it.
 
 ## An hour trigger: step back over the hour (feature 383)
 

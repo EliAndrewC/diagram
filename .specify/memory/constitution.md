@@ -1,7 +1,7 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.32.1 → 2.33.0
+Version change: 2.32.2 → 2.33.0
 
 Version 2.33.0 (amended 2026-10-26, feature 427 T03): Principle VI's performance bookends are WATCHED BY CALL COUNTS, their
 timings recorded only - the GM: "keep recording the timings, but completely stop using timings as a gate on anything ... the
@@ -10,6 +10,10 @@ need to be accepted by the arbiter and possibly raised to my attention if it is 
 each stage's Python calls per seed and size beside its seconds; a count up over the line (5% a stage on a seed, 2% the total,
 GUESS), or a pair that cannot be compared, refuses the push until the round arbiter accepts; the timing band's flag of 2.30.0 is
 retired, its bands printed for information. MINOR (a principle's requirement changes).
+
+Version 2.32.2 (2026-10-26, feature 432): a round-arbiter ruling no longer reaches the GM after landing; it reaches him only
+as a `for_gm` question that escalation-check keeps (the GM: *"Please file A through F as one feature"*). PATCH (where an
+existing ruling goes; no principle added or removed).
 
 Version 2.32.1 (2026-10-26): Governance's versioning policy states that upkeep takes no version, the GM's
 2026-09-06 words, moved out of a session memory when project memories were retired. PATCH (a clarification).
@@ -1747,7 +1751,7 @@ not peers, and treating them as a menu is itself the error:
   an exit, it is an abandonment.
 - **WAIVER is the round arbiter's to grant, never the session's to assume** (feature 379, GM 2026-10-10:
   *"things should go to the arbiter at the point where they were previously coming to me"*): `make arbiter-ask`,
-  and the GM reviews the ruling after landing. Asking for one is only honest after the fix has been genuinely
+  its ruling reaching the GM only as a `for_gm` question escalation-check keeps (feature 432). Asking for one is only honest after the fix has been genuinely
   attempted.
 
 A session that truly cannot fix a regression stops and says so - and "stops
@@ -1896,7 +1900,7 @@ on round one ends the review - there is no quota to fill and re-reviewing a spec
 reviewer has already passed buys nothing. A `CHANGES REQUIRED` verdict means: revise,
 re-review. If the FIFTH review still returns changes, the round arbiter rules before a sixth (feature 379, GM
 2026-10-10: *"things should go to the arbiter at the point where they were previously coming to me"*); its `accept`
-stands as the spec's verdict, and the GM reviews the ruling after landing.
+stands as the spec's verdict; the ruling reaches the GM only as a `for_gm` question escalation-check keeps (feature 432).
 
 **Raised from three on 2026-08-30 (GM), and the reason is what the cap is FOR.** It
 exists to catch a persistent misunderstanding that further attempts will not locate -
