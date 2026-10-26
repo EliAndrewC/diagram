@@ -47,7 +47,7 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     """
     # THE LANES ARE ALREADY SQUARE (feature 287, M4c): every way crosses the brook and every drawn channel square, and so
     # does its deck (features 261, research 0084) - squared as the first step of `settle_the_web`, the web's last pass
-    # (`ways/settle/`), so every rule of the lane law is judged on the squared lane and no stage
+    # (`ways/settle/`, `square_every_crossing`), so every rule of the lane law is judged on the squared lane and no stage
     # after the web rewrites one. This stage only decks what the web drew. (The brook is round since `stage_sink`, M2.)
     s.bridges()
     if s.M.get("field_ditches"):

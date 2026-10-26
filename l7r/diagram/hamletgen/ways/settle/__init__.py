@@ -82,6 +82,7 @@ from ..reach import _draw_tree_lane as _draw_tree_lane
 from ..reach import settle_field as settle_field
 from ..reach import settle_targets as settle_targets
 from ..serve import shadowed_by as shadowed_by
+from ..squaring import square_every_crossing as square_every_crossing
 from ..squaring import SQUARE_MARGIN_FT as SQUARE_MARGIN_FT
 from ..squaring import SQUARE_PASSES as SQUARE_PASSES
 from ..squaring import _pts as _pts

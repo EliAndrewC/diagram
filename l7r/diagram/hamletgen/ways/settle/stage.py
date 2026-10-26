@@ -13,6 +13,7 @@ from ..geom import memo_ground, worked_ground
 from ..keeper import unsettled
 from ..knots import settle_knots
 from ..reach import settle_field, settle_targets
+from ..squaring import square_every_crossing
 from ..tree import settle_defer, settle_tree
 from .ends import settle_ends, settle_fragments, settle_network
 from .lawful import Lawful
@@ -38,12 +39,14 @@ def settle_reach(s: Any) -> int:
 # ---- the loop ----------------------------------------------------------------------------------------------------------
 
 
-# TEN STEPS STOOD HERE AND WENT (feature 417 T40 and T31, research.md R8): `settle_husks` (first and last), `settle_street_ends`,
+# NINE STEPS STOOD HERE AND WENT (feature 417 T40-T42, research.md R8): `settle_husks` (first and last), `settle_street_ends`,
 # `settle_shadows`, `settle_joins`, `settle_needles` and `prune_the_tree` (no verdict and no pool manifest moved), then
-# `square_every_crossing`, `settle_shapes`, `settle_way_outs` and `settle_widths` (54 of 54; Inashiro, Kashikawa and Sawada moved in
-# their drawing order alone, and one Kashikawa lane's width 5 -> 6 ft). Their rules are kept by the placers before them. Do not
+# `settle_shapes`, `settle_way_outs` and `settle_widths` (54 of 54; Inashiro, Kashikawa and Sawada moved in their drawing order
+# alone). `square_every_crossing` went with them in T41 and CAME BACK (T43): fresh seed 723805 tied a lane knot without it
+# (bisected 2026-10-26: it alone of T41's seven), a crossing left unsquared the fixed seeds never met. Their rules are kept by the placers before them. Do not
 # re-add one to mend a seed: a seed that needs one is a placer's defect (constitution XIX).
 STEPS = (
+    square_every_crossing,
     settle_ends,
     settle_reach,
     settle_defer,

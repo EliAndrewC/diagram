@@ -110,4 +110,6 @@
 - [x] T42 (T31's conversion C1, D11) One width a way asked where the orphan link is laid (`link_width`), and `settle_widths` deleted from the last resort with its dead closure, in `l7r/diagram/hamletgen/ways/` (FR-004, FR-006)
       research: rendering
       verify: DONE. landed: link_width asked where the orphan link is laid (a link continuing a way end to end takes its width); settle_widths and rewidth deleted: 54 of 54, Inashiro's and Kashikawa's orphan link 6 -> 5 ft continuing a 5 ft way
+- [ ] T43 (T41's regression, XIII) `square_every_crossing` restored to the settle's rounds: fresh seed 723805 tied a lane knot without it (bisected to it alone of T41's seven), in `l7r/diagram/hamletgen/ways/`
+      research: rendering
 - [ ] GM review (make gm-reviewed F=417)
