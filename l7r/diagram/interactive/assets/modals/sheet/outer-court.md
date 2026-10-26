@@ -21,7 +21,7 @@ Guesses:
 - That the forecourt and the hearing court together take about 12 to 18% of the site: no measure of them was found.
 - That the ground is bare earth: the ground before an office's entrance was found surfaced only at Edo's South Town Magistracy, a stone path with gravel beside it, and nowhere was it found recorded as left bare earth.
 
-Depiction: The plan draws the outer court as the compound's bare earth, stippled, labeled with its name and, in smaller type, "forecourt". It is
+Depiction: The plan draws the outer court as the compound's bare earth, labeled with its name and, in smaller type, "forecourt". It is
 always drawn in front of the inner court, with a gate between them; for a Japanese office that is a simplification, since
 at Takayama the residence stood beside the office. The plan keeps its buildings a little further apart than a real jin'ya (an intendant's office compound),
 so that each reads as its own labeled footprint; like a real one, it draws the office hall as one building, its offices and the magistrate's dais under one roof with the roofed hearing court against its front, and leaves the rest of the ground open.

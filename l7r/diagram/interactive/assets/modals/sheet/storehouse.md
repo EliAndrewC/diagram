@@ -16,7 +16,7 @@ Guesses:
 
 Depiction: The plan draws the household's storehouses behind the house, across open ground from it, each at the common 2 by 3
 ken, about 12 by 18 ft. As buildings made not to burn they carry no fire-water tub, and they stand a little apart from their neighbors as a
-fire gap. Its doorway is drawn as one dark block on the wall, standing for the pair of plastered doors, and its width is set so the door shows on the plan, not taken from a measured door.
+fire gap. Its doorway is drawn as one dark block on the wall, standing for the pair of plastered doors, and its width is a drawing convention, not taken from a measured door: the drawn width has no premodern size behind it.
 
 Name: storehouse
 Covers: the household storehouse and its label

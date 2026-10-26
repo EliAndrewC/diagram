@@ -13,7 +13,7 @@ Guesses:
 - The yard's size on the map: how large the yard was is not recorded, so the plan keeps it no wider than its use.
 
 Depiction: The plan leaves the ground between the house and its storehouses open and names it, drawn as the court's own
-bare earth. It is never drawn as a wide empty band behind the house: like every open stretch of the compound, it is kept
+ground. It is never drawn as a wide empty band behind the house: like every open stretch of the compound, it is kept
 no wider than its use.
 
 Name: rear yard
