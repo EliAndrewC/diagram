@@ -363,7 +363,7 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
     manifests = [p for p in non_py if pool_readers.is_manifest(p)]
     if other := [p for p in non_py if p not in manifests]:
         return Plan("full", f"an engine file that is not Python changed: {other[0]}")
-    readers = pool_readers.readers(root) if manifests else []
+    readers: list[str] = pool_readers.readers(root) if manifests else []
     closures: dict[str, list[str]] = json.loads(tests.read_text(encoding="utf-8"))
     baseline_tests = sorted(closures)
     scripts_modules: list[str] = []
@@ -379,7 +379,7 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
     touched = contexts_touching(db, root, ch.engine)
     affected_tests = sorted({c.split("|", 1)[0] for c in touched if "|" in c and not c.startswith("fixture:")})
     affected_fixtures = sorted({c[len("fixture:") :].split("|", 1)[0] for c in touched if c.startswith("fixture:")})
-    changed_modules = sorted(set(ch.test_modules) | set(scripts_modules) | set(readers) | set(tree_readers))  # nodeids and the manifest are both repository-relative (feature 329)
+    changed_modules: list[str] = sorted(set(ch.test_modules) | set(scripts_modules) | set(readers) | set(tree_readers))  # nodeids and the manifest are both repository-relative (feature 329)
     pl = Plan(
         "incremental",
         f"{len(ch.engine)} engine file(s) and {len(ch.test_modules)} test module(s) changed"
