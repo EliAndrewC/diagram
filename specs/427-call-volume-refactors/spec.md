@@ -199,3 +199,12 @@ The GM's decision (`request.md` 4, detail in `call-count-flag.md`):
   no items. SC-003's measured figures keep their date-and-method label; the feature has no `measurements.json` to re-run.
   Read in full: the SC-003 hunk, `spec.md`, `request.md` 1-5, and the grep's hits (`plan-review.json` lines 140, 143,
   181, 230; it names an FR-008 citation an earlier plan round already resolved).
+- 2026-10-26, spec-fidelity-verify MODE 3, round 2 of the post-acceptance amendment (the Status and Input lines and
+  working-notes' start line, stale since `request.md` 5): FAITHFUL. The previous round's aside is resolved. Status now
+  records the start on `request.md` 5's own words, quoted verbatim ("please go ahead with feature 427 beginning with the
+  survey tool"), and keeps the hold of `request.md` 3 as history. Input says five messages, matching `request.md`'s five
+  numbered items. Working-notes' "Started on the GM's word" cites `request.md` 5 and keeps `request.md` 3's quote. None of
+  this adds a requirement or changes one. A grep of the feature directory for "four messages", "held until", "start
+  only", "not started", "go ahead" and `request.md` 3/5 finds no remaining stale hold. `plan.md` 9, `research/survey-t01.md`
+  12 and `plan-review.json` 100 and 169 cite `request.md` 5 in the same sense. The changed passages carry no figures with
+  units. Read in full: the three hunks, `request.md` 3 and 5, `working-notes.md` lines 1-14, and the grep's hits.
