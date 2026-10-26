@@ -14,6 +14,10 @@
       verify: DONE. landed: make perf records each stage's Python calls per seed and size (a counting pass after the timed rolls, sys.monitoring PY_START on the first free tool id) and the interpreter/numpy/shapely versions; tests red without it (counts deterministic per seed, a refusal keeps earlier stages); the pass costs 12.4 s for the 4 reference seeds against 11.4 s timed (about 1.09x a plain roll, snapshot 20261026T172151Z-adhoc)
 - [ ] T03 The call counts are what is watched: the push refuses an unaccepted increase over the line, naming the arbiter command; timings printed only; the arbiter's and perf-audit's agent files, Principle VI and the docs (D3; FR-006, SC-005; `tools/perf_review.py`, `tools/perf_bands.py`, `scripts/sync-with-main.sh`, `.claude/agents/`, the constitution)
       research: rendering
+- [ ] T04 US2, the contained wins: the cheap wins C1-C3 and C5 and the single-site recomputations R2, R3, R5 and R6 (research/hotspots-cheap-wins.md, research/hotspots-recompute.md), each scoped against the T01 survey (research/survey-t01.md) with its chain's count before and after (FR-002, FR-003, US2)
+      research: rendering
+- [ ] T05 US3, the wells without the cubic term: the shared wells seated with kept state (R1), lane_wells' 22.6M calls at 40 households (research/survey-t01.md) to under 100k (FR-003, US3)
+      research: rendering
 - [x] GM review (make gm-reviewed F=427) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
