@@ -87,6 +87,7 @@ aquifer	aquifer
 aquifers	aquifer
 aragaki	aragaki
 araiba	kawado
+araihari	araihari
 araizeki	araizeki
 ares	are
 arresting tools	three arresting tools
@@ -945,6 +946,9 @@ drip line	drip line
 drip lines	drip line
 drip strip	dishui
 drip strips	dishui
+drop spindle	drop spindle
+drop spindles	drop spindle
+drop-spindle	drop spindle
 drum tower	drum tower
 drum towers	drum tower
 dry edge	dry edge
@@ -961,6 +965,7 @@ dry-field conversion	kanden
 drying yard	drying yard
 drying yards	drying yard
 ds/m	dS/m
+duan	duan
 duck landing	duck landing
 duck landings	duck landing
 dujiangyan	Dujiangyan
@@ -982,6 +987,8 @@ earth-god shrine	tudi miao
 earth-rammer	earth-rammer
 earth-rammer's	earth-rammer
 earth-rammers	earth-rammer
+earthing up	earthing up
+earthing-up	earthing up
 earthramming	earth-rammer
 eastern capital	Dongjing
 eastern han	Han dynasty
@@ -1363,6 +1370,7 @@ gaison	gaison
 gakuzuka	gakuzuka
 galleried mining	siege mining
 game master	GM
+gan	kanme
 gang salt	gang salt
 gangi	gangi
 gannin	gannin
@@ -1429,6 +1437,8 @@ geta	geta
 geza	geza
 ghusl	ghusl
 ginmisho	ginmisho
+ginned	ginned cotton
+ginned cotton	ginned cotton
 gion	Gion festival
 gion festival	Gion festival
 gion festivals	Gion festival
@@ -1566,6 +1576,7 @@ hagi	Hagi
 haibutsu kishaku	haibutsu kishaku
 haiden	haiden
 haikai	haikai
+haithabu	Haithabu
 hakata	Hakata
 hakehi	hakehi
 hakka	Hakka
@@ -1646,6 +1657,7 @@ headworks	headworks
 heavenly kings	hall of the Heavenly Kings
 hectare	hectare
 hectares	hectare
+hedeby	Haithabu
 heian	Heian
 heian-kyo	Heian-kyo
 heian-kyo's	Heian-kyo
@@ -1891,6 +1903,7 @@ ichigami	ichigami
 ichimoji weir	ichimoji-zeki
 ichimoji-zeki	ichimoji-zeki
 ichirizuka	ichirizuka
+ichiryo gusoku	ichiryo gusoku
 icp	ICP
 icp2011	ICP
 ido	ido
@@ -2277,6 +2290,8 @@ kebiishi	kebiishi
 keenlung	Qianlong
 kegare	kegare
 keian	hitoyado
+keian edict	Keian edict
+keian ofuregaki	Keian edict
 keibodan	keibodan
 keicho	Keicho
 keicho-era	Keicho
@@ -3031,6 +3046,7 @@ nichō-ibi	Nichō-ibi
 night soil	night soil
 night watch	night watch
 night watches	night watch
+night work	yonabe
 night-soil	night soil
 nightsoil	night soil
 nihon dai-hyakka zensho	Nihon Dai-hyakka Zensho
@@ -3294,6 +3310,7 @@ perched	perched river
 perched river	perched river
 perched, silt-choked river	perched river
 percolation	percolation
+perilla	perilla
 periodic market	periodic market
 periodic markets	periodic market
 periodic-market	periodic market
@@ -3429,6 +3446,8 @@ purlins	purlin
 purple robe	purple robe
 purveyor merchant	purveyor merchant
 purveyor merchants	purveyor merchant
+put-out	put-out
+putting-out	put-out
 px	px
 qi	qi
 qian	qian
@@ -3557,6 +3576,7 @@ resson	ressen
 rest stop	tateba
 rest stops	tateba
 restoration	Restoration
+ret	retting
 retainer	retainer
 retainer terrace	row house
 retainer terraces	row house
@@ -3565,7 +3585,10 @@ retirement house	inkyo
 retirement houses	inkyo
 retiring house	retiring house
 retiring houses	retiring house
+rets	retting
 retsuson	ressen
+retted	retting
+retting	retting
 return flow	return flow
 reverse-kesa	kesa
 revetment	revetment
@@ -4041,6 +4064,8 @@ six fang	Six Chambers
 six ministries	Six Ministries
 six-day market	rokusai-ichi
 six-day markets	rokusai-ichi
+sized	sizing
+sizing	sizing
 skimmer wall	skimmer wall
 skirt roof	mokoshi
 skirt roofs	mokoshi
@@ -4658,6 +4683,8 @@ tung trees	tung
 tutelary shrine	chinju
 tutelary shrines	chinju
 twelve-mat	tatami
+twill	twill
+twills	twill
 two-grave	two-grave
 two-grave settlements	two-grave
 two-grave villages	two-grave
@@ -4821,6 +4848,10 @@ ward-and-market	ward-and-market system
 ward-and-market system	ward-and-market system
 wari-tetsu	wari-tetsu
 warichi	warichi
+warp	warp
+warp-weighted loom	warp-weighted loom
+warp-weighted looms	warp-weighted loom
+warps	warp
 warren	warren
 warrens	warren
 warring states	Warring States
@@ -4872,6 +4903,8 @@ wayside halls	tsujido
 wazi	wazi
 weathering	weathering
 weblio	weblio
+weft	weft
+wefts	weft
 wei-tian	weitian
 weilongwu	weilongwu
 weir	weir
@@ -5021,6 +5054,7 @@ yokogi-uchi	yokogi
 yomadori	four-room type
 yomihon	yomihon
 yomikudashi	yomikudashi
+yonabe	yonabe
 yonai	yonai
 yonai money	yonai
 yongzheng	Yongzheng
@@ -5102,6 +5136,7 @@ zhou	department
 zhou dynasty	Zhou dynasty
 zhou-dynasty	Zhou dynasty
 zhouli	Zhouli
+zhu	zhu
 zhu yuanzhang	Taizu
 zhuque dajie	Suzaku-oji
 zicheng	zicheng
