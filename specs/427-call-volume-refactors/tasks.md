@@ -21,8 +21,9 @@
 - [x] T05 US3, the wells without the cubic term: the shared wells seated with kept state (R1), lane_wells' 22.6M calls at 40 households (research/survey-t01.md) to under 100k (FR-003, US3)
       research: rendering
       verify: DONE. landed: the wells without the cubic term; arbiter accept on the 0.5 s GUESS
-- [ ] T06 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#PAIR_LOOK = 40: how many first-well seats nearest the share's middle are re-ranked by whether a second well would keep both at ten (search breadth, a GUESS) [lands-open]
+- [x] T06 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#PAIR_LOOK = 40: how many first-well seats nearest the share's middle are re-ranked by whether a second well would keep both at ten (search breadth, a GUESS) [lands-open]
       research: rendering
+      verify: DONE. landed: PAIR_LOOK's claim relabeled GUESS
 - [ ] T07 US4, the homestead parts family: the homesteads stage's pairwise chains (research/hotspots-pairwise.md) with R4 and R8 (research/hotspots-recompute.md), each chain at least tenfold down (FR-003, US4)
       research: rendering
 - [ ] T08 US4, the ground cover family: the hinterland and windbreak stages' pairwise chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)
