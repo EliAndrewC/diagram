@@ -141,3 +141,13 @@ def test_the_exact_family_answer_is_the_linear_scans_and_the_regions_never_call_
             assert b.taken_by(x, y) is not None, (x, y)
         seen.add(got)
     assert {"hard", "local", "lane", None} <= seen, "non-vacuity: every answer met"
+
+
+def test_a_column_asked_at_once_answers_as_each_point_asked_alone() -> None:
+    """Feature 427 T08: `inside_many` is `inside` for every point - the memo read and filled, repeats included."""
+    pts = [(float(x), float(y)) for x in range(-20, 440, 37) for y in range(-20, 320, 29)]
+    pts += pts[:5]
+    together, alone = _blocks(), _blocks()
+    assert together.inside_many(pts) == [alone.inside(x, y) for x, y in pts]
+    assert together.inside_many(pts[:3]) == [alone.inside(x, y) for x, y in pts[:3]], "asked again: read from the memo"
+    assert any(together.inside_many(pts)) and not all(together.inside_many(pts))

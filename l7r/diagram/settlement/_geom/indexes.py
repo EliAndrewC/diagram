@@ -437,10 +437,11 @@ class RingIndex:
     band, so a point farther than the band from every edge needs no number at all. Verdicts match
     the linear scan; a map that moves under this index moved for another reason."""
 
-    __slots__ = ("cell", "grid", "ring", "rows", "x0", "x1", "y0", "y1")
+    __slots__ = ("_shapes", "cell", "grid", "ring", "rows", "x0", "x1", "y0", "y1")
 
     def __init__(self, ring: Any, cell: float = 64.0) -> None:
         self.ring: Poly = [(float(p[0]), float(p[1])) for p in ring]
+        self._shapes: Any = None  # `inside_many`'s polygon and its two margins, built once (the ring does not change)
         self.cell = cell
         n = len(self.ring)
         edges = []
@@ -484,16 +485,31 @@ class RingIndex:
         xs, ys = np.asarray(xs, dtype=float), np.asarray(ys, dtype=float)
         out = np.zeros(len(xs), dtype=bool)
         inbox = (xs >= self.x0) & (xs <= self.x1) & (ys >= self.y0) & (ys <= self.y1)
-        poly = Polygon(self.ring) if len(self.ring) >= 3 else None
-        if poly is None or not poly.is_valid:
+        if self._shapes is None:  # ...built once an index, not once a call (feature 427 T08: the gap fill asks a column at a time)
+            poly = Polygon(self.ring) if len(self.ring) >= 3 else None
+            self._shapes = (None, None) if poly is None or not poly.is_valid else (poly.buffer(-0.05), poly.buffer(0.05))
+            for g in self._shapes:
+                if g is not None and not g.is_empty:
+                    shapely.prepare(g)  # asked again and again: prepared once, the same answers
+        core, hull = self._shapes
+        if core is None:
             ask = inbox
         else:
-            core, hull = poly.buffer(-0.05), poly.buffer(0.05)
             sure = shapely.contains_xy(core, xs, ys) if not core.is_empty else np.zeros(len(xs), dtype=bool)
             out[sure] = True
             ask = inbox & ~sure & shapely.intersects_xy(hull, xs, ys)
-        for i in np.flatnonzero(ask):
-            out[i] = self.inside(float(xs[i]), float(ys[i]))
+        idx = np.flatnonzero(ask)
+        if len(idx):
+            # ...THE CROSSINGS COUNTED FOR THE ASKED POINTS AT ONCE (feature 427 T08: a belt outline shapely reads as invalid asked
+            # every point in its box one by one, 57k calls at 40 households): `inside`'s formula over every edge as arrays - an
+            # edge whose y-span misses the ray fails its first test, so counting every edge is counting `inside`'s rows
+            ring = np.asarray(self.ring, dtype=float)
+            xi, yi = ring[:, 0][None, :], ring[:, 1][None, :]
+            xj, yj = np.roll(ring[:, 0], -1)[None, :], np.roll(ring[:, 1], -1)[None, :]  # each edge as `inside` files it: i to i + 1
+            px, py = xs[idx][:, None], ys[idx][:, None]
+            with np.errstate(divide="ignore", invalid="ignore"):
+                cross = ((yi > py) != (yj > py)) & (px < (xj - xi) * (py - yi) / (yj - yi + 1e-9) + xi)
+            out[idx] = cross.sum(axis=1) % 2 == 1
         return out
 
     def edge_within(self, px: float, py: float, limit: float) -> float | None:

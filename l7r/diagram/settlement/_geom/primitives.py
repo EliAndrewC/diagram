@@ -175,17 +175,15 @@ def convex_hull(pts: Sequence[Pt]) -> Poly:
     if len(ps) < 3:
         return [(x, y) for x, y in ps]
 
-    def cross(o: Pt, a: Pt, b: Pt) -> float:
-        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-
+    # the turn test `(a - o) x (b - o)` written inline, not a call per point (feature 427 T08: 90k calls at 40 households)
     lower: list[Pt] = []
     for p in ps:
-        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
+        while len(lower) >= 2 and (lower[-1][0] - lower[-2][0]) * (p[1] - lower[-2][1]) - (lower[-1][1] - lower[-2][1]) * (p[0] - lower[-2][0]) <= 0:
             lower.pop()
         lower.append(p)
     upper: list[Pt] = []
     for p in reversed(ps):
-        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
+        while len(upper) >= 2 and (upper[-1][0] - upper[-2][0]) * (p[1] - upper[-2][1]) - (upper[-1][1] - upper[-2][1]) * (p[0] - upper[-2][0]) <= 0:
             upper.pop()
         upper.append(p)
     return lower[:-1] + upper[:-1]

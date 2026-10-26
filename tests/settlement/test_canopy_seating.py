@@ -87,3 +87,15 @@ def test_a_burial_ground_s_middle_is_kept_out_of_the_canopy() -> None:
     rects, _circles = s._canopy_keepouts((0.0, 0.0, 1000.0, 1000.0))
     core = (500.0, 500.0, 30.0 * s.CEMETERY_CORE, 20.0 * s.CEMETERY_CORE)
     assert core in rects and not any(r[0] == 5000.0 for r in rects), "the ground in the box is kept out, one outside is not"
+
+
+def test_a_wellhead_reaching_into_the_box_is_kept_whose_center_lies_outside() -> None:
+    """Feature 427 T08: the box prefilters a wellhead by its drawn extent, as it does a building - a well 5 px past the box's
+    edge with a 9 px head still reaches a crown in the box; one beyond its reach does not; a frozen scope reads the same."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="Woods", scale="hamlet", ftpx=1, down_deg=90)
+    s.M["wells"] = [{"x": 105.0, "y": 50.0, "r": 8.0, "vr": 9.0}, {"x": 130.0, "y": 50.0, "r": 8.0, "vr": 9.0}]
+    _rects, circles = s._canopy_keepouts((0.0, 0.0, 100.0, 100.0))
+    assert circles == [(105.0, 50.0, 9.0)]
+    with s.canopy_frozen():
+        assert s._canopy_keepouts((0.0, 0.0, 100.0, 100.0)) == (_rects, circles)

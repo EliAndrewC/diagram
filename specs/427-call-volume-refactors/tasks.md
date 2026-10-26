@@ -27,8 +27,9 @@
 - [x] T07 US4, the homestead parts family: the homesteads stage's pairwise chains (research/hotspots-pairwise.md) with R8 (research/hotspots-recompute.md), each chain at least tenfold down (FR-003, US4); R4 moved to its own task, T12
       research: rendering
       verify: DONE. landed: homestead parts family's chains tenfold down (R4 to T12); pool unchanged but Kuwabata (kura/byre 3 ft, 0081)
-- [ ] T08 US4, the ground cover family: the hinterland and windbreak stages' pairwise chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)
+- [x] T08 US4, the ground cover family: the hinterland and windbreak stages' pairwise chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)
       research: rendering
+      verify: DONE. landed: ground cover chains tenfold down or gone (atan2 27k left); pool unchanged
 - [ ] T09 US4, the water family: the field settle (R7, research/hotspots-recompute.md) and the brook and partition chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)
       research: rendering
 - [ ] T10 US4, the lane web and the lane law, after feature 417's lane conversions (request.md 5): the web stage's pairwise chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)

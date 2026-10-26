@@ -1,0 +1,33 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+hinterland: 2,209,623 calls @20, 3,936,919 calls @40, growth exponent 0.83
+  anchor settlement/homestead_parts/grove_fill.py:354:close_belt_gaps [1]
+    settlement/_geom/indexes.py:461:inside [97,488|55,983] <- settlement/homestead_parts/grove_blocks.py:123:inside [35,568|31,386] <- settlement/homestead_parts/grove_fill.py:354:close_belt_gaps [1|1]
+    settlement/homestead_parts/grove_blocks.py:230:<genexpr> [64,545|56,931] <- settlement/homestead_parts/grove_blocks.py:228:too_near [12,180|11,471] <- settlement/homestead_parts/grove_fill.py:354:close_belt_gaps [1|1]
+  anchor settlement/_geom/primitives.py:171:convex_hull [96]
+    settlement/_geom/primitives.py:178:cross [90,187|41,113] <- settlement/_geom/primitives.py:171:convex_hull [96|46]
+  anchor hamletgen/hinterland/belt.py:383:fouled [2]
+    settlement/_geom/indexes.py:276:near [63,120|39,031] <- settlement/_geom/indexes.py:499:edge_within [35,423|14,066] <- hamletgen/hinterland/belt.py:384:<genexpr> [32,402|12,662] <- hamletgen/hinterland/belt.py:383:fouled [2|2]
+  fastest growers @20 -> @40:
+    x22.2 math.degrees [1,237 -> 27,476]
+    x22.2 math.atan2 [1,239 -> 27,478]
+    x7.2 settlement/homestead_parts/belt_law.py:169:_near [3,540 -> 25,506]
+    x6.8 settlement/homestead_parts/belt_law.py:158:uv [4,803 -> 32,609]
+    x6.5 settlement/homestead_parts/belt_law.py:166:bin [4,335 -> 28,243]
+    x4.0 settlement/land/cover.py:69:<lambda> [5,540 -> 22,200]
+    x3.3 math.dist [8,333 -> 27,855]
+    x2.8 builtins.abs [55,999 -> 155,782]
+windbreak: 810,214 calls @20, 1,672,752 calls @40, growth exponent 1.05
+  anchor settlement/homestead_parts/grove_fill.py:474:ink_and_record_grove [1]
+    settlement/shrines_wells/woods.py:123:<genexpr> [55,656|25,573] <- settlement/shrines_wells/woods.py:110:_crown_seat_clear [7,513|3,515] <- settlement/homestead_parts/groves.py:607:seat [5,964|2,820] <- settlement/homestead_parts/groves.py:440:_draw_grove [915|451] <- settlement/homestead_parts/grove_fill.py:474:ink_and_record_grove [1|1]
+  fastest growers @20 -> @40:
+    x4.0 settlement/homestead_parts/groves.py:590:<genexpr> [9,471 -> 37,515]
+    x3.3 math.dist [14,978 -> 49,971]
+    x2.5 'get' of 'dict' objects [128,381 -> 320,962]
+    x2.2 settlement/shrines_wells/woods.py:123:<genexpr> [25,573 -> 55,656]
+    x2.2 settlement/_geom/indexes.py:276:near [16,423 -> 35,531]
+    x2.1 settlement/houses.py:362:_hjit [14,228 -> 30,568]
+    x2.1 random.py:500:uniform [9,927 -> 21,111]
+    x2.1 'random' of '_random.Random' objects [11,280 -> 23,856]
+
+all stages: 3,019,837 calls @20, 5,609,671 calls @40

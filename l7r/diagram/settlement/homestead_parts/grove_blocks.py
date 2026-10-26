@@ -29,6 +29,7 @@ Research: index plumbing - NONE: the keep-outs are the callers' decisions, index
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from typing import Any
 
 from .._geom import PointGrid, RingIndex, boxed_circles, boxed_grid, boxed_rects, boxed_ring_hit, boxed_rings, boxed_seg_hit, boxed_segs, circle_hit, rect_hit
@@ -127,6 +128,17 @@ class GroveBlocks:
         if hit is None:
             hit = self._inside[(x, y)] = self.ring.inside(x, y)
         return hit
+
+    def inside_many(self, pts: Sequence[tuple[float, float]]) -> list[bool]:
+        """`inside` for every point of `pts` at once, the same memo read and filled: the points not yet asked are asked of the
+        outline together (`RingIndex.inside_many`, the same verdicts) - the gap fill's 33 depths a column (feature 427 T08).
+
+        Research: plumbing - NONE: the outline's test, asked of a column at once"""
+        ask = [q for q in dict.fromkeys(pts) if q not in self._inside]
+        if ask:
+            got = self.ring.inside_many([q[0] for q in ask], [q[1] for q in ask]).tolist()
+            self._inside.update(zip(ask, (bool(g) for g in got), strict=True))
+        return [self._inside[q] for q in pts]
 
     def regions(self) -> tuple[Any, Any, Any]:
         """EVERY STATIC KEEP-OUT OF THE FILL PAINTED ONCE, BY FAMILY (feature 297, FR-004, plan B3 - the GM: "drawing a box and then
@@ -227,7 +239,10 @@ class Seats:
 
     def too_near(self, x: float, y: float) -> bool:
         r2 = self.r2
-        return any((x - sx) ** 2 + (y - sy) ** 2 < r2 for sx, sy, _x0, _y0, _x1, _y1 in self.grid.near(x, y))
+        for sx, sy, *_ in self.grid.near(x, y):  # noqa: SIM110 - a loop, not any() over a generator (feature 427 T08)
+            if (x - sx) ** 2 + (y - sy) ** 2 < r2:
+                return True
+        return False
 
 
 class BankNear:

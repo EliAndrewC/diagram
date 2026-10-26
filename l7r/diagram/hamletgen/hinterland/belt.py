@@ -105,10 +105,16 @@ def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[fl
         lane clearance - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); BELT_LANE_CLEAR_FT
         its figures from 0071 - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: 146 (default near face + depth)
     """
+    import numpy as np  # noqa: PLC0415 - bound on first use (feature 237)
+
+    # the lanes' samples as arrays once, each column's test one mask (feature 427 T08: an `abs` per sample per column, 486k at
+    # 40 households) - the same comparisons
+    ls = np.asarray(lanes, dtype=float).reshape(-1, 2)
+    lu, lv = ls[:, 0], ls[:, 1]
     out: list[tuple[float, float]] = []
     for v, u in cols:
-        inside = [lu for lu, lv in lanes if abs(lv - v) <= width and u + near - BELT_LANE_CLEAR_FT <= lu <= u + depth]
-        moved = max(u, max(inside) + BELT_LANE_CLEAR_FT - near) if inside else u
+        inside = lu[(np.abs(lv - v) <= width) & (u + near - BELT_LANE_CLEAR_FT <= lu) & (lu <= u + depth)]
+        moved = max(u, float(inside.max()) + BELT_LANE_CLEAR_FT - near) if len(inside) else u
         out.append((v, moved))
     return out
 
@@ -156,11 +162,20 @@ def far_envelope(cols: Sequence[tuple[float, float]], depth: float = BELT_DEPTH_
     two columns). Sampling the far face along the profile instead was tried first and folded it: across a steep chord the
     samples share nearly one position across the wind, and the face ran back and forth over itself - Sawada's belt fell
     into six pieces."""
+    import numpy as np  # noqa: PLC0415 - bound on first use (feature 237)
+
     pts = along_the_profile(cols, step)
     lo, hi = cols[0][0], cols[-1][0]
     n = max(1, int(abs(hi - lo) // step))
     vs = sorted({*(lo + (hi - lo) * k / n for k in range(n + 1)), *(v for v, _u in cols)}, reverse=hi < lo)
-    return [(v, max(u2 + depth * (1.0 - ((v2 - v) / depth) ** 2) ** 0.5 for v2, u2 in pts if abs(v2 - v) <= depth) - depth) for v in vs]
+    # the profile's points as arrays once, each sample's disc reach one masked array (feature 427 T08: an `abs` and a disc
+    # per point per sample, 114k at 40 households) - the same arithmetic
+    pv, pu = (np.asarray([p[i] for p in pts], dtype=float) for i in (0, 1))
+    out: list[tuple[float, float]] = []
+    for v in vs:
+        near = np.abs(pv - v) <= depth
+        out.append((v, float((pu[near] + depth * (1.0 - ((pv[near] - v) / depth) ** 2) ** 0.5).max()) - depth))
+    return out
 
 
 def round_the_houses(cols: Sequence[tuple[float, float]], uv: Sequence[tuple[float, float]], reach: float, step: float = BELT_PROFILE_STEP_FT) -> list[tuple[float, float]]:
@@ -364,9 +379,17 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     # under 20 px - and a vertex that close to an edge is fouled either way, so a rounding difference on the edge itself
     # cannot change the answer.
     crop_idx = [RingIndex(c) for c in crops if len(c) >= 3]
+    # ...AND EVERY VERTEX ASKED AT ONCE (feature 427 T08): `inside_many` for the crossings, each crop's ring's distance to all the
+    # vertices in one shapely call for the 20 px - the same two tests, a candidate belt's vertices as arrays
+    import numpy as np  # noqa: PLC0415 - bound on first use (feature 237)
+    import shapely  # noqa: PLC0415
+
+    crop_rings = [shapely.LinearRing(ci.ring) for ci in crop_idx]
 
     def fouled(poly: Poly) -> bool:
-        return any(ci.inside(q[0], q[1]) or ci.edge_within(q[0], q[1], 20.0) is not None for q in poly for ci in crop_idx)
+        xs, ys = np.asarray([q[0] for q in poly], dtype=float), np.asarray([q[1] for q in poly], dtype=float)
+        pts = shapely.points(xs, ys)
+        return any(bool(ci.inside_many(xs, ys).any()) or bool((shapely.distance(ring, pts) < 20.0).any()) for ci, ring in zip(crop_idx, crop_rings, strict=True))
 
     # THE LADDER STANDS BACK BEFORE IT SHRINKS. Both moves get the belt off the crop, but they cost
     # different things: standing back spends the embrace budget (a clump within 150 px of a

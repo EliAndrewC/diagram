@@ -490,7 +490,11 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     _cop = [c for g in s.M.get("village_groves") or [] if g.get("role") == "copse" for c in g.get("clumps") or []]
     _hs = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
     if _cop and _hs:
-        _near = sorted(min(math.dist((float(c[0]), float(c[1])), h) for h in _hs) for c in _cop)
+        import numpy as np  # noqa: PLC0415 - bound on first use (feature 237)
+
+        # each clump's nearest house as one array pass, not a `math.dist` generator per clump (feature 427 T08: 37k steps)
+        cc, hh = np.asarray([(float(c[0]), float(c[1])) for c in _cop]), np.asarray(_hs)
+        _near = sorted(np.hypot(cc[:, None, 0] - hh[None, :, 0], cc[:, None, 1] - hh[None, :, 1]).min(axis=1).tolist())
         s.M["meta"]["copse_clumps"] = len(_near)
         s.M["meta"]["copse_house_ft"] = round(_near[len(_near) // 2] * float(s.M["meta"].get("ftpx") or 1), 1)
     # ...and what the woods came to beside what was rolled, so a copse the ground could not hold is a number, not a silence
