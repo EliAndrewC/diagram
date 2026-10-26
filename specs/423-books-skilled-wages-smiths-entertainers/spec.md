@@ -39,7 +39,7 @@ skilled against unskilled (0275), the kitchen knife (0276) and plays (0266), but
 4. **Q4, entertainers.** It reads a traveling country troupe's takings per performance and per year and how they were shared; a
    street performer's daily take; a city star actor's yearly pay; a traveling or rural troupe's size (beside the city companies of
    about 43 and 26 in 0266); and the price of a stage costume (ordinary and fine), a shamisen, a bamboo flute and a hand drum
-   (tsuzumi).
+   (tsuzumi). Japan first - kabuki, rural troupes and Morisada's 『守貞謾稿』 - with China beside it.
 
 **Acceptance**:
 1. Every figure each question names gets a verdict - ATTESTED, ATTESTED ONLY FOR <the narrower case>, NOT ATTESTED or SILENT -
@@ -48,7 +48,9 @@ skilled against unskilled (0275), the kitchen knife (0276) and plays (0266), but
 2. Each figure is given in the unit the question names (per booklet, volume, loan, leaf, day, trip, year, item) in silver or copper
    as the source states it, with the in-kind part of a wage named where the source names it.
 3. Each answer says how it stands against the canon the request names (scribes among the heimen; stipend = rank squared for samurai
-   clerks; servants and cooks hinin laborers; smiths heimen craftsmen; the county troupe of about 5-10 entertainers earning most
+   clerks; servants and cooks hinin laborers; the ledger's unverified Kanazawa lead for servants and stewards - 0.7-1 koku a year, a
+   young steward 3 - which the Q2 answer confirms, narrows or contradicts, its source traced and cited from the work it came from,
+   never the ledger; smiths heimen craftsmen; the county troupe of about 5-10 entertainers earning most
    on market day; entertainers hinin), and gives figures gm-assistant's estimates E0169-E0193 can be graded against; a
    contradiction goes to the GM through `escalation-check`.
 
@@ -72,3 +74,8 @@ skilled against unskilled (0275), the kitchen knife (0276) and plays (0266), but
 ## Out of scope
 
 - Editing the canon or gm-assistant's estimates.
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-25): CHANGES REQUIRED - Acceptance 3 left out the ledger's unverified Kanazawa lead; Scenario 4
+  dropped Q4's named sources (kabuki, rural troupes, Morisada). Both applied.
