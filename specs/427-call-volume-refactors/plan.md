@@ -195,3 +195,150 @@ l7r/diagram/tools/CLAUDE.md           # its row
 
 None.
 
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** The same homesteads seated, their parts asked of their neighbors per candidate set, not one Python
+   call per pair.
+2. **The constraints.** US4, FR-003, FR-004, FR-007; the GM's order (`request.md` 5): homestead parts first of the families
+   outside the lanes.
+3. **Where each comes from.** `research/hotspots-pairwise.md` "Homestead seating" (yards' `_filled_lattice`, `gap_ways.way_out`
+   and `trace`, `wood_share`); `research/hotspots-recompute.md` R4 (`household_reach` lays four whole homesteads per candidate) and
+   R8 (`capacity.field_distances` for every free grid point), which US4 sends with this family.
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage, so a chain of the family outside `homesteads` is not dropped) on the then-current engine scopes
+   the task to the chains that still stand (FR-002).
+5. **The order.** After T06, before the ground cover family.
+6. **The exits.** Green: each chain named falls at least tenfold (US4's test), the cohort with no seed regressed, the claims
+   round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the same predicates asked of a candidate set (STRtree query or numpy broadcast), no new search.
+8. **The budget.** One landing per chain group that changes no map, the cohort judging any that does.
+9. **Done, measured.** Each chain's count before and after from `make perf-fanout`, recorded in `research/`; R8, which no chain
+   shows, by its own test (US2, FR-003): the homesteads stage and `field_distances`' share at seed 47, 40 households, before and
+   after, as a seed-by-seed A/B against HEAD, and a pool reroll diffed against HEAD's manifests - reported, gating nothing
+   (FR-006).
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the chains re-scoped | `make perf-fanout` (every stage) |
+| each chain converted | its count in `make perf-fanout`, `make maps-moved` |
+| R8 | the homesteads stage at seed 47, 40 households, A/B of HEAD against the change in two detached worktrees, back to back, alternated; `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** The same ground cover drawn, its keep-out and gap tests asked per candidate set.
+2. **The constraints.** US4, FR-003, FR-004, FR-007; the GM's order (`request.md` 5): ground cover after the homestead parts.
+3. **Where each comes from.** `research/hotspots-pairwise.md` "Ground cover" (`close_belt_gaps`, `household_bamboo` ->
+   `stand_spares_seats`, `belt.fouled`, `convex_hull`, `belt_law`, `_crown_seat_clear`, the grove and hinterland genexprs).
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage, so a chain in another stage is not
+   dropped) scopes the task to the chains that still stand after T04 and T07 (FR-002).
+5. **The order.** After the homestead parts family, before the water family.
+6. **The exits.** Green: each chain named falls at least tenfold, the cohort with no seed regressed, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the same tests over a candidate set.
+8. **The budget.** One landing per chain group.
+9. **Done, measured.** Each chain's count before and after from `make perf-fanout`, recorded in `research/`.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the chains re-scoped | `make perf-fanout` (every stage) |
+| each chain converted | its count in `make perf-fanout`, `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** The same fields and brook, the field settle judging a new cell only against what is near it.
+2. **The constraints.** US4 (the field settle, R7, goes with its family), FR-003, FR-004, FR-007; outside the lanes, so before
+   them (`request.md` 5).
+3. **Where each comes from.** `research/hotspots-recompute.md` R7 (every added cell judged by the full ring rules; the fabric
+   already builds an STRtree); `research/hotspots-pairwise.md` "Water" (`brook_rules.crosses_mid_run`, `partition.keep_rows`).
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage, so a chain outside `field` is not dropped)
+   scopes the task (FR-002).
+5. **The order.** After the ground cover family, before the lanes.
+6. **The exits.** Green: each chain named falls at least tenfold, the cohort with no seed regressed, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the fabric's own STRtree asked for the collectors near a cell.
+8. **The budget.** One landing.
+9. **Done, measured.** Each chain's count before and after from `make perf-fanout`, recorded in `research/`.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the chains re-scoped | `make perf-fanout` (every stage) |
+| each chain converted | its count in `make perf-fanout`, `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
+### T10 Approach (checklist part A)
+
+1. **The goal, in the world.** The same lane web, its pair tests (lane against lane, lane against fabric, the lane law) asked per
+   candidate set.
+2. **The constraints.** US4, FR-003, FR-004, FR-007; the GM's order (`request.md` 5): the lane web and the lane law last, after
+   feature 417's lane conversions, since 417 restructures that code.
+3. **Where each comes from.** `research/hotspots-pairwise.md` "The lane web (stage `web`) and the lane law".
+4. **Do they describe the world here?** Re-measured first, on the engine feature 417's lane conversions leave: `make perf-fanout`
+   (every stage: the lane law runs outside `web` too) scopes the task (FR-002).
+5. **The order.** Last of the families; started only once 417's lane conversions have landed (`make speckit-todo` shows 417's
+   tasks), so this task holds the feature open until then.
+6. **The exits.** Green: each chain named falls at least tenfold, the cohort with no seed regressed, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the same tests over a candidate set.
+8. **The budget.** One landing per chain group.
+9. **Done, measured.** Each chain's count before and after from `make perf-fanout`, recorded in `research/`.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| 417's lane conversions landed | 417's `tasks.md` |
+| the chains re-scoped | `make perf-fanout` (every stage: the lane law runs outside `web` too) |
+| each chain converted | its count in `make perf-fanout`, `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
+### T11 Approach (checklist part A)
+
+1. **The goal, in the world.** The feature's outcome measured against its success criteria and reported.
+2. **The constraints.** FR-005 (bookends and a seed-by-seed A/B), SC-002 (calls tenfold down), SC-003 (every stage under a second
+   at 40 households on every completing seed), SC-004, SC-005; the feature report (the root CLAUDE.md).
+3. **Where each comes from.** `spec.md` FR-005, SC-002 to SC-005; the root CLAUDE.md (a feature ends with `make feature-report`).
+4. **Do they describe the world here?** Yes: the `427-start` bookend is committed (`dev/perf-log/`), so the pair compares.
+5. **The order.** Last, after every family task.
+6. **The exits.** Green: SC-002 and SC-003 met, measured by the `427-end` bookend and the seed-by-seed A/B, and the report
+   written. A criterion missed is red; an intermediate checkpoint does not close the feature (SC-003).
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One bookend run and the report.
+9. **Done, measured.** `make perf LABEL=427-end SCALING=1` against `427-start`; separately, the A/B (FR-005: never medians or
+   bookends alone, the GM's `request.md` 4 on load and processor): two detached worktrees, one at the `427-start` bookend's commit (1cc4066ac) and one at the end commit, each running `make perf SCALING=1` back to back in one session, alternated start, end, start, end, every stage of every completing seed compared seed by seed; `make perf-fanout`
+   totals; `make feature-report F=427 WRITE=1`; and 417's failing seeds re-measured on the end engine, before 417 resumes
+   (`request.md` 5).
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the end bookend | `make perf LABEL=427-end SCALING=1` |
+| the seed-by-seed A/B | two detached worktrees, one at the `427-start` bookend's commit (1cc4066ac) and one at the end commit, each running `make perf SCALING=1` back to back in one session, alternated start, end, start, end, every stage of every completing seed compared seed by seed |
+| 417's failing seeds | `make cohort` on feature 417's failing seeds on the end engine, recorded in 417's directory (`request.md` 5) |
+| the call totals | `make perf-fanout` |
+| the report | `make feature-report F=427 WRITE=1` |
+

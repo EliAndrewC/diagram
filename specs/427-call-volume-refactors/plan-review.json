@@ -38,13 +38,7 @@
    "declared": "spec-fidelity"
   },
   "## Task approaches": {
-   "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
-   "declared": "round-arbiter"
-  },
-  "### T01 Approach (checklist part A)": {
-   "sha256": "c3fec40bea35fdf3771fdff9fa38cfed681597667a42b25f8d2c644f2b701da4",
+   "sha256": "02088ce0679d735bf36b19f9762bbfd3645c8dee6e20e6bab8eccbff80305fbf",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "round-arbiter"
@@ -68,40 +62,46 @@
    "declared": "round-arbiter"
   },
   "## Complexity Tracking": {
-   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "sha256": "8dcf620a2bd091c299764cb3e7a10310427666368ee22d8751eb3e2579d3c501",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "round-arbiter"
-  },
-  "### T02 Approach (checklist part A)": {
-   "sha256": "061a8ce2ff37f264b04d915d064957fe6d831b1540828df19e93de076e2fdc72",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
-  },
-  "### T03 Approach (checklist part A)": {
-   "sha256": "6657e6e50d69304a07458c4c4b566d5bb1ba400120cf741c7043146b0cbe9db7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
-  },
-  "### T04 Approach (checklist part A)": {
-   "sha256": "2f5a9ccc974cfeb09086304beae2f9efc6fa56e4c4004100f9e2a1c0e4d73112",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
-  },
-  "### T05 Approach (checklist part A)": {
-   "sha256": "cad0d16f6c12fb512a8e317782bf21fad6376b246624c23250f8110bfe00cc8f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
   },
   "### T06 Approach (checklist part A)": {
    "sha256": "645d283c1e4322c15bd711128ae0fe1d7be9005b942b664520007f703d025bf1",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "1b1183e37baac4f6d6e992ce84210433c2a6eae50748bea64573ed167347598d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T08 Approach (checklist part A)": {
+   "sha256": "3db80465717448a40b3a9407d3573f45a5cc6588f7510a40fafa5510fc6764c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T09 Approach (checklist part A)": {
+   "sha256": "0edfc5a21d1e5e03c75356d0f564141862692aa83d0ad609006be7f3a22495e6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T10 Approach (checklist part A)": {
+   "sha256": "c706edd20d0c997590ad3e48062d981a4fab828afc77fc839e4a9a3f4bc7a0ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T11 Approach (checklist part A)": {
+   "sha256": "96d95d8be4da33e89a61ac74ca1f6e8de46a9f3f1cf405febe1a0777a1d02468",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -674,6 +674,283 @@
      "summary": "One landing, riding with the next engine task if one is ready.",
      "class": "within",
      "why": "Packaging of the landing; does not change what is delivered or what the GM asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T07 Approach (checklist part A)",
+    "### T08 Approach (checklist part A)",
+    "### T09 Approach (checklist part A)",
+    "### T10 Approach (checklist part A)",
+    "### T11 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T07-R8-measure",
+     "summary": "T07 takes R8 (capacity.field_distances, the no-chain finding) into the homestead family but measures done only by perf-fanout chain counts (exit 6, step 9, table).",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-003 names R8 as the task with no chain and requires its stage's time at the seed and size its finding names, before and after, as a seed-by-seed A/B against HEAD. A chain count cannot show R8 moved, so the block leaves R8 with no done-measure. Nothing in request.md excuses it. Fix: add the R8 stage-time A/B to step 9 and the table, as a REPORT, not a gate (request.md 4: timings gate nothing)."
+    },
+    {
+     "id": "T07-T10-tenfold-per-chain",
+     "summary": "Each family's green exit is every named chain falling at least tenfold.",
+     "class": "within",
+     "why": "Stricter per chain than SC-002's total tenfold; serves the GM's 'literal order of magnitude' (request.md 1)."
+    },
+    {
+     "id": "T07-T10-landings",
+     "summary": "One landing per chain group that changes no map; the cohort judges any that does; maps-moved per conversion.",
+     "class": "within",
+     "why": "The GM's accepted approach (request.md 5): identical manifests where that comes free, a per-seed comparison against HEAD for a deliberate change; FR-007."
+    },
+    {
+     "id": "T07-T10-red-exit",
+     "summary": "A family that cannot reach its exit is recorded and set down, the 'cannot be done' claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "request.md 4 wants the arbiter to handle such calls without the GM."
+    },
+    {
+     "id": "T07-T10-rescope",
+     "summary": "Each family re-measured with make perf-fanout STAGES=... on the then-current engine before work.",
+     "class": "within",
+     "why": "FR-002. (Aside: T09 names water chains brook_rules.crosses_mid_run and partition.keep_rows but filters STAGES=field only; confirm those run in that stage, or widen the filter, or FR-002's re-scope silently drops them.)"
+    },
+    {
+     "id": "T07-T10-order",
+     "summary": "Homestead parts (T07), then ground cover (T08), then field/water (T09), then the lane web and lane law (T10) last.",
+     "class": "within",
+     "why": "The order of the GM-approved approach (request.md 5): families outside the lanes first, homestead parts then ground cover, lanes last; T09's field/water family is outside the lanes and sits before them."
+    },
+    {
+     "id": "T10-wait-for-417",
+     "summary": "T10 starts only once feature 417's lane conversions have landed, holding feature 427 open until then.",
+     "class": "within",
+     "why": "Verbatim in the approach the GM agreed to (request.md 5): the lane web and lane law last, after 417's lane conversions."
+    },
+    {
+     "id": "T11-green-met-or-not",
+     "summary": "T11's green exit is SC-002 and SC-003 'measured and stated met or not', the report written.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "As written the closing task goes green with the feature's two headline criteria unmet, so an unmet SC never reaches the red exit or the arbiter. SC-003 says an intermediate checkpoint 'does not close the feature'; the request's purpose is a literal order-of-magnitude gain and every stage a fraction of a second at 40 (request.md 1), 'make things fast first' (request.md 5). Fix: green = SC-002 and SC-003 MET; not met = red, recorded and ruled through make arbiter-ask."
+    },
+    {
+     "id": "T11-no-per-seed-AB",
+     "summary": "T11 measures the outcome by the 427-end bookend, perf-fanout totals and the feature report; no seed-by-seed A/B against HEAD (step 9, table).",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-005, which the block itself names in step 2, requires bookends AND a seed-by-seed A/B, never medians alone; SC-003 is per stage on every completing seed, which a bookend median cannot show. Fix: add the per-seed A/B row to step 9 and the table."
+    },
+    {
+     "id": "T11-feature-report",
+     "summary": "T11 ends with make feature-report F=427 WRITE=1, cited as FR-009.",
+     "class": "within",
+     "why": "Standing project process for ending a feature, adds no behavior. (Note: FR-009 appears in neither spec-cited.md nor spec-index.md; either the bundle missed it or the block cites a requirement the spec lacks - correct the citation.)"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T07 Approach (checklist part A)",
+    "### T08 Approach (checklist part A)",
+    "### T09 Approach (checklist part A)",
+    "### T10 Approach (checklist part A)",
+    "### T11 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T07-scope",
+     "block": "### T07 Approach (checklist part A)",
+     "summary": "Homestead-parts family covers the 'Homestead seating' chains plus R4 (household_reach) and R8 (capacity.field_distances), sent with this family by US4.",
+     "class": "within",
+     "why": "request.md 5 names homestead parts as the first pairwise family outside the lanes; the block cites US4 for carrying R4 and R8 here. Nothing named in the research is dropped."
+    },
+    {
+     "id": "T07-order-rescope",
+     "block": "### T07 Approach (checklist part A)",
+     "summary": "After T06, before ground cover; re-scoped first by make perf-fanout STAGES=homesteads on the then-current engine.",
+     "class": "within",
+     "why": "Order is request.md 5's (homestead parts, then ground cover). Re-survey before change is FR-002."
+    },
+    {
+     "id": "T07-exits-budget",
+     "block": "### T07 Approach (checklist part A)",
+     "summary": "Green: each named chain falls at least tenfold, cohort no regression, claims clean; red: set down, cannot-be-done claim to arbiter-ask; one landing per map-neutral chain group, cohort judging any that moves maps.",
+     "class": "within",
+     "why": "Tenfold per chain is at least as strict as SC-002; cohort and claims are FR-007/FR-004; identical manifests where free and per-seed comparison for deliberate changes is the GM-approved approach (request.md 5). Setting a task down leaves the feature open, which narrows nothing."
+    },
+    {
+     "id": "T07-R8-own-test",
+     "block": "### T07 Approach (checklist part A)",
+     "summary": "R8, which shows no chain, is measured by stage time and field_distances share at seed 47, 40 households, before/after as a seed-by-seed A/B against HEAD plus a pool reroll diffed against HEAD's manifests; reported, gating nothing.",
+     "class": "within",
+     "why": "This is FR-003's rule for a chainless task word for word (stage time at the finding's seed and size, before and after, A/B against HEAD). 'Gating nothing' is FR-006 (timings flag nothing). The table names make perf-profile as the tool; the prose binds it to an A/B against HEAD, and the stage time has to come from that A/B, not from cProfile seconds. Seed 47 is taken as the seed R8 names; the bundle does not carry R8's text."
+    },
+    {
+     "id": "T08-scope-order",
+     "block": "### T08 Approach (checklist part A)",
+     "summary": "Ground-cover family (close_belt_gaps, household_bamboo->stand_spares_seats, belt.fouled, convex_hull, belt_law, _crown_seat_clear, grove and hinterland genexprs), after homestead parts and before water.",
+     "class": "within",
+     "why": "request.md 5: ground cover follows homestead parts, and both come before the lanes. Putting water (outside the lanes) after ground cover is consistent with that."
+    },
+    {
+     "id": "T08-rescope-filter",
+     "block": "### T08 Approach (checklist part A)",
+     "summary": "Re-scope by make perf-fanout STAGES=hinterland,windbreak, keeping the chains that still stand after T04/T07.",
+     "class": "within",
+     "why": "FR-002. The ruling assumes, as the block does, that every chain step 3 names (including the grove genexprs and close_belt_gaps) runs inside the hinterland or windbreak stages. The bundle carries no stage names and the manifest forbids repository reads, so that premise is unverified here. If any named chain runs in another stage, this filter drops it with no before/after count, and STAGES must be widened. The green exit, 'each chain named', still holds the task to step 3's full list."
+    },
+    {
+     "id": "T08-exits-budget",
+     "block": "### T08 Approach (checklist part A)",
+     "summary": "Tenfold per chain, cohort, claims; one landing per chain group.",
+     "class": "within",
+     "why": "Same exits as T07; FR-003/FR-004/FR-007."
+    },
+    {
+     "id": "T09-scope-order",
+     "block": "### T09 Approach (checklist part A)",
+     "summary": "Field settle (R7) and the water chains (brook_rules.crosses_mid_run, partition.keep_rows), using the fabric's existing STRtree; after ground cover, before the lanes; one landing.",
+     "class": "within",
+     "why": "Outside the lanes, so before them per request.md 5; US4 carries R7 with its family. One landing is a budget, not a narrowing."
+    },
+    {
+     "id": "T09-rescope-filter",
+     "block": "### T09 Approach (checklist part A)",
+     "summary": "Re-scope by make perf-fanout STAGES=field only.",
+     "class": "within",
+     "why": "FR-002. The ruling assumes the brook and partition chains run inside the field stage. The bundle does not settle this. If the brook chains run in a stage of their own, STAGES=field misses them, and the filter must name that stage too. The green exit still names every chain in step 3."
+    },
+    {
+     "id": "T10-lanes-last-after-417",
+     "block": "### T10 Approach (checklist part A)",
+     "summary": "Lane web and lane law converted last, started only once feature 417's lane conversions land, re-surveyed on 417's engine; the task holds 427 open until then.",
+     "class": "within",
+     "why": "Verbatim the approved order in request.md 5 ('the lane web and the lane law (part of US4) last, after feature 417's lane conversions, since 417 restructures that code'). Holding the feature open narrows nothing."
+    },
+    {
+     "id": "T10-exits-budget",
+     "block": "### T10 Approach (checklist part A)",
+     "summary": "Tenfold per chain, cohort, claims; one landing per chain group.",
+     "class": "within",
+     "why": "Same exits as the other families."
+    },
+    {
+     "id": "T11-green-exit",
+     "block": "### T11 Approach (checklist part A)",
+     "summary": "Green only when SC-002 and SC-003 are met; a missed criterion is red; an intermediate checkpoint does not close the feature.",
+     "class": "within",
+     "why": "Matches SC-002/SC-003 as written, including SC-003's sentence on checkpoints. The earlier wording ('stated met or not') was the narrowing, and it has been removed. SC-004 is enforced at every landing (cohort-landing in make land plus the family tasks' claims exits), and SC-005 lands with US5, so leaving them out of this exit narrows nothing."
+    },
+    {
+     "id": "T11-ab-is-bookend-pair",
+     "block": "### T11 Approach (checklist part A)",
+     "summary": "FR-005's seed-by-seed A/B against HEAD is carried out as the -end bookend's per-seed rows compared with the -start bookend's (make perf-review), not as a separate A/B run.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-005 names two instruments joined by 'and': bookends (427-start|end) AND a seed-by-seed A/B against HEAD. T11's step 9 prose claims both ('compared seed by seed against HEAD'), but its table puts the bookend pair, read per seed, under the A/B row. That reduces two instruments to one. The two are not alike. The bookends are separate runs taken days or weeks apart on a shared container, and request.md 4 names exactly that as the reason timings mislead ('which processor we were using and what the current system load is really throws them off'). An A/B runs both engines, seed by seed, in the same run, which controls for that. Nothing makes a real A/B impossible: run the pre-feature engine (the 427-start commit) against the end engine at the same seeds in one session. This is not implied by the GM's words, and it weakens the purpose of FR-005, which is a timing conclusion that load does not distort. Fix: keep the bookend pair, and add a separate seed-by-seed A/B of the 427-start commit against the end commit (each stage of each completing seed), named by its command in the table."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T07 Approach (checklist part A)",
+    "### T08 Approach (checklist part A)",
+    "### T09 Approach (checklist part A)",
+    "### T10 Approach (checklist part A)",
+    "### T11 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T07-survey-stage-filter",
+     "summary": "T07 re-scopes the homestead-parts family with `make perf-fanout STAGES=homesteads` only (item 4 and the table)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 scopes the task list against the survey's output and request.md 5 assigns work by FAMILY (homestead parts), not by stage. A stage filter scopes by stage: any chain of this family (yards' _filled_lattice, gap_ways.way_out/trace, wood_share, R4 household_reach) that runs outside the `homesteads` stage is invisible to the re-scope and falls into no task. The block gives no reason the family is confined to that stage, and the same plan, in T08 and T09, drops the stage filter for exactly this reason ('so a chain in another stage is not dropped'). Not impossible (the unfiltered survey is used two blocks later), not implied by the GM's words, and the literal rule defeats nothing. Fix: `make perf-fanout` over every stage, as T08/T09, in item 4 and the table."
+    },
+    {
+     "id": "T07-R8-ab",
+     "summary": "R8 (field_distances, no chain) measured by an A/B of HEAD against the change in two detached worktrees, back to back, alternated, at seed 47 / 40 households, reported and gating nothing",
+     "class": "within",
+     "why": "FR-003 asks exactly this for a chainless finding (stage time at its seed and size, before and after, seed-by-seed A/B against HEAD); 'gating nothing' is FR-006."
+    },
+    {
+     "id": "T07-landing-granularity",
+     "summary": "One landing per chain group that changes no map; the cohort judges any that does",
+     "class": "within",
+     "why": "Mechanics of landing; FR-007's cohort still judges every map change."
+    },
+    {
+     "id": "T08-survey-all-stages",
+     "summary": "T08 re-scopes with `make perf-fanout` over every stage instead of STAGES=hinterland,windbreak",
+     "class": "within",
+     "why": "Widens the re-scope to the whole survey FR-002 names; the family scope (ground cover, request.md 5) is unchanged."
+    },
+    {
+     "id": "T09-survey-all-stages",
+     "summary": "T09 re-scopes with `make perf-fanout` over every stage instead of STAGES=field",
+     "class": "within",
+     "why": "As T08: the full survey FR-002 names; the water/field-settle family scope is unchanged."
+    },
+    {
+     "id": "T10-survey-stage-filter",
+     "summary": "T10 (unchanged since its BLOCKED verdict) re-scopes the lane web AND the lane law with `make perf-fanout STAGES=web` only",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "request.md 5 puts 'the lane web and the lane law' in this last task. The research section the block cites is headed 'The lane web (stage `web`) and the lane law' - a stage is named for the web, not for the law. A survey confined to stage `web` cannot see lane-law chains in any other stage, and those then land in no task at all (T07-T09 are scoped to other families). Not impossible (T08/T09 of this plan already use the unfiltered survey), not implied by the GM, and the general rule defeats nothing. Fix: `make perf-fanout` over every stage, on the engine 417 leaves, in item 4 and the table."
+    },
+    {
+     "id": "T10-wait-on-417",
+     "summary": "T10 starts only after feature 417's lane conversions land, holding 427 open until then",
+     "class": "within",
+     "why": "The order the GM approved verbatim in request.md 5 ('the lane web and the lane law ... last, after feature 417's lane conversions')."
+    },
+    {
+     "id": "T11-ab-method",
+     "summary": "The success A/B is two detached worktrees at the 427-start commit (1cc4066ac) and the end commit, `make perf SCALING=1` back to back, alternated, every stage of every completing seed compared seed by seed; never medians or bookends alone",
+     "class": "within",
+     "why": "FR-005's seed-by-seed A/B against HEAD (HEAD is the end commit when T11 runs); 'never bookends alone' is stricter than FR-005, not narrower, and answers the GM's request.md 4 concern about load and processor."
+    },
+    {
+     "id": "T11-417-remeasure",
+     "summary": "417's failing seeds re-measured on the end engine with `make cohort`, recorded in 417's directory, before 417 resumes",
+     "class": "within",
+     "why": "request.md 5 verbatim: '417's failing seeds re-measured after 427, before 417 resumes'."
+    },
+    {
+     "id": "T11-exits",
+     "summary": "Green needs SC-002 and SC-003 met and the report written; any criterion missed is red; an intermediate checkpoint does not close the feature",
+     "class": "within",
+     "why": "Restates SC-002/SC-003 and SC-003's own checkpoint clause; a red exit ruled by the arbiter does not close the feature green."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Task approaches",
+    "### T07 Approach (checklist part A)",
+    "### T08 Approach (checklist part A)",
+    "### T09 Approach (checklist part A)",
+    "### T10 Approach (checklist part A)",
+    "### T11 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:427-plan-T07-T11",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }
