@@ -139,3 +139,9 @@ def test_a_stale_make_targets_page_is_refused_at_the_push(tmp_path: pathlib.Path
     page = ROOT / "scripts" / "make-docs.py"
     assert subprocess.run([sys.executable, str(page), str(tmp_path), "--check"], capture_output=True, check=False).returncode != 0
     assert pc.run_one(page, [str(tmp_path), "--check"], tmp_path, quiet=True) != 0, "the push's own runner refuses it too"
+
+
+def test_an_unmarked_amount_of_money_is_refused_at_the_push() -> None:
+    """Feature 413's check runs on every push (423 T02 landed with `make money-candidates CHECK=1` red: nothing ran it)."""
+    row = next(c for c in pc.CHECKS if c[0] == "money-candidates")
+    assert row[1] == "record/money_candidates.py" and row[2] == ("--check",) and "backfill.md" in row[3]
