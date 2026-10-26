@@ -59,6 +59,6 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 - [x] T07 Implementation check, the reply on #17 and the report (D7, D8; FR-004, FR-005)
       research: rendering
       verify: DONE. landed: impl-check nothing missing; the answer on #17 issuecomment-6400437689; report written
-- [ ] GM review (make gm-reviewed F=420) [lands-open]
+- [x] GM review (make gm-reviewed F=420) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

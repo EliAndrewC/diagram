@@ -30,6 +30,6 @@
 - [x] T08 Close: `make feature-report F=430 WRITE=1`, the report's measurements against SC-001 to SC-006
       research: rendering
       verify: DONE. feature report written (specs/430-faster-landings/report.md): SC-001..SC-006 measured, the machinery-gate defect found, ruled and fixed
-- [ ] GM review (make gm-reviewed F=430) [lands-open]
+- [x] GM review (make gm-reviewed F=430) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

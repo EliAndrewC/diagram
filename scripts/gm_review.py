@@ -79,6 +79,10 @@ def ensure_box(d: Path) -> bool:
     if not tasks.is_file() or not any("reviewed" not in r for r in rows(d)):
         return False
     text = tasks.read_text(encoding="utf-8")
+    ticked = box(d).replace("- [ ] ", "- [x] ")
+    if ticked in text:  # ...a new row after the GM reviewed the rest reopens his box (feature 432: a question carried into
+        tasks.write_text(text.replace(ticked, box(d)), encoding="utf-8")  # a closed feature must not sit behind a ticked box)
+        return True
     if "GM review (make gm-reviewed" in text:
         return False
     tasks.write_text(text.rstrip("\n") + "\n" + box(d) + "\n      research: rendering\n      verify: the GM reviewed every row (make gm-review lists them)\n",

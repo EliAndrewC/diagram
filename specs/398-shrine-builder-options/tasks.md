@@ -49,4 +49,4 @@ The four questions are `research: physical` with their five boxes; the rest are 
 - [x] T07 Close: report and land
       research: rendering
       verify: DONE. report written; landing by the direct route
-- [ ] GM review (make gm-reviewed F=398) [lands-open]
+- [x] GM review (make gm-reviewed F=398) [lands-open]

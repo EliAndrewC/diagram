@@ -300,3 +300,14 @@ def test_a_push_with_a_question_still_owed_is_refused(tmp_path: pathlib.Path, mo
     assert gm.main(["owed-check"]) == 1 and "make gm-escalated" in capsys.readouterr().err
     gm.escalated(tmp_path / "specs" / "375-x", n, "CUT", "the record settles it")
     assert gm.main(["owed-check"]) == 0 and gm.owed_in_delta(tmp_path) == []
+
+
+def test_a_question_after_the_review_reopens_the_box(root: pathlib.Path) -> None:
+    """Feature 432 (FR-006): a question carried into a feature whose rows the GM reviewed must not sit behind a ticked box."""
+    d = root / "specs" / "375-x"
+    gm.accept(d, "the steam arcs off center", "a drawing nicety no norm sets")
+    (d / "report.md").write_text("# report\n")
+    gm.reviewed(root, d)
+    assert gm.box(d).replace("- [ ] ", "- [x] ") in (d / "tasks.md").read_text()
+    gm.question(d, "redraw the three sheets or record the deviation?", "432 audit")
+    assert gm.box(d) in (d / "tasks.md").read_text() and todo.feature(d).state == "done - GM review pending"

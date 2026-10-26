@@ -25,6 +25,6 @@ The record write is `research: physical` with its five boxes; the rest are `rese
 - [x] T04 Close: the tooling tests green; report; landed
       research: rendering
       verify: DONE. tooling tests green (make hooks-test, tests/tooling 1,616 passed, the arbiter suites 106); report.md written (make feature-report F=343 WRITE=1, 2026-10-11); lands with sync-with-main.sh done
-- [ ] GM review (make gm-reviewed F=343) [lands-open]
+- [x] GM review (make gm-reviewed F=343) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
