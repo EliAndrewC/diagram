@@ -789,19 +789,24 @@ def test_the_coverage_check_writes_its_coverage_data_in_its_own_directory(tmp_pa
     assert "COVERAGE_FILE" not in seen["env"], "feature 430 T03: in a config file of its own, never the environment every child inherits"
 
 
-def test_a_delta_changing_the_gates_machinery_lands_through_a_gate(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
-    """The round arbiter's tooling_fix on red-gate@2026-10-24T19:17:09Z (feature 415): T03 changed how the landing runs its gate
-    and landed on the direct route, untested beside a real gate. A delta touching `land.py`, `scripts/gates/`, the Makefile or
-    `l7r/diagram/ci/` runs `make done` though the green-gate stamp would pass it; a docs delta does not."""
+def test_a_delta_changing_the_gates_machinery_runs_the_tooling_tests_not_a_gate(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """The round arbiter's process-fault on ask:430-machinery-gate (2026-10-26): a delta touching `land.py`, `scripts/gates/` or the
+    Makefile whose green-gate stamp passes ran a `make done` the done recipe's reuse branch always short-circuits (the GM's
+    2026-08-25 rule: scripts/ owe no make done) - no test ran, and land said a gate did. It now runs the tooling tests, and
+    hooks-test where the hooks stamp is stale; a red one lands nothing. A docs delta runs neither."""
     lb, _d = _land(tmp_path, monkeypatch)
     made: list[str] = []
-    delta = {"names": "scripts/gates/cover_changed.py\ndocs/x.md\n"}
+    ran: list[list[str]] = []
+    delta = {"names": "scripts/gates/cover_changed.py\ndocs/x.md\n", "hooks_fresh": 0, "tooling_rc": 0}
 
     def run(root, cmd, env=None, quiet=True):  # noqa: ANN001, ANN202
         if "gate-stamp.py" in str(cmd):
-            return (0, "")
+            return (delta["hooks_fresh"], "") if "--fresh" in cmd else (0, "")
         if cmd[:2] == ["git", "diff"]:
             return (0, delta["names"])
+        if cmd[:1] == ["make"]:
+            ran.append(cmd[2:])
+            return (delta["tooling_rc"] if "test-file" in cmd else 0, "")
         return (0, "")
 
     monkeypatch.setattr(lb, "run", run)
@@ -810,6 +815,10 @@ def test_a_delta_changing_the_gates_machinery_lands_through_a_gate(tmp_path: pat
     monkeypatch.setattr(lb, "engine_delta", lambda root: False)
     monkeypatch.setattr(lb, "commit_regenerated", lambda root, why: None)
     assert lb.gate_machinery_delta(tmp_path) == ["scripts/gates/cover_changed.py"]
-    assert lb.long_runs(tmp_path) == 0 and made == ["done"], "the machinery changed: through a gate"
-    made.clear(), delta.update(names="docs/x.md\n")
-    assert lb.long_runs(tmp_path) == 0 and made == [], "a docs delta: the stamp decides"
+    assert lb.long_runs(tmp_path) == 0 and made == [] and ran == [["test-file", "FILE=tests/tooling"]], "no gate claimed: the tooling tests"
+    ran.clear(), delta.update(hooks_fresh=1)
+    assert lb.long_runs(tmp_path) == 0 and ran == [["hooks-test"], ["test-file", "FILE=tests/tooling"]], "a stale hooks stamp: hooks-test first"
+    ran.clear(), delta.update(hooks_fresh=0, tooling_rc=1)
+    assert lb.long_runs(tmp_path) == 1, "a red tooling test: nothing lands"
+    ran.clear(), delta.update(names="docs/x.md\n", tooling_rc=0)
+    assert lb.long_runs(tmp_path) == 0 and made == [] and ran == [], "a docs delta: the stamp decides"
