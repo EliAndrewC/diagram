@@ -148,6 +148,23 @@ The trigger: two red gates in a row on T44's landing (red-gate@2026-10-26T03:11:
 8. **Routes measured?** One route, the arbiter's ruling.
 9. **After a ruling.** The step it names: `make done` once more.
 
+### T44 part B (2026-10-26T03:26Z)
+
+The trigger: a second red gate in a row (red-gate@2026-10-26T03:22:48Z; the round arbiter ruled continue, with a stop condition).
+
+1. **What exactly is refusing?** Coverage of `ways/tree.py` 298-300 (`as_joined`'s loop): T44's deletion of `settle_joins`' tests
+   also dropped `test_the_tree_is_asked_again_with_its_ends_joined_as_the_web_joins_them`, matched by its docstring's mention of
+   the step, though its body never called it. The same cause as two earlier reds in this feature: tests dropped by name.
+2. **A3 again.** O: the coverage floor.
+3. **A4 again.** The lines are live (`tree_base.Faces` and `admits` call `as_joined`), so they owe a test.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: the test restored.
+6. **The one-sentence test.** "A test was deleted for mentioning a removed step" - no question it raises.
+7. **The next step is a measurement.** Every other test T44 dropped checked by its BODY (2026-10-26): four call `settle_joins`
+   or its helpers; one only asserted the step's place in the last resort's list, reaching no engine line. Then `make land`.
+8. **Routes measured?** One route, the arbiter's.
+9. **After a ruling.** Its step: the gate again; and from now, a test is deleted only on what its body calls.
+
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
