@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-26T17:45:41Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 249,
+  "result": "failed: test-full",
+  "commit": "905074b76",
+  "first_failure_s": 143.9,
+  "last_failure_s": 143.9,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/test_operations_registry.py::test_every_entry_point_has_a_registry_row"
+  ],
+  "host": {
+    "load": [
+      7.16,
+      8.27
+    ],
+    "mem_avail_mb": [
+      7404,
+      8208
+    ],
+    "cpu_temp_c": [
+      99.0,
+      77.0
+    ],
+    "stall_s": {
+      "cpu": 5.1,
+      "io": 1.6,
+      "io_full": 1.2,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 332663,
+      "package": 114902
+    }
+  },
+  "phases": {
+    "preflight": 30.0,
+    "static": 1.0,
+    "format": 1.0,
+    "typecheck": 0.0,
+    "reference": 1.0,
+    "hooks-test": 37.0,
+    "pytest": 200.0,
+    "test-full": 209.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/tools/perf_review.py",
+  "selected": 10826,
+  "collected": 10826
+}
