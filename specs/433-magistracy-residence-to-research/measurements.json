@@ -1,0 +1,85 @@
+[
+ {
+  "quantity": "the clear way along the divider below the woodshed, and the woodshed's distance from the reception",
+  "observed": "2026-10-26",
+  "verifies": "E1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "f2904bce8e4c",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "method": "the woodshed rect (300,380 34x56) read against the divider line at y 460 (stroke 6) and the reception's x 458; the audit clean",
+  "value": {
+   "way_ft": 7.0,
+   "woodshed_to_reception_ft": 41.3
+  }
+ },
+ {
+  "quantity": "engawa rects on the west block",
+  "observed": "2026-10-26",
+  "verifies": "E2",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "f2904bce8e4c",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "grep -n 'data-kind=\"engawa\"' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "method": "every engawa rect listed; none lies on the west block (x 340-448)",
+  "value": {
+   "west_block_engawa": 0
+  }
+ },
+ {
+  "quantity": "the strip between the storehouses' doors and the garden's north edge",
+  "observed": "2026-10-26",
+  "verifies": "E3",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "f2904bce8e4c",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "grep -n 'garden-stipple' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "method": "the garden polygon's north edge (y 322, 340 east of x 760) read against the storehouses' south faces (y 290)",
+  "value": {
+   "strip_ft": 10.7,
+   "under_the_shrine_ft": 16.7
+  }
+ },
+ {
+  "quantity": "the kitchen's distance from the reception",
+  "observed": "2026-10-26",
+  "verifies": "Q1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "f2904bce8e4c",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "grep -n 'x=\"340\" y=\"328\" width=\"72\"' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "method": "the kitchen rect's east face (x 412) read against the east block's west face (x 458)",
+  "value": {
+   "kitchen_to_reception_ft": 15.3,
+   "kitchen_at": "the west block's west end"
+  }
+ },
+ {
+  "quantity": "the notes and comments that described the old kitchen yard and postern",
+  "observed": "2026-10-26",
+  "verifies": "N3",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "f2904bce8e4c",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md; pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "grep -n 'kitchen yard west of the kitchen' pool/magistracies/hayakawa-magistracy/",
+  "method": "read after the edit: no line describes the yard west of the kitchen",
+  "value": {
+   "stale_lines": 0
+  }
+ },
+ {
+  "quantity": "the house with its kitchen, bath and corridor",
+  "observed": "2026-10-26",
+  "verifies": "C1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "f2904bce8e4c",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "method": "the rects summed at 3 px = 1 ft: blocks 108x66 and 82x92, corridor 10x34, kitchen 72x54, bath 54x36; 35.58 sq ft a tsubo",
+  "value": {
+   "sq_ft": 2316,
+   "tsubo": 65.1,
+   "coverage_pct": 30.1
+  }
+ }
+]
