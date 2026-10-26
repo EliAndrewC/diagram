@@ -4,8 +4,8 @@
 
 **Created**: 2026-10-26
 
-**Status**: Draft - filed, not started. Held until the GM says to start (`request.md` 3: "once I'm in a place to actually work
-on that, then we can do that"); the reason is the engine refactors in flight (`request.md` 2).
+**Status**: Started 2026-10-26 on the GM's word (`request.md` 5: "please go ahead with feature 427 beginning with the survey
+tool"), after the hold of `request.md` 3.
 
 **Affects**: hamlet, performance, tooling
 
@@ -13,7 +13,7 @@ on that, then we can do that"); the reason is the engine refactors in flight (`r
 
 **Amended**: the GM, 2026-10-26, "please update the new feature 427 to make sure that all of these suggestions are incorporated, both the suggestions that you have made and my refinements of them." (`request.md` 4: call counts replace the timing band, feature 373 folded in, previously failing seeds need not pass, no Rust rewrite but shapely and numpy not required.)
 
-**Input**: `request.md` (the GM's four messages, verbatim).
+**Input**: `request.md` (the GM's five messages, verbatim).
 
 ## Why
 
@@ -190,3 +190,12 @@ The GM's decision (`request.md` 4, detail in `call-count-flag.md`):
   - The cProfile overhead now cites `dev/performance.md`.
   - `tooling-perf-fanout.md` no longer cites the timing-flag rule US5 replaces.
 - 2026-10-26, spec-fidelity-verify MODE 3, round 2 of the amendment: FAITHFUL.
+- 2026-10-26, spec-fidelity-verify MODE 3, round 1 of the SC-003 amendment (spec-lint: FR-008 was named by no success
+  criterion once tasks.md existed): FAITHFUL. SC-003 now names FR-008, "reached with the engine in Python". It adds no
+  requirement FR-008 does not already make, and it carries the GM's own pairing of the speed goal with staying on Python
+  (`request.md` 1: "without changing our fundamental technology stack away from Python"). "The engine" matches FR-008's
+  wording, so replacing shapely or numpy is still allowed. A grep of the feature directory for FR-008, SC-003 and "in
+  Python" finds no passage that the change contradicts. The previous round (round 2 of the amendment, FAITHFUL) raised
+  no items. SC-003's measured figures keep their date-and-method label; the feature has no `measurements.json` to re-run.
+  Read in full: the SC-003 hunk, `spec.md`, `request.md` 1-5, and the grep's hits (`plan-review.json` lines 140, 143,
+  181, 230; it names an FR-008 citation an earlier plan round already resolved).
