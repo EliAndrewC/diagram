@@ -4,14 +4,15 @@
 
 ## Before the first change
 
-- **Wait for the engine refactors in flight.** On 2026-10-26 the GM held this feature because another session was making
-  the tests more efficient and removing guess-and-check from placement ("I don't want to be making multiple different
-  fundamental engine refactors at the same time", `request.md` 2). Check with the GM that it has landed.
+- **Start only on the GM's word** ("once I'm in a place to actually work on that, then we can do that", `request.md` 3).
+  The reason for the hold: on 2026-10-26 another session was making the tests more efficient and removing guess-and-check
+  from placement ("I don't want to be making multiple different fundamental engine refactors at the same time", `request.md`
+  2).
 - **Re-run the survey first** (`make perf-fanout`, built as this feature's first task: `tooling-perf-fanout.md`). Line
   numbers and counts in `research/` are from commit dd3793e29. Chains will have moved, and some may already be gone after
   the refactors. Re-scope against the new output, not against this record.
 - **Read open feature 373** (`specs/373-field-tie-distance-per-tie/`, hamlet + performance) before planning: it is a related
-  open performance item and may fold into this one.
+  open performance item. Folding it into this feature widens the scope, so propose that to the GM, never do it unasked.
 - **Take the start bookend:** `make perf LABEL=427-start SCALING=1`.
 
 ## Rules the work is held to (the project's, restated only as pointers)

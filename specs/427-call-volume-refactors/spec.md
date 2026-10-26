@@ -4,7 +4,8 @@
 
 **Created**: 2026-10-26
 
-**Status**: Draft - filed, not started. The GM holds it until the engine refactors in flight have landed (`request.md` 2, 3).
+**Status**: Draft - filed, not started. Held until the GM says to start (`request.md` 3: "once I'm in a place to actually work
+on that, then we can do that"); the reason is the engine refactors in flight (`request.md` 2).
 
 **Affects**: hamlet, performance, tooling
 
@@ -15,10 +16,14 @@
 ## Why
 
 A hamlet takes 6.8 s to generate at 20 households and 14.7 s at 40 (`research/measurements.md`). Six independent estimates
-of a competent implementation of the same rules, on the same stack, came to 1-2 s and 2-4 s (`research/estimate-exercise.md`).
+of a competent implementation of the same rules, on the same stack, came to 1-2 s and 2-4 s (`research/estimate-exercise.md`). (Observed 2026-10-26, method: `make perf LABEL=adhoc SCALING=1`
+on commit fd707b608, snapshot `dev/perf-log/20261026T114000Z-adhoc-diagram-performance.json`; the estimates are agents'
+estimates, not measurements.)
 
 The gap is not any slow function. It is about 62.8 million Python calls at 40 households (24.1M at 20), at 0.2-0.45 µs each,
-produced by loops that multiply:
+produced by loops that multiply (observed 2026-10-26, method: `make perf-profile SEED=39 STAGE=<stage> HOUSEHOLDS=<20|40>`
+over all 23 stages, the summaries `dev/perf-log/20261026T1159*Z-profile-adhoc-seed39-*.txt` and `20261026T1200*Z-...`, the
+survey `research/fanout-2026-10-26.txt`; seconds per call = the snapshot's stage seconds over these counts):
 
 - recomputing what did not change;
 - checking each candidate against its neighbors one pure-Python call per pair;
@@ -65,7 +70,8 @@ The shared wells are seated with kept state (R1): a candidate's score is one arr
 admitted.
 
 **Independent Test**: at 40 households the lane_wells chain falls from about 2.19M inner calls to under 100k. The slowest
-seed's lane_wells time falls below 0.5 s.
+seed's lane_wells time falls below 0.5 s. (The 2.19M was observed 2026-10-26, method: `make perf-profile SEED=39
+STAGE=lane_wells HOUSEHOLDS=40`; both thresholds are a GUESS at what a kept-state solve reaches.)
 
 ### User Story 4 - Pairwise checks in bulk (Priority: P3)
 
@@ -73,7 +79,7 @@ The families in `research/hotspots-pairwise.md` are converted one at a time (lan
 pair questions per candidate set through an STRtree or numpy broadcast, not one Python call per pair. The homestead reach
 test (R4) and the field settle (R7) go with their families.
 
-**Independent Test**: per family, its chains' counts fall at least 10x. Total calls at 20 households fall below 8M.
+**Independent Test**: per family, its chains' counts fall at least 10x. Total calls at 20 households fall below 2.5M (SC-002).
 
 ### Edge Cases
 
@@ -98,15 +104,39 @@ test (R4) and the field settle (R7) go with their families.
 
 - **SC-001** (FR-001, FR-002): the survey re-runs in one command, and its output lists every chain of 50k+ calls with its
   anchor.
-- **SC-002** (FR-003, US2-US4): total Python calls at 20 households fall from 24.1M to under 8M, and at 40 from 62.8M to
-  under 20M.
-- **SC-003** (FR-005): median generation time at 20 households falls from 6.8 s to under 3 s, and no seed at 40 households
-  takes over 8 s. The first-principles target (`research/estimate-exercise.md`) is 1-2 s and 2-4 s; these thresholds are a
-  GUESS at a first milestone, not a research figure.
+- **SC-002** (FR-003, US2-US4): total Python calls fall by an order of magnitude (the GM: "literal order of magnitude
+  improvements", `request.md` 1): from 24.1M to under 2.5M at 20 households, and from 62.8M to under 6.5M at 40. (The
+  baselines were observed 2026-10-26, method: `make perf-profile SEED=39` over all 23 stages at each size; the targets are
+  the baselines divided by ten, rounded up.)
+- **SC-003** (FR-005): at 40 households, every stage takes under a second on every seed (the GM: "I would expect every
+  single stage of our Hamlet generation to take a fraction of a second. even when we artificially inflate the number of
+  homesteads ... such as 40", `request.md` 1). The whole roll lands near the first-principles estimate of 1-2 s at 20
+  households and 2-4 s at 40 (`research/estimate-exercise.md`; agents' estimates, not research figures), against 6.8 s and
+  14.7 s today (observed 2026-10-26, method: `make perf LABEL=adhoc SCALING=1` on commit fd707b608). An intermediate
+  checkpoint (for example a 20-household median under 3 s) may be reported along the way, but it does not close the
+  feature.
 - **SC-004** (FR-004): `make cohort-landing` shows no seed regressed, and the claims round is clean.
 
 ## Out of scope
 
-- Moving off CPython, shapely or numpy (the GM: "without changing our fundamental technology stack away from Python").
+- Moving the engine off Python (the GM: "without changing our fundamental technology stack away from Python"). The
+  session's reading, for the GM to confirm at planning: shapely and numpy stay too, as the tools the refactors move toward.
 - The 40-household `WebRefused` correctness failure (a lane-law matter), beyond checking against it.
 - A clean-room prototype placer (the GM deferred it, `request.md` 1).
+
+## Review history
+
+- 2026-10-26, spec-fidelity MODE 2, round 1: NOT-REVIEWABLE. Measured figures carried no observed-date-and-method label.
+  Labels added; spec-lint clean.
+- 2026-10-26, spec-fidelity MODE 2, round 2: CHANGES REQUIRED, 3 items:
+  - SC-002 and SC-003 set success below the GM's stated expectation. SC-003 now requires every stage under a second at
+    40 households, and SC-002 a tenfold cut in calls; an intermediate checkpoint does not close the feature.
+  - The Status line used the refactors landing as the start trigger. It now waits for the GM's word, with the refactors
+    as the reason.
+  - Out of scope attributed shapely and numpy to the GM. That is now marked as the session's reading, for the GM to confirm.
+  - Aside applied: folding in feature 373 needs the GM's approval (`working-notes.md`).
+- 2026-10-26, spec-fidelity-verify MODE 3, round 2: CHANGES REQUIRED, 2 items. US4's test still said 8M against SC-002's
+  2.5M; it now reads 2.5M (SC-002). SC-002's note now says "rounded up". Items 2 and 3 of round 2 were confirmed
+  resolved.
+- 2026-10-26, spec-fidelity-verify MODE 3, round 3: FAITHFUL. (The tooling counts the rounds 1-3 after the NOT-REVIEWABLE
+  dispatch, which did not count; the two "round 2" labels above are the same review's rounds 1 and 2.)
