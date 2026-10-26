@@ -153,6 +153,11 @@ rc=0; final_stop 'The backlog is cleared.' || rc=$?
 [ "$rc" -eq 0 ] && ok "the same message is refused once, never a loop" || no "refused twice" "(rc=$rc)"
 rc=0; final_stop 'The backlog is cleared. Yours to decide: 374#0, redraw the three sheets or record the deviation.' || rc=$?
 [ "$rc" -eq 0 ] && ok "a final message naming it passes" || no "a named kept question was refused" "(rc=$rc) $(cat "$HOOK_ERR")"
+: > "$TR"; printf '{"type":"user","timestamp":"2026-10-26T18:10:00.000Z","message":{"content":"carry on"}}\n' >> "$TR"
+rc=0; final_stop '- **374#0:** Should I redraw the three sheets, or record the deviation?' || rc=$?
+[ "$rc" -eq 0 ] && ok "a kept question, named and asked, is no unfiltered question (escalation-check kept it)" || no "the two Stop checks refused each other" "(rc=$rc) $(cat "$HOOK_ERR")"
+rc=0; final_stop 'Should I also redraw the gate house?' || rc=$?
+[ "$rc" -eq 2 ] && grep -q "QUESTION UNFILTERED" "$HOOK_ERR" && ok "...a new question beside it still owes the filter" || no "a new question passed" "(rc=$rc)"
 rm -rf "$FIX/specs" "$TR"
 
 echo "8. outside a work tree the hook does nothing"
