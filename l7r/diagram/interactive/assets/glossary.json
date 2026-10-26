@@ -5212,8 +5212,7 @@
  "liberty": {
   "def": "A deliberate departure from what history attests, made for the game's sake and stated openly in the record.",
   "variants": [
-   "liberty",
-   "liberties"
+   "liberty"
   ]
  },
  "Taizu": {
@@ -18298,6 +18297,63 @@
   "def": "An agronomist of the late Edo period whose illustrated farm manuals - the Nogu benriron on farm tools (1822) and the Koeki kokusan ko (1844) - this record quotes for tool prices and home brewing.",
   "variants": [
    "Okura Nagatsune"
+  ]
+ },
+ "kaomise": {
+  "def": "The first program of a kabuki theater's year, opening in the 11th month to show off the company newly contracted for the year (the name means \"face-showing\"); it was usually short, about ten days.",
+  "variants": [
+   "kaomise"
+  ]
+ },
+ "hour of you": {
+  "def": "One of the twelve two-hour divisions of the Chinese day, about 5 to 7 p.m.; Beijing's theaters let out by it.",
+  "variants": [
+   "hour of you",
+   "you hour"
+  ]
+ },
+ "hour of chen": {
+  "def": "One of the twelve two-hour divisions of the Chinese day, about 7 to 9 a.m.; a private party's play in a Beijing theater began at it.",
+  "variants": [
+   "hour of chen",
+   "chen hour"
+  ]
+ },
+ "beile": {
+  "def": "A Manchu princely title of the Qing imperial house, below a prince; here it is held by Prince Gong's son.",
+  "variants": [
+   "beile"
+  ]
+ },
+ "Michaelmas": {
+  "def": "The Christian feast of Saint Michael, 29 September, one of the days on which the English year was divided. A ban on plays \"until Michaelmas\" from late June ran for about three months.",
+  "variants": [
+   "Michaelmas"
+  ]
+ },
+ "Privy Council": {
+  "def": "The English monarch's council of chief advisers, which governed by order. In 1592 it forbade all plays in London.",
+  "variants": [
+   "Privy Council"
+  ]
+ },
+ "Admiral's men": {
+  "def": "A London company of players named for its patron, the Lord Admiral. It was led by the actor Edward Alleyn and played at Philip Henslowe's theaters in the 1590s.",
+  "variants": [
+   "Admiral's men",
+   "Admiral's"
+  ]
+ },
+ "King's men": {
+  "def": "Shakespeare's company of players, named for its patron King James. It played at the Globe and, from 1608, wintered at the Blackfriars.",
+  "variants": [
+   "King's men"
+  ]
+ },
+ "Shochiku": {
+  "def": "A Japanese theater company that, from the Taisho era (1912-1926), ran kabuki theaters with actors of its own and put on a new program every month.",
+  "variants": [
+   "Shochiku"
   ]
  }
 }

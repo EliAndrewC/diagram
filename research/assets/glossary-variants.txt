@@ -3939,6 +3939,7 @@ shizai	shizai
 shizuoka method	Shizuoka method
 sho	sho
 shobodan	shobodan
+shochiku	Shochiku
 shochu	shochu
 shogun	shogun
 shogunal village	shogunal village
