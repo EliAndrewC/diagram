@@ -1,0 +1,163 @@
+{
+ "feature": "428-working-days-and-performances",
+ "blocks": {
+  "preamble": {
+   "sha256": "8281b3b226a4ac8e8c322d54eb27c1d0a33e5d1effc93d7ba762162b23957956",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "9f338ff74922f6ab0f483cdb2099db27acbc226a963a3fa0c3eb19a6eca98a84",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "d76b4e7ce84624ac0518175e2c78b838cd765805be675af0184f8fc94b3d600d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "2af3cd7de4be30e6d9732bc52b389dad863ad614729acaf9de51a1bf175cfedc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - working days (Q1; FR-001)": {
+   "sha256": "3990197eed85f2c6ee782d045f16018e0f92b013651d7d838b4aea9be6768ff7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - terms of engagement (Q2; FR-001)": {
+   "sha256": "16af560700a1b275a726abd1caf066736b6f56896d1dba392cbbb722a9336bdf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - how often players performed (Q3 a-c; FR-001)": {
+   "sha256": "5deb7fb6cdedce9bfacc08f169fd0107da43a662f236722b39a29265d649ffa8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - England, the GM's comparison (Q3 d; FR-001)": {
+   "sha256": "dee558b624a25431d04fa2f898698e86544856fb3ba251ce2144945124ae7f8d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - the implementation check and the reply (FR-003, FR-004)": {
+   "sha256": "d590914f8af2220a11e8a8fc34954464e8bc323e20c4eb793741046e22e68f8b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - working days (Q1; FR-001)",
+    "## D2 - terms of engagement (Q2; FR-001)",
+    "## D3 - how often players performed (Q3 a-c; FR-001)",
+    "## D4 - England, the GM's comparison (Q3 d; FR-001)",
+    "## D5 - the implementation check and the reply (FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary-sessions",
+     "summary": "Two write sessions in two side-by-side clones: S1 Q1+Q2 (labor questions, sharing 0250/0115/0260/0307), S2 Q3 a-c plus England as its own comparative question; then the reply on #20; no code, map or canon change.",
+     "class": "within",
+     "why": "Process organisation of work the request and FR-001 ask for; drops nothing asked. The split is made under FR-002 (at most four questions and ten new keys a write) without citing it; from the bundle each write appears to touch a new question plus up to four existing ones by pointer, so the write sessions must check the per-write count against FR-002's full text. Not a narrowing of the GM's request."
+    },
+    {
+     "id": "TechContext-leads",
+     "summary": "Search passes are leads, not citations; every passage read on its page before citing; local copies go through make source-pages or the archive, image-only pages through IMAGES=.",
+     "class": "within",
+     "why": "Citation discipline under FR-001's citation rules; narrows nothing the GM asked."
+    },
+    {
+     "id": "TechContext-secondary",
+     "summary": "Secondary summaries (Furukawa summaries, chinanews article, Chambers reading Henslowe) cited as what they are, each write-up saying whose evidence it relays; primaries go on the leads list.",
+     "class": "within",
+     "why": "Honest labeling of evidence; every requested figure still reported."
+    },
+    {
+     "id": "Bookends-Constitution",
+     "summary": "Performance bookends N/A (no generator change); constitution check: question tasks research: physical, record checks green, built as the spec's FRs.",
+     "class": "within",
+     "why": "Consistent with a research-only request; no decision against the request."
+    },
+    {
+     "id": "D1-placement",
+     "summary": "Q1 in a new money question built on 0250, 0115 and 0260 with a pointer from each.",
+     "class": "within",
+     "why": "Exactly FR-001's Q1 placement."
+    },
+    {
+     "id": "D1-content",
+     "summary": "Japan first: farm servants' contract rest days (Kumon 2020, 310-330 days), village asobi-bi not summed onto Kumon's, yabuiri attested only for its two days, porters/carpenters/day laborers SILENT on a count with seasonal and weather evidence given as what it is; China's 250 days an assumption, 360 a bookkeeping convention, 200 spinning days an estimate; derived figures labeled as this project's arithmetic; canon comparison (no weekly rest day attested).",
+     "class": "within",
+     "why": "Answers Q1's worker list (servant time off, porters' busyness by season) in the requested region order; refusing to add asobi-bi to Kumon's count is evidence discipline, not a carve-out. Not a narrowing, but two requested sub-items carry neither a figure nor a SILENT in the block: 'a farm laborer by season' (Kumon gives a yearly count, not a seasonal split) and the construction worker's 'winter' (weather idling is not winter). SC-002 obliges the reply to give each or its SILENT; the write session must do so."
+    },
+    {
+     "id": "D2-placement",
+     "summary": "Q2 in 0307 or a sibling by 0307's prose cap.",
+     "class": "within",
+     "why": "Exactly FR-001's Q2 placement."
+    },
+    {
+     "id": "D2-content",
+     "summary": "Guards: China's escort-masters kept on by the agency, 3-4 trips a year, house guards between trips, clients contracting by trip/season/year; Japan: courier house's own convoy leader, armed escort hired per trip SILENT, by-the-job pattern attested only for unarmed couriers. Scribes: China by the document; Japan kept on, petition-writing by the case (fee SILENT), day-hired scribe SILENT. Canon check: scribes among the heimen.",
+     "class": "within",
+     "why": "Answers Q2's escort and scribe questions, including 'salaried or per trip', 'between jobs' and 'a day or two of writing', with SILENTs where not found; nothing asked is dropped."
+    },
+    {
+     "id": "D3-placement",
+     "summary": "Q3 a-c in a new money question with pointers from 0308, 0214 and 0187.",
+     "class": "within",
+     "why": "Exactly FR-001's Q3 a-c placement."
+    },
+    {
+     "id": "D3-content",
+     "summary": "(a) city playhouses: one daylight program a day, no night playing before 1878, five or six programs a theatrical year from kaomise, 6th-7th months idle, puppet calendar SILENT; (b) shrine-ground licenses of 100 fair-weather days, provincial licenses a year SILENT; (c) country troupes' festival engagements of 1-15 days, engagements a year SILENT; China beside it.",
+     "class": "within",
+     "why": "Covers (a)-(c) and the GM's 'literally every night' question, Japan first, China beside it. One requested sub-item of (a), 'how long a program', has neither a figure nor a SILENT in the block; SC-002 obliges the reply to give it or its SILENT."
+    },
+    {
+     "id": "D3-canon",
+     "summary": "The canon's county troupe working market day and touring villages the rest of the week is NOT ATTESTED; routed to the GM through escalation-check.",
+     "class": "within",
+     "why": "Reports a finding against the canon to the GM rather than changing canon; FR-003's escalation route. Not a narrowing."
+    },
+    {
+     "id": "D4-England",
+     "summary": "England in its own question in 'Comparative money', subject=comparative,money, source kind comparative (Chambers reading Henslowe): time of day, six days a week, bill changes, ~243 performances a year as labeled arithmetic, Lent, summer touring, plague inhibitions, Blackfriars; never a Rokugani figure.",
+     "class": "within",
+     "why": "FR-001's own placement for Q3 (d); covers every item (d) names (time of day, days a week, bill change, Lent and plague closures)."
+    },
+    {
+     "id": "D5-reply",
+     "summary": "implementation-check.md holds each touched question's line (make impl-check); the reply gives each figure with fragment file and verdict, the open leads, the 250-day convention's standing; GM findings through escalation-check first.",
+     "class": "within",
+     "why": "Matches FR-003 and FR-004 line for line; reporting the 250-day convention's standing answers the request's stated 'why it matters'."
+    }
+   ]
+  }
+ ]
+}
