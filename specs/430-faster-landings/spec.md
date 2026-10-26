@@ -50,10 +50,11 @@ manifest readers; a delta that changes an engine data file the readers do not co
 
 ### User Story 3 - A coverage gap is caught before the gate (Priority: P1)
 
-First, today's six coverage reds are replayed through today's `make cover-changed`, recording whether it named each line the
-full floor named. The pre-gate check's scope follows from that result: if `cover-changed` already named them, the fix is to run it
-before the gate; if not, the check reaches the tests that do run each changed line. Either way it runs inside `make land` before
-the gate, faster than the gate.
+Today's six coverage reds were replayed through today's `make cover-changed` (FR-003a, `research.md` R1, `m:coverage-reds-replay`):
+every line the five line-naming reds named was an EXISTING line of a changed module that lost its coverage, none an added line,
+and the sixth was the floor not counting new tests marked `tooling`. `cover-changed` asks only added lines, so it saw none of them.
+The pre-gate check therefore asks every line of each changed module, with the tests the floor counts, inside `make land` before
+the gate and faster than it.
 
 **Acceptance Scenarios**:
 
@@ -123,8 +124,9 @@ the gate, faster than the gate.
   data file) MUST select the tests of that directory; one directly under `tests/` plans full.
 - **FR-003a**: Today's six coverage reds MUST first be replayed through today's `make cover-changed`, recording (with an `m:` key)
   whether it named each line the full floor named; FR-003's scope follows from that result.
-- **FR-003**: A pre-gate coverage check MUST name each uncovered changed line the full floor would name, run inside `make land`
-  before the gate, and take less time than the gate.
+- **FR-003**: A pre-gate coverage check MUST name every line of each changed module that the full floor would name uncovered,
+  measured with the tests the floor counts (the GM's item 3: "on the changed modules, measured the way the full floor measures
+  them"), run inside `make land` before the gate, and take less time than the gate.
 - **FR-004**: `claims-gate`, `entry-gate` and `cohort-gate` MUST exit at once when the delta holds nothing each judges; their
   verdicts MUST be cached on the delta's content; the push MUST run the gates concurrently and report every refusal together.
 - **FR-005**: A mechanical plan-lint MUST run before a plan review is dispatched (labeled figures, the red exit, an approach
@@ -143,8 +145,9 @@ the gate, faster than the gate.
 
 - **SC-001** (FR-001, FR-002): replaying today's 19 full-planned deltas that were full only for a manifest or a `tests/`
   non-module file, the planner plans incremental for each.
-- **SC-002** (FR-003, FR-003a): the pre-gate check names the lines in each of today's 6 coverage reds, and on those replayed
-  deltas it takes less time than the gate took.
+- **SC-002** (FR-003, FR-003a): the pre-gate check names the lines of each of today's 5 line-naming coverage reds; on the sixth
+  it counts the tests the floor counts (no new `tooling`-marked test the floor leaves out); and on those replayed deltas it takes
+  less time than the gate took.
 - **SC-003** (FR-004): on a records-only delta each of the three gates exits before reading the claims, the record or the
   cohort records (the push observed 2026-10-26, method: each gate timed alone on a records-only delta, `request.md`).
 - **SC-004** (FR-005, FR-007): a plan review is never dispatched on a block the plan-lint refuses.
@@ -179,3 +182,17 @@ the gate, faster than the gate.
   block in its own terms: the property part B's test checks, that no rule is changed, no number tuned and no earlier placement
   moved (labeled or not), and that every `D<n>` it names is defined elsewhere. A missing label alone is still not enough.
   (b) US5.2 still gives the label-only test that FR-005 now rejects. It must state the same test as the corrected FR-005.
+- spec-fidelity round 3 (2026-10-26, VERIFY): CHANGES REQUIRED - (1) RESOLVED: FR-005 states the decides-nothing property (no
+  rule changed, no number tuned, nothing placed earlier moved, labeled or not; every `D<n>` defined elsewhere) asked of part
+  A's answers, with the item mapping left to the plan; a missing label alone is still not enough. (2) RESOLVED: US5.2 states the
+  same test. New, from research.md R1 (added since round 2): (3) FR-003a's result is in and FR-003 did not follow it. R1 finds
+  all 8 named lines were EXISTING lines that lost coverage, none added, and concludes the check asks every line of each changed
+  module with the floor's own test selection; FR-003 still says "each uncovered changed line", which reaches none of the lines
+  SC-002 requires it to name, and US3's description still carries the unresolved "if ... if not" branch. FR-003 must say: the
+  check names every line of each changed module that the full floor would name uncovered, measured with the tests the floor
+  counts (the GM's item 3: "on the changed modules, measured the way the full floor measures them"); US3 must state R1's result
+  instead of the branch. (4) SC-002's "names the lines in each of today's 6" cannot hold for the sixth (9a157cc4b), which names
+  no line - the floor and `cover-changed` selected different tests. SC-002 must name the lines of the five and, for the sixth,
+  require the check to count the tests the floor counts. Figures: `m:coverage-reds-replay`'s command is prose, so `make
+  figures` reported it NOT RE-MEASURED; spot-checked by `git diff -U0` on 31f739f5d, d92ff2c90 and 39ea51383 (12 line numbers
+  sampled from their named lines, none added), agreeing with it.
