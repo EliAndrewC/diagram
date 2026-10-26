@@ -20,3 +20,19 @@
 10. **Before moving a constant.** n/a
 11. **Before fitting things into room.** n/a
 
+<!-- plan-archive: archived 2026-10-26 -->
+### T02 Approach (checklist part A)
+
+1. **The goal, in the world.** Every snapshot says how many Python calls each stage made, on each seed.
+2. **The constraints.** D2; FR-006.
+3. **Where each comes from.** The GM 2026-10-26, `request.md` 4; `call-count-flag.md`.
+4. **Do they describe the world here?** Yes: counts are deterministic per seed and size.
+5. **The order.** After T01; before T03, which compares what it records.
+6. **The exits.** Green: its tests red without D2, and a `make perf` snapshot carrying counts. Red: what failed recorded and the
+   task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** Its tests red without D2; the counting pass's overhead on the reference seeds recorded beside the code.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
