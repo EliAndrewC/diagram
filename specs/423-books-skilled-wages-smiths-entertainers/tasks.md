@@ -8,14 +8,14 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 
 ## Tasks
 
-- [ ] T01 S1+C1: Q1 books and Q3 a smith's accounts (D1, D3; FR-001)
+- [x] T01 S1+C1: Q1 books and Q3 a smith's accounts (D1, D3; FR-001)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: record-owed clean for the touched questions and keys
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed: S1+C1 and its tail: 0305 what a book cost to buy, borrow and copy; 0306 what a smith earned (a tool against its iron, output, crew; income SILENT); a pointer in 0276; record-owed clean
 - [x] T02 S2+C2: Q2 skilled and trusted labor and Q4 entertainers (D2, D4; FR-001)
       research: physical
       - [x] research pass
