@@ -130,7 +130,8 @@ def lanes_of(M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequ
     Research:
         tree lane tread by role - research/questions/0081-village-lanes.drawing.html: house access 3 ft
         tree lanes assembled - NONE: the runs squared and set on their hosts as the web draws them, each then asked the needle rule (`off_the_needle`)
-        which way is cut - research/questions/0081-village-lanes.drawing.html: the lane whose end runs back along another way is cut where it comes alongside - each new lane against those drawn and the connector, then each drawn lane against the new one; the connector is never cut"""
+        which way is cut - research/questions/0081-village-lanes.drawing.html: the lane whose end runs back along another way is cut where it comes alongside - each new lane against those drawn and the connector, then each drawn lane against the new one; the connector is never cut
+        a cut lane not asked again - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); a drawn lane cut back onto a newer one is not asked again against those before it - a needle its tee closes with them is the law's to refuse"""
     raw_sq = square if square is not None else (lambda run: square_run_of(M, run))
     waters = square_waters_of(M)
 
@@ -163,7 +164,7 @@ def off_the_needle(pts: Sequence[Any], drawn: Sequence[Sequence[Sequence[float]]
     Research:
         the doubled way drawn as one - research/questions/0081-village-lanes.drawing.html: two ways side by side are drawn as one
         its reach - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); 0081 cuts a lane where it comes alongside and gives no distance - half of `law.NEEDLE_LOOP_FT` (10 ft); 2.0 (the walk's step)
-        a lane beside the other its whole length - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); left as drawn for the law to refuse, no stretch of it standing off to cut back to
+        a lane beside the other its whole length - research/questions/0081-village-lanes.drawing.html: two paths side by side are drawn as one - where no stretch of the lane stands off the other to cut back to, it is left for the lane law (`law.needle_loops`) to refuse, so the doubled way never ships
         a needle left where the tee would close one - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); the lane is left as drawn for the law to refuse rather than cut into another needle
     """
     from shapely.geometry import LineString

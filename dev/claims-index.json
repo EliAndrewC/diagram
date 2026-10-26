@@ -36625,19 +36625,11 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/tree.py::lanes_of#the needle rule is never asked against the connector (track out): `out` leaves out root `-1`, so a tree lane running alongside the track out is never cut": {
-  "code": "f3c88b06930e37a4",
-  "core": "f3c88b06930e37a4",
-  "date": "2026-10-25",
-  "note": "the needle rule is never asked against the connector (track out): `out` leaves out root `-1`, so a tree lane running alongside the track out is never cut",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lane tread by role": {
   "body": "baa9038b76b09baf",
   "claim": "tree lane tread by role - village-lanes.drawing: house access 3 ft",
-  "code": "763d4ec61e61764e",
-  "core": "f3c88b06930e37a4",
+  "code": "f22c2c56b48bcfb1",
+  "core": "a4906ab0ee9c54ec",
   "date": "2026-10-18",
   "note": "through lane_record, access lanes get 3 ft and branch lanes 5 ft, as the page sets",
   "pages": {
@@ -36660,26 +36652,37 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#which way is cut": {
-  "body": "5ef08e1c13574297",
-  "claim": "which way is cut - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); of two side by side, the one drawn later (in `chosen` order) ends on the earlier; the connector is never cut",
-  "code": "294c769456c86069",
-  "core": "f3c88b06930e37a4",
+  "body": "c34350c0673b3065",
+  "claim": "which way is cut - village-lanes.drawing: the lane whose end runs back along another way is cut where it comes alongside - each new lane against those drawn and the connector, then each drawn lane against the new one; the connector is never cut",
+  "code": "c5dc1dc3f8b0f45e",
+  "core": "a4906ab0ee9c54ec",
   "date": "2026-10-25",
-  "note": "the record is not wholly silent. §25 says which lane is cut: \"A lane whose end runs back along another way\", cut \"where it comes alongside\", a household's way \"at its far end, never at its door\". The code cuts by `chosen` order instead. When it is the earlier lane's end that runs along the later lane, walking back from the later lane's end ends at once (`at >= mine.length`) and the needle stays. The claim should cite 0081 §25 for the rule, and call the later-drawn tie-break a GUESS only where both ends run alongside",
+  "note": "the cut is made from the lane's far end, the end carried onto its host. The new lane is tried against the lanes drawn and the connector, then each drawn lane against it, so the lane whose end runs alongside is the one cut, as a T, and never at its door; the connector, which runs off the map, is never cut",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a lane beside the other its whole length": {
+  "body": "1ac8298f265a6d33",
+  "claim": "a lane beside the other its whole length - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); left as drawn for the law to refuse, no stretch of it standing off to cut back to",
+  "code": "5b8120cea350af2d",
+  "core": "fbdd435630095442",
+  "date": "2026-10-25",
+  "note": "the record is not silent here: §25 says \"Two paths running side by side are drawn as one\", and this unit's own claim \"the doubled way drawn as one\" cites that block. The code (`at <= 0.0` -> `continue`) leaves both lanes drawn and leaves the refusal to the law. The claim should cite 0081 and say how the law's refusal keeps a doubled way off the map. If the code means to depart from §25, it should be a DEVIATION that the drawing page records, and the page records none",
   "pages": {},
   "research": "",
   "verdict": "MISLABELED"
- },
- "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a lane that lies within reach of the other way along its whole length (`at <= 0.0`) is left as drawn, not cut": {
-  "code": "fbdd435630095442",
-  "core": "fbdd435630095442",
-  "date": "2026-10-25",
-  "note": "a lane that lies within reach of the other way along its whole length (`at <= 0.0`) is left as drawn, not cut",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a needle left where the tee would close one": {
   "body": "1ac8298f265a6d33",
@@ -36694,20 +36697,14 @@
  },
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#its reach": {
   "body": "1ac8298f265a6d33",
-  "claim": "its reach - GUESS village-lanes.drawing: cut where it comes alongside, the page giving no distance - half of `law.NEEDLE_LOOP_FT` (10 ft); 2.0 (the walk's step)",
-  "code": "3aedad57c1bbda15",
+  "claim": "its reach - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); 0081 cuts a lane where it comes alongside and gives no distance - half of `law.NEEDLE_LOOP_FT` (10 ft); 2.0 (the walk's step)",
+  "code": "a4e810e0dfbc90a6",
   "core": "fbdd435630095442",
   "date": "2026-10-25",
-  "note": "GUESS is the right class, since §25 gives an angle (\"less than 20 degrees\") but no distance. But the named drawing page does not record the 10 ft reach or the 2 ft step as a guess, so the pointer gives no backing. Either drop the pointer (bare GUESS) or have 0081.drawing §25 record the 10 ft reach as a guess",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
-  ],
-  "verdict": "MISLABELED"
+  "note": "§25 cuts the lane \"where it comes alongside\" and gives no distance; §22's 25 ft is for ends that nearly meet, not this. So 10 ft (half of NEEDLE_LOOP_FT) and the 2 ft walk step are honest GUESSes",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#the doubled way drawn as one": {
   "body": "1ac8298f265a6d33",
