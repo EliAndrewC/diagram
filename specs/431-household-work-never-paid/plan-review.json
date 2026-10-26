@@ -60,6 +60,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "38354576d4f02217bb6ac2a1b83ae41ac3e72a4dda18addbef1f70e125cb7caf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "09f34835934b1aa5b5744249cd33693bf2f4b279bb5b0e0bcfaf77512adeab71",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "81859b49f2fa20a9e88d4839c97d6343a3d951c3b9fbeec6ed0cd3a024864736",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -387,6 +405,47 @@
      "summary": "implementation-check.md per touched question; reply gives each figure with fragment file and verdict, what is open (leads incl. Hayami and Bray named as not reached in the original), escalation-check first",
      "class": "within",
      "why": "FR-003 and FR-004 as written; the request's named leads that were not reached are reported open rather than dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01/T02 constraints",
+     "summary": "T01 (D1, D2) and T02 (D3, D4) bound by FR-001 (findings in Money and prices, new questions as the material divides, comparative sources tagged) and FR-002 (page sessions of at most four questions / ten keys, check sessions, search first)",
+     "class": "within",
+     "why": "Names the accepted requirements that carry the request's questions 1-7 and the record rules; drops none of the request's questions or regions."
+    },
+    {
+     "id": "T03 constraints",
+     "summary": "T03 (D5) bound by FR-003 (reply on #21 with each figure, fragment, verdict, what is open, via escalation-check) and FR-004 (close with make impl-check)",
+     "class": "within",
+     "why": "The reply and close-out are what the request (an issue asking the GM's questions) expects; nothing narrowed. Item 3 cites FR-001/FR-002 as the source while item 2 names FR-003/FR-004 - a bookkeeping mismatch, not a narrowing."
+    },
+    {
+     "id": "Exits (all three)",
+     "summary": "Green: landed. Red: failure recorded, task set down, any cannot-be-done claim ruled by make arbiter-ask",
+     "class": "within",
+     "why": "Process for a stalled task; does not license dropping any question or figure the request asks for without an independent ruling."
+    },
+    {
+     "id": "Budget (all three)",
+     "summary": "One landing per task",
+     "class": "within",
+     "why": "Effort bound only; FR-002's session limits still apply and no scope is cut."
+    },
+    {
+     "id": "Done measured",
+     "summary": "T01/T02 done by SC-001 (record CHECK, record-owed clear, impl-check); T03 by SC-001 and SC-002 (reply answers each of Q1-Q7 with every figure or its SILENT)",
+     "class": "within",
+     "why": "SC-002 requires every one of Q1-Q7 answered, so the done-test covers the whole request."
     }
    ]
   }
