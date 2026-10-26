@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-26T17:57:25Z",
+  "target": "plan-gate push",
+  "commit": "92ff906ac",
+  "why": "this push touches only 430's gm-review rows and box (432 T06's backlog clearing); 430's T08 approach block was pushed by its own session as owing no review (8557a2927, D5)"
+}
