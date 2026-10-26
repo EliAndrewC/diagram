@@ -24,9 +24,9 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: the new questions built and checked, 0311 extended; record-owed clean
-- [ ] T03 Implementation check, the reply on #21 and the report (D5; FR-003, FR-004)
+- [ ] T03 The cross-pointers (0311, 0004 and 0183 to S1's questions; S1's and S2's questions to each other), the implementation check, the reply on #21 and the report (D5; FR-003, FR-004)
       research: rendering
-      verify: make impl-check F=431 reports nothing missing; the reply posted on #21; make feature-report F=431 WRITE=1
+      verify: the cross-pointers built and checked; make impl-check F=431 reports nothing missing; the reply posted on #21; make feature-report F=431 WRITE=1
 - [ ] GM review (make gm-reviewed F=431) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
