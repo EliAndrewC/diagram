@@ -20,6 +20,8 @@
       verify: DONE. landed: the contained wins (C1 C2 C3 C5 R2 R3 R5 R6): at seed 39, 40 households, set.add in the windbreak 1,052,833 -> 0, _falls' to_uf chain gone (to_uf 513,948 -> 83,038, all from _f_at_u), the ring_index and pts_key generators 361k / 229k, the crop's 122k, _near_a_house 56k, the union-find's find 109k and getpixel 36k all under the survey's 50k (research/t04-contained-wins.md); the pool unchanged against HEAD after both batches; scipy 1.16.3 declared; claims 2 IN-STEP
 - [ ] T05 US3, the wells without the cubic term: the shared wells seated with kept state (R1), lane_wells' 22.6M calls at 40 households (research/survey-t01.md) to under 100k (FR-003, US3)
       research: rendering
+- [ ] T06 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#PAIR_LOOK = 40: how many first-well seats nearest the share's middle are re-ranked by whether a second well would keep both at ten (search breadth, a GUESS) [lands-open]
+      research: rendering
 - [x] GM review (make gm-reviewed F=427) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
