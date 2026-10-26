@@ -27,8 +27,9 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 - [x] T03 Implementation check, the reply on #18 and the report (D5; FR-003, FR-004)
       research: rendering
       verify: DONE. landed: impl-check nothing missing; the answer on #18 issuecomment-6403668405; report written
-- [ ] T04 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: docs/buildings.md::Sacred features#torii top beam drawn 1.5 ft deep in plan (45 by 4.5 px), l7r/diagram/hamletgen/homesteads/retirement.py::retirement_houses#only `kind == "plain"` houses may keep a retirement house, and the target never falls below 1; what the "plain" filter leaves out cannot be told from the bundle, l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_seats#bath room seated 3 ft past the yard's side (`yard[1] + w / 2 + 3.0`), l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#a byre's clear margin, 3 px each side (`bw + 6, bh + 6` fit probe), l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#at least one byre in every settlement (`max(1, round(...))`) [lands-open]
-      research: rendering
+T04 (the five carried claims findings) moved to feature 405 T140 on the GM's word, 2026-10-26: "move 422's 5 [findings] into
+405 now so that 422 can close" (feature 385 FR-013 as amended that day).
+
 - [ ] GM review (make gm-reviewed F=422) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

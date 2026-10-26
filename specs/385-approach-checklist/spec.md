@@ -175,6 +175,11 @@ block; never block on unchanged code, the finding filed as an open task):
   the one command that files it (`make claims-carry F=<feature>`), which writes the task box and its record; the open-task
   refusal honors that box. A finding on changed code or a changed claim is still introduced and still refuses, as before; a
   finding that stood at the base still only warns.
+- **FR-013, amended 2026-10-26 (the GM: *"Yes, a finding carried by a landing that changes no engine code should go to 405
+  instead. Please make that the standing rule and move 422's 5 [findings] into 405 now so that 422 can close."*)**: when the
+  landing's delta holds no engine path (`l7r/**/*.py`, `pool/*.gen.py`, `pool/*.json`), the carried finding is filed as an
+  open task of feature 405, the claims feature, instead of the feature being landed (`claims_carry.target`, `CLAIMS_FEATURE`).
+  A research-record or tooling landing cannot fix engine code; feature 422 had been held open on five such findings.
 
 ### Amendment 4 - T03 measured again, before T04 (the GM, 2026-10-18)
 

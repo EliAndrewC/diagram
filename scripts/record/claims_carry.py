@@ -7,17 +7,25 @@ the claims that cite it, and the three findings that came back - all on code T03
 INTRODUCED. Option 3: such a finding never blocks the landing; it is filed as an open task of the feature being landed, so that
 feature cannot close while it stands.
 
+A LANDING WITH NO ENGINE CODE FILES INTO THE CLAIMS FEATURE (the GM, 2026-10-26: "Yes, a finding carried by a landing that
+changes no engine code should go to 405 instead. Please make that the standing rule"): a research-record or tooling landing
+cannot fix engine code, and option 3 held feature 422 (miso and soy sauce) open on five engine findings while 405, the feature
+that fixes claims findings, was on hold. So `target` is `CLAIMS_FEATURE` when the delta holds no engine path, the active feature
+otherwise; a delta whose engine path is only a comment still counts as engine here (the conservative side: it files where it
+always did).
+
 `claims.classify` decides what is carried (D26). This module keeps the record: `specs/<feature>/claims-carried.jsonl`, one row
 `{"task", "keys", "utc"}` a filing. A key is FILED while a row of the ACTIVE feature's record names it and that row's task is
 still an open box in its `tasks.md` (D27): ticking the task un-files it, so a finding still standing refuses again; another
 feature's record never files it, so a finding cannot be parked in a long-lived feature while this one closes (spec-fidelity,
-T13 round 1). `speckit-todo.py`'s open-task refusal honors a `[lands-open]` box a row names (D28).
+T13 round 1) - except the claims feature's, for a landing with no engine code (above). `speckit-todo.py`'s open-task refusal honors a `[lands-open]` box a row names (D28).
 """
 
 from __future__ import annotations
 
 import json
 import re
+import subprocess
 import sys
 import tempfile
 import time
@@ -25,6 +33,11 @@ from pathlib import Path
 from typing import Any
 
 RECORD = "claims-carried.jsonl"
+#: the standing feature that fixes claims findings (the GM, 2026-10-26): a landing with no engine code files its carries here.
+#: When 405 closes, the feature that takes over its claims work is named here.
+CLAIMS_FEATURE = "405"
+#: the engine paths (`l7r.diagram.ci.delta.is_engine`'s list, feature 132 FR-008; scripts/land.py keeps the same pattern)
+_ENGINE = re.compile(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json)$")
 _BOX = re.compile(r"^- \[( |x)\] (T\d+)\b(.*)$", re.M)
 _LANDS_OPEN = " [lands-open]"
 
@@ -39,6 +52,28 @@ def _plan_gate() -> Any:  # noqa: ANN401 - the module
 def active_feature(root: Path) -> Path | None:
     """The feature being landed: the active task's (`plan_gate.active_task`), or None."""
     return _plan_gate().active_task(root)[0]
+
+
+def _git_lines(root: Path, *args: str) -> list[str]:
+    out = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True)
+    return [ln.strip() for ln in out.stdout.splitlines() if ln.strip()] if out.returncode == 0 else []
+
+
+def touches_engine(root: Path) -> bool:
+    """Does this tree's delta - its commits since the merge base with origin/main (HEAD with none) and its uncommitted
+    changes - hold an engine path?"""
+    base = (_git_lines(root, "merge-base", "origin/main", "HEAD") or ["HEAD"])[0]
+    return any(_ENGINE.match(f) for f in _git_lines(root, "diff", "--name-only", base) + _git_lines(root, "ls-files", "--others", "--exclude-standard"))
+
+
+def target(root: Path) -> Path | None:
+    """The feature a carried finding is filed into: the claims feature (`CLAIMS_FEATURE`) for a delta with no engine code, when
+    it has a tasks.md; the feature being landed otherwise."""
+    if not touches_engine(root):
+        claims = _plan_gate().resolve(CLAIMS_FEATURE, root)
+        if claims is not None and (claims / "tasks.md").is_file():
+            return claims
+    return active_feature(root)
 
 
 def rows(d: Path) -> list[dict[str, Any]]:
@@ -59,8 +94,8 @@ def carried_ids(d: Path) -> set[str]:
 
 
 def filed(root: Path) -> dict[str, str]:
-    """key -> its open task, for every key the active feature's record files (none with no active feature)."""
-    d = active_feature(root)
+    """key -> its open task, for every key the record of the feature carries file into (`target`) files (none with none)."""
+    d = target(root)
     if d is None:
         return {}
     live = open_ids(d)
@@ -112,9 +147,12 @@ def carry(root: Path, feature: str, task: str, keys: list[str], now: str | None 
     it must be a `trigger` in the feature's `arbiter.jsonl`, and the record's row names it. The box and its row are written
     together, so `holding` honors the box by its id - never a box that merely cites a trigger."""
     d = _plan_gate().resolve(feature, root)
-    here = active_feature(root)
+    here, active = target(root), active_feature(root)
+    if d is not None and here is not None and active is not None and d.resolve() == active.resolve():
+        d = here  # ...the feature being landed names itself (`make land` does); a delta with no engine code files into 405
     if d is None or here is None or d.resolve() != here.resolve():
-        raise ValueError(f"a carried finding is filed only into the feature being landed - the active task's ({here.name if here else 'none: `make task-start F=<n> T=<Txx>` first'}), not {feature}")
+        where = "the claims feature's - this delta holds no engine code" if here is not None and not touches_engine(root) else "the active task's"
+        raise ValueError(f"a carried finding is filed only into {where} ({here.name if here else 'none: `make task-start F=<n> T=<Txx>` first'}), not {feature}")
     if ruling and not _ruled(d, ruling):
         raise ValueError(f"RULING={ruling} is no trigger in {d.name}/arbiter.jsonl - name the round arbiter's recorded ruling that carried these findings")
     if not keys:
@@ -150,7 +188,7 @@ def gate(cx: Any, root: Path) -> tuple[list[str], list[str]]:  # noqa: ANN401 - 
     unrecorded = [x for x in revealed if known[_key_of(x)] != "accepted by the round arbiter" and _key_of(x) not in done_known]
     pre = pre + [f"known drift ({known[_key_of(x)]}): {x}" for x in revealed if x not in unrecorded]
     done = filed(root)
-    d = active_feature(root)
+    d = target(root)
     how = f"`make claims-carry F={d.name.split('-', 1)[0]}`" if d is not None else "`make task-start F=<n> T=<Txx>`, then `make claims-carry F=<n>`"
     unfiled = [f"carry: {line} - a finding on code the change left unchanged: file it with {how} (make land files it itself)" for k, line in carried if k not in done]
     warn = [f"carried ({d.name if d else ''} {done[k]}): {line}" for k, line in carried if k in done]
