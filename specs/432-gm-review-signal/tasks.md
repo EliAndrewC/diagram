@@ -21,7 +21,8 @@ none: tooling only - the review queue's scripts, hooks, agent contracts and docs
       research: rendering
 - [ ] T05 E(a) claims after a page edit: the 0081 edit's triage measured, then the triage narrowed where the measure shows (D7; FR-005, SC-004)
       research: rendering
-- [ ] T06 The backlog cleared with the GM's words; 374#60, 385#40 and 397#10 carried on as kept questions (D8; FR-006, SC-005)
+- [x] T06 The backlog cleared with the GM's words; 374#60, 385#40 and 397#10 carried on as kept questions (D8; FR-006, SC-005)
       research: rendering
+      verify: DONE. landed: all 465 open rows marked reviewed with the GM's words (36 features; 385, 407, 412 and 413 row by row, their boxes held by their own implementation check); 374#60, 385#40 and 397#10 carried as kept questions 374#90, 385#107, 397#11; make gm-review lists exactly 3 decisions and 0 rows to review; test_gm_review 12/12 (a new row reopens a ticked box)
 - [ ] T07 The texts that say what reaches the GM (FR-007's search), the report and the close (D9; FR-007)
       research: rendering

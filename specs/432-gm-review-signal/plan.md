@@ -85,30 +85,7 @@ by the DIRECT route; no map moves. Every guard keeps its test companion (XVIII).
   `make arbiter-ask` before landing, not to a different mechanism. A claim whose rested-on block changed is owed impl-drift
   as today. Rendering: none.
 
-## T06 - F: the backlog cleared, three carried (FR-006)
-
-### T06 Approach (checklist part A)
-
-1. **The goal, in the world.** `make gm-review` shows exactly the GM's three decisions, and the features held open only by
-   their GM-review box close.
-2. **The constraints.** His words on every row cleared; nothing deleted.
-3. **Where each comes from.** O: the GM's answer, `request.md`.
-4. **Do they describe the world here?** Yes: 465 open rows (measured 2026-10-26 (`make gm-review`), `audit/judged.jsonl`).
-5. **The order.** After T01-T03 (the three need the question record).
-6. **The exits.** Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
-7. **The search smell.** None.
-8. **The budget.** 30 min (a GUESS, the session's, 2026-10-26).
-9. **Done, measured.** SC-005: `make gm-review` lists three decisions and no other open row; `make speckit-todo` before and
-   after.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T06 Decisions
-
-- **D8** Every open row is marked reviewed with `make gm-reviewed F=<n> WORDS="<his answer>"`, feature by feature; the three
-  are written as kept questions in their own features (374, 385, 397), each with the audit's escalation-check reason.
-  Rendering: none.
-
+<!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 ## T07 - the texts that say what reaches the GM, and the close (FR-007)
 
 ### T07 Approach (checklist part A)
