@@ -24,8 +24,9 @@
 - [x] T06 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#PAIR_LOOK = 40: how many first-well seats nearest the share's middle are re-ranked by whether a second well would keep both at ten (search breadth, a GUESS) [lands-open]
       research: rendering
       verify: DONE. landed: PAIR_LOOK's claim relabeled GUESS
-- [ ] T07 US4, the homestead parts family: the homesteads stage's pairwise chains (research/hotspots-pairwise.md) with R8 (research/hotspots-recompute.md), each chain at least tenfold down (FR-003, US4); R4 moved to its own task, T12
+- [x] T07 US4, the homestead parts family: the homesteads stage's pairwise chains (research/hotspots-pairwise.md) with R8 (research/hotspots-recompute.md), each chain at least tenfold down (FR-003, US4); R4 moved to its own task, T12
       research: rendering
+      verify: DONE. landed: homestead parts family's chains tenfold down (R4 to T12); pool unchanged but Kuwabata (kura/byre 3 ft, 0081)
 - [ ] T08 US4, the ground cover family: the hinterland and windbreak stages' pairwise chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)
       research: rendering
 - [ ] T09 US4, the water family: the field settle (R7, research/hotspots-recompute.md) and the brook and partition chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)

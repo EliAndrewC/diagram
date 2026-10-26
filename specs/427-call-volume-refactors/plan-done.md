@@ -113,3 +113,39 @@ Each step measured alone:
 |---|---|
 | the claim relabeled | `make claims-owed` names it, impl-drift IN-STEP |
 | no map moved | `make maps-moved` (a docstring: the roll cache keeps every seed) |
+<!-- plan-archive: archived 2026-10-26 -->
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** The same homesteads seated, their parts asked of their neighbors per candidate set, not one Python
+   call per pair.
+2. **The constraints.** US4, FR-003, FR-004, FR-007; the GM's order (`request.md` 5): homestead parts first of the families
+   outside the lanes.
+3. **Where each comes from.** `research/hotspots-pairwise.md` "Homestead seating" (yards' `_filled_lattice`, `gap_ways.way_out`
+   and `trace`, `wood_share`); `research/hotspots-recompute.md` R8 (`capacity.field_distances` for every free grid point), which
+   US4 sends with this family. R4 (`household_reach`), which US4 also sends here, is its own task (T12): its research's direction
+   is the household-keyed roll feature 297 withdrew, so it needs a design of its own (`research/t07-homestead-parts.md`).
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage, so a chain of the family outside `homesteads` is not dropped) on the then-current engine scopes
+   the task to the chains that still stand (FR-002).
+5. **The order.** After T06, before the ground cover family.
+6. **The exits.** Green: each chain named falls at least tenfold (US4's test), the cohort with no seed regressed, the claims
+   round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the same predicates asked of a candidate set (STRtree query or numpy broadcast), no new search.
+8. **The budget.** One landing per chain group that changes no map, the cohort judging any that does.
+9. **Done, measured.** Each chain's count before and after from `make perf-fanout`, recorded in `research/`; R8, which no chain
+   shows, by its own test (US2, FR-003): the homesteads stage and `field_distances`' share at seed 47, 40 households, before and
+   after, as a seed-by-seed A/B against HEAD, and a pool reroll diffed against HEAD's manifests - reported, gating nothing
+   (FR-006).
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the chains re-scoped | `make perf-fanout` (every stage) |
+| each chain converted | its count in `make perf-fanout`, `make maps-moved` |
+| R8 | the homesteads stage at seed 47, 40 households, A/B of HEAD against the change in two detached worktrees, back to back, alternated; `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
