@@ -117,6 +117,17 @@ web stage's sweeps (`_join_orphan_ways` as a repair, `_sweep_dangling_ends`, `_s
 probed off as R8 probed the rounds. The next session starts here: plan the reorder as its own task (decide first), measured on
 the landing cohort, a pre-change fresh block (seed 723759) and the five pool maps. Rendering: none until built.
 
+**Probed 2026-10-26** (method: the patch `evidence/c2/tree-first-no-joins.patch` - `settle_tree` called at the head of `stage_web`,
+before the skeleton, and `settle_joins` cut from the last resort - rolled with `make cohort-landing JOBS=3`, `make cohort N=48
+SEED=723759 FRESH=0 JOBS=3` and `make map` on the five pool hamlets): the landing cohort 54 of 54 with the tree first, and 54 of 54
+with the joins cut as well - `settle_joins` is NEEDLESS once the tree is drawn first. The pre-change fresh block: 7 of 48 failing
+as before (b307a7ed7's seven), but not the same seven - seed 723789 now passes and seed 723775 newly fails: `WebRefused`, two
+access lanes (1, 2) closing a `needle_loops` sliver, and a `joins_short`. With the joins kept it still fails, so the TREE-FIRST
+ORDER causes it, not the cut. Inashiro, Kuwabata and Sawada move. Not landed (constitution XIII: a known regression). Next: dump
+seed 723775's two access lanes at the needle (part B 1: the geometry before the cause) - two household ways laid against each
+other with no web between them yet - and ask the needle rule (`law.needle_loops`) of a tree lane where `lanes_of` draws it, as
+C1 asked the width rule of the link; then roll this block again.
+
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
