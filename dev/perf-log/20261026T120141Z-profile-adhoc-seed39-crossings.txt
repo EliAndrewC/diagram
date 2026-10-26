@@ -1,0 +1,36 @@
+perf-profile seed 39 stage crossings: 0.1s under cProfile (the stages before it took 38.5s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120141Z-seed39-crossings.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         160948 function calls (150361 primitive calls) in 0.105 seconds
+
+   Ordered by: cumulative time
+   List reduced from 151 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    0.107    0.107 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/frame.py:25(stage_crossings)
+        1    0.003    0.003    0.083    0.083 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:472(channel_footbridges)
+19853/9266    0.010    0.000    0.041    0.000 {built-in method builtins.min}
+    10699    0.008    0.000    0.025    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+        1    0.000    0.000    0.023    0.023 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:406(bridges)
+       17    0.000    0.000    0.023    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:735(_deck_clears_its_water)
+        1    0.000    0.000    0.017    0.017 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:236(crossing_deck)
+     6409    0.003    0.000    0.017    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:752(<genexpr>)
+    10699    0.011    0.000    0.015    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/primitives.py:45(seg_closest)
+        1    0.004    0.004    0.014    0.014 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:163(_lands_dry)
+       87    0.002    0.000    0.011    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:769(_plank_reaches_useful_ground)
+       17    0.000    0.000    0.010    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:220(plank_on_supply)
+       17    0.001    0.000    0.010    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:207(plank_ditch)
+    23904    0.008    0.000    0.010    0.000 {built-in method builtins.max}
+     1150    0.002    0.000    0.009    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:660(<genexpr>)
+     2907    0.001    0.000    0.008    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:214(<genexpr>)
+     4246    0.002    0.000    0.007    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:794(<genexpr>)
+       19    0.000    0.000    0.007    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:195(seat_order)
+      125    0.000    0.000    0.007    0.000 {built-in method builtins.sorted}
+     4274    0.005    0.000    0.006    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/primitives.py:32(point_in_poly)
+     1530    0.002    0.000    0.005    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:615(_wide_enough)
+       99    0.001    0.000    0.005    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:688(_widen_for_confluence)
+        5    0.002    0.000    0.005    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:263(extend)
+     1429    0.003    0.000    0.004    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:54(_deck_quad)
+        2    0.000    0.000    0.004    0.002 /diagram/.clones/diagram-performance/l7r/diagram/settlement/city/bridges.py:804(water_segment_index)
+
+

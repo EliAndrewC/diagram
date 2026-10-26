@@ -1,0 +1,36 @@
+perf-profile seed 39 stage pond_bank: 0.0s under cProfile (the stages before it took 21.9s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120054Z-seed39-pond_bank.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         99 function calls in 0.000 seconds
+
+   Ordered by: cumulative time
+   List reduced from 27 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/pondbank.py:129(stage_pond_bank)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/pondbank.py:31(pond_bank)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/plan.py:332(_roll)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_knobs.py:65(knob_rng)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/pondbank.py:40(keep_the_bank_dry)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/land/wet.py:312(ellipse_ring)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 /usr/lib/python3.14/random.py:119(__init__)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python3.14/random.py:128(seed)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python3.14/random.py:294(randrange)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python3.14/random.py:245(_randbelow_with_getrandbits)
+        1    0.000    0.000    0.000    0.000 {built-in method _hashlib.openssl_sha256}
+        1    0.000    0.000    0.000    0.000 {function Random.seed at 0x708d8c896980}
+       32    0.000    0.000    0.000    0.000 {built-in method math.sin}
+       32    0.000    0.000    0.000    0.000 {built-in method math.cos}
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:113(append)
+        1    0.000    0.000    0.000    0.000 {method 'digest' of '_hashlib.HASH' objects}
+        9    0.000    0.000    0.000    0.000 {method 'getrandbits' of '_random.Random' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        1    0.000    0.000    0.000    0.000 {built-in method from_bytes}
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:104(_bump)
+        1    0.000    0.000    0.000    0.000 {method 'encode' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/core.py:562(px)
+        1    0.000    0.000    0.000    0.000 {method 'bit_length' of 'int' objects}
+
+

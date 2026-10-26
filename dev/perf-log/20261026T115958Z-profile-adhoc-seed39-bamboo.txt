@@ -1,0 +1,35 @@
+perf-profile seed 39 stage bamboo: 0.0s under cProfile (the stages before it took 10.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T115958Z-seed39-bamboo.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         410 function calls in 0.001 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.001    0.001 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/stages.py:171(stage_bamboo)
+        4    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/homestead_parts/stands.py:153(bamboo_stand)
+       64    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/houses.py:362(_hjit)
+       32    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/primitives.py:32(point_in_poly)
+       56    0.000    0.000    0.000    0.000 {built-in method builtins.round}
+        8    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+       20    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/homestead_parts/stands.py:193(<genexpr>)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:599(__setitem__)
+        4    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/core.py:337(add)
+       64    0.000    0.000    0.000    0.000 {built-in method math.sin}
+       64    0.000    0.000    0.000    0.000 {built-in method math.floor}
+        4    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/land/tiles.py:59(pattern_id)
+       36    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:593(_unwrap)
+        2    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:63(tested)
+       12    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+        8    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+        8    0.000    0.000    0.000    0.000 {built-in method builtins.max}
+        4    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:611(setdefault)
+        4    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
+        3    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+        4    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/core.py:333(_tag)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:580(_wrap)
+
+

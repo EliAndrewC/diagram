@@ -1,0 +1,36 @@
+perf-profile seed 39 stage web: 8.1s under cProfile (the stages before it took 10.1s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120045Z-seed39-web.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         11052045 function calls (10970358 primitive calls) in 7.838 seconds
+
+   Ordered by: cumulative time
+   List reduced from 610 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    8.142    8.142 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/web/stage.py:38(stage_web)
+3947/3285    0.004    0.000    2.644    0.001 {built-in method builtins.sum}
+        1    0.000    0.000    2.614    2.614 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/settle/stage.py:57(settle_the_web)
+   954516    0.751    0.000    2.400    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+       45    0.016    0.000    2.075    0.046 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/checks.py:376(served_network)
+    28781    0.028    0.000    2.057    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/checks.py:396(<genexpr>)
+    26974    0.161    0.000    2.024    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/checks.py:365(lanes_share_tread)
+        1    0.001    0.001    1.899    1.899 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/serve.py:448(lay_door_paths)
+       10    0.001    0.000    1.722    0.172 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/settle/stage.py:71(<genexpr>)
+        3    0.001    0.000    1.620    0.540 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/tree.py:469(settle_tree)
+   980586    1.041    0.000    1.458    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/primitives.py:45(seg_closest)
+       27    0.002    0.000    1.249    0.046 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/geom.py:351(_trim_to_service)
+      542    0.030    0.000    1.182    0.002 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/geom.py:390(serves)
+        2    0.000    0.000    1.122    0.561 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/settle/stage.py:22(settle_reach)
+        1    0.003    0.003    1.064    1.064 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/web/skeleton.py:87(_lay_skeleton)
+        3    0.006    0.002    1.064    0.355 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/tree.py:124(lanes_of)
+      892    0.038    0.000    1.032    0.001 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/geom.py:316(end_serves)
+        1    0.000    0.000    0.981    0.981 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/web/stage.py:294(lay_reachable_runs)
+   321436    0.222    0.000    0.937    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/checks.py:373(<genexpr>)
+        4    0.000    0.000    0.910    0.227 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/web/stage.py:297(<genexpr>)
+       22    0.001    0.000    0.910    0.041 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/serve.py:134(_lay_web_lane)
+    68383    0.038    0.000    0.750    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/geom.py:348(<genexpr>)
+     2460    0.034    0.000    0.745    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/tree.py:157(off_the_needle)
+        1    0.000    0.000    0.733    0.733 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/keeper.py:58(unsettled)
+    67937    0.089    0.000    0.712    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/geom.py:209(ring_within)
+
+

@@ -1,0 +1,17 @@
+perf-profile seed 39 stage water_frame: 0.0s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T115936Z-seed39-water_frame.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         9 function calls in 0.000 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/water/skeleton.py:27(stage_water_frame)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/core.py:485(meta)
+        1    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+        2    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/water/skeleton.py:15(grows_grain)
+        2    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+
+

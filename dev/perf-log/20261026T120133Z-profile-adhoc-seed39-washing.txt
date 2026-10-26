@@ -1,0 +1,36 @@
+perf-profile seed 39 stage washing: 0.0s under cProfile (the stages before it took 22.6s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120133Z-seed39-washing.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         59404 function calls in 0.038 seconds
+
+   Ordered by: cumulative time
+   List reduced from 79 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.038    0.038 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/washing.py:222(stage_washing)
+        1    0.001    0.001    0.038    0.038 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/washing.py:123(shared_places)
+      640    0.013    0.000    0.037    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/washing.py:93(nearest_on)
+    14440    0.014    0.000    0.020    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/primitives.py:45(seg_closest)
+    14442    0.003    0.000    0.003    0.000 {built-in method math.dist}
+    14494    0.003    0.000    0.003    0.000 {built-in method builtins.min}
+    14452    0.003    0.000    0.003    0.000 {built-in method builtins.max}
+        2    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:271(conflicts)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/washing.py:72(passing_courses)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/core.py:328(admits)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:321(admits)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:504(append)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:325(record)
+      640    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/washing.py:141(<lambda>)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/washing.py:61(washing_form)
+        3    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:268(extents)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/plan.py:332(_roll)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/washing.py:204(draw_washing_place)
+        3    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:80(element_extents)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_knobs.py:65(knob_rng)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:347(_add)
+        3    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:198(box_of)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:611(setdefault)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+
+

@@ -1,0 +1,12 @@
+perf-profile seed 39 stage waterward: 0.0s under cProfile (the stages before it took 2.9s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120015Z-seed39-waterward.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         2 function calls in 0.000 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/water/polder.py:611(stage_waterward)
+
+
