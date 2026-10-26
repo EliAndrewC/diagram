@@ -67,9 +67,10 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
         orphan joined to the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
         link crosses the brook at a crossing place - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no out-and-back over the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a link crossing the brook twice is refused
-        link width - CONVENTION: the widest way within `_LANE_JOIN_FT` of the link (the orphan's and the network's at least)
+        link width - GUESS: searched, the record silent (feature 417 T31 C1, 2026-10-26); as `link_width` draws it - a link continuing a way end to end at its width, at a tee the widest way within reach
+        its planning clearance - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_FABRIC_GAP`, the gap a short link is planned at
         orphan link directness - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); a link up to `_LINK_DIRECTNESS` (4) times the gap
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 6 (rounds of the orphan sweep); 14 (lattice cell for the retry route)
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 6 (rounds of the orphan sweep); 2.0 (the router's pad multiplier: a link may go the long way round); 14 (lattice cell for the retry route)
     """
     made = 0
     for _ in range(6):
@@ -142,18 +143,37 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
         # "within 40 ft of a way" - so the very link laid to JOIN an orphan stopped 29 px short of the
         # network it was joining, and the web shipped as pieces. A link runs from the orphan's vertex to
         # the network's foot point; both ends serve by construction.
-        _w = max(
-            (
-                float(_l.get("w", 3))
-                for _l in s.M.get("lanes", [])
-                if len(_l.get("pts") or []) >= 2
-                and _net_reach(link, list(zip([(float(x), float(y)) for x, y in _l["pts"]], [(float(x), float(y)) for x, y in _l["pts"]][1:], strict=False))) <= _LANE_JOIN_FT
-            ),
-            default=3.0,
-        )
-        _draw_web(s, link, int(_w))
+        _draw_web(s, link, int(link_width(s.M.get("lanes", []), link)))
         made += 1
     return made  # pragma: no cover - six links is far more than any hamlet needs
+
+
+def link_width(lanes: Sequence[Mapping[str, Any]], link: Poly) -> float:
+    """The width an orphan link is drawn at: ONE WIDTH A WAY (`law.width_steps`, asked here where the link is laid - feature
+    417 T31 C1): a link whose end meets another lane's END continues that way, so it takes that lane's width - the orphan's end
+    (the link's start) first; a link meeting only treads stands at tees, where a width changes lawfully, and keeps the widest
+    way within `_LANE_JOIN_FT` of it (the orphan's and the network's at least). Cohort seeds 10 and 37 refused a 6 ft link that
+    continued a 3 ft skeleton arm and a 5 ft way end to end once the settle stopped widening the chain after the fact.
+
+    Research:
+        one width a way - GUESS: searched, the record silent (feature 417 T31 C1, 2026-10-26); the lane law's own rule (`law.width_steps`): a link continuing a way end to end takes its width, the orphan's end first - where both its ends continue ways of two widths, the step stands at the network's end
+        a link's width at a tee - GUESS: searched, the record silent (feature 417 T31 C1, 2026-10-26); the widest way within `_LANE_JOIN_FT`, a tee where a width may change
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.5 (an end on the link's end)
+        a footpath where nothing is near - research/questions/0081-village-lanes.drawing.html: 3 (a link with no way within reach, or a record with no width, drawn as the 3 ft footpath)
+    """
+    live = [ln for ln in lanes if len(ln.get("pts") or []) >= 2]
+    for tip in (link[0], link[-1]):
+        for ln in live:
+            if any(math.dist(tip, (float(q[0]), float(q[1]))) <= 0.5 for q in (ln["pts"][0], ln["pts"][-1])):
+                return float(ln.get("w", 3))
+    return max(
+        (
+            float(ln.get("w", 3))
+            for ln in live
+            if _net_reach(link, list(zip([(float(x), float(y)) for x, y in ln["pts"]], [(float(x), float(y)) for x, y in ln["pts"]][1:], strict=False))) <= _LANE_JOIN_FT
+        ),
+        default=3.0,
+    )
 
 
 def farm_bands(M: Mapping[str, Any]) -> list[Poly]:

@@ -144,6 +144,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T31 conversion C1 (2026-10-26): one width a way, asked where the orphan link is laid": {
+   "sha256": "f9b038de789ff5f0a2bd7e5102116f7e561f0ee22d03426f62c0867f1580b8d3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T42 (T31's conversion C1, D11): one width a way, asked where the orphan link is laid": {
+   "sha256": "080af34113eb1b019dcb959232cb7bd171f94f9938cab1df4efda6e4bb0381e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T42 Approach (checklist part A)": {
+   "sha256": "e56b183047264e1e3fad0519060239a40b70af8e3211d6249570deee5c776b5b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2597,6 +2615,53 @@
      "summary": "Re-run the landing cohort with settle_joins and settle_widths restored to the last resort and the rest of the cut kept, to see whether it returns to 54 of 54.",
      "class": "within",
      "why": "D35 (accepted spec) already routes a NEEDED step to D11's conversion (its rule asked by the placer that lays what it mends) rather than deletion, and only after measurement; restoring two menders shown needed, pending that conversion, is that route, not a carve-out. It keeps the rest of the cut, so it does not preserve repair behavior beyond what the measurement shows needed, and FR-004/the GM's 'get rid of all of them' are still served by the conversion D35 owes. Nothing is set down: a conversion that cannot land green must still be written as an exception and ruled under D35."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T31 conversion C1 (2026-10-26): one width a way, asked where the orphan link is laid",
+    "### T42 (T31's conversion C1, D11): one width a way, asked where the orphan link is laid",
+    "### T42 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "C1-rule",
+     "summary": "The width_steps repair (settle_widths) is replaced by asking 0081's one-width-a-way rule in the placer that lays the orphan link (_join_orphan_ways via link_width): a link meeting another lane end to end takes that lane's width, the orphan's end first.",
+     "class": "within",
+     "why": "This is the conversion the GM asked for on 2026-10-25 ('turning off automated checks, and then replacing them with just having the algorithm place correctly in the first place') and that D35/D11 lay down: the needed step's rule is asked by the placer that lays what the step mends, with the predicate and the placer named. The value is the lane law's own (0081), so D11's one-recorded-value condition holds."
+    },
+    {
+     "id": "C1-tees",
+     "summary": "A link meeting only treads (tees) keeps the widest way within _LANE_JOIN_FT, as before.",
+     "class": "within",
+     "why": "It keeps nothing the GM asked to change: the rule being moved into the placer (one width a way) allows a step at a tee, and the measurement backs that: every width_steps refusal on seeds 10 and 37 was an end-to-end joint, and 54 of 54 pass with settle_widths gone. The rule's own scope stays whole."
+    },
+    {
+     "id": "C1-probe-and-delete",
+     "summary": "settle_widths is probed off the last resort against the landing cohort and the five pool maps; if it is not needed it is deleted with its dead closure (settle_widths, rewidth and their tests), and the shared fragments test is kept.",
+     "class": "within",
+     "why": "D35 says the not-needed steps are deleted with their tests and dead closure (D23) and landed through make land when FR-008 holds. Keeping the fragments test keeps a check of something still in the engine and adds no scope."
+    },
+    {
+     "id": "C1-fallback",
+     "summary": "If it is still needed, the next placer the refusals name gets the same rule; otherwise the step is set down with its seeds and ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "This repeats D35/D11 word for word in effect: a conversion that cannot land green is recorded and set down, the claim is written as an exception and ruled, and nothing is iterated on seed by seed."
+    },
+    {
+     "id": "T42-maps-move",
+     "summary": "Landing the change redraws the one orphan link on Inashiro and on Kashikawa at 5 ft where it was 6, and redraws Inashiro's commons around it.",
+     "class": "within",
+     "why": "The GM, 2026-10-25: 'Changing behavior is fine as long as it is in line with our research.' The new width follows 0081's one width a way, and FR-008 is met (54 of 54 and the pool gate)."
+    },
+    {
+     "id": "T42-order-exits-done",
+     "summary": "Order: after T41, as the first of T31's conversions. Exits: green lands, red is set down with its seeds. Done: link_width is asked at the link, settle_widths is gone and make land is green.",
+     "class": "within",
+     "why": "This matches D11's stop line and D35's sequence. It does no work aimed at the fresh rate and no FR-007 room work."
     }
    ]
   }
