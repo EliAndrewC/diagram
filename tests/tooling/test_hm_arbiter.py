@@ -52,7 +52,7 @@ def test_a_ruling_is_binding_once_and_reaches_the_gm(tmp_path: pathlib.Path) -> 
     )
     assert row["kind"] == "reversal" and ha.owed(root) == {}
     d = root / "specs" / "375-x"
-    assert json.loads((d / "gm-review.jsonl").read_text())["ruling"] == "process-fault"
+    assert not (d / "gm-review.jsonl").exists(), "a ruling with nothing for the GM stays in arbiter.jsonl (feature 432)"
     assert ha.open_fixes(d) == [("reversal:/a.md", "x")], "a process fault is an open tooling fix (feature 379)"
     with pytest.raises(ValueError, match="already ruled"):
         ha.record_ruling(root, "reversal:/a.md", {"ruling": "accept", "why": "again"}, "round-arbiter")
@@ -835,7 +835,23 @@ def test_an_ask_naming_a_feature_by_number_is_filed_under_that_feature(tmp_path:
     ruling.write_text(json.dumps({"ruling": "accept", "why": "round 2 found only wording"}))
     assert ha.main(["ruled", "ask:414-round3", str(ruling), "--as", "round-arbiter"]) == 0
     d = root / "specs" / "414-price-stability"
-    assert "ask:414-round3" in (d / "arbiter.jsonl").read_text() and (d / "gm-review.jsonl").is_file()
+    assert "ask:414-round3" in (d / "arbiter.jsonl").read_text() and not (d / "gm-review.jsonl").is_file()
     assert not (root / "specs" / "375-x" / "arbiter.jsonl").exists(), "the active feature holds none of it"
     assert ha.main(["ask", "414-round3", "may the sixteen units close on round 2?"]) == 1, "already ruled, found in 414"
     assert ha.feature_dir(root, "ask:which-route") == root / "specs" / "375-x", "an ask naming no feature stays with the active one"
+
+
+def test_a_ruling_handing_the_gm_a_decision_needs_for_gm(tmp_path: pathlib.Path) -> None:
+    """Feature 432 (FR-003, plan D4): 374#60's ruling said the residence size was "the GM's question" in its prose and never
+    reached him; such words without `for_gm` are refused, and `for_gm` on any trigger is a question owed escalation-check."""
+    root = _clone(tmp_path)
+    for said in ("redrawing or recording the deviation is the GM's question", "held for the GM", "the GM must decide which"):
+        assert ha.hands_the_gm(said), said
+    for said in ("the rounds converged; nothing for the GM", "the arbiter accepts the GM's 2026-10-25 rule"):
+        assert not ha.hands_the_gm(said), said
+    ha.trip(root, "ask:b7-residence-route", "ask", "b7", "redraw or deviate?", 1)
+    with pytest.raises(ValueError, match="for_gm"):
+        ha.record_ruling(root, "ask:b7-residence-route", {"ruling": "accept", "why": "which route is the GM's question"}, "round-arbiter")
+    ha.record_ruling(root, "ask:b7-residence-route", {"ruling": "accept", "why": "which route is the GM's question", "for_gm": "redraw the three sheets or record the deviation?"}, "round-arbiter")
+    rows = [json.loads(ln) for ln in (root / "specs" / "375-x" / "gm-review.jsonl").read_text().splitlines()]
+    assert [(r["kind"], r["status"], r["source"]) for r in rows] == [("question", "owed", "ask:b7-residence-route")], "an ask's for_gm too"

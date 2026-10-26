@@ -133,8 +133,10 @@ by the DIRECT route; no map moves. Every guard keeps its test companion (XVIII).
 
 ### T05 Approach (checklist part A)
 
-1. **The goal, in the world.** A small page edit owes impl-drift only on the claims the edited passage bears on.
-2. **The constraints.** A claim whose cited passage changed stays owed; no narrowing lets through a drift today's checks catch.
+1. **The goal, in the world.** A small page edit owes checks only on the claims whose cited passage it changed; a claim
+   citing only passages the edit left unchanged is cleared mechanically, recorded as such (FR-005 a).
+2. **The constraints.** A claim whose cited passage changed stays owed; what the clearing lets through that today's
+   triage catches is stated and priced (FR-005's no-defect rule).
 3. **Where each comes from.** O: the audit's 385#0 (217 claims triaged, 58 impl-drift checks for two bullets on 0081).
 4. **Do they describe the world here?** In part: a claim is already owed impl-drift only when a block it rests on
    changed, the rest a triage (`scripts/record/claims_triage.py`). Not yet known: on recent triages, how many claims the
@@ -143,15 +145,19 @@ by the DIRECT route; no map moves. Every guard keeps its test companion (XVIII).
 6. **The exits.** Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
 7. **The search smell.** None.
 8. **The budget.** 90 min (a GUESS, the session's, 2026-10-26).
-9. **Done, measured.** `research.md` R3: the 0081 edit's claims owed by today's rules and by the change, with every DRIFTED
-   claim the old route found still owed.
+9. **Done, measured.** The mechanical clearing built and tested; `research.md` R3: on the 0081 edit replayed, the claims owed
+   by today's rules and by the change, and the price of clearing - the claims that past triages named TOUCHES on unchanged
+   passages and impl-drift then found DRIFTED or MISLABELED, which clearing would no longer catch.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
 ### T05 Decisions
 
-- **D7** Measure first (the triage's TOUCHES and impl-drift's yield on them); if the triage is already the per-passage scoping
-  the GM asked for, the change is to the triage's own threshold for TOUCHES, recorded with its yield. Rendering: none.
+- **D7** A claim owed only a triage because a page it cites changed while every block it rests on (`rests`) stands is
+  cleared mechanically, without the triage, and its row records the clearing (FR-005 a). The no-defect rule is met by
+  stating and pricing what the clearing lets through (R3, from past triages); if that price is material, it goes to
+  `make arbiter-ask` before landing, not to a different mechanism. A claim whose rested-on block changed is owed impl-drift
+  as today. Rendering: none.
 
 ## T06 - F: the backlog cleared, three carried (FR-006)
 

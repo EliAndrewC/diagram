@@ -120,23 +120,23 @@ def test_a_ruling_s_tooling_fix_opens_an_item_that_holds_the_next_tick(clone: Pa
     _rule(clone, trigger, {"ruling": "continue", "why": "progress, but one probe ran ten times", "tooling_fix": "make probe keeps its rolls", "fix_measure": "x", "fix_minutes": 10})
     assert cp.hold(clone, T0 + 3700) == ""
     assert "make probe keeps its rolls" in arb.fix_hold(clone / "specs" / "999-test"), "the 379 hold names the fix"
-    assert [r.get("tooling_fix") for r in _gm_rows(clone)] == ["make probe keeps its rolls"]
+    assert _gm_rows(clone) == [], "a fix is the session's to make; it reaches the GM only if declined (feature 432)"
 
 
-def test_a_change_of_route_names_its_route_and_reaches_the_gm(clone: Path) -> None:
+def test_a_change_of_route_names_its_route_and_stays_with_the_arbiter(clone: Path) -> None:
     trigger = cp.open_checkpoint(clone, T0 + 3600)
     with pytest.raises(ValueError, match="change-route"):
         _rule(clone, trigger, {"ruling": "change-route", "why": "five seating orders tried"})
     with pytest.raises(ValueError, match="one of"):
         _rule(clone, trigger, {"ruling": "accept", "why": "an hour has no accept"})
     _rule(clone, trigger, {"ruling": "change-route", "why": "five seating orders tried", "what": "widen the strip band (a convenience number) before another order"})
-    assert [r["ruling"] for r in _gm_rows(clone)] == ["change-route"]
+    assert _gm_rows(clone) == [], "a route change is the arbiter's own, not the GM's (feature 432)"
 
 
-def test_something_for_the_gm_reaches_the_gm_under_a_continue(clone: Path) -> None:
+def test_something_for_the_gm_is_a_question_owed_escalation_check(clone: Path) -> None:
     trigger = cp.open_checkpoint(clone, T0 + 3600)
     _rule(clone, trigger, {"ruling": "continue", "why": "steady", "for_gm": "the tier's packing rule wants the GM's word"})
-    assert [r.get("for_gm") for r in _gm_rows(clone)] == ["the tier's packing rule wants the GM's word"]
+    assert [(r["kind"], r["status"], r["question"]) for r in _gm_rows(clone)] == [("question", "owed", "the tier's packing rule wants the GM's word")]
 
 
 def test_a_review_owed_at_the_checkpoint_holds_the_tick_until_it_is_dispatched(clone: Path) -> None:

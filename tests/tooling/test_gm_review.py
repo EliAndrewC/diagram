@@ -49,11 +49,17 @@ def test_a_row_for_the_gm_brings_its_box_and_the_feature_reads_pending(root: pat
     assert not gm.ensure_box(d), "one box"
 
 
-def test_an_arbiter_ruling_is_a_row_and_the_gm_closes_it(root: pathlib.Path) -> None:
+def test_a_ruling_reaches_the_gm_only_as_a_question_and_the_gm_closes_it(root: pathlib.Path) -> None:
+    """Feature 432 (FR-001): a ruling with nothing for the GM stays in arbiter.jsonl; its `for_gm` is a question owed
+    escalation-check, which brings the box."""
     d = root / "specs" / "375-x"
     ha.trip(root, "reversal:/a.md", "reversal", "/a.md", "A -> B -> A", 1)
     ha.record_ruling(root, "reversal:/a.md", {"ruling": "accept", "why": "the second wording is the right one"}, "round-arbiter")
-    assert gm.box(d) in (d / "tasks.md").read_text(), "the ruling's row brought the box"
+    assert gm.rows(d) == [] and gm.box(d) not in (d / "tasks.md").read_text(), "a ruling alone is not the GM's"
+    ha.trip(root, "reversal:/b.md", "reversal", "/b.md", "A -> B -> A", 1)
+    ha.record_ruling(root, "reversal:/b.md", {"ruling": "accept", "why": "fine", "for_gm": "keep the old wording on the shrine page?"}, "round-arbiter")
+    assert [(r["kind"], r["status"], r["source"]) for r in gm.rows(d)] == [("question", "owed", "reversal:/b.md")]
+    assert gm.box(d) in (d / "tasks.md").read_text(), "the question brought the box"
     with pytest.raises(ValueError, match="no report.md"):
         gm.reviewed(root, d)
     (d / "report.md").write_text("# report\n")
@@ -129,11 +135,9 @@ def test_the_held_rows_and_the_command_line(root: pathlib.Path, monkeypatch: pyt
 
 def test_the_summary_counts_and_one_feature_groups_its_rows(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
     d = root / "specs" / "375-x"
-    for trigger in ("round:modal-form|modal:sheet/kitchen@3", "round:quote-check|q:0047@3"):
-        ha.trip(root, trigger, "round", trigger, "three rounds", 1)
-        ha.record_ruling(root, trigger, {"ruling": "accept", "why": "the rounds converged"}, "round-arbiter")
-    ha.trip(root, "red-gate@2026-10-10T22:25:54Z", "red-gate", "gate", "two reds", 1)
-    ha.record_ruling(root, "red-gate@2026-10-10T22:25:54Z", {"ruling": "continue", "why": "not a loop"}, "round-arbiter")
+    for trigger in ("round:modal-form|modal:sheet/kitchen@3", "round:quote-check|q:0047@3"):  # rows as feature 375 queued them
+        _rows(d, {"kind": "arbiter", "trigger": trigger, "ruling": "accept", "why": "the rounds converged"})
+    _rows(d, {"kind": "arbiter", "trigger": "red-gate@2026-10-10T22:25:54Z", "ruling": "continue", "why": "not a loop"})
     summary = gm.listing(root, width=200)
     assert "3 rulings (1 continue)" in summary and "converged" not in summary, "the bare listing counts, never lists rows"
     one = gm.listing(root, "375", width=200)
@@ -161,17 +165,20 @@ def test_explain_says_what_fired_what_was_ruled_and_what_the_gm_is_asked(root: p
     (root / "research" / "questions").mkdir(parents=True)
     for name in ("0047-farm-privies.html", "0047-farm-privies.drawing.html"):
         (root / "research" / "questions" / name).write_text("")
-    ha.trip(root, "round:modal-form|modal:sheet/kitchen@3", "round", "modal-form|modal:sheet/kitchen", "three rounds on the kitchen", 1)
-    ha.record_ruling(
-        root,
-        "round:modal-form|modal:sheet/kitchen@3",
-        {"ruling": "accept", "why": "the rounds converged", "what": "nothing is left", "tooling_fix": "count only own rounds", "fix_measure": "x", "fix_minutes": 10},
-        "round-arbiter",
+    _rows(  # the rows as feature 375 queued them, which the GM may still read and overturn
+        d,
+        {
+            "kind": "arbiter",
+            "trigger": "round:modal-form|modal:sheet/kitchen@3",
+            "ruling": "accept",
+            "why": "the rounds converged",
+            "asked": "three rounds on the kitchen",
+            "what": "nothing is left",
+            "tooling_fix": "count only own rounds",
+        },
+        {"kind": "arbiter", "trigger": "round:quote-check|q:0047@3", "ruling": "continue", "why": "one new note", "tooling_fix": "keep replies"},
+        {"kind": "arbiter-fix-declined", "trigger": "round:quote-check|q:0047@3", "tooling_fix": "keep replies", "note": "it contradicts FR-015"},
     )
-    assert gm.rows(d)[0]["asked"] == "three rounds on the kitchen" and gm.rows(d)[0]["what"] == "nothing is left", "the question kept"
-    ha.trip(root, "round:quote-check|q:0047@3", "round", "quote-check|q:0047", "", 1)
-    ha.record_ruling(root, "round:quote-check|q:0047@3", {"ruling": "continue", "why": "one new note", "tooling_fix": "keep replies", "fix_measure": "x", "fix_minutes": 10}, "round-arbiter")
-    ha.settle_fix(root, "round:quote-check|q:0047@3", "declined", "it contradicts FR-015")
     _rows(
         d,
         {

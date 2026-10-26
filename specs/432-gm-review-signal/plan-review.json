@@ -1,0 +1,287 @@
+{
+ "feature": "432-gm-review-signal",
+ "blocks": {
+  "preamble": {
+   "sha256": "428e9a48a5b8b013abad38f7c1ba166890ef2936b243669a29739f823c5493ae",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "c2087806442cbec2e8d93ee0471387e60d92da99efc47f6a5be95e985a98f54c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Measured before planning (2026-10-26)": {
+   "sha256": "7d8783254c6201de99fbab67ced9d20e9a7c72770f73e5b07751a79592cef458",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "f53a347a717c573bf9606b9c2a7713d9f80011e247d8dbe2cefea4107b2bd135",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - the question record and one source for held decisions (FR-002 record, FR-004)": {
+   "sha256": "4b40923c9c1784ad2cfafacd96d7b64c9acadf115b98eb03943efc8cd0e40253",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "a2206a534599fb9da14497f03a06a6d8dee1182755c70c6c32801514364e2d66",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "fee68c9f32bc7cdaef05a9eddbd37a1c328f11dd6d38f7a4d2047e361011eb0c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - what the arbiter queues (FR-001, FR-003)": {
+   "sha256": "c178dcdb0d20f1d66c7e04d5a366208de05fe3f18c9d30564ddd66aa525f62fd",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "7f7689c6a74ca23286bc5a81433dcfcc0a098efc783f305dd62a302bedac65ba",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "e15aafaea2e15ca8f94a1f8afcdb0768e46a0409e5337638fd0af26f09f6bde6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the door enforced (FR-002 enforcement)": {
+   "sha256": "32e2478f67c22ffba2d3fdfd238cac7f102e01f30193aca929850c4621dfba8d",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "dff50c79e88cf04b6e3b6b977a778fa853a4f33afc58e92c1bbbb967bb79ff9d",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "5ed8f21ab5b1d01089ac1b6c02c7539467908a5c514c2ac0bd8158cfd01b4bc0",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - E(b): pop-ups that share a paragraph (FR-005 b)": {
+   "sha256": "d695d886515113863a2e69e3b837c389d49ec702b336a1e142643768279e2c0a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "0d76b898c9d373ca287b0a01aeb9d3e31c8ae0aecde365c65b9b6d11170e7b03",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Decisions": {
+   "sha256": "60abce4e4a9f0a6b7e720c81fb1ddb0d55bd7862c99ec4ddc6557ff8f70a076f",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T05 - E(a): claims after a page edit (FR-005 a)": {
+   "sha256": "8c38f62d11caba6448b24bb3e555dc0faf13285ee408b78718d595f4c2d9f6f6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "490667bd0cc34187cc02aab6a5a74226cfed8679349f5ea6eabfbe5f2345afe0",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Decisions": {
+   "sha256": "737ff509bbf10c9a4b023033907c5d906d2a15f3349a085a637f95e127683e86",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T06 - F: the backlog cleared, three carried (FR-006)": {
+   "sha256": "6c395a91f10b213fbb931d97ab62c44ccfd84ade4b0d9243a417b4791731869f",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "d0dd80411889ee1419636e7b0caea66696cbba1e9f315a2261260b4a3aa0a179",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Decisions": {
+   "sha256": "5ca538ab1fdab63cf54f7a701d3c8b34b80b3685a38b9f819c6b46eea8ec5d71",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T07 - the texts that say what reaches the GM, and the close (FR-007)": {
+   "sha256": "4657f17dcb41952f1d7b2578075a06654107fb5f6fe9d8ff75dd11fbbd944907",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "986762fce03b1631dad70aeeec73992e7bdce0ec7a0f783c82526c4ddd2735fc",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Decisions": {
+   "sha256": "0053840c817ed76aaef8aef6ac6310dac66b3aad273b803bfcf5839e435d6071",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Constitution Check",
+    "## Measured before planning (2026-10-26)",
+    "## Summary",
+    "## T01 - the question record and one source for held decisions (FR-002 record, FR-004)",
+    "## T02 - what the arbiter queues (FR-001, FR-003)",
+    "## T03 - the door enforced (FR-002 enforcement)",
+    "## T04 - E(b): pop-ups that share a paragraph (FR-005 b)",
+    "## T05 - E(a): claims after a page edit (FR-005 a)",
+    "## T06 - F: the backlog cleared, three carried (FR-006)",
+    "## T07 - the texts that say what reaches the GM, and the close (FR-007)",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "### T07 Approach (checklist part A)",
+    "### T07 Decisions",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "A question is a gm-review.jsonl row of kind question (owed|kept|cut, reason); make gm-escalated records KEEP/CUT; gm-review shows kept as decisions, owed apart as the session's.",
+     "class": "within",
+     "why": "FR-002: one command records escalation-check's verdict, both kept in the record; owed listed apart from decisions; FR-004 one source."
+    },
+    {
+     "id": "D2",
+     "summary": "held() keeps only the 'Held behind' waiting reading; an override's own Held flag or held key is no longer a decision.",
+     "class": "within",
+     "why": "FR-004 verbatim."
+    },
+    {
+     "id": "D3",
+     "summary": "for_gm accepted on every trigger kind; bundle text and round arbiter's contract say it is the one way to the GM, through escalation-check.",
+     "class": "within",
+     "why": "FR-001 'on every trigger kind'; FR-002/B one door."
+    },
+    {
+     "id": "D4",
+     "summary": "C's refusal is a case-insensitive regex set (the GM's to decide|call|question|decision, for the GM to, held for the GM, the GM must/should decide, GM's choice) in why/what without for_gm; tested on 335#2, 374#60 and 20 negatives.",
+     "class": "within",
+     "why": "FR-003: each of its four named phrasings (his call, his question, his to decide, held for him) is covered."
+    },
+    {
+     "id": "D5",
+     "summary": "Landing refusal in push_gates.py over the active feature's records; Stop check in escalation-hooks.sh reads kept questions with utc after the session's last GM message, named by row id.",
+     "class": "within",
+     "why": "FR-002: a feature with an owed question cannot land; 'kept since the GM last spoke' operationalizes 'named in that session's next final message', refused once."
+    },
+    {
+     "id": "D6",
+     "summary": "E(b): measure the bamboo/shelter batch first; the change is chosen from the replay and recorded as a decision before it is made.",
+     "class": "within",
+     "why": "FR-005 'measured first on the two replays, then fixed'. The chosen change will return as a changed block for review."
+    },
+    {
+     "id": "D7a",
+     "summary": "E(a): measure first - the triage's TOUCHES and impl-drift's yield on the 0081 edit.",
+     "class": "within",
+     "why": "FR-005 'measured first on the two replays'."
+    },
+    {
+     "id": "D7b",
+     "summary": "E(a): 'if the triage is already the per-passage scoping the GM asked for, the change is to the triage's own threshold for TOUCHES' (with T05 Approach 1 'claims the edited passage bears on' and T05 Done 'every DRIFTED claim the old route found still owed' as its lever).",
+     "class": "narrowing",
+     "why": "NOT LEGITIMATE. FR-005(a) requires that a claim citing only passages the edit left unchanged is cleared mechanically, recorded as such, and that triage is owed only for claims whose cited passage changed. The branch keeps the triage running over every unchanged-passage claim and tunes a downstream threshold: on 385#0 the 217 claims would still be triaged for two bullets, i.e. per page, which is the thing E (claims invalidated per cited passage, not per page) exists to stop. Mechanical clearing is not impossible, not excluded by the GM's words, and does not defeat the purpose; 'if the triage is already what the GM asked for' completes his thought. 'Bears on' is the triage's semantic test, not citation. The plan should implement mechanical clearing and meet the no-defect rule by proof on the 0081 replay OR by stating and pricing what it lets through (the spec allows either); if T05 item 4's finding means the spec's premise is wrong, that goes to a spec amendment or make arbiter-ask, not a plan-side substitute.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "D8",
+     "summary": "Every open row marked reviewed via make gm-reviewed with his 2026-10-26 words, feature by feature; 374#60, 385#40, 397#10 written as kept questions in their own features with the audit's escalation-check reason.",
+     "class": "within",
+     "why": "FR-006, FR-004 (residence gets a kept question), SC-005."
+    },
+    {
+     "id": "D9",
+     "summary": "Texts change with the code of the task that makes each true (T01-T03); T07 sweeps FR-007's search hits, each changed or recorded as needing none.",
+     "class": "within",
+     "why": "FR-007."
+    },
+    {
+     "id": "A-T01",
+     "summary": "gm-review.jsonl stays the per-feature file; old rows read as before.",
+     "class": "within",
+     "why": "Constraint inside FR-002/FR-004; FR-001 leaves accepts and drifts unchanged."
+    },
+    {
+     "id": "A-T02",
+     "summary": "arbiter.jsonl unchanged; hour's continue-with-nothing rule kept; fix bookkeeping (open, done, declined) unchanged.",
+     "class": "within",
+     "why": "FR-001: every ruling still written to arbiter.jsonl; only the GM rows change."
+    },
+    {
+     "id": "A-T03",
+     "summary": "A refusal names the command that clears it; turn's end refused at most once per message.",
+     "class": "within",
+     "why": "FR-002 'refused once'; FR-007 names its cure."
+    },
+    {
+     "id": "A-T04",
+     "summary": "No check skipped on a pop-up whose own text changed.",
+     "class": "within",
+     "why": "FR-005 no-defect rule, the proof option."
+    },
+    {
+     "id": "A-T06",
+     "summary": "His words on every row cleared; nothing deleted.",
+     "class": "within",
+     "why": "FR-006 'marked reviewed'."
+    },
+    {
+     "id": "A-T07",
+     "summary": "The constitution's text changes under its own amendment rule.",
+     "class": "within",
+     "why": "FR-007 names the constitution among the texts."
+    }
+   ]
+  }
+ ]
+}
