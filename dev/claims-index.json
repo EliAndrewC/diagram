@@ -37478,6 +37478,23 @@
   "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a row's streets trimmed": {
+  "body": "20ef57e991b28a01",
+  "claim": "a row's streets trimmed - row-villages-resson.drawing: a row's street runs on off the map as the road into it - every street of a row, the first's ends and the join legs too, is trimmed to the last farm it serves (`tidy_lane_ends` with `streets`), a departure the code keeps until feature 417 T47",
+  "code": "1141d6a6371f4782",
+  "core": "9590bb47e32917bc",
+  "date": "2026-10-26",
+  "note": "`tidy_lane_ends(s, list(plan.envelope), streets=True)` pulls every street's ends back to the last farm it serves (via `_trim_to_service`), but the cited page says \"The street runs on off the map as the road into it\". The claim admits this departure, yet the page records no deliberate trim, so it is an unrecorded DEVIATION. Either the page records it and the claim is relabeled `DEVIATION`, or the street is laid running on off the map (T47)",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
+  },
+  "research": "37ada2a33aa587d2",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
+   "0033-row-villages-resson.drawing.html:8c303daeddea6496"
+  ],
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a web lane's middle off the fabric": {
   "body": "f326458b2a344b62",
   "claim": "a web lane's middle off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: WEB_FABRIC_GAP, 7 ft clear of a garden fence (`clear_runs`' tight margin)",
@@ -37634,14 +37651,6 @@
   "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#the FIRST row street's ends, and each street's join leg, are trimmed to service as well (`tidy_lane_ends(..., streets=True)` takes every `street` lane; the claim covers only \"a further row street\"), against 0033 §128 \"the street runs on off the map as the road into it\"": {
-  "code": "9590bb47e32917bc",
-  "core": "9590bb47e32917bc",
-  "date": "2026-10-26",
-  "note": "the FIRST row street's ends, and each street's join leg, are trimmed to service as well (`tidy_lane_ends(..., streets=True)` takes every `street` lane; the claim covers only \"a further row street\"), against 0033 §128 \"the street runs on off the map as the road into it\"",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#the households' ways first": {
   "body": "fc2429f745237e1b",
   "claim": "the households' ways first - how-our-maps-lay-a-clustered-settlements-lanes.drawing: every household's own way is laid in the gaps, and the web's lanes after it (`settle_tree` before the skeleton, the cuts and the door paths, on a clustered map)",
@@ -37661,17 +37670,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#the web's frame": {
-  "body": "fc2429f745237e1b",
-  "claim": "the web's frame - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH`, 100 ft past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band) is only the room the cuts are laid in, and a web lane is cut back where it stops serving (`trim_lane_stubs`)",
-  "code": "432b2deac54cc607",
+  "body": "20ef57e991b28a01",
+  "claim": "the web's frame - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a back lane is cut in about 30 ft past the last house it serves - the code cuts in a frame of `BUNDLE_PITCH` (100 ft) past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band, and trims back where a lane stops serving (`_trim_to_service`, `trim_lane_stubs`), a departure the code keeps until feature 417 T32",
+  "code": "a781c6e4e0ecaeb3",
   "core": "9590bb47e32917bc",
   "date": "2026-10-26",
-  "note": "the page names the room a back lane is cut in as \"about 30 ft past the last of them - the room it is cut in\"; the code cuts in a frame of `_reach_along + BUNDLE_PITCH` (100 ft past the outermost house) or `seat lat * CLUSTER_SPAN_FACTOR`, whichever is larger. The extra room is visible on the map: the trim keeps an end that reaches the bund or another way within 60 ft. The claim's rewording (\"the frame is only the room\") contradicts the page instead of following it. Either cut each lane about 30 ft past its last house, or make the claim a DEVIATION and have 0246's drawing page record it. The pull-back is done by `_lay_web_lane`'s `_trim_to_service`, not only by `trim_lane_stubs`",
+  "note": "`_margin_frame(plan, max(plan.seat[\"lat\"] * CLUSTER_SPAN_FACTOR, _reach_along + BUNDLE_PITCH), ...)` cuts the web 100 ft past the outermost house, or 1.6 times the seat band, where the page says a back lane is cut \"about 30 ft past the last of them - the room it is cut in\". The trims back (`_trim_to_service` in `_lay_web_lane`, `trim_lane_stubs`) follow the page's pull-back, but the 100 ft frame and the seat-band figure are a departure the page does not record. Either relabel as a recorded `DEVIATION` or bring the cut in to about 30 ft (T32)",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
   ],
@@ -37716,18 +37727,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#web lanes off the water": {
-  "body": "fc2429f745237e1b",
-  "claim": "web lanes off the water - villages-beside-their-stream-one-bank-or-both.drawing: a way keeps to its own bank; web cuts clipped at the watercourses and drawn channels",
-  "code": "dd7b4a388a67772c",
+  "body": "20ef57e991b28a01",
+  "claim": "web lanes off the water - villages-beside-their-stream-one-bank-or-both.drawing: a way keeps to its own bank unless crossing saves it more than about 150 ft, at a crossing place - the web's cuts are clipped at every watercourse and drawn channel and never cross, a departure the code keeps until feature 417 T32",
+  "code": "841626e8f9915bf1",
   "core": "9590bb47e32917bc",
   "date": "2026-10-26",
-  "note": "`clear_runs(..., lines=watercourses + drawn_water)` cuts every web run at every water line (14 ft margin), so a web cut never crosses. The page says a way keeps to its own bank \"unless crossing saves it more than about 150 ft\", crossing at a crossing place every ~160 ft, and that houses may stand on both banks. The claim quotes the rule without its \"unless\". Either let a cut cross at a crossing place, or make the claim a DEVIATION and have 0035's drawing page record it",
+  "note": "`clear_runs(..., lines=list(plan.watercourses) + drawn_water, ...)` and the same water list passed to `lay_reachable_runs`/`_lay_web_lane` clip every web cut at the water, so it never crosses. The page says \"A way keeps to its own bank unless crossing saves it more than about 150 ft\" and sets crossing places \"every 160 ft or so\". The page does not record a never-cross rule for web lanes; it records only the track's and the field spur's (§151). The pointer also covers the drawn irrigation channels, which this brook page does not speak to. Either the page records the departure and the claim is relabeled `DEVIATION`, or the cuts cross at a crossing place (T32)",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
   "research": "9354777ef34af3d3",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
