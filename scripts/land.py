@@ -94,7 +94,16 @@ def file_known(root: Path) -> None:
     rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "known"])
     if rc == 0 and "claims-known: recorded" in said:  # ...not its "no known drift is unrecorded"
         print(f"land: {said.strip()}", flush=True)
-        run(root, ["git", "add", "--", *(str(p.relative_to(root)) for p in sorted((root / "specs").glob("*/gm-review.jsonl"))), *(str(p.relative_to(root)) for p in sorted((root / "specs").glob("*/tasks.md")))])
+        run(
+            root,
+            [
+                "git",
+                "add",
+                "--",
+                *(str(p.relative_to(root)) for p in sorted((root / "specs").glob("*/gm-review.jsonl"))),
+                *(str(p.relative_to(root)) for p in sorted((root / "specs").glob("*/tasks.md"))),
+            ],
+        )
         run(root, ["git", "commit", "-q", "-m", "known drifts recorded for the GM's review (make land, feature 430 T06)"])
 
 
@@ -232,6 +241,18 @@ def claims_cure(out: str, in_flight: list[str]) -> str:
             + " (`make claims-triaged` / `make claims-checked`) - then run make land again"
         )
     return ""
+
+
+#: how `claims_cure` opens each refusal that waiting cannot end - so the stop names it as such, not as the wait run out
+CURE_OPENINGS = ("claims-gate.sh refuses on a finding no check in flight can cure", "claims-gate.sh: a claim is owed a check and none is in flight")
+
+
+def claims_stop_line(why: str) -> str:
+    """The landing's stop on the claims round: "refused at once" for a refusal no wait can end (`claims_cure`), "did not
+    finish" only for the wait run out - feature 427 T12's landing printed the second for the first, and read as a 20-minute wait."""
+    if why.startswith(CURE_OPENINGS):
+        return f"land: the gates are green, but the claims round refuses and waiting cannot cure it - nothing landed: {why}"
+    return f"land: the gates are green, but the claims round did not finish in {CLAIMS_WAIT_S / 60:.0f} min - nothing landed: {why}"
 
 
 def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
@@ -512,8 +533,11 @@ def gate_machinery_delta(root: Path) -> list[str]:
 def machinery_tests(root: Path, machinery: list[str]) -> str:
     """A gate-machinery delta whose stamp passes (`GATE_MACHINERY`): `make hooks-test` where the hooks stamp is stale, then the
     tooling tests (`make test-file FILE=tests/tooling`); why nothing lands, or ''."""
-    print(f"land: the delta changes how a landing or its gate runs ({', '.join(machinery[:3])}) - the gate's reuse stands (the GM's "
-          "2026-08-25 rule: scripts/ and the Makefile owe no make done), so the tooling tests run instead (ask:430-machinery-gate)", flush=True)
+    print(
+        f"land: the delta changes how a landing or its gate runs ({', '.join(machinery[:3])}) - the gate's reuse stands (the GM's "
+        "2026-08-25 rule: scripts/ and the Makefile owe no make done), so the tooling tests run instead (ask:430-machinery-gate)",
+        flush=True,
+    )
     if run(root, [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--fresh", "hooks"])[0] and run(root, ["make", "--no-print-directory", "hooks-test"], quiet=False)[0]:
         return "land: make hooks-test is red - nothing landed; fix it and run make land again"
     if run(root, ["make", "--no-print-directory", "test-file", "FILE=tests/tooling"], quiet=False)[0]:
@@ -660,7 +684,7 @@ def main(argv: list[str]) -> int:
     if rc := long_runs(root):
         return rc
     if why := wait_for_claims(root, tasks, d):
-        print(f"land: the gates are green, but the claims round did not finish in {CLAIMS_WAIT_S / 60:.0f} min - nothing landed: {why}", file=sys.stderr)
+        print(claims_stop_line(why), file=sys.stderr)
         return 2
     write_ledger(root, d)  # the passes the claims round made beside the gate (405 T52, D27)
     # ONE PUSH, THE TICKS IN IT (405 T51, D24): T13's landing pushed its work, then its ticks - two runs of every push check
