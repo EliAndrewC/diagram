@@ -193,6 +193,81 @@ def measure(seeds: tuple[int, ...], households: int | None = None, warm: bool = 
     return rows
 
 
+#: the `sys.monitoring` tool ids the counting pass may take, first free first (feature 427 T02, D2): `pipeline/gencache.py` and
+#: `overlap_census` hold `PROFILER_ID`, coverage `COVERAGE_ID`, and the tooling tests' dependency tracer (`tests/tooling/_test_deps.py`)
+#: tool 3 - the first form took 3 fixed and failed under it ("tool 3 is already in use")
+COUNT_TOOLS = (4, 5, 3, 0)
+
+
+def free_tool() -> int:
+    """The first of `COUNT_TOOLS` no one holds."""
+    tool = next((t for t in COUNT_TOOLS if sys.monitoring.get_tool(t) is None), None)
+    if tool is None:
+        raise RuntimeError(f"count_calls: every sys.monitoring tool id it may take is held ({COUNT_TOOLS})")
+    return tool
+
+
+def versions() -> dict[str, str]:
+    """The interpreter's and the libraries' versions a call count depends on: a count moves when they change, so T03 compares only
+    snapshots taken on the same ones (feature 427 D3)."""
+    import numpy  # noqa: PLC0415
+    import shapely  # noqa: PLC0415
+
+    return {"python": platform.python_version(), "numpy": numpy.__version__, "shapely": shapely.__version__}
+
+
+def count_calls(seeds: tuple[int, ...], households: int | None = None) -> dict[int, dict[str, int]]:
+    """{seed: {stage: Python function calls}} - the reference rolled again on each seed, at `households` when given, each stage's
+    `sys.monitoring` PY_START events counted (feature 427 T02, D2; the GM 2026-10-26, `request.md` 4: "the call counts themselves
+    are the thing that we are gating on"). A SEPARATE pass from `measure`'s timed one: a per-call Python callback costs about what
+    the calls it counts do, so counting the timed roll would distort the timings the snapshot keeps. What the pass costs: the four
+    reference seeds counted in 12.4 s where their timed rolls took 11.4 s, about 1.09 times a plain roll, measured 2026-10-26
+    (`make perf LABEL=adhoc`, snapshot `20261026T172151Z-adhoc-diagram-backlog.json`) - far under cProfile's +225%. Only Python functions are
+    counted - shapely's and numpy's C work is not, which is the point: the count tracks interpreter work. A roll the generator
+    refuses keeps the stages it ran, as `measure` does."""
+    from l7r.diagram.hamletgen import HamletSpec, plan_site
+    from l7r.diagram.hamletgen.driver import STAGES, roll_scope
+    from l7r.diagram.hamletgen.plan import beyond_the_band
+    from l7r.diagram.settlement import Settlement
+
+    mon = sys.monitoring
+    n = [0]
+
+    def on_start(code: Any, offset: int) -> None:  # noqa: ARG001  # pragma: no cover - see below
+        # NOT UNTESTED, UNOBSERVABLE, as `gencache`'s capture is: a `sys.monitoring` callback's body is invisible to coverage while
+        # coverage is installed, since both use the same machinery. It runs, and the counts the tests assert are its work.
+        n[0] += 1
+
+    spec = dict(REFERENCE, **({} if households is None else {"households": households}))
+    out: dict[int, dict[str, int]] = {}
+    tool = free_tool()
+    mon.use_tool_id(tool, "perf-calls")
+    try:
+        mon.register_callback(tool, mon.events.PY_START, on_start)
+        for seed in seeds:
+            with beyond_the_band():
+                plan = plan_site(HamletSpec(seed=seed, **spec))
+            s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+            per: dict[str, int] = {}
+            with roll_scope(plan.spec):
+                for st in STAGES:
+                    n[0] = 0
+                    mon.set_events(tool, mon.events.PY_START)
+                    try:
+                        with redirect_stdout(io.StringIO()):
+                            st(s, plan)
+                    except ValueError, RuntimeError:  # the generator's refusals, as `measure` reads them
+                        break
+                    finally:
+                        mon.set_events(tool, 0)
+                        per[st.__name__.replace("stage_", "")] = n[0]
+            out[seed] = per
+    finally:
+        mon.register_callback(tool, mon.events.PY_START, None)
+        mon.free_tool_id(tool)
+    return out
+
+
 def machine_identity() -> dict[str, str]:
     """WHERE a snapshot was taken, as the key `perf-gate` pairs bookends by (feature 130, FR-029).
 
@@ -228,6 +303,15 @@ def record(label: str, seeds: tuple[int, ...], scaling_leg: bool = False) -> str
         print(f"...at {size} households (the scaling leg):", flush=True)
         scaling += measure(seeds, households=size)
     after = machine_state()
+    # THE COUNTING PASS, AFTER THE TIMED ONE AND THE MACHINE'S STATE (feature 427 T02, D2): each stage's Python calls per seed and
+    # size, what is watched since feature 427 (`call-count-flag.md`); its own seconds kept beside, the overhead the design note asks
+    print("...counting each stage's Python calls (a separate pass, untimed):", flush=True)
+    t0 = time.time()
+    for size, block in ((None, rows), *((n, [r for r in scaling if r.get("households") == n]) for n in (SCALING_SIZES if scaling_leg else ()))):
+        counts = count_calls(tuple(r["seed"] for r in block), households=size)
+        for r in block:
+            r["calls"] = counts.get(r["seed"], {})
+    count_seconds = round(time.time() - t0, 1)
     totals = [float(r["seconds"]) for r in rows]
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     clone = _where()
@@ -250,12 +334,15 @@ def record(label: str, seeds: tuple[int, ...], scaling_leg: bool = False) -> str
         "machine_after": after,
         "rows": rows,
         "scaling": scaling,
+        "versions": versions(),
+        "total_calls": sum(sum(r.get("calls", {}).values()) for r in rows),
+        "count_seconds": count_seconds,
     }
     path = os.path.join(LOG_DIR, f"{stamp}-{label}-{clone}.json")
     with open(path, "w") as fh:
         json.dump(snap, fh, indent=2, sort_keys=True)
         fh.write("\n")
-    print(f"\ntotal {snap['total_seconds']}s  median {snap['median_seconds']}s  worst {snap['worst_seconds']}s")
+    print(f"\ntotal {snap['total_seconds']}s  median {snap['median_seconds']}s  worst {snap['worst_seconds']}s  calls {snap['total_calls']:,} (counted in {count_seconds}s)")
     print(f"wrote {os.path.relpath(path, SKILL)}")
     return path
 
