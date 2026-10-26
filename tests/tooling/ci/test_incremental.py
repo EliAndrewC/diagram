@@ -460,6 +460,114 @@ def test_a_roster_change_plans_a_full_run(tmp_path: Path, monkeypatch: pytest.Mo
     assert pl.mode == "full" and roster in pl.reason, pl
 
 
+def _manifest_baseline(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, now_engine: dict[str, str]) -> None:
+    """A baseline whose engine is one module and one pool manifest, the tree's engine `now_engine` (feature 430 T01)."""
+    bdir = tmp_path / "gb"
+    bdir.mkdir()
+    monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
+    before = {"engine": {"e/a.py": "1", "pool/hamlets/m/m.json": "1"}, "tests": {"tests/test_a.py": "1"}, "tooling": "T", "gate_config": "G"}
+    (bdir / incremental.MANIFEST).write_text(json.dumps(before), encoding="utf-8")
+    _db(bdir / incremental.COVERAGE_DB, {"tests/test_a.py::x|run": {str(tmp_path / "e/a.py"): [1]}})
+    (bdir / incremental.TESTS).write_text(json.dumps({"tests/test_a.py::x": []}), encoding="utf-8")
+    monkeypatch.setattr(incremental, "manifest", lambda root: {**before, "engine": now_engine})
+
+
+def test_a_pool_manifest_selects_the_tests_that_read_it(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 430 T01 (D1; the GM 2026-10-26, item 1): a changed pool manifest planned FULL - 11 of the day's 24 gates ran
+    everything for `inashiro.json` alone. Now the plan stays incremental and selects the tests whose source names the pool,
+    in the gate's trees (not `soak/`, not `tier_*`), and says so."""
+    for rel, text in {
+        "tests/hamletgen/test_reads.py": 'GENS = os.path.join(ROOT, "pool", "hamlets")\n',
+        "tests/gate/test_gate_reads.py": 'p = "pool/hamlets/*/*.json"\n',
+        "tests/soak/test_soak_reads.py": 'p = "pool"\n',
+        "tests/tier_town/test_town_reads.py": 'p = "pool"\n',
+        "tests/test_a.py": "x = 1\n",
+    }.items():
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / rel).write_text(text, encoding="utf-8")
+    _manifest_baseline(tmp_path, monkeypatch, {"e/a.py": "1", "pool/hamlets/m/m.json": "2"})
+    pl = incremental.plan(tmp_path)
+    assert pl.mode == "incremental", pl
+    assert pl.changed_test_modules == ["tests/gate/test_gate_reads.py", "tests/hamletgen/test_reads.py"], pl
+    assert "1 pool manifest(s) (2 test module(s) that read them)" in pl.reason, pl.reason
+
+
+def test_a_pool_manifest_no_test_reads_stays_incremental_and_says_so(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The spec's edge case: a manifest no reader names keeps the plan incremental, naming that none reads it."""
+    (tmp_path / "tests").mkdir()
+    _manifest_baseline(tmp_path, monkeypatch, {"e/a.py": "1", "pool/hamlets/m/m.json": "2"})
+    pl = incremental.plan(tmp_path)
+    assert pl.mode == "incremental" and "no test module reads one" in pl.reason, pl
+
+
+def test_another_non_python_engine_file_still_plans_full(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Only a manifest (`pool/<tier>/<map>/<map>.json`) is answered by its readers; any other non-Python engine file - a
+    frozen exhibit's JSON, a pool JSON of another shape - is a dependency selection cannot see, and plans full as before."""
+    (tmp_path / "tests").mkdir()
+    _manifest_baseline(tmp_path, monkeypatch, {"e/a.py": "1", "pool/hamlets/m/m.json": "2", "legacy-hand-authored-pool/x/x.json": "1"})
+    pl = incremental.plan(tmp_path)
+    assert pl.mode == "full" and "legacy-hand-authored-pool/x/x.json" in pl.reason, pl
+
+
+def _tree_plan(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, changed: str) -> incremental.Plan:
+    """The plan when one non-module file under `tests/` changed and nothing else (feature 430 T02)."""
+    files = {
+        "tests/x/test_x.py": "def test_x(): pass\n",
+        "tests/x/deeper/test_deep.py": "def test_d(): pass\n",
+        "tests/y/test_reads_fixture.py": 'P = HERE.parent / "fixtures" / "f.json"\n',
+        "tests/y/test_by_name.py": 'P = "f.json"\n',
+        "tests/z/test_builders.py": "from tests.hamletgen._builders import make\n",
+        "tests/z/test_plain.py": "x = 1\n",
+        "tests/soak/test_soak_fixture.py": 'P = "fixtures/f.json"\n',
+    }
+    for rel, text in files.items():
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / rel).write_text(text, encoding="utf-8")
+    (tmp_path / changed).parent.mkdir(parents=True, exist_ok=True)
+    (tmp_path / changed).write_text("x\n", encoding="utf-8")
+    bdir = tmp_path / "gb"
+    bdir.mkdir()
+    monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
+    before = {"engine": {"e/a.py": "1"}, "tests": {**dict.fromkeys(files, "1"), changed: "1"}, "tooling": "T", "gate_config": "G"}
+    (bdir / incremental.MANIFEST).write_text(json.dumps(before), encoding="utf-8")
+    _db(bdir / incremental.COVERAGE_DB, {"tests/z/test_plain.py::x|run": {str(tmp_path / "e/a.py"): [1]}})
+    (bdir / incremental.TESTS).write_text(json.dumps({"tests/z/test_plain.py::x": []}), encoding="utf-8")
+    monkeypatch.setattr(incremental, "manifest", lambda root: {**before, "tests": {**before["tests"], changed: "2"}})
+    return incremental.plan(tmp_path)
+
+
+def test_a_doc_under_tests_adds_nothing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 430 T02 (D2; the GM 2026-10-26, item 2): a `CLAUDE.md` under tests/ planned FULL; a doc runs nothing."""
+    pl = _tree_plan(tmp_path, monkeypatch, "tests/hamletgen/ways/CLAUDE.md")
+    assert pl.mode == "incremental" and pl.changed_test_modules == [] and "nothing the baseline exercised" in pl.reason, pl
+
+
+def test_a_file_directly_under_tests_still_plans_full(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The top level is the whole suite's: its `conftest.py` (or `_scope.py`, `rolls.py`) plans full, as FR-002 says."""
+    pl = _tree_plan(tmp_path, monkeypatch, "tests/conftest.py")
+    assert pl.mode == "full" and "tests/conftest.py" in pl.reason, pl
+
+
+def test_a_deeper_conftest_selects_its_own_directory(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A `conftest.py` under `tests/x/` reaches the tests under `tests/x/` (deeper ones too) and no other."""
+    pl = _tree_plan(tmp_path, monkeypatch, "tests/x/conftest.py")
+    assert pl.mode == "incremental" and pl.changed_test_modules == ["tests/x/deeper/test_deep.py", "tests/x/test_x.py"], pl
+    assert "1 non-module file(s) under tests/ (2 test module(s) that can read them)" in pl.reason, pl.reason
+
+
+def test_a_fixture_file_selects_the_tests_that_name_it_or_its_directory(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Research R3: `tests/fixtures/` holds no test module, and tests in other directories read it - so a fixture file selects
+    the gate's test modules naming it or its directory, never `soak/`'s."""
+    pl = _tree_plan(tmp_path, monkeypatch, "tests/fixtures/f.json")
+    assert pl.mode == "incremental" and pl.changed_test_modules == ["tests/y/test_by_name.py", "tests/y/test_reads_fixture.py"], pl
+
+
+def test_a_helper_module_selects_the_tests_that_import_it(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A helper is imported by its module name, not its file name: `tests/hamletgen/_builders.py` selects `test_builders`."""
+    pl = _tree_plan(tmp_path, monkeypatch, "tests/hamletgen/_builders.py")
+    assert pl.mode == "incremental" and pl.changed_test_modules == ["tests/z/test_builders.py"], pl
+
+
 # ---- feature 237: collect only what the run can reach --------------------------------------------------------------
 
 

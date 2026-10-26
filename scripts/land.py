@@ -86,6 +86,16 @@ def file_carries(root: Path, d: Path) -> None:
         run(root, ["git", "commit", "-q", "-m", f"{d.name}: claims findings outside the change filed as a task (make land, 405 T36)"])
 
 
+def file_known(root: Path) -> None:
+    """Every known drift the claims gate would refuse unrecorded, recorded for the GM in its task's feature and committed
+    (feature 430 T06, D6): the claims gate admits a known drift once `make claims-known` has recorded it, and the landing runs it."""
+    rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "known"])
+    if rc == 0 and "claims-known: recorded" in said:  # ...not its "no known drift is unrecorded"
+        print(f"land: {said.strip()}", flush=True)
+        run(root, ["git", "add", "--", *(str(p.relative_to(root)) for p in sorted((root / "specs").glob("*/gm-review.jsonl"))), *(str(p.relative_to(root)) for p in sorted((root / "specs").glob("*/tasks.md")))])
+        run(root, ["git", "commit", "-q", "-m", "known drifts recorded for the GM's review (make land, feature 430 T06)"])
+
+
 def _boxes() -> bool:
     """`make land ... BOXES=1`: the landing ticks a physical task's research boxes, as `make tick BOXES=1` does (410 T01 was
     refused with a pointer to BOXES=1, which `make land` did not pass on)."""
@@ -126,6 +136,7 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
     # A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
     # open task of this feature - what `make claims-carry` does by hand - and the box lands with the work
     file_carries(root, d)
+    file_known(root)
     commit_escape_records(root)
     if run(root, ["git", "status", "--porcelain"])[1].strip():
         stops.append("uncommitted changes - commit them first")
@@ -234,8 +245,9 @@ def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
     end, said = time.monotonic() + CLAIMS_WAIT_S, ""
     while True:
         rc, out = run(root, [str(HERE / "gates" / "claims-gate.sh")], env)
-        if rc and d is not None and "carry:" in out and not any(w in out for w in ("owed (", "introduced:")):
+        if rc and d is not None and ("carry:" in out or "known:" in out) and not any(w in out for w in ("owed (", "introduced:")):
             file_carries(root, d)  # a carry is filed, not waited on (405 T77: batch 5's wait needed `make claims-carry` by hand)
+            file_known(root)  # ...and a known drift recorded, not ruled on (feature 430 T06)
             rc, out = run(root, [str(HERE / "gates" / "claims-gate.sh")], env)
         commit_escape_records(root)
         commit_gate_formatting(root)
@@ -444,9 +456,12 @@ def commit_records(root: Path) -> None:
         run(root, ["git", "commit", "-q", "-m", "the run records (make land)", "--", "dev/cohort-log", "dev/run-log"])
 
 
-#: the paths that decide how a landing and its gate run: a delta touching one is landed through a gate, never the direct route
-#: (the round arbiter's tooling_fix on red-gate@2026-10-24T19:17:09Z, feature 415: T03 put cover_changed.py beside the gate on
-#: the direct route, untested beside a real gate, and two red gates and two rulings followed - ~27 minutes)
+#: the paths that decide how a landing and its gate run (the round arbiter's tooling_fix on red-gate@2026-10-24T19:17:09Z, feature
+#: 415: T03 put cover_changed.py beside the gate on the direct route, untested beside a real gate, and two red gates followed).
+#: A delta touching one whose green-gate stamp still passes runs the TOOLING TESTS, not `make done` (the round arbiter's
+#: process-fault on ask:430-machinery-gate, 2026-10-26): the done recipe's reuse branch ignores scripts/, tests/ and the Makefile
+#: by the GM's 2026-08-25 rule ("I thought we were omitting make done results for changes to the hooks or scripts or makefile
+#: changes"), so the `make done` this used to add always short-circuited - it ran no test and land said it ran a gate
 GATE_MACHINERY = re.compile(r"^(scripts/land\.py|scripts/gates/.*|Makefile|l7r/diagram/ci/.*|tests/conftest\.py|tests/_scope\.py)$")
 
 
@@ -456,6 +471,18 @@ def gate_machinery_delta(root: Path) -> list[str]:
     return [n for n in run(root, ["git", "diff", "--name-only", "origin/main...HEAD"])[1].split() if GATE_MACHINERY.match(n)]
 
 
+def machinery_tests(root: Path, machinery: list[str]) -> str:
+    """A gate-machinery delta whose stamp passes (`GATE_MACHINERY`): `make hooks-test` where the hooks stamp is stale, then the
+    tooling tests (`make test-file FILE=tests/tooling`); why nothing lands, or ''."""
+    print(f"land: the delta changes how a landing or its gate runs ({', '.join(machinery[:3])}) - the gate's reuse stands (the GM's "
+          "2026-08-25 rule: scripts/ and the Makefile owe no make done), so the tooling tests run instead (ask:430-machinery-gate)", flush=True)
+    if run(root, [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--fresh", "hooks"])[0] and run(root, ["make", "--no-print-directory", "hooks-test"], quiet=False)[0]:
+        return "land: make hooks-test is red - nothing landed; fix it and run make land again"
+    if run(root, ["make", "--no-print-directory", "test-file", "FILE=tests/tooling"], quiet=False)[0]:
+        return "land: the tooling tests are red (make test-file FILE=tests/tooling) - nothing landed; fix them and run make land again"
+    return ""
+
+
 def long_runs(root: Path) -> int:
     """Pass 2's runs, each only where its record does not cover this content; 0 when the push may go. The green-gate stamp names
     the gate each stale area owes (make done, make hooks-test, make page-check) and each named one runs - T30-T35's own landing
@@ -463,11 +490,11 @@ def long_runs(root: Path) -> int:
     stamp = [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--check", "origin/main"]
     rc, out = run(root, stamp)
     machinery = gate_machinery_delta(root)
-    if rc or machinery:
-        targets = list(dict.fromkeys(NAMED_GATE.findall(out)) or ["done"]) if rc else []
-        if machinery and "done" not in targets:  # ...the gate's own machinery changed: it lands through a gate (arbiter 19:17)
-            print(f"land: the delta changes how a landing or its gate runs ({', '.join(machinery[:3])}) - make done, though the stamp would pass it", flush=True)
-            targets.append("done")
+    if machinery and not rc and (why := machinery_tests(root, machinery)):
+        print(why, file=sys.stderr)
+        return 1
+    if rc:
+        targets = list(dict.fromkeys(NAMED_GATE.findall(out)) or ["done"])
         # THE COHORT BESIDE THE GATE (405 T48, D21): they share no work - the gate rolls the five pool maps, the cohort its seeds
         # and rows - and T19's landing spent 4.4 of its 7 minutes on the cohort after a green gate
         cohort, log = None, Path()

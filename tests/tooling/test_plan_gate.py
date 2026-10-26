@@ -253,7 +253,7 @@ def test_typo_scale_rules() -> None:
     assert gate.judge(b"anything", json.dumps(review))[0] == "plan-review-stale", "no text recorded: the hash decides, as before"
 
 
-PLAN_TASKS = b"# plan\n\n**D1 - a decision.** Each tub by a door.\n\n## T05 the bath (amendment 1)\n\n- the bath 10 x 8 ft\n\n## T06 the wells\n\n- a well by the kitchen\n"
+PLAN_TASKS = b"# plan\n\n**D1 - a decision.** Each tub by a door.\n\n## T05 the bath (amendment 1)\n\n- the bath 10 x 8 ft (GUESS)\n\n## T06 the wells\n\n- a well by the kitchen\n"
 
 
 def _git_init(root: pathlib.Path) -> None:
@@ -283,7 +283,7 @@ def test_a_task_section_carries_its_own_decision_verdict(tmp_path: pathlib.Path)
     assert gate.record_task(d, "T05", {"plan_sha256": sha, "decisions": [WITHIN]}, "spec-fidelity")["verdict"] == "CLEAR"
     review = json.loads((d / "plan-review.json").read_text())
     assert gate.task_current(review, text, "T05") and not gate.task_current(review, text, "T06")
-    grown = text.replace("- the bath 10 x 8 ft\n", "- the bath 10 x 8 ft\n- a second bath for guests\n")
+    grown = text.replace("- the bath 10 x 8 ft (GUESS)\n", "- the bath 10 x 8 ft (GUESS)\n- a second bath for guests\n")
     (d / "plan.md").write_text(grown)
     assert gate.owed(d)[0] == "plan-review-stale", "a new decision in a section its verdict no longer matches"
     gate.record_task(d, "T05", {"section_sha256": hashlib.sha256(gate.task_sections(grown)["T05"].encode()).hexdigest(), "decisions": [WITHIN]}, "spec-fidelity")
@@ -553,7 +553,7 @@ def test_a_clear_task_section_records_its_blocks_reviewed(tmp_path: pathlib.Path
     no longer owes the same text a second, block review (`make plan-delta`); a block outside it, and a verdict not CLEAR, record
     nothing."""
     d = feature(tmp_path, plan=PLAN_TASKS)
-    grown = PLAN_TASKS.decode().replace("- the bath 10 x 8 ft\n", "- the bath 10 x 8 ft\n- a second bath\n")
+    grown = PLAN_TASKS.decode().replace("- the bath 10 x 8 ft (GUESS)\n", "- the bath 10 x 8 ft (GUESS)\n- a second bath\n")
     (d / "plan.md").write_text(grown)
     sha = hashlib.sha256(gate.task_sections(grown)["T05"].encode()).hexdigest()
     narrowing = {**WITHIN, "class": "narrowing", "ruling": "NOT LEGITIMATE"}

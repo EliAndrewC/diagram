@@ -660,6 +660,7 @@ def _parser() -> argparse.ArgumentParser:
     r = sub.add_parser("record")
     r.add_argument("--bundle", required=True)
     r.add_argument("--reply", required=True)
+    sub.add_parser("triage-owed")
     tr = sub.add_parser("triage")
     tr.add_argument("--out", default="")
     td = sub.add_parser("triaged")
@@ -670,6 +671,7 @@ def _parser() -> argparse.ArgumentParser:
     sub.add_parser("rekey")
     sub.add_parser("report")
     sub.add_parser("gate")
+    sub.add_parser("known")
     cc = sub.add_parser("carry")
     cc.add_argument("--feature", required=True)
     cc.add_argument("--task", default="")
@@ -697,6 +699,25 @@ def _carry_cmd(root: Path, args: argparse.Namespace) -> int:
         print(f"claims-carry: {e}", file=sys.stderr)
         return 2
     return 0
+
+
+#: a triage bundle of this many claims or fewer is not triaged: impl-drift reads them directly (feature 430 T06, D6; proposal 6,
+#: approved by the GM 2026-10-26: "skip claims-triage for bundles of a few claims"). CONVENTION - "a few" is the spec's knob,
+#: set at 3: a triage round and an impl-drift round cost about the same on so few, and the triage would only route them on
+TRIAGE_SKIP_MAX = 3
+
+
+def _small_triage(root: Path, keys: list[str], out: str) -> int:
+    """A triage too small to be worth one (`TRIAGE_SKIP_MAX`): the impl-drift bundle of the same claims, and the skip on the ledger."""
+    why = f"a claims triage of {len(keys)} claim(s), at most {TRIAGE_SKIP_MAX}, goes straight to impl-drift (feature 430 D6)"
+    rc = main(["--root", str(root), "bundle", "--units", ",".join(keys), "--reason", why, *(["--out", out] if out else [])])
+    if rc == 0:
+        row = (f"| {datetime.date.today().isoformat()} | claims-triage | {len(keys)} claim(s) | SKIPPED | claims-triage: skipped for size - "
+               f"{len(keys)} claim(s), at most {TRIAGE_SKIP_MAX}; impl-drift reads them directly | mechanical | - | {why} | 0 s | 0 in / 0 out |")
+        with (root / "dev" / "review-ledger.md").open("a", encoding="utf-8") as fh:
+            fh.write(row + "\n")
+        print(f"claims-triage: {why} - dispatch `impl-drift` on the MANIFEST above, then `make claims-checked BUNDLE=<dir> REPLY=<file>`; the skip is on the ledger")
+    return rc
 
 
 def _rekey_cmd(root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]]) -> int:
@@ -748,6 +769,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 1 if refuse else 0
     if args.cmd == "carry":
         return _carry_cmd(root, args)
+    if args.cmd == "known":  # feature 430 T06 (D6): each known drift recorded for the GM, in its task's feature
+        written = claims_carry.record_known(sys.modules[__name__], root)
+        print("\n".join(f"claims-known: recorded {w}" for w in written) or "claims-known: no known drift is unrecorded")
+        return 0
     if args.cmd == "coverage":
         cl = engine(root)
         qs = {p.name for p in (root / QUESTIONS).glob("*.html")}
@@ -800,11 +825,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         save_store(root / STORE, store)
         print(f"claims-backfill: {n} row(s) given the pages they were checked at")
         return 0
+    if args.cmd == "triage-owed":  # feature 430 T07 (D7): how many claims a triage owes, for `make decide` / `make plan-delta`
+        print(sum(1 for _k, why in owed(cur, index, qdir, store) if why in TRIAGED))
+        return 0
     if args.cmd == "triage":
         keys = [k for k, why in owed(cur, index, qdir, store) if why in TRIAGED]
         if not keys:
             print("claims-triage: no claim is owed a triage")
             return 0
+        if len(keys) <= TRIAGE_SKIP_MAX:
+            return _small_triage(root, keys, args.out)
         tout = Path(args.out) if args.out else DEFAULT_OUT / "claims-triage"
         print(triage_bundle(cur, index, store, keys, qdir, tout))
         claims_flight.mark(root, tout)  # in flight until `claims-triaged` records its reply (feature 426 D1)

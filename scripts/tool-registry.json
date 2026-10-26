@@ -123,7 +123,11 @@
     },
     "cover_changed": {
       "kind": "check",
-      "what": "scripts/gates/cover_changed.py - the changed engine modules' added lines asked of their mirrored tests' coverage (make cover-changed, make land's first pass; the GM 2026-10-24); each run recorded passed or refused"
+      "what": "scripts/gates/cover_changed.py - every line of each changed engine module asked of the floor's tests, the floor's carried coverage honored (make cover-changed, beside make land's gate; the GM 2026-10-24, feature 430 T03); each run recorded passed or refused"
+    },
+    "push_gates": {
+      "kind": "check",
+      "what": "scripts/gates/push_gates.py - whether a push gate may skip a delta: nothing it judges, or a pass stored for the same committed content (the claims, record and cohort gates; feature 430 T04); each run recorded skipped (0) or judged (1)"
     },
     "gate_costs": {
       "kind": "report",

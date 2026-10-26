@@ -341,11 +341,11 @@ def test_e_no_baseline_is_a_full_run(project: tuple[Path, Path]) -> None:
     ("rel", "text", "why"),
     [
         ("tests/conftest.py", CONFTEST + "\n# edited\n", "non-module file under tests/"),
-        ("pool/hamlets/x/x.json", "{}", "not Python"),
+        ("legacy-hand-authored-pool/x/x.json", "{}", "not Python"),  # a pool MANIFEST selects its readers instead (feature 430 T01)
         ("Makefile", "test:\n\tpython3 -m pytest -x\n", "configuration changed"),  # a test recipe: the gate's configuration (feature 415)
         ("eng/core.py", CORE.replace("def add(a, b):", "def add(a, b, c=0):"), "import time"),
     ],
-    ids=["conftest", "manifest", "tooling", "import-time-def-line"],
+    ids=["conftest", "non-manifest-json", "tooling", "import-time-def-line"],
 )
 def test_e_each_fallback_shape_forces_a_full_run(baselined: tuple[Path, Path], rel: str, text: str, why: str) -> None:
     root, skill = baselined

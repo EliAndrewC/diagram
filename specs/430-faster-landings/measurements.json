@@ -47,5 +47,61 @@
     "fda3e0e04"
    ]
   }
+ },
+ "plan-replay": {
+  "quantity": "of 2026-10-26's 19 full-planned gates whose reason named a manifest or a tests/ non-module file, those the current planner plans incremental between the same two commits",
+  "value": 12,
+  "unit": "runs",
+  "observed": "2026-10-26",
+  "source": "this clone, dev/run-log/2026-10/*.json and git",
+  "command": "python3 specs/430-faster-landings/replay_plans.py",
+  "method": "replay_plans.py as committed: each run's base the latest earlier green full run at which its reason's file differs; both manifests rebuilt from git ls-tree, the configuration hash from each commit's own files; an empty coverage database (no import-time or context selection), INCR_NO_CUTOFF",
+  "full_top_level_conftest": 4,
+  "full_gate_configuration": 3
+ },
+ "push-gates-records-only": {
+  "quantity": "the slowest of the three push gates' wall time on a records-only delta (one run record committed on origin/main), each skipping as nothing to judge",
+  "value": 0.14,
+  "unit": "s",
+  "varies": true,
+  "observed": "2026-10-26",
+  "source": "this clone, a detached worktree at origin/main",
+  "command": "bash specs/430-faster-landings/time-push-gates.sh",
+  "method": "time-push-gates.sh as committed: each gate run once, wall time by date; claims 0.12 s, entry 0.14 s, cohort 0.12 s",
+  "by_gate": {
+   "claims-gate": 0.12,
+   "entry-gate": 0.14,
+   "cohort-gate": 0.12
+  }
+ },
+ "cover-replay": {
+  "quantity": "of 2026-10-26's 3 coverage reds whose named lines lie in a changed module, those the new check refuses at the red's commit against a gate baseline of its own base",
+  "value": 3,
+  "unit": "reds",
+  "observed": "2026-10-26",
+  "source": "this clone, detached worktrees",
+  "command": "bash specs/430-faster-landings/replay-cover.sh <red ...>",
+  "method": "replay-cover.sh as committed: a worktree at each red's base runs make done (the baseline), moves to the red, runs make cover-changed BASE=<base> with the new check, timed; the command carries a placeholder on purpose - each red costs a full gate, so `make figures` lists it rather than running three gates",
+  "floor_lines": 18,
+  "named_of_them": 14,
+  "named_beyond": 3,
+  "per_red": {
+   "31f739f5d": {
+    "check_s": 37,
+    "gate_s": 442,
+    "named": "ends.py 321, shapes.py 161-167, tree.py 404 - all 9 of the floor's"
+   },
+   "d92ff2c90": {
+    "check_s": 30,
+    "gate_s": 255,
+    "named": "tree.py 298-300 - all 3 of the floor's; and stage.py 166, 171, 172, which the floor did not name"
+   },
+   "39ea51383": {
+    "check_s": 17,
+    "gate_s": 418,
+    "named": "gencache.py 227-228 - 2 of the floor's 6; 238-241 not named (reached only by tooling tests the gate reuses, whose coverage of a changed file the floor drops)"
+   }
+  },
+  "sixth_red": "9a157cc4b: the floor_markers rule, pinned by tests/tooling/test_cover_changed.py; the replay cannot rebuild the gate stamp its tooling decision read"
  }
 }

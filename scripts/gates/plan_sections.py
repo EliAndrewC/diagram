@@ -325,10 +325,62 @@ _PART_B = re.compile(r"^### T\d+[a-z]?\s+part B \(")
 _DEFINED = re.compile(r"^\*\*(D\d+[a-z]?) - ", re.M)
 
 
+_APPROACH = re.compile(r"^### T\d+[a-z]?\s+Approach\b")
+_ITEM = re.compile(r"^(\d+)\.\s+\*\*[^*]*\*\*[ \t]*", re.M)
+#: the ids an approach answer may name and nothing else: decisions, requirements, criteria, research, tasks, a feature, a date
+_IDS = re.compile(r"\bD\d+[a-z]?\b|\bFR-\d+[a-z]?\b|\bSC-\d+\b|\bR\d+\b|\bT\d+[a-z]?\b|\bfeature \d{3}\b|\b\d{4}-\d\d-\d\d\b")
+#: the bare answers an item may give that decide nothing (D5, the round arbiter's accept on round:spec-fidelity|plan:430#T01@3)
+_BARE = {"", "n/a", "none", "yes", "one landing"}
+
+
+def _template_answers() -> dict[int, str]:
+    """`make task-add`'s own wording for items 6 and 9 (feature 430 D5): an answer that is the template's says nothing new."""
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("task_add", pathlib.Path(__file__).resolve().parents[1] / "task-add.py")
+    if spec is None or spec.loader is None:  # pragma: no cover - the file is beside this one
+        return {}
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    item6 = next((ln.split("**", 2)[2].strip() for ln in mod.TEMPLATE.splitlines() if ln.startswith("6.")), "")
+    return {6: item6, 9: "Its tests red without D<n>."}
+
+
+def approach_decides_nothing(body: str, plan_text: str, done: str = "") -> bool:
+    """An approach block that MATCHES THE TEMPLATE AND DECIDES NOTHING (feature 430 T05, D5; the GM 2026-10-26, item 5): every one
+    of its answers, once the ids it names are set aside, is bare ("n/a", "None", "Yes", "One landing", or nothing) or the
+    template's own wording, it holds no number of any kind outside those ids, and every `D<n>` it names is defined elsewhere. An
+    answer in the block's own words is where a rule or a number can stand, so it owes the review; a missing `D<n>` is never
+    enough. (`R<n>`, `FR-<n>`, `SC-<n>` point into research.md and the spec, which this reader is not handed - they name, they
+    do not decide.)"""
+    marks = list(_ITEM.finditer(body))
+    if not marks:
+        return False
+    template = _template_answers()
+    own = body  # ...the template's own ids (item 6 names D11 and D35, the decisions behind its wording) are not the block's
+    for i, m in enumerate(marks):
+        answer = " ".join(body[m.end() : marks[i + 1].start() if i + 1 < len(marks) else len(body)].split())
+        n = int(m.group(1))
+        if n in template and answer == template[n].replace("D<n>", (re.findall(r"\bD\d+[a-z]?\b", answer) or ["D<n>"])[0]):
+            if n == 6:
+                own = own.replace(template[n], "")
+            continue
+        rest = _IDS.sub(" ", answer)
+        if re.search(r"\d", rest):
+            return False
+        words = re.sub(r"(?:\s|[,;.:]|\band\b)+", " ", rest).strip().lower()
+        if words not in _BARE:
+            return False
+    return set(re.findall(r"\bD\d+[a-z]?\b", own)) <= set(_DEFINED.findall(plan_text.replace(body, "") + done))
+
+
 def decides_nothing(key: str, body: str, plan_text: str, done: str = "") -> bool:
     """A part B block that decides nothing (feature 385 T75, plan D94; the GM's approved change 3 of the 2026-10-18 step-back:
     "only one that adds a new decision gets a spec-fidelity review"): item 4 answered "No", item 5 "Neither", and every `D<n>` it
-    names defined elsewhere. A rule changed, a number tuned or an earlier placement moved is a decision, labeled or not."""
+    names defined elsewhere. A rule changed, a number tuned or an earlier placement moved is a decision, labeled or not. An
+    approach block is asked its own form (`approach_decides_nothing`, feature 430 D5)."""
+    if _APPROACH.match(key):
+        return approach_decides_nothing(body, plan_text, done)
     if not _PART_B.match(key):
         return False
 

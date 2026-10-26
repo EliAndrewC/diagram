@@ -387,9 +387,32 @@ push_cmd() {
     skip+=(--skip closing)
   fi
   python3 "$ROOT/scripts/gates/push_checks.py" "$ROOT" "${skip[@]}" || exit 1
-  # the record gate and the claims gate are shell scripts with their own refusals, not Python checks (features 311, 316)
-  "$ROOT/scripts/gates/entry-gate.sh" || exit 1
-  "$ROOT/scripts/gates/claims-gate.sh" || exit 1
+  # THE SEAMS AND THE ROUTE, DECIDED BEFORE THE GATES (feature 430 T04): the cohort gate is the gated route's, and the gates the
+  # route owes run side by side below. The seams and the routes are explained where the route is printed, further down.
+  local seams=""; [ -f "$ROOT/Makefile" ] || seams=1
+  local route
+  if [ -n "$seams" ] && [ -n "${CI_ROUTE:-}" ]; then route=$CI_ROUTE
+  elif [ -f "$ROOT/Makefile" ]; then
+    route=$( { cd "$ROOT" && make --no-print-directory ci-status ROUTE=1; } 2>/dev/null | tail -1 || true)
+    # AN UNDECIDED ROUTE IS NOT A DIRECT ROUTE. If the dispatcher could not answer, engine code
+    # could be sitting in the delta; falling through to the free push would land it ungated.
+    case "$route" in DIRECT|GATED|GATED-LOCAL) ;; *) die "could not decide the route ('make ci-status ROUTE=1' said '${route:-nothing}') - not pushing. Run it by hand to see why." ;; esac
+  else route=DIRECT; fi   # a tree with no diagram skill (a fixture) has nothing to gate
+  # the record gate and the claims gate are shell scripts with their own refusals, not Python checks (features 311, 316), and
+  # the landing cohort's gate on the gated route (feature 386: a DIRECT delta changes no map). SIDE BY SIDE, EVERY REFUSAL
+  # REPORTED (feature 430 T04, D4; the GM 2026-10-26, item 4): one after another they cost their sum - 5.7 s, 2.3 s and 8.8 s
+  # measured 2026-10-26 (each timed alone, `specs/430-faster-landings/request.md`) - and the first refusal hid the rest
+  local gates=(entry-gate claims-gate) gdir g failed=()
+  { [ "$route" = GATED ] || [ "$route" = GATED-LOCAL ]; } && gates+=(cohort-gate)
+  gdir=$(mktemp -d)
+  for g in "${gates[@]}"; do ( "$ROOT/scripts/gates/$g.sh" > "$gdir/$g.log" 2>&1; echo $? > "$gdir/$g.rc" ) & done
+  wait
+  for g in "${gates[@]}"; do
+    cat "$gdir/$g.log"
+    [ "$(cat "$gdir/$g.rc" 2>/dev/null)" = 0 ] || failed+=("$g")
+  done
+  rm -rf "$gdir"
+  [ "${#failed[@]}" = 0 ] || { printf 'sync-with-main: refused by %s - each refusal is above; nothing pushed\n' "${failed[*]}" >&2; exit 1; }
   # THE PERFORMANCE BANDS ARE PRINTED HERE, NEVER ENFORCED (feature 375 amendment 5, the GM 2026-10-11: "it doesn't
   # need to be a gate anymore" - GUARD_EDIT_OK: a guard loosened at the GM's word). `make perf-review` prints each pair's
   # band and, over the band-1 line, a FLAG with the machine's state at both ends, which the session mentions when it
@@ -398,7 +421,6 @@ push_cmd() {
   # reviewer's aside): a tree with no diagram skill Makefile is the only tree the tests build, and
   # on a real clone `CI_ROUTE=DIRECT` would have skipped the gated route entirely. So the seams
   # (CI_PERF_REVIEW, CI_ROUTE, CI_MERGE) are read only when that Makefile is absent.
-  local seams=""; [ -f "$ROOT/Makefile" ] || seams=1
   if [ -n "$seams" ] && [ -n "${CI_PERF_REVIEW:-}" ]; then bash -c "$CI_PERF_REVIEW"; elif [ -f "$ROOT/Makefile" ]; then ( cd "$ROOT" && make --no-print-directory perf-review ); else true; fi \
     || die "make perf-review failed to run (it never refuses on a band since feature 375 amendment 5) - see its output above"
   # TWO ROUTES TO MAIN, CHOSEN BY THE DELTA, NEVER BY THE SESSION (feature 130, FR-002). The delta
@@ -412,22 +434,15 @@ push_cmd() {
   # THREE ROUTES since feature 132: GATED-LOCAL is the gated route with remote OFF (dev/switches.json)
   # - `make ci-merge` then dispatches nothing and answers SKIP-VERIFIED only when a green local
   # `make done` vouches for the merged engine content; otherwise the work stays in the clone.
-  local route
-  if [ -n "$seams" ] && [ -n "${CI_ROUTE:-}" ]; then route=$CI_ROUTE
-  elif [ -f "$ROOT/Makefile" ]; then
-    route=$( { cd "$ROOT" && make --no-print-directory ci-status ROUTE=1; } 2>/dev/null | tail -1 || true)
-    # AN UNDECIDED ROUTE IS NOT A DIRECT ROUTE. If the dispatcher could not answer, engine code
-    # could be sitting in the delta; falling through to the free push would land it ungated.
-    case "$route" in DIRECT|GATED|GATED-LOCAL) ;; *) die "could not decide the route ('make ci-status ROUTE=1' said '${route:-nothing}') - not pushing. Run it by hand to see why." ;; esac
-  else route=DIRECT; fi   # a tree with no diagram skill (a fixture) has nothing to gate
+  # (the route itself is decided above, before the gates - feature 430 T04)
   case "$route" in
     GATED-LOCAL) echo "sync-with-main: route GATED (local - remote off): engine code in our delta, nothing dispatches; a green local make done on the merged engine content pushes, otherwise the work stays here" ;;
     *)           echo "sync-with-main: route $route (diagram engine code in our delta -> GATED, CodeBuild; otherwise DIRECT)" ;;
   esac
   if [ "$route" = GATED ] || [ "$route" = GATED-LOCAL ]; then
     # GUARD_EDIT_OK: feature 386 - THE LANDING COHORT: engine work lands with 48 seeds rolled on its engine, none regressed
-    # against main, and a fresh block whose rate is printed (the GM 2026-10-17). Here and not above: a DIRECT delta changes no map.
-    "$ROOT/scripts/gates/cohort-gate.sh" || exit 1
+    # against main, and a fresh block whose rate is printed (the GM 2026-10-17). Its gate runs with the others above, on a
+    # gated route only (feature 430 T04): a DIRECT delta changes no map.
     if [ -n "$seams" ] && [ -n "${CI_MERGE:-}" ]; then bash -c "$CI_MERGE"; else ( cd "$ROOT" && make --no-print-directory ci-merge ${FULL:+FULL=1} ); fi \
       || die "gated route: nothing landed (the conditions or the build refused - see above; the work stays in this clone)"
     case "$(cat "$ROOT/.git/ci-verdict" 2>/dev/null)" in

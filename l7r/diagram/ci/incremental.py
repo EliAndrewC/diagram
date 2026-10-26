@@ -34,8 +34,10 @@ the test that used to reach it re-runs and no longer does, and its old context i
 THE BASELINE IS THE LAST FULL RUN, NEVER A MERGED RESULT (spec D1): the selection grows as changes
 accumulate between full runs, and a full run - a fallback, `INCREMENTAL=0`, `FULL=1` - resets it. Nothing
 compounds. Fallbacks to FULL, each because file-level selection cannot see the dependency: no baseline; a
-changed engine file that is not `.py` (a pool generator or manifest); a changed file under `tests/` that is
-not a test module (`conftest.py`, `_scope.py`, a helper, `fixtures/`); the tooling hash moved; an
+changed engine file that is not `.py` and not a pool manifest (a
+manifest selects the tests that read it, feature 430); a changed file directly under `tests/` that is
+not a test module (`conftest.py`, `_scope.py`, `rolls.py` - one deeper selects the tests that can read it, and a doc
+nothing, feature 430); the tooling hash moved; an
 import-time line changed; or more than `FULL_FRACTION` of the baseline reached, which the PLANNER decides
 before pytest's arguments are chosen (`over_the_fraction`, projected over the baseline; feature 237 D8 says
 why it cannot be decided after collection any more). It lives under the clone's git directory - per clone, never in the tree.
@@ -46,6 +48,7 @@ from __future__ import annotations
 import difflib
 import json
 import os
+import re
 import shutil
 import sqlite3
 import subprocess
@@ -302,6 +305,33 @@ def existing(root: Path, modules: list[str]) -> list[str]:
     return [m for m in modules if (root / m).is_file()]
 
 
+def tree_file_readers(root: Path, files: list[str]) -> list[str]:
+    """The test modules a changed non-module file under `tests/<dir>/` can reach (feature 430 T02, D2): every test module under
+    the file's own directory, and - for a file that is not a `conftest.py` - every test module of the gate's trees whose source
+    names the file, its directory as a path part, or (a helper module) the name it is imported as. The second is wider than the
+    directory on purpose: fixture data under `tests/fixtures/` (no test module of its own) is read by tests in eight other
+    directories (the feature's research R3), and the directory alone would select nothing for it."""
+    from l7r.diagram.ci import pool_readers
+
+    out: set[str] = set()
+    named: list[re.Pattern[str]] = []
+    for f in files:
+        here = (root / f).parent
+        out |= {m.relative_to(root).as_posix() for m in here.rglob(f"{TEST_MODULE}*.py")} if here.is_dir() else set()
+        name, folder = Path(f).name, Path(f).parent.name
+        if name != "conftest.py":  # ...a helper module by the name it is imported as (`from tests.hamletgen._builders import`)
+            stem = rf"|\b{re.escape(Path(f).stem)}\b" if f.endswith(".py") else ""
+            named.append(re.compile(rf"{re.escape(name)}|[\"']{re.escape(folder)}[\"']|(?<![\w-]){re.escape(folder)}/{stem}"))
+    if named:
+        for m in sorted((root / "tests").rglob(f"{TEST_MODULE}*.py")):
+            parts = m.relative_to(root / "tests").parts
+            if parts[0] in pool_readers.NOT_GATE or parts[0].startswith("tier_"):
+                continue
+            if any(p.search(m.read_text(encoding="utf-8")) for p in named):
+                out.add(m.relative_to(root).as_posix())
+    return sorted(out)
+
+
 def plan(root: Path, force_full: str | None = None) -> Plan:
     """Decide the mode before collection. Everything that needs the collected items is `selection.py`'s."""
     bdir = baseline_dir(root)
@@ -312,15 +342,28 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
         return Plan("full", "no baseline - this run records one")
     before = json.loads(man.read_text(encoding="utf-8"))
     ch = changed(before, manifest(root))
-    if ch.other_tests:  # before the tooling rule: a conftest edit moves the tooling hash too, and the specific reason is the useful one
-        return Plan("full", f"a non-module file under tests/ changed: {ch.other_tests[0]}" + (f" (+{len(ch.other_tests) - 1})" if len(ch.other_tests) > 1 else ""))
+    # ...A NON-MODULE FILE UNDER tests/ (feature 430 T02, D2; the GM 2026-10-26, item 2): a doc adds nothing, one directly
+    # under tests/ is the whole suite's and plans full, any other selects the tests that can read it (`tree_file_readers`).
+    # Before the configuration rule: the top-level conftest moves that hash too, and the specific reason is the useful one
+    top = [p for p in ch.other_tests if not p.endswith(".md") and p.count("/") == 1]
+    if top:
+        return Plan("full", f"a non-module file under tests/ changed: {top[0]}" + (f" (+{len(top) - 1})" if len(top) > 1 else ""))
+    tree_files = [p for p in ch.other_tests if not p.endswith(".md")]
+    tree_readers = tree_file_readers(root, tree_files)
     # ...THE GATE'S CONFIGURATION, NOT THE TOOLING (feature 415, D3; the GM 2026-10-24): `scripts/`, a Makefile help line or a
     # new target moved `tooling_hash` and ran all 10,376 tests for a change that reached 143 (research.md R1)
     if ch.gate_config_moved:
         return Plan("full", "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)")
+    # ...A POOL MANIFEST IS READ, NOT EXECUTED (feature 430 T01, D1; the GM 2026-10-26, item 1): no coverage context shows a
+    # test reading one, so the tests whose source names the pool (`pool_readers`, quick's rule) are selected as if they had
+    # changed; any other non-Python engine file still plans full
+    from l7r.diagram.ci import pool_readers
+
     non_py = [p for p in ch.engine if not p.endswith(".py")]
-    if non_py:
-        return Plan("full", f"an engine file that is not Python changed: {non_py[0]}")
+    manifests = [p for p in non_py if pool_readers.is_manifest(p)]
+    if other := [p for p in non_py if p not in manifests]:
+        return Plan("full", f"an engine file that is not Python changed: {other[0]}")
+    readers: list[str] = pool_readers.readers(root) if manifests else []
     closures: dict[str, list[str]] = json.loads(tests.read_text(encoding="utf-8"))
     baseline_tests = sorted(closures)
     scripts_modules: list[str] = []
@@ -328,7 +371,7 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
         from l7r.diagram.ci import gate_config
 
         scripts_modules = sorted(set(gate_config.tooling_modules(root)) | set(gate_config.scripts_readers(root)))
-    if not ch.engine and not ch.test_modules and not scripts_modules:
+    if not ch.engine and not ch.test_modules and not scripts_modules and not tree_readers:
         return Plan("incremental", "nothing the baseline exercised has changed", [], [], [], [], baseline_tests, FULL_FRACTION, [])
     hit = import_time_change(root, db, before, ch)
     if hit:
@@ -336,11 +379,13 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
     touched = contexts_touching(db, root, ch.engine)
     affected_tests = sorted({c.split("|", 1)[0] for c in touched if "|" in c and not c.startswith("fixture:")})
     affected_fixtures = sorted({c[len("fixture:") :].split("|", 1)[0] for c in touched if c.startswith("fixture:")})
-    changed_modules = sorted(set(ch.test_modules) | set(scripts_modules))  # nodeids and the manifest are both repository-relative (feature 329)
+    changed_modules: list[str] = sorted(set(ch.test_modules) | set(scripts_modules) | set(readers) | set(tree_readers))  # nodeids and the manifest are both repository-relative (feature 329)
     pl = Plan(
         "incremental",
         f"{len(ch.engine)} engine file(s) and {len(ch.test_modules)} test module(s) changed"
-        + (f", {len(ch.scripts)} scripts/ file(s) ({len(scripts_modules)} module(s) that read scripts/)" if ch.scripts else ""),
+        + (f", {len(ch.scripts)} scripts/ file(s) ({len(scripts_modules)} module(s) that read scripts/)" if ch.scripts else "")
+        + (f", {len(manifests)} pool manifest(s) ({len(readers)} test module(s) that read them)" if readers else f", {len(manifests)} pool manifest(s) (no test module reads one)" if manifests else "")
+        + (f", {len(tree_files)} non-module file(s) under tests/ ({len(tree_readers)} test module(s) that can read them)" if tree_files else ""),
         list(ch.engine),
         changed_modules,
         affected_tests,

@@ -10,21 +10,18 @@ manifests' content differs from the stamp the last green quick left, the tests t
     pool-readers.py changed   print the reader test files, one per line, when the manifests moved since the stamp; else nothing
     pool-readers.py stamp     record the manifests as they stand (quick calls it once the readers passed)
 
-A READER is a test module in the quick tree (not gate/, full/, tooling/, soak/, tier_*) whose source names the pool as a path
-part (`"pool"`, as `"pool", "hamlets"` or a loop over `("pool", "legacy-hand-authored-pool")`) or globs `pool/hamlets/*`. Broad on
-purpose: the notes census (`tests/test_notes_census.py`) reached the manifests through a tree loop the first pattern missed, and
-its failure surfaced at batch 3's gate; a reader too many costs a fraction of a second. The stamp lives in the clone's `.git/` - never committed, one per tree.
+A READER is the rule `l7r/diagram/ci/pool_readers.py` holds (one copy, shared with the gate's planner since feature 430
+T01), asked here of the quick tree (not gate/, full/, tooling/, soak/, tier_*). The stamp lives in the clone's `.git/` - never
+committed, one per tree.
 """
 
 from __future__ import annotations
 
 import hashlib
-import re
 import subprocess
 import sys
 from pathlib import Path
 
-READS = re.compile(r'"pool"|pool/hamlets/\*')  # the pool named as a path part: `"pool", "hamlets"`, or a tree loop's `("pool", ...)`
 NOT_QUICK = ("gate", "full", "tooling", "soak")
 
 
@@ -46,14 +43,10 @@ def digest(top: Path) -> str:
 
 
 def readers(top: Path) -> list[str]:
-    out = []
-    for p in sorted((top / "tests").rglob("test_*.py")):
-        parts = p.relative_to(top / "tests").parts
-        if parts[0] in NOT_QUICK or parts[0].startswith("tier_"):
-            continue
-        if READS.search(p.read_text(encoding="utf-8")):
-            out.append(p.relative_to(top).as_posix())
-    return out
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # the repository this script is in, not the tree it asks
+    from l7r.diagram.ci import pool_readers  # noqa: PLC0415 - the one copy of the rule (feature 430 T01)
+
+    return pool_readers.readers(top, NOT_QUICK)
 
 
 def main(argv: list[str]) -> int:

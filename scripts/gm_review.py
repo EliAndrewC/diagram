@@ -90,8 +90,9 @@ def held(root: Path, full: bool = False) -> list[str]:
 
 KINDS = {"arbiter": "arbiter rulings", "accepted": "findings accepted with a reason",
          "arbiter-fix-done": "tooling fixes the arbiter asked for, made",
-         "arbiter-fix-declined": "tooling fixes the arbiter asked for, declined to the GM"}
-SHORT = {"arbiter": "rulings", "accepted": "accepted", "arbiter-fix-done": "fixes made", "arbiter-fix-declined": "fixes DECLINED"}
+         "arbiter-fix-declined": "tooling fixes the arbiter asked for, declined to the GM",
+         "known-drift": "known drifts landed on their open fixing task (feature 430)"}
+SHORT = {"arbiter": "rulings", "accepted": "accepted", "arbiter-fix-done": "fixes made", "arbiter-fix-declined": "fixes DECLINED", "known-drift": "known drifts"}
 
 
 def _num(d: Path) -> int:
