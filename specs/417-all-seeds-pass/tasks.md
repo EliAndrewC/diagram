@@ -107,6 +107,7 @@
 - [x] T41 (T31's second part, D35) The four map-moving settle steps and the last resort's three needless re-asks deleted, with the fourteen names they left dead and their tests, in `l7r/diagram/hamletgen/ways/` (FR-004)
       research: rendering
       verify: DONE. landed: square_every_crossing, settle_shapes, settle_way_outs and settle_widths out of STEPS and settle_husks, settle_street_ends and prune_the_tree out of last_resort: 54 of 54 (cohort-log 20261025T234826Z), Inashiro, Kashikawa and Sawada redrawn in a new drawing order (points unchanged; one Kashikawa lane 5 -> 6 ft); the fourteen dead names deleted with their tests; settle_joins and settle_widths stay in last_resort (seeds 10, 25, 37 refused without them: T31 part B)
-- [ ] T42 (T31's conversion C1, D11) One width a way asked where the orphan link is laid (`link_width`), and `settle_widths` deleted from the last resort with its dead closure, in `l7r/diagram/hamletgen/ways/` (FR-004, FR-006)
+- [x] T42 (T31's conversion C1, D11) One width a way asked where the orphan link is laid (`link_width`), and `settle_widths` deleted from the last resort with its dead closure, in `l7r/diagram/hamletgen/ways/` (FR-004, FR-006)
       research: rendering
+      verify: DONE. landed: link_width asked where the orphan link is laid (a link continuing a way end to end takes its width); settle_widths and rewidth deleted: 54 of 54, Inashiro's and Kashikawa's orphan link 6 -> 5 ft continuing a 5 ft way
 - [ ] GM review (make gm-reviewed F=417)
