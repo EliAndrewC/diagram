@@ -173,32 +173,7 @@ None.
 
 
 <!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
-### T08 Approach (checklist part A)
-
-1. **The goal, in the world.** The same ground cover drawn, its keep-out and gap tests asked per candidate set.
-2. **The constraints.** US4, FR-003, FR-004, FR-007; the GM's order (`request.md` 5): ground cover after the homestead parts.
-3. **Where each comes from.** `research/hotspots-pairwise.md` "Ground cover" (`close_belt_gaps`, `household_bamboo` ->
-   `stand_spares_seats`, `belt.fouled`, `convex_hull`, `belt_law`, `_crown_seat_clear`, the grove and hinterland genexprs).
-4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage, so a chain in another stage is not
-   dropped) scopes the task to the chains that still stand after T04 and T07 (FR-002).
-5. **The order.** After the homestead parts family, before the water family.
-6. **The exits.** Green: each chain named falls at least tenfold, the cohort with no seed regressed, the claims round clean.
-   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: the same tests over a candidate set.
-8. **The budget.** One landing per chain group.
-9. **Done, measured.** Each chain's count before and after from `make perf-fanout`, recorded in `research/`.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-Each step measured alone:
-
-| step | measured by |
-|---|---|
-| the chains re-scoped | `make perf-fanout` (every stage) |
-| each chain converted | its count in `make perf-fanout`, `make maps-moved` |
-| no seed regressed | `make cohort-landing` (in `make land`) |
-
-
+<!-- plan-archive: T08 to T08 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 ### T09 Approach (checklist part A)
 
 1. **The goal, in the world.** The same fields and brook, the field settle judging a new cell only against what is near it.
