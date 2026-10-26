@@ -90,7 +90,10 @@ VERDICTS = ("IN-STEP", *FINDINGS)
 DEFAULT_OUT = Path("/tmp/l7r-check")
 #: What the base read needs: the engine, the procedure documents and the questions.
 BASE_PATHS = ("l7r", "docs/buildings.md", "docs/buildings", QUESTIONS)
-_VERDICT = re.compile(r"^VERDICT\s+(\S.*?)\s+(" + "|".join(VERDICTS) + r")\s+-\s+(.*)$")
+# ...the verdict also read where a reply sets it off with a dash or closes it with a colon (`KEY - IN-STEP - note`, `KEY IN-STEP:
+# note`): read strictly, the dash went into the key, every line was "not a claim of this bundle" and nothing was recorded (feature
+# 417 T50, two impl-drift rounds)
+_VERDICT = re.compile(r"^VERDICT\s+(\S.*?)\s+(?:-\s+)?(" + "|".join(VERDICTS) + r")(?:\s+-\s+|:\s+)(.*)$")
 _UNCLAIMED = re.compile(r"^UNCLAIMED\s+(\S+?::\S.*?)\s+-\s+(.*)$")
 
 

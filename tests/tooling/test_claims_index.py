@@ -725,3 +725,11 @@ def test_a_claims_label_its_own_account_contradicts_is_flagged_with_its_fix(tmp_
         assert said(right) == [], right
     rows = {"k": type("R", (), {"claim": parse_claim("x - GUESS: as 0081 says")})(), "none": type("R", (), {"claim": None})()}
     assert len(lb.flags(rows, ["k", "k", "none", "gone"], q)) == 1  # once a key; an unclaimed or missing row is skipped
+
+
+def test_a_verdict_set_off_by_a_dash_or_closed_by_a_colon_is_read_against_its_key() -> None:
+    """Feature 417 T50: an impl-drift reply wrote `KEY - IN-STEP - note` and `KEY - IN-STEP: note`; the dash went into the key and
+    nothing was recorded."""
+    reply = "VERDICT l7r/x.py::f#a T - IN-STEP - a note\nVERDICT l7r/x.py::g#b - DRIFTED: known (417 T32): it\nVERDICT l7r/x.py::h#c IN-STEP - plain"
+    verdicts, _ = cx.parse_reply(reply)
+    assert verdicts == {"l7r/x.py::f#a T": ("IN-STEP", "a note"), "l7r/x.py::g#b": ("DRIFTED", "known (417 T32): it"), "l7r/x.py::h#c": ("IN-STEP", "plain")}
