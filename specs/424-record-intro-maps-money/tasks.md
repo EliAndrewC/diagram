@@ -6,6 +6,6 @@
 
 ## Tasks
 
-- [ ] T01 The opening (D1, D2; FR-001, FR-002)
+- [x] T01 The opening (D1, D2; FR-001, FR-002)
       research: rendering
-      verify: record tests green; make record CHECK=1 clean; make done green at the landing
+      verify: DONE. landed: contents.json opening, read by contents.load_opening, written first on the record's home page; both links pinned by test_record_site
