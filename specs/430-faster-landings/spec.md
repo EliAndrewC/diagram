@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-26
 
-**Status**: Draft (spec reviewed FAITHFUL, round 5, 2026-10-26)
+**Status**: Draft (spec reviewed FAITHFUL, round 5, 2026-10-26; amendment 1 - SC-001 counted against FR-002)
 
 **Affects**: tooling
 
@@ -145,8 +145,10 @@ unchanged modules stay the gate's (FR-009's narrowing, stated in Assumptions).
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001, FR-002): replaying today's 19 full-planned deltas that were full only for a manifest or a `tests/`
-  non-module file, the planner plans incremental for each.
+- **SC-001** (FR-001, FR-002): of today's 19 full-planned deltas that were full only for a manifest or a `tests/` non-module
+  file (`m:full-plan-reasons`: 11 `inashiro.json`, 4 the top-level `tests/conftest.py`, 2 `tests/hooks/`, 1 a `CLAUDE.md`, 1
+  `tests/tooling/ci/conftest.py`), the planner, replayed, plans incremental for the 15 that are not the top-level `conftest.py`;
+  those 4 plan full, as FR-002 says.
 - **SC-002** (FR-003, FR-003a): the pre-gate check names the lines of each of today's 3 coverage reds whose named lines lie in a
   module their delta changed; on the sixth it counts the tests the floor counts (no new `tooling`-marked test the floor leaves
   out); and on those replayed deltas it takes less time than the gate took. The 2 reds whose lines lie in an unchanged module

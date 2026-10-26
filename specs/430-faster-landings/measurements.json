@@ -23,5 +23,21 @@
   "named_module_in_delta": 3,
   "named_module_not_in_delta": 2,
   "lines_in_spans": 20
+ },
+ "full-plan-reasons": {
+  "quantity": "2026-10-26's `make done` runs planned full only for a pool manifest or a non-module file under tests/, by the file named",
+  "value": 19,
+  "unit": "runs",
+  "observed": "2026-10-26",
+  "source": "this clone, dev/run-log/2026-10/20261026*.json",
+  "command": "python3 specs/430-faster-landings/full_reasons.py",
+  "method": "full_reasons.py as committed: each target-done run record whose plan reason names a non-Python engine file or a non-module file under tests/, counted by that reason",
+  "by_reason": {
+   "pool/hamlets/inashiro/inashiro.json": 11,
+   "tests/conftest.py (top level)": 4,
+   "tests/hooks/test-cohort-gate.sh": 2,
+   "tests/hamletgen/ways/CLAUDE.md": 1,
+   "tests/tooling/ci/conftest.py": 1
+  }
  }
 }
