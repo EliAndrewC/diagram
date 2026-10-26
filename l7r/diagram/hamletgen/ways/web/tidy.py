@@ -19,7 +19,8 @@ from ..geom import _components, _trim_to_service, lane_houses, polyline_len, ste
 
 
 def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None:
-    """THE LAST PASS OVER EVERY LANE END, after the joins: pull back anything that still reaches nothing.
+    """A ROW'S STREETS TRIMMED, their ends pulled back where they reach nothing - since feature 417 T46 asked of a row's streets only
+    (`streets=True`), the web's other trims gone with the joins they followed; T47 lays the street to its last farm instead.
 
     A ROW'S STREETS ARE TRIMMED APART, with `streets=True`, once the door paths are laid (feature 291 plan D17): a row
     farm stands a frame's depth off its street and is reached by its door path, laid after this pass, so trimmed with

@@ -78,10 +78,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         a web lane's middle off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: WEB_FABRIC_GAP, 7 ft clear of a garden fence (`clear_runs`' tight margin)
         ground cover is not fabric - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane crosses a tree belt and the planting resumes on both sides
         scrub and commons crossed - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); a lane may cross grazing scrub and the commons
+        a row's streets trimmed - research/questions/0033-row-villages-resson.drawing.html: a row's street runs on off the map as the road into it - every street of a row, the first's ends and the join legs too, is trimmed to the last farm it serves (`tidy_lane_ends` with `streets`), a departure the code keeps until feature 417 T47
         a further row street's end - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (the row's street trim, `tidy_lane_ends` with `streets`; the settle's street-end step went in feature 417 T31)
-        the web's frame - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH`, 100 ft past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band) is only the room the cuts are laid in, and a web lane is cut back where it stops serving (`trim_lane_stubs`)
+        the web's frame - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a back lane is cut in about 30 ft past the last house it serves - the code cuts in a frame of `BUNDLE_PITCH` (100 ft) past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band, and trims back where a lane stops serving (`_trim_to_service`, `trim_lane_stubs`), a departure the code keeps until feature 417 T32
         a row village laid without web cuts - research/questions/0033-row-villages-resson.drawing.html: its farms are strung along their street and reach it by a path where their grove is in the way - its ways are its streets and those paths; no back lane or alley is cut among its farms (a map drawing convention)
-        web lanes off the water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way keeps to its own bank; web cuts clipped at the watercourses and drawn channels
+        web lanes off the water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way keeps to its own bank unless crossing saves it more than about 150 ft, at a crossing place - the web's cuts are clipped at every watercourse and drawn channel and never cross, a departure the code keeps until feature 417 T32
         the households' ways first - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every household's own way is laid in the gaps, and the web's lanes after it (`settle_tree` before the skeleton, the cuts and the door paths, on a clustered map)
         a row's street first - research/questions/0033-row-villages-resson.drawing.html: a row's street stands where its farms stand, and a farm off it reaches it by its own path (a path round the grove where the grove is in the way) - so the streets are laid first, and each farm's door path, or the settle's way for a house left unreached, ends on its street
         web lanes routed round the households' reserved wood seats as fabric - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: every pass clips and routes round each reserved wood seat by the copse's lane buffer, as it does a steading; no page read shows a lane through a household's grove
@@ -248,15 +249,13 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # verdict and no pool map's moved: the lay and `settle_the_web` already keep what they repaired. Do not re-add one to
     # mend a seed - the rule it stood in for belongs in the placer (feature 417's principle, its research R4).
     #
-    # ...and a record the joins emptied is not a lane: a husk with no points declares a way nothing draws (a review
-    # counted three on Kashikawa and two on Kuwabata) - dropped with its ink slot, the one way lanes leave
+    # ...and a record left with no points is not a lane: a husk declares a way nothing draws (a review counted three on
+    # Kashikawa and two on Kuwabata, when the orphan joins emptied them) - dropped with its ink slot, the one way lanes leave
     s.drop_lanes([i for i, ln in enumerate(s.M.get("lanes") or []) if len(ln.get("pts") or []) < 2 or polyline_len([(float(x), float(y)) for x, y in ln["pts"]]) < 1.0])
-    # ...AND THE ENDS ARE TRIMMED TO SERVICE ONCE MORE, LAST (feature 261): the dangling-end sweeps reshape lanes, and
-    # Kuwabata shipped a skeleton arm into the scrub that the first tidy had seen as part of a longer lane.
     # ...AND THE PADDY IS REACHED (269 B04, research/fields/290): where no lane end stands on its bund - the spur swept, or
     # never drawn - the nearest lane runs on to it, or a field path is drawn off the nearest lane; recorded either way
-    # ...AND A GROVE FARM IS REACHED AT ITS FRONT DOOR (feature 291 FR-019), LAST: laid before the trims, a door path was cut
-    # back off its door by them (Mizuguchi: the farm at (232,1582) served, its door 60 ft from the path's trimmed end)
+    # ...AND A GROVE FARM IS REACHED AT ITS FRONT DOOR (feature 291 FR-019), LAST: laid before a trim, a door path was cut
+    # back off its door by it (Mizuguchi: the farm at (232,1582) served, its door 60 ft from the path's trimmed end)
     # ...EVERY ROW FARM, unless its door is on its street (feature 291 on feature 287's lane law): a row farm's house stands
     # most of a frame off its street, so the street's end past the last farm served nothing the law counts (`end_serves`,
     # 60 ft of a house center) and the settle trimmed it back farm by farm - Mizuguchi's east row, its doors 33-39 ft off the
@@ -264,9 +263,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # as the seating's corridor meets the tree on a nucleated map, and the street's end then stands at a junction.
     lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     if _rows:
-        # ...and a door path laid beside a lane that was there first meets it rather than doubling it (Kashikawa: a
-        # join-orphans lane ran on 64 ft beside the door path of the farm at (2299, 2724)) - the sweep that ran above,
-        # before any door path existed
+        # ...and a row's streets trimmed to the last farm each serves - a repair, the street laid long and cut back (feature
+        # 417 T46 measured it needed: six linear seeds refuse without it); its conversion, the street laid ending there, is T47's
         tidy_lane_ends(s, list(plan.envelope), streets=True)
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web

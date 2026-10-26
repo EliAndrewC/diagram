@@ -37407,12 +37407,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a further row street's end": {
-  "body": "790029facd41a276",
-  "claim": "a further row street's end - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (the trims, `tidy_lane_ends`; the settle's street-end step went in feature 417 T31)",
-  "code": "b632e0eceee6bb7b",
-  "core": "10a9239a784dca8f",
-  "date": "2026-10-25",
-  "note": "pulling the end back to the last house it serves is 0246's recorded GUESS (\"pulled back to the last house it serves ... the rule is a GUESS\"); 0033 does not say where a further street ends",
+  "body": "fc2429f745237e1b",
+  "claim": "a further row street's end - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (the row's street trim, `tidy_lane_ends` with `streets`; the settle's street-end step went in feature 417 T31)",
+  "code": "e56628556ba2b6db",
+  "core": "9590bb47e32917bc",
+  "date": "2026-10-26",
+  "note": "the street trim (`tidy_lane_ends` with `streets=True`, then `_trim_to_service`) stops an end at a joint within 60 ft or at its closest approach to the last house it serves; the page records this pull-back as a GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -37421,17 +37421,15 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a row farm's door point": {
-  "body": "790029facd41a276",
+  "body": "fc2429f745237e1b",
   "claim": "a row farm's door point - GUESS row-villages-resson.drawing: where such a farm's gate stood was not found; set 8 ft past its yard (`front_door` at `DOOR_STEP_FT`); it picks the farm's own street (`own_street`) and starts its door path, while arrival and the trim are judged from the house",
-  "code": "af942e837105f94e",
-  "core": "10a9239a784dca8f",
-  "date": "2026-10-25",
-  "note": "the page records that where such a farm's gate stood was not found, so the path is a GUESS; the door point is placed by `lay_door_paths`",
+  "code": "b1bc7ed34f4863a8",
+  "core": "9590bb47e32917bc",
+  "date": "2026-10-26",
+  "note": "the page says the gate's place \"was not found\", so the path is a GUESS; `front_door(h, DOOR_STEP_FT)`, `own_street` by the door, and arrival judged from the house (`street_arrives`) match the claim",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
@@ -37439,8 +37437,6 @@
   "rests": [
    "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a row village laid without web cuts": {
@@ -37555,24 +37551,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#every farmhouse served": {
-  "body": "3917a1d684c46754",
+  "body": "fc2429f745237e1b",
   "claim": "every farmhouse served - how-our-maps-lay-a-clustered-settlements-lanes.drawing: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain",
-  "code": "5ca6757753802c9c",
-  "core": "10a9239a784dca8f",
-  "date": "2026-10-25",
-  "note": "every house is served except those reached across a neighbor's land (excluded from `proj` through `reached_across`); `settle_tree` now lays each household's own way before the web's lanes, which is the order the page gives (\"laid after every house stands and every household's own way is laid in the gaps\")",
+  "code": "c96554840be95024",
+  "core": "9590bb47e32917bc",
+  "date": "2026-10-26",
+  "note": "`reached_across` houses are left out of the cuts and the door paths, and every other farmhouse is owed a way",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#ground cover is not fabric": {
@@ -37641,43 +37634,48 @@
   "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#the FIRST row street's ends, and each street's join leg, are trimmed to service as well (`tidy_lane_ends(..., streets=True)` takes every `street` lane; the claim covers only \"a further row street\"), against 0033 §128 \"the street runs on off the map as the road into it\"": {
+  "code": "9590bb47e32917bc",
+  "core": "9590bb47e32917bc",
+  "date": "2026-10-26",
+  "note": "the FIRST row street's ends, and each street's join leg, are trimmed to service as well (`tidy_lane_ends(..., streets=True)` takes every `street` lane; the claim covers only \"a further row street\"), against 0033 §128 \"the street runs on off the map as the road into it\"",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#the households' ways first": {
-  "body": "aa3456f912e2f44d",
-  "claim": "the households' ways first - how-our-maps-lay-a-clustered-settlements-lanes.drawing: every household's own way is laid in the gaps, and the web's lanes after it (`settle_tree` before the skeleton, the cuts, the orphan links and the door paths, on a clustered map)",
-  "code": "7680b8e743573785",
-  "core": "10a9239a784dca8f",
-  "date": "2026-10-25",
-  "note": "`settle_tree` is drawn before the skeleton, the cuts, the orphan links and the door paths, as 0246 says: once every house stands, each household's way is laid in the gaps to the track out or an earlier way, and both lane forms are laid after it.",
+  "body": "fc2429f745237e1b",
+  "claim": "the households' ways first - how-our-maps-lay-a-clustered-settlements-lanes.drawing: every household's own way is laid in the gaps, and the web's lanes after it (`settle_tree` before the skeleton, the cuts and the door paths, on a clustered map)",
+  "code": "71ab52468c854bd8",
+  "core": "9590bb47e32917bc",
+  "date": "2026-10-26",
+  "note": "on a clustered map `settle_tree` runs before `_lay_skeleton`, the cuts and the door paths, as \"laid after every house stands and every household's own way is laid in the gaps\" says",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#the web's frame": {
-  "body": "ddc16e6f79f62d76",
-  "claim": "the web's frame - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH`, 100 ft past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves",
-  "code": "2739305ca1a126a3",
-  "core": "10a9239a784dca8f",
-  "date": "2026-10-22",
-  "note": "the frame is the room the cuts are laid in; tidy_lane_ends pulls the ends back",
+  "body": "fc2429f745237e1b",
+  "claim": "the web's frame - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH`, 100 ft past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band) is only the room the cuts are laid in, and a web lane is cut back where it stops serving (`trim_lane_stubs`)",
+  "code": "432b2deac54cc607",
+  "core": "9590bb47e32917bc",
+  "date": "2026-10-26",
+  "note": "the page names the room a back lane is cut in as \"about 30 ft past the last of them - the room it is cut in\"; the code cuts in a frame of `_reach_along + BUNDLE_PITCH` (100 ft past the outermost house) or `seat lat * CLUSTER_SPAN_FACTOR`, whichever is larger. The extra room is visible on the map: the trim keeps an end that reaches the bund or another way within 60 ft. The claim's rewording (\"the frame is only the room\") contradicts the page instead of following it. Either cut each lane about 30 ft past its last house, or make the claim a DEVIATION and have 0246's drawing page record it. The pull-back is done by `_lay_web_lane`'s `_trim_to_service`, not only by `trim_lane_stubs`",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-25",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#web lane margin off the hard ground": {
   "body": "f326458b2a344b62",
@@ -37718,22 +37716,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#web lanes off the water": {
-  "body": "f326458b2a344b62",
-  "claim": "web lanes off the water - villages-beside-their-stream-one-bank-or-both.drawing: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places",
-  "code": "5f3f0534895d2182",
-  "core": "10a9239a784dca8f",
-  "date": "2026-10-22",
-  "note": "the web cuts are clipped at `drawn_water` (`drawn_water_segs` = drawn_channels + streams, line 883), so a web lane never crosses an irrigation channel. 0084 §137 says \"the lanes among the houses cross a ditch where their line takes them\", on a deck (§136). The cited 0035 speaks only of the brook. The channel clipping should either follow 0084 or be claimed as a DEVIATION that 0084 records",
+  "body": "fc2429f745237e1b",
+  "claim": "web lanes off the water - villages-beside-their-stream-one-bank-or-both.drawing: a way keeps to its own bank; web cuts clipped at the watercourses and drawn channels",
+  "code": "dd7b4a388a67772c",
+  "core": "9590bb47e32917bc",
+  "date": "2026-10-26",
+  "note": "`clear_runs(..., lines=watercourses + drawn_water)` cuts every web run at every water line (14 ft margin), so a web cut never crosses. The page says a way keeps to its own bank \"unless crossing saves it more than about 150 ft\", crossing at a crossing place every ~160 ft, and that houses may stand on both banks. The claim quotes the rule without its \"unless\". Either let a cut cross at a crossing place, or make the claim a DEVIATION and have 0035's drawing page record it",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
   "research": "9354777ef34af3d3",
   "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-25",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#web lanes routed round the households' reserved wood seats as fabric": {
