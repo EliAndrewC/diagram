@@ -30,9 +30,12 @@ def _draw_tree_lane(s: Any, run: Poly, width: float, role: str, **extra: Any) ->
     """`run` drawn as a tree lane of `role`.
 
     Research:
+        square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)
         a tree lane's no-build corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE`, the lane's 18 ft room (9 ft each side of its middle), as a web lane's
         worn look - research/questions/0081-village-lanes.drawing.html: bare, packed earth with a soft worn edge"""
-    s.lane(_rounded(run), width=width, clearance=WEB_CLEARANCE, worn=True)
+    from .squaring import square_run  # imported where it is asked: `squaring` sits above this layer
+
+    s.lane(_rounded(square_run(s.M, run)), width=width, clearance=WEB_CLEARANCE, worn=True)
     s.M["lanes"][-1].update({"role": role, **extra})
 
 

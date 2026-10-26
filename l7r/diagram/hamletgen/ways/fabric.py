@@ -373,6 +373,7 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     brings a house inside the reach that is outside it now, it is a way, whatever its length.
 
     Research:
+        square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)
         shortest way - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); under 30 ft drawn only where it brings a house within 100 ft
         no join link through a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane
         web lanes seat no house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the farmhouses placed first, the lanes
@@ -383,6 +384,10 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
         web lane width - research/questions/0081-village-lanes.drawing.html: 3 ft by default, the footpath's tread"""
     if len(pts) < 2:
         return False
+    from .squaring import square_run  # imported where it is asked: `squaring` sits above this layer
+
+    # SQUARE WHERE IT CROSSES WATER, AS LAID (feature 417 T49): judged, and drawn, as squared - no pass squares it afterwards
+    pts = square_run(s.M, pts)
     # A JOIN LINK IS EXEMPT FROM THE DEBRIS FLOOR (feature 134 T50, 2026-08-29). The floor asks what a
     # run EARNS in service - does it bring a house inside the reach - and a link earns nothing by that
     # measure, because the house it belongs to is already served by the piece the link is joining. Its

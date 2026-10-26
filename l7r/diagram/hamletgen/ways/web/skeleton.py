@@ -31,6 +31,7 @@ from ..fabric import _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs
 from ..geom import _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from ..law_water import _brooks
 from ..route import _route
+from ..squaring import square_run
 
 SKELETON_ARM_WIDTH = 5.0
 
@@ -103,6 +104,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
     Returns the kept arms, for the web to treat as existing network.
 
     Research:
+        square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)
         skeleton laid after the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the farmhouses are placed first
         skeleton form - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the rolled lane shape
         clear of crop, wet and water - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane never crosses row crops and keeps off wet ground
@@ -264,7 +266,8 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             kept.append((arm, raw_arms[ai]))
             # ...laid only where the overlap matrix admits it (feature 287 M8): an arm across a byre or a house is cut there,
             # as the settle would cut it, and a piece left too short to be a way is not laid
-            for piece in s.admitted_runs(arm, 5):
+            # ...SQUARE WHERE IT CROSSES WATER, AS LAID (feature 417 T49): no pass squares a lane after the web any more
+            for piece in s.admitted_runs(square_run(s.M, arm), 5):
                 if polyline_len(piece) >= _WEB_MIN_FT:
                     s.lane(piece, width=SKELETON_ARM_WIDTH, clearance=LANE_CLEARANCE, worn=True)
     s.M["meta"]["lane_skeleton"] = kind

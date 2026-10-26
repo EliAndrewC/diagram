@@ -255,6 +255,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.lane
 
     Research:
+        square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)
         lanes after the farmhouses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: connector and spur drawn after every house
         polder has no spur - GUESS: the connector alone, the way into the fields taken to be over the dike's crest where the record runs a field path on to the outer bund
         spur to the field - research/questions/0081-village-lanes.drawing.html: the outline point whose path crosses least, then
@@ -443,6 +444,10 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
             _drawn_spur = tip_onto_the_bund(_drawn_spur, memo_ground(s, "worked", worked_ground), SPUR_WIDTH / 2.0, RunOnBlocks(s))
             if len(_drawn_spur) < 2:
                 _swept = "the threaded spur runs in the worked ground end to end - the field path is the web's"
+        if _swept is None:
+            from .settle import square_run  # the web's last pass sits above this layer
+
+            _drawn_spur = square_run(s.M, _drawn_spur)  # square where it crosses water, as laid (feature 417 T49)
         if _swept is None and not s.admits_lane(_drawn_spur, SPUR_WIDTH):
             _swept = "the overlap matrix refuses the spur (a dry plot or a steading's part on it) - the field path is the web's"
         if _swept is None:
@@ -695,11 +700,12 @@ def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequen
     forbid = st.forbidding("lanes") if st is not None else []
     matrix = [e[1] for e in forbid if e[0] != "wood seat"]
     seats = [e[1] for e in forbid if e[0] == "wood seat"]
+    # THE DRY EXIT SQUARED AS LAID too (feature 417 T49): the flood fill's run crosses water where the fill finds, squared here
     with contextlib.suppress(NoDryExit):
-        return connector_dry_exit(plan, track[0], [*avoid, *matrix, *seats], wet, waters, fabric)
+        return square_run(s.M, connector_dry_exit(plan, track[0], [*avoid, *matrix, *seats], wet, waters, fabric))
     # ...AND ONLY THEN OVER A RESERVED SEAT, WHICH THE WAY OUT TAKES: a gateway the seats wall in on every side has one way out,
     # and the seats it crosses are given up by name (`meta.wood_seats_to_the_connector`) rather than the hamlet left with none
-    run = connector_dry_exit(plan, track[0], [*avoid, *matrix], wet, waters, fabric)
+    run = square_run(s.M, connector_dry_exit(plan, track[0], [*avoid, *matrix], wet, waters, fabric))
     if st is not None:
         gone = st.reserved.release_seats_along(run, CONNECTOR_WIDTH)
         if gone:

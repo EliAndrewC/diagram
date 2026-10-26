@@ -302,6 +302,7 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
     rather than swallowed.
 
     Research:
+        square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)
         some way joins the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: joined, run on, or a
             field path branched off the nearest lane
         nearest lane runs on - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the end nearest the paddy
@@ -350,11 +351,14 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
     # ...AND WHERE THE WATER LIES BETWEEN, ACROSS IT ONCE: a row on the brook's far bank from its fields reaches them over a
     # plank, which the crossings stage squares and lays (Mizuguchi, settlement-review 2026-09-30: once its brook came on from
     # off the sheet no way reached the paddy, and the fallback refused every way across the water)
+    from .squaring import square_run  # imported where it is asked: `squaring` sits above this layer
+
     for over in (0, 1):
         for q in sorted(samples, key=paddy.dist):
             tgt = run_on_target(q, paddy, BRANCH_WIDTH / 2.0, reach=float("inf"))
-            if tgt is not None and blocks.clear(q, tgt, BRANCH_WIDTH, over_water=over) and s.admits_lane([q, tgt], BRANCH_WIDTH):  # ...and the matrix (M8)
-                s.lane([q, tgt], width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
+            way = square_run(s.M, [q, tgt]) if tgt is not None else []  # square where it crosses water, as laid (feature 417 T49)
+            if tgt is not None and blocks.clear(q, tgt, BRANCH_WIDTH, over_water=over) and s.admits_lane(way, BRANCH_WIDTH):  # ...and the matrix (M8)
+                s.lane(way, width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
                 return "branch"
     return "none: every straight way from the lanes to the paddy crosses water, the marsh or a steading"
 
