@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-26T22:44:08Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 213,
+  "result": "green",
+  "commit": "6d660a4fc",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10069,
+  "host": {
+    "load": [
+      4.57,
+      7.68
+    ],
+    "mem_avail_mb": [
+      9718,
+      9795
+    ],
+    "cpu_temp_c": [
+      84.0,
+      87.0
+    ],
+    "stall_s": {
+      "cpu": 1.7,
+      "io": 0.6,
+      "io_full": 0.4,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 12417,
+      "package": 7717
+    }
+  },
+  "phases": {
+    "preflight": 30.0,
+    "static": 3.0,
+    "format": 0.0,
+    "typecheck": 2.0,
+    "reference": 0.0,
+    "pytest": 193.0,
+    "floors": 10.0,
+    "test-full": 208.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/settlement/_geom/indexes.py",
+  "collected": 10069
+}
