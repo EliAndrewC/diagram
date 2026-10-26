@@ -95,3 +95,5 @@ households bought instead, and the historiography of why the record is thin.
 - spec-fidelity round 1 (2026-10-26): CHANGES REQUIRED - (1) Q4 names home-work days or hours a year for both city households,
   Q5 the same where any account exists; (2) Q6 reports whose saying the proverb was, testing the GM's farming guess; (3) Q4
   says "a family, or an extended family" and who in it did the unpaid work: all applied.
+- round 2 (verify, 2026-10-26): FAITHFUL - all three items resolved; the 0004 pointer read as where the household's members
+  come from, who did the unpaid work still the research's to answer.
