@@ -1,0 +1,27 @@
+{
+ "coverage-reds-replay": {
+  "quantity": "named line spans (8 spans, 20 lines) of 2026-10-26's line-naming coverage reds that were EXISTING lines (not added by the red's delta)",
+  "value": 8,
+  "unit": "spans",
+  "observed": "2026-10-26",
+  "source": "this clone, dev/run-log/2026-10/20261026*.json (target done, failed_names \"uncovered ...\")",
+  "command": "bash specs/430-faster-landings/replay-reds.sh",
+  "method": "replay-reds.sh as committed: base = the last landing commit before each red; a named line is ADDED when a + hunk of base..red covers it; its module IN the delta when base..red changes it",
+  "reds": 6,
+  "lines_checked": 8,
+  "added_lines": 0,
+  "existing_lines_that_lost_coverage": 8,
+  "marker_mismatch_reds": 1,
+  "per_red": {
+   "31f739f5d": "ends.py:321, shapes.py:161-167, tree.py:404 - existing lines (tests deleted with their callers) - in the delta",
+   "d92ff2c90": "tree.py:298-300 - existing - in the delta",
+   "7f209090b": "law.py:933 - existing - law.py NOT in the delta (b1713222b..7f209090b changed sweeps, tails, settle/stage, web/stage, web/tidy)",
+   "449e7df7b": "checks.py:141 - existing (the field spur that reached it deleted) - checks.py NOT in the delta (144a0e102..449e7df7b changed law, track, thread, bund, cluster_edge)",
+   "39ea51383": "gencache.py:227-228, 238-241 - existing (moved behind the raw branch) - in the delta",
+   "9a157cc4b": "cohort_audit.py - new tests marked tooling, counted by cover-changed's mirrored-directory run but not by the gate's floor"
+  },
+  "named_module_in_delta": 3,
+  "named_module_not_in_delta": 2,
+  "lines_in_spans": 20
+ }
+}
