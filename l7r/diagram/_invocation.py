@@ -210,6 +210,7 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.perf_review": ("perf-review", "cheap"),  # feature 129: the review records and the push-time check
     "l7r.diagram.switches": ("switches", "cheap"),  # feature 132: the iteration switches - remote off, scope locked
     "l7r.diagram.tools.perf_profile": ("perf-profile", "expensive"),  # feature 129: tier 2 - cProfile of one stage of one seed
+    "l7r.diagram.tools.perf_fanout": ("perf-fanout", "expensive"),  # feature 427 T01: it profiles every stage at two sizes
     # RE-POINTED, not removed (feature 198, claimed as 195 and renumbered 2026-09-07): `make hamlet-floor` is gone, but this module still
     # carries `if __name__ == "__main__":`, so `test_operations_registry._entry_points()` counts
     # it and a missing row fails the gate - and the block cannot go either, because the gate runs

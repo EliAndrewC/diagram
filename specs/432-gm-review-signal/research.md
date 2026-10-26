@@ -21,3 +21,19 @@
 - **Ruled**: the round arbiter, `ask:432-t05-triage-price`, 2026-10-26: the price is not material - the clearing removes 83% of
   the re-checks and forgoes 10% of the findings, a yield of 0.13% on the cleared route against 5.9% on the kept one; land it as
   specified, the cleared claims recorded as such (each row's `cleared`), where a later sweep would sample them.
+
+## R2 - the pop-up cascade the audit named (T04, FR-005 b, D6)
+
+- **Finding** (observed 2026-10-26, method: the 2026-10-13 rows of `dev/review-ledger.md` for modal-form, modal-research,
+  modal-depiction and quote-check naming a bamboo, shelter or grove pop-up): 47 checks on 9 choice pop-ups and 2 hamlet
+  pop-ups of 374's batch 17. 18 of them were a second or later round, and 15 of those 18 still found something
+  (`ACCURACY 1`, `TRUTH 2`, a `FIX`); the rounds tracked real findings, as the arbiter's hour-2 ruling said ("The checks did
+  catch real errors").
+- **Finding** (observed 2026-10-26, method: every `l7r/diagram/interactive/assets/modals/**/*.md`, split at blank lines,
+  paragraphs over 80 characters compared): of 293 pop-up files, 17 paragraphs appear in 2 or more, 51 placements in all, and
+  none of them in the bamboo, shelter or grove family. The premise behind E(b) - that the batch re-checked one shared paragraph
+  pop-up by pop-up - is not what happened: each pop-up has its own text, and its three checks each judged it.
+- **So** FR-005 (b) as filed (a shared paragraph checked once) would cover 51 placements of 17 paragraphs across the whole
+  registry and none of the batch that prompted it.
+- **SC-004's pop-up half** (from R2's counts): before and after identical - nothing built; the premise false for 374#81.
+  Ruled by the round arbiter, `ask:432-t04-shared-paragraphs`, 2026-10-26: FR-005 (b) waived, T04 closed on R2.

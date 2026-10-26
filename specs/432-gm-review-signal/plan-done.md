@@ -137,3 +137,49 @@
   as today. Rendering: none.
 
 <!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-26 -->
+## T04 - E(b): pop-ups that share a paragraph (FR-005 b)
+
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** One wording edit to a passage several pop-ups share costs one round of checks, not one a
+   pop-up.
+2. **The constraints.** No check skipped on a pop-up whose own text changed (FR-005's no-defect rule).
+3. **Where each comes from.** O: the audit's 374#81 (about 85 checks on about six pop-ups).
+4. **Do they describe the world here?** Not yet known: T04 opens by replaying the bamboo and shelter pop-up batch the
+   audit names through `make record-owed`, counting what each edit owed, and why.
+5. **The order.** After T03; measured before any change.
+6. **The exits.** Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
+7. **The search smell.** None.
+8. **The budget.** 90 min (a GUESS, the session's, 2026-10-26).
+9. **Done, measured.** `research.md` R2: the batch's owed checks before and after, with every pop-up whose own text changed
+   still owed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T04 Decisions
+
+- **D6** Measure first; the change is chosen from what the replay shows owed each check (a shared paragraph, a sibling's
+  re-owe, or a rule of the checks) and recorded as a decision before it is made. Rendering: none.
+
+<!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-10-26 -->
+## T07 - the texts that say what reaches the GM, and the close (FR-007)
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** No document tells a session or the GM that every ruling reaches him.
+2. **The constraints.** The constitution's text changes with the amendment rule it carries.
+3. **Where each comes from.** O: spec FR-007's search.
+4. **Do they describe the world here?** Yes, the search's hits.
+5. **The order.** Last.
+6. **The exits.** Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
+7. **The search smell.** None.
+8. **The budget.** 30 min (a GUESS, the session's, 2026-10-26).
+9. **Done, measured.** Each hit of the search changed or recorded as needing none; `make feature-report F=432 WRITE=1`.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T07 Decisions
+
+- **D9** The texts change with the code of the task that makes each true (T01-T03), and T07 sweeps the rest. Rendering: none.

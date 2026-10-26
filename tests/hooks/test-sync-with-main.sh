@@ -269,15 +269,15 @@ expect_out "main moved; re-run"
 }
 
 case_15() {  # 9 s measured 2026-10-11
-echo "10. the performance review prints at the push and never refuses on a band (feature 375 amendment 5); a review that cannot run still stops it"
+echo "10. the performance review prints at the push; its refusal (the call counts, feature 427 T03) or a failure to run stops it; a timing band pushes"
 D=$(topology j)
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
 gh_before=$(git -C "$D/github.git" rev-parse main)
-OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: crashed'; false" syncmain "$D" push); check "IT FIRES: a perf-review that fails to run stops the push" 1 $?
-expect_out "make perf-review failed to run"
+OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: REFUSED - the call counts owe the round arbiter'; false" syncmain "$D" push); check "IT FIRES: a perf-review refusal (or a failure to run) stops the push" 1 $?
+expect_out "make perf-review refused (or failed to run)"
 [ "$(git -C "$D/github.git" rev-parse main)" = "$gh_before" ] && PASS=$((PASS+1)) || { echo "FAIL  the push landed though the review could not run"; FAIL=$((FAIL+1)); }
-OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: [local] band 3 - FLAG: this looks slower'" syncmain "$D" push); check "STAYS QUIET: a flagged band pushes" 0 $?
-expect_out "FLAG: this looks slower"
+OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: [local] timing band 3 (information only)'" syncmain "$D" push); check "STAYS QUIET: a timing band pushes" 0 $?
+expect_out "timing band 3 (information only)"
 
 # GUARD_EDIT_OK: feature 167 - A NEW CLONE BORROWS A SIBLING ROLL CACHE (GM 2026-08-30). Measured:
 # a clone that has never rolled pays 30 s for the reference settlement and 122 s for the map-rolling

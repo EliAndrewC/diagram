@@ -89,7 +89,10 @@ session names it in that turn's final message.
 - **FR-005 (E)**: measured first on the two replays, then fixed:
   - (a) a page edit owes a claims triage only for claims whose cited passage changed; a claim citing only passages the edit
     left unchanged is cleared mechanically, recorded as such;
-  - (b) a paragraph several pop-ups share, edited once, owes its checks once for the pop-ups that share it.
+  - (b) a paragraph several pop-ups share, edited once, owes its checks once for the pop-ups that share it - measured on the
+    bamboo/shelter replay and NOT BUILT: its premise was false for the case behind it (no paragraph shared in that batch; 15
+    of its 18 later rounds found real errors), and across all 293 pop-ups 17 paragraphs are shared in 51 places (`research.md`
+    R2; waived by the round arbiter, `ask:432-t04-shared-paragraphs`, 2026-10-26).
   - No change may let a defect through that today's checks catch: each narrowing is proven on the replays against what
     today's rules owe, or stated and priced.
 - **FR-006 (F)**: every open row is marked reviewed with the GM's words of 2026-10-26. The three that are his - 374#60 (the
@@ -115,8 +118,8 @@ session names it in that turn's final message.
   decision without `for_gm` refused.
 - **SC-003** (FR-004): `make gm-review` lists the residence question among the GM's decisions, and an override row with a
   `held` key or a "Held" flag and no kept question is not listed as one.
-- **SC-004** (FR-005): on the two replays, the claims triaged and the pop-up checks owed fall, with every claim whose cited
-  passage changed still owed (the counts before and after in `research.md`).
+- **SC-004** (FR-005 a): on the 0081 replay, the claims triaged fall, with every claim whose cited passage changed still owed
+  (the counts before and after in `research.md` R3); the pop-up half is recorded unchanged in R2, (b) not built.
 - **SC-005** (FR-006): after the clearing, `make gm-review` lists exactly three decisions for the GM and no other open row, and
   `make speckit-todo` no longer lists a feature whose only open box was its GM review.
 - **SC-006** (FR-007): FR-007's search, re-run after T07, finds no text left saying every ruling or fix reaches the GM, and

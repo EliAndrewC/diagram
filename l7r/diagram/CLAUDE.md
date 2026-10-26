@@ -115,11 +115,12 @@ diagnosed and the tooling improved.
   fixed seeds passed feature 417 T41's deletion while a fresh seed regressed.
 - **A CPU-time bound in a test** inflates 2-4x under load on this hybrid CPU: scale it by a calibration loop (as
   `tests/test_open_questions.py` does), never a hard-coded figure.
-- **Performance is recorded and flagged, never a gate** (feature 375 amendment 5, the GM 2026-10-11: "it doesn't need to
-  be a gate anymore"): take the bookends (`make perf LABEL=<NNN>-start` / `-end`; `SCALING=1` adds the 10/20/40-household
-  legs for an investigation), each with the machine's load, free RAM and disk at both ends. Over the 5% band-1 line the
-  push prints a FLAG - mention it, with its load caveat, when you report the landing; nothing waits on it. `make
-  perf-report` shows the trend, to place a real slowdown between two commits later.
+- **Call counts are watched, timings only recorded** (feature 427 T03, the GM 2026-10-26: "keep recording the timings, but
+  completely stop using timings as a gate on anything ... the call counts themselves are the thing that we are gating on"):
+  take the bookends (`make perf LABEL=<NNN>-start` / `-end`; `SCALING=1` adds the 10/20/40-household legs), each recording
+  each stage's Python calls per seed beside its seconds. A count up over 5% in a stage on a seed, or 2% in the total, refuses
+  the push until the round arbiter accepts it (`make arbiter-ask SUBJECT=<NNN>-calls-<commit>`, the refusal names it); a
+  timing refuses and flags nothing. `make perf-fanout` names the chains that grew; `make perf-report` shows the trend.
 
 **Placement** ([`dev/placement.md`](../../dev/placement.md))
 

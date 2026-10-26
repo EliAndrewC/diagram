@@ -14,13 +14,18 @@ from l7r.diagram.tools import perf_review as pr
 F = "129-perf-audit-subagent"
 
 
-def snap(log: Path, label: str, seconds: dict[int, float], utc: str, commit: str = "abc1234", environment: str = "local") -> None:
+VERSIONS = {"python": "3.14.0", "numpy": "2.3.0", "shapely": "2.1.0"}
+
+
+def snap(log: Path, label: str, seconds: dict[int, float], utc: str, commit: str = "abc1234", environment: str = "local", web_calls: int = 100_000) -> None:
+    """A snapshot with each seed's timings and, since feature 427 T02, its call counts and versions (`web_calls` in `web`)."""
     body: dict[str, Any] = {
         "label": label,
         "utc": utc,
         "commit": commit,
         "environment": environment,
-        "rows": [{"seed": s, "seconds": v, "stages": {"web": v * 0.8, "field": v * 0.2}} for s, v in seconds.items()],
+        "versions": VERSIONS,
+        "rows": [{"seed": s, "seconds": v, "stages": {"web": v * 0.8, "field": v * 0.2}, "calls": {"web": web_calls, "field": 50_000}} for s, v in seconds.items()],
     }
     (log / f"{utc}-{label}-{environment}-c.json").write_text(json.dumps(body), encoding="utf-8")
 
@@ -52,17 +57,17 @@ def test_no_increase_owes_nothing(log: Path, capsys: pytest.CaptureFixture[str])
     assert "band 0" in out and "FLAG" not in out
 
 
-def test_a_band_is_a_flag_never_a_refusal(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    """Feature 375 amendment 5 (the GM 2026-10-11: "it doesn't need to be a gate anymore"): every band exits 0 and prints the
-    FLAG with the machine's state; the records stay available for an investigation and are listed when made."""
+def test_a_timing_band_is_information_never_a_flag_or_a_refusal(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 427 T03 (D3; the GM 2026-10-26: "completely stop using timings as a gate on anything"): every timing band exits
+    0 and is printed as information, with no FLAG - the flag of feature 375 amendment 5 is retired; the counts are watched."""
     for pct, band_no in ((6.0, 1), (12.0, 2), (25.0, 3)):
         for f in log.glob("*.json"):
             f.unlink()
         band(log, pct)
         assert run(log, "check") == 0
         out = capsys.readouterr()
-        assert f"band {band_no}" in out.out and "FLAG: this looks slower" in out.out and "may be the machine's load" in out.out
-        assert "REFUSED" not in out.err and "MISSING" not in out.out
+        assert f"timing band {band_no} (information only)" in out.out and "FLAG" not in out.out
+        assert "REFUSED" not in out.out + out.err and "MISSING" not in out.out
 
 
 def test_the_records_stay_available_and_are_listed_when_made(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
@@ -79,7 +84,7 @@ def test_the_records_stay_available_and_are_listed_when_made(log: Path, capsys: 
     capsys.readouterr()
     assert run(log, "check") == 0
     out = capsys.readouterr().out
-    assert "records made: audit=not-justified, confirmation=consistent, explanation=pending" in out and "FLAG" in out
+    assert "records made: audit=not-justified, confirmation=consistent, explanation=pending" in out and "information only" in out
 
 
 def test_a_signoff_the_GM_gives_unprompted_is_still_recorded(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
@@ -97,7 +102,7 @@ def test_environments_are_flagged_independently(log: Path, capsys: pytest.Captur
     band(log, 7.0, "codebuild")
     assert run(log, "check") == 0
     out = capsys.readouterr().out
-    assert "[codebuild]" in out and "[local]" in out and out.count("FLAG") == 1
+    assert "[codebuild]" in out and "[local]" in out and out.count("information only") == 2 and "FLAG" not in out
     assert run(log, "show", env="codebuild") == 0 and "perf bands [codebuild]" in capsys.readouterr().out
 
 
@@ -303,16 +308,34 @@ def test_the_cli_subcommand_returns_the_predicate_as_an_exit_code(log: Path, mon
     assert run(log, "has-start") == 0, "present -> zero, so the branch is skipped"
 
 
-def test_the_same_line_holds_in_both_environments(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    """Feature 375 amendment 5: 5% in every environment - 3% is flagged in neither, 6% in both."""
-    band(log, 3.0, "local")
-    band(log, 3.0, "codebuild")
-    assert run(log, "check") == 0 and "FLAG" not in capsys.readouterr().out
+def test_no_timing_flags_anything_in_any_environment(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 427 T03: the 5% timing line of feature 375 amendment 5 is gone - 3% and 6% alike print as information, anywhere."""
+    for pct in (3.0, 6.0):
+        for f in log.glob("*.json"):
+            f.unlink()
+        band(log, pct, "local")
+        band(log, pct, "codebuild")
+        assert run(log, "check") == 0 and "FLAG" not in capsys.readouterr().out
+
+
+def test_a_call_count_increase_refuses_until_the_arbiter_accepts(log: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 427 T03 (D3, SC-005): a stage's calls up over the line refuse the push, naming the arbiter command; the arbiter's
+    accept on the pair's subject clears it; the same code on a slower machine refuses nothing."""
+    specs = tmp_path / "specs"
+    (specs / "129-x").mkdir(parents=True)
+    snap(log, "129-start", {1: 100.0}, "20260825T000000Z")
+    snap(log, "129-end", {1: 100.0}, "20260825T010000Z", commit="def5678", web_calls=110_000)
+    assert pr.main(["check", "--feature", "129-x", "--log-dir", str(log), "--specs-dir", str(specs)]) == 1
+    out = capsys.readouterr().out
+    assert "REFUSED" in out and "web on seed 1: 100,000 -> 110,000 calls (+10%)" in out and "make arbiter-ask SUBJECT=129-calls-def5678" in out
+    (specs / "129-x" / "arbiter.jsonl").write_text(json.dumps({"trigger": "ask:129-calls-def5678", "ruling": "accept"}) + "\n")
+    assert pr.main(["check", "--feature", "129-x", "--log-dir", str(log), "--specs-dir", str(specs)]) == 0
+    assert "accepted by the round arbiter (ask:129-calls-def5678)" in capsys.readouterr().out
     for f in log.glob("*.json"):
         f.unlink()
-    band(log, 6.0, "local")
-    band(log, 6.0, "codebuild")
-    assert run(log, "check") == 0 and capsys.readouterr().out.count("FLAG") == 2
+    snap(log, "129-start", {1: 100.0}, "20260825T000000Z")
+    snap(log, "129-end", {1: 180.0}, "20260825T010000Z")
+    assert pr.main(["check", "--feature", "129-x", "--log-dir", str(log), "--specs-dir", str(specs)]) == 0, "80% slower, the same calls: nothing"
 
 
 # ---- feature 240 FR-010: an attribution names its counterfactual ------------------------------------------------

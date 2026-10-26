@@ -4737,10 +4737,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/_invocation.py::OPERATIONS#invocation guard": {
-  "code": "9a001a60deca21f4",
-  "core": "a4ed6b5e6ec8dae1",
-  "date": "2026-10-08",
-  "note": "registry mapping modules to make targets and prompting cost; tooling, no map decision",
+  "body": "21e3c69ba3ad2703",
+  "claim": "invocation guard - NONE: process-tree inspection, no map decision",
+  "code": "bd187fc984312580",
+  "core": "ffc7baf32058e254",
+  "date": "2026-10-26",
+  "note": "the registry maps each module to its make target and a cost tier that sets whether it prompts; the added perf_fanout row is tooling and makes no map decision",
   "pages": {},
   "research": "",
   "rests": [],
@@ -4887,10 +4889,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/_invocation.py::target_for#invocation guard": {
-  "code": "cf689d992de8c731",
-  "core": "47f33c5ef9011f86",
-  "date": "2026-10-08",
-  "note": "looks up the target, falling back to help; plumbing",
+  "body": "66f5872442e7a892",
+  "claim": "invocation guard - NONE: process-tree inspection, no map decision",
+  "code": "767ee55abc724eb2",
+  "core": "7a7fa6ca7833193f",
+  "date": "2026-10-26",
+  "note": "looks up the module's make target for a refusal message and falls back to `help` when there is none; tooling only",
   "pages": {},
   "research": "",
   "rests": [],
@@ -15978,9 +15982,10 @@
   "note": "matches its backing",
   "pages": {
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html": "ff11639478e7f7db",
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "79bfdbd47894e24f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
   },
-  "research": "1dc180a20ac518e7",
+  "research": "b85fcf5337c98826",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/retirement.py::RETIREMENT_FT#retirement house size": {
@@ -16024,9 +16029,10 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "79bfdbd47894e24f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
   },
-  "research": "b37378277cb6d3b4",
+  "research": "11dc0241a72744d0",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/retirement.py::retirement_glyph#its drawn sizes": {
@@ -16102,9 +16108,10 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "79bfdbd47894e24f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
   },
-  "research": "b37378277cb6d3b4",
+  "research": "11dc0241a72744d0",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/retirement.py::retirement_seats#which side": {
@@ -40191,9 +40198,10 @@
   "date": "2026-10-03",
   "note": "five, as 0004 finds",
   "pages": {
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "79bfdbd47894e24f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
   },
-  "research": "b37378277cb6d3b4",
+  "research": "11dc0241a72744d0",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/place.py::PLACE_KEYS#card plumbing": {
@@ -40359,19 +40367,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/place.py::retirement_fact#card plumbing": {
+  "body": "bc4bfa138b1658fb",
+  "claim": "card plumbing - households-how-many-live-in-a-house-and-under-how-many-roofs-ie: the count the map records, said as a count of this settlement",
   "code": "533f6e3d81c34f67",
   "core": "07d3e889ab868dff",
-  "date": "2026-10-05",
-  "note": "states the map's recorded retirement-house count; the form is attested and the share is not this unit's decision",
+  "date": "2026-10-26",
+  "note": "the code only states the settlement's own retirement-house count and decides nothing physical. It returns nothing where the generations live under one roof, which matches the page's two forms.",
   "pages": {
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "79bfdbd47894e24f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
   },
-  "research": "b37378277cb6d3b4",
+  "research": "11dc0241a72744d0",
   "rests": [
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:06805d774621cf15",
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:4e8eca4577e50161",
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:650b1e356fcc1032",
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:7635ea597e9a19db"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:eec29d74aacffe97"
   ],
   "verdict": "IN-STEP"
  },
@@ -40392,13 +40401,14 @@
   "date": "2026-10-07",
   "note": "five to a declared household where the tier records no population of its own",
   "pages": {
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "79bfdbd47894e24f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
   },
-  "research": "b37378277cb6d3b4",
+  "research": "11dc0241a72744d0",
   "rests": [
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:294c03d4ddf75ac7",
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:88e1da10d8149af5"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/place.py::where_sentences#card plumbing": {

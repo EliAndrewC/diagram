@@ -22,6 +22,7 @@ Usage: hm_gm_question.py judge < stop payload  ->  prints `ask<TAB>line` (a ques
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 
@@ -131,6 +132,38 @@ def _gm_last_at(path: str) -> str:
     return ""
 
 
+def kept_ids(clone: str) -> set[str]:
+    """Every open question escalation-check kept, as `NNN#row` (feature 432)."""
+    import glob  # noqa: PLC0415
+
+    out = set()
+    for f in glob.glob(f"{clone}/specs/*/gm-review.jsonl"):
+        num = int(f.split("/specs/", 1)[1].split("-", 1)[0])
+        with open(f, encoding="utf-8") as fh:
+            for i, line in enumerate(fh):
+                try:
+                    r = json.loads(line)
+                except ValueError:
+                    continue
+                if r.get("kind") == "question" and r.get("status") == "kept" and "reviewed" not in r:
+                    out.add(f"{num}#{i}")
+    return out
+
+
+def _said_since_gm(path: str) -> str:
+    """The session's own text since the GM's last message."""
+    out: list[str] = []
+    try:
+        for rec in _records_backward(path):
+            if _is_gm_message(rec):
+                break
+            if rec.get("type") == "assistant":
+                out += [str(x.get("text", "")) for x in (rec.get("message") or {}).get("content") or [] if isinstance(x, dict) and x.get("type") == "text"]
+    except OSError:
+        pass
+    return "\n".join(out)
+
+
 def unnamed(clone: str, payload: dict) -> list[str]:
     """The kept questions since the GM's last message that the final message does not name (feature 432, FR-002)."""
     import glob  # noqa: PLC0415
@@ -138,7 +171,9 @@ def unnamed(clone: str, payload: dict) -> list[str]:
     since = _gm_last_at(payload.get("transcript_path") or "")
     if not since:
         return []  # nothing to read: never refuse on a transcript the hook cannot see
-    said = payload.get("last_assistant_message") or ""
+    # ...NAMED ONCE SINCE THE GM'S LAST MESSAGE IS NAMED: the check asked for the same three in every message of a turn (found
+    # live, 2026-10-26) - the session's earlier messages since his last count
+    said = (payload.get("last_assistant_message") or "") + "\n" + _said_since_gm(payload.get("transcript_path") or "")
     out = []
     for f in sorted(glob.glob(f"{clone}/specs/*/gm-review.jsonl")):
         num = int(f.split("/specs/", 1)[1].split("-", 1)[0])
@@ -171,6 +206,10 @@ def main() -> int:
     except Exception:
         return 0
     ask, offer = classify(payload.get("last_assistant_message") or "")
+    # ...A QUESTION ESCALATION-CHECK ALREADY KEPT IS FILTERED (feature 432): naming one, as `unnamed` requires, is no new ask -
+    # the two checks refused each other's message on the session that built them (2026-10-26)
+    kept = kept_ids(payload.get("cwd") or os.getcwd())
+    ask = [a for a in ask if not any(k in a for k in kept)]
     if not (ask or offer) or filtered_since_gm(payload.get("transcript_path") or ""):
         return 0
     print(f"ask\t{ask[0]}" if ask else f"offer\t{offer[0]}")

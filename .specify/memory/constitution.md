@@ -1,7 +1,15 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.32.1 → 2.32.2
+Version change: 2.32.2 → 2.33.0
+
+Version 2.33.0 (amended 2026-10-26, feature 427 T03): Principle VI's performance bookends are WATCHED BY CALL COUNTS, their
+timings recorded only - the GM: "keep recording the timings, but completely stop using timings as a gate on anything ... the
+call counts themselves are the thing that we are gating on, because as you say, that is consistent ... something that would
+need to be accepted by the arbiter and possibly raised to my attention if it is increasing by too much". Each snapshot records
+each stage's Python calls per seed and size beside its seconds; a count up over the line (5% a stage on a seed, 2% the total,
+GUESS), or a pair that cannot be compared, refuses the push until the round arbiter accepts; the timing band's flag of 2.30.0 is
+retired, its bands printed for information. MINOR (a principle's requirement changes).
 
 Version 2.32.2 (2026-10-26, feature 432): a round-arbiter ruling no longer reaches the GM after landing; it reaches him only
 as a `for_gm` question that escalation-check keeps (the GM: *"Please file A through F as one feature"*). PATCH (where an
@@ -903,7 +911,21 @@ artifacts. Specifically:
       make perf LABEL=<NNN>-end       # last thing, before the push
       make perf-report AGAINST=<NNN>-start
 
-  **RECORDED AND FLAGGED, NEVER A GATE** (GM 2026-10-11, feature 375 amendment
+  **WATCHED BY CALL COUNTS; TIMINGS RECORDED ONLY** (GM 2026-10-26, feature
+  427 T03: *"keep recording the timings, but completely stop using timings as a
+  gate on anything ... the call counts themselves are the thing that we are
+  gating on, because as you say, that is consistent"*). Each snapshot also
+  records each stage's Python calls per seed and size, counted in a separate
+  untimed pass, with the interpreter and library versions. A feature's
+  `-start` / `-end` counts up over the line - 5% in a stage on a seed, 2% in
+  the total, GUESS lines to be tuned - or a pair that cannot be compared
+  (other versions, a `-start` with no counts) REFUSE the push until the round
+  arbiter accepts (`make arbiter-ask SUBJECT=<NNN>-calls-<commit>`); the
+  arbiter raises to the GM an increase it judges too large. A decrease needs
+  nothing. The timing rules below are kept for information only: no timing
+  refuses or flags anything.
+
+  **RECORDED, NEVER A GATE** (GM 2026-10-11, feature 375 amendment
   5: *"we don't actually do the perf review as part of our normal process for
   landing on main. We flag it if it looks like it is getting slower with the
   usual caveats about maybe it's just under load ... it doesn't need to be a
@@ -918,9 +940,8 @@ artifacts. Specifically:
     seconds otherwise, local against local and CodeBuild against CodeBuild (a
     cross-environment pair is refused, never displayed). Over the band-1 line -
     5% in every environment, the GM's *"from 2% to 5% for the jitter"* - on the
-    total or any seed, the push prints a FLAG with both snapshots' machine
-    state, and the session mentions it, with the load caveat, when it reports
-    the landing. Bands 2 (>5% total, >10% a seed) and 3 (>10%, >20%) label how
+    total or any seed, the push prints it with both snapshots' machine state,
+    for information (a FLAG to mention at landing until feature 427). Bands 2 (>5% total, >10% a seed) and 3 (>10%, >20%) label how
     much slower a pair looks; they owe nothing.
   - WHY NOT A GATE (measured 2026-10-11, specs/375-enforced-wave-process/
     research.md R4): on this laptop CPU time stretches with load as wall time
@@ -2328,4 +2349,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.32.2 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-26
+**Version**: 2.33.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-26

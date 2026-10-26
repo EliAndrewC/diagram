@@ -32,7 +32,10 @@ import time
 from pathlib import Path
 from typing import Any
 
-from l7r.diagram.tools import perf_bands
+from l7r.diagram.tools import perf_bands, perf_calls
+
+#: the specs a call-count ruling is read from (`perf_calls.accepted`)
+SPECS = Path(__file__).resolve().parents[3] / "specs"
 
 PASSING = {"explanation": ("pending", "consistent", "inconsistent"), "confirmation": ("consistent",), "audit": ("justified",), "signoff": ("signed",)}
 CRITERIA = ("necessary", "commensurate", "no_way_around")
@@ -160,6 +163,12 @@ def pairs(log_dir: Path, feature: str) -> dict[str, perf_bands.Verdict]:
     A pair is formed only from snapshots taken on the SAME machine; the newest `-end` chooses, and the
     baseline is the newest `-start` that matches it. An `-end` with no matching `-start` yields no
     verdict rather than a wrong one, which is what FR-009 reports on."""
+    return {name: perf_bands.evaluate(start, end) for name, (start, end) in pair_snapshots(log_dir, feature).items()}
+
+
+def pair_snapshots(log_dir: Path, feature: str) -> dict[str, tuple[dict[str, Any], dict[str, Any]]]:
+    """`pairs`' grouping, the snapshots themselves: {environment[:machine]: (-start, -end)} - the call counts are read from them
+    (feature 427 T03), which a `Verdict`'s identity fields do not carry."""
     n = feature_number(feature)
     by_key: dict[tuple[str, tuple[str, str]], dict[str, dict[str, Any]]] = {}
     for s in _snapshots(log_dir):
@@ -168,12 +177,12 @@ def pairs(log_dir: Path, feature: str) -> dict[str, perf_bands.Verdict]:
             continue
         key = (perf_bands.environment_of(s), machine_of(s))
         by_key.setdefault(key, {})[label.split("-")[1]] = s  # newest wins: files sort by utc
-    out: dict[str, perf_bands.Verdict] = {}
+    out: dict[str, tuple[dict[str, Any], dict[str, Any]]] = {}
     for (env, machine), d in by_key.items():
         if "start" in d and "end" in d:
             # one environment can now hold several machines, so the key says which
             name = env if machine[0] in ("laptop", "") else f"{env}:{machine[0].split(':', 1)[-1]}"
-            out[name] = perf_bands.evaluate(d["start"], d["end"])
+            out[name] = (d["start"], d["end"])
     return out
 
 
@@ -222,12 +231,12 @@ def write(log_dir: Path, feature: str, v: perf_bands.Verdict, kind: str, verdict
     return path
 
 
-def check(log_dir: Path, feature: str, specs_dir: Path | None = None) -> tuple[bool, str]:  # noqa: ARG001 - kept for its callers
-    """What the push prints about each environment's newest pair: its band and, over the band-1 line, the FLAG. NEVER A REFUSAL
-    since feature 375 amendment 5 (the GM, 2026-10-11): "we don't actually do the perf review as part of our normal process
-    for landing on main. We flag it if it looks like it is getting slower with the usual caveats about maybe it's just under
-    load ... it doesn't need to be a gate anymore." The first element is always True; the records the bands once owed
-    (`perf-explain`, `-confirm`, `-audit`, `-arbiter`, `-signoff`) stay available for an investigation and are listed when made."""
+def check(log_dir: Path, feature: str, specs_dir: Path | None = None) -> tuple[bool, str]:
+    """What the push prints about each environment's newest pair, and whether it may land (feature 427 T03, D3). Its timing band,
+    for information only - no timing refuses or flags anything (the GM, 2026-10-26: "completely stop using timings as a gate on
+    anything"); and its CALL COUNTS (`perf_calls`), which refuse the push when they rise over the line, or cannot be compared,
+    without the round arbiter's accept. The records the timing bands once owed (`perf-explain`, `-confirm`, `-audit`,
+    `-arbiter`, `-signoff`) stay available for an investigation and are listed when made."""
     vs = pairs(log_dir, feature)
     # FR-009 (feature 178): an `-end` with no `-start` on the SAME machine has nothing to compare against - said, never silent
     mute = unpaired(log_dir, feature)
@@ -236,17 +245,28 @@ def check(log_dir: Path, feature: str, specs_dir: Path | None = None) -> tuple[b
         return True, f"perf-review: no {feature_number(feature)}-start/-end pair in any environment - nothing to compare (perf-gate refuses a missing bookend on its own){mute_note}"
     recs = _records(log_dir)
     lines: list[str] = []
+    refusals: list[str] = []
+    n = feature_number(feature)
+    snaps = pair_snapshots(log_dir, feature)
     for env, v in sorted(vs.items()):
         b = binding(v)
         made = sorted({f"{r['kind']}={r.get('verdict')}" for r in recs if r.get("binding") == b})
+        # ...THE TIMING IS INFORMATION ONLY (feature 427 T03, D3; the GM 2026-10-26: "completely stop using timings as a gate on
+        # anything"): its band is printed and no rule acts on it - the band-1 FLAG of feature 375 amendment 5 is retired
         lines.append(
-            f"[{env}] {v.cur['label']} vs {v.base['label']} at {v.cur['commit']}: band {v.band}"
+            f"[{env}] {v.cur['label']} vs {v.base['label']} at {v.cur['commit']}: timing band {v.band} (information only)"
             + (f" ({'; '.join(v.crossed)})" if v.crossed else "")
             + (f" - records made: {', '.join(made)}" if made else "")
         )
-        if v.band >= 1:
-            lines.append(perf_bands.flag(v))
-    return True, "\n".join(lines) + mute_note
+        # ...THE CALL COUNTS ARE WATCHED: an increase over the line, or a pair that cannot be compared, owes the arbiter's accept
+        start, end = snaps[env]
+        cv = perf_calls.compare(start, end)
+        lines += [f"[{env}] {ln}" for ln in cv.lines]
+        if cv.owed and perf_calls.accepted(specs_dir or SPECS, n, end):
+            lines.append(f"[{env}] calls: accepted by the round arbiter (ask:{perf_calls.subject(n, end)})")
+        elif cv.owed:
+            refusals.append(f"[{env}] " + perf_calls.refusal(n, end, cv.owed))
+    return not refusals, "\n".join(lines + refusals) + mute_note
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -281,9 +301,9 @@ def main(argv: list[str] | None = None) -> int:
         # FR-017: the in-build bookend guard, asking the SNAPSHOT rather than the filename.
         return 0 if has_start_for_this_machine(log_dir, a.feature) else 1
     if a.command == "check":
-        _ok, text = check(log_dir, a.feature, Path(a.specs_dir))
-        print(text)  # a flag, never a refusal (feature 375 amendment 5)
-        return 0
+        ok, text = check(log_dir, a.feature, Path(a.specs_dir))
+        print(text)
+        return 0 if ok else 1  # the call counts' refusal (feature 427 T03); a timing never refuses
     vs = pairs(log_dir, a.feature)
     if a.environment not in vs:
         print(

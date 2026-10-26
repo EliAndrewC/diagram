@@ -6547,7 +6547,8 @@
   "variants": [
    "night watch",
    "night watches",
-   "five watches"
+   "five watches",
+   "fifth watch"
   ]
  },
  "hour of xu": {
@@ -18438,6 +18439,31 @@
    "araihari"
   ]
  },
+ "Inner City": {
+  "def": "The walled northern half of Qing Beijing, around the imperial palace, where the banner garrison and its households lived.",
+  "variants": [
+   "Inner City"
+  ]
+ },
+ "Outer City": {
+  "def": "The walled southern half of Qing Beijing, where most Chinese inhabitants lived and most of the city's shops and trades stood.",
+  "variants": [
+   "Outer City"
+  ]
+ },
+ "Hundred Poets": {
+  "def": "A classical Japanese anthology of one poem each by a hundred poets, compiled in the 13th century. In the Edo period it was so widely known that it was often parodied.",
+  "variants": [
+   "Hundred Poets",
+   "Hyakunin isshu"
+  ]
+ },
+ "shogi": {
+  "def": "Japanese chess: a board game for two players, played in Edo households beside go.",
+  "variants": [
+   "shogi"
+  ]
+ },
  "put-out": {
   "def": "Work given out to farm households to do at home, often in the slack farming season, and handed back to whoever gave it out - unlike work a household did under its own management.",
   "variants": [
@@ -18528,6 +18554,12 @@
    "perilla"
   ]
  },
+ "Single Whip Reform": {
+  "def": "A tax reform of the late Ming dynasty, after which the state no longer collected its taxes in kind, in grain and bolts of cloth, but in cash.",
+  "variants": [
+   "Single Whip Reform"
+  ]
+ },
  "twill": {
   "def": "A weave in which each weft thread passes over two or more warp threads and under two or more, shifting one thread along at each pass, so the cloth shows diagonal lines; \"2/2 twill\" means over two and under two.",
   "variants": [
@@ -18540,6 +18572,18 @@
   "variants": [
    "Haithabu",
    "Hedeby"
+  ]
+ },
+ "yomikudashi": {
+  "def": "A text written in Chinese-style characters rendered into Japanese word order, so that it reads as Japanese; an archive publishes one beside a transcription of an old document.",
+  "variants": [
+   "yomikudashi"
+  ]
+ },
+ "Onna daigaku": {
+  "def": "A text of the Edo period setting out rules of conduct for women, preaching chastity; historians read it against its purpose for what it shows of women's place and work.",
+  "variants": [
+   "Onna daigaku"
   ]
  }
 }
