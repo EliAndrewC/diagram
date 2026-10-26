@@ -79,9 +79,9 @@ by the DIRECT route; no map moves. Every guard keeps its test companion (XVIII).
 
 - **D3** `for_gm` is accepted on every trigger kind, and the arbiter-bundle text and the round arbiter's contract say it is
   the one way to put anything to the GM, and only what passes escalation-check's tests. Rendering: none.
-- **D4** The refusal pattern for C is words handing the GM a decision in `why` or `what`: "the GM's (to decide|call|question|
-  decision)", "for the GM to", "held for the GM", "the GM (must|should) decide", "GM's choice" (case-insensitive), with no
-  `for_gm`; tested on the audit's rows that said it (335#2, 374#60) and on 20 rulings that do not. Rendering: none.
+- **D4** The refusal pattern for C is words handing the GM a decision in `why` or `what` - the regular expressions
+  `the GM's (to decide|call|question|decision)`, `for the GM to`, `held for the GM`, `the GM (must|should) decide`,
+  `GM's choice` (case-insensitive) - with no `for_gm`; tested on the audit's rows that said it (335#2, 374#60) and on 20 rulings that do not. Rendering: none.
 
 ## T03 - the door enforced (FR-002 enforcement)
 
