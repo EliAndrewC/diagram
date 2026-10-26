@@ -126,6 +126,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T41 (T31's second part, D35): the four map-moving steps and the last resort's three needless re-asks deleted": {
+   "sha256": "35e399006134bd65325deb2ee6bcdc000a079ad419f3cc3e27437398ba7e4944",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T41 Approach (checklist part A)": {
+   "sha256": "077ed1f6480a87c8b258b8a0982b64edcc5f069e5635778556ea53db05055a08",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2514,6 +2526,52 @@
      "why": "Part of the dead closure D35/D23 require deleted. No tunable that another placer depends on is changed, so the GM's arbitrary-constants instruction is not engaged."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T41 (T31's second part, D35): the four map-moving steps and the last resort's three needless re-asks deleted",
+    "### T41 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T41-split",
+     "summary": "T31 is split; this landing (T41) carries only the deletion of the steps measured needless, T31 keeps the needed ones and their D11 conversions.",
+     "class": "within",
+     "why": "The GM: 'switch off the 16 repair steps ... in whatever manner you find most efficient'; D35 deletes the needless together and converts each needed one afterwards. Splitting the landing so it ticks only what it finished changes no scope."
+    },
+    {
+     "id": "T41-remove-four",
+     "summary": "square_every_crossing, settle_shapes, settle_way_outs and settle_widths come out of STEPS together.",
+     "class": "within",
+     "why": "Switching repair steps off is what the GM asked; D23 lets maps change at the deletion landing, held to the claims and the cohort, and the measured change (three pool maps' drawing order, one lane width 5 -> 6 ft, lane law still kept, 54 of 54 pass) is within that. It removes repair rather than keeping any."
+    },
+    {
+     "id": "T41-remove-three-last-resort",
+     "summary": "settle_husks, settle_street_ends and prune_the_tree come out of last_resort.",
+     "class": "within",
+     "why": "More repair switched off, in the direction the GM asked (place correctly, no place-then-repair); measured green on the same run."
+    },
+    {
+     "id": "T41-keep-joins-widths",
+     "summary": "settle_joins and settle_widths stay in last_resort, recorded NEEDED (cutting them refused seeds 10, 25, 37) and owed D11's conversion under T31.",
+     "class": "within",
+     "why": "Not a carve-out from switching off: D35 itself routes a step whose removal moves a verdict to D11's conversion (rule asked by its placer), which T31 still owes. This is classification by measurement, not D23's forbidden pass-by-pass iteration on a red deletion, and nothing is set down."
+    },
+    {
+     "id": "T41-dead-closure",
+     "summary": "The fourteen names make dead-closure finds dead are deleted with their tests.",
+     "class": "within",
+     "why": "D23/D35: the needless are deleted with call sites, dead closure and the tests that only exercised them."
+    },
+    {
+     "id": "T41-order-exits",
+     "summary": "After T40, before T31's conversions; landed through make land on the landing cohort and pool gate, set down whole with its seeds if red; one landing.",
+     "class": "within",
+     "why": "D35 orders deletion of the needless before conversion of the needed; D23 sets the red exit; FR-008/D11 the gate."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2993,6 +3051,50 @@
      "summary": "last_resort's re-asking of the settle's steps once its rounds run out (FR-005) is assigned to T31, because R8 measured only the STEPS positions",
      "class": "within",
      "why": "D35's probe switches off STEPS positions. last_resort's calls are a path the probe did not measure. Handing that path to T31, with each step's conversion or deletion, gives T31 scope D35 never covered. It cuts nothing. FR-005 (each rule asked by its placer) is carried, not narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T41": {
+   "section_sha256": "a4fd8a5d13dffba6140e03830e8aea2c24301f055c0b9f9d7df454bbd98b5086",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T41-split",
+     "summary": "T31 is split; this landing (T41) carries only the deletion of the steps measured needless, T31 keeps the needed ones and their D11 conversions.",
+     "class": "within",
+     "why": "The GM: 'switch off the 16 repair steps ... in whatever manner you find most efficient'; D35 deletes the needless together and converts each needed one afterwards. Splitting the landing so it ticks only what it finished changes no scope."
+    },
+    {
+     "id": "T41-remove-four",
+     "summary": "square_every_crossing, settle_shapes, settle_way_outs and settle_widths come out of STEPS together.",
+     "class": "within",
+     "why": "Switching repair steps off is what the GM asked; D23 lets maps change at the deletion landing, held to the claims and the cohort, and the measured change (three pool maps' drawing order, one lane width 5 -> 6 ft, lane law still kept, 54 of 54 pass) is within that. It removes repair rather than keeping any."
+    },
+    {
+     "id": "T41-remove-three-last-resort",
+     "summary": "settle_husks, settle_street_ends and prune_the_tree come out of last_resort.",
+     "class": "within",
+     "why": "More repair switched off, in the direction the GM asked (place correctly, no place-then-repair); measured green on the same run."
+    },
+    {
+     "id": "T41-keep-joins-widths",
+     "summary": "settle_joins and settle_widths stay in last_resort, recorded NEEDED (cutting them refused seeds 10, 25, 37) and owed D11's conversion under T31.",
+     "class": "within",
+     "why": "Not a carve-out from switching off: D35 itself routes a step whose removal moves a verdict to D11's conversion (rule asked by its placer), which T31 still owes. This is classification by measurement, not D23's forbidden pass-by-pass iteration on a red deletion, and nothing is set down."
+    },
+    {
+     "id": "T41-dead-closure",
+     "summary": "The fourteen names make dead-closure finds dead are deleted with their tests.",
+     "class": "within",
+     "why": "D23/D35: the needless are deleted with call sites, dead closure and the tests that only exercised them."
+    },
+    {
+     "id": "T41-order-exits",
+     "summary": "After T40, before T31's conversions; landed through make land on the landing cohort and pool gate, set down whole with its seeds if red; one landing.",
+     "class": "within",
+     "why": "D35 orders deletion of the needless before conversion of the needed; D23 sets the red exit; FR-008/D11 the gate."
     }
    ],
    "verdict": "CLEAR"

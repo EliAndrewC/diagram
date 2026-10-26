@@ -282,7 +282,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web
     # ...AND THE WEB SETTLES ITSELF, LAST (feature 287, M4): every rule of the lane law is asked of the web as it stands and
-    # what breaks one is cut away or re-laid (`settle_the_web`), the crossings squared first - so no stage after this one
+    # what breaks one is cut away or re-laid (`settle_the_web`) - so no stage after this one
     # rewrites a lane. A cut can take a farmhouse's only way or the field path, so the settle draws what the web still owes -
     # each stranded house's reserved corridor, a spur to each way target, the field way (M3's web half) - as lanes it never
     # cuts; the straggler redraw that stood in for the corridor until it landed is gone with the driver's re-roll.
