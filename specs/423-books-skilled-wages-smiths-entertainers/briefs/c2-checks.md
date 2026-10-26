@@ -1,0 +1,10 @@
+## Session C2 (2026-10-25)
+- quote-check 0275: 0 notes owed, the 0307 pointer bullet passes (0 unfootnoted)
+- quote-check 0307: r1 14 VERBATIM, 11 SUPPORTS / 3 PARTIAL, 2 CLAIM-FROM-UNREAD, 2 UNLINKED-NAME, 3 unfootnoted - EDITs applied; by hand: Mitsui and live-in passages added to the mitsui notes, a Beijing passage to chinanews, kotobank-tedai-2 on the lead, the reign dates and 'richest household' dropped, Morisada linked; r2 14 SUPPORTS, 0 unfootnoted (1 comment EDIT)
+- quote-check 0308: r1 15 SUPPORTS / 1 PARTIAL, 1 unfootnoted - EDITs applied, new note hashimoto-2015-toba-shima-geino-7 (thesis p. 10) on the village-purse sentence; r2 1 PARTIAL (gloss EDIT applied); r3 on qingbai-leichao-xiju-3 SUPPORTS
+- record-format 0275: 0/0/0. 0307: r1 9 VOCABULARY (6 glossary terms, 3 glosses), 1 SESSION NOTE (Kanazawa block retitled by hand); r2 and r3 0/0/0. 0308: r1 6 VOCABULARY (4 glossary terms, 2 EDITs); r2 1 (jin drew the catty tooltip, romanization dropped by hand); r3 0/0/0
+- intro-check 0307, 0308: NO-INTRO-NEEDED
+- translation-check 0307: r1 55 FAITHFUL / 2 LOOSE, r2 59 / 1 LOOSE - EDITs applied. 0308: r1 27 / 6 LOOSE, r2 32 / 2 LOOSE - EDITs applied; third round ruled accept by the round arbiter (round:translation-check|q:0308@3)
+- source-applicability: all 11 APPLICABLE-WITH-LIMITS; limits MISSING on chinanews, fukami (r1 and r2), hashimoto, kotobank-senryo-yakusha, kotobank-tedai, mitsui, nippon-com, wang-huizu - EDITs applied; HONEST on edo-rakugo-kuchiire-ya, japanknowledge-yakusha, pgm-wangfu-yanxi; hashimoto r2 HONEST (clause EDIT applied)
+- source-reader (on the passages added by hand): chinanews 1 READ, mitsui 2 READ, hashimoto-7 1 READ
+STILL OWED: none by make record-owed. Open for the GM: the 9rakugo-fan blog (edo-rakugo-kuchiire-ya) refuses fetches (403), checked only against its archive of 2026-10-03; the Wang Huizu originals' 乙己 and 大多幕/支納 and chinanews's 名日 are the source pages' own readings, kept verbatim; the review-ledger rows for C2's passes are written with make ledger-owed
