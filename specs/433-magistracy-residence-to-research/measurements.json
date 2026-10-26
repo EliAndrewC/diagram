@@ -1,5 +1,5 @@
-[
- {
+{
+ "br1-e1": {
   "quantity": "the clear way along the divider below the woodshed, and the woodshed's distance from the reception",
   "observed": "2026-10-26",
   "verifies": "E1",
@@ -13,7 +13,7 @@
    "woodshed_to_reception_ft": 41.3
   }
  },
- {
+ "br1-e2": {
   "quantity": "engawa rects on the west block",
   "observed": "2026-10-26",
   "verifies": "E2",
@@ -26,7 +26,7 @@
    "west_block_engawa": 0
   }
  },
- {
+ "br1-e3": {
   "quantity": "the strip between the storehouses' doors and the garden's north edge",
   "observed": "2026-10-26",
   "verifies": "E3",
@@ -40,7 +40,7 @@
    "under_the_shrine_ft": 16.7
   }
  },
- {
+ "br1-q1": {
   "quantity": "the kitchen's distance from the reception",
   "observed": "2026-10-26",
   "verifies": "Q1",
@@ -54,7 +54,7 @@
    "kitchen_at": "the west block's west end"
   }
  },
- {
+ "br1-n3": {
   "quantity": "the notes and comments that described the old kitchen yard and postern",
   "observed": "2026-10-26",
   "verifies": "N3",
@@ -67,7 +67,7 @@
    "stale_lines": 0
   }
  },
- {
+ "br1-c1": {
   "quantity": "the house with its kitchen, bath and corridor",
   "observed": "2026-10-26",
   "verifies": "C1",
@@ -82,4 +82,4 @@
    "coverage_pct": 30.1
   }
  }
-]
+}
