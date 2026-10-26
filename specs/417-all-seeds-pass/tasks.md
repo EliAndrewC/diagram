@@ -132,4 +132,6 @@
       verify: DONE. landed: every way squared at its water crossings where its placer lays it: the skeleton arms, _draw_web, the bund branch (judged as squared), the track's spur (before its tip) and row road, the field way and the connector's dry exits ask square_run; landing 54 of 54, the fresh block 723759 identical to HEAD seed by seed, no pool manifest moved; claims accepted by the arbiter (ask:417-T49-claims), the field branch's brook crossing and two outside items on T32
 - [ ] T50 (T31's D11, settle_network's first conversion) The track's field spur no longer laid unjoined (dropped by settle_network on 28 of 54 maps; the field reached by the web's way onto the bund or the settle's field way), and `bund.carry_on` squared at its water crossings, in `l7r/diagram/hamletgen/ways/` (FR-004, FR-005)
       research: rendering
+- [ ] T51 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/track.py::stage_track#which end of a row road is the way in: the run off the nearer edge is the entrance, and the far run is flagged `run_on`, so the board stands at the nearer end [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=417)
