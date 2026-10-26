@@ -4185,3 +4185,15 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [a Google search for the book](https://www.google.com/search?q=McClain+Wakita+%22Osaka%3A+The+Merchants%27+Capital+of+Early+Modern+Japan%22)
 - **Rests on it:** research/questions/0265-what-did-it-cost-to-rent-a-room-or-a-house.html (diagram feature 420; asked for by gm-assistant on EliAndrewC/diagram#17, Q3) - Osaka rents found only from 1814 (Tani 1989), none for 1745-1754.
 - Blocked by: in print only; no open copy was found (2026-10-25).
+
+### 330. [money] Laurent Chircop-Reyes, "Merchants, Brigands and Escorts: an Anthropological Approach of the Biaoju Phenomenon in Northern China", Ming-Qing Studies 2018 (HAL hal-01987402), the full PDF
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[the paper on HAL](https://hal.science/hal-01987402/document)**
+- How often a Qing escort agency's escort-masters traveled with a convoy in a year, how long a convoy took, and when and how they were paid (its account of the Qianlong reign onward, from Liu Jiansheng 2014 and Ji Kongrui 1986).
+- Fallback: [a Google search for the paper](https://www.google.com/search?q=Chircop-Reyes+%22Merchants%2C+Brigands+and+Escorts%22+biaoju)
+- **Rests on it:** research/questions/0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.html (diagram feature 428; asked for by gm-assistant on EliAndrewC/diagram#20, Q2) - an escort-master's trips a year are not yet in the record.
+- Blocked by: HAL serves a bot check (Anubis) to the container's fetches (2026-10-25 and 2026-10-26); a browser opens it.

@@ -340,7 +340,7 @@ def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str]
         return 2
     found_kind = kind_docstring(root, kind) if kind else None
     if kind and found_kind is None:
-        print(f"check-bundle: no modal class {kind!r} under {CLASSES} or {COMPOUND_KINDS}", file=sys.stderr)
+        print(f"check-bundle: no modal class {kind!r} under {CLASSES} or {COMPOUND_KINDS} - KIND is the modal's class name as written in its classes file, case and all (KIND=Stables, or household.Well when two modules share a name)", file=sys.stderr)
         return 2
     fresh(out)
     rows: list[tuple[str, str, str]] = []

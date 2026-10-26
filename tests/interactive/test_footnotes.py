@@ -265,7 +265,10 @@ def unmarked_foreign_quotes(text: str) -> list[str]:
 def test_a_foreign_language_quote_is_a_marked_translation(path: pathlib.Path) -> None:
     """On the page and in its notes file."""
     bad = unmarked_foreign_quotes(path.read_text(encoding="utf-8")) + unmarked_foreign_quotes(notes_text(path))
-    assert not bad, f"{path.name}: {len(bad)} foreign-language quote(s) with no translation note (feature 202):\n" + "\n".join(bad[:8])
+    assert not bad, (
+        f"{path.name}: {len(bad)} foreign-language quote(s) with no translation note (feature 202) - a 「...」 inside a "
+        "registry entry's title reads as an unmarked quote: write the title's inner brackets as \"...\":\n" + "\n".join(bad[:8])
+    )
 
 
 #: The forms feature 292 retired from the record (GM 2026-09-29): English is presumed, and so is this project as the

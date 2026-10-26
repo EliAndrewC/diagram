@@ -1,3 +1,8 @@
+- 0311: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i -w 'working days\|work year\|rest days\|asobi-bi\|yabuiri' l7r pool
+- 0307: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i -w 'escort\|biaoju\|scribe\|courier\|hikyaku\|kakiyaku\|kujiyado' l7r pool
+- 0250: no code implements it - consumed by gm-assistant's money skill (feature 428 added only a pointer to 0311); searched: grep -rn -i -w 'working days\|work year\|rest days' l7r pool
+- 0260: no code implements it - consumed by gm-assistant's money skill (feature 428 added only a pointer to 0311); searched: grep -rn -i -w 'working days\|rest days\|courier' l7r pool
+- 0115: no code decides servants' days off - feature 428 added only a pointer to 0311 beside the degawari finding; searched: grep -rn -i -w 'yabuiri\|rest days\|days off' l7r pool
 - 0309: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'how-often-players\|performances a year\|kaomise\|narimono\|hundred-day' l7r pool (no hit)
 - 0310: no code implements it - consumed by gm-assistant's money skill (a comparative question; never a Rokugani figure); searched: grep -rn 'Henslowe\|Globe\|Blackfriars\|Elizabethan' l7r pool (no hit)
 - 0308: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'troupe\|entertainer' l7r pool (glossary entries and the stage modal only; no code decides a troupe's calendar)

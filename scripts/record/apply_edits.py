@@ -21,7 +21,8 @@ THE BLOCKS, as the two contracts write them:
 A block is applied only when its old text occurs EXACTLY ONCE in its file - never a guess at which occurrence was
 meant - and only under the record (`research/`) or a modal's class file (`interactive/classes/`, D17); anything else is REFUSED with the reason, and the session applies
 it by hand. A glossary term already on file is skipped. `--skip 2,5` leaves those blocks alone (the session
-disagrees with them); `--dry-run` reports without writing. The input is the agent's reply saved as text, or its
+disagrees with them; SKIP numbers count EDIT and GLOSSARY blocks together, in the reply's order, and a duplicate EDIT
+is refused harmlessly, so run without SKIP first); `--dry-run` reports without writing. The input is the agent's reply saved as text, or its
 transcript (`.jsonl`, or the `.output` link the dispatch names), whose last reply is read.
 
 THE ROUND SETTLES (feature 335's round arbiter, 2026-10-11, rulings `round:record-format|q:0104@3` and

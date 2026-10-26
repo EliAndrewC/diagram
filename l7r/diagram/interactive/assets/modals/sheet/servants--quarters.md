@@ -1,14 +1,14 @@
-About: The servants' quarters lodged the household's domestic servants, the komono, who did its odd jobs. They were not
+About: The servants' quarters lodged the household's domestic servants, who did its odd jobs. They were not
 samurai but of peasant or townsman stock, most of them younger sons of peasants, hired for wages by the year or the half
 year, some through a broker; they changed households on two fixed days a year.
 How many a household had to keep was fixed by its assessed rice yield. They lived in, inside their master's walls; no
 servant is known to have had a house of their own in the samurai quarter.
 
-Where they slept followed the size of the house. On a large house the buildings along the street were long
+Where they slept followed the size of the house. At a large house the buildings along the street were long
 ranges (nagaya), of one story or two, where the servants lived, the front gate cut through one of them so that the servants there kept it; a
-smaller house had a wall in place of the ranges, and where its few servants slept is not recorded. Even a chief retainer's great house, at Aizu, kept the rooms of its maids and servants under its own roof, beside a range of retainers at its gate. One retainer's house, the Miwa house at Kaminoyama, kept its chugen in a hut outside the back door, by the kitchen.
+smaller house had a wall in place of the ranges, and where its few servants slept is not recorded. Even a chief retainer's great house, at Aizu, kept the rooms of its maids and servants under its own roof, beside a range of retainers at its gate. One retainer's house, the Miwa house at Kaminoyama, kept its chugen, its menservants, in a hut outside the back door, by the kitchen.
 
-The chugen, menservants ranked below the foot soldiers, lived together in large rooms: one
+In a lord's residence the chugen, menservants ranked below the foot soldiers, lived together in large rooms, and a samurai's gate range held a chugen room too: one
 was two rooms of six mats, each about 9 by 12 ft, entered by a sliding lattice door. Where servants lived as
 households, or a few men together, each dwelling had a door of its own, opening on an earth-floored entry before a raised
 plank floor.
@@ -37,6 +37,6 @@ hands are drawn in a maids' room under the main roof at the kitchen end.
 
 Name: servants' quarters
 Covers: the servants' nagaya, the maids' room in the house, and their labels
-Sources: buke-hokonin-wiki, kotobank-degawari, kotobank-hitoyado, fukui-bushi-jutaku, kotobank-nagayamon, jta-nagayamon, matsue-bukeyashiki, kotobank-bukeyashiki, kotobank-chugen, shinke-nagayamon-kanazawa, mitamura-nagaya-tcpip, hoppou-shibata-ashigaru, nando-jawiki, shoinzukuri-jawiki, shibata-ashigaru-nagaya, kaminoyama-miwa-ke, bunka-akasaka-bukeyashikimon, nagayamon-jawiki
+Sources: buke-hokonin-wiki, kotobank-degawari, kotobank-hitoyado, fukui-bushi-jutaku, kotobank-nagayamon, jta-nagayamon, matsue-bukeyashiki, kotobank-bukeyashiki, kotobank-chugen, shinke-nagayamon-kanazawa, mitamura-nagaya-tcpip, hoppou-shibata-ashigaru, nando-jawiki, shoinzukuri-jawiki, shibata-ashigaru-nagaya, kaminoyama-miwa-ke, bunka-akasaka-bukeyashikimon, nagayamon-jawiki, aizu-bukeyashiki-guide, bunka-inshu-ikeda-gate, jaanus-umaya
 Entry: research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html, research/questions/0108-stables-umaya.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html
 Drawing: research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.drawing.html, research/questions/0108-stables-umaya.drawing.html
