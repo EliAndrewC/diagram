@@ -309,6 +309,33 @@ def record_triage(
     return out, msgs
 
 
+#: what a claim cleared without a triage records (feature 432, FR-005 a, plan D7)
+CLEARED = "mechanically: a page it cites moved and no block it rests on did (feature 432)"
+
+
+def clear_page_moves(
+    cur: dict[str, Row],
+    index: Mapping[str, Mapping[str, Any]],
+    keys: Sequence[str],
+    qdir: Path,
+    today: str,
+) -> tuple[dict[str, dict[str, Any]], dict[str, list[str]]]:
+    """(the index with `keys` cleared, the page snapshots to store): each claim owed a triage only because a page it cites moved
+    while every block its verdict rests on stands keeps its verdict, recorded at the pages as they stand now, without a triage
+    (feature 432, FR-005 a; the GM 2026-10-26, "claims invalidated per cited passage, not per page").
+
+    THE PRICE, stated (`specs/432-gm-review-signal/research.md` R3, `m:triage-price`): of 5,304 such re-checks from 2026-10-04 to
+    2026-10-26 the triage route found 7 (4 DRIFTED, 3 MISLABELED, on 6 claims) - a passage new to a page bearing on a claim that
+    rests elsewhere; those are no longer caught here. The round arbiter ruled the price not material (ask:432-t05-triage-price)."""
+    memo: dict[str, Any] = {}
+    out = dict(index)
+    for k in keys:
+        pages = {ptr.rsplit("/", 1)[1]: page_blocks(ptr.rsplit("/", 1)[1], qdir, memo)[0] for ptr in cur[k].claim.pointers}
+        out[k] = {**dict(out[k]), "research": cur[k].research, "pages": pages, "triaged": today, "cleared": CLEARED}
+        out[k].pop("triage", None)
+    return out, {fp: [d for d, _w in blocks] for fp, blocks in memo.values()}
+
+
 def triage_reply(path: Path) -> str:
     """A triage reply's text: a transcript's (`.jsonl`, `.output`) last reply, as `make modal-triaged` reads one (feature 385 T92:
     T31's triage read raw cleared all 281 claims, the 18 it named TOUCHES among them)."""

@@ -829,7 +829,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(sum(1 for _k, why in owed(cur, index, qdir, store) if why in TRIAGED))
         return 0
     if args.cmd == "triage":
-        keys = [k for k, why in owed(cur, index, qdir, store) if why in TRIAGED]
+        due = owed(cur, index, qdir, store)
+        # ...a page moved and no block the claim rests on did: cleared, not triaged (feature 432, FR-005 a). A row with no `rests`
+        # may rest on any block of the page, so it keeps the triage (the plan review's note on D7)
+        pages = [k for k, why in due if why == "triage" and (index.get(k) or {}).get("rests")]
+        if pages:
+            index, snaps = claims_triage.clear_page_moves(cur, index, pages, qdir, datetime.date.today().isoformat())
+            save_index(root / INDEX, live_rows(cur, index))
+            save_store(root / STORE, {**store, **snaps})
+            print(f"claims-triage: {len(pages)} claim(s) cleared without a triage - a page each cites moved and no block it rests on did (feature 432, FR-005 a)")
+        keys = [k for k, why in due if why in TRIAGED and k not in pages]
         if not keys:
             print("claims-triage: no claim is owed a triage")
             return 0

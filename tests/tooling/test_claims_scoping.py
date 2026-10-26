@@ -163,18 +163,26 @@ def test_the_command_line_triage_triaged_and_backfill(tmp_path: pathlib.Path, ca
     assert "1 claim(s) in 1 file(s) owe impl-drift" in out and "1 claim(s) owe only a TRIAGE" in out
     assert cx.main(["--root", str(root), "bundle", "--owed", "--out", str(tmp_path / "c")]) == 0
     assert list(json.loads((tmp_path / "c" / "units.json").read_text())) == [FAR], "the triage claim is not judged"
+    capsys.readouterr()
     assert cx.main(["--root", str(root), "triage", "--out", str(tmp_path / "t")]) == 0
-    (tmp_path / "t.txt").write_text("No claim is touched.\n")  # T92: an empty reply is unread, and refused
-    assert cx.main(["--root", str(root), "triaged", "--bundle", str(tmp_path / "t"), "--reply", str(tmp_path / "t.txt")]) == 0
-    assert "0 of 1 sent on to impl-drift" in capsys.readouterr().out
-    assert [k for k, _w in cx.owed(cx.current(skill), cx.load_index(root / cx.INDEX), skill / cx.QUESTIONS.split("/", 3)[-1], cx.load_store(root / cx.STORE))] == [FAR]
+    said = capsys.readouterr().out
+    assert "1 claim(s) cleared without a triage" in said and not (tmp_path / "t" / "triage.json").exists(), (
+        "feature 432 (FR-005 a): a page moved and no block the claim rests on did - cleared, not triaged"
+    )
+    idx = cx.load_index(root / cx.INDEX)
+    assert idx[SHARE]["cleared"].startswith("mechanically") and idx[SHARE]["verdict"] == "IN-STEP", "the clearing is recorded"
+    assert [k for k, _w in cx.owed(cx.current(skill), idx, skill / cx.QUESTIONS.split("/", 3)[-1], cx.load_store(root / cx.STORE))] == [FAR]
     assert cx.main(["--root", str(root), "backfill"]) == 0 and "row(s) given the pages" in capsys.readouterr().out
     assert cx.main(["--root", str(root), "report"]) == 0
+    idx = cx.load_index(root / cx.INDEX)
+    idx[SHARE].pop("rests")  # a row with no rests may rest on any block: it keeps the triage (feature 432, the plan review's note)
+    cx.save_index(root / cx.INDEX, idx)
     _tree(root, MOD, PAGE.replace("5 ft", "7 ft"))
     monkeypatch.setattr(cx, "TRIAGE_SKIP_MAX", 3)
     capsys.readouterr()
     assert cx.main(["--root", str(root), "triage", "--out", str(tmp_path / "small")]) == 0
     said = capsys.readouterr().out
+    assert "cleared without a triage" not in said, "no rests: not cleared"
     assert "goes straight to impl-drift" in said and (tmp_path / "small" / "units.json").is_file(), "feature 430 T06: one claim is no triage"
 
 
