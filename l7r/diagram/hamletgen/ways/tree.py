@@ -143,8 +143,62 @@ def lanes_of(M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequ
         drawn_of[i] = _rounded(sq(recs[i]["pts"]))
     for i in chosen:
         h = host[i]
-        out.append(lane_record(recs[i], drawn_of[i], drawn_of.get(h) if h is not None else None))
+        rec = lane_record(recs[i], drawn_of[i], drawn_of.get(h) if h is not None else None)
+        rec["pts"] = off_the_needle(rec["pts"], [ln["pts"] for ln in out])
+        out.append(rec)
     return out
+
+
+def off_the_needle(pts: Sequence[Any], drawn: Sequence[Sequence[Sequence[float]]]) -> list[Any]:
+    """`pts`, a tree lane, ended on a way already drawn rather than run on beside it - the NEEDLE RULE asked where the lane is
+    laid (feature 417 T45, `law.is_needle`): where the lane and one drawn before it bound a needle of grass, the lane is cut where its
+    tail first comes within half the needle's width of that way (walked back from its end, every 2 ft), and carried onto that
+    way's tread there - a tee. Fresh seed 723775 drew
+    two households' ways onto the connector's start, the one's last leg 7 ft beside the other's, a 3 ft sliver between them.
+    Left as it was where no needle is closed, or where the tee would still close one.
+
+    Research:
+        the doubled way drawn as one - research/questions/0081-village-lanes.drawing.html: two ways side by side are drawn as one
+        its reach - CONVENTION: half of `law.NEEDLE_LOOP_FT`, the needle's own width, a map drawing convention - 2.0 (the walk's step)
+    """
+    from shapely.geometry import LineString
+    from shapely.ops import polygonize, unary_union
+
+    own = [[float(q[0]), float(q[1])] for q in pts]
+    if len(own) < 2:
+        return list(pts)
+    moved = False
+    for other in drawn:
+        if len(other) < 2:
+            continue
+        line = LineString([(float(q[0]), float(q[1])) for q in other])
+
+        def closes(p: Sequence[Sequence[float]], line: Any = line) -> bool:
+            return any(law.is_needle(f) for f in polygonize(unary_union([LineString(p), line])))
+
+        if not closes(own):
+            continue
+        mine = LineString(own)
+        reach = law.NEEDLE_LOOP_FT / 2.0
+        at = mine.length
+        while at > 0.0 and line.distance(mine.interpolate(at)) < reach:
+            at -= 2.0
+        if at <= 0.0 or at >= mine.length:
+            continue
+        cut = mine.interpolate(at)
+        foot = line.interpolate(line.project(cut))
+        kept = [q for q in own if mine.project(_point(q)) < at]
+        tee = [*kept, [round(cut.x, 1), round(cut.y, 1)], [round(foot.x, 1), round(foot.y, 1)]]
+        if len(tee) >= 2 and not closes(tee):
+            own = tee
+            moved = True
+    return own if moved else list(pts)
+
+
+def _point(q: Sequence[float]) -> Any:
+    from shapely.geometry import Point
+
+    return Point(float(q[0]), float(q[1]))
 
 
 def lane_record(r: Mapping[str, Any], pts: Poly, on: Poly | None) -> dict[str, Any]:

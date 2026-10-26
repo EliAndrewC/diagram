@@ -444,3 +444,26 @@ def test_the_tree_is_asked_again_with_its_ends_joined_as_the_web_joins_them() ->
     assert [list(q) for q in joined[0]["pts"]] == lanes[0]["pts"], "a lane whose ends make for no way is left as it was"
     assert len(joined[1]["pts"]) == 3 and abs(joined[1]["pts"][-1][1]) < 1e-6, "the end carried onto the way it made for"
     assert lanes[1]["pts"] == [[150.0, 60.0], [110.0, 12.0]], "the trial's own lanes untouched"
+
+
+def test_a_tree_lane_that_would_close_a_needle_ends_on_the_way_beside_it() -> None:
+    """Feature 417 T45 (fresh seed 723775): two households' ways onto one point, the second's last stretch running beside the
+    first's last leg, closed a 3 ft sliver; asked where it is laid, the second ends on the first's tread instead - a tee."""
+    first = [[1534.0, 1395.0], [1508.0, 1395.0], [1503.0, 1255.0], [1520.0, 1252.0]]
+    second = [[1372.0, 1502.0], [1308.0, 1380.0], [1520.0, 1252.0]]
+    teed = tree.off_the_needle(second, [first])
+    assert teed != second and teed[-1] != [1520.0, 1252.0], "it no longer runs on beside the first to the shared end"
+    from shapely.geometry import LineString, Point
+
+    assert LineString(first).distance(Point(teed[-1])) < 0.5, "it ends on the first's tread"
+    apart = [[1372.0, 1502.0], [1300.0, 1200.0]]
+    assert tree.off_the_needle(apart, [first]) == apart, "a lane closing no needle is left as it was"
+
+
+def test_a_needle_with_no_tee_to_take_is_left_for_the_law() -> None:
+    """`off_the_needle` changes nothing it cannot mend: a lane of one point, a drawn lane of one point, and a lane that runs
+    beside the other its whole length (no stretch of it stands off that way to cut back to) are left as they were."""
+    first = [[0.0, 0.0], [100.0, 0.0]]
+    assert tree.off_the_needle([[5.0, 5.0]], [first]) == [[5.0, 5.0]], "a lane of one point"
+    beside = [[0.0, 0.0], [0.0, 3.0], [100.0, 3.0], [100.0, 0.0]]
+    assert tree.off_the_needle(beside, [[[1.0, 1.0]], first]) == beside, "a one-point drawn lane is passed over; all of it beside"

@@ -188,7 +188,7 @@
    "declared": "spec-fidelity"
   },
   "### T45 (FR-005, the round arbiter's ruling on ask:417-T31-C2-regression): the needle rule asked where a tree lane is drawn": {
-   "sha256": "001d6fc54f30189900fbbae5ae9d3bee55d8792861abafe799de298e81a1fa72",
+   "sha256": "edbbb0ac680e495d505eb0f087ae4334d642b7dae19d82a38d1b8448bda5f6ad",
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
@@ -3024,6 +3024,57 @@
      "why": "Sequencing and budget inside the asked work; nothing of the request or spec is dropped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T45 (FR-005, the round arbiter's ruling on ask:417-T31-C2-regression): the needle rule asked where a tree lane is drawn"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T45-a",
+     "summary": "law.needle_loops is asked of the candidate in lanes_of where a tree lane is drawn, rather than only of the finished map",
+     "class": "within",
+     "why": "This is FR-005's conversion verbatim (a rule asked only of a finished map is asked by the placer that could break it), and the GM's 'replacing them with just having the algorithm place correctly in the first place' (2026-10-25)."
+    },
+    {
+     "id": "T45-b",
+     "summary": "the sliver threshold NEEDLE_LOOP_FT (20 ft, CONVENTION, ours) is read and not moved",
+     "class": "within",
+     "why": "The arbiter's step was 'if it is ours, moving it is tried before anything more elaborate'. The block's own text forecloses the try rather than skipping it: the convention is calibrated on a 16 ft triangle being a needle, so no value the convention admits sits below 16 ft, and the measured face is 3.0 ft wide - caught at every admissible value. Not moving it is the GM's own caution (2026-10-25) applied the other way: an arbitrary number is tunable, but lowering it below its calibration to make one map pass would drop the rule, not tune it. Nothing in the request or spec is narrowed."
+    },
+    {
+     "id": "T45-c",
+     "summary": "the lay-time resolution: a tree lane whose carried end would close a needle with an already-drawn tree lane ends instead on that lane's tread at the nearest point (a tee)",
+     "class": "within",
+     "why": "Asked of the candidate before it is drawn, so it is placement rather than place-then-repair (FR-005, the constitution rule the GM approved). The GM allows behavior change 'as long as it is in line with our research' (2026-10-25); the block cites 0081's doubled way drawn as one. The bundle does not carry 0081, so that citation is taken as stated, not verified here."
+    },
+    {
+     "id": "T45-d",
+     "summary": "the rule's reach: tree lane against an already-drawn tree lane only",
+     "class": "within",
+     "why": "T45 answers the C2-regression ask, and the measured needle is between two tree lanes (access lanes 1 and 2). Nothing in the bundle shows another placer closing a needle. Noted as a seam: if a connector or a non-tree lane can close one on a finished map, FR-005/SC-003 ('asked by its placer') still owes that placer the predicate; this task does not claim to discharge it."
+    },
+    {
+     "id": "T45-e",
+     "summary": "seed 723775 measured once to find the mechanism; never iterated on inside C2; the change judged by cohort, pinned rows and pool maps, never by 723775 passing",
+     "class": "within",
+     "why": "D11: no work aimed at the fresh rate, no seed-by-seed iteration. One diagnosis of a fresh seed's failure to design a general rule is not iteration, and the pass criterion is FR-008's, not the seed."
+    },
+    {
+     "id": "T45-f",
+     "summary": "measured on the landing cohort, the fresh block from seed 723759 and the pool maps",
+     "class": "within",
+     "why": "D11: each conversion lands through make land when FR-008 holds, its fresh rate recorded either way."
+    },
+    {
+     "id": "T45-g",
+     "summary": "Rendering: none",
+     "class": "within",
+     "why": "No render change is asked or made; D11 says Rendering: none."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3547,6 +3598,56 @@
      "summary": "After T40, before T31's conversions; landed through make land on the landing cohort and pool gate, set down whole with its seeds if red; one landing.",
      "class": "within",
      "why": "D35 orders deletion of the needless before conversion of the needed; D23 sets the red exit; FR-008/D11 the gate."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T45": {
+   "section_sha256": "edbbb0ac680e495d505eb0f087ae4334d642b7dae19d82a38d1b8448bda5f6ad",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T45-a",
+     "summary": "law.needle_loops is asked of the candidate in lanes_of where a tree lane is drawn, rather than only of the finished map",
+     "class": "within",
+     "why": "This is FR-005's conversion verbatim (a rule asked only of a finished map is asked by the placer that could break it), and the GM's 'replacing them with just having the algorithm place correctly in the first place' (2026-10-25)."
+    },
+    {
+     "id": "T45-b",
+     "summary": "the sliver threshold NEEDLE_LOOP_FT (20 ft, CONVENTION, ours) is read and not moved",
+     "class": "within",
+     "why": "The arbiter's step was 'if it is ours, moving it is tried before anything more elaborate'. The block's own text forecloses the try rather than skipping it: the convention is calibrated on a 16 ft triangle being a needle, so no value the convention admits sits below 16 ft, and the measured face is 3.0 ft wide - caught at every admissible value. Not moving it is the GM's own caution (2026-10-25) applied the other way: an arbitrary number is tunable, but lowering it below its calibration to make one map pass would drop the rule, not tune it. Nothing in the request or spec is narrowed."
+    },
+    {
+     "id": "T45-c",
+     "summary": "the lay-time resolution: a tree lane whose carried end would close a needle with an already-drawn tree lane ends instead on that lane's tread at the nearest point (a tee)",
+     "class": "within",
+     "why": "Asked of the candidate before it is drawn, so it is placement rather than place-then-repair (FR-005, the constitution rule the GM approved). The GM allows behavior change 'as long as it is in line with our research' (2026-10-25); the block cites 0081's doubled way drawn as one. The bundle does not carry 0081, so that citation is taken as stated, not verified here."
+    },
+    {
+     "id": "T45-d",
+     "summary": "the rule's reach: tree lane against an already-drawn tree lane only",
+     "class": "within",
+     "why": "T45 answers the C2-regression ask, and the measured needle is between two tree lanes (access lanes 1 and 2). Nothing in the bundle shows another placer closing a needle. Noted as a seam: if a connector or a non-tree lane can close one on a finished map, FR-005/SC-003 ('asked by its placer') still owes that placer the predicate; this task does not claim to discharge it."
+    },
+    {
+     "id": "T45-e",
+     "summary": "seed 723775 measured once to find the mechanism; never iterated on inside C2; the change judged by cohort, pinned rows and pool maps, never by 723775 passing",
+     "class": "within",
+     "why": "D11: no work aimed at the fresh rate, no seed-by-seed iteration. One diagnosis of a fresh seed's failure to design a general rule is not iteration, and the pass criterion is FR-008's, not the seed."
+    },
+    {
+     "id": "T45-f",
+     "summary": "measured on the landing cohort, the fresh block from seed 723759 and the pool maps",
+     "class": "within",
+     "why": "D11: each conversion lands through make land when FR-008 holds, its fresh rate recorded either way."
+    },
+    {
+     "id": "T45-g",
+     "summary": "Rendering: none",
+     "class": "within",
+     "why": "No render change is asked or made; D11 says Rendering: none."
     }
    ],
    "verdict": "CLEAR"
