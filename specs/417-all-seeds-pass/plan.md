@@ -482,6 +482,21 @@ or the step is set down with its seeds and ruled (`make arbiter-ask`). Rendering
 11. **Before fitting things into room.** n/a.
 
 
+### T46 part B (2026-10-26T05:20Z)
+
+The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly failing - the probe of the end trim's street call.
+
+1. **What exactly is refusing?** `dangling_ends` at a skeleton lane on six linear seeds: with `tidy_lane_ends(..., streets=True)`
+   off, a row's street runs on past its last farm. The probe never landed; T46 keeps the call.
+2. **A3 again.** O: the lane law's dangling-end rule; R: 0033's row street.
+3. **A4 again.** It describes the map here: `lay_row_streets` lays the street long and the trim cuts it back.
+4. **Moving something placed earlier to suit something later?** No: the trim was restored, nothing moved.
+5. **Tuning or changing?** Neither: one probe, then the call kept and its conversion filed.
+6. **The one-sentence test.** "The street trim is a repair still needed; T47 lays the street to its last farm" - no question.
+7. **The next step is a measurement.** T46 lands as measured with the call kept; T47 measures its own conversion.
+8. **Routes measured?** One route: keep and convert.
+9. **After a ruling.** The plan review ruled CLEAR on T46/T47 with this route.
+
 <!-- plan-archive: T43 to T41 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 
 ### T44 (T31 C2, the round arbiter's accept on ask:417-T31-C2-regression): the access tree drawn first; `settle_joins` deleted
