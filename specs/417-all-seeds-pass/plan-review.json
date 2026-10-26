@@ -162,6 +162,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T43 (T41's regression, constitution XIII): `square_every_crossing` restored to the settle's rounds": {
+   "sha256": "69e9bd2cd123a4edff12250ac182b4b29791b295be81f4965fb71949052a04ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T43 Approach (checklist part A)": {
+   "sha256": "b70b8b61b34d0ca830a5657c75cc920e1779f69505330fe0de4258a39c892337",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2662,6 +2674,40 @@
      "summary": "Order: after T41, as the first of T31's conversions. Exits: green lands, red is set down with its seeds. Done: link_width is asked at the link, settle_widths is gone and make land is green.",
      "class": "within",
      "why": "This matches D11's stop line and D35's sequence. It does no work aimed at the fresh rate and no FR-007 room work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T43 (T41's regression, constitution XIII): `square_every_crossing` restored to the settle's rounds",
+    "### T43 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T43-restore",
+     "summary": "square_every_crossing restored as it stood at T40 (definition, re-export, first place in STEPS, its test, the three claims T41 reworded), because a same-block roll and a bisection show its removal alone turns seed 723805 red",
+     "class": "within",
+     "why": "D35 deletes only the NEEDLESS steps (no verdict moved); a step whose removal moves a verdict is needed by D35's own criterion, so T41 deleting it was a misclassification the probe's 54 seeds did not see. Undoing a regression this feature caused serves the request's purpose ('all seeds passing'; 'making some seeds pass just ends up breaking other seeds') and FR-008 / constitution XIII. It is not 'work aimed at the fresh rate' under D11: it restores the pre-T41 baseline, it does not push the rate below it."
+    },
+    {
+     "id": "T43-conversion-owed",
+     "summary": "the restored step is owed D11's conversion under T31 like the other needed steps",
+     "class": "within",
+     "why": "Exactly D35's path for a NEEDED step, and the GM's 'switch off the 16 repair steps ... get rid of all of them. As per the requirements of this feature': the step is not kept as a repair, only returned to the queue for conversion. No exemption from conversion is claimed."
+    },
+    {
+     "id": "T43-order",
+     "summary": "T43 lands before T31's next conversion: a regression first",
+     "class": "within",
+     "why": "Sequencing only; nothing asked is dropped or narrowed, and fixing a known regression before further engine change is FR-008 / constitution XIII."
+    },
+    {
+     "id": "T43-done",
+     "summary": "done when seed 723805 passes and make land (the landing cohort and pool gate) is green; Inashiro and Sawada return to their pre-T41 drawing order; rendering none",
+     "class": "within",
+     "why": "The landing condition is FR-008's; the pool maps returning to their pre-T41 order is the restoration's consequence, not new behavior."
     }
    ]
   }

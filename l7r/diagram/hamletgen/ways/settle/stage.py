@@ -42,9 +42,11 @@ def settle_reach(s: Any) -> int:
 # NINE STEPS STOOD HERE AND WENT (feature 417 T40-T42, research.md R8): `settle_husks` (first and last), `settle_street_ends`,
 # `settle_shadows`, `settle_joins`, `settle_needles` and `prune_the_tree` (no verdict and no pool manifest moved), then
 # `settle_shapes`, `settle_way_outs` and `settle_widths` (54 of 54; Inashiro, Kashikawa and Sawada moved in their drawing order
-# alone). `square_every_crossing` went with them in T41 and CAME BACK (T43): fresh seed 723805 tied a lane knot without it
-# (bisected 2026-10-26: it alone of T41's seven), a crossing left unsquared the fixed seeds never met. Their rules are kept by the placers before them. Do not
-# re-add one to mend a seed: a seed that needs one is a placer's defect (constitution XIX).
+# alone). Their rules are kept by the placers before them. Do not re-add one to mend a seed: a seed that needs one is a placer's
+# defect (constitution XIX). The steps still here are NEEDED, each owed its rule moved into the placer that lays what it mends
+# (feature 417 T31, D11). `square_every_crossing` among them went in T41 and came back in T43: fresh seed 723805 tied a lane
+# knot without it (bisected 2026-10-26 UTC: it alone of T41's seven) - a crossing left unsquared that the
+# fixed seeds never met.
 STEPS = (
     square_every_crossing,
     settle_ends,
