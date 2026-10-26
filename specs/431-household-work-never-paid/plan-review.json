@@ -1,0 +1,394 @@
+{
+ "feature": "431-household-work-never-paid",
+ "blocks": {
+  "preamble": {
+   "sha256": "95cc51832c00cc7ebe973a1378ffdd7c4d37eda6730d3f0d12781e505b7254ad",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "f9c359b4e4e15d8bf11d131f49484573c9e2004413dd7609ad3c9694363e2193",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "76703c80ae3adff5423cac260f1032e937df5d601f860dcc355875d364136ee8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "2af3cd7de4be30e6d9732bc52b389dad863ad614729acaf9de51a1bf175cfedc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the farm household's unpaid work (Q1, Q2; FR-001)": {
+   "sha256": "163e0147f4117e2cf54eaa7c9299c05697583d49d8cd0342e4b386fd505ae594",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the fiber chain in hours (Q3; FR-001)": {
+   "sha256": "e88f1cad5c0ad998d49760c5773f3afac5c67c966618be18459ede1953ef26b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - city households, and other workers' days off (Q4, Q5; FR-001)": {
+   "sha256": "a11e946ff693f2eac426ded44bd14a84c3808af21d313353984fbbe25f1621c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - the proverb, and why the record is thin (Q6, Q7; FR-001)": {
+   "sha256": "89f50cfb53f225c9d2a744be70d99cee96f9338204c150566c9133cefeb54ea1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - the implementation check and the reply (FR-003, FR-004)": {
+   "sha256": "089ad9e32a5e6284d5eed4e750bd3350d4a615429d4fa611b797cae21681c244",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the farm household's unpaid work (Q1, Q2; FR-001)",
+    "## D2 - the fiber chain in hours (Q3; FR-001)",
+    "## D3 - city households, and other workers' days off (Q4, Q5; FR-001)",
+    "## D4 - the proverb, and why the record is thin (Q6, Q7; FR-001)",
+    "## D5 - the implementation check and the reply (FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary: no code, map or canon change",
+     "summary": "The feature writes the research record and the reply only; no Money page is built here.",
+     "class": "within",
+     "why": "The request's 'Why it matters' names a Money page, but says 'the page will say so' of the toolkit (gm-assistant), which consumes this research; FR-004 already settles that no code implements money questions here."
+    },
+    {
+     "id": "Summary: two write sessions in two clones",
+     "summary": "S1 (passes A-C: farm household, fiber chain) here, S2 (passes D-E: city, days off, proverb, historiography) in diagram-money-research-2, registry keys disjoint.",
+     "class": "within",
+     "why": "How the work is divided (FR-002 territory); it covers all seven questions and narrows none."
+    },
+    {
+     "id": "Technical Context: sourcing paths",
+     "summary": "Passes are leads, every passage read before citing; 'not to be quoted' drafts cited with the header stated; Bray through Waltner's review, Nagahara through Nagashima/Tanimoto, Seiryoki through the Sukumo city history, Keian edict through paraphrase with its date disputed; S1/S2 ownership of shared sources.",
+     "class": "within",
+     "why": "Citation route and labeling choices inside FR-001's citation rules; each secondary route is labeled as such. Aside: the request's leads named Bray's Technology and Gender and Hayami's industrious-revolution literature; neither the book itself nor Hayami appears in D5's open-leads list - leads may be dropped, but the drop is not recorded."
+    },
+    {
+     "id": "D1: Q1/Q2 findings and verdict labels",
+     "summary": "Seiryoki man-days ATTESTED ONLY FOR one Iyo farm book; Nagashima, Tomioku, Saito, Kumon by file; China from the Shen-shi and Bu nongshu, Buck (1921-25, labeled), Fei, Lu Village (third-hand, labeled); per-member hours SILENT; each task with who and its time or SILENT.",
+     "class": "within",
+     "why": "Answers Q1 and Q2 in the requested region order with the fallback Q1 itself names (off-season and night tasks); SILENT verdicts are findings, not narrowings. The 'each task ... or SILENT' rule must cover every item of Q2's starting list (hulling and polishing rice, charcoal, mending, care of the sick and old are not named in the block)."
+    },
+    {
+     "id": "D1: the GM's hypothesis tested both halves",
+     "summary": "Cotton era NOT ATTESTED for clothing as largest claim (about 51 days of household cloth against 200-plus female field days a cho); hemp/ramie era ATTESTED ONLY FOR Nagahara's estimate; fieldwork larger in total ATTESTED for Japan, NOT ATTESTED for Jiangnan.",
+     "class": "within",
+     "why": "Both halves of the GM's hypothesis are tested as Q2 asks. The record should say that 'making clothes' was tested on its cloth stage only (from ginned fiber), with growing, dyeing and sewing SILENT per D2, so the 51 days is a floor."
+    },
+    {
+     "id": "D1: thin-record note and canon comparison",
+     "summary": "Where women's household figures are missing the record says the work was rarely written down and why (pointing at D4); budgets.md and l7r.md compared against the findings.",
+     "class": "within",
+     "why": "Carries the GM's addendum at the point of each gap; the canon comparison changes nothing."
+    },
+    {
+     "id": "D2: fiber-chain figures",
+     "summary": "Cotton 4 days a tan from ginned fiber, 12.8 tan a household plus 39.4 for sale (Tanimoto); China 6-7 days a bolt, both given; Tiangong kaiwu single steps; hemp and silk per tan, growing, dyeing, sewing SILENT; Akita 1808-10 bought against made; units as sources give them.",
+     "class": "within",
+     "why": "Answers Q3's hours per stage, yearly output and cloth bought; SILENT stages are findings."
+    },
+    {
+     "id": "D2: European experiments not cited",
+     "summary": "Mannering 2021 and Bender Jorgensen 2012 are omitted on two grounds: research/CLAUDE.md's comparative exception does not cover craft-time rates, and wool on a warp-weighted loom says nothing about hemp splicing or cotton; the omission is said in the reply.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request's Q3 says 'a measured modern craft rate is acceptable as a COMPARATIVE source where no period figure exists', its region order 'Europe or modern experiment as comparison only', and its leads name 'measured craft and experimental-archaeology rates for spinning and weaving'; FR-001 places 'a Europe or modern-experiment figure' in Comparative money under research/CLAUDE.md 'Comparative money sources'. Ground 1 contradicts FR-001 and the GM's words directly: the accepted spec already settled that this class of figure goes in exactly that section. Ground 2 is a relevance argument the GM pre-empted: 'comparison only' already concedes a different fiber and loom, and the trigger condition is met by the plan's own finding that hemp and silk per tan are SILENT - the case the permission was written for. The plan turns 'comparison only' into 'not at all'; saying so in the reply is disclosure, not legitimacy. Fix: cite them in Comparative money, tagged subject=comparative,money, labeled wool on a warp-weighted loom, as comparison for the SILENT hemp and silk stages - or, if the session holds that no measured modern rate bears on any of the three fibers, name the search for one (hemp, ramie, cotton, silk, not only European wool) and record its SILENT."
+    },
+    {
+     "id": "D3: city households and days off",
+     "summary": "Edo rice polishers, Bunsei budgets, bath fees, the shared well, used clothing, water sellers, washing shops; home-work days single vs family SILENT; the journalist's unsourced contrast 'given as that or left out'; rental shops a lead only; China SILENT beyond Beijing water carriers; Q5 extends 0311 with merchant-house yabuiri; porters, guards, footmen SILENT.",
+     "class": "within",
+     "why": "Answers Q4 and Q5 in the requested order; SILENT results are findings. The 'given as that or left out' line is an undecided either/or on the very contrast Q4 asks about - not a narrowing, but it should be decided (given, labeled unsourced) rather than left open."
+    },
+    {
+     "id": "D4: why the record is thin",
+     "summary": "New question whose point is the GM's addendum; Japan ATTESTED (Makihara 2020, Hitotsubashi 2007 with the source kinds); China ATTESTED ONLY FOR narrower statements (Bray via Waltner, Pomeranz on Li Bozhong, Li Shizhong).",
+     "class": "within",
+     "why": "Carries Q7 and the GM's addendum that the gap is itself a historical fact to convey, with authors and source kinds as Q7 asks."
+    },
+    {
+     "id": "D4: the proverb",
+     "summary": "360-day form SILENT; halves ATTESTED ONLY FOR Lu Mingshan's almanac and Lou Yue's poem; Zhu Yongchun's rule; Zengguang xianwen not cited as premodern unless dated; Keian edict labeled; the GM's farming guess ATTESTED by the almanac's audience; placement by size.",
+     "class": "within",
+     "why": "Q6 asks to find it with original text or report SILENT; the plan reports the full form SILENT and the attested parts, and tests the GM's farming guess. The original text of the attested halves should be carried, as Q6 asks."
+    },
+    {
+     "id": "D5: implementation check and reply",
+     "summary": "implementation-check.md per touched question; reply gives each figure with fragment and verdict, open leads, and the European experiments' omission; escalation-check first.",
+     "class": "within",
+     "why": "FR-003 and FR-004 as written; the omission clause falls with the D2 ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the farm household's unpaid work (Q1, Q2; FR-001)",
+    "## D2 - the fiber chain in hours (Q3; FR-001)",
+    "## D3 - city households, and other workers' days off (Q4, Q5; FR-001)",
+    "## D4 - the proverb, and why the record is thin (Q6, Q7; FR-001)",
+    "## D5 - the implementation check and the reply (FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary: two write sessions S1/S2 in two clones, disjoint keys",
+     "summary": "Q1-Q3 (passes A-C) in this clone, Q4-Q7 (passes D-E) in the second clone, each followed by check-and-apply, then the reply; no code, map or canon change",
+     "class": "within",
+     "why": "How the work is divided, not what is answered; all seven questions stay assigned; the request asks for research, not code."
+    },
+    {
+     "id": "Technical Context: passes as leads; drafts and secondary readings cited as what they are; source ownership",
+     "summary": "Every passage read before citing; 'not to be quoted' drafts cited with the header said; Bray through Waltner, Nagahara through Nagashima/Tanimoto, Seiryoki through Sukumo city history, Keian edict through paraphrase with disputed date; S1/S2 own disjoint sources",
+     "class": "within",
+     "why": "Applies the citation rules FR-001 names; labeling a secondhand reading narrows nothing the GM asked for."
+    },
+    {
+     "id": "Performance bookends N/A; Constitution Check",
+     "summary": "No generator change; XII research tasks; XIII record checks green",
+     "class": "within",
+     "why": "Procedure only."
+    },
+    {
+     "id": "D1a: one new money question for Q1 and Q2 with pointers from 0311, 0004, 0183",
+     "summary": "Household's year and its tasks in one question",
+     "class": "within",
+     "why": "FR-001's expected division ('the household's year and its tasks')."
+    },
+    {
+     "id": "D1b: Q1 per-member figures; per member by hours SILENT",
+     "summary": "Seiryoki male/female field days and side tasks (labeled ATTESTED ONLY FOR one Iyo farm book), Nagashima, Tomioku yonabe, Saito 1879, Kumon via 0311; China Shen-shi, Bu, Buck (household work excluded, labeled), Fei, Lu Village third-hand; per-member hours SILENT with the searches",
+     "class": "within",
+     "why": "Q1 asks days or hours per member, failing that the off-season and night tasks a source names; the plan gives per-member days and shares where sources have them, names the night and rainy-day tasks, and reports the missing figure SILENT rather than dropping it."
+    },
+    {
+     "id": "D1c: the task list covers every item of the request's starting list plus what sources add, each with who and time or SILENT",
+     "summary": "Fiber, food, fuel and water, straw, house and tools, care - each named",
+     "class": "within",
+     "why": "Q2 asks for as near an exhaustive list as the sources allow, starting from the GM's list; every starting item is now carried (the earlier version listed only a subset)."
+    },
+    {
+     "id": "D1d: the GM's hypothesis tested on the cloth stage only, cloth days stated as a minimum for 'making clothes'",
+     "summary": "Growing, dyeing and sewing SILENT, so the comparison uses spinning and weaving days; cotton era NOT ATTESTED, hemp/ramie era ATTESTED ONLY FOR an estimate, Jiangnan level for cloth for sale, fieldwork larger in total ATTESTED for Japan / NOT ATTESTED for Jiangnan",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request asks for 'the figures that confirm or refute either half'; testing the whole of clothes-making is impossible where the other stages are SILENT after search (D2 also searches modern craft rates for them), and the plan says so on the page and calls the cloth days a minimum, so the limit is visible to the GM rather than hidden. Both halves are still adjudicated with a verdict label each."
+    },
+    {
+     "id": "D1e: the 'rarely written down' note where women's figures are missing, pointing at D4",
+     "summary": "Spotty figures tied to the reason",
+     "class": "within",
+     "why": "Is the GM's addendum verbatim in effect: call out that women's home work was almost never written down as a reason the numbers are spotty."
+    },
+    {
+     "id": "D1f: comparison against the canon (make canon)",
+     "summary": "budgets.md waraji the same evening; l7r.md silk gendered; 7.5 koku family unmatched, not contradicted",
+     "class": "within",
+     "why": "A check against existing canon with no canon change; adds no scope to the answer."
+    },
+    {
+     "id": "D2a: one new money question for Q3 with pointers from 0209, 0306, D1; units as sources give them, any per-area comparison labeled as this project's arithmetic",
+     "summary": "Cotton per tan (Niikawa), household yearly output and sale (Tanimoto), China per bolt (Pomeranz/JAS), 200-day maximum, Tiangong kaiwu steps, Akita bought against made; hemp and silk per tan in Japan, growing, dyeing, sewing SILENT",
+     "class": "within",
+     "why": "Q3 asks hours per stage per unit, yearly output and cloth bought, Japan first, China beside it; each is given or SILENT."
+    },
+    {
+     "id": "D2b: European experiments cited as COMPARATIVE sources in the Comparative money section; S1 also searches for a measured modern rate in hemp, ramie, cotton or silk",
+     "summary": "Mannering 2021 and Bender Jorgensen 2012 (only if more than the abstract is readable), subject=comparative,money, labeled wool on a warp-weighted loom, never a Rokugani figure",
+     "class": "within",
+     "why": "The request says 'a measured modern craft rate is acceptable as a COMPARATIVE source where no period figure exists' and 'Europe or modern experiment as comparison only'; FR-001 says where to file it. The earlier omission is reversed. The abstract-only condition is the citation rule, not a narrowing."
+    },
+    {
+     "id": "D3a: Q4's list of what a city household bought, and what each cost",
+     "summary": "Plan carries polished rice, the Bunsei budgets (firewood priced with seasonings, 58 monme), bath fees, used cotton clothing, water sellers, washing shops; used clothing, water and washing are named as trades with no price and no SILENT; cooked food has no entry beyond a child's sweets (rice, miso and soy are ingredients); mending has no entry at all",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Q4 asks verbatim 'What did they buy that a farm household made (used clothing, cooked food, washing, mending, firewood, water), and what did each cost?', and its figure needed is 'the trades that sold these services and goods, their prices'. Of the six items only firewood is priced. Used clothing, washing and water appear as trades with neither price nor SILENT (the only SILENT on washing is whose clothes); cooked food has no entry beyond a child's sweets; mending has none. Nothing makes those answers impossible to report - at worst they are SILENT with the searches - so this is a narrowing by omission, the same one D1's task list had and has now fixed. Fix: carry each of Q4's six items with its trade and its price, or SILENT with the searches, as D1 now does item by item for Q2's starting list."
+    },
+    {
+     "id": "D3b: home-work days for single and family city households SILENT; the journalist's unsourced single-against-married line GIVEN, labeled unsourced",
+     "summary": "The one statement on the GM's comparison carried with its weakness said",
+     "class": "within",
+     "why": "The GM's main question names exactly this contrast; giving the only statement on it, labeled, serves it (the earlier 'or left out' is gone)."
+    },
+    {
+     "id": "D3c: Kyoto and Osaka baths only; China SILENT beyond Beijing water carriers; rental shops a lead",
+     "summary": "Region coverage as found",
+     "class": "within",
+     "why": "Findings and SILENTs within Japan-first, China-beside order."
+    },
+    {
+     "id": "D3d: Q5 extends 0311 - merchant-house live-ins' yabuiri, no household until head clerk, Shirokiya staff; side trade SILENT; porters, guards, footmen SILENT",
+     "summary": "Every worker Q5 names answered or SILENT",
+     "class": "within",
+     "why": "FR-001 places Q5 as an extension of 0311; each of Q5's workers is accounted for."
+    },
+    {
+     "id": "D4a: one new question on why women's household work was rarely recorded, the GM's addendum as its point",
+     "summary": "Japan ATTESTED (Makihara 2020, Hitotsubashi 2007 with source kinds); China ATTESTED ONLY FOR narrower statements",
+     "class": "within",
+     "why": "Q7 and the GM's addendum verbatim."
+    },
+    {
+     "id": "D4b: the proverb - 360-day form SILENT; halves ATTESTED ONLY FOR Lu Mingshan's almanac and Lou Yue; original text carried for each attested part; Zengguang xianwen not cited undated; GM's farming guess ATTESTED by the almanac's audience; Japanese origin SILENT; placement by size",
+     "summary": "Q6 answered with original text",
+     "class": "within",
+     "why": "Q6 asks for the proverb with its original text or SILENT; the original text is now carried (the earlier version omitted it). Placement is FR-001's 'Q6 where it fits'."
+    },
+    {
+     "id": "D5: implementation-check.md and the reply on #21 with each figure, its fragment and verdict, open leads including Hayami and Bray, through escalation-check",
+     "summary": "Leads named in the request that were not reached are listed as open",
+     "class": "within",
+     "why": "FR-003 and FR-004; the request's leads 'to confirm or drop' are reported, Hayami and Bray now named with how far each was reached."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the farm household's unpaid work (Q1, Q2; FR-001)",
+    "## D2 - the fiber chain in hours (Q3; FR-001)",
+    "## D3 - city households, and other workers' days off (Q4, Q5; FR-001)",
+    "## D4 - the proverb, and why the record is thin (Q6, Q7; FR-001)",
+    "## D5 - the implementation check and the reply (FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary: two write sessions, disjoint keys",
+     "summary": "S1 (Q1-Q3, passes A-C) and S2 (Q4-Q7, passes D-E) write side by side in two clones, then the reply on #21; no code, map or canon change",
+     "class": "within",
+     "why": "How the work is split, not what is answered: all seven questions are assigned. The Money page itself is the gm-assistant toolkit's (the request is filed from gm-assistant and FR-001 puts the findings in the research record), so no code change here narrows nothing."
+    },
+    {
+     "id": "Technical Context: passes are leads; drafts and secondary readings cited as what they are; shared-source ownership",
+     "summary": "every passage read before citing; not-to-be-quoted drafts, Bray through Waltner, the Seiryoki and Keian edict through secondary sources cited with that said; S1/S2 own disjoint sources",
+     "class": "within",
+     "why": "Citation honesty and session coordination; nothing the request asked for is dropped (the published versions and Bray's own book go to the leads list in D5)."
+    },
+    {
+     "id": "Performance bookends / Constitution Check",
+     "summary": "N/A for a research-record feature; research: physical tasks, record checks green",
+     "class": "within",
+     "why": "No generator change; nothing in the request touched."
+    },
+    {
+     "id": "D1: Q1 and Q2 sources and fallbacks",
+     "summary": "Seiryoki man-days, Nagashima, Tomioku yonabe, Saito, Kumon (Japan first); Shen-shi and Bu nongshu, Buck, Fei, Lu Village (China beside); per-member hours SILENT with the searches",
+     "class": "within",
+     "why": "Q1's 'Figure needed' itself names the fallback ('failing that, the off-season and night tasks a source names'), which the block carries (rainy-day work, night work, yonabe); a per-member figure reported SILENT after search is an answer, not a narrowing. Region order kept."
+    },
+    {
+     "id": "D1: the task list",
+     "summary": "every item of the request's starting list plus what sources add, each with who did it and its time, or SILENT",
+     "class": "within",
+     "why": "Q2 asks for 'as near an exhaustive list as the sources allow' with who did each; the block enumerates the whole starting list (fiber, food, fuel and water, straw, house and tools, care) and adds araihari."
+    },
+    {
+     "id": "D1: the GM's hypothesis tested on the cloth stage, both halves, Japan and China",
+     "summary": "growing, dyeing and sewing SILENT, so cloth days stated as a minimum for making clothes; cotton era NOT ATTESTED, hemp/ramie era ATTESTED ONLY FOR an estimate, Jiangnan level (cloth for sale), fieldwork larger in total ATTESTED for Japan, NOT ATTESTED for Jiangnan",
+     "class": "within",
+     "why": "Not a narrowing of the question: the other stages are searched (D2) and reported SILENT, and the limit is stated on the page as a minimum, with both halves of the hypothesis answered in both regions as Q2's specific check asks. Whether the comparison is sound is research substance, not fidelity."
+    },
+    {
+     "id": "D1: thin-record note and canon check",
+     "summary": "where women's figures are missing the record says the work was rarely written down and why, pointing at D4; canon claims compared",
+     "class": "within",
+     "why": "Carries the GM's addendum verbatim in purpose; the canon comparison changes no canon."
+    },
+    {
+     "id": "D2: the fiber chain",
+     "summary": "cotton per tan by stage (Niikawa, Tanimoto), household yearly output and sale, China per bolt (Pomeranz, JAS exchange), single steps (Tiangong kaiwu), bought against made (Akita 1808-10); hemp and silk per tan, growing, dyeing and sewing SILENT; units as given, project arithmetic labeled",
+     "class": "within",
+     "why": "Q3's stages, yearly output and cloth bought are each answered or SILENT with the searches; region order Japan first, China beside."
+    },
+    {
+     "id": "D2: European experiments as comparative, plus a search for a modern Asian-fiber craft rate",
+     "summary": "Mannering 2021 and Bender Jorgensen 2012 (only if more than the abstract is readable) in their own Comparative money question, tagged comparative, limits stated; S1 searches for a measured modern rate in hemp, ramie, cotton or silk",
+     "class": "within",
+     "why": "Q3 explicitly permits 'a measured modern craft rate ... as a COMPARATIVE source where no period figure exists' and 'Europe or modern experiment as comparison only'; FR-001 places it. The readable-text condition is a citation rule, not a scope cut."
+    },
+    {
+     "id": "D3: Q4's six items, each with its trade and price or SILENT",
+     "summary": "used clothing, cooked food, washing, mending, firewood, water each answered with trade and price, or SILENT with the searches; conditional figures ('if the page bears; else SILENT')",
+     "class": "within",
+     "why": "The changed passage: Q4 asks 'what did they buy that a farm household made (used clothing, cooked food, washing, mending, firewood, water), and what did each cost?'. Every one of the six is now carried item by item, which the earlier text did not do (mending, cooked food and firewood/charcoal prices were absent). A figure kept conditional on reading the page is the read-before-cite rule."
+    },
+    {
+     "id": "D3: single against family household; Edo first, Kyoto/Osaka and China thin",
+     "summary": "home-work days SILENT with the searches; the one contrast (a journalist's unsourced line) given and labeled unsourced; wives did the work; Kyoto and Osaka on baths only; China SILENT beyond Beijing's water carriers; rental shops a lead",
+     "class": "within",
+     "why": "Q4's own contrast is answered as far as found and SILENT otherwise; an unsourced line is labeled as such rather than dropped or promoted. Thin regions reported SILENT after search are answers, in the request's region order."
+    },
+    {
+     "id": "D3: Q5 extends 0311",
+     "summary": "merchant-house live-ins' days off (yabuiri), no household until head clerk; side trade SILENT; porters, guards and footmen SILENT with the searches",
+     "class": "within",
+     "why": "Q5 asks for 'any account, with place and date' for a live-in servant, a clerk, a guard or a porter; each is answered or SILENT, and FR-001 places Q5 as an extension of 0311."
+    },
+    {
+     "id": "D4: Q7 why the record is thin, and the GM's addendum",
+     "summary": "Japan ATTESTED (Makihara 2020, Hitotsubashi 2007 with its source kinds); China ATTESTED ONLY FOR narrower statements; the addendum carried as the question's point",
+     "class": "within",
+     "why": "Q7 asks for the historiographic statement with its author and the kinds of source; the addendum ('explicitly call out ... this in and of itself is an important historical fact') is made the question's point."
+    },
+    {
+     "id": "D4: Q6 the proverb",
+     "summary": "360-day form SILENT; halves ATTESTED ONLY FOR Lu Mingshan's almanac and Lou Yue's poem, with original text and marked translations; Zengguang xianwen not cited as premodern unless dated; GM's farming-saying guess ATTESTED by the almanac's audience; Japan's origin SILENT",
+     "class": "within",
+     "why": "Q6 says 'find it with its original text, or report it SILENT'; the block does both for the parts, and answers the GM's farming-proverb guess. Placement 'by size' is FR-001's 'Q6 where it fits'."
+    },
+    {
+     "id": "D5: implementation check, reply and leads",
+     "summary": "implementation-check.md per touched question; reply gives each figure with fragment file and verdict, what is open (leads incl. Hayami and Bray named as not reached in the original), escalation-check first",
+     "class": "within",
+     "why": "FR-003 and FR-004 as written; the request's named leads that were not reached are reported open rather than dropped."
+    }
+   ]
+  }
+ ]
+}
