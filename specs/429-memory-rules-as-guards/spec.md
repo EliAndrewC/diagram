@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-26
 
-**Status**: In progress (amendment 1, 2026-10-26)
+**Status**: Done (amendment 1 landed 2026-10-26)
 
 **Affects**: tooling
 
@@ -129,5 +129,12 @@ that differs from HEAD, the comparison a wave records.
   feature 417 message caught), re-run by quote-matching since the uncommitted corpus has grown (8 of 8, 10 of 11, 0 false
   alarms reproduced). For the plan review: D167's two-day age bound is not in FR-001 or R2; T06 has no FR.
   Applied after: the labels are keyed by the sha1 of each message (reproduced on a 1,435-message corpus, 8 of 8 and 10 of
-  11, 0 false alarms); the age bound was struck by the plan review; spec-lint's FR/SC pairing fixed on SC-001, SC-002 and
-  SC-005 (wording only).
+  11, 0 false alarms); the age bound was struck by the plan review; spec-lint's FR/SC pairing fixed on SC-001 and SC-002 (wording
+  only); SC-005 reconciled with the plan review's note (T04 is a report, its test in the tooling tree).
+- spec-fidelity-verify round 1 of amendment 1 (2026-10-26): FAITHFUL - FR-006 matches amendment 1: an offer is not a
+  question and never a GM review item; the once-per-message escalation-check pass enforces only the GM's significance
+  threshold ("except insofar as ... threshold of significance"), with KEEP for a decision that might otherwise have been
+  floated as a question and CUT for routine ones. R3 re-run on 1,449 messages: asks 18 of 19, offer 1 of 1, 0 false
+  alarms in 161; R1's 8 of 8 and 10 of 11 reproduce. Carry-overs resolved (sha1 keys, R1 label committed, age bound
+  struck). Non-blocking: R1's "as shipped" row still names "if you want ... I", which R3 moved to OFFER; SC-005's change
+  was more than wording. Both applied.

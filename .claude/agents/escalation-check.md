@@ -96,7 +96,7 @@ overwhelming."* An offer (a decision already made or work already done, offered 
 you'd rather") is NOT held to the five tests below, and is never a GM review item. Judge it KEEP only when the decision
 it offers back might otherwise have been floated as a question: it changes what ships or what the GM will see, and a
 reasonable GM could want it the other way. CUT an offer of a routine choice, and CUT down a message that offers back
-most of its decisions to the one or two that clear the bar. An offer the draft words as a question ("Shall I switch to
+most of its decisions to those that clear the bar (there is no count cap). An offer the draft words as a question ("Shall I switch to
 Y?") after the work was already decided is REWRITE to the offer form.
 
 ## The five tests a DECISION item must pass

@@ -126,6 +126,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
+  },
+  "## T07 - amendment 1: offers are not questions, but owe a significance test (FR-006, SC-006)": {
+   "sha256": "80973dbf16beb16574162fc781847423ba49107f9938aea298b28372b301b2d5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "6de70d3249342d38250e2a6d44d778eb234257946b5e9ff67080316d53165e8b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Decisions": {
+   "sha256": "415b93df3b6bc58840592b894b62f32a27d40dc13b58f8fdaaf3f83cc6bfb9db",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -306,6 +324,47 @@
      "summary": "Fix hm_guard_permit.py's _GUARD pattern to /scripts/(hooks/)?<name>-hooks.sh so make guard-edit grants the permit for hooks under scripts/hooks/.",
      "class": "within",
      "why": "Adds rather than narrows: a found-while-working repair needed to edit escalation-hooks.sh for T02 by the sanctioned route; it removes no part of what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## T07 - amendment 1: offers are not questions, but owe a significance test (FR-006, SC-006)",
+    "### T07 Approach (checklist part A)",
+    "### T07 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D172a",
+     "summary": "One detector (hm_gm_question.classify) returns ask lines and offer-only lines; judge prints ask or offer with the first line.",
+     "class": "within",
+     "why": "FR-006 requires the detector to tell an ASK from an OFFER; amendment 1: 'offers are different from questions'. One detector with two labels is the mechanism, not a change of scope."
+    },
+    {
+     "id": "D172b",
+     "summary": "An ask on the same line (and on a mixed message) wins: the message is refused with the question instruction.",
+     "class": "within",
+     "why": "A message that asks the GM a question is a question under FR-002 whatever offers it also carries; amendment 1 exempts offers from counting as questions, not questions from the filter because an offer sits beside them. FR-002's question branch stays as approved."
+    },
+    {
+     "id": "D172c",
+     "summary": "An offer-only final message still owes the once-per-message escalation-check, whose offer section KEEPs a decision that might otherwise have been floated as a question and CUTs a routine one, cutting a message that offers back most of its decisions down to those that clear the bar.",
+     "class": "within",
+     "why": "This is FR-006 as accepted and the GM's own carve-back: offers are fine 'except insofar as I think that offer should only be made if it crosses a certain threshold of significance', 'things that might have otherwise been floated as questions but do not rise to the level of questions'. The offer never becomes a GM review item or a question; the filter only judges significance. The phrase 'the one or two that clear the bar' is descriptive - the bar, not a number, governs, as D172d states."
+    },
+    {
+     "id": "D172d",
+     "summary": "No count cap on offers: a pattern cannot weigh significance.",
+     "class": "within",
+     "why": "The GM's threshold is significance ('if you offer to reverse literally every single decision ... that is overwhelming'), not a count; leaving it to the filter's judgment follows his words rather than narrowing them."
+    },
+    {
+     "id": "T07-approach",
+     "summary": "Constraints FR-006 with FR-002's question branch unchanged; done is test-escalation-hooks.sh section 10 green and R3's three-way counts; one landing.",
+     "class": "within",
+     "why": "SC-006 names exactly these exits (offer-only refused once with the significance instruction, ask refused with the question instruction, R3 three-way labels); nothing beyond them is added."
     }
    ]
   }
