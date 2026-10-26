@@ -218,3 +218,12 @@ unchanged modules stay the gate's (FR-009's narrowing, stated in Assumptions).
   narrowing stated). Reaching those two before the gate would widen item 3 beyond the GM's words and is the GM's call, not a
   spec edit. Round 3 prescribed FR-003's wording from R1's "So", which took a step the replay did not measure. Figures:
   `make figures` again NOT RE-MEASURED (prose command); the split checked by `git diff --name-only` on each red's range.
+- spec-fidelity round 5 (2026-10-26, VERIFY): NOT-REVIEWABLE - no round consumed. The one figure with a unit in the changed
+  passages, research.md R1's "So" bullet ("at a price of 2 of today's 6 reds (one 4-5 minute gate each)"), carries no
+  `m:<key>` (`m:coverage-reds-replay` records lines, not minutes), no one-shot label and no round label; the Why paragraph
+  labels the same figure, R1's new use does not. Label it there (e.g. "observed 2026-10-26, method: `dev/run-log`, the GM's
+  figure in `request.md` item 3") and re-dispatch. Pending that, nothing else in the diff is in question: round 4's item reads
+  as resolved on every point (the 3/2 split in US3, R1 and the key; SC-002 and US3.1 require the three plus the sixth and
+  leave the two to the gate; the narrowing stated and priced in Assumptions; FR-003 unchanged, not widened). Figures:
+  `make figures` 0 moved, 0 outside band, 0 not re-measured; `bash replay-reds.sh` matches `per_red` row for row (on round 5's
+  own run).
