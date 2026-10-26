@@ -63,14 +63,15 @@ session names it in that turn's final message.
 
 ### Story 4 - the backlog cleared, three left (F; P1)
 
-1. **Given** the 465 open rows, **when** the backlog is cleared with the GM's words, **then** every row is reviewed except the
-   three that are his (374#60, 385#40, 397#10), `make gm-review` lists exactly those three as needing his decision, and the
+1. **Given** the 465 open rows, **when** the backlog is cleared with the GM's words, **then** every row is reviewed, the
+   three that are his (374#60, 385#40, 397#10) carried on as one kept question each, `make gm-review` lists exactly those three as needing his decision, and the
    features held open only by their GM-review box close.
 
 ## Requirements
 
 - **FR-001 (A)**: `make arbiter-ruled` writes every ruling to the feature's `arbiter.jsonl`, and a row of the GM's review only
-  for a question in `for_gm` (FR-002), on every trigger kind, not only the hourly one. `make arbiter-fix-done` writes no
+  for a question in `for_gm` (FR-002), on every trigger kind, not only the hourly one, or a declined fix (below), both as
+  questions owed `escalation-check`. `make arbiter-fix-done` writes no
   row of the GM's review. A declined fix (`arbiter-fix-declined`) wants his decision, so it too is written as a question owed
   `escalation-check` (FR-002's path), not straight to him. A finding accepted with a reason (`make accept`) and a known drift
   (feature 430) are rows he may read, not decisions, and are not changed by this feature.
@@ -100,15 +101,17 @@ session names it in that turn's final message.
   --exclude-dir=tests --exclude-dir=.git --exclude-dir=.clones .` (2026-10-26), the hits that describe it: the constitution
   (`.specify/memory/constitution.md`, "the GM reviews the ruling after landing"), `CLAUDE.md`, `docs/spec-kit-and-reviews.md`,
   `docs/guards.md`, the round arbiter's, escalation-check's and spec-fidelity's contracts, `scripts/gm_review.py`'s and
-  `scripts/hooks/lib/hm_arbiter.py`'s docstrings, and the step-back bundle's text (`scripts/reviews/stepback_bundle.py`); the
+  `scripts/hooks/lib/hm_arbiter.py`'s docstrings and messages ("the GM reviews it after landing"), the `Makefile` help of
+  `gm-review` and `arbiter-fix-declined` and `docs/make-targets.html` built from it, and the step-back bundle's text (`scripts/reviews/stepback_bundle.py`); the
   plan reads every other hit and records why it needs no change.
 
 ## Success Criteria
 
-- **SC-001** (FR-001): replayed over every ruling and fix recorded in `specs/*/arbiter.jsonl`, the new rule writes a row of
-  the GM's review only for the rulings carrying `for_gm` (the audit's count: 22 of the 465 open rows came that way or by a
-  ruling's own words), and none for a round-cap ruling, a fix made or a routine step-back.
-- **SC-002** (FR-002, FR-003): the tests show a `for_gm` question owed, kept, cut and named; a ruling handing the GM a
+- **SC-001** (FR-001): replayed over every ruling and fix recorded in `specs/*/arbiter.jsonl`, the new rule writes owed questions
+  only for the rulings carrying `for_gm` and for declined fixes, and no row for a round-cap ruling, a fix made or a routine
+  step-back (the audit's count: 22 of the 465 open rows came by `for_gm` or by a ruling's own words).
+- **SC-002** (FR-002, FR-003): the tests show a `for_gm` question owed, kept, cut and named; a declined fix written as an
+  owed question, not straight to the GM; a ruling handing the GM a
   decision without `for_gm` refused.
 - **SC-003** (FR-004): `make gm-review` lists the residence question among the GM's decisions, and an override row with a
   `held` key or a "Held" flag and no kept question is not listed as one.
