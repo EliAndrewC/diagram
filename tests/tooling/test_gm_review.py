@@ -277,3 +277,26 @@ def test_a_question_is_owed_escalation_check_then_kept_or_cut(root: pathlib.Path
     assert gm.main(["question", "375", "a fourth question for the GM", "ask:y"]) == 0 and "owed escalation-check" in capsys.readouterr().out
     assert gm.main(["escalated", "375", "3", "KEEP", "his to decide"]) == 0 and "KEPT" in capsys.readouterr().out
     assert gm.main(["escalated", "375", "3", "KEEP", "his to decide"]) == 1
+
+
+def test_a_push_with_a_question_still_owed_is_refused(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
+    """Feature 432 (FR-002): a feature does not land with a question escalation-check has not judged; another feature's owed
+    question, not in this push, holds nothing."""
+    import subprocess
+
+    g = ["git", "-C", str(tmp_path), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    for name in ("375-x", "376-y"):
+        (tmp_path / "specs" / name).mkdir(parents=True)
+        (tmp_path / "specs" / name / "tasks.md").write_text("- [x] T01 built\n")
+    gm.question(tmp_path / "specs" / "376-y", "an older question someone else owes", "ask:old")
+    subprocess.run([*g, "add", "-A"], check=True)
+    subprocess.run([*g, "commit", "-qm", "base"], check=True)
+    subprocess.run([*g, "update-ref", "refs/remotes/origin/main", "HEAD"], check=True)
+    assert gm.owed_in_delta(tmp_path) == [], "an owed question outside the push holds nothing"
+    n = gm.question(tmp_path / "specs" / "375-x", "redraw the sheets or record the deviation?", "ask:b7")
+    assert gm.owed_in_delta(tmp_path) == ["375#0: redraw the sheets or record the deviation?"]
+    monkeypatch.chdir(tmp_path)
+    assert gm.main(["owed-check"]) == 1 and "make gm-escalated" in capsys.readouterr().err
+    gm.escalated(tmp_path / "specs" / "375-x", n, "CUT", "the record settles it")
+    assert gm.main(["owed-check"]) == 0 and gm.owed_in_delta(tmp_path) == []

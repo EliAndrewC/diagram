@@ -121,6 +121,22 @@ def questions(root: Path, status: str) -> list[tuple[Path, int, dict]]:
     return [(d, i, r) for d, o in open_rows(root) for i, r in o if r.get("kind") == QUESTION and r.get("status") == status]
 
 
+def owed_in_delta(root: Path) -> list[str]:
+    """The questions still owed escalation-check in the features this push changes (`specs/<f>/gm-review.jsonl` in the delta
+    against `origin/main`, committed or not): a feature does not land with one unjudged (feature 432, FR-002)."""
+    import subprocess  # noqa: PLC0415
+
+    def names(*args: str) -> set[str]:
+        out = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True)
+        return set(out.stdout.split()) if out.returncode == 0 else set()
+
+    base = subprocess.run(["git", "-C", str(root), "merge-base", "HEAD", "origin/main"], capture_output=True, text=True).stdout.strip()
+    paths = (names("diff", "--name-only", base) if base else set()) | names("ls-files", "--others", "--exclude-standard")
+    feats = sorted({p.split("/")[1] for p in paths if p.startswith("specs/") and p.endswith("/" + ROWS)})
+    return [f"{_num(root / 'specs' / f)}#{i}: {r.get('question', '')}" for f in feats for i, r in enumerate(rows(root / "specs" / f))
+            if r.get("kind") == QUESTION and r.get("status") == "owed" and "reviewed" not in r]
+
+
 def escalated(d: Path, row: int, verdict: str, reason: str, now: str | None = None) -> str:
     """`make gm-escalated`: escalation-check's verdict on an owed question. KEEP holds it for the GM (his decision, named in the
     session's final message - `escalation-hooks.sh`); CUT closes it, the reason kept on the row (feature 432, FR-002)."""
@@ -506,6 +522,13 @@ def main(argv: list[str]) -> int:
             d = _feature(root, argv[1])
             n = question(d, argv[2], argv[3])
             print(f"gm-question: row {n} of {d.name} - owed escalation-check before it reaches the GM (make gm-escalated F={_num(d)} ROW={n})")
+        elif argv[:1] == ["owed-check"] and len(argv) == 1:
+            owed = owed_in_delta(root)
+            for line in owed:
+                print(f"gm-review: owed escalation-check - {line}", file=sys.stderr)
+            if owed:
+                print("gm-review: dispatch escalation-check on each, then make gm-escalated F=<n> ROW=<n> VERDICT=KEEP|CUT REASON=\"...\"", file=sys.stderr)
+                return 1
         elif argv[:1] == ["escalated"] and len(argv) == 5:
             print(f"gm-escalated: {escalated(_feature(root, argv[1]), int(argv[2]), argv[3], argv[4])}")
         elif argv[:1] == ["reviewed-row"] and len(argv) == 3:
