@@ -22,7 +22,7 @@ stands, so this plan holds T01 now; each later task is filed with its own sectio
 
 **Testing**: pytest through `make test-file`; 100% coverage of the new module
 
-**Target Platform**: the dev container (Linux), its containers sharing a 10 GB memory cap
+**Target Platform**: the dev container (Linux), its containers sharing a 10 GB memory cap (observed 2026-10-26, method: the laptop memory watch's notices)
 
 **Project Type**: a by-hand diagnostic, never a gate
 

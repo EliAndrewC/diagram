@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-26
 
-**Status**: Started 2026-10-26 on the GM's word (`request.md` 5: "please go ahead with feature 427 beginning with the survey tool"). Was held (`request.md` 3: "once I'm in a place to actually work
+**Status**: Draft - filed, not started. Held until the GM says to start (`request.md` 3: "once I'm in a place to actually work
 on that, then we can do that"); the reason is the engine refactors in flight (`request.md` 2).
 
 **Affects**: hamlet, performance, tooling
