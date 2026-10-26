@@ -1,0 +1,101 @@
+{
+ "feature": "424-record-intro-maps-money",
+ "blocks": {
+  "preamble": {
+   "sha256": "7045d6c90326f8a5e8a95b58775bebeeb5a4d4bcc0d6b14561f8bd62bea40d58",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "02d337b3453a0ee064887525a807472b7c88dc227ef48692507483d988a2666e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "a570e1703282c3686d38391dc3a1aaeee35686ef340e7275d08c3bd5240449b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "14ae3702a31125ba706637582a6137d55a94309a276007785bfe5beba9c7ec01",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "b53e279f0669455815c2ac0af885547ced39aec3af9eaf3713ff02af9ad16923",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - the opening (FR-001, FR-002)": {
+   "sha256": "3459ea444a77f2d381e3311c6c55e3b67dc753171e613e704ab4a9500fe12483",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "8cc35f39b86eb2bfdcd6d9f90d447c0f905c8ffd1a2aaec9d9022344e097af17",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "96a88c59e18f69d4a8c0b75a22c10f47eb24ab1bf2db0622bc8cca2cc5cc4bab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## Constitution Check",
+    "## Performance bookends",
+    "## Summary",
+    "## T01 - the opening (FR-001, FR-002)",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The opening is contents.json's top-level `opening` (HTML), read by contents.load_opening; absent means no opening, a non-string is refused by name; no renderer change.",
+     "class": "within",
+     "why": "FR-001 settles that contents.json carries the opening as HTML and the home page writes it; the reader and its absent/non-string handling are mechanism for that, and remove nothing the GM asked for - the opening itself is supplied in the data and FR-002's test fails if it is missing."
+    },
+    {
+     "id": "D2",
+     "summary": "The opening's words: the maps (with link) and the money pages (with link), each described, then one sentence on how a question answers (quoted passages; where history is silent or guessed).",
+     "class": "within",
+     "why": "The request asks for a better intro that OPENS with what the research is for - maps and money - linking the two URLs given; D2 opens with exactly that, both linked, and the one following sentence is further intro content inside 'a better intro to the research writeup', not a narrowing of anything asked."
+    },
+    {
+     "id": "Approach-2",
+     "summary": "Both URLs exactly as the GM gave them; whole-record link kept, after the opening; words in the record's data, not Python; nothing claimed the record does not do.",
+     "class": "within",
+     "why": "URLs verbatim is the request; keeping the whole-record link AFTER the opening is what FR-001 already settles and leaves the opening first as asked; the other two are constraints that narrow nothing requested."
+    },
+    {
+     "id": "Tests",
+     "summary": "A record test pins the order (opening before the whole-record link) and both links; a contents test pins the reader.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior (FR-002): delete the opening and the tests have nothing left to check."
+    },
+    {
+     "id": "Landing",
+     "summary": "Gated landing via make land / make done; performance bookends N/A; house style (no 'people' for commoners, American spelling, hyphens) in the opening's words.",
+     "class": "within",
+     "why": "Process and style constraints on how the requested work lands; none narrows or alters what the GM asked for."
+    }
+   ]
+  }
+ ]
+}
