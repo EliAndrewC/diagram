@@ -149,3 +149,33 @@ Each step measured alone:
 | no seed regressed | `make cohort-landing` (in `make land`) |
 
 
+<!-- plan-archive: archived 2026-10-26 -->
+### T12 Approach (checklist part A)
+
+1. **The goal, in the world.** The same homesteads seated, the reach a candidate seat's homestead takes measured without laying
+   its four garden sides' whole homesteads, fixtures included, at every candidate.
+2. **The constraints.** US4 (R4 goes with the homestead family), FR-003, FR-004, FR-007; feature 297's plan C and research R9:
+   a homestead's parts are rolled at the seat offered, never once per household (keyed on the household, seed 3 seated 9 of 10
+   and its site was refused).
+3. **Where each comes from.** `research/hotspots-recompute.md` R4; `research/t07-homestead-parts.md` (why its direction, one
+   envelope per lot and size, is the withdrawn household-keyed roll).
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
+   task to R4's chains as they stand after T07 (FR-002).
+5. **The order.** After T07, before the ground cover family.
+6. **The exits.** Green: R4's chain at least tenfold down with the per-seat rolls kept, the cohort with no seed regressed, the
+   claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the same layout, asked less often or more cheaply, not a new search.
+8. **The budget.** One landing.
+9. **Done, measured.** R4's chain count before and after from `make perf-fanout`, recorded in `research/`.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the chain re-scoped | `make perf-fanout` (every stage) |
+| R4's chain | its count in `make perf-fanout`, `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+

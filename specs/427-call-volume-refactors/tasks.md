@@ -35,8 +35,9 @@
       research: rendering
 - [ ] T11 The 427-end bookend and the report: SC-002 and SC-003 measured against 427-start (FR-005), make feature-report F=427 WRITE=1
       research: rendering
-- [ ] T12 US4, R4 on its own: household_reach without laying four whole homesteads per candidate, the per-seat rolls kept (feature 297 R9), its chain at least tenfold down (FR-003, US4)
+- [x] T12 US4, R4 on its own: household_reach without laying four whole homesteads per candidate, the per-seat rolls kept (feature 297 R9), its chain at least tenfold down (FR-003, US4)
       research: rendering
+      verify: DONE. landed: R4 4.8x down, arbiter accept (ask:427-T12-r4); pool unchanged
 - [x] GM review (make gm-reviewed F=427) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
