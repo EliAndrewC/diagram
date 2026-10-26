@@ -113,8 +113,9 @@
 - [x] T43 (T41's regression, XIII) `square_every_crossing` restored to the settle's rounds: fresh seed 723805 tied a lane knot without it (bisected to it alone of T41's seven), in `l7r/diagram/hamletgen/ways/`
       research: rendering
       verify: DONE. landed: square_every_crossing restored to STEPS as it stood at T40: fresh seed 723805 (lane_knots) bisected to its removal in T41 alone; with it back seed 723805 and 54 of 54 pass, Inashiro and Sawada back to their pre-T41 drawing order
-- [ ] T44 (T31 C2, arbiter ask:417-T31-C2-regression accept) The access tree drawn first in `stage_web` and `settle_joins` deleted, landed as measured with seed 723775 waived, after the roll census fix, in `l7r/diagram/hamletgen/ways/` (FR-004)
+- [x] T44 (T31 C2, arbiter ask:417-T31-C2-regression accept) The access tree drawn first in `stage_web` and `settle_joins` deleted, landed as measured with seed 723775 waived, after the roll census fix, in `l7r/diagram/hamletgen/ways/` (FR-004)
       research: rendering
+      verify: DONE. landed: settle_tree drawn first in stage_web on a clustered map (a row's streets stay first); settle_joins deleted with its closure and tests; under the round arbiter's accept (ask:417-T31-C2-regression): landing cohort 54 of 54, pool maps pass the gate (Inashiro, Kuwabata, Sawada move), fresh block from seed 723759 7 of 48 before and after (723789 newly green, 723775 newly red - waived, T45); settle_reach's own settle_tree probed off and kept (723790)
 - [ ] T45 (FR-005, ask:417-T31-C2-regression) The needle rule (`law.needle_loops`) asked where `lanes_of` draws a tree lane, so two household ways close no sliver (fresh seed 723775), in `l7r/diagram/hamletgen/ways/tree.py`
       research: rendering
 - [ ] GM review (make gm-reviewed F=417)
