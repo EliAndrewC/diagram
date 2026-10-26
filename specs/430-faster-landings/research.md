@@ -29,7 +29,7 @@
 
 - **Finding** (`m:full-plan-reasons`): 4 the top-level `tests/conftest.py`, 2 `tests/hooks/test-cohort-gate.sh` (a guard suite
   `make hooks-test` runs, no pytest test), 1 `tests/hamletgen/ways/CLAUDE.md`, 1 `tests/tooling/ci/conftest.py`.
-- **And** the fixture data under `tests/` is read across directories: `tests/fixtures/` (56 files) holds no test module of its
-  own, so "the tests of that directory" alone would select nothing for a change there.
+- **And** the fixture data under `tests/` is read across directories (observed 2026-10-26, method: `find tests/fixtures -type f`
+  and a grep of `tests/**/test_*.py` for `fixtures/`): `tests/fixtures/` (56 files) holds no test module of its own, so "the tests of that directory" alone would select nothing for a change there.
 - **So**: a data file selects its own directory's tests AND every test module that names it (its file name or its directory
   under `tests/`), a superset of FR-002's directory - the narrowing FR-009 forbids otherwise (D2).

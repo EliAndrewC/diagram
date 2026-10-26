@@ -252,3 +252,13 @@ unchanged modules stay the gate's (FR-009's narrowing, stated in Assumptions).
   feature does not change. Separately, `m:full-plan-reasons`'s `quantity` ("planned full only for ...") must stop claiming
   "only", because its method reads only the first reason the planner reports. Figures: `make figures` 0 moved, 0 outside band,
   0 not re-measured; `python3 full_reasons.py` prints 11/4/2/1/1 = 19 (on this round's own run).
+- spec-fidelity amendment 1, round 2 (2026-10-26, VERIFY): FAITHFUL. (1) RESOLVED: SC-001 now plans incremental for the 12
+  with no other cause (11 `inashiro.json`, 1 `CLAUDE.md`), full for the 4 top-level `conftest.py` deltas as FR-002 says, and
+  full for the 3 (4678af6c6, 39ea51383, fda3e0e04) by the configuration rule this feature leaves as it is; 12+4+3 = 19, and
+  `git diff --name-only e5788a596 <c>` lists `ci/gate_config.py`, `ci/state.py` and `pipeline/codeid.py` for each of the 3.
+  "Whose planner reason named" matches what `full_reasons.py` reads. (2) RESOLVED: the key's `quantity` now says the first rule
+  that fired, "a reason, not the only cause", and `also_gate_config` names the 3 with how they were found. Nothing the change
+  names contradicts another passage: the grep for SC-001, the key and the 3 commit ids lands only in SC-001, research R1 (the
+  unrelated coverage red 39ea51383) and R3 (the per-file breakdown, no count of incremental), and the earlier Review history.
+  Figures: `make figures` 0 moved, 0 outside band, 0 not re-measured; `python3 full_reasons.py` prints 11/4/2/1/1 = 19 (on this
+  round's own run).
