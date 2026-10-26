@@ -1,0 +1,49 @@
+{
+  "utc": "2026-10-26T19:05:19Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 330,
+  "result": "green",
+  "commit": "2a8e8413d",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10446,
+  "host": {
+    "load": [
+      2.86,
+      4.4
+    ],
+    "mem_avail_mb": [
+      8219,
+      9070
+    ],
+    "cpu_temp_c": [
+      100.0,
+      96.0
+    ],
+    "stall_s": {
+      "cpu": 4.1,
+      "io": 1.1,
+      "io_full": 0.9,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 467084,
+      "package": 184780
+    }
+  },
+  "phases": {
+    "preflight": 13.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "hooks-test": 40.0,
+    "pytest": 272.0,
+    "floors": 9.0,
+    "test-full": 285.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)",
+  "collected": 10446
+}
