@@ -78,8 +78,9 @@ it beside the code; counts are taken only of Python functions, so shapely's and 
 wants. A test rolls one stand-in stage twice and asserts equal counts (deterministic per seed).
 
 **D3 - the call counts are what is watched (FR-006, US5, SC-005).** `perf_review.check`, which the push runs:
-- compares the newest `-start`/`-end` pair's counts seed by seed and stage by stage, the same versions only - a pair on different
-  versions is "not compared", never flagged;
+- compares the newest `-start`/`-end` pair's counts seed by seed and stage by stage; a pair on DIFFERENT versions (an interpreter
+  or library upgrade between them) is not compared and REFUSES the push until a comparable pair exists - the `-start` re-taken on
+  the current versions - or the round arbiter rules on the same `<NNN>-calls` subject; it never passes silently;
 - the line: an increase over `CALLS_STAGE_LINE` (5% in any stage on any seed) or `CALLS_TOTAL_LINE` (2% in the total), both
   GUESS knobs of the design note, the reason beside them;
 - an increase over the line with no round-arbiter accept REFUSES the push, naming `make arbiter-ask SUBJECT=<NNN>-calls
