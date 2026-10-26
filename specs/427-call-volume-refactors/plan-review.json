@@ -44,7 +44,7 @@
    "declared": "spec-fidelity"
   },
   "### T01 Approach (checklist part A)": {
-   "sha256": "cb8eea8708dae1d970ae934ddc690a6e07369d7ce2e7e7fcdd958264c220cbb6",
+   "sha256": "c3fec40bea35fdf3771fdff9fa38cfed681597667a42b25f8d2c644f2b701da4",
    "verdict": "BLOCKED",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
@@ -141,6 +141,105 @@
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
      "why": "Template text from another feature: FR-008 is 'the engine stays in Python', not a landing condition; D11 and D35 exist nowhere in this plan or spec-cited.md; 'placed correctly' and 'fresh rate' are placement/seed-pass language for a tool that changes no stage. As written, the red exit sets T01 down on 'failing seeds'. T01 cannot make a seed regress (FR-007), so the only failing seeds at its landing are ones already failing on HEAD, and request.md 4 ('should not require all seeds to pass if seeds were previously failing') and 5 ('not have a requirement to have all of our seeds pass') exclude exactly that as a reason. It abandons the requested survey on a condition the GM ruled out: not physically necessary, not implied by the GM's words (they say the opposite), not serving the purpose. Fix: green = tests red without D1 and make perf-fanout on the current engine compared with research/fanout-2026-10-26.txt (FR-001, SC-001); red = only a seed passing on HEAD that fails after (FR-007); strike FR-008, D11, D35, 'placed correctly', 'fresh rate'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "### T01 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-order",
+     "summary": "Work order: survey (T01), call-count watch (US5), US2, US3, pairwise families outside the lanes, lane web and law last after feature 417",
+     "class": "within",
+     "why": "Restates the approach the GM approved in request.md 5, in its order."
+    },
+    {
+     "id": "Summary-T01-only",
+     "summary": "The plan holds T01 now; each later task is filed with its own section once the survey has run",
+     "class": "within",
+     "why": "FR-002 requires every engine task to be scoped against the survey's output on the then-current engine; filing them later is that requirement."
+    },
+    {
+     "id": "TechContext-stack",
+     "summary": "Standard library cProfile/pstats/concurrent.futures over perf_profile.profile_stage; report committed in dev/perf-log/, .prof files in gitignored dev/perf-raw/; 100% coverage",
+     "class": "within",
+     "why": "Implementation choices inside FR-001 (the tool as the design note describes, 100% coverage owed); stays in Python (FR-008)."
+    },
+    {
+     "id": "TechContext-diagnostic",
+     "summary": "The survey is a by-hand diagnostic, never a gate",
+     "class": "within",
+     "why": "The gating/flagging role belongs to the call-count watch (US5, FR-006, request.md 4); the survey is the data-gathering tool of request.md 2-3."
+    },
+    {
+     "id": "Bookends-start-at-T02",
+     "summary": "Start bookend make perf LABEL=427-start SCALING=1 taken before the first engine task, not at T01",
+     "class": "within",
+     "why": "T01 changes no stage; FR-005's bookends bracket the engine work, and taking the start before T02 still precedes every engine change."
+    },
+    {
+     "id": "Constitution",
+     "summary": "Constitution check: N/A for content principles; VI, X, XIII pass",
+     "class": "within",
+     "why": "Decides nothing the spec left open."
+    },
+    {
+     "id": "D1-stage-gate",
+     "summary": "D1 prints the multiplier chains only for each stage of 300,000 calls or more at the larger size",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "SC-001 (cited in full) requires the output to list EVERY chain of 50k+ calls with its anchor, and the plan's own Performance Goals restates that, but D1's stage gate cannot reach a function called 50,000-299,999 times in a stage whose total is under 300,000: such a chain is never printed. The GM named this range himself (request.md 2: 'hundreds of thousands or millions of times'), and FR-002 scopes every engine task against this output, so a skipped chain is a hotspot no task is ever scoped against - the gate defeats the survey's purpose. Walking every stage is not impossible, the GM's words do not imply the gate, and 'kept as written there' in the design note does not override SC-001. Fix: the stage gate becomes HOT (any stage holding a non-builtin function called HOT or more times at the larger size gets its chains), or there is no stage gate; the walk itself stays as written. If the author holds that the 300,000 gate is right, that is a spec amendment of SC-001 for the GM's review, not a plan decision."
+    },
+    {
+     "id": "D1-JOBS-default",
+     "summary": "JOBS defaults to 3 rather than the design note's 5, citing the shared memory cap",
+     "class": "within",
+     "why": "An overridable concurrency default; it changes nothing the tool reports. Its memory figures carry date and method (the memory watch, 2026-10-26)."
+    },
+    {
+     "id": "D1-testing",
+     "summary": "Analysis tested on synthetic pstats data, the profiling seam stubbed as perf_profile's tests do; a row in tools/CLAUDE.md",
+     "class": "within",
+     "why": "How FR-001's 100% coverage is met, and the design note's documentation row; no scope change."
+    },
+    {
+     "id": "D1-land-route",
+     "summary": "Lands through make land, not the make land-tooling route the design note names, because a module under l7r/ is engine by ci/delta.is_engine",
+     "class": "within",
+     "why": "FR-001's 'lands as tooling on its own' serves landing the survey by itself before any engine change; the plan keeps that (one landing, no stage changed, before T02). The GM's request names no landing route, make land is the stricter route, and the design note's own file location under l7r/ is what closes the tooling route. Nothing the GM gets is narrowed."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green: tests red without D1 and make perf-fanout compared with research/fanout-2026-10-26.txt; red: a red test or a seed passing on HEAD failing after (FR-007), recorded and the task set down, a cannot-be-done claim ruled through make arbiter-ask; a seed already failing on HEAD is no exit",
+     "class": "within",
+     "why": "Resolves the earlier block's misplaced FR-008 citation and seed-exit boilerplate: it now cites FR-001/SC-001 and FR-007, and 'a seed already failing is no exit' carries request.md 4 ('should not require all seeds to pass if seeds were previously failing') and 5."
+    },
+    {
+     "id": "T01-done",
+     "summary": "Done measured: tests red without D1; make perf-fanout on the current engine lists the chains, compared with research/fanout-2026-10-26.txt",
+     "class": "within",
+     "why": "Verification of FR-001/SC-001 and the FR-002 re-run on the current engine."
+    },
+    {
+     "id": "Structure",
+     "summary": "Files: l7r/diagram/tools/perf_fanout.py, tests/tools/test_perf_fanout.py, Makefile target, tools/CLAUDE.md row; feature docs layout",
+     "class": "within",
+     "why": "The design note's module, target and row; nothing beyond FR-001."
     }
    ]
   }

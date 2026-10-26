@@ -53,7 +53,9 @@ T01 changes no stage. The start bookend, `make perf LABEL=427-start SCALING=1`, 
   pair once through `perf_profile.profile_stage`, the pairs side by side in `JOBS` worker processes;
 - per stage it prints the total Python-level calls at each size and the growth exponent, `log2` of the larger size's calls
   over the smaller's;
-- for each stage of 300,000 calls or more at the larger size it prints the multiplier chains by the reference walk, kept as
+- for every stage holding a non-builtin function called `HOT` times or more at the larger size - no floor on the stage's
+  own total, so a 100,000-call chain in a small stage is listed (SC-001: every chain of 50,000 calls or more; the design note's
+  300,000-call stage floor is dropped) - it prints the multiplier chains by the reference walk, kept as
   written there (from each non-builtin function called `HOT` times or more, up the caller edge giving the most calls, a lambda
   or comprehension reached only through a builtin stepping to the `def` that encloses it, stopping at an ancestor called 300
   times or fewer), grouped by anchor;
