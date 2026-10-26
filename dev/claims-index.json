@@ -36625,6 +36625,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/tree.py::lanes_of#a cut lane not asked again": {
+  "body": "c34350c0673b3065",
+  "claim": "a cut lane not asked again - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); a drawn lane cut back onto a newer one is not asked again against those before it - a needle its tee closes with them is the law's to refuse",
+  "code": "9fbd33635245993e",
+  "core": "a4906ab0ee9c54ec",
+  "date": "2026-10-26",
+  "note": "the code cuts an earlier lane only against the new lane (`off_the_needle(ln[\"pts\"], [rec[\"pts\"]])`). 0081 says to cut where a lane comes alongside, but says nothing about checking a cut lane again, so GUESS is the right label.",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lane tread by role": {
   "body": "baa9038b76b09baf",
   "claim": "tree lane tread by role - village-lanes.drawing: house access 3 ft",
@@ -36643,16 +36654,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lanes assembled": {
-  "body": "5ef08e1c13574297",
+  "body": "c34350c0673b3065",
   "claim": "tree lanes assembled - NONE: the runs squared and set on their hosts as the web draws them, each then asked the needle rule (`off_the_needle`)",
-  "code": "7e2f8eeff1c9b23a",
-  "core": "f3c88b06930e37a4",
-  "date": "2026-10-25",
-  "note": "plumbing; the physical choice belongs to off_the_needle's own claims",
+  "code": "4fbfd028e5247541",
+  "core": "a4906ab0ee9c54ec",
+  "date": "2026-10-26",
+  "note": "this is assembly and plumbing. Tread width belongs to lane_record's claim, which lane is cut belongs to the \"which way is cut\" claim, and squaring belongs to settle.square_run.",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#which way is cut": {
@@ -36675,14 +36685,28 @@
  },
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a lane beside the other its whole length": {
   "body": "1ac8298f265a6d33",
-  "claim": "a lane beside the other its whole length - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); left as drawn for the law to refuse, no stretch of it standing off to cut back to",
-  "code": "5b8120cea350af2d",
+  "claim": "a lane beside the other its whole length - village-lanes.drawing: two paths side by side are drawn as one - where no stretch of the lane stands off the other to cut back to, it is left for the lane law (`law.needle_loops`) to refuse, so the doubled way never ships",
+  "code": "3de0b891f1b5e42e",
   "core": "fbdd435630095442",
-  "date": "2026-10-25",
-  "note": "the record is not silent here: §25 says \"Two paths running side by side are drawn as one\", and this unit's own claim \"the doubled way drawn as one\" cites that block. The code (`at <= 0.0` -> `continue`) leaves both lanes drawn and leaves the refusal to the law. The claim should cite 0081 and say how the law's refusal keeps a doubled way off the map. If the code means to depart from §25, it should be a DEVIATION that the drawing page records, and the page records none",
-  "pages": {},
+  "date": "2026-10-26",
+  "note": "when `at <= 0.0` the lane is left as drawn for the law to refuse. That fits 0081, which says a household's way is cut \"at its far end, never at its door\". A lane running alongside its whole length has nowhere to be cut except at its door, so no doubled way is drawn.",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a lane that closes a needle while its end stands off the other way (`at >= mine.length`) is left as drawn for the law to refuse, not cut. 0081 §25 says a lane that \"wanders over another way at such an angle\" is cut where it comes alongside.": {
+  "code": "fbdd435630095442",
+  "core": "fbdd435630095442",
+  "date": "2026-10-26",
+  "note": "a lane that closes a needle while its end stands off the other way (`at >= mine.length`) is left as drawn for the law to refuse, not cut. 0081 §25 says a lane that \"wanders over another way at such an angle\" is cut where it comes alongside.",
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a needle left where the tee would close one": {
   "body": "1ac8298f265a6d33",

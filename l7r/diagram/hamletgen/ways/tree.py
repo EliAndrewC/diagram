@@ -131,6 +131,7 @@ def lanes_of(M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequ
         tree lane tread by role - research/questions/0081-village-lanes.drawing.html: house access 3 ft
         tree lanes assembled - NONE: the runs squared and set on their hosts as the web draws them, each then asked the needle rule (`off_the_needle`)
         which way is cut - research/questions/0081-village-lanes.drawing.html: the lane whose end runs back along another way is cut where it comes alongside - each new lane against those drawn and the connector, then each drawn lane against the new one; the connector is never cut
+        a needle closed away from the lane's end - research/questions/0081-village-lanes.drawing.html: a lane that wanders over another way at a needle's angle is cut where it comes alongside - only a lane's tail is cut here, a needle closed mid-lane left for the law to refuse, a departure the code keeps until feature 417 T32
         a cut lane not asked again - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); a drawn lane cut back onto a newer one is not asked again against those before it - a needle its tee closes with them is the law's to refuse"""
     raw_sq = square if square is not None else (lambda run: square_run_of(M, run))
     waters = square_waters_of(M)
@@ -157,7 +158,7 @@ def off_the_needle(pts: Sequence[Any], drawn: Sequence[Sequence[Sequence[float]]
     """`pts`, a tree lane, ended on a way already drawn rather than run on beside it - the NEEDLE RULE asked where the lane is
     laid (feature 417 T45, `law.is_needle`): where the lane and one drawn before it bound a needle of grass, the lane is cut where its
     tail first comes within half the needle's width of that way (walked back from its end, every 2 ft), and carried onto that
-    way's tread there - a tee. Fresh seed 723775 drew
+    way's line there - a tee. Fresh seed 723775 drew
     two households' ways onto the connector's start, the one's last leg 7 ft beside the other's, a 3 ft sliver between them.
     Left as it was where no needle is closed, or where the tee would still close one.
 
