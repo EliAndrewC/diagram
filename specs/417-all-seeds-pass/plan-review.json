@@ -198,6 +198,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T45 Approach (checklist part A)": {
+   "sha256": "416c69b6ce692c51aa6ee8fe16006d6db0d480401dc1a1fd330b4bd008209814",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3073,6 +3079,39 @@
      "summary": "Rendering: none",
      "class": "within",
      "why": "No render change is asked or made; D11 says Rendering: none."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T45 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T45-1/7",
+     "summary": "The needle-loop rule (law.needle_loops), asked today only of a finished map, is asked by the lane placer (lanes_of via off_the_needle): a way that would run on beside another to a shared end ends on that way instead.",
+     "class": "within",
+     "why": "This is an FR-005 conversion, a finished-map rule moved into the placer that could break it. It is exactly what the GM's 2026-10-25 stop line (D11) asks to be finished: 'turning off automated checks, and then replacing them with just having the algorithm place correctly in the first place'. The behavior change rests on research (R: 0081), which the GM's next-morning amendment allows ('Changing behavior is fine as long as it is in line with our research')."
+    },
+    {
+     "id": "T45-5",
+     "summary": "Ordered after T44 as its own task, not iterated inside C2.",
+     "class": "within",
+     "why": "D11 says a conversion that cannot land green is set down, never iterated on. Splitting the work out of C2 honors that rather than narrowing it."
+    },
+    {
+     "id": "T45-6/8",
+     "summary": "Exits: land when FR-008 is green, with the fresh rate recorded; set down when red; a budget of one landing.",
+     "class": "within",
+     "why": "This is D11's landing rule word for word: land through make land when FR-008 holds, record the fresh rate either way, set down rather than iterate. The fresh rate is recorded and not aimed at (7 of 48, the same seven), so this is not the fresh-rate work D11 forbids."
+    },
+    {
+     "id": "T45-10",
+     "summary": "law.NEEDLE_LOOP_FT (20 ft, marked a CONVENTION) is kept unchanged. The placer asks the law's own predicate (law.is_needle) and reach (NEEDLE_LOOP_FT/2), so there is one implementation.",
+     "class": "within",
+     "why": "No constant moves, and the value stays marked as a convention, which is what the GM asked for arbitrary numbers. One implementation shared by the placer and the finished-map check is SC-003 and the 'rule coded twice' clause of D11."
     }
    ]
   }

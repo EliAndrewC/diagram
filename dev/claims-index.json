@@ -36307,6 +36307,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/tree.py::_point#access tree plumbing": {
+  "body": "9e5b545e589c9904",
+  "claim": "access tree plumbing - NONE",
+  "code": "95fbacb875104f79",
+  "core": "fc732e2bff04dbef",
+  "date": "2026-10-25",
+  "note": "builds a shapely Point; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/tree.py::_pt#access tree plumbing": {
   "code": "67c20f9a377aadd1",
   "core": "18ea38df8a72a402",
@@ -36631,15 +36643,59 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lanes assembled": {
-  "body": "baa9038b76b09baf",
+  "body": "5ef08e1c13574297",
   "claim": "tree lanes assembled - NONE: the runs squared and set on their hosts as the web draws them",
-  "code": "3825bc7ee635ba1c",
-  "core": "032f2d2d4505ff2b",
-  "date": "2026-10-18",
-  "note": "assembly only; the squaring rule belongs to settle.square_run",
+  "code": "9ba9ad199a7c3568",
+  "core": "f3c88b06930e37a4",
+  "date": "2026-10-25",
+  "note": "assembly only; the needle cut it now calls is decided and claimed in off_the_needle",
   "pages": {},
   "research": "",
-  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::lanes_of#which of two side-by-side ways is cut: the later lane in `chosen` order is cut against the lanes already in `out`, and the root/connector is never passed as a way to tee onto": {
+  "code": "f3c88b06930e37a4",
+  "core": "f3c88b06930e37a4",
+  "date": "2026-10-25",
+  "note": "which of two side-by-side ways is cut: the later lane in `chosen` order is cut against the lanes already in `out`, and the root/connector is never passed as a way to tee onto",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a doubled way left drawn side by side where the tee would still close a needle (`if len(tee) >= 2 and not closes(tee)`); §25 makes no such exception": {
+  "code": "fbdd435630095442",
+  "core": "fbdd435630095442",
+  "date": "2026-10-25",
+  "note": "a doubled way left drawn side by side where the tee would still close a needle (`if len(tee) >= 2 and not closes(tee)`); §25 makes no such exception",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#its reach": {
+  "body": "1ac8298f265a6d33",
+  "claim": "its reach - CONVENTION: half of `law.NEEDLE_LOOP_FT`, the needle's own width, a map drawing convention - 2.0 (the walk's step)",
+  "code": "ad4443c6c88becaa",
+  "core": "fbdd435630095442",
+  "date": "2026-10-25",
+  "note": "`reach = law.NEEDLE_LOOP_FT / 2.0` (10 ft) decides where the lane is cut and where the tee stands on the map. That is a placement, not how something is shown. The page's \"cut it where it comes alongside\" gives no distance, so the label should be GUESS research/questions/0081-village-lanes.drawing.html until that page records the 10 ft, as it records its other limits",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#the doubled way drawn as one": {
+  "body": "1ac8298f265a6d33",
+  "claim": "the doubled way drawn as one - village-lanes.drawing: two ways side by side are drawn as one",
+  "code": "855ee18bbde96557",
+  "core": "fbdd435630095442",
+  "date": "2026-10-25",
+  "note": "a lane whose tail runs beside an earlier way is cut at its far end, never its door, and tees onto that way's tread, as \"cut it where it comes alongside and let it meet the other as a T\" says; the trigger is law.is_needle, which the bundle does not show, but lane_record's \"19.9 degree needle\" fits the page's \"less than 20 degrees\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::others_clear#nothing built on a lane": {
