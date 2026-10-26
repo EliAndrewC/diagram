@@ -130,6 +130,24 @@ regression (seed 723775). Which governs a fresh seed that newly fails while the 
 arbiter (`make arbiter-ask`), asked next session before landing - not iterated on here. Either way, the needle rule asked of a
 tree lane where `lanes_of` draws it (`law.needle_loops`, FR-005) is its own conversion task, filed and decided on its own account.
 
+### T44 part B (2026-10-26T03:16Z)
+
+The trigger: two red gates in a row on T44's landing (red-gate@2026-10-26T03:11:45Z; the round arbiter ruled continue).
+
+1. **What exactly is refusing?** Two different things, neither T44's code: a stale notes census on Inashiro
+   (`tests/test_notes_census.py`, the census block written before the map moved), then
+   `tests/tooling/test_tick_task.py::test_the_changed_modules_coverage_runs_beside_the_gate_and_stops_it`, which read the
+   landing's own `COVER_OK` escape from its environment and so found the check it tests never started.
+2. **A3 again.** O: both are tooling's rules, not research.
+3. **A4 again.** The census rule holds (a moved map's census is rewritten); the test's rule holds once it owns its environment.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: two separate fixes, each once.
+6. **The one-sentence test.** "The landing's escape leaked into a test of that escape" - no question it raises.
+7. **The next step is a measurement.** `make land` again: the census refreshed (`make notes-census`), the test clearing
+   `COVER_OK` (landed on main as tooling).
+8. **Routes measured?** One route, the arbiter's ruling.
+9. **After a ruling.** The step it names: `make done` once more.
+
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
