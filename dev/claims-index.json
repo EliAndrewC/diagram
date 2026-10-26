@@ -25023,10 +25023,12 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/bund.py::carry_on#a junction stays a T": {
-  "code": "d7b528b1ce425fef",
-  "core": "3d32bf7b6eca4e14",
-  "date": "2026-10-08",
-  "note": "one network, a T at the meeting point",
+  "body": "e1c43103ea37d76e",
+  "claim": "a junction stays a T - how-our-maps-lay-a-clustered-settlements-lanes.drawing: one network, so the step is its own field path",
+  "code": "4c032d152a3a0384",
+  "core": "e77b42efbfd9c1c9",
+  "date": "2026-10-26",
+  "note": "at a junction the step is laid as its own spur, joined at a T, so the lanes stay one network",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -25035,18 +25037,26 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/bund.py::carry_on#a step carried on to the bund crosses the brook wherever it falls (squared, but not moved to a crossing place); 0035 §7 says \"A way crosses the water only at one of them\"": {
-  "code": "e77b42efbfd9c1c9",
+ "l7r/diagram/hamletgen/ways/bund.py::carry_on#square at the water, as laid": {
+  "body": "e1c43103ea37d76e",
+  "claim": "square at the water, as laid - villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T50)",
+  "code": "4b13abe426927b52",
   "core": "e77b42efbfd9c1c9",
   "date": "2026-10-26",
-  "note": "a step carried on to the bund crosses the brook wherever it falls (squared, but not moved to a crossing place); 0035 §7 says \"A way crosses the water only at one of them\"",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "`square_run` is applied both to the junction step and to the lengthened lane, so each crosses water square",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
+  },
+  "research": "4286351e944ac920",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped field path width": {
   "code": "9d3f44eb0f18c0c8",
@@ -25081,6 +25091,22 @@
   ],
   "triaged": "2026-10-26",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/bund.py::carry_on#the brook crossed where the step falls": {
+  "body": "e1c43103ea37d76e",
+  "claim": "the brook crossed where the step falls - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the water only at a crossing place - a step carried on to the bund crosses the brook wherever it falls (squared, not moved to a crossing place), a departure the code keeps until feature 417 T32",
+  "code": "84a49c310f417a80",
+  "core": "e77b42efbfd9c1c9",
+  "date": "2026-10-26",
+  "note": "known (417 T32): `squared_step` and `square_run` square the step where it falls and never move it to a crossing place, against \"A way crosses the water only at one of them\"; the code does what the claim says",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+  },
+  "research": "9354777ef34af3d3",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/bund.py::off_the_fixtures#off the fixtures": {
   "code": "f7886542e133acf2",
@@ -35168,57 +35194,56 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#connector width": {
-  "body": "7387cedc8d9d7edc",
+  "body": "9c601658aaebaecb",
   "claim": "connector width - village-lanes.drawing: the track out 6 ft (`CONNECTOR_WIDTH`), valley and polder alike",
-  "code": "e2d4323e84acedaa",
-  "core": "f4a4428fded3de21",
-  "date": "2026-10-22",
-  "note": "CONNECTOR_WIDTH 6 ft, valley and polder",
+  "code": "fe923401ccd0c44f",
+  "core": "1b96763703065a9c",
+  "date": "2026-10-26",
+  "note": "`CONNECTOR_WIDTH` is 6 ft on the polder, valley and row-road branches alike",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
-   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance": {
-  "body": "7387cedc8d9d7edc",
-  "claim": "lane clearance - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle keeps 7 ft clear of a garden fence; the connector and spur keep `LANE_CLEARANCE`, 7 ft from the lane's middle, a footprint held to it at its corners",
-  "code": "34c7720a6515d142",
-  "core": "c754c9fe20a85aa6",
-  "date": "2026-10-22",
-  "note": "LANE_CLEARANCE 7 ft from the lane's middle for the connector and spur, which belong to no household",
+  "body": "9c601658aaebaecb",
+  "claim": "lane clearance - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane's middle keeps 7 ft clear of a garden fence; the connector keeps `LANE_CLEARANCE`, 7 ft from the lane's middle, a footprint held to it at its corners",
+  "code": "6f3a3f6c3ce0ad06",
+  "core": "1b96763703065a9c",
+  "date": "2026-10-26",
+  "note": "every connector is laid with `clearance=LANE_CLEARANCE`, 7 ft, the page's lane-middle gap and its margin for a track outside the cluster",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
   ],
-  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#lanes after the farmhouses": {
-  "code": "58938768c6f16312",
-  "core": "c754c9fe20a85aa6",
-  "date": "2026-10-09",
-  "note": "the connector and spur are laid in this stage, after every house is seated; _fabric_now is read after the houses stand",
+  "body": "9c601658aaebaecb",
+  "claim": "lanes after the farmhouses - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the connector drawn after every house",
+  "code": "7f4ba9fcb6107ae2",
+  "core": "1b96763703065a9c",
+  "date": "2026-10-26",
+  "note": "the connector is laid in this stage, after every house is seated; the track out is no Imperial road, so the page's exception does not apply",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
-  "triage": "touched",
-  "triaged": "2026-10-26",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#row road": {
-  "code": "f2518596d68336e8",
-  "core": "f4a4428fded3de21",
+  "code": "259774624afd6b1b",
+  "core": "1b96763703065a9c",
   "date": "2026-10-09",
   "note": "the street runs on off the map at both ends, and the far end is marked run_on",
   "pages": {
@@ -35234,8 +35259,8 @@
  "l7r/diagram/hamletgen/ways/track.py::stage_track#row road over the brook at a ford": {
   "body": "324f4f084a043ed2",
   "claim": "row road over the brook at a ford - villages-beside-their-stream-one-bank-or-both.drawing: the ford that makes the walk shortest, each leg threaded to its landing (`thread_over_the_ford`)",
-  "code": "cba44041250a9b11",
-  "core": "f4a4428fded3de21",
+  "code": "b5f6467d6de7539b",
+  "core": "1b96763703065a9c",
   "date": "2026-10-26",
   "note": "ford_crossing, then thread_over_the_ford threads each leg to its landing, then the run is squared",
   "pages": {
@@ -35250,10 +35275,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#row road width": {
-  "code": "49c6b8a63a01748e",
-  "core": "f4a4428fded3de21",
-  "date": "2026-10-09",
-  "note": "width=6 is the street's 6 ft",
+  "body": "9c601658aaebaecb",
+  "claim": "row road width - row-villages-resson.drawing: 6 ft",
+  "code": "db499b719ff55ebf",
+  "core": "1b96763703065a9c",
+  "date": "2026-10-26",
+  "note": "the row road is laid at `CONNECTOR_WIDTH`, 6 ft, the page's street width",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
@@ -35261,16 +35288,15 @@
   "rests": [
    "0033-row-villages-resson.drawing.html:64088e4ad721724e"
   ],
-  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#square at the water, as laid": {
-  "body": "324f4f084a043ed2",
-  "claim": "square at the water, as laid - villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)",
-  "code": "080c2f8535ed38fd",
-  "core": "c754c9fe20a85aa6",
+  "body": "9c601658aaebaecb",
+  "claim": "square at the water, as laid - villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing: a way crosses the brook or a ditch square - the row road squared here as laid (`square_run`, feature 417 T49); the valley and polder connector as chosen and threaded (`choose_track_out`, `_connector_through`, which square it)",
+  "code": "09f7484ce331f5f8",
+  "core": "1b96763703065a9c",
   "date": "2026-10-26",
-  "note": "the spur and both runs of the row road are squared where laid; the connector is squared through choose_track_out",
+  "note": "the row road is `square_run` over the run threaded across the ford; the valley and polder connectors are handed on as `choose_track_out` chose them",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
@@ -35282,12 +35308,11 @@
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#track off the map": {
-  "code": "80d5aeee21ce77d4",
-  "core": "f4a4428fded3de21",
+  "code": "d98c87f8d8b72af2",
+  "core": "1b96763703065a9c",
   "date": "2026-10-09",
   "note": "the connector runs to the frame",
   "pages": {
@@ -35302,12 +35327,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#track off the wet": {
-  "body": "7387cedc8d9d7edc",
+  "body": "9c601658aaebaecb",
   "claim": "track off the wet - village-lanes.drawing: the toe band and every drawn marsh are wet",
-  "code": "5282f5c17e432aa7",
-  "core": "c754c9fe20a85aa6",
-  "date": "2026-10-22",
-  "note": "the spur is clipped off the toe band and the marsh; the connector and the row road are walled by them",
+  "code": "b7ae7caeca4643ee",
+  "core": "1b96763703065a9c",
+  "date": "2026-10-26",
+  "note": "the toe band and every role of `marsh_ground` are walled in `choose_track_out` and in `_thread_the_fabric`, through which the row road is threaded",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -35315,9 +35340,32 @@
   "rests": [
    "0081-village-lanes.drawing.html:48cdd569d493520c"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::stage_track#track out and field way one through-route": {
+  "body": "9c601658aaebaecb",
+  "claim": "track out and field way one through-route - village-lanes.drawing: the spur to the fields and the track out are one through-route - the track lays no spur (feature 417 T50) and the field is reached by the web's way onto the bund or the settle's field way, neither laid as the connector's other end, a departure the code keeps until feature 417 T32",
+  "code": "e279b719daaef130",
+  "core": "1b96763703065a9c",
+  "date": "2026-10-26",
+  "note": "known (417 T32): the track lays no field spur, and the field is reached by ways not laid as the connector's other end, against \"The spur to the fields and the track out are one through-route. They are its two ends\"; the code does what the claim says",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:df440690bbce9cb6"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::stage_track#which end of a row road is the way in: the run off the nearer edge is the entrance, and the far run is flagged `run_on`, so the board stands at the nearer end": {
+  "code": "1b96763703065a9c",
+  "core": "1b96763703065a9c",
+  "date": "2026-10-26",
+  "note": "which end of a row road is the way in: the run off the nearer edge is the entrance, and the far run is flagged `run_on`, so the board stands at the nearer end",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/track.py::thread_over_the_ford#crossed at a ford": {
   "body": "60656ba1e0c478d2",
