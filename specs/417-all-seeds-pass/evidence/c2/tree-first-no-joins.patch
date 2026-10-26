@@ -1,0 +1,35 @@
+diff --git a/l7r/diagram/hamletgen/ways/last_resort.py b/l7r/diagram/hamletgen/ways/last_resort.py
+index 0e9283066..f6179cad2 100644
+--- a/l7r/diagram/hamletgen/ways/last_resort.py
++++ b/l7r/diagram/hamletgen/ways/last_resort.py
+@@ -162,9 +162,7 @@ def last_resort(s: Any) -> int:
+             dropped += len(bad)
+             settle_network(s)
+         for step in (
+-            settle_joins,
+             settle_reach,
+-            settle_joins,
+             settle_knots,
+             settle_defer,
+             settle_network,
+diff --git a/l7r/diagram/hamletgen/ways/web/stage.py b/l7r/diagram/hamletgen/ways/web/stage.py
+index 2e5e64f2b..0ed482de7 100644
+--- a/l7r/diagram/hamletgen/ways/web/stage.py
++++ b/l7r/diagram/hamletgen/ways/web/stage.py
+@@ -30,6 +30,7 @@ from ..geom import polyline_len
+ from ..serve import _lay_web_lane, lay_door_paths
+ from ..settle import settle_the_web
+ from ..street import lay_row_streets
++from ..tree import settle_tree
+ from ..sweeps import (
+     _join_orphan_ways,
+     _sweep_dangling_ends,
+@@ -159,6 +160,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
+     # A ROW VILLAGE WITH PLANNED STREETS lays those, not a skeleton and cuts sized on the house cloud (feature 291 plan
+     # D17): the streets are laid below, once the steadings' fabric is known, and the stragglers and door paths still run.
+     _rows = plan.settlement_form == "linear" and bool(getattr(s, "_row_streets", None))
++    _pass("tree")
++    settle_tree(s)  # PROBE (feature 417 T31 C2): the households' ways first, so the web is laid onto them
+     _pass("skeleton")
+     if not _rows:
+         _lay_skeleton(s, plan, frame, arcs, stands)
