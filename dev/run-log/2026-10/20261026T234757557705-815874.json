@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-26T23:47:57Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 197,
+  "result": "green",
+  "commit": "6015b1eb9",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10063,
+  "host": {
+    "load": [
+      2.52,
+      6.21
+    ],
+    "mem_avail_mb": [
+      7575,
+      8085
+    ],
+    "cpu_temp_c": [
+      81.0,
+      92.0
+    ],
+    "stall_s": {
+      "cpu": 1.6,
+      "io": 0.4,
+      "io_full": 0.4,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 6096,
+      "package": 3333
+    }
+  },
+  "phases": {
+    "preflight": 46.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 179.0,
+    "floors": 11.0,
+    "test-full": 193.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/tools/pack_audit/shared.py",
+  "collected": 10063
+}
