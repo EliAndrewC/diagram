@@ -126,3 +126,8 @@
 
 **D166 - the 22 judged.** Doing something: a tool of the fix has interventions net of its likely misfires since it was made. Doing nothing: its tools have outcome records, 7 days or more of them since, and no intervention net of misfires. Too new to say: under 7 days since. No outcome record: a tool whose record cannot show an outcome is never judged doing nothing - the line says the record is missing. Record too new: a fix older than 7 days whose tools began recording under 7 days ago (this feature's new records) reads that, never doing nothing. Each fix takes the first that holds, in this order, so none falls through: too new to say (the fix under 7 days old); doing something (any of its tools with interventions net of misfires); no outcome record (any tool without one); record too new (any tool's record under 7 days); doing nothing. Each line cites the numbers; the file is written by hand from T06's output and reviewed with the feature.
 
+<!-- plan-archive: archived 2026-10-26 -->
+### T09 (the 22 judgments of T07 read "too new to say": each fix was made 10-17..19 and is readable from 10-24..26)
+
+- **Approach**: re-run `make fix-yield F=385` after 2026-10-26 and replace each "too new to say" in `fix-judgments.md` with the fix's tools and numbers since it was made, and a judgment citing them. No engine or tooling change.
+
