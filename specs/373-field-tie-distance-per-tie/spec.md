@@ -2,9 +2,7 @@
 
 **Created**: 2026-10-10
 
-**Status**: Filed - found by feature 328's landing pair (its perf-audit, round 4, 2026-10-10); not requested by the GM, so
-filed rather than carried in feature 372. Rewriting this into a full spec, a plan and tasks is the work of whoever picks it
-up (`/speckit-specify` on this directory); until then `make speckit-todo` lists it as filed.
+**Status**: Superseded by 427 - the GM folded it into feature 427 on 2026-10-26 ("Since feature 373 overlaps this, then I think we should just fold it into this feature", `specs/427-call-volume-refactors/request.md` 4); its finding is R8 of `specs/427-call-volume-refactors/research/hotspots-recompute.md`. Filed 2026-10-10 from feature 328's landing pair (its perf-audit, round 4).
 
 **Affects**: hamlet, performance
 

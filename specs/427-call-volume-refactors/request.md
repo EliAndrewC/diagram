@@ -19,3 +19,17 @@ Follow-up: "Yes, please go ahead, but let's not do the prototype just yet. We'll
 ## 3. File it, do not work it
 
 > Okay, yeah, I think I would like you to write all of this up as its own feature. I don't want you to actually perform the feature, but I want all of the details that are needed for a future session to work this, like all of your findings, the suggested tooling change for the make target for the performance fanout, and basically everything that we have figured out here to be captured in the feature directory somewhere. You know, there could be multiple different files that talk about the different things. Because I don't just want one super long file that has all of this necessarily, because that's token inefficient, but you know, just as long as everything is captured in that feature directory and then referenced in the specification so that the future session knows where to look to find each piece, then that would be good. And then once I'm in a place to actually work on that, then we can do that.
+
+## 4. Decisions on the session's suggestions (2026-10-26)
+
+> Are those suggestions for me to consider already recorded in the feature itself?
+>
+> Also, I think that recording call counts alongside the timings might actually be not going far enough, because one of our problems with timings has been that it is difficult to take consistent timings, because which processor we were using and what the current system load is really throws them off. So I think that recording the timings themselves has been tricky and not really done what we needed it to do. So I wonder if the thing that we should actually do is to, I guess, keep recording the timings, but completely stop using timings as a gate on anything. Like, we should no longer have any rules around what kind of timing increase we permit without it flagging something. Instead, we should do as you say and record call counts alongside the timings, but the call counts themselves are the thing that we are gating on, because as you say, that is consistent. And so that flag would replace the timing band Though, as you say, it would not necessarily be a gate, but rather something that would need to be accepted by the arbiter and possibly raised to my attention if it is increasing by too much. But this is the kind of thing that I would expect the arbiter to be able to handle without me.
+>
+> Since feature 373 overlaps this, then I think we should just fold it into this feature.
+>
+> This feature should not require all seeds to pass if seeds were previously failing, as we already have a different feature which exists specifically to get all seeds passing.
+>
+> When I talk about staying in Python, what I am basically expressing is that I do not believe that we need to rewrite everything in Rust. However, if switching away from shapely and numpy is something that we analyze and find would be better, then we can certainly do that. I don't currently see any reason to do that, because as far as I know, these libraries are fairly efficient. And I don't believe that there is like a high performance version of NumPy that is somehow better than NumPy, which already writes all of its critical path code in C, as I understand it. But it is certainly not a hard requirement that we continue using those particular libraries.
+>
+> please update the new feature 427 to make sure that all of these suggestions are incorporated, both the suggestions that you have made and my refinements of them. Thank you.
