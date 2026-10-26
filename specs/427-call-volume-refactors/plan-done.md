@@ -70,3 +70,20 @@
 10. **Before moving a constant.** n/a
 11. **Before fitting things into room.** n/a
 
+<!-- plan-archive: archived 2026-10-26 -->
+### T05 Approach (checklist part A)
+
+1. **The goal, in the world.** The same shared wells, seated without re-ranking every seat against every household per well.
+2. **The constraints.** D5; FR-003, FR-004, FR-007, US3.
+3. **Where each comes from.** The GM 2026-10-26, `request.md` 1 and 5; `research/hotspots-recompute.md` R1,
+   `research/survey-t01.md`.
+4. **Do they describe the world here?** Yes: lane_wells is the largest stage of the T01 survey of this engine (`research/survey-t01.md`).
+5. **The order.** After T04, the order the GM approved (`request.md` 5).
+6. **The exits.** Green: the lane_wells chain under US3's bound, the cohort with no seed regressed. Red: what failed recorded and
+   the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the sort's own key, computed at once.
+8. **The budget.** One landing.
+9. **Done, measured.** US3's test: the lane_wells chain's count and the slowest seed's lane_wells time.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
