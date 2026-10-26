@@ -28,7 +28,7 @@ OVERLAP_SHARE: float = 0.30
 # The coverage band: the record's "~37-42%" (research/contents.json#compounds, the packing entry) is the page's
 # own measurement of jin'ya plans with no readable source, and the same entry gives Takayama at ~33%
 # built (1,000 of 3,000 tsubo) as a figure that rests on no page read. Both are the page's own; the
-# FLOOR is that 33 and the ceiling the page's 42 with two points for a rule written with a tilde. Hayakawa ships at 35% with every building at its
+# FLOOR was that 33 (30 since feature 372 wave 105, below) and the ceiling the page's 42 with two points for a rule written with a tilde. Hayakawa ships at 35% with every building at its
 # size-audited footprint (the audit of 2026-07 shrank four laundered sizes AFTER the entry called it
 # 37-38%): inside the attested spread, so the exact 37 was the check's defect, not the sheet's
 # (feature 254 T06/T08, plan D9); the entry's stale sentence is corrected in the same work.
@@ -239,11 +239,11 @@ def viewbox_cropped(text: str, plan: ParsedPlan, max_margin_px: float = CROP_MAX
 
 #: the fix the coverage check names (feature 433 D3, the GM 2026-10-26: "whatever other changes need to be made should be made
 #: in order to make the whole thing correspond to our research"): a smaller wall never hides slack, but when the research sizes a
-#: magistracy's house - Hayakawa's cut from ~145 to ~65 tsubo left it at 26% - the envelope, a number no page measures, follows
-#: the house into the band. The check is the magistracy's alone (registry.py), so the amendment reaches no other sheet type.
+#: magistracy's house - Hayakawa's cut from ~145 to ~65 tsubo left it at 26% - a wall moved in to bring it into the band is a
+#: DEVIATION recorded on 0116's drawing page with its reason and who chose it. The check is the magistracy's alone (registry.py), so the amendment reaches no other sheet type.
 COVERAGE_FIX = (
     "consolidate loose slack or add a program building below it; never shrink the envelope to hide slack - only when the "
-    "research sizes the house does the envelope follow it into the band (feature 433)"
+    "research sizes the house does the envelope follow it into the band, a DEVIATION recorded on 0116's drawing page (feature 433)"
 )
 
 

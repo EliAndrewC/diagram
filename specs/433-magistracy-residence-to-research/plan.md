@@ -48,12 +48,14 @@ guess is labeled. Occasion: building-review (a sheet revised).
 
 ### T01 Decisions
 
-- **D1** The house is about 65 tsubo, about 2,320 sq ft, the top of research/questions/0091's range a GUESS for the RICH
-  knob: the west block 36 x 25.3 ft and the east block 27.3 x 25.3 ft (GUESS, their split), the corridor, the 24 x 18 ft
+- **D1** The house is about 65 tsubo, about 2,330 sq ft, near the top of the range below, a GUESS for the RICH knob
+  (amended after impl-drift, 2026-10-26, which found the old citation of the Kuchiba and Matsue houses DRIFTED): the west block 36 x 25.3 ft and the east block 27.3 x 25.3 ft (GUESS, their split), the corridor, the 24 x 18 ft
   kitchen and the 18 x 12 ft bath (unchanged, GUESS on research/questions/0091's drawing page, which counts the kitchen in the
-  house, as R1 counts the bath). The range is 0091's: 49 tsubo for a 150-koku district magistrate, 41-74 tsubo by the two measures of the
-  Kuchiba house of a 1,000-koku retainer; the Matsue 67 tsubo is not used as a measure (0091's drawing page). The top of the
-  range for Hayakawa's RICH posting is a GUESS: no page ties a house's size to its holder's wealth. Rooms, a GUESS as zones of
+  house, as R1 counts the bath). The range: from the 49-tsubo house of a 150-koku district magistrate that research/questions/0091's drawing
+  page measures the plan against, up to the ~2,400 sq ft senior house research/questions/0118's drawing page takes for a
+  senior lot (0091's drawing page uses neither the Matsue nor the Kuchiba house as a measure, so neither is cited); that a
+  RICH posting's magistrate keeps a senior house is a GUESS, recorded on 0091's drawing page: no page ties a house's size to
+  its holder's wealth. Rooms, a GUESS as zones of
   about six rooms (research/questions/0091): the inner rooms 16 x 25 ft (GUESS), the family's quarters 20 x 25 ft with the
   maids' room in them (GUESS), Hajime's quarters 12 x 25 ft (GUESS) and the reception 15 x 25 ft (GUESS). Rendering: the house's rects and room lines.
 - **D2** The inner court laid out again (north wall at the new line, D3): the house backs the north wall across a service
@@ -66,12 +68,13 @@ guess is labeled. Occasion: building-review (a sheet revised).
   side door kept on its west face. The vegetable garden keeps its seat knob ("south beside the formal garden", 0109) and its
   size, set east of the pond where nothing shades it; the shrine, its tree, its arch and its tub move with the north wall.
   Rendering: the inner court's rects, the garden polygon, the pond, pines, lanterns and stones.
-- **D3** The north wall moves 30 ft (90 px) south, the envelope a knob, and the guests' annex with it, so its top stays on
+- **D3** The north wall moves 30 ft (90 px) south, a recorded DEVIATION, and the guests' annex with it, so its top stays on
   the north wall: the walled ground falls to about 45,200 sq ft and the coverage to 30.4% (observed 2026-10-26, method: `pack_audit.coverage`
   on the draft redraw in the scratchpad, inside R2's band). The walls still fall between the two offices 0116's drawing page sizes them against
   (research/questions/0116, observed 2026-10-26, method: the draft's precinct rects): about 45,200 sq ft walled, under
-  Takayama's site of about 105,600 sq ft and well above the Joge branch office's one building of about 2,850 sq ft. The envelope is a number no page measures - the
-  notes call it the "audited Joge<->Takayama size", a range - so it is a knob (GM 2026-10-25, `make tunables`). Priced:
+  Takayama's site of about 105,600 sq ft and well above the Joge branch office's one building of about 2,850 sq ft. The move is a DEVIATION from research/questions/0116's drawing page,
+  which keeps a sparse compound's walls where they are, recorded there with its reason and who chose it (amended after
+  impl-drift, 2026-10-26; the envelope itself is a number no page measures). Priced:
   (a) the sheet under the band as a recorded deviation - SC-001 forbids it; (b) buildings drawn past their research sizes to
   fill the court - the "Realistic unless the GM says otherwise" rule forbids it; (c) the west wall in 36 ft (this project's arithmetic) - the servants'
   range abuts the gate range and the outer court's west column would run into the office hall; (d) the east wall in - the

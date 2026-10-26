@@ -86,7 +86,7 @@
    "declared": "spec-fidelity"
   },
   "### T04 Approach (checklist part A)": {
-   "sha256": "39f9277cc73a523b49b7bb48a5caf6474d2817a2a22b6c9a991fe0dead418c8e",
+   "sha256": "6c3a381a75778c1553afb6facc3c8997eb1c17dc2ccc18fdc215f23441f95c86",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
@@ -319,6 +319,27 @@
      "summary": "Approach items 6 and 9: an unmakeable check goes to make arbiter-ask with the measure; done means pack-audit green, coverage in band, house rects within 0091's range, render read, building-review passed",
      "class": "within",
      "why": "Done-conditions restate FR-001/SC-001; the exit escalates rather than narrowing anything."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T04 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T04-goal",
+     "summary": "The record's figure for Hayakawa's coverage (0116 drawing page: 'Ochiba's and Hayakawa's compounds cover 38% and 35%') is replaced by the corrected sheet's measured figure.",
+     "class": "within",
+     "why": "The GM: the third magistracy 'should be corrected And whatever other changes need to be made should be made in order to make the whole thing correspond to our research'. A research page quoting the pre-correction Hayakawa coverage is such a change; FR-001 / SC-001 carry it. Only change since the CLEAR verdict is the source path written out in full (was '0116-...drawing.html'), which decides nothing."
+    },
+    {
+     "id": "T04-constraints-order-exits-done",
+     "summary": "Edit the 0116 page fragment through its make route, run the checks make record-owed names, do it last with T01's final measure, red exit via make arbiter-ask, done = sentence carries the measured figures and feature-report written.",
+     "class": "within",
+     "why": "Procedure and sequencing only; nothing narrows which sheets are corrected or what is made to correspond to the research. Doing it last with T01's final measure makes the recorded figure the measured one, which serves the request."
     }
    ]
   }
