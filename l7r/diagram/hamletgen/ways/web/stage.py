@@ -61,7 +61,6 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.web.lay_reachable_runs
         l7r.diagram.hamletgen.ways.web._reachable_runs
         l7r.diagram.hamletgen.ways.serve._lay_web_lane
-        l7r.diagram.hamletgen.ways.sweeps._join_orphan_ways
         l7r.diagram.settlement.Settlement.trim_lane_stubs
         l7r.diagram.hamletgen.ways.bund.run_lanes_on_to_the_bund
         l7r.diagram.hamletgen.ways.bund.a_way_onto_the_bund
