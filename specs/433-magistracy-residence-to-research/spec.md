@@ -48,7 +48,7 @@ sheets follows the research.
 
 ## Success Criteria
 
-- **SC-001** (FR-001): the Hayakawa house measures within 49-67 tsubo, its coverage within 0116's band (R2), and every element
+- **SC-001** (FR-001, FR-004): the Hayakawa house - the sheet FR-004 names corrected - measures within 49-67 tsubo, its coverage within 0116's band (R2), and every element
   of the sheet the research speaks to corresponds to it, each review its occasion owes passed.
 - **SC-002** (FR-002, FR-003): no `Research:` claim or doc calls the magistracy house a GUESS; the two deviations name the GM's
   reason; the new-sheet procedure names the research's range and the coverage band, and no doc makes Ochiba the model for a
