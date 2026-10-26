@@ -40,7 +40,7 @@ the DIRECT route; no map moves. XVIII: every guard has its test companion.
 7. **The search smell.** none.
 8. **The budget.** One landing.
 9. **Done, measured.** `tests/hooks/test-engine-freeze-hooks.sh` green: refused with a live review, passes after it
-   finishes, passes for a doc or test, passes for a non-review agent, passes for a stall acked.
+   finishes, passes for a doc or test, passes for a non-review agent, passes for a stall acked; an old unfinished review refuses until acked.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
@@ -49,8 +49,8 @@ the DIRECT route; no map moves. XVIII: every guard has its test companion.
 **D167 - a new guard, `engine-freeze-hooks.sh`, with its decider `lib/hm_engine_freeze.py`.** It finds the session's
 subagents directory from the payload's `transcript_path` and keeps every agent whose `meta.json` `agentType` is in the
 map-review set and that has not FINISHED - not `"finished": true`, not ended on an assistant `end_turn`, not acked after
-a TaskStop (`<subagents>/../stall-ack/<id>`), transcript younger than agent-stall's two-day bound - stalled or not
-(spec-fidelity round 1); a stalled one is named with the ack command. An engine path
+a TaskStop (`<subagents>/../stall-ack/<id>`) - stalled or not, however old (spec-fidelity round 1; the plan review struck
+an age bound as a narrowing FR-001 does not have); a stalled one is named with the ack command. An engine path
 in this session's clone is refused while any remain. The review set and the engine list are read from their one copy
 (`pair-hooks.sh`'s `REVIEW_AGENTS_RE`, `delta.is_engine()`), never restated.
 

@@ -65,7 +65,9 @@ edit "$ENG";                                  check "stopped and acked: the edit
 agent a3 source-reader "$MIDTOOL"
 edit "$ENG";                                  check "a non-review agent does not freeze the engine" 0 "$RC"
 agent a4 fix-check "$MIDTOOL"; touch -d '3 days ago' "$SUB/agent-a4.jsonl"
-edit "$ENG";                                  check "a leftover review days old does not count" 0 "$RC"
+edit "$ENG";                                  check "an unfinished review days old still refuses until acked" 2 "$RC"
+touch "$SESSION/stall-ack/a4"
+edit "$ENG";                                  check "...and passes once acked" 0 "$RC"
 [ -n "$(ls "$GUARD_LOG_DIR" 2>/dev/null)" ] && { echo "ok    firings are recorded"; PASS=$((PASS+1)); } || { echo "FAIL  no guard-log entry"; FAIL=$((FAIL+1)); }
 
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"

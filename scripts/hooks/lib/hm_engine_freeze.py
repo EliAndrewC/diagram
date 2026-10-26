@@ -10,8 +10,8 @@ that this session launched has not FINISHED.
 FINISHED, read from the agent's own files: its `meta.json` says `"finished": true`, or its transcript's last record is
 an assistant message that ended its turn (`stop_reason: end_turn`; older harnesses write no `finished`), or the session
 acked it after a TaskStop (`agent-stall-hooks.sh ack`, `<subagents>/../stall-ack/<id>`). Anything else is live -
-stalled or not (spec-fidelity round 1: a slow review looks exactly like a dead one, and TaskStop is the route). An agent
-whose transcript is older than AGENT_RECENT_S (default two days, agent-stall's bound) is a leftover, not a review.
+stalled or not, however old (spec-fidelity round 1 and the plan review: a slow review looks exactly like a dead one, and
+TaskStop then ack is the route).
 
 Usage: hm_engine_freeze.py judge < payload  ->  prints one line per live review (`<id> <type> live|stalled <age>s`)
 and exits 1 when the edit must wait; exits 0 otherwise.
@@ -30,7 +30,6 @@ import time
 HERE = os.path.dirname(os.path.abspath(__file__))
 FILE_TOOLS = ("Edit", "Write", "NotebookEdit")
 STALE = int(os.environ.get("AGENT_STALE_S", "300"))
-RECENT = int(os.environ.get("AGENT_RECENT_S", "172800"))
 
 
 def review_types() -> set[str]:
@@ -108,8 +107,6 @@ def live_reviews(subagents: str, types: set[str], now: float | None = None) -> l
         if os.path.exists(os.path.join(subagents, "..", "stall-ack", aid)):
             continue
         age = int(now - os.stat(tpath).st_mtime)
-        if age > RECENT:
-            continue
         last = _last_record(tpath)
         if last.get("type") == "assistant" and (last.get("message") or {}).get("stop_reason") == "end_turn":
             continue

@@ -21,7 +21,7 @@ his own questions, verification steps), labeled two seeded random samples it nev
 | widened on r1's three misses ("for you to decide", "approve or decline", "ask of you", "needs your ...", "waiting on you") | 86 | 8 of 8 (fitted) | 0 of 73 | **9 of 11** | **0 of 89** |
 | widened on the holdout's misses ("yours to decide", "if you want ... I") - as shipped | 88 | 8 of 8 (fitted) | 0 of 73 | 10 of 11 (fitted) | 0 of 89 |
 
-The honest out-of-sample figure is the holdout's **9 of 11 (82%) recall with no false alarm in 89**, taken before its
+The honest out-of-sample figure (a one-shot observation, 2026-10-26, by `measure/detect.py`) is the holdout's **9 of 11 recall with no false alarm in 89**, taken before its
 misses were fitted. The 2026-10-25 feature 417 message is caught by every version ("1. Should I switch off the settle's
 16 repair steps one at a time ..."). The one message the shipped detector still misses offers rather than asks ("I can
 raise it too if you want."). A miss costs what the GM pays today; a false alarm costs one cheap `escalation-check`
