@@ -251,7 +251,7 @@ def test_write_cap_ok_with_a_reason_lets_a_brief_through_and_is_logged(tmp_path:
     assert entries[1]["detail"] == "one question split into five small parts" and entries[1]["context"]["brief"] == str(big)
 
 
-def test_every_exempt_kind_runs_and_only_a_write_session_is_told_the_key_cap(tmp_path: pathlib.Path, monkeypatch) -> None:
+def test_every_exempt_kind_runs_and_only_a_writing_session_is_told_the_key_cap(tmp_path: pathlib.Path, monkeypatch) -> None:
     briefs = []
     for kind in ps._brief_load.KINDS:
         b = tmp_path / f"{kind}.md"
@@ -265,7 +265,8 @@ def test_every_exempt_kind_runs_and_only_a_write_session_is_told_the_key_cap(tmp
     monkeypatch.setenv("L7R_KEY_CAP", "99")
     sids = [q["sid"] for q in queue]
     ps.work(str(tmp_path), "n", [], queue, str(tmp_path / "run.log"))
-    assert [e.get("L7R_KEY_CAP") for e in envs] == [None, None, None, None, str(ps.KEY_CAP)], "a check session is not capped"
+    cap = str(ps.KEY_CAP)
+    assert [e.get("L7R_KEY_CAP") for e in envs] == [None, cap, None, None, cap], "a check session is not capped; an assertions one writes, and is"
     assert [e["L7R_PAGE_SESSION"] for e in envs] == sids
     assert all(e["L7R_CONTINUE"] == str(tmp_path / ".git" / "page-sessions" / s / "continue.md") for e, s in zip(envs, sids, strict=True))
 
