@@ -29610,12 +29610,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/last_resort.py::last_resort#repair policy": {
-  "body": "3c43ff2b5ae3b3ad",
+  "body": "d4c355708bbdc673",
   "claim": "repair policy - NONE: each rule is claimed at its predicate in law.py",
-  "code": "2f5fd2b95ff3ed9a",
-  "core": "cb6e6dce42fcc76a",
+  "code": "b2a347621527d6c1",
+  "core": "3d608209c9f2b1c3",
   "date": "2026-10-25",
-  "note": "the drop and re-ask loop and the 8-pass cap are plumbing; each rule is claimed at its predicate",
+  "note": "plumbing only: the order of the repair steps, and 8 passes as a retry limit; nothing about the place",
   "pages": {},
   "research": "",
   "rests": [],
@@ -32644,18 +32644,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle/ends.py::rewidth#settle plumbing": {
-  "body": "117fff2e957afd21",
-  "claim": "settle plumbing - NONE",
-  "code": "c9041c6bbd8e0324",
-  "core": "a5213044cc97771d",
-  "date": "2026-10-21",
-  "note": "width is passed in; only the record and ink are rewritten",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_dangling#an end reaches something seen": {
   "body": "f896b99e9222b4d1",
   "claim": "an end reaches something seen - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: trimmed to service, else dropped",
@@ -32869,23 +32857,6 @@
   ],
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/settle/ends.py::settle_widths#one width a way": {
-  "body": "bc57c792d8df3f0e",
-  "claim": "one width a way - village-lanes.drawing: each way at its rank's width (3 ft footpath, 5 ft field spur), the rest of a chain at its widest rank, the narrowest where that fouls",
-  "code": "cfe6c27fb3768d42",
-  "core": "6eb6756558d7f2e2",
-  "date": "2026-10-22",
-  "note": "the chain loop rewidths every unranked member, the connector included (only the first loop skips the connector); I need rank_width's table to know whether the 6 ft track out and the 5 ft spine are ranked and so kept at their widths",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:91a5765af6230403"
-  ],
-  "triaged": "2026-10-22",
-  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::with_edits#settle plumbing": {
   "body": "750b8581df4c4097",
@@ -33559,12 +33530,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/stage.py::STEPS#settle plumbing": {
-  "body": "841d779171c0fae0",
+  "body": "eb73e0c2d18673ca",
   "claim": "settle plumbing - NONE",
-  "code": "32ce5ab9810be680",
-  "core": "2b051317013f513c",
+  "code": "65b28f42f34ea8a8",
+  "core": "8a0693ad8ac3fa36",
   "date": "2026-10-25",
-  "note": "the order of settle steps decides nothing physical",
+  "note": "the tuple only sets the order of the settle's steps; the squaring it now holds is claimed on its own unit",
   "pages": {},
   "research": "",
   "rests": [],
@@ -33716,6 +33687,52 @@
   "note": "`door if household or len(door) >= len(far)`, and a household's way is cut only onto a connector or tree lane; 0081 decides only the household's door",
   "pages": {},
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/squaring.py::square_every_crossing#a moved end keeps its joint": {
+  "body": "f60882b22ce118a4",
+  "claim": "a moved end keeps its joint - NONE: another lane ending there is moved with it",
+  "code": "94ea8c5b819b5b0f",
+  "core": "e83520d42e0edd1c",
+  "date": "2026-10-25",
+  "note": "carries a moved end's joint to the other lane that ended there; the 1 ft match tolerance is plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/squaring.py::square_every_crossing#square brook crossing": {
+  "body": "f60882b22ce118a4",
+  "claim": "square brook crossing - villages-beside-their-stream-one-bank-or-both.drawing: the track out too",
+  "code": "2d7ca9be4326c83d",
+  "core": "e83520d42e0edd1c",
+  "date": "2026-10-25",
+  "note": "every lane, the track out included, is squared at the brook; 0035 says \"cross the brook squarely\"",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+  },
+  "research": "9354777ef34af3d3",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/squaring.py::square_every_crossing#square ditch crossing": {
+  "body": "f60882b22ce118a4",
+  "claim": "square ditch crossing - plank-bridges-over-farm-ditches-itabashi.drawing: the drawn channels",
+  "code": "e9d1d1b7178fff22",
+  "core": "e83520d42e0edd1c",
+  "date": "2026-10-25",
+  "note": "lanes squared at the drawn channels; 0084 lays crossings \"square across the water\", and a way's deck is the one it takes \"wherever it crosses water\"",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
+  },
+  "research": "1dd5fd71121f4a06",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/squaring.py::square_run#square brook crossing": {
@@ -34342,23 +34359,38 @@
   "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#its search steps and tolerances": {
-  "body": "4d08660856e1939e",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 6 (rounds of the orphan sweep); 14 (lattice cell for the retry route)",
-  "code": "90d777395d409b7a",
-  "core": "19d5c3ae87e32c5d",
+ "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#its planning clearance": {
+  "body": "e0c6fea1ffea20dd",
+  "claim": "its planning clearance - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: `WEB_FABRIC_GAP`, the gap a short link is planned at",
+  "code": "434968a40ab8b3cc",
+  "core": "4784dfc79ebe963c",
   "date": "2026-10-25",
-  "note": "6 sweep rounds and the 14 ft retry lattice are search settings; the record is silent",
+  "note": "WEB_FABRIC_GAP 7.0 is the gap \"a short link joining a way's end to the network\" keeps from every garden, which the drawing page records as \"a GUESS\"",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#its search steps and tolerances": {
+  "body": "e0c6fea1ffea20dd",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 6 (rounds of the orphan sweep); 2.0 (the router's pad multiplier: a link may go the long way round); 14 (lattice cell for the retry route)",
+  "code": "24e184d43dc387be",
+  "core": "4784dfc79ebe963c",
+  "date": "2026-10-25",
+  "note": "the page gives no figure for sweep rounds, detour pad or lattice cell; the route is still bounded by the directness claim; 6 and 14 are really plumbing (NONE), but a GUESS on them hides nothing",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link crosses the brook at a crossing place": {
   "body": "4d08660856e1939e",
   "claim": "link crosses the brook at a crossing place - villages-beside-their-stream-one-bank-or-both.drawing",
-  "code": "dfd2c5b5ed4ccfed",
-  "core": "d7c070adeb041267",
+  "code": "a62c22a9544bcdc4",
+  "core": "4784dfc79ebe963c",
   "date": "2026-10-22",
   "note": "routed against stream_segs, the brook gapped at its fords; an even count of crossings refused",
   "pages": {
@@ -34368,15 +34400,16 @@
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link width": {
-  "body": "4d08660856e1939e",
-  "claim": "link width - CONVENTION: the widest way within `_LANE_JOIN_FT` of the link (the orphan's and the network's at least)",
-  "code": "cdb126c64513d89f",
-  "core": "19d5c3ae87e32c5d",
+  "body": "e0c6fea1ffea20dd",
+  "claim": "link width - GUESS: searched, the record silent (feature 417 T31 C1, 2026-10-26); as `link_width` draws it - a link continuing a way end to end at its width, at a tee the widest way within reach",
+  "code": "424c14b99b1974bf",
+  "core": "4784dfc79ebe963c",
   "date": "2026-10-25",
-  "note": "the page counts lane widths as a map drawing convention; the code draws the link at the widest way within 25 ft of it, default 3 ft, and the orphan's and the network's ways are always among them",
+  "note": "the record gives widths by role (3/5/6 ft) and treats lanes that meet end to end as one path, but says nothing of a link's width or a width at a tee; `link_width` does what the claim says",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -34384,8 +34417,8 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#no out-and-back over the brook": {
   "body": "4d08660856e1939e",
   "claim": "no out-and-back over the brook - villages-beside-their-stream-one-bank-or-both.drawing: a link crossing the brook twice is refused",
-  "code": "89669c7c889b391c",
-  "core": "d7c070adeb041267",
+  "code": "4972681a3adda786",
+  "core": "4784dfc79ebe963c",
   "date": "2026-10-22",
   "note": "no block refuses a link that crosses the brook twice; §110 charges a crossing about 150 ft and does not forbid it. Label GUESS/UNRESEARCHED or record the rule",
   "outside": true,
@@ -34397,13 +34430,14 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-10-25",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#orphan joined to the network": {
   "body": "4d08660856e1939e",
   "claim": "orphan joined to the network - how-our-maps-lay-a-clustered-settlements-lanes.drawing: one network",
-  "code": "f6cbaf64d7ae9a89",
-  "core": "d7c070adeb041267",
+  "code": "8ac11590c7a50f2f",
+  "core": "4784dfc79ebe963c",
   "date": "2026-10-22",
   "note": "orphan pieces are linked to the network, and one no link reaches is left to the settle",
   "pages": {
@@ -34414,18 +34448,19 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#orphan link directness": {
   "body": "4d08660856e1939e",
   "claim": "orphan link directness - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); a link up to `_LINK_DIRECTNESS` (4) times the gap",
-  "code": "2121905ba58bcbfe",
-  "core": "19d5c3ae87e32c5d",
+  "code": "8e96978ca89143a8",
+  "core": "4784dfc79ebe963c",
   "date": "2026-10-25",
   "note": "`<= _LINK_DIRECTNESS * max(cand[0], 1.0)`",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a house served": {
@@ -34744,6 +34779,56 @@
   "core": "5fcfb8e7882b1531",
   "date": "2026-10-03",
   "note": "matches",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/sweeps.py::link_width#a footpath where nothing is near": {
+  "body": "9751b20257afc781",
+  "claim": "a footpath where nothing is near - village-lanes.drawing: 3 (a link with no way within reach, or a record with no width, drawn as the 3 ft footpath)",
+  "code": "d5f77ac433b8d8d2",
+  "core": "4c2d6b09bec0d11c",
+  "date": "2026-10-25",
+  "note": "the default 3.0 and the missing-`w` 3 are the drawn footpath, \"a footpath is drawn 3 ft wide\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/sweeps.py::link_width#a link's width at a tee": {
+  "body": "9751b20257afc781",
+  "claim": "a link's width at a tee - GUESS: searched, the record silent (feature 417 T31 C1, 2026-10-26); the widest way within `_LANE_JOIN_FT`, a tee where a width may change",
+  "code": "61e53b79b4aa376f",
+  "core": "4c2d6b09bec0d11c",
+  "date": "2026-10-25",
+  "note": "GUESS holds: §29 gives widths by role (footpath, spine/spur, track out) and nothing in the bundle says what width a joining link takes at a tee",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/sweeps.py::link_width#its salts, guards and sentinels": {
+  "body": "9751b20257afc781",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.5 (an end on the link's end)",
+  "code": "f0fc46e04dac8123",
+  "core": "4c2d6b09bec0d11c",
+  "date": "2026-10-25",
+  "note": "0.5 is a tolerance for matching an end point, plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/sweeps.py::link_width#one width a way": {
+  "body": "9751b20257afc781",
+  "claim": "one width a way - GUESS: searched, the record silent (feature 417 T31 C1, 2026-10-26); the lane law's own rule (`law.width_steps`): a link continuing a way end to end takes its width, the orphan's end first - where both its ends continue ways of two widths, the step stands at the network's end",
+  "code": "5ba77fd377741e23",
+  "core": "4c2d6b09bec0d11c",
+  "date": "2026-10-25",
+  "note": "link[0] (the orphan's end) is checked before link[-1], so the link keeps the orphan way's width and any width step falls at the network's end, as the claim says; the page is silent on link width",
+  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -35376,11 +35461,11 @@
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook crossed at its crossing places": {
   "body": "78231be076742dce",
-  "claim": "brook crossed at its crossing places - villages-beside-their-stream-one-bank-or-both.drawing: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then held square to the brook by the lane law (`law_water`), the connector's too - the settle's squaring step went in feature 417 T31",
-  "code": "3f08c314eb2b71ef",
+  "claim": "brook crossed at its crossing places - villages-beside-their-stream-one-bank-or-both.drawing: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook by the settle (`squaring.square_every_crossing`, the connector's too)",
+  "code": "8153a6c5cb0f95ab",
   "core": "244a34e5859ee3b4",
   "date": "2026-10-25",
-  "note": "keeps to its own bank and crosses only at a crossing place (`brook_fords`, 160 ft) when that finds a way or saves more than 150 ft, as 0035 says \"crossing saves it more than about 150 ft\"; the squaring is left to `law_water`",
+  "note": "FORD_SPACING 160, the straight-reach bend limit and the 150 ft charge match 0035, and the restored settle step squares the crossing",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
@@ -35537,11 +35622,11 @@
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#where on a channel it crosses": {
   "body": "78231be076742dce",
-  "claim": "where on a channel it crosses - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); anywhere the fill finds; held to the lane law's square crossing (`law_water`), which the web keeps without the settle's squaring step (feature 417 T31)",
-  "code": "252effdfcac56c4e",
+  "claim": "where on a channel it crosses - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); anywhere the fill finds; the settle squares the crossing (`squaring.square_every_crossing`)",
+  "code": "0749dc4c5c7ac96c",
   "core": "244a34e5859ee3b4",
   "date": "2026-10-25",
-  "note": "0084 is silent on where a way crosses a ditch (\"no page we read says when a farm path crossed a ditch\"), so GUESS is the right label; \"square across the water\" is said only of the 4 ft bund crossing",
+  "note": "0084 says when the track crosses a channel (only as the last resort), never where; its siting rules are for the 4 ft footpath crossing alone",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -42357,6 +42442,18 @@
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/interactive/record/contents.py::load_opening#plumbing": {
+  "body": "93ad4f9f9adeb282",
+  "claim": "plumbing - NONE",
+  "code": "5590413183cda5aa",
+  "core": "9a27fc98a1aa66c7",
+  "date": "2026-10-25",
+  "note": "reads the opening HTML string from contents.json and refuses anything that is not text; it decides nothing about a place or how a map looks",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/contents.py::load_vocabulary#plumbing": {

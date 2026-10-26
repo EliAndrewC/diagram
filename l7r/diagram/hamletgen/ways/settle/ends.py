@@ -15,10 +15,8 @@ from ..corridors import (
     ACCESS_ROLE,
     is_tree,
 )
-from ..fabric import lane_fabric as _fabric
 from ..forced import lazy_ground
 from ..geom import _components, _trim_to_service, lane_owner, memo_ground, polyline_len, steading_footprints, worked_ground
-from ..joints import joints, rank_width
 from ..squaring import (
     _pts,
     cut_at_shallow_crossing,
@@ -26,7 +24,7 @@ from ..squaring import (
 from ..sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 from ..tree import set_corridor, tree_faults
 from .lawful import Lawful
-from .shapes import JOIN_ROLE, _as_end, _back, _ordinary, apply_pieces, fouled_segment, reaimed
+from .shapes import JOIN_ROLE, _as_end, _back, _ordinary, apply_pieces, reaimed
 
 
 def settle_ends(s: Any) -> int:
@@ -248,63 +246,6 @@ def settle_fragments(s: Any) -> int:
     if gone:
         s.drop_lanes(gone)
     return len(gone)
-
-
-def rewidth(s: Any, i: int, width: float) -> None:
-    """Lane `i` drawn at `width`: its record, and its ink re-laid at that width (the old ink blanked) where the settlement
-    keeps ink - a stand-in with no ink has only the record."""
-    ln = s.M["lanes"][i]
-    ln["w"] = width
-    ink = getattr(s, "_lane_ink", None)
-    if ink is None:
-        return
-    for z in ink[i]:
-        for part in ("edge", "bed", "top"):
-            if s.ground[z].get(part):
-                s.ground[z][part] = ""
-    ink[i] = s._lane_ink_at(ln["pts"], width, bool(ln.get("worn")), ln)
-
-
-def settle_widths(s: Any) -> int:
-    """One way keeps one width (homes H42), and each way its rank's: a lane its role ranks (`joints.rank_width`: a household's
-    way 3 ft, the field spur 5) is drawn at its rank whatever it meets end to end - feature 328 wave 4's glyph-check of
-    Inashiro found a household's way and the spur widened to a 6 ft link's tread, a 6 ft lane hanging off a 3 ft footpath. A
-    chain of lanes meeting end to end (`joints`) draws its unranked members at its widest ranked member's rank, or its widest
-    member's where none is ranked - in either case at its narrowest where that would foul the fabric (`fouled_segment`). No
-    tread is widened onto a steading; a step left is where one rank meets another (`law.width_steps`).
-
-    Research: one width a way - research/questions/0081-village-lanes.drawing.html: each way at its rank's width (3 ft footpath, 5 ft field spur), the rest of a chain at its widest rank, the narrowest where that fouls"""
-    lanes = s.M.get("lanes") or []
-    changed = 0
-    for k, ln in enumerate(lanes):
-        r = rank_width(ln)
-        if r is not None and not ln.get("connector") and float(ln.get("w") or 3.0) != r:
-            rewidth(s, k, r)
-            changed += 1
-    par = list(range(len(lanes)))
-
-    def find(k: int) -> int:
-        while par[k] != k:
-            k = par[k]
-        return k
-
-    for i, _ei, j, _ej in joints(lanes):
-        par[find(i)] = find(j)
-    yards, houses = _fabric(s)
-    solid = law.solid_boxes(s.M)
-    fixtures = law.fixture_quads(s.M)
-    for root in {find(i) for i in range(len(lanes)) if find(i) != i}:
-        chain = [k for k in range(len(lanes)) if find(k) == root]
-        free = [k for k in chain if rank_width(lanes[k]) is None]
-        widths = [float(lanes[k].get("w") or 3.0) for k in chain]
-        ranks = [w for k, w in zip(chain, widths, strict=True) if k not in free]
-        wide = max(ranks or widths)
-        target = wide if all(fouled_segment(_pts(lanes[k]), wide, houses, yards, solid, fixtures, s.M, lane_owner(lanes[k])) is None for k in free) else min(widths)
-        for k in free:
-            if float(lanes[k].get("w") or 3.0) != target:
-                rewidth(s, k, target)
-                changed += 1
-    return changed
 
 
 def settle_network(s: Any) -> int:

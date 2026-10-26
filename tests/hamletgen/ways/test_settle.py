@@ -229,46 +229,6 @@ def test_a_piece_the_ink_would_drop_is_joined_first() -> None:
     assert len(s.M["lanes"]) == 4 and law.lane_networks(s.M) == 1
 
 
-def test_a_fragment_is_dropped_and_a_chain_takes_one_width() -> None:
-    s = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 150.0), (10.0, 150.0)]], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
-    assert settle.settle_fragments(s) == 1 and len(s.M["lanes"]) == 2
-    assert settle.settle_fragments(s) == 0
-    # A HOUSEHOLD'S OWN WAY IS NEVER DEBRIS (feature 318, FR-014): a short access corridor to a house another lane already
-    # reaches is still the lane that household is served by - it stays (homes H40 dropped it, R9; owed again, it looped)
-    tree = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 150.0), (10.0, 150.0)]], houses=[(40.0, 150.0)], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
-    tree.M["lanes"][2].update(role=co.ACCESS_ROLE, of=[40.0, 150.0])
-    assert law.short_fragments(tree.M) == [] and settle.settle_fragments(tree) == 0 and len(tree.M["lanes"]) == 3
-    only = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 150.0), (20.0, 150.0)]], houses=[(115.0, 150.0)], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
-    only.M["lanes"][2].update(role=co.ACCESS_ROLE, of=[115.0, 150.0])
-    assert law.unreached_houses(only.M) == [] and settle.settle_fragments(only) == 0, "the house's only way earns its place"
-    w = _S([CONN, ([(0.0, 5.0), (100.0, 5.0)], {"w": 6}), ([(100.0, 5.0), (200.0, 15.0)], {"w": 3})])
-    assert settle.settle_widths(w) == 1 and law.width_steps(w.M["lanes"]) == []
-    assert {ln["w"] for ln in w.M["lanes"][1:]} == {6}, "the way takes its widest member's width"
-    tight = _S([CONN, ([(0.0, 5.0), (100.0, 5.0)], {"w": 6}), ([(100.0, 5.0), (200.0, 5.0)], {"w": 3})], houses=[(150.0, 21.5)])  # its wall 2.5 ft off: past a 3 ft tread's half, inside a 6 ft one's
-    settle.settle_widths(tight)
-    assert {ln["w"] for ln in tight.M["lanes"][1:]} == {3}, "widened, it would foul the farmhouse beside it: the narrowest"
-    assert settle.settle_widths(_S([CONN])) == 0
-    # EACH WAY AT ITS RANK (feature 328 wave 4, glyph-check round 2 of Inashiro: the field route - a household's way, a 6 ft
-    # link, the spur - all drawn 6 ft): the ranked lanes back to their rank, the link between them at the widest rank
-    route = _S([CONN, ([(0.0, 5.0), (100.0, 5.0)], {"w": 6.0}), ([(100.0, 5.0), (200.0, 15.0)], {"w": 6}), ([(200.0, 15.0), (300.0, 15.0)], {"w": 6.0})])
-    route.M["lanes"][1]["role"], route.M["lanes"][3]["spur"] = co.ACCESS_ROLE, True
-    assert settle.settle_widths(route) == 3
-    assert [ln["w"] for ln in route.M["lanes"][1:]] == [3.0, 5.0, 5.0] and law.width_steps(route.M["lanes"]) == []
-    assert settle.settle_widths(route) == 0
-
-
-def test_a_width_change_redraws_the_ink() -> None:
-    from l7r.diagram.settlement import Settlement
-
-    s = Settlement(600, 600, seed=1)
-    s.meta(name="W", scale="hamlet", ftpx=1, down_deg=90)
-    s.lane([(0.0, 5.0), (100.0, 5.0)], width=6, worn=True)
-    old = list(s._lane_ink[0])
-    settle.rewidth(s, 0, 3.0)
-    assert s.M["lanes"][0]["w"] == 3.0 and s._lane_ink[0] != old
-    assert all(not s.ground[z].get(part) for z in old for part in ("edge", "bed", "top")), "the old ink is blanked"
-
-
 def test_a_crossing_no_deck_seats_is_squared_and_else_cut() -> None:
     """Ways W12/W13: `law.undeckable_at` is the placer's own deck solve, asked of a lane by `_crossing_fault`. A shallow crossing
     of a field ditch is squared where a square deck seats; one that cannot seat even square - its landing on flooded rice - is
@@ -288,3 +248,27 @@ def test_with_no_connector_the_longest_network_is_kept() -> None:
     """`settle_network` keeps the connector's network; where no lane is the connector, the longest network is kept."""
     s = _S([[(0.0, 0.0), (400.0, 0.0)], [(0.0, 500.0), (100.0, 500.0)]])
     assert settle.settle_network(s) == 1 and _pts(s, 0) == [(0.0, 0.0), (400.0, 0.0)]
+
+
+def test_a_fragment_is_dropped_but_never_a_household_s_own_way() -> None:
+    s = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 150.0), (10.0, 150.0)]], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
+    assert settle.settle_fragments(s) == 1 and len(s.M["lanes"]) == 2
+    assert settle.settle_fragments(s) == 0
+    # A HOUSEHOLD'S OWN WAY IS NEVER DEBRIS (feature 318, FR-014): a short access corridor to a house another lane already
+    # reaches is still the lane that household is served by - it stays (homes H40 dropped it, R9; owed again, it looped)
+    tree = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 150.0), (10.0, 150.0)]], houses=[(40.0, 150.0)], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
+    tree.M["lanes"][2].update(role=co.ACCESS_ROLE, of=[40.0, 150.0])
+    assert law.short_fragments(tree.M) == [] and settle.settle_fragments(tree) == 0 and len(tree.M["lanes"]) == 3
+    only = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 150.0), (20.0, 150.0)]], houses=[(115.0, 150.0)], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
+    only.M["lanes"][2].update(role=co.ACCESS_ROLE, of=[115.0, 150.0])
+    assert law.unreached_houses(only.M) == [] and settle.settle_fragments(only) == 0, "the house's only way earns its place"
+
+
+def test_every_crossing_is_squared_and_a_joint_at_a_moved_end_moves_with_it() -> None:
+    # the lane starts 4 ft short of the brook and crosses it 39 degrees off square - the "left as drawn" case of old
+    s = _S([CONN, [(96.0, 20.0), (300.0, 180.0)], [(96.0, 20.0), (0.0, 0.0)]], streams=[BROOK], drawn_channels=[{"pts": [[400.0, -500.0], [400.0, 500.0]], "w0": 4.0}, {"pts": [[0.0, 0.0]]}])
+    s.M["lanes"].append({"pts": [[1.0, 1.0]]})
+    assert settle.square_every_crossing(s) == 1
+    assert law.oblique_crossings(s.M) == []
+    assert _pts(s, 2)[0] == _pts(s, 1)[0], "the lane that ended where the squared lane began still meets it"
+    assert settle.square_every_crossing(s) == 0, "squaring a squared web changes nothing"

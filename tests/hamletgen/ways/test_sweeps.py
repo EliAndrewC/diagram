@@ -391,3 +391,15 @@ def test_the_sweep_reads_a_farm_band_rotated_as_the_door_path_does() -> None:
     M = {"village_groves": [{"role": "copse", "r": 10.0, "clumps": [[50.0, 50.0]]}, {"role": "windbreak", "r": 10.0, "clumps": [[0.0, 0.0]]}]}
     (clump,) = _sw.farm_bands(M)
     assert max(math.dist(p, (50.0, 50.0)) for p in clump) == pytest.approx(10.0)
+
+
+def test_an_orphan_link_takes_the_width_of_the_way_it_continues_end_to_end() -> None:
+    """Feature 417 T31 C1 (cohort seeds 10, 37): one width a way, asked where the link is laid - a link whose end meets another
+    lane's end takes that lane's width; one meeting only treads keeps the widest way within reach."""
+    from l7r.diagram.hamletgen.ways.sweeps import link_width
+
+    arm = {"pts": [[0.0, 0.0], [100.0, 0.0]], "w": 3}
+    lane = {"pts": [[100.0, -200.0], [100.0, 200.0]], "w": 6}
+    assert link_width([arm, lane], [(0.0, 0.0), (-50.0, 50.0)]) == 3.0, "it continues the 3 ft arm from its end"
+    assert link_width([arm, lane], [(50.0, 0.0), (100.0, 50.0)]) == 6.0, "tees only: the widest way within reach"
+    assert link_width([], [(0.0, 0.0), (10.0, 0.0)]) == 3.0, "nothing near: a footpath"

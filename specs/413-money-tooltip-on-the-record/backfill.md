@@ -297,3 +297,21 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.notes | 360 bu | the same quoted definition: a li of 300 or 360 bu, a length
 - 0305-what-did-a-book-cost-to-buy-to-borrow-and-to-have-copied | * | feature 423: the kibyoshi's prices (no year beyond its span of 1772-1818, across three eras), the lending fees of Tsutaju's lifetime (1750-1797) and Nagatomo's undated scale, Bakin's undated yomihon trade prices, the 1846 fair copy (between the edo-1830 and edo-1850 eras), Chow's late Ming to early Qing prices with no year each, and this project's per-leaf arithmetic on them
 - 0305-what-did-a-book-cost-to-buy-to-borrow-and-to-have-copied.notes | * | as its question: the kibyoshi's, the lending libraries', Bakin's yomihon and the 1846 copy's amounts with no year inside a built era, Chow's undated Ming prices, and the pages' present-day yen; the years the scanner reads are the works' publication years
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 160 monme | feature 423: the Mitsui Kyoto shop's clerks' ladder, a source's estimate for the first half of the 1800s with no single year
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 500 monme | feature 423: the Konoike house's deferred grants, Osaka, no year given
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 200 monme | feature 423: the Konoike house's deferred grants, Osaka, no year given
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 500 taels | feature 423: the size of an escort agency's silver packet, not a sum paid
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.notes | 500 monme | as its question: the Konoike grants, no year given
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.notes | 200 monme | as its question: the Konoike grants, no year given
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.notes | 1 bu | a rate of interest (1 bu, 1% a month), not money
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.notes | 500 taels | as its question: the size of an escort agency's silver packet, not a sum paid
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.notes | 80,000 yen | a present-day yen conversion quoted from the page, no era carries it
+- 0308-what-did-an-entertainer-or-a-troupe-earn | 50 ryo | feature 423: an essayist's reckoning of an ordinary actor's 25-50 ryo, not a sum anyone recorded
+- 0308-what-did-an-entertainer-or-a-troupe-earn | 20 taels | feature 423: a Qing court actor's reward per summons, no year given
+- 0308-what-did-an-entertainer-or-a-troupe-earn | 3 cash | feature 423: 0266's Hangzhou toad-trainer, named in a pointer, no year given (unmarked in 0266 too)
+- 0308-what-did-an-entertainer-or-a-troupe-earn.notes | 50 ryo | as its question: the essayist's reckoning, not a recorded sum
+- 0308-what-did-an-entertainer-or-a-troupe-earn.notes | 20 taels | as its question: the Qing court reward, no year given
+- 0308-what-did-an-entertainer-or-a-troupe-earn.notes | 3 ryo | the Ura village entry of 1867 printed as 金三両壱歩九分九厘, with no monme between the bu and the bun, so its total cannot be read
+- 0308-what-did-an-entertainer-or-a-troupe-earn.notes | 1 bu | the same 1867 entry, unreadable as a total
+- 0308-what-did-an-entertainer-or-a-troupe-earn.notes | 9 rin | the same 1867 entry, unreadable as a total
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.notes | 160 monme | inside the English rendering of a quoted passage, the same figure the page's prose gives

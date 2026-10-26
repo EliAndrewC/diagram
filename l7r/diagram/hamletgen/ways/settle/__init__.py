@@ -86,6 +86,7 @@ from ..squaring import SQUARE_MARGIN_FT as SQUARE_MARGIN_FT
 from ..squaring import SQUARE_PASSES as SQUARE_PASSES
 from ..squaring import _pts as _pts
 from ..squaring import cut_at_shallow_crossing as cut_at_shallow_crossing
+from ..squaring import square_every_crossing as square_every_crossing
 from ..squaring import square_run as square_run
 from ..squaring import square_waters as square_waters
 from ..sweeps import _DOUBLED_DEG as _DOUBLED_DEG
@@ -100,13 +101,11 @@ from .ends import JOIN_BACK_PAD_FT as JOIN_BACK_PAD_FT
 from .ends import TRIM_GRAIN_FT as TRIM_GRAIN_FT
 from .ends import _join_admitted as _join_admitted
 from .ends import connector_component as connector_component
-from .ends import rewidth as rewidth
 from .ends import settle_dangling as settle_dangling
 from .ends import settle_ends as settle_ends
 from .ends import settle_fragments as settle_fragments
 from .ends import settle_joins as settle_joins
 from .ends import settle_network as settle_network
-from .ends import settle_widths as settle_widths
 from .ends import with_edits as with_edits
 from .lawful import Lawful as Lawful
 from .lawful import corridor_on_lawful_ground as corridor_on_lawful_ground

@@ -86,6 +86,9 @@ def test_the_halves_follow_the_table_of_contents_and_open_on_the_settlement_tier
     home = built["index.html"]
     assert home.index("The settlement tiers") < home.index("The countryside") < home.index("Estates and other compounds") < home.index("Map conventions")
     assert "Map conventions" not in home[: home.index('id="drawing"')], "the conventions are in the drawing half only"
+    title = home.index('<h1 id="contents">')  # the sidebar links all.html too: read the page's own body
+    maps, money = home.index('href="https://l7r-gm-assistant.fly.dev/maps"', title), home.index('href="https://l7r-gm-assistant.fly.dev/money"', title)
+    assert max(maps, money) < home.index('href="all.html"', title), "the home page opens with what the research is for (424)"
 
 
 def test_every_section_lists_its_questions_by_level_then_number(built: dict[str, str], record: store.qs.Record) -> None:

@@ -102,6 +102,21 @@ two tasks after the last engine task: the fresh block before the push (FR-009), 
 SC-006). The last task closes: 1,000 fresh seeds, T106's seat turn re-applied (User
 Story 2), the code-size delta (SC-004), the feature report.
 
+### T31 conversion C2 (2026-10-26): the joins stop short because the tree is drawn after the links (measured; not yet built)
+
+Measured 2026-10-26 (method: a throwaway trace in a detached worktree at a391e87ab logging, after each `STEPS` step, every
+`join-orphans` link end standing more than 2 ft off any lane; seed 25 rolled with the last resort's `settle_joins` cut, as the
+probe that refused it): every link is laid touching the network; the ends come off it after `settle_reach` (the tree lanes
+drawn) and `settle_defer` (the ordinary lanes that break a rule against the tree cut) - on seed 25 links 3, 4, 20 and 22 end
+7-15 ft off any lane after those two steps, and the last resort's `settle_joins` carries them back. So `settle_joins`' rule
+(`law.near_misses`, `joins_short`) has no one placer to move into: the links are laid before the ways they depend on. The
+conversion D11 owes is an ORDER: the access tree (`settle_tree`, `settle_targets`, `settle_field` - the household ways the
+seating already judged, `tree.admits`) laid first in `stage_web`, then the skeleton, the orphan links and the door paths laid
+onto it, each asked the lane law at lay (`Lawful`, as a tree lane is) - after which `settle_defer`, `settle_joins` and the
+web stage's sweeps (`_join_orphan_ways` as a repair, `_sweep_dangling_ends`, `_sweep_doubled_tails`, `tidy_lane_ends`) are each
+probed off as R8 probed the rounds. The next session starts here: plan the reorder as its own task (decide first), measured on
+the landing cohort, a pre-change fresh block (seed 723759) and the five pool maps. Rendering: none until built.
+
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
@@ -351,6 +366,18 @@ The trigger: the landing cohort (cohort@20261025T234214Z) refused seeds 10, 25 a
 8. **Routes measured?** None offered: the measurement first.
 9. **After a ruling.** None yet.
 
+### T31 conversion C1 (2026-10-26): one width a way, asked where the orphan link is laid
+
+D11's conversion of `settle_widths`, which only the last resort still asks (T41). Measured first (observed 2026-10-25; method:
+the refusal manifests `/tmp/l7r-refused/Audit-10-*.json`, `Audit-37-*.json` of the cut probe, T31 part B): every `width_steps`
+joint on seeds 10 and 37 is a `join-orphans` link (6 ft) meeting a narrower lane end to end (a 3 ft skeleton arm, a 5 ft way) -
+`_join_orphan_ways` drew the link at the widest way within `_LANE_JOIN_FT`, so where the link CONTINUES a lane from its end it
+steps. The rule (`law.width_steps`, 0081's one width a way) is asked by that placer: a link whose end meets another lane's end
+takes that lane's width (the orphan's end first); a link meeting only treads (tees, where a step is lawful) keeps the widest way
+within reach, as before. Then `settle_widths` is probed off the last resort as R8 probed the rounds: the landing cohort and the
+five pool maps. Needless: deleted with its dead closure. Still needed: the next placer the refusals name gets the same rule,
+or the step is set down with its seeds and ruled (`make arbiter-ask`). Rendering: none (a link's width; no glyph).
+
 <!-- plan-archive: T40 to T40 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 
 ### T41 (T31's second part, D35): the four map-moving steps and the last resort's three needless re-asks deleted
@@ -381,3 +408,30 @@ The trigger: the landing cohort (cohort@20261025T234214Z) refused seeds 10, 25 a
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
+
+### T42 (T31's conversion C1, D11): one width a way, asked where the orphan link is laid
+
+- **Approach**: T31's conversion C1 (its decision in T31's section). Measured 2026-10-26 (method: the landing cohort, `make
+  cohort-landing JOBS=3`, and `make map` on the five pool hamlets compared with `git diff`): with `link_width` asked by
+  `_join_orphan_ways` (a link continuing a lane end to end takes that lane's width; tees keep the widest way within reach) and
+  `settle_widths` out of `last_resort`, 54 of 54 pass, and Inashiro's and Kashikawa's one orphan link each is drawn 5 ft where
+  it was 6, continuing a 5 ft way (Inashiro's commons redrawn round it). `settle_widths` and `rewidth`, left dead, are deleted
+  with their tests; the fragments test they shared is kept on its own. Rendering: none (a link's width).
+
+### T42 Approach (checklist part A)
+
+1. **The goal, in the world.** A link joining an orphan piece is drawn at the width of the way it continues, so no way changes
+   width at a bare joint and nothing widens it afterwards.
+2. **The constraints.** D11, D35; `law.width_steps` (0081: one width a way); the fixed and pinned seeds; the pool maps.
+3. **Where each comes from.** R: 0081's one width a way. G: the GM 2026-10-25 (the repairs replaced by placing correctly). O: the measurement.
+4. **Do they describe the world here?** Measured: every width step the cut probe refused was such a link.
+5. **The order.** After T41; the first of T31's conversions.
+6. **The exits.** The landing cohort and the pool gate green: landed. Red: set down with its seeds.
+7. **The search smell.** None: one rule moved into one placer.
+8. **The budget.** One landing.
+9. **Done, measured.** `link_width` asked at the link, `settle_widths` gone, `make land` green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+
+<!-- plan-archive: T43 to T41 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
