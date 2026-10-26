@@ -51,7 +51,8 @@ session names it in that turn's final message.
 
 ### Story 2 - a held row is never dropped (D; P1)
 
-1. **Given** an override row carrying a `held` key, **when** `make gm-review` runs, **then** it is listed as held.
+1. **Given** a question ruled held for the GM, **when** `make gm-review` runs, **then** it is listed among his decisions, from
+   one source (the kept questions), so no field name can drop it; an override row edited by hand does not list itself.
 
 ### Story 3 - a small edit owes small checks (E; P2)
 
@@ -70,8 +71,9 @@ session names it in that turn's final message.
 
 - **FR-001 (A)**: `make arbiter-ruled` writes every ruling to the feature's `arbiter.jsonl`, and a row of the GM's review only
   for a question in `for_gm` (FR-002), on every trigger kind, not only the hourly one. `make arbiter-fix-done` writes no
-  row of the GM's review. A declined fix (`arbiter-fix-declined`), a finding accepted with a reason (`make accept`) and a
-  known drift (feature 430) are not changed by this feature.
+  row of the GM's review. A declined fix (`arbiter-fix-declined`) wants his decision, so it too is written as a question owed
+  `escalation-check` (FR-002's path), not straight to him. A finding accepted with a reason (`make accept`) and a known drift
+  (feature 430) are rows he may read, not decisions, and are not changed by this feature.
 - **FR-002 (B)**: a `for_gm` question is written as a question owed `escalation-check`. `make gm-review` lists owed questions
   to the session apart from the GM's decisions. One command records escalation-check's verdict on a question: KEEP holds
   it for the GM, CUT closes it with the reason, both kept in the record. A feature with an owed question cannot land until
@@ -79,19 +81,27 @@ session names it in that turn's final message.
   refused once while it is not.
 - **FR-003 (C)**: `make arbiter-ruled` refuses a ruling whose `why` or `what` hands a decision to the GM (his call, his
   question, his to decide, held for him) without a `for_gm`; the round arbiter's contract says so.
-- **FR-004 (D)**: the held list reads an override row's `held` key as well as a `flag` opening "Held".
+- **FR-004 (D)**: the GM's list of decisions reads one source, FR-002's kept questions. An override row of 328's ranking
+  (`audit/overrides.json`, edited by hand, never through escalation-check) no longer lists itself as his decision, whether by
+  a `flag` opening "Held" or a `held` key; a row waiting on other work ("Held behind ...") is still listed as waiting. The
+  residence row, ruled held on 2026-10-12 and dropped because its `held` key was never read, gets a kept question (FR-006).
 - **FR-005 (E)**: measured first on the two replays, then fixed:
   - (a) a page edit owes a claims triage only for claims whose cited passage changed; a claim citing only passages the edit
     left unchanged is cleared mechanically, recorded as such;
   - (b) a paragraph several pop-ups share, edited once, owes its checks once for the pop-ups that share it.
   - No change may let a defect through that today's checks catch: each narrowing is proven on the replays against what
     today's rules owe, or stated and priced.
-- **FR-006 (F)**: the open rows are marked reviewed with the GM's words of 2026-10-26, every row except 374#60, 385#40 and
-  397#10. 374#60's question stands as the held override row FR-004 surfaces; 385#40 and 397#10 become held questions (the
-  audit's escalation-check kept both). `make gm-reviewed` takes the rows to leave open.
-- **FR-007**: each change names its cure in its own output and carries a test that fails without it; the docs that describe
-  the queue (`scripts/gm_review.py`'s docstring, the round arbiter's contract, `docs/guards.md`, the step-back bundle's text)
-  say the new rule.
+- **FR-006 (F)**: every open row is marked reviewed with the GM's words of 2026-10-26. The three that are his - 374#60 (the
+  magistracy residence size), 385#40 (the dispersed-hamlet feature never filed) and 397#10 (translation-check as a wave job)
+  - are each carried on as one kept question (the audit's escalation-check kept all three), so each appears once, as one of
+  his three decisions.
+- **FR-007**: each change names its cure in its own output and carries a test that fails without it. Every text that says what
+  reaches the GM says the new rule; found by `grep -rln "GM's review\|gm-review\|GM review" --exclude-dir=specs
+  --exclude-dir=tests --exclude-dir=.git --exclude-dir=.clones .` (2026-10-26), the hits that describe it: the constitution
+  (`.specify/memory/constitution.md`, "the GM reviews the ruling after landing"), `CLAUDE.md`, `docs/spec-kit-and-reviews.md`,
+  `docs/guards.md`, the round arbiter's, escalation-check's and spec-fidelity's contracts, `scripts/gm_review.py`'s and
+  `scripts/hooks/lib/hm_arbiter.py`'s docstrings, and the step-back bundle's text (`scripts/reviews/stepback_bundle.py`); the
+  plan reads every other hit and records why it needs no change.
 
 ## Success Criteria
 
@@ -100,7 +110,8 @@ session names it in that turn's final message.
   ruling's own words), and none for a round-cap ruling, a fix made or a routine step-back.
 - **SC-002** (FR-002, FR-003): the tests show a `for_gm` question owed, kept, cut and named; a ruling handing the GM a
   decision without `for_gm` refused.
-- **SC-003** (FR-004): `make gm-review` lists the residence row (`docs/buildings.md::Scale#residence wing length`) as held.
+- **SC-003** (FR-004): `make gm-review` lists the residence question among the GM's decisions, and an override row with a
+  `held` key or a "Held" flag and no kept question is not listed as one.
 - **SC-004** (FR-005): on the two replays, the claims triaged and the pop-up checks owed fall, with every claim whose cited
   passage changed still owed (the counts before and after in `research.md`).
 - **SC-005** (FR-006): after the clearing, `make gm-review` lists exactly three decisions for the GM and no other open row, and
