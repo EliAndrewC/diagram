@@ -33,3 +33,21 @@
   and a grep of `tests/**/test_*.py` for `fixtures/`): `tests/fixtures/` (56 files) holds no test module of its own, so "the tests of that directory" alone would select nothing for a change there.
 - **So**: a data file selects its own directory's tests AND every test module that names it (its file name or its directory
   under `tests/`), a superset of FR-002's directory - the narrowing FR-009 forbids otherwise (D2).
+
+## R4 - T01's replay: what did the 11 manifest-only full runs fail? (FR-001, FR-009)
+
+- **Finding** (observed 2026-10-26, method: the 11 `dev/run-log/2026-10/20261026*.json` records of target `done` whose plan
+  reason named `inashiro.json`, their `result`): 8 green; 3 red, each on the coverage floor alone (31f739f5d, 7f209090b,
+  449e7df7b - the lines R1 lists), none on a failing test.
+- **So**: no test that a full run failed lies outside the new selection - there was none. The three coverage reds are judged
+  by the incremental merge's floor as any code change's are: the tests that reached the lost lines touched the changed modules
+  at the baseline, so they re-run and their old contexts are dropped (`incremental.py`'s argument, "THE MERGE" (b)). The gate's
+  readers for a manifest number 42 modules today (observed 2026-10-26, method: `pool_readers.readers` on this clone).
+
+## R5 - SC-001's replay (T01, T02)
+
+- **Finding** (`m:plan-replay`): of the 19 runs, the current planner plans 12 incremental (the 11 `inashiro.json` runs and the
+  `CLAUDE.md` one), 4 full for the top-level `tests/conftest.py`, and 3 full for the gate's configuration - SC-001 to the run.
+- **A trap in the replay itself**: the run records do not name the clone, and each clone keeps its own baseline, so taking "the
+  last green full run" as the base replayed two of the conftest runs as incremental against another clone's baseline. The base
+  is now the latest earlier green full run at which the file the run's own reason names differs.
