@@ -17872,9 +17872,10 @@
   ]
  },
  "kanme": {
-  "def": "A weight of silver of 1,000 monme. Weighed silver was reckoned in kan, monme and fun.",
+  "def": "A weight of 1,000 monme (about 3.75 kilograms), used for silver and for goods such as ginned cotton. Weighed silver was reckoned in kan, monme and fun.",
   "variants": [
-   "kanme"
+   "kanme",
+   "gan"
   ]
  },
  "copper monme": {
@@ -18525,6 +18526,20 @@
   "def": "an herb of the mint family (egoma), grown in Japan for its oil-bearing seed.",
   "variants": [
    "perilla"
+  ]
+ },
+ "twill": {
+  "def": "A weave in which each weft thread passes over two or more warp threads and under two or more, shifting one thread along at each pass, so the cloth shows diagonal lines; \"2/2 twill\" means over two and under two.",
+  "variants": [
+   "twill",
+   "twills"
+  ]
+ },
+ "Haithabu": {
+  "def": "A Viking Age trading town on the Schlei inlet in what is now northern Germany, whose harbor has yielded many textile finds; \"H11\" is the catalog number of one of them.",
+  "variants": [
+   "Haithabu",
+   "Hedeby"
   ]
  }
 }

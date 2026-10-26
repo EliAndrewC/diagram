@@ -1369,6 +1369,7 @@ gaison	gaison
 gakuzuka	gakuzuka
 galleried mining	siege mining
 game master	GM
+gan	kanme
 gang salt	gang salt
 gangi	gangi
 gannin	gannin
@@ -1574,6 +1575,7 @@ hagi	Hagi
 haibutsu kishaku	haibutsu kishaku
 haiden	haiden
 haikai	haikai
+haithabu	Haithabu
 hakata	Hakata
 hakehi	hakehi
 hakka	Hakka
@@ -1654,6 +1656,7 @@ headworks	headworks
 heavenly kings	hall of the Heavenly Kings
 hectare	hectare
 hectares	hectare
+hedeby	Haithabu
 heian	Heian
 heian-kyo	Heian-kyo
 heian-kyo's	Heian-kyo
@@ -4670,6 +4673,8 @@ tung trees	tung
 tutelary shrine	chinju
 tutelary shrines	chinju
 twelve-mat	tatami
+twill	twill
+twills	twill
 two-grave	two-grave
 two-grave settlements	two-grave
 two-grave villages	two-grave
