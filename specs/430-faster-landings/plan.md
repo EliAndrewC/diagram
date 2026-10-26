@@ -83,7 +83,7 @@ file directly under `tests/` plans full, as today; any other selects (a) every t
 (b) for a file that is not a `conftest.py`, every test module under the gate's trees whose source names the file's name or its
 directory as a path part. (b) is wider than FR-002's "that directory", on purpose: fixture data under `tests/fixtures/` (56
 files, no test module of its own) is read by tests in eight other directories (observed 2026-10-26, method: research R3), and the directory alone would
-select nothing - the narrowing FR-009 forbids. A guard suite under `tests/hooks/` selects only the pytest modules there, which is
+select nothing - an unpriced narrowing, which FR-009 forbids. A guard suite under `tests/hooks/` selects only the pytest modules there, which is
 right: `make hooks-test`, not the gate, runs the suites. The replay: SC-001's 12 re-plan incremental, the 4 top-level `conftest.py`
 runs re-plan full, and the 3 that also changed the gate's configuration re-plan full by that rule.
 
@@ -109,8 +109,8 @@ and a green check costs the landing nothing. SC-002's "less time than the gate" 
 the gate on this shared container, as a landing runs it, never alone. The escape stays `COVER_OK`.
 
 **D4 - the push gates (FR-004).** A new `scripts/gates/push_gates.py` holds, per gate, what it judges:
-- `claims`: `claims.BASE_PATHS`, `claims.INDEX`, `claims.DEFERRED`, `claims.STORE`, and `specs/*/tasks.md` (a known drift reads
-  its open task row);
+- `claims`: `claims.BASE_PATHS`, `claims.INDEX`, `claims.DEFERRED`, `claims.STORE`, `specs/*/tasks.md` (a known drift reads
+  its open task row) and `specs/*/gm-review.jsonl` (D6: a known drift is admitted once recorded there);
 - `entry`: the paths `record_owed.py` reads (`research/`, `l7r/diagram/interactive/`, and the record's answer files - the list
   read off its constants in the task, each pinned by a test that fails when a constant names a path the list lacks);
 - `cohort`: the engine paths (`ci/delta.is_engine`).
@@ -132,13 +132,13 @@ entry and claims always, cohort on a gated route - side by side, each to its own
 `plan_gate.py delta` (`make plan-delta`) runs the lint on every block it would bundle, as `make decide` already does, and writes
 no bundle while one refuses, naming each: no review is dispatched on a block the lint refuses, because no bundle exists to
 dispatch it on.
-An approach block owes no review when it decides nothing, asked of its own part A answers: item 5 (the order) answered "n/a" or
-"nothing placed earlier moves" (no earlier placement moved), item 10 (before moving a constant) "n/a" (no number tuned), item 11
-"n/a", it states no figure with a unit, and it makes no rule of its own, labeled or not: item 2 (the constraints) names only ids
-defined elsewhere in the plan, `plan-done.md` or the spec (`D<n>`, `FR-<n>`, `SC-<n>`, `R<n>`) and nothing else, and item 4 (does
-each describe the world here) is a bare "Yes" - a rule stated in prose has to stand in one of those two answers, and either one
-then fails the test; and every `D<n>` the block names is defined elsewhere. A missing `D<n>` alone is not enough: every one of
-these answers must hold. `plan_sections.decides_nothing` takes the approach form beside the part B form.
+An approach block owes no review only when it MATCHES THE TEMPLATE AND DECIDES NOTHING, labeled or not, asked of every one of its
+eleven answers with no free text left unasked: each answer, once the ids it names are set aside (`D<n>`, `FR-<n>`, `SC-<n>`,
+`R<n>`, `T<n>`, a feature number, a date - each `D<n>` and `R<n>` defined elsewhere in the plan, `plan-done.md` or the spec), is
+empty, "n/a", "None", "Yes", "One landing", or `task-add`'s own template wording for that item (item 6's red exit, item 9's "Its
+tests red without D<n>."); and the block holds no number of any kind outside those ids, unit or not ("9 of the 11", "4 or fewer"
+are tuned numbers). Any answer in the block's own words - a goal, a source, an order, a finish line - is where a rule or a number
+can stand, so it owes the review. A missing `D<n>` alone is never enough. `plan_sections.decides_nothing` takes the approach form beside the part B form.
 
 **D6 - known departures and small triages (FR-006, SC-005).** `claims_carry.known_drifts` drops the condition that the claim's
 code be the merge base's: a DRIFTED claim whose own text's last named task is an open row of that feature's `tasks.md` naming the
