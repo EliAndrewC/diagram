@@ -610,3 +610,50 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
   into it) asked where the street is laid, then the street call probed off and deleted as T46 deleted the others. Rendering:
   none.
 
+
+### T48 (T31's D11 probe, D35): two settle steps deleted that alone off move no pool lane and no verdict
+
+- **Approach**: after T44-T46 the settle's remaining repairs are probed off one at a time. Measured 2026-10-26 UTC (method: a
+  detached worktree at T46's tree, each off ALONE with `make cohort-landing JOBS=3`, `make cohort N=48 SEED=723759 FRESH=0
+  JOBS=3` - the block rolled before T44, baseline failing 723767 723770 723775 723777 723794 723799 723804 - and `make map` on
+  the five pool hamlets, each manifest diffed field by field against HEAD):
+  - `square_every_crossing` alone off: 54 of 54, the fresh block's verdicts identical to HEAD's seed by seed, no pool lane
+    moved - Inashiro's manifest moves only in the settle's own tally (`meta.web_settle.changed` 19 -> 18). NEEDLESS (D35). The
+    tree's lanes (`tree.lanes_of`, the seating's `Lawful.squared`), the door paths and the connector are squared as laid
+    (`squaring.square_run`); the skeleton arms (`web/skeleton.py`), the web lanes (`fabric._draw_web`), the bund and track spurs
+    and the field way (`reach.py`) are NOT, and on no measured map does one of them cross water off square - the law
+    (`law.oblique_crossings`) is asked of the finished web as before, so a seed that meets one is refused by name, a placer's
+    defect owed its squaring there (D35, constitution XIX), never this step back. T45's needle rule now holds fresh seed 723805,
+    for which T43 had restored it.
+  - `settle_fragments` alone off `STEPS`: the same - 54 of 54, the same seven, Inashiro's tally alone (19 -> 18). NEEDLESS.
+    It stays defined: the last resort asks it.
+  - Both together (this task's change, measured in the clone 2026-10-26 UTC): `make cohort-landing JOBS=3` 54 of 54; the fresh
+    block 47 of 54, its seven failures identical to HEAD's seed by seed and check by check (HEAD rolled on the same block in a
+    detached worktree; 723775 is refused `joins_short` at a skeleton arm's end on both, the block's older record's `lane_knots`
+    being from before T44 - its conversion stays owed); Inashiro's tally 19 -> 17, nothing else on any pool manifest.
+  - Measured NEEDED, kept, conversions owed (T31, D11): `settle_ends` alone off moves Kuwabata's access lane (66 -> 69 ft) and the
+    last resort then drops a lane on Inashiro; the tree's own `settle_defer` call alone off leaves the last resort dropping a lane
+    on Kuwabata and Sawada (its work moved into the backstop, not gone); `settle_network` (36 of 54 without it), `settle_knots`
+    (40 of 54) and the web's `trim_lane_stubs` (fresh seed 723805 refused without it).
+  - The last resort itself (`last_resort.py`, which asks `settle_reach`, `settle_knots`, `settle_defer`, `settle_network` and
+    `settle_fragments`) still repairs a laid web: it stays OWED under FR-004 as FR-007's backstop, converted once the steps it
+    re-asks are, never an exemption.
+  `make dead-closure` then finds `square_every_crossing` alone dead; it goes with the one test whose BODY calls it (the arbiter's
+  rule on T44). Rendering: none (no glyph; no lane redrawn).
+
+### T48 Approach (checklist part A)
+
+1. **The goal, in the world.** Nothing mends the web after it is laid: each way is laid lawful, square at its crossings.
+2. **The constraints.** D35 (needless = alone off, no verdict and no pool manifest moved), D23, FR-004, FR-008; the arbiter's rule
+   that a test goes only on what its body calls; the same-block rule (a pre-change fresh block rolled seed by seed).
+3. **Where each comes from.** G: the GM 2026-10-25 (the repairs replaced by placing correctly). O: the probes above.
+4. **Do they describe the world here?** Measured: each repair alone - fixed and pinned seeds, the pre-change fresh block, and
+   every pool manifest diffed field by field - then the two together.
+5. **The order.** After T46; it moves no map's lanes, so it may precede T47 (D11: tasks that move no map first).
+6. **The exits.** FR-008 green: landed with its fresh rate. Red: set down.
+7. **The search smell.** None: one probe a repair, then the two together.
+8. **The budget.** One landing.
+9. **Done, measured.** The two gone, `square_every_crossing`'s closure with it, the fresh block 723759 the same seven, `make
+   land` green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.

@@ -13,9 +13,8 @@ from ..geom import memo_ground, worked_ground
 from ..keeper import unsettled
 from ..knots import settle_knots
 from ..reach import settle_field, settle_targets
-from ..squaring import square_every_crossing
 from ..tree import settle_tree
-from .ends import settle_ends, settle_fragments, settle_network
+from .ends import settle_ends, settle_network
 from .lawful import Lawful
 from .shapes import SETTLE_ROUNDS
 
@@ -44,15 +43,13 @@ def settle_reach(s: Any) -> int:
 # `settle_shapes`, `settle_way_outs` and `settle_widths` (54 of 54; Inashiro, Kashikawa and Sawada moved in their drawing order
 # alone). Their rules are kept by the placers before them. Do not re-add one to mend a seed: a seed that needs one is a placer's
 # defect (constitution XIX). The steps still here are NEEDED, each owed its rule moved into the placer that lays what it mends
-# (feature 417 T31, D11). `square_every_crossing` among them went in T41 and came back in T43: fresh seed 723805 tied a lane
-# knot without it (bisected 2026-10-26 UTC: it alone of T41's seven) - a crossing left unsquared that the
-# fixed seeds never met.
+# (feature 417 T31, D11). `square_every_crossing` went in T41, came back in T43 (fresh seed 723805 tied a lane knot without
+# it) and went again in T48 with `settle_fragments`' place here, once T45's needle rule held 723805: each alone off, 54 of 54,
+# the pre-change fresh block from 723759 the same seven, no pool lane moved (the last resort still asks `settle_fragments`).
 STEPS = (
-    square_every_crossing,
     settle_ends,
     settle_reach,
     settle_network,
-    settle_fragments,
     settle_knots,
 )
 

@@ -46,9 +46,9 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
         dike gates at cuts - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a sluice gate at every cut of the perimeter dike
     """
     # THE LANES ARE ALREADY SQUARE (feature 287, M4c): every way crosses the brook and every drawn channel square, and so
-    # does its deck (features 261, research 0084) - squared as the first step of `settle_the_web`, the web's last pass
-    # (`ways/settle/`, `square_every_crossing`), so every rule of the lane law is judged on the squared lane and no stage
-    # after the web rewrites one. This stage only decks what the web drew. (The brook is round since `stage_sink`, M2.)
+    # does its deck (features 261, research 0084) - each run squared as its placer lays it (`squaring.square_run`; the
+    # settle's step that squared every lane afterwards went in feature 417 T48), so every rule of the lane law is judged on
+    # the squared lane and no stage after the web rewrites one. This stage only decks what the web drew. (The brook is round since `stage_sink`, M2.)
     s.bridges()
     if s.M.get("field_ditches"):
         if plan.field_archetype in POLDER_ARCHETYPES:

@@ -9,5 +9,5 @@ where it is looked up**: `settle.ends.settle_ends`, not `settle.settle_ends`. La
 |---|---|
 | `shapes.py` | the bookkeeping (`apply_pieces`, `SETTLE_ROUNDS`), the crossing and foul cuts, an end re-aimed (`reaimed`) (`settle_shapes` and `settle_way_outs` went in feature 417 T31) |
 | `lawful.py` | `Lawful` - the one question asked before a tree lane is drawn - and `corridor_on_lawful_ground` |
-| `ends.py` | the repairs of the ends and joins: `settle_ends`, `settle_dangling`, `settle_joins` (asked by the last resort only since feature 417 T31), `settle_fragments`, `settle_widths`, `settle_network` (`settle_shadows`, `settle_needles` and `settle_street_ends` went in T31: measured needless) |
+| `ends.py` | the repairs of the ends and joins: `settle_ends`, `settle_dangling`, `settle_fragments` (asked by the last resort only since feature 417 T48), `settle_network` (`settle_shadows`, `settle_needles` and `settle_street_ends` went in T31, `settle_widths` in T42, `settle_joins` in T44: measured needless) |
 | `stage.py` | the driver: `settle_reach`, the step order `STEPS`, `settle_the_web` |

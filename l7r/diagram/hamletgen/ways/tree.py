@@ -123,7 +123,7 @@ def chain_of(recs: Sequence[Mapping[str, Any]], host: Sequence[int | None], i: i
 
 def lanes_of(M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequence[int | None], chosen: Sequence[int], drawn: bool = True, square: Any = None) -> list[dict[str, Any]]:
     """The tree lanes for the runs `chosen` (their chains' closure taken by the caller), squared at their water crossings as
-    the web draws every lane (`settle.square_run`, or `square` - the seating's `Lawful.squared`, the same answer asked only
+    every placer squares its run (`settle.square_run`, or `square` - the seating's `Lawful.squared`, the same answer asked only
     where water comes near, and remembered per run). The seating's tree lays its runs one at a time on a kept base
     (`tree_base`, feature 387), each through `lane_record`.
 

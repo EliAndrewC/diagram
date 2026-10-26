@@ -222,6 +222,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
+  },
+  "### T48 (T31's D11 probe, D35): four settle repairs deleted once the households' ways are drawn first": {
+   "sha256": "52987776baae21b22a506bc4766dca7d080419c761a5ad99a7577892f1f39ffd",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T48 Approach (checklist part A)": {
+   "sha256": "efed7ecb85741f112802914a9ab83f7397fc07fea5c929e84eed133f80169067",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3225,6 +3237,53 @@
      "summary": "law.dangling_lane_ends (0033: a row's street ends at its last farm or runs off the map as the road into it) asked by lay_row_streets where it lays the street; then the street call probed off and deleted",
      "class": "within",
      "why": "D35's D11 conversion exactly: the predicate named, the placer named, the repair deleted. The 'or runs off the map' clause is the existing law's own text, not a carve-out the plan adds; no set-down exception is claimed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T48 (T31's D11 probe, D35): four settle repairs deleted once the households' ways are drawn first",
+    "### T48 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T48-a (square_every_crossing deleted)",
+     "summary": "square_every_crossing removed from STEPS because every placer squares the run it lays (square_run: Lawful.squared, lanes_of, the door paths, the connector); probed alone 54 of 54, fresh block the same seven.",
+     "class": "within",
+     "why": "FR-004 deletes the settle's repair steps; the GM asked that the repairs be switched off AND replaced by placing correctly, and this block names the replacing half (the predicate Lawful.squared, the placers that ask it via square_run). D35's conversion record is supplied for this step."
+    },
+    {
+     "id": "T48-b (settle_ends, settle_fragments out of STEPS and the tree's settle_defer call deleted as needless, while four pool maps move)",
+     "summary": "Three repairs deleted on the strength of 54 of 54 and the fresh block's same seven, each alone and together; the block then records that Inashiro, Kashikawa, Kuwabata (one lane, 2 ft) and Sawada move, and names no predicate and no placer that now does what these three did.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "D35, which the block cites, defines NEEDLESS as 'no verdict AND no pool manifest moved'; a NEEDED step gets D11's conversion decided before its code, 'the predicate named, the placer named'. The block records four pool manifests moving and does not record which step(s) moved them or that each alone left the pool still (checklist item 4 says the pool was measured but the result per step is not stated). Deleting them as needless on that record skips the 'and then replacing them with just having the algorithm place correctly' half of the GM's 2026-10-25 instruction for any step that did move a map - a step that moves a pool map was doing something. D23's 'maps may change' governs the deletion landing; it does not redefine D35's needless test, and FR-008's 'keep passing' is a no-regression floor, not the conversion. Not impossible, not implied by the GM's words, not purpose-defeating. Fix: state each of the four's pool result alone (measured, one-shot labeled or m: keyed); a step whose removal alone moved no pool manifest is needless and this ruling becomes within (the movement is then combination-only and D23 covers the landing); for any step that alone moved a map, write the D35 record (the rule it mended, the predicate, the placer that now asks it) before its deletion, or keep it with its conversion owed like settle_network and settle_knots."
+    },
+    {
+     "id": "T48-c (settle_defer and settle_fragments stay defined for the last resort)",
+     "summary": "The two functions are not deleted because the last resort still calls them; only their STEPS position and the tree's call go.",
+     "class": "within",
+     "why": "D23 deletes call sites and dead closure; a function another live caller reaches is not dead closure, and the last resort is not one of D35's STEPS. Checked the seam: both functions are in the same situation (removed from the pipeline, still reached by the last resort), so one ruling covers both. This block does NOT discharge FR-004 for the last resort: its calls to two repair functions are a pass that repairs a laid web, still owed under FR-004 (and FR-002's inventory), held by D11 if it is FR-007 ground. Read as a permanent exemption of the last resort it would be a narrowing and NOT LEGITIMATE; the plan should carry it as owed the way it carries the three NEEDED steps."
+    },
+    {
+     "id": "T48-d (settle_network, settle_knots, trim_lane_stubs kept as NEEDED)",
+     "summary": "Measured needed (36 of 54, 40 of 54, fresh seed 723805 refused); kept with their conversions owed under T31/D11.",
+     "class": "within",
+     "why": "D35 gives each NEEDED step D11's conversion later; keeping them with the conversion recorded as owed is the prescribed path, not an exemption."
+    },
+    {
+     "id": "T48-e (dead closure and tests deleted by the arbiter's body-calls rule)",
+     "summary": "The thirteen names make dead-closure finds dead are deleted with the tests whose body calls one.",
+     "class": "within",
+     "why": "D23 (tests that only exercised them) as applied by the recorded arbiter ruling on T44."
+    },
+    {
+     "id": "T48-f (exits, method, budget)",
+     "summary": "Green lands with its fresh rate; red is set down whole; workers at 3; one landing.",
+     "class": "within",
+     "why": "D11 and D23 (set down whole, no pass-by-pass iteration), D35 (JOBS=3). Order note, not a ruling: D11 says the tasks that move no map go first and T48 moves four pool maps; if T47 moves no map, D11 puts T47 before T48. T47 is not in this bundle."
     }
    ]
   }

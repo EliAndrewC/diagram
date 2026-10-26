@@ -8,13 +8,12 @@ changes nothing. It is the guarantee; the passes before it are best-effort drawi
 
 WHAT A REPAIR MAY DO. It only takes material AWAY from an ordinary lane - cuts a crossing, a fold or a foul out of it,
 shortens an end, re-aims an end's last leg at the foot of its own previous vertex (never longer than the leg it replaces),
-drops a piece that no longer joins the connector's network - or squares a crossing. It never cuts the TREE (`corridors.
+drops a piece that no longer joins the connector's network. It never cuts the TREE (`corridors.
 is_tree`: the connector, whose hook alone it takes off, and the lanes step 4 draws); the one tree edit is step 3's, which
 takes a tree lane away WHOLE where it alone carries a way out over the brook and back, and step 4 lays that reach again
 only where it adds no such way out (`Lawful`); and a tree lane shorter than `law.FRAGMENT_FT` that earns nothing goes whole
 as any lane does (`settle_fragments`, homes H40) - it reaches nothing step 4 owes. That is the termination argument:
-every repair but the squaring strictly shortens the non-tree web, the squaring is idempotent (`checks.square_crossings`),
-and step 4 adds a tree lane at most once per house, way target and field. Should the rounds run out, or a round change
+every repair strictly shortens the non-tree web, and step 4 adds a tree lane at most once per house, way target and field. Should the rounds run out, or a round change
 nothing, with a rule still broken (`unsettled`, the whole law asked at the exit), the ORDINARY lanes still breaking one are
 dropped whole, round by round, until none is (FR-005: a lane that cannot
 be repaired is dropped; it is never kept as "the least bad"); a rule the tree alone still breaks is refused by name, never
@@ -28,8 +27,8 @@ judged (`tree.settle_tree`), the ordinary lanes deferring to them (`tree.settle_
 the network misses (a burial ground's edge), the shortest run that keeps the law (`Lawful`); the step that pruned a tree
 lane the map no longer needed went in feature 417 T31, measured needless. This replaced the driver's re-roll (feature 287, FR-002).
 
-THE CROSSINGS ARE SQUARED HERE (ways W11): the squaring `stage_crossings` did after the woods now runs as this pass's first
-step, so every guarantee below is judged on the squared lane and no stage after the web rewrites one.
+THE CROSSINGS ARE SQUARED AS LAID (ways W11): every placer squares the run it lays (`squaring.square_run`), so every
+guarantee here is judged on the squared lane; the step that squared every lane here went in feature 417 T48.
 
 Research: settle plumbing - NONE: rounds, step order and bookkeeping; each rule is claimed at its predicate in law.py, and a split piece's room and width at `apply_pieces`"""
 
@@ -86,7 +85,6 @@ from ..squaring import SQUARE_MARGIN_FT as SQUARE_MARGIN_FT
 from ..squaring import SQUARE_PASSES as SQUARE_PASSES
 from ..squaring import _pts as _pts
 from ..squaring import cut_at_shallow_crossing as cut_at_shallow_crossing
-from ..squaring import square_every_crossing as square_every_crossing
 from ..squaring import square_run as square_run
 from ..squaring import square_waters as square_waters
 from ..sweeps import _DOUBLED_DEG as _DOUBLED_DEG

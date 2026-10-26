@@ -629,8 +629,8 @@ def door_path(
     straight step where it is clear (the router plans on a lattice and refused doors whose every neighboring cell stood in
     its gap of the yard, the well or a trunk - three Mizuguchi doors 35 ft from their street), else the routed way,
     string-pulled (the lattice's few-foot jogs are kinks to the law, cohort seed 904); ended square on the way at its first
-    arrival (`to_first_arrival`); squared where it crosses water (`settle.square_run`, as the settle squares every lane
-    first); and kept only where it crosses no wall and no fixture and the law would keep it as a tree lane (`lawful`).
+    arrival (`to_first_arrival`); squared where it crosses water (`settle.square_run`, as every placer squares
+    the run it lays); and kept only where it crosses no wall and no fixture and the law would keep it as a tree lane (`lawful`).
     The grove `bands` (grown by `band_grow`) are held `FOOTPATH_FABRIC_GAP` off by every test - the step and the pull as the
     router holds them - so 0036's 11 ft is kept whichever way the path was found (feature 385 T98's claims round).
 
