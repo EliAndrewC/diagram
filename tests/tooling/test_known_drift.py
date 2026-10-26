@@ -93,6 +93,14 @@ def test_an_accepted_drift_whose_text_names_no_task_is_known_on_the_accept(tmp_p
     assert carry.known_drifts(cx, tmp_path) == {KEY: "accepted by the round arbiter"}
 
 
+def test_an_accepted_drift_on_code_the_landing_changed_is_known(tmp_path: pathlib.Path) -> None:
+    _tasks(tmp_path, "- [ ] T32 The lanes: `DOORSTEP_FT` 80 against 0246's 60")
+    cx = _cx(tmp_path, "a departure the code keeps until feature 417 T32", "c0")
+    assert carry.known_drifts(cx, tmp_path) == {}, "the code changed and no accept: the landing's drift"
+    cx.load_index = lambda _p: {KEY: {"verdict": "DRIFTED", "core": "c1", "note": f"80 ft; {carry.ACCEPTED} (ask:x) to land as filed"}}
+    assert carry.known_drifts(cx, tmp_path) == {KEY: "417 T32"}, "the arbiter's accept stands whatever the base holds"
+
+
 def test_an_accept_keeps_a_label_s_own_semicolon_whole() -> None:
     acc = _load("claims_accept")
     known = {"a.md::S#well (\"x\"; y)": 1, "a.md::S#b": 1}
