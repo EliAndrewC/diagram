@@ -30,11 +30,6 @@ from ..geom import polyline_len
 from ..serve import _lay_web_lane, lay_door_paths
 from ..settle import settle_the_web
 from ..street import lay_row_streets
-from ..sweeps import (
-    _join_orphan_ways,
-    _sweep_dangling_ends,
-    _sweep_doubled_tails,
-)
 from ..tree import settle_tree
 from .skeleton import _lay_skeleton, _web_cut_lines
 from .tidy import tidy_lane_ends
@@ -89,9 +84,6 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         web lanes off the water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places
         the households' ways first - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every household's own way is laid in the gaps, and the web's lanes after it (`settle_tree` before the skeleton, the cuts, the orphan links and the door paths, on a clustered map)
         a row's street first - research/questions/0033-row-villages-resson.drawing.html: a row's street stands where its farms stand, and a farm off it reaches it by its own path (a path round the grove where the grove is in the way) - so the streets are laid first, and each farm's door path, or the settle's way for a house left unreached, ends on its street
-        orphan stub joined - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, so a stranded stub is joined into it
-        an end left in open ground pulled back - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back to the last thing it serves, or the lane dropped, against the final network (`tidy_lane_ends` after the joins, then `_sweep_dangling_ends`)
-        a doubled tail ends where it met - research/questions/0081-village-lanes.drawing.html: a lane that runs on beside the way it met ends where it met it (`_sweep_doubled_tails`, feature 261)
         web lanes routed round the households' reserved wood seats as fabric - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: every pass clips and routes round each reserved wood seat by the copse's lane buffer, as it does a steading; no page read shows a lane through a household's grove
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
         every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain
@@ -238,28 +230,16 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # is right to call that a tread that serves nobody. The engine already owns this trim; the web
     # simply has to ask for it after adding to the network.
     s.trim_lane_stubs()
-    # ONE NETWORK FIRST: a lane that joins an orphaned component is worth nothing while the component itself is an island.
     # A HOUSE THE WEB STILL LEAVES UNREACHED IS THE SETTLE'S (feature 287, GM 2026-09-30): the straggler footpath pass that
     # stood here - a door path routed to every house the web left more than 90 ft from a way - was dropped once the seating
     # reserved every house's corridor (`tree.admits`) and the settle drew it for any house left unreached (`settle_the_web`,
     # `last_resort.refuse_unreached`). Measured with it off: the reference snapshot 26.85 s -> 23.85 s, lanes 380 -> 347
     # (`specs/287-placer-guarantees/measurements.json`, `straggler-footpaths-off`).
-    _pass("join-orphans")
-    _join_orphan_ways(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    # ...AND JOIN ORPHANS AGAIN: on cohort seed 39 the first join saw four of the twelve lanes the map finished with, and the
-    # eight added after it formed a second network of their own. The passes that drew those eight between the two joins went
-    # (feature 417 T26); the second join is kept as measured, the two not yet made one.
-    _join_orphan_ways(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    # ...AND TRIM AGAINST THE FINAL NETWORK. Every lane is trimmed to service when it is drawn, against the ways and houses
-    # that exist AT THAT MOMENT, and the joins draw more after it: the ratchet's Cohort-42 shipped a 146 ft web lane whose end
-    # stood 80 ft from the nearest house. It only ever SHORTENS; a lane reduced below the debris floor is dropped. NOT
-    # `trim_lane_stubs`: that is a harsher rule (71 ft floor) meant for a skeleton arm, and running it here ate the short door
-    # paths the web draws - measured once at 43/48 -> 9/48. Named, so a lane it re-inks does not say the join drew it.
-    _pass("tidy")
-    tidy_lane_ends(s, list(plan.envelope))
-    _sweep_dangling_ends(s)  # an end the trim left in open ground is pulled back to something, or dropped
-    _sweep_doubled_tails(s)  # a lane that runs on beside the way it met ends where it met it (feature 261)
-    _sweep_dangling_ends(s)
+    # FIVE MORE PASSES STOOD HERE AND WENT (feature 417 T46, once the households' ways are drawn first - T44): the orphan
+    # joins (`_join_orphan_ways`, twice), the end trims (`tidy_lane_ends`), the dangling-end sweeps (`_sweep_dangling_ends`,
+    # twice) and the doubled-tail sweep (`_sweep_doubled_tails`) - each off alone, then all together, on the 48 fixed seeds,
+    # the pinned rows, the pre-change fresh block from seed 723759 and the pool maps: 54 of 54, the same seven of 48. The
+    # web is laid onto the tree, so it has no orphans to join and no ends to pull back; what reaches a house is the tree's.
     # EIGHTEEN REPAIR PASSES STOOD HERE AND WENT (feature 417 T26, its research R5): `_bridge_collinear_breaks`, `_touch_junctions`,
     # `_smooth_web`, `_drop_collapsed`, `_sweep_debris`, `_drop_end_nubs`, `_sweep_steading_fouls`, `_sweep_doubled_remnants`,
     # `_keep_the_route_wide`, `straighten_joints`, `fold_the_connector_hairpin`, `center_lane_ends`, `cut_the_overruns`,
@@ -273,7 +253,6 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     s.drop_lanes([i for i, ln in enumerate(s.M.get("lanes") or []) if len(ln.get("pts") or []) < 2 or polyline_len([(float(x), float(y)) for x, y in ln["pts"]]) < 1.0])
     # ...AND THE ENDS ARE TRIMMED TO SERVICE ONCE MORE, LAST (feature 261): the dangling-end sweeps reshape lanes, and
     # Kuwabata shipped a skeleton arm into the scrub that the first tidy had seen as part of a longer lane.
-    tidy_lane_ends(s, list(plan.envelope))
     # ...AND THE PADDY IS REACHED (269 B04, research/fields/290): where no lane end stands on its bund - the spur swept, or
     # never drawn - the nearest lane runs on to it, or a field path is drawn off the nearest lane; recorded either way
     # ...AND A GROVE FARM IS REACHED AT ITS FRONT DOOR (feature 291 FR-019), LAST: laid before the trims, a door path was cut
@@ -288,7 +267,6 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         # ...and a door path laid beside a lane that was there first meets it rather than doubling it (Kashikawa: a
         # join-orphans lane ran on 64 ft beside the door path of the farm at (2299, 2724)) - the sweep that ran above,
         # before any door path existed
-        _sweep_doubled_tails(s)
         tidy_lane_ends(s, list(plan.envelope), streets=True)
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web

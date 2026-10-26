@@ -553,3 +553,32 @@ or the step is set down with its seeds and ruled (`make arbiter-ask`). Rendering
    asks the law's own predicate (`law.is_needle`) and reach (`law.NEEDLE_LOOP_FT / 2`), so the placer and the finished-map check
    share one implementation (SC-003).
 11. **Before fitting things into room.** n/a.
+
+### T46 (T31 C2's probe step, D35): five web passes deleted once the households' ways are drawn first
+
+- **Approach**: C2 named it (T31's section): with the access tree laid first (T44), the passes that repaired after the web was
+  laid are probed off. Measured 2026-10-26 UTC (method: a detached worktree at T45's tree, each off alone with `make
+  cohort-landing JOBS=3`, then all off together with `make cohort-landing JOBS=3`, `make cohort N=48 SEED=723759 FRESH=0 JOBS=3`
+  and `make map` on the five pool hamlets): `settle_defer` out of `STEPS`, the orphan joins (`_join_orphan_ways`, twice), the end
+  trims (`tidy_lane_ends`, the two non-street calls), the dangling-end sweeps (`_sweep_dangling_ends`, twice) and the doubled-tail
+  sweep (`_sweep_doubled_tails`) - each alone 54 of 54; all together 54 of 54 and the fresh block 7 of 48, the same seven.
+  Inashiro, Kashikawa and Sawada move: Kashikawa drops a 492 ft orphan link and a 410 ft lane and the settle draws a 272 ft field
+  way in their place, every house and the field still reached. The fourteen names `make dead-closure` then found dead (T42's
+  `link_width` among them, its link gone) deleted, with the tests whose BODY calls one (the arbiter's rule on T44). `settle_defer`
+  stays defined: `settle_tree` asks it. Rendering: none (no glyph; three pool maps redrawn).
+
+### T46 Approach (checklist part A)
+
+1. **The goal, in the world.** Nothing mends the web after it is laid: the households' ways stand first and the rest is laid
+   onto them.
+2. **The constraints.** D35, D23, FR-004, FR-008; the arbiter's rule that a test goes only on what its body calls.
+3. **Where each comes from.** G: the GM 2026-10-25 (the repairs replaced by placing correctly). O: the probes above.
+4. **Do they describe the world here?** Measured: each pass alone and all together, fixed, pinned, fresh and pool.
+5. **The order.** After T44 (tree first) and T45 (the needle rule); before the settle's remaining steps.
+6. **The exits.** FR-008 green: landed with its fresh rate. Red: set down.
+7. **The search smell.** None: one probe a pass, then all together.
+8. **The budget.** One landing.
+9. **Done, measured.** The five gone with their dead closure, `make land` green.
+10. **Before moving a constant.** n/a: the constants go with their only users.
+11. **Before fitting things into room.** n/a.
+

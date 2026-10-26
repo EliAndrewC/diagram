@@ -60,7 +60,6 @@ from .route import _route as _route
 from .route import _unjog as _unjog
 from .serve import _lay_web_lane as _lay_web_lane
 from .smooth import web_pieces as web_pieces
-from .sweeps import _join_orphan_ways as _join_orphan_ways
 from .track import _cluster_edge_toward as _cluster_edge_toward
 from .track import _cluster_gateway as _cluster_gateway
 from .track import _thread_the_fabric as _thread_the_fabric

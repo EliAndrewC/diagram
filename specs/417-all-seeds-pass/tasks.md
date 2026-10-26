@@ -119,4 +119,6 @@
 - [x] T45 (FR-005, ask:417-T31-C2-regression) The needle rule (`law.needle_loops`) asked where `lanes_of` draws a tree lane, so two household ways close no sliver (fresh seed 723775), in `l7r/diagram/hamletgen/ways/tree.py`
       research: rendering
       verify: DONE. landed: off_the_needle asked in lanes_of: a tree lane whose end runs along a drawn way or the connector is cut where it comes alongside and teed onto it (0081); landing cohort 54 of 54, fresh block from seed 723759 7 of 48 (the same seven; 723775's needle gone, now refused on a skeleton end), no pool map moved; the mid-lane case held for T32 (arbiter asks 417-T45-midlane-needle and -unclaimed, accept)
+- [ ] T46 (T31 C2's probe step, D35) Five web passes deleted once the households' ways are drawn first - the orphan joins, the end trims, the dangling-end and doubled-tail sweeps and settle_defer's STEPS place - with the fourteen names they left dead, in `l7r/diagram/hamletgen/ways/` (FR-004)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=417)

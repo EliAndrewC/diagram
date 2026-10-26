@@ -7,13 +7,12 @@ Research: doubled tail plumbing - NONE"""
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping, Sequence
-from typing import Any
+from collections.abc import Sequence
 
-from l7r.diagram.settlement import Settlement, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import seg_closest, seg_dist, seg_intersect, segments_cross
 
 from ..consts import Pt
-from .geom import _TOUCH_GAP, _components, polyline_len
+from .geom import polyline_len
 from .keeper import kept
 
 _ALONG_FT = 14.0  # ft: two centerlines this close read as one tread doubled - a 6 ft way's width plus its soft shoulders
@@ -110,99 +109,3 @@ def cut_at_tail(pts: Sequence[Pt], k: int, other: Sequence[Pt], step: float = 4.
     a, b = min(zip(other, other[1:], strict=False), key=lambda ab: seg_dist(cut[0], cut[1], ab[0], ab[1]))
     snap = seg_closest(cut[0], cut[1], a, b)
     return [*kept, (float(snap[0]), float(snap[1]))]
-
-
-def cut_keeps_network(lanes: Sequence[Mapping[str, Any]], i: int, before: Sequence[Pt], after: Sequence[Pt]) -> bool:
-    """Whether replacing lane `i`'s points `before` with `after` leaves the lanes in no more pieces at the ink tolerance
-    (`_TOUCH_GAP`) than they were. FOUND BY FEATURE 280 (Sawada, once the larger yards moved its rows): a straggler's tail
-    running beside the way it met was cut back to where it came alongside, and a third straggler that had joined that
-    tail was left 13.7 ft from anything - two lane networks, which `test_every_shipped_hamlets_lanes_are_one_network`
-    caught. A tail that carries another lane's junction is not a doubled tail; it is part of the network.
-
-    Research: web kept one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html"""
-    ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
-
-    def pieces(pts: Sequence[Pt]) -> int:
-        ws = [list(pts) if j == i else w for j, w in enumerate(ways)]
-        live = [w for w in ws if len(w) >= 2]
-        return len(set(_components(live, _TOUCH_GAP))) if len(live) > 1 else 1
-
-    return pieces(after) <= pieces(before)
-
-
-_RESEAT_FT = 2.0 * _TOUCH_GAP
-"""How far a lane end left on a cut tail may be carried onto the way the tail ran beside (Sawada, feature 280: 4.4 ft).
-
-Research: end carried onto the way - NONE: a tolerance, twice the touch gap"""
-
-
-def reseat_on_way(lanes: Sequence[Mapping[str, Any]], i: int, before: Sequence[Pt], after: Sequence[Pt], way: Sequence[Pt]) -> dict[int, list[Pt]]:
-    """The lanes whose end stood on lane `i`'s tail (`before`) and on nothing once it is cut (`after`), each with that end
-    carried onto `way` - the way the tail ran beside - where it lies within `_RESEAT_FT` of it. FOUND BY FEATURE 280
-    (Sawada): a straggler met the doubled tail 4.4 ft off the way beside it, just past the touch gap, so the cut would
-    strand it and the tail stayed doubled; a tail 4 ft off a way is that way, and the straggler meets it there."""
-    ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
-    tail, kept, road = list(zip(before, before[1:], strict=False)), list(zip(after, after[1:], strict=False)), list(zip(way, way[1:], strict=False))
-    moved: dict[int, list[Pt]] = {}
-    for j, w in enumerate(ways):
-        if j == i or len(w) < 2 or not road:
-            continue
-        rest = [sg for k, o in enumerate(ways) if k not in (i, j) for sg in zip(o, o[1:], strict=False)]
-        for end in (0, len(w) - 1):
-            e = w[end]
-            if not any(seg_dist(e[0], e[1], a, b) <= _TOUCH_GAP for a, b in tail) or any(seg_dist(e[0], e[1], a, b) <= _TOUCH_GAP for a, b in kept + rest):
-                continue
-            to = min((seg_closest(e[0], e[1], a, b) for a, b in road), key=lambda z: math.dist(e, z))
-            if math.dist(e, to) <= _RESEAT_FT:
-                w = moved.get(j, w)[:]
-                w[end] = (float(to[0]), float(to[1]))
-                moved[j] = w
-    return moved
-
-
-def _sweep_doubled_tails(s: Settlement) -> int:
-    """A lane whose end runs ALONGSIDE another way has met that way where it first came alongside, and ends there
-    (settlement-review of Kuwabata, feature 261: a join lane ran back 122 ft beside the connector, 12.7 ft apart and
-    merging to one stroke, past the corner where it met it - a doubled road and a dead end). The tail is cut at its first
-    sample alongside and the end snapped onto the way, so the two meet in one junction. Each end is asked in turn.
-
-    Research:
-        doubled tail cut - research/questions/0081-village-lanes.drawing.html: the lane is cut where it comes alongside and meets the other as a T, a household's own way cut at its far end, never at its door - both ends of every lane are asked, a household's way at its door too, a departure the code keeps until feature 417 T32; a lane running on beside the way it met ends where it came alongside
-        narrower tail cut - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); of two tails side by side the narrower is cut, so the through-route keeps its width"""
-    lanes = s.M.get("lanes") or []
-    fixed = 0
-    # THE NARROWER TAIL IS CUT, NEVER THE WIDER (settlement-review of Sawada, feature 261): a 6 ft track and a 3 ft
-    # straggler ran into the hub side by side, the track was cut, and the route out necked to 69.7 ft of footpath -
-    # the thing `_keep_the_route_wide` existed to prevent (until feature 417 T26), arriving after it ran. Narrow lanes are asked first, and a lane
-    # is never cut back along a narrower one.
-    for i in sorted(range(len(lanes)), key=lambda k: float(lanes[k].get("w") or 3)):
-        ln = lanes[i]
-        if (ln.get("connector") or ln.get("street")) or ln.get("spur") or len(ln.get("pts") or []) < 2:
-            continue
-        pts = [(float(x), float(y)) for x, y in ln["pts"]]
-        changed = False
-        for _end in range(2):
-            for j, o in enumerate(lanes):
-                op = [(float(x), float(y)) for x, y in (o.get("pts") or [])]
-                if j == i or len(op) < 2 or float(o.get("w") or 3) < float(ln.get("w") or 3):
-                    continue
-                k = along_tail(pts, op)
-                if k is not None:
-                    cut = cut_at_tail(pts, k, op)
-                    moved = reseat_on_way(lanes, i, pts, cut, op)
-                    if not cut_keeps_network([{"pts": moved.get(n, lx.get("pts") or [])} for n, lx in enumerate(lanes)], i, pts, cut):
-                        continue  # the tail carries another lane's junction: cutting it would strand that lane
-                    # ...AND EVERY LANE CARRIED ONTO THE WAY IS ADMITTED BY THE OVERLAP MATRIX (feature 287 M8), all or none:
-                    # a carried end the matrix refuses would be left on the cut tail, stranded, so the tail is not cut
-                    if not all(s.admits("lanes", {**lanes[n], "pts": [[round(x, 1), round(y, 1)] for x, y in w]}, ignore=lanes[n]) for n, w in moved.items()):
-                        continue
-                    for n, w in moved.items():
-                        s.reshape_lane(lanes[n], w)
-                        s.reink_lane(n)
-                    pts, changed = cut, True
-                    fixed += 1
-                    break
-            pts.reverse()
-        if changed and s.reshape_lane(ln, pts):  # asked of the overlap matrix (feature 287 M8)
-            s.reink_lane(i)
-    return fixed

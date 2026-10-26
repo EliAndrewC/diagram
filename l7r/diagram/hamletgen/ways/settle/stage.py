@@ -14,7 +14,7 @@ from ..keeper import unsettled
 from ..knots import settle_knots
 from ..reach import settle_field, settle_targets
 from ..squaring import square_every_crossing
-from ..tree import settle_defer, settle_tree
+from ..tree import settle_tree
 from .ends import settle_ends, settle_fragments, settle_network
 from .lawful import Lawful
 from .shapes import SETTLE_ROUNDS
@@ -51,7 +51,6 @@ STEPS = (
     square_every_crossing,
     settle_ends,
     settle_reach,
-    settle_defer,
     settle_network,
     settle_fragments,
     settle_knots,
