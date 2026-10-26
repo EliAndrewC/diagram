@@ -13,13 +13,10 @@ from ..geom import memo_ground, worked_ground
 from ..keeper import unsettled
 from ..knots import settle_knots
 from ..reach import settle_field, settle_targets
-from ..squaring import (
-    square_every_crossing,
-)
 from ..tree import settle_defer, settle_tree
-from .ends import settle_ends, settle_fragments, settle_network, settle_widths
+from .ends import settle_ends, settle_fragments, settle_network
 from .lawful import Lawful
-from .shapes import SETTLE_ROUNDS, settle_shapes, settle_way_outs
+from .shapes import SETTLE_ROUNDS
 
 
 def settle_reach(s: Any) -> int:
@@ -38,32 +35,21 @@ def settle_reach(s: Any) -> int:
     return drawn + settle_tree(s) + settle_targets(s, lawful) + settle_field(s, lawful)
 
 
-def settle_husks(s: Any) -> int:
-    """Drop every lane record that draws nothing (ways W04)."""
-    gone = law.husks(s.M)
-    if gone:
-        s.drop_lanes(gone)
-    return len(gone)
-
-
 # ---- the loop ----------------------------------------------------------------------------------------------------------
 
 
-# SIX STEPS STOOD HERE AND WENT (feature 417 T31, research.md R8): `settle_husks` (first and last), `settle_street_ends`,
-# `settle_shadows`, `settle_joins`, `settle_needles` and `prune_the_tree` were each switched off and measured - and all six off
-# together - on the 48 fixed seeds, the pinned rows and the five pool maps: no verdict and no pool manifest moved. Their rules
-# are kept by the placers before them. Do not re-add one to mend a seed: a seed that needs one is a placer's defect (constitution XIX).
+# TEN STEPS STOOD HERE AND WENT (feature 417 T40 and T31, research.md R8): `settle_husks` (first and last), `settle_street_ends`,
+# `settle_shadows`, `settle_joins`, `settle_needles` and `prune_the_tree` (no verdict and no pool manifest moved), then
+# `square_every_crossing`, `settle_shapes`, `settle_way_outs` and `settle_widths` (54 of 54; Inashiro, Kashikawa and Sawada moved in
+# their drawing order alone, and one Kashikawa lane's width 5 -> 6 ft). Their rules are kept by the placers before them. Do not
+# re-add one to mend a seed: a seed that needs one is a placer's defect (constitution XIX).
 STEPS = (
-    square_every_crossing,
-    settle_shapes,
-    settle_way_outs,
     settle_ends,
     settle_reach,
     settle_defer,
     settle_network,
     settle_fragments,
     settle_knots,
-    settle_widths,
 )
 
 

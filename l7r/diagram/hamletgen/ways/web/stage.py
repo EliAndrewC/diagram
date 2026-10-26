@@ -81,7 +81,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         a web lane's middle off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: WEB_FABRIC_GAP, 7 ft clear of a garden fence (`clear_runs`' tight margin)
         ground cover is not fabric - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane crosses a tree belt and the planting resumes on both sides
         scrub and commons crossed - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); a lane may cross grazing scrub and the commons
-        a further row street's end - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (`settle.settle_street_ends`)
+        a further row street's end - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (the trims, `tidy_lane_ends`; the settle's street-end step went in feature 417 T31)
         the web's frame - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH`, 100 ft past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves
         a row village laid without web cuts - research/questions/0033-row-villages-resson.drawing.html: its farms are strung along their street and reach it by a path where their grove is in the way - its ways are its streets and those paths; no back lane or alley is cut among its farms (a map drawing convention)
         web lanes off the water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places
@@ -282,7 +282,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web
     # ...AND THE WEB SETTLES ITSELF, LAST (feature 287, M4): every rule of the lane law is asked of the web as it stands and
-    # what breaks one is cut away or re-laid (`settle_the_web`), the crossings squared first - so no stage after this one
+    # what breaks one is cut away or re-laid (`settle_the_web`) - so no stage after this one
     # rewrites a lane. A cut can take a farmhouse's only way or the field path, so the settle draws what the web still owes -
     # each stranded house's reserved corridor, a spur to each way target, the field way (M3's web half) - as lanes it never
     # cuts; the straggler redraw that stood in for the corridor until it landed is gone with the driver's re-roll.

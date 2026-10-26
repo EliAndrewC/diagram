@@ -196,21 +196,3 @@ def test_a_way_near_the_door_but_far_from_the_house_still_owes_a_footpath() -> N
     way = [((far[0] - 50.0 * uy, far[1] + 50.0 * ux), (far[0] + 50.0 * uy, far[1] - 50.0 * ux))]
     assert seg_dist(door[0], door[1], *way[0]) < 60.0 < seg_dist(c[0], c[1], *way[0])
     assert not street_arrives(h, door, way, None, []), "beyond 60 ft of the house: the farm owes its footpath"
-
-
-def test_a_street_is_anchored_at_each_farm_it_serves_without_a_path() -> None:
-    """Feature 385 T97 (D125): the trim anchored at a door within 12 ft of its street, while a farm took no door path wherever
-    its street served it from its house - so a street could be cut back past a farm it served."""
-    from l7r.diagram.hamletgen.ways.serve import street_anchors
-
-    s = Settlement(1400, 1400, seed=3)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    h = _farm(700.0, 400.0)
-    s.M["houses"] = [h]
-    street = {"pts": [[100.0, 440.0], [1300.0, 440.0]], "w": 5, "street": True, "street_index": 0}  # 40 ft from the house
-    s.M["lanes"] = [street]
-    door = front_door(h, DOOR_STEP_FT)
-    assert door is not None and street_arrives(h, door, [((100.0, 440.0), (1300.0, 440.0))], 0, [])
-    assert [(round(x), round(y)) for x, y in street_anchors(s)] == [(700, 440)], "the street's point nearest the house"
-    s.M["lanes"] = [{**street, "pts": [[100.0, 600.0], [1300.0, 600.0]]}]  # 200 ft off: not served, no anchor
-    assert street_anchors(s) == []

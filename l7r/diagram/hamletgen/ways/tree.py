@@ -19,8 +19,8 @@ SO THE ORDER CHANGES, and the proof with it:
    `settle_defer`): every household's way gets its chain of tree lanes - exactly those the gap pass judged, sub-runs of
    none - and an ordinary lane that breaks a rule
    against a tree lane is cut, never the tree.
-3. THE TREE IS PRUNED (`prune_the_tree`): a tree lane whose removal leaves no house, way target or field unreached, splits
-   no network and leaves no other lane's end serving nothing goes (homes H40: no more corridors than the map needs).
+3. NO TREE LANE IS DRAWN THAT THE MAP DOES NOT NEED (homes H40): the pruning step that took one away went in feature 417 T31,
+   measured needless - the tree draws only the chains the gap pass judged.
 
 So every house with a laid way is reached by construction: there is no fallback that ships one unreached; and on a brook
 map a field no way reaches refuses the map (`last_resort.refuse_unreached`).
@@ -43,7 +43,7 @@ from .bund import BRANCH_WIDTH
 from .checks import unreached_houses
 from .corridors import ACCESS_ROLE, ACCESS_WIDTH, ON_TREE_PX, is_tree
 from .forced import lazy_ground
-from .geom import lane_owner, memo_ground, polyline_len, worked_ground
+from .geom import lane_owner
 
 CARRY_FT = 20.0
 """How far off its host a tree run's end may stand and be set on its foot there rather than carried on by a leg of its own
@@ -640,52 +640,6 @@ def settle_defer(s: Any) -> int:
     return apply_pieces(s, edits)
 
 
-def prune_the_tree(s: Any) -> int:
-    """A tree lane the map no longer needs goes (homes H40): the first, longest first, whose removal leaves no farmhouse, way
-    target or field newly unreached, the web in no more networks and no lane end breaking a rule it did not (`end_faults`).
-    A household's own way never goes (feature 318), so what may is a way target's spur or the field way, which nothing hangs from. One a round, as a fragment: two can each be redundant only while the other stands.
-
-    Research:
-        redundant tree lane pruned - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane that serves nothing is not drawn (the page's GUESS, on Mencius and the Tang code); the pruning count is ours; no more corridors than the map needs; never a household's own way (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own)
-        the way of a household another is reached across - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its corridor never pruned, as no household's own way is
-        street and door path never pruned - research/questions/0033-row-villages-resson.drawing.html: the way a row's farms are reached by"""
-    M = s.M
-    lanes = M.get("lanes") or []
-    order = sorted(
-        # ...never a row village's street or a grove farm's own door path (feature 291 FR-017 and FR-019): each is the way its
-        # farms are reached by, not a corridor another way stands in for - pruned as one, Mizuguchi's door paths went as
-        # redundant beside a street a frame's depth off, and the streets' ends were left dangling
-        (
-            i
-            for i, ln in enumerate(lanes)
-            if is_tree(ln)
-            and not ln.get("connector")
-            and not ln.get("street")
-            and not ln.get("serves")
-            and len(ln.get("pts") or []) >= 2
-            and not ln.get("of")  # ...NOR A HOUSEHOLD'S OWN WAY (feature 318, FR-014): each is the lane its household is served by
-        ),
-        key=lambda i: -polyline_len(law.lane_pts(lanes[i])),
-    )
-    if not order:
-        return 0
-    ground = memo_ground(s, "worked", worked_ground)
-    reached, nets, targets, field = len(unreached_houses(M)), law.lane_networks(M), len(law.unreached_targets(M)), law.field_unreached(M)
-    ends = end_faults(M, ground)
-    for i in order:
-        without = {**M, "lanes": [ln for k, ln in enumerate(lanes) if k != i and len(ln.get("pts") or []) >= 2]}
-        if (
-            len(unreached_houses(without)) <= reached
-            and law.lane_networks(without) <= nets
-            and len(law.unreached_targets(without)) <= targets
-            and law.field_unreached(without) <= field
-            and all(a <= b for a, b in zip(end_faults(without, ground), ends, strict=True))
-        ):
-            s.drop_lanes([i])
-            return 1
-    return 0
-
-
 REJOIN_PAD_FT = 4.0
 """How far beyond the square leg's reach (the water's half-width and `checks.SQUARE_LEG_PAD`) a tree run is given a vertex
 either side of an oblique crossing before it is squared (`rejoined`) - past the squaring's elbow pass, so the vertex
@@ -742,18 +696,6 @@ def square_run_of(M: Mapping[str, Any], run: Poly) -> Poly:
     from .settle import square_run
 
     return square_run(M, run)
-
-
-def end_faults(M: Mapping[str, Any], ground: Any) -> tuple[int, ...]:
-    """How many lane ends break each rule an end is judged by - serving nothing, a house's third, a fold
-    where two meet with no third way there, a join stopping short: what a lane taken away can leave another lane's end
-    doing, since the ends that met it are then free (cohort seeds 14 and 40: a corridor's end left behind a house)."""
-    return (
-        len(law.dangling_lane_ends(M, ground)),
-        len(law.doorstep_ends(M)),
-        len(law.folded_joint_pairs(M.get("lanes") or [], lazy_ground(M))),
-        len(law.near_misses(M)),
-    )
 
 
 # ---- the seating's questions -------------------------------------------------------------------------------------------

@@ -29610,12 +29610,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/last_resort.py::last_resort#repair policy": {
-  "body": "571a7faeb97335b1",
+  "body": "3c43ff2b5ae3b3ad",
   "claim": "repair policy - NONE: each rule is claimed at its predicate in law.py",
-  "code": "c26329c028ba873b",
-  "core": "205e0cec1a83c622",
-  "date": "2026-10-17",
-  "note": "drop/settle rounds, policy",
+  "code": "2f5fd2b95ff3ed9a",
+  "core": "cb6e6dce42fcc76a",
+  "date": "2026-10-25",
+  "note": "the drop and re-ask loop and the 8-pass cap are plumbing; each rule is claimed at its predicate",
   "pages": {},
   "research": "",
   "rests": [],
@@ -32555,24 +32555,6 @@
   "research": "348d3cab06271e76",
   "verdict": "DRIFTED"
  },
- "l7r/diagram/hamletgen/ways/serve.py::street_anchors#a street kept to the last farm it serves": {
-  "body": "05abee2dac56097f",
-  "claim": "a street kept to the last farm it serves - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: pulled back to the last house it serves",
-  "code": "c955caa7973b4359",
-  "core": "98215157e9c62979",
-  "date": "2026-10-22",
-  "note": "anchors at the last house served; the page records the pull-back as a GUESS",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
-  },
-  "research": "4473caa26c642d2b",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
-  ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/serve.py::street_arrives#the street serves the farm": {
   "body": "ea53fae6e01777e3",
   "claim": "the street serves the farm - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: within 60 ft of the house or 12 ft of its built ground",
@@ -32886,40 +32868,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
   "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/settle/ends.py::settle_street_ends#an end reaches something seen": {
-  "body": "17da0e4bf8f90288",
-  "claim": "an end reaches something seen - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a further street's dangling end cut to its last joint, a lane's end, a way it crosses or the last farm it serves; a joint within `_TOUCH_GAP` (4 ft, the ink's touch - CONVENTION)",
-  "code": "5e40b922c58a1cb6",
-  "core": "acfe4fcfb856af88",
-  "date": "2026-10-22",
-  "note": "cut back to its last joint or the last farm it serves",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
-  },
-  "research": "4473caa26c642d2b",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
-  ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/settle/ends.py::settle_street_ends#the first street never cut": {
-  "body": "17da0e4bf8f90288",
-  "claim": "the first street never cut - row-villages-resson.drawing: the street runs on off the map as the road into it",
-  "code": "3570bdb537ef40eb",
-  "core": "acfe4fcfb856af88",
-  "date": "2026-10-21",
-  "note": "the first street is skipped, \"runs on off the map as the road into it\"",
-  "pages": {
-   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
-  },
-  "research": "37ada2a33aa587d2",
-  "rests": [
-   "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
-   "0033-row-villages-resson.drawing.html:8c303daeddea6496"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_widths#one width a way": {
@@ -33393,41 +33341,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle/shapes.py::_unkinked#a returning leg of 40 ft or more": {
-  "body": "f160e3caf09e22ff",
-  "claim": "a returning leg of 40 ft or more - GUESS village-lanes.drawing: cut as a shorter one is - the page says a lane never doubles back but gives the cut only under 40 ft",
-  "code": "8efec1b06ceb9fef",
-  "core": "219588e41619656c",
-  "date": "2026-10-22",
-  "note": "`max(head, tail, key=polyline_len)` cuts a returning leg of any length, but 0081 cuts only \"a returning leg under 40 ft\" and names the folded spur as \"an exception to the 40 ft rule\", so the page answers this rather than recording a guess. Either keep legs of 40 ft or more, or record the DEVIATION on 0081 and relabel the claim",
-  "outside": true,
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:eac54e81463e9673"
-  ],
-  "triaged": "2026-10-22",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/hamletgen/ways/settle/shapes.py::_unkinked#no hairpin or zigzag": {
-  "code": "dbfd75174d33ad97",
-  "core": "219588e41619656c",
-  "date": "2026-10-17",
-  "note": "shorter arm cut, zigzag pulled straight",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:d30e15716180fbf5"
-  ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::apply_pieces#split piece's room": {
   "body": "d4370d6007fadb08",
   "claim": "split piece's room - how-our-maps-lay-a-clustered-settlements-lanes.drawing: each split piece keeps WEB_CLEARANCE, the 18 ft lane room (9 ft each side of its middle), whatever its source kept",
@@ -33567,18 +33480,6 @@
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle/shapes.py::joined_way#settle plumbing": {
-  "body": "8a7b1f686fb566e5",
-  "claim": "settle plumbing - NONE",
-  "code": "7fdd2ec2d0702abb",
-  "core": "8270b153b573f734",
-  "date": "2026-10-21",
-  "note": "nearest-lane lookup at the ink touch tolerance",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::reaimed#a lane meets another as a T": {
   "body": "b2dffd81aa896a9c",
   "claim": "a lane meets another as a T - village-lanes.drawing: the end re-laid, never longer",
@@ -33624,88 +33525,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle/shapes.py::settle_shapes#a fouling segment cut out": {
-  "body": "0ed823dfa9f9fca0",
-  "claim": "a fouling segment cut out - UNRESEARCHED: a lane's fouling segment is cut out and the lane split into its two remaining pieces (405 T127)",
-  "code": "15230d2278136182",
-  "core": "56453e776c199ec5",
-  "date": "2026-10-22",
-  "note": "0246 answers it: §14 \"a stretch that would cross ... a homestead is cut out, and a stretch that joins nothing of the network is not drawn\" (and §8). It should be a 0246 claim. Under that claim, the split at line 419 keeps both pieces with no test that each still joins the network",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
- },
- "l7r/diagram/hamletgen/ways/settle/shapes.py::settle_shapes#a lane with no recorded width judged as a 3 ft footpath (`ln.get(\"w\") or 3.0`)": {
-  "code": "56453e776c199ec5",
-  "core": "56453e776c199ec5",
-  "date": "2026-10-22",
-  "note": "a lane with no recorded width judged as a 3 ft footpath (`ln.get(\"w\") or 3.0`)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/settle/shapes.py::settle_shapes#a lane's end loses its hook": {
-  "body": "0ed823dfa9f9fca0",
-  "claim": "a lane's end loses its hook - village-lanes.drawing: re-laid as a T where it joins a way, else cut",
-  "code": "e272fbac09966aba",
-  "core": "56453e776c199ec5",
-  "date": "2026-10-22",
-  "note": "a hook is re-laid as a T on the way it joins, else its leg is cut",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:a857325132f8d4ee",
-   "0081-village-lanes.drawing.html:b3423a58c3ff2774"
-  ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/settle/shapes.py::settle_shapes#crossings and fouls": {
-  "code": "45a82d12971c12ec",
-  "core": "56453e776c199ec5",
-  "date": "2026-10-17",
-  "note": "this unit drops the fouling segment and splits the lane in two, a repair decision the detectors do not make; should cite 0246 §34 or be UNRESEARCHED",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-21",
-  "verdict": "MISLABELED"
- },
- "l7r/diagram/hamletgen/ways/settle/shapes.py::settle_shapes#no hairpin or zigzag": {
-  "code": "41514c9e2c0a021c",
-  "core": "56453e776c199ec5",
-  "date": "2026-10-17",
-  "note": "as _unkinked",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:d30e15716180fbf5"
-  ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/settle/shapes.py::settle_way_outs#no way out over and back": {
-  "body": "fc2f837e6223cef6",
-  "claim": "no way out over and back - villages-beside-their-stream-one-bank-or-both.drawing",
-  "code": "c22407a377b7dc8a",
-  "core": "fb4cf6349114906c",
-  "date": "2026-10-22",
-  "note": "crossings are cut until no way out crosses a brook twice, a rule 0035 does not state; §110 charges a crossing about 150 ft and does not forbid it. Label GUESS/UNRESEARCHED or record the rule",
-  "outside": true,
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
-  },
-  "research": "9354777ef34af3d3",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
-  ],
-  "verdict": "NEEDS-RESEARCH"
- },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::theirs#a lane arrives at its own dooryard": {
   "body": "592f8334267512b3",
   "claim": "a lane arrives at its own dooryard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: its way leaves its dooryard round its own beds and fixtures",
@@ -33740,24 +33559,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/stage.py::STEPS#settle plumbing": {
-  "body": "da25e2d90d4d6cbc",
+  "body": "841d779171c0fae0",
   "claim": "settle plumbing - NONE",
-  "code": "48cee8de9efb1afd",
-  "core": "5f45d484dd3d0b4d",
+  "code": "32ce5ab9810be680",
+  "core": "2b051317013f513c",
   "date": "2026-10-25",
-  "note": "the tuple only orders the geometry-cleanup passes; removing six of them sets no size, count, distance, share, form or placement a map reader would read off the map, so NONE is right",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/settle/stage.py::settle_husks#settle plumbing": {
-  "body": "d4d1a51b249439d6",
-  "claim": "settle plumbing - NONE",
-  "code": "c728c811a56328d0",
-  "core": "aee39367a83d8788",
-  "date": "2026-10-21",
-  "note": "drops empty lane records",
+  "note": "the order of settle steps decides nothing physical",
   "pages": {},
   "research": "",
   "rests": [],
@@ -33909,49 +33716,6 @@
   "note": "`door if household or len(door) >= len(far)`, and a household's way is cut only onto a connector or tree lane; 0081 decides only the household's door",
   "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/squaring.py::square_every_crossing#a moved end keeps its joint": {
-  "code": "94ea8c5b819b5b0f",
-  "core": "e83520d42e0edd1c",
-  "date": "2026-10-08",
-  "note": "keeps two lanes joined, plumbing",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/squaring.py::square_every_crossing#square brook crossing": {
-  "body": "f60882b22ce118a4",
-  "claim": "square brook crossing - villages-beside-their-stream-one-bank-or-both.drawing: the track out too",
-  "code": "2d7ca9be4326c83d",
-  "core": "e83520d42e0edd1c",
-  "date": "2026-10-22",
-  "note": "every lane, connector included, squared at the brook",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
-  },
-  "research": "9354777ef34af3d3",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/squaring.py::square_every_crossing#square ditch crossing": {
-  "body": "f60882b22ce118a4",
-  "claim": "square ditch crossing - plank-bridges-over-farm-ditches-itabashi.drawing: the drawn channels",
-  "code": "e9d1d1b7178fff22",
-  "core": "e83520d42e0edd1c",
-  "date": "2026-10-22",
-  "note": "a way crosses a drawn channel square on its deck",
-  "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
-  },
-  "research": "1dd5fd71121f4a06",
-  "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/squaring.py::square_run#square brook crossing": {
@@ -34204,48 +33968,11 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/street.py::cut_between#street plumbing": {
-  "code": "7a5f7be165317d0b",
-  "core": "d2933f0ed59a9799",
-  "date": "2026-10-03",
-  "note": "matches",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/street.py::drawn_span#street plumbing": {
   "code": "46f2cb19835c1763",
   "core": "3d807c88ac594452",
   "date": "2026-10-03",
   "note": "matches",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/street.py::end_to_its_joint#street end cut to its joint": {
-  "body": "a614175f90ddd780",
-  "claim": "street end cut to its joint - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end reaching nothing is pulled back - a further street's (the first runs on off the map, row-villages-resson.drawing, and `settle_street_ends` never asks it)",
-  "code": "8c4815d9b63acb24",
-  "core": "3afff23a80093297",
-  "date": "2026-10-22",
-  "note": "a dangling end pulled back to its last joint, recorded GUESS; the first street runs on",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
-  },
-  "research": "4473caa26c642d2b",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
-  ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/street.py::first_street#street plumbing": {
-  "body": "22334fa080401516",
-  "claim": "street plumbing - NONE",
-  "code": "1c48b7902c2abc7a",
-  "core": "2c0584e5efb11518",
-  "date": "2026-10-21",
-  "note": "identifies the first-laid street by index",
-  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -34290,14 +34017,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
   "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/street.py::joints_along#street plumbing": {
-  "code": "fb1b4b8a9ff59ae8",
-  "core": "ecfcb09a6fc7fac9",
-  "date": "2026-10-03",
-  "note": "matches",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::lay_row_streets#further street joins the streets": {
@@ -35657,11 +35376,11 @@
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook crossed at its crossing places": {
   "body": "78231be076742dce",
-  "claim": "brook crossed at its crossing places - villages-beside-their-stream-one-bank-or-both.drawing: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook by the settle (`squaring.square_every_crossing`, the connector's too)",
-  "code": "8153a6c5cb0f95ab",
+  "claim": "brook crossed at its crossing places - villages-beside-their-stream-one-bank-or-both.drawing: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then held square to the brook by the lane law (`law_water`), the connector's too - the settle's squaring step went in feature 417 T31",
+  "code": "3f08c314eb2b71ef",
   "core": "244a34e5859ee3b4",
-  "date": "2026-10-22",
-  "note": "fords every 160 ft on straight reaches, crossing taken only where it finds a way or saves more than 150 ft, squared by the settle",
+  "date": "2026-10-25",
+  "note": "keeps to its own bank and crosses only at a crossing place (`brook_fords`, 160 ft) when that finds a way or saves more than 150 ft, as 0035 says \"crossing saves it more than about 150 ft\"; the squaring is left to `law_water`",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
@@ -35818,11 +35537,11 @@
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#where on a channel it crosses": {
   "body": "78231be076742dce",
-  "claim": "where on a channel it crosses - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); anywhere the fill finds; the settle squares the crossing (`squaring.square_every_crossing`)",
-  "code": "0749dc4c5c7ac96c",
+  "claim": "where on a channel it crosses - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); anywhere the fill finds; held to the lane law's square crossing (`law_water`), which the web keeps without the settle's squaring step (feature 417 T31)",
+  "code": "252effdfcac56c4e",
   "core": "244a34e5859ee3b4",
   "date": "2026-10-25",
-  "note": "anywhere the fill finds",
+  "note": "0084 is silent on where a way crosses a ditch (\"no page we read says when a farm path crossed a ditch\"), so GUESS is the right label; \"square across the water\" is said only of the 4 ft bund crossing",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -36821,16 +36540,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/tree.py::end_faults#access tree plumbing": {
-  "code": "160f760152fb9cc5",
-  "core": "5876341c46cb29df",
-  "date": "2026-10-17",
-  "note": "counting",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/tree.py::hosts#access tree plumbing": {
   "code": "9ee35e2287a5d9ce",
   "core": "78d86d36c6414a9c",
@@ -36979,51 +36688,6 @@
   "date": "2026-10-03",
   "note": "reads the manifest",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/tree.py::prune_the_tree#redundant tree lane pruned": {
-  "body": "7371e268ed5a4351",
-  "claim": "redundant tree lane pruned - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane that serves nothing is not drawn (the page's GUESS, on Mencius and the Tang code); the pruning count is ours; no more corridors than the map needs; never a household's own way (how-our-maps-lay-a-clustered-settlements-lanes.drawing: every other farmhouse is served by a lane of its own)",
-  "code": "174f466c9a988be5",
-  "core": "be660904c909f501",
-  "date": "2026-10-25",
-  "note": "extends the page's own GUESS (a lane serving nothing is not drawn) and never prunes a household's own way; the pruning rule is ours [0246 §5, §7]",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
-  },
-  "research": "4473caa26c642d2b",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/tree.py::prune_the_tree#street and door path never pruned": {
-  "code": "71f916734467bc44",
-  "core": "be660904c909f501",
-  "date": "2026-10-13",
-  "note": "the ways a row's farms are reached by",
-  "pages": {
-   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
-  },
-  "research": "37ada2a33aa587d2",
-  "rests": [
-   "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
-   "0033-row-villages-resson.drawing.html:64088e4ad721724e",
-   "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
-  ],
-  "triaged": "2026-10-13",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/tree.py::prune_the_tree#the way of a household another is reached across": {
-  "code": "9dca2414a32c03e8",
-  "core": "be660904c909f501",
-  "date": "2026-10-05",
-  "note": "lanes with \"of\" are excluded from pruning",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
-  },
-  "research": "4473caa26c642d2b",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
-  ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::records_of#access tree plumbing": {
@@ -38166,11 +37830,11 @@
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a further row street's end": {
   "body": "790029facd41a276",
-  "claim": "a further row street's end - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (`settle.settle_street_ends`)",
-  "code": "c7f1d966a3300638",
+  "claim": "a further row street's end - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: pulled back to the last house it serves - it ends at its outermost joint, or abreast the house of the last farm it serves without a path (the trims, `tidy_lane_ends`; the settle's street-end step went in feature 417 T31)",
+  "code": "2ee92af63a181be4",
   "core": "4749eb693dfa62f1",
   "date": "2026-10-25",
-  "note": "the pull-back of an end that reaches nothing to the last house it serves is recorded on the drawing page as a GUESS; 0033 gives no rule for where a further street ends; the cut is done in the settle (`settle_the_web`), whose code the bundle does not show",
+  "note": "pulling the end back to the last house it serves is 0246's recorded GUESS (\"pulled back to the last house it serves ... the rule is a GUESS\"); 0033 does not say where a further street ends",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },

@@ -11,8 +11,6 @@ from typing import Any
 from l7r.diagram.overlap.registry import forbidden_segment
 from l7r.diagram.settlement import seg_closest, seg_dist
 from l7r.diagram.settlement._knobs import bridge_crossed_waters
-from l7r.diagram.settlement.city.bridges import flooded_ground
-from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
 
 from ...consts import TAIL_CUT_FT, WEB_CLEARANCE, WEB_FABRIC_GAP, Poly, Pt
 from .. import law
@@ -22,13 +20,10 @@ from ..corridors import (
     is_tree,
 )
 from ..fabric import _crosses_fabric, house_hit
-from ..fabric import lane_fabric as _fabric
-from ..forced import lazy_ground
-from ..geom import _TOUCH_GAP, lane_owner, polyline_len
+from ..geom import _TOUCH_GAP, polyline_len
 from ..joints import _JOINT_FT
 from ..squaring import (
     SQUARE_MARGIN_FT,
-    _pts,
 )
 
 SETTLE_ROUNDS = 8
@@ -185,106 +180,10 @@ def _cut_gap(M: Mapping[str, Any], x: Pt) -> float:
     return max(near, default=3.0)
 
 
-def _unkinked(p: Poly, span: tuple[str, int, int]) -> list[Poly]:
-    """A run that doubles back loses its returning leg (the shorter arm): 0081 cuts one under 40 ft, and a lane never
-    doubles back, so a longer one goes too - left standing it broke the law every round and the last resort dropped the whole
-    lane (feature 328 wave 45, spec-fidelity). One that zigzags is pulled straight - its two turns dropped, the way running from
-    the vertex before the first to the vertex after the second (it cut the middle out, leaving two lanes where there was one).
-
-    Research:
-        no hairpin or zigzag - research/questions/0081-village-lanes.drawing.html: "a returning leg under 40 ft is cut"; and two turns of more than 50 degrees within 40 ft of path are pulled straight
-        a returning leg of 40 ft or more - GUESS research/questions/0081-village-lanes.drawing.html: cut as a shorter one is - the page says a lane never doubles back but gives the cut only under 40 ft"""
-    kind, ka, kb = span
-    if kind == "doubles back":
-        head, tail = p[: ka + 1], p[ka:]
-        return [max(head, tail, key=polyline_len)]
-    return [[*p[:ka], *p[kb + 1 :]]]
-
-
-def settle_shapes(s: Any) -> int:
-    """Step 2: cut from every ordinary lane what breaks its own shape or its crossings (ways W07, W09, W11, W12, W18, W19),
-    and take a hook off the connector's end. One fault per lane per round; the next round asks again.
-
-    Research:
-        a lane's end loses its hook - research/questions/0081-village-lanes.drawing.html: re-laid as a T where it joins a way, else cut
-        no hairpin or zigzag - research/questions/0081-village-lanes.drawing.html: cut as `_unkinked` cuts it
-        crossings and fouls - NONE: claimed at `_crossing_fault` and `fouled_segment`
-        a fouling segment cut out - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); a lane's fouling segment is cut out and the lane split into its two remaining pieces
-            (405 T127)"""
-    M = s.M
-    lanes = M.get("lanes") or []
-    yards, houses = _fabric(s)
-    solid = law.solid_boxes(M)
-    fixtures = law.fixture_quads(M)
-    wet = flooded_ground(M)
-    edits: dict[int, list[Poly]] = {}
-    blocked = lazy_ground(M, s)  # ...a hook or kink the ground forces is walked round what stands there, not repaired (feature 385 plan D2)
-    for i, ln in enumerate(lanes):
-        p = _pts(ln)
-        if len(p) < 2 or (is_tree(ln) and not ln.get("connector")):
-            continue
-        ends = law.hook_faults(p, float(ln.get("w") or 3.0), blocked)
-        if ends:
-            # A HOOK is a lane overshooting the way it joins and bending back onto it: re-laid as a T on that way where it
-            # joins one (so the web stays one network), else its hook leg is taken off
-            seq = _as_end(p, ends[0])
-            j = joined_way(lanes, i, seq[-1])
-            edits[i] = [_back(reaimed(seq, _pts(lanes[j]), bool(lanes[j].get("connector"))) if j is not None else seq[:-1], ends[0])]
-            continue
-        if ln.get("connector"):
-            continue
-        spans = law.kink_faults(p, float(ln.get("w") or 3.0), blocked)
-        if spans:
-            edits[i] = _unkinked(p, spans[0])
-            continue
-        pieces = _crossing_fault(M, i, p, wet)
-        if pieces is not None:
-            edits[i] = pieces
-            continue
-        k = fouled_segment(p, float(ln.get("w") or 3.0), houses, yards, solid, fixtures, M, lane_owner(ln))
-        if k is not None:
-            edits[i] = [q for q in (p[: k + 1], p[k + 1 :]) if len(q) >= 2]  # the fouling segment goes; a lane of one goes whole
-    return apply_pieces(s, edits)
-
-
 # ---- step 3: the ways out ----------------------------------------------------------------------------------------------
 
 
-def settle_way_outs(s: Any) -> int:
-    """Step 3 (ways W08): while some household's way out crosses one brook more than once (`law.way_out_carriers`), cut the
-    crossing nearest that household out of the ordinary lane that carries it. WHERE ONLY TREE LANES CARRY IT (a corridor, a
-    spur or the field way, laid when a lane since cut gave that household a shorter way out), the first of them goes whole:
-    step 4 lays its reach again under `Lawful`, which refuses a lane that adds such a way out - so the tree is no exemption
-    from the rule, only from the cutting.
-
-    Research: no way out over and back - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
-    M = s.M
-    lanes = M.get("lanes") or []
-    carriers = law.way_out_carriers(M, departure_routes(M))
-    for i, k, y in carriers:
-        if not is_tree(lanes[i]):
-            p = _pts(lanes[i])
-            return apply_pieces(s, {i: cut_around(p, arc_at(p, k, y), _cut_gap(M, y) + CROSSING_GAP_FT)})
-    if carriers:
-        s.drop_lanes([carriers[0][0]])
-        return 1
-    return 0
-
-
 # ---- step 4: where lanes end and meet ----------------------------------------------------------------------------------
-
-
-def joined_way(lanes: Sequence[Mapping[str, Any]], i: int, q: Pt) -> int | None:
-    """The index of the nearest OTHER lane whose tread the point `q` stands on (within `law.JOIN_TOL`), or None."""
-    best: tuple[float, int | None] = (law.JOIN_TOL, None)
-    for j, ln in enumerate(lanes):
-        o = _pts(ln)
-        if j == i or len(o) < 2:
-            continue
-        d = min(seg_dist(q[0], q[1], u, v) for u, v in zip(o, o[1:], strict=False))
-        if d <= best[0]:
-            best = (d, j)
-    return best[1]
 
 
 def _as_end(p: Poly, end: int) -> Poly:

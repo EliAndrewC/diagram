@@ -34,15 +34,13 @@ from .settle import (
     fouled_segment,
     lane_owner,
     settle_fragments,
-    settle_husks,
     settle_joins,
     settle_network,
     settle_reach,
-    settle_street_ends,
     settle_widths,
     unsettled,
 )
-from .tree import prune_the_tree, settle_defer, tree_faults
+from .tree import settle_defer, tree_faults
 
 LAST_RESORT_PASSES = 8
 """How many times the last resort drops and re-asks before it refuses. Each pass drops at least one ordinary lane, or it
@@ -153,7 +151,7 @@ def ordinary_carriers(M: Mapping[str, Any]) -> list[int]:
 
 def last_resort(s: Any) -> int:
     """THE LAST RESORT (FR-005): the rounds ran out with a lane still breaking a rule, so every ORDINARY lane still breaking
-    one goes whole - never kept as the least bad - with the network and husk rules asked again of what is left; then the
+    one goes whole - never kept as the least bad - with the network rule asked again of what is left; then the
     rules no drop can break are asked once more (a join closed only where it meets cleanly, the reach a drop took away drawn
     again as the tree, the network, a fragment that no longer earns, one width a way); then an ordinary lane still carrying
     a way out over the brook and back goes too, and the whole is asked again - up to `LAST_RESORT_PASSES` times. A tree lane
@@ -164,9 +162,7 @@ def last_resort(s: Any) -> int:
             s.drop_lanes(bad)
             dropped += len(bad)
             settle_network(s)
-            settle_husks(s)
         for step in (
-            settle_street_ends,
             settle_joins,
             settle_reach,
             settle_joins,
@@ -174,9 +170,7 @@ def last_resort(s: Any) -> int:
             settle_defer,
             settle_network,
             settle_fragments,
-            prune_the_tree,
             settle_widths,
-            settle_husks,
         ):  # a way the reach draws is joined before the network rule (feature 385 T03, cohort seed 21; not in `settle.STEPS`: seed 57)
             step(s)
         carriers = ordinary_carriers(s.M)
@@ -185,7 +179,6 @@ def last_resort(s: Any) -> int:
         s.drop_lanes(carriers)
         dropped += len(carriers)
         settle_network(s)
-        settle_husks(s)
     refuse_unmended(s)
     return dropped
 

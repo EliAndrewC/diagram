@@ -25,8 +25,8 @@ and the web may never have reached one at all. The seating reserved a corridor f
 connector starts on (`settlement/rolling/access.py`, `track._cluster_gateway`) and judged the whole tree as lanes with
 each (`tree.admits`), so the tree lanes owed - every unreached farmhouse's chain and the field's corridor - are drawn as
 judged (`tree.settle_tree`), the ordinary lanes deferring to them (`tree.settle_defer`); a spur is laid to each way target
-the network misses (a burial ground's edge), the shortest run that keeps the law (`Lawful`); and a tree lane the map no
-longer needs is pruned (`tree.prune_the_tree`). This replaced the driver's re-roll (feature 287, FR-002).
+the network misses (a burial ground's edge), the shortest run that keeps the law (`Lawful`); the step that pruned a tree
+lane the map no longer needed went in feature 417 T31, measured needless. This replaced the driver's re-roll (feature 287, FR-002).
 
 THE CROSSINGS ARE SQUARED HERE (ways W11): the squaring `stage_crossings` did after the woods now runs as this pass's first
 step, so every guarantee below is judged on the squared lane and no stage after the web rewrites one.
@@ -68,6 +68,7 @@ from ..forced import lazy_ground as lazy_ground
 from ..geom import _TOUCH_GAP as _TOUCH_GAP
 from ..geom import _components as _components
 from ..geom import _trim_to_service as _trim_to_service
+from ..geom import lane_owner as lane_owner
 from ..geom import memo_ground as memo_ground
 from ..geom import polyline_len as polyline_len
 from ..geom import steading_footprints as steading_footprints
@@ -81,18 +82,15 @@ from ..reach import _draw_tree_lane as _draw_tree_lane
 from ..reach import settle_field as settle_field
 from ..reach import settle_targets as settle_targets
 from ..serve import shadowed_by as shadowed_by
-from ..serve import street_anchors as street_anchors
 from ..squaring import SQUARE_MARGIN_FT as SQUARE_MARGIN_FT
 from ..squaring import SQUARE_PASSES as SQUARE_PASSES
 from ..squaring import _pts as _pts
 from ..squaring import cut_at_shallow_crossing as cut_at_shallow_crossing
-from ..squaring import square_every_crossing as square_every_crossing
 from ..squaring import square_run as square_run
 from ..squaring import square_waters as square_waters
 from ..sweeps import _DOUBLED_DEG as _DOUBLED_DEG
 from ..sweeps import along_tail as along_tail
 from ..sweeps import cut_at_tail as cut_at_tail
-from ..tree import prune_the_tree as prune_the_tree
 from ..tree import set_corridor as set_corridor
 from ..tree import settle_defer as settle_defer
 from ..tree import settle_tree as settle_tree
@@ -108,7 +106,6 @@ from .ends import settle_ends as settle_ends
 from .ends import settle_fragments as settle_fragments
 from .ends import settle_joins as settle_joins
 from .ends import settle_network as settle_network
-from .ends import settle_street_ends as settle_street_ends
 from .ends import settle_widths as settle_widths
 from .ends import with_edits as with_edits
 from .lawful import Lawful as Lawful
@@ -123,17 +120,11 @@ from .shapes import _cut_gap as _cut_gap
 from .shapes import _foot as _foot
 from .shapes import _ordinary as _ordinary
 from .shapes import _rounded as _rounded
-from .shapes import _unkinked as _unkinked
 from .shapes import apply_pieces as apply_pieces
 from .shapes import fouled_segment as fouled_segment
-from .shapes import joined_way as joined_way
-from .shapes import lane_owner as lane_owner
 from .shapes import meets_clean as meets_clean
 from .shapes import reaimed as reaimed
-from .shapes import settle_shapes as settle_shapes
-from .shapes import settle_way_outs as settle_way_outs
 from .shapes import theirs as theirs
 from .stage import STEPS as STEPS
-from .stage import settle_husks as settle_husks
 from .stage import settle_reach as settle_reach
 from .stage import settle_the_web as settle_the_web

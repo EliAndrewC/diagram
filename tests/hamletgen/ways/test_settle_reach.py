@@ -167,28 +167,6 @@ def test_a_routed_field_way_is_drawn_where_no_straight_run_keeps_the_law() -> No
     assert settle.settle_field(s, law_) == 1 and len(calls) > 120, "every straight run refused, a routed one drawn"
 
 
-def test_a_lane_over_a_fixture_is_cut_and_no_tree_lane_is_laid_over_one() -> None:
-    s = _S([CONN, [(-100.0, 0.0), (-100.0, 200.0)]], farm_fixtures=[{"kind": "manure", "x": -100.0, "y": 100.0, "w": 8.0, "h": 6.0, "rot": 0.0}])
-    assert law.lanes_over_fixtures(s.M) == [(1, 0)]
-    settle.settle_shapes(s)
-    assert law.lanes_over_fixtures(s.M) == [], "the leg over the heap is cut"
-    assert not settle.Lawful(s)([(-200.0, 0.0), (-100.0, 100.0)], 3.0)
-
-
-def test_a_lane_through_a_yard_persimmons_trunk_is_cut_and_no_tree_lane_is_laid_through_one() -> None:
-    """Feature 287, homes H43 (`test_no_tree_is_planted_in_a_path`; cohort seed 42 laid a straggler through a neighbor's
-    persimmon, seated with its household before the web): the trunk is a fixture quad, so the leg through it is cut and a
-    tree lane through it refused - a lane under the crown, clear of the trunk, is let stand."""
-    from l7r.diagram.settlement.homestead_parts.stands import trunk_on_tread
-
-    s = _S([CONN, [(-100.0, 0.0), (-100.0, 200.0)], [(-140.0, 0.0), (-140.0, 200.0)]], persimmons=[{"x": -100.0, "y": 100.0, "r": 11.5}, {"x": -150.0, "y": 100.0, "r": 11.5}])
-    assert law.lanes_over_fixtures(s.M) == [(1, 0)] and trunk_on_tread(-100.0, 100.0, s.M["lanes"][1:2])
-    settle.settle_shapes(s)
-    assert law.lanes_over_fixtures(s.M) == [] and not any(trunk_on_tread(-100.0, 100.0, [ln]) for ln in s.M["lanes"])
-    assert [(-140.0, 0.0), (-140.0, 200.0)] in [_pts(s, i) for i in range(len(s.M["lanes"]))], "under the other crown, 10 ft off its trunk: kept"
-    assert not settle.Lawful(s)([(-200.0, 100.0), (-50.0, 100.0)], 3.0)
-
-
 def _strip_over_the_brook(start_y: float, ford_y: float) -> _S:
     """One house's corridor down to (300, 80), then west over the brook at x = 100 to the connector's start (0, `start_y`) - the
     run the exit strip took before feature 320 - a ford where it crosses."""
@@ -448,27 +426,18 @@ def test_a_bare_point_is_no_field_run_and_a_fold_is_named(monkeypatch: pytest.Mo
     assert settle.Lawful(_S([CONN])).fault([(-240.0, 0.0), (-250.0, 290.0)], 3.0) == "folded_joints"
 
 
-def test_the_first_street_is_never_pulled_back() -> None:
-    """405 T54 (D63): 0033 runs the row's first street on off the map as the road into it, so the settle never cuts its end,
-    dangling or not - a further street's dangling end is 0246's pull-back (a GUESS)."""
-    street = ([(0.0, 0.0), (0.0, 200.0), (0.0, 600.0)], {"w": 6})
-    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)]], houses=[(100.0, 200.0)])
-    s.M["lanes"][1].update({"street": True, "street_index": 0})
-    assert (1, -1) in law.dangling_lane_ends(s.M), "the first street's end dangles"
-    assert settle.settle_street_ends(s) == 0 and _pts(s, 1)[-1] == (0.0, 600.0), "and is left to run on"
-
-
 def test_a_lane_keeps_the_gap_off_a_neighbor_s_garden_at_its_end() -> None:
     """405 T18 (D69): only a household's own way - its record names the household, `of` (a tree way) or `serves` (a door
     path) - may run beside its own garden; a back lane or cross lane is no household's own and keeps the gap off every
     garden, as 0246 keeps it off another household's."""
+    from l7r.diagram.hamletgen.ways.geom import lane_owner
     from l7r.diagram.hamletgen.ways.settle import shapes
 
     yards = [([(0.0, 0.0)], (0.0, 0.0)), ([(50.0, 0.0)], (50.0, 0.0)), ([(9.0, 9.0)], None)]
-    own_way = shapes.theirs(yards, shapes.lane_owner({"of": [0.0, 0.0]}))
+    own_way = shapes.theirs(yards, lane_owner({"of": [0.0, 0.0]}))
     assert [(0.0, 0.0)] not in own_way and [(50.0, 0.0)] in own_way, "its own household's exempt, the neighbor's not"
-    assert shapes.lane_owner({"serves": [50.0, 0.0]}) == (50.0, 0.0), "a door path's household"
-    assert shapes.theirs(yards, shapes.lane_owner({"pts": []})) == [y for y, _o in yards], "a back lane: every garden keeps its gap"
+    assert lane_owner({"serves": [50.0, 0.0]}) == (50.0, 0.0), "a door path's household"
+    assert shapes.theirs(yards, lane_owner({"pts": []})) == [y for y, _o in yards], "a back lane: every garden keeps its gap"
 
 
 def test_the_fence_gap_a_foul_is_judged_at_is_the_callers() -> None:
