@@ -35,7 +35,7 @@ first was most of a region's cost (feature 297, the hinterland's sample)."""
 class Region:
     """A raster of TAKEN ground over `window` = (x0, y0, x1, y1) at `cell` px. See the module docstring."""
 
-    __slots__ = ("_draw", "_im", "_sat", "cell", "nx", "ny", "x0", "y0")
+    __slots__ = ("_arr", "_draw", "_im", "_sat", "cell", "nx", "ny", "x0", "y0")
 
     def __init__(self, window: tuple[float, float, float, float], cell: float) -> None:
         from PIL import Image, ImageDraw  # bound on first use: no heavy library at import time (feature 237)
@@ -47,6 +47,7 @@ class Region:
         self._im = Image.new("L", (self.nx, self.ny), 0)
         self._draw = ImageDraw.Draw(self._im)
         self._sat: Any = None
+        self._arr: Any = None  # `taken`'s numpy view of the raster, built on the first read after a paint (feature 427 T04, C3)
 
     # ---- painting (every shape grown by GROW cells: conservative) ------------------------------------------------------
 
@@ -85,6 +86,7 @@ class Region:
         b = self._p(max(x0, x1) + pad, max(y0, y1) + pad)
         self._draw.rectangle([math.floor(a[0] - g), math.floor(a[1] - g), math.ceil(b[0] + g), math.ceil(b[1] + g)], fill=1)
         self._sat = None
+        self._arr = None
 
     def circle(self, x: float, y: float, r: float) -> None:
         """A disc of radius `r`."""
@@ -92,6 +94,7 @@ class Region:
         rr = max(r, 0.0) / self.cell + GROW
         self._draw.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], fill=1)
         self._sat = None
+        self._arr = None
 
     def poly(self, ring: Sequence[Pt], pad: float = 0.0) -> None:
         """A filled polygon, grown by `pad`: the polygon filled and its outline stroked `pad` either side."""
@@ -101,6 +104,7 @@ class Region:
         self._draw.polygon(pts, fill=1)
         self._stroke(pts + [pts[0]], max(pad, 0.0) / self.cell)
         self._sat = None
+        self._arr = None
 
     def line(self, pts: Sequence[Pt], half: float) -> None:
         """A polyline of half-width `half`, round-capped and round-joined."""
@@ -108,6 +112,7 @@ class Region:
             return
         self._stroke([self._p(float(p[0]), float(p[1])) for p in pts], max(half, 0.0) / self.cell)
         self._sat = None
+        self._arr = None
 
     def cells(self, taken: Iterable[tuple[int, int]], cell: float, x0: float, y0: float) -> None:
         """Another raster's taken cells (`(i, j)` of `cell` px from `(x0, y0)`, e.g. `FreeGround.taken`), each painted whole and
@@ -119,6 +124,7 @@ class Region:
             i1, j1 = math.ceil((ax + cell - self.x0) / self.cell - 1e-9) - 1, math.ceil((ay + cell - self.y0) / self.cell - 1e-9) - 1
             self._draw.rectangle([i0, j0, i1, j1], fill=1)
         self._sat = None
+        self._arr = None
 
     # ---- reading -------------------------------------------------------------------------------------------------------
 
@@ -133,7 +139,11 @@ class Region:
         i, j = math.floor((x - self.x0) / self.cell), math.floor((y - self.y0) / self.cell)
         if not (0 <= i < self.nx and 0 <= j < self.ny):
             return True
-        return bool(self._im.getpixel((i, j)))
+        # ...FROM A NUMPY VIEW, NOT A PIL PIXEL READ (feature 427 T04, C3): `getpixel` loads the image per call - 36k calls at 40
+        # households in `close_belt_gaps` alone (the T01 survey); the view is rebuilt after any paint, where `_sat` is dropped
+        if self._arr is None:
+            self._arr = self.array()
+        return bool(self._arr[j, i])
 
     def taken_many(self, xs: Any, ys: Any) -> Any:
         """`taken` for numpy arrays of points: a boolean array."""

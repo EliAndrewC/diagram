@@ -94,11 +94,54 @@ optimize first, and to the GM when it judges the increase too large; `perf-audit
 investigation. Constitution Principle VI is amended (MINOR) to say so, with `l7r/diagram/CLAUDE.md`, `dev/performance.md` and
 `docs/guards.md`; the project memory "perf is a flag, never a gate" is updated when it lands.
 
+**D4 - T04, the contained wins (FR-002, FR-003, US2).** Eight changes, each named by the chain it removes in the T01 survey
+(`research/survey-t01.md`; counts at seed 39, 40 households, observed 2026-10-26, method: `make perf-fanout`) and each
+proven by that chain's count falling at least tenfold (US2's test). Where a change computes the same values, a pool reroll
+diffed against HEAD's manifests shows the maps unchanged (the GM's approach, `request.md` 5: identical manifests where that comes
+free); where it may move a value by a rounding, the landing cohort judges it, as speed work may move maps (FR-007).
+- **C5, `CanopyArea.add`** (1.05M `set.add` calls in the windbreak stage): the cells under a crown found by one numpy mask over
+  its bounding box, written into the set by one `set.update` of integer cell keys - the same cells, so the same area.
+- **R6, `_falls`** (514k `_Frame.to_uf` calls under `grid_lines`): the fall of every vertex as one comprehension over the frame's
+  fall unit, the same expression `to_uf` computes, without a call per vertex.
+- **R2, `crop_boxes`' house shelter** (122k generator steps over 21 calls): every clump against every house in one numpy distance
+  comparison per grove, the same squared-distance test.
+- **R3, `free_seats`' `_near_a_house`** (82k): the grid's points tested against every house in one numpy pass after the static
+  ground's test, `np.hypot` for `math.hypot` (a last-place rounding may move a point on the half-pitch line: the cohort judges).
+- **C3, `Region.taken`** (36k PIL `getpixel` calls in `close_belt_gaps`): the raster held as a numpy array, built on the first
+  read after a paint and dropped when the region is painted again (where `_sat` is already dropped), and indexed.
+- **C1, `clearance.ring_index`** (70.6k calls, 361k key steps) and **C2, `keeper.pts_key`** (41k keys, 229k steps): the key built
+  by `tuple(map(tuple, pts))`, a walk in C with no Python frame per point, in place of a generator of `float()` pairs - a key equal
+  to the old one wherever the old one was made, since an int coordinate and its float hash and compare alike. The content key
+  stays: an identity key is the guess `dev/performance.md` forbids (the comment at `clearance.py`).
+- **R5, `free_components`** (40 whole-grid labelings at 40 households, about 19 ms each, measured 2026-10-26 in
+  `research/hotspots-recompute.md`): the run-length union-find replaced by `scipy.ndimage.label` with 4-connectivity, one C call -
+  the same components (only their numbers differ, and `np.isin(labels, hit)` reads components, not numbers). scipy is installed
+  in the container but not declared: it joins `requirements.in` and is locked by `pip-compile` with the numpy pin unchanged
+  (FR-008: a library may change where an analysis shows it better).
+Each change keeps its research claims; a claim on rewritten code is re-owed and checked through the claims round (FR-004).
+
 ## Task approaches
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+<!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+### T05 Approach (checklist part A)
+
+1. **The goal, in the world.** The same shared wells, seated without re-ranking every seat against every household per well.
+2. **The constraints.** FR-003, FR-004, FR-007, US3; its decisions are written, and reviewed, when T05 starts, after T04.
+3. **Where each comes from.** The GM 2026-10-26, `request.md` 1 and 5; `research/hotspots-recompute.md` R1,
+   `research/survey-t01.md`.
+4. **Do they describe the world here?** Yes: lane_wells is the largest stage of the T01 survey of this engine (`research/survey-t01.md`).
+5. **The order.** After T04, the order the GM approved (`request.md` 5).
+6. **The exits.** Green: the lane_wells chain under US3's bound, the cohort with no seed regressed. Red: what failed recorded and
+   the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None yet; to be answered with its decisions.
+8. **The budget.** One landing.
+9. **Done, measured.** US3's test: the lane_wells chain's count and the slowest seed's lane_wells time.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
 ## Project Structure
 
 ### Documentation (this feature)

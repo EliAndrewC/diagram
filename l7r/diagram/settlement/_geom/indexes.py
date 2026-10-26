@@ -331,11 +331,17 @@ class CanopyArea:
         self.cells: set[tuple[int, int]] = set()
 
     def add(self, x: float, y: float, r: float) -> None:
+        """The cells whose centers lie inside the crown, found by one numpy mask over its bounding box and written into the set
+        at once (feature 427 T04, C5: a `set.add` per cell was 1.05M calls of the windbreak stage at 40 households, the T01
+        survey) - the same cells, so the same area."""
+        import numpy as np  # noqa: PLC0415
+
         c = self.cell
-        for i in range(int((x - r) // c), int((x + r) // c) + 1):
-            for j in range(int((y - r) // c), int((y + r) // c) + 1):
-                if ((i + 0.5) * c - x) ** 2 + ((j + 0.5) * c - y) ** 2 <= r * r:
-                    self.cells.add((i, j))
+        i = np.arange(int((x - r) // c), int((x + r) // c) + 1)
+        j = np.arange(int((y - r) // c), int((y + r) // c) + 1)
+        inside = ((i[:, None] + 0.5) * c - x) ** 2 + ((j[None, :] + 0.5) * c - y) ** 2 <= r * r
+        ii, jj = np.nonzero(inside)
+        self.cells.update(zip(i[ii].tolist(), j[jj].tolist(), strict=True))
 
     @property
     def area(self) -> float:

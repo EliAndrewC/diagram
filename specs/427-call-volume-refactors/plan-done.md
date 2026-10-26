@@ -53,3 +53,20 @@
 10. **Before moving a constant.** n/a
 11. **Before fitting things into room.** n/a
 
+<!-- plan-archive: archived 2026-10-26 -->
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** The same hamlets, rolled with tenfold fewer Python calls in each chain T04 names.
+2. **The constraints.** D4; FR-002, FR-003, FR-004, FR-007, FR-008, US2.
+3. **Where each comes from.** The GM 2026-10-26, `request.md` 1 and 5; `research/hotspots-cheap-wins.md`,
+   `research/hotspots-recompute.md`, `research/survey-t01.md`.
+4. **Do they describe the world here?** Yes: each chain is in the T01 survey of this engine.
+5. **The order.** After T03 and the start bookend; before T05 (the wells).
+6. **The exits.** Green: each named chain's count down tenfold in `make perf-fanout`, the cohort with no seed regressed. Red: what
+   failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Two landings: C1-C3, C5 and R6 first, then R2, R3 and R5 (the dependency).
+9. **Done, measured.** Each chain's before and after count from `make perf-fanout`, and the pool reroll's manifest diff.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
