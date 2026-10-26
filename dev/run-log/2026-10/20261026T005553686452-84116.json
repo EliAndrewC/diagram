@@ -1,0 +1,49 @@
+{
+  "utc": "2026-10-26T00:55:53Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 451,
+  "result": "green",
+  "commit": "316c5bfd2",
+  "cache": "cold",
+  "mode": "full",
+  "selected": 10126,
+  "host": {
+    "load": [
+      8.28,
+      13.78
+    ],
+    "mem_avail_mb": [
+      8416,
+      7863
+    ],
+    "cpu_temp_c": [
+      80.0,
+      79.0
+    ],
+    "stall_s": {
+      "cpu": 14.4,
+      "io": 1.4,
+      "io_full": 0.9,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  },
+  "phases": {
+    "preflight": 160.0,
+    "static": 3.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 30.0,
+    "hooks-test": 98.0,
+    "pytest": 288.0,
+    "floors": 25.0,
+    "test-full": 315.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/hamletgen/ways/CLAUDE.md",
+  "collected": 10126
+}
