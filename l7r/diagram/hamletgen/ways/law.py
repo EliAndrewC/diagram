@@ -191,8 +191,8 @@ Research: no tread through a building - research/questions/0246-how-our-maps-lay
 FIELD_REACH_FT = _FIELD_REACH_FT  # feature 417 T05: the one constant
 """On a brook map one of the hamlet's own ways (not the track out) comes this near the field - its paddy or its dry hem -
 the reach `lanes_reach_something` asks of the field (feature 261, FR-012). 60 ft until 405 T22: no 0014 page states it, and
-0014 draws the path JOINING the bund, a lane end within 6 ft of the paddy's edge read as joining it. `track.SPUR_REACH_FT`
-is this distance (a test holds them equal; that layer cannot import the law).
+0014 draws the path JOINING the bund, a lane end within 6 ft of the paddy's edge read as joining it.
+(`track.SPUR_REACH_FT`, the field spur's copy, went with the spur in feature 417 T50.)
 Research:
     a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the hamlet to the field's outer bund
     the reach - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end that stops within 6 ft of the paddy's edge is drawn as joining it

@@ -380,30 +380,6 @@ def test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds(monkeypatch: py
     assert len(s.M["houses"]) < 20, "the ground, not the search, was the limit"
 
 
-def test_a_cluster_standing_off_its_field_gets_the_spur_to_it() -> None:
-    """`stage_track`'s field spur is laid when the path from the cluster's edge to the field is longer than 20 ft; the
-    pool's clusters front the paddy at the wall rule now (feature 227), so no shipped map lays one - a cluster seated
-    two hundred feet back does."""
-    from l7r.diagram.hamletgen.ways import stage_track
-
-    s, plan = _toy_hamlet(10)
-    # NUCLEATED seats two hundred feet back, where they are asked (feature 291). Three hundred fell off the toy's canvas,
-    # and the test leaned on the DISPERSED spiral finding room within reach of them (feature 276); a dispersed farm's
-    # frame - its grove, the service strip and the lane's room - is over 200 ft across now, and the spiral found none. The
-    # spur is a property of the track, whatever form stands back there.
-    cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
-    ox, oy = plan.seat["out"]
-    n = 0
-    for k in range(-2, 3):
-        ax, ay = plan.seat["along"]
-        if s.try_place(cx_ + ax * 110 * k + ox * 200, cy_ + ay * 110 * k + oy * 200, "plain"):
-            n += 1
-    assert n >= 3
-    stage_track(s, plan)
-    spurs = [ln for ln in s.M["lanes"] if ln.get("w") == 5 and not ln.get("connector") and ln.get("worn")]
-    assert spurs, "a worn width-5 way besides the connector: the spur to the field"
-
-
 def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field(monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 227 D8: the seats a pitch beyond each end of the rank are offered ONLY in a round that seated nothing
     behind - so a cluster whose back is refused grows along the field instead of stopping. Here the ground more than

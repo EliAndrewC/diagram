@@ -14,7 +14,7 @@ import math
 from collections.abc import Mapping
 from typing import cast
 
-from l7r.diagram.settlement import Settlement, seg_intersect, segments_cross
+from l7r.diagram.settlement import Settlement
 
 from ..consts import SPUR_SETBACK, TRACK_FABRIC_GAP, Poly, Pt
 from .fabric import _homestead_polys
@@ -77,55 +77,3 @@ def gate_out_of_the_field(envelope: Poly, gate: Pt) -> Pt:
         connector starts off the crop - research/questions/0081-village-lanes.drawing.html: the start pushed out of the field envelope
         setback from the field - research/questions/0081-village-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane may touch a plot's boundary and the field path runs onto the outer bund - the way out is set 17 ft back from the field, a departure the code keeps until feature 417 T32; `SPUR_SETBACK` 17 ft clear of the field envelope"""
     return push_out_of(envelope, gate, SPUR_SETBACK)
-
-
-def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt, fabric: list[Poly] | None = None) -> Pt:
-    """The point on the placed cluster's edge that FACES `target`.
-
-    NOT `_cluster_gateway`, and confusing the two cost the reference map its field access. That helper
-    pushes outward along `seat["out"]` - the downslope exit, which is where a track LEAVES for the
-    wider world and by construction points AWAY from the field. Feature 128 re-originated both tracks
-    from the placed houses and reused it for the spur as well, so the spur began on the far side of
-    the settlement from its own destination, ran 104 degrees off the field bearing, and dead-ended in
-    the shelter belt RECEDING from the paddy: 281 ft from the field envelope at its tip against 248 ft
-    at its start. Found by `settlement-review`; the gate could not see it, because
-    `lanes_reach_something` is satisfied by an end lying near a house and a way dying in the trees
-    still fronts one.
-
-    A spur goes TO somewhere. Its origin therefore belongs on the side of the cluster that faces the
-    somewhere - measured from the placed houses like everything else in this feature, not from the
-    seat band.
-
-    Research:
-        spur starts facing the field - research/questions/0081-village-lanes.drawing.html: on the cluster's edge toward its target
-        spur origin clear of the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the spur and the track keep 7 ft off every part of a homestead - the origin is walked out from a house center (8 px its first step) until it clears all that stands by that gap (`push_clear_of_fabric`)
-        origin on the houses' bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: stopped
-            14 px plus half the brook short of it (the router's figure, not the page's), the brook crossed squarely on a plank bridge at a crossing place
-    """
-    hs = s.M.get("houses") or []
-    if not hs:
-        return fallback
-    xs = [float(h["x"]) for h in hs]
-    ys = [float(h["y"]) for h in hs]
-    cx, cy = sum(xs) / len(xs), sum(ys) / len(ys)
-    ux, uy = target[0] - cx, target[1] - cy
-    n = math.hypot(ux, uy) or 1.0
-    ux, uy = ux / n, uy / n
-    reach = max(((x - cx) * ux + (y - cy) * uy for x, y in zip(xs, ys, strict=False)), default=0.0)
-    # `fabric`, where the caller asks this per candidate of an unchanging map, is built ONCE by it (feature 328, batch 11's
-    # perf-audit: the spur's 111-124 candidates each rebuilt `_homestead_polys`, and wave 87's held parts doubled its cost)
-    fabric = fabric if fabric is not None else [poly for poly, _owner, _kind in _homestead_polys(s)]
-    edge = push_clear_of_fabric((cx, cy), (ux, uy), reach + TRACK_FABRIC_GAP + 8.0, fabric)
-    # ...AND ON THE HOUSES' OWN BANK (feature 261). Pushed past the furthest house by the fabric gap, the origin landed
-    # across a brook that runs close by - Inashiro's by 20 ft - so the spur began on the field's side of the water, never
-    # crossed it, and was a stub too short to draw: the hamlet had no way to its rice. Where the push crosses a stream,
-    # the origin stops short of it by the router's own 14 px off water, and the spur crosses at a ford like any other way.
-    for f in s.M.get("streams") or []:
-        poly = [(float(x), float(y)) for x, y in (f.get("poly") or [])]
-        for a, b in zip(poly, poly[1:], strict=False):
-            if segments_cross((cx, cy), edge, a, b):
-                x = seg_intersect((cx, cy), edge, a, b)
-                if x is not None:
-                    back = math.dist((cx, cy), x) - 14.0 - float(f.get("w", 8.0)) / 2
-                    edge = (cx + ux * back, cy + uy * back)
-    return edge

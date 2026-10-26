@@ -167,20 +167,6 @@ def test_a_gateway_walled_in_by_reserved_seats_leaves_over_a_seat(monkeypatch: p
     assert "wood_seats_to_the_connector" not in s2.M["meta"], "the dry exit clear of the seats gives none up"
 
 
-def test_a_spur_the_registry_refuses_is_recorded_dropped(monkeypatch: pytest.MonkeyPatch) -> None:
-    from .ways._builders import _walled_settlement
-
-    s, plan = _walled_settlement()
-    plan.seat = hg.seat_cluster(plan)
-    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
-    monkeypatch.setattr(track, "_thread_the_fabric", lambda s_, plan_, run: run)
-    monkeypatch.setattr(track, "spur_cut_at_the_fold", lambda pts, env: (pts, None))
-    monkeypatch.setattr(s, "admits_lane", lambda pts, width: False)  # a dry plot or a part on every run the spur could take
-    track.stage_track(s, plan)
-    assert "overlap matrix refuses the spur" in s.M["meta"]["field_spur_swept"]
-    assert not [ln for ln in s.M.get("lanes") or [] if ln.get("spur")]
-
-
 def test_the_title_pocket_is_never_reserved_over_a_households_wood_or_a_corridor() -> None:
     """The copse refuses a clump inside the title's pocket grown by its radius, so a pocket over a reserved seat took the seat
     (cohort 1-60: 95 of them). The pocket's own predicate refuses such a box."""

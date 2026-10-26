@@ -206,8 +206,8 @@ LANE_JOIN_FT = 25.0
 TAIL_CUT_FT = 40.0
 """Research: a tail past a crossing - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut"""
 
-# A WAY JOINING THE BUND (feature 417 T05, D16): an end this near the paddy's edge reaches the field - `thread.SPUR_REACH_FT`
-# and `law.FIELD_REACH_FT` both read it (they were two 6.0s a test held equal); since T25 (D19) it IS the settlement's
+# A WAY JOINING THE BUND (feature 417 T05, D16): an end this near the paddy's edge reaches the field - `law.FIELD_REACH_FT`
+# reads it (with `thread.SPUR_REACH_FT`, gone with the field spur in 417 T50, they were two 6.0s a test held equal); since T25 (D19) it IS the settlement's
 # `water_ways._helpers.BUND_REACH_FT`, which the lanes and `geom.end_serves` read.
 FIELD_REACH_FT = BUND_REACH_FT  # the settlement's own 6 ft, one constant (417 T25, D19)
 """Research: reaching the field - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end within 6 ft of the paddy's edge joins it"""

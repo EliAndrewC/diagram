@@ -112,25 +112,6 @@ def turns_back(prev: Pt, end: Pt, tgt: Pt) -> bool:
     return math.degrees(math.acos(max(-1.0, min(1.0, (u[0] * v[0] + u[1] * v[1]) / (nu * nv))))) > RUN_ON_TURN_DEG
 
 
-def tip_onto_the_bund(pts: Sequence[Pt], ground: WorkedGround, half_tread: float, blocks: RunOnBlocks | None = None) -> list[Pt]:
-    """A path's LAST point set on the bund: pulled back out of the worked ground where it ends inside it, carried on to it
-    where it stops short and the way is clear, straight on (`run_on_target`, `turns_back`). Otherwise as it came.
-
-    Research:
-        spur tip on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: never short of it, never in it
-        a run-on leg clear by its tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the leg is judged at its drawn width (twice the half-tread: no house corner on its tread, nor a fixture or crop) and `RunOnBlocks.clear` keeps its middle 7 ft (`FOOTPATH_FABRIC_GAP`) off the steadings' fabric, gardens included - the width is the tread, not a clearance (405 T93)
-        a tip that cannot be carried on - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: past the run-on's reach, turning back or blocked, it is left as it came for the settle - the lane law calls the short end dangling and 0246's pull-back takes it - and the field is reached by `a_way_onto_the_bund` (0014: the hamlet's nearest lane runs on to the bund)"""
-    out = [(float(p[0]), float(p[1])) for p in pts]
-    if len(out) < 2:
-        return out
-    if ground.inside(out[-1]):
-        return pulled_out_of_the_ground(out, ground, half_tread)
-    tgt = run_on_target(out[-1], ground, half_tread)
-    if tgt is not None and not turns_back(out[-2], out[-1], tgt) and (blocks is None or blocks.clear(out[-1], tgt, 2.0 * half_tread)):
-        out.append(tgt)
-    return out
-
-
 class RunOnBlocks:
     """What a run-on may not cross, read once per pass: every drawn water course (a crossing between fords needs a plank
     this pass does not lay), the marsh and the wet toe, and the steadings' built ground at a footpath's clearance."""
@@ -413,21 +394,27 @@ def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> bool:
     nothing is drawn, where it refuses.
 
     Research:
+        square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T50)
         a junction stays a T - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, so the step is its own
             field path
         stepped spur's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the no-build corridor `LANE_CLEARANCE`, 7 ft from the lane's middle, a footprint held to it at its corners
         stepped field path width - research/questions/0081-village-lanes.drawing.html: drawn 5 ft wide (`BRANCH_WIDTH`), the spur's rank"""
+    from .squaring import square_run  # imported where it is asked: `squaring` sits above this layer
+
     lanes = s.M.get("lanes") or []
     step = squared_step(q, to, drawn_water_segs(s))
     if not off_the_fixtures(s, [q, *step], float(lanes[i].get("w") or 3)):
         return False
     if any(seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP for a, b in _segs_of(lanes, i)):
-        if not s.admits_lane([q, *step], BRANCH_WIDTH):
+        # ...SQUARE AT THE BROOK TOO, AS LAID (feature 417 T50): `squared_step` squares the drawn channels only, and a door path carried
+        # on to the bund over the brook crossed it 23.6 degrees off square (cohort seed 42)
+        way = square_run(s.M, [q, *step])
+        if not s.admits_lane(way, BRANCH_WIDTH):
             return False
-        s.lane([q, *step], width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
+        s.lane(way, width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
         return True
     pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
-    pts = [*pts, *step] if e == -1 else [*step[::-1], *pts]
+    pts = square_run(s.M, [*pts, *step] if e == -1 else [*step[::-1], *pts])
     if not s.reshape_lane(lanes[i], pts):
         return False
     s.reink_lane(i)

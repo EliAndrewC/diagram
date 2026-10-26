@@ -8,25 +8,6 @@ from ._builders import _hamlet_for_ways
 _FIELD_AWAY = [(1400.0, 1400.0), (1600.0, 1400.0), (1600.0, 1600.0), (1400.0, 1600.0)]
 
 
-def test_a_field_spur_that_folds_back_on_itself_is_cut_at_the_fold() -> None:
-    """`spur_cut_at_the_fold`. A spur threaded round the steadings can double back; the smoothing pass then
-    cuts the hairpin away and the hamlet's only path to its rice disappears with no record. So the fold is
-    cut here, and what is left is drawn only while it still reaches the field."""
-    from l7r.diagram.hamletgen.ways.thread import spur_cut_at_the_fold
-
-    near = [(104.0, -50.0), (220.0, -50.0), (220.0, 50.0), (104.0, 50.0)]  # 4 ft past the arm's end: within 0014's 6 ft join (405 T22)
-    straight = [(0.0, 0.0), (50.0, 0.0), (100.0, 0.0)]
-    assert spur_cut_at_the_fold(straight, near) == (straight, None), "a spur that does not fold is drawn as threaded"
-
-    folded = [(0.0, 0.0), (100.0, 0.0), (5.0, 3.0)]
-    assert spur_cut_at_the_fold(folded, near) == ([(0.0, 0.0), (100.0, 0.0)], None), "the outward arm reaches the field, so it is kept and drawn"
-
-    far = [(500.0, -50.0), (600.0, -50.0), (600.0, 50.0), (500.0, 50.0)]
-    cut, why = spur_cut_at_the_fold(folded, far)
-    assert cut == [(0.0, 0.0), (100.0, 0.0)]
-    assert why and "short of the field" in why, "the arm stops in open ground, so the map says why it has no path to its rice"
-
-
 def test_an_end_in_a_grove_band_leaves_it_toward_the_run_s_other_end() -> None:
     """`_out_of_bands` (feature 291). A spur that began at a deep band's middle (cohort seed 11) is set out of the band by
     the side it was heading for - walked toward the far end, with containment asked as well as the gap - and not into the

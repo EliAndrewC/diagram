@@ -13,9 +13,9 @@ from l7r.diagram.overlap.registry import forbidden_segment
 from l7r.diagram.settlement import Settlement, seg_dist, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.settlement.land.wet import marsh_ground
-from l7r.diagram.sitegen.geom import centroid, crop_polys, pull_clear, unit
+from l7r.diagram.sitegen.geom import crop_polys, pull_clear
 
-from ..cluster import _fork_spur, seat_cluster
+from ..cluster import seat_cluster
 from ..consts import (
     BROOK_CROSSING_COST_FT,
     FORD_BEND_DEG,
@@ -30,13 +30,12 @@ from ..consts import (
 )
 from ..plan import SitePlan
 from . import law
-from .bund import RunOnBlocks, tip_onto_the_bund
 from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, gap_segments, stream_segs
-from .clearance import clip_to_clear, route_around
-from .cluster_edge import _cluster_edge_toward, _cluster_gateway, gate_out_of_the_field  # noqa: F401 - re-exported: `gateway.py`, `ways/__init__.py` and the tests reach them here
+from .clearance import route_around
+from .cluster_edge import _cluster_gateway, gate_out_of_the_field  # noqa: F401 - re-exported: `gateway.py`, `ways/__init__.py` and the tests reach them here
 from .dry_exit import EXIT_CELL_FT, GROVE_EXIT_CELL_FT, clear_of_bands, dry_exit
 from .fabric import _homestead_polys, fabric_hits_boxed, poly_box
-from .geom import memo_ground, polyline_len, worked_ground
+from .geom import polyline_len
 from .route import set_crossing
 from .thread import (
     CONNECTOR_BAND_GAP_FT as CONNECTOR_BAND_GAP_FT,
@@ -45,9 +44,6 @@ from .thread import (
     CONNECTOR_WIDTH as CONNECTOR_WIDTH,
 )
 from .thread import (  # noqa: F401 - lifted out at the 1,000-line bar (405 T09); re-exported so every importer and test still reaches them here
-    SPUR_REACH_FT as SPUR_REACH_FT,
-)
-from .thread import (
     _inner as _inner,
 )
 from .thread import (
@@ -59,12 +55,6 @@ from .thread import (
 from .thread import (
     _water_crossings as _water_crossings,
 )
-from .thread import (
-    spur_cut_at_the_fold as spur_cut_at_the_fold,
-)
-
-SPUR_WIDTH = 5  # the field spur's tread, a worn path: the web's ways are 3, the connector 6
-"""Research: field spur width - research/questions/0081-village-lanes.drawing.html: 5 ft"""
 
 
 def stage_seat(s: Settlement, plan: SitePlan) -> None:
@@ -212,7 +202,7 @@ def choose_track_out(s: Settlement, plan: SitePlan) -> Poly:
 
 
 def stage_track(s: Settlement, plan: SitePlan) -> None:
-    """The connector and the field spur.
+    """The connector (the field spur it also laid went in feature 417 T50: laid before anything it could join, it was dropped whole).
 
     The track out to the off-map road, and the path to the fields - drawn NOW, after the farmhouses, because a
     lane drawn earlier takes ground the houses then cannot have. That is true whatever the lane represents: a
@@ -248,42 +238,20 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.track.connector_track
         l7r.diagram.hamletgen.ways.track._cluster_gateway
         l7r.diagram.hamletgen.ways.track._thread_the_fabric
-        l7r.diagram.hamletgen.ways.bund.tip_onto_the_bund
         l7r.diagram.hamletgen.ways.clearance.route_around
-        l7r.diagram.hamletgen.ways.clearance.clip_to_clear
-        l7r.diagram.settlement.Settlement.trim_off_marsh
         l7r.diagram.settlement.Settlement.lane
 
     Research:
-        spur scored at a ford - CONVENTION: a crossing within `FORD_HALF` (30 ft, the crossing place's drawn half-length) of a ford counts as at it when the spur's candidates are scored; 0035 sets the crossing places and their spacing, not their length
         square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)
-        lanes after the farmhouses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: connector and spur drawn after every house
-        polder has no spur - GUESS: the connector alone, the way into the fields taken to be over the dike's crest where the record runs a field path on to the outer bund
-        spur to the field - research/questions/0081-village-lanes.drawing.html: the outline point whose path crosses least, then
-            the shortest, clipped off the dry plots and the marsh
-        spur drawn taut - research/questions/0081-village-lanes.drawing.html: every lane pulled taut like a string - straight from the cluster's edge to the field, or over a ford
-        spur over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
-        field spur tip on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: set on the worked
-            ground's edge, again after threading
-        spur kept however short - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: drawn down to its 5 ft tread
+        lanes after the farmhouses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the connector drawn after every house
         row road - research/questions/0033-row-villages-resson.drawing.html: the street carried on off the map, over a ford
         row road width - research/questions/0033-row-villages-resson.drawing.html: 6 ft
         row road over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the ford that makes the walk shortest, each leg threaded to its landing (`thread_over_the_ford`)
         track off the map - research/questions/0081-village-lanes.drawing.html: from the gateway, out of the field, to the frame
         track off the wet - research/questions/0081-village-lanes.drawing.html: the toe band and every drawn marsh are wet
-        spur clip margin - research/questions/0081-village-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane may touch a plot's boundary and the field path runs onto the outer bund - the spur is clipped 12 ft short, a departure the code keeps until feature 417 T32; the spur clipped 12 ft off the dry plots (0081 lets a lane touch a plot's boundary, and gives no clearance)
-        toe-band margin - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); the spur clipped 12 ft off the toe band
-        spur tip set back - GUESS: the page is silent on the 17 ft, only the point the tip's candidates are scored to; the drawn tip is carried onto the paddy's outer bund (`tip_onto_the_bund`), as 0014 has the field path join it
         connector width - research/questions/0081-village-lanes.drawing.html: the track out 6 ft (`CONNECTOR_WIDTH`), valley and polder alike
-        field spur width - research/questions/0081-village-lanes.drawing.html: the field spur 5 ft (`SPUR_WIDTH`), a spur's rank
-        lane clearance - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps 7 ft clear of a garden fence; the connector and spur keep `LANE_CLEARANCE`, 7 ft from the lane's middle, a footprint held to it at its corners
+        lane clearance - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps 7 ft clear of a garden fence; the connector keeps `LANE_CLEARANCE`, 7 ft from the lane's middle, a footprint held to it at its corners
     """
-    seat = plan.seat
-    ax, ay = seat["along"]
-    ox, oy = seat["out"]
-    cx, cy = seat["cx"], seat["cy"]
-
-    crops = crop_polys(s)
     # The steadings, read ONCE for the whole stage: the bearing sweep ranks against them and
     # `_thread_the_fabric` re-reads them for the clip. They cannot change during this stage -
     # nothing here draws a homestead - so a second walk would only be a second chance to disagree.
@@ -293,11 +261,6 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # is not its drawn quad)
     plan.grove_bands = [poly for poly, _owner, kind in _homestead_polys(s) if kind == "groves"]  # for the dry exit (feature 291)
 
-    def to_screen(p: Pt) -> Pt:
-        """Seat frame (along the margin, away from the field) -> screen."""
-        return (cx + ax * p[0] + ox * p[1], cy + ay * p[0] + oy * p[1])
-
-    toe_now = s.toe_band() or None
     # THE SKELETON IS NO LONGER LAID HERE (feature 126). Its arms are drawn in `stage_lanes`,
     # after the houses exist, and are fitted to where the houses actually went. What survives in
     # this stage is the LAYOUT OBJECT ALONE, and only for its `gateway` - the downslope exit the
@@ -310,152 +273,15 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # middle, and the cluster stretched to meet them. That was a FEEDBACK loop, and it existed
     # only because the skeleton was laid BEFORE the houses and its arms generated seats. Laid
     # afterwards there are no seats to generate, so the loop is severed rather than re-entered.
-    # The spur no longer forks into the skeleton's arms, because they do not exist yet. It forks
-    # into nothing and simply runs to the field; `stage_lanes` joins the network up afterwards.
-    _kept_arms: list[tuple[Poly, Poly]] = []
-
-    # the SPUR to the field: from the middle of the cluster to the nearest envelope point THE TRACK
-    # CAN ACTUALLY REACH. Nearest-by-distance alone routes the path straight over the dry hem when
-    # the hem lies between cluster and paddy - and a trodden path crosses no row crops
-    # (`lanes_clear_of_dry_plots`; a real farm track runs on the baulk between plots, or round the
-    # hem). So candidates are ordered by distance and the first one whose straight run is clear of
-    # every hem plot wins; if none is, the nearest is used and the gate says so rather than the map
-    # quietly shipping a lane through the barley.
-    # A POLDER HAS NO FIELD SPUR. The valley hamlet's spur is a path from the cluster to the paddy's
-    # edge, and it is meaningful there because the crop's margin is walkable ground. A polder is
-    # ringed by its perimeter DIKE and, just inside that, the ring canal - so the way in is over the
-    # dike at its sluice gaps, and a spur to the crop edge is a path to a bank. Drawn anyway it was
-    # worse than pointless: every near target crosses the ring canal, so `path_violations` scored the
-    # nearby vertices badly and the least-bad candidate ran from the cluster straight ACROSS the
-    # block to a vertex on the far side (`fields_clear_of_road` on 4 of 12 cardinal polders).
+    # THE TRACK LAYS NO FIELD SPUR (feature 417 T50): laid here, before the connector and two stages before the web, it joined
+    # nothing it could reach, and on 28 of 54 maps the settle's one-network step dropped it whole - laid only to be dropped. The
+    # field is reached by the web's own way onto the bund (`bund.a_way_onto_the_bund`: run on, branch) or the settle's field way
+    # (`reach.settle_field`), each laid joined to the ways it serves.
+    # A POLDER'S CONNECTOR is its recorded track out (feature 150), over the dike at its sluice gaps
     if plan.field_archetype in POLDER_ARCHETYPES:  # both polder archetypes (feature 150)
         s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
         s.lane(recorded_track(s) or choose_track_out(s, plan), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
         return
-
-    # THE SPUR STARTS AT THE CLUSTER'S EDGE, NOT AT THE BAND'S CENTER (FR-002, feature 128).
-    #
-    # `to_screen((0, 0))` is the middle of the PREDICTED seat band, and with the spur now drawn after
-    # the houses that point sits inside the house cloud - so the path began among the steadings and
-    # had to leave through them. One house on the reference hamlet finished within 14 px of the
-    # spur's centerline, which is exactly what `houses_off_corridors` counts, and no amount of
-    # routing around the fabric could fix it because the route's own START was in the middle of what
-    # it was supposed to avoid.
-    #
-    # `_cluster_gateway` measures the placed cloud's reach along the seat axes and puts the origin
-    # just outside it. The band point is kept only as the no-houses fallback.
-    _band_start = to_screen((0.0, 0.0))
-    cen = centroid(plan.envelope)
-    # ...GAPPED AT THE FORDS (feature 261): a spur that crosses at a ford crosses legally - `bridges()` decks it - so only
-    # a crossing between fords counts against it. Judged against the whole course, every spur to rice across the brook
-    # scored the same violation, the shortest won the tie, and the clip cut that straight run to a 28 ft stub that was
-    # never drawn: Inashiro and Kashikawa lost their only way to the field.
-    brook_segs = gap_segments([(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)], getattr(s, "brook_fords", ()), FORD_HALF)
-
-    _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # built once for every candidate: nothing is drawn while they are scored
-
-    def spur_path(target: Pt) -> Poly:
-        # THE TIP STOPS OUTSIDE THE FIELD, measured on the LOCAL edge normal (GM 2026-08-12:
-        # "Inashiro has village paths overlapping with rice paddies"). It used to pull back 8 px
-        # along the SEAT's outward normal, which is one fixed direction for the whole map - so at a
-        # target vertex whose own outline runs a different way, the pull-back was sideways and the
-        # tip finished 28 px INSIDE the envelope, a track ending in the standing water. The normal
-        # is taken from the two outline edges meeting at the target and oriented away from the
-        # field's centroid, and the set-back covers the lane's own half-width plus the tolerance
-        # `fields_clear_of_road` allows. A path stops AT the bund; the last few feet are the baulk.
-        env = plan.envelope
-        k = min(range(len(env)), key=lambda i2: math.hypot(env[i2][0] - target[0], env[i2][1] - target[1]))
-        nx, ny = 0.0, 0.0
-        for a2, b2 in ((env[k - 1], env[k]), (env[k], env[(k + 1) % len(env)])):
-            ex, ey = unit(-(b2[1] - a2[1]), b2[0] - a2[0])
-            nx, ny = nx + ex, ny + ey
-        nx, ny = unit(nx, ny)
-        if nx * (target[0] - cen[0]) + ny * (target[1] - cen[1]) < 0:
-            nx, ny = -nx, -ny
-        edge = (target[0] + nx * SPUR_SETBACK, target[1] + ny * SPUR_SETBACK)
-        # THE WHOLE PATH IS IN ONE FRAME, which the first cut of feature 128 broke. It moved the
-        # START to the placed houses and left the bow point on the PREDICTED band's `cx, cy, ax, ay`,
-        # so the two ends of the same three-point path described different settlements. Combined with
-        # a start taken from the outward gateway - the direction a track LEAVES by, which faces away
-        # from the field - the spur ran 104 degrees off its own target and died in the windbreak.
-        #
-        # Now: the origin faces THIS target.
-        _s = _cluster_edge_toward(s, target, _band_start, _fabric_now)
-        # ...AND OVER THE BROOK AT A FORD (feature 261). Where the houses stand across the brook from their rice, the
-        # path crosses it square at the ford that makes the walk shortest, and `bridges()` decks the crossing - a
-        # straight run would meet the brook wherever it happened to, between fords, and the clip would cut it there.
-        _via = ford_crossing(_s, edge, plan.brook or [], getattr(s, "brook_fords", ()))
-        if _via:
-            return [_s, *_via, edge]
-        # TAUT (feature 328 wave 46, 0081: "Every lane is pulled taut like a string"): the 14 ft sideways swing at the midpoint
-        # that made the path "read as walked" is on no page
-        return [_s, edge]
-
-    # ...and again the candidate is the DRAWN path - see `path_is_clear`.
-    spur_check = PathChecker(crops, plan.sink_pond, brook_segs, plan.watercourses)  # built once for every candidate (FR-005)
-    spur = min(
-        (spur_path(q) for q in sorted(plan.envelope, key=lambda v: math.hypot(v[0] - cx, v[1] - cy))),
-        key=lambda p: (spur_check.violations(p), polyline_len(p)),
-    )
-    _spur_pts = s.trim_off_marsh(clip_to_clear(spur, [*crops, *([toe_now] if toe_now else [])], 12.0))
-    _spur_pts = _fork_spur(_spur_pts, _kept_arms)
-    # ...AND ITS TIP IS SET ON THE BUND (269 B04, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the path "runs from the hamlet to the paddy's outer bund
-    # and joins it ... it never ends in open ground short of the bund"). The clip leaves it 12 ft off the hem and the set-back
-    # 17 ft off an outline vertex - short of the bund - and where the rice stands proud of the outline it could stop in the
-    # rice (Sawada: 4 ft in). Carried on to the worked ground's edge, or pulled back out of it.
-    _spur_pts = tip_onto_the_bund(_spur_pts, memo_ground(s, "worked", worked_ground), SPUR_WIDTH / 2.0, RunOnBlocks(s))
-    _spur_ft = sum(math.dist(_spur_pts[k], _spur_pts[k + 1]) for k in range(len(_spur_pts) - 1)) if len(_spur_pts) >= 2 else 0.0
-    # WHAT WAS LEFT OF THE SPUR IS RECORDED, drawn or not (feature 230): a spur that fails the floor below vanished in
-    # silence, and a reviewer asking what the nearest way to the paddy was is how the reference hamlet turned out to have
-    # none. Where a field path ends was the open question this measured for; research/questions/0014-bunds-between-the-paddies-aze.drawing.html answers it (on the bund).
-    s.M["meta"]["field_spur_ft"] = round(_spur_ft, 1)
-    # ...AND A SPUR THAT NO LONGER REACHES THE WEB IS NOT DRAWN. The clip takes the spur out of the crop and off
-    # the marsh from BOTH ends, so what survives can be a length of path in the middle of open ground: on the
-    # reference hamlet it came back 111 ft long, 152 ft from the nearest lane and 72 ft from the field, joining
-    # nothing to nothing - a second lane "network" of one fragment, which is a worse thing to draw than no path
-    # at all and which the gate's own one-network rule catches. So the survivor is drawn only while its head is
-    # still on the fabric it forked from; otherwise the LENGTH stands as the record and `field_spur_head_ft`
-    # says how far short it fell. That is the shortfall reported rather than swallowed - the thing the fifth
-    # review pass asked for - and it is not the same as the sweep silently dropping it, which is what made the
-    # reference hamlet's missing path invisible in the first place.
-    # Whether it SURVIVES is decided later and elsewhere: nothing is on the map to attach to at this point in
-    # the stage - not the connector, which is drawn below this, and not the web, which is two stages away - so
-    # the spur is drawn on its own length and the sweeps judge it against the finished network (`sweeps.py`).
-    # THE FLOOR IS THE TREAD'S OWN WIDTH, NOT 20 FT (269 B04: "however short that leaves the path"). A run shorter than the
-    # path is wide is not a line; anything longer is the path to the rice, and a spur swept later is answered at the end of
-    # the web by the nearest lane running on to the bund (`a_way_onto_the_bund`).
-    if _spur_ft >= SPUR_WIDTH:
-        # ...AND NEVER DRAWN AS AN OUT-AND-BACK (settlement-review, feature 230 pass 11). Threading the clipped spur round
-        # the steadings can fold it back on itself: the reference hamlet's ran 90 ft toward the field and straight back to
-        # within 14 px of where it began, the smoothing pass then rightly cut that hairpin away, and the hamlet's only path
-        # to its rice disappeared with no record. Keeping the arm toward the field was tried first and was wrong: that arm
-        # stopped 60.6 ft short of the field, where the marsh the path may not cross lies between, so it was a lane ending
-        # in open ground (`lanes_reach_something`). A folded spur is drawn only when its outward arm still reaches the
-        # field; otherwise the map says why it has no path to its rice.
-        _threaded = thread_over_the_ford(s, plan, _spur_pts[0], _spur_pts[1:3], _spur_pts[3]) if len(_spur_pts) == 4 else _thread_the_fabric(s, plan, _spur_pts)
-        _drawn_spur, _swept = spur_cut_at_the_fold(_threaded, plan.envelope) if len(_threaded) >= 2 else (_threaded, "no way to the field clear of the steadings - the field path is the web's")
-        # ...AND THE DRAWN TIP IS SET ON THE BUND AGAIN (269 B04): the tip was set above, but the threading moves the spur's
-        # free bow vertex round the steadings and the fold cut then keeps the arm out to it, so the path drawn can end at a
-        # vertex neither step held to the field's edge. Cohort seed 905 (feature 304 T03, dispersed): a 6 ft spur bowed 14 ft
-        # sideways was threaded out to a bow 20 ft inside a paddy plot, and the arm kept ran across the comb's main ditch at the
-        # field's head onto a 2 ft bund strip - no deck lands dry there (`crossing_deck`), and a dispersed hamlet runs no web
-        # settle to cut it, so `bridges()` raised `UndeckableCrossing`. Pulled back out of the worked ground, the tip stops on
-        # this side of the bund, as the tip set above does.
-        # ...SQUARED WHERE IT CROSSES WATER FIRST (feature 417 T49), so the tip set on the bund below is the last word on its end
-        if _swept is None:
-            from .settle import square_run  # the web's last pass sits above this layer
-
-            _drawn_spur = square_run(s.M, _drawn_spur)
-        if _swept is None:
-            _drawn_spur = tip_onto_the_bund(_drawn_spur, memo_ground(s, "worked", worked_ground), SPUR_WIDTH / 2.0, RunOnBlocks(s))
-            if len(_drawn_spur) < 2:
-                _swept = "the threaded spur runs in the worked ground end to end - the field path is the web's"
-        if _swept is None and not s.admits_lane(_drawn_spur, SPUR_WIDTH):
-            _swept = "the overlap matrix refuses the spur (a dry plot or a steading's part on it) - the field path is the web's"
-        if _swept is None:
-            s.lane(_drawn_spur, width=SPUR_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)  # flagged so neither sweep can drop the FIELD's only way
-        else:
-            s.M["meta"]["field_spur_swept"] = _swept
 
     # the CONNECTOR, out to the frame
     # ...and the gate the connector starts FROM must itself be out of the crop. The skeleton's

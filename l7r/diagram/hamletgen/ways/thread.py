@@ -16,7 +16,6 @@ from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import (
-    FIELD_REACH_FT,
     FOOTPATH_FABRIC_GAP,
     GROVE_WORKING_ROOM_FT,
     TRACK_FABRIC_GAP,
@@ -24,10 +23,10 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
-from .clearance import _HAIRPIN_DEG, clip_to_clear
-from .cluster_edge import _cluster_edge_toward, _cluster_gateway, gate_out_of_the_field  # noqa: F401 - re-exported: `gateway.py`, `ways/__init__.py` and the tests reach them here
+from .clearance import clip_to_clear
+from .cluster_edge import _cluster_gateway, gate_out_of_the_field  # noqa: F401 - re-exported: `gateway.py`, `ways/__init__.py` and the tests reach them here
 from .fabric import _crosses_fabric, _homestead_polys
-from .geom import _turn_deg, push_clear_of_fabric, push_out_of
+from .geom import push_clear_of_fabric, push_out_of
 from .route import _route
 
 CONNECTOR_WIDTH = 6.0
@@ -41,42 +40,6 @@ connector's half-width, 12.5 ft (feature 385 T98: it was a footpath's gap and th
 7, never 0036's room). Dispersed farms' bands stand 32 ft apart (feature 291's measure), so the 25 ft it asks still passes.
 
 Research: the connector off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: some working room off the trees each side of the tread, 9.5 ft beyond the 6 ft connector's half-width"""
-
-
-# how near the field a spur's end must stand to have reached it - `law.FIELD_REACH_FT`, which this layer cannot import (a test
-# holds the two equal, 405 T22: one distance for the law and the placer)
-SPUR_REACH_FT = FIELD_REACH_FT  # feature 417 T05: the one constant
-"""Research: spur reaches the field - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end within 6 ft of the paddy's edge is drawn as joining it"""
-
-
-def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
-    """The field spur as it should be DRAWN, and the reason where it should not be.
-
-    A spur threaded round the steadings can FOLD BACK ON ITSELF (settlement-review, feature 230 pass 11):
-    the reference hamlet's ran 90 ft toward the field and straight back to within 14 px of where it began,
-    the smoothing pass then rightly cut that hairpin away, and the hamlet's only path to its rice
-    disappeared with no record of ever having been there. So the fold is cut here, before the map sees it.
-
-    Keeping the outward arm regardless was tried first and was wrong: on that map the arm stopped 60.6 ft
-    short of the field, with the marsh a path may not cross lying between, so it was a lane ending in open
-    ground (`lanes_reach_something`). A folded spur is drawn only while its outward arm still REACHES the
-    field; otherwise nothing is drawn and the caller records the returned reason, because a map with no
-    path to its rice should say so rather than quietly have none.
-
-    Lifted out of `stage_track` under the feature-146 doctrine: the decision is a question about a
-    polyline and an envelope, and inside the stage it could only be reached by rolling a whole hamlet
-    whose spur happens to fold.
-
-    Research:
-        spur fold cut - DEVIATION research/questions/0081-village-lanes.drawing.html: a folded field spur is cut at the fold whatever the returning leg's length, and drawn only while the arm reaches the field
-        a folded spur's reach - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the arm counts as reaching the field when it ends within `SPUR_REACH_FT` (6 ft, 0014's join) of it"""
-    fold = next((k for k in range(1, len(pts) - 1) if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) > _HAIRPIN_DEG), None)
-    if fold is None:
-        return pts, None
-    cut = pts[: fold + 1]
-    if edge_dist(cut[-1][0], cut[-1][1], envelope) <= SPUR_REACH_FT:
-        return cut, None
-    return cut, "folded back short of the field - the outward arm stops more than the join's reach from it"  # 405: the cause is not measured here
 
 
 def _out_of_bands(p: Pt, bands: Sequence[Poly], toward: Pt) -> Pt:

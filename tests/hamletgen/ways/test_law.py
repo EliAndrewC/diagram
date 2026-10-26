@@ -157,9 +157,6 @@ def test_a_way_reaches_the_field_on_a_brook_map() -> None:
     assert not law.field_unreached(near)
     # 405 T22: 0014 draws the path JOINING the bund, an end within 6 ft of the paddy read as joining it - 10 ft off is short
     assert law.field_unreached({**near, "dry_plots": [], "lanes": [_lane((150.0, 50.0), (190.0, 50.0))]}), "an end 10 ft short of the paddy"
-    from l7r.diagram.hamletgen.ways import track
-
-    assert track.SPUR_REACH_FT == law.FIELD_REACH_FT == 6.0, "one distance for the law and the placer"
     assert law.field_unreached(far), "the connector is not the hamlet's own way"
     assert not law.field_unreached({**far, "streams": []}), "without a brook the rule does not apply"
     assert law.field_reach_ft({"lanes": []}) == math.inf
@@ -335,9 +332,8 @@ def test_a_lanes_rank_is_its_roles() -> None:
     from l7r.diagram.hamletgen.ways import corridors as co
     from l7r.diagram.hamletgen.ways.bund import BRANCH_WIDTH
     from l7r.diagram.hamletgen.ways.joints import at_rank, rank_width
-    from l7r.diagram.hamletgen.ways.track import SPUR_WIDTH
 
-    assert rank_width({"connector": True}) == 6.0 and rank_width({"spur": True}) == SPUR_WIDTH == 5.0
+    assert rank_width({"connector": True}) == 6.0 and rank_width({"spur": True}) == BRANCH_WIDTH == 5.0
     assert rank_width({"role": co.ACCESS_ROLE}) == rank_width({"role": co.TARGET_ROLE}) == co.ACCESS_WIDTH
     assert rank_width({"role": co.FIELD_ROLE}) == BRANCH_WIDTH and rank_width({"role": "join-orphans"}) is None
     assert at_rank({"role": co.ACCESS_ROLE, "w": 3}) and not at_rank({"role": co.ACCESS_ROLE, "w": 6}) and not at_rank({"w": 3})

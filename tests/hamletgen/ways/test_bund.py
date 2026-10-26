@@ -6,6 +6,7 @@
 import pytest
 
 from l7r.diagram.hamletgen.ways import bund as B
+from l7r.diagram.hamletgen.ways import law
 from l7r.diagram.hamletgen.ways.geom import BUND_REACH_FT, WorkedGround, worked_ground
 
 from ._builders import _StubSettlement
@@ -53,16 +54,6 @@ def test_a_run_on_that_would_double_back_is_refused() -> None:
     assert not B.turns_back((0.0, 0.0), (10.0, 0.0), (20.0, 0.0))
     assert B.turns_back((0.0, 0.0), (10.0, 0.0), (0.0, 1.0))
     assert not B.turns_back((0.0, 0.0), (0.0, 0.0), (5.0, 5.0)), "a leg of no length has no heading"
-
-
-def test_the_spur_tip_is_set_on_the_bund() -> None:
-    g = WorkedGround([_FIELD])
-    assert B.tip_onto_the_bund([(360.0, 100.0)], g, 2.5) == [(360.0, 100.0)]
-    assert B.tip_onto_the_bund([(300.0, 100.0), (420.0, 100.0)], g, 2.5)[-1][0] < 400.0, "pulled out of the crop"
-    on = B.tip_onto_the_bund([(300.0, 100.0), (360.0, 100.0)], g, 2.5)
-    assert len(on) == 3 and g.dist(on[-1]) <= BUND_REACH_FT, "carried on to the bund"
-    back = B.tip_onto_the_bund([(380.0, 100.0), (360.0, 100.0)], g, 2.5)
-    assert back == [(380.0, 100.0), (360.0, 100.0)], "the bund lies behind the end: not run on"
 
 
 def _stub(**M) -> _StubSettlement:
@@ -192,7 +183,8 @@ def test_an_end_at_the_bund_with_water_between_is_carried_over_it() -> None:
     canal = _stub(streams=[{"poly": [[398.0, -100.0], [398.0, 400.0]], "w": 2}])
     canal.M["lanes"].append({"pts": [[200.0, 100.0], [395.0, 100.0]], "w": 3})
     assert B.a_way_onto_the_bund(canal) == "run_on"
-    assert canal.M["lanes"][1]["pts"][-1] == [398.0 + B.OVER_THE_WATER_FT, 100.0] and len(canal.M["lanes"][1]["pts"]) == 3, "square across, on the bund"
+    assert canal.M["lanes"][1]["pts"][-1] == [398.0 + B.OVER_THE_WATER_FT, 100.0], "across, on the bund"
+    assert not law.oblique_crossings(canal.M), "square across (`square_run`, as laid - feature 417 T50)"
     assert B.over_the_water((395.0, 100.0), (400.0, 90.0), []) == (400.0, 90.0), "no water crossed: the bund point"
     assert B.over_the_water((398.0, 100.0), (400.0, 100.0), [((398.0, 50.0), (398.0, 150.0)), ((399.0, 50.0), (397.0, 150.0))])[0] > 398.0
     assert B.water_between((395.0, 100.0), (400.0, 100.0), [((398.0, -100.0), (398.0, 400.0))])

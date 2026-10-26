@@ -79,7 +79,6 @@ from l7r.diagram.sitegen.geom import *
 
 from .cluster import *
 from .cluster import _arm_crossing_accidental as _arm_crossing_accidental
-from .cluster import _fork_spur as _fork_spur
 from .consts import *
 from .driver import *
 from .frame import *

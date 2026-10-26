@@ -45,7 +45,7 @@ bug): `placement_stages.py` decides plate or no-ink card from a record-count del
 | 4 | `stage_seat` | **nothing.** Decides WHERE the settlement sits (`plan.seat`), which `stage_homesteads` depends on. One half of what used to be `stage_ways`; the other half is stage 7 |
 | 5 | `stage_waterward` | a polder's WATERWARD reed fringe (feature 150): the strips outside the dike on the flanks that face the water, derived from the seat - laid BEFORE the houses and the track because it reserves wet ground both must avoid (laid in the hinterland it was drawn over an already-routed connector). No ink on a valley hamlet |
 | 6 | `stage_homesteads` | the farmhouses, seated with no lane anywhere on the map (feature 128, the GM's rule: water and fields, then FARMHOUSES, then every lane without exception) |
-| 7 | `stage_track` | the CONNECTOR and the field spur, derived from the houses that landed. Before the appurtenances, so a well is sunk where the track already runs |
+| 7 | `stage_track` | the CONNECTOR, derived from the houses that landed (the field spur it also laid went in feature 417 T50; the field is reached by the web). Before the appurtenances, so a well is sunk where the track already runs |
 | 8 | `stage_appurtenances` | yards, gardens, byres, wells, sheds |
 | 9 | `stage_pond_stock` | a dike-pond hamlet's pig sties, on the banks of the ponds nearest the houses (feature 150 A3; the duck pen retired, 269 B32) |
 | 10 | `stage_burial` | the hamlet's own burial ground, on its knob (feature 273: a ground at its edge, or none, its dead in the village's): seated against the placed houses and wells, before the web because it reserves ground the web and the scrub work around |

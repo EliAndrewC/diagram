@@ -481,39 +481,3 @@ def _arm_crossing_accidental(arm: Poly, raw: Poly, kept: list[tuple[Poly, Poly]]
         if _hr is None or math.dist(_h, _hr) > 40.0:
             return True
     return False
-
-
-def _fork_spur(spur_pts: Poly, kept: list[tuple[Poly, Poly]]) -> Poly:
-    """A FIELD SPUR BRANCHES OFF THE NETWORK - it does not cross it (settlement-review, Sawada
-    2026-08-16: the spur left the cluster's middle on the far side of a Y arm and ran an X over
-    it, where a real farm path FORKS from the lane it serves). If the run crosses a drawn arm,
-    the spur starts AT the crossing: the shared point becomes the fork. BOUNDED pass count: with
-    float hits a crossing can re-surface epsilon-shifted forever (the unbounded while hung a
-    regen at 600s); a spur meets at most a handful of arms, so eight passes is generous and
-    termination is structural, not numeric. The progress guard matters too: after a truncation
-    the new start lies ON the arm, so the same intersection comes straight back on the next pass
-    - a hit at the current start is the fork already made, not a crossing left to cure.
-
-    Research: field spur forks from the lane - research/questions/0081-village-lanes.drawing.html: a lane meets another's side as a T and a tail under 40 ft beyond a crossing is cut - the spur's run is cut at any length on the near side of an arm, a departure the code keeps until feature 417 T32; starts at its crossing with an arm
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 8 (cap on passes (stops the loop))
-        its figures against 0081 - research/questions/0081-village-lanes.drawing.html: 14 (a hit this near the spur's end is not a fork, so a stub of 14 ft or less stands where the page cuts a tail under 40 ft) - a departure the code keeps until feature 417 T32
-    """
-    for _pass in range(8):
-        _cut = False
-        if len(spur_pts) < 2:
-            break
-        for _ka, _kr in kept:
-            for _si in range(len(spur_pts) - 1):
-                for _sj in range(len(_ka) - 1):
-                    _hit = seg_intersect(spur_pts[_si], spur_pts[_si + 1], _ka[_sj], _ka[_sj + 1])
-                    if _hit is not None and math.dist(_hit, spur_pts[-1]) > 14.0 and math.dist(_hit, spur_pts[_si]) > 1.0:
-                        spur_pts = [_hit, *spur_pts[_si + 1 :]]
-                        _cut = True
-                        break
-                if _cut:
-                    break
-            if _cut:
-                break
-        if not _cut:
-            break
-    return spur_pts

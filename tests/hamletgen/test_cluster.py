@@ -123,20 +123,6 @@ def test_arm_crossing_accidental_drops_an_open_ground_X_and_keeps_a_designed_one
     assert not hg._arm_crossing_accidental([(0.0, 10.0), (100.0, 10.0)], raw_no_cross, [(kept_arm, kept_arm)])
 
 
-def test_fork_spur_truncates_at_the_lane_and_survives_degenerate_input():
-    arm = [(0.0, 0.0), (100.0, 0.0)]
-    # a spur starting on the far side of the arm gets truncated to fork AT the crossing
-    spur = [(50.0, -30.0), (50.0, 60.0)]
-    out = hg._fork_spur(spur, [(arm, arm)])
-    assert abs(out[0][0] - 50.0) < 0.1 and abs(out[0][1]) < 0.1, out
-    assert out[-1] == (50.0, 60.0)
-    # a spur already forking from the arm is untouched
-    clean = [(50.0, 0.0), (50.0, 60.0)]
-    assert hg._fork_spur(clean, [(arm, arm)]) == clean
-    # degenerate input passes through the bounded loop's guard unharmed
-    assert hg._fork_spur([(1.0, 2.0)], [(arm, arm)]) == [(1.0, 2.0)]
-
-
 def test_a_seat_centered_in_the_reed_fringe_is_refused_and_one_with_an_end_in_it_is_scored_down() -> None:
     """Feature 150 T50 (GM 2026-08-28): the reservoir's reed fringe is drawn before the seat is chosen but
     was never scored, so a cluster could be seated with one end in the reeds - the house placer then

@@ -20,7 +20,6 @@ from l7r.diagram.settlement import seg_dist as seg_dist
 from ..consts import WEB_REACH_FT as WEB_REACH_FT
 from .bund import a_way_onto_the_bund as a_way_onto_the_bund
 from .bund import run_lanes_on_to_the_bund as run_lanes_on_to_the_bund
-from .bund import tip_onto_the_bund as tip_onto_the_bund
 from .checks import crossing_lands_on_crop as crossing_lands_on_crop
 from .checks import drawn_water_segs as drawn_water_segs
 from .checks import lanes_share_tread as lanes_share_tread
@@ -60,7 +59,6 @@ from .route import _route as _route
 from .route import _unjog as _unjog
 from .serve import _lay_web_lane as _lay_web_lane
 from .smooth import web_pieces as web_pieces
-from .track import _cluster_edge_toward as _cluster_edge_toward
 from .track import _cluster_gateway as _cluster_gateway
 from .track import _thread_the_fabric as _thread_the_fabric
 from .track import connector_track as connector_track

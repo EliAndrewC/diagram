@@ -154,12 +154,11 @@ CONSUMED_PUBLIC = [
     "well_target",
 ]
 
-# The four underscore names with external consumers (test_hamletgen), and the submodule
+# The three underscore names with external consumers (test_hamletgen), and the submodule
 # that owns each. A bare star import DROPS these - they need the aliased explicit block.
 ALIASED_UNDERSCORE = {
     "_arm_crossing_accidental": "l7r.diagram.hamletgen.cluster",
     "_crop_refuses": "l7r.diagram.hamletgen.hinterland",
-    "_fork_spur": "l7r.diagram.hamletgen.cluster",
     "_near_line": "l7r.diagram.hamletgen.hinterland",
 }
 

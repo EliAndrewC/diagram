@@ -19,73 +19,6 @@ def test_the_connector_track_leaves_the_frame_without_crossing_the_crop() -> Non
     assert not (0 <= track[-1][0] <= plan.W and 0 <= track[-1][1] <= plan.H)  # ends off the canvas
 
 
-def test_a_spur_cut_short_of_the_field_is_recorded_instead_of_drawn(monkeypatch) -> None:
-    """The other half of `spur_cut_at_the_fold`, at the stage that uses it: where the fold leaves the outward
-    arm short of the field, nothing is drawn and the map says why. A hamlet with no drawn way to its rice is a
-    fact the manifest should carry - the reference hamlet's went missing for three review passes because the
-    sweeps dropped it silently."""
-    from l7r.diagram.hamletgen.ways import track
-
-    s, plan = _walled_settlement()
-    plan.seat = a_seat(plan)
-    monkeypatch.setattr(track, "spur_cut_at_the_fold", lambda pts, env: ([], "folded back short of the field - the test's own reason"))
-    # the wall of houses leaves the connector no way out at all (`NoDryExit`, tested on its own below); this test is the spur's
-    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
-    track.stage_track(s, plan)
-    assert "short of the field" in s.M["meta"].get("field_spur_swept", ""), "the map records why it has no path to its rice"
-    assert not [ln for ln in s.M.get("lanes") or [] if ln.get("spur")], "and nothing is drawn for it"
-
-
-_RICE = [(600.0, 1250.0), (800.0, 1250.0), (800.0, 1350.0), (600.0, 1350.0)]  # a field south of the wall of houses
-
-
-def _spur_drawn_from(monkeypatch, arm):  # type: ignore[no-untyped-def]
-    """`stage_track` on the walled settlement with a field (`_RICE`), the fold cut handing back `arm`: (settlement, spur)."""
-    from l7r.diagram.hamletgen.ways import track
-
-    s, plan = _walled_settlement()
-    s.M.setdefault("fields", []).append({"outline": [list(q) for q in _RICE]})
-    plan.seat = a_seat(plan)
-    monkeypatch.setattr(track, "spur_cut_at_the_fold", lambda pts, env: (list(arm), None))
-    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
-    track.stage_track(s, plan)
-    return s, next((ln for ln in s.M.get("lanes") or [] if ln.get("spur")), None)
-
-
-def test_the_field_spur_is_drawn_taut(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """0081: "Every lane is pulled taut like a string" - the spur's candidate runs straight from the cluster's edge to the
-    field (feature 328 wave 46 took out the 14 ft sideways swing at its midpoint); no ford lies between them here."""
-    from l7r.diagram.hamletgen.ways import track
-
-    seen: list[list[tuple[float, float]]] = []
-    clip = track.clip_to_clear
-    monkeypatch.setattr(track, "clip_to_clear", lambda pts, polys, margin: (margin == 12.0 and seen.append(list(pts)), clip(pts, polys, margin))[1])
-    _spur_drawn_from(monkeypatch, [(700.0, 1150.0), (700.0, 1300.0)])
-    assert seen and len(seen[0]) == 2, f"the spur candidate is one straight run: {seen[:1]}"
-
-
-def test_a_spur_whose_kept_arm_ends_in_the_rice_is_drawn_to_the_bund(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Feature 304 T03 (cohort seed 905): the threading moved the spur's bow 20 ft into a paddy plot and the fold cut kept the
-    arm out to it, across the main ditch at the field's head where no deck lands dry - `bridges()` raised. The DRAWN tip is
-    set on the bund (269 B04): pulled back out of the worked ground, the tread's half-width and a foot clear of its edge."""
-    from l7r.diagram.hamletgen.ways.geom import worked_ground
-
-    s, spur = _spur_drawn_from(monkeypatch, [(700.0, 1150.0), (700.0, 1300.0)])
-    assert spur is not None, "the spur is drawn"
-    tip = (float(spur["pts"][-1][0]), float(spur["pts"][-1][1]))
-    ground = worked_ground(s.M)
-    assert not ground.inside(tip), "its tip is not in the rice"
-    assert 3.4 <= ground.dist(tip) <= 5.0, f"it stops on the bund, not short of it: {ground.dist(tip):.1f} ft off the edge"
-
-
-def test_a_spur_whose_kept_arm_is_all_rice_is_recorded_dropped(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """...and an arm in the worked ground end to end leaves nothing to draw: the spur is recorded dropped, the field path the
-    web's."""
-    s, spur = _spur_drawn_from(monkeypatch, [(700.0, 1270.0), (700.0, 1320.0)])
-    assert spur is None
-    assert "in the worked ground end to end" in s.M["meta"].get("field_spur_swept", "")
-
-
 def test_a_connector_with_no_dry_bearing_takes_the_dry_neck() -> None:
     """Feature 287, ways W23 (FR-005): where every bearing of the sweep crosses the wet, the least-bad one was drawn
     through the marsh. The flood fill finds the one dry neck instead, and the track has no wet violation."""
@@ -139,20 +72,6 @@ def test_the_connector_takes_the_dry_exit_where_the_field_or_the_steadings_leave
     # 405 T124: a run clipped short of its far end (past the frame) would stop in open country (0081) - the dry exit instead
     monkeypatch.setattr(track, "_thread_the_fabric", lambda s, plan, run: [run[0], (-300.0, 10.0)])
     assert track.connector_through(s, plan, [(10.0, 10.0), (-900.0, 10.0)], [], [], [], []) == dry
-
-
-def test_a_spur_with_no_way_clear_of_the_steadings_is_recorded_dropped(monkeypatch) -> None:
-    """Feature 287, ways W25: the spur's threading hands back nothing rather than a run across a house, and the stage
-    records the spur as dropped; the field path is the web's."""
-    from l7r.diagram.hamletgen.ways import track
-
-    s, plan = _walled_settlement()
-    plan.seat = a_seat(plan)
-    monkeypatch.setattr(track, "_thread_the_fabric", lambda *a, **k: [])
-    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
-    track.stage_track(s, plan)
-    assert "clear of the steadings" in s.M["meta"].get("field_spur_swept", "")
-    assert not [ln for ln in s.M.get("lanes") or [] if ln.get("spur")]
 
 
 def test_a_bearing_that_only_clips_the_field_is_kept_for_route_around() -> None:

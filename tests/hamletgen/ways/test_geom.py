@@ -223,11 +223,12 @@ def test_thread_the_fabric_returns_the_run_untouched_when_there_is_no_fabric() -
     assert _thread_the_fabric(s, a_plan(), [(1.0, 1.0)]) == [(1.0, 1.0)]  # a one-point run is not a run
 
 
-def test_the_cluster_gateway_and_edge_fall_back_when_no_house_is_placed_yet() -> None:
-    """Feature 146: both helpers take the cloud's own extent, and both keep a fallback for a caller that
+def test_the_cluster_gateway_falls_back_when_no_house_is_placed_yet() -> None:
+    """Feature 146: the gateway takes the cloud's own extent (`_cluster_edge_toward`, its twin, went with the field spur in 417 T50), and keeps a fallback for a caller that
+    asks before any house is seated; both helpers took the cloud's own extent, and both keep a fallback for a caller that
     asks before any house is seated - which the shipped order does not do, and which this file's own comment
     says is the failure mode it has met repeatedly."""
-    from l7r.diagram.hamletgen.ways import _cluster_edge_toward, _cluster_gateway
+    from l7r.diagram.hamletgen.ways import _cluster_gateway
     from l7r.diagram.settlement import Settlement
 
     s = Settlement(1000, 1000, seed=1)
@@ -235,10 +236,8 @@ def test_the_cluster_gateway_and_edge_fall_back_when_no_house_is_placed_yet() ->
     seat = {"cx": 500.0, "cy": 500.0, "along": (1.0, 0.0), "out": (0.0, 1.0), "half": 200.0, "depth": 80.0}
     fallback = (123.0, 456.0)
     assert _cluster_gateway(s, seat, fallback) == fallback
-    assert _cluster_edge_toward(s, (900.0, 500.0), fallback) == fallback
     s.M["houses"].append({"x": 500.0, "y": 500.0, "w": 50.0, "h": 30.0})
     assert _cluster_gateway(s, seat, fallback) != fallback, "with a house placed it measures the cloud"
-    assert _cluster_edge_toward(s, (900.0, 500.0), fallback) != fallback
 
 
 def test_web_pieces_counts_connected_lanes_and_ignores_stubs() -> None:
