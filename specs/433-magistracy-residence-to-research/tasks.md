@@ -4,7 +4,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
 
 ## Occasions
 
-building-review: the Hayakawa sheet is revised (T01) - its house, inner court and north wall redrawn.
+- layout-revised: hayakawa-magistracy - its house, inner court and north wall redrawn (T01)
 
 ## Tasks
 
