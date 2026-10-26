@@ -690,7 +690,7 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
   only (`squared_step`), and a sixth placer T49 missed. With `carry_on` asking `squaring.square_run` of the run it lays or
   lengthens too: 54 of 54, the fresh block from 723759 identical to HEAD seed by seed, the pool passing - Inashiro's field path
   `joined` -> `run_on` and Kashikawa's `joined` -> `branch` (their lanes as drawn unchanged), Mizuguchi's field way replaced by
-  a 70 ft branch off the lane about 160 ft from it, Sawada's lanes unchanged; the last resort drops one lane on Kashikawa and Sawada where
+  a branch 70 ft along the lane, Sawada's lanes unchanged; the last resort drops one lane on Kashikawa and Sawada where
   `settle_network` dropped one before (their drawn lanes identical). The spur's code and the names it leaves dead (`make
   dead-closure`) go with the tests whose BODY calls one. The other placers' unjoined lanes (the skeleton pass's web lanes, the
   arms, the bund branch) are the next conversions, measured the same way. Rendering: none (no glyph; four pool maps redrawn).
