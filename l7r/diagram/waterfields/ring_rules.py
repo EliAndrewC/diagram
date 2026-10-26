@@ -342,8 +342,36 @@ def supply_intrusions(ring: Sequence[Sequence[float]], strokes: Sequence[SupplyS
 def _seg_dist(p: Pt, a: Pt, b: Pt) -> float:
     vx, vy = b[0] - a[0], b[1] - a[1]
     L2 = vx * vx + vy * vy
-    t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / L2))
+    t = 0.0 if L2 == 0 else ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / L2
+    t = 0.0 if t < 0.0 else 1.0 if t > 1.0 else t  # clamped with no `max`/`min` call (feature 427 T09)
     return math.hypot(p[0] - (a[0] + t * vx), p[1] - (a[1] + t * vy))
+
+
+def _near_polyline(p: Pt, segs: Sequence[tuple[Pt, Pt, float, float, float, float]], lim: float) -> bool:
+    """`min(_seg_dist(p, a, b) ...) < lim` over a drain's segments, stopping at the first within it, and measuring only those
+    whose box grown by `lim` holds `p` - a segment farther than its box is farther than `lim` (feature 427 T09, R7: the
+    collector test measured every segment of every drain for both ends of every edge of every cell).
+
+    Research: plumbing - NONE: the distance test, its prefilter deciding nothing"""
+    px, py = p
+    for a, b, x0, x1, y0, y1 in segs:  # noqa: SIM110 - a loop, not any() over a generator
+        if x0 <= px <= x1 and y0 <= py <= y1 and _seg_dist(p, a, b) < lim:
+            return True
+    return False
+
+
+def drain_index(drains: Sequence[tuple[Poly, float]]) -> list[tuple[float, float, float, float, float, float, list[Any]]]:
+    """Each collector as `collector_crossings` reads it: (half, reach, its centerline's box grown by the reach, its segments
+    each with its own box grown by the reach) - built once for a context (`RingContext.drain_index`), not once a ring.
+
+    Research: plumbing - NONE: the collectors' boxes, listed once"""
+    out: list[tuple[float, float, float, float, float, float, list[Any]]] = []
+    for pts, half in drains:
+        reach = half * COLLECTOR_REACH
+        xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+        segs = [(a, b, min(a[0], b[0]) - reach, max(a[0], b[0]) + reach, min(a[1], b[1]) - reach, max(a[1], b[1]) + reach) for a, b in zip(pts, pts[1:], strict=False)]
+        out.append((half, reach, min(xs) - reach, max(xs) + reach, min(ys) - reach, max(ys) + reach, segs))
+    return out
 
 
 def collector_strokes(drains: Sequence[dict[str, Any]]) -> list[tuple[Poly, float]]:
@@ -351,7 +379,7 @@ def collector_strokes(drains: Sequence[dict[str, Any]]) -> list[tuple[Poly, floa
     return [([(float(p[0]), float(p[1])) for p in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0))) / 2.0) for d in drains]
 
 
-def collector_crossings(ring: Sequence[Sequence[float]], drains: Sequence[tuple[Poly, float]]) -> list[tuple[int, int]]:
+def collector_crossings(ring: Sequence[Sequence[float]], drains: Sequence[tuple[Poly, float]], index: Any = None) -> list[tuple[int, int]]:
     """W17 - the start of every ring edge that runs ACROSS a collector rather than along it: both ends within
     `COLLECTOR_REACH` of the half-width from its centerline, and the edge longer than the stroke is wide. A paddy's
     low bund is the collector's bank; a bund across it would dam the thing that drains the field.
@@ -360,22 +388,16 @@ def collector_crossings(ring: Sequence[Sequence[float]], drains: Sequence[tuple[
     """
     out: list[tuple[int, int]] = []
     n = len(ring)
-    for pts, half in drains:
-        # A PREFILTER THAT DECIDES NOTHING (constitution X clause 15): an edge end within `half * COLLECTOR_REACH` of the
-        # centerline lies inside the centerline's box grown by that reach, so an edge with either end outside it is skipped.
-        reach = half * COLLECTOR_REACH
-        x0, x1 = min(p[0] for p in pts) - reach, max(p[0] for p in pts) + reach
-        y0, y1 = min(p[1] for p in pts) - reach, max(p[1] for p in pts) + reach
+    # A PREFILTER THAT DECIDES NOTHING (constitution X clause 15): an edge end within `half * COLLECTOR_REACH` of the
+    # centerline lies inside the centerline's box grown by that reach, so an edge with either end outside it is skipped -
+    # the boxes `drain_index` lists, once for a context where one is given
+    for half, reach, x0, x1, y0, y1, segs in index if index is not None else drain_index(drains):
         for k in range(n):
             a = (float(ring[k][0]), float(ring[k][1]))
             b = (float(ring[(k + 1) % n][0]), float(ring[(k + 1) % n][1]))
             if not (x0 <= a[0] <= x1 and y0 <= a[1] <= y1 and x0 <= b[0] <= x1 and y0 <= b[1] <= y1):
                 continue
-            if (
-                min(_seg_dist(a, pts[i], pts[i + 1]) for i in range(len(pts) - 1)) < half * COLLECTOR_REACH
-                and min(_seg_dist(b, pts[i], pts[i + 1]) for i in range(len(pts) - 1)) < half * COLLECTOR_REACH
-                and math.dist(a, b) > 2 * half
-            ):
+            if _near_polyline(a, segs, reach) and _near_polyline(b, segs, reach) and math.dist(a, b) > 2 * half:
                 out.append((round(a[0]), round(a[1])))
     return out
 
@@ -415,6 +437,15 @@ class RingContext:
     ponds: list[tuple[float, float, float, float]] = field(default_factory=list)
     graves: list[tuple[float, float, float]] = field(default_factory=list)
     _supply_reach: Any = field(default=None, repr=False, compare=False)
+    _drain_index: Any = field(default=None, repr=False, compare=False)
+
+    def drain_index(self) -> Any:
+        """The collectors' boxes for `collector_crossings`, built once for this context (`drain_index`, feature 427 T09).
+
+        Research: plumbing - NONE: the collectors' boxes, built once"""
+        if self._drain_index is None:
+            self._drain_index = drain_index(self.drains)
+        return self._drain_index
 
     def near_supply(self, ring: Sequence[Sequence[float]]) -> bool:
         """Whether `ring`'s bund comes within reach of any supply stroke - a PREFILTER that decides nothing (constitution
@@ -432,7 +463,9 @@ class RingContext:
             self._supply_reach = shapely.union_all([LineString(s.pts).buffer(max(s.w0, s.w1) / 2 + BANK_MARGIN + 1.0) for s in self.supplies])
             shapely.prepare(self._supply_reach)
         pts = [(float(p[0]), float(p[1])) for p in ring]
-        return bool(self._supply_reach.intersects(LineString([*pts, *pts[:1]])))
+        if not pts:  # an empty ring meets nothing (`LineString([])` was empty; `linestrings` refuses no points)
+            return False
+        return bool(shapely.intersects(self._supply_reach, shapely.linestrings([*pts, *pts[:1]])))  # built in one call (feature 427 T09)
 
 
 def fan_context(
@@ -498,7 +531,7 @@ def ring_violations(ring: Sequence[Sequence[float]], ctx: RingContext) -> set[st
         out.add("steps")
     if ctx.near_supply(ring) and supply_intrusions(ring, ctx.supplies):
         out.add("stroke")
-    if collector_crossings(ring, ctx.drains):
+    if collector_crossings(ring, ctx.drains, ctx.drain_index()):
         out.add("collector")
     if any(crosses_pond_rim(ring, p) for p in ctx.ponds):
         out.add("pond")

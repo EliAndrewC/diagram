@@ -206,3 +206,31 @@ Each step measured alone:
 | no seed regressed | `make cohort-landing` (in `make land`) |
 
 
+<!-- plan-archive: archived 2026-10-26 -->
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** The same fields and brook, the field settle judging a new cell only against what is near it.
+2. **The constraints.** US4 (the field settle, R7, goes with its family), FR-003, FR-004, FR-007; outside the lanes, so before
+   them (`request.md` 5).
+3. **Where each comes from.** `research/hotspots-recompute.md` R7 (every added cell judged by the full ring rules; the fabric
+   already builds an STRtree); `research/hotspots-pairwise.md` "Water" (`brook_rules.crosses_mid_run`, `partition.keep_rows`).
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage, so a chain outside `field` is not dropped)
+   scopes the task (FR-002).
+5. **The order.** After the ground cover family, before the lanes.
+6. **The exits.** Green: each chain named falls at least tenfold, the cohort with no seed regressed, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the fabric's own STRtree asked for the collectors near a cell.
+8. **The budget.** One landing.
+9. **Done, measured.** Each chain's count before and after from `make perf-fanout`, recorded in `research/`.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the chains re-scoped | `make perf-fanout` (every stage) |
+| each chain converted | its count in `make perf-fanout`, `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+

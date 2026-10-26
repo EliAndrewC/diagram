@@ -5,7 +5,7 @@ Research: frame geometry - NONE: the contour/fall frame, point and segment predi
 
 import math
 import random
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 
 Pt = tuple[float, float]  # an (x, y) point in map pixels
 Poly = list[Pt]  # a polyline / polygon as a list of points
@@ -310,10 +310,20 @@ def _f_at_u(F: _Frame, pts: Poly, u: float) -> float | None:
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 20 (range tolerance)
     """
     uf = [F.to_uf(*p) for p in pts]
-    us, fs = [q[0] for q in uf], [q[1] for q in uf]
+    return f_at_u_of([q[0] for q in uf], [q[1] for q in uf], u)
+
+
+def f_at_u_of(us: Sequence[float], fs: Sequence[float], u: float) -> float | None:
+    """`_f_at_u` of a polyline already in the frame (`us`, `fs` its contour and fall coordinates): a caller asking one
+    polyline at many stations converts it once (feature 427 T09: the collector's 70 points converted at each of 1,170
+    stations, 83k conversions at 40 households).
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 20 (range tolerance)
+    """
     if not (min(us[0], us[-1]) - 20 <= u <= max(us[0], us[-1]) + 20):
         return None
-    for i in range(len(pts) - 1):
+    for i in range(len(us) - 1):
         ua, ub = us[i], us[i + 1]
         if (ua <= u <= ub or ub <= u <= ua) and ub != ua:
             k = (u - ua) / (ub - ua)

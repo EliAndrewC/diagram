@@ -58,7 +58,10 @@ Research: scraps grow into a basin - research/questions/0005-rice-paddies-and-th
 
 def ring_of(poly: Any) -> Poly:
     """A polygon's outer ring as recorded (rounded to the grid, the closing vertex dropped)."""
-    return [(round(x, 1), round(y, 1)) for x, y in list(poly.exterior.coords)[:-1]]
+    import shapely
+
+    # the coordinates in one call, not shapely's sequence iterated (feature 427 T09: its Python wrappers, 50k calls at 40 households)
+    return [(round(x, 1), round(y, 1)) for x, y in shapely.get_coordinates(poly.exterior).tolist()[:-1]]
 
 
 def verdict(poly: Any, ctx: RingContext, plot_across: float, cell: float) -> set[str]:

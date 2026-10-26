@@ -96,7 +96,7 @@ def drain_bank_clearance(q: Pt, dpts: Poly, dv: Pt, w0: float, w1: float, cum: l
         ax, ay = dpts[i]
         vx, vy = dpts[i + 1][0] - ax, dpts[i + 1][1] - ay
         t = ((q[0] - ax) * vx + (q[1] - ay) * vy) / ((vx * vx + vy * vy) or 1.0)
-        tc = max(0.0, min(1.0, t))
+        tc = 0.0 if t < 0.0 else 1.0 if t > 1.0 else t  # `max(0, min(1, t))` with no call (feature 427 T09)
         sx, sy = ax + tc * vx, ay + tc * vy
         d = math.hypot(q[0] - sx, q[1] - sy)
         if d < off:
@@ -151,7 +151,7 @@ def _nearest_segment(q: Pt, pts: Poly, cum: list[float], which: Any) -> tuple[fl
         ax, ay = pts[i]
         vx, vy = pts[i + 1][0] - ax, pts[i + 1][1] - ay
         t = ((q[0] - ax) * vx + (q[1] - ay) * vy) / ((vx * vx + vy * vy) or 1.0)
-        tc = max(0.0, min(1.0, t))
+        tc = 0.0 if t < 0.0 else 1.0 if t > 1.0 else t  # `max(0, min(1, t))` with no call (feature 427 T09)
         sx, sy = ax + tc * vx, ay + tc * vy
         d = math.hypot(q[0] - sx, q[1] - sy)
         if d < off:

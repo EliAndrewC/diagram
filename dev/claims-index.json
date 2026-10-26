@@ -23052,11 +23052,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_course.py::_crop_edge#plumbing": {
-  "code": "2f87780c1d57a656",
-  "core": "ba18430937be072b",
+  "code": "b020081ec74e00d5",
+  "core": "64200a5f9f2b55ff",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_course.py::_off_the_axes#screen-axis backstop": {
@@ -23390,19 +23392,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::_dist_to_course#course measurement": {
-  "code": "166d0119145b0b50",
-  "core": "590e14dd793925a4",
+  "code": "dd3dc6e7c5eff0ad",
+  "core": "4e91165ce66317c2",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::_proper_cross#course measurement": {
-  "code": "5384c0866bdb9371",
-  "core": "5528d66cf43f5f7e",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::axis_segments#screen-axis segment": {
@@ -23438,18 +23434,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#a joiner's width": {
-  "code": "65dd0a82b8c03b0a",
-  "core": "09ca23aeef78ce4c",
+  "code": "e5f921a1996585a8",
+  "core": "6e85534d634eef16",
   "date": "2026-10-08",
   "note": "the cited questions say nothing on a default hairline width; GUESS is right",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#either end makes the junction": {
-  "code": "ee0b0d2dfbdaf9f6",
-  "core": "09ca23aeef78ce4c",
+  "code": "92b04bf1ebbedaa9",
+  "core": "6e85534d634eef16",
   "date": "2026-10-08",
   "note": "both channels' ends are tested against the other's half drawn width",
   "pages": {
@@ -23459,11 +23456,12 @@
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#no crossing mid-run": {
-  "code": "f156777055176212",
-  "core": "09ca23aeef78ce4c",
+  "code": "854c77d4a8a6f33a",
+  "core": "6e85534d634eef16",
   "date": "2026-10-08",
   "note": "a crossing away from a confluence is flagged; the research says ditches join rather than cross",
   "pages": {
@@ -23474,7 +23472,7 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.html:557053d2e543df0a",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.html:a3aafd75f942612b"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::ditch_strokes#course measurement": {
@@ -75622,13 +75620,14 @@
  "l7r/diagram/waterfields/banks.py::_nearest_segment#its salts, guards and sentinels": {
   "body": "3fc75328ff8bf505",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel)",
-  "code": "a655eea34a5c8096",
-  "core": "c1c568e7a2f6ed6e",
+  "code": "d2cb8c13800d2660",
+  "core": "9d1f5bb818a27484",
   "date": "2026-10-25",
   "note": "sentinel",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_stroke_verdict#bank geometry": {
@@ -75656,27 +75655,28 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::drain_bank_clearance#bank of the collector": {
-  "code": "5074ab2bc0f1001d",
-  "core": "9c49d1c5c7553fba",
+  "code": "b25f196a9bfd05bb",
+  "core": "00bf1487f44644ab",
   "date": "2026-10-03",
   "note": "half the drawn drain width plus a 0.75 margin (half a 1.5 ft bund at 1 ft/px)",
   "pages": {
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
   "research": "39036ea15e57c448",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::drain_bank_clearance#its salts, guards and sentinels": {
   "body": "8a2ada1098ee1202",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel starting distance)",
-  "code": "802ef49320d0c852",
-  "core": "9c49d1c5c7553fba",
+  "code": "c5f96c6dbf86dc61",
+  "core": "00bf1487f44644ab",
   "date": "2026-10-25",
   "note": "sentinel",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::drain_bank_clearance_many#bank of the collector": {
@@ -77546,12 +77546,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::_f_at_u#its search steps and tolerances": {
-  "body": "76c6eada22fa0921",
+  "body": "e6b43dace1657931",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 20 (range tolerance)",
-  "code": "89eb536261430c49",
-  "core": "8ee95423920be256",
-  "date": "2026-10-25",
-  "note": "slack in the range test",
+  "code": "ac5657b16af5645f",
+  "core": "da3f94ea2d8d167c",
+  "date": "2026-10-26",
+  "note": "delegates to f_at_u_of, whose 20 range slack is the stated guess, and no cited material speaks to it",
   "pages": {},
   "research": "",
   "rests": [],
@@ -77648,6 +77648,18 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:5dad73ad1b493d62"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/frame.py::f_at_u_of#its search steps and tolerances": {
+  "body": "5e445030229072f7",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 20 (range tolerance)",
+  "code": "eefc8ee3f9ef852b",
+  "core": "176e2db6e4e5fc5d",
+  "date": "2026-10-26",
+  "note": "the 20 range gate and the clamp to the nearer end are unchanged from _f_at_u, and nothing in the bundle answers them",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::taper_w#square-root taper": {
@@ -78863,15 +78875,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::keep_rows#ditch-side strips keep their rows": {
-  "code": "fd799c2b53566d4e",
-  "core": "498ad68c0e423309",
+  "code": "a5ec6b21e0c849a8",
+  "core": "8f0886c74c61b2b1",
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
   "research": "1a1b231001c7410e",
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::planted_region#planted ground": {
@@ -79972,19 +79984,35 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::RingContext#ring plumbing": {
-  "code": "5560f70a335f5847",
-  "core": "212ceea003093107",
+  "code": "27318cf71e31bcfd",
+  "core": "8d653017fdb60a47",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/ring_rules.py::RingContext.drain_index#plumbing": {
+  "body": "ef24704a82c35456",
+  "claim": "plumbing - NONE: the collectors' boxes, built once",
+  "code": "05ad23791aeb1639",
+  "core": "83d52255b65fa33c",
+  "date": "2026-10-26",
+  "note": "caches drain_index once per context and decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::RingContext.near_supply#ring plumbing": {
-  "code": "c9729c1bcc358fa2",
-  "core": "8fad1454ab202a92",
+  "code": "f62cbe49280c1564",
+  "core": "0bbcc8f53534802e",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::STROKE_ROUNDING_PX#ring plumbing": {
@@ -80019,6 +80047,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/ring_rules.py::_near_polyline#plumbing": {
+  "body": "2c8cc43546d7eaf0",
+  "claim": "plumbing - NONE: the distance test, its prefilter deciding nothing",
+  "code": "8c33739f9d4ec724",
+  "core": "1eca502ec81b9884",
+  "date": "2026-10-26",
+  "note": "the box prefilter is exact (a point outside a segment's box grown by lim is farther than lim), so it gives the same result as the full min-distance test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/ring_rules.py::_pts#ring plumbing": {
   "code": "7c9b9c7fde28dc7d",
   "core": "1d519967b7c50944",
@@ -80028,11 +80068,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::_seg_dist#ring plumbing": {
-  "code": "36cbaeb87247b712",
-  "core": "7aedeede97010bb1",
+  "code": "414df9bad6622659",
+  "core": "12379b9962768601",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::_shapely#ring plumbing": {
@@ -80064,15 +80106,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::collector_crossings#bunds run along the drain": {
-  "code": "9a8b834e2b925c28",
-  "core": "b829aba98c91b715",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "body": "799071172db01720",
+  "claim": "bunds run along the drain - where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing: no bund runs across the collector",
+  "code": "cff7b0fa6f33fcf0",
+  "core": "80ab01648bfa91cf",
+  "date": "2026-10-26",
+  "note": "flags a ring edge whose both ends lie within half*COLLECTOR_REACH of the drain's centerline and which is longer than the stroke, so it keeps bunds out of the drain's water as the page draws; the prefilter and the index parameter change nothing",
   "pages": {
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
   "research": "39036ea15e57c448",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::collector_strokes#ring plumbing": {
@@ -80107,6 +80155,18 @@
   },
   "research": "69aa78ae06a3c11d",
   "triaged": "2026-10-25",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/ring_rules.py::drain_index#plumbing": {
+  "body": "d37f780f3ca23560",
+  "claim": "plumbing - NONE: the collectors' boxes, listed once",
+  "code": "fdc13e63320777dc",
+  "core": "3cf51afbc74ddf90",
+  "date": "2026-10-26",
+  "note": "lists the boxes grown by the reach that collector_crossings already tested; the reach multiplier belongs to COLLECTOR_REACH and is not decided here",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::fan_context#its salts, guards and sentinels": {
@@ -80165,22 +80225,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::ring_violations#basin shape rules": {
-  "code": "eeb5c3d15562747d",
-  "core": "6d0d021063958c5f",
+  "code": "63f293b4c9bbea89",
+  "core": "794cac4692af128c",
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
   "research": "69aa78ae06a3c11d",
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::ring_violations#bund rules": {
   "body": "a18421ab74f539b5",
   "claim": "bund rules - bunds-between-the-paddies-aze.drawing, where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing: staircase, a bund in a supply stroke, a bund across the collector",
-  "code": "83f1c20764ada404",
-  "core": "6d0d021063958c5f",
+  "code": "661a12171fbd409b",
+  "core": "794cac4692af128c",
   "date": "2026-10-22",
   "note": "staircase, a bund kept out of a supply stroke, bunds along the collector and never into its water",
   "pages": {
@@ -80194,11 +80254,12 @@
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:fe85b102b5eb5beb"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::ring_violations#in-field features": {
-  "code": "0665f06b7185f7b8",
-  "core": "6d0d021063958c5f",
+  "code": "ad3f9ec643f72184",
+  "core": "794cac4692af128c",
   "date": "2026-10-08",
   "note": "a bund through a pond, or a basin under a grave, is refused",
   "pages": {
@@ -80209,18 +80270,19 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::ring_violations#width and dart not asked": {
-  "code": "c756b2eaf5d4ac15",
-  "core": "6d0d021063958c5f",
+  "code": "fbd2eede87044cfb",
+  "core": "794cac4692af128c",
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
   "research": "69aa78ae06a3c11d",
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::self_crossing#ring plumbing": {
@@ -80649,48 +80711,50 @@
  "l7r/diagram/waterfields/seams/pockets.py::_outside_command#collector extended level": {
   "body": "4d5e30430889ef54",
   "claim": "collector extended level - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); past its drawn ends the command area's low edge runs on at the end's fall",
-  "code": "fd5570e1c479d941",
-  "core": "90423d96149bcd97",
+  "code": "960e66e5ff7bb4ec",
+  "core": "e78e162627d81814",
   "date": "2026-10-25",
   "note": "neither 0053 nor 0060 says how the command area's low edge runs past the collector's drawn ends",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/pockets.py::_outside_command#command area": {
-  "code": "04e33b72f4551183",
-  "core": "90423d96149bcd97",
+  "code": "ec5ea110e2c35189",
+  "core": "e78e162627d81814",
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
   "research": "8b7dec608b28495e",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/pockets.py::_outside_command#its search steps and tolerances": {
   "body": "4d5e30430889ef54",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 64 (least sample count); 6 (sampling step)",
-  "code": "1681f8fd14ffdb93",
-  "core": "90423d96149bcd97",
+  "code": "825738afc8e46e52",
+  "core": "e78e162627d81814",
   "date": "2026-10-25",
   "note": "sampling density",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/pockets.py::_outside_command#set-back from the canal": {
-  "code": "7325b67133fa85d5",
-  "core": "90423d96149bcd97",
+  "code": "d6a7da4939f70c85",
+  "core": "e78e162627d81814",
   "date": "2026-10-03",
   "note": "a flat 4 grain (8 ft) down the fall from the centerline, while 0068 sets \"the stroke's local half-width plus a 5.0 ft berm\" (5.75-7.25 ft on a 4.5->1.5 ft canal, measured perpendicular), so the set-back ignores the taper and the canal's angle to the fall",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
   "research": "0563a9dcc87ebedc",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-26",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/seams/pockets.py::_parts#pocket plumbing": {
@@ -80925,11 +80989,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::ring_of#settle plumbing": {
-  "code": "f2b6cb607edd851c",
-  "core": "ead2cdf77748d5b2",
+  "code": "f3c7cce78f395e1f",
+  "core": "0d52c04074e1c3d0",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::settle_cells#unlawful scraps left bare": {

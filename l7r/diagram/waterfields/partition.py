@@ -336,8 +336,11 @@ def keep_rows(parts: list[Any], ground: Any, lim: float, across: float) -> list[
 
     Research: ditch-side strips keep their rows - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a short row kept where its strip is at least MIN_ROW plot widths across
     """
-    short = [q for q in parts if q.length < across]
-    return [q for q in short if q.length >= MIN_ROW * across] + keep_far([q for q in parts if q.length >= across], ground, lim)
+    import shapely
+
+    lens = shapely.length(parts).tolist() if parts else []  # every piece's length in one call, not a property each (feature 427 T09)
+    short = [q for q, n in zip(parts, lens, strict=True) if n < across and n >= MIN_ROW * across]
+    return short + keep_far([q for q, n in zip(parts, lens, strict=True) if n >= across], ground, lim)
 
 
 def keep_far(parts: list[Any], ground: Any, lim: float) -> list[Any]:
