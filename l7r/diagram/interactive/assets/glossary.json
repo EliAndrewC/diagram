@@ -6547,7 +6547,8 @@
   "variants": [
    "night watch",
    "night watches",
-   "five watches"
+   "five watches",
+   "fifth watch"
   ]
  },
  "hour of xu": {
@@ -18447,6 +18448,12 @@
   "def": "Japanese chess: a board game for two players, played in Edo households beside go.",
   "variants": [
    "shogi"
+  ]
+ },
+ "Single Whip Reform": {
+  "def": "A tax reform of the late Ming dynasty, after which the state no longer collected its taxes in kind, in grain and bolts of cloth, but in cash.",
+  "variants": [
+   "Single Whip Reform"
   ]
  }
 }

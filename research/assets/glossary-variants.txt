@@ -1162,6 +1162,7 @@ field roads	sakuba-michi
 field to field	tagoshi kangai
 field-to-field	tagoshi kangai
 field-to-field irrigation	tagoshi kangai
+fifth watch	night watch
 filature	filature
 filatures	filature
 fillet	fillet
@@ -4030,6 +4031,7 @@ silver carp	silver carp
 simpson index	SI
 single range	main range
 single straight range	main range
+single whip reform	Single Whip Reform
 sishu	sishu
 site coefficient	site coefficient
 site coefficients	site coefficient
