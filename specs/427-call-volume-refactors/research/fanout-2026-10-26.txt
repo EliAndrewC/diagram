@@ -1,0 +1,188 @@
+stage              calls@20     calls@40  exp
+lane_wells        4,786,172   22,622,782   2.2
+web               5,318,952   11,052,045   1.1
+homesteads        4,542,315   10,711,263   1.2
+hinterland        3,325,993    5,965,598   0.8
+field             2,486,936    4,607,882   0.9
+windbreak         1,794,703    3,925,050   1.1
+appurtenances       704,594    1,932,917   1.5
+notice              567,939      954,670   0.7
+woodland            198,754      299,659   0.6
+seat                105,943      238,940   1.2
+crossings            80,023      160,948   1.0
+labels               69,329      107,013   0.6
+sink                 87,345       90,824   0.1
+washing              25,765       59,404   1.2
+frame                30,102       31,635   0.1
+sties                10,512       28,150   1.4
+track                 4,637        8,692   0.9
+bamboo                  410          742   0.9
+pond_bank                99           99   0.0
+burial                   17           17   0.0
+water_frame               9            9   0.0
+pond_stock                4            4   0.0
+waterward                 2            2   0.0
+TOTAL            24,140,555   62,798,345
+
+=== lane_wells @40: 22,622,782 calls (@20: 4,786,172)
+  anchor hamletgen/homesteads/well_seats.py:41:seats (x11): hot leaves under it total 4,280,179 calls
+     hamletgen/homesteads/well_seats.py:41:seats [11|@20 6]  ->  settlement/shrines_wells/wells.py:33:well_gap_to_dwellings [79,163|@20 19,603]  ->  settlement/shrines_wells/wells.py:44:<genexpr> [183,049|@20 45,339]  ->  settlement/_geom/overlap.py:82:point_quad_dist [103,886|@20 25,736]  ->  settlement/_geom/overlap.py:86:<genexpr> [500,440|@20 124,400]  ->  settlement/_geom/primitives.py:54:seg_dist [964,713|@20 235,398]  ->  settlement/_geom/primitives.py:45:seg_closest [964,713|@20 235,398]
+     hamletgen/homesteads/well_seats.py:41:seats [11|@20 6]  ->  settlement/shrines_wells/wells.py:33:well_gap_to_dwellings [79,163|@20 19,603]  ->  settlement/shrines_wells/wells.py:44:<genexpr> [183,049|@20 45,339]  ->  settlement/_geom/overlap.py:82:point_quad_dist [103,886|@20 25,736]  ->  settlement/_geom/overlap.py:86:<genexpr> [500,440|@20 124,400]  ->  settlement/_geom/primitives.py:54:seg_dist [964,713|@20 235,398]
+     hamletgen/homesteads/well_seats.py:41:seats [11|@20 6]  ->  settlement/shrines_wells/wells.py:33:well_gap_to_dwellings [79,163|@20 19,603]  ->  settlement/shrines_wells/wells.py:44:<genexpr> [183,049|@20 45,339]  ->  settlement/_geom/overlap.py:82:point_quad_dist [103,886|@20 25,736]  ->  settlement/_geom/overlap.py:86:<genexpr> [500,440|@20 124,400]
+  anchor 'sort' of 'list' objects (x11): hot leaves under it total 2,511,902 calls
+     'sort' of 'list' objects [11|@20 6]  ->  hamletgen/homesteads/wells.py:654:_key [15,591|@20 4,069]  ->  hamletgen/homesteads/wells.py:144:most_served_after [15,594|@20 4,071]  ->  hamletgen/homesteads/wells.py:151:<lambda> [2,192,480|@20 244,240]
+     'sort' of 'list' objects [11|@20 6]  ->  hamletgen/homesteads/wells.py:654:_key [15,591|@20 4,069]  ->  hamletgen/homesteads/wells.py:563:_worst_after [15,591|@20 4,069]  ->  hamletgen/homesteads/wells.py:166:worst_after [15,591|@20 4,069]  ->  hamletgen/homesteads/wells.py:171:<genexpr> [93,546|@20 85,449]
+     'sort' of 'list' objects [11|@20 6]  ->  hamletgen/homesteads/wells.py:654:_key [15,591|@20 4,069]  ->  hamletgen/homesteads/wells.py:621:_extent_added [15,591|@20 4,069]  ->  hamletgen/homesteads/wells.py:33:drawn_r [28,369|@20 6,833]  ->  settlement/shrines_wells/wells.py:50:_well_vr [53,359|@20 11,898]  ->  settlement/houses.py:419:_toscale [53,361|@20 11,899]  ->  typing.py:2300:cast [59,676|@20 13,427]
+  anchor hamletgen/homesteads/wells.py:393:seat_wells (x4): hot leaves under it total 1,117,018 calls
+     hamletgen/homesteads/wells.py:393:seat_wells [4|@20 2]  ->  settlement/shrines_wells/wells.py:107:well_at [12,490|@20 2,530]  ->  settlement/core.py:328:admits [12,490|@20 2,530]  ->  overlap/registry.py:321:admits [12,490|@20 2,530]  ->  overlap/registry.py:271:conflicts [12,492|@20 2,531]  ->  overlap/reserved.py:134:conflicts [12,492|@20 2,531]  ->  overlap/reserved.py:121:_seats_near [299,434|@20 68,679]
+     hamletgen/homesteads/wells.py:393:seat_wells [4|@20 2]  ->  settlement/shrines_wells/wells.py:107:well_at [12,490|@20 2,530]  ->  settlement/core.py:328:admits [12,490|@20 2,530]  ->  overlap/registry.py:321:admits [12,490|@20 2,530]  ->  overlap/registry.py:271:conflicts [12,492|@20 2,531]  ->  overlap/registry.py:408:_center [15,311|@20 3,179]  ->  overlap/registry.py:409:<genexpr> [199,043|@20 41,327]
+     hamletgen/homesteads/wells.py:393:seat_wells [4|@20 2]  ->  settlement/shrines_wells/wells.py:107:well_at [12,490|@20 2,530]  ->  settlement/houses.py:265:_fits [2,100|@20 508]  ->  settlement/houses.py:200:_on_a_tread [2,037|@20 490]  ->  settlement/houses.py:235:<genexpr> [55,551|@20 7,311]  ->  settlement/houses.py:237:<genexpr> [166,602|@20 22,120]
+  anchor hamletgen/hinterland/belt.py:368:fouled (x4): hot leaves under it total 194,404 calls
+     hamletgen/hinterland/belt.py:368:fouled [4|@20 2]  ->  hamletgen/hinterland/belt.py:369:<genexpr> [64,804|@20 12,662]
+     hamletgen/hinterland/belt.py:368:fouled [4|@20 2]  ->  hamletgen/hinterland/belt.py:369:<genexpr> [64,804|@20 12,662]  ->  settlement/_geom/indexes.py:455:inside [64,800|@20 12,660]
+     hamletgen/hinterland/belt.py:368:fouled [4|@20 2]  ->  hamletgen/hinterland/belt.py:369:<genexpr> [64,804|@20 12,662]  ->  settlement/_geom/indexes.py:493:edge_within [64,800|@20 12,660]
+  fastest growers 20->40 (exponent, calls@20 -> @40):
+      3.2     244,240 ->  2,192,480  hamletgen/homesteads/wells.py:151:<lambda>
+      3.0       6,821 ->     53,514  settlement/houses.py:241:_tread_skipped
+      2.9       7,311 ->     55,551  settlement/houses.py:235:<genexpr>
+      2.9      22,120 ->    166,602  settlement/houses.py:237:<genexpr>
+      2.5     590,604 ->  3,403,773  math.hypot
+      2.4     355,268 ->  1,828,382  builtins.len
+
+=== web @40: 11,052,045 calls (@20: 5,318,952)
+  anchor hamletgen/ways/checks.py:376:served_network (x45): hot leaves under it total 2,256,538 calls
+     hamletgen/ways/checks.py:376:served_network [45|@20 29]  ->  hamletgen/ways/checks.py:396:<genexpr> [28,781|@20 8,052]  ->  hamletgen/ways/checks.py:365:lanes_share_tread [26,974|@20 7,319]  ->  hamletgen/ways/checks.py:373:<genexpr> [321,436|@20 118,837]  ->  settlement/_geom/primitives.py:54:seg_dist [954,516|@20 448,126]  ->  settlement/_geom/primitives.py:45:seg_closest [980,586|@20 460,108]
+     hamletgen/ways/checks.py:376:served_network [45|@20 29]  ->  hamletgen/ways/checks.py:396:<genexpr> [28,781|@20 8,052]  ->  hamletgen/ways/checks.py:365:lanes_share_tread [26,974|@20 7,319]  ->  hamletgen/ways/checks.py:373:<genexpr> [321,436|@20 118,837]  ->  settlement/_geom/primitives.py:54:seg_dist [954,516|@20 448,126]
+     hamletgen/ways/checks.py:376:served_network [45|@20 29]  ->  hamletgen/ways/checks.py:396:<genexpr> [28,781|@20 8,052]  ->  hamletgen/ways/checks.py:365:lanes_share_tread [26,974|@20 7,319]  ->  hamletgen/ways/checks.py:373:<genexpr> [321,436|@20 118,837]
+  anchor hamletgen/ways/geom.py:351:_trim_to_service (x27): hot leaves under it total 791,543 calls
+     hamletgen/ways/geom.py:351:_trim_to_service [27|@20 21]  ->  hamletgen/ways/geom.py:390:serves [542|@20 414]  ->  hamletgen/ways/geom.py:316:end_serves [892|@20 636]  ->  hamletgen/ways/geom.py:348:<genexpr> [68,383|@20 26,040]  ->  hamletgen/ways/geom.py:209:ring_within [67,937|@20 25,698]  ->  hamletgen/clearance.py:85:ring_index [70,580|@20 27,763]  ->  hamletgen/clearance.py:87:<genexpr> [361,036|@20 143,965]
+     hamletgen/ways/geom.py:351:_trim_to_service [27|@20 21]  ->  hamletgen/ways/geom.py:390:serves [542|@20 414]  ->  hamletgen/ways/geom.py:316:end_serves [892|@20 636]  ->  hamletgen/ways/geom.py:348:<genexpr> [68,383|@20 26,040]  ->  hamletgen/ways/geom.py:209:ring_within [67,937|@20 25,698]  ->  settlement/_geom/indexes.py:493:edge_within [69,307|@20 27,857]  ->  settlement/_geom/indexes.py:276:near [88,032|@20 34,995]
+     hamletgen/ways/geom.py:351:_trim_to_service [27|@20 21]  ->  hamletgen/ways/geom.py:390:serves [542|@20 414]  ->  hamletgen/ways/geom.py:316:end_serves [892|@20 636]  ->  hamletgen/ways/geom.py:348:<genexpr> [68,383|@20 26,040]  ->  hamletgen/ways/geom.py:209:ring_within [67,937|@20 25,698]  ->  hamletgen/clearance.py:85:ring_index [70,580|@20 27,763]
+  anchor hamletgen/ways/tree.py:711:rejoined (x120): hot leaves under it total 470,743 calls
+     hamletgen/ways/tree.py:711:rejoined [120|@20 60]  ->  settlement/_geom/primitives.py:115:segments_cross [154,221|@20 66,758]  ->  settlement/_geom/primitives.py:116:ccw [316,522|@20 140,072]
+     hamletgen/ways/tree.py:711:rejoined [120|@20 60]  ->  settlement/_geom/primitives.py:115:segments_cross [154,221|@20 66,758]
+  anchor hamletgen/ways/law.py:438:doubled_tails (x6): hot leaves under it total 290,353 calls
+     hamletgen/ways/law.py:438:doubled_tails [6|@20 6]  ->  hamletgen/ways/law.py:446:<genexpr> [10,667|@20 3,427]  ->  hamletgen/ways/tails.py:70:tail_doubled [10,173|@20 3,153]  ->  hamletgen/ways/tails.py:75:<genexpr> [30,519|@20 9,459]  ->  hamletgen/ways/keeper.py:39:keyed [20,520|@20 6,395]  ->  hamletgen/ways/keeper.py:40:<genexpr> [61,510|@20 19,162]  ->  hamletgen/ways/keeper.py:25:pts_key [40,990|@20 12,767]  ->  hamletgen/ways/keeper.py:27:<genexpr> [228,843|@20 91,509]
+     hamletgen/ways/law.py:438:doubled_tails [6|@20 6]  ->  hamletgen/ways/law.py:446:<genexpr> [10,667|@20 3,427]  ->  hamletgen/ways/tails.py:70:tail_doubled [10,173|@20 3,153]  ->  hamletgen/ways/tails.py:75:<genexpr> [30,519|@20 9,459]  ->  hamletgen/ways/keeper.py:39:keyed [20,520|@20 6,395]  ->  hamletgen/ways/keeper.py:40:<genexpr> [61,510|@20 19,162]
+  anchor hamletgen/ways/law.py:833:over_a_fixture (x82): hot leaves under it total 73,391 calls
+     hamletgen/ways/law.py:833:over_a_fixture [82|@20 53]  ->  hamletgen/ways/fabric.py:462:_crosses_fabric [13,515|@20 4,888]  ->  hamletgen/ways/fabric.py:457:poly_box [14,675|@20 5,793]  ->  hamletgen/ways/fabric.py:459:<genexpr> [73,391|@20 28,981]
+  fastest growers 20->40 (exponent, calls@20 -> @40):
+      2.0       7,773 ->     30,443  linestring.py:63:_coords
+      1.9       7,319 ->     26,974  hamletgen/ways/checks.py:365:lanes_share_tread
+      1.8       8,052 ->     28,781  hamletgen/ways/checks.py:396:<genexpr>
+      1.7      14,069 ->     46,848  decorators.py:73:wrapped
+      1.7       9,459 ->     30,519  hamletgen/ways/tails.py:75:<genexpr>
+      1.7      12,767 ->     40,990  hamletgen/ways/keeper.py:25:pts_key
+
+=== homesteads @40: 10,711,263 calls (@20: 4,542,315)
+  anchor settlement/homestead_parts/yards.py:166:_filled_lattice (x40): hot leaves under it total 471,281 calls
+     settlement/homestead_parts/yards.py:166:_filled_lattice [40|@20 20]  ->  settlement/homestead_parts/yards.py:114:fits [2,895|@20 1,252]  ->  settlement/homestead_parts/yards.py:115:<genexpr> [14,189|@20 6,178]  ->  settlement/_geom/primitives.py:167:edge_dist [12,658|@20 6,302]  ->  settlement/_geom/primitives.py:168:<genexpr> [63,514|@20 32,422]  ->  settlement/_geom/primitives.py:54:seg_dist [173,991|@20 59,394]  ->  settlement/_geom/primitives.py:45:seg_closest [233,776|@20 69,860]
+     settlement/homestead_parts/yards.py:166:_filled_lattice [40|@20 20]  ->  settlement/homestead_parts/yards.py:114:fits [2,895|@20 1,252]  ->  settlement/homestead_parts/yards.py:115:<genexpr> [14,189|@20 6,178]  ->  settlement/_geom/primitives.py:167:edge_dist [12,658|@20 6,302]  ->  settlement/_geom/primitives.py:168:<genexpr> [63,514|@20 32,422]  ->  settlement/_geom/primitives.py:54:seg_dist [173,991|@20 59,394]
+     settlement/homestead_parts/yards.py:166:_filled_lattice [40|@20 20]  ->  settlement/homestead_parts/yards.py:114:fits [2,895|@20 1,252]  ->  settlement/homestead_parts/yards.py:115:<genexpr> [14,189|@20 6,178]  ->  settlement/_geom/primitives.py:167:edge_dist [12,658|@20 6,302]  ->  settlement/_geom/primitives.py:168:<genexpr> [63,514|@20 32,422]
+  anchor hamletgen/homesteads/capacity.py:68:free_seats (x1): hot leaves under it total 408,865 calls
+     hamletgen/homesteads/capacity.py:68:free_seats [1|@20 1]  ->  hamletgen/homesteads/boundary.py:401:point_taken [81,810|@20 41,080]  ->  hamletgen/homesteads/boundary.py:398:_inside [87,417|@20 42,952]
+     hamletgen/homesteads/capacity.py:68:free_seats [1|@20 1]  ->  hamletgen/homesteads/boundary.py:401:point_taken [81,810|@20 41,080]
+     hamletgen/homesteads/capacity.py:68:free_seats [1|@20 1]  ->  hamletgen/homesteads/boundary.py:401:point_taken [81,810|@20 41,080]  ->  hamletgen/homesteads/boundary.py:364:_cell_beyond [67,600|@20 34,463]
+  anchor hamletgen/ways/tree.py:711:rejoined (x95): hot leaves under it total 374,113 calls
+     hamletgen/ways/tree.py:711:rejoined [95|@20 44]  ->  settlement/_geom/primitives.py:115:segments_cross [120,319|@20 41,621]  ->  settlement/_geom/primitives.py:116:ccw [253,794|@20 89,796]
+     hamletgen/ways/tree.py:711:rejoined [95|@20 44]  ->  settlement/_geom/primitives.py:115:segments_cross [120,319|@20 41,621]
+  anchor hamletgen/homesteads/growth.py:146:settled_seat (x267): hot leaves under it total 351,861 calls
+     hamletgen/homesteads/growth.py:146:settled_seat [267|@20 116]  ->  hamletgen/homesteads/growth.py:402:reach_at [416|@20 253]  ->  hamletgen/homesteads/growth.py:176:household_reach [416|@20 253]  ->  settlement/rolling/bundle.py:73:_bundle_envelope [416|@20 253]  ->  settlement/rolling/bundle.py:80:_bundle_geom [2,506|@20 1,344]  ->  settlement/rolling/bundle.py:161:_bundle_template [2,506|@20 1,344]  ->  settlement/rolling/bundle.py:190:_bundle_layout [1,221|@20 781]  ->  settlement/rolling/bundle.py:338:_lay_fixtures [1,221|@20 781]  ->  settlement/homestead_parts/fixture_seats.py:354:lay_fixtures [1,216|@20 776]  ->  settlement/homestead_parts/fixture_seats.py:643:_first [3,692|@20 2,388]  ->  settlement/homestead_parts/fixture_seats.py:443:<genexpr> [74,202|@20 44,670]  ->  settlement/core.py:562:px [204,473|@20 116,395]
+     hamletgen/homesteads/growth.py:146:settled_seat [267|@20 116]  ->  hamletgen/homesteads/growth.py:402:reach_at [416|@20 253]  ->  hamletgen/homesteads/growth.py:176:household_reach [416|@20 253]  ->  settlement/rolling/bundle.py:73:_bundle_envelope [416|@20 253]  ->  settlement/rolling/bundle.py:80:_bundle_geom [2,506|@20 1,344]  ->  settlement/rolling/bundle.py:161:_bundle_template [2,506|@20 1,344]  ->  settlement/rolling/bundle.py:190:_bundle_layout [1,221|@20 781]  ->  settlement/rolling/bundle.py:338:_lay_fixtures [1,221|@20 781]  ->  settlement/homestead_parts/fixture_seats.py:354:lay_fixtures [1,216|@20 776]  ->  settlement/homestead_parts/fixture_seats.py:643:_first [3,692|@20 2,388]  ->  settlement/homestead_parts/fixture_seats.py:443:<genexpr> [74,202|@20 44,670]
+     hamletgen/homesteads/growth.py:146:settled_seat [267|@20 116]  ->  hamletgen/homesteads/growth.py:402:reach_at [416|@20 253]  ->  hamletgen/homesteads/growth.py:176:household_reach [416|@20 253]  ->  settlement/rolling/bundle.py:73:_bundle_envelope [416|@20 253]  ->  settlement/rolling/bundle.py:80:_bundle_geom [2,506|@20 1,344]  ->  settlement/rolling/bundle.py:161:_bundle_template [2,506|@20 1,344]  ->  settlement/rolling/bundle.py:190:_bundle_layout [1,221|@20 781]  ->  settlement/rolling/bundle.py:338:_lay_fixtures [1,221|@20 781]  ->  settlement/homestead_parts/fixture_seats.py:354:lay_fixtures [1,216|@20 776]  ->  settlement/homestead_parts/fixture_seats.py:643:_first [3,692|@20 2,388]  ->  settlement/homestead_parts/fixture_seats.py:443:<genexpr> [74,202|@20 44,670]  ->  settlement/homestead_parts/fixture_seats.py:224:within_reach_of [73,186|@20 43,994]
+  anchor settlement/rolling/gap_ways.py:265:way_out (x40): hot leaves under it total 216,065 calls
+     settlement/rolling/gap_ways.py:265:way_out [40|@20 20]  ->  settlement/rolling/gap_ways.py:275:ok [90,281|@20 41,740]
+     settlement/rolling/gap_ways.py:265:way_out [40|@20 20]  ->  settlement/rolling/gap_ways.py:275:ok [90,281|@20 41,740]  ->  settlement/rolling/gap_ways.py:468:open_here [8,371|@20 3,877]  ->  settlement/rolling/access.py:258:fixtures_clear [9,630|@20 3,759]  ->  settlement/rolling/access.py:278:<genexpr> [50,058|@20 19,895]  ->  settlement/rolling/access.py:64:seg_box_within [75,726|@20 28,766]
+     settlement/rolling/gap_ways.py:265:way_out [40|@20 20]  ->  settlement/rolling/gap_ways.py:275:ok [90,281|@20 41,740]  ->  settlement/rolling/gap_ways.py:468:open_here [8,371|@20 3,877]  ->  settlement/rolling/access.py:258:fixtures_clear [9,630|@20 3,759]  ->  settlement/rolling/access.py:278:<genexpr> [50,058|@20 19,895]
+  anchor settlement/rolling/gap_ways.py:309:trace (x243): hot leaves under it total 167,835 calls
+     settlement/rolling/gap_ways.py:309:trace [243|@20 90]  ->  settlement/rolling/gap_ways.py:323:<genexpr> [57,501|@20 9,731]
+     settlement/rolling/gap_ways.py:309:trace [243|@20 90]  ->  settlement/rolling/gap_ways.py:323:<lambda> [56,313|@20 9,353]
+     settlement/rolling/gap_ways.py:309:trace [243|@20 90]  ->  settlement/rolling/gap_ways.py:326:<genexpr> [54,021|@20 15,012]
+  anchor hamletgen/homesteads/region.py:302:free_components (x40): hot leaves under it total 160,824 calls
+     hamletgen/homesteads/region.py:302:free_components [40|@20 20]  ->  hamletgen/homesteads/region.py:319:find [108,709|@20 33,437]
+     hamletgen/homesteads/region.py:302:free_components [40|@20 20]  ->  numeric.py:674:flatnonzero [23,200|@20 8,200]  ->  fromnumeric.py:2031:nonzero [28,499|@20 9,298]  ->  fromnumeric.py:48:_wrapfunc [52,115|@20 15,507]
+  anchor hamletgen/ways/law.py:512:near_misses (x83): hot leaves under it total 128,028 calls
+     hamletgen/ways/law.py:512:near_misses [83|@20 42]  ->  hamletgen/ways/law.py:449:free_end [3,318|@20 852]  ->  hamletgen/ways/law.py:452:<genexpr> [65,673|@20 9,211]
+     hamletgen/ways/law.py:512:near_misses [83|@20 42]  ->  hamletgen/ways/law.py:449:free_end [3,318|@20 852]  ->  hamletgen/ways/law.py:452:<genexpr> [65,673|@20 9,211]  ->  hamletgen/ways/law.py:459:box_gap [62,355|@20 8,359]
+  fastest growers 20->40 (exponent, calls@20 -> @40):
+      3.4       3,802 ->     39,210  settlement/homestead_parts/wood_share.py:408:<genexpr>
+      2.9       8,359 ->     62,355  hamletgen/ways/law.py:459:box_gap
+      2.8       9,211 ->     65,673  hamletgen/ways/law.py:452:<genexpr>
+      2.6       9,353 ->     56,313  settlement/rolling/gap_ways.py:323:<lambda>
+      2.6       9,731 ->     57,501  settlement/rolling/gap_ways.py:323:<genexpr>
+      2.0      62,765 ->    250,969  math.dist
+
+=== hinterland @40: 5,965,598 calls (@20: 3,325,993)
+  anchor settlement/homestead_parts/grove_fill.py:354:close_belt_gaps (x1): hot leaves under it total 234,845 calls
+     settlement/homestead_parts/grove_fill.py:354:close_belt_gaps [1|@20 1]  ->  settlement/homestead_parts/grove_blocks.py:123:inside [35,568|@20 31,386]  ->  settlement/_geom/indexes.py:455:inside [97,488|@20 55,983]
+     settlement/homestead_parts/grove_fill.py:354:close_belt_gaps [1|@20 1]  ->  settlement/homestead_parts/grove_blocks.py:187:static_clear [9,753|@20 8,066]  ->  settlement/homestead_parts/grove_blocks.py:168:taken_by [9,079|@20 8,144]  ->  settlement/_geom/region.py:131:taken [36,391|@20 26,514]  ->  Image.py:1752:getpixel [36,391|@20 26,514]  ->  Image.py:968:load [36,406|@20 26,525]  ->  Image.py:643:im [72,812|@20 53,050]
+     settlement/homestead_parts/grove_fill.py:354:close_belt_gaps [1|@20 1]  ->  settlement/homestead_parts/grove_blocks.py:228:too_near [12,180|@20 11,471]  ->  settlement/homestead_parts/grove_blocks.py:230:<genexpr> [64,545|@20 56,931]
+  anchor hamletgen/homesteads/bamboo.py:73:household_bamboo (x1): hot leaves under it total 213,100 calls
+     hamletgen/homesteads/bamboo.py:73:household_bamboo [1|@20 1]  ->  hamletgen/homesteads/bamboo.py:277:strip_refused [833|@20 573]  ->  settlement/homestead_parts/bamboo_keepout.py:36:stand_spares_seats [480|@20 335]  ->  settlement/homestead_parts/bamboo_keepout.py:45:<genexpr> [213,100|@20 73,700]
+  anchor settlement/_knobs.py:719:crop_boxes (x21): hot leaves under it total 121,845 calls
+     settlement/_knobs.py:719:crop_boxes [21|@20 6]  ->  settlement/_knobs.py:827:<genexpr> [121,845|@20 20,631]
+  anchor settlement/_geom/primitives.py:171:convex_hull (x96): hot leaves under it total 90,187 calls
+     settlement/_geom/primitives.py:171:convex_hull [96|@20 46]  ->  settlement/_geom/primitives.py:178:cross [90,187|@20 41,113]
+  anchor hamletgen/hinterland/belt.py:368:fouled (x2): hot leaves under it total 63,120 calls
+     hamletgen/hinterland/belt.py:368:fouled [2|@20 2]  ->  hamletgen/hinterland/belt.py:369:<genexpr> [32,402|@20 12,662]  ->  settlement/_geom/indexes.py:493:edge_within [35,423|@20 14,066]  ->  settlement/_geom/indexes.py:276:near [63,120|@20 39,031]
+  fastest growers 20->40 (exponent, calls@20 -> @40):
+      4.5       1,237 ->     27,476  math.degrees
+      4.5       1,239 ->     27,478  math.atan2
+      2.8       3,540 ->     25,506  settlement/homestead_parts/belt_law.py:169:_near
+      2.8       4,803 ->     32,609  settlement/homestead_parts/belt_law.py:158:uv
+      2.7       4,335 ->     28,243  settlement/homestead_parts/belt_law.py:166:bin
+      2.6      20,631 ->    121,845  settlement/_knobs.py:827:<genexpr>
+
+=== field @40: 4,607,882 calls (@20: 2,486,936)
+  anchor waterfields/partition.py:187:grid_lines (x8): hot leaves under it total 513,948 calls
+     waterfields/partition.py:187:grid_lines [8|@20 6]  ->  waterfields/partition.py:225:edge [9,141|@20 2,771]  ->  waterfields/partition.py:149:bound [18,562|@20 5,747]  ->  waterfields/carve.py:23:_bnd [15,644|@20 4,663]  ->  waterfields/frame.py:291:_at_f [15,644|@20 4,663]  ->  waterfields/frame.py:285:_falls [15,644|@20 4,663]  ->  waterfields/frame.py:242:to_uf [513,948|@20 160,801]
+  anchor hamletgen/water/brook_rules.py:190:crosses_mid_run (x26): hot leaves under it total 223,322 calls
+     hamletgen/water/brook_rules.py:190:crosses_mid_run [26|@20 24]  ->  hamletgen/water/brook_rules.py:203:<genexpr> [55,716|@20 37,190]  ->  hamletgen/water/brook_rules.py:170:_proper_cross [55,692|@20 37,168]  ->  hamletgen/water/brook_rules.py:173:side [111,914|@20 74,722]
+     hamletgen/water/brook_rules.py:190:crosses_mid_run [26|@20 24]  ->  hamletgen/water/brook_rules.py:203:<genexpr> [55,716|@20 37,190]
+     hamletgen/water/brook_rules.py:190:crosses_mid_run [26|@20 24]  ->  hamletgen/water/brook_rules.py:203:<genexpr> [55,716|@20 37,190]  ->  hamletgen/water/brook_rules.py:170:_proper_cross [55,692|@20 37,168]
+  anchor waterfields/settle.py:170:__init__ (x1): hot leaves under it total 130,690 calls
+     waterfields/settle.py:170:__init__ [1|@20 1]  ->  waterfields/settle.py:191:add [1,228|@20 633]  ->  waterfields/settle.py:188:judge [1,398|@20 752]  ->  waterfields/settle.py:64:verdict [1,398|@20 752]  ->  waterfields/ring_rules.py:476:ring_violations [1,416|@20 788]  ->  waterfields/ring_rules.py:354:collector_crossings [1,416|@20 788]  ->  waterfields/ring_rules.py:375:<genexpr> [67,212|@20 19,728]
+     waterfields/settle.py:170:__init__ [1|@20 1]  ->  waterfields/settle.py:191:add [1,228|@20 633]  ->  waterfields/settle.py:188:judge [1,398|@20 752]  ->  waterfields/settle.py:64:verdict [1,398|@20 752]  ->  waterfields/ring_rules.py:476:ring_violations [1,416|@20 788]  ->  waterfields/ring_rules.py:354:collector_crossings [1,416|@20 788]  ->  waterfields/ring_rules.py:375:<genexpr> [67,212|@20 19,728]  ->  waterfields/ring_rules.py:342:_seg_dist [63,478|@20 18,084]
+  anchor waterfields/partition.py:329:keep_rows (x8): hot leaves under it total 62,650 calls
+     waterfields/partition.py:329:keep_rows [8|@20 6]  ->  base.py:351:length [15,496|@20 912]  ->  decorators.py:73:wrapped [62,650|@20 24,401]
+  fastest growers 20->40 (exponent, calls@20 -> @40):
+      1.8      18,084 ->     63,478  waterfields/ring_rules.py:342:_seg_dist
+      1.8      19,728 ->     67,212  waterfields/ring_rules.py:375:<genexpr>
+      1.7     160,801 ->    513,948  waterfields/frame.py:242:to_uf
+      1.7       9,232 ->     29,321  math.sin
+      1.4      10,244 ->     26,904  waterfields/ring_rules.py:368:<genexpr>
+      1.4      10,244 ->     26,904  waterfields/ring_rules.py:367:<genexpr>
+
+=== windbreak @40: 3,925,050 calls (@20: 1,794,703)
+  anchor settlement/homestead_parts/grove_fill.py:474:ink_and_record_grove (x1): hot leaves under it total 55,656 calls
+     settlement/homestead_parts/grove_fill.py:474:ink_and_record_grove [1|@20 1]  ->  settlement/homestead_parts/groves.py:440:_draw_grove [915|@20 451]  ->  settlement/homestead_parts/groves.py:607:seat [5,964|@20 2,820]  ->  settlement/shrines_wells/woods.py:110:_crown_seat_clear [7,513|@20 3,515]  ->  settlement/shrines_wells/woods.py:123:<genexpr> [55,656|@20 25,573]
+  fastest growers 20->40 (exponent, calls@20 -> @40):
+      2.0       9,471 ->     37,515  settlement/homestead_parts/groves.py:590:<genexpr>
+      2.0       9,471 ->     37,515  hamletgen/hinterland/stages.py:493:<genexpr>
+      1.7      65,790 ->    220,108  math.hypot
+      1.7      14,978 ->     49,971  math.dist
+      1.7     282,829 ->    906,185  'get' of 'dict' objects
+      1.5      97,834 ->    284,117  builtins.isinstance
+
+=== appurtenances @40: 1,932,917 calls (@20: 704,594)
+  anchor hamletgen/homesteads/wells.py:393:seat_wells (x1): hot leaves under it total 216,790 calls
+     hamletgen/homesteads/wells.py:393:seat_wells [1|@20 1]  ->  settlement/shrines_wells/wells.py:107:well_at [824|@20 108]  ->  settlement/core.py:328:admits [824|@20 108]  ->  overlap/registry.py:321:admits [824|@20 108]  ->  overlap/registry.py:271:conflicts [997|@20 196]  ->  overlap/reserved.py:134:conflicts [964|@20 179]  ->  overlap/reserved.py:54:poly_seg_gap [1,800|@20 328]  ->  overlap/reserved.py:64:<genexpr> [15,120|@20 2,309]  ->  settlement/_geom/primitives.py:54:seg_dist [108,395|@20 36,798]  ->  settlement/_geom/primitives.py:45:seg_closest [108,395|@20 36,798]
+     hamletgen/homesteads/wells.py:393:seat_wells [1|@20 1]  ->  settlement/shrines_wells/wells.py:107:well_at [824|@20 108]  ->  settlement/core.py:328:admits [824|@20 108]  ->  overlap/registry.py:321:admits [824|@20 108]  ->  overlap/registry.py:271:conflicts [997|@20 196]  ->  overlap/reserved.py:134:conflicts [964|@20 179]  ->  overlap/reserved.py:54:poly_seg_gap [1,800|@20 328]  ->  overlap/reserved.py:64:<genexpr> [15,120|@20 2,309]  ->  settlement/_geom/primitives.py:54:seg_dist [108,395|@20 36,798]
+  anchor 'sort' of 'list' objects (x1): hot leaves under it total 92,480 calls
+     'sort' of 'list' objects [1|@20 1]  ->  hamletgen/homesteads/wells.py:654:_key [1,156|@20 687]  ->  hamletgen/homesteads/wells.py:144:most_served_after [1,156|@20 687]  ->  hamletgen/homesteads/wells.py:151:<lambda> [92,480|@20 27,480]
+  fastest growers 20->40 (exponent, calls@20 -> @40):
+      2.9       3,132 ->     23,527  overlap/reserved.py:121:_seats_near
+      2.8       6,562 ->     44,370  settlement/_geom/primitives.py:116:ccw
+      1.8       5,993 ->     20,405  math.cos
+      1.8      27,480 ->     92,480  hamletgen/homesteads/wells.py:151:<lambda>
+      1.7       6,640 ->     21,693  math.sin
+      1.6      36,798 ->    108,395  settlement/_geom/primitives.py:54:seg_dist
+
+=== notice @40: 954,670 calls (@20: 567,939)
+  fastest growers 20->40 (exponent, calls@20 -> @40):
+      1.3      80,612 ->    198,513  math.hypot
+      1.1      13,958 ->     30,283  'setdefault' of 'dict' objects
+      1.0      37,974 ->     77,434  'append' of 'list' objects
+      0.9      13,003 ->     24,875  builtins.getattr
+      0.8      40,458 ->     69,889  'get' of 'dict' objects
+      0.8      20,634 ->     34,932  builtins.len
