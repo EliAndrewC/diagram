@@ -81,8 +81,9 @@ the gate, faster than the gate.
 
 1. **Given** a plan block with an unlabeled figure, no red exit through `make arbiter-ask`, or a task with no approach block,
    **When** a plan review is dispatched, **Then** a mechanical plan-lint refuses first, naming each, and no round is spent.
-2. **Given** an approach block that matches the template's shape and names no decision (`D<n>`) not defined in a reviewed block,
-   **Then** it owes no spec-fidelity review, as a part B that decides nothing owes none today.
+2. **Given** an approach block that matches the template's shape, changes no rule, tunes no number and moves nothing placed
+   earlier (labeled or not), and whose every `D<n>` is defined elsewhere, **Then** it owes no spec-fidelity review, as a part B
+   that decides nothing owes none today; a block that only lacks a `D<n>` label still owes one.
 
 ---
 
@@ -127,8 +128,10 @@ the gate, faster than the gate.
 - **FR-004**: `claims-gate`, `entry-gate` and `cohort-gate` MUST exit at once when the delta holds nothing each judges; their
   verdicts MUST be cached on the delta's content; the push MUST run the gates concurrently and report every refusal together.
 - **FR-005**: A mechanical plan-lint MUST run before a plan review is dispatched (labeled figures, the red exit, an approach
-  block per task); an approach block MUST owe no review only when it passes the test a part B that decides nothing passes today
-  (item 4 answered "No", item 5 "Neither", every `D<n>` it names defined elsewhere) - a missing `D<n>` label alone is not enough.
+  block per task); an approach block MUST owe no review only when it decides nothing in the sense a part B that decides nothing
+  does today: it changes no rule, tunes no number and moves nothing placed earlier, labeled or not, and every `D<n>` it names is
+  defined elsewhere. The test is asked of the block's own part A answers (the plan names which items carry each property); a
+  missing `D<n>` label alone is not enough.
 - **FR-006**: The claims gate MUST admit a `known` drift whose open task row names its unit, record it, and list it in `make
   gm-review`; a claims-triage bundle of at most 3 claims is not triaged: impl-drift is dispatched directly and the skip recorded.
 - **FR-007**: The decide-first guard MUST let a claims triage be dispatched while the plan review runs.
@@ -168,7 +171,11 @@ the gate, faster than the gate.
   and FR-003's scope follows it; "(not only the mirrored directory)" is gone; SC-002 makes "fast" a criterion; the US3.1 and
   SC-002 escapes are deleted. (2) RESOLVED: FR-002 and US2.2 cover any non-doc, non-module file under `tests/<dir>/`; the top
   level plans full. (3) RESOLVED: "on code the landing changed" is gone from FR-006, US6.1 and SC-005; FR-006 says small bundles
-  are not triaged, and the skip is recorded. (4) PARTLY RESOLVED: FR-005 now states the part B test exactly as
-  `plan_sections.decides_nothing` applies it, but US5.2 still gives the label-only test ("names no decision (`D<n>`) not
-  defined in a reviewed block"), which FR-005 now rejects. US5.2 must state the same test as FR-005: item 4 answered "No",
-  item 5 "Neither", and every `D<n>` defined elsewhere.
+  are not triaged, and the skip is recorded. (4) PARTLY RESOLVED, two defects: (a) FR-005's parenthetical ("item 4 answered
+  "No", item 5 "Neither"") copies `plan_sections.decides_nothing`, which only runs on `### Txx part B` blocks. Those item
+  numbers belong to the checklist's part B (B4 "moving something placed earlier?", B5 "Tuning or changing?"). An approach block
+  answers part A (`approach_gate.py` D8, `docs/approach-checklist.md`), and there A4 and A5 are different questions with no
+  No/Neither answer, so no approach block can take the test as written. FR-005 must define "decides nothing" for an approach
+  block in its own terms: the property part B's test checks, that no rule is changed, no number tuned and no earlier placement
+  moved (labeled or not), and that every `D<n>` it names is defined elsewhere. A missing label alone is still not enough.
+  (b) US5.2 still gives the label-only test that FR-005 now rejects. It must state the same test as the corrected FR-005.
