@@ -150,6 +150,20 @@ def kept_ids(clone: str) -> set[str]:
     return out
 
 
+def _said_since_gm(path: str) -> str:
+    """The session's own text since the GM's last message."""
+    out: list[str] = []
+    try:
+        for rec in _records_backward(path):
+            if _is_gm_message(rec):
+                break
+            if rec.get("type") == "assistant":
+                out += [str(x.get("text", "")) for x in (rec.get("message") or {}).get("content") or [] if isinstance(x, dict) and x.get("type") == "text"]
+    except OSError:
+        pass
+    return "\n".join(out)
+
+
 def unnamed(clone: str, payload: dict) -> list[str]:
     """The kept questions since the GM's last message that the final message does not name (feature 432, FR-002)."""
     import glob  # noqa: PLC0415
@@ -157,7 +171,9 @@ def unnamed(clone: str, payload: dict) -> list[str]:
     since = _gm_last_at(payload.get("transcript_path") or "")
     if not since:
         return []  # nothing to read: never refuse on a transcript the hook cannot see
-    said = payload.get("last_assistant_message") or ""
+    # ...NAMED ONCE SINCE THE GM'S LAST MESSAGE IS NAMED: the check asked for the same three in every message of a turn (found
+    # live, 2026-10-26) - the session's earlier messages since his last count
+    said = (payload.get("last_assistant_message") or "") + "\n" + _said_since_gm(payload.get("transcript_path") or "")
     out = []
     for f in sorted(glob.glob(f"{clone}/specs/*/gm-review.jsonl")):
         num = int(f.split("/specs/", 1)[1].split("-", 1)[0])
