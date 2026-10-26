@@ -565,7 +565,11 @@ or the step is set down with its seeds and ruled (`make arbiter-ask`). Rendering
   Inashiro, Kashikawa and Sawada move: Kashikawa drops a 492 ft orphan link and a 410 ft lane and the settle draws a 272 ft field
   way in their place, every house and the field still reached. The fourteen names `make dead-closure` then found dead (T42's
   `link_width` among them, its link gone) deleted, with the tests whose BODY calls one (the arbiter's rule on T44). `settle_defer`
-  stays defined: `settle_tree` asks it. Rendering: none (no glyph; three pool maps redrawn).
+  stays defined: `settle_tree` asks it. The end trim's STREET call (`tidy_lane_ends(..., streets=True)`, a row map's) stays and is
+  NEEDED, measured 2026-10-26 UTC (method: it alone off, `make cohort-landing JOBS=3`): 48 of 54 - six linear seeds (11, 12, 23,
+  29, 901 among them) refused `dangling_ends`, a row's street running on past its last farm. It is a repair: the street is laid
+  long and cut back. Its conversion, the street laid ending at its last farm where `lay_row_streets` lays it, is T47's.
+  Rendering: none (no glyph; three pool maps redrawn).
 
 ### T46 Approach (checklist part A)
 
@@ -581,4 +585,13 @@ or the step is set down with its seeds and ruled (`make arbiter-ask`). Rendering
 9. **Done, measured.** The five gone with their dead closure, `make land` green.
 10. **Before moving a constant.** n/a: the constants go with their only users.
 11. **Before fitting things into room.** n/a.
+
+
+### T47 (FR-004, T46's measurement): a row's street laid ending at its last farm, and the street trim deleted
+
+- **Approach**: measured 2026-10-26 UTC (T46: the end trim's street call alone off, `make cohort-landing JOBS=3`): six linear
+  seeds refuse `dangling_ends` - `lay_row_streets` lays each street past its last farm and `tidy_lane_ends(..., streets=True)`
+  cuts it back. The rule (`law.dangling_lane_ends`, 0033: a row's street ends at its last farm, or runs off the map as the road
+  into it) asked where the street is laid, then the street call probed off and deleted as T46 deleted the others. Rendering:
+  none.
 

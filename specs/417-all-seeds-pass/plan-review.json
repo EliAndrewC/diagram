@@ -204,6 +204,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T46 (T31 C2's probe step, D35): five web passes deleted once the households' ways are drawn first": {
+   "sha256": "29aef1df84a8b2b4ca7efc5d66d6bd9ef5c931483bd7fbfaa83330f60a21bd45",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T46 Approach (checklist part A)": {
+   "sha256": "a9601f7e1b487eec4700805619ee2b9ecd7a2c18d91daec0e688709490a6e3b2",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3112,6 +3124,54 @@
      "summary": "law.NEEDLE_LOOP_FT (20 ft, marked a CONVENTION) is kept unchanged. The placer asks the law's own predicate (law.is_needle) and reach (NEEDLE_LOOP_FT/2), so there is one implementation.",
      "class": "within",
      "why": "No constant moves, and the value stays marked as a convention, which is what the GM asked for arbitrary numbers. One implementation shared by the placer and the finished-map check is SC-003 and the 'rule coded twice' clause of D11."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T46 (T31 C2's probe step, D35): five web passes deleted once the households' ways are drawn first",
+    "### T46 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T46-probe-and-delete",
+     "summary": "Each of the five passes was probed alone on `make cohort-landing` only, then all five off together on cohort-landing, the fresh N=48 block and the five pool maps; all five are deleted together although the joint run moved three pool manifests (Inashiro, Kashikawa, Sawada).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D35 rolls each step alone against `make cohort N=48 FRESH=0` and the pool maps, and calls a step needless only if no verdict and no pool manifest moved. Here the single-pass probes skipped the fresh block and the pool maps, and the joint deletion moved three pool manifests. Strictly, D35's per-step criterion governs only `settle_defer`, the one STEPS entry among the five; the bundle does not show the method C2 set for the other four. The departure is still legitimate on the GM's own words: 'I don't care whether you do it one at a time or all at once ... pick whichever ... most efficient ... allow you to get rid of all of them. As per the requirements of this feature.' Doing it all at once is expressly allowed, and the joint run covered every instrument D35 names (fixed cohort, the same seven fresh failures out of 48, the pool maps). D23 lets maps change on the joint deletion, held to the claims and the cohort. The purpose is met, not only the words: in Kashikawa the settle itself draws the 272 ft field way that the repairs used to patch, and every house and the field are still reached. A minor gap that is not a narrowing: the Inashiro and Sawada changes are not described one by one and rest on FR-008's pool pass."
+    },
+    {
+     "id": "T46-tidy_lane_ends-street-call",
+     "summary": "Only the two non-street calls of `tidy_lane_ends` are deleted. The street call is kept, with no reason given and no task named that owns it.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block's goal (Approach item 1) is 'Nothing mends the web after it is laid'. The GM asked that place-then-repair be gone 'anywhere' in the codebase. FR-004 deletes 'the passes that repair a laid web'. An end trim kept on one call site is a carve-out from all three. Nothing in the bundle gives a basis for it: 'street' appears only in this phrase, no requirement places the street web outside FR-004 or hands the call to another task, and the block calls it neither a trim done before placing nor something that is physically required. Exceptions are presumed wrong. Fix it with one sentence in the block: (a) the street call is a placer-side step taken before the street is laid, with that stated and shown; or (b) it is a repair owed by a named later task or requirement; or (c) it is deleted with the other two."
+    },
+    {
+     "id": "T46-settle_defer-kept-defined",
+     "summary": "`settle_defer` leaves STEPS but stays defined because `settle_tree` asks it.",
+     "class": "within",
+     "why": "A rule asked by the placer is D11's shape and the end state FR-004 and FR-005 aim at. The function is not dead closure under D23. This rests on 'asks' meaning it is consulted while placing. If it were a mend run inside `settle_tree`, the step would have been moved rather than deleted, and the block's wording does not say that."
+    },
+    {
+     "id": "T46-tests-by-body",
+     "summary": "The tests deleted are those whose body calls a deleted name.",
+     "class": "within",
+     "why": "This applies D23 ('the tests that only exercised them') under the arbiter's ruling on T44. That ruling is not re-ruled here."
+    },
+    {
+     "id": "T46-dead-closure",
+     "summary": "The fourteen names `make dead-closure` then reported, T42's `link_width` among them, are deleted, with the constants going with their only users.",
+     "class": "within",
+     "why": "D23: delete together with the call sites and the dead closure."
+    },
+    {
+     "id": "T46-order-exits-budget",
+     "summary": "Runs after T44 and T45 and before the settle's remaining steps. One landing. FR-008 green means landed; red means set down. No rendering.",
+     "class": "within",
+     "why": "D23 is one landing, set down whole if red. FR-008 is the gate. No glyph changes, and D23 allows redrawn maps. The fresh block's seven failures are the same seven, so nothing regressed before FR-009 applies."
     }
    ]
   }
