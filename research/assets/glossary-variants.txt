@@ -2290,6 +2290,8 @@ kebiishi	kebiishi
 keenlung	Qianlong
 kegare	kegare
 keian	hitoyado
+keian edict	Keian edict
+keian ofuregaki	Keian edict
 keibodan	keibodan
 keicho	Keicho
 keicho-era	Keicho

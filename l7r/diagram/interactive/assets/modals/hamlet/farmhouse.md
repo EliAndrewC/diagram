@@ -10,7 +10,7 @@ wood-floored living rooms, with a sunken hearth. The household came and went thr
 wide, or the low wicket set into it; the door was barred at night, at least at larger houses.
 
 A household averaged about five - often a couple, their married heir and the heir's children - and in one region
-shrank from about eight in the 1600s to about four by the 1800s. The commonest house had about 700 sq ft of floor,
+shrank from about eight in the 1600s to about four by the 1800s. In much of the country the old couple, once they had handed the farm to their heir, moved out to a retirement house of their own on the house plot; in the northeast and along the Sea of Japan the generations stayed together under the farmhouse's roof. The commonest house had about 700 sq ft of floor,
 and many under 360; the better-off houses that survive cover 1,100 to 1,600 sq ft.
 
 Name: farmhouse
