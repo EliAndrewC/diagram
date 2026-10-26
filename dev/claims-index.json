@@ -37484,15 +37484,11 @@
   "code": "1141d6a6371f4782",
   "core": "9590bb47e32917bc",
   "date": "2026-10-26",
-  "note": "`tidy_lane_ends(s, list(plan.envelope), streets=True)` pulls every street's ends back to the last farm it serves (via `_trim_to_service`), but the cited page says \"The street runs on off the map as the road into it\". The claim admits this departure, yet the page records no deliberate trim, so it is an unrecorded DEVIATION. Either the page records it and the claim is relabeled `DEVIATION`, or the street is laid running on off the map (T47)",
+  "note": "`tidy_lane_ends(s, list(plan.envelope), streets=True)` pulls every street's ends back to the last farm it serves (via `_trim_to_service`), but the cited page says \"The street runs on off the map as the road into it\". The claim admits this departure, yet the page records no deliberate trim, so it is an unrecorded DEVIATION. Either the page records it and the claim is relabeled `DEVIATION`, or the street is laid running on off the map (T47); a known drift accepted by the round arbiter (ask:417-T46-departures) to land as filed",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
   "research": "37ada2a33aa587d2",
-  "rests": [
-   "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
-   "0033-row-villages-resson.drawing.html:8c303daeddea6496"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a web lane's middle off the fabric": {
@@ -37675,17 +37671,11 @@
   "code": "a781c6e4e0ecaeb3",
   "core": "9590bb47e32917bc",
   "date": "2026-10-26",
-  "note": "`_margin_frame(plan, max(plan.seat[\"lat\"] * CLUSTER_SPAN_FACTOR, _reach_along + BUNDLE_PITCH), ...)` cuts the web 100 ft past the outermost house, or 1.6 times the seat band, where the page says a back lane is cut \"about 30 ft past the last of them - the room it is cut in\". The trims back (`_trim_to_service` in `_lay_web_lane`, `trim_lane_stubs`) follow the page's pull-back, but the 100 ft frame and the seat-band figure are a departure the page does not record. Either relabel as a recorded `DEVIATION` or bring the cut in to about 30 ft (T32)",
+  "note": "`_margin_frame(plan, max(plan.seat[\"lat\"] * CLUSTER_SPAN_FACTOR, _reach_along + BUNDLE_PITCH), ...)` cuts the web 100 ft past the outermost house, or 1.6 times the seat band, where the page says a back lane is cut \"about 30 ft past the last of them - the room it is cut in\". The trims back (`_trim_to_service` in `_lay_web_lane`, `trim_lane_stubs`) follow the page's pull-back, but the 100 ft frame and the seat-band figure are a departure the page does not record. Either relabel as a recorded `DEVIATION` or bring the cut in to about 30 ft (T32); a known drift accepted by the round arbiter (ask:417-T46-departures) to land as filed",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c90fc4f6fee86c66"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#web lane margin off the hard ground": {
@@ -37732,17 +37722,11 @@
   "code": "841626e8f9915bf1",
   "core": "9590bb47e32917bc",
   "date": "2026-10-26",
-  "note": "`clear_runs(..., lines=list(plan.watercourses) + drawn_water, ...)` and the same water list passed to `lay_reachable_runs`/`_lay_web_lane` clip every web cut at the water, so it never crosses. The page says \"A way keeps to its own bank unless crossing saves it more than about 150 ft\" and sets crossing places \"every 160 ft or so\". The page does not record a never-cross rule for web lanes; it records only the track's and the field spur's (§151). The pointer also covers the drawn irrigation channels, which this brook page does not speak to. Either the page records the departure and the claim is relabeled `DEVIATION`, or the cuts cross at a crossing place (T32)",
+  "note": "`clear_runs(..., lines=list(plan.watercourses) + drawn_water, ...)` and the same water list passed to `lay_reachable_runs`/`_lay_web_lane` clip every web cut at the water, so it never crosses. The page says \"A way keeps to its own bank unless crossing saves it more than about 150 ft\" and sets crossing places \"every 160 ft or so\". The page does not record a never-cross rule for web lanes; it records only the track's and the field spur's (§151). The pointer also covers the drawn irrigation channels, which this brook page does not speak to. Either the page records the departure and the claim is relabeled `DEVIATION`, or the cuts cross at a crossing place (T32); a known drift accepted by the round arbiter (ask:417-T46-departures) to land as filed",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
   "research": "9354777ef34af3d3",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#web lanes routed round the households' reserved wood seats as fabric": {
