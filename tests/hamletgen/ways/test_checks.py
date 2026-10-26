@@ -207,3 +207,11 @@ def test_a_track_whose_inner_end_stops_short_of_the_ways_is_named_and_one_on_the
     spur = {"pts": [[100.0, 0.0], [100.0, 200.0]], "spur": True}
     dispersed = {"lanes": [{"pts": [[130.0, 100.0], [300.0, 100.0]], "connector": True}, spur]}
     assert track_ends_off_the_web(dispersed) == [], "a map with no web (the track and the field spur alone) is not asked"
+
+
+def test_a_brook_with_no_ford_offers_no_crossing() -> None:
+    """`ford_crossing` with no ford on the brook: nothing, whatever the run (the track's field spur asked it of fordless brooks
+    until feature 417 T50 took the spur away)."""
+    from l7r.diagram.hamletgen.ways.checks import ford_crossing
+
+    assert ford_crossing((0.0, 0.0), (100.0, 0.0), [(50.0, -50.0), (50.0, 50.0)], []) == []
