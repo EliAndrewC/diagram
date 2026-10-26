@@ -36642,15 +36642,11 @@
   "code": "c61e3425bdf6e1aa",
   "core": "a4906ab0ee9c54ec",
   "date": "2026-10-26",
-  "note": "the claim cites 0081 as what the code implements, but by its own account the code departs from it. The page says a lane that \"wanders over another way at such an angle\" is cut \"where it comes alongside\". `off_the_needle` walks back only from the lane's end (`at = mine.length` ... `if at <= 0.0 or at >= mine.length: continue`), so a needle closed mid-lane is never cut and is left for the law to refuse. Relabelling it DEVIATION would not clear it, because the drawing page records no such departure. Either §25 gains a record of the deferral (held until feature 417 T32) and the claim becomes `DEVIATION research/questions/0081-village-lanes.drawing.html`, or the code cuts a mid-lane needle where it comes alongside",
+  "note": "the claim cites 0081 as what the code implements, but by its own account the code departs from it. The page says a lane that \"wanders over another way at such an angle\" is cut \"where it comes alongside\". `off_the_needle` walks back only from the lane's end (`at = mine.length` ... `if at <= 0.0 or at >= mine.length: continue`), so a needle closed mid-lane is never cut and is left for the law to refuse. Relabelling it DEVIATION would not clear it, because the drawing page records no such departure. Either §25 gains a record of the deferral (held until feature 417 T32) and the claim becomes `DEVIATION research/questions/0081-village-lanes.drawing.html`, or the code cuts a mid-lane needle where it comes alongside; a known drift accepted by the round arbiter (ask:417-T45-midlane-needle) to land as filed",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lane tread by role": {
