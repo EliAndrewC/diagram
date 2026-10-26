@@ -823,9 +823,17 @@ def crop_boxes(M: Any, city: bool, ftpx: float, W: float, H: float) -> list[tupl
         # north stayed cut.)
         _all = list(g.get("clumps") or []) + list(g.get("clumps_offpage") or [])
         _reach = WINDBREAK_HOUSE_REACH_FT / ftpx
-        for _c in _all:
-            if any((float(_c[0]) - float(_h["x"])) ** 2 + (float(_c[1]) - float(_h["y"])) ** 2 <= _reach**2 for _h in M.get("houses", [])):
-                out.append((float(_c[0]), float(_c[0]), float(_c[1]), float(_c[1]), f"village_groves[{i}] shelter of a house"))
+        # ...EVERY CLUMP AGAINST EVERY HOUSE IN ONE NUMPY COMPARISON (feature 427 T04, R2: a generator per clump over every house
+        # was 122k steps at 40 households over the crop's 21 calls, the T01 survey) - the same squared-distance test
+        if _all and M.get("houses"):
+            import numpy as np  # noqa: PLC0415
+
+            _cl = np.array([(float(c[0]), float(c[1])) for c in _all])
+            _hs = np.array([(float(h["x"]), float(h["y"])) for h in M.get("houses", [])])
+            _near = ((_cl[:, None, 0] - _hs[None, :, 0]) ** 2 + (_cl[:, None, 1] - _hs[None, :, 1]) ** 2 <= _reach**2).any(axis=1)
+            for _c, _n in zip(_all, _near.tolist(), strict=True):
+                if _n:
+                    out.append((float(_c[0]), float(_c[0]), float(_c[1]), float(_c[1]), f"village_groves[{i}] shelter of a house"))
         # ONE FACE PER ARM (feature 261): an L-shaped belt round a diagonal wind has two, and each is preserved
         for (_axis, _sign, _inner), _cl in windbreak_faces(g.get("clumps") or [], _r, M.get("houses", [])):
             if _axis == 0:

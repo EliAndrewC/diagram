@@ -91,9 +91,18 @@ def free_seats(s: Settlement, center: Pt, step: float | None = None, field: Sequ
     for i in range(ni):
         for j in range(nj):
             q = (x0 + i * pitch, y0 + j * pitch)
-            if (fg is not None and fg.point_taken(q[0], q[1])) or _near_a_house(s, q):
-                continue
-            out.append(q)
+            if fg is None or not fg.point_taken(q[0], q[1]):
+                out.append(q)
+    # ...EVERY POINT AGAINST EVERY HOUSE IN ONE NUMPY PASS (feature 427 T04, R3: `_near_a_house`'s `any(math.hypot(...))` per
+    # point was 82k calls at 40 households, the T01 survey): the same half-pitch test, `np.hypot` for `math.hypot`
+    houses = s.M.get("houses", [])
+    if out and houses:
+        import numpy as np  # noqa: PLC0415
+
+        qs = np.array(out)
+        hs = np.array([(float(h["x"]), float(h["y"])) for h in houses])
+        near = (np.hypot(qs[:, None, 0] - hs[None, :, 0], qs[:, None, 1] - hs[None, :, 1]) < BUNDLE_PITCH * 0.5).any(axis=1)
+        out = [q for q, n in zip(out, near.tolist(), strict=True) if not n]
     # THE FIELD DISTANCE ASKED ONCE FOR EVERY POINT (wave 20's pair: a scan of the outline's edges per point inside the sort
     # cost the homesteads stage up to +1.5 s a roll) - one vectorized shapely call, the same distance
     to_field = field_distances(field, out)

@@ -300,45 +300,14 @@ def flood_from(region: Region | LaneGround, segs: Sequence[tuple[Pt, Pt]], half:
 
 
 def free_components(free: Any) -> Any:
-    """Label the 4-connected components of the True cells of `free` (rows = y): an int array, 0 off the free cells. Run-length
-    union-find: each row's runs of free cells are unioned with the runs of the row above that they overlap - a few thousand runs
-    on a seat band, where a cell-by-cell flood was most of the seating's time (PIL's fill is Python)."""
-    import numpy as np
+    """Label the 4-connected components of the True cells of `free` (rows = y): an int array, 0 off the free cells. One
+    `scipy.ndimage.label` call (feature 427 T04, R5): the run-length union-find in Python this replaces was called once per seated
+    house, about 19 ms a call at 40 households (the feature's research R5, measured 2026-10-26) - the same components, their
+    numbers aside, and `flood_from` reads components (`np.isin(labels, hit)`), never their numbers. (A cell-by-cell flood was
+    the first form, PIL's fill being Python.)"""
+    from scipy import ndimage  # noqa: PLC0415 - bound on first use
 
-    ny, nx = free.shape
-    starts: list[Any] = []
-    ends: list[Any] = []
-    for j in range(ny):
-        row = np.concatenate(([False], free[j], [False])).astype(np.int8)
-        d = np.diff(row)
-        starts.append(np.flatnonzero(d == 1))
-        ends.append(np.flatnonzero(d == -1))
-    parent: list[int] = []
-    run_of: list[list[int]] = []
-
-    def find(i: int) -> int:
-        while parent[i] != i:
-            parent[i] = parent[parent[i]]
-            i = parent[i]
-        return i
-
-    for j in range(ny):
-        ids = []
-        for s0, e0 in zip(starts[j].tolist(), ends[j].tolist(), strict=True):
-            k = len(parent)
-            parent.append(k)
-            ids.append(k)
-            if j > 0:
-                for m, (s1, e1) in enumerate(zip(starts[j - 1].tolist(), ends[j - 1].tolist(), strict=True)):
-                    if s1 < e0 and s0 < e1:  # the runs share a column: 4-connected
-                        ra, rb = find(k), find(run_of[j - 1][m])
-                        if ra != rb:
-                            parent[ra] = rb
-        run_of.append(ids)
-    labels = np.zeros((ny, nx), dtype=np.int64)
-    for j in range(ny):
-        for (s0, e0), k in zip(zip(starts[j].tolist(), ends[j].tolist(), strict=True), run_of[j], strict=True):
-            labels[j, s0:e0] = find(k) + 1
+    labels, _n = ndimage.label(free, structure=[[0, 1, 0], [1, 1, 1], [0, 1, 0]])
     return labels
 
 

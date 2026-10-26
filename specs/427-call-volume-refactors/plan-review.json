@@ -32,7 +32,7 @@
    "declared": "round-arbiter"
   },
   "## Decisions": {
-   "sha256": "f4f175bd7b63c6a04e8589222bc3a1a6ae2e65fd51457c43312f6ca6341bb6a4",
+   "sha256": "ea866f37bab8abdca60c76f53002f88cfe5699f42c8ec15c0b6b2ba3447b4043",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
@@ -81,6 +81,18 @@
   },
   "### T03 Approach (checklist part A)": {
    "sha256": "6657e6e50d69304a07458c4c4b566d5bb1ba400120cf741c7043146b0cbe9db7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "2f5a9ccc974cfeb09086304beae2f9efc6fa56e4c4004100f9e2a1c0e4d73112",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "27564485f97ea871a66b6a50befc4cee96659db5aafe64df672a9882fdf28a45",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
@@ -482,6 +494,77 @@
      "summary": "T03 makes the counts the watch: more Python work lands only on the arbiter's accept, a slower machine says nothing; after T02; US5's test of a deliberate extra loop refused then cleared",
      "class": "within",
      "why": "Text unchanged; it carries D3 (now including the version-mismatch refusal), FR-006 and SC-005, and its exit is SC-005's own test."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "make perf-fanout survey tool (unchanged since its CLEAR verdict)",
+     "class": "within",
+     "why": "Text identical to earlier.md's CLEAR block; carries FR-001/SC-001 and the GM's request.md 3 and 5 (survey first)."
+    },
+    {
+     "id": "D2",
+     "summary": "call counts recorded in make perf by a separate sys.monitoring counting pass (unchanged)",
+     "class": "within",
+     "why": "Identical to the judged text; implements request.md 4 'record call counts alongside the timings' (FR-006)."
+    },
+    {
+     "id": "D3",
+     "summary": "perf_review.check gates on call counts, arbiter accepts increases, timings flag nothing (unchanged)",
+     "class": "within",
+     "why": "Identical to the judged text; is request.md 4's own design: timings kept but gating nothing, call counts replacing the band, accepted by the arbiter, raised to the GM when too large."
+    },
+    {
+     "id": "D4",
+     "summary": "T04 is eight contained wins (C5, R6, R2, R3, C3, C1, C2, R5), each named by its T01-survey chain and proven by that chain falling at least tenfold",
+     "class": "within",
+     "why": "Is US2 of the order the GM approved in request.md 5 (cheap wins and single-site recomputations after the survey); FR-002 scopes it against the survey, FR-003 names chains with before/after counts. Nothing the GM asked for is dropped from it: the lanes stay last and the wells are T05."
+    },
+    {
+     "id": "D4-proof",
+     "summary": "same-values changes shown by pool-reroll manifests identical to HEAD; a change that may move a value by a rounding (R3's np.hypot) judged by the landing cohort",
+     "class": "within",
+     "why": "Is the GM-approved rule in request.md 5 as written: identical manifests 'where that comes free', otherwise the per-seed comparison against HEAD; FR-007 is still held by make cohort-landing. Not a carve-out from FR-007, which still forbids any HEAD-passing seed failing."
+    },
+    {
+     "id": "D4-C1C2",
+     "summary": "content keys built by tuple(map(tuple, pts)); the content key kept, no identity key",
+     "class": "within",
+     "why": "An implementation choice for the chain US2 names; it keeps the existing rule rather than relaxing it."
+    },
+    {
+     "id": "D4-R5",
+     "summary": "free_components via scipy.ndimage.label; scipy declared in requirements.in, numpy pin unchanged",
+     "class": "within",
+     "why": "FR-008 and request.md 4: the engine stays in Python, libraries are not a hard requirement and may change where an analysis shows it better; the analysis cited is research/hotspots-recompute.md (40 labelings at about 19 ms each). Adding a C-backed Python library is not the compiled-language rewrite FR-008 forbids."
+    },
+    {
+     "id": "T04-order-budget",
+     "summary": "T04 after T03 and the start bookend, before T05; two landings (C1-C3, C5, R6 then R2, R3, R5)",
+     "class": "within",
+     "why": "Matches request.md 5's order (survey and watch, then US2, then the wells); landing split is scheduling only."
+    },
+    {
+     "id": "T04-exits",
+     "summary": "green on tenfold per chain and no seed regressed; red records the failure and sends a claim of impossibility to make arbiter-ask",
+     "class": "within",
+     "why": "Holds FR-003 and FR-007; the arbiter stands where the GM was asked (feature 379), so no requirement is relaxed by the session itself."
+    },
+    {
+     "id": "T05-deferral",
+     "summary": "T05 (the wells, US3) after T04; its decisions written and reviewed when T05 starts; done = the lane_wells chain under US3's bound",
+     "class": "within",
+     "why": "request.md 5 puts the wells after US2; deferring the design to a later reviewed block decides nothing that narrows US3, whose bound stays the done test."
     }
    ]
   }

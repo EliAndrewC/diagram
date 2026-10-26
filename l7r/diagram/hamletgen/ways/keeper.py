@@ -23,8 +23,9 @@ KEEP = 16384
 
 
 def pts_key(pts: Sequence[Any]) -> tuple[tuple[float, float], ...]:
-    """A run's points as a hashable key."""
-    return tuple((float(q[0]), float(q[1])) for q in pts)
+    """A run's points as a hashable key - built in C (feature 427 T04, C2: 229k key steps at 40 households, the T01 survey);
+    an int coordinate hashes and compares as its float, so the key is equal wherever the old float pairs were."""
+    return tuple(map(tuple, pts))
 
 
 def kept[T](fn: Callable[..., T]) -> Callable[..., T]:

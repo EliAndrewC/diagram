@@ -84,7 +84,9 @@ _RINGS_MAX = 4096
 
 def ring_index(pts: list[Pt]) -> RingIndex:
     """The `RingIndex` of these points, from `_RINGS` when a ring with the same points was indexed this roll."""
-    key = tuple((float(p[0]), float(p[1])) for p in pts)
+    # ...BUILT IN C, NOT A GENERATOR OF FLOAT PAIRS (feature 427 T04, C1: 361k key steps at 40 households, the T01 survey): an
+    # int coordinate hashes and compares as its float, so the key is equal wherever the old one was made
+    key = tuple(map(tuple, pts))
     hit = _RINGS.get(key)
     if hit is None:
         if len(_RINGS) >= _RINGS_MAX:

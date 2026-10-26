@@ -283,9 +283,11 @@ class _Thread:
 
 
 def _falls(F: _Frame, pts: Poly) -> list[float]:
-    """The fall of every vertex of `pts`. Feature 278 cached it per polyline for the length of a carve (`at_f_cache`); the carve
-    went with feature 302, and nothing asks it often enough now to want the cache."""
-    return [F.to_uf(*p)[1] for p in pts]
+    """The fall of every vertex of `pts`: `F.to_uf`'s fall, `x * d0 + y * d1`, computed in one comprehension rather than a call
+    per vertex (feature 427 T04, R6: 514k `to_uf` calls under `grid_lines` at 40 households, the T01 survey). Feature 278 cached
+    it per polyline for a carve; the carve went with feature 302."""
+    d0, d1 = F.d
+    return [p[0] * d0 + p[1] * d1 for p in pts]
 
 
 def _at_f(F: _Frame, pts: Poly, f: float) -> Pt:
