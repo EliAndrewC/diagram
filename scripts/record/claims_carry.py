@@ -178,7 +178,7 @@ def carry(root: Path, feature: str, task: str, keys: list[str], now: str | None 
     if d is not None and here is not None and active is not None and d.resolve() == active.resolve():
         d = here  # ...the feature being landed names itself (`make land` does); a delta with no engine code files into 405
     if d is None or here is None or d.resolve() != here.resolve():
-        where = "the claims feature's - this delta holds no engine code" if here is not None and not touches_engine(root) else "the active task's"
+        where = "the claims feature's - this delta holds no engine code" if here is not None and active is not None and here.resolve() != active.resolve() else "the active task's"
         raise ValueError(f"a carried finding is filed only into {where} ({here.name if here else 'none: `make task-start F=<n> T=<Txx>` first'}), not {feature}")
     if ruling and not _ruled(d, ruling):
         raise ValueError(f"RULING={ruling} is no trigger in {d.name}/arbiter.jsonl - name the round arbiter's recorded ruling that carried these findings")
