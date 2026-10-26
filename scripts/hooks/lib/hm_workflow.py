@@ -37,6 +37,7 @@ WAVE_JOBS = (
     "source-applicability", "quote-check", "settlement-review", "entry-drift", "modal-depiction", "record-format",
     "impl-drift", "modal-research", "building-review", "source-reader", "glyph-check", "modal-form", "round-arbiter",
     "claims-triage", "modal-triage",
+    "translation-check",  # the GM, 2026-10-26: "I also do pre-authorize the translation check as a wave job" (feature 432, 397#11)
 )
 WAVE = "check-wave"
 GP_ESCAPE = re.compile(r"GP_OK\s*[=:]\s*[\"']?\S+\s+\S+")
