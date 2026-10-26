@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-26
 
-**Status**: Draft (spec FAITHFUL, round 3, 2026-10-26) - the redraw waits on the GM (433#0)
+**Status**: Planned (spec FAITHFUL, round 3, 2026-10-26); 433#0 answered 2026-10-26: Hayakawa is the sheet corrected
 
 **Affects**: magistracy, research record
 
@@ -43,6 +43,8 @@ sheets follows the research.
 - **FR-004**: the sheets are the GM's naming; 433#0 asks him whether he meant them, since the sheets' notes record Ochiba
   "ordinary - solid but not lavish; no guest house", Ubame "rich posting, broke incumbent", and Hayakawa "RICH" ("one of the
   richest postings in the province"). An answer that reverses his naming amends FR-001 and FR-002; the redraw waits on it.
+  ANSWERED (the GM, 2026-10-26): "Yes, Hayakawa is the one that should be corrected." FR-001 and FR-002 stand as written;
+  Hayakawa's RICH knob stays, and the house is sized within the range for it (`plan.md` D1).
 
 ## Success Criteria
 
