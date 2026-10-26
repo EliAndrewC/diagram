@@ -14,28 +14,65 @@
 
 ## Why
 
-The three hand-drawn magistracy sheets draw the magistrate's house with 180-200 ft wings, about 145 tsubo, where the record's
-houses of a samurai of that rank are 49-67 tsubo (research 0091, 0118); `docs/buildings.md` keeps the wings as a GUESS. The GM
-ruled that two sheets keep the large house as recorded deviations, their magistrates being significantly wealthier than
-normal, that the third is corrected with whatever else it takes to match the research, and that the procedure for new
-magistracy sheets follows the research.
+The three hand-drawn magistracy sheets draw the magistrate's house far larger than the record's houses of a samurai of that
+rank, 49-67 tsubo (research 0091, 0118): about 141 tsubo at Ochiba, 152 at Ubame and 145 at Hayakawa (`research.md` R1);
+`docs/buildings.md` keeps the large wings as a GUESS. The GM ruled that two sheets, Ochiba and Ubame, keep the large house as
+recorded deviations, their magistrates being significantly wealthier than normal; that the third, Hayakawa, is corrected,
+with whatever else it takes to make the whole sheet correspond to the research; and that the procedure for new magistracy
+sheets follows the research.
 
 ## Requirements
 
-- **FR-001**: the corrected sheet draws a house within the research's 49-67 tsubo, and whatever else on the sheet the change
-  makes inconsistent with the research is brought to it (building coverage against 0116's 30-42% band among it), every review
-  its changes owe run on their occasion.
-- **FR-002**: the two kept sheets record the large house as a DEVIATION with the GM's reason (a significantly wealthier
-  magistrate), in their notes, their `Research:` claims and `docs/buildings.md`, replacing the GUESS label.
-- **FR-003**: the procedure for a NEW magistracy sheet (`docs/buildings.md`, the compound program) sizes the house by the
-  research, a larger house only as a recorded deviation with its reason; the Ochiba sheet, the template the vocabulary was
-  taken from, is no longer the model for the house's size.
-- **FR-004**: which sheet is corrected is the GM's (433#0): he named Ochiba and Ubame as the wealthy two, and the sheets' notes
-  record Ochiba ordinary and Hayakawa rich.
+- **FR-001**: the Hayakawa sheet draws a house within the research's 49-67 tsubo, and whatever on the Hayakawa sheet does not
+  correspond to the research is brought to it - building coverage against 0116's band (`research.md` R2) among it -
+  every review its changes owe run on their occasion.
+- **FR-002**: the Ochiba and Ubame sheets record the large house as a DEVIATION with the GM's reason (a significantly
+  wealthier magistrate), replacing the GUESS label, in every place found by `grep -rniE "residence wing|wing length|tsubo"
+  docs/buildings.md pool/magistracies` (2026-10-26): among them `docs/buildings.md` lines 17 and
+  23 (whose Ochiba wing length no longer matches the sheet, `research.md` R1), Hayakawa's notes (lines 59, 75)
+  and SVG (line 281), and Ubame's notes (line 109, whose "keeps to the 49-tsubo residence" R1's measurement contradicts).
+- **FR-003**: the procedure for a NEW magistracy sheet sizes the house by the research, a larger house only as a recorded
+  deviation with its reason, and keeps the sheet within 0116's coverage band (how, the plan's); found by `grep -rniE
+  "ochiba|template|residence" docs/usage.md docs/buildings.md docs/building-programs.md l7r/diagram/compound_example.py
+  l7r/diagram/compound_model.py` (2026-10-26): `docs/usage.md` lines 5, 41 and 119 (which make Ochiba the sheet new Mode A
+  sheets are copied from), `docs/buildings.md`'s compound program, and `docs/building-programs.md`;
+  `l7r/diagram/compound_example.py` already draws a 49-tsubo house. The Ochiba sheet is no longer the model for the house's
+  size.
+- **FR-004**: the sheets are the GM's naming; 433#0 asks him whether he meant them, since the sheets' notes record Ochiba
+  "ordinary - solid but not lavish; no guest house", Ubame "rich posting, broke incumbent", and Hayakawa "RICH" ("one of the
+  richest postings in the province"). An answer that reverses his naming amends FR-001 and FR-002; the redraw waits on it.
 
 ## Success Criteria
 
-- **SC-001** (FR-001): the corrected sheet's house measures within 49-67 tsubo and its coverage within 30-42%, each review its
-  occasion owes passed.
-- **SC-002** (FR-002, FR-003): no `Research:` claim or doc calls the magistracy house a GUESS; the two deviations name the
-  GM's reason; the new-sheet procedure names the research's range.
+- **SC-001** (FR-001): the Hayakawa house measures within 49-67 tsubo, its coverage within 0116's band (R2), and every element
+  of the sheet the research speaks to corresponds to it, each review its occasion owes passed.
+- **SC-002** (FR-002, FR-003): no `Research:` claim or doc calls the magistracy house a GUESS; the two deviations name the GM's
+  reason; the new-sheet procedure names the research's range and the coverage band, and no doc makes Ochiba the model for a
+  new sheet's house.
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-26): CHANGES REQUIRED - (1) FR-004 leaves the corrected sheet unnamed, so FR-001 and
+  FR-002 have nothing to act on, though the GM named the sheets: "specifically for Ochiba and Ubame" kept, "the third"
+  (Hayakawa) corrected. The spec carries his naming. 433#0 stays kept, and an answer that reverses it amends FR-001/002.
+  The redraw may wait on 433#0. FR-004 and 433#0 also state Ubame's knob in full, "rich posting, broke incumbent", since
+  his reason is the MAGISTRATE's wealth. (2) FR-001's "whatever else on the sheet the change makes inconsistent" narrows
+  "whatever other changes need to be made ... to make the whole thing correspond to our research", which has no causal
+  condition. It must read: whatever on the corrected sheet does not correspond to the research is brought to it. SC-001
+  covers that clause, not only the house and the coverage. (3) FR-002 lists no search space for the claims it replaces.
+  The list names the command that built it and reaches: docs/buildings.md:17 and :23 (the prose, whose "Ochiba ~200 ft"
+  wing no longer matches a sheet that draws a 90 x 50 ft block - observed 2026-10-26, method: reading docs/buildings.md:23
+  against the SVG's rects); hayakawa notes :59 and :75 and svg :281; and ubame
+  notes :109, whose "keeps to the 49-tsubo residence" a measurement contradicts. (4) FR-003 lists no search space, and
+  "the compound program" is ambiguous (docs/building-programs.md, or l7r/diagram/compound_example.py, which already uses
+  49 tsubo). docs/usage.md:5, :41 and :119 also make Ochiba the template new Mode A sheets are copied from, and FR-003
+  must reach them. A procedure that yields a sheet under 0116's coverage band does not correspond to the research (the
+  question put to the GM raised this), so FR-003 keeps the band; how is the plan's. (5) Figures: spec-lint finds
+  '42%' unpointed at lines 25 and 38. spec-lint accepts only `R<k>`, `research.md` or `research/<name>.md` (the 0116
+  page is an .html under research/questions/), so the fix is an `m:<key>` or a `research.md` entry that the paragraph
+  cites. The Why's "180-200 ft wings, about 145 tsubo" for all three sheets is unmeasured. A one-shot on this round's
+  own run (2026-10-26) supports the premise: Ochiba ~141 tsubo, Ubame ~152, Hayakawa ~145. Method: at 3 px = 1 ft and
+  35.58 sq ft a tsubo, sum each house's outer block rects (Ochiba 270x150 px; Ubame 270x76 and 306x76 plus the 10x16
+  corridor; Hayakawa 288x76 and 242x76 plus the 10x34 corridor), the kitchen's outer rect (72x54 on all three) and
+  the bath rect. Excluded: zone sub-rects, engawa strips, privies, and Hayakawa's 90x30 kitchen rect at (400,160.5),
+  which is not the house's. Record these as measurements.
