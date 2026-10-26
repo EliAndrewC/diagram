@@ -79,6 +79,12 @@ BAD=$(printf '%s' "$INPUT" | FA_CWD="$PWD" python3 "$FA_HERE/lib/hm_approval.py"
     printf 'runs: an approval line the command would write is not seen. Write and commit the approval line in its own\n'
     printf 'command first, then run the git add / commit / sync-with-main.sh step on its own.\n' ;;
   esac
+  # GUARD_EDIT_OK: feature 428 - the GM's 2026-10-18 standing approval of the requests gm-assistant files for him
+  case "$BAD" in *not-found*)
+    printf '\nAn issue gm-assistant filed for the GM (request.md opens "# Request: EliAndrewC/diagram#N") is approved by\n'
+    printf 'his standing words (2026-10-18) - quote them on the line:\n'
+    printf '  **Approved**: the GM, 2026-10-18, "you should treat features that I have asked to be filed as automatic approval"\n' ;;
+  esac
   printf '\nA feature is filed only when the GM says to (the GM, 2026-10-10). Ask the GM in this session, in your\n'
   printf 'final message rather than mid-stream, and prefer extending and reopening the feature the work came from.\n'
   printf 'Once the GM approves, put their words on a line of its own in the spec.md, verbatim:\n'

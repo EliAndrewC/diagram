@@ -28,6 +28,11 @@ slug>/spec.md` in HEAD that has LEFT (gone from the working tree, or its deletio
 still there is a copy, and new. A feature below FIRST is never checked (the GM: "only be
 with new features um, going forward"). There is no escape: the GM's approval is the way through.
 
+THE STANDING APPROVAL (GM 2026-10-18: *"you should treat features that I have asked to be filed as automatic approval, and
+therefore you should not ask in the future"*): a feature whose `request.md` is an issue gm-assistant filed here for the GM
+(`# Request: EliAndrewC/diagram#N` and a `**[gm-assistant]**` body) may quote those words instead. Without it, a session
+woken by its inbox had no line both `CLAUDE.md` and this guard would accept (feature 428's spec review, 2026-10-26).
+
 spec-lint's check 6 (the push backstop) imports FIRST, LINE and `form_problem` from here, so the commit and the push
 cannot disagree about the form.
 
@@ -48,6 +53,8 @@ LINE = re.compile(r'^\*\*Approved\*\*: the GM, (\d{4}-\d{2}-\d{2}), "(.+)"[ \t]*
 FORM = '**Approved**: the GM, YYYY-MM-DD, "<the GM\'s words, verbatim>"'
 SPEC = re.compile(r"(?:^|/)specs/(\d{3,})-([a-z0-9][a-z0-9-]*)/spec\.md$")
 ANSWERED = re.compile(r"\s*(?:Your questions have been answered|User has answered your questions)\b")
+STANDING = "you should treat features that I have asked to be filed as automatic approval"
+FILED_FOR_GM = re.compile(r"^# Request: EliAndrewC/diagram#\d+", re.M)
 _CURLY = str.maketrans({"‘": "'", "’": "'", "“": '"', "”": '"'})
 
 
@@ -164,6 +171,12 @@ def _text(top: str, rel: str, worktree: bool) -> str:
     return _git(top, "show", f":{rel}").stdout
 
 
+def standing(spec_text: str, request_text: str) -> bool:
+    """Does a spec of an issue gm-assistant filed for the GM quote his standing approval (2026-10-18)?"""
+    filed = bool(FILED_FOR_GM.search(request_text)) and "**[gm-assistant]**" in request_text
+    return filed and any(STANDING in norm(q) for q in quotes(spec_text))
+
+
 def judge(cmd: str, cwd: str, transcript: str) -> list[tuple[str, str]]:
     """(problem, path) for every new feature's spec.md this command would stage without a standing approval."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -187,7 +200,10 @@ def judge(cmd: str, cwd: str, transcript: str) -> list[tuple[str, str]]:
             continue
         if messages is None:
             messages = gm_messages(transcript)
-        bad = problem(_text(top, rel, worktree), messages)
+        text = _text(top, rel, worktree)
+        bad = problem(text, messages)
+        if bad == "not-found" and standing(text, _text(top, os.path.join(os.path.dirname(rel), "request.md"), worktree)):
+            bad = ""
         if bad:
             out.append((bad, rel))
     return out
