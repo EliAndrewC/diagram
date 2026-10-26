@@ -21,8 +21,8 @@ THE WRITE CAP (feature 274 D2, D3; research R1: a write session's cost follows i
 roughly with the square of its length). Every brief is counted by `brief_load.py` before its session starts - the
 ones listed at launch before anything detaches (a refusal exits 2), the ones a `then:` step prints when it runs (a
 refusal writes `STOPPED <brief>: <reason>` and ends the queue, never a silent skip). `WRITE_CAP_OK='<reason>'` lets a
-brief through, logged. A write session (a brief declaring no exempt kind) is told `L7R_KEY_CAP`, which `make reserve`
-enforces; every session is told its id (`L7R_PAGE_SESSION`) and where to leave a continuation (`L7R_CONTINUE`), and a
+brief through, logged. A write session (a brief declaring no exempt kind, or `assertions`) is told `L7R_KEY_CAP`, which
+`make reserve` enforces; every session is told its id (`L7R_PAGE_SESSION`) and where to leave a continuation (`L7R_CONTINUE`), and a
 brief left there is queued next - before the group's `then:` checks step, so the checks see both sessions' handoff.
 """
 
@@ -104,7 +104,9 @@ def session_env(env: dict[str, str], item: dict) -> dict[str, str]:
     """The queue's environment for one session: its id, its continuation path, and the key cap if it writes."""
     out = {k: v for k, v in env.items() if k != "L7R_KEY_CAP"}
     out |= {"L7R_PAGE_SESSION": item["sid"], "L7R_CONTINUE": os.path.join(item["log"], "continue.md")}
-    if item.get("write"):
+    # an `assertions` brief writes too - only its QUESTION count is exempt (feature 428, 2026-10-26: the money write briefs
+    # declared it, and a session reserved an eleventh registry key unrefused)
+    if item.get("write") or (item.get("brief") and _brief_load.declared(_read(item["brief"])) == "assertions"):
         out["L7R_KEY_CAP"] = str(KEY_CAP)
     if fd := brief_feature(item["brief"]):
         out["L7R_FEATURE_DIRECTORY"] = fd  # its checks and rulings are its brief's feature's (hm_arbiter.feature_dir)
