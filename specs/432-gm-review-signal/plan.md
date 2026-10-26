@@ -113,8 +113,8 @@ by the DIRECT route; no map moves. Every guard keeps its test companion (XVIII).
    pop-up.
 2. **The constraints.** No check skipped on a pop-up whose own text changed (FR-005's no-defect rule).
 3. **Where each comes from.** O: the audit's 374#81 (about 85 checks on about six pop-ups).
-4. **Do they describe the world here?** To be measured: replay 374's bamboo and shelter batch through `make record-owed` and
-   count what each edit owed, and why.
+4. **Do they describe the world here?** Not yet known: T04 opens by replaying the bamboo and shelter pop-up batch the
+   audit names through `make record-owed`, counting what each edit owed, and why.
 5. **The order.** After T03; measured before any change.
 6. **The exits.** Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
 7. **The search smell.** None.
@@ -136,9 +136,9 @@ by the DIRECT route; no map moves. Every guard keeps its test companion (XVIII).
 1. **The goal, in the world.** A small page edit owes impl-drift only on the claims the edited passage bears on.
 2. **The constraints.** A claim whose cited passage changed stays owed; no narrowing lets through a drift today's checks catch.
 3. **Where each comes from.** O: the audit's 385#0 (217 claims triaged, 58 impl-drift checks for two bullets on 0081).
-4. **Do they describe the world here?** In part: since feature 318 a claim is owed impl-drift only when a block it rests on
-   changed, the rest a triage (`scripts/record/claims_triage.py`). To be measured: on recent triages, how many claims the
-   triage named TOUCHES, and what impl-drift then found on them.
+4. **Do they describe the world here?** In part: a claim is already owed impl-drift only when a block it rests on
+   changed, the rest a triage (`scripts/record/claims_triage.py`). Not yet known: on recent triages, how many claims the
+   triage named TOUCHES, and what impl-drift then found on them; T05 opens by measuring it.
 5. **The order.** After T04.
 6. **The exits.** Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
 7. **The search smell.** None.
@@ -161,7 +161,7 @@ by the DIRECT route; no map moves. Every guard keeps its test companion (XVIII).
    their GM-review box close.
 2. **The constraints.** His words on every row cleared; nothing deleted.
 3. **Where each comes from.** O: the GM's answer, `request.md`.
-4. **Do they describe the world here?** Yes: 465 open rows, `audit/judged.jsonl`.
+4. **Do they describe the world here?** Yes: 465 open rows (measured 2026-10-26 (`make gm-review`), `audit/judged.jsonl`).
 5. **The order.** After T01-T03 (the three need the question record).
 6. **The exits.** Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
 7. **The search smell.** None.
