@@ -39,6 +39,9 @@ perf-signoff:   ## [performance] records a sign-off the GM gave UNPROMPTED, in t
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
 perf-review:    ## [performance] each environment's newest bookend pair: its band, and a FLAG to mention at landing when it looks slower - never a refusal (the push runs this)
 	@$(PERF_REVIEW) check
+perf-fanout:    ## [performance] the call-volume survey: per stage, the Python calls at each size and their growth, and every chain of HOT calls or more up to the loop it hangs from (feature 427 T01)   [SEED=39] [HOUSEHOLDS="20 40"] [STAGES=all] [HOT=50000] [JOBS=3] [LABEL=adhoc]
+	$(RUN).tools.perf_fanout --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),20 40)" --stages "$(or $(STAGES),all)" --hot "$(or $(HOT),50000)" --jobs "$(or $(JOBS),3)" --label "$(or $(LABEL),adhoc)"
+
 perf-profile:   ## [performance] tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web [HOUSEHOLDS=10]
 ##  SEED=<n>      which seed to profile - e.g. `25`
 ##  STAGE=<name>  which single stage to cProfile - e.g. `web`
