@@ -138,7 +138,7 @@ guess is labeled. Occasion: building-review (a sheet revised).
 1. **The goal, in the world.** The record's figure for Hayakawa's coverage is the sheet's measured one (R2's page).
 2. **The constraints.** The 0116 drawing page fragment is edited through its make route, and the checks `make record-owed`
    names run.
-3. **Where each comes from.** O: research/questions/0116-...drawing.html ("Ochiba's and Hayakawa's compounds cover 38% and
+3. **Where each comes from.** O: research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html ("Ochiba's and Hayakawa's compounds cover 38% and
    35%").
 4. **Do they describe the world here?** Yes.
 5. **The order.** Last, with T01's final measure.
