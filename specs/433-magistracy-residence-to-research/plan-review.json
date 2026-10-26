@@ -38,7 +38,7 @@
    "declared": "spec-fidelity"
   },
   "### T01 Decisions": {
-   "sha256": "9ef103a008023e8046482170009687bcef0c5555d1daa988a6e942b2e29f3d9d",
+   "sha256": "de4b182aaa98628876eb481cb493a2ea605a34d07599a809452a38e084f6d5df",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
@@ -93,6 +93,12 @@
   },
   "### T04 Decisions": {
    "sha256": "16295204b302fc11ea4fb6d9f43b93478996eb8cf035aa0c3881e77906bbfa4d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (re-answered 2026-10-26T23:33Z)": {
+   "sha256": "399282086a4b338e8925b7e94927cfff47a56121062bcdf727346bc9d1b7f1dc",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
@@ -374,6 +380,48 @@
      "summary": "The checklist's 'envelope NOT shrunk' and the coverage check's 'never shrink the envelope' amended for a magistracy sheet alone (docs/buildings.md, docs/building-programs.md, pack_audit messages, the test pinning the text); every other sheet type keeps the rule. Unchanged since its CLEAR verdict.",
      "class": "within",
      "why": "The GM: 'we should correct our general procedures when creating new magistracy diagrams in order to correspond to our research' (FR-003). The amendment is that correction, scoped to the magistracies his words reach; the test only pins the requested text."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T01 Approach (re-answered 2026-10-26T23:33Z)",
+    "### T01 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Approach (re-answered)",
+     "summary": "Re-answer for the labeling pass after impl-drift and the preflight: every rendering decision labeled in research/, the operative doc, the point of change and the spec; a departure from the research is never written into the procedure as its default; labels before landing, no ink changes; done = impl-drift IN-STEP on the changed claims and the record's checks on 0091 and 0116 recorded; exits through make arbiter-ask",
+     "class": "within",
+     "why": "It decides how the labels the GM's 'correspond to our research' requires are carried, and its constraint 2 states the very rule the preflight's D3b finding asked for. 'No ink changes' scopes this pass to labels; it does not relax SC-001, which still binds the sheet (house 49-67 tsubo, coverage in 0116's band, reviews passed) through the spec. Nothing in it narrows the request."
+    },
+    {
+     "id": "D1",
+     "summary": "House about 65 tsubo (~2,330 sq ft) inside 49 tsubo (0091's drawing page) to ~2,400 sq ft (0118's drawing page); RICH-keeps-a-senior-house a GUESS recorded on 0091's page; blocks, kitchen, bath and rooms GUESS",
+     "class": "within",
+     "why": "Text unchanged since its CLEAR verdict; ~2,400 sq ft is ~67 tsubo, so the range is FR-001's and 65 tsubo is inside it."
+    },
+    {
+     "id": "D2",
+     "summary": "Inner court relaid behind the new north wall (service alley, privies, reception and roji, kitchen ell, bath, inner entrance, storehouses, woodshed, karo's house, vegetable garden, shrine)",
+     "class": "within",
+     "why": "Text unchanged since its CLEAR verdict; it is the GM's 'whatever other changes need to be made', each form cited or labeled GUESS."
+    },
+    {
+     "id": "D3a",
+     "summary": "Hayakawa's north wall moves 30 ft south (walled ~45,200 sq ft, coverage 30.4%), a DEVIATION from 0116's drawing page recorded there with its reason and who chose it; alternatives (a)-(d) priced",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Text unchanged since its last ruling. The GM was told in the question that a 67-tsubo house drops coverage under 0116's band and still asked for the correction and 'whatever other changes need to be made'; with the house fixed by FR-001 and SC-001 requiring the band, 0116's band and 0116's wall-keeping cannot both hold on this sheet. The block prices the alternatives, follows the requirement the spec names, and labels the departure on the page."
+    },
+    {
+     "id": "D3b",
+     "summary": "Standing procedure for MAGISTRACY sheets only (docs/buildings.md checklist, docs/building-programs.md magistracy program, pack_audit shared.py/registry.py messages and their pinning test): 'never shrink the envelope' kept, amended so a wall moves in only as a DEVIATION and never a default - only when a house at the record's size leaves coverage under the band and no other wall and no building can honestly close it - each move recorded on 0116's drawing page with its reason and who chose it; other sheet types unchanged",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the remedy the preflight's NOT LEGITIMATE ruling named, adopted as written. The procedure no longer makes a departure from 0116 the unlabeled default: the default stays 0116's (walls kept), and the departure is permitted only under the same forced conflict that makes D3a legitimate (house at the research's size, coverage under the band, no wall and no research-sized building able to close it), with the same per-sheet DEVIATION record. That is what 'correct our general procedures when creating new magistracy diagrams in order to correspond to our research' asks: the procedure sizes the house by the research and, where the research's own two rules collide, records which gave and why rather than hiding it. Each of its parts was adjudicated: the trigger condition (narrow and tied to the conflict), the recording (on 0116's page, as D3a), and the reach (magistracy sheets only, the plan round 1 ruling, unchanged). 'Honestly' must be read as at research sizes, which D3a's (b) states; the procedure text should carry that meaning when written."
     }
    ]
   }

@@ -14,7 +14,7 @@ large the master's rooms were is not recorded.
 Guesses:
 - How much of the house the master's rooms take on the plan: no source measures them.
 
-Depiction: The plan draws the master's rooms as one labeled bay standing for several rooms, a work room and a bedroom among them, behind the reception and before the family's rooms, in the palace's order.
+Depiction: The plan draws the master's rooms as one labeled bay standing for several rooms, a work room and a bedroom among them.
 
 Name: lord's quarters
 Covers: the lord's suite in the residence, its floor and its labels
