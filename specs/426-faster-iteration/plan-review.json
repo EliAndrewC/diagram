@@ -126,6 +126,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
+  },
+  "### T10 (feature 426, found 2026-10-26: commit 335cfa840 swept in the cache audit's perturbation): no write or commit while `make cache-audit` runs": {
+   "sha256": "095297a9c2461257fe7693b749accb43559be6d16cf9c30e6ceb57fbc852a7c5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Approach (checklist part A)": {
+   "sha256": "c376ab2402bf8823417a888dcd1ef9f8e583243015e86a404064121ab25df537",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -554,6 +566,52 @@
      "summary": "Re-run make land as the measurement; the round arbiter ruled continue, and a third distinct red returns to it.",
      "class": "within",
      "why": "Process for this landing only; no requirement or gate is relaxed and the full floor and hook suites still judge the result."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T10 (feature 426, found 2026-10-26: commit 335cfa840 swept in the cache audit's perturbation): no write or commit while `make cache-audit` runs",
+    "### T10 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T10-scope",
+     "summary": "Add T10 to feature 426: a guard against committing the cache audit's working-tree perturbation, found in this feature's own T03 verification (335cfa840, restored by a7e46883b).",
+     "class": "within",
+     "why": "Adds rather than narrows. Covered by the GM's standing instructions quoted verbatim in request.md: 'Fix bugs you find, pre-existing or not, in the work at hand ... Don't ask first' and 'Close a process gap in a hook, gate or script'. The bug arose in this feature's own work (make cache-audit is FR-006's verification), so it is the work at hand."
+    },
+    {
+     "id": "T10-mechanism",
+     "summary": "Extend the existing gate-write guard (scripts/hooks/gate-write-hooks.sh) to detect own-make.sh cache-audit, as it already does for make done.",
+     "class": "within",
+     "why": "A hook, as the 'tooling, not remembering' instruction asks for; reuses the existing pattern. Design choice, not a fidelity question."
+    },
+    {
+     "id": "T10-reach",
+     "summary": "While the audit runs, refuse Edit/Write under l7r/ and pool/ and any git add or git commit, the cure (wait for the audit's exit) named in the message.",
+     "class": "within",
+     "why": "Every part of the reach is the same hazard: the audit perturbs and later restores files in l7r/ while sweeping pool/. A commit sweeps in the perturbation (the observed bug); an edit under l7r/ or pool/ is either undone by the restore or corrupts the sweep the audit is judging. It refuses nothing outside the audit's window and touches no other command or agent type. Naming the cure in the message is FR-011."
+    },
+    {
+     "id": "T10-escape",
+     "summary": "Escape through the guard's existing GATE_WRITE_OK; no new escape.",
+     "class": "within",
+     "why": "Keeps the guard's established override; adds no new behavior."
+    },
+    {
+     "id": "T10-verification",
+     "summary": "Test first in tests/hooks/test-gate-write-hooks.sh: refusal while a stand-in make cache-audit runs, pass after.",
+     "class": "within",
+     "why": "Required by FR-011 (a test that fails without the fix). Enforces the fix and adds no new scope."
+    },
+    {
+     "id": "T10-order-exits-budget",
+     "summary": "After T08, before the close; one landing; green exit by make land, red exit by recorded failing tests and make arbiter-ask (D11, D35); alone-off table n/a since there is no map step.",
+     "class": "within",
+     "why": "Procedural. Uses the feature's standard exits and narrows nothing the request or spec asked for."
     }
    ]
   }

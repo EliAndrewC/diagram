@@ -32,6 +32,37 @@ INPUT=$(cat 2>/dev/null || true)
 [ "$MODE" = "pretool" ] || exit 0
 
 GW_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# GUARD_EDIT_OK: feature 426 T10 - ...AND WHILE THIS TREE'S `make cache-audit` RUNS: the audit perturbs a numeric literal in an
+# engine function IN THE WORKING TREE, sweeps the pool and restores it at its end, so an engine or pool write mixes with its edit
+# and a `git add`/`git commit` sweeps the perturbation in (feature 426: 335cfa840 carried `rot_rect`'s `w / 3`, a7e46883b put it
+# back). Unlike the gate, nothing the audit changes is "unseen": every add, commit and engine or pool write waits for its end.
+if "$GW_HERE/lib/own-make.sh" --no-print-directory cache-audit >/dev/null 2>&1 || "$GW_HERE/lib/own-make.sh" cache-audit >/dev/null 2>&1; then
+  # shellcheck source=/dev/null
+  . "$GW_HERE/lib/guardlog.sh"
+  if escape_or_refuse gate-write GATE_WRITE_OK gate-write-ok "$GW_HERE"; then exit 0; fi
+  CA=$(printf '%s' "$INPUT" | GW_TOP="$(git rev-parse --show-toplevel 2>/dev/null || pwd -P)" python3 -c '
+import json, os, re, sys
+try:
+    p = json.load(sys.stdin)
+except Exception:
+    sys.exit(0)
+tool, ti, top = p.get("tool_name", ""), p.get("tool_input") or {}, os.path.realpath(os.environ["GW_TOP"])
+if tool in ("Edit", "Write", "NotebookEdit"):
+    rel = os.path.relpath(os.path.realpath(str(ti.get("file_path") or ti.get("notebook_path") or "")), top)
+    if rel.split(os.sep)[0] in ("l7r", "pool"):
+        print(f"an {tool} of {rel}")
+elif tool == "Bash" and re.search(r"\bgit\b[^;&|]*\b(commit|add)\b", str(ti.get("command") or "")):
+    print("a git commit or add")
+' 2>/dev/null)
+  if [ -n "$CA" ]; then
+    printf '\033[1mBLOCKED (gate-write): %s while this tree'"'"'s `make cache-audit` runs.\033[0m\n' "$CA" >&2
+    printf 'The audit has a perturbed literal in an engine file until it ends; a commit now carries it (feature 426: 335cfa840).\n' >&2
+    printf 'Wait for its exit (it is a background job: its notification is the end), then make the change.\n' >&2
+    printf '(feature 426 T10; escape GATE_WRITE_OK="<reason>")\n' >&2
+    guard_log gate-write blocked "$CA" write-during-cache-audit
+    exit 2
+  fi
+fi
 # the cheap test first: no gate of this tree running, nothing to refuse
 "$GW_HERE/lib/own-make.sh" --no-print-directory done >/dev/null 2>&1 || "$GW_HERE/lib/own-make.sh" done >/dev/null 2>&1 || exit 0
 

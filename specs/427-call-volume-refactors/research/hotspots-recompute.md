@@ -89,3 +89,19 @@ Counts are Python-level calls, seed 39, at 20 households -> 40 (`fanout-2026-10-
   `judge` -> `verdict` -> `waterfields/ring_rules.py:476 ring_violations` (788 -> 1,416) -> `collector_crossings` (`:354`) ->
   the genexpr at `:375` (19.7k -> 67k) -> `_seg_dist` (`:342`, 18k -> 63k).
 - **Direction:** test a new cell only against the collectors near it, using the STRtree the fabric already builds (`:182`).
+
+## R8. Field-tie distances computed for every free grid point (folded in from feature 373)
+
+Feature 373, filed 2026-10-10 from feature 328's landing pair and folded in here by the GM on 2026-10-26 (`request.md` 4), said:
+
+- `capacity.field_distances` (wave 20's seat-order tie toward the field, 81a14d318, vectorized 07ca65758) computes a ring
+  distance for every free grid point, though the seating uses it only to break ties within one grid pitch;
+- at 40 households, seed 47, it was 0.166 s of the homesteads stage (`free_seats` 0.31 s at main, 0.51 s after it);
+- stubbed, the stage returned to main's time (feature 328's `measurements.json`, `landing-pair-40hh-field-tie`).
+
+- **Direction (373's sketch):** compute the distance only for the candidates tied within the pitch.
+- **Check:** 373 also said "the roll must not change (a pool reroll diffed against HEAD's manifests shows it)". This
+  feature's rule is the GM's speed rule (maps may change, research held), but this change should be output-neutral, so
+  the diff is a cheap check that it is.
+- **Re-measure first:** it did not appear in the 2026-10-26 survey's chains at seed 39, because it is one vectorized call,
+  not a multiplier. Time it on seed 47 at 40 households before sizing it.

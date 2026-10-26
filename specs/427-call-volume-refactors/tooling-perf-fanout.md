@@ -94,11 +94,12 @@ def anchors(stats):  # {anchor: [chain, ...]} for every hot non-builtin function
   `pstats` dict, and stub the profiling seam as `perf_profile`'s own tests do.
 - A `##` help line in the Makefile; a row in `tools/CLAUDE.md`'s table ("Which functions are called millions of times,
   and from which loop?").
-- It is a by-hand diagnostic, never a gate (performance is a flag, feature 375 amendment 5).
+- It is a by-hand diagnostic, never a gate: it is the investigation tool, and the call-count check of User Story 5 is what is
+  watched (`call-count-flag.md`).
 - It lands as tooling (`make land-tooling`), separate from any engine change.
 
-## A possible refinement (for the GM to decide)
+## Call counts in `make perf`
 
-Call counts are noise-free, so `make perf` could record a stage's total calls beside its seconds. `make perf-report` would
-then show the call trend, and a call-count jump would be a FLAG at landing, as the time band is now. A multiplier that comes
-back would show up as a number, not hidden in load noise.
+The GM decided (`request.md` 4) that call counts replace the timing band. That is User Story 5; its design is
+`call-count-flag.md`. `make perf-fanout` is the investigation tool. The snapshot's per-stage counts are the cheap,
+always-on record that the flag compares, and the two should share their counting code where they can.
