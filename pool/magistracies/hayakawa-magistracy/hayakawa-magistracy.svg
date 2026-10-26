@@ -276,7 +276,7 @@
   <!-- ============================================================ -->
   <!-- INNER COURT (north half) - residence, garden, shrines         -->
   <!-- ============================================================ -->
-  <text font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="inner court" data-names="inner-court-1"><tspan>INNER</tspan><tspan>COURT</tspan></text>
+  <text font-size="10" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="inner court" data-names="inner-court-1"><tspan>INNER</tspan><tspan>COURT</tspan></text>
 
   <!-- Residence - TWO offset blocks (gankō / flying-geese massing, the way
        real shoin residences massed; was a single 180 ft bar - interior-audit
@@ -383,8 +383,8 @@
       <circle cx="339.5" cy="366" r="2.5" fill="#E68A40"/>
       <circle cx="348.5" cy="366" r="2.5" fill="#E68A40"/>
     </g>
-    <text font-size="11" font-weight="bold" fill="#3A2E1C">kitchen</text>
-    <text font-size="9" fill="#3A2E1C" data-cont="1">&amp; pantries</text>
+    <text font-size="10" font-weight="bold" fill="#3A2E1C">kitchen</text>
+    <text font-size="8" fill="#3A2E1C" data-cont="1">&amp; pantries</text>
     <!-- Kitchen well, inside the kitchen (0105's drawing page: on a hand plan, inside the kitchen) -->
     <rect data-id="well-1" x="363" y="356" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
     <circle data-id="well-2" cx="374" cy="367" r="6" fill="#2D2A24" data-kind="well"/>
@@ -414,12 +414,14 @@
          research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html, and a garden's extent beyond its
          pond is calibrated liberty, research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html).
          Feature 433 D2: north of it, the storehouses' strip and the shrine's corner, between the torii and the tree. -->
-    <rect x="460" y="384" width="96" height="52" fill="url(#garden-stipple)" stroke="none"/>
+    <rect x="397" y="330" width="59" height="106" fill="url(#garden-stipple)" stroke="none"/>
+    <rect x="381" y="382" width="16" height="54" fill="url(#garden-stipple)" stroke="none"/>
+    <rect x="456" y="384" width="100" height="52" fill="url(#garden-stipple)" stroke="none"/>
     <rect x="498" y="436" width="58" height="14" fill="url(#garden-stipple)" stroke="none"/>
     <rect x="712" y="252" width="60" height="88" fill="url(#garden-stipple)" stroke="none"/>
     <rect x="556" y="322" width="204" height="128" fill="url(#garden-stipple)" stroke="none"/>
     <rect x="760" y="340" width="115" height="110" fill="url(#garden-stipple)" stroke="none"/>
-    <polygon points="460,384 556,384 556,322 712,322 712,252 772,252 772,340 875,340 875,450 498,450 498,436 460,436" fill="none" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+    <polygon points="397,330 456,330 456,384 556,384 556,322 712,322 712,252 772,252 772,340 875,340 875,450 498,450 498,436 381,436 381,382 397,382" fill="none" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
     <ellipse cx="650" cy="410" rx="44" ry="22" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
     <!-- The guest's way in: no genkan - from the middle gate a stepping-stone path (roji) across the garden to a
          stone at the zashiki's veranda (feature 267 R07, 0104: the Koseki house's form; Hayakawa takes it,
@@ -447,21 +449,21 @@
       <circle cx="598" cy="421" r="3.5"/>
     </g>
     <!-- The family's way out of the garden (feature 335 D5): no wicket is drawn. The garden is a dashed edge, not a fence, and
-         its west side opens onto the kitchen yard, which the family's rooms face; whether
+         its west side runs to the kitchen's and the bath's east faces, and the family quarters' south face opens onto it (feature 433 building-review round 3); whether
          a wicket stood in a garden's fence is an absence note on
          research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html. -->
     <text font-size="10" font-style="italic" fill="#3A2E1C"><tspan>inner</tspan><tspan>garden</tspan></text>
   </g>
 
-  <!-- Bath: a small addition on the kitchen's west wall (feature 374 wave 113: it moved with the smaller kitchen), 18 x 12 ft (feature 267 R09, 0105: a bath
+  <!-- Bath: a small addition on the kitchen's south face (feature 374 wave 113: it moved with the smaller kitchen; feature 433: on its west wall until the kitchen moved to the west end), 18 x 12 ft (feature 267 R09, 0105: a bath
        was a room of the residence or a small addition to it - the Takayama residence's stood with its well and
        kitchen - never a building of its own; it was a pavilion in the garden's NW corner). The size is a guess. -->
   <g data-kind="bath">
     <rect data-id="bath-1" x="325" y="382" width="54" height="36" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <path d="M 328 414 q 3 -8 -2 -14 M 333 414 q 3 -8 -2 -14" stroke="#A8B4C8" stroke-width="1" fill="none" opacity="0.7"/>
-    <text font-size="10" font-weight="bold" fill="#3A2E1C" data-names="bath-1">bath</text>
-    <text font-size="6.5" font-style="italic" fill="#5C4830" data-cont="1">(enlarged</text>
-    <text font-size="6.5" font-style="italic" fill="#5C4830" data-cont="1">by Hajime)</text>
+    <path d="M 375 414 q 2 -6 -1 -10" stroke="#A8B4C8" stroke-width="1" fill="none" opacity="0.7"/>
+    <text font-size="9" font-weight="bold" fill="#3A2E1C" data-names="bath-1">bath</text>
+    <text font-size="6" font-style="italic" fill="#5C4830" data-cont="1">(enlarged</text>
+    <text font-size="6" font-style="italic" fill="#5C4830" data-cont="1">by Hajime)</text>
   </g>
 
   <!-- Karo's house - the house elder keeps a SEPARATE dwelling in the
@@ -540,7 +542,7 @@
        residence", one of research buildings 405's four; it stood in the inner garden before Hajime's quarters until the
        house was cut, where no soup-greens plot now fits west of the roji). The sun decides a seat (feature 283,
        `garden_sun`): nothing south of it but the divider; at the size knob's low end (research 0109). It has no well of
-       its own since feature 335 (the kitchen's, about 40 ft away, serves it). -->
+       its own since feature 335 (the kitchen's, about 36 ft away, serves it). -->
   <g data-kind="vegetable garden">
     <rect x="156" y="362" width="110" height="88" fill="url(#vegetable-rows)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
     <text font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>

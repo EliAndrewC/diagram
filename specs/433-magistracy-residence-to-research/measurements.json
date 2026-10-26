@@ -166,5 +166,32 @@
    "tsubo": 65.4,
    "coverage_pct": 30.1
   }
+ },
+ "br3-e1": {
+  "quantity": "the ground east of the kitchen and bath",
+  "observed": "2026-10-26",
+  "verifies": "E1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "1e2113622c75",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "command": "make pack-audit ARGS=pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "method": "the garden polygon now runs from the kitchen's east face (x 397) and the bath's (x 381) to the east block, from the west block's south face (y 330) to the 7 ft way along the divider (y 436); pack-audit no longer lists the 20.3 ft LOOSE gap at svg(428,348)",
+  "value": {
+   "loose_gap_east_of_kitchen": 0,
+   "divider_way_ft": 7.0
+  }
+ },
+ "br3-n1": {
+  "quantity": "the four stale lines round 3 named, in the svg and the notes",
+  "observed": "2026-10-26",
+  "verifies": "N1",
+  "subject": "building-review--hayakawa-magistracy",
+  "answers": "1e2113622c75",
+  "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg; pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "command": "grep -nE \"kitchen's west wall|each block's south face|rooms face|about 40 ft\" pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+  "method": "the review's own grep, run on both files after the edit",
+  "value": {
+   "stale_lines": 0
+  }
  }
 }
