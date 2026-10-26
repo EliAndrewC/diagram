@@ -315,3 +315,15 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0308-what-did-an-entertainer-or-a-troupe-earn.notes | 1 bu | the same 1867 entry, unreadable as a total
 - 0308-what-did-an-entertainer-or-a-troupe-earn.notes | 9 rin | the same 1867 entry, unreadable as a total
 - 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.notes | 160 monme | inside the English rendering of a quoted passage, the same figure the page's prose gives
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 100 cash | feature 428: Sichuan's and Nanhui's cash per sheet, 1821-1897; no built era counts their provinces' cash (Beijing's cash was counted otherwise)
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 500 cash | feature 428: Gu Zhi's fee in Nanhui cash, Daoguang years; no built era for its cash
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 300 cash | feature 428: the Qing offices' usual range for a plaint, no year or place given
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 900 ryo | feature 428: a sum stolen from a courier house, not a sum paid
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 500 ryo | feature 428: a sum stolen from a courier house, not a sum paid
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 1 ryo | feature 428: a debt a courier was sent to collect, not his pay
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 800 mon | feature 428: part of the village courier's 2 ryo, which is marked
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 5 taels | feature 428: the escort-master's 4 or 5 taels a month, from an article that gives no year
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 50 taels | feature 428: an escort agency's charge per 10,000 taels, no year given
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 10,000 taels | feature 428: the silver escorted, not a sum paid, no year given
+- 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.notes | * | feature 428: as its question - the amounts inside the quoted passages of the new notes (scribes' fees, couriers' pay, sums stolen, the escort agency's terms)
+- 0311-how-many-days-a-year-did-a-worker-work.notes | * | feature 428: the carpenter's day income of the Bunsei era inside a quoted passage (5 monme 4 bu, 540 mon), context for the weather sentence and not stated in the page's prose
