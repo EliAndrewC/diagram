@@ -106,3 +106,15 @@ def test_an_accept_keeps_a_label_s_own_semicolon_whole() -> None:
     known = {"a.md::S#well (\"x\"; y)": 1, "a.md::S#b": 1}
     assert acc.split_semicolon_keys('a.md::S#well ("x"; y);a.md::S#b', known) == ['a.md::S#well ("x"; y)', "a.md::S#b"]
     assert acc.split_semicolon_keys("a.md::S#b;nope", known) == ["a.md::S#b", "nope"], "an unknown piece is named alone"
+
+
+def test_the_task_a_claim_names_last_is_its_row_and_an_accept_stands_where_that_row_misses_it(tmp_path: pathlib.Path) -> None:
+    """ask:417-T50-claims: "the track lays no spur (feature 417 T50) ... a departure the code keeps until feature 417 T32" - the
+    row is T32's, the task named last; and where no row names the unit, the arbiter's recorded accept still makes it known."""
+    _tasks(tmp_path, "- [ ] T32 The lanes: `DOORSTEP_FT` 80 against 0246's 60\n- [ ] T50 The track lays no field spur")
+    cx = _cx(tmp_path, "the track lays no spur (feature 417 T50), a departure the code keeps until feature 417 T32", "c1")
+    assert carry.known_drifts(cx, tmp_path) == {KEY: "417 T32"}, "the row named last, which names the unit"
+    cx = _cx(tmp_path, "a departure (feature 417 T32) said elsewhere, until feature 417 T50", "c1")
+    assert carry.known_drifts(cx, tmp_path) == {}, "the row named last misses the unit and nothing accepted it"
+    cx.load_index = lambda _p: {KEY: {"verdict": "DRIFTED", "core": "c1", "note": f"no spur; {carry.ACCEPTED} (ask:x) to land as filed"}}
+    assert carry.known_drifts(cx, tmp_path) == {KEY: "accepted by the round arbiter"}, "the accept stands"
