@@ -104,8 +104,13 @@ def unlabeled_unit_figure(section: str) -> str:
 
 
 #: a DECIDED figure's labels (root CLAUDE.md, "every rendering decision is labeled"): a planned size is no measurement, and it
-#: carries its research label, its research page, or the knob it is - the test fixture's "the bath 10 x 8 ft" (feature 430 T05)
-_DECISION_LABEL = re.compile(r"\b(?:GUESS|CONVENTION|DEVIATION|UNRESEARCHED|ACCURATE|HISTORICALLY ACCURATE)\b|research/questions/|\bknob\b|\bR\d+\b")
+#: carries its research label, its research page, or the knob it is - the test fixture's "the bath 10 x 8 ft" (feature 430 T05).
+#: A research-record plan's figure is a SOURCE's, and its label is the verdict it will carry - ATTESTED, ATTESTED ONLY FOR,
+#: NOT ATTESTED, SILENT - or "this project's arithmetic" (feature 431: its plan quoted 293 man-days a cho, ATTESTED ONLY FOR one farm book)
+_DECISION_LABEL = re.compile(
+    r"\b(?:GUESS|CONVENTION|DEVIATION|UNRESEARCHED|ACCURATE|HISTORICALLY ACCURATE|ATTESTED|SILENT)\b|this project's arithmetic"
+    r"|research/questions/|\bknob\b|\bR\d+\b"
+)
 
 
 #: a RULE stated as a figure, which measures nothing: the coverage floor ("100% coverage of the new module" - feature 427's plan,

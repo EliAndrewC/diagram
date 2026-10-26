@@ -40,6 +40,13 @@ def test_a_figure_with_a_unit_anywhere_needs_a_label() -> None:
     assert plan_lint.unlabeled_unit_figure("**D3 - x.** Run `sleep 48 s` in a span.\n") == "", "a code span names, it measures nothing"
 
 
+def test_a_research_figure_is_labeled_by_its_verdict() -> None:
+    """A research-record plan quotes a source's figure; its label is the verdict it will carry (feature 431)."""
+    assert "31.6%" in plan_lint.unlabeled_unit_figure("**D1 - x.** Women did 31.6% of farm labor in the East.\n")
+    assert plan_lint.unlabeled_unit_figure("**D1 - x.** Women did 31.6% of farm labor in the East, ATTESTED ONLY FOR 1921-25.\n") == ""
+    assert plan_lint.unlabeled_unit_figure("**D1 - x.** A tan is 0.35 x 11 m, so 3.9 m2, this project's arithmetic.\n") == ""
+
+
 def test_an_approach_block_without_the_red_exit_is_refused() -> None:
     assert plan_lint.missing_red_exit(_approach("T01")) == ""
     assert plan_lint.missing_red_exit(_approach("T01", item6="Green: landed.")) == "T01"
