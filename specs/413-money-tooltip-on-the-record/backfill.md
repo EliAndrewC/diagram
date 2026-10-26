@@ -327,3 +327,4 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn | 10,000 taels | feature 428: the silver escorted, not a sum paid, no year given
 - 0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.notes | * | feature 428: as its question - the amounts inside the quoted passages of the new notes (scribes' fees, couriers' pay, sums stolen, the escort agency's terms)
 - 0311-how-many-days-a-year-did-a-worker-work.notes | * | feature 428: the carpenter's day income of the Bunsei era inside a quoted passage (5 monme 4 bu, 540 mon), context for the weather sentence and not stated in the page's prose
+- 0312-what-work-did-a-farm-household-do-that-was-never-paid.notes | * | feature 431: the Imai household's wages of 1821 inside the quoted passage (marked in the page's prose), and Allen's 14.61 taels, quoted for the 200-day maximum and not stated in the prose

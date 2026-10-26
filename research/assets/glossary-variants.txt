@@ -87,6 +87,7 @@ aquifer	aquifer
 aquifers	aquifer
 aragaki	aragaki
 araiba	kawado
+araihari	araihari
 araizeki	araizeki
 ares	are
 arresting tools	three arresting tools
@@ -3027,6 +3028,7 @@ nichō-ibi	Nichō-ibi
 night soil	night soil
 night watch	night watch
 night watches	night watch
+night work	yonabe
 night-soil	night soil
 nightsoil	night soil
 nihon dai-hyakka zensho	Nihon Dai-hyakka Zensho
@@ -5012,6 +5014,7 @@ yokogi	yokogi
 yokogi-uchi	yokogi
 yomadori	four-room type
 yomihon	yomihon
+yonabe	yonabe
 yonai	yonai
 yonai money	yonai
 yongzheng	Yongzheng

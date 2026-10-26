@@ -18423,5 +18423,18 @@
    "labour service",
    "labour services"
   ]
+ },
+ "yonabe": {
+  "def": "Night work: the work a Japanese farm household did indoors after dark, by the hearth, such as making straw goods, added in autumn and in some households done all year.",
+  "variants": [
+   "yonabe",
+   "night work"
+  ]
+ },
+ "araihari": {
+  "def": "Unpicking a robe and washing it, one of the farm household's unpaid tasks; no source read gives its time.",
+  "variants": [
+   "araihari"
+  ]
  }
 }
