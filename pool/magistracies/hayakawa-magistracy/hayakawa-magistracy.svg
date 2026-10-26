@@ -167,7 +167,7 @@
   <!-- guest-wing annex bulging east (x=880..1000, y=240..460).       -->
   <!-- Feature 433 D3: the north wall moved 90 px (30 ft) south and  -->
   <!-- the annex 60 px with it when the house was cut to the record's -->
-  <!-- size, so the buildings still cover 0116's 30-42% (30.2%); the  -->
+  <!-- size, so the buildings still cover 0116's 30-42% (30.1%); the  -->
   <!-- envelope is a knob, no page measures it.                       -->
   <!-- Main gate: the 12 ft passage x=490..526 through the gate range -->
   <!-- (x=334..574), the south wall broken along the range; the east  -->
@@ -224,7 +224,7 @@
     <rect x="874" y="492" width="12" height="8"/>
     <rect x="874" y="530" width="12" height="8"/>
   </g>
-  <!-- Kitchen postern posts (west service door, opening into the kitchen yard west of the kitchen ell -->
+  <!-- Kitchen postern posts (west service door, opening onto the lane past the karo's door toward the kitchen yard - feature 433) -->
   <g fill="#2D2A24" data-kind="side gate">
     <rect x="134" y="286" width="12" height="8"/>
     <rect x="134" y="320" width="12" height="8"/>
@@ -294,7 +294,7 @@
   <g data-kind="residence">
     <text font-size="11" font-weight="bold" letter-spacing="2" fill="#5C4830">RESIDENCE</text>
     <!-- West block: the private end - the inner rooms deepest, the family quarters toward the corridor, the kitchen
-         an ell projecting south from the family end (feature 374 wave 113; the lineage's alcove is with the reception),
+         an ell projecting south from the block's west end, under the inner rooms (feature 374 wave 113; feature 433 building-review Q1: it stood at the corridor end, 3 ft from the reception's flank, after the house was cut; the lineage's alcove is with the reception),
          and the family's rooms toward the corridor (each label is a multi-room ZONE, not one room; engawa
          veranda along the south face). The reception moved to the east block on 2026-09-27 (GM: "fix what you
          found"): drawn here, its genkan and its engawa faced the kitchen's flank 11 ft away, where the record
@@ -311,21 +311,21 @@
          R4-1): the maids and the kitchen hands sleep under the main roof, as the Aizu chief retainer's house kept "the rooms
          of the maids and servants" in the house (research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html);
          which servants slept here, and its size, are GUESSES. The menservants keep the street range, the grooms the stable's room (0108).
-         It stands 9 ft west of the corridor's mouth, which opens whole into the family quarters (feature 374 batch 5, building-review N1;
+         It stands 9 ft west of the corridor's mouth, its west half over the kitchen ell, which opens whole into the family quarters (feature 374 batch 5, building-review N1;
          feature 433: 12 ft before the house was cut). -->
     <rect data-id="maids-room-1" x="384" y="292" width="36" height="36" fill="#DDB87A" data-kind="servants' quarters"/>
     <rect x="384" y="292" width="36" height="36" fill="none" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3" data-kind="servants' quarters"/>
     <text font-size="8" fill="#3A2E1C" data-kind="servants' quarters" data-names="maids-room-1">maids' room</text>
     <rect x="340" y="262" width="108" height="66" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
-    <!-- the veranda (feature 374 wave 112, 0102's drawing page: 3-6 ft, the faces a knob): this hall keeps its south face
-         alone, 4 ft (12 px; it was 8 px, 2.7 ft); the house's roll is shown on its formal hall, the east block -->
-    <rect x="340" y="328" width="36" height="12" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
+    <!-- no veranda on this block (feature 433 building-review E2): the kitchen ell and the bath take its south face, and a
+         veranda is drawn along a garden face (0102's drawing page); the house's veranda roll is shown on its formal hall,
+         the east block -->
     <line x1="384" y1="262" x2="384" y2="328" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <!-- the family block's inner entrance (uchigenkan) on its WEST face, onto the ground the postern opens into (feature
-         433 D2: the veranda and the bath take its south face): the household's own way in, apart from the guests' roji
+         433 D2: the kitchen ell takes its south face): the household's own way in, apart from the guests' roji
          (docs/building-programs.md: no sealed boxes). Feature 267 pass 3: it was called the katteguchi here, wrongly - the
-         katteguchi is the KITCHEN's door (research buildings 370), drawn on the kitchen's south face. -->
-    <rect x="340" y="276" width="6" height="24" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+         katteguchi is the KITCHEN's door (research buildings 370), drawn on the kitchen's east face. -->
+    <rect x="340" y="298" width="6" height="24" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <text font-size="9.5" fill="#3A2E1C" data-kind="inner rooms" data-names="inner-rooms-1"><tspan>inner</tspan><tspan>rooms</tspan></text>
     <g data-kind="family quarters">
       <text font-size="10" fill="#3A2E1C" data-names="family-quarters-1">family</text>
@@ -368,37 +368,37 @@
        the Kuchiba house's east wing, is about 12 tsubo (~440 sq ft), about a sixth of the house, and a middle-rank house
        was one block with its kitchen projecting from one side and almost no corridors
        (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html); the size taken from it is a GUESS, as 0091's drawing page holds a kitchen's size. It projects
-       south from the west block's family end, the family's rooms beside it; it was 40 x 33 ft and stood apart, joined by
+       south from the west block's west end; it was 40 x 33 ft and stood apart, joined by
        a covered corridor tagged a residence corridor, now gone. The kitchen door is the house's service door (0107).
        Feature 433: the hearth and the well sit low in the room, so the kitchen's name has a seat. -->
   <g data-kind="kitchen">
-    <rect x="376" y="328" width="72" height="54" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <rect x="340" y="328" width="72" height="54" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <!-- the hearth is a kamado range, two fire mouths, on the kitchen's board floor (feature 267 R13, buildings
          360: a samurai kitchen cooked on a kamado; the sunken irori is the common house's). ~6 x 2.5 ft -->
     <g data-kind="hearth">
-      <rect x="392" y="362" width="18" height="8" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
-      <circle cx="396.5" cy="366" r="2.5" fill="#E68A40"/>
-      <circle cx="405.5" cy="366" r="2.5" fill="#E68A40"/>
+      <rect x="350" y="362" width="18" height="8" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
+      <circle cx="354.5" cy="366" r="2.5" fill="#E68A40"/>
+      <circle cx="363.5" cy="366" r="2.5" fill="#E68A40"/>
     </g>
     <text font-size="11" font-weight="bold" fill="#3A2E1C">kitchen</text>
     <text font-size="9" fill="#3A2E1C" data-cont="1">&amp; pantries</text>
     <!-- Kitchen well, inside the kitchen (0105's drawing page: on a hand plan, inside the kitchen) -->
-    <rect data-id="well-1" x="422" y="358" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
-    <circle data-id="well-2" cx="433" cy="369" r="6" fill="#2D2A24" data-kind="well"/>
-    <g data-kind="well" data-gear="beam pulley" data-at="433,369"><line x1="422" y1="369" x2="444" y2="369" stroke="#5A3F1E" stroke-width="2"/><circle cx="433" cy="369" r="2.2" fill="none" stroke="#5A3F1E" stroke-width="1.2"/></g>
+    <rect data-id="well-1" x="378" y="356" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
+    <circle data-id="well-2" cx="389" cy="367" r="6" fill="#2D2A24" data-kind="well"/>
+    <g data-kind="well" data-gear="beam pulley" data-at="389,367"><line x1="378" y1="367" x2="400" y2="367" stroke="#5A3F1E" stroke-width="2"/><circle cx="389" cy="367" r="2.2" fill="none" stroke="#5A3F1E" stroke-width="1.2"/></g>
     <text font-size="8" font-style="italic" fill="#3A2E1C" data-kind="well" data-names="well-1 well-2">well</text>
-    <!-- The kitchen's one outside door (katteguchi), on its south face, onto the service ground the kitchen postern opens
+    <!-- The kitchen's one outside door (katteguchi), on its EAST face (feature 433: the bath takes the south), onto the kitchen yard the kitchen postern's lane reaches
          into (research buildings 370; Hayakawa's kitchen has no doma - knob 9: the kamado on the board floor). -->
-    <rect x="386" y="376" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <rect x="406" y="344" width="6" height="24" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
   </g>
 
-  <!-- the kitchen yard: the ground below the kitchen and the bath, where the kitchen door opens and the lane from the
+  <!-- the kitchen yard: the ground east of the kitchen and the bath, where the kitchen door opens and the lane from the
        postern arrives between the karo's house and the vegetable garden (0107's drawing page: the kitchen door opens onto
        the way to the kitchen's yard; feature 374 wave 113, building-review round 1 E1; feature 433 D2: its seat moved with
        the house). That a samurai house kept a kitchen yard, and its extent here, are a GUESS: no source names a kitchen
        yard (0118; docs/building-programs.md) -->
   <g data-kind="inner court">
-    <polygon points="290,410 360,410 360,452 290,452" fill="none"/>
+    <polygon points="398,384 456,384 456,452 398,452" fill="none"/>
     <text font-size="9" font-style="italic" fill="#7A6A4A">kitchen yard</text>
   </g>
 
@@ -410,8 +410,9 @@
          pond is calibrated liberty, research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html).
          Feature 433 D2: north of it, the storehouses' strip and the shrine's corner, between the torii and the tree. -->
     <rect x="460" y="384" width="96" height="66" fill="url(#garden-stipple)" stroke="none"/>
-    <rect x="556" y="340" width="319" height="110" fill="url(#garden-stipple)" stroke="none"/>
-    <polygon points="460,384 556,384 556,340 875,340 875,450 460,450" fill="none" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+    <rect x="556" y="322" width="204" height="128" fill="url(#garden-stipple)" stroke="none"/>
+    <rect x="760" y="340" width="115" height="110" fill="url(#garden-stipple)" stroke="none"/>
+    <polygon points="460,384 556,384 556,322 760,322 760,340 875,340 875,450 460,450" fill="none" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
     <ellipse cx="650" cy="410" rx="44" ry="22" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
     <!-- The guest's way in: no genkan - from the middle gate a stepping-stone path (roji) across the garden to a
          stone at the zashiki's veranda (feature 267 R07, 0104: the Koseki house's form; Hayakawa takes it,
@@ -449,9 +450,9 @@
        was a room of the residence or a small addition to it - the Takayama residence's stood with its well and
        kitchen - never a building of its own; it was a pavilion in the garden's NW corner). The size is a guess. -->
   <g data-kind="bath">
-    <rect data-id="bath-1" x="322" y="346" width="54" height="36" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <path d="M 334 378 q 3 -8 -2 -14 M 347 378 q 3 -8 -2 -14" stroke="#A8B4C8" stroke-width="1" fill="none" opacity="0.7"/>
-    <text font-size="12" font-weight="bold" fill="#3A2E1C" data-names="bath-1">bath</text>
+    <rect data-id="bath-1" x="340" y="382" width="54" height="36" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <path d="M 343 414 q 3 -8 -2 -14 M 348 414 q 3 -8 -2 -14" stroke="#A8B4C8" stroke-width="1" fill="none" opacity="0.7"/>
+    <text font-size="10" font-weight="bold" fill="#3A2E1C" data-names="bath-1">bath</text>
     <text font-size="6.5" font-style="italic" fill="#5C4830" data-cont="1">(enlarged</text>
     <text font-size="6.5" font-style="italic" fill="#5C4830" data-cont="1">by Hajime)</text>
   </g>
@@ -495,19 +496,19 @@
   <!-- Rear service strip (feature 433 D2): behind the house a narrow service alley, the family privy ATTACHED to the
        residence's rear corner, cesspit toward the wall; the storehouses on the north wall east of the house. The rear yard
        the servants' range left (feature 374 wave 124) went with the north wall; its privy keeps the north-west corner. -->
-  <!-- The household's WOODSHED on the kitchen yard's east side, its open face west toward the kitchen door (feature 433
-       D2: it stood at the rear yard's east end, which went with the north wall), and the two-mouth kamado burns wood.
-       11 x 21 ft, the stacked cordwood along its back; 2 ft off the divider's ink. The size is a GUESS.
+  <!-- The household's WOODSHED west of the bath, its open face west toward the postern's lane (feature 433 building-review
+       E1: on the kitchen yard's east side it closed the household's way along the divider; a 7 ft way runs below it), and
+       the two-mouth kamado burns wood. 11 x 19 ft, the stacked cordwood along its back. The size is a GUESS.
        Tagged `kitchen` (the fuel is the kitchen's): no woodshed kind exists yet. -->
   <g data-kind="kitchen">
-    <rect x="422" y="386" width="34" height="64" fill="#C9A57A"/>
+    <rect x="300" y="380" width="34" height="56" fill="#C9A57A"/>
     <g stroke="#7A5430" stroke-width="1.6">
-      <line x1="444" y1="390" x2="444" y2="446"/>
-      <line x1="448" y1="390" x2="448" y2="446"/>
-      <line x1="452" y1="390" x2="452" y2="446"/>
+      <line x1="322" y1="384" x2="322" y2="432"/>
+      <line x1="326" y1="384" x2="326" y2="432"/>
+      <line x1="330" y1="384" x2="330" y2="432"/>
     </g>
-    <path d="M 422 386 L 456 386 L 456 450 L 422 450" fill="none" stroke="#6B4F2A" stroke-width="1.5"/>
-    <line x1="422" y1="386" x2="422" y2="450" stroke="#6B4F2A" stroke-width="1" stroke-dasharray="4 3"/>
+    <path d="M 300 380 L 334 380 L 334 436 L 300 436" fill="none" stroke="#6B4F2A" stroke-width="1.5"/>
+    <line x1="300" y1="380" x2="300" y2="436" stroke="#6B4F2A" stroke-width="1" stroke-dasharray="4 3"/>
     <text font-size="8.5" font-style="italic" fill="#3A2E1C">woodshed</text>
   </g>
   <!-- The privy in the court's north-west corner, beside the karo's house, reached from the kitchen postern, for the kitchen and the house's working servants by
@@ -845,12 +846,12 @@
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs" data-id="fire-water-tubs">
     <!-- kitchen (2, highest fire risk) - either side of its south door (feature 372 wave 106: each tub beside a door, 0100;
          feature 374 wave 113: the door moved with the smaller kitchen) -->
-    <circle cx="380" cy="386.5" r="3.8"/>
-    <circle cx="416" cy="386.5" r="3.8"/>
+    <circle cx="416.5" cy="340" r="3.8"/>
+    <circle cx="416.5" cy="372" r="3.8"/>
     <!-- office hall - beside its east door -->
     <circle cx="690" cy="535" r="3.8"/>
     <!-- residence west block - beside the engawa's door -->
-    <circle cx="335.5" cy="306" r="3.8"/>
+    <circle cx="335.5" cy="293" r="3.8"/>
     <!-- residence east block (reception and the lord's suite) - beside the shoe stone its guests step up from -->
     <circle cx="530" cy="384.5" r="3.8"/>
     <!-- the shrine - at its south-east corner, inside the arch, beside its south door (feature 374 wave 130) -->
