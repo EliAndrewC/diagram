@@ -192,6 +192,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T44 Approach (checklist part A)": {
+   "sha256": "8cdbf1cebc290c1fcfd2cc283c2d90367881d8cf06d157aae715a3ae36d1451d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2977,6 +2983,45 @@
      "summary": "A moved threshold judged by the cohort, the pinned rows and the pool maps, never by seed 723775 passing; never iterated on 723775 inside C2",
      "class": "within",
      "why": "FR-008's landing test and D11's ban on seed-by-seed work and on work aimed at the fresh rate, applied literally."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T44 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T44-1 land C2",
+     "summary": "settle_tree runs first in stage_web so the households' ways stand before any other lane; settle_joins (the step that carried a lost join back afterwards) and its closure are deleted.",
+     "class": "within",
+     "why": "This is the conversion the GM asked for on 2026-10-25 ('turning off automated checks, and then replacing them with just having the algorithm place correctly in the first place') and that D11/D35 prescribe for a NEEDED step: the placer lays the thing right and the mending step goes. Nothing here narrows it; it removes a place-then-repair loop."
+    },
+    {
+     "id": "T44-2 landing condition",
+     "summary": "Lands through make land with FR-008 green (fixed cohort, pinned rows, pool maps) and the fresh rate recorded (7 of 48), under the round arbiter's binding accept on ask:417-T31-C2-regression with seed 723775's waiver; red exit is set down.",
+     "class": "within",
+     "why": "D11: land when FR-008 holds, 'its fresh rate recorded either way'; one that cannot land green is set down - both exits are D11's. Seed 723775 lies in the fresh block (from 723759, 48 seeds), outside FR-008's sets, so the waiver does not relax FR-008; and the waiver is the arbiter's ruling (standing where the GM was asked, feature 379), applied here rather than made by this block."
+    },
+    {
+     "id": "T44-3 the step (b) probe and keeping settle_reach's settle_tree call",
+     "summary": "The one probe the arbiter's step (b) named - settle_reach's own settle_tree call switched off - measured 8 of 48 with 723790 newly failing; restored, 723790 passes; the call stays.",
+     "class": "within",
+     "why": "A single probe ordered by the arbiter's ruling, of the D35 kind (switch a step off, measure), not seed-by-seed work aimed at the fresh rate; its result keeps existing behavior of a step D35 already records as a placer. Whether settle_reach's redraw after its cuts must itself be converted is D35's question for settle_reach, not narrowed or settled by this block."
+    },
+    {
+     "id": "T44-4 JOIN_BACK_PAD_FT",
+     "summary": "The constant goes with settle_joins, its only user; no constant is moved.",
+     "class": "within",
+     "why": "Deleting dead closure with the deleted step is D23/D35's instruction; the GM's 2026-10-25 concern about arbitrary numbers applies to moving or fixing a number, not to removing one with no remaining user."
+    },
+    {
+     "id": "T44-5 order and budget",
+     "summary": "After the arbiter's tooling fix (a pool map obtained once a test), before T45; one landing.",
+     "class": "within",
+     "why": "Sequencing and budget inside the asked work; nothing of the request or spec is dropped."
     }
    ]
   }

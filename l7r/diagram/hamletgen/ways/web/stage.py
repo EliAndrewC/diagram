@@ -59,6 +59,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
 
     Steps:
         l7r.diagram.hamletgen.ways.fabric._margin_frame
+        l7r.diagram.hamletgen.ways.tree.settle_tree
         l7r.diagram.hamletgen.ways.web._lay_skeleton
         l7r.diagram.hamletgen.ways.web._web_cut_lines
         l7r.diagram.settlement._knobs.web_cuts
@@ -86,6 +87,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         the web's frame - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a back lane is laid about 30 ft past the last house it serves and its end then pulled back to that house - the frame (`BUNDLE_PITCH`, 100 ft past the outermost house, or `CLUSTER_SPAN_FACTOR` times the seat band) is only the room the cuts are laid in, and the trims (`tidy_lane_ends`) bring each end back to the last house it serves
         a row village laid without web cuts - research/questions/0033-row-villages-resson.drawing.html: its farms are strung along their street and reach it by a path where their grove is in the way - its ways are its streets and those paths; no back lane or alley is cut among its farms (a map drawing convention)
         web lanes off the water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places
+        the households' ways first - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every household's own way is laid in the gaps, and the web's lanes after it (`settle_tree` before the skeleton, the cuts, the orphan links and the door paths)
         orphan stub joined - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, so a stranded stub is joined into it
         an end left in open ground pulled back - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back to the last thing it serves, or the lane dropped, against the final network (`tidy_lane_ends` after the joins, then `_sweep_dangling_ends`)
         a doubled tail ends where it met - research/questions/0081-village-lanes.drawing.html: a lane that runs on beside the way it met ends where it met it (`_sweep_doubled_tails`, feature 261)
