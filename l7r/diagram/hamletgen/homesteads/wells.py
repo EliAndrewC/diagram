@@ -6,7 +6,7 @@ Research: well arithmetic - NONE: distances, scores and ground tests; the units 
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, surface_water_dist
@@ -390,6 +390,19 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     return len(placed)
 
 
+def stage_kept(s: Settlement, key: Any, make: Callable[[], Any]) -> Any:
+    """What `make` builds, kept under `key` while `stage_lane_wells` holds its memo (only wells are added inside it); built
+    afresh outside it (feature 427 T05).
+
+    Research: plumbing - NONE: a cache, deciding nothing about the place"""
+    memo: dict[Any, Any] | None = getattr(s, "_well_memo", None)
+    if memo is None:
+        return make()
+    if key not in memo:
+        memo[key] = make()
+    return memo[key]
+
+
 def seat_wells(
     s: Settlement,
     plan: SitePlan,
@@ -454,12 +467,7 @@ def seat_wells(
     # ...ONCE A STAGE WHERE THE STAGE HOLDS A MEMO (feature 427 T05): inside `stage_lane_wells` only wells are added, and the belt
     # reads the houses, the lanes and the crop - eight calls rebuilt the same polygon on a 40-household roll
     memo: dict[Any, Any] | None = getattr(s, "_well_memo", None)
-    if memo is not None and "belt" in memo:
-        _belt = memo["belt"]
-    else:
-        _belt = belt_polygon(s, plan)
-        if memo is not None:
-            memo["belt"] = _belt
+    _belt = stage_kept(s, "belt", lambda: belt_polygon(s, plan))
 
     _belt_of: dict[tuple[float, float, float], int] = {}
 
@@ -536,11 +544,9 @@ def seat_wells(
                 # ...and for every call of the stage that asks the same lattice of the same houses at the same gap (feature 427 T05):
                 # the sweep's wall gaps hold for its gap's reach, and nothing it measures moves while only wells are added
                 key = ("sweep", step, gap, reach_r, tuple(candidates or ()), tuple((h["x"], h["y"], h["w"], h["h"], h.get("rot", 0.0), h.get("kind")) for h in houses))
-                sweep = memo.get(key) if memo is not None else None
-                if sweep is None:
-                    sweep = SeatSweep(list(candidates) if candidates is not None else list(grid_points(min(xs) - pad, max(xs) + pad, min(ys) - pad, max(ys) + pad, step)), houses)
-                    if memo is not None:
-                        memo[key] = sweep
+                sweep = stage_kept(
+                    s, key, lambda pad=pad: SeatSweep(list(candidates) if candidates is not None else list(grid_points(min(xs) - pad, max(xs) + pad, min(ys) - pad, max(ys) + pad, step)), houses)
+                )
             seats, _near_of = sweep.seats(third, want_near, gap, reach_r, _seat_ok, (ccx, ccy))
             # GREEDY COVERAGE, not central-first throughout (settlement-review, Mizuguchi/Sawada
             # 2026-08-15): sorting every well toward the centroid put both of Mizuguchi's wells in one

@@ -19100,20 +19100,11 @@
   "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#PAIR_LOOK = 40: how many first-well seats nearest the share's middle are re-ranked by whether a second well would keep both at ten (search breadth, a GUESS)": {
-  "code": "64be70eb6166df7c",
-  "core": "64be70eb6166df7c",
-  "date": "2026-10-26",
-  "note": "PAIR_LOOK = 40: how many first-well seats nearest the share's middle are re-ranked by whether a second well would keep both at ten (search breadth, a GUESS)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#its salts, guards and sentinels": {
   "body": "fb92262619db0ab2",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.01 (divide-by-zero guard)",
-  "code": "2cc6aea403db1b55",
-  "core": "64be70eb6166df7c",
+  "code": "7757ac511e7ca5eb",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-25",
   "note": "divide-by-zero guard",
   "pages": {},
@@ -19123,24 +19114,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#its search steps and tolerances": {
-  "body": "fb92262619db0ab2",
+  "body": "996625a4f4763eba",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 22 (default lattice step); 120 (sweep box pad)",
-  "code": "3425b54779267552",
-  "core": "64be70eb6166df7c",
-  "date": "2026-10-25",
-  "note": "lattice step and sweep pad; every seat is still held to 95 ft and to the crop",
+  "code": "3eccfc9ddd08761b",
+  "core": "a3a40bd431ddb6a8",
+  "date": "2026-10-26",
+  "note": "the 22 lattice step and the 120 sweep-box pad are unchanged and only search the ground; the page is silent on them",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-26",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#later wells by the worst walk": {
-  "body": "e0dc3de245969b4b",
+  "body": "996625a4f4763eba",
   "claim": "later wells by the worst walk - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); ranked by the worst-served household's walk after the dig, in 66 px buckets, the crop's overreach added 1:1",
-  "code": "c4b1838b7a01f8aa",
-  "core": "64be70eb6166df7c",
+  "code": "45342cc32d1b7d79",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-26",
-  "note": "(w+e)//66 with the overreach added 1:1; the page says nothing on how later seats are ranked",
+  "note": "the 66 px bucket is passed into `PoolScore.keys` with the crop box and the drawn radius; the page sets when another well is owed, not how its seat is ranked",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -19148,8 +19139,8 @@
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#no well over a household's wood floor": {
   "body": "fb92262619db0ab2",
   "claim": "no well over a household's wood floor - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); no well seated over a household's reserved wood-floor seats",
-  "code": "bd63cd4c736642ef",
-  "core": "64be70eb6166df7c",
+  "code": "dfef6194e424f0dc",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-25",
   "note": "`_wood.disc_covers`",
   "pages": {},
@@ -19161,8 +19152,8 @@
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#no well past the crop": {
   "body": "a75224726c337c79",
   "claim": "no well past the crop - communal-wells-ido.drawing: every well stands among the houses it serves; refused where the wellhead would widen the crop",
-  "code": "75feb1ffa6bfcde0",
-  "core": "64be70eb6166df7c",
+  "code": "ce6c5b0cc2fabccb",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-18",
   "note": "refusing seats past the crop's box enforces \"Every well stands among the houses it serves\"",
   "pages": {
@@ -19176,12 +19167,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#no well serving more than ten": {
-  "body": "e0dc3de245969b4b",
+  "body": "996625a4f4763eba",
   "claim": "no well serving more than ten - communal-wells-ido.drawing: the five to ten houses each dug well served at Karihama; a seat that keeps every well at ten or fewer ranked first",
-  "code": "d847fe6a658b0a07",
-  "core": "64be70eb6166df7c",
+  "code": "fe3cfa9b457dee96",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-26",
-  "note": "int(busiest > 10) leads the key; matches \"five to ten houses that each dug well served\" and the more-than-ten rule",
+  "note": "`WELL_SERVES_MAX`=10 goes into the key, and `PairAhead` handles the first well; matches \"five to ten houses that each dug well served at Karihama\" and the deviation the page records past ten",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
@@ -19193,12 +19184,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#not in the windbreak": {
-  "body": "e0dc3de245969b4b",
+  "body": "996625a4f4763eba",
   "claim": "not in the windbreak - shelter-belts-on-a-villages-windward-side-bofurin.drawing: belt seats sorted last, never refused",
-  "code": "225bae6b6b0727e5",
-  "core": "64be70eb6166df7c",
+  "code": "d2ed25d994939275",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-26",
-  "note": "0072 says only that a wellhead inside a belt \"removes the clumps around it\" and the hole rule holds; it says nothing on where wells are seated relative to the belt, so the claim should be GUESS/UNRESEARCHED. Its wording \"sorted last\" is also true only of the first-well pool: for later wells _in_belt is the third key element, behind the over-ten flag and the worst-walk bucket",
+  "note": "belt seats are sorted last in the pool and behind the worst-walk bucket, never refused; the page expects a wellhead in a belt to be caught by the hole rule (\"holds there as written\"), and the belt cached per stage still reads only things the wells do not change",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
@@ -19207,13 +19198,13 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#seated a little closer than the check": {
   "body": "e0dc3de245969b4b",
   "claim": "seated a little closer than the check - GUESS communal-wells-ido.drawing: a dwelling's wall within `WELL_SEAT_FT` (80 ft, a GUESS the page names), the 95 ft check unchanged",
-  "code": "f1e061ae38422e99",
-  "core": "64be70eb6166df7c",
+  "code": "bf85e777513dce34",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-26",
   "note": "gap = WELL_SEAT_FT/ftpx, measured to a dwelling's wall; the page names 80 ft a GUESS and keeps the 95 ft check",
   "pages": {
@@ -19224,13 +19215,14 @@
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#surface water counts": {
   "body": "a75224726c337c79",
   "claim": "surface water counts - communal-wells-ido.drawing: a house within 760 ft (over the map's ft per px) of surface water needs no well",
-  "code": "4e5d7d060bf10c88",
-  "core": "64be70eb6166df7c",
+  "code": "78ed04f46b56b2f8",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-18",
   "note": "760.0/ftpx reach",
   "pages": {
@@ -19246,8 +19238,8 @@
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#the first well's seat": {
   "body": "a75224726c337c79",
   "claim": "the first well's seat - GUESS: the innermost seat where one well is owed; where two or more are, the middle of its own share of the houses, the shares cut along the cluster's long axis (`first_share_middle`)",
-  "code": "4ea4bab4babd8448",
-  "core": "64be70eb6166df7c",
+  "code": "b6aa0d8abd435840",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-18",
   "note": "the page says nothing on where a hamlet's first well stands in the cluster; the code sorts as claimed",
   "pages": {},
@@ -19256,30 +19248,29 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#ties among later wells": {
-  "body": "e0dc3de245969b4b",
+  "body": "996625a4f4763eba",
   "claim": "ties among later wells - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); the belt, then the crop's overreach, then the exact worst walk, then the want_near-th nearest house",
-  "code": "26caf1f55e7b10a7",
-  "core": "64be70eb6166df7c",
+  "code": "5cdf86a9c969b8ae",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-26",
-  "note": "the key order is belt, then overreach e, then exact walk w, then near_of, as the claim states",
+  "note": "an algorithm's order of ours, now computed by `PoolScore`; nothing in the cited pages answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#wells among the houses": {
-  "body": "e0dc3de245969b4b",
+  "body": "996625a4f4763eba",
   "claim": "wells among the houses - communal-wells-ido.drawing: seats with a dwelling near and a neighborhood round them, each later one serving the worst-served household",
-  "code": "7581582064ddae1c",
-  "core": "64be70eb6166df7c",
+  "code": "1a4262f76c3ccdfa",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-26",
-  "note": "wall within gap and the want_near-th house within third: a dwelling near and a neighborhood round it",
+  "note": "each seat has a dwelling's wall within `WELL_SEAT_FT` (80 ft) and a neighborhood from the `rungs` ladder (want_near-th house within `third`), as the page seats a cluster well among five houses, widening before the count drops",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
   "research": "f166979de9325ea9",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
@@ -19288,8 +19279,8 @@
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#wells apart": {
   "body": "fb92262619db0ab2",
   "claim": "wells apart - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); 170 px between wells",
-  "code": "d47da764f8a26038",
-  "core": "64be70eb6166df7c",
+  "code": "b96673226d10521d",
+  "core": "a3a40bd431ddb6a8",
   "date": "2026-10-25",
   "note": "`< 170.0` refused; no page gives a hamlet's well spacing (0033's 760 ft reach is a row village's)",
   "pages": {},
@@ -19386,6 +19377,18 @@
   },
   "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/wells.py::stage_kept#plumbing": {
+  "body": "ad404324515c78e5",
+  "claim": "plumbing - NONE: a cache, deciding nothing about the place",
+  "code": "e808cfde900b52a1",
+  "core": "f9ee58d9a0a32fb6",
+  "date": "2026-10-26",
+  "note": "a memo lookup that returns what make() builds, so it decides nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::stage_lane_wells#lane-side wells after the lanes": {

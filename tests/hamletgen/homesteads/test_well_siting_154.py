@@ -198,3 +198,17 @@ def test_seat_wells_seats_none_with_no_houses_or_its_count_met() -> None:
     plan = types.SimpleNamespace(ftpx=1.0)
     assert wl.seat_wells(_s([], HOUSES), plan, [], [], 1, [(95.0, 5)], "cluster") == []  # type: ignore[arg-type]
     assert wl.seat_wells(_s([], HOUSES), plan, HOUSES, [(0.0, 0.0)], 1, [(95.0, 5)], "cluster") == []  # type: ignore[arg-type]
+
+
+def test_the_stage_keeps_what_it_built_while_it_holds_its_memo() -> None:
+    """Feature 427 T05: `stage_kept` builds once under the stage's memo, and every time outside it."""
+    made: list[int] = []
+
+    def make() -> int:
+        made.append(1)
+        return len(made)
+
+    s = types.SimpleNamespace(_well_memo={})
+    assert wl.stage_kept(s, "k", make) == 1 and wl.stage_kept(s, "k", make) == 1  # type: ignore[arg-type]
+    plain = types.SimpleNamespace()
+    assert wl.stage_kept(plain, "k", make) == 2 and wl.stage_kept(plain, "k", make) == 3  # type: ignore[arg-type]
