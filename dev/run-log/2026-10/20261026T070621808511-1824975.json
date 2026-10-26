@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-26T07:06:21Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 126,
+  "result": "green",
+  "commit": "917366949",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 9885,
+  "host": {
+    "load": [
+      4.0,
+      5.3
+    ],
+    "mem_avail_mb": [
+      9025,
+      9744
+    ],
+    "cpu_temp_c": [
+      99.0,
+      101.0
+    ],
+    "stall_s": {
+      "cpu": 0.6,
+      "io": 0.1,
+      "io_full": 0.1,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 104646,
+      "package": 39403
+    }
+  },
+  "phases": {
+    "preflight": 26.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 0.0,
+    "reference": 1.0,
+    "pytest": 113.0,
+    "floors": 9.0,
+    "test-full": 123.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "an engine file that is not Python changed: pool/hamlets/inashiro/inashiro.json",
+  "collected": 9885
+}
