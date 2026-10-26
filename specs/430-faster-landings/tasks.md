@@ -22,3 +22,6 @@
       research: rendering
 - [ ] T08 Close: `make feature-report F=430 WRITE=1`, the report's measurements against SC-001 to SC-006
       research: rendering
+- [ ] GM review (make gm-reviewed F=430) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)

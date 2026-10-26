@@ -3,111 +3,111 @@
  "blocks": {
   "preamble": {
    "sha256": "a0c9e2d879ca20f51796f38b987b45b52ab30aeb83f97c5617d15437471faf62",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Summary": {
    "sha256": "645715e0581af7b932bce667c7fdd5b2585db09363928de4e73fa8d2fbbb2af4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Technical Context": {
    "sha256": "309e096f75c49168529e559951a6ca89f05826752b1accd68e2e0de5c51c1db0",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Performance bookends": {
    "sha256": "32af75c6e2417f701e4c4e946b3743e1c6e5345eaf7f20411f2b7bb38e9defcf",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Constitution Check": {
    "sha256": "faacf78cf5fd867d6e0e648b244c953d1274cfb4512d4fe6b15ea60b4dd1acf4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Decisions": {
-   "sha256": "95d1823868750e14b49293ee7c744ed7fc64ddd1cc0bacdb824eaa90b5dabfba",
-   "verdict": "BLOCKED",
+   "sha256": "4de1856667b221a7cd3273cdec6569f01698dbe85a2547f2239c818187a9f0c4",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Task approaches": {
    "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T01 Approach (checklist part A)": {
    "sha256": "383fd4b300ccafed995a8ce384fa785c7df4a15eb24384fed5072d4291aaee28",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T02 Approach (checklist part A)": {
    "sha256": "7d196542689c60da697ea7349fa7a0bbfe10d2149ee1bd4a87f29e43efa0fce0",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T03 Approach (checklist part A)": {
    "sha256": "f37733827201c41179985df38f4b2753adbed463627a6d3a67d5e02c0537c916",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T04 Approach (checklist part A)": {
    "sha256": "054578451cbb1758d258e73b3a367661e50412903c013bfec17e877b99e1d89a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T05 Approach (checklist part A)": {
    "sha256": "8e6fec9130266f9a68f7e2d60b49ebc8bc5382eba13dbe8b86478bd94c871789",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T06 Approach (checklist part A)": {
    "sha256": "2daf85de6aec141d69b34c62b3dce52ddf4cc54c6520fa8b920ede54d3af0f13",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T07 Approach (checklist part A)": {
    "sha256": "8c3c5b2171eae4f69d05c1b3aa7e1847bdb917a15685a8bf7d85445c29235b2e",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Project Structure": {
    "sha256": "78aa41f093ec3faedcbfbaf4620358dd38cb2532a522b49bf2a2b804d0d2fc7f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### Documentation (this feature)": {
    "sha256": "9ce761e57f62fd89e9a55c9c9e72722d5ba6b6eb4daaf69ea72ff4442f6ca14a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### Source Code (repository root)": {
    "sha256": "933987739c8584ee9849bf8ea65479c3230236d8a359b4bc57571fcb5ef55b31",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Complexity Tracking": {
    "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -324,6 +324,51 @@
      "summary": "Summary, Technical Context, Performance bookends, Constitution Check, Project Structure, Complexity Tracking.",
      "class": "within",
      "why": "They restate D1-D7. Constitution XVI names the D3 placement and the D2 superset openly, and both are ruled above. Every figure with a unit carries a label."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T06 Approach (checklist part A)",
+    "### T07 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:430-faster-landings#T01@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:430-faster-landings#T01@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }
