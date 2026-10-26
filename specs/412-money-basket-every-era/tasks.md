@@ -44,6 +44,6 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 - [x] T07 Close: report and land
       research: rendering
       verify: DONE. landed in batch T05+T07: reply on #13: https://github.com/EliAndrewC/diagram/issues/13#issuecomment-6391498613; landed
-- [ ] GM review (make gm-reviewed F=412) [lands-open]
+- [x] GM review (make gm-reviewed F=412) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

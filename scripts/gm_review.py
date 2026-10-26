@@ -472,7 +472,7 @@ def reviewed(root: Path, d: Path, overturn: int | None = None, to: Path | None =
             return msgs
     tasks = d / "tasks.md"
     text = tasks.read_text(encoding="utf-8") if tasks.is_file() else ""
-    if box(d) in text and text.count("- [ ] ") == 1:
+    if re.search(rf"^- \[ \] GM review \(make gm-reviewed F={_num(d)}\)", text, re.M) and text.count("- [ ] ") == 1:
         sys.path.insert(0, str(Path(__file__).resolve().parent / "gates"))
         import close_check  # noqa: PLC0415
 
@@ -482,8 +482,11 @@ def reviewed(root: Path, d: Path, overturn: int | None = None, to: Path | None =
     today = time.strftime("%Y-%m-%d", time.gmtime())
     (d / ROWS).write_text("".join(json.dumps({**r, "reviewed": r.get("reviewed", today), **({"gm_words": words} if words and "reviewed" not in r else {})}, ensure_ascii=False) + "\n" for r in rs),
                           encoding="utf-8")
-    if box(d) in text:
-        tasks.write_text(text.replace(box(d), box(d).replace("- [ ] ", "- [x] ")), encoding="utf-8")
+    # ...THE BOX AS WRITTEN, with or without its `[lands-open]` (feature 432: 415's box was written without it, so this marked
+    # its rows reviewed, said so, and left the box open)
+    open_box = re.compile(rf"^- \[ \] (GM review \(make gm-reviewed F={_num(d)}\).*)$", re.M)
+    if open_box.search(text):
+        tasks.write_text(open_box.sub(r"- [x] \1", text, count=1), encoding="utf-8")
     msgs.append(f"{len(rs)} row(s) of {d.name} reviewed")
     return msgs
 

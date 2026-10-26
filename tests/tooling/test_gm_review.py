@@ -311,3 +311,14 @@ def test_a_question_after_the_review_reopens_the_box(root: pathlib.Path) -> None
     assert gm.box(d).replace("- [ ] ", "- [x] ") in (d / "tasks.md").read_text()
     gm.question(d, "redraw the three sheets or record the deviation?", "432 audit")
     assert gm.box(d) in (d / "tasks.md").read_text() and todo.feature(d).state == "done - GM review pending"
+
+
+def test_a_box_written_without_lands_open_is_ticked_too(root: pathlib.Path) -> None:
+    """Feature 432: 415's box read `- [ ] GM review (make gm-reviewed F=415)` with no `[lands-open]`; its rows were marked
+    reviewed and the box stayed open."""
+    d = root / "specs" / "375-x"
+    (d / "tasks.md").write_text("- [x] T01 built\n- [ ] GM review (make gm-reviewed F=375)\n")
+    (d / "report.md").write_text("# report\n")
+    gm.accept(d, "the steam arcs off center", "a drawing nicety no norm sets")
+    gm.reviewed(root, d)
+    assert "- [x] GM review (make gm-reviewed F=375)" in (d / "tasks.md").read_text()
