@@ -66,6 +66,24 @@ Owed by the round arbiter's ruling on hour:406-every-tool-measured@1 (continue),
 <!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-20 (feature 375 FR-044) -->
 <!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-20 (feature 375 FR-044) -->
 <!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-20 (feature 375 FR-044) -->
+### T09 (the 22 judgments of T07 read "too new to say": each fix was made 10-17..19 and is readable from 10-24..26)
+
+- **Approach**: re-run `make fix-yield F=385` after 2026-10-26 and replace each "too new to say" in `fix-judgments.md` with the fix's tools and numbers since it was made, and a judgment citing them. No engine or tooling change.
+
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** each of the 22 arbiter fixes judged on what its tools did since it was made.
+2. **The constraints.** FR-005, SC-003.
+3. **Where each comes from.** O: `make fix-yield F=385`.
+4. **Do they describe the world here?** n/a - a reading, not a placement.
+5. **The order.** after 2026-10-26, when every fix has a week of use.
+6. **The exits.** done when no row reads "too new to say"; a fix still unread after a week is recorded as "no use since".
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** `grep -c "too new" fix-judgments.md` is 0.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
 ## T08 - the close
 
 ### T08 Approach (checklist part A)

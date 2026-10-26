@@ -150,6 +150,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-20",
    "declared": "round-arbiter"
+  },
+  "### T09 (the 22 judgments of T07 read \"too new to say\": each fix was made 10-17..19 and is readable from 10-24..26)": {
+   "sha256": "cc2ababaa57fc3a7050b1a2b56b2a318755533532761b719bc551afd0b7ab081",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (checklist part A)": {
+   "sha256": "e806643aed93d853d9ea5be5b34816f8152ee0e9d7815de61e3767bcf858a891",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -486,6 +498,40 @@
      "id": "round:spec-fidelity|plan:406-every-tool-measured#T01@4",
      "class": "within",
      "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T09 (the 22 judgments of T07 read \"too new to say\": each fix was made 10-17..19 and is readable from 10-24..26)",
+    "### T09 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T09-rejudge",
+     "summary": "After 2026-10-26, re-run make fix-yield F=385 and replace each of the 22 'too new to say' judgments in fix-judgments.md with the fix's tools and numbers since it was made, and a judgment citing them.",
+     "class": "within",
+     "why": "FR-005/SC-003 require each of the 22 fixes to carry a judgment citing its tools' numbers since it was made; 'too new to say' is allowed by FR-005 and by the GM ('in cases where a tool is too new ... that's fine'). Re-reading once a week of use exists adds to that judgment and narrows nothing."
+    },
+    {
+     "id": "T09-no-change",
+     "summary": "No engine or tooling change in this task.",
+     "class": "within",
+     "why": "The task is a reading of the existing report (proposal item 4: the fixes judged on the new report as its first use); it removes no requirement."
+    },
+    {
+     "id": "T09-order",
+     "summary": "Run after 2026-10-26, when every fix (made 10-17..19) has a week of use.",
+     "class": "within",
+     "why": "Timing of a reading; the request sets no date, and the spec's judgment is 'since the fix was made'."
+    },
+    {
+     "id": "T09-exit-no-use",
+     "summary": "Done when no row reads 'too new to say'; a fix still without readings after a week is recorded as 'no use since', checked by grep -c 'too new' = 0.",
+     "class": "within",
+     "why": "A zero count since the fix was made is a figure the judgment cites, as SC-003 asks; it does not reduce the set of 22 or drop the citation. Note: FR-005 names three judgments (doing something, doing nothing, too new to say); a 'no use since' row should still state which of those it amounts to, so the label does not become a fourth verdict the spec did not define."
     }
    ]
   }
