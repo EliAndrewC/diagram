@@ -1852,12 +1852,14 @@ huller	hulling
 hullers	hulling
 hulling	hulling
 hundred articles	hundred articles
+hundred poets	Hundred Poets
 hundredweight	hundredweight
 hundredweights	hundredweight
 hutong	hutong
 hutongs	hutong
 huzhou	Huzhou-Jiaxing
 huzhou-jiaxing	Huzhou-Jiaxing
+hyakunin isshu	Hundred Poets
 hyakusho denki	Hyakusho Denki
 hyakushodai	hyakushodai
 hyakushōdai	hyakushodai
@@ -1942,6 +1944,7 @@ initiate	initiate
 initiates	initiate
 inkyo	inkyo
 inland sea	Setouchi
+inner city	Inner City
 inner moat	uchibori
 inner moats	uchibori
 inshu	Inshu
@@ -3203,6 +3206,7 @@ out-to-out	out-to-out
 outcaste	outcaste
 outcastes	outcaste
 oute	ote-mon
+outer city	Outer City
 outer daimyo	tozama
 outer daimyos	tozama
 outer moat	outer moat
@@ -3960,6 +3964,7 @@ sho	sho
 shobodan	shobodan
 shochiku	Shochiku
 shochu	shochu
+shogi	shogi
 shogun	shogun
 shogunal village	shogunal village
 shogunal villages	shogunal village
