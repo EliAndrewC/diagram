@@ -60,3 +60,8 @@ def test_a_file_that_does_not_parse_is_its_bytes_and_a_non_python_file_is_too() 
     assert codeid.split_ids(b"def (:") is None
     assert codeid.semantic_bytes(b"def (:", "m.py") == b"def (:"
     assert codeid.semantic_bytes(b"# a Makefile line", "Makefile") == b"# a Makefile line"
+
+
+def test_the_engine_reads_the_one_module_the_gates_load() -> None:
+    """The shim loads `scripts/gates/codeid.py` once: a second load is the module already loaded, which gate-stamp shares."""
+    assert codeid._load() is codeid._mod and codeid.semantic_bytes is codeid._mod.semantic_bytes
