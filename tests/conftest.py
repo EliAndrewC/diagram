@@ -157,3 +157,12 @@ def pytest_report_header(config):  # type: ignore[no-untyped-def]
     if FULL:
         lines.append("scope: FULL - the full tree is collected, the coverage floors are enforced, no cache serves a roll")
     return lines
+
+
+@pytest.fixture(autouse=True)
+def _pool_reads_once_a_test():
+    """A pool map read twice by one test is obtained once (`tests/gate/_pool.py` `_OBTAINED`, feature 417 T44)."""
+    from tests.gate import _pool
+
+    _pool._OBTAINED.clear()
+    yield
