@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 188 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 189 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -68,6 +68,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make placement-stages-if-classes<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>re-plate the walk-through page only if the class registry moved (sync-in runs it)</td></tr>
 <tr><td class=n>make pool-index</td><td class=a>&ndash;</td><td>rebuild the pool index</td></tr>
 <tr><td class=n>make pool-index-if-stale<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>rebuild the pool index only when a manifest, render or notes file is newer</td></tr>
+<tr><td class=n>make probe</td><td class=a>EXITFIRST JOBS WT</td><td>what a change does to every seed and pool map against HEAD: the landing cohort, HEAD&#x27;s fresh block and the pool in WT, every seed beside HEAD&#x27;s stored verdict (feature 426)   [WT=&lt;worktree&gt;] [EXITFIRST=1] [JOBS=&lt;n&gt;]</td></tr>
 <tr><td class=n>make render-sync<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>regenerate MAIN&#x27;s renders (called by sync-with-main.sh; not for hand use)</td></tr>
 <tr><td class=n>make sheet-render</td><td class=a><div class=ad><span class=an>SHEET=&lt;svg&gt;</span><span class=aw>the hand-drawn sheet (its drawing and its captions&#x27; declarations)</span></div><div class=ad><span class=an>OUT=&lt;png&gt;</span><span class=aw>the picture to write</span></div></td><td>render a hand-drawn Mode A sheet with its captions placed by the ONE placer (feature 286)</td></tr>
 </table></div>
