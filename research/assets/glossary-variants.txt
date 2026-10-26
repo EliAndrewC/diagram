@@ -1445,6 +1445,7 @@ gofukumachi	Gofukumachi
 gogura	gogura
 gohei	paper wand
 gokaido	Five Highways
+gokan	gokan
 gokenin	gokenin
 gokumon	gokumon
 gokura	gogura
@@ -1663,6 +1664,7 @@ hereditary temple	hereditary temple
 hereditary temples	hereditary temple
 hexi	Hexi Corridor
 hexi corridor	Hexi Corridor
+hida	Hida
 hidden image	hidden image
 hidden images	hidden image
 hidenin	hidenin
@@ -2287,6 +2289,7 @@ khitan	Khitan
 kiangsu	Kiangsu
 kiba	kiba
 kibana	beam-end nose
+kibyoshi	kibyoshi
 kichin	kichin
 kichin charge	kichin
 kichin-yado	kichin-yado
@@ -2682,6 +2685,7 @@ master xuanhu	Xuanhu
 master-mountain	master-mountain
 masugata	masugata
 matebajii	matebajii
+materia medica	materia medica
 material index	material index
 matoi	matoi
 matou	gangi
@@ -3123,6 +3127,7 @@ oku-muki	oku
 oku-no-ma	oku-no-ma
 oku-zashiki	zashiki
 okura	kura
+okura nagatsune	Okura Nagatsune
 okuyama	okuyama
 older than modern times	modern times
 omamori	omamori
@@ -4604,6 +4609,7 @@ tsushi nikai	half-story
 tsushi-nikai	half-story
 tsushima	Tsushima
 tsushima's	Tsushima
+tsutaju	Tsutaju
 tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
@@ -4973,6 +4979,7 @@ yokocho	yokocho
 yokogi	yokogi
 yokogi-uchi	yokogi
 yomadori	four-room type
+yomihon	yomihon
 yonai	yonai
 yonai money	yonai
 yongzheng	Yongzheng
