@@ -49,4 +49,4 @@ The four questions are `research: physical` with their five boxes; the rest are 
 - [x] T07 Close: report and land
       research: rendering
       verify: DONE. feature-report written (specs/396-campaign-costs-inns-transport-cloth-sake/report.md); landing by sync-with-main done, the direct route
-- [ ] GM review (make gm-reviewed F=396) [lands-open]
+- [x] GM review (make gm-reviewed F=396) [lands-open]

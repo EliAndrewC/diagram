@@ -6,9 +6,18 @@ either a post-feature thing or we allow things to land on main with that and onl
 just as we have a make target for our `make speckit-todo` we could have a separate target"*. So a feature lands with its
 GM's review still open, and this lists, by feature, what waits on him:
 
-- HELD - work on the item cannot go on until the GM decides: the rows 328's ranking flags `Held` (`audit/overrides.json`);
-- TO REVIEW - the work went on and landed, and the GM may overturn it: every round-arbiter ruling and every finding accepted
-  with a reason (`specs/NNN/gm-review.jsonl`, written by `make arbiter-ruled` and `make accept`).
+- NEEDS YOUR DECISION - the QUESTIONS escalation-check kept (feature 432): a question is a `gm-review.jsonl` row of kind
+  `question`, written OWED by the round arbiter's `for_gm` or a declined fix, and judged by `make gm-escalated` (KEEP holds
+  it for the GM, CUT closes it with the reason). This is the ONE source of his decisions: 328's ranking (`audit/
+  overrides.json`, edited by hand) no longer lists itself as one - its "Held behind" rows are listed as waiting on other work;
+- OWED ESCALATION-CHECK - a question not yet judged: the session's, never the GM's;
+- TO REVIEW - rows he may read and overturn: a finding accepted with a reason (`make accept`), a known drift (feature 430),
+  and the rulings and fixes recorded before feature 432.
+
+WHY ONE DOOR (the GM, 2026-10-26): *"right now I've basically concluded that I should just ignore it because it is almost purely
+a distraction"* - feature 375 queued every round-arbiter ruling and fix (465 open rows, 443 of them not his; feature 432's
+audit), and the residence question ruled held for him on 2026-10-12 never reached him: its override carried a `held` key and
+this module read only a `flag` opening "Held".
 
 A feature with a row of either kind carries ONE box, `- [ ] GM review (make gm-reviewed F=NNN) [lands-open]`, which this
 adds; `make speckit-todo` reads such a feature `Done - GM review pending`; `make gm-reviewed F=NNN` marks its rows reviewed
@@ -28,6 +37,8 @@ reviewing it"* - 370's one row sat pending after exactly that discussion).
     gm_review.py accept F FINDING REASON                a finding accepted with a reason: a to-review row
     gm_review.py reviewed F [ROW G]                     the GM has reviewed F's rows (GM_WORDS= in the environment: his words)
     gm_review.py reviewed-row F ROW                     the GM has reviewed row ROW of F alone
+    gm_review.py question F TEXT SOURCE                 a question for the GM, owed escalation-check (feature 432)
+    gm_review.py escalated F ROW KEEP|CUT REASON        escalation-check's verdict on question ROW of F
 """
 
 from __future__ import annotations
@@ -68,6 +79,10 @@ def ensure_box(d: Path) -> bool:
     if not tasks.is_file() or not any("reviewed" not in r for r in rows(d)):
         return False
     text = tasks.read_text(encoding="utf-8")
+    ticked = box(d).replace("- [ ] ", "- [x] ")
+    if ticked in text:  # ...a new row after the GM reviewed the rest reopens his box (feature 432: a question carried into
+        tasks.write_text(text.replace(ticked, box(d)), encoding="utf-8")  # a closed feature must not sit behind a ticked box)
+        return True
     if "GM review (make gm-reviewed" in text:
         return False
     tasks.write_text(text.rstrip("\n") + "\n" + box(d) + "\n      research: rendering\n      verify: the GM reviewed every row (make gm-review lists them)\n",
@@ -76,7 +91,9 @@ def ensure_box(d: Path) -> bool:
 
 
 def held(root: Path, full: bool = False) -> list[str]:
-    """The rows held for the GM today: 328's ranking rows flagged `Held` (`full`: the whole flag, and the fix it would make)."""
+    """The rows of 328's ranking held behind another row (`Held behind ...`), which wait on other work (`full`: the whole flag,
+    and the fix it would make). A ranking row's own "Held" flag or `held` key is NOT a decision of the GM's: those come only
+    from the questions escalation-check kept (feature 432, FR-004; `questions`)."""
     f = root / HELD
     data = json.loads(f.read_text(encoding="utf-8")) if f.is_file() else {}
     # a row the ranking closed (`audit/waves.json`, the wave that closed it) waits on nothing, whatever its flag still says:
@@ -85,7 +102,67 @@ def held(root: Path, full: bool = False) -> list[str]:
     closed = json.loads(w.read_text(encoding="utf-8")) if w.is_file() else {}
     data = {k: v for k, v in data.items() if k not in closed}
     return [f"{k}: {v.get('flag', '') if full else v.get('flag', '')[:160]}" + (f". The fix it would make: {v['fix']}." if full and v.get("fix") else "")
-            for k, v in sorted(data.items()) if str(v.get("flag", "")).startswith("Held")]
+            for k, v in sorted(data.items()) if str(v.get("flag", "")).startswith("Held behind")]
+
+
+QUESTION = "question"
+
+
+def question(d: Path, text: str, source: str, now: str | None = None) -> int:
+    """A question for the GM, written OWED escalation-check (feature 432, FR-002); returns its row number."""
+    if len(text.split()) < 4:
+        raise ValueError("a question for the GM is a sentence he can answer - four words or more")
+    row = {"kind": QUESTION, "status": "owed", "question": text, "source": source, "utc": now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    n = len(rows(d))
+    with (d / ROWS).open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+    ensure_box(d)
+    return n
+
+
+def questions(root: Path, status: str) -> list[tuple[Path, int, dict]]:
+    """Every open question of `status` (owed or kept), by feature and row."""
+    return [(d, i, r) for d, o in open_rows(root) for i, r in o if r.get("kind") == QUESTION and r.get("status") == status]
+
+
+def owed_in_delta(root: Path) -> list[str]:
+    """The questions still owed escalation-check in the features this push changes (`specs/<f>/gm-review.jsonl` in the delta
+    against `origin/main`, committed or not): a feature does not land with one unjudged (feature 432, FR-002)."""
+    import subprocess  # noqa: PLC0415
+
+    def names(*args: str) -> set[str]:
+        out = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True)
+        return set(out.stdout.split()) if out.returncode == 0 else set()
+
+    base = subprocess.run(["git", "-C", str(root), "merge-base", "HEAD", "origin/main"], capture_output=True, text=True).stdout.strip()
+    paths = (names("diff", "--name-only", base) if base else set()) | names("ls-files", "--others", "--exclude-standard")
+    feats = sorted({p.split("/")[1] for p in paths if p.startswith("specs/") and p.endswith("/" + ROWS)})
+    return [f"{_num(root / 'specs' / f)}#{i}: {r.get('question', '')}" for f in feats for i, r in enumerate(rows(root / "specs" / f))
+            if r.get("kind") == QUESTION and r.get("status") == "owed" and "reviewed" not in r]
+
+
+def escalated(d: Path, row: int, verdict: str, reason: str, now: str | None = None) -> str:
+    """`make gm-escalated`: escalation-check's verdict on an owed question. KEEP holds it for the GM (his decision, named in the
+    session's final message - `escalation-hooks.sh`); CUT closes it, the reason kept on the row (feature 432, FR-002)."""
+    rs = rows(d)
+    if not 0 <= row < len(rs) or rs[row].get("kind") != QUESTION:
+        raise ValueError(f"ROW={row} is no question of {d.name} - make gm-review lists the owed ones")
+    if rs[row].get("status") != "owed":
+        raise ValueError(f"ROW={row} of {d.name} is already {rs[row].get('status')}")
+    if verdict not in ("KEEP", "CUT"):
+        raise ValueError("VERDICT is KEEP or CUT, escalation-check's")
+    if len(reason.split()) < 2:
+        raise ValueError("REASON is escalation-check's, two words or more")
+    when = now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    if verdict == "KEEP":
+        rs[row] = {**rs[row], "status": "kept", "kept": when, "escalation": reason}
+    else:
+        rs[row] = {**rs[row], "status": "cut", "escalation": reason, "reviewed": when[:10]}
+    (d / ROWS).write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rs), encoding="utf-8")
+    if verdict == "KEEP":
+        return (f"question {row} of {d.name} KEPT - it is the GM's decision now: name it in this turn's final message as "
+                f"\"{_num(d)}#{row}\" with the question")
+    return f"question {row} of {d.name} CUT - closed, not the GM's: {reason}"
 
 
 KINDS = {"arbiter": "arbiter rulings", "accepted": "findings accepted with a reason",
@@ -176,25 +253,31 @@ def listing(root: Path, feature: str = "", width: int = 0) -> str:
         return "\n".join(_detail(d, o, width) + ["", f"  reviewed:     make gm-reviewed F={_num(d)}",
                                                  f"  overturn one: make gm-reviewed F={_num(d)} OVERTURN=<row> TO=<feature>"]) + "\n"
     hs = held(root)
-    if not hs and not features:
+    kept, owed = questions(root, "kept"), questions(root, "owed")
+    features = [(d, [(i, r) for i, r in o if r.get("kind") != QUESTION]) for d, o in features]
+    features = [(d, o) for d, o in features if o]
+    if not hs and not features and not kept and not owed:
         return "gm-review: nothing waits on the GM\n"
     n = sum(len(o) for _, o in features)
-    out = [f"GM REVIEW - {sum(not _behind(h) for h in hs)} held question(s), {sum(map(_behind, hs))} waiting on other work, "
-           f"{n} landed row(s) to review in {len(features)} feature(s)", ""]
-    for title, group in (("HELD - work cannot go on until the GM decides (feature 328's ranking, carried by 374)", [h for h in hs if not _behind(h)]),
-                         ("WAITING ON OTHER WORK - held in the ranking behind another row, not on the GM", [h for h in hs if _behind(h)])):
+    out = [f"GM REVIEW - {len(kept)} decision(s) for the GM, {len(owed)} question(s) owed escalation-check, {len(hs)} waiting on "
+           f"other work, {n} landed row(s) to review in {len(features)} feature(s)", ""]
+    for title, group in (("NEEDS YOUR DECISION - the questions escalation-check kept (feature 432)", kept),
+                         ("OWED ESCALATION-CHECK - the session's, not the GM's: judge each, then make gm-escalated F=<n> ROW=<n> VERDICT=KEEP|CUT REASON=\"...\"", owed)):
         if group:
             out.append(title)
-            for h in group:
-                key, _, flag = h.partition(": ")
-                out += [_fit(f"  * {key}", width), _fit(f"      {re.sub(r'^Held( behind)?[:,]?\s*', 'waits on ' if _behind(h) else '', flag)}", width)]
+            out += [_fit(f"  * {_num(d)}#{i}: {r.get('question', '')}", width) for d, i, r in group]
             out.append("")
+    if hs:
+        out.append("WAITING ON OTHER WORK - held in the ranking behind another row, not on the GM")
+        for h in hs:
+            key, _, flag = h.partition(": ")
+            out += [_fit(f"  * {key}", width), _fit(f"      {re.sub(r'^Held behind[:,]?\s*', 'waits on ', flag)}", width)]
+        out.append("")
     if features:
         out.append("TO REVIEW - landed; the GM may overturn any row")
         out += [_fit(f"  {_num(d):>3}  {_fit(d.name.split('-', 1)[1], 40):<40} {len(o):>3}  {_counts(o)}", width) for d, o in features]
         declined = sum(r.get("kind") == "arbiter-fix-declined" for _, o in features for _, r in o)
-        asks = sum(not _behind(h) for h in hs)
-        out += ["", f"  needs a decision: {asks} held question(s), {declined} fix(es) declined to the GM - in full: make gm-review EXPLAIN=1",
+        out += ["", f"  needs a decision: {len(kept)} question(s), {declined} fix(es) declined to the GM - in full: make gm-review EXPLAIN=1",
                 "  a feature's rows:  make gm-review F=NNN   (each in full: add EXPLAIN=1, one row: ROW=n)",
                 "  reviewed:          make gm-reviewed F=NNN   (agreed in discussion with the GM: add WORDS=\"<his words>\")"]
     return "\n".join(out) + "\n"
@@ -330,13 +413,14 @@ def _behind(h: str) -> bool:
 
 
 def _needs_you(root: Path, width: int) -> str:
-    hs = held(root, full=True)
-    asks, waits = [h for h in hs if not _behind(h)], [h for h in hs if _behind(h)]
+    waits = held(root, full=True)
+    asks = questions(root, "kept")
     declined = [(d, i, r) for d, o in open_rows(root) for i, r in o if r.get("kind") == "arbiter-fix-declined"]
-    out = ["WHAT NEEDS YOUR DECISION" + ("" if asks or declined else ": nothing - no held question and no fix declined to you"), ""]
-    for n, h in enumerate(asks, 1):
-        key, _, flag = h.partition(": ")
-        out += [_fit(f"{n}. HELD QUESTION: {key}", width), *_wrap("", re.sub(r"^Held[:,]?\s*", "", flag), width), ""]
+    out = ["WHAT NEEDS YOUR DECISION" + ("" if asks or declined else ": nothing - no question kept for you and no fix declined to you"), ""]
+    for n, (d, i, r) in enumerate(asks, 1):
+        out += [_fit(f"{n}. QUESTION {_num(d)}#{i} ({d.name})", width), *_wrap("", str(r.get("question", "")), width),
+                *_wrap("Why it is yours (escalation-check): ", str(r.get("escalation", "")), width),
+                *_wrap("Answered: ", f"make gm-reviewed F={_num(d)} ROW={i} WORDS=\"<your answer>\"", width), ""]
     for n, (d, i, r) in enumerate(declined, len(asks) + 1):
         out += [_fit(f"{n}. A TOOLING FIX DECLINED TO YOU: feature {_num(d)} row [{i}], {' '.join(x for x in _subject(r) if x)}", width),
                 *_wrap("The arbiter asked: ", r.get("tooling_fix", ""), width), *_wrap("Declined because: ", r.get("note", ""), width),
@@ -347,7 +431,7 @@ def _needs_you(root: Path, width: int) -> str:
         for h in waits:
             key, _, flag = h.partition(": ")
             out += [_fit(f"  * {key}", width), *_wrap("", re.sub(r"^Held behind\s*", "Waits on ", flag), width), ""]
-    rest = sum(len(o) for _, o in open_rows(root)) - len(declined)
+    rest = sum(len(o) for _, o in open_rows(root)) - len(declined) - len(asks) - len(questions(root, "owed"))
     out += textwrap.wrap(f"The other {rest} row(s) are decisions already made that you may overturn; nothing waits on them. "
                          "Each in full: make gm-review F=NNN EXPLAIN=1 [ROW=n].", width=width)
     return "\n".join(out) + "\n"
@@ -438,6 +522,19 @@ def main(argv: list[str]) -> int:
             to = _feature(root, argv[3]) if len(argv) == 4 else None
             for m in reviewed(root, _feature(root, argv[1]), ov, to, os.environ.get("GM_WORDS", "").strip()):
                 print(f"gm-reviewed: {m}")
+        elif argv[:1] == ["question"] and len(argv) == 4:
+            d = _feature(root, argv[1])
+            n = question(d, argv[2], argv[3])
+            print(f"gm-question: row {n} of {d.name} - owed escalation-check before it reaches the GM (make gm-escalated F={_num(d)} ROW={n})")
+        elif argv[:1] == ["owed-check"] and len(argv) == 1:
+            owed = owed_in_delta(root)
+            for line in owed:
+                print(f"gm-review: owed escalation-check - {line}", file=sys.stderr)
+            if owed:
+                print("gm-review: dispatch escalation-check on each, then make gm-escalated F=<n> ROW=<n> VERDICT=KEEP|CUT REASON=\"...\"", file=sys.stderr)
+                return 1
+        elif argv[:1] == ["escalated"] and len(argv) == 5:
+            print(f"gm-escalated: {escalated(_feature(root, argv[1]), int(argv[2]), argv[3], argv[4])}")
         elif argv[:1] == ["reviewed-row"] and len(argv) == 3:
             print(f"gm-reviewed: {reviewed_row(_feature(root, argv[1]), int(argv[2]), os.environ.get('GM_WORDS', '').strip())}")
         else:

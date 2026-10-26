@@ -49,4 +49,4 @@ The four questions are `research: physical` with their five boxes; the rest are 
 - [x] T07 Close: report and land
       research: rendering
       verify: DONE. feature-report written (report.md); landing by sync-with-main.sh done
-- [ ] GM review (make gm-reviewed F=400) [lands-open]
+- [x] GM review (make gm-reviewed F=400) [lands-open]

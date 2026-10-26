@@ -23,6 +23,6 @@
 - [x] T04 Close: report and land
       research: rendering
       verify: DONE. feature-report written; landing by sync-with-main.sh done
-- [ ] GM review (make gm-reviewed F=404) [lands-open]
+- [x] GM review (make gm-reviewed F=404) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

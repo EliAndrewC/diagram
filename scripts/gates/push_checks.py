@@ -73,6 +73,7 @@ CHECKS: tuple[tuple[str, str, tuple[str, ...], str, bool, str], ...] = (
     ("gate-stamp", "gates/gate-stamp.py", ("--check", "origin/main"), "push refused by the green-gate guard (above)", False, ""),
     # a touched feature that reads closed carries its report and its carried keys (feature 375 FR-009/FR-014); under a CLOSE_OK
     # with its reason the shell logs the escape and passes `--skip closing`
+    ("gm-questions", "gm_review.py", ("owed-check",), "a question for the GM in this push is still owed escalation-check (above) - the one door to him (feature 432, FR-002)", False, "specs"),
     ("closing", "gates/close_check.py", ("--push", "origin/main...HEAD"), "REFUSED: a feature this push closes owes what closing owes (feature 375) - the reasons above; a case that is genuinely exempt: CLOSE_OK=\"<reason>\" (recorded)", False, ""),
 )
 #: a refusal the guard log records, as the shell recorded it (`guard_log sync-with-main blocked <what> <rule>`)

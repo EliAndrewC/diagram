@@ -14,6 +14,6 @@
       verify: DONE. landed: make perf records each stage's Python calls per seed and size (a counting pass after the timed rolls, sys.monitoring PY_START on the first free tool id) and the interpreter/numpy/shapely versions; tests red without it (counts deterministic per seed, a refusal keeps earlier stages); the pass costs 12.4 s for the 4 reference seeds against 11.4 s timed (about 1.09x a plain roll, snapshot 20261026T172151Z-adhoc)
 - [ ] T03 The call counts are what is watched: the push refuses an unaccepted increase over the line, naming the arbiter command; timings printed only; the arbiter's and perf-audit's agent files, Principle VI and the docs (D3; FR-006, SC-005; `tools/perf_review.py`, `tools/perf_bands.py`, `scripts/sync-with-main.sh`, `.claude/agents/`, the constitution)
       research: rendering
-- [ ] GM review (make gm-reviewed F=427) [lands-open]
+- [x] GM review (make gm-reviewed F=427) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

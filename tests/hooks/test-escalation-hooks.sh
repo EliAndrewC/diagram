@@ -139,6 +139,22 @@ rc=0; final_stop 'I kept the 104 ft ground; I can switch it if you would rather.
 [ "$rc" -eq 2 ] && grep -q "QUESTION UNFILTERED" "$HOOK_ERR" && ok "a message with an ask and an offer is refused as a question" || no "ask+offer" "(rc=$rc)"
 rm -f "$TR"
 
+echo "11. a question KEPT for the GM is named in the turn's final message (feature 432 FR-002)"
+mkdir -p "$FIX/specs/374-x"
+: > "$TR"; printf '{"type":"user","timestamp":"2026-10-26T18:00:00.000Z","message":{"content":"clear the backlog"}}\n' >> "$TR"
+filtered   # the filter ran this turn: only the naming is judged here
+printf '%s\n' '{"kind": "question", "status": "kept", "question": "redraw the three sheets or record the deviation?", "kept": "2026-10-26T18:05:00Z", "source": "ask:b7"}' \
+  '{"kind": "question", "status": "kept", "question": "an old kept question", "kept": "2026-10-25T10:00:00Z", "source": "ask:old"}' \
+  '{"kind": "question", "status": "owed", "question": "not yet judged by escalation-check", "source": "hour:1"}' > "$FIX/specs/374-x/gm-review.jsonl"
+rc=0; final_stop 'The backlog is cleared.' || rc=$?
+[ "$rc" -eq 2 ] && grep -q "QUESTION KEPT, NOT NAMED" "$HOOK_ERR" && grep -q "374#0: redraw" "$HOOK_ERR" && ok "a question kept this turn and not named is refused" || no "an unnamed kept question passed" "(rc=$rc) $(cat "$HOOK_ERR")"
+grep -q "374#1\|374#2" "$HOOK_ERR" && no "an older kept question or an owed one was named in the refusal" || ok "...naming only the one kept since the GM's last message"
+rc=0; final_stop 'The backlog is cleared.' || rc=$?
+[ "$rc" -eq 0 ] && ok "the same message is refused once, never a loop" || no "refused twice" "(rc=$rc)"
+rc=0; final_stop 'The backlog is cleared. Yours to decide: 374#0, redraw the three sheets or record the deviation.' || rc=$?
+[ "$rc" -eq 0 ] && ok "a final message naming it passes" || no "a named kept question was refused" "(rc=$rc) $(cat "$HOOK_ERR")"
+rm -rf "$FIX/specs" "$TR"
+
 echo "8. outside a work tree the hook does nothing"
 OUT=$(mktemp -d)
 rc=0; printf '{"session_id":"t1"}' | ( cd "$OUT" && "$HOOK" stop 2>/dev/null ) || rc=$?
