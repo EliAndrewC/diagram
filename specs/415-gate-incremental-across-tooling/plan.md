@@ -43,22 +43,7 @@ tooling change end to end. T07 closes.
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
 <!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-24 (feature 375 FR-044) -->
-## T06 - measured end to end (SC-006)
+<!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 
-### T06 Approach (checklist part A)
-
-1. **The goal, in the world.** The GM sees what a landing costs now, against T26's 8.8 minutes.
-2. **The constraints.** A real engine landing after a tooling change, its phases from T01's record.
-3. **Where each comes from.** O: the GM's item 1 ("the gate measured on the next real landing").
-4. **Do they describe the world here?** To be measured.
-5. **The order.** After T05.
-6. **The exits.** n/a.
-7. **The search smell.** None.
-8. **The budget.** 20 min.
-9. **Done, measured.** `research.md` holds the landing's table beside T26's.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T06 Decisions
-
-- **D9** The landing measured is the first whose own change does not move `gate_config`, whose baseline already carries the `gate_config` key, and which has a `scripts/` change since its baseline - confirmed by `plan_mode: incremental` in its run record (405's next task where it meets this; T01-T05's own landings change `ci/` and run everything). Rendering: none.
+<!-- plan-archive: T08 to T08 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+<!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->

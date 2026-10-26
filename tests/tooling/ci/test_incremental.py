@@ -562,6 +562,13 @@ def test_a_fixture_file_selects_the_tests_that_name_it_or_its_directory(tmp_path
     assert pl.mode == "incremental" and pl.changed_test_modules == ["tests/y/test_by_name.py", "tests/y/test_reads_fixture.py"], pl
 
 
+def test_a_hook_suite_keeps_the_gate_incremental(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 415 T08: a `tests/hooks/*.sh` suite is `make hooks-test`'s, no pytest module's, and planned both of 405 T138's
+    landing gates FULL (10,085 tests) on 2026-10-25; it now selects only the test modules that name it or `hooks/`."""
+    pl = _tree_plan(tmp_path, monkeypatch, "tests/hooks/test-no-poll-hooks.sh")
+    assert pl.mode == "incremental" and pl.changed_test_modules == [], pl
+
+
 def test_a_helper_module_selects_the_tests_that_import_it(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """A helper is imported by its module name, not its file name: `tests/hamletgen/_builders.py` selects `test_builders`."""
     pl = _tree_plan(tmp_path, monkeypatch, "tests/hamletgen/_builders.py")

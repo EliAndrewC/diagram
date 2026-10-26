@@ -168,6 +168,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-24",
    "declared": "spec-fidelity"
+  },
+  "## T08 - a hook suite keeps the gate incremental": {
+   "sha256": "40c3b49bf2765f6fb6f1b20eec5f53f37e262b63316c71f836ca7d1774a241f2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Approach (checklist part A)": {
+   "sha256": "b308f735b1a5e76a1c4b1bb6faa775dfe34064b014a6fef76d634a3ee68b2bee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Decisions": {
+   "sha256": "1b07252ff417e2669521215b5a5d619481faecdc1c9f109f04b38b1ebe6b6ac5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T07 - the close": {
+   "sha256": "6fa12be778d6a1925fdd740078269ae4f13602583c55ceb9ac4a7a607e0e0d16",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "5909a4931bb53989f3c0a782e9932f9c35759c2e6f30582b75908242641ba063",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Decisions": {
+   "sha256": "7be7ea95cbc0a81ca0a608e593a337f6d86035d7a0c6f52fad4c725371ca0643",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -493,6 +529,50 @@
      "summary": "T05's next make land counts green only with no INTERNALERROR or failed test, the three planner tests green by name, and cover_changed.py run beside the gate with real work, its data in its own directory and no stray .coverage* in the clone root.",
      "class": "within",
      "why": "Verification only: each condition fails solely when FR-004 (beside the gate, working) or the T05 change is absent or broken. It enforces what was asked and adds no behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## T07 - the close",
+    "## T08 - a hook suite keeps the gate incremental",
+    "### T07 Approach (checklist part A)",
+    "### T07 Decisions",
+    "### T08 Approach (checklist part A)",
+    "### T08 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T08 (task)",
+     "summary": "Add a task whose test pins that a change to a tests/hooks/*.sh suite plans incremental rather than full, so T06's real-landing measurement is not voided by a full run.",
+     "class": "within",
+     "why": "Serves the request's stated purpose (the GM: landing should only run tests on what changed) and item 1's 'the gate measured on the next real landing'; a test that fails only when the requested incremental behavior is absent is enforcement of the request (FR-008), not unrequested scope."
+    },
+    {
+     "id": "T08 constraint 2",
+     "summary": "The planner still selects every test that can read a changed file; nothing caught today is missed.",
+     "class": "within",
+     "why": "Preserves correctness of the selection; narrows nothing the GM asked for."
+    },
+    {
+     "id": "D10",
+     "summary": "No planner change of this feature's own: feature 430 T02's reader rule already selects readers of a non-module file under tests/<dir>/, so T08 adds only the test that pins the hook-suite case.",
+     "class": "within",
+     "why": "The behavior asked for (no full run for this change) is delivered by code already on main; the plan does not drop the behavior, it declines to duplicate it and adds a test that fails on the planner before 7d1ced680. Nothing the request or spec requires is removed."
+    },
+    {
+     "id": "T07 constraints / done",
+     "summary": "Close with make feature-report after every task (T06, T08) is ticked; done when report.md is written and the feature landed.",
+     "class": "within",
+     "why": "Project close rule; settles ordering only."
+    },
+    {
+     "id": "D12",
+     "summary": "The report carries R3's open item: whether the gate stays incremental under 430's planner on later landings is read from those landings' run records (make gate-costs), not a task of this feature.",
+     "class": "within",
+     "why": "Item 1 asks for the gate measured on the NEXT real landing (SC-006), which T06 owns and T07 follows; continued observation of subsequent landings is beyond what was asked, so leaving it to run records reported as open narrows nothing. This holds only while T06 itself carries SC-006's real-landing measurement; if D12's open item were T06's own measurement, it would be a narrowing."
     }
    ]
   }

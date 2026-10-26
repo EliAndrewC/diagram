@@ -45,3 +45,28 @@ files - staged, not observed across landings) - so each later landing would pay 
 resets it. That growth, not drift, is what the refresh (T05) must bound. These runs stand in for landings, the GM's approved
 departure (request.md amendment 1); a landing runs the fixed cohort and the coverage check beside its gate, so its numbers
 may shift under that load.
+
+## R3 - a real engine landing after a tooling change, end to end (T06, SC-006)
+
+Observed 2026-10-26 from the records of 2026-10-25; method: the landing's own log (`make land F=417 T=T04`, the session's
+`landT04.log`, its start the call at 04:20:05Z and its end the file's last write at 04:25:12Z), the gate's run record
+(`dev/run-log/2026-10/20261025T042434374185-1969079.json`) and main's commits. It is D9's landing: the first after T05 whose
+own change did not move `gate_config` and which had `scripts/` changes since its baseline - its record reads
+`plan_mode: incremental`, "1 engine file(s) and 9 test module(s) changed, 8 scripts/ file(s) (222 module(s) that read
+scripts/)", the engine file `l7r/diagram/tools/cohort_audit.py`. It was the landing's third call; the two before it were
+refused by the cheap checks (British spellings) in under a minute each, as T26's fourth attempt was the one R1 timed.
+
+Observed 2026-10-25, method: the landing's log and run record, as above. The landing took **5.1 minutes** against R1's 8.8,
+04:20:05 to 04:25:12 UTC:
+- the cheap refusals and the gate's preflight (`make quick`): ~45 s, preflight 21 s of it;
+- the gate's test phase, 2,023 tests selected and 1,330 tooling tests reused: pytest 151 s, the hook suites 51 s, the floors 12 s
+  (the gate 224 s in all, against T26's 280 s test phase alone);
+- the landing cohort ran beside the gate and was done when it was;
+- the claims round, the push and the tick: ~37 s; the fresh block of 48 rolled after the push, off the landing's path.
+
+Observed 2026-10-26, method: `make gate-costs` and each run record's `plan_reason`, 2026-10-25 to 2026-10-26 15:03Z: 39 of 45 gate runs still planned full. Their reasons: 11 a pool
+manifest (`inashiro.json`), 7 a `CLAUDE.md` under `tests/`, 6 an import-time line, 5 the top-level or ci `conftest.py`, 5 a
+hook suite under `tests/hooks/`, 3 no baseline, 2 the gate's configuration. Feature 430 T01-T02 (landed 2026-10-26 14:51Z)
+answers the manifests, the docs and the deeper test-tree files, the hook suites among them (T08); the top-level `conftest.py`
+and an import-time line still plan full by design. No landing has yet run under 430's planner without itself moving the gate's
+configuration, so how often the gate now stays incremental is the next landings' to show (`make gate-costs`).

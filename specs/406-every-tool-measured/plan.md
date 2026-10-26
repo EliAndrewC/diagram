@@ -66,10 +66,7 @@ Owed by the round arbiter's ruling on hour:406-every-tool-measured@1 (continue),
 <!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-20 (feature 375 FR-044) -->
 <!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-20 (feature 375 FR-044) -->
 <!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-20 (feature 375 FR-044) -->
-### T09 (the 22 judgments of T07 read "too new to say": each fix was made 10-17..19 and is readable from 10-24..26)
-
-- **Approach**: re-run `make fix-yield F=385` after 2026-10-26 and replace each "too new to say" in `fix-judgments.md` with the fix's tools and numbers since it was made, and a judgment citing them. No engine or tooling change.
-
+<!-- plan-archive: T09 to T07 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 ### T09 Approach (checklist part A)
 
 1. **The goal, in the world.** each of the 22 arbiter fixes judged on what its tools did since it was made.

@@ -93,8 +93,11 @@ def unlabeled_unit_figure(section: str) -> str:
     things; they are set aside."""
     figure, one_shot = _figures()
     text = re.sub(r"^```.*?^```", " ", section, flags=re.M | re.S)
-    for sentence in re.split(r"(?<=[.;])\s+|\n(?=\S)", text):
+    # ...A SENTENCE WRAPPED ACROSS LINES IS ONE SENTENCE (feature 427's plan: a label on one line, its figure on the next): split at
+    # a sentence's end, a blank line, or a line that opens a list item, a numbered item, a heading or a table row
+    for sentence in re.split(r"(?<=[.;])\s+|\n\s*\n|\n(?=\s*(?:[-*] |\d+\. |#|\|))", text):
         bare = _NOT_A_FIGURE.sub(" ", _SPAN.sub(" ", sentence))  # the figure is read outside code spans, the label anywhere
+        bare = _RULE.sub(" ", bare)
         if figure.search(bare) and not (_LABEL.search(sentence) or one_shot.search(sentence) or _DECISION_LABEL.search(sentence)):
             return " ".join(sentence.split())[:160]
     return ""
@@ -108,6 +111,11 @@ _DECISION_LABEL = re.compile(
     r"\b(?:GUESS|CONVENTION|DEVIATION|UNRESEARCHED|ACCURATE|HISTORICALLY ACCURATE|ATTESTED|SILENT)\b|this project's arithmetic"
     r"|research/questions/|\bknob\b|\bR\d+\b"
 )
+
+
+#: a RULE stated as a figure, which measures nothing: the coverage floor ("100% coverage of the new module" - feature 427's plan,
+#: the first this lint read, refused on it)
+_RULE = re.compile(r"\b100\s*%\s+(?:code\s+|line\s+)?coverage\b", re.I)
 
 
 _APPROACH_HEAD = re.compile(r"^### (T\d+[a-z]?) Approach\b.*$", re.M)
