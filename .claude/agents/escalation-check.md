@@ -133,6 +133,11 @@ they themselves asked in this session, which is answered rather than filtered.
    right before you record a norm as unverifiable - a verification that never ran looks exactly like one that passed.
    And "the record is silent" has a vocabulary: an ABSENCE note means a search that found nothing, a labeled GUESS
    means the record has already answered honestly, a GROUNDS note means nothing was owed. Only the first is silence.
+   A rule the draft calls the GM's ("your ruling", "GM 2026-09-05") is verified like any norm: find his quoted words in
+   a `specs/*/request.md`, an `**Approved**:` line, a spec or `docs/gm-rulings.md`. A docstring or doc that says "GM
+   ruling" is not enough - sessions have labeled their own choices rulings (2026-10-19: a cited "GM ruling" against
+   deleting stale bytecode was, per feature 184's spec, a choice the GM never asked for). Unfound, the item is REWRITE
+   to "an earlier session chose this".
 3. **Check the measurements are of the current state.** A figure measured before the last fix is
    stale, and the session will not have noticed.
 4. **Judge each item** KEEP / CUT / REWRITE.

@@ -14,6 +14,13 @@ question, you are adding or changing a guard, or you are auditing what the guard
 Every guard has a test companion that `make hooks-test` runs as a gate phase; a guard without one
 turns the gate red (constitution XVIII).
 
+**A guard's message is terse** (GM 2026-09-26, on a ~1,500-character block message: a line of measurements *"probably just
+burns tokens and then distracts from the information that we need to convey"*): what to do instead, and the one fact the
+session is missing. Measurements, dates and incident narratives go in the guard's header comment and this file. Trim a
+message whenever you touch its guard. Finding what misfires: `make audit` and `make guard-log GUARD=<name>` for
+firings; hook timeouts and crashes are not in the guard log, so `grep -rhoE` the transcripts under
+`~/.claude/projects/*/*.jsonl` (a Python read of the ~12 GB times out).
+
 | rule | mechanism |
 |---|---|
 | never `git push --force`; never rewrite history (rebase, pull --rebase, merge --squash, commit --amend) | [`scripts/hooks/repo-safety-hooks.sh`](../scripts/hooks/repo-safety-hooks.sh) - no escape; "never" stops meaning never the moment one exists |

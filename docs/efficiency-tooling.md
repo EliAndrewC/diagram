@@ -11,6 +11,12 @@ done when it should have only taken five minutes, then that limits the number of
 make in a single day."* A transcript profile put **78% of wall time in model turn latency**, not tool
 execution - so the number of sequential turns is the cost, not the speed of any one command.
 
+**And several sessions at once** (GM 2026-09-07): *"I would like to get our tooling back to the point where multiple
+sessions can simply be doing their work and rely on make done running in a reasonably short period of time and without
+consuming so many resources that it will overload the available RAM and CPU and other shared resources."* Gate memory,
+gate time and cross-session interference are first-class goals when proposing work, argued with measurements, not
+impressions (`scripts/gates/gate_lock.py` is the host-wide gate lock).
+
 ## 0. The cost ladder everything else protects
 
 | target | what it runs | measured 2026-08-30 |

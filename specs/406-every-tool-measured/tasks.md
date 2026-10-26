@@ -27,4 +27,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
       research: rendering
       verify: DONE. make feature-report F=406 WRITE=1 written (report.md); retro.md holds a row for each of T01-T08; both committed (c-406 T08 commit) just before this task-start, which the wording-only tick needed
 
+- [ ] T09 Re-judge the 22 fixes once readable: after 2026-10-26 re-run make fix-yield F=385 and replace each "too new to say" in fix-judgments.md with its numbers (moved from a session memory, 2026-10-26)
+      research: rendering
 - [x] GM review (make gm-reviewed F=406) [lands-open]
