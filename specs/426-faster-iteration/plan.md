@@ -66,12 +66,14 @@ key change on the same docs-only edit (SC-001), recorded in `research.md`.
 ## Decisions
 
 **D1 - the claims wait ends when nothing can arrive (FR-001, FR-002).** `land.py`'s `wait_for_claims` already reads the claims
-gate's refusal each poll. It returns at once, with the refusal and its cure, when the refusal names no OWED claim (no `owed (`
-line): an INTRODUCED finding, a known drift awaiting an arbiter's accept, or anything else only the session can cure by an edit
-or a ruling, which `make land` re-run afterwards picks up. An `owed (` refusal - a claims check the session may have in flight -
-keeps today's wait. A carry is filed as today. The message names the cure (`make arbiter-ask ... REVIEW=claims:<key>` for an
-introduced known drift; fix the code or the claim otherwise), per FR-011. Not chosen: tracking dispatched agents (no registry of
-in-flight claims checks exists; the owed/introduced split answers the same question from the gate's own words).
+gate's refusal each poll. It returns at once, naming every refusal with its cure, when ANY part of the refusal is one no
+in-flight check can cure: an INTRODUCED finding, a known drift awaiting an arbiter's accept, or anything else only an edit or a
+ruling cures (the next `make land` reads it); the owed claims, if any, are listed beside it. It also returns at once on an owed
+claim when no claims check is IN FLIGHT. In flight is seen, not inferred: `make claims-bundle` and `make claims-triage` write a
+marker (`.git/claims-in-flight/<bundle>`, the bundle's path and the time) and `make claims-checked` / `make claims-triaged`
+remove it; a marker older than `CLAIMS_WAIT_S` is stale and ignored. Only while a live marker exists does the landing wait, as
+today. A carry is filed as today. Each message names its cure (`make claims-bundle OWED=1` and dispatch impl-drift for an owed
+claim; `make arbiter-ask ... REVIEW=claims:<key>` for an introduced known drift; fix the code or the claim otherwise), per FR-011.
 
 **D2 - one docstring-blind code id (FR-003, FR-004).** A new `l7r/diagram/pipeline/codeid.py` holds the normalization
 `gate-stamp.py`'s `content_id` already does: parse, drop every docstring (module, class, function, and the bare string after an
@@ -95,7 +97,7 @@ point of change in each, naming the other.
 | `scripts/gates/gate-stamp.py` `content_id` | `make done`'s stamp | docstring-blind | keep; its normalization moves to `codeid` (D2); `RAW_AREAS` stay raw |
 | `ci/delta.py` `engine_key` | the paid gate's delta | docstring-blind | keep |
 | `scripts/measure/cohort_known.py` `engine_key` | which cohort records are the same engine | docstring-blind | keep |
-| `ci/state.py` `tooling_hash` | reuse of the tooling tests | raw bytes, deliberately | **change** `.py` files to `codeid` except each file's MODULE docstring (scripts print it as usage: `regen.py`, `building_programs.py`); non-`.py` (Makefile, its `##` help lines that build `docs/make-targets.html`) stay raw |
+| `ci/state.py` `tooling_hash` | reuse of the tooling tests | raw bytes, "deliberately: a Makefile comment IS a Makefile change worth one run" (its docstring) | **change** `.py` files to `codeid` except each file's MODULE docstring (scripts print it as usage: `regen.py`, `building_programs.py`, and a tooling test may assert on it); function and class docstrings are not read by any tooling test (grep for `__doc__`/`getdoc` under `scripts/` and `tests/tooling/`, research R3), so dropping them reuses no stale pass; non-`.py` (the Makefile, whose comments and `##` lines build `docs/make-targets.html`) stays raw - the reason written at the point of change |
 | `ci/gate_config.py` `config_hash` | how the gate's tests run | raw bytes | **change** `.py` (conftest and the machinery) to `codeid`; lockfiles and config files raw |
 | `scripts/record/record_cache.py` `code_sha` | a parse cache's extractor code | raw bytes | **change** to `codeid` for `.py`: an extractor's docstring does not change what it extracts |
 | `pipeline/record_build.py` `fingerprint` | the record's built site | raw bytes | keep - the build reads the engine's research claims, which live in docstrings |
@@ -111,9 +113,13 @@ point of change in each, naming the other.
   left unrolled; exit 1.
 - a run under `--last-failed` or `--exitfirst` writes its record marked `partial`, which `cohort_gate.landing_shaped` refuses, so
   it can never stand as a landing (FR-008); `cohort-landing` passes none of the three.
-- every run prints `rolled N, served M` from `rollcache.obtain`'s `how`, the measurement for SC-001 and FR-012; FR-012 then holds
-  by D3 (the store is already shared by a clone's linked worktrees) and is pinned by a test that runs a cohort twice at one code
-  and asserts zero rolled.
+- every run prints `rolled N, served M` from `rollcache.obtain`'s `how`, the measurement for SC-001 and FR-012. FR-012 is pinned
+  through the landing path itself: a test runs a full `make cohort N=48 FRESH=0`, then `make cohort-landing` (its own recipe, its
+  seed block, `cohort_gate.py check`) at the same code, the roll stubbed to count, and asserts the landing rolled zero; and the
+  same with the first run in a linked worktree of the clone.
+- a record from a run that rolled only some seeds (`--last-failed`, or `--exitfirst` stopping early) CARRIES FORWARD the earlier
+  failures it did not roll, as pytest's last-failed list keeps tests not run until they pass: its `failed` list is the seeds it
+  saw fail plus the previous record's failures it never rolled.
 
 **D5 - `make probe` (FR-009).** `scripts/measure/probe.py`, `make probe [WT=<worktree>] [EXITFIRST=1]`:
 - in `WT` (default: the current tree) it runs the landing cohort, the fresh block and `make map` for each live hamlet;
@@ -121,8 +127,9 @@ point of change in each, naming the other.
   the same seeds;
 - HEAD's verdicts per block are read from `.git/probe-baselines/<engine key>-<block>.json`; absent, HEAD is rolled once in a
   detached worktree at HEAD and stored (SC-004);
-- it prints, per seed whose verdict differs from HEAD's (new failure, fixed, changed failure), both verdicts; and per pool
-  manifest, each changed field path, lanes compared as drawn (rounded points);
+- it prints EVERY seed's verdict beside HEAD's, a difference marked (new failure, fixed, changed failure, same failure, same
+  pass), so the seed being worked on shows whether or not it moved; and per pool manifest, each changed field path, lanes
+  compared as drawn (rounded points);
 - `EXITFIRST=1` passes `--exitfirst-against <baseline>` to the cohort: stop at the first seed worse than HEAD's.
 
 **D6 - the plan section template (FR-010).** `task-add.py` writes, when no `SECTION=` is given, a section `### {T} (...)` with an

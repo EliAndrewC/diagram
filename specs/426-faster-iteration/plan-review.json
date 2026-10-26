@@ -1,0 +1,213 @@
+{
+ "feature": "426-faster-iteration",
+ "blocks": {
+  "preamble": {
+   "sha256": "79c94517fb99b97ac7cda23551146480100a6c94708f4a9e23fcee66bc29ee96",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "04ecd8001b95be773e92e9cb9d17f83c6102ecc6dd2603cc04df0542193dc1d0",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "2e0086ee9d201c01cdc814509b4d39b2c0b65884f64743d90a891cfabcc4e9d9",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "9072bc4b7188d354f0f03738f9794ff865bfb6a2a0cd5632da1941bf650586f8",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "eb078bbe6dd7e18101ff9b75a0f5b68e54a426daf81843af55f43d25dda9a1b9",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "565f50b11d600cf3ad7d02175d02ae70fbc4cb44df592a45c308400c62d64b37",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "78aa41f093ec3faedcbfbaf4620358dd38cb2532a522b49bf2a2b804d0d2fc7f",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### Documentation (this feature)": {
+   "sha256": "0abe6baf8d99cff6c3985a52af8197ec2273df104df7ada30121575146a6d9d4",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### Source Code (repository root)": {
+   "sha256": "d662579d5dfcdfa0b841546af219abd7d8e4413a9e96972e53a0211411c48238",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1-introduced",
+     "summary": "make land returns at once, with refusal and cure, when the claims refusal is an INTRODUCED finding / known drift / anything only an edit or ruling cures",
+     "class": "within",
+     "why": "Exactly FR-001 and the approved fix 1 ('stop waiting when the claims gate refuses for a reason waiting can't fix')."
+    },
+    {
+     "id": "D1-mixed",
+     "summary": "the fast exit fires only when the refusal names NO 'owed (' line, so a refusal carrying an introduced finding AND an owed claim still waits the full round",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "No in-flight check can cure the introduced part, so the land refuses after the wait anyway: that is FR-001's case literally ('MUST NOT wait ... when the refusal is one no in-flight check can cure') and the GM's 'a reason waiting can't fix'. Not impossible, not implied by the request, and it keeps the 20-minute waste the fix exists to remove. Should say: fail fast whenever any part of the refusal cannot be cured by waiting, listing the owed claims beside the rest."
+    },
+    {
+     "id": "D1-owed-proxy",
+     "summary": "an 'owed (' refusal is treated as 'a check may be in flight' and keeps today's wait, because no registry of in-flight claims checks exists",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 and SC-002 key on whether a check IS in flight ('refuses with nothing in flight never enters the claims wait'); the plan substitutes 'the gate says owed', so an owed claim nobody dispatched still waits 20 minutes, a reason waiting can't fix. The stated reason (no registry exists) is an implementation-cost argument, not impossibility: a marker written when a claims check is dispatched/started would make in-flight observable. Should say: wait only while an in-flight check is observable (e.g. such a marker), or take this narrowing to the GM via the arbiter."
+    },
+    {
+     "id": "D2",
+     "summary": "one docstring-blind code id in pipeline/codeid.py (drop module/class/function docstrings and constant-claim strings, dump AST without attributes, hash); gate-stamp calls it; unparsable files hashed by bytes",
+     "class": "within",
+     "why": "FR-003/FR-004 and the GM's 'omitting docstrings when hashing code'; one copy of the rule serves the audit."
+    },
+    {
+     "id": "D3-roll-render",
+     "summary": "gencache._split_sources and render_cache.engine_fingerprint key on codeid",
+     "class": "within",
+     "why": "FR-003, FR-005, SC-001."
+    },
+    {
+     "id": "D3-content-areas",
+     "summary": "interactive/** (class docstrings are modal text via cls.__doc__) stays hashed by bytes in the roll and render keys, the rule and reason at the point of change",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words ('failing to strip docstrings when we SHOULD') and carried by FR-004/FR-005's content exception: a docstring that is the artifact's content, hashed blind, would serve a stale render, defeating the cache exactness the request presumes (SC-006). Page assets are not docstrings at all."
+    },
+    {
+     "id": "audit-keeps-already-blind",
+     "summary": "gate-stamp content_id (RAW_AREAS raw), ci/delta engine_key, cohort_known engine_key kept as they are",
+     "class": "within",
+     "why": "Already docstring-blind; RAW_AREAS is the existing content exception FR-004 allows."
+    },
+    {
+     "id": "audit-tooling_hash",
+     "summary": "ci/state.py tooling_hash moves .py to codeid except each file's MODULE docstring (scripts print it as usage); Makefile and non-.py raw",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A content exception under FR-004: a module docstring printed as usage is output the tooling tests can observe. Note, not blocking: the row says today's raw hashing is 'deliberately' so and the plan does not record what that reason was; if the tooling tests read function docstrings too, stripping them serves a stale pass, an FR-004 content case the audit would have missed. Record the reason in research.md and at the point of change."
+    },
+    {
+     "id": "audit-gate_config-record_cache",
+     "summary": "ci/gate_config config_hash and record_cache code_sha move .py to codeid; lockfiles/config raw",
+     "class": "within",
+     "why": "FR-004: places that fail to strip docstrings when they should, fixed."
+    },
+    {
+     "id": "audit-content-keeps",
+     "summary": "record_build fingerprint kept raw (the built site reads research claims from docstrings); claims fingerprints kept (the claim text is what is checked)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-004's own exception: the docstring is content of what the site produces; the GM's 'when we should' implies such sites exist. The claims case is the spec's edge case."
+    },
+    {
+     "id": "audit-non-code",
+     "summary": "plan_*, hm_*, record/* other hashes are text, not code: no change",
+     "class": "within",
+     "why": "Not code-staleness keys; FR-004 covers code-hashing sites."
+    },
+    {
+     "id": "D4-modes",
+     "summary": "cohort_audit --failed-first/--last-failed/--exitfirst; last run = newest same-block record of this clone, none -> say so and roll all; ordered_specs and roll_until_failure; early stop cancels unstarted, lets started finish, exit 1",
+     "class": "within",
+     "why": "FR-007 and the GM's pytest-style modes; letting started seeds finish is pytest-xdist -x behavior in a parallel pool."
+    },
+    {
+     "id": "D4-partial-records",
+     "summary": "--last-failed/--exitfirst runs write records marked partial, refused by cohort_gate.landing_shaped; cohort-landing passes none of the modes",
+     "class": "within",
+     "why": "Enforces FR-008."
+    },
+    {
+     "id": "D4-lastfailed-after-partial",
+     "summary": "LAST_FAILED reads only the newest record's failing seeds, so failures an EXITFIRST partial run did not roll are forgotten",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Full run fails 3, 7, 9; LAST_FAILED=1 EXITFIRST=1 rolls 3, fails, stops - the record says failing {3}; the next LAST_FAILED=1 rolls only 3; once fixed it reports nothing failing, and 7 and 9 reappear only at the landing - the wasted round the GM is cutting. The GM asked for 'the pytest thing'; pytest's lastfailed keeps unrun failures until they pass. Should say: a partial record carries forward the failures of the run it selected from that it did not roll."
+    },
+    {
+     "id": "D4-count-line",
+     "summary": "every run prints 'rolled N, served M'",
+     "class": "within",
+     "why": "The measurement that enforces SC-001/FR-012; verification of what was asked."
+    },
+    {
+     "id": "D4-FR012-test",
+     "summary": "FR-012 'holds by D3' and is pinned by a test that runs a cohort twice at one code and asserts zero rolled",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-012 names its test: 'a landing right after a full cohort run at the same code rolls no seed', and the GM's own example is 'run the seeds locally and then do a make landing'. Two cohort runs never exercise the landing path (its worktree, environment and seed block), so 'holds by D3' is a premise the substituted test cannot measure. Should say: the test runs a full cohort, then make cohort-landing (the land path), and asserts zero rolled."
+    },
+    {
+     "id": "D5-probe-runs",
+     "summary": "make probe [WT=] [EXITFIRST=1] runs the landing cohort, HEAD's fresh block and make map for each live hamlet; HEAD's verdicts stored per engine key and block under .git/probe-baselines, rolled once in a detached worktree when absent; EXITFIRST stops at the first seed worse than HEAD's",
+     "class": "within",
+     "why": "FR-009, SC-003, SC-004, approved fix 2."
+    },
+    {
+     "id": "D5-print-only-diffs",
+     "summary": "the probe prints only seeds whose verdict differs from HEAD's",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Approved fix 2: 'print each seed's result and each changed field against HEAD'; FR-009: 'per-seed verdict comparisons'. A seed failing the same way at HEAD and in the probe - the seed being iterated on - would be invisible. Should say: print every seed's verdict against HEAD's, differences marked (the field changes may stay changed-only, as the fix's words say)."
+    },
+    {
+     "id": "D6",
+     "summary": "task-add writes a section with the alone-off table header and item 6's D35 red exit wording; a SECTION= file whose item 6 lacks make arbiter-ask gets a warning and is filed",
+     "class": "within",
+     "why": "FR-010 and approved fix 3."
+    },
+    {
+     "id": "context-structure",
+     "summary": "Summary, Technical Context (probe-baseline store, reference roll first), Performance bookends, Constitution Check, Project Structure, Complexity Tracking",
+     "class": "within",
+     "why": "Restate the spec or lay out the files for decisions above; none decide anything the spec left open beyond them."
+    }
+   ]
+  }
+ ]
+}

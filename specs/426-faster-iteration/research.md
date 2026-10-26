@@ -29,12 +29,20 @@
   (docstrings) to write the record's pages. Other `__doc__` readers found by grep are usage text (`regen.py` prints its module
   docstring, `building_programs.py` feeds argparse) - covered by keeping MODULE docstrings in `tooling_hash`.
 
+## R3b - Why the tooling hash may drop function docstrings
+
+- `tooling_hash` was made raw so a Makefile comment counts (its docstring). For `.py` under `scripts/` the readers of docstrings
+  are module-level usage text only (grep of `__doc__`, `getdoc`, `get_docstring` under `scripts/` and `tests/tooling/`,
+  2026-10-26: `gm_review.py`, `preflight.py`, `plan_gate.py` read module docstrings or plan text), so function and class
+  docstrings can drop and module docstrings stay.
+
 ## R4 - In-flight claims checks
 
-- **Decision**: infer from the gate's own refusal (D1), not from a registry.
-- **Rationale**: `wait_for_claims` already re-runs `claims-gate.sh` each poll and parses "carry:", "owed (", "introduced:"; no
-  registry of dispatched claims agents exists (`hm_checks` tracks the record's page checks, not claims checks). An owed claim
-  can be cured by a check the session runs; an introduced finding only by an edit or a ruling the next `make land` reads.
+- **Decision**: a marker per claims bundle, written when the bundle is built and removed when its reply is recorded (D1); the
+  landing waits only while a live marker exists.
+- **Rationale**: no registry of dispatched claims agents exists (`hm_checks` tracks the record's page checks). Inferring "in
+  flight" from "owed" waited 20 minutes for a check nobody dispatched (spec-fidelity, 2026-10-26). An introduced finding is never
+  cured by waiting; the landing stops on it at once whatever else is owed.
 
 ## R5 - The before/after count (to fill at the key change's landing)
 
