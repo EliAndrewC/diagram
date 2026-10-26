@@ -1,0 +1,376 @@
+{
+ "feature": "430-faster-landings",
+ "blocks": {
+  "preamble": {
+   "sha256": "a0c9e2d879ca20f51796f38b987b45b52ab30aeb83f97c5617d15437471faf62",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Summary": {
+   "sha256": "645715e0581af7b932bce667c7fdd5b2585db09363928de4e73fa8d2fbbb2af4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Technical Context": {
+   "sha256": "309e096f75c49168529e559951a6ca89f05826752b1accd68e2e0de5c51c1db0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Performance bookends": {
+   "sha256": "32af75c6e2417f701e4c4e946b3743e1c6e5345eaf7f20411f2b7bb38e9defcf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Constitution Check": {
+   "sha256": "faacf78cf5fd867d6e0e648b244c953d1274cfb4512d4fe6b15ea60b4dd1acf4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Decisions": {
+   "sha256": "4de1856667b221a7cd3273cdec6569f01698dbe85a2547f2239c818187a9f0c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Task approaches": {
+   "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "383fd4b300ccafed995a8ce384fa785c7df4a15eb24384fed5072d4291aaee28",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "7d196542689c60da697ea7349fa7a0bbfe10d2149ee1bd4a87f29e43efa0fce0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "f37733827201c41179985df38f4b2753adbed463627a6d3a67d5e02c0537c916",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "054578451cbb1758d258e73b3a367661e50412903c013bfec17e877b99e1d89a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "8e6fec9130266f9a68f7e2d60b49ebc8bc5382eba13dbe8b86478bd94c871789",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "2daf85de6aec141d69b34c62b3dce52ddf4cc54c6520fa8b920ede54d3af0f13",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "8c3c5b2171eae4f69d05c1b3aa7e1847bdb917a15685a8bf7d85445c29235b2e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Project Structure": {
+   "sha256": "78aa41f093ec3faedcbfbaf4620358dd38cb2532a522b49bf2a2b804d0d2fc7f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### Documentation (this feature)": {
+   "sha256": "9ce761e57f62fd89e9a55c9c9e72722d5ba6b6eb4daaf69ea72ff4442f6ca14a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### Source Code (repository root)": {
+   "sha256": "933987739c8584ee9849bf8ea65479c3230236d8a359b4bc57571fcb5ef55b31",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T06 Approach (checklist part A)",
+    "### T07 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Manifests alone keep the plan incremental and add their reader tests from the gate's trees (tests/, gate/, full/, tooling/; not soak/ or tier_*); the pattern moves to l7r/diagram/ci/pool_readers.py; a manifest with no reader stays incremental and says so; replay of the 11 inashiro.json runs.",
+     "class": "within",
+     "why": "FR-001 verbatim: incremental when only manifests changed, readers as pool-readers.py finds them, extended to the gate's own trees. The soak/ and tier_* exclusion rests on the plan's claim that they are not gate trees (not checkable from the bundle); the replay requiring every failed test to be selected is FR-009's proof."
+    },
+    {
+     "id": "D2",
+     "summary": "tests/ non-module files: *.md adds nothing; directly under tests/ plans full; otherwise the file's own directory's tests plus, for a non-conftest file, every gate-tree test whose source names the file or its directory.",
+     "class": "within",
+     "why": "Each clause of FR-002 is carried. Part (b) departs from the GM's item 2 'only its own directory's tests' and FR-002's 'that directory' in the WIDER direction - more tests, never fewer - and is stated as a superset in D2 and the Constitution Check (XVI). The literal reading would select nothing for tests/fixtures/ (no test module of its own, per R3) and let a defect through, which FR-009 forbids; widening verification is not a narrowing of the request."
+    },
+    {
+     "id": "D3-scope",
+     "summary": "cover_changed.py asks every line of every engine .py the diff changes, with the floor's own marker expression (tooling override removed); tests from baseline contexts, changed test modules and the mirror, less rolls_map; an unrun line whose text is unchanged and that the baseline shows a non-run context reaching is carried, not named; no baseline falls back to the mirror.",
+     "class": "within",
+     "why": "FR-003's 'every line of each changed module ... measured with the tests the floor counts' is carried by the modules rule, the floor's markers and the floor's own carried-coverage reading. The rolls_map exclusion is the one gap - a roll-reached line the change stops a roll reaching is not named here - and FR-009 itself permits a narrowing 'stated and priced': it is stated, the gate still names it so nothing reaches main that does today, and its price (misses among today's in-scope reds) is measured by the task. The no-baseline fallback errs toward naming more lines, not fewer."
+    },
+    {
+     "id": "D3-placement",
+     "summary": "The coverage check is started first, with the gate running beside it, and stops the gate on refusal (feature 415 T03 D6 kept), rather than running to completion before the gate starts.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's item 3 and FR-003 say 'before the 4-5 minute gate'. The purpose of 'before' is that a coverage red is heard at the check's time, not after the gate: concurrent start delivers that identically (refusal at the check's time, gate stopped), and a green check costs the landing nothing. A strictly serial placement would add the check's full time to every green landing, against the request's own stated purpose ('faster with either no cost to fidelity or an acceptable minimum cost'), with no fidelity gained. Applying the word literally defeats the purpose; that is the legitimate case. Condition: SC-002's 'less time than the gate' must be measured as the check actually runs - beside the gate on this shared container - not timed alone."
+    },
+    {
+     "id": "D4",
+     "summary": "push_gates.py holds each gate's judged paths (claims incl. specs/*/tasks.md; entry from record_owed.py's constants, pinned by a test; cohort the engine paths); 'nothing' exits at once, 'cached' exits on a stored PASS keyed on gate name, gate code id, merge base and judged blobs; refusals never cached; sync-with-main.sh runs the owed gates side by side and reports every refusal; replay of today's pushes.",
+     "class": "within",
+     "why": "FR-004 clause by clause: exit at once when nothing judged, cache on the delta's content, run concurrently, report every refusal together. Keeping the existing route (cohort only on a gated route) preserves nothing the GM asked to change. The constant-pinning test and the same-verdict replay are enforcement of the request (FR-009)."
+    },
+    {
+     "id": "D5-checks",
+     "summary": "plan_lint gains three checks (unit figure anywhere in the section without a label; item 6 lacking make arbiter-ask; an open task with no ### Txx Approach block); make plan-delta runs the lint on every block and writes no bundle while one refuses.",
+     "class": "within",
+     "why": "FR-005's three named checks and SC-004 (no review dispatched on a refused block - no bundle exists). The scoping of the third check to opted-in plans is ruled separately below."
+    },
+    {
+     "id": "D5-optin",
+     "summary": "The approach-block-per-task check applies only 'in a plan that opts into the checklist (**Approach checklist**:)'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-005 says 'an approach block per task' and the GM's item 5 says 'approach block present', with no condition. The carve-out is not stated or argued as one, is not physically necessary, and is not implied by the GM's words. Purpose test: the check exists so a missing approach block is caught by a script rather than a review round; scoped to a marker, a plan that omits the marker escapes the check entirely. Concretely, none of this plan's 18 blocks carries '**Approach checklist**:', yet it has seven '(checklist part A)' blocks - so as written the check would not apply to the very plan that defines it. Fix: apply it to every plan whose tasks owe approach blocks (e.g. any plan carrying a ### Txx Approach block, or every plan under the convention's own trigger), or show the real opt-in signal, that this plan carries it, and state why plans without it are exempt."
+    },
+    {
+     "id": "D5-decides-nothing",
+     "summary": "An approach block owes no review when item 5 is n/a or 'nothing placed earlier moves', items 10 and 11 are n/a, it states no unit figure, and every D<n> it names is defined elsewhere ('a rule is a decision, and a decision is a D<n>').",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-005 requires the block to change no rule, tune no number and move nothing placed earlier, 'labeled or not', tested 'of the block's own part A answers (the plan names which items carry each property)', and says 'a missing D<n> label alone is not enough'. D5 names carriers for 'moves nothing' (item 5) and 'tunes no number' (item 10, no unit figure), but for 'changes no rule' its only carrier is the D<n> check, justified by 'a decision is a D<n>' - the labeled-only reading the spec rejects. A block that states a new rule in prose with no label, items 5/10/11 'n/a' and no unit figure, would skip review. The purpose of the skip (GM item 5: 'decides nothing') is gutted for exactly the case the spec named. Not impossible: part A has items that can carry it (e.g. item 2 citing only D/FR/SC ids defined elsewhere and item 4 answered with an unqualified 'Yes'). Fix: name which part A item(s) carry 'changes no rule' in the unlabeled case, or state that the approach form cannot carry it and approach blocks keep owing review."
+    },
+    {
+     "id": "D6",
+     "summary": "known_drifts drops the merge-base condition: a DRIFTED claim whose own text's last named task is an open tasks.md row naming its unit is known; it must be recorded via make claims-known (run by make land) into gm-review.jsonl and listed by make gm-review; a triage of TRIAGE_SKIP_MAX=3 or fewer claims writes the impl-drift bundle directly with a ledger SKIPPED row.",
+     "class": "within",
+     "why": "The GM's item 6 defines known as 'its claim names the open task carrying the fix', with no condition on who moved the code, so dropping the merge-base condition is the GM's definition; 'last named task' is a narrower reading of 'names the open task', which only reduces admission. Recording, the gm-review listing (SC-005), the 3-claim threshold (FR-006 'at most 3') and the recorded skip are FR-006 verbatim."
+    },
+    {
+     "id": "D7",
+     "summary": "make decide and make plan-delta print the owed claims triage to dispatch beside the review; a hooks test pins that decide-first passes a claims-triage dispatch and refuses impl-drift while a task is undecided.",
+     "class": "within",
+     "why": "FR-007 and the GM's item 7. R2 found no guard holding the triage, so the prompt line is what makes the parallel dispatch happen; the hooks case is enforcement of FR-007, and refusing impl-drift preserves existing behavior the request does not change."
+    },
+    {
+     "id": "T01-T07 approaches",
+     "summary": "Each task's part A: goal, constraints (its D and FRs), exits with make arbiter-ask, budget one landing, done measured by red-without tests and the replays.",
+     "class": "within",
+     "why": "They restate the decisions above and the spec's SCs; T03 item 4's '2 in unchanged modules stay the gate's' is SC-002's own scoping. No number tuned, no placement moved, no rule beyond D1-D7."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T06 Approach (checklist part A)",
+    "### T07 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Pool manifests (pool/<tier>/<map>/<map>.json) alone keep the plan incremental and add their reader tests from the gate's trees (tests/, gate/, full/, tooling/; not soak/ or tier_*); the readers rule moves into l7r/diagram/ci/pool_readers.py; a manifest no reader names stays incremental and says so; replayed on the 11 inashiro.json runs.",
+     "class": "within",
+     "why": "FR-001 and GM item 1 as written: incremental plus the manifests' readers, the pool-readers rule extended to the gate's own trees. Other non-Python engine files plan full as today."
+    },
+    {
+     "id": "D2-a-c",
+     "summary": "A tests/ doc (*.md) adds nothing; a file directly under tests/ plans full; any other non-module file selects every test module of its own directory; a conftest.py selects its directory only.",
+     "class": "within",
+     "why": "FR-002 word for word, and GM item 2."
+    },
+    {
+     "id": "D2-b",
+     "summary": "A non-conftest non-module file under tests/<dir>/ also selects every test module in the gate's trees whose source names the file or its directory as a path part - wider than 'that directory'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from the GM's 'only its own directory's tests' (item 2), so it is ruled. Legitimate on the GM's own words elsewhere in the request: 'faster with either no cost to fidelity or an acceptable minimum cost to fidelity'. The tests that name a changed fixture are the ones that break when it changes; dropping them lets through a defect today's full plan catches. That holds for tests/fixtures/ (no test module of its own, read from eight directories, observed 2026-10-26, method: research R3) and equally for a directory that has its own tests, since an outside reader is still a reader. The accepted FR-002 says 'MUST select the tests of that directory', not 'only'. Every such delta plans full today, so (b) still saves time. Aside: the plan's 'the narrowing FR-009 forbids' misreads FR-009, which forbids an unpriced narrowing, not every narrowing. That is wording, not a finding."
+    },
+    {
+     "id": "D3-scope",
+     "summary": "Modules are every engine .py with any hunk; tests are the baseline contexts touching them, the changed test modules and the mirrored directory; the gate's own marker expression (the tooling override goes); a line unrun here is named unless the baseline shows it reached by an unrun context and its text is unchanged; with no baseline, the mirrored directory and every line asked.",
+     "class": "within",
+     "why": "FR-003 and FR-003a and GM item 3 ('measured the way the full floor measures them'). The carried-coverage rule is the floor's own. The no-baseline fallback can only over-name, never miss."
+    },
+    {
+     "id": "D3-rolls",
+     "summary": "Map-rolling tests are excluded (-m 'not rolls_map'). A line a roll used to reach and the change stops it reaching is not named here; the gate names it, as today. The task measures how many in-scope reds that would have missed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows FR-003's 'every line ... the full floor would name, with the tests the floor counts'. Running the rolls would make the check as slow as the gate, which defeats GM item 3's 'fast' and FR-003's 'less time than the gate'. FR-009 allows a narrowing that is stated and priced; this one is stated, priced by the task's replay of the in-scope reds, and the gate still catches the miss, so no defect lands."
+    },
+    {
+     "id": "D3-placement",
+     "summary": "The check keeps feature 415's placement: make land starts it first, runs the gate beside it, and stops the gate the moment the check refuses. It does not run strictly before the gate.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This departs from the literal 'before the 4-5 minute gate' (item 3) and FR-003's 'before the gate'. The words name the gate's duration, so what they ask for is an early answer, not an order of execution. Running the check first and alone would make every green landing pay its time (48 s on T26's landing, measured 2026-10-24, as the plan cites from feature 415). That defeats the request's stated purpose of making landings faster. Here a refusal arrives at the check's time and stops the gate, so nothing is lost. I rule on the plan's cited figure; this dispatch is bundle-only, so I did not re-run it."
+    },
+    {
+     "id": "D3-timing",
+     "summary": "SC-002's 'less time than the gate' is timed with the check running beside the gate, as a landing runs it, never alone.",
+     "class": "within",
+     "why": "A measuring method that follows from the placement and is the stricter of the two conditions."
+    },
+    {
+     "id": "D4",
+     "summary": "push_gates.py records what each gate judges; each gate exits at once when the delta touches none of its paths; a PASS is cached on the gate name, its scripts' code id, the merge base and the blob ids of its judged paths, and a refusal is never cached; sync-with-main.sh picks the route, then runs the owed gates side by side and reports every refusal together.",
+     "class": "within",
+     "why": "FR-004 and GM item 4. Re-running a refusal on an unchanged delta lets nothing through, and a cached refusal would block a push cured from outside the key. Aside for implementation: D6 makes the claims gate read gm-review.jsonl, which is not in D4's claims path list."
+    },
+    {
+     "id": "D5-checks",
+     "summary": "Three new plan-lint checks: a unit figure without a label anywhere in the section; item 6 lacking make arbiter-ask; an open task with no approach block. plan-delta runs the lint and writes no bundle while a block refuses.",
+     "class": "within",
+     "why": "FR-005's three lint items and SC-004."
+    },
+    {
+     "id": "D5-approach-scope",
+     "summary": "The missing-approach-block check applies only to plans that opt in or already hold a ### Txx Approach block. Plans with neither predate feature 385 and owe none (approach_gate.py D8).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows FR-005's 'an approach block per task'. On the plan's stated ground, such plans owe no approach block under the existing rule (approach_gate.py D8), so the lint cannot demand one; requiring it would refuse plans the checklist never covered. Ruled on the bundle's statement; the repository was not read."
+    },
+    {
+     "id": "D5-decides-nothing",
+     "summary": "An approach block owes no review when item 5 is n/a or 'nothing placed earlier moves', items 10 and 11 are n/a, it states no figure with a unit, item 2 names only ids defined elsewhere, item 4 is a bare 'Yes', and every D<n> it names is defined elsewhere.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-005 lets a block skip review ONLY WHEN it 'changes no rule, tunes no number and moves nothing placed earlier, labeled or not'. D5's test cannot see two of those. (1) 'Tunes no number' is checked as item 10 n/a plus 'no figure with a unit'. A unitless count such as '9 of the 11 replays', 'two landings' or '4 or fewer claims' is a number tuned, and the test passes it. (2) Rules are asked only of items 2 and 4. Items 6 (beyond containing make arbiter-ask), 8 and 9 are free prose and never asked. Item 9 ('Done, measured') is the acceptance criterion and carries criteria in this very bundle: T03 names four commits and 'each faster than its gate took'. A block with item 2 ids only, item 4 a bare Yes, and item 9 saying 'the replays select 9 of the 11 failures' would relax D1 and skip review. That is the feature-239 failure the plan gate exists for. The plan's premise that 'a rule stated in prose has to stand in one of those two answers' is asserted, not measured, and T03 contradicts it. The GM's item 5 also says 'matches the template and decides nothing'. FR-005's delegation ('the plan names which items carry each property') lets the plan choose the items; it does not let a property go uncovered. Fix: the test requires no number of any kind, labeled or not, rather than 'no figure with a unit', and every other free answer (at least items 6, 8 and 9) must be the template's own text (item 6 the standard green/red exit, item 9 'Its tests red without D<n>.') or name only ids defined elsewhere. Otherwise the block owes review."
+    },
+    {
+     "id": "D6",
+     "summary": "known_drifts drops the merge-base-code condition: a DRIFTED claim whose last named task is an open tasks.md row naming its unit is known. It is admitted once recorded (make claims-known writes a gm-review.jsonl row, and make land runs that itself) and listed in make gm-review. A triage of TRIAGE_SKIP_MAX = 3 claims or fewer goes straight to an impl-drift bundle, with a SKIPPED ledger row.",
+     "class": "within",
+     "why": "FR-006 and SC-005, and GM item 6's own definition of 'known' (the claim names the open task carrying the fix). The 'last named task' reading is the existing, more conservative rule from feature 417. The threshold of 3 is the spec's."
+    },
+    {
+     "id": "D7",
+     "summary": "make decide and make plan-delta print a line naming an owed claims triage so it is dispatched beside the review; a guard test pins that decide-first lets claims-triage through and still refuses impl-drift.",
+     "class": "within",
+     "why": "FR-007 and GM item 7. R2 found no guard blocking it; the prompt and the pinning test serve the request."
+    },
+    {
+     "id": "T01-T07",
+     "summary": "Part A approach blocks, one per task, each restating its D<n>, FR and SC ids, the template exits and its replay.",
+     "class": "within",
+     "why": "Each restates its decision and adds none. T02's item 4 carries D2-b, ruled above; T03's carries D3-rolls and D3-placement."
+    },
+    {
+     "id": "prose-sections",
+     "summary": "Summary, Technical Context, Performance bookends, Constitution Check, Project Structure, Complexity Tracking.",
+     "class": "within",
+     "why": "They restate D1-D7. Constitution XVI names the D3 placement and the D2 superset openly, and both are ruled above. Every figure with a unit carries a label."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T06 Approach (checklist part A)",
+    "### T07 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:430-faster-landings#T01@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:430-faster-landings#T01@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  }
+ ]
+}
