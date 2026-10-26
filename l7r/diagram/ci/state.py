@@ -187,10 +187,17 @@ def tooling_hash(root: Path) -> str:
         p = skill / rel
         files += sorted(p.rglob("*")) if p.is_dir() else [p]
     files += sorted((root / "scripts").rglob("*"))
+    from l7r.diagram.pipeline import codeid  # noqa: PLC0415 - the one docstring-blind id (feature 426 D2)
+
     for f in files:
         if f.is_file() and "__pycache__" not in f.parts:
             h.update(str(f.relative_to(root)).encode())
-            h.update(f.read_bytes())
+            # ...PYTHON BY WHAT RUNS, ITS MODULE DOCSTRING KEPT (feature 426, the audit): a function's docstring or a comment is no
+            # tooling change - no tooling test reads one (a grep of `__doc__`/`getdoc` under `scripts/` and `tests/tooling/`,
+            # 2026-10-26) - while a script's MODULE docstring is the usage text it prints, and the Makefile's comments and `##`
+            # lines build `docs/make-targets.html`: those keep counting, so non-`.py` files stay raw
+            data = f.read_bytes()
+            h.update(codeid.semantic_bytes(data, f.name, keep_module_docstring=True) if f.suffix == ".py" else data)
     return h.hexdigest()
 
 

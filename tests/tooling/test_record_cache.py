@@ -175,3 +175,14 @@ def test_claims_owed_reads_the_gates_form_problems_from_the_kept_parse(tmp_path:
     monkeypatch.setattr(claims, "engine", lambda _root: eng)
     assert claims.form_problems(skill) == ["unit: GUESS names the drawing page", "0001-x.html"]
     assert claims.units_of(skill) == ["unit"] and eng.reads == 1, "the form check and the claims share one parse"
+
+
+def test_an_extractor_s_docstring_or_comment_keeps_its_code_sha(tmp_path: pathlib.Path) -> None:
+    """Feature 426's audit: a parse cache's key is the extractor's code by what runs."""
+    p = tmp_path / "parser.py"
+    p.write_text('def parse(x):\n    """Doc."""\n    return x\n', encoding="utf-8")
+    before = rc.code_sha(p)
+    p.write_text('def parse(x):\n    """Doc, reworded."""\n    return x  # c\n', encoding="utf-8")
+    assert rc.code_sha(p) == before
+    p.write_text('def parse(x):\n    return x + 1\n', encoding="utf-8")
+    assert rc.code_sha(p) != before

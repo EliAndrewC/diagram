@@ -547,3 +547,22 @@ def test_run_gen_child_runs_the_gen_by_name_in_the_roll_child_and_returns_its_re
     monkeypatch.setenv(_census.GEN_ENV, "outer")
     gencache.run_gen_child("/pool/y.gen.py")
     assert os.environ[_census.GEN_ENV] == "outer" and asked[-1][2] == "/pool/y.gen.py", "an outer mark is restored"
+
+
+def test_a_function_is_keyed_on_what_runs_and_the_interactive_page_on_its_text(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 426 D3: a research claim relabeled or a comment fixed keeps a function's key (feature 417's claims rounds
+    re-rolled every seed through an edited function); `interactive/`'s docstrings are the modal text and keep moving it."""
+    monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path / "cache"))
+    eng = tmp_path / "ways.py"
+    eng.write_text('def f():\n    """Research: x - GUESS"""\n    return 1  # c\n', encoding="utf-8")
+    top, funcs, _ = gencache.split_sources(str(eng))
+    eng.write_text('def f():\n    """Research: x - CONVENTION: relabeled"""\n    return 1  # c2\n', encoding="utf-8")
+    assert gencache.split_sources(str(eng))[:2] == (top, funcs), "a docstring and a comment keep the key"
+    eng.write_text('def f():\n    """Research: x - CONVENTION: relabeled"""\n    return 2\n', encoding="utf-8")
+    assert gencache.split_sources(str(eng))[1]["f"] != funcs["f"], "what runs moves it"
+    page = tmp_path / "interactive" / "classes.py"
+    page.parent.mkdir()
+    page.write_text('class K:\n    """The modal text."""\n', encoding="utf-8")
+    before = gencache.split_sources(str(page))[0]
+    page.write_text('class K:\n    """The modal text, reworded."""\n', encoding="utf-8")
+    assert gencache.split_sources(str(page))[0] != before, "an interactive docstring is content"

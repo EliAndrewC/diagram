@@ -255,35 +255,30 @@ def _matches(path: str, area_path: str, patterns: tuple[str, ...], excl: tuple[s
     return any(fnmatch.fnmatch(rel, pat) for pat in patterns)
 
 
-def semantic_bytes(data: bytes, name: str) -> bytes:
-    """What a gate actually exercised: for a `.py` file, its AST with every docstring stripped and no
-    line/column attributes; any other file, its bytes verbatim.
+def _codeid():  # noqa: ANN202 - the module, loaded by path
+    """`l7r/diagram/pipeline/codeid.py`, loaded by PATH (stdlib only): this guard runs inside the hooks and must not import the
+    engine package; the one definition of the docstring-blind id lives there since feature 426 (D2)."""
+    import importlib.util  # noqa: PLC0415
 
-    WHY (GM 2026-08-26, feature 133 T11): a record-the-why comment is REQUIRED at the point of change
-    in this project, and a comment-only edit used to re-key the gate - four and a half minutes of
-    tests re-run over text Python never executes. Bytecode was priced and declined: `co_consts`
-    carries docstrings and the line table carries every comment's line shift, so `.pyc` moves on
-    exactly the edits this exists to ignore. The AST with docstrings removed and attributes dropped
-    (`ast.dump` default) is blind to comments, docstrings, blank lines and formatting, and moves on
-    every token that runs. A file that does not parse hashes as bytes - unparseable is still content.
-    ONE definition: `l7r/diagram/ci/delta.py` (the engine key) loads this module by path and calls
-    it on blob contents, so the short-circuit key and the push stamp cannot disagree."""
-    if not name.endswith(".py"):
-        return data
-    try:
-        tree = ast.parse(data)
-    except (SyntaxError, ValueError):
-        return data
-    # EVERY BARE STRING STATEMENT, NOT ONLY A BODY'S FIRST (feature 385 T57, the round arbiter's fix on
-    # hour:385-approach-checklist@20): a constant's claim docstring is a bare string after its assignment - the form this
-    # project's claims take - and it kept the id moving, so a docstring-only edit (T09's) owed a full gate and a landing
-    # cohort. Python evaluates a bare string statement and discards it; no token of it runs.
-    for node in ast.walk(tree):
-        for field in ("body", "orelse", "finalbody"):
-            stmts = getattr(node, field, None)
-            if isinstance(stmts, list):
-                stmts[:] = [s for s in stmts if not (isinstance(s, ast.Expr) and isinstance(s.value, ast.Constant) and isinstance(s.value.value, str))]
-    return ast.dump(tree).encode()
+    cached = sys.modules.get("l7r_codeid")
+    if cached is not None:
+        return cached
+    path = Path(__file__).resolve().parents[2] / "l7r" / "diagram" / "pipeline" / "codeid.py"
+    spec = importlib.util.spec_from_file_location("l7r_codeid", path)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["l7r_codeid"] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def semantic_bytes(data: bytes, name: str) -> bytes:
+    """What a gate actually exercised: for a `.py` file, its AST with every docstring stripped and no line/column attributes;
+    any other file, its bytes verbatim - `codeid.semantic_bytes`, whose docstring holds the why (GM 2026-08-26, feature 133
+    T11; the bare-string rule of feature 385 T57). ONE definition: `l7r/diagram/ci/delta.py` (the engine key) loads this module
+    by path and calls it on blob contents, so the short-circuit key and the push stamp cannot disagree, and the roll key
+    (`gencache`) reads the same module."""
+    return _codeid().semantic_bytes(data, name)
 
 
 _CACHE_NAME = "semantic-id-cache-2.json"  # -2: feature 385 T57 changed the rule, so the old entries are not reused

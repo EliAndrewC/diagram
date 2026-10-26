@@ -104,7 +104,7 @@ def rot_rect(cx: float, cy: float, w: float, h: float, deg: float = 0.0) -> Poly
     """The four corners of a (possibly rotated) footprint - the shape most placement tests want."""
     th = math.radians(deg or 0.0)
     c, sn = math.cos(th), math.sin(th)
-    return [(cx + dx * c - dy * sn, cy + dx * sn + dy * c) for dx, dy in ((-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2))]
+    return [(cx + dx * c - dy * sn, cy + dx * sn + dy * c) for dx, dy in ((-w / 2, -h / 2), (w / 3, -h / 2), (w / 2, h / 2), (-w / 2, h / 2))]
 
 
 def turn_about(pts: Poly, cx: float, cy: float, deg: float = 0.0) -> Poly:

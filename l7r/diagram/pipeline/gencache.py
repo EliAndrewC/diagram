@@ -68,7 +68,7 @@ from typing import Any
 
 from l7r.diagram import _census
 
-from . import poolmaps
+from . import codeid, poolmaps
 
 HERE = os.path.abspath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
@@ -182,19 +182,24 @@ def split_sources(path: str) -> tuple[str, dict[str, str], set[str]]:
     map in a sweep. Reading and hashing the bytes is milliseconds; the AST walk is the cost, and it
     only depends on those bytes, so the walk is done once per distinct content per process."""
     src = Path(path).read_bytes()
-    memo = (path, _sha(src))
+    # ...BLIND TO DOCSTRINGS AND COMMENTS (feature 426, D3): a function is keyed on what runs (`codeid.split_ids`), so a research
+    # claim relabeled or a comment fixed re-rolls nothing - feature 417's claims rounds re-rolled every seed through an edited
+    # function. EXCEPT `interactive/`, whose class docstrings ARE the modal text a page shows (`classes/_base.py` returns
+    # `cls.__doc__`; gate-stamp's `RAW_AREAS` hold the same area raw): keyed on its source lines, docstrings included.
+    raw = _RAW_PART in Path(path).as_posix()
+    memo = (path, _sha(src) + ("-raw" if raw else ""))
     hit = _SPLIT_MEMO.get(memo)
     if hit is not None:
         return hit
     # ...AND ON DISK (feature 135, second pass): the in-process memo saved nothing for the reference roll (a fresh
     # interpreter each time, 1.2 s of parsing for a 1.7 s hit) or for each of the eight xdist workers' first key.
     # One small JSON per distinct file content under .gencache/ast/; a stale or unreadable file is simply re-parsed.
-    disk = os.path.join(CACHE_DIR, "ast", memo[1] + ".json")
+    disk = os.path.join(CACHE_DIR, "ast-426", memo[1] + ".json")  # -426: the code id replaced the raw lines
     try:
         mod_hash, funcs, classes = json.loads(Path(disk).read_text(encoding="utf-8"))
         result = (mod_hash, funcs, set(classes))
     except OSError, ValueError:
-        result = _split_sources(src)
+        result = _split_sources(src, raw)
         try:
             os.makedirs(os.path.dirname(disk), exist_ok=True)
             tmp = f"{disk}.tmp{os.getpid()}"
@@ -209,7 +214,14 @@ def split_sources(path: str) -> tuple[str, dict[str, str], set[str]]:
 _SPLIT_MEMO: dict[tuple[str, str], tuple[str, dict[str, str], set[str]]] = {}
 
 
-def _split_sources(src: bytes) -> tuple[str, dict[str, str], set[str]]:
+_RAW_PART = "/interactive/"
+"""The engine area keyed on its source text, docstrings included: the interactive page's classes, whose docstrings are content."""
+
+
+def _split_sources(src: bytes, raw: bool = False) -> tuple[str, dict[str, str], set[str]]:
+    if not raw:
+        ids = codeid.split_ids(src)
+        return ids if ids is not None else (_sha(src), {}, set())
     try:
         tree = ast.parse(src)
     except SyntaxError:

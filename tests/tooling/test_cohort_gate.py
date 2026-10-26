@@ -37,6 +37,8 @@ def _repo(tmp: pathlib.Path) -> tuple[pathlib.Path, str, str]:
     (tmp / "pool").mkdir()
     (tmp / "scripts/gates").mkdir(parents=True)
     (tmp / "scripts/gates/gate-stamp.py").write_text((REPO / "scripts/gates/gate-stamp.py").read_text(encoding="utf-8"), encoding="utf-8")
+    (tmp / "l7r/diagram/pipeline").mkdir(parents=True, exist_ok=True)  # gate-stamp loads its code id from here (feature 426 D2)
+    (tmp / "l7r/diagram/pipeline/codeid.py").write_text((REPO / "l7r/diagram/pipeline/codeid.py").read_text(encoding="utf-8"), encoding="utf-8")
     (tmp / "l7r/a.py").write_text("X = 1\n")
     (tmp / "pool/p.json").write_text("{}\n")
     _git(tmp, "init", "-q", "-b", "main")
