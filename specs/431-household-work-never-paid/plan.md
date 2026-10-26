@@ -45,7 +45,7 @@ of tasks and women's wages (the Imai accounts of 1821, the Muramatsu house rules
 yonabe (Meiji-Taisho, labeled); Saito's 1879 Yamanashi by-employment shares; Kumon's 310-330 days and the rest days by file
 (0311). China: the Shen-shi nongshu's rainy-day work for hired men and rope at 5-8 jin a day (c. 1640); the Bu nongshu's two
 women weaving 120 bolts of silk a year and a man working ten mu (1658); Buck's productive man-work units (1921-25: about a fourth
-of the year, women 31.6% of farm labor in East Central China, 11.8% in the North; household and repair work excluded); Fei's
+of the year, women 31.6% of farm labor in East Central China, 11.8% in the North, ATTESTED ONLY FOR 1921-25; household and repair work excluded); Fei's
 Kaixiangong (1936: women out of the fields, sewing at home, cloth bought); Lu Village through Hu Yukun (third-hand, labeled). Per
 member by hours: SILENT with the searches. The task list: each task with who did it and its time, or SILENT (cooking, water,
 miso and soy, pickling, straw goods per unit, sewing, araihari, child care). The GM's hypothesis, both halves: cotton era
@@ -61,7 +61,7 @@ family of five on 7.5 koku providing the rest of its needs itself is unmatched b
 ## D2 - the fiber chain in hours (Q3; FR-001)
 
 A new money question, its title asking how long it took to make cloth, with pointers from 0209 and 0306 and from D1. Cotton from
-ginned fiber: 4 days a tan (spin 2, prepare 1, weave 1; Niikawa, mid-19th century; a tan about 0.35 x 11 m), 12.8 tan a year for
+ginned fiber: 4 days a tan (spin 2, prepare 1, weave 1; Niikawa, mid-19th century; a tan about 0.35 x 11 m, ATTESTED ONLY FOR Tanimoto's definition), 12.8 tan a year for
 a household of about five (51.2 days) and 39.4 for sale, one woman about seven months (Tanimoto); China about 7 days a bolt with
 hand-spun yarn (6 in one place - the draft disagrees with itself, both given), 3 with machine yarn, spinning about four hours to
 one of weaving (Pomeranz's draft and the JAS 2003 exchange); a woman's 200-day maximum (Allen et al., Li); the Songnan poems on
