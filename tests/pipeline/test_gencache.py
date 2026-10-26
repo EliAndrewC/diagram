@@ -566,3 +566,17 @@ def test_a_function_is_keyed_on_what_runs_and_the_interactive_page_on_its_text(t
     before = gencache.split_sources(str(page))[0]
     page.write_text('class K:\n    """The modal text, reworded."""\n', encoding="utf-8")
     assert gencache.split_sources(str(page))[0] != before, "an interactive docstring is content"
+
+
+def test_the_interactive_page_s_functions_and_an_unparsable_file_there_are_keyed_on_their_text(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 426 D3: `interactive/` keeps the raw split - a function's own text, docstring included; a file that does not
+    parse, its bytes."""
+    monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path / "cache"))
+    page = tmp_path / "interactive" / "writer.py"
+    page.parent.mkdir()
+    page.write_text('def write():\n    """The page\'s own words."""\n    return 1\n', encoding="utf-8")
+    before = gencache.split_sources(str(page))[1]["write"]
+    page.write_text('def write():\n    """The page\'s own words, reworded."""\n    return 1\n', encoding="utf-8")
+    assert gencache.split_sources(str(page))[1]["write"] != before
+    page.write_text("def (:\n", encoding="utf-8")
+    assert gencache.split_sources(str(page))[1:] == ({}, set()), "unparsable: hashed whole"
