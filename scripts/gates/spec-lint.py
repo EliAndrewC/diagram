@@ -71,7 +71,7 @@ def check_approval(spec_dir: pathlib.Path) -> list[str]:
     why = "has none" if bad == "no-line" else "quotes fewer than three words"
     return [f"{spec}:1: {CHECK6_MARK} {why} - a feature is filed only with the GM's approval; ask the GM, then add, "
             f"verbatim: {APPROVAL_FORM}"]
-_POINTER = re.compile(r"\bR\d+\b|research\.md")
+_POINTER = re.compile(r"\bR\d+\b|research\.md|research/[\w.-]+\.md")  # ...or a research FOLDER's file (427 keeps `research/*.md`)
 _ID = re.compile(r"\b(FR|SC)-(\d{3}[a-z]?)\b")
 # GUARD_EDIT_OK: the pattern recognized only `**FR-001**`, the id bolded alone, and five of the nine
 # specs in this repository write `**FR-001 Its title.**` instead - three of them already on main. On

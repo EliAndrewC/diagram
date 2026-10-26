@@ -147,7 +147,7 @@ The GM's decision (`request.md` 4, detail in `call-count-flag.md`):
   improvements", `request.md` 1): from 24.1M to under 2.5M at 20 households, and from 62.8M to under 6.5M at 40. (The
   baselines were observed 2026-10-26, method: `make perf-profile SEED=39` over all 23 stages at each size; the targets are
   the baselines divided by ten, rounded up.)
-- **SC-003** (FR-005): at 40 households, every stage takes under a second on every seed that completes (the GM: "I would expect every
+- **SC-003** (FR-005, FR-008: reached with the engine in Python): at 40 households, every stage takes under a second on every seed that completes (the GM: "I would expect every
   single stage of our Hamlet generation to take a fraction of a second. even when we artificially inflate the number of
   homesteads ... such as 40", `request.md` 1). The whole roll lands near the first-principles estimate of 1-2 s at 20
   households and 2-4 s at 40 (`research/estimate-exercise.md`; agents' estimates, not research figures), against 6.8 s and
