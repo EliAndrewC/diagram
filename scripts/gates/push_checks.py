@@ -64,6 +64,9 @@ CHECKS: tuple[tuple[str, str, tuple[str, ...], str, bool, str], ...] = (
     ("conflict", "hooks/lib/hm_conflict.py", ("--tracked", "{root}"), "a tracked file still carries an unresolved merge conflict (above) - the history here is never rewritten, so resolve it before it lands, feature 241", False, ""),
     # the record's build and the glossary - the presets `make record CHECK=1` and `make glossary CHECK=1` run (memo_check.py)
     ("record", "gates/memo_check.py", ("record",), "the record does not build cleanly (above; `make record CHECK=1` at the repository root names each refusal) - features 258 and 301", False, "research/sources"),
+    # every amount of money in the record marked or passed over with its reason (feature 413): 423 T02 landed with it red,
+    # because nothing on the push ran it - `make money-candidates CHECK=1` was a session's habit, not a check
+    ("money-candidates", "record/money_candidates.py", ("--check",), "an amount of money in the record is neither marked for the tooltip nor passed over (above) - mark it, or add `- <stem> | <amount> | <reason>` to specs/413-money-tooltip-on-the-record/backfill.md; feature 413", False, "research/sources"),
     ("glossary", "gates/memo_check.py", ("glossary",), "the committed glossary differs from its per-term files (run `make glossary` at the repository root, then commit) - feature 259, spec FR-006", False, "research/sources"),
     # the green-gate guard; under GATE_STAMP_OK the shell logs the escape and passes `--skip gate-stamp selftest --skip gate-stamp`
     ("gate-stamp selftest", "gates/gate-stamp.py", ("--selftest",), "gate-stamp selftest failed - the guard itself is broken; fix scripts/gates/gate-stamp.py before pushing", True, ""),
