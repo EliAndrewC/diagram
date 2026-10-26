@@ -110,9 +110,8 @@ def test_one_row_is_reviewed_alone(root: pathlib.Path, monkeypatch: pytest.Monke
 def test_the_held_rows_and_the_command_line(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
     held = root / gm.HELD
     held.parent.mkdir(parents=True)
-    held.write_text(json.dumps({"a#door band": {"flag": "Held: question for the GM"}, "b#x": {"flag": "deviation-tempting"}}))
-    assert gm.held(root) == ["a#door band: Held: question for the GM"] and "HELD - work cannot go on" in gm.listing(root)
-    assert "      question for the GM" in gm.listing(root), "the flag under its key, without the word the heading already says"
+    held.write_text(json.dumps({"a#door band": {"flag": "Held behind #b (row 2): after it", "held": "x"}, "b#x": {"flag": "deviation-tempting"}}))
+    assert gm.held(root) == ["a#door band: Held behind #b (row 2): after it"] and "WAITING ON OTHER WORK" in gm.listing(root)
     monkeypatch.chdir(root)
     assert gm.main(["list"]) == 0 and "door band" in capsys.readouterr().out
     assert gm.main(["accept", "375", "a finding", "a reason here"]) == 0
@@ -218,22 +217,56 @@ def test_explain_with_no_feature_names_only_what_needs_the_gm(root: pathlib.Path
         d,
         {"kind": "arbiter-fix-declined", "trigger": "round:modal-depiction|modal:sheet/garden@3", "tooling_fix": "re-owe less", "note": "contradicts FR-015"},
         {"kind": "arbiter", "trigger": "red-gate@t", "ruling": "continue", "why": "not a loop"},
+        {"kind": "question", "status": "kept", "question": "which door size stands on the three sheets?", "escalation": "test 1: his sheets", "source": "ask:x"},
     )
     e = gm.explain(root, width=200)
-    assert "1. HELD QUESTION: a#door band\n    which door size stands?. The fix it would make: narrow the doors." in e
+    assert "door band" not in e.split("WAITING ON OTHER WORK")[0], "a ranking row's own Held flag is no decision of the GM's (feature 432)"
+    assert "1. QUESTION 375#2 (375-x)\n    which door size stands on the three sheets?\n    Why it is yours (escalation-check): test 1: his sheets" in e
     assert "WAITING ON OTHER WORK - held in the ranking until another row is done; nothing for you to decide\n\n  * b#tubs\n    Waits on #retainers" in e, (
         "a row held behind other work is not a decision of the GM's"
     )
     assert "2. A TOOLING FIX DECLINED TO YOU: feature 375 row [0], modal-depiction sheet/garden" in e
     assert "The other 1 row(s) are decisions already made" in e
-    assert "needs a decision: 1 held question(s), 1 fix(es) declined" in gm.listing(root, width=200)
+    assert "needs a decision: 1 question(s), 1 fix(es) declined" in gm.listing(root, width=200)
     assert "WAITING ON OTHER WORK - held in the ranking behind another row, not on the GM\n  * b#tubs\n      waits on #retainers" in gm.listing(root, width=200)
-    assert gm.listing(root, width=200).startswith("GM REVIEW - 1 held question(s), 1 waiting on other work,")
+    assert gm.listing(root, width=200).startswith("GM REVIEW - 1 decision(s) for the GM, 0 question(s) owed escalation-check, 1 waiting on other work,")
     monkeypatch.chdir(root)
     assert gm.main(["explain", "375", "1"]) == 0 and "went red twice" in capsys.readouterr().out
     held.write_text(json.dumps({"b#tubs": {"flag": "Held behind #retainers (row 21): after that lands"}}))
     (d / gm.ROWS).write_text("")
     (held.parent / "waves.json").write_text(json.dumps({"a#door band": "115"}))
-    assert gm.explain(root, width=200).startswith("WHAT NEEDS YOUR DECISION: nothing - no held question and no fix declined to you")
+    assert gm.explain(root, width=200).startswith("WHAT NEEDS YOUR DECISION: nothing - no question kept for you and no fix declined to you")
     (held.parent / "waves.json").write_text(json.dumps({"b#tubs": "115"}))
     assert gm.held(root) == [] and "WAITING ON OTHER WORK" not in gm.explain(root), "a row its wave closed is held no more"
+
+
+def test_a_question_is_owed_escalation_check_then_kept_or_cut(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
+    """Feature 432 (FR-002, FR-004; the GM 2026-10-26: "anything that ends up in GM review I actually know is important"): a
+    question reaches the GM only once escalation-check keeps it; the kept questions are his decisions, from that one source."""
+    d = root / "specs" / "375-x"
+    n = gm.question(d, "redraw the three sheets or record the deviation?", "ask:b7")
+    assert gm.rows(d)[n]["status"] == "owed" and "GM review (make gm-reviewed F=375)" in (d / "tasks.md").read_text()
+    listing = gm.listing(root, width=200)
+    assert "OWED ESCALATION-CHECK - the session's, not the GM's" in listing and "NEEDS YOUR DECISION" not in listing
+    assert gm.explain(root, width=200).startswith("WHAT NEEDS YOUR DECISION: nothing")
+    with pytest.raises(ValueError, match="KEEP or CUT"):
+        gm.escalated(d, n, "MAYBE", "two words")
+    said = gm.escalated(d, n, "KEEP", "test 1: his own sheets")
+    assert "KEPT" in said and '"375#0"' in said, "a kept question says how to name it in the final message"
+    assert "NEEDS YOUR DECISION - the questions escalation-check kept" in gm.listing(root, width=200)
+    assert "1. QUESTION 375#0" in gm.explain(root, width=200)
+    with pytest.raises(ValueError, match="already kept"):
+        gm.escalated(d, n, "CUT", "two words")
+    m = gm.question(d, "is this one really for the GM at all?", "hour:375@2")
+    assert "CUT" in gm.escalated(d, m, "CUT", "the record settles it")
+    assert gm.rows(d)[m]["reviewed"] and "is this one" not in gm.listing(root, width=200), "a cut question is closed"
+    with pytest.raises(ValueError, match="no question"):
+        gm.escalated(d, 99, "KEEP", "two words")
+    with pytest.raises(ValueError, match="four words"):
+        gm.question(d, "why?", "x")
+    with pytest.raises(ValueError, match="two words"):
+        gm.escalated(d, gm.question(d, "a third question for the GM", "x"), "KEEP", "x")
+    monkeypatch.chdir(root)
+    assert gm.main(["question", "375", "a fourth question for the GM", "ask:y"]) == 0 and "owed escalation-check" in capsys.readouterr().out
+    assert gm.main(["escalated", "375", "3", "KEEP", "his to decide"]) == 0 and "KEPT" in capsys.readouterr().out
+    assert gm.main(["escalated", "375", "3", "KEEP", "his to decide"]) == 1
