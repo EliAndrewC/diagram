@@ -1,0 +1,148 @@
+{
+ "feature": "427-call-volume-refactors",
+ "blocks": {
+  "preamble": {
+   "sha256": "b6c61ce482839c97d8d574231837f0b1bce3ee43f899a102a26a29a59ca54ec8",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "0bdc5663ba1a90c4b65a7c04e2bbfc63de932153c6698f56130e962c6a9f25b6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "6f4f857065245faeea68053aa085bfc193907985eec1b5ed65d4beb857f7841b",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "bbb66ade3b2f340ba3b7f39d2e303cf4685b98fd76b22e808c6865e7836a5bbd",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "bafc3fb8e937ea09a29f2c12206f2c54a9669a5b5c1eb9c67c1da1e56415761c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "0aa4d87c6a5262afe0a2568e7c8d609088dc122d7cdc8bbc33b5a5062514418b",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Task approaches": {
+   "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "cb8eea8708dae1d970ae934ddc690a6e07369d7ce2e7e7fcdd958264c220cbb6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "78aa41f093ec3faedcbfbaf4620358dd38cb2532a522b49bf2a2b804d0d2fc7f",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### Documentation (this feature)": {
+   "sha256": "fc71726228efb09af112b47244492557d95d5486bb4fb21e74c45e06d5418b9e",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### Source Code (repository root)": {
+   "sha256": "f04999aa2992dcc1fb902558f4f3fb548c287e252ee512a0b39b18c7567ae83d",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "### T01 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-order",
+     "summary": "Work order: survey (T01), call-count watch (US5), cheap wins/single-site (US2), wells (US3), pairwise outside the lanes, lane web and law last after feature 417.",
+     "class": "within",
+     "why": "Matches request.md 5's approved order clause for clause."
+    },
+    {
+     "id": "Summary-T01-only",
+     "summary": "The plan holds T01 only; each later task is filed with its own section after the survey has run.",
+     "class": "within",
+     "why": "FR-002 requires engine tasks to be scoped against the survey's output on the then-current engine; deferring them is that requirement, not a narrowing."
+    },
+    {
+     "id": "TechContext-diagnostic",
+     "summary": "perf-fanout is a by-hand diagnostic, never a gate; report committed under dev/perf-log, .prof files in gitignored dev/perf-raw; stdlib cProfile/pstats.",
+     "class": "within",
+     "why": "Consistent with request.md 4: gating is the call-count flag (US5/FR-006), not the survey; storage and libraries narrow nothing asked."
+    },
+    {
+     "id": "Bookends-start-before-T02",
+     "summary": "The 427-start bookend is taken before the first engine task (T02), not before T01.",
+     "class": "within",
+     "why": "T01 changes no stage, so the bookend measures the same engine either way; FR-005 is still met."
+    },
+    {
+     "id": "D1-design",
+     "summary": "make perf-fanout with SEED/HOUSEHOLDS/STAGES/HOT/JOBS/LABEL, per-stage totals and growth exponent, multiplier chains by the reference walk kept as written, fastest growers, report to dev/perf-log.",
+     "class": "within",
+     "why": "FR-001 and SC-001: built as tooling-perf-fanout.md designs it; it lists every 50k+ chain with its anchor."
+    },
+    {
+     "id": "D1-JOBS-3",
+     "summary": "JOBS defaults to 3 instead of the design note's 5, citing the shared 10 GB memory cap read at 9.1-9.3 GB.",
+     "class": "within",
+     "why": "Changes only the default parallelism: output identical, overridable on the command line, and the GM's words say nothing about job count. A departure from tooling-perf-fanout.md's default that narrows no reach."
+    },
+    {
+     "id": "D1-land-route",
+     "summary": "Lands through make land rather than the design note's make land-tooling, because a module under l7r/ is engine by ci/delta.is_engine.",
+     "class": "within",
+     "why": "FR-001's 'on its own' is kept and the route taken is the stricter one, so the deliverable is not narrowed. Rests on a premise about ci/delta.is_engine not verifiable from the bundle; placing the module outside l7r/ to honor 'as tooling' literally is a design choice, not a fidelity finding."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Exits: 'FR-008 green: landed with its fresh rate. Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through make arbiter-ask (D11, D35).'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Template text from another feature: FR-008 is 'the engine stays in Python', not a landing condition; D11 and D35 exist nowhere in this plan or spec-cited.md; 'placed correctly' and 'fresh rate' are placement/seed-pass language for a tool that changes no stage. As written, the red exit sets T01 down on 'failing seeds'. T01 cannot make a seed regress (FR-007), so the only failing seeds at its landing are ones already failing on HEAD, and request.md 4 ('should not require all seeds to pass if seeds were previously failing') and 5 ('not have a requirement to have all of our seeds pass') exclude exactly that as a reason. It abandons the requested survey on a condition the GM ruled out: not physically necessary, not implied by the GM's words (they say the opposite), not serving the purpose. Fix: green = tests red without D1 and make perf-fanout on the current engine compared with research/fanout-2026-10-26.txt (FR-001, SC-001); red = only a seed passing on HEAD that fails after (FR-007); strike FR-008, D11, D35, 'placed correctly', 'fresh rate'."
+    }
+   ]
+  }
+ ]
+}
