@@ -46,6 +46,25 @@ guess is labeled. Occasion: building-review (a sheet revised).
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** The room is cut, not added; D3 prices the alternatives.
 
+### T01 Approach (re-answered 2026-10-26T23:33Z)
+
+1. **The goal, in the world.** Unchanged: Hayakawa's magistrate lives in a house of the record's size, on a compound whose
+   buildings cover what 0116 says, every choice labeled where the record keeps it.
+2. **The constraints.** Every rendering decision labeled in research/, the operative doc, the point of change and the spec
+   (impl-drift, 2026-10-26: the wall move and the house's ceiling were not); a departure from the research is never written
+   into the procedure as its default.
+3. **Where each comes from.** O: impl-drift's DRIFTED verdicts on the residence size, mostly-open and packing-coverage claims;
+   the decision preflight's D3b finding (2026-10-26).
+4. **Do they describe the world here?** Yes: 0091's drawing page sizes the plan's house to the 49-tsubo Yokota house and uses
+   neither the Matsue nor the Kuchiba house as a measure; 0116's keeps a sparse compound's walls where they are.
+5. **The order.** The labels before the landing; no ink changes.
+6. **The exits.** Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** 30 min (a GUESS, the session's, 2026-10-26).
+9. **Done, measured.** impl-drift IN-STEP on the changed claims; the record's checks on 0091 and 0116 recorded.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
 ### T01 Decisions
 
 - **D1** The house is about 65 tsubo, about 2,330 sq ft, near the top of the range below, a GUESS for the RICH knob
@@ -79,9 +98,11 @@ guess is labeled. Occasion: building-review (a sheet revised).
   fill the court - the "Realistic unless the GM says otherwise" rule forbids it; (c) the west wall in 36 ft (this project's arithmetic) - the servants'
   range abuts the gate range and the outer court's west column would run into the office hall; (d) the east wall in - the
   outer court's east side has no 36 ft to give (this project's arithmetic). The checklist's "envelope NOT shrunk" and the coverage check's "never shrink
-  the envelope" are kept for their reason - a smaller wall does not hide slack - and amended for a MAGISTRACY sheet alone: when the research sizes a magistracy's house, the envelope follows it into the
-  band (docs/buildings.md checklist; the magistracy program in docs/building-programs.md; `pack_audit/shared.py` and
-  `registry.py` messages worded for a magistracy sheet, with the test that pins the text). Every other sheet type keeps the
+  the envelope" are kept for their reason - a smaller wall does not hide slack - and amended for a MAGISTRACY sheet alone, as a DEVIATION and never a default: a wall moves in only when a house drawn at the record's size leaves coverage under the band and no other wall and no building can honestly close it, and
+  each such move is recorded on 0116's drawing page with its reason and who chose it, as Hayakawa's is (docs/buildings.md
+  checklist; the magistracy program in docs/building-programs.md; `pack_audit/shared.py` and `registry.py` messages worded
+  for a magistracy sheet, with the test that pins the text; amended after the decision preflight of 2026-10-26 found the
+  earlier wording made the move the procedure's default). Every other sheet type keeps the
   rule as it stands (spec-fidelity, plan round 1: the GM's words reach the magistracies and new magistracy diagrams only). Rendering: the walls, the precinct rects, the viewBox and the title block.
 
 ## T02 - the two kept houses recorded as deviations (FR-002)

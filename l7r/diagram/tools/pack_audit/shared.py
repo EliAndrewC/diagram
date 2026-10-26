@@ -242,8 +242,9 @@ def viewbox_cropped(text: str, plan: ParsedPlan, max_margin_px: float = CROP_MAX
 #: magistracy's house - Hayakawa's cut from ~145 to ~65 tsubo left it at 26% - a wall moved in to bring it into the band is a
 #: DEVIATION recorded on 0116's drawing page with its reason and who chose it. The check is the magistracy's alone (registry.py), so the amendment reaches no other sheet type.
 COVERAGE_FIX = (
-    "consolidate loose slack or add a program building below it; never shrink the envelope to hide slack - only when the "
-    "research sizes the house does the envelope follow it into the band, a DEVIATION recorded on 0116's drawing page (feature 433)"
+    "consolidate loose slack or add a program building below it; never shrink the envelope to hide slack - a wall moves in "
+    "only when a house drawn at the record's size leaves the sheet under the band and nothing else can close it, as a "
+    "DEVIATION recorded on 0116's drawing page (feature 433)"
 )
 
 

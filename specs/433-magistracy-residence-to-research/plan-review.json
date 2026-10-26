@@ -38,7 +38,7 @@
    "declared": "spec-fidelity"
   },
   "### T01 Decisions": {
-   "sha256": "939fd95176cd7aa6112d14c6e3843e70a8c889ae04803101f21dae6e7b048c83",
+   "sha256": "9ef103a008023e8046482170009687bcef0c5555d1daa988a6e942b2e29f3d9d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
@@ -342,60 +342,82 @@
      "why": "Procedure and sequencing only; nothing narrows which sheets are corrected or what is made to correspond to the research. Doing it last with T01's final measure makes the recorded figure the measured one, which serves the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T01 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-D1",
+     "summary": "Hayakawa house about 65 tsubo (about 2,330 sq ft), near the top of a 49-tsubo to ~2,400 sq ft (~67 tsubo) range, the range's top re-cited to 0118's senior house instead of the Kuchiba/Matsue houses; placing a RICH posting near the top is a GUESS recorded on 0091's drawing page; room zones GUESS.",
+     "class": "within",
+     "why": "The request asks for the third magistracy corrected to the research, framed as a 49-67 tsubo house; FR-001/SC-001 require a house within 49-67 tsubo. About 65 tsubo is inside that range; the re-citation of the range's ceiling and the GUESS about where in the range a RICH posting sits choose a point inside what was asked and narrow nothing. The pass rests on one premise, unchanged since the CLEAR verdict and attributed to research (0091's drawing page counts the kitchen in the house, R1 the bath): without the kitchen and bath the two blocks are about 1,600 sq ft, about 45 tsubo, under the range. With them, 36x25.3 + 27.3x25.3 + 24x18 + 18x12 is about 2,250 sq ft, so 2,330 implies about 80 sq ft of corridor, about 65.5 tsubo - consistent (this review's arithmetic on the block's own dimensions)."
+    },
+    {
+     "id": "T01-D2",
+     "summary": "Inner court laid out again around the smaller house and the moved north wall (service alley, privies, kitchen ell, bath, entrance, storehouses, woodshed, karo's house, vegetable garden, shrine). Unchanged since its CLEAR verdict.",
+     "class": "within",
+     "why": "The GM: 'whatever other changes need to be made should be made in order to make the whole thing correspond to our research'. Re-laying the court around the corrected house is that, each element kept on its research form or knob."
+    },
+    {
+     "id": "T01-D3a",
+     "summary": "The north wall moves 30 ft south (walled ground about 45,200 sq ft, coverage 30.4%, inside 0116's band), recorded as a DEVIATION from 0116's drawing page, which keeps a sparse compound's walls where they are; alternatives (a)-(d) priced.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request is that the whole sheet correspond to the research; a recorded deviation from 0116's drawing page is an exception to that and is ruled as one. It is legitimate: (1) the full rule is impossible here - a research-sized house inside the existing walls leaves coverage at about 27-28%, under 0116's band, which SC-001 forbids; inflating buildings breaks their research sizes; the west and east walls cannot give 36 ft by the plan's arithmetic - so some point of the research must give, and the plan prices every alternative; (2) the GM's own words imply it: he was told that coverage would fall under 0116's band and answered that 'whatever other changes need to be made should be made' to correspond to the research, which names changes beyond the house; (3) purpose test - the purpose (the house and the compound's density matching the research) survives: the house sits in 0091's range, coverage in 0116's band, and the walls still fall between the Joge and Takayama offices 0116 sizes them against, the envelope being a number no page measures. The relabel from 'a knob' to a DEVIATION recorded with its reason and chooser is the more honest statement of the same move, not a new carve-out. Two readings the ruling chooses rather than misses: (i) the GM set the two sheets that 'stay the same as recorded deviations' against the third that 'should be corrected'; a session-chosen recorded deviation on the corrected sheet is acceptable only because it is forced (the band and 0116's keep-the-walls rule cannot both hold with a research-sized house) and it lands on the one element no page measures, not on the house he asked about - it is not a deviation the GM approved; (ii) SC-001 names the house's range and the band explicitly and then requires 'every element of the sheet the research speaks to' to correspond; option (a) breaks a named measure, the wall move breaks a procedural rule whose number no page gives, and this ruling reads the catch-all as reaching measured sizes and bands first. Were that reading wrong, the plan would depart from the accepted spec and need a spec amendment. The impossibility of options (c) and (d) is taken on the plan's own arithmetic as stated; the bundle carries no run of it."
+    },
+    {
+     "id": "T01-D3b",
+     "summary": "The checklist's 'envelope NOT shrunk' and the coverage check's 'never shrink the envelope' amended for a magistracy sheet alone (docs/buildings.md, docs/building-programs.md, pack_audit messages, the test pinning the text); every other sheet type keeps the rule. Unchanged since its CLEAR verdict.",
+     "class": "within",
+     "why": "The GM: 'we should correct our general procedures when creating new magistracy diagrams in order to correspond to our research' (FR-003). The amendment is that correction, scoped to the magistracies his words reach; the test only pins the requested text."
+    }
+   ]
   }
  ],
  "tasks": {
   "T01": {
-   "section_sha256": "78837d93534ad9fd59c40cd47f63988061f536d61429636d8e56462fbee12dc6",
+   "section_sha256": "f4d99a590b7649a55bdd7454e2c430f6f6bbbfee813a37ea6cfd64fd2f8a560a",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D1",
-     "summary": "Hayakawa's house about 65 tsubo (two blocks, corridor, kitchen and bath counted, ~2,320 sq ft), the top of 0091's range a GUESS for the RICH knob; room zones GUESS",
+     "id": "Approach",
+     "summary": "Outer court not moved; house keeps its recorded forms; T01 first; exits to arbiter-ask; done measured by pack-audit, coverage in band, house sum in range, building-review",
      "class": "within",
-     "why": "FR-001: the house within 49-67 tsubo; the GM: 'the third magistracy should be corrected'. A size inside the range, labeled GUESS with its reason (no page ties house size to wealth); the stated rects sum to about 2,320 sq ft, about 65 tsubo."
+     "why": "Unchanged since its CLEAR verdict; carries FR-001/SC-001 as written."
+    },
+    {
+     "id": "D1",
+     "summary": "House about 65 tsubo (~2,330 sq ft), range now 49 tsubo (0091's drawing page) to ~2,400 sq ft senior house (0118's drawing page); RICH keeps a senior house is a GUESS recorded on 0091's page; blocks, kitchen, bath and rooms GUESS",
+     "class": "within",
+     "why": "~2,400 sq ft is ~67 tsubo at 35.58 sq ft/tsubo, so the re-cited top does not widen FR-001's 49-67; 65 tsubo is inside it. The amendment changes the citation, not the size. Placing a RICH posting at the top of the range stays inside the range FR-001 requires, and FR-004 owns the naming question. Every figure carries a GUESS label or a research cite."
     },
     {
      "id": "D2",
-     "summary": "Hayakawa's inner court laid out again around the smaller house (service alley, privies, roji, kitchen ell, bath, inner entrance, storehouses, woodshed, karo's house, vegetable garden on its seat knob, shrine moved with the north wall)",
+     "summary": "Inner court relaid behind the new north wall: service alley, privies, reception and roji, kitchen ell, bath, inner entrance, storehouses, woodshed, karo's house, vegetable garden, shrine",
      "class": "within",
-     "why": "The consequence of correcting the house; the GM: 'whatever other changes need to be made should be made in order to make the whole thing correspond to our research'; FR-001 sweeps the whole Hayakawa sheet."
+     "why": "Unchanged since its CLEAR verdict; it is the 'whatever other changes need to be made' the GM asked for, each form cited or labeled GUESS."
     },
     {
      "id": "D3a",
-     "summary": "Hayakawa's north wall moved 30 ft south (envelope a knob), guests' annex with it; coverage 30.4% measured on the draft redraw, inside 0116's band; walled ground ~45,200 sq ft stated against 0116's Joge/Takayama comparison",
+     "summary": "Hayakawa's north wall moves 30 ft south (walled ground ~45,200 sq ft, coverage 30.4%), recorded as a DEVIATION from 0116's drawing page (which keeps a sparse compound's walls) with its reason and who chose it",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "Departs from the standing 'envelope NOT shrunk' rule on this sheet. The GM was told in the question that a redraw drops coverage under 0116's band, chose the redraw, and added 'whatever other changes need to be made should be made in order to make the whole thing correspond to our research'; FR-001/SC-001 require coverage inside the band. Applying the old rule literally would defeat the request: a deviation is forbidden by SC-001, buildings inflated past their research sizes defeat its purpose, and the west and east walls are physically blocked (priced in D3 (c), (d))."
+     "why": "It narrows SC-001's 'every element the research speaks to corresponds to it' on the one sheet the GM said to correct. But the GM was told in the question itself that a 67-tsubo house drops coverage to 27-28%, under 0116's band, and answered that whatever other changes are needed should be made to make the whole correspond to the research; FR-001/SC-001 then require coverage inside the band. With the house fixed at 49-67 and the walls kept, 0116's band and 0116's wall-keeping cannot both hold: one piece of the research must give. The block prices the alternatives - (a) under the band, which SC-001 forbids; (b) buildings drawn past their research sizes; (c) and (d) the west or east wall in, both physically blocked - and neither the spec nor the request gives grounds for adding buildings. So the conflict is real, the choice follows the requirement the spec names explicitly, and the departure is labeled on the page with its reason and who chose it rather than hidden as a knob."
     },
     {
      "id": "D3b",
-     "summary": "The standing envelope rule amended for MAGISTRACY sheets only: when research sizes a magistracy's house the envelope follows it into the band (docs/buildings.md checklist, magistracy program in docs/building-programs.md, pack_audit/shared.py and registry.py messages worded for a magistracy sheet, the pinned test); every other sheet type keeps the rule",
+     "summary": "Standing procedure amended for every MAGISTRACY sheet: 'when the research sizes a magistracy's house, the envelope follows it into the band' (docs/buildings.md checklist, docs/building-programs.md magistracy program, pack_audit/shared.py and registry.py messages, the pinning test); other sheet types keep 'never shrink the envelope'",
      "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "Authorized in the GM's own words: 'we should correct our general procedures when creating new magistracy diagrams in order to correspond to our research'. The reach is limited to magistracy sheets, and the plan says explicitly that every other sheet type keeps the rule, so nothing goes beyond what the GM's words cover."
-    },
-    {
-     "id": "T01-constraint-outer-court",
-     "summary": "Approach item 2: the outer court is not moved to make room; FR-001's check of it against the research is still owed, through building-review",
-     "class": "within",
-     "why": "A layout constraint (D3's pricing of (c) and (d) relies on it) that does not exclude the outer court from FR-001's and SC-001's sweep of the whole sheet; its check against the research is kept, via building-review."
-    },
-    {
-     "id": "T01-constraint-forms",
-     "summary": "The house keeps its recorded forms (echelon of two blocks, reception at the east end, roji, kitchen ell, veranda faces)",
-     "class": "within",
-     "why": "Corrects the size the GM asked corrected and keeps forms nothing in the request or research is said to contradict; building-review remains the check that the sheet corresponds to the research."
-    },
-    {
-     "id": "T01-exit-and-done",
-     "summary": "Approach items 6 and 9: an unmakeable check goes to make arbiter-ask with the measure; done means pack-audit green, coverage in band, house rects within 0091's range, render read, building-review passed",
-     "class": "within",
-     "why": "Done-conditions restate FR-001/SC-001; the exit escalates rather than narrowing anything."
+     "ruling": "NOT LEGITIMATE",
+     "why": "The amendment changed what this rests on. When it was last judged (CLEAR), the shrink rested on 'the envelope is a number no page measures - a knob', which made the procedure change a design choice inside 'correct our general procedures'. D3 now says 0116's drawing page DOES speak to it (it keeps a sparse compound's walls where they are) and that the move departs from it. Yet the same block writes that move into the general procedure as the default for every magistracy sheet, with no DEVIATION label and no per-sheet recording. The GM asked that the procedures be corrected 'in order to correspond to our research'. A procedure that makes a labeled departure from the research the unlabeled default does the opposite, and it extends one sheet's forced conflict to sheets that may never face it. The block cannot have both: if the shrink is a deviation from 0116, the procedure text must require each magistracy shrink to be recorded as a DEVIATION on 0116's drawing page with its reason and who chose it, as D3a does, and allow it only when the house-sized-to-research leaves coverage under the band with no wall/building option. If instead the author holds that a NEW sheet's envelope set to the band at drawing time is not the redraw-shrink 0116's page speaks to, the procedure must say so and cite where 0116 supports it. The scope limit to magistracy sheets (plan round 1) is unchanged and is not what fails here."
     }
    ],
-   "verdict": "CLEAR"
+   "verdict": "BLOCKED"
   }
  }
 }
