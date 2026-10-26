@@ -58,8 +58,10 @@ def add_section(plan: str, tid: str, section: str) -> str:
     return plan + ("" if plan.endswith("\n") else "\n") + "\n" + body
 
 
-RED_EXIT = "Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35)."
-"""Checklist item 6's red exit as D35 words it: the wording T48's and T50's plan reviews each blocked a round on (feature 426, D6)."""
+RED_EXIT = "Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`."
+"""Checklist item 6's red exit (feature 426, D6): the wording T48's and T50's plan reviews each blocked a round on. Generic, never
+one feature's: the first form copied feature 417's D35 ("FR-008 green ... placed correctly ... (D11, D35)"), and feature 427's
+first plan review blocked on that text in a profiling tool's section (2026-10-26)."""
 
 TEMPLATE = """### {T} (<why: the finding or measurement that files it>)
 
@@ -75,7 +77,7 @@ TEMPLATE = """### {T} (<why: the finding or measurement that files it>)
 3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
 4. **Do they describe the world here?** <how it was measured>
 5. **The order.** <before and after what>
-6. **The exits.** FR-008 green: landed with its fresh rate. """ + RED_EXIT + """
+6. **The exits.** Green: <the measurement that lands it>. """ + RED_EXIT + """
 7. **The search smell.** <none, or what the probes showed>
 8. **The budget.** One landing.
 9. **Done, measured.** <the measurement that says it is done>
