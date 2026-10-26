@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-26T03:31:36Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 205,
+  "result": "green",
+  "commit": "f669c3c7c",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 12061,
+  "host": {
+    "load": [
+      1.35,
+      4.69
+    ],
+    "mem_avail_mb": [
+      8934,
+      9299
+    ],
+    "cpu_temp_c": [
+      102.0,
+      101.0
+    ],
+    "stall_s": {
+      "cpu": 1.0,
+      "io": 0.3,
+      "io_full": 0.2,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 89634,
+      "package": 33750
+    }
+  },
+  "phases": {
+    "preflight": 19.0,
+    "static": 1.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 193.0,
+    "floors": 7.0,
+    "test-full": 202.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/conftest.py (+1)",
+  "collected": 12061
+}
