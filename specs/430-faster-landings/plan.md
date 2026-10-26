@@ -164,6 +164,20 @@ gains the case: with a task undecided, a `claims-triage` dispatch passes decide-
 <!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** n/a
+2. **The constraints.** SC-001, SC-002, SC-003, SC-004, SC-005, SC-006.
+3. **Where each comes from.** FR-008, FR-009.
+4. **Do they describe the world here?** Yes.
+5. **The order.** n/a
+6. **The exits.** FR-008 green: landed with its fresh rate. Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** R4, R5, R6, R7.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
 ## Project Structure
 
 ### Documentation (this feature)
