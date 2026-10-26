@@ -23,5 +23,29 @@
   "named_module_in_delta": 3,
   "named_module_not_in_delta": 2,
   "lines_in_spans": 20
+ },
+ "full-plan-reasons": {
+  "quantity": "2026-10-26's `make done` runs planned full whose planner reason (the first rule that fired) named a pool manifest or a non-module file under tests/, by the file named - a reason, not the only cause",
+  "value": 19,
+  "unit": "runs",
+  "observed": "2026-10-26",
+  "source": "this clone, dev/run-log/2026-10/20261026*.json",
+  "command": "python3 specs/430-faster-landings/full_reasons.py",
+  "method": "full_reasons.py as committed: each target-done run record whose plan reason names a non-Python engine file or a non-module file under tests/, counted by that reason",
+  "by_reason": {
+   "pool/hamlets/inashiro/inashiro.json": 11,
+   "tests/conftest.py (top level)": 4,
+   "tests/hooks/test-cohort-gate.sh": 2,
+   "tests/hamletgen/ways/CLAUDE.md": 1,
+   "tests/tooling/ci/conftest.py": 1
+  },
+  "also_gate_config": {
+   "note": "3 of them also changed the gate configuration (ci/gate_config.py, ci/state.py, feature 426), found by diffing each from the 09:02 green full at e5788a596 (the spec review, amendment 1)",
+   "commits": [
+    "4678af6c6",
+    "39ea51383",
+    "fda3e0e04"
+   ]
+  }
  }
 }
