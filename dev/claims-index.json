@@ -13642,11 +13642,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround.lines_edge_points#site boundary": {
-  "code": "2c54edabea024414",
-  "core": "746a9f64337137c5",
+  "code": "4813d02a9d1433ef",
+  "core": "3992e98955e5cfef",
   "date": "2026-10-03",
   "note": "sampling",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround.point_clear#site boundary": {
@@ -13665,12 +13667,36 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround.points_taken#plumbing": {
+  "body": "1d0677e5f77aa5c2",
+  "claim": "plumbing - NONE: the same answers, asked in one call",
+  "code": "4d00c684fa05db31",
+  "core": "f8c78ff5648cdd6b",
+  "date": "2026-10-26",
+  "note": "all points asked in one array call; decides nothing about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround.rect_refused#site boundary": {
   "code": "e5acf6459f535202",
   "core": "c09b76bf64ed1f82",
   "date": "2026-10-03",
   "note": "lookup",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround.state_grid#plumbing": {
+  "body": "a7b288f262db3d2b",
+  "claim": "plumbing - NONE: the cells' verdicts as an array",
+  "code": "12872f4e233f829d",
+  "core": "e5ab889b727595e2",
+  "date": "2026-10-26",
+  "note": "the cells' verdicts as an array",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/boundary.py::MIN_MEMBER_AREA#site boundary": {
@@ -13934,32 +13960,34 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/capacity.py::field_distances#field distance": {
-  "code": "c3310c3c72bf697d",
-  "core": "da0b55d3c27d0b8d",
+  "code": "0a556aa4d4405e03",
+  "core": "15170383bfabc6b6",
   "date": "2026-10-07",
   "note": "distance plumbing only",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#about as near": {
-  "body": "2e72e87a9fd01185",
-  "claim": "about as near - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); one grid pitch",
-  "code": "f7f0fcbb618d2602",
-  "core": "b32ac5f6db212a26",
-  "date": "2026-10-25",
-  "note": "\"about as near\" is given no width; one pitch matches the code",
-  "pages": {},
-  "research": "",
   "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#about as near": {
+  "body": "0949c4d53ddd2c6e",
+  "claim": "about as near - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); one grid pitch",
+  "code": "acce3f9f81ce0b3a",
+  "core": "e8a37da2f58bac63",
+  "date": "2026-10-26",
+  "note": "`ring` puts points in bands one pitch wide; the page gives no figure for \"about as near\"",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#about as near, nearer the fields": {
-  "code": "6f07340b50e0d74b",
-  "core": "b32ac5f6db212a26",
-  "date": "2026-10-07",
-  "note": "field distance is the secondary sort key, \"of two places about as near ... the one nearer the fields\"",
+  "body": "0949c4d53ddd2c6e",
+  "claim": "about as near, nearer the fields - farmhouses-minka.drawing: a tie broken by nearness to the field",
+  "code": "e696975246aea462",
+  "core": "e8a37da2f58bac63",
+  "date": "2026-10-26",
+  "note": "lexsort orders by ring first, then field distance: \"of two places about as near, the one nearer the fields\"",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
   },
@@ -13967,14 +13995,13 @@
   "rests": [
    "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
   ],
-  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#its drawn sizes": {
   "body": "2e72e87a9fd01185",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (seat grid inset 6 px from the sheet edge)",
-  "code": "a6038c066701b3ac",
-  "core": "b32ac5f6db212a26",
+  "code": "72555ce023fcb05d",
+  "core": "e8a37da2f58bac63",
   "date": "2026-10-25",
   "note": "the 6 px sheet inset is the grid's origin",
   "pages": {},
@@ -13984,8 +14011,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#no bound from the field": {
-  "code": "a3cf0bac7c30f25d",
-  "core": "b32ac5f6db212a26",
+  "code": "71c505a55884b39f",
+  "core": "e8a37da2f58bac63",
   "date": "2026-10-07",
   "note": "no point is dropped for its field distance",
   "pages": {
@@ -13999,12 +14026,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order": {
-  "body": "83c843c3117f640c",
+  "body": "0949c4d53ddd2c6e",
   "claim": "the exhaustive seat order - farmhouses-minka.drawing: every legal grid point on the canvas, nearest the seat first",
-  "code": "66e9e91af98f3217",
-  "core": "b32ac5f6db212a26",
+  "code": "43ccf0ac02c68452",
+  "core": "e8a37da2f58bac63",
   "date": "2026-10-26",
-  "note": "every grid point on the canvas, sorted nearest the seat first, matches \"each next household takes the place open nearest the cluster\" with no maximum distance; the numpy pass keeps the same strict half-pitch test against house centers, so the set of seats and their order are unchanged",
+  "note": "every grid point not ruled out, nearest the center first, none dropped for distance from the field",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
   },
@@ -15132,8 +15159,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/growth.py::footprint#sun owed to the south": {
-  "code": "3c5b0aeecb5fee6d",
-  "core": "a5ca995c1f2f5078",
+  "code": "bb405b38f6eb3155",
+  "core": "afc6aef2ebcfeade",
   "date": "2026-10-05",
   "note": "39 ft (plus the placer's 2) south of the yard and each bed",
   "pages": {
@@ -15145,13 +15172,16 @@
    "0038-sunlight-and-shade-on-the-farm.drawing.html:1744d5d384a63127",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:3cf9dd5c14103b6d"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/growth.py::footprint#the household's wood": {
-  "code": "e9b8c55a4fbf82e4",
-  "core": "a5ca995c1f2f5078",
-  "date": "2026-10-11",
-  "note": "reserved seats inside the homestead's envelope, so no lane comes between a house and its wood",
+  "body": "98f09b56b005611b",
+  "claim": "the household's wood - groves-of-trees-around-farmhouses-yashikirin.drawing, groves-of-trees-around-farmhouses-yashikirin: its reserved copse seats inside its footprint, beside its house, so no lane comes between them - in every account found the way runs outside the grove or through a gap in it to the house",
+  "code": "002dcb52801de9b5",
+  "core": "afc6aef2ebcfeade",
+  "date": "2026-10-26",
+  "note": "the extremes of the wood seats widen the footprint, so the copse stays inside it beside the house",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
    "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785"
@@ -55998,66 +56028,73 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_persimmon#crown over no roof": {
-  "code": "13edd96c4bf8b3df",
-  "core": "eb5f50e478d005dc",
+  "code": "ccde6f705fab1712",
+  "core": "151abf9f424f711e",
   "date": "2026-10-03",
   "note": "visibility convention",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_persimmon#its search steps and tolerances": {
   "body": "638c4ca4aa3b0cac",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N9, 2026-10-25) - 0.75 (the same, behind the house)",
-  "code": "f2fb10b1d4168497",
-  "core": "eb5f50e478d005dc",
+  "code": "e984126b05f19b7a",
+  "core": "151abf9f424f711e",
   "date": "2026-10-25",
   "note": "0046 names the front corners but gives no offset",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_persimmon#its seat ring": {
   "body": "638c4ca4aa3b0cac",
   "claim": "its seat ring - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1 (first seat ring 1 ft past the crown's pad)",
-  "code": "55a561b5ef6977c9",
-  "core": "eb5f50e478d005dc",
+  "code": "2becadc3ab5ac1f3",
+  "core": "151abf9f424f711e",
   "date": "2026-10-25",
   "note": "0046 gives the 30 ft reach, not the ring spacing",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_persimmon#its trunk gap": {
   "body": "638c4ca4aa3b0cac",
   "claim": "its trunk gap - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 2 (trunk kept 2 ft clear of every part)",
-  "code": "92a5e4e8beb88834",
-  "core": "eb5f50e478d005dc",
+  "code": "a3c6286d54189165",
+  "core": "151abf9f424f711e",
   "date": "2026-10-25",
   "note": "the record is silent",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_persimmon#persimmon in front or behind": {
-  "code": "403ac41d109965dc",
-  "core": "eb5f50e478d005dc",
+  "code": "9aeccc08b811c5c4",
+  "core": "151abf9f424f711e",
   "date": "2026-10-03",
   "note": "front or behind, none on the flank, per 0046",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_persimmon#within the dooryard": {
-  "code": "eb1ff4b2b7eee9e1",
-  "core": "eb5f50e478d005dc",
+  "code": "99313f4b5dffac6e",
+  "core": "151abf9f424f711e",
   "date": "2026-10-03",
   "note": "in_dooryard at PERSIMMON_DOORYARD_FT, else None",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#coop seats": {
@@ -56899,8 +56936,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room joined": {
   "body": "2e6053a878457bd0",
   "claim": "bath room joined - baths-on-the-farm-furo.drawing: refused rather than walked out",
-  "code": "f8d730de93c97326",
-  "core": "ad39d64e14bca2aa",
+  "code": "2e07e3ca24ab92ad",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-24",
   "note": "the seats must abut the house wall, and FixtureUnlaid is raised rather than a free-standing bath shed being drawn",
   "pages": {
@@ -56912,13 +56949,14 @@
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
    "0044-baths-on-the-farm-furo.drawing.html:f4b4951f028d4a66"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room's wall per house": {
   "body": "2e6053a878457bd0",
   "claim": "bath room's wall per house - baths-on-the-farm-furo: each house rolls among the three walls (`bath_wall`)",
-  "code": "73195ccfb10c808b",
-  "core": "ad39d64e14bca2aa",
+  "code": "f04912e1b21230cc",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-24",
   "note": "bath_wall rolls the stable end, the floored rooms or the main door per house",
   "pages": {
@@ -56930,15 +56968,16 @@
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
    "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part and bath room slide 4 ft": {
-  "body": "2e6053a878457bd0",
-  "claim": "fixture gap 3.5 ft off every other part and bath room slide 4 ft - DEVIATION firewood-stacks-and-sheds-kigoya.drawing: the gap of about 3.5 ft our maps keep between a house wall and anything built in its yard; the 4 ft slide is ours; WALL_GAP_FT (3.5 ft) clears the drawn wall of any part a fixture stands by, WALL_SLIDE_FT (4 ft) the bath room's slide along its wall",
-  "code": "b9468176fe9acb0f",
-  "core": "ad39d64e14bca2aa",
-  "date": "2026-10-25",
-  "note": "0043's drawing page records the 3.5 ft as \"the gap ... our maps keep\", and its only DEVIATION is the wood shed's added gap past the ken. The general gap departs from no finding, and the 4 ft slide is ours. It should read GUESS 0043 drawing (gap) plus GUESS (slide)",
+  "body": "45ec7ea907bb5779",
+  "claim": "fixture gap 3.5 ft off every other part and bath room slide 4 ft - GUESS firewood-stacks-and-sheds-kigoya.drawing: the gap of about 3.5 ft our maps keep between a house wall and anything built in its yard; the 4 ft slide is ours; WALL_GAP_FT (3.5 ft) clears the drawn wall of any part a fixture stands by, WALL_SLIDE_FT (4 ft) the bath room's slide along its wall",
+  "code": "f8ae47cd5e6fd3c5",
+  "core": "b94db159cfeea5fb",
+  "date": "2026-10-26",
+  "note": "`g = px(WALL_GAP_FT)` is the page's \"gap of about 3.5 ft\"; the page says nothing of the 4 ft slide",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "0a910d7e0b0f7be2"
   },
@@ -56946,37 +56985,39 @@
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#its salts, guards and sentinels": {
   "body": "2e6053a878457bd0",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.25 (salt offset for the bath-wall roll)",
-  "code": "2ff9dd9b38e825b7",
-  "core": "ad39d64e14bca2aa",
+  "code": "9907c8b0971c98fb",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-25",
   "note": "roll salt offset",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no fixture on the door's room": {
   "body": "2e6053a878457bd0",
   "claim": "no fixture on the door's room - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); the square about the door in `keep` (`DOOR_ROOM_HALF_FT`)",
-  "code": "33d2c1c2a208f49c",
-  "core": "ad39d64e14bca2aa",
+  "code": "49e76e2173163e3b",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-25",
   "note": "the bundle's pages are silent on a keep-out square at the door",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no fixture on the way in": {
   "body": "2e6053a878457bd0",
   "claim": "no fixture on the way in - groves-of-trees-around-farmhouses-yashikirin.drawing: the way in by the open front, through the ring's break - every kind but the bath room kept off `keep`",
-  "code": "658b2a73a1cbb9fb",
-  "core": "ad39d64e14bca2aa",
+  "code": "b653e2989dceb7f3",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-24",
   "note": "`keep` goes into every kind's taken except the bath room's, so the way in through the front break stays clear",
   "pages": {
@@ -56987,13 +57028,14 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no seat, no persimmon": {
   "body": "2e6053a878457bd0",
   "claim": "no seat, no persimmon - fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing: the farm keeps none",
-  "code": "37bf22bfeb347652",
-  "core": "ad39d64e14bca2aa",
+  "code": "5e9517bd0f63c51f",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-24",
   "note": "when _persimmon returns None the farm keeps none, never one set far out",
   "pages": {
@@ -57003,13 +57045,14 @@
   "rests": [
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:65dfdac106fa4297"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon front or behind": {
   "body": "2e6053a878457bd0",
   "claim": "persimmon front or behind - fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing: in front of the house or behind it, rolled per house at `forms.persimmon_front`",
-  "code": "886276ffd574b063",
-  "core": "ad39d64e14bca2aa",
+  "code": "cfc236700afaf285",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-24",
   "note": "front or behind is rolled per house against the hamlet's front share, and the sun test sends the tree behind wherever a drying yard lies in front; it is never put on a flank",
   "pages": {
@@ -57020,13 +57063,14 @@
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:591f08ea01d694fd",
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon in its own grove bands": {
   "body": "2e6053a878457bd0",
   "claim": "persimmon in its own grove bands - fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing: it may stand in the grove behind the house - its own grove, no other farm's",
-  "code": "ce90771233076567",
-  "core": "ad39d64e14bca2aa",
+  "code": "88bbfb1dd34fc1a1",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-24",
   "note": "only this farm's `fruit` bands are lifted for the trunk, and the crown stays off the roofs, so the tree stands at the edge of its own grove",
   "pages": {
@@ -57036,48 +57080,52 @@
   "rests": [
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order": {
   "body": "2e6053a878457bd0",
   "claim": "seating order - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); FIXTURE_ORDER (retirement house, bath, wood shed, privy, manure, coop, shrine, grave, persimmon) is the order the fixtures take seats",
-  "code": "1c82c4aa6ff06c22",
-  "core": "ad39d64e14bca2aa",
+  "code": "5036627cb390f4aa",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-25",
   "note": "no page orders the fixtures",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#stepped outward": {
   "body": "2e6053a878457bd0",
   "claim": "stepped outward - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a fixture with no recorded seat free is offered the same seats a pace further out",
-  "code": "219d1ff1d7f44d47",
-  "core": "ad39d64e14bca2aa",
+  "code": "f2675cf30e1c3311",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-25",
   "note": "the pages are silent on stepping a fixture a pace further out",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the kura's walls too": {
   "body": "2e6053a878457bd0",
   "claim": "the kura's walls too - GUESS: the house's storehouse annex counts as a wall of the house for the shed",
-  "code": "d08e48c8b1028af7",
-  "core": "ad39d64e14bca2aa",
+  "code": "38737faaa0cb9cfa",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-24",
   "note": "the account does not match the code: the kura enters `walls` only for clearance (shed_off_a_wall clears every wall by gap plus ken), while the shed is seated off walls[:1] alone (wall_places and against_a_wall), so the kura is never a wall the shed stands off; the claim should read \"the kura's walls kept clear by the same gap and ken\"",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the privy's reach": {
   "body": "2e6053a878457bd0",
   "claim": "the privy's reach - farm-privies-and-their-night-soil-benjo.drawing: never stepped past 48 ft from its house; a farmstead with no seat within it refuses its privy by name",
-  "code": "2f275d750696236e",
-  "core": "ad39d64e14bca2aa",
+  "code": "e578e7b0b0b5bc07",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-24",
   "note": "within_reach_of measures 48 ft from the far corner to the walls, and FixtureUnlaid is raised by name when no seat qualifies",
   "pages": {
@@ -57089,13 +57137,14 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:bc74b262a32416b5",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": {
   "body": "2e6053a878457bd0",
   "claim": "wood shed's walls - GUESS firewood-stacks-and-sheds-kigoya.drawing: the house's walls, a short step off the house - never the byre's or the retirement house's",
-  "code": "5030d59ab1907d20",
-  "core": "933f7b3dadaf8563",
+  "code": "8b8a93bc1ad164cc",
+  "core": "b94db159cfeea5fb",
   "date": "2026-10-19",
   "note": "the walls are the house's own walls (plus the kura annex), not the byre's or the retirement house's, matching \"a short step off the house\"",
   "pages": {
@@ -57106,7 +57155,7 @@
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:420f80d6ab791a18",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
   ],
-  "triaged": "2026-10-24",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::outward#plumbing": {
@@ -60356,11 +60405,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.corridor_bars#plumbing": {
-  "code": "659647f945b31486",
-  "core": "491d8c1b11601244",
+  "code": "33f631fc9ce459c4",
+  "core": "642ea72241b73af6",
   "date": "2026-10-03",
   "note": "plumbing",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.covers_a_seat#plumbing": {
@@ -61097,19 +61148,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/yards.py::_filled_lattice#plumbing": {
-  "code": "63bd69140f5ed063",
-  "core": "11e4372f974001fb",
+  "code": "e0ed71cd745ebbee",
+  "core": "4e2776e3d319507a",
   "date": "2026-10-03",
   "note": "lattice fill",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/yards.py::_lay_by_hand#plumbing": {
-  "code": "72ad692412c84342",
-  "core": "2d50787cb132428e",
+  "code": "ad06913ce5f8b123",
+  "core": "734966fceed9ab46",
   "date": "2026-10-03",
   "note": "applies the claimed jitter constants",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/yards.py::_mat_corners#plumbing": {
@@ -61156,13 +61211,25 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/yards.py::floor_grid#its salts, guards and sentinels": {
-  "body": "3d97c7d7e01ea672",
+ "l7r/diagram/settlement/homestead_parts/yards.py::floor_grid#plumbing": {
+  "body": "537f1f7704cc2d67",
+  "claim": "plumbing - NONE: the same verdicts, asked of the grid at once",
+  "code": "3fbb7dd6bc9ffc87",
+  "core": "71f51fce27ef02f4",
+  "date": "2026-10-26",
+  "note": "the same verdicts, asked of a meshgrid",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/yards.py::floor_points#its salts, guards and sentinels": {
+  "body": "d19ad90d297d409f",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.02 (buffer arc error margin)",
-  "code": "c4fc60d5391e78b0",
-  "core": "0ddaf3c0345187cd",
-  "date": "2026-10-25",
-  "note": "buffer error margin",
+  "code": "0744e3983e3dcb08",
+  "core": "5a8de3c78494fdc1",
+  "date": "2026-10-26",
+  "note": "the 0.02 margin only decides which points get the exact test",
   "pages": {},
   "research": "",
   "rests": [],
@@ -61185,15 +61252,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/yards.py::mat_cells#fewer mats than a real yard": {
-  "code": "d4e635b5d2134acf",
-  "core": "d82c1009fdfe32bb",
+  "code": "20675df59d898e32",
+  "core": "d44cfb5803a9ac70",
   "date": "2026-10-03",
   "note": "third to two thirds, per 0037 drawing",
   "pages": {
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
   },
   "research": "4cd9ea0eb987d90e",
-  "triaged": "2026-10-08",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/yards.py::mat_spots#plumbing": {
@@ -64722,21 +64789,38 @@
   ],
   "verdict": "NEEDS-RESEARCH"
  },
- "l7r/diagram/settlement/rolling/access.py::fixtures_clear#a persimmon by its trunk alone": {
-  "code": "ffaa90e87c8d5d4a",
-  "core": "a29987cf79a0020b",
-  "date": "2026-10-03",
-  "note": "the 4 ft trunk box with the crown allowed to overhang is a guess; 0081's drawing page says nothing about clearance under a tree's crown",
+ "l7r/diagram/settlement/rolling/access.py::fixture_gaps#a persimmon by its trunk alone": {
+  "body": "37eab9878d9621e0",
+  "claim": "a persimmon by its trunk alone - GUESS: held off by a 4 ft trunk box, the crown free to overhang the path",
+  "code": "5b05a0a07c19b5cc",
+  "core": "56f80493e1e516f5",
+  "date": "2026-10-26",
+  "note": "the cited pages say nothing on a tree's trunk or crown beside a path; GUESS is right",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own fixtures": {
-  "body": "e8dadd5b52eee571",
+ "l7r/diagram/settlement/rolling/access.py::fixture_gaps#fixtures held off at the corridor's half-width": {
+  "body": "37eab9878d9621e0",
+  "claim": "fixtures held off at the corridor's half-width - GUESS village-lanes.drawing: no page gives how far a household's own way keeps off its own fixtures or well; held off at the corridor's half-width (`ACCESS_HALF_FT`, 7 ft from the line), so a 3 ft tread's edge stands 5.5 ft off - past the 3 ft floor the maps keep off a farmstead's sheds",
+  "code": "6f191fe65ff1b4c2",
+  "core": "56f80493e1e516f5",
+  "date": "2026-10-26",
+  "note": "accepted by the round arbiter (ask:427-T07-fixture-gaps-claim), binding",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/access.py::fixture_gaps#path clear of its own fixtures": {
+  "body": "37eab9878d9621e0",
   "claim": "path clear of its own fixtures - how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed round its own garden beds and fixtures - the corridor off privy, stack and shed",
-  "code": "c55e329c8e2c7a97",
-  "core": "a29987cf79a0020b",
-  "date": "2026-10-17",
-  "note": "own fixtures and well held off at half",
+  "code": "fe76412621b04f23",
+  "core": "56f80493e1e516f5",
+  "date": "2026-10-26",
+  "note": "its way goes round its own garden beds and fixtures, a map drawing convention; the code holds every fixture off the line",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -64744,14 +64828,15 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own well": {
-  "code": "ee1e17bce5fe1036",
-  "core": "a29987cf79a0020b",
-  "date": "2026-10-05",
-  "note": "wellhead's box held off the corridor",
+ "l7r/diagram/settlement/rolling/access.py::fixture_gaps#path clear of its own well": {
+  "body": "37eab9878d9621e0",
+  "claim": "path clear of its own well - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane; the wellhead's own box",
+  "code": "f2a6b36f76194730",
+  "core": "56f80493e1e516f5",
+  "date": "2026-10-26",
+  "note": "nothing is built on a lane; the wellhead box is held off at the corridor half-width",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -64760,7 +64845,50 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-22",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/access.py::fixtures_clear#a persimmon by its trunk alone": {
+  "body": "d8d972dc4c7119fa",
+  "claim": "a persimmon by its trunk alone - GUESS: held off by a 4 ft trunk box, the crown free to overhang the path",
+  "code": "9aab43c696f0d446",
+  "core": "e2a42a397d105acc",
+  "date": "2026-10-26",
+  "note": "the 4 ft trunk box comes in through fixture_gaps; the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own fixtures": {
+  "body": "d8d972dc4c7119fa",
+  "claim": "path clear of its own fixtures - how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed round its own garden beds and fixtures - the corridor off privy, stack and shed",
+  "code": "42d79b625e8f6660",
+  "core": "e2a42a397d105acc",
+  "date": "2026-10-26",
+  "note": "its way \"leaves its dooryard round its own garden beds and fixtures\"",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own well": {
+  "body": "d8d972dc4c7119fa",
+  "claim": "path clear of its own well - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane; the wellhead's own box",
+  "code": "ea538d2ca172ae60",
+  "core": "e2a42a397d105acc",
+  "date": "2026-10-26",
+  "note": "\"Nothing is built on a lane\"; held off by the wellhead's box",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::house_clear#corridor geometry, memo and search plumbing": {
@@ -64843,27 +64971,79 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/rolling/access.py::parts_clear#path off its own beds and outbuildings": {
-  "body": "a8fad3bbf6e7d4a1",
-  "claim": "path off its own beds and outbuildings - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane never crosses row crops and nothing is built on it; the tread's 0.5 ft margin is UNRESEARCHED",
-  "code": "45511407bb017aef",
-  "core": "2d6ddb14e47bf2b4",
-  "date": "2026-10-22",
-  "note": "the tread is held only PART_MARGIN_FT (0.5 ft) off its own shed and byre (`gap = s.px(TREAD_HALF_FT + PART_MARGIN_FT)` applied to \"shed\", \"byre\"), but 0081 drawing keeps \"the same 3 ft off a farmstead's other buildings - its sheds, byre and retirement house\"; the shed/byre gap should be TREAD_HALF_FT + TREAD_WALL_FT (beds and well can keep 0.5 ft)",
-  "outside": true,
+ "l7r/diagram/settlement/rolling/access.py::part_gaps#path off its own beds and well": {
+  "body": "2de2ef27ed7ba67f",
+  "claim": "path off its own beds and well - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane never crosses row crops and nothing is built on it; the tread's 0.5 ft margin is UNRESEARCHED",
+  "code": "85999f68bd6e31f6",
+  "core": "bd9313b4f76d37d8",
+  "date": "2026-10-26",
+  "note": "the 0.5 ft margin is not unresearched: 0246 §3 records the half foot spare at each side of the 3 ft footpath (\"leaving half a foot spare at each side - a map drawing convention\"), the same corridor margin the sibling claim names; cite 0246 §3 as a map drawing convention instead of UNRESEARCHED. Never crossing beds and the well is in step",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "bb1cc346ff176dc2",
   "rests": [
-   "0081-village-lanes.drawing.html:426f2feb39477167",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-22",
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/settlement/rolling/access.py::part_gaps#tread 3 ft off its own kura and byre": {
+  "body": "2de2ef27ed7ba67f",
+  "claim": "tread 3 ft off its own kura and byre - village-lanes.drawing: the maps keep the same 3 ft off a farmstead's other buildings - its sheds, byre - as off its farmhouse wall (`TREAD_WALL_FT`), with the corridor's half-foot margin as `house_gap` keeps (feature 427 T07, impl-drift: it kept 0.5 ft)",
+  "code": "8bdd4d1b1446c0b6",
+  "core": "bd9313b4f76d37d8",
+  "date": "2026-10-26",
+  "note": "wall = 1.5+3+0.5 ft from the line keeps the tread edge 3.5 ft off shed and byre: the page's 3 ft (a GUESS there) plus the stated half-foot margin",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:426f2feb39477167"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/access.py::parts_clear#path off its own beds and well": {
+  "body": "d3ab7f71a6081aab",
+  "claim": "path off its own beds and well - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane never crosses row crops and nothing is built on it; the tread's 0.5 ft margin is UNRESEARCHED",
+  "code": "6360df5333688561",
+  "core": "ffd123cd214f24c2",
+  "date": "2026-10-26",
+  "note": "same as on part_gaps: the 0.5 ft margin is 0246 §3's half foot spare each side, a map drawing convention, not UNRESEARCHED",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "bb1cc346ff176dc2",
+  "rests": [
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/settlement/rolling/access.py::parts_clear#tread 3 ft off its own kura and byre": {
+  "body": "d3ab7f71a6081aab",
+  "claim": "tread 3 ft off its own kura and byre - village-lanes.drawing: the same 3 ft off a farmstead's sheds and byre as off its farmhouse wall (`part_gaps`)",
+  "code": "c5f9d40e5b0fcf61",
+  "core": "ffd123cd214f24c2",
+  "date": "2026-10-26",
+  "note": "it hands the gaps to part_gaps, whose shed and byre gap keeps the tread 3 ft off plus the half-foot margin",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:426f2feb39477167"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::past_the_yard#path not drawn on its own yard": {
   "body": "5917120cbd6fa88f",
@@ -64874,6 +65054,18 @@
   "note": "the way is laid from the dooryard; no page says where its drawing starts",
   "pages": {},
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/access.py::point_clear#plumbing": {
+  "body": "e9982d5a6a632e7e",
+  "claim": "plumbing - NONE: the same verdict as the line tests, for a point",
+  "code": "adb1996e3264bf58",
+  "core": "ebbd0d20b06b1225",
+  "date": "2026-10-26",
+  "note": "the point-to-box distance gives the same verdict as seg_box_within(q, q)",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::prime_site#corridor geometry, memo and search plumbing": {
@@ -67414,6 +67606,42 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/rolling/gap_ways.py::SegFeet#plumbing": {
+  "body": "5822ba967f4347aa",
+  "claim": "plumbing - NONE: the nearest point on the tree, computed for all its legs at once",
+  "code": "c79f9966a694aee6",
+  "core": "aacaa3f84aba4e9f",
+  "date": "2026-10-26",
+  "note": "the nearest point on the segments, as arrays",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/gap_ways.py::SegFeet.__init__#plumbing": {
+  "body": "5c632cba7cb8564f",
+  "claim": "plumbing - NONE: the segments as arrays",
+  "code": "1d5d77e3af293813",
+  "core": "49c4da00c274ef8f",
+  "date": "2026-10-26",
+  "note": "the segments as arrays",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/gap_ways.py::SegFeet.nearest#plumbing": {
+  "body": "b9b16f53a22b6c2a",
+  "claim": "plumbing - NONE: `seg_closest`'s projection for every segment at once",
+  "code": "57dbaba32d04b86c",
+  "core": "4b8360ad69088a58",
+  "date": "2026-10-26",
+  "note": "the same clamped projection; argmin keeps the first of equals",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/rolling/gap_ways.py::_STEPS#plumbing": {
   "code": "8396ae94c3440101",
   "core": "a31a3c4b3a503105",
@@ -67435,8 +67663,8 @@
  "l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a foot gathered at a junction": {
   "body": "1f2c9467fa514620",
   "claim": "a foot gathered at a junction - village-lanes.drawing: a household's way's foot is set on a junction within KNOT_FT * KNOT_MARGIN, 25 ft; the foot as traced only where no gathered join is admitted, after `KNOTTED_TRIES` times the exits",
-  "code": "b96657ef8697eb63",
-  "core": "c26beeb2586c30b6",
+  "code": "46024084d4fa5fab",
+  "core": "7732a3f1a85290aa",
   "date": "2026-10-22",
   "note": "foot gathered within 25 ft; the T left beside a junction only when no gathered join passes the lane law (sliver, network), as §22 allows",
   "pages": {
@@ -67446,31 +67674,30 @@
   "rests": [
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a way leaves its own homestead from its dooryard": {
-  "body": "1f2c9467fa514620",
+  "body": "95bb55f4531c7411",
   "claim": "a way leaves its own homestead from its dooryard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: its way leaves its dooryard round its own garden beds and fixtures",
-  "code": "df40ed409731b008",
-  "core": "c26beeb2586c30b6",
-  "date": "2026-10-22",
-  "note": "doors and legs kept off its own fixtures and beds",
+  "code": "cf19ec912f269803",
+  "core": "7732a3f1a85290aa",
+  "date": "2026-10-26",
+  "note": "open_here asks a cell of its own house, parts and fixtures through point_clear: the same rule as before",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::_way_for#joined near, then far, then run on to the way out": {
   "body": "1f2c9467fa514620",
   "claim": "joined near, then far, then run on to the way out - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: each household's way runs along the gaps to the track out or to a way laid before it, which it joins at a T",
-  "code": "71fb1faf268958b2",
-  "core": "c26beeb2586c30b6",
+  "code": "39beb7d24f22e873",
+  "core": "7732a3f1a85290aa",
   "date": "2026-10-22",
   "note": "joins the track out or an earlier way at a T; the near-then-far order is not on the page",
   "pages": {
@@ -67480,7 +67707,7 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::ended_at#plumbing": {
@@ -67709,21 +67936,22 @@
  "l7r/diagram/settlement/rolling/gap_ways.py::trace#join reach": {
   "body": "2d13401301b5cc42",
   "claim": "join reach - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); a way joins an earlier one it comes within `JOIN_FT` of",
-  "code": "3c60e5d4d61c6fae",
-  "core": "32b691cd9f4a0f1c",
+  "code": "a5602f6d850e33fd",
+  "core": "5f4a4978cff80eae",
   "date": "2026-10-25",
   "note": "the JOIN_FT reach is on no page",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::trace#ways join at a T": {
-  "body": "2d13401301b5cc42",
+  "body": "a3305505fa2c8a7b",
   "claim": "ways join at a T - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane meets another at a T, never beside it",
-  "code": "5703f2516c8d4bbf",
-  "core": "32b691cd9f4a0f1c",
-  "date": "2026-10-22",
-  "note": "foot set on the closest point of the laid way, a T",
+  "code": "074799b046ae9700",
+  "core": "5f4a4978cff80eae",
+  "date": "2026-10-26",
+  "note": "the foot is still the nearest point on the tree, now from SegFeet",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
@@ -67731,26 +67959,25 @@
   "research": "bb1cc346ff176dc2",
   "rests": [
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::way_out#a way leaves its own homestead from its dooryard": {
-  "body": "96b70d6f764a5047",
+  "body": "176dd3bee853d3a2",
   "claim": "a way leaves its own homestead from its dooryard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: from the doors it is given (`access.doors_of` picks them), round its own house, beds and fixtures",
-  "code": "855f40d3f760a1ab",
-  "core": "c6fd9626d100f842",
-  "date": "2026-10-22",
-  "note": "search from the doors, round the household's own parts",
+  "code": "89b099ebab51080a",
+  "core": "7bed07a28f9daf3f",
+  "date": "2026-10-26",
+  "note": "the memo is read in place, so the search from the given doors is unchanged",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/lot.py::BUNDLE_PART_KEYS#quota, record and registry plumbing": {

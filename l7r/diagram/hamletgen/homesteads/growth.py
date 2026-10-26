@@ -115,9 +115,11 @@ def footprint(s: Settlement, rec: dict[str, Any]) -> Reach:
     g = rec.get("geom") or {}
     hx, hy = float(rec["x"]), float(rec["y"])
     w, e, n, so = box_reach((hx, hy), g.get("bbox") or (hx, hy, float(rec.get("w") or 0.0), float(rec.get("h") or 0.0)))  # a bare record: its house
-    for p in (rec.get("wood_share") or {}).get("seats") or ():
-        w, e = max(w, hx - p[0] + WOOD_CLUMP_PX), max(e, p[0] - hx + WOOD_CLUMP_PX)
-        n, so = max(n, hy - p[1] + WOOD_CLUMP_PX), max(so, p[1] - hy + WOOD_CLUMP_PX)
+    seats = (rec.get("wood_share") or {}).get("seats") or ()
+    if seats:  # the seats' extremes, once a call (feature 427 T07: per seat, four `max` calls - 293k at 40 households)
+        xs, ys = [p[0] for p in seats], [p[1] for p in seats]
+        w, e = max(w, hx - min(xs) + WOOD_CLUMP_PX), max(e, max(xs) - hx + WOOD_CLUMP_PX)
+        n, so = max(n, hy - min(ys) + WOOD_CLUMP_PX), max(so, max(ys) - hy + WOOD_CLUMP_PX)
     boxes = g.get("boxes") or {}
     sun = s.px(SUN_CORRIDOR_FT + 2.0)
     for r in (boxes.get("yard"), *(boxes.get("gardens") or ())):

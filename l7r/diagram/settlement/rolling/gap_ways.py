@@ -38,8 +38,8 @@ import math
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
-from .._geom import Pt, chain_violated_many, seg_closest
-from .access import _standing_memo, admitted, doors_of, doubles_back, fixtures_clear, house_clear, house_gap, legs, parts_clear, reserve, standing_ground
+from .._geom import Pt, chain_violated_many
+from .access import _standing_memo, admitted, doors_of, doubles_back, fixture_gaps, fixtures_clear, house_clear, house_gap, legs, part_gaps, parts_clear, point_clear, reserve, standing_ground
 from .route import taut
 
 if TYPE_CHECKING:
@@ -294,12 +294,13 @@ def way_out(L: Layers, dist: Any, doors: Sequence[Pt], area: tuple[int, int, int
             continue  # out on the lane ground: the flood takes it from here
         for di, dj, ln in _STEPS:
             u, v = i + di, j + dj
-            if not (i0 <= u < i1 and j0 <= v < j1 and 0 <= u < L.nx and 0 <= v < L.ny) or not ok((u, v)):
+            # a cell already judged read from the memo in place, not through `ok` (feature 427 T07: 90k calls a 40-household roll)
+            if not (i0 <= u < i1 and j0 <= v < j1 and 0 <= u < L.nx and 0 <= v < L.ny) or not (seen[(u, v)] if (u, v) in seen else ok((u, v))):
                 continue
-            if di and dj and not (ok((i + di, j)) and ok((i, j + dj))):
+            if di and dj and not ((seen[(i + di, j)] if (i + di, j) in seen else ok((i + di, j))) and (seen[(i, j + dj)] if (i, j + dj) in seen else ok((i, j + dj)))):
                 continue
             nd = d + ln * L.cell
-            if nd < best.get((u, v), math.inf):
+            if (u, v) not in best or nd < best[(u, v)]:
                 best[(u, v)], back[(u, v)] = nd, (i, j)
                 heapq.heappush(heap, (nd, u, v))
     exits.sort()
@@ -317,14 +318,50 @@ def trace(L: Layers, dist: Any, pred: Any, laid: Any, start: tuple[int, int], tr
     """
     path: list[Pt] = []
     u, v = start
+    feet = SegFeet(tree_segs)  # the tree's legs as arrays once a trace, not a `seg_closest` each per cell (feature 427 T07)
     while True:
         here = L.at((u, v))
         if laid[u, v] or dist[u][v] == 0:
-            foot = min((seg_closest(here[0], here[1], a, b) for a, b in tree_segs), key=lambda z: math.dist(z, here))
+            foot = feet.nearest(here)
             if dist[u][v] == 0 or joins(here, foot):
                 return path, foot
-        u, v = (int(x) for x in pred[u][v])
+        back = pred[u][v]  # the step back, without a generator per cell (feature 427 T07)
+        u, v = int(back[0]), int(back[1])
         path.append(L.at((u, v)))
+
+
+class SegFeet:
+    """The nearest point on any of a set of segments, for one point at a time, the segments held as arrays (feature 427 T07):
+    `min((seg_closest(x, y, a, b) for a, b in segs), key=lambda z: math.dist(z, (x, y)))` - the same projection, clamped the
+    same way, and the first of equals kept - in one array pass where `trace` asked every leg per cell.
+
+    Research: plumbing - NONE: the nearest point on the tree, computed for all its legs at once"""
+
+    __slots__ = ("ax", "ay", "dd", "dx", "dy")
+
+    def __init__(self, segs: Sequence[tuple[Pt, Pt]]) -> None:
+        """Research: plumbing - NONE: the segments as arrays"""
+        import numpy as np  # noqa: PLC0415 - bound on first use (feature 237)
+
+        s = np.asarray(segs, dtype=float).reshape(-1, 2, 2)
+        self.ax, self.ay = s[:, 0, 0], s[:, 0, 1]
+        self.dx, self.dy = s[:, 1, 0] - self.ax, s[:, 1, 1] - self.ay
+        self.dd = self.dx * self.dx + self.dy * self.dy
+
+    def nearest(self, p: Pt) -> Pt:
+        """The nearest point to `p` on the segments; ValueError where there are none (as `min` of nothing).
+
+        Research: plumbing - NONE: `seg_closest`'s projection for every segment at once"""
+        import numpy as np  # noqa: PLC0415
+
+        if not len(self.ax):
+            raise ValueError("no segment to stand a foot on")
+        with np.errstate(divide="ignore", invalid="ignore"):
+            t = np.clip(((p[0] - self.ax) * self.dx + (p[1] - self.ay) * self.dy) / self.dd, 0.0, 1.0)
+        t = np.where(self.dd == 0.0, 0.0, t)  # a point segment: its end, as `seg_closest`
+        cx, cy = self.ax + t * self.dx, self.ay + t * self.dy
+        k = int(np.argmin(np.hypot(cx - p[0], cy - p[1])))
+        return float(cx[k]), float(cy[k])
 
 
 def junction_points(segs: Sequence[tuple[Pt, Pt]]) -> list[Pt]:
@@ -465,12 +502,15 @@ def _way_for(
     own = geom["bbox"]
     sp = L.spans.get(id(own))
 
+    # its house, parts and fixtures with their gaps, listed once: a cell's point asked of them by `point_clear`, the verdicts
+    # `house_clear`, `parts_clear` and `fixtures_clear` give a point (feature 427 T07)
+    gaps = [(geom.get("boxes", {}).get("house") or geom["house"], hgap), *part_gaps(s, geom), *fixture_gaps(s, geom)]
+
     def open_here(c: tuple[int, int]) -> bool:
         if L.site[c]:
             return False
         n = int(L.cover[c]) - (1 if sp is not None and sp[0] <= c[0] < sp[1] and sp[2] <= c[1] < sp[3] else 0)
-        q = L.at(c)
-        return n <= 0 and house_clear(q, q, geom, hgap) and parts_clear(s, q, q, geom) and fixtures_clear(s, q, q, geom)
+        return n <= 0 and point_clear(L.at(c), gaps)
 
     k = next((n for n, b in enumerate(s.placed) if b is own), None)
     if k is not None:

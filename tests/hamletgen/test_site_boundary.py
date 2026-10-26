@@ -358,3 +358,23 @@ def test_a_scattered_hamlets_boundary_rings_its_fields_on_every_side() -> None:
     assert not s._site_blocks_rect((200.0, 500.0, 40.0, 28.0)), "...and one west of it, on a side no chord faced, stands"
     install_site_boundary(s, plan)  # type: ignore[arg-type]
     assert not s._fields_ringed and s._seat_ring_chains == [] and s._site_chains, "the clustered boundary, as before"
+
+
+def test_the_points_asked_together_answer_as_each_point_asked_alone() -> None:
+    """Feature 427 T07: `FreeGround.points_taken` is `point_taken` for every point at once - the grid's cells, and cells past
+    the grid (decided as `_cell_beyond` decides them); a grid of points wholly on the grid asks nothing past it."""
+    import random
+
+    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
+
+    water = ([((0.0, 130.0), (400.0, 170.0), 12.0)], [])
+    ring = ([[(200.0, 220.0), (330.0, 220.0), (330.0, 330.0), (200.0, 330.0)]], [])
+    fg = FreeGround([], water, ring, (0.0, 0.0, 400.0, 400.0))
+    rng = random.Random(11)
+    pts = [(rng.uniform(-60.0, 460.0), rng.uniform(-60.0, 460.0)) for _ in range(800)]
+    got = fg.points_taken([p[0] for p in pts], [p[1] for p in pts]).tolist()
+    alone = FreeGround([], water, ring, (0.0, 0.0, 400.0, 400.0))
+    assert got == [alone.point_taken(x, y) for x, y in pts]
+    assert any(got) and not all(got), "non-vacuity: taken and free points both"
+    on_grid = fg.points_taken([210.0, 10.0], [230.0, 10.0]).tolist()
+    assert on_grid == [fg.point_taken(210.0, 230.0), fg.point_taken(10.0, 10.0)]

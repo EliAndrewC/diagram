@@ -111,12 +111,6 @@ def mat_cells(
     mw, mh, clear = MAT_FT[0] / ftpx, MAT_FT[1] / ftpx, MAT_EDGE_CLEAR_FT / ftpx
     floor = math.ceil((w * ftpx) * (h * ftpx) / MAT_SQ_FT / 3.0)
 
-    def fits(corners: list[tuple[float, float]]) -> bool:
-        if not all(point_in_poly(px, py, poly) and edge_dist(px, py, poly) >= clear for px, py in corners):
-            return False
-        xs, ys = [p[0] for p in corners], [p[1] for p in corners]
-        return keep_out is None or not (min(xs) < keep_out[2] and max(xs) > keep_out[0] and min(ys) < keep_out[3] and max(ys) > keep_out[1])
-
     # WHICH MAT SPOTS FIT, ON A QUARTER-FOOT GRID, ONCE (spec-fidelity, amendment round 6, 2026-09-28): a lattice tried at a
     # few offsets missed the one that fits a yard in a 0.2 ft band and drew it a third short; every gap's pitch (7, 7.5 and
     # 8 ft across, 4, 4.5 and 5 ft down) is a whole number of quarter feet, so every lattice at every offset is a sum of
@@ -124,9 +118,22 @@ def mat_cells(
     # THE FLOOR FILLED, NOT SEARCHED (feature 297, FR-003): the lattice is laid centered in the floor's inner box at each gap,
     # widest first, and the first that meets the third-of-cover floor is taken; the search below runs only where no gap's
     # fill does (a floor too irregular for its inner box), so the floor rule holds either way.
-    filled = _filled_lattice(poly, clear, keep_out, mw, mh, ftpx, floor, fits)
+    def fits_all(spots: list[list[tuple[float, float]]]) -> list[bool]:
+        """`fits` for every spot's corners at once (feature 427 T07: four `point_in_poly` and `edge_dist` calls a spot were the
+        homesteads stage's largest scalar chain): the floor test asked of all their corners in one `floor_points`."""
+        if not spots:
+            return []
+        flat = [q for cs in spots for q in cs]
+        on = floor_points([q[0] for q in flat], [q[1] for q in flat], poly, clear).reshape(len(spots), len(spots[0])).all(axis=1).tolist()
+        return [
+            bool(o)
+            and (keep_out is None or not (min(q[0] for q in cs) < keep_out[2] and max(q[0] for q in cs) > keep_out[0] and min(q[1] for q in cs) < keep_out[3] and max(q[1] for q in cs) > keep_out[1]))
+            for o, cs in zip(on, spots, strict=True)
+        ]
+
+    filled = _filled_lattice(poly, clear, keep_out, mw, mh, ftpx, floor, fits_all)
     if filled is not None:
-        return thin_evenly(_lay_by_hand(filled, mw, mh, ftpx, fits, salt), max(1, math.floor((w * ftpx) * (h * ftpx) / MAT_SQ_FT * 2.0 / 3.0)))
+        return thin_evenly(_lay_by_hand(filled, mw, mh, ftpx, fits_all, salt), max(1, math.floor((w * ftpx) * (h * ftpx) / MAT_SQ_FT * 2.0 / 3.0)))
     q = MAT_SEARCH_STEP_FT / ftpx
     xs = [-w / 2.0 + i * q for i in range(int(w / q) + 1)]
     ys = [-h / 2.0 + j * q for j in range(int(h / q) + 1)]
@@ -150,8 +157,8 @@ def mat_cells(
             # short; so before a yard is let off with fewer, the lattice is solved exactly on the floor's own outline
             exact = _exact_lattice(poly, clear, keep_out, mw, mh, (MAT_FT[0] + gap_ft) / ftpx, (MAT_FT[1] + gap_ft) / ftpx, w, h, len(base))
             if len(exact) > len(base):
-                base = [b for b in exact if fits(_mat_corners(b[2], b[3], mw, mh, 0.0))]
-        mats = _lay_by_hand(base, mw, mh, ftpx, fits, salt)
+                base = [b for b, ok in zip(exact, fits_all([_mat_corners(b[2], b[3], mw, mh, 0.0) for b in exact]), strict=True) if ok]
+        mats = _lay_by_hand(base, mw, mh, ftpx, fits_all, salt)
         if len(mats) > len(best):
             best = mats
         if len(mats) >= floor:
@@ -164,11 +171,12 @@ def mat_cells(
 
 
 def _filled_lattice(
-    poly: list[tuple[float, float]], clear: float, keep_out: tuple[float, float, float, float] | None, mw: float, mh: float, ftpx: float, floor: int, fits: Any
+    poly: list[tuple[float, float]], clear: float, keep_out: tuple[float, float, float, float] | None, mw: float, mh: float, ftpx: float, floor: int, fits_all: Any
 ) -> list[tuple[int, int, float, float]] | None:
     """The mats' lattice (row, column, x, y of each mat's unturned origin) laid CENTERED in the floor's inner box - the box
     inside the floor moved in by `clear` (`inner_box`) - at the widest gap of `MAT_GAPS_FT` whose lattice seats `floor` mats,
-    a spot dropped where its mat leaves the floor or meets the rack (`fits`); None where no gap's lattice seats `floor`."""
+    a spot dropped where its mat leaves the floor or meets the rack (`fits_all`, every spot of a gap's lattice in one call);
+    None where no gap's lattice seats `floor`."""
     box = inner_box(poly, clear)
     if box is None:
         return None
@@ -181,7 +189,7 @@ def _filled_lattice(
         ox = (x0 + x1) / 2.0 - (nc * pw - gap_ft / ftpx) / 2.0
         oy = (y0 + y1) / 2.0 - (nr * ph - gap_ft / ftpx) / 2.0
         base = [(r, c, ox + c * pw, oy + r * ph) for r in range(nr) for c in range(nc)]
-        base = [b for b in base if fits(_mat_corners(b[2], b[3], mw, mh, 0.0))]
+        base = [b for b, ok in zip(base, fits_all([_mat_corners(b[2], b[3], mw, mh, 0.0) for b in base]), strict=True) if ok]
         if len(base) >= floor:
             return base
     return None
@@ -207,9 +215,20 @@ def inner_box(poly: list[tuple[float, float]], clear: float) -> tuple[float, flo
 
 def floor_grid(xs: list[float], ys: list[float], poly: list[tuple[float, float]], clear: float) -> Any:
     """`[[point_in_poly(x, y, poly) and edge_dist(x, y, poly) >= clear for y in ys] for x in xs]` as a boolean array, point
-    for point (feature 284): a point inside the floor shrunk by `clear` plus a margin is surely clear, one outside it shrunk
-    by `clear` minus the margin surely not, and a point between - within the margin of the line, where a buffer's chords and
-    rounding could disagree with the exact test - is asked the exact test itself.
+    for point (feature 284): `floor_points` over the grid.
+
+    Research: plumbing - NONE: the same verdicts, asked of the grid at once"""
+    import numpy as np  # bound on first use: no heavy library at import time (feature 237)
+
+    gx, gy = np.meshgrid(np.asarray(xs, dtype=float), np.asarray(ys, dtype=float), indexing="ij")
+    return floor_points(gx.ravel(), gy.ravel(), poly, clear).reshape(gx.shape)
+
+
+def floor_points(px: Any, py: Any, poly: list[tuple[float, float]], clear: float) -> Any:
+    """`point_in_poly(x, y, poly) and edge_dist(x, y, poly) >= clear` for every point of the arrays `px`, `py`, as a boolean
+    array (feature 284; any points, feature 427 T07): a point inside the floor shrunk by `clear` plus a margin is surely
+    clear, one outside it shrunk by `clear` minus the margin surely not, and a point between - within the margin of the line,
+    where a buffer's chords and rounding could disagree with the exact test - is asked the exact test itself.
 
     Research:
         its salts, guards and sentinels - NONE: they decide nothing about the place - 0.02 (buffer arc error margin)
@@ -218,7 +237,7 @@ def floor_grid(xs: list[float], ys: list[float], poly: list[tuple[float, float]]
     import shapely
     from shapely.geometry import Polygon
 
-    gx, gy = np.meshgrid(np.asarray(xs, dtype=float), np.asarray(ys, dtype=float), indexing="ij")
+    gx, gy = np.asarray(px, dtype=float), np.asarray(py, dtype=float)
     out = np.zeros(gx.shape, dtype=bool)
     if len(poly) < 3:
         return out
@@ -229,9 +248,9 @@ def floor_grid(xs: list[float], ys: list[float], poly: list[tuple[float, float]]
     if not surely.is_empty:
         out = shapely.contains_xy(surely, gx, gy)
     band = ~out & (shapely.intersects_xy(maybe, gx, gy) if not maybe.is_empty else np.zeros(gx.shape, dtype=bool))
-    for i, j in zip(*np.nonzero(band), strict=True):
-        x, y = xs[i], ys[j]
-        out[i, j] = point_in_poly(x, y, poly) and edge_dist(x, y, poly) >= clear
+    for k in np.nonzero(band)[0]:
+        x, y = float(gx[k]), float(gy[k])
+        out[k] = point_in_poly(x, y, poly) and edge_dist(x, y, poly) >= clear
     return out
 
 
@@ -399,9 +418,9 @@ def _boxes_within(a: list[tuple[float, float]], b: list[tuple[float, float]], ne
     return math.hypot(dx, dy) < need
 
 
-def _lay_by_hand(base: list[tuple[int, int, float, float]], mw: float, mh: float, ftpx: float, fits: Any, salt: float = 0.0) -> list[tuple[float, float, float, float, float]]:
+def _lay_by_hand(base: list[tuple[int, int, float, float]], mw: float, mh: float, ftpx: float, fits_all: Any, salt: float = 0.0) -> list[tuple[float, float, float, float, float]]:
     """Set each mat of the lattice `base` (row, column, x, y) down by hand: nudged up to `MAT_JITTER_FT` and turned up to
-    `MAT_JITTER_DEG` by a positional draw, and kept so only where its corners still fit the floor (`fits`) and its drawn
+    `MAT_JITTER_DEG` by a positional draw, and kept so only where its corners still fit the floor (`fits_all`, every try asked at once) and its drawn
     outline stays `MAT_INK_CLEAR_FT` clear of every neighbor's - the mats already laid and the lattice spots still to come.
     Where the full draw does not fit, the same turn with no nudge, then half the turn, then the lattice spot unturned.
 
@@ -415,14 +434,21 @@ def _lay_by_hand(base: list[tuple[int, int, float, float]], mw: float, mh: float
     # lattice - the next one over stands a whole mat and gap away - so each spot is measured against those, laid or to come
     at: dict[tuple[int, int], int] = {(r, c): k for k, (r, c, _x, _y) in enumerate(base)}
     placed: dict[int, list[tuple[float, float]]] = {}
-    for k, (r, c, x, y) in enumerate(base):
+    # EVERY SPOT'S FOUR TRIES AND THEIR FLOOR TEST UP FRONT (feature 427 T07): the floor does not depend on what is laid, so
+    # each try's `fits` is asked in one call for the whole lattice; only the neighbors' gap is asked in order
+    tries: list[list[tuple[float, float, float]]] = []
+    for r, c, x, y in base:
         dx, dy = (2 * _mat_hash(r, c, salt + 1.0) - 1) * MAT_JITTER_FT / ftpx, (2 * _mat_hash(r, c, salt + 2.0) - 1) * MAT_JITTER_FT / ftpx
         a = (2 * _mat_hash(r, c, salt + 3.0) - 1) * MAT_JITTER_DEG
+        tries.append([(x + dx, y + dy, a), (x, y, a), (x, y, a / 2.0), (x, y, 0.0)])
+    quads = [[_mat_corners(jx, jy, mw, mh, ja) for jx, jy, ja in ts] for ts in tries]
+    flat = fits_all([q for qs in quads for q in qs])
+    floor_ok = [flat[4 * k : 4 * k + 4] for k in range(len(base))]
+    for k, (r, c, _x, _y) in enumerate(base):
         near = [m for dr in (-1, 0, 1) for dc in (-1, 0, 1) if (dr or dc) and (m := at.get((r + dr, c + dc))) is not None]
         others = [placed[m] if m in placed else lattice[m] for m in near if m in placed or m > k]
-        for jx, jy, ja in ((x + dx, y + dy, a), (x, y, a), (x, y, a / 2.0), (x, y, 0.0)):
-            q = _mat_corners(jx, jy, mw, mh, ja)
-            if ja == 0.0 or (fits(q) and all(_quad_gap(q, o) >= need for o in others if _boxes_within(q, o, need))):
+        for (jx, jy, ja), q, on in zip(tries[k], quads[k], floor_ok[k], strict=True):
+            if ja == 0.0 or (on and all(_quad_gap(q, o) >= need for o in others if _boxes_within(q, o, need))):
                 laid.append((jx, jy, mw, mh, ja))
                 placed[k] = q
                 break

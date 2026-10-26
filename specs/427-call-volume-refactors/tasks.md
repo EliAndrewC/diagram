@@ -24,7 +24,7 @@
 - [x] T06 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#PAIR_LOOK = 40: how many first-well seats nearest the share's middle are re-ranked by whether a second well would keep both at ten (search breadth, a GUESS) [lands-open]
       research: rendering
       verify: DONE. landed: PAIR_LOOK's claim relabeled GUESS
-- [ ] T07 US4, the homestead parts family: the homesteads stage's pairwise chains (research/hotspots-pairwise.md) with R4 and R8 (research/hotspots-recompute.md), each chain at least tenfold down (FR-003, US4)
+- [ ] T07 US4, the homestead parts family: the homesteads stage's pairwise chains (research/hotspots-pairwise.md) with R8 (research/hotspots-recompute.md), each chain at least tenfold down (FR-003, US4); R4 moved to its own task, T12
       research: rendering
 - [ ] T08 US4, the ground cover family: the hinterland and windbreak stages' pairwise chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)
       research: rendering
@@ -33,6 +33,8 @@
 - [ ] T10 US4, the lane web and the lane law, after feature 417's lane conversions (request.md 5): the web stage's pairwise chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)
       research: rendering
 - [ ] T11 The 427-end bookend and the report: SC-002 and SC-003 measured against 427-start (FR-005), make feature-report F=427 WRITE=1
+      research: rendering
+- [ ] T12 US4, R4 on its own: household_reach without laying four whole homesteads per candidate, the per-seat rolls kept (feature 297 R9), its chain at least tenfold down (FR-003, US4)
       research: rendering
 - [x] GM review (make gm-reviewed F=427) [lands-open]
       research: rendering

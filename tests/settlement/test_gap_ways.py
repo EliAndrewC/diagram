@@ -280,3 +280,21 @@ def test_a_knotted_foot_is_kept_only_after_three_times_the_exits(monkeypatch: py
     exits = len(asked) - 1  # one call per exit tried, and the knotted fallback's last
     assert exits == gw.GAP_TRIES * gw.KNOTTED_TRIES == 3, exits
     assert houses[0]["geom"]["access"][-1] == _FEET[0], "then the foot as traced"
+
+
+def test_the_nearest_foot_on_the_tree_is_the_scalar_one() -> None:
+    """Feature 427 T07: `SegFeet.nearest` is `min(seg_closest ...)` by distance, a point segment included; none raises."""
+    import random
+
+    from l7r.diagram.settlement._geom import seg_closest
+
+    rng = random.Random(7)
+    for _ in range(200):
+        segs = [((rng.uniform(0, 100), rng.uniform(0, 100)), (rng.uniform(0, 100), rng.uniform(0, 100))) for _ in range(rng.randint(1, 12))]
+        segs.append(((50.0, 50.0), (50.0, 50.0)))
+        p = (rng.uniform(-20, 120), rng.uniform(-20, 120))
+        want = min((seg_closest(p[0], p[1], a, b) for a, b in segs), key=lambda z: math.dist(z, p))
+        got = gw.SegFeet(segs).nearest(p)
+        assert math.isclose(got[0], want[0], abs_tol=1e-9) and math.isclose(got[1], want[1], abs_tol=1e-9)
+    with pytest.raises(ValueError, match="no segment"):
+        gw.SegFeet([]).nearest((0.0, 0.0))

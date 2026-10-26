@@ -74,10 +74,10 @@
    "declared": "spec-fidelity"
   },
   "### T07 Approach (checklist part A)": {
-   "sha256": "1b1183e37baac4f6d6e992ce84210433c2a6eae50748bea64573ed167347598d",
+   "sha256": "898f0f6405b9a1259085b66184a00871532f3ee09384a33207bb69d75082ae99",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T08 Approach (checklist part A)": {
    "sha256": "3db80465717448a40b3a9407d3573f45a5cc6588f7510a40fafa5510fc6764c4",
@@ -102,6 +102,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "round-arbiter"
+  },
+  "### T12 Approach (checklist part A)": {
+   "sha256": "3d4832e1e01e6f65ded0d1e4846a169fd43c8e30430ff4a167c45d556f9a7288",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -951,6 +957,40 @@
      "id": "ask:427-plan-T07-T11",
      "class": "within",
      "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T07 Approach (checklist part A)",
+    "### T12 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T07-R4-split",
+     "summary": "R4 (household_reach) moves out of T07 into its own task T12; T07 keeps the yards/gap_ways/wood_share chains and R8.",
+     "class": "within",
+     "why": "R4 is moved, not dropped: T12 carries it with the same tenfold exit, still in the homestead family US4 sends it with, and still ordered before the ground cover family as the GM's order (request.md 5) requires. T07's other exits, R8 test and measurements are unchanged from its CLEAR text."
+    },
+    {
+     "id": "T12-per-seat-rolls",
+     "summary": "T12 keeps a homestead's parts rolled at the seat offered and rejects R4's research direction (one envelope per lot and size), which is the household-keyed roll feature 297 withdrew.",
+     "class": "within",
+     "why": "The request asks for far fewer calls computing the same thing (request.md 1, 5: 'a refactor meant to compute the same thing'; T12 goal 'the same homesteads seated'). Declining one candidate mechanism that would change what is seated, and that was already withdrawn by feature 297, narrows no clause of the request; the target (R4's chain at least tenfold down) is kept in full."
+    },
+    {
+     "id": "T12-order",
+     "summary": "T12 runs after T07, before the ground cover family.",
+     "class": "within",
+     "why": "Matches the GM-approved order: homestead parts, then ground cover, lanes last after 417."
+    },
+    {
+     "id": "T12-exits-measure-budget",
+     "summary": "Green exit: R4's chain at least tenfold down, cohort with no seed regressed, claims round clean; red exit to the arbiter; one landing; measured by make perf-fanout before/after and maps-moved, re-scoped by perf-fanout first.",
+     "class": "within",
+     "why": "Carries US4's tenfold test, FR-002, FR-003, FR-004 and FR-007 as written; no timing gates (FR-006); nothing narrowed."
     }
    ]
   }

@@ -57,10 +57,10 @@ def test_the_fill_has_no_box_on_a_floor_too_small_and_hands_an_unreached_floor_t
     assert Y.inner_box([(0.0, 0.0), (10.0, 0.0), (5.0, 8.0)], 0.5) is None  # a triangle: three corners
     assert Y.inner_box([(0.0, 0.0), (40.0, 0.0), (40.0, 30.0), (0.0, 30.0)], 1.0) == (1.0, 1.0, 39.0, 29.0)
     sq = [(-20.0, -15.0), (20.0, -15.0), (20.0, 15.0), (-20.0, 15.0)]
-    assert Y._filled_lattice(sq, 1.0, None, 6.0, 3.0, 1.0, 10_000, lambda q: True) is None  # a floor no lattice reaches
-    assert Y._filled_lattice([(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)], 2.0, None, 6.0, 3.0, 1.0, 1, lambda q: True) is None
+    assert Y._filled_lattice(sq, 1.0, None, 6.0, 3.0, 1.0, 10_000, lambda qs: [True] * len(qs)) is None  # a floor no lattice reaches
+    assert Y._filled_lattice([(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)], 2.0, None, 6.0, 3.0, 1.0, 1, lambda qs: [True] * len(qs)) is None
     narrow = [(-2.0, -15.0), (2.0, -15.0), (2.0, 15.0), (-2.0, 15.0)]  # narrower than one mat: no column fits, the search decides
-    assert Y._filled_lattice(narrow, 0.5, None, 6.0, 3.0, 1.0, 1, lambda q: True) is None
+    assert Y._filled_lattice(narrow, 0.5, None, 6.0, 3.0, 1.0, 1, lambda qs: [True] * len(qs)) is None
     keep = (-2.0, -2.0, 2.0, 2.0)
     mats = Y.mat_cells(40.0, 30.0, sq, 1.0, keep, 0.0)
     assert mats and all(not (x < keep[2] and x + mw > keep[0] and y < keep[3] and y + mh > keep[1]) for x, y, mw, mh, a in mats if a == 0.0)

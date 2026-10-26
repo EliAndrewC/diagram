@@ -53,16 +53,19 @@ def _near_a_house(s: Settlement, q: Pt) -> bool:
     return any(math.hypot(q[0] - float(h["x"]), q[1] - float(h["y"])) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", []))
 
 
-def field_distances(field: Sequence[Pt], points: Sequence[Pt]) -> dict[Pt, float]:
-    """Each point's distance to the field's outline (its ring), in one vectorized call; empty where there is no field.
+def field_distances(field: Sequence[Pt], xs: Any, ys: Any) -> Any:
+    """Each point's distance to the field's outline (its ring), in one vectorized call, as an array; zeros where there is no
+    field.
 
     Research: field distance - NONE: a ring's distance to points"""
-    if len(field) < 3 or not points:
-        return {}
+    import numpy as np  # noqa: PLC0415 - bound on first use
+
+    x, y = np.asarray(xs, dtype=np.float64), np.asarray(ys, dtype=np.float64)
+    if len(field) < 3 or not len(x):
+        return np.zeros(x.shape)
     import shapely  # noqa: PLC0415 - bound on first use
 
-    ds = shapely.distance(shapely.LinearRing(list(field)), shapely.points(list(points)))
-    return {q: float(d) for q, d in zip(points, ds, strict=True)}
+    return np.asarray(shapely.distance(shapely.LinearRing(list(field)), shapely.points(x, y)), dtype=np.float64)
 
 
 def free_seats(s: Settlement, center: Pt, step: float | None = None, field: Sequence[Pt] = ()) -> list[Pt]:
@@ -81,33 +84,35 @@ def free_seats(s: Settlement, center: Pt, step: float | None = None, field: Sequ
         about as near - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); one grid pitch
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (seat grid inset 6 px from the sheet edge)
     """
+    import numpy as np  # noqa: PLC0415 - bound on first use (feature 237)
+
     pitch = BUNDLE_PITCH * (FREE_SEAT_STEP if step is None else step)
     x0, y0, x1, y1 = 6.0, 6.0, float(s.W) - 6.0, float(s.H) - 6.0
     fg = getattr(s, "_free_ground", None)
     ni, nj = int(max(0.0, x1 - x0) // pitch) + 1, int(max(0.0, y1 - y0) // pitch) + 1
-    if fg is not None:  # ...the cells past the grid's window decided in one call, not one each (`FreeGround.decide_beyond`)
-        fg.decide_beyond([x0 + i * pitch for i in range(ni) for _j in range(nj)], [y0 + j * pitch for _i in range(ni) for j in range(nj)])
-    out: list[Pt] = []
-    for i in range(ni):
-        for j in range(nj):
-            q = (x0 + i * pitch, y0 + j * pitch)
-            if fg is None or not fg.point_taken(q[0], q[1]):
-                out.append(q)
+    # THE GRID AS ARRAYS (feature 427 T07): the points in the order the loops made them (column by column), each asked
+    # `point_taken` in one call (`FreeGround.points_taken`, the cells past the grid decided at once as before)
+    gx = np.repeat(x0 + np.arange(ni) * pitch, nj)
+    gy = np.tile(y0 + np.arange(nj) * pitch, ni)
+    keep = ~fg.points_taken(gx, gy) if fg is not None else np.ones(gx.shape, dtype=bool)
     # ...EVERY POINT AGAINST EVERY HOUSE IN ONE NUMPY PASS (feature 427 T04, R3: `_near_a_house`'s `any(math.hypot(...))` per
     # point was 82k calls at 40 households, the T01 survey): the same half-pitch test, `np.hypot` for `math.hypot`
     houses = s.M.get("houses", [])
-    if out and houses:
-        import numpy as np  # noqa: PLC0415
-
-        qs = np.array(out)
+    if keep.any() and houses:
         hs = np.array([(float(h["x"]), float(h["y"])) for h in houses])
-        near = (np.hypot(qs[:, None, 0] - hs[None, :, 0], qs[:, None, 1] - hs[None, :, 1]) < BUNDLE_PITCH * 0.5).any(axis=1)
-        out = [q for q, n in zip(out, near.tolist(), strict=True) if not n]
+        qx, qy = gx[keep], gy[keep]
+        near = (np.hypot(qx[:, None] - hs[None, :, 0], qy[:, None] - hs[None, :, 1]) < BUNDLE_PITCH * 0.5).any(axis=1)
+        keep[np.nonzero(keep)[0][near]] = False
+    qx, qy = gx[keep], gy[keep]
+    out = list(zip(qx.tolist(), qy.tolist(), strict=True))
     # THE FIELD DISTANCE ASKED ONCE FOR EVERY POINT (wave 20's pair: a scan of the outline's edges per point inside the sort
     # cost the homesteads stage up to +1.5 s a roll) - one vectorized shapely call, the same distance
-    to_field = field_distances(field, out)
-    out.sort(key=lambda q: (round(math.hypot(q[0] - center[0], q[1] - center[1]) / pitch), to_field.get(q, 0.0), q))
-    return out
+    fd = field_distances(field, qx, qy)
+    # ...AND THE SORT ON ARRAYS (feature 427 T07: a key tuple per point): the pitch ring, then the field distance, then the
+    # point - `np.lexsort`'s last key first; a stable sort of the same keys keeps the same order
+    ring = np.round(np.hypot(qx - center[0], qy - center[1]) / pitch)
+    order = np.lexsort((qy, qx, fd, ring))
+    return [out[k] for k in order.tolist()]
 
 
 def seat_the_rest(s: Settlement, plan: SitePlan, placed: int) -> int:

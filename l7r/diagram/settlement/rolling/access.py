@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import heapq
 import math
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterable, Iterator, Sequence
 from typing import TYPE_CHECKING, Any
 
 from .._geom import PointGrid, Pt, seg_closest, seg_dist, segments_cross
@@ -269,13 +269,41 @@ def fixtures_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
         a persimmon by its trunk alone - GUESS: held off by a 4 ft trunk box, the crown free to overhang the path
         path clear of its own well - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane; the wellhead's own box
     """
+    return not any(seg_box_within(a, b, box, t) for box, t in fixture_gaps(s, own))
+
+
+def fixture_gaps(s: Settlement, own: Any) -> list[tuple[Any, float]]:
+    """The boxes `fixtures_clear` keeps a line off, each with its gap, in the order it asks them: the well pocket's wellhead,
+    then each fixture (a persimmon by its trunk), all at the corridor's half-width.
+
+    Research:
+        path clear of its own fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed round its own garden beds and fixtures - the corridor off privy, stack and shed
+        fixtures held off at the corridor's half-width - GUESS research/questions/0081-village-lanes.drawing.html: no page gives how far a household's own way keeps off its own fixtures or well; held off at the corridor's half-width (`ACCESS_HALF_FT`, 7 ft from the line), so a 3 ft tread's edge stands 5.5 ft off - past the 3 ft floor the maps keep off a farmstead's sheds
+        a persimmon by its trunk alone - GUESS: held off by a 4 ft trunk box, the crown free to overhang the path
+        path clear of its own well - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane; the wellhead's own box"""
     half, trunk = s._access.half, s.px(4.0)
+    out: list[tuple[Any, float]] = []
     well = own.get("well")
     if well is not None:
         vr = float(s._well_vr())
-        if seg_box_within(a, b, (float(well[0]), float(well[1]), 2.0 * vr, 2.0 * vr), half):
+        out.append(((float(well[0]), float(well[1]), 2.0 * vr, 2.0 * vr), half))
+    out += [(box if kind != "persimmon" else (box[0], box[1], trunk, trunk), half) for kind, box in ((own.get("boxes") or {}).get("fixtures") or {}).items()]
+    return out
+
+
+def point_clear(q: Pt, gaps: Sequence[tuple[Any, float]]) -> bool:
+    """`not seg_box_within(q, q, box, t)` for every `(box, t)` of `gaps` - a point's distance to an axis-aligned box written
+    out (0 inside it), compared squared (feature 427 T07: the household's way out asked the three part tests of every cell
+    it stepped through, 75k box gaps at 40 households).
+
+    Research: plumbing - NONE: the same verdict as the line tests, for a point"""
+    qx, qy = q
+    for (cx, cy, w, h), t in gaps:
+        ex, ey = abs(qx - cx) - w / 2, abs(qy - cy) - h / 2
+        ex, ey = (ex if ex > 0.0 else 0.0), (ey if ey > 0.0 else 0.0)
+        if ex * ex + ey * ey < t * t and t > 0.0:
             return False
-    return not any(seg_box_within(a, b, box if kind != "persimmon" else (box[0], box[1], trunk, trunk), half) for kind, box in ((own.get("boxes") or {}).get("fixtures") or {}).items())
+    return True
 
 
 #: Half the tread the web draws along a corridor, in feet: the ways' `ACCESS_WIDTH` (3 ft) halved - this package cannot
@@ -296,12 +324,24 @@ def parts_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     The tread, not the corridor's reserved strip, keeps off them: the strip is the web's room to draw in, and the line is
     what it draws. The yard is the door's own ground; the web leaves it at its edge (`corridors.door_ends`).
 
-    Research: path off its own beds and outbuildings - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane never crosses row crops and nothing is built on it; the tread's 0.5 ft margin is UNRESEARCHED
+    Research:
+        path off its own beds and well - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane never crosses row crops and nothing is built on it; the tread's 0.5 ft margin is 0246's half foot spare at each side of the 3 ft footpath, a map drawing convention
+        tread 3 ft off its own kura and byre - research/questions/0081-village-lanes.drawing.html: the same 3 ft off a farmstead's sheds and byre as off its farmhouse wall (`part_gaps`)
     """
+    return not any(seg_box_within(a, b, box, t) for box, t in part_gaps(s, own))
+
+
+def part_gaps(s: Settlement, own: Any) -> list[tuple[Any, float]]:
+    """The boxes `parts_clear` keeps a tread off, each with its gap: the shed, the byre, the well pocket and the beds.
+
+    Research:
+        path off its own beds and well - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane never crosses row crops and nothing is built on it; the tread's 0.5 ft margin is 0246's half foot spare at each side of the 3 ft footpath, a map drawing convention
+        tread 3 ft off its own kura and byre - research/questions/0081-village-lanes.drawing.html: the maps keep the same 3 ft off a farmstead's other buildings - its sheds, byre - as off its farmhouse wall (`TREAD_WALL_FT`), with the corridor's half-foot margin as `house_gap` keeps (feature 427 T07, impl-drift: it kept 0.5 ft)"""
     boxes = own.get("boxes") or {}
     gap = s.px(TREAD_HALF_FT + PART_MARGIN_FT)
-    parts = [boxes.get(k) for k in ("shed", "byre", "well")] + list(boxes.get("gardens") or ())
-    return not any(seg_box_within(a, b, box, gap) for box in parts if box is not None)
+    wall = s.px(TREAD_HALF_FT + TREAD_WALL_FT + PART_MARGIN_FT)
+    out = [(boxes[k], wall) for k in ("shed", "byre") if boxes.get(k) is not None]
+    return out + [(box, gap) for box in [boxes.get("well"), *(boxes.get("gardens") or ())] if box is not None]
 
 
 def standing_clear(s: Settlement, a: Pt, b: Pt, memo: dict[Any, Any] | None = None) -> bool:

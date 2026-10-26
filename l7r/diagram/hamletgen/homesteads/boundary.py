@@ -398,6 +398,40 @@ class FreeGround:
     def _inside(self, k: tuple[int, int]) -> bool:
         return 0 <= k[0] < self.nx and 0 <= k[1] < self.ny
 
+    def state_grid(self) -> Any:
+        """Each grid cell's state as an array, built once: 1 surely taken, 2 surely clear, 0 the edge's cells.
+
+        Research: plumbing - NONE: the cells' verdicts as an array"""
+        import numpy as np
+
+        if self._state is None:
+            state = np.zeros((self.nx, self.ny), dtype=np.int8)  # 0: the edge's cells, and any outside the grid
+            for i, j in self.clear:
+                state[i, j] = 2
+            for i, j in self.taken:
+                state[i, j] = 1
+            self._state = state
+        return self._state
+
+    def points_taken(self, xs: Any, ys: Any) -> Any:
+        """`point_taken` for every point of the arrays `xs`, `ys` at once, as a boolean array (feature 427 T07: `free_seats`
+        asked it of every grid point of the canvas, 82k calls at 40 households): the grid's cells read from `state_grid`, a
+        cell past it decided by `decide_beyond` and read as `_cell_beyond` reads it.
+
+        Research: plumbing - NONE: the same answers, asked in one call"""
+        import numpy as np
+
+        x, y = np.asarray(xs, dtype=np.float64), np.asarray(ys, dtype=np.float64)
+        ki = np.floor_divide(x - self.x0, self.cell).astype(np.int64)
+        kj = np.floor_divide(y - self.y0, self.cell).astype(np.int64)
+        inside = (ki >= 0) & (ki < self.nx) & (kj >= 0) & (kj < self.ny)
+        out = np.zeros(x.shape, dtype=bool)
+        out[inside] = self.state_grid()[ki[inside], kj[inside]] == 1
+        if not inside.all():
+            self.decide_beyond(x[~inside], y[~inside])
+            out[~inside] = [self._beyond[k][0] for k in zip(ki[~inside].tolist(), kj[~inside].tolist(), strict=True)]
+        return out
+
     def point_taken(self, x: float, y: float) -> bool:
         k = (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell))
         return k in self.taken if self._inside(k) else self._cell_beyond(k)[0]
@@ -414,13 +448,7 @@ class FreeGround:
         (seed 44: 130,000 lines of up to a hundred samples each, each asked alone)."""
         import numpy as np
 
-        if self._state is None:
-            state = np.zeros((self.nx, self.ny), dtype=np.int8)  # 0: the edge's cells, and any outside the grid
-            for i, j in self.clear:
-                state[i, j] = 2
-            for i, j in self.taken:
-                state[i, j] = 1
-            self._state = state
+        self.state_grid()
         if not lines:
             return []
         ax, ay, bx, by, nf0 = np.array([(a[0], a[1], b[0], b[1], n) for a, b, n in lines], dtype=np.float64).T

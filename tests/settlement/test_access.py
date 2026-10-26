@@ -386,3 +386,19 @@ def test_the_site_raster_is_asked_of_a_searchs_lines_at_once_and_each_line_once(
     access.prime_site(s, [(a, b), (a, b), (b, a)])
     access.prime_site(s, [(a, b)])
     assert calls == [2, 0] and access._standing_memo(s)[1][("site", a, b)] is None
+
+
+def test_a_point_is_clear_of_the_boxes_as_the_line_tests_judge_it() -> None:
+    """Feature 427 T07: `point_clear(q, gaps)` is `not seg_box_within(q, q, box, t)` for every `(box, t)` - inside a box,
+    beside it, off a corner, and at no gap at all."""
+    import random
+
+    from l7r.diagram.settlement.rolling.access import point_clear, seg_box_within
+
+    rng = random.Random(5)
+    for _ in range(3000):
+        box = (rng.uniform(0, 50), rng.uniform(0, 50), rng.uniform(1, 20), rng.uniform(1, 20))
+        t = rng.choice([0.0, rng.uniform(0.1, 10.0)])
+        q = (rng.uniform(-20, 70), rng.uniform(-20, 70))
+        assert point_clear(q, [(box, t)]) == (not seg_box_within(q, q, box, t)), (q, box, t)
+    assert point_clear((0.0, 0.0), [])

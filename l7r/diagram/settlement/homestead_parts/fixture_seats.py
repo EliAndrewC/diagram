@@ -440,7 +440,8 @@ def lay_fixtures(
             else:
                 offered = chain(seats, outward(seats, px(STEP_FT), OUT_STEPS))
             if kind == "privy":  # its own farmstead's: no further than 48 ft from its house (0047), never stepped past it
-                offered = (q for q in offered if within_reach_of(q, roofs[0], px(PRIVY_SUN_MAX_FT)))
+                reach, house = px(PRIVY_SUN_MAX_FT), roofs[0]  # once, not per seat offered (feature 427 T07)
+                offered = (q for q in offered if within_reach_of(q, house, reach))
             found = _first(offered, taken, g)
             if found is None:
                 raise FixtureUnlaid("a privy found no place within 48 ft of its house")
@@ -823,16 +824,15 @@ def _persimmon(hw: float, hh: float, taken: Sequence[Rect], roofs: Sequence[Rect
     front = [(sx * reach * 0.75, reach * 0.75) for sx in (1.0, -1.0)] + [(0.0, reach)]
     back = [(sx * reach * 0.75, -reach * 0.75) for sx in (1.0, -1.0)] + [(0.0, -reach)]
     ring = front + back if front_first else back + front
-    steps = [px(s) for s in PERSIMMON_STEPS_FT] + [px(STEP_FT) * k + px(PERSIMMON_STEPS_FT[-1]) for k in range(1, OUT_STEPS + 1)]
+    pace, last = px(STEP_FT), px(PERSIMMON_STEPS_FT[-1])
+    steps = [px(s) for s in PERSIMMON_STEPS_FT] + [pace * k + last for k in range(1, OUT_STEPS + 1)]
     paced = ((lx * (reach + st) / reach, ly * (reach + st) / reach) for st in steps for lx, ly in ring)
+    dooryard, shade = px(PERSIMMON_DOORYARD_FT), r + px(SHADE_MARGIN_FT)  # once, not per seat tried (feature 427 T07)
     seat = next(
         (
             (lx, ly, 2 * r, 2 * r)
             for lx, ly in chain(ring, paced)
-            if in_dooryard(lx, ly, r, hw, hh, px(PERSIMMON_DOORYARD_FT))
-            and clears((lx, ly, trunk, trunk), taken, 2.0)
-            and clears((lx, ly, 2 * r, 2 * r), roofs, CANOPY_PAD)
-            and sunlit(lx, ly, r + px(SHADE_MARGIN_FT))
+            if in_dooryard(lx, ly, r, hw, hh, dooryard) and clears((lx, ly, trunk, trunk), taken, 2.0) and clears((lx, ly, 2 * r, 2 * r), roofs, CANOPY_PAD) and sunlit(lx, ly, shade)
         ),
         None,
     )
