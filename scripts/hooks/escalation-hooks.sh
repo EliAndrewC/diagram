@@ -156,10 +156,20 @@ ask_unfiltered() { # ask_unfiltered <clone>
   key="$(printf '%s' "$INPUT" | python3 -c 'import hashlib,json,sys; print(hashlib.sha1((json.load(sys.stdin).get("last_assistant_message") or "").encode()).hexdigest())' 2>/dev/null)"
   [ "$(read_field "$(state_file "$1")" asked_told)" = "$key" ] && exit 0   # once per message, never a loop
   write_field "$(state_file "$1")" asked_told "$key"
-  printf 'QUESTION UNFILTERED: your final message puts something to the GM and no escalation-check has read it:\n  %s\n' "$line" >&2
-  printf 'Dispatch `escalation-check` with the draft as its prompt and send what it keeps. A question the record or the\n' >&2
-  printf 'research answers is not his (root CLAUDE.md, "Research"); his are taste and genuine forks.\n' >&2
-  guard_log escalation blocked "stop" question-unfiltered
+  case "$line" in
+    offer$'\t'*)
+      # amendment 1 (the GM 2026-10-26): an offer is not a question, but "should only be made if it crosses a certain
+      # threshold of significance" - the filter keeps the significant ones and cuts the routine.
+      printf 'OFFER UNFILTERED: your final message offers a decision back to the GM and no escalation-check has read it:\n  %s\n' "${line#*$'\t'}" >&2
+      printf 'An offer is fine, and is not a question, but only for a decision that might otherwise have been floated as one.\n' >&2
+      printf 'Dispatch `escalation-check` with the draft as its prompt: it keeps the significant offers and cuts the routine.\n' >&2
+      guard_log escalation blocked "stop" offer-unfiltered ;;
+    *)
+      printf 'QUESTION UNFILTERED: your final message puts something to the GM and no escalation-check has read it:\n  %s\n' "${line#*$'\t'}" >&2
+      printf 'Dispatch `escalation-check` with the draft as its prompt and send what it keeps. A question the record or the\n' >&2
+      printf 'research answers is not his (root CLAUDE.md, "Research"); his are taste and genuine forks.\n' >&2
+      guard_log escalation blocked "stop" question-unfiltered ;;
+  esac
   exit 2
 }
 

@@ -4,11 +4,15 @@
 
 **Created**: 2026-10-26
 
-**Status**: Draft
+**Status**: Done (amendment 1 landed 2026-10-26)
 
 **Affects**: tooling
 
 **Approved**: the GM, 2026-10-26, "Sounds great. I approve all of that. So please do it end to end. Thanks."
+
+**Amendment 1** (the GM, 2026-10-26, in `request.md`): offers are not questions - *"saying that you made a decision but
+then offering to reverse it ... without that actually being a question that is floated for me, that is all perfectly fine"*
+- but *"that offer should only be made if it crosses a certain threshold of significance"*. FR-006, SC-006.
 
 **Input**: `request.md` (the GM's request and the four guards the audit proposed, verbatim).
 
@@ -88,6 +92,14 @@ that differs from HEAD, the comparison a wave records.
   passes the correct one; each records its firings (`guard_log`) and has its row in `docs/guards.md`; the dev-loop and
   tooling docs that stated these as rules to remember point at the tooling instead.
 
+- **FR-006** (amendment 1): The detector tells an ASK (a question, a choice, or a decision or go-ahead the GM must give
+  before the work goes on) from an OFFER (a decision already made or work already done, with an offer to reverse or extend
+  it). An offer is not a question and is never a GM review item. Because an offer is due only when it clears a threshold of
+  significance - a decision that might otherwise have been floated as a question - a final message carrying offers owes the
+  same once-per-message `escalation-check` pass, whose contract judges each offer KEEP (significant) or CUT (a routine
+  decision), so that a message offering to reverse every decision is cut back. The detector is re-measured against labels
+  that tell the two apart.
+
 ## Success Criteria
 
 - **SC-001** (FR-001): The 2026-09-27 shape (an engine edit with a review live) is refused in a test, and the edit passes once
@@ -96,6 +108,9 @@ that differs from HEAD, the comparison a wave records.
   test; a report-only message and a message after a filter dispatch pass.
 - **SC-003**: An Edit in gm-assistant's main tree is refused and one in its clone passes, in a test (FR-003).
 - **SC-004**: `make maps-moved` on a clone with one changed manifest names exactly that one (FR-004).
+- **SC-006** (FR-006): On three-way labeled samples (ASKS / OFFER / NONE), recorded in `research.md` R3, the detector
+  separates asks from offers, and a test shows an offer-only message refused once with the significance instruction and an
+  ask refused with the question instruction.
 - **SC-005** (FR-005): `make hooks-test` green with the three guard suites (engine-freeze, gm-tree, escalation section 9), `tests/tooling/test_maps_moved.py` green in the gate's tooling tree, and each guard's row in `docs/guards.md`.
 
 ## Review history
@@ -114,5 +129,12 @@ that differs from HEAD, the comparison a wave records.
   feature 417 message caught), re-run by quote-matching since the uncommitted corpus has grown (8 of 8, 10 of 11, 0 false
   alarms reproduced). For the plan review: D167's two-day age bound is not in FR-001 or R2; T06 has no FR.
   Applied after: the labels are keyed by the sha1 of each message (reproduced on a 1,435-message corpus, 8 of 8 and 10 of
-  11, 0 false alarms); the age bound was struck by the plan review; spec-lint's FR/SC pairing fixed on SC-001, SC-002 and
-  SC-005 (wording only).
+  11, 0 false alarms); the age bound was struck by the plan review; spec-lint's FR/SC pairing fixed on SC-001 and SC-002 (wording
+  only); SC-005 reconciled with the plan review's note (T04 is a report, its test in the tooling tree).
+- spec-fidelity-verify round 1 of amendment 1 (2026-10-26): FAITHFUL - FR-006 matches amendment 1: an offer is not a
+  question and never a GM review item; the once-per-message escalation-check pass enforces only the GM's significance
+  threshold ("except insofar as ... threshold of significance"), with KEEP for a decision that might otherwise have been
+  floated as a question and CUT for routine ones. R3 re-run on 1,449 messages: asks 18 of 19, offer 1 of 1, 0 false
+  alarms in 161; R1's 8 of 8 and 10 of 11 reproduce. Carry-overs resolved (sha1 keys, R1 label committed, age bound
+  struck). Non-blocking: R1's "as shipped" row still names "if you want ... I", which R3 moved to OFFER; SC-005's change
+  was more than wording. Both applied.

@@ -32,3 +32,5 @@ the DIRECT route; no map moves. XVIII: every guard has its test companion.
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+
+<!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->

@@ -21,6 +21,11 @@ for lab in sys.argv[2:]:
             c.setdefault("not in this corpus", 0)
             c["not in this corpus"] += 1
             continue
+        if v["label"] == "OFFER" or "labels-3way" in lab:  # three-way labels (amendment 1): label -> what it was read as
+            a, o = h.classify(by_sha[k])
+            key = f"{v['label']}->{'ASKS' if a else 'OFFER' if o else 'NONE'}"
+            c[key] = c.get(key, 0) + 1
+            continue
         hit, ask = bool(h.asks(by_sha[k])), v["label"] == "ASKS"
         c["tp" if ask and hit else "fn" if ask else "fp" if hit else "tn"] += 1
     print(lab, c)

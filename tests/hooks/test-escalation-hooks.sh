@@ -130,6 +130,15 @@ rc=0; final_stop "Shall I file it as feature 431?" || rc=$?
 [ "$rc" -eq 2 ] && ok "a filter BEFORE the GM's last message does not count" || no "an old filter let a new question through" "(rc=$rc)"
 rm -f "$TR"
 
+echo "10. an OFFER is not a question, but owes the significance test (feature 429 amendment 1)"
+: > "$TR"; gm_said "carry on"
+rc=0; final_stop 'I kept the 104 ft homestead ground. I can switch to the attested 75 ft if you would rather.' || rc=$?
+[ "$rc" -eq 2 ] && ok "an offer-only message is refused once" || no "an unfiltered offer passed" "(rc=$rc)"
+grep -q "OFFER UNFILTERED" "$HOOK_ERR" && grep -q "significant" "$HOOK_ERR" && ok "...with the significance instruction, not the question one" || no "the offer refusal text" "$(cat "$HOOK_ERR")"
+rc=0; final_stop 'I kept the 104 ft ground; I can switch it if you would rather. Shall I file the lane fix as a new task?' || rc=$?
+[ "$rc" -eq 2 ] && grep -q "QUESTION UNFILTERED" "$HOOK_ERR" && ok "a message with an ask and an offer is refused as a question" || no "ask+offer" "(rc=$rc)"
+rm -f "$TR"
+
 echo "8. outside a work tree the hook does nothing"
 OUT=$(mktemp -d)
 rc=0; printf '{"session_id":"t1"}' | ( cd "$OUT" && "$HOOK" stop 2>/dev/null ) || rc=$?

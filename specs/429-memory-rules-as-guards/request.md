@@ -28,3 +28,11 @@ The GM's answer, 2026-10-26:
 ```text
 Sounds great. I approve all of that. So please do it end to end. Thanks.
 ```
+
+## Amendment 1 (the GM, 2026-10-26, after the landing; dictated, verbatim)
+
+```text
+So does that mean that feature 429 has been opened but not yet done? With regards to your question there, then I think I do want that tuning that you mentioned, since that does improve things. I also don't mind offers being made. And I think that offers are different from questions. Like saying that you made a decision but then offering to reverse it if I think it's a good idea without that being a thing that goes into GM review, without that actually being a question that is floated for me, that is all perfectly fine. And I don't think that should count, except insofar as I think that offer should only be made if it crosses a certain threshold of significance. Because if you offer to reverse literally every single decision that is made, then that is overwhelming. But for things that might have otherwise been floated as questions but do not rise to the level of questions, but still do rise to the level of maybe being worth making an offer, then sure.
+```
+
+"That tuning" is the detector's widening on the measured misses (research.md R1), which shipped with the landing.
