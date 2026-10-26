@@ -1,0 +1,36 @@
+perf-profile seed 39 stage field: 4.8s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120011Z-seed39-field.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         4607882 function calls (4507267 primitive calls) in 4.807 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1402 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    4.833    4.833 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/water/comb.py:21(stage_field)
+        1    0.000    0.000    4.058    4.058 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/water/fit.py:45(fit_field)
+        1    0.001    0.001    3.368    3.368 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/water/fit.py:127(_finish_first_admissible)
+        1    0.005    0.005    3.352    3.352 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/comb.py:243(finish_comb)
+        1    0.000    0.000    1.857    1.857 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/settle.py:278(settle_cells)
+    62650    0.188    0.000    1.405    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+        1    0.003    0.003    1.197    1.197 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/settle.py:170(__init__)
+     1398    0.002    0.000    1.112    0.001 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/settle.py:188(judge)
+     1398    0.014    0.000    1.110    0.001 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/settle.py:64(verdict)
+20135/16694    0.036    0.000    0.995    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+     1228    0.004    0.000    0.988    0.001 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/settle.py:191(add)
+     1416    0.015    0.000    0.919    0.001 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/ring_rules.py:476(ring_violations)
+        1    0.004    0.004    0.870    0.870 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/partition.py:404(cut)
+13638/9148    0.022    0.000    0.731    0.000 {built-in method builtins.sum}
+        1    0.000    0.000    0.689    0.689 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/water/fit.py:178(_fit_at_aspect)
+        3    0.000    0.000    0.679    0.226 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/comb.py:86(carve_comb)
+      157    0.000    0.000    0.658    0.004 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/settle.py:286(<genexpr>)
+      157    0.002    0.000    0.657    0.004 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/settle.py:259(merge)
+        1    0.000    0.000    0.446    0.446 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/water/brook.py:524(feed_brook)
+        8    0.016    0.002    0.437    0.055 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/partition.py:187(grid_lines)
+     9141    0.032    0.000    0.394    0.000 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/partition.py:225(edge)
+      157    0.007    0.000    0.366    0.002 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/settle.py:221(neighbors)
+    18562    0.018    0.000    0.359    0.000 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/partition.py:149(bound)
+    15644    0.016    0.000    0.334    0.000 /diagram/.clones/diagram-performance/l7r/diagram/waterfields/carve.py:23(_bnd)
+330305/240118    0.121    0.000    0.330    0.000 {built-in method builtins.min}
+
+

@@ -1,0 +1,36 @@
+perf-profile seed 39 stage frame: 0.0s under cProfile (the stages before it took 24.2s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120138Z-seed39-frame.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         31635 function calls in 0.038 seconds
+
+   Ordered by: cumulative time
+   List reduced from 82 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.039    0.039 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/frame.py:127(stage_frame)
+        1    0.001    0.001    0.022    0.022 /diagram/.clones/diagram-performance/l7r/diagram/settlement/title.py:55(title)
+        1    0.000    0.000    0.021    0.021 /diagram/.clones/diagram-performance/l7r/diagram/settlement/title.py:336(_blank_label_spot)
+        1    0.002    0.002    0.021    0.021 /diagram/.clones/diagram-performance/l7r/diagram/settlement/title.py:216(_title_obstacles)
+        1    0.003    0.003    0.018    0.018 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:781(__init__)
+        1    0.000    0.000    0.010    0.010 /diagram/.clones/diagram-performance/l7r/diagram/settlement/core.py:730(crop_to_view)
+        1    0.000    0.000    0.010    0.010 /diagram/.clones/diagram-performance/l7r/diagram/settlement/core.py:576(set_view)
+        1    0.010    0.010    0.010    0.010 /diagram/.clones/diagram-performance/l7r/diagram/settlement/core.py:588(_partition_grove_clumps)
+       11    0.004    0.000    0.010    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:436(__init__)
+       12    0.006    0.000    0.008    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:263(extend)
+        1    0.000    0.000    0.006    0.006 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/frame.py:125(frame_for)
+        1    0.001    0.001    0.004    0.004 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/frame.py:99(frame_extras)
+     6416    0.002    0.000    0.003    0.000 {built-in method builtins.min}
+     6413    0.002    0.000    0.003    0.000 {built-in method builtins.max}
+        1    0.000    0.000    0.002    0.002 /diagram/.clones/diagram-performance/l7r/diagram/settlement/core.py:725(_crop_boxes)
+        1    0.000    0.000    0.002    0.002 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_knobs.py:719(crop_boxes)
+     8336    0.002    0.000    0.002    0.000 {method 'append' of 'list' objects}
+        1    0.000    0.000    0.002    0.002 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/frame.py:36(brook_beside_the_field)
+     5311    0.001    0.000    0.001    0.000 {method 'setdefault' of 'dict' objects}
+      194    0.001    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_knobs.py:737(add)
+        1    0.000    0.000    0.001    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/title.py:42(placard_size)
+     2866    0.001    0.000    0.001    0.000 {method 'get' of 'dict' objects}
+      533    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_knobs.py:827(<genexpr>)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/finish.py:353(_text_width)
+        8    0.000    0.000    0.000    0.000 {built-in method builtins.sum}
+
+

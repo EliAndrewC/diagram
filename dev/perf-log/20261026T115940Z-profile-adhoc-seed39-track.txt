@@ -1,0 +1,36 @@
+perf-profile seed 39 stage track: 0.0s under cProfile (the stages before it took 2.7s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T115940Z-seed39-track.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         4637 function calls in 0.003 seconds
+
+   Ordered by: cumulative time
+   List reduced from 68 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.003    0.003 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/track.py:204(stage_track)
+        1    0.000    0.000    0.002    0.002 /diagram/.clones/diagram-performance/l7r/diagram/settlement/water_ways/lanes.py:53(lane)
+        2    0.000    0.000    0.001    0.001 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:271(conflicts)
+        1    0.001    0.001    0.001    0.001 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/fabric.py:172(_homestead_polys)
+        1    0.000    0.000    0.001    0.001 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:504(append)
+        1    0.000    0.000    0.001    0.001 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:325(record)
+        1    0.000    0.000    0.001    0.001 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:431(refuse_unadmitted)
+        2    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/reserved.py:134(conflicts)
+        2    0.000    0.000    0.001    0.000 {built-in method builtins.next}
+        2    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/reserved.py:167(<genexpr>)
+       68    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/reserved.py:121(_seats_near)
+      138    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/overlap.py:103(rot_rect)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:347(_add)
+     1214    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+       28    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:202(pair_forbidden)
+       66    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+      666    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:263(_cells)
+       12    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:171(pair_permitted)
+       66    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/primitives.py:45(seg_closest)
+      478    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/reserved.py:98(_cells)
+      417    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+       12    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/overlap.py:46(sat_overlap)
+       12    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/taxonomy.py:738(matrix_policy)
+        3    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:268(extents)
+      221    0.000    0.000    0.000    0.000 {method 'setdefault' of 'dict' objects}
+
+

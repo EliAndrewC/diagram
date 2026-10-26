@@ -1,0 +1,36 @@
+perf-profile seed 39 stage sink: 0.1s under cProfile (the stages before it took 3.9s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120012Z-seed39-sink.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         90824 function calls (89148 primitive calls) in 0.059 seconds
+
+   Ordered by: cumulative time
+   List reduced from 282 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.061    0.061 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/sink.py:560(stage_sink)
+        1    0.000    0.000    0.036    0.036 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/water/brook_course.py:277(round_the_brooks)
+        1    0.000    0.000    0.034    0.034 /diagram/.clones/diagram-performance/l7r/diagram/settlement/water_ways/water.py:154(round_stream)
+        8    0.012    0.002    0.029    0.004 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:271(conflicts)
+        1    0.000    0.000    0.025    0.025 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/sink.py:614(lay_sink)
+        1    0.000    0.000    0.019    0.019 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:381(rerecord)
+        3    0.000    0.000    0.019    0.006 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:325(record)
+        1    0.000    0.000    0.018    0.018 /diagram/.clones/diagram-performance/l7r/diagram/settlement/land/wet.py:329(marsh)
+        3    0.000    0.000    0.014    0.005 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:431(refuse_unadmitted)
+    39678    0.007    0.000    0.009    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:202(pair_forbidden)
+6652/4983    0.003    0.000    0.007    0.000 {built-in method builtins.min}
+      609    0.001    0.000    0.006    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:198(box_of)
+        7    0.000    0.000    0.006    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:533(rings)
+       56    0.002    0.000    0.005    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:436(__init__)
+       68    0.003    0.000    0.004    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:263(extend)
+        3    0.001    0.000    0.004    0.001 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:347(_add)
+     6005    0.003    0.000    0.004    0.000 {built-in method builtins.max}
+        2    0.000    0.000    0.003    0.002 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/water/brook_rules.py:190(crosses_mid_run)
+       48    0.000    0.000    0.003    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+        1    0.000    0.000    0.003    0.003 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:617(shape)
+        1    0.000    0.000    0.003    0.003 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:623(_trees_for)
+        1    0.000    0.000    0.003    0.003 /diagram/.clones/diagram-performance/l7r/diagram/settlement/land/wet.py:126(_clipped_to_open_ground)
+        3    0.001    0.000    0.003    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:543(segs)
+    28/25    0.000    0.000    0.003    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+        1    0.000    0.000    0.002    0.002 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/sink.py:525(pond_seat)
+
+

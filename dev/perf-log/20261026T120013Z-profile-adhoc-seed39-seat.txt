@@ -1,0 +1,36 @@
+perf-profile seed 39 stage seat: 0.2s under cProfile (the stages before it took 2.7s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120013Z-seed39-seat.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         238940 function calls (238414 primitive calls) in 0.147 seconds
+
+   Ordered by: cumulative time
+   List reduced from 101 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    0.153    0.153 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/track.py:60(stage_seat)
+        1    0.002    0.002    0.134    0.134 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/cluster.py:174(seat_cluster)
+       91    0.027    0.000    0.076    0.001 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/cluster.py:61(back_fouled)
+   103194    0.021    0.000    0.029    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/cluster.py:86(<genexpr>)
+        2    0.000    0.000    0.021    0.011 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:345(seg_reach_index)
+        2    0.012    0.006    0.021    0.011 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:263(extend)
+        1    0.000    0.000    0.018    0.018 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/cluster.py:114(seat_has_dry_exit)
+        1    0.001    0.001    0.017    0.017 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/cluster.py:146(straight_exit)
+     6161    0.016    0.000    0.017    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/primitives.py:32(point_in_poly)
+7814/7288    0.007    0.000    0.013    0.000 {built-in method builtins.min}
+     7087    0.007    0.000    0.010    0.000 {built-in method builtins.max}
+      519    0.002    0.000    0.010    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/linestring.py:40(__new__)
+     1053    0.003    0.000    0.010    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+        1    0.000    0.000    0.007    0.007 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/checks.py:28(stream_segs)
+      135    0.000    0.000    0.007    0.000 {built-in method builtins.sum}
+        1    0.006    0.006    0.007    0.007 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/checks.py:157(gap_segments)
+      527    0.001    0.000    0.007    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+        1    0.004    0.004    0.005    0.005 /diagram/.clones/diagram-performance/l7r/diagram/settlement/land/wet.py:546(toe_band)
+    20671    0.005    0.000    0.005    0.000 {method 'setdefault' of 'dict' objects}
+    26059    0.005    0.000    0.005    0.000 {method 'append' of 'list' objects}
+      522    0.000    0.000    0.005    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/cluster.py:260(<genexpr>)
+      526    0.001    0.000    0.005    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:343(distance)
+      514    0.000    0.000    0.005    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/cluster.py:164(<genexpr>)
+      704    0.001    0.000    0.005    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/cluster.py:54(nearest_within)
+        1    0.003    0.003    0.004    0.004 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/route.py:31(set_crossing)
+
+

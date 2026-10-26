@@ -1,0 +1,36 @@
+perf-profile seed 39 stage sties: 0.0s under cProfile (the stages before it took 25.2s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120129Z-seed39-sties.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         28150 function calls in 0.029 seconds
+
+   Ordered by: cumulative time
+   List reduced from 81 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.029    0.029 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/sties.py:129(stage_sties)
+       23    0.001    0.000    0.024    0.001 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/sties.py:97(sty_seat)
+       23    0.008    0.000    0.019    0.001 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/sties.py:77(farmstead)
+    12705    0.008    0.000    0.008    0.000 {built-in method builtins.round}
+       23    0.000    0.000    0.004    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/farm_fixtures.py:153(farm_fixture)
+       46    0.001    0.000    0.004    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:271(conflicts)
+       23    0.000    0.000    0.003    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:504(append)
+       23    0.000    0.000    0.003    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:325(record)
+       23    0.000    0.000    0.002    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/core.py:328(admits)
+       23    0.000    0.000    0.002    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:321(admits)
+       23    0.000    0.000    0.002    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/homestead_parts/fixture_seats.py:457(against_a_part)
+     8103    0.002    0.000    0.002    0.000 {method 'get' of 'dict' objects}
+      147    0.001    0.000    0.002    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/sties.py:61(in_frame)
+       45    0.001    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/homestead_parts/fixture_seats.py:284(wall_places)
+       69    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:268(extents)
+       69    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:80(element_extents)
+       23    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:347(_add)
+      366    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:202(pair_forbidden)
+       69    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:198(box_of)
+       50    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/registry.py:171(pair_permitted)
+      147    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/sties.py:44(to_frame)
+      180    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/homestead_parts/fixture_seats.py:276(along)
+       69    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-performance/l7r/diagram/overlap/taxonomy.py:802(_mx_rect)
+      423    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+      456    0.000    0.000    0.000    0.000 {built-in method builtins.max}
+
+

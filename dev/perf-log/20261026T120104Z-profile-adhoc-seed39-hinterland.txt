@@ -1,0 +1,36 @@
+perf-profile seed 39 stage hinterland: 5.7s under cProfile (the stages before it took 25.7s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120104Z-seed39-hinterland.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         5965598 function calls (5962829 primitive calls) in 5.712 seconds
+
+   Ordered by: cumulative time
+   List reduced from 963 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    5.726    5.726 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/stages.py:78(stage_hinterland)
+        2    0.014    0.007    1.590    0.795 /diagram/.clones/diagram-performance/l7r/diagram/settlement/land/cover.py:738(hinterland)
+        1    0.020    0.020    1.386    1.386 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/parcels/patches.py:338(open_ground_patches)
+        1    0.009    0.009    1.284    1.284 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/stages.py:272(plant_the_belt)
+        1    0.009    0.009    1.264    1.264 /diagram/.clones/diagram-performance/l7r/diagram/settlement/homestead_parts/stands.py:211(village_grove)
+        5    0.057    0.011    1.075    0.215 /diagram/.clones/diagram-performance/l7r/diagram/settlement/land/cover.py:384(commons)
+30030/30029    0.100    0.000    1.040    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+    12589    0.070    0.000    0.962    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/parcels/patches.py:508(_ok)
+15235/13197    0.024    0.000    0.893    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+    10895    0.013    0.000    0.680    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/parcels/bounds.py:140(open_ground_region)
+        1    0.003    0.003    0.668    0.668 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/bamboo.py:337(seat_strips)
+        1    0.003    0.003    0.656    0.656 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/bamboo.py:73(household_bamboo)
+      833    0.005    0.000    0.614    0.001 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/bamboo.py:277(strip_refused)
+        1    0.007    0.007    0.536    0.536 /diagram/.clones/diagram-performance/l7r/diagram/settlement/homestead_parts/belt_law.py:434(settle_the_belt)
+       12    0.022    0.002    0.492    0.041 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/region.py:57(fill_many)
+        2    0.002    0.001    0.490    0.245 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/belt.py:204(belt_polygon)
+        1    0.069    0.069    0.441    0.441 /diagram/.clones/diagram-performance/l7r/diagram/settlement/homestead_parts/grove_fill.py:354(close_belt_gaps)
+        6    0.003    0.000    0.413    0.069 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:617(shape)
+        6    0.011    0.002    0.410    0.068 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:623(_trees_for)
+       28    0.387    0.014    0.388    0.014 /home/agent/.local/lib/python3.14/site-packages/shapely/set_operations.py:463(union_all)
+     2349    0.145    0.000    0.351    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/indexes.py:436(__init__)
+        4    0.001    0.000    0.322    0.081 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/belt.py:341(band)
+        8    0.009    0.001    0.286    0.036 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/hinterland/parcels/patches.py:285(_beyond_the_fields)
+        2    0.004    0.002    0.286    0.143 /diagram/.clones/diagram-performance/l7r/diagram/settlement/land/cover.py:54(farmstead_keepouts)
+     1973    0.021    0.000    0.281    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_geom/region.py:71(_stroke)
+
+

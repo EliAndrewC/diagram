@@ -1,0 +1,36 @@
+perf-profile seed 39 stage homesteads: 4.8s under cProfile (the stages before it took 0.8s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T115942Z-seed39-homesteads.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         4542315 function calls (4494552 primitive calls) in 4.706 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1676 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.016    0.016    4.755    4.755 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/stages.py:80(stage_homesteads)
+        1    0.000    0.000    2.388    2.388 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/stages.py:273(seat_every_household)
+        1    0.000    0.000    2.387    2.387 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/stages.py:425(_seat_households)
+        1    0.002    0.002    2.387    2.387 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/stages.py:445(_seat_households_as)
+        1    0.008    0.008    2.166    2.166 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/growth.py:371(grow_the_margin)
+        1    0.025    0.025    1.853    1.853 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/gap_ways.py:398(lay_the_ways)
+       20    0.004    0.000    1.423    0.071 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/gap_ways.py:452(_way_for)
+       30    0.000    0.000    0.937    0.031 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/gap_ways.py:534(_first_admitted)
+       65    0.000    0.000    0.878    0.014 /diagram/.clones/diagram-performance/l7r/diagram/settlement/houses.py:429(try_place)
+       65    0.001    0.000    0.877    0.013 /diagram/.clones/diagram-performance/l7r/diagram/settlement/houses.py:435(_try_place_bundle)
+      116    0.003    0.000    0.864    0.007 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/growth.py:146(settled_seat)
+     1344    0.048    0.000    0.853    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/bundle.py:80(_bundle_geom)
+       65    0.001    0.000    0.820    0.013 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/place.py:130(_place_bundle)
+       65    0.005    0.000    0.819    0.013 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/place.py:185(_place_bundle_nucleated)
+      253    0.001    0.000    0.814    0.003 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/growth.py:402(reach_at)
+      253    0.002    0.000    0.813    0.003 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/growth.py:176(household_reach)
+      253    0.005    0.000    0.801    0.003 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/bundle.py:73(_bundle_envelope)
+       47    0.001    0.000    0.737    0.016 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/access.py:499(admitted)
+     1344    0.008    0.000    0.640    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/bundle.py:161(_bundle_template)
+       47    0.000    0.000    0.632    0.013 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/access.py:605(tree_admits)
+       25    0.001    0.000    0.631    0.025 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/tree.py:824(judge)
+      781    0.014    0.000    0.628    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/bundle.py:190(_bundle_layout)
+      781    0.020    0.000    0.595    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/bundle.py:338(_lay_fixtures)
+      776    0.045    0.000    0.562    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/homestead_parts/fixture_seats.py:354(lay_fixtures)
+       25    0.004    0.000    0.561    0.022 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/tree.py:250(admits)
+
+

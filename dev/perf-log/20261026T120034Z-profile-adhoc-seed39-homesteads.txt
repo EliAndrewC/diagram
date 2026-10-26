@@ -1,0 +1,36 @@
+perf-profile seed 39 stage homesteads: 18.8s under cProfile (the stages before it took 2.7s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120034Z-seed39-homesteads.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         10711263 function calls (10571121 primitive calls) in 18.670 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1654 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.075    0.075   18.839   18.839 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/stages.py:80(stage_homesteads)
+        1    0.000    0.000    9.201    9.201 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/stages.py:273(seat_every_household)
+        1    0.000    0.000    9.198    9.198 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/stages.py:425(_seat_households)
+        1    0.012    0.012    9.198    9.198 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/stages.py:445(_seat_households_as)
+        1    0.034    0.034    8.339    8.339 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/growth.py:371(grow_the_margin)
+        1    0.048    0.048    8.182    8.182 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/gap_ways.py:398(lay_the_ways)
+       40    0.017    0.000    6.698    0.167 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/gap_ways.py:452(_way_for)
+       85    0.001    0.000    4.943    0.058 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/gap_ways.py:534(_first_admitted)
+      160    0.001    0.000    3.657    0.023 /diagram/.clones/diagram-performance/l7r/diagram/settlement/houses.py:429(try_place)
+      160    0.005    0.000    3.656    0.023 /diagram/.clones/diagram-performance/l7r/diagram/settlement/houses.py:435(_try_place_bundle)
+      160    0.005    0.000    3.461    0.022 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/place.py:130(_place_bundle)
+      160    0.018    0.000    3.456    0.022 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/place.py:185(_place_bundle_nucleated)
+      103    0.003    0.000    3.175    0.031 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/access.py:499(admitted)
+      103    0.002    0.000    2.815    0.027 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/access.py:605(tree_admits)
+       56    0.004    0.000    2.810    0.050 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/tree.py:824(judge)
+       56    0.013    0.000    2.505    0.045 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/ways/tree.py:250(admits)
+     2506    0.140    0.000    2.282    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/bundle.py:80(_bundle_geom)
+      267    0.009    0.000    2.236    0.008 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/growth.py:146(settled_seat)
+     4778    0.008    0.000    2.152    0.000 {built-in method builtins.next}
+      416    0.002    0.000    2.115    0.005 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/growth.py:402(reach_at)
+      416    0.006    0.000    2.112    0.005 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/growth.py:176(household_reach)
+      416    0.014    0.000    2.072    0.005 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/bundle.py:73(_bundle_envelope)
+        1    0.175    0.175    1.880    1.880 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/capacity.py:68(free_seats)
+     3364    0.017    0.000    1.876    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/access.py:316(standing_ground)
+     2649    0.051    0.000    1.829    0.001 /diagram/.clones/diagram-performance/l7r/diagram/settlement/rolling/access.py:349(_standing_clear)
+
+

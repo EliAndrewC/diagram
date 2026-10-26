@@ -1,0 +1,24 @@
+perf-profile seed 39 stage burial: 0.0s under cProfile (the stages before it took 12.9s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261026T120031Z-seed39-burial.prof (gitignored; archive: archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b))
+
+         17 function calls in 0.000 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/burial.py:30(stage_burial)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/hamletgen/homesteads/fixtures.py:196(household_graves)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/l7r/diagram/settlement/_knobs.py:65(knob_rng)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python3.14/random.py:119(__init__)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python3.14/random.py:128(seed)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 {function Random.seed at 0x7d35d6fc2980}
+        1    0.000    0.000    0.000    0.000 {built-in method _hashlib.openssl_sha256}
+        1    0.000    0.000    0.000    0.000 {method 'digest' of '_hashlib.HASH' objects}
+        1    0.000    0.000    0.000    0.000 {method 'random' of '_random.Random' objects}
+        3    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        1    0.000    0.000    0.000    0.000 {built-in method from_bytes}
+        1    0.000    0.000    0.000    0.000 {method 'encode' of 'str' objects}
+
+
