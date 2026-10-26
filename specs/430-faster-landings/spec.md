@@ -51,15 +51,17 @@ manifest readers; a delta that changes an engine data file the readers do not co
 ### User Story 3 - A coverage gap is caught before the gate (Priority: P1)
 
 Today's six coverage reds were replayed through today's `make cover-changed` (FR-003a, `research.md` R1, `m:coverage-reds-replay`):
-every line the five line-naming reds named was an EXISTING line of a changed module that lost its coverage, none an added line,
-and the sixth was the floor not counting new tests marked `tooling`. `cover-changed` asks only added lines, so it saw none of them.
-The pre-gate check therefore asks every line of each changed module, with the tests the floor counts, inside `make land` before
-the gate and faster than it.
+every line the five line-naming reds named was an EXISTING line that lost its coverage, none an added line - three in a module
+their delta changed, two in a module it did not (a caller changed or deleted) - and the sixth was the floor not counting new tests
+marked `tooling`. `cover-changed` asks only added lines, so it saw none of them. The pre-gate check therefore asks every line of
+each changed module, with the tests the floor counts, inside `make land` before the gate and faster than it; the two reds in
+unchanged modules stay the gate's (FR-009's narrowing, stated in Assumptions).
 
 **Acceptance Scenarios**:
 
-1. **Given** today's six coverage reds, **When** each one's delta is replayed, **Then** the pre-gate check names the lines the
-   full floor named.
+1. **Given** today's coverage reds, **When** each one's delta is replayed, **Then** the pre-gate check names the lines the full
+   floor named in the three whose lines lie in a changed module, and counts the floor's tests for the sixth; the two whose lines
+   lie in an unchanged module are left to the gate.
 2. **Given** `make land`, **Then** it runs this check first and refuses before the gate on a named uncovered line (escape as
    today's `COVER_OK`).
 
@@ -145,9 +147,10 @@ the gate and faster than it.
 
 - **SC-001** (FR-001, FR-002): replaying today's 19 full-planned deltas that were full only for a manifest or a `tests/`
   non-module file, the planner plans incremental for each.
-- **SC-002** (FR-003, FR-003a): the pre-gate check names the lines of each of today's 5 line-naming coverage reds; on the sixth
-  it counts the tests the floor counts (no new `tooling`-marked test the floor leaves out); and on those replayed deltas it takes
-  less time than the gate took.
+- **SC-002** (FR-003, FR-003a): the pre-gate check names the lines of each of today's 3 coverage reds whose named lines lie in a
+  module their delta changed; on the sixth it counts the tests the floor counts (no new `tooling`-marked test the floor leaves
+  out); and on those replayed deltas it takes less time than the gate took. The 2 reds whose lines lie in an unchanged module
+  are outside "the changed modules" and remain the gate's (`m:coverage-reds-replay`).
 - **SC-003** (FR-004): on a records-only delta each of the three gates exits before reading the claims, the record or the
   cohort records (the push observed 2026-10-26, method: each gate timed alone on a records-only delta, `request.md`).
 - **SC-004** (FR-005, FR-007): a plan review is never dispatched on a block the plan-lint refuses.
@@ -158,6 +161,9 @@ the gate and faster than it.
 
 - Tooling only: no engine behavior or map changes.
 - "A few claims" for skipping triage: at most 3 (a knob, labeled).
+- FR-009's narrowing for FR-003, priced: a line that loses its coverage in a module the delta did not change (a caller changed or
+  deleted) is not asked before the gate; today that was 2 of 6 coverage reds (`m:coverage-reds-replay`), each still caught by the
+  gate as now. Widening the check past "the changed modules" is the GM's to ask for, not this spec's.
 - The GM approved items 5 and 6's fidelity trade by approving all seven.
 
 ## Review history
@@ -196,3 +202,19 @@ the gate and faster than it.
   require the check to count the tests the floor counts. Figures: `m:coverage-reds-replay`'s command is prose, so `make
   figures` reported it NOT RE-MEASURED; spot-checked by `git diff -U0` on 31f739f5d, d92ff2c90 and 39ea51383 (12 line numbers
   sampled from their named lines, none added), agreeing with it.
+- spec-fidelity round 4 (2026-10-26, VERIFY): CHANGES REQUIRED - (1) RESOLVED as asked: FR-003 names every line of each
+  changed module the floor would name uncovered, with the tests the floor counts, quoting item 3; US3 states R1's result in
+  place of the branch. (2) RESOLVED as asked: SC-002 names the 5 line-naming reds and, for the sixth, the floor's tests. New,
+  introduced by those changes: (3) US3's "every line the five line-naming reds named was an EXISTING line of a changed module"
+  is false by the replay's own method (base = the last `ticked (make land)` / `Tooling from` commit before the red):
+  7f209090b names `law.py:933` and `b1713222b..7f209090b` does not touch law.py; 449e7df7b names `checks.py:141` and
+  `144a0e102..449e7df7b` does not touch checks.py (both lost coverage through a caller changed elsewhere). The key US3 cites
+  (`m:coverage-reds-replay`) records only added-versus-existing, not module-in-delta. So FR-003 as worded (the GM's "on the
+  changed modules") cannot name those two, and SC-002 requires it to; US3.1 ("six coverage reds ... names the lines the full
+  floor named") also no longer matches SC-002. It must say: US3 and R1 state the measured split (31f739f5d, d92ff2c90,
+  39ea51383 name lines in modules their delta changed; 7f209090b and 449e7df7b name lines in modules it did not), with a
+  module-in-delta field per red in the key; SC-002 and US3.1 require the check to name the lines of the three, the sixth's
+  floor-counted tests, and state the two as outside the GM's "changed modules" scope, still caught by the gate (FR-009's
+  narrowing stated). Reaching those two before the gate would widen item 3 beyond the GM's words and is the GM's call, not a
+  spec edit. Round 3 prescribed FR-003's wording from R1's "So", which took a step the replay did not measure. Figures:
+  `make figures` again NOT RE-MEASURED (prose command); the split checked by `git diff --name-only` on each red's range.
