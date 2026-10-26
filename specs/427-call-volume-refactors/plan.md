@@ -120,6 +120,24 @@ free); where it may move a value by a rounding, the landing cohort judges it, as
   (FR-008: a library may change where an analysis shows it better).
 Each change keeps its research claims; a claim on rewritten code is re-owed and checked through the claims round (FR-004).
 
+**D5 - T05, the wells scored as a pool, not seat by seat (FR-003, US3; `research/hotspots-recompute.md` R1).** In `seat_wells`,
+the sort after each landed well keeps its key and its order - (serves more than ten, the minimax bucket of the worst walk plus
+the crop overreach, in the belt, the overreach, the worst walk, the neighborhood) - but computes it for the whole pool at once:
+- the pool's seats and the households as numpy arrays once per rung, and the seats-by-households distance table once
+  (`np.hypot`, for `math.hypot`);
+- per sort, each household's nearest standing well and its distance (the wells change only when one lands), then for every seat
+  at once: the households a well there would take (strictly nearer than their standing well, as `min` over the wells in order
+  breaks a tie toward the standing one), the busiest well's count after it (`most_served_after`), the worst walk
+  (`worst_after`) and the overreach (`_extent_added`);
+- `_in_belt` asked once per seat, not once per sort;
+- the key tuples built from those arrays and the pool sorted by them, `most_served_after` and `worst_after` kept as the
+  one-seat reference forms their tests pin, and a new test holds the pool scorer to them seat for seat on a built case.
+The admission (`s.well_at`, `extent_past`, the wells' spacing - its GUESS claim "wells apart" in `seat_wells`) is unchanged: it
+already runs only on the seat popped. A
+distance that differs from `math.hypot` in its last place can move a seat across a bucket or a tie: the landing cohort judges
+it (FR-007). US3's test: the lane_wells chain at 40 households, about 2.19M inner calls (observed 2026-10-26, method: `make perf-fanout`, the
+T01 survey), under 100k, and the slowest seed's lane_wells under 0.5 s (both bounds US3's GUESS).
+
 ## Task approaches
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
@@ -129,14 +147,14 @@ Each change keeps its research claims; a claim on rewritten code is re-owed and 
 ### T05 Approach (checklist part A)
 
 1. **The goal, in the world.** The same shared wells, seated without re-ranking every seat against every household per well.
-2. **The constraints.** FR-003, FR-004, FR-007, US3; its decisions are written, and reviewed, when T05 starts, after T04.
+2. **The constraints.** D5; FR-003, FR-004, FR-007, US3.
 3. **Where each comes from.** The GM 2026-10-26, `request.md` 1 and 5; `research/hotspots-recompute.md` R1,
    `research/survey-t01.md`.
 4. **Do they describe the world here?** Yes: lane_wells is the largest stage of the T01 survey of this engine (`research/survey-t01.md`).
 5. **The order.** After T04, the order the GM approved (`request.md` 5).
 6. **The exits.** Green: the lane_wells chain under US3's bound, the cohort with no seed regressed. Red: what failed recorded and
    the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None yet; to be answered with its decisions.
+7. **The search smell.** None: the sort's own key, computed at once.
 8. **The budget.** One landing.
 9. **Done, measured.** US3's test: the lane_wells chain's count and the slowest seed's lane_wells time.
 10. **Before moving a constant.** n/a
