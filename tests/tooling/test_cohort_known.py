@@ -23,8 +23,7 @@ def _engine_tree(root: pathlib.Path) -> None:
     (root / "l7r").mkdir(parents=True)
     (root / "scripts/gates").mkdir(parents=True)
     (root / "scripts/gates/gate-stamp.py").write_text((REPO / "scripts/gates/gate-stamp.py").read_text(encoding="utf-8"), encoding="utf-8")
-    (root / "l7r/diagram/pipeline").mkdir(parents=True, exist_ok=True)  # gate-stamp loads its code id from here (feature 426 D2)
-    (root / "l7r/diagram/pipeline/codeid.py").write_text((REPO / "l7r/diagram/pipeline/codeid.py").read_text(encoding="utf-8"), encoding="utf-8")
+    (root / "scripts/gates/codeid.py").write_text((REPO / "scripts/gates/codeid.py").read_text(encoding="utf-8"), encoding="utf-8")  # gate-stamp loads its code id beside it (feature 426 D2)
 
 
 def test_the_seeds_a_row_lists_are_read_from_its_words() -> None:

@@ -163,6 +163,7 @@ def new_project(tmp_path: Path) -> tuple[Path, Path]:
     git(root, "config", "user.name", "t")
     (root / "scripts/gates").mkdir(parents=True)
     shutil.copyfile(REPO_ROOT / "scripts/gates/gate-stamp.py", root / "scripts/gates/gate-stamp.py")
+    shutil.copyfile(REPO_ROOT / "scripts/gates/codeid.py", root / "scripts/gates/codeid.py")  # gate-stamp loads it (feature 426 D2)
     skill = root
     (skill / "eng").mkdir(parents=True)
     (skill / "eng" / "__init__.py").write_text("", encoding="utf-8")

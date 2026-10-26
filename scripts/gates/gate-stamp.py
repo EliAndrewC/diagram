@@ -256,14 +256,14 @@ def _matches(path: str, area_path: str, patterns: tuple[str, ...], excl: tuple[s
 
 
 def _codeid():  # noqa: ANN202 - the module, loaded by path
-    """`l7r/diagram/pipeline/codeid.py`, loaded by PATH (stdlib only): this guard runs inside the hooks and must not import the
+    """`codeid.py` beside this script, loaded by PATH (stdlib only): this guard runs inside the hooks and must not import the
     engine package; the one definition of the docstring-blind id lives there since feature 426 (D2)."""
     import importlib.util  # noqa: PLC0415
 
     cached = sys.modules.get("l7r_codeid")
     if cached is not None:
         return cached
-    path = Path(__file__).resolve().parents[2] / "l7r" / "diagram" / "pipeline" / "codeid.py"
+    path = Path(__file__).resolve().parent / "codeid.py"
     spec = importlib.util.spec_from_file_location("l7r_codeid", path)
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)

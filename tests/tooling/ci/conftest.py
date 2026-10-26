@@ -35,8 +35,7 @@ def repo(tmp_path: Path) -> Path:
     git(root, "config", "user.name", "t")
     (root / "scripts/gates").mkdir(parents=True)
     (root / "scripts/gates/gate-stamp.py").write_text((REPO_ROOT / "scripts/gates/gate-stamp.py").read_text(encoding="utf-8"), encoding="utf-8")
-    (root / "l7r/diagram/pipeline").mkdir(parents=True, exist_ok=True)  # gate-stamp loads its code id from here (feature 426 D2)
-    (root / "l7r/diagram/pipeline/codeid.py").write_text((REPO_ROOT / "l7r/diagram/pipeline/codeid.py").read_text(encoding="utf-8"), encoding="utf-8")
+    (root / "scripts/gates/codeid.py").write_text((REPO_ROOT / "scripts/gates/codeid.py").read_text(encoding="utf-8"), encoding="utf-8")  # gate-stamp loads its code id beside it (feature 426 D2)
     skill = root
     (skill / "l7r" / "diagram").mkdir(parents=True, exist_ok=True)
     (skill / "l7r" / "diagram" / "m.py").write_text("x = 1\n", encoding="utf-8")
