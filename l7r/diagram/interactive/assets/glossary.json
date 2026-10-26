@@ -4216,6 +4216,7 @@
   "def": "A yamen's runners: the constables, messengers and guards who waited in sheds against the inside of its wall.",
   "variants": [
    "yayi",
+   "ya yi",
    "runners"
   ]
  },
@@ -18358,6 +18359,14 @@
   "variants": [
    "welfare ratio",
    "welfare ratios"
+  ]
+ },
+ "labor service": {
+  "def": "Work a household owed in person to the state or its lord, besides or in place of its tax; Ming China's Single Whip merged it with the land tax into one levy in silver.",
+  "variants": [
+   "labor service",
+   "labour service",
+   "labour services"
   ]
  }
 }

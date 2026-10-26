@@ -2476,6 +2476,9 @@ kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
 kōshin	Kōshin
 kōyasan	Kōyasan
+labor service	labor service
+labour service	labor service
+labour services	labor service
 lacey	Lacey
 lake biwa	Lake Biwa
 lake tai	Lower Yangzi
@@ -4940,6 +4943,7 @@ xun	xun
 xunfu	grand coordinator
 xunjiansi	xunjiansi
 xuzhi	Gongbu changku xuzhi
+ya yi	yayi
 yaba	yaba
 yabusame	yabusame
 yacheng	yacheng

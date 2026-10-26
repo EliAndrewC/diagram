@@ -1,12 +1,12 @@
-About: The servants' quarters lodged the household's domestic servants, the komono, who did its odd jobs. They were not
+About: The servants' quarters lodged the household's domestic servants, who did its odd jobs. They were not
 samurai but of peasant or townsman stock, most of them younger sons of peasants, hired for wages by the year or the half
 year, some through a broker; they changed households on two fixed days a year.
 How many a household had to keep was fixed by its assessed rice yield. They lived in, inside their master's walls; no
 servant is known to have had a house of their own in the samurai quarter.
 
-Where they slept followed the size of the house. On a large house the buildings along the street were long
+Where they slept followed the size of the house. At a large house the buildings along the street were long
 ranges (nagaya), of one story or two, where the servants lived, the front gate cut through one of them so that the servants there kept it; a
-smaller house had a wall in place of the ranges, and where its few servants slept is not recorded. Even a chief retainer's great house, at Aizu, kept the rooms of its maids and servants under its own roof, beside a range of retainers at its gate. One retainer's house, the Miwa house at Kaminoyama, kept its chugen in a hut outside the back door, by the kitchen.
+smaller house had a wall in place of the ranges, and where its few servants slept is not recorded. Even a chief retainer's great house, at Aizu, kept the rooms of its maids and servants under its own roof, beside a range of retainers at its gate. One retainer's house, the Miwa house at Kaminoyama, kept its chugen, its menservants, in a hut outside the back door, by the kitchen.
 
 In a lord's residence the chugen, menservants ranked below the foot soldiers, lived together in large rooms, and a samurai's gate range held a chugen room too: one
 was two rooms of six mats, each about 9 by 12 ft, entered by a sliding lattice door. Where servants lived as
