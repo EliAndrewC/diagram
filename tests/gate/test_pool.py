@@ -18,3 +18,16 @@ def test_a_spec_the_pool_does_not_carry_goes_to_the_roll_cache(monkeypatch: pyte
     monkeypatch.setattr(rollcache, "report", lambda s: ("report", "HIT"))
     assert _pool.rolled_map(spec) == ("plan", {"M": 3})
     assert _pool.rolled_report(spec) == "report"
+
+
+def test_a_pool_map_read_twice_by_one_test_is_obtained_once(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 417 T44 (the round arbiter's tooling fix on ask:417-T31-C2-regression): `rolled_map` then `rolled_report` read a
+    stale pool map twice in one test, and each read regenerated it - the roll census then refused an otherwise-green landing.
+    The second read is served what the first obtained."""
+    calls: list[str] = []
+    monkeypatch.setattr(_pool.gencache, "gate_obtain", lambda g: (calls.append(g), (f"/tmp/{g}.json", "REGENERATED", 1.0))[1])
+    monkeypatch.setattr(_pool, "refresh_census", lambda m: False)
+    first = _pool.obtain_full("pool/x/x.gen.py")
+    again = _pool.obtain_full("pool/x/x.gen.py")
+    assert calls == ["pool/x/x.gen.py"], "the map is rolled once"
+    assert first[0] == again[0] and again[1] == "CACHED"
