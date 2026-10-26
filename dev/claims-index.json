@@ -56025,7 +56025,7 @@
   "code": "b39c90de7ced7220",
   "core": "90dff9bbadcfbf12",
   "date": "2026-10-26",
-  "note": "the inline test measures from the privy's far edge to the house's walls on each axis, clips each at zero and compares the result with reach squared. That is the measure the page gives (\"runs from the privy's far corner to the house's walls\"), at the page's 48 ft, which the page records as this project's choice",
+  "note": "the inline test is the privy's far edge less the house's half-size on each axis, floored at 0 and compared to reach squared: the far corner to the house's walls, as §30 says the 48 ft reach is measured",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
@@ -57140,7 +57140,7 @@
   "code": "8889f6dce99779df",
   "core": "96e6f5629e3d4f9b",
   "date": "2026-10-26",
-  "note": "every privy seat offered is held to `px(PRIVY_SUN_MAX_FT)` (48 ft) off `roofs[0]` (the house) by `_first`, and FixtureUnlaid is raised by name when no seat is within it. This matches the page's 48 ft reach and why it is there: privies that stray past it read as a neighbor's",
+  "note": "only a privy gets `_first(..., roofs[0], px(PRIVY_SUN_MAX_FT))`, so no stepped seat is taken past 48 ft, and when none is in reach the farmstead's privy is refused by name (FixtureUnlaid)",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },

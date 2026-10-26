@@ -649,6 +649,7 @@ def _first(seats: Iterable[Rect], taken: Sequence[Rect], g: float, house: Rect |
 
     Research: the privy's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: no more than 48 ft from its house, measured off its far corner as `within_reach_of` measures it"""
     rects = [(t[0], t[1], t[2], t[3]) for t in taken]
+    hx = hy = hw2 = hh2 = r2 = 0.0  # read only where `house` is given
     if house is not None:
         hx, hy, hw2, hh2, r2 = house[0], house[1], house[2] / 2, house[3] / 2, reach * reach
     for q in seats:
