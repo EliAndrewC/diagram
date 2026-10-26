@@ -206,14 +206,20 @@
    "declared": "spec-fidelity"
   },
   "### T46 (T31 C2's probe step, D35): five web passes deleted once the households' ways are drawn first": {
-   "sha256": "29aef1df84a8b2b4ca7efc5d66d6bd9ef5c931483bd7fbfaa83330f60a21bd45",
-   "verdict": "BLOCKED",
+   "sha256": "90c087188894ea5bc983cff613cba1949a71907463f07e42daacf516f5eaa258",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T46 Approach (checklist part A)": {
-   "sha256": "a9601f7e1b487eec4700805619ee2b9ecd7a2c18d91daec0e688709490a6e3b2",
-   "verdict": "BLOCKED",
+   "sha256": "70ea4705acd9291dc060e891e5e22d4f913b91e8cdc569e4406c52834c4aa619",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T47 (FR-004, T46's measurement): a row's street laid ending at its last farm, and the street trim deleted": {
+   "sha256": "a2635e0826e65a2dee658fa24c367c6bc4752e966cdb6151df4453dab75b72a7",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   }
@@ -3172,6 +3178,53 @@
      "summary": "Runs after T44 and T45 and before the settle's remaining steps. One landing. FR-008 green means landed; red means set down. No rendering.",
      "class": "within",
      "why": "D23 is one landing, set down whole if red. FR-008 is the gate. No glyph changes, and D23 allows redrawn maps. The fresh block's seven failures are the same seven, so nothing regressed before FR-009 applies."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T46 (T31 C2's probe step, D35): five web passes deleted once the households' ways are drawn first",
+    "### T46 Approach (checklist part A)",
+    "### T47 (FR-004, T46's measurement): a row's street laid ending at its last farm, and the street trim deleted"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T46-a",
+     "summary": "settle_defer out of STEPS, the two orphan joins, the two non-street end trims, the two dangling-end sweeps and the doubled-tail sweep probed off (each alone, then together) and deleted together",
+     "class": "within",
+     "why": "FR-004 deletes the passes that repair a laid web; the GM asked for the repair steps switched off 'in whatever manner you find most efficient'; D35/D23 deletion together. Three pool maps move (Kashikawa's orphan link and lane replaced by a settle-drawn field way, every house and the field still reached): D23 allows maps to change held to the claims and cohort, and FR-008 asks the pool maps keep passing, not stay identical. Deleting more repair, not less, narrows nothing."
+    },
+    {
+     "id": "T46-b",
+     "summary": "the fourteen names make dead-closure found dead deleted, with the tests whose body calls one",
+     "class": "within",
+     "why": "D23: deleted with their call sites and the tests that only exercised them; the arbiter's rule fixes which tests."
+    },
+    {
+     "id": "T46-c",
+     "summary": "settle_defer stays defined because settle_tree (a placer) calls it",
+     "class": "within",
+     "why": "It is removed as a step run after the web is laid; what remains is a function a placer asks while placing, which is the request's model (rule asked by the placer), not a retained repair."
+    },
+    {
+     "id": "T46-d",
+     "summary": "the street call of tidy_lane_ends kept in T46, measured NEEDED (alone off: 48 of 54, six linear seeds refuse dangling_ends), its conversion filed as T47",
+     "class": "within",
+     "why": "Answers the earlier BLOCKED: the keep is no longer assumed but measured, and D35 routes a NEEDED step to D11's conversion rather than deletion-with-the-needless. It is kept only until T47 converts and deletes it, so FR-004's deletion is sequenced, not narrowed."
+    },
+    {
+     "id": "T46-approach",
+     "summary": "checklist: order after T44/T45; exit red = set down; done = the five gone with their dead closure and make land green",
+     "class": "within",
+     "why": "D23's whole-deletion set-down on a red landing and FR-008's landing gate; nothing excepted."
+    },
+    {
+     "id": "T47",
+     "summary": "law.dangling_lane_ends (0033: a row's street ends at its last farm or runs off the map as the road into it) asked by lay_row_streets where it lays the street; then the street call probed off and deleted",
+     "class": "within",
+     "why": "D35's D11 conversion exactly: the predicate named, the placer named, the repair deleted. The 'or runs off the map' clause is the existing law's own text, not a carve-out the plan adds; no set-down exception is claimed."
     }
    ]
   }
