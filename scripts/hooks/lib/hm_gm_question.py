@@ -22,6 +22,7 @@ Usage: hm_gm_question.py judge < stop payload  ->  prints `ask<TAB>line` (a ques
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 
@@ -131,6 +132,24 @@ def _gm_last_at(path: str) -> str:
     return ""
 
 
+def kept_ids(clone: str) -> set[str]:
+    """Every open question escalation-check kept, as `NNN#row` (feature 432)."""
+    import glob  # noqa: PLC0415
+
+    out = set()
+    for f in glob.glob(f"{clone}/specs/*/gm-review.jsonl"):
+        num = int(f.split("/specs/", 1)[1].split("-", 1)[0])
+        with open(f, encoding="utf-8") as fh:
+            for i, line in enumerate(fh):
+                try:
+                    r = json.loads(line)
+                except ValueError:
+                    continue
+                if r.get("kind") == "question" and r.get("status") == "kept" and "reviewed" not in r:
+                    out.add(f"{num}#{i}")
+    return out
+
+
 def unnamed(clone: str, payload: dict) -> list[str]:
     """The kept questions since the GM's last message that the final message does not name (feature 432, FR-002)."""
     import glob  # noqa: PLC0415
@@ -171,6 +190,10 @@ def main() -> int:
     except Exception:
         return 0
     ask, offer = classify(payload.get("last_assistant_message") or "")
+    # ...A QUESTION ESCALATION-CHECK ALREADY KEPT IS FILTERED (feature 432): naming one, as `unnamed` requires, is no new ask -
+    # the two checks refused each other's message on the session that built them (2026-10-26)
+    kept = kept_ids(payload.get("cwd") or os.getcwd())
+    ask = [a for a in ask if not any(k in a for k in kept)]
     if not (ask or offer) or filtered_since_gm(payload.get("transcript_path") or ""):
         return 0
     print(f"ask\t{ask[0]}" if ask else f"offer\t{offer[0]}")
