@@ -37909,6 +37909,25 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a row's street first": {
+  "body": "aa3456f912e2f44d",
+  "claim": "a row's street first - row-villages-resson.drawing: the street of a planned row laid out before its farms - on a row map the streets are laid first and the households' ways are the settle's",
+  "code": "0fb8e54ff9604094",
+  "core": "10a9239a784dca8f",
+  "date": "2026-10-25",
+  "note": "the gate `if not _rows` covers every linear map with streets, but 0033 has a street laid out first only on a planned row (\"a street laid out before the farms\", drawn straight). Its other attested form, \"a row along the dry edge\", \"curves with the field's margin\", and its street is placed where the farms stand. For that form the cited finding does not back laying the street before the households' ways. Either gate on the planned-street form, or rest the order on the farm's own path reaching its street (§138) and the street's placement (§124), and reword the claim to match.",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
+  },
+  "research": "37ada2a33aa587d2",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:071bd73215fda123",
+   "0033-row-villages-resson.drawing.html:0a23ce156774ee9f",
+   "0033-row-villages-resson.drawing.html:4f85f319664ea57f",
+   "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
+  ],
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a web lane's middle off the fabric": {
   "body": "f326458b2a344b62",
   "claim": "a web lane's middle off the fabric - how-our-maps-lay-a-clustered-settlements-lanes.drawing: WEB_FABRIC_GAP, 7 ft clear of a garden fence (`clear_runs`' tight margin)",
@@ -38033,14 +38052,6 @@
   "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#households' ways (`settle_tree`) drawn before the skeleton, the cuts, the orphan links and the door paths: an order 0246 §41/§47 supports (\"laid after ... every household's own way is laid in the gaps\"), but no claim of the unit names it": {
-  "code": "81f0449f3715e96a",
-  "core": "81f0449f3715e96a",
-  "date": "2026-10-25",
-  "note": "households' ways (`settle_tree`) drawn before the skeleton, the cuts, the orphan links and the door paths: an order 0246 §41/§47 supports (\"laid after ... every household's own way is laid in the gaps\"), but no claim of the unit names it",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#lanes after the houses": {
   "body": "7211c336ff08f58f",
   "claim": "lanes after the houses - how-our-maps-lay-a-clustered-settlements-lanes.drawing",
@@ -38105,6 +38116,25 @@
   "pages": {},
   "research": "",
   "triaged": "2026-10-25",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#the households' ways first": {
+  "body": "aa3456f912e2f44d",
+  "claim": "the households' ways first - how-our-maps-lay-a-clustered-settlements-lanes.drawing: every household's own way is laid in the gaps, and the web's lanes after it (`settle_tree` before the skeleton, the cuts, the orphan links and the door paths, on a clustered map)",
+  "code": "7680b8e743573785",
+  "core": "10a9239a784dca8f",
+  "date": "2026-10-25",
+  "note": "`settle_tree` is drawn before the skeleton, the cuts, the orphan links and the door paths, as 0246 says: once every house stands, each household's way is laid in the gaps to the track out or an earlier way, and both lane forms are laid after it.",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#the web's frame": {

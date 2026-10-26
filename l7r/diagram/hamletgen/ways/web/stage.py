@@ -88,7 +88,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         a row village laid without web cuts - research/questions/0033-row-villages-resson.drawing.html: its farms are strung along their street and reach it by a path where their grove is in the way - its ways are its streets and those paths; no back lane or alley is cut among its farms (a map drawing convention)
         web lanes off the water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way keeps to its own bank; web cuts and joins clipped at the watercourses and drawn channels, a join crossing the brook only at a ford, one of the crossing places
         the households' ways first - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every household's own way is laid in the gaps, and the web's lanes after it (`settle_tree` before the skeleton, the cuts, the orphan links and the door paths, on a clustered map)
-        a row's street first - research/questions/0033-row-villages-resson.drawing.html: the street of a planned row laid out before its farms - on a row map the streets are laid first and the households' ways are the settle's
+        a row's street first - research/questions/0033-row-villages-resson.drawing.html: a row's street stands where its farms stand and each farm's own path reaches it - so on a row map the streets are laid first and each household's way, drawn by the settle, ends on its street
         orphan stub joined - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, so a stranded stub is joined into it
         an end left in open ground pulled back - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back to the last thing it serves, or the lane dropped, against the final network (`tidy_lane_ends` after the joins, then `_sweep_dangling_ends`)
         a doubled tail ends where it met - research/questions/0081-village-lanes.drawing.html: a lane that runs on beside the way it met ends where it met it (`_sweep_doubled_tails`, feature 261)
@@ -168,7 +168,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # skeleton, the cuts, the orphan links and the door paths, so they are laid onto a network that stands - laid after them,
     # the tree's own cuts (`settle_defer`) took away what an orphan link had joined, and the last resort carried it back
     # (`settle_joins`, measured needless once the tree comes first: 54 of 54)
-    if not _rows:  # ...on a clustered map: a planned row's street is laid out before its farms (0033), so a row's ways stay the settle's
+    if not _rows:  # ...on a clustered map: a row's farms reach their street (0033), so a row's streets are laid first
         settle_tree(s)
     _pass("skeleton")
     if not _rows:
