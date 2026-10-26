@@ -3175,6 +3175,7 @@ one-bu silver	ichibu-gin
 onin war	Onin war
 onkura	kura
 onmyodo	onmyodo
+onna daigaku	Onna daigaku
 ons	Office for National Statistics
 ooka tadasuke	Ooka Tadasuke
 ooku	ooku
@@ -5019,6 +5020,7 @@ yokogi	yokogi
 yokogi-uchi	yokogi
 yomadori	four-room type
 yomihon	yomihon
+yomikudashi	yomikudashi
 yonai	yonai
 yonai money	yonai
 yongzheng	Yongzheng
