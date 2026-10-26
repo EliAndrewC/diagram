@@ -130,4 +130,6 @@
 - [x] T49 (FR-005, T48's review) Every way squared at its water crossings where its placer lays it - the skeleton arms, the web lanes (`_draw_web`), the bund and track spurs and the field way each ask `square_run` before committing, in `l7r/diagram/hamletgen/ways/` (FR-005)
       research: rendering
       verify: DONE. landed: every way squared at its water crossings where its placer lays it: the skeleton arms, _draw_web, the bund branch (judged as squared), the track's spur (before its tip) and row road, the field way and the connector's dry exits ask square_run; landing 54 of 54, the fresh block 723759 identical to HEAD seed by seed, no pool manifest moved; claims accepted by the arbiter (ask:417-T49-claims), the field branch's brook crossing and two outside items on T32
+- [ ] T50 (T31's D11, settle_network's first conversion) The track's field spur no longer laid unjoined (dropped by settle_network on 28 of 54 maps; the field reached by the web's way onto the bund or the settle's field way), and `bund.carry_on` squared at its water crossings, in `l7r/diagram/hamletgen/ways/` (FR-004, FR-005)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=417)

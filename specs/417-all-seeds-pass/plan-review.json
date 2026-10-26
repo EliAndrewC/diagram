@@ -170,13 +170,13 @@
    "declared": "spec-fidelity"
   },
   "### T47 (FR-004, T46's measurement): a row's street laid ending at its last farm, and the street trim deleted": {
-   "sha256": "bf59340fc9ae5833f8e158d980262c844a78eacfe69f32755847a7fc18469076",
+   "sha256": "404b41674de2e052195aa3c5cb7aef7fde332dc03721b41631d8c7908eef4ff1",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T48 Approach (checklist part A)": {
-   "sha256": "4a56172f31621c0a246edb62c9cd0d9b8cfe9e2ffdfcae1ee69ecbb065a2891e",
+   "sha256": "d3e5ffbdf80429fd800294d47f2f506ae6c190a7029a3cb1df420a24a1690c9c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "round-arbiter"
@@ -187,14 +187,14 @@
    "reviewed": "2026-10-26",
    "declared": "round-arbiter"
   },
-  "### T49 (FR-005, T48's review): every way squared at its water crossings where its placer lays it": {
-   "sha256": "b9f80c46b986260d83dff6875d3786eae3f3e5291e92461b59f91619ec328848",
+  "### T50 (T31's D11, settle_network's first conversion): the track's field spur no longer laid unjoined, and the bund's carry-on squared": {
+   "sha256": "e03c1a7768d33e6c0fc6177d2c3546e868cda590d6dbee18e3aa4ec2865106eb",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T49 Approach (checklist part A)": {
-   "sha256": "f9cf4e75ac7477d4c0e520d75b62862ca3d0af0ade5498c77ed974a5425f5ee3",
+  "### T50 Approach (checklist part A)": {
+   "sha256": "a42afd807d82e4ce1af9625e0f22dc780f89c4080fa9568c3541aa3bc10a4a9f",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "round-arbiter"
@@ -3368,6 +3368,175 @@
      "summary": "Measured with make cohort-landing, the fresh block and the pool, against HEAD. Rendering: none.",
      "class": "within",
      "why": "FR-008 and SC-001 call for the fixed cohort, pinned rows, pool and fresh block; the plan sets nothing beyond them."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T47 (FR-004, T46's measurement): a row's street laid ending at its last farm, and the street trim deleted",
+    "### T50 (T31's D11, settle_network's first conversion): the track's field spur no longer laid unjoined, and the bund's carry-on squared",
+    "### T50 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T47-probes",
+     "summary": "P2-P4 probed: street spanning the end farms' center projections (pad 0), the same keeping run_lanes_on_to_the_bund, and the span between the end farms' front-door projections with a 30 ft floor; none adopted (52 of 54 each)",
+     "class": "within",
+     "why": "Design probing that D35 requires before the conversion's code ('decided before its code: its rule asked by the placer'). Three design alternatives were measured on the cohort, none was adopted or landed, the probes' edits are not on main, and the task was then recorded and set down. That is D11's route, not the iteration D11 forbids. The 32 ft floor answered one seed (904); it was a single probe and was not adopted. Any further per-seed tuning of a floor would be the seed-by-seed iteration D11 rules out until the GM resumes it. Figures carry the one-shot label (Probed 2026-10-26 UTC, method stated)."
+    },
+    {
+     "id": "T47-open-junction-by-construction",
+     "summary": "OPEN option 1: make the street's end a junction by construction - the end farm's door path laid to the street's end point first (lay_door_paths), the street spanning the door projections",
+     "class": "within",
+     "why": "Placing correctly in the first place: the street's end is lawful because the door path is laid to it, with no trim afterwards. This is exactly FR-004 and the GM's 2026-10-25 'replacing them with just having the algorithm place correctly in the first place'."
+    },
+    {
+     "id": "T47-open-else-trim-kept",
+     "summary": "OPEN fallback: 'else the trim recorded as where the rule is asked (after the door paths)' - tidy_lane_ends(..., streets=True) kept, with the street laid past its last farm and cut back after the door paths, and relabelled as where the rule is asked",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a narrowing presented as an open question (the feature 239 pattern). The trim lays a street past its last farm and then cuts it back, so it is a pass that repairs a laid web; FR-004 deletes such passes, and the GM's request rules out 'place then check' 'anywhere in the codebase'. Calling the cut-back 'where the rule is asked' changes the label, not the mechanism: the street is still laid wrong and mended. None of the tests for an exception is met. It is not physically impossible to place it correctly, because the block's own first OPEN option (door path to the end point first) gives a construction that does it. Nothing in the GM's words implies it. Applying FR-004 literally does not defeat the request's purpose; it is the purpose. If the conversion cannot land green, D11/D35 already give the lawful exit: record the failing seeds and set the conversion down, with that claim written as an exception and ruled through make arbiter-ask. Required: strike the 'else' clause, or replace it with D11's set-down route."
+    },
+    {
+     "id": "T47-set-down",
+     "summary": "T47 set down 2026-10-26 for the settle's needed steps, its failing seeds (904, 04, 12) recorded, the task left OPEN",
+     "class": "within",
+     "why": "A sequencing decision: the conversion is deferred behind D35's needed settle steps, with failing seeds recorded and no iteration, as D11 provides. It does not claim the conversion cannot be done (the OPEN junction option stands). If it later becomes a permanent set-down on a 'cannot land green' claim, that claim needs its D11/D35 exception ruling."
+    },
+    {
+     "id": "T50-spur-not-laid",
+     "summary": "stage_track's field spur is no longer drawn; its code, its constants and the names it leaves dead are deleted",
+     "class": "within",
+     "why": "Measured: on 28 of 54 maps the spur is laid before anything it could join exists, and settle_network drops it. The field is still reached by the web's way onto the bund (run_on/branch) or settle_field, so 0014 holds. This takes away a placer whose only output was dropped by a repair (FR-004, D35's conversion of settle_network, the checklist goal 'nothing is laid only to be dropped'). D23 allows maps to change (four pool maps redrawn, held to the claims and the cohort, FR-008)."
+    },
+    {
+     "id": "T50-carry-on-squared",
+     "summary": "bund.carry_on asks squaring.square_run of the run it lays or lengthens, not only squared_step against the drawn channels",
+     "class": "within",
+     "why": "FR-005: the rule (0035/0084, a crossing square to the water) is asked by the placer that could break it. The probe found it as the gap that let seed 42 cross 23.6 degrees off square (one-shot labeled). It extends T49's squaring of the placers to a sixth placer."
+    },
+    {
+     "id": "T50-dead-code-and-tests",
+     "summary": "Tests go only where their BODY calls a deleted name; dead closure removed (make dead-closure)",
+     "class": "within",
+     "why": "D23 (call sites and tests that only exercised them deleted in the same landing) and the arbiter's recorded rule that the checklist cites."
+    },
+    {
+     "id": "T50-settle-network-staged",
+     "summary": "settle_network converted placer by placer: this task takes the spur, and the skeleton web lanes, the arms and the bund branch are the next conversions; until then the existing drop still removes one lane on Kashikawa and Sawada",
+     "class": "within",
+     "why": "The GM, 2026-10-25, on switching off the repair steps: 'I don't care whether you do it one at a time or all at once ... pick whichever one you believe will be the most efficient way forward and allow you to get rid of all of them.' Converting placer by placer is that, inside D35's conversion of a NEEDED step. The block keeps no drop permanently and names the remaining placers as the next conversions. The interim drop on two pool maps replaces the one settle_network made before, with the drawn lanes identical. It is transitional, not a retained repair."
+    },
+    {
+     "id": "T50-order-exits-budget",
+     "summary": "After T49 and before the other unjoined placers; exits FR-008 green landed with fresh rate, red set down; one landing",
+     "class": "within",
+     "why": "D11's landing and set-down rule and D35's order. 'Red: set down' does not mention D35's requirement that a 'cannot land green' claim be written as an exception and ruled (make arbiter-ask). It is not a narrowing, because item 2 of the same checklist names D35 as a binding constraint, so D35 governs any red set-down. The measured 54 of 54 makes the red exit hypothetical."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T47 (FR-004, T46's measurement): a row's street laid ending at its last farm, and the street trim deleted"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T47-a",
+     "summary": "The row street's end rule (dangling_lane_ends, 0033) asked where lay_row_streets lays the street; tidy_lane_ends' street call deleted as T46 deleted the others.",
+     "class": "within",
+     "why": "FR-004 and D35's conversion verbatim: the repair (laying past the last farm, then cutting back) is replaced by laying the street where the rule admits it; the GM 2026-10-25: 'replacing them with just having the algorithm place correctly in the first place'."
+    },
+    {
+     "id": "T47-b",
+     "summary": "OPEN approach: the street's end made a junction by construction - the end farm's door path laid to the street's end point first, the street spanning the door projections - after probes P2-P4 found no span computed from the farms alone ends lawfully.",
+     "class": "within",
+     "why": "A design choice of how the placer places correctly; it narrows nothing the GM or the spec asked for. The probes are labeled (date, method) and are not ruled on here."
+    },
+    {
+     "id": "T47-c",
+     "summary": "Exit on red: failing seeds recorded, task set down, any claim it cannot be placed correctly written as an exception and ruled through make arbiter-ask (D11, D35), never the trim kept.",
+     "class": "within",
+     "why": "This is the changed text. The earlier fallback ('else the trim recorded as where the rule is asked') kept a repair pass FR-004 deletes; the amended exit is D35's set-down procedure in its own terms."
+    },
+    {
+     "id": "T47-d",
+     "summary": "Set down 2026-10-26 behind the settle's needed steps; probe edits not on main.",
+     "class": "within",
+     "why": "Ordering, not abandonment: the task is deferred with its approach stated, and abandonment routes through the arbiter (T47-c). D11 leaves order to the plan."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T50 (T31's D11, settle_network's first conversion): the track's field spur no longer laid unjoined, and the bund's carry-on squared",
+    "### T50 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T50-a",
+     "summary": "settle_network's conversion taken placer by placer, the track's field spur first (28 maps); the skeleton pass's web lanes, the arms and the bund branch named as the next conversions.",
+     "class": "within",
+     "why": "The GM 2026-10-25: 'I don't care whether you do it one at a time or all at once'. The remaining placers are recorded, not dropped; settle_network stays in STEPS until they are converted, so the residual last-resort drop on Kashikawa and Sawada is the unconverted remainder, not the step kept."
+    },
+    {
+     "id": "T50-b",
+     "summary": "The spur not laid at all: it is laid before anything it could join exists, so the field is reached by a_way_onto_the_bund (run on, branch) or settle_field, where joining can be asked.",
+     "class": "within",
+     "why": "D35/FR-004: nothing laid only to be dropped; 0014 (the field path runs on to the bund) is still carried by the web's own placers. The block names the placers but not a law predicate for 'joined' - the D35 form (predicate named) is thinly met, not a narrowing."
+    },
+    {
+     "id": "T50-c",
+     "summary": "bund.carry_on asks squaring.square_run of the run it lays or lengthens, not only of drawn channels (squared_step), so its brook crossing is square (oblique_brook, 0035, 0084).",
+     "class": "within",
+     "why": "FR-005: the rule asked by the placer that could break it, found by the probe (seed 42, labeled 2026-10-26 with method)."
+    },
+    {
+     "id": "T50-d",
+     "summary": "The spur's code, the names it leaves dead (make dead-closure) and the tests whose body calls one deleted with it.",
+     "class": "within",
+     "why": "D23 and the arbiter's rule that a test goes only on what its body calls."
+    },
+    {
+     "id": "T50-e",
+     "summary": "Pool maps redrawn (Inashiro and Kashikawa field-path kinds, Mizuguchi's field way replaced by a branch).",
+     "class": "within",
+     "why": "D23: maps may change, held to the claims and the cohort; FR-008 is the landing condition."
+    },
+    {
+     "id": "T50-f",
+     "summary": "Checklist item 6, the exit on red: 'Red: set down.' - nothing more.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "T50 converts a settle step (settle_network), so D35 governs its exit: a conversion that cannot land green is 'recorded with its failing seeds and set down - and that claim ... is written as an exception and ruled (make arbiter-ask), never assumed.' The plan's exit allows a set-down with no failing seeds recorded and no arbiter ruling - the assumed claim D35 forbids. Reading 'set down' as 'set down per D35' would be completing the author's thought; the same bundle's T47 was amended to spell exactly this out. None of the three grounds holds: asking the arbiter is not impossible, the GM's words imply no skip, and the literal rule does not defeat the request. Fix: item 6 to read like T47's exit - red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through make arbiter-ask (D11, D35). The 54 of 54 probe makes red unlikely; it does not change what the plan commits to on red."
+    },
+    {
+     "id": "T50-g",
+     "summary": "Order: after T49, before the other unjoined placers; budget one landing; done = spur gone, carry_on squared, make land green.",
+     "class": "within",
+     "why": "Sequencing and the D11 landing condition; nothing narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T48 Approach (checklist part A)",
+    "### T50 (T31's D11, settle_network's first conversion): the track's field spur no longer laid unjoined, and the bund's carry-on squared",
+    "### T50 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:417-all-seeds-pass#T50@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }

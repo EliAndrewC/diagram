@@ -621,8 +621,9 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
   and seed 904's 30 ft street still fell short and a 32 ft floor only moved its failure to a skeleton end. FINDING: a street's
   lawful end is where its end farm's door path meets it, which is known only once that path is laid (after the street, which it
   joins), so no span computed from the farms alone ends lawfully. OPEN: the end made a junction by construction - an end farm's
-  door path laid to the street's end point first (`lay_door_paths`), the street spanning the door projections - else the trim
-  recorded as where the rule is asked (after the door paths). Set down 2026-10-26 for the settle's needed steps; its probes'
+  door path laid to the street's end point first (`lay_door_paths`), the street spanning the door projections; if that cannot
+  land green, the failing seeds are recorded and the task set down, a claim that it cannot be placed correctly being an exception
+  ruled through `make arbiter-ask` (D11, D35), never the trim kept. Set down 2026-10-26 for the settle's needed steps; its probes'
   edits are not on main.
 
 ### T48 (T31's D11 probe, D35): two settle steps deleted that alone off move no pool lane and no verdict
@@ -673,3 +674,42 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
 11. **Before fitting things into room.** n/a.
 
 <!-- plan-archive: T49 to T48 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+
+### T50 (T31's D11, settle_network's first conversion): the track's field spur no longer laid unjoined, and the bund's carry-on squared
+
+- **Approach**: `settle_network` (36 of 54 without it) drops every lane off the connector's network. Measured 2026-10-26 UTC
+  (method: a detached worktree at T49's tree, the lanes off the network logged at `settle_the_web`'s entry and the lanes
+  `settle_network` drops, `make cohort-landing JOBS=3`): 32 of the 54 maps reach the settle with lanes already off the network -
+  laid unjoined, not cut loose by a repair. By placer: the track's field spur (`stage_track`, laid before the web, "judged against
+  the finished network" by the sweeps T26 deleted) on 28 maps; web lanes of the skeleton pass on 18; skeleton arms on 13; the
+  bund's field branch on 4. This task takes the first: the spur is laid before anything it could join is on the map (the
+  connector is drawn after it, the web two stages later), so on 28 maps it stood alone until `settle_network` dropped it, and the
+  field was reached by the web's own way onto the bund (`a_way_onto_the_bund`: run on, branch) or the settle's field way
+  (`settle_field`). Probed off (the spur not drawn): 53 of 54 - seed 42's door path, carried on to the bund over the brook by
+  `bund.carry_on`, crossed it 23.6 degrees off square (`oblique_brook`): `carry_on`'s step is squared against the drawn channels
+  only (`squared_step`), and a sixth placer T49 missed. With `carry_on` asking `squaring.square_run` of the run it lays or
+  lengthens too: 54 of 54, the fresh block from 723759 identical to HEAD seed by seed, the pool passing - Inashiro's field path
+  `joined` -> `run_on` and Kashikawa's `joined` -> `branch` (their lanes as drawn unchanged), Mizuguchi's field way replaced by
+  a branch 70 ft along the lane, Sawada's lanes unchanged; the last resort drops one lane on Kashikawa and Sawada where
+  `settle_network` dropped one before (their drawn lanes identical). The spur's code and the names it leaves dead (`make
+  dead-closure`) go with the tests whose BODY calls one. The other placers' unjoined lanes (the skeleton pass's web lanes, the
+  arms, the bund branch) are the next conversions, measured the same way. Rendering: none (no glyph; four pool maps redrawn).
+
+### T50 Approach (checklist part A)
+
+1. **The goal, in the world.** Each way is laid joined to the ways it serves (the lane law's one network, `law.lane_networks` at
+   `law.JOIN_TOL`, as `settle.ends.connector_component` reads it); nothing is laid only to be dropped.
+2. **The constraints.** D35, D11, D23, FR-004, FR-005, FR-008; 0014 (the field path runs on to the bund), 0035 and 0084 (a
+   crossing square to the water); the arbiter's rule that a test goes only on what its body calls; the same-block rule.
+3. **Where each comes from.** G: the GM 2026-10-25 (the repairs replaced by placing correctly). R: 0014, 0035, 0084. O: the
+   probes above.
+4. **Do they describe the world here?** Measured: fixed, pinned, the pre-change fresh block and the pool, field by field.
+5. **The order.** After T49 (the placers squared); before the other unjoined placers.
+6. **The exits.** FR-008 green: landed with its fresh rate. Red: the failing seeds recorded and the task set down, a claim that it
+   cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
+7. **The search smell.** None: one placer, one squaring gap the probe found.
+8. **The budget.** One landing.
+9. **Done, measured.** The spur not laid and its dead code gone, `carry_on` squared, `make land` green.
+10. **Before moving a constant.** n/a: the spur's constants go with their only users.
+11. **Before fitting things into room.** n/a.
+
