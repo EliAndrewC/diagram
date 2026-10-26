@@ -18,7 +18,8 @@ leads, not citations: read each passage on its page before citing it; where a pa
 says, or SILENT. The Hitotsubashi PDF has no text layer for `make source-pages`; the pass read it by pdftotext - get it into the
 archive. Cite what reports a source as that: Morisada through the nippon.com articles, the Bunsei-era manuscript through the
 modern paper, Bray through Waltner's review, Shirokiya's papers through a book's chapter titles. A page with no source or date (the
-rental-shop page; the journalist's single-against-married line) is a lead, or given as unsourced if cited at all.
+rental-shop page) is a lead. The journalist's single-against-married line (nippon.com 2020) IS given, labeled as unsourced: it
+is the only statement on the comparison the GM asked for.
 
 **Not yours** (session S1 holds them, in another clone): Tanimoto, Nagashima 2017, Pomeranz's draft, Allen et al., the Sukumo
 city history, Tomioku, Buck, Fei, the Shen-shi and Bu nongshu, and the two new questions S1 writes (the farm household's unpaid
@@ -48,7 +49,7 @@ nearly 30), 0183 (the Edo street lot with back tenements), 0115 (servants), 0004
    in Lu Mingshan's farming almanac (begun 1314; to those who farm) and Lou Yue's poem (before 1213); Zhu Yongchun's household rule
    (gentry, nothing on wealth); the Zengguang xianwen lines only once their layer is dated; the Keian edict's "rise early" (its 1649
    date disputed; the Gunma archives); whose saying it was, testing the GM's guess that it is a farming proverb; the Japanese
-   early-rising proverb's origin SILENT. Translations marked as such.
+   early-rising proverb's origin SILENT. The original text carried for each attested part; translations marked as such.
 
 **New registry keys** (at most ten): as the passes name them. If more are needed, `make reserve`'s eleventh key writes a
 continuation brief - follow it.
