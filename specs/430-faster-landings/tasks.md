@@ -27,8 +27,9 @@
 - [x] T07 `make decide` and `make plan-delta` name an owed claims triage to dispatch beside the review; the guard test that decide-first lets it through and holds impl-drift (D7; FR-007; `scripts/gates/plan_gate.py`, `tests/hooks/test-checks-hooks.sh`, where the decide-first cases live)
       research: rendering
       verify: DONE. landed in batch T03+T04+T05+T06+T07: T03: cover_changed asks every line of each changed module with the floor's tests and carried coverage - refused the 3 in-scope reds in 17-37 s vs gates 255-442 s, 14 of 18 floor lines named (R6); T04: the three push gates skip a delta with nothing they judge (0.12-0.14 s on records only, R7), cache a pass on committed content, run side by side; T05: plan-lint (unit figures, red exit, approach per task) before every plan-delta bundle, approach blocks of template wording owe no review; T06: known drifts admitted on their open task whether code changed or not, recorded by make claims-known in gm-review; triages of 3 or fewer go to impl-drift; T07: decide and plan-delta name an owed triage, decide-first lets it through
-- [ ] T08 Close: `make feature-report F=430 WRITE=1`, the report's measurements against SC-001 to SC-006
+- [x] T08 Close: `make feature-report F=430 WRITE=1`, the report's measurements against SC-001 to SC-006
       research: rendering
+      verify: DONE. feature report written (specs/430-faster-landings/report.md): SC-001..SC-006 measured, the machinery-gate defect found, ruled and fixed
 - [ ] GM review (make gm-reviewed F=430) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
