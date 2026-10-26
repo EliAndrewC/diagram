@@ -176,8 +176,8 @@
    "declared": "spec-fidelity"
   },
   "### T31 conversion C2 (2026-10-26): the joins stop short because the tree is drawn after the links (measured; not yet built)": {
-   "sha256": "4bf79dbcb661f72920459c0c2c05bf02ca0d110a6949cdce87b20fe185c28bf2",
-   "verdict": "CLEAR",
+   "sha256": "07e8e55573ed0757be1e2a5e3f6150ec5d0d95ad5ffb5780f4913e4279e101f7",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
   }
@@ -2753,6 +2753,73 @@
      "summary": "Rendering: none until built",
      "class": "within",
      "why": "D11 says 'Rendering: none'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T31 conversion C2 (2026-10-26): the joins stop short because the tree is drawn after the links (measured; not yet built)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "C2-order",
+     "summary": "The conversion D11 owes for settle_joins is an order: the access tree laid first in stage_web, then skeleton, orphan links and door paths each asked the lane law at lay; settle_defer, settle_joins and the web sweeps probed off one by one.",
+     "class": "within",
+     "why": "Unchanged from the text judged CLEAR. It is the FR-004/FR-005 conversion itself - the GM's 'replacing them with just having the algorithm place correctly in the first place' - and probing the repairs off is 'turning off automated checks'."
+    },
+    {
+     "id": "C2-measure-set",
+     "summary": "The probe is measured on the landing cohort, the pre-change fresh block (seed 723759, N=48) and the five pool maps.",
+     "class": "within",
+     "why": "D11: a conversion lands when FR-008 holds (fixed cohort, pinned rows, pool maps) with its fresh rate recorded either way. Rolling the fresh block records that rate; it is not work aimed at the fresh rate."
+    },
+    {
+     "id": "C2-not-landed",
+     "summary": "The tree-first patch is not landed because seed 723775 newly fails (WebRefused, needle_loops, joins_short) on the fresh block, a known regression under constitution XIII, even though the landing cohort is 54 of 54.",
+     "class": "within",
+     "why": "Withholding a landing over a known regression narrows nothing the GM asked: the conversion is still owed and recorded, and D11 itself prefers a conversion recorded and set down to one landed red. The fresh-block regression is not an FR-008 gate, but the constitution's regression rule is a separate standing rule and keeping to it is not a carve-out from the request."
+    },
+    {
+     "id": "C2-next",
+     "summary": "Next: dump seed 723775's two access lanes at the needle (geometry before cause), then ask the needle rule (law.needle_loops) of a tree lane where lanes_of draws it, as C1 asked the width rule of the link, then roll the block again.",
+     "class": "within",
+     "why": "Asking a rule of its placer at lay is FR-005 ('rules into their placers'), the very conversion D11 directs; the seed is the instrument that located a rule the tree placer does not yet ask, not a seed-specific tweak. It stays within D11 only as that one conversion step: if the re-roll shows the order still cannot land green without seed-by-seed work or room, D11 requires it recorded and set down, never iterated on."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T31 conversion C2 (2026-10-26): the joins stop short because the tree is drawn after the links (measured; not yet built)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "C2-order",
+     "summary": "The conversion D11 owes for settle_joins is an order: the access tree laid first in stage_web, then skeleton, orphan links and door paths each asked the lane law at lay; settle_defer, settle_joins and the web sweeps probed off one by one.",
+     "class": "within",
+     "why": "Unchanged from the text judged CLEAR. It is the FR-004/FR-005 conversion itself - the GM's 'replacing them with just having the algorithm place correctly in the first place' - and probing the repairs off is 'turning off automated checks'."
+    },
+    {
+     "id": "C2-measure-set",
+     "summary": "The probe is measured on the landing cohort, the pre-change fresh block (seed 723759, N=48) and the five pool maps.",
+     "class": "within",
+     "why": "D11: a conversion lands when FR-008 holds with its fresh rate recorded either way. Rolling the fresh block records that rate."
+    },
+    {
+     "id": "C2-needle-at-lay",
+     "summary": "Ask the needle rule (law.needle_loops) of a tree lane at lay, where lanes_of draws it, as C1 asked the width rule of the link.",
+     "class": "within",
+     "why": "A rule the tree placer does not ask at lay is a place-then-check gap; asking it there is FR-005 ('rules into their placers'), owed on its own account whatever any seed does. Within only as that conversion, planned as one - not as the fix that gets C2 to land."
+    },
+    {
+     "id": "C2-hold-and-iterate",
+     "summary": "The tree-first patch is not landed over seed 723775 newly failing on the fresh block (constitution XIII, a known regression), and the next step is to dump that seed's two access lanes at the needle, change the placement, and roll the fresh block again to see whether C2 then lands.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "D11, the GM's stop line, gives a conversion exactly two outcomes: it 'lands through make land when FR-008 holds (the fixed cohort, the pinned rows, the pool maps), its fresh rate recorded either way', or, if it 'cannot land green without seed-by-seed work or room', it 'is recorded and set down, never iterated on', with 'No work aimed at the fresh rate'. The fresh block is not a landing gate until SC-001 (FR-009), and the rate here is 7 of 48 before and after - the case 'recorded either way' was written for. The plan takes a third path D11 does not offer: hold the conversion (so settle_joins, a repair the GM asked removed, stays in) and iterate on one named fresh seed, then re-roll. That is the seed-by-seed, fresh-rate iteration D11 forbids, and it reads as caution. Its premise is also unmeasured: the block says the pool maps 'move' without saying whether they pass and says nothing of the pinned rows, so whether FR-008 holds is not stated. The block should say instead: FR-008 measured (pinned rows and the five pool maps, pass or fail); if it holds, C2 lands through make land with the fresh rate recorded; if it does not, or if constitution XIII is read to forbid landing a seed that newly fails, C2 is recorded and set down per D11 - and C2-needle-at-lay proceeds as its own conversion, not as the work that gets C2 to land."
     }
    ]
   }

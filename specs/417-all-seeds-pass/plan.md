@@ -123,10 +123,12 @@ SEED=723759 FRESH=0 JOBS=3` and `make map` on the five pool hamlets): the landin
 with the joins cut as well - `settle_joins` is NEEDLESS once the tree is drawn first. The pre-change fresh block: 7 of 48 failing
 as before (b307a7ed7's seven), but not the same seven - seed 723789 now passes and seed 723775 newly fails: `WebRefused`, two
 access lanes (1, 2) closing a `needle_loops` sliver, and a `joins_short`. With the joins kept it still fails, so the TREE-FIRST
-ORDER causes it, not the cut. Inashiro, Kuwabata and Sawada move. Not landed (constitution XIII: a known regression). Next: dump
-seed 723775's two access lanes at the needle (part B 1: the geometry before the cause) - two household ways laid against each
-other with no web between them yet - and ask the needle rule (`law.needle_loops`) of a tree lane where `lanes_of` draws it, as
-C1 asked the width rule of the link; then roll this block again.
+ORDER causes it, not the cut. FR-008 as measured: the landing cohort's 48 fixed seeds and its pinned rows pass (54 of 54); the
+five pool maps generate (Inashiro, Kuwabata and Sawada move; the pool gate, `make done`, not yet run on them). By D11 a conversion
+whose FR-008 holds lands with its fresh rate recorded (7 of 48 here, before and after); constitution XIII refuses a known
+regression (seed 723775). Which governs a fresh seed that newly fails while the rate holds is a PROCESS question for the round
+arbiter (`make arbiter-ask`), asked next session before landing - not iterated on here. Either way, the needle rule asked of a
+tree lane where `lanes_of` draws it (`law.needle_loops`, FR-005) is its own conversion task, filed and decided on its own account.
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
