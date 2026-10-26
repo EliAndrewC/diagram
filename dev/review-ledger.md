@@ -4978,3 +4978,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-25 | impl-drift | claims-t45b | findings | impl-drift: 4 claims - IN-STEP 2, MISLABELED 2; UNCLAIMED 2 | judgment | - | applied or filed as impl-drift T45 r2 records | 46 s | 44k in (30k cached) / 3.9k out |
 | 2026-10-25 | impl-drift | claims-t45c | findings | impl-drift: 3 claims - IN-STEP 2, MISLABELED 1; UNCLAIMED 0 | judgment | - | applied or filed as claims-triage + impl-drift T45 r3 records | 39 s | 44k in (31k cached) / 2.9k out |
 | 2026-10-26 | impl-drift | claims-t45d | findings | impl-drift: 3 claims - IN-STEP 3; UNCLAIMED 1 | judgment | - | applied or filed as impl-drift T45 r4 records | 40 s | 57k in (42k cached) / 3.2k out |
+| 2026-10-26 | impl-drift | claims-t45e | findings | impl-drift: 1 claims - IN-STEP 0, DRIFTED 1; UNCLAIMED 0 | judgment | - | applied or filed as impl-drift T45 r5 records | 22 s | 41k in (29k cached) / 1.5k out |
