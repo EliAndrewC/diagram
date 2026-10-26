@@ -33472,16 +33472,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/stage.py::STEPS#settle plumbing": {
-  "body": "eb73e0c2d18673ca",
+  "body": "99f0accbab613e18",
   "claim": "settle plumbing - NONE",
-  "code": "1fd5403e6da707fd",
-  "core": "36adf8c2f1d95c06",
-  "date": "2026-10-25",
-  "note": "the tuple only sets the order of the settle's steps; the squaring it now holds is claimed on its own unit",
+  "code": "47858c335b78e839",
+  "core": "8ecca880ec0fb905",
+  "date": "2026-10-26",
+  "note": "the order of the settle passes and which ones run is plumbing; the change only removes steps whose rules the placers now keep",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/stage.py::settle_reach#a path runs to the graves": {
@@ -33630,52 +33629,6 @@
   "note": "`door if household or len(door) >= len(far)`, and a household's way is cut only onto a connector or tree lane; 0081 decides only the household's door",
   "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/squaring.py::square_every_crossing#a moved end keeps its joint": {
-  "body": "f60882b22ce118a4",
-  "claim": "a moved end keeps its joint - NONE: another lane ending there is moved with it",
-  "code": "94ea8c5b819b5b0f",
-  "core": "e83520d42e0edd1c",
-  "date": "2026-10-25",
-  "note": "carries a moved end's joint to the other lane that ended there; the 1 ft match tolerance is plumbing",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/squaring.py::square_every_crossing#square brook crossing": {
-  "body": "f60882b22ce118a4",
-  "claim": "square brook crossing - villages-beside-their-stream-one-bank-or-both.drawing: the track out too",
-  "code": "2d7ca9be4326c83d",
-  "core": "e83520d42e0edd1c",
-  "date": "2026-10-25",
-  "note": "every lane, the track out included, is squared at the brook; 0035 says \"cross the brook squarely\"",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
-  },
-  "research": "9354777ef34af3d3",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/squaring.py::square_every_crossing#square ditch crossing": {
-  "body": "f60882b22ce118a4",
-  "claim": "square ditch crossing - plank-bridges-over-farm-ditches-itabashi.drawing: the drawn channels",
-  "code": "e9d1d1b7178fff22",
-  "core": "e83520d42e0edd1c",
-  "date": "2026-10-25",
-  "note": "lanes squared at the drawn channels; 0084 lays crossings \"square across the water\", and a way's deck is the one it takes \"wherever it crosses water\"",
-  "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
-  },
-  "research": "1dd5fd71121f4a06",
-  "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/squaring.py::square_run#square brook crossing": {
@@ -34847,11 +34800,11 @@
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook crossed at its crossing places": {
   "body": "78231be076742dce",
-  "claim": "brook crossed at its crossing places - villages-beside-their-stream-one-bank-or-both.drawing: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook by the settle (`squaring.square_every_crossing`, the connector's too)",
-  "code": "8153a6c5cb0f95ab",
+  "claim": "brook crossed at its crossing places - villages-beside-their-stream-one-bank-or-both.drawing: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook as the track is laid (`squaring.square_run`)",
+  "code": "52ab6499e3510d64",
   "core": "244a34e5859ee3b4",
-  "date": "2026-10-25",
-  "note": "FORD_SPACING 160, the straight-reach bend limit and the 150 ft charge match 0035, and the restored settle step squares the crossing",
+  "date": "2026-10-26",
+  "note": "the track keeps to its own bank and crosses only at crossing places about 160 ft apart on straight reaches (FORD_SPACING, FORD_BEND_DEG); it crosses only when that finds a way the own-bank fill does not, or is more than 150 ft shorter; the squaring is left to square_run, as the claim says",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
@@ -35008,11 +34961,11 @@
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#where on a channel it crosses": {
   "body": "78231be076742dce",
-  "claim": "where on a channel it crosses - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); anywhere the fill finds; the settle squares the crossing (`squaring.square_every_crossing`)",
-  "code": "0749dc4c5c7ac96c",
+  "claim": "where on a channel it crosses - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); anywhere the fill finds; the crossing is squared as the track is laid (`squaring.square_run`)",
+  "code": "84f16d86d464615c",
   "core": "244a34e5859ee3b4",
-  "date": "2026-10-25",
-  "note": "0084 says when the track crosses a channel (only as the last resort), never where; its siting rules are for the 4 ft footpath crossing alone",
+  "date": "2026-10-26",
+  "note": "0084 says when the track crosses a ditch (only as the last resort) and that the deck is as wide as the way, but not where on the ditch it crosses; its placement rules (mid-ditch, widest spot) are for the 4 ft crossing, which belongs to a bund path alone",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
