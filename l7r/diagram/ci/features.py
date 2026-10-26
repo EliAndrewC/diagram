@@ -66,7 +66,9 @@ class FeatureStatus:
             problems.append(f"{len(self.open_tasks)} open task(s) in tasks.md: {shown}")
         if problems:
             return f"feature {self.name}: " + " | ".join(problems)
-        return f"feature {self.name} is complete: every task ticked, spec FAITHFUL"
+        # ...WHAT WAS CHECKED, SAID (2026-10-26): "every task ticked" printed on 427's landings with T05 open - an open task no
+        # session has started holds no landing (`speckit-todo.py --holding`), so the check passes it, and the words must say so
+        return f"feature {self.name}: no task holds this landing (an open task nobody started holds none), spec FAITHFUL"
 
 
 def active_feature(root: Path) -> str | None:

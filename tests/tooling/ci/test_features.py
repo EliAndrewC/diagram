@@ -59,7 +59,7 @@ def test_open_tasks_and_no_verdict_are_both_named(tmp_path: Path, monkeypatch: p
 def test_complete_feature(tmp_path: Path) -> None:
     _feature(tmp_path, "900-b", "- [x] T001 done\n- [x] T002 also\n")
     fs = feature_status(tmp_path, "900-b")
-    assert fs.complete and "is complete" in fs.why
+    assert fs.complete and "no task holds this landing" in fs.why, "the words say what was checked: an unstarted open task holds none (2026-10-26)"
 
 
 def test_no_spec_file_means_no_verdict(tmp_path: Path) -> None:
