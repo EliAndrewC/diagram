@@ -113,8 +113,12 @@ def test_record_writes_the_reference_rows_and_a_scaling_row_per_size_and_seed(tm
 
     monkeypatch.setattr(ps, "measure", fake)
     monkeypatch.setattr(ps, "machine_state", lambda path=ps.SKILL: {})
+    counted: list[tuple[tuple[int, ...], int | None]] = []
+    monkeypatch.setattr(ps, "count_calls", lambda seeds, households=None: counted.append((seeds, households)) or {s: {"homesteads": 100 * (households or 15) + s} for s in seeds})
     path = ps.record("304-x", (4, 25), scaling_leg=True)
     snap = json.loads(pathlib.Path(path).read_text(encoding="utf-8"))
+    assert counted == [((4, 25), None), ((4, 25), 10), ((4, 25), 20), ((4, 25), 40)], "feature 427 T02: each size counted, after the timed rolls"
+    assert {(r["households"], r["seed"]): r["calls"]["homesteads"] for r in snap["scaling"]}[(40, 25)] == 4025
     assert [r["seed"] for r in snap["rows"]] == [4, 25] and snap["total_seconds"] == 30.0, "the reference rows exactly as before"
     assert sorted((r["households"], r["seed"]) for r in snap["scaling"]) == [(h, s) for h in (10, 20, 40) for s in (4, 25)]
     calls.clear()

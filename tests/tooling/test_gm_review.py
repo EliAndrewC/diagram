@@ -49,11 +49,17 @@ def test_a_row_for_the_gm_brings_its_box_and_the_feature_reads_pending(root: pat
     assert not gm.ensure_box(d), "one box"
 
 
-def test_an_arbiter_ruling_is_a_row_and_the_gm_closes_it(root: pathlib.Path) -> None:
+def test_a_ruling_reaches_the_gm_only_as_a_question_and_the_gm_closes_it(root: pathlib.Path) -> None:
+    """Feature 432 (FR-001): a ruling with nothing for the GM stays in arbiter.jsonl; its `for_gm` is a question owed
+    escalation-check, which brings the box."""
     d = root / "specs" / "375-x"
     ha.trip(root, "reversal:/a.md", "reversal", "/a.md", "A -> B -> A", 1)
     ha.record_ruling(root, "reversal:/a.md", {"ruling": "accept", "why": "the second wording is the right one"}, "round-arbiter")
-    assert gm.box(d) in (d / "tasks.md").read_text(), "the ruling's row brought the box"
+    assert gm.rows(d) == [] and gm.box(d) not in (d / "tasks.md").read_text(), "a ruling alone is not the GM's"
+    ha.trip(root, "reversal:/b.md", "reversal", "/b.md", "A -> B -> A", 1)
+    ha.record_ruling(root, "reversal:/b.md", {"ruling": "accept", "why": "fine", "for_gm": "keep the old wording on the shrine page?"}, "round-arbiter")
+    assert [(r["kind"], r["status"], r["source"]) for r in gm.rows(d)] == [("question", "owed", "reversal:/b.md")]
+    assert gm.box(d) in (d / "tasks.md").read_text(), "the question brought the box"
     with pytest.raises(ValueError, match="no report.md"):
         gm.reviewed(root, d)
     (d / "report.md").write_text("# report\n")
@@ -110,9 +116,8 @@ def test_one_row_is_reviewed_alone(root: pathlib.Path, monkeypatch: pytest.Monke
 def test_the_held_rows_and_the_command_line(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
     held = root / gm.HELD
     held.parent.mkdir(parents=True)
-    held.write_text(json.dumps({"a#door band": {"flag": "Held: question for the GM"}, "b#x": {"flag": "deviation-tempting"}}))
-    assert gm.held(root) == ["a#door band: Held: question for the GM"] and "HELD - work cannot go on" in gm.listing(root)
-    assert "      question for the GM" in gm.listing(root), "the flag under its key, without the word the heading already says"
+    held.write_text(json.dumps({"a#door band": {"flag": "Held behind #b (row 2): after it", "held": "x"}, "b#x": {"flag": "deviation-tempting"}}))
+    assert gm.held(root) == ["a#door band: Held behind #b (row 2): after it"] and "WAITING ON OTHER WORK" in gm.listing(root)
     monkeypatch.chdir(root)
     assert gm.main(["list"]) == 0 and "door band" in capsys.readouterr().out
     assert gm.main(["accept", "375", "a finding", "a reason here"]) == 0
@@ -130,11 +135,9 @@ def test_the_held_rows_and_the_command_line(root: pathlib.Path, monkeypatch: pyt
 
 def test_the_summary_counts_and_one_feature_groups_its_rows(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
     d = root / "specs" / "375-x"
-    for trigger in ("round:modal-form|modal:sheet/kitchen@3", "round:quote-check|q:0047@3"):
-        ha.trip(root, trigger, "round", trigger, "three rounds", 1)
-        ha.record_ruling(root, trigger, {"ruling": "accept", "why": "the rounds converged"}, "round-arbiter")
-    ha.trip(root, "red-gate@2026-10-10T22:25:54Z", "red-gate", "gate", "two reds", 1)
-    ha.record_ruling(root, "red-gate@2026-10-10T22:25:54Z", {"ruling": "continue", "why": "not a loop"}, "round-arbiter")
+    for trigger in ("round:modal-form|modal:sheet/kitchen@3", "round:quote-check|q:0047@3"):  # rows as feature 375 queued them
+        _rows(d, {"kind": "arbiter", "trigger": trigger, "ruling": "accept", "why": "the rounds converged"})
+    _rows(d, {"kind": "arbiter", "trigger": "red-gate@2026-10-10T22:25:54Z", "ruling": "continue", "why": "not a loop"})
     summary = gm.listing(root, width=200)
     assert "3 rulings (1 continue)" in summary and "converged" not in summary, "the bare listing counts, never lists rows"
     one = gm.listing(root, "375", width=200)
@@ -162,17 +165,20 @@ def test_explain_says_what_fired_what_was_ruled_and_what_the_gm_is_asked(root: p
     (root / "research" / "questions").mkdir(parents=True)
     for name in ("0047-farm-privies.html", "0047-farm-privies.drawing.html"):
         (root / "research" / "questions" / name).write_text("")
-    ha.trip(root, "round:modal-form|modal:sheet/kitchen@3", "round", "modal-form|modal:sheet/kitchen", "three rounds on the kitchen", 1)
-    ha.record_ruling(
-        root,
-        "round:modal-form|modal:sheet/kitchen@3",
-        {"ruling": "accept", "why": "the rounds converged", "what": "nothing is left", "tooling_fix": "count only own rounds", "fix_measure": "x", "fix_minutes": 10},
-        "round-arbiter",
+    _rows(  # the rows as feature 375 queued them, which the GM may still read and overturn
+        d,
+        {
+            "kind": "arbiter",
+            "trigger": "round:modal-form|modal:sheet/kitchen@3",
+            "ruling": "accept",
+            "why": "the rounds converged",
+            "asked": "three rounds on the kitchen",
+            "what": "nothing is left",
+            "tooling_fix": "count only own rounds",
+        },
+        {"kind": "arbiter", "trigger": "round:quote-check|q:0047@3", "ruling": "continue", "why": "one new note", "tooling_fix": "keep replies"},
+        {"kind": "arbiter-fix-declined", "trigger": "round:quote-check|q:0047@3", "tooling_fix": "keep replies", "note": "it contradicts FR-015"},
     )
-    assert gm.rows(d)[0]["asked"] == "three rounds on the kitchen" and gm.rows(d)[0]["what"] == "nothing is left", "the question kept"
-    ha.trip(root, "round:quote-check|q:0047@3", "round", "quote-check|q:0047", "", 1)
-    ha.record_ruling(root, "round:quote-check|q:0047@3", {"ruling": "continue", "why": "one new note", "tooling_fix": "keep replies", "fix_measure": "x", "fix_minutes": 10}, "round-arbiter")
-    ha.settle_fix(root, "round:quote-check|q:0047@3", "declined", "it contradicts FR-015")
     _rows(
         d,
         {
@@ -218,22 +224,90 @@ def test_explain_with_no_feature_names_only_what_needs_the_gm(root: pathlib.Path
         d,
         {"kind": "arbiter-fix-declined", "trigger": "round:modal-depiction|modal:sheet/garden@3", "tooling_fix": "re-owe less", "note": "contradicts FR-015"},
         {"kind": "arbiter", "trigger": "red-gate@t", "ruling": "continue", "why": "not a loop"},
+        {"kind": "question", "status": "kept", "question": "which door size stands on the three sheets?", "escalation": "test 1: his sheets", "source": "ask:x"},
     )
     e = gm.explain(root, width=200)
-    assert "1. HELD QUESTION: a#door band\n    which door size stands?. The fix it would make: narrow the doors." in e
+    assert "door band" not in e.split("WAITING ON OTHER WORK")[0], "a ranking row's own Held flag is no decision of the GM's (feature 432)"
+    assert "1. QUESTION 375#2 (375-x)\n    which door size stands on the three sheets?\n    Why it is yours (escalation-check): test 1: his sheets" in e
     assert "WAITING ON OTHER WORK - held in the ranking until another row is done; nothing for you to decide\n\n  * b#tubs\n    Waits on #retainers" in e, (
         "a row held behind other work is not a decision of the GM's"
     )
     assert "2. A TOOLING FIX DECLINED TO YOU: feature 375 row [0], modal-depiction sheet/garden" in e
     assert "The other 1 row(s) are decisions already made" in e
-    assert "needs a decision: 1 held question(s), 1 fix(es) declined" in gm.listing(root, width=200)
+    assert "needs a decision: 1 question(s), 1 fix(es) declined" in gm.listing(root, width=200)
     assert "WAITING ON OTHER WORK - held in the ranking behind another row, not on the GM\n  * b#tubs\n      waits on #retainers" in gm.listing(root, width=200)
-    assert gm.listing(root, width=200).startswith("GM REVIEW - 1 held question(s), 1 waiting on other work,")
+    assert gm.listing(root, width=200).startswith("GM REVIEW - 1 decision(s) for the GM, 0 question(s) owed escalation-check, 1 waiting on other work,")
     monkeypatch.chdir(root)
     assert gm.main(["explain", "375", "1"]) == 0 and "went red twice" in capsys.readouterr().out
     held.write_text(json.dumps({"b#tubs": {"flag": "Held behind #retainers (row 21): after that lands"}}))
     (d / gm.ROWS).write_text("")
     (held.parent / "waves.json").write_text(json.dumps({"a#door band": "115"}))
-    assert gm.explain(root, width=200).startswith("WHAT NEEDS YOUR DECISION: nothing - no held question and no fix declined to you")
+    assert gm.explain(root, width=200).startswith("WHAT NEEDS YOUR DECISION: nothing - no question kept for you and no fix declined to you")
     (held.parent / "waves.json").write_text(json.dumps({"b#tubs": "115"}))
     assert gm.held(root) == [] and "WAITING ON OTHER WORK" not in gm.explain(root), "a row its wave closed is held no more"
+
+
+def test_a_question_is_owed_escalation_check_then_kept_or_cut(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
+    """Feature 432 (FR-002, FR-004; the GM 2026-10-26: "anything that ends up in GM review I actually know is important"): a
+    question reaches the GM only once escalation-check keeps it; the kept questions are his decisions, from that one source."""
+    d = root / "specs" / "375-x"
+    n = gm.question(d, "redraw the three sheets or record the deviation?", "ask:b7")
+    assert gm.rows(d)[n]["status"] == "owed" and "GM review (make gm-reviewed F=375)" in (d / "tasks.md").read_text()
+    listing = gm.listing(root, width=200)
+    assert "OWED ESCALATION-CHECK - the session's, not the GM's" in listing and "NEEDS YOUR DECISION" not in listing
+    assert gm.explain(root, width=200).startswith("WHAT NEEDS YOUR DECISION: nothing")
+    with pytest.raises(ValueError, match="KEEP or CUT"):
+        gm.escalated(d, n, "MAYBE", "two words")
+    said = gm.escalated(d, n, "KEEP", "test 1: his own sheets")
+    assert "KEPT" in said and '"375#0"' in said, "a kept question says how to name it in the final message"
+    assert "NEEDS YOUR DECISION - the questions escalation-check kept" in gm.listing(root, width=200)
+    assert "1. QUESTION 375#0" in gm.explain(root, width=200)
+    with pytest.raises(ValueError, match="already kept"):
+        gm.escalated(d, n, "CUT", "two words")
+    m = gm.question(d, "is this one really for the GM at all?", "hour:375@2")
+    assert "CUT" in gm.escalated(d, m, "CUT", "the record settles it")
+    assert gm.rows(d)[m]["reviewed"] and "is this one" not in gm.listing(root, width=200), "a cut question is closed"
+    with pytest.raises(ValueError, match="no question"):
+        gm.escalated(d, 99, "KEEP", "two words")
+    with pytest.raises(ValueError, match="four words"):
+        gm.question(d, "why?", "x")
+    with pytest.raises(ValueError, match="two words"):
+        gm.escalated(d, gm.question(d, "a third question for the GM", "x"), "KEEP", "x")
+    monkeypatch.chdir(root)
+    assert gm.main(["question", "375", "a fourth question for the GM", "ask:y"]) == 0 and "owed escalation-check" in capsys.readouterr().out
+    assert gm.main(["escalated", "375", "3", "KEEP", "his to decide"]) == 0 and "KEPT" in capsys.readouterr().out
+    assert gm.main(["escalated", "375", "3", "KEEP", "his to decide"]) == 1
+
+
+def test_a_push_with_a_question_still_owed_is_refused(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
+    """Feature 432 (FR-002): a feature does not land with a question escalation-check has not judged; another feature's owed
+    question, not in this push, holds nothing."""
+    import subprocess
+
+    g = ["git", "-C", str(tmp_path), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    for name in ("375-x", "376-y"):
+        (tmp_path / "specs" / name).mkdir(parents=True)
+        (tmp_path / "specs" / name / "tasks.md").write_text("- [x] T01 built\n")
+    gm.question(tmp_path / "specs" / "376-y", "an older question someone else owes", "ask:old")
+    subprocess.run([*g, "add", "-A"], check=True)
+    subprocess.run([*g, "commit", "-qm", "base"], check=True)
+    subprocess.run([*g, "update-ref", "refs/remotes/origin/main", "HEAD"], check=True)
+    assert gm.owed_in_delta(tmp_path) == [], "an owed question outside the push holds nothing"
+    n = gm.question(tmp_path / "specs" / "375-x", "redraw the sheets or record the deviation?", "ask:b7")
+    assert gm.owed_in_delta(tmp_path) == ["375#0: redraw the sheets or record the deviation?"]
+    monkeypatch.chdir(tmp_path)
+    assert gm.main(["owed-check"]) == 1 and "make gm-escalated" in capsys.readouterr().err
+    gm.escalated(tmp_path / "specs" / "375-x", n, "CUT", "the record settles it")
+    assert gm.main(["owed-check"]) == 0 and gm.owed_in_delta(tmp_path) == []
+
+
+def test_a_question_after_the_review_reopens_the_box(root: pathlib.Path) -> None:
+    """Feature 432 (FR-006): a question carried into a feature whose rows the GM reviewed must not sit behind a ticked box."""
+    d = root / "specs" / "375-x"
+    gm.accept(d, "the steam arcs off center", "a drawing nicety no norm sets")
+    (d / "report.md").write_text("# report\n")
+    gm.reviewed(root, d)
+    assert gm.box(d).replace("- [ ] ", "- [x] ") in (d / "tasks.md").read_text()
+    gm.question(d, "redraw the three sheets or record the deviation?", "432 audit")
+    assert gm.box(d) in (d / "tasks.md").read_text() and todo.feature(d).state == "done - GM review pending"

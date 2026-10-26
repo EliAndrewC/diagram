@@ -28,6 +28,6 @@ Every task deletes code no shipping map runs, or repoints prose to what does: no
 - [x] T06 (amendment 1) Measure and land (plan T06; FR-006, SC-002, SC-003, SC-006): `make maps`, `make done`, `make cohort-landing`, the end bookend, the report, the push
       research: rendering
       verify: DONE. DONE. make maps clean (pool unchanged); make done green; cohort-landing 54/54 (fresh 9 of 48, a rate); bookend 28.7 s under load ~16, retaken 21.1 s (start 18.9 s) - a load flag, deleted code runs in no roll
-- [ ] GM review (make gm-reviewed F=388) [lands-open]
+- [x] GM review (make gm-reviewed F=388) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

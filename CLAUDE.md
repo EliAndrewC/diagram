@@ -103,7 +103,9 @@ Spec-driven under `.specify/memory/constitution.md`. One line each here; the ful
 - Decide first, then check: a task's decisions carry a verdict before its checks run (`make decide`). The TRIPWIRES -
   a check's third round on one subject, a block an earlier version had and a later dropped coming back,
   a second red gate in a row, check dispatches past 1.0 a changed line - each owe the `round-arbiter`'s ruling
-  (`make arbiter-bundle`) before the next check or gate. `make gm-review` lists what waits for the GM.
+  (`make arbiter-bundle`) before the next check or gate. A ruling stays in the arbiter's log; the ONE door to the GM is a
+  `for_gm` question, owed escalation-check until `make gm-escalated` keeps or cuts it (feature 432). `make gm-review` lists his
+  kept questions first.
 - Run the chain end to end, unattended: stop only when a wrong guess would cost an hour-plus to unwind or the thing genuinely cannot be done; when stuck, the next
   step is a measurement. A PROCESS stop goes to the round arbiter (`make arbiter-ask`), what to build to the GM.
 - Do the literal thing (constitution XVI); an exception goes to `spec-fidelity` with the GM's words.

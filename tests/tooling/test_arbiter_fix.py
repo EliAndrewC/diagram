@@ -72,8 +72,7 @@ def test_the_fix_is_a_field_recorded_open_and_shown_to_the_gm(root: pathlib.Path
     row = ha.record_ruling(root, TRIGGER, RULING_378, "round-arbiter", "2026-10-10T22:34:00Z")
     assert row["fix"] == "open" and row["tooling_fix"] == RULING_378["tooling_fix"]
     assert ha.open_fixes(d) == [(TRIGGER, RULING_378["tooling_fix"])]
-    gm = json.loads((d / "gm-review.jsonl").read_text())
-    assert gm["tooling_fix"] == RULING_378["tooling_fix"], "the GM sees the recommendation itself"
+    assert not (d / "gm-review.jsonl").exists(), "an open fix is the session's to make, not the GM's (feature 432)"
     assert list(ha.rulings(root)) == [TRIGGER]
 
 
@@ -124,9 +123,9 @@ def test_made_with_its_test_it_settles_and_reaches_the_gm(root: pathlib.Path, mo
     monkeypatch.chdir(root)
     assert ha.main(["fix", "done", TRIGGER, "gate_lock.py refuses a second gate", "tests/tooling/test_gate_lock.py"]) == 0
     assert ha.open_fixes(d) == [] and _tick(root, "T02").returncode == 0
-    rows = [json.loads(ln) for ln in (d / "gm-review.jsonl").read_text().splitlines()]
-    assert rows[-1]["kind"] == "arbiter-fix-done" and rows[-1]["test"] == "tests/tooling/test_gate_lock.py"
-    assert rows[-1]["tooling_fix"] == RULING_378["tooling_fix"] and "gate_lock.py" in rows[-1]["note"]
+    assert not (d / "gm-review.jsonl").exists(), "a fix made with its test stays in arbiter.jsonl (feature 432)"
+    done = [json.loads(ln) for ln in (d / "arbiter.jsonl").read_text().splitlines()][-1]
+    assert done["status"] == "done" and done["test"] == "tests/tooling/test_gate_lock.py" and "gate_lock.py" in done["note"]
     assert ha.main(["fix", "done", TRIGGER, "again and again", "tests/tooling/test_gate_lock.py"]) == 1, "settled once"
 
 
@@ -136,7 +135,7 @@ def test_an_overhaul_is_declined_to_the_gm_never_filed(root: pathlib.Path, monke
     monkeypatch.chdir(root)
     assert ha.main(["fix", "declined", TRIGGER, "it rebuilds how every gate is scheduled"]) == 0
     row = json.loads((d / "gm-review.jsonl").read_text().splitlines()[-1])
-    assert row["kind"] == "arbiter-fix-declined" and "rebuilds" in row["note"] and "test" not in row
+    assert row["kind"] == "question" and row["status"] == "owed" and "rebuilds" in row["question"], "a declined fix is a question owed escalation-check (feature 432)"
     assert ha.open_fixes(d) == [] and not (d / "found.jsonl").exists()
     assert sorted(p.name for p in (root / "specs").iterdir()) == ["900-z"], "no feature filed"
     assert ha.fix_hold(d) == ""
@@ -172,7 +171,7 @@ def test_a_process_question_goes_to_the_arbiter_first(root: pathlib.Path, monkey
     manifest = ab.bundle(root, "ask:polder-regression", tmp_path / "out").read_text()
     assert "## The question" in manifest and q in manifest
     ha.record_ruling(root, "ask:polder-regression", {"ruling": "accept", "why": "pre-existing and out of scope"}, "round-arbiter")
-    assert json.loads((d / "gm-review.jsonl").read_text().splitlines()[-1])["trigger"] == "ask:polder-regression"
+    assert "ask:polder-regression" in (d / "arbiter.jsonl").read_text() and not (d / "gm-review.jsonl").exists()
     assert ha.main(["ask", "polder-regression", q]) == 1, "one ruling per question"
 
 
@@ -242,7 +241,7 @@ def test_a_batch_at_the_cap_gets_one_bundle_and_one_ruling(root: pathlib.Path, t
     assert [r["ruling"] for r in rows] == ["accept", "continue", "accept"]
     assert set(ha.owed(root)) == {"red-gate"}, "each trigger released; the red gate not part of the batch"
     assert ha.closed(root, "round:modal-form|modal:sheet/a@") == "accept" and ha.continues(root, "round:modal-form|modal:sheet/b@") == 1
-    assert sum(1 for ln in (d / "gm-review.jsonl").read_text().splitlines() if '"arbiter"' in ln) == 3
+    assert not (d / "gm-review.jsonl").exists() and sum(1 for ln in (d / "arbiter.jsonl").read_text().splitlines() if '"ruling"' in ln) == 3
     with pytest.raises(ValueError, match="already ruled"):
         ha.record_batch(root, ruling, "round-arbiter")
 

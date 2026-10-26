@@ -106,7 +106,7 @@ the moment a round returns `FAITHFUL`. Do not manufacture findings to justify an
 withhold a `FAITHFUL` because the review felt too easy. The five count the INITIAL acceptance only (the
 GM, 2026-09-12): a spec amended AFTER it was accepted is re-reviewed on a counter reset to zero. If you
 are told this is the fifth round of an initial review and the spec is still wrong, say so plainly and
-state that the matter goes to the round arbiter (feature 379; the GM reviews its ruling after landing): five failures to express a request as a specification is a
+state that the matter goes to the round arbiter (feature 379; a ruling reaches the GM only as a `for_gm` question that escalation-check keeps (feature 432)): five failures to express a request as a specification is a
 persistent misunderstanding rather than a drafting problem.
 
 ## FIGURES: re-run them, never adjudicate them by eye

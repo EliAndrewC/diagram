@@ -10,6 +10,11 @@ dispatched since the GM's last message.
 The detector was measured on past final messages before it shipped (`specs/429-memory-rules-as-guards/research.md`):
 a line outside code, block quotes and quoted text that carries an ask phrase, or ends in "?" with "you"/"your"/"I".
 
+A QUESTION KEPT FOR THE GM IS NAMED THE TURN IT IS KEPT (feature 432, FR-002): `unnamed` reads the clone's kept questions
+(`specs/*/gm-review.jsonl`, kind `question`, status `kept`) whose `kept` time is after the GM's last message, and prints each
+whose id (`NNN#row`) the final message does not carry - the one door to him ends in front of him, not in a queue.
+
+Usage: hm_gm_question.py unnamed <clone> < stop payload  ->  prints each unnamed kept question and exits 1; exits 0 otherwise.
 Usage: hm_gm_question.py judge < stop payload  ->  prints `ask<TAB>line` (a question for the GM) or `offer<TAB>line`
 (only offers: the filter's significance test, amendment 1) and exits 1 when the turn owes the filter; exits 0 otherwise.
 """
@@ -115,7 +120,49 @@ def filtered_since_gm(path: str) -> bool:
     return False
 
 
+def _gm_last_at(path: str) -> str:
+    """The time of the GM's last message (ISO, to the second), '' when the transcript cannot be read."""
+    try:
+        for rec in _records_backward(path):
+            if _is_gm_message(rec):
+                return str(rec.get("timestamp") or "")[:19]
+    except OSError:
+        pass
+    return ""
+
+
+def unnamed(clone: str, payload: dict) -> list[str]:
+    """The kept questions since the GM's last message that the final message does not name (feature 432, FR-002)."""
+    import glob  # noqa: PLC0415
+
+    since = _gm_last_at(payload.get("transcript_path") or "")
+    if not since:
+        return []  # nothing to read: never refuse on a transcript the hook cannot see
+    said = payload.get("last_assistant_message") or ""
+    out = []
+    for f in sorted(glob.glob(f"{clone}/specs/*/gm-review.jsonl")):
+        num = int(f.split("/specs/", 1)[1].split("-", 1)[0])
+        with open(f, encoding="utf-8") as fh:
+            for i, line in enumerate(fh):
+                try:
+                    r = json.loads(line)
+                except ValueError:
+                    continue
+                fresh = str(r.get("kept", ""))[:19] >= since
+                if r.get("kind") == "question" and r.get("status") == "kept" and "reviewed" not in r and fresh and f"{num}#{i}" not in said:
+                    out.append(f"{num}#{i}: {r.get('question', '')}")
+    return out
+
+
 def main() -> int:
+    if sys.argv[1:2] == ["unnamed"] and len(sys.argv) == 3:
+        try:
+            payload = json.load(sys.stdin) or {}
+        except Exception:
+            return 0
+        missing = unnamed(sys.argv[2], payload)
+        print("\n".join(missing))
+        return 1 if missing else 0
     if sys.argv[1:2] != ["judge"]:
         print(__doc__, file=sys.stderr)
         return 2

@@ -10,9 +10,10 @@ feature cannot close while it stands.
 A LANDING WITH NO ENGINE CODE FILES INTO THE CLAIMS FEATURE (the GM, 2026-10-26: "Yes, a finding carried by a landing that
 changes no engine code should go to 405 instead. Please make that the standing rule"): a research-record or tooling landing
 cannot fix engine code, and option 3 held feature 422 (miso and soy sauce) open on five engine findings while 405, the feature
-that fixes claims findings, was on hold. So `target` is `CLAIMS_FEATURE` when the delta holds no engine path, the active feature
-otherwise; a delta whose engine path is only a comment still counts as engine here (the conservative side: it files where it
-always did).
+that fixes claims findings, was on hold. So `target` is `CLAIMS_FEATURE` when the delta changes no engine code, the active
+feature otherwise. "Engine code" is the project's one definition (`l7r.diagram.ci.delta`): a path `is_engine` accepts (so not
+`l7r/diagram/ci/`), changed in what it executes - a comment-only, docstring-only or formatting edit is no engine change (the GM
+2026-08-25, 08-26, 08-28; spec-fidelity on this amendment, 2026-10-26).
 
 `claims.classify` decides what is carried (D26). This module keeps the record: `specs/<feature>/claims-carried.jsonl`, one row
 `{"task", "keys", "utc"}` a filing. A key is FILED while a row of the ACTIVE feature's record names it and that row's task is
@@ -36,8 +37,7 @@ RECORD = "claims-carried.jsonl"
 #: the standing feature that fixes claims findings (the GM, 2026-10-26): a landing with no engine code files its carries here.
 #: When 405 closes, the feature that takes over its claims work is named here.
 CLAIMS_FEATURE = "405"
-#: the engine paths (`l7r.diagram.ci.delta.is_engine`'s list, feature 132 FR-008; scripts/land.py keeps the same pattern)
-_ENGINE = re.compile(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json)$")
+_CHECKOUT = Path(__file__).resolve().parents[2]
 _BOX = re.compile(r"^- \[( |x)\] (T\d+)\b(.*)$", re.M)
 _LANDS_OPEN = " [lands-open]"
 
@@ -59,19 +59,46 @@ def _git_lines(root: Path, *args: str) -> list[str]:
     return [ln.strip() for ln in out.stdout.splitlines() if ln.strip()] if out.returncode == 0 else []
 
 
+def _engine_tools() -> tuple[Any, Any]:
+    """(`l7r.diagram.ci.delta.is_engine`, gate-stamp's `content_id`) from THIS checkout, not the root it reads (a fixture tree
+    has no engine package)."""
+    import importlib.util  # noqa: PLC0415
+
+    if str(_CHECKOUT) not in sys.path:
+        sys.path.insert(0, str(_CHECKOUT))
+    from l7r.diagram.ci.delta import is_engine  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("gate_stamp", _CHECKOUT / "scripts" / "gates" / "gate-stamp.py")
+    assert spec is not None and spec.loader is not None
+    gs = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(gs)
+    return is_engine, gs.content_id
+
+
 def touches_engine(root: Path) -> bool:
-    """Does this tree's delta - its commits since the merge base with origin/main (HEAD with none) and its uncommitted
-    changes - hold an engine path?"""
+    """Does this tree's delta - its commits since the merge base with origin/main (HEAD with none), its uncommitted and its
+    untracked files - change engine code, as `l7r.diagram.ci.delta` decides it (`_semantically_changed`)?"""
+    is_engine, content_id = _engine_tools()
     base = (_git_lines(root, "merge-base", "origin/main", "HEAD") or ["HEAD"])[0]
-    return any(_ENGINE.match(f) for f in _git_lines(root, "diff", "--name-only", base) + _git_lines(root, "ls-files", "--others", "--exclude-standard"))
+    paths = _git_lines(root, "diff", "--name-only", base) + _git_lines(root, "ls-files", "--others", "--exclude-standard")
+    for f in (p for p in paths if is_engine(p)):
+        if not f.endswith(".py"):
+            return True
+        before = subprocess.run(["git", "-C", str(root), "show", f"{base}:{f}"], capture_output=True)
+        now = root / f
+        if before.returncode != 0 or not now.is_file():  # ...added or deleted
+            return True
+        if content_id(before.stdout, f) != content_id(now.read_bytes(), f):
+            return True
+    return False
 
 
 def target(root: Path) -> Path | None:
-    """The feature a carried finding is filed into: the claims feature (`CLAIMS_FEATURE`) for a delta with no engine code, when
-    it has a tasks.md; the feature being landed otherwise."""
+    """The feature a carried finding is filed into: the claims feature (`CLAIMS_FEATURE`) for a delta with no engine code, while
+    it has an open task; the feature being landed otherwise."""
     if not touches_engine(root):
         claims = _plan_gate().resolve(CLAIMS_FEATURE, root)
-        if claims is not None and (claims / "tasks.md").is_file():
+        if claims is not None and open_ids(claims):  # ...a closed claims feature takes nothing: the landing's own, as before
             return claims
     return active_feature(root)
 
@@ -151,7 +178,7 @@ def carry(root: Path, feature: str, task: str, keys: list[str], now: str | None 
     if d is not None and here is not None and active is not None and d.resolve() == active.resolve():
         d = here  # ...the feature being landed names itself (`make land` does); a delta with no engine code files into 405
     if d is None or here is None or d.resolve() != here.resolve():
-        where = "the claims feature's - this delta holds no engine code" if here is not None and not touches_engine(root) else "the active task's"
+        where = "the claims feature's - this delta holds no engine code" if here is not None and active is not None and here.resolve() != active.resolve() else "the active task's"
         raise ValueError(f"a carried finding is filed only into {where} ({here.name if here else 'none: `make task-start F=<n> T=<Txx>` first'}), not {feature}")
     if ruling and not _ruled(d, ruling):
         raise ValueError(f"RULING={ruling} is no trigger in {d.name}/arbiter.jsonl - name the round arbiter's recorded ruling that carried these findings")

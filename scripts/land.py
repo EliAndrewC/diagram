@@ -301,7 +301,42 @@ ROLL_MB = 500
 GATE_WORKERS = 6
 
 
-def memory_free_mb(cgroup: Path = Path("/sys/fs/cgroup")) -> int:
+#: the laptop's memory watch, mounted into every container: its newest notice carries the containers' SHARED working set, which
+#: no cgroup inside one container can see (`~/.claude/hooks/memwatch-hook.sh`)
+MEMWATCH = Path.home() / ".claude" / "memwatch"
+#: a notice this recent still describes the machine (the watch writes one only when the containers near their cap)
+MEMWATCH_FRESH_S = 900
+_SHARED = re.compile(r"working set is ([\d.]+) of their shared ([\d.]+) GB")
+
+
+def shared_free_mb(mw: Path = MEMWATCH, now: float | None = None) -> int | None:
+    """The containers' shared cap less their working set, MB, from the memory watch's newest notice when it is
+    `MEMWATCH_FRESH_S` old or less; None when there is none (no watch, no recent notice, no figure in it). On 2026-10-26 at 12:59
+    a landing's cohort, sized at 6 workers from the 6.5 GB its own container showed free, took the shared 10 GB cap to its limit,
+    and memguard killed another session's 1.4 GB process."""
+    import time  # noqa: PLC0415
+
+    # ...THE NEWEST RECENT NOTICE THAT CARRIES THE FIGURE: a memguard kill notice carries none, and the first form read only the
+    # newest notice - after the kills of 2026-10-26 13:49-13:51 it found no figure and sized the next landing's cohort at 4 workers
+    try:
+        latest = int((mw / "latest").read_text().split()[0])
+        notices = sorted(((int(p.stem), p) for p in (mw / "events").glob("*.txt") if p.stem.isdigit() and int(p.stem) <= latest), reverse=True)
+    except OSError, ValueError:
+        return None
+    clock = now if now is not None else time.time()
+    for _seq, path in notices:
+        try:
+            if clock - path.stat().st_mtime > MEMWATCH_FRESH_S:
+                return None  # older notices are older still
+            m = _SHARED.search(path.read_text(errors="replace"))
+        except OSError:
+            continue
+        if m:
+            return int((float(m.group(2)) - float(m.group(1))) * 1024)
+    return None
+
+
+def memory_free_mb(cgroup: Path = Path("/sys/fs/cgroup"), mw: Path = MEMWATCH) -> int:
     """The memory free to this container, MB: the host's MemAvailable, and - where the container has a cgroup v2 limit - no more
     than that limit less what the cgroup holds, its reclaimable file cache given back (405 T72: sized from the host's 9.5 GB
     alone, the batch-3 landing's 12 workers took the containers' shared 10 GB cap to 9.0 GB)."""
@@ -317,13 +352,14 @@ def memory_free_mb(cgroup: Path = Path("/sys/fs/cgroup")) -> int:
             avail = min(avail, (int(cap) - held + cache) // (1024 * 1024))
     except OSError, ValueError:
         pass
-    return avail
+    shared = shared_free_mb(mw)  # ...and no more than the containers' SHARED cap leaves, when the watch has just said so
+    return avail if shared is None else min(avail, shared)
 
 
-def cohort_jobs(cgroup: Path = Path("/sys/fs/cgroup")) -> tuple[int, int]:
+def cohort_jobs(cgroup: Path = Path("/sys/fs/cgroup"), mw: Path = MEMWATCH) -> tuple[int, int]:
     """The cohort's workers beside a running gate - the cpus the gate leaves and the memory it leaves, at least 2 - and the
     memory (MB) they were sized from (`memory_free_mb`)."""
-    avail = memory_free_mb(cgroup)
+    avail = memory_free_mb(cgroup, mw)
     return max(2, min((os.cpu_count() or 4) - 2 - GATE_WORKERS, (avail - GATE_RESERVE_MB) // ROLL_MB)), avail
 
 

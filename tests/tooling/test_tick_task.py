@@ -567,11 +567,41 @@ def test_the_cohort_s_workers_fit_the_container_s_memory_limit(tmp_path: pathlib
     (cg / "memory.max").write_text(f"{10 * gib}\n")
     (cg / "memory.current").write_text(f"{8 * gib}\n")
     (cg / "memory.stat").write_text(f"anon 1\ninactive_file {gib}\n")
-    assert lb.memory_free_mb(cg) == 3 * 1024, "10 GiB less the 8 held, the 1 of cache given back"
-    assert lb.cohort_jobs(cg)[0] == 2, "3 GB free beside the gate's 3.5: the floor of 2"
+    quiet = tmp_path / "no-watch"
+    assert lb.memory_free_mb(cg, quiet) == 3 * 1024, "10 GiB less the 8 held, the 1 of cache given back"
+    assert lb.cohort_jobs(cg, quiet)[0] == 2, "3 GB free beside the gate's 3.5: the floor of 2"
     (cg / "memory.max").write_text("max\n")
-    assert lb.memory_free_mb(cg) > 0, "no cgroup limit: the host's figure"
-    assert lb.memory_free_mb(tmp_path / "none") > 0, "no cgroup at all"
+    assert lb.memory_free_mb(cg, quiet) > 0, "no cgroup limit: the host's figure"
+    assert lb.memory_free_mb(tmp_path / "none", quiet) > 0, "no cgroup at all"
+
+
+def test_the_cohort_s_workers_fit_the_containers_shared_cap(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """2026-10-26 12:59: sized at 6 workers from the 6.5 GB its own container showed free, a landing's cohort took the containers'
+    SHARED 10 GB cap to its limit and memguard killed another session's process. The memory watch's newest notice, when recent,
+    bounds the memory counted free."""
+    import time  # noqa: PLC0415
+
+    lb, _d = _land(tmp_path, monkeypatch)
+    mw = tmp_path / "memwatch"
+    (mw / "events").mkdir(parents=True)
+    now = time.time()
+    (mw / "latest").write_text(f"208 {int(now)}\n")
+    (mw / "events" / "208.txt").write_text("LOW MEMORY WARNING at 13:02: the Claude containers' working set is 9.2 of their shared 10.0 GB memory cap (diagram 7.2)")
+    assert lb.shared_free_mb(mw, now) == int(0.8 * 1024)
+    cg = tmp_path / "cg"
+    cg.mkdir()
+    (cg / "memory.max").write_text(f"{10 * 1024**3}\n")
+    (cg / "memory.current").write_text(f"{3 * 1024**3}\n")
+    (cg / "memory.stat").write_text("inactive_file 0\n")
+    assert lb.memory_free_mb(cg, mw) == int(0.8 * 1024), "the shared figure, not the container's 7 GB"
+    assert lb.cohort_jobs(cg, mw)[0] == 2
+    assert lb.shared_free_mb(mw, now + lb.MEMWATCH_FRESH_S + 60) is None, "a stale notice describes another moment"
+    (mw / "events" / "209.txt").write_text("MEMGUARD KILLED ONE OF YOUR PROCESSES at 13:49: python3")
+    (mw / "latest").write_text(f"209 {int(now)}\n")
+    assert lb.shared_free_mb(mw, now) == int(0.8 * 1024), "a kill notice carries no figure: the newest recent one that does"
+    (mw / "events" / "208.txt").write_text("MEMGUARD at 12:59: killed python3")
+    assert lb.shared_free_mb(mw, now) is None, "no recent notice carries a figure"
+    assert lb.shared_free_mb(tmp_path / "nowhere") is None
 
 
 def test_the_claims_wait_files_a_carry_it_meets(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001

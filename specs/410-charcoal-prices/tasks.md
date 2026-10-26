@@ -25,6 +25,6 @@ The question task is `research: physical` with its five boxes; the rest are `res
 - [x] T04 Close: report and land
       research: rendering
       verify: DONE. landed in batch T01+T02+T03+T04: 0279 written and checked (3 rounds, the third capped by the round arbiter); impl-check nothing missing; reply posted on #11 (issuecomment-6333545535)
-- [ ] GM review (make gm-reviewed F=410) [lands-open]
+- [x] GM review (make gm-reviewed F=410) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

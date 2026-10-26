@@ -247,7 +247,7 @@ Answer four questions:
 
 Rule `continue` (nothing to change) or `change-route` (binding: `what` names the loop or the number, and the route to take -
 more room first). Add `tooling_fix` for question 3 (it opens an item the session makes, with its test, or declines as an
-overhaul) and `for_gm` for question 4. A `continue` with neither adds nothing to the GM's review.
+overhaul) and `for_gm` for question 4. Only `for_gm` reaches the GM - as a question owed escalation-check, kept only if it is truly his (feature 432).
 
 Record it: write the JSON `{{"ruling": ..., "why": ..., "what": ..., "tooling_fix": ..., "fix_minutes": ..., "for_gm": ...}}` to a
 file (a `tooling_fix` carries `fix_minutes`, the cost it measured) and run

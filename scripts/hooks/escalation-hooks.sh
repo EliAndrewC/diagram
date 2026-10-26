@@ -173,11 +173,29 @@ ask_unfiltered() { # ask_unfiltered <clone>
   exit 2
 }
 
+# GUARD_EDIT_OK: feature 432 FR-002 - A QUESTION KEPT FOR THE GM IS NAMED THE TURN IT IS KEPT. The one door to him (a question
+# owed escalation-check, kept by `make gm-escalated`) ends in front of him, not in a queue he had learned to ignore (the GM
+# 2026-10-26). Refused once per message; a new operation.
+kept_unnamed() { # kept_unnamed <clone>
+  local missing key
+  missing="$(printf '%s' "$INPUT" | python3 "$EH_HERE/lib/hm_gm_question.py" unnamed "$1" 2>/dev/null)" && return 0
+  [ -n "$missing" ] || return 0
+  key="$(printf '%s' "$INPUT" | python3 -c 'import hashlib,json,sys; print(hashlib.sha1((json.load(sys.stdin).get("last_assistant_message") or "").encode()).hexdigest())' 2>/dev/null)"
+  [ "$(read_field "$(state_file "$1")" kept_told)" = "$key" ] && return 0   # once per message, never a loop
+  write_field "$(state_file "$1")" kept_told "$key"
+  printf 'QUESTION KEPT, NOT NAMED: escalation-check kept these for the GM this turn, and your final message does not name them:\n' >&2
+  printf '%s\n' "$missing" | sed 's/^/  /' >&2
+  printf 'Put each to him in the final message by its id ("<feature>#<row>", as listed above) with the question - a kept question is his decision now.\n' >&2
+  guard_log escalation blocked "stop" kept-unnamed
+  exit 2
+}
+
 stop() {
   local clone armed key
   INPUT="$(cat)"
   clone="$(clone_of)"
   [ -n "$clone" ] || exit 0
+  kept_unnamed "$clone"
   armed="$(read_field "$(state_file "$clone")" armed_by)"
   [ -n "$armed" ] || ask_unfiltered "$clone"   # GUARD_EDIT_OK: feature 429 FR-002, a new operation
   # GUARD_EDIT_OK: feature 375 FR-007 - a review whose every finding is DISPOSED (its ledger rows say fixed, verified, accepted,

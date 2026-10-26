@@ -114,7 +114,7 @@ for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); d
   # not mentions" rule finally applied to itself.
   # GUARD_EDIT_OK: feature 379 amendment 2 (the GM 2026-10-10: "things should go to the arbiter at the point where they were
   # previously coming to me") - past five rounds the round arbiter rules on a spec review, and its accept or process-fault
-  # stands in for the FAITHFUL verdict (the GM reviews the ruling after landing); without this the ruling could not bind
+  # stands in for the FAITHFUL verdict (the ruling reaches the GM only as a kept for_gm question, feature 432); without this the ruling could not bind
   # only a ruling on the spec AS IT READS NOW (the ruling carries the spec's hash; plan review round 2): an amended spec is
   # never passed on an old ruling, whichever clone pushes it
   ruled=""

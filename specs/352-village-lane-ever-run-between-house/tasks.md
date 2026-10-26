@@ -17,7 +17,7 @@
 - [x] T04 Close: no map changed (FR-004); the gate green; report; landed
       research: rendering
       verify: DONE. no map changed - the delta's engine lines are docstring claims only (FR-004); make done green (598 s); report.md written
-- [ ] GM review (make gm-reviewed F=352) [lands-open]
+- [x] GM review (make gm-reviewed F=352) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
 

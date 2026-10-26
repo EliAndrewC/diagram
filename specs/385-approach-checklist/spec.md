@@ -177,9 +177,13 @@ block; never block on unchanged code, the finding filed as an open task):
   finding that stood at the base still only warns.
 - **FR-013, amended 2026-10-26 (the GM: *"Yes, a finding carried by a landing that changes no engine code should go to 405
   instead. Please make that the standing rule and move 422's 5 [findings] into 405 now so that 422 can close."*)**: when the
-  landing's delta holds no engine path (`l7r/**/*.py`, `pool/*.gen.py`, `pool/*.json`), the carried finding is filed as an
-  open task of feature 405, the claims feature, instead of the feature being landed (`claims_carry.target`, `CLAIMS_FEATURE`).
-  A research-record or tooling landing cannot fix engine code; feature 422 had been held open on five such findings.
+  landing's delta (its commits since the merge base, its uncommitted and its untracked files) changes no engine code, the
+  carried finding is filed as an open task of feature 405, the claims feature, instead of the feature being landed
+  (`claims_carry.target`, `CLAIMS_FEATURE`). Engine code is `l7r.diagram.ci.delta`'s: a path `is_engine` accepts (so not
+  `l7r/diagram/ci/`), changed in what it executes - a comment-only, docstring-only or formatting edit is none (the GM
+  2026-08-25, 08-26, 08-28). A research-record or tooling landing cannot fix engine code; feature 422 had been held open on
+  five such findings. Once 405 has no open task, carries go to the feature being landed again until another claims feature
+  is named.
 
 ### Amendment 4 - T03 measured again, before T04 (the GM, 2026-10-18)
 

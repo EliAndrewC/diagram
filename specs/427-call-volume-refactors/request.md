@@ -33,3 +33,15 @@ Follow-up: "Yes, please go ahead, but let's not do the prototype just yet. We'll
 > When I talk about staying in Python, what I am basically expressing is that I do not believe that we need to rewrite everything in Rust. However, if switching away from shapely and numpy is something that we analyze and find would be better, then we can certainly do that. I don't currently see any reason to do that, because as far as I know, these libraries are fairly efficient. And I don't believe that there is like a high performance version of NumPy that is somehow better than NumPy, which already writes all of its critical path code in C, as I understand it. But it is certainly not a hard requirement that we continue using those particular libraries.
 >
 > please update the new feature 427 to make sure that all of these suggestions are incorporated, both the suggestions that you have made and my refinements of them. Thank you.
+
+## 5. The word to start (2026-10-26, after feature 430 landed)
+
+> What do you think about how we should approach this? My inclination is to work feature 427 next and not have a requirement to have all of our seeds pass. Basically make things fast first and then make them correct afterwards. Because I think that will be the quickest path to having things be both fast and correct.
+
+> I agree with your proposed approach, so please go ahead with feature 427 beginning with the survey tool. Thank you.
+
+"Your proposed approach" is the session's reply, in its order: the survey and the call-count watch first (US1, US5), then the
+cheap wins and single-site recomputations (US2), the wells (US3), and the pairwise families OUTSIDE the lanes (homestead parts,
+ground cover); the lane web and the lane law (part of US4) last, after feature 417's lane conversions, since 417 restructures
+that code; a refactor meant to compute the same thing is shown by identical manifests where that comes free, a deliberate change
+by the per-seed comparison against HEAD and the claims; 417's failing seeds re-measured after 427, before 417 resumes.

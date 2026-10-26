@@ -39,6 +39,7 @@ interpreter (`scripts/hooks/make-only-hooks.sh` refuses one).
 | Build or check the record's site from its per-entry fragments | `record_asset` - `make record` |
 | The source vocabulary derived into the `source-applicability` contract | `source_tags_contract` - `make source-tags-contract` (feature 305) |
 | A performance snapshot of the reference hamlet, its bands, its profile and its review records | `perf_snapshot` (`make perf`), `perf_bands` (`make perf-report`), `perf_profile` (`make perf-profile`), `perf_review` (`make perf-explain` / `perf-review` and the rest) |
+| Which functions are called millions of times, and from which loop? | `perf_fanout` - `make perf-fanout` (feature 427): per-stage call totals and growth, the multiplier chains by anchor |
 | How long does this loop take, and where does the time go? | `make audit`, `make durations`, `scripts/measure/gatecost.py <target>`; the frozen ledger is `dev/timings.md` |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it. Read that before

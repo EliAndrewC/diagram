@@ -1,0 +1,11 @@
+{
+ "triage-price": {
+  "quantity": "findings (DRIFTED or MISLABELED) that came by the triage route - a claim's code and rested-on blocks unchanged while a page it cites moved - which D7's mechanical clearing would no longer catch",
+  "value": 7,
+  "unit": "findings in 5,304 triage-route re-checks",
+  "observed": "2026-10-26",
+  "source": "git history of dev/claims-index.json, 2026-10-04 to 2026-10-26",
+  "command": "python3 specs/432-gm-review-signal/measure/triage_price.py",
+  "method": "each commit against its first parent; triage route = pages changed, rests and code the same"
+ }
+}
