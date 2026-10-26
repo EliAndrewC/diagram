@@ -138,6 +138,134 @@ and the checklist part A whose item 6 reads: "FR-008 green: landed with its fres
 task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35)." Given a `SECTION=` whose
 item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files the section anyway.
 
+## Task approaches
+
+### T01 Approach (checklist part A)
+
+1. **The goal, in the world.** `make land` never waits for a claims round nothing can deliver.
+2. **The constraints.** D1; FR-001, FR-002, FR-011.
+3. **Where each comes from.** the GM 2026-10-26 (fix 1); measured: T50's two full waits (research R1).
+4. **Do they describe the world here?** Measured by: the wait loop re-runs the gate each poll; the marker is the one new state.
+5. **The order.** first: the cheapest, the largest measured waste.
+6. **The exits.** green: landed by `make land` with T02-T04; red: set down with the failing tests named.
+7. **The search smell.** None: one change, its tests first.
+8. **The budget.** One landing.
+9. **Done, measured.** Its verify line in tasks.md passes.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T02 Approach (checklist part A)
+
+1. **The goal, in the world.** A code edit that runs nothing changes no key.
+2. **The constraints.** D2; FR-003, FR-004.
+3. **Where each comes from.** the GM 2026-10-26 ("omitting docstrings when hashing code"); feature 133 T11's rule.
+4. **Do they describe the world here?** Measured by: `gate-stamp.py`'s `semantic_bytes` already held the rule; moved, not rewritten.
+5. **The order.** before T03 and T04, which use it.
+6. **The exits.** green: landed with T01, T03, T04; red: set down.
+7. **The search smell.** None: one change, its tests first.
+8. **The budget.** One landing.
+9. **Done, measured.** Its verify line in tasks.md passes.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T03 Approach (checklist part A)
+
+1. **The goal, in the world.** A docstring-, comment- or claims-only edit re-rolls and re-renders nothing; content docstrings still count.
+2. **The constraints.** D3; FR-003, FR-005, FR-006, FR-012.
+3. **Where each comes from.** the GM 2026-10-26; R2, R3; measured R5 (11 of 16 re-rolled before, 0 after).
+4. **Do they describe the world here?** Measured by: `make cache-audit` (3 audited, 0 FAILED) and the before/after cohort count.
+5. **The order.** after T02.
+6. **The exits.** green: landed with T01, T02, T04; red: set down.
+7. **The search smell.** None: one change, its tests first.
+8. **The budget.** One landing.
+9. **Done, measured.** Its verify line in tasks.md passes.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** The other code-hashing keys follow the same rule where they should.
+2. **The constraints.** the audit table; FR-004.
+3. **Where each comes from.** the GM 2026-10-26 ("look for any other places"); R3b.
+4. **Do they describe the world here?** Measured by: each site's test: a function docstring keeps it, code moves it, usage text and the Makefile still count for `tooling_hash`.
+5. **The order.** after T02.
+6. **The exits.** green: landed with T01-T03; red: set down.
+7. **The search smell.** None: one change, its tests first.
+8. **The budget.** One landing.
+9. **Done, measured.** Its verify line in tasks.md passes.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T05 Approach (checklist part A)
+
+1. **The goal, in the world.** Iterating rolls the failing seeds first or only, and stops at the first failure.
+2. **The constraints.** D4; FR-007, FR-008.
+3. **Where each comes from.** the GM 2026-10-26 ("the pytest thing").
+4. **Do they describe the world here?** Measured by: tests on stubbed rolls; one real run on a seeded failure.
+5. **The order.** after T03 (the served/rolled count reads the new key).
+6. **The exits.** green: `make land`; red: set down.
+7. **The search smell.** None: one change, its tests first.
+8. **The budget.** One landing.
+9. **Done, measured.** Its verify line in tasks.md passes.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing after a full run rolls no seed.
+2. **The constraints.** FR-012, User Story 3b.
+3. **Where each comes from.** the GM 2026-10-26 ("run the seeds locally and then do a make landing").
+4. **Do they describe the world here?** Measured by: the landing-path test, and one real cohort then cohort-landing.
+5. **The order.** after T03 and T05.
+6. **The exits.** green: `make land`; red: set down.
+7. **The search smell.** None: one change, its tests first.
+8. **The budget.** One landing.
+9. **Done, measured.** Its verify line in tasks.md passes.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** A probe answers "what did this change do to every seed and map" against HEAD in one command.
+2. **The constraints.** D5; FR-009.
+3. **Where each comes from.** the GM 2026-10-26 (fix 2).
+4. **Do they describe the world here?** Measured by: tests on stubbed rolls and fixture manifests; one real probe.
+5. **The order.** after T05 (its EXITFIRST).
+6. **The exits.** green: `make land-tooling`; red: set down.
+7. **The search smell.** None: one change, its tests first.
+8. **The budget.** One landing.
+9. **Done, measured.** Its verify line in tasks.md passes.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** A new plan section already holds what its review asks.
+2. **The constraints.** D6; FR-010.
+3. **Where each comes from.** the GM 2026-10-26 (fix 3); T48's and T50's review rounds.
+4. **Do they describe the world here?** Measured by: tests of the written section and the warning.
+5. **The order.** any time.
+6. **The exits.** green: `make land-tooling`; red: set down.
+7. **The search smell.** None: one change, its tests first.
+8. **The budget.** One landing.
+9. **Done, measured.** Its verify line in tasks.md passes.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** The feature closed with its numbers shown to the GM.
+2. **The constraints.** the close.
+3. **Where each comes from.** the constitution's close.
+4. **Do they describe the world here?** Measured by: the feature report.
+5. **The order.** last.
+6. **The exits.** green: the report written; red: n/a.
+7. **The search smell.** None: one change, its tests first.
+8. **The budget.** One landing.
+9. **Done, measured.** Its verify line in tasks.md passes.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
 ## Project Structure
 
 ### Documentation (this feature)
