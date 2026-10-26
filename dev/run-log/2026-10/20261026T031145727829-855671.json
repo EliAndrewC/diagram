@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-26T03:11:45Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 313,
+  "result": "failed: test-full",
+  "commit": "52713979e",
+  "first_failure_s": 266.1,
+  "last_failure_s": 266.1,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_tick_task.py::test_the_changed_modules_coverage_runs_beside_the_gate_and_stops_it"
+  ],
+  "host": {
+    "load": [
+      6.37,
+      9.75
+    ],
+    "mem_avail_mb": [
+      7489,
+      8846
+    ],
+    "cpu_temp_c": [
+      77.0,
+      85.0
+    ],
+    "stall_s": {
+      "cpu": 3.9,
+      "io": 1.5,
+      "io_full": 1.2,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  },
+  "phases": {
+    "preflight": 36.0,
+    "static": 4.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 1.0,
+    "hooks-test": 3.0,
+    "pytest": 296.0,
+    "test-full": 304.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/conftest.py (+1)",
+  "selected": 12060,
+  "collected": 12060
+}
