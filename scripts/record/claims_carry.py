@@ -198,7 +198,10 @@ def known_drifts(cx: Any, root: Path) -> dict[str, str]:  # noqa: ANN401 - `cx` 
         name = uid.split("::", 1)[-1].rsplit(".", 1)[-1]
         # ...unchanged code, or - where the base tree's scope holds no core for the unit to compare - the round arbiter's own
         # recorded accept of the drift (`claims_accept.accept_line`), which is the binding answer for those claims
-        same = cores.get(uid) == index[key].get("core") or (cores.get(uid) is None and ACCEPTED in index[key].get("note", ""))
+        # ...or the round arbiter's recorded accept, whatever the base holds: the accept is the binding answer for the claim as it
+        # reads now, code changed in the landing or not (feature 417 T45: ask:417-T45-midlane-needle accepted a drift on `lanes_of`,
+        # which T45 itself changed, and the gate still listed it introduced)
+        same = cores.get(uid) == index[key].get("core") or ACCEPTED in index[key].get("note", "")
         if rows[(feat, task)] and re.search(rf"(?<![\w.]){re.escape(name)}(?!\w)", rows[(feat, task)]) and same:
             out[key] = f"{feat} {task}"
     return out
