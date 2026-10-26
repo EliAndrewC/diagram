@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-26T03:22:48Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 255,
+  "result": "failed: test-full",
+  "commit": "d92ff2c90",
+  "first_failure_s": 249.0,
+  "last_failure_s": 254.8,
+  "failed_names": [
+    "uncovered l7r/diagram/hamletgen/ways/tree.py:298-300"
+  ],
+  "host": {
+    "load": [
+      6.12,
+      8.1
+    ],
+    "mem_avail_mb": [
+      8397,
+      9010
+    ],
+    "cpu_temp_c": [
+      90.0,
+      99.0
+    ],
+    "stall_s": {
+      "cpu": 2.5,
+      "io": 0.9,
+      "io_full": 0.7,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 19178,
+      "package": 13405
+    }
+  },
+  "phases": {
+    "preflight": 18.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 1.0,
+    "hooks-test": 2.0,
+    "pytest": 235.0,
+    "floors": 13.0,
+    "test-full": 249.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/conftest.py (+1)",
+  "selected": 12060,
+  "collected": 12060
+}
