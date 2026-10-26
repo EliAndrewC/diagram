@@ -4193,7 +4193,7 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Saved as (optional, the file's name):
 
 - **[the paper on HAL](https://hal.science/hal-01987402/document)**
-- How often a Qing escort agency's escort-masters travelled with a convoy in a year, how long a convoy took, and when and how they were paid (its account of the Qianlong reign onward, from Liu Jiansheng 2014 and Ji Kongrui 1986).
+- How often a Qing escort agency's escort-masters traveled with a convoy in a year, how long a convoy took, and when and how they were paid (its account of the Qianlong reign onward, from Liu Jiansheng 2014 and Ji Kongrui 1986).
 - Fallback: [a Google search for the paper](https://www.google.com/search?q=Chircop-Reyes+%22Merchants%2C+Brigands+and+Escorts%22+biaoju)
 - **Rests on it:** research/questions/0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.html (diagram feature 428; asked for by gm-assistant on EliAndrewC/diagram#20, Q2) - an escort-master's trips a year are not yet in the record.
 - Blocked by: HAL serves a bot check (Anubis) to the container's fetches (2026-10-25 and 2026-10-26); a browser opens it.
