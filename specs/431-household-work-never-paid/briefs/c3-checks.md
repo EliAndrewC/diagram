@@ -7,3 +7,4 @@ translation-check 0313: 10 FAITHFUL; its 2 EDITs to originals (女土 to 女工,
 source-reader 0313#tiangong-kaiwu-zhisi: 2 READ
 modal-triage: 12 units on 0004, hamlet/farmhouse TOUCHED, 11 untouched; modal-research farmhouse ACCURACY 1 (retirement-house sentence added to About), modal-form round 2 0 FIX, 1 NOTE (no ordinary low/high household size - a research gap)
 STILL OWED: nothing (record-owed 0 unanswered). Not from S3: make quick's check-partial-citations on 0312#tomioku-village-life-tiikijiten and -2, as S3 noted
+STILL OWED: nothing - the farmhouse modal-research and modal-form passes' ledger rows were added by hand after the line above; 女土 confirmed against the archived xiafu page (archive f20fa1679d67)
