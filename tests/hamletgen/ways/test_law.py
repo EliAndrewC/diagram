@@ -470,3 +470,10 @@ def test_a_span_across_a_defense_belt_is_not_walkable() -> None:
     assert not law.span_walkable(M, (0.0, 0.0), (100.0, 0.0))
     M["marshes"][0]["role"] = "toe"
     assert not law.span_walkable(M, (0.0, 0.0), (100.0, 0.0)), "as any marsh"
+
+
+def test_a_way_out_crossing_a_brook_once_has_no_crossing_to_take_away() -> None:
+    """`way_out_carriers`: only a household's way out crossing a brook MORE than once has crossings the web may take away; one
+    crossing it once is passed over (feature 417 T46: the pool map that reached this line moved)."""
+    M = {"streams": [{"poly": [[0.0, 100.0], [400.0, 100.0]]}], "lanes": [{"pts": [[200.0, 0.0], [200.0, 300.0]], "w": 3}]}
+    assert law.way_out_carriers(M, [[(200.0, 0.0), (200.0, 300.0)]]) == []
