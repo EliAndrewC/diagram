@@ -5,6 +5,7 @@ an open task row that names it is no introduced finding - whether or not the lan
 from __future__ import annotations
 
 import importlib.util
+import json
 import pathlib
 import sys
 from types import SimpleNamespace
@@ -167,7 +168,9 @@ def test_a_triage_of_three_or_fewer_claims_goes_straight_to_impl_drift(tmp_path:
     monkeypatch.setattr(cl.claims_flight, "mark", lambda root, out: None)
     assert real_main(["--root", str(tmp_path), "triage"]) == 0
     assert bundled and "--units" in bundled[0] and ",".join(keys[:3]) in bundled[0], bundled
-    assert "| claims-triage | 3 claim(s) | SKIPPED |" in (tmp_path / "dev" / "review-ledger.md").read_text(encoding="utf-8")
+    skip = json.loads((tmp_path / cl.SKIPS).read_text(encoding="utf-8").splitlines()[-1])
+    assert skip["claims"] == 3 and skip["keys"] == keys[:3], "the skip recorded in its own file"
+    assert (tmp_path / "dev" / "review-ledger.md").read_text(encoding="utf-8") == "| date | check |\n", "never a ledger row (the ledger guard refuses one)"
     bundled.clear()
     owed["n"] = cl.TRIAGE_SKIP_MAX + 1
     assert real_main(["--root", str(tmp_path), "triage"]) == 0 and bundled == [], "four claims: triaged as before"

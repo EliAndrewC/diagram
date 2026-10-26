@@ -49,6 +49,6 @@ The four questions are `research: physical` with their five boxes; the rest are 
 - [x] T07 Close: report and land
       research: rendering
       verify: DONE. feature-report written (specs/395-shrine-building-costs/report.md); landing by sync-with-main done, the direct route (no engine code)
-- [ ] GM review (make gm-reviewed F=395) [lands-open]
+- [x] GM review (make gm-reviewed F=395) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

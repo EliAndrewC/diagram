@@ -595,9 +595,12 @@ def test_the_cohort_s_workers_fit_the_containers_shared_cap(tmp_path: pathlib.Pa
     (cg / "memory.stat").write_text("inactive_file 0\n")
     assert lb.memory_free_mb(cg, mw) == int(0.8 * 1024), "the shared figure, not the container's 7 GB"
     assert lb.cohort_jobs(cg, mw)[0] == 2
-    assert lb.shared_free_mb(mw, now + lb.MEMWATCH_FRESH_S + 1) is None, "a stale notice describes another moment"
+    assert lb.shared_free_mb(mw, now + lb.MEMWATCH_FRESH_S + 60) is None, "a stale notice describes another moment"
+    (mw / "events" / "209.txt").write_text("MEMGUARD KILLED ONE OF YOUR PROCESSES at 13:49: python3")
+    (mw / "latest").write_text(f"209 {int(now)}\n")
+    assert lb.shared_free_mb(mw, now) == int(0.8 * 1024), "a kill notice carries no figure: the newest recent one that does"
     (mw / "events" / "208.txt").write_text("MEMGUARD at 12:59: killed python3")
-    assert lb.shared_free_mb(mw, now) is None, "a notice with no figure"
+    assert lb.shared_free_mb(mw, now) is None, "no recent notice carries a figure"
     assert lb.shared_free_mb(tmp_path / "nowhere") is None
 
 

@@ -629,7 +629,7 @@ arbiter-ask:  ## [project] put a PROCESS question (a cap, a waiver, a stuck choi
 land-tooling:  ## [project] land the named TOOLING files on main by themselves, mid-feature (feature 379)   FILES="scripts/x.py tests/tooling/test_x.py"
 	@"$$(git rev-parse --show-toplevel)/scripts/land-tooling.sh" $(FILES)
 
-arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a process: declined, to the GM's review, never filed (feature 379)   ID=<trigger> REASON="<why>"
+arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a process: declined, never filed - a question for the GM owed escalation-check (features 379, 432)   ID=<trigger> REASON="<why>"
 	@if [ -z "$(ID)" ] || [ -z "$(REASON)" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix declined "$(ID)" "$(REASON)"
 
@@ -710,8 +710,16 @@ replay-owing:   ## [project] replay recorded commits through the old owing and t
 preflight:      ## [tests] the gate's first phase, in seconds: the derived files regenerated, the record and its pointers, make quick - and, here only (not in the gate, 405 T47), the changed engine lines a quick test runs (feature 375)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)"
 
-gm-review:      ## [project] what waits on the GM: HELD rows (work cannot go on) and, per feature, the TO REVIEW rows counted (landed; he may overturn) - feature 375   [F=<NNN> that feature's rows] [EXPLAIN=1 what needs the GM, or with F= each row in full] [ROW=<n>]
+gm-review:      ## [project] what waits on the GM: the questions escalation-check KEPT (his decisions, the one source - feature 432), the questions OWED escalation-check (the session's), rows waiting on other work, and per feature the TO REVIEW rows (he may overturn) - feature 375   [F=<NNN> that feature's rows] [EXPLAIN=1 what needs the GM, or with F= each row in full] [ROW=<n>]
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py $(if $(EXPLAIN),explain $(F) $(ROW),list $(F))
+
+gm-question:    ## [project] put a question to the GM: written OWED escalation-check, it reaches him only once kept (feature 432)   F=<NNN> Q="<the question>" SOURCE="<what raised it>"
+	@if [ -z "$(F)" ] || [ -z "$(Q)" ] || [ -z "$(SOURCE)" ]; then printf 'make gm-question: F=, Q= and SOURCE= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py question "$(F)" "$(Q)" "$(SOURCE)"
+
+gm-escalated:   ## [project] record escalation-check's verdict on an owed question: KEEP holds it for the GM (name it in the turn's final message), CUT closes it with the reason (feature 432)   F=<NNN> ROW=<n> VERDICT=KEEP|CUT REASON="<escalation-check's reason>"
+	@if [ -z "$(F)" ] || [ -z "$(ROW)" ] || [ -z "$(VERDICT)" ] || [ -z "$(REASON)" ]; then printf 'make gm-escalated: F=, ROW=, VERDICT= and REASON= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py escalated "$(F)" "$(ROW)" "$(VERDICT)" "$(REASON)"
 
 accept:         ## [project] accept a finding with a reason - the work goes on, and the GM may overturn it after landing (feature 375)   F=375 FINDING="<what>" REASON="<why it can stand>"
 	@if [ -z "$(F)" ] || [ -z "$(FINDING)" ] || [ -z "$(REASON)" ]; then printf 'make accept: F=, FINDING= and REASON= are required\n' >&2; exit 2; fi

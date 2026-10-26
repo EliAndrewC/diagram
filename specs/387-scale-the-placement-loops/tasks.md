@@ -48,6 +48,6 @@ Every task changes how a verdict is computed, not what is drawn or where: nothin
 - [x] T11 (amendment 1) Land: the claims of the touched code re-judged, the landing cohort, the gated push, the report
       research: rendering
       verify: DONE. claims judged (impl-drift: 23 + 7 + 1, relabeled where owed, the belt drift carried to 384); landing cohort 54/54 (dev/cohort-log/20261018T133350Z), fresh 9/48 vs main 10/48 on the same seeds; report updated; the gated push follows
-- [ ] GM review (make gm-reviewed F=387) [lands-open]
+- [x] GM review (make gm-reviewed F=387) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

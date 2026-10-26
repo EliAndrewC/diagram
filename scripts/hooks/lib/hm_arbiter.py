@@ -18,8 +18,10 @@ THE TRIGGERS (`<git common dir>/arbiter-owed.json`, `{id: {kind, unit, detail, t
 
 A trigger owes a RULING before the next check dispatch on its unit (a reversal or a cascade: any check; a red gate: the next
 gate). Nothing else stops. `make arbiter-bundle TRIGGER=` builds what `round-arbiter` reads; `make arbiter-ruled` records its
-ruling - one per trigger, binding - in `specs/<feature>/arbiter.jsonl` and as a row of the GM's review (`gm-review.jsonl`,
-FR-012). `continue` lifts a round cap by one round; `accept` and `process-fault` close the unit (its further dispatches are
+ruling - one per trigger, binding - in `specs/<feature>/arbiter.jsonl`. Only a QUESTION reaches the GM (feature 432, the GM
+2026-10-26: "anything that ends up in GM review I actually know is important"): a ruling's `for_gm`, on any trigger, and a
+declined fix are written to `gm-review.jsonl` as questions OWED escalation-check (`make gm-escalated`); every other ruling and
+every fix made stays in `arbiter.jsonl`, and a ruling whose `why` or `what` hands the GM a decision without `for_gm` is refused. `continue` lifts a round cap by one round; `accept` and `process-fault` close the unit (its further dispatches are
 refused). A ruling's `tooling_fix` - a `process-fault` always has one - is an OPEN item of the feature until
 `make arbiter-fix-done` or `arbiter-fix-declined` settles it, and `make tick` and the closing check refuse while it is open
 (feature 379: the first such fix lived only in a ruling's prose and was lost).
@@ -371,29 +373,21 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
         # reads so (feature 374 batch 5: an accepted unit's last verdict was NEEDS-WORK at an older key, and the gate refused)
         **({"content_key": ck} if trigger.startswith("round:") and not trigger.startswith("round:spec-fidelity|") and (ck := unit_content_key(root, row_unit(trig, trigger))) else {}),
     }
-    for_gm = str(ruling.get("for_gm") or "").strip() if hour else ""
+    for_gm = str(ruling.get("for_gm") or "").strip()
     if for_gm:
         row["for_gm"] = for_gm
+    elif hands_the_gm(f"{row['why']} {row['what']}"):
+        raise ValueError(
+            "this ruling hands the GM a decision in its `why` or `what` - put the question in `for_gm` instead, the one door to "
+            "him: it is written owed escalation-check and reaches him only if kept (feature 432, FR-003)"
+        )
     d.mkdir(parents=True, exist_ok=True)
     with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
-    # GUARD_EDIT_OK: feature 383 FR-010 - an hour with nothing to change (`continue`, no fix, nothing for the GM) adds no row to
-    # the GM's review: the one exception to "the GM reviews every ruling", stated in the arbiter's contract
-    if not hour or row["ruling"] != "continue" or fix or for_gm:
-        _gm_row(
-            d,
-            {
-                "kind": "arbiter",
-                "trigger": trigger,
-                "ruling": row["ruling"],
-                "why": row["why"],
-                **({"asked": row["asked"]} if "asked" in row else {}),
-                **({"what": row["what"]} if row["what"] else {}),
-                **({"tooling_fix": fix} if fix else {}),
-                **({"for_gm": for_gm} if for_gm else {}),
-                "utc": when,
-            },
-        )
+    # GUARD_EDIT_OK: feature 432 FR-001 - a ruling reaches the GM only as a question (`for_gm`), owed escalation-check; the
+    # rest stays in arbiter.jsonl (feature 375 queued every ruling: 465 open rows, 443 of them not his - 432's audit)
+    if for_gm:
+        _gm_question(d, for_gm, trigger, when)
     if hour:  # the hour is answered: the checkpoint's clock restarts from when it opened (scripts/reviews/checkpoint.py)
         _checkpoint().close_checkpoint(root, trigger)
     if row["ruling"] == "accept" and row["kind"] == "round":
@@ -540,20 +534,25 @@ def unit_ruled(d: Path, unit: str, content: str) -> str:
     return ""
 
 
-def _gm_row(d: Path, row: Mapping[str, Any]) -> None:
-    """A row of the GM's review after landing, and the feature's GM-review box with it (feature 375 FR-012)."""
-    with (d / "gm-review.jsonl").open("a", encoding="utf-8") as fh:
-        fh.write(json.dumps(row, ensure_ascii=False) + "\n")
-    try:
-        import importlib.util  # noqa: PLC0415
+#: words that hand the GM a decision in a ruling's `why` or `what` (feature 432, FR-003, plan D4): 335#2 and 374#60 said so in
+#: their prose, and 374#60 never reached him
+_HANDS_THE_GM = re.compile(r"the GM'?s (to decide|call|question|decision)|for the GM to|held for the GM|the GM (must|should) decide|GM'?s choice", re.I)
 
-        spec = importlib.util.spec_from_file_location("gm_review", Path(__file__).resolve().parents[2] / "gm_review.py")
-        if spec and spec.loader:
-            gm = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(gm)
-            gm.ensure_box(d)
-    except OSError, ImportError:  # pragma: no cover - a tree without the script records the row all the same
-        pass
+
+def hands_the_gm(text: str) -> bool:
+    """Does a ruling's prose hand the GM a decision (feature 432, FR-003)?"""
+    return bool(_HANDS_THE_GM.search(text))
+
+
+def _gm_question(d: Path, question: str, source: str, when: str) -> None:
+    """A question for the GM, OWED escalation-check (`scripts/gm_review.py question`; feature 432, FR-001/FR-002)."""
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("gm_review", Path(__file__).resolve().parents[2] / "gm_review.py")
+    assert spec is not None and spec.loader is not None
+    gm = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(gm)
+    gm.question(d, question, source, when)
 
 
 def open_fixes(d: Path) -> list[tuple[str, str]]:
@@ -582,7 +581,7 @@ def fix_hold(d: Path) -> str:
         "the round arbiter's tooling fix is open - make it, with its test, in this feature before going on (feature 379):\n"
         + "\n".join(f"    {t}: {fix}" for t, fix in fixes)
         + '\n  made:     make arbiter-fix-done ID="<trigger>" NOTE="<what was built>" TEST=<its test under tests/> LAND="<the fix\'s files>" F=<feature> TICK=<the task> (lands them, settles the fix, ticks the task)'
-        + '\n  overhaul: make arbiter-fix-declined ID="<trigger>" REASON="<why it overhauls a process>" (the GM reviews it after landing)'
+        + '\n  overhaul: make arbiter-fix-declined ID="<trigger>" REASON="<why it overhauls a process>" (a question for the GM, owed escalation-check)'
     )
 
 
@@ -599,8 +598,8 @@ def fix_home(root: Path, trigger: str) -> Path | None:
 
 
 def settle_fix(root: Path, trigger: str, status: str, note: str, test: str = "", now: str | None = None) -> dict[str, Any]:
-    """`make arbiter-fix-done` / `arbiter-fix-declined`: close an open tooling fix, on the GM's review, in the feature that
-    holds it (`fix_home`)."""
+    """`make arbiter-fix-done` / `arbiter-fix-declined`: close an open tooling fix in the feature that holds it (`fix_home`); a
+    declined one becomes a question for the GM, owed escalation-check (feature 432, FR-001)."""
     d = fix_home(root, trigger) or feature_dir(root)
     if d is None:
         raise ValueError("no active feature (.specify/feature.json)")
@@ -630,7 +629,8 @@ def settle_fix(root: Path, trigger: str, status: str, note: str, test: str = "",
     row = {"fix_of": trigger, "status": status, "note": note, **({"test": test} if status == "done" else {}), "utc": when}
     with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
-    _gm_row(d, {"kind": f"arbiter-fix-{status}", "trigger": trigger, "tooling_fix": fix, "note": note, **({"test": test} if status == "done" else {}), "utc": when})
+    if status == "declined":
+        _gm_question(d, f"Build this tooling fix the round arbiter asked for, which the session declined? The fix: {fix} Declined because: {note}", trigger, when)
     return row
 
 
@@ -685,7 +685,7 @@ def main(argv: list[str]) -> int:
         except (OSError, ValueError) as e:
             print(f"arbiter-ruled: refused - {e}", file=sys.stderr)
             return 1
-        print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl and for the GM's review)")
+        print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)")
         # GUARD_EDIT_OK: feature 385 T02, plan D9 - an hour or red-gate ruling owes the task's part B answered (nothing loosened)
         owed = _approach().ruled(root, row["trigger"])
         plan_review = row["trigger"].startswith("round:spec-fidelity|plan:") or row.get("review") == "plan"  # an asked one too (409)
@@ -724,7 +724,7 @@ def main(argv: list[str]) -> int:
             owed = _approach().ruled(root, row["trigger"])  # GUARD_EDIT_OK: feature 385 D9, as for a single ruling
             if owed:
                 print(owed)
-        print(f"arbiter-ruled: the batch's {len(rows)} triggers recorded (binding; each in arbiter.jsonl and for the GM's review)")
+        print(f"arbiter-ruled: the batch's {len(rows)} triggers recorded (binding; each in arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)")
         return 0
     if argv[:1] == ["gate-held"] and len(argv) == 1:  # the `done` recipe's first step and `make land` (feature 405 T44, D18)
         # THE GATE ASKS, NOT ONLY THE HOOK: the hook sees a typed `make done`, but T11's 05:09 `make land` ran its gate as a
@@ -754,7 +754,7 @@ def main(argv: list[str]) -> int:
             return 1
         stands = f"(REVIEW={review}: an accept stands as the {review} review's verdict)" if review else ""
         trip(Path(".").resolve(), trigger, "ask", "", f"{why} {stands}".strip(), review=review)
-        print(f"arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM, who reviews the ruling after landing; dispatch `round-arbiter` with the MANIFEST below")
+        print(f"arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM (its ruling reaches him only as a kept for_gm question, feature 432); dispatch `round-arbiter` with the MANIFEST below")
         if stands:
             print(f"arbiter-ask: {stands}")
         elif re.match(r"\d+-(spec|plan)-", subject) or re.search(r"spec-fidelity|plan review|spec review", why, re.I):
@@ -783,7 +783,7 @@ def main(argv: list[str]) -> int:
         except ValueError as e:
             print(f"arbiter-fix-{argv[1]}: refused - {e}", file=sys.stderr)
             return 1
-        print(f"arbiter-fix-{argv[1]}: {len(ids)} fix(es) settled - {', '.join(ids)} - on the GM's review (make gm-review)")
+        print(f"arbiter-fix-{argv[1]}: {len(ids)} fix(es) settled - {', '.join(ids)}" + (" - each a question owed escalation-check (make gm-review)" if argv[1] == "declined" else ""))
         return 0
     if argv[:1] == ["nit"] and len(argv) == 4:  # `make arbiter-nit` (feature 374 wave 120, the arbiter's tooling fix)
         try:

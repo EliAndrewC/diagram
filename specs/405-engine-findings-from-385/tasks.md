@@ -426,7 +426,7 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T140 Carried by the claims gate (385 FR-013): findings on code the change left unchanged, moved from feature 422 T04 on the GM's word (2026-10-26, "move 422's 5 [findings] into 405 now so that 422 can close") - fix the code or the claim and re-check each: docs/buildings.md::Sacred features#torii top beam drawn 1.5 ft deep in plan (45 by 4.5 px), l7r/diagram/hamletgen/homesteads/retirement.py::retirement_houses#only `kind == "plain"` houses may keep a retirement house, and the target never falls below 1; what the "plain" filter leaves out cannot be told from the bundle, l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_seats#bath room seated 3 ft past the yard's side (`yard[1] + w / 2 + 3.0`), l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#a byre's clear margin, 3 px each side (`bw + 6, bh + 6` fit probe), l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#at least one byre in every settlement (`max(1, round(...))`) [lands-open]
       research: rendering
-- [ ] GM review (make gm-reviewed F=405) [lands-open]
+- [x] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
 

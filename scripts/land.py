@@ -316,14 +316,24 @@ def shared_free_mb(mw: Path = MEMWATCH, now: float | None = None) -> int | None:
     and memguard killed another session's 1.4 GB process."""
     import time  # noqa: PLC0415
 
+    # ...THE NEWEST RECENT NOTICE THAT CARRIES THE FIGURE: a memguard kill notice carries none, and the first form read only the
+    # newest notice - after the kills of 2026-10-26 13:49-13:51 it found no figure and sized the next landing's cohort at 4 workers
     try:
-        seq, epoch = (mw / "latest").read_text().split()[:2]
-        if (now if now is not None else time.time()) - int(epoch) > MEMWATCH_FRESH_S:
-            return None
-        m = _SHARED.search((mw / "events" / f"{seq}.txt").read_text(errors="replace"))
+        latest = int((mw / "latest").read_text().split()[0])
+        notices = sorted(((int(p.stem), p) for p in (mw / "events").glob("*.txt") if p.stem.isdigit() and int(p.stem) <= latest), reverse=True)
     except OSError, ValueError:
         return None
-    return int((float(m.group(2)) - float(m.group(1))) * 1024) if m else None
+    clock = now if now is not None else time.time()
+    for _seq, path in notices:
+        try:
+            if clock - path.stat().st_mtime > MEMWATCH_FRESH_S:
+                return None  # older notices are older still
+            m = _SHARED.search(path.read_text(errors="replace"))
+        except OSError:
+            continue
+        if m:
+            return int((float(m.group(2)) - float(m.group(1))) * 1024)
+    return None
 
 
 def memory_free_mb(cgroup: Path = Path("/sys/fs/cgroup"), mw: Path = MEMWATCH) -> int:

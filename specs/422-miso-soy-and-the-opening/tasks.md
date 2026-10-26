@@ -30,6 +30,6 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 T04 (the five carried claims findings) moved to feature 405 T140 on the GM's word, 2026-10-26: "move 422's 5 [findings] into
 405 now so that 422 can close" (feature 385 FR-013 as amended that day).
 
-- [ ] GM review (make gm-reviewed F=422) [lands-open]
+- [x] GM review (make gm-reviewed F=422) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

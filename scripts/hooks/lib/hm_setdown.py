@@ -22,6 +22,7 @@ import json
 import re
 import subprocess
 import sys
+from collections.abc import Iterable
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -49,7 +50,19 @@ def git_dir(root: Path) -> Path:
 
 def running(transcript: str) -> set[str]:
     """The ids launched in the background that no task notification has reported on."""
-    return set(LAUNCHED.findall(transcript)) - set(NOTIFIED.findall(transcript))
+    return running_lines(transcript.splitlines())
+
+
+def running_lines(lines: Iterable[str]) -> set[str]:
+    """`running`, read a line at a time: only the ids are kept. A session's transcript reached 206 MB on 2026-10-26, and read whole
+    (its text, then every match of two patterns) this hook grew past 1.2 GB at each turn's end and was killed twice by the
+    laptop's memguard at the containers' shared memory cap."""
+    launched: set[str] = set()
+    notified: set[str] = set()
+    for line in lines:
+        launched.update(LAUNCHED.findall(line))
+        notified.update(NOTIFIED.findall(line))
+    return launched - notified
 
 
 def open_tasks(spec_dir: Path) -> list[tuple[str, str]]:
@@ -62,8 +75,8 @@ def open_tasks(spec_dir: Path) -> list[tuple[str, str]]:
     return boxes
 
 
-def verdict(root: Path, transcript: str) -> str:
-    """'' to let the turn end, else the refusal."""
+def verdict(root: Path, transcript: str | Path) -> str:
+    """'' to let the turn end, else the refusal; `transcript` is its text, or the path it is streamed from."""
     gd = git_dir(root)
     starts = _rows(gd / "task-starts.jsonl")
     if not starts:
@@ -74,7 +87,14 @@ def verdict(root: Path, transcript: str) -> str:
     if not feature or not (spec_dir / "tasks.md").is_file():
         return ""
     boxes = open_tasks(spec_dir)
-    if not boxes or running(transcript):
+    if not boxes:
+        return ""
+    if isinstance(transcript, Path):
+        with transcript.open(encoding="utf-8", errors="replace") as fh:
+            live = running_lines(fh)
+    else:
+        live = running(transcript)
+    if live:
         return ""
     if any(r.get("feature") == feature and str(r.get("utc", "")) >= since for r in _rows(gd / "set-downs.jsonl")):
         return ""
@@ -88,7 +108,7 @@ def main(argv: list[str]) -> int:
         payload = json.loads(sys.stdin.read() or "{}")
         root = Path(argv[1]) if len(argv) > 1 else Path(payload.get("cwd") or ".")
         tp = payload.get("transcript_path") or ""
-        transcript = Path(tp).read_text(encoding="utf-8", errors="replace") if tp and Path(tp).is_file() else ""
+        transcript: str | Path = Path(tp) if tp and Path(tp).is_file() else ""  # streamed, never read whole
         out = verdict(root, transcript)
     except Exception as e:  # noqa: BLE001 - fail open, recorded by the hook
         print(f"ERROR {type(e).__name__}: {e}")

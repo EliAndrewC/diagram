@@ -23,7 +23,7 @@ def accept_line(key: str, was: dict[str, Any], trigger: str) -> str:
     the list a fixing pass reads; every other verdict the accept stands in for is IN-STEP."""
     if was.get("verdict") == "DRIFTED":
         return f"VERDICT {key} DRIFTED - {was.get('note', '')}; a known drift accepted by the round arbiter ({trigger}) to land as filed"
-    return f"VERDICT {key} IN-STEP - accepted by the round arbiter ({trigger}), binding; the GM reviews it"
+    return f"VERDICT {key} IN-STEP - accepted by the round arbiter ({trigger}), binding"
 
 
 def split_semicolon_keys(text: str, known: Any) -> list[str]:  # noqa: ANN401 - a mapping of claim keys

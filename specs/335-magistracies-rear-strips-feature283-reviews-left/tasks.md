@@ -52,6 +52,6 @@ magistracy sheet is reviewed once, after all its redraws.
 - [x] T08 every sheet through `make pack-audit` and its gen; the harness at SC-001..SC-003; `make done`; the reviews the Occasions owe, each within two rounds (FR-015, SC-004, SC-005)
       research: rendering
       verify: DONE. every sheet through make pack-audit (clean) and its gen; harness at SC-001..SC-003 (m:steps-past-revetment-after 0 px, m:doors-off-walls-after 0, m:torii-not-in-plan-after 0); make done green; the six owed reviews recorded - four PASS, Ochiba and Ubame closed by the round arbiter's accepts after round 2
-- [ ] GM review (make gm-reviewed F=335) [lands-open]
+- [x] GM review (make gm-reviewed F=335) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

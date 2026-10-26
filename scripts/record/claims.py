@@ -705,6 +705,8 @@ def _carry_cmd(root: Path, args: argparse.Namespace) -> int:
 #: approved by the GM 2026-10-26: "skip claims-triage for bundles of a few claims"). CONVENTION - "a few" is the spec's knob,
 #: set at 3: a triage round and an impl-drift round cost about the same on so few, and the triage would only route them on
 TRIAGE_SKIP_MAX = 3
+#: where each skipped triage is recorded (feature 430 D6)
+SKIPS = "dev/claims-triage-skips.jsonl"
 
 
 def _small_triage(root: Path, keys: list[str], out: str) -> int:
@@ -712,11 +714,12 @@ def _small_triage(root: Path, keys: list[str], out: str) -> int:
     why = f"a claims triage of {len(keys)} claim(s), at most {TRIAGE_SKIP_MAX}, goes straight to impl-drift (feature 430 D6)"
     rc = main(["--root", str(root), "bundle", "--units", ",".join(keys), "--reason", why, *(["--out", out] if out else [])])
     if rc == 0:
-        row = (f"| {datetime.date.today().isoformat()} | claims-triage | {len(keys)} claim(s) | SKIPPED | claims-triage: skipped for size - "
-               f"{len(keys)} claim(s), at most {TRIAGE_SKIP_MAX}; impl-drift reads them directly | mechanical | - | {why} | 0 s | 0 in / 0 out |")
-        with (root / "dev" / "review-ledger.md").open("a", encoding="utf-8") as fh:
-            fh.write(row + "\n")
-        print(f"claims-triage: {why} - dispatch `impl-drift` on the MANIFEST above, then `make claims-checked BUNDLE=<dir> REPLY=<file>`; the skip is on the ledger")
+        # ...RECORDED IN ITS OWN FILE, not as a row of the review ledger's measured table: a skip has no check, class or cost of
+        # its own, and the ledger's guard (`ledger-hooks.sh`) refused the first form's row at the next commit (2026-10-26)
+        row = {"date": datetime.date.today().isoformat(), "claims": len(keys), "keys": keys, "why": why}
+        with (root / SKIPS).open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+        print(f"claims-triage: {why} - dispatch `impl-drift` on the MANIFEST above, then `make claims-checked BUNDLE=<dir> REPLY=<file>`; the skip is in {SKIPS}")
     return rc
 
 
@@ -726,6 +729,32 @@ def _rekey_cmd(root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]]
     if n:
         save_index(root / INDEX, index)
     print(f"claims-rekey: {n} claim row(s) carried to the file their unit moved to")
+    return 0
+
+
+def _triage_cmd(args: argparse.Namespace, root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]], qdir: Path, store: dict[str, Any]) -> int:
+    """`claims-triage`: clear the claims a page move alone owes (feature 432), then triage the rest of what a triage owes."""
+    due = owed(cur, index, qdir, store)
+    # ...a page moved and no block the claim rests on did: cleared, not triaged (feature 432, FR-005 a). A row with no `rests`
+    # may rest on any block of the page, so it keeps the triage (the plan review's note on D7)
+    pages = [k for k, why in due if why == "triage" and (index.get(k) or {}).get("rests")]
+    if pages:
+        index, snaps = claims_triage.clear_page_moves(cur, index, pages, qdir, datetime.date.today().isoformat())
+        save_index(root / INDEX, live_rows(cur, index))
+        save_store(root / STORE, {**store, **snaps})
+        print(f"claims-triage: {len(pages)} claim(s) cleared without a triage - a page each cites moved and no block it rests on did (feature 432, FR-005 a)")
+    keys = [k for k, why in due if why in TRIAGED and k not in pages]
+    if not keys:
+        print("claims-triage: no claim is owed a triage")
+        return 0
+    if len(keys) <= TRIAGE_SKIP_MAX:
+        return _small_triage(root, keys, args.out)
+    tout = Path(args.out) if args.out else DEFAULT_OUT / "claims-triage"
+    print(triage_bundle(cur, index, store, keys, qdir, tout))
+    claims_flight.mark(root, tout)  # in flight until `claims-triaged` records its reply (feature 426 D1)
+    print(
+        f"claims-triage: {len(keys)} claim(s); dispatch the `claims-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`"
+    )
     return 0
 
 
@@ -829,19 +858,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(sum(1 for _k, why in owed(cur, index, qdir, store) if why in TRIAGED))
         return 0
     if args.cmd == "triage":
-        keys = [k for k, why in owed(cur, index, qdir, store) if why in TRIAGED]
-        if not keys:
-            print("claims-triage: no claim is owed a triage")
-            return 0
-        if len(keys) <= TRIAGE_SKIP_MAX:
-            return _small_triage(root, keys, args.out)
-        tout = Path(args.out) if args.out else DEFAULT_OUT / "claims-triage"
-        print(triage_bundle(cur, index, store, keys, qdir, tout))
-        claims_flight.mark(root, tout)  # in flight until `claims-triaged` records its reply (feature 426 D1)
-        print(
-            f"claims-triage: {len(keys)} claim(s); dispatch the `claims-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`"
-        )
-        return 0
+        return _triage_cmd(args, root, cur, index, qdir, store)
     if args.cmd == "triaged":
         return _triaged_cmd(args, root, cur, index, qdir, store)
     if args.cmd == "report":
