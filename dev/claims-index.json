@@ -37911,11 +37911,11 @@
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a row's street first": {
   "body": "3917a1d684c46754",
-  "claim": "a row's street first - row-villages-resson.drawing: a row's street stands where its farms stand and each farm's own path reaches it - so on a row map the streets are laid first and each household's way, drawn by the settle, ends on its street",
-  "code": "2d72add63e896cac",
+  "claim": "a row's street first - row-villages-resson.drawing: a row's street stands where its farms stand, and a farm off it reaches it by its own path (a path round the grove where the grove is in the way) - so the streets are laid first, and each farm's door path, or the settle's way for a house left unreached, ends on its street",
+  "code": "19b52382d851d021",
   "core": "10a9239a784dca8f",
   "date": "2026-10-25",
-  "note": "the order is supported: the code skips `settle_tree` on a row map, lays the streets with `lay_row_streets`, then the door paths, then the settle, and the page places the street where the farms stand (§124: \"where the dry edge holds the most farms\"). The backing goes further than the page: \"each farm's own path reaches it\" is broader than the page, which draws a path only for \"A farm whose grove stands between it and the street\" (§138). \"drawn by the settle\" is also wrong for this code: `lay_door_paths` draws a row farm's way, and the settle draws only for a house left unreached. Reword to: a row's street stands where its farms stand, and a farm off it reaches it by its own path (a path round the grove where the grove is in the way), so the streets are laid first and each farm's door path, or the settle's way for a house left unreached, ends on its street",
+  "note": "on a row the change skips `settle_tree`, `lay_row_streets` runs before `lay_door_paths` and the settle, so each farm's path is laid onto a street that already stands; the page attests \"a street laid out before the farms\", the street laid \"where the dry edge holds the most farms\", and a farm reaching it \"by a path round the grove\"",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
@@ -37926,7 +37926,7 @@
    "0033-row-villages-resson.drawing.html:4f85f319664ea57f",
    "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#a web lane's middle off the fabric": {
   "body": "f326458b2a344b62",
