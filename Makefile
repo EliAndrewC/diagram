@@ -175,8 +175,13 @@ cohort:         ## [maps] roll N seeds and report every failure      N=10 [SEED=
 ##  SEED=<n>    the FIRST seed to roll (default: 1) - `N=1 SEED=15` reproduces the cohort's own Audit-15
 ##  JOBS=<n>    worker processes (default: cpus - 2) - each holds a roll, ~0.5 GB; the containers share a 10 GB cap
 ##  FRESH=<n>   fresh seeds rolled beside the fixed ones, a rate never a pass/fail (default: COHORT_FRESH; 0 rolls none) - feature 386
+##  FAILED_FIRST=1  roll the seeds that failed last run on this seed block first; LAST_FAILED=1 only those (feature 426)
+##  EXITFIRST=1     stop at the first seed that fails (feature 426); a run that skips seeds is partial, never a landing record
 	$(REF_FIRST)
-	$(RUN).tools.cohort_audit --count $(or $(N),10) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),) $(if $(filter-out 0,$(or $(FRESH),$(COHORT_FRESH))),--fresh $(or $(FRESH),$(COHORT_FRESH)) --fresh-from $$(python3 scripts/gates/cohort_gate.py fresh-seed),); rc=$$?; python3 scripts/measure/cohort_known.py --root . --stamp; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; [ $$rc = 0 ] || python3 scripts/measure/cohort_known.py --root .; exit $$rc
+	$(RUN).tools.cohort_audit --count $(or $(N),10) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),) $(if $(FAILED_FIRST),--failed-first,) $(if $(LAST_FAILED),--last-failed,) $(if $(EXITFIRST),--exitfirst,) $(if $(EXITFIRST_AGAINST),--exitfirst-against $(EXITFIRST_AGAINST),) $(if $(filter-out 0,$(or $(FRESH),$(COHORT_FRESH))),--fresh $(or $(FRESH),$(COHORT_FRESH)) --fresh-from $$(python3 scripts/gates/cohort_gate.py fresh-seed),); rc=$$?; python3 scripts/measure/cohort_known.py --root . --stamp; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; [ $$rc = 0 ] || python3 scripts/measure/cohort_known.py --root .; exit $$rc
+
+probe:          ## [maps] what a change does to every seed and pool map against HEAD: the landing cohort, HEAD's fresh block and the pool in WT, every seed beside HEAD's stored verdict (feature 426)   [WT=<worktree>] [EXITFIRST=1] [JOBS=<n>]
+	@python3 scripts/measure/probe.py --root . $(if $(WT),--wt $(WT),) $(if $(EXITFIRST),--exitfirst,) $(if $(JOBS),--jobs $(JOBS),)
 
 cohort-landing: ## [maps] the landing cohort a gated push requires: main's baseline first when its engine has none, then seeds 1-48 and the pinned rows (the 48-seed fresh block, a rate never a refusal, rolls after the push - feature 415) - and what the push will say
 	@if python3 scripts/gates/cohort_gate.py needs-baseline; then \

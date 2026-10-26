@@ -52,3 +52,8 @@
   `dev/cohort-log/` record counted.
 - Before (main's key, worktree `/tmp/probe-s` at `fd707b608`): rolled 11 of 16, served 5 (`20261026T112406Z-probe-s-2672952`).
 - After (the code id, the clone): rolled 0 of 16, served 16 (SC-001).
+
+## R6 - The landing after a full run (FR-012)
+
+- Observed 2026-10-26, method: in the clone at T05's tree, `make cohort N=48 FRESH=0 JOBS=3` (rolled 0, served 54 - the store was
+  warm from T05's runs), then `make cohort-landing JOBS=3`: rolled 0, served 54, 54 of 54, 28 s wall.

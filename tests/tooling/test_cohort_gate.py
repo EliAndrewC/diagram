@@ -103,6 +103,7 @@ def test_which_records_count(tmp_path: pathlib.Path) -> None:
         _rec(root, "u4", "nosuchcommit", 1),
         _rec(root, "u6", head, 1, households=40),  # a scaling roll
         dict(_rec(root, "u7", head, 1), seeds=[{"seed": 1, "verdict": "pass"}]),  # too few seeds
+        dict(_rec(root, "u10", head, 1), partial=True, carried=[]),  # a FAILED_FIRST/LAST_FAILED/EXITFIRST run (feature 426 D4)
     ]
     assert cg.pick(root, recs) is None
     landing = _rec(root, "u8", head, 1)

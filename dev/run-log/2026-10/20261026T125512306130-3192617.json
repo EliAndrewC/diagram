@@ -1,0 +1,49 @@
+{
+  "utc": "2026-10-26T12:55:12Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 254,
+  "result": "green",
+  "commit": "52d3d550e",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10220,
+  "host": {
+    "load": [
+      5.71,
+      11.65
+    ],
+    "mem_avail_mb": [
+      8513,
+      9162
+    ],
+    "cpu_temp_c": [
+      80.0,
+      90.0
+    ],
+    "stall_s": {
+      "cpu": 6.6,
+      "io": 1.4,
+      "io_full": 1.1,
+      "memory": 0.5
+    },
+    "throttle_ms": {
+      "core": 27177,
+      "package": 15528
+    }
+  },
+  "phases": {
+    "preflight": 21.0,
+    "static": 1.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 1.0,
+    "hooks-test": 43.0,
+    "pytest": 194.0,
+    "floors": 10.0,
+    "test-full": 207.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/tools/cohort_audit.py",
+  "collected": 10220
+}

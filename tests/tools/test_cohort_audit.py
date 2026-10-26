@@ -79,10 +79,12 @@ def test_a_clean_reference_runs_the_cohort_and_passes_its_arguments_through(_cle
     monkeypatch.setattr(
         ca,
         "audit",
-        lambda count, seed, only, jobs, households, fresh, fresh_from: seen.update(count=count, seed=seed, only=only, jobs=jobs, households=households, fresh=fresh, fresh_from=fresh_from) or 0,
+        lambda count, seed, only, jobs, households, fresh, fresh_from, *modes: (
+            seen.update(count=count, seed=seed, only=only, jobs=jobs, households=households, fresh=fresh, fresh_from=fresh_from, modes=modes) or 0
+        ),
     )
     assert ca.main(["--count", "6", "--seed", "9", "--only", "wells", "--jobs", "2", "--households", "40", "--fresh", "4", "--fresh-from", "12345"]) == 0
-    assert seen == {"count": 6, "seed": 9, "only": "wells", "jobs": 2, "households": 40, "fresh": 4, "fresh_from": 12345}
+    assert seen == {"count": 6, "seed": 9, "only": "wells", "jobs": 2, "households": 40, "fresh": 4, "fresh_from": 12345, "modes": (False, False, False, None)}
 
 
 def test_roll_one_goes_through_GENERATE_which_is_the_path_that_ships(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -40,10 +40,11 @@ def git(root: pathlib.Path, *a: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(["git", "-C", str(root), *a], capture_output=True, text=True, check=False)
 
 
-def fresh_seed(root: pathlib.Path) -> int:
-    """The fresh block's first seed: from the working tree's engine key, so one engine always rolls one block (plan D3) - and a
-    docs, comment or docstring edit is the same engine (`cohort_known.engine_key`)."""
-    h = hashlib.sha256(cohort_known.engine_key(root, None).encode()).hexdigest()
+def fresh_seed(root: pathlib.Path, ref: str | None = None) -> int:
+    """The fresh block's first seed: from the working tree's engine key (or `ref`'s - `make probe` rolls HEAD's block, feature
+    426 D5), so one engine always rolls one block (plan D3) - and a docs, comment or docstring edit is the same engine
+    (`cohort_known.engine_key`)."""
+    h = hashlib.sha256(cohort_known.engine_key(root, ref).encode()).hexdigest()
     return FRESH_BASE + int(h[:12], 16) % FRESH_SPAN
 
 
@@ -57,8 +58,16 @@ def fresh(rec: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def landing_shaped(rec: dict[str, Any], need_fresh: bool = True) -> bool:
-    """48 fixed seeds from seed 1 at the rolled sizes, no uncommitted engine diff - and, for the landing record, its fresh block."""
-    return int(rec.get("first_seed") or 0) == 1 and rec.get("households") is None and len(fixed(rec)) >= SEEDS and not rec.get("engine_diff") and (len(fresh(rec)) >= SEEDS or not need_fresh)
+    """48 fixed seeds from seed 1 at the rolled sizes, no uncommitted engine diff, every seed rolled (a FAILED_FIRST, LAST_FAILED
+    or EXITFIRST run that skipped some is `partial`, feature 426 D4) - and, for the landing record, its fresh block."""
+    return (
+        int(rec.get("first_seed") or 0) == 1
+        and rec.get("households") is None
+        and len(fixed(rec)) >= SEEDS
+        and not rec.get("engine_diff")
+        and not rec.get("partial")
+        and (len(fresh(rec)) >= SEEDS or not need_fresh)
+    )
 
 
 def on_engine(root: pathlib.Path, rec: dict[str, Any]) -> bool:
@@ -128,7 +137,7 @@ def main(argv: list[str] | None = None) -> int:
     root = pathlib.Path(git(pathlib.Path("."), "rev-parse", "--show-toplevel").stdout.strip() or ".")
     what = args[0] if args else "check"
     if what == "fresh-seed":
-        print(fresh_seed(root))
+        print(fresh_seed(root, args[1] if len(args) > 1 else None))
         return 0
     if what == "needs-baseline":
         return 0 if needs_baseline(root) else 1

@@ -1,0 +1,35 @@
+{
+ "utc": "20261026T123300Z",
+ "clone": "diagram-backlog",
+ "feature": "",
+ "commit": "16a824cb3",
+ "first_seed": 723759,
+ "households": null,
+ "count": 1,
+ "served": 1,
+ "partial": true,
+ "carried": [],
+ "block": [
+  723759,
+  16,
+  null,
+  null
+ ],
+ "seeds": [
+  {
+   "seed": 723767,
+   "households": 10,
+   "pins": {},
+   "how": "served",
+   "verdict": "fail",
+   "failures": [
+    "lane_knots"
+   ],
+   "counts": {
+    "lane_knots": 2
+   },
+   "form": "nucleated"
+  }
+ ],
+ "engine_diff": "33d1cf1d8096bb2b"
+}
