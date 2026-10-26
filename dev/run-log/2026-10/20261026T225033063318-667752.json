@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-26T22:50:33Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 271,
+  "result": "green",
+  "commit": "e63d7a68a",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10000,
+  "host": {
+    "load": [
+      7.98,
+      4.5
+    ],
+    "mem_avail_mb": [
+      8472,
+      9434
+    ],
+    "cpu_temp_c": [
+      78.0,
+      95.0
+    ],
+    "stall_s": {
+      "cpu": 2.3,
+      "io": 0.5,
+      "io_full": 0.5,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 25626,
+      "package": 16630
+    }
+  },
+  "phases": {
+    "preflight": 46.0,
+    "static": 4.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 1.0,
+    "pytest": 247.0,
+    "floors": 10.0,
+    "test-full": 262.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/hamletgen/water/brook_course.py",
+  "collected": 10000
+}
