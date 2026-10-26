@@ -1,0 +1,15 @@
+perf-fanout seed 25, sizes 40, HOT 50,000, ANCHOR 300
+
+lane_wells: 3,706,312 calls @40
+  anchor hamletgen/homesteads/well_seats.py:76:seats [23]
+    hamletgen/homesteads/wells.py:515:_seat_ok [146,581] <- hamletgen/homesteads/well_seats.py:76:seats [23]
+    settlement/_geom/primitives.py:45:seg_closest [146,475] <- settlement/_geom/primitives.py:54:seg_dist [146,475] <- hamletgen/homesteads/wells.py:757:<genexpr> [68,770] <- hamletgen/homesteads/wells.py:755:ok [44,449] <- hamletgen/homesteads/wells.py:515:_seat_ok [146,581] <- hamletgen/homesteads/well_seats.py:76:seats [23]
+    settlement/_geom/primitives.py:54:seg_dist [146,475] <- hamletgen/homesteads/wells.py:757:<genexpr> [68,770] <- hamletgen/homesteads/wells.py:755:ok [44,449] <- hamletgen/homesteads/wells.py:515:_seat_ok [146,581] <- hamletgen/homesteads/well_seats.py:76:seats [23]
+    settlement/homestead_parts/wood_share.py:444:<genexpr> [111,026] <- settlement/homestead_parts/wood_share.py:443:disc_covers [15,218] <- hamletgen/homesteads/wells.py:515:_seat_ok [146,581] <- hamletgen/homesteads/well_seats.py:76:seats [23]
+    hamletgen/homesteads/wells.py:757:<genexpr> [68,770] <- hamletgen/homesteads/wells.py:755:ok [44,449] <- hamletgen/homesteads/wells.py:515:_seat_ok [146,581] <- hamletgen/homesteads/well_seats.py:76:seats [23]
+  anchor hamletgen/homesteads/wells.py:393:seat_wells [8]
+    hamletgen/homesteads/wells.py:689:<genexpr> [124,521] <- hamletgen/homesteads/wells.py:393:seat_wells [8]
+  anchor hamletgen/homesteads/well_seats.py:163:keys [23]
+    hamletgen/homesteads/wells.py:466:_in_belt [63,662] <- hamletgen/homesteads/well_seats.py:163:keys [23]
+
+all stages: 3,706,312 calls @40

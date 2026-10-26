@@ -18,7 +18,7 @@ from l7r.diagram.settlement.shrines_wells.wells import well_gap_to_dwellings as 
 from ..consts import WELL_VERGE_FT, Pt
 from ..plan import SitePlan
 from .holds import release_held
-from .well_seats import PairAhead, SeatSweep
+from .well_seats import PairAhead, PoolScore, SeatSweep
 
 _WELL_DRAWN_R = 12.376
 """The wellhead's DRAWN half-extent, used when asking how far a candidate seat would push the crop: the glyph's own `vr`
@@ -451,10 +451,23 @@ def seat_wells(
     # dooryards, which is where the idiom 井戸端会議 puts them.
     from ..hinterland import belt_polygon  # local: hinterland is a later stage, module-level would invert the pipeline's reading order
 
-    _belt = belt_polygon(s, plan)
+    # ...ONCE A STAGE WHERE THE STAGE HOLDS A MEMO (feature 427 T05): inside `stage_lane_wells` only wells are added, and the belt
+    # reads the houses, the lanes and the crop - eight calls rebuilt the same polygon on a 40-household roll
+    memo: dict[Any, Any] | None = getattr(s, "_well_memo", None)
+    if memo is not None and "belt" in memo:
+        _belt = memo["belt"]
+    else:
+        _belt = belt_polygon(s, plan)
+        if memo is not None:
+            memo["belt"] = _belt
+
+    _belt_of: dict[tuple[float, float, float], int] = {}
 
     def _in_belt(c: tuple[float, float, float]) -> int:
-        return 1 if _belt and point_in_poly(c[1], c[2], _belt) else 0
+        """Asked once per seat, not once per sort (feature 427 T05, D5)."""
+        if c not in _belt_of:
+            _belt_of[c] = 1 if _belt and point_in_poly(c[1], c[2], _belt) else 0
+        return _belt_of[c]
 
     # THE MINIMAX SERVES THE HOUSES THAT NEED A WELL (known-open ledger 2026-08-16): the
     # worst-served objective used to count every house, including those
@@ -493,6 +506,18 @@ def seat_wells(
     # and each `well_at` built the water, dry-plot and wet-ring grids again for its one seat (cohort seed 44: 71 builds);
     # the scope asserts on exit that the terrain it froze is the terrain that stands
     sweep: SeatSweep | None = None
+    _ok_of: dict[tuple[float, float], bool] = {}
+    # ...AND A SEAT `well_at` REFUSED IS NOT ASKED AGAIN BY A LATER RUNG (feature 427 T05): the terrain is frozen and inside this
+    # call (and inside `stage_lane_wells`, whose memo keeps the set) only a well that lands changes what stands, which can add a refusal and never lift one (seed 25 at 40 households
+    # asked 21,093 times, most of them seats an earlier rung had already been refused)
+    _refused: set[tuple[float, float]] = memo.setdefault("refused", set()) if memo is not None else set()
+
+    def _seat_ok(x: float, y: float) -> bool:
+        """`seat_ok` and the wood floor, asked once per seat for every rung (feature 427 T05): neither reads the wells placed."""
+        if (x, y) not in _ok_of:
+            _ok_of[(x, y)] = bool(seat_ok(x, y)) and not _wood.disc_covers(x, y, _well_r)
+        return _ok_of[(x, y)]
+
     with s.frozen_terrain():
         for third, want_near in rungs:
             if len(placed) >= want:
@@ -508,8 +533,15 @@ def seat_wells(
             # as the docstring above promises.
             pad = 120.0
             if sweep is None:  # ...ONE DISTANCE TABLE FOR EVERY RUNG (feature 387, plan D9): the lattice and the houses do not change
-                sweep = SeatSweep(list(candidates) if candidates is not None else list(grid_points(min(xs) - pad, max(xs) + pad, min(ys) - pad, max(ys) + pad, step)), houses)
-            seats, _near_of = sweep.seats(third, want_near, gap, reach_r, lambda x, y: seat_ok(x, y) and not _wood.disc_covers(x, y, _well_r), (ccx, ccy))
+                # ...and for every call of the stage that asks the same lattice of the same houses at the same gap (feature 427 T05):
+                # the sweep's wall gaps hold for its gap's reach, and nothing it measures moves while only wells are added
+                key = ("sweep", step, gap, reach_r, tuple(candidates or ()), tuple((h["x"], h["y"], h["w"], h["h"], h.get("rot", 0.0), h.get("kind")) for h in houses))
+                sweep = memo.get(key) if memo is not None else None
+                if sweep is None:
+                    sweep = SeatSweep(list(candidates) if candidates is not None else list(grid_points(min(xs) - pad, max(xs) + pad, min(ys) - pad, max(ys) + pad, step)), houses)
+                    if memo is not None:
+                        memo[key] = sweep
+            seats, _near_of = sweep.seats(third, want_near, gap, reach_r, _seat_ok, (ccx, ccy))
             # GREEDY COVERAGE, not central-first throughout (settlement-review, Mizuguchi/Sawada
             # 2026-08-15): sorting every well toward the centroid put both of Mizuguchi's wells in one
             # lobe of a two-lobed cluster - the six eastern households walked 248-424 ft while the west
@@ -536,6 +568,7 @@ def seat_wells(
             # computed once per seat.
             _sorted_at = -1
             _crop_box: tuple[int, tuple[float, float, float, float]] | None = None
+            _score = PoolScore(pool, served, needy)  # the pool's seats-by-households distances, once a rung (feature 427 T05)
             while pool and len(placed) < want:
                 if placed and len(placed) != _sorted_at:
                     # ...by MINIMAX NEED, in ~3-grid-step buckets, centrality breaking ties inside a
@@ -559,9 +592,6 @@ def seat_wells(
                     # standing well inside each call (70,416 calls, 1.2 million terms on Kuwabata). Same numbers, same
                     # order: `worst_after` is the lifted body, held to the nested form by its test.
                     _standing = [min(math.hypot(h["x"] - wx, h["y"] - wy) for wx, wy in placed) for h in needy]
-
-                    def _worst_after(c: tuple[float, float, float], standing: Sequence[float] = _standing) -> float:
-                        return worst_after(c, needy, standing)
 
                     # AND AN INTERIOR SEAT BEATS A PADDED ONE THAT SERVES THE SAME HOUSEHOLDS. The sweep
                     # box above is padded 120 px past the house CENTERS because a bundle's courtyard
@@ -618,10 +648,7 @@ def seat_wells(
                     # worst-served household's walk to be worth it. Both quantities are distances in the
                     # same units, so no weighting has to be invented - and the well that genuinely serves
                     # an outlying lobe still wins, because the coverage it buys is real.
-                    def _extent_added(c: tuple[float, float, float], bx0: float = _bx0, bx1: float = _bx1, by0: float = _by0, by1: float = _by1) -> float:
-                        """How far past the crop's predicted box this seat (drawn radius included) reaches."""
-                        r = drawn_r(s)
-                        return max(0.0, bx0 - (c[1] - r), (c[1] + r) - bx1, by0 - (c[2] - r), (c[2] + r) - by1)
+                    # (the overreach: how far past the crop's predicted box a seat, drawn radius included, reaches - `PoolScore`)
 
                     # ...AND THE LAST TIE-BREAK IS THE NEIGHBORHOOD, NOT THE CENTROID (settlement-review,
                     # Sawada 2026-08-18). Once the minimax bucket and the frame term are equal, the
@@ -641,8 +668,7 @@ def seat_wells(
                     # is minimized by hugging one outlying farmhouse, which is the same mistake in the
                     # other direction. Every seat in the pool already passed the rung, so this only
                     # orders seats that are all legally "among the dwellings".
-                    def _neighborhood(c: tuple[float, float, float], memo: dict[tuple[float, float, float], float] = _near_of) -> float:
-                        return memo[c]  # the rung's own want_near-th nearest house, taken once by the sweep (`SeatSweep.seats`)
+                    # (the neighborhood: the rung's own want_near-th nearest house, taken once by the sweep - `SeatSweep.seats`)
 
                     # THE BELT TERM SITS BEHIND COVERAGE, not in front of it. Ranked first it is a
                     # filter, and it behaved like every other filter this function has tried: Mizuguchi's
@@ -651,11 +677,13 @@ def seat_wells(
                     # bought nothing. Behind the minimax bucket it can only decide between seats that
                     # serve the households equally well - which is all "do not stand in the windbreak"
                     # was ever entitled to decide.
-                    def _key(c: tuple[float, float, float]) -> tuple[int, float, int, float, float, float]:
-                        _w, _e = _worst_after(c), _extent_added(c)
-                        return (int(most_served_after(c, served, placed) > WELL_SERVES_MAX), (_w + _e) // 66.0, _in_belt(c), _e, _w, _neighborhood(c))
-
-                    pool.sort(key=_key)
+                    # ...THE KEY ABOVE, FOR THE WHOLE POOL AT ONCE (feature 427 T05, D5): `_worst_after`, `_extent_added`,
+                    # `most_served_after` and `_neighborhood` per seat walked every household against every standing well -
+                    # 2.19M inner calls at 40 households (the T01 survey); `PoolScore` computes the same key in array
+                    # operations, the one-seat forms kept as its reference (`tests/hamletgen/homesteads/test_pool_score.py`)
+                    _keys = _score.keys(pool, placed, _standing, (_bx0, _bx1, _by0, _by1), drawn_r(s), _in_belt, _near_of, WELL_SERVES_MAX, 66.0)  # the worst walk's bucket, in px (the claim above)
+                    _order = sorted(range(len(pool)), key=_keys.__getitem__)
+                    pool[:] = [pool[i] for i in _order]
                     _sorted_at = len(placed)
                 _, x, y = pool.pop(0)
                 if any(math.hypot(x - px, y - py) < 170.0 for px, py in placed):
@@ -667,10 +695,14 @@ def seat_wells(
                     # sometimes the only way to water a household; a lattice well that reaches past the box the crop will set
                     # is refused, not drawn, and the reach is held by `reach_wells` (feature 374 wave 155)
                     continue
+                if (x, y) in _refused:
+                    continue
                 if s.well_at(x, y):
                     mark_form(s, x, y, form)
                     placed.append((x, y))
                     new.append((x, y))
+                else:
+                    _refused.add((x, y))
     return new
 
 
@@ -703,6 +735,9 @@ def on_a_verge(s: Settlement) -> Any:
     Research: a lane-side well's seat - research/questions/0196-communal-wells-ido.drawing.html: on a lane's verge, clear of the tread, its curb within `WELL_VERGE_FT`"""
     # the lanes standing and the households' ways the seating reserved (`access_corridors`), drawn as lanes later: a cluster well
     # seated before the web keeps their verges too (feature 374 wave 154: two cohort wells stood on an access way's verge)
+    memo: dict[Any, Any] | None = getattr(s, "_well_memo", None)
+    if memo is not None and "verge" in memo:
+        return memo["verge"]  # the lanes stand still while `stage_lane_wells` adds wells: one test, its answers kept (feature 427 T05)
     M = getattr(s, "M", None) or {}
     lanes = [([(float(p[0]), float(p[1])) for p in ln["pts"]], float(ln.get("w", 3.0)) / 2) for ln in [*(M.get("lanes") or []), *(M.get("access_corridors") or [])] if len(ln.get("pts") or []) >= 2]
     reach = s._well_vr() + s.px(WELL_VERGE_FT) if lanes else 0.0
@@ -715,9 +750,15 @@ def on_a_verge(s: Settlement) -> Any:
         for a, b in zip(pts, pts[1:], strict=False)
     )
 
-    def ok(x: float, y: float) -> bool:
-        return any(seg_dist(x, y, a, b) - half <= reach for a, b, half, *_ in legs.near(x, y, 0.0))
+    asked: dict[tuple[float, float], bool] = {}
 
+    def ok(x: float, y: float) -> bool:
+        if (x, y) not in asked:
+            asked[(x, y)] = any(seg_dist(x, y, a, b) - half <= reach for a, b, half, *_ in legs.near(x, y, 0.0))
+        return asked[(x, y)]
+
+    if memo is not None:
+        memo["verge"] = ok
     return ok
 
 
@@ -739,10 +780,12 @@ def stage_lane_wells(s: Settlement, plan: SitePlan) -> None:
     owed = getattr(s, "_wells_owed", None)
     if not owed:
         return
+    s._well_memo = {}  # type: ignore[attr-defined]  # the belt and the seat sweeps, kept while only wells are added (`seat_wells`)
     try:
         lane_and_fallback_wells(s, plan, owed)
         reach_wells(s, plan)
     finally:
+        s._well_memo = None  # type: ignore[attr-defined]
         record_over_ten(s)
 
 

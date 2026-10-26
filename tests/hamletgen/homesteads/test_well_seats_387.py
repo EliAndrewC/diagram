@@ -70,3 +70,22 @@ def test_the_look_ahead_is_the_pair_rule_for_every_second_seat() -> None:
         ahead = PairAhead(seats, houses)
         for c in seats[:10]:
             assert ahead.keeps_ten(c) == _old_pair_keeps_ten(c, seats, houses), seed
+
+
+def test_the_wall_gap_is_measured_once_a_seat_and_reads_the_dwellings() -> None:
+    """Feature 427 T05: `walls` is `well_gap_to_dwellings` for the lattice - 0 inside a dwelling, an abandoned house no dwelling,
+    a seat measured once for every rung."""
+    import numpy as np
+
+    houses = [{"x": 100.0, "y": 100.0, "w": 40.0, "h": 20.0, "rot": 30.0}, {"x": 400.0, "y": 100.0, "w": 40.0, "h": 20.0, "kind": "abandoned"}]
+    pts = [(100.0, 100.0), (160.0, 100.0), (400.0, 100.0)]
+    sweep = SeatSweep(pts, houses)
+    got = sweep.walls(np.arange(3), 1e9)
+    for k, (x, y) in enumerate(pts):
+        assert math.isclose(got[k], well_gap_to_dwellings(houses, x, y), abs_tol=1e-9)
+    sweep.wall[0] = -1.0  # a seat measured is never measured again
+    assert sweep.walls(np.arange(1), 1e9)[0] == -1.0
+    assert np.isinf(SeatSweep(pts, houses).walls(np.arange(3), 1.0)[1:]).all()  # no dwelling within reach: infinity
+    gone = SeatSweep(pts, [houses[1]])
+    assert np.isinf(gone.walls(np.arange(3), 1e9)).all()
+    assert len(gone.walls(np.arange(3), 1e9)) == 3  # measured once: nothing left to do

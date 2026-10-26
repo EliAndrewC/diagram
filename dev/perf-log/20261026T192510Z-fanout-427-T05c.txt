@@ -1,0 +1,22 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+lane_wells: 978,547 calls @20, 2,580,249 calls @40, growth exponent 1.40
+  anchor hamletgen/homesteads/well_seats.py:76:seats [11]
+    settlement/_geom/primitives.py:45:seg_closest [104,969|41,502] <- settlement/_geom/primitives.py:54:seg_dist [104,969|41,502] <- hamletgen/homesteads/wells.py:757:<genexpr> [57,295|31,043] <- hamletgen/homesteads/wells.py:755:ok [21,477|5,738] <- hamletgen/homesteads/wells.py:515:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+    settlement/_geom/primitives.py:54:seg_dist [104,969|41,502] <- hamletgen/homesteads/wells.py:757:<genexpr> [57,295|31,043] <- hamletgen/homesteads/wells.py:755:ok [21,477|5,738] <- hamletgen/homesteads/wells.py:515:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+    hamletgen/homesteads/wells.py:515:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+    hamletgen/homesteads/wells.py:757:<genexpr> [57,295|31,043] <- hamletgen/homesteads/wells.py:755:ok [21,477|5,738] <- hamletgen/homesteads/wells.py:515:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+    settlement/homestead_parts/wood_share.py:444:<genexpr> [54,077|13,243] <- settlement/homestead_parts/wood_share.py:443:disc_covers [6,724|1,949] <- hamletgen/homesteads/wells.py:515:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+  anchor hamletgen/homesteads/wells.py:393:seat_wells [4]
+    hamletgen/homesteads/wells.py:689:<genexpr> [50,710|11,023] <- hamletgen/homesteads/wells.py:393:seat_wells [4|2]
+  fastest growers @20 -> @40:
+    x4.6 hamletgen/homesteads/wells.py:689:<genexpr> [11,023 -> 50,710]
+    x4.1 settlement/homestead_parts/wood_share.py:444:<genexpr> [13,243 -> 54,077]
+    x4.0 hamletgen/homesteads/wells.py:515:_seat_ok [18,180 -> 73,249]
+    x3.8 hamletgen/homesteads/wells.py:466:_in_belt [8,138 -> 31,182]
+    x3.7 hamletgen/homesteads/wells.py:755:ok [5,738 -> 21,477]
+    x3.7 settlement/houses.py:237:<genexpr> [6,828 -> 25,478]
+    x3.0 builtins.len [40,492 -> 120,953]
+    x3.0 math.hypot [58,483 -> 174,566]
+
+all stages: 978,547 calls @20, 2,580,249 calls @40

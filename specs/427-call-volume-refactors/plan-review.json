@@ -32,7 +32,7 @@
    "declared": "round-arbiter"
   },
   "## Decisions": {
-   "sha256": "ea866f37bab8abdca60c76f53002f88cfe5699f42c8ec15c0b6b2ba3447b4043",
+   "sha256": "c135d309a2e9fb10eda0308b6c94e4b6b180a40a105bbb1a67d84bd8f8a4d254",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
@@ -92,7 +92,7 @@
    "declared": "spec-fidelity"
   },
   "### T05 Approach (checklist part A)": {
-   "sha256": "27564485f97ea871a66b6a50befc4cee96659db5aafe64df672a9882fdf28a45",
+   "sha256": "cad0d16f6c12fb512a8e317782bf21fad6376b246624c23250f8110bfe00cc8f",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
@@ -565,6 +565,70 @@
      "summary": "T05 (the wells, US3) after T04; its decisions written and reviewed when T05 starts; done = the lane_wells chain under US3's bound",
      "class": "within",
      "why": "request.md 5 puts the wells after US2; deferring the design to a later reviewed block decides nothing that narrows US3, whose bound stays the done test."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Decisions",
+    "### T05 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-D4 (unchanged)",
+     "summary": "D1-D4 are byte-identical to the text judged CLEAR (diffed against earlier.md); the block changed only by adding D5.",
+     "class": "within",
+     "why": "No change to judge; the earlier CLEAR verdict stands for this text."
+    },
+    {
+     "id": "D5a",
+     "summary": "seat_wells' sort after each landed well keeps its key tuple and order, computed for the whole pool at once (seats and households as arrays once per rung, a seats-by-households distance table once).",
+     "class": "within",
+     "why": "US3 / FR-003 / research R1: the GM asked to stop calling functions hundreds of thousands of times for a few dozen items (request 1, 2) without fundamental redesign before measurement; same key, same order is a refactor meant to compute the same thing (request 5)."
+    },
+    {
+     "id": "D5b",
+     "summary": "Per sort, each household's nearest standing well; per seat at once the households a new well would take (strictly nearer, preserving min's tie toward the standing well), most_served_after, worst_after, _extent_added.",
+     "class": "within",
+     "why": "Preserves the existing semantics explicitly, including the tie rule; serves FR-003's chain removal."
+    },
+    {
+     "id": "D5c",
+     "summary": "_in_belt asked once per seat rather than once per sort.",
+     "class": "within",
+     "why": "Removes a recomputation of a per-seat value; the result is unchanged."
+    },
+    {
+     "id": "D5d",
+     "summary": "most_served_after and worst_after kept as one-seat reference forms; a new test holds the pool scorer to them seat for seat.",
+     "class": "within",
+     "why": "A test whose only effect is to enforce that the requested refactor computes the same thing; enforcement of the request, not scope."
+    },
+    {
+     "id": "D5e",
+     "summary": "Admission (well_at, extent_past, wells' spacing GUESS) unchanged.",
+     "class": "within",
+     "why": "Leaves behavior outside the hot path untouched; nothing narrowed."
+    },
+    {
+     "id": "D5f",
+     "summary": "np.hypot for math.hypot; a last-place rounding difference that moves a seat across a bucket or tie is judged by the landing cohort (FR-007).",
+     "class": "within",
+     "why": "Request 5 (the approved approach) says identical manifests 'where that comes free' and the per-seed comparison against HEAD otherwise; the cohort is that per-seed comparison, and FR-007 holds no HEAD-passing seed may fail. Same handling as D4's R3, judged CLEAR."
+    },
+    {
+     "id": "D5g",
+     "summary": "US3's test: lane_wells chain at 40 households from ~2.19M (observed 2026-10-26, make perf-fanout) to under 100k, and slowest seed's lane_wells under 0.5 s, both US3's GUESS bounds.",
+     "class": "within",
+     "why": "Restates the accepted spec's US3 test with FR-003's before/after count; the figure carries a one-shot label."
+    },
+    {
+     "id": "T05-approach",
+     "summary": "Approach checklist now names D5 as its constraint and answers the search smell: 'None: the sort's own key, computed at once.'",
+     "class": "within",
+     "why": "Fills in the items the earlier CLEAR text deferred to T05's decisions; no new scope or carve-out."
     }
    ]
   }
