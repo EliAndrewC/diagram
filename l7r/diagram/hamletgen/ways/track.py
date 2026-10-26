@@ -255,6 +255,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.lane
 
     Research:
+        spur scored at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the brook at a crossing place - a crossing within `FORD_HALF` (30 ft) of a ford counts as at it when the spur's candidates are scored
         square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)
         lanes after the farmhouses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: connector and spur drawn after every house
         polder has no spur - GUESS: the connector alone, the way into the fields taken to be over the dike's crest where the record runs a field path on to the outer bund

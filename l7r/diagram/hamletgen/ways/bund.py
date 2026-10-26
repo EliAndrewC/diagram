@@ -306,9 +306,11 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
         some way joins the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: joined, run on, or a
             field path branched off the nearest lane
         nearest lane runs on - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the end nearest the paddy
-        water between is crossed - GUESS: searched, the record silent (feature 417 T49, 2026-10-26); one water course at most - 0084
-            gives the deck a way takes over water (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html), no page
-            caps the courses a way to the field may cross
+        water between is crossed - DEVIATION research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html,
+            research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one water course at most (the straight
+            step's count; each squared leg judged clear too) - a ditch crossed where the line takes it, as 0084 has it, but the brook
+            crossed wherever the run-on target points, where 0035 crosses only at a crossing place and leaves off a spur that can reach
+            the field only across the brook - a departure the code keeps until feature 417 T32
         on the bund - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end within 6 ft of the paddy's edge (`BUND_REACH_FT`) counts as joined to the bund
         field path width - research/questions/0081-village-lanes.drawing.html: the branched field path 5 ft wide (`BRANCH_WIDTH`), the spur's rank
         field path's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the no-build corridor `LANE_CLEARANCE`, 7 ft from the lane's middle, a footprint held to it at its corners"""
@@ -358,7 +360,12 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
         for q in sorted(samples, key=paddy.dist):
             tgt = run_on_target(q, paddy, BRANCH_WIDTH / 2.0, reach=float("inf"))
             way = square_run(s.M, [q, tgt]) if tgt is not None else []  # square where it crosses water, as laid (feature 417 T49)
-            if tgt is not None and all(blocks.clear(a, b, BRANCH_WIDTH, over_water=over) for a, b in zip(way, way[1:], strict=False)) and s.admits_lane(way, BRANCH_WIDTH):  # ...and the matrix (M8)
+            if (
+                tgt is not None
+                and blocks.clear(q, tgt, BRANCH_WIDTH, over_water=over)
+                and all(blocks.clear(a, b, BRANCH_WIDTH, over_water=over) for a, b in zip(way, way[1:], strict=False))
+                and s.admits_lane(way, BRANCH_WIDTH)
+            ):  # ...and the matrix (M8)
                 s.lane(way, width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
                 return "branch"
     return "none: every straight way from the lanes to the paddy crosses water, the marsh or a steading"
