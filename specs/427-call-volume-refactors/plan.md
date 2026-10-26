@@ -145,6 +145,32 @@ T01 survey), under 100k, and the slowest seed's lane_wells under 0.5 s (both bou
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** `PAIR_LOOK`'s research claim says what the number is: a breadth of ours that decides which first
+   well is seated, not only what the search costs.
+2. **The constraints.** 385 FR-013 (a carried claims finding is fixed in the code or the claim); constitution XII (every guess
+   labeled).
+3. **Where each comes from.** impl-drift on T05's claims round 2 (2026-10-26): UNCLAIMED, "PAIR_LOOK = 40: how many first-well
+   seats nearest the share's middle are re-ranked ... (search breadth, a GUESS)"; carried into T06 by `make land`.
+4. **Do they describe the world here?** Yes: `PAIR_LOOK`'s seats are the only ones the look ahead re-ranks (`wells.py`,
+   `pool[:PAIR_LOOK]`), so the number moves which seat the first of two wells takes.
+5. **The order.** After T05, before the pairwise families (`request.md` 5).
+6. **The exits.** Green: the claim relabeled GUESS and judged IN-STEP by impl-drift. Red: the finding recorded and the task
+   set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: a label, no search.
+8. **The budget.** One landing, riding with the next engine task if one is ready.
+9. **Done, measured.** impl-drift's verdict on `wells.py::PAIR_LOOK`; no map moves (a docstring).
+10. **Before moving a constant.** n/a: the constant keeps its value.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the claim relabeled | `make claims-owed` names it, impl-drift IN-STEP |
+| no map moved | `make maps-moved` (a docstring: the roll cache keeps every seed) |
 ## Project Structure
 
 ### Documentation (this feature)

@@ -96,6 +96,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "645d283c1e4322c15bd711128ae0fe1d7be9005b942b664520007f703d025bf1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -629,6 +635,45 @@
      "summary": "Approach checklist now names D5 as its constraint and answers the search smell: 'None: the sort's own key, computed at once.'",
      "class": "within",
      "why": "Fills in the items the earlier CLEAR text deferred to T05's decisions; no new scope or carve-out."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T06 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-fix-in-claim",
+     "summary": "Resolve the carried impl-drift UNCLAIMED finding on wells.py::PAIR_LOOK by relabeling its research claim as a GUESS (a breadth that decides which first well is seated), not by changing the code or the constant's value.",
+     "class": "within",
+     "why": "385 FR-013 lets a carried claims finding be fixed in the code or the claim; constitution XII requires a guess to be labeled; FR-004 (no research claim broken, re-checked through the claims round) is served. Keeping the value changes no behavior, so nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T06-order",
+     "summary": "Run T06 after T05 and before the pairwise families.",
+     "class": "within",
+     "why": "request.md 5 fixes the order of the engine stages; inserting a claims-only fix between the wells work (US3) and the pairwise families does not reorder or drop any of them."
+    },
+    {
+     "id": "T06-exits",
+     "summary": "Green: claim relabeled GUESS and judged IN-STEP by impl-drift. Red: finding recorded, task set down, impossibility ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit is the FR-013 / FR-004 condition itself; the red exit routes to the arbiter, which stands where the GM was asked (feature 379); neither relaxes a requirement."
+    },
+    {
+     "id": "T06-done-measured",
+     "summary": "Done is impl-drift's verdict on PAIR_LOOK plus make claims-owed naming it and make maps-moved showing no map moved (docstring only).",
+     "class": "within",
+     "why": "Enforcement of FR-004 and FR-007 (no seed regresses) for a docstring change; adds no unrequested behavior or scope."
+    },
+    {
+     "id": "T06-budget",
+     "summary": "One landing, riding with the next engine task if one is ready.",
+     "class": "within",
+     "why": "Packaging of the landing; does not change what is delivered or what the GM asked for."
     }
    ]
   }

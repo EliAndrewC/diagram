@@ -138,7 +138,7 @@ PAIR_LOOK = 40
 """How many of the seats nearest the first share's middle the first well's look ahead ranks (feature 374 wave 155): a
 bound on the pairs it measures, the nearest 40 of a rung's few hundred seats.
 
-Research: the look ahead's bound - NONE: a bound on the search's cost, not a rule of the map"""
+Research: the look ahead's bound - GUESS: no source could speak to it, an algorithm's breadth of ours (feature 427 T06, 2026-10-26); the 40 seats nearest the first share's middle are the only ones re-ranked by whether a second well keeps both at ten, so it moves which seat the first of two wells takes"""
 
 
 def most_served_after(c: tuple[float, float, float], houses: Sequence[Mapping[str, Any]], wells: Sequence[Pt]) -> int:
