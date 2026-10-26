@@ -34,6 +34,9 @@ file_call Edit "/diagram/.clones/x/docs/a.md";         check "Edit in a diagram 
 # Bash: the write forms, by invocation.
 bash_call /tmp "sed -i 's/a/b/' $G/setting/government.md";   check "sed -i into the main tree is refused" 2 "$RC"
 bash_call /tmp "echo x >> $G/setting/village-headsmen.md";   check "an append redirection into the main tree is refused" 2 "$RC"
+bash_call /tmp "make x 2> $G/err.log";                       check "a 2> redirection into the main tree is refused" 2 "$RC"
+bash_call /tmp "make x &> $G/all.log";                        check "an &> redirection into the main tree is refused" 2 "$RC"
+bash_call /tmp "echo x >| $G/clobber.md";                     check "a >| redirection into the main tree is refused" 2 "$RC"
 bash_call /tmp "printf x | tee $G/notes.md";                  check "tee into the main tree is refused" 2 "$RC"
 bash_call /tmp "cp /tmp/a.md $G/setting/a.md";                check "cp into the main tree is refused" 2 "$RC"
 bash_call "$G" "echo x > setting/a.md";                       check "a relative write standing in the main tree is refused" 2 "$RC"

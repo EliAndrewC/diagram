@@ -170,6 +170,9 @@ def _segments(text: str) -> list[tuple[str, str]]:
             flush()
             out.append(("push", ""))
             i += 2
+        elif ch in "|&" and buf and buf[-1] == ">":
+            buf.append(ch)  # `>|` (clobber) and `>&` belong to the redirection, not a separator (feature 429)
+            i += 1
         elif ch in ";|&\n":
             flush()
             i += 1

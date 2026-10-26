@@ -3,127 +3,127 @@
  "blocks": {
   "preamble": {
    "sha256": "9e7ada033c8dc993054843ca68fa4128e9b4dbe35fb279f0828142083f505244",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "e54c4e4c1cc89f6a574f2aea6a5e592e53a0d668b6a282b6bcdac130c7f2c513",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## Measured before planning (2026-10-26)": {
    "sha256": "57c3d46affc67ae07541cdc0f2cfc88926beacef9b4ab4c1f663b5eebe3350d0",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "469e48ca3f7944cd30590fce8e6eadb07cfa74de21ea4128cf4931c6768f51bd",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## T01 - no engine edit while a map review runs (FR-001, SC-001)": {
    "sha256": "cb7fee65a1f9283e9f5e6ae8341ec1f14febae19221f097268b3f90823725ce2",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T01 Approach (checklist part A)": {
-   "sha256": "95b7f0b2c095338937e4228aabc106abf3e9d1c374deac267f5de1dbc4c6e290",
-   "verdict": "BLOCKED",
+   "sha256": "8703442ec42137b2f72e401bb57e986d43d15bdff07f0a892a7f9e52cae7c249",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T01 Decisions": {
-   "sha256": "527a5a193ac17d05735c423d4ca5f40417a3ca69c77799f1697f9b6637265a40",
-   "verdict": "BLOCKED",
+   "sha256": "675735e98d7cd901cb116ce74eaa26a923228d1bd922211cb7fca506087f2372",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## T02 - a question for the GM goes through escalation-check (FR-002, SC-002)": {
    "sha256": "146f59903a3fb33d29e6e16a14d930bea42287dd0fda4db7eb0bcfcd55a16357",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T02 Approach (checklist part A)": {
    "sha256": "12eb4e7b6e73060815e73bfc550eefe3af90b7c2f5ce1a5524794202156ba5a2",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T02 Decisions": {
    "sha256": "fc1ea92de30efa5342abaaa248d80510e6592012e798785f718673bc93591dde",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## T03 - gm-assistant's main tree is not edited from here (FR-003, SC-003)": {
    "sha256": "8e97d5997430a519fe38fe7bbd808f233c35109fb9c8aad04b81b2b2a3c7924e",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T03 Approach (checklist part A)": {
    "sha256": "9af12be2aba05355ef4dfbe20c4df48e168c55718a28429a3b7202b12eb72335",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T03 Decisions": {
    "sha256": "2c39be7a4d385eb13614c43ead07da078f92b3b6e581eaa276ba1dd22e12d909",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## T04 - a reroll says whether it moved the map, against HEAD (FR-004, SC-004)": {
    "sha256": "8623f8fd8f3fa2d372e78f7c4e724b0d26485cc533fa8c80eaff01cfcb9bdac5",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T04 Approach (checklist part A)": {
    "sha256": "1298d654c38a1750061e38e9262646ad224805dd966dc06ce948a01f7c416b57",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T04 Decisions": {
    "sha256": "308b2d6853d7cea4971e4ec466a123f9716609df9bb476d9e0730cb11a6f130a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## T05 - the records and the docs (FR-005, SC-005)": {
    "sha256": "e59f3f95ffea1eff1a325f7c4318a897f0c157adaad1bea87060769e884ff2bb",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T05 Approach (checklist part A)": {
    "sha256": "25fe1b32352e0026f88665b48f37e861fef5d712648045af33458b35da0287af",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## T06 - found while working: `make guard-edit` refused every hook (constitution XIV)": {
    "sha256": "4fa490b844cbdc8fd4764791f1575923773551246c70bcf9d8eb9f1b1deb59d0",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T06 Approach (checklist part A)": {
    "sha256": "a311c269832a160b69a496c8a3255fc275932a29bcc96cc5849ead3c05fccb72",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### T06 Decisions": {
    "sha256": "f5432e43e48962b92a1f7902519731d849a435ff2a82ca0fc858e470f686877b",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   }
@@ -211,6 +211,101 @@
      "summary": "Measured-before-planning conclusions: finished read from transcript as well as meta.json; the new tree guard scoped to gm-assistant because intake writes academic-sources",
      "class": "within",
      "why": "Matches request item 3 and FR-001/FR-003; both carry a dated method (one-shot label), so the figures are reviewable."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Constitution Check",
+    "## Measured before planning (2026-10-26)",
+    "## Summary",
+    "## T01 - no engine edit while a map review runs (FR-001, SC-001)",
+    "## T02 - a question for the GM goes through escalation-check (FR-002, SC-002)",
+    "## T03 - gm-assistant's main tree is not edited from here (FR-003, SC-003)",
+    "## T04 - a reroll says whether it moved the map, against HEAD (FR-004, SC-004)",
+    "## T05 - the records and the docs (FR-005, SC-005)",
+    "## T06 - found while working: `make guard-edit` refused every hook (constitution XIV)",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "### T05 Approach (checklist part A)",
+    "### T06 Approach (checklist part A)",
+    "### T06 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Measured: gm-assistant scope",
+     "summary": "The new write guard covers /host-l7r-repo/gm-assistant only; the rest of /host-l7r-repo (academic-sources intake) stays writable.",
+     "class": "within",
+     "why": "Request item 3 names the gm-assistant tree and nothing wider; FR-003 is scoped the same way."
+    },
+    {
+     "id": "Constitution Check: DIRECT route, tooling only",
+     "summary": "Lands by the direct route; no engine path, no map moves.",
+     "class": "within",
+     "why": "The request is four tooling guards; none touches the engine or a map."
+    },
+    {
+     "id": "T01 exits: no token escape",
+     "summary": "The engine-freeze refusal has no escape token; the routes are wait, draft outside the clone, or TaskStop then ack.",
+     "class": "within",
+     "why": "Stricter than nothing and exactly FR-001's named routes; request item 1 asks for no engine edits while a review runs."
+    },
+    {
+     "id": "D167",
+     "summary": "engine-freeze-hooks.sh + hm_engine_freeze.py: every map-review agent of this session not finished (finished flag, end_turn, or ack after TaskStop), stalled or not and however old, blocks an engine-path Edit/Write/NotebookEdit in the session's clone; review set and engine list read from their single copies.",
+     "class": "within",
+     "why": "The earlier round's narrowing (the two-day age bound) is struck; what remains is FR-001 as written: all unfinished reviews count, a stalled one is named with the TaskStop+ack route and passes after it. Non-engine paths and non-review agents passing is FR-001's own scope."
+    },
+    {
+     "id": "T02 exits: once per message, review-armed branch unchanged",
+     "summary": "Blocked once per final message keyed by its hash; an escalation-check since the GM's last message passes; the existing review-armed branch is untouched.",
+     "class": "within",
+     "why": "FR-002 says refused ONCE per message; request item 2 asks that the guard also fire without a review, which this adds without removing the existing branch."
+    },
+    {
+     "id": "D168",
+     "summary": "Detector in lib/hm_gm_question.py: ask phrases or a '?' line with you/your/I, outside code, block quotes and quoted text; 'since the GM's last message' = an Agent tool_use with subagent_type escalation-check after the last user record carrying text; scored by measure/detect.py.",
+     "class": "within",
+     "why": "FR-002 asks for a narrow detector measured for hit rate and recall; excluding quoted text is detector design whose cost shows in the measured recall, not a carve-out of the rule."
+    },
+    {
+     "id": "T03 exits",
+     "summary": "Edit/Write refused with no escape (the clone is the route); Bash refused with a GM_TREE_OK: <reason> escape.",
+     "class": "within",
+     "why": "FR-003 gives the Bash refusal an escape for the GM's say-so and none to Edit/Write; request item 3 is specifically that Edit and Write there pass today."
+    },
+    {
+     "id": "D169",
+     "summary": "gm-tree-hooks.sh: Edit/Write/NotebookEdit by file_path; Bash by write target only (>, >>, tee, sed -i, cp/mv destination) via hookmatch's splitter; in-tree = resolved path under /host-l7r-repo/gm-assistant/ and not under its .clones/.",
+     "class": "within",
+     "why": "The write-target list is FR-003's list verbatim. Excluding .clones/ is implied by the GM-approved rule's own name (gm_assistant_edits_from_clone): the clone is the compliant route, not the tree the rule protects."
+    },
+    {
+     "id": "D170",
+     "summary": "maps_moved.py: git diff --quiet HEAD per tracked pool manifest plus untracked ones; make maps-moved lists all; make map prints one line for its own map via --only; a report, never a refusal.",
+     "class": "within",
+     "why": "Request item 4 asks for a make target diffing manifests against HEAD; FR-004 asks for exactly the two outputs. Reporting rather than refusing is what the request named ('a make target ... rather than a habit')."
+    },
+    {
+     "id": "T05",
+     "summary": "Guard table rows, guard_log firings, hooks-test suites, and the remember-this docs (including CLAUDE.md's reroll line) pointed at the tooling.",
+     "class": "within",
+     "why": "FR-005; enforcement and records of what was asked."
+    },
+    {
+     "id": "D171 (T06)",
+     "summary": "Fix hm_guard_permit.py's _GUARD pattern to /scripts/(hooks/)?<name>-hooks.sh so make guard-edit grants the permit for hooks under scripts/hooks/.",
+     "class": "within",
+     "why": "Adds rather than narrows: a found-while-working repair needed to edit escalation-hooks.sh for T02 by the sanctioned route; it removes no part of what was asked."
     }
    ]
   }
