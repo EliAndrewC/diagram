@@ -174,7 +174,7 @@ def test_no_setting_puts_subagents_on_the_hour_long_cache(tmp_path: pathlib.Path
 # only. Claude Code's default prompt says to call Workflow only on the user's explicit request, and outranks CLAUDE.md - without
 # this text a session keeps hand-launching waves, each agent waking the main session once (research R20).
 #: the GM's draft list (diagram-fanout-workflows.md, recommendation 2); the authorization may add only agents that replaced
-#: general-purpose waves (the two triage agents, amendment 6)
+#: general-purpose waves (the two triage agents, amendment 6), and what the GM adds himself
 DRAFT_JOBS = {
     "source-applicability",
     "quote-check",
@@ -189,6 +189,7 @@ DRAFT_JOBS = {
     "glyph-check",
     "modal-form",
     "round-arbiter",
+    "translation-check",  # added by the GM, 2026-10-26: "I also do pre-authorize the translation check as a wave job"
 }
 REPLACED_GP = {"claims-triage", "modal-triage"}
 ROOT = AGENTS.parents[1]
