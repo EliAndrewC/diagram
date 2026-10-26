@@ -157,62 +157,10 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
-### T05 Approach (checklist part A)
-
-1. **The goal, in the world.** Iterating rolls the failing seeds first or only, and stops at the first failure.
-2. **The constraints.** D4; FR-007, FR-008.
-3. **Where each comes from.** the GM 2026-10-26 ("the pytest thing").
-4. **Do they describe the world here?** Measured by: tests on stubbed rolls; one real run on a seeded failure.
-5. **The order.** after T03 (the served/rolled count reads the new key).
-6. **The exits.** green: `make land`; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: one change, its tests first.
-8. **The budget.** One landing.
-9. **Done, measured.** Its verify line in tasks.md passes.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T06 Approach (checklist part A)
-
-1. **The goal, in the world.** A landing after a full run rolls no seed.
-2. **The constraints.** FR-012, User Story 3b.
-3. **Where each comes from.** the GM 2026-10-26 ("run the seeds locally and then do a make landing").
-4. **Do they describe the world here?** Measured by: the landing-path test, and one real cohort then cohort-landing.
-5. **The order.** after T03 and T05.
-6. **The exits.** green: `make land`; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: one change, its tests first.
-8. **The budget.** One landing.
-9. **Done, measured.** Its verify line in tasks.md passes.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T07 Approach (checklist part A)
-
-1. **The goal, in the world.** A probe answers "what did this change do to every seed and map" against HEAD in one command.
-2. **The constraints.** D5; FR-009.
-3. **Where each comes from.** the GM 2026-10-26 (fix 2).
-4. **Do they describe the world here?** Measured by: tests on stubbed rolls and fixture manifests; one real probe.
-5. **The order.** after T05 (its EXITFIRST).
-6. **The exits.** green: `make land-tooling`; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: one change, its tests first.
-8. **The budget.** One landing.
-9. **Done, measured.** Its verify line in tasks.md passes.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T08 Approach (checklist part A)
-
-1. **The goal, in the world.** A new plan section already holds what its review asks.
-2. **The constraints.** D6; FR-010.
-3. **Where each comes from.** the GM 2026-10-26 (fix 3); T48's and T50's review rounds.
-4. **Do they describe the world here?** Measured by: tests of the written section and the warning.
-5. **The order.** any time.
-6. **The exits.** green: `make land-tooling`; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: one change, its tests first.
-8. **The budget.** One landing.
-9. **Done, measured.** Its verify line in tasks.md passes.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
+<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 ### T09 Approach (checklist part A)
 
 1. **The goal, in the world.** The feature closed with its numbers shown to the GM.
