@@ -411,6 +411,37 @@ def test_the_gate_refuses_an_unfiled_carry_naming_the_command_and_lets_a_filed_o
     assert cx.main(["--root", str(root), "carry", "--feature", "900", "--task", "T02"]) == 0  # nothing unfiled
 
 
+def test_a_landing_with_no_engine_code_files_its_carries_into_the_claims_feature(tmp_path: pathlib.Path) -> None:
+    """The GM, 2026-10-26: "a finding carried by a landing that changes no engine code should go to 405 instead" - feature 422,
+    a research landing, was held open on five engine findings while 405 was on hold. An engine delta still files into its own."""
+    root = _repo(tmp_path)
+    cx.save_index(root / cx.INDEX, _all_in_step(root))
+    d = _active(root)
+    claims = _active(root, "405-claims")
+    _active(root, "900-x")  # ...the landing's feature stays the active one
+    _commit(root, "base")
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    q = root / "research" / "questions" / "0033-row-villages-resson.html"
+    q.write_text(PAGE.replace("face the street", "face south"))
+    idx = cx.load_index(root / cx.INDEX)
+    for key, row in cx.current(root).items():
+        idx[key]["research"] = row.research
+    idx[k]["verdict"] = "DRIFTED"
+    cx.save_index(root / cx.INDEX, idx)
+    assert cx.gate(root)[0] == [f"carry: DRIFTED        {k} -  - a finding on code the change left unchanged: file it with `make claims-carry F=405` (make land files it itself)"]
+    assert cx.main(["--root", str(root), "carry", "--feature", "900"]) == 0  # the landing names itself, as make land does
+    assert "Carried by the claims gate" not in (d / "tasks.md").read_text()
+    assert (
+        f"- [ ] T02 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: {k} [lands-open]"
+        in (claims / "tasks.md").read_text()
+    )
+    assert cx.gate(root) == ([], [f"carried (405-claims T02): DRIFTED        {k} - "])
+    # an engine path in the delta: the feature being landed again
+    (root / "l7r" / "diagram" / "hamletgen" / "other.py").write_text("x = 1\n")
+    assert cx.gate(root)[0][0].endswith("file it with `make claims-carry F=900` (make land files it itself)")
+    assert cx.main(["--root", str(root), "carry", "--feature", "405"]) == 2
+
+
 def test_a_verdict_line_that_cannot_be_recorded_is_refused_aloud(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
     """The round arbiter's fix on hour:385-approach-checklist@29: a path missing `diagram/`, `UNRESEARCHED IN-STEP` and a note's
     pointer to `0246-...lanes.html` (no `.drawing`) were each dropped with a quiet message, or found only by `make done`."""

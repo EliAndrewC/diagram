@@ -1,0 +1,11 @@
+{
+ "plan-replay-415": {
+  "quantity": "gate `done` runs of 2026-10-25 and 2026-10-26 that planned FULL and that the current planner, replayed between the same two commits, plans INCREMENTAL by a rule the replay reproduces (pool manifests, docs and hook suites under tests/)",
+  "value": 21,
+  "unit": "runs (of 39 full, of 45 in all)",
+  "observed": "2026-10-26",
+  "source": "this clone, dev/run-log/2026-10/2026102[56]*.json (target done)",
+  "command": "python3 specs/415-gate-incremental-across-tooling/replay_plans.py",
+  "method": "feature 430's replay harness widened to every reason: each run's base is the latest earlier green full run at which the file its reason names differs; manifests rebuilt from git; an empty coverage database, so the 6 import-time runs and the 3 no-baseline runs replay as incremental but would plan full in a real clone and are counted full here"
+ }
+}

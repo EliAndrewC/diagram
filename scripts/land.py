@@ -81,7 +81,9 @@ def file_carries(root: Path, d: Path) -> None:
     rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "carry", "--feature", num])
     if rc == 0 and "filed into" in said:
         print(f"land: {said.strip()}", flush=True)
-        rel = str(d.relative_to(root))
+        # ...into the claims feature when this delta holds no engine code (the GM, 2026-10-26; `claims_carry.target`)
+        m = re.search(r"filed into (\S+) T\d+", said)
+        rel = f"specs/{m.group(1)}" if m else str(d.relative_to(root))
         run(root, ["git", "add", "--", f"{rel}/tasks.md", f"{rel}/claims-carried.jsonl"])
         run(root, ["git", "commit", "-q", "-m", f"{d.name}: claims findings outside the change filed as a task (make land, 405 T36)"])
 

@@ -70,3 +70,22 @@ hook suite under `tests/hooks/`, 3 no baseline, 2 the gate's configuration. Feat
 answers the manifests, the docs and the deeper test-tree files, the hook suites among them (T08); the top-level `conftest.py`
 and an import-time line still plan full by design. No landing has yet run under 430's planner without itself moving the gate's
 configuration, so how often the gate now stays incremental is the next landings' to show (`make gate-costs`).
+
+## R4 - is the gate incremental now? Every run since 10-25 replayed (the GM, 2026-10-26)
+
+The GM, 2026-10-26: *"please do rebuild those measurements so that we can close out the feature or figure out that the feature
+is not currently working"*. R3's one landing could not say how often the gate stays incremental, and since feature 430 landed
+only two gates have run, both full because 430 itself changed the gate's machinery (expected once a clone).
+- **Finding** (`m:plan-replay-415`): of the 45 gate runs of 2026-10-25 and 2026-10-26, 6 ran incremental and 39 full. Replayed by
+  today's planner between the same two commits, 21 of the 39 now plan incremental: 11 a pool manifest, 7 a `CLAUDE.md` under
+  `tests/`, 3 a hook suite. 9 still plan full by design: 4 the top-level `tests/conftest.py`, 5 a change to the gate's own
+  configuration (2 hook-suite and 1 ci-conftest deltas that also changed it among them). The other 9 cannot be replayed and are
+  counted full: 6 an import-time line (the replay has no coverage contexts to find one) and 3 no baseline.
+- **So**: about 27 of 45 (60%) would run incremental under today's planner, against the 6 of 45 (13%) observed.
+- **What this feature set out to do holds**: no run of the 45 planned full because `scripts/` or other tooling changed, which was
+  the cause R1 found ("the tooling changed"); every incremental run with a `scripts/` change selected the readers instead.
+  The rest of the full runs came from causes outside this feature's scope. 430 answered most of them, and the remainder
+  (the top-level conftest, the gate's configuration, import-time lines) are full by design: each can change every test.
+- **The live check still owed by the world, not a task**: the first landings after each clone's one configuration-forced full run
+  will show the rate in `make gate-costs`. If they stay mostly full for a reason this replay counts incremental, that is a defect
+  in 430's rule.
