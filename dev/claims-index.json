@@ -15982,9 +15982,9 @@
   "note": "matches its backing",
   "pages": {
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html": "ff11639478e7f7db",
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "7cbffb429dad0f61"
   },
-  "research": "b85fcf5337c98826",
+  "research": "8f0b31ec45dcfbec",
   "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
@@ -16029,9 +16029,9 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "7cbffb429dad0f61"
   },
-  "research": "11dc0241a72744d0",
+  "research": "d5ebcdade018841c",
   "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
@@ -16108,9 +16108,9 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "7cbffb429dad0f61"
   },
-  "research": "11dc0241a72744d0",
+  "research": "d5ebcdade018841c",
   "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
@@ -40198,9 +40198,9 @@
   "date": "2026-10-03",
   "note": "five, as 0004 finds",
   "pages": {
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "7cbffb429dad0f61"
   },
-  "research": "11dc0241a72744d0",
+  "research": "d5ebcdade018841c",
   "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
@@ -40372,15 +40372,16 @@
   "code": "533f6e3d81c34f67",
   "core": "07d3e889ab868dff",
   "date": "2026-10-26",
-  "note": "the code only states the settlement's own retirement-house count and decides nothing physical. It returns nothing where the generations live under one roof, which matches the page's two forms.",
+  "note": "the card states the map's count only where the settlement has the retirement-house form, and says nothing where the old couple stays under one roof; both forms are attested, and the card asserts no share.",
   "pages": {
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "7cbffb429dad0f61"
   },
-  "research": "11dc0241a72744d0",
+  "research": "d5ebcdade018841c",
   "rests": [
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:06805d774621cf15",
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:650b1e356fcc1032",
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:eec29d74aacffe97"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:20692e8ed1b1a5c2",
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:4e8eca4577e50161",
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:650b1e356fcc1032"
   ],
   "verdict": "IN-STEP"
  },
@@ -40396,14 +40397,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/place.py::size_sentence#population from households": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "626e7da7745306d8",
   "core": "f9085c733d5a4c69",
   "date": "2026-10-07",
   "note": "five to a declared household where the tier records no population of its own",
   "pages": {
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "abf1ff4d83e2535f"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "7cbffb429dad0f61"
   },
-  "research": "11dc0241a72744d0",
+  "research": "d5ebcdade018841c",
   "rests": [
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:294c03d4ddf75ac7",
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:88e1da10d8149af5"
