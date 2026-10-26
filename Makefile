@@ -37,7 +37,7 @@ perf-arbiter:   ## [performance] an investigation may put a band-3 increase to t
 perf-signoff:   ## [performance] records a sign-off the GM gave UNPROMPTED, in their words - owed by nothing since feature 375 amendment 5   WHY="..."
 ##  WHY=<text>  the GM's own words, given unprompted - band 3
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
-perf-review:    ## [performance] each environment's newest bookend pair: its band, and a FLAG to mention at landing when it looks slower - never a refusal (the push runs this)
+perf-review:    ## [performance] each environment's newest bookend pair: its timing band, for information, and its call counts - an increase over the line, or an uncomparable pair, refuses until the round arbiter accepts (the push runs this; feature 427)
 	@$(PERF_REVIEW) check
 perf-fanout:    ## [performance] the call-volume survey: per stage, the Python calls at each size and their growth, and every chain of HOT calls or more up to the loop it hangs from (feature 427 T01)   [SEED=39] [HOUSEHOLDS="20 40"] [STAGES=all] [HOT=50000] [JOBS=3] [LABEL=adhoc]
 	$(RUN).tools.perf_fanout --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),20 40)" --stages "$(or $(STAGES),all)" --hot "$(or $(HOT),50000)" --jobs "$(or $(JOBS),3)" --label "$(or $(LABEL),adhoc)"
@@ -358,7 +358,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	ran=$$(for s in "$$work"/*.s; do [ -f "$$s" ] && printf '%s %s\n' "$$(cat "$$s")" "$$(basename "$$s" .s)"; done | sort -rn | awk '{printf "%s%s %ss", (NR>1?", ":""), $$2, $$1}'); \
 	[ -z "$$ran" ] || printf 'hooks-test: ran %s\n' "$$ran"
 
-perf-gate:      ## [performance] require the feature's -start bookend, take -end, and print the comparison - a slower pair is a FLAG, never a failure (feature 375 amendment 5)
+perf-gate:      ## [performance] require the feature's -start bookend, take -end, and print the comparison - its timings for information, its call counts judged as the push judges them (feature 427)
 	@f="$(or $(FEATURE),$(SPECIFY_FEATURE))"; \
 	if [ -z "$$f" ] && [ -f .specify/feature.json ]; then \
 	  f=$$(python3 -c "import json;print(json.load(open('.specify/feature.json'))['feature_directory'].split('/')[-1])" 2>/dev/null); \

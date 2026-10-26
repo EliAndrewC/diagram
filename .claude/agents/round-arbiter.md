@@ -65,8 +65,17 @@ previously coming to me"*), so two more kinds of trigger reach you:
   built is not yours: say so in `why` and rule `continue`, with `what` naming it as the GM's question.
   A question that ends "(REVIEW=spec: ...)" or "(REVIEW=plan: ...)" asks about that review: your `accept` or `process-fault`
   stands as its verdict on the spec or plan as it reads now, as on a review's round (feature 409).
+- a CALL-COUNT INCREASE (`ask:<NNN>-calls-<commit>`, from `make arbiter-ask` as the push's refusal names it; feature 427 T03):
+  a feature's `-end` snapshot makes more Python calls than its `-start` - over 5% in a stage on a seed, or 2% in the total - or
+  the pair could not be compared (taken on different interpreter or library versions, or a `-start` with no counts). The
+  timings refuse nothing (the GM, 2026-10-26: "completely stop using timings as a gate on anything"); the counts are what is
+  watched, and the GM expects you to "be able to handle [this] without me". `accept` when the increase is the cost of a rule the
+  feature adds and is commensurate with it, or when an uncomparable pair's change is the versions' alone; `continue` means
+  optimize first (`make perf-fanout` names the chains that grew); send it to the GM, by saying so in `what`, when you judge the
+  increase too large for what it buys - a stage's calls doubled, or a total up by a quarter, is the scale that asks. Your accept is
+  bound to that `-end` commit: a new `-end` needs a new ruling.
 - a BAND-3 PERFORMANCE INCREASE (`ask:perf-band3-<environment>-<binding>`, from `make perf-arbiter`), asked only in an
-  investigation since feature 375 amendment 5 made the bands a flag, never a gate: read `perf-report.txt` beside the MANIFEST and the band-2 audit in `dev/perf-log/`.
+  investigation since feature 375 amendment 5 made the bands a flag, and feature 427 their timings information only: read `perf-report.txt` beside the MANIFEST and the band-2 audit in `dev/perf-log/`.
   `accept` lets the increase land - only when it is NECESSARY, COMMENSURATE with what it buys, and has NO GOOD WAY AROUND IT
   (the band-2 standard, held to its strictest); `continue` means keep optimizing; `process-fault` means the measurement or the
   process is wrong, its `tooling_fix` named. Your accept is bound to these exact numbers: new numbers need a new ruling.

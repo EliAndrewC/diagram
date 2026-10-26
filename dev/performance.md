@@ -228,16 +228,28 @@ Two rules, and the second is the one that is easy to half-do:
 than structural on purpose: the failure mode is unbounded work, and the correct-vs-broken margin is
 a fraction of a second against effectively forever.
 
-## The three bands: a flag, never a gate (feature 129, 2026-08-25; feature 375 amendment 5, 2026-10-11)
+## The call counts are watched; the timing bands are information only (feature 427 T03, 2026-10-26)
 
-Since feature 375 amendment 5 (the GM: "it doesn't need to be a gate anymore") the bands LABEL how much slower a pair looks
-and owe nothing. Each snapshot (`make perf LABEL=<NNN>-start|-end`, `SCALING=1` for the 10/20/40-household legs) records
+Since feature 427 (the GM, 2026-10-26: "keep recording the timings, but completely stop using timings as a gate on anything
+... the call counts themselves are the thing that we are gating on, because as you say, that is consistent") each snapshot also
+records each stage's Python calls per seed and size, counted in a separate untimed pass (`perf_snapshot.count_calls`, about 1.09
+times a plain roll, measured 2026-10-26), with the interpreter and library versions. The push compares a feature's
+`-start` / `-end` counts (`tools/perf_calls.py`): an increase over 5% in a stage on a seed, or 2% in the total (GUESS lines, to be
+tuned on the first landings that meet them), or a pair that cannot be compared (other versions, a `-start` with no counts),
+refuses until the round arbiter accepts it - `make arbiter-ask SUBJECT=<NNN>-calls-<commit>`, which the refusal fills in. A
+decrease needs nothing. `make perf-fanout` names the chains that grew.
+
+What follows is the timing bands as they still print, for information: no rule acts on them.
+
+## The three bands: information only (feature 129, 2026-08-25; a flag from feature 375 amendment 5 until feature 427)
+
+The bands LABEL how much slower a pair looks and owe nothing. Each snapshot (`make perf LABEL=<NNN>-start|-end`, `SCALING=1` for the 10/20/40-household legs) records
 each stage's wall and CPU seconds after an untimed warm-up roll, and the machine's load, free RAM and disk at its start and
 end. A pair is compared in CPU seconds where both have them, wall seconds otherwise, PER ENVIRONMENT (a cross-environment
 pair is refused, never displayed):
 
     band            TOTAL          ANY SEED     what it means
-    1               > 5%           > 5%         the push prints a FLAG with both snapshots' machine state; mention it at landing
+    1               > 5%           > 5%         printed with both snapshots' machine state, for information (a FLAG until feature 427)
     2               > 5%           > 10%        the same flag, a bigger increase
     3               > 10%          > 20%        the same flag, a bigger increase
 
