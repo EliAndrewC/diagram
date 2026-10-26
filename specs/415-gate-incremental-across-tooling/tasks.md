@@ -27,6 +27,7 @@
 - [x] T08 A changed hook suite (`tests/hooks/*.sh`) plans the gate FULL ("a non-module file under tests/ changed"), though it is tooling that `hooks-test` runs: both of 405 T138's landing gates on 2026-10-25 planned full for `tests/hooks/test-no-poll-hooks.sh`, merged from main by another session (10,085 tests, pytest 337-348 s) - treat the hooks tree as tooling in the planner, so T06 can be measured (found by 405 T106/T138, 2026-10-25)
       research: rendering
       verify: DONE. landed: fixed by feature 430 T02's planner (7d1ced680): test_a_hook_suite_keeps_the_gate_incremental pins tests/hooks/test-no-poll-hooks.sh planning incremental, red on the planner before 7d1ced680, green now; plan blocks CLEAR
-- [ ] T07 Close: report and land
+- [x] T07 Close: report and land
       research: rendering
+      verify: DONE. landed: report.md written by make feature-report F=415 WRITE=1, its close section names SC-006's measurement (R3) and D12's open item
 - [ ] GM review (make gm-reviewed F=415)

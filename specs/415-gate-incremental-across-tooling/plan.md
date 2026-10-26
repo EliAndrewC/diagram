@@ -46,23 +46,4 @@ tooling change end to end. T07 closes.
 <!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 
 <!-- plan-archive: T08 to T08 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
-## T07 - the close
-
-### T07 Approach (checklist part A)
-
-1. **The goal, in the world.** The feature's report states what was asked, what was built and measured, and what is left.
-2. **The constraints.** Every task ticked first; the report from `make feature-report F=415 WRITE=1`.
-3. **Where each comes from.** O: the project's close rule (root `CLAUDE.md`, "A feature ends with `make feature-report`").
-4. **Do they describe the world here?** Yes.
-5. **The order.** Last, after T06 and T08.
-6. **The exits.** Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
-7. **The search smell.** None.
-8. **The budget.** 10 min (a GUESS, the session's, 2026-10-26).
-9. **Done, measured.** `report.md` written and the feature landed on main.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T07 Decisions
-
-- **D12** The report carries R3's open item: whether the gate now stays incremental under 430's planner is read from the next
-  landings' run records (`make gate-costs`), no task of this feature's. Rendering: none.
+<!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
