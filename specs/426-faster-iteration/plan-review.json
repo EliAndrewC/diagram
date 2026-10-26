@@ -3,61 +3,61 @@
  "blocks": {
   "preamble": {
    "sha256": "79c94517fb99b97ac7cda23551146480100a6c94708f4a9e23fcee66bc29ee96",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "04ecd8001b95be773e92e9cb9d17f83c6102ecc6dd2603cc04df0542193dc1d0",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
    "sha256": "2e0086ee9d201c01cdc814509b4d39b2c0b65884f64743d90a891cfabcc4e9d9",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## Performance bookends": {
    "sha256": "9072bc4b7188d354f0f03738f9794ff865bfb6a2a0cd5632da1941bf650586f8",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "eb078bbe6dd7e18101ff9b75a0f5b68e54a426daf81843af55f43d25dda9a1b9",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "565f50b11d600cf3ad7d02175d02ae70fbc4cb44df592a45c308400c62d64b37",
-   "verdict": "BLOCKED",
+   "sha256": "e6266cb1de1308bded58f7d67bfc53355544f0f941e666580c9d97823a2611ec",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## Project Structure": {
    "sha256": "78aa41f093ec3faedcbfbaf4620358dd38cb2532a522b49bf2a2b804d0d2fc7f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### Documentation (this feature)": {
    "sha256": "0abe6baf8d99cff6c3985a52af8197ec2273df104df7ada30121575146a6d9d4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "### Source Code (repository root)": {
    "sha256": "d662579d5dfcdfa0b841546af219abd7d8e4413a9e96972e53a0211411c48238",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
    "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   }
@@ -206,6 +206,188 @@
      "summary": "Summary, Technical Context (probe-baseline store, reference roll first), Performance bookends, Constitution Check, Project Structure, Complexity Tracking",
      "class": "within",
      "why": "Restate the spec or lay out the files for decisions above; none decide anything the spec left open beyond them."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary: five tasks, each its own landing",
+     "summary": "Five changes (claims fail-fast, docstring-blind code id, cohort modes, make probe, task-add template), each landed separately; the cache key through make land",
+     "class": "within",
+     "why": "Exactly the GM's approval: the first 3 proposed fixes plus the cache key and cohort modes, plus the docstring audit."
+    },
+    {
+     "id": "Technical Context: single-artifact target and storage",
+     "summary": "Key change proven first on the reference roll (Inashiro seed 4); probe baselines under .git/probe-baselines (untracked)",
+     "class": "within",
+     "why": "Verification of FR-003/SC-001 and the store FR-009 requires; adds no behavior."
+    },
+    {
+     "id": "Performance bookends / Constitution Check",
+     "summary": "Measure rolled/served counts before and after on a docs-only edit; baseline cohort-landing 54/54 and byte-identical manifests; cache-audit green",
+     "class": "within",
+     "why": "Measurement of SC-001 and the no-regression rule; verification of what was asked."
+    },
+    {
+     "id": "D1a - owed claim with nothing in flight returns at once; in-flight marker",
+     "summary": "An owed claim with no live claims-in-flight marker ends the wait at once; claims-bundle/claims-triage write the marker, claims-checked/claims-triaged remove it, stale past CLAIMS_WAIT_S; while a live marker exists the landing waits as today; each message names its cure",
+     "class": "within",
+     "why": "FR-001/SC-002 (nothing in flight never enters the wait) and FR-002 (wait while in flight); the marker is the means of seeing 'in flight'. Fixes the earlier text, under which every owed refusal waited."
+    },
+    {
+     "id": "D1b - mixed refusal returns at once even with a check in flight",
+     "summary": "When ANY part of the refusal is one waiting cannot cure, the wait ends at once even if an owed claim is also in flight",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Literally departs from FR-002 (wait while a check is in flight). The GM's own words cover it: 'stop waiting when the claims gate refuses for a reason waiting can't fix' - a mixed refusal has such a reason, and waiting cannot end in a landing; the in-flight check's result is read by the next make land, so nothing is lost."
+    },
+    {
+     "id": "D2 - one shared docstring-blind code id",
+     "summary": "New codeid module holding gate-stamp's existing normalization (drop docstrings, dump AST without attributes, hash); gate-stamp calls it; unparseable files hashed by bytes",
+     "class": "within",
+     "why": "FR-003/FR-004: one rule for every site the audit changes; the unparseable fallback keeps the cache exact (SC-006)."
+    },
+    {
+     "id": "D3 - roll and render keys on codeid",
+     "summary": "gencache._split_sources and render_cache.engine_fingerprint key .py on codeid",
+     "class": "within",
+     "why": "FR-003 and FR-005 as written."
+    },
+    {
+     "id": "D3 carve-out - interactive/** hashed raw in gencache and render_cache",
+     "summary": "Files whose docstrings are an artifact's content (the class registry's docstrings are modal text via cls.__doc__; the page writer's text) keep byte hashing, reason recorded at the point of change",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-004's 'unless a docstring is content of what it produces' and the GM's 'when we should': stripping these would serve a stale page whose text changed - the cache would stop being exact."
+    },
+    {
+     "id": "Audit: gate-stamp, ci/delta, cohort_known keep",
+     "summary": "Already docstring-blind; gate-stamp's normalization moves to codeid, RAW_AREAS stay raw",
+     "class": "within",
+     "why": "Already do what FR-004 asks; RAW_AREAS is the same content carve-out as D3."
+    },
+    {
+     "id": "Audit: tooling_hash .py function/class docstrings stripped",
+     "summary": "ci/state.py tooling_hash keys .py on codeid; function and class docstrings dropped (research R3: no tooling test reads __doc__/getdoc)",
+     "class": "within",
+     "why": "FR-004: a site failing to strip docstrings where it should; the GM's 'any other places'."
+    },
+    {
+     "id": "Audit: tooling_hash keeps MODULE docstrings",
+     "summary": "Each .py file's module docstring stays in the key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Content of what the tooling produces: scripts print it as usage (regen.py, building_programs.py named). FR-004's content exception. The supporting clause 'a tooling test may assert on it' is hedged and unmeasured and is not relied on."
+    },
+    {
+     "id": "Audit: tooling_hash Makefile '##' lines raw",
+     "summary": "The Makefile's ## help lines stay in the key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Content: they build docs/make-targets.html, so a change to them changes an output; FR-004's content exception."
+    },
+    {
+     "id": "Audit: tooling_hash Makefile plain '#' comments raw",
+     "summary": "Non-.py files, the Makefile's ordinary comments included, stay hashed by bytes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the spec's 'comments' in FR-004, but against the request as written: the GM's words name docstrings ('failing to strip docstrings when we should'), and a Makefile has none; the reason is to be written at the point of change."
+    },
+    {
+     "id": "Audit: gate_config config_hash .py on codeid, lockfiles/config raw",
+     "summary": "conftest and machinery on codeid; lockfiles and config files by bytes",
+     "class": "within",
+     "why": "FR-004 on the .py; lockfiles and config carry no docstrings."
+    },
+    {
+     "id": "Audit: record_cache code_sha on codeid",
+     "summary": "Extractor code keyed docstring-blind",
+     "class": "within",
+     "why": "FR-004: an extractor's docstring does not change what it extracts."
+    },
+    {
+     "id": "Audit: record_build fingerprint keeps raw",
+     "summary": "The record's built site keeps byte hashing",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Content: the build reads the engine's research claims, which live in docstrings; FR-004's exception."
+    },
+    {
+     "id": "Audit: claims fingerprints keep",
+     "summary": "tools/claims.py and scripts/record/claims*.py fingerprints unchanged",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Content: the claim text is the thing checked, so a docstring-blind key would let a changed claim skip its check; FR-004's exception."
+    },
+    {
+     "id": "Audit: plan/hook/record text hashes not touched",
+     "summary": "plan blocks, transcripts, record pages are text hashes, not code-staleness keys",
+     "class": "within",
+     "why": "Outside FR-004's 'code-hashing site that decides whether work is stale'."
+    },
+    {
+     "id": "D4 - FAILED_FIRST / LAST_FAILED / EXITFIRST and the last run",
+     "summary": "Three flags; 'last run' is the newest dev/cohort-log record of this clone with the same seed block; none: say so and roll all",
+     "class": "within",
+     "why": "FR-007 as written (the cohort's own records for the same seed block) and the GM's pytest-style modes."
+    },
+    {
+     "id": "D4 - EXITFIRST waits for rolls already started",
+     "summary": "On the first failing result it cancels unstarted rolls, waits for started ones, reports the count left unrolled, exits 1",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Up to pool-width seeds past the failure still finish, against 'without running the others' and SC-003's 'only'. On purpose grounds: those rolls are already running, the wait is bounded by one roll, and their results are stored and served next run; killing them would discard that work and force the re-roll the GM asked to stop."
+    },
+    {
+     "id": "D4 - partial records refused as a landing",
+     "summary": "A --last-failed/--exitfirst record is marked partial and cohort_gate.landing_shaped refuses it; cohort-landing passes none of the flags",
+     "class": "within",
+     "why": "FR-008: the landing judges every seed."
+    },
+    {
+     "id": "D4 - rolled/served count and the FR-012 test through the landing path",
+     "summary": "Every run prints 'rolled N, served M'; a test runs a full make cohort then make cohort-landing at the same code (and from a linked worktree) and asserts zero rolled",
+     "class": "within",
+     "why": "Measurement for SC-001 and the test FR-012 asks for; enforcement of what was asked. Now goes through the landing's own recipe, as FR-012 says."
+    },
+    {
+     "id": "D4 - carry-forward of earlier failures",
+     "summary": "A partial run's failed list is its own failures plus the previous record's failures it did not roll",
+     "class": "within",
+     "why": "The pytest last-failed behavior the GM named ('do the pytest thing')."
+    },
+    {
+     "id": "D5 - make probe",
+     "summary": "Rolls the landing cohort, HEAD's fresh block and make map per live hamlet in WT; HEAD's verdicts stored per engine key and block, rolled once in a detached worktree when absent; prints EVERY seed's verdict beside HEAD's with the difference marked and each changed manifest field; EXITFIRST against the baseline",
+     "class": "within",
+     "why": "Fix 2 verbatim ('print each seed's result and each changed field against HEAD, with HEAD's results for a block stored once') and FR-009, SC-004. Fixes the earlier text, which printed only seeds that differed."
+    },
+    {
+     "id": "D6 - task-add template",
+     "summary": "New sections carry the alone-off table header and item 6's D35 red exit; a SECTION= lacking make arbiter-ask gets a warning and is filed",
+     "class": "within",
+     "why": "Fix 3 and FR-010 (MUST warn) as written."
+    },
+    {
+     "id": "Project Structure / Documentation / Source Code / Complexity Tracking",
+     "summary": "File lists for the decisions above; no complexity entries",
+     "class": "within",
+     "why": "Carry the decisions above, nothing more."
     }
    ]
   }
