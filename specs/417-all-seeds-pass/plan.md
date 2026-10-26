@@ -611,6 +611,20 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
   none.
 
 
+- **Probed 2026-10-26 UTC** (method: a detached worktree at T49's tree, `make cohort-landing JOBS=3` each; the trim's street call
+  off, 48 of 54 before): (P2) the street spanning its end farms' center projections, no half frame past them (`row_reach`'s pad
+  0): 52 of 54 - seed 904's one-farm second street came out 24 ft (cut at whole 8 ft vertices of the planned line, under
+  `_WEB_MIN_FT`) and was not drawn (`street_not_drawn`); seed 04's second street ended 132 ft from any house (`dangling_ends`).
+  (P3) the same keeping `run_lanes_on_to_the_bund` (which only `tidy_lane_ends` calls): identical, 52 of 54. (P4) the span
+  between the end farms' FRONT-DOOR projections, ending exactly there, at least 30 ft: 52 of 54 - seed 12's end farm's door
+  path is routed round its grove and meets the street 72 ft from the door's projection (`dangling_ends` at the street's end),
+  and seed 904's 30 ft street still fell short and a 32 ft floor only moved its failure to a skeleton end. FINDING: a street's
+  lawful end is where its end farm's door path meets it, which is known only once that path is laid (after the street, which it
+  joins), so no span computed from the farms alone ends lawfully. OPEN: the end made a junction by construction - an end farm's
+  door path laid to the street's end point first (`lay_door_paths`), the street spanning the door projections - else the trim
+  recorded as where the rule is asked (after the door paths). Set down 2026-10-26 for the settle's needed steps; its probes'
+  edits are not on main.
+
 ### T48 (T31's D11 probe, D35): two settle steps deleted that alone off move no pool lane and no verdict
 
 - **Approach**: after T44-T46 the settle's remaining repairs are probed off one at a time. Measured 2026-10-26 UTC (method: a
