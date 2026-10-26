@@ -560,3 +560,29 @@ Owed by cohort@20261025T121445Z (18 landing seeds newly failing `track_ends_off_
   step off alone, and the six off together (observed 2026-10-25, research.md R8: 54 of 54 - the 48 fixed seeds and the six pinned rows of `make cohort-landing` - and no pool manifest moved).
   Rendering: none.
 
+<!-- plan-archive: archived 2026-10-25 -->
+### T43 (T41's regression, constitution XIII): `square_every_crossing` restored to the settle's rounds
+
+- **Approach**: measured 2026-10-26 (method: the fresh block from seed 723759, rolled before T40 at b307a7ed7, 7 of 48 failing,
+  rolled again on T42's tree with `make cohort N=48 SEED=723759 FRESH=0 JOBS=3`): 8 of 48 - the same seven and seed 723805,
+  `lane_knots` (two ends 20 ft apart). Bisected in detached worktrees: passing after T40 (04b840f20), failing after T41
+  (44ee317fa); on T40's tree each of T41's seven removals alone, and only `square_every_crossing` out fails it. T41's 54 fixed
+  and pinned seeds never met the unsquared crossing that ties the knot. So it is NEEDED, not needless: restored as it stood at
+  T40 (its definition, its re-export, its place first in `STEPS`, its test and the three claims T41 reworded), owed D11's
+  conversion under T31 like the other needed steps. With it back, seed 723805 and 54 of 54 pass; Inashiro and Sawada return to
+  their pre-T41 drawing order. Rendering: none.
+
+### T43 Approach (checklist part A)
+
+1. **The goal, in the world.** No seed that passed before T40's deletions fails after them.
+2. **The constraints.** Constitution XIII (no known regressions); D35 (a step that moves a verdict is needed); D11.
+3. **Where each comes from.** G: the constitution. O: the same-block roll and the bisection.
+4. **Do they describe the world here?** Measured: one seed, one step.
+5. **The order.** Before T31's next conversion: a regression first.
+6. **The exits.** The seed, the landing cohort and the pool gate green: landed.
+7. **The search smell.** None: bisection, one probe a candidate.
+8. **The budget.** One landing.
+9. **Done, measured.** Seed 723805 passing, `make land` green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+

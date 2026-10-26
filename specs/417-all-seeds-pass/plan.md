@@ -418,3 +418,5 @@ or the step is set down with its seeds and ruled (`make arbiter-ask`). Rendering
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
+
+<!-- plan-archive: T43 to T41 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
