@@ -58,7 +58,7 @@ Not a generator change. The measurements that matter are each task's replay agai
 - **III, IV, V, VII, VIII, IX**: N/A - no pool content, no SOURCE blocks, no in-world writing.
 - **VI. Verify Before Reporting Done**: PASS - each task's tests are red without its change (FR-008) and its replay is recorded.
 - **X. Python Discipline**: PASS - ruff, ruff format, pyrefly, 100% coverage on the touched engine modules (`ci/incremental.py`
-  and its new reader module); functions under 100 statements; no file past 1,000 lines (`incremental.py` is 580 lines,
+  and its new reader module); functions under 100 statements; no file past 1,000 lines (`incremental.py` is 580 lines, measured 2026-10-26 (`wc -l`),
   `claims_carry.py` and `plan_lint.py` small).
 - **XII**: N/A - changes nothing a generator asserts about the world.
 - **XIII. No Known Regressions**: PASS - FR-009's replays are the baseline: today's run records and pushes, judged the old way
@@ -82,7 +82,7 @@ new selection.
 file directly under `tests/` plans full, as today; any other selects (a) every test module under the file's own directory, and
 (b) for a file that is not a `conftest.py`, every test module under the gate's trees whose source names the file's name or its
 directory as a path part. (b) is wider than FR-002's "that directory", on purpose: fixture data under `tests/fixtures/` (56
-files, no test module of its own) is read by tests in eight other directories (research R3), and the directory alone would
+files, no test module of its own) is read by tests in eight other directories (observed 2026-10-26, method: research R3), and the directory alone would
 select nothing - the narrowing FR-009 forbids. A guard suite under `tests/hooks/` selects only the pytest modules there, which is
 right: `make hooks-test`, not the gate, runs the suites. The replay: SC-001's 12 re-plan incremental, the 4 top-level `conftest.py`
 runs re-plan full, and the 3 that also changed the gate's configuration re-plan full by that rule.
@@ -103,9 +103,10 @@ The narrowing, stated and priced (FR-009): a roll-reached line that the change s
 names it, as today. The task measures how many of today's in-scope reds that would have missed (expected none: R1 names deleted
 tests and moved code, no roll).
 Placement: `make land` already starts it FIRST, with the gate beside it, and stops the gate the moment it refuses
-(`land.start_cover`, feature 415 T03 D6, from the GM's 2026-10-24 measurement that it "ran 48 s before the gate on T26's
-landing"). That is kept: a refusal arrives at the check's time, not the gate's, which is what "before the 4-5 minute gate" buys,
-and a green check costs the landing nothing. The escape stays `COVER_OK`.
+(`land.start_cover`, feature 415 T03 D6: run before the gate it had cost T26's landing 48 s, measured 2026-10-24 (feature 415
+T03, `land.py`'s docstring)). That is kept: a refusal arrives at the check's time, not the gate's, which is what "before the 4-5 minute gate" buys,
+and a green check costs the landing nothing. SC-002's "less time than the gate" is therefore timed with the check running beside
+the gate on this shared container, as a landing runs it, never alone. The escape stays `COVER_OK`.
 
 **D4 - the push gates (FR-004).** A new `scripts/gates/push_gates.py` holds, per gate, what it judges:
 - `claims`: `claims.BASE_PATHS`, `claims.INDEX`, `claims.DEFERRED`, `claims.STORE`, and `specs/*/tasks.md` (a known drift reads
@@ -125,15 +126,19 @@ entry and claims always, cohort on a gated route - side by side, each to its own
 - a figure with a unit anywhere in the section (not only Approach item 4) whose sentence carries no label (`measured <date>
   (<method>)`, `observed <date>, method: ...`, or `m:<key>`), using the spec-lint's unit list (`spec_figures.UNITS`);
 - an Approach block whose item 6 lacks `make arbiter-ask` (the red exit, D35's wording);
-- in a plan that opts into the checklist (`**Approach checklist**:`), an open task of `tasks.md` with no `### Txx Approach` block.
+- in a plan whose tasks owe approach blocks - one that opts in (`**Approach checklist**:`) or already holds a `### Txx Approach`
+  block, as this plan does - an open task of `tasks.md` with no `### Txx Approach` block. A plan with neither predates the
+  checklist (feature 385) and owes none (`approach_gate.py` D8), so it is not asked.
 `plan_gate.py delta` (`make plan-delta`) runs the lint on every block it would bundle, as `make decide` already does, and writes
 no bundle while one refuses, naming each: no review is dispatched on a block the lint refuses, because no bundle exists to
 dispatch it on.
 An approach block owes no review when it decides nothing, asked of its own part A answers: item 5 (the order) answered "n/a" or
 "nothing placed earlier moves" (no earlier placement moved), item 10 (before moving a constant) "n/a" (no number tuned), item 11
-"n/a", it states no figure with a unit, and every `D<n>` it names is defined elsewhere in the plan or `plan-done.md` (no rule of
-its own - a rule is a decision, and a decision is a `D<n>`). A missing `D<n>` alone is not enough: the other answers must also
-hold. `plan_sections.decides_nothing` takes the approach form beside the part B form.
+"n/a", it states no figure with a unit, and it makes no rule of its own, labeled or not: item 2 (the constraints) names only ids
+defined elsewhere in the plan, `plan-done.md` or the spec (`D<n>`, `FR-<n>`, `SC-<n>`, `R<n>`) and nothing else, and item 4 (does
+each describe the world here) is a bare "Yes" - a rule stated in prose has to stand in one of those two answers, and either one
+then fails the test; and every `D<n>` the block names is defined elsewhere. A missing `D<n>` alone is not enough: every one of
+these answers must hold. `plan_sections.decides_nothing` takes the approach form beside the part B form.
 
 **D6 - known departures and small triages (FR-006, SC-005).** `claims_carry.known_drifts` drops the condition that the claim's
 code be the merge base's: a DRIFTED claim whose own text's last named task is an open row of that feature's `tasks.md` naming the
