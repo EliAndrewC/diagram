@@ -35,3 +35,5 @@
   pop-up by pop-up - is not what happened: each pop-up has its own text, and its three checks each judged it.
 - **So** FR-005 (b) as filed (a shared paragraph checked once) would cover 51 placements of 17 paragraphs across the whole
   registry and none of the batch that prompted it.
+- **SC-004's pop-up half** (from R2's counts): before and after identical - nothing built; the premise false for 374#81.
+  Ruled by the round arbiter, `ask:432-t04-shared-paragraphs`, 2026-10-26: FR-005 (b) waived, T04 closed on R2.
