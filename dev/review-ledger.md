@@ -4966,3 +4966,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-25 | impl-drift | claims-t44 | findings | impl-drift: 4 claims - IN-STEP 4; UNCLAIMED 1 | judgment | - | applied or filed as impl-drift T44 records | 59 s | 257k in (199k cached) / 4.1k out |
 | 2026-10-25 | impl-drift | claims-t44b | findings | impl-drift: 1 claim - IN-STEP 1; UNCLAIMED 1 | judgment | - | applied or filed as impl-drift T44 order claim records | 30 s | 84k in (63k cached) / 1.9k out |
 | 2026-10-25 | impl-drift | claims-t44c | findings | impl-drift: 2 claims - IN-STEP 1, DRIFTED 1; UNCLAIMED 0 | judgment | - | applied or filed as impl-drift T44 row order records | 74 s | 73k in (48k cached) / 5.2k out |
+| 2026-10-25 | impl-drift | claims-t44d | findings | impl-drift: 1 claims - IN-STEP 0, DRIFTED 1, MISLABELED 0, CANNOT-TELL 0; UNCLAIMED 0 | judgment | - | applied or filed as impl-drift T44 row claim r2 records | 47 s | 57k in (37k cached) / 2.9k out |
