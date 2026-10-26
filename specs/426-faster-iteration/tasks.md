@@ -30,9 +30,9 @@
 - [x] T08 `make task-add` writes the D35 red exit and the alone-off table into a new section, and warns when a `SECTION=` file's item 6 lacks it (D6; FR-010; `scripts/task-add.py`)
       research: rendering
       verify: DONE. landed in batch T05+T06+T07+T08: T05: make cohort FAILED_FIRST=1 / LAST_FAILED=1 / EXITFIRST=1 - on the block from 723759 EXITFIRST stopped at 723767 with 2 of 16 unrolled, LAST_FAILED after a full run rolled only 723767 (21 s); a partial record carries its skipped failures, records its block, skips the cohort-wide knob checks and is never a landing record; every run prints rolled/served. T06: a full cohort run then make cohort-landing rolled 0 of 54 (28 s, research R6). T07: make probe - on a worktree with settle_network off it rolled HEAD's two blocks once, stopped at seed 13 (pass at HEAD, refused now) and printed every seed beside HEAD's (4 min 24 s with the baseline). T08: make task-add writes D35's red exit and the alone-off table, and warns on a SECTION= without it
-- [ ] T09 The close: `make feature-report F=426 WRITE=1`, the GM shown the before/after counts and the landing's claims wait
+- [x] T09 The close: `make feature-report F=426 WRITE=1`, the GM shown the before/after counts and the landing's claims wait
       research: rendering
-      verify: the feature report written; every task ticked
+      verify: DONE. feature report written (specs/426-faster-iteration/report.md); T01-T08 and T10 landed and ticked; the GM shown the counts: a docstring-only edit re-rolled 11 of 16 seeds before, 0 after; a landing after a full run rolled 0 of 54 in 28 s; LAST_FAILED re-ran one seed in 21 s; make land no longer waits on a claims round that cannot come
 - [x] T10 No write under l7r/ or pool/ and no git add or commit while this tree's make cache-audit runs: the gate-write guard learns the audit as it knows make done (found: 335cfa840 swept in the audit's perturbation), in `scripts/hooks/gate-write-hooks.sh` (FR-011)
       research: rendering
       verify: DONE. landed: the gate-write guard refuses an Edit or Write under l7r/ or pool/ and any git add or commit while this tree's make cache-audit runs, naming the wait and the escape; tests/hooks/test-gate-write-hooks.sh section 4 (27 passed; the two refusals fail without the clause)

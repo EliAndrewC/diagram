@@ -161,20 +161,7 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
-### T09 Approach (checklist part A)
-
-1. **The goal, in the world.** The feature closed with its numbers shown to the GM.
-2. **The constraints.** the close.
-3. **Where each comes from.** the constitution's close.
-4. **Do they describe the world here?** Measured by: the feature report.
-5. **The order.** last.
-6. **The exits.** green: the report written; red: the missing items named and the close set down.
-7. **The search smell.** None: one change, its tests first.
-8. **The budget.** One landing.
-9. **Done, measured.** Its verify line in tasks.md passes.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
+<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 ### T02 part B (2026-10-26T12:15Z)
 
 The trigger: red-gate@2026-10-26T12:13:24Z, the second red gate in a row on 426 T01-T04's landing.
