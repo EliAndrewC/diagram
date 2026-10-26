@@ -79,3 +79,4 @@ skilled against unskilled (0275), the kitchen knife (0276) and plays (0266), but
 
 - spec-fidelity round 1 (2026-10-25): CHANGES REQUIRED - Acceptance 3 left out the ledger's unverified Kanazawa lead; Scenario 4
   dropped Q4's named sources (kabuki, rural troupes, Morisada). Both applied.
+- round 2 (verify): FAITHFUL.
