@@ -37,7 +37,6 @@ from .settle import (
     settle_joins,
     settle_network,
     settle_reach,
-    settle_widths,
     unsettled,
 )
 from .tree import settle_defer, tree_faults
@@ -153,7 +152,7 @@ def last_resort(s: Any) -> int:
     """THE LAST RESORT (FR-005): the rounds ran out with a lane still breaking a rule, so every ORDINARY lane still breaking
     one goes whole - never kept as the least bad - with the network rule asked again of what is left; then the
     rules no drop can break are asked once more (a join closed only where it meets cleanly, the reach a drop took away drawn
-    again as the tree, the network, a fragment that no longer earns, one width a way); then an ordinary lane still carrying
+    again as the tree, the network, a fragment that no longer earns); then an ordinary lane still carrying
     a way out over the brook and back goes too, and the whole is asked again - up to `LAST_RESORT_PASSES` times. A tree lane
     is never dropped here. Whatever is still broken after that is refused (`refuse_unmended`). Returns the lanes dropped."""
     dropped = 0
@@ -170,7 +169,6 @@ def last_resort(s: Any) -> int:
             settle_defer,
             settle_network,
             settle_fragments,
-            settle_widths,
         ):  # a way the reach draws is joined before the network rule (feature 385 T03, cohort seed 21; not in `settle.STEPS`: seed 57)
             step(s)
         carriers = ordinary_carriers(s.M)
