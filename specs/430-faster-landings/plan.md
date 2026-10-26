@@ -39,7 +39,7 @@ or `l7r/diagram/ci/`, so `land.py`'s `GATE_MACHINERY` sends it through a gate):
 
 **Project Type**: build and test tooling
 
-**Performance Goals**: SC-001 (15 of today's 19 full-planned deltas plan incremental), SC-002 (the coverage check names its
+**Performance Goals**: SC-001 (12 of today's 19 full-planned deltas plan incremental), SC-002 (the coverage check names its
 reds' lines in less time than the gate), SC-003 (a records-only push's three gates exit before reading what they judge)
 
 **Constraints**: FR-009 - every shortcut is replayed against today's runs; a narrowing is stated and priced, never silent
@@ -84,8 +84,8 @@ file directly under `tests/` plans full, as today; any other selects (a) every t
 directory as a path part. (b) is wider than FR-002's "that directory", on purpose: fixture data under `tests/fixtures/` (56
 files, no test module of its own) is read by tests in eight other directories (research R3), and the directory alone would
 select nothing - the narrowing FR-009 forbids. A guard suite under `tests/hooks/` selects only the pytest modules there, which is
-right: `make hooks-test`, not the gate, runs the suites. The replay: the 15 of today's 19 runs SC-001 names re-plan incremental,
-the 4 top-level `conftest.py` runs re-plan full.
+right: `make hooks-test`, not the gate, runs the suites. The replay: SC-001's 12 re-plan incremental, the 4 top-level `conftest.py`
+runs re-plan full, and the 3 that also changed the gate's configuration re-plan full by that rule.
 
 **D3 - the coverage check asks every line of each changed module, with the floor's tests (FR-003, FR-003a).**
 `cover_changed.py`:
@@ -178,7 +178,7 @@ gains the case: with a task undecided, a `claims-triage` dispatch passes decide-
    through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** Its tests red without D2; SC-001's 15 replays plan incremental and the 4 plan full.
+9. **Done, measured.** Its tests red without D2; SC-001's 12 replays plan incremental, the 4 and the 3 plan full.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 

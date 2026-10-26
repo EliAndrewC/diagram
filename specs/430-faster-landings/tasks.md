@@ -8,7 +8,7 @@
 
 - [ ] T01 Pool manifests keep the gate incremental, their readers selected; the readers rule in one engine module `make quick` shares; the 11 `inashiro.json` replays select every test their run failed (D1; FR-001, FR-009; `l7r/diagram/ci/incremental.py`, `l7r/diagram/ci/pool_readers.py`, `scripts/gates/pool-readers.py`)
       research: rendering
-- [ ] T02 The test tree's non-module files: a doc adds nothing, a top-level file plans full, another selects its directory's tests and the tests naming it; SC-001's 15 replays plan incremental, the 4 plan full (D2; FR-002, FR-009, SC-001; `l7r/diagram/ci/incremental.py`)
+- [ ] T02 The test tree's non-module files: a doc adds nothing, a top-level file plans full, another selects its directory's tests and the tests naming it; SC-001's 12 replays plan incremental, the 4 top-level and the 3 configuration ones plan full (D2; FR-002, FR-009, SC-001; `l7r/diagram/ci/incremental.py`)
       research: rendering
 - [ ] T03 The coverage check asks every line of each changed module with the floor's tests, the floor's carried coverage honored; the replays of SC-002 measured against their gates (D3; FR-003, FR-003a, FR-009, SC-002; `scripts/gates/cover_changed.py`)
       research: rendering

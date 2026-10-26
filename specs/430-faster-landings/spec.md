@@ -145,10 +145,12 @@ unchanged modules stay the gate's (FR-009's narrowing, stated in Assumptions).
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001, FR-002): of today's 19 full-planned deltas that were full only for a manifest or a `tests/` non-module
+- **SC-001** (FR-001, FR-002): of today's 19 full-planned deltas whose planner reason named a manifest or a `tests/` non-module
   file (`m:full-plan-reasons`: 11 `inashiro.json`, 4 the top-level `tests/conftest.py`, 2 `tests/hooks/`, 1 a `CLAUDE.md`, 1
-  `tests/tooling/ci/conftest.py`), the planner, replayed, plans incremental for the 15 that are not the top-level `conftest.py`;
-  those 4 plan full, as FR-002 says.
+  `tests/tooling/ci/conftest.py`), the planner, replayed, plans incremental for the 12 with no other cause (the 11 `inashiro.json`
+  and the `CLAUDE.md`); the 4 top-level `conftest.py` deltas plan full, as FR-002 says; and the 3 whose delta also changed the
+  gate's configuration (4678af6c6, 39ea51383, fda3e0e04: `ci/gate_config.py`, `ci/state.py`, feature 426) plan full by the
+  configuration rule, which this feature does not change.
 - **SC-002** (FR-003, FR-003a): the pre-gate check names the lines of each of today's 3 coverage reds whose named lines lie in a
   module their delta changed; on the sixth it counts the tests the floor counts (no new `tooling`-marked test the floor leaves
   out); and on those replayed deltas it takes less time than the gate took. The 2 reds whose lines lie in an unchanged module
@@ -236,3 +238,17 @@ unchanged modules stay the gate's (FR-009's narrowing, stated in Assumptions).
   says "8 lines". Round 4's item stays resolved (none of its passages changed). The new wording adds no scope and contradicts
   nothing. Figures: `make figures` 0 moved, 0 outside band, 0 not re-measured; `bash replay-reds.sh` prints 8 EXISTING spans
   covering 1+7+1+3+1+1+2+4 = 20 lines, with law.py:933 and checks.py:141 not in their deltas (on round 5's own run).
+- spec-fidelity amendment 1, round 1 (2026-10-26, VERIFY): CHANGES REQUIRED. Round 5's items stay resolved (none of their
+  passages changed). Holding the top-level `tests/conftest.py` deltas to full is FR-002 and US2.2 as accepted in round 2, and
+  request.md item 2 never promised all 19 incremental, so that part of the amendment is faithful. (1) But SC-001's "incremental
+  for the 15" is a count the record does not bear out. The planner reports the `tests/` reason BEFORE it checks the gate's
+  configuration (`l7r/diagram/ci/incremental.py` 315-318), and 3 of the 15 also moved the gate's machinery: 4678af6c6
+  (`tests/tooling/ci/conftest.py`), 39ea51383 and fda3e0e04 (`tests/hooks/test-cohort-gate.sh` +2). Each delta from the 09:02
+  green full at e5788a596 adds `l7r/diagram/pipeline/codeid.py` and changes the code of `l7r/diagram/ci/gate_config.py` and
+  `state.py` (feature 426, 335cfa840), so `config_hash` moves and the gate-configuration rule, which this spec leaves as it is,
+  plans them full. That base matches the run records: the delta's non-module `tests/` files come out as exactly 1 and 3. The
+  other 12 (11 `inashiro.json`, 1 `CLAUDE.md`) carry no other cause. SC-001 must say: incremental for those 12; full for the 4
+  top-level `conftest.py` deltas, as FR-002 says; full for the 3 whose delta also moved the gate's configuration, a rule this
+  feature does not change. Separately, `m:full-plan-reasons`'s `quantity` ("planned full only for ...") must stop claiming
+  "only", because its method reads only the first reason the planner reports. Figures: `make figures` 0 moved, 0 outside band,
+  0 not re-measured; `python3 full_reasons.py` prints 11/4/2/1/1 = 19 (on this round's own run).
