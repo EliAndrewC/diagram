@@ -33,8 +33,9 @@
 
 - `tooling_hash` was made raw so a Makefile comment counts (its docstring). For `.py` under `scripts/` the readers of docstrings
   are module-level usage text only (grep of `__doc__`, `getdoc`, `get_docstring` under `scripts/` and `tests/tooling/`,
-  2026-10-26: `gm_review.py`, `preflight.py`, `plan_gate.py` read module docstrings or plan text), so function and class
-  docstrings can drop and module docstrings stay.
+  2026-10-26: about twenty scripts read their own MODULE `__doc__` for argparse or a usage message - `gate-stamp.py`,
+  `plan_gate.py`, `review_prereq.py` among them; the one `get_docstring` of a class, `record/modal_owed.py`, reads the engine
+  registry's classes, not a script's), so function and class docstrings can drop and module docstrings stay.
 
 ## R4 - In-flight claims checks
 
