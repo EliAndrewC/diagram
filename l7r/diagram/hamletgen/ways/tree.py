@@ -166,6 +166,7 @@ def off_the_needle(pts: Sequence[Any], drawn: Sequence[Sequence[Sequence[float]]
         the doubled way drawn as one - research/questions/0081-village-lanes.drawing.html: two ways side by side are drawn as one
         its reach - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); 0081 cuts a lane where it comes alongside and gives no distance - half of `law.NEEDLE_LOOP_FT` (10 ft); 2.0 (the walk's step)
         a lane beside the other its whole length - research/questions/0081-village-lanes.drawing.html: two paths side by side are drawn as one - where no stretch of the lane stands off the other to cut back to, it is left for the lane law (`law.needle_loops`) to refuse, so the doubled way never ships
+        a needle closed away from the lane's end - research/questions/0081-village-lanes.drawing.html: a lane that wanders over another way at a needle's angle is cut where it comes alongside - a lane whose end stands off the other way (`at >= mine.length`) is not cut, the needle left for the law to refuse, a departure the code keeps until feature 417 T32
         a needle left where the tee would close one - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); the lane is left as drawn for the law to refuse rather than cut into another needle
     """
     from shapely.geometry import LineString
