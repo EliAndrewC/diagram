@@ -76,7 +76,10 @@ def asked_feature(root: Path, trigger: str) -> Path | None:
     """The feature an ask names by its SUBJECT's leading number (`ask:414-round3` -> `specs/414-*`), when exactly one directory
     has that number: `ask:414-round3` was filed under 416, the clone's active feature, so 414's ruling sat in 416's
     arbiter.jsonl and GM review (2026-10-24)."""
-    m = re.match(r"ask:(\d{3})-", trigger)
+    # ...AND A ROUND TRIGGER BY THE PLAN OR SPEC IT NAMES (`round:spec-fidelity|plan:427-call-volume-refactors#T01@3`): 427's plan
+    # round 3 was ruled while the session's `SPECIFY_FEATURE` still named 430, and its accept was filed in 430's arbiter.jsonl and
+    # gm-review, and rewrote 430's plan-review.json, leaving 427's plan with no CLEAR verdict (2026-10-26)
+    m = re.match(r"ask:(\d{3})-", trigger) or re.search(r"\|(?:plan|spec):(\d{3})-", trigger)
     dirs = sorted((root / "specs").glob(f"{m.group(1)}-*/")) if m else []
     return dirs[0] if len(dirs) == 1 else None
 

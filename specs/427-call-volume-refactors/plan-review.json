@@ -3,75 +3,75 @@
  "blocks": {
   "preamble": {
    "sha256": "b6c61ce482839c97d8d574231837f0b1bce3ee43f899a102a26a29a59ca54ec8",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Summary": {
    "sha256": "0bdc5663ba1a90c4b65a7c04e2bbfc63de932153c6698f56130e962c6a9f25b6",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Technical Context": {
    "sha256": "6f4f857065245faeea68053aa085bfc193907985eec1b5ed65d4beb857f7841b",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Performance bookends": {
    "sha256": "bbb66ade3b2f340ba3b7f39d2e303cf4685b98fd76b22e808c6865e7836a5bbd",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Constitution Check": {
    "sha256": "bafc3fb8e937ea09a29f2c12206f2c54a9669a5b5c1eb9c67c1da1e56415761c",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Decisions": {
-   "sha256": "0aa4d87c6a5262afe0a2568e7c8d609088dc122d7cdc8bbc33b5a5062514418b",
-   "verdict": "BLOCKED",
+   "sha256": "93f49b9f60d78f5778cc2e4f62a484c9a628b9ebcd4a640503e3b758ffdd6da7",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Task approaches": {
    "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T01 Approach (checklist part A)": {
    "sha256": "c3fec40bea35fdf3771fdff9fa38cfed681597667a42b25f8d2c644f2b701da4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Project Structure": {
    "sha256": "78aa41f093ec3faedcbfbaf4620358dd38cb2532a522b49bf2a2b804d0d2fc7f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### Documentation (this feature)": {
    "sha256": "fc71726228efb09af112b47244492557d95d5486bb4fb21e74c45e06d5418b9e",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### Source Code (repository root)": {
    "sha256": "f04999aa2992dcc1fb902558f4f3fb548c287e252ee512a0b39b18c7567ae83d",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "## Complexity Tracking": {
    "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -240,6 +240,32 @@
      "summary": "Files: l7r/diagram/tools/perf_fanout.py, tests/tools/test_perf_fanout.py, Makefile target, tools/CLAUDE.md row; feature docs layout",
      "class": "within",
      "why": "The design note's module, target and row; nothing beyond FR-001."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "### T01 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:427-call-volume-refactors#T01@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }

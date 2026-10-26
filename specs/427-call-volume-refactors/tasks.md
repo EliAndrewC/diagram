@@ -8,3 +8,6 @@
 
 - [ ] T01 `make perf-fanout`: the call-volume survey - per-stage call totals and growth, the multiplier chains by anchor, the fastest growers, the report in dev/perf-log (D1; FR-001, FR-002, SC-001; `l7r/diagram/tools/perf_fanout.py`, Makefile, `tools/CLAUDE.md`)
       research: rendering
+- [ ] GM review (make gm-reviewed F=427) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)

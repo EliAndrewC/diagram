@@ -600,6 +600,11 @@ def test_a_session_s_checks_and_rulings_are_its_brief_s_feature(tmp_path: pathli
     assert ha.feature_dir(tmp_path) == tmp_path / "specs/378-x"
     monkeypatch.setenv("L7R_FEATURE_DIRECTORY", "specs/343-receiving-court-swept/")
     assert ha.feature_dir(tmp_path) == tmp_path / "specs/343-receiving-court-swept"
+    # a plan or spec round trigger is filed under the feature it NAMES (427's plan round 3 was filed under 430, 2026-10-26)
+    (tmp_path / "specs" / "427-call-volume-refactors").mkdir(parents=True)
+    monkeypatch.setenv("SPECIFY_FEATURE", "430-faster-landings")
+    assert ha.feature_dir(tmp_path, "round:spec-fidelity|plan:427-call-volume-refactors#T01@3") == tmp_path / "specs/427-call-volume-refactors"
+    assert ha.feature_dir(tmp_path, "round:spec-fidelity|spec:427-call-volume-refactors@5") == tmp_path / "specs/427-call-volume-refactors"
 
 
 def test_a_session_s_end_writes_its_passes_ledger_rows(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
