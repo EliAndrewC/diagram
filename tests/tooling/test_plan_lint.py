@@ -40,6 +40,13 @@ def test_a_figure_with_a_unit_anywhere_needs_a_label() -> None:
     assert plan_lint.unlabeled_unit_figure("**D3 - x.** Run `sleep 48 s` in a span.\n") == "", "a code span names, it measures nothing"
 
 
+def test_a_research_figure_is_labeled_by_its_verdict() -> None:
+    """A research-record plan quotes a source's figure; its label is the verdict it will carry (feature 431)."""
+    assert "31.6%" in plan_lint.unlabeled_unit_figure("**D1 - x.** Women did 31.6% of farm labor in the East.\n")
+    assert plan_lint.unlabeled_unit_figure("**D1 - x.** Women did 31.6% of farm labor in the East, ATTESTED ONLY FOR 1921-25.\n") == ""
+    assert plan_lint.unlabeled_unit_figure("**D1 - x.** A tan is 0.35 x 11 m, so 3.9 m2, this project's arithmetic.\n") == ""
+
+
 def test_an_approach_block_without_the_red_exit_is_refused() -> None:
     assert plan_lint.missing_red_exit(_approach("T01")) == ""
     assert plan_lint.missing_red_exit(_approach("T01", item6="Green: landed.")) == "T01"
@@ -106,3 +113,18 @@ def test_decide_and_plan_delta_name_an_owed_claims_triage(tmp_path: Path, monkey
     assert plan_gate.triage_hint(tmp_path) == ""
     monkeypatch.setattr(plan_gate.subprocess, "run", lambda *a, **k: Done("Traceback ...\n"))
     assert plan_gate.triage_hint(tmp_path) == "", "claims that cannot be read name nothing"
+
+
+def test_a_coverage_rule_is_no_figure() -> None:
+    """Feature 427's plan, the first this lint read after landing: "100% coverage of the new module" is the project's rule, not
+    a measurement to label."""
+    assert plan_lint.unlabeled_unit_figure("- **X**: ruff, 100% coverage of the new module the day it lands.\n") == ""
+    assert "47%" in plan_lint.unlabeled_unit_figure("- **X**: the check covers 47% of the lines.\n"), "a measured share still needs its label"
+
+
+def test_a_sentence_wrapped_across_lines_is_read_whole() -> None:
+    """Feature 427's plan: "... the memory watch has since read the shared cap at 9.1-9.3 of 10 GB" wrapped onto a second line,
+    its label on the first; read line by line, the figure stood alone."""
+    wrapped = "**D1 - x.** The default, observed 2026-10-26, method: the memory watch, read the shared cap at\n9.3 of 10 GB.\n"
+    assert plan_lint.unlabeled_unit_figure(wrapped) == ""
+    assert "10 GB" in plan_lint.unlabeled_unit_figure("- one item.\n- the cap is 10 GB.\n"), "a list item is its own sentence"
