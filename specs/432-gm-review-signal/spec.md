@@ -119,6 +119,8 @@ session names it in that turn's final message.
   passage changed still owed (the counts before and after in `research.md`).
 - **SC-005** (FR-006): after the clearing, `make gm-review` lists exactly three decisions for the GM and no other open row, and
   `make speckit-todo` no longer lists a feature whose only open box was its GM review.
+- **SC-006** (FR-007): FR-007's search, re-run after T07, finds no text left saying every ruling or fix reaches the GM, and
+  each test FR-007 asks for fails with its change undone.
 
 ## Assumptions
 
