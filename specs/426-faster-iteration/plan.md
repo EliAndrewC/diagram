@@ -230,3 +230,31 @@ tests/tooling/test_probe.py, tests/tooling/test_task_add*.py
 ## Complexity Tracking
 
 None.
+
+### T10 (feature 426, found 2026-10-26: commit 335cfa840 swept in the cache audit's perturbation): no write or commit while `make cache-audit` runs
+
+- **Approach**: `make cache-audit` perturbs a numeric literal inside an engine function IN THE WORKING TREE, sweeps the pool, and
+  restores the file at the end (observed 2026-10-26, method: `git show 335cfa840` carried `rot_rect`'s `w / 3`, restored by
+  a7e46883b). The gate-write guard (`scripts/hooks/gate-write-hooks.sh`) already refuses a write while this tree's `make done`
+  runs (`own-make.sh done`); it learns the same of `make cache-audit` (`own-make.sh cache-audit`), refusing an Edit or Write
+  under `l7r/` or `pool/` and any `git add` or `git commit`, with the cure (wait: `make verify-wait`-style, the audit's own
+  exit) in its message. Escape: the guard's existing `GATE_WRITE_OK`. Rendering: none.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a (a guard, no map step) | - | - | - | - |
+
+### T10 Approach (checklist part A)
+
+1. **The goal, in the world.** No commit carries a file the cache audit has perturbed.
+2. **The constraints.** FR-011 (the fix in its own output, a test proving it fires); the guard's existing escape.
+3. **Where each comes from.** O: commit 335cfa840 (observed 2026-10-26, method: its diff); G: the GM's "tooling, not remembering".
+4. **Do they describe the world here?** Measured by the suite: a refusal while a stand-in `make cache-audit` runs, a pass after.
+5. **The order.** After T08; before the close.
+6. **The exits.** Green: landed by `make land`. Red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask` (D11, D35).
+7. **The search smell.** None: one guard clause, its test first.
+8. **The budget.** One landing.
+9. **Done, measured.** `tests/hooks/test-gate-write-hooks.sh` refuses the write and the commit during the audit, passes them after.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+

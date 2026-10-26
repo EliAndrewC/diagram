@@ -74,6 +74,20 @@ check "...and the tree check names it" 1 "$(python3 "$S/scripts/gates/preflight.
 pkill -f "sleep 30" 2>/dev/null
 rm -rf "$S"
 
+echo "--- 4. while make cache-audit runs (feature 426 T10: 335cfa840 swept in the audit's perturbation) ---"
+A=$(mktemp -d); git -C "$A" init -q; mkdir -p "$A/l7r/diagram" "$A/docs"
+printf 'cache-audit:\n\t@sleep 31\n' > "$A/Makefile"
+( cd "$A" && setsid nohup make cache-audit </dev/null >/dev/null 2>&1 & )
+for _ in $(seq 1 50); do ( cd "$A" && "$HERE/../../scripts/hooks/lib/own-make.sh" cache-audit ) && break; sleep 0.1; done
+check "a commit during the audit: refused" 2 "$(run "$A" "$COMMIT")"
+check "an Edit of an engine file during the audit: refused, even a docstring" 2 "$(run "$A" "$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"a","new_string":"b"}}' "$A")")"
+check "an Edit of a doc during the audit: let through" 0 "$(run "$A" "$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/docs/x.md","old_string":"a","new_string":"b"}}' "$A")")"
+check "the escape during the audit: let through" 0 "$(run "$A" '{"tool_name":"Bash","tool_input":{"command":"GATE_WRITE_OK=\"a deliberate commit beside the audit\" git -C . commit -qm x"}}')"
+pkill -f "sleep 31" 2>/dev/null
+sleep 0.3
+check "a commit once the audit has ended: let through" 0 "$(run "$A" "$COMMIT")"
+rm -rf "$A"
+
 echo "-----"
 printf 'test-gate-write-hooks: passed %s, failed %s\n' "$PASS" "$FAIL"
 rm -rf "$R" "$OTHER" "$LOGROOT"

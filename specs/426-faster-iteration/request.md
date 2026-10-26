@@ -23,3 +23,12 @@ Asked after the session's step-back on why feature 417's tasks took 40 min to ne
 3. A plan-section template that already carries the exit wording and a table of each step measured alone, which the plan reviews kept asking for.
 
 "This improvement" is the session's answer to the second message: the docstring-free cache key, and the cohort modes FAILED_FIRST, LAST_FAILED and EXITFIRST with stored HEAD results.
+
+## The GM's standing instructions that bear on found work (verbatim, his user-level `~/.claude/CLAUDE.md`, "Working habits")
+
+> - **Fix bugs you find**, pre-existing or not, in the work at hand, and report them. Don't ask first.
+> - **Tooling, not remembering.** Never offer "I'll remember to run X". Close a process gap in a hook,
+>   gate or script, and recommend the automatic option.
+
+T10 is such a gap, found in this feature's own work: a commit made while `make cache-audit` ran (T03's verification) carried
+the audit's perturbed engine file (335cfa840, restored by a7e46883b).
