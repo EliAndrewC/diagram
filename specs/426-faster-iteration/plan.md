@@ -266,6 +266,24 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
+### T02 part B (2026-10-26T12:15Z)
+
+The trigger: red-gate@2026-10-26T12:13:24Z, the second red gate in a row on 426 T01-T04's landing.
+
+1. **What exactly is refusing?** Gate 1 (11:53): seven hook and content-cache tests - their fixture repos copy `scripts/` but the
+   code id sat under `l7r/`, so `gate-stamp.py` could not load it there. Gate 2 (12:13): the 100% floor, six lines of
+   `gencache._split_sources`' raw (`interactive/`) branch no unit test ran.
+2. **A3 again.** O: the gate's fixtures (they copy the scripts tree whole); the coverage floor over the whole engine.
+3. **A4 again.** It describes the change: the module's home decided which fixtures carried it; `cover-changed` measured
+   `tests/pipeline` only, the full floor the rest.
+4. **Moving something placed earlier to suit something later?** The module moved to `scripts/gates/` beside `gate-stamp.py`,
+   where the rule always lived, an engine shim at `l7r/diagram/pipeline/codeid.py`; no behavior changed.
+5. **Tuning or changing?** Neither: two distinct defects, each fixed once (the move; one unit test).
+6. **The one-sentence test.** "The code id lives where every fixture carries it, and its raw branch is tested" - no question.
+7. **The next step is a measurement.** `make land` again: hook suites, the shim and `gencache` at 100% under the full floor.
+8. **Routes measured?** One route each: the move (hook suites green), the test (coverage of the branch).
+9. **After a ruling.** The round arbiter ruled continue (red-gate@2026-10-26T12:13:24Z); a third distinct red goes back to it.
+
 ## Project Structure
 
 ### Documentation (this feature)

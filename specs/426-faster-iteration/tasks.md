@@ -33,3 +33,6 @@
 - [ ] T09 The close: `make feature-report F=426 WRITE=1`, the GM shown the before/after counts and the landing's claims wait
       research: rendering
       verify: the feature report written; every task ticked
+- [ ] GM review (make gm-reviewed F=426) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
