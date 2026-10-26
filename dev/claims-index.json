@@ -25098,14 +25098,11 @@
   "code": "84a49c310f417a80",
   "core": "e77b42efbfd9c1c9",
   "date": "2026-10-26",
-  "note": "known (417 T32): `squared_step` and `square_run` square the step where it falls and never move it to a crossing place, against \"A way crosses the water only at one of them\"; the code does what the claim says",
+  "note": "known (417 T32): `squared_step` and `square_run` square the step where it falls and never move it to a crossing place, against \"A way crosses the water only at one of them\"; the code does what the claim says; a known drift accepted by the round arbiter (ask:417-T50-claims) to land as filed",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
   "research": "9354777ef34af3d3",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/bund.py::off_the_fixtures#off the fixtures": {
@@ -35348,24 +35345,12 @@
   "code": "e279b719daaef130",
   "core": "1b96763703065a9c",
   "date": "2026-10-26",
-  "note": "known (417 T32): the track lays no field spur, and the field is reached by ways not laid as the connector's other end, against \"The spur to the fields and the track out are one through-route. They are its two ends\"; the code does what the claim says",
+  "note": "known (417 T32): the track lays no field spur, and the field is reached by ways not laid as the connector's other end, against \"The spur to the fields and the track out are one through-route. They are its two ends\"; the code does what the claim says; a known drift accepted by the round arbiter (ask:417-T50-claims) to land as filed",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:df440690bbce9cb6"
-  ],
   "verdict": "DRIFTED"
- },
- "l7r/diagram/hamletgen/ways/track.py::stage_track#which end of a row road is the way in: the run off the nearer edge is the entrance, and the far run is flagged `run_on`, so the board stands at the nearer end": {
-  "code": "1b96763703065a9c",
-  "core": "1b96763703065a9c",
-  "date": "2026-10-26",
-  "note": "which end of a row road is the way in: the run off the nearer edge is the entrance, and the far run is flagged `run_on`, so the board stands at the nearer end",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/track.py::thread_over_the_ford#crossed at a ford": {
   "body": "60656ba1e0c478d2",
