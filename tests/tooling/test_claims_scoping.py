@@ -144,7 +144,8 @@ def test_the_backfill_gives_only_rows_checked_at_todays_research_their_pages(tmp
     assert cx.backfill(cur, index, skill / QDIR, store) == 0, "once"
 
 
-def test_the_command_line_triage_triaged_and_backfill(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_the_command_line_triage_triaged_and_backfill(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(cx, "TRIAGE_SKIP_MAX", 0)  # the triage path itself; a triage of a few claims skips it (feature 430 T06), below
     root = _repo(tmp_path)
     skill = root
     _tree(root, MOD, PAGE)
@@ -169,6 +170,12 @@ def test_the_command_line_triage_triaged_and_backfill(tmp_path: pathlib.Path, ca
     assert [k for k, _w in cx.owed(cx.current(skill), cx.load_index(root / cx.INDEX), skill / cx.QUESTIONS.split("/", 3)[-1], cx.load_store(root / cx.STORE))] == [FAR]
     assert cx.main(["--root", str(root), "backfill"]) == 0 and "row(s) given the pages" in capsys.readouterr().out
     assert cx.main(["--root", str(root), "report"]) == 0
+    _tree(root, MOD, PAGE.replace("5 ft", "7 ft"))
+    monkeypatch.setattr(cx, "TRIAGE_SKIP_MAX", 3)
+    capsys.readouterr()
+    assert cx.main(["--root", str(root), "triage", "--out", str(tmp_path / "small")]) == 0
+    said = capsys.readouterr().out
+    assert "goes straight to impl-drift" in said and (tmp_path / "small" / "units.json").is_file(), "feature 430 T06: one claim is no triage"
 
 
 def test_a_rest_on_a_page_the_claim_does_not_cite_is_dropped_and_named() -> None:
