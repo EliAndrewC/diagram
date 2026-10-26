@@ -174,8 +174,8 @@
   "subject": "building-review--hayakawa-magistracy",
   "answers": "1e2113622c75",
   "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-  "command": "make pack-audit ARGS=pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-  "method": "the garden polygon now runs from the kitchen's east face (x 397) and the bath's (x 381) to the east block, from the west block's south face (y 330) to the 7 ft way along the divider (y 436); pack-audit no longer lists the 20.3 ft LOOSE gap at svg(428,348)",
+  "command": "grep -n '397,330 456,330' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+  "method": "the garden polygon read: it runs from the kitchen's east face (x 397) and the bath's (x 381) to the east block, from the west block's south face (y 330) to the 7 ft way along the divider (y 436). pack-audit's gap list still prints 20.3 ft at svg(428,348): it measures between buildings and does not see ground features (corrected 2026-10-26 on building-review round 4 N2)",
   "value": {
    "loose_gap_east_of_kitchen": 0,
    "divider_way_ft": 7.0
