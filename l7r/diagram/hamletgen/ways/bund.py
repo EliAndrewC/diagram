@@ -394,6 +394,7 @@ def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> bool:
     nothing is drawn, where it refuses.
 
     Research:
+        the brook crossed where the step falls - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the water only at a crossing place - a step carried on to the bund crosses the brook wherever it falls (squared, not moved to a crossing place), a departure the code keeps until feature 417 T32
         square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T50)
         a junction stays a T - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, so the step is its own
             field path

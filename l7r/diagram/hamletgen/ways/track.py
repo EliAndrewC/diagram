@@ -204,13 +204,10 @@ def choose_track_out(s: Settlement, plan: SitePlan) -> Poly:
 def stage_track(s: Settlement, plan: SitePlan) -> None:
     """The connector (the field spur it also laid went in feature 417 T50: laid before anything it could join, it was dropped whole).
 
-    The track out to the off-map road, and the path to the fields - drawn NOW, after the farmhouses, because a
-    lane drawn earlier takes ground the houses then cannot have. That is true whatever the lane represents: a
-    road may well predate a settlement in the world, but this generator does not inherit a road, it DRAWS one,
-    and drawing it first reserves a no-build corridor the placer then refuses seats against. Both tracks now
-    start from the settlement as it actually stands rather than from where it was predicted to go.
-
-    The connector out to the road and the spur to the field - drawn AFTER the houses.
+    The track out to the off-map road - drawn NOW, after the farmhouses, because a lane drawn earlier takes ground the houses
+    then cannot have. That is true whatever the lane represents: a road may well predate a settlement in the world, but this
+    generator does not inherit a road, it DRAWS one, and drawing it first reserves a no-build corridor the placer then refuses
+    seats against. It starts from the settlement as it actually stands rather than from where it was predicted to go.
 
     THE GM, stating the whole feature (2026-08-24): *"We are reordering the procedural layout of the
     hamlet generation so that farmhouses are rendered after the fields and water, but before any
@@ -221,14 +218,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     houses registers a no-build corridor (`settlement/water_ways/lanes.py`, `Settlement.lane`) that the seating then
     refuses seats against. It takes ground the houses cannot have, which is
     exactly what the GM reported: *"the lanes being there was the thing that was making it difficult
-    to lay out the farmhouses."*
-
-    That reasoning - ground reservation - is the one that carries, and it is deliberately NOT an
-    argument about provenance. An earlier draft justified moving the spur by claiming a field path
-    cannot predate the households who walk it; the fidelity review showed that is not universally
-    true (land assarted from an older settlement, a bund track along an existing paddy, a hamlet
-    founded against a through-path) and that resting on provenance produced a false asymmetry between
-    the spur and the connector. Ground reservation is true of every lane whatever it represents.
+    to lay out the farmhouses."* That reasoning - ground reservation - is true of every lane whatever it represents.
 
     **Both branches.** The polder path returns early with its own connector; a fix applied only to
     the valley path would leave polder hamlets reserving ground, and the reference hamlet is a valley
@@ -242,7 +232,8 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.lane
 
     Research:
-        square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)
+        square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square - the row road squared here as laid (`square_run`, feature 417 T49); the valley and polder connector as chosen and threaded (`choose_track_out`, `_connector_through`, which square it)
+        track out and field way one through-route - research/questions/0081-village-lanes.drawing.html: the spur to the fields and the track out are one through-route - the track lays no spur (feature 417 T50) and the field is reached by the web's way onto the bund or the settle's field way, neither laid as the connector's other end, a departure the code keeps until feature 417 T32
         lanes after the farmhouses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the connector drawn after every house
         row road - research/questions/0033-row-villages-resson.drawing.html: the street carried on off the map, over a ford
         row road width - research/questions/0033-row-villages-resson.drawing.html: 6 ft
@@ -311,7 +302,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
             from .settle import square_run  # the web's last pass sits above this layer
 
             # ...squared where it crosses water, as laid (feature 417 T49): a ditch the road crosses, or a run threaded whole
-            s.lane(square_run(s.M, thread_over_the_ford(s, plan, _out[0], _via, _out[-1])), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
+            s.lane(square_run(s.M, thread_over_the_ford(s, plan, _out[0], _via, _out[-1])), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
             if _k:  # ...the far end's run is the road running on, not the way in: the board stands at the entrance (`run_on`)
                 s.M["lanes"][-1]["run_on"] = True
         return
