@@ -531,3 +531,19 @@ or the step is set down with its seeds and ruled (`make arbiter-ask`). Rendering
   nearest point, a tee - the way joins the way beside it rather than running on beside it to a shared end (0081's doubled way,
   drawn as one). Measured on the landing cohort, the fresh block from seed 723759 and the pool maps.
 
+### T45 Approach (checklist part A)
+
+1. **The goal, in the world.** No two households' ways close a sliver of grass between them: a way that would run on beside
+   another to a shared end ends on that way instead.
+2. **The constraints.** FR-005, D11; `law.needle_loops` (a 20 ft CONVENTION); the arbiter's ruling on ask:417-T31-C2-regression.
+3. **Where each comes from.** R: 0081's doubled way drawn as one. G: the GM 2026-10-25. O: the measured needle on seed 723775.
+4. **Do they describe the world here?** Measured: the needle a 3 ft face at the connector's start, bounded by two access lanes.
+5. **The order.** After T44 (the tree first); its own task, not iterated inside C2.
+6. **The exits.** FR-008 green: landed, its fresh rate recorded. Red: set down.
+7. **The search smell.** None: one rule asked at one placer (`lanes_of`, `off_the_needle`).
+8. **The budget.** One landing.
+9. **Done, measured** (observed 2026-10-26; method: `make cohort-landing JOBS=3`, `make cohort N=48 SEED=723759 FRESH=0 JOBS=3`,
+   `make map` on the five pool hamlets): 54 of 54; the fresh block 7 of 48, the same seven (723775 now refused on `joins_short`
+   at a skeleton end, its needle gone); no pool map moved.
+10. **Before moving a constant.** `NEEDLE_LOOP_FT` read and kept (a 16 ft calibration; the face is 3 ft).
+11. **Before fitting things into room.** n/a.
