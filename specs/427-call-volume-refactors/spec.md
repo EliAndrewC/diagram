@@ -4,8 +4,8 @@
 
 **Created**: 2026-10-26
 
-**Status**: Draft - filed, not started. Held until the GM says to start (`request.md` 3: "once I'm in a place to actually work
-on that, then we can do that"); the reason is the engine refactors in flight (`request.md` 2).
+**Status**: Started 2026-10-26 on the GM's word (`request.md` 5: "please go ahead with feature 427 beginning with the survey
+tool"), after the hold of `request.md` 3.
 
 **Affects**: hamlet, performance, tooling
 
@@ -13,7 +13,7 @@ on that, then we can do that"); the reason is the engine refactors in flight (`r
 
 **Amended**: the GM, 2026-10-26, "please update the new feature 427 to make sure that all of these suggestions are incorporated, both the suggestions that you have made and my refinements of them." (`request.md` 4: call counts replace the timing band, feature 373 folded in, previously failing seeds need not pass, no Rust rewrite but shapely and numpy not required.)
 
-**Input**: `request.md` (the GM's four messages, verbatim).
+**Input**: `request.md` (the GM's five messages, verbatim).
 
 ## Why
 
@@ -147,7 +147,7 @@ The GM's decision (`request.md` 4, detail in `call-count-flag.md`):
   improvements", `request.md` 1): from 24.1M to under 2.5M at 20 households, and from 62.8M to under 6.5M at 40. (The
   baselines were observed 2026-10-26, method: `make perf-profile SEED=39` over all 23 stages at each size; the targets are
   the baselines divided by ten, rounded up.)
-- **SC-003** (FR-005): at 40 households, every stage takes under a second on every seed that completes (the GM: "I would expect every
+- **SC-003** (FR-005, FR-008: reached with the engine in Python): at 40 households, every stage takes under a second on every seed that completes (the GM: "I would expect every
   single stage of our Hamlet generation to take a fraction of a second. even when we artificially inflate the number of
   homesteads ... such as 40", `request.md` 1). The whole roll lands near the first-principles estimate of 1-2 s at 20
   households and 2-4 s at 40 (`research/estimate-exercise.md`; agents' estimates, not research figures), against 6.8 s and
@@ -190,3 +190,21 @@ The GM's decision (`request.md` 4, detail in `call-count-flag.md`):
   - The cProfile overhead now cites `dev/performance.md`.
   - `tooling-perf-fanout.md` no longer cites the timing-flag rule US5 replaces.
 - 2026-10-26, spec-fidelity-verify MODE 3, round 2 of the amendment: FAITHFUL.
+- 2026-10-26, spec-fidelity-verify MODE 3, round 1 of the SC-003 amendment (spec-lint: FR-008 was named by no success
+  criterion once tasks.md existed): FAITHFUL. SC-003 now names FR-008, "reached with the engine in Python". It adds no
+  requirement FR-008 does not already make, and it carries the GM's own pairing of the speed goal with staying on Python
+  (`request.md` 1: "without changing our fundamental technology stack away from Python"). "The engine" matches FR-008's
+  wording, so replacing shapely or numpy is still allowed. A grep of the feature directory for FR-008, SC-003 and "in
+  Python" finds no passage that the change contradicts. The previous round (round 2 of the amendment, FAITHFUL) raised
+  no items. SC-003's measured figures keep their date-and-method label; the feature has no `measurements.json` to re-run.
+  Read in full: the SC-003 hunk, `spec.md`, `request.md` 1-5, and the grep's hits (`plan-review.json` lines 140, 143,
+  181, 230; it names an FR-008 citation an earlier plan round already resolved).
+- 2026-10-26, spec-fidelity-verify MODE 3, round 2 of the post-acceptance amendment (the Status and Input lines and
+  working-notes' start line, stale since `request.md` 5): FAITHFUL. The previous round's aside is resolved. Status now
+  records the start on `request.md` 5's own words, quoted verbatim ("please go ahead with feature 427 beginning with the
+  survey tool"), and keeps the hold of `request.md` 3 as history. Input says five messages, matching `request.md`'s five
+  numbered items. Working-notes' "Started on the GM's word" cites `request.md` 5 and keeps `request.md` 3's quote. None of
+  this adds a requirement or changes one. A grep of the feature directory for "four messages", "held until", "start
+  only", "not started", "go ahead" and `request.md` 3/5 finds no remaining stale hold. `plan.md` 9, `research/survey-t01.md`
+  12 and `plan-review.json` 100 and 169 cite `request.md` 5 in the same sense. The changed passages carry no figures with
+  units. Read in full: the three hunks, `request.md` 3 and 5, `working-notes.md` lines 1-14, and the grep's hits.

@@ -1,0 +1,489 @@
+{
+ "feature": "427-call-volume-refactors",
+ "blocks": {
+  "preamble": {
+   "sha256": "b6c61ce482839c97d8d574231837f0b1bce3ee43f899a102a26a29a59ca54ec8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Summary": {
+   "sha256": "0bdc5663ba1a90c4b65a7c04e2bbfc63de932153c6698f56130e962c6a9f25b6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Technical Context": {
+   "sha256": "6f4f857065245faeea68053aa085bfc193907985eec1b5ed65d4beb857f7841b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Performance bookends": {
+   "sha256": "bbb66ade3b2f340ba3b7f39d2e303cf4685b98fd76b22e808c6865e7836a5bbd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Constitution Check": {
+   "sha256": "bafc3fb8e937ea09a29f2c12206f2c54a9669a5b5c1eb9c67c1da1e56415761c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Decisions": {
+   "sha256": "f4f175bd7b63c6a04e8589222bc3a1a6ae2e65fd51457c43312f6ca6341bb6a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Task approaches": {
+   "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "c3fec40bea35fdf3771fdff9fa38cfed681597667a42b25f8d2c644f2b701da4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Project Structure": {
+   "sha256": "78aa41f093ec3faedcbfbaf4620358dd38cb2532a522b49bf2a2b804d0d2fc7f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### Documentation (this feature)": {
+   "sha256": "fc71726228efb09af112b47244492557d95d5486bb4fb21e74c45e06d5418b9e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### Source Code (repository root)": {
+   "sha256": "f04999aa2992dcc1fb902558f4f3fb548c287e252ee512a0b39b18c7567ae83d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "061a8ce2ff37f264b04d915d064957fe6d831b1540828df19e93de076e2fdc72",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "6657e6e50d69304a07458c4c4b566d5bb1ba400120cf741c7043146b0cbe9db7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "### T01 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-order",
+     "summary": "Work order: survey (T01), call-count watch (US5), cheap wins/single-site (US2), wells (US3), pairwise outside the lanes, lane web and law last after feature 417.",
+     "class": "within",
+     "why": "Matches request.md 5's approved order clause for clause."
+    },
+    {
+     "id": "Summary-T01-only",
+     "summary": "The plan holds T01 only; each later task is filed with its own section after the survey has run.",
+     "class": "within",
+     "why": "FR-002 requires engine tasks to be scoped against the survey's output on the then-current engine; deferring them is that requirement, not a narrowing."
+    },
+    {
+     "id": "TechContext-diagnostic",
+     "summary": "perf-fanout is a by-hand diagnostic, never a gate; report committed under dev/perf-log, .prof files in gitignored dev/perf-raw; stdlib cProfile/pstats.",
+     "class": "within",
+     "why": "Consistent with request.md 4: gating is the call-count flag (US5/FR-006), not the survey; storage and libraries narrow nothing asked."
+    },
+    {
+     "id": "Bookends-start-before-T02",
+     "summary": "The 427-start bookend is taken before the first engine task (T02), not before T01.",
+     "class": "within",
+     "why": "T01 changes no stage, so the bookend measures the same engine either way; FR-005 is still met."
+    },
+    {
+     "id": "D1-design",
+     "summary": "make perf-fanout with SEED/HOUSEHOLDS/STAGES/HOT/JOBS/LABEL, per-stage totals and growth exponent, multiplier chains by the reference walk kept as written, fastest growers, report to dev/perf-log.",
+     "class": "within",
+     "why": "FR-001 and SC-001: built as tooling-perf-fanout.md designs it; it lists every 50k+ chain with its anchor."
+    },
+    {
+     "id": "D1-JOBS-3",
+     "summary": "JOBS defaults to 3 instead of the design note's 5, citing the shared 10 GB memory cap read at 9.1-9.3 GB.",
+     "class": "within",
+     "why": "Changes only the default parallelism: output identical, overridable on the command line, and the GM's words say nothing about job count. A departure from tooling-perf-fanout.md's default that narrows no reach."
+    },
+    {
+     "id": "D1-land-route",
+     "summary": "Lands through make land rather than the design note's make land-tooling, because a module under l7r/ is engine by ci/delta.is_engine.",
+     "class": "within",
+     "why": "FR-001's 'on its own' is kept and the route taken is the stricter one, so the deliverable is not narrowed. Rests on a premise about ci/delta.is_engine not verifiable from the bundle; placing the module outside l7r/ to honor 'as tooling' literally is a design choice, not a fidelity finding."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Exits: 'FR-008 green: landed with its fresh rate. Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through make arbiter-ask (D11, D35).'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Template text from another feature: FR-008 is 'the engine stays in Python', not a landing condition; D11 and D35 exist nowhere in this plan or spec-cited.md; 'placed correctly' and 'fresh rate' are placement/seed-pass language for a tool that changes no stage. As written, the red exit sets T01 down on 'failing seeds'. T01 cannot make a seed regress (FR-007), so the only failing seeds at its landing are ones already failing on HEAD, and request.md 4 ('should not require all seeds to pass if seeds were previously failing') and 5 ('not have a requirement to have all of our seeds pass') exclude exactly that as a reason. It abandons the requested survey on a condition the GM ruled out: not physically necessary, not implied by the GM's words (they say the opposite), not serving the purpose. Fix: green = tests red without D1 and make perf-fanout on the current engine compared with research/fanout-2026-10-26.txt (FR-001, SC-001); red = only a seed passing on HEAD that fails after (FR-007); strike FR-008, D11, D35, 'placed correctly', 'fresh rate'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "### T01 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-order",
+     "summary": "Work order: survey (T01), call-count watch (US5), US2, US3, pairwise families outside the lanes, lane web and law last after feature 417",
+     "class": "within",
+     "why": "Restates the approach the GM approved in request.md 5, in its order."
+    },
+    {
+     "id": "Summary-T01-only",
+     "summary": "The plan holds T01 now; each later task is filed with its own section once the survey has run",
+     "class": "within",
+     "why": "FR-002 requires every engine task to be scoped against the survey's output on the then-current engine; filing them later is that requirement."
+    },
+    {
+     "id": "TechContext-stack",
+     "summary": "Standard library cProfile/pstats/concurrent.futures over perf_profile.profile_stage; report committed in dev/perf-log/, .prof files in gitignored dev/perf-raw/; 100% coverage",
+     "class": "within",
+     "why": "Implementation choices inside FR-001 (the tool as the design note describes, 100% coverage owed); stays in Python (FR-008)."
+    },
+    {
+     "id": "TechContext-diagnostic",
+     "summary": "The survey is a by-hand diagnostic, never a gate",
+     "class": "within",
+     "why": "The gating/flagging role belongs to the call-count watch (US5, FR-006, request.md 4); the survey is the data-gathering tool of request.md 2-3."
+    },
+    {
+     "id": "Bookends-start-at-T02",
+     "summary": "Start bookend make perf LABEL=427-start SCALING=1 taken before the first engine task, not at T01",
+     "class": "within",
+     "why": "T01 changes no stage; FR-005's bookends bracket the engine work, and taking the start before T02 still precedes every engine change."
+    },
+    {
+     "id": "Constitution",
+     "summary": "Constitution check: N/A for content principles; VI, X, XIII pass",
+     "class": "within",
+     "why": "Decides nothing the spec left open."
+    },
+    {
+     "id": "D1-stage-gate",
+     "summary": "D1 prints the multiplier chains only for each stage of 300,000 calls or more at the larger size",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "SC-001 (cited in full) requires the output to list EVERY chain of 50k+ calls with its anchor, and the plan's own Performance Goals restates that, but D1's stage gate cannot reach a function called 50,000-299,999 times in a stage whose total is under 300,000: such a chain is never printed. The GM named this range himself (request.md 2: 'hundreds of thousands or millions of times'), and FR-002 scopes every engine task against this output, so a skipped chain is a hotspot no task is ever scoped against - the gate defeats the survey's purpose. Walking every stage is not impossible, the GM's words do not imply the gate, and 'kept as written there' in the design note does not override SC-001. Fix: the stage gate becomes HOT (any stage holding a non-builtin function called HOT or more times at the larger size gets its chains), or there is no stage gate; the walk itself stays as written. If the author holds that the 300,000 gate is right, that is a spec amendment of SC-001 for the GM's review, not a plan decision."
+    },
+    {
+     "id": "D1-JOBS-default",
+     "summary": "JOBS defaults to 3 rather than the design note's 5, citing the shared memory cap",
+     "class": "within",
+     "why": "An overridable concurrency default; it changes nothing the tool reports. Its memory figures carry date and method (the memory watch, 2026-10-26)."
+    },
+    {
+     "id": "D1-testing",
+     "summary": "Analysis tested on synthetic pstats data, the profiling seam stubbed as perf_profile's tests do; a row in tools/CLAUDE.md",
+     "class": "within",
+     "why": "How FR-001's 100% coverage is met, and the design note's documentation row; no scope change."
+    },
+    {
+     "id": "D1-land-route",
+     "summary": "Lands through make land, not the make land-tooling route the design note names, because a module under l7r/ is engine by ci/delta.is_engine",
+     "class": "within",
+     "why": "FR-001's 'lands as tooling on its own' serves landing the survey by itself before any engine change; the plan keeps that (one landing, no stage changed, before T02). The GM's request names no landing route, make land is the stricter route, and the design note's own file location under l7r/ is what closes the tooling route. Nothing the GM gets is narrowed."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green: tests red without D1 and make perf-fanout compared with research/fanout-2026-10-26.txt; red: a red test or a seed passing on HEAD failing after (FR-007), recorded and the task set down, a cannot-be-done claim ruled through make arbiter-ask; a seed already failing on HEAD is no exit",
+     "class": "within",
+     "why": "Resolves the earlier block's misplaced FR-008 citation and seed-exit boilerplate: it now cites FR-001/SC-001 and FR-007, and 'a seed already failing is no exit' carries request.md 4 ('should not require all seeds to pass if seeds were previously failing') and 5."
+    },
+    {
+     "id": "T01-done",
+     "summary": "Done measured: tests red without D1; make perf-fanout on the current engine lists the chains, compared with research/fanout-2026-10-26.txt",
+     "class": "within",
+     "why": "Verification of FR-001/SC-001 and the FR-002 re-run on the current engine."
+    },
+    {
+     "id": "Structure",
+     "summary": "Files: l7r/diagram/tools/perf_fanout.py, tests/tools/test_perf_fanout.py, Makefile target, tools/CLAUDE.md row; feature docs layout",
+     "class": "within",
+     "why": "The design note's module, target and row; nothing beyond FR-001."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Source Code (repository root)",
+    "### T01 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:427-call-volume-refactors#T01@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "make perf-fanout survey tool, JOBS=3 convention, lands through make land",
+     "class": "within",
+     "why": "Text identical to the D1 judged CLEAR in earlier.md; FR-001, SC-001, request 3 and 5 (begin with the survey tool)."
+    },
+    {
+     "id": "D2-pass",
+     "summary": "make perf adds a separate counting pass after the timed rolls: same seeds (and sizes under SCALING=1), sys.monitoring PY_START counter on tool id 3, per-stage per-seed calls and the snapshot's versions recorded",
+     "class": "within",
+     "why": "Request 4: 'record call counts alongside the timings'; a separate pass keeps the timings the GM said to keep recording undistorted. FR-006 adopts call-count-flag.md; tool id is mechanism."
+    },
+    {
+     "id": "D2-python-only",
+     "summary": "Counts are of Python functions only; shapely/numpy C work is not counted",
+     "class": "within",
+     "why": "The GM adopted the session's measure ('do as you say and record call counts'); FR-006 defers to call-count-flag.md, and D1's survey counts the same Python-level calls. A definition of the metric, not a carve-out from it."
+    },
+    {
+     "id": "D2-overhead-and-determinism",
+     "summary": "Counting pass overhead measured on the reference seeds and recorded beside the code; a test rolls one stage twice and asserts equal counts",
+     "class": "within",
+     "why": "Enforcement of the requested gate: the GM chose counts 'because ... that is consistent'; the test only fails if they are not."
+    },
+    {
+     "id": "D3-reach",
+     "summary": "perf_review.check, run by the push, compares the newest -start/-end pair's counts seed by seed and stage by stage",
+     "class": "within",
+     "why": "Request 4: 'that flag would replace the timing band' - the count check stands where the band check stood. The bundle does not let me confirm the band's own reach, so this is classed on the request's framing of replacement in place."
+    },
+    {
+     "id": "D3-versions",
+     "summary": "A -start/-end pair on different versions (interpreter, numpy, shapely) is 'not compared', never flagged, and the push proceeds",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Request 4: 'the call counts themselves are the thing that we are gating on', and an increase 'would need to be accepted by the arbiter'. Applying the gate to a cross-version pair is neither impossible nor purpose-defeating: it costs one arbiter call, and the arbiter can see the versions differ ('the kind of thing that I would expect the arbiter to be able to handle without me'). The carve-out resolves 'the delta cannot be attributed' by not watching at all, so any engine increase lands unwatched whenever a dependency bump sits between -start and -end. Should say: a pair on different versions is not compared AND the push refuses until a comparable pair exists (the -start re-rolled on the current versions) or the arbiter rules on it under the same <NNN>-calls subject - never a silent pass."
+    },
+    {
+     "id": "D3-line",
+     "summary": "The line: over 5% in any stage on any seed (CALLS_STAGE_LINE) or 2% in the total (CALLS_TOTAL_LINE), GUESS knobs with the reason beside them",
+     "class": "within",
+     "why": "The GM: the count flag 'would replace the timing band' and arbiter attention 'if it is increasing by too much'; FR-006 and SC-005 say 'over the line'. Values are labeled knobs, not measured claims."
+    },
+    {
+     "id": "D3-refuse-and-accept",
+     "summary": "Over-the-line increase with no arbiter accept refuses the push and names make arbiter-ask SUBJECT=<NNN>-calls with stages, seeds, counts; an accept in arbiter.jsonl clears it; a decrease is printed and needs nothing",
+     "class": "within",
+     "why": "Request 4 ('would need to be accepted by the arbiter'); FR-006; SC-005 (refuses and names the arbiter command; accepted lands with the ruling recorded)."
+    },
+    {
+     "id": "D3-timings-retired",
+     "summary": "Timings printed for information only; no rule acts on them; the band FLAG retired, perf_bands keeps only what printing needs",
+     "class": "within",
+     "why": "Request 4: 'keep recording the timings, but completely stop using timings as a gate on anything'; SC-005."
+    },
+    {
+     "id": "D3-sync",
+     "summary": "scripts/sync-with-main.sh refuses on the check's exit as it refuses on its failing to run",
+     "class": "within",
+     "why": "Enforcement of the requested gate on the push path (FR-006 'the push check'); no reach beyond the call-count check itself."
+    },
+    {
+     "id": "D3-arbiter-guidance",
+     "summary": "Round arbiter's agent file gains the call-count case: accept when the cost of a rule the feature adds and commensurate, continue to optimize first, to the GM when too large",
+     "class": "within",
+     "why": "Request 4: accepted by the arbiter 'and possibly raised to my attention if it is increasing by too much'; FR-006 names the arbiter's agent file."
+    },
+    {
+     "id": "D3-docs",
+     "summary": "perf-audit.md repointed to call-count investigation; Constitution Principle VI amended (MINOR); l7r/diagram/CLAUDE.md, dev/performance.md, docs/guards.md and the project memory updated",
+     "class": "within",
+     "why": "FR-006: 'The constitution's Principle VI, the push check, the perf tools, the arbiter's and perf-audit's agent files and the docs change with it.'"
+    },
+    {
+     "id": "T02",
+     "summary": "T02 approach: every snapshot carries per-stage per-seed call counts; after T01, before T03; green = tests red without D2 and a make perf snapshot with counts; red = recorded and set down, cannot-be-done ruled via arbiter-ask; overhead recorded",
+     "class": "within",
+     "why": "Request 5: the survey and the call-count watch first (US1, US5); request 4; FR-006."
+    },
+    {
+     "id": "T03",
+     "summary": "T03 approach: an engine landing doing more Python work says so and lands only on the arbiter's accept, a slower machine says nothing; after T02; green = tests red without D3 and a deliberate extra loop refuses the push and an accept clears it (US5's test)",
+     "class": "within",
+     "why": "Request 4 and 5; FR-006, SC-005. Its exits test the requested gate. Its ruling stands on D3, whose versions carve-out is ruled separately."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-shape",
+     "summary": "make perf-fanout as tooling-perf-fanout.md designs it: per-stage totals at two sizes, growth exponent, multiplier chains by the reference walk grouped by anchor, fastest growers, report to dev/perf-log",
+     "class": "within",
+     "why": "FR-001 names the design note; the GM asked for 'the suggested tooling change for the make target for the performance fanout' and to begin with the survey tool (request 3, 5)."
+    },
+    {
+     "id": "D1-no-stage-floor",
+     "summary": "the design note's 300,000-call stage floor is dropped so every chain of HOT (50,000) calls or more is listed",
+     "class": "within",
+     "why": "Widens the note to meet SC-001 ('every chain of 50k+ calls'); narrows nothing the GM or spec asked for."
+    },
+    {
+     "id": "D1-jobs-3",
+     "summary": "JOBS defaults to 3 instead of the design note's 5, a convention for the shared memory cap",
+     "class": "within",
+     "why": "A parallelism default; JOBS stays settable and the survey's output is unchanged. Nothing in the request or FR-001 fixes worker count."
+    },
+    {
+     "id": "D1-tests",
+     "summary": "analysis tested on synthetic pstats data, profiling seam stubbed; a tools/CLAUDE.md row",
+     "class": "within",
+     "why": "Serves FR-001's 100% coverage; enforcement of the requested tool, not new scope."
+    },
+    {
+     "id": "D1-make-land",
+     "summary": "lands through make land, not the make land-tooling route the design note names, because a module under l7r/ is engine by ci/delta.is_engine",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Departs from the letter of FR-001 ('lands as tooling'), so ruled. What carries the ruling is purpose: the GM asked that the survey come first, ahead of any engine refactor (request 2, 5), and FR-001's 'on its own' says the same - both are kept, because it still lands alone as T01 before every engine task. The route is closed only because the design note put the module under l7r/, which the push's rule (ci/delta.is_engine) treats as engine; that is a consequence of where it lives, not a case where the rule cannot be followed. Nothing the GM asked for is given up."
+    },
+    {
+     "id": "D2-counting-pass",
+     "summary": "make perf gains a separate counting pass (sys.monitoring PY_START, tool id 3) after the timed rolls, recording per-stage per-seed calls and the snapshot's versions",
+     "class": "within",
+     "why": "The GM: 'keep recording the timings ... record call counts alongside the timings' (request 4). Kept in the same snapshot, the counts sit alongside; a separate pass keeps the timings undistorted, so it serves the request rather than narrowing it."
+    },
+    {
+     "id": "D2-python-only",
+     "summary": "only Python-level function calls are counted; shapely and numpy C work is not",
+     "class": "within",
+     "why": "The GM's concern is Python functions called hundreds of thousands or millions of times (request 2), and FR-006 adopts call-count-flag.md, which wants exactly this. It is the measure asked for, not a carve-out."
+    },
+    {
+     "id": "D2-overhead-determinism",
+     "summary": "pass overhead measured and recorded; a test asserts equal counts on two rolls of one stage",
+     "class": "within",
+     "why": "Checks that the requested counts are deterministic, which is the GM's stated reason for gating on them; enforcement, not scope."
+    },
+    {
+     "id": "D3-compare",
+     "summary": "perf_review.check compares the newest -start/-end pair's counts seed by seed and stage by stage",
+     "class": "within",
+     "why": "FR-006 / SC-005: call counts are what is watched."
+    },
+    {
+     "id": "D3-version-mismatch",
+     "summary": "CHANGED: a pair on different interpreter/library versions is not compared and REFUSES the push until a comparable pair (the -start re-taken) exists or the round arbiter rules on the <NNN>-calls subject; it never passes silently",
+     "class": "within",
+     "why": "The earlier text let a version-mismatched pair pass unflagged, a hole through which an increase could land without the arbiter (FR-006: an increase over the line 'owes the round arbiter's acceptance before it lands'). The new text closes it: nothing passes unexamined, and the way out is the arbiter or a comparable measurement, as the GM wanted (request 4: 'accepted by the arbiter ... the kind of thing that I would expect the arbiter to be able to handle without me'). It is enforcement of the requested watch, not a narrowing and not new behavior beyond it."
+    },
+    {
+     "id": "D3-line",
+     "summary": "the line: CALLS_STAGE_LINE 5% per stage per seed, CALLS_TOTAL_LINE 2% total, GUESS knobs with reasons",
+     "class": "within",
+     "why": "FR-006 and SC-005 settle that there is a line ('an increase over the line'); the GM said the count flag 'would replace the timing band', which had a tolerance. The values come from the design note FR-006 adopts."
+    },
+    {
+     "id": "D3-refuse-accept",
+     "summary": "an increase over the line without an arbiter accept refuses the push and names make arbiter-ask with the details; an accept in arbiter.jsonl clears it; a decrease needs nothing",
+     "class": "within",
+     "why": "SC-005 word for word; the GM's 'would need to be accepted by the arbiter'."
+    },
+    {
+     "id": "D3-timings-retired",
+     "summary": "timings printed for information only; the band flag retired",
+     "class": "within",
+     "why": "The GM: 'keep recording the timings, but completely stop using timings as a gate on anything' (request 4); SC-005."
+    },
+    {
+     "id": "D3-sync-arbiter-docs",
+     "summary": "sync-with-main.sh refuses on the check's exit; arbiter agent file gains accept/continue/to-the-GM for call counts; perf-audit repointed; Principle VI (MINOR), CLAUDE.md, dev/performance.md, docs/guards.md, project memory updated",
+     "class": "within",
+     "why": "FR-006 lists the push check, the arbiter's and perf-audit's agent files, Principle VI and the docs; the escalation to the GM is the GM's 'possibly raised to my attention if it is increasing by too much'."
+    },
+    {
+     "id": "T02-approach",
+     "summary": "T02 records counts per stage per seed; after T01, before T03; one landing; done = tests red without D2 and overhead recorded",
+     "class": "within",
+     "why": "Text unchanged from last judgment; it carries D2 and FR-006 with nothing dropped."
+    },
+    {
+     "id": "T03-approach",
+     "summary": "T03 makes the counts the watch: more Python work lands only on the arbiter's accept, a slower machine says nothing; after T02; US5's test of a deliberate extra loop refused then cleared",
+     "class": "within",
+     "why": "Text unchanged; it carries D3 (now including the version-mismatch refusal), FR-006 and SC-005, and its exit is SC-005's own test."
+    }
+   ]
+  }
+ ]
+}

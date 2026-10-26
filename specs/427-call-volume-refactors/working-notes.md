@@ -4,7 +4,8 @@
 
 ## Before the first change
 
-- **Start only on the GM's word** ("once I'm in a place to actually work on that, then we can do that", `request.md` 3).
+- **Started on the GM's word**, 2026-10-26 (`request.md` 5), after the hold of `request.md` 3 ("once I'm in a place to actually
+  work on that, then we can do that").
   The reason for the hold: on 2026-10-26 another session was making the tests more efficient and removing guess-and-check
   from placement ("I don't want to be making multiple different fundamental engine refactors at the same time", `request.md`
   2).

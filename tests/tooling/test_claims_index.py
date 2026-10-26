@@ -436,6 +436,17 @@ def test_a_landing_with_no_engine_code_files_its_carries_into_the_claims_feature
         in (claims / "tasks.md").read_text()
     )
     assert cx.gate(root) == ([], [f"carried (405-claims T02): DRIFTED        {k} - "])
+    # "engine code" is l7r.diagram.ci.delta's: a comment-only edit to engine Python, or a file of the ci package, is none
+    rows = root / "l7r" / "diagram" / "hamletgen" / "rows.py"
+    rows.write_text(rows.read_text() + "# a comment, nothing executed\n")
+    (root / "l7r" / "diagram" / "ci").mkdir(parents=True, exist_ok=True)
+    (root / "l7r" / "diagram" / "ci" / "x.py").write_text("x = 1\n")
+    assert cx.gate(root)[0] == [], "still filed in 405"
+    # a closed claims feature takes nothing: the feature being landed, as before
+    open_text = (claims / "tasks.md").read_text()
+    (claims / "tasks.md").write_text(open_text.replace("- [ ]", "- [x]"))
+    assert cx.gate(root)[0][0].endswith("file it with `make claims-carry F=900` (make land files it itself)")
+    (claims / "tasks.md").write_text(open_text)
     # an engine path in the delta: the feature being landed again
     (root / "l7r" / "diagram" / "hamletgen" / "other.py").write_text("x = 1\n")
     assert cx.gate(root)[0][0].endswith("file it with `make claims-carry F=900` (make land files it itself)")

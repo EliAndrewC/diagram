@@ -164,6 +164,7 @@ def test_record_writes_a_snapshot_keyed_by_stamp_label_and_TREE(tmp_path, monkey
         ],
     )
     monkeypatch.setattr(ps, "machine_state", lambda path=ps.SKILL: {"load": [1.0, 1.0, 1.0], "ram_available_mb": 4096})
+    monkeypatch.setattr(ps, "count_calls", lambda seeds, households=None: {s: {"web": 1000 * s} for s in seeds})
 
     path = ps.record("174-end", (2, 4, 6))
     assert path.endswith("-174-end-diagram-tooling.json")
@@ -174,6 +175,49 @@ def test_record_writes_a_snapshot_keyed_by_stamp_label_and_TREE(tmp_path, monkey
     assert snap["total_cpu_seconds"] == 12.0 and snap["machine_before"] == snap["machine_after"] == {"load": [1.0, 1.0, 1.0], "ram_available_mb": 4096}
     assert snap["scaling"] == [], "the scaling leg only when asked for (feature 375 amendment 5)"
     assert "total 12.0s" in capsys.readouterr().out
+    assert [r["calls"] for r in snap["rows"]] == [{"web": 2000}, {"web": 4000}, {"web": 6000}] and snap["total_calls"] == 12000, "feature 427 T02"
+    assert set(snap["versions"]) == {"python", "numpy", "shapely"} and isinstance(snap["count_seconds"], float)
+
+
+def test_the_counting_pass_counts_each_stage_s_python_calls_the_same_on_every_roll(monkeypatch) -> None:
+    """Feature 427 T02 (D2): a stage's count is its Python function calls, exact and deterministic per seed - the same code and
+    seed count the same on any machine under any load, which is why counts and not timings are what is watched. STAND-IN
+    stages, as `measure`'s test uses: each calls a helper a known number of times; a refusal keeps the stages before it."""
+    from l7r.diagram.hamletgen import driver
+
+    def helper() -> int:
+        return 1
+
+    def stage_water_frame(s, plan):  # noqa: ANN001, ARG001
+        for _ in range(500):
+            helper()
+
+    def stage_field(s, plan):  # noqa: ANN001, ARG001
+        for _ in range(2000):
+            helper()
+
+    def stage_sink(s, plan):  # noqa: ANN001, ARG001
+        raise ValueError("SinkRefused: a stand-in refusal")
+
+    monkeypatch.setattr(driver, "STAGES", (stage_water_frame, stage_field, stage_sink))
+    first = ps.count_calls((6, 7))
+    assert first == ps.count_calls((6, 7)), "the same code and seed: the same count"
+    assert set(first) == {6, 7} and list(first[6]) == ["water_frame", "field", "sink"]
+    assert 500 <= first[6]["water_frame"] < 600 and 2000 <= first[6]["field"] < 2100, "the helper's calls, and little else"
+    assert first[6]["field"] - first[6]["water_frame"] == 1500, "exactly the 1,500 more calls the second stage makes"
+    import sys as _sys  # noqa: PLC0415
+
+    held = [t for t in ps.COUNT_TOOLS if _sys.monitoring.get_tool(t) is None]
+    assert ps.free_tool() == held[0], "the counter's tool id is given back, the first free one taken next"
+    taken = [t for t in ps.COUNT_TOOLS if _sys.monitoring.get_tool(t) is None]
+    for t in taken:
+        _sys.monitoring.use_tool_id(t, "a test holding every id")
+    try:
+        with pytest.raises(RuntimeError, match="every sys.monitoring tool id"):
+            ps.free_tool()
+    finally:
+        for t in taken:
+            _sys.monitoring.free_tool_id(t)
 
 
 def test_the_trend_reads_SNAPSHOTS_only_and_steps_over_the_review_records(tmp_path, monkeypatch) -> None:
