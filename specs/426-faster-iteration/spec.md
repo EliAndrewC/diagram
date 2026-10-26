@@ -211,14 +211,16 @@ body carries the alone-off table's header.
 
 ### Measurable Outcomes
 
-- **SC-001**: After a full cohort run, a docstring-, comment- or claims-only edit to engine code followed by the same cohort run or
+- **SC-001** (FR-003, FR-008, FR-012): After a full cohort run, a docstring-, comment- or claims-only edit to engine code followed by the same cohort run or
   the landing cohort re-rolls zero seeds.
-- **SC-002**: A landing whose claims gate refuses with nothing in flight never enters the claims wait: it ends once its gates
+- **SC-002** (FR-001, FR-002): A landing whose claims gate refuses with nothing in flight never enters the claims wait: it ends once its gates
   have run (a target, not a measurement).
-- **SC-003**: A probe whose change regresses a seed reports it after rolling only the seeds up to that seed under `EXITFIRST=1`.
-- **SC-004**: Two probes in a row at the same HEAD roll HEAD's fresh block at most once.
-- **SC-005**: A plan section written by `make task-add` carries the D35 red exit with no hand edit.
-- **SC-006**: `make cache-audit` passes; no stored map or roll is served stale (an executable edit always re-rolls).
+- **SC-003** (FR-007): A probe whose change regresses a seed reports it after rolling only the seeds up to that seed under `EXITFIRST=1`.
+- **SC-004** (FR-009): Two probes in a row at the same HEAD roll HEAD's fresh block at most once.
+- **SC-005** (FR-010): A plan section written by `make task-add` carries the D35 red exit with no hand edit.
+- **SC-006** (FR-003, FR-004, FR-005, FR-006): `make cache-audit` passes; no stored map or roll is served stale (an executable edit always re-rolls).
+- **SC-007** (FR-011): every new mode, target and refusal names its cure in its own output, and each has a test that fails
+  without the change.
 
 ## Assumptions
 
