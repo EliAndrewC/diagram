@@ -49,3 +49,10 @@ def test_a_mark_is_live_until_cleared_and_stale_past_the_landing_s_wait(tmp_path
     flight.clear(tmp_path, bundle)
     assert flight.live(tmp_path) == []
     assert flight.MAX_AGE_S == land.CLAIMS_WAIT_S, "a mark is stale exactly when the landing would have stopped waiting"
+
+
+def test_the_stop_names_a_refusal_no_wait_can_end_as_such() -> None:
+    """Feature 427 T12: a `claims_cure` refusal is "waiting cannot cure it", never "did not finish in 20 min"; the wait run out is."""
+    cured = land.claims_cure(OWED, in_flight=[])
+    assert "waiting cannot cure it" in land.claims_stop_line(cured) and "did not finish" not in land.claims_stop_line(cured)
+    assert "did not finish in 20 min" in land.claims_stop_line("claims-gate.sh: owed (new) x")
