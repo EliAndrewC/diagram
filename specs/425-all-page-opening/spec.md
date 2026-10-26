@@ -37,3 +37,7 @@ the maps.
 ## Success Criteria
 
 - **SC-001** (FR-001, FR-002): the built `all.html` opens with the opening; the test passes; `make done` is green at the landing.
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-26): FAITHFUL.
