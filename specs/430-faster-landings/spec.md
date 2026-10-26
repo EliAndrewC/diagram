@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-26
 
-**Status**: Draft
+**Status**: Draft (spec reviewed FAITHFUL, round 5, 2026-10-26)
 
 **Affects**: tooling
 
@@ -227,3 +227,10 @@ unchanged modules stay the gate's (FR-009's narrowing, stated in Assumptions).
   leave the two to the gate; the narrowing stated and priced in Assumptions; FR-003 unchanged, not widened). Figures:
   `make figures` 0 moved, 0 outside band, 0 not re-measured; `bash replay-reds.sh` matches `per_red` row for row (on round 5's
   own run).
+- spec-fidelity round 5, re-dispatch (2026-10-26, VERIFY): FAITHFUL. The NOT-REVIEWABLE item is resolved: research.md R1's
+  "So" now labels its figure ("one gate each, 4-5 minutes - observed 2026-10-26, method: `dev/run-log`, the GM's figure in
+  `request.md` item 3"), matching request.md item 3's "4-5 minute gate". The spans-vs-lines aside was applied: R1's Finding
+  and the key now say 8 spans, 20 lines (`unit: spans`, `lines_in_spans: 20`), and no passage in the feature directory still
+  says "8 lines". Round 4's item stays resolved (none of its passages changed). The new wording adds no scope and contradicts
+  nothing. Figures: `make figures` 0 moved, 0 outside band, 0 not re-measured; `bash replay-reds.sh` prints 8 EXISTING spans
+  covering 1+7+1+3+1+1+2+4 = 20 lines, with law.py:933 and checks.py:141 not in their deltas (on round 5's own run).
