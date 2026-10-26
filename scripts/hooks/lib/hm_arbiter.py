@@ -511,12 +511,20 @@ def row_unit(trig: Mapping[str, Any], trigger: str) -> str:
     return str(trig.get("unit") or unit_of(trigger))
 
 
+def review_unit(unit: str) -> str:
+    """The review unit a round row is about, without the check's `<check>|` prefix its owed entry carries: the review gate
+    asks by the bare unit (`building-review--hayakawa-magistracy`), the round's entry names `building-review|building-review--
+    hayakawa-magistracy` (feature 433: the arbiter's accept on that unit carried no content key and matched no unit, so the gate
+    went on refusing a sheet it had accepted)."""
+    return unit.split("|", 1)[1] if "|" in unit else unit
+
+
 def unit_content_key(root: Path, unit: str) -> str:
     """A review unit's sheet as it reads now (`review_prereq.py content-key`), or '' where it has none."""
     import subprocess  # noqa: PLC0415
 
     script = Path(__file__).resolve().parents[2] / "reviews" / "review_prereq.py"
-    r = subprocess.run([sys.executable, str(script), "content-key", "--clone", str(root), "--map", unit], capture_output=True, text=True)
+    r = subprocess.run([sys.executable, str(script), "content-key", "--clone", str(root), "--map", review_unit(unit)], capture_output=True, text=True)
     return r.stdout.strip() if r.returncode == 0 else ""
 
 
@@ -529,7 +537,7 @@ def unit_ruled(d: Path, unit: str, content: str) -> str:
             r = json.loads(line)
         except ValueError:
             continue
-        if r.get("unit") == unit and str(r.get("trigger", "")).startswith("round:") and r.get("ruling") in ("accept", "process-fault") and r.get("content_key") == content:
+        if review_unit(str(r.get("unit", ""))) == review_unit(unit) and str(r.get("trigger", "")).startswith("round:") and r.get("ruling") in ("accept", "process-fault") and r.get("content_key") == content:
             return str(r["trigger"])
     return ""
 

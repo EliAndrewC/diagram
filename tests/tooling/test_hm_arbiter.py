@@ -655,6 +655,17 @@ def test_an_accept_on_a_review_unit_stands_while_its_sheet_reads_as_ruled(tmp_pa
     assert ha.unit_content_key(tmp_path, "building-review--nowhere") == ""
 
 
+def test_a_round_rows_check_prefix_does_not_hide_its_unit(tmp_path: pathlib.Path) -> None:
+    """Feature 433: the owed round entry names its unit `<check>|<unit>`, the review gate asks by the bare unit - the accept
+    matched nothing, and the content key, looked up under the prefixed name, was never written."""
+    d = tmp_path / "specs" / "900-x"
+    d.mkdir(parents=True)
+    row = {"trigger": "round:building-review|building-review--s@3", "unit": "building-review|building-review--s", "ruling": "accept", "content_key": "k"}
+    (d / "arbiter.jsonl").write_text(json.dumps(row) + "\n")
+    assert ha.unit_ruled(d, "building-review--s", "k") == "round:building-review|building-review--s@3"
+    assert ha.review_unit("building-review|building-review--s") == "building-review--s" and ha.review_unit("u") == "u"
+
+
 def test_a_red_gate_bundle_names_what_each_red_gate_failed_on(tmp_path: pathlib.Path) -> None:
     """The round arbiter's tooling fixes on red-gate@2026-10-12T13:55:48Z (feature 374 batch 10) and red-gate@2026-10-17T17:21:08Z
     (feature 385): a red-gate trigger's bundle carries the red `make done` runs of the run log - their phases and failure counts -
