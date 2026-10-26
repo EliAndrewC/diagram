@@ -24,9 +24,8 @@
 - [x] T06 A real engine landing after a tooling change measured end to end against T26's 8.8 minutes (D9; SC-006)
       research: rendering
       verify: DONE. research.md R3: 417 T04's landing (D9's: incremental, scripts/ changed) measured from its log and run record, 5.1 min against R1's 8.8; the full-plan reasons since counted
-- [x] T08 A changed hook suite (`tests/hooks/*.sh`) plans the gate FULL ("a non-module file under tests/ changed"), though it is tooling that `hooks-test` runs: both of 405 T138's landing gates on 2026-10-25 planned full for `tests/hooks/test-no-poll-hooks.sh`, merged from main by another session (10,085 tests, pytest 337-348 s) - treat the hooks tree as tooling in the planner, so T06 can be measured (found by 405 T106/T138, 2026-10-25)
+- [ ] T08 A changed hook suite (`tests/hooks/*.sh`) plans the gate FULL ("a non-module file under tests/ changed"), though it is tooling that `hooks-test` runs: both of 405 T138's landing gates on 2026-10-25 planned full for `tests/hooks/test-no-poll-hooks.sh`, merged from main by another session (10,085 tests, pytest 337-348 s) - treat the hooks tree as tooling in the planner, so T06 can be measured (found by 405 T106/T138, 2026-10-25)
       research: rendering
-      verify: DONE. landed: fixed by feature 430 T02's planner (7d1ced680): test_a_hook_suite_keeps_the_gate_incremental pins tests/hooks/test-no-poll-hooks.sh planning incremental, red on the planner before 7d1ced680, green now; plan blocks CLEAR
 - [ ] T07 Close: report and land
       research: rendering
 - [ ] GM review (make gm-reviewed F=415)
