@@ -440,14 +440,15 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # field's head onto a 2 ft bund strip - no deck lands dry there (`crossing_deck`), and a dispersed hamlet runs no web
         # settle to cut it, so `bridges()` raised `UndeckableCrossing`. Pulled back out of the worked ground, the tip stops on
         # this side of the bund, as the tip set above does.
+        # ...SQUARED WHERE IT CROSSES WATER FIRST (feature 417 T49), so the tip set on the bund below is the last word on its end
+        if _swept is None:
+            from .settle import square_run  # the web's last pass sits above this layer
+
+            _drawn_spur = square_run(s.M, _drawn_spur)
         if _swept is None:
             _drawn_spur = tip_onto_the_bund(_drawn_spur, memo_ground(s, "worked", worked_ground), SPUR_WIDTH / 2.0, RunOnBlocks(s))
             if len(_drawn_spur) < 2:
                 _swept = "the threaded spur runs in the worked ground end to end - the field path is the web's"
-        if _swept is None:
-            from .settle import square_run  # the web's last pass sits above this layer
-
-            _drawn_spur = square_run(s.M, _drawn_spur)  # square where it crosses water, as laid (feature 417 T49)
         if _swept is None and not s.admits_lane(_drawn_spur, SPUR_WIDTH):
             _swept = "the overlap matrix refuses the spur (a dry plot or a steading's part on it) - the field path is the web's"
         if _swept is None:
@@ -480,7 +481,10 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
             # ...AND OVER THE BROOK AT A FORD, as every other way crosses it (`ford_crossing`): run straight on along the
             # street's line, the road crossed the brook 72 ft from the nearest ford (cohort seed 3, 2026-10-01)
             _via = ford_crossing(_out[0], _out[-1], plan.brook or [], getattr(s, "brook_fords", ()))
-            s.lane(thread_over_the_ford(s, plan, _out[0], _via, _out[-1]), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
+            from .settle import square_run  # the web's last pass sits above this layer
+
+            # ...squared where it crosses water, as laid (feature 417 T49): a ditch the road crosses, or a run threaded whole
+            s.lane(square_run(s.M, thread_over_the_ford(s, plan, _out[0], _via, _out[-1])), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
             if _k:  # ...the far end's run is the road running on, not the way in: the board stands at the entrance (`run_on`)
                 s.M["lanes"][-1]["run_on"] = True
         return
@@ -676,6 +680,7 @@ def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequen
     here, since no repair cuts the connector afterwards.
 
     Research:
+        square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)
         connector round the field and the steadings - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: bent and threaded,
             else the dry exit
         never stopping in open country - research/questions/0081-village-lanes.drawing.html: the track out never stops in open country, so a

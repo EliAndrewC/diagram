@@ -188,10 +188,10 @@
    "declared": "round-arbiter"
   },
   "### T49 (FR-005, T48's review): every way squared at its water crossings where its placer lays it": {
-   "sha256": "fa4ece6ad5357662ad136e4e48f0b909a54007227841b0ee8a39f74903938355",
+   "sha256": "b9f80c46b986260d83dff6875d3786eae3f3e5291e92461b59f91619ec328848",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T49 Approach (checklist part A)": {
    "sha256": "f9cf4e75ac7477d4c0e520d75b62862ca3d0af0ade5498c77ed974a5425f5ee3",
@@ -3341,6 +3341,33 @@
      "id": "round:spec-fidelity|plan:417-all-seeds-pass#T48@3",
      "class": "within",
      "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T49 (FR-005, T48's review): every way squared at its water crossings where its placer lays it"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T49-placers",
+     "summary": "Each placer that lays a run across the brook or a drawn channel squares it with squaring.square_run before committing it: the skeleton arms, the web lanes, the bund and track spurs, the field way, and (new in this revision) the connector's dry exit, whose runs track.py returns unsquared at its two fallbacks.",
+     "class": "within",
+     "why": "FR-005 asks each finished-map rule of the placer that could break it, and the request wants 'place then check' gone 'anywhere' in the codebase. T48 deleted the settle's square_every_crossing, so any placer left unsquared would be broken by the deletion. Adding the connector's dry exit fallbacks, found by T48's impl-drift, closes a gap in that coverage. It does not widen the rule or add new behavior, so it is not unrequested scope."
+    },
+    {
+     "id": "T49-no-crossing-exemption",
+     "summary": "A placer whose ways are shown by measurement never to cross water (no crossing on any fixed, pinned or fresh seed, and none possible by construction) owes no squaring call, and its measurement is recorded in the plan.",
+     "class": "within",
+     "why": "FR-005 assigns the rule to 'the placer that could break it', and a placer that cannot cross water cannot break a crossing rule. The exemption needs both a measurement and an argument from construction, so it stays inside the spec's own scope rather than carving out of it. This block is unchanged from the version judged CLEAR before."
+    },
+    {
+     "id": "T49-measure",
+     "summary": "Measured with make cohort-landing, the fresh block and the pool, against HEAD. Rendering: none.",
+     "class": "within",
+     "why": "FR-008 and SC-001 call for the fixed cohort, pinned rows, pool and fresh block; the plan sets nothing beyond them."
     }
    ]
   }
