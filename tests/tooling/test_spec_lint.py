@@ -446,3 +446,17 @@ def test_check_7_a_task_id_taken_twice(tmp_path: pathlib.Path) -> None:
     assert ":4: task id T93 is taken (line 1)" in bad and "make task-add" in bad
     tasks.write_text("- [ ] T93 a figure\n- [ ] T93a its half\n")
     assert lint.check_duplicate_tasks(tasks) == []
+
+
+def test_a_research_folders_file_is_a_pointer(tmp_path) -> None:  # noqa: ANN001
+    """Feature 427 keeps its research in `research/*.md`, not one `research.md`: SC-003 cited `research/estimate-exercise.md`
+    and the lint read its "2 s" as unpointed (2026-10-26)."""
+    import importlib.util  # noqa: PLC0415
+    import pathlib  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("spec_lint", pathlib.Path(__file__).resolve().parents[2] / "scripts" / "gates" / "spec-lint.py")
+    assert spec and spec.loader
+    sl = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sl)
+    assert sl._POINTER.search("near 1-2 s (`research/estimate-exercise.md`)")
+    assert not sl._POINTER.search("near 1-2 s, by the estimate"), "a figure with no pointer still refuses"
