@@ -36713,13 +36713,18 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a lane that closes a needle while its end stands off the other way (`at >= mine.length`) is left as drawn for the law to refuse, not cut. 0081 §25 says a lane that \"wanders over another way at such an angle\" is cut where it comes alongside.": {
-  "code": "fbdd435630095442",
+ "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a needle closed away from the lane's end": {
+  "body": "38679ec4ea8529f7",
+  "claim": "a needle closed away from the lane's end - village-lanes.drawing: a lane that wanders over another way at a needle's angle is cut where it comes alongside - a lane whose end stands off the other way (`at >= mine.length`) is not cut, the needle left for the law to refuse, a departure the code keeps until feature 417 T32",
+  "code": "043c2f8c8d1b9fae",
   "core": "fbdd435630095442",
   "date": "2026-10-26",
-  "note": "a lane that closes a needle while its end stands off the other way (`at >= mine.length`) is left as drawn for the law to refuse, not cut. 0081 §25 says a lane that \"wanders over another way at such an angle\" is cut where it comes alongside.",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the code does not cut at all when the lane's end is far from the other way: `if at <= 0.0 or at >= mine.length: continue` sends a lane that \"wanders over another way at such an angle\" to the law uncut, where §25 says \"the maps cut it where it comes alongside and let it meet the other as a T\". The claim's own text calls this a departure, but its backing is a plain question citation, which claims the code does what the question finds. Its label should be `DEVIATION research/questions/0081-village-lanes.drawing.html`. Even so labeled it would not pass, because neither §25 nor §28 records a mid-lane needle left uncut as this project's choice. Either the drawing page records the held departure (until feature 417 T32), or the code cuts where the lane comes alongside.; a known drift accepted by the round arbiter (ask:417-T45-midlane-unclaimed) to land as filed",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a needle left where the tee would close one": {
   "body": "1ac8298f265a6d33",
