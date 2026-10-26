@@ -23,7 +23,8 @@ conversation.
 **Workflow is pre-authorized for recurring waves of typed agents** (the GM, 2026-10-17, feature 383 amendment 7). When a
 documented job launches 4 or more agents of one of these definitions - WAVE JOBS: `source-applicability`, `quote-check`,
 `settlement-review`, `entry-drift`, `modal-depiction`, `record-format`, `impl-drift`, `modal-research`, `building-review`,
-`source-reader`, `glyph-check`, `modal-form`, `round-arbiter`, `claims-triage`, `modal-triage` - run them through the saved
+`source-reader`, `glyph-check`, `modal-form`, `round-arbiter`, `claims-triage`, `modal-triage`, `translation-check` (the GM,
+2026-10-26: "I also do pre-authorize the translation check as a wave job") - run them through the saved
 `check-wave` workflow, without asking first:
 `Workflow({name: "check-wave", args: {agentType: "<job>", units: [{label, prompt, then?: [{agentType, prompt}]}]}})`.
 It sets `agentType` on every `agent()` call, staggers the launches by itself and wakes the main session once for the whole

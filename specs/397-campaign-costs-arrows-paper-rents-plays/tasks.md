@@ -65,4 +65,4 @@ The research tasks are `research: physical` with their five boxes; the rest are 
 - [x] T09 Close: report and land
       research: rendering
       verify: DONE. report written (make feature-report F=397 WRITE=1); landing by the direct route
-- [ ] GM review (make gm-reviewed F=397) [lands-open]
+- [x] GM review (make gm-reviewed F=397) [lands-open]
