@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-26
 
-**Status**: Draft - which sheet is corrected waits on the GM (433#0)
+**Status**: Draft (spec FAITHFUL, round 3, 2026-10-26) - the redraw waits on the GM (433#0)
 
 **Affects**: magistracy, research record
 
@@ -94,3 +94,15 @@ sheets follows the research.
   :109; the grep reaches it, so no change, but the implementer should know.) Read in full: the round's diff, request.md,
   gm-review.jsonl, spec.md :1-14, docs/buildings.md :15-30, hayakawa notes :57-60 and :74-76, hayakawa SVG :281, ubame
   notes :107-110, docs/usage.md :5, :41, :119; the FR-002 and FR-003 greps re-run.
+- spec-fidelity round 3 (2026-10-26, VERIFY): FAITHFUL - round 2's one item RESOLVED: Hayakawa's notes :59, :75 and SVG
+  :281 now sit under FR-001 as the sheet's own texts brought to the research (each re-read: :59 and :75 size the house at
+  about 145 tsubo, :281 its former 180 ft bar), so nothing tells the implementer to write a deviation into the sheet the GM
+  said "should be corrected"; FR-002 reaches only the Ochiba and Ubame sheets and docs/buildings.md, through the grep hits
+  "that labels or sizes the magistrate's house" there, which drops county-magistracy-example and ochiba-roundtrip-test;
+  the false claim that the grep finds SVG :281 is gone; Ochiba notes :65 is named beside Ubame :109 (both re-read, both
+  "keeps to the 49-tsubo residence"). No contradiction introduced: SC-001 (every element of the sheet the research speaks
+  to) covers the moved passages, and SC-002 and FR-004 still name FR-001/FR-002 consistently. Implementer's note, not a
+  finding: docs/buildings.md :23 names Hayakawa's ~180 ft beside Ochiba's ~200 ft, so when FR-002 rewrites it as the
+  deviation the Hayakawa figure goes to the redrawn house. Read in full: the round's diff, request.md, spec.md :20-54,
+  docs/buildings.md :15-24, :204, :212, hayakawa notes :59, :75 and SVG :281, ochiba notes :65 and :116, ubame notes :109,
+  the three sheets' SVG grep hits; FR-002's grep re-run.
