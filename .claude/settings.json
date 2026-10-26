@@ -87,6 +87,26 @@
         ]
       },
       {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/engine-freeze-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/engine-freeze-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 429 - a NEW guard",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/gm-tree-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/gm-tree-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 429 - a NEW guard",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "Read|Grep|Glob|Bash",
         "hooks": [
           {

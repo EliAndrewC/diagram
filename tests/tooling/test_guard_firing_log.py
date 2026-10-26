@@ -304,6 +304,7 @@ _ESCAPES = {
     "DOWNLOAD_COPY_OK": ("command", "routes through hookmatch.py escape via escape_or_refuse; a repair of the GM's copy of the download list the GM asks for (feature 313)"),
     "NO_BRANCH_OK": ("command", "routes through hookmatch.py escape"),
     "MAIN_TREE_OK": ("command", "routes through hookmatch.py escape"),
+    "GM_TREE_OK": ("command", "routes through hookmatch.py escape"),
     "HOST_GIT_OK": ("command", "routes through hookmatch.py escape, via RS_ESCAPED"),
     "PAIR_OK": (
         "command",

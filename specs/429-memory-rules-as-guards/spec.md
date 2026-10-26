@@ -71,12 +71,14 @@ that differs from HEAD, the comparison a wave records.
 - **FR-001**: An Edit, Write or NotebookEdit of an ENGINE path (the one list, `l7r/diagram/ci/delta.py` `is_engine()`)
   inside the session's clone is refused while an agent of a map-review type (`pair-hooks.sh`'s `REVIEW_AGENTS_RE`)
   launched by this session has not finished. The refusal names the running reviews and the compliant route (draft
-  outside the clone; edit once they return; or stop them with TaskStop). An agent whose transcript has not moved for
-  the stall bound is not counted live (`agent-stall-hooks.sh` reports it).
+  outside the clone; edit once they return; or stop them with TaskStop). Every map-review agent this session launched
+  that has not FINISHED counts as live, stalled or not; the refusal names a stalled one with the stall hook's route
+  (TaskStop, then `agent-stall-hooks.sh ack`), after which the edit passes.
 - **FR-002**: At the turn's end, a final message that asks the GM a question or puts a decision to him, with no
   `escalation-check` dispatched since his last message, is refused ONCE (per message) with the instruction to run the
-  filter on the draft. The detector is narrow and measured against past final messages before it ships (its hit rate
-  and a sample of its hits recorded in `research.md`).
+  filter on the draft. The detector is narrow and measured against past final messages before it ships: its hit rate,
+  a sample of its hits, and its RECALL - how many of an independently labeled sample of past final messages that put a
+  question or decision to the GM it catches, the 2026-10-25 feature 417 message among them - recorded in `research.md`.
 - **FR-003**: An Edit, Write or NotebookEdit whose file is in `/host-l7r-repo/gm-assistant` outside its `.clones/`, and a
   Bash command whose write target (a redirection, `tee`, `sed -i`, the destination of `cp`/`mv`) is there, are refused
   with the clone and issue routes. A Bash refusal takes an escape with a reason, for the GM's explicit say-so.
@@ -89,9 +91,19 @@ that differs from HEAD, the comparison a wave records.
 ## Success Criteria
 
 - **SC-001**: The 2026-09-27 shape (an engine edit with a review live) is refused in a test, and the edit passes once
-  the review has finished (FR-001).
+  the review has finished; a stalled review still refuses until it is stopped and acked (FR-001).
 - **SC-002**: The 2026-10-25 shape (a final message putting two choices to the GM, no filter run) is refused once in a
   test; a report-only message and a message after a filter dispatch pass (FR-002).
 - **SC-003**: An Edit in gm-assistant's main tree is refused and one in its clone passes, in a test (FR-003).
 - **SC-004**: `make maps-moved` on a clone with one changed manifest names exactly that one (FR-004).
 - **SC-005** (spec-wide): `make hooks-test` green with the four companions.
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-26): CHANGES REQUIRED - (1) FR-001's stall carve-out (a review agent unmoved for the stall
+  bound not counted live) ruled NOT LEGITIMATE against "no engine edits while a review is running": a slow review looks the
+  same, TaskStop already gives the route, and the pairing guard counts pending agents "stalled or not"; count them live and
+  name the stalled ones with the TaskStop route; (2) FR-002's measurement records only the detector's hits; add how many
+  past final messages that put a question or decision to the GM it catches, the 2026-10-25 feature 417 message among them.
+  FR-003's Bash escape (the GM's explicit say-so) ruled LEGITIMATE. Both changes made: FR-001 counts every unfinished
+  review live, SC-001 adds the stalled case; FR-002 adds the recall measurement.

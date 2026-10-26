@@ -1,0 +1,402 @@
+{
+ "11": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "15": {
+  "label": "ASKS",
+  "quote": "Which one the setting means is still your call; it's the first open item in HANDOFF.md."
+ },
+ "89": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "114": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "142": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "155": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "159": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "163": {
+  "label": "ASKS",
+  "quote": "Yours to decide, unchanged from my last message:"
+ },
+ "172": {
+  "label": "ASKS",
+  "quote": "Waiting on your decision"
+ },
+ "203": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "204": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "209": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "230": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "240": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "242": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "243": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "271": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "280": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "281": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "283": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "309": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "313": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "321": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "336": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "342": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "345": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "356": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "382": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "385": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "395": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "396": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "425": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "431": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "432": {
+  "label": "ASKS",
+  "quote": "Want me to give it the same opening?"
+ },
+ "459": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "469": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "484": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "486": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "493": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "503": {
+  "label": "ASKS",
+  "quote": "T02, the tooling, and T03's general merge are the next steps when you say go."
+ },
+ "512": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "529": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "540": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "551": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "576": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "587": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "591": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "629": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "639": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "643": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "665": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "672": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "674": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "677": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "692": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "749": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "786": {
+  "label": "ASKS",
+  "quote": "Should I file them as 385 tasks?"
+ },
+ "789": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "814": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "822": {
+  "label": "ASKS",
+  "quote": "should the lane-end findings keep going into 385, or move to their own feature?"
+ },
+ "838": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "839": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "845": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "847": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "857": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "874": {
+  "label": "ASKS",
+  "quote": "say the word and I will."
+ },
+ "877": {
+  "label": "ASKS",
+  "quote": "Your options:"
+ },
+ "887": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "889": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "891": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "938": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "950": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "953": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "962": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "981": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "988": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1016": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1024": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1047": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1062": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1136": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1140": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1145": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1175": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1216": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1219": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1221": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1225": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1247": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1264": {
+  "label": "ASKS",
+  "quote": "I can raise it too if you want."
+ },
+ "1266": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1282": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1290": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1301": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1305": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1323": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1337": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1365": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1372": {
+  "label": "NONE",
+  "quote": ""
+ },
+ "1393": {
+  "label": "ASKS",
+  "quote": "Shall I file this as one feature"
+ }
+}
