@@ -180,6 +180,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T44 (T31 C2, the round arbiter's accept on ask:417-T31-C2-regression): the access tree drawn first; `settle_joins` deleted": {
+   "sha256": "c0e79867467e0ca22d2ceb16030fe351be164a7497a4d17c5bb48ad75cdf8284",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T45 (FR-005, the round arbiter's ruling on ask:417-T31-C2-regression): the needle rule asked where a tree lane is drawn": {
+   "sha256": "5c85e40e63a8a771d03dc1ffd619a5641be043d96c984fe4bd25b550b9032d34",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2859,6 +2871,66 @@
      "summary": "The needle rule (law.needle_loops) asked of a tree lane where lanes_of draws it is filed as its own FR-005 conversion task, decided on its own account, whichever way the arbiter rules.",
      "class": "within",
      "why": "Moving a rule that is only asked of the settled web into the placer that could break it is FR-005's text and among the conversions D11 says are done. As its own decided task it is owed by FR-005, not by seed 723775. If it were run as a fix aimed at that seed, it would be the 'work aimed at the fresh rate' D11 forbids. Its own plan and review (decide first) are where that line is held, and this block commits to nothing past filing it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T44 (T31 C2, the round arbiter's accept on ask:417-T31-C2-regression): the access tree drawn first; `settle_joins` deleted",
+    "### T45 (FR-005, the round arbiter's ruling on ask:417-T31-C2-regression): the needle rule asked where a tree lane is drawn"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T44-a land with 723775 newly red",
+     "summary": "Land tree-first-no-joins.patch with fixed cohort 54/54 and pool maps green, fresh block 7 of 48 before and after (723789 green, 723775 red), under the arbiter's waiver.",
+     "class": "within",
+     "why": "D11: a conversion lands through make land when FR-008 holds (fixed cohort, pinned rows, pool maps), its fresh rate recorded either way. FR-009/SC-005 apply only once SC-001 is met, and it is not. FR-008's full text is not in the bundle (the index stops at '; the'), so this rests on D11's restatement of it as those three gates. Figures are dated and attributed to the arbiter's run (dated 2026-10-26, a day after today's 2026-10-25), and make land measures them again at landing."
+    },
+    {
+     "id": "T44-b settle_tree once a map; settle_reach call probed off",
+     "summary": "Run settle_tree once per map; if settle_reach's call is then redundant, probe it off and remove it.",
+     "class": "within",
+     "why": "FR-004 deletes the settle's repair steps; SC-002 and SC-004 ask for no repair loop and a smaller engine."
+    },
+    {
+     "id": "T44-c settle_joins deleted if nothing else calls it",
+     "summary": "Delete settle_joins and its tests when no other caller remains.",
+     "class": "within",
+     "why": "FR-004 and the request ('delete the repair passes'). The condition does not keep a repair pass alive: if another caller exists, that caller is a repair pass FR-004 deletes, and FR-002/SC-007's inventory has to list it. The condition must not end up as the reason the pass survives."
+    },
+    {
+     "id": "T44-d roll-census tooling fix first",
+     "summary": "Blocked on the arbiter's fix: the roll census counted the CLI test's re-roll of Inashiro as a second roll; narrow it to count each roll once, or only the gate's own, with a test.",
+     "class": "within",
+     "why": "Fixes a miscount in the landing gate (FR-011/SC-006), which the arbiter ordered. 'Count each roll once' corrects a double count. 'Only the gate's own' changes what is counted and could drop rolls SC-006 relies on, so the test should pin the narrower fix (each roll once)."
+    },
+    {
+     "id": "T44-e fresh rate recorded; probe comment; rendering none",
+     "summary": "Record the fresh rate with the landing, make the probe comment a plain one, no rendering.",
+     "class": "within",
+     "why": "D11 requires the fresh rate recorded either way."
+    },
+    {
+     "id": "T45-a needle_loops asked in lanes_of",
+     "summary": "law.needle_loops is asked of the candidate where lanes_of draws a tree lane, at the rule's recorded threshold.",
+     "class": "within",
+     "why": "FR-005: a rule asked only of a finished map (WebRefused at the end) is moved to the placer that could break it; D11 says the FR-005 conversions are done. If it cannot land green without seed-by-seed work or room, D11 says it is recorded and set down. That limits 'anything more elaborate', and 723775 is never iterated on."
+    },
+    {
+     "id": "T45-b move the threshold when it is 'ours'",
+     "summary": "If the tunables record marks needle_loops' sliver threshold as our own pick (researched, nothing found, chosen), moving it is tried first.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words (2026-10-25): an arbitrary number is 'not an actual hard requirement', and 'if it turns out that allowing a 15% angle instead of a 20% one made our placements much, much easier ... then I want to be able to do that'. This holds only as the way to land the FR-005 conversion green under FR-008. D11 still forbids work aimed at the fresh rate and FR-007 room work, so the move is judged by the cohort, pinned rows and pool maps, not by making 723775 pass. The new value is recorded as arbitrary in the tunables record, as the GM asked. D11 is applied here, not set aside: this ruling does not rely on the arbiter's ruling, which is not in the bundle."
+    },
+    {
+     "id": "T45-c move the threshold when it is 'unresearched'",
+     "summary": "If the tunables record marks the threshold unresearched, moving it is also tried before anything more elaborate.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM split the two cases in so many words (2026-10-25): numbers 'we simply have not looked into' get research first ('please actually perform research for any of those questions that we don't currently have answers for'). Only numbers researched with nothing found ('and therefore we picked something arbitrary') may be moved. T45 puts both under one permission and skips the research the GM asked for. Following the rule is not impossible, nothing else in the request implies the exception, and researching first does not defeat the request's purpose. Fix: 'if it is unresearched, research it first (record the result in the tunables record), then proceed by what the research finds; if it is ours, moving it is tried before anything more elaborate.'"
     }
    ]
   }

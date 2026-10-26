@@ -457,7 +457,7 @@ or the step is set down with its seeds and ruled (`make arbiter-ask`). Rendering
   ruling's waiver). Before landing: the probe comment made a plain one; `settle_tree` run once a map (if `settle_reach`'s call is
   then redundant, probe it off and remove it); `settle_joins` deleted with its tests if nothing else calls it; the fresh rate
   recorded with the landing (D11). Blocked first on the arbiter's tooling fix (the roll census counting the CLI test's re-roll of
-  Inashiro as a second roll: narrow it to count each roll once, or only the gate's own, with a test - `make arbiter-fix-done`).
+  Inashiro as a second roll: narrow it to count each roll once, its test pinning that - `make arbiter-fix-done`).
   Rendering: none.
 
 
@@ -465,6 +465,7 @@ or the step is set down with its seeds and ruled (`make arbiter-ask`). Rendering
 
 - **Approach**: `law.needle_loops` asked of the candidate where `lanes_of` draws a tree lane, so two household ways never close a
   sliver between them (fresh seed 723775 under the tree-first order: access lanes 1 and 2). Its first step, per the ruling: read
-  `needle_loops`' sliver threshold in the tunables record (`make tunables`) - if it is unresearched or ours, moving it (more room
-  before packing) is tried before anything more elaborate. Never iterated on 723775 inside C2 (D11). Rendering: none.
+  `needle_loops`' sliver threshold in the tunables record (`make tunables`) - if it is unresearched, research it first (the
+  result recorded in the tunables record), then proceed by what the research finds; if it is ours, moving it is tried before
+  anything more elaborate, judged by the cohort, the pinned rows and the pool maps, never by seed 723775 passing. Never iterated on 723775 inside C2 (D11). Rendering: none.
 
