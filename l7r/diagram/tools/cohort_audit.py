@@ -252,6 +252,7 @@ def audit(
     failed_first: bool = False,
     last_failed: bool = False,
     exitfirst: bool = False,
+    against: dict[int, list[str]] | None = None,
 ) -> int:
     """Roll `count` hamlets, gate each, and print the failures with the gate's own messages.
 
@@ -272,7 +273,7 @@ def audit(
         specs, extra = select(specs, extra, failed, name, last_failed and bool(failed))
     left: list[Any] = []
     if exitfirst:
-        pairs, left = roll_until_failure([*specs, *extra], jobs)
+        pairs, left = roll_until_failure([*specs, *extra], jobs, against)
         fixed_ids = {id(s) for s in specs}
         specs, extra = [s for s, _ in pairs if id(s) in fixed_ids], [s for s, _ in pairs if id(s) not in fixed_ids]
         rolled = [r for s, r in pairs if id(s) in fixed_ids] + [r for s, r in pairs if id(s) not in fixed_ids]
@@ -382,15 +383,26 @@ def ordered(specs: Sequence[Any], failed: Sequence[int], only_failed: bool) -> l
     return first if only_failed else [*first, *(s for s in specs if s[0] not in set(failed))]
 
 
-def roll_until_failure(specs: Sequence[Any], jobs: int) -> tuple[list[Any], list[Any]]:
-    """Roll `specs` in order and stop at the first that fails (EXITFIRST, feature 426 D4): ((spec, rolled) pairs, the specs left
-    unrolled). Rolls already started finish - their result is stored and served next time - and nothing not started begins."""
+def worse(spec: Any, result: Any, against: dict[int, list[str]] | None) -> bool:
+    """Does `result` stop an EXITFIRST run: any failure, or - against a baseline (`make probe`'s HEAD, feature 426 D5) - a check
+    the seed did not fail there."""
+    failures = result[0][1]
+    if against is None:
+        return bool(failures)
+    before = {f.split("[")[0] for f in against.get(int(spec[0]), [])}
+    return any(f.split("[")[0] not in before for f in failures)
+
+
+def roll_until_failure(specs: Sequence[Any], jobs: int, against: dict[int, list[str]] | None = None) -> tuple[list[Any], list[Any]]:
+    """Roll `specs` in order and stop at the first that fails (EXITFIRST, feature 426 D4), or at the first worse than `against`:
+    ((spec, rolled) pairs, the specs left unrolled). Rolls already started finish - their result is stored and served next time
+    - and nothing not started begins."""
     done: list[Any] = []
     if jobs == 1:
         for i, s in enumerate(specs):
             r = roll_how(s)
             done.append((s, r))
-            if r[0][1]:
+            if worse(s, r, against):
                 return done, list(specs[i + 1 :])
         return done, []
     with concurrent.futures.ProcessPoolExecutor(max_workers=jobs) as ex:
@@ -400,7 +412,7 @@ def roll_until_failure(specs: Sequence[Any], jobs: int) -> tuple[list[Any], list
             if f.cancelled():
                 continue
             done.append((futs[f], f.result()))
-            if not stop and done[-1][1][0][1]:
+            if not stop and worse(done[-1][0], done[-1][1], against):
                 stop = True
                 for g in futs:
                     g.cancel()
@@ -500,6 +512,16 @@ def _reference_ok() -> list[str]:
     return list(rep.failures)
 
 
+def _against(path: str | None) -> dict[int, list[str]] | None:
+    """`--exitfirst-against`'s baseline: {seed: its failures} from the JSON file `make probe` writes."""
+    if not path:
+        return None
+    import json  # noqa: PLC0415
+
+    with open(path, encoding="utf-8") as fh:
+        return {int(k): list(v) for k, v in json.load(fh).items()}
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--count", type=int, default=10)  # the GM, 2026-10-12: ten (feature 375 amendment 8, FR-038)
@@ -513,6 +535,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--failed-first", action="store_true", help="roll the seeds that failed in the last run on this seed block first (feature 426)")
     ap.add_argument("--last-failed", action="store_true", help="roll only the seeds that failed in the last run on this seed block (feature 426)")
     ap.add_argument("--exitfirst", action="store_true", help="stop at the first seed that fails (feature 426)")
+    ap.add_argument("--exitfirst-against", default=None, help="with --exitfirst: a JSON {seed: [failures]} - stop at the first seed worse than it (make probe, feature 426)")
     args = ap.parse_args(list(argv) if argv is not None else None)
 
     # THE REFERENCE SETTLEMENT IS A GATE, NOT A SUGGESTION (GM 2026-08-24).
@@ -541,7 +564,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print("(--anyway overrides, when you genuinely need the seed list from a red tree.)")
             return 2
         print("\033[1mreference settlement clean\033[0m - running the cohort\n", flush=True)
-    return audit(args.count, args.seed, args.only, args.jobs, args.households, args.fresh, args.fresh_from, args.failed_first, args.last_failed, args.exitfirst)
+    return audit(args.count, args.seed, args.only, args.jobs, args.households, args.fresh, args.fresh_from, args.failed_first, args.last_failed, args.exitfirst, _against(args.exitfirst_against))
 
 
 if __name__ == "__main__":

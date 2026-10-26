@@ -12,8 +12,6 @@ import pytest
 
 from l7r.diagram.tools import cohort_audit as ca
 
-pytestmark = pytest.mark.tooling
-
 
 @pytest.fixture(autouse=True)
 def _record_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
@@ -125,7 +123,7 @@ def test_the_cli_passes_the_three_modes_through(monkeypatch: pytest.MonkeyPatch)
     got: list[tuple] = []
     monkeypatch.setattr(ca, "audit", lambda *a: got.append(a) or 0)
     assert ca.main(["--anyway", "--failed-first", "--last-failed", "--exitfirst"]) == 0
-    assert got[0][-3:] == (True, True, True)
+    assert got[0][-4:] == (True, True, True, None)
 
 
 def test_a_corrupt_record_is_skipped_and_a_clean_exitfirst_run_rolls_every_seed(monkeypatch: pytest.MonkeyPatch, _record_dir: Path) -> None:
@@ -157,3 +155,15 @@ def test_the_landing_asks_the_cohort_a_developer_runs_so_it_serves_every_seed_ro
     recipe = (Path(__file__).resolve().parents[2] / "Makefile").read_text(encoding="utf-8").split("\ncohort-landing:", 1)[1].split("\n\n", 1)[0]
     assert "$(MAKE) --no-print-directory cohort N=48 FRESH=0" in recipe
     assert not any(mode in recipe for mode in ("FAILED_FIRST", "LAST_FAILED", "EXITFIRST")), "the landing judges every seed (FR-008)"
+
+
+def test_exitfirst_against_a_baseline_stops_only_at_a_seed_worse_than_it(monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """`make probe`'s stop (feature 426 D5): a seed failing the way it failed at HEAD goes on; a new failing check stops."""
+    seen: list[int] = []
+    _roll(monkeypatch, {1, 3}, seen)
+    base = tmp_path / "head.json"
+    base.write_text(json.dumps({"1": ["c[1]"], "2": [], "3": []}), encoding="utf-8")
+    assert ca.main(["--anyway", "--count", "4", "--households", "10", "--jobs", "1", "--exitfirst", "--exitfirst-against", str(base)]) == 1
+    assert seen == [1, 2, 3], "seed 1 fails as at HEAD and goes on; seed 3 is worse and stops the run"
+    assert "1 seed(s) not rolled" in capsys.readouterr().out
+    assert ca.worse((5,), (("h", [], []), "rolled"), {}) is False and ca._against(None) is None

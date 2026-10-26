@@ -83,3 +83,24 @@ def test_a_task_filed_mid_feature_carries_no_lands_open_mark(tmp_path, monkeypat
     assert ta.main(["385"]) == 0
     assert "**Lands open**: T09, T12\n" in (d / "plan.md").read_text(encoding="utf-8")
     assert "- [ ] T15 a fix\n" in (d / "tasks.md").read_text(encoding="utf-8")
+
+
+def test_a_task_filed_with_no_section_gets_the_template_with_its_red_exit_and_alone_off_table(tmp_path, monkeypatch, capsys) -> None:  # noqa: ANN001
+    """Feature 426 D6: T48's and T50's plan reviews each blocked a round on item 6's red exit and the table of each step alone."""
+    d = _feature(tmp_path, monkeypatch)
+    monkeypatch.setenv("TASK_TITLE", "x")
+    assert ta.main(["385"]) == 0 and "the template" in capsys.readouterr().out
+    plan = (d / "plan.md").read_text(encoding="utf-8")
+    assert "### T15 Approach (checklist part A)" in plan and ta.RED_EXIT in plan
+    assert "| step | alone off: fixed and pinned | fresh block vs HEAD |" in plan
+
+
+def test_a_section_without_the_red_exit_is_filed_with_a_warning_naming_the_wording(tmp_path, monkeypatch, capsys) -> None:  # noqa: ANN001
+    _feature(tmp_path, monkeypatch)
+    sec = tmp_path / "sec.md"
+    sec.write_text("### {T} x\n\n6. **The exits.** Red: set down.\n", encoding="utf-8")
+    monkeypatch.setenv("TASK_TITLE", "x")
+    assert ta.main(["385", "--section", str(sec)]) == 0
+    assert "has no red exit through `make arbiter-ask`" in capsys.readouterr().err
+    sec.write_text("### {T} x\n\n6. **The exits.** " + ta.RED_EXIT + "\n", encoding="utf-8")
+    assert ta.main(["385", "--section", str(sec)]) == 0 and "no red exit" not in capsys.readouterr().err

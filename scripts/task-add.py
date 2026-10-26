@@ -58,6 +58,40 @@ def add_section(plan: str, tid: str, section: str) -> str:
     return plan + ("" if plan.endswith("\n") else "\n") + "\n" + body
 
 
+RED_EXIT = "Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35)."
+"""Checklist item 6's red exit as D35 words it: the wording T48's and T50's plan reviews each blocked a round on (feature 426, D6)."""
+
+TEMPLATE = """### {T} (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### {T} Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** FR-008 green: landed with its fresh rate. """ + RED_EXIT + """
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+"""
+"""The section `make task-add` writes when no `SECTION=` is given (feature 426, D6): the alone-off table and checklist item 6's red
+exit already in place, the two things the plan reviews kept asking for."""
+
+
+def lacks_red_exit(section: str) -> bool:
+    """A section whose checklist item 6 does not route a red result through `make arbiter-ask`."""
+    item6 = next((ln for ln in section.splitlines() if ln.lstrip().startswith("6.")), "")
+    return "make arbiter-ask" not in item6
+
+
 def main(argv: list[str]) -> int:
     physical = "--physical" in argv
     args = [a for a in argv if a != "--physical"]
@@ -78,14 +112,16 @@ def main(argv: list[str]) -> int:
     if section and not Path(section).is_file():
         print(f"task-add: SECTION={section} is not a file", file=sys.stderr)
         return 2
+    text = Path(section).read_text(encoding="utf-8") if section else TEMPLATE
+    if section and lacks_red_exit(text):
+        print(f"task-add: SECTION={section}'s checklist item 6 has no red exit through `make arbiter-ask` - the plan review will ask for: {RED_EXIT}", file=sys.stderr)
     tid = next_id(d)
     # NO LANDS-OPEN MARK OR LINE (feature 405 T32, D4; the GM 2026-10-20): a task nobody has started holds no landing, so a task
     # filed mid-feature needs neither - the mark and the `**Lands open**:` line that T69 (plan D88) wrote here are retired.
     (d / "tasks.md").write_text(add_box((d / "tasks.md").read_text(encoding="utf-8"), tid, title, physical), encoding="utf-8")
-    if section:
-        plan = (d / "plan.md").read_text(encoding="utf-8") if (d / "plan.md").is_file() else ""
-        (d / "plan.md").write_text(add_section(plan, tid, Path(section).read_text(encoding="utf-8")), encoding="utf-8")
-    print(f"task-add: {tid} filed in {(d / 'tasks.md').relative_to(root)}" + (f", its section in {(d / 'plan.md').relative_to(root)}" if section else ""))
+    plan = (d / "plan.md").read_text(encoding="utf-8") if (d / "plan.md").is_file() else ""
+    (d / "plan.md").write_text(add_section(plan, tid, text), encoding="utf-8")
+    print(f"task-add: {tid} filed in {(d / 'tasks.md').relative_to(root)}, its section in {(d / 'plan.md').relative_to(root)}" + ("" if section else " (the template: fill each <...>)"))
     return 0
 
 
