@@ -231,7 +231,28 @@ def fresh_line(specs: Sequence[Any], results: Sequence[tuple[str, list[str], lis
     )
 
 
-def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None = None, households: int | None = None, fresh: int = 0, fresh_from: int | None = None) -> int:
+def select(specs: list[Any], extra: list[Any], failed: Sequence[int], name: str, last_failed: bool) -> tuple[list[Any], list[Any]]:
+    """The fixed and fresh specs in FAILED_FIRST order, or LAST_FAILED's alone (feature 426 D4); every seed, and why, when no
+    failure is recorded for the block."""
+    if not failed:
+        print("cohort: no failing seed recorded for this seed block" + (f" (last run {name})" if name else " (no last run)") + " - rolling every seed", flush=True)
+        return specs, extra
+    print(f"cohort: {len(failed)} seed(s) failed last run ({name}) - {'only those' if last_failed else 'those first'}: {', '.join(map(str, failed))}", flush=True)
+    return ordered(specs, failed, last_failed), ordered(extra, failed, last_failed)
+
+
+def audit(
+    count: int,
+    first_seed: int,
+    only: str | None = None,
+    jobs: int | None = None,
+    households: int | None = None,
+    fresh: int = 0,
+    fresh_from: int | None = None,
+    failed_first: bool = False,
+    last_failed: bool = False,
+    exitfirst: bool = False,
+) -> int:
     """Roll `count` hamlets, gate each, and print the failures with the gate's own messages.
 
     The rolls fan out across processes (the 2026-08-15 timings block flagged the serial cohort as
@@ -245,12 +266,29 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
     count = len(specs)
     extra = fresh_specs(fresh, fresh_from) if not (only or households) else []
     jobs = hg.default_jobs(count + len(extra)) if jobs is None else max(1, jobs)  # ONE courtesy rule, defined in the driver
-    if jobs == 1:
+    block = [first_seed, count, households, extra[0][0] if extra else None]
+    failed, name = previous_failures(*block) if (failed_first or last_failed or exitfirst) else ([], "")
+    if failed_first or last_failed:
+        specs, extra = select(specs, extra, failed, name, last_failed and bool(failed))
+    left: list[Any] = []
+    if exitfirst:
+        pairs, left = roll_until_failure([*specs, *extra], jobs)
+        fixed_ids = {id(s) for s in specs}
+        specs, extra = [s for s, _ in pairs if id(s) in fixed_ids], [s for s, _ in pairs if id(s) not in fixed_ids]
+        rolled = [r for s, r in pairs if id(s) in fixed_ids] + [r for s, r in pairs if id(s) not in fixed_ids]
+        if left:
+            print(f"cohort: EXITFIRST stopped at the first failing seed - {len(left)} seed(s) not rolled", flush=True)
+    elif jobs == 1:
         rolled = [roll_how(s) for s in [*specs, *extra]]
     else:
         with concurrent.futures.ProcessPoolExecutor(max_workers=jobs) as ex:
             rolled = list(ex.map(roll_how, [*specs, *extra]))
-    write_record([*specs, *extra], rolled, first_seed, households, fresh=len(extra))
+    count = len(specs)
+    rolled_seeds = {s[0] for s in [*specs, *extra]}
+    # ...A RUN THAT ROLLED SOME SEEDS CARRIES FORWARD THE EARLIER FAILURES IT SKIPPED (feature 426 D4, pytest's last-failed list)
+    partial = (last_failed and bool(failed)) or bool(left)
+    write_record([*specs, *extra], rolled, first_seed, households, fresh=len(extra), carried=[x for x in failed if x not in rolled_seeds] if partial else None, block=block)
+    print(f"cohort: rolled {sum(h == 'rolled' for _r, h in rolled)}, served {sum(h == 'served' for _r, h in rolled)}", flush=True)
     rolled, fresh_rolled = rolled[:count], rolled[count:]
     results = [r for r, _how in rolled]
 
@@ -282,15 +320,17 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
     waters = {h.split(" water=")[1].split()[0] for h, _f, _l in results if " water=" in h}
     missing += [f"farm_water={v}" for v in ("channel", "well") if v not in waters]
     print(f"row villages: {len(rows)}; knob values never rolled: {', '.join(missing) or 'none'}")
-    if missing and not only:
+    if missing and not (only or partial):  # a cohort-wide check: a partial run cannot answer it (feature 426)
         failing += 1
         tally.update(["row_knob_value_never_rolled"])
     dead = never_drawn(h for h, _f, _l in results)
     print(f"knob values rolled but never drawn: {', '.join(dead) or 'none'}")
-    if dead and not only:
+    if dead and not (only or partial):
         failing += 1
         tally.update(["knob_value_never_drawn"])
     print(f"\n{count - failing}/{count} passed the whole gate")
+    if left:
+        failing = max(failing, 1)  # EXITFIRST stopped on a failure: the run is red whatever the rest would have said
     if extra:
         print(fresh_line(extra, [r for r, _how in fresh_rolled]))
     if tally:
@@ -304,7 +344,81 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
 LOG_DIR: str | None = None
 
 
-def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[str], list[str]], str]], first_seed: int, households: int | None, fresh: int = 0) -> str:
+def _log_dir() -> str:
+    """Where the cohort's records live: the CLONE's `dev/cohort-log/`, a detached worktree's "before" leg too (the plan review:
+    the worktree is removed), or a test's own `LOG_DIR`."""
+    import subprocess  # noqa: PLC0415
+
+    if LOG_DIR:
+        return LOG_DIR
+    p = subprocess.run(["git", "-C", HERE, "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True, check=False)
+    common = p.stdout.strip() if p.returncode == 0 else ""
+    return os.path.join(os.path.dirname(common) if os.path.basename(common) == ".git" else HERE, "dev", "cohort-log")
+
+
+def previous_failures(first_seed: int, count: int, households: int | None, fresh_first: int | None) -> tuple[list[int], str]:
+    """The seeds that failed in the last run on this seed block (feature 426, D4) - the newest record of the same block (first
+    seed, `count` fixed seeds, size, fresh block; a record before the block was recorded matches none) - with the failures a partial run carried forward unrolled (`carried`), as pytest's last-failed list
+    keeps a test it did not run until it passes; and the record's name ("" when there is none)."""
+    import json  # noqa: PLC0415
+
+    d = _log_dir()
+    names = sorted(n for n in os.listdir(d) if n[:1].isdigit() and n.endswith(".json")) if os.path.isdir(d) else []
+    for name in reversed(names):
+        try:
+            with open(os.path.join(d, name), encoding="utf-8") as fh:
+                rec = json.load(fh)
+        except OSError, ValueError:
+            continue
+        if rec.get("block") == [first_seed, count, households, fresh_first]:
+            failed = [int(s["seed"]) for s in rec.get("seeds") or [] if s.get("verdict") != "pass"]
+            return sorted({*failed, *(int(x) for x in rec.get("carried") or [])}), name
+    return [], ""
+
+
+def ordered(specs: Sequence[Any], failed: Sequence[int], only_failed: bool) -> list[Any]:
+    """`specs` with the seeds in `failed` first (FAILED_FIRST), or those alone (LAST_FAILED) - each group in seed order."""
+    first = [s for s in specs if s[0] in set(failed)]
+    return first if only_failed else [*first, *(s for s in specs if s[0] not in set(failed))]
+
+
+def roll_until_failure(specs: Sequence[Any], jobs: int) -> tuple[list[Any], list[Any]]:
+    """Roll `specs` in order and stop at the first that fails (EXITFIRST, feature 426 D4): ((spec, rolled) pairs, the specs left
+    unrolled). Rolls already started finish - their result is stored and served next time - and nothing not started begins."""
+    done: list[Any] = []
+    if jobs == 1:
+        for i, s in enumerate(specs):
+            r = roll_how(s)
+            done.append((s, r))
+            if r[0][1]:
+                return done, list(specs[i + 1 :])
+        return done, []
+    with concurrent.futures.ProcessPoolExecutor(max_workers=jobs) as ex:
+        futs = {ex.submit(roll_how, s): s for s in specs}
+        stop = False
+        for f in concurrent.futures.as_completed(futs):
+            if f.cancelled():
+                continue
+            done.append((futs[f], f.result()))
+            if not stop and done[-1][1][0][1]:
+                stop = True
+                for g in futs:
+                    g.cancel()
+    order = {id(s): i for i, s in enumerate(specs)}
+    done.sort(key=lambda p: order[id(p[0])])
+    rolled_ids = {id(s) for s, _ in done}
+    return done, [s for s in specs if id(s) not in rolled_ids]
+
+
+def write_record(
+    specs: Sequence[Any],
+    rolled: Sequence[tuple[tuple[str, list[str], list[str]], str]],
+    first_seed: int,
+    households: int | None,
+    fresh: int = 0,
+    carried: Sequence[int] | None = None,
+    block: Sequence[Any] | None = None,
+) -> str:
     """The cohort's PER-SEED RECORD (feature 375 amendment 7, FR-029): one file a run under `dev/cohort-log/` - per seed,
     served or rolled, its verdict and the failures it found - so whether fewer seeds would find the same failures can be
     counted (feature 374's findings by seed lived only in its plan's prose). `make cohort` commits it, as `make done` does
@@ -320,10 +434,7 @@ def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[st
         return p.stdout.strip() if p.returncode == 0 else ""
 
     seeds = []
-    common = git("rev-parse", "--path-format=absolute", "--git-common-dir")
-    # A "before" leg rolled in a detached worktree keeps its record in the CLONE (the plan review): the worktree is removed
-    clone_root = os.path.dirname(common) if os.path.basename(common) == ".git" else HERE
-    log_dir = LOG_DIR or os.path.join(clone_root, "dev", "cohort-log")
+    log_dir = _log_dir()
     first_fresh = len(specs) - fresh
     for i, (spec, ((header, failures, _lines), how)) in enumerate(zip(specs, rolled, strict=True)):
         verdict = "refused" if any(f.startswith("refused:") for f in failures) else ("fail" if failures else "pass")
@@ -360,6 +471,10 @@ def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[st
                 "households": households,
                 "count": len(seeds),
                 "served": sum(s["how"] == "served" for s in seeds),
+                # ...A PARTIAL RUN (FAILED_FIRST's rest skipped, LAST_FAILED, EXITFIRST stopping early) carries forward the earlier
+                # failures it did not roll, and never stands as a landing record (`cohort_gate.landing_shaped`, feature 426 D4)
+                **({"partial": True, "carried": sorted(carried)} if carried is not None else {}),
+                **({"block": list(block)} if block is not None else {}),  # what FAILED_FIRST and LAST_FAILED match on (feature 426)
                 **({"fresh_first": specs[first_fresh][0], "fresh_count": fresh} if fresh else {}),
                 "seeds": seeds,
             },
@@ -395,6 +510,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--fresh", type=int, default=0, help="roll this many fresh seeds beside the fixed ones - a rate, never a pass/fail (feature 386)")
     ap.add_argument("--fresh-from", type=int, default=None, help="the fresh block's first seed (make cohort derives it from the engine)")
     ap.add_argument("--anyway", action="store_true", help="run even if the reference settlement is failing (say why in the same breath)")
+    ap.add_argument("--failed-first", action="store_true", help="roll the seeds that failed in the last run on this seed block first (feature 426)")
+    ap.add_argument("--last-failed", action="store_true", help="roll only the seeds that failed in the last run on this seed block (feature 426)")
+    ap.add_argument("--exitfirst", action="store_true", help="stop at the first seed that fails (feature 426)")
     args = ap.parse_args(list(argv) if argv is not None else None)
 
     # THE REFERENCE SETTLEMENT IS A GATE, NOT A SUGGESTION (GM 2026-08-24).
@@ -423,7 +541,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print("(--anyway overrides, when you genuinely need the seed list from a red tree.)")
             return 2
         print("\033[1mreference settlement clean\033[0m - running the cohort\n", flush=True)
-    return audit(args.count, args.seed, args.only, args.jobs, args.households, args.fresh, args.fresh_from)
+    return audit(args.count, args.seed, args.only, args.jobs, args.households, args.fresh, args.fresh_from, args.failed_first, args.last_failed, args.exitfirst)
 
 
 if __name__ == "__main__":

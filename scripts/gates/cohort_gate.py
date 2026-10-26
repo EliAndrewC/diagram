@@ -57,8 +57,16 @@ def fresh(rec: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def landing_shaped(rec: dict[str, Any], need_fresh: bool = True) -> bool:
-    """48 fixed seeds from seed 1 at the rolled sizes, no uncommitted engine diff - and, for the landing record, its fresh block."""
-    return int(rec.get("first_seed") or 0) == 1 and rec.get("households") is None and len(fixed(rec)) >= SEEDS and not rec.get("engine_diff") and (len(fresh(rec)) >= SEEDS or not need_fresh)
+    """48 fixed seeds from seed 1 at the rolled sizes, no uncommitted engine diff, every seed rolled (a FAILED_FIRST, LAST_FAILED
+    or EXITFIRST run that skipped some is `partial`, feature 426 D4) - and, for the landing record, its fresh block."""
+    return (
+        int(rec.get("first_seed") or 0) == 1
+        and rec.get("households") is None
+        and len(fixed(rec)) >= SEEDS
+        and not rec.get("engine_diff")
+        and not rec.get("partial")
+        and (len(fresh(rec)) >= SEEDS or not need_fresh)
+    )
 
 
 def on_engine(root: pathlib.Path, rec: dict[str, Any]) -> bool:
