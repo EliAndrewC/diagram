@@ -126,31 +126,5 @@ named in the request; Hayami's own work not reached, Bray read only through Walt
 and Morisada in the original, Hokuetsu seppu). Anything for the GM goes through
 `escalation-check` first.
 
-### T01 Approach (checklist part A)
-
-1. **The goal, in the world.** n/a
-2. **The constraints.** D1, D2; FR-001, FR-002.
-3. **Where each comes from.** FR-001, FR-002.
-4. **Do they describe the world here?** Yes.
-5. **The order.** n/a
-6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** SC-001.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
-### T03 Approach (checklist part A)
-
-1. **The goal, in the world.** n/a
-2. **The constraints.** D5; FR-003, FR-004.
-3. **Where each comes from.** FR-001, FR-002.
-4. **Do they describe the world here?** Yes.
-5. **The order.** n/a
-6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** SC-001, SC-002.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
+<!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
