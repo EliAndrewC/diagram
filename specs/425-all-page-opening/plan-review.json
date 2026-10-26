@@ -1,0 +1,95 @@
+{
+ "feature": "425-all-page-opening",
+ "blocks": {
+  "preamble": {
+   "sha256": "db458ce284a2d83376f1cf12ca9e86025884d4cd2ca31a648d2380856e54d783",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "5fa7e70239915b64976121805cf40bf4225ec9778608cd2e9400b9f5115b2f80",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "5f6ca525b114b31748d0f4820b7ede3f95ac98803be232db6e714ac324ebf3f2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "14ae3702a31125ba706637582a6137d55a94309a276007785bfe5beba9c7ec01",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "9bff6e1eb5f30bded304e27f59e77a4a015f2afc85fc605951ed5c4fbe952e2c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - all.html's opening (FR-001, FR-002)": {
+   "sha256": "2ebf9c736ab4aca2bca549f9f5c85fc104e1db4f9cf2055e820f523ee262b7dd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "2c6d67db776083b00a50ec817411b7996480d6d7c7d21589a182ba649b1e392d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "b582d4282ffd2928f685d305b4b0b56364263ae50c2ada2731e4ff1d14347009",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "## Constitution Check",
+    "## Performance bookends",
+    "## Summary",
+    "## T01 - all.html's opening (FR-001, FR-002)",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "_single's head is the title, then load_opening's text (the same opening the home page carries), then the pointer reworded to 'Every question, every note and every source on one page. The same record, a page per question: the contents.' kept italic",
+     "class": "within",
+     "why": "The GM asked that all.html get 'the same opening'; FR-001 places load_opening under the title before the pointer and requires the pointer no longer say the record is the maps' alone. Reusing the one load_opening text is the literal 'same opening'; the new wording drops the maps-only claim and keeps the pointer after the opening; keeping the italic is preservation of existing styling, not a scope change."
+    },
+    {
+     "id": "Summary/Technical Context",
+     "summary": "Change confined to site._single and one record test in tests/interactive/test_record_site.py; landed gated via make land / make done",
+     "class": "within",
+     "why": "Exactly the code FR-001 names and the test FR-002 requires; the gated landing is process, not a narrowing of what was asked."
+    },
+    {
+     "id": "Approach-9",
+     "summary": "Done measured as record site tests green, make record CHECK=1 clean, make done green at landing",
+     "class": "within",
+     "why": "Verification of the requested change itself (SC-001); enforces what was asked, adds no behavior."
+    },
+    {
+     "id": "Performance bookends",
+     "summary": "N/A: one string at the record's build, no generator change",
+     "class": "within",
+     "why": "Declares no performance work; neither narrows nor extends the request."
+    }
+   ]
+  }
+ ]
+}
