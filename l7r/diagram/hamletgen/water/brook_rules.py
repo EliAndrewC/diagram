@@ -167,23 +167,17 @@ def ends_off_canvas(course: Sequence[Pt], W: float, H: float, ends: Sequence[int
     return all(not (0.0 <= course[e][0] <= W and 0.0 <= course[e][1] <= H) for e in ends)
 
 
-def _proper_cross(a0: Pt, a1: Pt, b0: Pt, b1: Pt) -> bool:
-    """Do the two open segments properly cross (a shared end is a junction) - the junction test's own predicate."""
-
-    def side(p: Pt, q: Pt, r: Pt) -> float:
-        return (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
-
-    return ((side(a0, a1, b0) > 0) != (side(a0, a1, b1) > 0)) and ((side(b0, b1, a0) > 0) != (side(b0, b1, a1) > 0))
-
-
 def _dist_to_course(p: Pt, course: Sequence[Pt]) -> float:
     """The distance from `p` to the polyline `course`."""
     best = math.inf
     for a, b in zip(course, course[1:], strict=False):
         vx, vy = b[0] - a[0], b[1] - a[1]
         L2 = vx * vx + vy * vy
-        t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / L2))
-        best = min(best, math.hypot(p[0] - a[0] - t * vx, p[1] - a[1] - t * vy))
+        t = 0.0 if L2 == 0 else ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / L2
+        t = 0.0 if t < 0.0 else 1.0 if t > 1.0 else t  # no `max`/`min` call a segment (feature 427 T09)
+        d = math.hypot(p[0] - a[0] - t * vx, p[1] - a[1] - t * vy)
+        if d < best:
+            best = d
     return best
 
 
@@ -200,7 +194,18 @@ def crosses_mid_run(water: Sequence[Pt], joiner: Sequence[Pt], tol: float = CROS
         return False
     if min(_dist_to_course(e, joiner) for e in (water[0], water[-1])) < joiner_w / 2.0:
         return False
-    return any(_proper_cross(j0, j1, w0, w1) for j0, j1 in zip(joiner, joiner[1:], strict=False) for w0, w1 in zip(water, water[1:], strict=False))
+    # every joiner leg against every water leg in loops: the two open legs properly cross (a shared end is a junction) where each
+    # one's ends lie on opposite sides of the other, the side tests written inline (feature 427 T09: a predicate and its side
+    # function called per pair, 223k calls at 40 households) - the same arithmetic
+    for j0, j1 in zip(joiner, joiner[1:], strict=False):
+        jx, jy = j1[0] - j0[0], j1[1] - j0[1]
+        for w0, w1 in zip(water, water[1:], strict=False):
+            if ((jx * (w0[1] - j0[1]) - jy * (w0[0] - j0[0])) > 0) == ((jx * (w1[1] - j0[1]) - jy * (w1[0] - j0[0])) > 0):
+                continue
+            wx, wy = w1[0] - w0[0], w1[1] - w0[1]
+            if ((wx * (j0[1] - w0[1]) - wy * (j0[0] - w0[0])) > 0) != ((wx * (j1[1] - w0[1]) - wy * (j1[0] - w0[0])) > 0):
+                return True
+    return False
 
 
 def monotone_down(course: Sequence[Pt], fall: Pt, slack: float = 0.01) -> bool:

@@ -1,0 +1,31 @@
+perf-fanout seed 39, sizes 20, 40, HOT 20,000, ANCHOR 300
+
+field: 1,898,634 calls @20, 3,312,845 calls @40, growth exponent 0.80
+  anchor waterfields/seams/pockets.py:135:_outside_command [3]
+    waterfields/frame.py:242:to_uf [83,038|56,353] <- waterfields/frame.py:306:_f_at_u [2,699|2,376] <- waterfields/seams/pockets.py:177:drain_f [1,170|1,033] <- waterfields/seams/pockets.py:135:_outside_command [3|3]
+  anchor waterfields/settle.py:170:__init__ [1]
+    waterfields/ring_rules.py:342:_seg_dist [63,478|18,084] <- waterfields/ring_rules.py:350:_near_polyline [3,734|1,644] <- waterfields/ring_rules.py:366:collector_crossings [1,416|788] <- waterfields/ring_rules.py:484:ring_violations [1,416|788] <- waterfields/settle.py:64:verdict [1,398|752] <- waterfields/settle.py:188:judge [1,398|752] <- waterfields/settle.py:191:add [1,228|633] <- waterfields/settle.py:170:__init__ [1|1]
+    waterfields/ring_rules.py:379:<genexpr> [26,904|10,244] <- waterfields/ring_rules.py:366:collector_crossings [1,416|788] <- waterfields/ring_rules.py:484:ring_violations [1,416|788] <- waterfields/settle.py:64:verdict [1,398|752] <- waterfields/settle.py:188:judge [1,398|752] <- waterfields/settle.py:191:add [1,228|633] <- waterfields/settle.py:170:__init__ [1|1]
+    waterfields/ring_rules.py:380:<genexpr> [26,904|10,244] <- waterfields/ring_rules.py:366:collector_crossings [1,416|788] <- waterfields/ring_rules.py:484:ring_violations [1,416|788] <- waterfields/settle.py:64:verdict [1,398|752] <- waterfields/settle.py:188:judge [1,398|752] <- waterfields/settle.py:191:add [1,228|633] <- waterfields/settle.py:170:__init__ [1|1]
+    coords.py:43:__iter__ [24,868|15,030] <- waterfields/settle.py:59:ring_of [2,462|1,288] <- waterfields/settle.py:64:verdict [1,398|752] <- waterfields/settle.py:188:judge [1,398|752] <- waterfields/settle.py:191:add [1,228|633] <- waterfields/settle.py:170:__init__ [1|1]
+    linestring.py:63:_coords [20,234|9,633] <- linestring.py:40:__new__ [2,469|1,430] <- waterfields/ring_rules.py:427:near_supply [1,416|788] <- waterfields/ring_rules.py:484:ring_violations [1,416|788] <- waterfields/settle.py:64:verdict [1,398|752] <- waterfields/settle.py:188:judge [1,398|752] <- waterfields/settle.py:191:add [1,228|633] <- waterfields/settle.py:170:__init__ [1|1]
+    decorators.py:171:wrapper [20,135|10,450] <- base.py:219:coords [2,533|1,406] <- waterfields/settle.py:59:ring_of [2,462|1,288] <- waterfields/settle.py:64:verdict [1,398|752] <- waterfields/settle.py:188:judge [1,398|752] <- waterfields/settle.py:191:add [1,228|633] <- waterfields/settle.py:170:__init__ [1|1]
+  anchor waterfields/partition.py:329:keep_rows [8]
+    decorators.py:73:wrapped [62,650|24,401] <- base.py:351:length [15,496|912] <- waterfields/partition.py:329:keep_rows [8|6]
+  anchor sitegen/geom.py:84:crosses_poly [106]
+    settlement/_geom/primitives.py:116:ccw [24,858|14,676] <- settlement/_geom/primitives.py:115:segments_cross [12,084|7,140] <- sitegen/geom.py:104:<genexpr> [12,190|7,245] <- sitegen/geom.py:84:crosses_poly [106|105]
+  anchor waterfields/ring_rules.py:310:supply_intrusions [202]
+    waterfields/banks.py:214:clearance [22,427|15,382] <- waterfields/ring_rules.py:310:supply_intrusions [202|183]
+  anchor waterfields/carve.py:357:_bund_beans [1]
+    waterfields/frame.py:173:taper_w [21,496|13,243] <- waterfields/carve.py:409:wet [1,317|933] <- waterfields/carve.py:439:<lambda> [1,317|933] <- waterfields/carve.py:333:bead_runs [808|520] <- waterfields/carve.py:357:_bund_beans [1|1]
+  fastest growers @20 -> @40:
+    x3.5 waterfields/ring_rules.py:342:_seg_dist [18,084 -> 63,478]
+    x3.2 math.sin [9,232 -> 29,321]
+    x2.6 waterfields/ring_rules.py:379:<genexpr> [10,244 -> 26,904]
+    x2.6 waterfields/ring_rules.py:380:<genexpr> [10,244 -> 26,904]
+    x2.6 decorators.py:73:wrapped [24,401 -> 62,650]
+    x2.5 'items' of 'dict' objects [25,000 -> 63,476]
+    x2.1 linestring.py:63:_coords [9,633 -> 20,234]
+    x2.0 builtins.isinstance [93,130 -> 190,268]
+
+all stages: 1,898,634 calls @20, 3,312,845 calls @40

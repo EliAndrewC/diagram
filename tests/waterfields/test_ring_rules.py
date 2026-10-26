@@ -191,3 +191,12 @@ def test_a_collector_edge_away_from_the_drain_is_passed_over() -> None:
     drains = collector_strokes([{"poly": [[0.0, 50.0], [200.0, 50.0]], "w": 6.0}])
     assert collector_crossings(_box(20.0, 60.0, 80.0, 90.0), drains) == []
     assert collector_crossings([[20.0, 50.5], [80.0, 49.5], [80.0, 90.0], [20.0, 90.0]], drains) == [(20, 50)]
+
+
+def test_a_ring_near_a_supply_stroke_is_found_and_an_empty_one_meets_nothing() -> None:
+    """Feature 427 T09: `near_supply` builds the ring's line in one call - a ring across the canal meets its reach, one far off
+    does not, and an empty ring (which `linestrings` refuses) meets nothing, as the empty `LineString` did."""
+    ctx = RingContext(cell=1600.0, g=2.0, supplies=supply_strokes([{"poly": [[0.0, 50.0], [200.0, 50.0]], "w": 10.0}]))
+    assert ctx.near_supply([[40.0, 40.0], [60.0, 40.0], [60.0, 60.0], [40.0, 60.0]])
+    assert not ctx.near_supply([[40.0, 400.0], [60.0, 400.0], [60.0, 420.0], [40.0, 420.0]])
+    assert not ctx.near_supply([])

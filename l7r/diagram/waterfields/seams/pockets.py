@@ -16,7 +16,7 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
 from ..banks import (
     polyline_cum,
 )
-from ..frame import BANK_MARGIN, Poly, _f_at_u, _Frame, taper_w
+from ..frame import BANK_MARGIN, Poly, _Frame, f_at_u_of, taper_w
 
 _SHAPELY_LOADED = False
 
@@ -174,15 +174,21 @@ def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: floa
     dus = [F.to_uf(*p)[0] for p in dpts]
     du_lo, du_hi = min(dus), max(dus)
 
+    # the collector and the canal in the frame once, read at every station (feature 427 T09)
+    _d_uf = [F.to_uf(*p) for p in dpts]
+    _d_us, _d_fs = [q[0] for q in _d_uf], [q[1] for q in _d_uf]
+    _a_uf = [F.to_uf(*p) for p in a_pts]
+    _a_us, _a_fs = [q[0] for q in _a_uf], [q[1] for q in _a_uf]
+
     def drain_f(u: float) -> float:
-        fd = _f_at_u(F, dpts, u)
+        fd = f_at_u_of(_d_us, _d_fs, u)
         if fd is not None:
             return fd
         end = dpts[0] if abs(u - du_lo) < abs(u - du_hi) else dpts[-1]
         return F.to_uf(*end)[1]
 
     def canal_f(u: float) -> float:
-        fc = _f_at_u(F, a_pts, u)
+        fc = f_at_u_of(_a_us, _a_fs, u)
         return flo - span if fc is None else fc + 4 * g
 
     # The low bound is the collector's BANK IN FALL - `_drain_bank`, the very function `_carve`
