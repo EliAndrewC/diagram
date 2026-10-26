@@ -62,6 +62,7 @@ import claims_carry  # noqa: E402
 import claims_context  # noqa: E402
 import claims_labels  # noqa: E402
 import claims_stale  # noqa: E402
+import claims_flight  # noqa: E402
 import claims_triage  # noqa: E402
 import record_cache as rc  # noqa: E402
 import record_units as ru  # noqa: E402
@@ -895,16 +896,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         if not keys:
             print("claims-triage: no claim is owed a triage")
             return 0
-        print(
-            triage_bundle(
-                cur,
-                index,
-                store,
-                keys,
-                qdir,
-                Path(args.out) if args.out else DEFAULT_OUT / "claims-triage",
-            )
-        )
+        tout = Path(args.out) if args.out else DEFAULT_OUT / "claims-triage"
+        print(triage_bundle(cur, index, store, keys, qdir, tout))
+        claims_flight.mark(root, tout)  # in flight until `claims-triaged` records its reply (feature 426 D1)
         print(
             f"claims-triage: {len(keys)} claim(s); dispatch the `claims-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`"
         )
@@ -932,6 +926,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             + (f", {forced} owed in full: a removed block's words could not be shown" if forced else "")
             + "); the rest cleared"
         )
+        claims_flight.clear(root, Path(args.bundle))  # its reply is recorded (feature 426 D1)
         return 0
     if args.cmd == "report":
         print(report(cur, index, qdir, store, load_deferred(root / DEFERRED)))
@@ -968,6 +963,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 3
         _say(inherited_none(cur, [(k, due.get(k, "")) for k in keys]))
         print(bundle(root, cur, keys, out, [c for c in args.context.split(",") if c], [p for p in args.pages.split(",") if p]))
+        claims_flight.mark(root, out)  # in flight until `claims-checked` records its reply (feature 426 D1: `make land` waits only then)
         if not_owed:
             print(f"claims-bundle: re-check of {len(not_owed)} claim(s) not owed, because: {args.reason}")
         return 0
@@ -985,6 +981,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     for m in msgs:
         print(f"claims-checked: {m}")
     print(f"claims-checked: {sum(1 for k in units if k in new and new[k].get('code') == units[k]['code'])} of {len(units)} recorded")
+    claims_flight.clear(root, Path(args.bundle))  # its reply is recorded: no longer in flight (feature 426 D1)
     return 3 if bad else 0
 
 
