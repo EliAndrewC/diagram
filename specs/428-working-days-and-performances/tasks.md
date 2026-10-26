@@ -24,9 +24,9 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [x] quote-check confirmed
       - [x] source-applicability confirmed
       verify: DONE. landed: S2+C2: 0309 how often players performed, 0310 London's players (comparative), pointers in 0308/0214/0187; record-owed clean
-- [ ] T03 Implementation check, the reply on #20 and the report (D5; FR-003, FR-004)
+- [x] T03 Implementation check, the reply on #20 and the report (D5; FR-003, FR-004)
       research: rendering
-      verify: make impl-check F=428 reports nothing missing; the answer on #20 posted after escalation-check; report written
+      verify: DONE. landed: impl-check nothing missing; answer on #20 issuecomment-6419115459 (escalation-check rewrite applied); report written
 - [ ] GM review (make gm-reviewed F=428) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
