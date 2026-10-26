@@ -182,14 +182,14 @@
    "declared": "spec-fidelity"
   },
   "### T44 (T31 C2, the round arbiter's accept on ask:417-T31-C2-regression): the access tree drawn first; `settle_joins` deleted": {
-   "sha256": "c0e79867467e0ca22d2ceb16030fe351be164a7497a4d17c5bb48ad75cdf8284",
-   "verdict": "BLOCKED",
+   "sha256": "d4b42ccffd0926d30278e1cd377b0998949c3ef36de963df14ffa1cb7ee5c886",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
   },
   "### T45 (FR-005, the round arbiter's ruling on ask:417-T31-C2-regression): the needle rule asked where a tree lane is drawn": {
-   "sha256": "5c85e40e63a8a771d03dc1ffd619a5641be043d96c984fe4bd25b550b9032d34",
-   "verdict": "BLOCKED",
+   "sha256": "001d6fc54f30189900fbbae5ae9d3bee55d8792861abafe799de298e81a1fa72",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
   }
@@ -2931,6 +2931,52 @@
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
      "why": "The GM split the two cases in so many words (2026-10-25): numbers 'we simply have not looked into' get research first ('please actually perform research for any of those questions that we don't currently have answers for'). Only numbers researched with nothing found ('and therefore we picked something arbitrary') may be moved. T45 puts both under one permission and skips the research the GM asked for. Following the rule is not impossible, nothing else in the request implies the exception, and researching first does not defeat the request's purpose. Fix: 'if it is unresearched, research it first (record the result in the tunables record), then proceed by what the research finds; if it is ours, moving it is tried before anything more elaborate.'"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T44 (T31 C2, the round arbiter's accept on ask:417-T31-C2-regression): the access tree drawn first; `settle_joins` deleted",
+    "### T45 (FR-005, the round arbiter's ruling on ask:417-T31-C2-regression): the needle rule asked where a tree lane is drawn"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T44-a",
+     "summary": "Land the tree-first, no-joins patch per the arbiter's binding ruling, accepting 723775 newly red in the fresh block (the ruling's waiver) while the cohort, pinned rows and pool maps pass",
+     "class": "within",
+     "why": "FR-008 binds the fixed cohort, the pinned rows and the pool maps, all measured passing; D11 records the fresh rate either way and forbids work aimed at it, so a fresh-block move is recorded, not chased. The waiver is the arbiter's, not the plan's."
+    },
+    {
+     "id": "T44-b",
+     "summary": "settle_tree run once a map; settle_reach's call probed off and removed if redundant; settle_joins deleted with its tests if nothing else calls it",
+     "class": "within",
+     "why": "FR-004 and SC-002/SC-004: repair steps deleted, the engine smaller. Removal is conditioned on measurement (probe, no other callers), so nothing is removed on an assumption."
+    },
+    {
+     "id": "T44-c",
+     "summary": "The arbiter tooling fix: the roll census counts each roll once (the CLI test's re-roll of Inashiro no longer a second roll), a test pinning that",
+     "class": "within",
+     "why": "Corrects a double count so the census measures what it says. The earlier alternative 'or only the gate's own', which would have dropped rolls from the census and so narrowed what it counts, is gone; counting each roll once removes nothing the census should see."
+    },
+    {
+     "id": "T45-a",
+     "summary": "law.needle_loops asked of the candidate where lanes_of draws a tree lane, so two household ways never close a sliver",
+     "class": "within",
+     "why": "FR-005 verbatim: a rule asked only of a finished map is asked by the placer that could break it; the GM's 'place correctly in the first place' rule."
+    },
+    {
+     "id": "T45-b",
+     "summary": "The sliver threshold's status read first from the tunables record: if unresearched, research it first, record the result, then proceed by what it finds; if ours (researched, nothing found, picked), moving it is tried before anything more elaborate",
+     "class": "within",
+     "why": "The GM's 2026-10-25 amendment exactly: numbers not yet looked into are researched first, and only ones researched and found arbitrary are marked tweakable so we do not 'go through enormous iterations ... when the number is arbitrary'. The earlier text let an unresearched threshold be moved without research; that is fixed. A grounded threshold is not offered for moving at all."
+    },
+    {
+     "id": "T45-c",
+     "summary": "A moved threshold judged by the cohort, the pinned rows and the pool maps, never by seed 723775 passing; never iterated on 723775 inside C2",
+     "class": "within",
+     "why": "FR-008's landing test and D11's ban on seed-by-seed work and on work aimed at the fresh rate, applied literally."
     }
    ]
   }
