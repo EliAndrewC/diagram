@@ -1,0 +1,5 @@
+- 0309: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'how-often-players\|performances a year\|kaomise\|narimono\|hundred-day' l7r pool (no hit)
+- 0310: no code implements it - consumed by gm-assistant's money skill (a comparative question; never a Rokugani figure); searched: grep -rn 'Henslowe\|Globe\|Blackfriars\|Elizabethan' l7r pool (no hit)
+- 0308: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'troupe\|entertainer' l7r pool (glossary entries and the stage modal only; no code decides a troupe's calendar)
+- 0214: no code implements it - a pointer sentence to 0309; searched: grep -rn 'Kotohira\|playhouse' l7r pool (glossary entries only); make claims-owed: no claim owed
+- 0187: no code implements it - a pointer sentence to 0309; searched: grep -rn 'miyaji' l7r pool (the glossary term and the stage modal, which describe the stage, not how often it played); make claims-owed: no claim owed

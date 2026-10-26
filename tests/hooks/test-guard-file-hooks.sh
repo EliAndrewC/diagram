@@ -142,6 +142,10 @@ case8 "no permit: the root Makefile is refused" blocked "$FIX/Makefile" "a" "b" 
 grep -q 'make guard-edit FILE=' "$HOOK_ERR" && { echo "  ok      the refusal names make guard-edit"; PASS=$((PASS+1)); } || { echo "  FAIL    the refusal does not name make guard-edit"; FAIL=$((FAIL+1)); }
 L7R_PERMIT_NOW=$T0 python3 "$PERMIT" grant "$FIX/Makefile" "x" >/dev/null 2>&1 && { echo "  FAIL    a one-word reason was granted"; FAIL=$((FAIL+1)); } || { echo "  ok      a short reason is not granted"; PASS=$((PASS+1)); }
 python3 "$PERMIT" grant "$FIX/README.md" "documenting the fixture" >/dev/null 2>&1 && { echo "  FAIL    a non-guard file was granted"; FAIL=$((FAIL+1)); } || { echo "  ok      a non-guard file is not granted"; PASS=$((PASS+1)); }
+# feature 429: the guards live in scripts/hooks/ since 2026-10-08, and the permit's pattern still read scripts/<name>-hooks.sh,
+# so `make guard-edit` refused every hook file as "not a guard file" while the guard itself demanded the permit.
+python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import hm_guard_permit as p; sys.exit(0 if p.is_guard("/r/scripts/hooks/pair-hooks.sh") and not p.is_guard("/r/tests/hooks/test-pair-hooks.sh") else 1)' "$(dirname "$PERMIT")" \
+  && { echo "  ok      a hook in scripts/hooks/ is a guard the permit grants"; PASS=$((PASS+1)); } || { echo "  FAIL    a hook in scripts/hooks/ is not a guard to the permit"; FAIL=$((FAIL+1)); }
 L7R_PERMIT_NOW=$T0 python3 "$PERMIT" grant "$FIX/Makefile" "adding a target for a new operation" >/dev/null
 rm -rf "$GUARD_LOG_ROOT"/*
 case8 "a live permit: the same edit is accepted" ok "$FIX/Makefile" "a" "b" "$((T0 + 60))"

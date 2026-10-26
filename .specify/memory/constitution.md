@@ -1,7 +1,10 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.31.0 → 2.32.0
+Version change: 2.32.0 → 2.32.1
+
+Version 2.32.1 (2026-10-26): Governance's versioning policy states that upkeep takes no version, the GM's
+2026-09-06 words, moved out of a session memory when project memories were retired. PATCH (a clarification).
 
 Version 2.32.0 (amended 2026-10-25, feature 417 FR-003): a new Principle XIX, "Placed Right, Never Repaired" - every rule a
 map keeps is one predicate, asked by its placer of each candidate before placing; no place-then-repair; finished-map checks
@@ -2300,6 +2303,10 @@ document wins; where this document is silent, defer to the project's
 - MINOR: A new principle or section is added, or an existing principle is
   materially expanded.
 - PATCH: Clarification, wording, typo fixes, non-semantic refinements.
+- UPKEEP is no amendment and takes no version: a stale example, a retired command name, a moved path. Bump only
+  when a principle's OBLIGATION changes - added, removed, widened, narrowed, or its enforcement mechanism changed; if
+  unsure, ask whether a session's behavior would have to differ (GM 2026-09-06: *"I appreciate the constitution
+  updates but don't think it needs a new version bump just for this level of upkeep / editing."*)
 
 **Compliance**
 - Every plan generated via `/speckit-plan` includes a Constitution Check
@@ -2317,4 +2324,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.32.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-25
+**Version**: 2.32.1 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-26

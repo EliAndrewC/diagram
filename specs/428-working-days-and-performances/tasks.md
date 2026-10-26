@@ -16,14 +16,14 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: the new working-days question and 0307 (or its sibling) written and checked; record-owed clean for them
-- [ ] T02 S2+C2: Q3 performances, Japan and China, and England as a comparative question (D3, D4; FR-001)
+- [x] T02 S2+C2: Q3 performances, Japan and China, and England as a comparative question (D3, D4; FR-001)
       research: physical
       - [x] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: the new performances question and the comparative England question written and checked; record-owed clean for them
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed: S2+C2: 0309 how often players performed, 0310 London's players (comparative), pointers in 0308/0214/0187; record-owed clean
 - [ ] T03 Implementation check, the reply on #20 and the report (D5; FR-003, FR-004)
       research: rendering
       verify: make impl-check F=428 reports nothing missing; the answer on #20 posted after escalation-check; report written

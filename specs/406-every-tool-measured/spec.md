@@ -7,6 +7,9 @@
 **Status**: In progress
 
 **Approved**: the GM, 2026-10-19, "Yes, go ahead and do this as a process feature. So go ahead and file it and then fully implement it. And let me know when it is landed on main. Thanks."
+**Approved**: the GM, 2026-10-26, "Sounds great. I approve all of that. So please do it end to end. Thanks."
+
+Reopened 2026-10-26 for T09, the fix-yield re-run a retired session memory carried.
 
 **Affects**: tooling, review process
 

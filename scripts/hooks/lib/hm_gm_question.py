@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+"""Does the turn's final message put a question or a decision to the GM, unfiltered? (feature 429 FR-002, D168)
+
+`escalation-hooks.sh` arms on a review dispatch, so a question with no review behind it reached the GM unfiltered:
+on 2026-10-25 a feature 417 report asked him whether a finding applied and which of two placements to take, and he
+answered "that is the kind of question that our processes are supposed to answer". This decider reads the final
+message (the Stop payload's `last_assistant_message`) for an ASK, and the transcript for an `escalation-check`
+dispatched since the GM's last message.
+
+The detector was measured on past final messages before it shipped (`specs/429-memory-rules-as-guards/research.md`):
+a line outside code, block quotes and quoted text that carries an ask phrase, or ends in "?" with "you"/"your"/"I".
+
+Usage: hm_gm_question.py judge < stop payload  ->  prints the first asking line and exits 1 when the turn owes the
+filter; exits 0 otherwise.
+"""
+
+from __future__ import annotations
+
+import json
+import re
+import sys
+
+FENCE = re.compile(r"```.*?```", re.S)
+CODE = re.compile(r"`[^`\n]*`")
+QUOTED = re.compile(r'"[^"\n]*"|“[^”\n]*”')
+ASK = re.compile(
+    r"\b(should I|shall I|do you want|would you (like|prefer|rather)|want me to|which (one|of|would|do you)|your call"
+    r"|or should (I|we)|do you agree|is that (ok|okay|right|what you)|can you confirm|let me know (if|whether|which)"
+    r"|say (go|the word|yes)|for you to (decide|approve|choose|pick|confirm|rule)|approve or decline|ask (of )?you"
+    r"|needs your (words|approval|decision|ruling|go-ahead|call|answer)|waiting (on|for) (you|your)|yours to (decide|call|choose)|if you (want|like|prefer)\b[^.]*\b(I|me)\b)\b",
+    re.I,
+)
+FILTER = "escalation-check"
+
+
+def asks(text: str) -> list[str]:
+    """Every line of the message that puts a question or decision to its reader."""
+    hits = []
+    for line in FENCE.sub("", text or "").splitlines():
+        s = line.strip()
+        if s.startswith(">"):
+            continue
+        s = QUOTED.sub("", CODE.sub("", s))
+        if ASK.search(s) or (s.endswith("?") and re.search(r"\b(you|your|I)\b", s)):
+            hits.append(s[:200])
+    return hits
+
+
+def _records_backward(path: str, chunk: int = 1 << 20):
+    """The transcript's JSON records, last first, read from the end (a main transcript runs to hundreds of MB)."""
+    with open(path, "rb") as f:
+        f.seek(0, 2)
+        pos, tail = f.tell(), b""
+        while pos > 0:
+            step = min(chunk, pos)
+            pos -= step
+            f.seek(pos)
+            lines = (f.read(step) + tail).split(b"\n")
+            tail = lines.pop(0)
+            for raw in reversed(lines):
+                if raw.strip():
+                    try:
+                        yield json.loads(raw)
+                    except Exception:
+                        continue
+        if tail.strip():
+            try:
+                yield json.loads(tail)
+            except Exception:
+                pass
+
+
+def _is_gm_message(rec: dict) -> bool:
+    if rec.get("type") != "user" or rec.get("isMeta"):
+        return False
+    c = (rec.get("message") or {}).get("content")
+    if isinstance(c, str):
+        return not c.startswith("<")  # a hook or command echo, not the GM's words
+    return isinstance(c, list) and any(isinstance(x, dict) and x.get("type") == "text" for x in c)
+
+
+def filtered_since_gm(path: str) -> bool:
+    """Was `escalation-check` dispatched after the GM's last message?"""
+    try:
+        for rec in _records_backward(path):
+            if _is_gm_message(rec):
+                return False
+            if rec.get("type") == "assistant":
+                for x in (rec.get("message") or {}).get("content") or []:
+                    if isinstance(x, dict) and x.get("type") == "tool_use" and x.get("name") in ("Agent", "Task"):
+                        if (x.get("input") or {}).get("subagent_type") == FILTER:
+                            return True
+    except OSError:
+        return True  # nothing to read: never refuse on a transcript the hook cannot see
+    return False
+
+
+def main() -> int:
+    if sys.argv[1:2] != ["judge"]:
+        print(__doc__, file=sys.stderr)
+        return 2
+    try:
+        payload = json.load(sys.stdin) or {}
+    except Exception:
+        return 0
+    hits = asks(payload.get("last_assistant_message") or "")
+    if not hits or filtered_since_gm(payload.get("transcript_path") or ""):
+        return 0
+    print(hits[0])
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

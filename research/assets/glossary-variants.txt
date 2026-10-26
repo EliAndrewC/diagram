@@ -24,6 +24,8 @@ adepts	adept
 adlittoral	adlittoral
 administrative village	administrative village
 administrative villages	administrative village
+admiral's	Admiral's men
+admiral's men	Admiral's men
 admonition arch	admonition arch
 admonition arches	admonition arch
 admonition pavilion	admonition pavilion
@@ -227,6 +229,7 @@ bed load	bedload
 bed shear stress	bed shear stress
 bedload	bedload
 before modern times	modern times
+beile	beile
 beishan mianshui	beishan mianshui
 beitang	beitang
 beka cart	beka cart
@@ -481,6 +484,7 @@ chaya	chaya
 chemically hydrolyzed soy protein	hydrolyzed soy protein
 chemically hydrolyzed soy proteins	hydrolyzed soy protein
 chen fu	Chen Fu
+chen hour	hour of chen
 cheng-zhu	Cheng-Zhu Neo-Confucianism
 cheng-zhu neo-confucianism	Cheng-Zhu Neo-Confucianism
 chenghe	chenghe
@@ -1807,7 +1811,9 @@ hotei's	Hotei
 hotoke	hotoke
 hou ji	Hou Ji
 houlongshan	houlongshan
+hour of chen	hour of chen
 hour of xu	hour of xu
+hour of you	hour of you
 house chancellery	House Chancellery
 house manager	yamori
 house manager's	yamori
@@ -2207,6 +2213,7 @@ kanto school's	Kanto school
 kanto-school	Kanto school
 kantō	Kanto
 kaogongji	Kaogongji
+kaomise	kaomise
 kara-hafu	kara-hafu
 kara-hafu-gabled	kara-hafu
 karahafu	karahafu
@@ -2308,6 +2315,7 @@ kin	kin
 kinai	Kinai
 king post	king post
 king posts	king post
+king's men	King's men
 king-post	king post
 kinki	Kinki
 kinki region	Kinki
@@ -2528,7 +2536,6 @@ lianguang	Liang-Guang
 liao	Liao dynasty
 liao dynasty	Liao dynasty
 liao dynasty's	Liao dynasty
-liberties	liberty
 liberty	liberty
 licensed quarter	yukaku
 licensed quarters	yukaku
@@ -2735,6 +2742,7 @@ mexican dollar	Mexican dollar
 mexican dollars	Mexican dollar
 mi	material index
 miaohui	miaohui
+michaelmas	Michaelmas
 michikiri	michikiri
 micro-high	micro-high
 micro-high ground	micro-high ground
@@ -3371,6 +3379,7 @@ principal shrine	principal shrine
 principal shrines	principal shrine
 prison god	jail-god
 private salt	private salt
+privy council	Privy Council
 program item	program item
 program items	program item
 proportional flume	division flume
@@ -3930,6 +3939,7 @@ shizai	shizai
 shizuoka method	Shizuoka method
 sho	sho
 shobodan	shobodan
+shochiku	Shochiku
 shochu	shochu
 shogun	shogun
 shogunal village	shogunal village
@@ -5007,6 +5017,7 @@ yotsu	yotsu
 yotsu-takara	Yotsuho silver
 yotsuho	Yotsuho silver
 yotsuho silver	Yotsuho silver
+you hour	hour of you
 youfang	aburaya
 young men's association	young men's association
 young men's associations	young men's association

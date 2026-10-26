@@ -60,6 +60,60 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
+  },
+  "## T01 - Q1 working days and Q2 terms of engagement (D1, D2)": {
+   "sha256": "9bf6069aaeef59be8e286c864fdc6c954e924b855e64ee807c15d882cb3e999d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "87ebef2fb2515e6e04eac5f80f633c26148805f496708c08a836a8c91748828f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "0282a8e4051bd52b68c004dc3d78920fd469d287e3ee1169f5d50450f288aad6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - Q3 performances and England (D3, D4)": {
+   "sha256": "a5947f6684fc12036ee206d5644a99f68d22fd8809b672867544ea63fe12f383",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "3a41c2f6a4ede57c638338e63ef3600a28e59a7e1374bce8ed35090e1a9a0447",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "de6229f7142d1423f86a2a3155199ac2117c19041e3385757f920cf88a9e75cb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the implementation check and the reply (D5)": {
+   "sha256": "36ebb0c0729d6338d0f7bab62dca5478f09644d9fca6626835676819556f336b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "15035d9ad038c516e53af6eaff88ef007b8b2c3455ec2ea1d013c8776921686a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "ed07cce04f7eb057f1bd369859c2f744f2def76e29cb7b8179a06e9c612170c9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -156,6 +210,71 @@
      "summary": "implementation-check.md holds each touched question's line (make impl-check); the reply gives each figure with fragment file and verdict, the open leads, the 250-day convention's standing; GM findings through escalation-check first.",
      "class": "within",
      "why": "Matches FR-003 and FR-004 line for line; reporting the 250-day convention's standing answers the request's stated 'why it matters'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## T01 - Q1 working days and Q2 terms of engagement (D1, D2)",
+    "## T02 - Q3 performances and England (D3, D4)",
+    "## T03 - the implementation check and the reply (D5)",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-scope",
+     "summary": "T01 covers Q1 (working days per kind of worker) and Q2 (terms of engagement for guards and scribes) together; goal is to keep, label or replace the 250-day convention.",
+     "class": "within",
+     "why": "Q1 and Q2 are asked in full; the request's 'Why it matters' names the 250-day convention as what the answers bear on. Nothing in Q1/Q2 is dropped: 'each kind of worker' and 'guards and scribes' carry the request's lists."
+    },
+    {
+     "id": "T01-attested-only-for",
+     "summary": "Each figure is ATTESTED ONLY FOR its place, time and kind of worker; an assumed working year is never reported as a count.",
+     "class": "within",
+     "why": "The request asks for figures 'with place and date' per kind of worker and records that 250 was found NOT ATTESTED; scoping figures to their attestation serves that."
+    },
+    {
+     "id": "T01-exit-silent-and-furukawa",
+     "summary": "A figure no source gives is SILENT with its search; 古川's figures are cited only through the summaries that relay them.",
+     "class": "within",
+     "why": "A citation-form rule under the record's citation rules, not a narrowing of what is asked; every requested figure is still either answered or reported SILENT."
+    },
+    {
+     "id": "T01-order-budget",
+     "summary": "S1 write then C1 check in this clone; one write and one check session; done when make record-owed is clean for the touched questions.",
+     "class": "within",
+     "why": "Workflow and completion measure; no change to the questions' content."
+    },
+    {
+     "id": "T02-scope-and-canon",
+     "summary": "T02 covers Q3 (performance frequency by kind of troupe, idle months and closures) beside London's players and against the canon's county troupe.",
+     "class": "within",
+     "why": "Q3 (a)-(d) asks exactly this, with the Globe as the GM's comparison and l7r.md's Entertainers passage named as the canon beside it."
+    },
+    {
+     "id": "T02-england-comparative",
+     "summary": "England's evidence is marked comparative, never a Rokugani figure; Japan and China each ATTESTED ONLY FOR its city, time and kind of troupe.",
+     "class": "within",
+     "why": "The request labels the Globe 'the GM's comparison' and sets region order Japan, China, then England; treating it as comparison is the request's own framing."
+    },
+    {
+     "id": "T02-canon-contradiction-escalated",
+     "summary": "A canon contradiction is reported, never softened, and goes to the GM through escalation-check.",
+     "class": "within",
+     "why": "The request sets canon 'beside' the question; surfacing a conflict to the GM rather than resolving it adds no behavior and narrows nothing."
+    },
+    {
+     "id": "T03-close",
+     "summary": "After T01 and T02: make impl-check F=428, the reply on #20, make feature-report; the GM rules on the canon's county troupe via escalation-check.",
+     "class": "within",
+     "why": "Closing the request with a verifiable reply answers the questions asked; the GM ruling is the escalation of a reported finding, not new scope."
     }
    ]
   }
