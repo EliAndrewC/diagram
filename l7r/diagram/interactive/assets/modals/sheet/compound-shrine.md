@@ -22,9 +22,9 @@ Guesses:
 
 Depiction: The plan draws one shrine inside every compound, since what held across offices is that every one had a shrine, not
 how many it kept. It stands in a corner of the grounds, where a household kept its god, beside a tree: a household might keep its god at an old
-tree in place of a shrine, and the plan gives the shrine its tree as well. Which form a second kami takes is picked at
-random for each plan. Where its hall serves more than one
-kami, they are housed in one of three forms - altars side by side, as on a household's altar shelf of three shrines; one altar for the main kami, as on a household's one-shrine shelf; or a
+tree in place of a shrine, and the plan gives the shrine its tree as well.
+Where a compound's shrine serves more than one
+kami, they are housed in one of three forms, picked at random for each plan - altars side by side, as on a household's altar shelf of three shrines; one altar for the main kami, as on a household's one-shrine shelf; or a
 second small shrine - and each altar is drawn as a feature of its own, as is any torii before it.
 
 Name: compound shrine
