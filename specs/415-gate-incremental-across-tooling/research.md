@@ -56,14 +56,15 @@ own change did not move `gate_config` and which had `scripts/` changes since its
 scripts/)", the engine file `l7r/diagram/tools/cohort_audit.py`. It was the landing's third call; the two before it were
 refused by the cheap checks (British spellings) in under a minute each, as T26's fourth attempt was the one R1 timed.
 
-The landing took **5.1 minutes** against R1's 8.8, 04:20:05 to 04:25:12 UTC:
+Observed 2026-10-25, method: the landing's log and run record, as above. The landing took **5.1 minutes** against R1's 8.8,
+04:20:05 to 04:25:12 UTC:
 - the cheap refusals and the gate's preflight (`make quick`): ~45 s, preflight 21 s of it;
 - the gate's test phase, 2,023 tests selected and 1,330 tooling tests reused: pytest 151 s, the hook suites 51 s, the floors 12 s
   (the gate 224 s in all, against T26's 280 s test phase alone);
 - the landing cohort ran beside the gate and was done when it was;
 - the claims round, the push and the tick: ~37 s; the fresh block of 48 rolled after the push, off the landing's path.
 
-Since then (`make gate-costs`, 2026-10-25 to 2026-10-26 15:03Z), 39 of 45 gate runs still planned full. Their reasons: 11 a pool
+Observed 2026-10-26, method: `make gate-costs` and each run record's `plan_reason`, 2026-10-25 to 2026-10-26 15:03Z: 39 of 45 gate runs still planned full. Their reasons: 11 a pool
 manifest (`inashiro.json`), 7 a `CLAUDE.md` under `tests/`, 6 an import-time line, 5 the top-level or ci `conftest.py`, 5 a
 hook suite under `tests/hooks/`, 3 no baseline, 2 the gate's configuration. Feature 430 T01-T02 (landed 2026-10-26 14:51Z)
 answers the manifests, the docs and the deeper test-tree files, the hook suites among them (T08); the top-level `conftest.py`
