@@ -563,7 +563,8 @@ class Build:
                     out += [_ENTRY_H3.sub(r"<h5\1</h5>", self.rewrite(self.entry_html(i), None, "all.html", f"{store.REGISTRY_DIR}/ {i.id}", single=True), count=1) for i in entries]
         out.append("</section>\n")
         toc.append("</ul></nav>\n")
-        head = f'<h1 id="record">{TITLE}</h1>\n<p><em>Every question the maps were researched from, every note behind them and every source they cite, on one page. The same record, a page per question: <a href="index.html">the contents</a>.</em></p>\n'
+        opening = ct.load_opening(self.record_dir)  # what the research is for, as the home page opens (425)
+        head = f'<h1 id="record">{TITLE}</h1>\n{opening}\n<p><em>Every question, every note and every source on one page. The same record, a page per question: <a href="index.html">the contents</a>.</em></p>\n'
         out[:0] = [head, "".join(toc)]  # the page handed over in its pieces, which shell_utf8 consumes (features 323, 327: the build's peak)
         self.files.set_raw("all.html", sp.shell_utf8(TITLE + " - the whole record", "all.html", "", out, lazy_glossary=True))
 

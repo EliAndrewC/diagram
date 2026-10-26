@@ -89,6 +89,11 @@ def test_the_halves_follow_the_table_of_contents_and_open_on_the_settlement_tier
     title = home.index('<h1 id="contents">')  # the sidebar links all.html too: read the page's own body
     maps, money = home.index('href="https://l7r-gm-assistant.fly.dev/maps"', title), home.index('href="https://l7r-gm-assistant.fly.dev/money"', title)
     assert max(maps, money) < home.index('href="all.html"', title), "the home page opens with what the research is for (424)"
+    one = built["all.html"]
+    title = one.index('<h1 id="record">')
+    maps, money = one.index('href="https://l7r-gm-assistant.fly.dev/maps"', title), one.index('href="https://l7r-gm-assistant.fly.dev/money"', title)
+    assert max(maps, money) < one.index('href="index.html"', title), "all.html opens the same way (425)"
+    assert "the maps were researched from" not in one, "the maps-only line is gone"
 
 
 def test_every_section_lists_its_questions_by_level_then_number(built: dict[str, str], record: store.qs.Record) -> None:
