@@ -173,9 +173,11 @@ def known_drifts(cx: Any, root: Path) -> dict[str, str]:  # noqa: ANN401 - `cx` 
     cand: dict[str, tuple[str, str]] = {}
     for key, v in index.items():
         row = cur.get(key)
-        m = _TASK_NAMED.search(row.claim.account) if row is not None and v.get("verdict") == "DRIFTED" else None
-        if m is not None:
-            cand[key] = (m.group(1), m.group(2))
+        # ...the LAST task the text names: "a departure the code keeps until feature NNN Tnn" closes the claim, and a task named
+        # earlier says why the code is so (feature 417 T50: "the track lays no spur (feature 417 T50) ... until feature 417 T32")
+        found = _TASK_NAMED.findall(row.claim.account) if row is not None and v.get("verdict") == "DRIFTED" else []
+        if found:
+            cand[key] = found[-1]
     # ...and a DRIFTED claim the round arbiter ACCEPTED is known on that accept alone, its own text naming no task: the ruling is
     # the binding answer, and a claim reworded to name its task owes another round its ruling closed (feature 417 T38: ask:417-T38-compound-drifts
     # accepted eleven, and two whose text named no task stayed introduced)
@@ -204,6 +206,10 @@ def known_drifts(cx: Any, root: Path) -> dict[str, str]:  # noqa: ANN401 - `cx` 
         same = cores.get(uid) == index[key].get("core") or ACCEPTED in index[key].get("note", "")
         if rows[(feat, task)] and re.search(rf"(?<![\w.]){re.escape(name)}(?!\w)", rows[(feat, task)]) and same:
             out[key] = f"{feat} {task}"
+        elif ACCEPTED in index[key].get("note", ""):
+            # ...and a claim whose named row does not name its unit is still known on the arbiter's accept, as one naming no task
+            # is (feature 417 T50: ask:417-T50-claims accepted two, and the one whose text named T50 first stayed introduced)
+            out[key] = "accepted by the round arbiter"
     return out
 
 
