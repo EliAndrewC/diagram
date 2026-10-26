@@ -34,7 +34,6 @@ from .settle import (
     fouled_segment,
     lane_owner,
     settle_fragments,
-    settle_joins,
     settle_network,
     settle_reach,
     unsettled,
@@ -43,7 +42,7 @@ from .tree import settle_defer, tree_faults
 
 LAST_RESORT_PASSES = 8
 """How many times the last resort drops and re-asks before it refuses. Each pass drops at least one ordinary lane, or it
-ends; the steps between passes add tread only to close a join (`settle.settle_joins`) or as tree lanes, so this is a
+ends; the steps between passes add tread only as tree lanes, so this is a
 bound, not a tuning - the settle's own `SETTLE_ROUNDS`."""
 
 
@@ -162,9 +161,7 @@ def last_resort(s: Any) -> int:
             dropped += len(bad)
             settle_network(s)
         for step in (
-            settle_joins,
             settle_reach,
-            settle_joins,
             settle_knots,
             settle_defer,
             settle_network,

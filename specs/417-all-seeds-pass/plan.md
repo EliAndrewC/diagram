@@ -461,6 +461,23 @@ or the step is set down with its seeds and ruled (`make arbiter-ask`). Rendering
   Rendering: none.
 
 
+### T44 Approach (checklist part A)
+
+1. **The goal, in the world.** The households' ways stand before any other lane is laid, so a link never loses the way it joined
+   and nothing carries it back afterwards.
+2. **The constraints.** D11, D35, FR-008; the round arbiter's accept on ask:417-T31-C2-regression (binding, with seed 723775's waiver).
+3. **Where each comes from.** G: the GM 2026-10-25 (repairs replaced by placing correctly). O: the C2 trace and probes.
+4. **Do they describe the world here?** Measured: the trace on seed 25; the landing cohort; the fresh block; the pool gate.
+5. **The order.** After the arbiter's tooling fix (landed: a pool map obtained once a test); before T45.
+6. **The exits.** FR-008 green: landed with the fresh rate recorded (7 of 48). Red: set down.
+7. **The search smell.** One probe the arbiter's step (b) named - `settle_reach`'s own `settle_tree` call off - measured
+   2026-10-26 on the fresh block from seed 723759: 8 of 48, seed 723790 newly failing; restored, 723790 passes. The call stays:
+   the tree is drawn again after the cuts, not merely twice.
+8. **The budget.** One landing.
+9. **Done, measured.** `settle_tree` first in `stage_web`, `settle_joins` and its closure gone, `make land` green.
+10. **Before moving a constant.** n/a: `JOIN_BACK_PAD_FT` goes with its only user.
+11. **Before fitting things into room.** n/a.
+
 ### T45 (FR-005, the round arbiter's ruling on ask:417-T31-C2-regression): the needle rule asked where a tree lane is drawn
 
 - **Approach**: `law.needle_loops` asked of the candidate where `lanes_of` draws a tree lane, so two household ways never close a

@@ -311,18 +311,6 @@ def test_an_end_on_the_connectors_tread_is_drawn_where_the_seating_judged_it() -
         assert lanes[0]["pts"][-1] == end, (tread, lanes)
 
 
-def test_the_tree_is_asked_again_with_its_ends_joined_as_the_web_joins_them() -> None:
-    """Feature 317, plan D6: a free end that stops short of a way it makes for is carried onto it (`law.near_misses`, as the
-    settle's `settle_joins` carries it) - feature 314 R12's corridor start, 15 ft from another's end, closed a sliver once
-    joined - so `admits` asks the needle of the joined tree too."""
-    lanes = [{"pts": [[0.0, 0.0], [300.0, 0.0]], "w": 3.0}, {"pts": [[150.0, 60.0], [110.0, 12.0]], "w": 3.0}]
-    trial = {"meta": dict(_GEN), "lanes": lanes, "houses": []}
-    joined = tree.as_joined(trial, lanes)
-    assert [list(q) for q in joined[0]["pts"]] == lanes[0]["pts"], "a lane whose ends make for no way is left as it was"
-    assert len(joined[1]["pts"]) == 3 and abs(joined[1]["pts"][-1][1]) < 1e-6, "the end carried onto the way it made for"
-    assert lanes[1]["pts"] == [[150.0, 60.0], [110.0, 12.0]], "the trial's own lanes untouched"
-
-
 def test_a_corridor_whose_joined_tree_closes_a_sliver_is_refused(monkeypatch) -> None:  # noqa: ANN001
     """Feature 317, plan D6: lawful as laid, but a sliver once the web joins the ends - refused at seating."""
     M = _tree()

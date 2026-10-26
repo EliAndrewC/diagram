@@ -97,16 +97,12 @@ from ..tree import settle_defer as settle_defer
 from ..tree import settle_tree as settle_tree
 from ..tree import tree_faults as tree_faults
 from . import ends, lawful, shapes, stage  # noqa: F401 - the submodules by name: a test patches a name where it is looked up
-from .ends import JOIN_BACK_PAD_FT as JOIN_BACK_PAD_FT
 from .ends import TRIM_GRAIN_FT as TRIM_GRAIN_FT
-from .ends import _join_admitted as _join_admitted
 from .ends import connector_component as connector_component
 from .ends import settle_dangling as settle_dangling
 from .ends import settle_ends as settle_ends
 from .ends import settle_fragments as settle_fragments
-from .ends import settle_joins as settle_joins
 from .ends import settle_network as settle_network
-from .ends import with_edits as with_edits
 from .lawful import Lawful as Lawful
 from .lawful import corridor_on_lawful_ground as corridor_on_lawful_ground
 from .shapes import CROSSING_GAP_FT as CROSSING_GAP_FT

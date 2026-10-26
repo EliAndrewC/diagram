@@ -209,26 +209,6 @@ def test_the_settled_web_breaks_no_rule_of_the_law(monkeypatch: pytest.MonkeyPat
 # ---- joins, fragments, widths (homes H37-H40, H42) -------------------------------------------------------------------
 
 
-def test_a_join_that_stopped_short_is_carried_onto_its_way() -> None:
-    shy = law.JOIN_REACH_FT - 3.0  # inside the page's 25 ft join reach (0081)
-    s = _S([CONN, [(0.0, 0.0), (0.0, 400.0)], [(200.0, 100.0), (shy, 100.0)]])
-    assert settle.settle_joins(s) == 1
-    assert _pts(s, 2)[-1] == (0.0, 100.0) and law.near_misses(s.M) == []
-    assert settle.settle_joins(s) == 0
-    both = _S([CONN, [(0.0, 0.0), (0.0, 400.0)], [(300.0, 0.0), (300.0, 400.0)], [(shy, 100.0), (300.0 - shy, 100.0)]])
-    assert settle.settle_joins(both) == 1 and settle.settle_joins(both) == 1, "one end a round"
-    assert law.near_misses(both.M) == []
-
-
-def test_a_piece_the_ink_would_drop_is_joined_first() -> None:
-    """Cohort seed 40: two pieces within the web's 30 ft join reach but not touching; the network rule at the ink tolerance
-    dropped them and stranded two farmhouses. Settled, they are joined and kept."""
-    s = _S([CONN, [(0.0, 0.0), (0.0, 400.0)], [(200.0, 200.0), (25.0, 200.0)], [(200.0, 200.0), (200.0, 350.0)]])
-    settle.settle_joins(s)
-    assert settle.settle_network(s) == 0
-    assert len(s.M["lanes"]) == 4 and law.lane_networks(s.M) == 1
-
-
 def test_a_crossing_no_deck_seats_is_squared_and_else_cut() -> None:
     """Ways W12/W13: `law.undeckable_at` is the placer's own deck solve, asked of a lane by `_crossing_fault`. A shallow crossing
     of a field ditch is squared where a square deck seats; one that cannot seat even square - its landing on flooded rice - is

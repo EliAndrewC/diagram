@@ -264,43 +264,6 @@ def test_a_run_is_squared_only_where_water_comes_within_the_squaring_reach() -> 
     assert ok.squared(far) == settle.square_run(s.M, far) == far
 
 
-def test_an_ordinary_join_that_would_break_a_rule_against_the_tree_is_taken_back_instead(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 287 wave 6 (cohort seed 25 under the probes): a join closed onto the tree that the deference then cut again took
-    turns with it until the rounds ran out - so an ordinary lane whose join would break a rule against a tree lane
-    (`tree.tree_faults`) is taken back out of the join's reach instead; a tree lane's own join is made."""
-    END = 200.0 - (law.JOIN_REACH_FT - 5.0)  # an end 5 ft inside the join reach of the way at y = 200
-    s = _S([CONN, [(-100.0, 0.0), (-100.0, END)], [(-200.0, 200.0), (0.0, 200.0)]])
-    assert [i for i, _e, _f in law.near_misses(s.M)] == [1]
-    monkeypatch.setattr(settle.ends, "tree_faults", lambda M: [(1, (-100.0, 200.0))] if len(M["lanes"][1]["pts"]) > 2 else [])
-    assert settle.settle_joins(s) == 1
-    got = _pts(s, 1)
-    assert got[0] == (-100.0, 0.0) and got[-1][1] == pytest.approx(END - law.JOIN_REACH_FT - settle.JOIN_BACK_PAD_FT), "taken back"
-    t = _S([CONN, ([(-100.0, 0.0), (-100.0, END)], {}), [(-200.0, 200.0), (0.0, 200.0)]])
-    t.M["lanes"][1]["role"] = co.ACCESS_ROLE
-    assert settle.settle_joins(t) == 1 and _pts(t, 1)[-1] == (-100.0, 200.0), "a tree lane joins"
-
-
-def test_an_ordinary_join_the_matrix_refuses_is_taken_back_instead() -> None:
-    """Feature 318 (Kuwabata): the law called the span walkable (its centerline 4 ft off a garden) and the matrix refused the
-    tread at the write, every round, until the web was refused - so an ordinary join the matrix refuses is taken back out of
-    the join's reach, as one deferring to the tree is; a tree lane's join is never taken back."""
-    END = 200.0 - (law.JOIN_REACH_FT - 5.0)  # an end 5 ft inside the join reach of the way at y = 200
-
-    class _Refuses(_S):
-        def admits(self, key, rec, ignore=None):
-            return len(rec["pts"]) <= 2
-
-    s = _Refuses([CONN, [(-100.0, 0.0), (-100.0, END)], [(-200.0, 200.0), (0.0, 200.0)]])
-    assert [i for i, _e, _f in law.near_misses(s.M)] == [1]
-    assert settle.settle_joins(s) == 1
-    got = _pts(s, 1)
-    assert got[-1][1] == pytest.approx(END - law.JOIN_REACH_FT - settle.JOIN_BACK_PAD_FT) and not law.near_misses(s.M), "taken back"
-    t = _Refuses([CONN, ([(-100.0, 0.0), (-100.0, END)], {}), [(-200.0, 200.0), (0.0, 200.0)]])
-    t.M["lanes"][1]["role"] = co.ACCESS_ROLE
-    settle.settle_joins(t)
-    assert _pts(t, 1)[:2] == [(-100.0, 0.0), (-100.0, END)], "a tree lane is never taken back (its join is left to the write)"
-
-
 def test_a_house_crowded_with_ends_keeps_the_trees_and_loses_an_ordinary_one() -> None:
     """Homes H41 under the tree (feature 287 wave 6): a house discharging three free ends keeps the tree lane's - never cut -
     and the settle cuts the ordinary end that is farther than the nearer ordinary one; a violator the tree names is an

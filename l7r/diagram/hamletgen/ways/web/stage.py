@@ -35,6 +35,7 @@ from ..sweeps import (
     _sweep_dangling_ends,
     _sweep_doubled_tails,
 )
+from ..tree import settle_tree
 from .skeleton import _lay_skeleton, _web_cut_lines
 from .tidy import tidy_lane_ends
 
@@ -159,6 +160,12 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # A ROW VILLAGE WITH PLANNED STREETS lays those, not a skeleton and cuts sized on the house cloud (feature 291 plan
     # D17): the streets are laid below, once the steadings' fabric is known, and the stragglers and door paths still run.
     _rows = plan.settlement_form == "linear" and bool(getattr(s, "_row_streets", None))
+    _pass("tree")
+    # THE HOUSEHOLDS' WAYS FIRST (feature 417 T44, T31 C2): every way the seating judged (`tree.settle_tree`) is drawn before the
+    # skeleton, the cuts, the orphan links and the door paths, so they are laid onto a network that stands - laid after them,
+    # the tree's own cuts (`settle_defer`) took away what an orphan link had joined, and the last resort carried it back
+    # (`settle_joins`, measured needless once the tree comes first: 54 of 54)
+    settle_tree(s)
     _pass("skeleton")
     if not _rows:
         _lay_skeleton(s, plan, frame, arcs, stands)

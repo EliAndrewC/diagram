@@ -22,7 +22,7 @@ from ..squaring import (
     cut_at_shallow_crossing,
 )
 from ..sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
-from ..tree import set_corridor, tree_faults
+from ..tree import set_corridor
 from .lawful import Lawful
 from .shapes import JOIN_ROLE, _as_end, _back, _ordinary, apply_pieces, reaimed
 
@@ -163,65 +163,6 @@ trim, and changes nothing; on a lane the law calls dangling any trim is taken.""
 
 
 # ---- step 5: every join touches, then one network -----------------------------------------------------------------------
-
-
-def settle_joins(s: Any) -> int:
-    """Every join that stops short (`law.near_misses`: a free end making for a way within its reach, over walkable ground)
-    is carried onto that way - it ends ON the tread it joins (homes H37), and a way drawn as two across a hole is one again
-    (H38; the span may not run along a tread, H39). The only step that adds tread, and only to close a hole, once per end:
-    an end it closes is no longer free. Before the network rule, so a piece the ink tolerance would drop is joined first.
-
-    Research:
-        ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: carried onto the way
-        a join taken back - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); an ordinary end whose join breaks a rule against a tree lane, or the overlap matrix refuses, taken back 5 ft past the join's reach (`JOIN_BACK_PAD_FT`), the settle's trims then pulling it to what it serves"""
-    edits: dict[int, list[Poly]] = {}
-    # A TREE LANE'S END IS CARRIED ONTO ITS WAY AS ANY LANE'S IS: the span only adds tread, over walkable ground, meeting the
-    # way clean (`law.near_misses`), and the lane it reaches is an ordinary one the tree's joint then binds
-    lanes = s.M.get("lanes") or []
-    for i, end, f in law.near_misses(s.M):
-        if i in edits:
-            continue
-        p = _pts(lanes[i])
-        joined = [*p, f] if end == -1 else [f, *p]
-        # ...BUT AN ORDINARY LANE WHOSE JOIN WOULD BREAK A RULE AGAINST A TREE LANE DEFERS: it is taken back out of the join's
-        # reach instead - the deference would cut the join again, and the two passes took turns until the rounds ran out
-        # (cohort seed 25 under the probes). AND SO DOES ONE WHOSE JOIN THE OVERLAP MATRIX REFUSES (feature 318, Kuwabata): the
-        # law's walkable span reads the centerline 4 ft off a yard or garden, the matrix the whole tread, so a span the law
-        # called walkable was refused at the write (`reshape_lane`) every round and the end left short of its way until the
-        # web was refused - an end whose span is blocked is two ways, each ending at what it serves (`law.near_misses`)
-        if not is_tree(lanes[i]) and (not _join_admitted(s, lanes[i], joined) or any(k == i for k, _q in tree_faults(with_edits(s.M, {i: [joined]})))):
-            seq = _as_end(p, end)
-            edits[i] = [_back(sub_run(seq, 0.0, polyline_len(seq) - law.JOIN_REACH_FT - JOIN_BACK_PAD_FT), end)]
-            continue
-        edits[i] = [joined]
-    return apply_pieces(s, edits) if edits else 0
-
-
-def _join_admitted(s: Any, ln: Mapping[str, Any], joined: Poly) -> bool:
-    """Would the overlap matrix admit lane `ln` rewritten along `joined` - the question `reshape_lane` asks at the write,
-    asked first so a refused join is taken back rather than left short (`settle_joins`, feature 318).
-
-    Research: plumbing - NONE: the registry's own admission, at the record's 0.1 px
-    """
-    return bool(s.admits("lanes", {**ln, "pts": [[round(float(x), 1), round(float(y), 1)] for x, y in joined]}, ignore=ln))
-
-
-JOIN_BACK_PAD_FT = 5.0
-"""How far past a join's reach (`law.JOIN_REACH_FT`) an ordinary end that defers to a tree lane is taken back
-(`settle_joins`), so it no longer makes for the way it stopped short of.
-
-Research: a deferring end taken back - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); 5 ft past the join's reach"""
-
-
-def with_edits(M: Mapping[str, Any], edits: Mapping[int, Sequence[Poly]]) -> dict[str, Any]:
-    """`M` as `apply_pieces` would leave it after `edits`, its lane indices kept: each edited lane's first piece in place (a
-    lane with none left empty rather than removed) and the further pieces appended."""
-    lanes = [dict(ln) for ln in M.get("lanes") or []]
-    extra = []
-    for i, pieces in edits.items():
-        lanes[i]["pts"] = [list(q) for q in pieces[0]] if pieces else []
-        extra += [{"pts": [list(q) for q in p]} for p in pieces[1:]]
-    return {**M, "lanes": [*lanes, *extra]}
 
 
 def connector_component(lanes: Sequence[Mapping[str, Any]]) -> set[int]:

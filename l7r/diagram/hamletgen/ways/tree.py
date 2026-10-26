@@ -241,7 +241,7 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
             if faces.needles_with([*lanes, *stub], [new["pts"]]):  # ...the track out among them, as the strip was (feature 320)
                 return False
             # ...NOR CLOSES ONE ONCE THE WEB JOINS ITS ENDS (feature 317, plan D6): the settle carries a free end that stops
-            # short of a way onto it (`settle.settle_joins`, `law.near_misses`), and on seed 13 at 20 households a corridor's
+            # short of a way onto it (`law.near_misses`; the settle's join step went in feature 417 T44), and on seed 13 at 20 households a corridor's
             # start 15 ft from another's end was carried onto it and closed a sliver with a third - lawful as judged, refused
             # as drawn (feature 314 research R12). So the tree is asked again with its ends joined as the web will join them -
             # the faces judged where a lane the joining drew differently from the base's, or the new lane, meets them
@@ -292,7 +292,7 @@ def laid_run(base: Any, M: Mapping[str, Any], run: Poly) -> Poly:
 
 def as_joined(trial: Mapping[str, Any], lanes: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
     """`lanes` (the first lanes of `trial`) with every end that stops short of a way carried onto it, as the settle carries it
-    (`settle.settle_joins`, which reads `law.near_misses` the same way)."""
+    (`law.near_misses` reads them the same way)."""
     out = [dict(ln) for ln in lanes]
     for i, end, f in law.near_misses(trial):
         if i < len(out):

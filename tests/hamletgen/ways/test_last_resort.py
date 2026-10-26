@@ -237,12 +237,3 @@ def test_a_field_refusal_counts_its_runs_by_the_rule_that_turned_them_down() -> 
     }
     with pytest.raises(lr.WebRefused, match=r"the field is reached by no way \(its runs turned down by doubled_tails x2, fabric x3\)"):
         lr.refuse_unreached(M)
-
-
-def test_the_last_resort_joins_a_way_the_reach_drew_before_the_network_rule() -> None:
-    """Seed 21: a household's way the reach drew ended 8.6 ft off a lane's end and was dropped by the network rule, in the last
-    resort's passes, before any join could reach it."""
-    import inspect
-
-    assert "settle_reach, settle_joins, settle_knots, settle_defer, settle_network" in " ".join(inspect.getsource(lr.last_resort).split())
-    assert settle.settle_joins not in settle.STEPS, "the settle's own rounds no longer join (feature 417 T31, measured needless there); only the last resort does"
