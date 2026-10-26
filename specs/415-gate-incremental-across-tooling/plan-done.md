@@ -184,3 +184,28 @@ Owed by the round arbiter's ruling on red-gate@2026-10-24T19:17:09Z (continue).
 ### T06 Decisions
 
 - **D9** The landing measured is the first whose own change does not move `gate_config`, whose baseline already carries the `gate_config` key, and which has a `scripts/` change since its baseline - confirmed by `plan_mode: incremental` in its run record (405's next task where it meets this; T01-T05's own landings change `ci/` and run everything). Rendering: none.
+<!-- plan-archive: archived 2026-10-26 -->
+## T08 - a hook suite keeps the gate incremental
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** A change to a `tests/hooks/*.sh` suite, which no pytest module runs, no longer makes a landing's
+   gate run all ~10,000 tests, so T06 can be measured on a landing that carries one.
+2. **The constraints.** The planner selects every test that can read a changed file; nothing it would catch today is missed.
+3. **Where each comes from.** O: 405 T106/T138's two full-planned landing gates on 2026-10-25 (`tests/hooks/test-no-poll-hooks.sh`).
+4. **Do they describe the world here?** Yes: feature 430 T02 (landed 7d1ced680, 2026-10-26) made a non-module file below
+   `tests/<dir>/` select its readers (`incremental.tree_file_readers`) instead of planning full; a hook suite is one.
+5. **The order.** After 430 T02; before T07.
+6. **The exits.** Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
+7. **The search smell.** None.
+8. **The budget.** 15 min (a GUESS, the session's, 2026-10-26).
+9. **Done, measured.** `test_a_hook_suite_keeps_the_gate_incremental` plans incremental on today's planner and fails on the
+   planner before 7d1ced680.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T08 Decisions
+
+- **D10** No planner change of this feature's own: 430 T02's reader rule already covers the hooks tree, so T08 adds the test that
+  pins the case it was filed for. Rendering: none.
+
