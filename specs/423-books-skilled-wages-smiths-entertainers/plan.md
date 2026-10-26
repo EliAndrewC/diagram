@@ -65,22 +65,4 @@ verdict, and figures gm-assistant's estimates E0169-E0193 can be graded against;
 `escalation-check` first.
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
-## T03 - the implementation check and the reply (D5)
-
-### T03 Approach (checklist part A)
-
-1. **The goal, in the world.** gm-assistant can verify each answer, grade its estimates and close #19.
-2. **The constraints.** `make impl-check F=423`; `escalation-check` on what is for the GM.
-3. **Where each comes from.** O: the four questions (`request.md`); G: research/CLAUDE.md, research/money-requests.md.
-4. **Do they describe the world here?** Yes.
-5. **The order.** After T01 and T02 land.
-6. **The exits.** None.
-7. **The search smell.** None: research, not a fit.
-8. **The budget.** Minutes.
-9. **Done, measured.** `make impl-check F=423` nothing missing; the reply posted; `make feature-report F=423 WRITE=1`.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T03 Decisions
-
-- **D5** As the section "D5" states. Rendering: none.
+<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
