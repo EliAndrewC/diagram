@@ -147,7 +147,7 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 3. **Where each comes from.** the GM 2026-10-26 (fix 1); measured: T50's two full waits (research R1).
 4. **Do they describe the world here?** Measured by: the wait loop re-runs the gate each poll; the marker is the one new state.
 5. **The order.** first: the cheapest, the largest measured waste.
-6. **The exits.** green: landed by `make land` with T02-T04; red: set down with the failing tests named.
+6. **The exits.** green: landed by `make land` with T02-T04; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: one change, its tests first.
 8. **The budget.** One landing.
 9. **Done, measured.** Its verify line in tasks.md passes.
@@ -161,7 +161,7 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 3. **Where each comes from.** the GM 2026-10-26 ("omitting docstrings when hashing code"); feature 133 T11's rule.
 4. **Do they describe the world here?** Measured by: `gate-stamp.py`'s `semantic_bytes` already held the rule; moved, not rewritten.
 5. **The order.** before T03 and T04, which use it.
-6. **The exits.** green: landed with T01, T03, T04; red: set down.
+6. **The exits.** green: landed with T01, T03, T04; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: one change, its tests first.
 8. **The budget.** One landing.
 9. **Done, measured.** Its verify line in tasks.md passes.
@@ -175,7 +175,7 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 3. **Where each comes from.** the GM 2026-10-26; R2, R3; measured R5 (11 of 16 re-rolled before, 0 after).
 4. **Do they describe the world here?** Measured by: `make cache-audit` (3 audited, 0 FAILED) and the before/after cohort count.
 5. **The order.** after T02.
-6. **The exits.** green: landed with T01, T02, T04; red: set down.
+6. **The exits.** green: landed with T01, T02, T04; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: one change, its tests first.
 8. **The budget.** One landing.
 9. **Done, measured.** Its verify line in tasks.md passes.
@@ -189,7 +189,7 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 3. **Where each comes from.** the GM 2026-10-26 ("look for any other places"); R3b.
 4. **Do they describe the world here?** Measured by: each site's test: a function docstring keeps it, code moves it, usage text and the Makefile still count for `tooling_hash`.
 5. **The order.** after T02.
-6. **The exits.** green: landed with T01-T03; red: set down.
+6. **The exits.** green: landed with T01-T03; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: one change, its tests first.
 8. **The budget.** One landing.
 9. **Done, measured.** Its verify line in tasks.md passes.
@@ -203,7 +203,7 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 3. **Where each comes from.** the GM 2026-10-26 ("the pytest thing").
 4. **Do they describe the world here?** Measured by: tests on stubbed rolls; one real run on a seeded failure.
 5. **The order.** after T03 (the served/rolled count reads the new key).
-6. **The exits.** green: `make land`; red: set down.
+6. **The exits.** green: `make land`; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: one change, its tests first.
 8. **The budget.** One landing.
 9. **Done, measured.** Its verify line in tasks.md passes.
@@ -217,7 +217,7 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 3. **Where each comes from.** the GM 2026-10-26 ("run the seeds locally and then do a make landing").
 4. **Do they describe the world here?** Measured by: the landing-path test, and one real cohort then cohort-landing.
 5. **The order.** after T03 and T05.
-6. **The exits.** green: `make land`; red: set down.
+6. **The exits.** green: `make land`; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: one change, its tests first.
 8. **The budget.** One landing.
 9. **Done, measured.** Its verify line in tasks.md passes.
@@ -231,7 +231,7 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 3. **Where each comes from.** the GM 2026-10-26 (fix 2).
 4. **Do they describe the world here?** Measured by: tests on stubbed rolls and fixture manifests; one real probe.
 5. **The order.** after T05 (its EXITFIRST).
-6. **The exits.** green: `make land-tooling`; red: set down.
+6. **The exits.** green: `make land-tooling`; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: one change, its tests first.
 8. **The budget.** One landing.
 9. **Done, measured.** Its verify line in tasks.md passes.
@@ -245,7 +245,7 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 3. **Where each comes from.** the GM 2026-10-26 (fix 3); T48's and T50's review rounds.
 4. **Do they describe the world here?** Measured by: tests of the written section and the warning.
 5. **The order.** any time.
-6. **The exits.** green: `make land-tooling`; red: set down.
+6. **The exits.** green: `make land-tooling`; red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: one change, its tests first.
 8. **The budget.** One landing.
 9. **Done, measured.** Its verify line in tasks.md passes.
@@ -259,7 +259,7 @@ item 6 lacks `make arbiter-ask`, it prints that wording as a warning and files t
 3. **Where each comes from.** the constitution's close.
 4. **Do they describe the world here?** Measured by: the feature report.
 5. **The order.** last.
-6. **The exits.** green: the report written; red: n/a.
+6. **The exits.** green: the report written; red: the missing items named and the close set down.
 7. **The search smell.** None: one change, its tests first.
 8. **The budget.** One landing.
 9. **Done, measured.** Its verify line in tasks.md passes.
