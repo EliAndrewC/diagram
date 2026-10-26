@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 189 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 190 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -64,6 +64,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make hamlet</td><td class=a><div class=ad><span class=an>ARGS=&lt;cli args&gt;</span><span class=aw>passed to the hamletgen CLI - e.g. `&quot;--name Foo --seed 4 --households 15&quot;`</span></div><div class=ad><span class=an>PROFILE=1</span><span class=aw>also print where the roll spent its time, stage by stage</span></div></td><td>generate one hamlet from the CLI</td></tr>
 <tr><td class=n>make map</td><td class=a><div class=ad><span class=an>GEN=&lt;gen path&gt;</span><span class=aw>which generator to re-run (default: `pool/hamlets/inashiro/inashiro.gen.py`)</span></div><div class=ad><span class=an>PROFILE=1</span><span class=aw>also print where the roll spent its time, stage by stage</span></div><div class=ad><span class=an>REGEN_FROZEN=1</span><span class=aw>re-render a FROZEN legacy exhibit anyway - only on the GM&#x27;s say-so (regen&#x27;s --frozen-ok)</span></div></td><td>regenerate ONE gen and gate it</td></tr>
 <tr><td class=n>make maps</td><td class=a><div class=ad><span class=an>SCOPE=reference|all</span><span class=aw>override the scope; by default it picks its own - the reference hamlet alone after a failed run, the whole tier after a clean one</span></div></td><td>regenerate and check the pool, picking its own scope from how the last run went</td></tr>
+<tr><td class=n>make maps-moved</td><td class=a>&ndash;</td><td>which pool manifests differ from HEAD - the comparison a wave records, never a scratch copy (feature 429)</td></tr>
 <tr><td class=n>make placement-stages</td><td class=a>&ndash;</td><td>re-plate the stage-by-stage walk-through page</td></tr>
 <tr><td class=n>make placement-stages-if-classes<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>re-plate the walk-through page only if the class registry moved (sync-in runs it)</td></tr>
 <tr><td class=n>make pool-index</td><td class=a>&ndash;</td><td>rebuild the pool index</td></tr>
