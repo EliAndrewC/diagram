@@ -34315,32 +34315,29 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#its planning clearance": {
   "body": "e0c6fea1ffea20dd",
-  "claim": "its planning clearance - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: `WEB_FABRIC_GAP` at a pad of 2.0, the clearance a short link is planned at",
-  "code": "64c9994fd3c2a175",
+  "claim": "its planning clearance - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: `WEB_FABRIC_GAP`, the gap a short link is planned at",
+  "code": "434968a40ab8b3cc",
   "core": "4784dfc79ebe963c",
   "date": "2026-10-25",
-  "note": "the 0246 drawing page records the 7 ft gap (WEB_FABRIC_GAP=7.0) for \"a short link joining a way's end to the network ... a GUESS\"",
+  "note": "WEB_FABRIC_GAP 7.0 is the gap \"a short link joining a way's end to the network\" keeps from every garden, which the drawing page records as \"a GUESS\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#its search steps and tolerances": {
-  "body": "4d08660856e1939e",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 6 (rounds of the orphan sweep); 14 (lattice cell for the retry route)",
-  "code": "7bad4c1d09229298",
+  "body": "e0c6fea1ffea20dd",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 6 (rounds of the orphan sweep); 2.0 (the router's pad multiplier: a link may go the long way round); 14 (lattice cell for the retry route)",
+  "code": "24e184d43dc387be",
   "core": "4784dfc79ebe963c",
   "date": "2026-10-25",
-  "note": "6 sweep rounds and the 14 ft retry lattice are search settings; the record is silent",
+  "note": "the page gives no figure for sweep rounds, detour pad or lattice cell; the route is still bounded by the directness claim; 6 and 14 are really plumbing (NONE), but a GUESS on them hides nothing",
   "pages": {},
   "research": "",
-  "rests": [],
-  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link crosses the brook at a crossing place": {
@@ -34362,21 +34359,14 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link width": {
   "body": "e0c6fea1ffea20dd",
-  "claim": "link width - village-lanes.drawing: one width a way, as `link_width` draws it (a link continuing a way end to end at its width; at a tee the widest way within reach, a GUESS)",
-  "code": "53964b1dbce55ac8",
+  "claim": "link width - GUESS: searched, the record silent (feature 417 T31 C1, 2026-10-26); as `link_width` draws it - a link continuing a way end to end at its width, at a tee the widest way within reach",
+  "code": "424c14b99b1974bf",
   "core": "4784dfc79ebe963c",
   "date": "2026-10-25",
-  "note": "the 0081 drawing page never says a way keeps one width or takes no width step where two ways join end to end. §52 reads two such lanes as \"one path\" but says nothing of width, and §29 sets widths by a way's role and never names a link. The page should record the rule as this project's choice, or the claim should say GUESS/UNRESEARCHED",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
-   "0081-village-lanes.drawing.html:91a5765af6230403",
-   "0081-village-lanes.drawing.html:b3423a58c3ff2774"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "the record gives widths by role (3/5/6 ft) and treats lanes that meet end to end as one path, but says nothing of a link's width or a width at a tee; `link_width` does what the claim says",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#no out-and-back over the brook": {
   "body": "4d08660856e1939e",
@@ -34746,6 +34736,22 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/sweeps.py::link_width#a footpath where nothing is near": {
+  "body": "9751b20257afc781",
+  "claim": "a footpath where nothing is near - village-lanes.drawing: 3 (a link with no way within reach, or a record with no width, drawn as the 3 ft footpath)",
+  "code": "d5f77ac433b8d8d2",
+  "core": "4c2d6b09bec0d11c",
+  "date": "2026-10-25",
+  "note": "the default 3.0 and the missing-`w` 3 are the drawn footpath, \"a footpath is drawn 3 ft wide\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/sweeps.py::link_width#a link's width at a tee": {
   "body": "9751b20257afc781",
   "claim": "a link's width at a tee - GUESS: searched, the record silent (feature 417 T31 C1, 2026-10-26); the widest way within `_LANE_JOIN_FT`, a tee where a width may change",
@@ -34759,31 +34765,26 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::link_width#its salts, guards and sentinels": {
   "body": "9751b20257afc781",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.5 (an end on the link's end); 3 (a record with no width)",
-  "code": "7ae9123aaa692e11",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.5 (an end on the link's end)",
+  "code": "f0fc46e04dac8123",
   "core": "4c2d6b09bec0d11c",
   "date": "2026-10-25",
-  "note": "0.5 is a float tolerance for matching ends; 3 is the fallback for a lane record with no width, matching §3's 3 ft footpath; the `default=3.0` with no lane in reach can hardly ever fire, since the link's ends touch lanes",
+  "note": "0.5 is a tolerance for matching an end point, plumbing",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::link_width#one width a way": {
   "body": "9751b20257afc781",
-  "claim": "one width a way - village-lanes.drawing: no step at a bare joint - a link continuing a way end to end takes its width",
-  "code": "d659eca85be2b099",
+  "claim": "one width a way - GUESS: searched, the record silent (feature 417 T31 C1, 2026-10-26); the lane law's own rule (`law.width_steps`): a link continuing a way end to end takes its width, the orphan's end first - where both its ends continue ways of two widths, the step stands at the network's end",
+  "code": "5ba77fd377741e23",
   "core": "4c2d6b09bec0d11c",
   "date": "2026-10-25",
-  "note": "\"no step at a bare joint\" is not on the 0081 drawing page: §52 makes end-to-end lanes one path without mentioning width. Also, when both of the link's ends meet lane ends, the code takes the orphan's width and so steps at the network joint, which breaks the claimed rule itself. Record the rule on the page or relabel the claim GUESS/UNRESEARCHED, and fix the two-ended case",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:91a5765af6230403",
-   "0081-village-lanes.drawing.html:b3423a58c3ff2774"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "link[0] (the orphan's end) is checked before link[-1], so the link keeps the orphan way's width and any width step falls at the network's end, as the claim says; the page is silent on link width",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tails.py::_ALONG_DEG#running with the way": {
   "body": "fb182e5e1fa224a9",
