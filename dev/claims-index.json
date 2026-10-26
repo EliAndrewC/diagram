@@ -7398,11 +7398,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/clearance.py::ring_index#fabric index": {
-  "code": "5ab9292f31ef1674",
-  "core": "818fb5bbc33e0f2a",
+  "code": "2092d627e30a3101",
+  "core": "c2698a64b419c43e",
   "date": "2026-10-03",
   "note": "plumbing, no map decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::BELT_ROOM_MAX_OFF#belt room off the canvas": {
@@ -13944,17 +13946,18 @@
  "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#about as near": {
   "body": "2e72e87a9fd01185",
   "claim": "about as near - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); one grid pitch",
-  "code": "7e9677922110404c",
-  "core": "7cbec9c32ed91615",
+  "code": "f7f0fcbb618d2602",
+  "core": "b32ac5f6db212a26",
   "date": "2026-10-25",
   "note": "\"about as near\" is given no width; one pitch matches the code",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#about as near, nearer the fields": {
-  "code": "a625a3ce0d2fcb2a",
-  "core": "7cbec9c32ed91615",
+  "code": "6f07340b50e0d74b",
+  "core": "b32ac5f6db212a26",
   "date": "2026-10-07",
   "note": "field distance is the secondary sort key, \"of two places about as near ... the one nearer the fields\"",
   "pages": {
@@ -13964,23 +13967,25 @@
   "rests": [
    "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#its drawn sizes": {
   "body": "2e72e87a9fd01185",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (seat grid inset 6 px from the sheet edge)",
-  "code": "a4670f04220b8019",
-  "core": "7cbec9c32ed91615",
+  "code": "a6038c066701b3ac",
+  "core": "b32ac5f6db212a26",
   "date": "2026-10-25",
   "note": "the 6 px sheet inset is the grid's origin",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#no bound from the field": {
-  "code": "1696daa912b644f5",
-  "core": "7cbec9c32ed91615",
+  "code": "a3cf0bac7c30f25d",
+  "core": "b32ac5f6db212a26",
   "date": "2026-10-07",
   "note": "no point is dropped for its field distance",
   "pages": {
@@ -13990,13 +13995,16 @@
   "rests": [
    "0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html:61dbc3dc5e34efdf"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order": {
-  "code": "9edc76a0a6d53cc6",
-  "core": "7cbec9c32ed91615",
-  "date": "2026-10-07",
-  "note": "every legal grid point, nearest the center first, \"the place open nearest the cluster\"",
+  "body": "83c843c3117f640c",
+  "claim": "the exhaustive seat order - farmhouses-minka.drawing: every legal grid point on the canvas, nearest the seat first",
+  "code": "66e9e91af98f3217",
+  "core": "b32ac5f6db212a26",
+  "date": "2026-10-26",
+  "note": "every grid point on the canvas, sorted nearest the seat first, matches \"each next household takes the place open nearest the cluster\" with no maximum distance; the numpy pass keeps the same strict half-pitch test against house centers, so the set of seats and their order are unchanged",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
   },
@@ -15932,11 +15940,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/region.py::free_components#seat region": {
-  "code": "234108cb751296ee",
-  "core": "b577dd4e3e0c03a0",
+  "code": "e2d9e2e10e7733d2",
+  "core": "a1211788c412deda",
   "date": "2026-10-03",
   "note": "plumbing",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/region.py::smallest_sides#its figures from 0029": {
@@ -28649,11 +28659,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/keeper.py::pts_key#verdict cache": {
-  "code": "6732e09ea00d7e93",
-  "core": "5d436ce6555e1d73",
+  "code": "4f7ebbf9964fa667",
+  "core": "3f3c95c86eb0898f",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/keeper.py::unsettled#verdict cache": {
@@ -47031,11 +47043,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::CanopyArea.add#spatial indexes": {
-  "code": "34f1baac4912fe5b",
-  "core": "ae4a69120bc28215",
+  "code": "420ba7b0fdfb0b17",
+  "core": "1f9f02e8afd5cf8a",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::CanopyArea.area#spatial indexes": {
@@ -47935,19 +47949,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/region.py::Region#keep-out raster": {
-  "code": "f985b8e635a11db1",
-  "core": "70f975c318d297d5",
+  "code": "88ef02a3f1c88d6f",
+  "core": "4020fe0a3db966b6",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/region.py::Region.__init__#keep-out raster": {
-  "code": "371d36e4e2afd0a6",
-  "core": "3b4d6d29c85bbf23",
+  "code": "3c65a43f631e734d",
+  "core": "aea2a79e4c5dd761",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/region.py::Region._p#keep-out raster": {
@@ -47999,19 +48017,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/region.py::Region.cells#keep-out raster": {
-  "code": "ddba461efaa7f1bc",
-  "core": "e65f8a6cd3e8d0c6",
+  "code": "427cf163c74fa711",
+  "core": "c3e3f002e1dd6688",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/region.py::Region.circle#keep-out raster": {
-  "code": "c6b47909bbe4d7e6",
-  "core": "e619342547f3a3d5",
+  "code": "ce2cc08dced1a4e5",
+  "core": "c469fc5f0427dc4f",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/region.py::Region.fill_many#keep-out raster": {
@@ -48023,35 +48045,43 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/region.py::Region.line#keep-out raster": {
-  "code": "e812d521037590a3",
-  "core": "34af80f508c59892",
+  "code": "7ea555c06f4773af",
+  "core": "99b288f0e70c3c5a",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/region.py::Region.poly#keep-out raster": {
-  "code": "041049407bdf9096",
-  "core": "574345ac74d06666",
+  "code": "8312c98864fd91b2",
+  "core": "65bd25f9161245af",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/region.py::Region.rect#keep-out raster": {
-  "code": "54972bf6db743d46",
-  "core": "d3b95391424332d6",
+  "code": "707f8c359a7201cd",
+  "core": "11398d619724f0ce",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/region.py::Region.taken#keep-out raster": {
-  "code": "4bb5d4bb40930cd1",
-  "core": "8440b1fb58225bdb",
+  "code": "38a257e414f92cc1",
+  "core": "52d0769c17023052",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/region.py::Region.taken_many#keep-out raster": {
@@ -49117,21 +49147,26 @@
  "l7r/diagram/settlement/_knobs.py::crop_boxes#its salts, guards and sentinels": {
   "body": "403ed22e72b6febe",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 5 (tuple index)",
-  "code": "81ea0db89608fd27",
-  "core": "ec9862d5ddcf40ff",
+  "code": "4e5ea019a1f11d03",
+  "core": "868f70b4218b9e9f",
   "date": "2026-10-25",
   "note": "tuple index",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::crop_boxes#what sets the frame": {
-  "code": "3b71aa9828d815bf",
-  "core": "ec9862d5ddcf40ff",
-  "date": "2026-10-03",
-  "note": "framing convention",
+  "body": "dbd1575cd8c3c7ff",
+  "claim": "what sets the frame - CONVENTION: hard features, torii, row streets, fields, the pond, the belt's face and house shelter, a forest's reveal",
+  "code": "456eb657aa5a0deb",
+  "core": "868f70b4218b9e9f",
+  "date": "2026-10-26",
+  "note": "which features hold the render frame, including belt clumps within WINDBREAK_HOUSE_REACH_FT of a house, is a framing decision, so CONVENTION fits; the numpy pass keeps the same squared-distance test (<= _reach**2) and the same label, and adds no boxes when there are no houses or no clumps",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::knob_rng#seeding": {
@@ -76943,11 +76978,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::_falls#frame geometry": {
-  "code": "58a5473ed2f36ea7",
-  "core": "e302d6f8f64532a3",
+  "code": "f6484fc187bebb99",
+  "core": "8a46f7319088f68f",
   "date": "2026-10-03",
   "note": "geometry",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::_miter_normals#dry plots abut along the canal": {
