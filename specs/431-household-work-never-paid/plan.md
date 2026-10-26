@@ -47,8 +47,11 @@ yonabe (Meiji-Taisho, labeled); Saito's 1879 Yamanashi by-employment shares; Kum
 women weaving 120 bolts of silk a year and a man working ten mu (1658); Buck's productive man-work units (1921-25: about a fourth
 of the year, women 31.6% of farm labor in East Central China, 11.8% in the North, ATTESTED ONLY FOR 1921-25; household and repair work excluded); Fei's
 Kaixiangong (1936: women out of the fields, sewing at home, cloth bought); Lu Village through Hu Yukun (third-hand, labeled). Per
-member by hours: SILENT with the searches. The task list: each task with who did it and its time, or SILENT (cooking, water,
-miso and soy, pickling, straw goods per unit, sewing, araihari, child care). The GM's hypothesis, both halves: cotton era
+member by hours: SILENT with the searches. The task list covers every item of the request's starting list and whatever the sources add, each with who did
+it and its time, or SILENT: hemp or cotton growing, retting, spinning, weaving, dyeing, sewing, araihari, mending; hulling and
+polishing rice, cooking, pickling, miso and soy; firewood, charcoal, water; straw rope, sandals, mats, rain capes, bags; roof, wall
+and tool repair; care of children, the sick and the old. The GM's hypothesis, both halves, said to be tested on the CLOTH stage only (growing,
+dyeing and sewing SILENT, so the cloth days are a minimum for "making clothes"): cotton era
 NOT ATTESTED for clothing as the largest claim (about 51 days a year of household cloth, Tanimoto, against 200-plus female field
 days a cho); hemp and ramie era ATTESTED ONLY FOR an estimate (Nagahara's tenfold, through Nagashima; any days-a-year product
 of it this project's arithmetic, labeled); Jiangnan's textile year about level with a man's field year (Li and Pomeranz, for
@@ -70,9 +73,11 @@ splitting 3-5 zhu a day (Tiangong kaiwu, 1637). Hemp and silk per tan in Japan, 
 SILENT with the searches. Bought against made: Akita 1808-10 (cotton cloth bought, ginned cotton spun and woven at home, used
 cloth, home-grown hemp; the shares and the 1.23 tan a head this project's arithmetic). Units kept as each source gives them; any
 per-square-meter comparison is this project's arithmetic. The European experiments (Mannering 2021, Bender Jorgensen 2012) are
-NOT cited: they are craft-time rates, not money sources, so `research/CLAUDE.md`'s comparative exception does not cover them,
-and they time wool on a warp-weighted loom, which says nothing about hemp splicing or cotton - a deliberate omission, said in the
-reply.
+cited as the request permits ("a measured modern craft rate is acceptable as a COMPARATIVE source where no period figure exists";
+FR-001): in their own question in the "Comparative money" section, `subject=comparative,money`, their source kind `comparative`,
+labeled as wool on a warp-weighted loom, the comparison for the SILENT hemp and silk stages - Bender Jorgensen only if more than
+the abstract is readable; S1 also searches for a measured modern rate in hemp, ramie, cotton or silk (Japanese and Chinese craft
+studies first) and records it or SILENT. Their limits stated: wool, a warp-weighted loom, a modern experimenter, never a Rokugani figure.
 
 ## D3 - city households, and other workers' days off (Q4, Q5; FR-001)
 
@@ -83,7 +88,8 @@ firewood 58), through the modern paper summarizing the Bunsei-era manuscript; ba
 the article reporting Morisada; the tenement's shared well, no bath, and the wives washing and rinsing rice at the well; used
 cotton clothing; water sellers in many cities until early Meiji; washing shops from about 1688 (whose clothes SILENT). Home-work
 days a year for a single tenement laborer and for a family household: SILENT with the searches; the one single-against-married
-contrast is a journalist's unsourced line, given as that or left out; who did the household's work: the wives (the well scenes).
+contrast, a journalist's unsourced line (nippon.com 2020: married men worked every day, single peddlers idled), is GIVEN, labeled
+as unsourced, because it is the only statement on the comparison the GM asked for; who did the household's work: the wives (the well scenes).
 Rental shops: a popular page with no source - a lead, not a citation. Kyoto and Osaka: the Morisada paraphrase on baths only.
 China: SILENT beyond Beijing's two water-carrier systems. Q5 extends 0311: merchant-house live-ins' days off were the two
 yabuiri with pocket money and new clothes; no household of their own until head clerk; a Kyoto house's Edo staff first home in the
@@ -102,13 +108,15 @@ size: the 360-day form SILENT; its halves ATTESTED ONLY FOR the farming almanac 
 farm: rise in the hour before dawn, three early mornings make a day's work, a lifetime's plan lies in diligence) and Lou Yue's
 poem (before 1213: the line already a saying); Zhu Yongchun's household rule (rise at first light; a gentry rule, nothing on
 wealth); the Zengguang xianwen lines undated by layer, not cited as premodern unless dated; the Keian edict's "rise early" as a
-late-Tokugawa official text, its date disputed. The GM's guess (a farming saying) ATTESTED by the almanac's audience. Japan's
+late-Tokugawa official text, its date disputed. The original text is carried for each attested part (the almanac's 一日之計在寅…早起，三朝當一工…一生之計在勤, Lou Yue's
+早起三朝當一工), translations marked. The GM's guess (a farming saying) ATTESTED by the almanac's audience. Japan's
 early-rising proverb's origin: SILENT.
 
 ## D5 - the implementation check and the reply (FR-003, FR-004)
 
 `implementation-check.md` holds each touched question's line; the reply on #21 gives each figure with its fragment file and
 verdict, what is still open (the leads: Smith 1969 and Nishikawa 1978 on Choshu, Nagahara 2004 p. 212, Li Bozhong 1996-2008 and
-*Agricultural Development* pp. 139-152, Xu Xinwu, Walthall 1991, Nagashima 2006, the 日本農書全集 manuals, Bunsei-era manuscript
-and Morisada in the original, Hokuetsu seppu), and the European experiments' omission. Anything for the GM goes through
+*Agricultural Development* pp. 139-152, Xu Xinwu, Walthall 1991, Nagashima 2006, Hayami's industrious revolution and Bray's *Technology and Gender* (both
+named in the request; Hayami's own work not reached, Bray read only through Waltner's review), the 日本農書全集 manuals, Bunsei-era manuscript
+and Morisada in the original, Hokuetsu seppu). Anything for the GM goes through
 `escalation-check` first.

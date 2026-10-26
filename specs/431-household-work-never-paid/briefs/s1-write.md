@@ -21,7 +21,7 @@ says, or SILENT. Local copies the passes used (Tanimoto's and Pomeranz's LSE dra
 exchange as page images) go through `make archive-find` / `make source-pages` (an image page goes to the checks with `IMAGES=`).
 Cite drafts with their "not to be quoted" headers said; Nagahara's tenfold through Nagashima and Tanimoto, never as Nagahara; the
 Seiryoki through the Sukumo city history and Nagashima; Lu Village through Hu Yukun (third-hand). The European experiments
-(Mannering, Bender Jorgensen) are NOT cited: craft-time rates, not money sources, outside the comparative exception.
+(Mannering 2021; Bender Jorgensen 2012 only if more than its abstract is readable) are cited ONLY in item 3's comparative question.
 
 **Not yours** (session S2 holds them, in another clone): the Keian edict pages (Gunma archives, ja.wikipedia), pass D's and pass
 E's sources, and 0311, 0004 and 0183 (S2 edits them). Name night work from Tomioku and Nagashima.
@@ -47,6 +47,16 @@ E's sources, and 0311, 0004 and 0183 (S2 edits them). Name night work from Tomio
    2003 exchange); the 200-day maximum (Allen et al.); the Songnan poems (through Zheng Tianting); Tiangong kaiwu's reeling and ramie
    splitting (1637). Akita 1808-10 bought against made (shares this project's arithmetic). Hemp and silk per tan in Japan, growing,
    dyeing and sewing a robe: SILENT with the searches.
+
+3. **The comparison for the SILENT stages**, a NEW question in the "Comparative money" section (`subject=comparative,money`; each
+   source's kind `comparative`, under `research/CLAUDE.md` "Comparative money sources"), its title asking how long modern
+   experimenters took to spin and weave by hand: Mannering's weaving speeds (wool, warp-weighted loom, 2021), labeled as another
+   material, loom and age, never a Rokugani figure; and first a search for a measured modern rate in hemp, ramie, cotton or silk
+   (Japanese and Chinese craft and folk-craft studies first: days to splice the thread for a tan of asa, to spin and weave a tan
+   of cotton) - cite it if found, else SILENT with the search. Point at it from item 2.
+4. In item 1, test the GM's clothing hypothesis on the CLOTH stage only and say so: growing, dyeing and sewing are SILENT, so the
+   cloth days are a minimum for "making clothes". The task list covers every item of the request's starting list (hulling and
+   polishing rice, charcoal, mending, and care of the sick and old included), each with who and its time, or SILENT.
 
 **New registry keys** (at most ten): as the passes name them. If more are needed, `make reserve`'s eleventh key writes a
 continuation brief - follow it.
