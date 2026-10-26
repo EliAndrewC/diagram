@@ -86,7 +86,12 @@ A new money question, its title asking what a city household bought that a farm 
 the Bunsei budgets (a peddler's daily rice, miso and soy and a child's sweets; a carpenter's 128 monme a month, seasonings and
 firewood 58), through the modern paper summarizing the Bunsei-era manuscript; bath fees (8 mon from 1841 to 24 in 1866) through
 the article reporting Morisada; the tenement's shared well, no bath, and the wives washing and rinsing rice at the well; used
-cotton clothing; water sellers in many cities until early Meiji; washing shops from about 1688 (whose clothes SILENT). Home-work
+cotton clothing; water sellers in many cities until early Meiji; washing shops from about 1688 (whose clothes SILENT). Q4's six items, each with its trade and its price or SILENT with the searches: used clothing (the trade
+ATTESTED, 220 licensed buyers in 1659; its prices SILENT unless found); cooked food (sushi 8 mon and an omelette 16 mon through the
+article reporting Morisada, if the page bears; else SILENT); washing (the shops ATTESTED from about 1688, price and whose clothes
+SILENT); mending (SILENT); firewood (with seasonings, 58 monme a month in the carpenter's budget, ATTESTED ONLY FOR the Bunsei
+manuscript through the modern paper; charcoal 4.1 monme a bale in 1772 through the President excerpt, if the page bears); water
+(sellers ATTESTED in many cities until early Meiji, price SILENT). Home-work
 days a year for a single tenement laborer and for a family household: SILENT with the searches; the one single-against-married
 contrast, a journalist's unsourced line (nippon.com 2020: married men worked every day, single peddlers idled), is GIVEN, labeled
 as unsourced, because it is the only statement on the comparison the GM asked for; who did the household's work: the wives (the well scenes).

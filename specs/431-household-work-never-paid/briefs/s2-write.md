@@ -34,7 +34,8 @@ nearly 30), 0183 (the Edo street lot with back tenements), 0115 (servants), 0004
    farm household made; `subject=money`; pointers from 0183 and 0004. Edo: polished rice (1727, 1744); the Bunsei budgets of a
    peddler and a carpenter; bath fees (1841-1866); the tenement's shared well, no bath, the wives washing and rinsing rice; used
    clothing (1659); water sellers; washing shops from about 1688 (whose clothes SILENT); samurai barracks men cooking for themselves
-   or eating out (samurai, labeled). The GM's main question: home-work days or hours a year for a single tenement laborer and for a
+   or eating out (samurai, labeled). Q4's six items, each with its trade and its price, or SILENT with the searches: used clothing, cooked food, washing,
+   mending, firewood (and charcoal), water. The GM's main question: home-work days or hours a year for a single tenement laborer and for a
    laborer or artisan with a family or an extended family - a figure or SILENT with the searches - and who in the household did the
    unpaid work. Kyoto and Osaka; China (Beijing's water carriers; prices SILENT).
 2. **Other workers' days off**, extending 0311: merchant-house live-ins (the two yabuiri with pocket money and new clothes; no
