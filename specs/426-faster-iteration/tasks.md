@@ -33,8 +33,9 @@
 - [ ] T09 The close: `make feature-report F=426 WRITE=1`, the GM shown the before/after counts and the landing's claims wait
       research: rendering
       verify: the feature report written; every task ticked
-- [ ] T10 No write under l7r/ or pool/ and no git add or commit while this tree's make cache-audit runs: the gate-write guard learns the audit as it knows make done (found: 335cfa840 swept in the audit's perturbation), in `scripts/hooks/gate-write-hooks.sh` (FR-011)
+- [x] T10 No write under l7r/ or pool/ and no git add or commit while this tree's make cache-audit runs: the gate-write guard learns the audit as it knows make done (found: 335cfa840 swept in the audit's perturbation), in `scripts/hooks/gate-write-hooks.sh` (FR-011)
       research: rendering
+      verify: DONE. landed: the gate-write guard refuses an Edit or Write under l7r/ or pool/ and any git add or commit while this tree's make cache-audit runs, naming the wait and the escape; tests/hooks/test-gate-write-hooks.sh section 4 (27 passed; the two refusals fail without the clause)
 - [ ] GM review (make gm-reviewed F=426) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
