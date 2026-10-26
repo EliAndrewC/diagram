@@ -97,6 +97,8 @@ ashigaru	ashigaru
 ashigaru nagaya	ashigaru-nagaya
 ashigaru-nagaya	ashigaru-nagaya
 ashina	Ashina
+asobi-bi	asobi-bi
+asobibi	asobi-bi
 assay	assay
 assayed	assay
 assays	assay
@@ -811,6 +813,7 @@ deflate	deflate
 deflated	deflate
 deflating	deflate
 degawari	degawari
+deirishi	kujishi
 dejima	Dejima
 delivery ditch	delivery ditch
 delivery ditches	delivery ditch
@@ -1203,6 +1206,7 @@ five festivals	five festivals
 five grains	five grains
 five highways	Five Highways
 five punishments	five-punishments
+five seasonal festivals	five festivals
 five watches	night watch
 five-household group	five-household group
 five-household groups	five-household group
@@ -2164,6 +2168,7 @@ kakaemoto	hitoyado
 kakehi	kakehi
 kakenagashi	flow-through irrigation
 kaki	Diospyros kaki
+kakiyaku	kakiyaku
 kakoigura	kakoigura
 kamado	kamado
 kamakura	Kamakura period
@@ -2390,6 +2395,7 @@ koshiate-mori	koshiate-mori
 koshin	Kōshin
 koshin tower	koshin tower
 koshin towers	koshin tower
+koshogatsu	Little New Year
 koshu road	Koshu-kaido
 koshu-kaido	Koshu-kaido
 kosode	kosode
@@ -2410,8 +2416,11 @@ kuchiireya	hitoyado
 kuchimai	kuchimai
 kui	kui
 kujiba	kujiba
+kujikai	kujishi
 kujira shaku	whale-foot measure
 kujira-jaku	whale-foot measure
+kujishi	kujishi
+kujiyado	kujiyado
 kujuna	kujuna
 kumi	kumi
 kumi-chi	kumi-chi
@@ -2565,6 +2574,7 @@ litchi	litchi
 litchis	litchi
 litter	litter
 litters	litter
+little new year	Little New Year
 littoral	littoral
 liubu	liubu
 liuchu	liuchu
@@ -2947,7 +2957,10 @@ namako wall	namako-tiled
 namako walls	namako-tiled
 namako-tiled	namako-tiled
 nanbokucho	Northern and Southern Courts
-nanbu	Tohoku
+nanbu country	Tohoku
+nanbu domain	Tohoku
+nanbu magariya	Tohoku
+nanbu region	Tohoku
 nando	nando
 nando-gamae	nando-gamae
 nanhai	Nanhai
@@ -3308,6 +3321,8 @@ pivot-hung	pivot-hung
 pixel	px
 pixels	px
 placer	placer
+plaint	plaint
+plaints	plaint
 plankton	plankton
 plant association	plant association
 pleasure quarter	pleasure quarter
@@ -3722,6 +3737,7 @@ sappers	sapper
 sara ike	sara-ike
 sara-ike	sara-ike
 sarae	sarae
+saryo bikyaku	saryo bikyaku
 sasa	sasa
 sasumata	sasumata
 satetsu	satetsu
@@ -4840,6 +4856,8 @@ weilongwu	weilongwu
 weir	weir
 weirs	weir
 weitian	weitian
+welfare ratio	welfare ratio
+welfare ratios	welfare ratio
 well curb	curb
 well house	well-house
 well houses	well-house

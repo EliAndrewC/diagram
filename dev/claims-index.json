@@ -3090,11 +3090,11 @@
   "note": "menservants and gatekeeper in the street range, grooms in the stable's room, maids under the main roof (a GUESS)",
   "pages": {
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "03ca4daf0ce87285"
   },
-  "research": "5c5aa354e6ed15af",
+  "research": "085c8103b81a3446",
   "section": "85ad9bd2565f0fa8",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#storehouses in the rear strip": {
@@ -5903,13 +5903,14 @@
   "date": "2026-10-12",
   "note": "beside the servants' row on the street wall, as servants' quarters and a stable stood beside a gate passage",
   "pages": {
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "03ca4daf0ce87285"
   },
-  "research": "56857267abb1042e",
+  "research": "d59cee486372dadf",
   "rests": [
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5f4232f3b151ae8d",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:90f6ef1941297876"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#staff long-house": {

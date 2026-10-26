@@ -449,7 +449,10 @@
   "variants": [
    "Tohoku",
    "Tōhoku",
-   "Nanbu"
+   "Nanbu domain",
+   "Nanbu country",
+   "Nanbu region",
+   "Nanbu magariya"
   ]
  },
  "Tokugawa": {
@@ -1869,7 +1872,8 @@
   "variants": [
    "hongo",
    "edago"
-  ]
+  ],
+  "cased": true
  },
  "honmaru": {
   "def": "The innermost bailey of a Japanese castle, where the keep and the lord's palace stand.",
@@ -17200,6 +17204,7 @@
   "def": "The five seasonal festival days of the year: the 7th day of the first month, the 3rd of the third, the 5th of the fifth, the 7th of the seventh and the 9th of the ninth (the Double Ninth).",
   "variants": [
    "five festivals",
+   "five seasonal festivals",
    "gosekku"
   ]
  },
@@ -18298,6 +18303,61 @@
   "def": "An agronomist of the late Edo period whose illustrated farm manuals - the Nogu benriron on farm tools (1822) and the Koeki kokusan ko (1844) - this record quotes for tool prices and home brewing.",
   "variants": [
    "Okura Nagatsune"
+  ]
+ },
+ "plaint": {
+  "def": "A written complaint that opens a lawsuit, filed with a magistrate's office; in Qing China a scribe wrote it out for the litigant, for a fee by the sheet.",
+  "variants": [
+   "plaint",
+   "plaints"
+  ]
+ },
+ "kakiyaku": {
+  "def": "A clerk hired by an Edo town ward from 1721 to keep its accounts and do its duties at the watch house, paid a wage by the ward.",
+  "variants": [
+   "kakiyaku"
+  ]
+ },
+ "kujiyado": {
+  "def": "A litigants' inn: an Edo-period inn that lodged country people who came for a lawsuit, taught them the procedure and wrote the documents they filed with the offices.",
+  "variants": [
+   "kujiyado"
+  ]
+ },
+ "kujishi": {
+  "def": "A suit-broker: in the Edo period, an illegal agent who, for a fee, taught litigants how to sue, wrote their documents and acted for them in a lawsuit.",
+  "variants": [
+   "kujishi",
+   "deirishi",
+   "kujikai"
+  ]
+ },
+ "saryo bikyaku": {
+  "def": "A convoy-leader courier: a courier house's man who led a convoy of pack loads and carried cash and local goods himself.",
+  "variants": [
+   "saryo bikyaku"
+  ]
+ },
+ "asobi-bi": {
+  "def": "A rest day a Japanese village set for everyone in it at once, for a festival or the end of planting or harvest; working on one was fined. About 20 a year around 1700, and in places 50 to 80 after 1800.",
+  "variants": [
+   "asobi-bi",
+   "asobibi"
+  ]
+ },
+ "Little New Year": {
+  "def": "A festival of the New Year season after New Year itself, one of the days a Japanese village kept as a rest day around 1700.",
+  "variants": [
+   "Little New Year",
+   "koshogatsu",
+   "Koshogatsu"
+  ]
+ },
+ "welfare ratio": {
+  "def": "An economic historian's measure of a worker's standard of living: a year's earnings set against the cost of a year's basket of the goods a household needs to live, so that 1 means bare subsistence.",
+  "variants": [
+   "welfare ratio",
+   "welfare ratios"
   ]
  }
 }

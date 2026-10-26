@@ -4,5 +4,6 @@
  "variants": [
   "hongo",
   "edago"
- ]
+ ],
+ "cased": true
 }
