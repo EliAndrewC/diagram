@@ -864,6 +864,9 @@ dispersed villages	dispersed settlement
 dissection	dissection
 distributaries	distributary
 distributary	distributary
+district deputies	district deputy
+district deputy	district deputy
+district deputy's	district deputy
 district intendant	gundai
 district intendants	gundai
 district magistrate	gun-bugyo
@@ -982,6 +985,7 @@ eaves walls	eaves wall
 echelon	echelon
 echigo	Echigo
 echigo province	Echigo
+echigoya	Echigoya
 echinochloa	Echinochloa crus-galli
 echinochloa crus-galli	Echinochloa crus-galli
 echizen-no-kami	no-kami
@@ -1221,6 +1225,7 @@ flophouse	kichin-yado
 flophouses	kichin-yado
 flora	flora
 flow-through irrigation	flow-through irrigation
+flower money	flower money
 flowing-roof	nagare-zukuri
 flowing-roof style	nagare-zukuri
 flume	kakehi
@@ -1575,6 +1580,7 @@ han chinese	Han Chinese
 han dynasty	Han dynasty
 han's	han
 han-dynasty	Han dynasty
+hanadai	flower money
 hanamichi	hanamichi
 hanchiku	rammed earth
 hancho	hancho
@@ -1711,6 +1717,7 @@ hitching rail	hitching rail
 hitching rails	hitching rail
 hitoyado	hitoyado
 hitsu	hitsu
+hitto	hitto
 hiyokechi	hiyokechi
 hiyoza	hiyoza
 hizen	Hizen
@@ -2061,6 +2068,7 @@ jitō	jito
 jiujiang	Jiujiang
 jiuqing	Nine Ministers
 jiwari	warichi
+jiza	jiza
 jizo	jizo
 jizo-bon	Jizo-bon
 jizo-san	jizo
@@ -2095,6 +2103,7 @@ josui-ido	josui-ido
 journeyman	journeyman
 journeymen	journeyman
 jowa	Jowa
+joza	joza
 jozabangai-seki	jozabangai-seki
 jsidre	JSIDRE
 ju-jutsu	jujutsu
@@ -2597,6 +2606,7 @@ lower yangtze	Lower Yangzi
 lower yangzi	Lower Yangzi
 ltes	LTES
 lu guimeng	Lu Guimeng
+luantan	luantan
 luban ruler	Luban ruler
 luban rulers	Luban ruler
 lulu	lulu
@@ -3826,6 +3836,8 @@ shakushina	shakushina
 shakyamuni	Shakyamuni
 shakyamuni buddha	Shakyamuni
 shallow-water lotus	shallow-water lotus
+shamisen	shamisen
+shamisens	shamisen
 shandong	Shantung
 shanhai pass	Shanhaiguan
 shanhaiguan	Shanhaiguan
@@ -4913,6 +4925,7 @@ yagura	yagura
 yaguramon	yaguramon
 yaita	yaita
 yakudana	yakudana
+yakugashira	yakugashira
 yakuimon	yakuimon
 yakushi	Yakushi
 yam	yam
@@ -4960,6 +4973,8 @@ yokocho	yokocho
 yokogi	yokogi
 yokogi-uchi	yokogi
 yomadori	four-room type
+yonai	yonai
+yonai money	yonai
 yongzheng	Yongzheng
 yonin	yonin
 yonnomaru	yonnomaru
@@ -5105,6 +5120,7 @@ zōkibayashi	zokibayashi
 築地松	tsuijimatsu
 纤道	qiandao
 背山面水	beishan mianshui
+花代	flower money
 農業全書	Nogyo Zensho
 鈔關	chaoguan
 长藤结瓜	melon-on-the-vine

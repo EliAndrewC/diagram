@@ -174,6 +174,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
+  },
+  "### T31 conversion C2 (2026-10-26): the joins stop short because the tree is drawn after the links (measured; not yet built)": {
+   "sha256": "4bf79dbcb661f72920459c0c2c05bf02ca0d110a6949cdce87b20fe185c28bf2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2708,6 +2714,45 @@
      "summary": "done when seed 723805 passes and make land (the landing cohort and pool gate) is green; Inashiro and Sawada return to their pre-T41 drawing order; rendering none",
      "class": "within",
      "why": "The landing condition is FR-008's; the pool maps returning to their pre-T41 order is the restoration's consequence, not new behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-25",
+   "blocks": [
+    "### T31 conversion C2 (2026-10-26): the joins stop short because the tree is drawn after the links (measured; not yet built)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "C2-order",
+     "summary": "settle_joins' rule (law.near_misses, joins_short) is converted by an ORDER: the access tree (settle_tree, settle_targets, settle_field, the household ways tree.admits already judged) laid first in stage_web, then the skeleton, orphan links and door paths laid onto it, each asked the lane law at lay (Lawful)",
+     "class": "within",
+     "why": "This is the conversion itself: a rule now enforced by a repair step (the last resort's settle_joins carries the ends back) is moved to lay time so each lane is placed only where the lane law admits it. It is FR-004 and the request's own words ('replacing them with just having the algorithm place correctly in the first place'). Changing the order is how you get there, and the GM approved changed behavior that stays in line with the research (2026-10-25 morning). Nothing is excepted or narrowed."
+    },
+    {
+     "id": "C2-probe-off",
+     "summary": "Once the reorder is in, settle_defer, settle_joins and the web stage's sweeps (_join_orphan_ways as a repair, _sweep_dangling_ends, _sweep_doubled_tails, tidy_lane_ends) are each probed off as R8 probed the rounds",
+     "class": "within",
+     "why": "Switching repair steps off is what the GM asked for ('turning off automated checks', 'switch off the 16 repair steps in whatever manner you find most efficient'), and so do FR-004 and SC-002. Probing them one at a time is the GM's own 'one at a time or all at once' left to the session. No step is kept back."
+    },
+    {
+     "id": "C2-defer",
+     "summary": "Nothing is built this session. The reorder is planned as its own task (decide first) and the next session starts from it",
+     "class": "within",
+     "why": "The conversion is still owed: the block says 'the conversion D11 owes is an ORDER', it does not say the conversion is set down, and no rule leaves scope. Choosing which session does the work, and putting a decision gate before an engine reorder, is scheduling and is not a narrowing. It is not an FR-007 room set-down or a seed-by-seed set-down either, so D11's set-down clause is not being stretched to cover it."
+    },
+    {
+     "id": "C2-measure-on",
+     "summary": "The reorder is measured on the landing cohort, a pre-change fresh block (seed 723759) and the five pool maps",
+     "class": "within",
+     "why": "This is FR-008/D11's landing condition (the fixed cohort, the pinned rows and the pool maps, enforced by make land) plus the fresh rate that D11 says is recorded either way. The pre-change fresh block is a baseline for that recorded rate. It is not work aimed at the fresh rate."
+    },
+    {
+     "id": "C2-rendering",
+     "summary": "Rendering: none until built",
+     "class": "within",
+     "why": "D11 says 'Rendering: none'."
     }
    ]
   }

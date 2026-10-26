@@ -102,6 +102,21 @@ two tasks after the last engine task: the fresh block before the push (FR-009), 
 SC-006). The last task closes: 1,000 fresh seeds, T106's seat turn re-applied (User
 Story 2), the code-size delta (SC-004), the feature report.
 
+### T31 conversion C2 (2026-10-26): the joins stop short because the tree is drawn after the links (measured; not yet built)
+
+Measured 2026-10-26 (method: a throwaway trace in a detached worktree at a391e87ab logging, after each `STEPS` step, every
+`join-orphans` link end standing more than 2 ft off any lane; seed 25 rolled with the last resort's `settle_joins` cut, as the
+probe that refused it): every link is laid touching the network; the ends come off it after `settle_reach` (the tree lanes
+drawn) and `settle_defer` (the ordinary lanes that break a rule against the tree cut) - on seed 25 links 3, 4, 20 and 22 end
+7-15 ft off any lane after those two steps, and the last resort's `settle_joins` carries them back. So `settle_joins`' rule
+(`law.near_misses`, `joins_short`) has no one placer to move into: the links are laid before the ways they depend on. The
+conversion D11 owes is an ORDER: the access tree (`settle_tree`, `settle_targets`, `settle_field` - the household ways the
+seating already judged, `tree.admits`) laid first in `stage_web`, then the skeleton, the orphan links and the door paths laid
+onto it, each asked the lane law at lay (`Lawful`, as a tree lane is) - after which `settle_defer`, `settle_joins` and the
+web stage's sweeps (`_join_orphan_ways` as a repair, `_sweep_dangling_ends`, `_sweep_doubled_tails`, `tidy_lane_ends`) are each
+probed off as R8 probed the rounds. The next session starts here: plan the reorder as its own task (decide first), measured on
+the landing cohort, a pre-change fresh block (seed 723759) and the five pool maps. Rendering: none until built.
+
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-25 (feature 375 FR-044) -->
