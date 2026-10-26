@@ -1440,6 +1440,7 @@ gofukumachi	Gofukumachi
 gogura	gogura
 gohei	paper wand
 gokaido	Five Highways
+gokan	gokan
 gokenin	gokenin
 gokumon	gokumon
 gokura	gogura
@@ -2278,6 +2279,7 @@ khitan	Khitan
 kiangsu	Kiangsu
 kiba	kiba
 kibana	beam-end nose
+kibyoshi	kibyoshi
 kichin	kichin
 kichin charge	kichin
 kichin-yado	kichin-yado
@@ -4960,6 +4962,7 @@ yokocho	yokocho
 yokogi	yokogi
 yokogi-uchi	yokogi
 yomadori	four-room type
+yomihon	yomihon
 yongzheng	Yongzheng
 yonin	yonin
 yonnomaru	yonnomaru
