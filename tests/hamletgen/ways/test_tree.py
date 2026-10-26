@@ -467,3 +467,14 @@ def test_a_needle_with_no_tee_to_take_is_left_for_the_law() -> None:
     assert tree.off_the_needle([[5.0, 5.0]], [first]) == [[5.0, 5.0]], "a lane of one point"
     beside = [[0.0, 0.0], [0.0, 3.0], [100.0, 3.0], [100.0, 0.0]]
     assert tree.off_the_needle(beside, [[[1.0, 1.0]], first]) == beside, "a one-point drawn lane is passed over; all of it beside"
+
+
+def test_the_lane_whose_end_runs_along_the_other_is_the_one_cut() -> None:
+    """0081: the lane whose END runs back along another way is cut where it comes alongside - whichever was drawn first (feature
+    417 T45's claims round: the earlier lane's end along the later one was left a needle)."""
+    first = [[1534.0, 1395.0], [1508.0, 1395.0], [1503.0, 1255.0], [1520.0, 1252.0]]
+    second = [[1372.0, 1502.0], [1308.0, 1380.0], [1520.0, 1252.0]]
+    cut = tree.off_the_needle(first, [second])
+    from shapely.geometry import LineString, Point
+
+    assert cut != first and LineString(second).distance(Point(cut[-1])) < 0.5, "the first's own end, run along the second, tees onto it"

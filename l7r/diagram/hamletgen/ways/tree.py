@@ -130,7 +130,7 @@ def lanes_of(M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequ
     Research:
         tree lane tread by role - research/questions/0081-village-lanes.drawing.html: house access 3 ft
         tree lanes assembled - NONE: the runs squared and set on their hosts as the web draws them, each then asked the needle rule (`off_the_needle`)
-        which way is cut - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); of two side by side, the one drawn later (in `chosen` order) ends on the earlier; the connector is never cut"""
+        which way is cut - research/questions/0081-village-lanes.drawing.html: the lane whose end runs back along another way is cut where it comes alongside - each new lane against those drawn and the connector, then each drawn lane against the new one; the connector is never cut"""
     raw_sq = square if square is not None else (lambda run: square_run_of(M, run))
     waters = square_waters_of(M)
 
@@ -145,7 +145,9 @@ def lanes_of(M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequ
     for i in chosen:
         h = host[i]
         rec = lane_record(recs[i], drawn_of[i], drawn_of.get(h) if h is not None else None)
-        rec["pts"] = off_the_needle(rec["pts"], [ln["pts"] for ln in out])
+        rec["pts"] = off_the_needle(rec["pts"], [ln["pts"] for ln in out] + ([root] if root is not None else []))
+        for ln in out:  # ...and an earlier lane whose own end runs along this one is cut instead (0081: the lane whose END runs back)
+            ln["pts"] = off_the_needle(ln["pts"], [rec["pts"]])
         out.append(rec)
     return out
 
@@ -160,7 +162,8 @@ def off_the_needle(pts: Sequence[Any], drawn: Sequence[Sequence[Sequence[float]]
 
     Research:
         the doubled way drawn as one - research/questions/0081-village-lanes.drawing.html: two ways side by side are drawn as one
-        its reach - GUESS research/questions/0081-village-lanes.drawing.html: cut where it comes alongside, the page giving no distance - half of `law.NEEDLE_LOOP_FT` (10 ft); 2.0 (the walk's step)
+        its reach - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); 0081 cuts a lane where it comes alongside and gives no distance - half of `law.NEEDLE_LOOP_FT` (10 ft); 2.0 (the walk's step)
+        a lane beside the other its whole length - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); left as drawn for the law to refuse, no stretch of it standing off to cut back to
         a needle left where the tee would close one - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); the lane is left as drawn for the law to refuse rather than cut into another needle
     """
     from shapely.geometry import LineString
