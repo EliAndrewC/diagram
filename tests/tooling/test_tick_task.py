@@ -699,6 +699,7 @@ def test_the_gate_s_own_lint_is_committed_and_any_other_change_left(tmp_path: pa
 def test_the_changed_modules_coverage_runs_beside_the_gate_and_stops_it(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
     """Feature 415 (FR-004, D6; the GM 2026-10-24): `cover_changed.py` no longer runs before the gate (48 s on T26's landing)
     but beside it, and a refusal stops the gate at once and refuses the landing with its lines; COVER_OK skips it."""
+    monkeypatch.delenv("COVER_OK", raising=False)  # a landing run with the escape set must not skip the check under test (417 T44)
     lb, d = _land(tmp_path, monkeypatch)
     seen: list[list[str]] = []
     monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: seen.append([str(c) for c in cmd]) or (0, str(tmp_path) if "rev-parse" in cmd else ""))
