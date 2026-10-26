@@ -1,0 +1,51 @@
+{
+  "utc": "2026-10-26T08:58:22Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 193,
+  "result": "failed: test-full",
+  "commit": "449e7df7b",
+  "first_failure_s": 187.3,
+  "last_failure_s": 193.5,
+  "failed_names": [
+    "uncovered l7r/diagram/hamletgen/ways/checks.py:141"
+  ],
+  "host": {
+    "load": [
+      4.42,
+      8.36
+    ],
+    "mem_avail_mb": [
+      9331,
+      9404
+    ],
+    "cpu_temp_c": [
+      99.0,
+      75.0
+    ],
+    "stall_s": {
+      "cpu": 2.6,
+      "io": 0.2,
+      "io_full": 0.2,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 82495,
+      "package": 25477
+    }
+  },
+  "phases": {
+    "preflight": 10.0,
+    "static": 1.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 175.0,
+    "floors": 14.0,
+    "test-full": 191.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "an engine file that is not Python changed: pool/hamlets/inashiro/inashiro.json",
+  "selected": 9900,
+  "collected": 9900
+}
