@@ -18191,5 +18191,71 @@
   "variants": [
    "水油"
   ]
+ },
+ "jiza": {
+  "def": "A senior rank of ordinary clerk in the Mitsui house's Kyoto shop, above the clerks of middle standing; estimated pay in the first half of the 1800s, 200 monme of silver a year.",
+  "variants": [
+   "jiza"
+  ]
+ },
+ "hitto": {
+  "def": "A senior rank of ordinary clerk in the Mitsui house's Kyoto shop, above jiza; estimated pay in the first half of the 1800s, 210 monme of silver a year.",
+  "variants": [
+   "hitto"
+  ]
+ },
+ "joza": {
+  "def": "A senior rank of ordinary clerk in the Mitsui house's Kyoto shop, above hitto; estimated pay in the first half of the 1800s, 270 monme of silver a year.",
+  "variants": [
+   "joza"
+  ]
+ },
+ "yakugashira": {
+  "def": "The highest rank of ordinary clerk in the Mitsui house's Kyoto shop, below the group heads; estimated pay in the first half of the 1800s, 330 monme of silver a year.",
+  "variants": [
+   "yakugashira"
+  ]
+ },
+ "Echigoya": {
+  "def": "The Mitsui house's great draper's business; its Kyoto head shop is the shop whose clerks' pay ladder this record gives.",
+  "variants": [
+   "Echigoya"
+  ]
+ },
+ "district deputy": {
+  "def": "A shogunal official who governed a larger stretch of the shogun's own lands than an intendant (daikan) did; the Japanese is gundai.",
+  "variants": [
+   "district deputy",
+   "district deputy's",
+   "district deputies"
+  ]
+ },
+ "yonai": {
+  "def": "A payment to a kabuki actor on top of the yearly wage, made under another name; payments like it let several actors take 700 or 800 ryo while the Kansei-era cap held the wage at 500.",
+  "variants": [
+   "yonai",
+   "yonai money"
+  ]
+ },
+ "flower money": {
+  "def": "A gift of money a village paid hired performers on top of their fee and their keep. The Ura account books enter it as its own item, from 3 bu to 1 ryo 1 bu a visit.",
+  "variants": [
+   "flower money",
+   "hanadai",
+   "花代"
+  ]
+ },
+ "luantan": {
+  "def": "The popular regional opera styles of Qing China, as against the refined kunqu of the elite. They spread in the Qianlong era and were played by small troupes with gongs and drums.",
+  "variants": [
+   "luantan"
+  ]
+ },
+ "shamisen": {
+  "def": "A three-stringed Japanese lute played with a large plectrum; the chief instrument of kabuki and puppet-theater music.",
+  "variants": [
+   "shamisen",
+   "shamisens"
+  ]
  }
 }
