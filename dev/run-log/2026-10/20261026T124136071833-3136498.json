@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-26T12:41:36Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 273,
+  "result": "failed: test-full",
+  "commit": "9a157cc4b",
+  "first_failure_s": 268.5,
+  "last_failure_s": 273.1,
+  "failed_names": [
+    "uncovered l7r/diagram/tools/cohort_audit.py:308, 357, 383, 411-412, 414-422, 517-522, 526-532, 556-567"
+  ],
+  "host": {
+    "load": [
+      6.87,
+      9.2
+    ],
+    "mem_avail_mb": [
+      7941,
+      8308
+    ],
+    "cpu_temp_c": [
+      77.0,
+      82.0
+    ],
+    "stall_s": {
+      "cpu": 3.6,
+      "io": 1.0,
+      "io_full": 0.8,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 7875,
+      "package": 2403
+    }
+  },
+  "phases": {
+    "preflight": 24.0,
+    "static": 3.0,
+    "format": 0.0,
+    "typecheck": 2.0,
+    "reference": 1.0,
+    "hooks-test": 49.0,
+    "pytest": 202.0,
+    "floors": 12.0,
+    "test-full": 218.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/tools/cohort_audit.py",
+  "selected": 10005,
+  "collected": 10005
+}
