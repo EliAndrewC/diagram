@@ -608,9 +608,11 @@ use-feature:  ## [project] make F the clone's active feature for the hooks (.spe
 step-back:  ## [project] the feature's hourly checkpoint: open it and build the round arbiter's step-back bundle (feature 383)   [TRIGGER=hour:<f>@<n> TRANSCRIPT=<jsonl> SINCE=<ISO> UNTIL=<ISO>: replay an hour]
 	@cd "$$(git rev-parse --show-toplevel)" && if [ -n "$(TRIGGER)" ]; then python3 scripts/reviews/stepback_bundle.py "$(TRIGGER)" --root "$$(pwd)" $(if $(TRANSCRIPT),--transcript "$(TRANSCRIPT)",) $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(OUT),--out "$(OUT)",); else t=$$(python3 scripts/reviews/checkpoint.py open) && python3 scripts/reviews/stepback_bundle.py "$$t" --root "$$(pwd)"; fi
 
+arbiter-ask: export ARBITER_WHY = $(WHY)
+arbiter-ask: export ARBITER_REVIEW = $(REVIEW)
 arbiter-ask:  ## [project] put a PROCESS question (a cap, a waiver, a stuck choice of route) to the round arbiter before the GM (feature 379)   SUBJECT=<short id> WHY="<the question>" [FILES="<the measurements it cites>"] [REVIEW=spec|plan|claims:<key>;<key>: an accept then stands as that review's verdict, 409; claims' since 2026-10-24]
-	@if [ -z "$(SUBJECT)" ] || [ -z "$(WHY)" ]; then printf 'make arbiter-ask: SUBJECT= and WHY= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/reviews/arbiter_bundle.py --check-ask "$(WHY)" --evidence "$(FILES)" && python3 scripts/hooks/lib/hm_arbiter.py ask "$(SUBJECT)" "$(WHY)" "$(REVIEW)" && python3 scripts/reviews/arbiter_bundle.py "ask:$(SUBJECT)" --root "$$(pwd)" --evidence "$(FILES)"
+	@if [ -z "$(SUBJECT)" ] || [ -z "$$ARBITER_WHY" ]; then printf 'make arbiter-ask: SUBJECT= and WHY= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/reviews/arbiter_bundle.py --check-ask "$$ARBITER_WHY" --evidence "$(FILES)" && python3 scripts/hooks/lib/hm_arbiter.py ask "$(SUBJECT)" "$$ARBITER_WHY" "$$ARBITER_REVIEW" && python3 scripts/reviews/arbiter_bundle.py "ask:$(SUBJECT)" --root "$$(pwd)" --evidence "$(FILES)"
 
 land-tooling:  ## [project] land the named TOOLING files on main by themselves, mid-feature (feature 379)   FILES="scripts/x.py tests/tooling/test_x.py"
 	@"$$(git rev-parse --show-toplevel)/scripts/land-tooling.sh" $(FILES)

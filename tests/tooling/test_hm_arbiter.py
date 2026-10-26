@@ -810,7 +810,17 @@ def test_an_ask_with_no_review_is_recorded_as_before_and_a_review_like_subject_o
 def test_make_arbiter_ask_passes_review_through() -> None:
     repo = pathlib.Path(__file__).resolve().parents[2]
     dry = subprocess.run(["make", "-n", "-C", str(repo), "arbiter-ask", "SUBJECT=s", "WHY=why it is asked", "REVIEW=plan"], capture_output=True, text=True, check=False).stdout
-    assert 'hm_arbiter.py ask "s" "why it is asked" "plan"' in dry
+    assert 'hm_arbiter.py ask "s" "$ARBITER_WHY" "$ARBITER_REVIEW"' in dry
+
+
+def test_make_arbiter_ask_runs_no_backtick_in_a_claim_key() -> None:
+    """Feature 417 T45: a claim key holding backticks (`at >= mine.length`) was run by the shell when the recipe pasted REVIEW
+    into a double-quoted string; the recipe now reads WHY and REVIEW from the environment, which no shell parses."""
+    repo = pathlib.Path(__file__).resolve().parents[2]
+    text = (repo / "Makefile").read_text(encoding="utf-8")
+    assert "arbiter-ask: export ARBITER_REVIEW = $(REVIEW)" in text and "arbiter-ask: export ARBITER_WHY = $(WHY)" in text
+    recipe = "\n".join(ln for ln in text.split("arbiter-ask:  ##", 1)[1].split("\n")[1:3])
+    assert '"$(REVIEW)"' not in recipe and '"$(WHY)"' not in recipe, "neither is pasted into the shell"
 
 
 def test_an_ask_naming_a_feature_by_number_is_filed_under_that_feature(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
