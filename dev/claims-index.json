@@ -42398,6 +42398,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/interactive/record/contents.py::load_opening#plumbing": {
+  "body": "93ad4f9f9adeb282",
+  "claim": "plumbing - NONE",
+  "code": "5590413183cda5aa",
+  "core": "9a27fc98a1aa66c7",
+  "date": "2026-10-25",
+  "note": "reads the opening HTML string from contents.json and refuses anything that is not text; it decides nothing about a place or how a map looks",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/interactive/record/contents.py::load_vocabulary#plumbing": {
   "code": "2e1e13c82f12d58b",
   "core": "5e9a62dc86ee621e",
