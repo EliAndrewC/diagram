@@ -267,3 +267,24 @@ def test_a_width_change_redraws_the_ink() -> None:
     settle.rewidth(s, 0, 3.0)
     assert s.M["lanes"][0]["w"] == 3.0 and s._lane_ink[0] != old
     assert all(not s.ground[z].get(part) for z in old for part in ("edge", "bed", "top")), "the old ink is blanked"
+
+
+def test_a_crossing_no_deck_seats_is_squared_and_else_cut() -> None:
+    """Ways W12/W13: `law.undeckable_at` is the placer's own deck solve, asked of a lane by `_crossing_fault`. A shallow crossing
+    of a field ditch is squared where a square deck seats; one that cannot seat even square - its landing on flooded rice - is
+    cut (asked of one lane: the settle's own shapes step went in feature 417 T31, and `Lawful` and the last resort ask it)."""
+    ditch = {"poly": [[0.0, 100.0], [400.0, 110.0]], "w": 4.0, "role": "main"}
+    shallow = [(0.0, 95.0), (400.0, 118.0)]  # two degrees off the ditch's own line
+    s = _S([CONN, shallow], field_ditches=[ditch])
+    fixed = settle._crossing_fault(s.M, 1, _pts(s, 1), [])
+    assert fixed is not None and len(fixed) == 1 and not law.undeckable_crossings({**s.M, "lanes": [s.M["lanes"][0], {**s.M["lanes"][1], "pts": [list(q) for q in fixed[0]]}]}), "squared"
+    ring = [[-50.0, 101.75], [450.0, 114.25], [450.0, 400.0], [-50.0, 400.0]]  # the rice 3 ft past the ditch's line
+    wet = _S([CONN, [(200.0, 0.0), (200.0, 300.0)]], field_ditches=[ditch], fields=[{"outline": ring, "plot_rings": [ring]}])
+    cut = settle._crossing_fault(wet.M, 1, _pts(wet, 1), [[(float(x), float(y)) for x, y in ring]])
+    assert cut is not None and len(cut) == 2 and cut[0][-1][1] < 105.0 < cut[1][0][1], "cut either side of the ditch's line (y 105 at x 200)"
+
+
+def test_with_no_connector_the_longest_network_is_kept() -> None:
+    """`settle_network` keeps the connector's network; where no lane is the connector, the longest network is kept."""
+    s = _S([[(0.0, 0.0), (400.0, 0.0)], [(0.0, 500.0), (100.0, 500.0)]])
+    assert settle.settle_network(s) == 1 and _pts(s, 0) == [(0.0, 0.0), (400.0, 0.0)]

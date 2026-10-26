@@ -438,3 +438,9 @@ def test_the_defer_tees_only_where_its_gap_would_strand_the_reach(monkeypatch) -
     monkeypatch.setattr(tree, "strands_the_reach", lambda M, i, gap: False)
     tree.settle_defer(s)
     assert len(written[-1][0]) == 2 and written[-1][0][0][-1][0] < 50.0 < written[-1][0][1][0][0], "the gap, as before"
+
+
+def test_a_household_reached_across_a_yard_is_reached_from_its_neighbor() -> None:
+    """`passage_anchors`: each household reached across a neighbor's yard is reached from that neighbor's position."""
+    M = {"houses": [{"x": 0.0, "y": 0.0, "reached_across": [50.0, 60.0]}, {"x": 9.0, "y": 9.0}]}
+    assert tree.passage_anchors(M) == [(50.0, 60.0)]
