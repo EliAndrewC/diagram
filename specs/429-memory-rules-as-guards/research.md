@@ -13,7 +13,7 @@ his own questions, verification steps), labeled two seeded random samples it nev
 - `labels-r1.json`: 81 messages (80 drawn with seed 429, plus the 2026-10-25 feature 417 message, index 1164): 8 ASKS.
 - `labels-holdout.json`: 100 messages drawn after the detector was first widened (seed 4292, none from r1): 11 ASKS.
 
-**Results** (`python3 measure/detect.py <finals.json> measure/labels-r1.json measure/labels-holdout.json`):
+**Results** (`python3 measure/finals.py 60 <finals.json>`, then `python3 measure/detect.py <finals.json> measure/labels-r1.json measure/labels-holdout.json`; the labels are keyed by the sha1 of each message's text, so a grown corpus still finds them - re-run 2026-10-26 on 1,435 messages: 8 of 8, 10 of 11, no false alarm):
 
 | detector | flags of 1,426 | r1 recall | r1 false alarms | holdout recall | holdout false alarms |
 |---|---|---|---|---|---|

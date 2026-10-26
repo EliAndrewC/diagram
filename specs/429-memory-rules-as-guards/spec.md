@@ -90,13 +90,13 @@ that differs from HEAD, the comparison a wave records.
 
 ## Success Criteria
 
-- **SC-001**: The 2026-09-27 shape (an engine edit with a review live) is refused in a test, and the edit passes once
-  the review has finished; a stalled review still refuses until it is stopped and acked (FR-001).
-- **SC-002**: The 2026-10-25 shape (a final message putting two choices to the GM, no filter run) is refused once in a
-  test; a report-only message and a message after a filter dispatch pass (FR-002).
+- **SC-001** (FR-001): The 2026-09-27 shape (an engine edit with a review live) is refused in a test, and the edit passes once
+  the review has finished; a stalled review still refuses until it is stopped and acked.
+- **SC-002** (FR-002): The 2026-10-25 shape (a final message putting two choices to the GM, no filter run) is refused once in a
+  test; a report-only message and a message after a filter dispatch pass.
 - **SC-003**: An Edit in gm-assistant's main tree is refused and one in its clone passes, in a test (FR-003).
 - **SC-004**: `make maps-moved` on a clone with one changed manifest names exactly that one (FR-004).
-- **SC-005** (spec-wide): `make hooks-test` green with the four companions.
+- **SC-005** (FR-005): `make hooks-test` green with the three guard suites (engine-freeze, gm-tree, escalation section 9), `tests/tooling/test_maps_moved.py` green in the gate's tooling tree, and each guard's row in `docs/guards.md`.
 
 ## Review history
 
@@ -107,3 +107,12 @@ that differs from HEAD, the comparison a wave records.
   past final messages that put a question or decision to the GM it catches, the 2026-10-25 feature 417 message among them.
   FR-003's Bash escape (the GM's explicit say-so) ruled LEGITIMATE. Both changes made: FR-001 counts every unfinished
   review live, SC-001 adds the stalled case; FR-002 adds the recall measurement.
+- spec-fidelity round 2 (2026-10-26): FAITHFUL - (1) RESOLVED: FR-001 counts every unfinished map-review agent live,
+  stalled or not, with TaskStop then ack as the route, and SC-001 tests the stalled case; "not finished" is stricter than
+  round 1's suggested `pending` (which reads a review mid tool call as finished, R2) and accepted; (2) RESOLVED: R1
+  records recall against two independently labeled samples (holdout 9 of 11 before fitting, 0 false alarms in 89; the
+  feature 417 message caught), re-run by quote-matching since the uncommitted corpus has grown (8 of 8, 10 of 11, 0 false
+  alarms reproduced). For the plan review: D167's two-day age bound is not in FR-001 or R2; T06 has no FR.
+  Applied after: the labels are keyed by the sha1 of each message (reproduced on a 1,435-message corpus, 8 of 8 and 10 of
+  11, 0 false alarms); the age bound was struck by the plan review; spec-lint's FR/SC pairing fixed on SC-001, SC-002 and
+  SC-005 (wording only).
