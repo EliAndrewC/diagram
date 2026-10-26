@@ -56020,12 +56020,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_first#the privy's reach": {
-  "body": "781068c80700e5dd",
+  "body": "9fe3409f71700e1c",
   "claim": "the privy's reach - farm-privies-and-their-night-soil-benjo.drawing: no more than 48 ft from its house, measured off its far corner as `within_reach_of` measures it",
-  "code": "b39c90de7ced7220",
-  "core": "90dff9bbadcfbf12",
+  "code": "1fef5a810e23ba90",
+  "core": "bde49169f7f40d78",
   "date": "2026-10-26",
-  "note": "the inline test is the privy's far edge less the house's half-size on each axis, floored at 0 and compared to reach squared: the far corner to the house's walls, as §30 says the 48 ft reach is measured",
+  "note": "the inline test measures each axis's gap from the privy's far edge to the house's wall, `|d| + q/2 - h/2`, floored at 0. It rejects a seat only when the gap is more than `reach`, so a seat at exactly the reach still counts, as \"no more than 48 ft\" says. The 48 ft is the page's own choice and comes from the caller through `reach`",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
