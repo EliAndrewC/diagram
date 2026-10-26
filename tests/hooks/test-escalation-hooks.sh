@@ -99,6 +99,46 @@ rc=0; stop_call || rc=$?
 [ "$rc" -eq 2 ] && [ "$(armed_by)" = "settlement-review" ] && ok "a finding left for the GM still owes the filter" || no "an open finding was let through" "(rc=$rc)"
 ( cd "$FIX" && "$HOOK" disarm "$FIX" >/dev/null 2>&1 ); rm -f "$FIX/dev/review-ledger.md"
 
+echo "9. a QUESTION to the GM with no review behind it is filtered too (feature 429 FR-002)"
+TR="$FIX/../transcript.jsonl"
+gm_said() { printf '{"type":"user","message":{"content":"%s"}}\n' "$1" >> "$TR"; }
+filtered() { printf '{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Agent","input":{"subagent_type":"escalation-check","prompt":"draft"}}]}}\n' >> "$TR"; }
+final_stop() { # final_stop <last assistant message>
+  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","transcript_path":sys.argv[1],"last_assistant_message":sys.argv[2]}))' "$TR" "$1" \
+    | ( cd "$FIX" && "$HOOK" stop 2>"$HOOK_ERR" )
+}
+Q417='Everything in my last message stands, including the questions waiting for you:
+1. Should I switch off the settle'"'"'s 16 repair steps one at a time, as I did for the lane web?
+2. For T27, should the track be drawn from where its households'"'"' ways meet it, or should the ways be laid to the track'"'"'s start?'
+: > "$TR"; gm_said "work 417"
+rc=0; final_stop "$Q417" || rc=$?
+[ "$rc" -eq 2 ] && ok "the 2026-10-25 shape (two choices put to the GM, no filter) is refused" || no "the 10-25 shape passed" "(rc=$rc)"
+grep -q "escalation-check" "$HOOK_ERR" && ok "...and the refusal names escalation-check" || no "the refusal does not name the filter"
+rc=0; final_stop "$Q417" || rc=$?
+[ "$rc" -eq 0 ] && ok "the same message is refused once, never a loop" || no "the same message was refused twice" "(rc=$rc)"
+rc=0; final_stop 'Landed on main. To verify: `make maps-moved` prints "no pool manifest moved against HEAD".' || rc=$?
+[ "$rc" -eq 0 ] && ok "a report that asks nothing passes" || no "a report was refused" "(rc=$rc)"
+rc=0; final_stop '## Answers
+- "should we follow the research?": yes - the record answers it, so I followed it.
+> Do you want me to file it?' || rc=$?
+[ "$rc" -eq 0 ] && ok "the GM's own question, quoted, and a block quote pass" || no "a quoted question was refused" "(rc=$rc)"
+filtered
+rc=0; final_stop "Shall I file it as feature 430?" || rc=$?
+[ "$rc" -eq 0 ] && ok "an escalation-check since the GM's last message lets the question through" || no "a filtered question was refused" "(rc=$rc)"
+gm_said "and one more thing"
+rc=0; final_stop "Shall I file it as feature 431?" || rc=$?
+[ "$rc" -eq 2 ] && ok "a filter BEFORE the GM's last message does not count" || no "an old filter let a new question through" "(rc=$rc)"
+rm -f "$TR"
+
+echo "10. an OFFER is not a question, but owes the significance test (feature 429 amendment 1)"
+: > "$TR"; gm_said "carry on"
+rc=0; final_stop 'I kept the 104 ft homestead ground. I can switch to the attested 75 ft if you would rather.' || rc=$?
+[ "$rc" -eq 2 ] && ok "an offer-only message is refused once" || no "an unfiltered offer passed" "(rc=$rc)"
+grep -q "OFFER UNFILTERED" "$HOOK_ERR" && grep -q "significant" "$HOOK_ERR" && ok "...with the significance instruction, not the question one" || no "the offer refusal text" "$(cat "$HOOK_ERR")"
+rc=0; final_stop 'I kept the 104 ft ground; I can switch it if you would rather. Shall I file the lane fix as a new task?' || rc=$?
+[ "$rc" -eq 2 ] && grep -q "QUESTION UNFILTERED" "$HOOK_ERR" && ok "a message with an ask and an offer is refused as a question" || no "ask+offer" "(rc=$rc)"
+rm -f "$TR"
+
 echo "8. outside a work tree the hook does nothing"
 OUT=$(mktemp -d)
 rc=0; printf '{"session_id":"t1"}' | ( cd "$OUT" && "$HOOK" stop 2>/dev/null ) || rc=$?

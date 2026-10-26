@@ -86,6 +86,19 @@ does sometimes ask ("what went wrong", "why did that take so long", a tooling po
 requested) - check the session's instructions and the GM's own recent messages in the draft's context
 before cutting on this ground, and say which you found.
 
+## An OFFER is not a decision item - judge it by significance
+
+The GM, 2026-10-26 (feature 429 amendment 1): *"offers are different from questions. Like saying that you made a decision
+but then offering to reverse it if I think it's a good idea ... without that actually being a question that is floated for
+me, that is all perfectly fine ... except insofar as I think that offer should only be made if it crosses a certain
+threshold of significance. Because if you offer to reverse literally every single decision that is made, then that is
+overwhelming."* An offer (a decision already made or work already done, offered back - "I kept X; I can switch to Y if
+you'd rather") is NOT held to the five tests below, and is never a GM review item. Judge it KEEP only when the decision
+it offers back might otherwise have been floated as a question: it changes what ships or what the GM will see, and a
+reasonable GM could want it the other way. CUT an offer of a routine choice, and CUT down a message that offers back
+most of its decisions to those that clear the bar (there is no count cap). An offer the draft words as a question ("Shall I switch to
+Y?") after the work was already decided is REWRITE to the offer form.
+
 ## The five tests a DECISION item must pass
 
 Apply these in order. An item that fails any one of them is a CUT, and you say which test it failed.
@@ -133,6 +146,11 @@ they themselves asked in this session, which is answered rather than filtered.
    right before you record a norm as unverifiable - a verification that never ran looks exactly like one that passed.
    And "the record is silent" has a vocabulary: an ABSENCE note means a search that found nothing, a labeled GUESS
    means the record has already answered honestly, a GROUNDS note means nothing was owed. Only the first is silence.
+   A rule the draft calls the GM's ("your ruling", "GM 2026-09-05") is verified like any norm: find his quoted words in
+   a `specs/*/request.md`, an `**Approved**:` line, a spec or `docs/gm-rulings.md`. A docstring or doc that says "GM
+   ruling" is not enough - sessions have labeled their own choices rulings (2026-10-19: a cited "GM ruling" against
+   deleting stale bytecode was, per feature 184's spec, a choice the GM never asked for). Unfound, the item is REWRITE
+   to "an earlier session chose this".
 3. **Check the measurements are of the current state.** A figure measured before the last fix is
    stale, and the session will not have noticed.
 4. **Judge each item** KEEP / CUT / REWRITE.

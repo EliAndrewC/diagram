@@ -1,0 +1,502 @@
+{
+ "c50567520d9ee7adc28af1e96485c74b91496af9": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 11
+ },
+ "c0950fdcc1f1280329f29ca1785a7c2b4c583c83": {
+  "label": "ASKS",
+  "quote": "Which one the setting means is still your call; it's the first open item in HANDOFF.md.",
+  "index_2026_10_26": 15
+ },
+ "9ddaf1addf1c4fbd15661c4b36e67340795df359": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 89
+ },
+ "1cae171e98809d4443c12f4ca8f4d402c206231c": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 114
+ },
+ "2e0b49e2a68ed00590bddb1e3bb2c7e748eca4c7": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 142
+ },
+ "6a3981df473cae01270eb6b3297324263d05eb5b": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 155
+ },
+ "fc1b52f2736f86f2b3c1dabcf620ce970bb32adc": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 159
+ },
+ "792432e045b64221f351c88df8cbe02752c6949e": {
+  "label": "ASKS",
+  "quote": "Yours to decide, unchanged from my last message:",
+  "index_2026_10_26": 163
+ },
+ "11f5a4eae0847a980a7537525ef1c2c8defacf2d": {
+  "label": "ASKS",
+  "quote": "Waiting on your decision",
+  "index_2026_10_26": 172
+ },
+ "3920d5cf8cd2faa953a5a6714832b3a5411e8f04": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 203
+ },
+ "1d56ff9228c2493b44a81beb36ca872250189402": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 204
+ },
+ "e5fa68432a6d9f92415f2ef280770c97f44d5e8b": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 209
+ },
+ "48c17d1ab2c03afc2b24d1b566505cafa9e4a8cd": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 230
+ },
+ "d4070a992941b3bf503353392ad6ef7d40183aab": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 240
+ },
+ "85689fba470ce03ddddff3e590b78b0359423a45": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 242
+ },
+ "c69d84e5cdf8316daa59ca0fafb57bc2177288ef": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 243
+ },
+ "33cfb0081f97a778fdb30e5661ede216e81e9adc": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 271
+ },
+ "727b14fe100bb7d699cf8825a213ec64c7616008": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 280
+ },
+ "ce853b7fb597251640ea5311eec29f4333b44972": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 281
+ },
+ "fbaea86c89427980ee06a49edf81363a5cf464d8": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 283
+ },
+ "1c9fe1446678dfac824a6d87e4d866a5ee3ae206": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 309
+ },
+ "f1b430963d6dbf425e9806126ccb6306abcbf506": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 313
+ },
+ "838a91b05f332e911c9638b74b0e407fb46ed9e7": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 321
+ },
+ "0f9fc6b8f7f29bd39a61d7778fcbdb0b74b928dd": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 336
+ },
+ "c1ba9360367c0dcf501694b8bc67a7fd40f4be1e": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 342
+ },
+ "7037b3f053752e66a9a955030485f0511dfa902a": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 345
+ },
+ "600db1c1f235ab6496d17d9510ebeb8c52176a26": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 356
+ },
+ "42f0fbd71c09bd9ddc5e155cb5c18837ef9f25f0": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 382
+ },
+ "0e97690baf7e00545b32444235af03f9f803c69c": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 385
+ },
+ "5b23520863b125b4cb5be8b2310b807138d8b7e2": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 395
+ },
+ "7ee4784a204733450fcc3f5b300f6fa19957c764": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 396
+ },
+ "ebc12d6219a3652674deaac751758cc198ef2d6c": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 425
+ },
+ "54dea8f6694f8509fa87a74b6a6a10a38b8a7b9e": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 431
+ },
+ "7755f53c3cf264635457f17f313c98dcd1eca167": {
+  "label": "ASKS",
+  "quote": "Want me to give it the same opening?",
+  "index_2026_10_26": 432
+ },
+ "329e1f2995e822769b80a5894368f4f2e0059b72": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 459
+ },
+ "b174ffb37e7bc4961e8d5dd6afc7b79f3f63832f": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 469
+ },
+ "4b1a6b4c474a7661222d24569eb464a5787ab1cb": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 484
+ },
+ "0226f5875c44c7e62872a95b0c716a8f726bc9c4": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 486
+ },
+ "87d2f4f49dea6bca6e705cb793918dc431f66f65": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 493
+ },
+ "b19e04b9d234e611513aa33569b875f61dab4307": {
+  "label": "ASKS",
+  "quote": "T02, the tooling, and T03's general merge are the next steps when you say go.",
+  "index_2026_10_26": 503
+ },
+ "555c1fe5d8f65ca8c9bd7be51b229a65cf4203a2": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 512
+ },
+ "1f2d81cd5bcf70c0e8536323ec97038377b905a0": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 529
+ },
+ "d5247463057ad9ec7c77b43c2f339a147b7f3778": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 540
+ },
+ "392ca5900b4c64ec7421058b10f5de9ed57b608c": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 551
+ },
+ "82715254c05bbf941bd67320a0bcdc825ba7e951": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 576
+ },
+ "8f78b4a91828325b0a4d289af6ccb51176ce78bd": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 587
+ },
+ "ef6cf6a190aa11cb570e1c6571ed6e67b31aecdd": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 591
+ },
+ "1e38dfa6dc57d642866ab02ec7362e650da04aa5": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 629
+ },
+ "cf85b34cef60bbe359aa0087efb074a9b3c7d83b": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 639
+ },
+ "b5d60a41da45e55ae34ee2d20556201424d3c70e": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 643
+ },
+ "13f7a582bf3ae62bdd03ece201611c3073751816": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 665
+ },
+ "6f418fddc8085566b0ae9277129c1311c0e60df9": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 672
+ },
+ "112f178367ed039deb1f60d2e4506c73fef93c1c": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 674
+ },
+ "b58b2e0b703f9bcb66d7017428415467b6603fba": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 677
+ },
+ "5159c4210e8c23862712efb9949ae5bfe5022bb1": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 692
+ },
+ "f7394f73c7c178cf5ae43e79ed21830fa51b45cb": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 749
+ },
+ "aed70a584faef215e5ed1320faf9d42e49768097": {
+  "label": "ASKS",
+  "quote": "Should I file them as 385 tasks?",
+  "index_2026_10_26": 786
+ },
+ "c9cb61bf26d66facdadb0df9c67f4119b4ffe82c": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 789
+ },
+ "77ddb21bc17327fd45e21393d2b3eb8c39dd7038": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 814
+ },
+ "13d7df1cb04dab9d1dee13dc63c529975cdd6062": {
+  "label": "ASKS",
+  "quote": "should the lane-end findings keep going into 385, or move to their own feature?",
+  "index_2026_10_26": 822
+ },
+ "f01185b32fdcc232674b5579fd2ca91cb070c771": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 838
+ },
+ "b22593e0baa70c985946dd95fe3fb560eb73fbef": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 839
+ },
+ "c986e85a320752c04b17c45435d492a1b5338c58": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 845
+ },
+ "799fe92355e186e7824412dc302694edab25f63a": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 847
+ },
+ "7e8c41f173613dd20b9002d88faa000e4b5a2571": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 857
+ },
+ "f6411aaf0c80cfda150b3eeb40b4642cc67dcf3f": {
+  "label": "ASKS",
+  "quote": "say the word and I will.",
+  "index_2026_10_26": 874
+ },
+ "586f90c87c353d2116e9d6e0daefea32fada940f": {
+  "label": "ASKS",
+  "quote": "Your options:",
+  "index_2026_10_26": 877
+ },
+ "befe98e0cda32916a4d73e05c85a85c25d30ba7e": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 887
+ },
+ "a179ccc67abc6790fe71290b70feabb398755cf7": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 889
+ },
+ "d25b40a80cce517bf218ac4b9eb43596a5c763a0": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 891
+ },
+ "439e8defaebf585697ed232ed6c348a92cb4354a": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 938
+ },
+ "8551c1bb565116d385fd2369254cf3b730a47ba5": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 950
+ },
+ "7221539ce0c9a9c1b5d41cf2ba8c01a056541b4a": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 953
+ },
+ "c90fee35903412d34f0bd9ad236d7e651221d888": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 962
+ },
+ "46d746dc8e891fd7410bf24c435ef7bcf455c82a": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 981
+ },
+ "a7f81eb248c0645fa230be7de2029ebe65bc787c": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 988
+ },
+ "6c0c26c6b5296ae9e3df398bf306529f9bb70ccb": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1016
+ },
+ "124521a0d31e247ff298d32de147e28fff6fd250": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1024
+ },
+ "52f2204e099392e31e0a3c60b169f3acacc36f57": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1047
+ },
+ "14348b73d481d0a8f9fe6249e6a9ad006db3b63d": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1062
+ },
+ "0453c7d4a96547ebe982c560da2bb2af3a4f6119": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1136
+ },
+ "b65a6c304e8c63a371f988477965453151831de7": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1140
+ },
+ "d4ad5e7b81b017b6a88fbe7156de940c10830861": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1145
+ },
+ "80f3eda6ab5ae949d9ac37cc6bd268cefd1b3138": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1175
+ },
+ "e304980332cdb0ab924219dbbe4a1b1603c7b476": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1216
+ },
+ "c1cce6afe462eb620cfdc3ad162266a02cdea5c8": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1219
+ },
+ "57bf7b503b9d034d3803221cb1e8685dea2246a4": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1221
+ },
+ "b6f8ddc185a32ffad78c977de4a9eff0e8500358": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1225
+ },
+ "8d1ec3722945d009d49ff918db304df80c27fac8": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1247
+ },
+ "60f0d2bd38a909d66ecb3b2e9102a70c10fa3918": {
+  "label": "ASKS",
+  "quote": "I can raise it too if you want.",
+  "index_2026_10_26": 1264
+ },
+ "a534c32b299a06a903540362eb5b2c43ad6bed4e": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1266
+ },
+ "7b59c8aa994546bfeffbf2659fe42825397874e3": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1282
+ },
+ "3240c8e189efda51d5c68b7dbc1f5172e95c2598": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1290
+ },
+ "44d87857963c591fc626236218e3873eece9c473": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1301
+ },
+ "47c4f75cf99d937e5478923db252321d181cae8d": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1305
+ },
+ "82a76f8f2f651dd0a69385c083c2eee3d19b0151": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1323
+ },
+ "a470504c293b67e4478b89028e7ea0f3081a7eb5": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1337
+ },
+ "a9d4e31f1541259d44ab8a0562e4164324d3fb09": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1365
+ },
+ "2fed93aeb1b98393a0e54865a249d8e7b7304bfc": {
+  "label": "NONE",
+  "quote": "",
+  "index_2026_10_26": 1372
+ },
+ "3e9b92e9256eab7bb9aaf278e4cf7d6dee54d197": {
+  "label": "ASKS",
+  "quote": "Shall I file this as one feature",
+  "index_2026_10_26": 1393
+ }
+}

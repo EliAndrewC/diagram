@@ -111,6 +111,14 @@ Answer these, in this order:
    has already checked that the words are the GM's; only you can check what they approve. Read the quote against the
    request: words that state a rule, accept a feature after the fact, or approve a different piece of work do not
    approve filing this one, and the verdict is NOT FAITHFUL until the line quotes the GM's approval of this feature.
+8. **Does every enumeration carry its search space?** (feature 185: four rounds found the same miss four times - a NAME
+   was censused and treated as the MECHANISM.) A list of call sites, consumers or files to change - a removal above all -
+   names the command that produced it, so its reach can be checked: "five call sites" is unfalsifiable, "five, from
+   `grep -rn locked_out --include=*.py` under l7r/" shows the Makefiles, shell scripts and registries that hold the name as
+   a STRING were never searched. The list is derived from the WAIST - the narrowest function the behavior passes through,
+   walked outward by callers - not from the most recognizable token; ask what would FAIL if the thing vanished, not what
+   mentions it. A list produced through `| head` is a sample, not a census. A list with no stated search space, or one
+   whose space visibly misses a form of the name, is a finding.
 
 **Enforcing what was asked is not unrequested scope (GM 2026-09-20).** A test, a guard or a check whose ONLY effect
 is to make the thing the GM asked for actually happen, and keep happening, SERVES the request: name the clause it

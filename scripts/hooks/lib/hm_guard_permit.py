@@ -27,7 +27,7 @@ from hm_escape import reason_is_enough  # noqa: E402
 
 PERMIT_SECONDS = 3600
 STORE = "l7r-guard-permits.jsonl"
-_GUARD = re.compile(r"(/scripts/[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json|/tests/rolls\.py)$")
+_GUARD = re.compile(r"(/scripts/(?:hooks/)?[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json|/tests/rolls\.py)$")
 _SUITE = re.compile(r"/tests/hooks/test-[\w-]+-hooks\.sh$")
 
 

@@ -143,13 +143,43 @@ pretool() {
   exit 0
 }
 
+# GUARD_EDIT_OK: feature 429 FR-002 - A QUESTION WITH NO REVIEW BEHIND IT IS FILTERED TOO. On 2026-10-25 a feature 417
+# report put two questions to the GM (does a finding apply; which of two placements) with no review dispatched, so nothing
+# armed and nothing fired; he answered "that is the kind of question that our processes are supposed to answer". The final
+# message (the Stop payload's `last_assistant_message`) is read for an ask by `lib/hm_gm_question.py` - measured on 1,426
+# past final messages, specs/429-memory-rules-as-guards/research.md R1 - and the turn end is refused ONCE per message
+# unless an escalation-check was dispatched since the GM's last message. Exits 0 when nothing is owed.
+ask_unfiltered() { # ask_unfiltered <clone>
+  local line key
+  line="$(printf '%s' "$INPUT" | python3 "$EH_HERE/lib/hm_gm_question.py" judge 2>/dev/null)" && exit 0
+  [ -n "$line" ] || exit 0
+  key="$(printf '%s' "$INPUT" | python3 -c 'import hashlib,json,sys; print(hashlib.sha1((json.load(sys.stdin).get("last_assistant_message") or "").encode()).hexdigest())' 2>/dev/null)"
+  [ "$(read_field "$(state_file "$1")" asked_told)" = "$key" ] && exit 0   # once per message, never a loop
+  write_field "$(state_file "$1")" asked_told "$key"
+  case "$line" in
+    offer$'\t'*)
+      # amendment 1 (the GM 2026-10-26): an offer is not a question, but "should only be made if it crosses a certain
+      # threshold of significance" - the filter keeps the significant ones and cuts the routine.
+      printf 'OFFER UNFILTERED: your final message offers a decision back to the GM and no escalation-check has read it:\n  %s\n' "${line#*$'\t'}" >&2
+      printf 'An offer is fine, and is not a question, but only for a decision that might otherwise have been floated as one.\n' >&2
+      printf 'Dispatch `escalation-check` with the draft as its prompt: it keeps the significant offers and cuts the routine.\n' >&2
+      guard_log escalation blocked "stop" offer-unfiltered ;;
+    *)
+      printf 'QUESTION UNFILTERED: your final message puts something to the GM and no escalation-check has read it:\n  %s\n' "${line#*$'\t'}" >&2
+      printf 'Dispatch `escalation-check` with the draft as its prompt and send what it keeps. A question the record or the\n' >&2
+      printf 'research answers is not his (root CLAUDE.md, "Research"); his are taste and genuine forks.\n' >&2
+      guard_log escalation blocked "stop" question-unfiltered ;;
+  esac
+  exit 2
+}
+
 stop() {
   local clone armed key
   INPUT="$(cat)"
   clone="$(clone_of)"
   [ -n "$clone" ] || exit 0
   armed="$(read_field "$(state_file "$clone")" armed_by)"
-  [ -n "$armed" ] || exit 0
+  [ -n "$armed" ] || ask_unfiltered "$clone"   # GUARD_EDIT_OK: feature 429 FR-002, a new operation
   # GUARD_EDIT_OK: feature 375 FR-007 - a review whose every finding is DISPOSED (its ledger rows say fixed, verified, accepted,
   # filed, or nothing found) owes no escalation-check: nothing of it is going to the GM.
   if all_disposed "$clone" "$armed" "$(read_field "$(state_file "$clone")" ledger_rows)"; then

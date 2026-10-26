@@ -169,6 +169,10 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 	  $(patsubst @%,%,$(RUN)).pipeline.regen --no-cache "$$g"; \
 	fi
 	@$(MAKE) --no-print-directory pool-index-if-stale
+	@python3 scripts/measure/maps_moved.py --only "$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"
+
+maps-moved:     ## [maps] which pool manifests differ from HEAD - the comparison a wave records, never a scratch copy (feature 429)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/maps_moved.py" --root "$$(git rev-parse --show-toplevel)"
 
 cohort:         ## [maps] roll N seeds and report every failure      N=10 [SEED=<first seed>] [JOBS=<workers>] [HOUSEHOLDS=<n>]
 ##  N=<seeds>   how many seeds to roll, besides the six pinned rows (default: 10 - the GM, 2026-10-12, on the per-seed record: `make cohort-seeds`)
