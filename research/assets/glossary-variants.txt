@@ -1658,6 +1658,7 @@ hereditary temple	hereditary temple
 hereditary temples	hereditary temple
 hexi	Hexi Corridor
 hexi corridor	Hexi Corridor
+hida	Hida
 hidden image	hidden image
 hidden images	hidden image
 hidenin	hidenin
@@ -2674,6 +2675,7 @@ master xuanhu	Xuanhu
 master-mountain	master-mountain
 masugata	masugata
 matebajii	matebajii
+materia medica	materia medica
 material index	material index
 matoi	matoi
 matou	gangi
@@ -4594,6 +4596,7 @@ tsushi nikai	half-story
 tsushi-nikai	half-story
 tsushima	Tsushima
 tsushima's	Tsushima
+tsutaju	Tsutaju
 tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou

@@ -18209,5 +18209,23 @@
   "variants": [
    "yomihon"
   ]
+ },
+ "materia medica": {
+  "def": "The knowledge of medicinal substances - the plants, minerals and animal parts used as drugs - and a book that catalogs them; a Chinese bencao is one.",
+  "variants": [
+   "materia medica"
+  ]
+ },
+ "Tsutaju": {
+  "def": "The short name of the Edo publisher Tsutaya Juzaburo, who began as a lending librarian.",
+  "variants": [
+   "Tsutaju"
+  ]
+ },
+ "Hida": {
+  "def": "A mountain province of central Japan, in what is now northern Gifu Prefecture; its town of Takayama sent smiths out to work away from home.",
+  "variants": [
+   "Hida"
+  ]
  }
 }
