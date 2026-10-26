@@ -658,28 +658,4 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
-### T49 (FR-005, T48's review): every way squared at its water crossings where its placer lays it
-
-- **Approach**: T48 deleted the settle's `square_every_crossing`; four placers still lay a run without squaring it where it
-  crosses the brook or a drawn channel - the skeleton arms (`web/skeleton.py`, `_lay_skeleton`), the web lanes
-  (`fabric._draw_web`), the bund and track spurs (`bund.py`, `track.py`'s drawn spur), the field way (`reach.py`) and the connector's dry exit
-  (`track.connector_dry_exit`'s runs, returned unsquared at `track.py`'s two fallbacks - found by T48's impl-drift). Each asks
-  `squaring.square_run` of its run before it commits it (as `tree.lanes_of`, the door paths and the connector already do), the
-  run then judged as squared by the placer's own tests (`admits_lane`, `Lawful`). A placer whose ways are shown by measurement
-  never to cross water (no crossing on any fixed, pinned or fresh seed and none possible by construction) owes nothing, its
-  measurement recorded here. Measured with `make cohort-landing`, the fresh block and the pool, against HEAD. Rendering: none.
-
-### T49 Approach (checklist part A)
-
-1. **The goal, in the world.** Every way meets water square, as laid; nothing squares it afterwards.
-2. **The constraints.** FR-005, D35, D11, FR-008; 0035 and 0084 (a crossing square to the water).
-3. **Where each comes from.** G: the GM 2026-10-24/25 (place correctly in the first place). R: 0035, 0084. O: T48's review.
-4. **Do they describe the world here?** Measured per placer, fixed, pinned, fresh and pool.
-5. **The order.** After T48; with the other placer conversions (T31, D11).
-6. **The exits.** FR-008 green: landed with its fresh rate. Red: set down.
-7. **The search smell.** None: one placer at a time.
-8. **The budget.** One landing.
-9. **Done, measured.** Each of the four squares its run or is measured never to cross water; `make land` green.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
+<!-- plan-archive: T49 to T48 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
