@@ -164,3 +164,11 @@ the gate, faster than the gate.
   changed code" condition is not in item 6 (NOT LEGITIMATE as a condition; "task row names the unit" and "open" are
   LEGITIMATE); its "MAY be skipped" softens item 6's "skip". (4) FR-005's "decides nothing" must be the part B test, not the
   absence of a `D<n>` label alone.
+- spec-fidelity round 2 (2026-10-26, VERIFY): CHANGES REQUIRED - (1) RESOLVED: FR-003a puts the `cover-changed` replay first
+  and FR-003's scope follows it; "(not only the mirrored directory)" is gone; SC-002 makes "fast" a criterion; the US3.1 and
+  SC-002 escapes are deleted. (2) RESOLVED: FR-002 and US2.2 cover any non-doc, non-module file under `tests/<dir>/`; the top
+  level plans full. (3) RESOLVED: "on code the landing changed" is gone from FR-006, US6.1 and SC-005; FR-006 says small bundles
+  are not triaged, and the skip is recorded. (4) PARTLY RESOLVED: FR-005 now states the part B test exactly as
+  `plan_sections.decides_nothing` applies it, but US5.2 still gives the label-only test ("names no decision (`D<n>`) not
+  defined in a reviewed block"), which FR-005 now rejects. US5.2 must state the same test as FR-005: item 4 answered "No",
+  item 5 "Neither", and every `D<n>` defined elsewhere.
