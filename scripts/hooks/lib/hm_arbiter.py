@@ -754,7 +754,7 @@ def main(argv: list[str]) -> int:
             return 1
         stands = f"(REVIEW={review}: an accept stands as the {review} review's verdict)" if review else ""
         trip(Path(".").resolve(), trigger, "ask", "", f"{why} {stands}".strip(), review=review)
-        print(f"arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM, who reviews the ruling after landing; dispatch `round-arbiter` with the MANIFEST below")
+        print(f"arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM (its ruling reaches him only as a kept for_gm question, feature 432); dispatch `round-arbiter` with the MANIFEST below")
         if stands:
             print(f"arbiter-ask: {stands}")
         elif re.match(r"\d+-(spec|plan)-", subject) or re.search(r"spec-fidelity|plan review|spec review", why, re.I):

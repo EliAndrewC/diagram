@@ -48,7 +48,7 @@ incidents behind them.*
 - **A regression is measured, not remembered.** It is anything that passed before your change and fails after it - a test, a pool artifact, a cohort seed, a rate. Take the baseline on unmodified code in a **detached worktree** (`git worktree add --detach /tmp/base HEAD`), never by stashing - a stash mutates the tree under any review agent currently reading it. **And check each failure the worktree reports against your clone before calling it pre-existing**: a fresh worktree carries no GITIGNORED artifacts, so tests that read them fail there for reasons that have nothing to do with the code. The reverse is the dangerous half - the same gap can make a test pass ONLY in the worktree, hiding a real regression from the moment the baseline is taken.
 - **Pre-existing failures are NOT regressions** - they do not block your push, and that distinction is exactly why the baseline is mandatory. They are NOT left alone either: one you find is fixed in the work at hand (Principle XIV). The old wording here - "they stay ledgered and are not fixed under someone else's feature" - was struck by the GM on 2026-10-01 (*"I didn't think that we had a rule about not fixing someone else's pre-existing failure under your feature ... We should strike that as a rule ... We should definitely fix the pre-existing failure"*), after it led a session to escalate a bug it had already traced instead of fixing it.
 - **None of these excuses one**: it is small; it is "only" a cohort seed or a fixture; you documented it (a ledger entry tracks a regression, it does not permit one); the change fixes more than it breaks; or the residue "ROTATED" because a re-roll moved which seeds fail. On rotation specifically - where per-seed comparison survives, a check that passed on a seed and now fails is a regression; where the re-roll makes per-seed comparison meaningless, the pass RATE must not drop **and** every newly-failing check must be individually diagnosed.
-- **Three exits only: fix it, revert it, or get the round arbiter's waiver** (`make arbiter-ask`, the GM reviewing it after landing - feature 379) for that specific regression. If you cannot fix it, STOP and say so - the work stays in the clone, **unpushed**. `sync-with-main.sh done` is not run on a regressed state; committing inside your own clone is still fine and correct (mid-task work is sacred).
+- **Three exits only: fix it, revert it, or get the round arbiter's waiver** (`make arbiter-ask` - feature 379) for that specific regression. If you cannot fix it, STOP and say so - the work stays in the clone, **unpushed**. `sync-with-main.sh done` is not run on a regressed state; committing inside your own clone is still fine and correct (mid-task work is sacred).
 
 **FIX DEFECTS WHERE YOU FIND THEM - bugs before new code** (constitution Principle XIV, NON-NEGOTIABLE, GM 2026-08-17: *"anytime we are working on the diagram skill and you in the course of implementing a feature come across some new defect - even if it is a defect that did not have anything to do with what you were working on - I would like you to fix it as part of that work ... in general, we should fix bugs before writing new code."*). A defect you find while doing something else is fixed IN that work, with the same verification anything else gets - not filed, not deferred to "its own pass". The **only** exception is a fix that would be a complete overhaul or a giant architectural change (a stage reordering, a new subsystem, a placement engine rewritten), and deferring one is a deliverable rather than a shrug: it carries the MEASUREMENT that establishes the defect, the mechanism, and an implementation sketch.
 
@@ -66,12 +66,13 @@ it into where the time went - every feature closes with one. **Decide, then chec
 its checks run (`make decide`); a page is frozen while its checks run; a round's own edits go in once. **Owed by what changed**:
 a pop-up's checks are triaged against the blocks that moved; a procedure claim is owed by its own line. **Escalated without
 stopping**: a tripwire (a third round, a block that comes back, two red gates, checks out of proportion to the change) owes the
-`round-arbiter` one binding ruling - continue, accept or process fault - in place of the GM's waiver, and the GM reviews every
-ruling after the feature lands (`make gm-review`, `make gm-reviewed`). The full record: `specs/375-enforced-wave-process/`.
+`round-arbiter` one binding ruling - continue, accept or process fault - in place of the GM's waiver. A ruling stays in the
+arbiter's log; it reaches the GM only as a `for_gm` question that escalation-check keeps, the one door to him (feature 432,
+the GM 2026-10-26) - `make gm-review` lists his kept questions, `make gm-reviewed` records his answer. The full record: `specs/375-enforced-wave-process/`.
 A ruling's `tooling_fix` is made, not lost (feature 379, the GM 2026-10-10: *"always implement this kind of tooling change
 when recommended by the arbiter"*): it is an open item that holds every `make tick` and the closing check until `make
-arbiter-fix-done` (what was built, its test) or, for an overhaul of a process, `make arbiter-fix-declined` - each a row of
-the GM's review, and never a feature filed.
+arbiter-fix-done` (what was built, its test), which stays in the arbiter's log, or, for an overhaul of a process, `make
+arbiter-fix-declined`, a question for the GM owed escalation-check (feature 432) - never a feature filed.
 
 ## Review subagents
 
@@ -146,7 +147,7 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Every feature ends with `make feature-report F=NNN WRITE=1` - where its time and dispatches went, from the hooks' event
   log; its last `make tick`, a closing status line and `make gm-reviewed` refuse without it, and without any measurement
   another spec carried to it (`Carried: SC-nnn -> NNN <key>`). A feature lands with the GM's review open when it has a row
-  for him (an arbiter ruling, `make accept`); `make gm-review` lists them. (Feature 375.) A row the GM discussed in the session and
+  for him (a kept question, `make accept`); `make gm-review` lists them, his decisions first (feature 432). (Feature 375.) A row the GM discussed in the session and
   agreed needs no more action IS his review: run `make gm-reviewed F=NNN WORDS="<his words, verbatim>"` in that turn (GM 2026-10-10).
 - Decide first, then check (feature 375): a task's decisions carry a verdict before its checks run - the plan-stage review,
   or `make decide F= T=` on a plan section naming the task (`make task-start` names the task). A tripwire is not the session's

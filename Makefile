@@ -629,7 +629,7 @@ arbiter-ask:  ## [project] put a PROCESS question (a cap, a waiver, a stuck choi
 land-tooling:  ## [project] land the named TOOLING files on main by themselves, mid-feature (feature 379)   FILES="scripts/x.py tests/tooling/test_x.py"
 	@"$$(git rev-parse --show-toplevel)/scripts/land-tooling.sh" $(FILES)
 
-arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a process: declined, to the GM's review, never filed (feature 379)   ID=<trigger> REASON="<why>"
+arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a process: declined, never filed - a question for the GM owed escalation-check (features 379, 432)   ID=<trigger> REASON="<why>"
 	@if [ -z "$(ID)" ] || [ -z "$(REASON)" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix declined "$(ID)" "$(REASON)"
 
