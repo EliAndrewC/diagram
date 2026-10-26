@@ -109,3 +109,7 @@ This report took 1.8 s to build; its own runs are the `make feature-report` rows
 - **Left open, by D12**: 39 of the 45 gate runs between 2026-10-25 and 2026-10-26 15:03Z still planned full. 430 answers the 23
   for manifests, docs and hook suites. A top-level `conftest.py` and an import-time line still plan full by design. Whether
   the gate now stays incremental is for the next landings' run records to show (`make gate-costs`).
+- **Replayed, 2026-10-26** (`research.md` R4, `m:plan-replay-415`): of the 45 gate runs of 10-25 and 10-26, today's planner
+  would run about 27 incremental (60%) where 6 (13%) did. No run went full because the tooling changed, which was this
+  feature's cause. The rest are 430's causes or full by design. The feature works; the next landings' `make gate-costs`
+  is the live check.

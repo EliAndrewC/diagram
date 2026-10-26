@@ -176,4 +176,4 @@ def refusal(spec_dir: pathlib.Path, section: str) -> str:
     return ""
 
 
-RED_EXIT_HINT = "Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35)."
+RED_EXIT_HINT = "Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`."
