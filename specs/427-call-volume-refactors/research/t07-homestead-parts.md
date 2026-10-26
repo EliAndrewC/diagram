@@ -40,3 +40,20 @@ Kuwabata is the one pool map it moves: its fourth household, reached in HEAD acr
   placer rolls a homestead's parts at the seat offered, and `household_reach` rolls them at the same seat, so the reach is exact
   and its templates are the placer's own cache.
 - `route.taut` and the ways tree's admission (`tree.judge`) - the lane law's, T10's.
+
+## R8's test and the stage's time: the A/B (FR-003, FR-005)
+
+Two detached trees, the commit before T07 (5a6095082) and T07's (73713d668), each `make perf SCALING=1`, back to back in one
+session, alternated base, end, base, end (2026-10-26 20:39-20:46; the snapshots `*-427-T07ab-base-*.json`, taken in the scratch
+tree and not kept, and `dev/perf-log/*-427-T07ab-end-*.json`). The homesteads stage at 40 households, seconds, seed by seed:
+
+| seed | base | end |
+|---|---|---|
+| 4 | 2.84, 2.64 | 2.60, 2.57 |
+| 25 | 2.23, 2.11 | 2.06, 1.99 |
+| 39 | 1.84, 1.76 | 1.73, 1.67 |
+| 47 (R8's seed) | 2.48, 2.64 | 2.48, 2.35 |
+
+Reported, gating nothing (FR-006). The snapshots' call totals: 16,881,165 both base runs; 15,618,765 and 15,619,288 the two end
+runs - two counts of one commit 523 calls apart, which the counting pass is meant not to allow (T03's premise: a count moves
+only with the code or the seed); filed in `found.jsonl` to measure.
