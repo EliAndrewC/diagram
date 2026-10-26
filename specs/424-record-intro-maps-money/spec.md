@@ -41,3 +41,7 @@ not told what the research is for: the toolkit's maps and its money pages.
 
 - **SC-001** (FR-001, FR-002): the built `index.html` shows the opening with both links first; the test passes; `make done` is
   green at the landing.
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-25): FAITHFUL. Aside (not in scope): `all.html` has its own maps-only opening line.
