@@ -262,7 +262,7 @@ CHECKS: tuple[Check, ...] = (
         "ochiba-privy-detached-red.svg",
         "attach the family's privy to the residence (data-part-of=\"residence\"), and stand one in each court - at least three in all",
     ),
-    Check("coverage_band", lambda ctx: s.coverage_band(ctx.plan), False, "ochiba-coverage-red.svg", "consolidate loose slack or add a program building - never shrink the envelope"),
+    Check("coverage_band", lambda ctx: s.coverage_band(ctx.plan), False, "ochiba-coverage-red.svg", s.COVERAGE_FIX),
     Check("perimeter_hugging", lambda ctx: s.perimeter_hugging(ctx.plan), False, "ochiba-hugging-red.svg", "move the building against its wall - the center of each court stays open"),
     Check(
         "two_court_zoning",

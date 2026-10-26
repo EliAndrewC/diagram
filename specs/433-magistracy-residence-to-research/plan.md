@@ -31,7 +31,8 @@ guess is labeled. Occasion: building-review (a sheet revised).
 
 1. **The goal, in the world.** Hayakawa's magistrate lives in a house the size the record gives a samurai of that rank, on a
    compound whose buildings cover what 0116 says such a compound's do.
-2. **The constraints.** The outer court is not touched. The house keeps its recorded forms (the echelon of two blocks, the
+2. **The constraints.** The outer court is not moved to make room; FR-001's check of it against the research is still owed,
+   through building-review. The house keeps its recorded forms (the echelon of two blocks, the
    reception at the east end, the roji, the kitchen ell, the veranda faces rolled). Every pack-audit check stays green.
 3. **Where each comes from.** O: spec FR-001, SC-001; research 0091 (the house and its kitchen), 0118 (houses by rank), 0116
    (coverage), `research.md` R1-R2, the measures above.
@@ -66,16 +67,19 @@ guess is labeled. Occasion: building-review (a sheet revised).
   size, set east of the pond where nothing shades it; the shrine, its tree, its arch and its tub move with the north wall.
   Rendering: the inner court's rects, the garden polygon, the pond, pines, lanterns and stones.
 - **D3** The north wall moves 30 ft (90 px) south, the envelope a knob, and the guests' annex with it, so its top stays on
-  the north wall: the walled ground falls to about 45,200 sq ft and the coverage to about 30.6% (this project's arithmetic on
-  the measure above, inside R2's band). The envelope is a number no page measures - the
+  the north wall: the walled ground falls to about 45,200 sq ft and the coverage to 30.4% (observed 2026-10-26, method: `pack_audit.coverage`
+  on the draft redraw in the scratchpad, inside R2's band). The walls still fall between the two offices 0116's drawing page sizes them against
+  (research/questions/0116, observed 2026-10-26, method: the draft's precinct rects): about 45,200 sq ft walled, under
+  Takayama's site of about 105,600 sq ft and well above the Joge branch office's one building of about 2,850 sq ft. The envelope is a number no page measures - the
   notes call it the "audited Joge<->Takayama size", a range - so it is a knob (GM 2026-10-25, `make tunables`). Priced:
   (a) the sheet under the band as a recorded deviation - SC-001 forbids it; (b) buildings drawn past their research sizes to
   fill the court - the "Realistic unless the GM says otherwise" rule forbids it; (c) the west wall in 36 ft (this project's arithmetic) - the servants'
   range abuts the gate range and the outer court's west column would run into the office hall; (d) the east wall in - the
   outer court's east side has no 36 ft to give (this project's arithmetic). The checklist's "envelope NOT shrunk" and the coverage check's "never shrink
-  the envelope" are kept for their reason - a smaller wall does not hide slack - and amended: when the research resizes a
-  sheet's program, the envelope follows it (docs/buildings.md checklist; `pack_audit/shared.py` and `registry.py` messages,
-  with the test that pins the text). Rendering: the walls, the precinct rects, the viewBox and the title block.
+  the envelope" are kept for their reason - a smaller wall does not hide slack - and amended for a MAGISTRACY sheet alone: when the research sizes a magistracy's house, the envelope follows it into the
+  band (docs/buildings.md checklist; the magistracy program in docs/building-programs.md; `pack_audit/shared.py` and
+  `registry.py` messages worded for a magistracy sheet, with the test that pins the text). Every other sheet type keeps the
+  rule as it stands (spec-fidelity, plan round 1: the GM's words reach the magistracies and new magistracy diagrams only). Rendering: the walls, the precinct rects, the viewBox and the title block.
 
 ## T02 - the two kept houses recorded as deviations (FR-002)
 

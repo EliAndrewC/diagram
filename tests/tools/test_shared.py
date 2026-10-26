@@ -106,6 +106,9 @@ def test_coverage_band_and_hugging_floor_read_the_grids() -> None:
     assert "coverage is 56%" in s.coverage_band(plan)[0]
     _, plan = _plan(_rect(20, 20, 60, 60, BLDG))  # 3%
     assert "coverage is 3%" in s.coverage_band(plan)[0]
+    # the fix it names (feature 433 D3): never a smaller wall to hide slack, the envelope following a research-sized house
+    assert "never shrink the envelope to hide slack" in s.coverage_band(plan)[0]
+    assert "only when the research sizes the house does the envelope follow it into the band" in s.coverage_band(plan)[0]
     _, plan = _plan(_rect(120, 120, 160, 160, BLDG))  # an island in the center
     assert "of building footprint lies within 25 ft" in s.perimeter_hugging(plan)[0]
 

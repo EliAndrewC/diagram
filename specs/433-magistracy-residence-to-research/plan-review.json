@@ -1,0 +1,380 @@
+{
+ "feature": "433-magistracy-residence-to-research",
+ "blocks": {
+  "preamble": {
+   "sha256": "0a265d4bcb9f67800a1f89fe22633ad1ba96fdb5f741066745dabb792c240c66",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "5a0ad87b5436ee1f8981c4f3d4b9576133fa85ab0209e55ce3f3102b33557b30",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Measured before planning (2026-10-26)": {
+   "sha256": "b2d63d6807e2d8e941c41807ca7758b38d1bf967c6264c384956e5eaf2b9844d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "b16ba116d8712c0357913e7c7cb2c5cc5f8aa3702195cabb0728e6284cae24a7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T01 - Hayakawa's house and inner court redrawn to the research (FR-001)": {
+   "sha256": "864fbfbcaa47567f8328d1ca4d7a19936621f127d3dcf3c0d1f8af34d70ed67b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "0f983038daa752054cc64bbaf87bb62400d2085aa0c4a8bd6b926ad962b77956",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Decisions": {
+   "sha256": "939fd95176cd7aa6112d14c6e3843e70a8c889ae04803101f21dae6e7b048c83",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T02 - the two kept houses recorded as deviations (FR-002)": {
+   "sha256": "b99ed546db381f8f8cdd4978830213dfff00670339fb77ced02e4555fa66f5bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "8e69bcb145a957ce7aa535102ee177472a770a6858cd4dce4387c36791f2952b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Decisions": {
+   "sha256": "cad8abc8d7a875748856a96e2a2064ab220aefeee177548a9289100530ce9a39",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T03 - the procedure for a new magistracy (FR-003)": {
+   "sha256": "98d4c3a927e36878f7d47269b62070cf5448ded2965cefa754b63492c35643e6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "fa7bf02020bd01849f3676be41b1517ba5bfac0c9d7666b4f7f491a403f01f6e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Decisions": {
+   "sha256": "635db6011a071869dd6f7f80d815e836ee32683c04304df0ca4789580e993e31",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "## T04 - the record's figure and the close (FR-001)": {
+   "sha256": "e056dc540f84dbe179a94696cb2f5457bcfeee8b18356664991a43fe05b675d7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "39f9277cc73a523b49b7bb48a5caf6474d2817a2a22b6c9a991fe0dead418c8e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Decisions": {
+   "sha256": "16295204b302fc11ea4fb6d9f43b93478996eb8cf035aa0c3881e77906bbfa4d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Constitution Check",
+    "## Measured before planning (2026-10-26)",
+    "## Summary",
+    "## T01 - Hayakawa's house and inner court redrawn to the research (FR-001)",
+    "## T02 - the two kept houses recorded as deviations (FR-002)",
+    "## T03 - the procedure for a new magistracy (FR-003)",
+    "## T04 - the record's figure and the close (FR-001)",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Hayakawa's house about 65 tsubo (kitchen, bath, corridor counted), top of 0091's range as a GUESS for the RICH knob; room zones GUESS",
+     "class": "within",
+     "why": "FR-001: the house within 49-67 tsubo; the GM: 'the third magistracy should be corrected'. Placing it at the top of the range for a rich posting is a choice inside the range, labeled GUESS."
+    },
+    {
+     "id": "D2",
+     "summary": "Hayakawa's inner court laid out again around the smaller house: alley, privies, roji, kitchen ell, bath, inner entrance, storehouses, woodshed, karo's house, vegetable garden, shrine moved",
+     "class": "within",
+     "why": "FR-001: 'whatever on the Hayakawa sheet does not correspond to the research is brought to it'; the request: 'whatever other changes need to be made should be made'. Re-laying the court around a house a third its size is the consequence of the correction, not a new scope; the karo's house is kept at its measured 0118 size."
+    },
+    {
+     "id": "D3a",
+     "summary": "Hayakawa's north wall moved 30 ft south (envelope a knob), guests' annex with it, coverage to about 30.6%",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Departs from the standing 'envelope NOT shrunk' rule for this sheet. The question put to the GM told him a redraw drops coverage to 27-28%, under 0116's band; he chose the redraw and added 'whatever other changes need to be made should be made in order to make the whole thing correspond to our research'. 0116's band is research, and FR-001/SC-001 require the sheet inside it. The alternatives are priced: a recorded deviation is forbidden by SC-001, inflating buildings past research sizes defeats the request's own purpose, west/east walls are physically blocked by the gate range and outer court. The rule's purpose (a smaller wall must not hide slack) is not gutted: the program is research-sized and cannot be grown honestly. Owed, not ruled: the notes call the envelope 'the audited Joge<->Takayama size, a range'; the plan does not state the shrunk envelope still sits inside that range, and T01 should measure and say so, or else record what it leaves."
+    },
+    {
+     "id": "D3b",
+     "summary": "The standing rule amended for magistracy sheets: when the research resizes the program, the envelope follows the coverage band (docs/buildings.md checklist, coverage-check messages, the test pinning the text)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "As applied to magistracy sheets this is authorized in the GM's words: 'we should correct our general procedures when creating new magistracy diagrams in order to correspond to our research'; FR-003 requires a new sheet kept within 0116's band, 'how, the plan's'. Without it the procedure would order a research-sized house inside Ochiba's 141-tsubo envelope and land under the band."
+    },
+    {
+     "id": "D3c",
+     "summary": "The same amendment's reach as worded: 'when the research resizes A SHEET'S program, the envelope follows it', in the shared coverage-check messages (pack_audit/shared.py, registry.py) and the general checklist - every sheet type, not magistracies",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Nothing in request.md speaks to any sheet but the three magistracies and 'new magistracy diagrams'. 'Whatever other changes NEED to be made' covers what this correction needs; neither Hayakawa's redraw nor the magistracy procedure needs a standing rule relaxed for temples, farmhouses or any other compound. Generalizing it is completing the GM's thought. Fix: word the amended checklist line and both messages (and the pinned test) for a magistracy sheet whose house the research sizes, not 'a sheet's program'; or put the general form to the GM."
+    },
+    {
+     "id": "T01-constraint-outer-court",
+     "summary": "T01 Approach item 2: 'The outer court is not touched.'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001 and SC-001 sweep the whole Hayakawa sheet ('whatever on the Hayakawa sheet does not correspond to the research is brought to it'; 'every element of the sheet the research speaks to corresponds to it'). The plan measured coverage and the karo's house but records no check of the outer court against the research, so excluding it rests on an unmeasured premise. As a layout constraint (the outer court is not moved to make room, which D3's pricing of (c) and (d) relies on) it is within; as worded it cuts FR-001's scope. Fix: 'the outer court is not moved to make room; FR-001's correspondence sweep over it is still owed through building-review'."
+    },
+    {
+     "id": "T01-constraint-forms",
+     "summary": "The house keeps its recorded forms (echelon of two blocks, reception at the east end, roji, kitchen ell, veranda faces)",
+     "class": "within",
+     "why": "Corrects the size the GM asked corrected and keeps the forms nothing in the request or research is said to contradict; building-review remains the occasion for the sheet."
+    },
+    {
+     "id": "D4",
+     "summary": "docs/buildings.md :17 and :23, Ochiba notes :65 and Ubame notes :109 say DEVIATION with the GM's reason (about 141 and 152 tsubo); Hayakawa's figure becomes ~65 tsubo",
+     "class": "within",
+     "why": "FR-002 verbatim: 'two of them should stay the same as recorded deviations, because ... significantly wealthier magistrates than normal'. No ink changes on either sheet (T02 constraint) matches 'stay the same'."
+    },
+    {
+     "id": "D5",
+     "summary": "docs/building-programs.md residence bullet and a docs/buildings.md checklist line state 49-67 tsubo, a larger house only as a recorded deviation, envelope follows the band; docs/usage.md keeps Ochiba as template for conventions and drawing but says its house is a deviation not to be copied",
+     "class": "within",
+     "why": "FR-003 and the GM: 'correct our general procedures when creating new magistracy diagrams'. FR-003 removes Ochiba only as the model for the house's size; keeping it as the template for other conventions is inside that. The envelope clause here is magistracy-scoped (D3b), not the general reach of D3c."
+    },
+    {
+     "id": "D6",
+     "summary": "0116's drawing page sentence gives each compound's measured coverage on its date, Ochiba re-measured too",
+     "class": "within",
+     "why": "The record states Hayakawa's coverage (35%), which the redraw changes; making the record match the measured sheet is part of 'make the whole thing correspond to our research'. Re-measuring Ochiba's stated figure is the standing measure-not-remember rule on a figure already in the record, not new scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Constitution Check",
+    "## Measured before planning (2026-10-26)",
+    "## Summary",
+    "## T01 - Hayakawa's house and inner court redrawn to the research (FR-001)",
+    "## T02 - the two kept houses recorded as deviations (FR-002)",
+    "## T03 - the procedure for a new magistracy (FR-003)",
+    "## T04 - the record's figure and the close (FR-001)",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions",
+    "### T02 Approach (checklist part A)",
+    "### T02 Decisions",
+    "### T03 Approach (checklist part A)",
+    "### T03 Decisions",
+    "### T04 Approach (checklist part A)",
+    "### T04 Decisions",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Hayakawa's house about 65 tsubo (kitchen, bath, corridor counted), top of 0091's range as a GUESS for the RICH knob; room zones GUESS",
+     "class": "within",
+     "why": "FR-001: the house within 49-67 tsubo; the GM: 'the third magistracy should be corrected'. The top of the range for a rich posting is a choice inside the range, labeled GUESS. Text unchanged since round 1."
+    },
+    {
+     "id": "D2",
+     "summary": "Hayakawa's inner court laid out again around the smaller house (alley, privies, roji, kitchen ell, bath, inner entrance, storehouses, woodshed, karo's house, vegetable garden, shrine moved)",
+     "class": "within",
+     "why": "FR-001: 'whatever on the Hayakawa sheet does not correspond to the research is brought to it'; the request: 'whatever other changes need to be made should be made'. Re-laying the court around the corrected house is the consequence of the correction. Text unchanged since round 1."
+    },
+    {
+     "id": "D3a",
+     "summary": "Hayakawa's north wall moved 30 ft south (envelope a knob), guests' annex with it; coverage measured at 30.4% on the draft redraw; the shrunk walled ground (about 45,200 sq ft) stated against 0116's Joge<->Takayama comparison",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Departs from the standing 'envelope NOT shrunk' rule for this sheet. The GM was told a redraw drops coverage under 0116's band, chose the redraw, and added 'whatever other changes need to be made should be made in order to make the whole thing correspond to our research'; FR-001/SC-001 require the sheet inside the band. The alternatives are priced: a deviation is forbidden by SC-001, inflated buildings defeat the request's purpose, the west and east walls are physically blocked. Round 1's owed item is met: D3 now states the walled ground against the range the notes name, with its method and date, and the coverage figure is now measured rather than computed."
+    },
+    {
+     "id": "D3b",
+     "summary": "The standing rule amended for a MAGISTRACY sheet alone: when the research sizes a magistracy's house, the envelope follows it into the band (docs/buildings.md checklist, the magistracy program in docs/building-programs.md, pack_audit/shared.py and registry.py messages worded for a magistracy sheet, the pinned test); every other sheet type keeps the rule as it stands",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Authorized in the GM's words: 'we should correct our general procedures when creating new magistracy diagrams in order to correspond to our research'; FR-003 requires a new sheet kept within 0116's band, 'how, the plan's'. Round 1's NOT LEGITIMATE item D3c (the same amendment worded for every sheet type) is resolved: the reach is now scoped to magistracy sheets, and the plan states explicitly that every other sheet type keeps the rule."
+    },
+    {
+     "id": "T01-constraint-outer-court",
+     "summary": "T01 Approach item 2: the outer court is not moved to make room; FR-001's check of it against the research is still owed, through building-review",
+     "class": "within",
+     "why": "Round 1's NOT LEGITIMATE item resolved in the wording round 1 asked for: a layout constraint (the room is not taken from the outer court, which D3's pricing of (c) and (d) relies on) that no longer excludes the outer court from FR-001's and SC-001's sweep of the whole Hayakawa sheet."
+    },
+    {
+     "id": "T01-constraint-forms",
+     "summary": "The house keeps its recorded forms (echelon of two blocks, reception at the east end, roji, kitchen ell, veranda faces)",
+     "class": "within",
+     "why": "Corrects the size the GM asked corrected and keeps the forms nothing in the request or research is said to contradict; building-review remains the occasion for the sheet."
+    },
+    {
+     "id": "D4",
+     "summary": "docs/buildings.md :17 and :23, Ochiba notes :65 and Ubame notes :109 say DEVIATION with the GM's reason (about 141 and 152 tsubo); Hayakawa's figure becomes ~65 tsubo",
+     "class": "within",
+     "why": "FR-002 verbatim: 'two of them should stay the same as recorded deviations, because ... significantly wealthier magistrates than normal'. No ink changes on either sheet matches 'stay the same'. Block unchanged since round 1."
+    },
+    {
+     "id": "D5",
+     "summary": "docs/building-programs.md residence bullet and a docs/buildings.md checklist line state 49-67 tsubo, a larger house only as a recorded deviation, envelope follows the band; docs/usage.md keeps Ochiba as template for conventions and drawing but says its house is a deviation not to be copied",
+     "class": "within",
+     "why": "FR-003 and the GM: 'correct our general procedures when creating new magistracy diagrams'. FR-003 removes Ochiba only as the model for the house's size. The envelope clause is magistracy-scoped (D3b). Block unchanged since round 1."
+    },
+    {
+     "id": "D6",
+     "summary": "0116's drawing page sentence gives each compound's measured coverage on its date, Ochiba re-measured too",
+     "class": "within",
+     "why": "The record states Hayakawa's coverage (35%), which the redraw changes; making it match the measured sheet is part of 'make the whole thing correspond to our research'. Re-measuring Ochiba's figure already in the record is the standing measure-not-remember rule. Block unchanged since round 1."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## T01 - Hayakawa's house and inner court redrawn to the research (FR-001)",
+    "### T01 Approach (checklist part A)",
+    "### T01 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Hayakawa's house about 65 tsubo (two blocks, corridor, kitchen and bath counted, ~2,320 sq ft), the top of 0091's range a GUESS for the RICH knob; room zones GUESS",
+     "class": "within",
+     "why": "FR-001: the house within 49-67 tsubo; the GM: 'the third magistracy should be corrected'. A size inside the range, labeled GUESS with its reason (no page ties house size to wealth); the stated rects sum to about 2,320 sq ft, about 65 tsubo."
+    },
+    {
+     "id": "D2",
+     "summary": "Hayakawa's inner court laid out again around the smaller house (service alley, privies, roji, kitchen ell, bath, inner entrance, storehouses, woodshed, karo's house, vegetable garden on its seat knob, shrine moved with the north wall)",
+     "class": "within",
+     "why": "The consequence of correcting the house; the GM: 'whatever other changes need to be made should be made in order to make the whole thing correspond to our research'; FR-001 sweeps the whole Hayakawa sheet."
+    },
+    {
+     "id": "D3a",
+     "summary": "Hayakawa's north wall moved 30 ft south (envelope a knob), guests' annex with it; coverage 30.4% measured on the draft redraw, inside 0116's band; walled ground ~45,200 sq ft stated against 0116's Joge/Takayama comparison",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Departs from the standing 'envelope NOT shrunk' rule on this sheet. The GM was told in the question that a redraw drops coverage under 0116's band, chose the redraw, and added 'whatever other changes need to be made should be made in order to make the whole thing correspond to our research'; FR-001/SC-001 require coverage inside the band. Applying the old rule literally would defeat the request: a deviation is forbidden by SC-001, buildings inflated past their research sizes defeat its purpose, and the west and east walls are physically blocked (priced in D3 (c), (d))."
+    },
+    {
+     "id": "D3b",
+     "summary": "The standing envelope rule amended for MAGISTRACY sheets only: when research sizes a magistracy's house the envelope follows it into the band (docs/buildings.md checklist, magistracy program in docs/building-programs.md, pack_audit/shared.py and registry.py messages worded for a magistracy sheet, the pinned test); every other sheet type keeps the rule",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Authorized in the GM's own words: 'we should correct our general procedures when creating new magistracy diagrams in order to correspond to our research'. The reach is limited to magistracy sheets, and the plan says explicitly that every other sheet type keeps the rule, so nothing goes beyond what the GM's words cover."
+    },
+    {
+     "id": "T01-constraint-outer-court",
+     "summary": "Approach item 2: the outer court is not moved to make room; FR-001's check of it against the research is still owed, through building-review",
+     "class": "within",
+     "why": "A layout constraint (D3's pricing of (c) and (d) relies on it) that does not exclude the outer court from FR-001's and SC-001's sweep of the whole sheet; its check against the research is kept, via building-review."
+    },
+    {
+     "id": "T01-constraint-forms",
+     "summary": "The house keeps its recorded forms (echelon of two blocks, reception at the east end, roji, kitchen ell, veranda faces)",
+     "class": "within",
+     "why": "Corrects the size the GM asked corrected and keeps forms nothing in the request or research is said to contradict; building-review remains the check that the sheet corresponds to the research."
+    },
+    {
+     "id": "T01-exit-and-done",
+     "summary": "Approach items 6 and 9: an unmakeable check goes to make arbiter-ask with the measure; done means pack-audit green, coverage in band, house rects within 0091's range, render read, building-review passed",
+     "class": "within",
+     "why": "Done-conditions restate FR-001/SC-001; the exit escalates rather than narrowing anything."
+    }
+   ]
+  }
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "78837d93534ad9fd59c40cd47f63988061f536d61429636d8e56462fbee12dc6",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Hayakawa's house about 65 tsubo (two blocks, corridor, kitchen and bath counted, ~2,320 sq ft), the top of 0091's range a GUESS for the RICH knob; room zones GUESS",
+     "class": "within",
+     "why": "FR-001: the house within 49-67 tsubo; the GM: 'the third magistracy should be corrected'. A size inside the range, labeled GUESS with its reason (no page ties house size to wealth); the stated rects sum to about 2,320 sq ft, about 65 tsubo."
+    },
+    {
+     "id": "D2",
+     "summary": "Hayakawa's inner court laid out again around the smaller house (service alley, privies, roji, kitchen ell, bath, inner entrance, storehouses, woodshed, karo's house, vegetable garden on its seat knob, shrine moved with the north wall)",
+     "class": "within",
+     "why": "The consequence of correcting the house; the GM: 'whatever other changes need to be made should be made in order to make the whole thing correspond to our research'; FR-001 sweeps the whole Hayakawa sheet."
+    },
+    {
+     "id": "D3a",
+     "summary": "Hayakawa's north wall moved 30 ft south (envelope a knob), guests' annex with it; coverage 30.4% measured on the draft redraw, inside 0116's band; walled ground ~45,200 sq ft stated against 0116's Joge/Takayama comparison",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Departs from the standing 'envelope NOT shrunk' rule on this sheet. The GM was told in the question that a redraw drops coverage under 0116's band, chose the redraw, and added 'whatever other changes need to be made should be made in order to make the whole thing correspond to our research'; FR-001/SC-001 require coverage inside the band. Applying the old rule literally would defeat the request: a deviation is forbidden by SC-001, buildings inflated past their research sizes defeat its purpose, and the west and east walls are physically blocked (priced in D3 (c), (d))."
+    },
+    {
+     "id": "D3b",
+     "summary": "The standing envelope rule amended for MAGISTRACY sheets only: when research sizes a magistracy's house the envelope follows it into the band (docs/buildings.md checklist, magistracy program in docs/building-programs.md, pack_audit/shared.py and registry.py messages worded for a magistracy sheet, the pinned test); every other sheet type keeps the rule",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Authorized in the GM's own words: 'we should correct our general procedures when creating new magistracy diagrams in order to correspond to our research'. The reach is limited to magistracy sheets, and the plan says explicitly that every other sheet type keeps the rule, so nothing goes beyond what the GM's words cover."
+    },
+    {
+     "id": "T01-constraint-outer-court",
+     "summary": "Approach item 2: the outer court is not moved to make room; FR-001's check of it against the research is still owed, through building-review",
+     "class": "within",
+     "why": "A layout constraint (D3's pricing of (c) and (d) relies on it) that does not exclude the outer court from FR-001's and SC-001's sweep of the whole sheet; its check against the research is kept, via building-review."
+    },
+    {
+     "id": "T01-constraint-forms",
+     "summary": "The house keeps its recorded forms (echelon of two blocks, reception at the east end, roji, kitchen ell, veranda faces)",
+     "class": "within",
+     "why": "Corrects the size the GM asked corrected and keeps forms nothing in the request or research is said to contradict; building-review remains the check that the sheet corresponds to the research."
+    },
+    {
+     "id": "T01-exit-and-done",
+     "summary": "Approach items 6 and 9: an unmakeable check goes to make arbiter-ask with the measure; done means pack-audit green, coverage in band, house rects within 0091's range, render read, building-review passed",
+     "class": "within",
+     "why": "Done-conditions restate FR-001/SC-001; the exit escalates rather than narrowing anything."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
+}

@@ -237,12 +237,22 @@ def viewbox_cropped(text: str, plan: ParsedPlan, max_margin_px: float = CROP_MAX
     return [f"{side} margin is {px:.0f} px of empty parchment - crop the viewBox to ~{max_margin_px:.0f} px" for side, px in margins.items() if px > max_margin_px + tol_px]
 
 
+#: the fix the coverage check names (feature 433 D3, the GM 2026-10-26: "whatever other changes need to be made should be made
+#: in order to make the whole thing correspond to our research"): a smaller wall never hides slack, but when the research sizes a
+#: magistracy's house - Hayakawa's cut from ~145 to ~65 tsubo left it at 26% - the envelope, a number no page measures, follows
+#: the house into the band. The check is the magistracy's alone (registry.py), so the amendment reaches no other sheet type.
+COVERAGE_FIX = (
+    "consolidate loose slack or add a program building below it; never shrink the envelope to hide slack - only when the "
+    "research sizes the house does the envelope follow it into the band (feature 433)"
+)
+
+
 def coverage_band(plan: ParsedPlan, floor: float = COVERAGE_FLOOR, ceiling: float = COVERAGE_CEILING, tol: float = COVERAGE_TOL) -> list[str]:
     """Building coverage of the precinct between Takayama's ~33% floor and the record's ~42% ceiling (two points over it)."""
     cov = coverage(plan)
     if floor <= cov <= ceiling + tol:
         return []
-    return [f"building coverage is {100 * cov:.0f}% - a jin'ya runs ~{100 * floor:.0f}-{100 * ceiling:.0f}% built (consolidate or add a program building below it; never shrink the envelope)"]
+    return [f"building coverage is {100 * cov:.0f}% - a jin'ya runs ~{100 * floor:.0f}-{100 * ceiling:.0f}% built ({COVERAGE_FIX})"]
 
 
 def perimeter_hugging(plan: ParsedPlan, floor: float = HUGGING_FLOOR) -> list[str]:
