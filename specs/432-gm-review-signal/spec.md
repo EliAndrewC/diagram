@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-26
 
-**Status**: Draft
+**Status**: Draft (spec FAITHFUL, round 3, 2026-10-26)
 
 **Affects**: tooling, review process
 
