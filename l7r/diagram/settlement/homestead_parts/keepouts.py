@@ -4,7 +4,8 @@ Research: plumbing - NONE"""
 
 import math
 import os
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
+from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any
 
 from .._geom import boxed_seg_hit, seg_dist
@@ -324,18 +325,36 @@ class KeepoutsMixin:
 
     def _canopy_keepouts(self: Settlement, bbox: tuple[float, float, float, float]) -> tuple[list[tuple[float, float, float, float]], list[tuple[float, float, float]]]:  # type: ignore[misc]
         """Every drawn BUILDING footprint (as x, y, half-w, half-h) and WELLHEAD (as x, y, r) near `bbox` -
-        the keep-out a tree CROWN may not cover. Distinct from _urban_keepouts, the 30 ft swept halo the
-        ground-cover scatters honor: a tree may stand hard against a wall (real groves hug the eaves), it
-        may only not be DRAWN ON the roof - so the halo here is zero. A rotated structure is covered
-        conservatively by its half-diagonal square. Prefiltered to `bbox`, since the caller tests every
-        crown of a stand against this list.
+        the keep-out a tree CROWN may not cover (distinct from _urban_keepouts, the 30 ft swept halo the
+        ground-cover scatters honor). Prefiltered to `bbox`, since the caller tests every crown of a stand
+        against this list.
+
+        The keep-outs themselves - the drawn boxes (no halo, a turned structure as its half-diagonal square), the wellheads'
+        radii, the burial grounds' middles - are made by `_canopy_all`,
+        which carries their claims; this is the box's prefilter over them, by each one's extent.
+
+        Research: plumbing - NONE: the box prefilter over `_canopy_all`'s keep-outs"""
+        bx0, by0, bx1, by1 = bbox
+        # ...THE STANDING KEEP-OUTS READ ONCE WHERE A SCOPE FREEZES THEM (feature 427 T08): a grove's clumps ask this per clump
+        # (915 times at 40 households, every structure record walked each time); `canopy_frozen` holds the lists, unfiltered,
+        # while only crowns are drawn, and the box is applied here by the same tests
+        rects_all, circles_all = self.__dict__.get("_canopy_frozen") or self._canopy_all()
+        rects = [r for r in rects_all if r[0] + r[2] >= bx0 and r[0] - r[2] <= bx1 and r[1] + r[3] >= by0 and r[1] - r[3] <= by1]
+        # a wellhead by its drawn extent, as a building is by its box: by its center alone, one whose center stood just past the
+        # box was pruned while its radius still reached a crown `_crown_covers` would refuse (feature 427 T08, impl-drift's aside;
+        # the prefilter prunes, it never decides)
+        circles = [c for c in circles_all if c[0] + c[2] >= bx0 and c[0] - c[2] <= bx1 and c[1] + c[2] >= by0 and c[1] - c[2] <= by1]
+        return rects, circles
+
+    def _canopy_all(self: Settlement) -> tuple[list[tuple[float, float, float, float]], list[tuple[float, float, float]]]:  # type: ignore[misc]
+        """`_canopy_keepouts`' lists before the box: every drawn building's (x, y, half-w, half-h), each burial ground's middle,
+        every wellhead's (x, y, r).
 
         Research:
             no crown on a roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
-                against a wall, never on it; held here are roofs, while the yards and beds are held by `_sun_keepouts` (50 ft, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html)
-            no crown on a wellhead - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a crown may not cover a wellhead
+                against a wall, never on it - each building's drawn box (its `vw`/`vh`, a turned one as its half-diagonal square), no halo
+            no crown on a wellhead - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a crown may not cover a wellhead's drawn radius (`vr`)
             burial ground's middle - GUESS: 0.9 of its half-extent kept clear of crowns"""
-        bx0, by0, bx1, by1 = bbox
         rects: list[tuple[float, float, float, float]] = []
         for k in self._CANOPY_STRUCT_KEYS:
             for o in self._reclist(k):
@@ -345,8 +364,7 @@ class KeepoutsMixin:
                 hw, hh = o.get("vw", o["w"]) / 2, o.get("vh", o["h"]) / 2  # pyrefly: ignore[unsupported-operation]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
                 if o.get("rot"):
                     hw = hh = math.hypot(hw, hh)
-                if o["x"] + hw >= bx0 and o["x"] - hw <= bx1 and o["y"] + hh >= by0 and o["y"] - hh <= by1:
-                    rects.append((o["x"], o["y"], hw, hh))
+                rects.append((o["x"], o["y"], hw, hh))
         # A BURIAL GROUND'S MIDDLE (feature 273). It stays an open-air key - trees among graves are correct, and a
         # bough over its edge is normal - but a wood grown over the whole of it hides the graves: on the reference
         # hamlet a windbreak laid after the ground drew eight crowns centered on it. So the middle of the ground,
@@ -354,10 +372,34 @@ class KeepoutsMixin:
         # a GUESS (no source measures how near the graves a village let trees stand).
         for o in self.M.get("cemeteries", []):
             hw, hh = o["w"] / 2 * self.CEMETERY_CORE, o["h"] / 2 * self.CEMETERY_CORE
-            if o["x"] + hw >= bx0 and o["x"] - hw <= bx1 and o["y"] + hh >= by0 and o["y"] - hh <= by1:
-                rects.append((o["x"], o["y"], hw, hh))
-        circles = [(o["x"], o["y"], o.get("vr", o["r"])) for o in self.M.get("wells", []) if bx0 <= o["x"] <= bx1 and by0 <= o["y"] <= by1]
-        return rects, circles
+            rects.append((o["x"], o["y"], hw, hh))
+        return rects, [(o["x"], o["y"], o.get("vr", o["r"])) for o in self.M.get("wells", [])]
+
+    @contextmanager
+    def canopy_frozen(self: Settlement) -> Iterator[None]:  # type: ignore[misc]
+        """While only crowns are drawn, `_canopy_keepouts` reads the standing buildings, burial grounds and wellheads once
+        (`_canopy_all`), not once a call; a structure or a well added inside the scope is a mistake this asserts on exit.
+
+        Research: plumbing - NONE: a scope that reads the same keep-outs once"""
+        self.__dict__["_canopy_frozen"] = frozen = self._canopy_all()
+        self.__dict__["_persimmons_frozen"] = trees = self._persimmons()
+        try:
+            yield
+        finally:
+            self.__dict__.pop("_canopy_frozen", None)
+            self.__dict__.pop("_persimmons_frozen", None)
+        assert self._canopy_all() == frozen, "a structure or a well was added while the canopy's keep-outs were frozen"
+        assert self._persimmons() == trees, "a persimmon was laid while the canopy's keep-outs were frozen"
+
+    def _persimmons(self: Settlement) -> list[Any]:  # type: ignore[misc]
+        """Every household's yard persimmon box `(x, y, w, h)`, read once while `canopy_frozen` holds (feature 427 T08: each
+        clump walked every house's fixtures).
+
+        Research: plumbing - NONE: the yard persimmons every crown of a grove gives way round, listed"""
+        frozen = self.__dict__.get("_persimmons_frozen")
+        if frozen is not None:
+            return list(frozen)
+        return [t for t in ((rec.get("geom") or {}).get("fixtures", {}).get("persimmon") for rec in self.M.get("houses") or ()) if t is not None]
 
     @staticmethod
     def _crown_covers(x: float, y: float, r: float, rects: Sequence[tuple[float, float, float, float]], circles: Sequence[tuple[float, float, float]], pad: float = 0.0) -> bool:
@@ -367,11 +409,17 @@ class KeepoutsMixin:
         crown drawn exactly TANGENT to a wall can round to a hair of overlap and fire the check that
         re-reads it. Drawing passes a small pad so a kept crown is unambiguously clear; the check
         itself stays exact (pad 0), which is what keeps its teeth."""
-        for cx, cy, hw, hh in rects:
-            dx, dy = max(abs(x - cx) - hw, 0.0), max(abs(y - cy) - hh, 0.0)
-            if dx * dx + dy * dy < (r + pad) ** 2:
+        reach2 = (r + pad) ** 2
+        for cx, cy, hw, hh in rects:  # no `abs` or `max` call a rect (feature 427 T08: four a rect, 210k at 40 households)
+            dx, dy = x - cx, y - cy
+            dx, dy = (dx if dx >= 0 else -dx) - hw, (dy if dy >= 0 else -dy) - hh
+            dx, dy = (dx if dx > 0.0 else 0.0), (dy if dy > 0.0 else 0.0)
+            if dx * dx + dy * dy < reach2:
                 return True
-        return any((x - wx) ** 2 + (y - wy) ** 2 < (r + pad + wr) ** 2 for wx, wy, wr in circles)
+        for wx, wy, wr in circles:  # noqa: SIM110 - a loop, not any() over a generator (a call a circle)
+            if (x - wx) ** 2 + (y - wy) ** 2 < (r + pad + wr) ** 2:
+                return True
+        return False
 
     def _record_crowns(self: Settlement, crowns: Sequence[tuple[float, float, float]]) -> None:  # type: ignore[misc]
         """Record drawn canopy crowns as a flat [x, y, r, ...] run in M['tree_crowns'] - the manifest

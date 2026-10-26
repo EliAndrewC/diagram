@@ -432,12 +432,9 @@ def close_belt_gaps(
                 _d0, _d1 = min(_pd), max(_pd)
                 for _f in (0.5, 0.34, 0.66, 0.22, 0.78):
                     _col = (_pa[0] * _wv[0] + _pa[1] * _wv[1]) + ((_pb[0] * _wv[0] + _pb[1] * _wv[1]) - (_pa[0] * _wv[0] + _pa[1] * _wv[1])) * _f
-                    _inside = []
-                    for _k in range(33):
-                        _d = _d0 + (_d1 - _d0) * _k / 32
-                        _qx, _qy = round(_col * _wv[0] + _d * _perp[0], 1), round(_col * _wv[1] + _d * _perp[1], 1)  # the record's grain (W01)
-                        if blocks.inside(_qx, _qy):
-                            _inside.append((_qx, _qy))
+                    _depths = [_d0 + (_d1 - _d0) * _k / 32 for _k in range(33)]
+                    _column = [(round(_col * _wv[0] + _d * _perp[0], 1), round(_col * _wv[1] + _d * _perp[1], 1)) for _d in _depths]  # the record's grain (W01)
+                    _inside = [q for q, ok in zip(_column, blocks.inside_many(_column), strict=True) if ok]  # the column asked at once (feature 427 T08)
                     for _qx, _qy in _inside[len(_inside) // 2 :] + _inside[: len(_inside) // 2]:  # the band's middle outward
                         if within is not None and (_qx + clump * 0.9 < within[0] or _qx - clump * 0.9 > within[2] or _qy + clump * 0.9 < within[1] or _qy - clump * 0.9 > within[3]):
                             continue
@@ -506,15 +503,16 @@ def ink_and_record_grove(s: Settlement, seated: list[tuple[float, float]], poly:
         # knows of (`_draw_grove`'s `_cones`), and the belt's rows were never told it - a re-seated Inashiro drew a copse crown
         # over a belt cedar (B5b)
         s._conifer_crowns = [*(getattr(s, "_conifer_crowns", None) or []), *((float(x), float(y), float(r)) for x, y, r in _rows)]
-    for jx, jy in seated:
-        # feature 150: the belt and the copse are two highlight classes; a water_mouth grove has no
-        # class in the vocabulary yet and stays unclassed so the census reports it
-        if any(point_in_poly(jx, jy, w) for w in _wet):
-            alder += 1
-            alder_clumps.append([jx, jy])
-            s._draw_grove(jx, jy, clump, clump, face=(0, -1), mix="alder", cls="alder")
-            continue
-        bamboo += s._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=form or mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role), tally=crowns)
+    with s.canopy_frozen():  # only crowns are drawn here: the buildings and wellheads a crown keeps off read once (feature 427 T08)
+        for jx, jy in seated:
+            # feature 150: the belt and the copse are two highlight classes; a water_mouth grove has no
+            # class in the vocabulary yet and stays unclassed so the census reports it
+            if any(point_in_poly(jx, jy, w) for w in _wet):
+                alder += 1
+                alder_clumps.append([jx, jy])
+                s._draw_grove(jx, jy, clump, clump, face=(0, -1), mix="alder", cls="alder")
+                continue
+            bamboo += s._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=form or mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role), tally=crowns)
     if rows_ink:
         s.add(rows_ink, cls="windbreak")
     if clumps:

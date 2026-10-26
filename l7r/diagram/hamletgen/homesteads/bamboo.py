@@ -327,9 +327,15 @@ def parts_hit(cx: float, cy: float, cw: float, ch: float, parts: Sequence[Poly],
     """Does the `cw` x `ch` strip centered (`cx`, `cy`) come within `gap` of any part's box (its ring's bounding box)?
 
     Research: off the seated parts - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); the strip and a part's box, `gap` apart"""
+    x0, x1, y0, y1 = cx - cw / 2 - gap, cx + cw / 2 + gap, cy - ch / 2 - gap, cy + ch / 2 + gap
     for ring in parts:
-        xs, ys = [p[0] for p in ring], [p[1] for p in ring]
-        if cx + cw / 2 + gap > min(xs) and cx - cw / 2 - gap < max(xs) and cy + ch / 2 + gap > min(ys) and cy - ch / 2 - gap < max(ys):
+        # the ring's box by one pass over its points, no `min`/`max` calls (feature 427 T08: four calls and two lists a part)
+        rx0 = rx1 = ring[0][0]
+        ry0 = ry1 = ring[0][1]
+        for px, py in ring:
+            rx0, rx1 = (px if px < rx0 else rx0), (px if px > rx1 else rx1)
+            ry0, ry1 = (py if py < ry0 else ry0), (py if py > ry1 else ry1)
+        if x1 > rx0 and x0 < rx1 and y1 > ry0 and y0 < ry1:
             return True
     return False
 

@@ -444,7 +444,9 @@ def lay_fixtures(
             # asked inline by `_first` (feature 427 T12)
             found = _first(offered, taken, g, roofs[0], px(PRIVY_SUN_MAX_FT)) if kind == "privy" else _first(offered, taken, g)
             if found is None:
-                raise FixtureUnlaid("a privy found no place within 48 ft of its house")
+                # ...named for the kind that found none: a heap, coop, shrine, grave or retirement house is held to no 48 ft (feature
+                # 427 T08, impl-drift's aside on T12: every kind raised the privy's words)
+                raise FixtureUnlaid("a privy found no place within 48 ft of its house" if kind == "privy" else f"a {kind} found no place beside its house")
             seat = found
         laid[kind] = seat
         taken.append(_trunk(seat, px) if kind == "persimmon" else seat)

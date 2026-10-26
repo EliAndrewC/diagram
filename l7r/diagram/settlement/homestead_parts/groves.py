@@ -96,6 +96,20 @@ Research: grove bamboo patch - research/questions/0075-bamboo-groves-chikurin.dr
 """
 
 
+def under_a_crown(x: float, y: float, near: Sequence[tuple[float, float, float]], trees: Sequence[tuple[float, float, float]], pad: float) -> bool:
+    """Does (x, y) stand under an earlier crown of `near`, or within a persimmon's crown of `trees` and `pad`? `_open_share`'s
+    two crown tests as loops, not a generator each (feature 427 T08: 39k steps at 40 households) - the same `math.hypot`.
+
+    Research: plumbing - NONE: the open ground's test, written as loops"""
+    for ox, oy, orr in near:
+        if math.hypot(x - ox, y - oy) < orr:
+            return True
+    for tx, ty, tr in trees:  # noqa: SIM110 - a loop, not any() over a generator
+        if math.hypot(x - tx, y - ty) < tr + pad:
+            return True
+    return False
+
+
 def in_box(x: float, y: float, box: tuple[float, float, float, float] | None) -> bool:
     """Is (x, y) inside the axis-aligned `box` (x0, y0, x1, y1)? False with no box."""
     return box is not None and box[0] <= x <= box[2] and box[1] <= y <= box[3]
@@ -586,9 +600,7 @@ class GrovesMixin:
             # household, behind the house where a front yard keeps its sun, which is where the farm's grove stands; it is inked
             # on top after every grove, so a cedar under its crown would read as the broadleaf-over-conifer case (B5b)
             _trees = [
-                (t[0], t[1], t[2] / 2)
-                for t in ((rec.get("geom") or {}).get("fixtures", {}).get("persimmon") for rec in self.M.get("houses") or ())
-                if t is not None and cx - w / 2 - _cpad - t[2] <= t[0] <= cx + w / 2 + _cpad + t[2] and cy - h / 2 - _cpad - t[2] <= t[1] <= cy + h / 2 + _cpad + t[2]
+                (t[0], t[1], t[2] / 2) for t in self._persimmons() if cx - w / 2 - _cpad - t[2] <= t[0] <= cx + w / 2 + _cpad + t[2] and cy - h / 2 - _cpad - t[2] <= t[1] <= cy + h / 2 + _cpad + t[2]
             ]
             # ...TRANSLATED TO THE TENTH, as its crowns are written (feature 315): rounded to the whole pixel, every crown was inked up
             # to half a pixel from where its tests seated it, and a Mizuguchi broadleaf tested clear of a cedar was drawn over it (B5b)
@@ -670,12 +682,7 @@ class GrovesMixin:
                         w,
                         h,
                         self.px(self.CANOPY_R_FT),
-                        lambda x, y: (
-                            self._crown_covers(x, y, 1.0, ksun, kcirc, self.CANOPY_PAD)
-                            or in_box(x, y + lift, bamboo_box)
-                            or any(math.hypot(x - ox, y - oy) < orr for ox, oy, orr in _near)
-                            or any(math.hypot(x - tx, y - ty) < tr + self.px(self.CANOPY_R_FT) for tx, ty, tr in _trees)
-                        ),
+                        lambda x, y: self._crown_covers(x, y, 1.0, ksun, kcirc, self.CANOPY_PAD) or in_box(x, y + lift, bamboo_box) or under_a_crown(x, y, _near, _trees, self.px(self.CANOPY_R_FT)),
                     )
                     * w
                     * h

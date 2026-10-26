@@ -125,16 +125,18 @@ class BeltReading:
         self.axes = (wx, wy, px, py)
         self.cx = sum(float(h["x"]) for h in houses) / len(houses)
         self.cy = sum(float(h["y"]) for h in houses) / len(houses)
-        self.cl = [self.uv(float(c[0]), float(c[1])) for c in [*on, *off]]
+        # `uv` and `bin` written inline over the crowns (feature 427 T08: a call each per crown, 61k at 40 households)
+        cx, cy = self.cx, self.cy
+        self.cl = [((float(c[0]) - cx) * wx + (float(c[1]) - cy) * wy, (float(c[0]) - cx) * px + (float(c[1]) - cy) * py) for c in [*on, *off]]
         self.houses = [self.uv(float(h["x"]), float(h["y"])) for h in houses]
         self.band = [self.uv(float(q[0]), float(q[1])) for q in band]  # the band's outline (the record's `poly`), for W19's run break
-        self.lo = min(v for _u, v in self.cl)
+        self.lo = lo = min(v for _u, v in self.cl)
         self.bins: dict[int, list[float]] = {}
         for u, v in self.cl:
-            self.bins.setdefault(self.bin(v), []).append(u)
+            self.bins.setdefault(int((v - lo) // DEPTH_BIN_FT), []).append(u)
         # A BIN THE PAGE'S EDGE CUTS IS NOT JUDGED: the frame, not the belt, is what is thin there (Inashiro's belt runs off
         # the top of its view, and the canvas squeezes the part a reader never sees).
-        page = {self.bin(v) for _u, v in self.cl[len(on) :]}
+        page = {int((v - lo) // DEPTH_BIN_FT) for _u, v in self.cl[len(on) :]}
         # ...and a bin whose crowns stand within the belt's own designed depth of the page's edge: where the view starts at
         # the canvas's edge there are no crowns off the page to count - the canvas clamps the belt - but the frame takes its
         # depth just the same, which the record accepts (the belt's inner face is kept at the frame, its depth clipped).
@@ -152,7 +154,7 @@ class BeltReading:
         # ...and the TIPS: a bin at the end of a run of crowned bins is where a belt tapers - it is deepest in the middle
         # (research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html) - and one crown there is the taper, not the one-row arm this measures
         self.tips = {b for b in self.bins if not self.bins.get(b - 1) or not self.bins.get(b + 1)}
-        self.ways = [self.uv(x, y) for x, y in way_samples(ways)]
+        self.ways = [((x - cx) * wx + (y - cy) * wy, (x - cx) * px + (y - cy) * py) for x, y in way_samples(ways)]  # `uv` inline
         self.parted = self._parted()
 
     def uv(self, x: float, y: float) -> Pt:
@@ -194,9 +196,12 @@ class BeltReading:
         """
         r = self.r
         inside: dict[int, list[float]] = {}
+        near: dict[int, list[float]] = {}  # each bin's neighbors' crowns asked once: the bins do not change (feature 427 T08)
         for u, v in self.ways:
-            b = self.bin(v)
-            us = self._near(b)
+            b = int((v - self.lo) // DEPTH_BIN_FT)
+            if b not in near:
+                near[b] = self._near(b)
+            us = near[b]
             if us and min(us) + r < u < max(us) - r:  # inside the belt's thickness there, a crown's radius in from each face
                 inside.setdefault(b, []).append(u)
         out = set()

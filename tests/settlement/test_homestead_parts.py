@@ -532,7 +532,14 @@ def test_the_gap_fill_skips_a_barren_gap_and_seats_the_same_clumps(monkeypatch):
         calls["n"] += 1
         return real(self, x, y)
 
+    real_many = grove_blocks.GroveBlocks.inside_many
+
+    def counted_many(self, pts):  # the gap fill asks a column at once (feature 427 T08): each point counts as asked
+        calls["n"] += len(pts)
+        return real_many(self, pts)
+
     monkeypatch.setattr(grove_blocks.GroveBlocks, "inside", counted)
+    monkeypatch.setattr(grove_blocks.GroveBlocks, "inside_many", counted_many)
     belt = [(300, 420), (1000, 420), (1000, 520), (300, 520)]  # runs east across the paddy (x >= 640)
 
     def roll(memory):

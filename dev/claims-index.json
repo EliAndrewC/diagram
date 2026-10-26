@@ -10515,8 +10515,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#belt on the windward fringe": {
-  "code": "69bb84645aa8754f",
-  "core": "f0d341584f49b8af",
+  "code": "cd042e02f27fc6f6",
+  "core": "4f8cdb6f764777cb",
   "date": "2026-10-07",
   "note": "band hugs each column's windward-most house, floored at max(median u, 0) so it never falls behind the centroid",
   "pages": {
@@ -10530,12 +10530,12 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dde93f148061b296"
   ],
-  "triaged": "2026-10-08",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#connector and field spur lanes cross the belt as a way through, not moved past": {
-  "code": "6120ee4f1f63f398",
-  "core": "f0d341584f49b8af",
+  "code": "a3d1ce3b7689da2b",
+  "core": "4f8cdb6f764777cb",
   "date": "2026-10-07",
   "note": "connector/spur lanes are left out of the past-the-lanes move, so they cross the band and the planting resumes either side",
   "pages": {
@@ -10547,26 +10547,27 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
   ],
-  "triaged": "2026-10-08",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#its drawn sizes": {
   "body": "4c00b87241b24ea2",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 6 (belt vertices clamped inside the canvas)",
-  "code": "bfcddd359869d1fe",
-  "core": "f0d341584f49b8af",
+  "code": "34357326c9c025da",
+  "core": "4f8cdb6f764777cb",
   "date": "2026-10-25",
   "note": "canvas clamp",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#its plot-edge gap": {
   "body": "4c00b87241b24ea2",
   "claim": "its plot-edge gap - GUESS sunlight-and-shade-on-the-farm.drawing: 12 (the windbreak face's gap off the plots, an average plot's overhang)",
-  "code": "7233f703f1ce4e71",
-  "core": "f0d341584f49b8af",
+  "code": "49302d9bef463285",
+  "core": "4f8cdb6f764777cb",
   "date": "2026-10-25",
   "note": "the page records the gap as \"an average plot's overhang\", which is what the 12 is",
   "pages": {
@@ -10577,46 +10578,50 @@
    "0038-sunlight-and-shade-on-the-farm.drawing.html:b827c5a10b15cbbc",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#its salts, guards and sentinels": {
   "body": "4c00b87241b24ea2",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 4.29497e+09 (seed mask); 7919 (seed multiplier)",
-  "code": "c5eef9a1058de19c",
-  "core": "f0d341584f49b8af",
+  "code": "13d49ee357500e77",
+  "core": "4f8cdb6f764777cb",
   "date": "2026-10-25",
   "note": "seed mask and multiplier",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#its search steps and tolerances": {
   "body": "4c00b87241b24ea2",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 7 (fewest profile columns); 24 (most profile columns); 44 (push-back step off the crop); 0.88 (belt-shortening step off the crop); 0.74 (belt-shortening step off the crop); 40 (same window as line 48, in belt reach); 11 (lane samples per segment)",
-  "code": "89f80388061ea03d",
-  "core": "f0d341584f49b8af",
+  "code": "bf12dbfe803449a4",
+  "core": "4f8cdb6f764777cb",
   "date": "2026-10-25",
   "note": "ladder and sampling ours",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#no belt under three houses": {
   "body": "4c00b87241b24ea2",
   "claim": "no belt under three houses - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25)",
-  "code": "91e68fe6491484cc",
-  "core": "f0d341584f49b8af",
+  "code": "0f983f2d9dc47294",
+  "core": "4f8cdb6f764777cb",
   "date": "2026-10-25",
   "note": "the bundle is silent on it",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#off the afternoon sun-lane": {
-  "code": "cc0ad50696a5e5de",
-  "core": "f0d341584f49b8af",
+  "code": "191e8ca2702610d3",
+  "core": "4f8cdb6f764777cb",
   "date": "2026-10-07",
   "note": "near face moved back by -wx*(west sun lane + 12 ft plot overhang); clump refusal stays the guarantee, as the page says",
   "pages": {
@@ -10629,28 +10634,31 @@
    "0038-sunlight-and-shade-on-the-farm.drawing.html:b827c5a10b15cbbc",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#off the crop": {
-  "body": "4c00b87241b24ea2",
+  "body": "1e49c16d86051262",
   "claim": "off the crop - sunlight-and-shade-on-the-farm: a tree shades one tree's height (the Qimin Yaoshu), about 33 ft - the belt stands 20 px off the crop at its nearest, a departure the code keeps until feature 417 T33; stands back 22-60 px, then shortens to 0.6 of its span",
-  "code": "eec7bd89e2224085",
-  "core": "f0d341584f49b8af",
-  "date": "2026-10-25",
-  "note": "a vertex is fouled only within 20 px of the crop (`edge_within(..., 20.0)`), but 0038 finds a tree \"shades one tree's height\", about 33 ft. Also, when every rung of the ladder fouls, the (0.6, 60) band is returned still on the crop. The departure is on no drawing page: hold the belt about 33 ft off, or record a DEVIATION",
+  "code": "15a8d346bbc7993b",
+  "core": "4f8cdb6f764777cb",
+  "date": "2026-10-26",
+  "note": "known (417 T33): the belt stands only 20 px off the crop at its nearest (`shapely.distance(ring, pts) < 20.0` or a vertex inside a crop), short of the page's one tree's height, about 33 ft. The rewritten `fouled` still runs the same two tests. The ladder (1,0)(1,22)(1,44)(.88,44)(.74,60)(.6,60) is what the claim says: it stands back 22-60, then shortens to 0.6",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.html": "ed2f071234ba11c8"
   },
   "research": "94885ff78be67a9a",
   "rests": [
+   "0038-sunlight-and-shade-on-the-farm.html:057bd317a626287f",
    "0038-sunlight-and-shade-on-the-farm.html:5127397390471051",
+   "0038-sunlight-and-shade-on-the-farm.html:66d942dbe95f84f0",
    "0038-sunlight-and-shade-on-the-farm.html:f21ec99f6590b468"
   ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#one village belt for the clustered form only": {
-  "code": "1a7d19927b0adbf9",
-  "core": "f0d341584f49b8af",
+  "code": "3bf98bc5ba6bef7a",
+  "core": "4f8cdb6f764777cb",
   "date": "2026-10-07",
   "note": "returns no belt when not _nucleated; the record makes it one shared belt or a grove per farm, never both",
   "pages": {
@@ -10662,13 +10670,14 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html:d05a175e3f65183f"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#shoulder past the end houses": {
   "body": "4c00b87241b24ea2",
   "claim": "shoulder past the end houses - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing: the belt is a crescent wrapping round the houses' flanks (the page's own choice); the 90 ft is a GUESS; the band runs 90 ft past the outermost house across the wind",
-  "code": "97d41802a7a5170e",
-  "core": "f0d341584f49b8af",
+  "code": "b39e4ddd7b8b143c",
+  "core": "4f8cdb6f764777cb",
   "date": "2026-10-25",
   "note": "a crescent wrapping the flanks, the page's own choice; `half + 90.0` is a GUESS",
   "pages": {
@@ -10678,14 +10687,17 @@
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:c491d9aaff941cf5"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::far_envelope#belt geometry": {
-  "code": "94a43f94db4cbf56",
-  "core": "5ba0f926dcc9bc7d",
+  "code": "570d230833030755",
+  "core": "078a63b0103e5249",
   "date": "2026-10-03",
   "note": "curve plumbing",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::fringe_profile#belt follows the windward fringe": {
@@ -10713,8 +10725,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#belt into the marsh as alder": {
-  "code": "bae24b6a110cbaf4",
-  "core": "54163d5179638643",
+  "code": "5a1dc6e5b0c7cf0c",
+  "core": "d3d31077008f7cab",
   "date": "2026-10-07",
   "note": "band moves with no marsh check; its trees in the marsh are drawn as alder",
   "pages": {
@@ -10726,11 +10738,12 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:d4d9c7851e8a97bc"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#belt keeps its depth past a back lane": {
-  "code": "1215380b17c04d12",
-  "core": "54163d5179638643",
+  "code": "85cbfc65e7ce1d93",
+  "core": "d3d31077008f7cab",
   "date": "2026-10-07",
   "note": "the column moves upwind past the lane and keeps its full depth, honouring the 80-120 ft never-thinner rule",
   "pages": {
@@ -10741,13 +10754,14 @@
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:21b4ce77ba7bcd02",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:d3ed8cad5ddc7b21"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#its figures from 0071": {
   "body": "d7e3b0d45687e415",
   "claim": "its figures from 0071 - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing: 146 (default near face + depth)",
-  "code": "a44e64f0e21b5e1b",
-  "core": "54163d5179638643",
+  "code": "bde96599bf23330f",
+  "core": "d3d31077008f7cab",
   "date": "2026-10-25",
   "note": "the 100 ft depth inside \"80 to 120 ft deep\"",
   "pages": {
@@ -10757,18 +10771,20 @@
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:21b4ce77ba7bcd02"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#lane clearance": {
   "body": "d7e3b0d45687e415",
   "claim": "lane clearance - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); BELT_LANE_CLEAR_FT",
-  "code": "4e35c5a82d5512e9",
-  "core": "54163d5179638643",
+  "code": "7015c94bf9e37566",
+  "core": "d3d31077008f7cab",
   "date": "2026-10-25",
   "note": "the bundle is silent on it",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::round_the_houses#its search steps and tolerances": {
@@ -12294,17 +12310,18 @@
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#among-the-houses copse box": {
   "body": "a3e67ba925306fb3",
   "claim": "among-the-houses copse box - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); the box is the cluster's oriented footprint padded 16 ft",
-  "code": "257c95275cb4d5cc",
-  "core": "6f390401dade8cf4",
+  "code": "21a52ada433b1c09",
+  "core": "f7424f26c8c5d865",
   "date": "2026-10-25",
   "note": "pad = 16.0 around the oriented footprint; no page gives a padding",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse among the homes": {
-  "code": "1673c413768a9528",
-  "core": "6f390401dade8cf4",
+  "code": "9e77b7365e5bdc55",
+  "core": "f7424f26c8c5d865",
   "date": "2026-10-11",
   "note": "copse seated over the house cluster, in the gaps between the houses",
   "pages": {
@@ -12317,11 +12334,12 @@
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:6d00137e5f270209",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:8869ee12a8b6d77d"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse on the house's own bank": {
-  "code": "7e57644367a241fc",
-  "core": "6f390401dade8cf4",
+  "code": "42f23813863928b9",
+  "core": "f7424f26c8c5d865",
   "date": "2026-10-07",
   "note": "the one-bank farmstead GUESS is carried to the homestead's share of the copse",
   "pages": {
@@ -12332,12 +12350,12 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:6062bfc803d4863c"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse reach from a house": {
-  "code": "ba742f2646c89913",
-  "core": "6f390401dade8cf4",
+  "code": "40f7e5a1044dadb9",
+  "core": "f7424f26c8c5d865",
   "date": "2026-10-11",
   "note": "s.px(COPSE_HOUSE_REACH_FT) bounds each clump to 90 ft of a house",
   "pages": {
@@ -12347,11 +12365,12 @@
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:05b046d03b3783aa"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse sized by the homestead woods": {
-  "code": "526f8224271b27dc",
-  "core": "6f390401dade8cf4",
+  "code": "eaec509ce3d49f3d",
+  "core": "f7424f26c8c5d865",
   "date": "2026-10-07",
   "note": "each homestead's wood is rolled per farm, and the copse is filled to what the belt and the farm groves leave; the range itself is checked in copse_goal",
   "pages": {
@@ -12365,26 +12384,27 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:ccde3c4c44be3d3c"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#its salts, guards and sentinels": {
   "body": "a3e67ba925306fb3",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 210 (jitter salt)",
-  "code": "f6c05df80d750856",
-  "core": "6f390401dade8cf4",
+  "code": "b37f5dea02e707ff",
+  "core": "f7424f26c8c5d865",
   "date": "2026-10-25",
   "note": "a jitter salt",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#no copse without a belt or a reserved seat": {
   "body": "a3e67ba925306fb3",
   "claim": "no copse without a belt or a reserved seat - groves-of-trees-around-farmhouses-yashikirin.drawing: every farm that keeps a wood is given 6,000 to 28,000 sq ft of trees, its share of the copse counted - a map with no belt and no reserved seat draws no copse, a departure the code keeps until feature 417 T33; a map with neither draws no copse",
-  "code": "b9e664754b4527a9",
-  "core": "6f390401dade8cf4",
+  "code": "78468b299d851dd1",
+  "core": "f7424f26c8c5d865",
   "date": "2026-10-25",
   "note": "`if not plan.belt and not _seats: return` draws no copse, against \"Each homestead that keeps a wood has between about 6,000 and 28,000 sq ft\"; the claim itself calls this a departure, but the drawing page does not record it (§148 records only a shortfall for want of ground); relabel it DEVIATION and record it on the page, or land T33",
   "pages": {
@@ -12397,6 +12417,7 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da"
   ],
+  "triaged": "2026-10-26",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_woodland#coppice on the scanned parcels": {
@@ -13313,13 +13334,14 @@
  "l7r/diagram/hamletgen/homesteads/bamboo.py::parts_hit#off the seated parts": {
   "body": "6de7b998466e00f0",
   "claim": "off the seated parts - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); the strip and a part's box, `gap` apart",
-  "code": "3abb9eb915adf8d7",
-  "core": "6186c8810bc9dba9",
+  "code": "3e24d7859f4db810",
+  "core": "e40bd8123c176a73",
   "date": "2026-10-25",
   "note": "plumbing of the 2 ft guess",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::seat_strips#off the grove farms' bands": {
@@ -47452,19 +47474,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex#spatial indexes": {
-  "code": "97869f2cd29b0695",
-  "core": "efe0fa1acc00a59b",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
+  "body": "dfef3dc309c12e11",
+  "claim": "spatial indexes - NONE: prefilters that prune, the caller's test decides",
+  "code": "4cf6b57ddb39cbd9",
+  "core": "6fcc29cc9d91c172",
+  "date": "2026-10-26",
+  "note": "a `__slots__` addition, plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex.__init__#spatial indexes": {
-  "code": "2b9c088a8b71348d",
-  "core": "1b99ffe0b9a37414",
+  "code": "b56a34c9811758aa",
+  "core": "e2f618d1aec631ee",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex.edge_within#spatial indexes": {
@@ -47486,13 +47514,14 @@
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex.inside_many#its salts, guards and sentinels": {
   "body": "d84fd253a17bf226",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (boundary tolerance)",
-  "code": "587a8ec1fdb0910b",
-  "core": "537e9d76d1028292",
+  "code": "742aa4be2f29a831",
+  "core": "0a8989aec6fff88d",
   "date": "2026-10-25",
   "note": "boundary tolerance, plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::_parity_region#spatial indexes": {
@@ -47892,11 +47921,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::convex_hull#coordinate math": {
-  "code": "3f96ae20e1da3e5a",
-  "core": "f85689df8929724b",
+  "code": "6ab8f95ba43e754b",
+  "core": "88310f0860a48727",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::edge_dist#coordinate math": {
@@ -55121,11 +55152,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/bamboo_keepout.py::stand_spares_seats#plumbing": {
-  "code": "066a94064de3417a",
-  "core": "45b7c5839f193e8b",
+  "code": "2671ab0d1c289079",
+  "core": "6a1ac2ca6f7d669b",
   "date": "2026-10-03",
   "note": "plumbing",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BELT_DESIGN_DEPTH_FT#belt band depth": {
@@ -55163,8 +55196,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#depth near the frame not judged": {
-  "code": "203bb39d5a6fb646",
-  "core": "d21b3e787ecc47c7",
+  "code": "c542947d2a02ede5",
+  "core": "7a36a422cbbb16eb",
   "date": "2026-10-08",
   "note": "The 2 r margin only excuses the check's depth test where the frame clips the belt, and it draws nothing.",
   "pages": {},
@@ -55172,23 +55205,25 @@
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#its salts, guards and sentinels": {
   "body": "ecb763f49deb9363",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 2e+09 (sentinel frame when no view is recorded); 1e+09 (sentinel frame when no view is recorded)",
-  "code": "59c34b8d5f158dc5",
-  "core": "d21b3e787ecc47c7",
+  "code": "d792004723838f7c",
+  "core": "7a36a422cbbb16eb",
   "date": "2026-10-25",
   "note": "a sentinel frame",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#page edge not judged": {
-  "code": "51aac3ed7dc0b91e",
-  "core": "d21b3e787ecc47c7",
+  "code": "f0345fc660180390",
+  "core": "7a36a422cbbb16eb",
   "date": "2026-10-08",
   "note": "Stretches with off-page crowns, or where the band leaves the page, are not judged, and only those excuse a hole (`self.cut`); the frame margin excuses depth only, so a break a reader can see stays a hole.",
   "pages": {
@@ -55200,12 +55235,12 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:56f345de26c07dc8"
   ],
-  "triaged": "2026-10-08",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#tips not judged": {
-  "code": "f57ed5907bb8b6f0",
-  "core": "d21b3e787ecc47c7",
+  "code": "d7d65acb8d4ba9b9",
+  "core": "7a36a422cbbb16eb",
   "date": "2026-10-08",
   "note": "the grove is \"deepest in the middle and tapering to points\"",
   "pages": {
@@ -55215,6 +55250,7 @@
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:57a7ec65fd3ad92b"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading._band_leaves_the_page#plumbing": {
@@ -55259,15 +55295,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading._parted#lane crossing exempt": {
-  "code": "48e828239fc46515",
-  "core": "9ffeba43dcc021b6",
+  "code": "077daf9a7bdbe78c",
+  "core": "156fde14ea7b463b",
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
   "research": "5892781a1ab23bcb",
-  "triaged": "2026-10-08",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.bin#plumbing": {
@@ -56948,8 +56984,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room joined": {
   "body": "2e6053a878457bd0",
   "claim": "bath room joined - baths-on-the-farm-furo.drawing: refused rather than walked out",
-  "code": "858e4149517321e4",
-  "core": "96e6f5629e3d4f9b",
+  "code": "c952ddf7ae75919b",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-24",
   "note": "the seats must abut the house wall, and FixtureUnlaid is raised rather than a free-standing bath shed being drawn",
   "pages": {
@@ -56967,8 +57003,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room's wall per house": {
   "body": "2e6053a878457bd0",
   "claim": "bath room's wall per house - baths-on-the-farm-furo: each house rolls among the three walls (`bath_wall`)",
-  "code": "5019d1cba0375cd2",
-  "core": "96e6f5629e3d4f9b",
+  "code": "b7b93ec10e1e6929",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-24",
   "note": "bath_wall rolls the stable end, the floored rooms or the main door per house",
   "pages": {
@@ -56986,8 +57022,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part and bath room slide 4 ft": {
   "body": "45ec7ea907bb5779",
   "claim": "fixture gap 3.5 ft off every other part and bath room slide 4 ft - GUESS firewood-stacks-and-sheds-kigoya.drawing: the gap of about 3.5 ft our maps keep between a house wall and anything built in its yard; the 4 ft slide is ours; WALL_GAP_FT (3.5 ft) clears the drawn wall of any part a fixture stands by, WALL_SLIDE_FT (4 ft) the bath room's slide along its wall",
-  "code": "6361b2f7ab951eab",
-  "core": "96e6f5629e3d4f9b",
+  "code": "83b6214cf3013e43",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-26",
   "note": "`g = px(WALL_GAP_FT)` is the page's \"gap of about 3.5 ft\"; the page says nothing of the 4 ft slide",
   "pages": {
@@ -57003,8 +57039,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#its salts, guards and sentinels": {
   "body": "2e6053a878457bd0",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.25 (salt offset for the bath-wall roll)",
-  "code": "0e09183d5e4ce0ef",
-  "core": "96e6f5629e3d4f9b",
+  "code": "5b80bc4314e38fc5",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-25",
   "note": "roll salt offset",
   "pages": {},
@@ -57016,8 +57052,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no fixture on the door's room": {
   "body": "2e6053a878457bd0",
   "claim": "no fixture on the door's room - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); the square about the door in `keep` (`DOOR_ROOM_HALF_FT`)",
-  "code": "cadab6f0ef86a86e",
-  "core": "96e6f5629e3d4f9b",
+  "code": "d9e9ec696d0421fd",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-25",
   "note": "the bundle's pages are silent on a keep-out square at the door",
   "pages": {},
@@ -57029,8 +57065,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no fixture on the way in": {
   "body": "2e6053a878457bd0",
   "claim": "no fixture on the way in - groves-of-trees-around-farmhouses-yashikirin.drawing: the way in by the open front, through the ring's break - every kind but the bath room kept off `keep`",
-  "code": "ab739ada4cbcd330",
-  "core": "96e6f5629e3d4f9b",
+  "code": "10b06e4dae0514d8",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-24",
   "note": "`keep` goes into every kind's taken except the bath room's, so the way in through the front break stays clear",
   "pages": {
@@ -57047,8 +57083,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no seat, no persimmon": {
   "body": "2e6053a878457bd0",
   "claim": "no seat, no persimmon - fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing: the farm keeps none",
-  "code": "df89374a73d5feef",
-  "core": "96e6f5629e3d4f9b",
+  "code": "5ca116a3f2c316f0",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-24",
   "note": "when _persimmon returns None the farm keeps none, never one set far out",
   "pages": {
@@ -57064,8 +57100,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon front or behind": {
   "body": "2e6053a878457bd0",
   "claim": "persimmon front or behind - fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing: in front of the house or behind it, rolled per house at `forms.persimmon_front`",
-  "code": "dca7a1207b202018",
-  "core": "96e6f5629e3d4f9b",
+  "code": "f9ef2b772ed9ec3f",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-24",
   "note": "front or behind is rolled per house against the hamlet's front share, and the sun test sends the tree behind wherever a drying yard lies in front; it is never put on a flank",
   "pages": {
@@ -57082,8 +57118,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon in its own grove bands": {
   "body": "2e6053a878457bd0",
   "claim": "persimmon in its own grove bands - fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing: it may stand in the grove behind the house - its own grove, no other farm's",
-  "code": "deb0c8bde7379449",
-  "core": "96e6f5629e3d4f9b",
+  "code": "05b17404d9db9e75",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-24",
   "note": "only this farm's `fruit` bands are lifted for the trunk, and the crown stays off the roofs, so the tree stands at the edge of its own grove",
   "pages": {
@@ -57099,8 +57135,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order": {
   "body": "2e6053a878457bd0",
   "claim": "seating order - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); FIXTURE_ORDER (retirement house, bath, wood shed, privy, manure, coop, shrine, grave, persimmon) is the order the fixtures take seats",
-  "code": "f24a94716c531cc6",
-  "core": "96e6f5629e3d4f9b",
+  "code": "a85320b8e5458552",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-25",
   "note": "no page orders the fixtures",
   "pages": {},
@@ -57112,8 +57148,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#stepped outward": {
   "body": "2e6053a878457bd0",
   "claim": "stepped outward - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a fixture with no recorded seat free is offered the same seats a pace further out",
-  "code": "68af2bd39af36637",
-  "core": "96e6f5629e3d4f9b",
+  "code": "6b22dd4b06bb8973",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-25",
   "note": "the pages are silent on stepping a fixture a pace further out",
   "pages": {},
@@ -57125,8 +57161,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the kura's walls too": {
   "body": "2e6053a878457bd0",
   "claim": "the kura's walls too - GUESS: the house's storehouse annex counts as a wall of the house for the shed",
-  "code": "882c907ecdba2770",
-  "core": "96e6f5629e3d4f9b",
+  "code": "2361e79afb98f826",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-24",
   "note": "the account does not match the code: the kura enters `walls` only for clearance (shed_off_a_wall clears every wall by gap plus ken), while the shed is seated off walls[:1] alone (wall_places and against_a_wall), so the kura is never a wall the shed stands off; the claim should read \"the kura's walls kept clear by the same gap and ken\"",
   "pages": {},
@@ -57137,8 +57173,8 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the privy's reach": {
   "body": "68508d6112cb31c0",
   "claim": "the privy's reach - farm-privies-and-their-night-soil-benjo.drawing: never stepped past 48 ft from its house; a farmstead with no seat within it refuses its privy by name",
-  "code": "8889f6dce99779df",
-  "core": "96e6f5629e3d4f9b",
+  "code": "c3641bd1cb2ff2fe",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-26",
   "note": "only a privy gets `_first(..., roofs[0], px(PRIVY_SUN_MAX_FT))`, so no stepped seat is taken past 48 ft, and when none is in reach the farmstead's privy is refused by name (FixtureUnlaid)",
   "pages": {
@@ -57150,13 +57186,14 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:bc74b262a32416b5",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": {
   "body": "2e6053a878457bd0",
   "claim": "wood shed's walls - GUESS firewood-stacks-and-sheds-kigoya.drawing: the house's walls, a short step off the house - never the byre's or the retirement house's",
-  "code": "b63a96cfb593f0a8",
-  "core": "96e6f5629e3d4f9b",
+  "code": "aa8590e00cba666d",
+  "core": "bcb9abc8a662bb66",
   "date": "2026-10-19",
   "note": "the walls are the house's own walls (plus the kura annex), not the byre's or the retirement house's, matching \"a short step off the house\"",
   "pages": {
@@ -57557,6 +57594,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/grove_blocks.py::GroveBlocks.inside_many#plumbing": {
+  "body": "84efd333177d1b28",
+  "claim": "plumbing - NONE: the outline's test, asked of a column at once",
+  "code": "1947b7c7eceb4935",
+  "core": "c17a5f4de1c39a64",
+  "date": "2026-10-26",
+  "note": "the outline's inside test in batch, with the same memo",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/homestead_parts/grove_blocks.py::GroveBlocks.lane#index plumbing": {
   "code": "d64bb15432745819",
   "core": "3ffeda8afa39a261",
@@ -57638,16 +57687,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_blocks.py::Seats.too_near#index plumbing": {
-  "code": "29c91eb8ff7b8269",
-  "core": "01618e4a32a6a5a2",
+  "code": "00869db41a7be8a9",
+  "core": "4d2317381fbb8243",
   "date": "2026-10-03",
   "note": "plumbing, nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::close_belt_gaps#belt deep and whole": {
-  "code": "01eb7583e84c3dc6",
-  "core": "71470d563af6cb91",
+  "code": "e5fce544cc723e37",
+  "core": "f041f5f8bb4bfe46",
   "date": "2026-10-10",
   "note": "the code measures a gap as the straight-line distance `math.dist(_pa, _pb)` between neighbouring seats, ordered along the seats' own principal axis (`_belt_axis`), but the page says \"a bare run wider than about 30 ft, measured across the wind\". That axis can run 31-49 degrees off the across-wind line, and the straight-line distance counts the depth offset too. Either measure the gap across the wind, or have the page record this measure.",
   "pages": {
@@ -57660,11 +57711,12 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:7236ba17411f6faa",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:ef4711393f9f7044"
   ],
+  "triaged": "2026-10-26",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::close_belt_gaps#clumps off lanes": {
-  "code": "7f5865bea2125c9e",
-  "core": "71470d563af6cb91",
+  "code": "578ebdf422fcabb1",
+  "core": "f041f5f8bb4bfe46",
   "date": "2026-10-10",
   "note": "the gap is offered seats from both sides of its midpoint, so the planting resumes on each side of a crossing, as the page's GUESS says; there is no angled crossing.",
   "pages": {
@@ -57677,30 +57729,33 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::close_belt_gaps#its drawn sizes": {
   "body": "6a0745ff323bdd19",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.9 (\"any ink on the page\" frame test)",
-  "code": "5783e246de29506d",
-  "core": "71470d563af6cb91",
+  "code": "f1454f84caef39ac",
+  "core": "f041f5f8bb4bfe46",
   "date": "2026-10-25",
   "note": "the page-window ink test",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::close_belt_gaps#its search steps and tolerances": {
   "body": "6a0745ff323bdd19",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N9, 2026-10-25) - 6 (gap-fill round cap); 0.34 (fractions along a gap tried); 0.66 (fractions along a gap tried); 0.22 (fractions along a gap tried); 0.78 (fractions along a gap tried); 33 (depth samples across the band); 32 (the same, as intervals)",
-  "code": "0617dc5a64e412cb",
-  "core": "71470d563af6cb91",
+  "code": "df74b9918ed6c77c",
+  "core": "f041f5f8bb4bfe46",
   "date": "2026-10-25",
   "note": "search fractions and round cap; no page speaks to them",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::grove_blocks#belt off the deep marsh": {
@@ -57954,8 +58009,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::ink_and_record_grove#belt alder in the marsh": {
-  "code": "626aa0e6e1ac62a1",
-  "core": "61ab1aecfa7e8709",
+  "code": "b11af772d24132f4",
+  "core": "2fff3ed3c8a13981",
   "date": "2026-10-10",
   "note": "the code draws alder only in `marsh_ground(s.M, only=(\"toe\", \"waterside\"))`, but the page says \"A shelter belt's trees standing in the marsh are drawn as alder\", with no marsh kinds excluded. grove_blocks lets belt clumps sit in the margin of every marsh kind, so a clump in another kind's margin is drawn as an ordinary tree. Either widen the alder test to every marsh the belt may stand in, or have the page record the restriction.",
   "pages": {
@@ -57967,21 +58022,23 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:d4d9c7851e8a97bc"
   ],
+  "triaged": "2026-10-26",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::ink_and_record_grove#the belt's hit region": {
-  "code": "4a8aec4f3f61adf0",
-  "core": "61ab1aecfa7e8709",
+  "code": "5bc4a3d5cb0b5334",
+  "core": "2fff3ed3c8a13981",
   "date": "2026-10-10",
   "note": "the page's highlight extent, display only.",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::ink_and_record_grove#the belt's rolled form": {
-  "code": "4bb354d739090c9e",
-  "core": "61ab1aecfa7e8709",
+  "code": "d437d0b8a3202523",
+  "core": "2fff3ed3c8a13981",
   "date": "2026-10-10",
   "note": "`_windbreak_belt` picks one of the two attested forms per map, conifer ranks with lesser broadleaf or mixed broadleaf",
   "pages": {
@@ -57994,6 +58051,7 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:cdc8bbf5147ce3fe",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:e7f8a345b63cc861"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_fill.py::reseat_clump#a belt plants round a local obstacle": {
@@ -58695,8 +58753,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#alder in the marsh": {
-  "code": "880587395e27bc19",
-  "core": "a6c280c694c37362",
+  "code": "0e5119d18116980a",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "alder mix is broadleaf only, blue-gray greens, no conifer or bamboo",
   "pages": {
@@ -58707,11 +58765,12 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:5b72bf251cebc78b",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:66fe4489ce37ece6"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo patch forced": {
-  "code": "1811d42fd74de774",
-  "core": "a6c280c694c37362",
+  "code": "2712610aaa639966",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-13",
   "note": "patch inside the grove, a GUESS",
   "pages": {
@@ -58721,12 +58780,12 @@
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
   ],
-  "triaged": "2026-10-13",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo under the crowns": {
-  "code": "088f93677b3d71e4",
-  "core": "a6c280c694c37362",
+  "code": "1dd9039c341eb957",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-13",
   "note": "one in twelve, inked only in gaps; none in copse or alder",
   "pages": {
@@ -58738,22 +58797,23 @@
    "0075-bamboo-groves-chikurin.drawing.html:8814c0e6e1d63c8e",
    "0075-bamboo-groves-chikurin.drawing.html:98be5820b93e25f7"
   ],
-  "triaged": "2026-10-13",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#clump glyph": {
-  "code": "ce3a110c24597cb0",
-  "core": "a6c280c694c37362",
+  "code": "ca9323d1670488be",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "one disc per crown, fill colors and paint order only",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#conifer-led clump's lesser share": {
-  "code": "07bc14800cc3737c",
-  "core": "a6c280c694c37362",
+  "code": "40e70162e008ff39",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "`n = max(1, round(n * LESSER_ROLL_SHARE))` is exactly the 0.1 share with a floor of one lesser crown that the claim states; 0072's drawing page names lesser broadleaf among the conifer rows but gives no share, and both pages say no page gives a village belt's share (the Kashima 48% is one hamlet's farmhouse groves), so GUESS is the right label; the conifer stays the commonest crown, as the page's guess has it",
   "pages": {},
@@ -58763,13 +58823,16 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:6de01da4f44bfe0c",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:1884e0c831822752"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown over no roof or wellhead": {
-  "code": "0fa143e940aa62e2",
-  "core": "a6c280c694c37362",
-  "date": "2026-10-08",
-  "note": "each crown is refused at its full drawn radius against buildings (the pre-filter now reaches as far as a crown does) and against wellheads",
+  "body": "036698f6dc9bd162",
+  "claim": "crown over no roof or wellhead - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing, shelter-belts-on-a-villages-windward-side-bofurin.drawing: no crown on a building, and none round a wellhead in a belt",
+  "code": "7377e12f02bd0b79",
+  "core": "043c8911bc938d7c",
+  "date": "2026-10-26",
+  "note": "every crown is refused by `_crown_covers` against the drawn building boxes and wellheads, with zero halo; it stands against a wall, never on it",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
@@ -58777,14 +58840,14 @@
   "research": "383588539ff096b4",
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dde93f148061b296"
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:d3ed8cad5ddc7b21",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown size": {
-  "code": "671a5b07c1609335",
-  "core": "a6c280c694c37362",
+  "code": "dcf584b3ecbd51e2",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-10",
   "note": "CROWN_S is 0.75-1.4 of px(CANOPY_R_FT), conifer the same width; CANOPY_R_FT is not inline, so the 8.5 ft mean was not checked",
   "pages": {
@@ -58796,11 +58859,12 @@
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a52bbfe64bb3c3b8"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown under no crown": {
-  "code": "4c82f99f148a74b6",
-  "core": "a6c280c694c37362",
+  "code": "9f0ff05a488b34bc",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "_crown_seat_clear is checked against earlier stands' crowns and this clump's drawn crowns, with edges allowed to overlap",
   "pages": {
@@ -58811,11 +58875,12 @@
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:aad44c6751a44f5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns out of the plots' sun": {
-  "code": "589743d552d0033c",
-  "core": "a6c280c694c37362",
+  "code": "fc168490dfc1497b",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "every crown is held off the sun keep-outs, and culm marks at BAMBOO_SHADE_FT 50",
   "pages": {
@@ -58826,11 +58891,12 @@
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:eec3f6a7b5017ede"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump": {
-  "code": "acbb4bae3b208fbf",
-  "core": "a6c280c694c37362",
+  "code": "9ae9ea88d123bf80",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "round(w*h / grove_crown_px2), which is the hill wood's 180 sq ft per tree, also kept for the windbreak",
   "pages": {
@@ -58841,26 +58907,30 @@
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns topped up to the density as drawn": {
-  "code": "da2e13d0e7a266c0",
-  "core": "a6c280c694c37362",
-  "date": "2026-10-08",
-  "note": "open_share's test now counts the bamboo patch (in_box at y+lift, the same frame as the top-up's refusal) and a crown's reach round a persimmon; the clump is topped up to 180 sq ft per crown of open ground with the TOPUP_TRIES limit, and the conifer-led belt is excluded",
+  "body": "036698f6dc9bd162",
+  "claim": "crowns topped up to the density as drawn - how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing: one crown per `GROVE_CROWN_SQFT` of the clump's open ground (`open_share`: the box less the keep-outs, earlier stands' crowns, the bamboo patch and a crown's reach round a persimmon) as drawn, never over the bamboo patch, giving up after `TOPUP_TRIES` throws a crown wanted; not the conifer-led belt (its rows are its own)",
+  "code": "b830345fee9af5b8",
+  "core": "043c8911bc938d7c",
+  "date": "2026-10-26",
+  "note": "tops up to one crown per GROVE_CROWN_SQFT (180 sq ft) of the open ground (keep-outs, earlier crowns, the bamboo box, a persimmon's reach plus one crown radius). The lift is applied consistently. It stops after TOPUP_TRIES x want throws and skips conifer_led",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#dooryard mix": {
-  "code": "d6e33ff1bedc7501",
-  "core": "a6c280c694c37362",
+  "code": "4b76dfec9f212372",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-10",
   "note": "the dooryard mix gets b_th = c_th = 0, so it draws broadleaf only, with no conifer and no bamboo",
   "pages": {
@@ -58870,12 +58940,12 @@
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon": {
-  "code": "73b76c050fef3567",
-  "core": "a6c280c694c37362",
+  "code": "bb67a8885feddc22",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "a crown is refused when the centers are closer than tr + rr + 0.2, so the grove gives way wholly",
   "pages": {
@@ -58885,35 +58955,38 @@
   "rests": [
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#its salts, guards and sentinels": {
   "body": "d82e7a9bb167a9a4",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 9 (prefilter pad, floor under the true crown reach); 93 (salts); 94 (salts); 5 (seed multiplier); 0.2 (ink rounding slack)",
-  "code": "2f3089611a38fe29",
-  "core": "a6c280c694c37362",
+  "code": "d3d41ba2d346d709",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-25",
   "note": "prefilter pad, salts, seed, ink slack",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#its search steps and tolerances": {
   "body": "d82e7a9bb167a9a4",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N9, 2026-10-25) - 0.6 (scatter of decorative crowns about even steps along a band; no source could speak to it)",
-  "code": "0afec5480a768425",
-  "core": "a6c280c694c37362",
+  "code": "c83a789d085e5286",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-25",
   "note": "thin-band scatter, a figure of ours",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size": {
-  "code": "610703fde833e35c",
-  "core": "a6c280c694c37362",
+  "code": "527c8e6c141cce25",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "0.75 to 0.85 lies within the page's 0.75 to 1.4, a degree not a form",
   "pages": {
@@ -58923,21 +58996,23 @@
   "rests": [
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser crown over an earlier stand's conifer": {
-  "code": "90aa37df443021b3",
-  "core": "a6c280c694c37362",
+  "code": "8d1b280b2c6367a0",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "a paint-order cull so that no broadleaf is drawn over a cedar; the top-up restores the density",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt": {
-  "code": "b9ae3c10643a4171",
-  "core": "a6c280c694c37362",
+  "code": "2370596151438bd1",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "c_th = b_th, so no conifer; rounded crowns in CROWN_S",
   "pages": {
@@ -58947,11 +59022,12 @@
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt's bamboo": {
-  "code": "001b5c2b2a87eb95",
-  "core": "a6c280c694c37362",
+  "code": "e6d929db73ad86e9",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "the same GROVE_BAMBOO_SHARE; the page holds it \"in the village's shelter belt alike\" and records it as a guess",
   "pages": {
@@ -58961,23 +59037,24 @@
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:8814c0e6e1d63c8e"
   ],
-  "triaged": "2026-10-13",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#thin band end to end": {
   "body": "d82e7a9bb167a9a4",
   "claim": "thin band end to end - GUESS: searched, the record silent (feature 417 T36 pass P1, 2026-10-25); a thin band's few trees spread along its length",
-  "code": "4ca80f57e1461469",
-  "core": "a6c280c694c37362",
+  "code": "c5c97df8203ed6c7",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-25",
   "note": "0036 says the band is one tree deep but not how its trees spread along it; pinned ends with jittered steps are ours",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share": {
-  "code": "5876352456d5256d",
-  "core": "a6c280c694c37362",
+  "code": "c2798d625910db4e",
+  "core": "043c8911bc938d7c",
   "date": "2026-10-08",
   "note": "the kind is rolled where each crown is seated, against the drawn deficit, so 0.48 of the crowns drawn are conifer; cedar is the dominant tree",
   "pages": {
@@ -58988,6 +59065,7 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:1884e0c831822752",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:8b6131d80ca7a717"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_flank#cardinal wind's second face": {
@@ -59301,6 +59379,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/groves.py::under_a_crown#plumbing": {
+  "body": "2de3e5fccd8836fa",
+  "claim": "plumbing - NONE: the open ground's test, written as loops",
+  "code": "683dfb54e0b820d6",
+  "core": "731d2ede9139ed61",
+  "date": "2026-10-26",
+  "note": "a geometric predicate, and the caller passes in the reach",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin#plumbing": {
   "code": "af78c30c2f1f7336",
   "core": "e1115881b631ffd6",
@@ -59309,37 +59399,51 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._canopy_keepouts#burial ground's middle": {
-  "code": "ffd1317ecaa03ae8",
-  "core": "4f493b028f817cfe",
-  "date": "2026-10-03",
-  "note": "unanswered in the bundle",
+ "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._canopy_all#burial ground's middle": {
+  "body": "b99e5b23f06d694a",
+  "claim": "burial ground's middle - GUESS: 0.9 of its half-extent kept clear of crowns",
+  "code": "294710ce32743ec6",
+  "core": "56212db979413eb2",
+  "date": "2026-10-26",
+  "note": "the page never mentions a burial ground, so GUESS is the right label",
+  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._canopy_keepouts#no crown on a roof": {
-  "code": "b7787711e2a65b7c",
-  "core": "4f493b028f817cfe",
-  "date": "2026-10-07",
-  "note": "\"stands against a house, never on it\"; the plots' sun ground is kept by `_sun_keepouts`",
+ "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._canopy_all#no crown on a roof": {
+  "body": "b99e5b23f06d694a",
+  "claim": "no crown on a roof - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing: against a wall, never on it - each building's drawn box (its `vw`/`vh`, a turned one as its half-diagonal square), no halo",
+  "code": "2ce014b82779161e",
+  "core": "56212db979413eb2",
+  "date": "2026-10-26",
+  "note": "the page wants a circle round every building, but the code keeps out only the box itself for an unturned building: `rects.append((o[\"x\"], o[\"y\"], hw, hh))` with hw, hh = vw/2, vh/2. The page says \"Every clump's center keeps clear of each house, yard, garden, byre and shed by that building's own circumscribing radius (the distance from its center to its farthest corner) plus the clump's full drawn radius\". Either the code keeps out hypot(hw, hh) for every building, or the claim says how it departs and names the task that carries the fix; a known drift accepted by the round arbiter (ask:427-T08-canopy-roof) to land as filed",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
   "research": "90cf9ff106c766c9",
-  "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785"
-  ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
- "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._canopy_keepouts#no crown on a wellhead": {
-  "body": "c84cf4122845fc8b",
-  "claim": "no crown on a wellhead - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a crown may not cover a wellhead",
-  "code": "3436ca9fb7a5cbe0",
-  "core": "4f493b028f817cfe",
-  "date": "2026-10-25",
-  "note": "nothing explains why a crown keeps off a wellhead; 0072 only describes the effect",
+ "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._canopy_all#no crown on a wellhead": {
+  "body": "b99e5b23f06d694a",
+  "claim": "no crown on a wellhead - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a crown may not cover a wellhead's drawn radius (`vr`)",
+  "code": "be9c780da679a033",
+  "core": "56212db979413eb2",
+  "date": "2026-10-26",
+  "note": "§15's list (house, yard, garden, byre, shed) leaves out the wellhead, so GUESS is right",
   "pages": {},
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._canopy_keepouts#plumbing": {
+  "body": "c7d2184515100cc4",
+  "claim": "plumbing - NONE: the box prefilter over `_canopy_all`'s keep-outs",
+  "code": "496e37c7722ac0a8",
+  "core": "80c5ee4cf501f851",
+  "date": "2026-10-26",
+  "note": "this is only the box prefilter. It keeps the frozen or `_canopy_all` keep-outs whose extent overlaps the box, with no margin added. `_crown_covers` makes the actual keep-out decision, so this code decides nothing physical.",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._corridor_buffers#its salts, guards and sentinels": {
@@ -59366,11 +59470,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._crown_covers#plumbing": {
-  "code": "68798bfe60ece4cc",
-  "core": "d5a551cb18697e75",
-  "date": "2026-10-03",
-  "note": "geometry",
+  "body": "96b7acf86cd39c5d",
+  "claim": "plumbing - NONE",
+  "code": "d1c91370318994e7",
+  "core": "2e754db51e7a1b92",
+  "date": "2026-10-26",
+  "note": "the exact disc-against-rect and disc-against-circle test, rewritten without abs or max to the same arithmetic; pad is the rounding margin",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._on_crescent_pond#plumbing": {
@@ -59396,6 +59504,18 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._persimmons#plumbing": {
+  "body": "c97b1e3aae055b42",
+  "claim": "plumbing - NONE: the yard persimmons every crown of a grove gives way round, listed",
+  "code": "7c03a6b8066a30eb",
+  "core": "c3adbb268dcaa872",
+  "date": "2026-10-26",
+  "note": "it only reads a cached list of persimmon boxes and decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._plant_run#plumbing": {
@@ -59496,6 +59616,18 @@
   "core": "1d7d967b7eed813d",
   "date": "2026-10-25",
   "note": "taper tolerance, fallback",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin.canopy_frozen#plumbing": {
+  "body": "239e84288f14725e",
+  "claim": "plumbing - NONE: a scope that reads the same keep-outs once",
+  "code": "26a408ff2c917405",
+  "core": "9380f9be9e9f9274",
+  "date": "2026-10-26",
+  "note": "a cache scope that asserts on exit that nothing changed",
   "pages": {},
   "research": "",
   "rests": [],
@@ -70621,15 +70753,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._crown_seat_clear#no crown under another's": {
-  "code": "7627c03754152291",
-  "core": "17bc03f3327cd1b5",
+  "code": "7b1183f2591154c0",
+  "core": "7ef882eeb6bb45d0",
   "date": "2026-10-03",
   "note": "as claimed",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
-  "triaged": "2026-10-08",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._crowns#crown glyph": {

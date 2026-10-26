@@ -353,3 +353,12 @@ def test_where_the_walk_round_the_walls_begins_turns_with_the_households_roll() 
     seats = {fs.against_a_part([HOUSE, KURA], 8.0, 6.0, fs.WALL_GAP_FT, [HOUSE, KURA, YARD, GARDEN], 4.0, u) for u in (0.0, 0.3, 0.6, 0.9)}
     assert len(seats) > 1 and None not in seats
     assert fs.against_a_part([], 8.0, 6.0, 3.5, [], 4.0, 0.5) is None
+
+
+def test_a_fixture_that_finds_no_place_is_named_by_its_kind() -> None:
+    """Feature 427 T08: a coop with no seat is refused as a coop - only the privy is held to the 48 ft its words name."""
+    everywhere = (0.0, 0.0, 5000.0, 5000.0)
+    with pytest.raises(fs.FixtureUnlaid, match="a coop found no place beside its house"):
+        _lay(kinds=("coop",), ground=(everywhere,))
+    with pytest.raises(fs.FixtureUnlaid, match="a privy found no place within 48 ft"):
+        _lay(kinds=("privy",), ground=(everywhere,))
