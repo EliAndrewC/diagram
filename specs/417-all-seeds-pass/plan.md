@@ -520,4 +520,14 @@ or the step is set down with its seeds and ruled (`make arbiter-ask`). Rendering
   `needle_loops`' sliver threshold in the tunables record (`make tunables`) - if it is unresearched, research it first (the
   result recorded in the tunables record), then proceed by what the research finds; if it is ours, moving it is tried before
   anything more elaborate, judged by the cohort, the pinned rows and the pool maps, never by seed 723775 passing. Never iterated on 723775 inside C2 (D11). Rendering: none.
+- **The threshold, read 2026-10-26** (method: `law.py` `NEEDLE_LOOP_FT` and its claim): 20 ft mean width, `CONVENTION` - a map
+  drawing convention calibrated on two settlement-reviews (Sawada's 16 ft triangle read as a street forking round nothing); ours,
+  not a research figure. Not moved: the needle seed 723775 makes is 3 ft wide, far under any value the convention could take.
+- **The geometry, measured 2026-10-26** (method: seed 723775 rolled on main at T44, `make cohort N=1 SEED=723775`, the refusal's
+  manifest polygonized with shapely as `law.needle_loops` does): the one needle is a face of 66 sq ft, mean width 3.0 ft, at the
+  connector's start (1503-1520, 1252-1263), bounded by access lanes 1 and 2 - both households' ways end on the connector's start,
+  lane 1's last leg running about 7 ft beside lane 2's last stretch. **The rule asked at lay**: in `lanes_of`, a tree lane whose
+  carried end would close a needle (`law.is_needle`) with a tree lane already drawn ends instead on that lane's tread at the
+  nearest point, a tee - the way joins the way beside it rather than running on beside it to a shared end (0081's doubled way,
+  drawn as one). Measured on the landing cohort, the fresh block from seed 723759 and the pool maps.
 
