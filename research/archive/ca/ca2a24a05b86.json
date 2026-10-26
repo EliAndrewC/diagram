@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-26T00:38:41+00:00",
+ "final_url": "https://serai.jp/news/magazine-news/1213187",
+ "first": "ca/ca2a24a05b86/20261026T003840Z",
+ "gm_copies": [],
+ "keys": [
+  "serai-2025-kibyoshi"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "ca/ca2a24a05b86/20261026T003840Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "393f04635ab3064ed2d842d65dc1fb08be74de34372e8374e60f0ffc0dbf4dcc",
+ "url": "https://serai.jp/news/magazine-news/1213187"
+}

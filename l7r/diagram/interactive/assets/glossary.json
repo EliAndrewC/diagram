@@ -18192,6 +18192,24 @@
    "水油"
   ]
  },
+ "kibyoshi": {
+  "def": "A yellow-covered Japanese picture booklet of about 1772 to 1818: a story told in pictures with dialogue, five leaves to a volume and usually two or three volumes to a story, sold for a few mon a volume.",
+  "variants": [
+   "kibyoshi"
+  ]
+ },
+ "gokan": {
+  "def": "A longer illustrated Japanese storybook of the 1800s, the successor of the kibyoshi; a gokan of 40 leaves sold wholesale for 176 mon in the 1830s.",
+  "variants": [
+   "gokan"
+  ]
+ },
+ "yomihon": {
+  "def": "A long illustrated Japanese novel of the 1800s, such as Kyokutei Bakin's, running to well over a hundred leaves and costing several monme of silver a set.",
+  "variants": [
+   "yomihon"
+  ]
+ },
  "jiza": {
   "def": "A senior rank of ordinary clerk in the Mitsui house's Kyoto shop, above the clerks of middle standing; estimated pay in the first half of the 1800s, 200 monme of silver a year.",
   "variants": [
@@ -18256,6 +18274,30 @@
   "variants": [
    "shamisen",
    "shamisens"
+  ]
+ },
+ "materia medica": {
+  "def": "The knowledge of medicinal substances - the plants, minerals and animal parts used as drugs - and a book that catalogs them; a Chinese bencao is one.",
+  "variants": [
+   "materia medica"
+  ]
+ },
+ "Tsutaju": {
+  "def": "The short name of the Edo publisher Tsutaya Juzaburo, who began as a lending librarian.",
+  "variants": [
+   "Tsutaju"
+  ]
+ },
+ "Hida": {
+  "def": "A mountain province of central Japan, in what is now northern Gifu Prefecture; its town of Takayama sent smiths out to work away from home.",
+  "variants": [
+   "Hida"
+  ]
+ },
+ "Okura Nagatsune": {
+  "def": "An agronomist of the late Edo period whose illustrated farm manuals - the Nogu benriron on farm tools (1822) and the Koeki kokusan ko (1844) - this record quotes for tool prices and home brewing.",
+  "variants": [
+   "Okura Nagatsune"
   ]
  }
 }
