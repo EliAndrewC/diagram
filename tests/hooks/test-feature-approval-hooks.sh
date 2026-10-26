@@ -122,6 +122,22 @@ run "git add -A"
 [ "$RC" -eq 2 ] && ok "a task notification is not the GM's" || no "a task notification counted as the GM" "(rc=$RC)"
 clean
 
+echo "2b. the GM's standing approval (2026-10-18) stands for an issue gm-assistant filed for him, and nowhere else"
+STAND='**Approved**: the GM, 2026-10-18, "you should treat features that I have asked to be filed as automatic approval"'
+spec 378-widget-cache "$STAND"
+run "git add specs"
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'quote them on the line' && ok "the standing quote with no request.md is refused, and the refusal names the gm-assistant route" || no "the standing quote passed alone, or the tip is missing" "(rc=$RC)"
+printf '# Request: EliAndrewC/diagram#20, three questions\n\nplease work these\n' > "$FIX/specs/378-widget-cache/request.md"
+run "git add specs"
+[ "$RC" -eq 2 ] && ok "...and with a request.md that is no gm-assistant body" || no "a request with no gm-assistant body passed" "(rc=$RC)"
+printf '# Request: EliAndrewC/diagram#20, three questions\n\n```text\n**[gm-assistant]** Money research: days worked\n```\n' > "$FIX/specs/378-widget-cache/request.md"
+run "git add specs"
+[ "$RC" -eq 0 ] && ok "a spec of an issue gm-assistant filed passes on the standing quote" || no "the standing quote was refused on a gm-assistant request" "(rc=$RC) $OUT"
+spec 378-widget-cache '**Approved**: the GM, 2026-10-10, "please file a feature for the gadget"'
+run "git add specs"
+[ "$RC" -eq 2 ] && ok "...but other words the GM never wrote are still refused beside that request" || no "a foreign quote passed beside a gm-assistant request" "(rc=$RC)"
+clean
+
 echo "3. what is not new, and what is below the line, is not checked"
 printf '\nmore text\n' >> "$FIX/specs/377-held-feature/spec.md"
 run "git add -A"
