@@ -90,7 +90,7 @@ def file_known(root: Path) -> None:
     """Every known drift the claims gate would refuse unrecorded, recorded for the GM in its task's feature and committed
     (feature 430 T06, D6): the claims gate admits a known drift once `make claims-known` has recorded it, and the landing runs it."""
     rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "known"])
-    if rc == 0 and "recorded" in said:
+    if rc == 0 and "claims-known: recorded" in said:  # ...not its "no known drift is unrecorded"
         print(f"land: {said.strip()}", flush=True)
         run(root, ["git", "add", "--", *(str(p.relative_to(root)) for p in sorted((root / "specs").glob("*/gm-review.jsonl"))), *(str(p.relative_to(root)) for p in sorted((root / "specs").glob("*/tasks.md")))])
         run(root, ["git", "commit", "-q", "-m", "known drifts recorded for the GM's review (make land, feature 430 T06)"])
