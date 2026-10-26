@@ -6,6 +6,6 @@
 
 ## Tasks
 
-- [ ] T01 all.html's opening (D1; FR-001, FR-002)
+- [x] T01 all.html's opening (D1; FR-001, FR-002)
       research: rendering
-      verify: record tests green; make record CHECK=1 clean; make done green at the landing
+      verify: DONE. landed: all.html writes contents.load_opening under its title; its pointer to the contents no longer names the maps alone; test_record_site pins both pages
