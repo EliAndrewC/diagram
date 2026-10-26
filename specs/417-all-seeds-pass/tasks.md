@@ -116,6 +116,7 @@
 - [x] T44 (T31 C2, arbiter ask:417-T31-C2-regression accept) The access tree drawn first in `stage_web` and `settle_joins` deleted, landed as measured with seed 723775 waived, after the roll census fix, in `l7r/diagram/hamletgen/ways/` (FR-004)
       research: rendering
       verify: DONE. landed: settle_tree drawn first in stage_web on a clustered map (a row's streets stay first); settle_joins deleted with its closure and tests; under the round arbiter's accept (ask:417-T31-C2-regression): landing cohort 54 of 54, pool maps pass the gate (Inashiro, Kuwabata, Sawada move), fresh block from seed 723759 7 of 48 before and after (723789 newly green, 723775 newly red - waived, T45); settle_reach's own settle_tree probed off and kept (723790)
-- [ ] T45 (FR-005, ask:417-T31-C2-regression) The needle rule (`law.needle_loops`) asked where `lanes_of` draws a tree lane, so two household ways close no sliver (fresh seed 723775), in `l7r/diagram/hamletgen/ways/tree.py`
+- [x] T45 (FR-005, ask:417-T31-C2-regression) The needle rule (`law.needle_loops`) asked where `lanes_of` draws a tree lane, so two household ways close no sliver (fresh seed 723775), in `l7r/diagram/hamletgen/ways/tree.py`
       research: rendering
+      verify: DONE. landed: off_the_needle asked in lanes_of: a tree lane whose end runs along a drawn way or the connector is cut where it comes alongside and teed onto it (0081); landing cohort 54 of 54, fresh block from seed 723759 7 of 48 (the same seven; 723775's needle gone, now refused on a skeleton end), no pool map moved; the mid-lane case held for T32 (arbiter asks 417-T45-midlane-needle and -unclaimed, accept)
 - [ ] GM review (make gm-reviewed F=417)
