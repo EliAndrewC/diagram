@@ -164,3 +164,23 @@ Owed by the round arbiter's ruling on red-gate@2026-10-24T19:17:09Z (continue).
 
 - **D8** On R2's numbers (spec FR-006, amended): `make land`'s gate runs with `INCR_NO_CUTOFF=1`, which `incremental.plan` reads to skip the `FULL_FRACTION` check (the gate outside a landing keeps it). After a successful push whose gate ran incremental and selected at least `REFRESH_FRACTION` (0.25) of its baseline, `land.py` starts `scripts/gates/refresh_baseline.py` detached: under a lock, it adds a detached worktree at the pushed commit, runs `make done INCR_FORCE="refresh: <n> of <N> baseline tests selected"` there (a fresh worktree has no verification to short-circuit on), and when it is green copies the worktree's `gate-baseline/` into the clone's - each coverage file path rewritten from the worktree's root to the clone's - unless the clone's baseline was saved after the refresh started; it removes the worktree, and copies the run record into the clone's `dev/run-log/`, committed path by path. Rendering: none.
 
+<!-- plan-archive: archived 2026-10-26 -->
+## T06 - measured end to end (SC-006)
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** The GM sees what a landing costs now, against T26's 8.8 minutes.
+2. **The constraints.** A real engine landing after a tooling change, its phases from T01's record.
+3. **Where each comes from.** O: the GM's item 1 ("the gate measured on the next real landing").
+4. **Do they describe the world here?** To be measured.
+5. **The order.** After T05.
+6. **The exits.** n/a.
+7. **The search smell.** None.
+8. **The budget.** 20 min.
+9. **Done, measured.** `research.md` holds the landing's table beside T26's.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+### T06 Decisions
+
+- **D9** The landing measured is the first whose own change does not move `gate_config`, whose baseline already carries the `gate_config` key, and which has a `scripts/` change since its baseline - confirmed by `plan_mode: incremental` in its run record (405's next task where it meets this; T01-T05's own landings change `ci/` and run everything). Rendering: none.
