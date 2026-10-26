@@ -42,20 +42,23 @@ manifest readers; a delta that changes an engine data file the readers do not co
 **Acceptance Scenarios**:
 
 1. **Given** a delta whose only `tests/` non-module change is a doc file (`*.md`), **Then** that change adds no tests.
-2. **Given** a `conftest.py` changed under `tests/x/`, **Then** the plan selects the tests under `tests/x/`, not the suite;
-   **Given** the top-level `tests/conftest.py`, **Then** it plans full as today.
+2. **Given** a non-doc, non-module file changed under `tests/x/` (a `conftest.py` or a fixture data file), **Then** the plan selects
+   the tests under `tests/x/`, not the suite; **Given** such a file directly under `tests/` (the top-level `conftest.py`), **Then**
+   it plans full as today - the top level is the whole suite.
 
 ---
 
 ### User Story 3 - A coverage gap is caught before the gate (Priority: P1)
 
-Before the gate, one command measures the changed modules' coverage the way the full floor does, on the tests that reach them,
-and names each uncovered changed line in under a few minutes.
+First, today's six coverage reds are replayed through today's `make cover-changed`, recording whether it named each line the
+full floor named. The pre-gate check's scope follows from that result: if `cover-changed` already named them, the fix is to run it
+before the gate; if not, the check reaches the tests that do run each changed line. Either way it runs inside `make land` before
+the gate, faster than the gate.
 
 **Acceptance Scenarios**:
 
-1. **Given** today's six coverage reds, **When** each one's delta is replayed, **Then** the pre-landing check names the lines the
-   full floor named (or the plan records which it cannot and why).
+1. **Given** today's six coverage reds, **When** each one's delta is replayed, **Then** the pre-gate check names the lines the
+   full floor named.
 2. **Given** `make land`, **Then** it runs this check first and refuses before the gate on a named uncovered line (escape as
    today's `COVER_OK`).
 
@@ -87,8 +90,8 @@ and names each uncovered changed line in under a few minutes.
 
 **Acceptance Scenarios**:
 
-1. **Given** a DRIFTED claim judged `known (NNN Tnn)` whose task row is open and names the claim's unit, on code the landing
-   changed, **When** the claims gate runs, **Then** it admits the claim, records it, and lists it in `make gm-review` for the GM.
+1. **Given** a DRIFTED claim judged `known (NNN Tnn)` whose task row is open and names the claim's unit, **When** the claims gate
+   runs, **Then** it admits the claim, records it, and lists it in `make gm-review` for the GM.
 2. **Given** a claims-triage bundle of at most a few claims, **Then** the session dispatches impl-drift directly and the
    triage is recorded as skipped for size.
 
@@ -115,15 +118,19 @@ and names each uncovered changed line in under a few minutes.
 
 - **FR-001**: The gate's planner MUST plan incremental when the delta's only non-Python engine files are pool manifests, adding
   the manifests' reader tests (the readers `pool-readers.py` finds, extended to the gate's own trees).
-- **FR-002**: A `tests/` doc file MUST add no tests; a non-top-level `conftest.py` MUST select the tests of its directory.
-- **FR-003**: A pre-gate coverage check MUST measure the changed modules' lines with the tests that reach them (not only the
-  mirrored directory), name each uncovered changed line, and run inside `make land` before the gate.
+- **FR-002**: A `tests/` doc file MUST add no tests; any other non-module file under `tests/<dir>/` (a `conftest.py`, a fixture
+  data file) MUST select the tests of that directory; one directly under `tests/` plans full.
+- **FR-003a**: Today's six coverage reds MUST first be replayed through today's `make cover-changed`, recording (with an `m:` key)
+  whether it named each line the full floor named; FR-003's scope follows from that result.
+- **FR-003**: A pre-gate coverage check MUST name each uncovered changed line the full floor would name, run inside `make land`
+  before the gate, and take less time than the gate.
 - **FR-004**: `claims-gate`, `entry-gate` and `cohort-gate` MUST exit at once when the delta holds nothing each judges; their
   verdicts MUST be cached on the delta's content; the push MUST run the gates concurrently and report every refusal together.
 - **FR-005**: A mechanical plan-lint MUST run before a plan review is dispatched (labeled figures, the red exit, an approach
-  block per task); an approach block matching the template and naming no new decision MUST owe no review.
-- **FR-006**: The claims gate MUST admit a `known` drift on changed code whose open task row names its unit, record it, and list
-  it in `make gm-review`; a claims-triage bundle of at most a few claims MAY be skipped for impl-drift, recorded.
+  block per task); an approach block MUST owe no review only when it passes the test a part B that decides nothing passes today
+  (item 4 answered "No", item 5 "Neither", every `D<n>` it names defined elsewhere) - a missing `D<n>` label alone is not enough.
+- **FR-006**: The claims gate MUST admit a `known` drift whose open task row names its unit, record it, and list it in `make
+  gm-review`; a claims-triage bundle of at most 3 claims is not triaged: impl-drift is dispatched directly and the skip recorded.
 - **FR-007**: The decide-first guard MUST let a claims triage be dispatched while the plan review runs.
 - **FR-008**: Each change MUST name its cure in its own output and carry a test that fails without it (the project's rule).
 - **FR-009**: No change may let a defect through that today's gate catches: each mechanical shortcut is proven against the
@@ -133,11 +140,12 @@ and names each uncovered changed line in under a few minutes.
 
 - **SC-001** (FR-001, FR-002): replaying today's 19 full-planned deltas that were full only for a manifest or a `tests/`
   non-module file, the planner plans incremental for each.
-- **SC-002** (FR-003): the pre-gate check names the lines in each of today's 6 coverage reds (or the plan says which it cannot).
+- **SC-002** (FR-003, FR-003a): the pre-gate check names the lines in each of today's 6 coverage reds, and on those replayed
+  deltas it takes less time than the gate took.
 - **SC-003** (FR-004): on a records-only delta each of the three gates exits before reading the claims, the record or the
   cohort records (the push observed 2026-10-26, method: each gate timed alone on a records-only delta, `request.md`).
 - **SC-004** (FR-005, FR-007): a plan review is never dispatched on a block the plan-lint refuses.
-- **SC-005** (FR-006): a known departure on changed code lands with no arbiter round, and is listed for the GM.
+- **SC-005** (FR-006): a known departure lands with no arbiter round, and is listed for the GM.
 - **SC-006** (FR-008, FR-009): every change's test fails without it; no replayed delta passes a check today's full run fails.
 
 ## Assumptions
@@ -145,3 +153,14 @@ and names each uncovered changed line in under a few minutes.
 - Tooling only: no engine behavior or map changes.
 - "A few claims" for skipping triage: at most 3 (a knob, labeled).
 - The GM approved items 5 and 6's fidelity trade by approving all seven.
+
+## Review history
+
+- spec-fidelity round 1 (2026-10-26): CHANGES REQUIRED - (1) item 3's "after confirming whether today's `cover-changed`
+  actually missed those lines" is carried nowhere, and FR-003's "(not only the mirrored directory)" presumes its answer; the
+  confirmation must come first and decide FR-003's scope, "fast" must be a criterion, and SC-002's "or the plan says which it
+  cannot" escape goes to the plan review rather than being pre-approved. (2) FR-002 reads item 2's "a fixture change" as
+  `conftest.py` only; fixture data files under `tests/<dir>/` are unaddressed (SC-001's 8 may need them). (3) FR-006's "on
+  changed code" condition is not in item 6 (NOT LEGITIMATE as a condition; "task row names the unit" and "open" are
+  LEGITIMATE); its "MAY be skipped" softens item 6's "skip". (4) FR-005's "decides nothing" must be the part B test, not the
+  absence of a `D<n>` label alone.
