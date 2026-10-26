@@ -86,6 +86,13 @@ grep -q "record-format on $T/b/MANIFEST.md: " "$T/err" && ok "the decide-first r
 python3 -c 'import json,sys; print(json.dumps({"cwd":sys.argv[1],"tool_name":"Agent","tool_use_id":"t10","tool_input":{"subagent_type":"record-format","prompt":"Read "+sys.argv[2]+" DECIDE_OK=\"the GM asked for this check\""}}))' "$C" "$T/b/MANIFEST.md" \
   | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>"$T/err"; rc=$?
 [ "$rc" = 0 ] && ok "STAYS QUIET: DECIDE_OK with a reason" || no "the escape did not pass" "rc=$rc $(cat "$T/err")"
+# feature 430 T07 (D7; research R2): the claims TRIAGE runs beside the plan review - decide-first holds impl-drift, not the triage
+python3 -c 'import json,sys; print(json.dumps({"cwd":sys.argv[1],"tool_name":"Agent","tool_use_id":"t11","tool_input":{"subagent_type":"impl-drift","prompt":"Read "+sys.argv[2]}}))' "$C" "$T/b/MANIFEST.md" \
+  | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>"$T/err"; rc=$?
+[ "$rc" = 2 ] && grep -q "decide first" "$T/err" && ok "IT FIRES: impl-drift waits for the task's decisions" || no "impl-drift was let through undecided" "rc=$rc $(cat "$T/err")"
+python3 -c 'import json,sys; print(json.dumps({"cwd":sys.argv[1],"tool_name":"Agent","tool_use_id":"t12","tool_input":{"subagent_type":"claims-triage","prompt":"Read "+sys.argv[2]}}))' "$C" "$T/b/MANIFEST.md" \
+  | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>"$T/err"; rc=$?
+[ "$rc" = 0 ] && ok "STAYS QUIET: a claims triage beside the plan review (feature 430 T07)" || no "the claims triage was held by decide-first" "rc=$rc $(cat "$T/err")"
 
 echo
 echo "checks-hooks: $PASS passed, $FAIL failed"

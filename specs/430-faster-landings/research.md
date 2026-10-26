@@ -51,3 +51,31 @@
 - **A trap in the replay itself**: the run records do not name the clone, and each clone keeps its own baseline, so taking "the
   last green full run" as the base replayed two of the conftest runs as incremental against another clone's baseline. The base
   is now the latest earlier green full run at which the file the run's own reason names differs.
+
+## R7 - T04: the push gates on a records-only delta (SC-003, FR-009)
+
+- **Finding** (`m:push-gates-records-only`): each of the three gates exits in 0.14 s or less, saying it has nothing to judge,
+  where they took 5.7 s, 2.3 s and 8.8 s (observed 2026-10-26, method: each gate timed alone, `request.md`).
+- **FR-009's replay**: a delta that holds nothing a gate judges is one that gate could not refuse on its own content: its verdict
+  is the merge base's, which every push since has passed. A tree with no `origin/main` to read a delta from skips nothing (the
+  guard suites' fixtures caught the first form, which fell back to HEAD and read every delta as empty: 3 cohort-gate and 1
+  claims-gate cases). A stored pass is served only for the same committed content, the same merge base and the same `scripts/`
+  tree; an escaped pass (`ENTRY_DRIFT_OK`) is never stored.
+
+## R6 - T03's replay: the new coverage check on the in-scope reds (SC-002, FR-009)
+
+- **Finding** (`m:cover-replay`): the check refuses all 3 reds whose lines lie in a changed module, each against a gate
+  baseline of its own base, in 17 s to 37 s where their gates took 255 s to 442 s. It names 14 of the floor's 18 lines: all of
+  31f739f5d's and d92ff2c90's, and 2 of 39ea51383's 6 (`gencache.py` 227-228; not 238-241).
+- **Beyond the floor**: 3 lines of `web/stage.py` on d92ff2c90 the floor did not name - lines a roll reaches whose roll test
+  changed with the delta, so the floor's carried coverage is not honored for them. A landing meeting one passes with `COVER_OK`.
+- **Short of the floor, priced** (FR-009): `gencache.py` 238-241 are reached only by tooling tests the gate REUSES instead of
+  re-running (feature 383 amendment 5), whose coverage of a changed file the floor drops; the check runs those tests, so it counts
+  the lines. The landing is refused either way - one named line stops it - so what this costs is the first message naming 2 of
+  the 6 lines; the gate names the rest, as now.
+- **Three traps in building the replay**, each fixed in the check or the script and named at its point of change: a baseline
+  taken from another day's tree (its coverage paths name another tree, its contexts tests the red had deleted); `--cov-context=test`
+  without the gate's own plugins (an xdist worker crashed, "no such table: context"); and `COVERAGE_FILE` in the environment (the
+  tooling tests that run coverage in a fixture clone inherited it - 15 errors).
+- **The sixth red** (9a157cc4b) is the floor's tooling rule, `floor_markers`, pinned by a unit test; its replay would need the
+  gate stamp its tooling decision read, which no record keeps.

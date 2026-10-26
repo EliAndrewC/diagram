@@ -638,6 +638,18 @@ def task_start(feature: str, task: str) -> int:
     return 0
 
 
+def triage_hint(root: pathlib.Path) -> str:
+    """The line `make decide` and `make plan-delta` end with when the clone owes claims a triage (feature 430 T07, D7; research
+    R2: no guard holds a claims triage while a plan review runs - the session began the claims round only at landing, after the
+    review, for want of being told it was owed). '' when none is, or when the claims cannot be read."""
+    try:
+        out = subprocess.run([sys.executable, str(HERE.parent / "record" / "claims.py"), "--root", str(root), "triage-owed"], capture_output=True, text=True, timeout=120).stdout
+        n = int(out.strip().splitlines()[-1]) if out.strip() else 0
+    except (OSError, ValueError, subprocess.TimeoutExpired):
+        return ""
+    return f"claims owed a triage: {n} - `make claims-triage`, and dispatch it beside this review (impl-drift waits for the verdict)" if n else ""
+
+
 def main(argv: list[str]) -> int:
     if argv[:1] == ["arbiter-accept"] and len(argv) == 3:  # feature 385 T16: the arbiter's accept past the plan-round cap
         return _arbiter_accept_cmd(argv[1], argv[2])
@@ -659,6 +671,8 @@ def main(argv: list[str]) -> int:
                 print(f"decide: refused - {why}", file=sys.stderr)
                 return 2
         print(digest(section.encode()) if argv[0] == "section-sha" else decide_prompt(d, argv[2]))
+        if argv[0] == "decide" and (hint := triage_hint(d.parents[1])):
+            print(hint, file=sys.stderr)
         return 0
     if argv[:1] == ["task-start"] and len(argv) == 3:
         return task_start(argv[1], argv[2])
@@ -732,7 +746,14 @@ def main(argv: list[str]) -> int:
         if not keys:
             print(f"plan-delta: no block of {spec_dir.name}'s plan is owed a review")
             return 0
+        import plan_lint  # noqa: PLC0415 - feature 430 T05 (D5): the lint before every plan review, as `make decide` asks it
+
+        if why := plan_lint.plan_refusal(spec_dir, text, [b for k, b, _a in blocks(text) if k in keys]):
+            print(f"plan-delta: refused, no bundle written - {why}", file=sys.stderr)
+            return 1
         print(plan_bundle.delta_prompt(spec_dir, keys))
+        if hint := triage_hint(spec_dir.parents[1]):
+            print(hint, file=sys.stderr)
         return 0
     if argv[:1] == ["owed"] and len(argv) == 2:
         verdict = owed(pathlib.Path(argv[1]))

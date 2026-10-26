@@ -642,7 +642,7 @@ land:           ## [project] land one task or several and tick them: every cheap
 	$(if $(COVER_OK),$(LOGESCAPE) COVER_OK "$(COVER_OK)",@:)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/land.py" "$(F)" "$(T)"
 
-cover-changed:  ## [tests] the coverage floor on the engine modules the change touched, in seconds: each added line its mirrored test directory leaves unrun (the GM 2026-10-24)   [BASE=origin/main]
+cover-changed:  ## [tests] the coverage floor on the engine modules the change touched, in seconds: every line of each changed module the floor's tests leave unrun, the floor's carried coverage honored (the GM 2026-10-24; feature 430 T03)   [BASE=origin/main]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/cover_changed.py" --base "$(or $(BASE),origin/main)"
 
 gate-costs:     ## [performance] what a gate run costs here, from the run records: each run's mode, selection and phases, the fit (fixed + per selected test), the selection's growth between full runs (feature 415)   [SINCE=<utc prefix>]
@@ -782,6 +782,9 @@ claims-triaged: ## [project] record a triage reply: a claim it names (TOUCHES) i
 claims-carry: ## [project] file every carried claims finding (a page edit's, on unchanged code) as an open task of the active feature, so the push lands (feature 385 FR-013)   F=<feature> [T=<open task to file into>] [KEYS="<k>;<k>" RULING=<arbiter trigger>: findings a ruling carried]
 	@if [ -z "$(F)" ]; then printf 'make claims-carry: F=<feature> is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" carry --feature "$(F)" $(if $(T),--task "$(T)",) $(if $(KEYS),--keys "$(KEYS)",) $(if $(RULING),--ruling "$(RULING)",)
+
+claims-known:  ## [project] record every known drift (a DRIFTED claim naming the open task that fixes it) for the GM, in its task's feature's gm-review.jsonl, so the push lands it - make land runs it (feature 430 T06)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" known
 
 claims-backfill: ## [project] give every index row checked at today's research the pages it was checked at, so a later edit to them is triaged, not re-judged in full
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" backfill

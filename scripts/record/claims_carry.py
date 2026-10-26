@@ -144,13 +144,68 @@ def gate(cx: Any, root: Path) -> tuple[list[str], list[str]]:  # noqa: ANN401 - 
     # relabel revealed, not drift the landing made - it warns, and the fixing task carries it
     known = known_drifts(cx, root)
     intro, revealed = [x for x in intro if _key_of(x) not in known], [x for x in intro if _key_of(x) in known]
-    pre = pre + [f"known drift ({known[_key_of(x)]}): {x}" for x in revealed]
+    # ...ADMITTED ONCE RECORDED FOR THE GM (feature 430 T06, D6): a known drift on its open task lands as a row of that feature's
+    # gm-review.jsonl, which `make gm-review` lists; unrecorded, it refuses with the command that records it (make land runs it)
+    done_known = recorded_known(root)
+    unrecorded = [x for x in revealed if known[_key_of(x)] != "accepted by the round arbiter" and _key_of(x) not in done_known]
+    pre = pre + [f"known drift ({known[_key_of(x)]}): {x}" for x in revealed if x not in unrecorded]
     done = filed(root)
     d = active_feature(root)
     how = f"`make claims-carry F={d.name.split('-', 1)[0]}`" if d is not None else "`make task-start F=<n> T=<Txx>`, then `make claims-carry F=<n>`"
     unfiled = [f"carry: {line} - a finding on code the change left unchanged: file it with {how} (make land files it itself)" for k, line in carried if k not in done]
     warn = [f"carried ({d.name if d else ''} {done[k]}): {line}" for k, line in carried if k in done]
-    return refuse + [f"introduced: {x}" for x in intro] + unfiled, [f"pre-existing: {x}" for x in pre] + warn
+    unknown = [f"known: {x} - a known drift ({known[_key_of(x)]}) to record for the GM: `make claims-known` (make land runs it)" for x in unrecorded]
+    return refuse + [f"introduced: {x}" for x in intro] + unfiled + unknown, [f"pre-existing: {x}" for x in pre] + warn
+
+
+#: the kind of a gm-review.jsonl row that records an admitted known drift (feature 430 D6)
+KNOWN_KIND = "known-drift"
+
+
+def recorded_known(root: Path) -> set[str]:
+    """Every claim key a feature's `gm-review.jsonl` records as an admitted known drift."""
+    out: set[str] = set()
+    for f in sorted((root / "specs").glob("*/gm-review.jsonl")):
+        for ln in f.read_text(encoding="utf-8").splitlines():
+            try:
+                r = json.loads(ln)
+            except ValueError:
+                continue
+            if r.get("kind") == KNOWN_KIND and r.get("claim"):
+                out.add(str(r["claim"]))
+    return out
+
+
+def record_known(cx: Any, root: Path, now: str | None = None) -> list[str]:  # noqa: ANN401 - `cx` is the claims module
+    """`make claims-known`: each known drift the gate would refuse unrecorded, written as a row of its own task's feature's
+    `gm-review.jsonl` (the GM's review box added with it); returns the lines written."""
+    refuse, _warn = gate(cx, root)
+    written: list[str] = []
+    for line in refuse:
+        m = re.match(r"known: (.*) - a known drift \((\d{3}) (T\d+[a-z]?)\) to record", line)
+        if not m:
+            continue
+        key, feat, task = _key_of(m.group(1)), m.group(2), m.group(3)
+        specs = sorted((root / "specs").glob(f"{feat}-*"))
+        if not specs:
+            continue
+        row = {"kind": KNOWN_KIND, "claim": key, "task": task, "finding": m.group(1).strip()[:400],
+               "utc": now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+        with (specs[0] / "gm-review.jsonl").open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+        _gm_review().ensure_box(specs[0])
+        written.append(f"{specs[0].name} {task}: {key}")
+    return written
+
+
+def _gm_review() -> Any:  # noqa: ANN401 - the module, loaded by path
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("gm_review", Path(__file__).resolve().parents[1] / "gm_review.py")
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 
 _TASK_NAMED = re.compile(r"feature (\d{3}) (T\d+)")
@@ -164,12 +219,11 @@ def _key_of(line: str) -> str:
 
 
 def known_drifts(cx: Any, root: Path) -> dict[str, str]:  # noqa: ANN401 - `cx` is the claims module
-    """key -> `<feature> <task>` for every DRIFTED claim whose unit's code is the merge base's (its core, as `classify` reads it)
-    and whose own text names an OPEN task row of that feature's tasks.md which names the claim's unit - a departure the relabel
-    revealed and the feature filed for fixing, not one the landing made."""
+    """key -> `<feature> <task>` for every DRIFTED claim whose own text names an OPEN task row of that feature's tasks.md which
+    names the claim's unit - a departure the feature filed for fixing, whether or not the landing changed its code (feature 430
+    D6) - and every DRIFTED claim the round arbiter accepted."""
     cur = cx.current(root)
     index = cx.load_index(root / cx.INDEX)
-    mb = (cx._git(root, "merge-base", "HEAD", "origin/main") or "").strip()
     cand: dict[str, tuple[str, str]] = {}
     for key, v in index.items():
         row = cur.get(key)
@@ -186,10 +240,8 @@ def known_drifts(cx: Any, root: Path) -> dict[str, str]:  # noqa: ANN401 - `cx` 
         for key, v in index.items()
         if key not in cand and cur.get(key) is not None and v.get("verdict") == "DRIFTED" and ACCEPTED in v.get("note", "")
     }
-    if not cand or not mb:
+    if not cand:
         return out
-    with tempfile.TemporaryDirectory() as tmp:
-        cores = cx.base_cores(cx.base_tree(root, mb, Path(tmp)), keep=root)
     rows: dict[tuple[str, str], str] = {}
     for key, (feat, task) in cand.items():
         if (feat, task) not in rows:
@@ -198,13 +250,11 @@ def known_drifts(cx: Any, root: Path) -> dict[str, str]:  # noqa: ANN401 - `cx` 
             rows[(feat, task)] = box.group(0) if box else ""
         uid = key.rsplit("#", 1)[0]
         name = uid.split("::", 1)[-1].rsplit(".", 1)[-1]
-        # ...unchanged code, or - where the base tree's scope holds no core for the unit to compare - the round arbiter's own
-        # recorded accept of the drift (`claims_accept.accept_line`), which is the binding answer for those claims
-        # ...or the round arbiter's recorded accept, whatever the base holds: the accept is the binding answer for the claim as it
-        # reads now, code changed in the landing or not (feature 417 T45: ask:417-T45-midlane-needle accepted a drift on `lanes_of`,
-        # which T45 itself changed, and the gate still listed it introduced)
-        same = cores.get(uid) == index[key].get("core") or ACCEPTED in index[key].get("note", "")
-        if rows[(feat, task)] and re.search(rf"(?<![\w.]){re.escape(name)}(?!\w)", rows[(feat, task)]) and same:
+        # ...THE LANDING'S CHANGE TO ITS CODE OR NOT (feature 430 T06, D6 - proposal 6, approved by the GM 2026-10-26: a "known"
+        # departure is one whose claim names the open task carrying the fix): the open row naming the unit is what makes the drift
+        # known, and it lands recorded for the GM (`record_known`). Until then only unchanged code counted, and a landing that
+        # touched the code asked the round arbiter to accept each one, a round per landing (feature 417 T45, T50)
+        if rows[(feat, task)] and re.search(rf"(?<![\w.]){re.escape(name)}(?!\w)", rows[(feat, task)]):
             out[key] = f"{feat} {task}"
         elif ACCEPTED in index[key].get("note", ""):
             # ...and a claim whose named row does not name its unit is still known on the arbiter's accept, as one naming no task

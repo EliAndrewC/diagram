@@ -86,6 +86,16 @@ def file_carries(root: Path, d: Path) -> None:
         run(root, ["git", "commit", "-q", "-m", f"{d.name}: claims findings outside the change filed as a task (make land, 405 T36)"])
 
 
+def file_known(root: Path) -> None:
+    """Every known drift the claims gate would refuse unrecorded, recorded for the GM in its task's feature and committed
+    (feature 430 T06, D6): the claims gate admits a known drift once `make claims-known` has recorded it, and the landing runs it."""
+    rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "known"])
+    if rc == 0 and "recorded" in said:
+        print(f"land: {said.strip()}", flush=True)
+        run(root, ["git", "add", "--", *(str(p.relative_to(root)) for p in sorted((root / "specs").glob("*/gm-review.jsonl"))), *(str(p.relative_to(root)) for p in sorted((root / "specs").glob("*/tasks.md")))])
+        run(root, ["git", "commit", "-q", "-m", "known drifts recorded for the GM's review (make land, feature 430 T06)"])
+
+
 def _boxes() -> bool:
     """`make land ... BOXES=1`: the landing ticks a physical task's research boxes, as `make tick BOXES=1` does (410 T01 was
     refused with a pointer to BOXES=1, which `make land` did not pass on)."""
@@ -126,6 +136,7 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
     # A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
     # open task of this feature - what `make claims-carry` does by hand - and the box lands with the work
     file_carries(root, d)
+    file_known(root)
     commit_escape_records(root)
     if run(root, ["git", "status", "--porcelain"])[1].strip():
         stops.append("uncommitted changes - commit them first")
@@ -234,8 +245,9 @@ def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
     end, said = time.monotonic() + CLAIMS_WAIT_S, ""
     while True:
         rc, out = run(root, [str(HERE / "gates" / "claims-gate.sh")], env)
-        if rc and d is not None and "carry:" in out and not any(w in out for w in ("owed (", "introduced:")):
+        if rc and d is not None and ("carry:" in out or "known:" in out) and not any(w in out for w in ("owed (", "introduced:")):
             file_carries(root, d)  # a carry is filed, not waited on (405 T77: batch 5's wait needed `make claims-carry` by hand)
+            file_known(root)  # ...and a known drift recorded, not ruled on (feature 430 T06)
             rc, out = run(root, [str(HERE / "gates" / "claims-gate.sh")], env)
         commit_escape_records(root)
         commit_gate_formatting(root)

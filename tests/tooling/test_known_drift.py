@@ -1,6 +1,6 @@
-"""A KNOWN DRIFT lands as filed (feature 417, the round arbiter's ruling on ask:417-T29-drifted): a DRIFTED claim whose code the
-landing left as the base had it, and whose text names an open task row that names it, is no introduced finding - and a round
-arbiter's accept keeps it DRIFTED rather than rewriting it IN-STEP."""
+"""A KNOWN DRIFT lands as filed (feature 417, the round arbiter's ruling on ask:417-T29-drifted): a DRIFTED claim whose text names
+an open task row that names it is no introduced finding - whether or not the landing changed its code, recorded for the GM
+(feature 430 T06, D6) - and a round arbiter's accept keeps it DRIFTED rather than rewriting it IN-STEP."""
 
 from __future__ import annotations
 
@@ -51,10 +51,10 @@ def test_a_drifted_claim_filed_in_an_open_row_naming_it_with_its_code_unchanged_
     assert carry.known_drifts(cx, tmp_path) == {KEY: "417 T32"}
 
 
-def test_a_drift_the_landing_made_or_left_unfiled_is_not_known(tmp_path: pathlib.Path) -> None:
+def test_a_drift_left_unfiled_is_not_known(tmp_path: pathlib.Path) -> None:
     _tasks(tmp_path, "- [ ] T32 The lanes as the record has them: `DOORSTEP_FT` 80 against 0246's 60, in `ways/`")
     filed = "a departure the code keeps until feature 417 T32"
-    assert carry.known_drifts(_cx(tmp_path, filed, "c0"), tmp_path) == {}, "the code changed in the landing: the drift is the landing's"
+    assert carry.known_drifts(_cx(tmp_path, filed, "c0"), tmp_path) == {KEY: "417 T32"}, "feature 430 D6: its code changed, still known"
     assert carry.known_drifts(_cx(tmp_path, "a departure, unfiled", "c1"), tmp_path) == {}, "no task named in the claim"
     assert carry.known_drifts(_cx(tmp_path, filed, "c1", verdict="MISLABELED"), tmp_path) == {}, "only a DRIFTED verdict"
 
@@ -80,7 +80,7 @@ def test_a_unit_the_base_tree_cannot_see_is_known_only_on_the_arbiter_s_recorded
     _tasks(tmp_path, "- [ ] T33 The audit as the record has it: `DOORSTEP_FT` 80 against 0246's 60")
     cx = _cx(tmp_path, "a departure the code keeps until feature 417 T33", "c1")
     cx.base_cores = lambda _skill, keep=None: {}
-    assert carry.known_drifts(cx, tmp_path) == {}, "no base core and no accept: not known"
+    assert carry.known_drifts(cx, tmp_path) == {KEY: "417 T33"}, "feature 430 D6: the open row naming it alone, no base core needed"
     cx.load_index = lambda _p: {KEY: {"verdict": "DRIFTED", "core": "c1", "note": f"80 ft; {carry.ACCEPTED} (ask:x) to land as filed"}}
     assert carry.known_drifts(cx, tmp_path) == {KEY: "417 T33"}
 
@@ -96,7 +96,7 @@ def test_an_accepted_drift_whose_text_names_no_task_is_known_on_the_accept(tmp_p
 def test_an_accepted_drift_on_code_the_landing_changed_is_known(tmp_path: pathlib.Path) -> None:
     _tasks(tmp_path, "- [ ] T32 The lanes: `DOORSTEP_FT` 80 against 0246's 60")
     cx = _cx(tmp_path, "a departure the code keeps until feature 417 T32", "c0")
-    assert carry.known_drifts(cx, tmp_path) == {}, "the code changed and no accept: the landing's drift"
+    assert carry.known_drifts(cx, tmp_path) == {KEY: "417 T32"}, "feature 430 D6: the code changed and no accept - still known on its row"
     cx.load_index = lambda _p: {KEY: {"verdict": "DRIFTED", "core": "c1", "note": f"80 ft; {carry.ACCEPTED} (ask:x) to land as filed"}}
     assert carry.known_drifts(cx, tmp_path) == {KEY: "417 T32"}, "the arbiter's accept stands whatever the base holds"
 
@@ -118,3 +118,56 @@ def test_the_task_a_claim_names_last_is_its_row_and_an_accept_stands_where_that_
     assert carry.known_drifts(cx, tmp_path) == {}, "the row named last misses the unit and nothing accepted it"
     cx.load_index = lambda _p: {KEY: {"verdict": "DRIFTED", "core": "c1", "note": f"no spur; {carry.ACCEPTED} (ask:x) to land as filed"}}
     assert carry.known_drifts(cx, tmp_path) == {KEY: "accepted by the round arbiter"}, "the accept stands"
+
+
+LINE = f"{'DRIFTED':<14} {KEY} - 60 ft at a house, until feature 417 T32"
+
+
+def _gate_with_one_known(tmp: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    _tasks(tmp, "- [ ] T32 The lanes as the record has them: `DOORSTEP_FT` 80 against 0246's 60, in `ways/`")
+    monkeypatch.setattr(carry, "classified", lambda cx, root: ([], [LINE], [], []))
+    monkeypatch.setattr(carry, "known_drifts", lambda cx, root: {KEY: "417 T32"})
+    monkeypatch.setattr(carry, "filed", lambda root: {})
+    monkeypatch.setattr(carry, "active_feature", lambda root: None)
+
+
+def test_a_known_drift_unrecorded_refuses_with_the_command_and_recorded_it_warns(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 430 T06 (D6; proposal 6, approved by the GM 2026-10-26): a known departure lands with no arbiter round, recorded and
+    listed for the GM - `make claims-known` writes the row into its task's feature's gm-review.jsonl, and `make gm-review` lists it."""
+    _gate_with_one_known(tmp_path, monkeypatch)
+    refuse, warn = carry.gate(None, tmp_path)
+    assert refuse == [f"known: {LINE} - a known drift (417 T32) to record for the GM: `make claims-known` (make land runs it)"], refuse
+    written = carry.record_known(None, tmp_path, now="2026-10-26T00:00:00Z")
+    assert written == [f"417-all-seeds-pass T32: {KEY}"]
+    rows = (tmp_path / "specs" / "417-all-seeds-pass" / "gm-review.jsonl").read_text(encoding="utf-8")
+    assert '"kind": "known-drift"' in rows and KEY in rows
+    assert "GM review (make gm-reviewed F=417)" in (tmp_path / "specs" / "417-all-seeds-pass" / "tasks.md").read_text(encoding="utf-8")
+    refuse, warn = carry.gate(None, tmp_path)
+    assert refuse == [] and any("known drift (417 T32)" in w for w in warn), (refuse, warn)
+
+
+def test_a_triage_of_three_or_fewer_claims_goes_straight_to_impl_drift(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 430 T06 (D6; proposal 6, approved by the GM 2026-10-26: "skip claims-triage for bundles of a few claims"): a
+    triage of `TRIAGE_SKIP_MAX` claims or fewer writes the impl-drift bundle of the same claims and puts the skip on the ledger;
+    one more is triaged as before."""
+    cl = _load("claims")
+    (tmp_path / "dev").mkdir()
+    (tmp_path / "dev" / "review-ledger.md").write_text("| date | check |\n", encoding="utf-8")
+    monkeypatch.setattr(cl, "current", lambda root: {})
+    monkeypatch.setattr(cl, "load_index", lambda p: {})
+    monkeypatch.setattr(cl, "load_store", lambda p: {})
+    monkeypatch.setattr(cl, "_git", lambda root, *a: str(tmp_path))
+    keys = [f"l7r/x.py::f{i}#c" for i in range(cl.TRIAGE_SKIP_MAX + 1)]
+    owed = {"n": cl.TRIAGE_SKIP_MAX}
+    monkeypatch.setattr(cl, "owed", lambda cur, index, qdir, store: [(k, next(iter(cl.TRIAGED))) for k in keys[: owed["n"]]])
+    bundled: list[list[str]] = []
+    real_main = cl.main
+    monkeypatch.setattr(cl, "main", lambda argv: bundled.append(argv) or 0 if "bundle" in argv else real_main(argv))
+    monkeypatch.setattr(cl, "triage_bundle", lambda *a: "TRIAGE BUNDLE")
+    monkeypatch.setattr(cl.claims_flight, "mark", lambda root, out: None)
+    assert real_main(["--root", str(tmp_path), "triage"]) == 0
+    assert bundled and "--units" in bundled[0] and ",".join(keys[:3]) in bundled[0], bundled
+    assert "| claims-triage | 3 claim(s) | SKIPPED |" in (tmp_path / "dev" / "review-ledger.md").read_text(encoding="utf-8")
+    bundled.clear()
+    owed["n"] = cl.TRIAGE_SKIP_MAX + 1
+    assert real_main(["--root", str(tmp_path), "triage"]) == 0 and bundled == [], "four claims: triaged as before"

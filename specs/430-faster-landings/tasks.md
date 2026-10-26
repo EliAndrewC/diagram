@@ -20,7 +20,7 @@
       research: rendering
 - [ ] T06 A known drift admitted, recorded by `make claims-known` (run by `make land`) and listed in `make gm-review`; a triage of 3 or fewer claims goes to impl-drift, the skip on the ledger (D6; FR-006, SC-005; `scripts/record/claims_carry.py`, `scripts/record/claims.py`, `scripts/land.py`, Makefile)
       research: rendering
-- [ ] T07 `make decide` and `make plan-delta` name an owed claims triage to dispatch beside the review; the guard test that decide-first lets it through and holds impl-drift (D7; FR-007; `scripts/gates/plan_gate.py`, `tests/hooks/test-check-bundle-hooks.sh`)
+- [ ] T07 `make decide` and `make plan-delta` name an owed claims triage to dispatch beside the review; the guard test that decide-first lets it through and holds impl-drift (D7; FR-007; `scripts/gates/plan_gate.py`, `tests/hooks/test-checks-hooks.sh`, where the decide-first cases live)
       research: rendering
 - [ ] T08 Close: `make feature-report F=430 WRITE=1`, the report's measurements against SC-001 to SC-006
       research: rendering

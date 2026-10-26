@@ -75,6 +75,75 @@ def unlabeled_figure(section: str) -> str:
     return ""
 
 
+def _figures() -> tuple[re.Pattern[str], re.Pattern[str]]:
+    """The spec-lint's one definition of a figure with a unit, and of a one-shot label (`spec_figures`)."""
+    import sys  # noqa: PLC0415
+
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    import spec_figures  # noqa: PLC0415 - the module beside this one
+
+    return spec_figures._FIGURE, spec_figures._ONE_SHOT
+
+
+def unlabeled_unit_figure(section: str) -> str:
+    """The first sentence anywhere in the section stating a figure WITH A UNIT and carrying no label - `measured <date>
+    (<method>)`, `observed <date>, method: ...` or `m:<key>` for a measurement, a research label, page or knob for a decided
+    size (`_DECISION_LABEL`) - or '' (feature 430 T05, D5: item 4 alone was read before, and the
+    plan reviews of the day found unlabeled figures in a Constitution Check and a Decision). Code spans and fenced blocks name
+    things; they are set aside."""
+    figure, one_shot = _figures()
+    text = re.sub(r"^```.*?^```", " ", section, flags=re.M | re.S)
+    for sentence in re.split(r"(?<=[.;])\s+|\n(?=\S)", text):
+        bare = _NOT_A_FIGURE.sub(" ", _SPAN.sub(" ", sentence))  # the figure is read outside code spans, the label anywhere
+        if figure.search(bare) and not (_LABEL.search(sentence) or one_shot.search(sentence) or _DECISION_LABEL.search(sentence)):
+            return " ".join(sentence.split())[:160]
+    return ""
+
+
+#: a DECIDED figure's labels (root CLAUDE.md, "every rendering decision is labeled"): a planned size is no measurement, and it
+#: carries its research label, its research page, or the knob it is - the test fixture's "the bath 10 x 8 ft" (feature 430 T05)
+_DECISION_LABEL = re.compile(r"\b(?:GUESS|CONVENTION|DEVIATION|UNRESEARCHED|ACCURATE|HISTORICALLY ACCURATE)\b|research/questions/|\bknob\b|\bR\d+\b")
+
+
+_APPROACH_HEAD = re.compile(r"^### (T\d+[a-z]?) Approach\b.*$", re.M)
+
+
+def missing_red_exit(section: str) -> str:
+    """The task whose approach block's item 6 routes no red result through `make arbiter-ask` (D35's wording), or ''."""
+    for m in _APPROACH_HEAD.finditer(section):
+        rest = section[m.end() :]
+        nxt = re.search(r"^#{2,3} ", rest, re.M)
+        block = rest[: nxt.start()] if nxt else rest
+        item6 = re.search(r"^6\.\s.*?(?=^\d+\.\s|\Z)", block, re.M | re.S)
+        if not item6 or "make arbiter-ask" not in item6.group(0):
+            return m.group(1)
+    return ""
+
+
+def tasks_without_approach(spec_dir: pathlib.Path, plan_text: str) -> list[str]:
+    """In a plan whose tasks owe approach blocks - it opts in (`**Approach checklist**:`) or holds one already - each OPEN task
+    of tasks.md with no `### Txx Approach` block in the plan or plan-done.md (feature 430 D5). A plan with neither predates the
+    checklist (feature 385, `approach_gate.py` D8) and is not asked."""
+    done = (spec_dir / "plan-done.md").read_text(encoding="utf-8") if (spec_dir / "plan-done.md").is_file() else ""
+    if "**Approach checklist**:" not in plan_text and not _APPROACH_HEAD.search(plan_text + done):
+        return []
+    tasks = (spec_dir / "tasks.md").read_text(encoding="utf-8") if (spec_dir / "tasks.md").is_file() else ""
+    have = {m.group(1) for m in _APPROACH_HEAD.finditer(plan_text + "\n" + done)}
+    return [t for t in re.findall(r"^- \[ \] (T\d+[a-z]?)\b", tasks, re.M) if t not in have]
+
+
+def plan_refusal(spec_dir: pathlib.Path, plan_text: str, blocks: list[str]) -> str:
+    """Why `make plan-delta` writes no bundle: a refusal of any block it would bundle, or a task with no approach block, or ''
+    (feature 430 T05, D5: a plan review is never dispatched on what a script can see - no bundle, nothing to dispatch on)."""
+    for body in blocks:
+        if why := refusal(spec_dir, body):
+            return why
+    if missing := tasks_without_approach(spec_dir, plan_text):
+        return ("open tasks with no `### Txx Approach (checklist part A)` block in the plan - write one for each, `make task-add`'s "
+                f"template has the form (feature 430 D5):\n  {', '.join(missing)}")
+    return ""
+
+
 def refusal(spec_dir: pathlib.Path, section: str) -> str:
     """Why `make decide` refuses this section, or ''."""
     req = (spec_dir / "request.md").read_text(encoding="utf-8") if (spec_dir / "request.md").is_file() else ""
@@ -84,4 +153,14 @@ def refusal(spec_dir: pathlib.Path, section: str) -> str:
     if fig := unlabeled_figure(section):
         return ("Approach item 4 states a figure whose sentence carries no `measured <YYYY-MM-DD> (<method>)` or `m:<key>` - label "
                 f"it where it stands (feature 385 T86):\n  {fig}")
+    if fig := unlabeled_unit_figure(section):
+        return ("a figure with a unit whose sentence carries no label - a measurement `measured <YYYY-MM-DD> (<method>)`, `observed "
+                "<YYYY-MM-DD>, method: ...` or `m:<key>`; a decided size its research label (GUESS, CONVENTION, ...), its page or "
+                f"its knob - label it where it stands (feature 430 D5):\n  {fig}")
+    if task := missing_red_exit(section):
+        return (f"{task}'s approach item 6 routes no red result through `make arbiter-ask` - give it D35's red exit, as `make "
+                f"task-add`'s template words it (feature 430 D5):\n  {RED_EXIT_HINT}")
     return ""
+
+
+RED_EXIT_HINT = "Red: the failing seeds recorded and the task set down, a claim that it cannot be placed correctly ruled through `make arbiter-ask` (D11, D35)."

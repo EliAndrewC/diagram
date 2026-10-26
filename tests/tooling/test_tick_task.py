@@ -755,17 +755,15 @@ def _cover():  # noqa: ANN202 - `gates/cover_changed.py` by path
     return mod
 
 
-def test_cover_changed_reads_the_added_lines_and_the_mirrored_test_directory(tmp_path: pathlib.Path) -> None:
+def test_cover_changed_reads_the_mirrored_test_directory(tmp_path: pathlib.Path) -> None:
     cc = _cover()
-    diff = "+++ b/l7r/diagram/a/b.py\n@@ -3,0 +4,2 @@ def f\n+x\n+y\n@@ -9 +11 @@\n+z\n+++ /dev/null\n@@ -1 +0,0 @@\n"
-    assert cc.added_lines(diff) == {"l7r/diagram/a/b.py": {4, 5, 11}}, "added lines only; a deleted file adds none"
     (tmp_path / "tests" / "a").mkdir(parents=True)
     assert cc.mirrored(tmp_path, "l7r/diagram/a/b.py") == "tests/a"
     assert cc.mirrored(tmp_path, "l7r/diagram/a/deep/c.py") == "tests/a", "climbs to the nearest that exists"
     assert cc.mirrored(tmp_path, "l7r/diagram/z/c.py") == "tests"
     (tmp_path / "tests" / "tooling" / "ci").mkdir(parents=True)
     assert cc.mirrored(tmp_path, "l7r/diagram/ci/incremental.py") == "tests/tooling/ci", "the gate's machinery is tested as tooling"
-    assert "tooling" in cc.MARKERS and "not rolls_map" in cc.MARKERS, "the tooling tests asked for by name, no rolls"
+    assert "not rolls_map" in cc.WITH_TOOLING and "not rolls_map" in cc.WITHOUT_TOOLING, "no rolls (the lines asked: feature 430 T03)"
 
 
 def test_the_coverage_check_writes_its_coverage_data_in_its_own_directory(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
@@ -775,16 +773,20 @@ def test_the_coverage_check_writes_its_coverage_data_in_its_own_directory(tmp_pa
     seen: dict = {}
 
     def run(cmd, cwd=None, capture_output=True, text=True, env=None):  # noqa: ANN001, ANN202
-        seen["env"] = env or {}
+        seen["env"], seen["cmd"] = env or {}, cmd
+        rc = next(c.split("=", 1)[1] for c in cmd if c.startswith("--cov-config="))
+        seen["rc"] = pathlib.Path(rc).read_text(encoding="utf-8")
         return type("R", (), {"stdout": "", "stderr": "", "returncode": 0})()
 
     monkeypatch.setattr(cc.subprocess, "run", run)
+    monkeypatch.setenv("COVERAGE_FILE", "/elsewhere/.coverage")
     import contextlib  # noqa: PLC0415
 
     with contextlib.suppress(RuntimeError):  # no report written by the stand-in: the run itself is what is asked
-        cc.uncovered(tmp_path, {"l7r/x.py": {1}})
-    data = pathlib.Path(seen["env"]["COVERAGE_FILE"])
+        cc.uncovered(tmp_path, ["l7r/x.py"], None)
+    data = pathlib.Path(next(ln.split("=", 1)[1].strip() for ln in seen["rc"].splitlines() if ln.startswith("data_file")))
     assert data.name == ".coverage" and tmp_path not in data.parents and str(data.parent) != str(pathlib.Path.cwd())
+    assert "COVERAGE_FILE" not in seen["env"], "feature 430 T03: in a config file of its own, never the environment every child inherits"
 
 
 def test_a_delta_changing_the_gates_machinery_lands_through_a_gate(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
