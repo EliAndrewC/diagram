@@ -93,14 +93,18 @@ def test_engine_fingerprint_covers_and_skips(repo):
     _, skill, _ = repo
     fp1 = rc.engine_fingerprint(skill)
     assert len(fp1) == 64
-    # editing an engine file changes the fingerprint...
+    # a comment or docstring edit to engine Python does not (feature 426 D3: the code id)...
+    with open(os.path.join(skill, "l7r", "settlement.py"), "a") as fh:
+        fh.write("# a comment\n")
+    assert rc.engine_fingerprint(skill) == fp1
+    # ...editing what runs changes the fingerprint...
     with open(os.path.join(skill, "l7r", "settlement.py"), "w") as fh:
-        fh.write("# engine v2\n")
+        fh.write("ENGINE = 2\n")
     assert rc.engine_fingerprint(skill) != fp1
     # editing a PACKAGE engine file changes it too (feature 025: settlement/ is a package)
     fp_pkg_before = rc.engine_fingerprint(skill)
     with open(os.path.join(skill, "l7r", "engine_pkg", "core.py"), "w") as fh:
-        fh.write("# pkg engine v2\n")
+        fh.write("PKG = 2\n")
     assert rc.engine_fingerprint(skill) != fp_pkg_before
     # ...but editing a skipped file (test_/non-.py/the module itself/test packages/pool+wip) does not
     with open(os.path.join(skill, "l7r", "settlement.py"), "w") as fh:
@@ -365,7 +369,7 @@ def test_regen_pool_reruns_a_sheet_only_when_its_inputs_move(repo):
     Path(rc._predicted_svg(gen)).write_text('<svg xmlns="http://www.w3.org/2000/svg"><circle/></svg>')
     assert rc.regen_pool(skill, repo_dir, jobs=1)[1] == [gen]  # the sheet redrawn
     with open(os.path.join(skill, "l7r", "settlement.py"), "w") as fh:
-        fh.write("# engine v9\n")
+        fh.write("ENGINE = 9\n")
     assert rc.regen_pool(skill, repo_dir, jobs=1)[1] == [gen]  # the engine moved
     assert ran_marker.read_text() == "xxx"
 
@@ -600,3 +604,22 @@ def test_regen_pool_runs_at_most_render_jobs_maps_by_default(repo, monkeypatch):
     rc.regen_pool(skill, repo_dir, allow_main=False)
     rc.regen_pool(skill, repo_dir, jobs=7, allow_main=False)
     assert seen == [rc.RENDER_JOBS, 2, 7] and rc.RENDER_JOBS == 4, seen
+
+
+def test_an_interactive_docstring_moves_the_render_fingerprint_and_an_engine_docstring_does_not(repo):
+    """Feature 426 D3: the interactive page's class docstrings are its modal text, keyed on their bytes; engine Python by what
+    runs."""
+    _, skill, _ = repo
+    os.makedirs(os.path.join(skill, "l7r", "interactive"), exist_ok=True)
+    page = os.path.join(skill, "l7r", "interactive", "kinds.py")
+    with open(page, "w") as fh:
+        fh.write('class K:\n    """The modal text."""\n')
+    with open(os.path.join(skill, "l7r", "settlement.py"), "w") as fh:
+        fh.write('def f():\n    """A claim."""\n    return 1\n')
+    fp = rc.engine_fingerprint(skill)
+    with open(os.path.join(skill, "l7r", "settlement.py"), "w") as fh:
+        fh.write('def f():\n    """A claim, relabeled."""\n    return 1\n')
+    assert rc.engine_fingerprint(skill) == fp
+    with open(page, "w") as fh:
+        fh.write('class K:\n    """The modal text, reworded."""\n')
+    assert rc.engine_fingerprint(skill) != fp

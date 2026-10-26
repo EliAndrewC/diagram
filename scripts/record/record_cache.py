@@ -92,11 +92,31 @@ def common_dir(root: pathlib.Path) -> pathlib.Path | None:
     return path if path.is_absolute() else root / path
 
 
+def _codeid():  # noqa: ANN202 - the module, loaded by path
+    """`scripts/gates/codeid.py`, loaded by PATH (stdlib only, as `gate-stamp.py` loads it): this script does not import the
+    engine package."""
+    import importlib.util  # noqa: PLC0415
+    import sys  # noqa: PLC0415
+
+    cached = sys.modules.get("l7r_codeid")
+    if cached is not None:
+        return cached
+    path = pathlib.Path(__file__).resolve().parents[1] / "gates" / "codeid.py"
+    spec = importlib.util.spec_from_file_location("l7r_codeid", path)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["l7r_codeid"] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def code_sha(*paths: pathlib.Path) -> str:
-    """The version of the code a cache serves: its source files' contents."""
+    """The version of the code a cache serves: its source files' contents - Python by what runs (feature 426, the audit: an
+    extractor's docstring or comment does not change what it extracts), anything else by its bytes."""
     h = hashlib.sha256()
     for p in paths:
-        h.update(p.read_bytes())
+        data = p.read_bytes()
+        h.update(_codeid().semantic_bytes(data, p.name) if p.suffix == ".py" else data)
     return h.hexdigest()[:16]
 
 

@@ -46,7 +46,7 @@ import re
 import subprocess
 import sys
 
-from . import pool_index, poolmaps, record_build
+from . import codeid, pool_index, poolmaps, record_build
 
 SKILL_DIR = os.path.abspath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
@@ -118,7 +118,12 @@ def engine_fingerprint(skill_dir: str = SKILL_DIR) -> str:
                 continue
             rel = os.path.normpath(os.path.join(rel_dir, name))
             with open(os.path.join(dirpath, name), "rb") as fh:
-                parts.append(rel.encode() + b"\0" + _sha256(fh.read()).encode())
+                data = fh.read()
+            # ...ENGINE PYTHON BY WHAT RUNS (feature 426, D3): a docstring or comment edit re-renders no map (`codeid`); an asset,
+            # and `interactive/`'s Python, whose class docstrings are the modal text, by their bytes
+            if name.endswith(".py") and not is_asset and "interactive" not in dirs:
+                data = codeid.semantic_bytes(data, name)
+            parts.append(rel.encode() + b"\0" + _sha256(data).encode())
     return _sha256(b"\n".join(parts))
 
 

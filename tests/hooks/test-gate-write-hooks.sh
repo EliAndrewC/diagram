@@ -51,7 +51,7 @@ echo "--- 3. a change the gate does not see (feature 405 T41, D15) ---"
 # a tree with the gate's own tools: a docstring or comment in an engine file, or a claims-round record, passes; code does not
 S=$(mktemp -d); git -C "$S" init -q
 mkdir -p "$S/scripts/gates" "$S/l7r/diagram" "$S/dev"
-cp "$HERE/../../scripts/gates/preflight.py" "$HERE/../../scripts/gates/gate-stamp.py" "$S/scripts/gates/"; mkdir -p "$S/scripts/hooks/lib"; cp "$HERE/../../scripts/hooks/lib/usage_log.py" "$S/scripts/hooks/lib/"
+cp "$HERE/../../scripts/gates/preflight.py" "$HERE/../../scripts/gates/gate-stamp.py" "$HERE/../../scripts/gates/codeid.py" "$S/scripts/gates/"; mkdir -p "$S/scripts/hooks/lib"; cp "$HERE/../../scripts/hooks/lib/usage_log.py" "$S/scripts/hooks/lib/"
 printf 'def f(x):\n    """Research: a claim - NONE"""\n    return x + 1\n' > "$S/l7r/diagram/m.py"
 printf '{}\n' > "$S/dev/claims-index.json"
 printf 'done:\n\t@sleep 30\n' > "$S/Makefile"

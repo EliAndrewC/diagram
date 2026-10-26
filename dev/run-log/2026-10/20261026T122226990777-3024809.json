@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-26T12:22:26Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 279,
+  "result": "green",
+  "commit": "fda3e0e04",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10767,
+  "host": {
+    "load": [
+      3.94,
+      5.98
+    ],
+    "mem_avail_mb": [
+      8567,
+      9211
+    ],
+    "cpu_temp_c": [
+      88.0,
+      100.0
+    ],
+    "stall_s": {
+      "cpu": 1.9,
+      "io": 1.0,
+      "io_full": 0.9,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 10709,
+      "package": 5341
+    }
+  },
+  "phases": {
+    "preflight": 21.0,
+    "static": 1.0,
+    "format": 1.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 263.0,
+    "floors": 10.0,
+    "test-full": 276.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/hooks/test-cohort-gate.sh (+2)",
+  "collected": 10767
+}

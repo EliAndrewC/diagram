@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-26T12:13:23Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 418,
+  "result": "failed: test-full",
+  "commit": "39ea51383",
+  "first_failure_s": 413.8,
+  "last_failure_s": 418.4,
+  "failed_names": [
+    "uncovered l7r/diagram/pipeline/gencache.py:227-228, 238-241"
+  ],
+  "host": {
+    "load": [
+      6.05,
+      8.58
+    ],
+    "mem_avail_mb": [
+      7763,
+      9499
+    ],
+    "cpu_temp_c": [
+      81.0,
+      89.0
+    ],
+    "stall_s": {
+      "cpu": 12.6,
+      "io": 2.7,
+      "io_full": 1.8,
+      "memory": 1.0
+    },
+    "throttle_ms": {
+      "core": 4830,
+      "package": 2727
+    }
+  },
+  "phases": {
+    "preflight": 26.0,
+    "static": 3.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 1.0,
+    "hooks-test": 10.0,
+    "pytest": 386.0,
+    "floors": 12.0,
+    "test-full": 402.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/hooks/test-cohort-gate.sh (+2)",
+  "selected": 10766,
+  "collected": 10766
+}

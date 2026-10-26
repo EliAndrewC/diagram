@@ -97,10 +97,15 @@ def config_hash(root: Path) -> str:
     for rel in (*MACHINERY, *LOCKFILES):
         p = root / rel
         files += sorted(p.rglob("*")) if p.is_dir() else [p]
+    from l7r.diagram.pipeline import codeid  # noqa: PLC0415 - the one docstring-blind id (feature 426 D2)
+
     for f in files:
         if f.is_file() and "__pycache__" not in f.parts:
             h.update(str(f.relative_to(root)).encode())
-            h.update(f.read_bytes())
+            # ...the machinery's Python by what runs (feature 426, the audit): a docstring or comment in the conftest or the
+            # pipeline decides nothing about how the tests run; the lockfiles stay raw
+            data = f.read_bytes()
+            h.update(codeid.semantic_bytes(data, f.name) if f.suffix == ".py" else data)
     for name, extract in (("Makefile", makefile_test_config), ("pyproject.toml", pyproject_test_config)):
         p = root / name
         h.update(name.encode())

@@ -62,6 +62,21 @@ import claims_carry  # noqa: E402
 import claims_context  # noqa: E402
 import claims_labels  # noqa: E402
 import claims_stale  # noqa: E402
+from claims_reply import (  # noqa: E402, F401 - lifted out at the 1,000-line bar (feature 426); re-exported so every caller still reaches them here
+    FINDINGS,
+    OUTSIDE,
+    VERDICTS,
+    _ELIDED,
+    _RESTS,
+    _UNCLAIMED,
+    _VERDICT,
+    outside_tag,
+    parse_reply,
+    record,
+    rests_of,
+    unelide,
+)
+import claims_flight  # noqa: E402
 import claims_triage  # noqa: E402
 import record_cache as rc  # noqa: E402
 import record_units as ru  # noqa: E402
@@ -85,16 +100,9 @@ STORE = "dev/claims-pages.json"  # the page snapshots each row's pages name (fea
 from claims_owed import CODE_TRIAGE, SECTION_TRIAGE, TRIAGED  # noqa: E402,F401 - moved with the owed logic (T116); re-exported
 
 QUESTIONS = "research/questions"
-FINDINGS = ("DRIFTED", "NEEDS-RESEARCH", "MISLABELED", "UNCLAIMED", "CANNOT-TELL")
-VERDICTS = ("IN-STEP", *FINDINGS)
 DEFAULT_OUT = Path("/tmp/l7r-check")
 #: What the base read needs: the engine, the procedure documents and the questions.
 BASE_PATHS = ("l7r", "docs/buildings.md", "docs/buildings", QUESTIONS)
-# ...the verdict also read where a reply sets it off with a dash or closes it with a colon (`KEY - IN-STEP - note`, `KEY IN-STEP:
-# note`): read strictly, the dash went into the key, every line was "not a claim of this bundle" and nothing was recorded (feature
-# 417 T50, two impl-drift rounds)
-_VERDICT = re.compile(r"^VERDICT\s+(\S.*?)\s+(?:-\s+)?(" + "|".join(VERDICTS) + r")(?:\s+-\s+|:\s+)(.*)$")
-_UNCLAIMED = re.compile(r"^UNCLAIMED\s+(\S+?::\S.*?)\s+-\s+(.*)$")
 
 
 def _git(root: Path, *args: str) -> str | None:
@@ -397,7 +405,6 @@ def changed_lines(root: Path, base: str = "origin/main") -> dict[str, set[int]]:
 
 
 _HUNK = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@")
-OUTSIDE = "[outside the change]"
 
 
 def mark_changed(src: str, first: int, changed: set[int]) -> str:
@@ -409,132 +416,7 @@ def mark_changed(src: str, first: int, changed: set[int]) -> str:
     return "\n".join(("+ " if first + i in changed else "  ") + ln for i, ln in enumerate(lines))
 
 
-def outside_tag(note: str) -> tuple[bool, str]:
-    """(did the check tag it outside the change, the note without the tag)."""
-    s = note.strip()
-    return (True, s[len(OUTSIDE) :].strip()) if s.startswith(OUTSIDE) else (False, note)
-
-
 # ---- recording a verdict -------------------------------------------------------------------------------------------
-
-
-def parse_reply(text: str) -> tuple[dict[str, tuple[str, str]], list[tuple[str, str]]]:
-    """({key: (verdict, note)}, [(uid, decision)]) from a check's reply."""
-    sys.path.insert(0, str(HERE.parent / "hooks" / "lib"))
-    from hm_house import americanize  # noqa: PLC0415 - feature 385 T78: a note's words in the house style, its key as written
-
-    verdicts: dict[str, tuple[str, str]] = {}
-    unclaimed: list[tuple[str, str]] = []
-    for raw in text.split("\n"):
-        line = raw.strip().strip("`")
-        if m := _VERDICT.match(line):
-            verdicts[m.group(1).strip("`")] = (m.group(2), americanize(m.group(3).strip()))
-        elif m := _UNCLAIMED.match(line):
-            unclaimed.append((m.group(1).strip("`"), americanize(m.group(2).strip())))
-    return verdicts, unclaimed
-
-
-_RESTS = re.compile(r"\[(§[^\]]*)\]\s*$")
-
-
-_ELIDED = re.compile(r"\b(\d{4})-[\w-]*\.\.\.?[\w-]*?((?:\.drawing)?\.html)")
-
-
-def unelide(reply: str, stems: list[str]) -> str:
-    """The reply with each pointer a check wrote shortened (`0236-...-home-plot.drawing.html`) given its full file name, so a
-    verdict note written into the index never fails `check-research-pointers.py` (feature 319: four did, and the index had to
-    be hand-repaired). `stems` are the question stems (`0236-shrine-...`); a number with no question, or with more than one
-    stem, is left as written for a person to see."""
-
-    def full(m: re.Match[str]) -> str:
-        hits = [s for s in stems if s.startswith(m.group(1) + "-")]
-        return f"{hits[0]}{m.group(2)}" if len(hits) == 1 else m.group(0)
-
-    return _ELIDED.sub(full, reply)
-
-
-def rests_of(note: str, numbered: Mapping[str, str]) -> tuple[str, list[str] | None]:
-    """A verdict note without its closing `[§3, §12]`, and the `page:digest` of each block it names (feature 318, FR-016): `[§]`
-    is an empty list (the questions are silent on the claim), no tag at all None (either way any change on its pages is
-    triaged); a number the bundle does not hold is dropped."""
-    m = _RESTS.search(note)
-    if not m:
-        return note, None
-    names = [x.strip() for x in m.group(1).split(",")]
-    return note[: m.start()].rstrip(), sorted({numbered[n] for n in names if n in numbered})
-
-
-def record(
-    index: dict[str, dict[str, Any]],
-    units: dict[str, dict[str, Any]],
-    reply: str,
-    today: str,
-    numbered: Mapping[str, str] | None = None,
-) -> tuple[dict[str, dict[str, Any]], list[str]]:
-    """The index with a check's reply applied, and the messages for the session (spec FR-009). A key not in the bundle is
-    refused; a bundle key the reply gives no verdict stays owed; an UNCLAIMED finding is a row of its own, and a unit's earlier
-    UNCLAIMED rows are dropped when this check of its claims does not report them again. Each row keeps the pages it was checked
-    at and the blocks its verdict rests on (feature 318, FR-016)."""
-    verdicts, unclaimed = parse_reply(reply)
-    msgs: list[str] = []
-    out = dict(index)
-    for key in sorted(set(verdicts) - set(units)):
-        msgs.append(f"refused: `{key}` is not a unit of this bundle")
-    uids_checked = {u["uid"] for u in units.values()}
-    for key in [k for k, v in out.items() if v.get("verdict") == "UNCLAIMED" and k.rsplit("#", 1)[0] in uids_checked]:
-        del out[key]
-    for key, fp in sorted(units.items()):
-        if key not in verdicts:
-            msgs.append(f"no verdict for `{key}` - it stays owed")
-            continue
-        verdict, note = verdicts[key]
-        outside, note = outside_tag(note)
-        note, rests = rests_of(note, numbered or {})
-        # ...ONLY ON ITS OWN PAGES (feature 328 wave 95): an agent re-sent a fresh bundle cited the section numbers of the bundle it
-        # first read, and claims came to rest on blocks of pages they do not cite, so an edit to their own pages no longer
-        # re-owed them. A foreign rest is dropped and named; with none of its own left the claim triages any change on its pages
-        if rests and "pages" in fp:
-            foreign = [r for r in rests if r.rsplit(":", 1)[0] not in fp["pages"]]
-            if foreign:
-                msgs.append(
-                    f"`{key}`: rests on {', '.join(sorted({r.rsplit(':', 1)[0] for r in foreign}))}, a page it does not cite - dropped (was the reply judged against another bundle's numbering?)"
-                )
-                rests = [r for r in rests if r not in foreign] or None
-        row: dict[str, Any] = {
-            "verdict": verdict,
-            "code": fp["code"],
-            "core": fp["core"],
-            **{f: fp[f] for f in ("body", "claim") if f in fp},
-            "research": fp["research"],
-            "date": today,
-            "note": note,
-        }
-        if "pages" in fp:
-            row["pages"] = fp["pages"]
-        if "section" in fp:
-            row["section"] = fp["section"]
-        if rests is not None:
-            row["rests"] = rests
-        if outside and verdict in FINDINGS:
-            row["outside"] = True
-        out[key] = row
-    cores = {u["uid"]: u["core"] for u in units.values()}
-    for uid, said in unclaimed:
-        if uid not in cores:
-            msgs.append(f"refused: UNCLAIMED `{uid}` is not a unit of this bundle")
-            continue
-        outside, decision = outside_tag(said)
-        out[f"{uid}#{decision}"] = {
-            "verdict": "UNCLAIMED",
-            "code": cores[uid],
-            "core": cores[uid],
-            "research": "",
-            "date": today,
-            "note": decision,
-            **({"outside": True} if outside else {}),
-        }
-        msgs.append(f"UNCLAIMED {uid} - {decision}: write a claim for it, then check it")
-    return out, msgs
 
 
 def backfill_sections(cur: dict[str, Row], index: dict[str, dict[str, Any]], store: dict[str, list[str]]) -> int:
@@ -826,6 +708,34 @@ def _rekey_cmd(root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]]
     return 0
 
 
+def _triaged_cmd(args: argparse.Namespace, root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]], qdir: Path, store: dict[str, Any]) -> int:
+    """`claims-triaged`: record a triage reply - the claims it names go on to impl-drift, the rest are cleared."""
+    data = json.loads((Path(args.bundle) / "triage.json").read_text(encoding="utf-8"))
+    if not (reply := claims_triage.read_reply(args.reply, "claims-triaged", "nothing cleared")).strip():  # feature 385 T92
+        return 2
+    new, msgs = record_triage(
+        index,
+        data["units"],
+        reply,
+        datetime.date.today().isoformat(),
+        data.get("forced", []),
+    )
+    save_index(root / INDEX, live_rows(cur, new))
+    save_store(root / STORE, {**store, **data["snapshots"]})
+    keep_texts(qdir, data["units"])
+    for m in msgs:
+        print(f"claims-triaged: {m}")
+    named = sum(1 for m in msgs if m.startswith("touched") and " - a removed block the history no longer shows" not in m)
+    forced = sum(1 for m in msgs if m.startswith("touched")) - named
+    print(
+        f"claims-triaged: {named + forced} of {len(data['units'])} sent on to impl-drift ({named} named by the reply"
+        + (f", {forced} owed in full: a removed block's words could not be shown" if forced else "")
+        + "); the rest cleared"
+    )
+    claims_flight.clear(root, Path(args.bundle))  # its reply is recorded (feature 426 D1)
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     root = Path((_git(Path(args.root), "rev-parse", "--show-toplevel") or args.root).strip())
@@ -895,44 +805,15 @@ def main(argv: Sequence[str] | None = None) -> int:
         if not keys:
             print("claims-triage: no claim is owed a triage")
             return 0
-        print(
-            triage_bundle(
-                cur,
-                index,
-                store,
-                keys,
-                qdir,
-                Path(args.out) if args.out else DEFAULT_OUT / "claims-triage",
-            )
-        )
+        tout = Path(args.out) if args.out else DEFAULT_OUT / "claims-triage"
+        print(triage_bundle(cur, index, store, keys, qdir, tout))
+        claims_flight.mark(root, tout)  # in flight until `claims-triaged` records its reply (feature 426 D1)
         print(
             f"claims-triage: {len(keys)} claim(s); dispatch the `claims-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`"
         )
         return 0
     if args.cmd == "triaged":
-        data = json.loads((Path(args.bundle) / "triage.json").read_text(encoding="utf-8"))
-        if not (reply := claims_triage.read_reply(args.reply, "claims-triaged", "nothing cleared")).strip():  # feature 385 T92
-            return 2
-        new, msgs = record_triage(
-            index,
-            data["units"],
-            reply,
-            datetime.date.today().isoformat(),
-            data.get("forced", []),
-        )
-        save_index(root / INDEX, live_rows(cur, new))
-        save_store(root / STORE, {**store, **data["snapshots"]})
-        keep_texts(qdir, data["units"])
-        for m in msgs:
-            print(f"claims-triaged: {m}")
-        named = sum(1 for m in msgs if m.startswith("touched") and " - a removed block the history no longer shows" not in m)
-        forced = sum(1 for m in msgs if m.startswith("touched")) - named
-        print(
-            f"claims-triaged: {named + forced} of {len(data['units'])} sent on to impl-drift ({named} named by the reply"
-            + (f", {forced} owed in full: a removed block's words could not be shown" if forced else "")
-            + "); the rest cleared"
-        )
-        return 0
+        return _triaged_cmd(args, root, cur, index, qdir, store)
     if args.cmd == "report":
         print(report(cur, index, qdir, store, load_deferred(root / DEFERRED)))
         return 0
@@ -968,6 +849,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 3
         _say(inherited_none(cur, [(k, due.get(k, "")) for k in keys]))
         print(bundle(root, cur, keys, out, [c for c in args.context.split(",") if c], [p for p in args.pages.split(",") if p]))
+        claims_flight.mark(root, out)  # in flight until `claims-checked` records its reply (feature 426 D1: `make land` waits only then)
         if not_owed:
             print(f"claims-bundle: re-check of {len(not_owed)} claim(s) not owed, because: {args.reason}")
         return 0
@@ -985,6 +867,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     for m in msgs:
         print(f"claims-checked: {m}")
     print(f"claims-checked: {sum(1 for k in units if k in new and new[k].get('code') == units[k]['code'])} of {len(units)} recorded")
+    claims_flight.clear(root, Path(args.bundle))  # its reply is recorded: no longer in flight (feature 426 D1)
     return 3 if bad else 0
 
 

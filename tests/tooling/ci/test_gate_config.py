@@ -149,3 +149,15 @@ def test_a_variable_two_others_read_is_kept_once_and_an_unparseable_helper_reads
     assert gate_config.makefile_test_config(text).count("C = 1") == 1
     _tree(tmp_path, {"tests/__init__.py": "", "tests/_broken.py": "def (:\n", "tests/test_uses.py": "from tests import _broken\n"})
     assert gate_config.scripts_readers(tmp_path) == []
+
+
+def test_the_config_hash_is_blind_to_a_docstring_or_comment_in_the_machinery(tmp_path: Path) -> None:
+    """Feature 426's audit: the machinery's Python is keyed on what runs."""
+    conf = tmp_path / "tests" / "conftest.py"
+    conf.parent.mkdir(parents=True)
+    conf.write_text('def pytest_x():\n    """Doc."""\n    return 1\n', encoding="utf-8")
+    before = gate_config.config_hash(tmp_path)
+    conf.write_text('def pytest_x():\n    """Doc, reworded."""\n    return 1  # c\n', encoding="utf-8")
+    assert gate_config.config_hash(tmp_path) == before
+    conf.write_text('def pytest_x():\n    return 2\n', encoding="utf-8")
+    assert gate_config.config_hash(tmp_path) != before

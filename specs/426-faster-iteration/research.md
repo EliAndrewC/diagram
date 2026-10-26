@@ -47,5 +47,8 @@
 
 ## R5 - The before/after count (to fill at the key change's landing)
 
-- Before: a cohort run, a docstring-only edit to a function the rolls execute, the same cohort run: rolled N of 54.
-- After: the same: rolled 0 of 54 (SC-001).
+- Observed 2026-10-26, method: `make cohort N=10 FRESH=0 JOBS=3` (16 seeds), a docstring-only edit to
+  `settle/stage.py::settle_the_web` (one sentence added to its docstring), the same cohort again; the per-seed `how` of each run's
+  `dev/cohort-log/` record counted.
+- Before (main's key, worktree `/tmp/probe-s` at `fd707b608`): rolled 11 of 16, served 5 (`20261026T112406Z-probe-s-2672952`).
+- After (the code id, the clone): rolled 0 of 16, served 16 (SC-001).

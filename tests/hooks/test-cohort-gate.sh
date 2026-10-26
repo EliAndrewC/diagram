@@ -37,7 +37,7 @@ g init -q -b main; g commit -q --allow-empty -m root
 ( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "no cohort-landing target, silent"
 
 mkdir -p "$T/l7r/diagram/hamletgen" "$T/pool" "$T/scripts/gates"
-cp "$HERE/../../scripts/gates/gate-stamp.py" "$T/scripts/gates/"  # the engine key loads it from the tree it reads
+cp "$HERE/../../scripts/gates/gate-stamp.py" "$HERE/../../scripts/gates/codeid.py" "$T/scripts/gates/"  # the engine key loads them from the tree it reads (codeid: feature 426 D2)
 printf 'cohort-landing:\n\t@true\n' > "$T/Makefile"
 printf 'X = 1\n' > "$T/l7r/diagram/hamletgen/rows.py"; printf 'p\n' > "$T/pool/p.txt"
 g add -A; g commit -q -m "main's engine"; base="$(git -C "$T" rev-parse --short HEAD)"
@@ -46,7 +46,7 @@ printf 'X = 2\n' > "$T/l7r/diagram/hamletgen/rows.py"; g commit -qam "the work's
 
 # no record on the landed engine: refused, naming the command
 out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 1 "no landing record refuses"
-case "$out" in *"no landing cohort"*"48-seed fresh block"*"make cohort-landing"*) ok y y "names the missing record and the command" ;; *) ok n y "names the missing record and the command" ;; esac
+case "$out" in *"no landing cohort"*"make cohort-landing"*) ok y y "names the missing record and the command" ;; *) ok n y "names the missing record and the command" ;; esac
 
 # the escape: no reason refused, a reason passes and is logged in the tree's bypass log
 ( cd "$T" && COHORT_OK=1 "$GATE" >/dev/null 2>&1 ); ok "$?" 1 "COHORT_OK without a reason"

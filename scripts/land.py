@@ -195,10 +195,40 @@ def commit_gate_formatting(root: Path) -> list[str]:
     return mine
 
 
+def claims_cure(out: str, in_flight: list[str]) -> str:
+    """Why a claims refusal cannot end by waiting, with the cure - or "" when a check in flight may still answer it (feature 426
+    D1). An INTRODUCED finding is never cured by waiting: it needs an edit, or a round arbiter's accept, which the next `make
+    land` reads. An OWED claim waits only while a claims check is in flight (`claims_flight.live`): with none, nothing is coming.
+    Inferring "in flight" from "owed" waited the whole claims wait twice on feature 417 T50's landing."""
+    lines = [ln.strip() for ln in out.splitlines() if ln.strip() and "pre-existing" not in ln]
+    introduced = [ln for ln in lines if ln.startswith("introduced:")]
+    owed = [ln for ln in lines if "owed (" in ln]
+    if introduced:
+        return (
+            "claims-gate.sh refuses on a finding no check in flight can cure - "
+            + " | ".join(introduced)[:600]
+            + (" (also owed: " + " | ".join(owed)[:300] + ")" if owed else "")
+            + ". Fix the code or the claim and re-check it, or, for a known drift filed on an open task, `make arbiter-ask SUBJECT=<id>"
+            + ' WHY="<the rounds>" REVIEW=claims:<key>` - then run make land again'
+        )
+    if owed and not in_flight:
+        return (
+            "claims-gate.sh: a claim is owed a check and none is in flight - "
+            + " | ".join(owed)[:600]
+            + ". Run `make claims-triage` / `make claims-bundle OWED=1`, dispatch the agent on its MANIFEST, record its reply"
+            + " (`make claims-triaged` / `make claims-checked`) - then run make land again"
+        )
+    return ""
+
+
 def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
-    """The claims gate passing and the tree clean - the claims round recorded and committed beside the gate - or, past
-    `CLAIMS_WAIT_S`, the refusal that still stands (405 T50, D23)."""
+    """The claims gate passing and the tree clean - the claims round recorded and committed beside the gate - or the refusal
+    that still stands: at once when nothing waiting could cure it (`claims_cure`, feature 426 D1), else past `CLAIMS_WAIT_S`
+    (405 T50, D23)."""
     import time  # noqa: PLC0415
+
+    sys.path.insert(0, str(HERE / "record"))
+    import claims_flight  # noqa: PLC0415
 
     env = {"L7R_LAND_TICKS": " ".join(tasks)}
     end, said = time.monotonic() + CLAIMS_WAIT_S, ""
@@ -212,6 +242,8 @@ def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
         dirty = run(root, ["git", "status", "--porcelain"])[1].strip()
         if not rc and not dirty:
             return ""
+        if rc and (cure := claims_cure(out, claims_flight.live(root))):
+            return cure
         why = ("claims-gate.sh: " + " | ".join(ln.strip() for ln in out.splitlines() if ln.strip() and "pre-existing" not in ln)[-600:]) if rc else f"uncommitted changes: {dirty.splitlines()[0]}"
         if time.monotonic() >= end:
             return why

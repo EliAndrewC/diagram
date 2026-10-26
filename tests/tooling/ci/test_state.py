@@ -248,3 +248,19 @@ def test_a_tree_moved_abort_is_no_red_gate_in_a_row(repo: Path) -> None:
     assert len(json.loads(owed.read_text())) == 1, "two real red gates in a row"
     state.write(repo, state.GREEN, "done")
     assert state.write(repo, state.FAILED, "tree-moved").event == state.FAILED, "the abort overwrites the green record"
+
+
+def test_the_tooling_hash_is_blind_to_a_function_docstring_but_not_to_usage_text_or_the_makefile(repo: Path) -> None:
+    """Feature 426's audit: a function docstring or comment in a script is no tooling change; its module docstring (the usage
+    it prints), its code and a Makefile comment are."""
+    tool = repo / "scripts" / "record" / "tool.py"
+    tool.parent.mkdir(parents=True, exist_ok=True)
+    tool.write_text('"""Usage: tool."""\n\n\ndef f():\n    """Doc."""\n    return 1\n', encoding="utf-8")
+    before = state.tooling_hash(repo)
+    tool.write_text('"""Usage: tool."""\n\n\ndef f():\n    """Doc, reworded."""\n    return 1  # a comment\n', encoding="utf-8")
+    assert state.tooling_hash(repo) == before, "a function docstring and a comment"
+    tool.write_text('"""Usage: tool, reworded."""\n\n\ndef f():\n    """Doc, reworded."""\n    return 1\n', encoding="utf-8")
+    assert state.tooling_hash(repo) != before, "the module docstring is usage text"
+    mid = state.tooling_hash(repo)
+    (repo / S / "Makefile").write_text("# a comment\nquick:\n\techo hi\n", encoding="utf-8")
+    assert state.tooling_hash(repo) != mid, "a Makefile comment counts"

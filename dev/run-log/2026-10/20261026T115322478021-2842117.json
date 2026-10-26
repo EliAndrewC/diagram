@@ -1,0 +1,58 @@
+{
+  "utc": "2026-10-26T11:53:22Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 688,
+  "result": "failed: hooks-test test-full",
+  "commit": "4678af6c6",
+  "first_failure_s": 322.5,
+  "last_failure_s": 631.1,
+  "failed_tests": 7,
+  "failed_names": [
+    "tests/tooling/test_content_cache.py::test_duplicate_defs_answers_the_same_and_finds_a_fault_put_in_after_a_cached_run",
+    "tests/tooling/test_content_cache.py::test_function_cap_answers_the_same_and_finds_a_fault_put_in_after_a_cached_run",
+    "tests/tooling/test_content_cache.py::test_the_conflict_check_answers_the_same_and_finds_a_marker_put_in_after_a_cached_run",
+    "tests/tooling/test_content_cache.py::test_the_pointer_check_answers_the_same_and_resolves_a_new_question_each_run",
+    "tests/tooling/test_push_checks.py::test_a_check_seeded_to_fail_refuses_the_same_in_this_process[conflict]",
+    "tests/tooling/test_push_checks.py::test_a_check_seeded_to_fail_refuses_the_same_in_this_process[duplicate-defs]",
+    "tests/tooling/test_push_checks.py::test_a_check_seeded_to_fail_refuses_the_same_in_this_process[function-cap]"
+  ],
+  "host": {
+    "load": [
+      7.48,
+      9.96
+    ],
+    "mem_avail_mb": [
+      7802,
+      9412
+    ],
+    "cpu_temp_c": [
+      80.0,
+      87.0
+    ],
+    "stall_s": {
+      "cpu": 18.2,
+      "io": 2.1,
+      "io_full": 1.5,
+      "memory": 0.4
+    },
+    "throttle_ms": {
+      "core": 51116,
+      "package": 31534
+    }
+  },
+  "phases": {
+    "preflight": 42.0,
+    "static": 7.0,
+    "format": 0.0,
+    "typecheck": 2.0,
+    "reference": 1.0,
+    "hooks-test": 312.0,
+    "pytest": 356.0,
+    "test-full": 365.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/tooling/ci/conftest.py",
+  "selected": 10722,
+  "collected": 10722
+}

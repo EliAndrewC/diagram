@@ -60,6 +60,66 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
+  },
+  "## Task approaches": {
+   "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "66ece1d8ede8ae5a700bc318d776ae0488f61d425f40d1cb284751abdc6cb93c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "e3d39f39cbacc1dbfd8986f0da514298a223ce66629a3f9733099ecb2654ad6b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "165d3882a308f37936081568bca7f13eba256eb74325ea3defbd6c335012478a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "2f51214d116661de5b67321f63ecdf1432540d1f21a6fe5e4c0a5eb4d7f121c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "4f26d771b360aa2efb6bd0d28efb17f6f7ddeb4e1b9835c960fe5f9e661d45eb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "cd6b3889f3a5657cb1e848ae5b86830ac7c70e4fa16ca9adeaa2adb911322317",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "df20ac7ea0926f66edb490ebc75eed1270c2bab7d784778df06513b6253b17de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Approach (checklist part A)": {
+   "sha256": "13a595643934a742771bfe63a6656e59dc1ca1d7d54789b2ccf2de04acd39d18",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (checklist part A)": {
+   "sha256": "edf32c73e24ae3ec6949931d32285092d7176634695298fab978ebe2f18fe72b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -388,6 +448,79 @@
      "summary": "File lists for the decisions above; no complexity entries",
      "class": "within",
      "why": "Carry the decisions above, nothing more."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Task approaches",
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T06 Approach (checklist part A)",
+    "### T07 Approach (checklist part A)",
+    "### T08 Approach (checklist part A)",
+    "### T09 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01",
+     "summary": "Claims-wait fix built to D1 (FR-001, FR-002, FR-011), done first as the largest measured waste, landed by make land together with T02-T04.",
+     "class": "within",
+     "why": "Fix 1 of the GM's approved three; ordering and landing grouping decide nothing the request or spec constrain."
+    },
+    {
+     "id": "T02",
+     "summary": "codeid.py made by moving gate-stamp.py's existing normalization (one copy), before T03/T04.",
+     "class": "within",
+     "why": "Exactly D2 / FR-003-FR-004; serves 'I also thought we were already omitting docstrings when hashing code'."
+    },
+    {
+     "id": "T03",
+     "summary": "Roll and render keys docstring-, comment- and claims-blind, content docstrings (interactive/**) still counted; measured by cache-audit and the before/after cohort count.",
+     "class": "within",
+     "why": "The content-area carve-out is the spec's D3/FR-004/FR-005 already accepted, carried as-is rather than widened; a claims-only edit is a docstring/comment edit per D2 and SC-001."
+    },
+    {
+     "id": "T04-tooling-hash",
+     "summary": "Other code-hashing sites follow the audit table; tooling_hash keeps counting usage text and the Makefile.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows 'strip docstrings' for one site. Implied by the GM's own words 'where we're failing to strip docstrings WHEN WE SHOULD' and by FR-004's exception for a docstring that is content of what it produces: a script's usage text is printed output, and the Makefile is not Python with docstrings at all. A literal strip would let a changed usage message pass as unchanged tooling, defeating the purpose of a staleness key. Function docstrings at the same site are still stripped (its test pins that)."
+    },
+    {
+     "id": "T05",
+     "summary": "FAILED_FIRST / LAST_FAILED / EXITFIRST built to D4 after T03, measured on stubbed rolls plus one real run on a seeded failure; landed by make land.",
+     "class": "within",
+     "why": "The GM's 'the pytest thing' and 'stop after the first failing seed'; FR-008 (landing judges every seed) is cited, so the modes cannot weaken the landing."
+    },
+    {
+     "id": "T06",
+     "summary": "A landing after a full run at the same code rolls no seed, pinned by the landing-path test and one real cohort-then-cohort-landing.",
+     "class": "within",
+     "why": "Directly the GM's 'run the seeds locally and then do a make landing ... we don't want to rerun them'; FR-012."
+    },
+    {
+     "id": "T07",
+     "summary": "make probe built to D5 after T05 (reuses its early stop); landed by make land-tooling.",
+     "class": "within",
+     "why": "Fix 2 of the approved three, including HEAD's results stored once; landing route is tooling because the probe is a measurement script."
+    },
+    {
+     "id": "T08",
+     "summary": "task-add template carrying the D35 red exit and the alone-off table, with a warning on a SECTION= lacking it; any order; land-tooling.",
+     "class": "within",
+     "why": "Fix 3 of the approved three; D6/FR-010."
+    },
+    {
+     "id": "T09",
+     "summary": "Close: the feature report with its numbers shown to the GM.",
+     "class": "within",
+     "why": "The constitution's close; adds no scope to the request."
     }
    ]
   }
