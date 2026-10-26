@@ -126,4 +126,6 @@
       research: rendering
 - [ ] T48 (T31's D11 probe, D35) Two settle steps deleted that alone off move no pool lane and no verdict - `square_every_crossing` (every placer squares the run it lays) and `settle_fragments`' place in `STEPS` (the last resort still asks it) - in `l7r/diagram/hamletgen/ways/` (FR-004)
       research: rendering
+- [ ] T49 (FR-005, T48's review) Every way squared at its water crossings where its placer lays it - the skeleton arms, the web lanes (`_draw_web`), the bund and track spurs and the field way each ask `square_run` before committing, in `l7r/diagram/hamletgen/ways/` (FR-005)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=417)

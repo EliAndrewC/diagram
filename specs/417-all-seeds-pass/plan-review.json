@@ -38,9 +38,9 @@
    "declared": "spec-fidelity"
   },
   "## Order": {
-   "sha256": "080fa132871323ccd4105b7b868d8479716e8a79c335db4c1a71533b284013bc",
+   "sha256": "adb4b9bb7f75884210c4c63b57cbba650d85e090c458b6fa56f2f1007433045c",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
+   "reviewed": "2026-10-26",
    "declared": "round-arbiter"
   },
   "## T26 - the web's post-lay passes the placers already make needless, measured off and deleted (R2 G2, first part; FR-004, FR-006)": {
@@ -79,18 +79,6 @@
    "reviewed": "2026-10-25",
    "declared": "spec-fidelity"
   },
-  "### T28 Approach (checklist part A)": {
-   "sha256": "36c710cd17ebe34222ca1c0697f149d6093b32914bc83c8c607026b83ce9e9f1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "round-arbiter"
-  },
-  "### T29 Approach (checklist part A)": {
-   "sha256": "3a2c721a4f540f112ec0adf04450f893a99f2099893e43c99878a9ea9144c7af",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "round-arbiter"
-  },
   "### T30 Approach (checklist part A)": {
    "sha256": "a6d82c6a45ba42265a1c0c5b6f07a2bceccaa0c3f0b8e1bab203dd15eded5402",
    "verdict": "CLEAR",
@@ -98,34 +86,10 @@
    "declared": "round-arbiter"
   },
   "### T31 Approach (checklist part A)": {
-   "sha256": "4c89746443f50efc3b7223ea72df177a4d46a85262efb46c0c61de3a8b20b255",
+   "sha256": "31fe7d89800673f8423a5c71939178b222f357de789bc0a140759bc3c5895d8f",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T36 Approach (checklist part A)": {
-   "sha256": "883840fc9104249920c74a966b6dd4d8fee24f5cf33be1efd85b289ac09fe92b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T38 Approach (checklist part A)": {
-   "sha256": "7cd4364a8a0fa455cfbe021e56b345e75dca22adf1a33ecf89e725e8b930cd97",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T40 (T31's first part, D35): the six settle steps measured needless deleted": {
-   "sha256": "ef7bfb027857d3f7324e100adfa1f4f9ac8282a3a6812dc18895fb06cc4fdafc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T40 Approach (checklist part A)": {
-   "sha256": "1fc7066d609ebe9e47f9be660185a29a7b75a4b9ceb223fba20b711162c14aff",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
   },
   "### T41 (T31's second part, D35): the four map-moving steps and the last resort's three needless re-asks deleted": {
    "sha256": "35e399006134bd65325deb2ee6bcdc000a079ad419f3cc3e27437398ba7e4944",
@@ -134,16 +98,16 @@
    "declared": "spec-fidelity"
   },
   "### T41 Approach (checklist part A)": {
-   "sha256": "077ed1f6480a87c8b258b8a0982b64edcc5f069e5635778556ea53db05055a08",
+   "sha256": "87c34750d3a043ca6294f1f1cd412f27b65e4d1272655da95c86353140ed676c",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
   },
   "### T31 part B (2026-10-25T23:42Z)": {
-   "sha256": "97d12c81732f1fc8e99ed20ad9a9742e9059a07a64f5951716117b43503052d6",
+   "sha256": "853307c0ee9d7c24aa00ba5e5cc7c934842bb12b407dc0280cf40c06d328a8de",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
   },
   "### T31 conversion C1 (2026-10-26): one width a way, asked where the orphan link is laid": {
    "sha256": "f9b038de789ff5f0a2bd7e5102116f7e561f0ee22d03426f62c0867f1580b8d3",
@@ -158,28 +122,16 @@
    "declared": "spec-fidelity"
   },
   "### T42 Approach (checklist part A)": {
-   "sha256": "e56b183047264e1e3fad0519060239a40b70af8e3211d6249570deee5c776b5b",
+   "sha256": "16357eea021ee53aa59ed2bdbb4ba896e3b2a790ed636e20f9aa1c3bb93ae58b",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T43 (T41's regression, constitution XIII): `square_every_crossing` restored to the settle's rounds": {
-   "sha256": "69e9bd2cd123a4edff12250ac182b4b29791b295be81f4965fb71949052a04ac",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
-  },
-  "### T43 Approach (checklist part A)": {
-   "sha256": "b70b8b61b34d0ca830a5657c75cc920e1779f69505330fe0de4258a39c892337",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
   },
   "### T31 conversion C2 (2026-10-26): the joins stop short because the tree is drawn after the links (measured; not yet built)": {
-   "sha256": "db8a47c4aa5869aafd46a269a269851ce3a00ee8d52f9f024c93f8339556c2c4",
+   "sha256": "d951629106895f6a5b23eeb8a2ebaa7d7b8681a569f412887222e9021e9e7d88",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
   },
   "### T44 (T31 C2, the round arbiter's accept on ask:417-T31-C2-regression): the access tree drawn first; `settle_joins` deleted": {
    "sha256": "d4b42ccffd0926d30278e1cd377b0998949c3ef36de963df14ffa1cb7ee5c886",
@@ -200,10 +152,10 @@
    "declared": "spec-fidelity"
   },
   "### T45 Approach (checklist part A)": {
-   "sha256": "416c69b6ce692c51aa6ee8fe16006d6db0d480401dc1a1fd330b4bd008209814",
+   "sha256": "4ab57a5cc11bbe016706b32f2dab61323b71509ab84de72a67da3621188e9828",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
   },
   "### T46 (T31 C2's probe step, D35): five web passes deleted once the households' ways are drawn first": {
    "sha256": "90c087188894ea5bc983cff613cba1949a71907463f07e42daacf516f5eaa258",
@@ -218,22 +170,34 @@
    "declared": "spec-fidelity"
   },
   "### T47 (FR-004, T46's measurement): a row's street laid ending at its last farm, and the street trim deleted": {
-   "sha256": "a2635e0826e65a2dee658fa24c367c6bc4752e966cdb6151df4453dab75b72a7",
+   "sha256": "bf59340fc9ae5833f8e158d980262c844a78eacfe69f32755847a7fc18469076",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
-  },
-  "### T48 (T31's D11 probe, D35): four settle repairs deleted once the households' ways are drawn first": {
-   "sha256": "52987776baae21b22a506bc4766dca7d080419c761a5ad99a7577892f1f39ffd",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T48 Approach (checklist part A)": {
-   "sha256": "efed7ecb85741f112802914a9ab83f7397fc07fea5c929e84eed133f80169067",
-   "verdict": "BLOCKED",
+   "sha256": "4a56172f31621c0a246edb62c9cd0d9b8cfe9e2ffdfcae1ee69ecbb065a2891e",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
+  },
+  "### T48 (T31's D11 probe, D35): two settle steps deleted that alone off move no pool lane and no verdict": {
+   "sha256": "5093047c2ddba3c7b17a8f019ad5b9ce864f0409ec093c825d174dbe73b63b29",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T49 (FR-005, T48's review): every way squared at its water crossings where its placer lays it": {
+   "sha256": "fa4ece6ad5357662ad136e4e48f0b909a54007227841b0ee8a39f74903938355",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
+  },
+  "### T49 Approach (checklist part A)": {
+   "sha256": "f9cf4e75ac7477d4c0e520d75b62862ca3d0af0ade5498c77ed974a5425f5ee3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -3284,6 +3248,99 @@
      "summary": "Green lands with its fresh rate; red is set down whole; workers at 3; one landing.",
      "class": "within",
      "why": "D11 and D23 (set down whole, no pass-by-pass iteration), D35 (JOBS=3). Order note, not a ruling: D11 says the tasks that move no map go first and T48 moves four pool maps; if T47 moves no map, D11 puts T47 before T48. T47 is not in this bundle."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T48 (T31's D11 probe, D35): two settle steps deleted that alone off move no pool lane and no verdict",
+    "### T48 Approach (checklist part A)",
+    "(removed) ### T48 (T31's D11 probe, D35): four settle repairs deleted once the households' ways are drawn first"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T48-a",
+     "summary": "square_every_crossing deleted as NEEDLESS (alone off: 54 of 54, the fresh block's verdicts identical seed by seed, no pool lane moved), with its dead closure and the one test whose body calls it.",
+     "class": "within",
+     "why": "D35 deletes the needless steps with their tests and dead closure (D23); FR-004 deletes the settle's repair steps. The probe is the one D35 prescribes."
+    },
+    {
+     "id": "T48-b",
+     "summary": "settle_fragments taken out of STEPS as NEEDLESS; it stays defined because the last resort still calls it.",
+     "class": "within",
+     "why": "D35 deletion of a needless step. Keeping the function is not an exemption: it is still live code with another caller, and that caller (the last resort) is itself recorded as owed under FR-004 (T48-e)."
+    },
+    {
+     "id": "T48-c",
+     "summary": "D35's 'no pool manifest moved' read as allowing the settle's own tally (Inashiro meta.web_settle.changed 19->18 each alone, 19->17 together) to move, every other field of every pool manifest being identical.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "That field counts the repairs the settle makes; it drops whenever any repair that fires is removed, and SC-002 ('a settled web needs no changes after it is laid') makes driving it to zero the feature's own goal. Read literally, the instrument of the goal would mark every firing repair NEEDED and block the deletions the GM asked for (2026-10-25: 'switch off the 16 repair steps'). The same single field is excused for both steps, so the excuse covers one class of thing, and the field-by-field diff of every other field is recorded."
+    },
+    {
+     "id": "T48-d",
+     "summary": "settle_ends and the tree's own settle_defer call reclassified NEEDED (each alone off moves Kuwabata's access lane 66->69 ft or leaves the last resort dropping lanes), kept with their conversions owed; settle_network, settle_knots and trim_lane_stubs likewise.",
+     "class": "within",
+     "why": "D35: a step whose removal moves a verdict or a pool manifest is NEEDED and gets D11's conversion. Recording them as owed, not exempt, is what D35 and FR-004 require. This corrects the removed block, which deleted settle_ends and settle_defer while four pool maps moved."
+    },
+    {
+     "id": "T48-e",
+     "summary": "The last resort (last_resort.py) stays, recorded OWED under FR-004 as FR-007's backstop, to be converted once the steps it re-asks are.",
+     "class": "within",
+     "why": "Sequencing, not an exemption: the block says it is owed under FR-004 and 'never an exemption', and it cannot be converted before the steps it calls are."
+    },
+    {
+     "id": "T48-f",
+     "summary": "The skeleton arms (web/skeleton.py), the web lanes (fabric._draw_web), the bund and track spurs and the field way (reach.py) do NOT square their crossings as laid; with square_every_crossing gone, the oblique-crossing rule is asked of their ways only by the finished-web law, and their squaring is owed only if 'a seed meets one' ('a placer's defect owed its squaring there').",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Deleting the repair is within. Making the placers' squaring depend on a failing seed is not. For these four placers the rule is now asked only of a finished map, which is the place-then-check the GM said is not wanted 'anywhere' (2026-10-24) and asked to see replaced 'with just having the algorithm place correctly in the first place' (2026-10-25); FR-005 owes that conversion whether or not a seed has failed yet. 'On no measured map does one cross water off square' is a fact about the maps measured so far, not a showing that the rule is impossible in these placers or vacuous for them, and nothing in the GM's words exempts them. The block's own Approach item 1 ('each way is laid lawful, square at its crossings') is not met by these placers. Fix: name FR-005 and record the squaring of each of the four placers (square_run or the law's own predicate asked at placing) as an owed conversion in its own task, in D11's order, unconditionally. If one of them provably cannot cross water, say so with a measurement, and that placer then owes nothing."
+    },
+    {
+     "id": "T48-g",
+     "summary": "T48 may go before T47 because it moves no map's lanes.",
+     "class": "within",
+     "why": "D11: 'The tasks that move no map go first.'"
+    },
+    {
+     "id": "T48-h",
+     "summary": "Exits and done criteria: landed through make land when FR-008 holds, fresh rate recorded; set down whole if red; done = both steps gone, the closure with them, fresh block 723759 the same seven, make land green.",
+     "class": "within",
+     "why": "D11, D23 and FR-008 as written."
+    },
+    {
+     "id": "removed-T48-four",
+     "summary": "The earlier block that deleted four repairs (square_every_crossing, settle_ends, settle_fragments, the tree's settle_defer call) is removed.",
+     "class": "within",
+     "why": "Its premise ('each alone 54 of 54 and the fresh block the same seven' while Inashiro, Kashikawa, Kuwabata and Sawada moved) did not meet D35's NEEDLESS test (no pool manifest moved). The re-measurement finds settle_ends and settle_defer NEEDED. Removing it in favour of the two-step block narrows nothing the GM asked for: the two steps it no longer deletes are recorded as owed conversions (T48-d)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Order",
+    "### T31 Approach (checklist part A)",
+    "### T31 conversion C2 (2026-10-26): the joins stop short because the tree is drawn after the links (measured; not yet built)",
+    "### T31 part B (2026-10-25T23:42Z)",
+    "### T41 Approach (checklist part A)",
+    "### T42 Approach (checklist part A)",
+    "### T45 Approach (checklist part A)",
+    "### T47 (FR-004, T46's measurement): a row's street laid ending at its last farm, and the street trim deleted",
+    "### T48 (T31's D11 probe, D35): two settle steps deleted that alone off move no pool lane and no verdict",
+    "### T48 Approach (checklist part A)",
+    "### T49 (FR-005, T48's review): every way squared at its water crossings where its placer lays it",
+    "### T49 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:417-all-seeds-pass#T48@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }

@@ -621,9 +621,9 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
     moved - Inashiro's manifest moves only in the settle's own tally (`meta.web_settle.changed` 19 -> 18). NEEDLESS (D35). The
     tree's lanes (`tree.lanes_of`, the seating's `Lawful.squared`), the door paths and the connector are squared as laid
     (`squaring.square_run`); the skeleton arms (`web/skeleton.py`), the web lanes (`fabric._draw_web`), the bund and track spurs
-    and the field way (`reach.py`) are NOT, and on no measured map does one of them cross water off square - the law
-    (`law.oblique_crossings`) is asked of the finished web as before, so a seed that meets one is refused by name, a placer's
-    defect owed its squaring there (D35, constitution XIX), never this step back. T45's needle rule now holds fresh seed 723805,
+    and the field way (`reach.py`) are NOT, and each OWES its squaring as laid, unconditionally - T49 (FR-005), in D11's order
+    after this task; until it lands the law (`law.oblique_crossings`) is asked of the finished web as before (on no measured
+    map does one of them cross water off square), never this step back. T45's needle rule now holds fresh seed 723805,
     for which T43 had restored it.
   - `settle_fragments` alone off `STEPS`: the same - 54 of 54, the same seven, Inashiro's tally alone (19 -> 18). NEEDLESS.
     It stays defined: the last resort asks it.
@@ -657,3 +657,28 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
    land` green.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
+
+### T49 (FR-005, T48's review): every way squared at its water crossings where its placer lays it
+
+- **Approach**: T48 deleted the settle's `square_every_crossing`; four placers still lay a run without squaring it where it
+  crosses the brook or a drawn channel - the skeleton arms (`web/skeleton.py`, `_lay_skeleton`), the web lanes
+  (`fabric._draw_web`), the bund and track spurs (`bund.py`, `track.py`'s drawn spur) and the field way (`reach.py`). Each asks
+  `squaring.square_run` of its run before it commits it (as `tree.lanes_of`, the door paths and the connector already do), the
+  run then judged as squared by the placer's own tests (`admits_lane`, `Lawful`). A placer whose ways are shown by measurement
+  never to cross water (no crossing on any fixed, pinned or fresh seed and none possible by construction) owes nothing, its
+  measurement recorded here. Measured with `make cohort-landing`, the fresh block and the pool, against HEAD. Rendering: none.
+
+### T49 Approach (checklist part A)
+
+1. **The goal, in the world.** Every way meets water square, as laid; nothing squares it afterwards.
+2. **The constraints.** FR-005, D35, D11, FR-008; 0035 and 0084 (a crossing square to the water).
+3. **Where each comes from.** G: the GM 2026-10-24/25 (place correctly in the first place). R: 0035, 0084. O: T48's review.
+4. **Do they describe the world here?** Measured per placer, fixed, pinned, fresh and pool.
+5. **The order.** After T48; with the other placer conversions (T31, D11).
+6. **The exits.** FR-008 green: landed with its fresh rate. Red: set down.
+7. **The search smell.** None: one placer at a time.
+8. **The budget.** One landing.
+9. **Done, measured.** Each of the four squares its run or is measured never to cross water; `make land` green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
