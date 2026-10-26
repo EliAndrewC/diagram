@@ -480,7 +480,8 @@ class Build:
         self.files[here] = sp.shell(reg.title, here, "sources", body)
 
     def _home(self) -> None:
-        body = [f'<h1 id="contents">{TITLE}</h1>', '<p><a href="all.html">The whole record on one page</a> - every question, every note and every source, under one table of contents.</p>']
+        body = [f'<h1 id="contents">{TITLE}</h1>', ct.load_opening(self.record_dir)]  # what the research is for, first (424)
+        body.append('<p><a href="all.html">The whole record on one page</a> - every question, every note and every source, under one table of contents.</p>')
 
         def tree(half: str, sections: list[ct.Section]) -> str:
             rows = []

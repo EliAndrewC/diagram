@@ -135,6 +135,20 @@ def test_a_missing_vocabulary_is_refused(tmp_path: pathlib.Path) -> None:
     _refused(rec, "tags.json: missing")
 
 
+def test_the_home_page_opening_is_read_from_the_contents(tmp_path: pathlib.Path) -> None:
+    """Feature 424: `contents.json`'s `opening` is the home page's opening; absent, there is none; not text, it is refused."""
+    rec = fr.write(tmp_path)
+    assert ct.load_opening(str(rec)) == "", "the small record has no opening"
+    data = json.loads((rec / "contents.json").read_text(encoding="utf-8"))
+    (rec / "contents.json").write_text(json.dumps({"opening": "<p>Why.</p>", **data}), encoding="utf-8")
+    assert ct.load_opening(str(rec)) == "<p>Why.</p>"
+    (rec / "contents.json").write_text(json.dumps({"opening": ["no"], **data}), encoding="utf-8")
+    with pytest.raises(ct.ContentsError, match="`opening` is the home page's opening"):
+        ct.load_opening(str(rec))
+    (rec / "contents.json").write_text("[]", encoding="utf-8")
+    assert ct.load_opening(str(rec)) == "", "a malformed contents file is refused by load_contents, not here"
+
+
 def test_the_tag_pieces() -> None:
     tags = ct.Tags(("ways", "samurai"), ("city",), "detail")
     assert tags.marker() == "<!-- tags: subject=ways,samurai; setting=city; level=detail -->"

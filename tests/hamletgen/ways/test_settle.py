@@ -262,3 +262,13 @@ def test_a_fragment_is_dropped_but_never_a_household_s_own_way() -> None:
     only = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 150.0), (20.0, 150.0)]], houses=[(115.0, 150.0)], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
     only.M["lanes"][2].update(role=co.ACCESS_ROLE, of=[115.0, 150.0])
     assert law.unreached_houses(only.M) == [] and settle.settle_fragments(only) == 0, "the house's only way earns its place"
+
+
+def test_every_crossing_is_squared_and_a_joint_at_a_moved_end_moves_with_it() -> None:
+    # the lane starts 4 ft short of the brook and crosses it 39 degrees off square - the "left as drawn" case of old
+    s = _S([CONN, [(96.0, 20.0), (300.0, 180.0)], [(96.0, 20.0), (0.0, 0.0)]], streams=[BROOK], drawn_channels=[{"pts": [[400.0, -500.0], [400.0, 500.0]], "w0": 4.0}, {"pts": [[0.0, 0.0]]}])
+    s.M["lanes"].append({"pts": [[1.0, 1.0]]})
+    assert settle.square_every_crossing(s) == 1
+    assert law.oblique_crossings(s.M) == []
+    assert _pts(s, 2)[0] == _pts(s, 1)[0], "the lane that ended where the squared lane began still meets it"
+    assert settle.square_every_crossing(s) == 0, "squaring a squared web changes nothing"

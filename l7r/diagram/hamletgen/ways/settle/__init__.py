@@ -86,6 +86,7 @@ from ..squaring import SQUARE_MARGIN_FT as SQUARE_MARGIN_FT
 from ..squaring import SQUARE_PASSES as SQUARE_PASSES
 from ..squaring import _pts as _pts
 from ..squaring import cut_at_shallow_crossing as cut_at_shallow_crossing
+from ..squaring import square_every_crossing as square_every_crossing
 from ..squaring import square_run as square_run
 from ..squaring import square_waters as square_waters
 from ..sweeps import _DOUBLED_DEG as _DOUBLED_DEG
