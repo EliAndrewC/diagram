@@ -69,6 +69,12 @@ for THIS unit exactly as if it were written on it.
   range, a form fixed where the question attests several, a form drawn that the question does not attest, an order or placement
   the question contradicts, a DEVIATION the drawing page does not record. Name the code (a line or expression) and the finding
   (quote a short phrase of the question) that disagree.
+  **A FILED DEPARTURE is judged once, never relabeled** (round arbiter, ask:417-T49-claims, 2026-10-26): a claim that states
+  how its code departs from the cited page and names the open task that carries the fix (`a departure the code keeps until
+  feature NNN Tnn`) is a known defect already filed. Judge only whether the departure it states is what the code does: if it is,
+  the verdict is DRIFTED with the note `known (NNN Tnn): <the departure>`, and you ask for no other label - not a DEVIATION
+  recorded on the drawing page, not a GUESS, not NEEDS-RESEARCH or MISLABELED. If the stated departure misdescribes the code, it
+  is DRIFTED with what it misstates. (Three rounds on one bund claim each asked a different label for one filed departure.)
 - **NEEDS-RESEARCH** - the code makes a physical decision, the claim cites a question, and the question does not bear on that
   decision (the research is silent on what the code does) - the claim should say UNRESEARCHED until a research pass answers it.
 - **MISLABELED** - the claim's class or pointer is wrong for the code: NONE or CONVENTION on code that decides something physical
