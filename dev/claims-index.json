@@ -25055,18 +25055,12 @@
   "code": "e39f5cc43d8c113a",
   "core": "0eefbd0c74bb4f69",
   "date": "2026-10-26",
-  "note": "neither cited drawing page records this departure as the project's choice. 0035 says a way \"crosses the water only at one of them\" (a crossing place), and a spur that \"can reach the field only across the brook is left off\". The `for over in (0, 1)` pass with `over_water=over` lays the branch across the brook wherever run_on_target points. A departure kept until T32 is a known defect, not a recorded DEVIATION: record it on the 0035 drawing page, or make the over=1 pass refuse a brook crossing that is not at a ford",
+  "note": "neither cited drawing page records this departure as the project's choice. 0035 says a way \"crosses the water only at one of them\" (a crossing place), and a spur that \"can reach the field only across the brook is left off\". The `for over in (0, 1)` pass with `over_water=over` lays the branch across the brook wherever run_on_target points. A departure kept until T32 is a known defect, not a recorded DEVIATION: record it on the 0035 drawing page, or make the over=1 pass refuse a brook crossing that is not at a ford; a known drift accepted by the round arbiter (ask:417-T49-claims) to land as filed",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
   "research": "4286351e944ac920",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:e3d3d47298cee739"
-  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/bund.py::carry_on#a junction stays a T": {
@@ -35583,19 +35577,14 @@
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur scored at a ford": {
   "body": "324f4f084a043ed2",
-  "claim": "spur scored at a ford - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the brook at a crossing place - a crossing within `FORD_HALF` (30 ft) of a ford counts as at it when the spur's candidates are scored",
-  "code": "18aa38b8f0c47f14",
+  "claim": "spur scored at a ford - CONVENTION: a crossing within `FORD_HALF` (30 ft, the crossing place's drawn half-length) of a ford counts as at it when the spur's candidates are scored; 0035 sets the crossing places and their spacing, not their length",
+  "code": "568032d14acbe979",
   "core": "c754c9fe20a85aa6",
   "date": "2026-10-26",
-  "note": "0035 sets crossing places about 160 ft apart and lets a way cross only at one, but gives a crossing place no extent. `FORD_HALF` (30 ft, used in gap_segments for brook_segs) lets a candidate that crosses up to 30 ft off a ford score as clean. That figure is on no page: label it GUESS or UNRESEARCHED until the drawing page records a crossing place's half-width",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
-  },
-  "research": "9354777ef34af3d3",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "accepted by the round arbiter (ask:417-T49-claims), binding; the GM reviews it",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set back": {
   "body": "7387cedc8d9d7edc",
