@@ -244,3 +244,13 @@ def test_a_fragment_is_dropped_but_never_a_household_s_own_way() -> None:
     only = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 150.0), (20.0, 150.0)]], houses=[(115.0, 150.0)], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
     only.M["lanes"][2].update(role=co.ACCESS_ROLE, of=[115.0, 150.0])
     assert law.unreached_houses(only.M) == [] and settle.settle_fragments(only) == 0, "the house's only way earns its place"
+
+
+def test_a_leg_parallel_to_a_tread_crosses_it_nowhere() -> None:
+    """`shapes._crossing`: parallel legs have no crossing point (reached by a roll through `settle_ends` until feature 417 T06's
+    T67 moved the end rules to lay); one crossing well inside both is found, one at an end is two ends meeting."""
+    from l7r.diagram.hamletgen.ways.settle import shapes
+
+    assert shapes._crossing((0.0, 0.0), (100.0, 0.0), (0.0, 10.0), (100.0, 10.0)) is None
+    assert shapes._crossing((0.0, -50.0), (0.0, 50.0), (-50.0, 0.0), (50.0, 0.0)) == (0.0, 0.0)
+    assert shapes._crossing((0.0, 0.0), (0.0, 50.0), (-50.0, 0.0), (50.0, 0.0)) is None
