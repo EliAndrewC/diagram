@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 195 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 196 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -102,6 +102,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make perf-report</td><td class=a><div class=ad><span class=an>AGAINST=&lt;NNN&gt;-start</span><span class=aw>compare the newest snapshot against this bookend</span></div><div class=ad><span class=an>ENV=local|codebuild</span><span class=aw>which environment&#x27;s band-1 line to judge against (default: local)</span></div></td><td>the trend, and which BAND the newest bookend pair reaches</td></tr>
 <tr><td class=n>make perf-review</td><td class=a>&ndash;</td><td>each environment&#x27;s newest bookend pair: its timing band, for information, and its call counts - an increase over the line, or an uncomparable pair, refuses until the round arbiter accepts (the push runs this; feature 427)</td></tr>
 <tr><td class=n>make perf-signoff</td><td class=a><div class=ad><span class=an>WHY=&lt;text&gt;</span><span class=aw>the GM&#x27;s own words, given unprompted - band 3</span></div></td><td>records a sign-off the GM gave UNPROMPTED, in their words - owed by nothing since feature 375 amendment 5</td></tr>
+<tr><td class=n>make phase-calls</td><td class=a>ARCHETYPE FORM HOUSEHOLDS SEED SINK</td><td>one 40-household hamlet&#x27;s Python calls by stage and by step, recorded for the placement-stages page (feature 434)   [SEED=39] [HOUSEHOLDS=40] [FORM=nucleated|linear|dispersed] [ARCHETYPE=&lt;field archetype&gt;] [SINK=pond|offmap]</td></tr>
 <tr><td class=n>make review-yield</td><td class=a>SINCE</td><td>each review check&#x27;s passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]</td></tr>
 </table></div>
 <h2>Remote (AWS CodeBuild)</h2>
