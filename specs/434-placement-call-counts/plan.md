@@ -165,6 +165,24 @@ Each step measured alone:
 | the agreement with the fanout | `make perf-fanout HOUSEHOLDS=40` on the same engine |
 | the page | `make placement-stages`, read |
 
+### T01 part B (2026-10-27T14:15Z)
+
+The trigger: red-gate@2026-10-27T14:07:18Z, the second red gate in a row on 434 T01-T03's landing.
+
+1. **What exactly is refusing?** Gate 1: `tests/test_operations_registry.py` - the new `tools/phase_calls` entry point had no
+   row in `_invocation.OPERATIONS`. Gate 2: the roll census - the stand-in measure test entered `roll_scope`, read as an
+   unrostered roll of the reference spec.
+2. **A3 again.** O: the operations registry every `-m` entry point owes; the roll roster (`tests/rolls.py`, feature 213).
+3. **A4 again.** It describes the change: a new entry point and a new test that drives `measure`.
+4. **Moving something placed earlier to suit something later?** No: a row added; a test's stub added (it rolls no hamlet).
+5. **Tuning or changing?** Neither: two distinct defects, each fixed once.
+6. **The one-sentence test.** "The new entry point is registered and its stand-in test rolls nothing the census counts" -
+   no question.
+7. **The next step is a measurement.** `make land` again: the registry test and the census green, `phase_calls` at 100%.
+8. **Routes measured?** One route each: the row (the registry test green), the stub (10 passed with the registry test).
+9. **After a ruling.** The round arbiter ruled continue (ask:434-two-reds; red-gate@2026-10-27T14:07:18Z); either red again
+   goes to `make arbiter-ask`, a third distinct one back to it.
+
 ## Project Structure
 
 - `l7r/diagram/tools/phase_calls.py` (new) - the measurement and the record.
