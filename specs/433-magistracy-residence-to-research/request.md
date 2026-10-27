@@ -18,3 +18,11 @@ Okay, so my answer for those three magistracy buildings, like the existing diagr
 The three hand sheets: `pool/magistracies/ochiba-magistracy`, `ubame-magistracy`, `hayakawa-magistracy` (the third by his
 naming). Each sheet's notes record a posting-wealth knob: Ochiba "ordinary", Ubame "rich posting, broke incumbent", Hayakawa
 "RICH"; the session put that to him before redrawing (see the conversation of 2026-10-26).
+
+His clarification of Ochiba's wealth, 2026-10-26, after the landing report:
+
+```text
+Ochiba has a normal level of wealth for Fox lands, but the Fox are a wealthy clan, so Ochiba is normal for a Fox magistracy but wealthy by the standards of a normal magistracy.
+```
+
+Recorded in Ochiba's notes (knob 2 and the house's deviation bullet).
