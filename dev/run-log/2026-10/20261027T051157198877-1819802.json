@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-27T05:11:57Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 194,
+  "result": "green",
+  "commit": "66a43c916",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10005,
+  "host": {
+    "load": [
+      2.67,
+      2.91
+    ],
+    "mem_avail_mb": [
+      9475,
+      10199
+    ],
+    "cpu_temp_c": [
+      101.0,
+      83.0
+    ],
+    "stall_s": {
+      "cpu": 0.6,
+      "io": 0.2,
+      "io_full": 0.2,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 113918,
+      "package": 48145
+    }
+  },
+  "phases": {
+    "preflight": 16.0,
+    "static": 1.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 179.0,
+    "floors": 9.0,
+    "test-full": 190.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/hamletgen/ways/checks.py",
+  "collected": 10005
+}
