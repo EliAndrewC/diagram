@@ -52,10 +52,12 @@ so and stops there.
   tight seats not landlocked, 72 parts, 57 every side blocked, 3 no yard onto lane ground, 0 by the cheap house-box test).
 - The ceiling, measured: cProfile inflates the stage 1.96 times (2.28 s unprofiled at the 435-end bookend), so a perfect screen
   of every wasted envelope and refused placement would save about 0.74 s of 6.93 s - about 10.6%.
-- Most seats are refused, so by the rule a screen was spiked. No cheap test predicts the placer's refusals (each is read off
-  the laid layouts), so the spike took the other large waste, the settle loop's re-rolls: `research/spike2.md` - each settle
-  starting from the widest reach seen. Envelopes 803 -> 394, homesteads -11% under cProfile; the roll +17% (`make perf-ab`
-  quick, the floor -4%), because the wider seating more than doubled the web's work (4.93M -> 11.55M calls, `make perf-fanout`).
+- Most seats are refused, so the rule's screen was called for - and it was NOT built: each of the placer's refusals is read
+  off the laid layouts (which side's box is blocked, a corridor of its own, the parts), so none is a cheap test (a reading of
+  the code, `research/funnel.md`, not a measurement). In its place the search's other large waste was spiked under the rule's
+  promote / set-down test - the settle loop's re-rolls, `research/spike2.md`: each settle starting from the widest reach seen.
+  Envelopes 803 -> 394, homesteads -11% under cProfile; the roll +17% (`make perf-ab` quick, the floor -4%), because the wider
+  seating more than doubled the web's work (4.93M -> 11.55M calls, `make perf-fanout`).
 - THE VERDICT: SET DOWN by the rule (time not saved beyond the floor - it rose), spike 2 reverted. What it shows, limited to
   what was tried: a change to how this one search tries its candidates changed the settlement every later stage works on, so
   a search restructure is measured on the whole roll, never its own stage. Feature 437's other named searches
@@ -72,3 +74,5 @@ so and stops there.
   missing; the verdict did not follow the rule (most seats refused: the rule called for a spike); the ceiling a guess; the
   conclusion wider than the trial. Applied: spike 2 run and measured, the ceiling measured, the conclusion limited, the time
   reported.
+- 2026-10-27, round 2 (spec-fidelity-verify): CHANGES REQUIRED - the evidence said the rule's screen was spiked; it was not
+  (spike 2 is the re-rolls, run in its place). Reworded to say so; the third round put to the round arbiter.
