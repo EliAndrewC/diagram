@@ -127,7 +127,7 @@ def _stand_in_stages(monkeypatch: pytest.MonkeyPatch, step: float = 0.05) -> Non
     from l7r.diagram.hamletgen import driver
 
     def stage_water_frame(s, plan):  # noqa: ANN001, ARG001
-        return None
+        s.M.setdefault("meta", {})["seat_search"] = {"grow_took": 3}  # the counters a seating stage records (feature 440 T03)
 
     def stage_field(s, plan):  # noqa: ANN001, ARG001
         return None
@@ -160,6 +160,12 @@ def test_profiling_the_FIRST_stage_writes_a_raw_prof_and_a_table_that_says_what_
     assert "gitignored" in table and "archive disabled" in table
     assert "cumulative" in table or "function calls" in table, "and it carries pstats' own output"
     assert Path(raw + ".placed.json").is_file(), "what the stage placed, beside its profile (feature 417 T57)"
+    import json
+
+    from l7r.diagram.tools import perf_fanout
+
+    assert json.loads(Path(raw + ".placed.json").read_text())["meta.seat_search"] == {"grow_took": 3}, "the seat counters (440 T03)"
+    assert "meta.seat_search" not in (perf_fanout.placed_of(raw) or {}), "the fanout reads the counts alone"
     seen: list[int] = []
     real = perf_profile.__dict__.get("plan_site")
     from l7r.diagram import hamletgen

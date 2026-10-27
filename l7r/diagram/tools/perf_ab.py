@@ -45,7 +45,7 @@ from typing import Any
 from l7r.diagram.tools import perf_profile
 
 Key = tuple[int, int]  # (households, seed)
-Leg = tuple[float | None, float | None]  # (wall seconds, CPU seconds); None where the roll was refused
+Leg = tuple[Any, ...]  # (wall seconds, CPU seconds[, {stage: wall seconds}]); None where the roll was refused
 Run = dict[Key, Leg]
 Snapshot = Callable[[str, str, bool], dict[str, Any]]
 
@@ -73,7 +73,8 @@ for line in sys.stdin:
         row = ps.measure((q["seed"],), households=q["households"])[0]
         refused = bool(row.get("refused"))
         out = {"wall": None if refused else round(sum(row["stages"].values()), 2),
-               "cpu": None if refused else round(sum((row.get("cpu_stages") or {}).values()), 2)}
+               "cpu": None if refused else round(sum((row.get("cpu_stages") or {}).values()), 2),
+               "stages": None if refused else {k: round(v, 3) for k, v in row["stages"].items()}}
     print("@@" + json.dumps(out), flush=True)
 """
 
@@ -103,7 +104,7 @@ class Worker:
 
     def roll(self, key: Key) -> Leg:
         got = self.ask({"op": "roll", "households": key[0], "seed": key[1]})
-        return got["wall"], got["cpu"]
+        return got["wall"], got["cpu"], got.get("stages")
 
     def close(self) -> None:
         if self.proc.stdin is not None:
@@ -162,9 +163,9 @@ def legs(snap: Mapping[str, Any]) -> tuple[Run, dict[Key, int]]:
         k = (int(leg["asked"]), int(leg["seed"]))
         stages, cpu = leg.get("stages") or {}, leg.get("cpu_stages") or {}
         if leg.get("seconds") is None:
-            run[k] = (None, None)
+            run[k] = (None, None, None)
         else:
-            run[k] = (round(sum(stages.values()), 2) if stages else leg["seconds"], round(sum(cpu.values()), 2) if cpu else leg.get("cpu_seconds"))
+            run[k] = (round(sum(stages.values()), 2) if stages else leg["seconds"], round(sum(cpu.values()), 2) if cpu else leg.get("cpu_seconds"), stages or None)
         calls[k] = sum((leg.get("calls") or {}).values())
     return run, calls
 
@@ -210,7 +211,43 @@ def compare(runs: Mapping[str, Sequence[Run]], calls: Mapping[str, Mapping[Key, 
             cells.append(f"{got[0]:7.2f} {got[1]:5.2f}" if got else f"{'':>7} {'':>5}")
         dc = change(cpu[0][0], cpu[1][0]) if cpu[0] and cpu[1] else ""
         lines.append(f"{str(k):>17}  {aw:7.2f} {asp:5.2f} {bw:7.2f} {bsp:5.2f} {change(aw, bw):>5}  {cells[0]} {cells[1]} {dc:>5}  {ac:11,} {bc:11,} {change(ac, bc) if ac else '':>6}")
+    lines += stage_rows(runs)
     lines.append("best of each version's runs, alternated A B / B A; +- its worst less its best - read a change against it, never as a pass")
+    return lines
+
+
+#: A STAGE ROW IS MARKED WHEN THE STAGE MOVED by more than this share of the roll's best time; every stage is printed (feature 440
+#: T04: trial 439's +17% took two call-count fanouts to trace to the web; the stage times were in the worker all along)
+STAGE_SHARE = 0.01
+"""Research: plumbing - NONE: which stage rows the table marks, deciding nothing about a place"""
+
+
+def stage_best(runs: Sequence[Run], k: Key) -> dict[str, float]:
+    """Each stage's best wall time over a version's runs at `k`, where the runs carry their stages."""
+    out: dict[str, float] = {}
+    for r in runs:
+        leg = r.get(k)
+        for name, sec in ((leg[2] if leg is not None and len(leg) > 2 else None) or {}).items():
+            out[name] = min(out.get(name, sec), sec)
+    return out
+
+
+def stage_rows(runs: Mapping[str, Sequence[Run]]) -> list[str]:
+    """Below the totals: per size and seed, every stage's best time for A and B and the change, the largest move first, a stage
+    that moved by more than `STAGE_SHARE` of A's best roll marked `*`; a leg whose runs carry no stage times prints none."""
+    lines: list[str] = []
+    for k in sorted({k for arm in runs.values() for r in arm for k in r}):
+        roll = best(runs["A"], k, 0)
+        a, b = stage_best(runs["A"], k), stage_best(runs["B"], k)
+        if roll is None or not a or not b:
+            continue
+        bar = STAGE_SHARE * roll[0]
+        rows = [(name, a.get(name, 0.0), b.get(name, 0.0)) for name in {*a, *b}]
+        for name, sa, sb in sorted(rows, key=lambda m: (-abs(m[2] - m[1]), m[0])):
+            mark = "*" if abs(sb - sa) > bar else " "
+            lines.append(f"{str(k):>17}  {mark} stage {name:<14} A {sa:6.2f}  B {sb:6.2f}  {change(sa, sb) if sa else '':>5}")
+    if lines:
+        lines.insert(0, f"each stage, best of each version's runs (* moved more than {100 * STAGE_SHARE:.0f}% of the roll):")
     return lines
 
 

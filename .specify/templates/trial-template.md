@@ -39,8 +39,10 @@ engine change not landed), its evidence recorded".]
 
 ## The evidence
 
-[Filled as measured: `research/<name>.md` per measurement, each dated with its command. Then the verdict - promote or set
-down - and the reason.]
+[Filled as measured: `research/<name>.md` per measurement, each dated with its command.]
+
+- THE VERDICT: [the branch of the rule taken] - because [the measurement that took it, with its figure and command].
+  [A branch the rule names but the trial did not take, and why - so the review checks the verdict against the rule.]
 
 ## The time
 

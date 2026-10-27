@@ -698,7 +698,8 @@ spec-harness:   ## [project] run a feature's measurement harness (its harness.py
 	HARNESS_OUT="$(OUT)" python3 -m pytest -q -p no:cacheprovider --no-cov -p no:randomly tests/test_zz_spec_harness_tmp.py; ec=$$?; \
 	rm -f tests/test_zz_spec_harness_tmp.py; exit $$ec
 
-trial:          ## [project] start a TRIAL - a question a measurement answers: claims a number and writes the trial brief (**Form**: trial), measured first, reviewed once when Done (feature 438; docs/spec-kit-and-reviews.md)   SLUG=kebab-slug
+trial: export TRIAL_APPROVED = $(APPROVED)
+trial:          ## [project] start a TRIAL - a question a measurement answers: claims a number and writes the trial brief (**Form**: trial), measured first, reviewed once when Done (features 438, 440; docs/spec-kit-and-reviews.md)   SLUG=kebab-slug [APPROVED="<the GM's words, verbatim>"]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/trial-start.py" "$(SLUG)"
 
 claim:          ## [project] claim the next spec-kit feature number under the host-wide lock   SLUG=kebab-slug | RENUMBER=specs/NNN-slug [PEEK=1: look, claim nothing]
@@ -1078,7 +1079,7 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  root=$$(git rev-parse --show-toplevel); \
 	  if [ -n "$(FROM_PREFLIGHT)" ]; then [ $$el -lt 15 ] || printf '\nquick took %ss inside the preflight - not judged here (feature 375).\n' "$$el"; \
-	  elif [ "$$warm" = yes ] && [ -z "$(ALL)" ]; then python3 "$$root/scripts/measure/ratchet.py" quick "$$el" || exit 1; \
+	  elif [ "$$warm" = yes ] && [ -z "$(ALL)" ]; then XDIST_WORKERS=$(XDIST_WORKERS) python3 "$$root/scripts/measure/ratchet.py" quick "$$el" || exit 1; \
 	  elif [ $$el -ge 15 ]; then printf '\nquick took %ss, but this run was %s - not judged against the 15s bar (feature 171).\n' "$$el" "$$([ "$$warm" = yes ] && echo "ALL=1, so unselective" || echo "COLD: it built .testmondata")"; fi; \
 	  if [ -z "$(FROM_PREFLIGHT)" ] && [ "$$warm" = yes ] && [ -z "$(ALL)" ] && [ $$el -gt $(QUICK_BUDGET) ]; then \
 	    printf '\n\033[1mquick took %ss, over its %ss budget.\033[0m\n' "$$el" "$(QUICK_BUDGET)"; \

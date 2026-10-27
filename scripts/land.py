@@ -167,8 +167,27 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
         rc, out = run(root, [str(HERE / "gates" / gate)], env)
         if rc:
             said = f"{gate}: " + " | ".join(ln.strip() for ln in out.splitlines() if ln.strip() and "pre-existing" not in ln)[-600:]
-            (deferred if deferred is not None and gate == "claims-gate.sh" else stops).append(said)
+            # ...BUT A CLAIMS REFUSAL NO WAIT CAN CURE IS A STOP NOW (feature 440 T01, the GM 2026-10-27): an owed claim with no check in
+            # flight, or an introduced finding, cannot be answered while the gate runs - feature 438's landing ran its whole gate (about
+            # 19 min) and then refused on a claim never dispatched
+            where, why = claims_route(out, said, _in_flight(root)) if gate == "claims-gate.sh" and deferred is not None else ("stop", said)
+            (deferred if where == "defer" and deferred is not None else stops).append(why)
     return stops
+
+
+def claims_route(out: str, said: str, in_flight: list[str]) -> tuple[str, str]:
+    """Where a claims refusal met in the preflight goes: ("stop", its cure) when no wait can cure it (`claims_cure`), else
+    ("defer", what it said) - the round beside the gate may still answer it (feature 440 T01)."""
+    cure = claims_cure(out, in_flight)
+    return ("stop", cure) if cure else ("defer", said)
+
+
+def _in_flight(root: Path) -> list[str]:
+    """The claims checks in flight (`claims_flight.live`), as the wait reads them."""
+    sys.path.insert(0, str(HERE / "record"))
+    import claims_flight  # noqa: PLC0415
+
+    return list(claims_flight.live(root))
 
 
 #: how long the landing waits for the claims round after its gate, asking every CLAIMS_POLL_S (405 T50, D23)

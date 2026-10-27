@@ -72,6 +72,22 @@ def test_quick_is_judged_on_the_run_itself_at_the_gm_s_fifteen_seconds() -> None
     assert "15s ceiling" in msg
 
 
+def test_quick_is_judged_net_of_the_host_s_measured_slowdown() -> None:
+    """Feature 440 T05 (the GM 2026-10-27 approved "quick's 15 s ceiling failing under load"): a run over 15 s raw passes when
+    its time divided by the host's slowdown is under it, and fails when that is still over; the ceiling stays 15."""
+    ok, msg = ratchet.verdict("quick", seconds=18, slow=1.5)
+    assert ok and "18s raw, 12s net" in msg and "15s ceiling" in msg
+    ok, msg = ratchet.verdict("quick", seconds=30, slow=1.5)
+    assert not ok and "20s (30s raw, net of the host's 1.50x slowdown)" in msg
+    assert ratchet.verdict("quick", seconds=15, slow=1.0)[0] is False, "unloaded, 15 s still fails"
+    r = ratchet.RATCHETS["quick"]
+    assert r.calibration_s and "measured 2026-10-27" in r.calibration_reason, "the pinned loop time carries its date and method"
+    assert ratchet.slowdown(r, 6, rounds=2, run=lambda n: r.calibration_s * 2.0) == 2.0
+    assert ratchet.slowdown(r, 6, run=lambda n: r.calibration_s / 2) == 1.0, "a quieter host never tightens the bar"
+    assert ratchet.slowdown(ratchet.RATCHETS["done"], 6) == 1.0, "a target with no pinned loop is judged raw"
+    assert 0.0 < ratchet._loop(0) < 5.0
+
+
 def test_done_uses_the_median_while_its_baseline_is_above_the_gm_s_thirty_five() -> None:
     """Today's regime. A per-run bar at the interim ceiling would fire on 28% of normal runs, which is
     the handoff author's decision D2 - recorded as theirs, and the GM's to overturn."""

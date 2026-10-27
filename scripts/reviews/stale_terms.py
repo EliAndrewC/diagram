@@ -70,6 +70,22 @@ def changed_pairs(old: str, new: str) -> list[tuple[str, str]]:
     return pairs
 
 
+def rewritten_from(old: str | None, new: str) -> dict[int, str]:
+    """For each line of `new` the change REPLACED (1-based), the line it replaced. A candidate the same change rewrote FROM a line
+    already naming its subject was revisited about that subject on purpose and states the new value (feature 440 T05: feature
+    438's and 439's later rounds were refused on the rewritten passages themselves); a line the change rewrote to bring the
+    subject in for the first time is still searched."""
+    if old is None:
+        return {}
+    a, b = old.splitlines(), new.splitlines()
+    out: dict[int, str] = {}
+    for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
+        if tag == "replace":
+            for k in range(j2 - j1):
+                out[j1 + k + 1] = a[min(i1 + k, i2 - 1)]
+    return out
+
+
 def watched_lines(name: str, text: str) -> list[tuple[int, str]]:
     """(line number, line) of `text` that may be a candidate: none of a skipped file, none of the Review history."""
     path = pathlib.PurePath(name)
@@ -89,6 +105,7 @@ def stale_candidates(old_files: dict[str, str], new_files: dict[str, str]) -> li
     """Every line of `new_files` that names a changed line's subject and still carries its old value."""
     found: list[dict] = []
     seen: set[tuple[str, int]] = set()
+    wrote = {other: rewritten_from(old_files.get(other), text) for other, text in new_files.items()}
     for name, new_text in sorted(new_files.items()):
         if name not in old_files or not watched_lines(name, "x"):
             continue
@@ -102,6 +119,8 @@ def stale_candidates(old_files: dict[str, str], new_files: dict[str, str]) -> li
                     if line == new_line or (other, n) in seen:
                         continue
                     hit_subject = next((s for s in sorted(subj) if s in line), None)
+                    if hit_subject and hit_subject in wrote[other].get(n, ""):
+                        continue  # rewritten from a line already about this subject: revisited on purpose
                     hit_value = sorted(gone & tokens(line))
                     if hit_subject and hit_value:
                         seen.add((other, n))

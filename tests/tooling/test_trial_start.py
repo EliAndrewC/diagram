@@ -39,3 +39,13 @@ def test_main_claims_then_writes_and_refuses_without_a_slug(tmp_path: pathlib.Pa
     assert ts.main(["x"]) == 0 and (tmp_path / "specs" / "439-x" / "spec.md").is_file()
     monkeypatch.setattr(ts.subprocess, "run", lambda *a, **k: subprocess.CompletedProcess(a, 3, stdout="", stderr="REFUSED"))
     assert ts.main(["y"]) == 3
+
+
+def test_the_gms_words_ride_on_the_approval_line_and_the_verdict_names_its_branch(tmp_path: pathlib.Path) -> None:
+    """Feature 440 T02 and T05: APPROVED= fills the approval line; the evidence asks for the branch taken and its measurement."""
+    d = tmp_path / "specs" / "441-x"
+    d.mkdir(parents=True)
+    ts.brief(d, "2026-10-27", approved='Then do "it"')
+    spec = (d / "spec.md").read_text(encoding="utf-8")
+    assert "**Approved**: the GM, 2026-10-27, \"Then do 'it'\"" in spec
+    assert "THE VERDICT: [the branch of the rule taken]" in spec and "the measurement that took it" in spec

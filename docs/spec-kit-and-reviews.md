@@ -54,7 +54,11 @@ GM's words, the measurement, the trial's own decision rule, the evidence, the ti
 - **No engine code while running.** A spike is committed, measured and reverted, so a running trial's pushes change nothing
   under `l7r/` on net. A push that does change the engine - a spike that won and lands - owes the brief's verdict first, and
   lands as any engine change does.
+- **Its verdict names its branch**: the brief states which branch of its own rule was taken and the measurement that took
+  it, and the review checks the verdict against the rule (feature 440; trial 439's verdict misread its own rule).
 - **Its time** is reported as feature 437's was: `make feature-report F=<n>`'s split and a per-step breakdown.
+- `make trial SLUG=<slug> APPROVED="<the GM's words>"` writes the approval line, so the brief's first commit passes the
+  approval guard.
 
 The review gate holds the first and third rules (`scripts/gates/review-gate.sh`, its trial clause). For where the time is
 before a performance trial, `make perf-share` reads a module's share of each stage from the kept profiles.

@@ -56,3 +56,12 @@ def test_the_stop_names_a_refusal_no_wait_can_end_as_such() -> None:
     cured = land.claims_cure(OWED, in_flight=[])
     assert "waiting cannot cure it" in land.claims_stop_line(cured) and "did not finish" not in land.claims_stop_line(cured)
     assert "did not finish in 20 min" in land.claims_stop_line("claims-gate.sh: owed (new) x")
+
+
+def test_the_preflight_stops_at_once_on_a_claim_no_wait_can_cure_and_defers_one_a_check_may_answer() -> None:
+    """Feature 440 T01: an owed claim with no check in flight (or an introduced finding) is a stop before the gate runs - feature
+    438's landing ran its whole gate first and refused at its end; one a check in flight may answer still waits beside the gate."""
+    where, why = land.claims_route(OWED, "claims-gate.sh: owed", in_flight=[])
+    assert where == "stop" and "none is in flight" in why and "make claims-bundle OWED=1" in why
+    assert land.claims_route(OWED, "claims-gate.sh: owed", in_flight=["/tmp/b"]) == ("defer", "claims-gate.sh: owed")
+    assert land.claims_route(INTRODUCED, "x", in_flight=["/tmp/b"])[0] == "stop"

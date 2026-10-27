@@ -88,6 +88,7 @@ def profile_stage(seed: int, stage: str, top: int = 25, households: int | None =
         target = STAGES[names.index(stage)]
         plain = profiled = 0.0
         added: dict[str, int] = {}
+        seat: Any = None
         prof = cProfile.Profile()
         with redirect_stdout(io.StringIO()), roll_scope(plan.spec):  # a roll like any other (feature 210; the census, 213)
             for st in STAGES:
@@ -100,6 +101,7 @@ def profile_stage(seed: int, stage: str, top: int = 25, households: int | None =
                     prof.disable()
                     profiled = time.time() - t0
                     added = {k: n - before.get(k, 0) for k, n in placed_counts(s.M).items() if n != before.get(k, 0)}
+                    seat = (s.M.get("meta") or {}).get("seat_search")
                     break
                 t0 = time.time()
                 st(s, plan)
@@ -109,7 +111,9 @@ def profile_stage(seed: int, stage: str, top: int = 25, households: int | None =
     raw = os.path.join(RAW_DIR, f"{stamp}-seed{seed}-hh{spec['households']}-{stage}.prof")  # the size in the name, so a kept profile is matched to one (feature 438)
     prof.dump_stats(raw)
     with open(raw + ".placed.json", "w", encoding="utf-8") as fh:  # ...and what the stage placed (feature 417 T57: the calls per thing placed)
-        json.dump(added, fh, sort_keys=True)
+        # ...and the roll's seat-search counters where it recorded them (feature 440 T03: trial 439 needed a counting spike to read
+        # the growth's funnel at 40 households, which `make hamlet` refuses and a cohort keeps no counters of)
+        json.dump({**added, **({"meta.seat_search": dict(seat)} if seat else {})}, fh, sort_keys=True)
     out = io.StringIO()
     st_ = pstats.Stats(prof, stream=out)
     st_.sort_stats("cumulative").print_stats(top)

@@ -107,3 +107,16 @@ def test_main_against_a_ref_and_its_refusals(tmp_path, capsys):
     subprocess.run(["git", "-C", str(clone), "-c", "user.email=t@t", "-c", "user.name=t", "add", "-A"], check=True)
     subprocess.run(["git", "-C", str(clone), "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "x"], check=True)
     assert st.main(["301-x", "--clone", str(clone), "--against", "HEAD"]) == 0, "the committed state equals the present one"
+
+
+def test_a_line_the_change_rewrote_from_one_already_about_the_subject_is_not_a_candidate(monkeypatch):
+    """Feature 440 T05: feature 438's round-2 dispatch was refused on six lines of its own rewrite - each rewritten from a line
+    already about the subject. A line the change inserted is still searched; without the rule the rewritten line is named."""
+    old = {"spec.md": "**FR-4** a trial `Done` owes one verdict.\n\n**SC-3** it refuses `Done` without its verdict.\n"}
+    new = {"spec.md": "**FR-4** a trial `Done` owes one review.\n\n**SC-3** it refuses a trial `Done` without a verdict.\n"}
+    assert st.stale_candidates(old, new) == []
+    fresh = {"spec.md": "**FR-4** a trial `Done` owes one review.\n\nA new line: `Done` with a verdict.\n**SC-3** it refuses `Done` without its verdict.\n"}
+    assert [(c["line"], c["subject"]) for c in st.stale_candidates(old, fresh)] == [(3, "Done"), (4, "Done")], "an inserted line, and an untouched one, are searched"
+    assert st.rewritten_from(None, "a\nb\n") == {}
+    monkeypatch.setattr(st, "rewritten_from", lambda o, n: {})
+    assert [c["line"] for c in st.stale_candidates(old, new)] == [3], "the rule is what spares it"

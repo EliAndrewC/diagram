@@ -35,6 +35,7 @@ round finding the first version wrong:
 from __future__ import annotations
 
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 
 
@@ -57,6 +58,10 @@ class Ratchet:
     # value as "no floor", so renaming it would silently switch off the guard that stopped a
     # `make -n done` minting a push credential on 2026-09-05. `baseline_cold` is ADDITIVE.
     baseline_cold: int | None = None
+    # FEATURE 440 T05: the unloaded time of the calibration loop (`slowdown`) on this target's workers, pinned with its reason; a
+    # target that sets it is judged net of the host's slowdown - its run divided by the loop's time against this one
+    calibration_s: float | None = None
+    calibration_reason: str = ""
     reason_cold: str = ""  # its OWN written reason (171 FR-010) - the per-ROW check cannot see this
     min_class_runs: int = 5  # below this many same-class runs, the RUN is judged, never waved through
 
@@ -70,6 +75,10 @@ RATCHETS = {
         hard_ceiling=15,
         hard_at_or_below=11,  # binds now
         compare="run",
+        calibration_s=0.12,
+        calibration_reason="measured 2026-10-27 (the calibration loop on 6 processes, best of 5 rounds' slowest, load average 1.0 on "
+        "this 22-CPU host): 0.12 s; the GM 2026-10-27 approved reading quick net of load (feature 440: \"quick's 15 s ceiling failing "
+        "under load\") - the 15 s ceiling and the 11 s baseline unchanged",
     ),
     "done": Ratchet(
         target="done",
@@ -190,7 +199,39 @@ def ceiling_for_class(r: Ratchet, cache: str | None) -> tuple[int, str]:
     return ceiling_for(r)
 
 
-def verdict(target: str, seconds: int | None, median: int | None = None, cache: str | None = None, scope: str | None = None, class_runs: int | None = None) -> tuple[bool, str]:
+CALIBRATION_N = 3_000_000
+"""Research: plumbing - NONE: the calibration loop's length, about 0.1 s a process on this host"""
+
+
+def _loop(_: int) -> float:
+    import time  # noqa: PLC0415
+
+    t0 = time.perf_counter()
+    s = 0
+    for i in range(CALIBRATION_N):
+        s += i * i
+    return time.perf_counter() - t0
+
+
+def slowdown(r: Ratchet, workers: int, rounds: int = 3, run: Callable[[int], float] | None = None) -> float:
+    """How much slower the host runs now than when `r.calibration_s` was pinned: the calibration loop on `workers` processes at
+    once (quick's own parallelism), the best of `rounds` rounds' slowest process, over the pinned time - never below 1, so a
+    run is never held to a tighter bar than the GM's (feature 440 T05)."""
+    if r.calibration_s is None:
+        return 1.0
+    if run is None:
+        import multiprocessing as mp  # noqa: PLC0415
+
+        with mp.get_context("fork").Pool(workers) as pool:  # fork: the loop needs nothing re-imported
+            got = min(max(pool.map(_loop, range(workers))) for _ in range(rounds))
+    else:
+        got = min(run(workers) for _ in range(rounds))
+    return max(1.0, got / r.calibration_s)
+
+
+def verdict(
+    target: str, seconds: int | None, median: int | None = None, cache: str | None = None, scope: str | None = None, class_runs: int | None = None, slow: float = 1.0
+) -> tuple[bool, str]:
     """(ok, message). `seconds` is this run; `median` the recent same-scope, same-class median.
 
     THE BELOW-SAMPLE RULE (feature 196): when a class holds fewer than `min_class_runs` green runs
@@ -212,13 +253,16 @@ def verdict(target: str, seconds: int | None, median: int | None = None, cache: 
     measured = seconds if mode == "run" else median
     if measured is None:
         return True, ""  # nothing to judge on - never fail a target for lack of evidence
+    raw = measured
+    if slow > 1.0 and mode == "run":  # NET OF THE HOST'S SLOWDOWN (feature 440 T05): load alone does not fail the run
+        measured = round(raw / slow)
     if measured < ceiling:
-        return True, ""
+        return True, (f"{target}: {raw}s raw, {measured}s net of the host's {slow:.2f}x slowdown - under its {ceiling}s ceiling" if raw >= ceiling else "")
     what = "this run" if mode == "run" else "the median of recent green runs"
     klass = f" ({cache} roll cache)" if cache else ""
     base = r.baseline_cold if (cache == "cold" and r.baseline_cold is not None) else r.baseline
     return False, (
-        f"\n\033[1m{target} is at {measured}s, at or over its {ceiling}s ceiling{klass}.\033[0m\n"
+        f"\n\033[1m{target} is at {measured}s{f' ({raw}s raw, net of the host\'s {slow:.2f}x slowdown)' if measured != raw else ''}, at or over its {ceiling}s ceiling{klass}.\033[0m\n"
         f"Measured on {what}, against a pinned baseline of {base}s.\n"
         f"STOP and find out what got slower - that is the point of this failing rather than you\n"
         f"noticing in three days' time. `make audit` shows the history; `make durations` shows where\n"
@@ -239,7 +283,13 @@ if __name__ == "__main__":
     _c = sys.argv[4] if len(sys.argv) > 4 and sys.argv[4] in ("warm", "cold") else None
     _sc = sys.argv[5] if len(sys.argv) > 5 and sys.argv[5] else None
     _n = int(sys.argv[6]) if len(sys.argv) > 6 and sys.argv[6].isdigit() else None
-    _ok, _msg = verdict(_t, _s, _m, _c, _sc, _n)
+    _r = RATCHETS.get(_t)
+    _wv = __import__("os").environ.get("XDIST_WORKERS", "")
+    # the loop runs only for a run at or over the ceiling - a run under it is judged as it always was, at no cost
+    _slow = slowdown(_r, int(_wv) if _wv.isdigit() else 6) if _r is not None and _r.calibration_s is not None and _s is not None and _s >= (_r.hard_ceiling or 10**9) else 1.0
+    _ok, _msg = verdict(_t, _s, _m, _c, _sc, _n, slow=_slow)
+    if _ok and _msg:
+        print(_msg)
     sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[1] / "hooks" / "lib"))
     sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
     import usage_log  # feature 406 (D163): the gate's time ratchet records its run

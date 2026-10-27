@@ -157,7 +157,7 @@ def placed_of(raw: str) -> dict[str, int] | None:
     """What the profiled stage placed (`perf_profile`'s `<raw>.placed.json`), or None for a profile written without it."""
     try:
         with open(raw + ".placed.json", encoding="utf-8") as fh:
-            return {str(k): int(v) for k, v in json.load(fh).items()}
+            return {str(k): int(v) for k, v in json.load(fh).items() if isinstance(v, int)}  # the counts, not the seat counters (440 T03)
     except OSError:
         return None
 

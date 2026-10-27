@@ -44,7 +44,7 @@ def test_the_form_is_the_count_compared_and_the_order_alternates() -> None:
 def test_a_worker_answers_its_marked_lines_and_says_when_it_ended(tmp_path: Path) -> None:
     script = 'import json, sys\nfor line in sys.stdin:\n    q = json.loads(line)\n    print("progress")\n    print("@@" + json.dumps({"wall": 1.5, "cpu": 1.25, "calls": 7}), flush=True)\n'
     w = pa.Worker(str(tmp_path), script)
-    assert w.roll((40, 25)) == (1.5, 1.25) and w.ask({"op": "count"})["calls"] == 7
+    assert w.roll((40, 25)) == (1.5, 1.25, None) and w.ask({"op": "count"})["calls"] == 7
     w.close()
     dead = pa.Worker(str(tmp_path), "import sys; sys.stdin.readline()")
     with pytest.raises(RuntimeError, match="ended before it answered"):
@@ -81,7 +81,7 @@ def test_a_full_snapshot_runs_make_perf_in_its_tree_and_its_legs_read_from_the_s
         "scaling": [{"asked": 40, "seed": 4, "seconds": None}, {"asked": 10, "seed": 4, "seconds": 1.2, "cpu_seconds": 1.1}],
     }
     run_, counted = pa.legs(snap)
-    assert run_ == {(40, 25): (6.38, 3.0), (40, 4): (None, None), (10, 4): (1.2, 1.1)} and counted[(40, 25)] == 5
+    assert run_ == {(40, 25): (6.38, 3.0, {"web": 3.21, "wells": 3.17}), (40, 4): (None, None, None), (10, 4): (1.2, 1.1, None)} and counted[(40, 25)] == 5
 
 
 def test_swept_alternates_and_keeps_the_first_snapshots_calls() -> None:
@@ -194,7 +194,7 @@ def test_the_worker_script_rolls_with_the_versions_own_measure(tmp_path: Path) -
     w = pa.Worker(str(tmp_path))
     try:
         assert w.ask({"op": "warm", "households": 40, "seed": 25}) == {}
-        assert w.roll((40, 25)) == (3.0, 0.5) and w.roll((40, 4)) == (None, None)
+        assert w.roll((40, 25)) == (3.0, 0.5, {"a": 1.004, "b": 2.0}) and w.roll((40, 4)) == (None, None, None)
         assert w.ask({"op": "count", "households": 40, "seed": 25}) == {"calls": 7}
     finally:
         w.close()
@@ -205,3 +205,15 @@ def test_a_worktree_is_a_detached_checkout_under_the_temporary_directory(monkeyp
     seen: list[list[str]] = []
     monkeypatch.setattr(pa.subprocess, "run", lambda cmd, **_k: seen.append(cmd) or subprocess.CompletedProcess(cmd, 0))
     assert pa.worktree("abc", "/tmp/x", "A") == "/tmp/x/A" and seen[0][3:] == ["worktree", "add", "--detach", "/tmp/x/A", "abc"]
+
+
+def test_every_stage_is_printed_below_the_totals_and_the_ones_that_moved_marked() -> None:
+    """Feature 440 T04: every stage gets a row, the largest move first; one past 1% of the roll is marked `*`."""
+    runs = {"A": [{(40, 25): (6.0, 6.0, {"web": 1.0, "field": 2.0, "notice": 0.10})}], "B": [{(40, 25): (7.0, 7.0, {"web": 2.2, "field": 2.0, "notice": 0.11})}]}
+    lines = pa.compare(runs, {})
+    rows = [ln for ln in lines if "stage " in ln]
+    assert len(rows) == 3 and "web" in rows[0] and "+120%" in rows[0] and "* stage web" in rows[0], "the web first, marked"
+    assert all("* stage" not in r for r in rows[1:]), "field and notice printed, not marked"
+    assert any("* moved more than 1% of the roll" in ln for ln in lines)
+    assert pa.stage_rows({"A": [{(40, 25): (6.0, 6.0)}], "B": [{(40, 25): (6.0, 6.0)}]}) == [], "runs without stages print none"
+    assert pa.stage_rows({"A": [{(40, 4): (None, None, None)}], "B": [{(40, 4): (None, None, None)}]}) == []
