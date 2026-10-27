@@ -1,0 +1,28 @@
+{
+ "utc": "20261027T220839Z",
+ "clone": "diagram-backlog",
+ "feature": "",
+ "commit": "bd2b9f76f",
+ "first_seed": 25,
+ "households": 40,
+ "count": 1,
+ "served": 0,
+ "block": [
+  25,
+  1,
+  40,
+  null
+ ],
+ "seeds": [
+  {
+   "seed": 25,
+   "households": 40,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated"
+  }
+ ]
+}
