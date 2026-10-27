@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-27T15:56:26Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 276,
+  "result": "failed: test-full",
+  "commit": "82248f13d",
+  "first_failure_s": 244.4,
+  "last_failure_s": 244.4,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_speckit_todo.py::test_every_open_feature_in_the_repository_names_known_tags"
+  ],
+  "host": {
+    "load": [
+      1.89,
+      6.52
+    ],
+    "mem_avail_mb": [
+      7815,
+      9548
+    ],
+    "cpu_temp_c": [
+      100.0,
+      75.0
+    ],
+    "stall_s": {
+      "cpu": 3.7,
+      "io": 0.9,
+      "io_full": 0.8,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 310948,
+      "package": 112087
+    }
+  },
+  "phases": {
+    "preflight": 14.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "hooks-test": 44.0,
+    "pytest": 220.0,
+    "test-full": 229.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)",
+  "selected": 10209,
+  "collected": 10209
+}
