@@ -131,8 +131,8 @@ BEND_RUN_FT = _ZIGZAG_RUN_FT
 """Research: zigzag run - research/questions/0081-village-lanes.drawing.html: 40 ft"""
 
 JOIN_TOL = _TOUCH_GAP
-"""How near a lane end must come to another lane before the two count as one network - the web's own join tolerance (the
-ink's), which both network tests read; a looser bar would call a near-miss a junction."""
+"""How near two lanes' treads must come (`geom.lanes_share_tread`) before the two count as one network - the web's own join
+tolerance (the ink's), which every network test reads; a looser bar would call a near-miss a junction."""
 
 DOORSTEP_FT = 80.0
 """A lane end this near a farmhouse's center is at its dooryard for the settle: the end a fan of ways is cut back past

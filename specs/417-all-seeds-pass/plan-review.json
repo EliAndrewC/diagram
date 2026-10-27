@@ -32,13 +32,13 @@
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "47b58f0b6eb3cfe71720172dad245b0a87040ef54a9a883eb63333a3ac41ed5e",
+   "sha256": "225d38438f611ef7cb92654c6117a461ed9f06e8e9d756303cd1884f621ceb79",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Order": {
-   "sha256": "3499ae97cd2a517c6016f21bb4d58010a72a902bb1ba6254b69ba3203f5a0f4d",
+   "sha256": "00156749c87821278741b0e4b1fe20af1d21853f39fab55484bf9aaf8453882a",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
@@ -206,7 +206,7 @@
    "declared": "spec-fidelity"
   },
   "### T53 Approach (checklist part A)": {
-   "sha256": "22f27248eab41e4a9905c8246d8b12c967a7418420e76b01c223aa4ea16f856a",
+   "sha256": "0ce1e74d341d38b245cdeca8f808b24c114ed93d7d3e1254fc5b6b7c8588ba0d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
@@ -236,27 +236,27 @@
    "declared": "spec-fidelity"
   },
   "### T06 Approach (checklist part A)": {
-   "sha256": "bf07b88d941100f3a307dd8108ffd4c5ab026a5f64fc004e9d40f51042f85eb5",
+   "sha256": "22d08a67cbfaeddcb93d17dfd0bfc2e83733c17e8dc5285daf6e3fcd5f98e6e5",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T12 Approach (checklist part A)": {
-   "sha256": "09db2535daa4beb94580bb8408b8daf1f2fd51c9c84c1973c2016707ee04dd50",
+   "sha256": "896b56c07860a7dbd9bc198f851bfdaabae0cf7c55e53c33ca39af6863e59f51",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T11 Approach (checklist part A)": {
-   "sha256": "341057b75a2635dad2a0aeeaba5477f73e6f8b10f5c38b3157381a4a9a1f7386",
+   "sha256": "fe7cdc5a8d901dfd3ab0a5d9f572ce7faf8ccca213772b885f3e405cad7a890e",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T14 Approach (checklist part A)": {
-   "sha256": "175553ce20aa156b767402aa7c620aa1f8348bc11ab33c1141cb1de5a021a63a",
+   "sha256": "014111f3b9755a2ab1a7a4470012e809f0e705bdd9700ae9afdb9b829bf8a9f7",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T16 Approach (checklist part A)": {
@@ -377,6 +377,12 @@
    "sha256": "8ded2247cb62db5c38a2ad3d5cdce89fe079c0e50d31d70b64daf03228063bbc",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T58 Approach (checklist part A)": {
+   "sha256": "9bff30a8aebd981600fdea488cd5eb8648f472feaf2dd3f908ca5a3e6a8ac592",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   }
  },
@@ -4422,6 +4428,170 @@
      "why": "D35 sends to the arbiter only a conversion claimed unable to land green; the block claims none, so nothing is set down."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Order",
+    "### T06 Approach (checklist part A)",
+    "### T53 Approach (checklist part A)",
+    "### T58 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Order: T06 moved after T55, its first part split out as T58 ahead of T53",
+     "summary": "The speed tasks now run T52, T31, T58, T53, T54, T55, T06, T12, T11, T56, T14, T57, replacing the order the GM confirmed on 2026-10-26 (T06 third). The round arbiter ruled the move on ask:417-T06-order, from T06's remaining work measured at about 0.3 profiled s against T53's 0.8, T54's 1.37 and T55's 1.",
+     "class": "within",
+     "why": "Nothing the GM asked for is dropped or narrowed. Every speed task still runs, still before the correctness tasks, and the work still stops at T57 for the check-in. T58 is T06's own work split off, so 'all 10 of those tasks' remains the same work. The GM handed the ordering to the session's judgment ('put them in whatever order you think will put the speed up tasks first, so that the things that will give us the most performance gains will happen at the very beginning'), and FR-013 orders by what each task removes. Moving the task whose remaining gain measured smallest to later serves that purpose directly, and the arbiter stands where the GM was asked (feature 379). Aside, not a ruling: spec.md D5's SUPERSEDED note still lists the order as confirmed (T52, T31, T06, T53, ...), so the spec should be amended to the arbiter's order so that spec and plan agree."
+    },
+    {
+     "id": "T58 item 1: one predicate for 'one network' (lanes_share_tread behind _components), END-only join geom.ends_touch deleted",
+     "summary": "Every network question (served_network, law.lane_networks, settle_network/connector_component, tidy.unsplitting_drops, smooth.web_pieces, knots.WebMemo) asks one predicate: treads meet, grown from the connector (research 0246). The second, end-only implementation is deleted.",
+     "class": "within",
+     "why": "This is FR-006's 'a second implementation of a rule is deleted' and FR-004's 'each lane-law rule stays one predicate'. The behavior change follows research 0246, and the GM allowed behavior changes 'as long as it is in line with our research' (2026-10-25)."
+    },
+    {
+     "id": "T58 item 1: a web run joined to the connector's network, never to an island beside it",
+     "summary": "served_network decides a run's join, so a run that meets only a detached piece does not count as served.",
+     "class": "within",
+     "why": "This is the lane law's own rule (0246: grown from the connector), asked of the run as it is laid. It serves FR-004 and narrows nothing the GM asked for."
+    },
+    {
+     "id": "T58 items 1 and 10: healing/detour link kept only where it touches both run and network at the ink tolerance; the 12 ft GUESS replaced by 0246/0081's tolerance",
+     "summary": "serve._touches_both decides at the ink tolerance (0081: ends joined at a single point), and the 12 ft link reach recorded as a GUESS (T29 A2) goes.",
+     "class": "within",
+     "why": "The GM's rule for numbers (2026-10-25) is that a GUESS is a knob, free to move, and that research governs where it exists. Replacing a GUESS with the research's value is that rule applied. The link test is the predicate asked of the link (FR-006). It is not a narrowing: no room-remedy (FR-007) case is set aside, because a link that touches neither side does not join anything."
+    },
+    {
+     "id": "T58 items 5, 7, 8: lands now before T53, one landing, _components skips pairs beyond the box tolerance or already joined",
+     "summary": "Placement in the order, budget and a pruning of pair checks.",
+     "class": "within",
+     "why": "The order follows from the first decision. The pruning is the same predicate asked of fewer pairs, which is FR-012's direction. One landing through make land under FR-008 is the spec's ordinary route."
+    },
+    {
+     "id": "T53 item 5: after T58 and before T06; settle_reach's reach.py callers made incremental even though T06 may later delete one; served_network's new per-run caller from T58 made incremental",
+     "summary": "T53 now runs before T06 rather than after it, so it converts callers T06 might remove, and it absorbs the per-run served_network call that T58 introduces.",
+     "class": "within",
+     "why": "This widens the conversion rather than narrowing it. FR-012 asks that every network check asked again of a whole network be asked of what changed, and T53 converts every caller that stands, including the new one. Converting a caller that is later deleted wastes some work but drops nothing that was asked for. settle_reach staying a placer is D35's own ruling."
+    },
+    {
+     "id": "T06 item 5: after T55, before T12; the goal unchanged (the web laid by the law, no repair pass left)",
+     "summary": "Only T06's place in the order changed. Its goal, constraints (FR-004, FR-006, FR-013, SC-002) and exits are as when last judged CLEAR.",
+     "class": "within",
+     "why": "T06 keeps its whole goal, and the part that moved to T58 is done earlier, not dropped. The order is judged in the first decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "## Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D5 (T06 order amended, round arbiter 2026-10-27, ask:417-T06-order)",
+     "summary": "The GM-confirmed speed order (T52, T31, T06, T53, T54, T55, T12, T11, T56, T14, then T57's check-in) is amended: T06's first part lands as T58 before T53, and the rest of T06 runs after T55. The only change since the block's CLEAR verdict; D1-D4, D6 and D11 are byte-identical.",
+     "class": "within",
+     "why": "A re-sequencing inside the ten speed tasks, not a narrowing. Checked against the GM's words: 'work all 10 of those tasks ... From start to finish' - the ten are unchanged and T06 is split, not cut, so it is still worked whole; 'then we can check in once that is all done' - the stop line stays at T57's check-in, after all ten; 'prioritize the things that will make us go faster before the things that will make us correct' - nothing crosses the speed/correctness boundary, and T06's first part keeps its slot ahead of T53; FR-013's criterion ('ordered by the calls each removes') is unchanged in the spec, and the plan moves a position, not the rule. The GM handed the sequence to the session ('put them in whatever order you think'), keeping a veto they used once by confirming; they also said process-answerable questions should not come to them (2026-10-25), and feature 379 puts the round arbiter where the GM was asked. The plan records the change as that ruling, cited, not as the session's own call. Limit: the bundle cites the ruling but not its calls-removed reasoning, so the ranking itself was not re-derived here. Grounds for NOT LEGITIMATE would be a task dropped from the ten, one pushed past T57, or the reorder appearing with no ruling cited, and none is present."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T58 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T58-1 one predicate",
+     "summary": "One network asked by geom.lanes_share_tread behind _components for served_network, lane_networks, settle_network/connector_component, unsplitting_drops, web_pieces and WebMemo; the END-only join geom.ends_touch deleted",
+     "class": "within",
+     "why": "FR-006 'a second implementation of a rule is deleted'; the network is what research 0246 says it is (treads meet, grown from the connector). Deletes a duplicate rather than narrowing anything asked."
+    },
+    {
+     "id": "T58-2 runs join the connector's network",
+     "summary": "A web run joined to the connector's network (served_network), never to an island beside it",
+     "class": "within",
+     "why": "0246 'grown from the connector'; FR-004's lane law asked as one predicate. No case carved out."
+    },
+    {
+     "id": "T58-3 links touch both sides; 12 ft guess gone",
+     "summary": "A healing or detour link kept only where it touches both the run and the network at the ink tolerance (serve._touches_both, 0081); the 12 ft GUESS reach replaced by 0246's ink tolerance",
+     "class": "within",
+     "why": "This tightens an existing link; it does not rule that healing/detour links survive FR-004 (which deletes repair steps) - that question stays owed to T06's remaining conversions, which the arbiter's ruling on ask:417-T06-order (cited, text not in this bundle) moves after T55; the classification rests on that ruling. Replacing a marked GUESS with a research tolerance is what the GM asked on 2026-10-25 (arbitrary numbers marked and changeable; behavior changes fine where in line with research)."
+    },
+    {
+     "id": "T58-1a X-crossing counts",
+     "summary": "The tread join also counts a leg of one way crossing a leg of the other with no vertex near",
+     "class": "within",
+     "why": "Makes the predicate do what 0246 says (treads meet); fixes impl-drift's DRIFTED finding. Widens to the research, narrows nothing."
+    },
+    {
+     "id": "T58-1b doubled-lane shadow reads every way",
+     "summary": "The doubled-lane shadow still reads every way drawn (_net_segs); the join's network is the connector's only",
+     "class": "within",
+     "why": "Adjudicated on the word 'still': the shadow asks whether a candidate doubles any drawn way, not whether a way is on a network, so it is not a second implementation of the network rule and leaves no carve-out from 'one predicate everywhere'. The network itself stays the connector's only."
+    },
+    {
+     "id": "T58-1c memo share/touch one kind",
+     "summary": "knots.WebMemo's 'share' and 'touch' asked as one kind",
+     "class": "within",
+     "why": "FR-006: one implementation per rule."
+    },
+    {
+     "id": "T58-1d joins_short among the last resort's drop rules",
+     "summary": "law.near_misses' last resort names joins_short among the rules that drop an ordinary lane whole (seed 26: a skeleton arm 8 ft short of an access lane, refused joins_short once the one join kept it on the network)",
+     "class": "within",
+     "why": "Premise: the last resort is asked of the candidate at lay, so a lane that would fail joins_short is never laid. Read so, it is FR-005 exactly - a rule only a finished-map check had been asking (it refused seed 26's map) is now asked by the placer. Were it run on an already-laid web it would be a repair, which FR-004 deletes; the bundle does not let this review open the code, so the classification turns on that premise."
+    },
+    {
+     "id": "T58-5 order",
+     "summary": "Lands now, before T53; T06's remaining conversions after T55",
+     "class": "within",
+     "why": "The round arbiter's ruling on ask:417-T06-order, which this review does not re-adjudicate; consistent with FR-013 (tasks that delete repair work worked early)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T06 Approach (checklist part A)",
+    "### T11 Approach (checklist part A)",
+    "### T12 Approach (checklist part A)",
+    "### T14 Approach (checklist part A)",
+    "### T58 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T58-d-endonly-kept",
+     "summary": "T58 lands the one tread predicate everywhere but settle.settle_network / connector_component (one caller: the helper behind the settle step), which keeps the END-only join (geom.end_components) until T06 deletes it after settle_defer is converted to lay-time (T31 part C items 2-3)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-006 says a second coding of a rule is deleted, and this landing keeps one, so it narrows the request and was presumed wrong. It holds as SEQUENCING, for three reasons. (1) The GM's own words decide it: the 394 fold-in ('Yes fold 394 into 417') and FR-008 refuse a landing that regresses a seed. Deleting the join now turns cohort seed 26 red (measured 2026-10-27, make cohort N=1 SEED=26, bisected caller by caller), and the only way around that, a last-resort rule naming joins_short, was ruled NOT LEGITIMATE (MODE 2). So FR-006 now and FR-008 now collide at this one caller, and D11's stop line (the GM 2026-10-25) says such a conversion is recorded and set down, not iterated on. (2) The GM allowed the repair steps to be switched off 'one at a time or all at once', and an intermediate state where one caller waits for its upstream conversion is what one at a time means. (3) The debt is bound, not floated: T06's OWED paragraph counts this caller as OWED under FR-006, names its trigger (settle_defer at lay) and its proof (seed 26 passing without it), and T06's Green exit ('no repair pass left') cannot be met while the join stands. Purpose test: the kept join is a repair that hides a defect in settle_defer, which is exactly the brittleness the GM named. Keeping it for now does not defeat FR-006's purpose, because the plan already schedules the fix for that defect and, with it, the join's deletion. A T06 whose exit accepted the join would be a carve-out and NOT LEGITIMATE. The ruling also stands on the round arbiter's route B on ask:417-T58-red, but these are the reviewer's own grounds."
+    },
+    {
+     "id": "T58-d-joins_short-reverted",
+     "summary": "The earlier (d), a last resort naming joins_short among the rules that drop an ordinary lane whole, is removed (reverted after spec-fidelity MODE 2 ruled it NOT LEGITIMATE)",
+     "class": "within",
+     "why": "It removes a rule the GM never asked for and complies with an earlier ruling. It restores the status quo at that point and narrows nothing."
+    },
+    {
+     "id": "T06-owed-from-T58",
+     "summary": "T06 takes over the deletion of the END-only join at settle_network / connector_component: OWED under FR-006 until T31 part C item 2 (settle_defer at lay) lands and item 3 deletes it, with seed 26 shown passing without it",
+     "class": "within",
+     "why": "It enforces FR-006 on the one caller T58 left and adds no behavior the GM did not ask for. Reading: T06 carries out conversions that T31 part C decided (T31 is ticked). If T31 was meant to own items 2-3 itself, the parent should correct the wording, but either reading leaves the deletion owed and bound to an exit."
+    },
+    {
+     "id": "T12-T11-T14-ordinals",
+     "summary": "T12 is now the 8th speed task (after T06), T11 the 9th, T14 the 11th, renumbered for T58 landing before T53 and T06 moving after T55",
+     "class": "within",
+     "why": "They match D5's amended order as accepted in the spec (T52, T31, T58, T53, T54, T55, T06, T12, T11, T56, T14, then T57). Every speed task still runs before the correctness tasks (FR-013). T06's own item 5 is unchanged since its CLEAR and is not re-judged."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4995,6 +5165,62 @@
      "summary": "Rendering: none",
      "class": "within",
      "why": "No render change is asked or made; D11 says Rendering: none."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T58": {
+   "section_sha256": "c48bee2285c8f5b26a113720db90ca32b0a3a6fb829f8eaf2198e2dbff5fc592",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T58-1 one predicate",
+     "summary": "One network asked by geom.lanes_share_tread behind _components for served_network, lane_networks, settle_network/connector_component, unsplitting_drops, web_pieces and WebMemo; the END-only join geom.ends_touch deleted",
+     "class": "within",
+     "why": "FR-006 'a second implementation of a rule is deleted'; the network is what research 0246 says it is (treads meet, grown from the connector). Deletes a duplicate rather than narrowing anything asked."
+    },
+    {
+     "id": "T58-2 runs join the connector's network",
+     "summary": "A web run joined to the connector's network (served_network), never to an island beside it",
+     "class": "within",
+     "why": "0246 'grown from the connector'; FR-004's lane law asked as one predicate. No case carved out."
+    },
+    {
+     "id": "T58-3 links touch both sides; 12 ft guess gone",
+     "summary": "A healing or detour link kept only where it touches both the run and the network at the ink tolerance (serve._touches_both, 0081); the 12 ft GUESS reach replaced by 0246's ink tolerance",
+     "class": "within",
+     "why": "This tightens an existing link; it does not rule that healing/detour links survive FR-004 (which deletes repair steps) - that question stays owed to T06's remaining conversions, which the arbiter's ruling on ask:417-T06-order (cited, text not in this bundle) moves after T55; the classification rests on that ruling. Replacing a marked GUESS with a research tolerance is what the GM asked on 2026-10-25 (arbitrary numbers marked and changeable; behavior changes fine where in line with research)."
+    },
+    {
+     "id": "T58-1a X-crossing counts",
+     "summary": "The tread join also counts a leg of one way crossing a leg of the other with no vertex near",
+     "class": "within",
+     "why": "Makes the predicate do what 0246 says (treads meet); fixes impl-drift's DRIFTED finding. Widens to the research, narrows nothing."
+    },
+    {
+     "id": "T58-1b doubled-lane shadow reads every way",
+     "summary": "The doubled-lane shadow still reads every way drawn (_net_segs); the join's network is the connector's only",
+     "class": "within",
+     "why": "Adjudicated on the word 'still': the shadow asks whether a candidate doubles any drawn way, not whether a way is on a network, so it is not a second implementation of the network rule and leaves no carve-out from 'one predicate everywhere'. The network itself stays the connector's only."
+    },
+    {
+     "id": "T58-1c memo share/touch one kind",
+     "summary": "knots.WebMemo's 'share' and 'touch' asked as one kind",
+     "class": "within",
+     "why": "FR-006: one implementation per rule."
+    },
+    {
+     "id": "T58-1d joins_short among the last resort's drop rules",
+     "summary": "law.near_misses' last resort names joins_short among the rules that drop an ordinary lane whole (seed 26: a skeleton arm 8 ft short of an access lane, refused joins_short once the one join kept it on the network)",
+     "class": "within",
+     "why": "Premise: the last resort is asked of the candidate at lay, so a lane that would fail joins_short is never laid. Read so, it is FR-005 exactly - a rule only a finished-map check had been asking (it refused seed 26's map) is now asked by the placer. Were it run on an already-laid web it would be a repair, which FR-004 deletes; the bundle does not let this review open the code, so the classification turns on that premise."
+    },
+    {
+     "id": "T58-5 order",
+     "summary": "Lands now, before T53; T06's remaining conversions after T55",
+     "class": "within",
+     "why": "The round arbiter's ruling on ask:417-T06-order, which this review does not re-adjudicate; consistent with FR-013 (tasks that delete repair work worked early)."
     }
    ],
    "verdict": "CLEAR"

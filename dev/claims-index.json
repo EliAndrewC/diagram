@@ -25952,23 +25952,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network, joined where treads meet": {
-  "body": "b1d75ffd21aae6da",
-  "claim": "one network, joined where treads meet - how-our-maps-lay-a-clustered-settlements-lanes.drawing: two ways one network only where their treads meet, within the ink tolerance; the 25 ft of 0081 is the knot pass's, ends joined at one point",
-  "code": "576fba48307cc303",
-  "core": "0d03f0fddd962721",
-  "date": "2026-10-22",
-  "note": "treads within the 4 ft ink tolerance",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
-  },
-  "research": "4473caa26c642d2b",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
-  ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/checks.py::path_violations#drain brook never crossed": {
   "body": "f5b8f93399fba847",
   "claim": "drain brook never crossed - plank-bridges-over-farm-ditches-itabashi.drawing: the lanes among the houses cross a ditch where their line takes them, a crossing landing on cultivated ground, wet or dry - the drain brook is never crossed, a departure the code keeps until feature 417 T32; avoided outright, not bridged",
@@ -26048,13 +26031,13 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/checks.py::served_network#one network": {
-  "body": "5d48f7e89ddf5506",
+ "l7r/diagram/hamletgen/ways/checks.py::served_lanes#one network": {
+  "body": "ed6768758c909aa9",
   "claim": "one network - how-our-maps-lay-a-clustered-settlements-lanes.drawing: grown from the connector",
-  "code": "8628f4dbf391db1e",
-  "core": "fdae5a5be21d8f1f",
-  "date": "2026-10-22",
-  "note": "component grown from the connector",
+  "code": "704377e1e2c9eb21",
+  "core": "01fb247212c1554f",
+  "date": "2026-10-27",
+  "note": "the connector's component under the one join (`_components`), with the longest lane as the fallback seed; this is the page's one network joined where treads meet",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -26063,7 +26046,23 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
-  "triaged": "2026-10-22",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/checks.py::served_network#one network": {
+  "body": "c0d1f6721ded4f60",
+  "claim": "one network - how-our-maps-lay-a-clustered-settlements-lanes.drawing: grown from the connector",
+  "code": "307c181aa1b48c33",
+  "core": "531f101845820680",
+  "date": "2026-10-27",
+  "note": "the segments of `served_lanes`' component, so the same one-network rule",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::shallow_crossing#square over water": {
@@ -28349,10 +28348,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::_components#geometry": {
-  "code": "32c69ca5160fb188",
-  "core": "7b57b7a20d1bbf30",
-  "date": "2026-10-07",
-  "note": "union-find over touching ways, plumbing",
+  "body": "3163c11532b77dbd",
+  "claim": "geometry - NONE",
+  "code": "db051457c16f24d9",
+  "core": "86f2e3d8288342e9",
+  "date": "2026-10-27",
+  "note": "union-find labeling; the box prefilter only skips pairs that cannot meet at `touch`; the join decision belongs to `lanes_share_tread`",
   "pages": {},
   "research": "",
   "rests": [],
@@ -28501,6 +28502,22 @@
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/geom.py::end_components#one network, joined at ends": {
+  "body": "d6650001108870e1",
+  "claim": "one network, joined at ends - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: two ways one network where their treads meet - joined here only at an end, a departure the code keeps until feature 417 T06 (the round arbiter's ruling on ask:417-T58-red)",
+  "code": "1ec25f0d376e1a15",
+  "core": "7b57b7a20d1bbf30",
+  "date": "2026-10-27",
+  "note": "known (417 T06): joins two ways only where an END of one comes within `touch` of the other's tread, where the page says \"one network, joined where their treads meet\"; the code does what the claim says",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
+  ],
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/hamletgen/ways/geom.py::end_serves#an end reaches something seen": {
   "body": "493cd6f87043de5a",
   "claim": "an end reaches something seen - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a way or farmhouse within 60 ft",
@@ -28552,13 +28569,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::ends_touch#plumbing": {
-  "code": "beef2c685ca82ff4",
+  "body": "8f977f116156c9b3",
+  "claim": "plumbing - NONE: `end_components`' pair test",
+  "code": "cff13a7de9d19f96",
   "core": "cd98744ba34caa38",
-  "date": "2026-10-07",
-  "note": "pair test of end against tread, plumbing",
+  "date": "2026-10-27",
+  "note": "the pair test only; the end-only join it codes is claimed, and filed, at `end_components`",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::ground_key#geometry": {
@@ -28595,6 +28613,22 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/geom.py::lanes_share_tread#one network, joined where treads meet": {
+  "body": "71824590286da4dd",
+  "claim": "one network, joined where treads meet - how-our-maps-lay-a-clustered-settlements-lanes.drawing: two ways one network only where their treads meet, within the ink tolerance; the 25 ft of 0081 is the knot pass's, ends joined at one point",
+  "code": "20ac94075254d743",
+  "core": "549dd8a708a7fa52",
+  "date": "2026-10-27",
+  "note": "two treads count as one network when a vertex comes within the 4 ft ink tolerance of the other way or a leg crosses one, as 0246 joins where treads meet; the 25 ft join is left to the knot pass",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::memo_ground#geometry": {
@@ -28997,10 +29031,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::WebMemo._ask#plumbing": {
-  "code": "9415383b3f68fb6c",
-  "core": "b7c28a8d2e39cae6",
-  "date": "2026-10-07",
-  "note": "memoised dispatch; the 25 ft apart test only culls pairs before the 4 ft tread test and decides nothing on the map",
+  "body": "bd7277e98e058ee8",
+  "claim": "plumbing - NONE",
+  "code": "7b332d0e8b2325a4",
+  "core": "d467a82dfb6cba66",
+  "date": "2026-10-27",
+  "note": "memo dispatch to the network predicate behind a quick distance prefilter; it decides nothing physical",
   "pages": {},
   "research": "",
   "rests": [],
@@ -29037,10 +29073,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::WebMemo.pair#plumbing": {
-  "code": "dc33abce6c6c6de7",
-  "core": "c87c58d82b671ad5",
-  "date": "2026-10-07",
-  "note": "cached pair lookup",
+  "body": "76b0ec4ec3160229",
+  "claim": "plumbing - NONE",
+  "code": "f7e4ef590c4decb0",
+  "core": "219bb933ad626e4f",
+  "date": "2026-10-27",
+  "note": "makes \"share\" an alias of \"touch\" and caches the answer; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -29811,18 +29849,26 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/last_resort.py::lane_breaches#a 3 ft tread width as the default when a lane gives none": {
+  "code": "c78fcb12c207747a",
+  "core": "c78fcb12c207747a",
+  "date": "2026-10-27",
+  "note": "a 3 ft tread width as the default when a lane gives none",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/last_resort.py::lane_breaches#repair policy": {
-  "body": "f9e725983e50378f",
+  "body": "96ea32e8dd034690",
   "claim": "repair policy - NONE: each rule is claimed at its predicate in law.py",
   "code": "1dfda7ee29e12e07",
   "core": "c78fcb12c207747a",
-  "date": "2026-10-17",
-  "note": "collects the rules' verdicts",
+  "date": "2026-10-27",
+  "note": "mostly gathers rules claimed at law.py, but `float(ln.get(\"w\") or 3.0)` picks the tread width every fault test uses (the page's \"drawn 3 ft wide\"); the claim should add a 0246 drawing-page claim for that width",
+  "outside": true,
   "pages": {},
   "research": "",
-  "rests": [],
-  "triaged": "2026-10-21",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/last_resort.py::lane_violators#repair policy": {
   "code": "10ed2541245f7f1d",
@@ -31998,20 +32044,25 @@
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a healing link kept": {
-  "body": "a7944f2f3b704914",
-  "claim": "a healing link kept - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); its ends within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), else the gap is left unjoined",
-  "code": "7932c09dc2b1a753",
-  "core": "0ea0132e60ff1b70",
-  "date": "2026-10-25",
-  "note": "a tolerance of ours that no page gives",
-  "pages": {},
-  "research": "",
+ "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a healing link touches both sides": {
+  "body": "db40f1d4f2788b26",
+  "claim": "a healing link touches both sides - village-lanes.drawing: ends joined at a single point - kept only where it touches the run and the network at the ink tolerance (`_touches_both`), else the run is not drawn",
+  "code": "d4c08aa17bc9bef2",
+  "core": "f86f483864d3fb54",
+  "date": "2026-10-27",
+  "note": "the far-branch link is kept only where `_touches_both` holds, and the run is refused when no link survives",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a link takes its way's width": {
-  "code": "bd8bda7a0626621d",
-  "core": "0ea0132e60ff1b70",
+  "code": "0560dc573136de93",
+  "core": "f86f483864d3fb54",
   "date": "2026-10-08",
   "note": "the link's width follows the lane it joins, and lane widths are a drawing convention",
   "pages": {},
@@ -32019,12 +32070,24 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-27",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a link's clear run": {
+  "body": "db40f1d4f2788b26",
+  "claim": "a link's clear run - GUESS: no source could speak to it, a value of ours (feature 417 T58); a clear run under 12 ft (`clear_runs`' floor) is no link",
+  "code": "b474cb996ebe456d",
+  "core": "f86f483864d3fb54",
+  "date": "2026-10-27",
+  "note": "the 12 ft floor on a clear run is a guess, and no cited block sets a shortest link",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a tail past the junction cut": {
-  "code": "76e55926b81f1f18",
-  "core": "0ea0132e60ff1b70",
+  "code": "040a32735ac30ad1",
+  "core": "f86f483864d3fb54",
   "date": "2026-10-09",
   "note": "`tail < 40.0`",
   "pages": {
@@ -32034,34 +32097,34 @@
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a web lane joins the network": {
-  "body": "f86d6b4d90c56347",
+  "body": "db40f1d4f2788b26",
   "claim": "a web lane joins the network - how-our-maps-lay-a-clustered-settlements-lanes.drawing: one network, or not drawn",
-  "code": "c955b37c1cca20f9",
-  "core": "0ea0132e60ff1b70",
-  "date": "2026-10-22",
-  "note": "a run is joined or not drawn",
+  "code": "44a6a3e44d2c7f21",
+  "core": "f86f483864d3fb54",
+  "date": "2026-10-27",
+  "note": "a run that cannot be joined or linked to the served network returns False",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
-  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#arrived at the network": {
-  "body": "f86d6b4d90c56347",
+  "body": "db40f1d4f2788b26",
   "claim": "arrived at the network - village-lanes.drawing: a run within 25 ft of it (`_LANE_JOIN_FT`) is joined at a single point - its end carried onto the way, a whole run's arriving vertex snapped, or a link drawn - and not drawn where no link is walkable",
-  "code": "e8f6c21f36b1dba3",
-  "core": "0ea0132e60ff1b70",
-  "date": "2026-10-22",
-  "note": "joined at a single point within 25 ft (end carried, vertex snapped or link drawn), else not drawn; a tail under 40 ft cut",
+  "code": "2901877e566855f6",
+  "core": "f86f483864d3fb54",
+  "date": "2026-10-27",
+  "note": "within `_LANE_JOIN_FT` the end is carried on (`carried_onto`), a run kept whole has its vertex snapped or gets a link, and otherwise the run is not drawn; the end meets the way's side as a T, which the page allows",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -32070,27 +32133,27 @@
    "0081-village-lanes.drawing.html:2ca0b4939aee735d",
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
   ],
-  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#how far inside a belt": {
   "body": "a7944f2f3b704914",
   "claim": "how far inside a belt - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); a run over 60 ft inside a belt refused",
-  "code": "0fc81359f757de28",
-  "core": "0ea0132e60ff1b70",
+  "code": "fb596aef2e4c981e",
+  "core": "f86f483864d3fb54",
   "date": "2026-10-25",
   "note": "0072 has the lane go through the belt; no figure for how far inside",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#its figures against 0081": {
-  "body": "a7944f2f3b704914",
+  "body": "db40f1d4f2788b26",
   "claim": "its figures against 0081 - DEVIATION village-lanes.drawing: 0.6 (a run refused when over 60% shadowed, where the page draws two ways side by side as one) - a departure the code keeps until feature 417 T32",
-  "code": "6f1fc8e715bd1807",
-  "core": "0ea0132e60ff1b70",
-  "date": "2026-10-25",
-  "note": "a DEVIATION the page does not record: 0081 cuts a lane \"where it comes alongside and let it meet the other as a T\", while the code refuses the whole run (`_near > 0.6 * len(run)`). The page needs to record the departure, or the code should cut",
+  "code": "af3e2371ef2a08b6",
+  "core": "f86f483864d3fb54",
+  "date": "2026-10-27",
+  "note": "known (417 T32): `_near > 0.6 * len(run)` refuses the whole run, where the page cuts a run where it comes alongside and lets it meet the other way as a T; the stated departure matches the code, now measured against `_net_segs(s)`",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -32101,8 +32164,8 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link against the crop": {
-  "code": "78accaede7fa31ad",
-  "core": "0ea0132e60ff1b70",
+  "code": "12da27fddff1b81b",
+  "core": "f86f483864d3fb54",
   "date": "2026-10-12",
   "note": "a 6 ft link's edge stops at the crop boundary, which the page allows",
   "pages": {
@@ -32113,25 +32176,26 @@
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link off the toe and marsh": {
   "body": "a7944f2f3b704914",
   "claim": "link off the toe and marsh - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); kept 8 ft off them (`WEB_HARD_GAP`)",
-  "code": "f4ed50896e8c9e0f",
-  "core": "0ea0132e60ff1b70",
+  "code": "caab308fef721689",
+  "core": "f86f483864d3fb54",
   "date": "2026-10-25",
   "note": "no distance on the page",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link off walls": {
   "body": "f86d6b4d90c56347",
   "claim": "link off walls - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft off a wall (`WEB_FABRIC_GAP`), a garden fence's 7 ft to a lane's middle",
-  "code": "41ef65ae93805e3c",
-  "core": "0ea0132e60ff1b70",
+  "code": "a81fe8f31a8bd32a",
+  "core": "f86f483864d3fb54",
   "date": "2026-10-22",
   "note": "link's clear_runs tight_margin=WEB_FABRIC_GAP 7 ft; a link belongs to no household and keeps the gap from every garden",
   "pages": {
@@ -32142,37 +32206,41 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:592d8f7f82498636",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link reach": {
   "body": "a7944f2f3b704914",
   "claim": "link reach - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25); a link up to 200 ft to the network",
-  "code": "93af8ab5086fd45f",
-  "core": "0ea0132e60ff1b70",
+  "code": "610b0354315e58fc",
+  "core": "f86f483864d3fb54",
   "date": "2026-10-25",
   "note": "no page gives a link's reach",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#no way drawn twice": {
-  "body": "a7944f2f3b704914",
+  "body": "db40f1d4f2788b26",
   "claim": "no way drawn twice - village-lanes.drawing: two paths running side by side are drawn as one, measured at less than 20 degrees (a convention) - the test is 30 ft for more than a pitch, with no angle, a departure the code keeps until feature 417 T32; a run refused over 60% of it, or a bundle pitch unbroken, beside a way",
-  "code": "121480ca837aacf6",
-  "core": "0ea0132e60ff1b70",
-  "date": "2026-10-25",
-  "note": "`shadow_measure` tests distance only (30 ft, over 60% or a pitch unbroken), with no \"less than 20 degrees\". It also refuses the whole run where the page will \"cut it where it comes alongside\" [§37]; a known drift accepted by the round arbiter (ask:417-T29-drifted) to land as filed",
+  "code": "84b37580bc0f1958",
+  "core": "f86f483864d3fb54",
+  "date": "2026-10-27",
+  "note": "known (417 T32): `shadow_measure` against every drawn way, refused at a 0.6 share or an unbroken stretch over `BUNDLE_PITCH`, with no angle test, where the page's test is \"at less than 20 degrees\" with a cut and a T; the stated departure matches the code",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#not along a shelter belt": {
-  "code": "0b1e1ac3467422c4",
-  "core": "0ea0132e60ff1b70",
+  "code": "7bf48d3ae6b5005d",
+  "core": "f86f483864d3fb54",
   "date": "2026-10-08",
   "note": "the belt is kept whole and a lane gets through it",
   "pages": {
@@ -32185,27 +32253,46 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-27",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#runs join the network": {
+  "body": "db40f1d4f2788b26",
+  "claim": "runs join the network - how-our-maps-lay-a-clustered-settlements-lanes.drawing: one network grown from the connector - a run is joined to the connector's network (`served_network`), not to any line on the ground",
+  "code": "db125d70fdc938b4",
+  "core": "f86f483864d3fb54",
+  "date": "2026-10-27",
+  "note": "the join, trim and touch read `served_network(...)`, the connector's network, so a run is never joined to an island",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#the nearer end joined": {
-  "body": "a7944f2f3b704914",
+  "body": "db40f1d4f2788b26",
   "claim": "the nearer end joined - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); of a run's two ends, the one nearer the network is the one joined to it",
-  "code": "e8811f31e7f2cee0",
-  "core": "0ea0132e60ff1b70",
-  "date": "2026-10-25",
-  "note": "silent",
+  "code": "a5f2a897170948e4",
+  "core": "f86f483864d3fb54",
+  "date": "2026-10-27",
+  "note": "`end = 0 if d0 <= d1 else -1`, and no cited block says which end of a run is joined",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#trimmed to what it serves": {
-  "body": "f86d6b4d90c56347",
+  "body": "9e479c4dc09087d3",
   "claim": "trimmed to what it serves - GUESS how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane, or a stretch of one, that serves nothing is not drawn - the run trimmed to the houses it serves before it is joined (`_trim_to_service`) (405 T127)",
-  "code": "989b3f1d1ef2bff8",
-  "core": "0ea0132e60ff1b70",
-  "date": "2026-10-22",
-  "note": "§7 says a lane or stretch \"that serves nothing is not drawn\" and lists \"house, field, well, shrine, ford or other way\". The code differs in two ways. First, `_trim_to_service(run, segs, houses, steadings=...)` (no `ground`) uses `end_serves`, which counts only a way, a house or a steading: a field's bund, a well, a shrine or a ford does not count. Second, the `len(run) < 2` guard runs before the trim, so a run trimmed to one point (`out[:1]`) goes on to the far-gap branch and can draw its healing link (`_draw_web(s, link[0], ...)`) to a point that serves nothing. The fix: refuse the run when the trim leaves fewer than 2 points, and count the §7 targets",
+  "code": "ac0fe0a9e2da2caa",
+  "core": "f86f483864d3fb54",
+  "date": "2026-10-27",
+  "note": "`_trim_to_service` runs before the join, and the page records the rule as a GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -32214,12 +32301,12 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
   ],
-  "triaged": "2026-10-25",
-  "verdict": "DRIFTED"
+  "triaged": "2026-10-27",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#web lane width": {
-  "code": "6ba353b2b6399dde",
-  "core": "0ea0132e60ff1b70",
+  "code": "9b76dd582cc13461",
+  "core": "f86f483864d3fb54",
   "date": "2026-10-09",
   "note": "drawn 3 ft",
   "pages": {
@@ -32229,7 +32316,23 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-27",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::_touches_both#a link touches both sides": {
+  "body": "fd126299f5c8f4e1",
+  "claim": "a link touches both sides - village-lanes.drawing: ends joined at a single point - at the ink tolerance two treads meet at (`_TOUCH_GAP`, 0246's one network)",
+  "code": "bea060badec1bee5",
+  "core": "93f9d863e4cada70",
+  "date": "2026-10-27",
+  "note": "both reaches are held to <= 4 ft, the tread-meeting tolerance",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::band_grow#its figures from 0081": {
@@ -32524,21 +32627,49 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::join_width#a link takes its way's width": {
-  "body": "0257574447180137",
+  "body": "723b264afc61d897",
   "claim": "a link takes its way's width - CONVENTION",
-  "code": "d7268feb24f8b720",
-  "core": "b9c30e2514fdc95b",
-  "date": "2026-10-25",
-  "note": "the page itself calls lane widths a map drawing convention",
+  "code": "167fcc2193b11847",
+  "core": "61ccf7ae43e7d24b",
+  "date": "2026-10-27",
+  "note": "drawn width only: the widest served lane within LANE_JOIN_FT, else the 3 ft footpath width the page calls a drawing convention",
   "pages": {},
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::joined_link#a detour link touches both sides": {
+  "body": "4badbfc3e277b4b4",
+  "claim": "a detour link touches both sides - village-lanes.drawing: ends joined at a single point - kept only where it touches the point and the network at the ink tolerance (`_touches_both`)",
+  "code": "81dbe307ee672474",
+  "core": "f7e222ed26dd515f",
+  "date": "2026-10-27",
+  "note": "`clear_runs` results are filtered by `_touches_both`, otherwise None",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::joined_link#a detour link's clear run": {
+  "body": "4badbfc3e277b4b4",
+  "claim": "a detour link's clear run - GUESS: no source could speak to it, a value of ours (feature 417 T58); a clear run under 12 ft (`clear_runs`' floor) is no link",
+  "code": "e28ecebf76e18440",
+  "core": "f7e222ed26dd515f",
+  "date": "2026-10-27",
+  "note": "the 12 ft floor on `clear_runs` is a guess, and the cited blocks are silent on it",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::joined_link#a detour link's margins": {
   "body": "bc072093afa38239",
   "claim": "a detour link's margins - how-our-maps-lay-a-clustered-settlements-lanes.drawing: 7 ft off a wall (`WEB_FABRIC_GAP`); the hard ground at its own gap - the crop at a half-tread (`WEB_CROP_GAP`, 0081), the toe and marsh 8 ft (`WEB_HARD_GAP`, UNRESEARCHED)",
-  "code": "bb4860acd4ec1e6e",
-  "core": "0b650974e20acfd8",
+  "code": "82eb5241483b4422",
+  "core": "f7e222ed26dd515f",
   "date": "2026-10-22",
   "note": "tight_margin=WEB_FABRIC_GAP off walls; Gapped crop half-tread, else WEB_HARD_GAP; a link is no household's",
   "pages": {
@@ -32548,26 +32679,16 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
   ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/serve.py::joined_link#a detour link's reach": {
-  "body": "bc072093afa38239",
-  "claim": "a detour link's reach - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); kept only where it comes within 12 ft of the point and of the network",
-  "code": "205c6737e38409ef",
-  "core": "0b650974e20acfd8",
-  "date": "2026-10-25",
-  "note": "a tolerance of ours that no page gives",
-  "pages": {},
-  "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::joined_link#a near end joined": {
-  "body": "bc072093afa38239",
+  "body": "4badbfc3e277b4b4",
   "claim": "a near end joined - village-lanes.drawing: ends within 25 ft of one another joined at a single point, or the lane not drawn",
-  "code": "bd3290b9af5ac9cc",
-  "core": "0b650974e20acfd8",
-  "date": "2026-10-22",
-  "note": "a straight join, else a clear run, else None",
+  "code": "f2e75409fee1548d",
+  "core": "f7e222ed26dd515f",
+  "date": "2026-10-27",
+  "note": "a straight join where it is walkable, else a clear detour, else None, and the caller then does not draw the run",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -32865,17 +32986,22 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle/ends.py::connector_component#settle plumbing": {
-  "body": "e365e9299e570eec",
-  "claim": "settle plumbing - NONE",
-  "code": "4d9a80cdc0baa969",
-  "core": "91d3ee3dcc7e6b43",
-  "date": "2026-10-21",
-  "note": "finds connected parts at the ink tolerance, plumbing",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+ "l7r/diagram/hamletgen/ways/settle/ends.py::connector_component#one network": {
+  "body": "8da08a7a362436c3",
+  "claim": "one network - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: grown from the connector - joined only at an END (`geom.end_components`), where the page joins where treads meet, a departure the code keeps until feature 417 T06 (the round arbiter's ruling on ask:417-T58-red)",
+  "code": "9e8f8bd5d8b32f32",
+  "core": "ffc37ddf609fdb87",
+  "date": "2026-10-27",
+  "note": "known (417 T06): lanes are joined only at an END (`end_components(..., law.JOIN_TOL)`), where the page says \"joined where their treads meet\"; the departure is stated correctly",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
+  },
+  "research": "4473caa26c642d2b",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_dangling#an end reaches something seen": {
   "body": "f896b99e9222b4d1",
@@ -33049,10 +33175,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_network#one network": {
-  "code": "3d24741772dc89bc",
-  "core": "2708112982f2c609",
-  "date": "2026-10-05",
-  "note": "a lane off the network dropped",
+  "body": "1702ff79e9549ceb",
+  "claim": "one network - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane off the connector's network dropped - the network joined here only at an END (`geom.end_components`), where the page joins where treads meet, a departure the code keeps until feature 417 T06 (the round arbiter's ruling on ask:417-T58-red)",
+  "code": "cc2469b4d4b90c0f",
+  "core": "6d4af2fa1825822e",
+  "date": "2026-10-27",
+  "note": "known (417 T06): a lane outside the connector's network is dropped, and the network is joined only at an END (`end_components`), where the page says \"joined where their treads meet\"; the departure is stated correctly",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -33061,8 +33189,16 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/ways/settle/ends.py::settle_network#with no connector lane, the network with the longest total lane length is kept and every other network dropped": {
+  "code": "6d4af2fa1825822e",
+  "core": "6d4af2fa1825822e",
+  "date": "2026-10-27",
+  "note": "with no connector lane, the network with the longest total lane length is kept and every other network dropped",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful#the lane law asked of a new lane": {
   "code": "83d6b63ce2165303",

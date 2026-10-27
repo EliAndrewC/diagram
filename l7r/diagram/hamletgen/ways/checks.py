@@ -22,7 +22,8 @@ from ..consts import (
     Poly,
     Pt,
 )
-from .geom import _TOUCH_GAP
+from .geom import _TOUCH_GAP, _components
+from .geom import lanes_share_tread as lanes_share_tread
 
 
 def stream_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
@@ -354,23 +355,22 @@ def shallow_crossing(a: Pt, b: Pt, p: Pt, q: Pt, limit_deg: float = 42.0) -> boo
 # reach measure from scratch: it "was wrong on five of six seeds... it over-counted and never read
 # zero", so anything steered by it was steered by noise.
 #
-# AND IT DOES NOT REUSE `_components`, WHICH IS THE NEAR-MISS THAT WOULD HAVE MOVED MAPS.
-# `_components` joins two ways when an END of one comes within tolerance of the other's tread.
-# This rule joins them when ANY VERTEX does. The stricter predicate yields a smaller network, so
-# more houses read as unserved, so the ladder re-rolls maps it used to keep. Two connectivity
-# helpers that look interchangeable and are not - the exact shape `dev/gate.md` collects under
-# "MEASURE WHAT THE RULE MEASURES".
+# The join itself, `lanes_share_tread`, lives in `geom` (feature 417 T06): every network test asks the one predicate.
 
 
-def lanes_share_tread(p: Poly, q: Poly, join: float = _TOUCH_GAP) -> bool:
-    """Do two drawn treads meet - come within `join` (the ink tolerance, `_TOUCH_GAP`) anywhere, by ANY vertex of either
-    against the other's run? (Feature 328: it was the 25 ft join reach, so two ways 20 ft apart counted as one network.)
+def served_lanes(lanes: Sequence[Mapping[str, Any]], join: float = _TOUCH_GAP) -> set[int]:
+    """The lanes of the CONNECTED network (`served_network`'s), by index: the component grown from the connector if one is
+    drawn, else from the longest lane; empty where no lane is drawn.
 
-    Lifted from the check's own inner `_fw_touch` so it can be tested with two lists of tuples instead
-    of a settlement (the project's standing rule on closures that are hard to reach).
-
-    Research: one network, joined where treads meet - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: two ways one network only where their treads meet, within the ink tolerance; the 25 ft of 0081 is the knot pass's, ends joined at one point"""
-    return any(seg_dist(v[0], v[1], a, b) <= join for v in p for a, b in zip(q, q[1:], strict=False)) or any(seg_dist(v[0], v[1], a, b) <= join for v in q for a, b in zip(p, p[1:], strict=False))
+    Research: one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: grown from the connector"""
+    ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
+    seed = next((i for i, ln in enumerate(lanes) if ln.get("connector")), None)
+    if seed is None and ways:
+        seed = max(range(len(ways)), key=lambda i: sum(math.dist(a, b) for a, b in zip(ways[i], ways[i][1:], strict=False)))
+    if seed is None:
+        return set()
+    labels = _components(ways, join)
+    return {i for i, lb in enumerate(labels) if lb == labels[seed]}
 
 
 def served_network(lanes: Sequence[Mapping[str, Any]], join: float = _TOUCH_GAP) -> list[tuple[Pt, Pt]]:
@@ -382,21 +382,9 @@ def served_network(lanes: Sequence[Mapping[str, Any]], join: float = _TOUCH_GAP)
     a check satisfiable by an island rewards drawing an island.
 
     Research: one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: grown from the connector"""
-    ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
-    seed = next((i for i, ln in enumerate(lanes) if ln.get("connector")), None)
-    if seed is None and ways:
-        seed = max(range(len(ways)), key=lambda i: sum(math.dist(a, b) for a, b in zip(ways[i], ways[i][1:], strict=False)))
-    main = set() if seed is None else {seed}
-    grew = True
-    while grew:
-        grew = False
-        for i, p in enumerate(ways):
-            if i in main or len(p) < 2:
-                continue
-            if any(lanes_share_tread(p, ways[j], join) for j in main if len(ways[j]) >= 2):
-                main.add(i)
-                grew = True
-    return [(a, b) for i in sorted(main) for a, b in zip(ways[i], ways[i][1:], strict=False)]
+    main = served_lanes(lanes, join)
+    ways = [[(float(x), float(y)) for x, y in (lanes[i].get("pts") or [])] for i in sorted(main)]
+    return [(a, b) for w in ways for a, b in zip(w, w[1:], strict=False)]
 
 
 def unreached_houses(M: Mapping[str, Any], reach: float = WEB_REACH_FT, near: Callable[[float, float], float] | None = None) -> list[tuple[int, int, int]]:

@@ -16,7 +16,7 @@ from ..corridors import (
     is_tree,
 )
 from ..forced import lazy_ground
-from ..geom import _components, _trim_to_service, lane_owner, memo_ground, polyline_len, steading_footprints, worked_ground
+from ..geom import _trim_to_service, end_components, lane_owner, memo_ground, polyline_len, steading_footprints, worked_ground
 from ..squaring import (
     _pts,
     cut_at_shallow_crossing,
@@ -166,9 +166,11 @@ trim, and changes nothing; on a lane the law calls dangling any trim is taken.""
 
 
 def connector_component(lanes: Sequence[Mapping[str, Any]]) -> set[int]:
-    """The lanes joined to the connector's network at the ink tolerance (`law.JOIN_TOL`) - what `settle_network` keeps."""
+    """The lanes joined to the connector's network at the ink tolerance (`law.JOIN_TOL`) - what `settle_network` keeps.
+
+    Research: one network - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: grown from the connector - joined only at an END (`geom.end_components`), where the page joins where treads meet, a departure the code keeps until feature 417 T06 (the round arbiter's ruling on ask:417-T58-red)"""
     live = [i for i, ln in enumerate(lanes) if len(ln.get("pts") or []) >= 2]
-    labels = _components([_pts(lanes[i]) for i in live], law.JOIN_TOL)
+    labels = end_components([_pts(lanes[i]) for i in live], law.JOIN_TOL)  # the END-ONLY join, kept here alone until T06 (`geom.end_components`)
     roots = {labels[n] for n, i in enumerate(live) if lanes[i].get("connector")}
     return {i for n, i in enumerate(live) if labels[n] in roots}
 
@@ -192,10 +194,10 @@ def settle_fragments(s: Any) -> int:
 def settle_network(s: Any) -> int:
     """Step 5 (ways W17): drop every lane not in the connector's network at the ink tolerance (`law.JOIN_TOL`).
 
-    Research: one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane off the connector's network dropped"""
+    Research: one network - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane off the connector's network dropped - the network joined here only at an END (`geom.end_components`), where the page joins where treads meet, a departure the code keeps until feature 417 T06 (the round arbiter's ruling on ask:417-T58-red)"""
     lanes = s.M.get("lanes") or []
     live = [i for i, ln in enumerate(lanes) if len(ln.get("pts") or []) >= 2]
-    labels = _components([_pts(lanes[i]) for i in live], law.JOIN_TOL)
+    labels = end_components([_pts(lanes[i]) for i in live], law.JOIN_TOL)  # the END-ONLY join, kept here alone until T06 (`geom.end_components`)
     if len(set(labels)) <= 1:
         return 0
     roots = {labels[n] for n, i in enumerate(live) if lanes[i].get("connector")}

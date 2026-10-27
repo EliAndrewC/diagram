@@ -121,7 +121,7 @@
       research: rendering
       verify: DONE. landed: R8's probe complete (P1 added); each needed step's conversion decided in part C, reviewed CLEAR; built by T06
 
-- [ ] T06 (R2 G2) The web laid by the law: an ordinary lane admitted whole by the lane law before it is drawn; the passes after the lay and the settle's repair steps deleted, in `l7r/diagram/hamletgen/ways/` (FR-004, FR-006)
+- [ ] T58 (T06 part A) One network asked one way: every network test but the settle's one-network step asks the treads-meeting join (that step's end-only join deleted in T06, the round arbiter's ruling on ask:417-T58-red); a web run joined to the connector's network; a link kept only where it touches both sides, in l7r/diagram/hamletgen/ways/ (FR-004, FR-006)
       research: rendering
 
 - [ ] T53 (FR-012) The web's whole-network checks asked of what changed: served_network, lanes_share_tread and the rest the trial inventory names, asked of the lanes a step added or moved, not every pair again, in l7r/diagram/hamletgen/ways/ (FR-012)
@@ -131,6 +131,9 @@
       research: rendering
 
 - [ ] T55 (FR-012) The homesteads seated by construction: a seat's refusals that need no layout asked of every candidate at once, a homestead laid out in full (reach, four sides, fixtures) only where it can stand, the per-seat rolls kept, in l7r/diagram/hamletgen/homesteads/ (FR-012)
+      research: rendering
+
+- [ ] T06 (R2 G2) The web laid by the law: an ordinary lane admitted whole by the lane law before it is drawn; the passes after the lay and the settle's repair steps deleted, in `l7r/diagram/hamletgen/ways/` (FR-004, FR-006)
       research: rendering
 
 - [ ] T12 (R2 G9) The paddy cells cut by their rules: cells not cut then merged or left bare, rings not split and welded after, twins and stubs not drawn, the needle one predicate, in `l7r/diagram/waterfields/` (FR-004, FR-005)

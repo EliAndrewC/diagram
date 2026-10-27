@@ -6,3 +6,4 @@
 {"date": "2026-10-26", "claims": 1, "keys": ["l7r/diagram/compound.py::_draw_walls_and_gates#its figures against 0090"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
 {"date": "2026-10-26", "claims": 1, "keys": ["l7r/diagram/compound.py::_draw_walls_and_gates#its figures against 0090"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
 {"date": "2026-10-26", "claims": 1, "keys": ["l7r/diagram/compound_example.py::county_magistracy_program#office hall doors"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
+{"date": "2026-10-27", "claims": 1, "keys": ["l7r/diagram/hamletgen/ways/last_resort.py::lane_breaches#repair policy"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}

@@ -17,8 +17,8 @@ import pytest
 
 from l7r.diagram.hamletgen.ways import lanes_share_tread, served_network, unreached_houses
 
-# two treads that come within 40 ft only at an interior VERTEX, never at an end - the case that separates
-# this predicate from `_components`, which joins on ends alone
+# two treads that come within 40 ft only at an interior VERTEX, never at an end - the case that separated
+# this predicate from `_components` while it joined on ends alone (until feature 417 T06)
 _L_END_APART = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]
 _L_MID_NEAR = [(100.0, 20.0), (100.0, 400.0)]
 
@@ -40,7 +40,7 @@ def test_treads_that_stay_apart_do_not():
     assert lanes_share_tread(_L_END_APART, [(0.0, 500.0), (200.0, 500.0)]) is False
 
 
-def test_the_join_is_measured_by_ANY_vertex_not_only_by_an_end():
+def test_the_join_is_measured_by_ANY_vertex_not_only_by_an_end_and_every_network_test_asks_it():
     """The near-miss that would have moved maps, pinned on a pair that actually separates the two
     predicates. A long east-west lane, and a north-south lane crossing it whose ENDS are 500 ft away on
     either side but which has a VERTEX 20 ft off the tread. Any-vertex joins them; ends-only does not.
@@ -53,7 +53,18 @@ def test_the_join_is_measured_by_ANY_vertex_not_only_by_an_end():
     east_west = [(0.0, 0.0), (500.0, 0.0), (1000.0, 0.0)]
     crossing = [(500.0, -500.0), (500.0, 20.0), (500.0, 500.0)]  # ends 500 ft off; middle vertex 20 ft off
     assert lanes_share_tread(east_west, crossing) is True, "any-vertex: the middle vertex is 20 ft off the tread"
-    assert len(set(_components([east_west, crossing], 40.0))) == 2, "ends-only: every END is 500 ft away, so no join"
+    assert len(set(_components([east_west, crossing], 40.0))) == 1, "one network: `_components` asks the same any-vertex join (417 T58)"
+    from l7r.diagram.hamletgen.ways.geom import end_components
+
+    assert len(set(end_components([east_west, crossing], 40.0))) == 2, "the settle's end-only join, kept until T06: no END is near"
+    assert len(set(_components([east_west, [(0.0, 500.0), (200.0, 500.0)]], 4.0))) == 2, "boxes 500 ft apart: two networks"
+
+
+def test_two_lanes_crossing_in_an_x_with_no_vertex_near_share_a_tread() -> None:
+    """Their treads meet where the legs cross (0246: one network where treads meet), though no vertex of either comes within
+    the ink tolerance of the other (impl-drift on feature 417 T58)."""
+    assert lanes_share_tread([(0.0, 0.0), (200.0, 200.0)], [(0.0, 200.0), (200.0, 0.0)]) is True
+    assert lanes_share_tread([(0.0, 0.0), (200.0, 0.0)], [(0.0, 20.0), (200.0, 20.0)]) is False, "parallel, 20 ft apart"
 
 
 # ---- served_network: the component, seeded from the settlement's link to the world ---------------

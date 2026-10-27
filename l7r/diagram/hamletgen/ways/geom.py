@@ -9,7 +9,7 @@ import math
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any, cast
 
-from l7r.diagram.settlement import point_in_poly, rot_rect, seg_closest, seg_dist
+from l7r.diagram.settlement import point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
 from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
 from l7r.diagram.sitegen.geom import centroid, unit
 
@@ -52,8 +52,58 @@ _TOUCH_GAP = 4.0
 """Research: a junction link may brush a fence - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 4 ft off footprints"""
 
 
+def lanes_share_tread(p: Poly, q: Poly, join: float = _TOUCH_GAP) -> bool:
+    """Do two drawn treads meet - come within `join` (the ink tolerance, `_TOUCH_GAP`) anywhere: ANY vertex of either within
+    `join` of the other's run, or a leg of one crossing a leg of the other (an X mid-leg, no vertex near - impl-drift on
+    feature 417 T58)? (Feature 328: it was the 25 ft join reach, so two ways 20 ft apart counted as one network.)
+
+    THE ONE JOIN OF ONE NETWORK (feature 417 T58): `_components`, and so every network test (`checks.served_network`,
+    `law.lane_networks`, `tidy.unsplitting_drops`, `smooth.web_pieces`, `knots.WebMemo`), asks this - all but `settle_network`,
+    which keeps the END-only join (`end_components`) until T06 (the round arbiter's ruling on ask:417-T58-red). The end-only join
+    dropped lanes whose treads met the network mid-run - 11 at 0.0 ft on the 48-seed cohort (measured 2026-10-27).
+
+    Research: one network, joined where treads meet - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: two ways one network only where their treads meet, within the ink tolerance; the 25 ft of 0081 is the knot pass's, ends joined at one point"""
+    return (
+        any(seg_dist(v[0], v[1], a, b) <= join for v in p for a, b in zip(q, q[1:], strict=False))
+        or any(seg_dist(v[0], v[1], a, b) <= join for v in q for a, b in zip(p, p[1:], strict=False))
+        or any(segments_cross(a, b, c, d) for a, b in zip(p, p[1:], strict=False) for c, d in zip(q, q[1:], strict=False))
+    )
+
+
 def _components(ways: Sequence[Poly], touch: float) -> list[int]:
-    """Connected-component label per way, joined by an END within `touch` of another way's tread."""
+    """Connected-component label per way, two ways joined where their treads meet within `touch` (`lanes_share_tread`); a
+    pair whose boxes lie farther apart than `touch` cannot meet and is not asked."""
+    par = list(range(len(ways)))
+
+    def find(i: int) -> int:
+        while par[i] != i:
+            par[i] = par[par[i]]
+            i = par[i]
+        return i
+
+    boxes = [(min(v[0] for v in w), min(v[1] for v in w), max(v[0] for v in w), max(v[1] for v in w)) if len(w) >= 2 else None for w in ways]
+    for i in range(len(ways)):
+        bi = boxes[i]
+        if bi is None:
+            continue
+        for j in range(i + 1, len(ways)):
+            bj = boxes[j]
+            if bj is None or bj[0] - bi[2] > touch or bi[0] - bj[2] > touch or bj[1] - bi[3] > touch or bi[1] - bj[3] > touch:
+                continue
+            if find(i) != find(j) and lanes_share_tread(ways[i], ways[j], touch):
+                par[find(i)] = find(j)
+    return [find(i) for i in range(len(ways))]
+
+
+def end_components(ways: Sequence[Poly], touch: float) -> list[int]:
+    """Connected-component label per way, joined only where an END of one comes within `touch` of the other's tread
+    (`ends_touch`) - the END-ONLY join `settle_network` alone still asks (feature 417 T58, the round arbiter's ruling on
+    ask:417-T58-red): `settle_defer`'s 30 ft cut leaves a piece 8 ft short of a tree lane that this join drops as off the
+    network, and the one join (`_components`) keeps for the law to refuse (cohort seed 26, measured 2026-10-27). DELETED in
+    T06 at T31 part C item 3, once item 2 lays `settle_defer`'s rule at lay; until then it is the second coding of the
+    one-network rule FR-006 owes.
+
+    Research: one network, joined at ends - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: two ways one network where their treads meet - joined here only at an end, a departure the code keeps until feature 417 T06 (the round arbiter's ruling on ask:417-T58-red)"""
     par = list(range(len(ways)))
 
     def find(i: int) -> int:
@@ -73,9 +123,9 @@ def _components(ways: Sequence[Poly], touch: float) -> list[int]:
 
 
 def ends_touch(p: Poly, q: Poly, p_segs: Sequence[tuple[Pt, Pt]], q_segs: Sequence[tuple[Pt, Pt]], touch: float) -> bool:
-    """`_components`' join of two ways (`p_segs`, `q_segs` their legs): an END of either within `touch` of the other's tread.
+    """`end_components`' join of two ways (`p_segs`, `q_segs` their legs): an END of either within `touch` of the other's tread.
 
-    Research: plumbing - NONE: `_components`' pair test, asked pair by pair by a caller that keeps the answers (`knots.WebMemo`)"""
+    Research: plumbing - NONE: `end_components`' pair test"""
     return any(seg_dist(e[0], e[1], a, b) <= touch for e in (p[0], p[-1]) for a, b in q_segs) or any(seg_dist(e[0], e[1], a, b) <= touch for e in (q[0], q[-1]) for a, b in p_segs)
 
 

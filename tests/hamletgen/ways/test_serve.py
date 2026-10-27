@@ -70,6 +70,26 @@ def test_a_web_lane_that_cannot_reach_the_network_draws_a_link_or_is_refused() -
     assert len(walled.M["lanes"]) == 1, "nothing drawn when the link cannot be made"
 
 
+def test_a_web_lane_joins_the_connectors_network_never_an_island_beside_it() -> None:
+    """THE NETWORK, NOT ANY LINE ON THE GROUND (feature 417 T06, 0246: one network grown from the connector): a run beside an
+    island lane off the connector's network is joined to the connector's network - by a link - never snapped onto the island,
+    which the settle's one-network step would drop with the run on it."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)], [(70.0, 100.0), (70.0, 300.0)]], houses=[(150.0, 200.0)])
+    run = [(118.0, float(y)) for y in range(150, 255, 5)]  # 48 ft off the island, past the shadow's reach
+    assert hg.ways._lay_web_lane(s, run, [], [], [], houses=[(150.0, 200.0)]) is True
+    new = [ln["pts"] for ln in s.M["lanes"][2:]]
+    assert any(min(abs(x) for x, _y in pts) <= 4.0 for pts in new), f"joined to the connector's lane at x = 0: {new}"
+
+
+def test_a_web_lane_beside_an_island_off_the_network_is_refused_as_doubled() -> None:
+    """0081: two paths side by side are drawn as one - beside ANY way, the connector's network or not (impl-drift on feature
+    417 T58: the shadow had come to read only the join's network)."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)], [(100.0, 100.0), (100.0, 300.0)]], houses=[(150.0, 200.0)])
+    beside = [(108.0, float(y)) for y in range(110, 295, 5)]
+    assert hg.ways._lay_web_lane(s, beside, [], [], [], houses=[(150.0, 200.0)]) is False
+    assert len(s.M["lanes"]) == 2
+
+
 def test_a_web_lane_is_refused_when_its_link_is_blocked_though_the_gap_is_short() -> None:
     """The gap is well inside the search radius, so the run is not rejected for distance - it is
     rejected because the ground between it and the network will not take a lane. Refusing is the
@@ -443,8 +463,8 @@ def test_a_cut_end_that_cannot_be_carried_onto_the_way_is_refused_and_one_on_it_
 
 def test_joined_link_snaps_straight_falls_back_to_the_clear_run_or_refuses() -> None:
     """`joined_link` (feature 328 wave 44, 0081: ends within 25 ft are joined at a single point): no length is the point; a
-    walkable straight join; where the straight join grazes a fence, the clear run of it the far branch lays; None where the
-    link is blocked outright."""
+    walkable straight join; where the straight join grazes a fence, the clear run of it the far branch lays, touching both
+    sides; None where the link is blocked outright or its clear run stops short."""
     from l7r.diagram.hamletgen.ways.serve import joined_link
 
     segs = [((0.0, 0.0), (0.0, 400.0))]
@@ -452,9 +472,12 @@ def test_joined_link_snaps_straight_falls_back_to_the_clear_run_or_refuses() -> 
     assert joined_link((20.0, 200.0), (0.0, 200.0), [], [], [], segs) == [(20.0, 200.0), (0.0, 200.0)]
     across = [(5.0, 190.0), (15.0, 190.0), (15.0, 210.0), (5.0, 210.0)]  # a steading astride the link
     assert joined_link((20.0, 200.0), (0.0, 200.0), [], [across], [], segs) is None
-    graze = [(17.0, 205.0), (21.0, 205.0), (21.0, 209.0), (17.0, 209.0)]  # a post 5 ft off the link's first few feet
+    graze = [(21.0, 206.0), (25.0, 206.0), (25.0, 210.0), (21.0, 210.0)]  # a post 6 ft off the link's first few feet
     link = joined_link((20.0, 200.0), (0.0, 200.0), [], [graze], [], segs)
-    assert link is not None and link[-1] == (0.0, 200.0) and 0.0 < math.dist(link[0], (20.0, 200.0)) < 12.0, link
+    assert link is not None and link[-1] == (0.0, 200.0) and 0.0 < math.dist(link[0], (20.0, 200.0)) <= 4.0, link
+    # ...and a clear run that stops short of the point by more than the ink tolerance joins nothing (feature 417 T06)
+    short = [(17.0, 205.0), (21.0, 205.0), (21.0, 209.0), (17.0, 209.0)]  # the clear run starts 8 ft off the point
+    assert joined_link((20.0, 200.0), (0.0, 200.0), [], [short], [], segs) is None
 
 
 def test_a_run_kept_whole_takes_a_link_where_it_arrives() -> None:

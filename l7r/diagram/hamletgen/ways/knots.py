@@ -510,8 +510,8 @@ Research: plumbing - NONE: the law's own rules (`law.LAW`), asked of the web wit
 class WebMemo:
     """The whole web's questions a gather is asked (`settle_knots`), answered pair by pair and KEPT by each lane's points
     (the perf-audit of feature 328 wave 4: the step asked the whole web again for every trial, 2.2-2.5 s a 40-household map,
-    though a gather moves one to three lanes). Which lanes join (`geom.ends_touch`, at `law.JOIN_TOL`: `law.lane_networks`,
-    `settle.connector_component`), which share a tread (`checks.lanes_share_tread`: `checks.served_network`), how far a
+    though a gather moves one to three lanes). Which lanes join (`geom.lanes_share_tread`, at `law.JOIN_TOL`: `law.lane_networks`; `settle.connector_component`
+    keeps the end-only join until T06), which share a tread (the same question, one kind: `checks.served_network`), how far a
     farmhouse stands from a lane (`checks.unreached_houses`), whose end runs on beside another way (`tails.tail_doubled`:
     `law.doubled_tails`) and which runs beside another way (`serve.runs_beside`: `shadowed`) are each a question of two lanes'
     points, so a trial asks only the pairs a moved lane is in and every other pair's answer is the one already given - the
@@ -548,8 +548,9 @@ class WebMemo:
         return max(bb[0] - ba[2], ba[0] - bb[2], bb[1] - ba[3], ba[1] - bb[3]) > reach + 1e-6
 
     def pair(self, kind: str, a: int, b: int) -> bool:
-        """The answer for ways `a` and `b` (numbers from `ids`): "touch" (`ends_touch` at `JOIN_TOL`), "share"
+        """The answer for ways `a` and `b` (numbers from `ids`): "touch" (`lanes_share_tread` at `JOIN_TOL`), "share"
         (`lanes_share_tread`), "doubled" (`tail_doubled`, `a`'s end beside `b`) or "beside" (`runs_beside`, `a` beside `b`)."""
+        kind = "touch" if kind == "share" else kind  # one network, one predicate (feature 417 T58): "share" asks what "touch" does
         key = (kind, a, b) if kind in ("doubled", "beside") or a <= b else (kind, b, a)
         got = self._pairs.get(key)
         if got is None:
@@ -557,18 +558,14 @@ class WebMemo:
         return got
 
     def _ask(self, kind: str, a: int, b: int) -> bool:
-        from ..consts import LANE_JOIN_FT
         from . import law
         from .checks import lanes_share_tread
-        from .geom import ends_touch
         from .serve import runs_beside, sampled
         from .tails import tail_doubled
 
         p, o = self._ways[a], self._ways[b]
         if kind == "touch":
-            return not self._apart(a, b, law.JOIN_TOL) and ends_touch(p, o, self._legs[a], self._legs[b], law.JOIN_TOL)
-        if kind == "share":
-            return not self._apart(a, b, LANE_JOIN_FT) and lanes_share_tread(p, o)
+            return not self._apart(a, b, law.JOIN_TOL) and lanes_share_tread(p, o, law.JOIN_TOL)
         if kind == "doubled":
             return tail_doubled(p, o)
         if a not in self._runs:

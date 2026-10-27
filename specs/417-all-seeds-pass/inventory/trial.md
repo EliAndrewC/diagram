@@ -13,7 +13,7 @@ cProfile's, about twice the unprofiled; they rank, they gate nothing.
 
 | # | stage | site | what it does before it refuses | calls | profiled s | task |
 |---|---|---|---|---|---|---|
-| 1 | web (10.5M calls) | `ways/checks.py` `served_network` (from `ways/serve.py:501`, `ways/reach.py:56,86`, `ways/law.py:694`, `ways/checks.py:422`) | regrows the connected network from the connector over every pair of lanes (`lanes_share_tread`), each time it is asked, as the web grows | 45 calls; 26,974 lane pairs; 954,516 `seg_dist` | 0.86 | T53 (after T31 and T06, which may delete callers: FR-006) |
+| 1 | web (10.5M calls) | `ways/checks.py` `served_network` (from `ways/serve.py:501`, `ways/reach.py:56,86`, `ways/law.py:694`, `ways/checks.py:422`) | regrows the connected network from the connector over every pair of lanes (`lanes_share_tread`), each time it is asked, as the web grows | 45 calls; 26,974 lane pairs; 954,516 `seg_dist` | 0.86 | T53 (after T31 and T58; before T06, the round arbiter's ruling on ask:417-T06-order) |
 | 2 | homesteads (6.5M) | `rolling/gap_ways.py` `_way_for` -> `_first_admitted` -> `access.admitted` -> `tree_admits` -> `ways/tree.py` `judge` | up to `GAP_TRIES` exits a household, each traced back along the flood (`trace`), pulled taut (`route.taut`, 177) and judged by the ways tree, most refused | 40 households, 85 runs, 103 admissions, 56 tree judgments | 1.37 | T54 |
 | 3 | homesteads | `homesteads/growth.py` `settled_seat` -> `household_reach` -> `rolling/bundle.py` `_bundle_envelope` | every candidate seat's whole homestead laid out on its four garden sides, fixtures included, to measure its reach | 416 reaches; 2,506 bundle geometries; 1,216 fixture layouts | 0.39 | T55 |
 | 4 | homesteads | `settlement/houses.py` `try_place` -> `rolling/place.py` `_place_bundle_nucleated` -> `rolling/fit.py` `_parts_fit` | a seat's homestead placed and its parts' rules asked; most offers refused | 160 placements for 40 houses; 359 parts fits | 0.59 | T55 |
@@ -29,7 +29,7 @@ cProfile's, about twice the unprofiled; they rank, they gate nothing.
 
 | stage | site | profiled s | task |
 |---|---|---|---|
-| web | `ways/settle/stage.py` `settle_the_web` (the settle's remaining steps) | 1.13 | T31, then T06 |
+| web | `ways/settle/stage.py` `settle_the_web` (the settle's remaining steps) | 1.13 | T31, then T58 and T06 (after T55) |
 | field (2.8M) | `waterfields/settle.py` `Fabric` judge, merge and neighbors (cells cut, then judged and merged) | 0.33 judge, 0.24 merge | T12 |
 
 ## What no task needs

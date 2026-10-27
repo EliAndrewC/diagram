@@ -82,7 +82,9 @@ flag, never a gate (375 amendment 5): a by-construction placer that is slower is
   Approach before its code (decide first), on the inventory's entries. Rendering: per task.
   SUPERSEDED FOR THE ORDER BY FR-013 (the GM 2026-10-26: "order our remaining tasks in 417 to prioritize the things that will
   make us go faster before the things that will make us correct"): the speed tasks run first, ranked by the calls each removes,
-  in the order the GM confirmed that day (T52, T31, T06, T53, T54, T55, T12, T11, T56, T14, then T57's check-in); the order by
+  in the order the GM confirmed that day (T52, T31, T06, T53, T54, T55, T12, T11, T56, T14, then T57's check-in), amended
+  2026-10-27 by the round arbiter's ruling on ask:417-T06-order (T06's first part landed as T58 before T53, T06 after T55:
+  `## Order`); the order by
   share of failures above holds only among the tasks that make seeds pass, once the GM lifts the stop line.
 - **D6 (the principle)**: FR-003's text is drafted by T03 and goes to the GM; the constitution is amended only with the GM's
   words. Rendering: none.
@@ -115,8 +117,11 @@ SC-006). The last task closes: 1,000 fresh seeds, T106's seat turn re-applied (U
 Story 2), the code-size delta (SC-004), the feature report.
 
 THE ORDER SINCE 2026-10-26 (FR-013; the GM, `request.md` "Speed first"): the open tasks run speed first, the tasks that cut a
-roll's calls ordered by what each removes - T52 (the trial inventory), T31, T06, T53, T54, T55, T12, T11, T56, T14, T57 (the
-checkpoint) - then the tasks that make every seed pass, in `tasks.md`'s order. Each task's Approach states its place. THE
+roll's calls ordered by what each removes - T52 (the trial inventory), T31, T58 (T06's first part), T53, T54, T55, T06, T12,
+T11, T56, T14, T57 (the checkpoint; T06 moved after T55 and its first part split out as T58 by the round arbiter's ruling on
+ask:417-T06-order, 2026-10-27: T06's remaining settle repairs at about 0.3 profiled s of the web's 3.17 against T53's 0.8, T54's
+1.37 and T55's 1, measured 2026-10-26 (`make perf-profile SEED=39 STAGE=<stage> HOUSEHOLDS=40`, `t06-measured.md` in the
+ruling's bundle)) - then the tasks that make every seed pass, in `tasks.md`'s order. Each task's Approach states its place. THE
 WORK STOPS AT T57 for the GM's check-in ("then we can check in once that is all done", `request.md`); the tasks after it start
 on his word.
 
@@ -607,7 +612,7 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
 3. **Where each comes from.** `spec.md` User Story 5's measurement (the check asked of every pair of lanes at each of its calls); the trial inventory.
 4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
    task to the chains that still stand (FR-012).
-5. **The order.** Fourth of the speed tasks, after the settle's probe (T31) and the web laid by the law (T06), which may delete some of these checks' callers (FR-006): the largest single search by trial left in the web.
+5. **The order.** After the settle's probe (T31) and one network asked one way (T58), before T06 (the round arbiter's ruling on ask:417-T06-order, 2026-10-27): the largest single search by trial left in the web. `settle_reach` stays a placer, so its `reach.py` callers stay and are made incremental here; a caller T06 later deletes is a small loss the ruling accepts. The web's serve now asks `served_network` per run laid (T58), a caller this task makes incremental too.
 6. **The exits.** Green: the web's whole-network checks asked incrementally, their calls at least tenfold down, the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
    Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: the same predicate asked of a smaller set; an index the plan names (`settlement/_geom/indexes.py`).
@@ -728,7 +733,7 @@ Each step measured alone:
 2. **The constraints.** FR-004, FR-006, FR-013, SC-002.
 3. **Where each comes from.** the inventory (`inventory/ways.md`, G2); T26's and T31's measured deletions; D5, D11, D35.
 4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the task to what still stands (FR-012).
-5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): third of the speed tasks, after the trial inventory and the settle's probe (T31), before the web's whole-network checks (T53).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the households' seating (T55), before the paddy cells (T12) - moved there, its first part landed as T58, by the round arbiter's ruling on ask:417-T06-order (2026-10-27): what T06 still converts measured smaller than T53-T55 (`t06-measured.md`).
 6. **The exits.** Green: the web laid by the law with no repair pass left, its calls measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
    Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: the law's predicates asked of a candidate lane before it is drawn.
@@ -736,6 +741,8 @@ Each step measured alone:
 9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
 10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
 11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+OWED FROM T58 (the round arbiter's ruling on ask:417-T58-red): `settle_network` / `connector_component` still ask the END-only join (`geom.end_components`), the second coding of the one-network rule; FR-006's one-network check counts this caller as OWED, not done, until T31 part C item 2 (`settle_defer` at lay) lands and item 3 deletes it, seed 26 shown passing without it.
 
 Each step measured alone:
 
@@ -751,7 +758,7 @@ Each step measured alone:
 2. **The constraints.** FR-004, FR-005, FR-013.
 3. **Where each comes from.** the inventory (`inventory/homesteads-water.md`, G9); feature 427 T09's measurements (`specs/427-call-volume-refactors/research/t09-water.md`).
 4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the task to what still stands (FR-012).
-5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): seventh of the speed tasks, after the homesteads (T55), before the field's courses (T11).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): eighth of the speed tasks, after the web laid by the law (T06, moved after T55 by the ruling on ask:417-T06-order), before the field's courses (T11).
 6. **The exits.** Green: the cells cut by their rules with the settle's merges gone, the field stage's calls measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
    Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: the ring rules asked of a cell before it is cut.
@@ -774,7 +781,7 @@ Each step measured alone:
 2. **The constraints.** FR-004, FR-006, FR-007, FR-013.
 3. **Where each comes from.** the inventory (`inventory/homesteads-water.md`, G8).
 4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the task to what still stands (FR-012).
-5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): eighth of the speed tasks, after the paddy cells (T12).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): ninth of the speed tasks, after the paddy cells (T12).
 6. **The exits.** Green: the courses placed by their rules with the repair gone, the field stage's calls measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
    Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: each course's rules asked of its candidate before it is laid.
@@ -797,7 +804,7 @@ Each step measured alone:
 2. **The constraints.** FR-006, FR-013.
 3. **Where each comes from.** the inventory (`inventory/cross.md`, G11); T18's deletions.
 4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the task to what still stands (FR-012).
-5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): tenth of the speed tasks, before the checkpoint (T57).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): eleventh of the speed tasks (T58 added before T53), before the checkpoint (T57).
 6. **The exits.** Green: the resync's checking and the record-time refusal gone from the generator, the finished-map overlap check in the cohort and the tests calling the placers' predicate, the hand mirrors one, the calls measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
    Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: the matrix asked by each placer of its candidate.
@@ -1252,3 +1259,30 @@ Each step measured alone:
 | what still stands | the re-measure in item 4 |
 | each change | `make maps-moved`, `make perf-fanout` |
 | no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T58 Approach (checklist part A)
+
+T06's first part, the round arbiter's ruling on ask:417-T06-order: one network asked one way, and runs and links that join it.
+
+1. **The goal, in the world.** One network is what 0246 says it is - two ways one network where their treads meet, grown from the connector - asked by ONE predicate everywhere but one: `geom.lanes_share_tread` behind `_components`, and so `checks.served_network`, `law.lane_networks`, `tidy.unsplitting_drops`, `smooth.web_pieces` and `knots.WebMemo` (FR-006); `settle.settle_network` / `connector_component` alone keep the END-only join until T06 (item (d) below). A web run joined to the connector's network (`served_network`), never to an island beside it; a healing or detour link kept only where it touches both the run and the network at the ink tolerance (`serve._touches_both`, 0081: ends joined at a single point), the 12 ft GUESS gone. Decided after the first landing cohort (2026-10-27): (a) the tread join also counts a leg of one crossing a leg of the other (an X with no vertex near - impl-drift's DRIFTED on `lanes_share_tread`); (b) the doubled-lane shadow still reads every way drawn (`_net_segs`), the join's network being the connector's only; (c) the web memo's "share" and "touch" asked as one kind; (d) THE END-ONLY JOIN KEPT at `settle_network` / `connector_component` alone (`geom.end_components`), the round arbiter's ruling on ask:417-T58-red (route B): with the one join there, cohort seed 26 measured 2026-10-27 (`t58-red.md`: `make cohort N=1 SEED=26`, bisected caller by caller) was refused `joins_short` on a piece `settle_defer`'s 30 ft cut leaves 8 ft short of a tree lane, which the end-only join drops as off the network; a last-resort rule naming `joins_short` was ruled NOT LEGITIMATE by spec-fidelity (MODE 2) and reverted. The end-only join is deleted in T06 at T31 part C item 3, after item 2 converts `settle_defer` to lay-time; until then it is the one second coding of the one-network rule FR-006 still owes.
+2. **The constraints.** FR-004, FR-006, FR-013; research 0246 (one network where treads meet, grown from the connector), 0081 (ends joined at a single point).
+3. **Where each comes from.** T06's probes P2-P5 in a detached worktree at fb19852b5 (`t06-measured.md`, the arbiter bundle of ask:417-T06-order): the END-only join dropped 11 runs whose treads met the network at 0.0 ft, measured 2026-10-27 (the P4 gap log on `make cohort N=48 FRESH=0 JOBS=3`).
+4. **Do they describe the world here?** Measured 2026-10-27 (`make cohort N=48 FRESH=0 JOBS=3`, the settle's edits logged by step): P5 54/54, the settle's edits 135 -> 105, the runs `settle_network` drops 22 -> 16; P2 54/54, edits unchanged; P3 54/54, the door paths' knot moves gone.
+5. **The order.** Lands now, before T53 (the round arbiter, ask:417-T06-order: what the probes found lands now; T06's remaining conversions move after T55).
+6. **The exits.** Green: the landing cohort and pinned rows passing, the claims round clean, the calls recorded beside the seconds. Red: the failing seeds recorded, the change set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one predicate asked; `_components` skips a pair whose boxes lie beyond the tolerance and a pair already joined.
+8. **The budget.** One landing.
+9. **Done, measured.** The cohort's verdicts and `make maps-moved` recorded in the landing NOTE; the calls by `make perf-fanout`.
+10. **Before moving a constant.** The 12 ft link reach was a GUESS (feature 417 T29 pass A2), a knob; the ink tolerance it becomes is 0246's.
+11. **Before fitting things into room.** Not a packing change.
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| one network, treads meeting (P5) | the 48-seed cohort with the settle's edits logged, 2026-10-27 |
+| runs join the connector's network (P2) | the same, 2026-10-27 |
+| links touch both sides (P3) | the same, 2026-10-27 |
+| (a)-(c) after the first cohort, and (d) the end-only join kept at `settle_network` | seed 26 bisected caller by caller (`t58-red.md`), then `make cohort-landing` in `make land`, 2026-10-27 |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+

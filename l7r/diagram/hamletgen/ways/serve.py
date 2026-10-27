@@ -86,21 +86,31 @@ def runs_beside(p: Sequence[Pt], run: Sequence[Pt], o: Sequence[Pt]) -> bool:
     return shadow_measure(run, list(zip(o, o[1:], strict=False)))[1] > BUNDLE_PITCH
 
 
+def _touches_both(p: Pt, link: Poly, segs: Sequence[tuple[Pt, Pt]]) -> bool:
+    """Does a link run touch both the point it leaves (`p`) and the network (`segs`) at the ink tolerance (`_TOUCH_GAP`, the
+    join of one network)? A link that stops short of either side joins nothing (feature 417 T06: it was 12 ft, and the settle's
+    knots step carried the ends that stopped short).
+
+    Research: a link touches both sides - research/questions/0081-village-lanes.drawing.html: ends joined at a single point - at the ink tolerance two treads meet at (`_TOUCH_GAP`, 0246's one network)"""
+    return _reach(p, link) <= _TOUCH_GAP and _net_reach(link, segs) <= _TOUCH_GAP
+
+
 def joined_link(p: Pt, q: Pt, hard: list[Poly], walls: list[Poly], water: list[tuple[Pt, Pt]], segs: Sequence[tuple[Pt, Pt]]) -> Poly | None:
     """The link that joins a lane's point `p` to its foot `q` on the network (feature 328 wave 44, 0081: ends within 25 ft are
     joined at a single point): the straight join where it is walkable (`_clear_link`), else the clear run of it the far-gap
-    branch lays (`clear_runs`, kept where it reaches both `p` and the network within 12 ft), else None - and the run is then not
+    branch lays (`clear_runs`, kept where it touches both `p` and the network, `_touches_both`), else None - and the run is then not
     drawn. A link of no length is the point itself.
 
     Research:
         a near end joined - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another joined at a single point, or the lane not drawn
         a detour link's margins - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft off a wall (`WEB_FABRIC_GAP`); the hard ground at its own gap - the crop at a half-tread (`WEB_CROP_GAP`, 0081), the toe and marsh 8 ft (`WEB_HARD_GAP`, UNRESEARCHED)
-        a detour link's reach - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); kept only where it comes within 12 ft of the point and of the network"""
+        a detour link touches both sides - research/questions/0081-village-lanes.drawing.html: ends joined at a single point - kept only where it touches the point and the network at the ink tolerance (`_touches_both`)
+        a detour link's clear run - GUESS: no source could speak to it, a value of ours (feature 417 T58); a clear run under 12 ft (`clear_runs`' floor) is no link"""
     if math.dist(p, q) <= 1e-6:
         return [p]
     if _clear_link(p, q, hard, walls, water):
         return [p, q]
-    link = [r for r in clear_runs([p, q], hard, WEB_HARD_GAP, step=4.0, lines=water, tight=walls, tight_margin=WEB_FABRIC_GAP, floor=12.0) if _reach(p, r) < 12.0 and _net_reach(r, segs) < 12.0]
+    link = [r for r in clear_runs([p, q], hard, WEB_HARD_GAP, step=4.0, lines=water, tight=walls, tight_margin=WEB_FABRIC_GAP, floor=12.0) if _touches_both(p, r, segs)]
     return link[0] if link else None
 
 
@@ -108,11 +118,17 @@ def join_width(s: Settlement, link: Poly) -> float:
     """A healing link's drawn width: the widest lane it joins (within `_LANE_JOIN_FT` of the link), else 3 ft. Laid at the
     web's own 3 ft between two 5 ft lanes it renders as a neck with a round-cap knuckle at each step - a review read it at 2x as a
     lollipop knob mid-street; a link exists to make two lanes one, so it looks like the lane it completes. Lifted out of the far
-    branch so the kept-whole branch's link takes it too (feature 328 wave 44, impl-drift).
+    branch so the kept-whole branch's link takes it too (feature 328 wave 44, impl-drift). The lanes read are the connector's
+    network the link joins, never an island beside it (feature 417 T58).
 
     Research: a link takes its way's width - CONVENTION"""
-    segs_of = [list(zip([(float(x), float(y)) for x, y in _l["pts"]], [(float(x), float(y)) for x, y in _l["pts"]][1:], strict=False)) for _l in s.M.get("lanes", [])]
-    return max((float(_l.get("w", 3)) for _l, sg in zip(s.M.get("lanes", []), segs_of, strict=False) if sg and _net_reach(link, sg) <= _LANE_JOIN_FT), default=3.0)
+    from .checks import served_lanes  # local: checks sits above serve in this package's layers
+
+    lanes = s.M.get("lanes", [])
+    main = sorted(served_lanes(lanes))
+    segs_of = [list(zip([(float(x), float(y)) for x, y in lanes[i]["pts"]], [(float(x), float(y)) for x, y in lanes[i]["pts"]][1:], strict=False)) for i in main]
+    widths = [float(lanes[i].get("w", 3)) for i in main]
+    return max((w for w, sg in zip(widths, segs_of, strict=False) if sg and _net_reach(link, sg) <= _LANE_JOIN_FT), default=3.0)
 
 
 def carried_onto(run: Poly, end: int, link: Poly | None, hard: list[Poly], walls: list[Poly], water: list[tuple[Pt, Pt]]) -> Poly | None:
@@ -172,13 +188,18 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         link off walls - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft off a wall (`WEB_FABRIC_GAP`), a garden fence's 7 ft to a lane's middle
         link off the toe and marsh - GUESS: searched, the record silent (feature 417 T29 pass A1, 2026-10-25); kept 8 ft off them (`WEB_HARD_GAP`)
         link against the crop - research/questions/0081-village-lanes.drawing.html: half the widest tread off it (`WEB_CROP_GAP`, carried by the crop polygons), so a link drawn at its way's width keeps its tread off the crop
-        a healing link kept - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); its ends within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), else the gap is left unjoined
+        a healing link touches both sides - research/questions/0081-village-lanes.drawing.html: ends joined at a single point - kept only where it touches the run and the network at the ink tolerance (`_touches_both`), else the run is not drawn
+        runs join the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network grown from the connector - a run is joined to the connector's network (`served_network`), not to any line on the ground
+        a link's clear run - GUESS: no source could speak to it, a value of ours (feature 417 T58); a clear run under 12 ft (`clear_runs`' floor) is no link
         a link takes its way's width - CONVENTION
         the nearer end joined - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); of a run's two ends, the one nearer the network is the one joined to it
         web lane width - research/questions/0081-village-lanes.drawing.html: a web lane drawn 3 ft wide, the footpath's tread
         its figures against 0081 - DEVIATION research/questions/0081-village-lanes.drawing.html: 0.6 (a run refused when over 60% shadowed, where the page draws two ways side by side as one) - a departure the code keeps until feature 417 T32
     """
-    segs = _net_segs(s)
+    from .checks import served_network  # local: checks sits above serve in this package's layers
+
+    segs = served_network(s.M.get("lanes") or [])  # THE NETWORK, NOT ANY LINE ON THE GROUND (feature 417 T58): a run
+    # joined to an island off the connector's network would be dropped whole by the settle's one-network step
     if len(run) < 2:
         return False
     # TRIM FIRST, JOIN SECOND. The join is computed from the run's ENDS, so trimming afterwards moves
@@ -203,7 +224,8 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         # run or four fifths of it, so the longest UNBROKEN shadowed stretch is capped at one bundle
         # pitch as well. Both clauses are needed - the fraction catches a short lane laid alongside
         # another for all of its length, the absolute catches a long one that eventually diverges.
-        _near, _worst_ft = shadow_measure(run, segs)
+        _near, _worst_ft = shadow_measure(run, _net_segs(s))  # ...beside ANY way drawn, the connector's network or not (0081:
+        # two paths side by side are drawn as one; impl-drift on feature 417 T58, where the join's network had become the shadow's)
         # ONE REFUSAL, BOTH CLAUSES: the fraction catches a short lane laid alongside another for all of its
         # length, the unbroken stretch a long one that eventually diverges. Written as one test because they are
         # one rule - a lane that shadows another is a doubled band - and because a separate line for the second
@@ -263,9 +285,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         if gap > _LANE_JOIN_FT:
             if math.dist(p, q) > WEB_REACH_FT * 2.0:
                 return False
-            link = [
-                r for r in clear_runs([p, q], hard, WEB_HARD_GAP, step=4.0, lines=water, tight=walls, tight_margin=WEB_FABRIC_GAP, floor=12.0) if _reach(p, r) < 12.0 and _net_reach(r, segs) < 12.0
-            ]
+            link = [r for r in clear_runs([p, q], hard, WEB_HARD_GAP, step=4.0, lines=water, tight=walls, tight_margin=WEB_FABRIC_GAP, floor=12.0) if _touches_both(p, r, segs)]
             if not link:
                 return False
             # A HEALING LINK INHERITS THE WIDTH OF THE WAY IT JOINS. Laid at the web's own 3 ft
