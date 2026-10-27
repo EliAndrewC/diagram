@@ -60,26 +60,27 @@ sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True  # the push runs this in fixture trees whose `git status` must stay clean
 import claims_carry  # noqa: E402
 import claims_context  # noqa: E402
+import claims_flight  # noqa: E402
 import claims_labels  # noqa: E402
 import claims_stale  # noqa: E402
+import claims_triage  # noqa: E402
+import pager  # noqa: E402
+import record_cache as rc  # noqa: E402
+import record_units as ru  # noqa: E402
 from claims_reply import (  # noqa: E402, F401 - lifted out at the 1,000-line bar (feature 426); re-exported so every caller still reaches them here
-    FINDINGS,
-    OUTSIDE,
-    VERDICTS,
     _ELIDED,
     _RESTS,
     _UNCLAIMED,
     _VERDICT,
+    FINDINGS,
+    OUTSIDE,
+    VERDICTS,
     outside_tag,
     parse_reply,
     record,
     rests_of,
     unelide,
 )
-import claims_flight  # noqa: E402
-import claims_triage  # noqa: E402
-import record_cache as rc  # noqa: E402
-import record_units as ru  # noqa: E402
 from claims_triage import (  # noqa: E402,F401 - the triage half, split out (feature 375 T09); re-exported
     BLOBS,
     findings_of,
@@ -918,7 +919,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.cmd == "triaged":
         return _triaged_cmd(args, root, cur, index, qdir, store)
     if args.cmd == "report":
-        print(report(cur, index, qdir, store, load_deferred(root / DEFERRED), show_deferred=args.all))
+        pager.page(report(cur, index, qdir, store, load_deferred(root / DEFERRED), show_deferred=args.all))
         return 0
     if args.cmd == "bundle":
         due_all = owed(cur, index, qdir, store)
