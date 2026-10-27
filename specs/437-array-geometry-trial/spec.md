@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: Draft
+**Status**: Done - the trial measured and set down (FR-005): `research/share.md`, `research/spike.md`, `report-trial.md`
 
 **Affects**: tooling, performance, hamlet
 
@@ -92,6 +92,9 @@ which tooling or process changes those times point at, to make iterating on perf
   landing dropped.
 - 2026-10-27, round 2 (spec-fidelity-verify): CHANGES REQUIRED - the caller reading taken over FR-001's search space and the
   predicate named; User Story 1 and SC-001/SC-002 worded for one predicate; the clock's rows sourced or marked not recorded.
+- 2026-10-27, round 3 (spec-fidelity-verify): CHANGES REQUIRED - the clock's rows 5 and 11; the spike converted only the seat
+  test. Its tripwire (a third round) went to the round arbiter: ACCEPT (ask:437-spec-round-4) - the spec stands with the
+  fixes made (spike 2 whole, the early exit named, SC-003 aligned), no further round owed.
 
 ## Assumptions
 

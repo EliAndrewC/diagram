@@ -64,6 +64,11 @@ took 38 s
 corridor_bars spike 2: 4,199 calls, self 0.073 s, cumulative 0.348 s (stage 5.04 s under cProfile; before: 0.135 s of 4.47 s)
 ```
 
+`make phase-calls` on spike 2's commit (in a detached worktree), measured 2026-10-27: homesteads 7,722,160 -> 7,718,806, the
+roll 26,369,851 -> 26,362,008 (-0.03%). Spike 1's count (homesteads -1.2%), taken in the clone on its commit, does not agree
+with this; the difference between the two counts was not explained (the call count also varies about 0.03% between processes,
+feature 436's A/A).
+
 ## Reading of both
 
 - Spike 1 made the corridor test 2.3 times slower, spike 2 2.6 times; the roll moved +2% and +3%, inside the -4% floor. No
