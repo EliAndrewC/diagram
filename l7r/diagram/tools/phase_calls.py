@@ -8,8 +8,8 @@ off and the step's own switched on, and back on its return: a call is counted on
 by the stage (its own work). The wrappers' frames and the profilers' switches are taken out of the counts, so a stage's
 total is cProfile's count of the stage alone - the fanout's for the same seed and engine.
 
-One roll measures every stage: the fanout's job for stage k runs stages 1 to k-1 plainly in a fresh process and then k, which
-is the state stage k meets here; neither profiling nor the wrappers change a result.
+Each stage is measured as the fanout measures it, in a fresh process that runs the stages before it plainly (`stage_job`):
+one sequential roll measuring every stage was measured short of the fanout (`measure`'s docstring).
 
 The record, `dev/phase-calls.json`, keeps the newest measurement per map type (the settlement form, field archetype and water
 sink the spec sets), with its date, seed, households and engine commit; `make placement-stages` reads it
@@ -27,6 +27,7 @@ import json
 import os
 import subprocess
 from collections.abc import Callable, Mapping, Sequence
+from concurrent.futures import ProcessPoolExecutor
 from contextlib import ExitStack, redirect_stdout
 from typing import Any
 
@@ -35,6 +36,7 @@ from l7r.diagram.tools import perf_profile
 RECORD = os.path.join(perf_profile.SKILL, "dev", "phase-calls.json")
 HOUSEHOLDS = 40
 SEED = 39
+JOBS = 3  # the fanout's default: each worker holds a roll
 _SWITCHES = ("<method 'enable' of '_lsprof.Profiler' objects>", "<method 'disable' of '_lsprof.Profiler' objects>")
 
 
@@ -102,26 +104,45 @@ def type_key(spec: Mapping[str, Any]) -> str:
     return "/".join(str(spec.get(k) or "rolled") for k in ("settlement_form", "field_archetype", "water_sink"))
 
 
-def measure(seed: int = SEED, households: int = HOUSEHOLDS, overrides: Mapping[str, Any] | None = None) -> dict[str, Any]:
-    """One hamlet measured stage by stage: its type, total and per-stage counts."""
+def stage_job(job: tuple[int, int, Mapping[str, Any], int]) -> tuple[str, dict[str, Any]]:
+    """One stage measured as `make perf-fanout` measures it: a fresh roll of `(seed, households, overrides)` whose stages before
+    the `k`th run plainly, then the `k`th under the tally - its name and its counts."""
     from l7r.diagram.hamletgen import HamletSpec, plan_site
     from l7r.diagram.hamletgen.driver import STAGES, roll_scope
     from l7r.diagram.hamletgen.plan import beyond_the_band
     from l7r.diagram.settlement import Settlement
-    from l7r.diagram.tools.perf_snapshot import REFERENCE
     from l7r.diagram.tools.placement_stages import _bind_points, stage_doc
 
-    spec: dict[str, Any] = {**REFERENCE, "households": households, **(overrides or {})}
-    stages: dict[str, Any] = {}
+    seed, households, overrides, k = job
     with ExitStack() as band:
         band.enter_context(beyond_the_band())
-        plan = plan_site(HamletSpec(seed=seed, **spec))
+        plan = plan_site(HamletSpec(seed=seed, **_spec(households, overrides)))
         s = Settlement(W=plan.W, H=plan.H, seed=seed)
-        tally = Tally()
         with redirect_stdout(io.StringIO()), roll_scope(plan.spec):
-            for st in STAGES:
-                name = st.__name__.replace("stage_", "")
-                stages[name] = tally.stage(functools.partial(st, s, plan), stage_doc(st)[2], _bind_points)
+            for st in STAGES[:k]:
+                st(s, plan)
+            st = STAGES[k]
+            return st.__name__.replace("stage_", ""), Tally().stage(functools.partial(st, s, plan), stage_doc(st)[2], _bind_points)
+
+
+def _spec(households: int, overrides: Mapping[str, Any] | None) -> dict[str, Any]:
+    from l7r.diagram.tools.perf_snapshot import REFERENCE
+
+    return {**REFERENCE, "households": households, **(overrides or {})}
+
+
+def measure(seed: int = SEED, households: int = HOUSEHOLDS, overrides: Mapping[str, Any] | None = None, jobs: int = JOBS, pool_cls: Any = ProcessPoolExecutor) -> dict[str, Any]:  # noqa: ANN401
+    """One hamlet measured stage by stage, each stage in its own fresh roll (`stage_job`): its type, total and per-stage counts.
+
+    EACH STAGE IN A FRESH PROCESS, AS THE FANOUT DOES IT: one sequential roll measuring every stage was 3,317 calls short of the
+    fanout's 5,205,034 on seed 39's 40-household homesteads (measured 2026-10-27, make phase-calls against make perf-fanout) -
+    the process a stage meets is not the one a plain roll of the stages before it leaves."""
+    from l7r.diagram.hamletgen.driver import STAGES
+
+    fresh = {"max_tasks_per_child": 1} if pool_cls is ProcessPoolExecutor else {}
+    with pool_cls(max_workers=max(1, jobs), **fresh) as pool:
+        stages = dict(pool.map(stage_job, [(seed, households, dict(overrides or {}), k) for k in range(len(STAGES))]))
+    spec = _spec(households, overrides)
     return {"type": type_key(spec), "seed": seed, "households": households, "total": sum(v["calls"] for v in stages.values()), "stages": stages}
 
 
@@ -159,9 +180,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--form", default=None, help="settlement form (nucleated, linear, dispersed)")
     ap.add_argument("--archetype", default=None, help="field archetype")
     ap.add_argument("--sink", default=None, help="water sink (pond, offmap)")
+    ap.add_argument("--jobs", type=int, default=JOBS)
     a = ap.parse_args(argv)
     over = {k: v for k, v in (("settlement_form", a.form), ("field_archetype", a.archetype), ("water_sink", a.sink)) if v}
-    m = measure(a.seed, a.households, over)
+    m = measure(a.seed, a.households, over, a.jobs)
     record(m)
     print(report(m))
     print(f"recorded in {os.path.relpath(RECORD, perf_profile.SKILL)}")

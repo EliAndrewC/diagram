@@ -97,8 +97,11 @@ def test_measure_rolls_every_stage_once_under_the_tally(monkeypatch: pytest.Monk
         pc.type_key({})
 
     monkeypatch.setattr(driver, "STAGES", (stage_water_frame, stage_sink))
-    m = pc.measure(7, 12, {"water_sink": "offmap"})
-    assert ran == ["water_frame", "sink"] and m["type"] == "nucleated/rolled/offmap" and m["households"] == 12
+    from concurrent.futures import ThreadPoolExecutor
+
+    m = pc.measure(7, 12, {"water_sink": "offmap"}, jobs=2, pool_cls=ThreadPoolExecutor)
+    assert ran.count("water_frame") == 2 and ran.count("sink") == 1, "each stage its own roll: the stages before it run first"
+    assert m["type"] == "nucleated/rolled/offmap" and m["households"] == 12
     assert set(m["stages"]) == {"water_frame", "sink"} and m["total"] == sum(v["calls"] for v in m["stages"].values())
     assert m["stages"]["sink"]["steps"]["l7r.diagram.tools.phase_calls.type_key"] > 0
 
@@ -106,7 +109,7 @@ def test_measure_rolls_every_stage_once_under_the_tally(monkeypatch: pytest.Monk
 def test_main_measures_records_and_prints(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     got: dict[str, Any] = {}
     m = {"type": "t", "seed": 1, "households": 40, "total": 4, "stages": {"x": {"calls": 4, "own": 4, "steps": {}}}}
-    monkeypatch.setattr(pc, "measure", lambda seed, households, over: got.update(seed=seed, households=households, over=over) or m)
+    monkeypatch.setattr(pc, "measure", lambda seed, households, over, jobs: got.update(seed=seed, households=households, over=over) or m)
     monkeypatch.setattr(pc, "RECORD", str(tmp_path / "rec.json"))
     monkeypatch.setattr(pc, "record", lambda mm: got.update(recorded=mm))
     assert pc.main(["--seed", "5", "--form", "linear", "--sink", "pond"]) == 0

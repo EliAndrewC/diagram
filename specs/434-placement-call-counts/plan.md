@@ -59,9 +59,14 @@ innermost listed step's, or the stage's (its own work). The wrappers' own frames
 are removed from the counts, so a stage's total is cProfile's count of the stage alone - the fanout's (SC-003). A step that
 calls itself, or a step nested in another, nests on the same stack.
 
-**D2 - One sequential roll is the fanout's state.** The fanout profiles stage k in a fresh process after running stages 1 to
-k-1 plainly; one roll that runs every stage in order gives stage k the same process state (the profiling and the wrappers
-change no result). So one roll measures every stage, and agrees with the fanout stage by stage.
+**D2 - Each stage in a fresh process, as the fanout measures it.** AMENDED 2026-10-27: one sequential roll measuring every
+stage was 3,317 calls short of the fanout on seed 39's 40-household homesteads, measured 2026-10-27 (make phase-calls
+against make perf-fanout) - the process a stage meets is not the one a plain roll of the stages before it leaves. So each
+stage is measured as the fanout measures it: a fresh worker runs the stages before it plainly, then it under the tally
+(`phase_calls.stage_job`, `--jobs` workers, each job a fresh process). What remains apart from the fanout is a few hundred
+calls in four stages - two the fanout's own run variation (two consecutive fanouts gave sink 77,448 then 77,396), two a
+small residue - measured 2026-10-27 (make phase-calls against make perf-fanout); the round arbiter accepted SC-003 so
+(ask:434-SC-003-exact).
 
 **D3 - The record.** `dev/phase-calls.json`: one entry per map type, keyed by the spec's knobs that decide which stages do
 work (settlement form, field archetype, water sink), each with its date, seed, households, engine commit, total, and per

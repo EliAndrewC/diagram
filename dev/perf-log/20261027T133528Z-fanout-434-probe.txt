@@ -1,0 +1,16 @@
+perf-fanout seed 39, sizes 40, HOT 50,000, ANCHOR 300
+
+field: 2,869,318 calls @40
+  placed @40: wet_plots +122, comb_floors.inashiro-paddies +114, dry_plots +53, flooded_plots +15, drawn_channels +13, field_ditches +13, channels +1, field_ponds +1, fields +1, streams +1, weirs +1; 8,565 calls per thing placed
+sink: 77,448 calls @40
+  placed @40: pond +4, channels +1, drawn_channels +1, marshes +1; 11,064 calls per thing placed
+seat: 204,913 calls @40
+  placed @40: nothing in the manifest
+  anchor hamletgen/cluster.py:61:back_fouled [91]
+    hamletgen/cluster.py:86:<genexpr> [103,194] <- hamletgen/cluster.py:61:back_fouled [91]
+homesteads: 5,205,033 calls @40
+  placed @40: site_boundary.water +101, site_boundary.corridors +98, access_corridors +85, gardens +52, houses +40, threshing_yards +40, site_boundary.chords +11, farm_sheds +5, site_boundary.window +4, way_out_gate +2, way_out_track +2, site_boundary.rings +1; 11,802 calls per thing placed
+  anchor hamletgen/homesteads/growth.py:148:settled_seat [267]
+    settlement/core.py:562:px [73,306] <- settlement/homestead_parts/fixture_seats.py:355:lay_fixtures [1,216] <- settlement/rolling/bundle.py:338:_lay_fixtures [1,221] <- settlement/rolling/bundle.py:190:_bundle_layout [1,221] <- settlement/rolling/bundle.py:161:_bundle_template [2,506] <- settlement/rolling/bundle.py:80:_bundle_geom [2,506] <- settlement/rolling/bundle.py:73:_bundle_envelope [416] <- hamletgen/homesteads/growth.py:178:household_reach [416] <- hamletgen/homesteads/growth.py:404:reach_at [416] <- hamletgen/homesteads/growth.py:148:settled_seat [267]
+
+all stages: 8,356,712 calls @40

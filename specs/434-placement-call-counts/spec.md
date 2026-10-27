@@ -106,6 +106,11 @@ in its place - where that type spent more calls in the stage than the reference 
 - **SC-002** (FR-001, FR-004): Within every stage, its steps plus its own work add up to the stage's count.
 - **SC-003** (FR-006): For the reference spec, a stage's recorded count equals `make perf-fanout`'s for the same seed and engine
   (the fanout measures the reference spec only): both are cProfile's call count over the same stage run in the same process state, the step tally switching profilers rather than counting its own way, and the calls its own switching adds subtracted.
+  NOTE (the round arbiter's accept on ask:434-SC-003-exact, 2026-10-27): met for the reference spec at seed 39, 40
+  households, on this engine, by waiver - 19 of 23 stages equal the fanout's; sink -52 and seat +465 each equal one fanout
+  run exactly (the fanout's own run and environment variation); field -307 and homesteads +298 keep a residue of a few
+  hundred calls in stages of millions, measured 2026-10-27 (make phase-calls against make perf-fanout).
+  The waiver holds at this scale only: a stage thousands of calls apart is a new question.
 - **SC-004** (FR-004, FR-005): Expanding and collapsing a stage row works in the page as generated, with no time anywhere in the counts.
 
 ## Assumptions

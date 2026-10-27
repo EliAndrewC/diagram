@@ -1,0 +1,1337 @@
+{
+ "dispersed/rolled/pond": {
+  "commit": "fc80961f4",
+  "date": "2026-10-27",
+  "households": 40,
+  "seed": 39,
+  "stages": {
+   "appurtenances": {
+    "calls": 87046,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 46376,
+     "l7r.diagram.hamletgen.homesteads.retirement.retirement_houses": 28,
+     "l7r.diagram.hamletgen.homesteads.wells.place_wells": 8541,
+     "l7r.diagram.settlement.Settlement.draft_byres": 32098
+    }
+   },
+   "bamboo": {
+    "calls": 10,
+    "own": 10,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.bamboo_stand": 0
+    }
+   },
+   "burial": {
+    "calls": 17,
+    "own": 17,
+    "steps": {
+     "l7r.diagram.hamletgen.burial.stage_burial": 0
+    }
+   },
+   "crossings": {
+    "calls": 98975,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.water.polder_crossing_caps": 0,
+     "l7r.diagram.settlement.Settlement.bridges": 3329,
+     "l7r.diagram.settlement.Settlement.channel_footbridges": 95643,
+     "l7r.diagram.settlement.Settlement.dike_gates": 0
+    }
+   },
+   "field": {
+    "calls": 2869011,
+    "own": 680,
+    "steps": {
+     "l7r.diagram.hamletgen.water.brook.draw_intake": 1264,
+     "l7r.diagram.hamletgen.water.brook.feed_brook": 313568,
+     "l7r.diagram.hamletgen.water.brook.open_race_mouth": 149,
+     "l7r.diagram.hamletgen.water.comb.fit_field": 2120837,
+     "l7r.diagram.hamletgen.water.comb.head_sluice": 23,
+     "l7r.diagram.hamletgen.water.polder.stage_polder": 0,
+     "l7r.diagram.settlement.Settlement.draw_comb_field": 408872,
+     "l7r.diagram.settlement.Settlement.plot_texture": 6,
+     "l7r.diagram.sitegen.geom.net_acres": 23612
+    }
+   },
+   "frame": {
+    "calls": 14869,
+    "own": 2691,
+    "steps": {
+     "l7r.diagram.hamletgen.frame.waterward_to_the_frame": 8,
+     "l7r.diagram.hamletgen.hinterland.frame.title_pocket": 2,
+     "l7r.diagram.settlement.Settlement.crop_to_view": 7,
+     "l7r.diagram.settlement.Settlement.title": 12161
+    }
+   },
+   "hinterland": {
+    "calls": 1220034,
+    "own": 31,
+    "steps": {
+     "l7r.diagram.hamletgen.hinterland.bamboo.bamboo_seats": 2,
+     "l7r.diagram.hamletgen.hinterland.belt.belt_polygon": 12,
+     "l7r.diagram.hamletgen.hinterland.frame.frame_for": 5372,
+     "l7r.diagram.hamletgen.hinterland.frame.scatter_frame": 2596,
+     "l7r.diagram.hamletgen.hinterland.parcels.open_ground_patches": 633484,
+     "l7r.diagram.hamletgen.hinterland.stages.plant_the_belt": 1,
+     "l7r.diagram.hamletgen.homesteads.bamboo.seat_strips": 18748,
+     "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 25394,
+     "l7r.diagram.settlement.Settlement.fill_the_holes": 108719,
+     "l7r.diagram.settlement.Settlement.hinterland": 425673,
+     "l7r.diagram.settlement.Settlement.thin_planted_trees": 2
+    }
+   },
+   "homesteads": {
+    "calls": 8134401,
+    "own": 21160,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary": 122591,
+     "l7r.diagram.hamletgen.homesteads.boundary.site_boundary": 64193,
+     "l7r.diagram.hamletgen.homesteads.growth.grow_the_margin": 0,
+     "l7r.diagram.hamletgen.homesteads.household_ways.chose_the_track": 0,
+     "l7r.diagram.hamletgen.homesteads.seat_geometry.declare_cluster_shape": 147,
+     "l7r.diagram.hamletgen.homesteads.stages.reserve_the_seating": 90,
+     "l7r.diagram.hamletgen.homesteads.stages.seat_every_household": 531462,
+     "l7r.diagram.settlement.Settlement._bundle_envelope": 61844,
+     "l7r.diagram.settlement.Settlement._envelope_blocked": 0,
+     "l7r.diagram.settlement.Settlement._parts_fit": 0,
+     "l7r.diagram.settlement.Settlement._place_bundle_nucleated": 0,
+     "l7r.diagram.settlement.Settlement.farmsteads": 841304,
+     "l7r.diagram.settlement.Settlement.try_place": 6485161,
+     "l7r.diagram.settlement.homestead_parts.wood_share.WoodShares.share": 0,
+     "l7r.diagram.settlement.homestead_parts.wood_share.install_wood_shares": 0,
+     "l7r.diagram.settlement.rolling.access.access_corridor": 0,
+     "l7r.diagram.settlement.rolling.access.reserve": 0,
+     "l7r.diagram.settlement.rolling.gap_ways.lay_the_ways": 83,
+     "l7r.diagram.settlement.rolling.lot.household_parts": 5476,
+     "l7r.diagram.settlement.rolling.lot.record_parts": 890,
+     "l7r.diagram.settlement.rolling.route.routed_corridors": 0
+    }
+   },
+   "labels": {
+    "calls": 111732,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.place_labels": 111730
+    }
+   },
+   "lane_wells": {
+    "calls": 3,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.wells.lane_and_fallback_wells": 0,
+     "l7r.diagram.hamletgen.homesteads.wells.reach_wells": 0,
+     "l7r.diagram.hamletgen.homesteads.wells.record_over_ten": 0
+    }
+   },
+   "notice": {
+    "calls": 222428,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.fixture_clear_of_water": 11858,
+     "l7r.diagram.settlement.Settlement.kosatsuba": 131,
+     "l7r.diagram.settlement.Settlement.place_kosatsuba": 145378,
+     "l7r.diagram.settlement.structures.fixtures._helpers.kosatsuba_anchor": 65059
+    }
+   },
+   "pond_bank": {
+    "calls": 99,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.pondbank.bank_seats": 0,
+     "l7r.diagram.hamletgen.pondbank.draw_bank_trees": 0,
+     "l7r.diagram.hamletgen.pondbank.keep_the_bank_dry": 70,
+     "l7r.diagram.hamletgen.pondbank.pond_bank": 26,
+     "l7r.diagram.hamletgen.pondbank.seat_free": 0
+    }
+   },
+   "pond_stock": {
+    "calls": 4,
+    "own": 4,
+    "steps": {
+     "l7r.diagram.hamletgen.pondstock._bank_seats": 0,
+     "l7r.diagram.settlement.Settlement.pig_sty": 0,
+     "l7r.diagram.settlement.Settlement.pond_fixture_fits": 0
+    }
+   },
+   "seat": {
+    "calls": 205378,
+    "own": 7370,
+    "steps": {
+     "l7r.diagram.hamletgen.cluster.seat_cluster": 192532,
+     "l7r.diagram.hamletgen.ways.checks.brook_fords": 666,
+     "l7r.diagram.hamletgen.ways.route.set_crossing": 3961,
+     "l7r.diagram.settlement.Settlement.toe_band": 847,
+     "l7r.diagram.sitegen.geom.crop_polys": 2
+    }
+   },
+   "sink": {
+    "calls": 77396,
+    "own": 2325,
+    "steps": {
+     "l7r.diagram.hamletgen.sink.brook_join": 0,
+     "l7r.diagram.hamletgen.sink.drain_heading": 18,
+     "l7r.diagram.hamletgen.sink.drain_outfall": 5,
+     "l7r.diagram.hamletgen.sink.drain_run": 767,
+     "l7r.diagram.hamletgen.sink.hull_route": 0,
+     "l7r.diagram.hamletgen.sink.pond_clear_of_crop": 237,
+     "l7r.diagram.hamletgen.sink.pond_run": 12,
+     "l7r.diagram.hamletgen.sink.pond_seat": 450,
+     "l7r.diagram.hamletgen.sink.pond_setback": 426,
+     "l7r.diagram.hamletgen.sink.route_refusals": 0,
+     "l7r.diagram.hamletgen.water.brook.round_the_brooks": 60160,
+     "l7r.diagram.settlement.Settlement.marsh": 12647,
+     "l7r.diagram.settlement.Settlement.pond": 316,
+     "l7r.diagram.settlement.land.wet.pond_fringe_ring": 33
+    }
+   },
+   "sties": {
+    "calls": 75496,
+    "own": 366,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.sties.sty_seat": 71900,
+     "l7r.diagram.settlement.farm_fixtures.FarmFixturesMixin.farm_fixture": 3230
+    }
+   },
+   "track": {
+    "calls": 121163,
+    "own": 41130,
+    "steps": {
+     "l7r.diagram.hamletgen.ways.clearance.route_around": 585,
+     "l7r.diagram.hamletgen.ways.track._cluster_gateway": 8922,
+     "l7r.diagram.hamletgen.ways.track._thread_the_fabric": 50771,
+     "l7r.diagram.hamletgen.ways.track.connector_track": 15816,
+     "l7r.diagram.settlement.Settlement.lane": 3939
+    }
+   },
+   "washing": {
+    "calls": 31068,
+    "own": 102,
+    "steps": {
+     "l7r.diagram.hamletgen.washing.each_house_places": 0,
+     "l7r.diagram.hamletgen.washing.shared_places": 30948,
+     "l7r.diagram.hamletgen.washing.washing_form": 18
+    }
+   },
+   "water_frame": {
+    "calls": 9,
+    "own": 9,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.pin_knob": 0
+    }
+   },
+   "waterward": {
+    "calls": 2,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.hamletgen.pondstock.reserve_sty_seat": 0,
+     "l7r.diagram.hamletgen.water.polder.dike_face": 0,
+     "l7r.diagram.hamletgen.water.polder.waterward_flanks": 0,
+     "l7r.diagram.settlement.Settlement.marsh": 0
+    }
+   },
+   "web": {
+    "calls": 5,
+    "own": 5,
+    "steps": {
+     "l7r.diagram.hamletgen.ways.bund.a_way_onto_the_bund": 0,
+     "l7r.diagram.hamletgen.ways.bund.run_lanes_on_to_the_bund": 0,
+     "l7r.diagram.hamletgen.ways.fabric._margin_frame": 0,
+     "l7r.diagram.hamletgen.ways.serve._lay_web_lane": 0,
+     "l7r.diagram.hamletgen.ways.settle.settle_the_web": 0,
+     "l7r.diagram.hamletgen.ways.tree.settle_tree": 0,
+     "l7r.diagram.hamletgen.ways.web._lay_skeleton": 0,
+     "l7r.diagram.hamletgen.ways.web._reachable_runs": 0,
+     "l7r.diagram.hamletgen.ways.web._web_cut_lines": 0,
+     "l7r.diagram.hamletgen.ways.web.lay_reachable_runs": 0,
+     "l7r.diagram.settlement.Settlement.trim_lane_stubs": 0,
+     "l7r.diagram.settlement._knobs.web_cuts": 0
+    }
+   },
+   "windbreak": {
+    "calls": 84,
+    "own": 84,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.village_grove": 0
+    }
+   },
+   "woodland": {
+    "calls": 177990,
+    "own": 45819,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.commons": 132171
+    }
+   }
+  },
+  "total": 13447220,
+  "type": "dispersed/rolled/pond"
+ },
+ "linear/rolled/pond": {
+  "commit": "fc80961f4",
+  "date": "2026-10-27",
+  "households": 40,
+  "seed": 4,
+  "stages": {
+   "appurtenances": {
+    "calls": 962989,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 25044,
+     "l7r.diagram.hamletgen.homesteads.retirement.retirement_houses": 4387,
+     "l7r.diagram.hamletgen.homesteads.wells.place_wells": 376505,
+     "l7r.diagram.settlement.Settlement.draft_byres": 557050
+    }
+   },
+   "bamboo": {
+    "calls": 10,
+    "own": 10,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.bamboo_stand": 0
+    }
+   },
+   "burial": {
+    "calls": 17,
+    "own": 17,
+    "steps": {
+     "l7r.diagram.hamletgen.burial.stage_burial": 0
+    }
+   },
+   "crossings": {
+    "calls": 207896,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.water.polder_crossing_caps": 0,
+     "l7r.diagram.settlement.Settlement.bridges": 46908,
+     "l7r.diagram.settlement.Settlement.channel_footbridges": 160985,
+     "l7r.diagram.settlement.Settlement.dike_gates": 0
+    }
+   },
+   "field": {
+    "calls": 8083542,
+    "own": 731,
+    "steps": {
+     "l7r.diagram.hamletgen.water.brook.draw_intake": 1246,
+     "l7r.diagram.hamletgen.water.brook.feed_brook": 490200,
+     "l7r.diagram.hamletgen.water.brook.open_race_mouth": 149,
+     "l7r.diagram.hamletgen.water.comb.fit_field": 6756205,
+     "l7r.diagram.hamletgen.water.comb.head_sluice": 23,
+     "l7r.diagram.hamletgen.water.polder.stage_polder": 0,
+     "l7r.diagram.settlement.Settlement.draw_comb_field": 795798,
+     "l7r.diagram.settlement.Settlement.plot_texture": 6,
+     "l7r.diagram.sitegen.geom.net_acres": 39184
+    }
+   },
+   "frame": {
+    "calls": 20841,
+    "own": 5160,
+    "steps": {
+     "l7r.diagram.hamletgen.frame.waterward_to_the_frame": 8,
+     "l7r.diagram.hamletgen.hinterland.frame.title_pocket": 2,
+     "l7r.diagram.settlement.Settlement.crop_to_view": 7,
+     "l7r.diagram.settlement.Settlement.title": 15664
+    }
+   },
+   "hinterland": {
+    "calls": 2684901,
+    "own": 117169,
+    "steps": {
+     "l7r.diagram.hamletgen.hinterland.bamboo.bamboo_seats": 2,
+     "l7r.diagram.hamletgen.hinterland.belt.belt_polygon": 12,
+     "l7r.diagram.hamletgen.hinterland.frame.frame_for": 10310,
+     "l7r.diagram.hamletgen.hinterland.frame.scatter_frame": 5065,
+     "l7r.diagram.hamletgen.hinterland.parcels.open_ground_patches": 1705331,
+     "l7r.diagram.hamletgen.hinterland.stages.plant_the_belt": 1,
+     "l7r.diagram.hamletgen.homesteads.bamboo.seat_strips": 26477,
+     "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 199,
+     "l7r.diagram.settlement.Settlement.fill_the_holes": 189002,
+     "l7r.diagram.settlement.Settlement.hinterland": 631331,
+     "l7r.diagram.settlement.Settlement.thin_planted_trees": 2
+    }
+   },
+   "homesteads": {
+    "calls": 5832753,
+    "own": 82691,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary": 73933,
+     "l7r.diagram.hamletgen.homesteads.boundary.site_boundary": 68125,
+     "l7r.diagram.hamletgen.homesteads.growth.grow_the_margin": 0,
+     "l7r.diagram.hamletgen.homesteads.household_ways.chose_the_track": 0,
+     "l7r.diagram.hamletgen.homesteads.seat_geometry.declare_cluster_shape": 147,
+     "l7r.diagram.hamletgen.homesteads.stages.reserve_the_seating": 90,
+     "l7r.diagram.hamletgen.homesteads.stages.seat_every_household": 4079280,
+     "l7r.diagram.settlement.Settlement._bundle_envelope": 0,
+     "l7r.diagram.settlement.Settlement._envelope_blocked": 0,
+     "l7r.diagram.settlement.Settlement._parts_fit": 0,
+     "l7r.diagram.settlement.Settlement._place_bundle_nucleated": 0,
+     "l7r.diagram.settlement.Settlement.farmsteads": 804268,
+     "l7r.diagram.settlement.Settlement.try_place": 720744,
+     "l7r.diagram.settlement.homestead_parts.wood_share.WoodShares.share": 0,
+     "l7r.diagram.settlement.homestead_parts.wood_share.install_wood_shares": 0,
+     "l7r.diagram.settlement.rolling.access.access_corridor": 0,
+     "l7r.diagram.settlement.rolling.access.reserve": 0,
+     "l7r.diagram.settlement.rolling.gap_ways.lay_the_ways": 83,
+     "l7r.diagram.settlement.rolling.lot.household_parts": 2844,
+     "l7r.diagram.settlement.rolling.lot.record_parts": 548,
+     "l7r.diagram.settlement.rolling.route.routed_corridors": 0
+    }
+   },
+   "labels": {
+    "calls": 201250,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.place_labels": 201248
+    }
+   },
+   "lane_wells": {
+    "calls": 3,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.wells.lane_and_fallback_wells": 0,
+     "l7r.diagram.hamletgen.homesteads.wells.reach_wells": 0,
+     "l7r.diagram.hamletgen.homesteads.wells.record_over_ten": 0
+    }
+   },
+   "notice": {
+    "calls": 991881,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.fixture_clear_of_water": 53242,
+     "l7r.diagram.settlement.Settlement.kosatsuba": 137,
+     "l7r.diagram.settlement.Settlement.place_kosatsuba": 927402,
+     "l7r.diagram.settlement.structures.fixtures._helpers.kosatsuba_anchor": 11098
+    }
+   },
+   "pond_bank": {
+    "calls": 197356,
+    "own": 1939,
+    "steps": {
+     "l7r.diagram.hamletgen.pondbank.bank_seats": 480,
+     "l7r.diagram.hamletgen.pondbank.draw_bank_trees": 662,
+     "l7r.diagram.hamletgen.pondbank.keep_the_bank_dry": 70,
+     "l7r.diagram.hamletgen.pondbank.pond_bank": 26,
+     "l7r.diagram.hamletgen.pondbank.seat_free": 194179
+    }
+   },
+   "pond_stock": {
+    "calls": 4,
+    "own": 4,
+    "steps": {
+     "l7r.diagram.hamletgen.pondstock._bank_seats": 0,
+     "l7r.diagram.settlement.Settlement.pig_sty": 0,
+     "l7r.diagram.settlement.Settlement.pond_fixture_fits": 0
+    }
+   },
+   "seat": {
+    "calls": 809726,
+    "own": 7694,
+    "steps": {
+     "l7r.diagram.hamletgen.cluster.seat_cluster": 795624,
+     "l7r.diagram.hamletgen.ways.checks.brook_fords": 693,
+     "l7r.diagram.hamletgen.ways.route.set_crossing": 3961,
+     "l7r.diagram.settlement.Settlement.toe_band": 1752,
+     "l7r.diagram.sitegen.geom.crop_polys": 2
+    }
+   },
+   "sink": {
+    "calls": 110079,
+    "own": 2695,
+    "steps": {
+     "l7r.diagram.hamletgen.sink.brook_join": 0,
+     "l7r.diagram.hamletgen.sink.drain_heading": 18,
+     "l7r.diagram.hamletgen.sink.drain_outfall": 5,
+     "l7r.diagram.hamletgen.sink.drain_run": 786,
+     "l7r.diagram.hamletgen.sink.hull_route": 0,
+     "l7r.diagram.hamletgen.sink.pond_clear_of_crop": 233,
+     "l7r.diagram.hamletgen.sink.pond_run": 12,
+     "l7r.diagram.hamletgen.sink.pond_seat": 540,
+     "l7r.diagram.hamletgen.sink.pond_setback": 449,
+     "l7r.diagram.hamletgen.sink.route_refusals": 0,
+     "l7r.diagram.hamletgen.water.brook.round_the_brooks": 86060,
+     "l7r.diagram.settlement.Settlement.marsh": 18907,
+     "l7r.diagram.settlement.Settlement.pond": 341,
+     "l7r.diagram.settlement.land.wet.pond_fringe_ring": 33
+    }
+   },
+   "sties": {
+    "calls": 81596,
+    "own": 366,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.sties.sty_seat": 77665,
+     "l7r.diagram.settlement.farm_fixtures.FarmFixturesMixin.farm_fixture": 3565
+    }
+   },
+   "track": {
+    "calls": 112452,
+    "own": 16178,
+    "steps": {
+     "l7r.diagram.hamletgen.ways.clearance.route_around": 0,
+     "l7r.diagram.hamletgen.ways.track._cluster_gateway": 0,
+     "l7r.diagram.hamletgen.ways.track._thread_the_fabric": 95315,
+     "l7r.diagram.hamletgen.ways.track.connector_track": 0,
+     "l7r.diagram.settlement.Settlement.lane": 959
+    }
+   },
+   "washing": {
+    "calls": 37136,
+    "own": 36,
+    "steps": {
+     "l7r.diagram.hamletgen.washing.each_house_places": 0,
+     "l7r.diagram.hamletgen.washing.shared_places": 37079,
+     "l7r.diagram.hamletgen.washing.washing_form": 21
+    }
+   },
+   "water_frame": {
+    "calls": 9,
+    "own": 9,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.pin_knob": 0
+    }
+   },
+   "waterward": {
+    "calls": 2,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.hamletgen.pondstock.reserve_sty_seat": 0,
+     "l7r.diagram.hamletgen.water.polder.dike_face": 0,
+     "l7r.diagram.hamletgen.water.polder.waterward_flanks": 0,
+     "l7r.diagram.settlement.Settlement.marsh": 0
+    }
+   },
+   "web": {
+    "calls": 63917112,
+    "own": 62903857,
+    "steps": {
+     "l7r.diagram.hamletgen.ways.bund.a_way_onto_the_bund": 52200,
+     "l7r.diagram.hamletgen.ways.bund.run_lanes_on_to_the_bund": 208142,
+     "l7r.diagram.hamletgen.ways.fabric._margin_frame": 4431,
+     "l7r.diagram.hamletgen.ways.serve._lay_web_lane": 0,
+     "l7r.diagram.hamletgen.ways.settle.settle_the_web": 747812,
+     "l7r.diagram.hamletgen.ways.tree.settle_tree": 18,
+     "l7r.diagram.hamletgen.ways.web._lay_skeleton": 0,
+     "l7r.diagram.hamletgen.ways.web._reachable_runs": 1,
+     "l7r.diagram.hamletgen.ways.web._web_cut_lines": 0,
+     "l7r.diagram.hamletgen.ways.web.lay_reachable_runs": 5,
+     "l7r.diagram.settlement.Settlement.trim_lane_stubs": 646,
+     "l7r.diagram.settlement._knobs.web_cuts": 0
+    }
+   },
+   "windbreak": {
+    "calls": 84,
+    "own": 84,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.village_grove": 0
+    }
+   },
+   "woodland": {
+    "calls": 921459,
+    "own": 278077,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.commons": 643382
+    }
+   }
+  },
+  "total": 85173098,
+  "type": "linear/rolled/pond"
+ },
+ "nucleated/mulberry_dike_fishpond/pond": {
+  "commit": "fc80961f4",
+  "date": "2026-10-27",
+  "households": 40,
+  "seed": 39,
+  "stages": {
+   "appurtenances": {
+    "calls": 216794,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 37226,
+     "l7r.diagram.hamletgen.homesteads.retirement.retirement_houses": 28,
+     "l7r.diagram.hamletgen.homesteads.wells.place_wells": 175148,
+     "l7r.diagram.settlement.Settlement.draft_byres": 4389
+    }
+   },
+   "bamboo": {
+    "calls": 1058,
+    "own": 30,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.bamboo_stand": 1028
+    }
+   },
+   "burial": {
+    "calls": 17,
+    "own": 17,
+    "steps": {
+     "l7r.diagram.hamletgen.burial.stage_burial": 0
+    }
+   },
+   "crossings": {
+    "calls": 49998,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.water.polder_crossing_caps": 23,
+     "l7r.diagram.settlement.Settlement.bridges": 2378,
+     "l7r.diagram.settlement.Settlement.channel_footbridges": 29832,
+     "l7r.diagram.settlement.Settlement.dike_gates": 17762
+    }
+   },
+   "field": {
+    "calls": 4192856,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.hamletgen.water.brook.draw_intake": 0,
+     "l7r.diagram.hamletgen.water.brook.feed_brook": 0,
+     "l7r.diagram.hamletgen.water.brook.open_race_mouth": 0,
+     "l7r.diagram.hamletgen.water.comb.fit_field": 0,
+     "l7r.diagram.hamletgen.water.comb.head_sluice": 0,
+     "l7r.diagram.hamletgen.water.polder.stage_polder": 4058200,
+     "l7r.diagram.settlement.Settlement.draw_comb_field": 114156,
+     "l7r.diagram.settlement.Settlement.plot_texture": 0,
+     "l7r.diagram.sitegen.geom.net_acres": 20498
+    }
+   },
+   "frame": {
+    "calls": 29054,
+    "own": 9194,
+    "steps": {
+     "l7r.diagram.hamletgen.frame.waterward_to_the_frame": 3933,
+     "l7r.diagram.hamletgen.hinterland.frame.title_pocket": 2,
+     "l7r.diagram.settlement.Settlement.crop_to_view": 49,
+     "l7r.diagram.settlement.Settlement.title": 15876
+    }
+   },
+   "hinterland": {
+    "calls": 2235295,
+    "own": 28,
+    "steps": {
+     "l7r.diagram.hamletgen.hinterland.bamboo.bamboo_seats": 2,
+     "l7r.diagram.hamletgen.hinterland.belt.belt_polygon": 93698,
+     "l7r.diagram.hamletgen.hinterland.frame.frame_for": 24934,
+     "l7r.diagram.hamletgen.hinterland.frame.scatter_frame": 1239,
+     "l7r.diagram.hamletgen.hinterland.parcels.open_ground_patches": 294581,
+     "l7r.diagram.hamletgen.hinterland.stages.plant_the_belt": 858972,
+     "l7r.diagram.hamletgen.homesteads.bamboo.seat_strips": 230276,
+     "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 40050,
+     "l7r.diagram.settlement.Settlement.fill_the_holes": 102776,
+     "l7r.diagram.settlement.Settlement.hinterland": 579044,
+     "l7r.diagram.settlement.Settlement.thin_planted_trees": 9695
+    }
+   },
+   "homesteads": {
+    "calls": 6641326,
+    "own": 15341,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary": 44121,
+     "l7r.diagram.hamletgen.homesteads.boundary.site_boundary": 14457,
+     "l7r.diagram.hamletgen.homesteads.growth.grow_the_margin": 584213,
+     "l7r.diagram.hamletgen.homesteads.household_ways.chose_the_track": 1488554,
+     "l7r.diagram.hamletgen.homesteads.seat_geometry.declare_cluster_shape": 147,
+     "l7r.diagram.hamletgen.homesteads.stages.reserve_the_seating": 5187,
+     "l7r.diagram.hamletgen.homesteads.stages.seat_every_household": 499997,
+     "l7r.diagram.settlement.Settlement._bundle_envelope": 663681,
+     "l7r.diagram.settlement.Settlement._envelope_blocked": 46340,
+     "l7r.diagram.settlement.Settlement._parts_fit": 147663,
+     "l7r.diagram.settlement.Settlement._place_bundle_nucleated": 198750,
+     "l7r.diagram.settlement.Settlement.farmsteads": 421490,
+     "l7r.diagram.settlement.Settlement.try_place": 6951,
+     "l7r.diagram.settlement.homestead_parts.wood_share.WoodShares.share": 218670,
+     "l7r.diagram.settlement.homestead_parts.wood_share.install_wood_shares": 15984,
+     "l7r.diagram.settlement.rolling.access.access_corridor": 0,
+     "l7r.diagram.settlement.rolling.access.reserve": 4311,
+     "l7r.diagram.settlement.rolling.gap_ways.lay_the_ways": 2174900,
+     "l7r.diagram.settlement.rolling.lot.household_parts": 35975,
+     "l7r.diagram.settlement.rolling.lot.record_parts": 54594,
+     "l7r.diagram.settlement.rolling.route.routed_corridors": 0
+    }
+   },
+   "labels": {
+    "calls": 96514,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.place_labels": 96512
+    }
+   },
+   "lane_wells": {
+    "calls": 1338536,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.wells.lane_and_fallback_wells": 88,
+     "l7r.diagram.hamletgen.homesteads.wells.reach_wells": 1337831,
+     "l7r.diagram.hamletgen.homesteads.wells.record_over_ten": 614
+    }
+   },
+   "notice": {
+    "calls": 826914,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.fixture_clear_of_water": 40576,
+     "l7r.diagram.settlement.Settlement.kosatsuba": 162,
+     "l7r.diagram.settlement.Settlement.place_kosatsuba": 781987,
+     "l7r.diagram.settlement.structures.fixtures._helpers.kosatsuba_anchor": 4187
+    }
+   },
+   "pond_bank": {
+    "calls": 3,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.hamletgen.pondbank.bank_seats": 0,
+     "l7r.diagram.hamletgen.pondbank.draw_bank_trees": 0,
+     "l7r.diagram.hamletgen.pondbank.keep_the_bank_dry": 0,
+     "l7r.diagram.hamletgen.pondbank.pond_bank": 1,
+     "l7r.diagram.hamletgen.pondbank.seat_free": 0
+    }
+   },
+   "pond_stock": {
+    "calls": 403017,
+    "own": 385593,
+    "steps": {
+     "l7r.diagram.hamletgen.pondstock._bank_seats": 16487,
+     "l7r.diagram.settlement.Settlement.pig_sty": 261,
+     "l7r.diagram.settlement.Settlement.pond_fixture_fits": 676
+    }
+   },
+   "seat": {
+    "calls": 23159,
+    "own": 17,
+    "steps": {
+     "l7r.diagram.hamletgen.cluster.seat_cluster": 22851,
+     "l7r.diagram.hamletgen.ways.checks.brook_fords": 3,
+     "l7r.diagram.hamletgen.ways.route.set_crossing": 3,
+     "l7r.diagram.settlement.Settlement.toe_band": 283,
+     "l7r.diagram.sitegen.geom.crop_polys": 2
+    }
+   },
+   "sink": {
+    "calls": 33,
+    "own": 4,
+    "steps": {
+     "l7r.diagram.hamletgen.sink.brook_join": 0,
+     "l7r.diagram.hamletgen.sink.drain_heading": 0,
+     "l7r.diagram.hamletgen.sink.drain_outfall": 14,
+     "l7r.diagram.hamletgen.sink.drain_run": 0,
+     "l7r.diagram.hamletgen.sink.hull_route": 0,
+     "l7r.diagram.hamletgen.sink.pond_clear_of_crop": 0,
+     "l7r.diagram.hamletgen.sink.pond_run": 0,
+     "l7r.diagram.hamletgen.sink.pond_seat": 0,
+     "l7r.diagram.hamletgen.sink.pond_setback": 0,
+     "l7r.diagram.hamletgen.sink.route_refusals": 0,
+     "l7r.diagram.hamletgen.water.brook.round_the_brooks": 15,
+     "l7r.diagram.settlement.Settlement.marsh": 0,
+     "l7r.diagram.settlement.Settlement.pond": 0,
+     "l7r.diagram.settlement.land.wet.pond_fringe_ring": 0
+    }
+   },
+   "sties": {
+    "calls": 320,
+    "own": 320,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.sties.sty_seat": 0,
+     "l7r.diagram.settlement.farm_fixtures.FarmFixturesMixin.farm_fixture": 0
+    }
+   },
+   "track": {
+    "calls": 13624,
+    "own": 2622,
+    "steps": {
+     "l7r.diagram.hamletgen.ways.clearance.route_around": 0,
+     "l7r.diagram.hamletgen.ways.track._cluster_gateway": 0,
+     "l7r.diagram.hamletgen.ways.track._thread_the_fabric": 0,
+     "l7r.diagram.hamletgen.ways.track.connector_track": 0,
+     "l7r.diagram.settlement.Settlement.lane": 11002
+    }
+   },
+   "washing": {
+    "calls": 14910,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.washing.each_house_places": 0,
+     "l7r.diagram.hamletgen.washing.shared_places": 14889,
+     "l7r.diagram.hamletgen.washing.washing_form": 18
+    }
+   },
+   "water_frame": {
+    "calls": 9,
+    "own": 9,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.pin_knob": 0
+    }
+   },
+   "waterward": {
+    "calls": 181206,
+    "own": 7753,
+    "steps": {
+     "l7r.diagram.hamletgen.pondstock.reserve_sty_seat": 2798,
+     "l7r.diagram.hamletgen.water.polder.dike_face": 8954,
+     "l7r.diagram.hamletgen.water.polder.waterward_flanks": 23,
+     "l7r.diagram.settlement.Settlement.marsh": 161678
+    }
+   },
+   "web": {
+    "calls": 9687452,
+    "own": 389976,
+    "steps": {
+     "l7r.diagram.hamletgen.ways.bund.a_way_onto_the_bund": 37671,
+     "l7r.diagram.hamletgen.ways.bund.run_lanes_on_to_the_bund": 0,
+     "l7r.diagram.hamletgen.ways.fabric._margin_frame": 4261,
+     "l7r.diagram.hamletgen.ways.serve._lay_web_lane": 2884560,
+     "l7r.diagram.hamletgen.ways.settle.settle_the_web": 3549604,
+     "l7r.diagram.hamletgen.ways.tree.settle_tree": 1848376,
+     "l7r.diagram.hamletgen.ways.web._lay_skeleton": 770334,
+     "l7r.diagram.hamletgen.ways.web._reachable_runs": 15909,
+     "l7r.diagram.hamletgen.ways.web._web_cut_lines": 2815,
+     "l7r.diagram.hamletgen.ways.web.lay_reachable_runs": 13,
+     "l7r.diagram.settlement.Settlement.trim_lane_stubs": 183771,
+     "l7r.diagram.settlement._knobs.web_cuts": 162
+    }
+   },
+   "windbreak": {
+    "calls": 1368790,
+    "own": 15711,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.village_grove": 1353079
+    }
+   },
+   "woodland": {
+    "calls": 2,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.commons": 0
+    }
+   }
+  },
+  "total": 27320887,
+  "type": "nucleated/mulberry_dike_fishpond/pond"
+ },
+ "nucleated/polder_grid/pond": {
+  "commit": "fc80961f4",
+  "date": "2026-10-27",
+  "households": 40,
+  "seed": 4,
+  "stages": {
+   "appurtenances": {
+    "calls": 211668,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 40218,
+     "l7r.diagram.hamletgen.homesteads.retirement.retirement_houses": 9401,
+     "l7r.diagram.hamletgen.homesteads.wells.place_wells": 160005,
+     "l7r.diagram.settlement.Settlement.draft_byres": 2041
+    }
+   },
+   "bamboo": {
+    "calls": 518,
+    "own": 20,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.bamboo_stand": 498
+    }
+   },
+   "burial": {
+    "calls": 17,
+    "own": 17,
+    "steps": {
+     "l7r.diagram.hamletgen.burial.stage_burial": 0
+    }
+   },
+   "crossings": {
+    "calls": 28682,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.water.polder_crossing_caps": 23,
+     "l7r.diagram.settlement.Settlement.bridges": 2171,
+     "l7r.diagram.settlement.Settlement.channel_footbridges": 21249,
+     "l7r.diagram.settlement.Settlement.dike_gates": 5236
+    }
+   },
+   "field": {
+    "calls": 5378185,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.hamletgen.water.brook.draw_intake": 0,
+     "l7r.diagram.hamletgen.water.brook.feed_brook": 0,
+     "l7r.diagram.hamletgen.water.brook.open_race_mouth": 0,
+     "l7r.diagram.hamletgen.water.comb.fit_field": 0,
+     "l7r.diagram.hamletgen.water.comb.head_sluice": 0,
+     "l7r.diagram.hamletgen.water.polder.stage_polder": 5080204,
+     "l7r.diagram.settlement.Settlement.draw_comb_field": 233066,
+     "l7r.diagram.settlement.Settlement.plot_texture": 0,
+     "l7r.diagram.sitegen.geom.net_acres": 64913
+    }
+   },
+   "frame": {
+    "calls": 28974,
+    "own": 9476,
+    "steps": {
+     "l7r.diagram.hamletgen.frame.waterward_to_the_frame": 3933,
+     "l7r.diagram.hamletgen.hinterland.frame.title_pocket": 2,
+     "l7r.diagram.settlement.Settlement.crop_to_view": 49,
+     "l7r.diagram.settlement.Settlement.title": 15514
+    }
+   },
+   "hinterland": {
+    "calls": 2196807,
+    "own": 28,
+    "steps": {
+     "l7r.diagram.hamletgen.hinterland.bamboo.bamboo_seats": 2,
+     "l7r.diagram.hamletgen.hinterland.belt.belt_polygon": 105596,
+     "l7r.diagram.hamletgen.hinterland.frame.frame_for": 25444,
+     "l7r.diagram.hamletgen.hinterland.frame.scatter_frame": 1374,
+     "l7r.diagram.hamletgen.hinterland.parcels.open_ground_patches": 220178,
+     "l7r.diagram.hamletgen.hinterland.stages.plant_the_belt": 1001761,
+     "l7r.diagram.hamletgen.homesteads.bamboo.seat_strips": 148202,
+     "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 214,
+     "l7r.diagram.settlement.Settlement.fill_the_holes": 97359,
+     "l7r.diagram.settlement.Settlement.hinterland": 587356,
+     "l7r.diagram.settlement.Settlement.thin_planted_trees": 9293
+    }
+   },
+   "homesteads": {
+    "calls": 9370244,
+    "own": 15739,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary": 44611,
+     "l7r.diagram.hamletgen.homesteads.boundary.site_boundary": 13005,
+     "l7r.diagram.hamletgen.homesteads.growth.grow_the_margin": 686576,
+     "l7r.diagram.hamletgen.homesteads.household_ways.chose_the_track": 1056572,
+     "l7r.diagram.hamletgen.homesteads.seat_geometry.declare_cluster_shape": 167,
+     "l7r.diagram.hamletgen.homesteads.stages.reserve_the_seating": 5541,
+     "l7r.diagram.hamletgen.homesteads.stages.seat_every_household": 1932868,
+     "l7r.diagram.settlement.Settlement._bundle_envelope": 1151110,
+     "l7r.diagram.settlement.Settlement._envelope_blocked": 43207,
+     "l7r.diagram.settlement.Settlement._parts_fit": 134813,
+     "l7r.diagram.settlement.Settlement._place_bundle_nucleated": 324904,
+     "l7r.diagram.settlement.Settlement.farmsteads": 314852,
+     "l7r.diagram.settlement.Settlement.try_place": 7625,
+     "l7r.diagram.settlement.homestead_parts.wood_share.WoodShares.share": 209075,
+     "l7r.diagram.settlement.homestead_parts.wood_share.install_wood_shares": 15649,
+     "l7r.diagram.settlement.rolling.access.access_corridor": 0,
+     "l7r.diagram.settlement.rolling.access.reserve": 4653,
+     "l7r.diagram.settlement.rolling.gap_ways.lay_the_ways": 3301553,
+     "l7r.diagram.settlement.rolling.lot.household_parts": 53493,
+     "l7r.diagram.settlement.rolling.lot.record_parts": 54231,
+     "l7r.diagram.settlement.rolling.route.routed_corridors": 0
+    }
+   },
+   "labels": {
+    "calls": 93638,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.place_labels": 93636
+    }
+   },
+   "lane_wells": {
+    "calls": 1432711,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.wells.lane_and_fallback_wells": 88,
+     "l7r.diagram.hamletgen.homesteads.wells.reach_wells": 1432006,
+     "l7r.diagram.hamletgen.homesteads.wells.record_over_ten": 614
+    }
+   },
+   "notice": {
+    "calls": 854500,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.fixture_clear_of_water": 42476,
+     "l7r.diagram.settlement.Settlement.kosatsuba": 146,
+     "l7r.diagram.settlement.Settlement.place_kosatsuba": 808213,
+     "l7r.diagram.settlement.structures.fixtures._helpers.kosatsuba_anchor": 3663
+    }
+   },
+   "pond_bank": {
+    "calls": 3,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.hamletgen.pondbank.bank_seats": 0,
+     "l7r.diagram.hamletgen.pondbank.draw_bank_trees": 0,
+     "l7r.diagram.hamletgen.pondbank.keep_the_bank_dry": 0,
+     "l7r.diagram.hamletgen.pondbank.pond_bank": 1,
+     "l7r.diagram.hamletgen.pondbank.seat_free": 0
+    }
+   },
+   "pond_stock": {
+    "calls": 4,
+    "own": 4,
+    "steps": {
+     "l7r.diagram.hamletgen.pondstock._bank_seats": 0,
+     "l7r.diagram.settlement.Settlement.pig_sty": 0,
+     "l7r.diagram.settlement.Settlement.pond_fixture_fits": 0
+    }
+   },
+   "seat": {
+    "calls": 17403,
+    "own": 17,
+    "steps": {
+     "l7r.diagram.hamletgen.cluster.seat_cluster": 17111,
+     "l7r.diagram.hamletgen.ways.checks.brook_fords": 3,
+     "l7r.diagram.hamletgen.ways.route.set_crossing": 3,
+     "l7r.diagram.settlement.Settlement.toe_band": 267,
+     "l7r.diagram.sitegen.geom.crop_polys": 2
+    }
+   },
+   "sink": {
+    "calls": 31,
+    "own": 4,
+    "steps": {
+     "l7r.diagram.hamletgen.sink.brook_join": 0,
+     "l7r.diagram.hamletgen.sink.drain_heading": 0,
+     "l7r.diagram.hamletgen.sink.drain_outfall": 12,
+     "l7r.diagram.hamletgen.sink.drain_run": 0,
+     "l7r.diagram.hamletgen.sink.hull_route": 0,
+     "l7r.diagram.hamletgen.sink.pond_clear_of_crop": 0,
+     "l7r.diagram.hamletgen.sink.pond_run": 0,
+     "l7r.diagram.hamletgen.sink.pond_seat": 0,
+     "l7r.diagram.hamletgen.sink.pond_setback": 0,
+     "l7r.diagram.hamletgen.sink.route_refusals": 0,
+     "l7r.diagram.hamletgen.water.brook.round_the_brooks": 15,
+     "l7r.diagram.settlement.Settlement.marsh": 0,
+     "l7r.diagram.settlement.Settlement.pond": 0,
+     "l7r.diagram.settlement.land.wet.pond_fringe_ring": 0
+    }
+   },
+   "sties": {
+    "calls": 29309,
+    "own": 366,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.sties.sty_seat": 25203,
+     "l7r.diagram.settlement.farm_fixtures.FarmFixturesMixin.farm_fixture": 3740
+    }
+   },
+   "track": {
+    "calls": 17008,
+    "own": 2632,
+    "steps": {
+     "l7r.diagram.hamletgen.ways.clearance.route_around": 0,
+     "l7r.diagram.hamletgen.ways.track._cluster_gateway": 0,
+     "l7r.diagram.hamletgen.ways.track._thread_the_fabric": 0,
+     "l7r.diagram.hamletgen.ways.track.connector_track": 0,
+     "l7r.diagram.settlement.Settlement.lane": 14376
+    }
+   },
+   "washing": {
+    "calls": 10827,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.washing.each_house_places": 0,
+     "l7r.diagram.hamletgen.washing.shared_places": 10803,
+     "l7r.diagram.hamletgen.washing.washing_form": 21
+    }
+   },
+   "water_frame": {
+    "calls": 9,
+    "own": 9,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.pin_knob": 0
+    }
+   },
+   "waterward": {
+    "calls": 141792,
+    "own": 7723,
+    "steps": {
+     "l7r.diagram.hamletgen.pondstock.reserve_sty_seat": 2,
+     "l7r.diagram.hamletgen.water.polder.dike_face": 8648,
+     "l7r.diagram.hamletgen.water.polder.waterward_flanks": 23,
+     "l7r.diagram.settlement.Settlement.marsh": 125396
+    }
+   },
+   "web": {
+    "calls": 8443019,
+    "own": 399567,
+    "steps": {
+     "l7r.diagram.hamletgen.ways.bund.a_way_onto_the_bund": 234975,
+     "l7r.diagram.hamletgen.ways.bund.run_lanes_on_to_the_bund": 0,
+     "l7r.diagram.hamletgen.ways.fabric._margin_frame": 4459,
+     "l7r.diagram.hamletgen.ways.serve._lay_web_lane": 2426668,
+     "l7r.diagram.hamletgen.ways.settle.settle_the_web": 3666425,
+     "l7r.diagram.hamletgen.ways.tree.settle_tree": 1254738,
+     "l7r.diagram.hamletgen.ways.web._lay_skeleton": 251007,
+     "l7r.diagram.hamletgen.ways.web._reachable_runs": 11793,
+     "l7r.diagram.hamletgen.ways.web._web_cut_lines": 2207,
+     "l7r.diagram.hamletgen.ways.web.lay_reachable_runs": 12,
+     "l7r.diagram.settlement.Settlement.trim_lane_stubs": 190994,
+     "l7r.diagram.settlement._knobs.web_cuts": 174
+    }
+   },
+   "windbreak": {
+    "calls": 1280672,
+    "own": 16311,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.village_grove": 1264361
+    }
+   },
+   "woodland": {
+    "calls": 2,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.commons": 0
+    }
+   }
+  },
+  "total": 29536023,
+  "type": "nucleated/polder_grid/pond"
+ },
+ "nucleated/rolled/pond": {
+  "commit": "fc80961f4",
+  "date": "2026-10-27",
+  "households": 40,
+  "seed": 39,
+  "stages": {
+   "appurtenances": {
+    "calls": 494974,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 44961,
+     "l7r.diagram.hamletgen.homesteads.retirement.retirement_houses": 28,
+     "l7r.diagram.hamletgen.homesteads.wells.place_wells": 444570,
+     "l7r.diagram.settlement.Settlement.draft_byres": 5412
+    }
+   },
+   "bamboo": {
+    "calls": 742,
+    "own": 24,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.bamboo_stand": 718
+    }
+   },
+   "burial": {
+    "calls": 17,
+    "own": 17,
+    "steps": {
+     "l7r.diagram.hamletgen.burial.stage_burial": 0
+    }
+   },
+   "crossings": {
+    "calls": 125028,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.water.polder_crossing_caps": 0,
+     "l7r.diagram.settlement.Settlement.bridges": 29515,
+     "l7r.diagram.settlement.Settlement.channel_footbridges": 95510,
+     "l7r.diagram.settlement.Settlement.dike_gates": 0
+    }
+   },
+   "field": {
+    "calls": 2869011,
+    "own": 680,
+    "steps": {
+     "l7r.diagram.hamletgen.water.brook.draw_intake": 1264,
+     "l7r.diagram.hamletgen.water.brook.feed_brook": 313568,
+     "l7r.diagram.hamletgen.water.brook.open_race_mouth": 149,
+     "l7r.diagram.hamletgen.water.comb.fit_field": 2120837,
+     "l7r.diagram.hamletgen.water.comb.head_sluice": 23,
+     "l7r.diagram.hamletgen.water.polder.stage_polder": 0,
+     "l7r.diagram.settlement.Settlement.draw_comb_field": 408872,
+     "l7r.diagram.settlement.Settlement.plot_texture": 6,
+     "l7r.diagram.sitegen.geom.net_acres": 23612
+    }
+   },
+   "frame": {
+    "calls": 18062,
+    "own": 5041,
+    "steps": {
+     "l7r.diagram.hamletgen.frame.waterward_to_the_frame": 8,
+     "l7r.diagram.hamletgen.hinterland.frame.title_pocket": 2,
+     "l7r.diagram.settlement.Settlement.crop_to_view": 49,
+     "l7r.diagram.settlement.Settlement.title": 12962
+    }
+   },
+   "hinterland": {
+    "calls": 2543420,
+    "own": 31,
+    "steps": {
+     "l7r.diagram.hamletgen.hinterland.bamboo.bamboo_seats": 2,
+     "l7r.diagram.hamletgen.hinterland.belt.belt_polygon": 115232,
+     "l7r.diagram.hamletgen.hinterland.frame.frame_for": 14527,
+     "l7r.diagram.hamletgen.hinterland.frame.scatter_frame": 2049,
+     "l7r.diagram.hamletgen.hinterland.parcels.open_ground_patches": 649327,
+     "l7r.diagram.hamletgen.hinterland.stages.plant_the_belt": 705000,
+     "l7r.diagram.hamletgen.homesteads.bamboo.seat_strips": 165839,
+     "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 45580,
+     "l7r.diagram.settlement.Settlement.fill_the_holes": 99236,
+     "l7r.diagram.settlement.Settlement.hinterland": 746595,
+     "l7r.diagram.settlement.Settlement.thin_planted_trees": 2
+    }
+   },
+   "homesteads": {
+    "calls": 5205329,
+    "own": 15406,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary": 51272,
+     "l7r.diagram.hamletgen.homesteads.boundary.site_boundary": 33049,
+     "l7r.diagram.hamletgen.homesteads.growth.grow_the_margin": 562962,
+     "l7r.diagram.hamletgen.homesteads.household_ways.chose_the_track": 191046,
+     "l7r.diagram.hamletgen.homesteads.seat_geometry.declare_cluster_shape": 147,
+     "l7r.diagram.hamletgen.homesteads.stages.reserve_the_seating": 5231,
+     "l7r.diagram.hamletgen.homesteads.stages.seat_every_household": 472931,
+     "l7r.diagram.settlement.Settlement._bundle_envelope": 643724,
+     "l7r.diagram.settlement.Settlement._envelope_blocked": 52523,
+     "l7r.diagram.settlement.Settlement._parts_fit": 236657,
+     "l7r.diagram.settlement.Settlement._place_bundle_nucleated": 180816,
+     "l7r.diagram.settlement.Settlement.farmsteads": 373658,
+     "l7r.diagram.settlement.Settlement.try_place": 6993,
+     "l7r.diagram.settlement.homestead_parts.wood_share.WoodShares.share": 326732,
+     "l7r.diagram.settlement.homestead_parts.wood_share.install_wood_shares": 5589,
+     "l7r.diagram.settlement.rolling.access.access_corridor": 0,
+     "l7r.diagram.settlement.rolling.access.reserve": 5128,
+     "l7r.diagram.settlement.rolling.gap_ways.lay_the_ways": 1954771,
+     "l7r.diagram.settlement.rolling.lot.household_parts": 32048,
+     "l7r.diagram.settlement.rolling.lot.record_parts": 54646,
+     "l7r.diagram.settlement.rolling.route.routed_corridors": 0
+    }
+   },
+   "labels": {
+    "calls": 107013,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.place_labels": 107011
+    }
+   },
+   "lane_wells": {
+    "calls": 1267184,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.wells.lane_and_fallback_wells": 88,
+     "l7r.diagram.hamletgen.homesteads.wells.reach_wells": 1266561,
+     "l7r.diagram.hamletgen.homesteads.wells.record_over_ten": 532
+    }
+   },
+   "notice": {
+    "calls": 779962,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.fixture_clear_of_water": 42196,
+     "l7r.diagram.settlement.Settlement.kosatsuba": 135,
+     "l7r.diagram.settlement.Settlement.place_kosatsuba": 729757,
+     "l7r.diagram.settlement.structures.fixtures._helpers.kosatsuba_anchor": 7872
+    }
+   },
+   "pond_bank": {
+    "calls": 99,
+    "own": 3,
+    "steps": {
+     "l7r.diagram.hamletgen.pondbank.bank_seats": 0,
+     "l7r.diagram.hamletgen.pondbank.draw_bank_trees": 0,
+     "l7r.diagram.hamletgen.pondbank.keep_the_bank_dry": 70,
+     "l7r.diagram.hamletgen.pondbank.pond_bank": 26,
+     "l7r.diagram.hamletgen.pondbank.seat_free": 0
+    }
+   },
+   "pond_stock": {
+    "calls": 4,
+    "own": 4,
+    "steps": {
+     "l7r.diagram.hamletgen.pondstock._bank_seats": 0,
+     "l7r.diagram.settlement.Settlement.pig_sty": 0,
+     "l7r.diagram.settlement.Settlement.pond_fixture_fits": 0
+    }
+   },
+   "seat": {
+    "calls": 205378,
+    "own": 7370,
+    "steps": {
+     "l7r.diagram.hamletgen.cluster.seat_cluster": 192532,
+     "l7r.diagram.hamletgen.ways.checks.brook_fords": 666,
+     "l7r.diagram.hamletgen.ways.route.set_crossing": 3961,
+     "l7r.diagram.settlement.Settlement.toe_band": 847,
+     "l7r.diagram.sitegen.geom.crop_polys": 2
+    }
+   },
+   "sink": {
+    "calls": 77396,
+    "own": 2325,
+    "steps": {
+     "l7r.diagram.hamletgen.sink.brook_join": 0,
+     "l7r.diagram.hamletgen.sink.drain_heading": 18,
+     "l7r.diagram.hamletgen.sink.drain_outfall": 5,
+     "l7r.diagram.hamletgen.sink.drain_run": 767,
+     "l7r.diagram.hamletgen.sink.hull_route": 0,
+     "l7r.diagram.hamletgen.sink.pond_clear_of_crop": 237,
+     "l7r.diagram.hamletgen.sink.pond_run": 12,
+     "l7r.diagram.hamletgen.sink.pond_seat": 450,
+     "l7r.diagram.hamletgen.sink.pond_setback": 426,
+     "l7r.diagram.hamletgen.sink.route_refusals": 0,
+     "l7r.diagram.hamletgen.water.brook.round_the_brooks": 60160,
+     "l7r.diagram.settlement.Settlement.marsh": 12647,
+     "l7r.diagram.settlement.Settlement.pond": 316,
+     "l7r.diagram.settlement.land.wet.pond_fringe_ring": 33
+    }
+   },
+   "sties": {
+    "calls": 27684,
+    "own": 366,
+    "steps": {
+     "l7r.diagram.hamletgen.homesteads.sties.sty_seat": 23975,
+     "l7r.diagram.settlement.farm_fixtures.FarmFixturesMixin.farm_fixture": 3343
+    }
+   },
+   "track": {
+    "calls": 8548,
+    "own": 2622,
+    "steps": {
+     "l7r.diagram.hamletgen.ways.clearance.route_around": 0,
+     "l7r.diagram.hamletgen.ways.track._cluster_gateway": 0,
+     "l7r.diagram.hamletgen.ways.track._thread_the_fabric": 0,
+     "l7r.diagram.hamletgen.ways.track.connector_track": 0,
+     "l7r.diagram.settlement.Settlement.lane": 5926
+    }
+   },
+   "washing": {
+    "calls": 30524,
+    "own": 36,
+    "steps": {
+     "l7r.diagram.hamletgen.washing.each_house_places": 0,
+     "l7r.diagram.hamletgen.washing.shared_places": 30470,
+     "l7r.diagram.hamletgen.washing.washing_form": 18
+    }
+   },
+   "water_frame": {
+    "calls": 9,
+    "own": 9,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.pin_knob": 0
+    }
+   },
+   "waterward": {
+    "calls": 2,
+    "own": 2,
+    "steps": {
+     "l7r.diagram.hamletgen.pondstock.reserve_sty_seat": 0,
+     "l7r.diagram.hamletgen.water.polder.dike_face": 0,
+     "l7r.diagram.hamletgen.water.polder.waterward_flanks": 0,
+     "l7r.diagram.settlement.Settlement.marsh": 0
+    }
+   },
+   "web": {
+    "calls": 3278818,
+    "own": 426135,
+    "steps": {
+     "l7r.diagram.hamletgen.ways.bund.a_way_onto_the_bund": 292423,
+     "l7r.diagram.hamletgen.ways.bund.run_lanes_on_to_the_bund": 0,
+     "l7r.diagram.hamletgen.ways.fabric._margin_frame": 10031,
+     "l7r.diagram.hamletgen.ways.serve._lay_web_lane": 523545,
+     "l7r.diagram.hamletgen.ways.settle.settle_the_web": 484721,
+     "l7r.diagram.hamletgen.ways.tree.settle_tree": 909767,
+     "l7r.diagram.hamletgen.ways.web._lay_skeleton": 554764,
+     "l7r.diagram.hamletgen.ways.web._reachable_runs": 7877,
+     "l7r.diagram.hamletgen.ways.web._web_cut_lines": 2853,
+     "l7r.diagram.hamletgen.ways.web.lay_reachable_runs": 7,
+     "l7r.diagram.settlement.Settlement.trim_lane_stubs": 66506,
+     "l7r.diagram.settlement._knobs.web_cuts": 189
+    }
+   },
+   "windbreak": {
+    "calls": 1119945,
+    "own": 11657,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.village_grove": 1108288
+    }
+   },
+   "woodland": {
+    "calls": 205647,
+    "own": 52455,
+    "steps": {
+     "l7r.diagram.settlement.Settlement.commons": 153192
+    }
+   }
+  },
+  "total": 18364796,
+  "type": "nucleated/rolled/pond"
+ }
+}
