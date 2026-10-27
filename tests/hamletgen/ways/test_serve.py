@@ -548,3 +548,16 @@ def test_a_run_refused_at_its_last_draw_leaves_no_lane(monkeypatch: pytest.Monke
     monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0: None)
     assert hg.ways._lay_web_lane(s, [(200.0 - 182.0 * i / 10.0, 200.0) for i in range(11)], [], [], []) is False
     assert len(s.M["lanes"]) == 1
+
+
+def test_a_healing_link_refused_or_cut_off_one_side_takes_its_run_with_it(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 417 T06 (impl-drift): a run whose healing link the lay check refuses is not drawn - it was drawn as an island -
+    and a link the check cut so that it no longer touches both sides goes, with the run, as no link at all."""
+    detached = [(120.0, float(y)) for y in range(150, 255, 5)]
+    homes = [(150.0, 200.0)]
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
+    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0: None)
+    assert hg.ways._lay_web_lane(s, detached, [], [], [], houses=homes) is False and len(s.M["lanes"]) == 1
+    cut = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
+    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0: [(60.0, 200.0), (100.0, 200.0)])  # off the network
+    assert hg.ways._lay_web_lane(cut, detached, [], [], [], houses=homes) is False and len(cut.M["lanes"]) == 1

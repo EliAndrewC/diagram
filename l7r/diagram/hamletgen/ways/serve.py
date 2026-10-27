@@ -299,7 +299,13 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             # review read it at 2x as a lollipop knob mid-street, and it is a repair scar rather than
             # a way. A link exists to make two lanes one; it should look like the lane it completes.
             _w = join_width(s, link[0])
-            _draw_web(s, link[0], int(_w), lawful=True)
+            # ...AND THE LINK DRAWN, STILL TOUCHING BOTH SIDES AS HELD, OR THE RUN IS NOT DRAWN (feature 417 T06, impl-drift): a
+            # link the lay check refused left its run drawn as an island, and one it cut was never asked again
+            if not _draw_web(s, link[0], int(_w), lawful=True):
+                return False
+            if not _touches_both(p, [(float(x), float(y)) for x, y in s.M["lanes"][-1]["pts"]], segs):
+                s.drop_lanes(range(linked, len(s.M["lanes"])))
+                return False
         else:
             # SNAP ONLY IF THE GROUND BETWEEN IS CLEAR. Extending an end onto the way it meets is what makes the junction read
             # as a touch instead of a gap - but the few feet being added are ground like any other, and adding them blind put

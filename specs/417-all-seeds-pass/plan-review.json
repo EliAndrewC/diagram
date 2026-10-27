@@ -432,6 +432,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
+  },
+  "### T67 Approach (checklist part A)": {
+   "sha256": "bf3fe3af7243b37e903e2f2b1abbad28b95c7cceaf26cb74d99b2adab83282cd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5154,6 +5160,57 @@
      "why": "These carry the GM's 2026-10-25 words (arbitrary numbers marked and free to move) and FR-007/FR-008/FR-012. Nothing narrows."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T67 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T67-1 end rules at lay, settle_ends deleted",
+     "summary": "Each ordinary lane (skeleton arm, web run or link, way onto the bund) is held to the lane law's end rules on the candidate before it is drawn, and the settle's settle_ends step is deleted.",
+     "class": "within",
+     "why": "This is FR-004 itself (lanes laid only where the law admits them; the settle's repair steps deleted) and the GM's 'switch off the repair steps ... in whatever manner you find most efficient'. The coverage matches the measured attribution: settle_ends' edits were on the skeleton, web runs and the bund way, and all three placers are converted."
+    },
+    {
+     "id": "T67-2 fixes applied to the candidate, a drawn lane never moved",
+     "summary": "Re-aim, cut-at-tail, cut-at-shallow-crossing and trim-to-service are applied only to the candidate before placement, at most lay.TRIES asks, and a changed candidate is asked of the overlap matrix again. No standing lane is moved.",
+     "class": "within",
+     "why": "FR-006 keeps 'the predicate asked of a candidate before it is placed' in the generator. Reshaping a candidate before it is placed is not place-then-repair, and the block rules out moving drawn lanes explicitly. Asking the overlap matrix again closes the gap where a reshaped candidate could slip past a rule it was never asked."
+    },
+    {
+     "id": "T67-3 lay.TRIES = 3, marked GUESS",
+     "summary": "A new constant bounds the asks per candidate, recorded as an arbitrary GUESS with a claim.",
+     "class": "within",
+     "why": "The GM asked (2026-10-25) that arbitrary numbers be marked as such so a later pass may tune them. Here the constant is marked as such. It narrows nothing that was asked."
+    },
+    {
+     "id": "T67-4 only= on law.doubled_tails and law.dangling_lane_ends",
+     "summary": "The two law predicates take an optional one-lane scope that gives the same verdict on that lane, so the lay check does not ask the whole web for each candidate.",
+     "class": "within",
+     "why": "Each rule stays ONE predicate in law.py (FR-004, FR-006). This is a parameter on that predicate, not a second implementation. The finished-map check and the placer still call the same function."
+    },
+    {
+     "id": "T67-5 settle_dangling stays a settle step until T06's cutting steps go",
+     "summary": "settle_ends' fallback is not deleted in this task. It is measured as needed while settle_defer, settle_network and settle_knots still cut ways after lanes are laid, and it is removed together with them in T06.",
+     "class": "within",
+     "why": "This is sequencing inside the feature, not a carve-out. The GM left 'one at a time or all at once' to the session, and FR-004 still owes the step's deletion under T06. The measurement (dropped 0 -> 1 on Inashiro and Kuwabata without it) shows that deleting it before the steps that make ends dangle would regress pool maps (FR-008). Conditional: this ruling holds only because the block says the step goes with T06's cutting steps. A T06 that keeps settle_dangling past those conversions would be a narrowing of FR-004 and would need its own MODE 1 check."
+    },
+    {
+     "id": "T67-6 order: first of T06's four conversions",
+     "summary": "This conversion runs before settle_knots, settle_network and the last resort.",
+     "class": "within",
+     "why": "It orders work the feature already owes. FR-013's speed-first ordering is not contradicted: this is repair work FR-004 deletes, and it cuts the web's calls."
+    },
+    {
+     "id": "T67-7 exits: no seed worse than HEAD on the fresh block, landing cohort passing, moved pool manifests named",
+     "summary": "Green needs the fresh block from 520001 no worse seed by seed (FAIL lines as well as REFUSED), make cohort-landing passing, every moved pool manifest named with web_settle.dropped unchanged, and the claims round clean. Red sets the task down and goes to the arbiter.",
+     "class": "within",
+     "why": "FR-008 (no regression; the research claims hold). The fresh-block comparison is enforcement of the feature's 'all seeds pass' purpose and FR-008, not unrequested verification."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5947,6 +6004,56 @@
      "summary": "Items 4 and 8-11: re-measure first (FR-012), one landing per group, measures kept in research/, a GUESS constant is a knob within the research, more room within the research before fitting.",
      "class": "within",
      "why": "These carry the GM's 2026-10-25 words (arbitrary numbers marked and free to move) and FR-007/FR-008/FR-012. Nothing narrows."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T67": {
+   "section_sha256": "bf3fe3af7243b37e903e2f2b1abbad28b95c7cceaf26cb74d99b2adab83282cd",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T67-1 end rules at lay, settle_ends deleted",
+     "summary": "Each ordinary lane (skeleton arm, web run or link, way onto the bund) is held to the lane law's end rules on the candidate before it is drawn, and the settle's settle_ends step is deleted.",
+     "class": "within",
+     "why": "This is FR-004 itself (lanes laid only where the law admits them; the settle's repair steps deleted) and the GM's 'switch off the repair steps ... in whatever manner you find most efficient'. The coverage matches the measured attribution: settle_ends' edits were on the skeleton, web runs and the bund way, and all three placers are converted."
+    },
+    {
+     "id": "T67-2 fixes applied to the candidate, a drawn lane never moved",
+     "summary": "Re-aim, cut-at-tail, cut-at-shallow-crossing and trim-to-service are applied only to the candidate before placement, at most lay.TRIES asks, and a changed candidate is asked of the overlap matrix again. No standing lane is moved.",
+     "class": "within",
+     "why": "FR-006 keeps 'the predicate asked of a candidate before it is placed' in the generator. Reshaping a candidate before it is placed is not place-then-repair, and the block rules out moving drawn lanes explicitly. Asking the overlap matrix again closes the gap where a reshaped candidate could slip past a rule it was never asked."
+    },
+    {
+     "id": "T67-3 lay.TRIES = 3, marked GUESS",
+     "summary": "A new constant bounds the asks per candidate, recorded as an arbitrary GUESS with a claim.",
+     "class": "within",
+     "why": "The GM asked (2026-10-25) that arbitrary numbers be marked as such so a later pass may tune them. Here the constant is marked as such. It narrows nothing that was asked."
+    },
+    {
+     "id": "T67-4 only= on law.doubled_tails and law.dangling_lane_ends",
+     "summary": "The two law predicates take an optional one-lane scope that gives the same verdict on that lane, so the lay check does not ask the whole web for each candidate.",
+     "class": "within",
+     "why": "Each rule stays ONE predicate in law.py (FR-004, FR-006). This is a parameter on that predicate, not a second implementation. The finished-map check and the placer still call the same function."
+    },
+    {
+     "id": "T67-5 settle_dangling stays a settle step until T06's cutting steps go",
+     "summary": "settle_ends' fallback is not deleted in this task. It is measured as needed while settle_defer, settle_network and settle_knots still cut ways after lanes are laid, and it is removed together with them in T06.",
+     "class": "within",
+     "why": "This is sequencing inside the feature, not a carve-out. The GM left 'one at a time or all at once' to the session, and FR-004 still owes the step's deletion under T06. The measurement (dropped 0 -> 1 on Inashiro and Kuwabata without it) shows that deleting it before the steps that make ends dangle would regress pool maps (FR-008). Conditional: this ruling holds only because the block says the step goes with T06's cutting steps. A T06 that keeps settle_dangling past those conversions would be a narrowing of FR-004 and would need its own MODE 1 check."
+    },
+    {
+     "id": "T67-6 order: first of T06's four conversions",
+     "summary": "This conversion runs before settle_knots, settle_network and the last resort.",
+     "class": "within",
+     "why": "It orders work the feature already owes. FR-013's speed-first ordering is not contradicted: this is repair work FR-004 deletes, and it cuts the web's calls."
+    },
+    {
+     "id": "T67-7 exits: no seed worse than HEAD on the fresh block, landing cohort passing, moved pool manifests named",
+     "summary": "Green needs the fresh block from 520001 no worse seed by seed (FAIL lines as well as REFUSED), make cohort-landing passing, every moved pool manifest named with web_settle.dropped unchanged, and the claims round clean. Red sets the task down and goes to the arbiter.",
+     "class": "within",
+     "why": "FR-008 (no regression; the research claims hold). The fresh-block comparison is enforcement of the feature's 'all seeds pass' purpose and FR-008, not unrequested verification."
     }
    ],
    "verdict": "CLEAR"

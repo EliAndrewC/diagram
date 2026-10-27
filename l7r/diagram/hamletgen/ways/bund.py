@@ -338,6 +338,7 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
     # off the sheet no way reached the paddy, and the fallback refused every way across the water)
     from .squaring import square_run  # imported where it is asked: `squaring` sits above this layer
 
+    refused = False
     for over in (0, 1):
         for q in sorted(samples, key=paddy.dist):
             tgt = run_on_target(q, paddy, BRANCH_WIDTH / 2.0, reach=float("inf"))
@@ -350,10 +351,13 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
             ):  # ...and the matrix (M8)
                 # ...HELD TO THE END RULES BEFORE IT IS DRAWN (feature 417 T06): re-aimed or cut, this way alone, or the next sample
                 held = laid_lawfully(s, way, float(BRANCH_WIDTH))
-                if held is None:
+                if held is None or held[-1] != way[-1]:  # ...and still on the bund as held: a cut that took its bund end is no way there
+                    refused = True
                     continue
                 s.lane(held, width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
                 return "branch"
+    if refused:  # ...the reason as it was: a way the lay check refused is not one that crossed water (impl-drift, feature 417 T06)
+        return "none: every straight way from the lanes to the paddy crosses water, the marsh or a steading, or breaks a lane rule where it meets the lanes"
     return "none: every straight way from the lanes to the paddy crosses water, the marsh or a steading"
 
 
@@ -418,7 +422,7 @@ def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> bool:
         if not s.admits_lane(way, BRANCH_WIDTH):
             return False
         held = laid_lawfully(s, way, float(BRANCH_WIDTH))  # ...held to the end rules before it is drawn (feature 417 T06)
-        if held is None:
+        if held is None or held[-1] != way[-1]:  # ...and still on the bund as held
             return False
         s.lane(held, width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
         return True

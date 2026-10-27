@@ -32,8 +32,9 @@ def laid_lawfully(s: Any, run: Poly, width: float = 3.0) -> Poly | None:
 
     Research:
         lanes met end to end read as one - research/questions/0081-village-lanes.drawing.html: a needle, fold or hairpin re-laid as a T
-        no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T101
-        two paths side by side become one - research/questions/0081-village-lanes.drawing.html: a lane crossing another at under 20 degrees cut at the crossing (`cut_at_shallow_crossing`)
+        no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T101; at whichever end runs on (the candidate is an ordinary lane, never a household's way, whose door end the page keeps)
+        two paths side by side become one - research/questions/0081-village-lanes.drawing.html: a lane crossing another at under 20 degrees (`law.NEEDLE_DEG`, 20) cut at the crossing (`cut_at_shallow_crossing`)
+        a bare leg folded on a way not laid - GUESS: no source could speak to it, a value of ours (feature 417 T06); a two-point candidate folded on a standing way has no vertex to re-aim from, and is refused, as the settle dropped the shorter of two bare legs
         a drawn lane not moved for a new one - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each way laid in turn; a candidate that only a standing lane's move could admit is not laid"""
     from . import law
     from .forced import lazy_ground

@@ -278,3 +278,14 @@ def test_a_way_onto_the_bund_the_lay_check_refuses_is_not_drawn(monkeypatch) -> 
     assert B.a_way_onto_the_bund(branch).startswith("none: ") and len(branch.M["lanes"]) == 2
     s = _StubSettlement(lanes=[[(300.0, 0.0), (300.0, 200.0)], [(100.0, 100.0), (300.0, 100.0)]])
     assert B.carry_on(s, 1, -1, (300.0, 100.0), (396.0, 100.0)) is False and len(s.M["lanes"]) == 2
+
+
+def test_a_way_onto_the_bund_cut_off_the_bund_is_no_way_there(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 417 T06 (impl-drift): a branch or step the lay check cut so it no longer ends on the bund is refused, and the
+    map says the lane rules refused it rather than that every way crossed water."""
+    monkeypatch.setattr(B, "laid_lawfully", lambda s, run, width=3.0: list(run)[:-1] + [(0.0, 0.0)])
+    branch = _stub()
+    branch.M["lanes"].append({"pts": [[300.0, 300.0], [300.0, 250.0]], "w": 3})
+    assert B.a_way_onto_the_bund(branch).endswith("or breaks a lane rule where it meets the lanes")
+    s = _StubSettlement(lanes=[[(300.0, 0.0), (300.0, 200.0)], [(100.0, 100.0), (300.0, 100.0)]])
+    assert B.carry_on(s, 1, -1, (300.0, 100.0), (396.0, 100.0)) is False and len(s.M["lanes"]) == 2
