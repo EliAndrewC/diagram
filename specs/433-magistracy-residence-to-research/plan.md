@@ -30,25 +30,4 @@ guess is labeled. Occasion: building-review (a sheet revised).
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
 
-## T05 - the claims carry: the placer example's office-hall door seat claimed (385 FR-013)
-
-### T05 Approach (checklist part A)
-
-1. **The goal, in the world.** Every decision the placer example makes about the office hall's doors names its research or
-   its GUESS.
-2. **The constraints.** No code changes: the claim describes the code as it is.
-3. **Where each comes from.** O: impl-drift's UNCLAIMED finding of 2026-10-26 on `compound_example.py::county_magistracy_program`,
-   carried into this feature by the claims gate.
-4. **Do they describe the world here?** Yes: the door seat is drawn and no claim named it.
-5. **The order.** After T01-T04.
-6. **The exits.** Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** 15 min (a GUESS, the session's, 2026-10-26).
-9. **Done, measured.** impl-drift IN-STEP on the office hall doors claim.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-
-### T05 Decisions
-
-- **D7** The office hall's door seat, 0.8 of its end face (0.7 its second seat), is claimed as a GUESS in the existing
-  `office hall doors` claim: no page places an office hall's doors. Rendering: none.
+<!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
