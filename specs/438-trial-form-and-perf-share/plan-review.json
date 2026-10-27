@@ -1,0 +1,158 @@
+{
+ "feature": "438-trial-form-and-perf-share",
+ "blocks": {
+  "preamble": {
+   "sha256": "74cb87333b46a1f782f74c10ba844a667db9d36cbb50bccd52a2df2862328c23",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "97f999320b7e7536c305fd470ef09e5def3bb16798f716bdc02753faf11a1ea9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "ee25f0d689d069c933fab309f8ab2f32b4f6a4695204321151f7fa68f9aec5a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "1c4442d80ccbd4667319d8d3f50aa7392c1c652820a78fa22f4aaeebcb03b419",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "41c4fa3ed3ebaf138b39ca1a551b8d1e28de75ef01b7e42dfe56f100cf6b427c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "1edbac55a2f65033ff1958466e0b818ffebba2cd69a4dadfe76532352b10a06f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Task approaches": {
+   "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "8523958948b53fe47ccf25fd00036efbceac907a04727d498c71f205f937992f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "8683676597f44b5c941ade1df5ed74c6bac674896e303223b6825b0f68a5bdc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "66338189bcd49aec1b37767c4e6242faa0f619f65fa5c0ccd4189920aab30327",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1a",
+     "summary": "PROFILES files are matched to a stage by their -<stage>.prof suffix; otherwise the newest dev/perf-raw/*-seed<S>-hh<H>-<stage>.prof; otherwise profile_stage is run and the output says so",
+     "class": "within",
+     "why": "This is FR-001's lookup order. FR-001 does not say how a named file maps to a stage, and the suffix rule reaches old (sizeless) and new names alike."
+    },
+    {
+     "id": "D1b",
+     "summary": "Each stage shows the 8 largest self times",
+     "class": "within",
+     "why": "FR-001 asks for 'the stage's largest self-time functions' and gives no count. Choosing 8 settles a detail the spec leaves open."
+    },
+    {
+     "id": "D1c",
+     "summary": "Callers are ranked by the module's cumulative time under them; a call from the module to itself is not counted as a caller",
+     "class": "within",
+     "why": "FR-001 asks for the callers of the module ranked by the module's time under them. Every caller from outside the module is still listed. An internal edge's time also sits under the external caller above it, so counting it would count the same time twice and the ranking would no longer show where the module's time comes from. That reads 'callers' as callers of the module and drops nothing the spec asks for."
+    },
+    {
+     "id": "D1d",
+     "summary": "The summary line labels the cross-stage share 'an upper bound' because cProfile inflates times",
+     "class": "within",
+     "why": "FR-001's closing share is still printed. The label adds a caveat and takes nothing away, and nothing is gated on it (FR-007)."
+    },
+    {
+     "id": "D2",
+     "summary": "profile_stage names its raw profile <stamp>-seed<S>-hh<H>-<stage>.prof, with H the roll's household count (the reference's 15 when none is given)",
+     "class": "within",
+     "why": "FR-001 requires the -seed<S>-hh<H>-<stage>.prof name from this feature on. Writing the count actually used when none is passed keeps the name true to the roll."
+    },
+    {
+     "id": "D3",
+     "summary": "scripts/trial-start.py runs claim-feature.py, writes spec.md from trial-template.md with [DATE] and [N] filled plus a request.md stub, and prints the export lines as make claim does",
+     "class": "within",
+     "why": "FR-003: claim a number as make claim does and write the brief from the template. The request.md stub and export lines copy what make claim already does and add no behavior."
+    },
+    {
+     "id": "D4",
+     "summary": "The review gate passes a **Form**: trial spec without a verdict when its status does not open Done and git diff --quiet $RANGE -- l7r/ holds; otherwise the verdict is owed. The refusal names both conditions",
+     "class": "within",
+     "why": "This is FR-004's exemption with both of its conditions and no wider reach. 'Changes the engine on net by nothing' becomes a no-diff over the push range under l7r/, which is FR-004's own definition. It refuses on nothing beyond what FR-004 refuses on, and on no time (FR-007)."
+    },
+    {
+     "id": "D5",
+     "summary": "Docs: a 'The trial form' section in spec-kit-and-reviews.md, one line in the root CLAUDE.md workflow list, and the trial rule in guards.md",
+     "class": "within",
+     "why": "This is FR-006 item for item."
+    },
+    {
+     "id": "PS",
+     "summary": "perf_share.py sits beside perf_profile.py in l7r/diagram/tools/; Makefile targets perf-share and trial; perf-profile bookends are none",
+     "class": "within",
+     "why": "File placement. It changes no requested behavior, and no roll's engine code changes."
+    },
+    {
+     "id": "T01-done",
+     "summary": "T01 is done when make perf-share PROFILES=<437's four> reproduces 437's 3.5%",
+     "class": "within",
+     "why": "This checks SC-001 for the requested command. It measures nothing the GM did not ask about."
+    },
+    {
+     "id": "T02-done",
+     "summary": "T02 is done when hooks-test passes the gate's new cases and the next feature (the search-restructuring trial) is started with make trial",
+     "class": "within",
+     "why": "The GM's request says to build the trial form, then do the search-restructuring trial. Starting that trial with the new form is the next step the request names. It does not narrow the request."
+    }
+   ]
+  }
+ ]
+}

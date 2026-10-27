@@ -63,7 +63,7 @@ status does not open `Done` is passed without a verdict when the push's delta ch
 6. **The exits.** Green: landed with its tests and a real run on 437's profiles. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** `make perf-share PROFILES=<437's four>` prints 437's shares (3.5% across the four).
+9. **Done, measured.** `make perf-share PROFILES=<437's four>` prints 437's shares (3.5% across the four, measured 2026-10-27 (feature 437, research/share.md)).
 10. **Before moving a constant.** n/a
 11. **Before fitting things into room.** n/a
 

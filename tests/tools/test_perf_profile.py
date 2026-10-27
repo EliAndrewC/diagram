@@ -153,6 +153,7 @@ def test_profiling_the_FIRST_stage_writes_a_raw_prof_and_a_table_that_says_what_
     table, raw = perf_profile.profile_stage(7, "water_frame", top=5)
 
     assert Path(raw).is_file() and raw.endswith(".prof"), "the raw profile lands on disk"
+    assert raw.endswith("-seed7-hh15-water_frame.prof"), "the size in the name, the reference's 15 (feature 438)"
     assert str(tmp_path) in raw, "in the raw directory, not beside the committed evidence"
     assert "perf-profile seed 7 stage water_frame" in table
     assert "under cProfile" in table and "+225%" in table, "the table says its number is inflated"

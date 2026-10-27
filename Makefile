@@ -45,6 +45,9 @@ perf-fanout:    ## [performance] the call-volume survey: per stage, the Python c
 perf-ab:        ## [performance] two engines timed against each other - QUICK first (one seed at one size, the default), then a SUBSET or FULL=1, refused without a quick run of the same engines; alternated, wall and CPU best and spread, calls; evidence, never a gate (features 435, 436)   A=<commit> [B=HEAD] [SEEDS=25] [HOUSEHOLDS=40] [FULL=1] [AA=1: the noise floor] [N=1: raise it rarely]
 	$(RUN).tools.perf_ab "$(A)" "$(or $(B),HEAD)" --seeds "$(or $(SEEDS),25)" --households "$(or $(HOUSEHOLDS),40)" $(if $(FULL),--full,) $(if $(AA),--aa,) $(if $(N),--n "$(N)",)
 
+perf-share:     ## [performance] where a module's time is: its share of each stage and its callers, read from the KEPT raw profiles (a stage with none is profiled then); an upper bound under cProfile, never a gate (feature 438)   [MODULE=l7r/diagram/settlement/_geom/primitives.py] [STAGES=homesteads,web,field,hinterland] [SEED=25] [HOUSEHOLDS=40] [PROFILES=<kept .prof files>]
+	$(RUN).tools.perf_share $(if $(MODULE),--module "$(MODULE)",) $(if $(STAGES),--stages "$(STAGES)",) --seed "$(or $(SEED),25)" --households "$(or $(HOUSEHOLDS),40)" $(if $(PROFILES),--profiles "$(PROFILES)",)
+
 phase-calls:    ## [performance] one 40-household hamlet's Python calls by stage and by step, recorded for the placement-stages page (feature 434)   [SEED=39] [HOUSEHOLDS=40] [FORM=nucleated|linear|dispersed] [ARCHETYPE=<field archetype>] [SINK=pond|offmap]
 	$(RUN).tools.phase_calls --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),40)" $(if $(FORM),--form "$(FORM)",) $(if $(ARCHETYPE),--archetype "$(ARCHETYPE)",) $(if $(SINK),--sink "$(SINK)",)
 

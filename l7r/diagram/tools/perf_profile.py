@@ -106,7 +106,7 @@ def profile_stage(seed: int, stage: str, top: int = 25, households: int | None =
                 plain += time.time() - t0
     os.makedirs(RAW_DIR, exist_ok=True)
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-    raw = os.path.join(RAW_DIR, f"{stamp}-seed{seed}-{stage}.prof")
+    raw = os.path.join(RAW_DIR, f"{stamp}-seed{seed}-hh{spec['households']}-{stage}.prof")  # the size in the name, so a kept profile is matched to one (feature 438)
     prof.dump_stats(raw)
     with open(raw + ".placed.json", "w", encoding="utf-8") as fh:  # ...and what the stage placed (feature 417 T57: the calls per thing placed)
         json.dump(added, fh, sort_keys=True)
