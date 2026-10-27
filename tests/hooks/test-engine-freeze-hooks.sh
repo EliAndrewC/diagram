@@ -68,6 +68,22 @@ agent a4 fix-check "$MIDTOOL"; touch -d '3 days ago' "$SUB/agent-a4.jsonl"
 edit "$ENG";                                  check "an unfinished review days old still refuses until acked" 2 "$RC"
 touch "$SESSION/stall-ack/a4"
 edit "$ENG";                                  check "...and passes once acked" 0 "$RC"
+# A DOCSTRING OR COMMENT EDIT PASSES (the GM, 2026-10-27): the engine key a review is recorded against strips them - but not in
+# the interactive page's classes, whose docstrings are the modal text, and never a code change
+edit2() { # edit2 <path> <old> <new>
+  OUT=$(printf '{"session_id":"t","cwd":"%s","transcript_path":"%s.jsonl","tool_name":"Edit","tool_input":{"file_path":"%s","old_string":"%s","new_string":"%s"}}' \
+        "$C" "$SESSION" "$1" "$2" "$3" | "$HOOK" pretool 2>&1); RC=$?
+}
+agent a5 glyph-check "$MIDTOOL"
+printf 'def f():\n    """alpha"""\n    return 1  # one\n' > "$ENG"
+edit2 "$ENG" "alpha" "beta, a second line";  check "a docstring-only edit passes a running review" 0 "$RC"
+edit2 "$ENG" "# one" "# two";                 check "a comment-only edit passes" 0 "$RC"
+edit2 "$ENG" "return 1" "return 2";           check "a code edit is still refused" 2 "$RC"
+edit2 "$ENG" "nothing here" "x";              check "an edit whose old text is absent is refused (cannot judge)" 2 "$RC"
+mkdir -p "$C/l7r/diagram/interactive/classes"; IA=$C/l7r/diagram/interactive/classes/lane.py
+printf 'class Lane:\n    """A worn path."""\n' > "$IA"
+edit2 "$IA" "A worn path." "A lane.";         check "an interactive class docstring is modal text: refused" 2 "$RC"
+touch "$SESSION/stall-ack/a5"
 [ -n "$(ls "$GUARD_LOG_DIR" 2>/dev/null)" ] && { echo "ok    firings are recorded"; PASS=$((PASS+1)); } || { echo "FAIL  no guard-log entry"; FAIL=$((FAIL+1)); }
 
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"
