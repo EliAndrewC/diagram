@@ -639,3 +639,188 @@ Each step measured alone:
 | each site's cost | its calls and profiled seconds in the record |
 
 
+<!-- plan-archive: archived 2026-10-26 -->
+### T41 (T31's second part, D35): the four map-moving steps and the last resort's three needless re-asks deleted
+
+- **Approach**: T31's section, split so its second landing ticks only what it finished. Measured 2026-10-25 (method: the landing
+  cohort, `make cohort-landing JOBS=3`, record `dev/cohort-log/20261025T234826Z-diagram-backlog-3803029.json`, and `make map` on
+  the five pool hamlets compared with `git diff`): with `square_every_crossing`, `settle_shapes`, `settle_way_outs` and
+  `settle_widths` out of `STEPS`, and `settle_husks`, `settle_street_ends` and `prune_the_tree` out of `last_resort`, 54 of 54
+  pass; Inashiro, Kashikawa and Sawada move in their drawing order (`z`) alone, every lane's points unchanged, and one Kashikawa
+  lane's width 5 -> 6 ft, the lane law still kept (the settle refuses a map that breaks it). Cutting `settle_joins` and
+  `settle_widths` from `last_resort` as well refused seeds 10, 25 and 37 (`width_steps`, `joins_short`: T31 part B), so those
+  two stay in `last_resort` - NEEDED, owed D11's conversion under T31. The fourteen names `make dead-closure` then found dead
+  are deleted with their tests. T31 keeps the six needed steps and the last resort's `settle_joins` and `settle_widths`.
+  Rendering: none (no glyph changes; three pool maps redrawn in a new order).
+
+### T41 Approach (checklist part A)
+
+1. **The goal, in the world.** The settle's rounds no longer run the four steps the placers already keep, nor the last resort
+   the three re-asks it does not need, and no code they alone used survives.
+2. **The constraints.** D35, D23, D11; the fixed and pinned seeds; the pool maps held to the lane law.
+3. **Where each comes from.** G: the GM 2026-10-25 ("switch off the 16 repair steps"). O: the measurement above.
+4. **Do they describe the world here?** Measured (the landing cohort and the five pool maps).
+5. **The order.** After T40; before T31's conversions of the needed steps.
+6. **The exits.** The landing cohort and the pool gate green: landed. Red: set down with its seeds (D23).
+7. **The search smell.** None: one removal measured, then one narrower (T31 part B).
+8. **The budget.** One landing.
+9. **Done, measured.** The four out of `STEPS`, the three out of `last_resort`, the fourteen dead names gone, `make land` green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+
+### T42 (T31's conversion C1, D11): one width a way, asked where the orphan link is laid
+
+- **Approach**: T31's conversion C1 (its decision in T31's section). Measured 2026-10-26 (method: the landing cohort, `make
+  cohort-landing JOBS=3`, and `make map` on the five pool hamlets compared with `git diff`): with `link_width` asked by
+  `_join_orphan_ways` (a link continuing a lane end to end takes that lane's width; tees keep the widest way within reach) and
+  `settle_widths` out of `last_resort`, 54 of 54 pass, and Inashiro's and Kashikawa's one orphan link each is drawn 5 ft where
+  it was 6, continuing a 5 ft way (Inashiro's commons redrawn round it). `settle_widths` and `rewidth`, left dead, are deleted
+  with their tests; the fragments test they shared is kept on its own. Rendering: none (a link's width).
+
+### T42 Approach (checklist part A)
+
+1. **The goal, in the world.** A link joining an orphan piece is drawn at the width of the way it continues, so no way changes
+   width at a bare joint and nothing widens it afterwards.
+2. **The constraints.** D11, D35; `law.width_steps` (0081: one width a way); the fixed and pinned seeds; the pool maps.
+3. **Where each comes from.** R: 0081's one width a way. G: the GM 2026-10-25 (the repairs replaced by placing correctly). O: the measurement.
+4. **Do they describe the world here?** Measured: every width step the cut probe refused was such a link.
+5. **The order.** After T41; the first of T31's conversions.
+6. **The exits.** The landing cohort and the pool gate green: landed. Red: set down with its seeds.
+7. **The search smell.** None: one rule moved into one placer.
+8. **The budget.** One landing.
+9. **Done, measured.** `link_width` asked at the link, `settle_widths` gone, `make land` green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+
+### T45 (FR-005, the round arbiter's ruling on ask:417-T31-C2-regression): the needle rule asked where a tree lane is drawn
+
+- **Approach**: `law.needle_loops` asked of the candidate where `lanes_of` draws a tree lane, so two household ways never close a
+  sliver between them (fresh seed 723775 under the tree-first order: access lanes 1 and 2). Its first step, per the ruling: read
+  `needle_loops`' sliver threshold in the tunables record (`make tunables`) - if it is unresearched, research it first (the
+  result recorded in the tunables record), then proceed by what the research finds; if it is ours, moving it is tried before
+  anything more elaborate, judged by the cohort, the pinned rows and the pool maps, never by seed 723775 passing. Never iterated on 723775 inside C2 (D11). Rendering: none.
+- **The threshold, read 2026-10-26** (method: `law.py` `NEEDLE_LOOP_FT` and its claim): 20 ft mean width, `CONVENTION` - a map
+  drawing convention calibrated on two settlement-reviews (Sawada's 16 ft triangle read as a street forking round nothing); ours,
+  not a research figure. Not moved: the needle seed 723775 makes is 3 ft wide, far under any value the convention could take.
+- **The geometry, measured 2026-10-26** (method: seed 723775 rolled on main at T44, `make cohort N=1 SEED=723775`, the refusal's
+  manifest polygonized with shapely as `law.needle_loops` does): the one needle is a face of 66 sq ft, mean width 3.0 ft, at the
+  connector's start (1503-1520, 1252-1263), bounded by access lanes 1 and 2 - both households' ways end on the connector's start,
+  lane 1's last leg running about 7 ft beside lane 2's last stretch. **The rule asked at lay**: in `lanes_of`, a tree lane whose
+  carried end would close a needle (`law.is_needle`) with a tree lane already drawn ends instead on that lane's tread at the
+  nearest point, a tee - the way joins the way beside it rather than running on beside it to a shared end (0081's doubled way,
+  drawn as one). Measured on the landing cohort, the fresh block from seed 723759 and the pool maps.
+
+### T45 Approach (checklist part A)
+
+1. **The goal, in the world.** No two households' ways close a sliver of grass between them: a way that would run on beside
+   another to a shared end ends on that way instead.
+2. **The constraints.** FR-005, D11; `law.needle_loops` (a 20 ft CONVENTION); the arbiter's ruling on ask:417-T31-C2-regression.
+3. **Where each comes from.** R: 0081's doubled way drawn as one. G: the GM 2026-10-25. O: the measured needle on seed 723775.
+4. **Do they describe the world here?** Measured (observed 2026-10-26 UTC; method: seed 723775 rolled on main at T44, the refusal's
+   manifest polygonized as `law.needle_loops` does - T45's section): the needle a face of mean width 3.0 ft at the connector's
+   start, bounded by two access lanes.
+5. **The order.** After T44 (the tree first); its own task, not iterated inside C2.
+6. **The exits.** FR-008 green: landed, its fresh rate recorded. Red: set down.
+7. **The search smell.** None: one rule asked at one placer (`lanes_of`, `off_the_needle`).
+8. **The budget.** One landing.
+9. **Done, measured** (observed 2026-10-26 UTC; method: `make cohort-landing JOBS=3`, `make cohort N=48 SEED=723759 FRESH=0 JOBS=3`,
+   `make map` on the five pool hamlets): 54 of 54; the fresh block 7 of 48, the same seven (723775 now refused on `joins_short`
+   at a skeleton end, its needle gone); no pool map moved.
+10. **Before moving a constant.** One value, `law.NEEDLE_LOOP_FT` (20 ft mean width, a CONVENTION), read and kept: it was set
+   to catch the 16 ft triangle two settlement-reviews read as a street forking round nothing - the 16 ft is the example it was
+   calibrated on, not a second value - and the measured face (3.0 ft, item 4's run) is under it either way. `off_the_needle`
+   asks the law's own predicate (`law.is_needle`) and reach (`law.NEEDLE_LOOP_FT / 2`), so the placer and the finished-map check
+   share one implementation (SC-003).
+11. **Before fitting things into room.** n/a.
+
+### T48 (T31's D11 probe, D35): two settle steps deleted that alone off move no pool lane and no verdict
+
+- **Approach**: after T44-T46 the settle's remaining repairs are probed off one at a time. Measured 2026-10-26 UTC (method: a
+  detached worktree at T46's tree, each off ALONE with `make cohort-landing JOBS=3`, `make cohort N=48 SEED=723759 FRESH=0
+  JOBS=3` - the block rolled before T44, baseline failing 723767 723770 723775 723777 723794 723799 723804 - and `make map` on
+  the five pool hamlets, each manifest diffed field by field against HEAD):
+  - `square_every_crossing` alone off: 54 of 54, the fresh block's verdicts identical to HEAD's seed by seed, no pool lane
+    moved - Inashiro's manifest moves only in the settle's own tally (`meta.web_settle.changed` 19 -> 18). NEEDLESS (D35). The
+    tree's lanes (`tree.lanes_of`, the seating's `Lawful.squared`), the door paths and the connector are squared as laid
+    (`squaring.square_run`); the skeleton arms (`web/skeleton.py`), the web lanes (`fabric._draw_web`), the bund and track spurs
+    and the field way (`reach.py`) are NOT, and each OWES its squaring as laid, unconditionally - T49 (FR-005), in D11's order
+    after this task; until it lands the law (`law.oblique_crossings`) is asked of the finished web as before (on no measured
+    map does one of them cross water off square), never this step back. T45's needle rule now holds fresh seed 723805,
+    for which T43 had restored it.
+  - `settle_fragments` alone off `STEPS`: the same - 54 of 54, the same seven, Inashiro's tally alone (19 -> 18). NEEDLESS.
+    It stays defined: the last resort asks it.
+  - Both together (this task's change, measured in the clone 2026-10-26 UTC): `make cohort-landing JOBS=3` 54 of 54; the fresh
+    block 47 of 54, its seven failures identical to HEAD's seed by seed and check by check (HEAD rolled on the same block in a
+    detached worktree; 723775 is refused `joins_short` at a skeleton arm's end on both, the block's older record's `lane_knots`
+    being from before T44 - its conversion stays owed); Inashiro's tally 19 -> 17, nothing else on any pool manifest.
+  - Measured NEEDED, kept, conversions owed (T31, D11): `settle_ends` alone off moves Kuwabata's access lane (66 -> 69 ft) and the
+    last resort then drops a lane on Inashiro; the tree's own `settle_defer` call alone off leaves the last resort dropping a lane
+    on Kuwabata and Sawada (its work moved into the backstop, not gone); `settle_network` (36 of 54 without it), `settle_knots`
+    (40 of 54) and the web's `trim_lane_stubs` (fresh seed 723805 refused without it).
+  - The last resort itself (`last_resort.py`, which asks `settle_reach`, `settle_knots`, `settle_defer`, `settle_network` and
+    `settle_fragments`) still repairs a laid web: it stays OWED under FR-004 as FR-007's backstop, converted once the steps it
+    re-asks are, never an exemption.
+  `make dead-closure` then finds `square_every_crossing` alone dead; it goes with the one test whose BODY calls it (the arbiter's
+  rule on T44). Rendering: none (no glyph; no lane redrawn).
+
+### T48 Approach (checklist part A)
+
+1. **The goal, in the world.** Nothing mends the web after it is laid: each way is laid lawful, square at its crossings.
+2. **The constraints.** D35 (needless = alone off, no verdict and no pool manifest moved), D23, FR-004, FR-008; the arbiter's rule
+   that a test goes only on what its body calls; the same-block rule (a pre-change fresh block rolled seed by seed).
+3. **Where each comes from.** G: the GM 2026-10-25 (the repairs replaced by placing correctly). O: the probes above.
+4. **Do they describe the world here?** Measured: each repair alone - fixed and pinned seeds, the pre-change fresh block, and
+   every pool manifest diffed field by field - then the two together.
+5. **The order.** After T46; it moves no map's lanes, so it may precede T47 (D11: tasks that move no map first).
+6. **The exits.** FR-008 green: landed with its fresh rate. Red: set down.
+7. **The search smell.** None: one probe a repair, then the two together.
+8. **The budget.** One landing.
+9. **Done, measured.** The two gone, `square_every_crossing`'s closure with it, the fresh block 723759 the same seven, `make
+   land` green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+<!-- plan-archive: T49 to T48 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
+
+### T50 (T31's D11, settle_network's first conversion): the track's field spur no longer laid unjoined, and the bund's carry-on squared
+
+- **Approach**: `settle_network` (36 of 54 without it) drops every lane off the connector's network. Measured 2026-10-26 UTC
+  (method: a detached worktree at T49's tree, the lanes off the network logged at `settle_the_web`'s entry and the lanes
+  `settle_network` drops, `make cohort-landing JOBS=3`): 32 of the 54 maps reach the settle with lanes already off the network -
+  laid unjoined, not cut loose by a repair. By placer: the track's field spur (`stage_track`, laid before the web, "judged against
+  the finished network" by the sweeps T26 deleted) on 28 maps; web lanes of the skeleton pass on 18; skeleton arms on 13; the
+  bund's field branch on 4. This task takes the first: the spur is laid before anything it could join is on the map (the
+  connector is drawn after it, the web two stages later), so on 28 maps it stood alone until `settle_network` dropped it, and the
+  field was reached by the web's own way onto the bund (`a_way_onto_the_bund`: run on, branch) or the settle's field way
+  (`settle_field`). Probed off (the spur not drawn): 53 of 54 - seed 42's door path, carried on to the bund over the brook by
+  `bund.carry_on`, crossed it 23.6 degrees off square (`oblique_brook`): `carry_on`'s step is squared against the drawn channels
+  only (`squared_step`), and a sixth placer T49 missed. With `carry_on` asking `squaring.square_run` of the run it lays or
+  lengthens too: 54 of 54, the fresh block from 723759 identical to HEAD seed by seed, the pool passing - Inashiro's field path
+  `joined` -> `run_on` and Kashikawa's `joined` -> `branch` (their lanes as drawn unchanged), Mizuguchi's field way replaced by
+  a branch 70 ft along the lane, Sawada's lanes unchanged; the last resort drops one lane on Kashikawa and Sawada where
+  `settle_network` dropped one before (their drawn lanes identical). The spur's code and the names it leaves dead (`make
+  dead-closure`) go with the tests whose BODY calls one. The other placers' unjoined lanes (the skeleton pass's web lanes, the
+  arms, the bund branch) are the next conversions, measured the same way. Rendering: none (no glyph; four pool maps redrawn).
+
+### T50 Approach (checklist part A)
+
+1. **The goal, in the world.** Each way is laid joined to the ways it serves (the lane law's one network, `law.lane_networks` at
+   `law.JOIN_TOL`, as `settle.ends.connector_component` reads it); nothing is laid only to be dropped.
+2. **The constraints.** D35, D11, D23, FR-004, FR-005, FR-008; 0014 (the field path runs on to the bund), 0035 and 0084 (a
+   crossing square to the water); the arbiter's rule that a test goes only on what its body calls; the same-block rule.
+3. **Where each comes from.** G: the GM 2026-10-25 (the repairs replaced by placing correctly). R: 0014, 0035, 0084. O: the
+   probes above.
+4. **Do they describe the world here?** Measured: fixed, pinned, the pre-change fresh block and the pool, field by field.
+5. **The order.** After T49 (the placers squared); before the other unjoined placers.
+6. **The exits.** FR-008 green: landed with its fresh rate. Red: the failing seeds recorded and the task set down, a claim that it
+   cannot be placed correctly ruled through `make arbiter-ask` (D11, D35).
+7. **The search smell.** None: one placer, one squaring gap the probe found.
+8. **The budget.** One landing.
+9. **Done, measured.** The spur not laid and its dead code gone, `carry_on` squared, `make land` green.
+10. **Before moving a constant.** n/a: the spur's constants go with their only users.
+11. **Before fitting things into room.** n/a.
+
+
+<!-- plan-archive: T52 to T52 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
