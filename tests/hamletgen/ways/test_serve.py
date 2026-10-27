@@ -5,6 +5,7 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.hamletgen.ways import lay as _lay
 from l7r.diagram.hamletgen.ways import serve as _serve
 
 from ._builders import _StubSettlement
@@ -37,6 +38,14 @@ def test_a_way_shadowed_past_a_pitch_names_the_way_it_runs_beside() -> None:
     assert _serve.sampled([(0.0, 0.0), (10.0, 0.0)]) == [(0.0, 0.0), (5.0, 0.0), (10.0, 0.0)]
 
 
+@pytest.fixture
+def unheld(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The lay check passed through (`lay.laid_lawfully`, feature 417 T06, `test_lay.py`'s subject): these stubs seat no
+    farmhouse at a run's free end, so the service rule would refuse the run before the join mechanics under test are reached."""
+    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, run, width=3.0: run)
+
+
+@pytest.mark.usefixtures("unheld")
 def test_a_web_lane_may_not_run_the_length_of_a_shelter_belt() -> None:
     """Crossing a belt costs it a lane's width of wall, which is a fair price for a way with
     somewhere to be. Running ALONG it splits one wind wall into two thinner ones - measured, a back
@@ -102,6 +111,7 @@ def test_a_web_lane_is_refused_when_its_link_is_blocked_though_the_gap_is_short(
     assert len(s.M["lanes"]) == 1, "neither the link nor the run is drawn"
 
 
+@pytest.mark.usefixtures("unheld")
 def test_a_web_lane_snaps_its_end_onto_the_way_it_almost_meets() -> None:
     """A run that stops a few feet short of the way it aims at renders as a gap, whatever the gate
     thinks of it - acceptance tolerances are not ink tolerances. So an end within `_LANE_JOIN_FT` is
@@ -480,6 +490,7 @@ def test_joined_link_snaps_straight_falls_back_to_the_clear_run_or_refuses() -> 
     assert joined_link((20.0, 200.0), (0.0, 200.0), [], [short], [], segs) is None
 
 
+@pytest.mark.usefixtures("unheld")
 def test_a_run_kept_whole_takes_a_link_where_it_arrives() -> None:
     """A run whose nearest vertex comes within 25 ft of the network mid-run, both halves 40 ft or more, has that vertex snapped onto
     its foot on the way (it was drawn whole and left unjoined); refused where a new leg is not walkable."""
@@ -502,6 +513,18 @@ def test_a_run_kept_whole_takes_a_link_where_it_arrives() -> None:
     assert hg.ways._lay_web_lane(shut, run, [], [fence, post], [], houses=homes) is False and len(shut.M["lanes"]) == 1
 
 
+def test_a_link_goes_with_its_run_when_the_lay_check_refuses_the_run(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 417 T06: the link `joined_link` finds and the run it joins are one placement - the lay check refusing the run
+    takes the link back with it, and the run is not counted laid."""
+    run = [(160.0, 260.0), (110.0, 230.0), (20.0, 200.0), (110.0, 170.0), (160.0, 140.0)]
+    homes = [(170.0, 270.0), (170.0, 130.0)]
+    walled = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
+    walled.M["lanes"][0]["w"] = 5
+    fence = [(40.0, 175.0), (60.0, 175.0), (60.0, 190.0), (40.0, 190.0)]
+    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0: pts if width != 3.0 else None)  # the link held, the run not
+    assert hg.ways._lay_web_lane(walled, run, [], [fence], [], houses=homes) is False and len(walled.M["lanes"]) == 1
+
+
 def test_carried_onto_splices_the_link_and_checks_the_leg_into_it() -> None:
     """`carried_onto` (feature 328 wave 44): no link, nothing; a point link leaves the run; a link from the end itself is spliced
     on; one starting past a foul is spliced only where the leg into it is walkable."""
@@ -516,3 +539,12 @@ def test_carried_onto_splices_the_link_and_checks_the_leg_into_it() -> None:
     wall = [(30.0, 198.0), (40.0, 198.0), (40.0, 212.0), (30.0, 212.0)]  # on the leg from (60, 200) into the piece
     assert carried_onto(run, 0, piece, [], [wall], []) is None
     assert carried_onto(run[::-1], -1, piece, [], [], [])[-2:] == [(14.0, 205.0), (0.0, 205.0)]
+
+
+def test_a_run_refused_at_its_last_draw_leaves_no_lane(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 417 T06: a run that reaches the network's end and is refused there by the lay check is not counted laid, and
+    nothing it would have joined by is left drawn."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]])
+    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0: None)
+    assert hg.ways._lay_web_lane(s, [(200.0 - 182.0 * i / 10.0, 200.0) for i in range(11)], [], [], []) is False
+    assert len(s.M["lanes"]) == 1

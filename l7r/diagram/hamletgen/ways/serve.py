@@ -198,6 +198,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     """
     from .checks import served_network  # local: checks sits above serve in this package's layers
 
+    linked = len(s.M.get("lanes") or [])  # the lanes before this run: a link drawn for a run refused goes with it
     segs = served_network(s.M.get("lanes") or [])  # THE NETWORK, NOT ANY LINE ON THE GROUND (feature 417 T58): a run
     # joined to an island off the connector's network would be dropped whole by the settle's one-network step
     if len(run) < 2:
@@ -275,8 +276,13 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
                     link = joined_link(run_k, q, hard, walls, water, segs)
                     if link is None or not _draw_web(s, link, int(join_width(s, link)), joins=True, lawful=True):
                         return False
-            _draw_web(s, run, 3, lawful=True)
-            return True
+                    if not _draw_web(s, run, 3, lawful=True):
+                        # ...THE LINK GOES WITH ITS RUN (feature 417 T06): a run the lay check refuses leaves no link joined to
+                        # nothing - the two are one placement, laid together or not at all
+                        s.drop_lanes(range(linked, len(s.M["lanes"])))
+                        return False
+                    return True
+            return _draw_web(s, run, 3, lawful=True)
         d0, d1 = vert[0], vert[-1]
         end = 0 if d0 <= d1 else -1
         gap = min(d0, d1)
@@ -305,8 +311,10 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             if carried_run is None:
                 return False
             run = carried_run
-    _draw_web(s, run, 3, lawful=True)
-    return True
+    if _draw_web(s, run, 3, lawful=True):
+        return True
+    s.drop_lanes(range(linked, len(s.M["lanes"])))  # ...the healing link goes with its refused run, as above
+    return False
 
 
 def front_door(h: Mapping[str, Any], clear: float) -> Pt | None:
