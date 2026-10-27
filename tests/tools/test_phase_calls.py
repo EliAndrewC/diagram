@@ -2,6 +2,7 @@
 steps and its own work adding up to it, a call counted by the innermost listed step running; the record keeps the newest
 measurement per map type."""
 
+import contextlib
 import cProfile
 import json
 import pstats
@@ -97,6 +98,7 @@ def test_measure_rolls_every_stage_once_under_the_tally(monkeypatch: pytest.Monk
         pc.type_key({})
 
     monkeypatch.setattr(driver, "STAGES", (stage_water_frame, stage_sink))
+    monkeypatch.setattr(driver, "roll_scope", lambda spec: contextlib.nullcontext())  # stand-ins roll nothing: no census row (feature 213)
     from concurrent.futures import ThreadPoolExecutor
 
     m = pc.measure(7, 12, {"water_sink": "offmap"}, jobs=2, pool_cls=ThreadPoolExecutor)
