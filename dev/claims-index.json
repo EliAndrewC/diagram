@@ -18612,6 +18612,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/well_seats.py::CELL_PX#plumbing": {
+  "body": "93bc3517cd8fa454",
+  "claim": "plumbing - NONE: how many seats one array asks at once, deciding nothing about the place",
+  "code": "0f721d7080946a5d",
+  "core": "53b0fbdb385924ae",
+  "date": "2026-10-27",
+  "note": "a cell size for grouping the array tests; nothing is read off the map",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/well_seats.py::PairAhead#plumbing": {
   "body": "f09c78fcdc81bd26",
   "claim": "plumbing - NONE: how `seat_wells`' own questions (its claims) are computed",
@@ -18704,35 +18716,48 @@
  "l7r/diagram/hamletgen/homesteads/well_seats.py::SeatSweep#plumbing": {
   "body": "8b703c59c6269f66",
   "claim": "plumbing - NONE: how `seat_wells`' own questions (its claims) are computed",
-  "code": "4a3e5d1467892c71",
-  "core": "42b4cb496d657c51",
+  "code": "e41ab37c6bd735c7",
+  "core": "d749c833d0aadadb",
   "date": "2026-10-26",
   "note": "slots only",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/well_seats.py::SeatSweep.__init__#plumbing": {
   "body": "a59fa1a90438de8b",
   "claim": "plumbing - NONE: how `seat_wells`' own questions (its claims) are computed",
-  "code": "5d74472f24b6be6e",
-  "core": "ff1e6f5b0a712846",
+  "code": "39cb5bfa25ff62a7",
+  "core": "3ccdbf837936afc8",
   "date": "2026-10-18",
   "note": "a table of distances from each lattice point to each house, nothing more",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-26",
+  "triaged": "2026-10-27",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/well_seats.py::SeatSweep.passing#plumbing": {
+  "body": "370afaad69df44f2",
+  "claim": "plumbing - NONE: the caller's own seat test, asked of the lattice at once and kept",
+  "code": "5f1326a356291417",
+  "core": "d7666f9f0e2397e5",
+  "date": "2026-10-27",
+  "note": "runs the caller's test on the lattice once and keeps the answers",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/well_seats.py::SeatSweep.seats#the rung's test": {
-  "body": "c84012a1f7bf2322",
+  "body": "fb67091091271368",
   "claim": "the rung's test - NONE: `seat_wells`' own neighborhood and seat gap, computed for the lattice at once",
-  "code": "e10467b380676537",
-  "core": "71d76ab67ba1f87c",
-  "date": "2026-10-26",
-  "note": "the gap, third and want_near come from the caller; the prefilter (center within gap plus half-diagonal) only narrows what the wall test then decides",
+  "code": "2031374f2bf553e7",
+  "core": "e7d05f4a25c359e1",
+  "date": "2026-10-27",
+  "note": "applies the thresholds `seat_wells` passes in; the array path replaces the per-seat `seat_ok` call and decides nothing new",
   "pages": {},
   "research": "",
   "rests": [],
@@ -18745,6 +18770,66 @@
   "core": "b142a315287d40a2",
   "date": "2026-10-26",
   "note": "a vectorised copy of `well_gap_to_dwellings`' reading; the `reach` cutoff only skips work and changes no result",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/well_seats.py::SeatTest#plumbing": {
+  "body": "352738c9e0d70fea",
+  "claim": "plumbing - NONE: how `seat_wells`' own questions (its claims) are computed",
+  "code": "7f7888b44663aa8f",
+  "core": "334637f9635f6596",
+  "date": "2026-10-27",
+  "note": "a holder for the one-seat and array forms of a test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/well_seats.py::SeatTest.__call__#plumbing": {
+  "body": "5095dbb4a20e96e9",
+  "claim": "plumbing - NONE: how `seat_wells`' own questions (its claims) are computed",
+  "code": "71edd29ac386127e",
+  "core": "d9edfd627ae51254",
+  "date": "2026-10-27",
+  "note": "passes the call to the one-seat form",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/well_seats.py::cells#plumbing": {
+  "body": "c8c17cd8774affa4",
+  "claim": "plumbing - NONE: how `seat_wells`' own questions (its claims) are computed",
+  "code": "ca7aae8bdc251a34",
+  "core": "c96cda1ffd9b964b",
+  "date": "2026-10-27",
+  "note": "groups row indices by cell",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/well_seats.py::discs_cover#plumbing": {
+  "body": "03c112542837eadc",
+  "claim": "plumbing - NONE: how `seat_wells`' own questions (its claims) are computed",
+  "code": "7a38a601515311ae",
+  "core": "3446c6ec4527a031",
+  "date": "2026-10-27",
+  "note": "the same strict disc test as `ReservedSeats.disc_covers`, done as arrays; the radius comes from the caller",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/wells.py::ANYWHERE#plumbing": {
+  "body": "618935aa866a8c5c",
+  "claim": "plumbing - NONE: the seat test of a form that sets none",
+  "code": "ebf60c191c0b59c2",
+  "core": "2631528689a783e4",
+  "date": "2026-10-27",
+  "note": "the test that always passes, for a form that sets none",
   "pages": {},
   "research": "",
   "rests": [],
@@ -18861,6 +18946,18 @@
   "core": "0dd8e9ba9e55a848",
   "date": "2026-10-07",
   "note": "the glyph's drawn size, purely how the well is shown",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/wells.py::_anywhere_many#well arithmetic": {
+  "body": "08699b5b5e7f0ec0",
+  "claim": "well arithmetic - NONE: distances, scores and ground tests; the units that decide carry their own claims",
+  "code": "3547b3e32229be7c",
+  "core": "5bd997c1b2e30143",
+  "date": "2026-10-27",
+  "note": "the array form of the test that always passes",
   "pages": {},
   "research": "",
   "rests": [],
@@ -19065,12 +19162,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::on_a_verge#a lane-side well's seat": {
-  "body": "70ddbe43b17e7272",
+  "body": "fdf432ba11e46f2e",
   "claim": "a lane-side well's seat - communal-wells-ido.drawing: on a lane's verge, clear of the tread, its curb within `WELL_VERGE_FT`",
-  "code": "4428bc1bda8ae499",
-  "core": "7485d2266143bbdb",
+  "code": "7e32913f06e130ea",
+  "core": "896f8a212b4218e1",
   "date": "2026-10-27",
-  "note": "the rewritten point-to-leg test is still the old `seg_dist - half <= reach`, with reach = the well's half-extent plus WELL_VERGE_FT (8 ft), so the curb lands within 8 ft of the tread edge as the page says; keeping the well off the tread is well_at's job",
+  "note": "curb within WELL_VERGE_FT=8 of the tread, which the page gives as a GUESS of 8 ft; the array form asks the same legs (padded boxes meeting each cell) with the same `<= reach` test as `ok`",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
@@ -19079,7 +19176,6 @@
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
-  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::own_well_clear#its drawn sizes": {
@@ -19261,8 +19357,8 @@
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster#among five to ten houses": {
   "body": "1ee2871a505f80b5",
   "claim": "among five to ten houses - communal-wells-ido.drawing: the cluster form in the open ground among five to ten houses, off every lane",
-  "code": "9acc7f84f0f5cdd3",
-  "core": "02579f03e6bd7ffb",
+  "code": "222112c06bc76574",
+  "core": "d92b58ee2ccba6b1",
   "date": "2026-10-18",
   "note": "five-house neighborhood",
   "pages": {
@@ -19273,14 +19369,14 @@
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster#its figures from 0196": {
   "body": "1ee2871a505f80b5",
   "claim": "its figures from 0196 - communal-wells-ido.drawing: 5 (fewer than five households: three, then two)",
-  "code": "8bae65518b4909e5",
-  "core": "02579f03e6bd7ffb",
+  "code": "939e5590cab1b127",
+  "core": "d92b58ee2ccba6b1",
   "date": "2026-10-25",
   "note": "\"only a hamlet with fewer than five households to share a well takes three, or two\" is len(houses) < 5",
   "pages": {
@@ -19291,27 +19387,29 @@
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster#its salts, guards and sentinels": {
   "body": "1ee2871a505f80b5",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.01 (divide-by-zero guard)",
-  "code": "55c4192c5a210333",
-  "core": "02579f03e6bd7ffb",
+  "code": "eb793d13f0dce78e",
+  "core": "d92b58ee2ccba6b1",
   "date": "2026-10-25",
   "note": "divide-by-zero guard",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster#off every lane": {
-  "body": "1ee2871a505f80b5",
+  "body": "00b7093687cd8164",
   "claim": "off every lane - communal-wells-ido.drawing: the cluster well off every lane, its verge included (`on_a_verge`)",
-  "code": "b56dd4c125229ccc",
-  "core": "02579f03e6bd7ffb",
-  "date": "2026-10-18",
-  "note": "verge seats refused",
+  "code": "573ff08291b65c9d",
+  "core": "d92b58ee2ccba6b1",
+  "date": "2026-10-27",
+  "note": "the array form `~verge.many(P)` is the one-seat form's negation, so the cluster well stays \"off every lane\", verge included",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
@@ -19320,14 +19418,13 @@
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
-  "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster#the reach widens first": {
   "body": "1ee2871a505f80b5",
   "claim": "the reach widens first - GUESS communal-wells-ido.drawing: how far round a seat the five may stand is this project's choice - 190, 300, 520 px, then 760 ft - widened before the count gives way",
-  "code": "45546bcc31397429",
-  "core": "02579f03e6bd7ffb",
+  "code": "3b91c3ca164b72e2",
+  "core": "d92b58ee2ccba6b1",
   "date": "2026-10-18",
   "note": "the page calls the reach this project's choice, widened before the count",
   "pages": {
@@ -19337,14 +19434,14 @@
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_cluster#three, then two, only where five cannot be gathered": {
   "body": "1ee2871a505f80b5",
   "claim": "three, then two, only where five cannot be gathered - communal-wells-ido.drawing: a household is still owed a well within reach",
-  "code": "b27f0e47631aa823",
-  "core": "02579f03e6bd7ffb",
+  "code": "bd59d00c99f0f784",
+  "core": "d92b58ee2ccba6b1",
   "date": "2026-10-18",
   "note": "`len(houses) < 5` is the page's \"fewer than five households\"",
   "pages": {
@@ -19354,63 +19451,63 @@
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#its salts, guards and sentinels": {
   "body": "fb92262619db0ab2",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.01 (divide-by-zero guard)",
-  "code": "7757ac511e7ca5eb",
-  "core": "a3a40bd431ddb6a8",
+  "code": "73f303390fbce060",
+  "core": "feb5916e3f0ee88d",
   "date": "2026-10-25",
   "note": "divide-by-zero guard",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-26",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#its search steps and tolerances": {
   "body": "996625a4f4763eba",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 22 (default lattice step); 120 (sweep box pad)",
-  "code": "3eccfc9ddd08761b",
-  "core": "a3a40bd431ddb6a8",
+  "code": "3fb2066b003e4afb",
+  "core": "feb5916e3f0ee88d",
   "date": "2026-10-26",
   "note": "the 22 lattice step and the 120 sweep-box pad are unchanged and only search the ground; the page is silent on them",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#later wells by the worst walk": {
   "body": "996625a4f4763eba",
   "claim": "later wells by the worst walk - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); ranked by the worst-served household's walk after the dig, in 66 px buckets, the crop's overreach added 1:1",
-  "code": "45342cc32d1b7d79",
-  "core": "a3a40bd431ddb6a8",
+  "code": "35490f0708b9f645",
+  "core": "feb5916e3f0ee88d",
   "date": "2026-10-26",
   "note": "the 66 px bucket is passed into `PoolScore.keys` with the crop box and the drawn radius; the page sets when another well is owed, not how its seat is ranked",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#no well over a household's wood floor": {
-  "body": "fb92262619db0ab2",
+  "body": "6c471e0bb9b63c5e",
   "claim": "no well over a household's wood floor - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); no well seated over a household's reserved wood-floor seats",
-  "code": "dfef6194e424f0dc",
-  "core": "a3a40bd431ddb6a8",
-  "date": "2026-10-25",
-  "note": "`_wood.disc_covers`",
+  "code": "63341ab84b6d9463",
+  "core": "feb5916e3f0ee88d",
+  "date": "2026-10-27",
+  "note": "`_many` refuses any seat whose `_well_r` disc covers a reserved wood-floor center (strict, as before); the page says nothing about wood floors, so GUESS stands",
   "pages": {},
   "research": "",
-  "rests": [],
-  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#no well past the crop": {
   "body": "a75224726c337c79",
   "claim": "no well past the crop - communal-wells-ido.drawing: every well stands among the houses it serves; refused where the wellhead would widen the crop",
-  "code": "ce6c5b0cc2fabccb",
-  "core": "a3a40bd431ddb6a8",
+  "code": "d3265a850a76cfd3",
+  "core": "feb5916e3f0ee88d",
   "date": "2026-10-18",
   "note": "refusing seats past the crop's box enforces \"Every well stands among the houses it serves\"",
   "pages": {
@@ -19420,14 +19517,14 @@
   "rests": [
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
-  "triaged": "2026-10-26",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#no well serving more than ten": {
   "body": "996625a4f4763eba",
   "claim": "no well serving more than ten - communal-wells-ido.drawing: the five to ten houses each dug well served at Karihama; a seat that keeps every well at ten or fewer ranked first",
-  "code": "fe3cfa9b457dee96",
-  "core": "a3a40bd431ddb6a8",
+  "code": "25c889866890508f",
+  "core": "feb5916e3f0ee88d",
   "date": "2026-10-26",
   "note": "`WELL_SERVES_MAX`=10 goes into the key, and `PairAhead` handles the first well; matches \"five to ten houses that each dug well served at Karihama\" and the deviation the page records past ten",
   "pages": {
@@ -19438,15 +19535,16 @@
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#not in the windbreak": {
-  "body": "996625a4f4763eba",
+  "body": "6c471e0bb9b63c5e",
   "claim": "not in the windbreak - shelter-belts-on-a-villages-windward-side-bofurin.drawing: belt seats sorted last, never refused",
-  "code": "d2ed25d994939275",
-  "core": "a3a40bd431ddb6a8",
-  "date": "2026-10-26",
-  "note": "belt seats are sorted last in the pool and behind the worst-walk bucket, never refused; the page expects a wellhead in a belt to be caught by the hole rule (\"holds there as written\"), and the belt cached per stage still reads only things the wells do not change",
+  "code": "a9b18585ab155a07",
+  "core": "feb5916e3f0ee88d",
+  "date": "2026-10-27",
+  "note": "`points_in_poly` gives each seat its belt flag; belt seats are ranked down and never removed from the pool, which fits the page counting a wellhead in a belt as a hole",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
@@ -19460,8 +19558,8 @@
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#seated a little closer than the check": {
   "body": "e0dc3de245969b4b",
   "claim": "seated a little closer than the check - GUESS communal-wells-ido.drawing: a dwelling's wall within `WELL_SEAT_FT` (80 ft, a GUESS the page names), the 95 ft check unchanged",
-  "code": "bf85e777513dce34",
-  "core": "a3a40bd431ddb6a8",
+  "code": "905f70cfbabaadeb",
+  "core": "feb5916e3f0ee88d",
   "date": "2026-10-26",
   "note": "gap = WELL_SEAT_FT/ftpx, measured to a dwelling's wall; the page names 80 ft a GUESS and keeps the 95 ft check",
   "pages": {
@@ -19472,14 +19570,14 @@
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
-  "triaged": "2026-10-26",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#surface water counts": {
   "body": "a75224726c337c79",
   "claim": "surface water counts - communal-wells-ido.drawing: a house within 760 ft (over the map's ft per px) of surface water needs no well",
-  "code": "78ed04f46b56b2f8",
-  "core": "a3a40bd431ddb6a8",
+  "code": "80625e317f2536a2",
+  "core": "feb5916e3f0ee88d",
   "date": "2026-10-18",
   "note": "760.0/ftpx reach",
   "pages": {
@@ -19489,38 +19587,39 @@
   "rests": [
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
   ],
-  "triaged": "2026-10-26",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#the first well's seat": {
   "body": "a75224726c337c79",
   "claim": "the first well's seat - GUESS: the innermost seat where one well is owed; where two or more are, the middle of its own share of the houses, the shares cut along the cluster's long axis (`first_share_middle`)",
-  "code": "b6aa0d8abd435840",
-  "core": "a3a40bd431ddb6a8",
+  "code": "e1cb0a2e1a971ce5",
+  "core": "feb5916e3f0ee88d",
   "date": "2026-10-18",
   "note": "the page says nothing on where a hamlet's first well stands in the cluster; the code sorts as claimed",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-26",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#ties among later wells": {
   "body": "996625a4f4763eba",
   "claim": "ties among later wells - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); the belt, then the crop's overreach, then the exact worst walk, then the want_near-th nearest house",
-  "code": "5cdf86a9c969b8ae",
-  "core": "a3a40bd431ddb6a8",
+  "code": "ad1584e9704e9ab2",
+  "core": "feb5916e3f0ee88d",
   "date": "2026-10-26",
   "note": "an algorithm's order of ours, now computed by `PoolScore`; nothing in the cited pages answers it",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#wells among the houses": {
   "body": "996625a4f4763eba",
   "claim": "wells among the houses - communal-wells-ido.drawing: seats with a dwelling near and a neighborhood round them, each later one serving the worst-served household",
-  "code": "1a4262f76c3ccdfa",
-  "core": "a3a40bd431ddb6a8",
+  "code": "a63fe12c2328e688",
+  "core": "feb5916e3f0ee88d",
   "date": "2026-10-26",
   "note": "each seat has a dwelling's wall within `WELL_SEAT_FT` (80 ft) and a neighborhood from the `rungs` ladder (want_near-th house within `third`), as the page seats a cluster well among five houses, widening before the count drops",
   "pages": {
@@ -19531,18 +19630,19 @@
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#wells apart": {
   "body": "fb92262619db0ab2",
   "claim": "wells apart - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); 170 px between wells",
-  "code": "b96673226d10521d",
-  "core": "a3a40bd431ddb6a8",
+  "code": "e8b7a66288434ef6",
+  "core": "feb5916e3f0ee88d",
   "date": "2026-10-25",
   "note": "`< 170.0` refused; no page gives a hamlet's well spacing (0033's 760 ft reach is a row village's)",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-26",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#a farm counted to each street within two farmstead frames": {
@@ -48709,6 +48809,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/_geom/primitives.py::points_in_poly#coordinate math": {
+  "body": "dad8e5004cb6214c",
+  "claim": "coordinate math - NONE",
+  "code": "94c694fe895846fc",
+  "core": "7e61c19b0681ce61",
+  "date": "2026-10-27",
+  "note": "the crossing test done as arrays; 1e-9 is a guard against dividing by zero",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/_geom/primitives.py::poly_seg_dist#coordinate math": {
   "code": "f6e6fd838732c0e1",
   "core": "bd466da97b5a5b41",
@@ -61149,19 +61261,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::ReservedSeats#plumbing": {
-  "code": "0921149ae9b38ce0",
-  "core": "a12521a524a6da33",
+  "code": "3e55f52645cdb520",
+  "core": "b22a4cbe2ea35a4e",
   "date": "2026-10-03",
   "note": "index",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::ReservedSeats.__init__#plumbing": {
-  "code": "517e7769d13c230e",
-  "core": "ec007e066032f73f",
+  "code": "95ceec21d2551d80",
+  "core": "f90b9cd2c9183f07",
   "date": "2026-10-03",
   "note": "index",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::ReservedSeats.disc_covers#plumbing": {
