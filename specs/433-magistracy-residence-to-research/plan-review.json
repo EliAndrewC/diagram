@@ -102,6 +102,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
+  },
+  "## T05 - the claims carry: the placer example's office-hall door seat claimed (385 FR-013)": {
+   "sha256": "d4c6caa2a38ec997987077a794d341a049e44332bb0438aa7e54f69ec582d5bb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "70fe31514fac62f2aa4b2a303fa4a33a740f7226e3aa1c19ad1e1a9df7a6f734",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Decisions": {
+   "sha256": "ea754b0ff30b09c2e0069c521b7012bc590e65b8a6eb282f03168b9be37a81ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -422,6 +440,35 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "This is the remedy the preflight's NOT LEGITIMATE ruling named, adopted as written. The procedure no longer makes a departure from 0116 the unlabeled default: the default stays 0116's (walls kept), and the departure is permitted only under the same forced conflict that makes D3a legitimate (house at the research's size, coverage under the band, no wall and no research-sized building able to close it), with the same per-sheet DEVIATION record. That is what 'correct our general procedures when creating new magistracy diagrams in order to correspond to our research' asks: the procedure sizes the house by the research and, where the research's own two rules collide, records which gave and why rather than hiding it. Each of its parts was adjudicated: the trigger condition (narrow and tied to the conflict), the recording (on 0116's page, as D3a), and the reach (magistracy sheets only, the plan round 1 ruling, unchanged). 'Honestly' must be read as at research sizes, which D3a's (b) states; the procedure text should carry that meaning when written."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## T05 - the claims carry: the placer example's office-hall door seat claimed (385 FR-013)",
+    "### T05 Approach (checklist part A)",
+    "### T05 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05",
+     "summary": "File the claims gate's carried UNCLAIMED finding on compound_example.py::county_magistracy_program (the office hall's door seat) as a task of this feature, per 385 FR-013.",
+     "class": "within",
+     "why": "A carried finding must be filed as an open task of the feature being landed (385 FR-013); it adds no behavior and narrows nothing the GM asked. Naming a GUESS where the magistracy example decides something no research covers serves the request's 'make the whole thing correspond to our research' and its new-magistracy procedure clause (FR-003)."
+    },
+    {
+     "id": "D7",
+     "summary": "The office hall's door seat (0.8 of its end face, 0.7 its second seat) is claimed as a GUESS in the existing 'office hall doors' claim; no page places an office hall's doors; no rendering change.",
+     "class": "within",
+     "why": "It labels existing code honestly rather than changing it; it touches no house size, deviation or procedure the request and FR-001..FR-004 govern, so it removes nothing from what was asked."
+    },
+    {
+     "id": "T05-constraint",
+     "summary": "No code changes in T05: the claim describes the code as it is; ordered after T01-T04; done when impl-drift reads IN-STEP on the office hall doors claim.",
+     "class": "within",
+     "why": "The constraint scopes this one carried task, not the GM's request; the redraw, deviations and procedure work stay in T01-T04 untouched. Order and done-measure decide nothing the request settles."
     }
    ]
   }

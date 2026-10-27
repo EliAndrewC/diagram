@@ -5829,18 +5829,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#office hall doors": {
-  "code": "f2dfd93c3dbfed2d",
+  "body": "a352bbdec4b1a82d",
+  "claim": "office hall doors - GUESS the-formal-entrance-and-a-guests-arrival-genkan.drawing: the office takes the formal entrance where it shares a compound with the residence, facing open ground; its doors on its east face by the middle gate and on its west face, the faces a GUESS; each seated at 0.8 of its end face (0.7 its second seat), so it opens on the front room - the seat a GUESS: no page places an office hall's doors",
+  "code": "501cf5923bb12f8a",
   "core": "14103fc5d3e18912",
-  "date": "2026-10-12",
-  "note": "genkan on the office, door onto open ground; the page names no door faces, so E and W stay a GUESS",
+  "date": "2026-10-26",
+  "note": "the formal entrance is on the office, facing open ground (east door on the yard and the forecourt way), as 0104 finds; no page places an office hall's doors on a face or at a seat, so the E/W faces and the 0.8/0.7 seats are GUESSes",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "135f046dfe4c1c73"
   },
   "research": "20c3b70fa4a4761c",
   "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:096177a66b97c551",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:a7771290ebe77a35"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:a7771290ebe77a35",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:da69c5f5c1d09f0a"
   ],
   "verdict": "IN-STEP"
  },
@@ -6142,15 +6144,6 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fb5af5b7b0dcb397"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/compound_example.py::county_magistracy_program#the office hall's east end-face door seated at 0.8 of the face (door_fracs (0.8, 0.7)); the only 0.8 claimed is the barracks' last door": {
-  "code": "14103fc5d3e18912",
-  "core": "14103fc5d3e18912",
-  "date": "2026-10-26",
-  "note": "the office hall's east end-face door seated at 0.8 of the face (door_fracs (0.8, 0.7)); the only 0.8 claimed is the barracks' last door",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#vegetable garden site": {
   "code": "7c56851b39df7008",
