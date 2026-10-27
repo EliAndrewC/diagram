@@ -1,0 +1,51 @@
+{
+  "utc": "2026-10-27T10:55:49Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 202,
+  "result": "failed: test-full",
+  "commit": "a656b5f1f",
+  "first_failure_s": 196.4,
+  "last_failure_s": 202.2,
+  "failed_names": [
+    "uncovered l7r/diagram/hamletgen/ways/settle/shapes.py:215"
+  ],
+  "host": {
+    "load": [
+      2.21,
+      4.36
+    ],
+    "mem_avail_mb": [
+      9369,
+      10131
+    ],
+    "cpu_temp_c": [
+      100.0,
+      82.0
+    ],
+    "stall_s": {
+      "cpu": 1.4,
+      "io": 0.3,
+      "io_full": 0.2,
+      "memory": 0.4
+    },
+    "throttle_ms": {
+      "core": 69165,
+      "package": 28928
+    }
+  },
+  "phases": {
+    "preflight": 15.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 181.0,
+    "floors": 13.0,
+    "test-full": 198.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/hamletgen/ways/fabric.py",
+  "selected": 10046,
+  "collected": 10046
+}
