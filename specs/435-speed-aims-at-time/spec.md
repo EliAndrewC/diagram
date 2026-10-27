@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Affects**: tooling, engine (the reverts and the three cheap fixes)
+**Affects**: tooling, performance, hamlet
 
 **Approved**: the GM, 2026-10-27, "Okay, in that case, yes."
 
