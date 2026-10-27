@@ -374,7 +374,7 @@ def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> b
     return False
 
 
-def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (), joins: bool = False) -> bool:
+def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (), joins: bool = False, lawful: bool = False) -> bool:
     """Draw a web lane, unless it is debris. See `_WEB_MIN_FT`.
 
     SHORT IS NOT THE SAME AS USELESS, and conflating them cost more than the debris did. A blunt
@@ -399,6 +399,15 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
 
     # SQUARE WHERE IT CROSSES WATER, AS LAID (feature 417 T49): judged, and drawn, as squared - no pass squares it afterwards
     pts = square_run(s.M, pts)
+    # ...AND HELD TO THE END RULES BEFORE IT IS DRAWN where its caller asks (`lawful`: the web's runs and their links, feature 417
+    # T06) - re-aimed or cut, the candidate alone, or not drawn (`lay.laid_lawfully`); the settle mended them after until then
+    if lawful:
+        from .lay import laid_lawfully  # imported where it is asked: `lay` sits above this layer
+
+        held = laid_lawfully(s, pts, float(width))
+        if held is None:
+            return False
+        pts = held
     # A JOIN LINK IS EXEMPT FROM THE DEBRIS FLOOR (feature 134 T50, 2026-08-29). The floor asks what a
     # run EARNS in service - does it bring a house inside the reach - and a link earns nothing by that
     # measure, because the house it belongs to is already served by the piece the link is joining. Its

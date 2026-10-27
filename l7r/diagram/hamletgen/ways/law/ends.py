@@ -80,11 +80,12 @@ def _walked_to(end: Pt, far: Pt, sg: tuple[Pt, Pt]) -> bool:
     return math.dist(c, end) < math.dist(c, far)
 
 
-def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None) -> list[tuple[int, int]]:
+def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None, only: int | None = None) -> list[tuple[int, int]]:
     """(lane index, end) for every internal lane end that reaches nothing (`end_serves`) other than the way its own far
     end stands on: the other ways' segments are asked, less those within `_TOUCH_GAP` of the lane's far end. `ground` is the
     worked ground where the caller has it built already (`memo_ground`). A way target (`meta.way_targets`, a burial ground's
-    near edge) is something worth walking to, as a farmhouse is (homes H36: a path runs to the graves).
+    near edge) is something worth walking to, as a farmhouse is (homes H36: a path runs to the graves). `only`, a lane's
+    index, asks that lane's ends alone - the same verdict on it (a candidate at lay, `lay.laid_lawfully`, feature 417 T06).
     Research:
         an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: walked toward it
         a burial ground's edge a lane end's destination - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25) on where a lane ends at the graves - 0224 has paths to the graves; a way target counts as a farmhouse does
@@ -98,7 +99,7 @@ def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None)
     out = []
     for i, ln in enumerate(M.get("lanes") or []):
         p = ways[i]
-        if ln.get("connector") or len(p) < 2:
+        if ln.get("connector") or len(p) < 2 or (only is not None and i != only):
             continue
         others = [sg for k, o in enumerate(ways) if k != i and len(o) >= 2 for sg in zip(o, o[1:], strict=False)]
         for e, end, far in ((-1, p[-1], p[0]), (0, p[0], p[-1])):

@@ -217,9 +217,11 @@ def test_a_run_on_keeps_off_every_farmstead_fixture() -> None:
     assert free.M["lanes"][0]["pts"][-1] == [250.0, 100.0], "nothing written"
 
 
-def test_a_junction_end_is_carried_on_as_a_path_of_its_own() -> None:
+def test_a_junction_end_is_carried_on_as_a_path_of_its_own(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """`carry_on` (feature 291): an end on another lane's tread stays a junction - the step to the bund is a field path of
-    its own from it; a free end is lengthened as before."""
+    its own from it; a free end is lengthened as before. (The stub has no field for the step to reach, so the lay check -
+    `test_lay.py`'s subject, feature 417 T06 - is passed through here.)"""
+    monkeypatch.setattr(B, "laid_lawfully", lambda s, run, width=3.0: run)
     s = _StubSettlement(lanes=[[(300.0, 0.0), (300.0, 200.0)], [(100.0, 100.0), (300.0, 100.0)]])
     B.carry_on(s, 1, -1, (300.0, 100.0), (396.0, 100.0))
     assert s.M["lanes"][1]["pts"] == [[100.0, 100.0], [300.0, 100.0]], "the junction is kept"
@@ -265,3 +267,14 @@ def test_a_run_on_aims_at_the_paddy_never_a_dry_plot() -> None:
     assert s.M["lanes"][1]["pts"] == before, "not carried onto the dry plot"
     s.M["lanes"] += [{"pts": [[200.0, 100.0], [360.0, 100.0]], "w": 3}]
     assert B.run_lanes_on_to_the_bund(s, g) == 1 and s.M["lanes"][2]["pts"][-1][0] > 390.0, "carried to the paddy's bund"
+
+
+def test_a_way_onto_the_bund_the_lay_check_refuses_is_not_drawn(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 417 T06: the branch and the carried step are each held to the end rules before they are drawn
+    (`lay.laid_lawfully`); refused, the branch tries no other way here and the step returns False, nothing drawn."""
+    monkeypatch.setattr(B, "laid_lawfully", lambda s, run, width=3.0: None)
+    branch = _stub()
+    branch.M["lanes"].append({"pts": [[300.0, 300.0], [300.0, 250.0]], "w": 3})
+    assert B.a_way_onto_the_bund(branch).startswith("none: ") and len(branch.M["lanes"]) == 2
+    s = _StubSettlement(lanes=[[(300.0, 0.0), (300.0, 200.0)], [(100.0, 100.0), (300.0, 100.0)]])
+    assert B.carry_on(s, 1, -1, (300.0, 100.0), (396.0, 100.0)) is False and len(s.M["lanes"]) == 2

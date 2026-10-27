@@ -29,6 +29,7 @@ from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, WAY_END_REACH_FT, Poly
 from .checks import drawn_water_segs
 from .fabric import _crosses_fabric, _hits_a_steading, _homestead_polys
 from .geom import _TOUCH_GAP, BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, stroke_quad, worked_ground
+from .lay import laid_lawfully
 
 # The tip stops this far outside the worked ground's edge past its own half-tread, so the tread's rounded cap lies on the
 # bund line rather than on the rice (a map drawing convention; inside `BUND_REACH_FT` for every lane width drawn here).
@@ -347,7 +348,11 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
                 and all(blocks.clear(a, b, BRANCH_WIDTH, over_water=over) for a, b in zip(way, way[1:], strict=False))
                 and s.admits_lane(way, BRANCH_WIDTH)
             ):  # ...and the matrix (M8)
-                s.lane(way, width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
+                # ...HELD TO THE END RULES BEFORE IT IS DRAWN (feature 417 T06): re-aimed or cut, this way alone, or the next sample
+                held = laid_lawfully(s, way, float(BRANCH_WIDTH))
+                if held is None:
+                    continue
+                s.lane(held, width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
                 return "branch"
     return "none: every straight way from the lanes to the paddy crosses water, the marsh or a steading"
 
@@ -412,7 +417,10 @@ def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> bool:
         way = square_run(s.M, [q, *step])
         if not s.admits_lane(way, BRANCH_WIDTH):
             return False
-        s.lane(way, width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
+        held = laid_lawfully(s, way, float(BRANCH_WIDTH))  # ...held to the end rules before it is drawn (feature 417 T06)
+        if held is None:
+            return False
+        s.lane(held, width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
         return True
     pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
     pts = square_run(s.M, [*pts, *step] if e == -1 else [*step[::-1], *pts])

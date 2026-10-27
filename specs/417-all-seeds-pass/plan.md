@@ -1286,3 +1286,31 @@ Each step measured alone:
 | each site | its chain in `make perf-fanout` |
 | no seed regressed | `make cohort-landing` (in `make land`) |
 
+
+### T67 Approach (checklist part A)
+
+1. **The goal, in the world.** The same lane web, each ordinary lane the web lays (a skeleton arm, a web run or its link, the way onto the bund) held to the lane law's end rules as it is laid - a needle, fold or connector hairpin re-aimed as a T, a doubled tail or a shallow crossing cut, a third end at one door cut back past the doorstep, an end reaching nothing trimmed to service - on the candidate alone, so the settle's `settle_ends` step goes (T06's conversion order, item 7 (a)).
+2. **The constraints.** FR-004 (the lane law's rules unchanged), FR-006, FR-008 (no seed regressed), FR-013; a drawn lane is never moved for a new one (place-then-repair is not this).
+3. **Where each comes from.** T06's item 7: `settle_ends` 206,187 of the settle's 1,345,743 calls on seed 39; its edits made on the skeleton (14), the web runs (11) and `a_way_onto_the_bund` (11), measured 2026-10-27.
+4. **Do they describe the world here?** Yes: each placer named in item 7's attribution now asks `lay.laid_lawfully` before `s.lane` (`web/skeleton.py`, `fabric._draw_web` with `lawful=True` from `serve.py`'s four web calls, `bund.py`'s two ways).
+5. **The order.** First of T06's four conversions; `settle_knots`, `settle_network` and the last resort follow in T06.
+6. **The exits.** Green: the landing cohort passing, the fresh block from 520001 no seed worse than HEAD's (47/54, rolled on HEAD 2026-10-27), every moved pool manifest named, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: each rule is the law's own predicate asked once of the standing lanes plus the candidate, at most `lay.TRIES` (3) asks; the fixes are the settle's own (`reaimed`, `cut_at_tail`, `cut_at_shallow_crossing`, `_trim_to_service`). A changed candidate is asked of the overlap matrix again (Inashiro's skeleton arm re-aimed over a threshing yard, the first roll).
+8. **The budget.** One landing.
+9. **Done, measured.** The fresh block from 520001: HEAD 47/54, this 48/54 - 520048's unreached farmhouse gone, no seed failing that passed, the FAIL lines otherwise the same; the landing cohort 54/54; three pool manifests moved, Inashiro, Kuwabata and Mizuguchi, each with `meta.web_settle.dropped` 0 as on HEAD, Mizuguchi's lane 16 and its bridge re-laid, the settle's edits 16 -> 7, 10 -> 9, 1 -> 0; seed 39 at 40 households the web 3,283,827 -> 3,259,015 calls, every other stage within 0.01% of HEAD's, both measured 2026-10-27 (`make perf-fanout HOUSEHOLDS=40`, HEAD's in a detached worktree). Method: `make cohort`, `make cohort-landing`, `make maps`, `make maps-moved`, `make perf-fanout`. `law.doubled_tails` and `law.dangling_lane_ends` gained `only=` (one lane asked, the same verdict on it): asked of the whole web per candidate, the lay check cost the web +6.4% (3,494,369 calls, the first measure), measured 2026-10-27 (`make perf-fanout HOUSEHOLDS=40`, dev/perf-log/20261027T095757Z-fanout-417-T06a.txt).
+10. **Before moving a constant.** No constant moves; `lay.TRIES` is new (GUESS, claimed).
+11. **Before fitting things into room.** n/a
+
+What was found, and kept: `settle_ends`' fallback, `settle_dangling`, stays a settle step. An end that reached a way when laid dangles once a later step (`settle_defer`, `settle_network`, `settle_knots`) cuts that way: measured on Inashiro and Kuwabata, where with the step gone the last resort dropped the skeleton lane and a bund way (`dropped 0 -> 1`). It goes with the cutting steps in T06.
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the end rules at lay, `settle_ends` gone | the fresh block from 520001 against HEAD's, seed by seed, FAIL lines as well as REFUSED (`make cohort N=48 SEED=520001 FRESH=0 JOBS=3`) |
+| a changed candidate asked of the matrix | Inashiro (seed 4), the reference settlement |
+| `settle_dangling` kept as a step | `meta.web_settle.dropped` on Inashiro and Kuwabata (`make map`) |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+| the calls | `make perf-fanout HOUSEHOLDS=40` |
+

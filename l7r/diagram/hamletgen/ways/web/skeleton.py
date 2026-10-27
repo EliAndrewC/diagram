@@ -30,6 +30,7 @@ from ..clearance import clip_to_clear
 from ..fabric import _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs
 from ..geom import _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from ..law_water import _brooks
+from ..lay import laid_lawfully
 from ..route import _route
 from ..squaring import square_run
 
@@ -268,8 +269,10 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             # as the settle would cut it, and a piece left too short to be a way is not laid
             # ...SQUARE WHERE IT CROSSES WATER, AS LAID (feature 417 T49): no pass squares a lane after the web any more
             for piece in s.admitted_runs(square_run(s.M, arm), 5):
-                if polyline_len(piece) >= _WEB_MIN_FT:
-                    s.lane(piece, width=SKELETON_ARM_WIDTH, clearance=LANE_CLEARANCE, worn=True)
+                # ...HELD TO THE END RULES BEFORE IT IS DRAWN (feature 417 T06): re-aimed or cut, the arm alone, or not laid
+                held = laid_lawfully(s, piece, float(SKELETON_ARM_WIDTH)) if polyline_len(piece) >= _WEB_MIN_FT else None
+                if held is not None and polyline_len(held) >= _WEB_MIN_FT:
+                    s.lane(held, width=SKELETON_ARM_WIDTH, clearance=LANE_CLEARANCE, worn=True)
     s.M["meta"]["lane_skeleton"] = kind
     return kept
 

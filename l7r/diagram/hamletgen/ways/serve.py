@@ -273,9 +273,9 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
                     run = [*run[:k], q, *run[k + 1 :]]
                 else:
                     link = joined_link(run_k, q, hard, walls, water, segs)
-                    if link is None or not _draw_web(s, link, int(join_width(s, link)), joins=True):
+                    if link is None or not _draw_web(s, link, int(join_width(s, link)), joins=True, lawful=True):
                         return False
-            _draw_web(s, run, 3)
+            _draw_web(s, run, 3, lawful=True)
             return True
         d0, d1 = vert[0], vert[-1]
         end = 0 if d0 <= d1 else -1
@@ -293,7 +293,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             # review read it at 2x as a lollipop knob mid-street, and it is a repair scar rather than
             # a way. A link exists to make two lanes one; it should look like the lane it completes.
             _w = join_width(s, link[0])
-            _draw_web(s, link[0], int(_w))
+            _draw_web(s, link[0], int(_w), lawful=True)
         else:
             # SNAP ONLY IF THE GROUND BETWEEN IS CLEAR. Extending an end onto the way it meets is what makes the junction read
             # as a touch instead of a gap - but the few feet being added are ground like any other, and adding them blind put
@@ -305,7 +305,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             if carried_run is None:
                 return False
             run = carried_run
-    _draw_web(s, run, 3)
+    _draw_web(s, run, 3, lawful=True)
     return True
 
 

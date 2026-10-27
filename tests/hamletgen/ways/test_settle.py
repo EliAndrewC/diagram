@@ -201,7 +201,9 @@ def test_the_settled_web_breaks_no_rule_of_the_law(monkeypatch: pytest.MonkeyPat
     # since feature 320 a brook map's field no way reaches is refused whatever was reserved (`last_resort.refuse_unreached`)
     monkeypatch.setattr(law, "field_unreached", lambda M: False)
     got = settle.settle_the_web(s)
-    assert got["rounds"] >= 2
+    # (the doubled tail was cut by `settle_ends` over two rounds until feature 417 T06 moved that rule to the placers: lanes
+    # handed in already drawn are the last resort's to drop)
+    assert got["changed"] + got["dropped"] > 0
     left = {k: v for k, v in law.violations(s.M).items() if k not in ("unreached_houses", "field_unreached")}
     assert left == {}, left
 

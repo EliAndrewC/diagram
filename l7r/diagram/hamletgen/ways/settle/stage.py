@@ -14,7 +14,7 @@ from ..keeper import unsettled
 from ..knots import settle_knots
 from ..reach import settle_field, settle_targets
 from ..tree import settle_tree
-from .ends import settle_ends, settle_network
+from .ends import settle_dangling, settle_network
 from .lawful import Lawful
 from .shapes import SETTLE_ROUNDS
 
@@ -46,8 +46,11 @@ def settle_reach(s: Any) -> int:
 # (feature 417 T31, D11). `square_every_crossing` went in T41, came back in T43 (fresh seed 723805 tied a lane knot without
 # it) and went again in T48 with `settle_fragments`' place here, once T45's needle rule held 723805: each alone off, 54 of 54,
 # the pre-change fresh block from 723759 the same seven, no pool lane moved (the last resort still asks `settle_fragments`).
+# `settle_ends` went in feature 417 T06: its end rules are asked of each ordinary lane as it is laid (`ways/lay.py`). Its
+# fallback, `settle_dangling`, stays a step while the steps that cut lanes stand: an end that reached a way when laid dangles
+# once a later cut takes that way (Inashiro's and Kuwabata's skeleton and bund lanes, measured; the last resort dropped them).
 STEPS = (
-    settle_ends,
+    settle_dangling,
     settle_reach,
     settle_network,
     settle_knots,
