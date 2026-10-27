@@ -60,21 +60,34 @@ times, so the evidence is cheap to take.
 1. **Given** two commits, **When** `make perf-ab` runs, **Then** it prints per seed and size the best time and spread of each
    arm, alternated, and the calls of each, and refuses nothing.
 
-### User Story 3 - The changes that only moved work are reverted (Priority: P1)
+### User Story 3 - The changes that cut calls without improving time are reverted (Priority: P1)
 
-Feature 417's speed changes that only moved work (inlinings and builtin replacements) are reverted where the time evidence
-shows they bought nothing measurable, keeping every change that removed work.
+The earlier call-cutting changes - every one the search below finds, in features 427 and 417 - are classed removes-work or
+moves-work, the class deciding where to look first; a change is reverted where its time evidence shows no gain and its growth
+with the settlement's size does not argue for it, and kept where either does.
 
 **Acceptance Scenarios**:
 
-1. **Given** 417's speed commits, **Then** each change is classed removes-work or moves-work, and the moves-work set is reverted
-   where the reverted engine's time sits inside the current engine's spread, with the evidence recorded.
+1. **Given** the candidates, **Then** each is classed, grouped by the commit that made it (the grouping stated), and each
+   group's revert timed against the current engine (`make perf-ab`, best of N, the spread shown); a group whose revert costs
+   nothing measurable is reverted, one whose revert costs time is kept, the evidence recorded either way.
 
 ### User Story 4 - The three cheap fixes (Priority: P2)
 
 The three changes T57 ranked first - the notice board's seats screened before the full house-fit test, the homestead bundle's
 geometry built once and placed, the wells' seats screened by a feasibility mask before the overlap admission - each planned
 with the checklist, each removing work, each with its time evidence.
+
+### User Story 5 - New numbers to decide what is next (Priority: P1)
+
+When the reverts and the three cheap fixes have landed, one report sets the per-stage calls at 40 households (`make
+phase-calls`) beside feature 417 T57's, and the time of the engine before this feature against the engine after it (`make
+perf-ab`, best of N with its spread), for the GM to decide what performance work comes next.
+
+## Order
+
+The GM's order (`request.md`, message 3): the checklist and its tools first, then the reverts, then the three cheap fixes, then
+the closing report.
 
 ## Edge Cases
 
@@ -85,27 +98,39 @@ with the checklist, each removing work, each with its time evidence.
 ## Requirements *(mandatory)*
 
 - **FR-001**: A performance checklist (`docs/performance-checklist.md`) holds the questions above and the sensibility, worded
-  as prompts; the task-add plan template carries them for a performance task; nothing refuses on them.
+  as prompts; nothing refuses on them. It reaches every task: the task-add plan template's approach items carry one line
+  asking whether the task is performance work, and `make task-add ... PERF=1` writes the checklist's questions into its plan
+  section.
 - **FR-002**: `make perf-ab A=<commit> B=<commit> [N=] [SEEDS=] [SIZES=]` times two engines in detached worktrees,
   alternating, and prints per seed and size each arm's best time, spread and calls; it gates nothing.
 - **FR-003**: The perf-audit agent's contract names an occasion: a performance task's diff read for removes-work or
   moves-work, with its time evidence; its finding informs, it does not gate.
-- **FR-004**: Feature 417's moves-work changes are reverted where the time evidence shows no measurable cost of reverting;
-  every removes-work change is kept; maps unmoved by the revert stay unmoved.
+- **FR-004**: The candidates are the call-cutting changes of features 427 and 417 that `git log --oneline -i -E
+  --since=2026-10-25 --grep='inline|without (builtin |inner )?calls|fewer builtin|no abs|plain loops|by comparison|as
+  conditionals|written in|written out' -- 'l7r/**'` finds (427 T07, T08, T09, T12; 417 T54, T63, T64, T65), read hunk by hunk.
+  Each hunk is classed removes-work or moves-work; the moves-work hunks, grouped by feature, are each group's revert
+  candidate, timed against the current engine; a group is reverted where its revert costs no measurable time and kept where
+  it costs time, with the evidence recorded. Maps unmoved by a revert stay unmoved.
 - **FR-005**: The three cheap fixes are built, each planned with the checklist and its time evidence reported.
 - **FR-006**: No timing gates anything anywhere: no requirement, test, guard or exit of this feature refuses on a time.
-- **FR-007**: The project's standing guidance (`l7r/diagram/CLAUDE.md`'s performance rules, `dev/performance.md`) says time is
-  the goal and calls the measure, pointing at the checklist.
+- **FR-007**: The project's standing guidance says time is the goal and calls the measure, pointing at the checklist, wherever
+  `grep -rln "call counts" .specify/memory/constitution.md docs/ dev/performance.md l7r/diagram/CLAUDE.md .claude/agents/`
+  finds the rule stated: the constitution's performance principle, `l7r/diagram/CLAUDE.md`, `dev/performance.md`,
+  `docs/guards.md` and the perf-audit agent; the gate's own wording (calls gated, timings recorded) stays as it is.
+- **FR-008**: A closing report (`specs/435-speed-aims-at-time/report-numbers.md`) gives the per-stage calls at 40 households
+  after this feature beside feature 417 T57's, and the time A/B of the engine before this feature against after it.
 
 ## Success Criteria *(mandatory)*
 
 - **SC-001** (FR-001, FR-007): A performance task filed after this feature carries the checklist in its plan section.
 - **SC-002** (FR-002, FR-006): `make perf-ab` prints both arms' best, spread and calls per seed and size, and exits 0 whatever
   the times.
-- **SC-003** (FR-004): Each 417 speed change is classed; the reverted set's A/B is recorded with its spread; no pool manifest
-  moves on the revert.
+- **SC-003** (FR-004): Every candidate hunk is classed; each group's A/B is recorded with its spread and its decision; no pool
+  manifest moves on a revert.
 - **SC-004** (FR-005): The three cheap fixes land, each with its calls and time evidence before and after, the cohort passing.
 - **SC-005** (FR-003, FR-006): No guard, test or exit added by this feature refuses on a timing.
+- **SC-006** (FR-007, FR-008): The constitution and the guidance files name time as the goal; the closing report exists with
+  both comparisons.
 
 ## Assumptions
 
