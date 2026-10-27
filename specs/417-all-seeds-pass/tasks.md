@@ -249,5 +249,7 @@
       research: rendering
 - [ ] T68 A claims bundle resolves an aliased constant to its value (found row 441: fabric._LANE_JOIN_FT = LANE_JOIN_FT reached impl-drift as Name(LANE_JOIN_FT)), the index carried by make claims-refingerprint, in l7r/diagram/tools/claims.py
       research: rendering
+- [ ] T69 The ways' findings outside T67: the far healing link drawn with joins=True (serve._lay_web_lane), _hits_a_steading's setback against 0081 stated or applied, _draw_web's shortest-way claim citing 0246 (MISLABELED), 0014 §35's order of run-on and field path, in l7r/diagram/hamletgen/ways/ and research/questions/ (FR-004, FR-008); carried by the claims gate (385 FR-013): l7r/diagram/hamletgen/ways/fabric.py::_draw_web#shortest way
+      research: rendering
 - [ ] GM review (make gm-reviewed F=417)
 
