@@ -257,3 +257,12 @@ def test_a_tread_across_or_along_a_long_wall_is_a_hit() -> None:
     assert house_hit([(35.0, -40.0), (35.0, 40.0)], 3.0, houses), "across the house, 15 ft from every corner and the center"
     assert house_hit([(20.0, 14.0), (80.0, 14.0)], 3.0, houses), "along the long wall, 4 ft off it, 4.5 ft from no corner's diagonal"
     assert not house_hit([(20.0, 15.0), (80.0, 15.0)], 3.0, houses), "5 ft off the wall is clear of 1.5 + 3"
+
+
+def test_an_empty_run_hits_no_house() -> None:
+    """Feature 417 T54: `house_hit` reads the run's box before any house, and a run of no points has none - no hit."""
+    from l7r.diagram.hamletgen.ways.fabric import house_hit
+
+    assert house_hit([], 3.0, [{"x": 0.0, "y": 0.0, "w": 40.0, "h": 30.0}]) is False
+    assert house_hit([(-100.0, 0.0), (100.0, 0.0)], 3.0, [{"x": 0.0, "y": 0.0, "w": 40.0, "h": 30.0}]) is True
+    assert house_hit([(-100.0, 200.0), (100.0, 200.0)], 3.0, [{"x": 0.0, "y": 0.0, "w": 40.0, "h": 30.0}]) is False, "a house beyond the run's reach"
