@@ -32,16 +32,16 @@
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "8f3c903610c6e707776d84457efadec618acca7cbfc25c36f0095fe30b91ebe1",
+   "sha256": "47b58f0b6eb3cfe71720172dad245b0a87040ef54a9a883eb63333a3ac41ed5e",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-25",
+   "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
   },
   "## Order": {
-   "sha256": "adb4b9bb7f75884210c4c63b57cbba650d85e090c458b6fa56f2f1007433045c",
+   "sha256": "3499ae97cd2a517c6016f21bb4d58010a72a902bb1ba6254b69ba3203f5a0f4d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "## T26 - the web's post-lay passes the placers already make needless, measured off and deleted (R2 G2, first part; FR-004, FR-006)": {
    "sha256": "ce523d8935a28d8260ea306d299d3b02aba8093fb9f5729a5d354177f5bafff8",
@@ -198,6 +198,180 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "round-arbiter"
+  },
+  "### T52 Approach (checklist part A)": {
+   "sha256": "ba02080032e304520203b18d3f4a3e103a58b2247c1ed50db2ca6dc350647057",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T53 Approach (checklist part A)": {
+   "sha256": "22f27248eab41e4a9905c8246d8b12c967a7418420e76b01c223aa4ea16f856a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T54 Approach (checklist part A)": {
+   "sha256": "4264ddd82c2a04b62a8c6f19e0b3dbc20d833a44e7133a175fd5efaa0e632385",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T55 Approach (checklist part A)": {
+   "sha256": "2bfbe94b015e4d2cf02ee025a7d878d248b63c4a75ef58b67b81030ee741e33b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T56 Approach (checklist part A)": {
+   "sha256": "b412112a577b550584b94d3b2dab431e7ba7bf8d51fe3a3ce97a6f2d0dba7370",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T57 Approach (checklist part A)": {
+   "sha256": "eca3cc0f30bc748ededda3b883c129fb3ff28b1470a273d05a77e995f10af35e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "bf07b88d941100f3a307dd8108ffd4c5ab026a5f64fc004e9d40f51042f85eb5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T12 Approach (checklist part A)": {
+   "sha256": "09db2535daa4beb94580bb8408b8daf1f2fd51c9c84c1973c2016707ee04dd50",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T11 Approach (checklist part A)": {
+   "sha256": "341057b75a2635dad2a0aeeaba5477f73e6f8b10f5c38b3157381a4a9a1f7386",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T14 Approach (checklist part A)": {
+   "sha256": "175553ce20aa156b767402aa7c620aa1f8348bc11ab33c1141cb1de5a021a63a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Approach (checklist part A)": {
+   "sha256": "fbaf9d6af00f798355197deea8304a2004533a30f77839d8f1d5b39cdd0ffea9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "fa08a3b2fce3242da5afd992a555424822ce6982597bf24c59146a62098f3086",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Approach (checklist part A)": {
+   "sha256": "4282f316639407dc97e319ef84b329621cf215a166cabfa1e76f6272febd590e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (checklist part A)": {
+   "sha256": "f239a83389aca434724395eb809157cd88a0e85e6eb7de20b7d09d72b1749044",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Approach (checklist part A)": {
+   "sha256": "0fdc4310b1e840ae31f15e6859dd510d02ee386580938e70924e119d2f835f71",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T13 Approach (checklist part A)": {
+   "sha256": "faddb1c289e49e8d24a699ab3af8631bb91cd68319f4883fed78a6e06216f640",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T15 Approach (checklist part A)": {
+   "sha256": "69ba069e66a40d985918af8f0b789fb77ad8639a2262cdaa67a3c98fb0b71c8e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Approach (checklist part A)": {
+   "sha256": "347ce20cb91330f5729c67424db8b7e0a9262af58bed8e8ab98affa8b27589fe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T32 Approach (checklist part A)": {
+   "sha256": "63cada65f6f115655781399a5d69ba2fd43e11538e503110faa7364d26446d1d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T33 Approach (checklist part A)": {
+   "sha256": "eb54cc9e77e2f8047a74d0235f7e278a3ac47abd9ca12c121c9fd12b875522f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T34 Approach (checklist part A)": {
+   "sha256": "9063d57b47788698719ec4a16b5c4d9210e45775cab906b8db14810a9db94997",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T35 Approach (checklist part A)": {
+   "sha256": "d09475520dfef9b9b969b3818291936cf43ca5d01527798884aa850bfdd824cb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T47 Approach (checklist part A)": {
+   "sha256": "d294db244359ef913a98744d0a672599b865ab821d3c9a512e3cfdd58ccd3aeb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T37 Approach (checklist part A)": {
+   "sha256": "9a7f96ee011450a5a8701394a168ad6a64435f0bd479ddba2141e42cec97718d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T39 Approach (checklist part A)": {
+   "sha256": "301aee471ca41aa06fca1127b40854a4d2ca88e00b581ccfa9fdd13450007e3f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T51 Approach (checklist part A)": {
+   "sha256": "228347042875996cb4cc57ecc5d8244aad0ca227e38f35695970b5a253518408",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Approach (checklist part A)": {
+   "sha256": "435c75aae723c6a0ef1ca1b73a9429d1a03c20d567899094aa3cf6ca7190281b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T21 Approach (checklist part A)": {
+   "sha256": "d42bb2ea979c90ce473ee43d97c0f7a063ce71d6e7031e91c4718475843fd61b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Approach (checklist part A)": {
+   "sha256": "99708ce44f00a311ca14ce52399b6d1fef125c02357a6513727b0f618b398735",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3537,6 +3711,582 @@
      "id": "round:spec-fidelity|plan:417-all-seeds-pass#T50@3",
      "class": "within",
      "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Order",
+    "### T06 Approach (checklist part A)",
+    "### T07 Approach (checklist part A)",
+    "### T08 Approach (checklist part A)",
+    "### T09 Approach (checklist part A)",
+    "### T10 Approach (checklist part A)",
+    "### T11 Approach (checklist part A)",
+    "### T12 Approach (checklist part A)",
+    "### T13 Approach (checklist part A)",
+    "### T14 Approach (checklist part A)",
+    "### T15 Approach (checklist part A)",
+    "### T16 Approach (checklist part A)",
+    "### T20 Approach (checklist part A)",
+    "### T21 Approach (checklist part A)",
+    "### T22 Approach (checklist part A)",
+    "### T27 Approach (checklist part A)",
+    "### T32 Approach (checklist part A)",
+    "### T33 Approach (checklist part A)",
+    "### T34 Approach (checklist part A)",
+    "### T35 Approach (checklist part A)",
+    "### T37 Approach (checklist part A)",
+    "### T39 Approach (checklist part A)",
+    "### T47 Approach (checklist part A)",
+    "### T51 Approach (checklist part A)",
+    "### T52 Approach (checklist part A)",
+    "### T53 Approach (checklist part A)",
+    "### T54 Approach (checklist part A)",
+    "### T55 Approach (checklist part A)",
+    "### T56 Approach (checklist part A)",
+    "### T57 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "## Order: speed first",
+     "summary": "The open tasks run speed first (T52, T31, T06, T53, T54, T55, T12, T11, T56, T14, then the T57 checkpoint), then the correctness tasks in tasks.md's order.",
+     "class": "within",
+     "why": "The GM 2026-10-26: 'prioritize the things that will make us go faster before the things that will make us correct', and confirmed the session's order and 'all 10 of those tasks ... As the 10 speed tasks'; ten named plus a measuring checkpoint matches FR-013. Omission, not a narrowing: the GM said 'then we can check in once that is all done', and D11's stop on fixing work still stands, but the Order runs from T57 straight into T16 without naming the check-in. Name it."
+    },
+    {
+     "id": "### T52 Approach (checklist part A): inventory and 50,000-call floor",
+     "summary": "The trial inventory lists every site with its calls; every site over 50,000 calls has a task.",
+     "class": "within",
+     "why": "FR-012's listing. The 50,000 line is a floor and is within only because T56 takes 'the rest of the trial inventory's sites', so every site under it is still converted. That depends on T56's set-down clause being removed (see T56)."
+    },
+    {
+     "id": "### T53 Approach (checklist part A): incremental network checks",
+     "summary": "The web's whole-network checks are asked of what a step added or moved, with the lane-law rules unchanged.",
+     "class": "within",
+     "why": "FR-012's 'a network check is asked of what changed'. The tenfold exit is stricter than asked, and a miss goes to the red exit and the arbiter. DEFECT, must be fixed: item 5 says 'before the web laid by the law', but the Order and T06 item 5 put T06 third and T53 fourth. The GM confirmed one order, so a plan that states two does not carry the confirmed one. Make T53's place agree with the Order."
+    },
+    {
+     "id": "### T54 Approach (checklist part A)",
+     "summary": "Each household's exits are refused by the cheap tests as one pass before any is traced; the tree's judge stays the verdict.",
+     "class": "within",
+     "why": "FR-012: the refusals that need no layout are asked of the whole set first."
+    },
+    {
+     "id": "### T55 Approach (checklist part A)",
+     "summary": "The seat refusals are asked of every candidate at once, a full layout only at a seat that can stand, the per-seat rolls kept.",
+     "class": "within",
+     "why": "FR-012. The per-seat rolls are kept on recorded research (R9) and an arbiter ask (427 T12 R4), so this is no unrequested preservation."
+    },
+    {
+     "id": "### T56 Approach (checklist part A): green set-down",
+     "summary": "T56's GREEN exit accepts 'each site's chain at least tenfold down OR THE SITE SET DOWN WITH ITS MEASUREMENT'.",
+     "class": "narrowing",
+     "why": "FR-012 covers every placer that lays a candidate out in full and then refuses it, and the GM asked for these sites to be tasks. A site that still stands but is left unconverted and called green skips the arbiter ruling that the red exit (and D35) requires for any 'cannot be done'. Nothing in the request implies it, and nothing makes it impossible. Fix: green means converted. A site that cannot be converted goes to the red exit, through make arbiter-ask. A site already gone at item 4's re-measure is within.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "### T57 Approach (checklist part A)",
+     "summary": "A checkpoint after the speed tasks measures SC-009 against feature 427's start; stage times are reported and gate nothing.",
+     "class": "within",
+     "why": "The GM asked for the order-of-magnitude goal to be documented and for a check-in after the speed tasks. SC-009 and 427 FR-006."
+    },
+    {
+     "id": "### T06 Approach (checklist part A)",
+     "summary": "The ordinary lanes are admitted whole by the lane law before drawing; no repair pass and no settle step; third of the speed tasks.",
+     "class": "within",
+     "why": "FR-004, FR-006, FR-013. Its place agrees with the Order (see T53 for the contradiction)."
+    },
+    {
+     "id": "### T12 Approach (checklist part A)",
+     "summary": "The paddy cells are cut where the ring rules admit them; the merges, welds and dropped stubs are gone; the needle is one predicate.",
+     "class": "within",
+     "why": "FR-004, FR-005, FR-006, FR-013."
+    },
+    {
+     "id": "### T11 Approach (checklist part A)",
+     "summary": "The brook, sink, field and polder are placed by their rules, with no course repair and no finished-net judgment.",
+     "class": "within",
+     "why": "FR-004, FR-006, FR-013."
+    },
+    {
+     "id": "### T14 Approach (checklist part A): overlap backstop kept in the generator",
+     "summary": "The overlap registry's per-stage resync and record-time refusal are KEPT as 'a backstop only'. Green: they 'fire on no pool map or cohort seed'.",
+     "class": "narrowing",
+     "why": "FR-006: 'every check the generator runs on what it has already placed is deleted'. D3 names the OverlapRefused backstop as a site to convert. The GM asked of exactly this case: 'If the check on the finished map never fires, then do we even need the check ...? Should we just get rid of it', and approved the scope the session gave in answer: one finished-map check per rule, in the cohort and the tests only, with the generator's mid-map checks deleted. A generator backstop whose success condition is that it never fires is the thing the GM asked to remove, and no requirement carves out the overlap registry. Fix: the resync's checking and the record-time refusal are deleted from the run, each placer asks the matrix of its candidate, and the overlap rule's finished-map check runs in the cohort and the tests and calls the same predicate.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "### T16 Approach (checklist part A): set down under D11",
+     "summary": "Differing copies of a lane rule are made one at the recorded value, 'or set down under D11' (a value with no record waits for the GM).",
+     "class": "narrowing",
+     "why": "The GM's later words (2026-10-25) overtake D11's 'waits for the GM'. Where research is silent, 'we can either make it a tunable knob, or we can just do whatever is algorithmically easier', and such questions 'should not come to my attention'. The GM also accepted 20 degrees for the doubled tail, documented as an approximation. Setting a copy down for the GM sends back to the GM a decision the GM declined. Fix: a copy with no recorded value is made one at a chosen value, marked as researched-and-arbitrary (tunable). It is never set down for the GM.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "### T07 Approach (checklist part A)",
+     "summary": "The ways' drops and refusals are removed, with room within the research as the remedy.",
+     "class": "within",
+     "why": "FR-007."
+    },
+    {
+     "id": "### T08 Approach (checklist part A)",
+     "summary": "Seating room: no SiteRefused, no give-up, no drop; more room is the remedy.",
+     "class": "within",
+     "why": "FR-007."
+    },
+    {
+     "id": "### T09 Approach (checklist part A)",
+     "summary": "The row rules are asked by the row placer, and the wells' dry check is out of the run.",
+     "class": "within",
+     "why": "FR-005, FR-006."
+    },
+    {
+     "id": "### T10 Approach (checklist part A)",
+     "summary": "The grove rules are asked before placing, made one predicate each, and the repairs are deleted.",
+     "class": "within",
+     "why": "FR-004, FR-005, FR-006."
+    },
+    {
+     "id": "### T13 Approach (checklist part A)",
+     "summary": "The hinterland and land are placed by their rules, with no thinning or filling in the run.",
+     "class": "within",
+     "why": "FR-004, FR-006, FR-007."
+    },
+    {
+     "id": "### T15 Approach (checklist part A): green set-down",
+     "summary": "T15's GREEN exit accepts 'each site the inventory names converted OR SET DOWN WITH ITS MEASUREMENT'.",
+     "class": "narrowing",
+     "why": "FR-005 and FR-006 cover each rule, and SC-001 is 0 of N. D11's 'recorded and set down' served the overnight stop line, which kept the session out of the fixing. T15 IS the fixing, and even under D11, D35 requires a cannot-land claim to be written as an exception and ruled through make arbiter-ask, never assumed. A green set-down skips that ruling. Fix: green means converted, and anything not converted goes to the red exit through the arbiter.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "### T27 Approach (checklist part A)",
+     "summary": "The track out ends on the web, the end placed where its ways meet it (one of D27(b)'s two placements).",
+     "class": "within",
+     "why": "The GM 2026-10-25 declined to choose and told the session to answer T27 by the guidelines ('whatever is algorithmically easier' where research is silent). Research 0081."
+    },
+    {
+     "id": "### T32 Approach (checklist part A)",
+     "summary": "The lanes and track contradictions from T29 A1/A2/D are made to agree with the record, or ruled by the arbiter.",
+     "class": "within",
+     "why": "FR-008: the research claims hold."
+    },
+    {
+     "id": "### T33 Approach (checklist part A)",
+     "summary": "The homestead part contradictions from T29 B/C/P1 are made to agree with the record, or ruled.",
+     "class": "within",
+     "why": "FR-008."
+    },
+    {
+     "id": "### T34 Approach (checklist part A)",
+     "summary": "The water and field contradictions from T29 P2a/P2b are made to agree with the record, or ruled.",
+     "class": "within",
+     "why": "FR-008."
+    },
+    {
+     "id": "### T35 Approach (checklist part A)",
+     "summary": "The town contradictions from T29 P7. Green names the town tests and pool maps.",
+     "class": "within",
+     "why": "FR-008. The fixed cohort and pinned rows still run in make land (its cohort-landing row), so nothing is narrowed."
+    },
+    {
+     "id": "### T47 Approach (checklist part A)",
+     "summary": "A row street is laid to its last farm and the trim's call deleted.",
+     "class": "within",
+     "why": "FR-004."
+    },
+    {
+     "id": "### T37 Approach (checklist part A)",
+     "summary": "Carried claims findings are fixed and re-checked.",
+     "class": "within",
+     "why": "385 FR-013, FR-008."
+    },
+    {
+     "id": "### T39 Approach (checklist part A)",
+     "summary": "Carried claims findings are fixed and re-checked.",
+     "class": "within",
+     "why": "385 FR-013, FR-008."
+    },
+    {
+     "id": "### T51 Approach (checklist part A)",
+     "summary": "stage_track's carried way-in finding is fixed and re-checked.",
+     "class": "within",
+     "why": "385 FR-013, FR-008."
+    },
+    {
+     "id": "### T20 Approach (checklist part A)",
+     "summary": "The fresh block runs in make land before the push and refuses a failure, once 500 pass whole.",
+     "class": "within",
+     "why": "FR-009 and SC-005; 500 is SC-001's N (D1)."
+    },
+    {
+     "id": "### T21 Approach (checklist part A)",
+     "summary": "Every archetype form is diffed against HEAD, and a newly red unrolled seed with no row or waiver is refused.",
+     "class": "within",
+     "why": "FR-011, SC-006."
+    },
+    {
+     "id": "### T22 Approach (checklist part A)",
+     "summary": "The close: 1,000 fresh seeds, the seat turn, the code-size delta, SC-009, the report.",
+     "class": "within",
+     "why": "SC-001, SC-004, SC-009, User Story 2, D1."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Order",
+    "### T06 Approach (checklist part A)",
+    "### T07 Approach (checklist part A)",
+    "### T08 Approach (checklist part A)",
+    "### T09 Approach (checklist part A)",
+    "### T10 Approach (checklist part A)",
+    "### T11 Approach (checklist part A)",
+    "### T12 Approach (checklist part A)",
+    "### T13 Approach (checklist part A)",
+    "### T14 Approach (checklist part A)",
+    "### T15 Approach (checklist part A)",
+    "### T16 Approach (checklist part A)",
+    "### T20 Approach (checklist part A)",
+    "### T21 Approach (checklist part A)",
+    "### T22 Approach (checklist part A)",
+    "### T27 Approach (checklist part A)",
+    "### T32 Approach (checklist part A)",
+    "### T33 Approach (checklist part A)",
+    "### T34 Approach (checklist part A)",
+    "### T35 Approach (checklist part A)",
+    "### T37 Approach (checklist part A)",
+    "### T39 Approach (checklist part A)",
+    "### T47 Approach (checklist part A)",
+    "### T51 Approach (checklist part A)",
+    "### T52 Approach (checklist part A)",
+    "### T53 Approach (checklist part A)",
+    "### T54 Approach (checklist part A)",
+    "### T55 Approach (checklist part A)",
+    "### T56 Approach (checklist part A)",
+    "### T57 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Order-speed-first",
+     "summary": "The open tasks run speed first, ordered by calls removed: T52, T31, T06, T53, T54, T55, T12, T11, T56, T14, then T57 the checkpoint; correctness tasks after in tasks.md order.",
+     "class": "within",
+     "why": "FR-013; the GM 2026-10-26 'put the speed up tasks first' and his confirmation 'Sounds great. I confirm that this is good'."
+    },
+    {
+     "id": "Order-stop-at-T57",
+     "summary": "The work stops at T57 for the GM's check-in; the tasks after it start on his word.",
+     "class": "within",
+     "why": "The GM 2026-10-26: 'work all 10 of those tasks ... From start to finish. And then we can check in once that is all done.' Ten speed tasks (T52, T31, T06, T53, T54, T55, T12, T11, T56, T14) plus the T57 measurement; stopping there is the literal reading, and it keeps D11's hold on room work and T20/T21 until he resumes them."
+    },
+    {
+     "id": "T52-trial-inventory",
+     "summary": "An inventory of every search by trial (laid out then refused, whole-network re-checks), measured by perf-fanout and perf-profile at 40 households, each site with the task that converts it; no engine change.",
+     "class": "within",
+     "why": "FR-012's listing clause and FR-013's ranking. The exit gives every listed site its converting task; the 50,000-call line adds a check and excuses no site (T56 converts the rest)."
+    },
+    {
+     "id": "T53-incremental-network-checks",
+     "summary": "Whole-network web checks (served_network, lanes_share_tread, ...) asked of what a step changed, via the named index; rules unchanged; order now fourth, after T31 and T06.",
+     "class": "within",
+     "why": "FR-012 'a network check is asked of what changed, not of the whole network again'. The new place agrees with the Order block (the earlier text put it before T06 and contradicted the Order)."
+    },
+    {
+     "id": "T54-household-ways-prefilter",
+     "summary": "Household ways' candidate exits refused by the tests that need no traced way before any is traced; the tree's judge stays the verdict.",
+     "class": "within",
+     "why": "FR-012 'refusals that need no layout are asked of the whole set at once ... before any candidate is laid out'."
+    },
+    {
+     "id": "T55-seating-prefilter",
+     "summary": "A seat's refusals that need no layout asked of every candidate at once, the full layout only at a seat that can stand; the per-seat rolls kept (297 plan C, 427 T12 R4).",
+     "class": "within",
+     "why": "FR-012; keeping the recorded research's per-seat rolls is FR-008, not a carve-out from the request."
+    },
+    {
+     "id": "T56-rest-of-trial-sites",
+     "summary": "The rest of the trial inventory's sites converted, largest first; green requires each site converted and its chain tenfold down (a site already gone counts); the earlier 'or set down with its measurement' green exit is removed.",
+     "class": "within",
+     "why": "FR-012 covers every such placer. With the set-down green exit removed, no site is excused, and a site that cannot be converted takes the Red exit through arbiter-ask."
+    },
+    {
+     "id": "T57-checkpoint",
+     "summary": "SC-009 measured at 40 households against 427's start once the speed tasks land; stage times reported and gating nothing.",
+     "class": "within",
+     "why": "SC-009 and FR-013; the GM's check-in after the speed tasks."
+    },
+    {
+     "id": "T06-web-by-law",
+     "summary": "Each ordinary lane admitted whole by the lane law before it is drawn, no repair pass or settle step left; calls measured before and after; third speed task.",
+     "class": "within",
+     "why": "FR-004, FR-006 and SC-002. Green requires 'no repair pass left' across the web, and the track's end is T27's."
+    },
+    {
+     "id": "T12-paddy-cells",
+     "summary": "Cells cut where the ring rules admit them: no cut-then-merge, split-and-weld, or drawn-then-dropped twin; the needle one predicate.",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-006 (no place-then-repair, one predicate); FR-013 placement as the seventh speed task."
+    },
+    {
+     "id": "T11-brook-field-polder",
+     "summary": "The brook, sink, field and polder placed by their rules, with no course repaired then judged and no field judged as a finished net in the run.",
+     "class": "within",
+     "why": "FR-004/FR-006/FR-007; FR-013 placement."
+    },
+    {
+     "id": "T14-overlap-registry",
+     "summary": "The resync's checking and the record-time refusal are taken out of the generator; each placer asks the overlap matrix of its candidate; the finished-map overlap check runs in the cohort and tests only, calling the same predicate; hand mirrors made one.",
+     "class": "within",
+     "why": "FR-006 word for word, and the GM's 'do we even need the check on the finished map? ... get rid of it'. The earlier 'a backstop only' text kept a check inside the generator; that is replaced."
+    },
+    {
+     "id": "T16-differing-lane-rules",
+     "summary": "Each lane rule with differing copies made one predicate at its recorded value, or, with no recorded value, at a chosen value labeled a GUESS and made a tunable knob; the doubled tail at the GM's 20 degrees, documented as an approximation; never set down for the GM.",
+     "class": "within",
+     "why": "The GM 2026-10-25 accepted 20 degrees for the double-tailed rule as an approximation, said such numbers stay movable, and ruled that where research shows nothing 'we can either make it a tunable knob, or we can just do whatever is algorithmically easier', and that such questions should not reach him. This does more than D11's 'waits for the GM' and is what his later words ask; it narrows nothing. See the aside on D11's text."
+    },
+    {
+     "id": "All-item-10-GUESS-is-a-knob",
+     "summary": "In every task, before moving a constant: read its research claim; a GUESS is a knob, free to move within the research (replacing 'a GUESS moved only toward the record').",
+     "class": "within",
+     "why": "The GM 2026-10-25: arbitrary numbers are not hard requirements and can move (15 or 25 degrees) if that makes placement easier or the maps look better; mark them so later passes know they can tweak them. 'Within the research' keeps FR-008."
+    },
+    {
+     "id": "T07-ways-drops",
+     "summary": "The ways' drops and refusals (WebRefused, NoDryExit, dropped lanes, waived angle rules, released wood seats) gone; room within the research the remedy.",
+     "class": "within",
+     "why": "FR-007; the correctness tasks after the T57 stop."
+    },
+    {
+     "id": "T08-seating-room",
+     "summary": "SiteRefused on a short margin, dry-spell give-up, rank-round drop and pinched passage gone; more room the remedy.",
+     "class": "within",
+     "why": "FR-007."
+    },
+    {
+     "id": "T09-row-village",
+     "summary": "row_rules, water_rules and bamboo_mismatch asked by the row placer; the wells' dry-household check out of the run.",
+     "class": "within",
+     "why": "FR-005/FR-006."
+    },
+    {
+     "id": "T10-grove-rules",
+     "summary": "The audit-only grove rules asked before placing; fixtures_on_groves and gardens_east_shaded one predicate each; the belt, copse and persimmon repairs deleted.",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-006."
+    },
+    {
+     "id": "T13-hinterland",
+     "summary": "No dike tree thinned after, no hole filled to a share in the run; the belt ladder, parcels, marsh and wet lanes asked before placing.",
+     "class": "within",
+     "why": "FR-004/FR-006/FR-007."
+    },
+    {
+     "id": "T15-rest-of-inventory",
+     "summary": "The rest of the inventory converted (labels, beads, bridges, byres, wells and pond stock, the cluster's copies); green requires each site converted, and the earlier 'or set down' green exit is removed.",
+     "class": "within",
+     "why": "FR-002 (every inventory entry that breaks a point becomes a task) and FR-004 through FR-007. A site that cannot convert takes the Red exit with an arbiter ruling."
+    },
+    {
+     "id": "T27-track-end",
+     "summary": "The track out drawn ending on the web, its end placed where its ways meet it; the six D27 seeds named.",
+     "class": "within",
+     "why": "D27(b) and research 0081 ('It never stops in open country'). The GM 2026-10-25 handed the choice to the session and the guidelines ('whatever is algorithmically easier' where research is silent)."
+    },
+    {
+     "id": "T32-T35-research-contradictions",
+     "summary": "The lanes and track, homestead parts, water and fields, and town walls and wards made to agree with the record where T29's passes found the code contradicting it, or ruled by the arbiter.",
+     "class": "within",
+     "why": "FR-008 'the research claims hold'."
+    },
+    {
+     "id": "T47-row-street-end",
+     "summary": "A row's street laid to its last farm where lay_row_streets lays it; the end trim's street call deleted.",
+     "class": "within",
+     "why": "FR-004/FR-006: placed right, not trimmed after."
+    },
+    {
+     "id": "T37-T39-T51-carried-claims",
+     "summary": "The carried claims findings fixed in the code or the claim and re-checked IN-STEP.",
+     "class": "within",
+     "why": "FR-008 and feature 385 FR-013 (a carried finding blocks the feature's close)."
+    },
+    {
+     "id": "T20-fresh-block-in-land",
+     "summary": "The fresh block runs inside make land before the push, refusing a landing with any fresh failure, once a fresh block of 500 passes whole; a test on a seeded failure.",
+     "class": "within",
+     "why": "FR-009 and SC-005; 'once a fresh block of 500 passes whole' is SC-001 at D1's N=500."
+    },
+    {
+     "id": "T21-all-forms-vs-HEAD",
+     "summary": "Every archetype form's seeds recorded and diffed against HEAD; a newly red unrolled-form seed with no filed row or waiver refuses; SC-006's two test landings.",
+     "class": "within",
+     "why": "FR-011 and SC-006 (feature 394 folded in). Rolled-form refusals are T20's under FR-009."
+    },
+    {
+     "id": "T22-close",
+     "summary": "The close: 1,000 fresh seeds, T106's seat turn re-applied, SC-004's code-size delta, SC-009 measured, the feature report.",
+     "class": "within",
+     "why": "SC-001, SC-004, SC-009, User Story 2; D1's 1,000 at the close."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Fresh block of 500 after each engine landing, 1,000 at T01 and the close; SC-001's N is 500; FR-009's landing block stays 48.",
+     "class": "within",
+     "why": "SC-001 asks N in the plan, at least 500; FR-001 asks a block large enough to show a rate near zero. The only change since CLEAR is the one-shot label added to the 47-minute figure."
+    },
+    {
+     "id": "D2",
+     "summary": "fresh_tally.py / make fresh-tally pools the cohort-log records' fresh seeds by form and cause.",
+     "class": "within",
+     "why": "Instrument for FR-001's measurement, by the spec's own gap method. Unchanged since CLEAR."
+    },
+    {
+     "id": "D3",
+     "summary": "The inventory's search space: STEPS, after-the-web passes, cohort_audit rules and their callers, mid-map checks, duplicate rule pairs, drop/relax/refuse sites; each entry classed by the rule's four points; every breaking entry becomes a task.",
+     "class": "within",
+     "why": "Carries FR-002 and the GM's 'Where else is this part of our algorithm?'. Unchanged since CLEAR."
+    },
+    {
+     "id": "D4",
+     "summary": "make task-start refuses tasks of a held claims feature while 417 is open; HOLD_OK admits only non-engine tasks; engine tasks have no escape.",
+     "class": "within",
+     "why": "Enforces FR-010 and the GM's 'put our claims work on hold'; the guard's reach is exactly the held features' engine tasks. Unchanged since CLEAR."
+    },
+    {
+     "id": "D5",
+     "summary": "Engine tasks run by share of R1's failures: lane web, then seating room, then row/brook/grove rules into their placers, then the rest the inventory finds.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM reversed this ordering principle on 2026-10-26: 'order our remaining tasks in 417 to prioritize the things that will make us go faster before the things that will make us correct', carried as FR-013 (speed tasks first, ordered by the calls each removes). D5 still orders by failure share, puts FR-005's conversions (tasks that only make seeds pass) ahead of FR-012's search-by-construction tasks, and names FR-012's work only as 'the rest'. Nothing in the block says FR-013 displaces D5; D11 AMENDED's 'the speed tasks ... run whole' is a statement of scope, not order. Not physically impossible, not implied by the GM's words, and applying FR-013 does not defeat the request's purpose; the GM's words contradict D5. D5 must say FR-013 governs the order of the remaining tasks (speed tasks first, by calls removed, in the order the GM confirmed on 2026-10-26), with failure-share order only among the fix tasks once the GM lifts the stop line."
+    },
+    {
+     "id": "D6",
+     "summary": "FR-003's principle text drafted by T03 and amended into the constitution only with the GM's words.",
+     "class": "within",
+     "why": "FR-003: 'in text the GM approves'; the GM approved it 2026-10-25. Unchanged since CLEAR."
+    },
+    {
+     "id": "D11",
+     "summary": "The stop line (GM 2026-10-25): FR-004/005/006 conversions done and landed under FR-008 or recorded and set down; no fresh-rate work, no FR-007 room work, no T20/T21 until the GM resumes; tasks that move no map first.",
+     "class": "within",
+     "why": "The GM's 'finish out doing the tasks that involve turning off automated checks ... and then stop'. Previously ruled by MODE 1 and unchanged except for the AMENDED paragraph, judged separately below."
+    },
+    {
+     "id": "D11-amended-guess",
+     "summary": "A rule coded twice with no recorded value no longer waits for the GM; it is made one at a chosen value labeled a GUESS (T16).",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Lifting the wait is the GM's ('these two are exactly the kind of thing that should not come to my attention'), but the GM made the pick conditional: 'if our research findings do not indicate that things were any particular way, then we can either make it a tunable knob, or ... whatever is algorithmically easier', and asked that unsubstantiated numbers 'first check our downloaded research' and then 'actually perform research' for anything not yet looked into, so that a value marked as arbitrary means 'we looked and found nothing'. The amended sentence goes straight from 'no recorded value' to a chosen GUESS, dropping the research step the GM put before it; '(T16)' does not say the T16 process (a research pass, then a value accepted as an approximation) applies. Not impossible, not implied by the GM's words, and adding the step does not defeat the purpose. The sentence must say the value is chosen and labeled a GUESS only after the downloaded research is checked and, where nothing was looked for, a research pass finds nothing conclusive; or a tunable knob, as the GM allowed."
+    },
+    {
+     "id": "D11-amended-speed",
+     "summary": "The speed tasks (FR-013) run whole, each landed through make land under FR-008; the stop line holds after them, at T57's check-in.",
+     "class": "within",
+     "why": "The GM 2026-10-26: 'work all 10 of those tasks ... From start to finish. And then we can check in once that is all done.' Landing under FR-008 carries the feature's no-regression rule."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "## Decisions",
+    "### T16 Approach (checklist part A)",
+    "### T56 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Fresh block of 500 after each engine landing, 1,000 at T01 and the close; SC-001's N is 500; the landing's own fresh block stays the cohort gate's 48.",
+     "class": "within",
+     "why": "SC-001 leaves N to the plan, at least 500; 500 meets it. Timings carry one-shot 2026-10-24 labels from R1. The 48 is an existing gate's configured size, not a measured result, so it needs no m: key."
+    },
+    {
+     "id": "D2",
+     "summary": "fresh_tally.py / make fresh-tally pools cohort-log records at or above fresh_first by verdict, by form and cause.",
+     "class": "within",
+     "why": "A measuring instrument for FR-001/SC-001 that reproduces the spec's gap method; it adds no behavior."
+    },
+    {
+     "id": "D3",
+     "summary": "Inventory method: found by search (STEPS, after-the-web passes, cohort_audit rules and callers, mid-map callers of law.violations etc., duplicate predicates, drop/relax/refuse sites), each entry classed by the rule's four points; every breaking entry becomes a task.",
+     "class": "within",
+     "why": "Carries FR-002 and the GM's 'Where else is this part of our algorithm?'. It states its search space, and turning every breaking entry into a task widens nothing past what the GM asked for."
+    },
+    {
+     "id": "D4",
+     "summary": "make task-start refuses a task of a feature whose status line is ON HOLD until an open feature closes; HOLD_OK admits only a non-engine task; an engine task has no escape.",
+     "class": "within",
+     "why": "Enforces FR-010 ('put our claims work on hold') and nothing more. FR-010 holds only engine-changing claims tasks, so admitting non-engine tasks is FR-010's own scope, not a carve-out."
+    },
+    {
+     "id": "D5",
+     "summary": "Engine tasks by share of R1's failures (lane web ~60%, seating 15%, then row/brook/grove, then the rest); SUPERSEDED for order by FR-013: speed tasks first in the GM-confirmed order T52, T31, T06, T53, T54, T55, T12, T11, T56, T14, then T57's check-in; share-of-failures order holds only among seed-passing tasks once the stop line is lifted.",
+     "class": "within",
+     "why": "The GM 2026-10-26: 'order our remaining tasks in 417 to prioritize the things that will make us go faster before the things that will make us correct', then 'I confirm that this is good ... work all 10 of those tasks'. The list has exactly ten. The shares carry one-shot 2026-10-24 labels."
+    },
+    {
+     "id": "D6",
+     "summary": "FR-003's principle text drafted by T03 and goes to the GM; the constitution is amended only with the GM's words.",
+     "class": "within",
+     "why": "FR-003 says 'in text the GM approves'. The GM approved the principle on 2026-10-25 ('I also approve the new prionciple')."
+    },
+    {
+     "id": "D11",
+     "summary": "Stop line: finish the FR-004/005/006 conversions; duplicate rules made one at the lane law's or recorded value; each lands through make land under FR-008; one needing seed-by-seed work or room is recorded and set down; no fresh-rate work, no FR-007 room work, no T20/T21 until the GM resumes; no-map tasks first.",
+     "class": "within",
+     "why": "The GM 2026-10-25: 'finish out doing the tasks that involve, turning off automated checks, and then replacing them ... and then stop so we can slowly and deliberately go through the actual fixing'. Setting down a conversion that would need seed fixing is that stop, not a carve-out."
+    },
+    {
+     "id": "D11 amended (arbitrary values)",
+     "summary": "A rule with no recorded value no longer waits for the GM: downloaded research checked first, a research pass run where nothing was ever looked for, and only where both find nothing conclusive is it made one at a chosen value labeled a GUESS, or a tunable knob.",
+     "class": "within",
+     "why": "Follows the GM's sequence: 'we should first check our downloaded research ... then please actually perform research for any of those questions', then 'if our research findings do not indicate that things were any particular way, then we can either make it a tunable knob, or we can just do whatever is algorithmically easier', and such questions 'should not come to my attention'. The earlier text, judged BLOCKED, went straight to a GUESS and skipped the research-first step. This text carries that step."
+    },
+    {
+     "id": "D11 amended (speed tasks then check-in)",
+     "summary": "The ten speed tasks run whole, each landed through make land under FR-008; the stop line holds after them at T57's check-in, so remaining conversions (T16 among them) sit past the check-in.",
+     "class": "within",
+     "why": "The GM 2026-10-26: 'work all 10 of those tasks ... From start to finish. And then we can check in once that is all done ... We can sync up in the morning'. Moving the remaining conversions past the check-in is the GM's own reordering (FR-013), not a narrowing of the 10-25 instruction."
+    },
+    {
+     "id": "T56 item 1 (goal)",
+     "summary": "The rest of the trial inventory's sites converted, largest first: wells' registry admission, bamboo strips, open-ground patches, grove clumps, the notice board's seats (inventory/trial.md rows 6-11); earlier text named the labels' least-cost seat instead of the notice board's seats.",
+     "class": "within",
+     "why": "FR-012: every lay-out-then-refuse placer converted. The bundle forbids opening inventory/trial.md, so the change of site name and the five names against six rows cannot be checked here. The class does not turn on that, because the goal's operative words, 'the rest of the trial inventory's sites', bind any row the list omits."
+    },
+    {
+     "id": "T56 items 5, 6, 8 (order, exits, budget)",
+     "summary": "After the field, before the overlap registry's resync; green = each site converted with its chain at least tenfold down, fixed cohort and pinned rows passing, claims clean; red = recorded, set down, can't-be-done claim ruled through make arbiter-ask; one landing per chain group.",
+     "class": "within",
+     "why": "The position sits inside the GM-confirmed ten-task order (D5). The tenfold exit comes from the GM's 'order of magnitude decrease' goal. The red exit's set-down goes through the arbiter, never by the session alone, and FR-008 forbids landing a red seed. Unchanged since the CLEAR verdict apart from item 1."
+    },
+    {
+     "id": "T16 item 1 (goal) and item 3",
+     "summary": "Lane rules whose copies differ made one predicate at the recorded value, or, where downloaded research checked first and a research pass where nothing was looked for find none, at a chosen value labeled a GUESS or a tunable knob; the doubled tail at the GM's accepted 20 degrees, documented as an approximation; never set down for the GM; the GM's 2026-10-25 words supersede D11's hold.",
+     "class": "within",
+     "why": "FR-006 ('a second implementation of a rule is deleted'). The GM: 'T16 could use a research pass ... on the angles at which footpaths and lanes and country roads tend to intersect'; 'I accept your recommendation of 20% ... careful to document this as an approximation'; 'tunable knob, or ... algorithmically easier'; such questions 'should not come to my attention'. The change adds the research-first step the GM asked for."
+    },
+    {
+     "id": "T16 items 5, 6, 8, 10, 11",
+     "summary": "First of the tasks after the speed tasks; green = each copy made one at recorded value or labeled GUESS with FR-008 holding; red = set down with arbiter ruling; one landing per group; a GUESS is a knob free to move within the research; more room within the research before fitting.",
+     "class": "within",
+     "why": "The order is FR-013 and the GM's confirmed order. Treating a GUESS as a movable knob carries the GM's 'avoid falling into the trap where we set a number arbitrarily ... it can change if needed'. Item 11 restates FR-007. Unchanged since the CLEAR verdict apart from item 1."
     }
    ]
   }

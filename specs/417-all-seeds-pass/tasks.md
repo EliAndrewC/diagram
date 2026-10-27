@@ -137,10 +137,10 @@
 - [ ] T11 (R2 G8) The brook, sink, field and polder placed by their rules: courses not repaired then judged, the field not judged as a finished net, the polder's relaxed wander, in `l7r/diagram/hamletgen/water/` and `l7r/diagram/hamletgen/sink.py` (FR-004, FR-006, FR-007)
       research: rendering
 
-- [ ] T56 (FR-012) The rest of the trial inventory converted, largest first: the wells' admission, the bamboo strips, the open-ground patches, the grove clumps, the labels' least-cost seat (FR-012)
+- [ ] T56 (FR-012) The rest of the trial inventory converted, largest first: the wells' admission, the bamboo strips, the open-ground patches, the grove clumps, the notice board's seats (FR-012)
       research: rendering
 
-- [ ] T14 (R2 G11) The overlap registry: the per-stage resync and the record-time refusal as backstop only, the hand mirrors made one, in `l7r/diagram/overlap/` (FR-006)
+- [ ] T14 (R2 G11) The overlap registry: the per-stage resync's checking and the record-time refusal out of the run, each placer asking the matrix of its candidate, the overlap check in the cohort and tests only, the hand mirrors made one, in `l7r/diagram/overlap/` (FR-006)
       research: rendering
 
 - [ ] T57 (SC-009) Where the speed tasks leave a roll: make perf-fanout at 40 households against feature 427's start, the stage times reported (SC-009, FR-013)

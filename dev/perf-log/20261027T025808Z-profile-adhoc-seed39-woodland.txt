@@ -1,0 +1,36 @@
+perf-profile seed 39 stage woodland: 0.1s under cProfile (the stages before it took 6.6s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261027T025808Z-seed39-woodland.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         298298 function calls in 0.116 seconds
+
+   Ordered by: cumulative time
+   List reduced from 106 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.116    0.116 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/hinterland/stages.py:200(stage_woodland)
+        1    0.001    0.001    0.116    0.116 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/hinterland/stages.py:230(stock_woodland)
+        1    0.000    0.000    0.086    0.086 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/land/cover.py:384(commons)
+        1    0.007    0.007    0.072    0.072 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/land/cover.py:645(_stock_woodland)
+     2425    0.004    0.000    0.036    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/land/cover.py:482(_sparse)
+        1    0.001    0.001    0.029    0.029 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/land/cover.py:343(woodland_room)
+     2006    0.005    0.000    0.024    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:313(clear)
+     4315    0.004    0.000    0.023    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:515(edge_within)
+        2    0.000    0.000    0.020    0.010 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/land/cover.py:293(_commons_keep)
+      526    0.009    0.000    0.020    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:442(__init__)
+    33722    0.013    0.000    0.016    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:318(<genexpr>)
+     8801    0.011    0.000    0.015    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:276(near)
+        8    0.000    0.000    0.015    0.002 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:555(rings)
+     1830    0.010    0.000    0.013    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:263(extend)
+     2480    0.002    0.000    0.011    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:584(hit)
+    13428    0.008    0.000    0.010    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:462(inside)
+     6763    0.003    0.000    0.009    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+     6763    0.004    0.000    0.006    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/primitives.py:45(seg_closest)
+    54491    0.005    0.000    0.005    0.000 {built-in method builtins.max}
+    31766    0.004    0.000    0.004    0.000 {method 'get' of 'dict' objects}
+        4    0.001    0.000    0.004    0.001 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:565(segs)
+     1288    0.001    0.000    0.003    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:310(add)
+    28916    0.003    0.000    0.003    0.000 {method 'append' of 'list' objects}
+    20950    0.003    0.000    0.003    0.000 {method 'setdefault' of 'dict' objects}
+     4083    0.001    0.000    0.003    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/land/cover.py:704(<genexpr>)
+
+

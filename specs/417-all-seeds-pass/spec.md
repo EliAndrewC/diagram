@@ -107,7 +107,9 @@ The repair passes, any rule coded twice and the checks the generator runs mid-ma
 
 The GM, 2026-10-26 (`request.md`, "Speed first"): "we should explicitly make it one of the goals of 417 to get the kind of
 order of magnitude decrease that we believe should be possible based on the feature that we just completed". Feature 427 cut a
-40-household roll from 62.6M Python calls to about 30M by removing per-pair overhead; what is left is structural. Placing
+40-household roll from 62.6M Python calls (observed 2026-10-26, method: `make perf-fanout`, 427's T01 survey) to 29,717,755 once its
+families outside the lanes landed (its T09; its T10, the web's pairwise chains, waits on this feature's lane conversions) (observed 2026-10-27, method: `make perf-fanout` at fb19852b5, `dev/perf-log/20261027T030656Z-fanout-417-start.txt`) by
+removing per-pair overhead; what is left is structural. Placing
 then repairing is this feature's FR-004 to FR-006. Search by trial is not: a placer lays a candidate out in full - a homestead
 with its fixtures, a way traced and pulled taut, a well through the registry - and only then refuses it, and a whole-network
 check is asked again of the whole network as it grows. Measured 2026-10-26 (method: `make perf-profile SEED=39 HOUSEHOLDS=40`,
@@ -200,7 +202,8 @@ laying out in full a candidate a test needing no layout refuses.
   calls - a tenfold cut from feature 427's start of 62.6M (observed 2026-10-26, method: `make perf-fanout`, 427's T01 survey).
   The bound is a GUESS at what a by-construction engine reaches (the session's estimate 2026-10-26: 3-6M, from a few hundred
   candidate seats a house each asked a couple of dozen indexed questions); stage times are reported beside it and gate nothing
-  (feature 427 FR-006).
+  (feature 427 FR-006). The GM saw this bound and its baseline in the session's proposal ("SC-009: at most 6.3M ... a tenfold cut
+  from 427's start of 62.6M") before answering "Sounds great. I confirm that this is good" (`request.md`).
 
 ## Assumptions
 
@@ -235,3 +238,32 @@ laying out in full a candidate a test needing no layout refuses.
 - spec-fidelity SC round 1 (2026-10-24, spec-lint's FR names on each SC): CHANGES REQUIRED - SC-001 cannot measure FR-008
   (now SC-008); SC-007's first clause measured only the tasks (now FR-002 in full). Aside taken: SC-004 names FR-004.
 - spec-fidelity SC round 2 (2026-10-24): FAITHFUL.
+- spec-fidelity-verify speed-first amendment round 1 (2026-10-26; the hook's round 2 of the pass - the NOT-REVIEWABLE
+  return before it reviewed nothing and does not count): CHANGES REQUIRED - User Story 5 says feature 427 cut a 40-household
+  roll "to 30,974,895", but the cited log (`dev/perf-log/20261026T222703Z-fanout-427-T09-start.txt`) is the survey from the
+  START of 427's T09. Commit 7307453e2 added that log, and its message records a further cut made after it ("field 4.07M ->
+  2.93M at 40 hh"). The same paragraph's profile seconds were taken after T09 (fb19852b5), so the passage mixes two engine
+  states. The fix: say the count is from T09's start and that T09 then cut the field, or cite a new all-stages
+  `make perf-fanout` at 40 households (none taken after T09 is in `dev/perf-log/`). The rest of the amendment matches the
+  GM's "Speed first" words and his confirmation: User Story 5, FR-012, FR-013, SC-009 (62.6M confirmed, 62,648,969 in the
+  T01 survey) and the last Assumption.
+- spec-fidelity-verify speed-first amendment round 2 (2026-10-26; the hook's round 2 of the pass, as round 1 was): CHANGES REQUIRED - round
+  1's item is RESOLVED in substance: 29,717,755 at 40 households is line 159 of
+  `dev/perf-log/20261027T030656Z-fanout-417-start.txt`, taken at fb19852b5 after 427's T09 landed (f28012335). But the new
+  words "once its last task landed" are false: 427's T10 (the web's pairwise chains, waiting on this feature's lane
+  conversions) and T11 (its bookend) are open in `specs/427-call-volume-refactors/tasks.md`. Say "once its families outside
+  the lanes landed (its T09; T10, the web's pairwise chains, waits on this feature's lane conversions)", as `request.md`
+  puts it. And `inventory/trial.md` row 2 gives homesteads as 6.9M. The survey it cites gives 6,537,670 at 40 (6.5M); 6.9M
+  (6,940,802) is an earlier log's count. Its other stage totals match the survey. SC-009's new sentence is true: the session's proposal of 2026-10-26 said "at most 6.3M Python calls, a tenfold
+  cut from 427's start of 62.6M" before the GM confirmed. That proposal is in the session transcript, not `request.md`;
+  this does not block. The plan.md, tasks.md T14 and `inventory/trial.md` changes match the GM's 2026-10-25 and 2026-10-26 words.
+- spec-fidelity-verify speed-first amendment round 3 (2026-10-26; the hook's round 3 of the pass): FAITHFUL - round 2's two
+  items RESOLVED: User Story 5 now says 427 reached 29,717,755 "once its families outside the lanes landed (its T09; its
+  T10 ... waits on this feature's lane conversions)", true against `specs/427-call-volume-refactors/tasks.md` (T09 ticked,
+  T10 and T11 open) and `request.md`'s "landed its families outside the lanes"; `inventory/trial.md` row 2 reads 6.5M, the
+  survey's 6,537,670 at 40. T56's task line and plan block now name the notice board's seats (trial.md rows 6-11) in place of
+  the labels, which trial.md lists as needing no task. plan.md's D5 note (FR-013 governs the order; the list matches the
+  Order section and the GM's 2026-10-26 confirmation) and the D11 AMENDED and T16 item 1 wording (downloaded research
+  checked first, a research pass where nothing was looked for, then a GUESS or a tunable knob) follow the GM's 2026-10-25
+  and 2026-10-26 words. That plan text's Decisions block is still BLOCKED in `plan-review.json` until a spec-fidelity plan
+  review rules on it again; this round records no plan verdict.

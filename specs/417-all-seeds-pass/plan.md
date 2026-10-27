@@ -55,7 +55,7 @@ flag, never a gate (375 amendment 5): a by-construction placer that is slower is
 ## Decisions
 
 - **D1 (block sizes, R1)**: a fresh block of 500 after each engine landing (~23 min at 12 workers, R1's 2.8 s a seed, one-shot
-  2026-10-24, background); 1,000 at T01 and at the close (~47 min, the same rate). SC-001's N is 500. The landing's own fresh block (FR-009) stays the cohort gate's 48. Rendering:
+  2026-10-24, background); 1,000 at T01 and at the close (~47 min at the same rate, one-shot 2026-10-24, from R1). SC-001's N is 500. The landing's own fresh block (FR-009) stays the cohort gate's 48. Rendering:
   none.
 - **D2 (the tally)**: `scripts/measure/fresh_tally.py` (`make fresh-tally [SINCE=] [COMMIT=]`) reads `dev/cohort-log/*.json`,
   counts each record's seeds at or above its `fresh_first` by `verdict`, and prints the pooled rate by form and by cause - the
@@ -80,6 +80,10 @@ flag, never a gate (375 amendment 5): a by-construction placer that is slower is
   (15%, same tally), then the
   row, brook and grove rules into their placers, then the rest the inventory finds. Each task's own design is decided in its
   Approach before its code (decide first), on the inventory's entries. Rendering: per task.
+  SUPERSEDED FOR THE ORDER BY FR-013 (the GM 2026-10-26: "order our remaining tasks in 417 to prioritize the things that will
+  make us go faster before the things that will make us correct"): the speed tasks run first, ranked by the calls each removes,
+  in the order the GM confirmed that day (T52, T31, T06, T53, T54, T55, T12, T11, T56, T14, then T57's check-in); the order by
+  share of failures above holds only among the tasks that make seeds pass, once the GM lifts the stop line.
 - **D6 (the principle)**: FR-003's text is drafted by T03 and goes to the GM; the constitution is amended only with the GM's
   words. Rendering: none.
 
@@ -92,6 +96,14 @@ flag, never a gate (375 amendment 5): a by-construction placer that is slower is
   that cannot land green without seed-by-seed work or room (FR-007) is recorded and set down, never iterated on. No work aimed
   at the fresh rate, no FR-007 room work, no T20/T21 until the GM resumes it. The tasks that move no map go first. Rendering:
   none.
+  AMENDED (the GM's later words): a rule with no recorded value no longer waits for the GM - "make it a tunable knob, or we can
+  just do whatever is algorithmically easier", such questions "should not come to my attention for an answer in this way"
+  (2026-10-25, `request.md`), "if our research findings do not indicate that things were any particular way" - so the
+  downloaded research is checked first and, where nothing was ever looked for, a research pass is run (T29's and T36's method);
+  only where both find nothing conclusive is it made one at a chosen value labeled a GUESS, or a tunable knob, as the GM allowed
+  (T16). And the speed tasks (FR-013, the GM
+  2026-10-26: "work all 10 of those tasks ... From start to finish") run whole, each landed through `make land` under FR-008;
+  the stop line holds after them, at T57's check-in.
 
 ## Order
 
@@ -101,6 +113,12 @@ T01 measure (D1, D2). T02 the hold guard (D4) - small tooling, lands alone. T03 
 two tasks after the last engine task: the fresh block before the push (FR-009), and every archetype form against HEAD (FR-011,
 SC-006). The last task closes: 1,000 fresh seeds, T106's seat turn re-applied (User
 Story 2), the code-size delta (SC-004), the feature report.
+
+THE ORDER SINCE 2026-10-26 (FR-013; the GM, `request.md` "Speed first"): the open tasks run speed first, the tasks that cut a
+roll's calls ordered by what each removes - T52 (the trial inventory), T31, T06, T53, T54, T55, T12, T11, T56, T14, T57 (the
+checkpoint) - then the tasks that make every seed pass, in `tasks.md`'s order. Each task's Approach states its place. THE
+WORK STOPS AT T57 for the GM's check-in ("then we can check in once that is all done", `request.md`); the tasks after it start
+on his word.
 
 ### T31 conversion C2 (2026-10-26): the joins stop short because the tree is drawn after the links (measured; not yet built)
 
@@ -747,7 +765,7 @@ Each step measured alone:
 3. **Where each comes from.** `spec.md` User Story 5's measurement (the check asked of every pair of lanes at each of its calls); the trial inventory.
 4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
    task to the chains that still stand (FR-012).
-5. **The order.** After the trial inventory, before the web laid by the law: the largest single search by trial in the web.
+5. **The order.** Fourth of the speed tasks, after the settle's probe (T31) and the web laid by the law (T06), which may delete some of these checks' callers (FR-006): the largest single search by trial left in the web.
 6. **The exits.** Green: the web's whole-network checks asked incrementally, their calls at least tenfold down, the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
    Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: the same predicate asked of a smaller set; an index the plan names (`settlement/_geom/indexes.py`).
@@ -817,13 +835,13 @@ Each step measured alone:
 
 ### T56 Approach (checklist part A)
 
-1. **The goal, in the world.** The rest of the trial inventory's sites converted, largest first: the wells' registry admission, the bamboo strips, the open-ground patches, the grove clumps and the labels' least-cost seat, as the inventory ranks them.
+1. **The goal, in the world.** The rest of the trial inventory's sites converted, largest first: the wells' registry admission, the bamboo strips, the open-ground patches, the grove clumps and the notice board's seats, as the inventory ranks them (`inventory/trial.md` rows 6-11).
 2. **The constraints.** FR-012, FR-013, User Story 5, FR-008; each placer's rules unchanged.
 3. **Where each comes from.** The trial inventory.
 4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
    task to the chains that still stand (FR-012).
 5. **The order.** After the field, before the overlap registry's resync.
-6. **The exits.** Green: each site's chain at least tenfold down or the site set down with its measurement, the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
+6. **The exits.** Green: each site converted, its chain at least tenfold down (a site already gone when item 4 re-measures counts), the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
    Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None: each site's cheap refusals asked of its candidate set at once.
 8. **The budget.** One landing per chain group; a group that moves a map judged by the cohort.
@@ -862,3 +880,533 @@ Each step measured alone:
 | the calls | `make perf-fanout` |
 | the stage times | `make perf LABEL=417-speed SCALING=1` |
 
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** The same lane web, each ordinary lane admitted whole by the lane law before it is drawn, so no pass after the lay and no settle step repairs it.
+2. **The constraints.** FR-004, FR-006, FR-013, SC-002.
+3. **Where each comes from.** the inventory (`inventory/ways.md`, G2); T26's and T31's measured deletions; D5, D11, D35.
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the task to what still stands (FR-012).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): third of the speed tasks, after the trial inventory and the settle's probe (T31), before the web's whole-network checks (T53).
+6. **The exits.** Green: the web laid by the law with no repair pass left, its calls measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the law's predicates asked of a candidate lane before it is drawn.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T12 Approach (checklist part A)
+
+1. **The goal, in the world.** The same paddy cells, cut where the ring rules admit them: no cell cut then merged or left bare, no ring split and welded after, no twin or stub drawn then dropped, the needle one predicate.
+2. **The constraints.** FR-004, FR-005, FR-013.
+3. **Where each comes from.** the inventory (`inventory/homesteads-water.md`, G9); feature 427 T09's measurements (`specs/427-call-volume-refactors/research/t09-water.md`).
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the task to what still stands (FR-012).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): seventh of the speed tasks, after the homesteads (T55), before the field's courses (T11).
+6. **The exits.** Green: the cells cut by their rules with the settle's merges gone, the field stage's calls measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the ring rules asked of a cell before it is cut.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T11 Approach (checklist part A)
+
+1. **The goal, in the world.** The same brook, sink, field and polder, placed by their rules: no course repaired then judged, the field not judged as a finished net, the polder's wander held to its rule.
+2. **The constraints.** FR-004, FR-006, FR-007, FR-013.
+3. **Where each comes from.** the inventory (`inventory/homesteads-water.md`, G8).
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the task to what still stands (FR-012).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): eighth of the speed tasks, after the paddy cells (T12).
+6. **The exits.** Green: the courses placed by their rules with the repair gone, the field stage's calls measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: each course's rules asked of its candidate before it is laid.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T14 Approach (checklist part A)
+
+1. **The goal, in the world.** The same overlap registry, its per-stage resync's checking and its record-time refusal taken out of the run: each placer asks the overlap matrix of its candidate before it is placed, the overlap rule's finished-map check runs in the cohort and the tests only, calling the same predicate (FR-006), and the hand mirrors made one.
+2. **The constraints.** FR-006, FR-013.
+3. **Where each comes from.** the inventory (`inventory/cross.md`, G11); T18's deletions.
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the task to what still stands (FR-012).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): tenth of the speed tasks, before the checkpoint (T57).
+6. **The exits.** Green: the resync's checking and the record-time refusal gone from the generator, the finished-map overlap check in the cohort and the tests calling the placers' predicate, the hand mirrors one, the calls measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the matrix asked by each placer of its candidate.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T16 Approach (checklist part A)
+
+1. **The goal, in the world.** The lane rules whose copies differ, each made one predicate at the rule's recorded value - or, where the downloaded research checked first and a research pass where nothing was ever looked for find no recorded
+   value (the GM 2026-10-25: "if our research findings do not indicate that things were any particular way"), at a chosen value
+   labeled a GUESS, or a tunable knob (the GM 2026-10-25: "make it a tunable knob, or ... whatever is algorithmically easier"; the doubled tail at the 20 degrees the GM accepted, documented as an approximation), never set down for the GM.
+2. **The constraints.** FR-006, FR-008.
+3. **Where each comes from.** the inventory (`inventory/ways.md`, G1); the GM's 2026-10-25 words on arbitrary values (`request.md`), which supersede D11's hold for this task.
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): first of the tasks after the speed tasks.
+6. **The exits.** Green: each differing copy made one, at its recorded value or a labeled GUESS, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one predicate where several stood.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** The ways' drops and refusals gone: no ordinary lane dropped, no `WebRefused` or `NoDryExit`, no spur given up, no angle rule waived, no wood seat released - room within the research the remedy.
+2. **The constraints.** FR-007, SC-001.
+3. **Where each comes from.** the inventory (`inventory/ways.md`, G3); FR-007's room before repair.
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the lane rules made one (T16).
+6. **The exits.** Green: the drops and refusals the inventory names gone, the fresh block's ways failures measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: room, not a new search.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** Seating room: no `SiteRefused` on a short margin, no dry-spell give-up, no rank round's drop, no pinched passage - more room within the research the remedy.
+2. **The constraints.** FR-007, SC-001.
+3. **Where each comes from.** the inventory (`inventory/homesteads-water.md`, G4); the room-before-packing rule (the GM 2026-10-12).
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the ways' drops (T07).
+6. **The exits.** Green: the seating's refusals the inventory names gone, the fresh block's seating failures measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: room, not a new search.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** The row village's rules asked of its candidates: `row_rules`, `water_rules` and `bamboo_mismatch` by the row placer, the wells' dry-household check out of the run.
+2. **The constraints.** FR-005, FR-006, SC-001.
+3. **Where each comes from.** the inventory (`inventory/homesteads-water.md`, G5).
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the seating room (T08).
+6. **The exits.** Green: each rule asked by the row placer and its finished-map check its predicate, the fresh block's linear-form failures measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the rules asked of a candidate row.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T10 Approach (checklist part A)
+
+1. **The goal, in the world.** The grove rules asked by the grove placers: the five audit-only grove rules before placing, `fixtures_on_groves` and `gardens_east_shaded` one predicate each, the belt, copse and persimmon repairs deleted.
+2. **The constraints.** FR-004, FR-005, FR-006, SC-001.
+3. **Where each comes from.** the inventory (`inventory/homesteads-water.md`, G6); T17's first part.
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the row village (T09).
+6. **The exits.** Green: the grove rules asked before placing and the repairs deleted, the fresh block's grove failures measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the rules asked of a candidate clump.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T13 Approach (checklist part A)
+
+1. **The goal, in the world.** The hinterland and land placed by their rules: no dike tree thinned after, no hole filled to a share in the run, the belt's ladder, the parcels, the marsh and the wet lanes asked before placing.
+2. **The constraints.** FR-004, FR-006, FR-007, SC-001.
+3. **Where each comes from.** the inventory (`inventory/rest.md`, G10).
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the grove rules (T10).
+6. **The exits.** Green: the passes the inventory names gone, the fresh block's failures measured before and after, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the rules asked of a candidate.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T15 Approach (checklist part A)
+
+1. **The goal, in the world.** The rest of the inventory placed by its rules: the labels' repair and least-cost seat, the beads dropped twice, the bridges' reseat and refusal, the byres' relaxed tiers, the wells' and pond stock's rules asked twice, the cluster's belt and dry-exit copies.
+2. **The constraints.** FR-004, FR-005, FR-006, FR-007, SC-001.
+3. **Where each comes from.** the inventory (`inventory/rest.md`, G12).
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the hinterland (T13).
+6. **The exits.** Green: each site the inventory names converted, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: each rule asked of its candidate.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T27 Approach (checklist part A)
+
+1. **The goal, in the world.** The track out drawn ending on the web, never stopping in open country past the households' ways.
+2. **The constraints.** FR-004, SC-001.
+3. **Where each comes from.** T19's probe and D27; research 0081 ("It never stops in open country").
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the rest of the inventory (T15).
+6. **The exits.** Green: the six named fresh seeds' track ending on the web, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the track's end placed where its ways meet it.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T32 Approach (checklist part A)
+
+1. **The goal, in the world.** The lanes and the track standing where the record puts them, where T29's passes A1, A2 and D found the code contradicting it.
+2. **The constraints.** FR-008 (the research claims hold), SC-001.
+3. **Where each comes from.** T29's passes A1, A2, D; the pages the task names (0014, 0035, 0037, 0055, 0084, 0089).
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the track (T27).
+6. **The exits.** Green: each contradiction the task lists made to agree with the record or ruled by the arbiter, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the record's values, no search.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T33 Approach (checklist part A)
+
+1. **The goal, in the world.** The homestead's parts standing where the record puts them, where T29's passes B, C and P1 found the code contradicting it.
+2. **The constraints.** FR-008, SC-001.
+3. **Where each comes from.** T29's passes B, C, P1; the pages the task names (0029, 0036, 0042, 0196).
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the lanes and track (T32).
+6. **The exits.** Green: each contradiction the task lists made to agree with the record or ruled by the arbiter, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the record's values, no search.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T34 Approach (checklist part A)
+
+1. **The goal, in the world.** The water and the fields as the record has them, where T29's passes P2a and P2b found the code contradicting it.
+2. **The constraints.** FR-008, SC-001.
+3. **Where each comes from.** T29's passes P2a, P2b; T36; the pages the task names (0013, 0020).
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the homestead's parts (T33).
+6. **The exits.** Green: each contradiction the task lists made to agree with the record or ruled by the arbiter, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the record's values, no search.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T35 Approach (checklist part A)
+
+1. **The goal, in the world.** The town's walls and wards as the record has them, where T29's pass P7 found the code contradicting it.
+2. **The constraints.** FR-008.
+3. **Where each comes from.** T29's pass P7; T36; the pages the task names (0087, 0151, 0160).
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the water and fields (T34).
+6. **The exits.** Green: each contradiction the task lists made to agree with the record or ruled by the arbiter, the town tests and pool maps passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the record's values, no search.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T47 Approach (checklist part A)
+
+1. **The goal, in the world.** A row's street laid ending at its last farm where `lay_row_streets` lays it, and the end trim's street call deleted.
+2. **The constraints.** FR-004, SC-001.
+3. **Where each comes from.** T46's claims round and measurement.
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the town (T35).
+6. **The exits.** Green: the street laid to its end with the trim's call gone, the fixed cohort and pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the street's end placed where it is laid.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T37 Approach (checklist part A)
+
+1. **The goal, in the world.** The claims findings the claims gate carried on code a change left unchanged, each fixed in the code or the claim and re-checked.
+2. **The constraints.** FR-008 (385 FR-013).
+3. **Where each comes from.** the claims gate's carry (385 FR-013).
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the row street (T47), with the other carried findings.
+6. **The exits.** Green: every finding the task names fixed and re-checked IN-STEP, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: a claim or a line at a time.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T39 Approach (checklist part A)
+
+1. **The goal, in the world.** The claims findings the claims gate carried on code a change left unchanged, each fixed in the code or the claim and re-checked.
+2. **The constraints.** FR-008 (385 FR-013).
+3. **Where each comes from.** the claims gate's carry (385 FR-013).
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after T37, with the other carried findings.
+6. **The exits.** Green: every finding the task names fixed and re-checked IN-STEP, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: a claim or a line at a time.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T51 Approach (checklist part A)
+
+1. **The goal, in the world.** The claims finding the claims gate carried on `stage_track`'s way-in end, fixed in the code or the claim and re-checked.
+2. **The constraints.** FR-008 (385 FR-013).
+3. **Where each comes from.** the claims gate's carry (385 FR-013).
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after T39, with the other carried findings.
+6. **The exits.** Green: the finding fixed and re-checked IN-STEP, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one claim.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T20 Approach (checklist part A)
+
+1. **The goal, in the world.** The fresh block run inside `make land` before the push, any fresh failure refusing the landing, once a fresh block of 500 passes whole.
+2. **The constraints.** FR-009, SC-005.
+3. **Where each comes from.** FR-009; the GM 2026-10-24.
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the last engine task.
+6. **The exits.** Green: `make land` refusing a landing one of whose fresh seeds fails, with a test that proves it on a seeded failure.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: tooling.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T21 Approach (checklist part A)
+
+1. **The goal, in the world.** Every archetype form's seeds recorded per seed and diffed against HEAD, a newly red unrolled-form seed with no filed row or waiver refusing.
+2. **The constraints.** FR-011, SC-006.
+3. **Where each comes from.** FR-011; feature 394's request.
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): after the fresh block in the landing (T20).
+6. **The exits.** Green: SC-006's two test landings, the refused one and the one a filed row lets land.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: tooling.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+### T22 Approach (checklist part A)
+
+1. **The goal, in the world.** The feature closed: 1,000 fresh seeds, T106's seat turn re-applied, the code-size delta, SC-009 measured, the feature report.
+2. **The constraints.** SC-001, SC-004, SC-009, User Story 2.
+3. **Where each comes from.** the spec's success criteria.
+4. **Do they describe the world here?** Re-measured first: the inventory's rows for this task read against the then-current engine, and the latest fresh block's failures by cause (`make cohort-seeds`).
+5. **The order.** In the speed-first order (FR-013; the GM 2026-10-26, `request.md` "Speed first"): last.
+6. **The exits.** Green: SC-001 on 1,000 fresh seeds, SC-004's delta and SC-009 measured, the report written.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: measurement and the report.
+8. **The budget.** One landing per group the task names; a group that moves a map judged by the cohort.
+9. **Done, measured.** Its exit's measures recorded in `research/` beside the task.
+10. **Before moving a constant.** Its research claim read first; a GUESS is a knob, free to move within the research (`make tunables`; the GM 2026-10-25).
+11. **Before fitting things into room.** More room within the research first (the GM 2026-10-12, FR-007).
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| what still stands | the re-measure in item 4 |
+| each change | `make maps-moved`, `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
