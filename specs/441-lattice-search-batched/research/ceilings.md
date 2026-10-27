@@ -19,7 +19,7 @@ noise, and it moved maps).
 
 The stage's cProfile inflation is its profiled total over its unprofiled time - homesteads 4.47 s / 2.20 s, web 1.90 s / 0.83
 s (the unprofiled times: `make perf-ab A=HEAD~1`'s stage rows, A's best, measured 2026-10-27 on the engine these profiles were
-taken of) - and a search's ceiling is its cumulative time over that, against the 7.01 s roll: what the roll would save were the
+taken of; the homesteads profile is `dev/perf-raw/20261027T205423Z-seed25-homesteads.prof`) - and a search's ceiling is its cumulative time over that, against the 7.01 s roll: what the roll would save were the
 search free.
 
 | search | stage | calls | cumulative, profiled | inflation | ceiling, unprofiled | of the roll |

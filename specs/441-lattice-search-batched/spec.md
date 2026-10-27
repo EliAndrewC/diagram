@@ -55,10 +55,9 @@ ceiling question trial 439 learned to ask first.)
 
 ## The time
 
-As feature 437 reported it: `make feature-report F=441`'s split - the session's work, its waits and the agents' own time,
-from the event log - and a per-step breakdown (each step's start, end, time, and whether it was work or a wait), with the
-total from the GM's request to the end.
+`report-trial.md` - `make feature-report`'s split and the per-step breakdown, with feature 440's (the tooling it used).
 
 ## Review history
 
-- 2026-10-27, the one review (spec-fidelity, MODE 2, on the brief with its evidence fixed): [verdict].
+- 2026-10-27, the one review (spec-fidelity, MODE 2, on the brief with its evidence fixed): FAITHFUL - every profiled figure
+  re-derived from the kept profiles; re-timed under load (the roll 8.04 s) the ceilings still sit under the floor (2.6%, 2.8%).

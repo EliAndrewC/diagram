@@ -52,4 +52,5 @@ total from the GM's request to the end.
 
 ## Review history
 
-- [DATE], the one review (spec-fidelity, MODE 2, on the brief with its evidence fixed): [verdict].
+<!-- the one review is recorded here when it returns: "- <date>, the one review (spec-fidelity, MODE 2, on the brief with its
+evidence fixed): <verdict>." - a line written before it would read as a round already taken -->
