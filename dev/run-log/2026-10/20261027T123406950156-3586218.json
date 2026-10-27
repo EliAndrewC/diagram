@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-27T12:34:06Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 266,
+  "result": "green",
+  "commit": "8d58a2af6",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10041,
+  "host": {
+    "load": [
+      2.76,
+      4.13
+    ],
+    "mem_avail_mb": [
+      9392,
+      9880
+    ],
+    "cpu_temp_c": [
+      88.0,
+      102.0
+    ],
+    "stall_s": {
+      "cpu": 2.1,
+      "io": 0.2,
+      "io_full": 0.2,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 23631,
+      "package": 15136
+    }
+  },
+  "phases": {
+    "preflight": 13.0,
+    "static": 1.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 249.0,
+    "floors": 10.0,
+    "test-full": 263.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/tools/perf_fanout.py",
+  "collected": 10041
+}
