@@ -212,8 +212,13 @@ def test_a_finding_in_a_deferred_unit_is_reported_deferred(tmp_path: pathlib.Pat
     k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
     index[k] |= {"verdict": "DRIFTED", "note": "296"}
     deferred = frozenset({k.rsplit("#", 1)[0]})
-    text = cx.report(cx.current(skill), index, deferred=deferred)
+    text = cx.report(cx.current(skill), index, deferred=deferred, show_deferred=True)
     assert "IN-STEP 4, DEFERRED 1" in text and f"DEFERRED       {k} - 296" in text and "DRIFTED" not in text
+    assert "not listed" not in text
+    # By default (the GM 2026-10-27) a deferred finding is counted, not listed, and the report says how to list it.
+    text = cx.report(cx.current(skill), index, deferred=deferred)
+    assert "IN-STEP 4, DEFERRED 1" in text and k not in text
+    assert "(1 DEFERRED findings not listed: make claims-report ALL=1 lists them)" in text
     assert cx.classify(cx.current(skill), index, {}, {}, tmp_path, deferred) == ([], [], [])
     f = tmp_path / "deferred.json"
     f.write_text('{"why": "legacy", "units": ["a::b"], "keys": ["c::d#e"]}')

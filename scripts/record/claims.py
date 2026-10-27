@@ -484,17 +484,22 @@ def report(
     qdir: Path | None = None,
     store: Mapping[str, list[str]] | None = None,
     deferred: frozenset[str] = frozenset(),
+    show_deferred: bool = False,
 ) -> str:
     """Counts by verdict, the owed count, then every finding and every UNRESEARCHED claim (spec FR-011); a finding in a
-    deferred unit (`load_deferred`) is shown and counted DEFERRED."""
+    deferred unit (`load_deferred`) is counted DEFERRED, and its row is listed only with `show_deferred` (the GM
+    2026-10-27: the report showed too much, and a deferred finding is not one to fix now)."""
     rows = live_rows(cur, index)
     due = owed(cur, index, qdir, store)
     counts = Counter(shown(k, v["verdict"], deferred) for k, v in rows.items())
     tally = ", ".join(f"{v} {counts[v]}" for v in (*VERDICTS, "DEFERRED") if counts[v]) or "no verdicts yet"
     lines = [f"claims: {len(cur)} in scope; {tally}; owed {len(due)}"]
     for key, v in sorted(rows.items()):
-        if v["verdict"] != "IN-STEP":
-            lines.append(f"  {shown(key, v['verdict'], deferred):<14} {key} - {v.get('note', '')}")
+        verdict = shown(key, v["verdict"], deferred)
+        if verdict != "IN-STEP" and (show_deferred or verdict != "DEFERRED"):
+            lines.append(f"  {verdict:<14} {key} - {v.get('note', '')}")
+    if counts["DEFERRED"] and not show_deferred:
+        lines.append(f"({counts['DEFERRED']} DEFERRED findings not listed: make claims-report ALL=1 lists them)")
     unres = sorted(k for k, r in cur.items() if r.claim.backing == "UNRESEARCHED")
     if unres:
         lines.append(f"UNRESEARCHED claims (the open research): {len(unres)}")
@@ -670,7 +675,8 @@ def _parser() -> argparse.ArgumentParser:
     sub.add_parser("backfill-sections")
     sub.add_parser("rekey")
     sub.add_parser("refingerprint")
-    sub.add_parser("report")
+    rp = sub.add_parser("report")
+    rp.add_argument("--all", action="store_true", help="list the DEFERRED findings too")
     sub.add_parser("gate")
     sub.add_parser("known")
     cc = sub.add_parser("carry")
@@ -912,7 +918,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.cmd == "triaged":
         return _triaged_cmd(args, root, cur, index, qdir, store)
     if args.cmd == "report":
-        print(report(cur, index, qdir, store, load_deferred(root / DEFERRED)))
+        print(report(cur, index, qdir, store, load_deferred(root / DEFERRED), show_deferred=args.all))
         return 0
     if args.cmd == "bundle":
         due_all = owed(cur, index, qdir, store)
