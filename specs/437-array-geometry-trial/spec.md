@@ -49,20 +49,24 @@ which tooling or process changes those times point at, to make iterating on perf
 
 ## Requirements *(mandatory)*
 
-- **FR-001**: The target is chosen by measurement: `make perf-profile` of the 40-household roll's largest stages (seed 25),
-  read for the caller whose calls into the scalar geometry primitives (`seg_dist`, `seg_closest`, `point_in_poly`, `edge_dist`
-  and their kin in `settlement/_geom/primitives.py`) hold the most time; the reading is recorded.
-- **FR-002**: That caller asks its candidates' geometry as arrays (the primitives' array forms, `seg_dists`, `points_in_poly`,
-  or new ones beside them), each array form held equal to its scalar form by a test on random cases.
+- **FR-001**: One predicate and its hottest caller are chosen by measurement: `make perf-profile` of the 40-household roll's
+  largest stages (seed 25), read for every scalar function in `l7r/diagram/settlement/_geom/primitives.py` taking a single
+  point, and for the caller under which the chosen predicate's time is largest; the reading is recorded
+  (`research/share.md`), with the whole module's share of each stage's time beside it.
+- **FR-002**: That caller's calls to that one predicate go through its array form (asked of the caller's candidates at once),
+  which a test on random cases holds equal to the scalar form; the caller's other primitives stay as they are.
 - **FR-003**: Maps may move (the GM 2026-10-18: speed work may move maps, held to the research); the landing cohort passes and
   the changed code's research claims are checked.
 - **FR-004**: The evidence: `make phase-calls` before and after; `make perf-ab` quick (seed 25, 40 households) with its floor,
   then a subset (seeds 25, 39, 47 at 20 and 40 households) once before landing.
-- **FR-005**: The trial lands where the evidence shows time saved beyond the floor, or calls saved with no time lost; otherwise
-  it is set down, its evidence recorded.
+- **FR-005**: The trial lands only where the evidence shows time saved beyond the quick form's floor; otherwise it is set down
+  (the engine change not landed), its evidence recorded, and the report says plainly that no time saving was measured.
 - **FR-006**: A report (`specs/437-array-geometry-trial/report-trial.md`) gives the measured saving, the labeled extrapolation
-  to the whole layer, each step's wall-clock time from a clock log (`process-clock.md`) kept as the trial ran, and the
-  tooling and process improvements the times point at.
+  to the whole layer, each step's wall-clock time from a clock log (`process-clock.md`), and the tooling and process
+  improvements the times point at. The log is kept as the trial runs from its opening; the steps before its first entry are
+  entered from commit timestamps and the review dispatches' times, labeled reconstructed with their source. The trial starts
+  at the GM's request and ends at the report, which states the total, split into the session's work and its waits (reviews,
+  gates, cohorts, rolls).
 - **FR-007**: No requirement, test or exit of this feature refuses on a time (feature 435 FR-006 stands).
 
 ## Success Criteria *(mandatory)*
@@ -71,14 +75,20 @@ which tooling or process changes those times point at, to make iterating on perf
 - **SC-002** (FR-002, FR-003): The array forms' tests pass on random cases and the landing cohort passes (or the trial is set
   down with the reason).
 - **SC-003** (FR-004, FR-005): The report shows the quick and subset A/Bs with the floor, and the phase-calls before and after.
-- **SC-004** (FR-006): The report's process section lists every step with its time and at least one improvement per step that
-  took more than five minutes.
+- **SC-004** (FR-006): The report's process section lists every step with its time and the total split into work and waits;
+  every step over five minutes names an improvement with the time it would save, or says why none is seen.
 - **SC-005** (FR-007): Nothing added refuses on a time.
 
 ## Edge Cases
 
 - The vectorized caller is slower (array setup costs more than it saves on few candidates): that is a finding, recorded, and
   the trial is set down (FR-005).
+
+## Review history
+
+- 2026-10-27, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED - one predicate, not the whole caller; the clock's
+  earlier steps reconstructed and labeled, the total split into work and waits; SC-004's quota replaced; the calls-only
+  landing dropped.
 
 ## Assumptions
 
