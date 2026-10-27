@@ -308,7 +308,7 @@ def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -
     been inked cannot be taken back, so an earlier version - which asked each run as it was about to
     be drawn whether it touched anything yet - refused runs merely for being early in the loop and
     admitted islands that happened to be laid first. Order should not decide what a village looks
-    like.
+    like - save where no skeleton stands to grow from, when the first candidate run seeds the network (the claim below).
 
     ADJACENCY IS COMPUTED ONCE, over a bounding-box prefilter, and the runs are subsampled to a
     stride before any distance is measured. The naive version re-measured every admitted segment
@@ -319,6 +319,7 @@ def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -
 
     Research: islands never drawn - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network grown from the skeleton
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 8 (sample stride ("the stride is the resolution"))
+        a web with no skeleton - GUESS: no source could speak to it, a value of ours (feature 417 T62); where no way stands to grow from, the network grows from the first candidate run, the candidates' order deciding which are drawn
     """
     runs = [r for r in cands if len(r) >= 2]
     if not runs:

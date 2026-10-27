@@ -402,6 +402,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
+  },
+  "### T63 Approach (checklist part A)": {
+   "sha256": "d4a100274a6f197b6f3e02bfed293b4615d1034ce197d9ce3eac8cb7dbd4a43a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T62 Approach (checklist part A)": {
+   "sha256": "3217538339347e14375e4d74eb99724dd4ad1ecaf93bac0317121d23623fcc76",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4872,6 +4884,46 @@
      "summary": "One landing; red exit records the failure and sets the task down, a cannot-be-done claim ruled through make arbiter-ask.",
      "class": "within",
      "why": "Process within the feature's existing exit discipline; narrows nothing asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T62 Approach (checklist part A)",
+    "### T63 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T63-1 admits early exit",
+     "summary": "The overlap registry's admits stops at the first forbidden overlap (Standing.conflicts(first=True)), every admits ask using it; the overlap matrix and rules unchanged.",
+     "class": "within",
+     "why": "Cuts a roll's calls with no change to what is admitted - the 'Speed first' request (GM 2026-10-26: 'prioritize the things that will make us go faster') and FR-013; FR-004's one-predicate rule and FR-008's no-regression constraint are kept, not narrowed."
+    },
+    {
+     "id": "T63-2 squared-distance verge test",
+     "summary": "wells.ok compares the squared distance to the squared reach instead of taking a root.",
+     "class": "within",
+     "why": "Same predicate, fewer calls; serves FR-013's call-cutting order. Whether the floats agree at the boundary is a correctness question the block's own exits measure (maps-moved, cohort-landing), not a fidelity one."
+    },
+    {
+     "id": "T63-3 primitives written without inner calls",
+     "summary": "seg_closest's clamp as a conditional, seg_dist with it inlined, segments_cross's four orientation tests inlined - the same comparisons in the same order.",
+     "class": "within",
+     "why": "Removes calls from the geometry every stage asks; within the GM's speed-first request and FR-013. It is not FR-012's search-by-construction, but the block does not claim it discharges FR-012, so nothing asked is dropped."
+    },
+    {
+     "id": "T63-4 order and exits",
+     "summary": "T63 is T56's first part, ordered by the arbiter's ruling on ask:417-T11-route; green exit is no manifest moved, cohort passing, calls measured before and after.",
+     "class": "within",
+     "why": "Ordering by the arbiter's ruling and FR-013; exits enforce FR-008. No requirement is set aside."
+    },
+    {
+     "id": "T62-1 claim on _reachable_runs",
+     "summary": "Write the missing claim that _reachable_runs' network is grown from the first candidate run where no skeleton stands, labeled GUESS; no code change, landed beside T63.",
+     "class": "within",
+     "why": "Labels an unclaimed decision as Constitution XII requires, answering impl-drift's finding; changes no engine behavior, so FR-010's hold on claims work that changes the engine is not touched, and nothing the GM asked is narrowed."
     }
    ]
   }

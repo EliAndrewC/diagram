@@ -268,9 +268,11 @@ class Standing:
     def extents(self, key: str, o: Any) -> list[Extent]:
         return element_extents(key, o, self.M)
 
-    def conflicts(self, key: str, o: Any, ignore: Any = None) -> list[tuple[str, str, float, float]]:
+    def conflicts(self, key: str, o: Any, ignore: Any = None, first: bool = False) -> list[tuple[str, str, float, float]]:
         """Every forbidden overlap recording `o` under `key` would make: (key, the standing key, x, y), empty when the
-        matrix admits it. `ignore` is a record whose own extents do not count (the one `o` replaces)."""
+        matrix admits it. `ignore` is a record whose own extents do not count (the one `o` replaces). `first` stops at the
+        first one found - all `admits` asks (feature 417 T56: the wells' seats asked every overlap of a seat refused at its
+        first, 2,231 refused seats at 499 calls each on seed 39 at 40 households, measured 2026-10-27)."""
         own = self.extents(key, o)
         if not own:
             return []
@@ -283,6 +285,8 @@ class Standing:
             for j in range(i + 1, len(own)):  # the record's own pieces against each other: the same rule as any pair
                 if pair_forbidden(e, own[j], priv, b, boxes[j]):
                     out.append((key, own[j][0], *_center(e[1])))
+                    if first:
+                        return out
             cb = self._clamp(b)
             if cb[2] < cb[0] or cb[3] < cb[1]:
                 continue  # wholly off the canvas - nothing on the map can meet it
@@ -295,6 +299,8 @@ class Standing:
                     other, ob, _ocb = self._ext[n]
                     if pair_forbidden(e, other, priv, b, ob):
                         out.append((e[0], other[0], *_center(e[1])))
+                        if first:
+                            return out
         return out + self.reserved.conflicts(key, o, own)  # ...and the ground the seating reserved (`reserved.py`)
 
     def hold(self, key: str, rec: Any) -> Any:
@@ -320,7 +326,7 @@ class Standing:
 
     def admits(self, key: str, o: Any, ignore: Any = None) -> bool:
         """May `o` be recorded under `key` on what already stands? The question every placer asks of its candidate."""
-        return not self.conflicts(key, o, ignore)
+        return not self.conflicts(key, o, ignore, first=True)
 
     def record(self, key: str, o: Any) -> None:
         """Record `o` under `key`; raise `OverlapRefused` where the matrix forbids it on what already stands."""

@@ -19035,12 +19035,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::on_a_verge#a lane-side well's seat": {
-  "body": "e5e16ffe479afb54",
+  "body": "70ddbe43b17e7272",
   "claim": "a lane-side well's seat - communal-wells-ido.drawing: on a lane's verge, clear of the tread, its curb within `WELL_VERGE_FT`",
-  "code": "4428bc1bda8ae499",
-  "core": "7485d2266143bbdb",
-  "date": "2026-10-18",
-  "note": "curb within WELL_VERGE_FT=8 ft of the tread, the page's own 8 ft GUESS",
+  "code": "a602af55a3c74442",
+  "core": "c6f6168ace0dd10d",
+  "date": "2026-10-27",
+  "note": "the rewritten point-to-leg test is still the old `seg_dist - half <= reach`, with reach = the well's half-extent plus WELL_VERGE_FT (8 ft), so the curb lands within 8 ft of the tread edge as the page says; keeping the well off the tread is well_at's job",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
@@ -19049,7 +19049,6 @@
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
-  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::own_well_clear#its drawn sizes": {
@@ -37705,6 +37704,17 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/web/stage.py::_reachable_runs#a web with no skeleton": {
+  "body": "7811633c1152719b",
+  "claim": "a web with no skeleton - GUESS: no source could speak to it, a value of ours (feature 417 T62); where no way stands to grow from, the network grows from the first candidate run, the candidates' order deciding which are drawn",
+  "code": "cd89bae8fd08c0fc",
+  "core": "751ebb04a224e1ae",
+  "date": "2026-10-27",
+  "note": "with no skeleton the code sets `reached = {0}` (the first run that has at least 2 points) and grows from it, as the claim says; the page assumes a track out always stands and never covers the no-skeleton case, so GUESS fits",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/web/stage.py::_reachable_runs#islands never drawn": {
   "body": "7811633c1152719b",
   "claim": "islands never drawn - how-our-maps-lay-a-clustered-settlements-lanes.drawing: one network grown from the skeleton",
@@ -37734,15 +37744,6 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/web/stage.py::_reachable_runs#with no skeleton, the network grows from the first candidate run (`reached = {0}`), so the order of the candidates decides which runs are drawn": {
-  "code": "751ebb04a224e1ae",
-  "core": "751ebb04a224e1ae",
-  "date": "2026-10-27",
-  "note": "with no skeleton, the network grows from the first candidate run (`reached = {0}`), so the order of the candidates decides which runs are drawn",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::lay_reachable_runs#web plumbing": {
   "code": "73ad542510a3302f",
@@ -45221,19 +45222,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.admits#registry plumbing": {
-  "code": "7336d8918e7eab43",
-  "core": "a36320e1cf1f7fc4",
+  "code": "c0ef71ddb6652bea",
+  "core": "89195b5466cca1c8",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical or visible",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.conflicts#registry plumbing": {
-  "code": "6644fd860854eaff",
-  "core": "a1d4928f7275ecfb",
+  "code": "cd311d98c0435920",
+  "core": "adafb47f26c6c979",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical or visible",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.extents#registry plumbing": {
@@ -48487,19 +48492,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::seg_closest#coordinate math": {
-  "code": "2874dcee7a9bc150",
-  "core": "189df99ed7e79018",
+  "code": "71ef4437f6d8a3ba",
+  "core": "8328fcc174a90f57",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::seg_dist#coordinate math": {
-  "code": "e7c37b4a2a0b0263",
-  "core": "55b8a109ccf318a7",
+  "code": "09311e251a18fe4b",
+  "core": "9534fe6f278a77fc",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::seg_dists#coordinate math": {
@@ -48519,11 +48528,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::segments_cross#coordinate math": {
-  "code": "f21b0520d1987c35",
-  "core": "960d0e2beed070f9",
+  "code": "7341066df5506a5b",
+  "core": "2ee09a1b510e938c",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::simplify_ring#coordinate math": {

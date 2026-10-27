@@ -47,13 +47,23 @@ def seg_closest(px: float, py: float, a: Pt, b: Pt) -> Pt:
     dx, dy = bx - ax, by - ay
     if dx == dy == 0:
         return ax, ay
-    t = max(0, min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)))
+    # the clamp written as conditionals, the value `max(0, min(1, t))` gives (feature 417 T56: two calls a point, the engine's
+    # most asked primitive)
+    t = ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)
+    t = 0 if t < 0 else (1 if t > 1 else t)
     return ax + t * dx, ay + t * dy
 
 
 def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
-    cx, cy = seg_closest(px, py, a, b)
-    return math.hypot(px - cx, py - cy)
+    # `seg_closest` written in (feature 417 T56: the call and its clamps were four calls of the five a distance cost), the same
+    # arithmetic in the same order, so the same float
+    ax, ay, bx, by = a[0], a[1], b[0], b[1]
+    dx, dy = bx - ax, by - ay
+    if dx == dy == 0:
+        return math.hypot(px - ax, py - ay)
+    t = ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)
+    t = 0 if t < 0 else (1 if t > 1 else t)
+    return math.hypot(px - (ax + t * dx), py - (ay + t * dy))
 
 
 def seg_dists(pts: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]]) -> Any:
@@ -113,10 +123,11 @@ def ring_touches(cx: float, cy: float, r: float, ring: Poly) -> bool:
 
 
 def segments_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> bool:
-    def ccw(p: Pt, q: Pt, r: Pt) -> bool:
-        return (r[1] - p[1]) * (q[0] - p[0]) > (q[1] - p[1]) * (r[0] - p[0])
-
-    return ccw(a, c, d) != ccw(b, c, d) and ccw(a, b, c) != ccw(a, b, d)
+    # the four orientation tests written in (feature 417 T56: a nested function made and called four times a pair - 244,106 calls
+    # of it on one stage), the same comparisons in the same order: ccw(p, q, r) is (r.y - p.y)(q.x - p.x) > (q.y - p.y)(r.x - p.x)
+    if ((d[1] - a[1]) * (c[0] - a[0]) > (c[1] - a[1]) * (d[0] - a[0])) == ((d[1] - b[1]) * (c[0] - b[0]) > (c[1] - b[1]) * (d[0] - b[0])):
+        return False
+    return ((c[1] - a[1]) * (b[0] - a[0]) > (b[1] - a[1]) * (c[0] - a[0])) != ((d[1] - a[1]) * (b[0] - a[0]) > (b[1] - a[1]) * (d[0] - a[0]))
 
 
 def seg_intersect(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:

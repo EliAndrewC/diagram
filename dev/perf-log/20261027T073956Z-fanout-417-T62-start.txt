@@ -1,0 +1,83 @@
+perf-fanout seed 39, sizes 20, 40, HOT 60,000, ANCHOR 300
+
+homesteads: 2,999,636 calls @20, 5,701,714 calls @40, growth exponent 0.93
+  anchor hamletgen/homesteads/growth.py:148:settled_seat [267]
+    settlement/core.py:562:px [73,306|39,025] <- settlement/homestead_parts/fixture_seats.py:355:lay_fixtures [1,216|776] <- settlement/rolling/bundle.py:338:_lay_fixtures [1,221|781] <- settlement/rolling/bundle.py:190:_bundle_layout [1,221|781] <- settlement/rolling/bundle.py:161:_bundle_template [2,506|1,344] <- settlement/rolling/bundle.py:80:_bundle_geom [2,506|1,344] <- settlement/rolling/bundle.py:73:_bundle_envelope [416|253] <- hamletgen/homesteads/growth.py:178:household_reach [416|253] <- hamletgen/homesteads/growth.py:404:reach_at [416|253] <- hamletgen/homesteads/growth.py:148:settled_seat [267|116]
+  fastest growers @20 -> @40:
+    x4.7 'astype' of 'numpy.ndarray' objects [5,307 -> 24,994]
+    x4.7 math.dist [19,571 -> 91,244]
+    x4.5 settlement/rolling/access.py:96:seg_box_within [6,152 -> 27,406]
+    x3.9 fromnumeric.py:48:_wrapfunc [8,122 -> 31,399]
+    x3.0 settlement/rolling/gap_ways.py:141:at [15,568 -> 46,828]
+    x3.0 hamletgen/ways/geom.py:587:<genexpr> [11,423 -> 33,740]
+    x3.0 'extend' of 'list' objects [12,023 -> 35,479]
+    x2.7 builtins.round [36,589 -> 100,166]
+lane_wells: 785,438 calls @20, 2,175,770 calls @40, growth exponent 1.47
+  anchor hamletgen/homesteads/well_seats.py:76:seats [11]
+    settlement/_geom/primitives.py:45:seg_closest [104,969|41,502] <- settlement/_geom/primitives.py:54:seg_dist [104,969|41,502] <- hamletgen/homesteads/wells.py:763:<genexpr> [57,295|31,043] <- hamletgen/homesteads/wells.py:761:ok [21,477|5,738] <- hamletgen/homesteads/wells.py:523:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+    settlement/_geom/primitives.py:54:seg_dist [104,969|41,502] <- hamletgen/homesteads/wells.py:763:<genexpr> [57,295|31,043] <- hamletgen/homesteads/wells.py:761:ok [21,477|5,738] <- hamletgen/homesteads/wells.py:523:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+    hamletgen/homesteads/wells.py:523:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+  fastest growers @20 -> @40:
+    x4.6 hamletgen/homesteads/wells.py:695:<genexpr> [11,023 -> 50,710]
+    x4.1 settlement/homestead_parts/wood_share.py:460:<genexpr> [13,243 -> 54,077]
+    x4.0 hamletgen/homesteads/wells.py:523:_seat_ok [18,180 -> 73,249]
+    x3.8 hamletgen/homesteads/wells.py:474:_in_belt [8,138 -> 31,182]
+    x3.7 hamletgen/homesteads/wells.py:761:ok [5,738 -> 21,477]
+    x3.7 settlement/houses.py:237:<genexpr> [6,828 -> 25,478]
+    x3.5 builtins.abs [15,502 -> 54,834]
+    x3.0 math.hypot [58,483 -> 174,566]
+hinterland: 1,946,076 calls @20, 3,384,461 calls @40, growth exponent 0.80
+  fastest growers @20 -> @40:
+    x22.2 math.degrees [1,237 -> 27,476]
+    x22.2 math.atan2 [1,239 -> 27,478]
+    x4.0 settlement/land/cover.py:69:<lambda> [5,540 -> 22,200]
+    x3.3 math.dist [8,333 -> 27,855]
+    x2.8 builtins.abs [55,999 -> 155,782]
+    x2.2 settlement/_geom/indexes.py:462:inside [16,846 -> 37,273]
+    x2.2 ImageDraw.py:135:_getink [14,444 -> 31,884]
+    x2.2 'draw_ink' of 'ImagingDraw' objects [14,455 -> 31,899]
+appurtenances: 296,986 calls @20, 1,008,774 calls @40, growth exponent 1.76
+  anchor hamletgen/homesteads/wells.py:406:seat_wells [1]
+    settlement/_geom/primitives.py:45:seg_closest [70,507|19,774] <- settlement/_geom/primitives.py:54:seg_dist [70,507|19,774] <- overlap/reserved.py:64:<genexpr> [15,120|4,353] <- overlap/reserved.py:54:poly_seg_gap [1,800|328] <- overlap/reserved.py:134:conflicts [964|179] <- overlap/registry.py:271:conflicts [997|196] <- overlap/registry.py:321:admits [824|108] <- settlement/core.py:328:admits [824|108] <- settlement/shrines_wells/wells.py:107:well_at [824|108] <- hamletgen/homesteads/wells.py:406:seat_wells [1|1]
+    settlement/_geom/primitives.py:54:seg_dist [70,507|19,774] <- overlap/reserved.py:64:<genexpr> [15,120|4,353] <- overlap/reserved.py:54:poly_seg_gap [1,800|328] <- overlap/reserved.py:134:conflicts [964|179] <- overlap/registry.py:271:conflicts [997|196] <- overlap/registry.py:321:admits [824|108] <- settlement/core.py:328:admits [824|108] <- settlement/shrines_wells/wells.py:107:well_at [824|108] <- hamletgen/homesteads/wells.py:406:seat_wells [1|1]
+  fastest growers @20 -> @40:
+    x7.5 overlap/reserved.py:121:_seats_near [3,132 -> 23,527]
+    x6.8 settlement/_geom/primitives.py:116:ccw [6,562 -> 44,370]
+    x4.3 builtins.len [6,217 -> 26,821]
+    x3.6 math.hypot [21,810 -> 77,902]
+    x3.6 settlement/_geom/primitives.py:45:seg_closest [19,774 -> 70,507]
+    x3.6 settlement/_geom/primitives.py:54:seg_dist [19,774 -> 70,507]
+    x3.4 'get' of 'dict' objects [13,826 -> 47,639]
+    x3.4 builtins.max [30,588 -> 104,102]
+notice: 567,939 calls @20, 954,670 calls @40, growth exponent 0.75
+  fastest growers @20 -> @40:
+    x2.5 math.hypot [80,612 -> 198,513]
+    x2.2 'setdefault' of 'dict' objects [13,958 -> 30,283]
+    x2.0 'append' of 'list' objects [37,974 -> 77,434]
+    x1.9 builtins.getattr [13,003 -> 24,875]
+    x1.7 'get' of 'dict' objects [40,458 -> 69,889]
+    x1.7 builtins.len [20,634 -> 34,932]
+    x1.2 builtins.max [42,448 -> 50,301]
+    x1.2 builtins.min [41,942 -> 49,477]
+windbreak: 681,460 calls @20, 1,313,513 calls @40, growth exponent 0.95
+  fastest growers @20 -> @40:
+    x2.2 settlement/_geom/indexes.py:276:near [16,423 -> 35,531]
+    x2.1 settlement/houses.py:362:_hjit [14,228 -> 30,568]
+    x2.1 random.py:500:uniform [9,927 -> 21,111]
+    x2.1 'random' of '_random.Random' objects [11,280 -> 23,856]
+    x2.1 builtins.len [15,462 -> 32,552]
+    x2.1 'extend' of 'list' objects [10,288 -> 21,490]
+    x2.1 'get' of 'dict' objects [101,445 -> 211,406]
+    x2.1 builtins.round [17,722 -> 36,445]
+field: 1,635,818 calls @20, 2,818,698 calls @40, growth exponent 0.79
+  fastest growers @20 -> @40:
+    x3.2 math.sin [9,232 -> 29,321]
+    x2.2 decorators.py:73:wrapped [21,580 -> 47,776]
+    x2.2 'items' of 'dict' objects [22,108 -> 48,531]
+    x2.1 waterfields/frame.py:242:to_uf [13,844 -> 29,414]
+    x2.0 builtins.isinstance [77,044 -> 156,339]
+    x1.9 builtins.round [54,347 -> 104,951]
+    x1.9 decorators.py:171:wrapper [10,450 -> 20,135]
+    x1.8 math.acos [25,363 -> 44,970]
+
+all stages: 8,913,353 calls @20, 17,357,600 calls @40

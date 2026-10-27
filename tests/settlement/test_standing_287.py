@@ -328,3 +328,17 @@ def test_corridors_reserved_since_a_mark_are_released_back_to_it() -> None:
     res.release_corridors_to(mark)
     assert res.corridors_mark() == 1 and list(res._corridors_near(0.0, 290.0, 500.0, 310.0)) == []
     assert [c[0] for c in res._corridors_near(0.0, -5.0, 100.0, 5.0)] == [(0.0, 0.0)]
+
+
+def test_admits_stops_at_the_first_conflict_and_answers_as_conflicts_does() -> None:
+    """Feature 417 T56: `admits` asks `conflicts(..., first=True)`, which stops at the first forbidden overlap - the same verdict,
+    without the rest (the wells' seats asked every overlap of a seat refused at its first)."""
+    st, _M = _registry()
+    st.extents = lambda key, o: [  # type: ignore[method-assign]
+        ("houses", [(0, 0), (10, 0), (10, 10), (0, 10)], None, None),
+        ("lanes", [(2, 2), (8, 2), (8, 8), (2, 8)], None, None),
+        ("lanes", [(3, 3), (7, 3), (7, 7), (3, 7)], None, None),
+    ]
+    every = st.conflicts("houses", {})
+    assert len(every) >= 2 and st.conflicts("houses", {}, first=True) == every[:1]
+    assert not st.admits("houses", {})

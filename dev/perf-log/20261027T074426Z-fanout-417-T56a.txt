@@ -1,0 +1,40 @@
+perf-fanout seed 39, sizes 20, 40, HOT 60,000, ANCHOR 300
+
+lane_wells: 712,401 calls @20, 2,010,260 calls @40, growth exponent 1.50
+  anchor hamletgen/homesteads/well_seats.py:76:seats [11]
+    settlement/_geom/primitives.py:45:seg_closest [104,969|41,502] <- settlement/_geom/primitives.py:54:seg_dist [104,969|41,502] <- hamletgen/homesteads/wells.py:763:<genexpr> [57,295|31,043] <- hamletgen/homesteads/wells.py:761:ok [21,477|5,738] <- hamletgen/homesteads/wells.py:523:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+    settlement/_geom/primitives.py:54:seg_dist [104,969|41,502] <- hamletgen/homesteads/wells.py:763:<genexpr> [57,295|31,043] <- hamletgen/homesteads/wells.py:761:ok [21,477|5,738] <- hamletgen/homesteads/wells.py:523:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+    hamletgen/homesteads/wells.py:523:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+  fastest growers @20 -> @40:
+    x4.6 hamletgen/homesteads/wells.py:695:<genexpr> [11,023 -> 50,710]
+    x4.1 settlement/homestead_parts/wood_share.py:460:<genexpr> [13,243 -> 54,077]
+    x4.0 hamletgen/homesteads/wells.py:523:_seat_ok [18,180 -> 73,249]
+    x3.8 hamletgen/homesteads/wells.py:474:_in_belt [8,138 -> 31,182]
+    x3.7 hamletgen/homesteads/wells.py:761:ok [5,738 -> 21,477]
+    x3.7 settlement/houses.py:237:<genexpr> [6,828 -> 25,478]
+    x3.5 builtins.abs [15,502 -> 54,834]
+    x3.1 builtins.len [33,404 -> 104,992]
+appurtenances: 281,089 calls @20, 901,554 calls @40, growth exponent 1.68
+  fastest growers @20 -> @40:
+    x6.4 settlement/_geom/primitives.py:116:ccw [5,058 -> 32,458]
+    x6.1 overlap/reserved.py:64:<genexpr> [3,328 -> 20,395]
+    x4.1 builtins.len [5,709 -> 23,416]
+    x3.4 'get' of 'dict' objects [13,520 -> 45,678]
+    x3.3 builtins.abs [20,362 -> 66,183]
+    x3.2 math.hypot [20,261 -> 65,115]
+    x3.2 settlement/_geom/primitives.py:45:seg_closest [18,298 -> 58,231]
+    x3.2 settlement/_geom/primitives.py:54:seg_dist [18,298 -> 58,231]
+homesteads: 2,999,868 calls @20, 5,702,188 calls @40, growth exponent 0.93
+  anchor hamletgen/homesteads/growth.py:148:settled_seat [267]
+    settlement/core.py:562:px [73,306|39,025] <- settlement/homestead_parts/fixture_seats.py:355:lay_fixtures [1,216|776] <- settlement/rolling/bundle.py:338:_lay_fixtures [1,221|781] <- settlement/rolling/bundle.py:190:_bundle_layout [1,221|781] <- settlement/rolling/bundle.py:161:_bundle_template [2,506|1,344] <- settlement/rolling/bundle.py:80:_bundle_geom [2,506|1,344] <- settlement/rolling/bundle.py:73:_bundle_envelope [416|253] <- hamletgen/homesteads/growth.py:178:household_reach [416|253] <- hamletgen/homesteads/growth.py:404:reach_at [416|253] <- hamletgen/homesteads/growth.py:148:settled_seat [267|116]
+  fastest growers @20 -> @40:
+    x4.7 'astype' of 'numpy.ndarray' objects [5,307 -> 24,994]
+    x4.7 math.dist [19,571 -> 91,244]
+    x4.5 settlement/rolling/access.py:96:seg_box_within [6,152 -> 27,406]
+    x3.9 fromnumeric.py:48:_wrapfunc [8,122 -> 31,399]
+    x3.0 settlement/rolling/gap_ways.py:141:at [15,568 -> 46,828]
+    x3.0 hamletgen/ways/geom.py:587:<genexpr> [11,423 -> 33,740]
+    x3.0 'extend' of 'list' objects [12,023 -> 35,479]
+    x2.7 builtins.round [36,589 -> 100,166]
+
+all stages: 3,993,358 calls @20, 8,614,002 calls @40

@@ -1281,3 +1281,48 @@ Each step measured alone:
 
 
 <!-- plan-archive: T61 to T61 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
+
+### T63 Approach (checklist part A)
+
+1. **The goal, in the world.** The same maps, the wells' seats and the engine's most-asked geometry answering with fewer calls: the overlap registry's `admits` stopping at the first forbidden overlap, the verge test's distance written out, and the two primitives every stage asks (`seg_dist` with `seg_closest`, `segments_cross`) written without their inner calls - the same arithmetic, the same floats, no map moved.
+2. **The constraints.** FR-012, FR-013, FR-008; the overlap matrix and every rule unchanged (FR-004).
+3. **Where each comes from.** T56's re-measure (measured 2026-10-27, a throwaway call counter in `well_at` on `make perf-profile SEED=39 STAGE=lane_wells HOUSEHOLDS=40`): of 2,566 well seats asked, 2,231 refused by the registry at 499 calls each, 335 by `_fits`, 4 seated - the stage 2,175,770 calls.
+4. **Do they describe the world here?** Yes: `make perf-fanout` (every stage), dev/perf-log/*-fanout-417-T56*.txt, measured 2026-10-27.
+5. **The order.** T56's first part, the arbiter's ruling on ask:417-T11-route sending the session to T56.
+6. **The exits.** Green: every pool manifest unchanged, the landing cohort passing, each chain's calls measured before and after, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: `Standing.conflicts(first=True)` returns at the first forbidden pair, all `admits` asks; `wells.ok` compares the squared distance to the squared reach; `seg_closest`'s clamp a conditional, `seg_dist` with it written in, `segments_cross`'s four orientation tests written in - each the same comparison in the same order.
+8. **The budget.** One landing.
+9. **Done, measured.** lane_wells 2,175,770 -> 1,542,780 calls at 40 households (seed 39), appurtenances 1,008,774 -> 901,554 (with the early exit alone), the roll 23,204,610 -> 21,520,104, measured 2026-10-27 (`make perf-fanout`); no pool manifest moved and the landing cohort 54/54, observed 2026-10-27, method: `make maps`, `make maps-moved`, `make cohort-landing`.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| each chain | `make perf-fanout` |
+| no map moved | `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
+### T62 Approach (checklist part A)
+
+1. **The goal, in the world.** The carried claim made true: `_reachable_runs`' network grown from the first candidate run where no skeleton stands, claimed as a GUESS.
+2. **The constraints.** Constitution XII (every rendering decision labeled).
+3. **Where each comes from.** impl-drift's UNCLAIMED finding on T61's claims round (2026-10-27), carried by `make land`.
+4. **Do they describe the world here?** Yes: the code is unchanged; only its claim is written.
+5. **The order.** Beside T63's landing, the claims round that owes it.
+6. **The exits.** Green: the claim checked IN-STEP by impl-drift, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: claim text only.
+8. **The budget.** No landing of its own.
+9. **Done, measured.** The claims round's verdict.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the claim | impl-drift's verdict in the claims round |
