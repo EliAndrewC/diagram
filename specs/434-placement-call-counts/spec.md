@@ -119,3 +119,16 @@ in its place - where that type spent more calls in the stage than the reference 
 - The reference hamlet's spec at 40 households, seed 39, is the default measurement (feature 417's T57 roll).
 - Counting calls under a step needs a call tally during the roll; it may cost more time than a plain roll and is run on
   demand, never by the gate.
+
+## Review history
+
+- 2026-10-27, first reading, NOT-REVIEWABLE (not a round): SC-003's typed tolerance carried no label; restated as equality.
+- 2026-10-27, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED - "exercised" undefined and the denominators unnamed; SC-003
+  only checkable for the reference; the step rows to explain themselves; a label and the Input line.
+- 2026-10-27, round 2 (spec-fidelity-verify): CHANGES REQUIRED - "most calls" let another type replace the reference's counts;
+  the polder example named the wrong stage (now `waterward`).
+- 2026-10-27, round 3 (spec-fidelity-verify): CHANGES REQUIRED - the dash rule disagreed with itself for a stage only another
+  type holds.
+- 2026-10-27, round 4 (spec-fidelity-verify): FAITHFUL.
+- 2026-10-27, the round arbiter on ask:434-SC-003-exact: accept - SC-003 met by waiver at the measured residues (the note
+  beside SC-003; no spec round owed for the note).
