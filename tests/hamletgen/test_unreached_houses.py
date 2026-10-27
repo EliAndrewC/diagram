@@ -57,6 +57,7 @@ def test_the_join_is_measured_by_ANY_vertex_not_only_by_an_end_and_every_network
     from l7r.diagram.hamletgen.ways.geom import end_components
 
     assert len(set(end_components([east_west, crossing], 40.0))) == 2, "the settle's end-only join, kept until T06: no END is near"
+    assert end_components([east_west, [(0.0, 0.0)]], 40.0) == [0, 1], "a way of one point joins nothing"
     assert len(set(_components([east_west, [(0.0, 500.0), (200.0, 500.0)]], 4.0))) == 2, "boxes 500 ft apart: two networks"
 
 
