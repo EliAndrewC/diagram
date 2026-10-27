@@ -32,7 +32,7 @@
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "6c4735bd416843deddf4172171fb2cee0ac98474d5a8a920c84e2265f43f276c",
+   "sha256": "4dc2a12f36f60722829d64ff2f42e1dfba6a3f0ed70daf4db8c3c5c3f645cb74",
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
@@ -158,6 +158,51 @@
      "summary": "Tests on stand-in stages and a test record: totals equal profile_stage, steps plus own work equal the stage, headings and rows match, toggle works, dash shown, no time.",
      "class": "within",
      "why": "Enforcement of SC-001 to SC-004 / FR-005, i.e. of what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "## Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Step tally by switching cProfile profilers; each call counted by exactly one profiler (innermost listed step or the stage's own work); wrapper frames and enable/disable calls removed.",
+     "class": "within",
+     "why": "Unchanged from its CLEAR text. Implements the GM's per-step counts (second message) and FR-006/SC-002 (steps plus own work sum to the stage); the measure is the fanout's cProfile count."
+    },
+    {
+     "id": "D2",
+     "summary": "AMENDED: each stage measured in a fresh worker process that runs the preceding stages plainly then the stage under the tally, as the fanout does; a few-hundred-call residue in four stages remains.",
+     "class": "within",
+     "why": "A change of method only: nothing the GM sees (per-stage counts, per-step counts, percentages, dashes, the end table after 'Features this map does not have') changes in kind. It replaces the earlier D2's unmeasured premise (one sequential roll gives the fanout's state) with a measured one (3,317 calls short, measured 2026-10-27), to meet SC-003's same-process-state requirement. The residue is covered by the GM's own words ('I'm not asking for it to literally add up to the exact number') and by the round arbiter's recorded waiver on SC-003 (ask:434-SC-003-exact). Figures carry date-and-method labels."
+    },
+    {
+     "id": "D3",
+     "summary": "Record dev/phase-calls.json, one entry per map type keyed by the stage-deciding knobs, with date, seed, households, commit, total, per-stage calls/own/steps; newest measurement replaces.",
+     "class": "within",
+     "why": "Unchanged. Carries 'the most recent counts that happen to have been captured' per type (FR-002)."
+    },
+    {
+     "id": "D4",
+     "summary": "Page shows the reference hamlet's count and share per stage, a dash where unmeasured; another recorded type shown beside a stage where it spent more or holds a stage the reference lacks.",
+     "class": "within",
+     "why": "Unchanged. Carries the GM's per-stage display, the dash for unmeasured stages, and the clause that some stages apply only to certain map types (FR-003)."
+    },
+    {
+     "id": "D5",
+     "summary": "End section id=calls after id=missing: 23-stage table with calls and share, total; rows expand to steps with calls, share of stage, share of total, plus the stage's own work.",
+     "class": "within",
+     "why": "Unchanged. Exactly the GM's end table placed after 'Features this map does not have', with click-to-expand per-step rows and both percentages (FR-004); no time (FR-005)."
+    },
+    {
+     "id": "D6",
+     "summary": "make phase-calls with SEED/HOUSEHOLDS/FORM/ARCHETYPE/SINK knobs, reference spec by default, writes the record; make placement-stages reads it without measuring.",
+     "class": "within",
+     "why": "Unchanged. The tooling the GM asked for that measures and inserts the table (FR-001)."
     }
    ]
   }
