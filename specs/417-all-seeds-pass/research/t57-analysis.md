@@ -128,10 +128,10 @@ L (a refactor across modules).
 
 **What they add up to** - upper bounds, not a sum of independent cuts: items 5 and 6 both act on the web's tree pair checks (an incremental judgment would take most of what box-first asking saves there), and item 10 vectorizes the same inner loops that items 1, 4 and 7 remove by searching less, so its 3-5M is a share of today's 10.2M builtins, not of what is left after 1-9. The time-share proxy under-counts call-dense subtrees (a builtin costs little time per call), so the wells and notice estimates are, if anything, low. Items 1-4 (the S and M items, about 3.1M) would take the roll to about 15M. With 5-9 (about
 3.6-4.1M more, the correctness-phase items among them), about 11M. Reaching SC-009's 6.3M needs item 10 as well:
-about two thirds of the calls are the scalar inner loops of section 3, and only a change to how those loops are written
+about two thirds of the calls are the scalar inner loops of section 3 (SC-009's 6.3M is itself an estimate, the session's of 2026-10-26 of what an engine laid by construction reaches, which the GM confirmed - a goal, not a measured floor), and only a change to how those loops are written
 - arrays of candidates, one call for many - removes them in bulk. That is the large decision, and the GM's to price.
 
-**What I would do first** (a recommendation, the GM's to decide): items 2, 3 and 1, in that order (cheapest first,
-about 2.6M together, each one landing, measured by the fanout), then a short spike on item 10 - one predicate
+**What I would do first** (a recommendation, the GM's to decide): items 2, 3 and 1, in that order (cheapest first, about 2.6M together - items 2 and 3 a landing each, item 1 a few -
+measured by the fanout; the roll then about 15.7M), then a short spike on item 10 - one predicate
 (`seg_dist` over many candidates) vectorized and measured in its hottest caller - to put a measured number on the
 large item before committing to it.
