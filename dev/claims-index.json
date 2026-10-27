@@ -36051,11 +36051,11 @@
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#no doubled band": {
   "body": "5bab44e36c948dbd",
-  "claim": "no doubled band - village-lanes.drawing: two paths running side by side are drawn as one, and two lanes met end to end are read as one (`walked_shadows`) - an access lane may not run beside another past a pitch",
-  "code": "32a24d57b580da4b",
+  "claim": "no doubled band - DEVIATION village-lanes.drawing: two paths running side by side are drawn as one, and two lanes met end to end are read as one (`walked_shadows`) - an access lane may not run beside another past a pitch, measured with no angle where the page's test is under 20 degrees, a departure the code keeps until feature 417 T32",
+  "code": "cb6bc294616bea04",
   "core": "b57b04abdbf6d7c9",
   "date": "2026-10-27",
-  "note": "the refusal `tree_shadows(...) or walked_shadows(lanes)` is a run-beside-past-a-pitch test with no angle (\"115 ft within 30 ft\"), where §41 measures \"at less than 20 degrees\". The claim names no filing; it should state the departure and carry 417 T32, as `tree_shadow_cuts` does",
+  "note": "known (417 T32): the stated departure is what the code does. `tree_shadows(...) or walked_shadows(...)` refuses an access lane that runs beside another past a pitch, measured with no angle, where the page measures \"at less than 20 degrees\". It also reads lanes met end to end as one way, as the page asks. The claim leaves out two departures its helpers state (the 30 ft test, and refusing the whole corridor where the page says to \"cut it where it comes alongside\" at the far end), and they belong in the same T32 departure.",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -36086,11 +36086,11 @@
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged": {
   "body": "5bab44e36c948dbd",
-  "claim": "track out's width as judged - village-lanes.drawing: the track out's stub judged at 6 ft, the track out as drawn",
-  "code": "cf03730ebfba829d",
+  "claim": "track out's width as judged - village-lanes.drawing: the track out's stub judged at 6 ft (`tree_base.Base.stub`, `w` 6.0), the track out as drawn",
+  "code": "0297a60943dd1dcc",
   "core": "b57b04abdbf6d7c9",
   "date": "2026-10-27",
-  "note": "nothing in `admits` sets the 6 ft. The stub comes from `tree_base.base_for` (`tb.stub`), and I need that stub record's `w`",
+  "note": "the tree is judged with the track out's stub among its lanes, and the 6 ft stated matches \"the track out to the wider world 6 ft\".",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -36098,7 +36098,7 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#tree keeps the lane law": {
   "body": "5bab44e36c948dbd",

@@ -260,9 +260,9 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
         tree keeps the lane law - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way, laid once the last house stands, admitted with no hook, fold, hairpin or dangling end among the tree's lanes
         no sliver between the tree's lanes - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined (`as_joined`), two paths side by side are drawn as one (no needle, `needle_loops`), no stub run on past a crossing (no doubled tail)
         way out crosses each brook once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
-        no doubled band - research/questions/0081-village-lanes.drawing.html: two paths running side by side are drawn as one, and two lanes met end to end are read as one (`walked_shadows`) - an access lane may not run beside another past a pitch
+        no doubled band - DEVIATION research/questions/0081-village-lanes.drawing.html: two paths running side by side are drawn as one, and two lanes met end to end are read as one (`walked_shadows`) - an access lane may not run beside another past a pitch, measured with no angle where the page's test is under 20 degrees, a departure the code keeps until feature 417 T32
         free ends at a house - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25) - one main door served a minka's household (JAANUS, Edo period, pass A2); no page gives how many ends meet at one; at most DOORSTEP_MAX (2) free lane ends at a house
-        track out's width as judged - research/questions/0081-village-lanes.drawing.html: the track out's stub judged at 6 ft, the track out as drawn"""
+        track out's width as judged - research/questions/0081-village-lanes.drawing.html: the track out's stub judged at 6 ft (`tree_base.Base.stub`, `w` 6.0), the track out as drawn"""
     from .tree_base import base_for
 
     def lay(run: Poly) -> Poly:
