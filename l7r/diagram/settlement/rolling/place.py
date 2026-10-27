@@ -238,7 +238,7 @@ class PlacerMixin:
         # is ever offered (`_envelope_blocked` returns True, not the one box, on any of the three). The four layouts, each
         # laying the household's fixtures, were built for nothing on a third of the exhaustive pass's offers.
         if self._house_box_refused(self._house_box(x, y, hw, hh)):
-            self._seat_search["why_house_box"] = self._seat_search.get("why_house_box", 0) + 1; return None
+            return None
         # THE SEAT'S OWN QUESTIONS, ONCE (feature 297, FR-002, plan C, amended by research R10): the corridor to the access tree
         # depends on the house and its yard, common to all four garden sides (558 of 558 seats measured, research R6) - asked ONCE
         # per seat below, after the envelope (the cheaper refusal: asked first, it ran the costliest search on every offered seat,
@@ -252,10 +252,7 @@ class PlacerMixin:
         # way of its own, and a household lays its beds where its way can run - so the seat is taken only where some layout here
         # has a walk to the neighbor's yard and none has a corridor of its own
         if getattr(self, "_tight_of", None) is not None and not landlocked(self, list(_at.values())):
-            self._seat_search["why_landlocked"] = self._seat_search.get("why_landlocked", 0) + 1; return None
-        _why = {"blocked": 0, "reach": 0, "parts": 0}
-        if _union_clear:
-            self._seat_search["why_union_clear"] = self._seat_search.get("why_union_clear", 0) + 1; pass
+            return None
         best: Any = None
         _reaches: bool | None = None
         for rank, side in enumerate(self._NUC_SIDES):
@@ -286,18 +283,15 @@ class PlacerMixin:
                 if hit is None and keep is not None and not keep(geom["bbox"]):
                     hit = True
             if hit is not None:
-                _why["blocked"] += 1
                 continue
             if (cx, cy) == (x, y):  # the seat's corridor, asked once for all its unmoved sides (a moved side is another seat)
                 if _reaches is None:  # ...its yard onto lane ground where a seat region stands (feature 318), else a corridor candidate
                     region = getattr(self, "_seat_region", None)
                     _reaches = region.opens(geom) if region is not None else seat_reaches_tree(self, geom)
                 if not _reaches:
-                    _why["reach"] += 1
                     continue
             self._seat_search["parts"] = self._seat_search.get("parts", 0) + 1
             if not self._parts_fit(geom):
-                _why["parts"] += 1
                 continue
             # FEWEST SHADED BEDS, THEN THE DOCTRINE'S TIER, THEN THE MAP'S OWN HAND (feature 227, the review's
             # second pass). `_NUC_SIDES` is (SE, SW, E, W): the sunny south strip before the walls is the researched
@@ -311,9 +305,8 @@ class PlacerMixin:
             if best is None or score < best[0]:
                 best = (score, cx, cy, geom)
         if best is None:
-            self._seat_search["why_refused"] = self._seat_search.get("why_refused", 0) + 1; self._seat_search["why_" + ("parts" if _why["parts"] else "reach" if _why["reach"] else "blocked")] = self._seat_search.get("why_" + ("parts" if _why["parts"] else "reach" if _why["reach"] else "blocked"), 0) + 1
             return None
-        self._seat_search["why_placed"] = self._seat_search.get("why_placed", 0) + 1; return best[1], best[2], best[3]
+        return best[1], best[2], best[3]
 
     def _house_box(self: Settlement, x: float, y: float, hw: float, hh: float) -> tuple[float, float, float, float]:  # type: ignore[misc]
         """The house's box as `_bundle_geom` records it at (x, y) (`boxes["house"]`): its rect, turned by the seat's rake."""

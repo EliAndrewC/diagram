@@ -488,7 +488,5 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, largest: tuple[f
                 placed += 1
                 took += 1
     s._seat_search["grow_offered"], s._seat_search["grow_took"], s._seat_search["grow_level"] = offered, took, level
-    import sys  # 439 SPIKE: the placer's refusals by reason, printed
-    print("439-SPIKE", {k: v for k, v in s._seat_search.items() if k.startswith(("why_", "grow_"))}, file=sys.stderr)
     s._seat_search["tie_reordered"] = s._seat_search.get("tie_reordered", 0) + reordered
     return placed
