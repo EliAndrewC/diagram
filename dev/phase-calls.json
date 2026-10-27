@@ -1068,7 +1068,7 @@
   "type": "nucleated/polder_grid/pond"
  },
  "nucleated/rolled/pond": {
-  "commit": "3f221a2b7",
+  "commit": "34ee43bee",
   "date": "2026-10-27",
   "households": 40,
   "seed": 39,
@@ -1108,13 +1108,13 @@
     }
    },
    "field": {
-    "calls": 3694951,
+    "calls": 3694962,
     "own": 680,
     "steps": {
      "l7r.diagram.hamletgen.water.brook.draw_intake": 1264,
      "l7r.diagram.hamletgen.water.brook.feed_brook": 903492,
      "l7r.diagram.hamletgen.water.brook.open_race_mouth": 149,
-     "l7r.diagram.hamletgen.water.comb.fit_field": 2350714,
+     "l7r.diagram.hamletgen.water.comb.fit_field": 2350725,
      "l7r.diagram.hamletgen.water.comb.head_sluice": 23,
      "l7r.diagram.hamletgen.water.polder.stage_polder": 0,
      "l7r.diagram.settlement.Settlement.draw_comb_field": 415011,
@@ -1133,7 +1133,7 @@
     }
    },
    "hinterland": {
-    "calls": 4358012,
+    "calls": 4357785,
     "own": 31,
     "steps": {
      "l7r.diagram.hamletgen.hinterland.bamboo.bamboo_seats": 2,
@@ -1145,17 +1145,17 @@
      "l7r.diagram.hamletgen.homesteads.bamboo.seat_strips": 935604,
      "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 74412,
      "l7r.diagram.settlement.Settlement.fill_the_holes": 99236,
-     "l7r.diagram.settlement.Settlement.hinterland": 1388081,
+     "l7r.diagram.settlement.Settlement.hinterland": 1387854,
      "l7r.diagram.settlement.Settlement.thin_planted_trees": 2
     }
    },
    "homesteads": {
-    "calls": 7722172,
+    "calls": 7722160,
     "own": 15410,
     "steps": {
      "l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary": 87144,
      "l7r.diagram.hamletgen.homesteads.boundary.site_boundary": 34813,
-     "l7r.diagram.hamletgen.homesteads.growth.grow_the_margin": 610720,
+     "l7r.diagram.hamletgen.homesteads.growth.grow_the_margin": 610708,
      "l7r.diagram.hamletgen.homesteads.household_ways.chose_the_track": 334593,
      "l7r.diagram.hamletgen.homesteads.seat_geometry.declare_cluster_shape": 147,
      "l7r.diagram.hamletgen.homesteads.stages.reserve_the_seating": 5231,
@@ -1193,12 +1193,12 @@
     }
    },
    "notice": {
-    "calls": 871838,
+    "calls": 845220,
     "own": 2,
     "steps": {
      "l7r.diagram.settlement.Settlement.fixture_clear_of_water": 32955,
      "l7r.diagram.settlement.Settlement.kosatsuba": 140,
-     "l7r.diagram.settlement.Settlement.place_kosatsuba": 824851,
+     "l7r.diagram.settlement.Settlement.place_kosatsuba": 798233,
      "l7r.diagram.settlement.structures.fixtures._helpers.kosatsuba_anchor": 13890
     }
    },
@@ -1331,7 +1331,7 @@
     }
    }
   },
-  "total": 26396697,
+  "total": 26369851,
   "type": "nucleated/rolled/pond"
  }
 }
