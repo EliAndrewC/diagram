@@ -3,79 +3,79 @@
  "blocks": {
   "preamble": {
    "sha256": "7e7f76ab9d2d82d57204816efed8f353518766ee65677ff6a975c216ebc6a68a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "da10a774dc7b320bca709b3950bb559bacd558d9ebefa488217c7665129eceb8",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
    "sha256": "8e54642bdf07dd2ec0af2cdf7e73e9e4e451a9815f026acf549d7389060bdcc7",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Performance bookends": {
    "sha256": "81ac42a836b28fd2986d16fa2d0eb545fd74bcc82ad760e6d5c9caa98a866b8a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "74fda2b4e186ef41c87ef4bd5a632a14257be2e6040229fccaa1a48a7a6863f0",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "700148b07e065286e544cb1dc3e8582707bffd1c711c547ab85d7df53973a4db",
-   "verdict": "BLOCKED",
+   "sha256": "9aa5693331b4f2efba7b910bae8d504aea10ab667892ec650b43dcff402fb68f",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Task approaches": {
    "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T01 Approach (checklist part A)": {
    "sha256": "ae44264933b879a0e4950df0dd1656fa7a56e25c00f20e2d261972d46c8458fa",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T02 Approach (checklist part A)": {
    "sha256": "b7d1b496b8e398bdc46eecab7791538734e006c6be5c21fcb6ebfe9ccd66b2bc",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T03 Approach (checklist part A)": {
    "sha256": "8d59a525cf80448e257afb20c21ff34add22541e6b7943444031a4a0d8d2504a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T04 Approach (checklist part A)": {
    "sha256": "1a036b787b08f730b53ff0e8f92ad87ce2d66583fcff0904c36fc1f7903feac2",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Project Structure": {
    "sha256": "07934220ef873d3d472504d10249cfecde36f72ea4107befcc9f69b3fee4a011",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
    "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   }
@@ -179,6 +179,111 @@
      "summary": "single-artifact target: the reference hamlet at 40 households, seed 39",
      "class": "within",
      "why": "FR-008's 40 households; perf-ab keeps SEEDS/SIZES (FR-002) for wider comparison."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The checklist is prompts: docs/performance-checklist.md states the sensibility and six questions; nothing refuses on an answer.",
+     "class": "within",
+     "why": "FR-001 and FR-006; the GM: 'the checklists serve the function of helping us not forget steps ... rather than the checklist items being taken as if they are themselves the goal'. FR-001's 'questions above' are not in the bundle, so the six cannot be matched one to one here; the six named cover the GM's concerns (where time goes, removes vs moves work, growth with size toward thousands of buildings, before/after evidence with its conditions)."
+    },
+    {
+     "id": "D2",
+     "summary": "task-add --performance (PERF=1) appends the questions; every task's approach template gains a one-line prompt.",
+     "class": "within",
+     "why": "FR-001 verbatim."
+    },
+    {
+     "id": "D3",
+     "summary": "make perf-ab: two detached worktrees, make perf SCALING=1 alternated N times (default 3), counting pass on the first run only via L7R_PERF_NO_COUNTS; an older commit that ignores it counts after its timed runs; prints best, spread and calls per size and seed; exits 0.",
+     "class": "within",
+     "why": "FR-002 and FR-006. Skipping the counting pass on later runs is a measurement-method choice inside FR-002. The premise that an older commit's counting pass runs AFTER its timed runs is stated, not shown in the bundle; it bears only on D8's before-arm (T02's arms are patches against HEAD after T01 and honor the flag), so it affects the report's fairness, not any revert decision, and does not change the class."
+    },
+    {
+     "id": "D4",
+     "summary": "perf-audit agent's contract gains the occasion: a performance task's diff read for removes-work or moves-work with its perf-ab evidence; informs, gates nothing.",
+     "class": "within",
+     "why": "FR-003 verbatim."
+    },
+    {
+     "id": "D5",
+     "summary": "One sentence (time the goal, calls the measure, checklist the process) in the constitution, l7r/diagram/CLAUDE.md, dev/performance.md, docs/guards.md and the perf-audit agent's contract; gate wording unchanged.",
+     "class": "within",
+     "why": "FR-007 names exactly these five sites; the BLOCKED round's missing fifth site (the perf-audit agent) is now present. Gate wording kept, as FR-007 and the GM ('I am not reversing the rule that timings gate nothing') require."
+    },
+    {
+     "id": "D6-arms",
+     "summary": "Each commit group is split by hunk class into a moves-work arm and a removes-work arm, each arm's revert timed against HEAD by perf-ab; reverted where its revert costs no time beyond the spread and growth with size does not argue for it.",
+     "class": "within",
+     "why": "A departure in unit from FR-004/SC-003's wording ('each group's revert is timed', 'each commit group's A/B'): a two-class group gets two arm A/Bs and no single whole-group A/B. Judged within, not missed: every hunk is still timed (FR-004 'excludes no hunk from timing'), the class still orders the work moves-work first, the keep/revert rule is FR-004's own (gain or growth argues -> keep, otherwise revert), and the finer unit serves the GM's purpose at least as well - a moves-work arm that buys no time is exactly the trap the GM named ('combining multiple functions into a single function ... is pointless') and would survive a whole-group A/B carried by a removes-work gain. It shrinks nothing the GM asked to have reverted. A group with one class has one arm, i.e. the group itself."
+    },
+    {
+     "id": "D6-adapt",
+     "summary": "An arm whose revert needs later code adapted is written with that code adapted and timed; a claim that a revert cannot be written at all goes through make arbiter-ask.",
+     "class": "within",
+     "why": "Replaces the BLOCKED round's carve-out (unwritable removes-work arms recorded and kept), which exempted a class of change from the GM's 'working through reverting'. Now no arm is exempt by the session's own say-so; the only exit is the arbiter. T02's make maps-moved check keeps FR-004's 'maps unmoved by a revert stay unmoved' true when later code is touched."
+    },
+    {
+     "id": "D7",
+     "summary": "The three cheap fixes: notice board route seats screened by a house/yard index; homestead bundle geometry built once per (form, size, fixtures) and moved; wells' seats screened by a feasibility mask; each a PERF=1 task answering the checklist.",
+     "class": "within",
+     "why": "Exactly the three items request.md names (seat screen, bundle geometry built once, wells' feasibility mask); FR-005."
+    },
+    {
+     "id": "D8",
+     "summary": "Closing report: make phase-calls per-stage after this feature beside T57's table, and perf-ab of the engine before this feature against after it.",
+     "class": "within",
+     "why": "FR-008 verbatim; the GM: 'we will have new numbers that I can look at'."
+    },
+    {
+     "id": "bookends",
+     "summary": "Start/end make perf bookends; calls gated as feature 427 gates them, times recorded only; a revert's call-count refusal goes to the round arbiter with the GM's words, never escaped.",
+     "class": "within",
+     "why": "Keeps the GM's standing rule (calls gated, timings gate nothing) and routes the expected refusal of a revert the GM explicitly asked for to the arbiter rather than letting it silently stop the reverts or bypassing the gate. The plan cites the spec's Edge Cases for this; that passage is not in the bundle, so the citation itself is not checked here."
+    },
+    {
+     "id": "target",
+     "summary": "Single-artifact target: the reference hamlet at 40 households, seed 39.",
+     "class": "within",
+     "why": "A development target only; perf-ab still runs SCALING=1 across sizes and seeds per FR-002, so nothing the GM asked to see is narrowed to one seed."
+    },
+    {
+     "id": "constitution-check",
+     "summary": "Principles VI, X, XIII PASS with each revert and fix carrying maps-moved and perf-ab evidence; constitution gains the time-is-the-goal sentence beside unchanged gate wording.",
+     "class": "within",
+     "why": "Restates FR-004/FR-007. The claim that reverts move no map rests on the earlier changes being value-preserving (T54 not named in that sentence); it is enforced by T02's maps-moved step rather than assumed."
+    },
+    {
+     "id": "T01-T04",
+     "summary": "Task order checklist/tools, reverts, cheap fixes, report; T03 fixes re-measured on the engine T02 leaves, each its own PERF=1 task with perf-ab against its parent; red exits through make arbiter-ask.",
+     "class": "within",
+     "why": "The GM's order in message 3 ('Start off by ... creating these checklists ... then ... reverting ... Then ... the three cheap fixes ... new numbers'); FR-001 to FR-008."
+    },
+    {
+     "id": "structure",
+     "summary": "Files touched: the checklist doc, task-add.py, Makefile, perf_ab.py (new), perf_snapshot.py, perf-audit.md, the constitution, CLAUDE.md, dev/performance.md, docs/guards.md, reverted engine files, fixes' modules.",
+     "class": "within",
+     "why": "Matches FR-001, FR-002, FR-003, FR-007's five sites; docs/make-targets.html left alone as FR-007 says."
     }
    ]
   }
