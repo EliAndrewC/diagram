@@ -70,3 +70,13 @@ trial - a candidate laid out in full and then refused - which no task of this fe
 The GM's answer to the session's proposed order (2026-10-26):
 
 > Sounds great. I confirm that this is good, so please proceed By writing the older tasks approach blocks, running the spec and plan reviews, landing it all, and then starting T52. I would like for you to then proceed to work all 10 of those tasks that you have listed. As the 10 speed tasks. From start to finish. And then we can check in once that is all done. I'm guessing that that will not be done by the time I go to bed, but that's fine. We can sync up in the morning when hopefully you will be done with all 10 tasks. Thanks.
+
+## The approach checked (2026-10-27, at the speed lane's stopping place)
+
+The GM, after the session reported T67 and T70 barely moved the call count:
+
+> Okay. I mean, my basic feeling here is that our highest priority for this project at this time is improving the performance. The thing that is making it difficult for us to iterate is poor performance. I don't know what the current number of function calls is to make one of these maps, but it had been something like 67 million to make a map with 40 homesteads, and then we got that down to "only" 30 million, and now you're telling me it's down to 18 million. On the one hand, that is very good progress, But on the other hand, I do not believe that 18 million function calls are necessary to create a map with 40 homesteads. Now, if I understand what you are pitching, then it sounds like task 57 would be about doing the analysis required to figure out how to get this down. So if that is what you're telling me, then I think I agree with your plan. But before we move forward with that, then I want to make sure that I understand the current state of things. So basically you're telling me that your proposal is for you to finish the task that you are in the middle of so that it can land on main, then You would reorder things so that the tasks that we believe will not significantly improve performance will be done later, and then you will do another round of in-depth analysis on why we are making so many millions of function calls to place such a small number of things. Is that right?
+
+And on the session's confirming it:
+
+> sounds good, please proceed with that plan.  After you've done those tasks and finished your analysis in T57 then we can talk more about how to proceed.

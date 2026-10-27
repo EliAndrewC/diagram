@@ -230,13 +230,13 @@
    "declared": "spec-fidelity"
   },
   "### T57 Approach (checklist part A)": {
-   "sha256": "eca3cc0f30bc748ededda3b883c129fb3ff28b1470a273d05a77e995f10af35e",
+   "sha256": "f7a88723502cfc8e2c39993d411de962bdcbc657e1d5f68f91b3ad9460aeb74f",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T06 Approach (checklist part A)": {
-   "sha256": "7066df5665f6b5a3cd360f5737faf6959630ac0c32da0b923a225b13ac739d8c",
+   "sha256": "7f1aba9cd75300433266eb7f1528bb48c5fed5c67508ac545763cb33da03f079",
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
@@ -5330,6 +5330,106 @@
      "summary": "The gather uses the existing knot reach (knots.lane_knots' reach, ground_apart); no constant changes.",
      "class": "within",
      "why": "Keeps FR-004's predicate unchanged; nothing is retuned."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T06 Approach (checklist part A)",
+    "### T57 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T06-5-moved",
+     "summary": "T06's remaining conversion (settle_knots for the households' ways and KNOTTED_TRIES, settle_network, unsettled and the last resort, T58's owed END-only join) moved out of the speed lane to the correctness phase after its parts A-D (T58, T61, T67, T70), its order and content unchanged, FR-004 and FR-006 still owing it",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows D11's 'the speed tasks run whole' and FR-013's speed-first order, but the exception is in the GM's own words of 2026-10-27: 'reorder things so that the tasks that we believe will not significantly improve performance will be done later' ... 'sounds good, please proceed with that plan.' The premise is measured, not assumed: T67 3,283,827 -> 3,260,405 and T70 3,260,405 -> 3,278,818 calls, the rest at most about 0.78M, each with a date and method. Nothing is dropped: the content is unchanged and FR-004/FR-006 still owe it, so only the order moves."
+    },
+    {
+     "id": "T57-analysis",
+     "summary": "T57 is the SC-009 measurement AND an in-depth analysis: per stage, what it places, candidates tried per thing placed, rule checks per try, the multiplier named; then per stage the change that would cut it, its estimated saving and its cost, ranked by saving per cost; written to research/t57-analysis.md",
+     "class": "within",
+     "why": "This is the analysis the GM asked for: 'another round of in-depth analysis on why we are making so many millions of function calls to place such a small number of things', and 'task 57 would be about doing the analysis required to figure out how to get this down'."
+    },
+    {
+     "id": "T57-gates-nothing",
+     "summary": "The analysis gates nothing; the GM decides what is built from it",
+     "class": "within",
+     "why": "Matches 'After you've done those tasks and finished your analysis in T57 then we can talk more about how to proceed.'"
+    },
+    {
+     "id": "T57-T54-priced",
+     "summary": "T54's owed incremental tree judgment (upper bound 1.2M) is one priced line in T57's ranking rather than built in the speed lane; T06 still owes it",
+     "class": "within",
+     "why": "Not dropped (T06's OWED FROM T54 paragraph stands). Pricing it for the GM's decision is the 2026-10-27 plan. 1.2M is the cost of the whole-tree judgment measured 2026-10-27 in T06's block, so it is an upper bound on the saving and not the saving itself. That is why it belongs as a priced line rather than as work assumed to pay off."
+    },
+    {
+     "id": "T57-0.5M-cutoff",
+     "summary": "The analysis covers only each stage over 0.5M calls of seed 39's 40-household roll",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM asked why the roll makes 'so many millions of function calls'. The block ties that why to stages over 0.5M and does not say, or commit to measuring, what the stages under the cutoff add up to. The scope therefore rests on a premise nobody measured: that the residue is negligible. None of the grounds for an exception applies. Covering every stage is not impossible, the GM's words do not imply the cutoff, and reading the request literally does not defeat its purpose. Against SC-009's 6.3M bound, a residue of a couple of million spread over small stages would matter, and a reader of the plan cannot tell whether it is 0.3M or 4M. Remedy, one clause: either state the stages under 0.5M as a measured sum and share of the roll in the analysis, with the multiplier analysis extended to any group of them that is material, or drop the cutoff."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T06 Approach (checklist part A)",
+    "### T57 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T57-scope-every-stage",
+     "summary": "T57's analysis covers EVERY stage of seed 39's 40-household roll, the small stages included, each named with its calls (replaces the earlier 'each stage over 0.5M calls' cut-off)",
+     "class": "within",
+     "why": "The GM asked for 'in-depth analysis on why we are making so many millions of function calls to place such a small number of things'; the request names no threshold. The earlier 0.5M floor excluded stages from the analysis; the change removes it, so the analysis now reaches every stage, which is what the request covers."
+    },
+    {
+     "id": "T57-method",
+     "summary": "Per stage: things placed (from the manifest), candidates tried per thing placed, rule checks per try (perf-fanout chains, perf-profile), the multiplier named; then the cutting change per stage with estimated call saving and work cost, ranked by saving per cost, T54's owed incremental tree judgment one priced line",
+     "class": "within",
+     "why": "This is the analysis the GM asked for ('why ... so many millions of function calls to place such a small number of things'); the ranked remedies serve the GM's stated next step ('then we can talk more about how to proceed') and propose nothing to build."
+    },
+    {
+     "id": "T57-gates-nothing-GM-decides",
+     "summary": "The analysis is written to research/t57-analysis.md, gates nothing, and the GM decides what is built from it",
+     "class": "within",
+     "why": "Matches 'After you've done those tasks and finished your analysis in T57 then we can talk more about how to proceed.'"
+    },
+    {
+     "id": "T57-measurement-and-exits",
+     "summary": "T57 keeps its SC-009 measurement (perf-fanout at 40 households vs 427's start; perf stage times reported, gating nothing) and its green/red exits",
+     "class": "within",
+     "why": "Unchanged from the accepted spec's SC-009 and FR-013; the amendment makes the analysis part of T57 under either exit, so a red SC-009 records what failed and does not excuse the analysis."
+    },
+    {
+     "id": "T06-moved-to-correctness-phase",
+     "summary": "T06's remainder (after parts A-D: T58, T61, T67, T70) moves out of the speed lane to the correctness phase, content unchanged, FR-004 and FR-006 still owing it; the measured basis is T67/T70 barely moving calls and what remains being at most about 0.78M calls of the settle",
+     "class": "within",
+     "why": "The GM approved exactly this on 2026-10-27: 'You would reorder things so that the tasks that we believe will not significantly improve performance will be done later ... sounds good, please proceed with that plan.' FR-013 itself orders speed tasks by calls removed; nothing of FR-004/FR-006 is dropped, only deferred."
+    },
+    {
+     "id": "T06-T54-owed-priced-in-T57",
+     "summary": "T54's owed incremental tree judgment (about 1.2M calls), recorded as T06's starting point, is priced in T57 rather than built inside the deferred T06",
+     "class": "within",
+     "why": "Keeps the larger speed item visible in the analysis the GM asked for, for the GM's decision after T57; nothing is dropped."
+    },
+    {
+     "id": "T06-conversion-order",
+     "summary": "Conversion in order: (a) settle_ends' rules asked of the candidate at lay (re-aim as T, cut, ask again, refuse), settle_ends leaves STEPS; (b) settle_knots gathered at lay, KNOTTED_TRIES priced and routed through arbiter-ask if it must change; (c) settle_network waits on settle_defer at lay; (d) unsettled and the last resort leave last once the cohort asks the lane law of every roll; settle_reach stays as a placer",
+     "class": "within",
+     "why": "Implements FR-004 (lanes laid only where the law admits; settle repair steps deleted) and FR-006, with settle_reach's status settled by D35; the KNOTTED_TRIES routing is a decision procedure, not a carve-out, since the green exit still requires no repair pass left; unchanged content."
+    },
+    {
+     "id": "T06-exits-and-measures",
+     "summary": "Green: web laid by the law with no repair pass left, calls measured before/after, cohort, pinned rows and claims round clean; red: recorded, set down, impossibility claim ruled through arbiter-ask",
+     "class": "within",
+     "why": "Matches FR-004, SC-002, FR-008 and D35's rule that a cannot-land claim is ruled, never assumed."
     }
    ]
   }

@@ -1,0 +1,7 @@
+perf-fanout seed 39, sizes 40, HOT 50,000, ANCHOR 300
+
+homesteads: 5,204,554 calls @40
+  anchor hamletgen/homesteads/growth.py:148:settled_seat [267]
+    settlement/core.py:562:px [73,306] <- settlement/homestead_parts/fixture_seats.py:355:lay_fixtures [1,216] <- settlement/rolling/bundle.py:338:_lay_fixtures [1,221] <- settlement/rolling/bundle.py:190:_bundle_layout [1,221] <- settlement/rolling/bundle.py:161:_bundle_template [2,506] <- settlement/rolling/bundle.py:80:_bundle_geom [2,506] <- settlement/rolling/bundle.py:73:_bundle_envelope [416] <- hamletgen/homesteads/growth.py:178:household_reach [416] <- hamletgen/homesteads/growth.py:404:reach_at [416] <- hamletgen/homesteads/growth.py:148:settled_seat [267]
+
+all stages: 5,204,554 calls @40
