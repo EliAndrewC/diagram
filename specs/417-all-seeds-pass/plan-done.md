@@ -850,3 +850,51 @@ Each step measured alone:
 | no seed regressed | `make cohort-landing` (in `make land`) |
 
 
+<!-- plan-archive: archived 2026-10-27 -->
+### T54 Approach (checklist part A)
+
+1. **The goal, in the world.** The same household ways, each household's candidate exits refused by the tests that need no traced way - its corridor's ground, its own parts, the tree's reach - before any is traced, pulled taut and judged by the ways tree.
+2. **The constraints.** FR-012, FR-013, User Story 5, FR-008; the ways' admission rules unchanged (the tree's `judge` stays the verdict).
+3. **Where each comes from.** `spec.md` User Story 5's measurement (the households' ways traced and judged); the trial inventory.
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
+   task to the chains that still stand (FR-012).
+5. **The order.** After the web's laying (the households' ways are the web's first layer).
+6. **The exits.** Green (amended by the round arbiter's accept on ask:417-T54-exit, 2026-10-27; it was "`gap_ways`' admission chain at least tenfold down", the plan's split of SC-009, which the measurement showed this route cannot reach): the candidates' cheap refusals asked before any trace and the judgment's scans asked box-first, each chain's calls measured before and after, the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the candidates' cheap refusals asked as one array or index pass; no new search. DECIDED 2026-10-27 on the re-measure (`t54-measured.md` in the arbiter's bundle, measured 2026-10-27: `make perf-profile SEED=39 STAGE=homesteads HOUSEHOLDS=40`, a throwaway call counter in `gap_ways`, a throwaway log in `tree.admits` over `make cohort N=12 FRESH=0 JOBS=3`): of 177 candidate runs on seed 39, 74 stall in the taut pull (45,164 calls in all), 63 are refused by the tree, 40 admitted; the refused-after-a-pull runs cost 626,443 calls, the admitted 1,202,725, the tracing 172,780 - the trial is about a third of the chain, and the refusals already stop at the tree's first clause (76 of 115 on 12 seeds). So the cheap refusals stand as they are, and the judgment's scans are asked box-first, the same verdicts: `tree.rejoined`'s water legs, `fabric.house_hit`'s houses, `law.free_end`'s ways, and `access._seg_box_gap` written out as a clip and squared sums (an oracle test holds it to the old construction). Measured after (2026-10-27, `make perf-fanout STAGES="homesteads web"`): homesteads 6,940,189 -> 6,172,193 calls, web 7,208,472 -> 6,942,717; every pool manifest unchanged (`make maps-moved`), the landing cohort 54/54. What is left of the chain - about 1.2M calls of the admitted ways' own judgment (`Lawful` against the whole tree, `tree_base.judged`, `needles_with`, `as_joined`) - is T06's predicate, made incremental there.
+8. **The budget.** One landing per chain group; a group that moves a map judged by the cohort.
+9. **Done, measured.** Each chain's calls before and after from `make perf-fanout`, recorded in `research/`.
+10. **Before moving a constant.** n/a: the rules' figures stay as they are.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the chains re-scoped | `make perf-fanout` (every stage) |
+| each converted | its calls in `make perf-fanout`, `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
+<!-- plan-archive: archived 2026-10-27 -->
+### T59 Approach (checklist part A)
+
+1. **The goal, in the world.** The three claims the claims gate carried on unchanged code made true: `lane_breaches`' 3 ft tread where a lane records none claimed against 0081's drawing page (the MISLABELED and UNCLAIMED findings on it), and `settle_network`'s network of the greatest length, where no connector is drawn, claimed as a GUESS.
+2. **The constraints.** Constitution XII (every rendering decision labeled); FR-006.
+3. **Where each comes from.** impl-drift's findings on T58's claims round (2026-10-27), carried by `make land`.
+4. **Do they describe the world here?** Yes: the code the claims name is unchanged; only their text is written.
+5. **The order.** Beside T54's landing, the claims round that owes them.
+6. **The exits.** Green: each claim checked IN-STEP by impl-drift, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: claim text only.
+8. **The budget.** No landing of its own.
+9. **Done, measured.** The claims round's verdicts.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| each claim | impl-drift's verdict in the claims round |
+
