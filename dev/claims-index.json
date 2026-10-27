@@ -4859,12 +4859,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/_invocation.py::OPERATIONS#invocation guard": {
-  "body": "ab91a04379a68684",
+  "body": "ad2b7aa74d159fc1",
   "claim": "invocation guard - NONE: process-tree inspection, no map decision",
-  "code": "89dea005d3f842f4",
-  "core": "75f9d20c57431863",
+  "code": "cd9607f1b1db7172",
+  "core": "2213e1865f040a6c",
   "date": "2026-10-27",
-  "note": "registry rows map each module to a make target and a prompting cost; this is plumbing with no map decision, and the added phase_calls row is plumbing too",
+  "note": "this is the registry that maps each module to its make target and cost, and that includes the added perf_ab row; it makes no map decision",
   "pages": {},
   "research": "",
   "rests": [],
