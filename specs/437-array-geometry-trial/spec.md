@@ -24,14 +24,14 @@ to it. Feature 435's closing report found time unchanged by call counts alone, s
 
 ### User Story 1 - A measured number on the large item (Priority: P1)
 
-The GM reads what one caller's geometry, asked of its candidates as arrays, saved in time and calls, and what that suggests the
-whole layer would save, and decides whether to go on.
+The GM reads what one predicate's calls in its hottest caller, asked as arrays, saved in time and calls, and what that suggests
+the whole layer would save, and decides whether to go on.
 
 **Acceptance Scenarios**:
 
-1. **Given** the 40-household roll, **Then** the caller whose per-candidate scalar geometry holds the most time is named from a
-   measurement, with the share it holds.
-2. **Given** that caller vectorized, **Then** the report gives its stage's and the roll's time before and after (`make
+1. **Given** the 40-household roll, **Then** the predicate and its hottest caller are named from a measurement (FR-001), with
+   the share they hold.
+2. **Given** that predicate's calls in that caller asked as arrays, **Then** the report gives its stage's and the roll's time before and after (`make
    perf-ab`, the quick form, then a subset) and calls (`make phase-calls`), read against the quick form's floor.
 3. **Given** the measured saving, **Then** the report states what the whole geometry layer might save, labeled as an
    extrapolation from this one caller.
@@ -43,7 +43,7 @@ which tooling or process changes those times point at, to make iterating on perf
 
 **Acceptance Scenarios**:
 
-1. **Given** the trial done, **Then** the report lists each step's wall-clock time from a log kept as it ran, the waits
+1. **Given** the trial done, **Then** the report lists each step's wall-clock time from the clock log (FR-006), the waits
    (reviews, gates, cohorts, rolls) apart from the work, and the improvements those times suggest, each with the time it would
    save.
 
@@ -71,8 +71,8 @@ which tooling or process changes those times point at, to make iterating on perf
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001): The report names the caller and its measured share of the roll's profiled time.
-- **SC-002** (FR-002, FR-003): The array forms' tests pass on random cases and the landing cohort passes (or the trial is set
+- **SC-001** (FR-001): The report names the predicate and its hottest caller, and their measured share of the profiled time.
+- **SC-002** (FR-002, FR-003): The array form's test passes on random cases and the landing cohort passes (or the trial is set
   down with the reason).
 - **SC-003** (FR-004, FR-005): The report shows the quick and subset A/Bs with the floor, and the phase-calls before and after.
 - **SC-004** (FR-006): The report's process section lists every step with its time and the total split into work and waits;
@@ -89,6 +89,8 @@ which tooling or process changes those times point at, to make iterating on perf
 - 2026-10-27, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED - one predicate, not the whole caller; the clock's
   earlier steps reconstructed and labeled, the total split into work and waits; SC-004's quota replaced; the calls-only
   landing dropped.
+- 2026-10-27, round 2 (spec-fidelity-verify): CHANGES REQUIRED - the caller reading taken over FR-001's search space and the
+  predicate named; User Story 1 and SC-001/SC-002 worded for one predicate; the clock's rows sourced or marked not recorded.
 
 ## Assumptions
 
