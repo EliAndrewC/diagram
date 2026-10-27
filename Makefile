@@ -779,8 +779,8 @@ claims-checked: ## [project] record an impl-drift reply into the claims index, a
 claims-coverage: ## [project] every unit with no research claim, a malformed claim or a pointer to no question - the gate's coverage test, narrowed   [IN=<part of a file path>]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" coverage $(if $(IN),--path "$(IN)",)
 
-claims-report: ## [project] the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" report
+claims-report: ## [project] the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim; DEFERRED findings are counted, not listed   [ALL=1 lists them]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" report $(if $(filter 1,$(ALL)),--all,)
 
 tunables: ## [project] every claim whose value is ours - GUESS (searched, silent), UNRESEARCHED, CONVENTION - with its figure: a goal and a knob a fixing pass may move (feature 417 T28)   [UNDER=<file or dir>] [ALL=1 keeps claims with no figure] [COUNT=1] [INLINE=1 lists the numbers inside functions no claim states]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/tunables.py" --root "$$(git rev-parse --show-toplevel)" $(if $(UNDER),--path $(UNDER),) $(if $(filter 1,$(ALL)),--all,) $(if $(filter 1,$(COUNT)),--count,) $(if $(filter 1,$(INLINE)),--inline,)
