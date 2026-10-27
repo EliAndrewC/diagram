@@ -724,22 +724,28 @@ def rejoined(run: Poly, waters: Sequence[tuple[Poly, float]]) -> Poly:
     from .clearance import _ZIGZAG_RUN_FT
 
     out: Poly = [run[0]] if run else []
+    # ...EACH WATER LEG'S BOX ONCE (feature 417 T54): a leg crosses only a water leg whose box meets its own, so the rest are
+    # passed over unasked - the same cuts (95 runs asked 115,475 `segments_cross` on seed 39 at 40 households)
+    legs = [(c, e, min(c[0], e[0]), min(c[1], e[1]), max(c[0], e[0]), max(c[1], e[1]), half) for course, half in waters for c, e in zip(course, course[1:], strict=False)]
     for a, b in zip(run, run[1:], strict=False):
         d = math.dist(a, b)
         cuts: list[float] = []
-        for course, half in waters:
-            for c, e in zip(course, course[1:], strict=False):
-                if d == 0.0 or math.dist(c, e) == 0.0 or not segments_cross(a, b, c, e):
-                    continue
-                x = seg_intersect(a, b, c, e)
-                if x is None:  # pragma: no cover - segments that cross are not parallel
-                    continue
-                sin = abs(((b[0] - a[0]) * (e[1] - c[1]) - (b[1] - a[1]) * (e[0] - c[0])) / (d * math.dist(c, e)))
-                # ...clear of the LONGER square leg too, which the squaring takes where the short one leaves a zigzag
-                # (`squaring.squared_against`, feature 328 wave 46): set inside it, the vertices were overrun and the run moved
-                reach = (max(half, _ZIGZAG_RUN_FT / 2.0 + 1.0) + SQUARE_LEG_PAD + REJOIN_PAD_FT) / max(sin, 0.2)
-                t = math.dist(a, x)
-                cuts += [t - reach, t + reach]
+        ax0, ax1 = (a[0], b[0]) if a[0] <= b[0] else (b[0], a[0])
+        ay0, ay1 = (a[1], b[1]) if a[1] <= b[1] else (b[1], a[1])
+        for c, e, cx0, cy0, cx1, cy1, half in legs:
+            if cx0 > ax1 or cx1 < ax0 or cy0 > ay1 or cy1 < ay0:
+                continue
+            if d == 0.0 or math.dist(c, e) == 0.0 or not segments_cross(a, b, c, e):
+                continue
+            x = seg_intersect(a, b, c, e)
+            if x is None:  # pragma: no cover - segments that cross are not parallel
+                continue
+            sin = abs(((b[0] - a[0]) * (e[1] - c[1]) - (b[1] - a[1]) * (e[0] - c[0])) / (d * math.dist(c, e)))
+            # ...clear of the LONGER square leg too, which the squaring takes where the short one leaves a zigzag
+            # (`squaring.squared_against`, feature 328 wave 46): set inside it, the vertices were overrun and the run moved
+            reach = (max(half, _ZIGZAG_RUN_FT / 2.0 + 1.0) + SQUARE_LEG_PAD + REJOIN_PAD_FT) / max(sin, 0.2)
+            t = math.dist(a, x)
+            cuts += [t - reach, t + reach]
         for t in sorted(c for c in cuts if 0.0 < c < d):
             out.append((a[0] + (b[0] - a[0]) * t / d, a[1] + (b[1] - a[1]) * t / d))
         out.append(b)

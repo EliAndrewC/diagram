@@ -194,7 +194,9 @@ def settle_fragments(s: Any) -> int:
 def settle_network(s: Any) -> int:
     """Step 5 (ways W17): drop every lane not in the connector's network at the ink tolerance (`law.JOIN_TOL`).
 
-    Research: one network - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane off the connector's network dropped - the network joined here only at an END (`geom.end_components`), where the page joins where treads meet, a departure the code keeps until feature 417 T06 (the round arbiter's ruling on ask:417-T58-red)"""
+    Research:
+        one network - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane off the connector's network dropped - the network joined here only at an END (`geom.end_components`), where the page joins where treads meet, a departure the code keeps until feature 417 T06 (the round arbiter's ruling on ask:417-T58-red)
+        a web with no track out - GUESS: no source could speak to it, a value of ours (feature 417 T59); where no connector is drawn, the network of the greatest total length is kept"""
     lanes = s.M.get("lanes") or []
     live = [i for i, ln in enumerate(lanes) if len(ln.get("pts") or []) >= 2]
     labels = end_components([_pts(lanes[i]) for i in live], law.JOIN_TOL)  # the END-ONLY join, kept here alone until T06 (`geom.end_components`)

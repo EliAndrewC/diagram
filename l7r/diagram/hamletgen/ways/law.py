@@ -449,11 +449,19 @@ def doubled_tails(M: Mapping[str, Any]) -> list[int]:
 def free_end(ways: Sequence[Poly], i: int, q: Pt, boxes: Sequence[tuple[float, float, float, float] | None] | None = None) -> bool:
     """Does the end `q` of way `i` touch no other way (within `JOIN_TOL`)? `boxes` (each way's `_bbox`), where the caller
     has them, pass over a way whose box lies beyond the tolerance (`box_gap`) - the same answer, without its segments."""
-    return all(
-        len(o) < 2 or (boxes is not None and box_gap(q, boxes[k]) > JOIN_TOL) or min(seg_dist(q[0], q[1], u, v) for u, v in zip(o, o[1:], strict=False)) > JOIN_TOL
-        for k, o in enumerate(ways)
-        if k != i
-    )
+    qx, qy = q
+    for k, o in enumerate(ways):
+        if k == i or len(o) < 2:
+            continue
+        if boxes is not None:
+            # ...the box's gap inline (feature 417 T54): `box_gap` asked of every way from every free end grew n^2 with the
+            # web (65,673 calls on seed 39 at 40 households); a box beyond the tolerance on either axis is beyond it
+            b = boxes[k]
+            if b is None or b[0] - qx > JOIN_TOL or qx - b[2] > JOIN_TOL or b[1] - qy > JOIN_TOL or qy - b[3] > JOIN_TOL or box_gap(q, b) > JOIN_TOL:
+                continue
+        if min(seg_dist(qx, qy, u, v) for u, v in zip(o, o[1:], strict=False)) <= JOIN_TOL:
+            return False
+    return True
 
 
 def box_gap(q: Pt, box: tuple[float, float, float, float] | None) -> float:

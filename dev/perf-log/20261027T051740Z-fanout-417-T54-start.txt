@@ -1,0 +1,25 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+homesteads: 3,196,585 calls @20, 6,940,189 calls @40, growth exponent 1.12
+  anchor hamletgen/ways/tree.py:711:rejoined [95]
+    settlement/_geom/primitives.py:116:ccw [244,106|84,796] <- settlement/_geom/primitives.py:115:segments_cross [115,475|39,121] <- hamletgen/ways/tree.py:711:rejoined [95|44]
+    settlement/_geom/primitives.py:115:segments_cross [115,475|39,121] <- hamletgen/ways/tree.py:711:rejoined [95|44]
+  anchor hamletgen/ways/settle/shapes.py:94:fouled_segment [257]
+    settlement/_geom/primitives.py:45:seg_closest [73,374|28,372] <- settlement/_geom/primitives.py:54:seg_dist [69,902|27,259] <- hamletgen/ways/fabric.py:359:<genexpr> [6,065|2,095] <- hamletgen/ways/fabric.py:342:house_hit [383|159] <- hamletgen/ways/settle/shapes.py:94:fouled_segment [257|108]
+    settlement/_geom/primitives.py:54:seg_dist [69,902|27,259] <- hamletgen/ways/fabric.py:359:<genexpr> [6,065|2,095] <- hamletgen/ways/fabric.py:342:house_hit [383|159] <- hamletgen/ways/settle/shapes.py:94:fouled_segment [257|108]
+  anchor hamletgen/homesteads/growth.py:148:settled_seat [267]
+    settlement/core.py:562:px [73,306|39,025] <- settlement/homestead_parts/fixture_seats.py:355:lay_fixtures [1,216|776] <- settlement/rolling/bundle.py:338:_lay_fixtures [1,221|781] <- settlement/rolling/bundle.py:190:_bundle_layout [1,221|781] <- settlement/rolling/bundle.py:161:_bundle_template [2,506|1,344] <- settlement/rolling/bundle.py:80:_bundle_geom [2,506|1,344] <- settlement/rolling/bundle.py:73:_bundle_envelope [416|253] <- hamletgen/homesteads/growth.py:178:household_reach [416|253] <- hamletgen/homesteads/growth.py:404:reach_at [416|253] <- hamletgen/homesteads/growth.py:148:settled_seat [267|116]
+  anchor hamletgen/ways/law.py:512:near_misses [83]
+    hamletgen/ways/law.py:452:<genexpr> [65,673|9,211] <- hamletgen/ways/law.py:449:free_end [3,318|852] <- hamletgen/ways/law.py:512:near_misses [83|42]
+    hamletgen/ways/law.py:459:box_gap [62,355|8,359] <- hamletgen/ways/law.py:452:<genexpr> [65,673|9,211] <- hamletgen/ways/law.py:449:free_end [3,318|852] <- hamletgen/ways/law.py:512:near_misses [83|42]
+  fastest growers @20 -> @40:
+    x7.5 hamletgen/ways/law.py:459:box_gap [8,359 -> 62,355]
+    x7.1 hamletgen/ways/law.py:452:<genexpr> [9,211 -> 65,673]
+    x4.7 'astype' of 'numpy.ndarray' objects [5,307 -> 24,994]
+    x4.5 settlement/rolling/access.py:64:seg_box_within [6,152 -> 27,406]
+    x3.9 fromnumeric.py:48:_wrapfunc [8,122 -> 31,399]
+    x3.6 math.dist [53,411 -> 194,656]
+    x3.0 settlement/rolling/gap_ways.py:141:at [15,568 -> 46,828]
+    x3.0 'extend' of 'list' objects [12,023 -> 35,631]
+
+all stages: 3,196,585 calls @20, 6,940,189 calls @40

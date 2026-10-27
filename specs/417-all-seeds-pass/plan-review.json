@@ -212,9 +212,9 @@
    "declared": "spec-fidelity"
   },
   "### T54 Approach (checklist part A)": {
-   "sha256": "4264ddd82c2a04b62a8c6f19e0b3dbc20d833a44e7133a175fd5efaa0e632385",
+   "sha256": "358a96b1be9e1d03b78fdc75da09ac04d79481afd8d984dae3406ed03bef1e8d",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T55 Approach (checklist part A)": {
@@ -236,7 +236,7 @@
    "declared": "spec-fidelity"
   },
   "### T06 Approach (checklist part A)": {
-   "sha256": "22d08a67cbfaeddcb93d17dfd0bfc2e83733c17e8dc5285daf6e3fcd5f98e6e5",
+   "sha256": "4949b02ebee7c6ae70ee9f009715329236063dcba83a05a80596e195687f2de7",
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
@@ -381,6 +381,12 @@
   },
   "### T58 Approach (checklist part A)": {
    "sha256": "9bff30a8aebd981600fdea488cd5eb8648f472feaf2dd3f908ca5a3e6a8ac592",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T59 Approach (checklist part A)": {
+   "sha256": "094de6d891187f0c8b8dae9d31103742474d6993e2dcbf94b5f4226483338bd4",
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
@@ -4647,6 +4653,65 @@
      "summary": "Item 10: the rules' figures stay as they are.",
      "class": "within",
      "why": "FR-004 leaves the lane law's rules unchanged. The task moves no constant, so the GM's arbitrary-number marking is not engaged."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T06 Approach (checklist part A)",
+    "### T54 Approach (checklist part A)",
+    "### T59 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T54-exit",
+     "summary": "T54's green exit changed from 'gap_ways admission chain at least tenfold down' to: the candidates' cheap refusals asked before any trace, the judgment's scans box-first, each chain's calls measured before and after, cohort and pinned rows passing, claims round clean.",
+     "class": "within",
+     "why": "The tenfold-per-chain figure was the plan's own split of SC-009, not a clause of the request or the spec. The GM asked for an order-of-magnitude cut of the roll (request 'Speed first'), carried by SC-009 on the whole 40-household roll; SC-009 is untouched by this block, and the chain's remainder (~1.2M calls) is explicitly reassigned to T06 rather than dropped, so the purpose (the roll tenfold down) is not gutted. Relaxing a plan-internal share that the measurement showed this route cannot reach, while the spec-level bound stands, does not narrow what was asked."
+    },
+    {
+     "id": "T54-cheap-refusals-stand",
+     "summary": "On the 2026-10-27 re-measure, the existing cheap refusals are kept as they are rather than new no-layout refusals being hoisted before the trace.",
+     "class": "within",
+     "why": "FR-012 requires the refusals that NEED NO LAYOUT to be asked of the whole set before any candidate is laid out. The block's measurement (dated, method stated) shows the stalls in the taut pull cost 45,164 calls in all and the tree's refusals land at its first clause, which judges the traced way - i.e. the remaining refused-run cost is in refusals that need the layout, which FR-012 does not require to precede it. The no-layout refusals named in the goal (corridor ground, own parts, tree reach) are kept ahead of the trace per the exit. This is a measured finding that FR-012's condition is already met, not a decision to skip it."
+    },
+    {
+     "id": "T54-box-first-scans",
+     "summary": "The judgment's scans asked box-first with the same verdicts: tree.rejoined's water legs, fabric.house_hit's houses, law.free_end's ways, access._seg_box_gap rewritten as clip-and-squared-sums held by an oracle test to the old construction.",
+     "class": "within",
+     "why": "Same admission rules and verdicts (constraint 2, FR-004's one predicate per rule unaffected); an indexed/box-first ask is FR-012's 'asked of the whole set at once (an array, a raster or an index)'. FR-008 recorded held: pool manifests unchanged, landing cohort 54/54."
+    },
+    {
+     "id": "T54-residual-to-T06",
+     "summary": "The ~1.2M calls left of the households' ways' own tree judgment (Lawful against the whole tree, tree_base.judged, needles_with, as_joined) handed to T06, to be made incremental there.",
+     "class": "within",
+     "why": "FR-012: 'a network check is asked of what changed, not of the whole network again' - an incremental judgment is exactly that. The households' ways are the web's first layer (T54 item 5), so T06's lane law at lay is the natural home; the work is reassigned inside the feature and recorded as OWED in T06, not removed."
+    },
+    {
+     "id": "T06-owed-from-T54",
+     "summary": "T06 inherits the 1.2M-call households' ways tree judgment and starts from that number.",
+     "class": "within",
+     "why": "Serves FR-012 (network check asked of what changed) and FR-004 (lanes admitted by the lane law before drawn). Note for the session, not a narrowing: T06's order (after T55, before T12) was ruled on ask:417-T06-order on the premise that what T06 still converts measured smaller than T53-T55 (t06-measured.md); that premise predates this transfer of ~1.2M calls. FR-013 orders by calls removed, so T06's rank against T55 is owed a re-measure before T06 is started; the bundle holds no T55 figure to settle it here."
+    },
+    {
+     "id": "T59-claim-text-task",
+     "summary": "A new claim-text-only task making true the three claims impl-drift found on unchanged code in T58's claims round, so T54/T58 land with the claims round clean.",
+     "class": "within",
+     "why": "Every speed task's exit requires 'the claims round clean' and the GM asked the session to land the work (2026-10-26, 'landing it all ... work all 10 ... From start to finish'). It changes no engine code, so FR-010's hold on engine-changing claims tasks is not engaged; it is Constitution XII labeling, the GM's 2026-10-25 instruction that such numbers be marked. Enforcement of what was asked, not new behavior."
+    },
+    {
+     "id": "T59-tread-claim",
+     "summary": "lane_breaches' 3 ft tread where a lane records none claimed against 0081's drawing page (resolving the MISLABELED and UNCLAIMED findings).",
+     "class": "within",
+     "why": "Attaching an existing research source to an existing default; no value moves and no rule changes. Labeling per Constitution XII."
+    },
+    {
+     "id": "T59-settle-network-guess",
+     "summary": "settle_network's choice of the network of greatest length, where no connector is drawn, claimed as a GUESS.",
+     "class": "within",
+     "why": "Considered as a possible narrowing of D11-as-amended (research checked first, a pass run where nothing was looked for, GUESS only after). On the block's own words this is an engineering tie-breaker - which connected component the algorithm keeps when none is joined - inside a step the plan already counts as OWED for deletion (T06's OWED FROM T58), not a world-fact about premodern lane webs that a research pass could speak to; the GM's 2026-10-25 rule for such choices is 'do whatever is algorithmically easier' and mark it. Labeling it a GUESS is that marking. Had it been a historical value, skipping the research step would be a narrowing and the deletion plan would be a cost argument, not a ground."
     }
    ]
   }

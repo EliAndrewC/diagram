@@ -28007,12 +28007,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::house_hit#a tread 3 ft off the wall": {
-  "body": "ebf3eb313c51d5b7",
+  "body": "db83eb307f6d2a58",
   "claim": "a tread 3 ft off the wall - village-lanes.drawing: a lane's tread kept 3 ft clear of a farmhouse wall (`TREAD_WALL_FT`), measured from the tread's middle to every wall (half the tread plus 3 ft), the 3 ft winning over the 6 ft a straightened lane may come up to the buildings (405 T119)",
-  "code": "9bec617db14a5a15",
-  "core": "baed7c5f0ae51271",
-  "date": "2026-10-22",
-  "note": "the code tests from the tread's middle to every wall against half the width plus `TREAD_WALL_FT`=3, and has no 6 ft allowance that could override it; this matches the 3 ft wall clearance that wins over the 6 ft",
+  "code": "30a855ff54df8b84",
+  "core": "0609dc14706142d7",
+  "date": "2026-10-27",
+  "note": "half = width/2 + TREAD_WALL_FT (3.0) is measured from the tread's middle to every wall; the new box prefilter only skips houses whose half-diagonal disc stands farther than that reach from the run's box, so every verdict stays the same and the 3 ft still wins over the 6 ft pull-taut allowance",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -28021,16 +28021,15 @@
    "0081-village-lanes.drawing.html:426f2feb39477167",
    "0081-village-lanes.drawing.html:8d27a46007b683f3"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::house_hit#no house on a tread": {
-  "body": "ebf3eb313c51d5b7",
+  "body": "db83eb307f6d2a58",
   "claim": "no house on a tread - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane - no part of a house (its walls or what they enclose) on the tread",
-  "code": "3018bf42ad6ee560",
-  "core": "baed7c5f0ae51271",
-  "date": "2026-10-22",
-  "note": "a crossing, or an endpoint inside the house's quad, counts as a hit, so no part of a house stands on the tread",
+  "code": "c1bba29d02aae6a6",
+  "core": "0609dc14706142d7",
+  "date": "2026-10-27",
+  "note": "a vertex inside the quad, a crossed wall or a wall within reach is still a hit; the prefilter and the empty-run guard give the same answers as before",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -28038,7 +28037,6 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::lane_fabric#plumbing and geometry": {
@@ -29898,26 +29896,22 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/last_resort.py::lane_breaches#a 3 ft tread width as the default when a lane gives none": {
-  "code": "c78fcb12c207747a",
+ "l7r/diagram/hamletgen/ways/last_resort.py::lane_breaches#a lane's tread where none is recorded": {
+  "body": "fc8b3e7dafcdeeaf",
+  "claim": "a lane's tread where none is recorded - village-lanes.drawing: a web lane drawn 3 ft wide, the footpath's tread - the width every fault test reads of a lane recorded with none",
+  "code": "b1fdaf87a815fb52",
   "core": "c78fcb12c207747a",
   "date": "2026-10-27",
-  "note": "a 3 ft tread width as the default when a lane gives none",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/last_resort.py::lane_breaches#repair policy": {
-  "body": "96ea32e8dd034690",
-  "claim": "repair policy - NONE: each rule is claimed at its predicate in law.py",
-  "code": "1dfda7ee29e12e07",
-  "core": "c78fcb12c207747a",
-  "date": "2026-10-27",
-  "note": "mostly gathers rules claimed at law.py, but `float(ln.get(\"w\") or 3.0)` picks the tread width every fault test uses (the page's \"drawn 3 ft wide\"); the claim should add a 0246 drawing-page claim for that width",
-  "outside": true,
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "`float(ln.get(\"w\") or 3.0)` gives a lane recorded with no width the footpath's 3 ft tread, and every fault test reads that width",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/last_resort.py::lane_violators#repair policy": {
   "code": "10ed2541245f7f1d",
@@ -30655,11 +30649,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::free_end#plumbing and wrappers": {
-  "code": "8b26d1523a341538",
-  "core": "dd7424acdecd09f3",
+  "code": "0949b1a1842186f1",
+  "core": "c2a53a6f4f32def6",
   "date": "2026-10-03",
   "note": "a touch predicate, plumbing",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::fronted_ends#plumbing and wrappers": {
@@ -33223,6 +33219,17 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/settle/ends.py::settle_network#a web with no track out": {
+  "body": "1702ff79e9549ceb",
+  "claim": "a web with no track out - GUESS: no source could speak to it, a value of ours (feature 417 T59); where no connector is drawn, the network of the greatest total length is kept",
+  "code": "9eba523197d616d4",
+  "core": "6d4af2fa1825822e",
+  "date": "2026-10-27",
+  "note": "the cited pages say a track out exists and the lanes form one network, but nothing on them says which network survives when no connector is drawn; keeping the one with the greatest total length is an honest GUESS",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_network#one network": {
   "body": "1702ff79e9549ceb",
   "claim": "one network - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: a lane off the connector's network dropped - the network joined here only at an END (`geom.end_components`), where the page joins where treads meet, a departure the code keeps until feature 417 T06 (the round arbiter's ruling on ask:417-T58-red)",
@@ -33239,15 +33246,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
   "verdict": "DRIFTED"
- },
- "l7r/diagram/hamletgen/ways/settle/ends.py::settle_network#with no connector lane, the network with the longest total lane length is kept and every other network dropped": {
-  "code": "6d4af2fa1825822e",
-  "core": "6d4af2fa1825822e",
-  "date": "2026-10-27",
-  "note": "with no connector lane, the network with the longest total lane length is kept and every other network dropped",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful#the lane law asked of a new lane": {
   "code": "83d6b63ce2165303",
@@ -36523,13 +36521,14 @@
  "l7r/diagram/hamletgen/ways/tree.py::rejoined#its salts, guards and sentinels": {
   "body": "c8703fabe2a0bf1e",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (floor on sin, a divide-by-zero guard)",
-  "code": "b0680cd7dc68039b",
-  "core": "e935f0e80bd31e52",
+  "code": "e6018712468b48ed",
+  "core": "72694fece93e02af",
   "date": "2026-10-25",
   "note": "the 0.2 sin floor is a divide guard on vertices that do not move the line",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::seating_drawn#a corridor kept clear as the web will lay it": {
@@ -65109,11 +65108,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::_seg_box_gap#corridor geometry, memo and search plumbing": {
-  "code": "5f2b5ca561f95f5b",
-  "core": "2825ee86bbc0594c",
+  "code": "3a9f9dbbca340fdb",
+  "core": "c24176fe862e2aca",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::_standing_clear#corridor geometry, memo and search plumbing": {

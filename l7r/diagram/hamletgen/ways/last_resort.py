@@ -62,7 +62,9 @@ def lane_breaches(s: Any, every: bool = False) -> dict[int, list[str]]:
 
     THE RULES BY NAME (feature 385 T01, plan D3): a refusal that named five lanes and no rule (cohort seed 21, 2026-10-13) left
     the session to find which rule by hand; each lane now carries the names of the rules that hold it - every one of its own
-    rules with `every` (a refusal), the first that holds it otherwise."""
+    rules with `every` (a refusal), the first that holds it otherwise.
+
+    Research: a lane's tread where none is recorded - research/questions/0081-village-lanes.drawing.html: a web lane drawn 3 ft wide, the footpath's tread - the width every fault test reads of a lane recorded with none"""
     M = s.M
     lanes = M.get("lanes") or []
     yards, houses = _fabric(s)

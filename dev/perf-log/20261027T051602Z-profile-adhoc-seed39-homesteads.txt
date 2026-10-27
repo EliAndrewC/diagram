@@ -1,0 +1,36 @@
+perf-profile seed 39 stage homesteads: 5.8s under cProfile (the stages before it took 1.7s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261027T051602Z-seed39-homesteads.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         6943074 function calls (6900802 primitive calls) in 5.713 seconds
+
+   Ordered by: cumulative time
+   List reduced from 2591 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.022    0.022    5.777    5.777 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/stages.py:80(stage_homesteads)
+        1    0.000    0.000    2.976    2.976 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/stages.py:273(seat_every_household)
+        1    0.000    0.000    2.975    2.975 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/stages.py:425(_seat_households)
+        1    0.003    0.003    2.975    2.975 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/stages.py:445(_seat_households_as)
+        1    0.012    0.012    2.420    2.420 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/growth.py:373(grow_the_margin)
+        1    0.013    0.013    2.382    2.382 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/gap_ways.py:435(lay_the_ways)
+       40    0.006    0.000    1.949    0.049 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/gap_ways.py:489(_way_for)
+       85    0.002    0.000    1.604    0.019 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/gap_ways.py:574(_first_admitted)
+      103    0.001    0.000    1.053    0.010 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/access.py:542(admitted)
+      103    0.001    0.000    0.934    0.009 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/access.py:651(tree_admits)
+       56    0.001    0.000    0.932    0.017 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/ways/tree.py:824(judge)
+      160    0.000    0.000    0.915    0.006 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/houses.py:429(try_place)
+      160    0.001    0.000    0.915    0.006 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/houses.py:435(_try_place_bundle)
+      160    0.001    0.000    0.835    0.005 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/place.py:130(_place_bundle)
+      160    0.007    0.000    0.834    0.005 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/place.py:185(_place_bundle_nucleated)
+       56    0.004    0.000    0.821    0.015 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/ways/tree.py:250(admits)
+     2506    0.058    0.000    0.675    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/bundle.py:80(_bundle_geom)
+     4779    0.003    0.000    0.670    0.000 {built-in method builtins.next}
+      267    0.003    0.000    0.653    0.002 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/growth.py:148(settled_seat)
+    19272    0.047    0.000    0.649    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+      416    0.001    0.000    0.603    0.001 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/growth.py:404(reach_at)
+      416    0.002    0.000    0.602    0.001 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/growth.py:178(household_reach)
+      416    0.006    0.000    0.588    0.001 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/bundle.py:73(_bundle_envelope)
+      359    0.010    0.000    0.553    0.002 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/fit.py:307(_parts_fit)
+     3364    0.007    0.000    0.546    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/access.py:356(standing_ground)
+
+

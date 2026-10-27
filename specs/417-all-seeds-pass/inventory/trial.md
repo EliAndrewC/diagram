@@ -46,3 +46,10 @@ Every site over 50,000 calls has its task: 1 (T53), 2-5 (T54, T55), 6 (T56).
   answer kept by the two lanes' points) took `lanes_share_tread` 2,976 -> 91 calls, `served_network` 0.24 -> 0.02 profiled s, and
   the web stage 8,101,851 -> 7,208,472 calls (`dev/perf-log/20261027T040412Z-fanout-417-T58.txt`,
   `dev/perf-log/20261027T050246Z-fanout-417-T53b.txt`).
+- **Row 2, the households' ways (T54).** Seed 39 at 40 households, measured 2026-10-27 (`make perf-profile SEED=39 STAGE=homesteads
+  HOUSEHOLDS=40`, `make perf-fanout STAGES="homesteads web"`; the shares by a throwaway call counter in `gap_ways`): the trial's
+  refused candidates are about a third of the chain (626,443 + 45,164 of about 2.05M calls), the admitted ways' judgment about
+  1.2M. The judgment's scans asked box-first (`rejoined`, `house_hit`, `free_end`, `_seg_box_gap` written out), the same verdicts:
+  homesteads 6,940,189 -> 6,172,193 calls, web 7,208,472 -> 6,942,717, `_way_for` 2.25 -> 1.11 profiled s
+  (`dev/perf-log/20261027T052103Z-fanout-417-T54b.txt`). The rest - the admitted ways' lane-law judgment - is T06's (the round
+  arbiter's accept on ask:417-T54-exit).

@@ -47,18 +47,50 @@ TARGET_STEP_PX = 50.0
 
 
 def _seg_box_gap(a: Pt, b: Pt, box: Any) -> float:
-    """The least distance from the segment a-b to the axis-aligned box `(cx, cy, w, h)`; 0 where they meet."""
+    """The least distance from the segment a-b to the axis-aligned box `(cx, cy, w, h)`; 0 where they meet.
+
+    WRITTEN OUT (feature 417 T54): it asked four `segments_cross` and twelve `seg_dist` of every box a leg came near (51,422
+    `seg_dist` under the households' taut pulls on seed 39 at 40 households). The segment meets the box where its clip to the
+    box (Liang-Barsky) leaves a part; else the gap is the least of each end's distance to the box and each corner's distance
+    to the segment - the same quantities, as squared sums and one root."""
     cx, cy, w, h = box
     x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
-    if any(x0 <= p[0] <= x1 and y0 <= p[1] <= y1 for p in (a, b)):
+    ax, ay = a
+    dx, dy = b[0] - ax, b[1] - ay
+    lo, hi = 0.0, 1.0
+    for pp, qq in ((-dx, ax - x0), (dx, x1 - ax), (-dy, ay - y0), (dy, y1 - ay)):
+        if pp == 0.0:
+            if qq < 0.0:
+                lo, hi = 1.0, 0.0
+                break
+        elif pp < 0.0:
+            r = qq / pp
+            if r > lo:
+                lo = r
+        else:
+            r = qq / pp
+            if r < hi:
+                hi = r
+        if lo > hi:
+            break
+    if lo <= hi:
         return 0.0
-    corners = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
-    if any(segments_cross(a, b, corners[k], corners[(k + 1) % 4]) for k in range(4)):
-        return 0.0
-    return min(
-        min(seg_dist(c[0], c[1], a, b) for c in corners),
-        min(seg_dist(p[0], p[1], corners[k], corners[(k + 1) % 4]) for p in (a, b) for k in range(4)),
-    )
+    best = math.inf
+    for px, py in (a, b):
+        gx = x0 - px if px < x0 else (px - x1 if px > x1 else 0.0)
+        gy = y0 - py if py < y0 else (py - y1 if py > y1 else 0.0)
+        d2 = gx * gx + gy * gy
+        if d2 < best:
+            best = d2
+    ll = dx * dx + dy * dy
+    for qx, qy in ((x0, y0), (x1, y0), (x1, y1), (x0, y1)):
+        u = ((qx - ax) * dx + (qy - ay) * dy) / ll if ll > 0.0 else 0.0
+        u = 0.0 if u < 0.0 else (1.0 if u > 1.0 else u)
+        ex, ey = ax + u * dx - qx, ay + u * dy - qy
+        d2 = ex * ex + ey * ey
+        if d2 < best:
+            best = d2
+    return math.sqrt(best)
 
 
 def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:

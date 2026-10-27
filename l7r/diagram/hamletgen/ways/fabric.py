@@ -350,7 +350,18 @@ def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> b
             (`TREAD_WALL_FT`), measured from the tread's middle to every wall (half the tread plus 3 ft), the 3 ft winning over the 6 ft a
             straightened lane may come up to the buildings (405 T119)"""
     half = width / 2.0 + TREAD_WALL_FT
+    if not pts:
+        return False
+    # ...EACH HOUSE PASSED OVER WHERE THE RUN'S BOX CANNOT COME WITHIN ITS REACH (feature 417 T54): a house lies inside the disc of
+    # half its diagonal about its center, so one whose disc stands farther than `half` from the run's box is no hit - the same
+    # verdict (the web's foul test asked every house of every leg: 69,902 `seg_dist` on seed 39 at 40 households)
+    rx0, ry0 = min(q[0] for q in pts), min(q[1] for q in pts)
+    rx1, ry1 = max(q[0] for q in pts), max(q[1] for q in pts)
     for h in houses:
+        hx, hy = float(h["x"]), float(h["y"])
+        reach = math.hypot(float(h["w"]), float(h["h"])) / 2.0 + half
+        if hx + reach < rx0 or hx - reach > rx1 or hy + reach < ry0 or hy - reach > ry1:
+            continue
         quad = rot_rect(float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"]), float(h.get("rot", 0.0)))
         walls = list(zip(quad, quad[1:] + quad[:1], strict=True))
         for i in range(len(pts) - 1):

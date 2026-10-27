@@ -402,3 +402,30 @@ def test_a_point_is_clear_of_the_boxes_as_the_line_tests_judge_it() -> None:
         q = (rng.uniform(-20, 70), rng.uniform(-20, 70))
         assert point_clear(q, [(box, t)]) == (not seg_box_within(q, q, box, t)), (q, box, t)
     assert point_clear((0.0, 0.0), [])
+
+
+def _old_seg_box_gap(a, b, box):  # the construction `_seg_box_gap` replaced (feature 417 T54), kept as its oracle
+    from l7r.diagram.settlement import seg_dist, segments_cross
+
+    cx, cy, w, h = box
+    x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
+    if any(x0 <= p[0] <= x1 and y0 <= p[1] <= y1 for p in (a, b)):
+        return 0.0
+    corners = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+    if any(segments_cross(a, b, corners[k], corners[(k + 1) % 4]) for k in range(4)):
+        return 0.0
+    return min(min(seg_dist(c[0], c[1], a, b) for c in corners), min(seg_dist(p[0], p[1], corners[k], corners[(k + 1) % 4]) for p in (a, b) for k in range(4)))
+
+
+def test_the_written_out_segment_to_box_gap_is_the_old_constructions() -> None:
+    """Feature 417 T54: the clip and the squared sums give the gap the four crossings and twelve distances gave, on random
+    segments and boxes, a point-segment among them."""
+    import random
+
+    rng = random.Random(54)
+    for _ in range(3000):
+        box = (rng.uniform(-50, 50), rng.uniform(-50, 50), rng.uniform(1, 40), rng.uniform(1, 40))
+        a = (rng.uniform(-100, 100), rng.uniform(-100, 100))
+        b = a if rng.random() < 0.05 else (rng.uniform(-100, 100), rng.uniform(-100, 100))
+        assert abs(_seg_box_gap(a, b, box) - _old_seg_box_gap(a, b, box)) < 1e-9, (a, b, box)
+    assert _seg_box_gap((0.0, 30.0), (0.0, 40.0), (0.0, 0.0, 10.0, 10.0)) == 25.0, "a vertical segment past the box"
