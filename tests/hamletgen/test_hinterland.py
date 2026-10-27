@@ -957,3 +957,16 @@ def test_the_grass_ground_takes_its_form_from_the_land() -> None:
     assert grass_ground(types.SimpleNamespace(flood_ground=True)) == "floodplain"
     assert grass_ground(types.SimpleNamespace(flood_ground=False)) == "grass_hill"
     assert grass_ground(types.SimpleNamespace()) == "grass_hill", "a plan with no flood ground recorded"
+
+
+def test_the_scans_lattice_and_its_open_seats_are_the_scans_own() -> None:
+    """Feature 417 T56: the open-ground scan's lattice is its loop's own steps, and the region is asked of the lattice at once -
+    a taken seat left out, an open one kept."""
+    from l7r.diagram.hamletgen.hinterland.parcels.patches import lattice, open_seats
+    from l7r.diagram.settlement._geom.region import Region
+
+    assert lattice(10.0, 40.0, 10.0) == [10.0, 20.0, 30.0, 40.0] and lattice(5.0, 4.0, 1.0) == []
+    region = Region((0.0, 0.0, 100.0, 100.0), 3.0)
+    region.rect(0.0, 0.0, 50.0, 100.0)
+    got = open_seats(region, [20.0, 80.0], [50.0])
+    assert got == {(80.0, 50.0)}, got

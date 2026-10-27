@@ -335,6 +335,31 @@ def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, 
     return [t for t, ok in zip(scored, _through, strict=True) if ok]
 
 
+def lattice(start: float, stop: float, step: float) -> list[float]:
+    """The scan's lattice along one axis: `start`, then each `step` on by repeated addition, while not past `stop` - the
+    values the scan's own loop stepped through (feature 417 T56).
+
+    Research: plumbing - NONE: the scan's own steps, listed"""
+    out: list[float] = []
+    v = start
+    while v <= stop:
+        out.append(v)
+        v += step
+    return out
+
+
+def open_seats(region: Any, xs: Sequence[float], ys: Sequence[float]) -> set[tuple[float, float]]:
+    """The lattice's seats (`xs` by `ys`) the open-ground region leaves open, asked in one array read (`Region.taken_many`,
+    feature 417 T56): a seat it holds taken fails the scan's `_ok`, so `_ok` is asked only of these.
+
+    Research: plumbing - NONE: the region's own verdict, asked of the set at once"""
+    import numpy as np
+
+    gx, gy = np.meshgrid(np.array(xs), np.array(ys))
+    free = ~np.asarray(region.taken_many(gx.ravel(), gy.ravel()))
+    return {(float(a), float(b)) for a, b in zip(gx.ravel()[free], gy.ravel()[free], strict=True)}
+
+
 def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float = 250.0) -> list[Poly]:
     """Find `count` patches of ground still open enough for a managed woodland - by SCANNING.
 
@@ -550,24 +575,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # ...THE LATTICE'S SEATS ASKED OF THE REGION AT ONCE (feature 417 T56): a seat the region holds taken fails `_ok`, and with no
             # crop every seat does, so `_ok` is asked only of the seats one array read leaves open - the same seats qualify
             # (12,589 seats each a call into the region on seed 39 at 40 households, measured 2026-10-27)
-            ys_ = []
-            y = max(half + 40.0, sy0)
-            while y <= min(plan.H - half - 40.0, sy1):
-                ys_.append(y)
-                y += step
-            xs_ = []
-            x = max(half + 40.0, sx0)
-            while x <= min(plan.W - half - 40.0, sx1):
-                xs_.append(x)
-                x += step
-            open_ = set()
-            if crops and xs_ and ys_:
-                import numpy as np
-
-                gx, gy = np.meshgrid(np.array(xs_), np.array(ys_))
-                region = open_ground_region(regions, half, _sb_n, _sb_s, crops, keep, keep_rects, lanes + streams, marshes, (sx0, sy0, sx1, sy1))
-                free = ~np.asarray(region.taken_many(gx.ravel(), gy.ravel()))
-                open_ = {(float(a), float(b)) for a, b in zip(gx.ravel()[free], gy.ravel()[free], strict=True)}
+            ys_ = lattice(max(half + 40.0, sy0), min(plan.H - half - 40.0, sy1), step)
+            xs_ = lattice(max(half + 40.0, sx0), min(plan.W - half - 40.0, sx1), step)
+            open_ = open_seats(open_ground_region(regions, half, _sb_n, _sb_s, crops, keep, keep_rects, lanes + streams, marshes, (sx0, sy0, sx1, sy1)), xs_, ys_) if crops and xs_ and ys_ else set()
             for y in ys_:
                 for x in xs_:
                     if (x, y) in open_ and _ok(x, y):
