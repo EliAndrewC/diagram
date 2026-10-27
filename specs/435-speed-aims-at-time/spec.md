@@ -113,7 +113,10 @@ the closing report.
   grouped by the commit that made them; each group's revert is timed against the current engine (`make perf-ab`, best of N,
   the spread shown); a group is kept where its time shows a gain or where how its work grows with the settlement's size argues
   for it, and reverted otherwise, the evidence recorded either way. Maps unmoved by a revert stay unmoved.
-- **FR-005**: The three cheap fixes are built, each planned with the checklist and its time evidence reported.
+- **FR-005**: The three cheap fixes are planned with the checklist, each with its time evidence reported: the wells' and the notice
+  board's built; the bundle's (T57 item 3) measured and set down - its layouts are already kept per seat offered, and keying them
+  on the household is feature 297's withdrawn change (round arbiter, ask:435-bundle-once, 2026-10-27), recorded with the time it
+  would have bought.
 - **FR-006**: No timing gates anything anywhere: no requirement, test, guard or exit of this feature refuses on a time.
 - **FR-007**: The project's standing guidance says time is the goal and calls the measure, pointing at the checklist, wherever
   `grep -rln "call counts" .specify/memory/constitution.md docs/ dev/performance.md l7r/diagram/CLAUDE.md .claude/agents/`
@@ -131,7 +134,8 @@ the closing report.
   the times.
 - **SC-003** (FR-004): Every candidate hunk is classed; each commit group's A/B is recorded with its spread and its decision;
   no pool manifest moves on a revert.
-- **SC-004** (FR-005): The three cheap fixes land, each with its calls and time evidence before and after, the cohort passing.
+- **SC-004** (FR-005): The wells' and the notice board's fixes land, each with its calls and time evidence before and after, the
+  cohort passing; the bundle's is recorded as set down with its measurement (ask:435-bundle-once).
 - **SC-005** (FR-003, FR-006): No guard, test or exit added by this feature refuses on a timing.
 - **SC-006** (FR-007, FR-008): The constitution and the guidance files name time as the goal; the closing report exists with
   both comparisons.

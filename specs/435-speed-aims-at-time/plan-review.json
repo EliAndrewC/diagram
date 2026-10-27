@@ -90,6 +90,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
+  },
+  "### T06 (T57 item 1, re-measured on the engine T02 left: the wells' per-seat tests are the largest share of `seat_wells`)": {
+   "sha256": "6564744cba85d75901f6697d24d6681277ffcf34cd53700a314a0c05be3b7987",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "b3d53fcf9ff6ce5d9613fb4d5fe8b7a22d85dc20d1a40e2f21a400d145ad8e34",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "0846f5d630ddfd2ddeec3ee43de00f31d085cf0b15b31cab868f44f450fff3ba",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -336,6 +354,59 @@
      "summary": "Declares 'Performance work? No', so checklist parts beyond A are not applied.",
      "class": "within",
      "why": "Accurate: the task changes no code and cuts no calls, so it is not a performance task under FR-001/SC-001 or FR-005; the checklist obligation of FR-005 attaches to the three cheap fixes, which this block does not touch."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T06 (T57 item 1, re-measured on the engine T02 left: the wells' per-seat tests are the largest share of `seat_wells`)",
+    "### T06 Approach (checklist part A)",
+    "### T06 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-mask",
+     "summary": "seat_wells' three per-seat tests (verge, wood floor, belt) gain array forms asked of many seats at once, and SeatSweep keeps each seat's verdict in an array beside its distance table for the stage's later calls",
+     "class": "within",
+     "why": "This is D7's third cheap fix as written: the wells' seats screened by a feasibility mask before the overlap admission. It moves per-seat Python calls into numpy and reuses verdicts instead of asking again, so it removes interpreter work rather than folding calls into a loop - the request's own trap is answered in checklist item 2."
+    },
+    {
+     "id": "T06-admission-kept",
+     "summary": "the overlap admission well_at is still asked of each ranked seat, in the same order",
+     "class": "within",
+     "why": "D7 puts the mask BEFORE the overlap admission, not in place of it; keeping the rule and order is what the fix specifies."
+    },
+    {
+     "id": "T06-maps-may-move",
+     "summary": "a seat at a float boundary may flip; allowed under the GM's 2026-10-18 speed rule, checked by make maps-moved, the cohort, and held to 0196's claims",
+     "class": "within",
+     "why": "Applies a standing GM rule for speed work and keeps the research check (0196 claims round); the request neither forbids nor widens this, and nothing the GM asked for is carved out."
+    },
+    {
+     "id": "T06-exits",
+     "summary": "green exit: landed with make perf-ab evidence and the cohort passing; red: failure recorded, task set down, any cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "The green exit records time evidence and gates on no timing amount (FR-006, the GM: timings are not a gate). The red exit pre-narrows nothing: abandoning a fix the GM asked for is routed to the arbiter, not decided by the session."
+    },
+    {
+     "id": "T06-order",
+     "summary": "after T02 (the reverts), before T07 (notice board)",
+     "class": "within",
+     "why": "The GM's order: checklists, then the reverts, then the three cheap fixes."
+    },
+    {
+     "id": "T06-evidence",
+     "summary": "done measured by make phase-calls and make perf-ab A=<parent> B=HEAD before and after, recorded in research/t06-evidence.md, with the maps-moved result",
+     "class": "within",
+     "why": "FR-005: each fix's time evidence reported; the GM asked to look at time while calls stay the deterministic measure."
+    },
+    {
+     "id": "T06-expected-saving",
+     "summary": "checklist answers: removes work (Python loop into C, verdicts cached); expected saving about 0.1 s unprofiled, 1-2 percent of the 40-household roll, labeled GUESSES; lowers the constant without bending the curve",
+     "class": "within",
+     "why": "The checklist answered honestly, with expected time savings stated as the goal and labeled as guesses rather than claimed. A small expected saving does not change what was asked: the GM named this fix among the three to build."
     }
    ]
   }

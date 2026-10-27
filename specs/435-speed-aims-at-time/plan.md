@@ -163,3 +163,50 @@ None.
 11. **Before fitting things into room.** n/a
 
 **Performance work?** No.
+
+### T06 (T57 item 1, re-measured on the engine T02 left: the wells' per-seat tests are the largest share of `seat_wells`)
+
+- **Approach**: `seat_wells` asks three tests of each lattice seat one Python call at a time: the caller's verge test
+  (`on_a_verge`'s `ok`, a `seg_dist` per lane leg near the seat), the wood floor (`ReservedSeats.disc_covers`) and, for the
+  sort, the belt (`point_in_poly`). Each gains an array form asked of many seats at once - the verge through
+  `primitives.seg_dists` against the legs, in blocks of rows; the wood floor against the reserved seats' points; the belt by
+  the crossing test `SeatSweep.walls` already uses - and `SeatSweep` keeps each seat's verdict in an array beside its distance
+  table (`ok`, keyed by the test, NaN until asked), so the stage's later `seat_wells` calls read it: the sweep is the index
+  (`stage_kept`, keyed as now), the overlap admission `well_at` still asked of each seat ranked, in the same order. Profiled
+  shares, measured 2026-10-27 (make perf-profile SEED=25 STAGE=lane_wells HOUSEHOLDS=40, dev/perf-log/20261027T174428Z-profile-adhoc-seed25-lane_wells.txt): `_seat_ok` 0.230 s, the belt 0.126 s, of the stage's 1.316 s under cProfile.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| verge, wood floor and belt as arrays on the sweep | the scalar tests kept as the arrays' reference in their tests | `make cohort-landing` | `make maps-moved` (a seat at a float boundary may flip; allowed under the GM's 2026-10-18 speed rule, held to 0196's claims) | n/a |
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** The same wells, seated by the same rules, in less time.
+2. **The constraints.** FR-005, FR-006; D7; research/questions/0196-communal-wells-ido.drawing.html (the verge, the cluster
+   well off every lane); the wood floor (feature 287 W25).
+3. **Where each comes from.** O: the lane_wells profile above; R: 0196; G: the GM 2026-10-27, "please proceed with the three cheat fixes" (dictated; "cheat" is "cheap").
+4. **Do they describe the world here?** Re-measured on the engine T02 left (the profile above, and `make phase-calls`: lane
+   wells 2,009,602 calls at seed 39, measured 2026-10-27 (make phase-calls)).
+5. **The order.** After T02; before T07 (the notice board).
+6. **The exits.** Green: landed with its `make perf-ab` evidence, the cohort passing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** A lattice of seats each tested alone - this screens it in bulk.
+8. **The budget.** One landing.
+9. **Done, measured.** `make phase-calls` and `make perf-ab A=<parent> B=HEAD` recorded in research/t06-evidence.md.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** Yes - its answers below.
+
+### T06 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In `lane_wells`, 1.316 s under cProfile, measured 2026-10-27 (make perf-profile SEED=25 STAGE=lane_wells HOUSEHOLDS=40). Of it, `seat_wells`' per-seat tests (`_seat_ok`, the verge's `seg_dist` legs, `disc_covers`, `_in_belt`'s `point_in_poly`) take about 0.36 s, measured 2026-10-27 (make perf-profile SEED=25 STAGE=lane_wells HOUSEHOLDS=40). The overlap admission `well_at` takes 0.282 s and the sweep's distance table 0.148 s, measured 2026-10-27 (make perf-profile SEED=25 STAGE=lane_wells HOUSEHOLDS=40).
+2. **Removes work, or only moves it?** Removes: a loop of Python calls moved into numpy (a loop into C), and each verdict kept
+   on the sweep for the stage's later calls instead of asked again.
+3. **What do you expect it to save, and why?** Most of the per-seat tests' 0.36 s profiled, measured 2026-10-27 (make perf-profile SEED=25 STAGE=lane_wells HOUSEHOLDS=40). Unprofiled that is about 0.1 s, a GUESS from cProfile's inflation (largest on call-dense Python like this) - about 1 to 2 percent of the 40-household roll, a GUESS from the profile's share; the stage itself perhaps a quarter faster, a GUESS.
+4. **How does the work grow with the settlement?** The lattice grows with the cluster's area and the lane legs with the
+   households, so the verge test grows faster than the wells placed; the arrays keep that product but take it out of the
+   interpreter. It does not bend the curve; it lowers its constant.
+5. **What did the before and after show, and under what conditions?** Recorded at landing: `make phase-calls` before and after,
+   `make perf-ab A=<parent> B=HEAD` (best of 3, each arm's spread, the host's load).
+6. **Did any map move, and does it still keep the research?** Recorded at landing: `make maps-moved` and the cohort; a moved
+   well held to 0196's claims by the claims round.

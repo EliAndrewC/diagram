@@ -18,3 +18,5 @@
       research: rendering
 - [ ] T05 0047's drawing page states whether the privy's 48 ft reach covers every privy place, and that a privy with no seat in reach refuses the bundle (impl-drift, T02's claims round)
       research: rendering
+- [ ] T06 The wells' seats screened in bulk: the verge, the wood floor and the belt asked of the lattice as arrays, kept on the stage's sweep, before the overlap admission (T57 item 1; T03's first fix)
+      research: rendering

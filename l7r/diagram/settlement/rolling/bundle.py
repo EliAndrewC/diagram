@@ -78,8 +78,8 @@ class BundleGeomMixin:
         return self._bbox_of([self._bundle_geom(hx, hy, hw, hh, side, shed)["bbox"] for side in self._NUC_SIDES])
 
     def _bundle_geom(self: Settlement, hx: float, hy: float, hw: float, hh: float, garden_side: str = "E", shed: bool = False, rot: float | None = None) -> dict[str, Any]:  # type: ignore[misc]
-        """The bundle at (hx, hy): its UNRAKED layout, built once per household and size (`_bundle_layout`), moved here
-        and turned by this seat's rake (feature 276, FR-003, plan D10).
+        """The bundle at (hx, hy): its UNRAKED layout, built once per seat offered, size and garden side (`_bundle_template`,
+        `_bundle_layout`), moved here and turned by this seat's rake (feature 276, FR-003, plan D10).
 
         WHY ONCE. The placer asks for this bundle at every candidate seat - the spiral's offsets, every 2 px of a
         slide, four garden sides - and rebuilt it each time (46,781 builds on the rescue scenario). A layout relative
@@ -89,6 +89,10 @@ class BundleGeomMixin:
         Recorded: the same distributions, rolled per household). The RAKE stays the seat's, applied after the move, so
         the homestead still turns as one piece wherever it lands (GM 2026-09-26). Outside a seat search the rolls key
         on (hx, hy) as they always did. `rot` overrides the seat's turn (0.0: the unturned layout a caller measures).
+        ONCE PER SEAT OFFERED, NOT PER HOUSEHOLD: each `_place_bundle` call is a seat offered and its own key - keying the rolls
+        on the household was tried and withdrawn (feature 297, `place.py`) - so a household offered from many seats lays as
+        many layouts (2,369 for 40 households at seed 25, measured 2026-10-27 by `make perf-profile`; feature 435 set down
+        building them once per household on that ground, ask:435-bundle-once).
 
         THE GROUND CLEARED IS THE GROUND DRAWN, AT ANY TURN (269 B18). The parts keep their true sizes - the drawing and
         the fixtures read a part in its house's frame - and `boxes` holds each part's axis-aligned box AS DRAWN, turned
