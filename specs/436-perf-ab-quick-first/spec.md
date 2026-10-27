@@ -31,7 +31,8 @@ version, in a couple of minutes, and iterates on that.
 
 1. **Given** two commits, **When** `make perf-ab A=<commit>` runs with nothing else set, **Then** it times seed 25 at 40
    households, 6 runs a version, and prints each version's best wall time and spread, best CPU time and spread, and calls.
-2. **Given** `SEED=` and `HOUSEHOLDS=`, **Then** the quick form times that seed at that size instead.
+2. **Given** `SEEDS=` and `HOUSEHOLDS=` naming one seed and one size, **Then** the quick form times that seed at that size
+   instead.
 
 ### User Story 2 - Quick first, enforced (Priority: P1)
 
@@ -60,18 +61,20 @@ two engines is on record, the way `make done` will not run before `make quick` h
 
 ## Requirements *(mandatory)*
 
-- **FR-001**: `make perf-ab A=<commit> [B=<commit>]` with no form set is the quick form: `SEED` (default 25) at
-  `HOUSEHOLDS` (default 40), `N` runs a version (default 6).
-- **FR-002**: The subset form takes `SEEDS=` and `HOUSEHOLDS=` lists; the full form, `FULL=1`, is the present sweep (`make
-  perf SCALING=1`'s legs, `N` default 3).
+- **FR-001**: The form is decided by what is compared, never by which variable is spelled how: `SEEDS=` and `HOUSEHOLDS=`
+  are lists (defaults `25` and `40`); exactly one seed at exactly one size is the QUICK form (`N` default 6); more than one
+  seed or more than one size is the SUBSET form (`N` default 3); `FULL=1` is the FULL form, the present sweep (`make perf
+  SCALING=1`'s legs, `N` default 3). `make perf-ab A=<commit> [B=<commit>]` with nothing else set is the quick form, seed 25
+  at 40 households.
+- **FR-002**: The subset form times every seed listed at every size listed.
 - **FR-003**: Every form alternates the order A B, B A, A B, ...; prints, per seed and size, each version's best wall time
   and spread, best CPU time and spread, and calls, and the change between versions in each; and exits 0 whatever the times.
 - **FR-004**: A quick comparison is recorded (local to the clone, never pushed) under both engines' code keys, the keys
   ignoring docstrings and comments as the project's other engine keys do.
-- **FR-005**: The subset and full forms refuse, before any roll, unless that record holds a quick comparison of the same two
-  engine keys; the refusal names the quick command; `PERF_AB_QUICK_OK="<reason>"` overrides it, the reason recorded where
+- **FR-005**: Every run that is not the quick form refuses, before any roll, unless that record holds a quick comparison of
+  the same two engine keys; the refusal names the quick command; `PERF_AB_QUICK_OK="<reason>"` overrides it, the reason recorded where
   the project's escapes are recorded.
-- **FR-006**: `make perf-ab AA=1 [SEED=] [HOUSEHOLDS=] [N=]` takes the noise floor of a quick form: one engine (default
+- **FR-006**: `make perf-ab AA=1 [SEEDS=<one seed>] [HOUSEHOLDS=<one size>] [N=]` takes the noise floor of a quick form: one engine (default
   HEAD) against itself, recorded per seed, size and run count; a quick comparison prints the latest floor of its form beside
   its result.
 - **FR-007**: No requirement, test or exit of this feature refuses on a time (feature 435 FR-006 stands).
@@ -91,6 +94,11 @@ two engines is on record, the way `make done` will not run before `make quick` h
 - A seed the generator refuses at a size prints "refused" for both versions, as today.
 - An older commit as A: the quick and subset forms roll through code the older commit already has (the reference hamlet's
   roll and the per-stage timing), so any engine since feature 435 can be compared.
+
+## Review history
+
+- 2026-10-27, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED - nothing decided which form a run is, so `HOUSEHOLDS=20,40`
+  read as quick and skipped the refusal; the form is now decided by the count of seeds and sizes compared (FR-001, FR-005).
 
 ## Assumptions
 
