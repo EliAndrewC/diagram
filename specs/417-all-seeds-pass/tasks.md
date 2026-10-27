@@ -121,8 +121,9 @@
       research: rendering
       verify: DONE. landed: R8's probe complete (P1 added); each needed step's conversion decided in part C, reviewed CLEAR; built by T06
 
-- [ ] T58 (T06 part A) One network asked one way: every network test but the settle's one-network step asks the treads-meeting join (that step's end-only join deleted in T06, the round arbiter's ruling on ask:417-T58-red); a web run joined to the connector's network; a link kept only where it touches both sides, in l7r/diagram/hamletgen/ways/ (FR-004, FR-006)
+- [x] T58 (T06 part A) One network asked one way: every network test but the settle's one-network step asks the treads-meeting join (that step's end-only join deleted in T06, the round arbiter's ruling on ask:417-T58-red); a web run joined to the connector's network; a link kept only where it touches both sides, in l7r/diagram/hamletgen/ways/ (FR-004, FR-006)
       research: rendering
+      verify: DONE. landed: one network asked one way (geom.lanes_share_tread behind _components: served_network, law.lane_networks, tidy, smooth, knots; an X crossing joins), runs joined to the connector's network, links kept only where they touch both sides (the 12 ft GUESS gone), the shadow against every way, a link's width from the connector's network; settle_network keeps the end-only join until T06 (round arbiter ask:417-T58-red, route B; seed 26 measured, t58-red.md). Web calls at 40 households 10.46M -> 8.10M (make perf-fanout, dev/perf-log/20261027T040412Z-fanout-417-T58.txt)
 
 - [ ] T53 (FR-012) The web's whole-network checks asked of what changed: served_network, lanes_share_tread and the rest the trial inventory names, asked of the lanes a step added or moved, not every pair again, in l7r/diagram/hamletgen/ways/ (FR-012)
       research: rendering
