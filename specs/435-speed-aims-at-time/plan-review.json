@@ -78,6 +78,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
+  },
+  "### T05 (impl-drift's two notes outside T02's change, 2026-10-27: 0047's drawing page states the 48 ft reach (research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html) only for the sunny side, and records no choice for a privy with no seat in reach)": {
+   "sha256": "e78d1cc0227b2a95589d9e72bd5dd4d775bb9949baa116c52b43a6dde8a5d764",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "d0c91eb9402062821c4ead6d19cc11e3bdd7d0126931a3b8708058d545523a99",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -284,6 +296,46 @@
      "summary": "Files touched: the checklist doc, task-add.py, Makefile, perf_ab.py (new), perf_snapshot.py, perf-audit.md, the constitution, CLAUDE.md, dev/performance.md, docs/guards.md, reverted engine files, fixes' modules.",
      "class": "within",
      "why": "Matches FR-001, FR-002, FR-003, FR-007's five sites; docs/make-targets.html left alone as FR-007 says."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T05 (impl-drift's two notes outside T02's change, 2026-10-27: 0047's drawing page states the 48 ft reach (research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html) only for the sunny side, and records no choice for a privy with no seat in reach)",
+    "### T05 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05-record-reach",
+     "summary": "0047's drawing page records that every privy seat offered (the sunny side's and the four places' outward steps alike) is held to the privy reach (within_reach_of, PRIVY_SUN_MAX_FT, far corner to the house's walls), as the code reads 2026-10-27; labeled a decision of this project's.",
+     "class": "within",
+     "why": "A record-only correction that brings the research page into line with the code the feature's T02 claims round read; it removes nothing the GM asked for (checklist, reverts, three cheap fixes) and narrows no requirement. The 48 ft figure is the page's own design constant, cited to its page, not a measurement."
+    },
+    {
+     "id": "T05-record-refusal",
+     "summary": "The page records that a privy with no seat in reach raises FixtureUnlaid, the bundle is not the household's, and another seat or garden side is sought - never a privy past the reach, never a farm short of one; labeled a map drawing convention.",
+     "class": "within",
+     "why": "Describes existing behavior; it neither changes the engine nor carves a case out of any rule the request or spec sets. Labeling per Constitution XII is standing project process."
+    },
+    {
+     "id": "T05-no-engine-change",
+     "summary": "Worked as a page session; no engine code changes; pool manifests unmoved.",
+     "class": "within",
+     "why": "Confines the task to the record; nothing asked for is dropped by it, and it cannot move calls or time of any cheap fix or revert."
+    },
+    {
+     "id": "T05-order-exits-done",
+     "summary": "Runs after T02 lands, independent of T03/T04; green exit is the two blocks written and checked by make record-owed; red exit records the failure and goes to make arbiter-ask; done when make claims-owed names no privy claim of lay_fixtures against the page or its round is IN-STEP; budget one landing.",
+     "class": "within",
+     "why": "Sequencing and exit conditions for a record task; no exit refuses on a timing (FR-006 / SC-005 untouched) and none narrows FR-004/FR-005."
+    },
+    {
+     "id": "T05-not-performance-work",
+     "summary": "Declares 'Performance work? No', so checklist parts beyond A are not applied.",
+     "class": "within",
+     "why": "Accurate: the task changes no code and cuts no calls, so it is not a performance task under FR-001/SC-001 or FR-005; the checklist obligation of FR-005 attaches to the three cheap fixes, which this block does not touch."
     }
    ]
   }

@@ -158,26 +158,32 @@ Each step measured alone:
 
 None.
 
-### T05 (<why: the finding or measurement that files it>)
+### T05 (impl-drift's two notes outside T02's change, 2026-10-27: 0047's drawing page states the 48 ft reach (research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html) only for the sunny side, and records no choice for a privy with no seat in reach)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: 0047's drawing page gains what the code does, read 2026-10-27 in `fixture_seats.lay_fixtures`: every privy
+  seat offered, the sunny side's and the four places' outward steps alike, is held to the privy's reach (`within_reach_of`,
+  `PRIVY_SUN_MAX_FT`, far corner to the house's walls; research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html); a privy with no seat in reach raises `FixtureUnlaid`, so the bundle
+  is not the household's and another seat or garden side is sought - never a privy past the reach, never a farm kept short
+  of one. Each labeled (the reach a decision of this project's, the refusal a map drawing convention). Worked as a page
+  session (`make page-session`); no engine code changes.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the page's two blocks | n/a (record only) | n/a | none (no code) | n/a |
 
 ### T05 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The record says how far from its house every privy stands, and what a farm whose privy
+   cannot stand within that reach does.
+2. **The constraints.** Constitution XII (every rendering decision labeled); `research/CLAUDE.md`.
+3. **Where each comes from.** O: impl-drift's reply on T02's claims, 2026-10-27; the code read the same day.
+4. **Do they describe the world here?** Yes: the code is the hamlet's, which every pool hamlet rolls.
+5. **The order.** After T02 lands; independent of T03 and T04.
+6. **The exits.** Green: the page's two blocks written and checked (`make record-owed`'s checks). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** `make claims-owed` names no privy claim of `lay_fixtures` against the changed page, or its round is IN-STEP.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** No.
