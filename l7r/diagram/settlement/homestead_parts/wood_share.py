@@ -42,7 +42,7 @@ import math
 from collections.abc import Iterable, Mapping, Sequence
 from typing import TYPE_CHECKING, Any
 
-from .._geom import PointGrid, Pt, seg_dist, segments_cross
+from .._geom import PointGrid, Pt, seg_dist, seg_dists, segments_cross
 from ..land.wet import marsh_ground
 from ..shrines_wells.byres import BYRE_FT
 from .grove_blocks import GroveBlocks
@@ -402,12 +402,13 @@ class WoodShares:
             cells = [(i, j) for i in range(i0, i1 + 1) for j in range(j0, j1 + 1) if (i, j) in grid.buckets]
         else:
             cells = [k for k in grid.buckets if i0 <= k[0] <= i1 and j0 <= k[1] <= j1]
-        for i, j in cells:
-            if seg_dist((i + 0.5) * c, (j + 0.5) * c, a, b) >= reach:
-                continue
-            if any(seg_dist(sx, sy, a, b) < gap for sx, sy, *_ in grid.buckets[(i, j)]):
-                return True
-        return False
+        # ...BOTH DISTANCES ASKED AS ARRAYS (feature 437, the array geometry trial, FR-002): the cells' centers in one call, then the
+        # seats of every cell in reach in one call, where each was a `seg_dist`
+        if not cells:
+            return False
+        inside = seg_dists([((i + 0.5) * c, (j + 0.5) * c) for i, j in cells], [(a, b)])[:, 0] < reach
+        near = [(s[0], s[1]) for k, ok in zip(cells, inside, strict=True) if ok for s in grid.buckets[k]]
+        return bool(near) and bool((seg_dists(near, [(a, b)]) < gap).any())
 
     def file(self, circles: Iterable[tuple[float, float, float]], rects: Iterable[tuple[float, float, float, float]]) -> None:
         """File keep-outs every later seat is read against."""
