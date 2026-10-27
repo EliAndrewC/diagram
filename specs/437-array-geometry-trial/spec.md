@@ -74,7 +74,8 @@ which tooling or process changes those times point at, to make iterating on perf
 - **SC-001** (FR-001): The report names the predicate and its hottest caller, and their measured share of the profiled time.
 - **SC-002** (FR-002, FR-003): The array form's test passes on random cases and the landing cohort passes (or the trial is set
   down with the reason).
-- **SC-003** (FR-004, FR-005): The report shows the quick and subset A/Bs with the floor, and the phase-calls before and after.
+- **SC-003** (FR-004, FR-005): The report shows the quick A/B with the floor and the phase-calls before and after, and the
+  subset A/B where the trial lands (a trial set down by FR-005 runs no subset).
 - **SC-004** (FR-006): The report's process section lists every step with its time and the total split into work and waits;
   every step over five minutes names an improvement with the time it would save, or says why none is seen.
 - **SC-005** (FR-007): Nothing added refuses on a time.
