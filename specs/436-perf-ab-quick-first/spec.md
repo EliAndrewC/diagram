@@ -106,6 +106,7 @@ two engines is on record, the way `make done` will not run before `make quick` h
 - 2026-10-27, round 2 (spec-fidelity-verify): FAITHFUL.
 - 2026-10-27, round 3 (spec-fidelity-verify, on the success criteria spec-lint asked for): CHANGES REQUIRED - SC-001 could not
   fail on FR-002; SC-006 now measures the subset form's rows.
+- 2026-10-27, round 4 (spec-fidelity-verify): FAITHFUL.
 
 ## Assumptions
 
