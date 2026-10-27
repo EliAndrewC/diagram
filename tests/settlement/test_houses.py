@@ -151,6 +151,16 @@ def test_fits_steers_off_a_grove():
     assert s._fits(505, 505, 20, 20) is False
 
 
+def test_the_placed_clearance_is_fits_last_test_and_a_screen_alone():
+    """Feature 435 T08: `_clear_of_placed` is `_fits`' clearance from what stands, askable first - a seat on a house is refused
+    by both, a seat clear of it admitted by the screen whatever else `_fits` asks."""
+    s = Settlement(1000, 1000, seed=1)
+    s.placed.append((500, 500, 40, 30))
+    assert s._clear_of_placed(505, 505, 10, 10) is False and s._fits(505, 505, 10, 10) is False
+    assert s._clear_of_placed(700, 700, 10, 10) is True and s._fits(700, 700, 10, 10) is True
+    assert s._clear_of_placed(20, 20, 10, 10) is True and s._fits(20, 20, 10, 10) is False  # off the sheet: `_fits`' own margin
+
+
 def test_abandoned_ruin_draws_as_a_lone_house_and_big_glyph_renders():
     # the geom-less lone-house path in _farmsteads_bundle now serves ONLY abandoned ruins - the dispersed
     # headman that used to share it gets a full bundle since 2026-07-21 (the Hikari fix). The ruin must

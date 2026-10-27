@@ -21,3 +21,7 @@
 - [x] T06 The wells' seats screened in bulk: the verge, the wood floor and the belt asked of the lattice as arrays, kept on the stage's sweep, before the overlap admission (T57 item 1; T03's first fix)
       research: rendering
       verify: DONE. landed: the wells' verge, wood-floor and belt tests asked of the lattice as arrays and kept on the sweep; lane wells -24% calls, the roll ~3% faster at 40 households on two seeds (research/t06-evidence.md)
+- [ ] T07 seat_wells' belt claim says belt seats rank behind coverage, never refused; 0072's drawing page states the maps' rule of seating wells outside the belt first (impl-drift, T06's claims round)
+      research: rendering
+- [ ] T08 The notice board's seats screened by the houses and yards before the full house-fit test (T57 item 2; T03's second fix)
+      research: rendering

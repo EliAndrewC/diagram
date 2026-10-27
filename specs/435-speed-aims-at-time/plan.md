@@ -210,3 +210,70 @@ None.
    `make perf-ab A=<parent> B=HEAD` (best of 3, each arm's spread, the host's load).
 6. **Did any map move, and does it still keep the research?** Recorded at landing: `make maps-moved` and the cohort; a moved
    well held to 0196's claims by the claims round.
+
+### T07 (impl-drift's two notes outside T06's change, 2026-10-27: the belt claim's wording, and 0072's page silent on the rule)
+
+- **Approach**: `seat_wells`' claim "not in the windbreak" says what the code does: a belt seat is ranked behind coverage (the
+  worst walk's bucket) and the first well's look ahead, never refused; and 0072's drawing page
+  (research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html) gains the maps' rule beside its
+  block on a wellhead in a belt - among seats that serve the households alike, one outside the belt is taken first - labeled
+  this project's choice. The page worked as a page session (`make page-session`); the claim a docstring edit.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the claim and the page's block | n/a (record and docstring only) | n/a | none (no code) | n/a |
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** The record says how the maps keep a well out of the shelter belt, as the code does it.
+2. **The constraints.** Constitution XII (every rendering decision labeled); `research/CLAUDE.md`.
+3. **Where each comes from.** O: impl-drift's reply on T06's claims, 2026-10-27; the code read the same day.
+4. **Do they describe the world here?** Yes: every hamlet with a belt seats its wells this way.
+5. **The order.** After T06; independent of T08 and T04.
+6. **The exits.** Green: the claim reworded and the page's block written and checked (`make record-owed`'s checks). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The claims round on `seat_wells` IN-STEP against the changed page.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** No.
+
+### T08 (T57 item 2, re-measured on the engine T02 left: the notice board's route seats each run the full house-fit test)
+
+- **Approach**: `_route_seats` asks `_fits` of every seat that clears the view, the placard, the beds and the water; `_fits`
+  runs the field-bund, blocked and hard-ground tests before the indexed clearance from what stands (the houses, their yards
+  and parts, `self.placed`, and the groves). That tail of `_fits` becomes its own method (`_clear_of_placed`), which `_fits`
+  still calls last; `_route_seats` asks it first, as the screen, so a seat a house or a yard already refuses is never put
+  through the rest. The screen is the same index (`_reach_index`, versioned by the registry) asked once more of each seat that
+  passes it - a pure conjunction, so no seat's verdict changes. Profiled shares, measured 2026-10-27 (make perf-profile SEED=25 STAGE=notice HOUSEHOLDS=40, dev/perf-log/20261027T174447Z-profile-adhoc-seed25-notice.txt): `_route_seats` 0.282 s and `_fits`
+  0.117 s of the stage's 0.430 s under cProfile.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the placed clearance asked first | `_fits`' verdict unchanged on random seats (its test) | `make cohort-landing` | `make maps-moved` (none expected: the same conjunction) | n/a |
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** The same notice board, sited by the same rules, in less time.
+2. **The constraints.** FR-005, FR-006; D7; research/questions/0190-notice-boards-kosatsuba.drawing.html (the board's seat).
+3. **Where each comes from.** O: the notice profile above; G: the GM 2026-10-27, "please proceed with the three cheat fixes" (dictated; "cheat" is "cheap").
+4. **Do they describe the world here?** Re-measured on the engine T02 left (the profile above, and `make phase-calls`: notice 953,393 calls at seed 39, measured 2026-10-27 (make phase-calls)).
+5. **The order.** After T06; before T04.
+6. **The exits.** Green: landed with its `make perf-ab` evidence, the cohort passing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** A band of seats each put through the whole house-fit test - this screens it.
+8. **The budget.** One landing.
+9. **Done, measured.** `make phase-calls` and `make perf-ab A=<parent> B=HEAD` recorded in research/t08-evidence.md.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** Yes - its answers below.
+
+### T08 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In `notice`, 0.430 s under cProfile, measured 2026-10-27 (make perf-profile SEED=25 STAGE=notice HOUSEHOLDS=40, dev/perf-log/20261027T174447Z-profile-adhoc-seed25-notice.txt). Of it, `_route_seats` takes 0.282 s and its `_fits` 0.117 s, measured 2026-10-27 (make perf-profile SEED=25 STAGE=notice HOUSEHOLDS=40, dev/perf-log/20261027T174447Z-profile-adhoc-seed25-notice.txt); `_fits`' field-bund test takes 0.052 s and its blocked test 0.032 s, measured 2026-10-27 (make perf-profile SEED=25 STAGE=notice HOUSEHOLDS=40, dev/perf-log/20261027T174447Z-profile-adhoc-seed25-notice.txt).
+2. **Removes work, or only moves it?** Removes: a cheap indexed screen before an expensive test, so a refused seat skips the bund, blocked and hard-ground tests.
+3. **What do you expect it to save, and why?** At most the bund and blocked tests' 0.084 s profiled, measured 2026-10-27 (make perf-profile SEED=25 STAGE=notice HOUSEHOLDS=40, dev/perf-log/20261027T174447Z-profile-adhoc-seed25-notice.txt), for the seats a house refuses - about 0.03 s unprofiled, a GUESS from cProfile's inflation, under half a percent of the 40-household roll. The GM named the fix; the honest answer is that it is small.
+4. **How does the work grow with the settlement?** The band's seats grow with the main ways' length and the houses beside them; the screen keeps that product and drops the dearer tests from most of it. It lowers the constant, not the curve.
+5. **What did the before and after show, and under what conditions?** Recorded at landing: `make phase-calls` before and after, `make perf-ab A=<parent> B=HEAD` (best of 3, each arm's spread, the host's load; legs timed from their stages since T06).
+6. **Did any map move, and does it still keep the research?** Recorded at landing: `make maps-moved` and the cohort; none expected, the conjunction being the same.

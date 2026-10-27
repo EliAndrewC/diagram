@@ -108,6 +108,36 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
+  },
+  "### T07 (impl-drift's two notes outside T06's change, 2026-10-27: the belt claim's wording, and 0072's page silent on the rule)": {
+   "sha256": "c1bd43ba50eaa94786efd2c7e07f7272764e6e1a3d2237bd31d22b4f9dbb8706",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "dd6461b685db3e1d94e8269aee9532fc3bd737cf42ae0d6a06f13bbf189a495d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T08 (T57 item 2, re-measured on the engine T02 left: the notice board's route seats each run the full house-fit test)": {
+   "sha256": "e9413cc26f349b41868951194c8b59b57538040e37247ea1d6b7afb7bc5cc63a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Approach (checklist part A)": {
+   "sha256": "00d0ed83ea47166855c06c427a8b04ab451f2673b061cd1d194ffac333b2cc97",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "d7285948e9e5213a44e8a78032f239130f4980a52ca3aea60c3c13fb0f5b3875",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -462,6 +492,108 @@
      "why": "The GM's order: the checklist, then the reverts, then the three cheap fixes; sequencing among the fixes is left open by the request and the spec."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T07 (impl-drift's two notes outside T06's change, 2026-10-27: the belt claim's wording, and 0072's page silent on the rule)",
+    "### T07 Approach (checklist part A)",
+    "### T08 (T57 item 2, re-measured on the engine T02 left: the notice board's route seats each run the full house-fit test)",
+    "### T08 Approach (checklist part A)",
+    "### T08 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T07-claim",
+     "summary": "seat_wells' docstring claim 'not in the windbreak' reworded to what the code does: a belt seat is ranked behind coverage and the first well's look-ahead, never refused.",
+     "class": "within",
+     "why": "Brings the record of the wells fix (FR-005, T06) into step with its code; no behavior changes and nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T07-page",
+     "summary": "0072's drawing page gains the maps' rule (among seats serving the households alike, one outside the belt is taken first), labeled this project's choice, worked as a page session.",
+     "class": "within",
+     "why": "Records an existing rendering rule with its label (Constitution XII) after the wells change; adds no behavior and narrows no clause of the request or FR-005."
+    },
+    {
+     "id": "T07-order-exits",
+     "summary": "T07 after T06, independent of T08 and T04; green is the claims round IN-STEP, red is set down and ruled via arbiter-ask; not performance work.",
+     "class": "within",
+     "why": "Sequencing and exits only; nothing time-gated (FR-006)."
+    },
+    {
+     "id": "T08-screen",
+     "summary": "The indexed placed-clearance tail of _fits is split into _clear_of_placed, which _fits still calls last; _route_seats asks it first as a screen so a seat a house or yard refuses skips the bund, blocked and hard-ground tests.",
+     "class": "within",
+     "why": "Is D7's notice-board fix as written (route seats screened by an index of the houses and yards before the full house-fit test); its reach (parts, placed, groves) is the existing index, a superset that does not narrow D7."
+    },
+    {
+     "id": "T08-no-verdict-change",
+     "summary": "The screen is a pure conjunction, so no seat's verdict changes; pinned by a test that _fits' verdict is unchanged on random seats, maps-moved expected none.",
+     "class": "within",
+     "why": "Enforces that the fix changes time only, not the maps; a test enforcing the requested fix, not new behavior."
+    },
+    {
+     "id": "T08-small-saving",
+     "summary": "The checklist answers that the expected saving is small (at most the profiled bund+blocked share for refused seats, an unprofiled figure labeled a GUESS) and proceeds because the GM named the fix.",
+     "class": "within",
+     "why": "The GM asked for the three cheap fixes to be done with the checklist and their time evidence reported (FR-005); proceeding while stating the saving honestly is what the request asks, not a narrowing."
+    },
+    {
+     "id": "T08-exits-evidence",
+     "summary": "Green is landing with phase-calls before/after and perf-ab A=<parent> B=HEAD recorded in research/t08-evidence.md, the cohort passing; red is set down and ruled via arbiter-ask.",
+     "class": "within",
+     "why": "Time evidence is recorded, never a threshold (FR-005 reports it, FR-006 forbids gating on it); no exit refuses on a time."
+    },
+    {
+     "id": "T08-order",
+     "summary": "T08 after T06 and before T04.",
+     "class": "within",
+     "why": "Sequencing among the requested cheap fixes; drops none of them."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T08 (T57 item 2, re-measured on the engine T02 left: the notice board's route seats each run the full house-fit test)",
+    "### T08 Approach (checklist part A)",
+    "### T08 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T08-screen",
+     "summary": "Split the indexed clearance from what stands (_reach_index: houses, yards and parts, self.placed, groves) out of _fits as _clear_of_placed; _route_seats asks it first as a screen, _fits still calls it last, so seats a house or yard refuses skip the bund, blocked and hard-ground tests.",
+     "class": "within",
+     "why": "This is D7's notice-board fix as worded: route seats screened by an index of the houses and yards before the full house-fit test. The index also covers placed items and groves, but it is the same clearance _fits already applies, and the check is a pure conjunction, so no seat's verdict changes and nothing the GM asked for is narrowed. FR-005 requires this fix to be built, and this plan builds it."
+    },
+    {
+     "id": "T08-pins",
+     "summary": "Verification: a test that _fits' verdict is unchanged on random seats, make cohort-landing, make maps-moved (no moves expected).",
+     "class": "within",
+     "why": "These checks only enforce that the requested fix keeps the same siting ('the same notice board, sited by the same rules'). They are enforcement, not unrequested scope."
+    },
+    {
+     "id": "T08-evidence",
+     "summary": "Done when make phase-calls and make perf-ab A=<parent> B=HEAD before and after are recorded in research/t08-evidence.md; green is landing with that evidence and the cohort passing; red is recording what failed and setting the task down, with a claim of impossibility ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "FR-005 asks for each fix's time evidence to be reported, and SC-004 asks for calls and time before and after. The exits record timings and refuse on none, so FR-006 and the GM's 'timings are not a gate' hold."
+    },
+    {
+     "id": "T08-small-saving",
+     "summary": "The fix proceeds even though the expected saving is stated honestly as small: at most 0.084 s profiled, about 0.03 s unprofiled (labeled a GUESS), under half a percent of the 40-household roll.",
+     "class": "within",
+     "why": "The GM named the three cheap fixes and asked that they be done, and FR-005 requires the notice board's fix to be built. The change removes work (dearer tests are skipped) rather than folding calls into a loop, so it is not the trap the request warns against. Stating that the saving is small follows the checklist's sensibility; it does not narrow anything."
+    },
+    {
+     "id": "T08-order-budget",
+     "summary": "Ordered after T06 and before T04; budget of one landing.",
+     "class": "within",
+     "why": "Sequencing and budget among the requested tasks do not touch what was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -511,6 +643,44 @@
      "summary": "After T02, before T07 (the notice board).",
      "class": "within",
      "why": "The GM's order: the checklist, then the reverts, then the three cheap fixes; sequencing among the fixes is left open by the request and the spec."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T08": {
+   "section_sha256": "2e0aefb8ed4519c7e8ee8f357b05639751857e4bad1d0652337cfc7b2f4c1128",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T08-screen",
+     "summary": "Split the indexed clearance from what stands (_reach_index: houses, yards and parts, self.placed, groves) out of _fits as _clear_of_placed; _route_seats asks it first as a screen, _fits still calls it last, so seats a house or yard refuses skip the bund, blocked and hard-ground tests.",
+     "class": "within",
+     "why": "This is D7's notice-board fix as worded: route seats screened by an index of the houses and yards before the full house-fit test. The index also covers placed items and groves, but it is the same clearance _fits already applies, and the check is a pure conjunction, so no seat's verdict changes and nothing the GM asked for is narrowed. FR-005 requires this fix to be built, and this plan builds it."
+    },
+    {
+     "id": "T08-pins",
+     "summary": "Verification: a test that _fits' verdict is unchanged on random seats, make cohort-landing, make maps-moved (no moves expected).",
+     "class": "within",
+     "why": "These checks only enforce that the requested fix keeps the same siting ('the same notice board, sited by the same rules'). They are enforcement, not unrequested scope."
+    },
+    {
+     "id": "T08-evidence",
+     "summary": "Done when make phase-calls and make perf-ab A=<parent> B=HEAD before and after are recorded in research/t08-evidence.md; green is landing with that evidence and the cohort passing; red is recording what failed and setting the task down, with a claim of impossibility ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "FR-005 asks for each fix's time evidence to be reported, and SC-004 asks for calls and time before and after. The exits record timings and refuse on none, so FR-006 and the GM's 'timings are not a gate' hold."
+    },
+    {
+     "id": "T08-small-saving",
+     "summary": "The fix proceeds even though the expected saving is stated honestly as small: at most 0.084 s profiled, about 0.03 s unprofiled (labeled a GUESS), under half a percent of the 40-household roll.",
+     "class": "within",
+     "why": "The GM named the three cheap fixes and asked that they be done, and FR-005 requires the notice board's fix to be built. The change removes work (dearer tests are skipped) rather than folding calls into a loop, so it is not the trap the request warns against. Stating that the saving is small follows the checklist's sensibility; it does not narrow anything."
+    },
+    {
+     "id": "T08-order-budget",
+     "summary": "Ordered after T06 and before T04; budget of one landing.",
+     "class": "within",
+     "why": "Sequencing and budget among the requested tasks do not touch what was asked."
     }
    ],
    "verdict": "CLEAR"

@@ -334,6 +334,9 @@ class FixtureSitingMixin:
                             board_in_view(env.view, x, y, w, h)
                             and not under_placard(self.M, x, y, w, h, PLACARD_KEEP_FT / ftpx)
                             and all(seg_dist(x, y, a, b) >= reach for a, b, reach, _x0, _y0, _x1, _y1 in env.beds.near(x, y) if _x0 <= x <= _x1 and _y0 <= y <= _y1)
+                            # ...CLEAR OF WHAT STANDS ASKED FIRST (feature 435 T08): the houses and yards refuse most of the
+                            # band, and asked of their index a seat they refuse skips the water, bund and hard-ground tests
+                            and self._clear_of_placed(x, y, w, h)
                             and self.fixture_clear_of_water(x, y, half)
                             and self._fits(x, y, w, h, corridors=False, top=26.0)
                             # TURNED TO ITS NEAREST WAY, and refused where that board cannot face it (labels L12, feature 287

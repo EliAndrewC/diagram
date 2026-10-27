@@ -274,8 +274,11 @@ class HousesMixin:
         rot: float | None = None,
         top: float = 88.0,
     ) -> bool:
-        """Research: building spacing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 4 px between collision circles (exact boxes where both are declared)
-        its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 88 (top sheet margin); 55 (side and bottom sheet margins); 26 (side and bottom sheet margins)
+        """Does a `w` x `h` footprint at (x, y) fit: inside the sheet's margins and the bound, off the blocked ground, the
+        corridors and treads, the field bunds and the hard ground, and clear of what stands (`_clear_of_placed`, asked last).
+
+        Research:
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 88 (top sheet margin); 55 (side and bottom sheet margins); 26 (side and bottom sheet margins)
         """
         if x < 55 or x > self.W - 55 or y < top or y > self.H - 26:
             return False
@@ -289,6 +292,14 @@ class HousesMixin:
             return False
         if not self._hard_clear(x, y, w, h):
             return False
+        return self._clear_of_placed(x, y, w, h, disc, rot)
+
+    def _clear_of_placed(self: Settlement, x: float, y: float, w: float, h: float, disc: bool = False, rot: float | None = None) -> bool:  # type: ignore[misc]
+        """`_fits`' last test, its own so a placer can ask it FIRST as a screen (feature 435 T08): clear of everything that
+        stands (`self.placed` - the houses, their yards and parts) and of the groves, each asked of its reach index.
+
+        Research: building spacing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 4 px between collision circles (exact boxes where both are declared)
+        """
         # INDEXED (2026-08-04), and the history is worth the paragraph. These two scans are
         # O(placed) per candidate seat - 58M hypot() calls on Minami - and indexing them was tried
         # on 2026-08-03 and REVERTED: an incremental index assumed `placed` was append-only, two
