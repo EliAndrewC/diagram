@@ -115,6 +115,10 @@ diagnosed and the tooling improved.
   fixed seeds passed feature 417 T41's deletion while a fresh seed regressed.
 - **A CPU-time bound in a test** inflates 2-4x under load on this hybrid CPU: scale it by a calibration loop (as
   `tests/test_open_questions.py` does), never a hard-coded figure.
+- **Time is the goal of performance work, calls the measure** (feature 435, the GM 2026-10-27: "timings are not a gate, but improving timings is the goal of any performance improvement ticket"): plan a speed change
+  with `docs/performance-checklist.md` (`make task-add ... PERF=1`) - where the time goes, whether it removes work or only
+  moves it (inlining, merging, writing a builtin out lowers the count, not the time), its growth with size - and read
+  `make perf-ab` (alternated, best of N, each arm's spread) as evidence, never as a gate.
 - **Call counts are watched, timings only recorded** (feature 427 T03, the GM 2026-10-26: "keep recording the timings, but
   completely stop using timings as a gate on anything ... the call counts themselves are the thing that we are gating on"):
   take the bookends (`make perf LABEL=<NNN>-start` / `-end`; `SCALING=1` adds the 10/20/40-household legs), each recording

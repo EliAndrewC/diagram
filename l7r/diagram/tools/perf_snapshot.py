@@ -307,7 +307,8 @@ def record(label: str, seeds: tuple[int, ...], scaling_leg: bool = False) -> str
     # size, what is watched since feature 427 (`call-count-flag.md`); its own seconds kept beside, the overhead the design note asks
     print("...counting each stage's Python calls (a separate pass, untimed):", flush=True)
     t0 = time.time()
-    for size, block in ((None, rows), *((n, [r for r in scaling if r.get("households") == n]) for n in (SCALING_SIZES if scaling_leg else ()))):
+    # ...SKIPPED where `make perf-ab` asks (feature 435): its later runs of an arm need the time alone, the calls taken once
+    for size, block in () if os.environ.get("L7R_PERF_NO_COUNTS") else ((None, rows), *((n, [r for r in scaling if r.get("households") == n]) for n in (SCALING_SIZES if scaling_leg else ()))):
         counts = count_calls(tuple(r["seed"] for r in block), households=size)
         for r in block:
             r["calls"] = counts.get(r["seed"], {})

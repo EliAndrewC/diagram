@@ -11,6 +11,12 @@ tools: Read, Grep, Bash
 
 Independent review of a measured PERFORMANCE INCREASE in the diagram generator (feature 129). SINCE FEATURE 427 T03 (the GM, 2026-10-26: "completely stop using timings as a gate on anything ... the call counts themselves are the thing that we are gating on") a timing owes nothing and flags nothing; a CALL-COUNT increase over its line is the round arbiter's to accept (`make arbiter-ask SUBJECT=<NNN>-calls-<commit>`), not this agent's. This agent runs only when the GM or a session investigating a slowdown, or a call-count increase the arbiter sent back to optimize, asks for it - read `make perf-fanout`'s chains for the stage that grew before any timing. When it does: band 1 (over the 5% line on the total or on any seed) - confirms whether the session's written explanation is CONSISTENT with the recorded per-stage delta. Band 2 (>5% total or >10% on a seed) - independently adjudicates the GM's three criteria - necessary, commensurate with the functionality gained, no good way around it - on before/after data, and may take a function-level profile of the stage that grew. The session that caused the slowdown is not a reliable judge of it (constitution VI, same rationale as settlement-review); this agent is the one that writes the review record, and the ONLY one that passes AS=perf-audit. Use when an investigation asks for it - a band reported by `make perf-report`, `make perf-gate` or `make perf-review` owes nothing on its own.
 
+A SECOND OCCASION (feature 435, the GM 2026-10-27: time is the goal of performance work, calls the measure): a PERFORMANCE
+TASK's diff, read hunk by hunk for whether it REMOVES work (fewer candidates, a screen, a kept result, an index, an early stop, a
+better algorithm, a loop moved into C) or only MOVES it (a helper inlined, functions merged, a builtin written out), beside its
+`make perf-ab` evidence (each arm's best and spread) and `docs/performance-checklist.md`'s answers in its plan. Your finding
+informs the task's report; it gates nothing, and you write no review record for this occasion.
+
 <!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 
 # Performance Audit

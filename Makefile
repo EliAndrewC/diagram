@@ -42,6 +42,9 @@ perf-review:    ## [performance] each environment's newest bookend pair: its tim
 perf-fanout:    ## [performance] the call-volume survey: per stage, the Python calls at each size and their growth, and every chain of HOT calls or more up to the loop it hangs from (feature 427 T01)   [SEED=39] [HOUSEHOLDS="20 40"] [STAGES=all] [HOT=50000] [JOBS=3] [LABEL=adhoc]
 	$(RUN).tools.perf_fanout --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),20 40)" --stages "$(or $(STAGES),all)" --hot "$(or $(HOT),50000)" --jobs "$(or $(JOBS),3)" --label "$(or $(LABEL),adhoc)"
 
+perf-ab:        ## [performance] two engines timed against each other - alternated, best of N, each arm's spread and calls; evidence, never a gate (feature 435)   A=<commit> [B=HEAD] [N=3]
+	$(RUN).tools.perf_ab "$(A)" "$(or $(B),HEAD)" --n "$(or $(N),3)"
+
 phase-calls:    ## [performance] one 40-household hamlet's Python calls by stage and by step, recorded for the placement-stages page (feature 434)   [SEED=39] [HOUSEHOLDS=40] [FORM=nucleated|linear|dispersed] [ARCHETYPE=<field archetype>] [SINK=pond|offmap]
 	$(RUN).tools.phase_calls --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),40)" $(if $(FORM),--form "$(FORM)",) $(if $(ARCHETYPE),--archetype "$(ARCHETYPE)",) $(if $(SINK),--sink "$(SINK)",)
 
@@ -566,9 +569,9 @@ found-close:    ## [project] close found.jsonl rows: FILED as a task, or SETTLED
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/found.py" close --feature "$$(ls -d specs/$(F)-* | head -1)" --rows "$(ROWS)" $(if $(TASK),--task "$(TASK)",) $(if $(WHY),--why "$(WHY)",)
 
 task-add: export TASK_TITLE = $(TITLE)
-task-add:       ## [project] file a task box (and its plan section) with the next free id: F=385 TITLE="..." [SECTION=<file with {T} for the id>] [RESEARCH=physical]
+task-add:       ## [project] file a task box (and its plan section) with the next free id: F=385 TITLE="..." [SECTION=<file with {T} for the id>] [RESEARCH=physical] [PERF=1: a performance task, docs/performance-checklist.md's questions appended]
 	@if [ -z "$(F)" ]; then printf 'make task-add: F=<feature> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/task-add.py" "$(F)" $(if $(SECTION),--section "$(abspath $(SECTION))",) $(if $(filter physical,$(RESEARCH)),--physical,)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/task-add.py" "$(F)" $(if $(SECTION),--section "$(abspath $(SECTION))",) $(if $(filter physical,$(RESEARCH)),--physical,) $(if $(PERF),--performance,)
 
 tick: export TICK_NOTE = $(NOTE)
 tick: export PLAN_REVIEW_OK := $(PLAN_REVIEW_OK)

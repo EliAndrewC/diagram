@@ -911,6 +911,15 @@ artifacts. Specifically:
       make perf LABEL=<NNN>-end       # last thing, before the push
       make perf-report AGAINST=<NNN>-start
 
+  **TIME IS THE GOAL; CALLS ARE THE MEASURE** (the GM 2026-10-27, feature 435: "timings are not a gate, but improving timings is the goal of any performance improvement ticket").
+  A performance change aims at less time; the call count, deterministic where a
+  timing is not, finds where work multiplies and is never itself the goal - a
+  change that only moves work (a helper inlined, functions merged, a builtin
+  written out) lowers the count, not the time. Each performance task answers
+  `docs/performance-checklist.md` (prompts, never a gate); time is read as
+  evidence (`make perf-ab`: alternated, best of N, the spread shown), and no
+  timing gates anything.
+
   **WATCHED BY CALL COUNTS; TIMINGS RECORDED ONLY** (GM 2026-10-26, feature
   427 T03: *"keep recording the timings, but completely stop using timings as a
   gate on anything ... the call counts themselves are the thing that we are

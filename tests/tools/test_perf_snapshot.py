@@ -177,6 +177,9 @@ def test_record_writes_a_snapshot_keyed_by_stamp_label_and_TREE(tmp_path, monkey
     assert "total 12.0s" in capsys.readouterr().out
     assert [r["calls"] for r in snap["rows"]] == [{"web": 2000}, {"web": 4000}, {"web": 6000}] and snap["total_calls"] == 12000, "feature 427 T02"
     assert set(snap["versions"]) == {"python", "numpy", "shapely"} and isinstance(snap["count_seconds"], float)
+    monkeypatch.setenv("L7R_PERF_NO_COUNTS", "1")  # ...and `make perf-ab`'s later runs skip the counting pass (feature 435)
+    skipped = _json.loads(_Path(ps.record("ab-B2", (2, 4))).read_text())
+    assert "calls" not in skipped["rows"][0] and skipped["total_calls"] == 0
 
 
 def test_the_counting_pass_counts_each_stage_s_python_calls_the_same_on_every_roll(monkeypatch) -> None:

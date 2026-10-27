@@ -48,22 +48,24 @@ docs/performance-checklist.md here (PERF=1)." - the memory aid present on every 
 
 **D3 - `make perf-ab`.** `tools/perf_ab.py`: two detached worktrees, `make perf SCALING=1` alternated N times (default 3), the
 first run of each arm counted and the rest skipping the counting pass (`L7R_PERF_NO_COUNTS`, which `perf_snapshot` honors; an
-older commit ignores it and counts); per size and seed each arm's best time, spread and calls. It exits 0 always.
+older commit ignores it and counts, after its timed runs, so its times are taken as an arm's that skips); per size and seed
+each arm's best time, spread and calls. It exits 0 always.
 
 **D4 - The perf-audit agent's occasion.** Its contract gains "a performance task's diff, read for removes-work or moves-work
 with its `make perf-ab` evidence"; the finding informs the task's report, it gates nothing.
 
 **D5 - The guidance.** The constitution's performance principle, `l7r/diagram/CLAUDE.md`'s "Call counts are watched, timings
-only recorded", `dev/performance.md` and `docs/guards.md`'s call-count row each gain one sentence: time is the goal, calls the
-measure, the checklist the process; the gate's wording stays (FR-007).
+only recorded", `dev/performance.md`, `docs/guards.md`'s call-count row and the perf-audit agent's contract (beside its D4
+occasion) each gain one sentence: time is the goal, calls the measure, the checklist the process; the gate's wording stays
+(FR-007).
 
 **D6 - The reverts.** The candidates are FR-004's eight commits, every hunk classed (the 417 ones read 2026-10-27: T63's
 `conflicts(first=True)` removes work, its four inlinings move it; T64 and T65 move work in every hunk; 427 T07, T08, T09, T12
 and 417 T54 classed hunk by hunk). Each commit is a group, its hunks split by class into a moves-work arm and a removes-work arm,
 moves-work first; each arm's revert is a patch against HEAD, timed against HEAD by `make perf-ab` (best of N, the spread shown).
 An arm is reverted where its revert costs no time beyond the spread and its growth with size does not argue for it, kept
-otherwise; the evidence of every arm is recorded in `research.md`. A removes-work arm whose revert cannot be written against
-HEAD (later work built on it) is recorded so, with why, and kept.
+otherwise; the evidence of every arm is recorded in `research.md`. An arm whose revert needs later code adapted is written with that code
+adapted, and timed; a claim that an arm's revert cannot be written at all goes through `make arbiter-ask`.
 
 **D7 - The three cheap fixes**, each a task answering the checklist (D1) in its plan: the notice board's route seats screened
 by an index of the houses and yards before the full house-fit test; the homestead bundle's geometry built once per (form,

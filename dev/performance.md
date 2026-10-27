@@ -228,6 +228,12 @@ Two rules, and the second is the one that is easy to half-do:
 than structural on purpose: the failure mode is unbounded work, and the correct-vs-broken margin is
 a fraction of a second against effectively forever.
 
+## Time is the goal, calls the measure (feature 435, 2026-10-27)
+
+The GM: "timings are not a gate, but improving timings is the goal of any performance improvement ticket". Feature 417's speed lane cut a 40-household roll's calls 38-44% and its time 0-6% (an alternating best-of-3
+A/B, measured 2026-10-27): much of it inlined helpers and wrote builtins out, which lowers the count and not the time. Plan
+every speed change with `docs/performance-checklist.md`; read `make perf-ab` as evidence.
+
 ## The call counts are watched; the timing bands are information only (feature 427 T03, 2026-10-26)
 
 Since feature 427 (the GM, 2026-10-26: "keep recording the timings, but completely stop using timings as a gate on anything

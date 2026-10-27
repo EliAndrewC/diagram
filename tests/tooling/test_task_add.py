@@ -104,3 +104,18 @@ def test_a_section_without_the_red_exit_is_filed_with_a_warning_naming_the_wordi
     assert "has no red exit through `make arbiter-ask`" in capsys.readouterr().err
     sec.write_text("### {T} x\n\n6. **The exits.** " + ta.RED_EXIT + "\n", encoding="utf-8")
     assert ta.main(["385", "--section", str(sec)]) == 0 and "no red exit" not in capsys.readouterr().err
+
+
+def test_every_task_asks_whether_it_is_performance_work_and_PERF_writes_the_checklist(tmp_path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 435 D2: the memory aid on every task - one line asking - and `--performance` (`make task-add PERF=1`) appending
+    the checklist's six questions as prompts, after the section, never in place of it."""
+    d = _feature(tmp_path, monkeypatch)
+    monkeypatch.setenv("TASK_TITLE", "x")
+    assert ta.main(["385"]) == 0
+    plan = (d / "plan.md").read_text(encoding="utf-8")
+    assert "**Performance work?**" in plan and "Performance checklist" not in plan
+    assert ta.main(["385", "--performance"]) == 0
+    plan = (d / "plan.md").read_text(encoding="utf-8")
+    assert "### T16 Performance checklist (docs/performance-checklist.md" in plan and "Removes work, or only moves it?" in plan
+    assert plan.index("### T16 Approach (checklist part A)") < plan.index("### T16 Performance checklist"), "after the section"
+    assert "--performance" not in (d / "tasks.md").read_text(encoding="utf-8"), "the flag is no task's title"

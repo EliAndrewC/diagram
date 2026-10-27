@@ -83,9 +83,28 @@ TEMPLATE = """### {T} (<why: the finding or measurement that files it>)
 9. **Done, measured.** <the measurement that says it is done>
 10. **Before moving a constant.** <n/a, or the claim it moves>
 11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 """
 """The section `make task-add` writes when no `SECTION=` is given (feature 426, D6): the alone-off table and checklist item 6's red
 exit already in place, the two things the plan reviews kept asking for."""
+
+
+PERFORMANCE = """
+### {T} Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: `make perf-profile` time beside `make phase-calls` / `make perf-fanout` calls>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <calls; `make perf-ab` best of N with each arm's spread,
+   the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+"""
+"""What `make task-add ... PERF=1` appends to a performance task's section (feature 435, D2; the GM 2026-10-27: the checklist
+helps "us not forget steps as we work towards our goal, rather than the checklist items being taken as if they are themselves
+the goal")."""
 
 
 def lacks_red_exit(section: str) -> bool:
@@ -96,14 +115,15 @@ def lacks_red_exit(section: str) -> bool:
 
 def main(argv: list[str]) -> int:
     physical = "--physical" in argv
-    args = [a for a in argv if a != "--physical"]
+    performance = "--performance" in argv
+    args = [a for a in argv if a not in ("--physical", "--performance")]
     section = ""
     if "--section" in args:
         i = args.index("--section")
         section, args = args[i + 1] if i + 1 < len(args) else "", args[:i] + args[i + 2 :]
     title = os.environ.get("TASK_TITLE", "").strip()
     if len(args) != 1 or not title:
-        print('usage: make task-add F=<feature> TITLE="<what the task does>" [SECTION=<file with {T}>] [RESEARCH=physical]', file=sys.stderr)
+        print('usage: make task-add F=<feature> TITLE="<what the task does>" [SECTION=<file with {T}>] [RESEARCH=physical] [PERF=1]', file=sys.stderr)
         return 2
     tick = _tick()
     root = tick.repo_root()
@@ -114,7 +134,7 @@ def main(argv: list[str]) -> int:
     if section and not Path(section).is_file():
         print(f"task-add: SECTION={section} is not a file", file=sys.stderr)
         return 2
-    text = Path(section).read_text(encoding="utf-8") if section else TEMPLATE
+    text = (Path(section).read_text(encoding="utf-8") if section else TEMPLATE) + (PERFORMANCE if performance else "")
     if section and lacks_red_exit(text):
         print(f"task-add: SECTION={section}'s checklist item 6 has no red exit through `make arbiter-ask` - the plan review will ask for: {RED_EXIT}", file=sys.stderr)
     tid = next_id(d)
