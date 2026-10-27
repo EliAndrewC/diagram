@@ -21,3 +21,5 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
       research: rendering
 - [ ] T04 The record's coverage figures for Ochiba and Hayakawa re-measured on 0116's drawing page, its owed checks run; the feature report (D6; FR-001); American spellings, hyphens only
       research: rendering
+- [ ] T05 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/compound_example.py::county_magistracy_program#the office hall's east end-face door seated at 0.8 of the face (door_fracs (0.8, 0.7)); the only 0.8 claimed is the barracks' last door [lands-open]
+      research: rendering
