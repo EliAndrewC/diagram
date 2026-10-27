@@ -413,7 +413,7 @@ def seat_wells(
     rungs: Sequence[tuple[float, int]],
     form: str,
     gap: float = 0.0,
-    seat_ok: Any = None,
+    seat_ok: SeatTest | None = None,
     candidates: Sequence[Pt] | None = None,
     step: float = 22.0,
 ) -> list[Pt]:
@@ -519,20 +519,13 @@ def seat_wells(
     # and each `well_at` built the water, dry-plot and wet-ring grids again for its one seat (cohort seed 44: 71 builds);
     # the scope asserts on exit that the terrain it froze is the terrain that stands
     sweep: SeatSweep | None = None
-    _ok_of: dict[tuple[float, float], bool] = {}
     # ...AND A SEAT `well_at` REFUSED IS NOT ASKED AGAIN BY A LATER RUNG (feature 427 T05): the terrain is frozen and inside this
     # call (and inside `stage_lane_wells`, whose memo keeps the set) only a well that lands changes what stands, which can add a refusal and never lift one (seed 25 at 40 households
     # asked 21,093 times, most of them seats an earlier rung had already been refused)
     _refused: set[tuple[float, float]] = memo.setdefault("refused", set()) if memo is not None else set()
 
-    def _seat_ok(x: float, y: float) -> bool:
-        """`seat_ok` and the wood floor, asked once per seat for every rung (feature 427 T05): neither reads the wells placed."""
-        if (x, y) not in _ok_of:
-            _ok_of[(x, y)] = bool(seat_ok(x, y)) and not _wood.disc_covers(x, y, _well_r)
-        return _ok_of[(x, y)]
-
-    # ...AND, WHERE THE SEAT TEST HAS AN ARRAY FORM, ASKED OF THE LATTICE AS ARRAYS AND KEPT ON THE SWEEP (feature 435 T06): the
-    # same two tests, every seat a rung reaches asked at once and each verdict read by the stage's later calls
+    # `seat_ok` and the wood floor, neither reading the wells placed (feature 427 T05), ASKED OF THE LATTICE AS ARRAYS AND KEPT ON
+    # THE SWEEP (feature 435 T06): every seat a rung reaches asked at once, each verdict read by every later rung and call
     _centers = None
 
     def _many(P: Any) -> Any:
@@ -543,7 +536,7 @@ def seat_wells(
             _centers = np.asarray(_wood.pts, dtype=float).reshape(-1, 2)
         return np.asarray(seat_ok.many(P), dtype=bool) & ~discs_cover(P, _centers, _well_r)
 
-    many = ((seat_ok.key, _well_r), _many) if isinstance(seat_ok, SeatTest) else None
+    many = ((seat_ok.key, _well_r), _many)
 
     with s.frozen_terrain():
         for third, want_near in rungs:
@@ -566,7 +559,7 @@ def seat_wells(
                 sweep = stage_kept(
                     s, key, lambda pad=pad: SeatSweep(list(candidates) if candidates is not None else list(grid_points(min(xs) - pad, max(xs) + pad, min(ys) - pad, max(ys) + pad, step)), houses)
                 )
-            seats, _near_of = sweep.seats(third, want_near, gap, reach_r, _seat_ok, (ccx, ccy), many)
+            seats, _near_of = sweep.seats(third, want_near, gap, reach_r, seat_ok, (ccx, ccy), many)
             _belt_all(seats)
             # GREEDY COVERAGE, not central-first throughout (settlement-review, Mizuguchi/Sawada
             # 2026-08-15): sorting every well toward the centroid put both of Mizuguchi's wells in one
