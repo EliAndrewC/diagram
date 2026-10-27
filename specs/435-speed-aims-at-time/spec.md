@@ -68,9 +68,10 @@ with the settlement's size does not argue for it, and kept where either does.
 
 **Acceptance Scenarios**:
 
-1. **Given** the candidates, **Then** each is classed, its moves-work hunks grouped by the commit that made them, and each
-   group's revert timed against the current engine (`make perf-ab`, best of N, the spread shown); a group whose revert costs
-   nothing measurable is reverted, one whose revert costs time is kept, the evidence recorded either way.
+1. **Given** the candidates, **Then** each is classed (the class ordering the work, moves-work first), its hunks grouped by
+   the commit that made them, and each group's revert timed against the current engine (`make perf-ab`, best of N, the spread
+   shown); a group is kept where its revert costs time or where how its work grows with the settlement's size argues for it,
+   and reverted otherwise, the evidence recorded either way.
 
 ### User Story 4 - The three cheap fixes (Priority: P2)
 
@@ -108,9 +109,7 @@ the closing report.
 - **FR-004**: The candidates are the call-cutting changes of features 427 and 417 that `git log --oneline -i -E
   --since=2026-10-25 --grep='inline|without (builtin |inner )?calls|fewer builtin|no abs|plain loops|by comparison|as
   conditionals|written in|written out' -- 'l7r/**'` finds (427 T07, T08, T09, T12; 417 T54, T63, T64, T65), read hunk by hunk
-  and each classed removes-work or moves-work. The revert's scope is the moves-work hunks: the GM named the changes "done by
-  falling into the exact trap", which is moving work to lower the count; a removes-work hunk does less work and is not that
-  trap, and its time is read in the closing report's before-and-after (FR-008), not by reverting it. The moves-work hunks are
+  and each classed removes-work or moves-work. The class orders the work, moves-work first, and excludes no hunk from timing. The hunks are
   grouped by the commit that made them; each group's revert is timed against the current engine (`make perf-ab`, best of N,
   the spread shown); a group is kept where its time shows a gain or where how its work grows with the settlement's size argues
   for it, and reverted otherwise, the evidence recorded either way. Maps unmoved by a revert stay unmoved.
