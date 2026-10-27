@@ -437,3 +437,23 @@ def test_a_code_change_owes_a_triage_of_its_hunks_and_clears_the_claims_it_does_
     cx.claims_triage._git(root, "update-ref", "refs/remotes/origin/main", "HEAD")
     cx.triage_bundle(cx.current(skill), index, store, [FAR], skill / QDIR, tmp_path / "t")
     assert json.loads((tmp_path / "t" / "triage.json").read_text())["forced"] == [FAR]
+
+
+def test_a_triage_whose_every_claim_is_owed_in_full_dispatches_no_triage(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 417 T54 (2026-10-27): after `law.py` became a package, 18 claims were owed a triage whose bundle showed nothing - a
+    code move leaves no diff - so each was owed in full; the triage agent dispatched on the empty bundle could only say so, and
+    its reply was refused as empty. Every claim forced: recorded at once, no bundle marked in flight, impl-drift named."""
+    monkeypatch.setattr(cx, "TRIAGE_SKIP_MAX", 0)
+    root = _repo(tmp_path)
+    _tree(root, MOD, PAGE)
+    assert cx.main(["--root", str(root), "bundle", "--owed", "--out", str(tmp_path / "b")]) == 0
+    units = json.loads((tmp_path / "b" / "units.json").read_text())
+    (tmp_path / "r.txt").write_text("".join(f"VERDICT {k} IN-STEP - ok {'[§1]' if k == SHARE else '[§2]' if k == FAR else '[§]'}\n" for k in units))
+    assert cx.main(["--root", str(root), "record", "--bundle", str(tmp_path / "b"), "--reply", str(tmp_path / "r.txt")]) == 0
+    _commit(root, "checked")
+    monkeypatch.setattr(cx, "owed", lambda *a, **k: [(SHARE, cx.CODE_TRIAGE)])  # a code move: no page moved, no diff to show
+    capsys.readouterr()
+    assert cx.main(["--root", str(root), "triage", "--out", str(tmp_path / "t")]) == 0
+    said = capsys.readouterr().out
+    assert "owed in full" in said and "no triage to dispatch" in said and "claims-bundle OWED=1" in said, said
+    assert cx.load_index(root / cx.INDEX)[SHARE]["triage"] == "touched", "sent on to impl-drift"
