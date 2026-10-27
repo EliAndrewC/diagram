@@ -10965,18 +10965,19 @@
  "l7r/diagram/hamletgen/hinterland/belt.py::round_the_houses#its search steps and tolerances": {
   "body": "76808f2d2c101f94",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 7 (arc sample count bound); 15 (arc sampling step, degrees)",
-  "code": "613741679de73925",
-  "core": "aecfb47f3c66dc45",
+  "code": "2b34f512016f8f2b",
+  "core": "ca89f499ffb65491",
   "date": "2026-10-25",
   "note": "arc sampling",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::round_the_houses#near face clear of every house": {
-  "code": "0756ec566a32616e",
-  "core": "aecfb47f3c66dc45",
+  "code": "0046b8062a7029cb",
+  "core": "ca89f499ffb65491",
   "date": "2026-10-05",
   "note": "back grove's outline stands back from the nearest houses",
   "pages": {
@@ -10986,18 +10987,19 @@
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:d3ed8cad5ddc7b21"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::round_the_houses#stand-off reach": {
   "body": "76808f2d2c101f94",
   "claim": "stand-off reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); `reach` from each house",
-  "code": "0886f4015e886a6b",
-  "core": "aecfb47f3c66dc45",
+  "code": "6e9d78c0745d2267",
+  "core": "ca89f499ffb65491",
   "date": "2026-10-25",
   "note": "the page says the outline stands back from the houses but gives no distance; `reach` is the caller's value",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::trim_receding_ends#no arm along the wind": {
@@ -32039,13 +32041,14 @@
  "l7r/diagram/hamletgen/ways/route.py::lattice_search#its salts, guards and sentinels": {
   "body": "fed6528fedf1c382",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+18 (sentinel)",
-  "code": "7fdbcaf6c80d43b8",
-  "core": "738317b7d4e0b32d",
+  "code": "5ffdc6cfb9d6e4c4",
+  "core": "58fcddb971ddee0a",
   "date": "2026-10-25",
   "note": "1e18 is an unreached-cost sentinel, plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::set_crossing#crossing the brook is charged": {
@@ -36539,8 +36542,8 @@
  "l7r/diagram/hamletgen/ways/tree.py::rejoined#its salts, guards and sentinels": {
   "body": "c8703fabe2a0bf1e",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (floor on sin, a divide-by-zero guard)",
-  "code": "e6018712468b48ed",
-  "core": "72694fece93e02af",
+  "code": "ebd98d4d2f8d1f02",
+  "core": "f6e96c2f003492de",
   "date": "2026-10-25",
   "note": "the 0.2 sin floor is a divide guard on vertices that do not move the line",
   "pages": {},
@@ -47931,19 +47934,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::PointGrid.extend#spatial indexes": {
-  "code": "baa996c48876a6fa",
-  "core": "210eaff7b021bf20",
+  "code": "5882139a8204613e",
+  "core": "ce2bcace58aeaa5c",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::PointGrid.near#spatial indexes": {
-  "code": "dfaafcb9064ad8a9",
-  "core": "148cae0c286fb4e1",
+  "code": "0355809d1a4fcb79",
+  "core": "be816d4046603c65",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex#spatial indexes": {
@@ -47959,13 +47966,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex.__init__#spatial indexes": {
-  "code": "b56a34c9811758aa",
-  "core": "e2f618d1aec631ee",
+  "code": "aa610e34edd41dbd",
+  "core": "4aecccb41bff4d62",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-26",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex.edge_within#spatial indexes": {
@@ -64666,71 +64673,75 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#flare size": {
-  "code": "bbe7244f0c32cf3e",
-  "core": "218200a86a6f451e",
+  "code": "79d2f09f23a8b194",
+  "core": "77b8850ef2673150",
   "date": "2026-10-03",
   "note": "1.5*pad*t**1.6 as claimed; 0057 gives the bow, not its size",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#flaring flanks": {
-  "code": "92e0d541fc013fec",
-  "core": "218200a86a6f451e",
+  "code": "e862b783a6f59c97",
+  "core": "77b8850ef2673150",
   "date": "2026-10-03",
   "note": "0057: ends bow outward downhill as seepage spreads, part of the straight-band deviation",
   "pages": {
    "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
   },
   "research": "d85a68dc96fcb1d6",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#its drawn sizes": {
   "body": "8ab2a16e26b484e7",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 120 (bleed past the canvas edge)",
-  "code": "879353005bcd5257",
-  "core": "218200a86a6f451e",
+  "code": "55ded25eca3b4ad3",
+  "core": "77b8850ef2673150",
   "date": "2026-10-25",
   "note": "bleed",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#its search steps and tolerances": {
   "body": "8ab2a16e26b484e7",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 24 (cross-slope station step floor); 0.2 (flank sample station); 0.4 (flank sample station); 0.6 (flank sample station); 0.8 (flank sample station)",
-  "code": "9d6d0f67f4dc59f8",
-  "core": "218200a86a6f451e",
+  "code": "76cbc460a7bee34e",
+  "core": "77b8850ef2673150",
   "date": "2026-10-25",
   "note": "station sampling",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#toe band edge": {
-  "code": "e43ee4d3814d26e9",
-  "core": "218200a86a6f451e",
+  "code": "1e0b29de63d7b150",
+  "core": "77b8850ef2673150",
   "date": "2026-10-03",
   "note": "stations pad above local lowest fan point, running max of three, as 0057 (pad is raw px: 90 ft only at 1 ft/px)",
   "pages": {
    "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
   },
   "research": "d85a68dc96fcb1d6",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#toe band width": {
-  "code": "107becddce7e4f5e",
-  "core": "218200a86a6f451e",
+  "code": "e75548af3a8f7616",
+  "core": "77b8850ef2673150",
   "date": "2026-10-03",
   "note": "fan plots + dry plots +/- pad, clipped near the frame, as 0057 (same px caveat)",
   "pages": {
    "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
   },
   "research": "d85a68dc96fcb1d6",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.trim_off_marsh#its search steps and tolerances": {
@@ -65684,13 +65695,14 @@
  "l7r/diagram/settlement/rolling/access.py::point_clear#plumbing": {
   "body": "e9982d5a6a632e7e",
   "claim": "plumbing - NONE: the same verdict as the line tests, for a point",
-  "code": "adb1996e3264bf58",
-  "core": "ebbd0d20b06b1225",
+  "code": "db0baca47c789af0",
+  "core": "cb9497f1a6e3c774",
   "date": "2026-10-26",
   "note": "the point-to-box distance gives the same verdict as seg_box_within(q, q)",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::prime_site#corridor geometry, memo and search plumbing": {

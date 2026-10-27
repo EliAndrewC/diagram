@@ -1,0 +1,36 @@
+perf-profile seed 39 stage lane_wells: 1.5s under cProfile (the stages before it took 7.6s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261027T080853Z-seed39-lane_wells.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         1540738 function calls (1540630 primitive calls) in 1.460 seconds
+
+   Ordered by: cumulative time
+   List reduced from 306 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    1.472    1.472 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells.py:784(stage_lane_wells)
+        1    0.002    0.002    1.470    1.470 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells.py:821(reach_wells)
+        4    0.054    0.013    1.462    0.365 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells.py:406(seat_wells)
+     1746    0.008    0.000    0.508    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/shrines_wells/wells.py:107(well_at)
+       11    0.078    0.007    0.407    0.037 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/well_seats.py:76(seats)
+     1746    0.001    0.000    0.288    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/core.py:328(admits)
+     1746    0.004    0.000    0.286    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/overlap/registry.py:327(admits)
+     1748    0.027    0.000    0.283    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/overlap/registry.py:271(conflicts)
+    73249    0.042    0.000    0.176    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells.py:523(_seat_ok)
+        2    0.000    0.000    0.148    0.074 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells.py:715(seat_cluster)
+     8687    0.137    0.000    0.138    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/primitives.py:32(point_in_poly)
+    10079    0.007    0.000    0.137    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/overlap/registry.py:202(pair_forbidden)
+       29    0.018    0.001    0.135    0.005 {built-in method builtins.sorted}
+        8    0.000    0.000    0.122    0.015 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells.py:393(stage_kept)
+    15591    0.010    0.000    0.117    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells.py:563(<lambda>)
+      306    0.002    0.000    0.115    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/houses.py:265(_fits)
+     2061    0.069    0.000    0.109    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/overlap.py:46(sat_overlap)
+    31182    0.010    0.000    0.108    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells.py:474(_in_belt)
+       11    0.048    0.004    0.095    0.009 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/well_seats.py:43(walls)
+     6724    0.016    0.000    0.075    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/homestead_parts/wood_share.py:459(disc_covers)
+        1    0.000    0.000    0.074    0.074 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells.py:470(<lambda>)
+        1    0.001    0.001    0.074    0.074 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/hinterland/belt.py:219(belt_polygon)
+   115622    0.042    0.000    0.067    0.000 {built-in method builtins.max}
+      294    0.003    0.000    0.067    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/houses.py:200(_on_a_tread)
+     8212    0.017    0.000    0.063    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/houses.py:235(<genexpr>)
+
+

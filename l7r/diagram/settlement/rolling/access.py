@@ -331,7 +331,8 @@ def point_clear(q: Pt, gaps: Sequence[tuple[Any, float]]) -> bool:
     Research: plumbing - NONE: the same verdict as the line tests, for a point"""
     qx, qy = q
     for (cx, cy, w, h), t in gaps:
-        ex, ey = abs(qx - cx) - w / 2, abs(qy - cy) - h / 2
+        dx, dy = qx - cx, qy - cy  # the gaps by sign, not `abs` (feature 417 T56: 95,732 calls) - the same values
+        ex, ey = (dx if dx >= 0 else -dx) - w / 2, (dy if dy >= 0 else -dy) - h / 2
         ex, ey = (ex if ex > 0.0 else 0.0), (ey if ey > 0.0 else 0.0)
         if ex * ex + ey * ey < t * t and t > 0.0:
             return False

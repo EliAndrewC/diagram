@@ -414,6 +414,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
+  },
+  "### T64 Approach (checklist part A)": {
+   "sha256": "ccf759d02c82c4818badf12402e4411460848983b8f949099f525246799cb118",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4924,6 +4930,45 @@
      "summary": "Write the missing claim that _reachable_runs' network is grown from the first candidate run where no skeleton stands, labeled GUESS; no code change, landed beside T63.",
      "class": "within",
      "why": "Labels an unclaimed decision as Constitution XII requires, answering impl-drift's finding; changes no engine behavior, so FR-010's hold on claims work that changes the engine is not touched, and nothing the GM asked is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T64 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T64-1 goal",
+     "summary": "Rewrite the engine's hottest loops to ask fewer builtin calls (PointGrid.near/extend and RingIndex read by `in` and subscript, lattice_search memos likewise, min/max/abs per item written as comparisons in rejoined, belt, point_clear, toe_band), the same values, no map moved.",
+     "class": "within",
+     "why": "The GM's 'Speed first' amendment (2026-10-26) asks that the remaining 417 work prioritize 'the things that will make us go faster' toward an order-of-magnitude decrease, and FR-013 orders the tasks that cut a roll's calls first; this cuts calls (SC-009's measure) without changing any rule (FR-004) or any map (FR-008). It removes nothing the request or spec asks for, so it narrows nothing."
+    },
+    {
+     "id": "T64-5 order",
+     "summary": "Worked as T56's second part, after T63.",
+     "class": "within",
+     "why": "Sequencing inside the speed-first block the GM approved ('put them in whatever order you think'); FR-013 ordering by calls removed is not contradicted."
+    },
+    {
+     "id": "T64-6 exits",
+     "summary": "Green requires every pool manifest unchanged, the landing cohort passing, calls measured before and after, claims round clean; red records the failure and sets the task down, a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Green exit carries FR-008 in full; the red exit routes a give-up to the arbiter rather than narrowing any requirement."
+    },
+    {
+     "id": "T64-9 done measured",
+     "summary": "Roll 21,520,104 -> 18,522,470 calls at 40 households seed 39; no pool manifest moved; landing cohort 54/54.",
+     "class": "within",
+     "why": "A record of the task's result, each figure carrying a date and method; it does not claim SC-009's 6.3M target is met nor relax it."
+    },
+    {
+     "id": "T64-8/10 budget and constants",
+     "summary": "One landing; no constant moves.",
+     "class": "within",
+     "why": "Moving no constant keeps every research-backed or flagged-arbitrary number as it is; nothing asked is dropped."
     }
    ]
   }
