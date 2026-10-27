@@ -15,3 +15,5 @@
       research: rendering
 - [ ] T04 The closing report: per-stage calls at 40 households beside T57's, and the time A/B of the engine before this feature against after it (D8; FR-008)
       research: rendering
+- [ ] T05 0047's drawing page states whether the privy's 48 ft reach covers every privy place, and that a privy with no seat in reach refuses the bundle (impl-drift, T02's claims round)
+      research: rendering
