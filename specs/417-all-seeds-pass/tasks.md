@@ -136,8 +136,9 @@
 - [ ] T55 SET DOWN 2026-10-27 by the round arbiter's ruling on ask:417-T55-route (the trial is about 4% of the stage; the one early refusal left is inexact or saves nothing - inventory/trial.md rows 3-5). (FR-012) The homesteads seated by construction: a seat's refusals that need no layout asked of every candidate at once, a homestead laid out in full (reach, four sides, fixtures) only where it can stand, the per-seat rolls kept, in l7r/diagram/hamletgen/homesteads/ (FR-012)
       research: rendering
 
-- [ ] T61 (T06 part B) The web's law and trims asked box-first: the settle's exit question and the web's trims ask each predicate of the legs, ways and fixtures within its reach only, the same verdicts, in l7r/diagram/hamletgen/ways/ (FR-012, FR-013)
+- [x] T61 (T06 part B) The web's law and trims asked box-first: the settle's exit question and the web's trims ask each predicate of the legs, ways and fixtures within its reach only, the same verdicts, in l7r/diagram/hamletgen/ways/ (FR-012, FR-013)
       research: rendering
+      verify: DONE. landed: the web's settle exit question and trims asked box-first, the same verdicts: law.over_a_fixture, geom.end_serves and _trim_to_service's far-end filter kept per end, law.needle_ends, law.fronting_ends (free_end's boxes), law.dangling_lane_ends, checks.unreached_houses, geom.end_components, web._reachable_runs. Seed 39 at 40 households: the web 6,942,846 -> 4,830,229 calls, the roll 25,419,527 -> 23,204,610 (dev/perf-log/20261027T072724Z-fanout-417-T61.txt); no pool manifest moved, landing cohort 54/54
 
 - [ ] T06 (R2 G2) The web laid by the law: an ordinary lane admitted whole by the lane law before it is drawn; the passes after the lay and the settle's repair steps deleted - with them the end-only join T58 left at settle_network / connector_component (end_components, ends_touch; the round arbiter's ruling on ask:417-T58-red) and the ordinary lane cut for the tree (tree_faults) - in `l7r/diagram/hamletgen/ways/` (FR-004, FR-006)
       research: rendering
