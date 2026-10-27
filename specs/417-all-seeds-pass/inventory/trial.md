@@ -37,3 +37,12 @@ cProfile's, about twice the unprofiled; they rank, they gate nothing.
 `seat`, `woodland`, `crossings`, `labels`: none over 0.12 profiled seconds or 300,000 calls at 40 households.
 
 Every site over 50,000 calls has its task: 1 (T53), 2-5 (T54, T55), 6 (T56).
+
+## Converted
+
+- **Row 1, `served_network` (T58, T53).** Seed 39 at 40 households, measured 2026-10-27 (`make perf-profile SEED=39 STAGE=web
+  HOUSEHOLDS=40`; `make perf-fanout STAGES=web`): T58's one predicate, with each pair's box asked first and a pair already joined
+  skipped, took the web stage 10,462,166 -> 8,101,851 calls and `served_network` 0.86 -> 0.24 profiled s; T53's `NetworkMemo` (each pair's
+  answer kept by the two lanes' points) took `lanes_share_tread` 2,976 -> 91 calls, `served_network` 0.24 -> 0.02 profiled s, and
+  the web stage 8,101,851 -> 7,208,472 calls (`dev/perf-log/20261027T040412Z-fanout-417-T58.txt`,
+  `dev/perf-log/20261027T050246Z-fanout-417-T53b.txt`).

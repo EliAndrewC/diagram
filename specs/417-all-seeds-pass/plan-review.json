@@ -206,9 +206,9 @@
    "declared": "spec-fidelity"
   },
   "### T53 Approach (checklist part A)": {
-   "sha256": "0ce1e74d341d38b245cdeca8f808b24c114ed93d7d3e1254fc5b6b7c8588ba0d",
+   "sha256": "56d41035c138b71be6674368a0b46f8bc5674191f03aafde8b34852173346e6e",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T54 Approach (checklist part A)": {
@@ -4592,6 +4592,63 @@
      "why": "They match D5's amended order as accepted in the spec (T52, T31, T58, T53, T54, T55, T06, T12, T11, T56, T14, then T57). Every speed task still runs before the correctness tasks (FR-013). T06's own item 5 is unchanged since its CLEAR and is not re-judged."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T53 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T53-goal",
+     "summary": "Item 1: the web's whole-network checks (served_network, lanes_share_tread and the rest the trial inventory names) are asked of the lanes a step added or moved, not of every pair again.",
+     "class": "within",
+     "why": "This is FR-012's last clause verbatim in effect ('a network check is asked of what changed, not of the whole network again'), which carries the GM's 'Speed first' request to target search by trial. The lane law's rules stay unchanged (FR-004)."
+    },
+    {
+     "id": "T53-rescope",
+     "summary": "Item 4: re-measure with make perf-fanout on the current engine first, and scope the task to the chains that still stand.",
+     "class": "within",
+     "why": "FR-012 lists each check 'with its measured calls'. Scoping to what the measurement shows still stands follows the project's measure-not-remember rule and drops nothing that still exists."
+    },
+    {
+     "id": "T53-order",
+     "summary": "Item 5: after T31 and T58, before T06 (round arbiter ruling ask:417-T06-order); settle_reach's reach.py callers stay and are made incremental here, and the per-run served_network caller T58 added is made incremental too.",
+     "class": "within",
+     "why": "FR-013 orders the speed tasks before the correctness tasks by the calls each removes, and the GM's 2026-10-26 'Sounds great... proceed' let the session set that order. The block cites an arbiter ruling for its place, and accepting that a caller T06 later deletes may be wasted work is a cost, not a cut in scope. All callers stay covered."
+    },
+    {
+     "id": "T53-exits",
+     "summary": "Item 6: green = whole-network checks asked incrementally, their calls at least tenfold down, cohort and pinned rows passing, claims round clean; red = recorded, set down, and a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The tenfold bar is the GM's 'order of magnitude' goal applied to this task's chain. FR-008 is carried whole. The red exit sends any claim that it cannot be done to the arbiter rather than letting the session excuse itself."
+    },
+    {
+     "id": "T53-memo",
+     "summary": "Item 7: checks.served_lanes asks a per-process NetworkMemo that keeps each pair's lanes_share_tread answer, keyed by the two lanes' points, and judges only the pairs that a new or changed lane is in (appended, edited, dropped or reordered); the union-find is rebuilt each ask from cached answers and per-lane boxes with no predicate call; the memo starts over at another join tolerance or past KEEP pairs; a test holds its answer equal to a fresh _components on random webs.",
+     "class": "within",
+     "why": "The expensive predicate is asked only of what changed, which is what FR-012 requires. Rebuilding the union-find from stored answers is bookkeeping, not asking the check again, and the measurement after shows the check's calls 2,976 -> 91. Starting over at another tolerance or at the size cap keeps the answers correct, and the equivalence test enforces that the rules are unchanged (FR-004). It covers every kind of change, so it narrows nothing."
+    },
+    {
+     "id": "T53-no-index",
+     "summary": "Item 7: no spatial index beyond the per-lane box, the webs measured being tens of lanes (largest 24).",
+     "class": "within",
+     "why": "FR-012's 'an array, a raster or an index' governs refusing a candidate set before layout, not a network check asked of what changed. This is an implementation choice backed by a measured web size and gives up nothing the request asked for."
+    },
+    {
+     "id": "T53-not-search",
+     "summary": "Item 7: the search smell is judged None, the same predicate asked of a smaller set.",
+     "class": "within",
+     "why": "This is a correct description of the change. The predicate and its outcomes are unchanged and only the set it is asked of shrinks."
+    },
+    {
+     "id": "T53-constants",
+     "summary": "Item 10: the rules' figures stay as they are.",
+     "class": "within",
+     "why": "FR-004 leaves the lane law's rules unchanged. The task moves no constant, so the GM's arbitrary-number marking is not engaged."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5221,6 +5278,62 @@
      "summary": "Lands now, before T53; T06's remaining conversions after T55",
      "class": "within",
      "why": "The round arbiter's ruling on ask:417-T06-order, which this review does not re-adjudicate; consistent with FR-013 (tasks that delete repair work worked early)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T53": {
+   "section_sha256": "56d41035c138b71be6674368a0b46f8bc5674191f03aafde8b34852173346e6e",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T53-goal",
+     "summary": "Item 1: the web's whole-network checks (served_network, lanes_share_tread and the rest the trial inventory names) are asked of the lanes a step added or moved, not of every pair again.",
+     "class": "within",
+     "why": "This is FR-012's last clause verbatim in effect ('a network check is asked of what changed, not of the whole network again'), which carries the GM's 'Speed first' request to target search by trial. The lane law's rules stay unchanged (FR-004)."
+    },
+    {
+     "id": "T53-rescope",
+     "summary": "Item 4: re-measure with make perf-fanout on the current engine first, and scope the task to the chains that still stand.",
+     "class": "within",
+     "why": "FR-012 lists each check 'with its measured calls'. Scoping to what the measurement shows still stands follows the project's measure-not-remember rule and drops nothing that still exists."
+    },
+    {
+     "id": "T53-order",
+     "summary": "Item 5: after T31 and T58, before T06 (round arbiter ruling ask:417-T06-order); settle_reach's reach.py callers stay and are made incremental here, and the per-run served_network caller T58 added is made incremental too.",
+     "class": "within",
+     "why": "FR-013 orders the speed tasks before the correctness tasks by the calls each removes, and the GM's 2026-10-26 'Sounds great... proceed' let the session set that order. The block cites an arbiter ruling for its place, and accepting that a caller T06 later deletes may be wasted work is a cost, not a cut in scope. All callers stay covered."
+    },
+    {
+     "id": "T53-exits",
+     "summary": "Item 6: green = whole-network checks asked incrementally, their calls at least tenfold down, cohort and pinned rows passing, claims round clean; red = recorded, set down, and a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The tenfold bar is the GM's 'order of magnitude' goal applied to this task's chain. FR-008 is carried whole. The red exit sends any claim that it cannot be done to the arbiter rather than letting the session excuse itself."
+    },
+    {
+     "id": "T53-memo",
+     "summary": "Item 7: checks.served_lanes asks a per-process NetworkMemo that keeps each pair's lanes_share_tread answer, keyed by the two lanes' points, and judges only the pairs that a new or changed lane is in (appended, edited, dropped or reordered); the union-find is rebuilt each ask from cached answers and per-lane boxes with no predicate call; the memo starts over at another join tolerance or past KEEP pairs; a test holds its answer equal to a fresh _components on random webs.",
+     "class": "within",
+     "why": "The expensive predicate is asked only of what changed, which is what FR-012 requires. Rebuilding the union-find from stored answers is bookkeeping, not asking the check again, and the measurement after shows the check's calls 2,976 -> 91. Starting over at another tolerance or at the size cap keeps the answers correct, and the equivalence test enforces that the rules are unchanged (FR-004). It covers every kind of change, so it narrows nothing."
+    },
+    {
+     "id": "T53-no-index",
+     "summary": "Item 7: no spatial index beyond the per-lane box, the webs measured being tens of lanes (largest 24).",
+     "class": "within",
+     "why": "FR-012's 'an array, a raster or an index' governs refusing a candidate set before layout, not a network check asked of what changed. This is an implementation choice backed by a measured web size and gives up nothing the request asked for."
+    },
+    {
+     "id": "T53-not-search",
+     "summary": "Item 7: the search smell is judged None, the same predicate asked of a smaller set.",
+     "class": "within",
+     "why": "This is a correct description of the change. The predicate and its outcomes are unchanged and only the set it is asked of shrinks."
+    },
+    {
+     "id": "T53-constants",
+     "summary": "Item 10: the rules' figures stay as they are.",
+     "class": "within",
+     "why": "FR-004 leaves the lane law's rules unchanged. The task moves no constant, so the GM's arbitrary-number marking is not engaged."
     }
    ],
    "verdict": "CLEAR"

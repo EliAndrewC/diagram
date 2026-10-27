@@ -22,7 +22,7 @@ from ..consts import (
     Poly,
     Pt,
 )
-from .geom import _TOUCH_GAP, _components
+from .geom import _TOUCH_GAP
 from .geom import lanes_share_tread as lanes_share_tread
 
 
@@ -358,6 +358,70 @@ def shallow_crossing(a: Pt, b: Pt, p: Pt, q: Pt, limit_deg: float = 42.0) -> boo
 # The join itself, `lanes_share_tread`, lives in `geom` (feature 417 T06): every network test asks the one predicate.
 
 
+class NetworkMemo:
+    """Each pair of lanes' answer to the one join (`geom.lanes_share_tread`), KEPT by the two lanes' points (feature 417 T53):
+    the one network is asked again and again as the web is laid (67 asks a 40-household roll on seed 39), while between two asks
+    a lane or two is appended, edited or dropped (764 asks on the 48-seed cohort and pinned rows: 603 after appends only, 123
+    after an edit or a drop, measured 2026-10-27), so an ask judges only the pairs a new or changed lane is in, every other pair's
+    answer the one already given; the union-find over the answers is rebuilt each ask from the boxes alone. Its components are
+    `geom._components`' - a test holds the two equal.
+
+    Research: plumbing - NONE: the one network (`served_lanes`) asked of what changed"""
+
+    KEEP = 200_000
+    """Pairs kept before the memo starts over (a roll's web is tens of lanes; this bounds a long-lived process's memory)."""
+
+    def __init__(self) -> None:
+        self.join: float | None = None
+        self.pairs: dict[tuple[tuple[Pt, ...], tuple[Pt, ...]], bool] = {}
+        self.boxes: dict[tuple[Pt, ...], tuple[float, float, float, float]] = {}
+
+    def labels(self, ways: Sequence[Poly], join: float) -> list[int]:
+        """Each way's component root under the one join at `join`, each pair's answer kept by its two ways' points."""
+        if join != self.join or len(self.pairs) > self.KEEP:
+            self.join, self.pairs, self.boxes = join, {}, {}
+        keys = [tuple(w) for w in ways]
+        boxes: list[tuple[float, float, float, float] | None] = []
+        for k in keys:
+            if len(k) < 2:
+                boxes.append(None)
+            elif k in self.boxes:
+                boxes.append(self.boxes[k])
+            else:
+                b = self.boxes[k] = (min(v[0] for v in k), min(v[1] for v in k), max(v[0] for v in k), max(v[1] for v in k))
+                boxes.append(b)
+        par = list(range(len(keys)))
+
+        def find(i: int) -> int:
+            while par[i] != i:
+                par[i] = par[par[i]]
+                i = par[i]
+            return i
+
+        pairs = self.pairs
+        for i in range(len(keys)):
+            bi = boxes[i]
+            if bi is None:
+                continue
+            for j in range(i + 1, len(keys)):
+                bj = boxes[j]
+                if bj is None or bj[0] - bi[2] > join or bi[0] - bj[2] > join or bj[1] - bi[3] > join or bi[1] - bj[3] > join:
+                    continue
+                if find(i) == find(j):
+                    continue
+                key = (keys[i], keys[j])
+                if key in pairs:
+                    met = pairs[key]
+                else:
+                    met = pairs[key] = lanes_share_tread(ways[i], ways[j], join)
+                if met:
+                    par[find(i)] = find(j)
+        return [find(i) for i in range(len(keys))]
+
+
+_NETWORK = NetworkMemo()
+
+
 def served_lanes(lanes: Sequence[Mapping[str, Any]], join: float = _TOUCH_GAP) -> set[int]:
     """The lanes of the CONNECTED network (`served_network`'s), by index: the component grown from the connector if one is
     drawn, else from the longest lane; empty where no lane is drawn.
@@ -369,7 +433,7 @@ def served_lanes(lanes: Sequence[Mapping[str, Any]], join: float = _TOUCH_GAP) -
         seed = max(range(len(ways)), key=lambda i: sum(math.dist(a, b) for a, b in zip(ways[i], ways[i][1:], strict=False)))
     if seed is None:
         return set()
-    labels = _components(ways, join)
+    labels = _NETWORK.labels(ways, join)
     return {i for i, lb in enumerate(labels) if lb == labels[seed]}
 
 

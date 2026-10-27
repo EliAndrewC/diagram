@@ -215,3 +215,38 @@ def test_a_brook_with_no_ford_offers_no_crossing() -> None:
     from l7r.diagram.hamletgen.ways.checks import ford_crossing
 
     assert ford_crossing((0.0, 0.0), (100.0, 0.0), [(50.0, -50.0), (50.0, 50.0)], []) == []
+
+
+def test_the_network_memo_answers_as_a_fresh_components_on_appended_edited_and_dropped_webs() -> None:
+    """Feature 417 T53: `NetworkMemo` keeps each pair's answer by the two lanes' points and asks only the pairs a new or changed
+    lane is in - its components are `geom._components`' on every web a roll asks of it, appended, edited or dropped."""
+    import random
+
+    from l7r.diagram.hamletgen.ways.checks import NetworkMemo
+    from l7r.diagram.hamletgen.ways.geom import _components
+
+    def parts(labels: list[int]) -> set[frozenset[int]]:
+        out: dict[int, set[int]] = {}
+        for i, lb in enumerate(labels):
+            out.setdefault(lb, set()).add(i)
+        return {frozenset(v) for v in out.values()}
+
+    rng = random.Random(53)
+    memo = NetworkMemo()
+    web: list[list[tuple[float, float]]] = []
+    for step in range(60):
+        roll = rng.random()
+        if roll < 0.6 or len(web) < 3:
+            x, y = rng.uniform(0, 400), rng.uniform(0, 400)
+            web.append([(x, y), (x + rng.uniform(-80, 80), y + rng.uniform(-80, 80))] + ([(x, y + 1.0)] if step % 7 == 0 else []))
+        elif roll < 0.8:
+            k = rng.randrange(len(web))
+            web[k] = [(px + 5.0, py) for px, py in web[k]]
+        else:
+            del web[rng.randrange(len(web))]
+        if step % 11 == 0:
+            web.append([(1.0, 1.0)])  # a way of one point joins nothing
+        assert parts(memo.labels(web, 4.0)) == parts(_components(web, 4.0)), step
+    assert parts(memo.labels(web, 25.0)) == parts(_components(web, 25.0)), "another tolerance starts over"
+    memo.KEEP = 0
+    assert parts(memo.labels(web, 25.0)) == parts(_components(web, 25.0)), "past its bound the memo starts over"

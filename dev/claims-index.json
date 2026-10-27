@@ -26032,19 +26032,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::served_lanes#one network": {
-  "body": "ed6768758c909aa9",
+  "body": "7e9ab4a077cc25e1",
   "claim": "one network - how-our-maps-lay-a-clustered-settlements-lanes.drawing: grown from the connector",
-  "code": "704377e1e2c9eb21",
-  "core": "01fb247212c1554f",
+  "code": "15741911015f6c2e",
+  "core": "bc2a9f8dd13cbf30",
   "date": "2026-10-27",
-  "note": "the connector's component under the one join (`_components`), with the longest lane as the fallback seed; this is the page's one network joined where treads meet",
+  "note": "takes the connected component grown from the track out (the connector), with lanes joined where they touch, as one joined network; the marked line only routes the labeling through the NetworkMemo cache, which is plumbing",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
   ],
   "verdict": "IN-STEP"
  },
