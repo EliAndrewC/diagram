@@ -15,7 +15,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
-from ..consts import Poly
+from ..consts import Poly, Pt
 from .geom import polyline_len
 
 TRIES = 3
@@ -25,21 +25,24 @@ crossing, as the settle mended at most one meeting a lane a round.
 Research: its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T06); three asks"""
 
 
-def laid_lawfully(s: Any, run: Poly, width: float = 3.0) -> Poly | None:
+def laid_lawfully(s: Any, run: Poly, width: float = 3.0, whole: bool = False, keep: Pt | None = None) -> Poly | None:
     """`run` as it may be drawn among the lanes standing - re-aimed as a T where its end meets a way as a needle, a fold or a
     hairpin at the connector, cut where its tail doubles a way or it crosses one at a needle's angle - or None where it still
-    breaks one after `TRIES` asks, or where a lane already drawn would have to move (its end a needle along the candidate).
+    breaks one after `TRIES` asks, or where a lane already drawn would have to move (its end a needle along the candidate). Each
+    candidate changed is squared at the water again (`square_run`) and asked again. `whole`: the candidate is laid only as it
+    came - a link, whose join was computed for it (`serve._lay_web_lane`); `keep`: a point the candidate must still pass
+    through as laid - where the run a link joins meets its link.
 
     Research:
         lanes met end to end read as one - research/questions/0081-village-lanes.drawing.html: a needle, fold or hairpin re-laid as a T
-        no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T101; at whichever end runs on (the candidate is an ordinary lane, never a household's way, whose door end the page keeps)
+        no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T101; at whichever end runs on (the candidate is an ordinary lane, never a household's way, whose door end the page keeps); doubled with no way alongside within `_DOUBLED_DEG` to cut it at, not laid
         two paths side by side become one - research/questions/0081-village-lanes.drawing.html: a lane crossing another at under 20 degrees (`law.NEEDLE_DEG`, 20) cut at the crossing (`cut_at_shallow_crossing`)
-        a bare leg folded on a way not laid - GUESS: no source could speak to it, a value of ours (feature 417 T06); a two-point candidate folded on a standing way has no vertex to re-aim from, and is refused, as the settle dropped the shorter of two bare legs
+        a bare leg folded on a way not laid - research/questions/0081-village-lanes.drawing.html: where a fold cannot be pulled straight the meeting moves back one bend (itself a GUESS there); a two-point candidate has no bend to move back to, and is refused - a value of ours (feature 417 T06), as the settle dropped the shorter of two bare legs
         a drawn lane not moved for a new one - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each way laid in turn; a candidate that only a standing lane's move could admit is not laid"""
     from . import law
     from .forced import lazy_ground
     from .settle.shapes import _as_end, _back, reaimed
-    from .squaring import cut_at_shallow_crossing
+    from .squaring import cut_at_shallow_crossing, square_run
     from .sweeps import _DOUBLED_DEG
     from .tails import along_tail, cut_at_tail
 
@@ -50,6 +53,7 @@ def laid_lawfully(s: Any, run: Poly, width: float = 3.0) -> Poly | None:
     centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []]
     run = first = [(float(q[0]), float(q[1])) for q in run]
     for _ in range(TRIES):
+        run = square_run(M, run)  # ...a re-aimed or cut candidate squared at the water again, and asked again as squared
         if len(run) < 2 or polyline_len(run) < 1.0:
             return None
         tl = [*lanes, {"pts": [list(q) for q in run], "w": width}]
@@ -87,7 +91,7 @@ def laid_lawfully(s: Any, run: Poly, width: float = 3.0) -> Poly | None:
                     fix, settled = (cut[::-1] if back else cut), False
                     break
             if settled:
-                return None
+                return None  # ...doubled, with no way alongside within `_DOUBLED_DEG` to cut it at: not laid
         if settled:
             for i, _seg, o, _x in law.shallow_crossing_at(tl):
                 if k in (i, o):
@@ -99,7 +103,11 @@ def laid_lawfully(s: Any, run: Poly, width: float = 3.0) -> Poly | None:
         if settled:
             served = _served(s, lanes, run, width)
             # ...a re-aimed or cut candidate asked of the overlap matrix again: the caller admitted the run it handed in, not this
+            if served is not None and ((whole and served != first) or (keep is not None and not any(math.dist(q, keep) < 1e-6 for q in served))):
+                return None
             return served if served is not None and (served == first or s.admits_lane(served, width)) else None
+        if whole:
+            return None  # ...a join computed for the candidate as it came holds only for it unchanged (`whole`)
         run = [(float(q[0]), float(q[1])) for q in fix or []]
     return None
 

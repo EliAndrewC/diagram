@@ -285,8 +285,8 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
 
     Research:
         square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)
-        some way joins the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: joined, run on, or a
-            field path branched off the nearest lane
+        some way joins the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0081-village-lanes.drawing.html: joined, run on, or a
+            field path branched off the nearest lane - a lane stops at the flooded paddy, the way on along the bunds
         nearest lane runs on - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the end nearest the paddy
         water between is crossed - DEVIATION research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html,
             research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one water course at most (the straight

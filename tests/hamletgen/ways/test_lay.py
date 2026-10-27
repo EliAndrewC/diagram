@@ -176,3 +176,23 @@ def test_a_third_end_reaching_past_the_doorstep_is_cut_back_to_it(monkeypatch: p
     monkeypatch.setattr(law, "fronting_ends", lambda M: {0: [(1, -1), (0, -1), (2, -1)]})
     got = laid_lawfully(s, [(150.0, 0.0), (150.0, 100.0), (150.0, 225.0)])
     assert got is None or math.dist(got[-1], (150.0, 230.0)) > law.DOORSTEP_FT
+
+
+def test_a_candidate_laid_whole_is_refused_where_it_would_change() -> None:
+    """`whole` (feature 417 T06, impl-drift): a link, or the run a link joins, holds its join only as it came - refused rather
+    than re-aimed or cut; a lawful one is laid unchanged."""
+    tread = [(0.0, 0.0), (300.0, 0.0)]
+    s = _S([CONN, tread], houses=[(50.0, 180.0), (150.0, 230.0)])
+    assert laid_lawfully(s, [(50.0, 150.0), (120.0, 10.0), (153.6, 0.4)], whole=True) is None, "a needle, not re-aimed"
+    assert laid_lawfully(s, [(150.0, 200.0), (150.0, 0.0)], whole=True) == [(150.0, 200.0), (150.0, 0.0)]
+    assert laid_lawfully(s, [(150.0, 0.0), (150.0, 200.0), (150.0, 600.0)], whole=True) is None, "trimmed to service: changed"
+
+
+def test_a_run_its_link_joins_is_laid_only_through_the_joint() -> None:
+    """`keep` (feature 417 T06, impl-drift): the run a link joins may be trimmed at its far end, never off the point its link
+    meets - there the join would no longer hold."""
+    s = _S([CONN, [(0.0, 0.0), (300.0, 0.0)]], houses=[(150.0, 230.0)])
+    run = [(150.0, 0.0), (150.0, 200.0), (150.0, 600.0)]
+    got = laid_lawfully(s, run, keep=(150.0, 0.0))
+    assert got is not None and got[0] == (150.0, 0.0) and got[-1][1] < 600.0, "trimmed at its far end, the joint kept"
+    assert laid_lawfully(s, run, keep=(150.0, 600.0)) is None, "the joint trimmed away: not laid"

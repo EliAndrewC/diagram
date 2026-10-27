@@ -247,5 +247,7 @@
       research: rendering
 - [ ] T66 The grove clumps, the notice board's route seats and the bamboo strips converted by construction (deferred from T56 by the round arbiter's ruling on ask:417-lane-close), in homestead_parts/stands.py, structures/fixtures/siting.py and homesteads/bamboo.py (FR-012)
       research: rendering
+- [ ] T68 A claims bundle resolves an aliased constant to its value (found row 441: fabric._LANE_JOIN_FT = LANE_JOIN_FT reached impl-drift as Name(LANE_JOIN_FT)), the index carried by make claims-refingerprint, in l7r/diagram/tools/claims.py
+      research: rendering
 - [ ] GM review (make gm-reviewed F=417)
 

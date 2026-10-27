@@ -374,7 +374,7 @@ def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> b
     return False
 
 
-def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (), joins: bool = False, lawful: bool = False) -> bool:
+def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (), joins: bool = False, lawful: bool = False, whole: bool = False, keep: Pt | None = None) -> bool:
     """Draw a web lane, unless it is debris. See `_WEB_MIN_FT`.
 
     SHORT IS NOT THE SAME AS USELESS, and conflating them cost more than the debris did. A blunt
@@ -404,7 +404,7 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     if lawful:
         from .lay import laid_lawfully  # imported where it is asked: `lay` sits above this layer
 
-        held = laid_lawfully(s, pts, float(width))
+        held = laid_lawfully(s, pts, float(width), whole=whole, keep=keep)  # ...a link laid as it came, its run still through the joint
         if held is None:
             return False
         pts = held

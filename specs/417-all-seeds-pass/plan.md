@@ -1314,3 +1314,26 @@ Each step measured alone:
 | no seed regressed | `make cohort-landing` (in `make land`) |
 | the calls | `make perf-fanout HOUSEHOLDS=40` |
 
+
+### T68 Approach (checklist part A)
+
+1. **The goal, in the world.** A claims bundle shows the value of every constant a unit reads, an alias included: `fabric._LANE_JOIN_FT = LANE_JOIN_FT` reaches impl-drift as `Name(LANE_JOIN_FT)`, so `_lay_web_lane`'s "25 ft" could not be checked (impl-drift on T67, found row 441).
+2. **The constraints.** The claims index's fingerprints: resolving an alias in `tools/claims.py` `values()` changes the core of every unit reading one, so it lands with `make claims-refingerprint` carrying the rows whose code is otherwise unchanged (as 417 T54 did).
+3. **Where each comes from.** Found row 441, impl-drift's second pass on T67, observed 2026-10-27, method: the bundle's `constants it reads` line.
+4. **Do they describe the world here?** Yes: `l7r/diagram/hamletgen/ways/fabric.py` binds `_LANE_JOIN_FT = LANE_JOIN_FT`.
+5. **The order.** Any time; tooling, no map moves.
+6. **The exits.** Green: an aliased constant's bundle line carries its value, the claims index carried with no claim newly owed, `make hooks-test` and the tooling tests green.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one alias followed through the import table already built.
+8. **The budget.** One landing (`make land-tooling`).
+9. **Done, measured.** Not yet measured.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the alias resolved in the bundle | `make claims-bundle MODULE=l7r/diagram/hamletgen/ways/serve.py` shows `_LANE_JOIN_FT=Constant(value=25.0)` |
+| no claim newly owed | `make claims-owed` before and after `make claims-refingerprint` |
+

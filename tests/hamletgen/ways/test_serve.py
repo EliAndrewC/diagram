@@ -42,7 +42,7 @@ def test_a_way_shadowed_past_a_pitch_names_the_way_it_runs_beside() -> None:
 def unheld(monkeypatch: pytest.MonkeyPatch) -> None:
     """The lay check passed through (`lay.laid_lawfully`, feature 417 T06, `test_lay.py`'s subject): these stubs seat no
     farmhouse at a run's free end, so the service rule would refuse the run before the join mechanics under test are reached."""
-    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, run, width=3.0: run)
+    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, run, width=3.0, whole=False, keep=None: run)
 
 
 @pytest.mark.usefixtures("unheld")
@@ -521,7 +521,7 @@ def test_a_link_goes_with_its_run_when_the_lay_check_refuses_the_run(monkeypatch
     walled = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
     walled.M["lanes"][0]["w"] = 5
     fence = [(40.0, 175.0), (60.0, 175.0), (60.0, 190.0), (40.0, 190.0)]
-    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0: pts if width != 3.0 else None)  # the link held, the run not
+    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0, whole=False, keep=None: pts if width != 3.0 else None)  # the link held, the run not
     assert hg.ways._lay_web_lane(walled, run, [], [fence], [], houses=homes) is False and len(walled.M["lanes"]) == 1
 
 
@@ -545,19 +545,20 @@ def test_a_run_refused_at_its_last_draw_leaves_no_lane(monkeypatch: pytest.Monke
     """Feature 417 T06: a run that reaches the network's end and is refused there by the lay check is not counted laid, and
     nothing it would have joined by is left drawn."""
     s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]])
-    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0: None)
+    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0, whole=False, keep=None: None)
     assert hg.ways._lay_web_lane(s, [(200.0 - 182.0 * i / 10.0, 200.0) for i in range(11)], [], [], []) is False
     assert len(s.M["lanes"]) == 1
 
 
-def test_a_healing_link_refused_or_cut_off_one_side_takes_its_run_with_it(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_healing_link_refused_takes_its_run_with_it_and_both_are_laid_whole(monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 417 T06 (impl-drift): a run whose healing link the lay check refuses is not drawn - it was drawn as an island -
     and a link the check cut so that it no longer touches both sides goes, with the run, as no link at all."""
     detached = [(120.0, float(y)) for y in range(150, 255, 5)]
     homes = [(150.0, 200.0)]
     s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
-    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0: None)
+    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0, whole=False, keep=None: None)
     assert hg.ways._lay_web_lane(s, detached, [], [], [], houses=homes) is False and len(s.M["lanes"]) == 1
-    cut = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
-    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0: [(60.0, 200.0), (100.0, 200.0)])  # off the network
-    assert hg.ways._lay_web_lane(cut, detached, [], [], [], houses=homes) is False and len(cut.M["lanes"]) == 1
+    asked: list[bool] = []
+    monkeypatch.setattr(_lay, "laid_lawfully", lambda s, pts, width=3.0, whole=False, keep=None: asked.append((whole, keep is not None)) or pts)
+    hg.ways._lay_web_lane(_StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes), detached, [], [], [], houses=homes)
+    assert asked == [(True, False), (False, True)], "the link laid as it came, the run still through the link's end"

@@ -199,6 +199,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     from .checks import served_network  # local: checks sits above serve in this package's layers
 
     linked = len(s.M.get("lanes") or [])  # the lanes before this run: a link drawn for a run refused goes with it
+    joint: Pt | None = None  # where a healing link meets the run, which the run must still pass through as laid
     segs = served_network(s.M.get("lanes") or [])  # THE NETWORK, NOT ANY LINE ON THE GROUND (feature 417 T58): a run
     # joined to an island off the connector's network would be dropped whole by the settle's one-network step
     if len(run) < 2:
@@ -274,9 +275,9 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
                     run = [*run[:k], q, *run[k + 1 :]]
                 else:
                     link = joined_link(run_k, q, hard, walls, water, segs)
-                    if link is None or not _draw_web(s, link, int(join_width(s, link)), joins=True, lawful=True):
+                    if link is None or not _draw_web(s, link, int(join_width(s, link)), joins=True, lawful=True, whole=True):
                         return False
-                    if not _draw_web(s, run, 3, lawful=True):
+                    if not _draw_web(s, run, 3, lawful=True, keep=run_k):  # ...still through the vertex its link meets
                         # ...THE LINK GOES WITH ITS RUN (feature 417 T06): a run the lay check refuses leaves no link joined to
                         # nothing - the two are one placement, laid together or not at all
                         s.drop_lanes(range(linked, len(s.M["lanes"])))
@@ -299,13 +300,11 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             # review read it at 2x as a lollipop knob mid-street, and it is a repair scar rather than
             # a way. A link exists to make two lanes one; it should look like the lane it completes.
             _w = join_width(s, link[0])
-            # ...AND THE LINK DRAWN, STILL TOUCHING BOTH SIDES AS HELD, OR THE RUN IS NOT DRAWN (feature 417 T06, impl-drift): a
-            # link the lay check refused left its run drawn as an island, and one it cut was never asked again
-            if not _draw_web(s, link[0], int(_w), lawful=True):
+            # ...AND THE LINK DRAWN AS IT CAME, OR THE RUN IS NOT DRAWN (feature 417 T06, impl-drift): a link the lay check
+            # refused left its run drawn as an island, and one it re-aimed or cut no longer met both sides as `_touches_both` found
+            if not _draw_web(s, link[0], int(_w), lawful=True, whole=True):
                 return False
-            if not _touches_both(p, [(float(x), float(y)) for x, y in s.M["lanes"][-1]["pts"]], segs):
-                s.drop_lanes(range(linked, len(s.M["lanes"])))
-                return False
+            joint = p
         else:
             # SNAP ONLY IF THE GROUND BETWEEN IS CLEAR. Extending an end onto the way it meets is what makes the junction read
             # as a touch instead of a gap - but the few feet being added are ground like any other, and adding them blind put
@@ -317,7 +316,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             if carried_run is None:
                 return False
             run = carried_run
-    if _draw_web(s, run, 3, lawful=True):
+    if _draw_web(s, run, 3, lawful=True, keep=joint):  # ...still through its link's end
         return True
     s.drop_lanes(range(linked, len(s.M["lanes"])))  # ...the healing link goes with its refused run, as above
     return False
