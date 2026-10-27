@@ -23,7 +23,7 @@ For the GM (FR-006). Measured 2026-10-27, seed 25 at 40 households, the host sha
 
 ## What it cost
 
-From the GM's request to this report: the session's first command 20:54:02, this report 21:11 (about 17 minutes of wall
+From the GM's request to this report (the step log is partly reconstructed - `process-clock.md` marks which rows): the session's first command 20:54:02, this report 21:11 (about 17 minutes of wall
 clock). `make feature-report F=437` splits the session's own time (from the event log):
 
 | category | time |
@@ -38,10 +38,10 @@ the round arbiter 2 min - mostly overlapped with the session's work. The step-by
 
 | step | took | improvement it points at, and what it would save |
 |---|---|---|
-| spec and its review rounds (3 rounds and the arbiter) | about 14 min of reviewer time, 4 min waited | A TRIAL FORM: measure first under a one-paragraph brief, then write the spec on the fixed evidence and review it once. The rounds kept finding things because the evidence files (the clock, the spike) changed beside the spec, so each round read them a step behind (the arbiter's reading). About 8 min of review and 3 min of waiting a trial. |
+| spec and its review rounds (3 rounds and the arbiter) | about 12 min of reviewer time, 4 min waited | A TRIAL FORM: measure first under a one-paragraph brief, then write the spec on the fixed evidence and review it once. The rounds kept finding things because the evidence files (the clock, the spike) changed beside the spec, so each round read them a step behind (the arbiter's reading). About 8 min of review and 3 min of waiting a trial. |
 | the clock log kept by hand | about 5 min, and one review round's findings | `make feature-report` already splits a feature's time from the event log; a step mark (`make clock STEP="..."`, an event the report reads) would replace the hand-kept table. About 5 min a feature that reports its time. |
 | reading the profiles (two ad-hoc scripts) | about 3 min | A `make perf-share MODULE=<path> STAGES=<list>` reading the raw profiles already kept (`dev/perf-raw/`): a module's share of each stage and its callers. About 3 min an investigation, and the search space right the first time. |
-| measurements: 6 profiles (29 s each), 2 quick A/Bs (38 s), 2 call counts (55-60 s) | about 5 min, mostly overlapped | `make phase-calls` counts the whole roll; counting only the changed stage (`STAGE=`) would take about a third. About 40 s a count. |
+| measurements: 6 profiles (29 s each), 2 quick A/Bs (38 s), 2 call counts (55-60 s) | about 5 min, mostly overlapped | `make phase-calls` counts the whole roll; `make perf-fanout STAGES=<stage>` already counts one stage's calls, so the trial should have used it - no build, about 40 s a count. |
 | landing | none - the spikes were set down | Had a spike landed: `make done` (about 3 min), `make cohort-landing` (about 2 min), a claims round (about 1 min). None seen to cut for a trial. |
 
 One process note: the spikes were written and measured before a plan was written - a trial set down by FR-005 never reached
