@@ -466,7 +466,7 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, largest: tuple[f
             lot: list[Reach] = []
             got = settled_seat(center, reach, start, ang, parting, scale, reach_at, lambda q, h=house: seat_refused(s, q, h), lot)
             if got is not None:  # the next settle starts from the reach this one settled on (fewer rolls a seat)
-                start = union(guess, last[0])
+                start = union(start, last[0])  # 439 SPIKE 2: settle from the widest reach seen, so a seat settles on its first envelope
             if got is None or _near_a_house(s, got):
                 continue
             q = got
