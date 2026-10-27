@@ -16793,8 +16793,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#cell on a lane or stream left undrawn": {
-  "code": "d25f1e516708f7e7",
-  "core": "e373381534fa0fdb",
+  "code": "f880170f5d1c8fb9",
+  "core": "384a780b5587204a",
   "date": "2026-10-07",
   "note": "0033 says nothing on how a lane or stream crossing a holding strip was laid out, so GUESS is the right label; the cited 0081 page was not in the bundle",
   "pages": {},
@@ -16808,8 +16808,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#crop cells kept back from lanes and streams": {
-  "code": "47d30390662a10d2",
-  "core": "e373381534fa0fdb",
+  "code": "38d77b00cf4dfe62",
+  "core": "384a780b5587204a",
   "date": "2026-10-07",
   "note": "GUESS correct: 0033 does not say how near a lane or stream a holding is planted; the 2 px / 6 px buffers match the code",
   "pages": {},
@@ -16824,16 +16824,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#furrows down the strip": {
-  "code": "a0fadd7badd6fc99",
-  "core": "e373381534fa0fdb",
+  "code": "e35cfb7df041e9f7",
+  "core": "384a780b5587204a",
   "date": "2026-10-03",
   "note": "matches its backing",
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#holding drawn as dry field": {
-  "code": "3e0d7be45acd4017",
-  "core": "e373381534fa0fdb",
+  "code": "0a4ba26ce3f1971b",
+  "core": "384a780b5587204a",
   "date": "2026-10-07",
   "note": "every cell takes its crop from DRY_CROPS, none paddy; dry field is recorded as a GUESS",
   "pages": {
@@ -16847,8 +16847,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#holding plot depth": {
-  "code": "3f36239e2c0c86de",
-  "core": "e373381534fa0fdb",
+  "code": "2d727e27a4923fbe",
+  "core": "384a780b5587204a",
   "date": "2026-10-07",
   "note": "max(1, round(depth / px(150 ft))) matches \"plots about 150 ft deep\", which the page records as a convention",
   "pages": {
@@ -16864,8 +16864,8 @@
  "l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#its salts, guards and sentinels": {
   "body": "0ad8b1f5a7294a5e",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 100000 (sentinel band length, clipped)",
-  "code": "98658f9905191f86",
-  "core": "e373381534fa0fdb",
+  "code": "db2a560bbbe5b66f",
+  "core": "384a780b5587204a",
   "date": "2026-10-25",
   "note": "a clipped sentinel length",
   "pages": {},
@@ -21109,8 +21109,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::drain_run#a drain is a dug ditch": {
-  "code": "1ae10b14b1ed0f07",
-  "core": "384c72dd6418742f",
+  "code": "a98b94834da36d11",
+  "core": "4d6614c4663205d1",
   "date": "2026-10-07",
   "note": "every sink, whether brook, pond or off the map, draws one drainage-ditch class, matching \"a dug channel that reaches a watercourse, never a brook of its own\"",
   "pages": {
@@ -21129,8 +21129,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::drain_run#drain width": {
-  "code": "1e53f84e8140138b",
-  "core": "384c72dd6418742f",
+  "code": "59c879307ec77f24",
+  "core": "4d6614c4663205d1",
   "date": "2026-10-07",
   "note": "the run onward is \"the same dug ditch\" and carries the collector's full outfall width (chan_px(DRAIN_FT[1])), as the page draws it",
   "pages": {
@@ -21145,8 +21145,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::drain_run#no no-build corridor on a hamlet": {
-  "code": "c349445a03c4a60a",
-  "core": "384c72dd6418742f",
+  "code": "7657bfbb9d1a3754",
+  "core": "4d6614c4663205d1",
   "date": "2026-10-07",
   "note": "field_channel registers no corridor; the 33 ft strip is the town and city maps' rule, and a hamlet's rule is the marsh and the ground below the drain",
   "pages": {
@@ -24919,8 +24919,8 @@
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#off the steadings": {
   "body": "b614b97d8f7d53f9",
   "claim": "off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane, the built ground blocks",
-  "code": "676b8533b51cd7da",
-  "core": "f63f3ae5ddc34c28",
+  "code": "ffe9b39a31403b2b",
+  "core": "cd6dc183472888b4",
   "date": "2026-10-27",
   "note": "the homestead fabric, but for commons and village groves, blocks a run-on",
   "pages": {
@@ -29038,8 +29038,8 @@
  "l7r/diagram/hamletgen/ways/keeper.py::unsettled#verdict cache": {
   "body": "930e4bd0593328ef",
   "claim": "verdict cache - NONE",
-  "code": "15e6026acf3c3ccf",
-  "core": "1791cf8fcdc4a127",
+  "code": "615c12894ce92ce5",
+  "core": "24229a936a4aa579",
   "date": "2026-10-27",
   "note": "picks which rules the exit question asks; plumbing",
   "pages": {},
@@ -29092,8 +29092,8 @@
  "l7r/diagram/hamletgen/ways/knots.py::WebMemo.count#plumbing": {
   "body": "003f60481d4557e9",
   "claim": "plumbing - NONE",
-  "code": "e7f2361cdc0f5dce",
-  "core": "a51a6ff1637b1ed0",
+  "code": "9b6999c6008cb33c",
+  "core": "2e135de82ac6b132",
   "date": "2026-10-27",
   "note": "counts breaches; plumbing",
   "pages": {},
@@ -33123,8 +33123,8 @@
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#a lane ends at the dooryard": {
   "body": "e25bbb4e52d82055",
   "claim": "a lane ends at the dooryard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end within 60 ft of the house or 12 ft of its built ground reaches it on any side; one that reaches nothing is trimmed to service (`settle_dangling`)",
-  "code": "f8bab17f924cc7ec",
-  "core": "ae7eac92a7533c0c",
+  "code": "352b9bff56a47385",
+  "core": "249bf159e5eef10d",
   "date": "2026-10-27",
   "note": "the 60 ft / 12 ft reach is the page's own GUESS; an end that reaches nothing is trimmed by `settle_dangling`",
   "pages": {
@@ -33140,8 +33140,8 @@
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#a lane with no width judged as a footpath": {
   "body": "e25bbb4e52d82055",
   "claim": "a lane with no width judged as a footpath - village-lanes.drawing: a lane with no recorded width is judged at the footpath's 3 ft",
-  "code": "761618182d313555",
-  "core": "ae7eac92a7533c0c",
+  "code": "40177dc53603028c",
+  "core": "249bf159e5eef10d",
   "date": "2026-10-27",
   "note": "`lanes[i].get(\"w\") or 3.0`, the footpath's 3 ft",
   "pages": {
@@ -33174,8 +33174,8 @@
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#no doubled tail": {
   "body": "e25bbb4e52d82055",
   "claim": "no doubled tail - village-lanes.drawing: an end running back along another way under 20 degrees cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T101",
-  "code": "7650a1ab93931707",
-  "core": "ae7eac92a7533c0c",
+  "code": "ff936482039a7224",
+  "core": "249bf159e5eef10d",
   "date": "2026-10-27",
   "note": "known (405 T101): `along_tail(..., deg=_DOUBLED_DEG)` asks at 15 degrees where the page says \"less than 20 degrees\"",
   "pages": {
@@ -33201,8 +33201,8 @@
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#two paths side by side become one": {
   "body": "e25bbb4e52d82055",
   "claim": "two paths side by side become one - village-lanes.drawing: a lane crossing another at under 20 degrees cut at the crossing (`cut_at_shallow_crossing`)",
-  "code": "aa5cfb9343c64ae9",
-  "core": "ae7eac92a7533c0c",
+  "code": "97e1831ea3126c03",
+  "core": "249bf159e5eef10d",
   "date": "2026-10-27",
   "note": "cut at the shallow crossing, the end left on the other way and re-aimed as a T the next round; a household's way is kept at its door",
   "pages": {
@@ -36041,8 +36041,8 @@
  "l7r/diagram/hamletgen/ways/tree.py::admits#free ends at a house": {
   "body": "5bab44e36c948dbd",
   "claim": "free ends at a house - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25) - one main door served a minka's household (JAANUS, Edo period, pass A2); no page gives how many ends meet at one; at most DOORSTEP_MAX (2) free lane ends at a house",
-  "code": "7250d2280c38a4d1",
-  "core": "b57b04abdbf6d7c9",
+  "code": "444e3c4910a8a4dd",
+  "core": "6cb2cf406d24a647",
   "date": "2026-10-27",
   "note": "`n > law.DOORSTEP_MAX` refuses; no block gives how many ends meet at a house",
   "pages": {},
@@ -36052,8 +36052,8 @@
  "l7r/diagram/hamletgen/ways/tree.py::admits#no doubled band": {
   "body": "5bab44e36c948dbd",
   "claim": "no doubled band - DEVIATION village-lanes.drawing: two paths running side by side are drawn as one, and two lanes met end to end are read as one (`walked_shadows`) - an access lane may not run beside another past a pitch, measured with no angle where the page's test is under 20 degrees, a departure the code keeps until feature 417 T32",
-  "code": "cb6bc294616bea04",
-  "core": "b57b04abdbf6d7c9",
+  "code": "827d60a7e8bef861",
+  "core": "6cb2cf406d24a647",
   "date": "2026-10-27",
   "note": "known (417 T32): the stated departure is what the code does. `tree_shadows(...) or walked_shadows(...)` refuses an access lane that runs beside another past a pitch, measured with no angle, where the page measures \"at less than 20 degrees\". It also reads lanes met end to end as one way, as the page asks. The claim leaves out two departures its helpers state (the 30 ft test, and refusing the whole corridor where the page says to \"cut it where it comes alongside\" at the far end), and they belong in the same T32 departure.",
   "pages": {
@@ -36069,8 +36069,8 @@
  "l7r/diagram/hamletgen/ways/tree.py::admits#no sliver between the tree's lanes": {
   "body": "5bab44e36c948dbd",
   "claim": "no sliver between the tree's lanes - village-lanes.drawing: ends within 25 ft are joined (`as_joined`), two paths side by side are drawn as one (no needle, `needle_loops`), no stub run on past a crossing (no doubled tail)",
-  "code": "df48fc52478ac25e",
-  "core": "b57b04abdbf6d7c9",
+  "code": "336c10dcb9fa26e1",
+  "core": "6cb2cf406d24a647",
   "date": "2026-10-27",
   "note": "needle faces judged both as laid and with ends joined (`as_joined`)",
   "pages": {
@@ -36087,8 +36087,8 @@
  "l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged": {
   "body": "5bab44e36c948dbd",
   "claim": "track out's width as judged - village-lanes.drawing: the track out's stub judged at 6 ft (`tree_base.Base.stub`, `w` 6.0), the track out as drawn",
-  "code": "0297a60943dd1dcc",
-  "core": "b57b04abdbf6d7c9",
+  "code": "103663c4b5345af5",
+  "core": "6cb2cf406d24a647",
   "date": "2026-10-27",
   "note": "the tree is judged with the track out's stub among its lanes, and the 6 ft stated matches \"the track out to the wider world 6 ft\".",
   "pages": {
@@ -36103,8 +36103,8 @@
  "l7r/diagram/hamletgen/ways/tree.py::admits#tree keeps the lane law": {
   "body": "5bab44e36c948dbd",
   "claim": "tree keeps the lane law - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: each household's way, laid once the last house stands, admitted with no hook, fold, hairpin or dangling end among the tree's lanes",
-  "code": "b412724766555f8c",
-  "core": "b57b04abdbf6d7c9",
+  "code": "e380bb637c260b4e",
+  "core": "6cb2cf406d24a647",
   "date": "2026-10-27",
   "note": "each household's way is put to `law_` (Lawful) once the houses stand: no hook, fold, hairpin or dangling end",
   "pages": {
@@ -36123,8 +36123,8 @@
  "l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once": {
   "body": "5bab44e36c948dbd",
   "claim": "way out crosses each brook once - villages-beside-their-stream-one-bank-or-both.drawing",
-  "code": "f4c092a14ba36a1b",
-  "core": "b57b04abdbf6d7c9",
+  "code": "9e8f054d3acc6a46",
+  "core": "6cb2cf406d24a647",
   "date": "2026-10-27",
   "note": "0035 sets no once-per-brook cap (\"no page we read says how many crossings one way of a hamlet made\"). It records as a GUESS only that a replacement way crosses no more often than the one it replaces. The claim should be a GUESS stating the cap, or the page should record it",
   "pages": {
@@ -36380,8 +36380,8 @@
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a lane beside the other its whole length": {
   "body": "38679ec4ea8529f7",
   "claim": "a lane beside the other its whole length - village-lanes.drawing: two paths side by side are drawn as one - where no stretch of the lane stands off the other to cut back to, it is left for the lane law (`law.needle_loops`) to refuse, so the doubled way never ships",
-  "code": "8de0e1c3e126a969",
-  "core": "fa7c4e82e50a5d0e",
+  "code": "3de0b891f1b5e42e",
+  "core": "fbdd435630095442",
   "date": "2026-10-27",
   "note": "`at <= 0.0` leaves the lane for `needle_loops` to refuse",
   "pages": {
@@ -36409,8 +36409,8 @@
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a needle left where the tee would close one": {
   "body": "38679ec4ea8529f7",
   "claim": "a needle left where the tee would close one - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); the lane is left as drawn for the law to refuse rather than cut into another needle",
-  "code": "1c7f224ec1e2b735",
-  "core": "fa7c4e82e50a5d0e",
+  "code": "7e2596b2bd71b69e",
+  "core": "fbdd435630095442",
   "date": "2026-10-27",
   "note": "`not closes(tee)` guards the tee; the record is silent",
   "pages": {},
@@ -36420,8 +36420,8 @@
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#its reach": {
   "body": "38679ec4ea8529f7",
   "claim": "its reach - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); 0081 cuts a lane where it comes alongside and gives no distance - half of `law.NEEDLE_LOOP_FT` (10 ft); 2.0 (the walk's step)",
-  "code": "803b19c188bddf7e",
-  "core": "fa7c4e82e50a5d0e",
+  "code": "a4e810e0dfbc90a6",
+  "core": "fbdd435630095442",
   "date": "2026-10-27",
   "note": "`NEEDLE_LOOP_FT / 2.0` and the 2 ft step; §41 gives no distance for \"comes alongside\"",
   "pages": {},
@@ -36430,17 +36430,16 @@
  },
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#the doubled way drawn as one": {
   "body": "38679ec4ea8529f7",
-  "claim": "the doubled way drawn as one - village-lanes.drawing: two ways side by side are drawn as one",
-  "code": "549729caa95186a5",
-  "core": "fa7c4e82e50a5d0e",
+  "claim": "the doubled way drawn as one - DEVIATION village-lanes.drawing: two ways side by side are drawn as one - asked where the tail closes a thin face (`law.is_needle`), not at the page's under-20-degree tail, a departure the code keeps until feature 417 T32",
+  "code": "6a5cc3e82ba6446d",
+  "core": "fbdd435630095442",
   "date": "2026-10-27",
-  "note": "the trigger is `closes(own)`, a thin face (`law.is_needle`), where §41 cuts a lane whose end \"runs back along another way at less than 20 degrees\". A tail under 20 degrees that closes no face is not cut here. The claim should state that departure and name its task, or the code should ask the angle",
+  "note": "known (417 T32): the cut is triggered where the tail closes a thin face (`closes` -> `law.is_needle` on the polygonized faces), not at the page's under-20-degree tail; the stated departure matches the code",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
-   "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
   ],
   "verdict": "DRIFTED"
@@ -36677,48 +36676,98 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/tree.py::tree_faults#a doubled tail asked at `_DOUBLED_DEG` (15 degrees)": {
-  "code": "c522e8a994cc57e0",
-  "core": "c522e8a994cc57e0",
+ "l7r/diagram/hamletgen/ways/tree.py::tree_faults#a doubled tail asked at 15 degrees": {
+  "body": "c767ff85ab958252",
+  "claim": "a doubled tail asked at 15 degrees - DEVIATION village-lanes.drawing: an end running back along another way under 20 degrees - asked at `_DOUBLED_DEG`, 15, a departure the code keeps until feature 417 T16",
+  "code": "bf29db9750273ad8",
+  "core": "2db678d444aaf4aa",
   "date": "2026-10-27",
-  "note": "a doubled tail asked at `_DOUBLED_DEG` (15 degrees)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "known (417 T16): `along_tail(..., deg=_DOUBLED_DEG)` with `_DOUBLED_DEG=15.0` against the page's \"at less than 20 degrees\"; the stated departure matches the code",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "DRIFTED"
  },
- "l7r/diagram/hamletgen/ways/tree.py::tree_faults#an ordinary lane's ends at a house past `DOORSTEP_MAX` cut there": {
-  "code": "c522e8a994cc57e0",
-  "core": "c522e8a994cc57e0",
+ "l7r/diagram/hamletgen/ways/tree.py::tree_faults#a needle the ground forces is no fault": {
+  "body": "c767ff85ab958252",
+  "claim": "a needle the ground forces is no fault - village-lanes.drawing: a path bends round what stands in its way (`forced.forced_meeting`, feature 385)",
+  "code": "1e0b53be29401a4e",
+  "core": "2db678d444aaf4aa",
   "date": "2026-10-27",
-  "note": "an ordinary lane's ends at a house past `DOORSTEP_MAX` cut there",
+  "note": "accepted by the round arbiter (ask:417-T54-tree-claims), binding",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::tree_faults#doorstep ends cut": {
+  "body": "c767ff85ab958252",
+  "claim": "doorstep ends cut - GUESS: no source could speak to it, a value of ours (feature 417 T54); an ordinary lane's end past `law.DOORSTEP_MAX` at a house cut there",
+  "code": "61040b1fa529d123",
+  "core": "2db678d444aaf4aa",
+  "date": "2026-10-27",
+  "note": "the page gives no limit on free ends at a house and no cut point for them; its \"never at its door\" rule is about the side-by-side cut, not this one",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::tree_faults#ordinary lane defers": {
   "body": "c767ff85ab958252",
-  "claim": "ordinary lane defers - NONE: which of two lanes a repair cuts",
-  "code": "47bf0410261ca981",
-  "core": "c522e8a994cc57e0",
+  "claim": "ordinary lane defers - DEVIATION village-lanes.drawing: a household's own way is cut at its far end, never at its door - here the ordinary lane is cut and the tree lane never, a departure the code keeps until feature 417 T06",
+  "code": "514a02d91de389b3",
+  "core": "2db678d444aaf4aa",
   "date": "2026-10-27",
-  "note": "which of two lanes a repair cuts is physical (`settle_ends` labels its like as a GUESS), and §41 answers it: \"A household's own way is cut at its far end, never at its door\". This code never cuts the tree lane and cuts the ordinary one instead. It should be a 0081 claim stated as a DEVIATION the page records, or a filed departure",
+  "note": "known (417 T06): every entry appended is guarded `not is_tree(...)`, so the ordinary lane is cut and the tree lane never, against \"A household's own way is cut at its far end, never at its door\"; the stated departure matches the code",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::tree_faults#where a doubled band is cut": {
+  "body": "c767ff85ab958252",
+  "claim": "where a doubled band is cut - DEVIATION village-lanes.drawing: cut where it comes alongside - cut at the middle of the ordinary lane's stretch beside the tree lane (`tree_shadow_cuts`), a departure the code keeps until feature 417 T32",
+  "code": "decb4cdb60c27fc7",
+  "core": "2db678d444aaf4aa",
+  "date": "2026-10-27",
+  "note": "accepted by the round arbiter (ask:417-T54-tree-claims), binding",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::tree_faults#where a needle or a doubled tail is cut": {
+  "body": "c767ff85ab958252",
+  "claim": "where a needle or a doubled tail is cut - DEVIATION village-lanes.drawing: cut where it comes alongside and meet the other as a T - cut at the foot of the tree lane's end, or at the tree lane's end nearer it, a departure the code keeps until feature 417 T32",
+  "code": "39832df99ca85187",
+  "core": "2db678d444aaf4aa",
+  "date": "2026-10-27",
+  "note": "accepted by the round arbiter (ask:417-T54-tree-claims), binding",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::tree_faults#where a sliver is cut": {
+  "body": "c767ff85ab958252",
+  "claim": "where a sliver is cut - GUESS: no source could speak to it, a value of ours (feature 417 T54); the ordinary lane cut at the sliver's center",
+  "code": "e1429cdd041d1fcf",
+  "core": "2db678d444aaf4aa",
+  "date": "2026-10-27",
+  "note": "accepted by the round arbiter (ask:417-T54-tree-claims), binding",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
- },
- "l7r/diagram/hamletgen/ways/tree.py::tree_faults#the cut point for a needle or doubled tail: the tree lane's end projected, or its nearer end": {
-  "code": "c522e8a994cc57e0",
-  "core": "c522e8a994cc57e0",
-  "date": "2026-10-27",
-  "note": "the cut point for a needle or doubled tail: the tree lane's end projected, or its nearer end",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/tree.py::tree_faults#the ordinary lane cut at a sliver face's centroid, not where it comes alongside": {
-  "code": "c522e8a994cc57e0",
-  "core": "c522e8a994cc57e0",
-  "date": "2026-10-27",
-  "note": "the ordinary lane cut at a sliver face's centroid, not where it comes alongside",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::tree_records#access tree plumbing": {
   "code": "7ee61809f0fa9802",
@@ -49902,8 +49951,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin._plank_reaches_useful_ground#bank and village reach": {
   "body": "a4873095dd93272a",
   "claim": "bank and village reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); PLANK_BANK_REACH past the end, PLANK_VILLAGE_REACH to a house",
-  "code": "1a2b05ede536f897",
-  "core": "00e129613d13cafd",
+  "code": "2d812c0c2df5ded8",
+  "core": "903a7c8b0c60de0e",
   "date": "2026-10-25",
   "note": "no reach is given",
   "pages": {},
@@ -49911,8 +49960,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin._plank_reaches_useful_ground#both banks reach useful ground": {
-  "code": "63bbb642a68001fb",
-  "core": "00e129613d13cafd",
+  "code": "f443fef1d8ede93d",
+  "core": "903a7c8b0c60de0e",
   "date": "2026-10-03",
   "note": "0084 drawing: field, settlement or dike",
   "pages": {
@@ -50053,8 +50102,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#a join rules a seat out": {
-  "code": "65b52ead7431b1c2",
-  "core": "905067e4a1548e29",
+  "code": "dd6e723f01044079",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "a seat is skipped when `span_here > span`",
   "pages": {
@@ -50069,8 +50118,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#a seat nearer a drain refused": {
-  "code": "74b8b4a06910e299",
-  "core": "905067e4a1548e29",
+  "code": "6ae062ef54e8e68f",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "`plank_on_supply`; drains carry no crossing",
   "pages": {
@@ -50086,8 +50135,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed brook width": {
   "body": "fd0263253db64fbe",
   "claim": "assumed brook width - villages-beside-their-stream-one-bank-or-both.drawing: a brook 7 ft wide where a record has none (`DEFAULT_W`)",
-  "code": "b5cb3dd3808261df",
-  "core": "905067e4a1548e29",
+  "code": "006848d58f6642c3",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-22",
   "note": "px(7.0), a brook 7 ft wide",
   "pages": {
@@ -50102,8 +50151,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed channel width": {
   "body": "fd0263253db64fbe",
   "claim": "assumed channel width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: every width is stored in feet, the same real size on every map, and 0031 records a 2.5 ft channel - the fallback is 2.5 px, not feet, a departure the code keeps until feature 417 T34; 2.5 px where a record has none (`DEFAULT_W`)",
-  "code": "3e2f4e84f6916d53",
-  "core": "905067e4a1548e29",
+  "code": "817488dd7c5fddcf",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-25",
   "note": "`\"channels\": 2.5` is in px, not `self.px(2.5)`, against \"Widths are stored in feet ... the same real size on every map\"",
   "pages": {
@@ -50116,8 +50165,8 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed ditch width": {
-  "code": "99784e758a2e013c",
-  "core": "905067e4a1548e29",
+  "code": "14a7856f962945bb",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "`px(2.5)`, delivery ditches \"2.5 ft at the head\"",
   "pages": {
@@ -50131,8 +50180,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#both banks reach useful ground": {
-  "code": "84e67c79eebcdc0f",
-  "core": "905067e4a1548e29",
+  "code": "beb22d1e20e4d57c",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "`_plank_reaches_useful_ground`",
   "pages": {
@@ -50148,8 +50197,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#feeder left unplanked": {
   "body": "fd0263253db64fbe",
   "claim": "feeder left unplanked - plank-bridges-over-farm-ditches-itabashi.drawing: a crossing stands wherever both ends reach useful ground, a walked dike included - the feeder is left unplanked at a flank seat, a departure the code keeps until feature 417 T34; by `seg_caps` (feeder 0 at a flank seat, 3 at the head), not by `SUPPLY_ROLES`, which takes the feeder as `main`",
-  "code": "859182a19067aa32",
-  "core": "905067e4a1548e29",
+  "code": "35a06aa3e92207d3",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-25",
   "note": "`seg_caps` gives the feeder 0 planks at a flank seat even where both banks reach useful ground, against \"Both ends of a crossing land on ground worth crossing to\" as the only bar. Unrecorded; DEVIATION or fix in T34",
   "pages": {
@@ -50164,8 +50213,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#its salts, guards and sentinels": {
   "body": "fd0263253db64fbe",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 41 (taper sample count)",
-  "code": "9c7b866b5940a587",
-  "core": "905067e4a1548e29",
+  "code": "4eb6862b6a415b85",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-25",
   "note": "taper sample count",
   "pages": {},
@@ -50176,8 +50225,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#no path leads to a plank": {
   "body": "fd0263253db64fbe",
   "claim": "no path leads to a plank - plank-bridges-over-farm-ditches-itabashi.drawing",
-  "code": "9594eb1961de91de",
-  "core": "905067e4a1548e29",
+  "code": "6e8b25ae8db7bdc1",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-22",
   "note": "planks laid free-standing, reached along the bunds",
   "pages": {
@@ -50190,8 +50239,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#not on another deck": {
-  "code": "1d53dbbf32ca888a",
-  "core": "905067e4a1548e29",
+  "code": "88372b41c8ce46d7",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "other crossings rule a seat out",
   "pages": {
@@ -50205,8 +50254,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops and gardens": {
-  "code": "86af16e7780dd070",
-  "core": "905067e4a1548e29",
+  "code": "0e449d2c4583e738",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "crops rule a seat out, then the widest seat left is taken",
   "pages": {
@@ -50223,8 +50272,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off groves": {
   "body": "fd0263253db64fbe",
   "claim": "off groves - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a farm's grove rules a seat out",
-  "code": "4db6939cd42ba0ea",
-  "core": "905067e4a1548e29",
+  "code": "738323f67349c619",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-25",
   "note": "the page names houses, crops, crossings and joins, not groves",
   "pages": {},
@@ -50232,8 +50281,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off the homes": {
-  "code": "362624b7c301aa31",
-  "core": "905067e4a1548e29",
+  "code": "39c9af275d40ea08",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "the plank slides along its ditch until it clears every house",
   "pages": {
@@ -50247,8 +50296,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#one near the middle, more on a long run": {
-  "code": "c0fba5c60fdaa776",
-  "core": "905067e4a1548e29",
+  "code": "ab63b235ae2c1bae",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "midway, or evenly spaced along the qualifying run",
   "pages": {
@@ -50262,8 +50311,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#one rolled form": {
-  "code": "d4c814e501a8d7c4",
-  "core": "905067e4a1548e29",
+  "code": "3acd8ba4e3074a65",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "`resolve(\"footbridge_form\")` per settlement",
   "pages": {
@@ -50278,8 +50327,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#only water too wide to step across": {
-  "code": "1a1a48f6bcc2529d",
-  "core": "905067e4a1548e29",
+  "code": "dbf791455c95d338",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "`worth_planking` judges the widest point, and `seat_order` tries those seats first",
   "pages": {
@@ -50297,8 +50346,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#plank width": {
   "body": "fd0263253db64fbe",
   "claim": "plank width - plank-bridges-over-farm-ditches-itabashi.drawing: about 4 ft (`px(4)`), a single-file crossing",
-  "code": "a3c7959fd85fdad8",
-  "core": "905067e4a1548e29",
+  "code": "ce0d95fbb6e83654",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-22",
   "note": "px(4), about 4 ft single-file",
   "pages": {
@@ -50314,8 +50363,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#polder crossings by side": {
   "body": "fd0263253db64fbe",
   "claim": "polder crossings by side - plank-bridges-over-farm-ditches-itabashi.drawing: a crossing stands wherever both ends reach useful ground - zero caps where both banks are useful, a departure the code keeps until feature 417 T34; seg_caps: at a flank seat none on the feeder, far toe or drain; at the head the feeder 3; at the foot the toes 2 each",
-  "code": "5062f0c2153e0da6",
-  "core": "905067e4a1548e29",
+  "code": "7ab3b1dd7b18e0f9",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-25",
   "note": "zero caps on the feeder and far toe at a flank seat refuse crossings the page allows wherever both banks are useful. Unrecorded; DEVIATION or fix in T34",
   "pages": {
@@ -50329,8 +50378,8 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short abutment": {
-  "code": "5bbbc9c9c8453257",
-  "core": "905067e4a1548e29",
+  "code": "58d9db5cbfb1114e",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "local width plus 5.5 ft, so a 2.5 ft ditch takes about 8 ft",
   "pages": {
@@ -50347,8 +50396,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short stub stepped over": {
   "body": "fd0263253db64fbe",
   "claim": "short stub stepped over - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); under 140 px, no plank",
-  "code": "723978edee8d9c1c",
-  "core": "905067e4a1548e29",
+  "code": "102d73d99d4e15f7",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-25",
   "note": "\"a long ditch\" is not quantified",
   "pages": {},
@@ -50356,8 +50405,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#slide resolution": {
-  "code": "bfaa671923a80837",
-  "core": "905067e4a1548e29",
+  "code": "5d6c5f7ae8dab4bf",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "the sampling step only; plumbing",
   "pages": {},
@@ -50366,8 +50415,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#square across the ditch": {
-  "code": "8e284ff7447f2eac",
-  "core": "905067e4a1548e29",
+  "code": "57653620ddd60f70",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "`deck = ang + 90`",
   "pages": {
@@ -50381,8 +50430,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#supply ditches only": {
-  "code": "0716868c5f904601",
-  "core": "905067e4a1548e29",
+  "code": "d9a2dc6a904dd7d5",
+  "core": "abebfe0fa8ab157d",
   "date": "2026-10-08",
   "note": "only `SUPPLY_ROLES`; drains carry none",
   "pages": {
@@ -50520,8 +50569,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#landing past each bank": {
-  "code": "fbe3208ba591d5e8",
-  "core": "9dc618b8849796dc",
+  "code": "3478cee97d6e00e0",
+  "core": "524c2bea8be046a9",
   "date": "2026-10-08",
   "note": "`2 * LANDING_FT`, about 10 ft each bank",
   "pages": {
@@ -50535,8 +50584,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#near-parallel clamp": {
-  "code": "8b1edb1353b4d6f8",
-  "core": "9dc618b8849796dc",
+  "code": "39f92dd92c1ba5ff",
+  "core": "524c2bea8be046a9",
   "date": "2026-10-08",
   "note": "a numeric floor; `seat_deck` lengthens the deck to clear the water",
   "pages": {},
@@ -50545,8 +50594,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#oblique span solved": {
-  "code": "fab073266077fc92",
-  "core": "9dc618b8849796dc",
+  "code": "eb6eea90e9fb93e4",
+  "core": "524c2bea8be046a9",
   "date": "2026-10-08",
   "note": "`(ww + rw|cos|)/sin`",
   "pages": {
@@ -50559,8 +50608,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#rice at the landing cuts the crossing": {
-  "code": "0a8932d182ebbfea",
-  "core": "9dc618b8849796dc",
+  "code": "1d2323cc35dd5e86",
+  "core": "524c2bea8be046a9",
   "date": "2026-10-08",
   "note": "`_lands_dry` on every corner, else the deck is not seated",
   "pages": {
@@ -51134,8 +51183,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement._header#the covers right above the land": {
-  "code": "4161ef5095794286",
-  "core": "45be4f83c33685d5",
+  "code": "d840f1d28ce45340",
+  "core": "87b6adde2dd2da10",
   "date": "2026-10-12",
   "note": "drawing order only; the new grass-cut slot is z-order, not a physical decision",
   "pages": {},
@@ -51144,8 +51193,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement._header#the dry-crop and fallow tiles": {
-  "code": "17a959023eae6f71",
-  "core": "45be4f83c33685d5",
+  "code": "59780dd086a31efe",
+  "core": "87b6adde2dd2da10",
   "date": "2026-10-12",
   "note": "pattern fills and lines only",
   "pages": {},
@@ -51910,8 +51959,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#drained acres": {
-  "code": "3f0729811466b3ce",
-  "core": "dd4d7696ec4d23c4",
+  "code": "46cfea426050b434",
+  "core": "78074669546f5c03",
   "date": "2026-10-08",
   "note": "counts as drained only plots that are neither FLOODED nor low; the low row's green plots count as wet",
   "pages": {
@@ -51925,8 +51974,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#need and count": {
-  "code": "442dc1fffbc8a85d",
-  "core": "dd4d7696ec4d23c4",
+  "code": "dd68f531b78780e9",
+  "core": "78074669546f5c03",
   "date": "2026-10-08",
   "note": "rolls the winter crop among the forms the site can feed, then tops up the dry plots to the need, nearest the toe first",
   "pages": {
@@ -51943,8 +51992,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#top-up scope": {
-  "code": "0bb009a72c7510d4",
-  "core": "dd4d7696ec4d23c4",
+  "code": "189b5175cdd4bf31",
+  "core": "78074669546f5c03",
   "date": "2026-10-08",
   "note": "runs only for a generated hamlet with a fan middle and a dry reserve",
   "pages": {
@@ -51958,8 +52007,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_beads#bead glyph": {
-  "code": "f9e7b0b7e7fe73da",
-  "core": "2762218cc050eea8",
+  "code": "fba0cb6288b5407d",
+  "core": "8c04940c12eab1d7",
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
@@ -52164,8 +52213,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#blue plot class": {
-  "code": "cdfe2b1d8f1150b3",
-  "core": "76bc7a69d90f9e8c",
+  "code": "e038b714f9439058",
+  "core": "ba91bf5f42a5aee1",
   "date": "2026-10-08",
   "note": "classes a plot \"wet paddy\" only when it is FLOODED and low, so class and tint agree",
   "pages": {
@@ -52181,8 +52230,8 @@
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#no resting plot on a dike-pond block": {
   "body": "df5944d77617f562",
   "claim": "no resting plot on a dike-pond block - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a dike-pond block is drawn as its fish ponds (and 0019), not as rice plots; its open water is the fabric",
-  "code": "bb6ed5043e4dc8db",
-  "core": "76bc7a69d90f9e8c",
+  "code": "b82b23d43dea6d01",
+  "core": "ba91bf5f42a5aee1",
   "date": "2026-10-25",
   "note": "the block is drawn as fish ponds and dikes, not paddy, so nothing there can rest",
   "pages": {
@@ -52197,8 +52246,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#resting plots": {
-  "code": "3a91cf24d901ed0e",
-  "core": "76bc7a69d90f9e8c",
+  "code": "f65e5a121befea4e",
+  "core": "ba91bf5f42a5aee1",
   "date": "2026-10-08",
   "note": "whole basins, weighted down the fan's fall",
   "pages": {
@@ -52214,8 +52263,8 @@
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#resting plots off the low row": {
   "body": "df5944d77617f562",
   "claim": "resting plots off the low row - paddies-left-to-rest-kataarashi.drawing: resting is weighted toward the far end of the water's run, with no row excluded - the lowest row never rests, a departure the code keeps until feature 417 T34; a low or blue plot never rests (the wet ground the pond and overlays take)",
-  "code": "675c9bb39bde6d2f",
-  "core": "76bc7a69d90f9e8c",
+  "code": "00a7d4fbab3bb4aa",
+  "core": "ba91bf5f42a5aee1",
   "date": "2026-10-25",
   "note": "`_may` drops every `low` plot, but the page makes the far end of the water's run the likeliest to rest (\"grows the farther down the field's slope it lies\") and records no exclusion; the departure is admitted and tracked to T34 but is not recorded on the drawing page - either let low plots rest or record the exclusion as a DEVIATION",
   "pages": {
@@ -52477,8 +52526,8 @@
  "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#its figures from 0284": {
   "body": "afe25e3ea78f8345",
   "claim": "its figures from 0284 - how-our-maps-draw-a-bunds-bends-and-corners.drawing: 1.1 (pile floored just above the drawn bund width)",
-  "code": "a1a365af563edb0f",
-  "core": "af187e3458709bd8",
+  "code": "d6b30e54ce49efeb",
+  "core": "d9ab2590ef5403f9",
   "date": "2026-10-25",
   "note": "floor just above the drawn line (\"never thinner than the map's line\")",
   "pages": {
@@ -52493,8 +52542,8 @@
  "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#its salts, guards and sentinels": {
   "body": "afe25e3ea78f8345",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 16 (hex base of the seed hash); 0.25 (Bézier sample point); 0.75 (Bézier sample point)",
-  "code": "ec4139c5a3c84df6",
-  "core": "af187e3458709bd8",
+  "code": "f8c962a11672b108",
+  "core": "d9ab2590ef5403f9",
   "date": "2026-10-25",
   "note": "hash base and Bezier samples; 0.25 also serves as the bare-quadrant share, which the \"pile by quadrant\" claim covers",
   "pages": {},
@@ -52504,8 +52553,8 @@
  "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#junction pile size": {
   "body": "afe25e3ea78f8345",
   "claim": "junction pile size - how-our-maps-draw-a-bunds-bends-and-corners.drawing: four to six feet across - each fillet leg 2-3 ft from the vertex (0.8-1.2 of 2.5 ft), floored at the drawn aze (405 T126)",
-  "code": "6fcaa46b8ec33608",
-  "core": "af187e3458709bd8",
+  "code": "8ebd1023867c3ace",
+  "core": "d9ab2590ef5403f9",
   "date": "2026-10-22",
   "note": "legs of 0.8-1.2 x 2.5 ft give 2-3 ft from the vertex, so 4-6 ft across the node; the floor at aze_w*1.1 matches \"never thinner than the map's line\"; the page records the size as a GUESS",
   "pages": {
@@ -52532,8 +52581,8 @@
  "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#pile by quadrant": {
   "body": "afe25e3ea78f8345",
   "claim": "pile by quadrant - how-our-maps-draw-a-bunds-bends-and-corners.drawing: a fillet per corner, each leg drawn on its own, a quarter of corners left bare",
-  "code": "c5dc4d890357b67a",
-  "core": "af187e3458709bd8",
+  "code": "8b49722f39a9f5ff",
+  "core": "d9ab2590ef5403f9",
   "date": "2026-10-22",
   "note": "one fillet per corner, each leg drawn on its own, and rng < 0.25 left bare match \"roughly a quarter are left bare\"",
   "pages": {
@@ -52562,8 +52611,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin.settle_beads#beads off later water": {
-  "code": "fecf571e3a0175fc",
-  "core": "392fa62f77c030df",
+  "code": "65cdf9a852adc879",
+  "core": "403bfbd3ec4c17b7",
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
@@ -53002,8 +53051,8 @@
   "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#bank, margin and water proportions": {
-  "code": "771d53725329f130",
-  "core": "3e8e40aca8a5096f",
+  "code": "2bdcd0e07b7c3d77",
+  "core": "aa69419d5fc95d82",
   "date": "2026-10-08",
   "note": "the drawing page records the dish pond's proportions as a GUESS",
   "pages": {},
@@ -53014,8 +53063,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#field pond glyph": {
-  "code": "d2da11a14b322204",
-  "core": "3e8e40aca8a5096f",
+  "code": "54f7e54283e256e7",
+  "core": "aa69419d5fc95d82",
   "date": "2026-10-08",
   "note": "drawn as an earthen bank ring, a wet margin and open water: \"low ground ringed with an embankment and dug out\"",
   "pages": {
@@ -53032,8 +53081,8 @@
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#its drawn sizes": {
   "body": "91a06dde2dbc2b83",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (half-length of a reed mark); 8 (count of reed marks)",
-  "code": "1804c6e3fd706535",
-  "core": "3e8e40aca8a5096f",
+  "code": "1970a875cecf4d64",
+  "core": "aa69419d5fc95d82",
   "date": "2026-10-25",
   "note": "reed mark length and count",
   "pages": {},
@@ -53042,8 +53091,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#reed fringe": {
-  "code": "e796caac5189c7f2",
-  "core": "3e8e40aca8a5096f",
+  "code": "14ecb9c97eeb53f1",
+  "core": "aa69419d5fc95d82",
   "date": "2026-10-08",
   "note": "the reeds stand on the wet margin inside the bank, within one low plot",
   "pages": {
@@ -54705,8 +54754,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.rest_basin#its drawn sizes": {
   "body": "8d168a688800740b",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 900 (tufts per px² (decoration))",
-  "code": "f19f3b762f850287",
-  "core": "2664aea5536ad9d4",
+  "code": "1f0f5cf279aa3cd8",
+  "core": "a3e55046d053b1b1",
   "date": "2026-10-25",
   "note": "how densely the tufts are drawn",
   "pages": {},
@@ -54716,8 +54765,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.rest_basin#its salts, guards and sentinels": {
   "body": "8d168a688800740b",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (seed multiplier); 13 (seed multiplier)",
-  "code": "82e5035dded87886",
-  "core": "2664aea5536ad9d4",
+  "code": "23a611395a246a18",
+  "core": "a3e55046d053b1b1",
   "date": "2026-10-25",
   "note": "seed multipliers",
   "pages": {},
@@ -54726,8 +54775,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.rest_basin#resting plot drawn": {
-  "code": "6e711be271a1fa88",
-  "core": "2664aea5536ad9d4",
+  "code": "8941dae0de0cb33a",
+  "core": "a3e55046d053b1b1",
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
@@ -54748,8 +54797,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#canal widths": {
-  "code": "36459a44b2dc2dbf",
-  "core": "1dbc88c8837680db",
+  "code": "64e053b5c12d6ba0",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-10",
   "note": "the code uses fixed widths (main 3.3, drain 3.0, lateral 2.0) where the page tapers every stroke: supply \"4.5 -> 1.5\", delivery \"2.5 -> 1.2\", drain \"1.2 -> 5.5\". The widths are also px, not feet converted at the map's scale. No DEVIATION is recorded for leaving them untapered",
   "pages": {
@@ -54772,8 +54821,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#canals set in from the edges": {
   "body": "2b2f05a48c769311",
   "claim": "canals set in from the edges - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the main and the drain 1.4 plots inside the field's high and low edges, a lateral's ends 0.7 plot in",
-  "code": "5631819098696ce3",
-  "core": "1dbc88c8837680db",
+  "code": "27bcaef5f664e83a",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-25",
   "note": "fhi + 1.4*plot and flo - 1.4*plot, lateral ends 0.7*plot in; the 1.4 is not on any page, and the main stays near the high edge with a dry hem above it",
   "pages": {},
@@ -54783,8 +54832,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#column bund wanders": {
   "body": "2b2f05a48c769311",
   "claim": "column bund wanders - how-our-maps-draw-a-bunds-bends-and-corners.drawing: each column's bund wanders off its line by two sines (5 px over a 66 px period, 3 px over 29) as it runs down the fall",
-  "code": "4c5b495eb95fb55d",
-  "core": "1dbc88c8837680db",
+  "code": "58ee11ad0b22137a",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-22",
   "note": "`uline` swings a column line up to 8 px (5 + 3) on columns 0.9-1.35 x 34 px wide, about a quarter of the spacing, and never fades along the line. The page's only wander figures are \"up to about a tenth of the grid's spacing\" and a bow that \"fades to nothing at both ends\" (for a polder), and it gives none of the two-sine figures the claim credits to it. Either the wander should be brought within the page's bound, or the claim should be a GUESS until the page sizes a water-first field's wander",
   "pages": {
@@ -54798,8 +54847,8 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#dry where water fails": {
-  "code": "5d999320c950d77e",
-  "core": "1dbc88c8837680db",
+  "code": "6719d56176f52da8",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-11",
   "note": "`un_irrig = fm < fh or fm > fd` and `edgef ... > 0.6` turn the plots below the drain and at every margin dry. 0006 puts dry plots only \"just upslope of the supply canal\" and \"only in the hem\". And `random.random() < 0.62` fixes one grain-to-soy share where \"Each map picks its mix of the four crops at random\"",
   "pages": {
@@ -54814,8 +54863,8 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#each plot's green": {
-  "code": "fcaa7e0d491be4c6",
-  "core": "1dbc88c8837680db",
+  "code": "57e02454de790c72",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-10",
   "note": "the shade of one green is a display choice; it matches \"Rice basins are drawn one green\"",
   "pages": {},
@@ -54823,8 +54872,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#flooded near the ditches": {
-  "code": "c97d29b8a4b8314f",
-  "core": "1dbc88c8837680db",
+  "code": "29d94d9b12d25380",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-10",
   "note": "the page says \"about one rice plot in sixteen is drawn still flooded\", and the blue-green pooling plots are \"the low plots on the drain collector\". The code floods 30% of plots near the main as well as the drain",
   "pages": {
@@ -54840,8 +54889,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#its figures from 0009": {
   "body": "2b2f05a48c769311",
   "claim": "its figures from 0009 - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: 0.3 (flooded share near the ditches); 0.975 (ripe share, 2.5% on every map where the page has one in twenty on some maps) - a departure the code keeps until feature 417 T34",
-  "code": "ccb6b2c2ea4da725",
-  "core": "1dbc88c8837680db",
+  "code": "56c279cc72d2cfdb",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-25",
   "note": "`ro > 0.975` paints 2.5% ripe on every map where 0009 has \"on some maps ... one in twenty gold\" (5%, per map); `ro < 0.3` floods 30% of near-ditch plots against \"one rice plot in sixteen ... still flooded\" on some maps. Roll both per map at the page's shares",
   "pages": {
@@ -54857,8 +54906,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#its flooded band": {
   "body": "2b2f05a48c769311",
   "claim": "its flooded band - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1.4 (the flooded plots within 1.4 plots of the main or drain)",
-  "code": "f06cc81588df3f8b",
-  "core": "1dbc88c8837680db",
+  "code": "b09125af45e71d07",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-25",
   "note": "the page gives a flooded share and the drain collector, but no width for the band",
   "pages": {},
@@ -54868,8 +54917,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#its salts, guards and sentinels": {
   "body": "2b2f05a48c769311",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 6.28 (2π); 7 (seed multiplier); 13 (seed multiplier); 1.7 (phase decorrelation)",
-  "code": "b13eb55920b1a383",
-  "core": "1dbc88c8837680db",
+  "code": "769772e6050e20b6",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-25",
   "note": "2π, seeds and phase decorrelation",
   "pages": {},
@@ -54880,8 +54929,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#its search steps and tolerances": {
   "body": "2b2f05a48c769311",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 0.55 (last-column threshold); 14 (lateral sampling step)",
-  "code": "bc75f46a0fe33d14",
-  "core": "1dbc88c8837680db",
+  "code": "6f2cfef3087aee2d",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-25",
   "note": "a column threshold and a sampling step",
   "pages": {},
@@ -54892,8 +54941,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#its unstated figures": {
   "body": "2b2f05a48c769311",
   "claim": "its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 52 (outline wobble); 0.6 (how near the edge a plot goes dry); 0.62 (dry grain vs soy share); 0.08 (edge-dryness jitter)",
-  "code": "d813f4bd35620635",
-  "core": "1dbc88c8837680db",
+  "code": "8f33a489e291b7fa",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-25",
   "note": "0006 records the crop mix as a guess; nothing gives an edge-dryness rule",
   "pages": {},
@@ -54903,8 +54952,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#lateral spacing": {
   "body": "2b2f05a48c769311",
   "claim": "lateral spacing - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); a lateral every 4-6 columns",
-  "code": "428301fa41992389",
-  "core": "1dbc88c8837680db",
+  "code": "feead6078a680a7d",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-25",
   "note": "randint(4, 6), as claimed; no page gives the spacing",
   "pages": {},
@@ -54912,8 +54961,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#plot size": {
-  "code": "5efb34d0abd23207",
-  "core": "1dbc88c8837680db",
+  "code": "f67ec04cf3bdbff3",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-10",
   "note": "at 1 ft/px the 34 px plot gives about 1,500 sq ft, which matches the hamlet basin. But the page sizes basins \"in real feet at whatever scale\", and `plot` is px. I need the ft-per-px of the maps that call water_field and whether callers scale `plot`",
   "pages": {
@@ -54928,8 +54977,8 @@
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#ripe share": {
-  "code": "06bb1122eeb574e5",
-  "core": "1dbc88c8837680db",
+  "code": "604e597d75fea33a",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-10",
   "note": "the page says \"one in twenty gold\" (5%) \"on some maps\"; the code makes `ro > 0.975` ripe (2.5%) on every map",
   "pages": {
@@ -54944,8 +54993,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row bunds run straight": {
   "body": "2b2f05a48c769311",
   "claim": "row bunds run straight - how-our-maps-draw-a-bunds-bends-and-corners.drawing: the bunds across the fall drawn straight, only the column bunds wandering",
-  "code": "375c5fa477213ec4",
-  "core": "1dbc88c8837680db",
+  "code": "a26a943a531035f5",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-22",
   "note": "Each row bund is a straight segment at a fixed fall `fa`, from `uline(k, fa)` to `uline(k+1, fa)`. The page says \"No bund on our maps is ruled straight\" and \"each line wanders on its own\", and it records no straight-row exception for this field. Either give the row bunds their own wander or have 0284 record straight rows as a DEVIATION and relabel the claim.",
   "pages": {
@@ -54963,8 +55012,8 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row bunds staggered": {
   "body": "2b2f05a48c769311",
   "claim": "row bunds staggered - how-our-maps-draw-a-bunds-bends-and-corners.drawing: a bund that steps a few feet sideways and carries on parallel is not drawn, under about 30 ft - rows rolled per column stagger the row bunds a few feet across each column bund, a departure the code keeps until feature 417 T34; row boundaries rolled per column, so row bunds stagger between columns",
-  "code": "b1e4ab9e58b3f446",
-  "core": "1dbc88c8837680db",
+  "code": "8289d280297ce05b",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-25",
   "note": "`rows` is re-rolled for every column `k`, so each row bund stops at a column bund and carries on offset by anywhere from 0 to about one plot; that is the sideways step the page refuses (\"steps a few feet sideways and carries on parallel to itself is not drawn\") for every offset under about 30 ft",
   "pages": {
@@ -54978,8 +55027,8 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#water-first network": {
-  "code": "216bb9abfdb01e4a",
-  "core": "1dbc88c8837680db",
+  "code": "d9343b2f2b285463",
+  "core": "12626ecf93a3a92b",
   "date": "2026-10-10",
   "note": "comb: a supply canal on the high edge, delivery ditches down the fall along plot edges, one drain low, one flank only",
   "pages": {
@@ -55266,8 +55315,8 @@
  "l7r/diagram/settlement/finish.py::FinishMixin.label#its drawn sizes": {
   "body": "391e0264caf4f652",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 12 (font size); 1.15 (pitch); 0.55 (advance); 0.275 (center)",
-  "code": "758496f73b321c70",
-  "core": "569fc179f4f70d46",
+  "code": "2b7d59c00ac0d169",
+  "core": "1081cb1517af3750",
   "date": "2026-10-25",
   "note": "caption metrics",
   "pages": {},
@@ -62342,8 +62391,8 @@
  "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#its figures against 0005": {
   "body": "195b752c209a213a",
   "claim": "its figures against 0005 - rice-paddies-and-their-plots-suiden.drawing: 34 (small_irregular basin, under the page's 40 to 60 ft); 20 (small_irregular basin); 40 (small_irregular basin); 70 (large_block basin, past 60 ft); 30 (large_block basin); 44 (large_block basin) - a departure the code keeps until feature 417 T34",
-  "code": "3c2388b2c703168d",
-  "core": "c12cf075945e19b3",
+  "code": "56c7a47f2744eb75",
+  "core": "1cfe85aff69cb3c4",
   "date": "2026-10-25",
   "note": "34 ft is under and 70 ft over the page's \"some 40 to 60 ft across\"; the departure is acknowledged and tracked by T34, but the page does not record it as a choice",
   "pages": {
@@ -62359,8 +62408,8 @@
  "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#its figures against 0005's village basin": {
   "body": "195b752c209a213a",
   "claim": "its figures against 0005's village basin - rice-paddies-and-their-plots-suiden.drawing: 0.66 (basin aspect at ftpx >= 2, where the village basin is about 47 ft square); 0.72 (large_block aspect at ftpx >= 2) - a departure the code keeps until feature 417 T34",
-  "code": "9e221869fd6d5163",
-  "core": "c12cf075945e19b3",
+  "code": "39a618a7ad585b92",
+  "core": "1cfe85aff69cb3c4",
   "date": "2026-10-25",
   "note": "aspect 0.66 and 0.72, where the village basin is \"about 47 ft square\"; the claim names this and T34 is filed",
   "pages": {
@@ -62375,8 +62424,8 @@
  "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#its figures from 0005": {
   "body": "195b752c209a213a",
   "claim": "its figures from 0005 - rice-paddies-and-their-plots-suiden.drawing: 48 (medium basin); 26 (medium basin); 36 (medium basin)",
-  "code": "6df5ce4bad695128",
-  "core": "c12cf075945e19b3",
+  "code": "a5021210bf22310b",
+  "core": "1cfe85aff69cb3c4",
   "date": "2026-10-25",
   "note": "matches \"about 48 ft across its canal and 26 to 36 ft along it\"",
   "pages": {
@@ -62391,8 +62440,8 @@
  "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#its row spacing": {
   "body": "195b752c209a213a",
   "claim": "its row spacing - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (a planned grid's row spacing held to mean +-3 ft)",
-  "code": "3629cec8317aacad",
-  "core": "c12cf075945e19b3",
+  "code": "5d52651c9f727eea",
+  "core": "1cfe85aff69cb3c4",
   "date": "2026-10-25",
   "note": "the page says evenly spaced rows for a planned field and gives no tolerance",
   "pages": {},
@@ -62402,8 +62451,8 @@
  "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#its strip shapes": {
   "body": "195b752c209a213a",
   "claim": "its strip shapes - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1.9 (strip aspect); 32 (hamlet strip); 46 (hamlet strip); 66 (hamlet strip)",
-  "code": "77d289c0667b8bce",
-  "core": "c12cf075945e19b3",
+  "code": "8d971c98a3966d76",
+  "core": "1cfe85aff69cb3c4",
   "date": "2026-10-25",
   "note": "the page attests strips but gives them no size",
   "pages": {},
@@ -62411,8 +62460,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#paddy plot size and regularity": {
-  "code": "76b614bc4c0e57f1",
-  "core": "c12cf075945e19b3",
+  "code": "68bbcf1474ed9949",
+  "core": "1cfe85aff69cb3c4",
   "date": "2026-10-05",
   "note": "sizes bracket the norm, the grid only evens the rows, no jori squares",
   "pages": {
@@ -63329,8 +63378,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#dike-top house size": {
-  "code": "291243a7a77bc308",
-  "core": "b5b27729ad8ac47c",
+  "code": "4466e3120d769b89",
+  "core": "dc0114e770cb6529",
   "date": "2026-10-03",
   "note": "every dike-top plain house is drawn 46 x 28; 0029 keeps that for the better-off, with an ordinary house near 35 x 20 ft",
   "pages": {
@@ -63341,8 +63390,8 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#dike-top village": {
-  "code": "3b7fa1cc0d2e9efb",
-  "core": "b5b27729ad8ac47c",
+  "code": "7c0a93425e42b05c",
+  "core": "dc0114e770cb6529",
   "date": "2026-10-05",
   "note": "single file on the crest, widened platform, recorded GUESS",
   "pages": {
@@ -63361,8 +63410,8 @@
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#house platform": {
   "body": "31993559d4a1e11a",
   "claim": "house platform - GUESS polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the house and about 14 ft by 10 ft more; the house plus 14 by 10 ft of widened crest",
-  "code": "5be63cba77a20360",
-  "core": "b5b27729ad8ac47c",
+  "code": "75fbf02d1a8b69f3",
+  "core": "dc0114e770cb6529",
   "date": "2026-10-25",
   "note": "`hw + px(14)` by `hh + px(10)`, the page's own guess",
   "pages": {
@@ -63377,8 +63426,8 @@
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#its drawn sizes": {
   "body": "31993559d4a1e11a",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.32 (platform mottle spread (width)); 0.28 (platform mottle spread (height)); 8 (platform mottle rx max); 5 (platform mottle ry max / rx min)",
-  "code": "115a7d1de3300656",
-  "core": "b5b27729ad8ac47c",
+  "code": "3af7f2be87bcc6d9",
+  "core": "dc0114e770cb6529",
   "date": "2026-10-25",
   "note": "mottle ink",
   "pages": {},
@@ -63389,8 +63438,8 @@
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#its salts, guards and sentinels": {
   "body": "31993559d4a1e11a",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 3358 (seed salt (0xD1E))",
-  "code": "a9eea116c18c35da",
-  "core": "b5b27729ad8ac47c",
+  "code": "4a64ecbd498a2fb4",
+  "core": "dc0114e770cb6529",
   "date": "2026-10-25",
   "note": "seed salt",
   "pages": {},
@@ -63401,8 +63450,8 @@
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#its unstated figures": {
   "body": "31993559d4a1e11a",
   "claim": "its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N11, 2026-10-25) - 0.18 (house seat jitter along the crest)",
-  "code": "85ccad66dff79595",
-  "core": "b5b27729ad8ac47c",
+  "code": "69e870e18e2caa65",
+  "core": "dc0114e770cb6529",
   "date": "2026-10-25",
   "note": "0019 silent on seat spacing",
   "pages": {},
@@ -63412,8 +63461,8 @@
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#no homestead bundle": {
   "body": "31993559d4a1e11a",
   "claim": "no homestead bundle - GUESS polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: drawing none on the crest; bare houses, the gardens down on the parcels",
-  "code": "a64aee41200e5968",
-  "core": "b5b27729ad8ac47c",
+  "code": "a56d16495307aaf6",
+  "core": "dc0114e770cb6529",
   "date": "2026-10-25",
   "note": "bare houses on the crest, the page's guess",
   "pages": {
@@ -63428,8 +63477,8 @@
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#off the sluice notch": {
   "body": "31993559d4a1e11a",
   "claim": "off the sluice notch - GUESS polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: about 34 ft on a hamlet map; no house within 34 px of a gap",
-  "code": "d8158289c9e03792",
-  "core": "b5b27729ad8ac47c",
+  "code": "2c7d030b11c26e05",
+  "core": "dc0114e770cb6529",
   "date": "2026-10-25",
   "note": "34 px is 34 ft at a hamlet's grain and 68 ft at a village's, both the page's",
   "pages": {
@@ -63444,8 +63493,8 @@
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#spacing along the crest": {
   "body": "31993559d4a1e11a",
   "claim": "spacing along the crest - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); neighbors at least 1.15 house widths apart",
-  "code": "188875966b2f50dc",
-  "core": "b5b27729ad8ac47c",
+  "code": "4d2e045d5f42bfa8",
+  "core": "dc0114e770cb6529",
   "date": "2026-10-25",
   "note": "single file is attested, the spacing is not; 1.15 house widths matches the code",
   "pages": {},
@@ -63453,8 +63502,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#dike label": {
-  "code": "2eb41ece48e498b0",
-  "core": "2bf29f82ce4a5eb2",
+  "code": "fcbccc2a7bdd34f0",
+  "core": "42f962eb30de9055",
   "date": "2026-10-03",
   "note": "drawing convention",
   "research": "",
@@ -63463,8 +63512,8 @@
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#dike width": {
   "body": "4caa58bae16e8df6",
   "claim": "dike width - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the 14-40 ft band",
-  "code": "8418a97891092463",
-  "core": "2bf29f82ce4a5eb2",
+  "code": "2afdedcc41fe4c16",
+  "core": "42f962eb30de9055",
   "date": "2026-10-18",
   "note": "it draws and records (w_min/w_max) the band dike_band makes, which runs 11-43 ft against \"14 to 40 ft across\" (see dike_band)",
   "pages": {
@@ -63477,8 +63526,8 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#earth mottle": {
-  "code": "a4eb7c92b65421e3",
-  "core": "2bf29f82ce4a5eb2",
+  "code": "03242f2adab4c5fa",
+  "core": "42f962eb30de9055",
   "date": "2026-10-03",
   "note": "drawing convention",
   "research": "",
@@ -63487,8 +63536,8 @@
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#its drawn sizes": {
   "body": "4caa58bae16e8df6",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.7 (mottle throw count per px of bbox); 13 (mottle ellipse max rx); 9 (mottle ellipse max ry); 1.4 (willow wander off its row line); 1.2 (mulberry wander off its row line); 200 (label siting penalty on the village's side); 1000 (label siting score: prefer the north side)",
-  "code": "db15124eb36b67e8",
-  "core": "2bf29f82ce4a5eb2",
+  "code": "54bd254e066a4f19",
+  "core": "42f962eb30de9055",
   "date": "2026-10-25",
   "note": "mottle, row wander, label siting",
   "pages": {},
@@ -63498,8 +63547,8 @@
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#its figures from 0027": {
   "body": "4caa58bae16e8df6",
   "claim": "its figures from 0027 - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: 0.74 (willow row's place across the band); 0.26 (mulberry row's place across the band)",
-  "code": "c5348d2cc64acac0",
-  "core": "2bf29f82ce4a5eb2",
+  "code": "f439261da5c78c0c",
+  "core": "42f962eb30de9055",
   "date": "2026-10-25",
   "note": "three quarters toward the water, a quarter from the fields",
   "pages": {
@@ -63514,8 +63563,8 @@
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#its salts, guards and sentinels": {
   "body": "4caa58bae16e8df6",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 29 (seed salt (0x1D))",
-  "code": "d8826068f27aa296",
-  "core": "2bf29f82ce4a5eb2",
+  "code": "4ff7c2565b9a84ab",
+  "core": "42f962eb30de9055",
   "date": "2026-10-25",
   "note": "seed salt",
   "pages": {},
@@ -63524,8 +63573,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#mulberry row": {
-  "code": "a8ade0a257fd7fe8",
-  "core": "2bf29f82ce4a5eb2",
+  "code": "7d2b9be435a7c50c",
+  "core": "42f962eb30de9055",
   "date": "2026-10-03",
   "note": "0.26 out, 4.4 apart, per 0027",
   "pages": {
@@ -63536,8 +63585,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#no building on the dike": {
-  "code": "dd5a13bfb69e09b9",
-  "core": "2bf29f82ce4a5eb2",
+  "code": "e80e4a916384aacf",
+  "core": "42f962eb30de9055",
   "date": "2026-10-03",
   "note": "per 0019 (dike-top form is its own knob)",
   "pages": {
@@ -63548,8 +63597,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#notched at sluices": {
-  "code": "aed3cd3e88b78262",
-  "core": "2bf29f82ce4a5eb2",
+  "code": "7897d8cc21c5af31",
+  "core": "42f962eb30de9055",
   "date": "2026-10-03",
   "note": "band and rows cut, per 0027",
   "pages": {
@@ -63560,8 +63609,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#rows on the faces": {
-  "code": "6067b6e2c8cbe0b6",
-  "core": "2bf29f82ce4a5eb2",
+  "code": "6b13ccfe831622d1",
+  "core": "42f962eb30de9055",
   "date": "2026-10-03",
   "note": "0027 records the deviation",
   "pages": {
@@ -63572,8 +63621,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#willow row": {
-  "code": "a6e8d68b8e43fbcb",
-  "core": "2bf29f82ce4a5eb2",
+  "code": "2f17610481eb8b69",
+  "core": "42f962eb30de9055",
   "date": "2026-10-03",
   "note": "0.74 out, 8.5 apart, per 0027",
   "pages": {
@@ -67450,8 +67499,8 @@
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._house_too_near_a_neighbor#roofs shed apart": {
   "body": "8278420971ef6224",
   "claim": "roofs shed apart - farmhouses-minka.drawing: 3 ft is the gap our maps keep between neighboring houses, and 0246 parts two homesteads by 20 ft - two farmhouses are held 8 + 2 ft apart, a departure the code keeps until feature 417 T33; `FARMHOUSE_EAVE_GAP_FT` (8 ft) plus 2 ft between the rotated corners of two farmhouses; 0029 gives only a 3 ft eave",
-  "code": "3fffc71e3e3fb69e",
-  "core": "fca22a5379e8a649",
+  "code": "7027d3aa3bc63a25",
+  "core": "b4bd5108a6c07b21",
   "date": "2026-10-25",
   "note": "`FARMHOUSE_EAVE_GAP_FT + 2.0` holds houses 10 ft apart at the corners, where 0029 sets 3 ft as \"the gap our maps already keep between neighboring houses\"; 0246's 20 ft parts homestead lots, not walls, so the 8 ft is on no page - use 3 ft, or record the 8 ft",
   "pages": {
@@ -71561,8 +71610,8 @@
  "l7r/diagram/settlement/structures/captions.py::CaptionProbesMixin._draw_placement#its drawn sizes": {
   "body": "6789dff199d7c055",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.6 (leader stroke); 0.08 (leader stroke)",
-  "code": "cf0f89c13a37b683",
-  "core": "e53185c439be09f1",
+  "code": "89361811abdae594",
+  "core": "af040f7d9930d5d3",
   "date": "2026-10-25",
   "note": "leader stroke.",
   "pages": {},

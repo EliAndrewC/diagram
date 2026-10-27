@@ -163,7 +163,7 @@ def off_the_needle(pts: Sequence[Any], drawn: Sequence[Sequence[Sequence[float]]
     Left as it was where no needle is closed, or where the tee would still close one.
 
     Research:
-        the doubled way drawn as one - research/questions/0081-village-lanes.drawing.html: two ways side by side are drawn as one
+        the doubled way drawn as one - DEVIATION research/questions/0081-village-lanes.drawing.html: two ways side by side are drawn as one - asked where the tail closes a thin face (`law.is_needle`), not at the page's under-20-degree tail, a departure the code keeps until feature 417 T32
         its reach - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); 0081 cuts a lane where it comes alongside and gives no distance - half of `law.NEEDLE_LOOP_FT` (10 ft); 2.0 (the walk's step)
         a lane beside the other its whole length - research/questions/0081-village-lanes.drawing.html: two paths side by side are drawn as one - where no stretch of the lane stands off the other to cut back to, it is left for the lane law (`law.needle_loops`) to refuse, so the doubled way never ships
         a needle closed away from the lane's end - research/questions/0081-village-lanes.drawing.html: a lane that wanders over another way at a needle's angle is cut where it comes alongside - a lane whose end stands off the other way (`at >= mine.length`) is not cut, the needle left for the law to refuse, a departure the code keeps until feature 417 T32
@@ -506,7 +506,14 @@ def tree_faults(M: Mapping[str, Any]) -> list[tuple[int, Pt]]:
     `settle_needles` cuts only where nothing splits, cohort seeds 15, 27 and 36), or a house discharges more than
     `law.DOORSTEP_MAX` free ends. The ordinary lane is cut there - it defers.
 
-    Research: ordinary lane defers - NONE: which of two lanes a repair cuts"""
+    Research:
+        ordinary lane defers - DEVIATION research/questions/0081-village-lanes.drawing.html: a household's own way is cut at its far end, never at its door - here the ordinary lane is cut and the tree lane never, a departure the code keeps until feature 417 T06
+        a doubled tail asked at 15 degrees - DEVIATION research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees - asked at `_DOUBLED_DEG`, 15, a departure the code keeps until feature 417 T16
+        where a needle or a doubled tail is cut - DEVIATION research/questions/0081-village-lanes.drawing.html: cut where it comes alongside and meet the other as a T - cut at the foot of the tree lane's end, or at the tree lane's end nearer it, a departure the code keeps until feature 417 T32
+        where a doubled band is cut - DEVIATION research/questions/0081-village-lanes.drawing.html: cut where it comes alongside - cut at the middle of the ordinary lane's stretch beside the tree lane (`tree_shadow_cuts`), a departure the code keeps until feature 417 T32
+        where a sliver is cut - GUESS: no source could speak to it, a value of ours (feature 417 T54); the ordinary lane cut at the sliver's center
+        a needle the ground forces is no fault - research/questions/0081-village-lanes.drawing.html: a path bends round what stands in its way (`forced.forced_meeting`, feature 385)
+        doorstep ends cut - GUESS: no source could speak to it, a value of ours (feature 417 T54); an ordinary lane's end past `law.DOORSTEP_MAX` at a house cut there"""
     lanes = M.get("lanes") or []
     out: list[tuple[int, Pt]] = []
     for i, end, k, u, v in law.needle_ends(lanes, lazy_ground(M)):  # ...a needle the ground forces is no fault (feature 385 plan D2)

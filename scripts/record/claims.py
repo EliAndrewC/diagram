@@ -669,6 +669,7 @@ def _parser() -> argparse.ArgumentParser:
     sub.add_parser("backfill")
     sub.add_parser("backfill-sections")
     sub.add_parser("rekey")
+    sub.add_parser("refingerprint")
     sub.add_parser("report")
     sub.add_parser("gate")
     sub.add_parser("known")
@@ -721,6 +722,39 @@ def _small_triage(root: Path, keys: list[str], out: str) -> int:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
         print(f"claims-triage: {why} - dispatch `impl-drift` on the MANIFEST above, then `make claims-checked BUNDLE=<dir> REPLY=<file>`; the skip is in {SKIPS}")
     return rc
+
+
+def refingerprint(index: dict[str, dict[str, Any]], old: Mapping[str, tuple[str, str]], new: Mapping[str, tuple[str, str]]) -> int:
+    """Carry each row whose stored code is its claim's code under the OLD fingerprint to the NEW one (key -> (code, core) under
+    each), in place: a change to how the fingerprint is read owes nothing whose code did not otherwise change (feature 417 T54:
+    star re-exports followed, which moved 57 claims' fingerprints on code no edit touched). A row whose code moved for any other
+    reason keeps it, and stays owed. Returns the rows carried."""
+    n = 0
+    for key, row in index.items():
+        if key in old and key in new and old[key][0] != new[key][0] and row.get("code") == old[key][0]:
+            row["code"] = new[key][0]
+            if row.get("core") == old[key][1]:
+                row["core"] = new[key][1]
+            n += 1
+    return n
+
+
+def _refingerprint_cmd(root: Path, index: dict[str, dict[str, Any]]) -> int:
+    """`make claims-refingerprint`: every claim's fingerprint read with and without the star re-exports, its row carried."""
+    cl = engine(Path(__file__).resolve().parents[2])
+
+    def codes(stars: bool) -> dict[str, tuple[str, str]]:
+        cl.STAR_REEXPORTS = stars
+        try:
+            return {u.key(c): (u.code(c), u.core) for u, _e in cl.all_units(root) for c in u.claims}
+        finally:
+            cl.STAR_REEXPORTS = True
+
+    n = refingerprint(index, codes(False), codes(True))
+    if n:
+        save_index(root / INDEX, index)
+    print(f"claims-refingerprint: {n} claim row(s) carried to the fingerprint the star re-exports give, their code otherwise unchanged")
+    return 0
 
 
 def _rekey_cmd(root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]]) -> int:
@@ -827,6 +861,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     cur = current(root)
     index = load_index(root / INDEX)
     qdir, store = root / QUESTIONS, load_store(root / STORE)
+    if args.cmd == "refingerprint":  # 417 T54: a change to how the fingerprint reads owes nothing
+        return _refingerprint_cmd(root, index)
     if args.cmd == "rekey":  # 405 T58: a file split at the bar keeps its claims' rows
         return _rekey_cmd(root, cur, index)
     if args.cmd == "accept":  # the round arbiter's accept on claims (the GM 2026-10-24)

@@ -274,6 +274,11 @@ def module_constants(tree: ast.Module) -> dict[str, str]:
     return out
 
 
+#: Star imports followed as re-exports (feature 417 T54). False reads the tables as before it, for `make claims-refingerprint`,
+#: which carries each claim's row to the fingerprint this gives wherever its code is otherwise unchanged.
+STAR_REEXPORTS = True
+
+
 def import_table(tree: ast.Module, module: str, is_package: bool) -> dict[str, tuple[str, str]]:
     """local name -> (module, name) for every `from X import Y [as Z]` at any depth, relative imports resolved."""
     pkg = module if is_package else module.rsplit(".", 1)[0]
@@ -282,7 +287,9 @@ def import_table(tree: ast.Module, module: str, is_package: bool) -> dict[str, t
         if isinstance(node, ast.ImportFrom):
             src = resolve_from(pkg, node)
             for alias in node.names:
-                out[alias.asname or alias.name] = (src, alias.name)
+                # ...a star import keyed by its source, so a package's several (`from .shape import *`, `from .meet import *`) each
+                # stand (feature 417 T54); `reexported` follows them
+                out[f"*{src}" if alias.name == "*" and STAR_REEXPORTS else alias.asname or alias.name] = (src, alias.name)
     return out
 
 
@@ -485,7 +492,15 @@ def reexported(constants: dict[str, dict[str, str]], tables: dict[str, dict[str,
         changed = False
         for mod, table in tables.items():
             for local, (src, real) in table.items():
-                if real in out.get(src, {}) and local not in out.setdefault(mod, {}):
+                if real == "*" and STAR_REEXPORTS:
+                    # ...AND A STAR IMPORT RE-EXPORTS EVERY PUBLIC CONSTANT (feature 417 T54): `law.py` split into a package whose
+                    # `__init__.py` reads `from .shape import *`, and every unit reading `law.JOIN_TOL` lost the value from its
+                    # fingerprint - 18 claims re-owed in full on code no edit touched
+                    for name, value in list(out.get(src, {}).items()):
+                        if not name.startswith("_") and name not in out.setdefault(mod, {}):
+                            out[mod][name] = value
+                            changed = True
+                elif real in out.get(src, {}) and local not in out.setdefault(mod, {}):
                     out[mod][local] = out[src][real]
                     changed = True
     return out

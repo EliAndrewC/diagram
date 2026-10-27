@@ -803,6 +803,9 @@ claims-backfill: ## [project] give every index row checked at today's research t
 claims-rekey:   ## [project] carry each claim's index row to the file its unit moved to with its code intact - a file split at the 1,000-line bar (405 T58); make land runs it
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" rekey
 
+claims-refingerprint: ## [project] carry each claim's index row to the fingerprint the star re-exports give, where its code is otherwise unchanged - run once, at the change (417 T54)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" refingerprint
+
 claims-backfill-sections: ## [project] re-key every procedure-section claim to its own line (feature 375), owing nothing that was not owed: run once, at the change
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" backfill-sections
 

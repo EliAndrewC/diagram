@@ -221,6 +221,19 @@ def test_resolve_from_handles_absolute_and_relative_imports() -> None:
     assert cl.import_table(ast.parse("from .c import D as E"), "pkg", True) == {"E": ("pkg.c", "D")}
 
 
+def test_a_package_of_star_imports_re_exports_every_public_constant_of_each() -> None:
+    """Feature 417 T54: `law.py` became a package whose `__init__.py` star-imports its submodules, and every unit reading
+    `law.JOIN_TOL` lost the value from its fingerprint (18 claims re-owed in full on code no edit touched). Each star import is
+    kept by its source, and each re-exports its module's public constants; a private one is not star-exported."""
+    import ast
+
+    tree = ast.parse("from .shape import *\nfrom .meet import *\nfrom .meet import _P as _P\n")
+    table = cl.import_table(tree, "pkg.law", True)
+    assert table["*pkg.law.shape"] == ("pkg.law.shape", "*") and table["*pkg.law.meet"] == ("pkg.law.meet", "*")
+    out = cl.reexported({"pkg.law.shape": {"JOIN_TOL": "4", "_Q": "1"}, "pkg.law.meet": {"NEEDLE_FT": "20", "_P": "2"}, "pkg.law": {}}, {"pkg.law": table})
+    assert out["pkg.law"] == {"JOIN_TOL": "4", "NEEDLE_FT": "20", "_P": "2"}, out["pkg.law"]
+
+
 def test_a_reexported_constant_resolves_to_its_definition() -> None:
     out = cl.reexported({"a": {"X": "1"}, "b": {}, "c": {}}, {"b": {"Y": ("a", "X")}, "c": {"Z": ("b", "Y"), "w": ("b", "nothing")}})
     assert out["c"] == {"Z": "1"} and out["b"] == {"Y": "1"}

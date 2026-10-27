@@ -457,3 +457,15 @@ def test_a_triage_whose_every_claim_is_owed_in_full_dispatches_no_triage(tmp_pat
     said = capsys.readouterr().out
     assert "owed in full" in said and "no triage to dispatch" in said and "claims-bundle OWED=1" in said, said
     assert cx.load_index(root / cx.INDEX)[SHARE]["triage"] == "touched", "sent on to impl-drift"
+
+
+def test_a_change_to_how_the_fingerprint_reads_carries_each_unchanged_row_and_keeps_a_changed_one() -> None:
+    """Feature 417 T54: following star re-exports moved 57 claims' fingerprints on code no edit touched. `refingerprint` carries a
+    row whose stored code is the OLD reading to the NEW one, its core with it; a row whose code moved for another reason stays."""
+    index = {"a": {"code": "old-a", "core": "core-a"}, "b": {"code": "edited-b", "core": "x"}, "c": {"code": "same"}}
+    old = {"a": ("old-a", "core-a"), "b": ("old-b", "core-b"), "c": ("same", "k")}
+    new = {"a": ("new-a", "core-a2"), "b": ("new-b", "core-b2"), "c": ("same", "k")}
+    assert cx.refingerprint(index, old, new) == 1
+    assert index["a"] == {"code": "new-a", "core": "core-a2"}, "carried, core and all"
+    assert index["b"]["code"] == "edited-b", "its code moved otherwise: still owed"
+    assert index["c"]["code"] == "same", "the reading did not move it"
