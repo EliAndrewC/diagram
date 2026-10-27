@@ -170,8 +170,8 @@ def field_unreached(M: Mapping[str, Any]) -> bool:
     cell's; the first within the reach answers, by the same `seg_dist`.
     Research:
         a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: on brook maps
-        asked on brook maps only - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); the field reach is asked only where a brook runs, a map whose field is fed otherwise owing
-            none (405 T127)
+        asked on brook maps only - DEVIATION research/questions/0014-bunds-between-the-paddies-aze.drawing.html: every hamlet's field path runs onto the outer bund - asked here only where a brook runs (405 T127), a departure the code keeps until feature 417 T60
+        the track out is no way to the field - GUESS: no source could speak to it, a value of ours (feature 417 T60); the `connector` lane, which only the track out carries (`track.stage_track` lays it), is the way off the map, not the hamlet's own way to its field
         its salts, guards and sentinels - NONE: they decide nothing about the place - 128 (spatial-index cell)
     """
     if not _brooks(M):

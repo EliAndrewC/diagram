@@ -1300,3 +1300,26 @@ Each step measured alone:
 | step | measured by |
 |---|---|
 | each claim | impl-drift's verdict in the claims round |
+
+### T60 Approach (checklist part A)
+
+1. **The goal, in the world.** Every hamlet's field path runs onto the paddy's outer bund (0014's drawing page, its field path: "never ends in open ground short of the bund", with no brook condition), so the field reach (`law.field_unreached`) is asked on every map with fields, not only where a brook runs.
+2. **The constraints.** Constitution XII; FR-004, FR-005; FR-008 (no seed regressed).
+3. **Where each comes from.** impl-drift on the claims round of T54's landing (2026-10-27): `field_unreached#asked on brook maps only` MISLABELED - the page is not silent.
+4. **Do they describe the world here?** Re-measured first: the cohort's maps with fields and no brook counted, and the field reach asked of each (`make cohort N=48 FRESH=0 JOBS=3` with the brook condition off).
+5. **The order.** After the speed tasks (FR-013): a correctness task.
+6. **The exits.** Green: the field reach asked on every map with fields, the placer that draws the field way (`reach.settle_field`) drawing it there, the fixed cohort and the pinned rows passing.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The cohort's verdicts with and without the condition, recorded in `research/`.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the maps the condition skips | the cohort with the condition off |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+

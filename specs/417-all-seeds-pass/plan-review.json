@@ -390,6 +390,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
+  },
+  "### T60 Approach (checklist part A)": {
+   "sha256": "4be38ec0b433d21e9aa6d5e16b140d82b84b3025c2f62ee102d0b8532a487e3a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4712,6 +4718,45 @@
      "summary": "settle_network's choice of the network of greatest length, where no connector is drawn, claimed as a GUESS.",
      "class": "within",
      "why": "Considered as a possible narrowing of D11-as-amended (research checked first, a pass run where nothing was looked for, GUESS only after). On the block's own words this is an engineering tie-breaker - which connected component the algorithm keeps when none is joined - inside a step the plan already counts as OWED for deletion (T06's OWED FROM T58), not a world-fact about premodern lane webs that a research pass could speak to; the GM's 2026-10-25 rule for such choices is 'do whatever is algorithmically easier' and mark it. Labeling it a GUESS is that marking. Had it been a historical value, skipping the research step would be a narrowing and the deletion plan would be a cost argument, not a ground."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T60 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T60-1 field reach on every map with fields",
+     "summary": "law.field_unreached is asked on every map with fields, not only where a brook runs; reach.settle_field draws the field way there",
+     "class": "within",
+     "why": "Widens a rule to the research page's own unconditioned statement (field path never ends short of the bund); the GM: 'everything already there functions as expected' and 'Changing behavior is fine as long as it is in line with our research'. Asking it in the placer is FR-005. Narrows nothing asked."
+    },
+    {
+     "id": "T60-5 order after the speed tasks",
+     "summary": "worked after FR-013's speed tasks, as a correctness task",
+     "class": "within",
+     "why": "Exactly FR-013 and the GM's 2026-10-26 'prioritize the things that will make us go faster before the things that will make us correct'."
+    },
+    {
+     "id": "T60-6 exits",
+     "summary": "green = rule asked everywhere, placer draws it, fixed cohort and pinned rows pass; red = recorded, set down, can't-be-done claim ruled via make arbiter-ask",
+     "class": "within",
+     "why": "Green carries FR-005/FR-008; red routes a failure to the arbiter rather than carving out a case, which narrows nothing."
+    },
+    {
+     "id": "T60-4/9 measurement",
+     "summary": "re-measure the no-brook maps with fields on the fixed cohort with the condition off; record verdicts with and without in research/",
+     "class": "within",
+     "why": "Measurement of the change's effect; serves FR-008 no regression; adds no behavior."
+    },
+    {
+     "id": "T60-10 no constant moves",
+     "summary": "no constant changes",
+     "class": "within",
+     "why": "Decides nothing against the request."
     }
    ]
   }

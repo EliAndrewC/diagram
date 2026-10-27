@@ -24917,21 +24917,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#off the steadings": {
-  "body": "d9d47dab9ac1e243",
+  "body": "b614b97d8f7d53f9",
   "claim": "off the steadings - how-our-maps-lay-a-clustered-settlements-lanes.drawing: nothing built on a lane, the built ground blocks",
-  "code": "ffe9b39a31403b2b",
-  "core": "cd6dc183472888b4",
-  "date": "2026-10-22",
-  "note": "the steadings' built ground blocks a run-on",
+  "code": "676b8533b51cd7da",
+  "core": "f63f3ae5ddc34c28",
+  "date": "2026-10-27",
+  "note": "the homestead fabric, but for commons and village groves, blocks a run-on",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#off the wet ground": {
@@ -29038,10 +29036,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/keeper.py::unsettled#verdict cache": {
-  "code": "615c12894ce92ce5",
-  "core": "24229a936a4aa579",
-  "date": "2026-10-17",
-  "note": "collects rule verdicts",
+  "body": "930e4bd0593328ef",
+  "claim": "verdict cache - NONE",
+  "code": "15e6026acf3c3ccf",
+  "core": "1791cf8fcdc4a127",
+  "date": "2026-10-27",
+  "note": "picks which rules the exit question asks; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -29090,10 +29090,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::WebMemo.count#plumbing": {
-  "code": "9b6999c6008cb33c",
-  "core": "2e135de82ac6b132",
-  "date": "2026-10-17",
-  "note": "counting",
+  "body": "003f60481d4557e9",
+  "claim": "plumbing - NONE",
+  "code": "e7f2361cdc0f5dce",
+  "core": "a51a6ff1637b1ed0",
+  "date": "2026-10-27",
+  "note": "counts breaches; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -30015,49 +30017,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/law.py::JOIN_REACH_FT#a join that stops short": {
-  "body": "f00e61a70a78181c",
-  "claim": "a join that stops short - village-lanes.drawing: ends within 25 ft of one another are joined",
-  "code": "f2993a3c86e0b72c",
-  "core": "8513e2c25050981f",
-  "date": "2026-10-22",
-  "note": "25 ft",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/law.py::field_unreached#a way reaches the field": {
-  "body": "5d1cff4617012bae",
-  "claim": "a way reaches the field - bunds-between-the-paddies-aze.drawing: on brook maps",
-  "code": "9130b9c70cde2d55",
-  "core": "228eb10bdfe7a42d",
-  "date": "2026-10-22",
-  "note": "a lane within the 6 ft reach of the paddy or the dry hem",
-  "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
-  },
-  "research": "1a1b231001c7410e",
-  "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:c46ebb5fdc934b56"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/law.py::field_unreached#asked on brook maps only": {
-  "body": "5d1cff4617012bae",
-  "claim": "asked on brook maps only - UNRESEARCHED: the field reach is asked only where a brook runs, a map whose field is fed otherwise owing none (405 T127)",
-  "code": "9bf98e34cb05460b",
-  "core": "228eb10bdfe7a42d",
-  "date": "2026-10-22",
-  "note": "0014 asks this of every map (\"the field path runs from the hamlet to the paddy's outer bund and joins it\", with no brook condition), so the brook-only ask (`if not _brooks(M): return False`) is a departure from a finding, not a silence. Label it DEVIATION with a recorded reason, or ask on every map",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
- },
  "l7r/diagram/hamletgen/ways/law/ends.py::FIXTURE_PAD_FT#fixture pad": {
   "code": "8d63d64eb770260a",
   "core": "8965d718adaaab2a",
@@ -30233,6 +30192,38 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/law/ends.py::field_unreached#a way reaches the field": {
+  "body": "5d1cff4617012bae",
+  "claim": "a way reaches the field - bunds-between-the-paddies-aze.drawing: on brook maps",
+  "code": "a50519e8ebe218ba",
+  "core": "72321ed8680bf119",
+  "date": "2026-10-27",
+  "note": "a hamlet lane must come within the reach of a paddy outline or a dry-plot edge, as the page says (the field path joins the outer bund, and the same reach holds at the dry hem)",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+  },
+  "research": "1a1b231001c7410e",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c46ebb5fdc934b56"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/law/ends.py::field_unreached#asked on brook maps only": {
+  "body": "5d1cff4617012bae",
+  "claim": "asked on brook maps only - DEVIATION bunds-between-the-paddies-aze.drawing: every hamlet's field path runs onto the outer bund - asked here only where a brook runs (405 T127), a departure the code keeps until feature 417 T60",
+  "code": "ed9c06ace35294c9",
+  "core": "72321ed8680bf119",
+  "date": "2026-10-27",
+  "note": "known (417 T60): `if not _brooks(M): return False` asks the field reach only on brook maps, where the page says \"the field path runs from the hamlet to the paddy's outer bund\" on every map",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+  },
+  "research": "1a1b231001c7410e",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c46ebb5fdc934b56"
+  ],
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/hamletgen/ways/law/ends.py::field_unreached#its salts, guards and sentinels": {
   "body": "5d1cff4617012bae",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 128 (spatial-index cell)",
@@ -30243,6 +30234,17 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/law/ends.py::field_unreached#the track out is no way to the field": {
+  "body": "5d1cff4617012bae",
+  "claim": "the track out is no way to the field - GUESS: no source could speak to it, a value of ours (feature 417 T60); the `connector` lane, which only the track out carries (`track.stage_track` lays it), is the way off the map, not the hamlet's own way to its field",
+  "code": "74c5e05d02531a2a",
+  "core": "72321ed8680bf119",
+  "date": "2026-10-27",
+  "note": "the code drops lanes flagged `connector` from the reach test, and the page is silent on that: it speaks only of the hamlet's own field path and its nearest lane reaching the bund, never of a track off the map",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law/ends.py::fixture_quads#under the crown, not the trunk": {
@@ -31062,6 +31064,23 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
   ],
   "triaged": "2026-10-22",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/law/shape.py::JOIN_REACH_FT#a join that stops short": {
+  "body": "f00e61a70a78181c",
+  "claim": "a join that stops short - village-lanes.drawing: ends within 25 ft of one another are joined",
+  "code": "ec401dd69ec16a2c",
+  "core": "4afca99cfe6691d4",
+  "date": "2026-10-27",
+  "note": "uses the web's join reach, 25 ft, which matches \"Ends within 25 ft of one another are joined\", including a T onto another lane's side",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:7e0b0a8a509d4899"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law/shape.py::JOIN_TOL#plumbing and wrappers": {
@@ -33102,29 +33121,29 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#a lane ends at the dooryard": {
-  "body": "d7addc485d684650",
+  "body": "e25bbb4e52d82055",
   "claim": "a lane ends at the dooryard - how-our-maps-lay-a-clustered-settlements-lanes.drawing: an end within 60 ft of the house or 12 ft of its built ground reaches it on any side; one that reaches nothing is trimmed to service (`settle_dangling`)",
-  "code": "352b9bff56a47385",
-  "core": "249bf159e5eef10d",
-  "date": "2026-10-22",
-  "note": "reached on any side; it defers to settle_dangling",
+  "code": "f8bab17f924cc7ec",
+  "core": "ae7eac92a7533c0c",
+  "date": "2026-10-27",
+  "note": "the 60 ft / 12 ft reach is the page's own GUESS; an end that reaches nothing is trimmed by `settle_dangling`",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
   "research": "4473caa26c642d2b",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:27b22a35a1127bbf",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453"
   ],
-  "triaged": "2026-10-23",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#a lane with no width judged as a footpath": {
-  "body": "d7addc485d684650",
+  "body": "e25bbb4e52d82055",
   "claim": "a lane with no width judged as a footpath - village-lanes.drawing: a lane with no recorded width is judged at the footpath's 3 ft",
-  "code": "40177dc53603028c",
-  "core": "249bf159e5eef10d",
-  "date": "2026-10-22",
-  "note": "`w or 3.0`, the footpath's 3 ft",
+  "code": "761618182d313555",
+  "core": "ae7eac92a7533c0c",
+  "date": "2026-10-27",
+  "note": "`lanes[i].get(\"w\") or 3.0`, the footpath's 3 ft",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -33132,7 +33151,6 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-23",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#lanes met end to end read as one": {
@@ -33154,21 +33172,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#no doubled tail": {
-  "body": "d7addc485d684650",
+  "body": "e25bbb4e52d82055",
   "claim": "no doubled tail - village-lanes.drawing: an end running back along another way under 20 degrees cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T101",
-  "code": "ff936482039a7224",
-  "core": "249bf159e5eef10d",
-  "date": "2026-10-21",
-  "note": "it cuts doubled tails at `_DOUBLED_DEG` = 15 where the page says \"less than 20 degrees\"; same fix as `law.doubled_tails` (20, or a recorded DEVIATION)",
+  "code": "7650a1ab93931707",
+  "core": "ae7eac92a7533c0c",
+  "date": "2026-10-27",
+  "note": "known (405 T101): `along_tail(..., deg=_DOUBLED_DEG)` asks at 15 degrees where the page says \"less than 20 degrees\"",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
   ],
-  "triaged": "2026-10-23",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#no fan of stubs at a door": {
@@ -33183,10 +33199,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#two paths side by side become one": {
-  "code": "97e1831ea3126c03",
-  "core": "249bf159e5eef10d",
-  "date": "2026-10-17",
-  "note": "a lane wandering over another at under 20 degrees is cut at the crossing and meets it as a T",
+  "body": "e25bbb4e52d82055",
+  "claim": "two paths side by side become one - village-lanes.drawing: a lane crossing another at under 20 degrees cut at the crossing (`cut_at_shallow_crossing`)",
+  "code": "aa5cfb9343c64ae9",
+  "core": "ae7eac92a7533c0c",
+  "date": "2026-10-27",
+  "note": "cut at the shallow crossing, the end left on the other way and re-aimed as a T the next round; a household's way is kept at its door",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -33194,7 +33212,6 @@
   "rests": [
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
   ],
-  "triaged": "2026-10-23",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/ends.py::settle_ends#which of a folded pair is re-aimed": {
@@ -36022,23 +36039,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#free ends at a house": {
-  "body": "9b88275de8b9d98a",
+  "body": "5bab44e36c948dbd",
   "claim": "free ends at a house - GUESS: searched, the record silent (feature 417 T29 pass A2, 2026-10-25) - one main door served a minka's household (JAANUS, Edo period, pass A2); no page gives how many ends meet at one; at most DOORSTEP_MAX (2) free lane ends at a house",
-  "code": "444e3c4910a8a4dd",
-  "core": "6cb2cf406d24a647",
-  "date": "2026-10-25",
-  "note": "no page in the bundle counts the lane ends that may meet at one house; 0246 gives each house \"a lane of its own\" but no limit on ends",
+  "code": "7250d2280c38a4d1",
+  "core": "b57b04abdbf6d7c9",
+  "date": "2026-10-27",
+  "note": "`n > law.DOORSTEP_MAX` refuses; no block gives how many ends meet at a house",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#no doubled band": {
-  "body": "9b88275de8b9d98a",
+  "body": "5bab44e36c948dbd",
   "claim": "no doubled band - village-lanes.drawing: two paths running side by side are drawn as one, and two lanes met end to end are read as one (`walked_shadows`) - an access lane may not run beside another past a pitch",
-  "code": "f103763c4e5c113a",
-  "core": "6cb2cf406d24a647",
-  "date": "2026-10-22",
-  "note": "refuses tree_shadows and walked_shadows",
+  "code": "32a24d57b580da4b",
+  "core": "b57b04abdbf6d7c9",
+  "date": "2026-10-27",
+  "note": "the refusal `tree_shadows(...) or walked_shadows(lanes)` is a run-beside-past-a-pitch test with no angle (\"115 ft within 30 ft\"), where §41 measures \"at less than 20 degrees\". The claim names no filing; it should state the departure and carry 417 T32, as `tree_shadow_cuts` does",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -36047,16 +36064,15 @@
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb",
    "0081-village-lanes.drawing.html:b3423a58c3ff2774"
   ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#no sliver between the tree's lanes": {
-  "body": "9b88275de8b9d98a",
+  "body": "5bab44e36c948dbd",
   "claim": "no sliver between the tree's lanes - village-lanes.drawing: ends within 25 ft are joined (`as_joined`), two paths side by side are drawn as one (no needle, `needle_loops`), no stub run on past a crossing (no doubled tail)",
-  "code": "336c10dcb9fa26e1",
-  "core": "6cb2cf406d24a647",
-  "date": "2026-10-22",
-  "note": "asked on the joined ends (as_joined) for needle faces, plus the shadow/doubled checks",
+  "code": "df48fc52478ac25e",
+  "core": "b57b04abdbf6d7c9",
+  "date": "2026-10-27",
+  "note": "needle faces judged both as laid and with ends joined (`as_joined`)",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -36069,12 +36085,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged": {
-  "body": "c618eab596f6ed1a",
+  "body": "5bab44e36c948dbd",
   "claim": "track out's width as judged - village-lanes.drawing: the track out's stub judged at 6 ft, the track out as drawn",
-  "code": "ba2c21c9346f85e9",
-  "core": "6cb2cf406d24a647",
-  "date": "2026-10-18",
-  "note": "the stub comes from tb.stub, built at w 6.0, the page's 6 ft for the track out",
+  "code": "cf03730ebfba829d",
+  "core": "b57b04abdbf6d7c9",
+  "date": "2026-10-27",
+  "note": "nothing in `admits` sets the 6 ft. The stub comes from `tree_base.base_for` (`tb.stub`), and I need that stub record's `w`",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -36082,16 +36098,15 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#tree keeps the lane law": {
-  "body": "9b88275de8b9d98a",
+  "body": "5bab44e36c948dbd",
   "claim": "tree keeps the lane law - village-lanes.drawing, how-our-maps-lay-a-clustered-settlements-lanes.drawing: each household's way, laid once the last house stands, admitted with no hook, fold, hairpin or dangling end among the tree's lanes",
-  "code": "e380bb637c260b4e",
-  "core": "6cb2cf406d24a647",
-  "date": "2026-10-22",
-  "note": "each household's way is asked of the lane law once the houses stand",
+  "code": "b412724766555f8c",
+  "core": "b57b04abdbf6d7c9",
+  "date": "2026-10-27",
+  "note": "each household's way is put to `law_` (Lawful) once the houses stand: no hook, fold, hairpin or dangling end",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
@@ -36100,30 +36115,28 @@
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:a857325132f8d4ee",
-   "0081-village-lanes.drawing.html:b3423a58c3ff2774",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b7092db240b5c453",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
   ],
-  "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once": {
-  "body": "9b88275de8b9d98a",
+  "body": "5bab44e36c948dbd",
   "claim": "way out crosses each brook once - villages-beside-their-stream-one-bank-or-both.drawing",
-  "code": "9e8f054d3acc6a46",
-  "core": "6cb2cf406d24a647",
-  "date": "2026-10-22",
-  "note": "0035 never says \"once\": a crossing is charged 150 ft of walk (§279) and a replacement way crosses no more often than the way it replaces (§281). `way_out_once` refuses a second crossing outright. Charge it per §279, or record the cap as a GUESS or DEVIATION with its account",
+  "code": "f4c092a14ba36a1b",
+  "core": "b57b04abdbf6d7c9",
+  "date": "2026-10-27",
+  "note": "0035 sets no once-per-brook cap (\"no page we read says how many crossings one way of a hamlet made\"). It records as a GUESS only that a replacement way crosses no more often than the one it replaces. The claim should be a GUESS stating the cap, or the page should record it",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
   "research": "9354777ef34af3d3",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/tree.py::alongside_points#beside, as the map reads it": {
   "body": "5723b8b928d25b4d",
@@ -36365,18 +36378,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a lane beside the other its whole length": {
-  "body": "1ac8298f265a6d33",
+  "body": "38679ec4ea8529f7",
   "claim": "a lane beside the other its whole length - village-lanes.drawing: two paths side by side are drawn as one - where no stretch of the lane stands off the other to cut back to, it is left for the lane law (`law.needle_loops`) to refuse, so the doubled way never ships",
-  "code": "3de0b891f1b5e42e",
-  "core": "fbdd435630095442",
-  "date": "2026-10-26",
-  "note": "when `at <= 0.0` the lane is left as drawn for the law to refuse. That fits 0081, which says a household's way is cut \"at its far end, never at its door\". A lane running alongside its whole length has nowhere to be cut except at its door, so no doubled way is drawn.",
+  "code": "8de0e1c3e126a969",
+  "core": "fa7c4e82e50a5d0e",
+  "date": "2026-10-27",
+  "note": "`at <= 0.0` leaves the lane for `needle_loops` to refuse",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
-   "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
   ],
   "verdict": "IN-STEP"
@@ -36395,44 +36407,43 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#a needle left where the tee would close one": {
-  "body": "1ac8298f265a6d33",
+  "body": "38679ec4ea8529f7",
   "claim": "a needle left where the tee would close one - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); the lane is left as drawn for the law to refuse rather than cut into another needle",
-  "code": "7e2596b2bd71b69e",
-  "core": "fbdd435630095442",
-  "date": "2026-10-25",
-  "note": "§22 and §25 give the tee but say nothing of a tee that would close a needle itself; GUESS is right",
+  "code": "1c7f224ec1e2b735",
+  "core": "fa7c4e82e50a5d0e",
+  "date": "2026-10-27",
+  "note": "`not closes(tee)` guards the tee; the record is silent",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#its reach": {
-  "body": "1ac8298f265a6d33",
+  "body": "38679ec4ea8529f7",
   "claim": "its reach - GUESS: searched, the record silent (feature 417 T45, 2026-10-26); 0081 cuts a lane where it comes alongside and gives no distance - half of `law.NEEDLE_LOOP_FT` (10 ft); 2.0 (the walk's step)",
-  "code": "a4e810e0dfbc90a6",
-  "core": "fbdd435630095442",
-  "date": "2026-10-25",
-  "note": "§25 cuts the lane \"where it comes alongside\" and gives no distance; §22's 25 ft is for ends that nearly meet, not this. So 10 ft (half of NEEDLE_LOOP_FT) and the 2 ft walk step are honest GUESSes",
+  "code": "803b19c188bddf7e",
+  "core": "fa7c4e82e50a5d0e",
+  "date": "2026-10-27",
+  "note": "`NEEDLE_LOOP_FT / 2.0` and the 2 ft step; §41 gives no distance for \"comes alongside\"",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::off_the_needle#the doubled way drawn as one": {
-  "body": "1ac8298f265a6d33",
+  "body": "38679ec4ea8529f7",
   "claim": "the doubled way drawn as one - village-lanes.drawing: two ways side by side are drawn as one",
-  "code": "855ee18bbde96557",
-  "core": "fbdd435630095442",
-  "date": "2026-10-25",
-  "note": "a lane whose tail runs beside an earlier way is cut at its far end, never its door, and tees onto that way's tread, as \"cut it where it comes alongside and let it meet the other as a T\" says; the trigger is law.is_needle, which the bundle does not show, but lane_record's \"19.9 degree needle\" fits the page's \"less than 20 degrees\"",
+  "code": "549729caa95186a5",
+  "core": "fa7c4e82e50a5d0e",
+  "date": "2026-10-27",
+  "note": "the trigger is `closes(own)`, a thin face (`law.is_needle`), where §41 cuts a lane whose end \"runs back along another way at less than 20 degrees\". A tail under 20 degrees that closes no face is not cut here. The claim should state that departure and name its task, or the code should ask the angle",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "research": "348d3cab06271e76",
   "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:7e0b0a8a509d4899",
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/tree.py::others_clear#nothing built on a lane": {
   "body": "a9039a860f536a7c",
@@ -36666,15 +36677,48 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/tree.py::tree_faults#a doubled tail asked at `_DOUBLED_DEG` (15 degrees)": {
+  "code": "c522e8a994cc57e0",
+  "core": "c522e8a994cc57e0",
+  "date": "2026-10-27",
+  "note": "a doubled tail asked at `_DOUBLED_DEG` (15 degrees)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::tree_faults#an ordinary lane's ends at a house past `DOORSTEP_MAX` cut there": {
+  "code": "c522e8a994cc57e0",
+  "core": "c522e8a994cc57e0",
+  "date": "2026-10-27",
+  "note": "an ordinary lane's ends at a house past `DOORSTEP_MAX` cut there",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/tree.py::tree_faults#ordinary lane defers": {
-  "code": "1abf365dc6f1c6d9",
-  "core": "2db678d444aaf4aa",
-  "date": "2026-10-17",
-  "note": "decides which lane is cut and where (sliver centroid, nearer end, doubled-tail end), placements a reader sees; should be UNRESEARCHED, not NONE",
+  "body": "c767ff85ab958252",
+  "claim": "ordinary lane defers - NONE: which of two lanes a repair cuts",
+  "code": "47bf0410261ca981",
+  "core": "c522e8a994cc57e0",
+  "date": "2026-10-27",
+  "note": "which of two lanes a repair cuts is physical (`settle_ends` labels its like as a GUESS), and §41 answers it: \"A household's own way is cut at its far end, never at its door\". This code never cuts the tree lane and cuts the ordinary one instead. It should be a 0081 claim stated as a DEVIATION the page records, or a filed departure",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::tree_faults#the cut point for a needle or doubled tail: the tree lane's end projected, or its nearer end": {
+  "code": "c522e8a994cc57e0",
+  "core": "c522e8a994cc57e0",
+  "date": "2026-10-27",
+  "note": "the cut point for a needle or doubled tail: the tree lane's end projected, or its nearer end",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/tree.py::tree_faults#the ordinary lane cut at a sliver face's centroid, not where it comes alongside": {
+  "code": "c522e8a994cc57e0",
+  "core": "c522e8a994cc57e0",
+  "date": "2026-10-27",
+  "note": "the ordinary lane cut at a sliver face's centroid, not where it comes alongside",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/tree.py::tree_records#access tree plumbing": {
   "code": "7ee61809f0fa9802",
