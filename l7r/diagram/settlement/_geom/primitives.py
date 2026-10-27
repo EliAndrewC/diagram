@@ -187,16 +187,23 @@ def convex_hull(pts: Sequence[Pt]) -> Poly:
         return [(x, y) for x, y in ps]
 
     # the turn test `(a - o) x (b - o)` written inline, not a call per point (feature 427 T08: 90k calls at 40 households)
+    # ...each chain's length counted, not asked of `len` at every step (feature 417 T65: 91,550 calls)
     lower: list[Pt] = []
+    n = 0
     for p in ps:
-        while len(lower) >= 2 and (lower[-1][0] - lower[-2][0]) * (p[1] - lower[-2][1]) - (lower[-1][1] - lower[-2][1]) * (p[0] - lower[-2][0]) <= 0:
+        while n >= 2 and (lower[-1][0] - lower[-2][0]) * (p[1] - lower[-2][1]) - (lower[-1][1] - lower[-2][1]) * (p[0] - lower[-2][0]) <= 0:
             lower.pop()
+            n -= 1
         lower.append(p)
+        n += 1
     upper: list[Pt] = []
+    n = 0
     for p in reversed(ps):
-        while len(upper) >= 2 and (upper[-1][0] - upper[-2][0]) * (p[1] - upper[-2][1]) - (upper[-1][1] - upper[-2][1]) * (p[0] - upper[-2][0]) <= 0:
+        while n >= 2 and (upper[-1][0] - upper[-2][0]) * (p[1] - upper[-2][1]) - (upper[-1][1] - upper[-2][1]) * (p[0] - upper[-2][0]) <= 0:
             upper.pop()
+            n -= 1
         upper.append(p)
+        n += 1
     return lower[:-1] + upper[:-1]
 
 
@@ -446,7 +453,8 @@ def chain_violated(px: float, py: float, chains: Sequence[Sequence[Chord]], gap:
                     return True
             else:
                 qx, qy = (ax, ay) if t < 0.0 else (bx, by)
-                if math.hypot(px - qx, py - qy) < gap:
+                dx, dy = px - qx, py - qy  # ...compared squared, no `hypot` (feature 417 T65: 103,415 calls); a gap <= 0 holds nothing nearer
+                if gap > 0.0 and dx * dx + dy * dy < gap * gap:
                     return True
     return False
 

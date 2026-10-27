@@ -420,6 +420,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
+  },
+  "### T65 Approach (checklist part A)": {
+   "sha256": "a68589141313981bdd105e7cf56fdf6c7f528208fd7bc6ecdfa8bc9f3dc401ef",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4969,6 +4975,45 @@
      "summary": "One landing; no constant moves.",
      "class": "within",
      "why": "Moving no constant keeps every research-backed or flagged-arbitrary number as it is; nothing asked is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T65 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T65-scope",
+     "summary": "Cut builtin calls in the hottest remaining loops (sat_overlap projections reduced as made, crossing_points leg boxes and patches._ok window/overlap by comparison, convex_hull chains counted, chain_violated and banks._nearest_segment comparing squared distances) as T56's third part.",
+     "class": "within",
+     "why": "The GM's 'Speed first' amendment asks that 417 prioritize 'the things that will make us go faster' and confirmed the ten speed tasks to be worked start to finish; FR-013/SC-009 carry that. Cutting a roll's calls in its heaviest loops is speed work of exactly that kind; it narrows nothing asked."
+    },
+    {
+     "id": "T65-behavior",
+     "summary": "Same verdicts, no map moved, every rule unchanged (FR-004), exits gated on unchanged pool manifests, the landing cohort and a clean claims round (FR-008).",
+     "class": "within",
+     "why": "Holds the existing rules and the no-regression requirement FR-008 exactly; changes no rule, no placer behavior and no research claim."
+    },
+    {
+     "id": "T65-order",
+     "summary": "Worked after T64, as the third part of T56, ahead of correctness tasks.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-10-26 confirmation of the speed-first order; the block does not reorder anything the GM confirmed."
+    },
+    {
+     "id": "T65-red-exit",
+     "summary": "On failure, record it and set the task down; a claim that it cannot be done goes through make arbiter-ask.",
+     "class": "within",
+     "why": "Leaves the requested speed work open rather than declaring it done or carving anything out; routes an impossibility claim to the arbiter as the process requires."
+    },
+    {
+     "id": "T65-done",
+     "summary": "Done measured as 18,522,470 -> 17,913,531 calls at 40 households (seed 39), with no pool manifest moved.",
+     "class": "within",
+     "why": "A measured step toward SC-009's target, not a claim that SC-009 is met and not a lowering of it; figures carry date, method and log path."
     }
    ]
   }

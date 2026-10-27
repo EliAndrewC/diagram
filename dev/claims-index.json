@@ -11949,43 +11949,46 @@
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#a ring with room for a wood": {
   "body": "dc6d399fa6b8a272",
   "claim": "a ring with room for a wood - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); a ring with room for fewer than `WOODLAND_MIN_CROWNS` (5) crowns is refused as a wood",
-  "code": "63e3aae7e204a50b",
-  "core": "d774bd653e03d206",
+  "code": "5fea33bd2b247331",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "WOODLAND_MIN_CROWNS 5; pages silent",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#aspect and bearing": {
   "body": "dc6d399fa6b8a272",
   "claim": "aspect and bearing - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25); up to 2.2:1, laid across the fall within 20 deg",
-  "code": "c87e142a5f904e1c",
-  "core": "d774bd653e03d206",
+  "code": "da6bc89f11a9d059",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "1+1.2*jit gives up to 2.2:1, bearing fall+90 deg ±20; 0077 gives no lot shape",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#commons legibility floor": {
   "body": "dc6d399fa6b8a272",
   "claim": "commons legibility floor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); a ring under 120 ft is dropped rather than drawn smaller (fewer, never smaller)",
-  "code": "4eb8d647766f7d27",
-  "core": "d774bd653e03d206",
+  "code": "bc571b2ca4f04a81",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "_COMMONS_FLOOR_FT 120, rung skipped and ring_span refused below it",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#crop set-back": {
   "body": "dc6d399fa6b8a272",
   "claim": "crop set-back - sunlight-and-shade-on-the-farm: a tree shades one tree's height to its east, west and north (the Qimin Yaoshu), about 33 ft, which the set-backs clear; 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100",
-  "code": "3ea3f1fde3d1de15",
-  "core": "d774bd653e03d206",
+  "code": "5dac0457c1055b3f",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "80/180, relaxed 40/100 plus slack, sunny band south of each crop (open_ground_region); all clear the 33 ft one-height shade",
   "pages": {
@@ -11998,15 +12001,16 @@
    "0038-sunlight-and-shade-on-the-farm.html:66d942dbe95f84f0",
    "0038-sunlight-and-shade-on-the-farm.html:f21ec99f6590b468"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#its canvas hold": {
-  "body": "dc6d399fa6b8a272",
+  "body": "b5f17e923409bc37",
   "claim": "its canvas hold - NONE: they decide nothing about the place - 40 (seat held 40 px plus the half-size off the canvas edge)",
-  "code": "19085d1f51e1a3be",
-  "core": "d774bd653e03d206",
-  "date": "2026-10-25",
-  "note": "working-canvas margin, plumbing",
+  "code": "ee1a35228570985c",
+  "core": "ddc8a0aa760588d7",
+  "date": "2026-10-27",
+  "note": "the 40 px margin (`lo`, `wr`, `wb`) keeps a seat off the working canvas edge, which is plumbing; the T65 rewrite keeps 40 and half",
   "pages": {},
   "research": "",
   "rests": [],
@@ -12015,55 +12019,59 @@
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#its lattice": {
   "body": "dc6d399fa6b8a272",
   "claim": "its lattice - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 90 (lattice step, and the nudge of up to half a step off it)",
-  "code": "da88cdc8c4b087be",
-  "core": "d774bd653e03d206",
+  "code": "e312660cdfe913b9",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "90 px step and a nudge of up to half a step; pages silent",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#its salts, guards and sentinels": {
   "body": "dc6d399fa6b8a272",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 76 (jitter salt); 77 (jitter salt); 71 (jitter salt); 72 (jitter salt); 73 (jitter salt); 78 (jitter salt (bearing)); 74 (jitter salt)",
-  "code": "009a0da35ee12b28",
-  "core": "d774bd653e03d206",
+  "code": "16345d3a32937bfb",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "jitter salts",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#its search steps and tolerances": {
   "body": "dc6d399fa6b8a272",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 0.2 (per-map ladder spread 0.9-1.1); 0.415 (√2−1 diagonal slack, geometry); 0.72 (aspect-ladder step); 0.45 (aspect-ladder step); 16 (scan window inset from content box); 0.36 (size-band spread 0.82-1.18); 1.35 (exclusion radius 1.15-2.5× size)",
-  "code": "0e2d1a420307da8a",
-  "core": "d774bd653e03d206",
+  "code": "a6494a44b3f80b2f",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "the ladder spread, diagonal slack, aspect steps, inset, size bands and exclusion are values of ours; no cited page gives them",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#its unstated figures": {
   "body": "dc6d399fa6b8a272",
   "claim": "its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N2, 2026-10-25) - 1.2 (lot elongation up to 2.2:1)",
-  "code": "ff46869746e674ca",
-  "core": "d774bd653e03d206",
+  "code": "f0eaed276cb03c1a",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "0077 forbids only the rectangle and gives no aspect, so the 2.2:1 elongation is a GUESS",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#line follows its bounds": {
   "body": "dc6d399fa6b8a272",
   "claim": "line follows its bounds - village-fuel-woods-and-their-coppice-satoyama.drawing: within LOT_BOUND_REACH (45 ft, the page's \"within about 45 ft\", its GUESS) of a lane, brook or field the line runs alongside",
-  "code": "20813ffde97d9242",
-  "core": "d774bd653e03d206",
+  "code": "7c80db6cbb900bb0",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "LOT_BOUND_REACH 45 is the page's \"within about 45 ft\", its GUESS",
   "pages": {
@@ -12073,13 +12081,14 @@
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:62655ffbea173c76"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#low ground by the water": {
   "body": "dc6d399fa6b8a272",
   "claim": "low ground by the water - GUESS village-fuel-woods-and-their-coppice-satoyama.drawing: a square below the houses refused within LOW_BY_WATER_FT (46 ft) of a river or marsh, measured from its corners (half the side times the square root of two)",
-  "code": "701aa8d7f88a36c4",
-  "core": "d774bd653e03d206",
+  "code": "de444ae9791cb8f7",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "46 ft plus half*sqrt2, applied only below house_floor; the page records 46 ft as a GUESS",
   "pages": {
@@ -12089,13 +12098,14 @@
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:1c8bf409e3901b51"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#mostly dry": {
   "body": "dc6d399fa6b8a272",
   "claim": "mostly dry - village-fuel-woods-and-their-coppice-satoyama.drawing: no sample of the parcel in marsh (WET_SHARE_CAP 0)",
-  "code": "d3b2a6bb1d86238b",
-  "core": "d774bd653e03d206",
+  "code": "4bfe7f39d1bb050d",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "parcel_wet_share > 0 refused",
   "pages": {
@@ -12107,13 +12117,14 @@
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#nearest seat preferred": {
   "body": "dc6d399fa6b8a272",
   "claim": "nearest seat preferred - village-fuel-woods-and-their-coppice-satoyama.drawing: the nearest slope beyond the fields",
-  "code": "03ec91f9a82ef7e4",
-  "core": "d774bd653e03d206",
+  "code": "40337183cd4a9ef2",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "nearest wins within woodland_tier, and only seats across the fields (_beyond_the_fields)",
   "pages": {
@@ -12125,98 +12136,107 @@
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#on the page": {
   "body": "dc6d399fa6b8a272",
   "claim": "on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the ring inside the view",
-  "code": "942aad5478efb2b7",
-  "core": "d774bd653e03d206",
+  "code": "2a2f701dbf7629be",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "WOODLAND_BBOX_FLOOR share inside the frame",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#parcel count and size": {
   "body": "dc6d399fa6b8a272",
   "claim": "parcel count and size - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0071's 0.06 to 5.3 ha are fengshui groves, a different wood, and 0077 gives no coppice lot's size; `count` parcels from 250 ft, the ladder scaled 0.9-1.1 per map, rungs 0.8, 0.64, 0.5",
-  "code": "2c6836c12a08d125",
-  "core": "d774bd653e03d206",
+  "code": "5dd95fc7e3e4757e",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "250 ft, ladder 0.9-1.1, rungs 0.8/0.64/0.5 as claimed; no page sizes a coppice lot",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#parcels kept apart": {
   "body": "dc6d399fa6b8a272",
   "claim": "parcels kept apart - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); each one's exclusion 1.15-2.5 of the size",
-  "code": "6d300888f4a78b48",
-  "core": "d774bd653e03d206",
+  "code": "ad54f0d60b54b73b",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "size*(1.15+1.35*jit) gives 1.15-2.5",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#per-parcel size bands": {
   "body": "dc6d399fa6b8a272",
   "claim": "per-parcel size bands - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); 0.82-1.18 of the half-size by band, then a 0.84 smaller try",
-  "code": "52ce8911d141ab20",
-  "core": "d774bd653e03d206",
+  "code": "1a28cd3d1659b1eb",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "0.82+0.36*band share stays inside 0.82-1.18, then 0.84",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#scan reach": {
   "body": "dc6d399fa6b8a272",
   "claim": "scan reach - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P5, 2026-10-25); confined to 210 px past the content box",
-  "code": "4673e59dc9375757",
-  "core": "d774bd653e03d206",
+  "code": "0af0183a8aa6b0ea",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "content_box pad 210",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#scan seat window": {
-  "body": "dc6d399fa6b8a272",
+  "body": "b5f17e923409bc37",
   "claim": "scan seat window - CONVENTION: a seat's center may sit up to 0.6 of the half-size outside the predicted frame, 0.8 of the square's box inside it",
-  "code": "822552550fde9da9",
-  "core": "d774bd653e03d206",
-  "date": "2026-10-25",
-  "note": "0.6*half outside the frame, 0.8 of the box inside; framing only",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#title pocket kept clear": {
-  "body": "dc6d399fa6b8a272",
-  "claim": "title pocket kept clear - CONVENTION: the title pocket (frame.title_pocket) is a keep rectangle no wood's square may enter",
-  "code": "658d078b8eee1fa1",
-  "core": "d774bd653e03d206",
-  "date": "2026-10-25",
-  "note": "read through _patch_keepouts' keep_rects",
+  "code": "9b6606315a4a0a98",
+  "core": "ddc8a0aa760588d7",
+  "date": "2026-10-27",
+  "note": "an on-sheet legibility window: 0.6*half past the frame (sx0..sy1) and an overlap of at least 0.8*(2*half)^2; the comparisons give the same values as the old max/min",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#title pocket kept clear": {
+  "body": "dc6d399fa6b8a272",
+  "claim": "title pocket kept clear - CONVENTION: the title pocket (frame.title_pocket) is a keep rectangle no wood's square may enter",
+  "code": "4fa6fcc87d1cbabd",
+  "core": "ddc8a0aa760588d7",
+  "date": "2026-10-25",
+  "note": "read through _patch_keepouts' keep_rects",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "triaged": "2026-10-27",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::open_ground_patches#woods not in a ruled line": {
   "body": "dc6d399fa6b8a272",
   "claim": "woods not in a ruled line - GUESS: searched, the record silent (feature 417 T36 pass P5, 2026-10-25) - 0077 speaks only of one wood's boundary bending, no page of how several parcels stand to each other",
-  "code": "5402868dc3a40f69",
-  "core": "d774bd653e03d206",
+  "code": "bbbbc9ceda18bc05",
+  "core": "ddc8a0aa760588d7",
   "date": "2026-10-25",
   "note": "row asked of the seat, the nudged seat and ring_center; 0077 silent on how parcels stand to each other",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels/patches.py::parcel_bbox_ok#woods on the page": {
@@ -31375,13 +31395,14 @@
  "l7r/diagram/hamletgen/ways/law_water.py::crossing_points#its salts, guards and sentinels": {
   "body": "636d77a2db9a7b90",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (spatial-index cell)",
-  "code": "77b37097921ed7b2",
-  "core": "fc68cad492548d3c",
+  "code": "882f99c77358c818",
+  "core": "c5f9047831cdd303",
   "date": "2026-10-25",
   "note": "index cell",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::deck_seats#a deck's corners on dry ground": {
@@ -48297,11 +48318,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/overlap.py::rects_overlap#collision and gap predicates": {
-  "code": "f91c331eb19f5a6c",
-  "core": "d9c159b1eb867fd1",
+  "code": "0cd7a02679a529dd",
+  "core": "14421497ce8f7b58",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/overlap.py::rot_rect#collision and gap predicates": {
@@ -48313,11 +48336,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/overlap.py::sat_overlap#collision and gap predicates": {
-  "code": "cab1323476373c63",
-  "core": "116ad8ddfd7646c7",
+  "code": "84f225981d8edb81",
+  "core": "33cc8f82e76f5624",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/overlap.py::turn_about#collision and gap predicates": {
@@ -48385,11 +48410,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::chain_violated#coordinate math": {
-  "code": "1ad736cd02e2f08c",
-  "core": "0b67298a7205eafd",
+  "code": "facfc2534d7c4d53",
+  "core": "468923b70ab63aac",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::chain_violated_many#plumbing": {
@@ -48401,13 +48428,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::convex_hull#coordinate math": {
-  "code": "6ab8f95ba43e754b",
-  "core": "88310f0860a48727",
+  "code": "fec2b9d743ccf486",
+  "core": "fcc9fb70d8a2df58",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-26",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::edge_dist#coordinate math": {
@@ -75974,16 +76001,15 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/banks.py::_nearest_segment#its salts, guards and sentinels": {
-  "body": "3fc75328ff8bf505",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel)",
-  "code": "d2cb8c13800d2660",
-  "core": "9d1f5bb818a27484",
-  "date": "2026-10-25",
-  "note": "sentinel",
+  "body": "8bd83aea20ce78ba",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel); 1e+18 (its square, the running squared gap)",
+  "code": "9353bda83197bd4c",
+  "core": "795e758fc9db0ff4",
+  "date": "2026-10-27",
+  "note": "1e9 and its square 1e18 are the starting \"nearest so far\" values; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_stroke_verdict#bank geometry": {

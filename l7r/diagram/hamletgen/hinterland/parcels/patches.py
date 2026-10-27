@@ -523,9 +523,13 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 # half is unreachable in the corpus - no pool map or cohort seed happens to jitter a
                 # seat past the edge - and an untested line in a predicate whose whole job is
                 # re-asking is exactly what rots.
+                # ...the window and the overlap by comparison, not `max`/`min` (feature 417 T65: eight calls a seat) - the same values
+                lo, wr, wb = half + 40.0, plan.W - half - 40.0, plan.H - half - 40.0
+                ox = (x + half if x + half < _fx1 else _fx1) - (x - half if x - half > _fx0 else _fx0)
+                oy = (y + half if y + half < _fy1 else _fy1) - (y - half if y - half > _fy0 else _fy0)
                 if (
-                    not (max(half + 40.0, sx0) <= x <= min(plan.W - half - 40.0, sx1) and max(half + 40.0, sy0) <= y <= min(plan.H - half - 40.0, sy1))
-                    or (max(0.0, min(x + half, _fx1) - max(x - half, _fx0)) * max(0.0, min(y + half, _fy1) - max(y - half, _fy0))) < 0.8 * (2.0 * half) ** 2
+                    not ((lo if lo > sx0 else sx0) <= x <= (wr if wr < sx1 else sx1) and (lo if lo > sy0 else sy0) <= y <= (wb if wb < sy1 else sy1))
+                    or ((ox if ox > 0.0 else 0.0) * (oy if oy > 0.0 else 0.0)) < 0.8 * (2.0 * half) ** 2
                 ):
                     return False  # off the window, or under the check's own 70%-of-bbox rule (0.8 here, for prediction slack)
                 # EVERY KEEP-OUT A SQUARE'S CENTER IS ASKED OF, PAINTED ONCE PER SIZE (feature 297, FR-004, plan B4 - the GM:
