@@ -31721,6 +31721,22 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/lay.py::laid_lawfully#a doubled tail asked at 15 degrees": {
+  "body": "eae8f25b73ffd3e9",
+  "claim": "a doubled tail asked at 15 degrees - DEVIATION village-lanes.drawing: an end running back along another way under 20 degrees, cut where it comes alongside at whichever end runs on (the candidate is an ordinary lane, never a household's way, whose door end the page keeps) - asked at `_DOUBLED_DEG`, 15, the one constant every doubled-tail reader shares (the GM's 2026-10-25 ruling: 20 a goal, not a hard requirement), and doubled with no way alongside within it, not laid - a departure the code keeps until feature 405 T101",
+  "code": "eec996d67457393e",
+  "core": "e6db863047944b05",
+  "date": "2026-10-27",
+  "note": "known (405 T101): the page cuts a tail that \"runs back along another way at less than 20 degrees\", but the code tests with `along_tail(..., deg=_DOUBLED_DEG)` at 15 and refuses a doubled candidate it has nothing alongside to cut against (`return None`); the claim describes both departures correctly, and it also tries both ends of the run, as the claim says",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
+  ],
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/hamletgen/ways/lay.py::laid_lawfully#a drawn lane not moved for a new one": {
   "body": "eae8f25b73ffd3e9",
   "claim": "a drawn lane not moved for a new one - how-our-maps-lay-a-clustered-settlements-lanes.drawing: each way laid in turn; a candidate that only a standing lane's move could admit is not laid",
@@ -31735,6 +31751,23 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/lay.py::laid_lawfully#a lane with no width judged as a footpath": {
+  "body": "eae8f25b73ffd3e9",
+  "claim": "a lane with no width judged as a footpath - village-lanes.drawing: a candidate with no width given is judged at the footpath's 3 ft",
+  "code": "d99f6a62fb8ae76c",
+  "core": "e6db863047944b05",
+  "date": "2026-10-27",
+  "note": "default `width: float = 3.0` matches the page's \"a footpath is drawn 3 ft wide\" (3 shaku field road)",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
@@ -31754,22 +31787,6 @@
    "0081-village-lanes.drawing.html:b3423a58c3ff2774"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/lay.py::laid_lawfully#no doubled tail": {
-  "body": "eae8f25b73ffd3e9",
-  "claim": "no doubled tail - village-lanes.drawing: an end running back along another way under 20 degrees cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T101; at whichever end runs on (the candidate is an ordinary lane, never a household's way, whose door end the page keeps); doubled with no way alongside within `_DOUBLED_DEG` to cut it at, not laid",
-  "code": "244c5d9ce2df2a93",
-  "core": "e6db863047944b05",
-  "date": "2026-10-27",
-  "note": "known (405 T101): `along_tail(..., deg=_DOUBLED_DEG)` asks at 15 degrees where 0081 cuts \"at less than 20 degrees\", and a doubled candidate with no way alongside within 15 degrees is refused rather than cut",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:a9d7f58a366d76eb"
-  ],
-  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/lay.py::laid_lawfully#two paths side by side become one": {
   "body": "eae8f25b73ffd3e9",

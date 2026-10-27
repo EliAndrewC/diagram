@@ -303,7 +303,7 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
       research: rendering
       verify: DONE. landed in batch T95+T96+T97+T100: batch 10: the join link's water margin claimed (T95); a hairpin is a turn of more than 140 degrees and a zigzag's turns more than 50, as 0081 says (T96); 0081's doubled tail claimed, its 20 degrees measured and owned by T101 (T97); spec-lint refuses a task id taken twice (T100); seeds 1-48 and pinned rows 54/54
-- [ ] T101 Move tails._DOUBLED_DEG from 15 to 0081's 20 degrees (an end running back along another way under 20 degrees is cut where it comes alongside) once the side-by-side family (T07) leaves the tree no doubled household way: at 20, cohort seed 10's household way, a tree lane no settle may cut, read as doubled and seed 40 left a shallow crossing (measured 2026-10-21, T97) - done when seeds 1-48 and the pinned rows pass at 20 [lands-open]
+- [ ] T101 Move tails._DOUBLED_DEG from 15 to 0081's 20 degrees (an end running back along another way under 20 degrees is cut where it comes alongside) - with every reader of it, `ways/lay.py` laid_lawfully's lay-time cut among them (feature 417 T67, the round arbiter's ruling on ask:417-T67-doubled-tail) - once the side-by-side family (T07) leaves the tree no doubled household way: at 20, cohort seed 10's household way, a tree lane no settle may cut, read as doubled and seed 40 left a shallow crossing (measured 2026-10-21, T97) - done when seeds 1-48 and the pinned rows pass at 20 [lands-open]
       research: rendering
       research: rendering
 - [x] T102 The decide guard refused T100's claims check after the round arbiter's accept had recorded T100's plan blocks CLEAR (`plan_gate.arbiter_accept`); read again minutes later the section was CLEAR (its preamble a typo-scale change from the accepted text, forgiven). Find which reading refused - the guard on the mirror's scripts, a block the accept did not name, or the digest before T81's forgiveness - and make one reading hold (escaped with DECIDE_OK, logged; found landing batch 10, 2026-10-21) [lands-open]
@@ -474,7 +474,7 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T164 Open claims findings in docs (1) that no open task named on 2026-10-26 (the GM, 2026-10-26: "feature 405 is supposed to be fixing all remaining claims findings"; feature 432's audit, 385#107) - fix the code or the claim and re-check each: docs/buildings.md::Scale#residence wing length [lands-open]
       research: rendering
-- [x] GM review (make gm-reviewed F=405) [lands-open]
+- [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
 

@@ -1317,7 +1317,7 @@ Each step measured alone:
 
 ### T68 Approach (checklist part A)
 
-1. **The goal, in the world.** A claims bundle shows the value of every constant a unit reads, an alias included: `fabric._LANE_JOIN_FT = LANE_JOIN_FT` reaches impl-drift as `Name(LANE_JOIN_FT)`, so `_lay_web_lane`'s "25 ft" could not be checked (impl-drift on T67, found row 441).
+1. **The goal, in the world.** A claims bundle shows the value of every constant a unit reads, an alias included: `fabric._LANE_JOIN_FT = LANE_JOIN_FT` reaches impl-drift as `Name(LANE_JOIN_FT)`, so `_lay_web_lane`'s "25 ft" (research/questions/0081-village-lanes.drawing.html §65) could not be checked (impl-drift on T67, found row 441).
 2. **The constraints.** The claims index's fingerprints: resolving an alias in `tools/claims.py` `values()` changes the core of every unit reading one, so it lands with `make claims-refingerprint` carrying the rows whose code is otherwise unchanged (as 417 T54 did).
 3. **Where each comes from.** Found row 441, impl-drift's second pass on T67, observed 2026-10-27, method: the bundle's `constants it reads` line.
 4. **Do they describe the world here?** Yes: `l7r/diagram/hamletgen/ways/fabric.py` binds `_LANE_JOIN_FT = LANE_JOIN_FT`.
@@ -1334,16 +1334,16 @@ Each step measured alone:
 
 | step | measured by |
 |---|---|
-| the alias resolved in the bundle | `make claims-bundle MODULE=l7r/diagram/hamletgen/ways/serve.py` shows `_LANE_JOIN_FT=Constant(value=25.0)` |
+| the alias resolved in the bundle | `make claims-bundle MODULE=l7r/diagram/hamletgen/ways/serve.py` shows `_LANE_JOIN_FT=Constant(value=25.0)` (research/questions/0081-village-lanes.drawing.html §65) |
 | no claim newly owed | `make claims-owed` before and after `make claims-refingerprint` |
 
 
 ### T69 Approach (checklist part A)
 
-1. **The goal, in the world.** The four findings impl-drift's third pass on T67 named outside that change, each answered: (a) the far healing link in `serve._lay_web_lane` drawn as the kept-whole branch's link is (`joins=True`: the house check on its tread, 0246, and exempt from the debris floor, which can refuse a 25-30 ft link and with it, since T67, its run); (b) `fabric._hits_a_steading`'s claim saying why a join link keeps half its tread off a house corner where 0081 keeps a lane 3 ft off the wall, or the setback applied; (c) `fabric._draw_web`'s "shortest way" claim citing 0246 for the 100 ft reach and the serves-nothing rule, the 30 ft floor alone a GUESS (MISLABELED); (d) 0014 §35 stating whether the run-on or the field path comes first, as `a_way_onto_the_bund` tries them.
+1. **The goal, in the world.** The four findings impl-drift's third pass on T67 named outside that change, each answered: (a) the far healing link in `serve._lay_web_lane` drawn as the kept-whole branch's link is (`joins=True`: the house check on its tread, 0246, and exempt from the debris floor, which can refuse a link of 25 ft (`LANE_JOIN_FT`, research/questions/0081-village-lanes.drawing.html §65) to 30 ft (`_WEB_MIN_FT`, GUESS) and with it, since T67, its run); (b) `fabric._hits_a_steading`'s claim saying why a join link keeps half its tread off a house corner where 0081 keeps a lane 3 ft off the wall (research/questions/0081-village-lanes.drawing.html §62), or the setback applied; (c) `fabric._draw_web`'s "shortest way" claim citing 0246 for the 100 ft reach (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html §78) and the serves-nothing rule, the 30 ft floor alone a GUESS (MISLABELED); (d) 0014 §35 stating whether the run-on or the field path comes first, as `a_way_onto_the_bund` tries them.
 2. **The constraints.** FR-004, FR-008 (no seed regressed); a map may move under (a) and (b), held to the research.
 3. **Where each comes from.** found.jsonl rows 444-446 and the MISLABELED verdict, impl-drift on T67, observed 2026-10-27, method: `make claims-checked`.
-4. **Do they describe the world here?** Yes: main's far link is `_draw_web(s, link[0], int(_w))`, no `joins=True` (observed 2026-10-27, method: `git show origin/main`).
+4. **Do they describe the world here?** Yes: main's far link is `_draw_web(s, link[0], int(_w))`, no `joins=True`, measured 2026-10-27 (git show origin/main).
 5. **The order.** After T06; the correctness phase.
 6. **The exits.** Green: each answered, the landing cohort passing, the claims round clean.
    Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.

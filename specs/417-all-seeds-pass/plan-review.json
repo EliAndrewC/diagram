@@ -438,6 +438,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
+  },
+  "### T68 Approach (checklist part A)": {
+   "sha256": "79808f08e97fa1eeb3d0a55e9379ce5dacab6859aec2b23a435f45e237e23e46",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T69 Approach (checklist part A)": {
+   "sha256": "08f9a75509b17b2c18f76e395ac6da254936988fb77e716a6f5bd116cb47869c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5209,6 +5221,64 @@
      "summary": "Green needs the fresh block from 520001 no worse seed by seed (FAIL lines as well as REFUSED), make cohort-landing passing, every moved pool manifest named with web_settle.dropped unchanged, and the claims round clean. Red sets the task down and goes to the arbiter.",
      "class": "within",
      "why": "FR-008 (no regression; the research claims hold). The fresh-block comparison is enforcement of the feature's 'all seeds pass' purpose and FR-008, not unrequested verification."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T68 Approach (checklist part A)",
+    "### T69 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T68-1",
+     "summary": "Resolve a module-level alias (fabric._LANE_JOIN_FT = LANE_JOIN_FT) to its value in tools/claims.py values(), so a unit's claims bundle shows the constant's value",
+     "class": "within",
+     "why": "Tooling only, no engine change (so FR-010's hold on claims work that changes the engine is not touched). Its sole effect is to let the claims round check that a research figure this feature's lane code reads (25 ft, 0081 s65) holds - enforcement of FR-008's 'the research claims hold'. Adds nothing the request excludes and narrows nothing."
+    },
+    {
+     "id": "T68-2",
+     "summary": "Land the alias change with make claims-refingerprint, carrying the claims of units whose code is otherwise unchanged; exit requires no claim newly owed",
+     "class": "within",
+     "why": "The fingerprint moves only because the bundle now shows a value the code already read; carrying claims whose code did not change keeps the claims index consistent (as T54 did). No requirement or research claim is relaxed."
+    },
+    {
+     "id": "T68-3",
+     "summary": "Order: any time, one tooling landing, no map moves",
+     "class": "within",
+     "why": "No map moves, so it cannot cost the speed-first order the GM confirmed on 2026-10-26 or any seed; scheduling of a no-behavior tooling fix is left to the session."
+    },
+    {
+     "id": "T69-1",
+     "summary": "Answer, inside 417, the four findings impl-drift's third pass on T67 named outside that change (found rows 444-446 and a MISLABELED verdict)",
+     "class": "within",
+     "why": "FR-008 requires the research claims to hold at every landing of this feature; these are claims findings on lane code 417 changed. Taking them up widens the feature's work slightly; it narrows nothing asked."
+    },
+    {
+     "id": "T69-2",
+     "summary": "(a) Draw serve._lay_web_lane's far healing link as the kept-whole branch's link is (joins=True): the 0246 house check on its tread, exempt from the 30 ft debris floor (a GUESS) that can refuse a 25 ft link (0081 s65)",
+     "class": "within",
+     "why": "Moves behavior toward the research (the GM 2026-10-25: changing behavior is fine in line with the research) and stops an arbitrary floor refusing a research-sized link - exactly the trap the GM named about arbitrary numbers. FR-004 (lanes only where the law admits them) is served, not relaxed: the house check still applies. Maps may move, held to FR-008 and the research."
+    },
+    {
+     "id": "T69-3",
+     "summary": "(b) For fabric._hits_a_steading: either a claim recording why a join link keeps half its tread off a house corner where 0081 s62 keeps a lane 3 ft off the wall, or the 3 ft setback applied",
+     "class": "within",
+     "why": "The request does not require 417 to bring every deviation into line, and the project's claim categories include a recorded intentional deviation; whichever branch is taken, the claim holds (FR-008). Leaving the branch to the work is not a narrowing of anything asked. If the claim branch is taken, the claims round judges whether the stated reason is a real one."
+    },
+    {
+     "id": "T69-4",
+     "summary": "(c) Correct fabric._draw_web's 'shortest way' claim to cite 0246 s78 for the 100 ft reach and the serves-nothing rule, with only the 30 ft floor a GUESS; (d) 0014 s35 to state whether the run-on or the field path comes first, as a_way_onto_the_bund tries them",
+     "class": "within",
+     "why": "Labeling and research-record fixes for code this feature touches, directly serving FR-008 and the GM's 2026-10-25 instruction that arbitrary numbers be marked as such; no behavior or requirement is narrowed."
+    },
+    {
+     "id": "T69-5",
+     "summary": "Order: after T06, in the correctness phase; one landing",
+     "class": "within",
+     "why": "A map-moving correctness task placed after the speed tasks is the order the GM asked for on 2026-10-26 ('prioritize the things that will make us go faster before the things that will make us correct')."
     }
    ]
   }
