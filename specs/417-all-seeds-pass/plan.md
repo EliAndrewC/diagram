@@ -432,6 +432,25 @@ The trigger: the landing cohort (cohort@20261025T234214Z) refused seeds 10, 25 a
 8. **Routes measured?** None offered: the measurement first.
 9. **After a ruling.** None yet.
 
+### T31 part B (2026-10-27T03:27Z)
+
+The trigger: cohort@20261026T004436Z (at 75eb5da47), seeds 25 and 37 newly failing - a run of T31's probes the night of
+2026-10-25/26, with the last resort's re-asked menders cut beside the four steps out of `STEPS` (part B of 23:42Z).
+
+1. **What exactly is refusing?** The two seeds part B (23:42Z) named: seed 25 `joins_short`, seed 37 `width_steps` and `joins_short`,
+   refused by `refuse_unmended` once `settle_joins` and `settle_widths` were cut from the last resort.
+2. **A3 again.** O: lane-law rules (`law.py`), their menders the cut steps.
+3. **A4 again.** They describe the web as it was laid then.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: the probe was a measurement, and its cut never landed.
+6. **The one-sentence test.** "The last resort needed its join and width menders until their rules moved into the placers" -
+   answered since: T41 landed with the menders kept, T42 put one width a way where the orphan link is laid, T44 drew the tree first
+   and deleted `settle_joins`, T48 deleted `square_every_crossing` and `settle_widths`' place - each landed 54 of 54.
+7. **The next step is a measurement.** None owed: every landing since passed the fixed cohort (the cohort log through
+   cohort@20261026T225340Z). What the settle still needs is part C's.
+8. **Routes measured?** The menders kept (T41), then their rules moved (T42, T44, T48).
+9. **After a ruling.** None owed.
+
 ### T31 part C (2026-10-27): each needed step's conversion decided (D35, D11 as amended; built by T06)
 
 The six steps R8 found NEEDED, and the last resort, each with the placer its rule moves into. Probed off alone they refuse
