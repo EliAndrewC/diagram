@@ -5,7 +5,8 @@ A map review's verdict is recorded against the engine it reviewed. Feature 261 (
 reviews were still running, twice, and every one of them recorded NOT-REVIEWABLE - a whole extra round; feature 317
 did it with a docstring. So an Edit/Write/NotebookEdit of an ENGINE path (`l7r/diagram/ci/delta.py` `is_engine`, the
 one list) in a diagram clone is refused while a map-review agent (`pair-hooks.sh` `REVIEW_AGENTS_RE`, the one list)
-that this session launched has not FINISHED.
+that this session launched has not FINISHED - unless the edit changes only docstrings and comments outside the
+interactive page's classes (`docstring_only`: the engine key a review is recorded against strips them; the GM, 2026-10-27).
 
 FINISHED, read from the agent's own files: its `meta.json` says `"finished": true`, or its transcript's last record is
 an assistant message that ended its turn (`stop_reason: end_turn`; older harnesses write no `finished`), or the session
@@ -66,7 +67,40 @@ def engine_edit(payload: dict) -> bool:
     if top.returncode or not root:
         return False
     rel = os.path.relpath(os.path.realpath(path), os.path.realpath(root))
-    return not rel.startswith("..") and _is_engine(root, rel)
+    return not rel.startswith("..") and _is_engine(root, rel) and not docstring_only(rel, path, ti, payload.get("tool_name") or "")
+
+
+def docstring_only(rel: str, path: str, ti: dict, tool: str) -> bool:
+    """Does the edit change only docstrings and comments of a `.py` file - its semantic id, the AST with docstrings stripped
+    (`gate-stamp.py` `semantic_bytes`, what the engine key a review is recorded against hashes since feature 426), the same?
+    Then no review's verdict can move, and the edit passes (the GM, 2026-10-27: "We should change the rule to allow docstring
+    edits during a run, since those don't affect things"). Never in the byte-hashed areas (`RAW_AREAS`: the interactive page's
+    class docstrings ARE the modal text a review reads), and never for a NotebookEdit or a file that cannot be read."""
+    if not rel.endswith(".py") or tool not in ("Edit", "Write"):
+        return False
+    try:
+        with open(path, "rb") as f:
+            old = f.read()
+    except OSError:
+        return False
+    if tool == "Write":
+        new = str(ti.get("content") or "")
+    else:
+        cur, o, n = old.decode("utf-8", "replace"), str(ti.get("old_string") or ""), str(ti.get("new_string") or "")
+        if o not in cur:
+            return False
+        new = cur.replace(o, n) if ti.get("replace_all") else cur.replace(o, n, 1)
+    spec = importlib.util.spec_from_file_location("gate_stamp", os.path.join(HERE, "..", "..", "gates", "gate-stamp.py"))
+    if spec is None or spec.loader is None:
+        return False
+    gs = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(gs)
+        if any(gs._matches(rel, *gs.AREAS[a]) for a in gs.RAW_AREAS if a in gs.AREAS):  # noqa: SLF001
+            return False
+        return bool(gs.semantic_bytes(old, rel) == gs.semantic_bytes(new.encode("utf-8"), rel))
+    except Exception:  # noqa: BLE001 - a guard that cannot judge refuses as before
+        return False
 
 
 def _last_record(path: str) -> dict:
