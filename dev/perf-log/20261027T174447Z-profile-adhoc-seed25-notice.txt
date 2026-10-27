@@ -1,0 +1,36 @@
+perf-profile seed 25 stage notice: 0.4s under cProfile (the stages before it took 7.7s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261027T174447Z-seed25-notice.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         1223571 function calls (1221679 primitive calls) in 0.430 seconds
+
+   Ordered by: cumulative time
+   List reduced from 288 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    0.440    0.440 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/frame.py:65(stage_notice)
+        1    0.000    0.000    0.439    0.439 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/structures/fixtures/siting.py:134(place_kosatsuba)
+        1    0.000    0.000    0.408    0.408 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/structures/fixtures/board_seat.py:269(site_board)
+        2    0.000    0.000    0.408    0.204 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/structures/fixtures/siting.py:227(<lambda>)
+        2    0.001    0.000    0.407    0.204 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/structures/fixtures/siting.py:419(_board_for)
+        2    0.000    0.000    0.282    0.141 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/structures/fixtures/siting.py:205(sample)
+        2    0.000    0.000    0.282    0.141 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/structures/fixtures/siting.py:253(_board_seats)
+       42    0.013    0.000    0.282    0.007 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/structures/fixtures/siting.py:286(_route_seats)
+     1842    0.011    0.000    0.117    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/houses.py:265(_fits)
+        8    0.000    0.000    0.068    0.008 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/structures/fixtures/siting.py:199(proof)
+        7    0.000    0.000    0.068    0.010 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/structures/fixtures/board_seat.py:165(board_caption_seat)
+        7    0.001    0.000    0.066    0.009 /diagram/.clones/diagram-backlog/l7r/diagram/labels/placer.py:409(place)
+     9082    0.005    0.000    0.054    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/fit.py:132(_field_blocks_point)
+     1810    0.003    0.000    0.052    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/houses.py:112(_wall_on_the_bund)
+     9050    0.003    0.000    0.045    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/houses.py:127(<genexpr>)
+     1058    0.001    0.000    0.044    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/core.py:328(admits)
+     1058    0.001    0.000    0.043    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/overlap/registry.py:327(admits)
+     1059    0.009    0.000    0.042    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/overlap/registry.py:271(conflicts)
+     9082    0.029    0.000    0.037    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/primitives.py:423(chain_violated)
+     1133    0.002    0.000    0.037    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/structures/fixtures/board_seat.py:99(turn)
+      170    0.000    0.000    0.036    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/labels/placer.py:575(_score)
+       11    0.020    0.002    0.034    0.003 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:263(extend)
+     1133    0.007    0.000    0.034    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/structures/fixtures/board_seat.py:86(_near)
+     1842    0.007    0.000    0.032    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/houses.py:129(_in_blocked)
+     1000    0.003    0.000    0.029    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/labels/geom.py:127(poly_seg_gap)
+
+
