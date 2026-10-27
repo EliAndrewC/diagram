@@ -37,7 +37,10 @@ the time, and it costs readability. Combining functions to lower the count is po
    hundreds and thousands of buildings in a walled city later). Work that grows faster than what is placed is what will hurt
    at city scale - say whether this change bends that curve.
 5. **What did the before and after show, and under what conditions?** Calls (exact) and time (`make perf-ab`: alternated,
-   best of N, the spread of each arm, the host's load) - stated as evidence, not as a pass.
+   best of N, the spread of each arm, wall and CPU, the host's load) - stated as evidence, not as a pass. QUICK FIRST
+   (feature 436): iterate on the quick form - one seed at one size, `make perf-ab A=<parent>` (seed 25 at 40 households) -
+   read against its noise floor (`make perf-ab AA=1`, once per form); then a subset (`SEEDS=`, `HOUSEHOLDS=` lists) or the
+   full sweep (`FULL=1`) once before landing. A wider run with no quick one of the same engines is refused.
 6. **Did any map move, and does it still keep the research?** Speed work may move maps (the GM, 2026-10-18); hold them to the
    rules and the research claims, never to identical output.
 
@@ -47,5 +50,7 @@ the time, and it costs readability. Combining functions to lower the count is po
 |---|---|
 | where the calls are, by stage and step | `make phase-calls` (the placement-stages page shows it), `make perf-fanout` |
 | where the time is, in one stage | `make perf-profile SEED=<n> STAGE=<stage> HOUSEHOLDS=<n>` |
-| before against after | `make perf-ab A=<commit> B=<commit>` |
+| before against after, while iterating | `make perf-ab A=<commit> [SEEDS=<one>] [HOUSEHOLDS=<one>]` (the quick form, 6 runs a version) |
+| the noise floor of that quick form | `make perf-ab AA=1 [SEEDS=] [HOUSEHOLDS=]` (one engine against itself, once) |
+| before against after, once before landing | `make perf-ab A=<commit> SEEDS=25,39,47 HOUSEHOLDS=20,40` or `FULL=1` (refused without a quick run first) |
 | the bookends | `make perf LABEL=<NNN>-start` / `-end` |

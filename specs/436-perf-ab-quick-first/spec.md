@@ -83,11 +83,13 @@ two engines is on record, the way `make done` will not run before `make quick` h
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001): The quick form's wall time is a few minutes or less at 40 households (measured, not gated).
-- **SC-002** (FR-005): A subset or full comparison with no quick record refuses before rolling; with one, or with the stated
+- **SC-001** (FR-001, FR-002): The quick form's wall time is a few minutes or less at 40 households (measured, not gated).
+- **SC-002** (FR-004, FR-005): A subset or full comparison with no quick record refuses before rolling; with one, or with the stated
   reason, it runs.
 - **SC-003** (FR-003, FR-006): The output shows wall and CPU time with spreads, the alternating order, and the floor line.
 - **SC-004** (FR-007): No test or exit added refuses on a time.
+- **SC-005** (FR-008): The checklist's question 5 and tools table name the quick form first, and the guard table lists the
+  refusal with its escape.
 
 ## Edge Cases
 

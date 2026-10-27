@@ -134,6 +134,121 @@
      "why": "Verification and enforcement of exactly what was asked; the one figure with a unit (8.2 min) carries a one-shot label (2026-10-27, file times of feature 435's T04/T08 logs)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T01 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-goal",
+     "summary": "Goal: a performance change is compared quickly while iterated on, slower comparisons only after a quick one of the same engines",
+     "class": "within",
+     "why": "Restates the GM's request (quick first, enforced, then subset/full) and FR-001/FR-005."
+    },
+    {
+     "id": "T01-constraints",
+     "summary": "Constraints are FR-001..FR-008 and D1..D8, all of them",
+     "class": "within",
+     "why": "Takes the whole accepted spec; nothing dropped."
+    },
+    {
+     "id": "T01-world",
+     "summary": "Builds on perf_ab.py as feature 435 landed it",
+     "class": "within",
+     "why": "The request is to change what make perf-ab runs; extending the existing tool is the request's own frame."
+    },
+    {
+     "id": "T01-order",
+     "summary": "All of the feature in one task",
+     "class": "within",
+     "why": "Sequencing only; no requirement is deferred or removed."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green: landed with tests, a real quick A/B and an A/A run recorded; red: failure recorded, impossibility claims to the arbiter",
+     "class": "within",
+     "why": "The real quick A/B and A/A runs exercise the quick form and the noise floor the GM accepted; no exit refuses on a time (FR-007 respected)."
+    },
+    {
+     "id": "T01-done",
+     "summary": "Done measured by a real quick A/B of HEAD~ vs HEAD at seed 25, 40 households with its wall time stated, and the refusal seen on a subset run with no record",
+     "class": "within",
+     "why": "Matches SC-001 (measured, not gated) and SC-002; seed 25 at 40 households is the GM-accepted quick default."
+    },
+    {
+     "id": "T01-step-table",
+     "summary": "Forms, order, refusal and floor measured by tests/tools/test_perf_ab.py; quick wall time by a real make perf-ab",
+     "class": "within",
+     "why": "Verification of requested behavior; it does not drop any requirement (CPU time, the record and the override stay in the constraints via FR-003/FR-004/FR-005)."
+    },
+    {
+     "id": "T01-not-perf-work",
+     "summary": "Not performance work: it times engines and changes none; constant/room questions n/a",
+     "class": "within",
+     "why": "The feature is tooling for comparing engines; no engine code is in scope of the request."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "2d40567deea04ca8c83de281058186f844ada549e6ac29a51688496b5561daf0",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T01-goal",
+     "summary": "Goal: a performance change is compared quickly while iterated on, slower comparisons only after a quick one of the same engines",
+     "class": "within",
+     "why": "Restates the GM's request (quick first, enforced, then subset/full) and FR-001/FR-005."
+    },
+    {
+     "id": "T01-constraints",
+     "summary": "Constraints are FR-001..FR-008 and D1..D8, all of them",
+     "class": "within",
+     "why": "Takes the whole accepted spec; nothing dropped."
+    },
+    {
+     "id": "T01-world",
+     "summary": "Builds on perf_ab.py as feature 435 landed it",
+     "class": "within",
+     "why": "The request is to change what make perf-ab runs; extending the existing tool is the request's own frame."
+    },
+    {
+     "id": "T01-order",
+     "summary": "All of the feature in one task",
+     "class": "within",
+     "why": "Sequencing only; no requirement is deferred or removed."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green: landed with tests, a real quick A/B and an A/A run recorded; red: failure recorded, impossibility claims to the arbiter",
+     "class": "within",
+     "why": "The real quick A/B and A/A runs exercise the quick form and the noise floor the GM accepted; no exit refuses on a time (FR-007 respected)."
+    },
+    {
+     "id": "T01-done",
+     "summary": "Done measured by a real quick A/B of HEAD~ vs HEAD at seed 25, 40 households with its wall time stated, and the refusal seen on a subset run with no record",
+     "class": "within",
+     "why": "Matches SC-001 (measured, not gated) and SC-002; seed 25 at 40 households is the GM-accepted quick default."
+    },
+    {
+     "id": "T01-step-table",
+     "summary": "Forms, order, refusal and floor measured by tests/tools/test_perf_ab.py; quick wall time by a real make perf-ab",
+     "class": "within",
+     "why": "Verification of requested behavior; it does not drop any requirement (CPU time, the record and the override stay in the constraints via FR-003/FR-004/FR-005)."
+    },
+    {
+     "id": "T01-not-perf-work",
+     "summary": "Not performance work: it times engines and changes none; constant/room questions n/a",
+     "class": "within",
+     "why": "The feature is tooling for comparing engines; no engine code is in scope of the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }
