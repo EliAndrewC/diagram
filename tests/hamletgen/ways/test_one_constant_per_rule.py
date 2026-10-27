@@ -8,6 +8,7 @@ import re
 
 from l7r.diagram.hamletgen import consts
 from l7r.diagram.hamletgen.ways import bund, clearance, fabric, knots, law, serve, sweeps
+from l7r.diagram.hamletgen.ways.law import shape as law_shape
 from l7r.diagram.hamletgen.ways.settle import shapes
 
 WAYS = pathlib.Path(bund.__file__).parent
@@ -28,7 +29,7 @@ def test_the_tail_past_a_meeting_is_one_constant():
 def test_the_join_the_serve_and_the_field_reach_are_one_constant_each():
     assert _reads(fabric, "_LANE_JOIN_FT", "LANE_JOIN_FT")
     assert _reads(sweeps, "_SERVE_FT", "WEB_REACH_FT")
-    assert _reads(law, "FIELD_REACH_FT", "_FIELD_REACH_FT")  # the field spur's copy, `thread.SPUR_REACH_FT`, went with the spur (T50)
+    assert _reads(law_shape, "FIELD_REACH_FT", "_FIELD_REACH_FT")  # the field spur's copy, `thread.SPUR_REACH_FT`, went with the spur (T50); the law a package since 417 T54
     assert fabric._LANE_JOIN_FT == law.JOIN_REACH_FT == consts.LANE_JOIN_FT == 25.0
     assert law.FIELD_REACH_FT == consts.FIELD_REACH_FT == 6.0
     assert not hasattr(knots, "_KNOT_MARGIN"), "knots asks the imported KNOT_MARGIN, not a copy"

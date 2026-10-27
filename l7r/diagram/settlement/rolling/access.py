@@ -20,7 +20,7 @@ import math
 from collections.abc import Iterable, Iterator, Sequence
 from typing import TYPE_CHECKING, Any
 
-from .._geom import PointGrid, Pt, seg_closest, seg_dist, segments_cross
+from .._geom import PointGrid, Pt, seg_closest, seg_dist
 from .._geom.primitives import chain_violated
 
 if TYPE_CHECKING:
