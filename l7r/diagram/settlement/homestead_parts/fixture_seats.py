@@ -377,9 +377,10 @@ def lay_fixtures(
     `yard` is the threshing yard, `kura` whether the house keeps one on its north wall, `annex` the byre where the household
     keeps one; `roll` the household's position roll (`Settlement._hjit` at its seat).
     `notes`, where given, receives what the drawing needs beyond the box: each rolled size in feet (`ft`, `fixture_ft`) and
-    the wall the bath room took (`bath_seat`). Every kind is laid: the outward paces reach free ground past any parts. Raises
-    only for a bath room with no place along the house's three attested walls, or a wood shed with no place a ken off a
-    wall of its steading, each named - a refusal, never a room walked out into the yard (feature 280 M21, M22).
+    the wall the bath room took (`bath_seat`). Raises `FixtureUnlaid`, naming the kind, for a bath room with no place along
+    the house's three attested walls, a wood shed with no place a ken off a wall of its steading, a privy with no seat
+    within 48 ft of its house, or any other kind with no seat beside its house - a refusal, never a room walked out into
+    the yard (feature 280 M21, M22; the privy's reach, feature 328).
 
     Research:
         fixture gap 3.5 ft off every other part and bath room slide 4 ft - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the gap of about 3.5 ft our maps keep between a house wall and anything built in its yard; the 4 ft slide is ours; WALL_GAP_FT (3.5 ft) clears the drawn wall of any part a fixture stands by, WALL_SLIDE_FT (4 ft) the bath room's slide along its wall
@@ -644,7 +645,9 @@ def door_room(house: Rect, yard: Rect | None, out: float, half: float) -> Rect |
 
 
 def _first(seats: Iterable[Rect], taken: Sequence[Rect], g: float) -> Rect | None:
-    """The first of `seats` that `clears` every rect in `taken` by `g` - its test written inline (73,000 searches a map)."""
+    """The first of `seats` that `clears` every rect in `taken` by `g` - its test written inline (73,000 searches a map).
+
+    Research: plumbing - NONE: `clears`' arithmetic, the gap the caller passes (restored by feature 435 T02 from 427 T12)"""
     rects = [(t[0], t[1], t[2], t[3]) for t in taken]
     for q in seats:
         qx, qy, qw, qh = q[0], q[1], q[2], q[3]

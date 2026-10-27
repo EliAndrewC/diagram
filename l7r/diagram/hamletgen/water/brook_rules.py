@@ -168,7 +168,9 @@ def ends_off_canvas(course: Sequence[Pt], W: float, H: float, ends: Sequence[int
 
 
 def _proper_cross(a0: Pt, a1: Pt, b0: Pt, b1: Pt) -> bool:
-    """Do the two open segments properly cross (a shared end is a junction) - the junction test's own predicate."""
+    """Do the two open segments properly cross (a shared end is a junction) - the junction test's own predicate.
+
+    Research: plumbing - NONE: segment geometry (restored by feature 435 T02 from 427 T09's inlining)"""
 
     def side(p: Pt, q: Pt, r: Pt) -> float:
         return (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
