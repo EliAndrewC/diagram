@@ -632,31 +632,7 @@ Each step measured alone:
 | no seed regressed | `make cohort-landing` (in `make land`) |
 
 
-### T56 Approach (checklist part A)
-
-1. **The goal, in the world.** The rest of the trial inventory's sites converted, largest first (`inventory/trial.md` rows 6-11): the wells' registry admission and the open-ground patches here; the bamboo strips, the grove clumps and the notice board's seats in T66 (item 6).
-2. **The constraints.** FR-012, FR-013, User Story 5, FR-008; each placer's rules unchanged.
-3. **Where each comes from.** The trial inventory.
-4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
-   task to the chains that still stand (FR-012).
-5. **The order.** After the field, before the overlap registry's resync.
-6. **The exits.** Green (restated by the round arbiter's ruling on ask:417-lane-close, 2026-10-27; it was "each site converted, its chain at least tenfold down", the plan's split of SC-009): the sites' measured share removed - the wells' registry admission and the most-asked geometry (T63, T64, T65), the open-ground patches' lattice asked of the region at once - each chain measured before and after, the fixed cohort and the pinned rows passing (FR-008), the claims round clean; the grove clumps (the stands' `_seat`, inventory row 10), the notice board's route seats and the bamboo strips, each a few hundred thousand calls at most (measured 2026-10-27 by `make perf-profile` and the subtree estimator, which over-counts), DEFERRED to T66 in the correctness phase, not dropped. The ruling (ask:417-lane-close, 2026-10-27, `arbiter.jsonl`; its shares measured 2026-10-27 (`make perf-profile`, throwaway call counters)): "The T11/T12 precedent moves a pool-wide rewrite that buys about 1% to the correctness phase. T56's remaining sites (a few hundred thousand calls at most, by an estimator that over-counts) and T14 ... fall under it"; "Land T56's measured part (the patches' lattice, -52k, no manifest moved) and close T56 at that share."
-   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: each site's cheap refusals asked of its candidate set at once. The patches: the scan's lattice asked of the open-ground region in one array read (`Region.taken_many`), `_ok` asked only of the seats it leaves open - a taken seat fails `_ok`, and with no crop every seat does - the same seats qualifying (hinterland 2,596,223 -> 2,543,957 calls at 40 households on seed 39, measured 2026-10-27 by `make perf-fanout STAGES=hinterland`; no pool manifest moved, observed 2026-10-27, method: `make maps`, `make maps-moved`).
-8. **The budget.** One landing per chain group; a group that moves a map judged by the cohort.
-9. **Done, measured.** Each chain's calls before and after from `make perf-fanout`, recorded in `research/`.
-10. **Before moving a constant.** n/a: the rules' figures stay as they are.
-11. **Before fitting things into room.** n/a
-
-Each step measured alone:
-
-| step | measured by |
-|---|---|
-| the chains re-scoped | `make perf-fanout` (every stage) |
-| each converted | its calls in `make perf-fanout`, `make maps-moved` |
-| no seed regressed | `make cohort-landing` (in `make land`) |
-
-
+<!-- plan-archive: T56 to T56 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
 ### T57 Approach (checklist part A)
 
 1. **The goal, in the world.** Where SC-009 stands once the speed tasks have landed, before the correctness tasks start.

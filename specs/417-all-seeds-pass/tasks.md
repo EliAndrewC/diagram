@@ -159,8 +159,9 @@
       research: rendering
       verify: DONE. landed: sat_overlap's projections reduced as made, crossing_points' leg boxes and patches._ok's window and overlap by comparison, convex_hull's chains counted, chain_violated and banks._nearest_segment comparing squared - the same verdicts. Seed 39 at 40 households: the roll 18,522,470 -> 17,913,531 calls (dev/perf-log/20261027T083303Z-fanout-417-T65b.txt); no pool manifest moved
 
-- [ ] T56 (FR-012) The rest of the trial inventory converted, largest first: the wells' admission, the bamboo strips, the open-ground patches, the grove clumps, the notice board's seats (FR-012)
+- [x] T56 (FR-012) The rest of the trial inventory converted, largest first: the wells' admission, the bamboo strips, the open-ground patches, the grove clumps, the notice board's seats (FR-012)
       research: rendering
+      verify: DONE. landed: closed at its measured share by the round arbiter's ruling on ask:417-lane-close: the wells and the most-asked geometry (T63, T64, T65) and the open-ground patches' lattice asked of the region at once (hinterland 2,596,223 -> 2,543,957 calls at 40 households, seed 39; no pool manifest moved); the grove clumps, the notice board's route seats and the bamboo strips deferred to T66 in the correctness phase
 
 - [ ] T57 (SC-009) Where the speed tasks leave a roll: make perf-fanout at 40 households against feature 427's start, the stage times reported (SC-009, FR-013)
       research: rendering
