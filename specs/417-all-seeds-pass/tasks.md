@@ -125,8 +125,9 @@
       research: rendering
       verify: DONE. landed: one network asked one way (geom.lanes_share_tread behind _components: served_network, law.lane_networks, tidy, smooth, knots; an X crossing joins), runs joined to the connector's network, links kept only where they touch both sides (the 12 ft GUESS gone), the shadow against every way, a link's width from the connector's network; settle_network keeps the end-only join until T06 (round arbiter ask:417-T58-red, route B; seed 26 measured, t58-red.md). Web calls at 40 households 10.46M -> 8.10M (make perf-fanout, dev/perf-log/20261027T040412Z-fanout-417-T58.txt)
 
-- [ ] T53 (FR-012) The web's whole-network checks asked of what changed: served_network, lanes_share_tread and the rest the trial inventory names, asked of the lanes a step added or moved, not every pair again, in l7r/diagram/hamletgen/ways/ (FR-012)
+- [x] T53 (FR-012) The web's whole-network checks asked of what changed: served_network, lanes_share_tread and the rest the trial inventory names, asked of the lanes a step added or moved, not every pair again, in l7r/diagram/hamletgen/ways/ (FR-012)
       research: rendering
+      verify: DONE. landed: served_network asked of what changed: checks.NetworkMemo keeps each pair's lanes_share_tread answer by the two lanes' points and asks only the pairs a new or changed lane is in (764 cohort asks measured: 603 after appends, 123 after an edit or drop); a test holds it equal to a fresh _components on random appended, edited and dropped webs. Seed 39 at 40 households: lanes_share_tread 2,976 -> 91 calls, served_network 0.24 -> 0.02 profiled s, the web stage 8,101,851 -> 7,208,472 calls (dev/perf-log/20261027T050246Z-fanout-417-T53b.txt); landing cohort 54/54, no pool manifest moved
 
 - [ ] T54 (FR-012) The households' ways admitted by construction: each household's exits refused by the tests that need no traced way before any is traced, pulled taut and judged, in l7r/diagram/settlement/rolling/gap_ways.py (FR-012)
       research: rendering

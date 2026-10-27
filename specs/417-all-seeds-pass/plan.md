@@ -605,31 +605,7 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
   edits are not on main.
 
 <!-- plan-archive: T48 to T31 moved to plan-done.md, 2026-10-26 (feature 375 FR-044) -->
-### T53 Approach (checklist part A)
-
-1. **The goal, in the world.** The same lane web, its whole-network checks (`served_network`, `lanes_share_tread` and the rest the trial inventory names) asked of the lanes a step added or moved, not of every pair of lanes again.
-2. **The constraints.** FR-012, FR-013, User Story 5, FR-008; the lane law's rules unchanged (FR-004).
-3. **Where each comes from.** `spec.md` User Story 5's measurement (the check asked of every pair of lanes at each of its calls); the trial inventory.
-4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
-   task to the chains that still stand (FR-012).
-5. **The order.** After the settle's probe (T31) and one network asked one way (T58), before T06 (the round arbiter's ruling on ask:417-T06-order, 2026-10-27): the largest single search by trial left in the web. `settle_reach` stays a placer, so its `reach.py` callers stay and are made incremental here; a caller T06 later deletes is a small loss the ruling accepts. The web's serve now asks `served_network` per run laid (T58), a caller this task makes incremental too.
-6. **The exits.** Green: the web's whole-network checks asked incrementally, their calls at least tenfold down, the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
-   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: the same predicate asked of a smaller set. DECIDED 2026-10-27 on the re-measure (item 4; `make perf-profile SEED=39 STAGE=web HOUSEHOLDS=40`, `dev/perf-raw/20261027T045320Z-seed39-web.prof`): after T58 `served_network` is asked 67 times on seed 39 (`lay_door_paths` 40, `_lay_web_lane` 22, `unreached_houses` 5), each regrowing every pair of lanes. Between two asks a lane or two is appended, edited or dropped: 764 asks on the 48-seed cohort and pinned rows, 603 after appends only, 45 after an edit, 55 after a drop, 23 after both, the largest web 24 lanes - measured 2026-10-27 (a throwaway log in the memo, `make cohort N=48 FRESH=0 JOBS=3`). So `checks.served_lanes` asks a memo (`NetworkMemo`, one per process, started over at another join tolerance or past `KEEP` pairs) that KEEPS each pair's answer to `geom.lanes_share_tread` by the two lanes' points: an ask judges only the pairs a new or changed lane is in, whatever changed - appended, edited, dropped or reordered - and the union-find over the answers is rebuilt each ask from the lanes' boxes (inline arithmetic, no call). The answer is the set a fresh `_components` gives (a test holds the two equal on random appended, edited and dropped webs). No index beyond the per-lane box, the webs measured being tens of lanes. Measured after (same profile, 2026-10-27): `lanes_share_tread` 2,976 -> 91 calls, `served_network` 0.24 -> 0.02 profiled s; the web stage 8,101,851 -> 7,208,472 calls (`make perf-fanout STAGES=web`).
-8. **The budget.** One landing per chain group; a group that moves a map judged by the cohort.
-9. **Done, measured.** Each chain's calls before and after from `make perf-fanout`, recorded in `research/`.
-10. **Before moving a constant.** n/a: the rules' figures stay as they are.
-11. **Before fitting things into room.** n/a
-
-Each step measured alone:
-
-| step | measured by |
-|---|---|
-| the chains re-scoped | `make perf-fanout` (every stage) |
-| each converted | its calls in `make perf-fanout`, `make maps-moved` |
-| no seed regressed | `make cohort-landing` (in `make land`) |
-
-
+<!-- plan-archive: T53 to T53 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
 ### T54 Approach (checklist part A)
 
 1. **The goal, in the world.** The same household ways, each household's candidate exits refused by the tests that need no traced way - its corridor's ground, its own parts, the tree's reach - before any is traced, pulled taut and judged by the ways tree.
