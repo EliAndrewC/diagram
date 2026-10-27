@@ -215,6 +215,109 @@
      "why": "These restate the five items and their FRs. They decide nothing the spec leaves open beyond order and file placement. The figures carry one-shot labels (0.12 s; 2.13x and 2.24x, measured 2026-10-27, with their methods) or a CONVENTION (15 s from the GM's words, 1%, 60 s, 100%)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T01 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-order",
+     "summary": "One task in five parts: the GM's five improvements in one task",
+     "class": "within",
+     "why": "The request asks for all five tooling improvements; one task with one part per improvement keeps all five and adds no extra work. How the work is ordered is not a scope decision."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green: landed with its tests and real runs. Red: record what failed, set the task down, and rule any 'cannot be done' claim through make arbiter-ask",
+     "class": "within",
+     "why": "The red exit drops nothing on its own authority. A claim that an item cannot be done goes to the arbiter instead of being carved out by the session, which is the opposite of a narrowing."
+    },
+    {
+     "id": "T01-budget",
+     "summary": "Budget: one landing",
+     "class": "within",
+     "why": "How the work is landed; it adds nothing to the request and takes nothing away."
+    },
+    {
+     "id": "T01-done",
+     "summary": "Done when the listed tests pass, a quick A/B prints its stage rows, and research/quick-calibration.md records that the slowdown tracks load (suite 2.13x, loop 2.24x, one-shot label 2026-10-27 with method)",
+     "class": "within",
+     "why": "Each condition is an SC or FR-007's own one-shot measurement. The figures carry a dated one-shot label with its method (quiet and with 16 busy processes). A real A/B run checks FR-004 on a live roll; it is verification of the requested item, not new scope."
+    },
+    {
+     "id": "T01-measure-table",
+     "summary": "Each step measured by its own test file (claims stop, verdict line/APPROVED=, seat counters, every stage, stale terms, quick net of load)",
+     "class": "within",
+     "why": "Tests that only fail when a requested improvement is missing enforce the request. There is one row per GM item: items 1-4 and the three small ones in item 5. FR-008's docs are listed as a constraint in item 2 and carry no row; that leaves a step unchecked, but it does not narrow the request."
+    },
+    {
+     "id": "T01-not-perf",
+     "summary": "Not performance work: it changes tools, not the roll",
+     "class": "within",
+     "why": "Correct for the request as written: all five items change tooling (land, the trial template, perf-profile, perf-ab, the trial/stale-terms/quick checks). None changes generation."
+    },
+    {
+     "id": "T01-world",
+     "summary": "The constraints describe the world here: each change is in the code the report's row names",
+     "class": "within",
+     "why": "The request names each improvement by the tool trial 439's report pointed at, and the plan puts each change in that tool."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "b97f1936afed30030b6f91ad352e19ec09e65fc49801c6635a9522cd3b953db6",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T01-order",
+     "summary": "One task in five parts: the GM's five improvements in one task",
+     "class": "within",
+     "why": "The request asks for all five tooling improvements; one task with one part per improvement keeps all five and adds no extra work. How the work is ordered is not a scope decision."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green: landed with its tests and real runs. Red: record what failed, set the task down, and rule any 'cannot be done' claim through make arbiter-ask",
+     "class": "within",
+     "why": "The red exit drops nothing on its own authority. A claim that an item cannot be done goes to the arbiter instead of being carved out by the session, which is the opposite of a narrowing."
+    },
+    {
+     "id": "T01-budget",
+     "summary": "Budget: one landing",
+     "class": "within",
+     "why": "How the work is landed; it adds nothing to the request and takes nothing away."
+    },
+    {
+     "id": "T01-done",
+     "summary": "Done when the listed tests pass, a quick A/B prints its stage rows, and research/quick-calibration.md records that the slowdown tracks load (suite 2.13x, loop 2.24x, one-shot label 2026-10-27 with method)",
+     "class": "within",
+     "why": "Each condition is an SC or FR-007's own one-shot measurement. The figures carry a dated one-shot label with its method (quiet and with 16 busy processes). A real A/B run checks FR-004 on a live roll; it is verification of the requested item, not new scope."
+    },
+    {
+     "id": "T01-measure-table",
+     "summary": "Each step measured by its own test file (claims stop, verdict line/APPROVED=, seat counters, every stage, stale terms, quick net of load)",
+     "class": "within",
+     "why": "Tests that only fail when a requested improvement is missing enforce the request. There is one row per GM item: items 1-4 and the three small ones in item 5. FR-008's docs are listed as a constraint in item 2 and carry no row; that leaves a step unchecked, but it does not narrow the request."
+    },
+    {
+     "id": "T01-not-perf",
+     "summary": "Not performance work: it changes tools, not the roll",
+     "class": "within",
+     "why": "Correct for the request as written: all five items change tooling (land, the trial template, perf-profile, perf-ab, the trial/stale-terms/quick checks). None changes generation."
+    },
+    {
+     "id": "T01-world",
+     "summary": "The constraints describe the world here: each change is in the code the report's row names",
+     "class": "within",
+     "why": "The request names each improvement by the tool trial 439's report pointed at, and the plan puts each change in that tool."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

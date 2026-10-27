@@ -76111,6 +76111,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/perf_ab.py::STAGE_SHARE#plumbing": {
+  "body": "63002a56568526ef",
+  "claim": "plumbing - NONE: which stage rows the table marks, deciding nothing about a place",
+  "code": "8745c3a86c2ed33d",
+  "core": "c3924e8347d19c07",
+  "date": "2026-10-27",
+  "note": "a performance-table marking threshold in a benchmark tool; it decides nothing about a place or how one is drawn",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/perf_share.py::STAGES#plumbing": {
   "body": "0e608537208abf15",
   "claim": "plumbing - NONE: the four stages feature 437 read, the largest by time share at the 435-start bookend",
