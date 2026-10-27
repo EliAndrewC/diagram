@@ -144,3 +144,10 @@ def test_every_written_form_of_a_decision_is_read() -> None:
     got = pb._paragraphs(plan, pb._DECISION)
     assert sorted(got) == ["D121", "D7", "D8", "D83", "D96"]
     assert got["D121"] == "- **D121** The rows released.\n"
+
+
+def test_a_cited_range_of_requirements_is_written_out_id_by_id() -> None:
+    """Feature 440: "FR-005-FR-007" cites FR-006 too - the bundle that kept only the ends blocked 440's plan review on it."""
+    assert pb.expand_ranges("D5 (FR-005-FR-007)") == "D5 (FR-005, FR-006, FR-007)"
+    assert pb.expand_ranges("FR-001 to FR-003; SC-002 to 004") == "FR-001, FR-002, FR-003; SC-002, SC-003, SC-004"
+    assert pb.expand_ranges("FR-007-FR-005 and FR-001 to FR-099") == "FR-007-FR-005 and FR-001 to FR-099", "backwards or too long: left as written"

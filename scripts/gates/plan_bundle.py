@@ -39,6 +39,19 @@ _IDS = re.compile(r"\b((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b")
 #: ...and through its amendment (T123, plan D145): "Feature 375 amendment 11 (D64)" was read as 385's own D64
 _QUALIFIED = re.compile(r"(?<![-\w])(?:[Ff]eature\s+)?(\d{3})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?\(?(?:plan\s+)?((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b")
 _ITEM = re.compile(r"^- \*\*((?:FR|SC)-\d{3}[a-z]?)\b", re.M)
+#: A RANGE OF REQUIREMENTS, CITED AS ONE (feature 440): "FR-005-FR-007", "FR-005 to FR-007", "FR-001 to 008" - every id in it is
+#: cited; the bundle once kept only the two ends, and feature 440's plan review blocked on the FR-006 it left out
+_RANGE = re.compile(r"\b(FR|SC)-(\d{3})\s*(?:-|to|through)\s*(?:(?:FR|SC)-)?(\d{3})\b")
+
+
+def expand_ranges(text: str) -> str:
+    """`text` with each cited requirement range written out id by id (at most 40 ids a range; a longer one is left as it is)."""
+
+    def each(m: re.Match[str]) -> str:
+        a, b = int(m.group(2)), int(m.group(3))
+        return ", ".join(f"{m.group(1)}-{n:03d}" for n in range(a, b + 1)) if 0 < b - a <= 40 else m.group(0)
+
+    return _RANGE.sub(each, text)
 #: every form the plans write a decision in (405 T133, D123): `**D83 - `, `- **D96 - `, `- **D121** `, `- **D7 The ...**` and
 #: `**D8.**` - the first form alone left 452 decisions out of every `spec-cited.md` that cited one
 _DECISION = re.compile(r"^(?:- )?\*\*(D\d+[a-z]?)(?: - |\*\*|\.| )", re.M)
@@ -153,7 +166,7 @@ def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earli
     own_no = spec_dir.name[:3]
     others = list(dict.fromkeys((m.group(1), m.group(2)) for _k, body in under for m in _QUALIFIED.finditer(body) if m.group(1) != own_no))
     # an id named as another feature's is not this feature's: matched with the qualified spans taken out
-    cited = list(dict.fromkeys(m.group(1) for _k, body in under for m in _IDS.finditer(_QUALIFIED.sub(lambda q: "" if q.group(1) != own_no else q.group(2), body))))
+    cited = list(dict.fromkeys(m.group(1) for _k, body in under for m in _IDS.finditer(expand_ranges(_QUALIFIED.sub(lambda q: "" if q.group(1) != own_no else q.group(2), body)))))
     # a decision's own paragraph is in blocks.md already; the requirements it answers to, and the decisions it leans on, are cited
     own = {m.group(1) for _k, body in under for m in _DECISION.finditer(body)}
     (out / "spec-cited.md").write_text(

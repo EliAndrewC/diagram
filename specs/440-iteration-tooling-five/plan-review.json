@@ -3,61 +3,61 @@
  "blocks": {
   "preamble": {
    "sha256": "848643d2a59b02ca2858dcdf594c505068210d14730e7d1a55521aed0603c003",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "f0337ce56687f0c45af4ec846ae66fff87cea15229de168da3a7bdbc1cba8d91",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
    "sha256": "39c7f93d07f9e68047422b6b381f721ed226dfad761c6866ae0b696babff13f1",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Performance bookends": {
    "sha256": "6a89dcc30cf046aee742e3df4a63a758fec60fdb6518d81932c0c8bf49f6c9c0",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "ea6b77382a717c65b836b41ea5695040370669e250fb09a3f8e60e4122db0f6b",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "f7cb6888e7a47b8af448015ba212ab26f445314e45b8c549510c38df5bcfddd6",
-   "verdict": "BLOCKED",
+   "sha256": "7bb48f1aca77f98ccbb22ba80f6f32d1bdf2acb5c7c5d6af7faf96e3d9c20502",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Task approaches": {
    "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T01 Approach (checklist part A)": {
    "sha256": "b97f1936afed30030b6f91ad352e19ec09e65fc49801c6635a9522cd3b953db6",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Project Structure": {
    "sha256": "0357ceb7a6c052f5c25ca8ac4cba6332a11e8d7c33e7235ce5c169e35b1f05c3",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
    "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   }
@@ -140,6 +140,79 @@
      "summary": "One task in five parts and one landing; done means the named tests, a real quick A/B with stage rows, and research/quick-calibration.md",
      "class": "within",
      "why": "Covers all five items the GM asked for, and the measurement FR-007 asks for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "land.claims_route sends a claims refusal claims_cure names (owed with no check in flight per claims_flight.live, or introduced) to the preflight's stops; any other refusal to the deferred wait.",
+     "class": "within",
+     "why": "Request item (1) and FR-001: the owed-with-none-in-flight refusal moves before the gate. An introduced claim has no check in flight either, so routing it too is the same refusal, and FR-001 says the cheap refusals 'include' it. A claim with a check in flight still waits, which the request does not ask to change."
+    },
+    {
+     "id": "D2",
+     "summary": "The trial template's evidence section ends 'THE VERDICT: [branch taken] - because [measurement that took it]' plus the branch not taken; the trial form's doc says the review checks it.",
+     "class": "within",
+     "why": "Request item (2) and FR-002 almost word for word. Naming the branch not taken is what lets the review check the verdict against the rule's branches, as FR-002 asks."
+    },
+    {
+     "id": "D3",
+     "summary": "profile_stage writes meta.seat_search into .placed.json; perf_fanout.placed_of reads only its integer counts.",
+     "class": "within",
+     "why": "Request item (3) and FR-003. The perf_fanout change only keeps the one existing reader of the sidecar working with the new key. It adds no behavior."
+    },
+    {
+     "id": "D4",
+     "summary": "Each leg carries (wall, cpu, {stage: seconds}), from the worker's roll in the quick and subset forms and from the snapshot legs in the full form; stage_rows prints every stage, largest move first, with * past STAGE_SHARE (1% of A's best roll).",
+     "class": "within",
+     "why": "Request item (4) and FR-004: every form, every stage, the 1% marker. 'A's best roll' is a reading of FR-004's 'the roll's best time' and does not narrow it. The ordering is presentation. The total-only fallback for a leg with no stage times stays in FR-004, and D4 does not contradict it."
+    },
+    {
+     "id": "D5a",
+     "summary": "make trial APPROVED= (TRIAL_APPROVED) fills the brief's approval line, dated today.",
+     "class": "within",
+     "why": "Request item (5), 'make trial APPROVED=', and FR-005 as written."
+    },
+    {
+     "id": "D5b",
+     "summary": "stale_terms skips a candidate the diff rewrote from a line already naming its subject (rewritten_from); a line the diff inserted, or rewrote to bring the subject in, is still searched, quoting FR-006's own condition.",
+     "class": "within",
+     "why": "Request item (5), 'the stale-terms check skipping lines the same diff rewrote', and FR-006. The previous round's finding is cured: D5 now cites FR-006 by itself and quotes its condition in full, including the clause that inserted lines and lines rewritten to bring the subject in are still searched. Nothing outside that condition is spared."
+    },
+    {
+     "id": "D5c",
+     "summary": "ratchet.slowdown (the loop on XDIST_WORKERS forked processes, best of 5 rounds' slowest, over the pinned 0.12 s, floor 1) runs only for a quick run at or over the 15 s ceiling and divides that run before the verdict, which prints raw, slowdown and net. A run under the ceiling is judged raw and prints that its slowdown was not measured.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows FR-007's output clause: a run under the ceiling does not print a measured slowdown or a normalized time. The GM's words are 'quick's 15 s ceiling failing under load', and their purpose is to stop the ceiling failing a run because of load. FR-007's own floor ('never below 1') means the normalized time is never above the raw time, so a run under the ceiling passes on either comparison and no verdict can change. The purpose is therefore untouched. The output says what was compared ('slowdown not measured'), so it does not mislead. Best of 5 rounds matches how the pin was taken (its one-shot label: 6 processes, best of 5 rounds, load 1.0), so the quotient compares like with like; this is method and stays within FR-007."
+    },
+    {
+     "id": "D5d",
+     "summary": "Feature 171's other check on quick, the 60 s QUICK_BUDGET, stays raw.",
+     "class": "within",
+     "why": "The request names only 'quick's 15 s ceiling', and FR-007 changes 'the quick gate's time check' with the ceiling and baseline otherwise unchanged. Leaving the budget alone keeps to the request. Normalizing it too would be unrequested scope."
+    },
+    {
+     "id": "blocks-other",
+     "summary": "Preamble, Summary, Technical Context, Performance bookends (none: tools only), Constitution Check, T01 approach (one task, five parts, the step-by-step measurement table, the calibration figures), Project Structure, Complexity Tracking.",
+     "class": "within",
+     "why": "These restate the five items and their FRs. They decide nothing the spec leaves open beyond order and file placement. The figures carry one-shot labels (0.12 s; 2.13x and 2.24x, measured 2026-10-27, with their methods) or a CONVENTION (15 s from the GM's words, 1%, 60 s, 100%)."
     }
    ]
   }
