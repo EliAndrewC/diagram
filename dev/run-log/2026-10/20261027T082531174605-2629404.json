@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-27T08:25:31Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 189,
+  "result": "green",
+  "commit": "2e19d0ce9",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10011,
+  "host": {
+    "load": [
+      1.49,
+      2.46
+    ],
+    "mem_avail_mb": [
+      9954,
+      10110
+    ],
+    "cpu_temp_c": [
+      98.0,
+      102.0
+    ],
+    "stall_s": {
+      "cpu": 0.8,
+      "io": 0.2,
+      "io_full": 0.1,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 114311,
+      "package": 47518
+    }
+  },
+  "phases": {
+    "preflight": 8.0,
+    "static": 1.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 1.0,
+    "pytest": 174.0,
+    "floors": 9.0,
+    "test-full": 185.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/hamletgen/hinterland/belt.py",
+  "collected": 10011
+}
