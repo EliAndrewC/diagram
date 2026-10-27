@@ -133,7 +133,7 @@
 - [ ] T55 (FR-012) The homesteads seated by construction: a seat's refusals that need no layout asked of every candidate at once, a homestead laid out in full (reach, four sides, fixtures) only where it can stand, the per-seat rolls kept, in l7r/diagram/hamletgen/homesteads/ (FR-012)
       research: rendering
 
-- [ ] T06 (R2 G2) The web laid by the law: an ordinary lane admitted whole by the lane law before it is drawn; the passes after the lay and the settle's repair steps deleted, in `l7r/diagram/hamletgen/ways/` (FR-004, FR-006)
+- [ ] T06 (R2 G2) The web laid by the law: an ordinary lane admitted whole by the lane law before it is drawn; the passes after the lay and the settle's repair steps deleted - with them the end-only join T58 left at settle_network / connector_component (end_components, ends_touch; the round arbiter's ruling on ask:417-T58-red) - in `l7r/diagram/hamletgen/ways/` (FR-004, FR-006)
       research: rendering
 
 - [ ] T12 (R2 G9) The paddy cells cut by their rules: cells not cut then merged or left bare, rings not split and welded after, twins and stubs not drawn, the needle one predicate, in `l7r/diagram/waterfields/` (FR-004, FR-005)
