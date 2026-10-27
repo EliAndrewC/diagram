@@ -99,7 +99,7 @@ def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def
     # ...BUT NEVER A RUN THAT ASKS FOR THEM: `make tooling` (`-m tooling`) and `make test-file` on a tooling file collected
     # ZERO tests while the hash stood unchanged - exit 5, the target failing - so a changed tool none of the hash's files
     # covers (`tools/mapcheck.py`, 2026-10-01) could not have its own tests run at all
-    asked = "tooling" in (config.getoption("markexpr", "") or "") or any(str(a).split("::")[0].endswith(".py") for a in config.args)
+    asked = tooling_asked(config.getoption("markexpr", "") or "", config.args)
     skip_tooling = _tooling_unchanged() and not FULL and not asked
     keep, drop = [], []
     for item in items:
@@ -114,6 +114,13 @@ def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def
         config.hook.pytest_deselected(items=drop)
         items[:] = keep
         config._tier_dropped = len(drop)  # type: ignore[attr-defined]
+
+
+def tooling_asked(markexpr: str, args: list[str]) -> bool:
+    """Did this run ask for the tooling tests by name: `-m tooling`, a test file, or the `tests/tooling` tree itself? THE TREE
+    TOO (feature 417 T54, 2026-10-27): `make land` runs `make test-file FILE=tests/tooling` when its delta changes the Makefile,
+    and with the tooling hash unchanged every test was deselected - pytest's exit 5, read as a red suite, refused the landing."""
+    return "tooling" in markexpr or any(str(a).split("::")[0].endswith(".py") or str(a).rstrip("/").endswith("tests/tooling") for a in args)
 
 
 def _tooling_unchanged() -> bool:
