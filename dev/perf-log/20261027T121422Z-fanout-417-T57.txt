@@ -1,0 +1,151 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+water_frame: 9 calls @20, 9 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+field: 1,709,714 calls @20, 2,869,318 calls @40, growth exponent 0.75
+  placed @40: wet_plots +122, comb_floors.inashiro-paddies +114, dry_plots +53, flooded_plots +15, drawn_channels +13, field_ditches +13, channels +1, field_ponds +1, fields +1, streams +1, weirs +1; 8,565 calls per thing placed
+  fastest growers @20 -> @40:
+    x3.2 math.sin [9,232 -> 29,321]
+    x2.2 decorators.py:73:wrapped [21,580 -> 47,776]
+    x2.2 'items' of 'dict' objects [22,179 -> 48,602]
+    x2.1 waterfields/frame.py:242:to_uf [13,844 -> 29,414]
+    x2.0 builtins.isinstance [82,515 -> 161,810]
+    x1.9 builtins.round [54,347 -> 104,951]
+    x1.9 decorators.py:171:wrapper [10,450 -> 20,135]
+    x1.8 math.acos [25,363 -> 44,970]
+sink: 76,600 calls @20, 77,448 calls @40, growth exponent 0.02
+  placed @40: pond +4, channels +1, drawn_channels +1, marshes +1; 11,064 calls per thing placed
+  fastest growers @20 -> @40:
+    x1.0 overlap/registry.py:202:pair_forbidden [41,634 -> 39,678]
+seat: 92,907 calls @20, 204,913 calls @40, growth exponent 1.14
+  placed @40: nothing in the manifest
+  anchor hamletgen/cluster.py:61:back_fouled [91]
+    hamletgen/cluster.py:86:<genexpr> [103,194|40,950] <- hamletgen/cluster.py:61:back_fouled [91|65]
+  fastest growers @20 -> @40:
+    x2.6 hamletgen/cluster.py:79:<genexpr> [9,425 -> 24,115]
+    x2.5 hamletgen/cluster.py:86:<genexpr> [40,950 -> 103,194]
+    x2.4 'append' of 'list' objects [10,423 -> 25,482]
+waterward: 2 calls @20, 2 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+homesteads: 2,579,131 calls @20, 5,205,031 calls @40, growth exponent 1.01
+  placed @40: site_boundary.water +101, site_boundary.corridors +98, access_corridors +85, gardens +52, houses +40, threshing_yards +40, site_boundary.chords +11, farm_sheds +5, site_boundary.window +4, way_out_gate +2, way_out_track +2, site_boundary.rings +1; 11,802 calls per thing placed
+  anchor hamletgen/homesteads/growth.py:148:settled_seat [267]
+    settlement/core.py:562:px [73,306|39,025] <- settlement/homestead_parts/fixture_seats.py:355:lay_fixtures [1,216|776] <- settlement/rolling/bundle.py:338:_lay_fixtures [1,221|781] <- settlement/rolling/bundle.py:190:_bundle_layout [1,221|781] <- settlement/rolling/bundle.py:161:_bundle_template [2,506|1,344] <- settlement/rolling/bundle.py:80:_bundle_geom [2,506|1,344] <- settlement/rolling/bundle.py:73:_bundle_envelope [416|253] <- hamletgen/homesteads/growth.py:178:household_reach [416|253] <- hamletgen/homesteads/growth.py:404:reach_at [416|253] <- hamletgen/homesteads/growth.py:148:settled_seat [267|116]
+  fastest growers @20 -> @40:
+    x4.7 'astype' of 'numpy.ndarray' objects [5,307 -> 24,994]
+    x4.7 math.dist [19,571 -> 91,244]
+    x4.5 settlement/rolling/access.py:96:seg_box_within [6,152 -> 27,406]
+    x3.9 fromnumeric.py:48:_wrapfunc [8,122 -> 31,399]
+    x3.0 settlement/rolling/gap_ways.py:141:at [15,568 -> 46,828]
+    x3.0 'extend' of 'list' objects [12,023 -> 35,631]
+    x3.0 hamletgen/ways/geom.py:587:<genexpr> [11,423 -> 33,740]
+    x2.7 builtins.round [36,589 -> 100,166]
+track: 4,379 calls @20, 8,548 calls @40, growth exponent 0.96
+  placed @40: lanes +1; 8,548 calls per thing placed
+appurtenances: 150,031 calls @20, 494,974 calls @40, growth exponent 1.72
+  placed @40: farm_fixtures +121, tree_crowns +99, persimmons +33, byres +17, wells +2; 1,819 calls per thing placed
+  fastest growers @20 -> @40:
+    x4.3 'get' of 'dict' objects [6,208 -> 26,516]
+    x4.2 settlement/_geom/primitives.py:57:seg_dist [8,740 -> 37,121]
+    x4.0 math.hypot [10,573 -> 42,309]
+    x2.8 builtins.round [7,801 -> 21,722]
+    x2.5 builtins.max [8,579 -> 21,504]
+    x2.4 builtins.min [12,171 -> 29,706]
+    x1.9 'append' of 'list' objects [16,267 -> 30,187]
+pond_stock: 4 calls @20, 4 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+burial: 17 calls @20, 17 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+web: 1,670,855 calls @20, 3,278,818 calls @40, growth exponent 0.97
+  placed @40: lanes +41; 79,971 calls per thing placed
+  anchor hamletgen/ways/geom.py:414:_trim_to_service [31]
+    settlement/_geom/indexes.py:282:near [90,650|35,218] <- settlement/_geom/indexes.py:529:edge_within [71,925|28,063] <- hamletgen/ways/geom.py:266:ring_within [70,555|25,904] <- hamletgen/ways/geom.py:411:<genexpr> [71,018|26,250] <- hamletgen/ways/geom.py:373:end_serves [948|696] <- hamletgen/ways/geom.py:453:serves [574|438] <- hamletgen/ways/geom.py:414:_trim_to_service [31|27]
+    hamletgen/clearance.py:85:ring_index [73,198|27,969] <- hamletgen/ways/geom.py:266:ring_within [70,555|25,904] <- hamletgen/ways/geom.py:411:<genexpr> [71,018|26,250] <- hamletgen/ways/geom.py:373:end_serves [948|696] <- hamletgen/ways/geom.py:453:serves [574|438] <- hamletgen/ways/geom.py:414:_trim_to_service [31|27]
+    settlement/_geom/indexes.py:529:edge_within [71,925|28,063] <- hamletgen/ways/geom.py:266:ring_within [70,555|25,904] <- hamletgen/ways/geom.py:411:<genexpr> [71,018|26,250] <- hamletgen/ways/geom.py:373:end_serves [948|696] <- hamletgen/ways/geom.py:453:serves [574|438] <- hamletgen/ways/geom.py:414:_trim_to_service [31|27]
+    hamletgen/ways/geom.py:411:<genexpr> [71,018|26,250] <- hamletgen/ways/geom.py:373:end_serves [948|696] <- hamletgen/ways/geom.py:453:serves [574|438] <- hamletgen/ways/geom.py:414:_trim_to_service [31|27]
+    hamletgen/ways/geom.py:266:ring_within [70,555|25,904] <- hamletgen/ways/geom.py:411:<genexpr> [71,018|26,250] <- hamletgen/ways/geom.py:373:end_serves [948|696] <- hamletgen/ways/geom.py:453:serves [574|438] <- hamletgen/ways/geom.py:414:_trim_to_service [31|27]
+  anchor overlap/reserved.py:134:conflicts [179]
+    settlement/_geom/primitives.py:57:seg_dist [83,217|56,968] <- overlap/reserved.py:167:<genexpr> [598|597] <- overlap/reserved.py:134:conflicts [179|124]
+  fastest growers @20 -> @40:
+    x3.9 linestring.py:63:_coords [7,772 -> 30,443]
+    x3.6 hamletgen/ways/law/ends.py:232:<genexpr> [9,070 -> 33,005]
+    x3.3 decorators.py:73:wrapped [14,084 -> 46,892]
+    x3.2 hamletgen/ways/tails.py:75:<genexpr> [6,552 -> 20,928]
+    x3.2 'items' of 'dict' objects [19,601 -> 62,184]
+    x3.2 hamletgen/ways/keeper.py:25:pts_key [8,894 -> 28,202]
+    x3.2 hamletgen/ways/keeper.py:41:<genexpr> [13,354 -> 42,328]
+    x3.1 builtins.isinstance [81,455 -> 252,857]
+lane_wells: 404,194 calls @20, 1,267,184 calls @40, growth exponent 1.65
+  placed @40: wells +2; 633,592 calls per thing placed
+  anchor hamletgen/homesteads/well_seats.py:76:seats [11]
+    hamletgen/homesteads/wells.py:523:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+    settlement/homestead_parts/wood_share.py:460:<genexpr> [54,077|13,243] <- settlement/homestead_parts/wood_share.py:459:disc_covers [6,724|1,949] <- hamletgen/homesteads/wells.py:523:_seat_ok [73,249|18,180] <- hamletgen/homesteads/well_seats.py:76:seats [11|6]
+  anchor settlement/land/wet.py:651:surface_water_dist [168]
+    settlement/_geom/primitives.py:57:seg_dist [57,077|15,295] <- settlement/land/wet.py:651:surface_water_dist [168|40]
+  anchor hamletgen/homesteads/wells.py:406:seat_wells [4]
+    hamletgen/homesteads/wells.py:695:<genexpr> [50,710|11,023] <- hamletgen/homesteads/wells.py:406:seat_wells [4|2]
+  fastest growers @20 -> @40:
+    x4.6 hamletgen/homesteads/wells.py:695:<genexpr> [11,023 -> 50,710]
+    x4.1 settlement/homestead_parts/wood_share.py:460:<genexpr> [13,243 -> 54,077]
+    x4.0 hamletgen/homesteads/wells.py:523:_seat_ok [18,180 -> 73,249]
+    x4.0 math.hypot [27,852 -> 111,250]
+    x3.8 hamletgen/homesteads/wells.py:474:_in_belt [8,138 -> 31,182]
+    x3.7 hamletgen/homesteads/wells.py:761:ok [5,738 -> 21,477]
+    x3.7 settlement/_geom/primitives.py:57:seg_dist [15,295 -> 57,077]
+    x3.7 settlement/houses.py:237:<genexpr> [6,820 -> 25,399]
+pond_bank: 99 calls @20, 99 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+hinterland: 1,492,306 calls @20, 2,543,420 calls @40, growth exponent 0.77
+  placed @40: scrub_pines +1,069, tree_crowns +42, farm_fixtures +19, commons +5, marshes +1, village_groves +1; 2,236 calls per thing placed
+  fastest growers @20 -> @40:
+    x22.2 math.degrees [1,237 -> 27,476]
+    x22.2 math.atan2 [1,239 -> 27,478]
+    x4.0 settlement/land/cover.py:69:<lambda> [5,540 -> 22,200]
+    x3.3 math.dist [8,333 -> 27,855]
+    x2.2 settlement/_geom/indexes.py:476:inside [16,846 -> 37,273]
+    x2.2 ImageDraw.py:135:_getink [14,444 -> 31,884]
+    x2.2 'draw_ink' of 'ImagingDraw' objects [14,455 -> 31,899]
+    x2.2 'pop' of 'list' objects [20,276 -> 44,494]
+woodland: 135,973 calls @20, 205,647 calls @40, growth exponent 0.60
+  placed @40: tree_crowns +1,929, commons +1; 106 calls per thing placed
+  fastest growers @20 -> @40:
+    x1.6 'append' of 'list' objects [13,825 -> 21,905]
+    x1.5 builtins.max [23,568 -> 35,416]
+    x1.5 settlement/_geom/indexes.py:326:<genexpr> [22,449 -> 33,722]
+windbreak: 588,559 calls @20, 1,119,945 calls @40, growth exponent 0.93
+  placed @40: tree_crowns +3,597, village_groves +1; 311 calls per thing placed
+  fastest growers @20 -> @40:
+    x2.2 settlement/_geom/indexes.py:282:near [16,423 -> 35,531]
+    x2.1 settlement/houses.py:362:_hjit [14,228 -> 30,568]
+    x2.1 random.py:500:uniform [9,927 -> 21,111]
+    x2.1 'random' of '_random.Random' objects [11,280 -> 23,856]
+    x2.1 builtins.len [15,462 -> 32,552]
+    x2.1 'extend' of 'list' objects [10,288 -> 21,490]
+    x2.1 builtins.round [17,722 -> 36,445]
+    x2.0 builtins.isinstance [13,595 -> 27,159]
+bamboo: 410 calls @20, 742 calls @40, growth exponent 0.86
+  placed @40: bamboo_stands +7; 106 calls per thing placed
+crossings: 61,357 calls @20, 125,028 calls @40, growth exponent 1.03
+  placed @40: bridges +18; 6,946 calls per thing placed
+sties: 10,057 calls @20, 27,684 calls @40, growth exponent 1.46
+  placed @40: farm_fixtures +23; 1,203 calls per thing placed
+washing: 13,365 calls @20, 30,524 calls @40, growth exponent 1.19
+  placed @40: washing_places +1; 30,524 calls per thing placed
+frame: 14,004 calls @20, 18,062 calls @40, growth exponent 0.37
+  placed @40: scalebar.bbox +4, title.bbox +4, title.placard +4; 1,505 calls per thing placed
+notice: 484,589 calls @20, 779,962 calls @40, growth exponent 0.69
+  placed @40: kosatsuba +1; 779,962 calls per thing placed
+  fastest growers @20 -> @40:
+    x2.2 math.hypot [55,036 -> 119,237]
+    x2.0 'append' of 'list' objects [35,804 -> 73,309]
+    x1.9 builtins.getattr [13,003 -> 24,875]
+    x1.7 'get' of 'dict' objects [30,734 -> 52,987]
+    x1.7 builtins.len [19,147 -> 32,717]
+    x1.1 builtins.max [30,557 -> 33,751]
+    x1.1 builtins.min [30,051 -> 32,927]
+labels: 69,329 calls @20, 107,013 calls @40, growth exponent 0.63
+  placed @40: labels +1; 107,013 calls per thing placed
+  fastest growers @20 -> @40:
+    x1.7 'append' of 'list' objects [13,572 -> 22,528]
+
+all stages: 9,557,891 calls @20, 18,364,392 calls @40

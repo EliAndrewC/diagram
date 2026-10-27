@@ -23,11 +23,13 @@ with no floor on its total (SC-001: every chain of 50,000 calls or more); and th
 from __future__ import annotations
 
 import argparse
+import json
 import math
 import os
 import pstats
 import time
 from collections import defaultdict
+from collections.abc import Mapping
 from concurrent.futures import ProcessPoolExecutor
 from typing import Any
 
@@ -116,14 +118,20 @@ def growers(small: Stats, large: Stats, top: int = 8) -> list[tuple[float, Key, 
     return sorted(out, key=lambda r: -r[0])[:top]
 
 
-def stage_report(stage: str, by_size: dict[int, Stats], hot: int = HOT) -> list[str]:
-    """One stage's lines: totals and growth, then its chains by anchor and its fastest growers when it is big enough."""
+def stage_report(stage: str, by_size: dict[int, Stats], hot: int = HOT, placed: Mapping[str, int] | None = None) -> list[str]:
+    """One stage's lines: totals and growth, what it placed at the largest size and its calls per thing placed (feature 417
+    T57), then its chains by anchor and its fastest growers when it is big enough."""
     sizes = sorted(by_size)
     totals = {n: total(by_size[n]) for n in sizes}
     line = f"{stage}: " + ", ".join(f"{totals[n]:,} calls @{n}" for n in sizes)
     if len(sizes) > 1:
         line += f", growth exponent {exponent(totals[sizes[0]], totals[sizes[-1]], sizes[-1] / sizes[0]):.2f}"
     out = [line]
+    if placed is not None:
+        things = sum(n for n in placed.values() if n > 0)
+        what = ", ".join(f"{k} {n:+,}" for k, n in sorted(placed.items(), key=lambda kv: -abs(kv[1])))
+        each = f"; {totals[sizes[-1]] // things:,} calls per thing placed" if things else ""
+        out.append(f"  placed @{sizes[-1]}: {what or 'nothing in the manifest'}{each}")
     big = by_size[sizes[-1]]
     small = by_size[sizes[0]]
     for anchor, chains in sorted(anchors(big, hot).items(), key=lambda kv: -max(c[0][1] for c in kv[1])):
@@ -145,6 +153,15 @@ def _profile(job: tuple[int, str, int]) -> tuple[int, str, str]:
     return households, stage, raw
 
 
+def placed_of(raw: str) -> dict[str, int] | None:
+    """What the profiled stage placed (`perf_profile`'s `<raw>.placed.json`), or None for a profile written without it."""
+    try:
+        with open(raw + ".placed.json", encoding="utf-8") as fh:
+            return {str(k): int(v) for k, v in json.load(fh).items()}
+    except OSError:
+        return None
+
+
 def stage_names() -> list[str]:
     from l7r.diagram.hamletgen.driver import STAGES  # noqa: PLC0415 - the engine, only when the survey runs
 
@@ -155,7 +172,10 @@ def survey(seed: int, sizes: list[int], stages: list[str], jobs: int, hot: int =
     """Profile each (size, stage) pair once, `jobs` at a time (in processes: each stage's roll is its own), and the report."""
     work = [(seed, st, n) for n in sizes for st in stages]
     raws: dict[tuple[int, str], str] = {}
-    with pool_cls(max_workers=max(1, jobs)) as pool:
+    # ...EACH JOB IN A FRESH PROCESS (feature 417 T57): a worker that rolled the 20-household stage first counted the 40-household
+    # homesteads at 4,798,222 calls, a fresh one at 5,204,554 (seed 39, measured 2026-10-27) - caches that outlive a job
+    fresh = {"max_tasks_per_child": 1} if pool_cls is ProcessPoolExecutor else {}
+    with pool_cls(max_workers=max(1, jobs), **fresh) as pool:
         for households, stage, raw in pool.map(_profile, work):
             raws[(households, stage)] = raw
     lines = [f"perf-fanout seed {seed}, sizes {', '.join(map(str, sizes))}, HOT {hot:,}, ANCHOR {ANCHOR}", ""]
@@ -164,7 +184,7 @@ def survey(seed: int, sizes: list[int], stages: list[str], jobs: int, hot: int =
         by_size = {n: pstats.Stats(raws[(n, stage)]).stats for n in sizes}  # type: ignore[attr-defined]
         for n in sizes:
             grand[n] += total(by_size[n])
-        lines += stage_report(stage, by_size, hot)
+        lines += stage_report(stage, by_size, hot, placed_of(raws[(sizes[-1], stage)]))
     lines += ["", "all stages: " + ", ".join(f"{grand[n]:,} calls @{n}" for n in sizes)]
     return "\n".join(lines) + "\n"
 

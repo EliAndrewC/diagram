@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import cProfile
 import math
+import pstats
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
@@ -139,3 +140,16 @@ def test_the_stage_names_are_the_drivers() -> None:
     from l7r.diagram.hamletgen.driver import STAGES
 
     assert pf.stage_names() == [st.__name__.replace("stage_", "") for st in STAGES] and "web" in pf.stage_names()
+
+
+def test_a_stage_reports_what_it_placed_and_its_calls_per_thing(tmp_path: Path) -> None:
+    """Feature 417 T57: the stage's line is followed by what it placed at the largest size and its calls per thing placed;
+    a profile written without its placed counts reports as before, and a stage that placed nothing says so."""
+    raw = _prof(tmp_path, "lanes-40", 4000)
+    Path(raw + ".placed.json").write_text('{"lanes": 20, "houses": -1}')
+    assert pf.placed_of(raw) == {"lanes": 20, "houses": -1}
+    assert pf.placed_of(_prof(tmp_path, "bare", 10)) is None
+    by_size = {40: pstats.Stats(raw).stats}  # type: ignore[attr-defined]
+    lines = pf.stage_report("lanes", by_size, 1000, {"lanes": 20, "houses": -1})
+    assert lines[1].startswith("  placed @40: lanes +20, houses -1;") and "calls per thing placed" in lines[1]
+    assert pf.stage_report("lanes", by_size, 1000, {})[1] == "  placed @40: nothing in the manifest"

@@ -158,6 +158,7 @@ def test_profiling_the_FIRST_stage_writes_a_raw_prof_and_a_table_that_says_what_
     assert "under cProfile" in table and "+225%" in table, "the table says its number is inflated"
     assert "gitignored" in table and "archive disabled" in table
     assert "cumulative" in table or "function calls" in table, "and it carries pstats' own output"
+    assert Path(raw + ".placed.json").is_file(), "what the stage placed, beside its profile (feature 417 T57)"
     seen: list[int] = []
     real = perf_profile.__dict__.get("plan_site")
     from l7r.diagram import hamletgen
@@ -234,3 +235,10 @@ def test_the_skill_root_is_put_on_sys_path_when_it_is_not_already_there(monkeypa
     monkeypatch.setattr(sys, "path", [p for p in sys.path if Path(p).resolve() != Path(perf_profile.SKILL).resolve()])
     reloaded = importlib.reload(perf_profile)
     assert Path(reloaded.SKILL).resolve() in [Path(p).resolve() for p in sys.path], "it inserted the skill root"
+
+
+def test_what_a_stage_placed_is_written_beside_its_profile() -> None:
+    """Feature 417 T57: a stage's calls read against what it placed - the manifest's lists counted (a dict's lists under
+    `key.sub`, `meta` aside), the difference across the stage written to `<raw>.placed.json`."""
+    M = {"houses": [1, 2], "lanes": [], "meta": {"x": [1]}, "standing": {"wells": [1, 2, 3], "n": 4}, "W": 10}
+    assert perf_profile.placed_counts(M) == {"houses": 2, "lanes": 0, "standing.wells": 3}

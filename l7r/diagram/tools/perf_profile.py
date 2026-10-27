@@ -23,11 +23,13 @@ from __future__ import annotations
 import argparse
 import cProfile
 import io
+import json
 import os
 import pstats
 import subprocess
 import sys
 import time
+from collections.abc import Mapping
 from contextlib import redirect_stdout
 from typing import Any
 
@@ -90,11 +92,13 @@ def profile_stage(seed: int, stage: str, top: int = 25, households: int | None =
             for st in STAGES:
                 if st is target:
                     # the stage runs ONCE, profiled; the plain time is the snapshot's job (a second run would double the stage's side effects)
+                    before = placed_counts(s.M)
                     t0 = time.time()
                     prof.enable()
                     st(s, plan)
                     prof.disable()
                     profiled = time.time() - t0
+                    added = {k: n - before.get(k, 0) for k, n in placed_counts(s.M).items() if n != before.get(k, 0)}
                     break
                 t0 = time.time()
                 st(s, plan)
@@ -103,12 +107,26 @@ def profile_stage(seed: int, stage: str, top: int = 25, households: int | None =
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     raw = os.path.join(RAW_DIR, f"{stamp}-seed{seed}-{stage}.prof")
     prof.dump_stats(raw)
+    with open(raw + ".placed.json", "w", encoding="utf-8") as fh:  # ...and what the stage placed (feature 417 T57: the calls per thing placed)
+        json.dump(added, fh, sort_keys=True)
     out = io.StringIO()
     st_ = pstats.Stats(prof, stream=out)
     st_.sort_stats("cumulative").print_stats(top)
     body = out.getvalue()
     head = f"perf-profile seed {seed} stage {stage}: {profiled:.1f}s under cProfile (the stages before it took {plain:.1f}s unprofiled; cProfile itself is ~+225%, research R2)\nraw: {os.path.relpath(raw, SKILL)} (gitignored; archive: {archive_status()})\n\n"
     return head + body, raw
+
+
+def placed_counts(M: Mapping[str, Any]) -> dict[str, int]:
+    """How many records each list of the manifest holds (a dict's own lists counted under `key.sub`; `meta` aside): what a
+    stage placed is the difference across it (feature 417 T57 - the denominator of a stage's calls)."""
+    out: dict[str, int] = {}
+    for k, v in M.items():
+        if isinstance(v, list):
+            out[k] = len(v)
+        elif isinstance(v, dict) and k != "meta":
+            out.update({f"{k}.{sub}": len(w) for sub, w in v.items() if isinstance(w, list)})
+    return out
 
 
 def archive_status() -> str:
