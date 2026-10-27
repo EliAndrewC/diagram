@@ -25703,6 +25703,42 @@
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/checks.py::NetworkMemo#plumbing": {
+  "body": "10af2c8f4c07e153",
+  "claim": "plumbing - NONE: the one network (`served_lanes`) asked of what changed",
+  "code": "45957c2ea6d6f9ed",
+  "core": "6ab6916d9b76a5e9",
+  "date": "2026-10-27",
+  "note": "memo of pair answers to the one join; KEEP bounds memory only, decides nothing about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/checks.py::NetworkMemo.__init__#plumbing": {
+  "body": "d6de226c3c9b8e90",
+  "claim": "plumbing - NONE",
+  "code": "b410deb3a7c74ccf",
+  "core": "2ebb989fe975ebf9",
+  "date": "2026-10-27",
+  "note": "empty cache state",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/checks.py::NetworkMemo.labels#plumbing": {
+  "body": "d3714fbca6766d6d",
+  "claim": "plumbing - NONE",
+  "code": "697dc3642a12b453",
+  "core": "239c4a18b2d4cdc2",
+  "date": "2026-10-27",
+  "note": "bounding-box prefilter plus union-find over cached lanes_share_tread answers; the join distance is passed in, not decided here",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/checks.py::PathChecker#plumbing": {
   "code": "d2873809b975340b",
   "core": "857248b140565a9f",
@@ -25804,6 +25840,18 @@
   "date": "2026-10-03",
   "note": "idempotence pad",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/checks.py::_NETWORK#plumbing": {
+  "body": "2a368e39f73428fc",
+  "claim": "plumbing - NONE",
+  "code": "97751fbb8a51018b",
+  "core": "b2de706e8647f704",
+  "date": "2026-10-27",
+  "note": "module-level memo instance",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::_meeting#plumbing": {
