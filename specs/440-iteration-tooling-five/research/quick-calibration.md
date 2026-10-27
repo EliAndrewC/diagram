@@ -18,3 +18,9 @@ session's (`os.times` for the children's CPU).
   loop is.
 - A first attempt, whose "quiet" run was taken while load from the session's own failed start was still at 8.7, read the
   loop 2.35 times against the suite's 1.38 - its baseline was not quiet. It is reported, not used.
+
+## The ceiling it is read against
+
+The 15 s is the GM's: "if it takes even as much as fifteen seconds ... a failure" (`specs/171-runtime-ratchets/request.md`,
+2026-08-30), pinned as `hard_ceiling=15` on quick's ratchet in `scripts/measure/ratchet.py`; this feature leaves it, and the
+11 s baseline, as they are.

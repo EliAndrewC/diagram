@@ -217,3 +217,12 @@ def test_every_stage_is_printed_below_the_totals_and_the_ones_that_moved_marked(
     assert any("* moved more than 1% of the roll" in ln for ln in lines)
     assert pa.stage_rows({"A": [{(40, 25): (6.0, 6.0)}], "B": [{(40, 25): (6.0, 6.0)}]}) == [], "runs without stages print none"
     assert pa.stage_rows({"A": [{(40, 4): (None, None, None)}], "B": [{(40, 4): (None, None, None)}]}) == []
+
+
+def test_the_full_form_reads_its_stage_rows_from_the_snapshots_legs() -> None:
+    """Feature 440 T04: a full snapshot's leg carries its stages, so the full form prints them too."""
+    snap = {"rows": [{"asked": 15, "seed": 4, "seconds": 2.0, "stages": {"web": 1.0, "field": 1.0}, "calls": {}}]}
+    other = {"rows": [{"asked": 15, "seed": 4, "seconds": 2.5, "stages": {"web": 1.5, "field": 1.0}, "calls": {}}]}
+    runs = {"A": [pa.legs(snap)[0]], "B": [pa.legs(other)[0]]}
+    rows = [ln for ln in pa.compare(runs, {}) if "stage " in ln]
+    assert len(rows) == 2 and "* stage web" in rows[0]

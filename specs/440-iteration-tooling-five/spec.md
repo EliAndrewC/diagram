@@ -74,7 +74,8 @@ counters; two call-count fanouts to find which stage a +17% came from; and three
   a fixed calibration loop run at the check on as many processes as quick's workers (`XDIST_WORKERS`), its time against its
   unloaded time - a pinned value with its date, method and reason beside the baseline, as 171 FR-010 asks - and never below
   1. The ceiling and baseline are unchanged; the output prints the raw time, the slowdown and the normalized time. A one-shot
-  measurement, dated with its method, records quick and the loop timed under the same load, showing the slowdown tracks.
+  measurement, dated with its method, records a fixed suite on quick's workers (`tests/hamletgen/`, 6 workers) and the loop
+  timed under the same load, showing the slowdown tracks (`research/quick-calibration.md`).
 - **FR-008**: `docs/guards.md` and the touched targets' help name each change; nothing added refuses on a time (feature 435
   FR-006).
 
@@ -84,12 +85,13 @@ counters; two call-count fanouts to find which stage a +17% came from; and three
 - **SC-002** (FR-002, FR-005): `make trial ... APPROVED="x y"` writes a brief whose approval line quotes "x y" and whose
   evidence section asks for the branch; a test reads both.
 - **SC-003** (FR-003): a test of `profile_stage` finds `seat_search` in the `.placed.json` when the roll recorded it.
-- **SC-004** (FR-004): a test of the A/B table prints a stage row for a stage that moved past the threshold and none for one
-  that did not; a real quick A/B shows the stage rows.
+- **SC-004** (FR-004): a test of the A/B table prints a row for every stage, only the stage past the threshold marked; reads the
+  stage rows from the snapshot's legs in the full form; and prints only the total for a leg that records no stage times; a
+  real quick A/B shows the stage rows.
 - **SC-005** (FR-006): the stale-terms tests pass a diff whose candidate is a line the same diff rewrote from one about the
   subject, and still name a line the diff inserted carrying the old value.
 - **SC-006** (FR-007): the quick ratchet's tests pass a run whose raw time is over the GM's 15 s ceiling (feature 171,
-  2026-08-30; observed 2026-08-30, method: the GM's words in specs/171-runtime-ratchets/request.md, pinned as hard_ceiling)
+  2026-08-30; observed 2026-08-30, method: the GM's words, its source recorded in `research/quick-calibration.md`)
   but whose normalized time is under it, and fail one whose normalized time is over.
 - **SC-007** (FR-008): the docs name the changes; nothing added refuses on a time.
 
@@ -103,6 +105,8 @@ counters; two call-count fanouts to find which stage a +17% came from; and three
 - 2026-10-27, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED - FR-007 states the comparison it changes, the loop on
   quick's workers, the pinned unloaded time and a measurement that the slowdown tracks; FR-004 every stage, every form;
   FR-006 rewritten lines only; SC-006's figure attributed.
+- 2026-10-27, round 2 (spec-fidelity-verify): CHANGES REQUIRED - SC-004 to every stage and every form; FR-007 names the
+  suite actually timed; SC-006's figure points at its research.
 
 ## Assumptions
 
