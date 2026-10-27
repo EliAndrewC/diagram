@@ -140,3 +140,14 @@ the closing report.
 
 - The call-count tripwire (feature 427) stays as it is; this feature adds nothing to what it gates.
 - "The three cheat fixes" are T57's items 2, 3 and 1 (`specs/417-all-seeds-pass/research/t57-analysis.md`).
+
+## Review history
+
+- 2026-10-27, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED - the revert's search space stopped at 417; the deciding test
+  was the change's type, not its time; the constitution missing from FR-007; no mechanism bringing the checklist to a task; no
+  closing report, the GM's order unstated.
+- 2026-10-27, round 2 (spec-fidelity-verify): CHANGES REQUIRED - FR-004 grouped by feature and filtered by class against User
+  Story 3; FR-007's grep found a sixth file.
+- 2026-10-27, round 3 (spec-fidelity-verify): CHANGES REQUIRED - the argument that the revert covers moves-work only did not
+  hold: the GM defines the trap by its result, so every hunk is timed, the class only ordering the work.
+- 2026-10-27, round 4 (spec-fidelity-verify): FAITHFUL.
