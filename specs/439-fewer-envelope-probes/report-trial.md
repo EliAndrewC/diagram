@@ -39,7 +39,7 @@ other subagents 3 min.
 
 Work about 17 min, waits about 32 min - 19 of them the landing that ran to its end before refusing.
 
-### Trial 439 (22:05:50 to 22:19:30, about 14 min)
+### Trial 439 (22:05:50 to about 22:28, about 22 min)
 
 `make feature-report F=439` before the review: thinking 4 min, tools 1 min.
 
@@ -51,9 +51,9 @@ Work about 17 min, waits about 32 min - 19 of them the landing that ran to its e
 | 4 | the one review (CHANGES REQUIRED: the verdict did not follow the rule, the ceiling a guess, the time missing) | 22:11:12 | ~22:15:30 | 260 s | WAIT |
 | 5 | the ceiling measured; spike 2 and its measurement (perf-ab 37 s, profile 8 s, two fanouts 20 s each) | ~22:15:30 | 22:18:00 | 2.5 min | work, WAIT ~1.5 min |
 | 6 | evidence, verdict and this report written | 22:18:00 | 22:19:30 | 1.5 min | work |
-| 7 | the review's second round | 22:19:30 | (this report's push) | | WAIT |
+| 7 | the review's second round (CHANGES REQUIRED, one wording item), the rewording, the round arbiter's accept | 22:19:52 | ~22:27 | 202 s + 37 s | WAIT, work ~1 min |
 
-Work about 8 min, waits about 6 min. Against feature 437 (17 min, three spec rounds and an arbiter ruling before any verdict),
+Work about 9 min, waits about 13 min (two review rounds and the arbiter about 8.4 min of them). Against feature 437 (17 min, three spec rounds and an arbiter ruling before any verdict),
 the trial form let the evidence be pushed as it was measured, with no review until the end.
 
 ## What the times point at

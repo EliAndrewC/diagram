@@ -75,4 +75,5 @@ so and stops there.
   conclusion wider than the trial. Applied: spike 2 run and measured, the ceiling measured, the conclusion limited, the time
   reported.
 - 2026-10-27, round 2 (spec-fidelity-verify): CHANGES REQUIRED - the evidence said the rule's screen was spiked; it was not
-  (spike 2 is the re-rolls, run in its place). Reworded to say so; the third round put to the round arbiter.
+  (spike 2 is the re-rolls, run in its place). Reworded to say so; the third round put to the round arbiter: ACCEPT
+  (ask:439-brief-round-3) - the brief stands as the review's verdict, no third round.
