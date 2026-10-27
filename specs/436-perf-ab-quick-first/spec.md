@@ -99,6 +99,7 @@ two engines is on record, the way `make done` will not run before `make quick` h
 
 - 2026-10-27, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED - nothing decided which form a run is, so `HOUSEHOLDS=20,40`
   read as quick and skipped the refusal; the form is now decided by the count of seeds and sizes compared (FR-001, FR-005).
+- 2026-10-27, round 2 (spec-fidelity-verify): FAITHFUL.
 
 ## Assumptions
 
