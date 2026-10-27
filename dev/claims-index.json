@@ -1091,14 +1091,15 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "92e632718de209b5",
   "core": "d283a33aec6357ec",
   "date": "2026-10-12",
   "note": "a gate between the courts",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977"
   },
-  "research": "57c4f6365aa66772",
+  "research": "be68079ccdc95cfd",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
@@ -1108,14 +1109,15 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate on the axis": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "9f3b303502039960",
   "core": "958d4bc05bb7b9db",
   "date": "2026-10-10",
   "note": "0090's drawing page records the divider gate behind the office hall as a GUESS and finds no jin'ya axis, as the claim says",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977"
   },
-  "research": "57c4f6365aa66772",
+  "research": "be68079ccdc95cfd",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517"
@@ -1434,14 +1436,15 @@
  "docs/building-programs.md::Magistrate's manor (county magistracy)#posting wealth knob": {
   "body": "45dde4356996179e",
   "claim": "posting wealth knob - GUESS magistrates-compounds-jinya-and-yamen.drawing: that offices ran short of money is attested, but how a poor one looked is a guess (patched walls, weathered timber, a hall too small)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "aea6c1694f11a522",
   "core": "73379cfad9de42c7",
   "date": "2026-10-26",
   "note": "the poor end's look is recorded as a GUESS on 0090's drawing page, as the claim says",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977"
   },
-  "research": "57c4f6365aa66772",
+  "research": "be68079ccdc95cfd",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:28f3b3b08cf308d9"
   ],
@@ -1724,14 +1727,15 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#two-court zoning": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8d3d62fd2d0ad5f7",
   "core": "958d4bc05bb7b9db",
   "date": "2026-10-10",
   "note": "office court in front and residence behind; the drawing page records this as \"a deliberate simplification\" (at Takayama the residence stood beside the office)",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977"
   },
-  "research": "57c4f6365aa66772",
+  "research": "be68079ccdc95cfd",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
@@ -1795,15 +1799,16 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#walled enclosure": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "cb01687f61db5bdc",
   "core": "d283a33aec6357ec",
   "date": "2026-10-12",
   "note": "walled compound; gate form and gatekeepers' place knobs",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html": "a8c7eafbeafe0423"
   },
-  "research": "e0b02487d6782522",
+  "research": "3e112ca350d483d6",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:ab75c2aae97d08a3",
@@ -2334,19 +2339,20 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#office front, residence rear": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "38e79f2688a28d13",
   "core": "2cb5aa094943faa7",
   "date": "2026-10-10",
   "note": "0090's drawing page records office in front and residence behind as \"a deliberate simplification\", since at Takayama the residence stood beside the office",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977"
   },
-  "research": "57c4f6365aa66772",
+  "research": "be68079ccdc95cfd",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82"
   ],
   "section": "2a84ef9835252815",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#perimeter-first placement order": {
@@ -4297,21 +4303,24 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#plan scale": {
+  "body": "f19e5f136e885844",
+  "claim": "plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
   "code": "93bbf1d4f75fa52d",
-  "core": "d28e8161b6f37cbb",
-  "date": "2026-10-09",
-  "note": "3 px = 1 ft, so drawn compounds fall between Joge and Takayama",
+  "core": "778b3b986322b456",
+  "date": "2026-10-26",
+  "note": "3 px = 1 ft, chosen so drawn compounds fall between Joge and Takayama, as the page sets it",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977"
   },
-  "research": "57c4f6365aa66772",
+  "research": "be68079ccdc95cfd",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:4afbca9685190246",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:aa6db6345dde31d6",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:ae03b2d56e73425e",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:fe00696b6b046c03"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c1eb54b975cd5790"
   ],
   "section": "778b3b986322b456",
-  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#residence size": {
@@ -4455,21 +4464,22 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#divider wall between the courts": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5c42ace4f9676ac8",
   "core": "260aa1c5e1ce4172",
   "date": "2026-10-10",
   "note": "a divider wall separating the courts, with its own gate opening, as the page draws the two courts and the gate between them; the front/behind order is the zoning claim's DEVIATION, and this unit's code does not fix it",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977"
   },
-  "research": "57c4f6365aa66772",
+  "research": "be68079ccdc95cfd",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
   "section": "3c216ad7c4b56d44",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#gatehouse": {
@@ -5132,15 +5142,14 @@
   "claim": "its wall widths - magistrates-compounds-jinya-and-yamen.drawing: 9 (compound wall drawn 3 ft)",
   "code": "ad025dbbf2f104cf",
   "core": "1599fe06178ede30",
-  "date": "2026-10-25",
-  "note": "9 px at 3 px/ft is the page's 3 ft wall",
+  "date": "2026-10-26",
+  "note": "the compound wall's stroke-width 9 at 3 px/ft is 3 ft, and the page has \"the walls are 3 ft thick\"; the 4.5 obstacle half-band matches",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977"
   },
-  "research": "57c4f6365aa66772",
+  "research": "be68079ccdc95cfd",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:3096f9775f2c523a",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:fe00696b6b046c03"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:3096f9775f2c523a"
   ],
   "verdict": "IN-STEP"
  },
@@ -5369,22 +5378,25 @@
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#envelope": {
   "body": "a352bbdec4b1a82d",
-  "claim": "envelope - GUESS magistrates-compounds-jinya-and-yamen.drawing, the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: a 270 x 200 ft walled compound, a GUESS within 0090's range of real sites (Joge's ~20,300 sq ft to Takayama's ~105,600), the divider at 90 ft, its buildings in 0116's ~30-42% coverage band",
-  "code": "07d7c712cb2a34c7",
+  "claim": "envelope - magistrates-compounds-jinya-and-yamen.drawing, the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: a 270 x 200 ft walled compound, inside 0090's range of real sites (Joge's ~20,300 sq ft to Takayama's ~105,600), its buildings covering 30% (measured 2026-10-26 with make pack-audit on the drawn county-magistracy-example sheet: 54,314 sq ft walled), in 0116's ~30-42% band; the divider at 90 ft a GUESS",
+  "code": "001c25556f15f895",
   "core": "14103fc5d3e18912",
   "date": "2026-10-26",
-  "note": "270 x 200 ft (54,000 sq ft) is inside Joge's ~20,300 to Takayama's ~105,600; the coverage part cannot be confirmed: the program's 15 BuildingSpecs sum to ~15,742 sq ft, 29.2% of 270x200 gross and ~30.7% if w/h are the outer faces of 3 ft walls; needed: how w_ft/h_ft relate to the wall faces, and whether pack_audit counts the bath, privies and wells",
+  "note": "270 x 200 ft (~54,000 sq ft) sits between Joge's ~20,300 and Takayama's ~105,600 sq ft; the stated 30% coverage is inside the 30-42% band; no page places the divider, so 90 ft is fairly a GUESS",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
   },
-  "research": "b97f5f0282c5d036",
+  "research": "042db67326213fb4",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:fe00696b6b046c03",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:aa6db6345dde31d6",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:c28165113020f34c"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:7275c3eabc9e3eda",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:c28165113020f34c",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:e672b523bf8222b2"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#forecourt": {
   "code": "410acb1dfc09f8dd",
@@ -6115,6 +6127,15 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/compound_example.py::county_magistracy_program#the office hall's east end-face door seated at 0.8 of the face (door_fracs (0.8, 0.7)); the only 0.8 claimed is the barracks' last door": {
+  "code": "14103fc5d3e18912",
+  "core": "14103fc5d3e18912",
+  "date": "2026-10-26",
+  "note": "the office hall's east end-face door seated at 0.8 of the face (door_fracs (0.8, 0.7)); the only 0.8 claimed is the barracks' last door",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/compound_example.py::county_magistracy_program#vegetable garden site": {
   "code": "7c56851b39df7008",
   "core": "14103fc5d3e18912",
@@ -6324,17 +6345,19 @@
  "l7r/diagram/compound_model.py::NOTICE_BOARD_MAX_FT#board by the gate": {
   "body": "de030158c173bca8",
   "claim": "board by the gate - magistrates-compounds-jinya-and-yamen.drawing: the notice board stands within about 15 ft of a gate in the wall - it is allowed 40 ft, a departure the code keeps until feature 417 T33; within 40 ft of the opening, this project's figure, so a board beside the road (0190) can face its gate across the Imperial road's 30 ft (0088)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "83da0088df29ff4d",
   "core": "9d1de12bdc5d386c",
   "date": "2026-10-25",
   "note": "`NOTICE_BOARD_MAX_FT = 40.0` against 0090's \"within about 15 ft of a gate in the wall\". 0190 nowhere puts the bench's board across the road from the gate, so either 0090's drawing page records 40 ft as a DEVIATION or the code goes back to about 15 ft",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977"
   },
-  "research": "57c4f6365aa66772",
+  "research": "be68079ccdc95cfd",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:e53d9fbf1c2a0525"
   ],
+  "triaged": "2026-10-26",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/compound_model.py::OUTLINE_CLEAR_FT#outline clearance": {
@@ -6708,33 +6731,37 @@
  "l7r/diagram/compound_parts.py::_draw_point_parts#its figures from 0090": {
   "body": "f4e54140c35454ae",
   "claim": "its figures from 0090 - magistrates-compounds-jinya-and-yamen.drawing: 8 (board 8-14 ft west of the gate's edge)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "65ef4329a4f5fc07",
   "core": "7195bec783d8462e",
   "date": "2026-10-25",
   "note": "board 8-14 ft from the gate, \"within about 15 ft of a gate\"",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977"
   },
-  "research": "57c4f6365aa66772",
+  "research": "be68079ccdc95cfd",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:e53d9fbf1c2a0525"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_parts.py::_draw_point_parts#its figures from 0090's drawing page": {
   "body": "f4e54140c35454ae",
   "claim": "its figures from 0090's drawing page - magistrates-compounds-jinya-and-yamen.drawing: 14 (caption box at the board, within about 15 ft of the gate)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "382d916aba940f5f",
   "core": "7195bec783d8462e",
   "date": "2026-10-25",
   "note": "The board's far edge is 14 ft from the gate, inside \"within about 15 ft of a gate\"",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "2d57e78d4651f977"
   },
-  "research": "57c4f6365aa66772",
+  "research": "be68079ccdc95cfd",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:e53d9fbf1c2a0525"
   ],
+  "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_parts.py::_draw_point_parts#its figures guessed on 0100": {

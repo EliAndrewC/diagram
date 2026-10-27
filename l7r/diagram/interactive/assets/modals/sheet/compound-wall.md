@@ -19,7 +19,7 @@ Guesses:
 
 Depiction: The plan draws the wall 3 ft thick, the heavier of the two real forms, so its stroke reads; the lighter wall, at
 a foot or two, would draw too thin a line. No building stands on the wall: where a building and the wall would meet, the
-building gives way, and buildings back onto it with a foot or two between.
+building gives way, and buildings back onto it with a foot or two between. The wall is drawn as a dark, nearly black line to set it apart from the buildings and the court on either side; the line does not show the wall's color, and the real wall was earth under a small roof of tiles or boards.
 
 Name: compound wall
 Covers: the outer wall's strokes
