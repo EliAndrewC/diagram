@@ -9,8 +9,9 @@ import math
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, surface_water_dist
+from l7r.diagram.settlement import Settlement, seg_dist, surface_water_dist
 from l7r.diagram.settlement._geom.indexes import PointGrid
+from l7r.diagram.settlement._geom.primitives import points_in_poly, seg_dists
 from l7r.diagram.settlement.homestead_parts.wood_share import ReservedSeats, well_keepout
 from l7r.diagram.settlement.shrines_wells.wells import WELL_AMONG_DWELLINGS_PX
 from l7r.diagram.settlement.shrines_wells.wells import well_gap_to_dwellings as well_gap_to_dwellings  # re-exported: the tests ask it here
@@ -18,7 +19,7 @@ from l7r.diagram.settlement.shrines_wells.wells import well_gap_to_dwellings as 
 from ..consts import WELL_VERGE_FT, Pt
 from ..plan import SitePlan
 from .holds import release_held
-from .well_seats import PairAhead, PoolScore, SeatSweep
+from .well_seats import PairAhead, PoolScore, SeatSweep, SeatTest, cells, discs_cover
 
 _WELL_DRAWN_R = 12.376
 """The wellhead's DRAWN half-extent, used when asking how far a candidate seat would push the crop: the glyph's own `vr`
@@ -441,7 +442,7 @@ def seat_wells(
     if not houses or len(placed) >= want:
         return new
     gap = gap or WELL_SEAT_FT / max(plan.ftpx, 0.01)
-    seat_ok = seat_ok or (lambda _x, _y: True)
+    seat_ok = seat_ok or ANYWHERE
     xs = [h["x"] for h in houses]
     ys = [h["y"] for h in houses]
     ccx, ccy = sum(xs) / len(xs), sum(ys) / len(ys)
@@ -469,13 +470,19 @@ def seat_wells(
     memo: dict[Any, Any] | None = getattr(s, "_well_memo", None)
     _belt = stage_kept(s, "belt", lambda: belt_polygon(s, plan))
 
-    _belt_of: dict[tuple[float, float, float], int] = {}
+    # ...each seat asked once for the stage, every seat of a pool in one array (feature 435 T06): the belt stands still while wells land
+    _belt_of: dict[tuple[float, float], int] = stage_kept(s, "belt_of", dict)
+
+    def _belt_all(seats: Sequence[tuple[float, float, float]]) -> None:
+        new = [(c[1], c[2]) for c in seats if (c[1], c[2]) not in _belt_of]
+        for xy, inside in zip(new, points_in_poly(new, _belt) if _belt and new else [False] * len(new), strict=True):
+            _belt_of[xy] = int(inside)
 
     def _in_belt(c: tuple[float, float, float]) -> int:
         """Asked once per seat, not once per sort (feature 427 T05, D5)."""
-        if c not in _belt_of:
-            _belt_of[c] = 1 if _belt and point_in_poly(c[1], c[2], _belt) else 0
-        return _belt_of[c]
+        if (c[1], c[2]) not in _belt_of:
+            _belt_all([c])
+        return _belt_of[(c[1], c[2])]
 
     # THE MINIMAX SERVES THE HOUSES THAT NEED A WELL (known-open ledger 2026-08-16): the
     # worst-served objective used to count every house, including those
@@ -526,6 +533,20 @@ def seat_wells(
             _ok_of[(x, y)] = bool(seat_ok(x, y)) and not _wood.disc_covers(x, y, _well_r)
         return _ok_of[(x, y)]
 
+    # ...AND, WHERE THE SEAT TEST HAS AN ARRAY FORM, ASKED OF THE LATTICE AS ARRAYS AND KEPT ON THE SWEEP (feature 435 T06): the
+    # same two tests, every seat a rung reaches asked at once and each verdict read by the stage's later calls
+    _centers = None
+
+    def _many(P: Any) -> Any:
+        nonlocal _centers
+        import numpy as np
+
+        if _centers is None:
+            _centers = np.asarray(_wood.pts, dtype=float).reshape(-1, 2)
+        return np.asarray(seat_ok.many(P), dtype=bool) & ~discs_cover(P, _centers, _well_r)
+
+    many = ((seat_ok.key, _well_r), _many) if isinstance(seat_ok, SeatTest) else None
+
     with s.frozen_terrain():
         for third, want_near in rungs:
             if len(placed) >= want:
@@ -547,7 +568,8 @@ def seat_wells(
                 sweep = stage_kept(
                     s, key, lambda pad=pad: SeatSweep(list(candidates) if candidates is not None else list(grid_points(min(xs) - pad, max(xs) + pad, min(ys) - pad, max(ys) + pad, step)), houses)
                 )
-            seats, _near_of = sweep.seats(third, want_near, gap, reach_r, _seat_ok, (ccx, ccy))
+            seats, _near_of = sweep.seats(third, want_near, gap, reach_r, _seat_ok, (ccx, ccy), many)
+            _belt_all(seats)
             # GREEDY COVERAGE, not central-first throughout (settlement-review, Mizuguchi/Sawada
             # 2026-08-15): sorting every well toward the centroid put both of Mizuguchi's wells in one
             # lobe of a two-lobed cluster - the six eastern households walked 248-424 ft while the west
@@ -727,14 +749,24 @@ def seat_cluster(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, An
     """
     reach = max(520.0, 760.0 / max(plan.ftpx, 0.01))
     verge = on_a_verge(s)
-    off_lanes = lambda x, y: not verge(x, y)  # noqa: E731 - off every lane, its verge included (0196), where lanes stand
+    off_lanes = SeatTest("off-verge", lambda x, y: not verge(x, y), lambda P: ~verge.many(P))  # off every lane, its verge included (0196), where lanes stand
     new = seat_wells(s, plan, houses, placed, want, ((190.0, 5), (300.0, 5), (520.0, 5), (reach, 5)), "cluster", seat_ok=off_lanes)
     if len(placed) < want and len(houses) < 5:
         new += seat_wells(s, plan, houses, placed, want, THREE_THEN_TWO, "cluster", seat_ok=off_lanes)
     return new
 
 
-def on_a_verge(s: Settlement) -> Any:
+def _anywhere_many(P: Any) -> Any:
+    import numpy as np
+
+    return np.ones(len(P), dtype=bool)
+
+
+ANYWHERE = SeatTest("anywhere", lambda _x, _y: True, _anywhere_many)
+"""Research: plumbing - NONE: the seat test of a form that sets none"""
+
+
+def on_a_verge(s: Settlement) -> SeatTest:
     """The lane-side form's seat test: the wellhead's curb within `WELL_VERGE_FT` of a lane's tread - its center no farther
     from the tread's edge than the wellhead's half-extent and the verge (a curb ON the tread is `well_at`'s to refuse).
 
@@ -749,12 +781,13 @@ def on_a_verge(s: Settlement) -> Any:
     reach = s._well_vr() + s.px(WELL_VERGE_FT) if lanes else 0.0
     # ...EACH LEG FILED ONCE, its box padded by its half-width and the reach (feature 387): a seat asks the legs near it, not every
     # leg of every lane (the lattice at 11 px asked them all, seat by seat)
-    legs = PointGrid()
-    legs.extend(
+    entries = [
         (a, b, half, min(a[0], b[0]) - half - reach, min(a[1], b[1]) - half - reach, max(a[0], b[0]) + half + reach, max(a[1], b[1]) + half + reach)
         for pts, half in lanes
         for a, b in zip(pts, pts[1:], strict=False)
-    )
+    ]
+    legs = PointGrid()
+    legs.extend(entries)
 
     asked: dict[tuple[float, float], bool] = {}
 
@@ -763,9 +796,27 @@ def on_a_verge(s: Settlement) -> Any:
             asked[(x, y)] = any(seg_dist(x, y, a, b) - half <= reach for a, b, half, *_ in legs.near(x, y, 0.0))
         return asked[(x, y)]
 
+    def many(P: Any) -> Any:
+        """`ok` for every seat of `P` at once (feature 435 T06): each cell's seats against the legs whose padded box meets it."""
+        import numpy as np
+
+        out = np.zeros(len(P), dtype=bool)
+        if not entries:
+            return out
+        box = np.asarray([e[3:] for e in entries], dtype=float)
+        halves = np.asarray([e[2] for e in entries], dtype=float)
+        for rows in cells(P):
+            B = P[rows]
+            (x0, y0), (x1, y1) = B.min(axis=0), B.max(axis=0)
+            near = np.nonzero((box[:, 0] <= x1) & (box[:, 2] >= x0) & (box[:, 1] <= y1) & (box[:, 3] >= y0))[0]
+            if len(near):
+                out[rows] = ((seg_dists(B, [(entries[i][0], entries[i][1]) for i in near]) - halves[near][None, :]) <= reach).any(axis=1)
+        return out
+
+    test = SeatTest("verge", ok, many)
     if memo is not None:
-        memo["verge"] = ok
-    return ok
+        memo["verge"] = test
+    return test
 
 
 def stage_lane_wells(s: Settlement, plan: SitePlan) -> None:

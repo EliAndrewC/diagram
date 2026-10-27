@@ -42,6 +42,20 @@ def point_in_poly(px: float, py: float, poly: Poly) -> bool:
     return inside
 
 
+def points_in_poly(pts: Any, poly: Poly) -> Any:
+    """`point_in_poly` for every point of `pts` (rows of x and y) at once, as one boolean array - the same crossing test, each
+    corner against the one before it (feature 435 T06)."""
+    import numpy as np  # bound here, not at import (feature 237: the engine loads no heavy library at import time)
+
+    P = np.asarray(pts, dtype=float).reshape(-1, 2)
+    px, py = P[:, 0], P[:, 1]
+    inside = np.zeros(len(P), dtype=bool)
+    for i in range(len(poly)):
+        (xi, yi), (xj, yj) = poly[i], poly[i - 1]
+        inside ^= ((yi > py) != (yj > py)) & (px < (xj - xi) * (py - yi) / (yj - yi + 1e-9) + xi)
+    return inside
+
+
 def seg_closest(px: float, py: float, a: Pt, b: Pt) -> Pt:
     ax, ay, bx, by = a[0], a[1], b[0], b[1]
     dx, dy = bx - ax, by - ay

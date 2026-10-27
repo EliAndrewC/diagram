@@ -10,7 +10,7 @@ import pytest
 
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement, seg_dist
-from l7r.diagram.settlement._geom.primitives import convex_hull, edge_dist, point_in_poly
+from l7r.diagram.settlement._geom.primitives import convex_hull, edge_dist, point_in_poly, points_in_poly
 from l7r.diagram.settlement._geom.walls import _box_hits_run, wall_runs
 from tests.settlement._builders import _IDX_POLY, _max_turn_deg
 
@@ -842,3 +842,14 @@ def test_lane_runs_reads_a_towns_streets_at_their_width() -> None:
 
     runs = lane_runs({"town_streets": [{"pts": [[0, 0], [100, 0]], "w": 20}]})
     assert ([(0.0, 0.0), (100.0, 0.0)], 10.0) in runs
+
+
+def test_points_in_poly_is_point_in_poly_for_every_point() -> None:
+    """Feature 435 T06: the array form answers as the one-point crossing test, on random polygons and points."""
+    import random
+
+    for seed in range(20):
+        rng = random.Random(seed)
+        poly = [(rng.uniform(0, 100), rng.uniform(0, 100)) for _ in range(rng.randint(3, 9))]
+        pts = [(rng.uniform(-10, 110), rng.uniform(-10, 110)) for _ in range(200)]
+        assert [bool(v) for v in points_in_poly(pts, poly)] == [point_in_poly(x, y, poly) for x, y in pts], seed

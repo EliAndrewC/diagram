@@ -86,6 +86,11 @@ def test_the_verge_test_and_the_count_a_dig_leaves_and_the_form_recorded() -> No
     s = _s([{"x": 5.0, "y": 5.0}], HOUSES, lanes=[{"pts": [[0, 0], [100, 0]], "w": 4.0}, {"pts": [[0, 0]]}])
     ok = wl.on_a_verge(s)  # type: ignore[arg-type]
     assert ok(50.0, 2.0 + 12.0 + 8.0) and not ok(50.0, 2.0 + 12.0 + 9.0)
+    import numpy as np
+
+    P = np.asarray([(50.0, 2.0 + 12.0 + 8.0), (50.0, 2.0 + 12.0 + 9.0), (500.0, 500.0)])
+    assert list(ok.many(P)) == [True, False, False]  # the array form is the one-seat test (feature 435 T06)
+    assert not wl.on_a_verge(_s([], HOUSES)).many(P).any() and wl.ANYWHERE.many(P).all() and wl.ANYWHERE(1.0, 2.0)
     assert wl.most_served_after((0.0, 1000.0, 0.0), HOUSES, [(0.0, 0.0)]) == 12 and wl.most_served_after((0.0, 115.0, 0.0), HOUSES, [(0.0, 0.0)]) == 6
     assert wl.grid_points(0.0, 10.0, 0.0, 0.0, 5.0) == [(0.0, 0.0), (5.0, 0.0), (10.0, 0.0)]
     wl.mark_form(s, 5.0, 5.0, "lane")

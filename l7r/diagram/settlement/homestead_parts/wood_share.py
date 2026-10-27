@@ -434,11 +434,12 @@ class ReservedSeats:
     """Every seat the households reserved, read off their records (`wood_share`) and indexed once, for a later placer to
     keep its keep-out off: `disc_covers(x, y, r)` - would a disc of radius `r` at (x, y) stand over one?"""
 
-    __slots__ = ("grid",)
+    __slots__ = ("grid", "pts")
 
     def __init__(self, houses: Iterable[Mapping[str, Any]]) -> None:
+        self.pts = [(float(p[0]), float(p[1])) for h in houses for p in (h.get("wood_share") or {}).get("seats") or ()]  # the seats themselves, for an array form
         self.grid = PointGrid(64.0)
-        self.grid.extend([(float(p[0]), float(p[1]), float(p[0]), float(p[1]), float(p[0]), float(p[1])) for h in houses for p in (h.get("wood_share") or {}).get("seats") or ()])
+        self.grid.extend([(x, y, x, y, x, y) for x, y in self.pts])
 
     def disc_covers(self, x: float, y: float, r: float) -> bool:
         return any((sx - x) ** 2 + (sy - y) ** 2 < r * r for sx, sy, *_ in self.grid.near(x, y, r))

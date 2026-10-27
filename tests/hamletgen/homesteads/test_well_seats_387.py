@@ -89,3 +89,38 @@ def test_the_wall_gap_is_measured_once_a_seat_and_reads_the_dwellings() -> None:
     gone = SeatSweep(pts, [houses[1]])
     assert np.isinf(gone.walls(np.arange(3), 1e9)).all()
     assert len(gone.walls(np.arange(3), 1e9)) == 3  # measured once: nothing left to do
+
+
+def test_the_seat_tests_asked_as_arrays_are_the_one_seat_tests_and_kept_on_the_sweep() -> None:
+    """Feature 435 T06: `discs_cover` is `ReservedSeats.disc_covers` for every seat, `SeatTest.many` the seat test asked of many,
+    and `SeatSweep.seats` with `many` keeps the seats the one-seat test keeps, each verdict asked once."""
+    import numpy as np
+
+    from l7r.diagram.hamletgen.homesteads.well_seats import SeatTest, cells, discs_cover
+    from l7r.diagram.settlement.homestead_parts.wood_share import ReservedSeats
+
+    assert cells(np.zeros((0, 2))) == [] and not discs_cover(np.zeros((2, 2)), np.zeros((0, 2)), 5.0).any()
+    for seed in seeds(20):
+        rng = random.Random(200 + seed)
+        reserved = ReservedSeats([{"wood_share": {"seats": [(rng.uniform(0, 900), rng.uniform(0, 900)) for _ in range(rng.randint(0, 30))]}}])
+        P = np.asarray([(rng.uniform(-50, 950), rng.uniform(-50, 950)) for _ in range(300)])
+        r = rng.uniform(5.0, 60.0)
+        got = discs_cover(P, np.asarray(reserved.pts, dtype=float).reshape(-1, 2), r)
+        assert [bool(g) for g in got] == [reserved.disc_covers(float(x), float(y), r) for x, y in P], seed
+        houses = _hamlet(rng)
+        pts = [(rng.uniform(-100, 1000) + 0.37, rng.uniform(-100, 1000) + 0.37) for _ in range(400)]
+        reach_r = max(math.hypot(h["w"], h["h"]) / 2 for h in houses)
+        asked: list[int] = []
+
+        def many(Q: Any, asked: list[int] = asked) -> Any:
+            asked.append(len(Q))
+            return np.asarray([_ok(float(x), float(y)) for x, y in Q])
+
+        test = SeatTest("odd", _ok, many)
+        assert test(7.0, 0.0) is False
+        sweep = SeatSweep(pts, houses)
+        for third, want_near in ((190.0, 3), (300.0, 5), (1e9, 2)):
+            got_seats, _ = sweep.seats(third, want_near, 80.0, reach_r, test, (450.0, 450.0), (test.key, test.many))
+            old, _ = SeatSweep(pts, houses).seats(third, want_near, 80.0, reach_r, _ok, (450.0, 450.0))
+            assert got_seats == old, (seed, third)
+        assert sum(asked) == int((~np.isnan(sweep.ok["odd"])).sum())  # each seat asked once across the rungs

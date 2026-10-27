@@ -17,6 +17,7 @@ Research: plumbing - NONE: how `seat_wells`' own questions (its claims) are comp
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
+from dataclasses import dataclass
 from typing import Any
 
 from l7r.diagram.settlement._geom.overlap import rot_rect
@@ -24,11 +25,58 @@ from l7r.diagram.settlement._geom.primitives import seg_dists
 
 from ..consts import Pt
 
+#: THE CELL A SEAT TEST IS ASKED BY (feature 435 T06): the lattice's seats are asked in groups that share a 64 px cell, so each
+#: group meets only the lane legs and reserved seats near it - a block of whole lattice rows spans the map and meets them all
+CELL_PX = 64.0
+"""Research: plumbing - NONE: how many seats one array asks at once, deciding nothing about the place"""
+
+
+@dataclass(frozen=True)
+class SeatTest:
+    """A seat test asked of one seat (`one`, the reference) or of many as an array (`many`, rows of x and y) - its verdicts kept
+    on the sweep under `key` (feature 435 T06)."""
+
+    key: str
+    one: Callable[[float, float], bool]
+    many: Callable[[Any], Any]
+
+    def __call__(self, x: float, y: float) -> bool:
+        return self.one(x, y)
+
+
+def cells(P: Any, size: float = CELL_PX) -> list[Any]:
+    """The row indices of `P` grouped by the `size` px cell each point stands in."""
+    import numpy as np
+
+    if not len(P):
+        return []
+    k = np.floor(P / size).astype(np.int64)
+    key = k[:, 0] * 1_000_003 + k[:, 1]
+    order = np.argsort(key, kind="stable")
+    return list(np.split(order, np.nonzero(np.diff(key[order]))[0] + 1))
+
+
+def discs_cover(P: Any, centers: Any, r: float) -> Any:
+    """For each point of `P`, does a disc of radius `r` there stand over any of `centers` - `ReservedSeats.disc_covers` for
+    every point at once, the same strict test, asked cell by cell of the centers near each."""
+    import numpy as np
+
+    out = np.zeros(len(P), dtype=bool)
+    if not len(centers) or r <= 0.0:
+        return out
+    for rows in cells(P):
+        B = P[rows]
+        lo, hi = B.min(axis=0) - r, B.max(axis=0) + r
+        C = centers[((centers >= lo) & (centers <= hi)).all(axis=1)]
+        if len(C):
+            out[rows] = (((B[:, None, :] - C[None, :, :]) ** 2).sum(axis=2) < r * r).any(axis=1)
+    return out
+
 
 class SeatSweep:
     """Every lattice seat's distance to every house, one array (seats x houses), read by each rung of the ladder."""
 
-    __slots__ = ("dist", "houses", "pts", "wall")
+    __slots__ = ("dist", "houses", "ok", "pts", "wall", "xy")
 
     def __init__(self, pts: Sequence[Pt], houses: Sequence[Mapping[str, Any]]) -> None:
         import numpy as np  # loaded when a well is seated, never at import (feature 237: no heavy library at import time)
@@ -39,6 +87,8 @@ class SeatSweep:
         h = np.asarray([(float(o["x"]), float(o["y"])) for o in houses], dtype=float).reshape(-1, 2)
         self.dist = np.hypot(p[:, None, 0] - h[None, :, 0], p[:, None, 1] - h[None, :, 1])
         self.wall = np.full(len(self.pts), np.nan)
+        self.xy = p
+        self.ok: dict[Any, Any] = {}
 
     def walls(self, idx: Any, reach: float) -> Any:
         """The gap from each seat of `idx` (lattice rows) to the nearest dwelling's drawn wall, measured once a seat and kept for
@@ -73,13 +123,36 @@ class SeatSweep:
             self.wall[rows] = np.minimum(self.wall[rows], gap)
         return self.wall[idx]
 
+    def passing(self, rows: Any, key: Any, many: Callable[[Any], Any]) -> Any:
+        """The rows of `rows` whose seat passes the static test `many`, asked of the seats not yet asked as one array and each
+        verdict kept under `key` for every later rung and call that reads this sweep (feature 435 T06) - the verge and the wood
+        floor, which no well landing changes.
+
+        Research: plumbing - NONE: the caller's own seat test, asked of the lattice at once and kept"""
+        import numpy as np
+
+        got = self.ok.get(key)
+        if got is None:
+            got = self.ok[key] = np.full(len(self.pts), np.nan)
+        todo = rows[np.isnan(got[rows])]
+        if len(todo):
+            got[todo] = np.asarray(many(self.xy[todo]), dtype=float)
+        return rows[got[rows] == 1.0]
+
     def seats(
-        self, third: float, want_near: int, gap: float, reach_r: float, seat_ok: Callable[[float, float], bool], center: Pt
+        self,
+        third: float,
+        want_near: int,
+        gap: float,
+        reach_r: float,
+        seat_ok: Callable[[float, float], bool],
+        center: Pt,
+        many: tuple[Any, Callable[[Any], Any]] | None = None,
     ) -> tuple[list[tuple[float, float, float]], dict[tuple[float, float, float], float]]:
         """The rung's seats, `(distance to center, x, y)` in the lattice's order, and each seat's `want_near`-th nearest house
         (the ranking's neighborhood tie-break): a seat with `want_near` houses within `third`, its nearest house's center within
         `gap` plus the widest house's half-diagonal (the prefilter), a dwelling's wall within `gap` (`walls`, each seat measured
-        once for every rung), and `seat_ok`.
+        once for every rung), and `seat_ok` - or, given `many` (its key and array form), the kept verdicts of `passing`.
 
         Research: the rung's test - NONE: `seat_wells`' own neighborhood and seat gap, computed for the lattice at once"""
         import numpy as np
@@ -93,12 +166,16 @@ class SeatSweep:
         nearest = d.min(axis=1)
         reach = gap + reach_r
         idx = np.nonzero((nth <= third) & (nearest <= reach))[0]
-        for k in idx[self.walls(idx, reach) <= gap]:
+        rows = idx[self.walls(idx, reach) <= gap]
+        if many is not None:
+            rows = self.passing(rows, *many)
+        for k in rows:
             x, y = self.pts[int(k)]
-            if seat_ok(x, y):
-                c = (float(np.hypot(x - center[0], y - center[1])), x, y)
-                out.append(c)
-                kth[c] = float(nth[int(k)])
+            if many is None and not seat_ok(x, y):
+                continue
+            c = (float(np.hypot(x - center[0], y - center[1])), x, y)
+            out.append(c)
+            kth[c] = float(nth[int(k)])
         return out, kth
 
 
