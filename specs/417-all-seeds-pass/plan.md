@@ -1286,3 +1286,18 @@ Each step measured alone:
 | (a)-(c) after the first cohort, and (d) the end-only join kept at `settle_network` | seed 26 bisected caller by caller (`t58-red.md`), then `make cohort-landing` in `make land`, 2026-10-27 |
 | no seed regressed | `make cohort-landing` (in `make land`) |
 
+
+### T58 part B (2026-10-27T04:37Z)
+
+The trigger: cohort@20261027T041717Z, seed 26 newly failing - the bisect of the one join at `settle_network` (`t58-red.md`).
+
+1. **What exactly is refusing?** `joins_short` on a piece `settle_defer`'s 30 ft cut leaves 8 ft short of access lane 10 (seed 26):
+   the one join keeps it on the network, where the end-only join dropped it as off the network.
+2. **A3 again.** O: the lane law's join that stops short (`law.near_misses`); R: 0246's one network where treads meet.
+3. **A4 again.** It describes the map here: the defer's cut makes the near miss; the end-only join hid it.
+4. **Moving something placed earlier to suit something later?** No: the settle's step keeps its join; nothing placed moves.
+5. **Tuning or changing?** Neither: a last-resort rule that passed it was ruled NOT LEGITIMATE (spec-fidelity MODE 2) and reverted.
+6. **The one-sentence test.** "The defer's cut is a repair still needed; T06 lays its rule at lay, then deletes the end-only join" - no question.
+7. **The next step is a measurement.** T58 lands with the end-only join kept at `settle_network`, measured by `make land`'s cohort.
+8. **Routes measured?** Three priced (A: the defer at lay now; B: keep the end-only join there; C: set T58 down); B measured green on seed 26.
+9. **After a ruling.** The round arbiter ruled `continue`, route B, on ask:417-T58-red; the plan review ruled CLEAR on it.
