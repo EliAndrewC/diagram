@@ -1,0 +1,49 @@
+{
+  "utc": "2026-10-27T20:40:14Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 440,
+  "result": "green",
+  "commit": "ec399bfea",
+  "cache": "cold",
+  "mode": "full",
+  "selected": 10514,
+  "host": {
+    "load": [
+      2.49,
+      3.89
+    ],
+    "mem_avail_mb": [
+      10007,
+      10282
+    ],
+    "cpu_temp_c": [
+      77.0,
+      102.0
+    ],
+    "stall_s": {
+      "cpu": 1.5,
+      "io": 0.9,
+      "io_full": 0.9,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 67709,
+      "package": 41285
+    }
+  },
+  "phases": {
+    "preflight": 22.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 5.0,
+    "hooks-test": 88.0,
+    "pytest": 328.0,
+    "floors": 10.0,
+    "test-full": 343.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/tools/perf_ab.py",
+  "collected": 10514
+}
