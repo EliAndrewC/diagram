@@ -314,6 +314,7 @@ def replate_page(skill_dir: str, fingerprint: str, allow_main: bool = True) -> b
     generators run, under the same main-tree allowance."""
     page_dir = os.path.join(skill_dir, PAGE_DIR)
     stamp = os.path.join(page_dir, ".stamp")
+    fingerprint = f"{fingerprint}:{_counts_sha(skill_dir)}"  # ...and the call counts it shows (feature 434: a new measurement re-plates)
     if os.path.isfile(stamp) and os.path.isfile(os.path.join(page_dir, "hamlet-placement.html")):
         with open(stamp, encoding="utf-8") as fh:
             if fh.read().strip() == fingerprint:
@@ -328,6 +329,17 @@ def replate_page(skill_dir: str, fingerprint: str, allow_main: bool = True) -> b
     with open(os.path.join(page_dir, ".classes"), "w", encoding="utf-8") as fh:
         fh.write(classes_fingerprint() + "\n")
     return True
+
+
+def _counts_sha(skill_dir: str) -> str:
+    """A hash of the call-count record the page shows (`dev/phase-calls.json`, `make phase-calls`), or "none"."""
+    import hashlib
+
+    try:
+        with open(os.path.join(skill_dir, "dev", "phase-calls.json"), "rb") as fh:
+            return hashlib.sha256(fh.read()).hexdigest()[:16]
+    except OSError:
+        return "none"
 
 
 def classes_fingerprint() -> str:

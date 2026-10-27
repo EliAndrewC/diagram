@@ -537,6 +537,11 @@ def test_replate_page_rolls_the_page_when_the_fingerprint_moved_and_skips_when_i
     assert rc.replate_page(repo, "fp-1") is True and len(calls) == 1 and calls[0][1:3] == ["-m", "l7r.diagram.tools.placement_stages"]
     assert rc.replate_page(repo, "fp-1") is False and len(calls) == 1, "the stamp matches: no roll"
     assert rc.replate_page(repo, "fp-2") is True and len(calls) == 2, "the engine moved: re-plated"
+    os.makedirs(os.path.join(repo, "dev"), exist_ok=True)
+    with open(os.path.join(repo, "dev", "phase-calls.json"), "w") as fh:
+        fh.write("{}")
+    assert rc.replate_page(repo, "fp-2") is True and len(calls) == 3, "a new call-count record: re-plated (feature 434)"
+    assert rc.replate_page(repo, "fp-2") is False and len(calls) == 3
 
 
 def test_main_replates_the_placement_page_in_a_tree_that_carries_the_tool(repo, monkeypatch, capsys):
