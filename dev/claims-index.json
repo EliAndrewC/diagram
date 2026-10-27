@@ -76099,25 +76099,13 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/tools/perf_ab.py::QUICK_N#plumbing": {
-  "body": "1e057f31f33b9c12",
-  "claim": "plumbing - NONE: runs a version in the quick form, the GM's \"a single Hamlet seed 6 times\" (feature 436)",
-  "code": "7946abbed6f5bce3",
-  "core": "3e65c247a0c8f861",
+ "l7r/diagram/tools/perf_ab.py::RUNS#plumbing": {
+  "body": "b397c4e7bfd200be",
+  "claim": "plumbing - NONE: runs a version in every form, the GM 2026-10-27 (\"I don't know that we want repeated runs at all, even for the full runs\"); `N=` raises it",
+  "code": "fc39a6cc067ffbfc",
+  "core": "a7a50042be63d617",
   "date": "2026-10-27",
-  "note": "a timing repeat count, nothing a map reader sees",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/tools/perf_ab.py::WIDE_N#plumbing": {
-  "body": "a06934e59923a3d9",
-  "claim": "plumbing - NONE: runs a version in the subset and full forms, feature 435's best of 3",
-  "code": "940abea6d1743705",
-  "core": "c35ad46f1990d395",
-  "date": "2026-10-27",
-  "note": "a timing repeat count, nothing a map reader sees",
+  "note": "perf benchmark repeat count is tooling plumbing; RUNS = 1 matches the GM 2026-10-27 ruling the claim quotes",
   "pages": {},
   "research": "",
   "rests": [],
