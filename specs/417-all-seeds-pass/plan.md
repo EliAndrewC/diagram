@@ -1334,3 +1334,31 @@ Each step measured alone:
 | (b) the setback | `make cohort-landing`, `make maps-moved` |
 | (c), (d) the claim and the page | `make claims-owed`, `make record-owed` |
 
+
+### T70 Approach (checklist part A)
+
+1. **The goal, in the world.** The same lane web, each ordinary lane (a skeleton arm, a web run, a way onto the bund) and each door path's foot gathered at lay onto a junction already standing when its end would arrive a few feet beside it (research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point) - the new lane's end moved, never a drawn lane's (`lay.gathered_forms`, `knots.moved_onto`'s forms, asked through the end rules and refused back to the run as it came). `settle_knots` stays a step, mending only the knots the households' ways leave (T06's conversion order, item 7 (b)); its `KNOTTED_TRIES` fallback is priced from this part's measure, not touched here.
+2. **The constraints.** FR-004 (the knot rule's predicate unchanged: `knots.lane_knots`' reach and `ground_apart`), FR-006, FR-008 (no seed regressed), FR-013; a drawn lane is never moved for a new one.
+3. **Where each comes from.** T06's item 7: `settle_knots` 79,482 of the settle's 1,345,743 calls on seed 39, its edits on the door paths (7), the households' ways (6), the skeleton (3) and the bund way (2), measured 2026-10-27; re-probed on T67's HEAD (`settle_knots` out of STEPS, the knots recorded by the lanes' roles), measured 2026-10-27 (make cohort N=48 FRESH=0 JOBS=3 and the fresh block from 520001): seeds 4, 7, 20, 22, 40 newly knotted - the web's skeleton-pass lanes against each other or the bund way (4, 22, 40, 42, 902, 520020), households' ways against each other or the connector (7, 20, 520043), a household's way against a door path (520023, 520043).
+4. **Do they describe the world here?** Yes: with the gather in and `settle_knots` still out of STEPS, measured 2026-10-27 (the same two cohorts), every knot left is between households' ways or a household's way and the connector (seeds 7, 20, 38, 520043) - the part `gap_ways` lays.
+5. **The order.** Second of T06's four conversions, after T67; `settle_network` and the last resort follow in T06.
+6. **The exits.** Green: the landing cohort passing, the fresh block from 520001 no seed worse than T67's (48/54), every moved pool manifest named, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the junctions standing (`knots.end_nodes`) asked once per candidate, the nearest within the reach taken; each gathered form asked through the end rules (`_held`), the run as it came last.
+8. **The budget.** One landing.
+9. **Done, measured.** The fresh block from 520001 went from T67's 48/54 to 49/54, seed 520023's knot of a door path against a household's way gone and none worse, measured 2026-10-27 (make cohort N=48 SEED=520001 FRESH=0 JOBS=3). The landing cohort passed 54/54, measured 2026-10-27 (make cohort-landing). One pool manifest moved, Mizuguchi, one lane gathered, measured 2026-10-27 (make maps-moved). Seed 39's web at 40 households went from 3,260,405 to 3,278,818 calls, the junctions asked per candidate while `settle_knots` still runs, every other stage within 0.01%, measured 2026-10-27 (make perf-fanout HOUSEHOLDS=40).
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a
+
+What was found, and kept: `settle_knots` stays a step until the households' ways gather at their own lay (`gap_ways`' gather and its `KNOTTED_TRIES` fallback, kept by feature 328 wave 54 because Sawada lost households without it): its remaining edits are theirs alone (item 4), the measure the price of that fallback needs; the price goes through `make arbiter-ask` before the fallback is touched.
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the gather at lay, `settle_knots` off | the two cohorts above, the knots recorded by role (a throwaway probe in `lane_knots`, removed) |
+| the gather, `settle_knots` on | the fresh block from 520001 against T67's, seed by seed, FAIL lines as well as REFUSED (`make cohort N=48 SEED=520001 FRESH=0 JOBS=3`) |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+| the calls | `make perf-fanout HOUSEHOLDS=40` |
+| the maps | `make maps-moved` |
+

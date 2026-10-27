@@ -196,3 +196,28 @@ def test_a_run_its_link_joins_is_laid_only_through_the_joint() -> None:
     got = laid_lawfully(s, run, keep=(150.0, 0.0))
     assert got is not None and got[0] == (150.0, 0.0) and got[-1][1] < 600.0, "trimmed at its far end, the joint kept"
     assert laid_lawfully(s, run, keep=(150.0, 600.0)) is None, "the joint trimmed away: not laid"
+
+
+# ---- the gather at lay (feature 417 T06 part D): an end a few feet beside a junction standing moved onto it ----
+
+
+def test_an_end_beside_a_junction_is_gathered_onto_it() -> None:
+    """0081: ends within 25 ft are joined at a single point - the new lane's end moved onto the junction standing, never a
+    drawn lane's; an end one point with it (within `_JOINT_FT`) or past the reach is left."""
+    s = _S([CONN, [(0.0, 0.0), (300.0, 0.0)], [(150.0, 0.0), (150.0, -200.0)]], houses=[(160.0, 230.0)])
+    got = laid_lawfully(s, [(160.0, 200.0), (160.0, 0.0)])  # its foot 10 ft beside the T at (150, 0)
+    assert got is not None and got[-1] == (150.0, 0.0), got
+    assert [tuple(q) for q in s.M["lanes"][2]["pts"]] == [(150.0, 0.0), (150.0, -200.0)], "the standing lane untouched"
+    far = laid_lawfully(s, [(190.0, 200.0), (190.0, 0.0)])  # 40 ft off any junction: no knot
+    assert far is not None and far[-1] == (190.0, 0.0)
+
+
+def test_a_link_and_a_joint_are_never_gathered_and_a_fence_parts_a_knot() -> None:
+    from l7r.diagram.hamletgen.ways.lay import gathered_forms
+
+    s = _S([CONN, [(0.0, 0.0), (300.0, 0.0)], [(150.0, 0.0), (150.0, -200.0)]], houses=[(160.0, 230.0)])
+    run = [(160.0, 200.0), (160.0, 0.0)]
+    assert laid_lawfully(s, run, whole=True) == run, "a link laid as it came"
+    assert laid_lawfully(s, run, keep=(160.0, 0.0)) == run, "a run's joint stays where its link meets it"
+    assert gathered_forms(s, run, (-1,), lambda a, b, w: True) == [], "ground between: two paths either side of a fence"
+    assert gathered_forms(s, [(1.0, 1.0)], (-1,), lambda a, b, w: False) == [] and gathered_forms(s, run, (), lambda a, b, w: False) == []

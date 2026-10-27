@@ -33,7 +33,9 @@ from ..consts import (
 )
 from .clearance import _clear_link, clear_runs
 from .fabric import _LANE_JOIN_FT, _crosses_fabric, _draw_web, _net_segs
+from .forced import lazy_ground
 from .geom import _TOUCH_GAP, _net_reach, _reach, _trim_to_service, door_unhooked, end_serves, polyline_len, steading_footprints
+from .lay import gathered_forms
 from .route import ROUTE_CELL, _route
 
 
@@ -547,6 +549,10 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
             own_law = copy.copy(lawful)
             own_law.owner = (float(h["x"]), float(h["y"]))  # ...its household's own way, beside its own garden (405 T18)
             path = door_path(s, d, segs, hard, walls, water, quads, own_law, bands)  # type: ignore[arg-type]
+            if path is not None:
+                # ...ITS FOOT GATHERED ONTO A JUNCTION STANDING a few feet beside it (feature 417 T06 part D, 0081: ends within 25 ft
+                # are joined at a single point), judged as the path is; its door end never moves
+                path = next((g for g in gathered_forms(s, path, (-1,), lazy_ground(s.M, s)) if own_law(g, 3.0)), path)
             if path is not None and _draw_web(s, path, 3, houses=[(float(h["x"]), float(h["y"]))], joins=True):
                 s.M["lanes"][-1]["serves"] = [float(h["x"]), float(h["y"])]
                 if k > 0:

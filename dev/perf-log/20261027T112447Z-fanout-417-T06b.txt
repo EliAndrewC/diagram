@@ -1,0 +1,46 @@
+perf-fanout seed 39, sizes 40, HOT 50,000, ANCHOR 300
+
+water_frame: 9 calls @40
+field: 2,869,336 calls @40
+sink: 77,448 calls @40
+seat: 205,378 calls @40
+  anchor hamletgen/cluster.py:61:back_fouled [91]
+    hamletgen/cluster.py:86:<genexpr> [103,194] <- hamletgen/cluster.py:61:back_fouled [91]
+waterward: 2 calls @40
+homesteads: 5,204,554 calls @40
+  anchor hamletgen/homesteads/growth.py:148:settled_seat [267]
+    settlement/core.py:562:px [73,306] <- settlement/homestead_parts/fixture_seats.py:355:lay_fixtures [1,216] <- settlement/rolling/bundle.py:338:_lay_fixtures [1,221] <- settlement/rolling/bundle.py:190:_bundle_layout [1,221] <- settlement/rolling/bundle.py:161:_bundle_template [2,506] <- settlement/rolling/bundle.py:80:_bundle_geom [2,506] <- settlement/rolling/bundle.py:73:_bundle_envelope [416] <- hamletgen/homesteads/growth.py:178:household_reach [416] <- hamletgen/homesteads/growth.py:404:reach_at [416] <- hamletgen/homesteads/growth.py:148:settled_seat [267]
+track: 8,548 calls @40
+appurtenances: 504,530 calls @40
+pond_stock: 4 calls @40
+burial: 17 calls @40
+web: 3,278,818 calls @40
+  anchor hamletgen/ways/geom.py:414:_trim_to_service [31]
+    settlement/_geom/indexes.py:282:near [90,650] <- settlement/_geom/indexes.py:529:edge_within [71,925] <- hamletgen/ways/geom.py:266:ring_within [70,555] <- hamletgen/ways/geom.py:411:<genexpr> [71,018] <- hamletgen/ways/geom.py:373:end_serves [948] <- hamletgen/ways/geom.py:453:serves [574] <- hamletgen/ways/geom.py:414:_trim_to_service [31]
+    hamletgen/clearance.py:85:ring_index [73,198] <- hamletgen/ways/geom.py:266:ring_within [70,555] <- hamletgen/ways/geom.py:411:<genexpr> [71,018] <- hamletgen/ways/geom.py:373:end_serves [948] <- hamletgen/ways/geom.py:453:serves [574] <- hamletgen/ways/geom.py:414:_trim_to_service [31]
+    settlement/_geom/indexes.py:529:edge_within [71,925] <- hamletgen/ways/geom.py:266:ring_within [70,555] <- hamletgen/ways/geom.py:411:<genexpr> [71,018] <- hamletgen/ways/geom.py:373:end_serves [948] <- hamletgen/ways/geom.py:453:serves [574] <- hamletgen/ways/geom.py:414:_trim_to_service [31]
+    hamletgen/ways/geom.py:411:<genexpr> [71,018] <- hamletgen/ways/geom.py:373:end_serves [948] <- hamletgen/ways/geom.py:453:serves [574] <- hamletgen/ways/geom.py:414:_trim_to_service [31]
+    hamletgen/ways/geom.py:266:ring_within [70,555] <- hamletgen/ways/geom.py:411:<genexpr> [71,018] <- hamletgen/ways/geom.py:373:end_serves [948] <- hamletgen/ways/geom.py:453:serves [574] <- hamletgen/ways/geom.py:414:_trim_to_service [31]
+  anchor overlap/reserved.py:134:conflicts [179]
+    settlement/_geom/primitives.py:57:seg_dist [83,217] <- overlap/reserved.py:167:<genexpr> [598] <- overlap/reserved.py:134:conflicts [179]
+lane_wells: 1,267,032 calls @40
+  anchor hamletgen/homesteads/well_seats.py:76:seats [11]
+    hamletgen/homesteads/wells.py:523:_seat_ok [73,249] <- hamletgen/homesteads/well_seats.py:76:seats [11]
+    settlement/homestead_parts/wood_share.py:460:<genexpr> [54,077] <- settlement/homestead_parts/wood_share.py:459:disc_covers [6,724] <- hamletgen/homesteads/wells.py:523:_seat_ok [73,249] <- hamletgen/homesteads/well_seats.py:76:seats [11]
+  anchor settlement/land/wet.py:651:surface_water_dist [168]
+    settlement/_geom/primitives.py:57:seg_dist [57,077] <- settlement/land/wet.py:651:surface_water_dist [168]
+  anchor hamletgen/homesteads/wells.py:406:seat_wells [4]
+    hamletgen/homesteads/wells.py:695:<genexpr> [50,710] <- hamletgen/homesteads/wells.py:406:seat_wells [4]
+pond_bank: 99 calls @40
+hinterland: 2,543,343 calls @40
+woodland: 205,647 calls @40
+windbreak: 1,119,945 calls @40
+bamboo: 742 calls @40
+crossings: 125,028 calls @40
+sties: 27,684 calls @40
+washing: 30,524 calls @40
+frame: 18,062 calls @40
+notice: 779,962 calls @40
+labels: 107,013 calls @40
+
+all stages: 18,373,725 calls @40

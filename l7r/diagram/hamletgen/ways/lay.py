@@ -26,6 +26,52 @@ Research: its search steps and tolerances - GUESS: no source could speak to it, 
 
 
 def laid_lawfully(s: Any, run: Poly, width: float = 3.0, whole: bool = False, keep: Pt | None = None) -> Poly | None:
+    """`run` held to the lane law's end rules (`_held`), each end that would arrive a few feet beside a junction already
+    standing first gathered onto it (`gathered_forms`, feature 417 T06 part D): the gathered forms asked in turn, then the run as it
+    came - a knot left is a lane laid, never a lane refused for want of a gather. A link (`whole`) is laid as it came and a
+    run's joint (`keep`) stays where its link meets it, so neither is gathered.
+
+    Research:
+        lane ends gathered at lay - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another are joined at a single point, so three lanes never arrive a few feet apart in a knot - the new lane's end moved onto the junction standing, never a drawn lane's"""
+    from .forced import lazy_ground
+
+    run = [(float(q[0]), float(q[1])) for q in run]
+    ends = () if whole else tuple(e for e in (0, -1) if keep is None or math.dist(run[e], keep) >= 1e-6)
+    for form in [*gathered_forms(s, run, ends, lazy_ground(s.M, s)), run]:
+        held = _held(s, form, width, whole, keep)
+        if held is not None:
+            return held
+    return None
+
+
+def gathered_forms(s: Any, run: Poly, ends: tuple[int, ...], blocked: Any) -> list[Poly]:
+    """`run` with each of `ends` that stands a few feet beside a junction of the lanes standing - within the knot reach
+    (`knots.lane_knots`' own, `KNOT_MARGIN * _KNOT_FT`) and beyond one point (`_JOINT_FT`), with lawful ground between
+    (`blocked`, the knot rule's `ground_apart`) - moved onto the nearest such junction (`knots.moved_onto`, its forms in turn);
+    none where no end stands so.
+
+    Research:
+        lane ends gathered at lay - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point
+        a knot is ends that could meet - research/questions/0081-village-lanes.drawing.html: ends a fence parts are not a knot, the join tested at the footpath's 3 ft"""
+    from l7r.diagram.settlement.rolling.gap_ways import KNOT_MARGIN
+
+    from .joints import _JOINT_FT
+    from .knots import end_nodes, moved_onto
+    from .smooth import _KNOT_FT
+
+    if len(run) < 2 or not ends:
+        return []
+    nodes = [at for at, _members in end_nodes(list(s.M.get("lanes") or []))]
+    forms: list[Poly] = []
+    for e in ends:
+        q = run[e]
+        near = [at for at in nodes if _JOINT_FT < math.dist(at, q) <= KNOT_MARGIN * _KNOT_FT and not blocked(q, at, 3.0)]
+        if near:
+            forms += [f for f in moved_onto(run, e, min(near, key=lambda at: math.dist(at, q))) if f not in forms]
+    return forms
+
+
+def _held(s: Any, run: Poly, width: float = 3.0, whole: bool = False, keep: Pt | None = None) -> Poly | None:
     """`run` as it may be drawn among the lanes standing - re-aimed as a T where its end meets a way as a needle, a fold or a
     hairpin at the connector, cut where its tail doubles a way or it crosses one at a needle's angle - or None where it still
     breaks one after `TRIES` asks, or where a lane already drawn would have to move (its end a needle along the candidate). Each
