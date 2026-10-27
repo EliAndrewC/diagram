@@ -612,3 +612,30 @@ Owed by cohort@20261025T121445Z (18 landing seeds newly failing `track_ends_off_
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
+<!-- plan-archive: archived 2026-10-26 -->
+### T52 Approach (checklist part A)
+
+1. **The goal, in the world.** Every search by trial in the engine known and costed before any is converted: each placer that
+   lays a candidate out in full and then refuses it, and each check asked again of a whole network as it grows.
+2. **The constraints.** FR-012, FR-013, User Story 5; the GM 2026-10-26 (`request.md` "Speed first").
+3. **Where each comes from.** The GM's words; the session's measurements of 2026-10-26 (`spec.md` User Story 5).
+4. **Do they describe the world here?** Measured first: `make perf-fanout` (every stage, both sizes) and `make perf-profile` of
+   each stage at the survey's larger size, on the engine as it stands.
+5. **The order.** First of the speed tasks (FR-013): it ranks the rest.
+6. **The exits.** Green: `inventory/trial.md` lists each site with where it is, what it lays out before refusing, its calls and
+   seconds at 40 households, and the task that converts it; every site over 50,000 calls has a task.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: a measurement and a list.
+8. **The budget.** No engine change; one commit.
+9. **Done, measured.** The list's rows against the survey's chains.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the sites found | `make perf-fanout`, `make perf-profile` per stage |
+| each site's cost | its calls and profiled seconds in the record |
+
+

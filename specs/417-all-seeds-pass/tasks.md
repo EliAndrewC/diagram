@@ -113,8 +113,9 @@
 
 ### Speed first (FR-013; the GM 2026-10-26, `request.md` "Speed first"): the tasks that cut a roll's calls, largest first
 
-- [ ] T52 (FR-012) The trial inventory: every placer that lays a candidate out in full and then refuses it, and every check asked again of a whole network as it grows, each with its calls and seconds at 40 households and the task that converts it, in inventory/trial.md (FR-012, FR-013)
+- [x] T52 (FR-012) The trial inventory: every placer that lays a candidate out in full and then refuses it, and every check asked again of a whole network as it grows, each with its calls and seconds at 40 households and the task that converts it, in inventory/trial.md (FR-012, FR-013)
       research: rendering
+      verify: DONE. landed: the trial inventory: 11 sites ranked by measured cost, every site over 50,000 calls tasked (inventory/trial.md)
 
 - [ ] T31 (D35) The settle's 16 steps probed off as T26's passes were; the needless deleted together with their tests and dead closure, each needed one converted into its placer (D11) or, where that needs seed-by-seed or room work, ruled as an exception and set down with its seeds, in `l7r/diagram/hamletgen/ways/settle/` T31 also takes `last_resort`'s re-asked steps (its FR-005 pass re-asks `settle_husks`, `settle_street_ends`, `settle_joins` and `prune_the_tree`, which T40 left defined): each leaves it with its own step's conversion or deletion, these four cut and deleted in T31's landing (T40's plan review, 2026-10-25). (FR-004, FR-006) - if the deletion is set aside (D23), the six steps' numbers T38 skipped owe claims as T38's before the fixing resumes (the plan review's condition on D37 c)
       research: rendering
