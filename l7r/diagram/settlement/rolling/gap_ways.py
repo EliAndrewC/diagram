@@ -294,13 +294,12 @@ def way_out(L: Layers, dist: Any, doors: Sequence[Pt], area: tuple[int, int, int
             continue  # out on the lane ground: the flood takes it from here
         for di, dj, ln in _STEPS:
             u, v = i + di, j + dj
-            # a cell already judged read from the memo in place, not through `ok` (feature 427 T07: 90k calls a 40-household roll)
-            if not (i0 <= u < i1 and j0 <= v < j1 and 0 <= u < L.nx and 0 <= v < L.ny) or not (seen[(u, v)] if (u, v) in seen else ok((u, v))):
+            if not (i0 <= u < i1 and j0 <= v < j1 and 0 <= u < L.nx and 0 <= v < L.ny) or not ok((u, v)):
                 continue
-            if di and dj and not ((seen[(i + di, j)] if (i + di, j) in seen else ok((i + di, j))) and (seen[(i, j + dj)] if (i, j + dj) in seen else ok((i, j + dj)))):
+            if di and dj and not (ok((i + di, j)) and ok((i, j + dj))):
                 continue
             nd = d + ln * L.cell
-            if (u, v) not in best or nd < best[(u, v)]:
+            if nd < best.get((u, v), math.inf):
                 best[(u, v)], back[(u, v)] = nd, (i, j)
                 heapq.heappush(heap, (nd, u, v))
     exits.sort()
@@ -325,8 +324,7 @@ def trace(L: Layers, dist: Any, pred: Any, laid: Any, start: tuple[int, int], tr
             foot = feet.nearest(here)
             if dist[u][v] == 0 or joins(here, foot):
                 return path, foot
-        back = pred[u][v]  # the step back, without a generator per cell (feature 427 T07)
-        u, v = int(back[0]), int(back[1])
+        u, v = (int(x) for x in pred[u][v])
         path.append(L.at((u, v)))
 
 

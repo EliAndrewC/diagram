@@ -51,8 +51,8 @@ def _seg_box_gap(a: Pt, b: Pt, box: Any) -> float:
 
     WRITTEN OUT (feature 417 T54): it asked four `segments_cross` and twelve `seg_dist` of every box a leg came near (51,422
     `seg_dist` under the households' taut pulls on seed 39 at 40 households). The segment meets the box where its clip to the
-    box (Liang-Barsky) leaves a part; else the gap is the least of each end's distance to the box and each corner's distance
-    to the segment - the same quantities, as squared sums and one root."""
+    box (Liang-Barsky) leaves a part; else the gap is the least of each end's distance to the box (squared, one root) and each
+    corner's distance to the segment (`seg_dist`)."""
     cx, cy, w, h = box
     x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
     ax, ay = a
@@ -82,15 +82,7 @@ def _seg_box_gap(a: Pt, b: Pt, box: Any) -> float:
         d2 = gx * gx + gy * gy
         if d2 < best:
             best = d2
-    ll = dx * dx + dy * dy
-    for qx, qy in ((x0, y0), (x1, y0), (x1, y1), (x0, y1)):
-        u = ((qx - ax) * dx + (qy - ay) * dy) / ll if ll > 0.0 else 0.0
-        u = 0.0 if u < 0.0 else (1.0 if u > 1.0 else u)
-        ex, ey = ax + u * dx - qx, ay + u * dy - qy
-        d2 = ex * ex + ey * ey
-        if d2 < best:
-            best = d2
-    return math.sqrt(best)
+    return min(math.sqrt(best), min(seg_dist(qx, qy, a, b) for qx, qy in ((x0, y0), (x1, y0), (x1, y1), (x0, y1))))
 
 
 def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:
@@ -331,8 +323,7 @@ def point_clear(q: Pt, gaps: Sequence[tuple[Any, float]]) -> bool:
     Research: plumbing - NONE: the same verdict as the line tests, for a point"""
     qx, qy = q
     for (cx, cy, w, h), t in gaps:
-        dx, dy = qx - cx, qy - cy  # the gaps by sign, not `abs` (feature 417 T56: 95,732 calls) - the same values
-        ex, ey = (dx if dx >= 0 else -dx) - w / 2, (dy if dy >= 0 else -dy) - h / 2
+        ex, ey = abs(qx - cx) - w / 2, abs(qy - cy) - h / 2
         ex, ey = (ex if ex > 0.0 else 0.0), (ey if ey > 0.0 else 0.0)
         if ex * ex + ey * ey < t * t and t > 0.0:
             return False

@@ -239,8 +239,7 @@ def clears(r: Rect, taken: Sequence[Rect], gap: float) -> bool:
     least? A plain loop that stops at the first rect it meets (the seating asks it 1.3 million times a map, seed 44)."""
     rx, ry, rw, rh = r[0], r[1], r[2], r[3]
     for t in taken:  # noqa: SIM110 - a loop, not all() over a generator: the generator was half this test's cost
-        dx, dy = rx - t[0], ry - t[1]
-        if (dx if dx >= 0 else -dx) < (rw + t[2]) / 2 + gap and (dy if dy >= 0 else -dy) < (rh + t[3]) / 2 + gap:  # no `abs` call a pair (feature 427 T12)
+        if abs(rx - t[0]) < (rw + t[2]) / 2 + gap and abs(ry - t[1]) < (rh + t[3]) / 2 + gap:
             return False
     return True
 
@@ -440,9 +439,10 @@ def lay_fixtures(
                 offered = rolled_first(seats, sun or 1, px(STEP_FT), OUT_STEPS, hw / 2)
             else:
                 offered = chain(seats, outward(seats, px(STEP_FT), OUT_STEPS))
-            # a privy is its own farmstead's: no further than 48 ft from its house (0047), never stepped past it - `within_reach_of`
-            # asked inline by `_first` (feature 427 T12)
-            found = _first(offered, taken, g, roofs[0], px(PRIVY_SUN_MAX_FT)) if kind == "privy" else _first(offered, taken, g)
+            if kind == "privy":  # its own farmstead's: no further than 48 ft from its house (0047), never stepped past it
+                reach, house = px(PRIVY_SUN_MAX_FT), roofs[0]  # once, not per seat offered (feature 427 T07)
+                offered = (q for q in offered if within_reach_of(q, house, reach))
+            found = _first(offered, taken, g)
             if found is None:
                 # ...named for the kind that found none: a heap, coop, shrine, grave or retirement house is held to no 48 ft (feature
                 # 427 T08, impl-drift's aside on T12: every kind raised the privy's words)
@@ -643,28 +643,13 @@ def door_room(house: Rect, yard: Rect | None, out: float, half: float) -> Rect |
     return (yard[0], yard[1] + s * (yard[3] / 2 + out), 2 * half, 2 * half)
 
 
-def _first(seats: Iterable[Rect], taken: Sequence[Rect], g: float, house: Rect | None = None, reach: float = 0.0) -> Rect | None:
-    """The first of `seats` that `clears` every rect in `taken` by `g` - its test written inline (73,000 searches a map) - and,
-    where `house` is given, stands `within_reach_of` it by `reach` (the privy's 48 ft), that test inline too (feature 427 T12:
-    a generator and a call per seat offered). The gaps are taken without `abs`, the same arithmetic (a call per pair, the
-    homesteads stage's commonest).
-
-    Research: the privy's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: no more than 48 ft from its house, measured off its far corner as `within_reach_of` measures it"""
+def _first(seats: Iterable[Rect], taken: Sequence[Rect], g: float) -> Rect | None:
+    """The first of `seats` that `clears` every rect in `taken` by `g` - its test written inline (73,000 searches a map)."""
     rects = [(t[0], t[1], t[2], t[3]) for t in taken]
-    hx = hy = hw2 = hh2 = r2 = 0.0  # read only where `house` is given
-    if house is not None:
-        hx, hy, hw2, hh2, r2 = house[0], house[1], house[2] / 2, house[3] / 2, reach * reach
     for q in seats:
         qx, qy, qw, qh = q[0], q[1], q[2], q[3]
-        if house is not None:  # `within_reach_of`: the far corner's gap on each axis
-            gx, gy = qx - hx, qy - hy
-            gx, gy = (gx if gx >= 0 else -gx) + qw / 2 - hw2, (gy if gy >= 0 else -gy) + qh / 2 - hh2
-            gx, gy = (gx if gx > 0.0 else 0.0), (gy if gy > 0.0 else 0.0)
-            if gx * gx + gy * gy > r2:
-                continue
         for tx, ty, tw, th in rects:
-            dx, dy = qx - tx, qy - ty
-            if (dx if dx >= 0 else -dx) < (qw + tw) / 2 + g and (dy if dy >= 0 else -dy) < (qh + th) / 2 + g:  # `clears`, the same arithmetic
+            if abs(qx - tx) < (qw + tw) / 2 + g and abs(qy - ty) < (qh + th) / 2 + g:  # `clears`, the same arithmetic
                 break
         else:
             return q

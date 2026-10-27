@@ -42,8 +42,4 @@ def stand_spares_seats(cx: float, cy: float, w: float, h: float, seats: Sequence
     from .wood_share import BAR_MARGIN_PX
 
     rx, ry = w / 2 + copse_bamboo_reach(bs) + BAR_MARGIN_PX, h / 2 + copse_bamboo_reach(bs) + BAR_MARGIN_PX
-    for x, y in seats:  # a loop with no `abs` call a seat (feature 427 T08: a generator and two calls a seat, 213k at 40 households)
-        dx, dy = x - cx, y - cy
-        if (dx if dx >= 0 else -dx) <= rx and (dy if dy >= 0 else -dy) <= ry:
-            return False
-    return True
+    return not any(abs(x - cx) <= rx and abs(y - cy) <= ry for x, y in seats)

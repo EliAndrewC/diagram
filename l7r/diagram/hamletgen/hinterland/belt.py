@@ -205,8 +205,7 @@ def round_the_houses(cols: Sequence[tuple[float, float]], uv: Sequence[tuple[flo
         return cols[0][1] if abs(v - cols[0][0]) < abs(v - cols[-1][0]) else cols[-1][1]  # pragma: no cover - every v asked lies in [lo, hi]
 
     def disc(v: float) -> float:
-        # ...the band test as two comparisons, not `abs` (feature 417 T56: 206,080 calls a 40-household roll) - the same discs
-        return max((hu + (reach * reach - (v - hv) ** 2) ** 0.5 - reach for hu, hv in uv if -reach <= v - hv <= reach), default=-math.inf)
+        return max((hu + (reach * reach - (v - hv) ** 2) ** 0.5 - reach for hu, hv in uv if abs(v - hv) <= reach), default=-math.inf)
 
     n = max(1, int((hi - lo) // step))
     # round each disc every 15 degrees of arc, so no chord between two points sags more than 0.7 ft into it at 79 ft

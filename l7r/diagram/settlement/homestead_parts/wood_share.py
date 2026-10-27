@@ -402,27 +402,11 @@ class WoodShares:
             cells = [(i, j) for i in range(i0, i1 + 1) for j in range(j0, j1 + 1) if (i, j) in grid.buckets]
         else:
             cells = [k for k in grid.buckets if i0 <= k[0] <= i1 and j0 <= k[1] <= j1]
-        # `seg_dist`'s projection written inline and compared squared (feature 427 T07: a call each per cell and per seat was the
-        # stage's fastest-growing chain, x10 from 20 to 40 households)
-        ax, ay = a
-        dx, dy = b[0] - ax, b[1] - ay
-        dd = dx * dx + dy * dy
-        reach2, gap2 = reach * reach, gap * gap
         for i, j in cells:
-            # the cell's center first: a cell farther than the reach holds no seat within the gap
-            px, py = (i + 0.5) * c, (j + 0.5) * c
-            t = 0.0 if dd == 0 else ((px - ax) * dx + (py - ay) * dy) / dd
-            t = 0.0 if t < 0.0 else 1.0 if t > 1.0 else t
-            ex, ey = px - (ax + t * dx), py - (ay + t * dy)
-            if ex * ex + ey * ey >= reach2:
+            if seg_dist((i + 0.5) * c, (j + 0.5) * c, a, b) >= reach:
                 continue
-            for seat in grid.buckets[(i, j)]:
-                px, py = seat[0], seat[1]
-                t = 0.0 if dd == 0 else ((px - ax) * dx + (py - ay) * dy) / dd
-                t = 0.0 if t < 0.0 else 1.0 if t > 1.0 else t
-                ex, ey = px - (ax + t * dx), py - (ay + t * dy)
-                if ex * ex + ey * ey < gap2:
-                    return True
+            if any(seg_dist(sx, sy, a, b) < gap for sx, sy, *_ in grid.buckets[(i, j)]):
+                return True
         return False
 
     def file(self, circles: Iterable[tuple[float, float, float]], rects: Iterable[tuple[float, float, float, float]]) -> None:

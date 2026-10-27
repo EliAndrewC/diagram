@@ -732,13 +732,8 @@ def rejoined(run: Poly, waters: Sequence[tuple[Poly, float]]) -> Poly:
 
     out: Poly = [run[0]] if run else []
     # ...EACH WATER LEG'S BOX ONCE (feature 417 T54): a leg crosses only a water leg whose box meets its own, so the rest are
-    # passed over unasked - the same cuts (95 runs asked 115,475 `segments_cross` on seed 39 at 40 households); the box by
-    # comparison, not `min`/`max` (193,070 calls each)
-    legs = [
-        (c, e, c[0] if c[0] <= e[0] else e[0], c[1] if c[1] <= e[1] else e[1], c[0] if c[0] >= e[0] else e[0], c[1] if c[1] >= e[1] else e[1], half)
-        for course, half in waters
-        for c, e in zip(course, course[1:], strict=False)
-    ]
+    # passed over unasked - the same cuts (95 runs asked 115,475 `segments_cross` on seed 39 at 40 households)
+    legs = [(c, e, min(c[0], e[0]), min(c[1], e[1]), max(c[0], e[0]), max(c[1], e[1]), half) for course, half in waters for c, e in zip(course, course[1:], strict=False)]
     for a, b in zip(run, run[1:], strict=False):
         d = math.dist(a, b)
         cuts: list[float] = []

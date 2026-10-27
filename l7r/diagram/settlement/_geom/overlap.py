@@ -45,28 +45,14 @@ def drawn_extent(w: float, h: float, rot: float = 0.0) -> tuple[float, float]:
 
 def sat_overlap(p: Sequence[Sequence[float]], q: Sequence[Sequence[float]]) -> bool:
     """Do two CONVEX polygons overlap? (separating-axis test; touching edges do not count.)"""
-    # each axis's projections reduced as they are made, not listed and handed to `max`/`min` (feature 417 T65: four calls an
-    # axis) - the same extremes, the same comparison
     for poly in (p, q):
-        n = len(poly)
-        for i in range(n):
+        for i in range(len(poly)):
             x1, y1 = poly[i]
-            x2, y2 = poly[(i + 1) % n]
+            x2, y2 = poly[(i + 1) % len(poly)]
             nx, ny = -(y2 - y1), (x2 - x1)
-            plo = phi = qlo = qhi = None
-            for x, y in p:
-                v = nx * x + ny * y
-                if plo is None or v < plo:
-                    plo = v
-                if phi is None or v > phi:
-                    phi = v
-            for x, y in q:
-                v = nx * x + ny * y
-                if qlo is None or v < qlo:
-                    qlo = v
-                if qhi is None or v > qhi:
-                    qhi = v
-            if phi < qlo or qhi < plo:  # type: ignore[operator]
+            pa = [nx * x + ny * y for x, y in p]
+            qa = [nx * x + ny * y for x, y in q]
+            if max(pa) < min(qa) or max(qa) < min(pa):
                 return False
     return True
 
@@ -161,27 +147,13 @@ def eave_gap(a: Any, b: Any) -> float:
 
 def rects_overlap(p: Poly, q: Poly) -> bool:
     """Separating-axis overlap for two convex quads (corner lists)."""
-    # each axis's projections reduced as they are made, not listed and handed to `max`/`min` (feature 417 T65: four calls an
-    # axis) - the same extremes, the same comparison
     for poly in (p, q):
-        n = len(poly)
-        for i in range(n):
+        for i in range(len(poly)):
             x1, y1 = poly[i]
-            x2, y2 = poly[(i + 1) % n]
+            x2, y2 = poly[(i + 1) % len(poly)]
             nx, ny = -(y2 - y1), (x2 - x1)
-            plo = phi = qlo = qhi = None
-            for x, y in p:
-                v = nx * x + ny * y
-                if plo is None or v < plo:
-                    plo = v
-                if phi is None or v > phi:
-                    phi = v
-            for x, y in q:
-                v = nx * x + ny * y
-                if qlo is None or v < qlo:
-                    qlo = v
-                if qhi is None or v > qhi:
-                    qhi = v
-            if phi < qlo or qhi < plo:  # type: ignore[operator]
+            pa = [nx * x + ny * y for x, y in p]
+            qa = [nx * x + ny * y for x, y in q]
+            if max(pa) < min(qa) or max(qa) < min(pa):
                 return False
     return True

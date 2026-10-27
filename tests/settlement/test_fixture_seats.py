@@ -193,9 +193,9 @@ def test_the_first_clear_seat_and_the_sun_sector_answer_as_they_were_written() -
         g = rng.choice((0.0, 3.5))
         want = next((q for q in seats if all(abs(q[0] - t[0]) >= (q[2] + t[2]) / 2 + g or abs(q[1] - t[1]) >= (q[3] + t[3]) / 2 + g for t in taken)), None)
         assert fs._first(seats, taken, g) == want
-        house, reach = (0.0, 0.0, 30.0, 20.0), rng.choice((10.0, 48.0))  # feature 427 T12: the privy's reach asked inline
+        house, reach = (0.0, 0.0, 30.0, 20.0), rng.choice((10.0, 48.0))  # the privy's reach, filtered before `_first` as `lay_fixtures` does
         near = next((q for q in seats if fs.within_reach_of(q, house, reach) and fs.clears(q, taken, g)), None)
-        assert fs._first(iter(seats), taken, g, house, reach) == near
+        assert fs._first((q for q in seats if fs.within_reach_of(q, house, reach)), taken, g) == near
         assert all(fs.clears(q, taken, g) == all(abs(q[0] - t[0]) >= (q[2] + t[2]) / 2 + g or abs(q[1] - t[1]) >= (q[3] + t[3]) / 2 + g for t in taken) for q in seats)
         found += want is not None
     assert 40 < found < 400

@@ -760,20 +760,7 @@ def on_a_verge(s: Settlement) -> Any:
 
     def ok(x: float, y: float) -> bool:
         if (x, y) not in asked:
-            # ...the leg's distance written out, compared squared (feature 417 T56: `seg_dist` and its clamps were five calls a leg,
-            # 104,969 legs on seed 39 at 40 households) - the same comparison as `seg_dist(x, y, a, b) - half <= reach`
-            got = False
-            for a, b, half, *_ in legs.near(x, y, 0.0):
-                dx, dy = b[0] - a[0], b[1] - a[1]
-                ll = dx * dx + dy * dy
-                t = ((x - a[0]) * dx + (y - a[1]) * dy) / ll if ll > 0.0 else 0.0
-                t = 0.0 if t < 0.0 else (1.0 if t > 1.0 else t)
-                ex, ey = a[0] + t * dx - x, a[1] + t * dy - y
-                lim = reach + half
-                if lim >= 0.0 and ex * ex + ey * ey <= lim * lim:
-                    got = True
-                    break
-            asked[(x, y)] = got
+            asked[(x, y)] = any(seg_dist(x, y, a, b) - half <= reach for a, b, half, *_ in legs.near(x, y, 0.0))
         return asked[(x, y)]
 
     if memo is not None:

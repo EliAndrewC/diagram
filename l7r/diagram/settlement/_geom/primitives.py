@@ -47,23 +47,13 @@ def seg_closest(px: float, py: float, a: Pt, b: Pt) -> Pt:
     dx, dy = bx - ax, by - ay
     if dx == dy == 0:
         return ax, ay
-    # the clamp written as conditionals, the value `max(0, min(1, t))` gives (feature 417 T56: two calls a point, the engine's
-    # most asked primitive)
-    t = ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)
-    t = 0 if t < 0 else (1 if t > 1 else t)
+    t = max(0, min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)))
     return ax + t * dx, ay + t * dy
 
 
 def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
-    # `seg_closest` written in (feature 417 T56: the call and its clamps were four calls of the five a distance cost), the same
-    # arithmetic in the same order, so the same float
-    ax, ay, bx, by = a[0], a[1], b[0], b[1]
-    dx, dy = bx - ax, by - ay
-    if dx == dy == 0:
-        return math.hypot(px - ax, py - ay)
-    t = ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)
-    t = 0 if t < 0 else (1 if t > 1 else t)
-    return math.hypot(px - (ax + t * dx), py - (ay + t * dy))
+    cx, cy = seg_closest(px, py, a, b)
+    return math.hypot(px - cx, py - cy)
 
 
 def seg_dists(pts: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]]) -> Any:
@@ -123,11 +113,10 @@ def ring_touches(cx: float, cy: float, r: float, ring: Poly) -> bool:
 
 
 def segments_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> bool:
-    # the four orientation tests written in (feature 417 T56: a nested function made and called four times a pair - 244,106 calls
-    # of it on one stage), the same comparisons in the same order: ccw(p, q, r) is (r.y - p.y)(q.x - p.x) > (q.y - p.y)(r.x - p.x)
-    if ((d[1] - a[1]) * (c[0] - a[0]) > (c[1] - a[1]) * (d[0] - a[0])) == ((d[1] - b[1]) * (c[0] - b[0]) > (c[1] - b[1]) * (d[0] - b[0])):
-        return False
-    return ((c[1] - a[1]) * (b[0] - a[0]) > (b[1] - a[1]) * (c[0] - a[0])) != ((d[1] - a[1]) * (b[0] - a[0]) > (b[1] - a[1]) * (d[0] - a[0]))
+    def ccw(p: Pt, q: Pt, r: Pt) -> bool:
+        return (r[1] - p[1]) * (q[0] - p[0]) > (q[1] - p[1]) * (r[0] - p[0])
+
+    return ccw(a, c, d) != ccw(b, c, d) and ccw(a, b, c) != ccw(a, b, d)
 
 
 def seg_intersect(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
@@ -186,24 +175,19 @@ def convex_hull(pts: Sequence[Pt]) -> Poly:
     if len(ps) < 3:
         return [(x, y) for x, y in ps]
 
-    # the turn test `(a - o) x (b - o)` written inline, not a call per point (feature 427 T08: 90k calls at 40 households)
-    # ...each chain's length counted, not asked of `len` at every step (feature 417 T65: 91,550 calls)
+    def cross(o: Pt, a: Pt, b: Pt) -> float:
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
     lower: list[Pt] = []
-    n = 0
     for p in ps:
-        while n >= 2 and (lower[-1][0] - lower[-2][0]) * (p[1] - lower[-2][1]) - (lower[-1][1] - lower[-2][1]) * (p[0] - lower[-2][0]) <= 0:
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
             lower.pop()
-            n -= 1
         lower.append(p)
-        n += 1
     upper: list[Pt] = []
-    n = 0
     for p in reversed(ps):
-        while n >= 2 and (upper[-1][0] - upper[-2][0]) * (p[1] - upper[-2][1]) - (upper[-1][1] - upper[-2][1]) * (p[0] - upper[-2][0]) <= 0:
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
             upper.pop()
-            n -= 1
         upper.append(p)
-        n += 1
     return lower[:-1] + upper[:-1]
 
 
@@ -453,8 +437,7 @@ def chain_violated(px: float, py: float, chains: Sequence[Sequence[Chord]], gap:
                     return True
             else:
                 qx, qy = (ax, ay) if t < 0.0 else (bx, by)
-                dx, dy = px - qx, py - qy  # ...compared squared, no `hypot` (feature 417 T65: 103,415 calls); a gap <= 0 holds nothing nearer
-                if gap > 0.0 and dx * dx + dy * dy < gap * gap:
+                if math.hypot(px - qx, py - qy) < gap:
                     return True
     return False
 

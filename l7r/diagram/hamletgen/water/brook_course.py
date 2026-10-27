@@ -123,13 +123,11 @@ def _crop_edge(segs: Sequence[tuple[Pt, Pt]], u: float, window: float, floor: fl
     vertices inside a window either side are taken as they stand - the window covering the reach to the next
     station, so nothing that sticks out between two stations is missed by both."""
     best = floor
-    for (ua, va), (ub, vb) in segs:  # no `abs`/`max` call an edge (feature 427 T09: 275k at 40 households) - the same tests
-        if -window <= ua - u <= window and va > best:
-            best = va
+    for (ua, va), (ub, vb) in segs:
+        if abs(ua - u) <= window:
+            best = max(best, va)
         if (ua - u) * (ub - u) <= 0 and ua != ub:
-            cut = va + (vb - va) * (u - ua) / (ub - ua)
-            if cut > best:
-                best = cut
+            best = max(best, va + (vb - va) * (u - ua) / (ub - ua))
     return best
 
 

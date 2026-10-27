@@ -120,11 +120,7 @@ class TreeStandsMixin:
 
         Research: no crown under another's - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: d >= max(r, r_other)
         """
-        for cx, cy, cr in crowns:  # noqa: SIM110 - a loop, not all() over a generator and a `max` a crown (feature 427 T08)
-            m = r if r >= cr else cr
-            if (x - cx) ** 2 + (y - cy) ** 2 < m**2:
-                return False
-        return True
+        return all((x - cx) ** 2 + (y - cy) ** 2 >= max(r, cr) ** 2 for cx, cy, cr in crowns)
 
     def _crowns_near(self: Settlement, x0: float, y0: float, x1: float, y1: float) -> list[tuple[float, float, float]]:  # type: ignore[misc]
         """Every crown ALREADY RECORDED on the map (M['tree_crowns'], any stand or clump) that reaches into

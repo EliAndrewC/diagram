@@ -120,18 +120,15 @@ def lattice_search(
     # in the order the nested loops walked them, and the verdicts already asked (`free`, the caller's memo) are read before
     # the caller is - so every cell is pushed with the same cost in the same order, and the path is the one it was
     steps = [(dx2, dy2, math.hypot(dx2, dy2) * cell, bool(dx2 and dy2)) for dx2 in (-1, 0, 1) for dy2 in (-1, 0, 1) if dx2 or dy2]
-    pop, push = heapq.heappop, heapq.heappush
-    # ...the memos read by `in` and a subscript, not `.get` (feature 417 T56: 531,251 `dict.get` calls a 40-household roll, each a
-    # profiled call) - the same values
-    fmemo: dict[tuple[int, int], bool] = free if free is not None else {}
-    bmemo: dict[tuple[int, int], bool] = band if band is not None else {}
+    pop, push, seen = heapq.heappop, heapq.heappush, dist.get
+    known = free.get if free is not None else {}.get
+    banded = band.get if band is not None else {}.get
 
     while heap:
         d, ix, iy = pop(heap)
         if ix == gx and iy == gy:
             break
-        here = (ix, iy)
-        if d > (dist[here] if here in dist else 1e18):  # noqa: SIM401 - a subscript is no profiled call, `.get` is (417 T56)
+        if d > seen((ix, iy), 1e18):
             continue
         for dx2, dy2, step, diag in steps:
             jx, jy = ix + dx2, iy + dy2
@@ -142,26 +139,33 @@ def lattice_search(
             # tell the truth about what it can walk.
             if not (0 <= jx < nx and 0 <= jy < ny):
                 continue
-            there = (jx, jy)
-            ok = fmemo[there] if there in fmemo else is_free(jx, jy)
+            ok = known((jx, jy))
+            if ok is None:
+                ok = is_free(jx, jy)
             if ok and diag:
-                k = (jx, iy)
-                ok = fmemo[k] if k in fmemo else is_free(jx, iy)
+                ok = known((jx, iy))
+                if ok is None:
+                    ok = is_free(jx, iy)
                 if ok:
-                    k = (ix, jy)
-                    ok = fmemo[k] if k in fmemo else is_free(ix, jy)
+                    ok = known((ix, jy))
+                    if ok is None:
+                        ok = is_free(ix, jy)
             if ok:
                 extra = 0.0  # the toll for entering the band (`set_crossing`), each band verdict read from `band` first
                 if toll:
-                    into = bmemo[there] if there in bmemo else in_band(jx, jy)
+                    into = banded((jx, jy))
+                    if into is None:
+                        into = in_band(jx, jy)
                     if into:
-                        out_of = bmemo[here] if here in bmemo else in_band(ix, iy)
+                        out_of = banded((ix, iy))
+                        if out_of is None:
+                            out_of = in_band(ix, iy)
                         if not out_of:
                             extra = toll
                 nd = d + step + extra
-                if nd < (dist[there] if there in dist else 1e18):  # noqa: SIM401 - a subscript is no profiled call (417 T56)
-                    dist[there] = nd
-                    prev[there] = here
+                if nd < seen((jx, jy), 1e18):
+                    dist[(jx, jy)] = nd
+                    prev[(jx, jy)] = (ix, iy)
                     push(heap, (nd, jx, jy))
     return dist, prev
 

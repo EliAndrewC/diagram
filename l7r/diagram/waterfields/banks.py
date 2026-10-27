@@ -96,7 +96,7 @@ def drain_bank_clearance(q: Pt, dpts: Poly, dv: Pt, w0: float, w1: float, cum: l
         ax, ay = dpts[i]
         vx, vy = dpts[i + 1][0] - ax, dpts[i + 1][1] - ay
         t = ((q[0] - ax) * vx + (q[1] - ay) * vy) / ((vx * vx + vy * vy) or 1.0)
-        tc = 0.0 if t < 0.0 else 1.0 if t > 1.0 else t  # `max(0, min(1, t))` with no call (feature 427 T09)
+        tc = max(0.0, min(1.0, t))
         sx, sy = ax + tc * vx, ay + tc * vy
         d = math.hypot(q[0] - sx, q[1] - sy)
         if d < off:
@@ -143,22 +143,19 @@ def _nearest_segment(q: Pt, pts: Poly, cum: list[float], which: Any) -> tuple[fl
     and the indexed walk (`StrokeIndex`), so the two cannot drift.
 
     Research:
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel); 1e+18 (its square, the running squared gap)
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel)
     """
     off, foot, arc, past, nrm = 1e9, (0.0, 0.0), 0.0, False, (0.0, 1.0)
-    off2 = 1e18  # ...the running least gap kept squared, its root taken only where a segment is nearer (feature 417 T65: 127,377 `hypot`)
     last = len(pts) - 2
     for i in which:
         ax, ay = pts[i]
         vx, vy = pts[i + 1][0] - ax, pts[i + 1][1] - ay
         t = ((q[0] - ax) * vx + (q[1] - ay) * vy) / ((vx * vx + vy * vy) or 1.0)
-        tc = 0.0 if t < 0.0 else 1.0 if t > 1.0 else t  # `max(0, min(1, t))` with no call (feature 427 T09)
+        tc = max(0.0, min(1.0, t))
         sx, sy = ax + tc * vx, ay + tc * vy
-        ex, ey = q[0] - sx, q[1] - sy
-        d2 = ex * ex + ey * ey
-        if d2 < off2:
-            off2 = d2
-            off, foot = math.hypot(ex, ey), (sx, sy)
+        d = math.hypot(q[0] - sx, q[1] - sy)
+        if d < off:
+            off, foot = d, (sx, sy)
             arc = cum[i] + tc * math.hypot(vx, vy)
             past = (i == 0 and t < 0.0) or (i == last and t > 1.0)
             nl = math.hypot(vx, vy) or 1.0

@@ -269,15 +269,9 @@ class PointGrid:
             if i1 - i0 > self._MAX_SPAN or j1 - j0 > self._MAX_SPAN:
                 self.oversized.append(item)
                 continue
-            buckets = self.buckets  # ...a new cell's list made whole, an old one's appended to (feature 417 T56: `setdefault` and
-            # `append` were two calls a cell, 553,430 a 40-household roll) - the same buckets in the same order
             for i in range(i0, i1 + 1):
                 for j in range(j0, j1 + 1):
-                    k = (i, j)
-                    if k in buckets:
-                        buckets[k].append(item)
-                    else:
-                        buckets[k] = [item]
+                    self.buckets.setdefault((i, j), []).append(item)
 
     def near(self, px: float, py: float, pad: float = 0.0) -> Any:
         """Every filed item whose box comes within `pad` of (px, py) - plus, harmlessly, some that
@@ -286,16 +280,14 @@ class PointGrid:
         c = self.cell
         i0, j0 = int((px - pad) // c), int((py - pad) // c)
         i1, j1 = int((px + pad) // c), int((py + pad) // c)
-        buckets = self.buckets  # ...read by `in` and a subscript, not `.get` (feature 417 T56: 760,812 `dict.get` calls, the most of any)
         if i0 == i1 and j0 == j1 and not self.oversized:  # the common case - one cell, no copy
-            k = (i0, j0)
-            return buckets[k] if k in buckets else ()  # noqa: SIM401 - a subscript is no profiled call, `.get` is (417 T56)
+            return self.buckets.get((i0, j0)) or ()
         out: list[Any] = list(self.oversized)
         for i in range(i0, i1 + 1):
             for j in range(j0, j1 + 1):
-                k = (i, j)
-                if k in buckets:
-                    out.extend(buckets[k])
+                bucket = self.buckets.get((i, j))
+                if bucket:
+                    out.extend(bucket)
         return out
 
 
@@ -456,17 +448,11 @@ class RingIndex:
         self.rows: dict[int, list[tuple[float, float, float, float]]] = {}
         for i in range(n):
             (xi, yi), (xj, yj) = self.ring[i], self.ring[(i + 1) % n]
-            lx, hx = (xi, xj) if xi <= xj else (xj, xi)  # the box by comparison, not `min`/`max` (feature 417 T56: 163,021 each)
-            ly, hy = (yi, yj) if yi <= yj else (yj, yi)
-            edges.append(((xi, yi), (xj, yj), lx, ly, hx, hy))
+            edges.append(((xi, yi), (xj, yj), min(xi, xj), min(yi, yj), max(xi, xj), max(yi, yj)))
             # the ray test's own condition is `(yi > py) != (yj > py)`, so an edge can only count for
             # the rows its y-span covers; file it there and the crossing count is exact per row
-            rows = self.rows
-            for r in range(int(ly // cell), int(hy // cell) + 1):
-                if r in rows:
-                    rows[r].append((xi, yi, xj, yj))
-                else:
-                    rows[r] = [(xi, yi, xj, yj)]
+            for r in range(int(min(yi, yj) // cell), int(max(yi, yj) // cell) + 1):
+                self.rows.setdefault(r, []).append((xi, yi, xj, yj))
         self.grid = PointGrid(cell)
         self.grid.extend(edges)
         xs = [p[0] for p in self.ring]

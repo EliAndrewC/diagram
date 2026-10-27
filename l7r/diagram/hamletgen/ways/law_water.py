@@ -68,10 +68,7 @@ def crossing_points(p: Poly, course: Poly) -> list[tuple[int, Pt]]:
         its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (spatial-index cell)
     """
     grid = PointGrid(64.0)
-    grid.extend(  # each leg's box by comparison, not `min`/`max` (feature 417 T65)
-        (j, c, d, c[0] if c[0] <= d[0] else d[0], c[1] if c[1] <= d[1] else d[1], c[0] if c[0] >= d[0] else d[0], c[1] if c[1] >= d[1] else d[1])
-        for j, (c, d) in enumerate(zip(course, course[1:], strict=False))
-    )
+    grid.extend((j, c, d, min(c[0], d[0]), min(c[1], d[1]), max(c[0], d[0]), max(c[1], d[1])) for j, (c, d) in enumerate(zip(course, course[1:], strict=False)))
     out = []
     for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
         mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2

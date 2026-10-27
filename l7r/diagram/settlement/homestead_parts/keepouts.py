@@ -410,16 +410,11 @@ class KeepoutsMixin:
         re-reads it. Drawing passes a small pad so a kept crown is unambiguously clear; the check
         itself stays exact (pad 0), which is what keeps its teeth."""
         reach2 = (r + pad) ** 2
-        for cx, cy, hw, hh in rects:  # no `abs` or `max` call a rect (feature 427 T08: four a rect, 210k at 40 households)
-            dx, dy = x - cx, y - cy
-            dx, dy = (dx if dx >= 0 else -dx) - hw, (dy if dy >= 0 else -dy) - hh
-            dx, dy = (dx if dx > 0.0 else 0.0), (dy if dy > 0.0 else 0.0)
+        for cx, cy, hw, hh in rects:
+            dx, dy = max(abs(x - cx) - hw, 0.0), max(abs(y - cy) - hh, 0.0)
             if dx * dx + dy * dy < reach2:
                 return True
-        for wx, wy, wr in circles:  # noqa: SIM110 - a loop, not any() over a generator (a call a circle)
-            if (x - wx) ** 2 + (y - wy) ** 2 < (r + pad + wr) ** 2:
-                return True
-        return False
+        return any((x - wx) ** 2 + (y - wy) ** 2 < (r + pad + wr) ** 2 for wx, wy, wr in circles)
 
     def _record_crowns(self: Settlement, crowns: Sequence[tuple[float, float, float]]) -> None:  # type: ignore[misc]
         """Record drawn canopy crowns as a flat [x, y, r, ...] run in M['tree_crowns'] - the manifest

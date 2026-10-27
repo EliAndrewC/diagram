@@ -239,10 +239,7 @@ class Seats:
 
     def too_near(self, x: float, y: float) -> bool:
         r2 = self.r2
-        for sx, sy, *_ in self.grid.near(x, y):  # noqa: SIM110 - a loop, not any() over a generator (feature 427 T08)
-            if (x - sx) ** 2 + (y - sy) ** 2 < r2:
-                return True
-        return False
+        return any((x - sx) ** 2 + (y - sy) ** 2 < r2 for sx, sy, _x0, _y0, _x1, _y1 in self.grid.near(x, y))
 
 
 class BankNear:

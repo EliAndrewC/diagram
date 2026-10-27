@@ -630,7 +630,7 @@ class WetGroundMixin:
         vs = [p[0] * dx + p[1] * dy for p in fan]
         local: list[float] = []
         for u in stations:
-            near = [v for v, uu in zip(vs, us_fan, strict=True) if -pad <= uu - u <= pad]  # two comparisons, not `abs` (417 T56)
+            near = [v for v, uu in zip(vs, us_fan, strict=True) if abs(uu - u) <= pad]
             local.append((max(near) if near else v_in + pad) - pad)
         edge = [max(local[max(0, k - 1) : k + 2]) for k in range(n)]
         inner = [(u * ux + v * dx, u * uy + v * dy) for u, v in zip(stations, edge, strict=True)]

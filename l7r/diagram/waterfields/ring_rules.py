@@ -342,8 +342,7 @@ def supply_intrusions(ring: Sequence[Sequence[float]], strokes: Sequence[SupplyS
 def _seg_dist(p: Pt, a: Pt, b: Pt) -> float:
     vx, vy = b[0] - a[0], b[1] - a[1]
     L2 = vx * vx + vy * vy
-    t = 0.0 if L2 == 0 else ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / L2
-    t = 0.0 if t < 0.0 else 1.0 if t > 1.0 else t  # clamped with no `max`/`min` call (feature 427 T09)
+    t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / L2))
     return math.hypot(p[0] - (a[0] + t * vx), p[1] - (a[1] + t * vy))
 
 
@@ -354,10 +353,7 @@ def _near_polyline(p: Pt, segs: Sequence[tuple[Pt, Pt, float, float, float, floa
 
     Research: plumbing - NONE: the distance test, its prefilter deciding nothing"""
     px, py = p
-    for a, b, x0, x1, y0, y1 in segs:  # noqa: SIM110 - a loop, not any() over a generator
-        if x0 <= px <= x1 and y0 <= py <= y1 and _seg_dist(p, a, b) < lim:
-            return True
-    return False
+    return any(x0 <= px <= x1 and y0 <= py <= y1 and _seg_dist(p, a, b) < lim for a, b, x0, x1, y0, y1 in segs)
 
 
 def drain_index(drains: Sequence[tuple[Poly, float]]) -> list[tuple[float, float, float, float, float, float, list[Any]]]:
@@ -463,9 +459,7 @@ class RingContext:
             self._supply_reach = shapely.union_all([LineString(s.pts).buffer(max(s.w0, s.w1) / 2 + BANK_MARGIN + 1.0) for s in self.supplies])
             shapely.prepare(self._supply_reach)
         pts = [(float(p[0]), float(p[1])) for p in ring]
-        if not pts:  # an empty ring meets nothing (`LineString([])` was empty; `linestrings` refuses no points)
-            return False
-        return bool(shapely.intersects(self._supply_reach, shapely.linestrings([*pts, *pts[:1]])))  # built in one call (feature 427 T09)
+        return bool(self._supply_reach.intersects(LineString([*pts, *pts[:1]])))
 
 
 def fan_context(
