@@ -83,11 +83,13 @@ two engines is on record, the way `make done` will not run before `make quick` h
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001, FR-002): The quick form's wall time is a few minutes or less at 40 households (measured, not gated).
+- **SC-001** (FR-001): The quick form's wall time is a few minutes or less at 40 households (measured, not gated).
 - **SC-002** (FR-004, FR-005): A subset or full comparison with no quick record refuses before rolling; with one, or with the stated
   reason, it runs.
 - **SC-003** (FR-003, FR-006): The output shows wall and CPU time with spreads, the alternating order, and the floor line.
 - **SC-004** (FR-007): No test or exit added refuses on a time.
+- **SC-006** (FR-002): `make perf-ab A=<a> SEEDS=25,39 HOUSEHOLDS=20,40`, with a quick record on file, prints a result row
+  for each of the four seed and size pairs.
 - **SC-005** (FR-008): The checklist's question 5 and tools table name the quick form first, and the guard table lists the
   refusal with its escape.
 
@@ -102,6 +104,8 @@ two engines is on record, the way `make done` will not run before `make quick` h
 - 2026-10-27, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED - nothing decided which form a run is, so `HOUSEHOLDS=20,40`
   read as quick and skipped the refusal; the form is now decided by the count of seeds and sizes compared (FR-001, FR-005).
 - 2026-10-27, round 2 (spec-fidelity-verify): FAITHFUL.
+- 2026-10-27, round 3 (spec-fidelity-verify, on the success criteria spec-lint asked for): CHANGES REQUIRED - SC-001 could not
+  fail on FR-002; SC-006 now measures the subset form's rows.
 
 ## Assumptions
 

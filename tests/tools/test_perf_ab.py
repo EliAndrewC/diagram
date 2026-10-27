@@ -134,7 +134,7 @@ def rig(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
     seen: list[str] = []
 
     def make(tree: str) -> _Fake:
-        return _Fake(tree, {(tree, (40, 25)): [(2.0, 1.9)] * 6, (tree, (20, 25)): [(1.0, 0.9)] * 6, (tree, (40, 39)): [(2.5, 2.4)] * 6}, seen)
+        return _Fake(tree, {(tree, (40, 25)): [(2.0, 1.9)] * 6, (tree, (20, 25)): [(1.0, 0.9)] * 6, (tree, (20, 39)): [(1.1, 1.0)] * 6, (tree, (40, 39)): [(2.5, 2.4)] * 6}, seen)
 
     return {"made": made, "removed": removed, "make": make, "state": tmp_path / "state", "seen": seen}
 
@@ -153,8 +153,9 @@ def test_main_refuses_a_wider_run_with_no_quick_record_and_lets_it_through_with_
     assert "REASON" in capsys.readouterr().err
     assert pa.main(["abc", "--households", "20,40"], make=rig["make"], env={pa.ESCAPE: "the quick run was taken on the other host"}) == 0
     assert pa.main(["abc"], make=rig["make"], env={}) == 0
-    assert pa.main(["abc", "--seeds", "25,39"], make=rig["make"], env={}) == 0
-    assert "(40, 39)" in capsys.readouterr().out
+    assert pa.main(["abc", "--seeds", "25,39", "--households", "20,40"], make=rig["make"], env={}) == 0
+    out = capsys.readouterr().out
+    assert all(f"({h}, {s})" in out for h in (20, 40) for s in (25, 39)), "a row for every seed at every size (SC-006)"
 
 
 def test_main_full_sweeps_and_aa_records_the_floor(rig: dict[str, Any], capsys: pytest.CaptureFixture[str]) -> None:
