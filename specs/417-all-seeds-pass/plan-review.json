@@ -236,7 +236,7 @@
    "declared": "spec-fidelity"
   },
   "### T06 Approach (checklist part A)": {
-   "sha256": "4949b02ebee7c6ae70ee9f009715329236063dcba83a05a80596e195687f2de7",
+   "sha256": "7066df5665f6b5a3cd360f5737faf6959630ac0c32da0b923a225b13ac739d8c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
@@ -5091,6 +5091,69 @@
      "why": "Carries FR-012 for inventory rows 9-11 and FR-008 at each landing; nothing is excluded from the conversion."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T06 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-order",
+     "summary": "Item 5: T06 runs after T55 and before T12, its first part already landed as T58 before T53 (the round arbiter's ruling on ask:417-T06-order).",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-10-26 ('put them in whatever order you think will put the speed up tasks first, so that the things that will give us the most performance gains will happen at the very beginning') rank the speed tasks by the calls each removes. Re-ranking on a measurement applies that rule. No task is dropped and none is pushed past the stop line. All ten are still worked 'from start to finish', and D5 already carries the amendment. t06-measured.md is not in the bundle, so the arbiter's comparison was accepted as recorded, not re-derived."
+    },
+    {
+     "id": "T06-settle-reach",
+     "summary": "Item 7: settle_reach (567,081 calls) is a placer and stays.",
+     "class": "within",
+     "why": "D35 in the accepted spec settles this: settle_reach draws the reach the web owes, which places new lanes rather than repairing drawn ones, and it was probed and recorded as such. T06 restates D35 and does not reopen it."
+    },
+    {
+     "id": "T06-a-settle-ends",
+     "summary": "(a) The skeleton's arms, the web's runs and the bund way ask the end rules (Lawful's pair rules, shallow crossing, crowded doorstep) of their candidate before it is drawn. The candidate is re-aimed as a T or cut, asked again, and refused if it still breaks a rule. Nothing already drawn is touched, and settle_ends leaves STEPS.",
+     "class": "within",
+     "why": "This is FR-004 and FR-006 exactly: the rule is asked of a candidate before it is placed, and the repair step is deleted. Two clauses carry it. 'Nothing already drawn is touched' makes the re-aim placement rather than repair, and 'leaves STEPS' deletes the step. Whether re-asking a modified candidate should become a set-at-once query (FR-012) is a design matter, not fidelity."
+    },
+    {
+     "id": "T06-b-settle-knots",
+     "summary": "(b) The door paths, the skeleton and the bund way gather their ends onto a junction within KNOT_FT at lay. The households' ways' knotted fallback (KNOTTED_TRIES, feature 328) is priced before it is touched, and any change to it goes through make arbiter-ask.",
+     "class": "within",
+     "why": "Gathering ends at lay is FR-004's conversion. The households' ways clause, read plainly, is a condition: any change to the fallback goes through the ruling that D35 prescribes for a conversion claimed impossible. It is not a decision to keep the fallback or the mends that settle_knots makes for that share (6 of 18). Two cautions. Unlike (a), (b) never says settle_knots leaves STEPS. This stays within only because item 6's green exit requires 'no repair pass left', which removes settle_knots. If a later amendment keeps KNOTTED_TRIES together with settle_knots's mends for the households' ways, that is an exception owing a MODE 1 ruling, and this verdict does not cover it."
+    },
+    {
+     "id": "T06-c-settle-network",
+     "summary": "(c) settle_network waits on settle_defer laid by Lawful(tree=True) (T31 part C items 2-3). The END-only join is recorded as OWED under FR-006's one-network check (OWED FROM T58).",
+     "class": "within",
+     "why": "This is sequencing on another task's conversion. The duplicate coding is recorded as owed, not as done, and nothing is excepted from FR-006. The green exit still requires the repair pass gone. Whether T31 part C has landed cannot be confirmed from the bundle, and the exit guards it either way."
+    },
+    {
+     "id": "T06-d-unsettled-last-resort",
+     "summary": "(d) unsettled and the last resort leave the run last, once cohort_audit asks law.violations of every roll (FR-006), with the exit-law breaches the repairs made (Inashiro's fragment, seed 8's off-ford crossing) checked gone.",
+     "class": "within",
+     "why": "This is FR-004's deletion of the remaining repair, and FR-006's finished-map check run in the cohort only, calling the placer's predicate. The check enforces the request."
+    },
+    {
+     "id": "T06-owed-T54",
+     "summary": "OWED FROM T54: the households' ways' tree judgment (about 1.2M calls of seed 39's 40-household roll) becomes T06's lane law at lay, made incremental. T06 starts from that number.",
+     "class": "within",
+     "why": "This is FR-012: 'a network check is asked of what changed, not of the whole network again'. The arbiter's accept on ask:417-T54-exit attached it to T06, so the plan did not invent it."
+    },
+    {
+     "id": "T06-exits",
+     "summary": "Item 6: green is the web laid by the law with no repair pass left, measured, with the cohort, pinned rows and claims passing. Red is the failure recorded and the task set down, with any claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit is SC-002 and FR-008. The red exit is D11 and D35: a conversion that cannot land green without seed-by-seed work or room work is set down, and the claim is ruled rather than assumed. This rests on the GM's 2026-10-25 stop line, before 'the actual fixing where we get more seeds to pass'."
+    },
+    {
+     "id": "T06-rest",
+     "summary": "Items 4 and 8-11: re-measure first (FR-012), one landing per group, measures kept in research/, a GUESS constant is a knob within the research, more room within the research before fitting.",
+     "class": "within",
+     "why": "These carry the GM's 2026-10-25 words (arbitrary numbers marked and free to move) and FR-007/FR-008/FR-012. Nothing narrows."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5822,6 +5885,68 @@
      "summary": "Order: after the households' ways and before the field. Per-seat rolls kept (feature 427 R4). One landing per chain group, with the cohort judging any group that moves a map. Rule figures unchanged.",
      "class": "within",
      "why": "This is sequencing under FR-013, which the GM approved as the speed-first order. It keeps an earlier feature's constraint and leaves constants alone. It narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T06": {
+   "section_sha256": "7066df5665f6b5a3cd360f5737faf6959630ac0c32da0b923a225b13ac739d8c",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T06-order",
+     "summary": "Item 5: T06 runs after T55 and before T12, its first part already landed as T58 before T53 (the round arbiter's ruling on ask:417-T06-order).",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-10-26 ('put them in whatever order you think will put the speed up tasks first, so that the things that will give us the most performance gains will happen at the very beginning') rank the speed tasks by the calls each removes. Re-ranking on a measurement applies that rule. No task is dropped and none is pushed past the stop line. All ten are still worked 'from start to finish', and D5 already carries the amendment. t06-measured.md is not in the bundle, so the arbiter's comparison was accepted as recorded, not re-derived."
+    },
+    {
+     "id": "T06-settle-reach",
+     "summary": "Item 7: settle_reach (567,081 calls) is a placer and stays.",
+     "class": "within",
+     "why": "D35 in the accepted spec settles this: settle_reach draws the reach the web owes, which places new lanes rather than repairing drawn ones, and it was probed and recorded as such. T06 restates D35 and does not reopen it."
+    },
+    {
+     "id": "T06-a-settle-ends",
+     "summary": "(a) The skeleton's arms, the web's runs and the bund way ask the end rules (Lawful's pair rules, shallow crossing, crowded doorstep) of their candidate before it is drawn. The candidate is re-aimed as a T or cut, asked again, and refused if it still breaks a rule. Nothing already drawn is touched, and settle_ends leaves STEPS.",
+     "class": "within",
+     "why": "This is FR-004 and FR-006 exactly: the rule is asked of a candidate before it is placed, and the repair step is deleted. Two clauses carry it. 'Nothing already drawn is touched' makes the re-aim placement rather than repair, and 'leaves STEPS' deletes the step. Whether re-asking a modified candidate should become a set-at-once query (FR-012) is a design matter, not fidelity."
+    },
+    {
+     "id": "T06-b-settle-knots",
+     "summary": "(b) The door paths, the skeleton and the bund way gather their ends onto a junction within KNOT_FT at lay. The households' ways' knotted fallback (KNOTTED_TRIES, feature 328) is priced before it is touched, and any change to it goes through make arbiter-ask.",
+     "class": "within",
+     "why": "Gathering ends at lay is FR-004's conversion. The households' ways clause, read plainly, is a condition: any change to the fallback goes through the ruling that D35 prescribes for a conversion claimed impossible. It is not a decision to keep the fallback or the mends that settle_knots makes for that share (6 of 18). Two cautions. Unlike (a), (b) never says settle_knots leaves STEPS. This stays within only because item 6's green exit requires 'no repair pass left', which removes settle_knots. If a later amendment keeps KNOTTED_TRIES together with settle_knots's mends for the households' ways, that is an exception owing a MODE 1 ruling, and this verdict does not cover it."
+    },
+    {
+     "id": "T06-c-settle-network",
+     "summary": "(c) settle_network waits on settle_defer laid by Lawful(tree=True) (T31 part C items 2-3). The END-only join is recorded as OWED under FR-006's one-network check (OWED FROM T58).",
+     "class": "within",
+     "why": "This is sequencing on another task's conversion. The duplicate coding is recorded as owed, not as done, and nothing is excepted from FR-006. The green exit still requires the repair pass gone. Whether T31 part C has landed cannot be confirmed from the bundle, and the exit guards it either way."
+    },
+    {
+     "id": "T06-d-unsettled-last-resort",
+     "summary": "(d) unsettled and the last resort leave the run last, once cohort_audit asks law.violations of every roll (FR-006), with the exit-law breaches the repairs made (Inashiro's fragment, seed 8's off-ford crossing) checked gone.",
+     "class": "within",
+     "why": "This is FR-004's deletion of the remaining repair, and FR-006's finished-map check run in the cohort only, calling the placer's predicate. The check enforces the request."
+    },
+    {
+     "id": "T06-owed-T54",
+     "summary": "OWED FROM T54: the households' ways' tree judgment (about 1.2M calls of seed 39's 40-household roll) becomes T06's lane law at lay, made incremental. T06 starts from that number.",
+     "class": "within",
+     "why": "This is FR-012: 'a network check is asked of what changed, not of the whole network again'. The arbiter's accept on ask:417-T54-exit attached it to T06, so the plan did not invent it."
+    },
+    {
+     "id": "T06-exits",
+     "summary": "Item 6: green is the web laid by the law with no repair pass left, measured, with the cohort, pinned rows and claims passing. Red is the failure recorded and the task set down, with any claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit is SC-002 and FR-008. The red exit is D11 and D35: a conversion that cannot land green without seed-by-seed work or room work is set down, and the claim is ruled rather than assumed. This rests on the GM's 2026-10-25 stop line, before 'the actual fixing where we get more seeds to pass'."
+    },
+    {
+     "id": "T06-rest",
+     "summary": "Items 4 and 8-11: re-measure first (FR-012), one landing per group, measures kept in research/, a GUESS constant is a knob within the research, more room within the research before fitting.",
+     "class": "within",
+     "why": "These carry the GM's 2026-10-25 words (arbitrary numbers marked and free to move) and FR-007/FR-008/FR-012. Nothing narrows."
     }
    ],
    "verdict": "CLEAR"
