@@ -475,9 +475,24 @@ def unreached_houses(M: Mapping[str, Any], reach: float = WEB_REACH_FT, near: Ca
         if not segs:
             return []
         near = lambda cx, cy: min(seg_dist(cx, cy, a, b) for a, b in segs)  # noqa: E731
+
+        def within(cx: float, cy: float) -> bool:
+            # ...a leg by its box first (feature 417 T06): a house a leg within the reach serves is served, and the full nearest
+            # distance is asked only of a house none serves - the same answer (every house against every leg: 140,509 `seg_dist`
+            # on seed 39 at 40 households)
+            for a, b in segs:
+                if (a[0] - reach > cx and b[0] - reach > cx) or (a[0] + reach < cx and b[0] + reach < cx) or (a[1] - reach > cy and b[1] - reach > cy) or (a[1] + reach < cy and b[1] + reach < cy):
+                    continue
+                if seg_dist(cx, cy, a, b) <= reach:
+                    return True
+            return False
+    else:
+        within = lambda cx, cy: near(cx, cy) <= reach  # noqa: E731
     far: dict[tuple[int, int], tuple[int, int, int]] = {}
     for h in M.get("houses") or []:
         cx, cy = float(h["x"]), float(h["y"])  # x, y ARE the center here - the manifest's convention
+        if within(cx, cy):
+            continue
         d = near(cx, cy)
         if d > reach:
             far[(round(cx), round(cy))] = (round(cx), round(cy), round(d))

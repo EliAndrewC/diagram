@@ -348,7 +348,10 @@ def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -
         bx = boxes[i]
         if bx[2] < seed_box[0] or seed_box[2] < bx[0] or bx[3] < seed_box[1] or seed_box[3] < bx[1]:
             continue
-        if any(seg_dist(q[0], q[1], u, v) <= _LANE_JOIN_FT for q in r for u, v in seed_segs):
+        # ...the seed's legs within the run's box (grown by the join reach) alone, the same verdict (feature 417 T06: every point of
+        # every run against every leg of the skeleton, 99,407 `seg_dist` on seed 39 at 40 households)
+        mine = [(u, v) for u, v in seed_segs if not (max(u[0], v[0]) < bx[0] or min(u[0], v[0]) > bx[2] or max(u[1], v[1]) < bx[1] or min(u[1], v[1]) > bx[3])]
+        if any(seg_dist(q[0], q[1], u, v) <= _LANE_JOIN_FT for q in r for u, v in mine):
             reached.add(i)
     if seed_box is None:
         reached = {0}

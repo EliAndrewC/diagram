@@ -1,0 +1,39 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+web: 3,143,041 calls @20, 5,702,028 calls @40, growth exponent 0.86
+  anchor hamletgen/ways/law/ends.py:120:fronting_ends [6]
+    settlement/_geom/primitives.py:45:seg_closest [225,146|146,524] <- settlement/_geom/primitives.py:54:seg_dist [199,076|134,542] <- hamletgen/ways/law_water.py:41:<genexpr> [48,369|18,904] <- hamletgen/ways/law_water.py:40:_min_dist [14,028|4,396] <- hamletgen/ways/law/ends.py:136:<genexpr> [14,522|4,670] <- hamletgen/ways/law/ends.py:120:fronting_ends [6|6]
+    settlement/_geom/primitives.py:54:seg_dist [199,076|134,542] <- hamletgen/ways/law_water.py:41:<genexpr> [48,369|18,904] <- hamletgen/ways/law_water.py:40:_min_dist [14,028|4,396] <- hamletgen/ways/law/ends.py:136:<genexpr> [14,522|4,670] <- hamletgen/ways/law/ends.py:120:fronting_ends [6|6]
+  anchor hamletgen/ways/geom.py:407:_trim_to_service [27]
+    settlement/_geom/indexes.py:276:near [88,032|34,995] <- settlement/_geom/indexes.py:515:edge_within [69,307|27,857] <- hamletgen/ways/geom.py:259:ring_within [67,937|25,698] <- hamletgen/ways/geom.py:404:<genexpr> [68,383|26,040] <- hamletgen/ways/geom.py:366:end_serves [892|636] <- hamletgen/ways/geom.py:446:serves [542|414] <- hamletgen/ways/geom.py:407:_trim_to_service [27|21]
+    hamletgen/clearance.py:85:ring_index [70,580|27,763] <- hamletgen/ways/geom.py:259:ring_within [67,937|25,698] <- hamletgen/ways/geom.py:404:<genexpr> [68,383|26,040] <- hamletgen/ways/geom.py:366:end_serves [892|636] <- hamletgen/ways/geom.py:446:serves [542|414] <- hamletgen/ways/geom.py:407:_trim_to_service [27|21]
+    settlement/_geom/indexes.py:515:edge_within [69,307|27,857] <- hamletgen/ways/geom.py:259:ring_within [67,937|25,698] <- hamletgen/ways/geom.py:404:<genexpr> [68,383|26,040] <- hamletgen/ways/geom.py:366:end_serves [892|636] <- hamletgen/ways/geom.py:446:serves [542|414] <- hamletgen/ways/geom.py:407:_trim_to_service [27|21]
+    hamletgen/ways/geom.py:404:<genexpr> [68,383|26,040] <- hamletgen/ways/geom.py:366:end_serves [892|636] <- hamletgen/ways/geom.py:446:serves [542|414] <- hamletgen/ways/geom.py:407:_trim_to_service [27|21]
+    hamletgen/ways/geom.py:259:ring_within [67,937|25,698] <- hamletgen/ways/geom.py:404:<genexpr> [68,383|26,040] <- hamletgen/ways/geom.py:366:end_serves [892|636] <- hamletgen/ways/geom.py:446:serves [542|414] <- hamletgen/ways/geom.py:407:_trim_to_service [27|21]
+  anchor settlement/city/bridges.py:281:undeckable_at [42]
+    settlement/_geom/primitives.py:116:ccw [83,530|51,086] <- settlement/_geom/primitives.py:115:segments_cross [39,435|23,382] <- settlement/city/bridges.py:281:undeckable_at [42|23]
+  anchor hamletgen/ways/law/meet.py:196:doubled_tails [6]
+    hamletgen/ways/keeper.py:41:<genexpr> [61,510|19,162] <- hamletgen/ways/keeper.py:40:keyed [20,520|6,395] <- hamletgen/ways/tails.py:75:<genexpr> [30,519|9,459] <- hamletgen/ways/tails.py:70:tail_doubled [10,173|3,153] <- hamletgen/ways/law/meet.py:204:<genexpr> [10,667|3,427] <- hamletgen/ways/law/meet.py:196:doubled_tails [6|6]
+  fastest growers @20 -> @40:
+    x3.9 linestring.py:63:_coords [7,773 -> 30,443]
+    x3.6 hamletgen/ways/law/ends.py:220:<genexpr> [9,070 -> 33,005]
+    x3.3 decorators.py:73:wrapped [14,069 -> 46,848]
+    x3.2 hamletgen/ways/tails.py:75:<genexpr> [9,459 -> 30,519]
+    x3.2 hamletgen/ways/keeper.py:25:pts_key [12,767 -> 40,990]
+    x3.2 hamletgen/ways/keeper.py:41:<genexpr> [19,162 -> 61,510]
+    x3.2 hamletgen/ways/keeper.py:40:keyed [6,395 -> 20,520]
+    x3.2 'items' of 'dict' objects [21,477 -> 68,578]
+homesteads: 3,006,584 calls @20, 5,728,529 calls @40, growth exponent 0.93
+  anchor hamletgen/homesteads/growth.py:148:settled_seat [267]
+    settlement/core.py:562:px [73,306|39,025] <- settlement/homestead_parts/fixture_seats.py:355:lay_fixtures [1,216|776] <- settlement/rolling/bundle.py:338:_lay_fixtures [1,221|781] <- settlement/rolling/bundle.py:190:_bundle_layout [1,221|781] <- settlement/rolling/bundle.py:161:_bundle_template [2,506|1,344] <- settlement/rolling/bundle.py:80:_bundle_geom [2,506|1,344] <- settlement/rolling/bundle.py:73:_bundle_envelope [416|253] <- hamletgen/homesteads/growth.py:178:household_reach [416|253] <- hamletgen/homesteads/growth.py:404:reach_at [416|253] <- hamletgen/homesteads/growth.py:148:settled_seat [267|116]
+  fastest growers @20 -> @40:
+    x4.7 'astype' of 'numpy.ndarray' objects [5,307 -> 24,994]
+    x4.6 math.dist [20,731 -> 95,886]
+    x4.5 settlement/rolling/access.py:96:seg_box_within [6,152 -> 27,406]
+    x3.9 fromnumeric.py:48:_wrapfunc [8,122 -> 31,399]
+    x3.0 settlement/rolling/gap_ways.py:141:at [15,568 -> 46,828]
+    x3.0 hamletgen/ways/geom.py:580:<genexpr> [11,423 -> 33,740]
+    x3.0 'extend' of 'list' objects [12,023 -> 35,479]
+    x2.7 builtins.round [36,589 -> 100,166]
+
+all stages: 6,149,625 calls @20, 11,430,557 calls @40

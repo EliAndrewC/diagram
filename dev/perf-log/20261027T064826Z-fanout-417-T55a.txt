@@ -1,0 +1,18 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+homesteads: 3,126,808 calls @20, 5,805,652 calls @40, growth exponent 0.89
+  anchor settlement/rolling/gap_ways.py:489:_way_for [40]
+    settlement/rolling/gap_ways.py:141:at [71,166|19,172] <- settlement/rolling/gap_ways.py:310:trace [360|123] <- settlement/rolling/gap_ways.py:489:_way_for [40|20]
+  anchor hamletgen/ways/law/meet.py:120:needle_ends [101]
+    settlement/_geom/primitives.py:45:seg_closest [50,162|52,771] <- settlement/_geom/primitives.py:54:seg_dist [48,087|50,464] <- hamletgen/ways/law/meet.py:120:needle_ends [101|45]
+  fastest growers @20 -> @40:
+    x9.3 settlement/rolling/gap_ways.py:524:leg_ok [2,757 -> 25,643]
+    x8.4 'astype' of 'numpy.ndarray' objects [4,534 -> 38,031]
+    x6.2 settlement/rolling/access.py:304:<genexpr> [4,276 -> 26,298]
+    x6.1 settlement/rolling/access.py:96:seg_box_within [6,574 -> 40,200]
+    x5.6 fromnumeric.py:48:_wrapfunc [8,144 -> 45,991]
+    x4.0 math.dist [24,646 -> 97,626]
+    x3.7 settlement/rolling/gap_ways.py:141:at [19,172 -> 71,166]
+    x3.3 builtins.getattr [26,529 -> 88,104]
+
+all stages: 3,126,808 calls @20, 5,805,652 calls @40

@@ -113,9 +113,16 @@ def end_components(ways: Sequence[Poly], touch: float) -> list[int]:
         return i
 
     segs = [list(zip(w, w[1:], strict=False)) for w in ways]
+    boxes = [(min(v[0] for v in w), min(v[1] for v in w), max(v[0] for v in w), max(v[1] for v in w)) if len(w) >= 2 else None for w in ways]
     for i in range(len(ways)):
+        bi = boxes[i]
         for j in range(i + 1, len(ways)):
-            if len(ways[i]) < 2 or len(ways[j]) < 2:
+            bj = boxes[j]
+            if bi is None or bj is None:
+                continue
+            # ...a pair whose boxes lie farther apart than `touch` cannot touch, and one already joined is not asked (feature 417 T06,
+            # as `_components` asks them) - the same labels
+            if bj[0] - bi[2] > touch or bi[0] - bj[2] > touch or bj[1] - bi[3] > touch or bi[1] - bj[3] > touch or find(i) == find(j):
                 continue
             if ends_touch(ways[i], ways[j], segs[i], segs[j], touch):
                 par[find(i)] = find(j)
@@ -389,8 +396,14 @@ def end_serves(
         an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way or farmhouse within 60 ft
         reached on the bund - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of its edge
         arrived at a steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of its built ground, how close counts as serving"""
-    if any(seg_dist(q[0], q[1], a, b) <= WAY_END_REACH_FT for a, b in segs):
-        return True
+    qx, qy, reach = q[0], q[1], WAY_END_REACH_FT
+    for a, b in segs:
+        # ...each way's leg by its box first (feature 417 T06): a leg whose box stands beyond the reach is beyond it, the same
+        # verdict (the web's trims asked every leg of the network at every 4 ft step: 379,186 `seg_dist` on seed 39 at 40 households)
+        if (a[0] - reach > qx and b[0] - reach > qx) or (a[0] + reach < qx and b[0] + reach < qx) or (a[1] - reach > qy and b[1] - reach > qy) or (a[1] + reach < qy and b[1] + reach < qy):
+            continue
+        if seg_dist(qx, qy, a, b) <= reach:
+            return True
     if any(math.dist(q, h) <= WAY_END_REACH_FT for h in houses):
         return True
     if ground is not None and ground.dist(q) <= BUND_REACH_FT:
@@ -449,7 +462,17 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
             return True
         # ...counting no way the run's OTHER end stands on (settlement-review of Mizuguchi, feature 261): a lane that left the
         # connector and ran 61 ft past its house counted as reaching the connector it had left
-        return end_serves(q, segs if other is None else [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP], houses, ground, steadings)
+        return end_serves(q, segs if other is None else left_of(other), houses, ground, steadings)
+
+    # ...THE WAYS THE OTHER END DOES NOT STAND ON, KEPT PER END (feature 417 T06): the far end is fixed while one end is walked in,
+    # so the list is the same at every step - it was filtered again at each
+    _left: dict[Pt, list[tuple[Pt, Pt]]] = {}
+
+    def left_of(other: Pt) -> list[tuple[Pt, Pt]]:
+        got = _left.get(other)
+        if got is None:
+            got = _left[other] = [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP]
+        return got
 
     out = list(run)
     # EVERY END IS WALKED IN, NEVER POPPED A SEGMENT AT A TIME (feature 405 T12, D1): pulled back to the last house it serves,
@@ -479,8 +502,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
         # the houses an end is served by, or None when it has arrived at a way, the field or a steading - a way OTHER than
         # the one the run's far end already stands on (settlement-review of Mizuguchi, feature 261: a lane ran 61 ft past
         # its house into the grass, and counted as arrived because it was still within reach of the connector it left)
-        _left = [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP]
-        if end_serves(q, _left, (), ground, steadings):
+        if end_serves(q, left_of(other), (), ground, steadings):
             return None
         return [h for h in houses if math.dist(q, h) <= WAY_END_REACH_FT] + [h for h in keep if math.dist(q, h) <= WAY_END_REACH_FT]
 

@@ -615,9 +615,9 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
 4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
    task to the chains that still stand (FR-012).
 5. **The order.** After the households' ways, before the field.
-6. **The exits.** Green: the seating's full layouts at least tenfold down, the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
-   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: the refusals asked of the candidate set through the seat region (feature 297) and the placed-box index.
+6. **The exits.** Green: the seats a refusal that needs no layout refuses asked before their reach is rolled and before any layout, each chain's calls measured before and after, the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`. TAKEN: the red exit, by the round arbiter's ruling on ask:417-T55-route (2026-10-27) - set down, nothing landed.
+7. **The search smell.** None: the refusals asked of the candidate set through the seat region (feature 297) and the placed-box index. SET DOWN 2026-10-27 (the round arbiter's ruling on ask:417-T55-route; the measurement in `inventory/trial.md`, rows 3-5, measured 2026-10-27 by `make perf-profile SEED=39 STAGE=homesteads HOUSEHOLDS=40` and throwaway counters): the seating's refusals that need no layout are already asked early - the house's box and the refused ground before any layout, the envelope and the growth's distance on the four sides' boxes from the household's template before `_parts_fit` (a seat they refuse costs 2,587 calls, against 12,148 for one `_parts_fit` refuses and 16,067 for one admitted) - except the house and yard over a reserved wood seat, and asking that early is either inexact (asked by the growth before the placer: -2.2% of the stage, measured 2026-10-27 by `make perf-fanout STAGES=homesteads`, but it forgoes a side the placer moves off a neighbor, and three pool maps moved, observed 2026-10-27, method: `make maps` then `make maps-moved`) or saves nothing (asked exactly in the placer). The stage's cost is the admitted seats' reach rolls and layouts, not trial; the trial share is about 4% of it, measured 2026-10-27 (the same counters).
 8. **The budget.** One landing per chain group; a group that moves a map judged by the cohort.
 9. **Done, measured.** Each chain's calls before and after from `make perf-fanout`, recorded in `research/`.
 10. **Before moving a constant.** n/a: the rules' figures stay as they are.
@@ -1277,5 +1277,29 @@ Each step measured alone:
 | step | measured by |
 |---|---|
 | the maps the condition skips | the cohort with the condition off |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
+### T61 Approach (checklist part A)
+
+1. **The goal, in the world.** The same lane web, its settle's exit question and its trims asking each rule's predicate of only the legs, ways and fixtures that can bear on the point or leg asked - by their boxes first - so no verdict changes and no map moves.
+2. **The constraints.** FR-012 (an index asked per candidate), FR-013 (speed first), FR-008 (no seed regressed); maps unchanged, the lane law's rules unchanged (FR-004).
+3. **Where each comes from.** T06's re-measure (measured 2026-10-27, a throwaway call counter round `settle_the_web` on `make perf-profile SEED=39 STAGE=web HOUSEHOLDS=40`): the settle 3,244,838 of the web's 6,942,846 calls - its exit question (`keeper.unsettled`) 1,309,157, half of it `over_fixtures` (619,222).
+4. **Do they describe the world here?** Yes: `make perf-fanout STAGES=web` names each chain (dev/perf-log/*-fanout-417-T06*.txt, measured 2026-10-27).
+5. **The order.** T06's first conversions, before its settle steps are converted at lay (T31 part C): the predicates those conversions ask at lay are the same ones made cheap here.
+6. **The exits.** Green: every pool manifest unchanged (`make maps-moved`), the landing cohort passing, the calls measured before and after, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: each predicate asks the same test of fewer candidates, each passed over only where its box stands beyond the rule's reach - `law.over_a_fixture` (each fixture's box), `geom.end_serves` (each leg's box, and `_trim_to_service`'s far-end filter kept per end), `law.needle_ends` (each tread leg's box), `law.fronting_ends` (`free_end`'s boxes), `law.dangling_lane_ends` (the legs within the end's reach first), `checks.unreached_houses` (a house a leg within the reach serves is served; the nearest distance asked only of one none serves), `geom.end_components` (as `_components`: boxes beyond the tolerance, a pair already joined), `web._reachable_runs` (the skeleton's legs within the run's box).
+8. **The budget.** One landing.
+9. **Done, measured.** The web 6,942,846 -> 4,830,229 calls at 40 households (seed 39), the roll 25,419,527 -> 23,204,610, measured 2026-10-27 (`make perf-fanout`, dev/perf-log/20261027T072724Z-fanout-417-T61.txt); no pool manifest moved and the landing cohort 54/54, observed 2026-10-27, method: `make maps`, `make maps-moved`, `make cohort-landing`.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| each predicate asked box-first | its chain in `make perf-fanout STAGES=web` |
+| no map moved | `make maps-moved` |
 | no seed regressed | `make cohort-landing` (in `make land`) |
 

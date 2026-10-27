@@ -1,0 +1,36 @@
+perf-profile seed 39 stage field: 1.7s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261027T070036Z-seed39-field.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         2925986 function calls (2909433 primitive calls) in 1.723 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1409 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    1.730    1.730 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/water/comb.py:21(stage_field)
+        1    0.000    0.000    1.441    1.441 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/water/fit.py:45(fit_field)
+        1    0.000    0.000    1.243    1.243 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/water/fit.py:127(_finish_first_admissible)
+        1    0.002    0.002    1.236    1.236 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/comb.py:243(finish_comb)
+        1    0.000    0.000    0.778    0.778 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/settle.py:281(settle_cells)
+    47776    0.074    0.000    0.555    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+        1    0.002    0.002    0.497    0.497 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/settle.py:173(__init__)
+     1398    0.001    0.000    0.436    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/settle.py:191(judge)
+     1398    0.007    0.000    0.435    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/settle.py:67(verdict)
+20135/16694    0.018    0.000    0.409    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+     1228    0.002    0.000    0.399    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/settle.py:194(add)
+     1416    0.008    0.000    0.350    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/ring_rules.py:509(ring_violations)
+13639/9149    0.011    0.000    0.314    0.000 {built-in method builtins.sum}
+      157    0.000    0.000    0.280    0.002 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/settle.py:303(<genexpr>)
+      157    0.001    0.000    0.279    0.002 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/settle.py:262(merge)
+        1    0.001    0.001    0.222    0.222 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/partition.py:407(cut)
+        1    0.000    0.000    0.198    0.198 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/water/fit.py:178(_fit_at_aspect)
+        3    0.000    0.000    0.195    0.065 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/comb.py:86(carve_comb)
+      157    0.003    0.000    0.164    0.001 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/settle.py:224(neighbors)
+        1    0.000    0.000    0.149    0.149 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/fields/comb.py:260(draw_comb_field)
+     1196    0.002    0.000    0.135    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/settle.py:251(shared)
+        1    0.000    0.000    0.134    0.134 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/water/brook.py:524(feed_brook)
+     1192    0.003    0.000    0.133    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/settle.py:137(shared_length)
+    22427    0.042    0.000    0.122    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/banks.py:214(clearance)
+        1    0.000    0.000    0.116    0.116 /diagram/.clones/diagram-backlog/l7r/diagram/waterfields/hem.py:20(_comb_dry_and_beans)
+
+

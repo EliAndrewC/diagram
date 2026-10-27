@@ -133,16 +133,13 @@
       research: rendering
       verify: DONE. landed in batch T54+T59: T54: the households' ways' tree judgment's scans asked box-first, the same verdicts (tree.rejoined's water legs, fabric.house_hit's houses, law.free_end's ways; access._seg_box_gap written out as a clip and squared sums, an oracle test holding it to the old construction); seed 39 at 40 households homesteads 6,940,189 -> 6,172,193 calls, web 7,208,472 -> 6,942,717, every pool manifest unchanged, landing cohort 54/54; exit amended by the round arbiter's accept on ask:417-T54-exit (the trial is a third of the chain, measured; the admitted ways' judgment, about 1.2M, is T06's); law.py split into a package at the 1,000-line bar, the claims fingerprint now following star re-exports (ask:417-T54-tree-claims's fix). T59: the three carried claims written and checked IN-STEP
 
-- [ ] T55 (FR-012) The homesteads seated by construction: a seat's refusals that need no layout asked of every candidate at once, a homestead laid out in full (reach, four sides, fixtures) only where it can stand, the per-seat rolls kept, in l7r/diagram/hamletgen/homesteads/ (FR-012)
+- [ ] T55 SET DOWN 2026-10-27 by the round arbiter's ruling on ask:417-T55-route (the trial is about 4% of the stage; the one early refusal left is inexact or saves nothing - inventory/trial.md rows 3-5). (FR-012) The homesteads seated by construction: a seat's refusals that need no layout asked of every candidate at once, a homestead laid out in full (reach, four sides, fixtures) only where it can stand, the per-seat rolls kept, in l7r/diagram/hamletgen/homesteads/ (FR-012)
+      research: rendering
+
+- [ ] T61 (T06 part B) The web's law and trims asked box-first: the settle's exit question and the web's trims ask each predicate of the legs, ways and fixtures within its reach only, the same verdicts, in l7r/diagram/hamletgen/ways/ (FR-012, FR-013)
       research: rendering
 
 - [ ] T06 (R2 G2) The web laid by the law: an ordinary lane admitted whole by the lane law before it is drawn; the passes after the lay and the settle's repair steps deleted - with them the end-only join T58 left at settle_network / connector_component (end_components, ends_touch; the round arbiter's ruling on ask:417-T58-red) and the ordinary lane cut for the tree (tree_faults) - in `l7r/diagram/hamletgen/ways/` (FR-004, FR-006)
-      research: rendering
-
-- [ ] T12 (R2 G9) The paddy cells cut by their rules: cells not cut then merged or left bare, rings not split and welded after, twins and stubs not drawn, the needle one predicate, in `l7r/diagram/waterfields/` (FR-004, FR-005)
-      research: rendering
-
-- [ ] T11 (R2 G8) The brook, sink, field and polder placed by their rules: courses not repaired then judged, the field not judged as a finished net, the polder's relaxed wander, in `l7r/diagram/hamletgen/water/` and `l7r/diagram/hamletgen/sink.py` (FR-004, FR-006, FR-007)
       research: rendering
 
 - [ ] T56 (FR-012) The rest of the trial inventory converted, largest first: the wells' admission, the bamboo strips, the open-ground patches, the grove clumps, the notice board's seats (FR-012)
@@ -155,6 +152,12 @@
       research: rendering
 
 ### Then every seed passing
+
+- [ ] T11 MOVED OUT OF THE SPEED LANE 2026-10-27 by the round arbiter's ruling on ask:417-T11-route (the brook's course repair, settle_course, about 269k calls on seed 39 - 1.1% of the roll - and 134k to 1.07M a map elsewhere, measured 2026-10-27 by a throwaway call counter; the route rewrites the brook's router, every brook map moves) - worked in the correctness phase, its GUESS and CONVENTION numbers moved before any router is built (BROOK_MAX_TURN_DEG, the approach bearings' search), the MISLABELED no-fold-back and DRIFTED no-ruled-run claims corrected in the same pass. (R2 G8) The brook, sink, field and polder placed by their rules: courses not repaired then judged, the field not judged as a finished net, the polder's relaxed wander, in `l7r/diagram/hamletgen/water/` and `l7r/diagram/hamletgen/sink.py` (FR-004, FR-006, FR-007)
+      research: rendering
+
+- [ ] T12 MOVED OUT OF THE SPEED LANE 2026-10-27 by the round arbiter's ruling on ask:417-T12-route (its route removes at most about 370k calls, 13% of the field stage, 1.5% of the roll, measured 2026-10-27 by `make perf-profile SEED=39 STAGE=field HOUSEHOLDS=40`, and moves every comb field map) - worked in the correctness phase. (R2 G9) The paddy cells cut by their rules: cells not cut then merged or left bare, rings not split and welded after, twins and stubs not drawn, the needle one predicate, in `l7r/diagram/waterfields/` (FR-004, FR-005)
+      research: rendering
 
 - [ ] T16 (R2 G1, second part) The lane rules whose copies DIFFER made one at the rule's recorded value, in `l7r/diagram/hamletgen/ways/` - the doubled tail (the sweep's 25 deg against the law's 15, the page's 20; 405 T101's known gap, held), the shadow (four bodies), the hook (five), the reach to a farmhouse (three), the network tolerance (25 ft against 4 ft), the foul, the dangling end, the street end, the link width (FR-006). Set down 2026-10-25 under D11 for the doubled tail: no page records the value its two roles should share; each other rule waits on its own recorded value. T26 (2026-10-25) deleted several of the copies listed here (the doubled remnant's shadow, the end nub's hook, `trim_streets`' street end, the bridge's and touch pass's reaches); what is left to make one is re-counted when T16 is taken up (tree_faults' doubled tail, asked at 15, among them)
       research: rendering

@@ -18,10 +18,11 @@ from l7r.diagram.settlement.city.bridges import undeckable_at as undeckable_at
 from l7r.diagram.settlement.homestead_parts.fixture_seats import TRUNK_FT
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
 
-from ...consts import Poly, Pt
+from ...consts import WAY_END_REACH_FT, Poly, Pt
 from ..checks import served_network, unreached_houses
 from ..fabric import _crosses_fabric
 from ..geom import _TOUCH_GAP, WorkedGround, end_serves, polyline_len, steading_footprints, worked_ground
+from ..law_water import _bbox
 from ..law_water import (
     _brooks as _brooks,
 )
@@ -37,13 +38,12 @@ from ..law_water import (
 from ..law_water import (
     lane_pts as lane_pts,
 )
-from .meet import lane_networks
+from .meet import free_end, lane_networks
 from .shape import (
     BREAK_SPAN_FT,
     DOORSTEP_MAX,
     FIELD_REACH_FT,
     FRAGMENT_FT,
-    JOIN_TOL,
     Lanes,
     reach_to_steading,
 )
@@ -105,7 +105,17 @@ def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None)
             # ...AND A WAY IS REACHED ONLY WHERE THE END GOT NEARER TO IT THAN THE LANE'S FAR END ALREADY STOOD (feature 293, settlement-review of Inashiro): a 32 ft skeleton
             # stub left the connector at the entrance and ended in the windbreak, 58 ft from the exit strip's end at that same junction - inside `WAY_END_REACH_FT`, so it
             # "reached" the junction it had left. The nearest point of each other way is asked: nearer the far end than the end, the lane walked away from it, not to it.
-            segs = [sg for sg in others if seg_dist(far[0], far[1], sg[0], sg[1]) > _TOUCH_GAP and _walked_to(end, far, sg)]
+            # ...ONLY A LEG WITHIN THE END'S REACH CAN SERVE IT (`end_serves`), so the far end and the walk are asked of those alone
+            # (feature 417 T06: every leg was asked both, 165,659 `seg_dist` on seed 39 at 40 households) - the same verdict
+            ex, ey, r = end[0], end[1], WAY_END_REACH_FT
+            near = [
+                sg
+                for sg in others
+                if not (
+                    (sg[0][0] - r > ex and sg[1][0] - r > ex) or (sg[0][0] + r < ex and sg[1][0] + r < ex) or (sg[0][1] - r > ey and sg[1][1] - r > ey) or (sg[0][1] + r < ey and sg[1][1] + r < ey)
+                )
+            ]
+            segs = [sg for sg in near if seg_dist(far[0], far[1], sg[0], sg[1]) > _TOUCH_GAP and _walked_to(end, far, sg)]
             if not end_serves(end, segs, centers, ground, steadings):
                 out.append((i, e))
     return out
@@ -128,12 +138,13 @@ def fronting_ends(M: Mapping[str, Any]) -> dict[int, list[tuple[int, int]]]:
     fronted: dict[int, list[tuple[int, int]]] = {}
     if not houses:
         return fronted
+    boxes = [_bbox(o) for o in ways]  # ...each way's box once: `free_end` passes over a way beyond the tolerance (feature 417 T06)
     for i, ln in enumerate(M.get("lanes") or []):
         p = ways[i]
         if ln.get("connector") or len(p) < 2:
             continue
         for e, end in ((0, p[0]), (-1, p[-1])):
-            if any(_min_dist(end, o) <= JOIN_TOL for k, o in enumerate(ways) if k != i and len(o) >= 2):  # the first junction answers
+            if not free_end(ways, i, end, boxes):  # the first junction answers
                 continue
             best = min(range(len(houses)), key=lambda h: math.hypot(end[0] - houses[h]["x"], end[1] - houses[h]["y"]))
             if reach_to_steading(end, houses[best], M):  # 0246's reach (feature 328: it was DOORSTEP_FT from the center)
@@ -214,8 +225,16 @@ def over_a_fixture(pts: Sequence[Pt], width: float, quads: Sequence[Poly]) -> in
     PREDICATE: the web's settle cuts what it names, a tree lane is refused by it, and the finished-map rule reads it.
     Research: off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing stands on a tread"""
     gap = width / 2.0 + FIXTURE_PAD_FT
+    # ...EACH FIXTURE'S BOX FIRST (feature 417 T06): a segment meets a fixture only where its box, grown by the gap, meets the
+    # fixture's - the rest are passed over unasked, the same verdict (the finished web's rule asked every fixture of every
+    # segment: 619,222 calls, half the settle's exit question on seed 39 at 40 households, measured 2026-10-27)
+    boxes = [(min(v[0] for v in q), min(v[1] for v in q), max(v[0] for v in q), max(v[1] for v in q)) for q in quads]
     for k, (a, b) in enumerate(zip(pts, pts[1:], strict=False)):
-        for q in quads:
+        sx0, sx1 = (a[0], b[0]) if a[0] <= b[0] else (b[0], a[0])
+        sy0, sy1 = (a[1], b[1]) if a[1] <= b[1] else (b[1], a[1])
+        for q, (qx0, qy0, qx1, qy1) in zip(quads, boxes, strict=True):
+            if qx0 - gap > sx1 or qx1 + gap < sx0 or qy0 - gap > sy1 or qy1 + gap < sy0:
+                continue
             if point_in_poly(a[0], a[1], q) or point_in_poly(b[0], b[1], q) or _crosses_fabric([a, b], [q], gap):
                 return k
     return None

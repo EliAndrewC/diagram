@@ -140,6 +140,15 @@ def needle_ends(lanes: Lanes, blocked: Blocked | None = None) -> list[tuple[int,
                 if k == i or len(o) < 2:
                     continue
                 for u, v in zip(o, o[1:], strict=False):
+                    # ...each tread leg by its box first (feature 417 T06): one whose box stands beyond the tolerance is beyond it,
+                    # the same verdict (every end against every leg of every way: 246,213 `seg_dist` on seed 39 at 40 households)
+                    if (
+                        (u[0] - JOIN_TOL > q[0] and v[0] - JOIN_TOL > q[0])
+                        or (u[0] + JOIN_TOL < q[0] and v[0] + JOIN_TOL < q[0])
+                        or (u[1] - JOIN_TOL > q[1] and v[1] - JOIN_TOL > q[1])
+                        or (u[1] + JOIN_TOL < q[1] and v[1] + JOIN_TOL < q[1])
+                    ):
+                        continue
                     if seg_dist(q[0], q[1], u, v) > JOIN_TOL:
                         continue
                     if any(math.degrees(math.acos(max(-1.0, min(1.0, back[0] * d[0] + back[1] * d[1])))) < NEEDLE_DEG for d in _tread_bearings(q, u, v)) and not forced_meeting(

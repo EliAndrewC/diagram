@@ -53,3 +53,11 @@ Every site over 50,000 calls has its task: 1 (T53), 2-5 (T54, T55), 6 (T56).
   homesteads 6,940,189 -> 6,172,193 calls, web 7,208,472 -> 6,942,717, `_way_for` 2.25 -> 1.11 profiled s
   (`dev/perf-log/20261027T052103Z-fanout-417-T54b.txt`). The rest - the admitted ways' lane-law judgment - is T06's (the round
   arbiter's accept on ask:417-T54-exit).
+- **Rows 3-5, the homesteads' seating (T55, set down by the round arbiter's ruling on ask:417-T55-route).** Seed 39 at 40 households,
+  measured 2026-10-27 (`make perf-profile SEED=39 STAGE=homesteads HOUSEHOLDS=40`, `make perf-fanout STAGES=homesteads`, throwaway
+  counters): the stage's 6,171,552 calls sit in the settled seats' reach rolls (about 1.9M) and the admitted layouts (39 at 16,067),
+  none of it trial; laid out and then refused, about 268k (`_parts_fit` 18 at 12,148, the envelope or the growth's distance 19 at
+  2,587) - about 4% of the stage. The one refusal that needs no layout and is not already early, the house and yard over a reserved
+  wood seat (126 of 157 wood refusals), asked by the growth before the placer saves 2.2% but forgoes the placer's move off a neighbor
+  (Inashiro, Kuwabata and Sawada moved); asked exactly in the placer it saves nothing. Noted: 83 of 159 offered seats stood over a
+  reserved wood seat - a high rate, for where the wood share's reservation is claimed.

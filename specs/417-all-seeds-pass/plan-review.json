@@ -218,9 +218,9 @@
    "declared": "spec-fidelity"
   },
   "### T55 Approach (checklist part A)": {
-   "sha256": "2bfbe94b015e4d2cf02ee025a7d878d248b63c4a75ef58b67b81030ee741e33b",
+   "sha256": "0085793da71e3aa26d9fa53df751418bc5c098801007cb1279e2c6f54e8ad865",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T56 Approach (checklist part A)": {
@@ -393,6 +393,12 @@
   },
   "### T60 Approach (checklist part A)": {
    "sha256": "4be38ec0b433d21e9aa6d5e16b140d82b84b3025c2f62ee102d0b8532a487e3a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T61 Approach (checklist part A)": {
+   "sha256": "f362f8b16208e47f227bf6d7f78ecf67f906cb747baf3bff459532337669e2fe",
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
@@ -4759,6 +4765,115 @@
      "why": "Decides nothing against the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T55 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T55-exit-restated",
+     "summary": "Item 6 restates the green exit, as the arbiter's accept on ask:417-T54-exit directs: no longer 'the seating's full layouts at least tenfold down' (the plan's own split of SC-009) but FR-012's mechanism - the seats that a no-layout refusal refuses are asked before their reach is rolled and before any layout - with each chain's calls measured before and after, FR-008 holding, and the claims round clean.",
+     "class": "within",
+     "why": "The tenfold target this drops was the plan's own per-task split of SC-009. Neither the GM nor the spec asked for it. SC-009 (6.3M calls for the 40-household roll, the GM's order-of-magnitude goal) is untouched and still gates the feature. The restated exit is FR-012's own wording, and calls are still measured before and after (FR-013's ordering by calls removed). Nothing the GM or the spec asked for is narrowed."
+    },
+    {
+     "id": "T55-core-wood-check",
+     "summary": "The wood's reserved seats are asked of the house-and-yard core (growth.core_covers_wood) once a seat is settled and before it goes to the placer. A seat whose core covers a reserved seat is never laid out.",
+     "class": "within",
+     "why": "This is FR-012 itself. A refusal that needs no layout (the core is the same on every garden side, and its keep-outs are a subset of the whole homestead's) moves ahead of the full layout, on measured counts (126 of 157 wood refusals made by the core alone)."
+    },
+    {
+     "id": "T55-per-seat-not-whole-set",
+     "summary": "The core check is asked one seat at a time, after settled_seat and before the placer, rather than inside settled_seat or of the whole candidate set at once, so the growth's sequence is unchanged (asked inside settled_seat it refused cohort seed 8, measured 2026-10-27).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-012 asks for 'the whole set at once' only 'where a candidate set is offered'. The growth offers no such set. Each seat is settled in sequence, and each settle's start depends on the one before. The plan measured this: moving the check into settled_seat moved the next start and refused seed 8. The placed-box state also changes after every placement, so a whole-set query is not available before the growth runs. FR-008 (the GM's 'all seeds passing', no regression) rules out changing the sequence. The purpose of FR-012 and of 'Speed first' is that no candidate is laid out in full and then refused by a rule that needs no layout. That is still met: each seat is asked before any layout, at 157 calls each."
+    },
+    {
+     "id": "T55-envelope-distance-stay",
+     "summary": "The envelope and the growth's distance stay in _place_bundle_nucleated, before _parts_fit, asked of the four garden sides' boxes moved from the household's template (union first). They are not hoisted ahead of the placer.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Item 1 lists 'the envelope off the ground' among the no-layout refusals, so leaving it in the placer narrows FR-012 on its face. Adjudicated separately. (a) The distance is asked only of a box the placer has moved off a neighbor. It cannot exist before the placer acts, so it is not a no-layout refusal at all. (b) The envelope needs each garden side's own box, which the placer builds from the template. It is already asked at the earliest point its input exists and before the full layout (_parts_fit). The measured cost is 2,587 calls for a placement it refuses, against 12,148 for one _parts_fit refuses and 16,067 for one admitted (2026-10-27, seed 39). So these refusals are not the 'laid out in full and then refused' trial that FR-012 and the GM's 'Speed first' target, and leaving them in place does not defeat the request's purpose. The plan should say that item 7's finding (the envelope needs the per-side boxes) supersedes item 1's listing; otherwise the green exit's 'refusals that need no layout' reads as including the envelope."
+    },
+    {
+     "id": "T55-layout-refusals-stay",
+     "summary": "The other refusals (the gardens', the fixtures', the household's own wood, a layout not laid) read the whole layout and stay where they are.",
+     "class": "within",
+     "why": "FR-012 covers only the refusals that need no layout. These ones read the laid-out gardens and fixtures, so they fall outside it by its own terms."
+    },
+    {
+     "id": "T55-order-budget-constants",
+     "summary": "Order: after the households' ways and before the field. Per-seat rolls kept (feature 427 R4). One landing per chain group, with the cohort judging any group that moves a map. Rule figures unchanged.",
+     "class": "within",
+     "why": "This is sequencing under FR-013, which the GM approved as the speed-first order. It keeps an earlier feature's constraint and leaves constants alone. It narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T55 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T55-red-exit-taken",
+     "summary": "Item 6: T55 takes its red exit - set down, nothing landed - on the round arbiter's ruling on ask:417-T55-route (2026-10-27).",
+     "class": "within",
+     "why": "The red exit (what failed recorded, task set down, a cannot-be-done claim ruled through make arbiter-ask) stood in the text judged CLEAR and in the plan the GM confirmed on 2026-10-26; taking it through the arbiter, who stands where the GM was asked (feature 379), is the plan's own route, not a new carve-out. The GM's 'work all 10 ... from start to finish' asked for each task to be carried to its end, and a pre-approved exit is one of its ends. Item 6 also drops the arbiter-directed green restatement ('the seating's full layouts at least tenfold down', the plan's split of SC-009): moot once red is taken. This block does not relax SC-009 (the 40-household roll at most 6.3M calls) or FR-013; T55's share of SC-009 is now owed by other tasks or SC-009 fails at close, and nothing here decides otherwise."
+    },
+    {
+     "id": "T55-wood-core-refusal-stays-in-placer",
+     "summary": "Item 7: the one seating refusal not asked before layout - the house and yard over a reserved wood seat - is left where the placer asks it, not hoisted ahead of layout; the growth.core_covers_wood hoist the earlier text reported is not landed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-012 asks that 'the refusals that need no layout' be asked of the whole candidate set before any candidate is laid out; the block says 'except' for this refusal, so it is ruled, not waved through. The ground is the mechanism, not the size of the saving (-2.2% of the stage and the trial share of about 4% are context only; a small saving is not a fidelity ground). Measured 2026-10-27, the exact refusal depends on where the placer moves a garden side off a neighbor: asked by the growth before the placer it is inexact - it forgoes a side the placer would have seated, so different homesteads seat and pool maps moved - which breaches item 1's own goal ('the same homesteads seated') and FR-008, the no-regression purpose of the GM's speed-first request (faster, so correctness work iterates faster, not different output); asked exactly, it already stands in the placer and saves nothing. So the literal rule on this refusal either changes the map or is a no-op, and in truth the refusal is not layout-free and lies outside FR-012's reach. The block's other layout-free refusals (house box and refused ground before any layout; envelope and the growth's distance on the template-moved side boxes before _parts_fit) are measured as already asked early, so FR-012 is otherwise met for this chain. SEAM, named so the record does not read as if the two texts agree: the earlier CLEAR'd text rested on the premise that house and yard are 'the same on every garden side' and 'the placer would refuse it on every side after four'; this text's measurement contradicts that premise, and under the measured-over-remembered rule the measurement governs. FIGURE NOTE (non-blocking): 'three pool maps moved' and '-2.2% of the stage' carry the label 'make perf-profile ... and throwaway counters', but a profile and call counters do not measure maps moving - make maps-moved (the block's own table) does; the session should relabel those two figures with the method that produced them. The ruling turns on whether any map moved, not on the count."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T55 Approach (checklist part A)",
+    "### T61 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T55-setdown",
+     "summary": "T55 set down by the red exit (the round arbiter's ruling on ask:417-T55-route): the seating's no-layout refusals are measured already asked before any layout; the one remaining case (house and yard over a reserved wood seat) is either inexact early (moves three pool maps) or saves nothing asked exactly in the placer; the trial share is about 4% of the stage.",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; the only edit is two figure labels (the -2.2% now carries its perf-fanout method and date, the three moved maps their make maps/maps-moved observation). FR-012 asks the refusals that NEED NO LAYOUT before any layout; the block measures that they already are, and the remaining refusal needs the placer's own position to be answered exactly, so it is outside that clause. Declining the inexact variant keeps FR-008 (pool maps). The red exit is the plan's own, ruled through make arbiter-ask."
+    },
+    {
+     "id": "T61-box-first",
+     "summary": "The lane web's settle exit question (keeper.unsettled, over_fixtures) and its trims ask each lane-law predicate only of the legs, ways and fixtures whose boxes can bear on the point or leg asked (law.over_a_fixture, geom.end_serves, law.needle_ends, law.fronting_ends, law.dangling_lane_ends, checks.unreached_houses, geom.end_components, web._reachable_runs).",
+     "class": "within",
+     "why": "FR-012 (refusals and checks asked through an index rather than by trial over everything) and FR-013 / the GM's 'Speed first' amendment (cut a roll's calls before correctness work). Same test of fewer candidates; no requirement is narrowed."
+    },
+    {
+     "id": "T61-no-behavior-change",
+     "summary": "No verdict changes, no map moves, the lane law's rules unchanged (each still one predicate in law.py); green exit requires every pool manifest unchanged and the landing cohort passing.",
+     "class": "within",
+     "why": "FR-004 (each lane-law rule stays one predicate) and FR-008 (cohort, pinned rows, pool maps keep passing). An exact-equivalence speed change asks nothing the GM did not ask."
+    },
+    {
+     "id": "T61-order",
+     "summary": "Worked as T06's first conversions, before T31 part C converts the settle steps at lay, because the predicates asked at lay are the ones made cheap here.",
+     "class": "within",
+     "why": "FR-013 leaves the order of the speed tasks to the plan, ordered by calls removed; the GM's 2026-10-26 words ask speed-up tasks first. T61 does not replace or defer FR-004's deletion of the settle's repair steps or FR-012's 'asked of what changed' clause - it makes the predicates cheaper ahead of T31, and claims neither requirement as met."
+    },
+    {
+     "id": "T61-budget-exits",
+     "summary": "One landing; red exit records the failure and sets the task down, a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Process within the feature's existing exit discipline; narrows nothing asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5444,6 +5559,52 @@
      "summary": "Item 10: the rules' figures stay as they are.",
      "class": "within",
      "why": "FR-004 leaves the lane law's rules unchanged. The task moves no constant, so the GM's arbitrary-number marking is not engaged."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T55": {
+   "section_sha256": "8fdfac25ba84e0db5c49f4aa6b8226c62586f282fcc9328bfa7486f9f073b16b",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T55-exit-restated",
+     "summary": "Item 6 restates the green exit, as the arbiter's accept on ask:417-T54-exit directs: no longer 'the seating's full layouts at least tenfold down' (the plan's own split of SC-009) but FR-012's mechanism - the seats that a no-layout refusal refuses are asked before their reach is rolled and before any layout - with each chain's calls measured before and after, FR-008 holding, and the claims round clean.",
+     "class": "within",
+     "why": "The tenfold target this drops was the plan's own per-task split of SC-009. Neither the GM nor the spec asked for it. SC-009 (6.3M calls for the 40-household roll, the GM's order-of-magnitude goal) is untouched and still gates the feature. The restated exit is FR-012's own wording, and calls are still measured before and after (FR-013's ordering by calls removed). Nothing the GM or the spec asked for is narrowed."
+    },
+    {
+     "id": "T55-core-wood-check",
+     "summary": "The wood's reserved seats are asked of the house-and-yard core (growth.core_covers_wood) once a seat is settled and before it goes to the placer. A seat whose core covers a reserved seat is never laid out.",
+     "class": "within",
+     "why": "This is FR-012 itself. A refusal that needs no layout (the core is the same on every garden side, and its keep-outs are a subset of the whole homestead's) moves ahead of the full layout, on measured counts (126 of 157 wood refusals made by the core alone)."
+    },
+    {
+     "id": "T55-per-seat-not-whole-set",
+     "summary": "The core check is asked one seat at a time, after settled_seat and before the placer, rather than inside settled_seat or of the whole candidate set at once, so the growth's sequence is unchanged (asked inside settled_seat it refused cohort seed 8, measured 2026-10-27).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-012 asks for 'the whole set at once' only 'where a candidate set is offered'. The growth offers no such set. Each seat is settled in sequence, and each settle's start depends on the one before. The plan measured this: moving the check into settled_seat moved the next start and refused seed 8. The placed-box state also changes after every placement, so a whole-set query is not available before the growth runs. FR-008 (the GM's 'all seeds passing', no regression) rules out changing the sequence. The purpose of FR-012 and of 'Speed first' is that no candidate is laid out in full and then refused by a rule that needs no layout. That is still met: each seat is asked before any layout, at 157 calls each."
+    },
+    {
+     "id": "T55-envelope-distance-stay",
+     "summary": "The envelope and the growth's distance stay in _place_bundle_nucleated, before _parts_fit, asked of the four garden sides' boxes moved from the household's template (union first). They are not hoisted ahead of the placer.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Item 1 lists 'the envelope off the ground' among the no-layout refusals, so leaving it in the placer narrows FR-012 on its face. Adjudicated separately. (a) The distance is asked only of a box the placer has moved off a neighbor. It cannot exist before the placer acts, so it is not a no-layout refusal at all. (b) The envelope needs each garden side's own box, which the placer builds from the template. It is already asked at the earliest point its input exists and before the full layout (_parts_fit). The measured cost is 2,587 calls for a placement it refuses, against 12,148 for one _parts_fit refuses and 16,067 for one admitted (2026-10-27, seed 39). So these refusals are not the 'laid out in full and then refused' trial that FR-012 and the GM's 'Speed first' target, and leaving them in place does not defeat the request's purpose. The plan should say that item 7's finding (the envelope needs the per-side boxes) supersedes item 1's listing; otherwise the green exit's 'refusals that need no layout' reads as including the envelope."
+    },
+    {
+     "id": "T55-layout-refusals-stay",
+     "summary": "The other refusals (the gardens', the fixtures', the household's own wood, a layout not laid) read the whole layout and stay where they are.",
+     "class": "within",
+     "why": "FR-012 covers only the refusals that need no layout. These ones read the laid-out gardens and fixtures, so they fall outside it by its own terms."
+    },
+    {
+     "id": "T55-order-budget-constants",
+     "summary": "Order: after the households' ways and before the field. Per-seat rolls kept (feature 427 R4). One landing per chain group, with the cohort judging any group that moves a map. Rule figures unchanged.",
+     "class": "within",
+     "why": "This is sequencing under FR-013, which the GM approved as the speed-first order. It keeps an earlier feature's constraint and leaves constants alone. It narrows nothing."
     }
    ],
    "verdict": "CLEAR"
