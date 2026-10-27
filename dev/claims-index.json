@@ -4859,12 +4859,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/_invocation.py::OPERATIONS#invocation guard": {
-  "body": "ad2b7aa74d159fc1",
+  "body": "54cb3e2a7be1e107",
   "claim": "invocation guard - NONE: process-tree inspection, no map decision",
-  "code": "cd9607f1b1db7172",
-  "core": "2213e1865f040a6c",
+  "code": "701bff21f99743a3",
+  "core": "cbcacb88a434f3ca",
   "date": "2026-10-27",
-  "note": "this is the registry that maps each module to its make target and cost, and that includes the added perf_ab row; it makes no map decision",
+  "note": "a registry of make targets and how much each operation costs; it makes no physical or rendering decision, so NONE is correct",
   "pages": {},
   "research": "",
   "rests": [],
