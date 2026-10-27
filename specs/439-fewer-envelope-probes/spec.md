@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: Done - set down at the measurement (`research/funnel.md`): no cheap screen exists, and even a perfect one is worth about 4% of the roll
+**Status**: Done - set down by its rule: the spike on the search saved its own stage 11% and cost the roll 17% (`research/spike2.md`)
 
 **Affects**: performance, hamlet
 
@@ -47,22 +47,28 @@ so and stops there.
 ## The evidence
 
 - `research/funnel.md` (measured 2026-10-27, seed 25 at 40 households): the envelope probes take 1.002 s of the homesteads
-  stage's 4.47 s under cProfile (22%, `make perf-share`); 803 envelopes are built for 40 houses placed - 272 seats offered to the
-  placer, 232 refused - so 95% of the envelopes serve seats never used.
-- The placer's refusals by reason (a counting spike, reverted): 100 tight seats not landlocked, 72 parts that do not fit, 57
-  with every side's box blocked, 3 with no yard onto lane ground, 0 by the cheap house-box test (already asked before the
-  envelope). Every refusal is read off the laid layouts, so no cheap test predicts it.
-- THE VERDICT: SET DOWN at the measurement, by the rule's first clause. A screen cannot be cheap here; even a perfect one
-  skipping all 763 wasted envelopes would save about 0.3 s of a 7 s roll (about 4%, a GUESS through cProfile's inflation),
-  at the quick form's floor. The largest search in the largest stage is worth a few percent: an order of magnitude will not
-  come from screening one search.
+  stage's 4.47 s under cProfile (22%, `make perf-share`); 803 envelopes are built for 40 houses placed - about 397 re-rolled
+  inside the settle loop, 134 for settled seats never offered, the rest for the 272 offered of which the placer refuses 232 (100
+  tight seats not landlocked, 72 parts, 57 every side blocked, 3 no yard onto lane ground, 0 by the cheap house-box test).
+- The ceiling, measured: cProfile inflates the stage 1.96 times (2.28 s unprofiled at the 435-end bookend), so a perfect screen
+  of every wasted envelope and refused placement would save about 0.74 s of 6.93 s - about 10.6%.
+- Most seats are refused, so by the rule a screen was spiked. No cheap test predicts the placer's refusals (each is read off
+  the laid layouts), so the spike took the other large waste, the settle loop's re-rolls: `research/spike2.md` - each settle
+  starting from the widest reach seen. Envelopes 803 -> 394, homesteads -11% under cProfile; the roll +17% (`make perf-ab`
+  quick, the floor -4%), because the wider seating more than doubled the web's work (4.93M -> 11.55M calls, `make perf-fanout`).
+- THE VERDICT: SET DOWN by the rule (time not saved beyond the floor - it rose), spike 2 reverted. What it shows, limited to
+  what was tried: a change to how this one search tries its candidates changed the settlement every later stage works on, so
+  a search restructure is measured on the whole roll, never its own stage. Feature 437's other named searches
+  (`boundary._samples`, `gap_ways.flood`, `route.lattice_search`, the fixture seats' `_first` and `within_reach_of`) and the
+  "fewer, larger questions" form of the lever are untried; this is the first search-restructuring trial, not the last word.
 
 ## The time
 
-As feature 437 reported it: `make feature-report F=439`'s split - the session's work, its waits and the agents' own time,
-from the event log - and a per-step breakdown (each step's start, end, time, and whether it was work or a wait), with the
-total from the GM's request to the end.
+`report-trial.md` - `make feature-report F=439`'s split and the per-step breakdown, with feature 438's (the tooling it used).
 
 ## Review history
 
-- 2026-10-27, the one review (spec-fidelity, MODE 2, on the brief with its evidence fixed): [verdict].
+- 2026-10-27, the one review (spec-fidelity, MODE 2, on the brief with its evidence fixed): CHANGES REQUIRED - the time breakdown
+  missing; the verdict did not follow the rule (most seats refused: the rule called for a spike); the ceiling a guess; the
+  conclusion wider than the trial. Applied: spike 2 run and measured, the ceiling measured, the conclusion limited, the time
+  reported.

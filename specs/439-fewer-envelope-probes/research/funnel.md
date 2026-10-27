@@ -33,7 +33,12 @@ cheap house-box test (`_house_box_refused`), which `settled_seat` already asks b
 - Every refusal the placer makes is read off the laid layouts themselves - which side's box is blocked, whether a layout has a
   corridor of its own, whether its parts fit - so no cheap test predicts it; the one cheap test there is, the house's box, is
   already asked first and refuses none.
-- THE CEILING: a perfect screen that skipped all 763 wasted envelopes would save about 0.95 s profiled - about 0.3 s of a 7 s
-  roll unprofiled (cProfile's inflation, a GUESS from feature 435's profiles), about 4%, at the quick form's floor. Even
-  perfect, restructuring this search cannot approach an order of magnitude; a real screen would catch only part of it.
-- By the brief's rule the screen is not built: the trial is set down at the measurement.
+- THE CEILING, MEASURED: unprofiled, the homesteads stage takes 2.28 s of a 6.93 s roll at seed 25 (`dev/perf-log/20261027T190722Z-435-end-diagram-backlog.json`,
+  measured 2026-10-27 by `make perf LABEL=435-end SCALING=1`), so cProfile inflates it 1.96 times (4.47 / 2.28). The 763 wasted
+  envelopes (0.95 s profiled) are then about 0.49 s (7% of the roll); the placer's work on the 232 refused seats (`try_place`
+  0.571 s profiled over 272 seats) about 0.25 s more - a perfect screen's ceiling about 0.74 s, about 10.6%.
+- WHERE THE WASTED ENVELOPES ARE LOST: about 397 are re-rolls inside `settled_seat`'s loop (803 envelopes for 406 settles - a
+  seat whose reach grows is settled again); the rest are the settled seats never offered (134: near a house, or out of
+  settles) and the 232 the placer refuses. Spike 2 (`research/spike2.md`) aimed at the re-rolls.
+- No cheap test predicts the placer's 232 refusals (the house box, the one cheap test, is asked first and refuses none); the
+  re-rolls were spiked instead (spike 2).
