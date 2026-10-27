@@ -155,8 +155,9 @@
       research: rendering
       verify: DONE. landed: the spatial grid (PointGrid.near, extend; RingIndex's rows and boxes), the router's memos (lattice_search) and the per-item boxes and band tests (tree.rejoined, belt's disc, access.point_clear, wet.toe_band) read without dict.get, setdefault, min, max or abs - the same values. Seed 39 at 40 households: the roll 21,520,104 -> 18,522,470 calls (dev/perf-log/20261027T081533Z-fanout-417-T64b.txt); no pool manifest moved, landing cohort 54/54
 
-- [ ] T65 (T56 part C) More of the hottest loops without builtin calls: sat_overlap, crossing_points, patches._ok, convex_hull, chain_violated and banks._nearest_segment - the same verdicts, no map moved (FR-012, FR-013)
+- [x] T65 (T56 part C) More of the hottest loops without builtin calls: sat_overlap, crossing_points, patches._ok, convex_hull, chain_violated and banks._nearest_segment - the same verdicts, no map moved (FR-012, FR-013)
       research: rendering
+      verify: DONE. landed: sat_overlap's projections reduced as made, crossing_points' leg boxes and patches._ok's window and overlap by comparison, convex_hull's chains counted, chain_violated and banks._nearest_segment comparing squared - the same verdicts. Seed 39 at 40 households: the roll 18,522,470 -> 17,913,531 calls (dev/perf-log/20261027T083303Z-fanout-417-T65b.txt); no pool manifest moved
 
 - [ ] T56 (FR-012) The rest of the trial inventory converted, largest first: the wells' admission, the bamboo strips, the open-ground patches, the grove clumps, the notice board's seats (FR-012)
       research: rendering

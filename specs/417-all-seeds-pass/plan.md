@@ -1286,26 +1286,4 @@ Each step measured alone:
 
 <!-- plan-archive: T64 to T64 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
 
-### T65 Approach (checklist part A)
-
-1. **The goal, in the world.** The same maps, more of the hottest loops without builtin calls: `sat_overlap`'s projections reduced as made, `crossing_points`' leg boxes and `patches._ok`'s window and overlap by comparison, `convex_hull`'s chains counted, `chain_violated` and `banks._nearest_segment` comparing squared distances (the root taken only where a nearer segment is kept) - the same verdicts, no map moved.
-2. **The constraints.** FR-012, FR-013, FR-008; every rule unchanged (FR-004).
-3. **Where each comes from.** The summed profiles of the roll's eight heaviest stages after T64 (measured 2026-10-27, `make perf-profile SEED=39 STAGE=<stage> HOUSEHOLDS=40`): `sat_overlap` 67,711 each of `max` and `min`, `patches._ok` 75,534 and 50,356, `convex_hull` 91,550 `len`, `_nearest_segment` 127,377 and `chain_violated` 103,415 `hypot`.
-4. **Do they describe the world here?** Yes: the same profiles, re-summed.
-5. **The order.** T56's third part, after T64.
-6. **The exits.** Green: every pool manifest unchanged, the landing cohort passing, the calls measured before and after, the claims round clean.
-   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: each loop asks the same test of the same items.
-8. **The budget.** One landing.
-9. **Done, measured.** The roll 18,522,470 -> 17,913,531 calls at 40 households (seed 39), measured 2026-10-27 (`make perf-fanout`, dev/perf-log/20261027T083303Z-fanout-417-T65b.txt); no pool manifest moved, observed 2026-10-27, method: `make maps`, `make maps-moved`; the landing cohort in `make land`.
-10. **Before moving a constant.** No constant moves.
-11. **Before fitting things into room.** n/a
-
-Each step measured alone:
-
-| step | measured by |
-|---|---|
-| each loop | the summed profiles' call counts by function |
-| no map moved | `make maps-moved` |
-| no seed regressed | `make cohort-landing` (in `make land`) |
-
+<!-- plan-archive: T65 to T65 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
