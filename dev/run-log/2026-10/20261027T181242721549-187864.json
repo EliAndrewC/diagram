@@ -1,0 +1,51 @@
+{
+  "utc": "2026-10-27T18:12:42Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 196,
+  "result": "failed: test-full",
+  "commit": "18c6b4bb1",
+  "first_failure_s": 190.9,
+  "last_failure_s": 196.4,
+  "failed_names": [
+    "uncovered l7r/diagram/hamletgen/homesteads/wells.py:530-532"
+  ],
+  "host": {
+    "load": [
+      4.29,
+      4.64
+    ],
+    "mem_avail_mb": [
+      9342,
+      10019
+    ],
+    "cpu_temp_c": [
+      98.0,
+      69.0
+    ],
+    "stall_s": {
+      "cpu": 2.1,
+      "io": 0.2,
+      "io_full": 0.2,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 218072,
+      "package": 88477
+    }
+  },
+  "phases": {
+    "preflight": 14.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 175.0,
+    "floors": 12.0,
+    "test-full": 192.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/hamletgen/homesteads/well_seats.py",
+  "selected": 10056,
+  "collected": 10056
+}
