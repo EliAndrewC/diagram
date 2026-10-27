@@ -38,9 +38,9 @@
    "declared": "spec-fidelity"
   },
   "## Order": {
-   "sha256": "00156749c87821278741b0e4b1fe20af1d21853f39fab55484bf9aaf8453882a",
+   "sha256": "0dbc48a78b9c37b2dd5a35ef08a60419480dc3bbcb04036916fe24aa05c3d780",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "## T26 - the web's post-lay passes the placers already make needless, measured off and deleted (R2 G2, first part; FR-004, FR-006)": {
@@ -5430,6 +5430,84 @@
      "summary": "Green: web laid by the law with no repair pass left, calls measured before/after, cohort, pinned rows and claims round clean; red: recorded, set down, impossibility claim ruled through arbiter-ask",
      "class": "within",
      "why": "Matches FR-004, SC-002, FR-008 and D35's rule that a cannot-land claim is ruled, never assumed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "## Order"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Order-moved-T06-rest",
+     "summary": "T06's remaining parts move to the correctness phase, after its parts A-D, T58, T61, T67 and T70 (ask:417-T06-rest)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-013's speed-first order and the GM's 2026-10-26 'work all 10 of those tasks ... from start to finish', but the GM's 2026-10-27 words imply it: 'reorder things so that the tasks that we believe will not significantly improve performance will be done later'. The block names a later place (the correctness phase, inside 417) and carries its own basis: a rule asked at lay moves its check into the placer rather than removing it, and T67/T70 measured -0.7% and +0.6% on the web (dated 2026-10-27, make perf-fanout HOUSEHOLDS=40)."
+    },
+    {
+     "id": "Order-moved-lane-close",
+     "summary": "T11, T12, T14 and T56's three deferred sites (T66) move to the correctness phase (ask:417-lane-close)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same narrowing of the 2026-10-26 'all 10' and of FR-013; the destination is exactly the 2026-10-27 'done later', inside the feature, and the GM delegated the belief that a task will not significantly improve performance to 'we' rather than naming tasks. The block carries that belief only by the arbiter ruling's id, not by a figure; the deferral (not removal) is what is checkable from the GM's words, and it passes."
+    },
+    {
+     "id": "Order-moved-T55",
+     "summary": "T55 set down (ask:417-T55-route)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM's 2026-10-27 words authorize deferring ('done later') tasks believed not to significantly improve performance, and name performance 'our highest priority'. 'Set down' names no later place - the block says 'to the correctness phase' for the other moves and not for this one - so as written T55's work leaves the feature, which narrows FR-012/FR-013 with nothing in the GM's words to carry it. And the block's own figure cuts against the premise: T55 at about 1 profiled s of the web's 3.17 (2026-10-26) is a larger share than T53's 0.8, still being worked. Ruling it legitimate would mean supplying the reason myself. To clear: the block states where T55's work goes (to the correctness phase, absorbed into a named task by the new route, or dropped on the GM's own word) and why its measured share no longer stands."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "## Order"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Order-base",
+     "summary": "T01 measure, T02 hold guard, T03 inventory and principle draft, engine tasks in D5's order with a fresh block of 500 after each, then the FR-009 and FR-011/SC-006 guards, then the close (1,000 fresh seeds, T106's seat turn, SC-004 delta, report).",
+     "class": "within",
+     "why": "Carries D1-D6, FR-009, FR-011, SC-004, SC-006 as the accepted spec states them; the GM's 'all seeds passing' and 'hard requirement' request. Unchanged from the text last judged."
+    },
+    {
+     "id": "Order-speed-first",
+     "summary": "Open tasks run speed first, ranked by calls removed: T52, T31, T58, T53, T54, T55, T06, T12, T11, T56, T14, then T57 the checkpoint; then the seed-passing tasks in tasks.md order.",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-10-26 ('order our remaining tasks in 417 to prioritize the things that will make us go faster'; 'I confirm that this is good'). The T06 move after T55 and T58 split are a re-ranking by measured calls removed (0.3 s against 0.8/1.37/1, dated and methoded), which is FR-013's own ordering key."
+    },
+    {
+     "id": "Order-stop-at-T57",
+     "summary": "Work stops at T57 for the GM's check-in; later tasks start on his word.",
+     "class": "within",
+     "why": "The GM 2026-10-26 'then we can check in once that is all done' and 2026-10-27 'After you've done those tasks and finished your analysis in T57 then we can talk more about how to proceed.'"
+    },
+    {
+     "id": "Order-T55-set-down",
+     "summary": "T55 (one of the ten speed tasks the GM confirmed) is set down: its trial screens about 4% of the seating's 1 profiled s and its one early refusal is inexact or saves nothing (measured 2026-10-27, inventory/trial.md rows 3-5); its goal, fewer full homestead layouts per seat, is carried to T57's ranked list as item 3 for the GM's choice.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It removes a task from the ten the GM told the session to work 'from start to finish' (2026-10-26). It is implied by the GM's own later words (2026-10-27): 'reorder things so that the tasks that we believe will not significantly improve performance will be done later, and then you will do another round of in-depth analysis', approved with 'please proceed with that plan'. The route is measured, by a dated one-shot, to remove almost nothing, so working it literally would spend the speed lane on a task that does not serve the request's stated purpose (speed so iteration is faster). The goal is not dropped: it goes into T57, the very analysis the GM approved, explicitly for the GM's choice, which is where he said the next step is decided."
+    },
+    {
+     "id": "Order-lane-close-deferrals",
+     "summary": "T11, T12, T14 and T56's three deferred sites (T66) move to the correctness phase (ask:417-lane-close).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the ten speed tasks the GM confirmed on 2026-10-26, but is the reorder the GM approved on 2026-10-27 (tasks not believed to significantly improve performance 'will be done later'). They are deferred, not removed: the correctness phase follows the GM's word after T57."
+    },
+    {
+     "id": "Order-T06-rest-deferral",
+     "summary": "T06's remaining parts go to the correctness phase after its parts A-D, T58, T61, T67 and T70 landed (ask:417-T06-rest), because a rule asked at lay moves its check into the placer rather than removing it; T67 and T70 measured -0.7% and +0.6% (2026-10-27, make perf-fanout HOUSEHOLDS=40).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground as the lane-close deferrals: the GM 2026-10-27 directed that tasks measured not to improve performance move later, and the measurement given (dated, with the command) shows T06's parts are neutral on calls. Deferred to the correctness phase, not dropped; FR-004/FR-006 still hold for that phase."
     }
    ]
   }

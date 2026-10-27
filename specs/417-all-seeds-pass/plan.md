@@ -123,7 +123,7 @@ ask:417-T06-order, 2026-10-27: T06's remaining settle repairs at about 0.3 profi
 1.37 and T55's 1, measured 2026-10-26 (`make perf-profile SEED=39 STAGE=<stage> HOUSEHOLDS=40`, `t06-measured.md` in the
 ruling's bundle)) - then the tasks that make every seed pass, in `tasks.md`'s order. Each task's Approach states its place. THE
 WORK STOPS AT T57 for the GM's check-in ("then we can check in once that is all done", `request.md`); the tasks after it start
-on his word. MOVED SINCE (the round arbiter's rulings, 2026-10-27): T55 set down (ask:417-T55-route); T11, T12, T14 and T56's
+on his word. MOVED SINCE (the round arbiter's rulings, 2026-10-27): T55 set down (ask:417-T55-route) - the 1 profiled s above was the seating's whole, of which the trial T55 would screen is about 4% and its one early refusal left inexact or saving nothing, measured 2026-10-27 (`inventory/trial.md` rows 3-5, a throwaway counter in the seating) - its goal, fewer full homestead layouts per seat, carried to T57's ranked list as item 3 (the bundle geometry built once), for the GM's choice; T11, T12, T14 and T56's
 three deferred sites (T66) to the correctness phase (ask:417-lane-close); T06's remaining parts to the correctness phase after
 its parts A-D, T58, T61, T67 and T70 (ask:417-T06-rest: a rule asked at lay moves its check into the placer rather than
 removing it, T67 and T70 measured -0.7% and +0.6% on the web, 2026-10-27, make perf-fanout HOUSEHOLDS=40).
