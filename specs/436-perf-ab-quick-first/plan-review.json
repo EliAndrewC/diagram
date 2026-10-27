@@ -1,0 +1,139 @@
+{
+ "feature": "436-perf-ab-quick-first",
+ "blocks": {
+  "preamble": {
+   "sha256": "3aad4a55e3533b310e63932ea48a0f63bb8e1e84e06e0b1cce91f112ef2479af",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "aae229d40ef510a4d7d6d736e7d1f6d57ef395ee43ff94f847b385ad8afdc659",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "0ddefcc674c7776c336a9e363a6deef002c85e9ca6129f2d0820ec3d2f6f4fd9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "f57e69294e629953af15afa2dd99df05a1e3b0eb760a569482f0718226ff8221",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "4dc4115a83a37d6f0e2779729191f7bfa465110ee912db6a73af210f9946360b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "021a94490cbc4a158f87427b614702758153f43bcbeb93ca002399a392cb2533",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Task approaches": {
+   "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "2d40567deea04ca8c83de281058186f844ada549e6ac29a51688496b5561daf0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "ed17216b7520a9833221e1aacbdb3c328324a3ef77e83eccd0dd2b940e02624f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Form decided by count compared: --seeds/--households comma lists (defaults 25, 40); one seed one size QUICK N=6, more SUBSET N=3, --full FULL N=3 with make perf SCALING=1's seeds and sizes; Makefile passes SEEDS/HOUSEHOLDS/FULL/N/AA.",
+     "class": "within",
+     "why": "Restates FR-001 and the approved proposal's three steps (quick default seed 25 at 40 households, 6 runs; subset SEEDS=25,39 HOUSEHOLDS=20,40; full = today's sweep)."
+    },
+    {
+     "id": "D2",
+     "summary": "Quick and subset roll in one warmed worker process per version inside that version's worktree, calling the version's own perf_snapshot.measure per run over stdin; calls counted once after; FULL keeps today's fresh-process make perf SCALING=1 path.",
+     "class": "within",
+     "why": "The request and proposal ask for 6 runs of a single seed per version and do not prescribe the process model; timing with each version's own code and warming as make perf warms is an implementation choice that removes nothing asked. FULL is left as today's sweep per FR-001. Engines predating d2ce4e79c lack the functions used; comparing such old engines is not part of the request and the FR-005 escape remains for them."
+    },
+    {
+     "id": "D3",
+     "summary": "Run i takes A,B when even, B,A when odd.",
+     "class": "within",
+     "why": "Exactly the proposal's 'A then B, then B then A' and FR-003."
+    },
+    {
+     "id": "D4",
+     "summary": "Wall = sum of stages, CPU = sum of cpu_stages, to the hundredth; per seed and size best and spread (worst less best) of each, change between versions, and calls.",
+     "class": "within",
+     "why": "Carries the GM's 'CPU time beside wall time' and the proposal's 'each with its best and spread' (FR-003)."
+    },
+    {
+     "id": "D5",
+     "summary": "Quick record at <git common dir>/perf-ab/quick/<sorted pair of engine_fingerprint keys>.json, local, never committed, holding seed, size, N, commits, table.",
+     "class": "within",
+     "why": "FR-004: local, never pushed, under both engines' code keys ignoring docstrings/comments; the proposal's 'same two engines judged by the engine code, not the commit name'. Sorting the pair treats 'the same two engines' symmetrically, which the words already imply."
+    },
+    {
+     "id": "D6",
+     "summary": "Non-quick runs look up D5's record after worktrees are made and before the first roll; with none and no PERF_AB_QUICK_OK, print a refusal naming the quick command and exit 2; the escape goes through escape_log.escape (reason of two words or more, logged as guard perf-ab-quick-first); a timing never refuses.",
+     "class": "within",
+     "why": "FR-005 (before any roll, names the quick command, escape with stated reason recorded where escapes are recorded) and FR-007 (refuses a skipped step, never a timing). The two-word minimum is the project's existing escape mechanism giving 'a stated reason' its form, not a new carve-out; it applies to all non-quick forms with no exception."
+    },
+    {
+     "id": "D7",
+     "summary": "AA=1 builds one worktree of A (default HEAD), two alternating workers, writes perf-ab/floor/<seed>-<households>-<n>.json; a quick comparison prints that floor beside its table, or the AA=1 command to take it when none exists; AA=1 is a quick-form run needing no record.",
+     "class": "within",
+     "why": "FR-006 and the proposal's 'A/A run of the quick form taken once and printed beside each quick result'. Printing the command when no floor exists is the accepted spec's mechanism (AA=1 takes it); AA=1 not needing a quick record follows from it being a quick form, not an exception to the refusal."
+    },
+    {
+     "id": "D8",
+     "summary": "performance-checklist question 5 and tools table: quick while iterating, subset or full once before landing, floor read beside quick; guards.md gains the refusal row with escape; Makefile help line names the forms.",
+     "class": "within",
+     "why": "FR-008 and the proposal's checklist line; the help line only documents the requested forms."
+    },
+    {
+     "id": "Performance bookends / Constitution Check / T01 approach",
+     "summary": "No engine code changed, no bookends; tests in tests/tools/test_perf_ab.py, 100% coverage, guard doctrine; T01 done = a real quick A/B of HEAD~ vs HEAD at seed 25/40 with wall time stated and the refusal seen on a subset run without a record.",
+     "class": "within",
+     "why": "Verification and enforcement of exactly what was asked; the one figure with a unit (8.2 min) carries a one-shot label (2026-10-27, file times of feature 435's T04/T08 logs)."
+    }
+   ]
+  }
+ ]
+}
