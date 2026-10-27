@@ -76111,6 +76111,30 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/perf_share.py::STAGES#plumbing": {
+  "body": "0e608537208abf15",
+  "claim": "plumbing - NONE: the four stages feature 437 read, the largest by time share at the 435-start bookend",
+  "code": "3333d5304fcb93ba",
+  "core": "244ce6f1ddb16fb2",
+  "date": "2026-10-27",
+  "note": "profiling stage names for a performance tool; nothing a map reader would read about a place or how it is drawn",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/perf_share.py::TOP#plumbing": {
+  "body": "a0deb1f9a6ed3c1f",
+  "claim": "plumbing - NONE: how many rows each list prints, deciding nothing about a place",
+  "code": "58f9618711d6bdea",
+  "core": "fb3833914fdfbf29",
+  "date": "2026-10-27",
+  "note": "the number of report rows a perf tool prints; nothing about a place or how it looks",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/banks.py::StrokeIndex#bank geometry": {
   "code": "ff68e604dc0c7ffd",
   "core": "7f4c25209f6faf8d",

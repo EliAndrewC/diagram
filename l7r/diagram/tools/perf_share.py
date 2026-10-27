@@ -31,6 +31,7 @@ MODULE = "l7r/diagram/settlement/_geom/primitives.py"
 STAGES = ("homesteads", "web", "field", "hinterland")
 """Research: plumbing - NONE: the four stages feature 437 read, the largest by time share at the 435-start bookend"""
 TOP = 8
+"""Research: plumbing - NONE: how many rows each list prints, deciding nothing about a place"""
 
 
 def short(fn: str, ln: int, name: str) -> str:
