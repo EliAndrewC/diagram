@@ -636,30 +636,7 @@ Each step measured alone:
 
 
 <!-- plan-archive: T56 to T56 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
-### T57 Approach (checklist part A)
-
-1. **The goal, in the world.** Where SC-009 stands once the speed tasks have landed, before the correctness tasks start.
-2. **The constraints.** SC-009, FR-013.
-3. **Where each comes from.** `spec.md` SC-009, the GM 2026-10-26.
-4. **Do they describe the world here?** Yes: feature 427's start survey is committed (`dev/perf-log/`), so the cut compares.
-5. **The order.** Last of the speed tasks, first before the correctness tasks.
-6. **The exits.** Green: SC-009 met, measured, and reported.
-   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: a measurement.
-8. **The budget.** One survey, one snapshot.
-9. **Done, measured.** `make perf-fanout` at 40 households against feature 427's start; `make perf LABEL=417-speed SCALING=1` for the stage times, reported, gating nothing.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-AMENDED 2026-10-27 (the GM, verbatim: "then you will do another round of in-depth analysis on why we are making so many millions of function calls to place such a small number of things", and on its confirming, "sounds good, please proceed with that plan.  After you've done those tasks and finished your analysis in T57 then we can talk more about how to proceed."; the round arbiter's ruling on ask:417-T06-rest): T57 is the measurement above AND the analysis it serves - for every stage of seed 39's 40-household roll (the small stages too, each named with its calls, so what they add up to is measured and none is assumed negligible), what it places (counted from the manifest), how many candidates it tries per thing placed and how many rule checks each try costs (`make perf-fanout` chains, `make perf-profile SEED=39 STAGE=<stage> HOUSEHOLDS=40`), so the multiplier that turns a few hundred placed things into millions of calls is named per stage; then, per stage, the change that would cut it (search fewer candidates, ask in bulk, vectorize, or keep a result instead of asking again), its estimated saving in calls and its cost in work, ranked by saving per cost, with T54's owed incremental tree judgment (upper bound 1.2M) one priced line. Written to `specs/417-all-seeds-pass/research/t57-analysis.md`; gating nothing; the GM decides what is built from it.
-
-Each step measured alone:
-
-| step | measured by |
-|---|---|
-| the calls | `make perf-fanout` |
-| the stage times | `make perf LABEL=417-speed SCALING=1` |
-
+<!-- plan-archive: T57 to T57 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
 ### T06 Approach (checklist part A)
 
 1. **The goal, in the world.** The same lane web, each ordinary lane admitted whole by the lane law before it is drawn, so no pass after the lay and no settle step repairs it.
