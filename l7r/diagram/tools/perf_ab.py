@@ -273,7 +273,7 @@ def refusal(a: str, b: str, what: str, seed: int, size: int) -> str:
 
 def floor_line(floor: Mapping[str, Any] | None, seed: int, size: int, n: int) -> str:
     if floor is None:
-        return f"floor: none on record for seed {seed} at {size} households, {n} runs - take it once: make perf-ab AA=1 SEEDS={seed} HOUSEHOLDS={size} N={n}"
+        return f"floor: none on record for seed {seed} at {size} households, {n} run{"s" if n != 1 else ""} a version - take it once: make perf-ab AA=1 SEEDS={seed} HOUSEHOLDS={size} N={n}"
     return f"floor (one engine against itself, taken {floor['utc']}): wall {floor['wall']}, CPU {floor['cpu']} - a change inside it is not a change"
 
 
@@ -332,7 +332,7 @@ def main(argv: list[str] | None = None, make: Callable[[str], Any] = Worker, tak
             floor_path = os.path.join(state, "floor", f"{seeds[0]}-{sizes[0]}-{n}.json")
             if a.aa:
                 write(floor_path, {"utc": utc, "commit": a.a, "seed": seeds[0], "households": sizes[0], "n": n, **floor_of(runs, (sizes[0], seeds[0]))})
-                print(f"floor recorded for seed {seeds[0]} at {sizes[0]} households, {n} runs")
+                print(f"floor recorded for seed {seeds[0]} at {sizes[0]} households, {n} run{"s" if n != 1 else ""} a version")
             elif kind == "quick":
                 write(record, {"utc": utc, "a": a.a, "b": a.b, "keys": keys, "seed": seeds[0], "households": sizes[0], "n": n, "table": compare(runs, calls)})
                 print(floor_line(read(floor_path), seeds[0], sizes[0], n))

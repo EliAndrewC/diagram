@@ -59,3 +59,30 @@ exit 2
 - CPU time tracks wall time within 0.01 s on every row: the roll is one thread, so CPU time removes waiting (other
   processes holding the core) but not the speed of the core it lands on - on this host's mixed cores it narrows the spread
   less than hoped. The spread of a run (0.98 s in the second quick run) is still the reading's limit.
+
+## Amendment 1: one run a version (measured 2026-10-27)
+
+`make perf-ab A=d2ce4e79c` (the quick form, one run a version, the untimed work of both versions at once):
+
+```
+ households, seed   A wall    +-  B wall    +-  wall    A cpu    +-   B cpu    +-   cpu      A calls     B calls  calls
+         (40, 25)     7.29  0.00    7.18  0.00   -2%     7.29  0.00    7.17  0.00   -2%    6,549,158   7,564,885   +16%
+best of each version's runs, alternated A B / B A; +- its worst less its best - read a change against it, never as a pass
+floor: none on record for seed 25 at 40 households, 1 runs - take it once: make perf-ab AA=1 SEEDS=25 HOUSEHOLDS=40 N=1
+took 38 s
+```
+
+Its floor, `make perf-ab AA=1 A=HEAD` (one run a version):
+
+```
+ households, seed   A wall    +-  B wall    +-  wall    A cpu    +-   B cpu    +-   cpu      A calls     B calls  calls
+         (40, 25)     7.63  0.00    7.36  0.00   -4%     7.63  0.00    7.36  0.00   -4%    7,564,885   7,562,255    -0%
+best of each version's runs, alternated A B / B A; +- its worst less its best - read a change against it, never as a pass
+floor recorded for seed 25 at 40 households, 1 runs
+took 39 s
+```
+
+The quick form takes 38 s, from 2.05 min at six runs; its floor is -4%, so a one-run reading resolves a change of roughly 5% or
+more - the order-of-magnitude gains the work aims at, not the 1-3% changes the GM set aside. The two workers of the A/A
+counted 7,564,885 and 7,562,255 calls on the same engine (-0.03%): the call count is not exactly repeatable between
+processes, by a margin far under the call-count gate's 2%.
