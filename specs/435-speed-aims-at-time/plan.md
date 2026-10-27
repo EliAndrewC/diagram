@@ -78,50 +78,8 @@ size, fixtures) and moved into place; the wells' seats screened by a feasibility
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
-### T03 Approach (checklist part A)
-
-1. **The goal, in the world.** The three cheap fixes (D7), each its own task filed with `PERF=1`, its checklist answered.
-2. **The constraints.** FR-005, FR-006; SC-004.
-3. **Where each comes from.** `specs/417-all-seeds-pass/research/t57-analysis.md` items 2, 3, 1.
-4. **Do they describe the world here?** Re-measured first (`make phase-calls`, `make perf-profile`) on the engine T02 leaves.
-5. **The order.** After T02.
-6. **The exits.** Green: each fix landed with its calls and time evidence, the cohort passing.
-   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** Each fix removes a search: a screen before a full test, a result kept.
-8. **The budget.** One landing per fix.
-9. **Done, measured.** Not yet measured.
-10. **Before moving a constant.** Its research claim read first.
-11. **Before fitting things into room.** n/a
-
-Each step measured alone:
-
-| step | measured by |
-|---|---|
-| each fix | `make phase-calls`, `make perf-ab` against its parent |
-| the maps | `make maps-moved`, the cohort |
-
-### T04 Approach (checklist part A)
-
-1. **The goal, in the world.** The new numbers for the GM (D8).
-2. **The constraints.** FR-008; SC-006.
-3. **Where each comes from.** `request.md` message 3.
-4. **Do they describe the world here?** Yes.
-5. **The order.** Last.
-6. **The exits.** Green: `report-numbers.md` written with both comparisons.
-   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** Not yet measured.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-Each step measured alone:
-
-| step | measured by |
-|---|---|
-| the calls | `make phase-calls` |
-| the time | `make perf-ab` |
-
+<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
+<!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
 ## Project Structure
 
 - `docs/performance-checklist.md` (new); `scripts/task-add.py`, `Makefile` (`perf-ab`, `task-add PERF=`).

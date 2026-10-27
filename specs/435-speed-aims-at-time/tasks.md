@@ -12,10 +12,12 @@
 - [x] T02 The earlier call-cutting changes (427 T07, T08, T09, T12; 417 T54, T63, T64, T65) classed hunk by hunk, each commit's moves-work and removes-work arms timed against HEAD with `make perf-ab`, reverted where they bought no time and their growth with size does not argue for them (D6; FR-004)
       research: rendering
       verify: DONE. landed: the eight moves-work arms reverted (time inside the spread); removes-work arms kept on growth (arbiter ask:435-removes-arms)
-- [ ] T03 The three cheap fixes, each its own task filed with PERF=1: the notice board's seats screened, the homestead bundle's geometry built once, the wells' seats screened by a feasibility mask (D7; FR-005)
+- [x] T03 The three cheap fixes, each its own task filed with PERF=1: the notice board's seats screened, the homestead bundle's geometry built once, the wells' seats screened by a feasibility mask (D7; FR-005)
       research: rendering
-- [ ] T04 The closing report: per-stage calls at 40 households beside T57's, and the time A/B of the engine before this feature against after it (D8; FR-008)
+      verify: DONE. landed in batch T03+T04: T03: wells (T06) and notice (T08) built, the bundle set down (ask:435-bundle-once); T04: report-numbers.md - calls +44% after the reverts with time unchanged inside a 9% A/A floor
+- [x] T04 The closing report: per-stage calls at 40 households beside T57's, and the time A/B of the engine before this feature against after it (D8; FR-008)
       research: rendering
+      verify: DONE. landed in batch T03+T04: T03: wells (T06) and notice (T08) built, the bundle set down (ask:435-bundle-once); T04: report-numbers.md - calls +44% after the reverts with time unchanged inside a 9% A/A floor
 - [ ] T05 0047's drawing page states whether the privy's 48 ft reach covers every privy place, and that a privy with no seat in reach refuses the bundle (impl-drift, T02's claims round)
       research: rendering
 - [x] T06 The wells' seats screened in bulk: the verge, the wood floor and the belt asked of the lattice as arrays, kept on the stage's sweep, before the overlap admission (T57 item 1; T03's first fix)
