@@ -709,7 +709,8 @@ def door_path(
             return None
         # ...ITS FOOT GATHERED ONTO A JUNCTION STANDING a few feet beside it (feature 417 T06 part D, 0081: ends within 25 ft are
         # joined at a single point), each new leg walkable and the whole kept as the path is; its door end never moves
-        gathered = (g for g in gathered_forms(s, path, (-1,), lazy_ground(s.M, s)) if all(clear(a, b) for a, b in zip(g, g[1:], strict=False)) and sound(g))
+        forms = (square_run(s.M, g) for g in gathered_forms(s, path, (-1,), lazy_ground(s.M, s)))  # ...squared at the water, as laid
+        gathered = (g for g in forms if all(clear(a, b) for a, b in zip(g, g[1:], strict=False)) and sound(g))
         return next(gathered, path)
 
     def lawful_step(a: Pt, b: Pt) -> bool:

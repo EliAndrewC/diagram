@@ -32597,8 +32597,8 @@
  "l7r/diagram/hamletgen/ways/serve.py::door_path#a door path off the fixtures": {
   "body": "992984e5400ec179",
   "claim": "a door path off the fixtures - how-our-maps-lay-a-clustered-settlements-lanes.drawing: a household's way goes round its own garden beds and fixtures",
-  "code": "9062c79057f75dd6",
-  "core": "6b52b3ec1649a835",
+  "code": "cbb1140c1b653434",
+  "core": "832f17a4484934c4",
   "date": "2026-10-22",
   "note": "refuses crossing a wall, fixture at 3 ft, matrix-forbidden bed",
   "pages": {
@@ -32609,6 +32609,7 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#a worn path takes the shortest way": {
@@ -32626,14 +32627,15 @@
    "0081-village-lanes.drawing.html:8d27a46007b683f3",
    "0081-village-lanes.drawing.html:eac54e81463e9673"
   ],
+  "triage": "touched",
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#its margin off the fixtures": {
   "body": "992984e5400ec179",
   "claim": "its margin off the fixtures - GUESS village-lanes.drawing: the 3 ft the page keeps a tread off a farmstead's other buildings (its sheds, byre and retirement house, a GUESS there), extended here to the fixtures; its line 3 ft off every fixture and off what the overlap matrix forbids (`over_a_fixture`, `forbidden_segment` at 3 ft)",
-  "code": "a93578034909efc2",
-  "core": "6b52b3ec1649a835",
+  "code": "2435cab6a186ebdb",
+  "core": "832f17a4484934c4",
   "date": "2026-10-25",
   "note": "0081's 3 ft GUESS off a farmstead's other buildings, extended to the fixtures, and the claim says so",
   "pages": {
@@ -32643,6 +32645,7 @@
   "rests": [
    "0081-village-lanes.drawing.html:426f2feb39477167"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#no sliver with the ways it meets": {
@@ -32660,6 +32663,7 @@
    "0081-village-lanes.drawing.html:a9d7f58a366d76eb",
    "0081-village-lanes.drawing.html:b3423a58c3ff2774"
   ],
+  "triage": "touched",
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
@@ -32679,13 +32683,14 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#the fallback at the law's gap": {
   "body": "992984e5400ec179",
   "claim": "the fallback at the law's gap - DEVIATION how-our-maps-lay-a-clustered-settlements-lanes.drawing: routed again at `WEB_FABRIC_GAP` (7 ft off a garden fence) and stepped only on lawful ground",
-  "code": "16591cff06a36646",
-  "core": "6b52b3ec1649a835",
+  "code": "3cf9549ce7df192f",
+  "core": "832f17a4484934c4",
   "date": "2026-10-22",
   "note": "the page records routing at 7 ft from every garden, the household's own included, with its reason (\"keeps that routing simple\")",
   "pages": {
@@ -32695,6 +32700,7 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:b2fae7ceda96f718"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#water on the way": {
@@ -32712,6 +32718,7 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::flank_doors#a flank door as fallback": {
@@ -32940,6 +32947,7 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
   ],
+  "triage": "touched",
   "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
