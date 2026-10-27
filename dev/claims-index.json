@@ -4859,12 +4859,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/_invocation.py::OPERATIONS#invocation guard": {
-  "body": "21e3c69ba3ad2703",
+  "body": "ab91a04379a68684",
   "claim": "invocation guard - NONE: process-tree inspection, no map decision",
-  "code": "bd187fc984312580",
-  "core": "ffc7baf32058e254",
-  "date": "2026-10-26",
-  "note": "the registry maps each module to its make target and a cost tier that sets whether it prompts; the added perf_fanout row is tooling and makes no map decision",
+  "code": "89dea005d3f842f4",
+  "core": "75f9d20c57431863",
+  "date": "2026-10-27",
+  "note": "registry rows map each module to a make target and a prompting cost; this is plumbing with no map decision, and the added phase_calls row is plumbing too",
   "pages": {},
   "research": "",
   "rests": [],
