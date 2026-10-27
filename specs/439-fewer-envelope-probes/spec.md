@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: Running
+**Status**: Done - set down at the measurement (`research/funnel.md`): no cheap screen exists, and even a perfect one is worth about 4% of the roll
 
 **Affects**: performance, hamlet
 
@@ -46,8 +46,16 @@ so and stops there.
 
 ## The evidence
 
-[Filled as measured: `research/<name>.md` per measurement, each dated with its command. Then the verdict - promote or set
-down - and the reason.]
+- `research/funnel.md` (measured 2026-10-27, seed 25 at 40 households): the envelope probes take 1.002 s of the homesteads
+  stage's 4.47 s under cProfile (22%, `make perf-share`); 803 envelopes are built for 40 houses placed - 272 seats offered to the
+  placer, 232 refused - so 95% of the envelopes serve seats never used.
+- The placer's refusals by reason (a counting spike, reverted): 100 tight seats not landlocked, 72 parts that do not fit, 57
+  with every side's box blocked, 3 with no yard onto lane ground, 0 by the cheap house-box test (already asked before the
+  envelope). Every refusal is read off the laid layouts, so no cheap test predicts it.
+- THE VERDICT: SET DOWN at the measurement, by the rule's first clause. A screen cannot be cheap here; even a perfect one
+  skipping all 763 wasted envelopes would save about 0.3 s of a 7 s roll (about 4%, a GUESS through cProfile's inflation),
+  at the quick form's floor. The largest search in the largest stage is worth a few percent: an order of magnitude will not
+  come from screening one search.
 
 ## The time
 
