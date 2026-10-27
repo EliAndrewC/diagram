@@ -1,0 +1,14 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+hinterland: 1,492,442 calls @20, 2,543,957 calls @40, growth exponent 0.77
+  fastest growers @20 -> @40:
+    x22.2 math.degrees [1,237 -> 27,476]
+    x22.2 math.atan2 [1,239 -> 27,478]
+    x4.0 settlement/land/cover.py:69:<lambda> [5,540 -> 22,200]
+    x3.3 math.dist [8,333 -> 27,855]
+    x2.2 settlement/_geom/indexes.py:476:inside [16,846 -> 37,273]
+    x2.2 ImageDraw.py:135:_getink [14,444 -> 31,884]
+    x2.2 'draw_ink' of 'ImagingDraw' objects [14,455 -> 31,899]
+    x2.2 'pop' of 'list' objects [20,276 -> 44,494]
+
+all stages: 1,492,442 calls @20, 2,543,957 calls @40

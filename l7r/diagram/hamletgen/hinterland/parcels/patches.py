@@ -547,11 +547,30 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 )
 
             scored: list[tuple[float, float, float]] = []
+            # ...THE LATTICE'S SEATS ASKED OF THE REGION AT ONCE (feature 417 T56): a seat the region holds taken fails `_ok`, and with no
+            # crop every seat does, so `_ok` is asked only of the seats one array read leaves open - the same seats qualify
+            # (12,589 seats each a call into the region on seed 39 at 40 households, measured 2026-10-27)
+            ys_ = []
             y = max(half + 40.0, sy0)
             while y <= min(plan.H - half - 40.0, sy1):
-                x = max(half + 40.0, sx0)
-                while x <= min(plan.W - half - 40.0, sx1):
-                    if _ok(x, y):
+                ys_.append(y)
+                y += step
+            xs_ = []
+            x = max(half + 40.0, sx0)
+            while x <= min(plan.W - half - 40.0, sx1):
+                xs_.append(x)
+                x += step
+            open_ = set()
+            if crops and xs_ and ys_:
+                import numpy as np
+
+                gx, gy = np.meshgrid(np.array(xs_), np.array(ys_))
+                region = open_ground_region(regions, half, _sb_n, _sb_s, crops, keep, keep_rects, lanes + streams, marshes, (sx0, sy0, sx1, sy1))
+                free = ~np.asarray(region.taken_many(gx.ravel(), gy.ravel()))
+                open_ = {(float(a), float(b)) for a, b in zip(gx.ravel()[free], gy.ravel()[free], strict=True)}
+            for y in ys_:
+                for x in xs_:
+                    if (x, y) in open_ and _ok(x, y):
                         # PREFER THE NEAREST QUALIFYING GROUND. The first version of this maximized distance from
                         # the crop instead, which drove every patch to the canvas's far upslope margin and the crop
                         # then cut three of four off the sheet. A settlement's coppice is walked to daily for fuel and
@@ -559,8 +578,6 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                         # ground the height rule below admits, nearer wins outright. The keep-outs above are what make
                         # it far ENOUGH. Height is no longer a term in this score (269 B27): it is `woodland_tier`.
                         scored.append((-math.hypot(x - ccx, y - ccy), x, y))
-                    x += step
-                y += step
             scored = _beyond_the_fields(s, plan, scored, crop_pts, (ccx, ccy))  # higher than the fields beside it, and across them
             # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
             # and refused where it does not - the count is a target the scan already meets only where there is open ground

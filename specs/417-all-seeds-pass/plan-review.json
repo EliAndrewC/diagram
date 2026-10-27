@@ -224,9 +224,9 @@
    "declared": "spec-fidelity"
   },
   "### T56 Approach (checklist part A)": {
-   "sha256": "b412112a577b550584b94d3b2dab431e7ba7bf8d51fe3a3ce97a6f2d0dba7370",
+   "sha256": "9ccbd35fd952299f39e9de429344570def7e0da289407d7009463d2e4baae7ba",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
+   "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
   },
   "### T57 Approach (checklist part A)": {
@@ -423,6 +423,12 @@
   },
   "### T65 Approach (checklist part A)": {
    "sha256": "a68589141313981bdd105e7cf56fdf6c7f528208fd7bc6ecdfa8bc9f3dc401ef",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T66 Approach (checklist part A)": {
+   "sha256": "7bee54cdd9f552e72b54b2a084dbf6309e922703cacc836062b76ae5561fd02e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
@@ -5014,6 +5020,75 @@
      "summary": "Done measured as 18,522,470 -> 17,913,531 calls at 40 households (seed 39), with no pool manifest moved.",
      "class": "within",
      "why": "A measured step toward SC-009's target, not a claim that SC-009 is met and not a lowering of it; figures carry date, method and log path."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T56 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T56-6a exit metric",
+     "summary": "Green restated from 'each site converted, its chain at least tenfold down' to 'the sites' measured share removed, each chain measured before and after'.",
+     "class": "within",
+     "why": "The per-chain tenfold was the plan's own split of SC-009, not a spec requirement; SC-009's whole-roll 6.3M bound is untouched by this block, and the before/after measurement FR-012 asks for is kept."
+    },
+    {
+     "id": "T56-6b geometry counted",
+     "summary": "The most-asked geometry work (T63, T64, T65) counted toward T56's removed share alongside the wells' registry admission.",
+     "class": "within",
+     "why": "Speed work worked and ordered by the calls it removes, which is FR-013 and the GM's 'Speed first' amendment; it narrows nothing asked."
+    },
+    {
+     "id": "T56-7 patches lattice",
+     "summary": "Open-ground patches: the scan's lattice asked of the region in one array read (Region.taken_many), _ok asked only of the seats left open, the same seats qualifying.",
+     "class": "within",
+     "why": "This is FR-012's mechanism applied literally: the refusals that need no layout asked of the whole candidate set at once before any candidate is laid out."
+    },
+    {
+     "id": "T56-6c sites left",
+     "summary": "The stands' seats, the notice board's route seats and the bamboo strips 'left where they stand', unconverted, on the ground that each is a few hundred thousand calls at most.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-012 is universal: every placer that lays a candidate out and then refuses it has its no-layout refusals asked of the whole set at once; the GM named trial search 'one of the big things that we need to target'. FR-013 lets size set the ORDER, nothing in request.md or the spec lets size DROP a site. The only ground given is that the sites are small - a not-worth-it argument, not impossibility, not implied by the GM's words, not purpose-defeating. The authority cited, the round arbiter's ruling on ask:417-lane-close, is not in the bundle and its name does not name these sites; a ruling the reviewer cannot read cannot carry a scope change - if it does release them from FR-012, its text belongs in the bundle or the spec amended. The block contradicts itself: item 1 still lists the bamboo strips and the notice board's seats among the sites to be converted. 'Left where they stand' names no later task that owns them, so as written they are dropped, not deferred. Also unclear: item 1 says 'grove clumps', item 6 'the stands' seats'; if these differ, the grove clumps are unaccounted for in the new exit."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T56 Approach (checklist part A)",
+    "### T66 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T56/T66 deferral",
+     "summary": "T56 lands the wells' registry admission and the open-ground patches' lattice in the speed lane; the grove clumps (stands _seat, row 10), the notice board's route seats (row 11) and the bamboo strips (row 9) move to a new task T66 worked in the correctness phase, after the speed lane.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Departs from FR-013's literal order (call-cutting tasks before tasks that only make seeds pass). The departure is schedule-only: FR-012 coverage is untouched (all three sites still named for conversion by construction, same placements, in T66), SC-009's roll-wide bound is neither claimed met nor relaxed, FR-008 still gates every T66 landing (cohort, pinned rows, claims round), and T66 is a filed task with its own green and red exits (red through make arbiter-ask), not a parking spot - this is what cures the earlier BLOCKED text, 'left where they stand'. The GM's own words set the gradient this follows: 'the things that will give us the most performance gains will happen at the very beginning', and FR-013's 'ordered by the calls each removes' writes it down; these three are the smallest measured sites, so they fall last on that ordering. The GM's 2026-10-25 amendment also sends exactly this kind of algorithmic-ordering question to the project's processes rather than to himself. Seam checked: the three sites are one class (each a candidate-set placer whose refusals are re-asked per candidate, each measured 2026-10-27 at a small call share: 9,971 seats, 1,561 _fits over 42 routes, 833 strips), so one justification covers them. The ruling stands on request.md; the round arbiter's ruling ask:417-lane-close is quoted in the block but arbiter.jsonl is not in the bundle and was not read, so it corroborates rather than grounds this ruling."
+    },
+    {
+     "id": "T56 exit restated",
+     "summary": "T56's green exit restated from the plan's per-chain 'at least tenfold down' to 'the sites' measured share removed', each chain measured before and after.",
+     "class": "within",
+     "why": "The per-chain tenfold target was the plan's own split of SC-009; SC-009 itself is a roll-wide bound (6.3M calls at 40 households, seed 39) that this block does not touch or relax."
+    },
+    {
+     "id": "T56 patches lattice",
+     "summary": "The open-ground patches' scan lattice asked of the region at once (Region.taken_many), _ok asked only of the seats left open, the same seats qualifying; no pool manifest moved.",
+     "class": "within",
+     "why": "Exactly FR-012's 'refusals that need no layout asked of the whole set at once', with FR-008 held (same placements, no map moved)."
+    },
+    {
+     "id": "T66 method and budget",
+     "summary": "Each of the three sites converted by asking its cheap refusals of its candidate set at once through the region and grid it already reads, same placements; one landing per site; calls before and after from make perf-fanout, recorded in inventory/trial.md; no constant moves.",
+     "class": "within",
+     "why": "Carries FR-012 for inventory rows 9-11 and FR-008 at each landing; nothing is excluded from the conversion."
     }
    ]
   }

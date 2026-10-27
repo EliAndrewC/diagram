@@ -634,15 +634,15 @@ Each step measured alone:
 
 ### T56 Approach (checklist part A)
 
-1. **The goal, in the world.** The rest of the trial inventory's sites converted, largest first: the wells' registry admission, the bamboo strips, the open-ground patches, the grove clumps and the notice board's seats, as the inventory ranks them (`inventory/trial.md` rows 6-11).
+1. **The goal, in the world.** The rest of the trial inventory's sites converted, largest first (`inventory/trial.md` rows 6-11): the wells' registry admission and the open-ground patches here; the bamboo strips, the grove clumps and the notice board's seats in T66 (item 6).
 2. **The constraints.** FR-012, FR-013, User Story 5, FR-008; each placer's rules unchanged.
 3. **Where each comes from.** The trial inventory.
 4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
    task to the chains that still stand (FR-012).
 5. **The order.** After the field, before the overlap registry's resync.
-6. **The exits.** Green: each site converted, its chain at least tenfold down (a site already gone when item 4 re-measures counts), the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
+6. **The exits.** Green (restated by the round arbiter's ruling on ask:417-lane-close, 2026-10-27; it was "each site converted, its chain at least tenfold down", the plan's split of SC-009): the sites' measured share removed - the wells' registry admission and the most-asked geometry (T63, T64, T65), the open-ground patches' lattice asked of the region at once - each chain measured before and after, the fixed cohort and the pinned rows passing (FR-008), the claims round clean; the grove clumps (the stands' `_seat`, inventory row 10), the notice board's route seats and the bamboo strips, each a few hundred thousand calls at most (measured 2026-10-27 by `make perf-profile` and the subtree estimator, which over-counts), DEFERRED to T66 in the correctness phase, not dropped. The ruling (ask:417-lane-close, 2026-10-27, `arbiter.jsonl`; its shares measured 2026-10-27 (`make perf-profile`, throwaway call counters)): "The T11/T12 precedent moves a pool-wide rewrite that buys about 1% to the correctness phase. T56's remaining sites (a few hundred thousand calls at most, by an estimator that over-counts) and T14 ... fall under it"; "Land T56's measured part (the patches' lattice, -52k, no manifest moved) and close T56 at that share."
    Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: each site's cheap refusals asked of its candidate set at once.
+7. **The search smell.** None: each site's cheap refusals asked of its candidate set at once. The patches: the scan's lattice asked of the open-ground region in one array read (`Region.taken_many`), `_ok` asked only of the seats it leaves open - a taken seat fails `_ok`, and with no crop every seat does - the same seats qualifying (hinterland 2,596,223 -> 2,543,957 calls at 40 households on seed 39, measured 2026-10-27 by `make perf-fanout STAGES=hinterland`; no pool manifest moved, observed 2026-10-27, method: `make maps`, `make maps-moved`).
 8. **The budget.** One landing per chain group; a group that moves a map judged by the cohort.
 9. **Done, measured.** Each chain's calls before and after from `make perf-fanout`, recorded in `research/`.
 10. **Before moving a constant.** n/a: the rules' figures stay as they are.
@@ -1287,3 +1287,26 @@ Each step measured alone:
 <!-- plan-archive: T64 to T64 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
 
 <!-- plan-archive: T65 to T65 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
+
+### T66 Approach (checklist part A)
+
+1. **The goal, in the world.** The last three sites of the trial inventory converted by construction (FR-012), deferred from T56 by the round arbiter's ruling on ask:417-lane-close: the windbreak's grove clumps (`homestead_parts/stands.py` `_seat`, inventory row 10), the notice board's route seats (`structures/fixtures/siting.py` `_route_seats`, row 11) and the bamboo strips (`homesteads/bamboo.py` `strip_refused`, row 9) - each candidate's cheap refusals asked of its candidate set at once, the same placements.
+2. **The constraints.** FR-012, FR-008; each placer's rules unchanged.
+3. **Where each comes from.** `inventory/trial.md` rows 9-11; T56's re-measure (measured 2026-10-27 by `make perf-profile SEED=39 STAGE=<stage> HOUSEHOLDS=40`: the clumps 9,971 seats, the notice board 1,561 `_fits` over 42 routes, the bamboo 833 strips).
+4. **Do they describe the world here?** Re-measured first, as every speed task's item 4.
+5. **The order.** In the correctness phase, after the speed lane (FR-013 orders by calls removed; each is a few hundred thousand calls at most).
+6. **The exits.** Green: each site's candidates asked at once where its refusals need no layout, its calls measured before and after, the fixed cohort and the pinned rows passing, the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the refusals asked of the candidate set through the region and grid each site already reads.
+8. **The budget.** One landing per site.
+9. **Done, measured.** Each site's calls before and after (`make perf-fanout`), recorded in `inventory/trial.md`.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| each site | its chain in `make perf-fanout` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
