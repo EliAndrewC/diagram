@@ -432,6 +432,35 @@ The trigger: the landing cohort (cohort@20261025T234214Z) refused seeds 10, 25 a
 8. **Routes measured?** None offered: the measurement first.
 9. **After a ruling.** None yet.
 
+### T31 part C (2026-10-27): each needed step's conversion decided (D35, D11 as amended; built by T06)
+
+The six steps R8 found NEEDED, and the last resort, each with the placer its rule moves into. Probed off alone they refuse
+seeds (R8), so none is deleted before its conversion lands; T06 builds them in the order below, each landed under FR-008.
+
+1. **`settle_ends`** (R8: seed 21 `lane_knots`). Its end rules - a shallow crossing, a connector hairpin, a needle end, a folded
+   joint, a doubled tail, a fronting end, a dangling end - are asked by `Lawful` of each candidate lane where it is laid (the
+   skeleton's arms, the web's runs, the door paths, the orphan links), and a run whose end breaks one is laid shorter at lay or
+   not drawn - never drawn and cut.
+2. **`settle_defer`** (R8: seed 47 `WebRefused`). The tree is drawn first since T44, so every ordinary lane is laid against it:
+   `Lawful(tree=True)` asks each candidate the rules `tree_faults` asks of the finished web, and a run that breaks one against a
+   tree lane is not drawn.
+3. **`settle_network`** (R8: 11 seeds). Every placer lays only a lane joined to the connector's network: the candidate's join is
+   asked of the network (`served_network`, made incremental by T53) before it is drawn, as `lay_reachable_runs` already asks of
+   the web's runs.
+4. **`settle_fragments`** (R8: seed 36; asked now only by the last resort). A run shorter than `law.short_fragments`' length is
+   not drawn - the length asked of the candidate.
+5. **`settle_knots`** (R8: 13 seeds). An end laid within the knot reach of a junction (`KNOT_FT`, research 0081's ends-within-25-ft rule) is laid AT the junction by its placer, as the
+   household ways' feet already are (`gap_ways.gathered_foot`), for every placer that lays an end.
+6. **`settle_reach`** (R8: a placer; P1: seeds 13 and 26 need it in the rounds). Once 1-5 are built no cut strands a way, and the
+   reach is drawn once, after the web is laid; until then it stays in the rounds.
+7. **The last resort, `unsettled` and `refuse_unmended`** (FR-006). Once 1-6 hold, the finished-web law (`keeper.unsettled`, the
+   last resort's `lane_breaches`, `refuse_unmended`, and `refuse_unreached`'s reading of the finished web) runs in the cohort and
+   the tests only, calling the same predicates. A way the reach owes - a household's way, a way target's spur, the field way - that
+   no admitted candidate can lay is refused by the placer that seeks it, where its candidate search ends empty (`settle_tree`,
+   `settle_targets`, `settle_field` asking `Lawful` of each run, FR-007's case); the room that would let it be laid is T08's.
+
+Each is a conversion decided before code (T31's exit, item 6). No step is an exception; none is asked of the arbiter.
+
 ### T31 conversion C1 (2026-10-26): one width a way, asked where the orphan link is laid
 
 D11's conversion of `settle_widths`, which only the last resort still asks (T41). Measured first (observed 2026-10-25; method:

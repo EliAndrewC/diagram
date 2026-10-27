@@ -372,6 +372,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-26",
    "declared": "spec-fidelity"
+  },
+  "### T31 part C (2026-10-27): each needed step's conversion decided (D35, D11 as amended; built by T06)": {
+   "sha256": "8ded2247cb62db5c38a2ad3d5cdce89fe079c0e50d31d70b64daf03228063bbc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4287,6 +4293,133 @@
      "summary": "First of the tasks after the speed tasks; green = each copy made one at recorded value or labeled GUESS with FR-008 holding; red = set down with arbiter ruling; one landing per group; a GUESS is a knob free to move within the research; more room within the research before fitting.",
      "class": "within",
      "why": "The order is FR-013 and the GM's confirmed order. Treating a GUESS as a movable knob carries the GM's 'avoid falling into the trap where we set a number arbitrarily ... it can change if needed'. Item 11 restates FR-007. Unchanged since the CLEAR verdict apart from item 1."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T31 part C (2026-10-27): each needed step's conversion decided (D35, D11 as amended; built by T06)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T31C-0 order",
+     "summary": "No needed step is deleted before its conversion lands; T06 builds them in the listed order, each landed under FR-008.",
+     "class": "within",
+     "why": "D35: needed steps get D11's conversion, landed through make land once FR-008 holds. Sequencing only."
+    },
+    {
+     "id": "T31C-1 settle_ends",
+     "summary": "The end rules are asked by Lawful of each candidate lane where it is laid (skeleton arms, web runs, door paths, orphan links); a run whose end breaks one is laid shorter at lay or not drawn, never drawn and cut.",
+     "class": "within",
+     "why": "FR-004/FR-006 and D35: the rule asked by the placer of a candidate before it is placed, predicate and placers named."
+    },
+    {
+     "id": "T31C-2 settle_defer",
+     "summary": "With the tree drawn first (T44), Lawful(tree=True) asks each candidate the tree_faults rules; a run that breaks one against a tree lane is not drawn.",
+     "class": "within",
+     "why": "FR-006: the finished-web rule becomes the predicate asked of the candidate; one implementation of the rule (SC-003)."
+    },
+    {
+     "id": "T31C-3 settle_network",
+     "summary": "Every placer lays only a lane joined to the connector's network, its join asked of served_network (incremental by T53) before it is drawn.",
+     "class": "within",
+     "why": "FR-004/FR-006 by construction; T53 is one of the speed tasks FR-013 already orders."
+    },
+    {
+     "id": "T31C-4 settle_fragments",
+     "summary": "A run shorter than law.short_fragments' length is not drawn, the length asked of the candidate.",
+     "class": "within",
+     "why": "FR-006; uses the lane law's single recorded value (D11)."
+    },
+    {
+     "id": "T31C-5 settle_knots",
+     "summary": "An end within KNOT_FT (research 0081) of a junction is laid AT the junction by its placer, as gathered_foot already does, for every placer that lays an end.",
+     "class": "within",
+     "why": "FR-004/FR-006: the end is placed at the junction at lay, not moved after; the value is research-sourced (D11)."
+    },
+    {
+     "id": "T31C-6 settle_reach",
+     "summary": "settle_reach stays in the rounds until 1-5 are built; then the reach is drawn once after the web is laid.",
+     "class": "within",
+     "why": "D35 records settle_reach as a placer, not a repair; drawing it once after the web is the placer's construction. Its stay in the rounds is sequencing, and the premise (no cut strands a way) follows from 1-5 removing the cuts, not from an unmeasured figure."
+    },
+    {
+     "id": "T31C-7a last resort to cohort/tests",
+     "summary": "Once 1-6 hold, keeper.unsettled / lane_breaches / refuse_unmended run in the cohort and the tests only, calling the same predicates.",
+     "class": "within",
+     "why": "FR-006 verbatim: one finished-map check per rule, in the cohort and the tests only, calling the placer's predicate."
+    },
+    {
+     "id": "T31C-7b refuse_unreached stays",
+     "summary": "refuse_unreached stays in the generator as the one refusal a map that cannot be reached gets (FR-007's room is T08's).",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A carve-out from the very relocation 7a makes. FR-006: every check the generator runs on what it has already placed is deleted; only a predicate asked of a candidate before it is placed stays. The GM: place then check is not wanted ANYWHERE. The block names no placer and no predicate for refuse_unreached (every other item does) and its subject is a map, not a candidate, so on its own text it is a finished-map refusal kept in the generator. Not physically impossible (the map can be emitted and the cohort's finished-web check records it); not implied by the GM's words (the stop line defers room work, it does not keep a generator check); it preserves existing behavior the GM did not ask to preserve. The parenthetical is a reason room waits, not a reason the check survives. Fix: either move refuse_unreached to the cohort and tests with the rest of the finished-web law, or rewrite the sentence to name the placer that raises it when it finds no admitted candidate and the predicate it asks - at which point it is FR-007's case and within. The closing line 'No step is an exception' must then be true."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-26",
+   "blocks": [
+    "### T31 part C (2026-10-27): each needed step's conversion decided (D35, D11 as amended; built by T06)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T31C-order",
+     "summary": "No NEEDED step is deleted before its conversion lands; T06 builds the seven in the listed order, each landed under FR-008.",
+     "class": "within",
+     "why": "D35: each NEEDED step gets D11's conversion decided before code and lands through make land once FR-008 holds; R8 shows each refuses seeds when merely switched off."
+    },
+    {
+     "id": "T31C-1 settle_ends",
+     "summary": "End rules asked by Lawful of each candidate lane at lay; a run whose end breaks one is laid shorter at lay or not drawn, never drawn and cut.",
+     "class": "within",
+     "why": "FR-004/FR-006 and the 'place then check' rule: the predicate is asked of the candidate before it is placed; predicate and placers named as D35 requires."
+    },
+    {
+     "id": "T31C-2 settle_defer",
+     "summary": "Lawful(tree=True) asks each ordinary candidate the tree_faults rules against the already-drawn tree; a breaking run is not drawn.",
+     "class": "within",
+     "why": "Same rule moved from a finished-web check into the candidate's admission (FR-006's 'predicate asked of a candidate')."
+    },
+    {
+     "id": "T31C-3 settle_network",
+     "summary": "Every placer lays only a lane joined to the connector network, the join asked of served_network (incremental via T53) before drawing.",
+     "class": "within",
+     "why": "Construction instead of repair (FR-004); making the predicate incremental is a speed task the GM approved under FR-012/FR-013."
+    },
+    {
+     "id": "T31C-4 settle_fragments",
+     "summary": "A run shorter than law.short_fragments' length is not drawn.",
+     "class": "within",
+     "why": "One rule at the lane law's own value (D11), asked of the candidate (FR-006)."
+    },
+    {
+     "id": "T31C-5 settle_knots",
+     "summary": "An end laid within KNOT_FT of a junction is laid at the junction by its placer, for every placer that lays an end.",
+     "class": "within",
+     "why": "Rule moved into its placers at the research's recorded value (research 0081), as gap_ways already does; no new value chosen."
+    },
+    {
+     "id": "T31C-6 settle_reach",
+     "summary": "settle_reach stays in the rounds until 1-5 are built, then the reach is drawn once after the web is laid.",
+     "class": "within",
+     "why": "D35 records settle_reach as a placer, not a repair; keeping it until its dependencies land is FR-008 sequencing, not a carve-out."
+    },
+    {
+     "id": "T31C-7 last resort",
+     "summary": "Once 1-6 hold, the finished-web law (keeper.unsettled, lane_breaches, refuse_unmended, refuse_unreached's reading of the finished web) runs only in the cohort and tests on the same predicates; a way the reach owes that no admitted candidate can lay is refused by the placer that seeks it when its candidate search ends empty (settle_tree, settle_targets, settle_field asking Lawful of each run); the room to lay it is T08's.",
+     "class": "within",
+     "why": "FR-006 verbatim: finished-map checks run in the cohort and tests only, and every check the generator runs on what it has already placed is deleted. The earlier text kept refuse_unreached as a generator-side finished-web refusal; this text removes that and moves the refusal to the empty candidate search, which is FR-007's case. Deferring the room itself to T08 follows D11's stop line ('no FR-007 room work ... until the GM resumes it'), so it is not a narrowing."
+    },
+    {
+     "id": "T31C-no-exceptions",
+     "summary": "Each conversion is decided before code; none is written as an exception or sent to the arbiter.",
+     "class": "within",
+     "why": "D35 sends to the arbiter only a conversion claimed unable to land green; the block claims none, so nothing is set down."
     }
    ]
   }

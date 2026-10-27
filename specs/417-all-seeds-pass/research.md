@@ -252,6 +252,11 @@ committed pool. The probes took about 13 min a step at 3 workers.
 | `settle_knots` | 41/54 - 13 seeds `lane_knots` | Inashiro |
 | `settle_widths` | 54/54 | Inashiro, Kashikawa, Sawada |
 
+P1 (observed 2026-10-27; method: as above, in the detached worktree `wt31` at fb19852b5, `settle_reach` taken out of `STEPS` and
+called once before the rounds; `make cohort N=48 FRESH=0 JOBS=3`): 52 of 54 - seeds 13 and 26 `WebRefused`, "the field is reached
+by no way". The rounds' `settle_ends` cuts the field way `settle_reach` drew, and only a later round's `settle_reach` draws it
+again - so the reach stays in the rounds until the cuts it answers are made at lay (T31 part C, the conversion T06 builds).
+
 So, by D35: six steps change nothing measured - `settle_husks`, `settle_street_ends`, `settle_shadows`, `settle_joins`,
 `settle_needles`, `prune_the_tree` - and are NEEDLESS; four keep every fixed and pinned verdict but move a pool map -
 `square_every_crossing`, `settle_shapes`, `settle_way_outs`, `settle_widths` - so whether they are needless is the pool gate's
