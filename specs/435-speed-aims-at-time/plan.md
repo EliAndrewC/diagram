@@ -77,31 +77,7 @@ size, fixtures) and moved into place; the wells' seats screened by a feasibility
 ## Task approaches
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
-### T02 Approach (checklist part A)
-
-1. **The goal, in the world.** The earlier call-cutting changes timed group by group, reverted where they bought no time (D6).
-2. **The constraints.** FR-004, FR-006; SC-003.
-3. **Where each comes from.** `spec.md`; the A/B of the engine before 417's lane against HEAD, measured 2026-10-27 (make perf
-   SCALING=1 alternated in two worktrees).
-4. **Do they describe the world here?** Yes: the eight commits FR-004's search returns.
-5. **The order.** After T01 (it uses `make perf-ab`).
-6. **The exits.** Green: every arm's evidence recorded, the reverted arms landed with no pool manifest moved and the cohort
-   passing.
-   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: a measurement per arm.
-8. **The budget.** One landing per feature's set of reverted arms.
-9. **Done, measured.** Not yet measured.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-Each step measured alone:
-
-| step | measured by |
-|---|---|
-| each arm's time | `make perf-ab` against HEAD |
-| no map moved | `make maps-moved` |
-| no seed regressed | `make cohort-landing` |
-
+<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
 ### T03 Approach (checklist part A)
 
 1. **The goal, in the world.** The three cheap fixes (D7), each its own task filed with `PERF=1`, its checklist answered.
