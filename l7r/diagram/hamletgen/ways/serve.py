@@ -549,10 +549,6 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
             own_law = copy.copy(lawful)
             own_law.owner = (float(h["x"]), float(h["y"]))  # ...its household's own way, beside its own garden (405 T18)
             path = door_path(s, d, segs, hard, walls, water, quads, own_law, bands)  # type: ignore[arg-type]
-            if path is not None:
-                # ...ITS FOOT GATHERED ONTO A JUNCTION STANDING a few feet beside it (feature 417 T06 part D, 0081: ends within 25 ft
-                # are joined at a single point), judged as the path is; its door end never moves
-                path = next((g for g in gathered_forms(s, path, (-1,), lazy_ground(s.M, s)) if own_law(g, 3.0)), path)
             if path is not None and _draw_web(s, path, 3, houses=[(float(h["x"]), float(h["y"]))], joins=True):
                 s.M["lanes"][-1]["serves"] = [float(h["x"]), float(h["y"])]
                 if k > 0:
@@ -699,14 +695,22 @@ def door_path(
             and forbidden_segment(s.M, "lanes", [a, b], 3.0) is None
         )
 
-    def kept(path: list[Pt], clear: Any) -> list[Pt] | None:
-        path = to_first_arrival(path, segs, _TOUCH_GAP, clear)
-        path = square_run(s.M, path) if len(path) >= 2 else path
+    def sound(path: list[Pt]) -> bool:
         ok_ = len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and not _crosses_fabric(path, bands, FOOTPATH_FABRIC_GAP)
         ok_ = ok_ and over_a_fixture(path, 3.0, quads) is None and lawful(path, 3.0)
         # ...AND CLOSES NO NEEDLE WITH THE WAYS IT MEETS (feature 374 wave 146): a door path is a tree lane no settle may cut, so
         # one laid up beside its street to meet it left a sliver the web was refused for (dike-pond seed 3, polder seed 4)
-        return path if ok_ and not closes_a_needle(s.M.get("lanes") or [], path) else None
+        return ok_ and not closes_a_needle(s.M.get("lanes") or [], path)
+
+    def kept(path: list[Pt], clear: Any) -> list[Pt] | None:
+        path = to_first_arrival(path, segs, _TOUCH_GAP, clear)
+        path = square_run(s.M, path) if len(path) >= 2 else path
+        if not sound(path):
+            return None
+        # ...ITS FOOT GATHERED ONTO A JUNCTION STANDING a few feet beside it (feature 417 T06 part D, 0081: ends within 25 ft are
+        # joined at a single point), each new leg walkable and the whole kept as the path is; its door end never moves
+        gathered = (g for g in gathered_forms(s, path, (-1,), lazy_ground(s.M, s)) if all(clear(a, b) for a, b in zip(g, g[1:], strict=False)) and sound(g))
+        return next(gathered, path)
 
     def lawful_step(a: Pt, b: Pt) -> bool:
         # a step the footpath's own test passes and the law's ground half keeps (`Lawful.on_lawful_ground`): 7 ft off a fence

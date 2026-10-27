@@ -450,6 +450,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
+  },
+  "### T70 Approach (checklist part A)": {
+   "sha256": "9322f7b5276cbc8dbf8cbabe52f34a9edb02ef69459f8dea51a3655190e34f7c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5281,6 +5287,51 @@
      "why": "A map-moving correctness task placed after the speed tasks is the order the GM asked for on 2026-10-26 ('prioritize the things that will make us go faster before the things that will make us correct')."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T70 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T70-1 gather at lay",
+     "summary": "Each ordinary lane end (skeleton arm, web run, way onto the bund) and each door path's foot that would arrive within the knot reach of a junction already standing is moved onto that junction at lay, before it is drawn (lay.gathered_forms), per research 0081 (ends within 25 ft joined at a single point).",
+     "class": "within",
+     "why": "This is the conversion the request asks for: a rule asked of a candidate before it is placed rather than a knot placed and then repaired by settle_knots (FR-004 'lanes are laid only where the lane law admits them; the settle's repair steps ... are deleted'; the GM 2026-10-24 'place then check is not something we want anywhere'). It changes behavior in line with the research, which the GM ruled fine on 2026-10-25."
+    },
+    {
+     "id": "T70-2 the new lane's end moved, never a drawn lane's",
+     "summary": "Only the arriving lane's end is moved onto the standing junction; a lane already drawn is never moved for a new one.",
+     "class": "within",
+     "why": "Moving an already-placed lane to fit a newcomer would itself be place-then-repair; constraining the move to the candidate is the request's rule applied, not an exception to it."
+    },
+    {
+     "id": "T70-3 gathered form asked through the end rules, refused back to the run as it came",
+     "summary": "Each gathered form is asked through the existing end rules (_held); if refused, the run is laid as it came.",
+     "class": "within",
+     "why": "The predicate is asked of the candidate before placement (FR-006: 'what stays in the generator is the predicate asked of a candidate before it is placed'); the knot rule's predicate itself is unchanged (FR-004 one predicate per rule). Falling back to the un-gathered run adds no new rule and no post-placement check."
+    },
+    {
+     "id": "T70-4 settle_knots kept as a step for the households' ways' knots; KNOTTED_TRIES fallback not touched here",
+     "summary": "settle_knots stays in STEPS, now mending only the knots between households' ways (and against the connector), until gap_ways gathers at its own lay; the KNOTTED_TRIES fallback is priced from this task's measure and goes through make arbiter-ask before it is touched.",
+     "class": "within",
+     "why": "Sequencing, not a carve-out: the block names itself the second of T06's four conversions with settle_network and the last resort following in T06, and states the condition under which settle_knots goes (the households' ways gathered at their own lay). It does not declare settle_knots or the fallback permanent or exempt from FR-004/FR-012; it narrows only what this one landing does, which the GM left to the session ('I don't care whether you do it one at a time or all at once', 2026-10-25). Any later decision to keep the fallback would be a narrowing needing its own ruling."
+    },
+    {
+     "id": "T70-5 exits",
+     "summary": "Green: landing cohort passing, fresh block from 520001 no seed worse than T67's 48/54, every moved pool manifest named, claims round clean. Red: failure recorded, task set down, a cannot-be-done claim ruled via make arbiter-ask.",
+     "class": "within",
+     "why": "Carries FR-008 (no regression on the fixed cohort, pinned rows, pool maps; research claims hold) and FR-009/FR-011's no-seed-worse intent; the red exit routes a cannot-be-done claim to the arbiter rather than relaxing the requirement."
+    },
+    {
+     "id": "T70-6 no constant moves",
+     "summary": "The gather uses the existing knot reach (knots.lane_knots' reach, ground_apart); no constant changes.",
+     "class": "within",
+     "why": "Keeps FR-004's predicate unchanged; nothing is retuned."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6124,6 +6175,50 @@
      "summary": "Green needs the fresh block from 520001 no worse seed by seed (FAIL lines as well as REFUSED), make cohort-landing passing, every moved pool manifest named with web_settle.dropped unchanged, and the claims round clean. Red sets the task down and goes to the arbiter.",
      "class": "within",
      "why": "FR-008 (no regression; the research claims hold). The fresh-block comparison is enforcement of the feature's 'all seeds pass' purpose and FR-008, not unrequested verification."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T70": {
+   "section_sha256": "9322f7b5276cbc8dbf8cbabe52f34a9edb02ef69459f8dea51a3655190e34f7c",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T70-1 gather at lay",
+     "summary": "Each ordinary lane end (skeleton arm, web run, way onto the bund) and each door path's foot that would arrive within the knot reach of a junction already standing is moved onto that junction at lay, before it is drawn (lay.gathered_forms), per research 0081 (ends within 25 ft joined at a single point).",
+     "class": "within",
+     "why": "This is the conversion the request asks for: a rule asked of a candidate before it is placed rather than a knot placed and then repaired by settle_knots (FR-004 'lanes are laid only where the lane law admits them; the settle's repair steps ... are deleted'; the GM 2026-10-24 'place then check is not something we want anywhere'). It changes behavior in line with the research, which the GM ruled fine on 2026-10-25."
+    },
+    {
+     "id": "T70-2 the new lane's end moved, never a drawn lane's",
+     "summary": "Only the arriving lane's end is moved onto the standing junction; a lane already drawn is never moved for a new one.",
+     "class": "within",
+     "why": "Moving an already-placed lane to fit a newcomer would itself be place-then-repair; constraining the move to the candidate is the request's rule applied, not an exception to it."
+    },
+    {
+     "id": "T70-3 gathered form asked through the end rules, refused back to the run as it came",
+     "summary": "Each gathered form is asked through the existing end rules (_held); if refused, the run is laid as it came.",
+     "class": "within",
+     "why": "The predicate is asked of the candidate before placement (FR-006: 'what stays in the generator is the predicate asked of a candidate before it is placed'); the knot rule's predicate itself is unchanged (FR-004 one predicate per rule). Falling back to the un-gathered run adds no new rule and no post-placement check."
+    },
+    {
+     "id": "T70-4 settle_knots kept as a step for the households' ways' knots; KNOTTED_TRIES fallback not touched here",
+     "summary": "settle_knots stays in STEPS, now mending only the knots between households' ways (and against the connector), until gap_ways gathers at its own lay; the KNOTTED_TRIES fallback is priced from this task's measure and goes through make arbiter-ask before it is touched.",
+     "class": "within",
+     "why": "Sequencing, not a carve-out: the block names itself the second of T06's four conversions with settle_network and the last resort following in T06, and states the condition under which settle_knots goes (the households' ways gathered at their own lay). It does not declare settle_knots or the fallback permanent or exempt from FR-004/FR-012; it narrows only what this one landing does, which the GM left to the session ('I don't care whether you do it one at a time or all at once', 2026-10-25). Any later decision to keep the fallback would be a narrowing needing its own ruling."
+    },
+    {
+     "id": "T70-5 exits",
+     "summary": "Green: landing cohort passing, fresh block from 520001 no seed worse than T67's 48/54, every moved pool manifest named, claims round clean. Red: failure recorded, task set down, a cannot-be-done claim ruled via make arbiter-ask.",
+     "class": "within",
+     "why": "Carries FR-008 (no regression on the fixed cohort, pinned rows, pool maps; research claims hold) and FR-009/FR-011's no-seed-worse intent; the red exit routes a cannot-be-done claim to the arbiter rather than relaxing the requirement."
+    },
+    {
+     "id": "T70-6 no constant moves",
+     "summary": "The gather uses the existing knot reach (knots.lane_knots' reach, ground_apart); no constant changes.",
+     "class": "within",
+     "why": "Keeps FR-004's predicate unchanged; nothing is retuned."
     }
    ],
    "verdict": "CLEAR"
