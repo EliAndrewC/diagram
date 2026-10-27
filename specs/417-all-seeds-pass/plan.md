@@ -713,3 +713,152 @@ The trigger: cohort@20261026T051100Z, seeds 11, 12, 23, 29, 901 and 903 newly fa
 10. **Before moving a constant.** n/a: the spur's constants go with their only users.
 11. **Before fitting things into room.** n/a.
 
+
+### T52 Approach (checklist part A)
+
+1. **The goal, in the world.** Every search by trial in the engine known and costed before any is converted: each placer that
+   lays a candidate out in full and then refuses it, and each check asked again of a whole network as it grows.
+2. **The constraints.** FR-012, FR-013, User Story 5; the GM 2026-10-26 (`request.md` "Speed first").
+3. **Where each comes from.** The GM's words; the session's measurements of 2026-10-26 (`spec.md` User Story 5).
+4. **Do they describe the world here?** Measured first: `make perf-fanout` (every stage, both sizes) and `make perf-profile` of
+   each stage at the survey's larger size, on the engine as it stands.
+5. **The order.** First of the speed tasks (FR-013): it ranks the rest.
+6. **The exits.** Green: `inventory/trial.md` lists each site with where it is, what it lays out before refusing, its calls and
+   seconds at 40 households, and the task that converts it; every site over 50,000 calls has a task.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: a measurement and a list.
+8. **The budget.** No engine change; one commit.
+9. **Done, measured.** The list's rows against the survey's chains.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the sites found | `make perf-fanout`, `make perf-profile` per stage |
+| each site's cost | its calls and profiled seconds in the record |
+
+
+### T53 Approach (checklist part A)
+
+1. **The goal, in the world.** The same lane web, its whole-network checks (`served_network`, `lanes_share_tread` and the rest the trial inventory names) asked of the lanes a step added or moved, not of every pair of lanes again.
+2. **The constraints.** FR-012, FR-013, User Story 5, FR-008; the lane law's rules unchanged (FR-004).
+3. **Where each comes from.** `spec.md` User Story 5's measurement (the check asked of every pair of lanes at each of its calls); the trial inventory.
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
+   task to the chains that still stand (FR-012).
+5. **The order.** After the trial inventory, before the web laid by the law: the largest single search by trial in the web.
+6. **The exits.** Green: the web's whole-network checks asked incrementally, their calls at least tenfold down, the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the same predicate asked of a smaller set; an index the plan names (`settlement/_geom/indexes.py`).
+8. **The budget.** One landing per chain group; a group that moves a map judged by the cohort.
+9. **Done, measured.** Each chain's calls before and after from `make perf-fanout`, recorded in `research/`.
+10. **Before moving a constant.** n/a: the rules' figures stay as they are.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the chains re-scoped | `make perf-fanout` (every stage) |
+| each converted | its calls in `make perf-fanout`, `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
+### T54 Approach (checklist part A)
+
+1. **The goal, in the world.** The same household ways, each household's candidate exits refused by the tests that need no traced way - its corridor's ground, its own parts, the tree's reach - before any is traced, pulled taut and judged by the ways tree.
+2. **The constraints.** FR-012, FR-013, User Story 5, FR-008; the ways' admission rules unchanged (the tree's `judge` stays the verdict).
+3. **Where each comes from.** `spec.md` User Story 5's measurement (the households' ways traced and judged); the trial inventory.
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
+   task to the chains that still stand (FR-012).
+5. **The order.** After the web's laying (the households' ways are the web's first layer).
+6. **The exits.** Green: `gap_ways`' admission chain at least tenfold down, the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the candidates' cheap refusals asked as one array or index pass; no new search.
+8. **The budget.** One landing per chain group; a group that moves a map judged by the cohort.
+9. **Done, measured.** Each chain's calls before and after from `make perf-fanout`, recorded in `research/`.
+10. **Before moving a constant.** n/a: the rules' figures stay as they are.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the chains re-scoped | `make perf-fanout` (every stage) |
+| each converted | its calls in `make perf-fanout`, `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
+### T55 Approach (checklist part A)
+
+1. **The goal, in the world.** The same homesteads seated, a candidate seat's refusals that need no layout - the envelope off the ground, the placed boxes, the region - asked of every candidate at once, so a homestead is laid out in full (its reach, its four garden sides, its fixtures) only at a seat that can stand; the per-seat rolls kept (feature 297 plan C, research R9).
+2. **The constraints.** FR-012, FR-013, User Story 5, FR-008; R4's per-seat rolls (feature 427 T12, `ask:427-T12-r4`).
+3. **Where each comes from.** `spec.md` User Story 5's measurement (the seating's placements and reach measures); feature 427's `research/t12-r4.md`; the trial inventory.
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
+   task to the chains that still stand (FR-012).
+5. **The order.** After the households' ways, before the field.
+6. **The exits.** Green: the seating's full layouts at least tenfold down, the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the refusals asked of the candidate set through the seat region (feature 297) and the placed-box index.
+8. **The budget.** One landing per chain group; a group that moves a map judged by the cohort.
+9. **Done, measured.** Each chain's calls before and after from `make perf-fanout`, recorded in `research/`.
+10. **Before moving a constant.** n/a: the rules' figures stay as they are.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the chains re-scoped | `make perf-fanout` (every stage) |
+| each converted | its calls in `make perf-fanout`, `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
+### T56 Approach (checklist part A)
+
+1. **The goal, in the world.** The rest of the trial inventory's sites converted, largest first: the wells' registry admission, the bamboo strips, the open-ground patches, the grove clumps and the labels' least-cost seat, as the inventory ranks them.
+2. **The constraints.** FR-012, FR-013, User Story 5, FR-008; each placer's rules unchanged.
+3. **Where each comes from.** The trial inventory.
+4. **Do they describe the world here?** Re-measured first: `make perf-fanout` (every stage) on the then-current engine scopes the
+   task to the chains that still stand (FR-012).
+5. **The order.** After the field, before the overlap registry's resync.
+6. **The exits.** Green: each site's chain at least tenfold down or the site set down with its measurement, the fixed cohort and the pinned rows passing (FR-008), the claims round clean.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: each site's cheap refusals asked of its candidate set at once.
+8. **The budget.** One landing per chain group; a group that moves a map judged by the cohort.
+9. **Done, measured.** Each chain's calls before and after from `make perf-fanout`, recorded in `research/`.
+10. **Before moving a constant.** n/a: the rules' figures stay as they are.
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the chains re-scoped | `make perf-fanout` (every stage) |
+| each converted | its calls in `make perf-fanout`, `make maps-moved` |
+| no seed regressed | `make cohort-landing` (in `make land`) |
+
+
+### T57 Approach (checklist part A)
+
+1. **The goal, in the world.** Where SC-009 stands once the speed tasks have landed, before the correctness tasks start.
+2. **The constraints.** SC-009, FR-013.
+3. **Where each comes from.** `spec.md` SC-009, the GM 2026-10-26.
+4. **Do they describe the world here?** Yes: feature 427's start survey is committed (`dev/perf-log/`), so the cut compares.
+5. **The order.** Last of the speed tasks, first before the correctness tasks.
+6. **The exits.** Green: SC-009 met, measured, and reported.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: a measurement.
+8. **The budget.** One survey, one snapshot.
+9. **Done, measured.** `make perf-fanout` at 40 households against feature 427's start; `make perf LABEL=417-speed SCALING=1` for the stage times, reported, gating nothing.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+Each step measured alone:
+
+| step | measured by |
+|---|---|
+| the calls | `make perf-fanout` |
+| the stage times | `make perf LABEL=417-speed SCALING=1` |
+

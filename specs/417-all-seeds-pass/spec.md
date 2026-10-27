@@ -103,6 +103,22 @@ The repair passes, any rule coded twice and the checks the generator runs mid-ma
    before placing; an entry the session believes must stay goes to `spec-fidelity` as a proposed exception (MODE 1) and
    stays only on a LEGITIMATE ruling.
 
+### User Story 5 - A roll costs an order of magnitude less (Priority: P1)
+
+The GM, 2026-10-26 (`request.md`, "Speed first"): "we should explicitly make it one of the goals of 417 to get the kind of
+order of magnitude decrease that we believe should be possible based on the feature that we just completed". Feature 427 cut a
+40-household roll from 62.6M Python calls to about 30M by removing per-pair overhead; what is left is structural. Placing
+then repairing is this feature's FR-004 to FR-006. Search by trial is not: a placer lays a candidate out in full - a homestead
+with its fixtures, a way traced and pulled taut, a well through the registry - and only then refuses it, and a whole-network
+check is asked again of the whole network as it grows. Measured 2026-10-26 (method: `make perf-profile SEED=39 HOUSEHOLDS=40`,
+profiled seconds): the households' ways traced and judged 1.6 s, the seating's 160 placements and 416 full reach measures for 40
+houses 1.6 s, the web's settle 1.13 s, and its `served_network` check asked 45 times over every pair of lanes 0.86 s. The GM
+orders the work speed first, "because once we make things faster, then it will be easier to make them correct, because we will
+be able to iterate much more quickly."
+
+**Independent Test**: `make perf-fanout` at 40 households, seed 39, totals at most SC-009's bound; the profiles show no placer
+laying out in full a candidate a test needing no layout refuses.
+
 ### Edge Cases
 
 - A rule that can only be judged on the whole map (a lane laid after a house crossing that house's grove): the LATER placer
@@ -150,6 +166,14 @@ The repair passes, any rule coded twice and the checks the generator runs mid-ma
   only to the forms FR-008 and FR-009 do not hold to zero - the unrolled field forms; a rolled-form seed that fails is refused
   under FR-008 / FR-009 whatever HEAD shows or a row says.
 
+- **FR-012 (search by construction; the GM 2026-10-26, `request.md` "Speed first")**: every placer that lays a candidate out
+  in full and then refuses it, and every check asked again of a whole network as it grows, is listed (as FR-002 listed the
+  repair passes), each with its measured calls; where a candidate set is offered, the refusals that need no layout are asked of
+  the whole set at once (an array, a raster or an index) before any candidate is laid out, and a network check is asked of
+  what changed, not of the whole network again.
+- **FR-013 (speed first; the GM 2026-10-26)**: the tasks that cut a roll's calls - FR-012's, and FR-004's and FR-006's where
+  they delete repair work - are worked before the tasks that only make seeds pass, ordered by the calls each removes.
+
 ### Key Entities
 
 - **A rule**: one predicate; its placer; its finished-map check.
@@ -172,13 +196,21 @@ The repair passes, any rule coded twice and the checks the generator runs mid-ma
 - **SC-008** (FR-008): every engine landing of this feature passes the fixed cohort, the pinned rows and the pool maps, and
   the research-claims round (`make land`).
 
+- **SC-009** (FR-012, FR-013, User Story 5): a 40-household roll (seed 39, `make perf-fanout`) makes at most 6.3M Python
+  calls - a tenfold cut from feature 427's start of 62.6M (observed 2026-10-26, method: `make perf-fanout`, 427's T01 survey).
+  The bound is a GUESS at what a by-construction engine reaches (the session's estimate 2026-10-26: 3-6M, from a few hundred
+  candidate seats a house each asked a couple of dozen indexed questions); stage times are reported beside it and gate nothing
+  (feature 427 FR-006).
+
 ## Assumptions
 
 - The unrolled field forms (polder, dike-pond) are guarded against regression (FR-011); turning them on, and holding them
   to zero failures, is a later choice, as `ROLLED_ARCHETYPES`' own note says ("opt-in until their cohort is green").
 - The cohort's sizes, forms and pins are the population "any seed" means; a new form or tier is a later feature's.
 - The fixed 48 stay the landing gate; the fresh block is added beside them, not in place of them.
-- Speed is a flag, never a gate (375 amendment 5); a by-construction placer may be slower and is mentioned if it is.
+- Timings are a flag, never a gate (375 amendment 5, feature 427 FR-006); the call count is this feature's goal (SC-009), watched
+  by feature 427's call-count watch. (Before 2026-10-26 this read "a by-construction placer may be slower"; the GM's speed goal
+  replaced it.)
 
 ## Review history
 
