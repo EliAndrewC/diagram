@@ -60,4 +60,4 @@ ceiling question trial 439 learned to ask first.)
 ## Review history
 
 - 2026-10-27, the one review (spec-fidelity, MODE 2, on the brief with its evidence fixed): FAITHFUL - every profiled figure
-  re-derived from the kept profiles; re-timed under load (the roll 8.04 s, the review round's own run of make perf-ab A=HEAD~1) the ceilings still sit under the floor (2.6%, 2.8%).
+  re-derived from the kept profiles; re-timed under load (the roll 8.04 s, observed 2026-10-27, method: the review's own make perf-ab A=HEAD~1) the ceilings still sit under the floor (2.6%, 2.8%).
