@@ -320,12 +320,26 @@ def batch_triggers(root: Path, extra: Iterable[str] = ()) -> list[str]:
     return sorted(set(own) | {t for t in extra if t.startswith("round:") and not t.startswith("round:spec-fidelity|")})
 
 
+def rekeys(prior: Mapping[str, Any], trigger: str, ruling: Mapping[str, Any]) -> bool:
+    """May the arbiter record its SAME ruling on a trigger again? Only to carry the sheet's content key a review unit's round
+    row was written without (feature 433: a recorder bug - the owed entry's `<check>|` prefix - left the accept on
+    building-review--hayakawa-magistracy keyless, so the review gate could not honor it); the ruling itself may not change,
+    so the one-ruling rule stands, and `record_ruling` asks too that the unit HAS a sheet to key (a record check's round has
+    none, and stays ruled once)."""
+    return (
+        trigger.startswith("round:")
+        and not trigger.startswith("round:spec-fidelity|")
+        and not prior.get("content_key")
+        and prior.get("ruling") == ruling.get("ruling")
+    )
+
+
 def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared: str, now: str | None = None, batch: bool = False) -> dict[str, Any]:
     """Record the round arbiter's ruling: binding, one per trigger (FR-011). A round trigger owed together with others is
     ruled with them, as a batch (FR-017) - not alone."""
     if declared != "round-arbiter":
         raise PermissionError("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, recorded, not a proof")
-    if trigger in rulings(root, trigger):
+    if (prior := rulings(root, trigger).get(trigger)) is not None and not (rekeys(prior, trigger, ruling) and unit_content_key(root, unit_of(trigger))):
         raise ValueError(f"{trigger} is already ruled - one ruling per trigger, binding; the session neither re-asks nor overrules")
     others = [t for t in batch_triggers(root) if t != trigger]
     if not batch and trigger in batch_triggers(root, [trigger]) and others:
