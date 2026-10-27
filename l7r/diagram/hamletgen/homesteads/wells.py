@@ -479,9 +479,7 @@ def seat_wells(
             _belt_of[xy] = int(inside)
 
     def _in_belt(c: tuple[float, float, float]) -> int:
-        """Asked once per seat, not once per sort (feature 427 T05, D5)."""
-        if (c[1], c[2]) not in _belt_of:
-            _belt_all([c])
+        """Asked once per seat, not once per sort (feature 427 T05, D5): every seat of a rung is asked by `_belt_all` first."""
         return _belt_of[(c[1], c[2])]
 
     # THE MINIMAX SERVES THE HOUSES THAT NEED A WELL (known-open ledger 2026-08-16): the

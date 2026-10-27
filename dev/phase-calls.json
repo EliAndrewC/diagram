@@ -1068,18 +1068,18 @@
   "type": "nucleated/polder_grid/pond"
  },
  "nucleated/rolled/pond": {
-  "commit": "02b4bbee7",
+  "commit": "2ccbb7ff9",
   "date": "2026-10-27",
   "households": 40,
   "seed": 39,
   "stages": {
    "appurtenances": {
-    "calls": 892154,
+    "calls": 710211,
     "own": 3,
     "steps": {
      "l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures": 55400,
      "l7r.diagram.hamletgen.homesteads.retirement.retirement_houses": 28,
-     "l7r.diagram.hamletgen.homesteads.wells.place_wells": 829546,
+     "l7r.diagram.hamletgen.homesteads.wells.place_wells": 647603,
      "l7r.diagram.settlement.Settlement.draft_byres": 7177
     }
    },
@@ -1150,12 +1150,12 @@
     }
    },
    "homesteads": {
-    "calls": 7722633,
+    "calls": 7722179,
     "own": 15410,
     "steps": {
      "l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary": 87144,
      "l7r.diagram.hamletgen.homesteads.boundary.site_boundary": 34813,
-     "l7r.diagram.hamletgen.homesteads.growth.grow_the_margin": 610707,
+     "l7r.diagram.hamletgen.homesteads.growth.grow_the_margin": 610727,
      "l7r.diagram.hamletgen.homesteads.household_ways.chose_the_track": 334593,
      "l7r.diagram.hamletgen.homesteads.seat_geometry.declare_cluster_shape": 147,
      "l7r.diagram.hamletgen.homesteads.stages.reserve_the_seating": 5231,
@@ -1170,7 +1170,7 @@
      "l7r.diagram.settlement.homestead_parts.wood_share.install_wood_shares": 27814,
      "l7r.diagram.settlement.rolling.access.access_corridor": 0,
      "l7r.diagram.settlement.rolling.access.reserve": 5426,
-     "l7r.diagram.settlement.rolling.gap_ways.lay_the_ways": 3211180,
+     "l7r.diagram.settlement.rolling.gap_ways.lay_the_ways": 3210706,
      "l7r.diagram.settlement.rolling.lot.household_parts": 32048,
      "l7r.diagram.settlement.rolling.lot.record_parts": 58126,
      "l7r.diagram.settlement.rolling.route.routed_corridors": 0
@@ -1184,11 +1184,11 @@
     }
    },
    "lane_wells": {
-    "calls": 2009602,
+    "calls": 1520139,
     "own": 3,
     "steps": {
      "l7r.diagram.hamletgen.homesteads.wells.lane_and_fallback_wells": 88,
-     "l7r.diagram.hamletgen.homesteads.wells.reach_wells": 2008979,
+     "l7r.diagram.hamletgen.homesteads.wells.reach_wells": 1519516,
      "l7r.diagram.hamletgen.homesteads.wells.record_over_ten": 532
     }
    },
@@ -1223,10 +1223,10 @@
     }
    },
    "seat": {
-    "calls": 237697,
+    "calls": 238162,
     "own": 7370,
     "steps": {
-     "l7r.diagram.hamletgen.cluster.seat_cluster": 213679,
+     "l7r.diagram.hamletgen.cluster.seat_cluster": 214144,
      "l7r.diagram.hamletgen.ways.checks.brook_fords": 666,
      "l7r.diagram.hamletgen.ways.route.set_crossing": 3961,
      "l7r.diagram.settlement.Settlement.toe_band": 12019,
@@ -1234,7 +1234,7 @@
     }
    },
    "sink": {
-    "calls": 90824,
+    "calls": 90876,
     "own": 5124,
     "steps": {
      "l7r.diagram.hamletgen.sink.brook_join": 0,
@@ -1248,7 +1248,7 @@
      "l7r.diagram.hamletgen.sink.pond_setback": 670,
      "l7r.diagram.hamletgen.sink.route_refusals": 0,
      "l7r.diagram.hamletgen.water.brook.round_the_brooks": 60346,
-     "l7r.diagram.settlement.Settlement.marsh": 20047,
+     "l7r.diagram.settlement.Settlement.marsh": 20099,
      "l7r.diagram.settlement.Settlement.pond": 316,
      "l7r.diagram.settlement.land.wet.pond_fringe_ring": 33
     }
@@ -1331,7 +1331,7 @@
     }
    }
   },
-  "total": 27149548,
+  "total": 26478205,
   "type": "nucleated/rolled/pond"
  }
 }

@@ -36,10 +36,14 @@ def snapshot(tree: str, label: str, counted: bool) -> dict[str, Any]:
 
 
 def legs(snap: Mapping[str, Any]) -> dict[tuple[int, int], tuple[float | None, int]]:
-    """(households, seed) -> (seconds, calls) of every timed leg of a snapshot."""
+    """(households, seed) -> (seconds, calls) of every timed leg of a snapshot: the seconds summed from its stages, timed to
+    the hundredth (the leg's own `seconds` is rounded to the tenth, too coarse for a change of a few percent), or that total
+    where a leg records no stages (feature 435 T06)."""
     out: dict[tuple[int, int], tuple[float | None, int]] = {}
     for leg in [*snap.get("rows", []), *snap.get("scaling", [])]:
-        out[(int(leg["asked"]), int(leg["seed"]))] = (leg.get("seconds"), sum((leg.get("calls") or {}).values()))
+        stages = leg.get("stages") or {}
+        secs = round(sum(stages.values()), 2) if stages and leg.get("seconds") is not None else leg.get("seconds")
+        out[(int(leg["asked"]), int(leg["seed"]))] = (secs, sum((leg.get("calls") or {}).values()))
     return out
 
 

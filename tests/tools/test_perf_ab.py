@@ -58,3 +58,10 @@ def test_main_builds_two_worktrees_compares_and_always_removes_them(monkeypatch:
     assert pa.main(["abc123", "--n", "1"], run=fake) == 0
     assert [c[3:5] for c in git if "worktree" in c][:2] == [["worktree", "add"], ["worktree", "add"]]
     assert sum(1 for c in git if "remove" in c) == 2 and "(15, 4)" in capsys.readouterr().out
+
+
+def test_a_leg_is_timed_from_its_stages_to_the_hundredth() -> None:
+    """Feature 435 T06: the leg's `seconds` is rounded to the tenth, so the stages are summed instead; a refused leg stays refused."""
+    snap = {"rows": [{"asked": 40, "seed": 25, "seconds": 6.4, "stages": {"web": 3.21, "wells": 3.17}, "calls": {}}, {"asked": 40, "seed": 4, "seconds": None, "stages": {"web": 1.0}}]}
+    got = pa.legs(snap)
+    assert got[(40, 25)][0] == 6.38 and got[(40, 4)][0] is None

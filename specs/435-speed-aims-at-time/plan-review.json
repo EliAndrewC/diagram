@@ -409,6 +409,111 @@
      "why": "The checklist answered honestly, with expected time savings stated as the goal and labeled as guesses rather than claimed. A small expected saving does not change what was asked: the GM named this fix among the three to build."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T06 (T57 item 1, re-measured on the engine T02 left: the wells' per-seat tests are the largest share of `seat_wells`)",
+    "### T06 Approach (checklist part A)",
+    "### T06 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-arrays",
+     "summary": "The verge test, the wood floor and the belt are each given an array form asked of many lattice seats at once (seg_dists against the legs in row blocks, the reserved seats' points, the SeatSweep.walls crossing test).",
+     "class": "within",
+     "why": "D7 names the wells' fix as the seats screened by a feasibility mask before the overlap admission; these three tests are that mask, and FR-005 asks for the wells' fix built. The request asks for the three cheap fixes."
+    },
+    {
+     "id": "T06-verdicts-on-sweep",
+     "summary": "SeatSweep keeps each seat's verdict per test in an array beside its distance table (NaN until asked), so later seat_wells calls in the stage read it instead of asking again; the sweep stays keyed as now.",
+     "class": "within",
+     "why": "Keeping the mask's verdicts is how the mask removes work rather than moving it - the GM's own concern (calls cut without time is the trap); checklist answer 2 says it removes work. Nothing the request or D7 asks for is dropped."
+    },
+    {
+     "id": "T06-overlap-kept",
+     "summary": "The overlap admission well_at is still asked of each ranked seat, in the same order.",
+     "class": "within",
+     "why": "D7 places the mask BEFORE the overlap admission, not in place of it; keeping the admission and its order keeps 'the same wells, seated by the same rules'."
+    },
+    {
+     "id": "T06-scalar-reference",
+     "summary": "The scalar tests are kept as the arrays' reference in their tests.",
+     "class": "within",
+     "why": "A check that only fails when the array form disagrees with the rule it replaces - enforcement of the requested fix, not new scope."
+    },
+    {
+     "id": "T06-maps-may-move",
+     "summary": "A seat at a float boundary may flip; maps-moved is run and a moved well is held to 0196's claims by the claims round, under the GM's 2026-10-18 speed rule.",
+     "class": "within",
+     "why": "The request does not ask that maps stay byte-identical, so permitting a float-boundary flip narrows nothing it asked; the moved map is still checked against the research. The cited 2026-10-18 rule is outside this bundle and was not read."
+    },
+    {
+     "id": "T06-exits-and-evidence",
+     "summary": "Green: landed with make perf-ab evidence and the cohort passing; Red: failure recorded, task set down, a cannot-be-done claim ruled through make arbiter-ask. Evidence: make phase-calls and make perf-ab A=<parent> B=HEAD recorded in research/t06-evidence.md.",
+     "class": "within",
+     "why": "FR-005/SC-004 ask each fix's calls and time evidence reported before and after; FR-006 forbids a time gate and neither exit refuses on a timing - perf-ab is recorded evidence, read with judgment, as the GM asked ('timings are not a gate, but improving timings is the goal')."
+    },
+    {
+     "id": "T06-order",
+     "summary": "After T02, before T07 (the notice board).",
+     "class": "within",
+     "why": "The GM's order: the checklist, then the reverts, then the three cheap fixes; sequencing among the fixes is left open by the request and the spec."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T06": {
+   "section_sha256": "0b0a7a6b32a5bfd03021bd417ebf4dc60d93747a1233e3e0a39282f06327c369",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T06-arrays",
+     "summary": "The verge test, the wood floor and the belt are each given an array form asked of many lattice seats at once (seg_dists against the legs in row blocks, the reserved seats' points, the SeatSweep.walls crossing test).",
+     "class": "within",
+     "why": "D7 names the wells' fix as the seats screened by a feasibility mask before the overlap admission; these three tests are that mask, and FR-005 asks for the wells' fix built. The request asks for the three cheap fixes."
+    },
+    {
+     "id": "T06-verdicts-on-sweep",
+     "summary": "SeatSweep keeps each seat's verdict per test in an array beside its distance table (NaN until asked), so later seat_wells calls in the stage read it instead of asking again; the sweep stays keyed as now.",
+     "class": "within",
+     "why": "Keeping the mask's verdicts is how the mask removes work rather than moving it - the GM's own concern (calls cut without time is the trap); checklist answer 2 says it removes work. Nothing the request or D7 asks for is dropped."
+    },
+    {
+     "id": "T06-overlap-kept",
+     "summary": "The overlap admission well_at is still asked of each ranked seat, in the same order.",
+     "class": "within",
+     "why": "D7 places the mask BEFORE the overlap admission, not in place of it; keeping the admission and its order keeps 'the same wells, seated by the same rules'."
+    },
+    {
+     "id": "T06-scalar-reference",
+     "summary": "The scalar tests are kept as the arrays' reference in their tests.",
+     "class": "within",
+     "why": "A check that only fails when the array form disagrees with the rule it replaces - enforcement of the requested fix, not new scope."
+    },
+    {
+     "id": "T06-maps-may-move",
+     "summary": "A seat at a float boundary may flip; maps-moved is run and a moved well is held to 0196's claims by the claims round, under the GM's 2026-10-18 speed rule.",
+     "class": "within",
+     "why": "The request does not ask that maps stay byte-identical, so permitting a float-boundary flip narrows nothing it asked; the moved map is still checked against the research. The cited 2026-10-18 rule is outside this bundle and was not read."
+    },
+    {
+     "id": "T06-exits-and-evidence",
+     "summary": "Green: landed with make perf-ab evidence and the cohort passing; Red: failure recorded, task set down, a cannot-be-done claim ruled through make arbiter-ask. Evidence: make phase-calls and make perf-ab A=<parent> B=HEAD recorded in research/t06-evidence.md.",
+     "class": "within",
+     "why": "FR-005/SC-004 ask each fix's calls and time evidence reported before and after; FR-006 forbids a time gate and neither exit refuses on a timing - perf-ab is recorded evidence, read with judgment, as the GM asked ('timings are not a gate, but improving timings is the goal')."
+    },
+    {
+     "id": "T06-order",
+     "summary": "After T02, before T07 (the notice board).",
+     "class": "within",
+     "why": "The GM's order: the checklist, then the reverts, then the three cheap fixes; sequencing among the fixes is left open by the request and the spec."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }
