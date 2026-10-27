@@ -103,3 +103,17 @@ def test_a_spec_the_round_arbiter_accepted_at_its_cap_is_faithful(tmp_path: Path
     with (d / "arbiter.jsonl").open("a") as fh:
         fh.write(json.dumps({"trigger": "round:spec-fidelity|387-x#1@6", "ruling": "accept"}) + "\n")
     assert feature_status(tmp_path, "387-x").complete
+
+
+def test_a_spec_ruled_on_an_asked_round_is_faithful(tmp_path: Path) -> None:
+    """Feature 440: an ASKED ruling (`make arbiter-ask ... REVIEW=spec`) stands for the spec's verdict at the review gate, and the
+    merge refused it here; an asked ruling on another review, or a `continue`, is still no verdict."""
+    _feature(tmp_path, "440-x", "- [x] T01 done\n", spec="## Review history\n- round 2: CHANGES REQUIRED\n")
+    d = tmp_path / "specs" / "440-x"
+    (d / "arbiter.jsonl").write_text(
+        json.dumps({"trigger": "ask:440-x", "review": "plan", "ruling": "accept"}) + "\n" + json.dumps({"trigger": "ask:440-y", "review": "spec", "ruling": "continue"}) + "\n"
+    )
+    assert not feature_status(tmp_path, "440-x").faithful
+    with (d / "arbiter.jsonl").open("a") as fh:
+        fh.write(json.dumps({"trigger": "ask:440-spec-round-3", "review": "spec", "ruling": "accept"}) + "\n")
+    assert feature_status(tmp_path, "440-x").complete

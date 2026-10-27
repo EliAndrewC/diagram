@@ -111,6 +111,9 @@ def spec_accepted(d: Path, name: str) -> bool:
             r = json.loads(line)
         except ValueError:
             continue
-        if str(r.get("trigger", "")).startswith(f"round:spec-fidelity|{name}#") and r.get("ruling") == "accept":
+        # ...an ASKED ruling too (`make arbiter-ask ... REVIEW=spec`, feature 409), as `hm_arbiter.spec_ruled` reads it for the review
+        # gate - feature 440's landing was refused here on a spec the review gate had passed on that ruling
+        spec_review = str(r.get("trigger", "")).startswith(f"round:spec-fidelity|{name}#") or r.get("review") == "spec"
+        if spec_review and r.get("ruling") in ("accept", "process-fault"):
             return True
     return False
