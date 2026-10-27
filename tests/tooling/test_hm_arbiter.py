@@ -666,6 +666,18 @@ def test_a_round_rows_check_prefix_does_not_hide_its_unit(tmp_path: pathlib.Path
     assert ha.review_unit("building-review|building-review--s") == "building-review--s" and ha.review_unit("u") == "u"
 
 
+def test_a_keyless_round_ruling_may_be_recorded_again_unchanged_only() -> None:
+    """Feature 433: the arbiter may record its SAME ruling again to carry the content key a recorder bug left off - never a
+    different ruling, never on a row that has its key, never on a spec review's round."""
+    t = "round:building-review|building-review--s@3"
+    keyless = {"trigger": t, "ruling": "accept"}
+    assert ha.rekeys(keyless, t, {"ruling": "accept"})
+    assert not ha.rekeys(keyless, t, {"ruling": "continue"}), "a different ruling is an overrule"
+    assert not ha.rekeys({**keyless, "content_key": "k"}, t, {"ruling": "accept"}), "a keyed row is final"
+    assert not ha.rekeys(keyless, "round:spec-fidelity|x@6", {"ruling": "accept"}), "a spec round names its spec, not a key"
+    assert not ha.rekeys(keyless, "ask:x", {"ruling": "accept"})
+
+
 def test_a_red_gate_bundle_names_what_each_red_gate_failed_on(tmp_path: pathlib.Path) -> None:
     """The round arbiter's tooling fixes on red-gate@2026-10-12T13:55:48Z (feature 374 batch 10) and red-gate@2026-10-17T17:21:08Z
     (feature 385): a red-gate trigger's bundle carries the red `make done` runs of the run log - their phases and failure counts -
