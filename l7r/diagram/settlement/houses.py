@@ -273,12 +273,14 @@ class HousesMixin:
         disc: bool = False,
         rot: float | None = None,
         top: float = 88.0,
+        placed: bool = True,
     ) -> bool:
         """Does a `w` x `h` footprint at (x, y) fit: inside the sheet's margins and the bound, off the blocked ground, the
-        corridors and treads, the field bunds and the hard ground, and clear of what stands (`_clear_of_placed`, asked last).
+        corridors and treads, the field bunds and the hard ground, and clear of what stands (`_clear_of_placed`, asked last;
+        `placed=False` from a caller that asked it first, feature 435 T08).
 
         Research:
-            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 88 (top sheet margin); 55 (side and bottom sheet margins); 26 (side and bottom sheet margins)
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 88 (top sheet margin, the default `top`); 55 (side sheet margins); 26 (bottom sheet margin)
         """
         if x < 55 or x > self.W - 55 or y < top or y > self.H - 26:
             return False
@@ -292,7 +294,7 @@ class HousesMixin:
             return False
         if not self._hard_clear(x, y, w, h):
             return False
-        return self._clear_of_placed(x, y, w, h, disc, rot)
+        return not placed or self._clear_of_placed(x, y, w, h, disc, rot)
 
     def _clear_of_placed(self: Settlement, x: float, y: float, w: float, h: float, disc: bool = False, rot: float | None = None) -> bool:  # type: ignore[misc]
         """`_fits`' last test, its own so a placer can ask it FIRST as a screen (feature 435 T08): clear of everything that

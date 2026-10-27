@@ -25,3 +25,5 @@
       research: rendering
 - [ ] T08 The notice board's seats screened by the houses and yards before the full house-fit test (T57 item 2; T03's second fix)
       research: rendering
+- [ ] T09 0190's drawing page states that a notice board keeps out of a farmstead's own grove (grove_rects, _fits' clearance) beside its rule that a board clears no ground and may stand under a crown (impl-drift, T08's claims round)
+      research: rendering

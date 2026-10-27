@@ -62300,6 +62300,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/houses.py::HousesMixin._clear_of_placed#building spacing": {
+  "body": "ebb2d4cf2e60ee7b",
+  "claim": "building spacing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 4 px between collision circles (exact boxes where both are declared)",
+  "code": "795aa5eb0facf063",
+  "core": "20bfa0a28398f2f0",
+  "date": "2026-10-27",
+  "note": "the 4 px is added in the exact-box branch, the circle branch and the grove test; no cited page speaks to it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/houses.py::HousesMixin._corridor_index#placement, index and corridor plumbing": {
   "code": "afdeb2ff29c03dd0",
   "core": "89f5f7d30368ceb0",
@@ -62308,24 +62320,13 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/houses.py::HousesMixin._fits#building spacing": {
-  "body": "6a966e2f87bfd36d",
-  "claim": "building spacing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 4 px between collision circles (exact boxes where both are declared)",
-  "code": "be721b42f72f55d7",
-  "core": "5d14909a7141acf6",
-  "date": "2026-10-25",
-  "note": "no page gives building-to-building clearance; 0081's 3 ft is a lane's tread off a wall",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/houses.py::HousesMixin._fits#its drawn sizes": {
-  "body": "6a966e2f87bfd36d",
-  "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 88 (top sheet margin); 55 (side and bottom sheet margins); 26 (side and bottom sheet margins)",
-  "code": "a26cf70ec9362e7a",
-  "core": "5d14909a7141acf6",
-  "date": "2026-10-25",
-  "note": "sheet margins",
+  "body": "2cbcfff03af0f854",
+  "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 88 (top sheet margin, the default `top`); 55 (side sheet margins); 26 (bottom sheet margin)",
+  "code": "6ed9358817373186",
+  "core": "6cf84a4b057cd3c9",
+  "date": "2026-10-27",
+  "note": "sheet margins 88/55/26 are sizes on the sheet only, and `placed=False` only skips a test the caller already asked",
   "pages": {},
   "research": "",
   "rests": [],
@@ -73247,8 +73248,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#an approach seat faces the approach": {
-  "code": "5541b9972ca1b698",
-  "core": "1ee9fffb5e43d3f9",
+  "code": "114eecab037e2049",
+  "core": "d8d8574af1f62129",
   "date": "2026-10-11",
   "note": "an approach seat takes its own segment's bearing, so it is squared to the way out that every household passes",
   "pages": {
@@ -73259,11 +73260,23 @@
    "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5",
    "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca"
   ],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#clear of what stands, asked first": {
+  "body": "f74838223eea7a07",
+  "claim": "clear of what stands, asked first - CONVENTION: `_fits`' own clearance from the houses, yards and groves (`_clear_of_placed`, its 4 px a GUESS there), asked before the dearer tests and not again by `_fits` - it decides nothing `_fits` did not (feature 435 T08)",
+  "code": "1ff235d708f9795d",
+  "core": "d8d8574af1f62129",
+  "date": "2026-10-27",
+  "note": "moving the test earlier adds no decision, so this should be NONE (it calls `_clear_of_placed(x, y, w, h)` with the same defaults `_fits` used, then `placed=False`). CONVENTION is wrong: keeping a board clear of houses, yards and groves is a placement rule, not how something is shown, and it belongs to `_fits`/`_clear_of_placed`'s own claims",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#farthest seat off the road": {
-  "code": "882e018186562ab3",
-  "core": "1ee9fffb5e43d3f9",
+  "code": "f3b25934c8effda3",
+  "core": "d8d8574af1f62129",
   "date": "2026-10-11",
   "note": "up to 60 ft, which the page calls \"this project's own figure\"",
   "pages": {
@@ -73273,26 +73286,40 @@
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-27",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#in view": {
+  "body": "f74838223eea7a07",
+  "claim": "in view - CONVENTION: a board the map's crop would cut is not offered (`board_in_view`)",
+  "code": "ef7411eef1c9af54",
+  "core": "d8d8574af1f62129",
+  "date": "2026-10-27",
+  "note": "dropping a seat the crop would cut is a framing matter; the board is placed after the crop",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#its drawn sizes": {
   "body": "d115974af6a9ea97",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 26 (top sheet margin)",
-  "code": "53dc040656092b72",
-  "core": "1ee9fffb5e43d3f9",
+  "code": "b9908e4f77197789",
+  "core": "d8d8574af1f62129",
   "date": "2026-10-25",
   "note": "top sheet margin.",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#least offset off the tread": {
-  "code": "55611981ac4ea072",
-  "core": "1ee9fffb5e43d3f9",
-  "date": "2026-10-11",
-  "note": "the first offset puts the drawn footing's near edge 6 ft from the road's edge",
+  "body": "f74838223eea7a07",
+  "claim": "least offset off the tread - notice-boards-kosatsuba.drawing: 6 ft from the edge of the road to the board drawn (its footing), not to the face tested",
+  "code": "fba57e830413c162",
+  "core": "d8d8574af1f62129",
+  "date": "2026-10-27",
+  "note": "`off = rw/2 + dh/2 + px(6 ft)` puts the drawn footing's near edge 6 ft from the road edge, and the verge and 60 ft limits are measured the same way",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
@@ -73300,13 +73327,14 @@
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1",
+   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
    "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#long axis along the route": {
-  "code": "654737655741abcc",
-  "core": "1ee9fffb5e43d3f9",
+  "code": "372bfb1f709df9a8",
+  "core": "d8d8574af1f62129",
   "date": "2026-10-09",
   "note": "`rot` is the segment bearing, so the long side runs along the road (\"broadside to the traffic\", \"long side runs parallel to the road it faces\"); a seat that is not on the approach is turned to its nearest way and refused where it cannot face it",
   "pages": {
@@ -73318,48 +73346,63 @@
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#nearness tie-break": {
   "body": "d115974af6a9ea97",
   "claim": "nearness tie-break - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); score less a third of the offset",
-  "code": "7db0fdd0e534eb5c",
-  "core": "1ee9fffb5e43d3f9",
+  "code": "e57235b59beacbee",
+  "core": "d8d8574af1f62129",
   "date": "2026-10-25",
   "note": "the code is busy*10 - off/3, as the claim says; no page gives a tie-break",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#off the tread, out of water, in view": {
-  "code": "06d794fa56abef8e",
-  "core": "1ee9fffb5e43d3f9",
-  "date": "2026-10-11",
-  "note": "seats stay off every way's bed and on the verge, never set back past the band",
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#off the tread": {
+  "body": "f74838223eea7a07",
+  "claim": "off the tread - notice-boards-kosatsuba.drawing: 6 ft from the edge of the road, so never on the tread",
+  "code": "1417821e1d90a13e",
+  "core": "d8d8574af1f62129",
+  "date": "2026-10-27",
+  "note": "the seat starts 6 ft out from the edge, and `env.beds` reach also refuses any way's tread",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
   "research": "5b977d097fda2bb4",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
    "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#sampling lattice": {
-  "code": "5f52d88e694b6526",
-  "core": "1ee9fffb5e43d3f9",
-  "date": "2026-10-09",
-  "note": "the 12 px step along the road and the 5 px step outward only set how finely the search samples; no map reader reads either off the map",
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#out of water": {
+  "body": "f74838223eea7a07",
+  "claim": "out of water - UNRESEARCHED: a board in a stream is the overlap matrix's refusal (`no_structure_on_stream`), no page's (`fixture_clear_of_water`)",
+  "code": "5dc146dfaf302778",
+  "core": "d8d8574af1f62129",
+  "date": "2026-10-27",
+  "note": "0190 does not speak to a board in water, so UNRESEARCHED holds",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#sampling lattice": {
+  "code": "57facee45d8890c1",
+  "core": "d8d8574af1f62129",
+  "date": "2026-10-09",
+  "note": "the 12 px step along the road and the 5 px step outward only set how finely the search samples; no map reader reads either off the map",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "triaged": "2026-10-27",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#seat scored by traffic": {
-  "code": "559823c467045a2a",
-  "core": "1ee9fffb5e43d3f9",
+  "code": "a1650d4790e3fc7e",
+  "core": "d8d8574af1f62129",
   "date": "2026-10-11",
   "note": "the score counts houses and buildings near each seat (the passers-by it would meet); the radii and weights are claimed separately as UNRESEARCHED",
   "pages": {
@@ -73372,29 +73415,31 @@
    "0190-notice-boards-kosatsuba.drawing.html:e5c42f0010bd2a09",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#the nearer weighted": {
   "body": "d115974af6a9ea97",
   "claim": "the nearer weighted - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a building within the inner radius counts three times, once in each radius and once more",
-  "code": "0cd3a55fa3f946f2",
-  "core": "1ee9fffb5e43d3f9",
+  "code": "24bc3d4c5468498c",
+  "core": "d8d8574af1f62129",
   "date": "2026-10-25",
   "note": "the code adds 1 + 2 for a building within 150, as the claim says; no page gives a weighting",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#traffic radii": {
   "body": "d115974af6a9ea97",
   "claim": "traffic radii - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); 260 px and 150 px, in pixels at every scale",
-  "code": "3bf78e03b8e96cc3",
-  "core": "1ee9fffb5e43d3f9",
+  "code": "909e7bd0b9c7d42c",
+  "core": "d8d8574af1f62129",
   "date": "2026-10-25",
   "note": "the 250 ft on the page is a measurement, not a rule; the radii are the project's own",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.fixture_clear_of_water#fixture out of the water": {

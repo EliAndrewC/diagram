@@ -159,6 +159,7 @@ def test_the_placed_clearance_is_fits_last_test_and_a_screen_alone():
     assert s._clear_of_placed(505, 505, 10, 10) is False and s._fits(505, 505, 10, 10) is False
     assert s._clear_of_placed(700, 700, 10, 10) is True and s._fits(700, 700, 10, 10) is True
     assert s._clear_of_placed(20, 20, 10, 10) is True and s._fits(20, 20, 10, 10) is False  # off the sheet: `_fits`' own margin
+    assert s._fits(505, 505, 10, 10, placed=False) is True  # a caller that screened first is not asked again
 
 
 def test_abandoned_ruin_draws_as_a_lone_house_and_big_glyph_renders():

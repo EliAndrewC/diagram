@@ -138,6 +138,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-27",
    "declared": "spec-fidelity"
+  },
+  "### T09 (impl-drift's note outside T08's change, 2026-10-27: 0190's page says a board clears no ground, while the fit keeps it out of a farmstead's grove)": {
+   "sha256": "c92c2094cc3a78b6810f6aabd172c30ccff7d224da30c310ec08904339ff78c9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (checklist part A)": {
+   "sha256": "b0ae27079652e874b243c272ded24f537e81b1b919fb52fb156a67ba6c202f46",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -592,6 +604,40 @@
      "summary": "Ordered after T06 and before T04; budget of one landing.",
      "class": "within",
      "why": "Sequencing and budget among the requested tasks do not touch what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T09 (impl-drift's note outside T08's change, 2026-10-27: 0190's page says a board clears no ground, while the fit keeps it out of a farmstead's grove)",
+    "### T09 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T09-record",
+     "summary": "Resolve impl-drift's note on T08 (the notice board's seat fit, FR-005's cheap fix) by recording on 0190's page the code's existing behavior - a board seat is kept off a farmstead's own grove bands as off its yard - labeled a map drawing convention, with no code change",
+     "class": "within",
+     "why": "It brings the record into step with code the requested notice-board fix touched; it changes no behavior and narrows nothing the GM's request or the spec's requirements ask for."
+    },
+    {
+     "id": "T09-contingency",
+     "summary": "If a research pass finds a board posted in a farm's grove, the claim and the fit change instead, as a task of its own",
+     "class": "within",
+     "why": "A deferral of a possible future change to a separate task; it removes nothing from what was asked and leaves this feature's requested work whole."
+    },
+    {
+     "id": "T09-exits",
+     "summary": "Exits are the page's block written and checked (make record-owed) or a recorded failure ruled through make arbiter-ask; done is the claims round IN-STEP; no timing exit",
+     "class": "within",
+     "why": "No exit refuses on a time, consistent with the GM's 'timings are not a gate' and FR-006."
+    },
+    {
+     "id": "T09-order-and-class",
+     "summary": "Runs after T08, independent of T05/T07/T04; one landing; 'Performance work? No' so the checklist's performance parts are n/a",
+     "class": "within",
+     "why": "Sequencing and classification of a record-only task; the task cuts no calls and moves no time, so the GM's checklist concern (calls cut without time) has nothing to bite on here."
     }
    ]
   }

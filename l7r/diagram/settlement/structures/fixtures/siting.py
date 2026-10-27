@@ -291,7 +291,10 @@ class FixtureSitingMixin:
         Research:
             long axis along the route - research/questions/0190-notice-boards-kosatsuba.drawing.html: broadside to the traffic
             an approach seat faces the approach - research/questions/0190-notice-boards-kosatsuba.drawing.html: squared to the road it faces, here the way out every departure passes
-            off the tread, out of water, in view - research/questions/0190-notice-boards-kosatsuba.drawing.html: never in the roadbed
+            off the tread - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 ft from the edge of the road, so never on the tread
+            out of water - UNRESEARCHED: a board in a stream is the overlap matrix's refusal (`no_structure_on_stream`), no page's (`fixture_clear_of_water`)
+            in view - CONVENTION: a board the map's crop would cut is not offered (`board_in_view`)
+            clear of what stands, asked first - NONE: `_fits`' own clearance (`_clear_of_placed`, whose claims it is) asked before the dearer tests and not again by `_fits` - it decides nothing `_fits` did not (feature 435 T08)
             seat scored by traffic - research/questions/0190-notice-boards-kosatsuba.drawing.html: dwellings and buildings near each seat
             the nearer weighted - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); a building within the inner radius counts three times, once in each radius and once more
             traffic radii - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); 260 px and 150 px, in pixels at every scale
@@ -319,7 +322,7 @@ class FixtureSitingMixin:
                 f = t * BOARD_ALONG_STEP_PX / seg
                 mx, my = ax + (bx - ax) * f, ay + (by - ay) * f
                 for side in (1.0, -1.0):
-                    off = rw / 2 + dh / 2 + self.px(6.0)  # the board's footing 6 ft from the road's edge (0190), not the smaller face tested
+                    off = rw / 2 + dh / 2 + self.px(KOSATSUBA_VERGE_FT)  # the board's footing 6 ft from the road's edge (0190), not the smaller face tested
                     while off - rw / 2 - dh / 2 <= lim:  # the 60 ft, like the 6 ft, from the road's edge to the footing's
                         if verge_only and off - rw / 2 - dh / 2 > verge:  # past the verge: the roadside rule would drop it
                             break
@@ -338,7 +341,7 @@ class FixtureSitingMixin:
                             # band, and asked of their index a seat they refuse skips the water, bund and hard-ground tests
                             and self._clear_of_placed(x, y, w, h)
                             and self.fixture_clear_of_water(x, y, half)
-                            and self._fits(x, y, w, h, corridors=False, top=26.0)
+                            and self._fits(x, y, w, h, corridors=False, top=26.0, placed=False)
                             # TURNED TO ITS NEAREST WAY, and refused where that board cannot face it (labels L12, feature 287
                             # wave 6): beside a lane's corner both arms are as near, and a board turned to one stood 55 and 86
                             # degrees off the other (cohort seeds 25 and 42) - asked last, of a seat every cheaper test kept.

@@ -277,3 +277,33 @@ None.
 4. **How does the work grow with the settlement?** The band's seats grow with the main ways' length and the houses beside them; the screen keeps that product and drops the dearer tests from most of it. It lowers the constant, not the curve.
 5. **What did the before and after show, and under what conditions?** Recorded at landing: `make phase-calls` before and after, `make perf-ab A=<parent> B=HEAD` (best of 3, each arm's spread, the host's load; legs timed from their stages since T06).
 6. **Did any map move, and does it still keep the research?** Recorded at landing: `make maps-moved` and the cohort; none expected, the conjunction being the same.
+
+### T09 (impl-drift's note outside T08's change, 2026-10-27: 0190's page says a board clears no ground, while the fit keeps it out of a farmstead's grove)
+
+- **Approach**: read what the code does and record it: `_fits`' clearance (`_clear_of_placed`) refuses a board seat within
+  reach of a farmstead's own grove bands (`grove_rects`, recorded by `rolling/farmsteads.py` - the household's windbreak, not
+  a lone tree or the commons' wood), which stands beside 0190's blocks "The board clears no ground" and "A board may stand
+  under a tree's canopy" (research/questions/0190-notice-boards-kosatsuba.drawing.html). The page gains a block saying so -
+  the board stands off a household's own grove as off its yard, labeled a map drawing convention - or, if a research pass
+  finds a board posted in a farm's grove, the claim and the fit change instead (then a task of its own). Worked as a page
+  session (`make page-session`).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the page's block | n/a (record only) | n/a | none (no code) | n/a |
+
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** The record says where a notice board may and may not stand among the farmsteads' groves.
+2. **The constraints.** Constitution XII (every rendering decision labeled); `research/CLAUDE.md`.
+3. **Where each comes from.** O: impl-drift's reply on T08's claims, 2026-10-27; the code read the same day.
+4. **Do they describe the world here?** Yes: every dispersed and grove farm records its grove bands in `grove_rects`.
+5. **The order.** After T08; independent of T05, T07 and T04.
+6. **The exits.** Green: the page's block written and checked (`make record-owed`'s checks). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The claims round on `_route_seats` IN-STEP against the changed page.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** No.
