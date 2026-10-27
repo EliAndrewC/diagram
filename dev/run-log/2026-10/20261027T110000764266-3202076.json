@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-27T11:00:00Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 176,
+  "result": "green",
+  "commit": "4d1e22399",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10047,
+  "host": {
+    "load": [
+      3.73,
+      2.67
+    ],
+    "mem_avail_mb": [
+      9670,
+      10123
+    ],
+    "cpu_temp_c": [
+      100.0,
+      88.0
+    ],
+    "stall_s": {
+      "cpu": 0.5,
+      "io": 0.1,
+      "io_full": 0.1,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 77329,
+      "package": 32327
+    }
+  },
+  "phases": {
+    "preflight": 14.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 1.0,
+    "pytest": 159.0,
+    "floors": 9.0,
+    "test-full": 172.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/hamletgen/ways/fabric.py",
+  "collected": 10047
+}
