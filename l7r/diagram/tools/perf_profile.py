@@ -87,6 +87,7 @@ def profile_stage(seed: int, stage: str, top: int = 25, households: int | None =
             raise SystemExit(f"perf-profile: no stage {stage!r}; the stages are: {', '.join(names)}")
         target = STAGES[names.index(stage)]
         plain = profiled = 0.0
+        added: dict[str, int] = {}
         prof = cProfile.Profile()
         with redirect_stdout(io.StringIO()), roll_scope(plan.spec):  # a roll like any other (feature 210; the census, 213)
             for st in STAGES:
