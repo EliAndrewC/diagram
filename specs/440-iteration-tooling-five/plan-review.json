@@ -1,0 +1,147 @@
+{
+ "feature": "440-iteration-tooling-five",
+ "blocks": {
+  "preamble": {
+   "sha256": "848643d2a59b02ca2858dcdf594c505068210d14730e7d1a55521aed0603c003",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "f0337ce56687f0c45af4ec846ae66fff87cea15229de168da3a7bdbc1cba8d91",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "39c7f93d07f9e68047422b6b381f721ed226dfad761c6866ae0b696babff13f1",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "6a89dcc30cf046aee742e3df4a63a758fec60fdb6518d81932c0c8bf49f6c9c0",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "ea6b77382a717c65b836b41ea5695040370669e250fb09a3f8e60e4122db0f6b",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "f7cb6888e7a47b8af448015ba212ab26f445314e45b8c549510c38df5bcfddd6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Task approaches": {
+   "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "b97f1936afed30030b6f91ad352e19ec09e65fc49801c6635a9522cd3b953db6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "0357ceb7a6c052f5c25ca8ac4cba6332a11e8d7c33e7235ce5c169e35b1f05c3",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "land.claims_route sends a claims refusal claims_cure names (owed with no check in flight, or introduced) to the preflight's stops; any other to the deferred wait",
+     "class": "within",
+     "why": "Carries FR-001 and request item (1): the owed-with-none-in-flight refusal now stops before the gate. Routing 'introduced' claims to the preflight as well goes past the one case FR-001 names, but it adds an early stop and narrows nothing, so this mode gives it no ruling."
+    },
+    {
+     "id": "D2",
+     "summary": "Template evidence section ends 'THE VERDICT: [branch taken] - because [measurement]' plus the branch not taken; the trial form's doc says the review checks it",
+     "class": "within",
+     "why": "This is FR-002 and request item (2) as written. Naming the branch not taken adds to the line and takes nothing away."
+    },
+    {
+     "id": "D3",
+     "summary": "profile_stage writes meta.seat_search into .placed.json; perf_fanout.placed_of reads its integer counts alone",
+     "class": "within",
+     "why": "This is FR-003 and request item (3). The perf_fanout change follows from the new key, so that reader keeps working; it adds no scope."
+    },
+    {
+     "id": "D4",
+     "summary": "A leg carries (wall, cpu, {stage: seconds}); stage_rows prints every stage, largest move first, '*' past STAGE_SHARE = 1% of A's best roll",
+     "class": "within",
+     "why": "This is FR-004 and request item (4): every stage, for every form. Using A's roll pins down the spec's 'the roll's best time', and the sort order is presentation. FR-004 also asks that a leg with no stage times print its total alone; the plan does not drop that."
+    },
+    {
+     "id": "D5a",
+     "summary": "make trial APPROVED= (TRIAL_APPROVED) fills the brief's approval line",
+     "class": "within",
+     "why": "This is FR-005 and request item (5a). The plan says nothing about FR-005's 'dated today', so that requirement stands and gets checked at implementation."
+    },
+    {
+     "id": "D5b",
+     "summary": "stale_terms skips a candidate the diff rewrote only when the line it was rewritten from already named its subject (rewritten_from)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request says 'the stale-terms check skipping lines the same diff rewrote', with no qualifier. Under the qualifier, a line the diff rewrote is still named when its earlier form did not mention the subject. That keeps existing behavior the GM did not ask to keep, and the bundle shows nothing in the GM's words that implies it. Nothing shows that skipping every rewritten line would be impossible or would defeat the request's purpose, which is to stop the check naming lines the author has already rewritten. Bundle defect: D5 cites 'FR-005-FR-007' as a range, and spec-cited.md holds FR-005 and FR-007 but not FR-006. spec-index.md's FR-006 and SC-005 lines are cut off before the words that would settle this. Cure: if the accepted FR-006 (or trial 439's report, which the GM approved as a list) states this qualifier, then D5b is already settled by the spec. In that case re-bundle with FR-006 in full, and D5b leaves the decisions list. Otherwise drop the qualifier, so that every line the same diff rewrote is skipped."
+    },
+    {
+     "id": "D5c",
+     "summary": "ratchet.slowdown (loop on XDIST_WORKERS processes, best of 3 rounds' slowest over the pinned 0.12 s, at least 1) is measured only for a run at or over the ceiling, and divides quick's run before the verdict",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-007 says the loop runs at the check. The plan runs it only when the raw run is at or over 15 s. The slowdown is never below 1, so dividing a run already under the ceiling cannot change the ceiling verdict, and the GM's words are about the ceiling failing under load. For every run the ceiling judges, the outcome is identical, so the gate is implied by the request. Two conditions go on record. (1) FR-007 asks the output to print the raw time, the slowdown and the normalized time. Under the gate, a run under the ceiling has no measured slowdown, so the output must say so (for example 'slowdown not measured: under the ceiling'); dropping it silently is not allowed. (2) This ruling assumes the ceiling is the only comparison in feature 171 that load can trip. If 171 also fails a raw run against the baseline below 15 s, the gate leaves that comparison raw, and the ruling does not hold. The bundle cannot settle (2)."
+    },
+    {
+     "id": "bookends",
+     "summary": "Performance bookends: none, because no engine code a roll runs changes",
+     "class": "within",
+     "why": "All the changes are tooling; nothing the GM asked for touches a roll."
+    },
+    {
+     "id": "constitution",
+     "summary": "Constitution Check: VI by the named tests and real runs; X by the coverage floor on the changed l7r/ tools; feature 171's ceiling and baseline unchanged",
+     "class": "within",
+     "why": "Restates FR-007's 'ceiling and baseline unchanged' and settles nothing new."
+    },
+    {
+     "id": "T01",
+     "summary": "One task in five parts and one landing; done means the named tests, a real quick A/B with stage rows, and research/quick-calibration.md",
+     "class": "within",
+     "why": "Covers all five items the GM asked for, and the measurement FR-007 asks for."
+    }
+   ]
+  }
+ ]
+}

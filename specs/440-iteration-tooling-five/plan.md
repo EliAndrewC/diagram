@@ -39,10 +39,15 @@ because [the measurement that took it ...]" and the branch not taken; the trial 
 **D4 - Every stage** (FR-004): a leg carries `(wall, cpu, {stage: seconds})` - the worker's roll returns the stages, the full
 form's `legs` reads them - and `stage_rows` prints every stage, largest move first, `*` past `STAGE_SHARE` (CONVENTION: 1% of A's best roll, a plumbing threshold of ours).
 
-**D5 - The small ones** (FR-005-FR-007): `make trial APPROVED=` (`TRIAL_APPROVED`) fills the approval line; `stale_terms`
-skips a candidate the diff rewrote from a line already naming its subject (`rewritten_from`); `ratchet.slowdown` - the loop
-on `XDIST_WORKERS` processes (fork), best of 3 rounds' slowest over the pinned 0.12 s (measured 2026-10-27 (the loop on 6 processes, best of 5 rounds, load 1.0)), at least 1, asked only for a run at or
-over the ceiling - divides quick's run before the verdict, which prints both.
+**D5 - The small ones** (FR-005, FR-006, FR-007): `make trial APPROVED=` (`TRIAL_APPROVED`) fills the approval line, the brief
+dated today (FR-005); `stale_terms` skips a candidate the diff rewrote from a line already naming its subject
+(`rewritten_from`) - FR-006's own condition, as the accepted spec words it ("a line in a replaced block whose old line already
+named the candidate's subject; a line the diff inserted, or rewrote to bring the subject in, is still searched");
+`ratchet.slowdown` - the loop on `XDIST_WORKERS` processes (fork), best of 5 rounds' slowest (as the pin was taken) over the
+pinned 0.12 s (measured 2026-10-27 (the loop on 6 processes, best of 5 rounds, load 1.0)), at least 1 - is asked only for a run
+at or over the ceiling and divides it before the verdict, which prints the raw time, the slowdown and the net time; a run under
+the ceiling is judged raw as before and prints that its slowdown was not measured (FR-007). Feature 171's other check on quick,
+the 60 s budget (CONVENTION: `QUICK_BUDGET` in the Makefile, feature 171), stays raw: no comparison below the ceiling reads load.
 
 ## Task approaches
 

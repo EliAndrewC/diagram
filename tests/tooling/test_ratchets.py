@@ -80,6 +80,8 @@ def test_quick_is_judged_net_of_the_host_s_measured_slowdown() -> None:
     ok, msg = ratchet.verdict("quick", seconds=30, slow=1.5)
     assert not ok and "20s (30s raw, net of the host's 1.50x slowdown)" in msg
     assert ratchet.verdict("quick", seconds=15, slow=1.0)[0] is False, "unloaded, 15 s still fails"
+    ok, msg = ratchet.verdict("quick", seconds=12)
+    assert ok and "slowdown not measured" in msg, "a run under the ceiling says it was judged raw"
     r = ratchet.RATCHETS["quick"]
     assert r.calibration_s and "measured 2026-10-27" in r.calibration_reason, "the pinned loop time carries its date and method"
     assert ratchet.slowdown(r, 6, rounds=2, run=lambda n: r.calibration_s * 2.0) == 2.0

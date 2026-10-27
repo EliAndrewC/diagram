@@ -213,9 +213,9 @@ def _loop(_: int) -> float:
     return time.perf_counter() - t0
 
 
-def slowdown(r: Ratchet, workers: int, rounds: int = 3, run: Callable[[int], float] | None = None) -> float:
+def slowdown(r: Ratchet, workers: int, rounds: int = 5, run: Callable[[int], float] | None = None) -> float:
     """How much slower the host runs now than when `r.calibration_s` was pinned: the calibration loop on `workers` processes at
-    once (quick's own parallelism), the best of `rounds` rounds' slowest process, over the pinned time - never below 1, so a
+    once (quick's own parallelism), the best of `rounds` rounds' slowest process (five, as the pin was taken), over the pinned time - never below 1, so a
     run is never held to a tighter bar than the GM's (feature 440 T05)."""
     if r.calibration_s is None:
         return 1.0
@@ -257,7 +257,11 @@ def verdict(
     if slow > 1.0 and mode == "run":  # NET OF THE HOST'S SLOWDOWN (feature 440 T05): load alone does not fail the run
         measured = round(raw / slow)
     if measured < ceiling:
-        return True, (f"{target}: {raw}s raw, {measured}s net of the host's {slow:.2f}x slowdown - under its {ceiling}s ceiling" if raw >= ceiling else "")
+        if r.calibration_s is not None and mode == "run":
+            if raw >= ceiling:
+                return True, f"{target}: {raw}s raw, {measured}s net of the host's {slow:.2f}x slowdown - under its {ceiling}s ceiling"
+            return True, f"{target}: {raw}s, under its {ceiling}s ceiling (the host's slowdown not measured: asked only at the ceiling)"
+        return True, ""
     what = "this run" if mode == "run" else "the median of recent green runs"
     klass = f" ({cache} roll cache)" if cache else ""
     base = r.baseline_cold if (cache == "cold" and r.baseline_cold is not None) else r.baseline
