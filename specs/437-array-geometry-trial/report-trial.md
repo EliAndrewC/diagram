@@ -23,7 +23,7 @@ For the GM (FR-006). Measured 2026-10-27, seed 25 at 40 households, the host sha
 
 ## What it cost
 
-From the GM's request to this report: the session's first command 20:54:02, this report 21:16 (about 22 minutes of wall
+From the GM's request to this report: the session's first command 20:54:02, this report 21:11 (about 17 minutes of wall
 clock). `make feature-report F=437` splits the session's own time (from the event log):
 
 | category | time |
