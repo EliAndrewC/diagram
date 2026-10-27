@@ -23,7 +23,8 @@
       verify: DONE. landed: the wells' verge, wood-floor and belt tests asked of the lattice as arrays and kept on the sweep; lane wells -24% calls, the roll ~3% faster at 40 households on two seeds (research/t06-evidence.md)
 - [ ] T07 seat_wells' belt claim says belt seats rank behind coverage, never refused; 0072's drawing page states the maps' rule of seating wells outside the belt first (impl-drift, T06's claims round)
       research: rendering
-- [ ] T08 The notice board's seats screened by the houses and yards before the full house-fit test (T57 item 2; T03's second fix)
+- [x] T08 The notice board's seats screened by the houses and yards before the full house-fit test (T57 item 2; T03's second fix)
       research: rendering
+      verify: DONE. landed: the notice board's route seats screened by _fits' own clearance from what stands, asked first and not again; notice -9% calls, its time inside the run's bias (research/t08-evidence.md)
 - [ ] T09 0190's drawing page states that a notice board keeps out of a farmstead's own grove (grove_rects, _fits' clearance) beside its rule that a board clears no ground and may stand under a crown (impl-drift, T08's claims round)
       research: rendering
