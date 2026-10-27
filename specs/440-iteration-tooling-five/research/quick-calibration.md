@@ -24,3 +24,11 @@ session's (`os.times` for the children's CPU).
 The 15 s is the GM's: "if it takes even as much as fifteen seconds ... a failure" (`specs/171-runtime-ratchets/request.md`,
 2026-08-30), pinned as `hard_ceiling=15` on quick's ratchet in `scripts/measure/ratchet.py`; this feature leaves it, and the
 11 s baseline, as they are.
+
+## Why the pin is the unloaded time (the round arbiter's point, ask:440-spec-round-3)
+
+The pinned 0.12 s was taken at load average 1.0 on this 22-CPU host (measured 2026-10-27: the loop on 6 processes, the best
+of 5 rounds' slowest - 0.122, 0.147, 0.123, 0.132, 0.132 s), effectively idle; the "quiet" suite runs above were at load
+4.0-4.5 from other sessions, so their 1.25-1.31x is real load, not a pin taken high. Were the pin taken under load, the
+division would loosen the GM's 15 s on a quiet host; taken idle, a quiet host's slowdown reads 1.0 (never below it) and the
+15 s binds as before.

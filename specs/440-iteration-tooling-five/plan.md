@@ -22,8 +22,8 @@ None: no engine code a roll runs changes (the tools read and time rolls; `perf_f
 ## Constitution Check
 
 - **I-V, VII-IX, XI**: N/A. **VI**: PASS - the tests above, `make quick`, `make cover-changed`, the landing's `make done`; a
-  real quick A/B with its stage rows; `research/quick-calibration.md`. **X**: PASS - 100% on the changed `l7r/` tools.
-- **Feature 171** (the GM's 15 s): the ceiling and baseline unchanged; what is compared changes on the GM's approval (FR-007).
+  real quick A/B with its stage rows; `research/quick-calibration.md`. **X**: PASS - the coverage floor (CONVENTION: constitution X's 100%) on the changed `l7r/` tools.
+- **Feature 171** (the GM's 15 s, observed 2026-08-30, method: the GM's words, `research/quick-calibration.md`): the ceiling and baseline unchanged; what is compared changes on the GM's approval (FR-007).
 
 ## Decisions
 
@@ -37,11 +37,11 @@ because [the measurement that took it ...]" and the branch not taken; the trial 
 `.placed.json`; `perf_fanout.placed_of` reads its integer counts alone.
 
 **D4 - Every stage** (FR-004): a leg carries `(wall, cpu, {stage: seconds})` - the worker's roll returns the stages, the full
-form's `legs` reads them - and `stage_rows` prints every stage, largest move first, `*` past 1% of A's best roll.
+form's `legs` reads them - and `stage_rows` prints every stage, largest move first, `*` past `STAGE_SHARE` (CONVENTION: 1% of A's best roll, a plumbing threshold of ours).
 
 **D5 - The small ones** (FR-005-FR-007): `make trial APPROVED=` (`TRIAL_APPROVED`) fills the approval line; `stale_terms`
 skips a candidate the diff rewrote from a line already naming its subject (`rewritten_from`); `ratchet.slowdown` - the loop
-on `XDIST_WORKERS` processes (fork), best of 3 rounds' slowest over the pinned 0.12 s, at least 1, asked only for a run at or
+on `XDIST_WORKERS` processes (fork), best of 3 rounds' slowest over the pinned 0.12 s (measured 2026-10-27 (the loop on 6 processes, best of 5 rounds, load 1.0)), at least 1, asked only for a run at or
 over the ceiling - divides quick's run before the verdict, which prints both.
 
 ## Task approaches

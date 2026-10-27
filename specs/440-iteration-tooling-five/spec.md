@@ -107,6 +107,8 @@ counters; two call-count fanouts to find which stage a +17% came from; and three
   FR-006 rewritten lines only; SC-006's figure attributed.
 - 2026-10-27, round 2 (spec-fidelity-verify): CHANGES REQUIRED - SC-004 to every stage and every form; FR-007 names the
   suite actually timed; SC-006's figure points at its research.
+- 2026-10-27, the round cap: the round arbiter ACCEPT (ask:440-spec-round-3), standing as the spec's verdict; its point on the
+  pinned loop time answered in `research/quick-calibration.md`.
 
 ## Assumptions
 
