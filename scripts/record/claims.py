@@ -750,7 +750,21 @@ def _triage_cmd(args: argparse.Namespace, root: Path, cur: dict[str, Row], index
     if len(keys) <= TRIAGE_SKIP_MAX:
         return _small_triage(root, keys, args.out)
     tout = Path(args.out) if args.out else DEFAULT_OUT / "claims-triage"
-    print(triage_bundle(cur, index, store, keys, qdir, tout))
+    manifest = triage_bundle(cur, index, store, keys, qdir, tout)
+    data = json.loads((tout / "triage.json").read_text(encoding="utf-8"))
+    if set(data["forced"]) >= set(keys):
+        # ...EVERY CLAIM OWED IN FULL, NOTHING TO TRIAGE (feature 417 T54, 2026-10-27): a code move left no diff to show, and the
+        # triage agent dispatched on the empty bundle could only say so, its reply then refused as empty - recorded here instead
+        new, msgs = record_triage(index, data["units"], "", datetime.date.today().isoformat(), data["forced"])
+        save_index(root / INDEX, live_rows(cur, new))
+        save_store(root / STORE, {**store, **data["snapshots"]})
+        keep_texts(qdir, data["units"])
+        print(
+            f"claims-triage: all {len(keys)} claim(s) are owed in full (no diff or removed block to show) - no triage to dispatch; "
+            "they go straight to impl-drift: `make claims-bundle OWED=1`, then `make claims-checked BUNDLE=<dir> REPLY=<file>`"
+        )
+        return 0
+    print(manifest)
     claims_flight.mark(root, tout)  # in flight until `claims-triaged` records its reply (feature 426 D1)
     print(
         f"claims-triage: {len(keys)} claim(s); dispatch the `claims-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`"
