@@ -153,6 +153,198 @@
      "why": "The GM's request says to build the trial form, then do the search-restructuring trial. Starting that trial with the new form is the next step the request names. It does not narrow the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02-goal",
+     "summary": "A trial measured first and reviewed once, its evidence pushed as it is measured.",
+     "class": "within",
+     "why": "Restates the GM-endorsed proposal (a) verbatim in substance: 'measure first under a short brief, then one spec review on fixed evidence'."
+    },
+    {
+     "id": "T02-gate-site",
+     "summary": "The trial rule is placed in review-gate.sh's spec loop, the one place a verdict is required at push.",
+     "class": "within",
+     "why": "Implements FR-004 where the verdict requirement lives; it adds no reach beyond FR-004's exemption (verdict-less brief, not Done, engine unchanged on net) and FR-007 holds: the conditions are status and engine delta, not time."
+    },
+    {
+     "id": "T02-order",
+     "summary": "After T01.",
+     "class": "within",
+     "why": "Sequencing only; the GM asked for both (a) and (c) built first, in no stated order."
+    },
+    {
+     "id": "T02-exits",
+     "summary": "Green: landed with the gate's hook tests and trial-start's tests; red: failure recorded, task set down, a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Process exits; nothing dropped from FR-003/FR-004."
+    },
+    {
+     "id": "T02-done",
+     "summary": "Done measured as make hooks-test passing the gate's new cases and feature 439 started with make trial.",
+     "class": "within",
+     "why": "Starting the search-restructuring trial with the new tool is the GM's stated next step ('Then do the search-restructuring trial'); only its claim/brief is in this task, the trial itself stays its own feature."
+    },
+    {
+     "id": "T02-step-tests",
+     "summary": "The brief measured by tests/test_trial_start.py, the gate rule by tests/hooks/test-review-gate.sh.",
+     "class": "within",
+     "why": "Tests whose only effect is to enforce FR-003 (SC-002) and FR-004 (SC-003): enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T02-perf",
+     "summary": "Not performance work.",
+     "class": "within",
+     "why": "Tooling for the trial form; no engine change."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T01 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-goal",
+     "summary": "Goal: a module's share of each stage's time, read in one command from the profiles already kept.",
+     "class": "within",
+     "why": "The GM's (c), `make perf-share MODULE= STAGES=` reading the kept raw profiles, restated; FR-001 carries it."
+    },
+    {
+     "id": "T01-constraints",
+     "summary": "Constraints cited: FR-001, FR-002, FR-007, D1, D2; nothing in them is dropped or bounded by the block.",
+     "class": "within",
+     "why": "Every perf-share requirement in the spec (FR-001/002/007, D1/D2) is named; the trial-form requirements (FR-003/004/006) belong to other tasks, so their absence here narrows nothing."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green: landed with tests and a real run on 437's profiles; Red: failure recorded, task set down, a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Process exits; neither relaxes FR-001 nor makes an exception to it."
+    },
+    {
+     "id": "T01-done",
+     "summary": "Done measured as `make perf-share PROFILES=<437's four>` printing 437's shares (3.5%, dated one-shot label to 437 research/share.md).",
+     "class": "within",
+     "why": "This is SC-001 for FR-001/FR-002; it checks the requested reading on real kept profiles. The defaults and the newest-kept-profile path stay required by the cited FR-001/FR-002 and are not excluded by the block."
+    },
+    {
+     "id": "T01-steps",
+     "summary": "Each step measured alone: the reading by tests/tools/test_perf_share.py on a synthetic profile; the size-in-name by tests/tools/test_perf_profile.py.",
+     "class": "within",
+     "why": "Tests that enforce FR-001 and D2 exactly; enforcement of the request, not scope."
+    },
+    {
+     "id": "T01-not-perf",
+     "summary": "Not performance work: it reads profiles and changes no engine code a roll runs.",
+     "class": "within",
+     "why": "Consistent with the request (a tooling change) and FR-007 (gates nothing, refuses on no time)."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T02": {
+   "section_sha256": "8683676597f44b5c941ade1df5ed74c6bac674896e303223b6825b0f68a5bdc4",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T02-goal",
+     "summary": "A trial measured first and reviewed once, its evidence pushed as it is measured.",
+     "class": "within",
+     "why": "Restates the GM-endorsed proposal (a) verbatim in substance: 'measure first under a short brief, then one spec review on fixed evidence'."
+    },
+    {
+     "id": "T02-gate-site",
+     "summary": "The trial rule is placed in review-gate.sh's spec loop, the one place a verdict is required at push.",
+     "class": "within",
+     "why": "Implements FR-004 where the verdict requirement lives; it adds no reach beyond FR-004's exemption (verdict-less brief, not Done, engine unchanged on net) and FR-007 holds: the conditions are status and engine delta, not time."
+    },
+    {
+     "id": "T02-order",
+     "summary": "After T01.",
+     "class": "within",
+     "why": "Sequencing only; the GM asked for both (a) and (c) built first, in no stated order."
+    },
+    {
+     "id": "T02-exits",
+     "summary": "Green: landed with the gate's hook tests and trial-start's tests; red: failure recorded, task set down, a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Process exits; nothing dropped from FR-003/FR-004."
+    },
+    {
+     "id": "T02-done",
+     "summary": "Done measured as make hooks-test passing the gate's new cases and feature 439 started with make trial.",
+     "class": "within",
+     "why": "Starting the search-restructuring trial with the new tool is the GM's stated next step ('Then do the search-restructuring trial'); only its claim/brief is in this task, the trial itself stays its own feature."
+    },
+    {
+     "id": "T02-step-tests",
+     "summary": "The brief measured by tests/test_trial_start.py, the gate rule by tests/hooks/test-review-gate.sh.",
+     "class": "within",
+     "why": "Tests whose only effect is to enforce FR-003 (SC-002) and FR-004 (SC-003): enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T02-perf",
+     "summary": "Not performance work.",
+     "class": "within",
+     "why": "Tooling for the trial form; no engine change."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T01": {
+   "section_sha256": "8523958948b53fe47ccf25fd00036efbceac907a04727d498c71f205f937992f",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T01-goal",
+     "summary": "Goal: a module's share of each stage's time, read in one command from the profiles already kept.",
+     "class": "within",
+     "why": "The GM's (c), `make perf-share MODULE= STAGES=` reading the kept raw profiles, restated; FR-001 carries it."
+    },
+    {
+     "id": "T01-constraints",
+     "summary": "Constraints cited: FR-001, FR-002, FR-007, D1, D2; nothing in them is dropped or bounded by the block.",
+     "class": "within",
+     "why": "Every perf-share requirement in the spec (FR-001/002/007, D1/D2) is named; the trial-form requirements (FR-003/004/006) belong to other tasks, so their absence here narrows nothing."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green: landed with tests and a real run on 437's profiles; Red: failure recorded, task set down, a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Process exits; neither relaxes FR-001 nor makes an exception to it."
+    },
+    {
+     "id": "T01-done",
+     "summary": "Done measured as `make perf-share PROFILES=<437's four>` printing 437's shares (3.5%, dated one-shot label to 437 research/share.md).",
+     "class": "within",
+     "why": "This is SC-001 for FR-001/FR-002; it checks the requested reading on real kept profiles. The defaults and the newest-kept-profile path stay required by the cited FR-001/FR-002 and are not excluded by the block."
+    },
+    {
+     "id": "T01-steps",
+     "summary": "Each step measured alone: the reading by tests/tools/test_perf_share.py on a synthetic profile; the size-in-name by tests/tools/test_perf_profile.py.",
+     "class": "within",
+     "why": "Tests that enforce FR-001 and D2 exactly; enforcement of the request, not scope."
+    },
+    {
+     "id": "T01-not-perf",
+     "summary": "Not performance work: it reads profiles and changes no engine code a roll runs.",
+     "class": "within",
+     "why": "Consistent with the request (a tooling change) and FR-007 (gates nothing, refuses on no time)."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

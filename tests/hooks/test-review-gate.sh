@@ -122,6 +122,17 @@ mkrepo f4; printf '# Feature Specification: x\n\n**Status**: Superseded by 901\n
 printf -- '- [ ] T01 build it\n' > specs/900-x/tasks.md; echo work >> seed.txt; git add -A; git commit -qm superseded-with-tasks
 check "...a superseded spec that HAD tasks: the verdict is owed" f4 blocked
 
+# feature 438: a TRIAL (**Form**: trial) pushes its evidence with no verdict while it is not Done and changes no engine code on net
+TRIAL='# Trial: x\n\n**Form**: trial\n\n**Status**: Running\n'
+mkrepo t1; printf "$TRIAL" > specs/900-x/spec.md; echo evidence > specs/900-x/notes.md; git add -A; git commit -qm trial
+check "a running trial with no verdict, its evidence pushed: no verdict owed yet" t1 ok
+mkrepo t2; printf "$TRIAL" > specs/900-x/spec.md; mkdir -p l7r; echo spike > l7r/x.py; git add -A; git commit -qm spike; git rm -q l7r/x.py; git commit -qm revert
+check "...a spike committed and reverted in the same push: still none" t2 ok
+mkrepo t3; printf "$TRIAL" > specs/900-x/spec.md; mkdir -p l7r; echo spike > l7r/x.py; git add -A; git commit -qm spike
+check "...a push that changes the engine on net: the verdict is owed" t3 blocked
+mkrepo t4; printf '# Trial: x\n\n**Form**: trial\n\n**Status**: Done - set down\n' > specs/900-x/spec.md; echo work >> seed.txt; git add -A; git commit -qm done
+check "...a trial Done: the verdict is owed" t4 blocked
+
 echo
 }
 

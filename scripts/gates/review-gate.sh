@@ -104,6 +104,12 @@ for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); d
   # GUARD_EDIT_OK: the GM 2026-10-10 withdrew filed feature 345 and this check refused the status edit. A spec WITHDRAWN
   # or SUPERSEDED with no tasks.md was never implemented, so it owes no verdict either; one that was planned keeps owing it.
   if [ ! -f "$(dirname "$spec")/tasks.md" ] && grep -qiE '^\*\*Status\*\*:?[[:space:]]*(Withdrawn|Superseded by)\b' "$spec"; then continue; fi
+  # A TRIAL RUNNING (feature 438; docs/spec-kit-and-reviews.md, "The trial form"): a brief with `**Form**: trial` is measured first and
+  # reviewed ONCE, when its evidence is fixed - feature 437's spec took three rounds because it was reviewed while its evidence changed
+  # beside it. So a trial not yet Done pushes its evidence with no verdict, while the push changes no engine code on net (a spike is
+  # committed, measured and reverted); Done, or a push that changes l7r/, owes the verdict as any spec does.
+  if grep -qE '^\*\*Form\*\*:?[[:space:]]*trial\b' "$spec" && ! grep -qiE '^\*\*Status\*\*:?[[:space:]]*Done\b' "$spec" \
+     && git diff --quiet "$RANGE" -- l7r/ 2>/dev/null; then continue; fi
   # A VERDICT, not a MENTION (feature 156, 2026-08-29). The check used to be a bare `grep FAITHFUL`,
   # which two shapes satisfied without a review having passed: a spec whose only occurrence is "NOT
   # FAITHFUL" - i.e. one a reviewer REJECTED - and a spec whose prose merely discusses the word. So
@@ -126,6 +132,10 @@ for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); d
     printf 'Mode 2, give it the GM request VERBATIM (not the plan - a spec checked against its own\n'
     printf 'plan is tested for self-consistency, which a wrong spec passes), and record the verdict\n'
     printf 'in a "## Review history" section.\n'
+    if grep -qE '^\*\*Form\*\*:?[[:space:]]*trial\b' "$spec"; then
+      printf 'A TRIAL (feature 438) pushes with no verdict only while it is not Done AND the push changes nothing under l7r/ on\n'
+      printf 'net: revert a measured spike before pushing, or take the one review now (spec-fidelity, MODE 2, on the brief).\n'
+    fi
     fail="$fail $spec"
   fi
 done

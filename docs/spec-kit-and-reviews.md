@@ -39,6 +39,26 @@ incidents behind them.*
 - **A SPEC IS REVIEWED AGAINST THE GM'S OWN WORDS, BY SOMEONE ELSE** (same principle). Before implementation, hand the finished `spec.md` and the GM's request AS WRITTEN to an independent subagent: does this specify what was asked, and does it add anything that was not? Not the plan - a spec graded against its own plan is being checked for self-consistency, which a wrong spec passes. Adjust and re-review up to **five** times; if the FIFTH round still returns changes, the round arbiter rules before a sixth (feature 379: never the GM first; its `accept` stands as the verdict at the review gate), because that many failures means a persistent misunderstanding another attempt will not find. The cap exists to end an argument going nowhere, NOT to cut off a review still finding new, smaller things each round. **Watch the number**: if features start hitting five, the drafting is the problem, not the cap. **THE CAP COUNTS THE INITIAL REVIEW ONLY** (GM 2026-09-12: *"we should probably clarify the five round cap on reviews. That is intended for the initial creation of the spec ... it is completely fine to go past five rounds because what you're really doing is you're resetting the counter every time you make a change ... once the spec is accepted, then we set the counter to zero the next time that any changes are made mid implementation or later"*): the five rounds are the spec's first acceptance; a spec amended AFTER it was accepted - mid-implementation, because the design changed under measurement, or later - is re-reviewed on a counter reset to zero, five rounds again from the amendment.
 - **One constitution for the whole repo, deliberately** (GM 2026-08-15): spec-kit's Constitution Check reads a single file, and the domain separation the project needs already exists in layers - the constitution carries universal principles; each domain's operational doctrine lives in its auto-loading directory CLAUDE.md (the diagram skill's is the exemplar); SKILL.md stays the usage-facing index. A rule that applies to only one domain belongs in that domain's CLAUDE.md, not in a forked constitution.
 
+## The trial form (feature 438)
+
+A TRIAL is a question a measurement answers, asked before any decision to build - "would arrays make the geometry faster?",
+"does fewer candidates cut the search's time?". Start one with `make trial SLUG=<slug>`: it claims the number as `make claim`
+does and writes a trial brief (`spec.md`, `**Form**: trial`, from `.specify/templates/trial-template.md`) - the question, the
+GM's words, the measurement, the trial's own decision rule, the evidence, the time.
+
+- **Measure first.** The brief is not reviewed before the measurement: while the trial runs (its status not `Done`) its pushes
+  go through with no fidelity verdict, so its evidence is committed and pushed as it is measured.
+- **Review once.** When the evidence is fixed and the status turns `Done`, the brief takes its one review (spec-fidelity,
+  MODE 2, on the brief with its evidence) - feature 437's spec, reviewed while its evidence changed beside it, took three
+  rounds and a round-arbiter ruling (`specs/437-array-geometry-trial/report-trial.md`).
+- **No engine code while running.** A spike is committed, measured and reverted, so a running trial's pushes change nothing
+  under `l7r/` on net. A push that does change the engine - a spike that won and lands - owes the brief's verdict first, and
+  lands as any engine change does.
+- **Its time** is reported as feature 437's was: `make feature-report F=<n>`'s split and a per-step breakdown.
+
+The review gate holds the first and third rules (`scripts/gates/review-gate.sh`, its trial clause). For where the time is
+before a performance trial, `make perf-share` reads a module's share of each stage from the kept profiles.
+
 ## Regressions and defects: the full rule
 
 **FIXING IT IS THE EXIT.** Principle XIII's three ways out are not a menu (GM 2026-08-23): FIX is the expected outcome, REVERT requires a WRITTEN impossibility investigation rather than a preference, and a waiver is the GM's to grant after a fix has genuinely been attempted. A session that has found a path forward takes it.

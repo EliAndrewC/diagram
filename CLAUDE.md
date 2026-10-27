@@ -97,6 +97,8 @@ Spec-driven under `.specify/memory/constitution.md`. One line each here; the ful
   (`make speckit-todo BY=affects`, `CHECK=1` at the push). An item owed at a tier goes into that tier's placeholder (380 village,
   381 town, 382 provincial city), never filed alone. A feature closes when every task is ticked, or when its status line opens
   `Done`, `Superseded by NNN` or `Withdrawn` with the evidence beside it.
+- A question a measurement answers, before any decision to build, is a TRIAL (`make trial SLUG=`): measured first, reviewed
+  once when Done, no engine code on net while it runs (`docs/spec-kit-and-reviews.md`, "The trial form", feature 438).
 - Every task is `research: rendering` or `research: physical` (the physical one carries its five boxes).
 - A feature ends with `make feature-report F=NNN WRITE=1`; a row the GM agreed in the session is
   `make gm-reviewed F=NNN WORDS="<his words>"`.

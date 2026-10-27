@@ -698,6 +698,9 @@ spec-harness:   ## [project] run a feature's measurement harness (its harness.py
 	HARNESS_OUT="$(OUT)" python3 -m pytest -q -p no:cacheprovider --no-cov -p no:randomly tests/test_zz_spec_harness_tmp.py; ec=$$?; \
 	rm -f tests/test_zz_spec_harness_tmp.py; exit $$ec
 
+trial:          ## [project] start a TRIAL - a question a measurement answers: claims a number and writes the trial brief (**Form**: trial), measured first, reviewed once when Done (feature 438; docs/spec-kit-and-reviews.md)   SLUG=kebab-slug
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/trial-start.py" "$(SLUG)"
+
 claim:          ## [project] claim the next spec-kit feature number under the host-wide lock   SLUG=kebab-slug | RENUMBER=specs/NNN-slug [PEEK=1: look, claim nothing]
 ##  SLUG=<slug>          lower-case kebab; the directory becomes specs/NNN-<slug>/ in THIS clone
 ##  RENUMBER=<specs/dir> instead of a slug: MOVE that existing directory to the next number (a deduplication, GM 2026-09-07)
