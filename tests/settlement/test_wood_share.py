@@ -398,3 +398,20 @@ def test_a_farm_with_no_yard_keeps_only_its_beds_sun_strips() -> None:
     _c, rects = copse_keepouts({"house": (0.0, 0.0, 40.0, 24.0), "yard": None, "gardens": [bed]}, 22.0, 39.0, 12.0)
     assert len(rects) == 2, rects  # the bed's south strip and its east lane, nothing for the yard
     assert all(r[2] > bed[0] for r in rects), "both stand off the bed"
+
+
+def test_the_corridor_test_asked_as_one_array_is_the_seat_by_seat_test() -> None:
+    """Feature 437, the array geometry trial: `corridor_bars` asks the seats in reach as one array; on random seats and
+    corridors it answers as asking each seat's `seg_dist` did."""
+    import random
+
+    s = _open()
+    wood = install_wood_shares(s, FLOOR, REACH, 7.0)
+    rng = random.Random(437)
+    wood.seats.extend([(x, y, x, y, x, y) for x, y in ((rng.uniform(0, 1400), rng.uniform(0, 1400)) for _ in range(300))])
+    for _ in range(400):
+        a = (rng.uniform(0, 1400), rng.uniform(0, 1400))
+        b = (a[0] + rng.uniform(-200, 200), a[1] + rng.uniform(-200, 200))
+        old = any(seg_dist(sx, sy, a, b) < wood.lane_gap for sx, sy, *_ in wood.seats.near((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, math.dist(a, b) / 2 + wood.lane_gap))
+        assert wood.corridor_bars(a, b) == old, (a, b)
+    assert not install_wood_shares(_open(), FLOOR, REACH, 7.0).corridor_bars((0.0, 0.0), (10.0, 0.0)), "no seat: nothing bars"
