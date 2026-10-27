@@ -95,6 +95,7 @@ stages' time.
 - 2026-10-27, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED - perf-share reads the kept profiles (matched by seed,
   size and stage); the separate engine refusal dropped, the verdict-less pass limited to no net engine change; each trial's
   own rule; the per-step time kept.
+- 2026-10-27, round 2 (spec-fidelity-verify): FAITHFUL.
 
 ## Assumptions
 
