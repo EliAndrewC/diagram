@@ -111,3 +111,17 @@ two engines is on record, the way `make done` will not run before `make quick` h
 ## Assumptions
 
 - The default seed is 25, the seed the 435 profiles used; seed 4 is refused at 40 households.
+
+## Amendment 1 (the GM, 2026-10-27): one run a version in every form
+
+After the quick form measured 2.05 min at 6 runs, the GM, verbatim: "I'm kind of just okay with saying that we mostly don't
+care about 1 to 3% changes enough to really need to measure those with high fidelity, and that the cost of achieving that
+fidelity is making these runs really significantly longer, which is actually making it harder for us to iterate and making
+everything take longer, which is counterproductive to the entire effort that we are undertaking here, right? So really, I
+don't know that we want repeated runs at all, even for the full runs. This will still help us know whether or not our gains
+are large. And if we feel that we really need to run with more rounds, then we can make that a tunable parameter. But we
+should only enable that parameter in rare circumstances, I think."
+
+- FR-001's run counts become ONE run a version in every form (quick, subset, full); `N=` raises it, rarely.
+- The untimed work (each worker's warm-up and its call count) runs for both versions at once; the timed rolls take turns, the
+  first version alternating run by run and seed by seed (FR-003's alternation, kept across a subset's seeds when N is 1).

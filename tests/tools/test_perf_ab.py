@@ -23,8 +23,12 @@ class _Fake:
         self.seen.append(self.tree)
         return self.times[(self.tree, k)].pop(0)
 
-    def count(self, k: Any) -> int:
-        return 100 if self.tree.endswith("A") else 90
+    def send(self, q: Any) -> None:
+        self.seen.append(f"{self.tree}:{q['op']}")
+        self.last = q
+
+    def answer(self) -> dict[str, Any]:
+        return {"calls": 100 if self.tree.endswith("A") else 90} if self.last["op"] == "count" else {}
 
     def close(self) -> None:
         self.seen.append("closed")
@@ -40,7 +44,7 @@ def test_the_form_is_the_count_compared_and_the_order_alternates() -> None:
 def test_a_worker_answers_its_marked_lines_and_says_when_it_ended(tmp_path: Path) -> None:
     script = 'import json, sys\nfor line in sys.stdin:\n    q = json.loads(line)\n    print("progress")\n    print("@@" + json.dumps({"wall": 1.5, "cpu": 1.25, "calls": 7}), flush=True)\n'
     w = pa.Worker(str(tmp_path), script)
-    assert w.roll((40, 25)) == (1.5, 1.25) and w.count((40, 25)) == 7
+    assert w.roll((40, 25)) == (1.5, 1.25) and w.ask({"op": "count"})["calls"] == 7
     w.close()
     dead = pa.Worker(str(tmp_path), "import sys; sys.stdin.readline()")
     with pytest.raises(RuntimeError, match="ended before it answered"):
@@ -48,12 +52,15 @@ def test_a_worker_answers_its_marked_lines_and_says_when_it_ended(tmp_path: Path
     dead.close()
 
 
-def test_rolled_alternates_the_versions_and_counts_each_once() -> None:
+def test_rolled_warms_and_counts_both_at_once_and_alternates_by_run_and_by_key() -> None:
     seen: list[str] = []
-    times = {("tA", (40, 25)): [(2.0, 1.9), (2.2, 2.0)], ("tB", (40, 25)): [(1.5, 1.4), (1.7, 1.6)]}
-    runs, calls = pa.rolled({"A": "tA", "B": "tB"}, [(40, 25)], 2, make=lambda tree: _Fake(tree, times, seen))
-    assert seen == ["tA", "tB", "tB", "tA", "closed", "closed"]
-    assert runs["A"] == [{(40, 25): (2.0, 1.9)}, {(40, 25): (2.2, 2.0)}] and calls == {"A": {(40, 25): 100}, "B": {(40, 25): 90}}
+    times = {("tA", (40, 25)): [(2.0, 1.9), (2.2, 2.0)], ("tB", (40, 25)): [(1.5, 1.4), (1.7, 1.6)], ("tA", (40, 39)): [(3.0, 3.0)] * 2, ("tB", (40, 39)): [(2.9, 2.9)] * 2}
+    runs, calls = pa.rolled({"A": "tA", "B": "tB"}, [(40, 25), (40, 39)], 2, make=lambda tree: _Fake(tree, times, seen))
+    assert seen[:2] == ["tA:warm", "tB:warm"], "both warmed before any timed roll"
+    assert seen[2:10] == ["tA", "tB", "tB", "tA", "tB", "tA", "tA", "tB"], "the first version alternates key by key and run by run"
+    assert seen[10:] == ["tA:count", "tB:count", "tA:count", "tB:count", "closed", "closed"]
+    assert runs["A"] == [{(40, 25): (2.0, 1.9), (40, 39): (3.0, 3.0)}, {(40, 25): (2.2, 2.0), (40, 39): (3.0, 3.0)}]
+    assert calls == {"A": {(40, 25): 100, (40, 39): 100}, "B": {(40, 25): 90, (40, 39): 90}}
 
 
 def test_a_full_snapshot_runs_make_perf_in_its_tree_and_its_legs_read_from_the_stages(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -134,7 +141,7 @@ def rig(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
     seen: list[str] = []
 
     def make(tree: str) -> _Fake:
-        return _Fake(tree, {(tree, (40, 25)): [(2.0, 1.9)] * 6, (tree, (20, 25)): [(1.0, 0.9)] * 6, (tree, (20, 39)): [(1.1, 1.0)] * 6, (tree, (40, 39)): [(2.5, 2.4)] * 6}, seen)
+        return _Fake(tree, {(tree, (40, 25)): [(2.0, 1.9)] * 9, (tree, (20, 25)): [(1.0, 0.9)] * 9, (tree, (20, 39)): [(1.1, 1.0)] * 9, (tree, (40, 39)): [(2.5, 2.4)] * 9}, seen)
 
     return {"made": made, "removed": removed, "make": make, "state": tmp_path / "state", "seen": seen}
 
@@ -142,7 +149,7 @@ def rig(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
 def test_main_quick_records_the_pair_and_prints_the_floor_line(rig: dict[str, Any], capsys: pytest.CaptureFixture[str]) -> None:
     assert pa.main(["abc"], make=rig["make"], env={}) == 0
     out = capsys.readouterr().out
-    assert "(40, 25)" in out and "make perf-ab AA=1 SEEDS=25 HOUSEHOLDS=40 N=6" in out
+    assert "(40, 25)" in out and "make perf-ab AA=1 SEEDS=25 HOUSEHOLDS=40 N=1" in out
     assert (rig["state"] / "quick" / "kA-kB.json").is_file() and len(rig["removed"]) == 2
 
 
@@ -166,7 +173,7 @@ def test_main_full_sweeps_and_aa_records_the_floor(rig: dict[str, Any], capsys: 
     assert pa.main(["abc", "--aa", "--seeds", "25,39"], make=rig["make"], env={}) == 2
     assert pa.main(["HEAD", "--aa"], make=rig["make"], env={}) == 0
     assert "floor recorded" in capsys.readouterr().out and rig["made"][-1] == "HEAD"
-    floor = pa.read(str(rig["state"] / "floor" / "25-40-6.json"))
+    floor = pa.read(str(rig["state"] / "floor" / "25-40-1.json"))
     assert floor is not None and floor["wall"] == "+0%"
     assert pa.main(["abc"], make=rig["make"], env={}) == 0
     assert "floor (one engine against itself" in capsys.readouterr().out
@@ -186,7 +193,9 @@ def test_the_worker_script_rolls_with_the_versions_own_measure(tmp_path: Path) -
     )
     w = pa.Worker(str(tmp_path))
     try:
-        assert w.roll((40, 25)) == (3.0, 0.5) and w.roll((40, 4)) == (None, None) and w.count((40, 25)) == 7
+        assert w.ask({"op": "warm", "households": 40, "seed": 25}) == {}
+        assert w.roll((40, 25)) == (3.0, 0.5) and w.roll((40, 4)) == (None, None)
+        assert w.ask({"op": "count", "households": 40, "seed": 25}) == {"calls": 7}
     finally:
         w.close()
     assert sys.executable

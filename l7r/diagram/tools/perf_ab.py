@@ -3,9 +3,14 @@
 THREE FORMS, DECIDED BY WHAT IS COMPARED (feature 436, the GM 2026-10-27: "test a refactor first by doing the quick version
 ... then we could move on to running a larger subset of the tests and seeds"):
 
-- QUICK, the default: one seed at one size (`make perf-ab A=<commit>`: seed 25 at 40 households), 6 runs a version.
-- SUBSET: more than one seed or more than one size (`SEEDS=25,39 HOUSEHOLDS=20,40`), 3 runs a version.
-- FULL (`FULL=1`): the whole snapshot with its scaling legs (`make perf SCALING=1`), 3 runs a version.
+- QUICK, the default: one seed at one size (`make perf-ab A=<commit>`: seed 25 at 40 households).
+- SUBSET: more than one seed or more than one size (`SEEDS=25,39 HOUSEHOLDS=20,40`).
+- FULL (`FULL=1`): the whole snapshot with its scaling legs (`make perf SCALING=1`).
+
+ONE RUN A VERSION IN EVERY FORM (the GM 2026-10-27: "we mostly don't care about 1 to 3% changes enough to really need to
+measure those with high fidelity, and that the cost of achieving that fidelity is making these runs really significantly
+longer"): the work aims at large gains, which one run shows. `N=` repeats a run where a smaller change must be read - rarely,
+or once a roll is cheap enough that a repeat costs seconds.
 
 QUICK FIRST, ENFORCED: a subset or full run is refused before it rolls unless a quick comparison of the same two engines -
 judged by their code, docstrings and comments aside (`render_cache.engine_fingerprint`) - is on record in this clone, or
@@ -13,8 +18,9 @@ judged by their code, docstrings and comments aside (`render_cache.engine_finger
 
 Each version is checked out in a detached worktree. The quick and subset forms roll in one worker process per version,
 warmed by one untimed roll as `make perf` warms its first, each roll timed by that version's own `perf_snapshot.measure`;
-the full form runs `make perf SCALING=1` in each worktree. The versions ALTERNATE, A then B, then B then A, so neither always
-runs first. Per size and seed it prints each version's best wall time and CPU time with the spread of its runs (worst less
+the full form runs `make perf SCALING=1` in each worktree. The untimed work - each worker's warm-up and its call count -
+runs for both versions at once; only the timed rolls take turns. The versions ALTERNATE, A then B, then B then A, run by run
+and seed by seed, so neither always runs first. Per size and seed it prints each version's best wall time and CPU time with the spread of its runs (worst less
 best), the change between versions, and the calls of each (counted once, in a separate pass). A quick comparison prints the
 NOISE FLOOR of its form beside it - one engine timed against itself (`make perf-ab AA=1`) - to read a change against.
 
@@ -43,10 +49,9 @@ Leg = tuple[float | None, float | None]  # (wall seconds, CPU seconds); None whe
 Run = dict[Key, Leg]
 Snapshot = Callable[[str, str, bool], dict[str, Any]]
 
-QUICK_N = 6
-"""Research: plumbing - NONE: runs a version in the quick form, the GM's "a single Hamlet seed 6 times" (feature 436)"""
-WIDE_N = 3
-"""Research: plumbing - NONE: runs a version in the subset and full forms, feature 435's best of 3"""
+RUNS = 1
+"""Research: plumbing - NONE: runs a version in every form, the GM 2026-10-27 ("I don't know that we want repeated runs at all,
+even for the full runs"); `N=` raises it"""
 GUARD = "perf-ab-quick-first"
 ESCAPE = "PERF_AB_QUICK_OK"
 
@@ -56,15 +61,16 @@ WORKER = r"""
 import json, sys
 sys.path.insert(0, ".")
 from l7r.diagram.tools import perf_snapshot as ps
-warm = True
 for line in sys.stdin:
     q = json.loads(line)
-    if q["op"] == "count":
+    if q["op"] == "warm":
+        ps.measure((q["seed"],), households=q["households"])
+        out = {}
+    elif q["op"] == "count":
         got = ps.count_calls((q["seed"],), households=q["households"])
         out = {"calls": sum(sum(v.values()) for v in got.values())}
     else:
-        row = ps.measure((q["seed"],), households=q["households"], warm=warm)[0]
-        warm = False
+        row = ps.measure((q["seed"],), households=q["households"])[0]
         refused = bool(row.get("refused"))
         out = {"wall": None if refused else round(sum(row["stages"].values()), 2),
                "cpu": None if refused else round(sum((row.get("cpu_stages") or {}).values()), 2)}
@@ -79,21 +85,25 @@ class Worker:
         env = {**os.environ, "PYTHONPATH": tree}
         self.proc = subprocess.Popen([sys.executable, "-c", script], cwd=tree, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
 
-    def ask(self, q: Mapping[str, Any]) -> dict[str, Any]:
-        assert self.proc.stdin is not None and self.proc.stdout is not None
+    def send(self, q: Mapping[str, Any]) -> None:
+        assert self.proc.stdin is not None
         self.proc.stdin.write(json.dumps(dict(q)) + "\n")
         self.proc.stdin.flush()
+
+    def answer(self) -> dict[str, Any]:
+        assert self.proc.stdout is not None
         for line in self.proc.stdout:
             if line.startswith("@@"):
                 return dict(json.loads(line[2:]))
         raise RuntimeError("the worker ended before it answered - roll that seed with `make perf` in the worktree to see why")
 
+    def ask(self, q: Mapping[str, Any]) -> dict[str, Any]:
+        self.send(q)
+        return self.answer()
+
     def roll(self, key: Key) -> Leg:
         got = self.ask({"op": "roll", "households": key[0], "seed": key[1]})
         return got["wall"], got["cpu"]
-
-    def count(self, key: Key) -> int:
-        return int(self.ask({"op": "count", "households": key[0], "seed": key[1]})["calls"])
 
     def close(self) -> None:
         if self.proc.stdin is not None:
@@ -102,19 +112,32 @@ class Worker:
 
 
 def order(i: int) -> tuple[str, str]:
-    """The versions' order in run `i`: A then B, then B then A, so neither always runs first (feature 436)."""
+    """The versions' order at step `i` (a run's index plus a key's): A then B, then B then A, so neither always runs first."""
     return ("A", "B") if i % 2 == 0 else ("B", "A")
 
 
+def both(workers: Mapping[str, Any], q: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
+    """Ask both versions' workers at once and wait for both - for the untimed work only (a warm-up, a call count)."""
+    for w in workers.values():
+        w.send(q)
+    return {arm: w.answer() for arm, w in workers.items()}
+
+
 def rolled(trees: Mapping[str, str], keys: Sequence[Key], n: int, make: Callable[[str], Any] = Worker) -> tuple[dict[str, list[Run]], dict[str, dict[Key, int]]]:
-    """The quick and subset forms: `n` runs of every key on each version's worker, alternated; then each version's calls."""
+    """The quick and subset forms: both workers warmed at once; `n` runs of every key, the timed rolls taking turns, the order
+    alternating run by run and key by key; then each version's calls, counted at once."""
     workers = {arm: make(trees[arm]) for arm in ("A", "B")}
     try:
-        runs: dict[str, list[Run]] = {"A": [], "B": []}
+        both(workers, {"op": "warm", "households": keys[0][0], "seed": keys[0][1]})
+        runs: dict[str, list[Run]] = {"A": [{} for _ in range(n)], "B": [{} for _ in range(n)]}
         for i in range(n):
-            for arm in order(i):
-                runs[arm].append({k: workers[arm].roll(k) for k in keys})
-        calls = {arm: {k: workers[arm].count(k) for k in keys} for arm in ("A", "B")}
+            for j, k in enumerate(keys):
+                for arm in order(i + j):
+                    runs[arm][i][k] = workers[arm].roll(k)
+        calls: dict[str, dict[Key, int]] = {"A": {}, "B": {}}
+        for k in keys:
+            for arm, got in both(workers, {"op": "count", "households": k[0], "seed": k[1]}).items():
+                calls[arm][k] = int(got["calls"])
     finally:
         for w in workers.values():
             w.close()
@@ -278,12 +301,12 @@ def main(argv: list[str] | None = None, make: Callable[[str], Any] = Worker, tak
     ap.add_argument("--households", default="40", help="comma-separated sizes (default 40)")
     ap.add_argument("--full", action="store_true", help="the whole snapshot with its scaling legs")
     ap.add_argument("--aa", action="store_true", help="the noise floor: A against itself, in the quick form")
-    ap.add_argument("--n", type=int, default=None, help="runs a version (default 6 quick, 3 otherwise)")
+    ap.add_argument("--n", type=int, default=None, help="runs a version (default 1; raise it rarely, for a small change)")
     a = ap.parse_args(argv)
     seeds = [int(x) for x in a.seeds.split(",") if x.strip()]
     sizes = [int(x) for x in a.households.split(",") if x.strip()]
     kind = form(seeds, sizes, a.full)
-    n = a.n or (QUICK_N if kind == "quick" else WIDE_N)
+    n = a.n or RUNS
     if a.aa and kind != "quick":
         print("perf-ab: AA=1 takes the floor of a quick form - one seed at one size", file=sys.stderr)
         return 2

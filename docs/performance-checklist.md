@@ -50,7 +50,7 @@ the time, and it costs readability. Combining functions to lower the count is po
 |---|---|
 | where the calls are, by stage and step | `make phase-calls` (the placement-stages page shows it), `make perf-fanout` |
 | where the time is, in one stage | `make perf-profile SEED=<n> STAGE=<stage> HOUSEHOLDS=<n>` |
-| before against after, while iterating | `make perf-ab A=<commit> [SEEDS=<one>] [HOUSEHOLDS=<one>]` (the quick form, 6 runs a version) |
+| before against after, while iterating | `make perf-ab A=<commit> [SEEDS=<one>] [HOUSEHOLDS=<one>]` (the quick form, one run a version; `N=` repeats it, rarely) |
 | the noise floor of that quick form | `make perf-ab AA=1 [SEEDS=] [HOUSEHOLDS=]` (one engine against itself, once) |
 | before against after, once before landing | `make perf-ab A=<commit> SEEDS=25,39,47 HOUSEHOLDS=20,40` or `FULL=1` (refused without a quick run first) |
 | the bookends | `make perf LABEL=<NNN>-start` / `-end` |
