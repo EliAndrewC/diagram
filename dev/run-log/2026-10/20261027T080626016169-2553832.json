@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-27T08:06:26Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 183,
+  "result": "green",
+  "commit": "8e01b4616",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10011,
+  "host": {
+    "load": [
+      10.5,
+      3.07
+    ],
+    "mem_avail_mb": [
+      9287,
+      10108
+    ],
+    "cpu_temp_c": [
+      78.0,
+      82.0
+    ],
+    "stall_s": {
+      "cpu": 0.5,
+      "io": 0.2,
+      "io_full": 0.2,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 30776,
+      "package": 16594
+    }
+  },
+  "phases": {
+    "preflight": 13.0,
+    "static": 2.0,
+    "format": 1.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 166.0,
+    "floors": 10.0,
+    "test-full": 179.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/hamletgen/homesteads/wells.py",
+  "collected": 10011
+}
