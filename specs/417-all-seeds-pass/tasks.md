@@ -213,5 +213,7 @@
 - [ ] T22 Close: 1,000 fresh seeds, T106's seat turn re-applied (User Story 2), the code-size delta (SC-004), the feature report
       research: rendering
 
+- [ ] T59 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: l7r/diagram/hamletgen/ways/last_resort.py::lane_breaches#a 3 ft tread width as the default when a lane gives none, l7r/diagram/hamletgen/ways/last_resort.py::lane_breaches#repair policy, l7r/diagram/hamletgen/ways/settle/ends.py::settle_network#with no connector lane, the network with the longest total lane length is kept and every other network dropped [lands-open]
+      research: rendering
 - [ ] GM review (make gm-reviewed F=417)
 
