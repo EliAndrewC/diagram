@@ -91,6 +91,12 @@ Identical code, identical calls, -9% to +8% apart. This is the resolution of a b
 smaller than about 5-9% on one seed and size cannot be told from the conditions of the run. It also reads back on T08's A/B
 (3-7% at every size for a change worth well under 1%): that was this floor, not the change.
 
+## The bookends (`make perf LABEL=435-start` / `-end`, the 10-household reference rows)
+
+`make perf-gate` reads the end against the start in CPU seconds: -9.7% in all (seeds 4, 25, 39, 47: -10.7%, -9.1%, -10.0%,
+-8.7%), measured 2026-10-27 (make perf-gate). CPU time moves less with load than wall time, but this is one pair of runs four
+hours apart, not alternated, so it is read as a direction beside the A/B above, not as a gain.
+
 ## What was done
 
 - **The checklist and its tools** (T01): `docs/performance-checklist.md`; a "Performance work?" line on every task and
