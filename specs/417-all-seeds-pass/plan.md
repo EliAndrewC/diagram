@@ -1284,26 +1284,4 @@ Each step measured alone:
 
 <!-- plan-archive: T63 to T63 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->
 
-### T64 Approach (checklist part A)
-
-1. **The goal, in the world.** The same maps, the engine's hottest loops asking fewer builtin calls: the spatial grid read and filed by `in` and a subscript (`PointGrid.near`, `PointGrid.extend`, `RingIndex`'s rows and edge boxes), the router's memos the same (`route.lattice_search`), and the boxes and band tests that called `min`, `max` or `abs` per item written as comparisons (`tree.rejoined`, `belt`'s disc test, `access.point_clear`, `wet.toe_band`) - the same values, no map moved.
-2. **The constraints.** FR-012, FR-013, FR-008; every rule unchanged (FR-004).
-3. **Where each comes from.** The roll's call counts by function across its eight heaviest stages (measured 2026-10-27, `make perf-profile SEED=39 STAGE=<stage> HOUSEHOLDS=40` for each, the profiles summed): builtins were over half the calls - `dict.get` 2,188,300 (`PointGrid.near` 760,812, `lattice_search` 531,251), `max` 1,421,093 and `min` 1,277,265 (`rejoined` 193,070 each, `RingIndex` 163,021 each), `setdefault` and `append` 553,430 in `PointGrid.extend`, `abs` 566,827 (`belt` 206,080, `toe_band` 122,892, `point_clear` 95,732).
-4. **Do they describe the world here?** Yes: the same profiles, summed after each step.
-5. **The order.** T56's second part, after T63.
-6. **The exits.** Green: every pool manifest unchanged, the landing cohort passing, the calls measured before and after, the claims round clean.
-   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: each loop asks the same test of the same items; a dictionary read where the key is absent returns what `.get` gave, a new cell's list is made whole where `setdefault` made it empty, and `-r <= x <= r` is `abs(x) <= r`.
-8. **The budget.** One landing.
-9. **Done, measured.** The roll 21,520,104 -> 18,522,470 calls at 40 households (seed 39), measured 2026-10-27 (`make perf-fanout`, dev/perf-log/20261027T081533Z-fanout-417-T64b.txt); no pool manifest moved and the landing cohort 54/54, observed 2026-10-27, method: `make maps`, `make maps-moved`, `make cohort-landing`.
-10. **Before moving a constant.** No constant moves.
-11. **Before fitting things into room.** n/a
-
-Each step measured alone:
-
-| step | measured by |
-|---|---|
-| each loop | the summed profiles' call counts by function |
-| no map moved | `make maps-moved` |
-| no seed regressed | `make cohort-landing` (in `make land`) |
-
+<!-- plan-archive: T64 to T64 moved to plan-done.md, 2026-10-27 (feature 375 FR-044) -->

@@ -151,8 +151,9 @@
       research: rendering
       verify: DONE. landed in batch T62+T63: T63: Standing.conflicts(first=True) for admits, the wells' verge distance written out, seg_closest's clamp a conditional, seg_dist with it written in, segments_cross's orientation tests written in - the same arithmetic. Seed 39 at 40 households: lane_wells 2,175,770 -> 1,542,780 calls, the roll 23,204,610 -> 21,520,104 (make perf-fanout); no pool manifest moved, landing cohort 54/54. T62: _reachable_runs' no-skeleton growth claimed, checked IN-STEP
 
-- [ ] T64 (T56 part B) The hottest loops with fewer builtin calls: the spatial grid, the router's memos and the per-item boxes and band tests read without dict.get, setdefault, min, max or abs - the same values, no map moved (FR-012, FR-013)
+- [x] T64 (T56 part B) The hottest loops with fewer builtin calls: the spatial grid, the router's memos and the per-item boxes and band tests read without dict.get, setdefault, min, max or abs - the same values, no map moved (FR-012, FR-013)
       research: rendering
+      verify: DONE. landed: the spatial grid (PointGrid.near, extend; RingIndex's rows and boxes), the router's memos (lattice_search) and the per-item boxes and band tests (tree.rejoined, belt's disc, access.point_clear, wet.toe_band) read without dict.get, setdefault, min, max or abs - the same values. Seed 39 at 40 households: the roll 21,520,104 -> 18,522,470 calls (dev/perf-log/20261027T081533Z-fanout-417-T64b.txt); no pool manifest moved, landing cohort 54/54
 
 - [ ] T56 (FR-012) The rest of the trial inventory converted, largest first: the wells' admission, the bamboo strips, the open-ground patches, the grove clumps, the notice board's seats (FR-012)
       research: rendering
