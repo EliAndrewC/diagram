@@ -32,7 +32,7 @@ def laid_lawfully(s: Any, run: Poly, width: float = 3.0, whole: bool = False, ke
     run's joint (`keep`) stays where its link meets it, so neither is gathered.
 
     Research:
-        lane ends gathered at lay - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another are joined at a single point, so three lanes never arrive a few feet apart in a knot - the new lane's end moved onto the junction standing, never a drawn lane's"""
+        lane ends gathered at lay - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another are joined at a single point, so three lanes never arrive a few feet apart in a knot - the new lane's end moved onto the junction standing, never a drawn lane's; where no gathered form holds the lane is laid as it came and its knot is gathered by the settle's `settle_knots`, still a step (feature 417 T70)"""
     from .forced import lazy_ground
 
     run = [(float(q[0]), float(q[1])) for q in run]
@@ -51,7 +51,7 @@ def gathered_forms(s: Any, run: Poly, ends: tuple[int, ...], blocked: Any) -> li
     none where no end stands so.
 
     Research:
-        lane ends gathered at lay - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point
+        lane ends gathered at lay - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point - the reach `KNOT_MARGIN * _KNOT_FT`, 1.0 x 25 ft (`gap_ways.KNOT_FT`)
         a knot is ends that could meet - research/questions/0081-village-lanes.drawing.html: ends a fence parts are not a knot, the join tested at the footpath's 3 ft"""
     from l7r.diagram.settlement.rolling.gap_ways import KNOT_MARGIN
 
@@ -82,7 +82,7 @@ def _held(s: Any, run: Poly, width: float = 3.0, whole: bool = False, keep: Pt |
     Research:
         lanes met end to end read as one - research/questions/0081-village-lanes.drawing.html: a needle, fold or hairpin re-laid as a T
         a doubled tail asked at 15 degrees - DEVIATION research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees, cut where it comes alongside at whichever end runs on (the candidate is an ordinary lane, never a household's way, whose door end the page keeps) - asked at `_DOUBLED_DEG`, 15, the one constant every doubled-tail reader shares (the GM's 2026-10-25 ruling: 20 a goal, not a hard requirement), and doubled with no way alongside within it, not laid - a departure the code keeps until feature 405 T101
-        two paths side by side become one - research/questions/0081-village-lanes.drawing.html: a lane crossing another at under 20 degrees (`law.NEEDLE_DEG`, 20) cut at the crossing (`cut_at_shallow_crossing`)
+        two paths side by side become one - research/questions/0081-village-lanes.drawing.html: a lane crossing another at under 20 degrees (`law.NEEDLE_DEG`, 20) cut at the crossing (`cut_at_shallow_crossing`); where no cut holds (the cut would leave the connector's network or no lane), not laid - a value of ours, the page silent on a crossing no cut can mend
         a bare leg folded on a way not laid - research/questions/0081-village-lanes.drawing.html: where a fold cannot be pulled straight the meeting moves back one bend (itself a GUESS there); a two-point candidate has no bend to move back to, and is refused - a value of ours (feature 417 T06), as the settle dropped the shorter of two bare legs
         a lane with no width judged as a footpath - research/questions/0081-village-lanes.drawing.html: a candidate with no width given is judged at the footpath's 3 ft
         a drawn lane not moved for a new one - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each way laid in turn; a candidate that only a standing lane's move could admit is not laid"""
