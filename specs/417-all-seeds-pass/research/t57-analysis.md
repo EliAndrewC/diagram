@@ -58,6 +58,14 @@ Unrelated to speed, noted so it is not mistaken for a regression: seed 4 at 40 h
 
 The eight stages over 0.49M hold 17.56M of the 18.36M (96%); the other fifteen together hold 0.81M.
 
+For the big four, what multiplies (each a count from the profiles, measured 2026-10-27):
+- **homesteads**: 160 placement tries and 2,506 bundle geometries built for 40 houses; 416 reach questions, 3,364
+  standing-ground tests and 13,393 way-leg tests for 40 households' ways.
+- **web**: 41 lanes; `end_serves` asked 948 times, which asks `ring_within` 70,555 times; the tree's `off_the_needle` 2,460
+  and `closes` 4,800 times; `doubled_tails` asks 7,314 pairs.
+- **field**: 1,398 cell verdicts and 1,416 ring-rule checks for about 335 cells, 157 merges; 22,427 bank clearances.
+- **hinterland**: `open_ground_region` asked 3,541 times and `patches._ok` 4,368 times for 1,069 pines and 5 commons.
+
 ## 3. The cross-cutting finding: most calls are arithmetic one value at a time
 
 Across the eight heavy stages' profiles (17.56M calls, measured 2026-10-27):
@@ -107,7 +115,7 @@ L (a refactor across modules).
 
 | # | change | stage(s) | est. saving | cost | pattern |
 |---|---|---|---|---|---|
-| 1 | Wells: one feasibility mask over the seat area (numpy), then the overlap admission asked of the best few seats only | lane wells, appurtenances | ~1.5M of ~1.7M | M | A |
+| 1 | Wells: one feasibility mask over the seat area (numpy), then the overlap admission asked of the best few seats only | lane wells, appurtenances | ~1.5M of ~1.7M (the 1.7M measured: `seat_wells` is 0.726 of `lane_wells`' 0.732 s and 0.324 of `appurtenances`' 0.353) | M | A |
 | 2 | Notice board: screen route seats against an index of houses and yards before the full house-fit test | notice | ~0.6M of 0.78M | S | A |
 | 3 | Homestead bundle geometry built once per (form, size, fixtures) and moved into place | homesteads | ~0.5M | S | C |
 | 4 | Windbreak planted to its wood goal instead of planted and trimmed; its index filled in one batch | windbreak | ~0.5M | S-M | D, A |
@@ -118,7 +126,7 @@ L (a refactor across modules).
 | 9 | The rest of T06 (the settle's remaining repair steps; in the correctness phase) | web | ≤0.78M | M-L | D |
 | 10 | The shared geometry layer vectorized: `seg_dist`, `point_in_poly`, ring and segment distance, the spatial index builds and shapely asked on arrays of candidates | every stage | ~3-5M | L | E, and A's inner loops |
 
-**What they add up to.** Items 1-4 (the S and M items, about 3.1M) would take the roll to about 15M. With 5-9 (about
+**What they add up to** - upper bounds, not a sum of independent cuts: items 5 and 6 both act on the web's tree pair checks (an incremental judgment would take most of what box-first asking saves there), and item 10 vectorizes the same inner loops that items 1, 4 and 7 remove by searching less, so its 3-5M is a share of today's 10.2M builtins, not of what is left after 1-9. The time-share proxy under-counts call-dense subtrees (a builtin costs little time per call), so the wells and notice estimates are, if anything, low. Items 1-4 (the S and M items, about 3.1M) would take the roll to about 15M. With 5-9 (about
 3.6-4.1M more, the correctness-phase items among them), about 11M. Reaching SC-009's 6.3M needs item 10 as well:
 about two thirds of the calls are the scalar inner loops of section 3, and only a change to how those loops are written
 - arrays of candidates, one call for many - removes them in bulk. That is the large decision, and the GM's to price.
