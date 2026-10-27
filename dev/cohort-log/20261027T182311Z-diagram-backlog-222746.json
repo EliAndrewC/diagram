@@ -1,0 +1,661 @@
+{
+ "utc": "20261027T182311Z",
+ "clone": "diagram-backlog",
+ "feature": "",
+ "commit": "7f2e72a59",
+ "first_seed": 1,
+ "households": null,
+ "count": 54,
+ "served": 6,
+ "block": [
+  1,
+  6,
+  null,
+  839459
+ ],
+ "fresh_first": 839459,
+ "fresh_count": 48,
+ "seeds": [
+  {
+   "seed": 901,
+   "households": 14,
+   "pins": {
+    "row_line": "street",
+    "row_sides": "one",
+    "row_water": "own"
+   },
+   "how": "served",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "linear"
+  },
+  {
+   "seed": 902,
+   "households": 10,
+   "pins": {
+    "row_line": "street",
+    "row_sides": "both",
+    "row_water": "shared"
+   },
+   "how": "served",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "linear"
+  },
+  {
+   "seed": 903,
+   "households": 17,
+   "pins": {
+    "row_line": "edge",
+    "row_sides": "one",
+    "row_water": "shared"
+   },
+   "how": "served",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "linear"
+  },
+  {
+   "seed": 904,
+   "households": 13,
+   "pins": {
+    "row_line": "edge",
+    "row_sides": "both",
+    "row_water": "own"
+   },
+   "how": "served",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "linear"
+  },
+  {
+   "seed": 905,
+   "households": 20,
+   "pins": {
+    "settlement_form": "dispersed",
+    "farm_water": "channel"
+   },
+   "how": "served",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed"
+  },
+  {
+   "seed": 906,
+   "households": 16,
+   "pins": {
+    "settlement_form": "dispersed",
+    "farm_water": "well"
+   },
+   "how": "served",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed"
+  },
+  {
+   "seed": 839459,
+   "households": 12,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839460,
+   "households": 19,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839461,
+   "households": 15,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839462,
+   "households": 11,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839463,
+   "households": 18,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839464,
+   "households": 14,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839465,
+   "households": 10,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839466,
+   "households": 17,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "refused",
+   "failures": [
+    "refused:OverlapRefused"
+   ],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839467,
+   "households": 13,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839468,
+   "households": 20,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839469,
+   "households": 16,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839470,
+   "households": 12,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839471,
+   "households": 19,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "fail",
+   "failures": [
+    "row_rules"
+   ],
+   "counts": {
+    "row_rules": 1
+   },
+   "form": "linear",
+   "fresh": true
+  },
+  {
+   "seed": 839472,
+   "households": 15,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "linear",
+   "fresh": true
+  },
+  {
+   "seed": 839473,
+   "households": 11,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "refused",
+   "failures": [
+    "refused:SiteRefused"
+   ],
+   "counts": {},
+   "form": "linear",
+   "fresh": true
+  },
+  {
+   "seed": 839474,
+   "households": 18,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "linear",
+   "fresh": true
+  },
+  {
+   "seed": 839475,
+   "households": 14,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839476,
+   "households": 10,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839477,
+   "households": 17,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839478,
+   "households": 13,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "refused",
+   "failures": [
+    "refused:OverlapRefused"
+   ],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839479,
+   "households": 20,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "fail",
+   "failures": [
+    "lane_knots"
+   ],
+   "counts": {
+    "lane_knots": 1
+   },
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839480,
+   "households": 16,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "linear",
+   "fresh": true
+  },
+  {
+   "seed": 839481,
+   "households": 12,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839482,
+   "households": 19,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839483,
+   "households": 15,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839484,
+   "households": 11,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "refused",
+   "failures": [
+    "refused:WebRefused"
+   ],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839485,
+   "households": 18,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839486,
+   "households": 14,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839487,
+   "households": 10,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839488,
+   "households": 17,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839489,
+   "households": 13,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839490,
+   "households": 20,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839491,
+   "households": 16,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839492,
+   "households": 12,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839493,
+   "households": 19,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839494,
+   "households": 15,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839495,
+   "households": 11,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "refused",
+   "failures": [
+    "refused:WebRefused"
+   ],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839496,
+   "households": 18,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "fail",
+   "failures": [
+    "lane_knots"
+   ],
+   "counts": {
+    "lane_knots": 1
+   },
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839497,
+   "households": 14,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839498,
+   "households": 10,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "linear",
+   "fresh": true
+  },
+  {
+   "seed": 839499,
+   "households": 17,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "fail",
+   "failures": [
+    "lane_knots"
+   ],
+   "counts": {
+    "lane_knots": 1
+   },
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839500,
+   "households": 13,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed",
+   "fresh": true
+  },
+  {
+   "seed": 839501,
+   "households": 20,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839502,
+   "households": 16,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839503,
+   "households": 12,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839504,
+   "households": 19,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "fail",
+   "failures": [
+    "fixtures_on_groves"
+   ],
+   "counts": {
+    "fixtures_on_groves": 1
+   },
+   "form": "linear",
+   "fresh": true
+  },
+  {
+   "seed": 839505,
+   "households": 15,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated",
+   "fresh": true
+  },
+  {
+   "seed": 839506,
+   "households": 11,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "linear",
+   "fresh": true
+  }
+ ],
+ "engine_diff": "5f5b832d34a89f2c"
+}
