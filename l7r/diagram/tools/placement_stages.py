@@ -49,6 +49,7 @@ from l7r.diagram.interactive import sources as _sources  # noqa: E402
 from l7r.diagram.settlement import Settlement  # noqa: E402
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT  # noqa: E402
 from l7r.diagram.tools import claims as _claims  # noqa: E402
+from l7r.diagram.tools import placement_calls  # noqa: E402
 
 # THE PAGE IS WRITTEN FROM THE CODE'S OWN DOCUMENTATION (feature 227, GM 2026-09-12: *"I would like it if this HTML
 # page basically was generated based on the documentation, the docstrings, the stages, and such so that I could just
@@ -767,6 +768,7 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
             os.remove(os.path.join(out_dir, name))
             print(f"  pruned stale plate {name}")
     site = os.path.relpath(os.path.join(SKILL, "research", "site"), out_dir).replace(os.sep, "/") + "/"
+    counts = placement_calls.load()  # the newest recorded 40-household counts (feature 434; `make phase-calls`)
     parts = [
         "<title>Hamlet placement order</title>",
         "<style>",
@@ -814,6 +816,7 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         ".research{margin:.5rem 0 .4rem;font-size:.9rem}.research ul{margin:.2rem 0 0;padding-left:1.1rem}.research li{margin:.15rem 0}",
         ".research .acc{color:var(--dim)}.vd{font:700 .68rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.05em;padding:.12rem .35rem;border-radius:3px;border:1px solid var(--rule);color:var(--dim)}",
         ".vd-in-step{color:#2f6b3a;border-color:#2f6b3a}.vd-drifted,.vd-mislabeled,.vd-needs-research,.vd-unclaimed{color:#9b2c1f;border-color:#9b2c1f}",
+        placement_calls.CSS,
         "</style>",
         '<div class="wrap">',
         "<h1>Hamlet placement order</h1>",
@@ -834,12 +837,13 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         '<nav class="toc"><div class="cap">Contents</div><ol>',
         *(f'<li><a href="#s{r["i"]:02d}"><span class="n">{r["i"]:02d}</span>{escape(r["title"])}</a></li>' for r in rows),
         *(['<li><a href="#missing">Features this map does not have</a></li>'] if _rest else []),
+        '<li><a href="#calls">Calls by stage and step</a></li>',
         "</ol></nav>",
     ]
     for r in rows:
         parts += [
             f'<section class="stage" id="s{r["i"]:02d}">',
-            f'<div class="hd"><span class="n">{r["i"]:02d}</span><span class="t">{escape(r["title"])}</span><span class="fn">{escape(r["fn"])}</span></div>',
+            f'<div class="hd"><span class="n">{r["i"]:02d}</span><span class="t">{escape(r["title"])}</span><span class="fn">{escape(r["fn"])}</span>{placement_calls.heading(counts, r["fn"])}</div>',
             *(f'<p class="why">{escape(p)}</p>' for p in r["paras"]),
             research_html(r.get("research", []), site),
         ]
@@ -885,6 +889,8 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
             *(f'<div><span class="k">{escape(k)}</span><span class="v">{escape(m or "no shipped map draws it today")}</span></div>' for k, m in _rest),
             "</div></section>",
         ]
+    # ...AND WHAT EACH STAGE AND STEP COSTS, LAST (feature 434, the GM 2026-10-27): the newest recorded 40-household counts
+    parts += placement_calls.section(counts, [(r["i"], r["fn"], r["title"], [(e["path"], e["name"]) for e in r["steps"]]) for r in rows])
     parts.append("</div>")
     page = os.path.join(out_dir, "hamlet-placement.html")
     with open(page, "w") as fh:

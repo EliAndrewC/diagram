@@ -1,0 +1,165 @@
+{
+ "feature": "434-placement-call-counts",
+ "blocks": {
+  "preamble": {
+   "sha256": "b364f93f79a326b04217f0a8ac751954dc7e7d473ecb3fb0a476e62e4169107f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "92422e86c910ec176719ca86e5a4381f7e7ef64fe4bde51336323d12794f3617",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "6e6370a6e218e1484851b711023b8181e2138dca4760d039f7bec1ce03dfc34d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "632ecebdf6eddfd1a16580381d36d6b72225ff0c452ab167fc83a369c0fbcbd0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "869b2b46b6e91b8073ba6f1163f9d8223fbf80321836a064c86e71c0a80e2750",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "6c4735bd416843deddf4172171fb2cee0ac98474d5a8a920c84e2265f43f276c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Task approaches": {
+   "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "680b968018642aa231e4dacf820ae73793d0833fc42555c658a3d86d19d28192",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "7c6525efe7ad6814e50ff383b738c31f7aa30ff84039428fc39d7bd021fc0954",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "087d75c35664a4e994b4d6d65e63a71adea399f787146a9c17e53a8f07641f3a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "5a26cc7cca28b12b26c2cde0373236bf5f59687a1587546371d5fc2b2dbd7c22",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Step tally by switching cProfile profilers at each listed step's binding (_bind_points); innermost listed step gets the call, else the stage's own work; wrapper and enable/disable calls removed from counts.",
+     "class": "within",
+     "why": "Carries the GM's per-step counts ('please do include the per step counts') exactly as FR-001/SC-002/SC-003 settle them. Note: a listed step's calls are only attributed to it if every listed step is bound; an unbound one lands in own work, so T01's binding must cover every Steps: entry."
+    },
+    {
+     "id": "D2",
+     "summary": "One sequential roll measures every stage, giving stage k the fanout's process state.",
+     "class": "within",
+     "why": "Implements FR-006's 'process state the fanout's job gives it'. Its premise (profiling and wrappers change no result) is asserted, but T01's and T03's exits test agreement with profile_stage / perf-fanout directly, which enforces SC-003."
+    },
+    {
+     "id": "D3",
+     "summary": "Record dev/phase-calls.json, one entry per map type keyed by settlement form, field archetype, water sink; newest replaces.",
+     "class": "within",
+     "why": "FR-002 and the GM's 'most recent counts that happen to have been captured'. The three-knob key is an asserted definition of map type: if a knob deciding which stages do work is missing from it, a newer roll would overwrite an entry holding a stage the newer lacks and drop a captured count against the request. The implementation must confirm the key covers every knob that gates a stage; not a narrowing as written."
+    },
+    {
+     "id": "D4",
+     "summary": "Headings show the reference's calls and share or a dash; another type shown beside, named, where it spent more or holds a stage the reference lacks.",
+     "class": "within",
+     "why": "Restates FR-003. 'Every roll runs every stage' is labeled for one stage (waterward, 2 calls, 2026-10-27, perf-fanout LABEL=417-T57) and generalised; it narrows nothing because the GM foresaw near-zero stages ('some of those will be literally zero') and D5 keeps the dash path for a stage no record holds. The dash branch must stay implemented, not pruned on that premise."
+    },
+    {
+     "id": "D5",
+     "summary": "End section id=calls after id=missing: stage table with calls and share, total row, other types beside; each row toggles step rows (calls, share of stage, share of reference total) plus an own-work row; one sentence on innermost-step attribution.",
+     "class": "within",
+     "why": "The GM's second and third messages and FR-004: after 'Features this map does not have', click to expand, each step with its own count, share of the stage and share of overall map generation; no time. The '23 stages' figure carries no measurement label and could not be checked under this bundle; FR-004 says 'every stage', so the table must enumerate the page's stage list rather than a hardcoded 23 - a hardcoded count that disagreed with the page would be a narrowing."
+    },
+    {
+     "id": "D6",
+     "summary": "make phase-calls [SEED HOUSEHOLDS FORM ARCHETYPE SINK], reference spec by default; make placement-stages reads the record and needs no measurement.",
+     "class": "within",
+     "why": "The GM's 'tooling that is able to not only measure these things, but actually ... insert that kind of table into that document'; FR-001's selectable seed and type."
+    },
+    {
+     "id": "TC-storage-gate-seed",
+     "summary": "Record committed; measuring roll on demand, never in the gate; default artifact the reference spec at 40 households, seed 39 (feature 417's T57 roll).",
+     "class": "within",
+     "why": "GM: 'I don't think that we need or even want to literally have that document be always up to date'; the 40-homestead placement 'that we are talking about' is T57's."
+    },
+    {
+     "id": "CC-module",
+     "summary": "Page's new section in a new module tools/placement_calls.py rather than growing placement_stages.py.",
+     "class": "within",
+     "why": "Structure only; changes nothing the GM asked for. The ~910-line figure is unlabelled but decides only file layout, not scope."
+    },
+    {
+     "id": "PB-none",
+     "summary": "No performance bookends; the measure is checked against the fanout instead.",
+     "class": "within",
+     "why": "No generator change; SC-003 carries the check."
+    },
+    {
+     "id": "T03-other-types",
+     "summary": "Measure the reference at 40 households and also row, dispersed, polder, dike-pond where a 40-household roll of them stands; regenerate the page.",
+     "class": "within",
+     "why": "Fills FR-003's beside-column and the GM's per-type dash rule ('a type that contains the stage'); widens nothing the GM limited, and an unrollable type leaves the dash the GM asked for."
+    },
+    {
+     "id": "T01-T02-exits",
+     "summary": "Tests on stand-in stages and a test record: totals equal profile_stage, steps plus own work equal the stage, headings and rows match, toggle works, dash shown, no time.",
+     "class": "within",
+     "why": "Enforcement of SC-001 to SC-004 / FR-005, i.e. of what was asked."
+    }
+   ]
+  }
+ ]
+}

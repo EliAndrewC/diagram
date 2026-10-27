@@ -7,3 +7,7 @@ The GM, 2026-10-27, after T57's check-in on feature 417:
 The session answered with the per-stage table and proposed the tooling, offering per-step counts (the page's steps within each stage) as a second part. The GM:
 
 > Yes, please do that, and please do include the per step counts. And then when you add the new section at the end, which is the table showing each stage and the counts, I would like to be able to click on one of those table rows to expand it to show a breakdown of the per step tallies, and then they should have their own percentages as well, where each step within a stage shows the number of function calls, the percentage of the stage that it is, and then the percentage of the overall map generation that that step is. So please go ahead and build that. Thank you.
+
+And, on where the table goes:
+
+> The section at the end would come after the "Features this map does not have" section, in case that wasn't clear.

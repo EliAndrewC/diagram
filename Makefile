@@ -42,6 +42,9 @@ perf-review:    ## [performance] each environment's newest bookend pair: its tim
 perf-fanout:    ## [performance] the call-volume survey: per stage, the Python calls at each size and their growth, and every chain of HOT calls or more up to the loop it hangs from (feature 427 T01)   [SEED=39] [HOUSEHOLDS="20 40"] [STAGES=all] [HOT=50000] [JOBS=3] [LABEL=adhoc]
 	$(RUN).tools.perf_fanout --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),20 40)" --stages "$(or $(STAGES),all)" --hot "$(or $(HOT),50000)" --jobs "$(or $(JOBS),3)" --label "$(or $(LABEL),adhoc)"
 
+phase-calls:    ## [performance] one 40-household hamlet's Python calls by stage and by step, recorded for the placement-stages page (feature 434)   [SEED=39] [HOUSEHOLDS=40] [FORM=nucleated|linear|dispersed] [ARCHETYPE=<field archetype>] [SINK=pond|offmap]
+	$(RUN).tools.phase_calls --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),40)" $(if $(FORM),--form "$(FORM)",) $(if $(ARCHETYPE),--archetype "$(ARCHETYPE)",) $(if $(SINK),--sink "$(SINK)",)
+
 perf-profile:   ## [performance] tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web [HOUSEHOLDS=10]
 ##  SEED=<n>      which seed to profile - e.g. `25`
 ##  STAGE=<name>  which single stage to cProfile - e.g. `web`
