@@ -121,6 +121,41 @@ def total_problems(text: str) -> list[str]:
     return out
 
 
+INDEXES = re.compile(r"^## Indexes\b(.*?)(?=^## |\Z)", re.M | re.S)
+_INDEX = re.compile(r"^-\s*([^:\n]+):\s*(.*)$", re.M)
+_CELL_FT = re.compile(r"\bcells?\s+(?:of\s+)?[\d,.]+\s*ft\b", re.I)
+_SIDE = re.compile(r"\bside\b[^.]*?[\d,.]+\s*ft\b", re.I)
+_PX = re.compile(r"(?<![\w.])[\d,.]+\s*px\b")
+_PX_FT = re.compile(r"^[^.;\n]{0,40}?[\d,.]+\s*ft\b")
+
+
+def index_problems(text: str) -> list[str]:
+    """EVERY INDEX ITS OWN ROW (the round arbiter's tooling fix on ask:444-T02-water-round-6: T07's check held once a derivation, so
+    one cells row passed while each index a rewrite added went unchecked - field round 5, pond_bank round 3): a derivation that uses a
+    grid or spatial index lists each in `## Indexes` - its cell size in ft and its densest case from a smallest SIDE in ft, never an
+    area - and counts each in a row of its own, the row's factor naming the index and its cells; and every px figure carries its ft."""
+    out: list[str] = []
+    alts = ALTERNATIVES.search(text)
+    used = bool(alts and re.search(r"^-\s*grid or spatial index:\s*used\b", alts.group(1), re.M | re.I))
+    sec = INDEXES.search(text)
+    entries = [(m.group(1).strip(), m.group(2)) for m in _INDEX.finditer(sec.group(1))] if sec else []
+    if used and not entries:
+        out.append("an `## Indexes` section: one line per index the derivation uses - `- <name>: cells of <N> ft; densest <count>, from a smallest side of <S> ft`")
+    count = COUNT.search(text)
+    rows = [ln.strip().strip("|").split("|")[0].strip().lower() for ln in (count.group(1) if count else "").splitlines() if ln.strip().startswith("|")][2:]
+    for name, line in entries:
+        if not _CELL_FT.search(line):
+            out.append(f"`## Indexes` - {name}: its cell size in ft (`cells of <N> ft`)")
+        if not _SIDE.search(line):
+            out.append(f"`## Indexes` - {name}: its densest case from a smallest side in ft, never an area")
+        if not any(name.lower() in r and "cell" in r for r in rows):
+            out.append(f"`## The count, factor by factor`: a row counting {name}'s cells - its factor naming `{name}` and its cells")
+    for m in _PX.finditer(text):
+        if not _PX_FT.match(text[m.end():].lstrip(" (")):
+            out.append(f"`{m.group(0)}`: a px figure with no ft beside it - write its conversion, `{m.group(0)} (<N> ft)`")
+    return out
+
+
 def cells_problems(text: str) -> list[str]:
     """A derivation that uses a grid or spatial index counts the cells it examines (the rubric: an index cell examined is a basic
     operation; feature 444 T07)."""
@@ -158,7 +193,7 @@ def form_problems(text: str) -> list[str]:
     alts = ALTERNATIVES.search(text)
     said = {m.group(1).strip().lower(): m.group(2).strip() for m in re.finditer(r"^-\s*([^:\n]+):[ \t]*(.*)$", alts.group(1) if alts else "", re.M)}
     out += [f"`## Cheaper algorithms considered`: a line for `{a}` - used, or why not" for a in STANDARD if not said.get(a)]
-    return out + cells_problems(text) + total_problems(text)
+    return out + cells_problems(text) + index_problems(text) + total_problems(text)
 
 
 def refusals(text: str) -> list[str]:

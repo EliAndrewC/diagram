@@ -21,6 +21,10 @@ describes is `placer.py.txt` beside this file.
         place the disc on it
         flag the sites closer than d: on the d / 2 lattice these are the 8 offsets (i, j) with i^2 + j^2 < 4, (i, j) not (0, 0)
 
+## Indexes
+
+- the lattice: cells of 5 ft (d / 2, at the fixture test's d = 10 ft); densest 1 site a cell, from a smallest side of 5 ft - a cell is one site
+
 ## The count, factor by factor
 
 | factor | scope | value | reason | worst case |
