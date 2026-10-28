@@ -120,3 +120,27 @@
 
 **Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
 
+<!-- plan-archive: archived 2026-10-28 -->
+### T02 (FR-003, FR-004: today's figures for every stage, and the counters inert)
+
+- **Approach**: `tools/work_budget.py` (D4) and `make counters-inert` (D5); `dev/work-budget.md` generated with today's figures at 10, 20, 40 and 80 households.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T02 Approach (checklist part A)
+
+1. **The goal, in the world.** the distance between today's work and a budget is on record for every stage.
+2. **The constraints.** FR-003, FR-004, SC-001, SC-002, SC-004; D4, D5.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`)
+4. **Do they describe the world here?** the record's per-stage figures read against `make perf-fanout`'s calls for the same rolls.
+5. **The order.** after T01 and T09-T12.
+6. **The exits.** Green: `make work-budget` writes the record; `make counters-inert` passes and refuses a stub counter that writes the manifest. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** `dev/work-budget.md` committed with every stage at four sizes.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+

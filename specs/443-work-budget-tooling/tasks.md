@@ -10,8 +10,9 @@
 - [x] T01 The shared counters and their attribution: `l7r/diagram/work_counts.py`, the sites in `_geom/primitives.py`, `_geom/indexes.py` and `overlap/registry.py`, `driver._run_stages`' per-stage copy; no Python call added, the overhead measured (D1-D3; FR-001, FR-002, SC-001); the stages' candidate loops are T09-T12
       research: rendering
       verify: DONE. landed: the shared counters landed: Python calls unmoved (-0.005% at 40 households), +1% wall inside the -4% floor, inert under -O (research/overhead.md)
-- [ ] T02 (after T09-T12) `make work-budget` and the standing record `dev/work-budget.md` with today's figures for every stage at 10, 20, 40 and 80 households; `make counters-inert` in `make done` (D4, D5; FR-003, FR-004, SC-001, SC-002, SC-004)
+- [x] T02 (after T09-T12) `make work-budget` and the standing record `dev/work-budget.md` with today's figures for every stage at 10, 20, 40 and 80 households; `make counters-inert` in `make done` (D4, D5; FR-003, FR-004, SC-001, SC-002, SC-004)
       research: rendering
+      verify: DONE. landed: make work-budget writes the standing record (dev/work-budget.md, every stage at 10/20/40/80, research/first-record.md: no roll at 80, the hinterland 77% of the counted work); make counters-inert passes on seed 25 and runs in make done
 - [ ] T03 The budget table `dev/work-budget.json`, `make budget-set` and `make budget-change`, the WORDS hook `budget-change-hooks.sh`, the table a guard file (D6; FR-005, SC-003)
       research: rendering
 - [ ] T04 The ratchet `make work-budget-review` in the push, and the standing record printed by `make land` and `make speckit-todo` (D7, D8; FR-006, FR-007, SC-003, SC-004)
