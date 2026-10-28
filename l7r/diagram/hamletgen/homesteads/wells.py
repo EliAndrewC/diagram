@@ -15,6 +15,7 @@ from l7r.diagram.settlement._geom.primitives import points_in_poly, seg_dists
 from l7r.diagram.settlement.homestead_parts.wood_share import ReservedSeats, well_keepout
 from l7r.diagram.settlement.shrines_wells.wells import WELL_AMONG_DWELLINGS_PX
 from l7r.diagram.settlement.shrines_wells.wells import well_gap_to_dwellings as well_gap_to_dwellings  # re-exported: the tests ask it here
+from l7r.diagram.work_counts import OPS
 
 from ..consts import WELL_VERGE_FT, Pt
 from ..plan import SitePlan
@@ -292,6 +293,8 @@ def shared_row_wells(s: Settlement, houses: Sequence[Mapping[str, Any]], streets
                 nx, ny = -(b[1] - a[1]) / seg, (b[0] - a[0]) / seg
                 seated = False
                 for sgn in (1.0, -1.0):
+                    if __debug__:
+                        OPS["candidate@shared_row_wells"] += 1
                     off = half + s.px(8.0)  # off the street's tread, beside it
                     x, y = p[0] + sgn * nx * off, p[1] + sgn * ny * off
                     if own_well_clear(s, x, y, half, boxes):
@@ -589,6 +592,8 @@ def seat_wells(
             _crop_box: tuple[int, tuple[float, float, float, float]] | None = None
             _score = PoolScore(pool, served, needy)  # the pool's seats-by-households distances, once a rung (feature 427 T05)
             while pool and len(placed) < want:
+                if __debug__:
+                    OPS["candidate@seat_wells"] += 1
                 if placed and len(placed) != _sorted_at:
                     # ...by MINIMAX NEED, in ~3-grid-step buckets, centrality breaking ties inside a
                     # bucket. Two failed rankings led here, and both are worth remembering. Strict

@@ -36,6 +36,7 @@ from collections.abc import Callable, Iterator, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import seg_closest, seg_dist
+from l7r.diagram.work_counts import OPS
 
 from ..consts import WEB_CLEARANCE, Poly, Pt
 from . import law
@@ -288,6 +289,8 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
     whole = [*tb.lanes, new_lane]
 
     for lanes in (whole, [*(tb.lanes[i] for i in reversed(chain[1:])), new_lane]):
+        if __debug__:
+            OPS["candidate@AccessTree.lay"] += 1
         new = lanes[-1]
         law_.M = _trial(view, lanes=[*lanes[:-1], *stub])
         law_.owner = lane_owner(new)  # ...a household's own way, beside its own garden (405 T18)

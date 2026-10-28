@@ -299,3 +299,57 @@ anchors are the registry's `conflicts` (counted there) and `cluster.back_fouled`
 (grep, 2026-10-28) - a cluster predicate T10 counts by function wherever it is reached. No anchor is a miss of the walk.
 Python calls after T09 (the run's raw profiles, Python functions only): 10,594,880 at 40 households against 10,591,580 after
 T01 (+0.031%), 7,093,577 at 20 against 7,093,049 (+0.007%) - inside SC-001's one in a thousand.
+
+## T10 - the homesteads family, filtered by hand (2026-10-28)
+
+Stages: seat, homesteads, appurtenances, burial, lane_wells, sties, washing. Every seat a house or bundle is tried at ends in one
+of two fit tests, so those carry the per-candidate count for the whole seating; the loops above them count their own rounds.
+
+**Counted:**
+
+| where | key | what each count is |
+|---|---|---|
+| `settlement/houses.py` `_fits` | `_fits` | one house footprint tried (every `try_place`, front-row and cluster seat) |
+| `settlement/rolling/fit.py` `_bundle_fits` | `_bundle_fits` | one homestead bundle tried at a seat and side |
+| `hamletgen/homesteads/region.py` `SeatRegion.offer` | `SeatRegion.offer` (`len(pts)`) | the seats the region screens at once (vectorized) |
+| `hamletgen/homesteads/capacity.py` `offer_seats` | `offer_seats` | one seat offered to the placer |
+| `hamletgen/homesteads/rank_rounds.py` `_seat_rank_rounds` | `_seat_rank_rounds` | one widening round of the ranks |
+| `settlement/rolling/place.py` `_slide`, `_place_bundle_dispersed`, `_place_bundle_nucleated` | the function | one slide step; one offset; one side of a nucleated seat |
+| `settlement/rolling/gap_ways.py` `_way_for`, `_first_admitted` | the function | one exit; one run |
+| `settlement/rolling/access.py` `fixtures_clear`, `_house_candidates` (both target loops) | the function | one door or leg asked against the fixtures; one target |
+| `settlement/rolling/route.py` `search`, `taut` | the function | one lattice neighbor; one pull of the line taut |
+| `settlement/rolling/farmsteads.py` `_relax_gardens_south` | `candidate@` and **`moved@`** | one shift tried; **a placed garden moved after placing (S4)** |
+| `settlement/homestead_parts/fixture_seats.py` `clears`, `in_dooryard`, `against_a_part` | the function | one clearance asked (a seat asks `clears` up to twice); one persimmon seat; one wall seat |
+| `hamletgen/homesteads/fixtures.py` `_flexible_clear` | `_flexible_clear` | one deferred fixture's seat (the manure pit's) |
+| `settlement/homestead_parts/yards.py` `_lay_by_hand`, `_filled_lattice` | the function | one mat try; one lattice gap |
+| `hamletgen/homesteads/rows.py` `clear_frames`, `best_row_line`, `seat_rows` | the function | one frame; one street angle; one row seat |
+| `hamletgen/homesteads/wells.py` `shared_row_wells`, `seat_wells` | the function | one side of a street well; one pool seat ranked and tried |
+| `hamletgen/cluster.py` `seat_cluster`, `back_fouled` | the function | one margin; one back-ground test (also reached from the sink's fanout row) |
+| `hamletgen/ways/tree.py` `AccessTree.lay` | `AccessTree.lay` | one chain tried for a new lane of the access tree |
+| `hamletgen/homesteads/retirement.py` `retirement_houses` | `retirement_houses` | one retirement-house seat |
+| `settlement/shrines_wells/byres.py` `_courtyard_byre_seat`, `_yard_shed_seat`, `_borrowers` | the function | one courtyard side; one shed seat; one borrowed byre drawn from the pool |
+
+**Counted at the registry, no counter of their own:** `rolling/lot.py` `bundle_admitted`, `hamletgen/washing.py`'s shared and
+per-house places (footing then `admits`), `retirement.py`'s record, `ways/tree.py` `settle_defer`.
+
+**Excluded, with why** - tests the counted loops call (`houses.py` `_in_blocked`, `_near_corridor`, `_on_a_tread`,
+`_clear_of_placed`; `hard_ground._hard_clear`; `wellground._well_ground_clear`; `boundary.SiteCorridors` and
+`FreeGround.rect_refused`; `access.parts_clear`, paired with `fixtures_clear`; `passage.walk_clear`, `is_open`; `tree.others_clear`,
+`own_clear`; `wells.ok`, `many`), measurements (`seat_geometry.water_push`, `well_seats.walls`, `wells._belt_all`, `_in_belt`,
+`dry_households`, `cluster.nearest_within`), and `farmsteads._garden_beds_clear`, the test `_relax_gardens_south` asks.
+
+**The getattr dispatch** (`s._seat_region`, `s._free_ground`, `s._access`, `s._site_corridors`) resolves to `SeatRegion`,
+`FreeGround`, `AccessTree` and `SiteCorridors`: their trials are counted above (`offer`, `_house_candidates`, `lay`) and the rest
+are tests. **burial** places nothing and has no candidate loop. **sties**' trials are `against_a_part`'s; **washing**'s are the
+registry's.
+
+**Split at the 1,000-line bar:** `homesteads/stages.py` went to 1,002 lines with its round counter; `_seat_rank_rounds` moved to
+`rank_rounds.py` (stages imports it back, so `stages._seat_rank_rounds`, which a test patches, still names it).
+
+**T10's cross-check** (`make perf-fanout SEED=25 HOT=20000 LABEL=443-T10`, 2026-10-28): three anchors were **misses of the walk**,
+counted now - `settlement/rolling/gap_ways.py` `way_out` (each cell asked whether a household's way may cross it, in its search out
+of the homestead), `trace` (each join onto the laid ways tried) and `settlement/homestead_parts/wood_share.py` `WoodShares.share`
+(each wood seat of a homestead's lattice tried). The rest are counted (`taut`, `_lay_by_hand`, `grow_the_margin` through
+`offer`), raster builds (`_geom/region.cells`), or the ways' law and settle (`meet.near_misses`, `web_lines`,
+`ways/geom.push_clear_of_fabric`, `settle/shapes.fouled_segment`), which T11 walks. Python calls after T10 (the run's raw
+profiles): 10,591,824 at 40 households against 10,594,880 after T09 (-0.03%).

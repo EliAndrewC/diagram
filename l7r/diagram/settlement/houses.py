@@ -6,6 +6,8 @@ import random
 from collections.abc import Iterator
 from typing import TYPE_CHECKING, Any, cast
 
+from l7r.diagram.work_counts import OPS
+
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, poly_seg_dist, rot_rect, seg_dist
 from .rolling.access import LANE_MIDDLE_CLEAR_FT, TREAD_WALL_FT
 from .rolling.bearing import house_rot
@@ -282,6 +284,8 @@ class HousesMixin:
         Research:
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 88 (top sheet margin, the default `top`); 55 (side sheet margins); 26 (bottom sheet margin)
         """
+        if __debug__:
+            OPS["candidate@_fits"] += 1
         if x < 55 or x > self.W - 55 or y < top or y > self.H - 26:
             return False
         if self.bound and not point_in_poly(x, y, self.bound):  # stay inside a bounding ring (city wall)

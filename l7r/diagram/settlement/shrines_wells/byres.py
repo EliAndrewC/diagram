@@ -9,6 +9,8 @@ import math
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import (
     PointGrid,
     Pt,
@@ -277,6 +279,8 @@ class DraftByresMixin:
             sy = 1.0 if (-(yx - h["x"]) * math.sin(th) + (yy - h["y"]) * math.cos(th)) >= 0 else -1.0
         for lyc in (sy * max(0.0, hh / 2.0 - bw / 2.0), 0.0):  # reach toward the court first, then sit centered on the wall
             for sx in (-1.0, 1.0):
+                if __debug__:
+                    OPS["candidate@_courtyard_byre_seat"] += 1
                 # ABUTTING, NOT OVERLAPPING - a 3 ft drip line rather than the kura's shared wall.
                 # The first cut overlapped by 1.5 px to read as literally joined, the way the kura
                 # is drawn inside the house's own transform, and that cost `no_structure_overlaps`
@@ -319,6 +323,8 @@ class DraftByresMixin:
         k = int(self._hjit(hx, hy, 131.0) * 5) % 5  # the first ring's five seats, turned
         seats = seats[k:5] + seats[:k] + seats[5:]
         for lx, ly, turn in seats:
+            if __debug__:
+                OPS["candidate@_yard_shed_seat"] += 1
             cx, cy = hx + lx * math.cos(th) - ly * math.sin(th), hy + lx * math.sin(th) + ly * math.cos(th)
             brot = rot + turn
             _c, _s = abs(math.cos(math.radians(brot))), abs(math.sin(math.radians(brot)))
@@ -539,6 +545,8 @@ class DraftByresMixin:
             return sum(1 for o in houses if o is not q and math.hypot(o["x"] - q["x"], o["y"] - q["y"]) <= _BORROW_REACH)
 
         while len(out) < target and _pool:
+            if __debug__:
+                OPS["candidate@_borrowers"] += 1
             if not out and not _courtyard:
                 # THE FIRST SHARED BYRE NEEDS THE BORROWER FLOOR TOO (settlement-review, Kashikawa
                 # 2026-08-18 round 2). The floor below lives inside `if out and ...`, so the FIRST

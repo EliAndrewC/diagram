@@ -20,6 +20,8 @@ import math
 from collections.abc import Iterable, Iterator, Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import PointGrid, Pt, seg_closest, seg_dist
 from .._geom.primitives import chain_violated
 
@@ -293,6 +295,8 @@ def fixtures_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
         a persimmon by its trunk alone - GUESS: held off by a 4 ft trunk box, the crown free to overhang the path
         path clear of its own well - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane; the wellhead's own box
     """
+    if __debug__:
+        OPS["candidate@fixtures_clear"] += 1
     return not any(seg_box_within(a, b, box, t) for box, t in fixture_gaps(s, own))
 
 
@@ -708,6 +712,8 @@ def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tu
     gap = s.px(TREAD_HALF_FT + PART_MARGIN_FT)
     for door in doors:
         for q in tree.targets(door):
+            if __debug__:
+                OPS["candidate@_house_candidates"] += 1
             if math.dist(door, q) < 1e-6 or (clear(door, q) and leaves_its_yard((door, q), yard, gap)):
                 yield (door, q)
     for door in doors[2:]:  # the flank doors: round the gable (none on a bundle with no yard)
@@ -715,6 +721,8 @@ def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tu
         if not clear(door, turn):
             continue
         for q in tree.targets(turn):
+            if __debug__:
+                OPS["candidate@_house_candidates"] += 1
             # ...never back past the house it went round (`doubles_back`): the web could not draw it (cohort seed 32)
             if math.dist(turn, q) < 1e-6 or (not doubles_back(door, turn, q) and clear(turn, q) and leaves_its_yard((door, turn, q), yard, gap)):
                 yield (door, turn, q)

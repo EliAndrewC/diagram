@@ -15,6 +15,7 @@ Split from one `homesteads.py` by feature 173, as LAYERS emitted bottom-up (ever
 | `capacity.py` | the DISPERSED form's last pass - the exhaustive offer of the free ground, its dry-spell cap and the near-miss rescue - and the margin ladder every form shares (`margin_ladder`, `seating_mark`, `unseat_to`, `SiteRefused`) |
 | `household_ways.py` | THE TRACK OUT CHOSEN ONCE, when the last house stands (feature 320, FR-008): `chose_the_track` asks `track.choose_track_out` with the homesteads as seated standing in for the undrawn farmsteads (`seated_parts`, wood seats included); `near_the_cluster` gives the stretch the households' ways are laid to - nothing of a way is reserved while houses are seated |
 | `stages.py` | STAGES 5 and 6 - the homesteads themselves and what stands among them. Read this first |
+| `rank_rounds.py` | the ranked rounds of a cluster's seating (`_seat_rank_rounds`), split from `stages.py` at the 1,000-line bar (feature 443 T10); `stages.py` imports it back, and it takes `stages`' own names at the call |
 | `seat_geometry.py` | the seating's leaf geometry (feature 316 split it from `stages.py`, which re-exports it): the brook push, the seat's turn, the drawn cluster band and the declared cluster shape |
 | `boundary.py` | THE SITE BOUNDARY (feature 226): the ground a homestead may stand on, computed ONCE |
 | `region.py` | THE SEAT REGION (feature 297): where a homestead can stand and a door can reach the access tree, computed once per change to what stands; every round's seats are drawn only from it |

@@ -25,6 +25,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.homestead_parts.grove_sides import grove_faces
 from l7r.diagram.settlement.rolling.dispersed import LANE_ROOM_FT
+from l7r.diagram.work_counts import OPS
 
 from ..consts import DOOR_STEP_FT, WIND_VECTORS, Poly, Pt
 from ..plan import SitePlan
@@ -491,6 +492,8 @@ def clear_frames(
 
     n = 0
     for (fx, fy), _side, _t, _n in row_seats(line, frame, sides, gap, pitch):
+        if __debug__:
+            OPS["candidate@clear_frames"] += 1
         w, h = float(frame[2]), float(frame[3])
         inside = bounds[0] <= fx - w / 2 and fx + w / 2 <= bounds[2] and bounds[1] <= fy - h / 2 and fy + h / 2 <= bounds[3]
         if inside and (hard is None or not box(fx - w / 2, fy - h / 2, fx + w / 2, fy + h / 2).intersects(hard)) and door_clear((fx, fy, w, h), front, pad, hard, room):
@@ -536,6 +539,8 @@ def best_row_line(
     tries = [anchor] + [(p.x, p.y) for p in (ring.interpolate((s0 + near * (2 * k / (samples - 1) - 1)) % total) for k in range(samples))]
     best: tuple[int, float, list[tuple[Pt, Pt]]] | None = None
     for a in tries:
+        if __debug__:
+            OPS["candidate@best_row_line"] += 1
         line = street_line(hard, a, offset, length, form, slack=slack)
         score = (clear_frames(line, frame, sides, gap, hard, bounds, front, pad, room, pitch), -math.dist(a, anchor))
         if best is None or score > best[:2]:
@@ -634,6 +639,8 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
         mine: list[Pt] = []  # this street's farms, as seated - what its span is drawn over (`ways/street.lay_row_streets`)
         seats = [q for q in row_seats(line, frame, sides, gap, lot) if seat_allowed(q[0][0] - hx_off, q[0][1] - hy_off, float(s.W), float(s.H), allowed)]
         for (fx, fy), side, t, nrm in seats:
+            if __debug__:
+                OPS["candidate@seat_rows"] += 1
             if placed >= want:
                 break
             hx, hy = fx - hx_off, fy - hy_off

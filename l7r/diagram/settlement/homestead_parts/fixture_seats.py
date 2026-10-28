@@ -35,6 +35,8 @@ from functools import lru_cache
 from itertools import chain
 from typing import Any
 
+from l7r.diagram.work_counts import OPS
+
 from ..farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT, PIT_FT, kura_rect
 from .tree_shade import crown_in_ground, sun_ground
 
@@ -237,6 +239,8 @@ def within_reach_of(r: Rect, house: Rect, reach: float) -> bool:
 def clears(r: Rect, taken: Sequence[Rect], gap: float) -> bool:
     """Does `r` stand clear of every rect in `taken` by `gap` - apart by the two half-sizes and the gap on one axis at
     least? A plain loop that stops at the first rect it meets (the seating asks it 1.3 million times a map, seed 44)."""
+    if __debug__:
+        OPS["candidate@clears"] += 1
     rx, ry, rw, rh = r[0], r[1], r[2], r[3]
     for t in taken:  # noqa: SIM110 - a loop, not all() over a generator: the generator was half this test's cost
         if abs(rx - t[0]) < (rw + t[2]) / 2 + gap and abs(ry - t[1]) < (rh + t[3]) / 2 + gap:
@@ -468,6 +472,8 @@ def against_a_part(built: Sequence[Rect], w: float, d: float, g: float, taken: S
     offers = [(part, q) for part in built for q in wall_places([part], w, d, 0.0, step)]
     k = int(start * len(offers)) % len(offers) if offers else 0
     for part, q in offers[k:] + offers[:k]:
+        if __debug__:
+            OPS["candidate@against_a_part"] += 1
         if clears(q, [part], -1e-6) and clears(q, [t for t in taken if t is not part], g):
             return q
     return None
@@ -846,6 +852,8 @@ def _persimmon(hw: float, hh: float, taken: Sequence[Rect], roofs: Sequence[Rect
 
 def in_dooryard(lx: float, ly: float, r: float, hw: float, hh: float, reach: float) -> bool:
     """Does a crown of radius `r` at (`lx`, `ly`) in the house's frame keep its edge within `reach` of the house's walls?"""
+    if __debug__:
+        OPS["candidate@in_dooryard"] += 1
     dx, dy = max(abs(lx) - hw / 2, 0.0), max(abs(ly) - hh / 2, 0.0)
     return math.hypot(dx, dy) - r <= reach
 

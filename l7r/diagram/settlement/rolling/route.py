@@ -31,6 +31,8 @@ import math
 from collections.abc import Callable, Iterator, Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import Pt, seg_closest, seg_dist
 
 if TYPE_CHECKING:
@@ -100,6 +102,8 @@ def search(
         reach = (-2, -1, 0, 1, 2) if c == start else (-1, 0, 1)
         for di in reach:
             for dj in reach:
+                if __debug__:
+                    OPS["candidate@search"] += 1
                 nc = (c[0] + di, c[1] + dj)
                 if nc == c or abs(nc[0] - si) > n or abs(nc[1] - sj) > n:
                     continue
@@ -125,6 +129,8 @@ def taut(pts: Sequence[Pt], leg_ok: Callable[[Pt, Pt], bool], turns_back: Callab
     out = [pts[0]]
     k = 0
     while k < len(pts) - 1:
+        if __debug__:
+            OPS["candidate@taut"] += 1
         if len(out) > most:
             return None
         far = next((m for m in range(len(pts) - 1, k, -1) if leg_ok(pts[k], pts[m]) and (len(out) < 2 or not turns_back(out[-2], out[-1], pts[m]))), None)

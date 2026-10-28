@@ -8,6 +8,8 @@ Research: draw-order and footprint plumbing - NONE: the order things are drawn i
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any, cast
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import Indexed
 from ..farm_fixtures import PERSIMMON_CROWN_FT
 from ..homestead_parts.groves import GROVE_BAMBOO_PATCH_FT, GROVE_CLUMP_CROWNS, HOUSEHOLD_BAMBOO_PREVALENCE, bamboo_patch, band_clumps, grove_crown_px2
@@ -236,6 +238,8 @@ class FarmsteadFlushMixin:
             others = footprints(i) + [tuple(part_box(geom, "house"))] + ([tuple(part_box(geom, "yard"))] if geom.get("yard") is not None else []) + [tuple(b) for b in geom.get("groves") or ()]
             dy = step
             while dy <= maxshift:
+                if __debug__:
+                    OPS["candidate@_relax_gardens_south"] += 1
                 lane = (gcy + dy - gh / 2, gcy + dy + gh / 2)  # clear of EVERY east tree (a small shift can slip INTO a taller arm)
                 if not any(overlaps(lane, t) for t in trees):
                     shifted = [(b[0], b[1] + dy, b[2], b[3]) for b in beds]
@@ -243,6 +247,8 @@ class FarmsteadFlushMixin:
                     # ...and its new sun ground clear of every crown already drawn, every persimmon promised a seat and every bamboo
                     # mark (feature 315; cohort seed 14: a bed nudged 8 ft south took a neighbor's persimmon into its sun)
                     if self._garden_beds_clear(drawn, others) and beds_sun_clear(drawn, near_crowns, promised, near_marks, reach, bamboo_reach):
+                        if __debug__:
+                            OPS["moved@_relax_gardens_south"] += 1
                         geom["gardens"] = shifted
                         if "boxes" in geom:
                             geom["boxes"]["gardens"] = drawn  # the beds' drawn boxes move with them

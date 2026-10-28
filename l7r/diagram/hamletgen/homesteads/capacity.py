@@ -22,6 +22,8 @@ import math
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from ..consts import BUNDLE_PITCH, Pt
 
 if TYPE_CHECKING:
@@ -138,6 +140,8 @@ def offer_seats(s: Settlement, seats: Sequence[Pt], placed: int, want: int, dry:
     took)`. A seat a house this pass seated now stands on is passed over."""
     offered = took = since = 0
     for q in seats:
+        if __debug__:
+            OPS["candidate@offer_seats"] += 1
         if placed >= want or (dry is not None and since >= dry):
             break
         if _near_a_house(s, q):

@@ -71,13 +71,13 @@
    "sha256": "25c6e3cda175ac5e81e512cc8a4655e6be39362439671408a9970fbb6062fb2a",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T10 Approach (checklist part A)": {
    "sha256": "a7a3a99ce0a273fe4e886948c4ce4a999d4309e53b274b9dda85d67049df08ed",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T11 (the walk of the ways: plan D2, the round arbiter's ruling on ask:443-plan-round-3)": {
    "sha256": "aef0bd2ac7efe28fa55777bbe46cb7056376a963aea19fd16653d2f43fc8e8cc",
@@ -833,6 +833,65 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T10 (the walk of the homesteads family: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T10 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T10-source",
+     "summary": "The homesteads family's candidate loops (seat, homesteads, appurtenances, burial, lane_wells, sties, washing) are taken from the scan's list in research/candidate-loops.md, filtered by hand, the excluded loops written down with why.",
+     "class": "within",
+     "why": "D2 makes the walk of each stage's code from STAGES the source and asks it be recorded in research/candidate-loops.md with its search space, command and date; filtering the scan's over-inclusive list to the loops that try a site is D2's own definition of a candidate loop, and recording each exclusion keeps the census checkable."
+    },
+    {
+     "id": "T10-reach",
+     "summary": "The scan's reach: an ast call graph over hamletgen, settlement, waterfields, sitegen, overlap and labels, followed through resolved calls; what it cannot follow (getattr dispatch, name-matched modules, its not-fully-walked list, non-unique method names, functions passed by reference found by a stated grep) is read by hand, naming _seat_region, _free_ground, _access, _site_corridors and homesteads/stages.py.",
+     "class": "within",
+     "why": "D2 asks for every module a stage reaches; the plan states the search space and the command, and closes the scan's known blind spots by hand rather than leaving them out. The round arbiter ruled T10-T12 within on the scan's reach (ask:443-T09-plan-round-3)."
+    },
+    {
+     "id": "T10-increment",
+     "summary": "Each counted loop takes an inline if __debug__: OPS[\"candidate@<function>\"] += n, one per iteration; inside a named predicate or key function, keyed with it, with no call; a bare sorted/min or inline lambda over a list takes len(cands) before it.",
+     "class": "within",
+     "why": "FR-001: an inline increment inside if __debug__, no function call, a vectorized operation counting its elements. len() raising no PY_START event is stated with a dated, method-labeled measurement (2026-10-28, make perf-ab, research/overhead.md), so the no-new-calls condition is measured, not assumed."
+    },
+    {
+     "id": "T10-registry-only",
+     "summary": "A loop whose only test is the registry's admits or conflicts takes no counter of its own; the registry's candidate@Standing.conflicts counts it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D2's letter gives each candidate loop a candidate@<function> increment, so this narrows it. But D2 also makes Standing.admits and conflicts a candidate counting site, and the request says the counters count once per element: a second increment at the loop would count the same candidate twice and inflate the very candidates-per-thing-placed figure the request exists to measure. The candidate is still counted, and FR-002 still attributes it to its stage. The rule reaches only loops whose ONLY test is the registry; a loop that also tests against the _geom layer or a predicate keeps its own counter. This is the T09 approach text the round arbiter accepted."
+    },
+    {
+     "id": "T10-exits",
+     "summary": "Green: every listed loop counted, Python calls within SC-001's one in a thousand by make perf-fanout, perf-fanout anchors read against the list with each miss added and recorded, cohort-landing unregressed; red: recorded, set down, a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "SC-001's threshold and D2's cross-check by perf-fanout anchors at 40 households, as written; cohort-landing unregressed matches 'no map changes'. The red exit routes an impossibility claim to the arbiter and does not quietly drop the family."
+    },
+    {
+     "id": "T10-reality-check",
+     "summary": "Each family's candidate counts read against its stages' things placed on the reference roll; a stage with calls large against its counts is re-read.",
+     "class": "within",
+     "why": "D2's last bullet: calls printed beside counts so a stage whose calls are large against its counts shows it."
+    },
+    {
+     "id": "T10-order",
+     "summary": "After T01; the families in any order, each its own landing; one landing with the claims round's triage as a check-wave.",
+     "class": "within",
+     "why": "Sequencing within step 1 (the instrument); the request sets no order among the stage families."
+    },
+    {
+     "id": "T10-not-perf",
+     "summary": "Not performance work: instrumentation whose overhead is measured by make perf-ab, moving no map.",
+     "class": "within",
+     "why": "Step 1 of the request: engine counters only, no map changes."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -956,6 +1015,63 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T10": {
+   "section_sha256": "e8027403dc4a67cde825e5f415f9c54328373765160226db609816d78e0f99e6",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T10-source",
+     "summary": "The homesteads family's candidate loops (seat, homesteads, appurtenances, burial, lane_wells, sties, washing) are taken from the scan's list in research/candidate-loops.md, filtered by hand, the excluded loops written down with why.",
+     "class": "within",
+     "why": "D2 makes the walk of each stage's code from STAGES the source and asks it be recorded in research/candidate-loops.md with its search space, command and date; filtering the scan's over-inclusive list to the loops that try a site is D2's own definition of a candidate loop, and recording each exclusion keeps the census checkable."
+    },
+    {
+     "id": "T10-reach",
+     "summary": "The scan's reach: an ast call graph over hamletgen, settlement, waterfields, sitegen, overlap and labels, followed through resolved calls; what it cannot follow (getattr dispatch, name-matched modules, its not-fully-walked list, non-unique method names, functions passed by reference found by a stated grep) is read by hand, naming _seat_region, _free_ground, _access, _site_corridors and homesteads/stages.py.",
+     "class": "within",
+     "why": "D2 asks for every module a stage reaches; the plan states the search space and the command, and closes the scan's known blind spots by hand rather than leaving them out. The round arbiter ruled T10-T12 within on the scan's reach (ask:443-T09-plan-round-3)."
+    },
+    {
+     "id": "T10-increment",
+     "summary": "Each counted loop takes an inline if __debug__: OPS[\"candidate@<function>\"] += n, one per iteration; inside a named predicate or key function, keyed with it, with no call; a bare sorted/min or inline lambda over a list takes len(cands) before it.",
+     "class": "within",
+     "why": "FR-001: an inline increment inside if __debug__, no function call, a vectorized operation counting its elements. len() raising no PY_START event is stated with a dated, method-labeled measurement (2026-10-28, make perf-ab, research/overhead.md), so the no-new-calls condition is measured, not assumed."
+    },
+    {
+     "id": "T10-registry-only",
+     "summary": "A loop whose only test is the registry's admits or conflicts takes no counter of its own; the registry's candidate@Standing.conflicts counts it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D2's letter gives each candidate loop a candidate@<function> increment, so this narrows it. But D2 also makes Standing.admits and conflicts a candidate counting site, and the request says the counters count once per element: a second increment at the loop would count the same candidate twice and inflate the very candidates-per-thing-placed figure the request exists to measure. The candidate is still counted, and FR-002 still attributes it to its stage. The rule reaches only loops whose ONLY test is the registry; a loop that also tests against the _geom layer or a predicate keeps its own counter. This is the T09 approach text the round arbiter accepted."
+    },
+    {
+     "id": "T10-exits",
+     "summary": "Green: every listed loop counted, Python calls within SC-001's one in a thousand by make perf-fanout, perf-fanout anchors read against the list with each miss added and recorded, cohort-landing unregressed; red: recorded, set down, a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "SC-001's threshold and D2's cross-check by perf-fanout anchors at 40 households, as written; cohort-landing unregressed matches 'no map changes'. The red exit routes an impossibility claim to the arbiter and does not quietly drop the family."
+    },
+    {
+     "id": "T10-reality-check",
+     "summary": "Each family's candidate counts read against its stages' things placed on the reference roll; a stage with calls large against its counts is re-read.",
+     "class": "within",
+     "why": "D2's last bullet: calls printed beside counts so a stage whose calls are large against its counts shows it."
+    },
+    {
+     "id": "T10-order",
+     "summary": "After T01; the families in any order, each its own landing; one landing with the claims round's triage as a check-wave.",
+     "class": "within",
+     "why": "Sequencing within step 1 (the instrument); the request sets no order among the stage families."
+    },
+    {
+     "id": "T10-not-perf",
+     "summary": "Not performance work: instrumentation whose overhead is measured by make perf-ab, moving no map.",
+     "class": "within",
+     "why": "Step 1 of the request: engine counters only, no map changes."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

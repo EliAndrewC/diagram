@@ -53,6 +53,7 @@ from l7r.diagram.settlement.homestead_parts.fixture_seats import (
 )
 from l7r.diagram.settlement.homestead_parts.grove_rules import fixture_on_band, grove_bands
 from l7r.diagram.settlement.land.wet import marsh_ground
+from l7r.diagram.work_counts import OPS
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -470,6 +471,8 @@ def _flexible_clear(s: Settlement, h: Mapping[str, Any], q: Pt, ext: tuple[float
         pit on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: no brook between pit and house
         pit off every grove - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); clear of every farm's grove band
     """
+    if __debug__:
+        OPS["candidate@_flexible_clear"] += 1
     hx, hy = float(h["x"]), float(h["y"])
     if _strip_blocked(s, q[0], q[1], ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing, near=near):
         return False

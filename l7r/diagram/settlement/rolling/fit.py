@@ -22,6 +22,8 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+from l7r.diagram.work_counts import OPS
+
 from .fit_index import _extent_boxed, drop_persimmon, farmstead_boxes, house_box, house_extent, houses_meeting, part_box, recorded_box  # noqa: E402,F401 - split at the bar (feature 315)
 
 
@@ -573,6 +575,8 @@ class BundleFitMixin:
         every garden side at a position) and a side-DEPENDENT half (the garden bed + the bbox it grows), so
         the nucleated placer can test the common half ONCE across all four sides (see `_fits_any_side`). The
         conjunction is order-independent, so the result is unchanged from the old single test."""
+        if __debug__:
+            OPS["candidate@_bundle_fits"] += 1
         return self._bundle_common_fits(geom, grove_off_field) and self._bundle_side_fits(geom) and not self._on_the_access(geom) and not self._fixtures_in_bands(geom) and bundle_admitted(self, geom)
 
     def _fixtures_in_bands(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]

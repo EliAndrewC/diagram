@@ -37,6 +37,7 @@ from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.settlement._geom.region import GROW, Region
 from l7r.diagram.settlement.rolling.lot import DEPTH_FACTORS, LENGTH_FACTORS
+from l7r.diagram.work_counts import OPS
 
 from ..consts import Pt
 
@@ -159,6 +160,8 @@ class SeatRegion:
 
         Research: a way of its own - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a seat is offered only where its yard opens onto the ground the lanes are laid in, connected to the track out
         """
+        if __debug__:
+            OPS["candidate@SeatRegion.offer"] += len(pts)
         import numpy as np
 
         self.sync()

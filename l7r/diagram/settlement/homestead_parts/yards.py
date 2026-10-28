@@ -6,6 +6,8 @@ Research: plumbing - NONE
 import math
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import edge_dist, point_in_poly, turn_about
 
 if TYPE_CHECKING:
@@ -182,6 +184,8 @@ def _filled_lattice(
         return None
     x0, y0, x1, y1 = box
     for gap_ft in MAT_GAPS_FT:
+        if __debug__:
+            OPS["candidate@_filled_lattice"] += 1
         pw, ph = mw + gap_ft / ftpx, mh + gap_ft / ftpx
         nc, nr = int((x1 - x0 + gap_ft / ftpx) // pw), int((y1 - y0 + gap_ft / ftpx) // ph)
         if nc < 1 or nr < 1:
@@ -448,6 +452,8 @@ def _lay_by_hand(base: list[tuple[int, int, float, float]], mw: float, mh: float
         near = [m for dr in (-1, 0, 1) for dc in (-1, 0, 1) if (dr or dc) and (m := at.get((r + dr, c + dc))) is not None]
         others = [placed[m] if m in placed else lattice[m] for m in near if m in placed or m > k]
         for (jx, jy, ja), q, on in zip(tries[k], quads[k], floor_ok[k], strict=True):
+            if __debug__:
+                OPS["candidate@_lay_by_hand"] += 1
             if ja == 0.0 or (on and all(_quad_gap(q, o) >= need for o in others if _boxes_within(q, o, need))):
                 laid.append((jx, jy, mw, mh, ja))
                 placed[k] = q

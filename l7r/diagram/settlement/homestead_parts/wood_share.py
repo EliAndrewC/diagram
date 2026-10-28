@@ -42,6 +42,8 @@ import math
 from collections.abc import Iterable, Mapping, Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import PointGrid, Pt, seg_dist, segments_cross
 from ..land.wet import marsh_ground
 from ..shrines_wells.byres import BYRE_FT
@@ -352,6 +354,8 @@ class WoodShares:
         mine: set[tuple[int, int]] = set()
         seats: list[tuple[float, float]] = []
         for x, y in lattice:
+            if __debug__:
+                OPS["candidate@WoodShares.share"] += 1  # a wood seat tried (feature 443 T10, a miss of the walk)
             if self.seat_barred(x, y, (hx, hy), own, corridors, banks):
                 continue
             fresh = self.crown(x, y, (hx, hy)) - self.cells - mine

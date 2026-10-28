@@ -38,6 +38,8 @@ import math
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import Pt, chain_violated_many
 from .access import _standing_memo, admitted, doors_of, doubles_back, fixture_gaps, fixtures_clear, house_clear, house_gap, legs, part_gaps, parts_clear, point_clear, reserve, standing_ground
 from .route import taut
@@ -274,6 +276,8 @@ def way_out(L: Layers, dist: Any, doors: Sequence[Pt], area: tuple[int, int, int
 
     def ok(c: tuple[int, int]) -> bool:
         if c not in seen:
+            if __debug__:
+                OPS["candidate@way_out"] += 1  # a cell asked whether the way may cross it (feature 443 T10, a miss of the walk)
             seen[c] = bool(math.isfinite(dist[c[0]][c[1]]) or open_here(c))
         return seen[c]
 
@@ -321,6 +325,8 @@ def trace(L: Layers, dist: Any, pred: Any, laid: Any, start: tuple[int, int], tr
     while True:
         here = L.at((u, v))
         if laid[u, v] or dist[u][v] == 0:
+            if __debug__:
+                OPS["candidate@trace"] += 1  # a join onto the laid ways tried (feature 443 T10, a miss of the walk)
             foot = feet.nearest(here)
             if dist[u][v] == 0 or joins(here, foot):
                 return path, foot
@@ -542,6 +548,8 @@ def _way_for(
         junctions = junction_points(s._access.segs)
         knotted: list[list[Pt]] = []
         for _, i, j in exits:
+            if __debug__:
+                OPS["candidate@_way_for"] += 1
             if len(picked) >= (GAP_TRIES * KNOTTED_TRIES if knotted else GAP_TRIES):  # a knotted fallback in hand: look further
                 break
             if any(abs(i - a) + abs(j - b) < RING_CELLS for a, b in picked):
@@ -574,6 +582,8 @@ def _first_admitted(s: Settlement, runs: Sequence[list[Pt]], leg_ok: Any, geom: 
 
     Research: plumbing - NONE: candidates asked in order"""
     for q in runs:
+        if __debug__:
+            OPS["candidate@_first_admitted"] += 1
         run = taut(q, leg_ok, doubles_back, GAP_LEGS)
         drawn = admitted(s, run, geom, memo) if run is not None else None
         if drawn is not None:

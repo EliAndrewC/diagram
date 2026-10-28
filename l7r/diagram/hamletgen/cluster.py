@@ -14,6 +14,7 @@ from typing import Any
 from l7r.diagram.settlement import point_in_poly, seg_dist, seg_intersect
 from l7r.diagram.settlement._geom import seg_reach_index
 from l7r.diagram.sitegen.geom import centroid, unit
+from l7r.diagram.work_counts import OPS
 
 from .consts import WIND_BACK_MIN_DOT, Poly, Pt
 from .plan import SitePlan, band_extent
@@ -68,6 +69,8 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
     Research: depth sampled behind the margin - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); 2.6 band depths, the cluster and its belt
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 7 (sample count along the back (claim: T29 pass E))
     """
+    if __debug__:
+        OPS["candidate@back_fouled"] += 1
     if not dry_plots:
         return 0.0
     ax, ay = -out[1], out[0]
@@ -254,6 +257,8 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), toe: Poly | Non
     ranked: list[tuple[float, Pt, Pt]] = []  # the wind-facing margins with room for their belt, in the order met
     turned: list[tuple[float, Pt, Pt]] = []  # margins whose back is turned to the wind off a flank (`margin_candidates`)
     for mid, (nx, ny), tier in margin_candidates(env, cen, (wx, wy)):
+        if __debug__:
+            OPS["candidate@seat_cluster"] += 1
         rel = ((mid[0] - cen[0]), (mid[1] - cen[1]))
         # ...and belt-and-braces: the BAND ITSELF must stand on open ground. An edge normal can
         # still graze a lobe of the fan a little further along, and a check is cheaper than a theory.

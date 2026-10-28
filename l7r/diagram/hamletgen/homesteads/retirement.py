@@ -17,6 +17,7 @@ from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.settlement._knobs import Knob, knob_rng, register_knob
+from l7r.diagram.work_counts import OPS
 
 from .holds import release_held
 
@@ -180,6 +181,8 @@ def retirement_houses(s: Settlement, plan: SitePlan) -> int:
         if seated >= target:
             break
         for cx, cy, rot in retirement_seats(h, w, d, gaps, rng.randrange(3)):
+            if __debug__:
+                OPS["candidate@retirement_houses"] += 1
             aw, ah = turned_box(w, d, rot)
             rec = {"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(d, 1), "rot": round(rot, 1), "of": [round(float(h["x"]), 1), round(float(h["y"]), 1)]}
             if s._byre_clear_of_all_but(cx, cy, aw, ah, h) and s.admits("retirement_houses", rec):  # ...and the registry (M8)

@@ -8,6 +8,8 @@ Research: search and prefilter plumbing - NONE
 import math
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import Pt, point_in_poly
 from .access import seat_reaches_tree
 from .fit import part_box
@@ -108,6 +110,8 @@ class PlacerMixin:
             its salts, guards and sentinels - NONE: they decide nothing about the place - 1.5 (stop tolerance (arrived at the target))
         """
         for _ in range(48):
+            if __debug__:
+                OPS["candidate@_slide"] += 1
             tgt = target_fn(cx, cy)
             if tgt is None:
                 break
@@ -165,6 +169,8 @@ class PlacerMixin:
                 a = k * math.pi / 6
                 offsets.append((round(r * math.cos(a)), round(r * math.sin(a))))
         for nx, ny in offsets:
+            if __debug__:
+                OPS["candidate@_place_bundle_dispersed"] += 1
             # THE FREE GROUND PROPOSES, THE FIT TEST DECIDES (feature 276, plan D9): an offset whose house the index
             # refuses is one `_bundle_fits` would refuse, so it is dropped without building its bundle.
             if self._seat_refused(x + nx, y + ny, hw, hh):
@@ -256,6 +262,8 @@ class PlacerMixin:
         best: Any = None
         _reaches: bool | None = None
         for rank, side in enumerate(self._NUC_SIDES):
+            if __debug__:
+                OPS["candidate@_place_bundle_nucleated"] += 1
             cx, cy = x, y
             geom = _at[side]
             hit = None
