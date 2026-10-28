@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-26
 
-**Status**: Started 2026-10-26 on the GM's word (`request.md` 5: "please go ahead with feature 427 beginning with the survey
+**Status**: Superseded by 444 2026-10-28 - the GM approved the work-budget design ("Thank you. I approve the design. Please proceed."). Evidence: the end bookend (`research/end-bookend.md`) cut calls 42% at 20 households and 62% at 40, short of SC-002's tenfold and SC-003's second a stage; both goals pass to 444's whole-roll budget (444 FR-009); T10 is withdrawn, T11 measured. Was: Started 2026-10-26 on the GM's word (`request.md` 5: "please go ahead with feature 427 beginning with the survey
 tool"), after the hold of `request.md` 3.
 
 **Affects**: hamlet, performance, tooling

@@ -98,10 +98,10 @@
    "declared": "round-arbiter"
   },
   "### T11 Approach (checklist part A)": {
-   "sha256": "96d95d8be4da33e89a61ac74ca1f6e8de46a9f3f1cf405febe1a0777a1d02468",
+   "sha256": "cbac05388b8e3792297ee7b865c0d320dd045839f5a84db3ccd98f4a5ba61893",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-26",
-   "declared": "round-arbiter"
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
   },
   "### T12 Approach (checklist part A)": {
    "sha256": "3d4832e1e01e6f65ded0d1e4846a169fd43c8e30430ff4a167c45d556f9a7288",
@@ -993,6 +993,97 @@
      "why": "Carries US4's tenfold test, FR-002, FR-003, FR-004 and FR-007 as written; no timing gates (FR-006); nothing narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T11 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T11-order",
+     "summary": "T11 runs last, after every family task",
+     "class": "within",
+     "why": "The feature's closing measurement can only follow the work it measures; request.md 5's order (survey and watch first, lanes last) is not changed by putting the final measurement after all of it."
+    },
+    {
+     "id": "T11-exits",
+     "summary": "Green only when SC-002 and SC-003 are met by the end measurement and the report is written; any criterion missed is red; an intermediate checkpoint does not close the feature; red sets the task down and a claim of impossibility goes to make arbiter-ask",
+     "class": "within",
+     "why": "Carries SC-002 and SC-003 at full strength, which carry request.md 1 ('literal order of magnitude', 'every single stage ... a fraction of a second ... such as 40'), and keeps SC-003's rule that an intermediate checkpoint does not close the feature. It relaxes nothing. The arbiter route for a can't-be-done claim is the project's standing escalation path, not a carve-out."
+    },
+    {
+     "id": "T11-ab-baseline",
+     "summary": "The seed-by-seed A/B compares a detached worktree at the 427-start bookend commit (1cc4066ac) with one at the end commit, make perf SCALING=1 alternated start, end, start, end in one session, every stage of every completing seed compared seed by seed",
+     "class": "within",
+     "why": "FR-005 asks for bookends plus a seed-by-seed A/B, never medians alone. By the time the feature closes, HEAD is the end commit, so the only A/B that measures the feature's effect is against the pre-feature engine. Alternating the runs inside one session answers the GM's own point in request.md 4 that load and processor throw timings off. Comparing completing seeds only follows request.md 4 and 5 (seeds that already failed are not required to pass)."
+    },
+    {
+     "id": "T11-calls",
+     "summary": "Call totals for SC-002 are taken with make perf-fanout",
+     "class": "within",
+     "why": "SC-002 is a count of calls and the plan measures it with the feature's own call-count tool. Nothing is narrowed: the 2.5M / 6.5M targets in SC-002 still stand."
+    },
+    {
+     "id": "T11-417-seeds",
+     "summary": "Feature 417's failing seeds are re-measured with make cohort on the end engine, the result recorded in 417's directory, before 417 resumes",
+     "class": "within",
+     "why": "This is request.md 5's approved approach, word for word: '417's failing seeds re-measured after 427, before 417 resumes'."
+    },
+    {
+     "id": "T11-report",
+     "summary": "The feature closes with make feature-report F=427 WRITE=1",
+     "class": "within",
+     "why": "This is the project's standing close for every feature (the root CLAUDE.md). It does not change the scope of what the GM asked for."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T11": {
+   "section_sha256": "1166f7421fbc3d1e47f2435446b85843f7f5a8465e484d1b6295ffe126f84371",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T11-order",
+     "summary": "T11 runs last, after every family task",
+     "class": "within",
+     "why": "The feature's closing measurement can only follow the work it measures; request.md 5's order (survey and watch first, lanes last) is not changed by putting the final measurement after all of it."
+    },
+    {
+     "id": "T11-exits",
+     "summary": "Green only when SC-002 and SC-003 are met by the end measurement and the report is written; any criterion missed is red; an intermediate checkpoint does not close the feature; red sets the task down and a claim of impossibility goes to make arbiter-ask",
+     "class": "within",
+     "why": "Carries SC-002 and SC-003 at full strength, which carry request.md 1 ('literal order of magnitude', 'every single stage ... a fraction of a second ... such as 40'), and keeps SC-003's rule that an intermediate checkpoint does not close the feature. It relaxes nothing. The arbiter route for a can't-be-done claim is the project's standing escalation path, not a carve-out."
+    },
+    {
+     "id": "T11-ab-baseline",
+     "summary": "The seed-by-seed A/B compares a detached worktree at the 427-start bookend commit (1cc4066ac) with one at the end commit, make perf SCALING=1 alternated start, end, start, end in one session, every stage of every completing seed compared seed by seed",
+     "class": "within",
+     "why": "FR-005 asks for bookends plus a seed-by-seed A/B, never medians alone. By the time the feature closes, HEAD is the end commit, so the only A/B that measures the feature's effect is against the pre-feature engine. Alternating the runs inside one session answers the GM's own point in request.md 4 that load and processor throw timings off. Comparing completing seeds only follows request.md 4 and 5 (seeds that already failed are not required to pass)."
+    },
+    {
+     "id": "T11-calls",
+     "summary": "Call totals for SC-002 are taken with make perf-fanout",
+     "class": "within",
+     "why": "SC-002 is a count of calls and the plan measures it with the feature's own call-count tool. Nothing is narrowed: the 2.5M / 6.5M targets in SC-002 still stand."
+    },
+    {
+     "id": "T11-417-seeds",
+     "summary": "Feature 417's failing seeds are re-measured with make cohort on the end engine, the result recorded in 417's directory, before 417 resumes",
+     "class": "within",
+     "why": "This is request.md 5's approved approach, word for word: '417's failing seeds re-measured after 427, before 417 resumes'."
+    },
+    {
+     "id": "T11-report",
+     "summary": "The feature closes with make feature-report F=427 WRITE=1",
+     "class": "within",
+     "why": "This is the project's standing close for every feature (the root CLAUDE.md). It does not change the scope of what the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

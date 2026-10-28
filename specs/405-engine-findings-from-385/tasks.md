@@ -474,6 +474,8 @@ Spec: [`spec.md`](spec.md). T01-T27 keep their 385 id in their title (the boxes 
       research: rendering
 - [ ] T164 Open claims findings in docs (1) that no open task named on 2026-10-26 (the GM, 2026-10-26: "feature 405 is supposed to be fixing all remaining claims findings"; feature 432's audit, 385#107) - fix the code or the claim and re-check each: docs/buildings.md::Scale#residence wing length [lands-open]
       research: rendering
+- [ ] T165 Three drawing-page notes moved from feature 435 T05, T07 and T09 on the GM's approval of the work-budget design (2026-10-28, "Thank you. I approve the design. Please proceed.") so that 435 can close: 0047's drawing page states whether the privy's 48 ft reach covers every privy place and that a privy with no seat in reach refuses the bundle; seat_wells' belt claim says belt seats rank behind coverage, never refused, and 0072's drawing page states the maps' rule of seating wells outside the belt first; 0190's drawing page states that a notice board keeps out of a farmstead's own grove (grove_rects, _fits' clearance) beside its rule that a board clears no ground and may stand under a crown (impl-drift, 435's claims rounds)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=405) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

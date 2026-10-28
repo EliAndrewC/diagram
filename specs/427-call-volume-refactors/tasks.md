@@ -33,7 +33,7 @@
 - [x] T09 US4, the water family: the field settle (R7, research/hotspots-recompute.md) and the brook and partition chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)
       research: rendering
       verify: DONE. landed: water chains gone (R7, crosses_mid_run, keep_rows, drain_f); pool unchanged
-- [ ] T10 US4, the lane web and the lane law, after feature 417's lane conversions (request.md 5): the web stage's pairwise chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)
+- [ ] T10 WITHDRAWN 2026-10-28 on the GM's approval of the work-budget design ("Thank you. I approve the design. Please proceed."; specs/444-work-budget-program/request.md): feature 444 rebuilds the web against its budget, which replaces this task. Was: US4, the lane web and the lane law, after feature 417's lane conversions (request.md 5): the web stage's pairwise chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)
       research: rendering
 - [ ] T11 The 427-end bookend and the report: SC-002 and SC-003 measured against 427-start (FR-005), make feature-report F=427 WRITE=1
       research: rendering

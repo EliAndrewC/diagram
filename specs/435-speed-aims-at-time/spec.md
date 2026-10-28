@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: Draft
+**Status**: Done 2026-10-28 - every engine and tooling task landed (T01-T04, T06, T08); the three drawing-page notes (T05, T07, T09) moved to feature 405 T165 on the GM's approval of the work-budget design ("Thank you. I approve the design. Please proceed."). Was: Draft
 
 **Affects**: tooling, performance, hamlet
 
