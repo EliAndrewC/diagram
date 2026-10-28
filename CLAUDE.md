@@ -79,6 +79,9 @@ Constitution XII. One line each here; the full text of every rule, with its feat
   and ten new registry keys a write (`make reserve`'s eleventh key sends the rest to a continuation brief); coordination files
   are read with `make lines` and written with `make append`; a page session loads `scripts/container/page-session-rules.md`.
 - A `research record` feature closes only with its findings checked against the code (`make impl-check F=<n>`).
+- **The claims switch is at `report`** (feature 445, the GM 2026-10-28): a claims finding refuses no landing and files no task while
+  it is checked and listed by `make claims-report`; only an owed claim or a form problem refuses. `make claims-clean REASON=` throws
+  it to the long-run rule - no landing while the report lists an open finding - when the claims feature after the rewrite closes.
 
 ## Development workflow
 

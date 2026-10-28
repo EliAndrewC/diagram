@@ -414,6 +414,46 @@
      "why": "This is the method for placing each task under its stage, as D4 requires. It is a measurement with its date and method, not a choice of scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T04 - the docs and the report (D5)",
+    "### T04 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T04-docs",
+     "summary": "docs/guards.md, claims-gate.sh's message and the root CLAUDE.md name the switch and its state",
+     "class": "within",
+     "why": "Exactly the three places D5/FR-006 name, carrying the GM's ruling that the check be built but disabled: a session reading about the claims gate learns it is switched to report."
+    },
+    {
+     "id": "T04-scope-docs-half",
+     "summary": "T04 carries FR-006's docs half only; its exits do not include FR-006's second clause (each refusal's test proven to fire with it deleted)",
+     "class": "within",
+     "why": "The task does not claim or relax the test clause; it is a refusal-level obligation owned where the refusals are added (FR-002/FR-003 tasks, SC-005). Nothing here narrows it. Noted so the closing check confirms SC-005's red-with-deletion half is carried by an earlier task."
+    },
+    {
+     "id": "T04-order-last",
+     "summary": "the docs task runs last",
+     "class": "within",
+     "why": "Ordering only; the docs describe the switch after it exists. Settles nothing the request bounds."
+    },
+    {
+     "id": "T04-report",
+     "summary": "make feature-report F=445 WRITE=1 as the done measure",
+     "class": "within",
+     "why": "Project closing step for the feature; adds no behavior and removes nothing the GM asked for."
+    },
+    {
+     "id": "T04-exits",
+     "summary": "green: the docs name the switch; red as T01 / record and set down, impossibility ruled via make arbiter-ask",
+     "class": "within",
+     "why": "Green exit is FR-006/SC-005's docs clause verbatim in substance; red exit is the standard set-down route and carves out no case."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -551,6 +591,44 @@
      "summary": "the open tasks of 405 read against STAGES, observed 2026-10-28 via make speckit-todo and grep of STAGES",
      "class": "within",
      "why": "This is the method for placing each task under its stage, as D4 requires. It is a measurement with its date and method, not a choice of scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T04": {
+   "section_sha256": "6a908dee4054b6fd0433963853eb1630dab5b2e2bc32aaca7271223d1d803558",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T04-docs",
+     "summary": "docs/guards.md, claims-gate.sh's message and the root CLAUDE.md name the switch and its state",
+     "class": "within",
+     "why": "Exactly the three places D5/FR-006 name, carrying the GM's ruling that the check be built but disabled: a session reading about the claims gate learns it is switched to report."
+    },
+    {
+     "id": "T04-scope-docs-half",
+     "summary": "T04 carries FR-006's docs half only; its exits do not include FR-006's second clause (each refusal's test proven to fire with it deleted)",
+     "class": "within",
+     "why": "The task does not claim or relax the test clause; it is a refusal-level obligation owned where the refusals are added (FR-002/FR-003 tasks, SC-005). Nothing here narrows it. Noted so the closing check confirms SC-005's red-with-deletion half is carried by an earlier task."
+    },
+    {
+     "id": "T04-order-last",
+     "summary": "the docs task runs last",
+     "class": "within",
+     "why": "Ordering only; the docs describe the switch after it exists. Settles nothing the request bounds."
+    },
+    {
+     "id": "T04-report",
+     "summary": "make feature-report F=445 WRITE=1 as the done measure",
+     "class": "within",
+     "why": "Project closing step for the feature; adds no behavior and removes nothing the GM asked for."
+    },
+    {
+     "id": "T04-exits",
+     "summary": "green: the docs name the switch; red as T01 / record and set down, impossibility ruled via make arbiter-ask",
+     "class": "within",
+     "why": "Green exit is FR-006/SC-005's docs clause verbatim in substance; red exit is the standard set-down route and carves out no case."
     }
    ],
    "verdict": "CLEAR"

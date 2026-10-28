@@ -57,6 +57,7 @@ OUT="$(PYTHONDONTWRITEBYTECODE=1 python3 "$CG_HERE/../record/claims.py" --root "
 
 guard_log claims-gate blocked "$(printf '%s' "$OUT" | grep 'REFUSED' | head -c 400)" claims
 printf '\n\033[1mCLAIMS GATE: research claims owed a check, a finding this delta introduced, or one to carry.\033[0m\n' >&2
+printf 'The claims switch (dev/switches.json) is at %s: at report only an owed claim or a form problem refuses; at clean every open finding the claims report lists does too (feature 445).\n' "$(python3 -c 'import json,sys; print((json.load(open(sys.argv[1])).get("claims") or {}).get("state","report"))' "$ROOT/dev/switches.json" 2>/dev/null || echo report)" >&2
 printf '%s\n' "$OUT" | grep 'REFUSED' | sed 's/^claims-gate: REFUSED /  /' | head -40 >&2
 n="$(printf '%s\n' "$OUT" | grep -c 'REFUSED')"
 [ "$n" -gt 40 ] && printf '  ... and %s more (`make claims-owed`)\n' "$((n - 40))" >&2
