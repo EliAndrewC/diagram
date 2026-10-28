@@ -573,10 +573,28 @@ def commit_records(root: Path) -> None:
 GATE_MACHINERY = re.compile(r"^(scripts/land\.py|scripts/gates/.*|Makefile|l7r/diagram/ci/.*|tests/conftest\.py|tests/_scope\.py)$")
 
 
-def gate_machinery_delta(root: Path) -> list[str]:
-    """The delta's paths that decide how a landing and its gate run (`GATE_MACHINERY`)."""
+def delta_names(root: Path) -> list[str]:
+    """Every path the delta against origin/main changes."""
     run(root, ["git", "fetch", "-q", "origin"])
-    return [n for n in run(root, ["git", "diff", "--name-only", "origin/main...HEAD"])[1].split() if GATE_MACHINERY.match(n)]
+    return run(root, ["git", "diff", "--name-only", "origin/main...HEAD"])[1].split()
+
+
+def gate_machinery_delta(root: Path, names: list[str] | None = None) -> list[str]:
+    """The delta's paths that decide how a landing and its gate run (`GATE_MACHINERY`)."""
+    return [n for n in (delta_names(root) if names is None else names) if GATE_MACHINERY.match(n)]
+
+
+def tooling_reads(root: Path, names: list[str]) -> list[str]:
+    """The tooling test files a delta of scripts reaches: each changed `tests/tooling/` test, and each one naming a changed
+    `scripts/**/*.py` by its module name. WHY (feature 446 T03, 2026-10-28): a delta of `scripts/record/` and its tests is no gate
+    machinery and its stamp owes only `make hooks-test`, so the tooling tests never ran - T02 landed a call that broke
+    `test_known_drift.py`'s stub of `owed`, caught only by T03's Makefile line pulling in the whole tooling run."""
+    tests = {n for n in names if n.startswith("tests/tooling/") and Path(n).name.startswith("test_") and n.endswith(".py") and (root / n).is_file()}
+    stems = sorted({Path(n).stem for n in names if n.startswith("scripts/") and n.endswith(".py")})
+    if stems:
+        named = re.compile(r"\b(?:" + "|".join(map(re.escape, stems)) + r")\b")
+        tests |= {p.relative_to(root).as_posix() for p in (root / "tests" / "tooling").rglob("test_*.py") if named.search(p.read_text(encoding="utf-8"))}
+    return sorted(tests)
 
 
 def machinery_tests(root: Path, machinery: list[str]) -> str:
@@ -600,10 +618,16 @@ def long_runs(root: Path) -> int:
     owed hooks-test alone, which a `make done` would not have stamped."""
     stamp = [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--check", "origin/main"]
     rc, out = run(root, stamp)
-    machinery = gate_machinery_delta(root)
+    names = delta_names(root)
+    machinery = gate_machinery_delta(root, names)
     if machinery and not rc and (why := machinery_tests(root, machinery)):
         print(why, file=sys.stderr)
         return 1
+    if not machinery and (reads := tooling_reads(root, names)):
+        print(f"land: the delta changes scripts or tooling tests - the {len(reads)} tooling test file(s) reaching them run", flush=True)
+        if run(root, ["make", "--no-print-directory", "test-file", f"FILE={' '.join(reads)}"], quiet=False)[0]:
+            print("land: the tooling tests the delta reaches are red - nothing landed; fix them and run make land again", file=sys.stderr)
+            return 1
     if rc:
         targets = list(dict.fromkeys(NAMED_GATE.findall(out)) or ["done"])
         # THE COHORT BESIDE THE GATE (405 T48, D21): they share no work - the gate rolls the five pool maps, the cohort its seeds

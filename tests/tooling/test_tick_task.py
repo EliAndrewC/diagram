@@ -857,6 +857,39 @@ def test_a_delta_changing_the_gates_machinery_runs_the_tooling_tests_not_a_gate(
     assert lb.long_runs(tmp_path) == 0 and made == [] and ran == [], "a docs delta: the stamp decides"
 
 
+def test_a_delta_of_scripts_runs_the_tooling_tests_that_name_them(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 446 T03 (2026-10-28): T02's `scripts/record/` delta was no gate machinery, so no tooling test ran and a stub of
+    `owed` in `test_known_drift.py` broke on main. A delta of scripts now runs the tooling test files naming a changed script, and
+    each changed tooling test; a red one lands nothing; a script no test names, and a docs delta, run none."""
+    lb, _d = _land(tmp_path, monkeypatch)
+    (tmp_path / "tests" / "tooling").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "tests" / "tooling" / "test_a.py").write_text("import claims_counters\n")
+    (tmp_path / "tests" / "tooling" / "test_b.py").write_text("import claims_countersx\n")
+    ran: list[list[str]] = []
+    delta = {"names": "scripts/record/claims_counters.py\n", "rc": 0}
+
+    def run(root, cmd, env=None, quiet=True):  # noqa: ANN001, ANN202
+        if cmd[:2] == ["git", "diff"]:
+            return (0, delta["names"])
+        if cmd[:1] == ["make"]:
+            ran.append(cmd[2:])
+            return (delta["rc"], "")
+        return (0, "")
+
+    monkeypatch.setattr(lb, "run", run)
+    monkeypatch.setattr(lb, "run_gate", lambda root, target, cover: 0)
+    monkeypatch.setattr(lb, "start_cover", lambda root: None)
+    monkeypatch.setattr(lb, "engine_delta", lambda root: False)
+    monkeypatch.setattr(lb, "commit_regenerated", lambda root, why: None)
+    assert lb.long_runs(tmp_path) == 0 and ran == [["test-file", "FILE=tests/tooling/test_a.py"]], "the test naming the script, by word"
+    ran.clear(), delta.update(names="scripts/record/other.py\ntests/tooling/test_b.py\n")
+    assert lb.long_runs(tmp_path) == 0 and ran == [["test-file", "FILE=tests/tooling/test_b.py"]], "a changed tooling test runs itself"
+    ran.clear(), delta.update(names="scripts/record/claims_counters.py\n", rc=1)
+    assert lb.long_runs(tmp_path) == 1, "a red one: nothing lands"
+    ran.clear(), delta.update(names="scripts/record/other.py\ndocs/x.md\n", rc=0)
+    assert lb.long_runs(tmp_path) == 0 and ran == [], "no tooling test names it: none run"
+
+
 def test_a_counter_only_landing_rolls_no_fresh_block(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
     """Feature 446 FR-002: the fresh 48-seed block after the push follows an engine landing, never a counter-only one."""
     lb, _d = _land(tmp_path, monkeypatch)
