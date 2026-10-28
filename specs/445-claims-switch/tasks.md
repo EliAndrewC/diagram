@@ -6,8 +6,9 @@
 
 ## Tasks
 
-- [ ] T01 The `claims` switch in `l7r/diagram/switches.py` and `dev/switches.json` (shipped at `report`), `make claims-report-only` and `make claims-clean`, the other axis kept on a throw (D1; FR-001, FR-004, SC-001)
+- [x] T01 The `claims` switch in `l7r/diagram/switches.py` and `dev/switches.json` (shipped at `report`), `make claims-report-only` and `make claims-clean`, the other axis kept on a throw (D1; FR-001, FR-004, SC-001)
       research: rendering
+      verify: DONE. landed: the claims switch in switches.py, thrown to report on record with the GM's words; remote kept on a claims throw; a malformed claims entry closes to clean alone
 - [ ] T02 The claims gate at `report` (only owed claims and form problems refuse; no carry filed, no known-drift row) and at `clean` (every open finding the report lists refuses, `open_findings` shared with the report) (D2, D3; FR-002, FR-003, SC-002, SC-003)
       research: rendering
 - [ ] T03 Feature 405 closed Withdrawn with its evidence; its engine fixes and notes recorded in `specs/444-work-budget-program/phase-inputs.md` under their stages (D4; FR-005, SC-004)
