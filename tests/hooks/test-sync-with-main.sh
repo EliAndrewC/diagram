@@ -542,13 +542,17 @@ OUT=$(COHORT_OK="a fixture with nothing rolled" syncmain "$D" push); check "COHO
 
 
 case_28() {  # 3 s
-echo "X. sync-in BY HAND waits only the bounded time for a held mirror lock and still merges the clone (feature 442)"
+echo "X. sync-in with the mirror lock held: no lock taken when the mirror is at the tip; the bounded wait when main moved (feature 442)"
 D=$(topology bh)
-( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
 mkdir -p "$D/main/.clones"; ( flock "$D/main/.clones/.sync.lock" sleep 20 ) & holder=$!; sleep 0.3
+start=$(date +%s); OUT=$(SYNC_LOCK_WAIT=15 syncmain "$D" sync-in); rc=$?; took=$(( $(date +%s) - start ))
+check "sync-in, the mirror at the tip, the lock held" 0 $rc
+[ "$took" -lt 5 ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in waited ${took}s for a lock it did not need (the mirror at the tip)"; FAIL=$((FAIL+1)); }
+case "$OUT" in *"mirror lock stayed busy"*) echo "FAIL  sync-in asked for the lock with the mirror at the tip"; FAIL=$((FAIL+1)) ;; *) PASS=$((PASS+1)) ;; esac
+( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
 start=$(date +%s); OUT=$(SYNC_LOCK_WAIT=1 syncmain "$D" sync-in); rc=$?; took=$(( $(date +%s) - start ))
 kill "$holder" 2>/dev/null; wait "$holder" 2>/dev/null
-check "sync-in with the mirror lock held" 0 $rc
+check "sync-in, main moved, the lock held" 0 $rc
 [ "$took" -lt 10 ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in waited ${took}s behind a held lock (bounded at 1 s)"; FAIL=$((FAIL+1)); }
 expect_out "mirror lock stayed busy"
 [ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  the clone did not merge GitHub main past a busy mirror"; FAIL=$((FAIL+1)); }

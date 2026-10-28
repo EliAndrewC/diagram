@@ -39,7 +39,8 @@ engine change not landed), its evidence recorded".]
 
 ## The evidence
 
-[Filled as measured: `research/<name>.md` per measurement, each dated with its command.]
+[Filled as measured: `research/<name>.md` per measurement, each dated with its command and its output in a fenced block beside
+the figure - the one review checks a figure against its recorded output and re-runs only what has none (`make trial-review`).]
 
 - THE VERDICT: [the branch of the rule taken] - because [the measurement that took it, with its figure and command].
   [A branch the rule names but the trial did not take, and why - so the review checks the verdict against the rule.]

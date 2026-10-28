@@ -21,12 +21,13 @@ ROOT = HERE.parent
 CHECK_DIR = pathlib.Path("/tmp/l7r-check")
 
 INSTRUCTION = (
-    "Each figure in the brief and its research is recorded with the command that measured it and its output: CHECK each figure "
-    "against the output recorded beside it, and re-run a command only where an output is missing or disagrees with its figure."
+    "Each figure in the brief and its research is recorded with the command that measured it and its output (a fenced block "
+    "beside it): CHECK each figure against the output recorded beside it, and re-run a command only where no output is recorded "
+    "for it or the output disagrees with its figure."
 )
 
 
-def bundle(feature: pathlib.Path, out: pathlib.Path) -> pathlib.Path:
+def bundle(feature: pathlib.Path, out: pathlib.Path, stopped: bool = True) -> pathlib.Path:
     """Copy the trial's brief, request and research into `out` and write its MANIFEST; the MANIFEST's path."""
     if out.exists():
         shutil.rmtree(out)
@@ -41,11 +42,25 @@ def bundle(feature: pathlib.Path, out: pathlib.Path) -> pathlib.Path:
     files = [n for n in names if (out / n).is_file()] + [f"research/{f.name}" for f in research]
     (out / "MANIFEST.md").write_text(
         f"# The one review of trial {feature.name}\n\nThe brief (`spec.md`, **Form**: trial) with its evidence fixed, and the GM's words "
-        f"(`request.md`).\n\n{INSTRUCTION}\n\nJudge whether the brief and its verdict do what the GM asked, and whether the verdict is "
+        f"(`request.md`).\n\n{INSTRUCTION if stopped else 'Its spike lands engine code: review it in full, re-running what you need.'}\n\nJudge whether the brief and its verdict do what the GM asked, and whether the verdict is "
         "the branch of the brief's own rule its measurement took.\n\n## Files\n\n" + "".join(f"- `{n}`\n" for n in files),
         encoding="utf-8",
     )
     return out / "MANIFEST.md"
+
+
+#: A TRIAL THAT LANDED NO ENGINE CODE says so on its Status line (439, 441): only its review is told to check rather than re-run -
+#: a trial whose spike lands takes the ordinary full review (feature 442, the spec review's round 1)
+_STOPPED = ("set down", "stopped at the measurement")
+
+
+def measurement_only(spec_text: str) -> bool:
+    """Does the brief's Status open Done and say the trial was set down or stopped at the measurement?"""
+    for line in spec_text.splitlines():
+        if line.startswith("**Status**:"):
+            low = line.lower()
+            return low.removeprefix("**status**:").strip().startswith("done") and any(s in low for s in _STOPPED)
+    return False
 
 
 def main(argv: list[str]) -> int:
@@ -57,8 +72,9 @@ def main(argv: list[str]) -> int:
     if not found or not (found[0] / "spec.md").is_file() or "**Form**: trial" not in (found[0] / "spec.md").read_text(encoding="utf-8"):
         print(f"make trial-review: specs/{n}-* is no trial brief (**Form**: trial) - an ordinary spec takes its review from spec-fidelity's MODE 2 as before", file=sys.stderr)
         return 2
-    manifest = bundle(found[0], CHECK_DIR / f"trial-review-{n}")
-    print(f"MODE 2: SPECIFICATION REVIEW of trial {found[0].name} - its one review: read {manifest} and the files beside it. {INSTRUCTION}")
+    stopped = measurement_only((found[0] / "spec.md").read_text(encoding="utf-8"))
+    manifest = bundle(found[0], CHECK_DIR / f"trial-review-{n}", stopped)
+    print(f"MODE 2: SPECIFICATION REVIEW of trial {found[0].name} - its one review: read {manifest} and the files beside it." + (f" {INSTRUCTION}" if stopped else " Its spike lands engine code: review it in full."))
     return 0
 
 
