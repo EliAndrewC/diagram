@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-19
 
-**Status**: In progress - started 2026-10-20 on the GM's word ("test the current state of things by starting feature 405 and fixing 1 claim"); ON HOLD from 2026-10-24 until feature 417 (all seeds pass) closes - the GM: "we might want to put our claims work on hold"
+**Status**: Withdrawn 2026-10-28 on the GM's ruling ("close it and then we'll open a new version of that feature after our Rust rewrite"; "for now, I just want to basically ignore claims so long as they are properly marked and show up in the claims report" - `specs/445-claims-switch/request.md`). Evidence: its claims findings stay rows of `make claims-report` for the claims feature filed after the rewrite, the claims switch at `report` until then (feature 445); its open engine fixes and drawing-page notes (T98, T101, T104, T106, T111, T165) moved to `specs/444-work-budget-program/phase-inputs.md` under the stages whose rebuilds settle them; T136 (re-measure the gate's costs on 405's landings) has no landings left to measure; the carried tasks (T127, T137, T139, T140) are claims-report rows. Amendment 12 (closing on an empty report, reviewed FAITHFUL) was set aside unlanded for this. Was: In progress - started 2026-10-20 on the GM's word ("test the current state of things by starting feature 405 and fixing 1 claim"); ON HOLD from 2026-10-24 until feature 417 (all seeds pass) closes - the GM: "we might want to put our claims work on hold"
 
 **Approved**: the GM, 2026-10-19, "Let's keep the current round of process tasks such that all open process tasks stay in 385 and everything else moves into a new feature.  Then we can finish and land our process tasks and then start the new feature after that ends up in main."
 

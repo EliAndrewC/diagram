@@ -368,6 +368,52 @@
      "why": "Sequencing and a measure restating FR-002; no change to what is delivered."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T03 - 405 closed (D4)",
+    "### T03 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T03-status",
+     "summary": "405's status line becomes Withdrawn with its evidence",
+     "class": "within",
+     "why": "The accepted recommendation says to close 405, and the GM's ruling accepted it. FR-005/D4 carry this word for word."
+    },
+    {
+     "id": "T03-inputs",
+     "summary": "specs/444-work-budget-program/phase-inputs.md holds the six tasks' texts (T98, T101, T104, T106, T111, T165) under their stages",
+     "class": "within",
+     "why": "The accepted recommendation moves exactly these six tasks to 444 as inputs to their phases, and D4 places each one under a stage. No task is dropped and none is added."
+    },
+    {
+     "id": "T03-figures",
+     "summary": "any measured figure in the moved task texts is marked as today's count, so 444's budget bundles leave it out (443 FR-008)",
+     "class": "within",
+     "why": "The whole task text is still recorded in phase-inputs.md. Only the budget bundle omits the counts, and it does so under 443 FR-008's existing refusal to carry counts, which neither the request nor D4 overrides. A count is the current state of the code, not part of a phase's contract, so the derivation still reads every task's requirement. Nothing the GM asked for is cut."
+    },
+    {
+     "id": "T03-exits",
+     "summary": "green: make speckit-todo lists 405 closed and phase-inputs.md names each task once; red: as T01, recorded and ruled through make arbiter-ask",
+     "class": "within",
+     "why": "These exits verify FR-005/SC-004 and enforce what was asked. The block's first paragraph states the under-its-stage placement that the exit's wording abbreviates."
+    },
+    {
+     "id": "T03-order",
+     "summary": "lands after T02, in one landing",
+     "class": "within",
+     "why": "Sequencing only. The request sets no order."
+    },
+    {
+     "id": "T03-observation",
+     "summary": "the open tasks of 405 read against STAGES, observed 2026-10-28 via make speckit-todo and grep of STAGES",
+     "class": "within",
+     "why": "This is the method for placing each task under its stage, as D4 requires. It is a measurement with its date and method, not a choice of scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -461,6 +507,50 @@
      "summary": "After T01; one landing; done when a landing at report passes with findings warned and none filed",
      "class": "within",
      "why": "Sequencing and a measure restating FR-002; no change to what is delivered."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T03": {
+   "section_sha256": "95a8b9ff3795306e1662998a40765833ddbd8b23ab073be7ae65b85da7a72fbf",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T03-status",
+     "summary": "405's status line becomes Withdrawn with its evidence",
+     "class": "within",
+     "why": "The accepted recommendation says to close 405, and the GM's ruling accepted it. FR-005/D4 carry this word for word."
+    },
+    {
+     "id": "T03-inputs",
+     "summary": "specs/444-work-budget-program/phase-inputs.md holds the six tasks' texts (T98, T101, T104, T106, T111, T165) under their stages",
+     "class": "within",
+     "why": "The accepted recommendation moves exactly these six tasks to 444 as inputs to their phases, and D4 places each one under a stage. No task is dropped and none is added."
+    },
+    {
+     "id": "T03-figures",
+     "summary": "any measured figure in the moved task texts is marked as today's count, so 444's budget bundles leave it out (443 FR-008)",
+     "class": "within",
+     "why": "The whole task text is still recorded in phase-inputs.md. Only the budget bundle omits the counts, and it does so under 443 FR-008's existing refusal to carry counts, which neither the request nor D4 overrides. A count is the current state of the code, not part of a phase's contract, so the derivation still reads every task's requirement. Nothing the GM asked for is cut."
+    },
+    {
+     "id": "T03-exits",
+     "summary": "green: make speckit-todo lists 405 closed and phase-inputs.md names each task once; red: as T01, recorded and ruled through make arbiter-ask",
+     "class": "within",
+     "why": "These exits verify FR-005/SC-004 and enforce what was asked. The block's first paragraph states the under-its-stage placement that the exit's wording abbreviates."
+    },
+    {
+     "id": "T03-order",
+     "summary": "lands after T02, in one landing",
+     "class": "within",
+     "why": "Sequencing only. The request sets no order."
+    },
+    {
+     "id": "T03-observation",
+     "summary": "the open tasks of 405 read against STAGES, observed 2026-10-28 via make speckit-todo and grep of STAGES",
+     "class": "within",
+     "why": "This is the method for placing each task under its stage, as D4 requires. It is a measurement with its date and method, not a choice of scope."
     }
    ],
    "verdict": "CLEAR"
