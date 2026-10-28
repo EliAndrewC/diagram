@@ -1,0 +1,54 @@
+{
+  "utc": "2026-10-28T03:20:16Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 464,
+  "result": "failed: test-full",
+  "commit": "cefe52fd3",
+  "first_failure_s": 247.2,
+  "last_failure_s": 248.8,
+  "failed_tests": 3,
+  "failed_names": [
+    "tests/tooling/ci/test_dispatch.py::test_merge_uses_the_merge_project_and_full_scope_travels",
+    "tests/tooling/ci/test_main.py::test_remote_off_merge_is_local_gated",
+    "tests/tooling/ci/test_main.py::test_remote_off_refusals_leave_would_have_entries"
+  ],
+  "host": {
+    "load": [
+      3.27,
+      3.57
+    ],
+    "mem_avail_mb": [
+      7948,
+      8933
+    ],
+    "cpu_temp_c": [
+      84.0,
+      101.0
+    ],
+    "stall_s": {
+      "cpu": 2.2,
+      "io": 1.1,
+      "io_full": 1.0,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 14483,
+      "package": 8440
+    }
+  },
+  "phases": {
+    "preflight": 19.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "hooks-test": 67.0,
+    "pytest": 386.0,
+    "test-full": 393.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)",
+  "selected": 10814,
+  "collected": 10814
+}
