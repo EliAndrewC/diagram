@@ -359,3 +359,9 @@ with `_house_max` and `shed=True`, as `_seat_rank_rounds` does, on the reference
 244.1 x 196.4 ft (seed 4), 312.1 x 236.4 (25), 236.1 x 185.5 (39), 304.1 x 225.5 (47) - so a north-south step between ranks is
 the depth plus 39 ft, 224.5-275.4 ft, not the 92 ft (house, yard and sun) the claim "the step between ranks" says. The envelope
 is the union of the four garden sides' bundles, not one house and yard.
+
+**Where the rank-step finding is resolved:** the DRIFTED row of `rank_rounds.py::_seat_rank_rounds#the step between ranks` in the
+claims index, which `make claims-report` lists and feature 405 resolves (the round arbiter's ask:443-T10-rank-step-carry). Its two
+routes: bring the step to house + yard + sun (about 93 ft), or keep the wider step and rewrite the claim as a departure from 0038
+§17 with its figure - decided on whether 0038's 92 ft is a fixed row spacing or a minimum for sun. With it, re-read the stale
+"about 111 ft" comment above `_rank_step` and the claim "a lane's room between ranks" (impl-drift's notes outside the change).
