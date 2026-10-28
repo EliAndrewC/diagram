@@ -30,6 +30,7 @@ from typing import Any
 
 from l7r.diagram.settlement import point_in_poly, seg_dist
 from l7r.diagram.settlement._geom import RingIndex
+from l7r.diagram.work_counts import OPS
 
 from .consts import Pt
 
@@ -214,7 +215,11 @@ class FabricIndex:
     def fouled(self, q: Pt) -> bool:
         """Is `q` inside a polygon, within a polygon's margin of its edge, or within a line's margin?"""
         x, y = q
-        for idx in self.candidates(q):
+        cands = self.candidates(q)
+        if __debug__:  # the counted work (feature 443 T11): the ways' point test, an index query and the entries it examines
+            OPS["index_query@FabricIndex.fouled"] += 1
+            OPS["index_examined@FabricIndex.fouled"] += len(cands)
+        for idx in cands:
             kind, pts, m, (bx0, by0, bx1, by1) = self.polys[idx]
             if x < bx0 or x > bx1 or y < by0 or y > by1:
                 continue

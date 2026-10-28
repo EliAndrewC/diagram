@@ -365,3 +365,43 @@ claims index, which `make claims-report` lists and feature 405 resolves (the rou
 routes: bring the step to house + yard + sun (about 93 ft), or keep the wider step and rewrite the claim as a departure from 0038
 §17 with its figure - decided on whether 0038's 92 ft is a fixed row spacing or a minimum for sun. With it, re-read the stale
 "about 111 ft" comment above `_rank_step` and the claim "a lane's room between ranks" (impl-drift's notes outside the change).
+
+## T11 - the ways, filtered by hand (2026-10-28)
+
+Stages: track, web, crossings. The ways try routes and points through a few predicates, so the predicates carry most counts.
+
+**Counted:**
+
+| where | key | what each count is |
+|---|---|---|
+| `hamletgen/clearance.py` `FabricIndex.fouled` | `index_query@`, `index_examined@FabricIndex.fouled` | one point asked of the fabric index, and the entries it examines (every lattice cell, sample and link point of the ways) |
+| `hamletgen/ways/route.py` `lattice_search`, `_ease_corner` | the function | one lattice neighbor stepped to; one eased corner |
+| `hamletgen/ways/clearance.py` `_clear_link`, `_clear_touch`, `route_around` | the function | one link or touch tried; one route round a polygon |
+| `hamletgen/ways/track.py` `connector_track` | `connector_track` | one bearing of the connector |
+| `sitegen/geom.py` `pull_clear` | `pull_clear` | one pull of a point clear |
+| `hamletgen/ways/settle/shapes.py` `fouled_segment`; `ways/fabric.py` `house_hit`, `_crosses_fabric`; `ways/law/ends.py` `over_a_fixture` | the function | one run asked against houses, yards and fixtures |
+| `hamletgen/ways/lay.py` `_held` | `_held` | one re-aim or cut of a draft lane, asked again |
+| `hamletgen/ways/serve.py` `door_off_fixtures`, `door_path` | the function | one door offset; one door path sought |
+| `hamletgen/ways/bund.py` `RunOnBlocks.clear`, `a_way_onto_the_bund` | the function | one bund leg; one end tried onto the bund |
+| `hamletgen/ways/knots.py` `trial_count` | `trial_count` | one fence gap tried |
+| `settlement/city/bridges.py` `_deck_corners_clear`, `undeckable_at` | the function | one deck size or skew; one run asked whether a deck can carry it |
+| `hamletgen/ways/law/meet.py` `free_end` (`seg_test@`, the other ways it is asked against), `box_gap` (`dist@`); `ways/tails.py` `tail_doubled` (`seg_test@`) | the function | the web law's all-pairs end tests (feature 427's hot chains) |
+
+**Counted at the registry, no counter of their own:** `settlement/water_ways/lanes.py` `admits_lane` and `admitted_runs` (each
+segment asked `admits`), `ways/last_resort.py`'s refusals, `bridges.deck_admitted`.
+
+**Excluded, with why:** construction and assembly - `ways/web/skeleton.py`, `web/stage.py`'s line loop, `tree.lanes_of`,
+`fabric.project`, `ways/street.py`'s threading of a placed line, `route._unjog` and `in_band`'s link pulls (their tests are
+`_clear_link`, counted), `clearance.clip_to_clear` and `clear_runs` (samples through `fouled`, counted); measurement -
+`track.on_course`, `serve.to_first_arrival`, `street.near`, `web/stage.near`; and `law_water.crossing_points`, an indexed pair
+test (its grid's `near` counted).
+
+**Uncounted work, a lower bound:** `law/meet.web_lines` and `web_faces` build and polygonize the treads in shapely, work in C the
+counters do not see (S5); the web law's checks over the laid web (`near_misses`, `fronting_ends`, `doubled_tails`) are counted
+through `free_end` and `tail_doubled`, not as candidates - they judge placed lanes, the S4 question 444's rebuild of the web asks.
+
+**T11's cross-check** (`make perf-fanout SEED=25 HOT=20000 LABEL=443-T11`, 2026-10-28): the web's anchors are counted
+(`undeckable_at`, `doubled_tails` via `tail_doubled`, `lattice_search`, `over_a_fixture`, `fronting_ends` via `free_end`) or
+excluded above (`lanes_of`, `project`, `crossing_points`); the homesteads stage's `near_misses` and `web_lines` (T10's) are the
+law's, counted through `free_end` and uncounted shapely respectively. No anchor is a miss. Python calls (the run's raw profiles):
+10,576,254 at 40 households against 10,591,824 after T10 (-0.15%), 7,085,089 at 20 against 7,093,022 (-0.11%).

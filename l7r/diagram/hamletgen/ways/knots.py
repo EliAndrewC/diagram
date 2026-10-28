@@ -21,6 +21,7 @@ from typing import Any
 
 from l7r.diagram.settlement import seg_closest, seg_dist
 from l7r.diagram.settlement.rolling.gap_ways import KNOT_MARGIN
+from l7r.diagram.work_counts import OPS
 
 from ..consts import TAIL_CUT_FT, WEB_CROP_GAP, WEB_FABRIC_GAP, WEB_SHADOW_FT, Poly, Pt
 from .corridors import ACCESS_ROLE, FIELD_ROLE, TARGET_ROLE
@@ -729,6 +730,8 @@ def settle_knots(s: Any) -> int:
         return memo.count(name, trial, tw, ti)
 
     for gap in (WEB_FABRIC_GAP, WEB_CROP_GAP):
+        if __debug__:
+            OPS["candidate@trial_count"] += 1
         lawful.fence_gap = gap
         refused.clear()
         for _ in range(4 * len(lanes)):

@@ -1,0 +1,282 @@
+perf-fanout seed 25, sizes 20, 40, HOT 20,000, ANCHOR 300
+
+water_frame: 9 calls @20, 9 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+field: 3,527,840 calls @20, 4,385,781 calls @40, growth exponent 0.31
+  placed @40: comb_floors.inashiro-paddies +120, wet_plots +119, dry_plots +38, flooded_plots +22, drawn_channels +13, field_ditches +13, channels +1, field_ponds +1, fields +1, streams +1, weirs +1; 13,290 calls per thing placed
+  anchor hamletgen/water/brook_rules.py:192:crosses_mid_run [26]
+    hamletgen/water/brook_rules.py:175:side [98,124|107,140] <- hamletgen/water/brook_rules.py:170:_proper_cross [48,735|53,312] <- hamletgen/water/brook_rules.py:205:<genexpr> [48,759|53,334] <- hamletgen/water/brook_rules.py:192:crosses_mid_run [26|24]
+    hamletgen/water/brook_rules.py:205:<genexpr> [48,759|53,334] <- hamletgen/water/brook_rules.py:192:crosses_mid_run [26|24]
+    hamletgen/water/brook_rules.py:170:_proper_cross [48,735|53,312] <- hamletgen/water/brook_rules.py:205:<genexpr> [48,759|53,334] <- hamletgen/water/brook_rules.py:192:crosses_mid_run [26|24]
+  anchor waterfields/partition.py:187:grid_lines [8]
+    waterfields/frame.py:244:to_uf [52,436|73,906] <- waterfields/partition.py:149:bound [19,219|8,601] <- waterfields/partition.py:225:edge [9,456|4,198] <- waterfields/partition.py:187:grid_lines [8|6]
+  anchor waterfields/seams/pockets.py:73:_water [13]
+    decorators.py:73:wrapped [50,920|31,100] <- decorators.py:171:wrapper [25,331|16,986] <- linestring.py:40:__new__ [4,507|5,170] <- waterfields/seams/pockets.py:73:_water [13|30]
+    linestring.py:63:_coords [27,397|18,699] <- linestring.py:40:__new__ [4,507|5,170] <- waterfields/seams/pockets.py:73:_water [13|30]
+    decorators.py:171:wrapper [25,331|16,986] <- linestring.py:40:__new__ [4,507|5,170] <- waterfields/seams/pockets.py:73:_water [13|30]
+  anchor waterfields/settle.py:173:__init__ [1]
+    waterfields/ring_rules.py:359:<genexpr> [35,490|13,730] <- waterfields/ring_rules.py:352:_near_polyline [2,535|1,373] <- waterfields/ring_rules.py:381:collector_crossings [1,875|915] <- waterfields/ring_rules.py:506:ring_violations [1,875|915] <- waterfields/settle.py:67:verdict [1,865|903] <- waterfields/settle.py:191:judge [1,865|903] <- waterfields/settle.py:194:add [1,602|881] <- waterfields/settle.py:173:__init__ [1|1]
+    polygon.py:87:_coords [27,858|31,144] <- polygon.py:61:__new__ [3,553|1,924] <- polygon.py:227:__new__ [3,588|1,924] <- waterfields/ring_rules.py:222:self_crossing [1,875|915] <- waterfields/ring_rules.py:506:ring_violations [1,875|915] <- waterfields/settle.py:67:verdict [1,865|903] <- waterfields/settle.py:191:judge [1,865|903] <- waterfields/settle.py:194:add [1,602|881] <- waterfields/settle.py:173:__init__ [1|1]
+  anchor waterfields/comb.py:650:_comb_clip_and_cap [13]
+    waterfields/frame.py:339:_seg_x [32,073|57,538] <- waterfields/comb.py:650:_comb_clip_and_cap [13|30]
+  anchor settlement/fields/features.py:419:_pond_fit [3]
+    settlement/fields/features.py:448:<genexpr> [25,989|15,186] <- settlement/fields/features.py:419:_pond_fit [3|3]
+  anchor settlement/fields/comb.py:169:bund_junctions [1]
+    settlement/fields/comb.py:253:<genexpr> [25,644|14,118] <- settlement/fields/comb.py:169:bund_junctions [1|1]
+    random.py:500:uniform [20,902|21,791] <- settlement/fields/comb.py:169:bund_junctions [1|1]
+  anchor waterfields/carve.py:359:_bund_beans [1]
+    waterfields/frame.py:175:taper_w [25,122|23,873] <- waterfields/carve.py:413:wet [1,649|831] <- waterfields/carve.py:443:<lambda> [1,649|831] <- waterfields/carve.py:335:bead_runs [1,250|652] <- waterfields/carve.py:359:_bund_beans [1|1]
+  anchor sitegen/geom.py:87:crosses_poly [100]
+    settlement/_geom/primitives.py:144:ccw [25,008|16,234] <- settlement/_geom/primitives.py:140:segments_cross [12,198|7,969] <- sitegen/geom.py:107:<genexpr> [12,100|7,979] <- sitegen/geom.py:87:crosses_poly [100|101]
+  fastest growers @20 -> @40:
+    x2.6 waterfields/ring_rules.py:359:<genexpr> [13,730 -> 35,490]
+    x2.1 math.sin [15,344 -> 31,837]
+    x1.9 builtins.round [80,469 -> 149,031]
+    x1.8 settlement/fields/comb.py:253:<genexpr> [14,118 -> 25,644]
+    x1.8 math.degrees [38,959 -> 70,620]
+    x1.8 math.acos [31,692 -> 56,349]
+    x1.7 settlement/fields/features.py:448:<genexpr> [15,186 -> 25,989]
+    x1.6 decorators.py:73:wrapped [31,100 -> 50,920]
+sink: 190,516 calls @20, 134,859 calls @40, growth exponent -0.50
+  placed @40: pond +4, channels +1, drawn_channels +1, marshes +1; 19,265 calls per thing placed
+  anchor overlap/registry.py:272:conflicts [8]
+    overlap/registry.py:203:pair_forbidden [23,145|56,382] <- overlap/registry.py:272:conflicts [8|8]
+  fastest growers @20 -> @40:
+    x0.4 overlap/registry.py:203:pair_forbidden [56,382 -> 23,145]
+seat: 100,074 calls @20, 179,335 calls @40, growth exponent 0.84
+  placed @40: nothing in the manifest
+  anchor hamletgen/cluster.py:62:back_fouled [103]
+    hamletgen/cluster.py:89:<genexpr> [84,357|43,659] <- hamletgen/cluster.py:62:back_fouled [103|77]
+  fastest growers @20 -> @40:
+    x1.9 hamletgen/cluster.py:89:<genexpr> [43,659 -> 84,357]
+waterward: 2 calls @20, 2 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+homesteads: 9,212,692 calls @20, 10,102,848 calls @40, growth exponent 0.13
+  placed @40: site_boundary.water +112, access_corridors +109, site_boundary.corridors +105, gardens +54, houses +40, threshing_yards +40, site_boundary.chords +10, farm_sheds +5, site_boundary.window +4, site_boundary.rings +2, way_out_gate +2, way_out_track +2; 20,830 calls per thing placed
+  anchor hamletgen/homesteads/growth.py:373:grow_the_margin [1]
+    settlement/homestead_parts/fixture_seats.py:226:within_reach_of [159,645|77,430] <- settlement/homestead_parts/fixture_seats.py:449:<genexpr> [158,995|77,892] <- settlement/homestead_parts/fixture_seats.py:653:_first [8,030|3,802] <- settlement/homestead_parts/fixture_seats.py:358:lay_fixtures [2,364|1,108] <- settlement/rolling/bundle.py:342:_lay_fixtures [2,369|1,113] <- settlement/rolling/bundle.py:194:_bundle_layout [2,369|1,113] <- settlement/rolling/bundle.py:165:_bundle_template [4,506|2,137] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/homestead_parts/fixture_seats.py:449:<genexpr> [158,995|77,892] <- settlement/homestead_parts/fixture_seats.py:653:_first [8,030|3,802] <- settlement/homestead_parts/fixture_seats.py:358:lay_fixtures [2,364|1,108] <- settlement/rolling/bundle.py:342:_lay_fixtures [2,369|1,113] <- settlement/rolling/bundle.py:194:_bundle_layout [2,369|1,113] <- settlement/rolling/bundle.py:165:_bundle_template [4,506|2,137] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/core.py:562:px [142,959|68,292] <- settlement/homestead_parts/fixture_seats.py:358:lay_fixtures [2,364|1,108] <- settlement/rolling/bundle.py:342:_lay_fixtures [2,369|1,113] <- settlement/rolling/bundle.py:194:_bundle_layout [2,369|1,113] <- settlement/rolling/bundle.py:165:_bundle_template [4,506|2,137] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/homestead_parts/tree_shade.py:55:<genexpr> [87,200|37,745] <- settlement/homestead_parts/tree_shade.py:47:sun_ground [17,440|7,549] <- settlement/homestead_parts/tree_shade.py:41:crown_shades [12,813|5,541] <- settlement/rolling/fit.py:890:<genexpr> [12,823|5,710] <- settlement/rolling/fit.py:878:_settle_persimmon [4,615|2,187] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/homestead_parts/fixture_seats.py:315:<genexpr> [44,240|18,820] <- settlement/homestead_parts/fixture_seats.py:310:privy_places [11,060|4,705] <- settlement/homestead_parts/fixture_seats.py:732:<genexpr> [8,848|3,764] <- settlement/homestead_parts/fixture_seats.py:691:_seats [8,030|3,802] <- settlement/homestead_parts/fixture_seats.py:358:lay_fixtures [2,364|1,108] <- settlement/rolling/bundle.py:342:_lay_fixtures [2,369|1,113] <- settlement/rolling/bundle.py:194:_bundle_layout [2,369|1,113] <- settlement/rolling/bundle.py:165:_bundle_template [4,506|2,137] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/rolling/bundle.py:108:moved [41,179|19,601] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/_geom/indexes.py:277:near [38,557|20,654] <- settlement/rolling/fit_index.py:93:houses_meeting [5,225|2,432] <- settlement/rolling/fit.py:895:_persimmon_shades_a_neighbor [3,881|1,744] <- settlement/rolling/fit.py:878:_settle_persimmon [4,615|2,187] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/houses.py:379:_hjit [36,917|17,344] <- settlement/rolling/bundle.py:393:<lambda> [21,274|9,905] <- settlement/homestead_parts/fixture_seats.py:358:lay_fixtures [2,364|1,108] <- settlement/rolling/bundle.py:342:_lay_fixtures [2,369|1,113] <- settlement/rolling/bundle.py:194:_bundle_layout [2,369|1,113] <- settlement/rolling/bundle.py:165:_bundle_template [4,506|2,137] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/rolling/bundle.py:125:tbox [36,673|17,464] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/homestead_parts/fixture_seats.py:239:clears [34,060|21,567] <- settlement/homestead_parts/fixture_seats.py:843:<genexpr> [4,034|1,762] <- settlement/homestead_parts/fixture_seats.py:817:_persimmon [2,017|881] <- settlement/homestead_parts/fixture_seats.py:358:lay_fixtures [2,364|1,108] <- settlement/rolling/bundle.py:342:_lay_fixtures [2,369|1,113] <- settlement/rolling/bundle.py:194:_bundle_layout [2,369|1,113] <- settlement/rolling/bundle.py:165:_bundle_template [4,506|2,137] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    hamletgen/homesteads/growth.py:103:<genexpr> [32,655|8,900] <- hamletgen/homesteads/growth.py:101:box_reach [6,531|1,780] <- hamletgen/homesteads/growth.py:107:footprint [5,728|1,403] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/rolling/bundle.py:432:turned [32,167|15,327] <- settlement/rolling/bundle.py:413:_rake_parts [4,506|2,137] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/homestead_parts/fixture_seats.py:301:outward [27,037|16,987] <- settlement/homestead_parts/fixture_seats.py:449:<genexpr> [158,995|77,892] <- settlement/homestead_parts/fixture_seats.py:653:_first [8,030|3,802] <- settlement/homestead_parts/fixture_seats.py:358:lay_fixtures [2,364|1,108] <- settlement/rolling/bundle.py:342:_lay_fixtures [2,369|1,113] <- settlement/rolling/bundle.py:194:_bundle_layout [2,369|1,113] <- settlement/rolling/bundle.py:165:_bundle_template [4,506|2,137] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/rolling/lot.py:181:<genexpr> [23,997|5,981] <- settlement/rolling/lot.py:167:household_parts [1,075|505] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/rolling/bundle.py:393:<lambda> [21,274|9,905] <- settlement/homestead_parts/fixture_seats.py:358:lay_fixtures [2,364|1,108] <- settlement/rolling/bundle.py:342:_lay_fixtures [2,369|1,113] <- settlement/rolling/bundle.py:194:_bundle_layout [2,369|1,113] <- settlement/rolling/bundle.py:165:_bundle_template [4,506|2,137] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    hamletgen/homesteads/boundary.py:398:_inside [21,257|11,197] <- hamletgen/homesteads/boundary.py:435:point_taken [14,552|7,732] <- hamletgen/homesteads/boundary.py:486:<genexpr> [15,637|7,757] <- hamletgen/homesteads/boundary.py:482:rect_refused [1,598|801] <- hamletgen/homesteads/growth.py:197:seat_refused [830|393] <- hamletgen/homesteads/growth.py:467:<lambda> [830|393] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+    settlement/homestead_parts/tree_shade.py:59:crown_in_ground [20,556|9,033] <- settlement/homestead_parts/tree_shade.py:41:crown_shades [12,813|5,541] <- settlement/rolling/fit.py:890:<genexpr> [12,823|5,710] <- settlement/rolling/fit.py:878:_settle_persimmon [4,615|2,187] <- settlement/rolling/bundle.py:80:_bundle_geom [4,506|2,137] <- settlement/rolling/bundle.py:73:_bundle_envelope [803|377] <- hamletgen/homesteads/growth.py:178:household_reach [803|377] <- hamletgen/homesteads/growth.py:404:reach_at [803|377] <- hamletgen/homesteads/growth.py:148:settled_seat [406|188] <- hamletgen/homesteads/growth.py:373:grow_the_margin [1|1]
+  anchor settlement/rolling/route.py:122:taut [121]
+    settlement/_geom/primitives.py:64:seg_closest [105,306|349,948] <- settlement/_geom/primitives.py:75:seg_dist [104,239|349,098] <- settlement/homestead_parts/wood_share.py:412:<genexpr> [52,097|20,007] <- settlement/homestead_parts/wood_share.py:394:corridor_bars [4,199|2,315] <- settlement/rolling/access.py:417:_standing_clear [4,039|2,065] <- settlement/rolling/access.py:384:standing_ground [4,946|3,003] <- settlement/rolling/gap_ways.py:528:leg_ok [22,736|23,686] <- settlement/rolling/route.py:136:<genexpr> [880|879] <- settlement/rolling/route.py:122:taut [121|127]
+    settlement/_geom/primitives.py:75:seg_dist [104,239|349,098] <- settlement/homestead_parts/wood_share.py:412:<genexpr> [52,097|20,007] <- settlement/homestead_parts/wood_share.py:394:corridor_bars [4,199|2,315] <- settlement/rolling/access.py:417:_standing_clear [4,039|2,065] <- settlement/rolling/access.py:384:standing_ground [4,946|3,003] <- settlement/rolling/gap_ways.py:528:leg_ok [22,736|23,686] <- settlement/rolling/route.py:136:<genexpr> [880|879] <- settlement/rolling/route.py:122:taut [121|127]
+    settlement/homestead_parts/wood_share.py:412:<genexpr> [52,097|20,007] <- settlement/homestead_parts/wood_share.py:394:corridor_bars [4,199|2,315] <- settlement/rolling/access.py:417:_standing_clear [4,039|2,065] <- settlement/rolling/access.py:384:standing_ground [4,946|3,003] <- settlement/rolling/gap_ways.py:528:leg_ok [22,736|23,686] <- settlement/rolling/route.py:136:<genexpr> [880|879] <- settlement/rolling/route.py:122:taut [121|127]
+    fromnumeric.py:48:_wrapfunc [44,516|23,820] <- fromnumeric.py:437:repeat [16,157|8,277] <- hamletgen/homesteads/boundary.py:467:_samples [8,078|4,138] <- hamletgen/homesteads/boundary.py:444:lines_edge_points [4,040|2,070] <- settlement/rolling/access.py:446:site_edge_samples [4,039|2,073] <- settlement/rolling/access.py:417:_standing_clear [4,039|2,065] <- settlement/rolling/access.py:384:standing_ground [4,946|3,003] <- settlement/rolling/gap_ways.py:528:leg_ok [22,736|23,686] <- settlement/rolling/route.py:136:<genexpr> [880|879] <- settlement/rolling/route.py:122:taut [121|127]
+    settlement/rolling/access.py:90:seg_box_within [41,477|26,219] <- settlement/rolling/access.py:300:<genexpr> [26,756|15,628] <- settlement/rolling/access.py:284:fixtures_clear [5,374|2,829] <- settlement/rolling/gap_ways.py:528:leg_ok [22,736|23,686] <- settlement/rolling/route.py:136:<genexpr> [880|879] <- settlement/rolling/route.py:122:taut [121|127]
+    settlement/rolling/access.py:300:<genexpr> [26,756|15,628] <- settlement/rolling/access.py:284:fixtures_clear [5,374|2,829] <- settlement/rolling/gap_ways.py:528:leg_ok [22,736|23,686] <- settlement/rolling/route.py:136:<genexpr> [880|879] <- settlement/rolling/route.py:122:taut [121|127]
+    settlement/rolling/gap_ways.py:528:leg_ok [22,736|23,686] <- settlement/rolling/route.py:136:<genexpr> [880|879] <- settlement/rolling/route.py:122:taut [121|127]
+  anchor settlement/rolling/gap_ways.py:267:way_out [40]
+    settlement/rolling/gap_ways.py:277:ok [84,820|43,489] <- settlement/rolling/gap_ways.py:267:way_out [40|20]
+  anchor hamletgen/ways/law/meet.py:277:near_misses [80]
+    hamletgen/ways/law/meet.py:215:<genexpr> [62,554|7,430] <- hamletgen/ways/law/meet.py:210:free_end [3,200|752] <- hamletgen/ways/law/meet.py:277:near_misses [80|39]
+    hamletgen/ways/law/meet.py:222:box_gap [59,354|6,678] <- hamletgen/ways/law/meet.py:215:<genexpr> [62,554|7,430] <- hamletgen/ways/law/meet.py:210:free_end [3,200|752] <- hamletgen/ways/law/meet.py:277:near_misses [80|39]
+  anchor settlement/rolling/gap_ways.py:313:trace [198]
+    settlement/rolling/gap_ways.py:333:<genexpr> [56,289|28,923] <- settlement/rolling/gap_ways.py:313:trace [198|135]
+    settlement/rolling/gap_ways.py:143:at [46,445|24,636] <- settlement/rolling/gap_ways.py:313:trace [198|135]
+  anchor hamletgen/ways/law/meet.py:355:web_lines [160]
+    hamletgen/ways/geom.py:587:<genexpr> [45,075|10,531] <- hamletgen/ways/geom.py:586:polyline_len [5,738|1,664] <- hamletgen/ways/law/meet.py:355:web_lines [160|80]
+    decorators.py:73:wrapped [21,194|10,421] <- decorators.py:171:wrapper [13,447|8,075] <- linestring.py:40:__new__ [4,189|1,854] <- hamletgen/ways/law/meet.py:355:web_lines [160|80]
+  anchor settlement/_geom/region.py:117:cells [2]
+    ImageDraw.py:135:_getink [40,054|19,764] <- ImageDraw.py:376:rectangle [37,908|18,328] <- settlement/_geom/region.py:117:cells [2|2]
+    ImageDraw.py:376:rectangle [37,908|18,328] <- settlement/_geom/region.py:117:cells [2|2]
+  anchor settlement/homestead_parts/wood_share.py:332:share [139]
+    settlement/homestead_parts/wood_share.py:151:<genexpr> [34,358|17,319] <- settlement/homestead_parts/wood_share.py:148:in_keepouts [8,249|4,243] <- settlement/homestead_parts/wood_share.py:303:seat_barred [9,317|4,788] <- settlement/homestead_parts/wood_share.py:332:share [139|76]
+  anchor hamletgen/ways/geom.py:170:push_clear_of_fabric [3]
+    hamletgen/ways/geom.py:187:<genexpr> [28,977|19,452] <- hamletgen/ways/geom.py:170:push_clear_of_fabric [3|4]
+  anchor settlement/homestead_parts/yards.py:425:_lay_by_hand [42]
+    settlement/homestead_parts/yards.py:420:<genexpr> [26,040|14,995] <- settlement/homestead_parts/yards.py:416:_boxes_within [5,208|2,999] <- settlement/homestead_parts/yards.py:457:<genexpr> [1,099|718] <- settlement/homestead_parts/yards.py:425:_lay_by_hand [42|20]
+    settlement/homestead_parts/yards.py:421:<genexpr> [26,040|14,995] <- settlement/homestead_parts/yards.py:416:_boxes_within [5,208|2,999] <- settlement/homestead_parts/yards.py:457:<genexpr> [1,099|718] <- settlement/homestead_parts/yards.py:425:_lay_by_hand [42|20]
+  anchor hamletgen/ways/settle/shapes.py:95:fouled_segment [261]
+    hamletgen/ways/fabric.py:482:<genexpr> [21,044|84,706] <- hamletgen/ways/fabric.py:480:poly_box [2,678|10,978] <- hamletgen/ways/fabric.py:485:_crosses_fabric [543|9,377] <- hamletgen/ways/settle/shapes.py:95:fouled_segment [261|214]
+  fastest growers @20 -> @40:
+    x8.9 hamletgen/ways/law/meet.py:222:box_gap [6,678 -> 59,354]
+    x8.4 hamletgen/ways/law/meet.py:215:<genexpr> [7,430 -> 62,554]
+    x4.3 hamletgen/ways/geom.py:587:<genexpr> [10,531 -> 45,075]
+    x4.0 settlement/rolling/lot.py:181:<genexpr> [5,981 -> 23,997]
+    x3.7 hamletgen/homesteads/growth.py:103:<genexpr> [8,900 -> 32,655]
+    x3.5 math.dist [25,799 -> 89,679]
+    x2.6 settlement/homestead_parts/wood_share.py:412:<genexpr> [20,007 -> 52,097]
+    x2.4 settlement/homestead_parts/fixture_seats.py:315:<genexpr> [18,820 -> 44,240]
+track: 2,504 calls @20, 7,902 calls @40, growth exponent 1.66
+  placed @40: lanes +1; 7,902 calls per thing placed
+appurtenances: 352,772 calls @20, 351,377 calls @40, growth exponent -0.01
+  placed @40: tree_crowns +102, farm_fixtures +101, persimmons +34, retirement_houses +21, byres +15, wells +2; 1,277 calls per thing placed
+  fastest growers @20 -> @40:
+    x3.5 builtins.abs [18,257 -> 64,603]
+    x1.6 'append' of 'list' objects [19,195 -> 31,393]
+    x0.9 builtins.min [42,940 -> 36,535]
+    x0.8 builtins.max [37,598 -> 31,064]
+pond_stock: 4 calls @20, 4 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+burial: 17 calls @20, 17 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+web: 2,187,085 calls @20, 5,681,440 calls @40, growth exponent 1.38
+  placed @40: lanes +42; 135,272 calls per thing placed
+  anchor settlement/city/bridges.py:285:undeckable_at [43]
+    settlement/_geom/primitives.py:144:ccw [103,812|37,002] <- settlement/_geom/primitives.py:140:segments_cross [50,914|18,022] <- settlement/city/bridges.py:285:undeckable_at [43|20]
+    settlement/_geom/primitives.py:140:segments_cross [50,914|18,022] <- settlement/city/bridges.py:285:undeckable_at [43|20]
+  anchor hamletgen/ways/law/meet.py:197:doubled_tails [7]
+    settlement/_geom/primitives.py:64:seg_closest [98,323|25,868] <- settlement/_geom/primitives.py:75:seg_dist [97,230|25,566] <- hamletgen/ways/tails.py:39:along_tail [3,326|720] <- hamletgen/ways/keeper.py:36:_cached [3,411|760] <- hamletgen/ways/keeper.py:40:keyed [14,375|2,330] <- hamletgen/ways/tails.py:78:<genexpr> [21,306|3,372] <- hamletgen/ways/tails.py:71:tail_doubled [7,102|1,124] <- hamletgen/ways/law/meet.py:207:<genexpr> [7,442|1,244] <- hamletgen/ways/law/meet.py:197:doubled_tails [7|7]
+    settlement/_geom/primitives.py:75:seg_dist [97,230|25,566] <- hamletgen/ways/tails.py:39:along_tail [3,326|720] <- hamletgen/ways/keeper.py:36:_cached [3,411|760] <- hamletgen/ways/keeper.py:40:keyed [14,375|2,330] <- hamletgen/ways/tails.py:78:<genexpr> [21,306|3,372] <- hamletgen/ways/tails.py:71:tail_doubled [7,102|1,124] <- hamletgen/ways/law/meet.py:207:<genexpr> [7,442|1,244] <- hamletgen/ways/law/meet.py:197:doubled_tails [7|7]
+    hamletgen/ways/keeper.py:41:<genexpr> [43,080|6,968] <- hamletgen/ways/keeper.py:40:keyed [14,375|2,330] <- hamletgen/ways/tails.py:78:<genexpr> [21,306|3,372] <- hamletgen/ways/tails.py:71:tail_doubled [7,102|1,124] <- hamletgen/ways/law/meet.py:207:<genexpr> [7,442|1,244] <- hamletgen/ways/law/meet.py:197:doubled_tails [7|7]
+    hamletgen/ways/keeper.py:25:pts_key [28,705|4,638] <- hamletgen/ways/keeper.py:41:<genexpr> [43,080|6,968] <- hamletgen/ways/keeper.py:40:keyed [14,375|2,330] <- hamletgen/ways/tails.py:78:<genexpr> [21,306|3,372] <- hamletgen/ways/tails.py:71:tail_doubled [7,102|1,124] <- hamletgen/ways/law/meet.py:207:<genexpr> [7,442|1,244] <- hamletgen/ways/law/meet.py:197:doubled_tails [7|7]
+    hamletgen/ways/tails.py:78:<genexpr> [21,306|3,372] <- hamletgen/ways/tails.py:71:tail_doubled [7,102|1,124] <- hamletgen/ways/law/meet.py:207:<genexpr> [7,442|1,244] <- hamletgen/ways/law/meet.py:197:doubled_tails [7|7]
+  anchor hamletgen/ways/route.py:91:lattice_search [3]
+    hamletgen/ways/route.py:230:to_pt [73,620|33,519] <- hamletgen/ways/route.py:255:is_free [37,740|17,214] <- hamletgen/ways/route.py:91:lattice_search [3|3]
+    hamletgen/clearance.py:208:candidates [50,280|24,195] <- hamletgen/clearance.py:215:fouled [50,280|24,195] <- hamletgen/ways/route.py:255:is_free [37,740|17,214] <- hamletgen/ways/route.py:91:lattice_search [3|3]
+    hamletgen/clearance.py:215:fouled [50,280|24,195] <- hamletgen/ways/route.py:255:is_free [37,740|17,214] <- hamletgen/ways/route.py:91:lattice_search [3|3]
+    hamletgen/ways/route.py:255:is_free [37,740|17,214] <- hamletgen/ways/route.py:91:lattice_search [3|3]
+    hamletgen/ways/route.py:60:in_brook_band [36,300|16,607] <- hamletgen/ways/route.py:266:in_band [35,696|16,170] <- hamletgen/ways/route.py:91:lattice_search [3|3]
+    hamletgen/ways/route.py:266:in_band [35,696|16,170] <- hamletgen/ways/route.py:91:lattice_search [3|3]
+  anchor hamletgen/ways/tree.py:125:lanes_of [3]
+    decorators.py:73:wrapped [48,741|10,434] <- decorators.py:171:wrapper [22,272|6,189] <- linestring.py:40:__new__ [9,771|1,355] <- hamletgen/ways/tree.py:158:off_the_needle [2,460|342] <- hamletgen/ways/tree.py:125:lanes_of [3|2]
+    linestring.py:63:_coords [36,316|4,681] <- linestring.py:40:__new__ [9,771|1,355] <- hamletgen/ways/tree.py:158:off_the_needle [2,460|342] <- hamletgen/ways/tree.py:125:lanes_of [3|2]
+    decorators.py:171:wrapper [22,272|6,189] <- linestring.py:40:__new__ [9,771|1,355] <- hamletgen/ways/tree.py:158:off_the_needle [2,460|342] <- hamletgen/ways/tree.py:125:lanes_of [3|2]
+  anchor hamletgen/ways/law_water.py:58:crossing_points [80]
+    settlement/_geom/indexes.py:277:near [38,270|20,774] <- hamletgen/ways/law_water.py:58:crossing_points [80|36]
+  anchor hamletgen/ways/law/ends.py:224:over_a_fixture [80]
+    hamletgen/ways/law/ends.py:235:<genexpr> [29,635|7,665] <- hamletgen/ways/law/ends.py:224:over_a_fixture [80|32]
+  anchor hamletgen/ways/fabric.py:121:project [40]
+    hamletgen/ways/fabric.py:139:<genexpr> [26,150|6,848] <- hamletgen/ways/fabric.py:137:__call__ [13,075|3,424] <- hamletgen/ways/fabric.py:121:project [40|18]
+  anchor hamletgen/ways/law/ends.py:132:fronting_ends [7]
+    hamletgen/ways/law/meet.py:215:<genexpr> [20,070|4,418] <- hamletgen/ways/law/meet.py:210:free_end [668|306] <- hamletgen/ways/law/ends.py:132:fronting_ends [7|7]
+  fastest growers @20 -> @40:
+    x7.8 linestring.py:63:_coords [4,681 -> 36,316]
+    x6.3 hamletgen/ways/tails.py:78:<genexpr> [3,372 -> 21,306]
+    x6.2 hamletgen/ways/keeper.py:25:pts_key [4,638 -> 28,705]
+    x6.2 hamletgen/ways/keeper.py:41:<genexpr> [6,968 -> 43,080]
+    x4.9 'items' of 'dict' objects [13,214 -> 64,633]
+    x4.7 decorators.py:73:wrapped [10,434 -> 48,741]
+    x4.5 hamletgen/ways/law/meet.py:215:<genexpr> [4,418 -> 20,070]
+    x4.3 builtins.isinstance [63,557 -> 273,495]
+lane_wells: 500,796 calls @20, 2,177,828 calls @40, growth exponent 2.12
+  placed @40: wells +4; 544,457 calls per thing placed
+  anchor hamletgen/homesteads/wells.py:410:seat_wells [8]
+    hamletgen/homesteads/wells.py:713:<genexpr> [124,521|9,667] <- hamletgen/homesteads/wells.py:410:seat_wells [8|2]
+    settlement/_geom/primitives.py:64:seg_closest [87,216|19,199] <- settlement/_geom/primitives.py:75:seg_dist [87,216|19,199] <- settlement/land/wet.py:651:surface_water_dist [320|40] <- hamletgen/homesteads/wells.py:410:seat_wells [8|2]
+    settlement/_geom/primitives.py:75:seg_dist [87,216|19,199] <- settlement/land/wet.py:651:surface_water_dist [320|40] <- hamletgen/homesteads/wells.py:410:seat_wells [8|2]
+    settlement/houses.py:239:<genexpr> [37,221|6,418] <- settlement/houses.py:237:<genexpr> [9,765|2,147] <- settlement/houses.py:202:_on_a_tread [333|145] <- settlement/houses.py:267:_fits [334|149] <- settlement/shrines_wells/wells.py:107:well_at [1,705|640] <- hamletgen/homesteads/wells.py:410:seat_wells [8|2]
+    typing.py:2300:cast [26,605|4,054] <- settlement/houses.py:436:_toscale [25,560|3,603] <- settlement/shrines_wells/wells.py:50:_well_vr [25,556|3,602] <- hamletgen/homesteads/wells.py:35:drawn_r [22,133|2,330] <- hamletgen/homesteads/wells.py:410:seat_wells [8|2]
+    settlement/core.py:562:px [26,566|4,042] <- settlement/shrines_wells/wells.py:50:_well_vr [25,556|3,602] <- hamletgen/homesteads/wells.py:35:drawn_r [22,133|2,330] <- hamletgen/homesteads/wells.py:410:seat_wells [8|2]
+    settlement/houses.py:436:_toscale [25,560|3,603] <- settlement/shrines_wells/wells.py:50:_well_vr [25,556|3,602] <- hamletgen/homesteads/wells.py:35:drawn_r [22,133|2,330] <- hamletgen/homesteads/wells.py:410:seat_wells [8|2]
+    settlement/shrines_wells/wells.py:50:_well_vr [25,556|3,602] <- hamletgen/homesteads/wells.py:35:drawn_r [22,133|2,330] <- hamletgen/homesteads/wells.py:410:seat_wells [8|2]
+    overlap/registry.py:200:<genexpr> [22,269|8,190] <- overlap/registry.py:199:box_of [1,713|630] <- overlap/registry.py:272:conflicts [1,709|629] <- overlap/registry.py:338:admits [1,705|628] <- settlement/core.py:328:admits [1,705|628] <- settlement/shrines_wells/wells.py:107:well_at [1,705|640] <- hamletgen/homesteads/wells.py:410:seat_wells [8|2]
+    hamletgen/homesteads/wells.py:35:drawn_r [22,133|2,330] <- hamletgen/homesteads/wells.py:410:seat_wells [8|2]
+    hamletgen/homesteads/wells.py:68:extent_past [22,110|2,324] <- hamletgen/homesteads/wells.py:410:seat_wells [8|2]
+  anchor hamletgen/homesteads/well_seats.py:240:keys [23]
+    hamletgen/homesteads/wells.py:484:_in_belt [63,662|7,540] <- hamletgen/homesteads/well_seats.py:240:keys [23|6]
+  anchor hamletgen/homesteads/wells.py:534:_many [5]
+    hamletgen/homesteads/wells.py:579:<lambda> [31,831|3,770] <- hamletgen/homesteads/wells.py:534:_many [5|5]
+  fastest growers @20 -> @40:
+    x12.9 hamletgen/homesteads/wells.py:713:<genexpr> [9,667 -> 124,521]
+    x9.5 hamletgen/homesteads/wells.py:68:extent_past [2,324 -> 22,110]
+    x9.5 hamletgen/homesteads/wells.py:35:drawn_r [2,330 -> 22,133]
+    x9.2 builtins.hasattr [2,420 -> 22,282]
+    x8.7 'pop' of 'list' objects [3,501 -> 30,499]
+    x8.4 hamletgen/homesteads/wells.py:484:_in_belt [7,540 -> 63,662]
+    x8.4 hamletgen/homesteads/wells.py:579:<lambda> [3,770 -> 31,831]
+    x7.1 settlement/shrines_wells/wells.py:50:_well_vr [3,602 -> 25,556]
+pond_bank: 95 calls @20, 95 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+hinterland: 2,003,972 calls @20, 4,535,418 calls @40, growth exponent 1.18
+  placed @40: scrub_pines +979, tree_crowns +114, farm_fixtures +24, commons +5, marshes +1, village_groves +1; 4,035 calls per thing placed
+  anchor hamletgen/homesteads/bamboo.py:73:household_bamboo [1]
+    settlement/homestead_parts/bamboo_keepout.py:45:<genexpr> [282,437|54,412] <- settlement/homestead_parts/bamboo_keepout.py:36:stand_spares_seats [611|256] <- hamletgen/homesteads/bamboo.py:277:strip_refused [1,152|487] <- hamletgen/homesteads/bamboo.py:73:household_bamboo [1|1]
+    settlement/_geom/primitives.py:144:ccw [49,794|16,300] <- settlement/_geom/primitives.py:140:segments_cross [21,839|7,175] <- hamletgen/homesteads/bamboo.py:604:<genexpr> [17,355|4,035] <- hamletgen/homesteads/bamboo.py:537:_strip_blocked [1,211|505] <- hamletgen/homesteads/bamboo.py:277:strip_refused [1,152|487] <- hamletgen/homesteads/bamboo.py:73:household_bamboo [1|1]
+    settlement/_geom/primitives.py:140:segments_cross [21,839|7,175] <- hamletgen/homesteads/bamboo.py:604:<genexpr> [17,355|4,035] <- hamletgen/homesteads/bamboo.py:537:_strip_blocked [1,211|505] <- hamletgen/homesteads/bamboo.py:277:strip_refused [1,152|487] <- hamletgen/homesteads/bamboo.py:73:household_bamboo [1|1]
+    hamletgen/homesteads/bamboo.py:602:<genexpr> [21,053|4,932] <- hamletgen/homesteads/bamboo.py:537:_strip_blocked [1,211|505] <- hamletgen/homesteads/bamboo.py:277:strip_refused [1,152|487] <- hamletgen/homesteads/bamboo.py:73:household_bamboo [1|1]
+  anchor settlement/_geom/primitives.py:201:convex_hull [92]
+    settlement/_geom/primitives.py:208:cross [85,014|40,509] <- settlement/_geom/primitives.py:201:convex_hull [92|44]
+    settlement/_geom/primitives.py:204:<genexpr> [24,060|11,468] <- settlement/_geom/primitives.py:201:convex_hull [92|44]
+  anchor settlement/homestead_parts/grove_fill.py:354:close_belt_gaps [1]
+    settlement/homestead_parts/grove_blocks.py:242:<genexpr> [80,956|49,974] <- settlement/homestead_parts/grove_blocks.py:240:too_near [15,953|10,591] <- settlement/homestead_parts/grove_fill.py:354:close_belt_gaps [1|1]
+    settlement/_geom/region.py:137:taken [39,048|21,170] <- settlement/homestead_parts/grove_blocks.py:180:taken_by [12,820|7,358] <- settlement/homestead_parts/grove_blocks.py:199:static_clear [14,196|7,965] <- settlement/homestead_parts/grove_fill.py:354:close_belt_gaps [1|1]
+    settlement/_geom/indexes.py:277:near [35,358|21,140] <- settlement/homestead_parts/grove_blocks.py:240:too_near [15,953|10,591] <- settlement/homestead_parts/grove_fill.py:354:close_belt_gaps [1|1]
+    settlement/homestead_parts/grove_blocks.py:140:<genexpr> [32,900|17,854] <- settlement/homestead_parts/grove_blocks.py:132:inside_many [1,077|600] <- settlement/homestead_parts/grove_fill.py:354:close_belt_gaps [1|1]
+  anchor settlement/land/cover.py:384:commons [5]
+    settlement/_geom/indexes.py:470:inside [42,150|18,434] <- settlement/land/cover.py:482:_sparse [1,975|1,203] <- settlement/land/cover.py:384:commons [5|5]
+    random.py:500:uniform [31,371|16,990] <- settlement/land/cover.py:384:commons [5|5]
+  anchor settlement/homestead_parts/belt_law.py:99:__init__ [9]
+    settlement/homestead_parts/belt_law.py:158:uv [31,437|9,272] <- settlement/homestead_parts/belt_law.py:99:__init__ [9|4]
+  anchor settlement/_geom/indexes.py:661:_trees_for [6]
+    polygon.py:87:_coords [28,485|16,718] <- polygon.py:61:__new__ [1,683|942] <- polygon.py:227:__new__ [1,605|888] <- geo.py:46:box [380|184] <- settlement/_geom/indexes.py:661:_trees_for [6|6]
+  anchor settlement/homestead_parts/belt_law.py:186:_parted [9]
+    settlement/homestead_parts/belt_law.py:166:bin [27,737|8,300] <- settlement/homestead_parts/belt_law.py:186:_parted [9|4]
+  anchor hamletgen/hinterland/parcels/patches.py:363:open_ground_patches [1]
+    decorators.py:73:wrapped [23,350|13,428] <- decorators.py:171:wrapper [13,708|8,746] <- point.py:54:__new__ [2,110|1,083] <- hamletgen/hinterland/wood_rank.py:119:near [1,531|583] <- hamletgen/hinterland/wood_rank.py:126:low_by_the_water [2,391|907] <- hamletgen/hinterland/parcels/patches.py:533:_ok [3,096|1,400] <- hamletgen/hinterland/parcels/patches.py:363:open_ground_patches [1|1]
+  anchor settlement/land/cover.py:54:farmstead_keepouts [2]
+    settlement/land/cover.py:69:<lambda> [22,560|5,680] <- settlement/land/cover.py:54:farmstead_keepouts [2|2]
+  anchor settlement/land/wet.py:197:_keyholed [2]
+    settlement/land/wet.py:216:<genexpr> [22,241|14,433] <- settlement/land/wet.py:197:_keyholed [2|2]
+    settlement/land/wet.py:216:<lambda> [22,240|14,432] <- settlement/land/wet.py:197:_keyholed [2|2]
+  fastest growers @20 -> @40:
+    x12.2 math.degrees [1,839 -> 22,376]
+    x12.2 math.atan2 [1,841 -> 22,378]
+    x5.2 settlement/homestead_parts/bamboo_keepout.py:45:<genexpr> [54,412 -> 282,437]
+    x4.3 hamletgen/homesteads/bamboo.py:602:<genexpr> [4,932 -> 21,053]
+    x4.0 settlement/land/cover.py:69:<lambda> [5,680 -> 22,560]
+    x3.8 builtins.abs [148,340 -> 570,996]
+    x3.4 settlement/homestead_parts/belt_law.py:158:uv [9,272 -> 31,437]
+    x3.3 settlement/homestead_parts/belt_law.py:166:bin [8,300 -> 27,737]
+woodland: 2 calls @20, 2 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+windbreak: 840,684 calls @20, 1,555,656 calls @40, growth exponent 0.89
+  placed @40: tree_crowns +3,618, village_groves +1; 429 calls per thing placed
+  anchor settlement/homestead_parts/grove_fill.py:471:ink_and_record_grove [1]
+    settlement/shrines_wells/woods.py:123:<genexpr> [50,681|28,237] <- settlement/shrines_wells/woods.py:110:_crown_seat_clear [6,947|3,784] <- settlement/homestead_parts/groves.py:605:seat [5,534|2,907] <- settlement/homestead_parts/groves.py:440:_draw_grove [908|460] <- settlement/homestead_parts/grove_fill.py:471:ink_and_record_grove [1|1]
+    settlement/homestead_parts/groves.py:674:<genexpr> [38,726|20,285] <- settlement/homestead_parts/groves.py:671:<lambda> [3,632|1,840] <- settlement/homestead_parts/groves.py:66:<genexpr> [4,540|2,300] <- settlement/homestead_parts/groves.py:59:open_share [908|460] <- settlement/homestead_parts/groves.py:440:_draw_grove [908|460] <- settlement/homestead_parts/grove_fill.py:471:ink_and_record_grove [1|1]
+  anchor settlement/homestead_parts/stands.py:211:village_grove [1]
+    settlement/_geom/indexes.py:277:near [33,464|16,869] <- settlement/homestead_parts/grove_blocks.py:272:too_near [8,914|4,498] <- settlement/homestead_parts/stands.py:330:<lambda> [8,048|4,060] <- settlement/homestead_parts/stands.py:317:_seat [9,302|4,685] <- settlement/homestead_parts/stands.py:211:village_grove [1|1]
+    settlement/homestead_parts/grove_blocks.py:242:<genexpr> [33,244|16,195] <- settlement/homestead_parts/grove_blocks.py:240:too_near [14,045|7,086] <- settlement/homestead_parts/stands.py:211:village_grove [1|1]
+    settlement/houses.py:379:_hjit [31,864|20,692] <- settlement/homestead_parts/stands.py:211:village_grove [1|1]
+  fastest growers @20 -> @40:
+    x2.4 builtins.abs [14,076 -> 34,238]
+    x2.1 settlement/homestead_parts/grove_blocks.py:242:<genexpr> [16,195 -> 33,244]
+    x2.0 numpy.arange [10,852 -> 21,922]
+    x2.0 'tolist' of 'numpy.ndarray' objects [10,853 -> 21,923]
+    x2.0 builtins.round [17,604 -> 34,966]
+    x2.0 settlement/_geom/indexes.py:277:near [16,869 -> 33,464]
+    x1.9 builtins.max [50,039 -> 97,471]
+    x1.9 math.hypot [19,840 -> 37,970]
+bamboo: 734 calls @20, 1,334 calls @40, growth exponent 0.86
+  placed @40: bamboo_stands +13; 102 calls per thing placed
+crossings: 77,876 calls @20, 115,494 calls @40, growth exponent 0.57
+  placed @40: bridges +12; 9,624 calls per thing placed
+sties: 12,881 calls @20, 39,505 calls @40, growth exponent 1.62
+  placed @40: farm_fixtures +30; 1,316 calls per thing placed
+washing: 31,008 calls @20, 55,607 calls @40, growth exponent 0.84
+  placed @40: washing_places +1; 55,607 calls per thing placed
+frame: 21,107 calls @20, 30,425 calls @40, growth exponent 0.53
+  placed @40: scalebar.bbox +4, title.bbox +4, title.placard +4; 2,535 calls per thing placed
+notice: 566,757 calls @20, 1,131,083 calls @40, growth exponent 1.00
+  placed @40: kosatsuba +1; 1,131,083 calls per thing placed
+  anchor labels/obstacles.py:241:blocked [197]
+    labels/geom.py:58:seg_closest [32,647|29,174] <- labels/geom.py:54:seg_dist [26,887|20,278] <- labels/geom.py:69:segments_cross [4,166|3,924] <- labels/geom.py:127:poly_seg_gap [1,000|766] <- labels/obstacles.py:241:blocked [197|158]
+    labels/geom.py:54:seg_dist [26,887|20,278] <- labels/geom.py:69:segments_cross [4,166|3,924] <- labels/geom.py:127:poly_seg_gap [1,000|766] <- labels/obstacles.py:241:blocked [197|158]
+  fastest growers @20 -> @40:
+    x3.1 math.hypot [66,526 -> 206,508]
+    x2.3 'append' of 'list' objects [33,354 -> 78,088]
+    x2.3 'setdefault' of 'dict' objects [13,775 -> 31,012]
+    x2.2 builtins.len [19,049 -> 42,674]
+    x2.2 'get' of 'dict' objects [34,919 -> 76,969]
+    x1.5 builtins.min [55,115 -> 80,639]
+    x1.4 builtins.max [59,563 -> 82,651]
+    x1.3 labels/geom.py:54:seg_dist [20,278 -> 26,887]
+labels: 49,447 calls @20, 87,923 calls @40, growth exponent 0.83
+  placed @40: labels +1; 87,923 calls per thing placed
+
+all stages: 19,678,874 calls @20, 30,573,944 calls @40

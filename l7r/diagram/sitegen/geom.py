@@ -13,6 +13,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
+from l7r.diagram.work_counts import OPS
 
 from .types import SQ_FT_PER_ACRE, Poly, Pt
 
@@ -69,6 +70,8 @@ def pull_clear(pt: Pt, toward: Pt, obstacles: Sequence[Poly], margin: float, ste
     """
     x, y = pt
     for _ in range(tries):
+        if __debug__:
+            OPS["candidate@pull_clear"] += 1
         if not any(point_in_poly(x, y, list(o)) or min(seg_dist(x, y, o[i], o[(i + 1) % len(o)]) for i in range(len(o))) < margin for o in obstacles):
             return (x, y)
         ux, uy = unit(toward[0] - x, toward[1] - y)

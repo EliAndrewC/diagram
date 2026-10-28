@@ -10,6 +10,7 @@ import math
 from collections.abc import Callable, Sequence
 
 from l7r.diagram.settlement import segments_cross
+from l7r.diagram.work_counts import OPS
 
 from ..clearance import fabric_index
 from ..consts import (
@@ -131,6 +132,8 @@ def lattice_search(
         if d > seen((ix, iy), 1e18):
             continue
         for dx2, dy2, step, diag in steps:
+            if __debug__:
+                OPS["candidate@lattice_search"] += 1
             jx, jy = ix + dx2, iy + dy2
             # A DIAGONAL MAY NOT CUT A BLOCKED CORNER. Cell centers can both be clear while the
             # step between them clips the corner of a steading standing between them - so the
@@ -408,6 +411,8 @@ def _ease_corner(a: Pt, apex: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly]
     for i in range(1, _EASE_STEPS + 1):
         off = _EASE_FT * i / _EASE_STEPS
         for sign in (apex_side, -apex_side):
+            if __debug__:
+                OPS["candidate@_ease_corner"] += 1
             cand = (mx + px * off * sign, my + py * off * sign)
             if _turn_deg(a, cand, b) >= _HAIRPIN_DEG:
                 continue  # the eased corner must not itself be a hairpin

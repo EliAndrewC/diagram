@@ -9,6 +9,7 @@ import math
 from collections.abc import Callable, Sequence
 
 from l7r.diagram.settlement import seg_intersect, segments_cross
+from l7r.diagram.work_counts import OPS
 
 from ..clearance import FabricIndex, fabric_index
 from ..consts import (
@@ -39,6 +40,8 @@ def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: li
         link clear of the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the link's line 7 ft off a garden fence (the page's fence to the middle of the lane), its edge 5.5 ft
         link clear of the crop - research/questions/0081-village-lanes.drawing.html: half the widest tread off the crop (`WEB_CROP_GAP`)
         link clear of the wet ground and the water - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a path runs on the bank of every grade of field channel, and the bund is a path - the link is held 14 ft off the water, a departure the code keeps until feature 417 T32; 8 ft off the toe and marsh, 14 ft off water"""
+    if __debug__:
+        OPS["candidate@_clear_link"] += 1
     span = math.dist(a, b)
     if span < 1.0:
         return True
@@ -139,6 +142,8 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
         a join link off the wet ground at the gap - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A1, 2026-10-25); the link keeps the fabric's 7 ft off the toe and the marsh, where a lane's link keeps 8 ft (`_clear_link`); no page gives either
         a join link off the water - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a path runs on the bank of every grade of field channel, and the bund is a path - the join link is held 14 ft off the water, a departure the code keeps until feature 417 T32; 14 ft off the water lines (`clear_runs`' `line_margin`), as `_clear_link`
         a join link off every garden - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gap is kept from another household's garden and a household's own way may run beside its own; a link joins a way to the network and belongs to no one household, so no garden is its own"""
+    if __debug__:
+        OPS["candidate@_clear_touch"] += 1
     span = math.dist(a, b)
     if span < 1.0:
         return True
@@ -226,6 +231,8 @@ def route_around(poly: Poly, path: Poly, margin: float, rounds: int | None = Non
     Research:
         a track goes round the field - research/questions/0081-village-lanes.drawing.html: never across the crop, the
             shorter way round its outline"""
+    if __debug__:
+        OPS["candidate@route_around"] += 1
     ring = list(poly)
     n = len(ring)
     out = [push_out_of(poly, q, margin) for q in path]

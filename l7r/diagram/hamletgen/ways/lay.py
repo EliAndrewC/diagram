@@ -15,6 +15,8 @@ from __future__ import annotations
 import math
 from typing import Any
 
+from l7r.diagram.work_counts import OPS
+
 from ..consts import Poly, Pt
 from .geom import polyline_len
 
@@ -100,6 +102,8 @@ def _held(s: Any, run: Poly, width: float = 3.0, whole: bool = False, keep: Pt |
     centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []]
     run = first = [(float(q[0]), float(q[1])) for q in run]
     for _ in range(TRIES):
+        if __debug__:
+            OPS["candidate@_held"] += 1
         run = square_run(M, run)  # ...a re-aimed or cut candidate squared at the water again, and asked again as squared
         if len(run) < 2 or polyline_len(run) < 1.0:
             return None

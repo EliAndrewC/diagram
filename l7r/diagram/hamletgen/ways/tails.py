@@ -10,6 +10,7 @@ import math
 from collections.abc import Sequence
 
 from l7r.diagram.settlement import seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.work_counts import OPS
 
 from ..consts import Pt
 from .geom import polyline_len
@@ -72,6 +73,8 @@ def tail_doubled(p: Sequence[Pt], o: Sequence[Pt]) -> bool:
     reversed)? The pair test of `law.doubled_tails`, asked pair by pair by a caller that keeps the answers (`knots.WebMemo`).
 
     Research: no doubled tail - research/questions/0081-village-lanes.drawing.html: an end running back along another way under 20 degrees is refused, cut where it comes alongside - asked at `_DOUBLED_DEG`, 15, a known gap carried to 405 T101"""
+    if __debug__:
+        OPS["seg_test@tail_doubled"] += 1
     return len(o) >= 2 and any(along_tail(q, o, deg=_DOUBLED_DEG) is not None for q in (p, p[::-1]))
 
 

@@ -17,6 +17,7 @@ from l7r.diagram.settlement.city.bridges import deck_covers as deck_covers
 from l7r.diagram.settlement.city.bridges import undeckable_at as undeckable_at
 from l7r.diagram.settlement.homestead_parts.fixture_seats import TRUNK_FT
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
+from l7r.diagram.work_counts import OPS
 
 from ...consts import WAY_END_REACH_FT, Poly, Pt
 from ..checks import served_network, unreached_houses
@@ -225,6 +226,8 @@ def over_a_fixture(pts: Sequence[Pt], width: float, quads: Sequence[Poly]) -> in
     crosses it, stands in it, or passes within its half-width and `FIXTURE_PAD_FT` of it; None where it meets none. THE ONE
     PREDICATE: the web's settle cuts what it names, a tree lane is refused by it, and the finished-map rule reads it.
     Research: off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing stands on a tread"""
+    if __debug__:
+        OPS["candidate@over_a_fixture"] += 1
     gap = width / 2.0 + FIXTURE_PAD_FT
     # ...EACH FIXTURE'S BOX FIRST (feature 417 T06): a segment meets a fixture only where its box, grown by the gap, meets the
     # fixture's - the rest are passed over unasked, the same verdict (the finished web's rule asked every fixture of every

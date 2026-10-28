@@ -16,6 +16,7 @@ from l7r.diagram.settlement.city.bridges import PLANK_DITCH_FT as PLANK_DITCH_FT
 from l7r.diagram.settlement.city.bridges import deck_covers as deck_covers
 from l7r.diagram.settlement.city.bridges import undeckable_at as undeckable_at
 from l7r.diagram.settlement.rolling.access import TREAD_HALF_FT
+from l7r.diagram.work_counts import OPS
 
 from ...consts import WEB_FABRIC_GAP, Poly, Pt
 from ..clearance import kink_spans
@@ -209,6 +210,8 @@ def doubled_tails(M: Mapping[str, Any], only: int | None = None) -> list[int]:
 def free_end(ways: Sequence[Poly], i: int, q: Pt, boxes: Sequence[tuple[float, float, float, float] | None] | None = None) -> bool:
     """Does the end `q` of way `i` touch no other way (within `JOIN_TOL`)? `boxes` (each way's `_bbox`), where the caller
     has them, pass over a way whose box lies beyond the tolerance (`box_gap`) - the same answer, without its segments."""
+    if __debug__:
+        OPS["seg_test@free_end"] += max(len(ways) - 1, 0)
     return all(
         len(o) < 2 or (boxes is not None and box_gap(q, boxes[k]) > JOIN_TOL) or min(seg_dist(q[0], q[1], u, v) for u, v in zip(o, o[1:], strict=False)) > JOIN_TOL
         for k, o in enumerate(ways)
@@ -219,6 +222,8 @@ def free_end(ways: Sequence[Poly], i: int, q: Pt, boxes: Sequence[tuple[float, f
 def box_gap(q: Pt, box: tuple[float, float, float, float] | None) -> float:
     """How far `q` lies from the box `(x0, y0, x1, y1)` (0 inside it; infinite from no box) - never more than its distance to
     anything in the box, so a box beyond a reach puts all it holds beyond it."""
+    if __debug__:
+        OPS["dist@box_gap"] += 1
     if box is None:
         return math.inf
     return math.hypot(max(box[0] - q[0], 0.0, q[0] - box[2]), max(box[1] - q[1], 0.0, q[1] - box[3]))

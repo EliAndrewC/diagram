@@ -83,13 +83,13 @@
    "sha256": "aef0bd2ac7efe28fa55777bbe46cb7056376a963aea19fd16653d2f43fc8e8cc",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T11 Approach (checklist part A)": {
    "sha256": "7dc9ba02397319aa25a96108edcf8bf6b54d923fef733905e37a5d976af92b33",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T12 (the walk of ground cover, the frame, the notice board and the labels: plan D2, the round arbiter's ruling on ask:443-plan-round-3)": {
    "sha256": "cfa68cf5a21b39151023f73ee02b8c96037c2fad074916a0cd492a1fe0add16d",
@@ -892,6 +892,78 @@
      "why": "Step 1 of the request: engine counters only, no map changes."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T11 (the walk of the ways: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T11 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T11-source",
+     "summary": "The source for track, web and crossings is the ast scan's loop list in research/candidate-loops.md, filtered by hand. What the scan cannot follow (getattr dispatch, modules reached only by name, the modules it did not fully walk, method names that are not unique, functions passed by reference found by the stated grep) is read by hand.",
+     "class": "within",
+     "why": "D2: the stage's code, walked from STAGES through every module it reaches, is the source, recorded with its search space and command. The scan widens the reach of that walk and says where it stops. Nothing D2 asks to be walked is left out."
+    },
+    {
+     "id": "T11-misses",
+     "summary": "The cross-check's four misses (gap_ways.py way_out and trace, meet.py near_misses and web_lines) are read and written up as misses of the walk.",
+     "class": "within",
+     "why": "D2 makes perf-fanout's anchors a cross-check that the walk missed no hot loop. Reading the misses and recording them as the walk's misses is that cross-check, applied."
+    },
+    {
+     "id": "T11-trials-vs-measurements",
+     "summary": "The scanned ways/ loops are sorted into trials and measurements. Only a loop that tries a site gets a candidate@<function> counter.",
+     "class": "within",
+     "why": "D2 counts 'every loop that tries a site'. The request counts 'a candidate site evaluated'. A measurement loop is not a candidate. The geometry it does is counted at the _geom primitives (D2 bullets 1-2), and the excluded loops are written down with the reason."
+    },
+    {
+     "id": "T11-counter-placement",
+     "summary": "n = 1 per iteration. When the test is a named predicate or a key function, the increment goes inside it, keyed with it, with no call.",
+     "class": "within",
+     "why": "FR-001: an inline increment inside if __debug__, with no function call. D2: one candidate@<function> increment per candidate tried."
+    },
+    {
+     "id": "T11-len-before-bare-sorted",
+     "summary": "A bare sorted/min, or an inline lambda over a list, takes OPS[...] += len(cands) before it. len() is a C builtin that raises no PY_START event. Measured 2026-10-28 with make perf-ab A=29253d4c3, seed 25 at 40 households: the call count was the same in both engines.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001's literal 'no function call' is narrowed to allow one C builtin. FR-001 gives the rule's purpose in its own words: 'so the push's call-count guard sees no new calls'. That purpose is MEASURED to hold, with a dated one-shot label (perf-ab, seed 25 at 40 households: the call count was the same in both engines). FR-001's 'a vectorized operation counts its elements' requires the element count. For a bare sorted/min with no key there is no Python body to hold an inline increment, so the count has to be taken before the call. The inline-lambda case could be named and counted inside, but the plan's form meets the same measured purpose. SC-001's exit re-checks the call count with perf-fanout at the landing, so a wrong premise would show there."
+    },
+    {
+     "id": "T11-registry-only-loops",
+     "summary": "A loop whose only test is the registry's admits or conflicts takes no counter of its own. The registry's candidate@Standing.conflicts counts it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D2 says each walked loop, including one that 'submits it to Standing.admits or conflicts', gets a candidate@<function> increment. Here such a loop gets none. Applied literally, the rule counts the same candidate evaluation twice, once at the loop and once in the registry D2 already counts. That doubles the request's 'a candidate site evaluated' for every registry-only loop and corrupts the candidates-per-thing figure the task exists to measure (the plan's goal 1). The candidate is still counted, once, attributed to its stage by the driver (FR-002). The loop is still listed in research/candidate-loops.md with why it takes no counter of its own. Only the redundant second increment is dropped. The exception is narrow: it covers only loops whose ONLY test is the registry. A loop that also tests against _geom or a predicate is counted at the loop. Conditions of this ruling, which the plan's filter must verify loop by loop: (a) the registry's candidate increment is attributed to the calling stage (FR-002), so no stage-level count is lost; (b) every candidate the loop tries reaches admits/conflicts, so nothing is rejected before the call by an uncounted test. A loop that fails either condition is outside the exception and takes its own candidate@<function> counter."
+    },
+    {
+     "id": "T11-check-4",
+     "summary": "Each family's candidate counts are read against its stages' things placed on the reference roll. A stage whose calls are large against its counts is re-read.",
+     "class": "within",
+     "why": "D2, last bullet: the standing record prints Python calls beside counts so that such a stage shows itself. This applies that check."
+    },
+    {
+     "id": "T11-exits",
+     "summary": "Green: every listed loop counted. Python calls within SC-001's one in a thousand. perf-fanout's anchors read against the list, and any anchor the walk missed added and written as a miss. cohort-landing unregressed. Red: the failure recorded and the task set down, and a claim that it cannot be done goes to arbiter-ask.",
+     "class": "within",
+     "why": "SC-001 and D2's cross-check stated as the exit. An unregressed cohort enforces the design's 'a counter can never change a map'. The Red path is the project's process. None of these narrows what was asked."
+    },
+    {
+     "id": "T11-order-budget",
+     "summary": "Runs after T01. The families go in any order, each in its own landing. One landing, with the claims round's triage as a check-wave.",
+     "class": "within",
+     "why": "Sequencing and process only. No requirement is changed."
+    },
+    {
+     "id": "T11-not-performance",
+     "summary": "Classed as instrumentation, not performance work. Overhead is measured by perf-ab, and no map moves.",
+     "class": "within",
+     "why": "Section 6 step 1 of the request: 'Engine counters only; no map changes.'"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1069,6 +1141,76 @@
      "summary": "Not performance work: instrumentation whose overhead is measured by make perf-ab, moving no map.",
      "class": "within",
      "why": "Step 1 of the request: engine counters only, no map changes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T11": {
+   "section_sha256": "512c38bea5e6849c6545d7f828345cca9a275bd05ae7f2f2a586bbe7db4a0617",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T11-source",
+     "summary": "The source for track, web and crossings is the ast scan's loop list in research/candidate-loops.md, filtered by hand. What the scan cannot follow (getattr dispatch, modules reached only by name, the modules it did not fully walk, method names that are not unique, functions passed by reference found by the stated grep) is read by hand.",
+     "class": "within",
+     "why": "D2: the stage's code, walked from STAGES through every module it reaches, is the source, recorded with its search space and command. The scan widens the reach of that walk and says where it stops. Nothing D2 asks to be walked is left out."
+    },
+    {
+     "id": "T11-misses",
+     "summary": "The cross-check's four misses (gap_ways.py way_out and trace, meet.py near_misses and web_lines) are read and written up as misses of the walk.",
+     "class": "within",
+     "why": "D2 makes perf-fanout's anchors a cross-check that the walk missed no hot loop. Reading the misses and recording them as the walk's misses is that cross-check, applied."
+    },
+    {
+     "id": "T11-trials-vs-measurements",
+     "summary": "The scanned ways/ loops are sorted into trials and measurements. Only a loop that tries a site gets a candidate@<function> counter.",
+     "class": "within",
+     "why": "D2 counts 'every loop that tries a site'. The request counts 'a candidate site evaluated'. A measurement loop is not a candidate. The geometry it does is counted at the _geom primitives (D2 bullets 1-2), and the excluded loops are written down with the reason."
+    },
+    {
+     "id": "T11-counter-placement",
+     "summary": "n = 1 per iteration. When the test is a named predicate or a key function, the increment goes inside it, keyed with it, with no call.",
+     "class": "within",
+     "why": "FR-001: an inline increment inside if __debug__, with no function call. D2: one candidate@<function> increment per candidate tried."
+    },
+    {
+     "id": "T11-len-before-bare-sorted",
+     "summary": "A bare sorted/min, or an inline lambda over a list, takes OPS[...] += len(cands) before it. len() is a C builtin that raises no PY_START event. Measured 2026-10-28 with make perf-ab A=29253d4c3, seed 25 at 40 households: the call count was the same in both engines.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001's literal 'no function call' is narrowed to allow one C builtin. FR-001 gives the rule's purpose in its own words: 'so the push's call-count guard sees no new calls'. That purpose is MEASURED to hold, with a dated one-shot label (perf-ab, seed 25 at 40 households: the call count was the same in both engines). FR-001's 'a vectorized operation counts its elements' requires the element count. For a bare sorted/min with no key there is no Python body to hold an inline increment, so the count has to be taken before the call. The inline-lambda case could be named and counted inside, but the plan's form meets the same measured purpose. SC-001's exit re-checks the call count with perf-fanout at the landing, so a wrong premise would show there."
+    },
+    {
+     "id": "T11-registry-only-loops",
+     "summary": "A loop whose only test is the registry's admits or conflicts takes no counter of its own. The registry's candidate@Standing.conflicts counts it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D2 says each walked loop, including one that 'submits it to Standing.admits or conflicts', gets a candidate@<function> increment. Here such a loop gets none. Applied literally, the rule counts the same candidate evaluation twice, once at the loop and once in the registry D2 already counts. That doubles the request's 'a candidate site evaluated' for every registry-only loop and corrupts the candidates-per-thing figure the task exists to measure (the plan's goal 1). The candidate is still counted, once, attributed to its stage by the driver (FR-002). The loop is still listed in research/candidate-loops.md with why it takes no counter of its own. Only the redundant second increment is dropped. The exception is narrow: it covers only loops whose ONLY test is the registry. A loop that also tests against _geom or a predicate is counted at the loop. Conditions of this ruling, which the plan's filter must verify loop by loop: (a) the registry's candidate increment is attributed to the calling stage (FR-002), so no stage-level count is lost; (b) every candidate the loop tries reaches admits/conflicts, so nothing is rejected before the call by an uncounted test. A loop that fails either condition is outside the exception and takes its own candidate@<function> counter."
+    },
+    {
+     "id": "T11-check-4",
+     "summary": "Each family's candidate counts are read against its stages' things placed on the reference roll. A stage whose calls are large against its counts is re-read.",
+     "class": "within",
+     "why": "D2, last bullet: the standing record prints Python calls beside counts so that such a stage shows itself. This applies that check."
+    },
+    {
+     "id": "T11-exits",
+     "summary": "Green: every listed loop counted. Python calls within SC-001's one in a thousand. perf-fanout's anchors read against the list, and any anchor the walk missed added and written as a miss. cohort-landing unregressed. Red: the failure recorded and the task set down, and a claim that it cannot be done goes to arbiter-ask.",
+     "class": "within",
+     "why": "SC-001 and D2's cross-check stated as the exit. An unregressed cohort enforces the design's 'a counter can never change a map'. The Red path is the project's process. None of these narrows what was asked."
+    },
+    {
+     "id": "T11-order-budget",
+     "summary": "Runs after T01. The families go in any order, each in its own landing. One landing, with the claims round's triage as a check-wave.",
+     "class": "within",
+     "why": "Sequencing and process only. No requirement is changed."
+    },
+    {
+     "id": "T11-not-performance",
+     "summary": "Classed as instrumentation, not performance work. Overhead is measured by perf-ab, and no map moves.",
+     "class": "within",
+     "why": "Section 6 step 1 of the request: 'Engine counters only; no map changes.'"
     }
    ],
    "verdict": "CLEAR"

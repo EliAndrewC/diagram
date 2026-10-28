@@ -9,6 +9,8 @@ import math
 from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING, Any, cast
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import (
     CARRIED_LANDING_FLOOR_FT,
     LANDING_FT,
@@ -87,6 +89,8 @@ def _deck_corners_clear(p: Any, rot_deg: float, span: float, rw: float, wpts: An
     the whole reason this has to be asked at all: the span formula in `bridges()` solves the crossing
     against that one segment, so a course bending back toward a corner is water the formula never
     saw."""
+    if __debug__:
+        OPS["candidate@_deck_corners_clear"] += 1
     _r = math.radians(rot_deg)
     _c, _s = math.cos(_r), math.sin(_r)
     return all(
@@ -283,6 +287,8 @@ def undeckable_at(pts: Any, width: float, waters: Any, ftpx: float = 1.0, wet: A
     no deck seats (`crossing_deck`, the very solve `bridges()` makes) - or where the registry of what stands on `M` refuses
     the deck as `bridge()` would record it (`deck_admitted`, feature 287 M8). THE ONE PREDICATE: the lane law asks it of a
     finished web (`hamletgen/ways/law.py`), and the web's last pass cuts what it names."""
+    if __debug__:
+        OPS["candidate@undeckable_at"] += 1
     out = []
     for k, (ra, rb) in enumerate(zip(pts, pts[1:], strict=False)):
         for wpts, ww in waters:

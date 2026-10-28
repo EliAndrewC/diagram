@@ -11,6 +11,7 @@ from typing import Any
 from l7r.diagram.overlap.registry import forbidden_segment
 from l7r.diagram.settlement import seg_closest, seg_dist
 from l7r.diagram.settlement._knobs import bridge_crossed_waters
+from l7r.diagram.work_counts import OPS
 
 from ...consts import TAIL_CUT_FT, WEB_CLEARANCE, WEB_FABRIC_GAP, Poly, Pt
 from .. import law
@@ -116,6 +117,8 @@ def fouled_segment(
         no long leg through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `law.breaks_through`
         off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its own household's too
         what the overlap matrix forbids - NONE: each pair is claimed in the matrix"""
+    if __debug__:
+        OPS["candidate@fouled_segment"] += 1
     near = theirs(yards, owner)
     over = law.over_a_fixture(p, width, fixtures) if fixtures else None
     matrix = forbidden_segment(M, "lanes", p, width) if M is not None else None

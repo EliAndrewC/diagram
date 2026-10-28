@@ -16,6 +16,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
 from l7r.diagram.settlement._geom.primitives import seg_dists
+from l7r.diagram.work_counts import OPS
 
 from ..consts import (
     BUNDLE_PITCH,
@@ -393,6 +394,8 @@ def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, st
     ax, ay = -fy / n, fx / n  # along the front
     for k in range(tries + 1):
         for sgn in (1.0,) if k == 0 else (1.0, -1.0):
+            if __debug__:
+                OPS["candidate@door_off_fixtures"] += 1
             q = (door[0] + sgn * ax * k * step, door[1] + sgn * ay * k * step)
             if not any(len(p) >= 3 and (point_in_poly(q[0], q[1], p) or edge_dist(q[0], q[1], p) < gap) for p in quads) and (arrives is None or arrives(q)):
                 return q
@@ -679,6 +682,8 @@ def door_path(
         the fallback at the law's gap - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed again at `WEB_FABRIC_GAP` (7 ft off a garden fence) and stepped only on lawful ground
         its foot gathered onto a junction - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point - the foot moved onto a junction standing a few feet beside it (`lay.gathered_forms`), each gathered form held to the path's own checks; its door end never moves
         water on the way - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a straight step crosses no water, and a routed path is squared where it crosses (`square_run`)"""
+    if __debug__:
+        OPS["candidate@door_path"] += 1
     from l7r.diagram.overlap.registry import forbidden_segment
 
     from .law import over_a_fixture

@@ -12,6 +12,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_dist, segments_cross
 from l7r.diagram.settlement.rolling.access import TREAD_WALL_FT
 from l7r.diagram.sitegen.geom import centroid, unit
+from l7r.diagram.work_counts import OPS
 
 from ..consts import (
     BUNDLE_PITCH,
@@ -349,6 +350,8 @@ def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> b
         a tread 3 ft off the wall - research/questions/0081-village-lanes.drawing.html: a lane's tread kept 3 ft clear of a farmhouse wall
             (`TREAD_WALL_FT`), measured from the tread's middle to every wall (half the tread plus 3 ft), the 3 ft winning over the 6 ft a
             straightened lane may come up to the buildings (405 T119)"""
+    if __debug__:
+        OPS["candidate@house_hit"] += 1
     half = width / 2.0 + TREAD_WALL_FT
     if not pts:
         return False
@@ -501,6 +504,8 @@ def _crosses_fabric(run: Poly, fabric: Sequence[Poly], gap: float) -> bool:
     # other, so a polygon - or a run segment - whose box, widened by `gap`, misses the other's cannot answer True; the same
     # tests decide the rest.
 
+    if __debug__:
+        OPS["candidate@_crosses_fabric"] += 1
     rx0, ry0 = min(p[0] for p in run) - gap, min(p[1] for p in run) - gap
     rx1, ry1 = max(p[0] for p in run) + gap, max(p[1] for p in run) + gap
     for poly in fabric:

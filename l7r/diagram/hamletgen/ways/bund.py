@@ -24,6 +24,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement, point_in_poly, poly_gap, seg_dist, segments_cross
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
+from l7r.diagram.work_counts import OPS
 
 from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, WAY_END_REACH_FT, Poly, Pt
 from .checks import drawn_water_segs
@@ -169,6 +170,8 @@ class RunOnBlocks:
             the stretch from 2 ft along - GUESS: the fabric and the crop are judged from 2 ft along the stretch, since the end it grows from may stand at its own dooryard's gap (405 T118)
             off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane - no farmstead fixture under the tread, at `FIXTURE_PAD_FT` (its own claim)
             the whole tread off a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no house corner on the tread, at the run-on's width unrounded and from the stretch's own start (405 T118: it was cut to a whole foot, a 3.5 ft tread judged at 3, and asked only from 2 ft along)"""
+        if __debug__:
+            OPS["candidate@RunOnBlocks.clear"] += 1
         from .law import over_a_fixture  # local: the law sits above the run on
 
         seg = (min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]))
@@ -315,6 +318,8 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
                 continue
             return "run_on"
     for i, e, q in sorted(ends, key=lambda t: paddy.dist(t[2])):
+        if __debug__:
+            OPS["candidate@a_way_onto_the_bund"] += 1
         # ...BUT NOT AN END THAT IS A JUNCTION (feature 293; Sawada in the earlier 293 pass): an end standing on another way's
         # tread carried on past it turns the T into a crossing, a crossing is not a join at the ink tolerance, and the hamlet's
         # ways came out two networks - the rule `run_lanes_on_to_the_bund` already keeps by moving only ends that reach

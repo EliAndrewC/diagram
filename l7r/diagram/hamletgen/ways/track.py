@@ -14,6 +14,7 @@ from l7r.diagram.settlement import Settlement, seg_dist, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys, pull_clear
+from l7r.diagram.work_counts import OPS
 
 from ..cluster import seat_cluster
 from ..consts import (
@@ -385,6 +386,8 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), wet: 
     best: tuple[tuple[int, int, int], Poly] | None = None
     fabric_boxes = [poly_box(p) for p in fabric]  # the steadings do not move while the sweep ranks its bearings
     for swing in sorted((9.0 * k for k in range(-20, 21)), key=abs):
+        if __debug__:
+            OPS["candidate@connector_track"] += 1
         theta = math.radians(base + swing)
         # THE CANDIDATE IS THE PATH THAT WILL BE DRAWN - a probe measures what the check will measure. It is TAUT (feature 328
         # wave 46, 0081: "Every lane is pulled taut like a string"): the track bowed 34 and 46 px either side of the bearing
