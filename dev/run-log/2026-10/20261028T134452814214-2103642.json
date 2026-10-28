@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-28T13:44:52Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 282,
+  "result": "green",
+  "commit": "f487872b7",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10086,
+  "host": {
+    "load": [
+      4.4,
+      4.55
+    ],
+    "mem_avail_mb": [
+      8418,
+      8724
+    ],
+    "cpu_temp_c": [
+      87.0,
+      94.0
+    ],
+    "stall_s": {
+      "cpu": 2.8,
+      "io": 0.6,
+      "io_full": 0.5,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 21277,
+      "package": 14156
+    }
+  },
+  "phases": {
+    "preflight": 18.0,
+    "static": 1.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 1.0,
+    "pytest": 263.0,
+    "floors": 9.0,
+    "test-full": 278.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/settlement/fields/__init__.py",
+  "collected": 10086
+}
