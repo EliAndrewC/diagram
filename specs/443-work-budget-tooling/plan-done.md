@@ -168,3 +168,27 @@
 
 **Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
 
+<!-- plan-archive: archived 2026-10-28 -->
+### T04 (FR-006, FR-007: the budget held at the push and in view)
+
+- **Approach**: `make work-budget-review` beside `make perf-review` in `sync-with-main.sh` (D7, seam `CI_WORK_BUDGET_REVIEW`); `land.py` and `speckit-todo.py` print the record (D8).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** an accepted phase cannot grow back past its figure unnoticed, and every landing shows the distance from the goal.
+2. **The constraints.** FR-006, FR-007, SC-003, SC-004; D7, D8.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`)
+4. **Do they describe the world here?** `sync-with-main.sh`'s fixture tests drive the seam.
+5. **The order.** after T03.
+6. **The exits.** Green: the review refuses over an accepted figure or a budget and passes under both; the record printed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** the sync suite's new cases green.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+

@@ -16,8 +16,9 @@
 - [x] T03 The budget table `dev/work-budget.json`, `make budget-set` and `make budget-change`, the WORDS hook `budget-change-hooks.sh`, the table a guard file (D6; FR-005, SC-003)
       research: rendering
       verify: DONE. landed: landed: dev/work-budget.json (every STAGES stage, unbudgeted; a guard file), scripts/budget_change.py (budget-set from a SOUND verdict only; budget-change and budget-program need WORDS and are logged in dev/work-budget-changes.jsonl), budget-change-hooks.sh checking WORDS against the GM's messages; each refusal red with its condition deleted
-- [ ] T04 The ratchet `make work-budget-review` in the push, and the standing record printed by `make land` and `make speckit-todo` (D7, D8; FR-006, FR-007, SC-003, SC-004)
+- [x] T04 The ratchet `make work-budget-review` in the push, and the standing record printed by `make land` and `make speckit-todo` (D7, D8; FR-006, FR-007, SC-003, SC-004)
       research: rendering
+      verify: DONE. landed: landed: make work-budget-review in the push beside perf-review (accepted stages held at 40 and 80 households to the accepted figure and the budget, from a run at the pushed engine; seam CI_WORK_BUDGET_REVIEW; no arbiter accept), the standing record printed by make land on engine code and make speckit-todo under 444; each red with its condition deleted
 - [ ] T05 The `work-budget` agent, `docs/work-budget-rubric.md`, `make work-budget-bundle MODE=budget|audit`, the two fixtures dispatched and their rulings held by a test (D9-D11; FR-008, FR-009, SC-005)
       research: rendering
 - [ ] T06 `.specify/templates/phase-checklist.md` and `make land`'s refusal of a feature-444 `phase:` task with its checklist absent, short or unticked (D12; FR-010, SC-006)
