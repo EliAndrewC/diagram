@@ -211,7 +211,7 @@ def findings_of(text: str) -> list[str]:
     if not lines:
         return []
     also = re.search(r"\(Also:\s*(.*?)\)\s*$", text, re.S)
-    return [lines[0]] + ([a.strip() for a in also.group(1).split(";") if a.strip()] if also else [])
+    return [lines[0]] + ([a.strip().rstrip(".") for a in also.group(1).split(";") if a.strip()] if also else [])
 
 
 def answer_problems(src: Path, text: str) -> list[str]:
