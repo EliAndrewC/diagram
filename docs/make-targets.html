@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 200 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 202 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -89,6 +89,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make census</td><td class=a>&ndash;</td><td>the overlap census: comparisons per call of every check the pool&#x27;s rolls run, the ones over the flag named</td></tr>
 <tr><td class=n>make cohort-seeds</td><td class=a>&ndash;</td><td>which cohort seeds found which failure, over how many changes, and the fewest first seeds that find them all (dev/cohort-log/)</td></tr>
+<tr><td class=n>make counters-inert</td><td class=a>HOUSEHOLDS SEED</td><td>the work counters change no map: one seed rolled with them and under python -O, the manifests compared (feature 443, FR-004)   [SEED=25] [HOUSEHOLDS=15]</td></tr>
 <tr><td class=n>make fresh-tally</td><td class=a>COMMIT SINCE</td><td>seeds nobody has used: the failed share pooled, by form and by cause (feature 417)   [COMMIT=&lt;sha prefix&gt;] [SINCE=&lt;UTC stamp&gt;]</td></tr>
 <tr><td class=n>make gate-costs</td><td class=a>SINCE</td><td>what a gate run costs here, from the run records: each run&#x27;s mode, selection and phases, the fit (fixed + per selected test), the selection&#x27;s growth between full runs (feature 415)   [SINCE=&lt;utc prefix&gt;]</td></tr>
 <tr><td class=n>make perf</td><td class=a><div class=ad><span class=an>LABEL=&lt;NNN&gt;-start|&lt;NNN&gt;-end</span><span class=aw>which bookend this snapshot is (default: `adhoc`, which counts as neither)</span></div><div class=ad><span class=an>SCALING=1</span><span class=aw>add the 10-, 20- and 40-household legs - for investigating the algorithm, not routine work</span></div></td><td>take a performance snapshot of the reference hamlet across its seeds, with the machine&#x27;s state at both ends</td></tr>
@@ -106,6 +107,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make perf-signoff</td><td class=a><div class=ad><span class=an>WHY=&lt;text&gt;</span><span class=aw>the GM&#x27;s own words, given unprompted - band 3</span></div></td><td>records a sign-off the GM gave UNPROMPTED, in their words - owed by nothing since feature 375 amendment 5</td></tr>
 <tr><td class=n>make phase-calls</td><td class=a>ARCHETYPE FORM HOUSEHOLDS SEED SINK</td><td>one 40-household hamlet&#x27;s Python calls by stage and by step, recorded for the placement-stages page (feature 434)   [SEED=39] [HOUSEHOLDS=40] [FORM=nucleated|linear|dispersed] [ARCHETYPE=&lt;field archetype&gt;] [SINK=pond|offmap]</td></tr>
 <tr><td class=n>make review-yield</td><td class=a>SINCE</td><td>each review check&#x27;s passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]</td></tr>
+<tr><td class=n>make work-budget</td><td class=a>SEED SIZES</td><td>the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=&lt;n&gt;] [SIZES=10,20,40,80]</td></tr>
 </table></div>
 <h2>Remote (AWS CodeBuild)</h2>
 <p class=sec>Everything except `ci-status` costs money. Remote is currently OFF; `make switches` says so.</p>
