@@ -5,7 +5,7 @@ subagents**, every one defined in `.claude/agents/`: `building-review`, `claims-
 `entry-drift`, `escalation-check`, `fix-check`, `glyph-check`, `impl-drift`, `intro-check`,
 `modal-depiction`, `modal-form`, `modal-research`, `modal-triage`, `perf-audit`, `quote-check`, `record-format`,
 `record-style`, `research-pass`, `round-arbiter`, `settlement-review`, `size-audit`, `source-applicability`, `source-filter`, `source-reader`,
-`spec-fidelity`, `spec-fidelity-verify` and `translation-check`. When `CLAUDE.md`, a doc it points
+`spec-fidelity`, `spec-fidelity-verify`, `translation-check` and `work-budget`. When `CLAUDE.md`, a doc it points
 to or a `make` target's output calls for one of them, invoke it with the Agent tool without asking first.
 `perf-audit` (feature 129) is the ONLY agent that may pass `AS=perf-audit` to the review-record
 commands, and never writes those records itself; since feature 375 amendment 5 a performance band is a FLAG to
