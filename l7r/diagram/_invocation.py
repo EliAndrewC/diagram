@@ -213,6 +213,8 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.perf_fanout": ("perf-fanout", "expensive"),  # feature 427 T01: it profiles every stage at two sizes
     "l7r.diagram.tools.perf_ab": ("perf-ab", "expensive"),  # feature 435: two engines timed, alternated - evidence, never a gate
     "l7r.diagram.tools.perf_share": ("perf-share", "expensive"),  # feature 438: a module's share of each stage, kept profiles
+    "l7r.diagram.tools.work_budget": ("work-budget", "expensive"),  # feature 443: the counted work per stage, the standing record
+    "l7r.diagram.tools.counters_inert": ("counters-inert", "expensive"),  # feature 443: the counters change no map, two rolls compared
     "l7r.diagram.tools.phase_calls": ("phase-calls", "expensive"),  # feature 434: every stage of a 40-household roll profiled, each in its own process
     # RE-POINTED, not removed (feature 198, claimed as 195 and renumbered 2026-09-07): `make hamlet-floor` is gone, but this module still
     # carries `if __name__ == "__main__":`, so `test_operations_registry._entry_points()` counts
