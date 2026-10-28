@@ -5,7 +5,7 @@
 - Reads: the plan - the field's frame and fan, the intake at the high head (`head_sluice`), the archetype (the reference: a valley comb), the plot size rolled from `PLOT_SIZES` (0005: a basin about 48 ft across its canal, 26 to 36 ft) through `plot_texture`, which resolves it into the comb's levers and draws nothing; the field record's `cell`, 1,488 sq ft, is each plot's area - at its narrowest, 26 ft wide (0005), a plot is at most 57.2 ft long, its diagonal at most 62.9 ft.
 - Writes: the comb (`draw_comb_field`: the dry hem, the flooded paddies, the bunds and the channels), the field ditches - the head race and its branches and the drain (the `field_ditches` records, roles main, branch and drain) - and their drawn channels (`drawn_channels`, 13 records of 231 points at 20), the field's outline, the brook from off the map past the fan, the intake and its weir, the field pond; and each ditch stretch outside the crop reserved as a 30 px (30 ft at the reference's 1 ft a px, `meta.ftpx`) no-build corridor, written into the corridor index.
 - Keeps: the comb grown round the water, fed at the high head (0053); the brook fed past the intake (0059); every plot inside the fan's outline (a plot on the outline is clipped to it and kept - none is refused) and off every ditch, and so off the brook, which runs outside the outline: the brook is tested against the outline, in place of every plot against it. The cohort's checks: each footprint against the overlap matrix (`overlap/`).
-- Bounds (measured 2026-10-28, `phases/items.md`; the dry hem's record, `fields[0].drain_hem`, 36 and 61 polygons of 265 and 409 points at 10 and 20, x1.54 a doubling: 409 at 20, 631 at 40, 974 at 80; the reference manifests at 10 and 20 households, each record read by its `poly` list; past 20 at each figure's measured rate a doubling): the comb's plots 376 and 853 (853 at 20, 1,807 at 40, 3,715 at 80); the outline, a closed ring, its perimeter 3,146 and 4,874 ft (x1.55: 4,874 at 20, 7,555 at 40, 11,710 at 80) and its points, so its segments, 67 and 78 (x1.16: 78 at 20, 90 at 40, 105 at 80); at most 10 outline segments in one 64 ft cell at any size measured (10 at 10, where a 0.1 ft sliver crowds them; 4 at 20; measured 2026-10-28 by walking each segment through 64 ft cells) - the ceiling taken at every size, a sliver's crowding not following the mean segment; the ditches 9 and 12 (12 at 20, 16 at 40, 21 at 80), their segments 79 and 120 (x1.52: 120 at 20, 182 at 40, 277 at 80), their length 3,430 and 5,885 ft (x1.72: 5,885 at 20, 10,122 at 40, 17,410 at 80), of it outside the outline 914 and 1,225 ft (x1.34: 1,225 at 20, 1,642 at 40, 2,200 at 80); the brook, an open line, 5,404 and 7,362 ft (x1.36: 7,362 at 20, 10,012 at 40, 13,617 at 80), 212 and 237 points, so 211 and 236 segments (236 at 20, 264 at 40, 296 at 80); the drawn channels 149 and 231 points (x1.55); the weir a framed record of 4 points, the field pond an ellipse of 4 values, the intake one value.
+- Bounds (measured 2026-10-28, `phases/items.md`; the comb's strips about 272 ft wide - the crop's area, the plots x 1,488 sq ft (1,269,264 at 20), over the ditches' length inside it (5,885 less 1,225 ft) - so a strip holds a row of at most 11 plots across (272 ft over 0005's narrowest 26 ft), and at least 1; the dry hem's record, `fields[0].drain_hem`, 36 and 61 polygons of 265 and 409 points at 10 and 20, x1.54 a doubling: 409 at 20, 631 at 40, 974 at 80; the reference manifests at 10 and 20 households, each record read by its `poly` list; past 20 at each figure's measured rate a doubling, but the plots at their slope a household: 1.3 gross acres a household (0017) over a fixed cell is linear in the households, the hem their intercept): the comb's plots 376 and 853 (853 at 20, 1,807 at 40, 3,715 at 80); the outline, a closed ring, its perimeter 3,146 and 4,874 ft (x1.55: 4,874 at 20, 7,555 at 40, 11,710 at 80) and its points, so its segments, 67 and 78 (x1.16: 78 at 20, 90 at 40, 105 at 80); at most 10 outline segments in one 64 ft cell at any size measured (10 at 10, where a 0.1 ft sliver crowds them; 4 at 20; measured 2026-10-28 by walking each segment through 64 ft cells) - the ceiling taken at every size, a sliver's crowding not following the mean segment; the ditches 9 and 12 (12 at 20, 16 at 40, 21 at 80), their segments 79 and 120 (x1.52: 120 at 20, 182 at 40, 277 at 80), their length 3,430 and 5,885 ft (x1.72: 5,885 at 20, 10,122 at 40, 17,410 at 80), of it outside the outline 914 and 1,225 ft (x1.34: 1,225 at 20, 1,642 at 40, 2,200 at 80); the brook, an open line, 5,404 and 7,362 ft (x1.36: 7,362 at 20, 10,012 at 40, 13,617 at 80), 212 and 237 points, so 211 and 236 segments (236 at 20, 264 at 40, 296 at 80); the drawn channels 149 and 231 points (x1.55); the weir a framed record of 4 points, the field pond an ellipse of 4 values, the intake one value.
 
 ## The algorithm
 
@@ -14,8 +14,9 @@
     walk each ditch's segments through the outline's cells, testing the outline segments filed there: the stretches outside the
         crop found; reserve each, 30 ft wide, written into the corridor index's 64 ft cells
     walk the outline's points once, filing each to the strip whose ditches it falls between
-    for each strip between two neighboring ditches, walking down the fall, for each plot tried:
-        cut it: one new cross line met against the current segment of each of the strip's two ditches (the last plot's line kept)
+    for each strip between two neighboring ditches, walking down the fall, row by row, for each plot tried:
+        cut the next row: one new cross line met against the current segment of each of the strip's two ditches (the last row's
+            line kept), then divided along it into the row's plots, one divider a plot but the last
         select: past either ditch's crossing (2 comparisons), or holding its strip's next filed vertex (1)? - then it is on the outline
         classify it by its fall below the head
     walk the outline's ring through the cut comb, plot by plot: at each plot it enters, find where it leaves (at most 3 side
@@ -33,13 +34,13 @@
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
 | items | per item | 853 at 20, 1,807 at 40, 3,715 at 80 | the comb's plots - every plot tried is recorded | 80 households |
-| the cut (S1) | per item | 2 | one new cross line x the current segment of each of two ditches | always 2; a pointer's step counted below |
-| the selection | per item | 3 | the cut against each of the strip's two ditches' crossings, and against the strip's next filed vertex | always 3 |
+| the cut (S1) | per item | 2 | a row of k plots across (1 to 11, the Bounds) costs its one cross line met against its two ditches' current segments, 2, and k - 1 dividers: (k + 1) / k a plot, at most 2 | a row of one plot; a pointer's step counted below |
+| the selection | per item | 3 | the row against each of the strip's two ditches' crossings, and against the strip's next filed vertex - at most 3 a plot, a row's tests shared by its plots | a row of one plot |
 | the class | per item | 1 | one comparison of the plot's fall against the head's | always 1 |
 | the record | per item | 8 | the plot's 4 corners and 4 bund edges, written once after the ring walk (a clipped plot's extra points in the clipped records) | always 8 |
 | slack | per item | 1 | every factor is a bound at its worst case: each crossing-rule row pays 3 a segment, its start cell and the 2 more it can touch at a corner | not applicable |
-| the ring walk | over the run | 5,798 at 20, 8,350 at 40, 12,255 at 80 | each plot the ring enters: at most 3 side tests to find its exit, and a binary search of the next strip's cross lines (log2 of the plots, rounded up: 10 at 20, 11 at 40, 12 at 80) where it crosses a ditch, charged at every entry; the entries at their worst, the length term L x sqrt(1/26^2 + 1/57.2^2) plus 3 a segment (a segment's start and up to 2 more cross lines it can clip at a corner): 440 at 20, 590 at 40, 810 at 80; plus one a vertex | every entry across a ditch |
-| the clipped records | over the run | 958 at 20, 1,270 at 40, 1,725 at 80 | each crossing recorded in the 2 plots it divides - the crossings as many as the entries, 440 at 20, 590 at 40, 810 at 80 - and each vertex once | every crossing a corner of two plots |
+| the ring walk | over the run | 7,966 at 20, 11,286 at 40, 16,293 at 80 | each plot the ring enters: at most 3 side tests to find its exit; where it crosses a ditch, a binary search of the next strip's rows (log2 of the plots, rounded up: 10 at 20, 11 at 40, 12 at 80) and then of the row's plots (4, log2 of 11 rounded up), charged at every entry; the entries at their worst, the length term L x sqrt(1/26^2 + 1/57.2^2) plus 3 a segment, plus one for each strip the ring enters (the cross lines need not line up from strip to strip; it enters a strip at most where a ditch crosses it, 2 a ditch): 464 at 20, 622 at 40, 852 at 80; plus one a vertex | every entry across a ditch |
+| the clipped records | over the run | 1,006 at 20, 1,334 at 40, 1,809 at 80 | each crossing recorded in the 2 plots it divides - the crossings as many as the entries, 464 at 20, 622 at 40, 852 at 80 - and each vertex once | every crossing a corner of two plots |
 | the outline's vertices | over the run | 156 at 20, 180 at 40, 210 at 80 | 2 each: the vertex's side of each of the two ditches it falls between - the ring's order keeps each strip's vertices in order | every point |
 | the pointers' steps | over the run | 240 at 20, 364 at 40, 554 at 80 | one more test each time a strip's pointer steps: once a ditch segment for each of the 2 strips an inner ditch borders | every segment a bend |
 | the ditches (outline index cells examined) | over the run | 5,401 at 20, 8,470 at 40, 13,376 at 80 | 11 a segment-cell entry - the cell examined, at most 10 outline segments tested; the entries at their worst, their length at its diagonal over 64 ft plus 3 a segment (its start cell and up to 2 more at a corner): 491 at 20, 770 at 40, 1,216 at 80 | 80 households |
@@ -52,9 +53,9 @@ So: plots x (2 + 3 + 1 + 8) x 1, plus the run's terms, the index and the writes 
 
 ## Totals
 
-- at 20: 853 x (2 + 3 + 1 + 8) x 1 + 5798 + 958 + 156 + 240 + 5401 + 776 + 9581 + 342 + 1096 = 36290
-- at 40: 1807 x (2 + 3 + 1 + 8) x 1 + 8350 + 1270 + 180 + 364 + 8470 + 1166 + 11154 + 437 + 1551 = 58240
-- at 80: 3715 x (2 + 3 + 1 + 8) x 1 + 12255 + 1725 + 210 + 554 + 13376 + 1760 + 13079 + 574 + 2238 = 97781
+- at 20: 853 x (2 + 3 + 1 + 8) x 1 + 7966 + 1006 + 156 + 240 + 5401 + 776 + 9581 + 342 + 1096 = 38506
+- at 40: 1807 x (2 + 3 + 1 + 8) x 1 + 11286 + 1334 + 180 + 364 + 8470 + 1166 + 11154 + 437 + 1551 = 61240
+- at 80: 3715 x (2 + 3 + 1 + 8) x 1 + 16293 + 1809 + 210 + 554 + 13376 + 1760 + 13079 + 574 + 2238 = 101903
 
 ## Earlier findings
 
@@ -103,6 +104,10 @@ So: plots x (2 + 3 + 1 + 8) x 1, plus the run's terms, the index and the writes 
 - verdict-11, finding 1: fixed - every crossing-rule row pays 3 a segment, its worst (the start cell and the 2 more a segment can touch at a corner), so slack 1 holds
 - verdict-11, finding 2: fixed - the ring walk follows the cut lines as they are, a binary search of each strip's own cross lines, so none need line up
 - verdict-11, finding 3: fixed - the ring is walked through the cut comb, each crossing found where it happens, in place of the clip of every outline plot against its cells
+- verdict-12, finding 1: fixed - the cut is a row's: one cross line against the strip's two ditches and a divider a plot, at most 2 a plot for a row of 1 to 11 plots across
+- verdict-12, finding 2: fixed - the selection is the row's, shared by its plots; the ring walk's search finds the row and then the plot in it
+- verdict-12, finding 3: fixed - the entries add one for each strip the ring enters, 2 a ditch
+- verdict-12, finding 4: fixed - the plots are stated linear in the households (1.3 gross acres a household over a fixed cell), the other figures at their rate a doubling
 
 ## Cheaper algorithms considered
 
