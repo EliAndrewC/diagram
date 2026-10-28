@@ -903,3 +903,45 @@ def test_a_counter_only_landing_rolls_no_fresh_block(tmp_path: pathlib.Path, mon
     assert lb.counter_only(tmp_path) and asked[-1][-1] == "counter-only" and asked[-1][1].endswith("cohort_gate.py")
     monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (1, ""))
     assert not lb.counter_only(tmp_path)
+
+
+def test_a_444_phase_task_lands_only_with_its_checklist_whole_and_ticked(tmp_path: pathlib.Path) -> None:
+    """Feature 443 T06 (FR-010, SC-006): a `phase: <stage>` task of feature 444 is refused with no checklist, with one short of the
+    template's eight boxes, and with one unticked; it passes ticked whole, and no other task or feature is read."""
+    _lb = importlib.util.spec_from_file_location("land_phase", script("land.py"))
+    assert _lb and _lb.loader
+    lb = importlib.util.module_from_spec(_lb)
+    _lb.loader.exec_module(lb)
+    (tmp_path / ".specify" / "templates").mkdir(parents=True)
+    template = (REPO / lb.PHASE_TEMPLATE).read_text(encoding="utf-8")
+    (tmp_path / lb.PHASE_TEMPLATE).write_text(template)
+    d = tmp_path / "specs" / "444-work-budget-program"
+    (d / "phases").mkdir(parents=True)
+    tasks = "- [ ] T01 rebuild the water frame\n      phase: water_frame\n      research: rendering\n- [ ] T02 the docs\n      research: rendering\n"
+    assert lb.phase_refusal(tmp_path, d, tasks, "T02") == "", "a task with no phase line is not read"
+    assert "no checklist at specs/444-work-budget-program/phases/water_frame.md" in lb.phase_refusal(tmp_path, d, tasks, "T01")
+    ticked = template.replace("- [ ] ", "- [x] ")
+    (d / "phases" / "water_frame.md").write_text(ticked.replace("- [x] 5. **Rebuild.**", "- [x] 5. **Rebuilt.**"))
+    assert "lacks the box `5. **Rebuild.**`" in lb.phase_refusal(tmp_path, d, tasks, "T01"), "short of a box"
+    (d / "phases" / "water_frame.md").write_text(ticked.replace("- [x] 7. ", "- [ ] 7. "))
+    assert "has `7. **Audit review, MODE AUDIT.**` unticked" in lb.phase_refusal(tmp_path, d, tasks, "T01")
+    (d / "phases" / "water_frame.md").write_text(ticked)
+    assert lb.phase_refusal(tmp_path, d, tasks, "T01") == "", "ticked whole: it lands"
+    other = tmp_path / "specs" / "443-x"
+    other.mkdir()
+    assert lb.phase_refusal(tmp_path, other, tasks, "T01") == "", "only feature 444's phases are held"
+    assert len(lb._BOX.findall(template)) == 8, "the template holds the design's eight boxes"
+
+
+def test_the_landing_asks_the_phase_refusal_with_its_other_cheap_refusals(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    lb, _d = _land(tmp_path, monkeypatch)
+    d = tmp_path / "specs" / "444-work-budget-program"
+    d.mkdir(parents=True)
+    (d / "tasks.md").write_text(
+        VERIFIED.replace("- [ ] T02a the second-and-a-half thing\n      research: rendering", "- [ ] T02a the second-and-a-half thing\n      research: rendering\n      phase: water_frame")
+    )
+    (tmp_path / ".specify" / "templates").mkdir(parents=True)
+    (tmp_path / lb.PHASE_TEMPLATE).write_text((REPO / lb.PHASE_TEMPLATE).read_text(encoding="utf-8"))
+    assert "phase: water_frame" in lb._task_block((d / "tasks.md").read_text(), "T02a")
+    stops = lb.cheap_refusals(tmp_path, d, ["T02a"], "verified: the phase")
+    assert any("no checklist at specs/444-work-budget-program/phases/water_frame.md" in s for s in stops), stops

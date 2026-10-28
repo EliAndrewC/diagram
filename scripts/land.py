@@ -133,6 +133,35 @@ def _box_flag(tt, d: Path, task: str) -> list[str]:  # noqa: ANN001 - the tick-t
     return ["--boxes"] if _boxes() and tt.boxes_refusal((d / "tasks.md").read_text(encoding="utf-8"), task) else []
 
 
+PHASE_TEMPLATE = ".specify/templates/phase-checklist.md"
+_PHASE = re.compile(r"^\s*phase:\s*([a-z_]+)\s*$", re.M)
+_BOX = re.compile(r"^- \[([ xX])\] (\d\. \*\*[^*]+\*\*)", re.M)
+
+
+def _task_block(text: str, task: str) -> str:
+    """The lines of `task` in a tasks.md: its box line and what follows it, up to the next task's box."""
+    m = re.search(rf"^- \[[ xX]\] {re.escape(task)}\b.*?(?=^- \[|\Z)", text, re.M | re.S)
+    return m.group(0) if m else ""
+
+
+def phase_refusal(root: Path, d: Path, text: str, task: str) -> str:
+    """A feature-444 phase task (`phase: <stage>` in its lines) lands only with its checklist, `phases/<stage>.md`, holding every
+    box of the template, each ticked (feature 443 FR-010, plan D12); '' when it may land, else the file and the first box short."""
+    if not d.name.startswith("444-") or not (m := _PHASE.search(_task_block(text, task))):
+        return ""
+    rel = f"{d.relative_to(root)}/phases/{m.group(1)}.md"
+    boxes = [b for _t, b in _BOX.findall((root / PHASE_TEMPLATE).read_text(encoding="utf-8"))]
+    if not (root / rel).is_file():
+        return f"phase {m.group(1)}: no checklist at {rel} - copy {PHASE_TEMPLATE} there and tick each box with its evidence"
+    have = dict((b, t) for t, b in _BOX.findall((root / rel).read_text(encoding="utf-8")))
+    for b in boxes:
+        if b not in have:
+            return f"phase {m.group(1)}: {rel} lacks the box `{b}` - every one of the template's eight boxes is owed"
+        if have[b] == " ":
+            return f"phase {m.group(1)}: {rel} has `{b}` unticked - each box is ticked, with its evidence, before the phase lands"
+    return ""
+
+
 def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: list[str] | None = None) -> list[str]:
     """Pass 1: every refusal the landing would meet that costs seconds to ask, all of them - but the claims gate's, which goes to
     `deferred` when given (405 T50, D23: the claims round runs beside the gate, and the landing waits for it before the push)."""
@@ -147,6 +176,8 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
             continue
         why, _msg = tt.refusal(root, d, task, note, landed=False, boxes=_boxes())
         if why:
+            by_why.setdefault(why, []).append(task)
+        if why := phase_refusal(root, d, text, task):
             by_why.setdefault(why, []).append(task)
     stops = [f"{', '.join(ts)}: {why}" for why, ts in by_why.items()]
     write_ledger(root, d)

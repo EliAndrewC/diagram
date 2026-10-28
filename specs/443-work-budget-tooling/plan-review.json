@@ -1220,6 +1220,58 @@
      "why": "T05 adds an agent, a rubric, a bundle script and fixtures, and moves no map. The perf-ab note is boilerplate for a task that adds no engine code. It narrows nothing that was asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T06 (FR-010: the phase checklist held at landing)",
+    "### T06 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-approach",
+     "summary": "The template .specify/templates/phase-checklist.md plus one refusal added to land.py's cheap refusals (D12).",
+     "class": "within",
+     "why": "Restates D12 and FR-010, which carry the request's section 3 ('a template ... make land refuses a phase task whose boxes are not all ticked'). Nothing new is decided."
+    },
+    {
+     "id": "T06-table",
+     "summary": "A table with a header row (step / alone off / fresh block vs HEAD / pool manifests moved / the last resort) and no rows.",
+     "class": "within",
+     "why": "With no rows it decides nothing. It looks like leftover template text, and it neither narrows nor adds anything."
+    },
+    {
+     "id": "T06-goal",
+     "summary": "The goal: no phase of 444 lands with a box of its checklist missing.",
+     "class": "within",
+     "why": "This is the request's enforcement clause (section 3, and section 5.1: one program feature with the phases as its tasks). The exit and done criteria are SC-006's three refusals, and one of those is the unticked box, so 'missing' is not narrowed to 'absent'."
+    },
+    {
+     "id": "T06-order",
+     "summary": "The order: any time after T01.",
+     "class": "within",
+     "why": "Sequencing that the spec leaves open. It removes nothing that was asked for."
+    },
+    {
+     "id": "T06-exits",
+     "summary": "Green is SC-006's three refusals plus a passing landing. Red is the failure recorded and the task set down, with any claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The three refusals are SC-006 word for word. The pass case only checks that the refusal does not block a complete checklist, so it enforces FR-010 and adds no scope. The red path sends a claim of impossibility to the arbiter and does not quietly drop the requirement."
+    },
+    {
+     "id": "T06-budget-done",
+     "summary": "Budget: one landing. Done: SC-006's tests green.",
+     "class": "within",
+     "why": "A measure of the task's own size and its done test. Neither narrows FR-010."
+    },
+    {
+     "id": "T06-not-perf",
+     "summary": "Not performance work.",
+     "class": "within",
+     "why": "This is correct: the task is a land-time refusal and never touches the engine. The reason it gives ('instrumentation; its overhead is measured (make perf-ab), and it moves no map') looks copied from an engine-counter task and does not describe this one, because a land.py refusal has no perf-ab overhead to measure. The wording is inaccurate but narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1713,6 +1765,56 @@
      "summary": "Declared not performance work: instrumentation that moves no map, with overhead measured by make perf-ab.",
      "class": "within",
      "why": "T05 adds an agent, a rubric, a bundle script and fixtures, and moves no map. The perf-ab note is boilerplate for a task that adds no engine code. It narrows nothing that was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T06": {
+   "section_sha256": "1b977d3a8cb93521407f2bc6bdd3e1915b6dbf62fe571eb9c1e98c6cfa28e2f5",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T06-approach",
+     "summary": "The template .specify/templates/phase-checklist.md plus one refusal added to land.py's cheap refusals (D12).",
+     "class": "within",
+     "why": "Restates D12 and FR-010, which carry the request's section 3 ('a template ... make land refuses a phase task whose boxes are not all ticked'). Nothing new is decided."
+    },
+    {
+     "id": "T06-table",
+     "summary": "A table with a header row (step / alone off / fresh block vs HEAD / pool manifests moved / the last resort) and no rows.",
+     "class": "within",
+     "why": "With no rows it decides nothing. It looks like leftover template text, and it neither narrows nor adds anything."
+    },
+    {
+     "id": "T06-goal",
+     "summary": "The goal: no phase of 444 lands with a box of its checklist missing.",
+     "class": "within",
+     "why": "This is the request's enforcement clause (section 3, and section 5.1: one program feature with the phases as its tasks). The exit and done criteria are SC-006's three refusals, and one of those is the unticked box, so 'missing' is not narrowed to 'absent'."
+    },
+    {
+     "id": "T06-order",
+     "summary": "The order: any time after T01.",
+     "class": "within",
+     "why": "Sequencing that the spec leaves open. It removes nothing that was asked for."
+    },
+    {
+     "id": "T06-exits",
+     "summary": "Green is SC-006's three refusals plus a passing landing. Red is the failure recorded and the task set down, with any claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The three refusals are SC-006 word for word. The pass case only checks that the refusal does not block a complete checklist, so it enforces FR-010 and adds no scope. The red path sends a claim of impossibility to the arbiter and does not quietly drop the requirement."
+    },
+    {
+     "id": "T06-budget-done",
+     "summary": "Budget: one landing. Done: SC-006's tests green.",
+     "class": "within",
+     "why": "A measure of the task's own size and its done test. Neither narrows FR-010."
+    },
+    {
+     "id": "T06-not-perf",
+     "summary": "Not performance work.",
+     "class": "within",
+     "why": "This is correct: the task is a land-time refusal and never touches the engine. The reason it gives ('instrumentation; its overhead is measured (make perf-ab), and it moves no map') looks copied from an engine-counter task and does not describe this one, because a land.py refusal has no perf-ab overhead to measure. The wording is inaccurate but narrows nothing."
     }
    ],
    "verdict": "CLEAR"
