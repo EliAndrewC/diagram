@@ -1434,6 +1434,52 @@
      "why": "Standard guard discipline (FR-012's prove-it-fires) and the project's arbiter routing; nothing here relaxes the requested enforcement."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T08 (FR-012: every guard on record, and the feature closed)",
+    "### T08 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T08-docs",
+     "summary": "Every refusal the feature added is named in docs/guards.md and each target's help, and the work-budget agent's review occasions in docs/reviews.md",
+     "class": "within",
+     "why": "FR-012 requires docs/guards.md and each target's help to name every guard; docs/reviews.md is where the design (section 3 box 6) says a phase's owed reviews are listed, so recording the new agent there carries the approved design rather than adding to it."
+    },
+    {
+     "id": "T08-proof",
+     "summary": "Each guard is deleted once and its test is seen to go red",
+     "class": "within",
+     "why": "This is FR-012's 'proven to fire by deleting it and watching a test go red' and SC-008 word for word, and it applies to every guard with none carved out. The constraints line cites FR-012 whole, so its other parts (a hooks-test companion, a message naming the compliant command, no refusal on a time) stay binding even though the goal line paraphrases them as 'documented, tested and proven'."
+    },
+    {
+     "id": "T08-bookend",
+     "summary": "Closing bookend: make perf LABEL=443-end and make feature-report F=443 WRITE=1",
+     "class": "within",
+     "why": "The block heading says 'the feature closed'. A closing perf label and report are the project's ordinary close-out and serve the design's instruction that Python calls and times are 'still recorded beside these figures'. They narrow nothing asked and add no behavior."
+    },
+    {
+     "id": "T08-order-budget",
+     "summary": "The task runs last, within one landing",
+     "class": "within",
+     "why": "Sequencing and size only. Running last is what lets it census every guard the earlier tasks added, and nothing asked is dropped."
+    },
+    {
+     "id": "T08-exits",
+     "summary": "Red exit: the failure is recorded and the task set down, and any claim that it cannot be done is ruled through make arbiter-ask",
+     "class": "within",
+     "why": "A task set down is not ticked, so the feature does not close on a guard that fails to fire, and FR-012 is not relaxed. Sending a cannot-be-done claim to the arbiter is a process ruling, which design section 5.4 permits. This is a tooling task, not a phase, so the bar on the arbiter accepting a phase over budget is not touched."
+    },
+    {
+     "id": "T08-not-perf",
+     "summary": "Not performance work: instrumentation whose overhead is measured with make perf-ab and which moves no map",
+     "class": "within",
+     "why": "Design step 1 says 'Engine counters only; no map changes', and section 1 says a counter can never change a map. The block's table header has no rows, which fits a task that is not performance work."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2071,6 +2117,50 @@
      "summary": "Green = refusal per field, fixtures pass, red with condition deleted; red exit records failure, an impossibility claim goes to make arbiter-ask; one landing; tooling, not performance work",
      "class": "within",
      "why": "Standard guard discipline (FR-012's prove-it-fires) and the project's arbiter routing; nothing here relaxes the requested enforcement."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T08": {
+   "section_sha256": "1d6a53725a4728169a1970071e56f89295ab9290dbfbe195085585d2622a9cc1",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T08-docs",
+     "summary": "Every refusal the feature added is named in docs/guards.md and each target's help, and the work-budget agent's review occasions in docs/reviews.md",
+     "class": "within",
+     "why": "FR-012 requires docs/guards.md and each target's help to name every guard; docs/reviews.md is where the design (section 3 box 6) says a phase's owed reviews are listed, so recording the new agent there carries the approved design rather than adding to it."
+    },
+    {
+     "id": "T08-proof",
+     "summary": "Each guard is deleted once and its test is seen to go red",
+     "class": "within",
+     "why": "This is FR-012's 'proven to fire by deleting it and watching a test go red' and SC-008 word for word, and it applies to every guard with none carved out. The constraints line cites FR-012 whole, so its other parts (a hooks-test companion, a message naming the compliant command, no refusal on a time) stay binding even though the goal line paraphrases them as 'documented, tested and proven'."
+    },
+    {
+     "id": "T08-bookend",
+     "summary": "Closing bookend: make perf LABEL=443-end and make feature-report F=443 WRITE=1",
+     "class": "within",
+     "why": "The block heading says 'the feature closed'. A closing perf label and report are the project's ordinary close-out and serve the design's instruction that Python calls and times are 'still recorded beside these figures'. They narrow nothing asked and add no behavior."
+    },
+    {
+     "id": "T08-order-budget",
+     "summary": "The task runs last, within one landing",
+     "class": "within",
+     "why": "Sequencing and size only. Running last is what lets it census every guard the earlier tasks added, and nothing asked is dropped."
+    },
+    {
+     "id": "T08-exits",
+     "summary": "Red exit: the failure is recorded and the task set down, and any claim that it cannot be done is ruled through make arbiter-ask",
+     "class": "within",
+     "why": "A task set down is not ticked, so the feature does not close on a guard that fails to fire, and FR-012 is not relaxed. Sending a cannot-be-done claim to the arbiter is a process ruling, which design section 5.4 permits. This is a tooling task, not a phase, so the bar on the arbiter accepting a phase over budget is not touched."
+    },
+    {
+     "id": "T08-not-perf",
+     "summary": "Not performance work: instrumentation whose overhead is measured with make perf-ab and which moves no map",
+     "class": "within",
+     "why": "Design step 1 says 'Engine counters only; no map changes', and section 1 says a counter can never change a map. The block's table header has no rows, which fits a task that is not performance work."
     }
    ],
    "verdict": "CLEAR"

@@ -135,6 +135,9 @@ full").
 - **Speed work may ALWAYS change maps** (the GM, 2026-10-18: *"anytime we are trying to make things faster, it's always okay
   for maps to change, so long as the changes don't violate our research findings"*): hold it to the rules and the research
   claims rather than to identical output.
+- **Work budgets** (feature 443): each stage's counted operations (`make work-budget`, the record `dev/work-budget.md`) against a
+  budget derived on paper (`.specify/templates/derivation.md`, judged by the `work-budget` agent; `docs/work-budget-rubric.md`); a
+  first budget needs its SOUND, a change the GM's words (`make budget-change`); an accepted stage is held at the push.
 - Python: ruff, ruff format, pyrefly, 100% coverage held as a floor; a Python file past 1,000 raw lines fails the gate - split it into a package of ~650-line submodules whose `__init__.py`
   re-exports every name, never trim it to just under (405 T53).
 - Edit with `Edit`; a large file through its make target; batch the lookups you already know you need.
