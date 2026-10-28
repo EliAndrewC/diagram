@@ -59,7 +59,18 @@
    "items_at_80": 1
   },
   "homesteads": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 1.0,
+   "derivation": "specs/444-work-budget-program/phases/homesteads.derivation.md",
+   "verdict": "ask:444-T03-homesteads-round-4",
+   "items_at_20": 1055880,
+   "items_at_40": 2109967,
+   "items_at_80": 4219257,
+   "pinned_on": "accept",
+   "derivation_sha": "09385b8337b128bef858bfc2d5f272469d575e1aa0afa5333692fddf213bc91d",
+   "rounds": 3,
+   "spread": "264,471-1,055,880 at 20"
   },
   "track": {
    "status": "unbudgeted"

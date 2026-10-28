@@ -1,0 +1,25 @@
+UNDERIVED - the join test, "traced back... to a laid way within 25 ft" (derivation.md line 32): no row counts deciding at each trace cell whether a laid way lies within 25 ft, and the trace row (line 55) charges only 1 a cell.
+
+**Earlier findings.** Judged on the text, findings 1-10 of verdict-1 and 1-7 of verdict-2 are all closed. The taut pull, the hull and gate, Dial's flood at 26 a cell, the 200 parts query, the 32 opening strip, the 453 band cells and the 8-cell pinch each have a row, and each recomputes from its stated reason.
+
+**1. Is each factor derived?** No. Two factors block:
+- **Join test (line 32 and line 55):** a 25 ft radius on a 6 ft grid is about 9 by 9 cells per trace step if it is queried. If it is marked instead, each way written as it is laid costs about 9 cells per 6 ft of way. Neither appears.
+- **First shell of seats (lines 17-18 and line 48):** the stated reason is "six equal homesteads touch one, the hexagonal packing", at 184 + 20 = 204 ft center to center. Every other row reads the envelope as a 184 ft square: the 7 by 7 cells, the 4 x 184 perimeter, the 224² - 184² band and the hull's 4 corners. For such a square, the seat at 60° sits at (102, 176.7). Since 176.7 < 184, the two envelopes overlap, so the offerer's own gap rule refuses four of the six seats.
+  - The counts 6 and 12 can still hold under an offset (brick) lattice: seats at (±204, 0) and (±102, ±204), which gives 6 touching and 12 in the second ring.
+  - But the pseudocode the rebuild will follow names the wrong positions. The derivation must state the envelope's shape and the seats' offsets.
+  - If the envelope is meant to be a 184 ft disc instead, the derivation must show that parts measured to a 184 ft bounding extent fit inside it. They may need up to 184 x √2 = 260 ft.
+- **Gate (line 59):** the "8" has no reason. A scan of the hull's edges is up to 4n; a binary search is ⌈log2 320⌉ = 9 at 80. The gap is small but it is a gap.
+
+**2. Is there a standard, cheaper algorithm?** Nothing is missed beyond the join test. Once it has a row, it should say which it uses: an incremental mark of the 25 ft band as each way is laid, or a query per step. The mark costs less, because a way's cells are walked once.
+
+**3. Is any factor padded?** None. Slack is 1. "Every band unshared" is a legitimate worst-case ceiling, though the trace row counts a gap as shared by two.
+
+**4. Is each figure read at its source's size and unit?**
+- The Bounds' "extent, 184 ft" is read as a square's side in six rows and as a disc's diameter in the packing (see question 1).
+- **Lane ground (line 53)**, two charges fall short of their own reasons:
+  - "Read from the 32 ft raster (1)": the band lies outside the envelope, and the seat test refuses undecided cells only in the envelope's interior. So a band cell can sit in an undecided 32 ft cell, and deciding it means testing up to 20 segments, not 1.
+  - "Its 64 ft cell (8)": 64 is not a multiple of 6, so a 6 ft cell can straddle up to 2 by 2 cells of 64 ft, which is up to 32, not 8.
+- **Stale text, line 61:** it still says "seats offered x 743"; the Totals use 831.
+- **Admission at 80 (line 57):** 10,968, against the 137.2 a household implied by the figures at 20 and 40 (10,976). This is rounding and immaterial.
+
+Files read, all in /tmp/l7r-check/work-budget-budget-homesteads/: MANIFEST.md, rubric.md, contract.md, derivation.md, homesteads.verdict-1.txt and homesteads.verdict-2.txt.

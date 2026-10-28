@@ -1,0 +1,25 @@
+LOOSE - the places x the place test (88 x 121 per household): a per-wall interval sweep tests each nearby thing once per wall, not once per place, so a household costs about 88 + 30 x (cells its wall strips touch, at most 2 x (ceil(L/64)+1) per wall), a few thousand operations rather than 10,648; the derivation's claim that a sweep "saves no factor" is wrong.
+
+**1. Is each factor derived?** Yes. Each factor gives a reason:
+- **Items:** households tried, each at most once, because a passed sty never goes back.
+- **Places:** 350 / 4 rounded up = 88.
+- **Place test:** the raked 15 x 13 box has a diagonal under 20 ft, so it lies in at most 2 x 2 cells of 64 ft. That is 4 x (29 things + 1 cell read), plus 1 for the grove band, = 121.
+- **Slack:** 1.
+- **Drawing:** 5 per sty.
+
+The arithmetic checks: 212,960 + 76 = 213,036; 425,920 + 166 = 426,086; 851,840 + 346 = 852,186. No round-1 verdict file is in the bundle, and the derivation has no `## Earlier findings`, so there is nothing earlier to confirm closed.
+
+**2. Is there a standard, cheaper algorithm?** Yes, and the derivation turns it down wrongly ("Cheaper algorithms considered", sweep line). The cells limit how many things are near a place (116). They do not limit how often each thing is tested: the derivation tests every thing once for each of the 88 places.
+- **Why nothing is lost:** nothing is filed until the sty is drawn, so a household's cells do not change during its scan. Yet the same 2 x 2 cells are re-read for about 16 consecutive places on each 64 ft stretch of wall. The memoizing line, "tested once", misses this too.
+- **The sweep:** for each wall, gather the things in the cells its 15 ft strip touches. Project each onto the wall's axis as a blocked interval, merge the intervals, then walk the 88 places against the merged list.
+- **It is exact, not a filter:** each thing (a part, way segment, crown or stand, or the grove band where it meets the strip) is convex. So the slide positions along the wall where the box would overlap it form a single interval, and the merged intervals give exactly the admitted places. The first admitted place stays the rule.
+
+**3. Is any factor padded?** Yes: the product 88 x 121 per household, since the sweep turns it into a sum.
+- **The tighter bound:** per household, 88 + 30 x C (each cell read with its at most 29 things), plus the sort of the strip things. C is the cells the strips touch: at most 2 x (ceil(L/64)+1) for a wall of length L, so about 12 + 4W over 350 ft of walls, W being the number of walls.
+- **What the derivation must add:** the contract does not give W. The derivation must supply it from the farmstead (the house and outbuildings, four walls each), or say why a sweep cannot apply. Even at a generous W = 20, the figure is about 2,900 against 10,648.
+
+**4. Is each figure read at its source's size and unit?** Yes, nothing blocks here.
+- **The flat figures:** the contract itself writes "(350 taken)" and "(29 taken)", and it extrapolates only the sty count (x2.14 to 33 and 69). The derivation uses 350 ft of wall length and 29 things per cell as the contract states them, and the drawing uses 15/33/69 sties.
+- **One thing to add:** the derivation should say why the cell density, measured at 21 and then 29, stays at 29 past 20 households: what a 64 ft cell can hold, not just the higher of two measurements. S1 needs that bound to stay flat.
+
+Bundle read: /tmp/l7r-check/work-budget-budget-sties/MANIFEST.md, /tmp/l7r-check/work-budget-budget-sties/rubric.md, /tmp/l7r-check/work-budget-budget-sties/contract.md, /tmp/l7r-check/work-budget-budget-sties/derivation.md

@@ -1,0 +1,16 @@
+UNDERIVED - the water index's cells written per segment: "at most 3" holds only for a segment that runs along a grid axis; a 222 ft segment at 45 degrees runs about 157 ft on each axis, crosses 2 gridlines each way and so passes through up to 5 cells of 120 ft (9 if segments are filed by bounding box).
+
+**Q1, is each factor derived?**
+- The water index (derivation.md line 38): the reason given ("the longest, 222 ft, crosses at most 3") is wrong geometry for any angled segment, so 3 is not derived. The 222 ft is also not in the contract's Bounds and has no stated source.
+- The footing seats (line 36, pseudocode lines 18-20) leave out a factor. Each of the 9 shifts is a point "along the bank" up to 32 ft from the projection. If that means along the water's line of segments, finding the point can cross several segments, and that work has no bound and no entry. If it means an offset along the found segment's direction (1 operation), the derivation must say so.
+- The rest is derived and adds up: 58 = 9 + 48 + 1, 121 = 4 x 30 + 1, 1,089 = 9 x 121, the sort at n x ceil(log2 n), the drawing at 5 a footing, and a slack of 1.
+
+**Q2, is there a standard, cheaper algorithm?** None missed. The derivation already uses the grid index (waters and registry), the sweep along each bank (one sort), filing each footing as it is drawn, and finding each household's water and place once. A priority queue does not apply, because the shifts come in a fixed order.
+
+**Q3, is any factor padded?** Not on the stated reasons. "n footings x 9 shifts" combines the shared form's 9 shifts with the each-house form's one footing a household, but the contract's Bounds allow "at most one a household on either form". That makes n footings on the shared form an allowed ceiling.
+
+**Q4, is each figure read at its source's size and unit?**
+- The registry's 29 things a cell (line 26) was "measured for the sties" and "about the houses". Washing is set last of the ground's features, at banks up to 120 ft from the houses. The derivation should say why a count taken earlier, and somewhere else, still holds. It should also say whether 29 counts filed entries (way segments) or whole things.
+- Both density figures grow between the two measurements (21 to 29, 46 to 48), and both are held flat at 40 and 80. The contract's rule is "past 20 at each figure's measured rate a doubling", which gives about 40 and 55 things, and about 50 and 52 segments. The contract fixes the 48 ("48 taken"), but not the 29. The derivation should give the 29 its own reason, not "the ceiling taken" from two rising points.
+
+There were no earlier verdicts in the bundle (round 1). Files read: /tmp/l7r-check/work-budget-budget-washing/MANIFEST.md, /tmp/l7r-check/work-budget-budget-washing/rubric.md, /tmp/l7r-check/work-budget-budget-washing/contract.md, /tmp/l7r-check/work-budget-budget-washing/derivation.md
