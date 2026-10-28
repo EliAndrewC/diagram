@@ -1,0 +1,233 @@
+import ast,os,collections,re,sys
+roots=['hamletgen','settlement','waterfields','sitegen','overlap','labels']
+pkgbase='l7r.diagram'
+files={}
+modname={}
+for r in roots:
+  for d,_,fs in os.walk(r):
+    if 'tools' in d.split(os.sep) or '__pycache__' in d: continue
+    for f in fs:
+      if f.endswith('.py'):
+        p=os.path.join(d,f); src=open(p).read(); files[p]=(src,ast.parse(src))
+        m=pkgbase+'.'+p[:-3].replace(os.sep,'.')
+        if m.endswith('.__init__'): m=m[:-9]
+        modname[p]=m
+mod2file={v:k for k,v in modname.items()}
+defs={}   # (file,qual)->node
+bymod=collections.defaultdict(dict) # file -> name-> qual (top-level and methods by simple name list)
+methods=collections.defaultdict(list)
+toplevel=collections.defaultdict(dict)
+for p,(src,t) in files.items():
+  def walk(n,q):
+    for c in ast.iter_child_nodes(n):
+      if isinstance(c,(ast.FunctionDef,ast.AsyncFunctionDef)):
+        defs[(p,q+c.name)]=c
+        if q=='' : toplevel[p][c.name]=(p,c.name)
+        elif '.' in q.rstrip('.') or q: methods[c.name].append((p,q+c.name))
+        walk(c,q+c.name+'.')
+      elif isinstance(c,ast.ClassDef):
+        toplevel[p].setdefault(c.name,(p,c.name)); walk(c,q+c.name+'.')
+      else: walk(c,q)
+  walk(t,'')
+# import tables
+imps={}
+def resolve_rel(p,level,module):
+  pk=modname[p].split('.')
+  if os.path.basename(p)!='__init__.py': pk=pk[:-1]
+  if level: pk=pk[:len(pk)-(level-1)]
+  base='.'.join(pk)
+  return base+('.'+module if module else '') if level else module
+for p,(src,t) in files.items():
+  tab={}
+  for n in ast.walk(t):
+    if isinstance(n,ast.ImportFrom):
+      mod=resolve_rel(p,n.level,n.module) if n.level else n.module
+      for a in n.names:
+        tab[a.asname or a.name]=(mod,a.name)
+    elif isinstance(n,ast.Import):
+      for a in n.names: tab[(a.asname or a.name).split('.')[0]]=(a.name,None)
+  imps[p]=tab
+def lookup_in_module(mod,name,seen=None):
+  seen=seen or set()
+  f=mod2file.get(mod)
+  if not f or (mod,name) in seen: return []
+  seen.add((mod,name))
+  if name in toplevel[f]: return [toplevel[f][name]]
+  # re-export
+  tab=imps[f]
+  if name in tab:
+    m2,n2=tab[name]
+    if n2: 
+      r=lookup_in_module(m2,n2,seen)
+      if r: return r
+  return []
+NOISY={'__init__','add','get','append','extend','pop','items','keys','values','copy','update','at','find','count','line','ok','rect','build','index','sort','join','format'}
+def resolve(p,qual,call):
+  out=[]
+  f=call.func
+  if isinstance(f,ast.Name):
+    nm=f.id
+    # nested def in same func?
+    for (pp,qq) in [(p,qual+'.'+nm)]:
+      if (pp,qq) in defs: out.append((pp,qq))
+    if nm in toplevel[p]: out.append(toplevel[p][nm])
+    elif nm in imps[p]:
+      m,n=imps[p][nm]
+      if n: out+=lookup_in_module(m,n)
+  elif isinstance(f,ast.Attribute):
+    nm=f.attr
+    if isinstance(f.value,ast.Name) and f.value.id in imps[p]:
+      m,n=imps[p][f.value.id]
+      full=m+('.'+n if n else '')
+      r=lookup_in_module(full,nm)
+      if r: return r
+      if mod2file.get(full) : return []
+    if nm in NOISY: return []
+    if isinstance(f.value,ast.Name) and f.value.id=='self':
+      cls=qual.rsplit('.',1)[0] if '.' in qual else ''
+      if (p,cls+'.'+nm) in defs: return [(p,cls+'.'+nm)]
+    out+=[m for m in methods.get(nm,[])]
+  return out
+# also name refs passed as callbacks
+def edges(k):
+  p,q=k; n=defs[k]; res=set()
+  for x in ast.walk(n):
+    if isinstance(x,ast.Call): res.update(resolve(p,q,x))
+    elif isinstance(x,ast.Name) and isinstance(x.ctx,ast.Load):
+      if x.id in toplevel[p] and toplevel[p][x.id] in defs: res.add(toplevel[p][x.id])
+      elif x.id in imps[p] and imps[p][x.id][1]:
+        res.update(r for r in lookup_in_module(*imps[p][x.id]) if r in defs)
+  res.discard(k)
+  return res
+E={k:edges(k) for k in defs}
+STAGES="stage_water_frame stage_field stage_sink stage_seat stage_waterward stage_homesteads stage_track stage_appurtenances stage_pond_stock stage_burial stage_web stage_lane_wells stage_pond_bank stage_hinterland stage_woodland stage_windbreak stage_bamboo stage_crossings stage_sties stage_washing stage_frame stage_notice stage_labels".split()
+reach={}
+for st in STAGES:
+  rs=[k for k in defs if k[1]==st and k[0].startswith('hamletgen')]
+  seen=set(rs);stack=list(rs)
+  while stack:
+    k=stack.pop()
+    for e in E[k]:
+      if e not in seen and e in defs: seen.add(e);stack.append(e)
+  reach[st]=seen
+
+GEOM=set()
+for p in files:
+  if '_geom' in p or p.startswith('overlap'):
+    for (pp,q),n in defs.items():
+      if pp==p and not n.name.startswith('__') and n.name not in NOISY: GEOM.add(n.name)
+GEOM-={'tested','elements','element_extents','record','hold','release','forget','rerecord','resync','refuse','kept','extents','winding','convex_hull','smooth_points','smooth_closed','fillet_polyline','simplify_ring','ring_offset','label_tilt','aligned_tilt','village_population','rot_rect','turn_about','touch','sort','reverse','insert','remove','update','setdefault','shape','rings','segs','rects','circles','cells','array','poly','circle','fill_many','area','keepout_ring','wall_runs','lane_runs','way_beds','street_runs','torii_glyph_dims','torii_halfbox','forest_reveal_x','forest_frame_span','paddy_wet_rings','organic_bbox','organic_poly','label_quad','label_aabb','linear_tilt','linear_tilt_full','drawn_extent','_signed_area','_rect_ring','box_of','_center','water_index','boxed_polys','boxed_segs','boxed_circles','boxed_rects','boxed_grid','boxed_rings','indexed_grid','seg_reach_index','ring_chords','facing_chains','_facing_chains','edge_normal','dp','cross','ccw'}
+RX=re.compile(r'(^|_)(admits?|conflicts?|fits?|fit|in_blocked|near_corridor|hard_clear|open_seat|is_free|fouled|foul|clear|clears|clearance|within_reach|keepout|blocked|free_at|free|collides|collide|overlaps?|hits?|crosses|too_close|admissible|permitted|forbidden|forbidding|taken|violat\w*)($|_)')
+TESTN=GEOM|set()
+def isname(nm): return nm in GEOM or bool(RX.search(nm))
+def cname(c):
+  f=c.func
+  return f.id if isinstance(f,ast.Name) else (f.attr if isinstance(f,ast.Attribute) else None)
+def own_tests(node):
+  s=set()
+  for x in ast.walk(node):
+    if isinstance(x,ast.Call):
+      n=cname(x)
+      if n and isname(n): s.add(n)
+  return s
+# helpers with direct tests (level 1)
+HELP={}
+for k,n in defs.items():
+  t=own_tests(n)
+  if t: HELP[n.name]=HELP.get(n.name,set())|t
+LOOPS=(ast.For,ast.While,ast.ListComp,ast.SetComp,ast.DictComp,ast.GeneratorExp)
+def cands(k):
+  p,q=k; n=defs[k]; out=[]
+  for x in ast.walk(n):
+    kind=None
+    if isinstance(x,LOOPS): kind=type(x).__name__
+    elif isinstance(x,ast.Call) and cname(x) in ('min','max','sorted','next') and isinstance(x.func,ast.Name): kind=cname(x)
+    if not kind: continue
+    # skip loops belonging to nested defs (they're keyed separately)
+    d=own_tests(x)
+    # drop self-evident
+    if d: out.append((x.lineno,kind,sorted(d),'direct'))
+    else:
+      hs=set()
+      for y in ast.walk(x):
+        if isinstance(y,ast.Call):
+          nm=cname(y)
+          if nm in HELP and nm not in NOISY: hs.add(nm)
+      if hs: out.append((x.lineno,kind,sorted(hs),'via'))
+  return out
+
+JUNK={'_add','_assert_not_main_tree','_bump','_cells','_clamp','_is_main_tree','_mx_clamp','_mx_rect','_mx_same','_mx_stroke','_p','_stroke','_struct_rect','_table','_unwrap','_wrap','load','poly_area','polyline_len','rect_corners','bank_of','declare_cluster_shape','matrix_extents','matrix_policy','matrix_violations','seat_radius','seat_walls','shapes_drawn_at','corridors_mark','release_corridors','release_corridors_to','release_seats','release_seats_along','reserve_corridor','reserve_seats','_trees_for','_held','_parity_region','water_push','turn_the_seat','box_covers','private_well','in_a_shapes_band','forbidden_segment','refuse_unadmitted','pair_permitted','pair_forbidden'}
+def isname(nm): return (nm in GEOM and nm not in JUNK) or bool(RX.search(nm))
+HELP={}
+for k,n in defs.items():
+  t=own_tests(n)
+  if t: HELP[n.name]=HELP.get(n.name,set())|t
+ALLC={}
+for st in STAGES:
+  for k in reach[st]:
+    if k not in ALLC: ALLC[k]=cands(k)
+code={s:i for i,s in enumerate(STAGES)}
+
+def resolve_strong(p,qual,call):
+  f=call.func
+  if isinstance(f,ast.Attribute):
+    nm=f.attr
+    if isinstance(f.value,ast.Name):
+      if f.value.id in imps[p]:
+        m,n=imps[p][f.value.id]; full=m+('.'+n if n else '')
+        return lookup_in_module(full,nm)
+      if f.value.id=='self':
+        cls=qual.rsplit('.',1)[0] if '.' in qual else ''
+        if (p,cls+'.'+nm) in defs: return [(p,cls+'.'+nm)]
+        return [] 
+    # s.method / settlement method: resolve only if unique method of that name
+    if nm not in NOISY and len(methods.get(nm,[]))==1: return list(methods[nm])
+    return []
+  return resolve(p,qual,call)
+def edges_s(k):
+  p,q=k; n=defs[k]; res=set()
+  for x in ast.walk(n):
+    if isinstance(x,ast.Call): res.update(resolve_strong(p,q,x))
+    elif isinstance(x,ast.Name) and isinstance(x.ctx,ast.Load):
+      if x.id in toplevel[p] and toplevel[p][x.id] in defs: res.add(toplevel[p][x.id])
+      elif x.id in imps[p] and imps[p][x.id][1]:
+        res.update(r for r in lookup_in_module(*imps[p][x.id]) if r in defs)
+  res.discard(k); return res
+ES={k:edges_s(k) for k in defs}
+sreach={}
+for st in STAGES:
+  rs=[k for k in defs if k[1]==st and k[0].startswith('hamletgen')]
+  seen=set(rs);stack=list(rs)
+  while stack:
+    k=stack.pop()
+    for e in ES[k]:
+      if e in defs and e not in seen: seen.add(e);stack.append(e)
+  sreach[st]=seen
+
+LET='ABCDEFGHIJKLMNOPQRSTUVW'
+def stagestr(k):
+  s=''
+  for i,st in enumerate(STAGES):
+    if k in sreach[st]: s+=LET[i]
+    elif k in reach[st]: s+=LET[i].lower()
+  return s
+def dump(prefixes):
+  rows=[]
+  for k in sorted(defs, key=lambda k:(k[0],defs[k].lineno)):
+    if not k[0].startswith(prefixes): continue
+    if k not in ALLC: ALLC[k]=cands(k)
+    cs=ALLC[k]
+    ss=stagestr(k)
+    if not ss or not cs: continue
+    # dedupe cands that are nested defs? keep
+    parts=[]
+    for ln,kind,t,mode in sorted(cs):
+      parts.append(f"{ln}{kind[0] if kind in('For','While') else {'ListComp':'lc','SetComp':'sc','DictComp':'dc','GeneratorExp':'ge'}.get(kind,kind)}{'*' if mode=='via' else ''}[{','.join(t[:4])}]")
+    print(f"{k[0]} {k[1]} {ss} :: "+' '.join(parts))
+
+RX=re.compile(r'(^|_)(admits?|admitted|admissible|conflicts?|fits?|fitting|in_blocked|near_corridor|hard_clear|open_seat|is_free|fouled|foul|clear|clears|clearance|within_reach|keepout|blocked|free_at|free|collides|collide|overlaps?|hits?|crosses|too_close|permitted|forbidden|forbidding|taken|violat\w*|refused|refuses|offer|seat_free|seats_near|corridors_near|inside|clean)($|_)')
+HELP={}
+for k,n in defs.items():
+  t=own_tests(n)
+  if t: HELP[n.name]=HELP.get(n.name,set())|t
+ALLC={}

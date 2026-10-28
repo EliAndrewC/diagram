@@ -34,6 +34,7 @@ from typing import Any, SupportsIndex
 from l7r.diagram.settlement._geom.indexes import Indexed
 from l7r.diagram.settlement._geom.overlap import sat_overlap
 from l7r.diagram.settlement._geom.walls import torii_halfbox
+from l7r.diagram.work_counts import OPS
 
 from .reserved import Reservations
 from .taxonomy import (
@@ -273,6 +274,8 @@ class Standing:
         matrix admits it. `ignore` is a record whose own extents do not count (the one `o` replaces). `first` stops at the
         first one found - all `admits` asks (feature 417 T56: the wells' seats asked every overlap of a seat refused at its
         first, 2,231 refused seats at 499 calls each on seed 39 at 40 households, measured 2026-10-27)."""
+        if __debug__:  # the counted work (feature 443): a candidate asked of what stands
+            OPS["candidate@Standing.conflicts"] += 1
         own = self.extents(key, o)
         if not own:
             return []
@@ -283,6 +286,8 @@ class Standing:
         for i, e in enumerate(own):
             b = boxes[i]
             for j in range(i + 1, len(own)):  # the record's own pieces against each other: the same rule as any pair
+                if __debug__:
+                    OPS["index_examined@Standing.conflicts"] += 1
                 if pair_forbidden(e, own[j], priv, b, boxes[j]):
                     out.append((key, own[j][0], *_center(e[1])))
                     if first:
@@ -296,6 +301,8 @@ class Standing:
                     if n in seen or n in skip:
                         continue
                     seen.add(n)
+                    if __debug__:
+                        OPS["index_examined@Standing.conflicts"] += 1
                     other, ob, _ocb = self._ext[n]
                     if pair_forbidden(e, other, priv, b, ob):
                         out.append((e[0], other[0], *_center(e[1])))
@@ -308,12 +315,16 @@ class Standing:
         pocket, its fixtures), held so every way laid in between keeps off it as off a drawn one. Raises as `record`.
         `release` takes it down when the part itself is recorded."""
         self.record(key, rec)
+        if __debug__:
+            OPS["placed@Standing.record"] -= 1  # a hold is not yet a placement: the part's own record is
         self._holds.add((key, id(rec)))
         return rec
 
     def release(self, key: str, rec: Any) -> None:
         self._holds.discard((key, id(rec)))
         self.forget(key, rec)
+        if __debug__:
+            OPS["dropped@Standing.forget"] -= 1  # a released hold is not a dropped thing
 
     def forbidding(self, key: str) -> list[Extent]:
         """Every standing extent the matrix forbids a record of `key` - one naming no parent - to lie on: the walls a
@@ -333,6 +344,8 @@ class Standing:
         bad = self.conflicts(key, o)
         if bad:
             self.refuse(bad)
+        if __debug__:
+            OPS["placed@Standing.record"] += 1
         self._add(key, o)
 
     def refuse(self, bad: Sequence[tuple[str, str, float, float]]) -> None:
@@ -373,6 +386,8 @@ class Standing:
         held = self._held.pop((key, id(o)), None)
         if held is None:
             return
+        if __debug__:
+            OPS["dropped@Standing.forget"] += 1
         for n in held[1]:
             _e, _b, cb = self._ext.pop(n)
             if cb[2] < cb[0] or cb[3] < cb[1]:
@@ -391,6 +406,10 @@ class Standing:
             return  # nothing it covers moved
         self.forget(key, o)
         self.record(key, o)
+        if __debug__ and held is not None:  # a move, not a drop and a placement (an unheld record's is its first placement)
+            OPS["moved@Standing.rerecord"] += 1
+            OPS["dropped@Standing.forget"] -= 1
+            OPS["placed@Standing.record"] -= 1
 
     def resync(self) -> None:
         """THE BACKSTOP FOR A RECORD RESHAPED IN PLACE (a lane's `pts` rewritten, a brook's course rounded). A record held here

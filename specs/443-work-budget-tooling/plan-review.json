@@ -38,10 +38,10 @@
    "declared": "round-arbiter"
   },
   "## Task approaches": {
-   "sha256": "232385f36db5ffce21505dc7c9be62e14ef49723084161f6c9f4d42257a6083c",
+   "sha256": "7ba6603b65b77804230a6c7f2aa1f6abb3b2f467c15ff285e3476b3d24accab8",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "## Project Structure": {
    "sha256": "1adecc977176222ff5df4704517ace2a778d7dab0c7ece3fd5526f4f5c6dc36c",
@@ -54,6 +54,150 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "round-arbiter"
+  },
+  "### T01 (the design's section 1: counted work that survives a port; FR-001, FR-002)": {
+   "sha256": "a024d0514266c24adcf31ae95125c3e672d91a66570aea3703418c8b94af63cf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "23702f61331bcf4379733dfa52fcc0832aafd2262c79c2db342a684fc2443af6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T09 (the walk of the water and fields stages: plan D2, the round arbiter's ruling on ask:443-plan-round-3)": {
+   "sha256": "903bf314b60ee6ee3ded75afc8616bb431e1ec296b4f13b3dfe33f422638edc7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (checklist part A)": {
+   "sha256": "0b222f93546e33e996507f2bf94c53780484dfeab1f587b36cfafdff23dfe652",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T10 (the walk of the homesteads family: plan D2, the round arbiter's ruling on ask:443-plan-round-3)": {
+   "sha256": "b7674b5b6d698737003fade5ac6e0ee8be1015cf5d4e1abf0356720f567d7e90",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Approach (checklist part A)": {
+   "sha256": "bdc0482272e4b1faee77c6ceb73f60c6e000e294672daae8c8788a47039a0c13",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T11 (the walk of the ways: plan D2, the round arbiter's ruling on ask:443-plan-round-3)": {
+   "sha256": "8795cf4e288c1fd1deb45033e9086ef0833ec6cb0de28365aedc8edf7ef21943",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T11 Approach (checklist part A)": {
+   "sha256": "a61123add6a61011b112c3b770dad514a07362782ff8653853b1632b1965c678",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T12 (the walk of ground cover, the frame, the notice board and the labels: plan D2, the round arbiter's ruling on ask:443-plan-round-3)": {
+   "sha256": "e20b911f83f0c2d01a9487b358c6637c8d811e3df2931eb181d5fe64c0c7da2e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T12 Approach (checklist part A)": {
+   "sha256": "100e0acb6db8fec26135d9b4d7f28c09cab341f391bb1466b1b429b55ae35c99",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T02 (FR-003, FR-004: today's figures for every stage, and the counters inert)": {
+   "sha256": "387d434ff525d0d1225e9384d6cbca407f1daf7e2f8060e6700bb5f4acf1e076",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "02af78253d3521198ebc2eafcd364c9665a57644e87fab577105a463653c1cf8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T03 (FR-005: budgets change only with the GM's words)": {
+   "sha256": "1206bae3c7df419cae22d8c77d7e7a5ffeaecc292b722393c1ea7ec416cdea84",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "62c689cfaf30bc50511c4177bb48a03976a8e78ae72891956ae0eeebecdd1825",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T04 (FR-006, FR-007: the budget held at the push and in view)": {
+   "sha256": "daf778819af2d4887985403d7d4a8b9dabfe44a99cdd3898a52151c0c6adb248",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "9d30c7003d25df28cfa128f3c86439690b76ed0fc0d8272f7b971b76cfd16a56",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T05 (FR-008, FR-009: the adversarial check of the arithmetic)": {
+   "sha256": "e22c35dd8b3caea227589a294eef83cfb4a4902a6aae1e51f95e8584d3f1d1b5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "f2f54863cbc73fa8e72c8f57e9323a0bc343a470bb6e25545af86d3d7b57d567",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T06 (FR-010: the phase checklist held at landing)": {
+   "sha256": "dc3e16fef9bdcb9daae2de1a9e2c5da75cd0a25e515a8c0f2b738c19f93659f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "a0e671aae036bb2e8173044f6eef18a1b11bc5d639a8b44a8c3bf91e7da7ce12",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T07 (FR-011: no Python-only check forgotten)": {
+   "sha256": "d830d795e21c644715c4ad10a044da1041ff1abbaa54da2cd9201e189f6edce5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "23e188ca79f4f093b8153c13c07c82d0ab0fac4500a0aeff26751d33aabff7c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T08 (FR-012: every guard on record, and the feature closed)": {
+   "sha256": "47e8c920477a35ffd9c307a502789c476b2d5035df0bd20c6c8f3720141ef3d5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Approach (checklist part A)": {
+   "sha256": "743883c54467a17830e0615c2aad832163efc099a3c1acadb4d8d65a12abe8e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -410,6 +554,333 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Task approaches",
+    "### T01 (the design's section 1: counted work that survives a port; FR-001, FR-002)",
+    "### T01 Approach (checklist part A)",
+    "### T02 (FR-003, FR-004: today's figures for every stage, and the counters inert)",
+    "### T02 Approach (checklist part A)",
+    "### T03 (FR-005: budgets change only with the GM's words)",
+    "### T03 Approach (checklist part A)",
+    "### T04 (FR-006, FR-007: the budget held at the push and in view)",
+    "### T04 Approach (checklist part A)",
+    "### T05 (FR-008, FR-009: the adversarial check of the arithmetic)",
+    "### T05 Approach (checklist part A)",
+    "### T06 (FR-010: the phase checklist held at landing)",
+    "### T06 Approach (checklist part A)",
+    "### T07 (FR-011: no Python-only check forgotten)",
+    "### T07 Approach (checklist part A)",
+    "### T08 (FR-012: every guard on record, and the feature closed)",
+    "### T08 Approach (checklist part A)",
+    "### T09 (the walk of the water and fields stages: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T09 Approach (checklist part A)",
+    "### T10 (the walk of the homesteads family: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T10 Approach (checklist part A)",
+    "### T11 (the walk of the ways: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T11 Approach (checklist part A)",
+    "### T12 (the walk of ground cover, the frame, the notice board and the labels: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T12 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "task-split",
+     "summary": "T01 holds only D1, D3 and D2's shared sites (primitives, indexes, registry); each stage family's candidate-loop counters move to T09-T12, each its own landing, T01 first",
+     "class": "within",
+     "why": "D2 lists both the shared sites and the candidate loops; dividing them among tasks drops neither, and the order (T01's module before the increments that use it) is forced by D1."
+    },
+    {
+     "id": "stage-families",
+     "summary": "The candidate-loop walk is partitioned into four families naming 23 stages (T09: water_frame, field, sink, waterward, pond_stock, pond_bank; T10: seat, homesteads, appurtenances, burial, lane_wells, sties, washing; T11: track, web, crossings; T12: hinterland, woodland, windbreak, bamboo, frame, notice, labels)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "D2 requires every stage's candidate loops, walked from STAGES; the request says about 25 stages. The blocks enumerate 23 with no statement that the four lists are STAGES entire and no command or date that produced them, so a stage absent from every family would go unwalked - its candidates uncounted and its 'none' never decided by the walk, which D2 forbids. An enumeration with no search space cannot be checked, and an exception is presumed wrong. Fix: the Task approaches block (or each family header) names the command and date that listed STAGES and states that the four lists are that set entire, every stage in exactly one family; a stage outside them gets a family."
+    },
+    {
+     "id": "T09-T12-walk-source",
+     "summary": "Each family starts from the scan's loops in research/candidate-loops.md, filtered by hand, with named hand-reads where the scan cannot reach (getattr-dispatched _seat_region/_free_ground/_access/_site_corridors, homesteads/stages.py, water/brook*.py, water/polder.py, hinterland/parcels/*, groves, labels/*, and the fanout cross-check's misses in gap_ways.py and meet.py); filtered list and excluded loops written with why",
+     "class": "within",
+     "why": "D2 makes the walk the source and the fanout a cross-check; the scan is the walk's recorded first pass, the hand-reads extend it past what a static scan misses, the filter is D2's own criterion (a loop that tries a site), and recording each exclusion with its reason keeps the search space checkable."
+    },
+    {
+     "id": "T11-trials-vs-measurements",
+     "summary": "T11 sorts the ~350 scanned ways/ loops into trials (counted) and measurements (excluded)",
+     "class": "within",
+     "why": "D2 counts a candidate per site tried; a measuring loop's _geom calls are already counted at the shared sites. Same decision at any loop count. Note: '~350' carries no m: key or dated label in the block; it should point at the scan's date or the research file's command line."
+    },
+    {
+     "id": "candidate-counting-rule",
+     "summary": "n = 1 per iteration; len(cands) before a comprehension, sorted or min over a list; a short-circuiting next/first-admitted search counted inside the predicate it calls, keyed with that predicate",
+     "class": "within",
+     "why": "Matches D1 (key names the kind and the function the increment sits in, n the element count of a whole-list operation) and D2 (one candidate per candidate tried): exhaustive operations touch every element, a short-circuit search only those it tries."
+    },
+    {
+     "id": "T09-T12-exits",
+     "summary": "Green exit: every listed loop counted, calls unmoved within one in a thousand, make cohort-landing unregressed; done when the family's research section is complete and its counts print per stage",
+     "class": "within",
+     "why": "The call tolerance is SC-001's; cohort-landing enforces the request's 'engine counters only; no map changes'; the completed research section is D2's record."
+    },
+    {
+     "id": "T01-measurement",
+     "summary": "T01 measured by perf-fanout before/after (SC-001), perf-ab against the 443-start commit for overhead, counters-inert compared by hand until T02 builds it, counts checked against a hand count of one primitive's calls from perf-profile",
+     "class": "within",
+     "why": "Each enforces a stated requirement (SC-001, FR-004's inertness, FR-001's correctness); the request records Python calls and times beside the counts without making them targets, and the A/B is a record, not a gate."
+    },
+    {
+     "id": "task-order",
+     "summary": "T02 after T01 and T09-T12; T03 after T02; T04 after T03; T05 after T02; T06, T07 any time after T01; T08 last",
+     "class": "within",
+     "why": "FR-003 requires today's figures for every stage, which needs the candidate counts; the audit bundle reads T02's runs; the rest is sequencing that drops nothing."
+    },
+    {
+     "id": "T02-T08-approaches",
+     "summary": "T02-T08 approaches restate D4-D13 and FR-012 (work_budget.py, counters-inert, the budget table and WORDS hook, the ratchet and record in view, the agent with rubric, bundles and fixtures, the checklist refusal, the Rust-tooling inventory, the guard docs and closing report)",
+     "class": "within",
+     "why": "Each names the D-decision it implements and adds no exception; the 'Performance work? no' and red-exit lines are template boilerplate that decide nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Task approaches",
+    "### T01 (the design's section 1: counted work that survives a port; FR-001, FR-002)",
+    "### T01 Approach (checklist part A)",
+    "### T02 (FR-003, FR-004: today's figures for every stage, and the counters inert)",
+    "### T02 Approach (checklist part A)",
+    "### T03 (FR-005: budgets change only with the GM's words)",
+    "### T03 Approach (checklist part A)",
+    "### T04 (FR-006, FR-007: the budget held at the push and in view)",
+    "### T04 Approach (checklist part A)",
+    "### T05 (FR-008, FR-009: the adversarial check of the arithmetic)",
+    "### T05 Approach (checklist part A)",
+    "### T06 (FR-010: the phase checklist held at landing)",
+    "### T06 Approach (checklist part A)",
+    "### T07 (FR-011: no Python-only check forgotten)",
+    "### T07 Approach (checklist part A)",
+    "### T08 (FR-012: every guard on record, and the feature closed)",
+    "### T08 Approach (checklist part A)",
+    "### T09 (the walk of the water and fields stages: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T09 Approach (checklist part A)",
+    "### T10 (the walk of the homesteads family: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T10 Approach (checklist part A)",
+    "### T11 (the walk of the ways: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T11 Approach (checklist part A)",
+    "### T12 (the walk of ground cover, the frame, the notice board and the labels: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T12 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "TA-families",
+     "summary": "T09-T12 partition STAGES into four families; the 23 stages listed 2026-10-28 by a named grep of driver.py, each in exactly one family (6+7+3+7=23, no duplicates); a stage added later joins a family before its counters land",
+     "class": "within",
+     "why": "D2/FR-001 ask a candidate counter at every stage's candidate loops, found by walking each stage from STAGES; a partition that names every stage once and absorbs later stages carries the whole of that, and the count carries a one-shot label (date and command). The design's 'about 25 stages' is an estimate; the listed 23 is the measured figure."
+    },
+    {
+     "id": "TA-order",
+     "summary": "Landing order T01, T09-T12, T02-T08",
+     "class": "within",
+     "why": "Sequencing only; every FR-001..FR-012 still has its task."
+    },
+    {
+     "id": "T01",
+     "summary": "work_counts.py, one-line __debug__ increments at D2's shared geometry, index and registry sites, the driver's per-stage copy; SC-001 checked by perf-fanout before/after, overhead by perf-ab, -O identity by hand until T02",
+     "class": "within",
+     "why": "D1-D3, FR-001, FR-002, SC-001 as written; no call added (section 1 of the request)."
+    },
+    {
+     "id": "T09-T12-walk",
+     "summary": "Each family's candidate loops taken from the scan in research/candidate-loops.md, filtered by hand, with dynamically dispatched or unscanned modules read by hand and perf-fanout's misses listed as misses of the walk; excluded loops recorded with why",
+     "class": "within",
+     "why": "D2 as the round arbiter read it (the walk is the source, the fanout a cross-check, a stage 'none' only by the walk); excluding loops that measure rather than try a site follows D2's definition of a candidate loop, and each exclusion is written down."
+    },
+    {
+     "id": "T09-T12-n",
+     "summary": "n = 1 per iteration; len(cands) before a comprehension, sorted or min over a list; a short-circuiting first-admitted search counted inside the predicate, keyed with it",
+     "class": "within",
+     "why": "The request counts 'once per element, even when a vectorized call handles many elements'; counting inside the predicate counts exactly the candidates tried, and D1 keys a site by the function it sits in."
+    },
+    {
+     "id": "T09-T12-exits",
+     "summary": "Each family its own landing; green on every listed loop counted, calls unmoved within one in a thousand, cohort-landing unregressed",
+     "class": "within",
+     "why": "SC-001's threshold and the request's 'no map changes' for step 1."
+    },
+    {
+     "id": "T02",
+     "summary": "tools/work_budget.py and make counters-inert; dev/work-budget.md with today's figures at 10/20/40/80 after T09-T12",
+     "class": "within",
+     "why": "D4, D5, FR-003, FR-004, SC-002, SC-004; the request's step 1."
+    },
+    {
+     "id": "T03",
+     "summary": "Budget table as a guard file, budget-set/budget-change/budget-program, WORDS checked by a hook with hm_approval",
+     "class": "within",
+     "why": "D6, FR-005; section 5 item 4."
+    },
+    {
+     "id": "T04",
+     "summary": "work-budget-review beside perf-review in the push; land.py and speckit-todo print the record",
+     "class": "within",
+     "why": "D7, D8, FR-006, FR-007; section 5 items 2-3."
+    },
+    {
+     "id": "T05",
+     "summary": "work-budget agent, rubric with the homestead reference, bundles, two fixtures dispatched once with rulings held by a test",
+     "class": "within",
+     "why": "D9-D11, FR-008, FR-009; section 4 'proving that it bites'."
+    },
+    {
+     "id": "T06",
+     "summary": "Phase checklist template and land.py refusal",
+     "class": "within",
+     "why": "D12, FR-010; section 3."
+    },
+    {
+     "id": "T07",
+     "summary": "dev/rust-tooling.md and check-rust-tooling.py in hooks-test",
+     "class": "within",
+     "why": "D13, FR-011; section 7 'nothing forgotten, mechanically'."
+    },
+    {
+     "id": "T08",
+     "summary": "Guards documented and each proven red with it deleted; closing bookend and report",
+     "class": "within",
+     "why": "FR-012, SC-008."
+    },
+    {
+     "id": "perf-class",
+     "summary": "Every task classed 'not performance work' (instrumentation, overhead measured by perf-ab, moves no map)",
+     "class": "within",
+     "why": "Step 1 of the request is a tooling feature with no map changes; overhead is still measured."
+    },
+    {
+     "id": "red-exit",
+     "summary": "A red exit records the failure and sets the task down, a claim it cannot be done ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Not a set-down on a small gain (section 5 item 1 governs 444's phases); impossibility goes to the arbiter, not the session."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T01 (the design's section 1: counted work that survives a port; FR-001, FR-002)",
+    "### T01 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-scope",
+     "summary": "T01 builds D1 (work_counts.py, a defaultdict(int) OPS), D2's shared sites (primitives.py, indexes.py, the registry) and D3 (driver._run_stages' per-stage copy into BY_STAGE); the stages' candidate-loop increments are left to T09-T12, which use its module",
+     "class": "within",
+     "why": "A split of FR-001 across the feature's tasks, not a cut from it: D2's candidate-loop bullet stays owed by later tasks of the same feature, and the request's section 1 asks for counters in the shared geometry layer AND at each phase's candidate loop, both of which the feature still carries."
+    },
+    {
+     "id": "T01-mechanism",
+     "summary": "one-line `if __debug__:` increments, a dict subscript and add, no Python call added (the call guard, feature 427 T03); counts kept by kind and by function; a run under -O counts nothing",
+     "class": "within",
+     "why": "Restates FR-001 and D1, and the request's 'the counters sit in if __debug__: blocks, which python -O drops'."
+    },
+    {
+     "id": "T01-calls-measure",
+     "summary": "make perf-fanout SEED=25 total calls before and after, held to SC-001's one call in a thousand; the Green exit says 'the calls unmoved'",
+     "class": "within",
+     "why": "SC-001 as accepted. The Green exit's 'unmoved' is at least as strict as SC-001, so it narrows nothing the GM asked; the two wordings differ but neither loosens the requirement."
+    },
+    {
+     "id": "T01-overhead",
+     "summary": "make perf-ab A=<443-start commit>, quick form, for the counters' overhead, recorded in research/overhead.md",
+     "class": "within",
+     "why": "The request records Python calls and times beside the counts 'but neither is the target', and checklist box 6 records perf-ab time as a record, not a gate; measuring the instrument's overhead serves the request's 'the counters cost nothing in the deployed build' and adds no behavior."
+    },
+    {
+     "id": "T01-inert-by-hand",
+     "summary": "until T02 builds make counters-inert (FR-004), the two rolls (counters on, and under python -O) are compared by hand; Green requires a manifest identical with and without -O",
+     "class": "within",
+     "why": "An ordering of the work, not a weakening: the manifest-identity check the request asks of the gate ('rolls a seed both ways and requires identical manifests') is still built by FR-004 in T02, and T01 runs the same comparison meanwhile rather than skipping it."
+    },
+    {
+     "id": "T01-hand-count",
+     "summary": "the counts are checked on the reference roll against a hand count of one primitive's calls from make perf-profile",
+     "class": "within",
+     "why": "A verification of the thing asked (that the counters count what happens), which serves FR-001; it adds no behavior and no unrequested scope."
+    },
+    {
+     "id": "T01-red-exit",
+     "summary": "Red: what failed recorded and the task set down; a claim that it cannot be done ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Routes an impossibility claim to the round arbiter, which stands where the GM was asked (feature 379); it does not let the task finish short of FR-001/FR-002, and the request's limit on the arbiter (it may not accept a phase over budget) concerns phases, not this instrument task."
+    },
+    {
+     "id": "T01-order-budget-class",
+     "summary": "first task of the feature, before T09-T12; one landing; 'Performance work? no - instrumentation, moves no map'",
+     "class": "within",
+     "why": "Matches the request's step 1 ('the instrument ... Engine counters only; no map changes') and FR-002's 'the manifest is unchanged'. The empty perf-work table (header only, no rows) is consistent with 'Performance work? no' and declares no step."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "b3e9efb9452cf9e76e785034919fc6160164c9b7d4214fcf0a1b8b02e5580329",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T01-scope",
+     "summary": "T01 builds D1 (work_counts.py, a defaultdict(int) OPS), D2's shared sites (primitives.py, indexes.py, the registry) and D3 (driver._run_stages' per-stage copy into BY_STAGE); the stages' candidate-loop increments are left to T09-T12, which use its module",
+     "class": "within",
+     "why": "A split of FR-001 across the feature's tasks, not a cut from it: D2's candidate-loop bullet stays owed by later tasks of the same feature, and the request's section 1 asks for counters in the shared geometry layer AND at each phase's candidate loop, both of which the feature still carries."
+    },
+    {
+     "id": "T01-mechanism",
+     "summary": "one-line `if __debug__:` increments, a dict subscript and add, no Python call added (the call guard, feature 427 T03); counts kept by kind and by function; a run under -O counts nothing",
+     "class": "within",
+     "why": "Restates FR-001 and D1, and the request's 'the counters sit in if __debug__: blocks, which python -O drops'."
+    },
+    {
+     "id": "T01-calls-measure",
+     "summary": "make perf-fanout SEED=25 total calls before and after, held to SC-001's one call in a thousand; the Green exit says 'the calls unmoved'",
+     "class": "within",
+     "why": "SC-001 as accepted. The Green exit's 'unmoved' is at least as strict as SC-001, so it narrows nothing the GM asked; the two wordings differ but neither loosens the requirement."
+    },
+    {
+     "id": "T01-overhead",
+     "summary": "make perf-ab A=<443-start commit>, quick form, for the counters' overhead, recorded in research/overhead.md",
+     "class": "within",
+     "why": "The request records Python calls and times beside the counts 'but neither is the target', and checklist box 6 records perf-ab time as a record, not a gate; measuring the instrument's overhead serves the request's 'the counters cost nothing in the deployed build' and adds no behavior."
+    },
+    {
+     "id": "T01-inert-by-hand",
+     "summary": "until T02 builds make counters-inert (FR-004), the two rolls (counters on, and under python -O) are compared by hand; Green requires a manifest identical with and without -O",
+     "class": "within",
+     "why": "An ordering of the work, not a weakening: the manifest-identity check the request asks of the gate ('rolls a seed both ways and requires identical manifests') is still built by FR-004 in T02, and T01 runs the same comparison meanwhile rather than skipping it."
+    },
+    {
+     "id": "T01-hand-count",
+     "summary": "the counts are checked on the reference roll against a hand count of one primitive's calls from make perf-profile",
+     "class": "within",
+     "why": "A verification of the thing asked (that the counters count what happens), which serves FR-001; it adds no behavior and no unrequested scope."
+    },
+    {
+     "id": "T01-red-exit",
+     "summary": "Red: what failed recorded and the task set down; a claim that it cannot be done ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Routes an impossibility claim to the round arbiter, which stands where the GM was asked (feature 379); it does not let the task finish short of FR-001/FR-002, and the request's limit on the arbiter (it may not accept a phase over budget) concerns phases, not this instrument task."
+    },
+    {
+     "id": "T01-order-budget-class",
+     "summary": "first task of the feature, before T09-T12; one landing; 'Performance work? no - instrumentation, moves no map'",
+     "class": "within",
+     "why": "Matches the request's step 1 ('the instrument ... Engine counters only; no map changes') and FR-002's 'the manifest is unchanged'. The empty perf-work table (header only, no rows) is consistent with 'Performance work? no' and declares no step."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

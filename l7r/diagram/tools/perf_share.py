@@ -68,13 +68,15 @@ def share(path: str, module: str, top: int = TOP) -> list[str]:
     return lines
 
 
-def kept(stage: str, seed: int, households: int, named: Sequence[str], raw_dir: str = perf_profile.RAW_DIR) -> str | None:
+def kept(stage: str, seed: int, households: int, named: Sequence[str], raw_dir: str | None = None) -> str | None:
     """The kept raw profile of `stage`: the named file for it (by its `-<stage>.prof` suffix), else the newest of this seed and
-    size; None where neither is kept. A profile whose name holds no size (before feature 438) is read only when named."""
+    size; None where neither is kept. A profile whose name holds no size (before feature 438) is read only when named.
+    `raw_dir` defaults to `perf_profile.RAW_DIR` as it stands at the call (a default bound at definition kept the real
+    `dev/perf-raw` under a test's patch, so the test failed on any clone holding kept profiles - feature 443)."""
     for path in named:
         if path.endswith(f"-{stage}.prof"):
             return path
-    found = sorted(glob.glob(os.path.join(raw_dir, f"*-seed{seed}-hh{households}-{stage}.prof")))
+    found = sorted(glob.glob(os.path.join(perf_profile.RAW_DIR if raw_dir is None else raw_dir, f"*-seed{seed}-hh{households}-{stage}.prof")))
     return found[-1] if found else None
 
 

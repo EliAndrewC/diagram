@@ -24,6 +24,7 @@ from typing import Any
 # module-init on the FIRST generate() of a process and not on later ones, and gencache keys a
 # map on which engine functions EXECUTED - so the dependency set became call-order dependent
 # and unchanged pool maps stopped hitting the cache. Caught by the pre-push gate, feature 127.
+from l7r.diagram import work_counts
 from l7r.diagram._invocation import guard
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.sitegen.jobs import default_jobs as default_jobs  # noqa: PLC0414 - explicit re-export so `hamletgen.default_jobs` still resolves under --strict
@@ -299,11 +300,18 @@ def _run_stages(s: Settlement, plan: SitePlan) -> None:
     Research:
         its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (profile print threshold, in seconds)
     """
+    if __debug__:
+        work_counts.reset()  # the roll's counted work, by stage (feature 443, D3): dropped under `python -O`
+    before: dict[str, int] = {}
     if not os.environ.get(STAGE_PROFILE_ENV):
         with roll_scope(plan.spec):
             for stage in STAGES:
+                if __debug__:
+                    before = dict(work_counts.OPS)
                 stage(s, plan)
                 s.standing.resync()  # a record a stage reshaped in place is recorded again (the registry's backstop, feature 287 M8)
+                if __debug__:
+                    work_counts.BY_STAGE[stage.__name__.replace("stage_", "")] = {k: n - before.get(k, 0) for k, n in work_counts.OPS.items() if n != before.get(k, 0)}
         return
     # WHERE THE TIME WENT, in one roll (feature 151, US4). Finding the slow stage used to mean editing
     # this loop by hand, rolling, reading, and reverting - done twice in one session before this existed,

@@ -12,6 +12,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
+from ...work_counts import OPS
 from .base import Poly, Pt
 
 FIELD_KEEPOUT_EPS = (
@@ -30,6 +31,8 @@ def _signed_area(poly: Poly) -> float:
 
 
 def point_in_poly(px: float, py: float, poly: Poly) -> bool:
+    if __debug__:
+        OPS["pt_test@point_in_poly"] += 1  # the counted work (feature 443): dropped under `python -O`
     inside = False
     n = len(poly)
     j = n - 1
@@ -48,6 +51,8 @@ def points_in_poly(pts: Any, poly: Poly) -> Any:
     import numpy as np  # bound here, not at import (feature 237: the engine loads no heavy library at import time)
 
     P = np.asarray(pts, dtype=float).reshape(-1, 2)
+    if __debug__:
+        OPS["pt_test@points_in_poly"] += len(P)
     px, py = P[:, 0], P[:, 1]
     inside = np.zeros(len(P), dtype=bool)
     for i in range(len(poly)):
@@ -57,6 +62,8 @@ def points_in_poly(pts: Any, poly: Poly) -> Any:
 
 
 def seg_closest(px: float, py: float, a: Pt, b: Pt) -> Pt:
+    if __debug__:
+        OPS["dist@seg_closest"] += 1  # `seg_dist`'s too: it is this projection
     ax, ay, bx, by = a[0], a[1], b[0], b[1]
     dx, dy = bx - ax, by - ay
     if dx == dy == 0:
@@ -78,6 +85,8 @@ def seg_dists(pts: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]]) -> Any:
 
     P = np.asarray(pts, dtype=float).reshape(-1, 2)
     S = np.asarray(segs, dtype=float).reshape(-1, 2, 2)
+    if __debug__:
+        OPS["dist@seg_dists"] += len(P) * len(S)
     A, D = S[:, 0, :], S[:, 1, :] - S[:, 0, :]
     dd = (D * D).sum(axis=1)
     rel = P[:, None, :] - A[None, :, :]
@@ -105,6 +114,8 @@ def ring_meets_ellipse(ring: Sequence[Sequence[float]], cx: float, cy: float, rx
     edge's closest approach to the center, measured in the scaled space where the ellipse is the unit circle. A ring
     that only TOUCHES the rim (closest approach exactly 1) does not meet it."""
     n = len(ring)
+    if __debug__:
+        OPS["seg_test@ring_meets_ellipse"] += n
     for i in range(n):
         ax, ay = (float(ring[i][0]) - cx) / rx, (float(ring[i][1]) - cy) / ry
         bx, by = (float(ring[(i + 1) % n][0]) - cx) / rx, (float(ring[(i + 1) % n][1]) - cy) / ry
@@ -127,6 +138,9 @@ def ring_touches(cx: float, cy: float, r: float, ring: Poly) -> bool:
 
 
 def segments_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> bool:
+    if __debug__:
+        OPS["seg_test@segments_cross"] += 1
+
     def ccw(p: Pt, q: Pt, r: Pt) -> bool:
         return (r[1] - p[1]) * (q[0] - p[0]) > (q[1] - p[1]) * (r[0] - p[0])
 
@@ -143,6 +157,8 @@ def seg_intersect(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
     candidate paths scored 3,847 to 8,773 "violations" with no real crossing among them), a cluster's way-crossing
     finder and its spur trim met ways that never touched, and a homestead's brook-cut test counted a brook it did not
     cross. A caller that checked `segments_cross` first gets the same point as before."""
+    if __debug__:
+        OPS["seg_test@seg_intersect"] += 1
     den = (a[0] - b[0]) * (c[1] - d[1]) - (a[1] - b[1]) * (c[0] - d[0])
     if abs(den) < 1e-9:
         return None
@@ -441,6 +457,8 @@ def chain_violated(px: float, py: float, chains: Sequence[Sequence[Chord]], gap:
     the distance to the end counts (the next chord, if any, projects it)."""
     for chain in chains:
         for (ax, ay), (bx, by), (nx, ny) in chain:
+            if __debug__:
+                OPS["seg_test@chain_violated"] += 1
             ex, ey = bx - ax, by - ay
             el2 = ex * ex + ey * ey
             if el2 <= 1e-12:
@@ -469,6 +487,8 @@ def chain_violated_many(xs: Any, ys: Any, chains: Sequence[Sequence[Chord]], gap
     bad = np.zeros(xs.shape, dtype=bool)
     for chain in chains:
         for (ax, ay), (bx, by), (nx, ny) in chain:
+            if __debug__:
+                OPS["seg_test@chain_violated_many"] += xs.size
             ex, ey = bx - ax, by - ay
             el2 = ex * ex + ey * ey
             if el2 <= 1e-12:

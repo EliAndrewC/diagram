@@ -149,10 +149,291 @@ the same `.py` patterns; it fails on any whose key has no row, naming the row to
 
 ## Task approaches
 
-The tasks, in landing order: T01 the counters and their attribution (D1-D3); T02 `make work-budget`, the standing record with
+The tasks, in landing order: T01 the shared counters and their attribution (D1, D3, D2's shared sites); T09-T12 the stages'
+candidate loops by family (D2) - the families are the whole of `STAGES`, every stage in exactly one: the 23 stages listed on
+2026-10-28 by `grep -n "STAGES = (" -A60 l7r/diagram/hamletgen/driver.py`, T09 six (water_frame, field, sink, waterward,
+pond_stock, pond_bank), T10 seven (seat, homesteads, appurtenances, burial, lane_wells, sties, washing), T11 three (track, web,
+crossings), T12 seven (hinterland, woodland, windbreak, bamboo, frame, notice, labels); a stage added to `STAGES` later joins a
+family before its counters land; T02 `make work-budget`, the standing record with
 today's figures, and `make counters-inert` (D4, D5); T03 the budget table, `budget-set`, `budget-change` and its hook (D6);
 T04 the ratchet and the record in view (D7, D8); T05 the agent, its rubric, bundles and fixtures (D9-D11); T06 the phase
 checklist and its landing check (D12); T07 the Rust-tooling inventory and its check (D13); T08 the docs and the closing report.
+
+### T01 (the design's section 1: counted work that survives a port; FR-001, FR-002)
+
+- **Approach**: `work_counts.py` (a `defaultdict(int)`, its `__missing__` in C), the one-line `if __debug__:` increments of D1-D2's shared sites and `driver._run_stages`' per-stage copy (D3). Measured: `make perf-fanout SEED=25` total calls before and after (SC-001: within one call in a thousand), `make perf-ab A=<443-start commit>` quick form for the overhead, `make counters-inert`'s two rolls compared by hand until T02 builds it.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T01 Approach (checklist part A)
+
+1. **The goal, in the world.** every basic operation the shared geometry and the registry do is counted, by stage, by kind and by function, and a run under `-O` counts nothing.
+2. **The constraints.** FR-001, FR-002; D1-D3; no Python call added (the push's call guard, feature 427 T03).
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`); O: the 443-start bookend and the loop survey (`dev/perf-log/20261028T044837Z-443-start-diagram-backlog.json`, `20261028T045040Z-fanout-443-loops.txt`).
+4. **Do they describe the world here?** the counts are read on the reference roll against a hand count of one primitive's calls from the profile (`make perf-profile`).
+5. **The order.** first of the feature; before T09-T12, whose increments use its module.
+6. **The exits.** Green: the calls unmoved, a manifest identical with and without `-O`, the counts printed per stage. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** `make perf-fanout` before and after, the A/B recorded in `research/overhead.md`.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+
+### T09 (the walk of the water and fields stages: plan D2, the round arbiter's ruling on ask:443-plan-round-3)
+
+- **Approach**: for water_frame, field, sink, waterward, pond_stock, pond_bank: the scan's loops in `research/candidate-loops.md` filtered by hand - `water/brook*.py`, `water/polder.py` read by hand (listed from the scan only) - and each loop that tries a site given `if __debug__: OPS["candidate@<function>"] += <n>` (n = 1 per iteration; `len(cands)` before a comprehension, `sorted` or `min` over a list; a short-circuiting `next`/first-admitted search counted inside the predicate it calls, keyed with that predicate). The filtered list and the excluded loops, with why, are written into the research file's section for the family.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** every candidate the water and fields stages try is counted, so today's candidates per thing placed is a measured figure.
+2. **The constraints.** FR-001; D2 as the arbiter's ruling reads it: the walk is the source, the fanout a cross-check, a stage 'none' only by the walk.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`); R: `research/candidate-loops.md`; O: the loop survey.
+4. **Do they describe the world here?** each family's candidate counts read against its stages' things placed on the reference roll; a stage with calls large against its counts is re-read.
+5. **The order.** after T01; the families in any order, each its own landing.
+6. **The exits.** Green: every listed loop counted, the calls unmoved (one in a thousand), `make cohort-landing` unregressed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing; the claims round's triage as a `check-wave`.
+9. **Done, measured.** the family's section of `research/candidate-loops.md` complete and its counts printed per stage
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+
+### T10 (the walk of the homesteads family: plan D2, the round arbiter's ruling on ask:443-plan-round-3)
+
+- **Approach**: for seat, homesteads, appurtenances, burial, lane_wells, sties, washing: the scan's loops in `research/candidate-loops.md` filtered by hand - the getattr-dispatched `_seat_region`, `_free_ground`, `_access`, `_site_corridors` and `homesteads/stages.py` read by hand - and each loop that tries a site given `if __debug__: OPS["candidate@<function>"] += <n>` (n = 1 per iteration; `len(cands)` before a comprehension, `sorted` or `min` over a list; a short-circuiting `next`/first-admitted search counted inside the predicate it calls, keyed with that predicate). The filtered list and the excluded loops, with why, are written into the research file's section for the family.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T10 Approach (checklist part A)
+
+1. **The goal, in the world.** every candidate the homesteads family try is counted, so today's candidates per thing placed is a measured figure.
+2. **The constraints.** FR-001; D2 as the arbiter's ruling reads it: the walk is the source, the fanout a cross-check, a stage 'none' only by the walk.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`); R: `research/candidate-loops.md`; O: the loop survey.
+4. **Do they describe the world here?** each family's candidate counts read against its stages' things placed on the reference roll; a stage with calls large against its counts is re-read.
+5. **The order.** after T01; the families in any order, each its own landing.
+6. **The exits.** Green: every listed loop counted, the calls unmoved (one in a thousand), `make cohort-landing` unregressed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing; the claims round's triage as a `check-wave`.
+9. **Done, measured.** the family's section of `research/candidate-loops.md` complete and its counts printed per stage
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+
+### T11 (the walk of the ways: plan D2, the round arbiter's ruling on ask:443-plan-round-3)
+
+- **Approach**: for track, web, crossings: the scan's loops in `research/candidate-loops.md` filtered by hand - the cross-check's misses (`gap_ways.py` `way_out`, `trace`; `meet.py` `near_misses`, `web_lines`) read and listed as misses of the walk; the scanned `ways/` loops (the scan of 2026-10-28, `research/candidate-loops.md`) sorted into trials and measurements - and each loop that tries a site given `if __debug__: OPS["candidate@<function>"] += <n>` (n = 1 per iteration; `len(cands)` before a comprehension, `sorted` or `min` over a list; a short-circuiting `next`/first-admitted search counted inside the predicate it calls, keyed with that predicate). The filtered list and the excluded loops, with why, are written into the research file's section for the family.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T11 Approach (checklist part A)
+
+1. **The goal, in the world.** every candidate the ways try is counted, so today's candidates per thing placed is a measured figure.
+2. **The constraints.** FR-001; D2 as the arbiter's ruling reads it: the walk is the source, the fanout a cross-check, a stage 'none' only by the walk.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`); R: `research/candidate-loops.md`; O: the loop survey.
+4. **Do they describe the world here?** each family's candidate counts read against its stages' things placed on the reference roll; a stage with calls large against its counts is re-read.
+5. **The order.** after T01; the families in any order, each its own landing.
+6. **The exits.** Green: every listed loop counted, the calls unmoved (one in a thousand), `make cohort-landing` unregressed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing; the claims round's triage as a `check-wave`.
+9. **Done, measured.** the family's section of `research/candidate-loops.md` complete and its counts printed per stage
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+
+### T12 (the walk of ground cover, the frame, the notice board and the labels: plan D2, the round arbiter's ruling on ask:443-plan-round-3)
+
+- **Approach**: for hinterland, woodland, windbreak, bamboo, frame, notice, labels: the scan's loops in `research/candidate-loops.md` filtered by hand - `hinterland/parcels/*`, `groves.py`, `grove_fill.py`, `labels/*` read by hand - and each loop that tries a site given `if __debug__: OPS["candidate@<function>"] += <n>` (n = 1 per iteration; `len(cands)` before a comprehension, `sorted` or `min` over a list; a short-circuiting `next`/first-admitted search counted inside the predicate it calls, keyed with that predicate). The filtered list and the excluded loops, with why, are written into the research file's section for the family.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T12 Approach (checklist part A)
+
+1. **The goal, in the world.** every candidate ground cover, the frame, the notice board and the labels try is counted, so today's candidates per thing placed is a measured figure.
+2. **The constraints.** FR-001; D2 as the arbiter's ruling reads it: the walk is the source, the fanout a cross-check, a stage 'none' only by the walk.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`); R: `research/candidate-loops.md`; O: the loop survey.
+4. **Do they describe the world here?** each family's candidate counts read against its stages' things placed on the reference roll; a stage with calls large against its counts is re-read.
+5. **The order.** after T01; the families in any order, each its own landing.
+6. **The exits.** Green: every listed loop counted, the calls unmoved (one in a thousand), `make cohort-landing` unregressed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing; the claims round's triage as a `check-wave`.
+9. **Done, measured.** the family's section of `research/candidate-loops.md` complete and its counts printed per stage
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+
+### T02 (FR-003, FR-004: today's figures for every stage, and the counters inert)
+
+- **Approach**: `tools/work_budget.py` (D4) and `make counters-inert` (D5); `dev/work-budget.md` generated with today's figures at 10, 20, 40 and 80 households.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T02 Approach (checklist part A)
+
+1. **The goal, in the world.** the distance between today's work and a budget is on record for every stage.
+2. **The constraints.** FR-003, FR-004, SC-001, SC-002, SC-004; D4, D5.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`)
+4. **Do they describe the world here?** the record's per-stage figures read against `make perf-fanout`'s calls for the same rolls.
+5. **The order.** after T01 and T09-T12.
+6. **The exits.** Green: `make work-budget` writes the record; `make counters-inert` passes and refuses a stub counter that writes the manifest. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** `dev/work-budget.md` committed with every stage at four sizes.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+
+### T03 (FR-005: budgets change only with the GM's words)
+
+- **Approach**: `dev/work-budget.json`, `scripts/budget_change.py` (`budget-set`, `budget-change`, `budget-program`), `budget-change-hooks.sh` checking WORDS with `hm_approval` (D6); the table a guard file.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T03 Approach (checklist part A)
+
+1. **The goal, in the world.** no budget is set without a SOUND derivation, and none raised without the GM's own words.
+2. **The constraints.** FR-005, SC-003; D6.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`)
+4. **Do they describe the world here?** the hook's test feeds a transcript with and without the words.
+5. **The order.** after T02.
+6. **The exits.** Green: the refusals and passes of SC-003 in tests, the hook in `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** SC-003's tests green; the hook proven to fire with it deleted.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+
+### T04 (FR-006, FR-007: the budget held at the push and in view)
+
+- **Approach**: `make work-budget-review` beside `make perf-review` in `sync-with-main.sh` (D7, seam `CI_WORK_BUDGET_REVIEW`); `land.py` and `speckit-todo.py` print the record (D8).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** an accepted phase cannot grow back past its figure unnoticed, and every landing shows the distance from the goal.
+2. **The constraints.** FR-006, FR-007, SC-003, SC-004; D7, D8.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`)
+4. **Do they describe the world here?** `sync-with-main.sh`'s fixture tests drive the seam.
+5. **The order.** after T03.
+6. **The exits.** Green: the review refuses over an accepted figure or a budget and passes under both; the record printed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** the sync suite's new cases green.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+
+### T05 (FR-008, FR-009: the adversarial check of the arithmetic)
+
+- **Approach**: `.claude/agents/work-budget.md`, `docs/work-budget-rubric.md` (the homestead reference worked out, S7), `scripts/reviews/work_budget_bundle.py` (D9, D10), the two fixtures dispatched once and their rulings recorded (D11).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T05 Approach (checklist part A)
+
+1. **The goal, in the world.** a budget is set only after an independent reviewer, blind to today's code and counts, found its arithmetic derived.
+2. **The constraints.** FR-008, FR-009, SC-005; D9-D11.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`); O: trial 439's funnel (`specs/439-fewer-envelope-probes/research/funnel.md`).
+4. **Do they describe the world here?** the funnel fixture's derivation is checked against trial 439's funnel, measured 2026-10-27 (a counting spike, `specs/439-fewer-envelope-probes/research/funnel.md`).
+5. **The order.** after T02 (the audit bundle reads its runs).
+6. **The exits.** Green: the funnel ruled LOOSE or OVER and the grid placer SOUND or WITHIN, held by a test; a budget bundle with engine code refused. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing and two dispatches.
+9. **Done, measured.** the two rulings recorded and the test green.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+
+### T06 (FR-010: the phase checklist held at landing)
+
+- **Approach**: `.specify/templates/phase-checklist.md` and the refusal in `land.py`'s cheap refusals (D12).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** no phase of 444 lands with a box of its checklist missing.
+2. **The constraints.** FR-010, SC-006; D12.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`)
+4. **Do they describe the world here?** the land tests' fixtures.
+5. **The order.** any time after T01.
+6. **The exits.** Green: the three refusals of SC-006 and a pass. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** SC-006's tests green.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+
+### T07 (FR-011: no Python-only check forgotten)
+
+- **Approach**: `dev/rust-tooling.md` (section 7's table, a key per row) and `scripts/gates/check-rust-tooling.py` in `make hooks-test` (D13).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** every check that reads Python has its row saying what happens to it under Rust.
+2. **The constraints.** FR-011, SC-007; D13.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`)
+4. **Do they describe the world here?** the check run on the real tree finds `scripts/gates/check-file-scale.py` (the arbiter's note).
+5. **The order.** any time after T01.
+6. **The exits.** Green: the check fails on each scratch reader kind with no row and passes on the tree. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** SC-007's tests green.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+
+### T08 (FR-012: every guard on record, and the feature closed)
+
+- **Approach**: `docs/guards.md`, `docs/reviews.md`, each target's help; each guard deleted and its test seen red; `make perf LABEL=443-end`; `make feature-report F=443 WRITE=1`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** every refusal this feature added is documented, tested and proven.
+2. **The constraints.** FR-012, SC-008.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`)
+4. **Do they describe the world here?** each guard's deletion run once.
+5. **The order.** last.
+6. **The exits.** Green: every guard red with it deleted; the report written. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** the report and the docs.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
 
 ## Project Structure
 

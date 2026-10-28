@@ -15,6 +15,7 @@ Research: spatial indexes - NONE: prefilters that prune, the caller's test decid
 from collections.abc import Callable
 from typing import Any, SupportsIndex, cast
 
+from ...work_counts import OPS
 from .base import Poly, Pt
 from .primitives import edge_dist, point_in_poly, seg_dist, segments_cross
 
@@ -281,13 +282,20 @@ class PointGrid:
         i0, j0 = int((px - pad) // c), int((py - pad) // c)
         i1, j1 = int((px + pad) // c), int((py + pad) // c)
         if i0 == i1 and j0 == j1 and not self.oversized:  # the common case - one cell, no copy
-            return self.buckets.get((i0, j0)) or ()
+            one = self.buckets.get((i0, j0)) or ()
+            if __debug__:  # the counted work (feature 443): one query, and the entries it hands back to be examined
+                OPS["index_query@PointGrid.near"] += 1
+                OPS["index_examined@PointGrid.near"] += len(one)
+            return one
         out: list[Any] = list(self.oversized)
         for i in range(i0, i1 + 1):
             for j in range(j0, j1 + 1):
                 bucket = self.buckets.get((i, j))
                 if bucket:
                     out.extend(bucket)
+        if __debug__:
+            OPS["index_query@PointGrid.near"] += 1
+            OPS["index_examined@PointGrid.near"] += len(out)
         return out
 
 
@@ -464,7 +472,11 @@ class RingIndex:
         if not (self.x0 <= px <= self.x1 and self.y0 <= py <= self.y1):
             return False
         inside = False
-        for xi, yi, xj, yj in self.rows.get(int(py // self.cell), ()):
+        row = self.rows.get(int(py // self.cell), ())
+        if __debug__:
+            OPS["index_query@RingIndex.inside"] += 1
+            OPS["index_examined@RingIndex.inside"] += len(row)
+        for xi, yi, xj, yj in row:
             if ((yi > py) != (yj > py)) and (px < (xj - xi) * (py - yi) / (yj - yi + 1e-9) + xi):
                 inside = not inside
         return inside
@@ -483,6 +495,8 @@ class RingIndex:
         from shapely.geometry import Polygon
 
         xs, ys = np.asarray(xs, dtype=float), np.asarray(ys, dtype=float)
+        if __debug__:
+            OPS["index_query@RingIndex.inside_many"] += len(xs)
         out = np.zeros(len(xs), dtype=bool)
         inbox = (xs >= self.x0) & (xs <= self.x1) & (ys >= self.y0) & (ys <= self.y1)
         if self._shapes is None:  # ...built once an index, not once a call (feature 427 T08: the gap fill asks a column at a time)
@@ -507,6 +521,8 @@ class RingIndex:
             xi, yi = ring[:, 0][None, :], ring[:, 1][None, :]
             xj, yj = np.roll(ring[:, 0], -1)[None, :], np.roll(ring[:, 1], -1)[None, :]  # each edge as `inside` files it: i to i + 1
             px, py = xs[idx][:, None], ys[idx][:, None]
+            if __debug__:
+                OPS["index_examined@RingIndex.inside_many"] += len(idx) * len(self.ring)
             with np.errstate(divide="ignore", invalid="ignore"):
                 cross = ((yi > py) != (yj > py)) & (px < (xj - xi) * (py - yi) / (yj - yi + 1e-9) + xi)
             out[idx] = cross.sum(axis=1) % 2 == 1
