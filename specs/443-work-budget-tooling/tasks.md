@@ -22,8 +22,9 @@
 - [x] T05 The `work-budget` agent, `docs/work-budget-rubric.md`, `make work-budget-bundle MODE=budget|audit`, the two fixtures dispatched and their rulings held by a test (D9-D11; FR-008, FR-009, SC-005)
       research: rendering
       verify: DONE. landed: landed: the work-budget agent and rubric, make work-budget-bundle (MODE BUDGET refuses code and today's counts, red with the refusal deleted), the ledger check; FR-009 held by the typed agent's rulings - the funnel OVER (MODE AUDIT against the rubric's reference; MODE 1 ruled UNDERIVED's acceptance NOT LEGITIMATE), the grid placer SOUND at round 4 (the arbiter's continues on rounds 3 and 4). Departure from D9: work-budget is not added to the WAVE JOBS list - that list is the GM's authorization and a new fan-out is his to grant
-- [ ] T06 `.specify/templates/phase-checklist.md` and `make land`'s refusal of a feature-444 `phase:` task with its checklist absent, short or unticked (D12; FR-010, SC-006)
+- [x] T06 `.specify/templates/phase-checklist.md` and `make land`'s refusal of a feature-444 `phase:` task with its checklist absent, short or unticked (D12; FR-010, SC-006)
       research: rendering
+      verify: DONE. landed: landed: the phase checklist template (eight boxes) and land's refusal of a 444 phase task with its checklist absent, short or unticked, asked among the cheap refusals; red with the call and with each condition deleted
 - [ ] T07 `dev/rust-tooling.md` and `make rust-tooling` in `make hooks-test`, over every tracked file and the Makefile's recipes (D13; FR-011, SC-007)
       research: rendering
 - [ ] T08 `docs/guards.md`, `docs/reviews.md` and each target's help name every change; each guard proven to fire with it deleted; the 443-end bookend; `make feature-report F=443 WRITE=1` (FR-012, SC-008)
