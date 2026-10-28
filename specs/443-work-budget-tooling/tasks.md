@@ -13,8 +13,9 @@
 - [x] T02 (after T09-T12) `make work-budget` and the standing record `dev/work-budget.md` with today's figures for every stage at 10, 20, 40 and 80 households; `make counters-inert` in `make done` (D4, D5; FR-003, FR-004, SC-001, SC-002, SC-004)
       research: rendering
       verify: DONE. landed: make work-budget writes the standing record (dev/work-budget.md, every stage at 10/20/40/80, research/first-record.md: no roll at 80, the hinterland 77% of the counted work); make counters-inert passes on seed 25 and runs in make done
-- [ ] T03 The budget table `dev/work-budget.json`, `make budget-set` and `make budget-change`, the WORDS hook `budget-change-hooks.sh`, the table a guard file (D6; FR-005, SC-003)
+- [x] T03 The budget table `dev/work-budget.json`, `make budget-set` and `make budget-change`, the WORDS hook `budget-change-hooks.sh`, the table a guard file (D6; FR-005, SC-003)
       research: rendering
+      verify: DONE. landed: landed: dev/work-budget.json (every STAGES stage, unbudgeted; a guard file), scripts/budget_change.py (budget-set from a SOUND verdict only; budget-change and budget-program need WORDS and are logged in dev/work-budget-changes.jsonl), budget-change-hooks.sh checking WORDS against the GM's messages; each refusal red with its condition deleted
 - [ ] T04 The ratchet `make work-budget-review` in the push, and the standing record printed by `make land` and `make speckit-todo` (D7, D8; FR-006, FR-007, SC-003, SC-004)
       research: rendering
 - [ ] T05 The `work-budget` agent, `docs/work-budget-rubric.md`, `make work-budget-bundle MODE=budget|audit`, the two fixtures dispatched and their rulings held by a test (D9-D11; FR-008, FR-009, SC-005)

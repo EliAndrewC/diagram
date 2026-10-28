@@ -165,29 +165,7 @@ checklist and its landing check (D12); T07 the Rust-tooling inventory and its ch
 <!-- plan-archive: T11 to T11 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 <!-- plan-archive: T12 to T12 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
-### T03 (FR-005: budgets change only with the GM's words)
-
-- **Approach**: `dev/work-budget.json`, `scripts/budget_change.py` (`budget-set`, `budget-change`, `budget-program`), `budget-change-hooks.sh` checking WORDS with `hm_approval` (D6); the table a guard file.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T03 Approach (checklist part A)
-
-1. **The goal, in the world.** no budget is set without a SOUND derivation, and none raised without the GM's own words.
-2. **The constraints.** FR-005, SC-003; D6.
-3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`)
-4. **Do they describe the world here?** the hook's test feeds a transcript with and without the words.
-5. **The order.** after T02.
-6. **The exits.** Green: the refusals and passes of SC-003 in tests, the hook in `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing.
-9. **Done, measured.** SC-003's tests green; the hook proven to fire with it deleted.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
-
+<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 ### T04 (FR-006, FR-007: the budget held at the push and in view)
 
 - **Approach**: `make work-budget-review` beside `make perf-review` in `sync-with-main.sh` (D7, seam `CI_WORK_BUDGET_REVIEW`); `land.py` and `speckit-todo.py` print the record (D8).
