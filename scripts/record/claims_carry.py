@@ -249,15 +249,19 @@ def gate(cx: Any, root: Path) -> tuple[list[str], list[str]]:  # noqa: ANN401 - 
         # of `make claims-report`; no carry is filed and no known drift recorded (`carry` refuses, `record_known` finds none)
         return refuse, flagged + [f"pre-existing: {x}" for x in pre] + warn
     # ...AND AT CLEAN, "every time a feature lands, there are no open claims": every finding the report lists refuses too
-    index = cx.load_index(root / cx.INDEX)
-    rows = cx.live_rows(cx.current(root), index)
     named = {_key_of(x) for x in intro} | {k for k, _line in carried} | {_key_of(x) for x in revealed}  # each finding refused once
-    listed = [
-        f"open ({v}): {k} - {note[:160]} - fix it or its claim here: `make claims-bundle UNITS=\"{k}\"`"
-        for v, k, note in cx.open_findings(rows, cx.load_deferred(root / cx.DEFERRED))
-        if k not in named or k in done
-    ]
+    listed = [line for k, line in open_lines(cx, root) if k not in named or k in done]
     return refuse + flagged + listed, [f"pre-existing: {x}" for x in pre] + warn
+
+
+def open_lines(cx: Any, root: Path) -> list[tuple[str, str]]:  # noqa: ANN401 - `cx` is the claims module
+    """(key, refusal) for every open finding `make claims-report` lists (`cx.open_findings`, the DEFERRED left out): what the
+    gate refuses at `clean` (feature 445, D3)."""
+    rows = cx.live_rows(cx.current(root), cx.load_index(root / cx.INDEX))
+    return [
+        (k, f"open ({v}): {k} - {note[:160]} - fix it or its claim here: `make claims-bundle UNITS=\"{k}\"`")
+        for v, k, note in cx.open_findings(rows, cx.load_deferred(root / cx.DEFERRED))
+    ]
 
 
 #: the kind of a gm-review.jsonl row that records an admitted known drift (feature 430 D6)

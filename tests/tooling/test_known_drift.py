@@ -133,6 +133,9 @@ def _gate_with_one_known(tmp: pathlib.Path, monkeypatch) -> None:  # noqa: ANN00
 
 
 def test_a_known_drift_unrecorded_refuses_with_the_command_and_recorded_it_warns(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    # the claims switch at `clean`, today's gate (feature 445); its open-finding listing is the report's, which the stub cannot serve
+    monkeypatch.setattr(carry, "claims_mode", lambda root: "clean")
+    monkeypatch.setattr(carry, "open_lines", lambda cx, root: [])
     """Feature 430 T06 (D6; proposal 6, approved by the GM 2026-10-26): a known departure lands with no arbiter round, recorded and
     listed for the GM - `make claims-known` writes the row into its task's feature's gm-review.jsonl, and `make gm-review` lists it."""
     _gate_with_one_known(tmp_path, monkeypatch)

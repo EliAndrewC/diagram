@@ -45,6 +45,7 @@ CARRIED = {
         "**Room before packing**": "NOT: a rule for the engine's placement work (the GM, 2026-10-12), which a page session never does",
         "Whether a finding APPLIES to a case": "NOT: a rule for what reaches the GM (escalation-check), and a page session asks him nothing",
         "A `GUESS`, `UNRESEARCHED` or `CONVENTION` value": "NOT: a rule for the engine's fixing work (feature 417 T28), which a page session never does",
+        "**The claims switch is at `report`**": "NOT: a rule for what the claims gate refuses at a landing (feature 445), and a page session lands no engine code",
     },
 }
 
