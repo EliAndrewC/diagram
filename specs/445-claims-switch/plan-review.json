@@ -1,0 +1,132 @@
+{
+ "feature": "445-claims-switch",
+ "blocks": {
+  "preamble": {
+   "sha256": "8cac5724e771f26a7bec839dc5665a523c52d8a350a541057b314c685a2a878c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "fa5a4091dbf11c40341b8f0e61d318d908af0a4a2152a57810f8f7e28e200c2c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "5a28fe224da295444ca2b255a31af96424a1fd17f384d55c4fc66125ca875d08",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "37866b1fac31f417797ec9bda093e88204e45073a5b76a712bfab5e0d20386ce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "67c9732985016f15cab731f6318a078e7a821defaa1e33976f9266bc336ebdaf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "eaeb62c8e1d7b08556cc8e6b9e4f736fb4ad5e54332069f26fe106997977291f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Task approaches": {
+   "sha256": "8780f07818faaf6e6b6e4c661d00b7d0c6f757491b92e43ab14e7c769733bf57",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "213ee867b5a101f7424eb8eba7bb2465dae06035271b5ba30e38ef1ecd5e8cc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "claims axis in switches.py, CLAIMS_STATES (report, clean), default report; malformed claims entry closes to clean; write keeps the axis it is not setting; make claims-report-only / claims-clean REASON= through _switch, which commits; ships at report with the GM's words",
+     "class": "within",
+     "why": "FR-001 and FR-004 as written (GM: 'building the check that we want, but then disabling it'). The write fix is required for FR-001's one tracked file holding both axes; it adds no behavior the request did not ask for."
+    },
+    {
+     "id": "D2-reader",
+     "summary": "scripts/record/claims_carry.py reads the switch through its own stdlib reader claims_mode(root), default report, malformed -> clean",
+     "class": "within",
+     "why": "Implementation choice; same default and same fail-closed direction as D1 and FR-001, so it narrows nothing."
+    },
+    {
+     "id": "D2-gate",
+     "summary": "At report the gate refuses only owed claims and delta_form_problems; introduced, carried and known findings become warnings; record_known writes nothing; file_carries returns at once; land.py's claims route and wait unchanged",
+     "class": "within",
+     "why": "FR-002 verbatim; carries the GM's 'ignore claims so long as they are properly marked and show up in the claims report'."
+    },
+    {
+     "id": "D2-carry-refusal",
+     "summary": "make claims-carry REFUSES at report with a message naming the switch, where FR-002 says it 'says the switch is at report'",
+     "class": "within",
+     "why": "A carry filed at report becomes a task holding a feature open - the 2026-10-17 option 3 the GM set aside - so refusing serves the request. It is a refusal added, so FR-006 (test proven to fire with it deleted) binds it; the Constitution Check's guard-doctrine line names only D3's refusal and is incomplete on that point, not a decision to skip the test."
+    },
+    {
+     "id": "D3",
+     "summary": "At clean the gate refuses as today (owed, introduced, unfiled carried, unrecorded known) plus every open finding the report lists (DRIFTED, NEEDS-RESEARCH, MISLABELED, UNCLAIMED, UNDECIDED, CANNOT-TELL), less DEFERRED, each naming make claims-bundle UNITS=",
+     "class": "within",
+     "why": "FR-003 plus FR-002's 'At clean both behave as today' (file_carries and record_known read the gate's refusals, so the gate must still present carried and known at clean). A superset of FR-003's base, not a narrowing; carries the GM's long-run 'no open claims' on landing. Seam for the implementer: FR-003 excepts DEFERRED findings; if today's unfiled-carried refusal fires on a DEFERRED carried finding, the clean gate would refuse what FR-003 excepts - SC-003's passing fixture should include one."
+    },
+    {
+     "id": "D3-open-findings",
+     "summary": "The report's selection lifted into open_findings(root), read by both the gate and make claims-report",
+     "class": "within",
+     "why": "Enforcement of FR-003 (the gate refuses exactly what the report lists)."
+    },
+    {
+     "id": "D4",
+     "summary": "405's status line opens 'Withdrawn 2026-10-28' with the ruling and evidence; phase-inputs.md lists T98, T101 under web, T104, T106 under homesteads, T111 under track, T165's notes under homesteads and lane_wells, each with its task text; 444's FR-001 derivation reads them as part of each stage's contract",
+     "class": "within",
+     "why": "FR-005 and the accepted recommendation ('move to 444 as inputs to their phases'); reading them as the stage's contract is what an input to a phase is."
+    },
+    {
+     "id": "D5",
+     "summary": "docs/guards.md claims-gate row, claims-gate.sh's message and root CLAUDE.md's claims line name the switch and its state",
+     "class": "within",
+     "why": "FR-006 as written."
+    },
+    {
+     "id": "bookends-complexity",
+     "summary": "No performance bookends (no code a roll runs changes); no complexity tracking; tooling only, no engine code",
+     "class": "within",
+     "why": "Nothing the request or spec asks for is dropped."
+    }
+   ]
+  }
+ ]
+}
