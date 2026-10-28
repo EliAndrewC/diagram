@@ -35,7 +35,7 @@
       verify: DONE. landed: water chains gone (R7, crosses_mid_run, keep_rows, drain_f); pool unchanged
 - [ ] T10 WITHDRAWN 2026-10-28 on the GM's approval of the work-budget design ("Thank you. I approve the design. Please proceed."; specs/444-work-budget-program/request.md): feature 444 rebuilds the web against its budget, which replaces this task. Was: US4, the lane web and the lane law, after feature 417's lane conversions (request.md 5): the web stage's pairwise chains (research/hotspots-pairwise.md), each at least tenfold down (FR-003, US4)
       research: rendering
-- [ ] T11 The 427-end bookend and the report: SC-002 and SC-003 measured against 427-start (FR-005), make feature-report F=427 WRITE=1
+- [ ] T11 MEASURED 2026-10-28, RED by its own exit (plan verdict CLEAR, T11-exits): the 427-end bookend shows SC-002 and SC-003 unmet (research/end-bookend.md: calls -42% at 20 households, -62% at 40; the web 5.3 s at 40), the report written (report.md); the feature is superseded by 444, whose whole-roll budget carries both goals, so the A/B and the re-run of 417's seeds were not taken. Was: The 427-end bookend and the report: SC-002 and SC-003 measured against 427-start (FR-005), make feature-report F=427 WRITE=1
       research: rendering
 - [x] T12 US4, R4 on its own: household_reach without laying four whole homesteads per candidate, the per-seat rolls kept (feature 297 R9), its chain at least tenfold down (FR-003, US4)
       research: rendering

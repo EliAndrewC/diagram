@@ -309,6 +309,10 @@ def belongs(p: dict[str, str], num: str, questions: set[str], repo: Path, transc
         subject = _unit_prompt(p, transcripts) or subject
     if re.search(rf"(?:feature |specs/|\b){num}-|feature {num}\b", subject):
         return True
+    # A SUBJECT IS LOGGED CUT AT 100 CHARACTERS: a prompt naming its feature after that (feature 443's MODE 2, "MODE 2:
+    # SPECIFICATION REVIEW. Clone: ... Request (the GM's words verba") stayed owed under every WRITE, so read the whole prompt
+    if len(subject) >= 100 and re.search(rf"(?:feature |specs/|\b){num}-|feature {num}\b", _unit_prompt(p, transcripts)):
+        return True
     if questions & set(re.findall(r"(?<![\d.])(\d{4})(?!\d)", subject)):
         return True
     # A CLAIMS ROUND'S PASS IS THE ACTIVE FEATURE'S (feature 405 T39, D13): its bundle is the clone's own (`make claims-bundle`,
