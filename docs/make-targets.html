@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 202 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 204 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -160,12 +160,14 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make claims-bundle</td><td class=a>MODULE OUT OWED PAGES REASON UNITS WITH</td><td>the bundle impl-drift reads, copied out of the repository - dispatch it on the MANIFEST printed</td></tr>
 <tr><td class=n>make claims-carry</td><td class=a>F KEYS RULING T</td><td>file every carried claims finding (a page edit&#x27;s, on unchanged code) as an open task of the active feature, so the push lands (feature 385 FR-013)</td></tr>
 <tr><td class=n>make claims-checked</td><td class=a>BUNDLE REPLY</td><td>record an impl-drift reply into the claims index, at the fingerprints its bundle read</td></tr>
+<tr><td class=n>make claims-clean</td><td class=a><div class=ad><span class=an>REASON=&lt;text&gt;</span><span class=aw>why claims go clean - recorded with who and when</span></div></td><td>CLAIMS CLEAN - a landing refuses while make claims-report lists any open finding, so a finding is fixed where it is noticed (feature 445)</td></tr>
 <tr><td class=n>make claims-coverage</td><td class=a>IN</td><td>every unit with no research claim, a malformed claim or a pointer to no question - the gate&#x27;s coverage test, narrowed   [IN=&lt;part of a file path&gt;]</td></tr>
 <tr><td class=n>make claims-known</td><td class=a>&ndash;</td><td>record every known drift (a DRIFTED claim naming the open task that fixes it) for the GM, in its task&#x27;s feature&#x27;s gm-review.jsonl, so the push lands it - make land runs it (feature 430 T06)</td></tr>
 <tr><td class=n>make claims-owed</td><td class=a>&ndash;</td><td>every research claim of the engine or the Mode A procedures owed an impl-drift check (no index row, or its code or cited research moved since), and why</td></tr>
 <tr><td class=n>make claims-refingerprint</td><td class=a>&ndash;</td><td>carry each claim&#x27;s index row to the fingerprint the star re-exports give, where its code is otherwise unchanged - run once, at the change (417 T54)</td></tr>
 <tr><td class=n>make claims-rekey</td><td class=a>&ndash;</td><td>carry each claim&#x27;s index row to the file its unit moved to with its code intact - a file split at the 1,000-line bar (405 T58); make land runs it</td></tr>
 <tr><td class=n>make claims-report</td><td class=a>ALL</td><td>the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim; DEFERRED findings are counted, not listed   [ALL=1 lists them]</td></tr>
+<tr><td class=n>make claims-report-only</td><td class=a><div class=ad><span class=an>REASON=&lt;text&gt;</span><span class=aw>why claims go to report - recorded with who and when</span></div></td><td>CLAIMS AT REPORT - a claims finding refuses no landing and files no task; it is checked and listed by make claims-report (feature 445; the shipped state)</td></tr>
 <tr><td class=n>make claims-triage</td><td class=a>OUT</td><td>the claims owed only a TRIAGE (a page they cite moved, the blocks they rest on stand): one bundle of the new or changed blocks for one agent   [OUT=&lt;dir&gt;]</td></tr>
 <tr><td class=n>make claims-triaged</td><td class=a>BUNDLE REPLY</td><td>record a triage reply: a claim it names (TOUCHES) is owed impl-drift, every other claim of the bundle is cleared</td></tr>
 <tr><td class=n>make commit-permitted</td><td class=a>&ndash;</td><td>commit the most recent bypass-log entry, which is how a paid FULL run is authorized</td></tr>
