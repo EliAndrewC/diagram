@@ -16265,17 +16265,12 @@
   "code": "9b67d9a805f2b9ed",
   "core": "53f02568ef2a6a94",
   "date": "2026-10-28",
-  "note": "the form is right: abs(ox)*env[2] + abs(oy)*env[3] + max(px(18), abs(oy)*px(39)) gives a north-south step of the envelope's depth plus 39 ft. Whether that is the page's 92 ft (\"a house (28 ft deep), its yard (about 26 ft) and 39 ft of sun\") depends on env[3], the depth `s._bundle_envelope(..., _house_max, shed=True)` returns, which the bundle does not carry. Need that function and the `_house_max` it is given, to see whether the depth is about 53-54 ft. The code comment's \"about 111 ft\" for the old summed step implies about 54 ft (111-18-39), but that is a comment, not code",
+  "note": "`_rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + max(...)` adds one `_bundle_envelope` depth, and that envelope is the union of all four garden sides' bundle boxes. The session measured that depth at 185.5-236.4 ft (seeds 4, 25, 39, 47), so a north-south step is 224.5-275.4 ft. The page's \"Rows are set 92 ft apart\" is \"a house (28 ft deep), its yard (about 26 ft) and 39 ft of sun\", so the code's ranks stand 2.4-3x the page's rows apart and the claim's \"so ranks ... stand as the page's rows 92 ft apart\" is false. Either the step should add house depth, yard and sun (about 93 ft) in place of the full envelope, or the claim should say the step is envelope-based and state how far it departs from §17.; a known drift accepted by the round arbiter (ask:443-T10-rank-step-carry) to land as filed",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
-  "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:1744d5d384a63127",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:3cf9dd5c14103b6d",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:d3e8abcab30e5886"
-  ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/homesteads/region.py::LaneGround#lane ground": {
   "code": "58f3ffbf079b2c9b",

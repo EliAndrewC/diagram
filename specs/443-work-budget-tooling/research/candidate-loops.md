@@ -353,3 +353,9 @@ of the homestead), `trace` (each join onto the laid ways tried) and `settlement/
 `offer`), raster builds (`_geom/region.cells`), or the ways' law and settle (`meet.near_misses`, `web_lines`,
 `ways/geom.push_clear_of_fabric`, `settle/shapes.fouled_segment`), which T11 walks. Python calls after T10 (the run's raw
 profiles): 10,591,824 at 40 households against 10,594,880 after T09 (-0.03%).
+
+**A measurement for T10's claims round** (2026-10-28, a one-off test calling `Settlement._bundle_envelope` at the canvas center
+with `_house_max` and `shed=True`, as `_seat_rank_rounds` does, on the reference spec's four seeds, ft/px 1.0): the envelope is
+244.1 x 196.4 ft (seed 4), 312.1 x 236.4 (25), 236.1 x 185.5 (39), 304.1 x 225.5 (47) - so a north-south step between ranks is
+the depth plus 39 ft, 224.5-275.4 ft, not the 92 ft (house, yard and sun) the claim "the step between ranks" says. The envelope
+is the union of the four garden sides' bundles, not one house and yard.
