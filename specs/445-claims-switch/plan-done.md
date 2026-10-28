@@ -48,25 +48,3 @@ Exits: green - `make speckit-todo` lists 405 closed and `phase-inputs.md` names 
 
 **Performance work?** no - tooling.
 
-<!-- plan-archive: archived 2026-10-28 -->
-### T04 - the docs and the report (D5)
-
-`docs/guards.md`, `claims-gate.sh`'s message and the root `CLAUDE.md` name the switch and its state; `make feature-report F=445
-WRITE=1`. Exits: green - the docs read the switch; red as T01.
-
-### T04 Approach (checklist part A)
-
-1. **The goal, in the world.** the switch and its state named where a session reads about the claims gate.
-2. **The constraints.** FR-006; D5.
-3. **Where each comes from.** G: the GM's ruling, 2026-10-28 (`request.md`).
-4. **Do they describe the world here?** the docs read after the change.
-5. **The order.** last.
-6. **The exits.** Green: the docs name the switch. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing.
-9. **Done, measured.** the feature report written.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-**Performance work?** no - tooling.
-
