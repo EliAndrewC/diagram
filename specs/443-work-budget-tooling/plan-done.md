@@ -296,3 +296,27 @@ and on where it lands: *"as long as it happens before the place where it would a
 
 **Performance work?** no - tooling.
 
+<!-- plan-archive: archived 2026-10-28 -->
+### T08 (FR-012: every guard on record, and the feature closed)
+
+- **Approach**: `docs/guards.md`, `docs/reviews.md`, each target's help; each guard deleted and its test seen red; `make perf LABEL=443-end`; `make feature-report F=443 WRITE=1`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** every refusal this feature added is documented, tested and proven.
+2. **The constraints.** FR-012, SC-008.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`)
+4. **Do they describe the world here?** each guard's deletion run once.
+5. **The order.** last.
+6. **The exits.** Green: every guard red with it deleted; the report written. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** the report and the docs.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+

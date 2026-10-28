@@ -28,8 +28,9 @@
 - [x] T07 `dev/rust-tooling.md` and `make rust-tooling` in `make hooks-test`, over every tracked file and the Makefile's recipes (D13; FR-011, SC-007)
       research: rendering
       verify: DONE. landed: landed: dev/rust-tooling.md with a row for each of the 43 readers and 14 make targets the check finds (check-file-scale.py among them), make rust-tooling in hooks-test, failing on a scratch reader of every D13 kind with no row; red with its condition deleted. The design's rule that every one-for-one, partial and rewritten row is proven on a Rust fixture before the first Rust phase lands is carried to 444's step 5 in the inventory's header
-- [ ] T08 `docs/guards.md`, `docs/reviews.md` and each target's help name every change; each guard proven to fire with it deleted; the 443-end bookend; `make feature-report F=443 WRITE=1` (FR-012, SC-008)
+- [x] T08 `docs/guards.md`, `docs/reviews.md` and each target's help name every change; each guard proven to fire with it deleted; the 443-end bookend; `make feature-report F=443 WRITE=1` (FR-012, SC-008)
       research: rendering
+      verify: DONE. landed: landed: docs/guards.md rows for each refusal 443 added (the budget hook and budget-set, the push ratchet, counters-inert, the bundle's refusals with the derivation form, the phase checklist, rust-tooling, land's tooling tests), each proven red with it deleted in its task; the root CLAUDE.md's work-budget line; the 443-end bookend; the feature report
 - [x] T09 The candidate-loop counters of the water and fields stages (water_frame, field, sink, waterward, pond_stock, pond_bank): the walk's loops filtered and hand-read, each loop that tries a site given its candidate@<function> increment, the excluded loops listed with why (D2; FR-001, research/candidate-loops.md)
       research: rendering
       verify: DONE. landed: the water and fields stages' candidate loops counted (research/candidate-loops.md, T09 section); Python calls +0.031% at 40 households; comb.py split at the 1,000-line bar
