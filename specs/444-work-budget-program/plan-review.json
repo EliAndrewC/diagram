@@ -43,18 +43,6 @@
    "reviewed": "2026-10-28",
    "declared": "round-arbiter"
   },
-  "### T01 - a budget counts the derivation's own items (D2)": {
-   "sha256": "61f86a976d0ca3608b4f7c34316e689a378f921f2515445b811e1b896b04bdb4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T01 Approach (checklist part A)": {
-   "sha256": "a4825ad678a8c78fa4e38e7f1384165e76c6f66c223ae873920460c66b32cdfe",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
   "### T02 - the water family's budgets (D1, D3, D4)": {
    "sha256": "16b848e1e0f9a5f4f247b52505c2ecd22912dfb9eed710e17db34587dc25fce2",
    "verdict": "CLEAR",
@@ -68,40 +56,40 @@
    "declared": "spec-fidelity"
   },
   "### T03 - the homesteads family's budgets (D1, D3, D4)": {
-   "sha256": "f644a1c79d1b8e3c6de3e957b520b6eec44d4d1a2faf1ca303c90fb409de43d8",
+   "sha256": "23aea34ced09e53c2e45d36ba8fada8fc116f19f00bd888ca80fb5b8652b6b60",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "round-arbiter"
   },
   "### T03 Approach (checklist part A)": {
    "sha256": "a5002517238d3eba77d58868a4d6a6d3c6d2df8e1976ef0c9fab6c6c55768e91",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T04 - the ways family's budgets (D1, D3, D4)": {
-   "sha256": "050538fca64803ed67c1fa77c17b70a82530ddcb14afd9b4eb7bed0b62603d06",
+   "sha256": "f5d1c586ff2026396ba673683c905532db6f7eecdda5b64482a503318f285f4f",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "round-arbiter"
   },
   "### T04 Approach (checklist part A)": {
    "sha256": "8b82aa6da59d4292bed5294f6ada8be4a952c24424468db0a20549c420a8175f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T05 - the hinterland and frame family's budgets (D1, D3, D4)": {
-   "sha256": "e4088dab6b6185096ce2bb4b079cdc13c5de740d197c2320738a75a7b923e01e",
+   "sha256": "32778d007272e478f866dbea033e7c4fadf9d7cbe3dbcaf80ea23317e0e33cbc",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "round-arbiter"
   },
   "### T05 Approach (checklist part A)": {
    "sha256": "915b0754af659b5a28dde68319e83b4d0c8dacaecab09ff05ac4cd3126bbb3b3",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T06 - the program's target to the GM (D5)": {
    "sha256": "a2b6b1390900884b665b24d543e127eab66a4ebb668c2350af1265ddc534c551",
@@ -122,20 +110,20 @@
    "declared": "round-arbiter"
   },
   "## Complexity Tracking": {
-   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "sha256": "4e0d718ded310667080e5928ed1d5dfae001108a490216b8aa2d9716c7ae39f1",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "round-arbiter"
   },
   "### T07 - a derivation's arithmetic and its index cells checked before any dispatch (the GM 2026-10-28)": {
-   "sha256": "2963e3c8550ce7cfd1cb046a344d9c0b7337b6f83341bfc231a89d4b8c493d6c",
-   "verdict": "BLOCKED",
+   "sha256": "721be817d006ab7dbbe2b8d8978efde5cb4ce71ba426103788faeeb300a02a5a",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "spec-fidelity"
   },
   "### T07 Approach (checklist part A)": {
-   "sha256": "f92105cda187dc947e76ff37f6deb36a594be06995fba0464b3240b62cd25515",
-   "verdict": "BLOCKED",
+   "sha256": "b0ea1a963e2ebc0bdafc0d387fcdbc69e89896952e52643f0d3928a59cb8c297",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "spec-fidelity"
   }
@@ -504,6 +492,215 @@
      "why": "The GM, 2026-10-28: 'as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to.'"
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T07 - a derivation's arithmetic and its index cells checked before any dispatch (the GM 2026-10-28)",
+    "### T07 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T03/T04/T05-sources",
+     "summary": "Each family's derivations written from D1's five contract sources (docstring, plan fields read, manifest keys and registries written, claims, cohort checks), never the code or today's counts",
+     "class": "within",
+     "why": "D1 verbatim; serves request section 3 box 2 ('written from the contract alone') and section 4 (today's waste cannot anchor the target). The three blocks are byte-identical to their BLOCKED text in earlier.md, which records no reason; read afresh, nothing in them departs from the request or the spec."
+    },
+    {
+     "id": "T03/T04/T05-order-and-dispatch",
+     "summary": "After T01; one dispatch per stage, more on a LOOSE/UNDERIVED correction, the third round owing the arbiter (D3)",
+     "class": "within",
+     "why": "D3 and FR-001 as written; request section 6 step 3 (MODE BUDGET on each stage)."
+    },
+    {
+     "id": "T03/T04/T05-exits",
+     "summary": "Green: every stage of the family SOUND and pinned (seven / three / seven); red: task set down with a cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Green requires a SOUND verdict and a pin for every stage, as FR-001/SC-001 and step 3 ask. The red exit sets down the task, not the requirement: it accepts no budget and no phase over budget (request 5.4), and the feature cannot close without every stage's SOUND verdict (SC-001). The stage counts (7 + 3 + 7) carry no search space in the bundle - item 4 cites dev/placement.md's STAGES table as a source but the blocks never say the counts came from it - so I could not confirm they cover 'every stage' (the request says about 25); not shown to under-count, so not ruled a narrowing."
+    },
+    {
+     "id": "T07-totals-1pct-band",
+     "summary": "make work-budget-bundle MODE=budget evaluates each Totals expression and refuses a value more than 1% off it (a CONVENTION for hand-written rounding)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block's own goal is totals 'arithmetically true', and the slip it is for is a sum written wrong (19 + 8 as 26). A relative 1% band refuses that slip only while the total is under about 100. Request section 2 puts a stage at 2,000-4,000 ops per house, so a total at 80 households is in the hundreds of thousands, and 1% admits an error of thousands: the incident's exact slip inside such a sum passes, and so does a whole omitted row smaller than 1%. That leaves 'being careful' as the only defense below the band, which is what the GM's rule refuses. An exact check is possible (the script computes the value; compare it rounded to an integer, or let the value be the evaluator's own). Convenience in writing a rounded total is not impossibility. Fix: refuse any value that differs from its expression's evaluation (rounded to the integer)."
+    },
+    {
+     "id": "T07-carveout-omitted-term",
+     "summary": "'A total leaving out a term of the table' left to the work-budget agent rather than refused by the script, on the premise it needs the table's meaning",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Judged apart from the wrong-size case. The block itself requires the expression to be written 'in the count table's own figures', and T07 is already editing the template, so a check that every count-table row's figure for that size appears in that size's expression (or that the table's rows carry per-size products the script sums) is syntactic and not impossible. The premise 'needs the table's meaning' is asserted, not demonstrated. Leaving this kind to the agent's questions 1 and 3 (is a factor derived, is one padded) changes nothing from the process that produced the twelve rounds, and neither question names a total missing a term: for this kind the session's answer to the GM's 'careful made a checked step' is the status quo. Fix: refuse a Totals expression that omits a count-table row at that size, red with its condition deleted, or show concretely why the table's form makes that impossible."
+    },
+    {
+     "id": "T07-carveout-wrong-size",
+     "summary": "'A figure read at the wrong size' (the pond's radii read as halves) left to the work-budget agent's derivation questions",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A script that checks arithmetic cannot know that a figure is the radius rather than the diameter; that takes the contract's meaning, so the rule cannot be applied mechanically here. The GM's own words name 'enforced in our subagent checks' as a valid form of enforcement, and the MODE BUDGET bundle carries the contract against which a factor's derivation is judged. One caveat for the session: the block says the pond case was 'found by the session after sink round 3' and then that the agent 'caught each in T02', which contradict each other for this example. The claim should cite the verdict in which the agent caught a wrong-size figure, or be dropped."
+    },
+    {
+     "id": "T07-index-cells-row",
+     "summary": "A derivation whose 'Cheaper algorithms considered' says a grid or spatial index is used must have a count row naming the cells examined, or it is refused",
+     "class": "within",
+     "why": "It enforces request section 1 ('a spatial-index query, with the number of entries it examined') and S5, and it answers the measured finding (field round 3, sink round 3). Keying the trigger on that one section is a design choice, not a fidelity question."
+    },
+    {
+     "id": "T07-order",
+     "summary": "T07 lands before T02's next dispatch and applies to every derivation after it; the water family's derivations get Totals written and must pass",
+     "class": "within",
+     "why": "The GM: 'as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to.'"
+    },
+    {
+     "id": "T07-approach-exits",
+     "summary": "Green: the bundle refuses a missing size, a total off its expression, and an indexed derivation with no cells row, each red with its condition deleted; the fixtures and the water family pass",
+     "class": "within",
+     "why": "It carries the narrative's mechanism; the band in 'off its expression' is ruled above (T07-totals-1pct-band) and the exits change with that fix. Sources now cite sink.verdict-3, matching the narrative."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T07 - a derivation's arithmetic and its index cells checked before any dispatch (the GM 2026-10-28)",
+    "### T07 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T03/T04/T05-sources",
+     "summary": "Each family's derivations written from D1's five contract sources (docstring, plan fields read, manifest keys and registries written, claims, cohort checks), never the code or today's counts",
+     "class": "within",
+     "why": "D1 verbatim; serves request section 3 box 2 ('written from the contract alone') and section 4 (today's waste cannot anchor the target). The three blocks are byte-identical to their BLOCKED text in earlier.md, which records no reason; read afresh, nothing in them departs from the request or the spec."
+    },
+    {
+     "id": "T03/T04/T05-order-and-dispatch",
+     "summary": "After T01; one dispatch per stage, more on a LOOSE/UNDERIVED correction, the third round owing the arbiter (D3)",
+     "class": "within",
+     "why": "D3 and FR-001 as written; request section 6 step 3 (MODE BUDGET on each stage)."
+    },
+    {
+     "id": "T03/T04/T05-exits",
+     "summary": "Green: every stage of the family SOUND and pinned (seven / three / seven); red: task set down with a cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Green requires a SOUND verdict and a pin for every stage, as FR-001/SC-001 and step 3 ask. The red exit sets down the task, not the requirement: it accepts no budget and no phase over budget (request 5.4), and the feature cannot close without every stage's SOUND verdict (SC-001). The stage counts (7 + 3 + 7) carry no search space in the bundle - item 4 cites dev/placement.md's STAGES table as a source but the blocks never say the counts came from it - so I could not confirm they cover 'every stage' (the request says about 25); not shown to under-count, so not ruled a narrowing."
+    },
+    {
+     "id": "T07-totals-1pct-band",
+     "summary": "make work-budget-bundle MODE=budget evaluates each Totals expression and refuses a value more than 1% off it (a CONVENTION for hand-written rounding)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block's own goal is totals 'arithmetically true', and the slip it is for is a sum written wrong (19 + 8 as 26). A relative 1% band refuses that slip only while the total is under about 100. Request section 2 puts a stage at 2,000-4,000 ops per house, so a total at 80 households is in the hundreds of thousands, and 1% admits an error of thousands: the incident's exact slip inside such a sum passes, and so does a whole omitted row smaller than 1%. That leaves 'being careful' as the only defense below the band, which is what the GM's rule refuses. An exact check is possible (the script computes the value; compare it rounded to an integer, or let the value be the evaluator's own). Convenience in writing a rounded total is not impossibility. Fix: refuse any value that differs from its expression's evaluation (rounded to the integer)."
+    },
+    {
+     "id": "T07-carveout-omitted-term",
+     "summary": "'A total leaving out a term of the table' left to the work-budget agent rather than refused by the script, on the premise it needs the table's meaning",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Judged apart from the wrong-size case. The block itself requires the expression to be written 'in the count table's own figures', and T07 is already editing the template, so a check that every count-table row's figure for that size appears in that size's expression (or that the table's rows carry per-size products the script sums) is syntactic and not impossible. The premise 'needs the table's meaning' is asserted, not demonstrated. Leaving this kind to the agent's questions 1 and 3 (is a factor derived, is one padded) changes nothing from the process that produced the twelve rounds, and neither question names a total missing a term: for this kind the session's answer to the GM's 'careful made a checked step' is the status quo. Fix: refuse a Totals expression that omits a count-table row at that size, red with its condition deleted, or show concretely why the table's form makes that impossible."
+    },
+    {
+     "id": "T07-carveout-wrong-size",
+     "summary": "'A figure read at the wrong size' (the pond's radii read as halves) left to the work-budget agent's derivation questions",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A script that checks arithmetic cannot tell that a figure is a radius rather than a diameter, so the tooling form is impossible for this kind. That makes tooling impossible, not the GM's rule: he names three forms, 'tooling', 'subagent checks' or 'procedures'. The block's only claim that anything enforces this kind is that the agent 'caught each in T02', and its own example says the pond's radii were 'found by the session after sink round 3', not by the agent. The one premise that decides whether this kind is enforced at all is contradicted in the passage that states it, which leaves the slip to carefulness, the thing the GM's rule refuses. Fix: cite the verdict file in which the work-budget agent caught a wrong-size figure, or add a check for it. Either a template rule that each figure read from the contract cites its source and the size it is read at (procedure), or a question in the MODE BUDGET bundle asking whether each figure is read at the contract's size (subagent check)."
+    },
+    {
+     "id": "T07-index-cells-row",
+     "summary": "A derivation whose 'Cheaper algorithms considered' says a grid or spatial index is used must have a count row naming the cells examined, or it is refused",
+     "class": "within",
+     "why": "It enforces request section 1 ('a spatial-index query, with the number of entries it examined') and S5, and it answers the measured finding (field round 3, sink round 3). Keying the trigger on that one section is a design choice, not a fidelity question."
+    },
+    {
+     "id": "T07-order",
+     "summary": "T07 lands before T02's next dispatch and applies to every derivation after it; the water family's derivations get Totals written and must pass",
+     "class": "within",
+     "why": "The GM: 'as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to.'"
+    },
+    {
+     "id": "T07-approach-exits",
+     "summary": "Green: the bundle refuses a missing size, a total off its expression, and an indexed derivation with no cells row, each red with its condition deleted; the fixtures and the water family pass",
+     "class": "within",
+     "why": "It carries the narrative's mechanism; the band in 'off its expression' is ruled above (T07-totals-1pct-band) and the exits change with that fix. Sources now cite sink.verdict-3, matching the narrative."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Complexity Tracking",
+    "### T03 - the homesteads family's budgets (D1, D3, D4)",
+    "### T03 Approach (checklist part A)",
+    "### T04 - the ways family's budgets (D1, D3, D4)",
+    "### T04 Approach (checklist part A)",
+    "### T05 - the hinterland and frame family's budgets (D1, D3, D4)",
+    "### T05 Approach (checklist part A)",
+    "### T07 - a derivation's arithmetic and its index cells checked before any dispatch (the GM 2026-10-28)",
+    "### T07 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:444-T07-plan-round-3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T07 - a derivation's arithmetic and its index cells checked before any dispatch (the GM 2026-10-28)",
+    "### T07 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T07-D1 totals section",
+     "summary": "The derivation template gains a ## Totals section, one line per size (20, 40, 80) written as <expression> = <value>.",
+     "class": "within",
+     "why": "The GM (2026-10-28) ruled that 'careful' works only when the checklist-based process is changed to include it, enforced in tooling, subagent checks or procedures. Writing the totals as expressions that can be checked is the template change that makes 'check the arithmetic' something a tool can enforce. It adds no scope beyond the step-3 derivation the design already requires (S7, show the arithmetic)."
+    },
+    {
+     "id": "T07-D2 bundle refusals",
+     "summary": "make work-budget-bundle MODE=budget refuses, naming the line: a missing size; a value that differs from its expression's evaluation rounded to the integer; an expression that leaves out a count row's figure at that size; a count row with no per-size figure (form: 'N at 20, N at 40, N at 80' or one number); a derivation whose 'Cheaper algorithms considered' says it uses a grid or spatial index but has no count row whose factor names the cells examined.",
+     "class": "within",
+     "why": "Each refusal turns one of the observed slips (a sum written wrong, a total leaving out a term, index cells not counted) into a refusal in the tooling, which is the form of enforcement the GM named first. The row-form requirement exists only so the omitted-term check can run, so it enforces the request rather than adding scope. Keying the index check on the 'Cheaper algorithms considered' text limits how far the script reaches, but it takes nothing away from what was asked: MODE BUDGET's S1/S7 questions still apply to every derivation, and that agent caught field round 3 and sink round 3."
+    },
+    {
+     "id": "T07-D3 fourth agent question",
+     "summary": "A figure read at the wrong size or unit (a radius taken as a diameter, a record's keys counted as its points) is left to the work-budget agent: MODE BUDGET gains a fourth question asking exactly that.",
+     "class": "within",
+     "why": "The GM listed 'enforced in our subagent checks' as one acceptable form of enforcement. A fourth question added to the design's three asks more of the adversarial check and takes nothing away from it. The slips that motivate it (the pond's radii, the keys counted as points) were the session's own catches, so before T07 nothing enforced this at all."
+    },
+    {
+     "id": "T07-D4 order and reach",
+     "summary": "T07 lands before T02's next dispatch, applies to every derivation after it, and is filed under feature 444.",
+     "class": "within",
+     "why": "The GM's own words: 'as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to.' T02's next dispatch is that place."
+    },
+    {
+     "id": "T07-D5 exits",
+     "summary": "Green: each refusal fires and goes red when its condition is deleted, the agent file asks the fourth question, the fixtures pass, and the water family's derivations pass once their totals are written. Red: the failure is recorded and the task set down; a claim that it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "The green exits prove each enforcement fires, which is the GM's test that the rule is 'actually enforced' and not colloquial. The red exit only records a failure and routes a claim to the arbiter. It does not let the task be set down for having a small gain, so it carves out nothing the request keeps."
+    },
+    {
+     "id": "T07-D6 not performance work",
+     "summary": "T07 is tooling and not a phase: no budget, checklist items 10 and 11 marked n/a, done measured by the refusals' tests.",
+     "class": "within",
+     "why": "T07 changes the step-3 process. It rebuilds no stage, so the per-phase budget and acceptance in design sections 3 and 6 do not apply to it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -591,6 +788,50 @@
      "summary": "Not performance work: paper budgets, no code a roll runs changes.",
      "class": "within",
      "why": "The request's step 3 derives budgets on paper; rebuilds begin in step 4."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T07": {
+   "section_sha256": "c8f199d5b0740e3d8606eadf31cf482bdfbb2d2ac47ac60329d8a7a939566326",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T07-D1 totals section",
+     "summary": "The derivation template gains a ## Totals section, one line per size (20, 40, 80) written as <expression> = <value>.",
+     "class": "within",
+     "why": "The GM (2026-10-28) ruled that 'careful' works only when the checklist-based process is changed to include it, enforced in tooling, subagent checks or procedures. Writing the totals as expressions that can be checked is the template change that makes 'check the arithmetic' something a tool can enforce. It adds no scope beyond the step-3 derivation the design already requires (S7, show the arithmetic)."
+    },
+    {
+     "id": "T07-D2 bundle refusals",
+     "summary": "make work-budget-bundle MODE=budget refuses, naming the line: a missing size; a value that differs from its expression's evaluation rounded to the integer; an expression that leaves out a count row's figure at that size; a count row with no per-size figure (form: 'N at 20, N at 40, N at 80' or one number); a derivation whose 'Cheaper algorithms considered' says it uses a grid or spatial index but has no count row whose factor names the cells examined.",
+     "class": "within",
+     "why": "Each refusal turns one of the observed slips (a sum written wrong, a total leaving out a term, index cells not counted) into a refusal in the tooling, which is the form of enforcement the GM named first. The row-form requirement exists only so the omitted-term check can run, so it enforces the request rather than adding scope. Keying the index check on the 'Cheaper algorithms considered' text limits how far the script reaches, but it takes nothing away from what was asked: MODE BUDGET's S1/S7 questions still apply to every derivation, and that agent caught field round 3 and sink round 3."
+    },
+    {
+     "id": "T07-D3 fourth agent question",
+     "summary": "A figure read at the wrong size or unit (a radius taken as a diameter, a record's keys counted as its points) is left to the work-budget agent: MODE BUDGET gains a fourth question asking exactly that.",
+     "class": "within",
+     "why": "The GM listed 'enforced in our subagent checks' as one acceptable form of enforcement. A fourth question added to the design's three asks more of the adversarial check and takes nothing away from it. The slips that motivate it (the pond's radii, the keys counted as points) were the session's own catches, so before T07 nothing enforced this at all."
+    },
+    {
+     "id": "T07-D4 order and reach",
+     "summary": "T07 lands before T02's next dispatch, applies to every derivation after it, and is filed under feature 444.",
+     "class": "within",
+     "why": "The GM's own words: 'as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to.' T02's next dispatch is that place."
+    },
+    {
+     "id": "T07-D5 exits",
+     "summary": "Green: each refusal fires and goes red when its condition is deleted, the agent file asks the fourth question, the fixtures pass, and the water family's derivations pass once their totals are written. Red: the failure is recorded and the task set down; a claim that it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "The green exits prove each enforcement fires, which is the GM's test that the rule is 'actually enforced' and not colloquial. The red exit only records a failure and routes a claim to the arbiter. It does not let the task be set down for having a small gain, so it carves out nothing the request keeps."
+    },
+    {
+     "id": "T07-D6 not performance work",
+     "summary": "T07 is tooling and not a phase: no budget, checklist items 10 and 11 marked n/a, done measured by the refusals' tests.",
+     "class": "within",
+     "why": "T07 changes the step-3 process. It rebuilds no stage, so the per-phase budget and acceptance in design sections 3 and 6 do not apply to it."
     }
    ],
    "verdict": "CLEAR"

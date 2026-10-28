@@ -25,11 +25,11 @@ describes is `placer.py.txt` beside this file.
 
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
-| items | per item | n discs | the contract | n up to the capacity A / d^2 |
+| items | per item | 20 at 20, 40 at 40, 80 at 80 | n discs, the contract (the fixture's sizes are its n) | n up to the capacity A / d^2 |
 | lookups: the lattice cells examined (S2) | over the run | at most 9 n, plus the blocked sites | each site is looked up once, and a site looked up is one of three: blocked (at most the blocked sites, once), placed (n), or refused by a center's flag - each refused site charged to the first center that flagged it, which flags at most 8 (8 n). So the lookups over the run are at most n + 8 n, plus the blocked sites | every center isolated, so no two conflict sets overlap; any n from 1 to the capacity |
 | work per lookup (S1) | per item | 1 | the site's own flag: every center sits on the lattice, so the conflict set is fixed (8 sites) and is marked when the disc is placed, never searched | always 1 |
 | marks per disc placed | per item | at most 8 | the conflict set (fewer at the edge) | a disc away from the edge, all 8 marked |
-| setup | once | 4 A / d^2 flags laid and shuffled, plus the sites each blocked rectangle covers, summed over the rectangles | before the loop, never per candidate; overlapping rectangles flag a site more than once, so the term is the sum over the rectangles, not capped at the site count | the rectangles' total area over (d / 2)^2 |
+| setup | once | 4 flags a disc at capacity (A = n d^2): 4 A / d^2 = 4 n, laid and shuffled, plus the sites each blocked rectangle covers, summed over the rectangles (none in this count) | before the loop, never per candidate; overlapping rectangles flag a site more than once, so the term is the sum over the rectangles, not capped at the site count | the rectangles' total area over (d / 2)^2 |
 | slack | per item | 1 | none needed: every factor is a stated bound | not applicable: no factor is estimated |
 
 So placing n discs takes at most 9 n lookups and 8 n marks - 17 n basic operations - plus the blocked sites' lookups and the setup,
@@ -38,9 +38,9 @@ both once. It is linear in n: no factor depends on the number placed (S1, S2), n
 
 ## Totals
 
-- at 20: 9 x 20 + 8 x 20 = 340
-- at 40: 9 x 40 + 8 x 40 = 680
-- at 80: 9 x 80 + 8 x 80 = 1360
+- at 20: 20 x (9 x 1 + 8) x 1 + 4 x 20 = 420
+- at 40: 40 x (9 x 1 + 8) x 1 + 4 x 40 = 840
+- at 80: 80 x (9 x 1 + 8) x 1 + 4 x 80 = 1680
 
 ## Cheaper algorithms considered
 

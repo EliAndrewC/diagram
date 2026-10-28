@@ -25,6 +25,7 @@ import json
 import re
 import shutil
 import sys
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -59,8 +60,23 @@ TOTALS = re.compile(r"^## Totals\b(.*?)(?=^## |\Z)", re.M | re.S)
 TOTAL_SIZES = (20, 40, 80)
 _TOTAL = re.compile(r"^-\s*at\s+(\d+)\s*:\s*(.+?)\s*=\s*([\d,]+(?:\.\d+)?)\s*$", re.M)
 _EXPR = re.compile(r"^[\d\s.,+\-*/x()]+$")
-#: how far a written total may sit from its own expression (feature 444 T07): a CONVENTION, the rounding a hand-written total carries
-TOLERANCE = 0.01
+_AT = re.compile(r"([\d,]+(?:\.\d+)?)\s+at\s+(\d+)")
+_NUM = re.compile(r"^\s*(?:at most\s+|about\s+)?([\d,]+(?:\.\d+)?)\b")
+
+
+def row_values(text: str) -> dict[str, dict[int, str]]:
+    """Each count row's figure at each size: `N at S` pairs where the value cell gives them, else its one leading number at every
+    size; a row whose value is neither has no figure (and is refused by `total_problems`)."""
+    count = COUNT.search(text)
+    out: dict[str, dict[int, str]] = {}
+    for ln in (count.group(1) if count else "").splitlines():
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
+        if not ln.strip().startswith("|") or len(cells) != len(COLUMNS) or cells[0].lower() in ("factor",) or set(cells[0]) <= set("-"):
+            continue
+        pairs = {int(sz): n for n, sz in _AT.findall(cells[2])}
+        one = _NUM.match(cells[2])
+        out[cells[0]] = {h: pairs.get(h, one.group(1) if one and not pairs else "") for h in TOTAL_SIZES}
+    return out
 
 
 def _arith(node: ast.AST) -> float:
@@ -76,22 +92,32 @@ def _arith(node: ast.AST) -> float:
 
 
 def total_problems(text: str) -> list[str]:
-    """The `## Totals` section's lines - `- at <size>: <expression> = <value>`, one per size - each evaluated, and refused where
-    a size is missing or the value sits more than `TOLERANCE` off its expression (feature 444 T07: a sum written wrong, or a total
-    leaving out a term, refused before any dispatch)."""
+    """The `## Totals` section's lines - `- at <size>: <expression> = <value>`, one per size - each evaluated EXACTLY, to the
+    integer (feature 444 T07: a sum written wrong refused before any dispatch), and each holding every count row's figure at that
+    size (a total leaving out a term refused); a row with no figure at a size is refused too, so nothing escapes the expression."""
     sec = TOTALS.search(text)
     if sec is None:
         return [f"a `## Totals` section: one line per size, `- at <{'|'.join(str(h) for h in TOTAL_SIZES)}>: <expression> = <value>`"]
     found = {int(m.group(1)): (m.group(2), m.group(3)) for m in _TOTAL.finditer(sec.group(1))}
     out = [f"`## Totals`: a line for {h} households" for h in TOTAL_SIZES if h not in found]
+    rows = row_values(text)
     for h, (expr, value) in sorted(found.items()):
         if not _EXPR.match(expr):
             out.append(f"`## Totals` at {h}: `{expr}` is not arithmetic on the table's figures (digits, + - x / and brackets)")
             continue
         got = _arith(ast.parse(expr.replace(",", "").replace("x", "*"), mode="eval").body)
-        want = float(value.replace(",", ""))
-        if abs(got - want) > TOLERANCE * max(abs(got), 1):
-            out.append(f"`## Totals` at {h}: `{expr}` is {got:,.0f}, not {value}")
+        if round(got) != round(float(value.replace(",", ""))):
+            out.append(f"`## Totals` at {h}: `{expr}` is {round(got):,}, not {value}")
+        # ...EACH ROW ITS OWN TERM (the round arbiter's note on ask:444-T07-plan-round-3): two rows sharing a figure owe it twice, so the
+        # expression's numbers are counted, and each row takes one of its own
+        tokens = Counter(t.replace(",", "") for t in re.findall(r"[\d,]+(?:\.\d+)?", expr))
+        for name, at in rows.items():
+            if not at[h]:
+                out.append(f"`{name}`: no figure at {h} households - write its value as `N at 20, N at 40, N at 80`, or one number for every size")
+            elif tokens[at[h].replace(",", "")] > 0:
+                tokens[at[h].replace(",", "")] -= 1
+            else:
+                out.append(f"`## Totals` at {h}: `{name}`'s figure {at[h]} is not in the expression - every row of the count is a term of the total")
     return out
 
 

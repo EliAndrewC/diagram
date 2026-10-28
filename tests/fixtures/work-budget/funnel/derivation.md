@@ -29,13 +29,11 @@ reason the algorithm has for it.
 
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
-| items | per item | 40 houses | one per household | the reference spec at 40 households |
+| items | per item | 20 at 20, 40 at 40, 80 at 80 | one per household | the reference spec at each size |
 | seats asked the cheap ground test | per item | about 21 (830 for 40) | the growth offers seats until one is placed; no bound but the seats in the growth's ring | no bound: until the ring's seats run out |
-| seats settled | per item | about 10 (406 for 40) | those the ground test keeps | as many as the ground test keeps |
 | envelopes built | per item | about 20 (803 for 40) | each settle builds one, and builds it again when the reach grows (about 397 rebuilds) | every settle rebuilt |
 | seats offered to the placer | per item | about 7 (272 for 40) | the settled seats not near a house already placed | every settled seat offered |
 | layouts laid per offered seat | per item | 4 | the homestead's four layouts, each laid before the placer can say whether the seat is refused | every offered seat refused after laying |
-| houses placed | over the run | 40 of 272 offered | 232 refused by the placer, each after its layouts were laid | as measured: 232 refused |
 | slack | per item | 1 | none added to the measured funnel | as measured |
 
 So per house: about 21 ground tests, about 20 full envelopes (95% of them for seats never placed) and about 7 x 4 = 28 laid
@@ -45,9 +43,9 @@ household box (all pairs), a pass over a growing set inside a loop over a growin
 
 ## Totals
 
-- at 20: 20 x (21 + 20 + 7 x 4) = 1,380
-- at 40: 40 x (21 + 20 + 7 x 4) = 2,760
-- at 80: 80 x (21 + 20 + 7 x 4) = 5,520
+- at 20: 20 x (21 + 20 + 7 x 4) x 1 = 1,380
+- at 40: 40 x (21 + 20 + 7 x 4) x 1 = 2,760
+- at 80: 80 x (21 + 20 + 7 x 4) x 1 = 5,520
 
 ## Cheaper algorithms considered
 

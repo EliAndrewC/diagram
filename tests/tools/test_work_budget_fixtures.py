@@ -54,7 +54,7 @@ def test_the_grid_placer_places_its_discs_apart_within_its_derived_count() -> No
 
 def test_the_agent_asks_the_designs_questions() -> None:
     text = AGENT.read_text(encoding="utf-8")
-    for q in ("Is each factor derived?", "Is there a standard, cheaper algorithm?", "Is any factor padded?"):
+    for q in ("Is each factor derived?", "Is there a standard, cheaper algorithm?", "Is any factor padded?", "Is each figure read at its source's size and unit?"):
         assert q in text, f"MODE BUDGET asks: {q}"
     for q in ("Are the counters within budget?", "Does a counter cover every inner loop (S5)?", "Is anything placed and then repaired (S4)?", "Is the growth linear (S6)?"):
         assert q in text, f"MODE AUDIT asks: {q}"
@@ -96,6 +96,14 @@ def test_a_derivation_short_of_a_template_field_is_refused_naming_it(tmp_path: P
     (tmp_path / "d.md").write_text(edit((FIX / "grid-placer" / "derivation.md").read_text(encoding="utf-8")))
     rc, msg = wbb.budget_bundle(REPO, "x", str(tmp_path / "d.md"), tmp_path / "out")
     assert rc == 1 and "short of the template's fields" in msg and why in msg, msg
+
+
+def test_the_water_familys_derivations_pass_the_form_checks() -> None:
+    """The round arbiter's note on ask:444-T07-plan-round-3: T02's next dispatch runs on these, so they pass the checks first."""
+    done = sorted((REPO / "specs/444-work-budget-program/phases").glob("*.derivation.md"))
+    assert done, "the water family's derivations"
+    for p in done:
+        assert wbb.form_problems(p.read_text(encoding="utf-8")) == [], p.name
 
 
 def test_the_template_and_both_fixtures_hold_every_field() -> None:
@@ -154,11 +162,17 @@ def test_main_builds_and_refuses(tmp_path: Path, capsys: pytest.CaptureFixture[s
 @pytest.mark.parametrize(
     ("edit", "why"),
     [
-        (lambda t: t.replace("- at 40: 9 x 40 + 8 x 40 = 680\n", ""), "a line for 40 households"),
-        (lambda t: t.replace("- at 80: 9 x 80 + 8 x 80 = 1360", "- at 80: 9 x 80 + 8 x 80 = 1460"), "is 1,360, not 1460"),
-        (lambda t: t.replace("- at 20: 9 x 20 + 8 x 20 = 340", "- at 20: nine x 20 = 340"), "is not arithmetic"),
+        (lambda t: t.replace("- at 40: 40 x (9 x 1 + 8) x 1 + 4 x 40 = 840\n", ""), "a line for 40 households"),
+        (lambda t: t.replace("- at 80: 80 x (9 x 1 + 8) x 1 + 4 x 80 = 1680", "- at 80: 80 x (9 x 1 + 8) x 1 + 4 x 80 = 1681"), "is 1,680, not 1681"),
+        (lambda t: t.replace("- at 40: 40 x (9 x 1 + 8) x 1 + 4 x 40 = 840", "- at 40: 40 x (9 x 1 + 8) x 1 = 680"), "figure 4 is not in the expression"),
+        (lambda t: t.replace("- at 20: 20 x (9 x 1 + 8) x 1 + 4 x 20 = 420", "- at 20: nine x 20 = 420"), "is not arithmetic"),
         (lambda t: t.split("## Totals")[0] + "## Cheaper" + t.split("## Cheaper")[1], "a `## Totals` section"),
         (lambda t: t.replace("| lookups: the lattice cells examined (S2) |", "| lookups (S2) |"), "a row counting the index cells examined"),
+        (lambda t: t.replace("| marks per disc placed | per item | at most 8 |", "| marks per disc placed | per item | the conflict set |"), "no figure at 20 households"),
+        (
+            lambda t: t.replace("| slack | per item | 1 |", "| slack | per item | 1 |").replace("- at 20: 20 x (9 x 1 + 8) x 1 + 4 x 20 = 420", "- at 20: 20 x (9 x 1 + 8) + 4 x 20 = 420"),
+            "`slack`'s figure 1 is not in the expression",
+        ),
     ],
 )
 def test_a_derivations_totals_are_evaluated_and_its_index_cells_counted(tmp_path: Path, edit, why: str) -> None:  # noqa: ANN001

@@ -28,7 +28,7 @@ The bundle holds the stage's contract (what it reads and writes), the derivation
 factor) and the rubric. It deliberately holds no code and no counts of today's code, so today's waste cannot anchor the target;
 do not ask for them.
 
-Ask three questions, in order:
+Ask four questions, in order:
 
 1. **Is each factor derived?** Every factor of the count - things placed, candidates per thing, checks per candidate, the work of
    each check, the slack - names its reason from the geometry or the contract (S1-S3, S7). A tuned retry count, a "safety
@@ -37,6 +37,9 @@ Ask three questions, in order:
    memoizing a value that does not change during a scan. If one would lower a factor, the derivation should use it or say why
    it cannot.
 3. **Is any factor padded?** A factor larger than its own stated reason supports.
+4. **Is each figure read at its source's size and unit?** A figure taken from the contract's Bounds or a measurement - a
+   radius or a diameter, a count at 10 households or at 20, a length or a point count - used as the source states it. (Feature
+   444 T07: a pond's radii were read as halves, a record's keys counted as its points; no script can tell.)
 
 Verdicts:
 
