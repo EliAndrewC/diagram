@@ -327,6 +327,34 @@
      "why": "Bookkeeping; decides nothing the spec left open."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T03 - the docs and the report (D4)",
+    "### T03 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T03-docs",
+     "summary": "docs/guards.md and make land's help name both counter-only skips (the cohort skip and the claims-triage clearing)",
+     "class": "within",
+     "why": "Exactly FR-005's last clause and D4 (guards table rows for the cohort and claims gates, and make land's help, name the skips). It covers both skips the GM accepted ('those two changes'); nothing is dropped."
+    },
+    {
+     "id": "T03-report",
+     "summary": "make feature-report F=446 WRITE=1 as the task's done measure",
+     "class": "within",
+     "why": "Closing artifact of the feature's own process; adds no behavior and narrows nothing in the request or spec."
+    },
+    {
+     "id": "T03-order-budget-exits",
+     "summary": "T03 runs last, in one landing; red exit records the failure and routes a cannot-be-done claim to make arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and process handling only; the docs describe the skips after they exist (T01/T02). FR-005's test half (each skip red with its condition deleted) is not claimed by this block and is not narrowed by it - it belongs to the tasks that build the skips (SC-004)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -414,6 +442,32 @@
      "summary": "Budget of one landing; constants and fitting n/a; not performance work",
      "class": "within",
      "why": "Bookkeeping; decides nothing the spec left open."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T03": {
+   "section_sha256": "afc3308488d3eed898ad5e679cbd1a7405735e53e9d92a93b4097373207a107d",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T03-docs",
+     "summary": "docs/guards.md and make land's help name both counter-only skips (the cohort skip and the claims-triage clearing)",
+     "class": "within",
+     "why": "Exactly FR-005's last clause and D4 (guards table rows for the cohort and claims gates, and make land's help, name the skips). It covers both skips the GM accepted ('those two changes'); nothing is dropped."
+    },
+    {
+     "id": "T03-report",
+     "summary": "make feature-report F=446 WRITE=1 as the task's done measure",
+     "class": "within",
+     "why": "Closing artifact of the feature's own process; adds no behavior and narrows nothing in the request or spec."
+    },
+    {
+     "id": "T03-order-budget-exits",
+     "summary": "T03 runs last, in one landing; red exit records the failure and routes a cannot-be-done claim to make arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and process handling only; the docs describe the skips after they exist (T01/T02). FR-005's test half (each skip red with its condition deleted) is not claimed by this block and is not narrowed by it - it belongs to the tasks that build the skips (SC-004)."
     }
    ],
    "verdict": "CLEAR"
