@@ -15,5 +15,6 @@
 - [x] T03 Feature 405 closed Withdrawn with its evidence; its engine fixes and notes recorded in `specs/444-work-budget-program/phase-inputs.md` under their stages (D4; FR-005, SC-004)
       research: rendering
       verify: DONE. landed: 405 closed Withdrawn with its evidence; T98, T101, T104, T106, T111 and T165 in specs/444-work-budget-program/phase-inputs.md under web, homesteads, lane_wells, notice and track, today's counts marked
-- [ ] T04 `docs/guards.md`, the gate's message and the root CLAUDE.md name the switch; the refusal proven to fire with it deleted; `make feature-report F=445 WRITE=1` (D5; FR-006, SC-005)
+- [x] T04 `docs/guards.md`, the gate's message and the root CLAUDE.md name the switch; the refusal proven to fire with it deleted; `make feature-report F=445 WRITE=1` (D5; FR-006, SC-005)
       research: rendering
+      verify: DONE. landed: the guards table, the claims gate's message (which prints the switch's state) and the root CLAUDE.md name the claims switch; the feature report written
