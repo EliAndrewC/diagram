@@ -27,7 +27,7 @@
     declare the cluster's shape; set the way out's gate on the cluster's edge
     lane ground, a sparse raster of 6 ft cells over each homestead's gap band (its envelope dilated by the 20 ft gap): each
         cell's free ground read from the 32 ft raster and its parts from the parts index
-    one flood from the gate over lane ground (a heap: the cheapest walk to every cell, dearer beside blocked ground)
+    one flood from the gate over lane ground (a bucket queue: the cheapest walk to every cell, dearer beside blocked ground)
     each household, nearest the way out first: its door opens onto lane ground (the seat's rule), so its way is traced back
         along the flood to the gate or to a laid way within 25 ft, pulled taut, and its legs admitted against the parts
         index; reserved and recorded; a household none admits is pinched across its nearest reached neighbor's yard
@@ -46,23 +46,25 @@
 | the parts laid (parts index cells written) | per item | 65 | 13 parts, each recorded (1) and filed in at most 2 by 2 cells of 64 ft (4) | the most parts |
 | slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
 | the seats offered | over the run | 360 at 20, 720 at 40, 1,440 at 80 | 18 a house: the 6 of the first shell and the 12 of the second, each offered once | the second shell reached for every house |
-| the seat test (raster and parts index cells examined) | over the run | 743 a seat | the envelope, 184 ft, covers at most 7 by 7 cells of 32 ft, each read (49), and its 24 edge cells each with at most 20 segments tested (480); its at most 4 by 4 cells of 64 ft, each with at most 7 parts (128); the sun's 39 ft and the west lane's 50 ft, each a strip at most 63 ft wide in at most 2 by 2 cells of 64 ft (32 each), and the opening's 20 ft strip in at most 2 cells of 64 ft (16) and 3 by 2 cells of 32 ft (6) | every seat at the densest cells |
+| the seat test (raster and parts index cells examined) | over the run | 831 a seat | the envelope, 184 ft, covers at most 7 by 7 cells of 32 ft, each read (49), and its 24 edge cells each with at most 20 segments tested (480); the envelope grown by the 20 ft gap, 224 ft, in at most 5 by 5 cells of 64 ft, each with at most 7 parts (200); the sun's 39 ft, the west lane's 50 ft and the opening's 20 ft, each a strip at most 63 ft long in at most 2 by 2 cells of 64 ft (32 each, 96), and the opening's 3 by 2 cells of 32 ft read for lane ground (6) | every seat at the densest cells |
 | the heap | over the run | 6,480 at 20, 14,400 at 40, 31,680 at 80 | each offer pushed and popped, 2 x log2 of the offers rounded up | 80 households |
 | the raster (cells written) | once | 5,521 at 20, 11,926 at 40, 25,759 at 80 | the canvas in 32 ft cells | 80 households |
 | the boundary (raster cells written) | once | 6,832 at 20, 9,393 at 40, 13,009 at 80 | each boundary segment walked through the raster: its length at its diagonal over 32 ft, plus 3 a segment | 80 households |
-| lane ground (cells written) | over the run | 73,620 at 20, 147,240 at 40, 294,480 at 80 | 409 cells a homestead - its gap band, 4 x 184 ft of envelope by the 20 ft gap over 36 sq ft - each read from the 32 ft raster (1) and tested against the parts of its 64 ft cell (8) | every band unshared |
-| the flood (lane ground cells examined) | over the run | 278,120 at 20, 588,960 at 40, 1,243,360 at 80 | each cell popped once, its 8 neighbors read and the heap's push and pop, 2 x log2 of the cells rounded up | every band cell reached |
+| lane ground (cells written) | over the run | 81,540 at 20, 163,080 at 40, 326,160 at 80 | 453 cells a homestead - its gap band, the envelope grown by the 20 ft gap, (224 x 224 - 184 x 184) sq ft over 36 sq ft - each read from the 32 ft raster (1) and tested against the parts of its 64 ft cell (8) | every band unshared |
+| the flood (lane ground cells examined) | over the run | 235,560 at 20, 471,120 at 40, 942,240 at 80 | 26 a cell, on a bucket queue (Dial's): the step costs are small integers - 2 straight and 3 diagonal, times the center weight 1 to 3, at most 9 - so a push or a pop is one operation; each cell popped once (1), its 8 neighbors read (8), pushed at most once for each neighbor that improves it (8), and the buckets scanned once, at most 9 a cell (the costs' ceiling times the cells) | every band cell reached |
 | the trace (lane ground cells examined) | over the run | 1,240 at 20, 2,480 at 40, 4,960 at 80 | 62 a household: the ways end where they join, so together they are at most the gaps' length, half each homestead's 4 x 184 ft perimeter (a gap is shared by two), over 6 ft cells, 62 | every gap walked |
+| the taut pull (lane ground cells examined) | over the run | 2,480 at 20, 4,960 at 40, 9,920 at 80 | 124 a household: a funnel over the trace's at most 62 cells, each cell's two sides tested once (2) | every gap walked |
 | the admission (parts index cells examined) | over the run | 2,744 at 20, 5,488 at 40, 10,968 at 80 | the ways' length, 368 ft a household, at its diagonal over 64 ft, plus 3 a leg, at most 3 legs a household (a start and a turn at each of 2 corners a way passes), each cell's at most 7 parts and the cell, 8 | every way at the densest cells |
-| the pinch (parts index cells examined) | over the run | 960 at 20, 1,920 at 40, 3,840 at 80 | at most one a household: one leg across a neighbor's yard, 184 ft at its diagonal over 64 ft plus 3, 6 cells, each 8 | every household pinched |
+| the pinch (parts index cells examined) | over the run | 1,280 at 20, 2,560 at 40, 5,120 at 80 | at most one a household: one leg across a neighbor's yard, 184 ft at its diagonal over 64 ft plus 3, 7.07 rounded up to 8 cells, each with its at most 7 parts (8) | every household pinched |
+| the cluster's shape and the gate | once | 568 at 20, 1,288 at 40, 2,888 at 80 | the hull of the envelopes' 4 corners a house, a sort of 4 x n points, 4 x n x log2 rounded up, and the gate's seat on the hull's edge toward the way out, 8 | 80 households |
 
 So: houses x 65 x 1, plus the seats offered x 743, the run's other terms and the raster once.
 
 ## Totals
 
-- at 20: 20 x 65 x 1 + 360 x 743 + 6480 + 5521 + 6832 + 73620 + 278120 + 1240 + 2744 + 960 = 644297
-- at 40: 40 x 65 x 1 + 720 x 743 + 14400 + 11926 + 9393 + 147240 + 588960 + 2480 + 5488 + 1920 = 1319367
-- at 80: 80 x 65 x 1 + 1440 x 743 + 31680 + 25759 + 13009 + 294480 + 1243360 + 4960 + 10968 + 3840 = 2703176
+- at 20: 20 x 65 x 1 + 360 x 831 + 6480 + 5521 + 6832 + 81540 + 235560 + 1240 + 2480 + 2744 + 1280 + 568 = 644705
+- at 40: 40 x 65 x 1 + 720 x 831 + 14400 + 11926 + 9393 + 163080 + 471120 + 2480 + 4960 + 5488 + 2560 + 1288 = 1287615
+- at 80: 80 x 65 x 1 + 1440 x 831 + 31680 + 25759 + 13009 + 326160 + 942240 + 4960 + 9920 + 10968 + 5120 + 2888 = 2574544
 
 ## Earlier findings
 
@@ -76,11 +78,18 @@ So: houses x 65 x 1, plus the seats offered x 743, the run's other terms and the
 - verdict-1, finding 8: fixed - the ways are bounded by the gaps' length, linear in the households, not by today's segments
 - verdict-1, finding 9: fixed - an access corridor record is a way's leg (19 of the 51 at 20 name a household); the legs are counted in the admission
 - verdict-1, finding 10: fixed - the heap charges a push and a pop
+- verdict-2, finding 1: fixed - the taut pull is a funnel over the trace's cells, its own row
+- verdict-2, finding 2: fixed - the cluster's shape (a hull of the envelopes' corners) and the gate are a once row
+- verdict-2, finding 3: fixed - the flood runs on a bucket queue, and a cell is pushed at most once for each improving neighbor, 8
+- verdict-2, finding 4: fixed - the seat's parts query is the envelope grown by the 20 ft gap, 5 by 5 cells, 200
+- verdict-2, finding 5: fixed - the opening's strip is 2 by 2 cells of 64 ft, 32
+- verdict-2, finding 6: fixed - lane ground counts the dilation's corners, 453 cells a homestead
+- verdict-2, finding 7: fixed - the pinch is 8 cells, 7.07 rounded up
 
 ## Cheaper algorithms considered
 
 - sweep: not used - the growth offers seats from the houses standing, not in a fixed order a sweep could follow
 - grid or spatial index: used - the raster refuses blocked ground, the parts index bounds a seat's and a way's neighbors, and lane ground is the flood's grid
-- priority queue: used - the offers, and the flood
+- priority queue: used - the offers on a heap, and the flood on a bucket queue (its step costs are small integers)
 - incremental update: used - the parts index is filed as each part is placed; lane ground is built once, after the last house
 - memoizing what a scan does not change: used - the boundary is rasterized once, and each seat is offered once over the run

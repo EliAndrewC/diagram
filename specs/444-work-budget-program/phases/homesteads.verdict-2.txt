@@ -1,0 +1,20 @@
+UNDERIVED - the way "pulled taut" (derivation.md line 32): each way is pulled taut before its legs are admitted, and no row counts that work. A line-of-sight or funnel pass over the trace's lane-ground cells is real per-household work, and the admission row (line 56) charges only the final legs.
+
+**Earlier findings.** On the derivation's text, findings 1-4 and 6-10 of `homesteads.verdict-1.txt` are closed. Finding 5 is only partly closed. Lane ground, flood, trace, admission and pinch now have rows, but the taut pull still has none.
+
+**1. Is each factor derived?** No. Three factors lack a reason:
+- **Taut pull (line 32):** no row, as in the first line.
+- **Cluster's shape and the way out's gate (line 27):** no row. A hull over the placed parts' corners is about 52n points, an n log n pass. It is small, but nothing counts it.
+- **Flood (line 54):** it charges one push and one pop per cell. The step costs are non-uniform ("dearer beside blocked ground"), so a cell can be pushed or decrease-keyed once for each neighbor that improves it, up to 8. The row gives no reason why one push per cell is a ceiling. That breaks the reason the slack row gives for slack 1 (line 47: "every factor is a ceiling").
+
+**2. Is there a standard, cheaper algorithm?** One is missed. The flood's step costs are a few fixed values, so a bucket queue (Dial's algorithm) would cut the 2 x log2 heap term to a constant. The flood is 1,243,360 of the 2,703,176 operations at 80. The derivation should use a bucket queue or say why the costs are not small integers. The other choices are sound: the raster, the parts index, offers keyed by cell, and rasterizing the boundary once.
+
+**3. Is any factor padded?** None. The seats (6 + 12, the hexagonal shells) and the raster, boundary, heap, trace and admission figures all recompute from their reasons. Every mismatch I found runs the other way: an undercount (below).
+
+**4. Is each figure read at its source's size and unit?** Four figures are smaller than their own reasons support:
+- **Seat test, parts query (line 49):** the 20 ft gap rule (contract line 5) means the query region is the envelope grown 20 ft on each side, 224 ft. That spans up to 5 by 5 cells of 64 ft: 25 x 8 = 200, not 128. The lane-ground row itself says "envelope dilated by the 20 ft gap", so the 184 ft extent excludes the gap.
+- **Same row, the opening's strip:** "3 by 2 cells of 32 ft" means a strip up to 63 ft long and 20 ft deep. At 64 ft cells that is up to 2 by 2 cells: 32, not 16.
+- **Lane ground (line 53):** 4 x 184 x 20 leaves out the dilation's corners. (224^2 - 184^2) / 36 = 453 cells a homestead, not 409.
+- **Pinch (line 57):** its own reason, 184 x sqrt2 / 64 + 3, gives 7.07 cells, not 6.
+
+Files read, all in /tmp/l7r-check/work-budget-budget-homesteads/: MANIFEST.md, rubric.md, contract.md, derivation.md and homesteads.verdict-1.txt.
