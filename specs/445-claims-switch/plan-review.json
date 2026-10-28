@@ -54,6 +54,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "spec-fidelity"
+  },
+  "### T01 - the switch (D1)": {
+   "sha256": "29f8df650e7f8da475d05cdf86f219827cfbb6262e9892297b7fc32f11bcc8fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T02 - the gate at `report` and `clean` (D2, D3)": {
+   "sha256": "3d93b9e7c41b4936d696703fd1633cddc76dee08981658d5b3ed8b8d89eb8f90",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T03 - 405 closed (D4)": {
+   "sha256": "609962c7fd0f56ae2048c6c1464e9997729705a7cccfb820645eca28fa48ac87",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T04 - the docs and the report (D5)": {
+   "sha256": "376ec553aad9628b29800242310ecd5f6e928ebcac090bb650b524ef729c53e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -127,6 +151,169 @@
      "why": "Nothing the request or spec asks for is dropped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T01 - the switch (D1)",
+    "### T02 - the gate at `report` and `clean` (D2, D3)",
+    "### T03 - 405 closed (D4)",
+    "### T04 - the docs and the report (D5)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-axis",
+     "summary": "claims axis in switches.py, default report, malformed entry closed to clean, absent read as report, write keeps the other axis, two targets through _switch, dev/switches.json thrown to report with the GM's words; test throws both axes both ways",
+     "class": "within",
+     "why": "D1/FR-001/FR-004 verbatim; the GM asked to build the check and disable it ('building the check that we want, but then disabling it'), which is report as shipped default with clean available."
+    },
+    {
+     "id": "T01..T04-red-exit",
+     "summary": "red exit: recorded and set down, a claim that it cannot be done goes to make arbiter-ask",
+     "class": "within",
+     "why": "Process for a failed task, not scope; changes nothing the GM asked for."
+    },
+    {
+     "id": "T02-report",
+     "summary": "claims_mode, gate at report lands introduced/carried/known findings with no task filed and no gm-review.jsonl row, refuses an owed claim, refuses make claims-carry at report with the refusal's own test proven to fire with it deleted",
+     "class": "within",
+     "why": "D2/FR-002/SC-002: the GM's 'ignore claims so long as they are properly marked and show up in the claims report'. The deletion-proof test is enforcement of the requested refusal (SC-005), not added scope."
+    },
+    {
+     "id": "T02-clean-deferred",
+     "summary": "at clean, refuses a fixture whose report lists an open finding and passes one whose only findings are DEFERRED, a DEFERRED carried finding among them",
+     "class": "within",
+     "why": "D3/FR-003/SC-003 exclude DEFERRED (load_deferred) from open findings, and the GM's long-run rule ('no open claims' at each landing) does not reach a recorded deferral. Condition: D3 also says clean refuses 'as today' an unfiled carried finding; this exit holds only if today's carried check already honors DEFERRED. If it does not, the exit goes red and what is owed is a spec amendment to D3 (re-reviewed), not a quiet loosening of the 'as today' leg."
+    },
+    {
+     "id": "T02-open-findings",
+     "summary": "open_findings lifted from the report and read by both gate and make claims-report",
+     "class": "within",
+     "why": "D3 verbatim; makes the clean refusal list exactly what the report lists, which is the GM's 'show up in the claims report'."
+    },
+    {
+     "id": "T03-withdraw-405",
+     "summary": "405 status Withdrawn with evidence; phase-inputs.md holds the six tasks' texts under their stages; exit: speckit-todo lists 405 closed, each task named once",
+     "class": "within",
+     "why": "D4/FR-005/SC-004 and the recommendation the GM accepted (close 405; T98, T101, T104, T106, T111, T165 move to 444 as phase inputs)."
+    },
+    {
+     "id": "T03-figures-marked",
+     "summary": "any measured figure in the moved task texts marked as today's count so 444's budget bundles leave it out (443 FR-008's refusal holds)",
+     "class": "within",
+     "why": "The task texts still move whole, as D4 and the accepted recommendation require; the marking only keeps them compatible with an already-landed rule (443 FR-008: the budget bundle refuses counts). It removes nothing the GM asked to move and carves no case out of 445's request."
+    },
+    {
+     "id": "T04-docs-report",
+     "summary": "guards.md, claims-gate.sh message and root CLAUDE.md name the switch and its state; make feature-report F=445 WRITE=1",
+     "class": "within",
+     "why": "D5/FR-006/SC-005; the feature report is the routine record, not new behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T01 - the switch (D1)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-axis",
+     "summary": "switches.py gains a claims axis, CLAIMS_STATES report/clean, default report; an absent claims entry reads as report",
+     "class": "within",
+     "why": "D1 verbatim; serves the GM's 'building the check that we want, but then disabling it' (FR-001, FR-004)"
+    },
+    {
+     "id": "T01-malformed",
+     "summary": "a malformed claims entry closes to clean, the strict state",
+     "class": "within",
+     "why": "settled by the accepted spec's D1; fails toward the check the GM wants in the long run, and does not change the shipped state, which is report"
+    },
+    {
+     "id": "T01-write-keeps",
+     "summary": "write keeps the axis it is not setting, so a claims throw keeps remote",
+     "class": "within",
+     "why": "D1 verbatim; without it the switch would silently drop the remote axis, so it is needed for the switch to work at all"
+    },
+    {
+     "id": "T01-targets",
+     "summary": "make claims-report-only and make claims-clean throw the axis through _switch, which commits",
+     "class": "within",
+     "why": "D1 and FR-001: the only writers of the switch; the 'disabling' the GM asked for, reversible to the check he wants long-term"
+    },
+    {
+     "id": "T01-ship-report",
+     "summary": "dev/switches.json ships at claims: report with the GM's words as its reason",
+     "class": "within",
+     "why": "FR-004 and D1; the GM: 'for now, I just want to basically ignore claims so long as they are properly marked'"
+    },
+    {
+     "id": "T01-green-exit",
+     "summary": "test_switches.py throws both axes both ways, reads malformed claims as clean and absent as report, and finds remote kept after a claims throw",
+     "class": "within",
+     "why": "SC-001; a test that only fails when D1's behavior is absent - enforcement of the request, not added scope"
+    },
+    {
+     "id": "T01-red-exit",
+     "summary": "on failure: recorded and set down, a claim it cannot be done goes to make arbiter-ask",
+     "class": "within",
+     "why": "procedure for a failed task; narrows nothing asked and drops no requirement - an impossibility claim goes to the arbiter rather than being decided by the session"
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "29f8df650e7f8da475d05cdf86f219827cfbb6262e9892297b7fc32f11bcc8fc",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T01-axis",
+     "summary": "switches.py gains a claims axis, CLAIMS_STATES report/clean, default report; an absent claims entry reads as report",
+     "class": "within",
+     "why": "D1 verbatim; serves the GM's 'building the check that we want, but then disabling it' (FR-001, FR-004)"
+    },
+    {
+     "id": "T01-malformed",
+     "summary": "a malformed claims entry closes to clean, the strict state",
+     "class": "within",
+     "why": "settled by the accepted spec's D1; fails toward the check the GM wants in the long run, and does not change the shipped state, which is report"
+    },
+    {
+     "id": "T01-write-keeps",
+     "summary": "write keeps the axis it is not setting, so a claims throw keeps remote",
+     "class": "within",
+     "why": "D1 verbatim; without it the switch would silently drop the remote axis, so it is needed for the switch to work at all"
+    },
+    {
+     "id": "T01-targets",
+     "summary": "make claims-report-only and make claims-clean throw the axis through _switch, which commits",
+     "class": "within",
+     "why": "D1 and FR-001: the only writers of the switch; the 'disabling' the GM asked for, reversible to the check he wants long-term"
+    },
+    {
+     "id": "T01-ship-report",
+     "summary": "dev/switches.json ships at claims: report with the GM's words as its reason",
+     "class": "within",
+     "why": "FR-004 and D1; the GM: 'for now, I just want to basically ignore claims so long as they are properly marked'"
+    },
+    {
+     "id": "T01-green-exit",
+     "summary": "test_switches.py throws both axes both ways, reads malformed claims as clean and absent as report, and finds remote kept after a claims throw",
+     "class": "within",
+     "why": "SC-001; a test that only fails when D1's behavior is absent - enforcement of the request, not added scope"
+    },
+    {
+     "id": "T01-red-exit",
+     "summary": "on failure: recorded and set down, a claim it cannot be done goes to make arbiter-ask",
+     "class": "within",
+     "why": "procedure for a failed task; narrows nothing asked and drops no requirement - an impossibility claim goes to the arbiter rather than being decided by the session"
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

@@ -62,6 +62,33 @@ phase-inputs.md` lists T98 and T101 under `web`, T104 and T106 under `homesteads
 T01 the switch (D1); T02 the gate at `report` and `clean` (D2, D3); T03 405 closed and its inputs moved (D4); T04 the docs and the
 closing report (D5).
 
+### T01 - the switch (D1)
+
+The `claims` axis in `switches.py` (`CLAIMS_STATES`, default `report`, a malformed entry closed to `clean`), `write` keeping the
+axis it does not set, the two targets through `_switch`, and `dev/switches.json` thrown to `report` with the GM's words. Exits:
+green - `tests/tooling/test_switches.py` throws both axes both ways, reads a malformed `claims` as `clean` and an absent one as
+`report`, and finds `remote` kept after a `claims` throw; red - recorded and set down, a claim that it cannot be done to `make
+arbiter-ask`.
+
+### T02 - the gate at `report` and `clean` (D2, D3)
+
+`claims_carry.claims_mode`, `gate`'s two modes, `open_findings` lifted from the report and read by both, `file_carries` and
+`carry` at `report`. Exits: green - `tests/tooling/test_claims_switch.py` lands a fixture with an introduced, a carried and a known
+finding at `report` with no task filed and no `gm-review.jsonl` row, refuses one with an owed claim, refuses `make claims-carry` at
+`report` (the refusal's own test, proven to fire with it deleted), refuses at `clean` a fixture whose report lists an open finding
+and passes one whose only findings are DEFERRED, a DEFERRED carried one among them; red as T01.
+
+### T03 - 405 closed (D4)
+
+405's status line `Withdrawn` with its evidence; `specs/444-work-budget-program/phase-inputs.md` holding the six tasks' texts under
+their stages, any measured figure in them marked as today's count so 444's budget bundles leave it out (443 FR-008's refusal holds).
+Exits: green - `make speckit-todo` lists 405 closed and `phase-inputs.md` names each task once; red as T01.
+
+### T04 - the docs and the report (D5)
+
+`docs/guards.md`, `claims-gate.sh`'s message and the root `CLAUDE.md` name the switch and its state; `make feature-report F=445
+WRITE=1`. Exits: green - the docs read the switch; red as T01.
+
 ## Project Structure
 
 - `l7r/diagram/switches.py`, `dev/switches.json`, `Makefile`; `scripts/record/claims_carry.py`, `scripts/record/claims.py`,

@@ -131,6 +131,12 @@ switches:       ## [project] the iteration switch: remote on|off, with reason, w
 ci-off:         ## [remote] REMOTE OFF - nothing dispatches to CodeBuild; the gated push lands on a green local make done   REASON="..."
 ##  REASON=<text>  why remote is being switched off - recorded with who and when
 	@$(MAKE) --no-print-directory _switch AXIS=remote STATE=off MSG="remote off" REASON="$(REASON)"
+claims-report-only: ## [project] CLAIMS AT REPORT - a claims finding refuses no landing and files no task; it is checked and listed by make claims-report (feature 445; the shipped state)   REASON="..."
+##  REASON=<text>  why claims go to report - recorded with who and when
+	@$(MAKE) --no-print-directory _switch AXIS=claims STATE=report MSG="claims at report" REASON="$(REASON)"
+claims-clean:   ## [project] CLAIMS CLEAN - a landing refuses while make claims-report lists any open finding, so a finding is fixed where it is noticed (feature 445)   REASON="..."
+##  REASON=<text>  why claims go clean - recorded with who and when
+	@$(MAKE) --no-print-directory _switch AXIS=claims STATE=clean MSG="claims clean" REASON="$(REASON)"
 ci-on:          ## [remote] REMOTE ON - the default; the gated route may dispatch again   REASON="..."
 ##  REASON=<text>  why remote is being switched back on - recorded with who and when
 	@$(MAKE) --no-print-directory _switch AXIS=remote STATE=on MSG="remote on" REASON="$(REASON)"

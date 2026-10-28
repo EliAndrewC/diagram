@@ -120,6 +120,8 @@ def test_cli_show_set_check(skill: Path, monkeypatch: pytest.MonkeyPatch, capsys
     assert sw.main(["state", "remote"]) == 0 and "off" in capsys.readouterr().out
     with pytest.raises(SystemExit):
         sw.main(["set", "gears", "off", "--why", "x"])
+    assert sw.main(["set", "claims", "clean", "--why", "claims closed out"]) == 0
+    assert sw.main(["state", "claims"]) == 0 and capsys.readouterr().out.strip().endswith("clean")
 
 
 # ---- THE MAKEFILE REFUSALS, for real (FR-014/FR-015): a fixture skill dir with the real Makefile -
@@ -249,3 +251,27 @@ def test_an_unknown_key_is_IGNORED_not_failed_closed(skill: Path) -> None:
     assert not s.error, "a leftover scope block must not fail closed"
     assert not s.remote_off, "and must not turn remote OFF"
     assert s.remote.state == "on"
+
+
+# ---- the claims switch (feature 445) ----------------------------------------------------------
+
+
+def test_the_claims_switch_defaults_to_report_and_is_thrown_both_ways_keeping_remote(skill: Path) -> None:
+    assert sw.read(skill).claims.state == "report" == sw.DEFAULT_CLAIMS
+    sw.write(skill, "remote", "off", "no remote")
+    s = sw.write(skill, "claims", "clean", "everything works", who="GM")
+    assert s.claims.state == "clean" and s.claims.who == "GM" and s.remote_off, "a claims throw keeps remote as it stood"
+    s = sw.write(skill, "remote", "on", "back on")
+    assert not s.remote_off and s.claims.state == "clean", "a remote throw keeps claims as it stood"
+    assert sw.read(skill).claims.state == "clean" and "claims  clean" in sw.describe(sw.read(skill))
+    assert sw.write(skill, "claims", "report", "until the rewrite").claims.state == "report"
+    with pytest.raises(ValueError, match="unknown switch"):
+        sw.write(skill, "claims", "strict", "x")
+
+
+def test_a_malformed_claims_entry_closes_claims_alone(skill: Path) -> None:
+    (skill / "dev" / "switches.json").write_text('{"remote": {"state": "on"}, "claims": {"state": "lax"}}')
+    s = sw.read(skill)
+    assert s.claims.state == "clean" and "MALFORMED" in s.claims.why and not s.remote_off and not s.error
+    (skill / "dev" / "switches.json").write_text("not json")
+    assert sw.read(skill).claims.state == "clean", "a malformed file closes claims too"
