@@ -27,8 +27,14 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 OPEN = re.compile(r"^- \[ \] (T\d+[a-z]?) (.*)$", re.M)
-LAUNCHED = re.compile(r"(?:running in background with ID: |agentId: )([A-Za-z0-9]+)")
+# ...A LAUNCH IS THE TOOL'S OWN RECORD, NEVER ITS TEXT (2026-10-28): the notice's words reach the transcript quoted - in the session's
+# commands and in the system's notes of a changed file - and each quote read as a launch kept the guard silent; the tool result's
+# structured fields (`backgroundTaskId`, an async agent's `agentId`) are written only by a real launch
+LAUNCHED = re.compile(r'"(?:backgroundTaskId|agentId)":\s*"([A-Za-z0-9]+)"')
 NOTIFIED = re.compile(r"<task-id>([A-Za-z0-9]+)</task-id>")
+#: a task ended with TaskStop sends no notification, so its stop is its end (2026-10-28: a background command stopped on 10-25 stayed
+#: "running" for three days and let every turn of the session end unrefused; the same fix `hm_checks` made in feature 385 T104)
+STOPPED = re.compile(r'"name":\s*"TaskStop",\s*"input":\s*\{[^}]*?"(?:task_id|shell_id)":\s*"([A-Za-z0-9]+)"')
 
 
 def _rows(path: Path) -> list[dict]:
@@ -62,6 +68,7 @@ def running_lines(lines: Iterable[str]) -> set[str]:
     for line in lines:
         launched.update(LAUNCHED.findall(line))
         notified.update(NOTIFIED.findall(line))
+        notified.update(STOPPED.findall(line))
     return launched - notified
 
 

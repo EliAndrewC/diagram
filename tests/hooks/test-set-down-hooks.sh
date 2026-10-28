@@ -33,13 +33,22 @@ rc=$(stop)
 ls "$GUARD_LOG_DIR" >/dev/null 2>&1 && ok "the refusal is recorded in the guard log" || no "guard log"
 
 echo "3. work still running lets the turn end; reported back, it does not"
-line "Command running in background with ID: b1abc. Output is being written to: x"
+launch() { python3 -c 'import json,sys; print(json.dumps({"type": "user", "message": {"content": [{"type": "tool_result", "content": sys.argv[2]}]}, "toolUseResult": {sys.argv[1]: sys.argv[3]}}))' "$1" "$2" "$3" >> "$T/tr.jsonl"; }
+launch backgroundTaskId "Command running in background with ID: b1abc. Output is being written to: x" b1abc
 [ "$(stop)" = 0 ] && ok "a background command not reported back" || no "background running"
 line "<task-notification><task-id>b1abc</task-id><status>completed</status></task-notification>"
 [ "$(stop)" = 2 ] && ok "reported back: refused again" || no "reported back"
-line "Async agent launched successfully. agentId: a9f00 (internal ID)"
+launch agentId "Async agent launched successfully. agentId: a9f00 (internal ID)" a9f00
 [ "$(stop)" = 0 ] && ok "an async agent not reported back" || no "agent running"
 line "<task-id>a9f00</task-id>"
+launch backgroundTaskId "Command running in background with ID: b2stop. Output is being written to: x" b2stop
+[ "$(stop)" = 0 ] && ok "a second background command running" || no "second running"
+python3 -c 'import json; print(json.dumps({"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "t1", "name": "TaskStop", "input": {"task_id": "b2stop"}}]}}))' >> "$T/tr.jsonl"
+[ "$(stop)" = 2 ] && ok "stopped with TaskStop: no notification comes, the stop is its end - refused again (2026-10-28)" || no "TaskStop left it running"
+python3 -c 'import json; print(json.dumps({"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "t2", "name": "Bash", "input": {"command": "echo Command running in background with ID: b3quote"}}]}}))' >> "$T/tr.jsonl"
+[ "$(stop)" = 2 ] && ok "a launch notice quoted in the session's own command is not a launch - refused (2026-10-28)" || no "a quoted notice counted as running"
+line "Note: a file changed - Command running in background with ID: b4note. Output is being written to: x"
+[ "$(stop)" = 2 ] && ok "a launch notice quoted in a system note is not a launch - refused (2026-10-28)" || no "a noted notice counted as running"
 
 echo "4. a question is no way out (the plan review, 2026-10-19)"
 python3 -c 'import json; print(json.dumps({"type": "assistant", "message": {"content": [{"type": "text", "text": "Shall I go on to the next task?"}]}}))' >> "$T/tr.jsonl"
