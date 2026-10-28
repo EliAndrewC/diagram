@@ -20,7 +20,9 @@ section or field below, naming it (feature 443 T13, the GM 2026-10-28); the `wor
 
 One row per factor; every column filled. SCOPE is one of `per item` (per thing placed), `over the run` (a total for the whole
 stage) or `once` (setup outside the loop). A bound that holds only over the run is never written per item, and a `once` term
-states its own bound. WORST CASE names where the bound is tight, at the smallest and the largest n the contract allows.
+states its own bound. SLACK covers only what varies around a stated bound (at most 2, S7); work you can name - a flag set, a
+record written, a jitter drawn - is a factor of its own, never folded into the slack. A factor's value comes from the contract,
+never from a figure with no source. WORST CASE names where the bound is tight, at the smallest and the largest n the contract allows.
 
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|

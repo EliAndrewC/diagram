@@ -1,0 +1,1 @@
+UNDERIVED - pins: the figure "at most 10" has no reason; the contract says the pins are the spec's own and the reference spec pins none, and the only reason given for 10 is "a spec pinning 10 knobs", which just restates the number. (Also: the slack of 2 named four operations of work, not variance - a factor, the slack 1.)

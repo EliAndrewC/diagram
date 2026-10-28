@@ -1,0 +1,3 @@
+SOUND - every factor of the 40 operations per roll is a count the contract fixes (36 fields, 3 flags, 1 archetype test, 0 pins on the reference spec), no standard algorithm would lower any of them, and no factor is larger than its reason supports.
+
+(Round 3, 2026-10-28, under the round arbiter's continue on ask:444-T02-water-round-3. Its caveat: the pins factor is 0 only for the reference spec; a spec that pins knobs adds one write per pin.)

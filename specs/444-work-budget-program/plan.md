@@ -98,7 +98,7 @@ water_frame, field, sink, waterward, pond_stock, pond_bank: each derived, judged
 1. **The goal, in the world.** Each water stage has a budget an independent judge, blind to today's code and counts, found derived.
 2. **The constraints.** FR-001; the rubric S1-S7; the template (443 T13); D1, D3.
 3. **Where each comes from.** G: the design the GM approved, 2026-10-28 (`request.md`, step 3).
-4. **Do they describe the world here?** Each stage's contract, read from its docstring, `dev/placement.md` and its claims when its derivation is written.
+4. **Do they describe the world here?** Each stage's contract, read when its derivation is written from D1's five sources: its docstring, the `plan` fields it reads, the manifest keys and registries it writes (`dev/placement.md`'s `STAGES` table and draw order), its claims (`make claims-report`) and the cohort's checks of what it places (`cohort_audit`'s rules).
 5. **The order.** After T01.
 6. **The exits.** Green: six SOUND verdicts recorded and six budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** none
@@ -118,7 +118,7 @@ seat, homesteads, appurtenances, burial, lane_wells, sties, washing: each derive
 1. **The goal, in the world.** Each homesteads-family stage has a budget an independent judge found derived.
 2. **The constraints.** FR-001; the rubric; the template; D1, D3.
 3. **Where each comes from.** G: the design the GM approved, 2026-10-28 (`request.md`, step 3).
-4. **Do they describe the world here?** Each stage's contract, read when its derivation is written.
+4. **Do they describe the world here?** Each stage's contract, read when its derivation is written from D1's five sources: its docstring, the `plan` fields it reads, the manifest keys and registries it writes (`dev/placement.md`'s `STAGES` table and draw order), its claims (`make claims-report`) and the cohort's checks of what it places (`cohort_audit`'s rules).
 5. **The order.** After T01.
 6. **The exits.** Green: seven SOUND verdicts and seven budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** none
@@ -138,7 +138,7 @@ track, web, crossings: each derived, judged SOUND and pinned.
 1. **The goal, in the world.** Each ways stage has a budget an independent judge found derived.
 2. **The constraints.** FR-001; the rubric; the template; D1, D3.
 3. **Where each comes from.** G: the design the GM approved, 2026-10-28 (`request.md`, step 3).
-4. **Do they describe the world here?** Each stage's contract, read when its derivation is written.
+4. **Do they describe the world here?** Each stage's contract, read when its derivation is written from D1's five sources: its docstring, the `plan` fields it reads, the manifest keys and registries it writes (`dev/placement.md`'s `STAGES` table and draw order), its claims (`make claims-report`) and the cohort's checks of what it places (`cohort_audit`'s rules).
 5. **The order.** After T01.
 6. **The exits.** Green: three SOUND verdicts and three budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** none
@@ -158,7 +158,7 @@ hinterland, woodland, windbreak, bamboo, frame, notice, labels: each derived, ju
 1. **The goal, in the world.** Each hinterland and frame stage has a budget an independent judge found derived.
 2. **The constraints.** FR-001; the rubric; the template; D1, D3.
 3. **Where each comes from.** G: the design the GM approved, 2026-10-28 (`request.md`, step 3).
-4. **Do they describe the world here?** Each stage's contract, read when its derivation is written.
+4. **Do they describe the world here?** Each stage's contract, read when its derivation is written from D1's five sources: its docstring, the `plan` fields it reads, the manifest keys and registries it writes (`dev/placement.md`'s `STAGES` table and draw order), its claims (`make claims-report`) and the cohort's checks of what it places (`cohort_audit`'s rules).
 5. **The order.** After T01.
 6. **The exits.** Green: seven SOUND verdicts and seven budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** none

@@ -1,0 +1,1 @@
+UNDERIVED - flags and the archetype test (4): the contract's Writes line names only the 36 meta fields and one knob per pin, and no flag or archetype test appears anywhere in the contract or the geometry. (Corrected: the contract's Writes and Reads now declare the three settlement flags later stages read and the archetype test the brook fields need.)

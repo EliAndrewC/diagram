@@ -59,13 +59,13 @@
    "sha256": "16b848e1e0f9a5f4f247b52505c2ecd22912dfb9eed710e17db34587dc25fce2",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T02 Approach (checklist part A)": {
-   "sha256": "5d123a59010629dfc2f1fa2416bc4f0ff3735ae7f90d7cee5c339bc834c9c195",
+   "sha256": "f67cd11dcd0fae4ea65d7aca669abbcec8634d25bc44bee5e0c460c049808732",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T03 - the homesteads family's budgets (D1, D3, D4)": {
    "sha256": "f644a1c79d1b8e3c6de3e957b520b6eec44d4d1a2faf1ca303c90fb409de43d8",
@@ -371,6 +371,64 @@
      "why": "These are sequencing and process choices inside the request. None of them changes what is built or relaxes any standard. The arbiter is asked only whether the task can be done, not to accept a phase over budget, so this matches request section 5 item 4."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T02 - the water family's budgets (D1, D3, D4)",
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02-scope",
+     "summary": "The task covers the six water stages (water_frame, field, sink, waterward, pond_stock, pond_bank), each derived, judged SOUND and pinned, landed together.",
+     "class": "within",
+     "why": "D4 lists exactly these six as the water family, one task per family landing derivations, verdicts and budgets together; the request's step 3 derives every stage's budget on paper with MODE BUDGET on each. No stage of the family is left out."
+    },
+    {
+     "id": "T02-blind",
+     "summary": "Goal: each budget found derived by an independent judge blind to today's code and counts.",
+     "class": "within",
+     "why": "FR-001 and the request's section 4 (the MODE BUDGET bundle does not hold the current code or its numbers, so today's waste cannot anchor the target). The cited D1 also keeps the counts out of the writing."
+    },
+    {
+     "id": "T02-contract-sources",
+     "summary": "Item 4: each stage's contract is read from D1's five sources - docstring, the plan fields it reads, the manifest keys and registries it writes (dev/placement.md's STAGES table and draw order), its claims (make claims-report) and the cohort's checks of what it places (cohort_audit's rules).",
+     "class": "within",
+     "why": "This is the changed passage. The earlier text (docstring, dev/placement.md and claims only) dropped the inputs read and the cohort properties; the new text carries all five of D1's sources, which are the request's checklist item 1 (what the phase reads from the manifest and writes, the claims that govern it, the cohort properties it must keep). It now matches D1 in full and narrows nothing."
+    },
+    {
+     "id": "T02-order",
+     "summary": "After T01.",
+     "class": "within",
+     "why": "T01 makes a budget count the derivation's own items, which the budgets pinned here need; sequencing only, the spec leaves it open and it narrows nothing."
+    },
+    {
+     "id": "T02-exits",
+     "summary": "Green: six SOUND verdicts recorded and six budgets pinned. Red: what failed recorded and the task set down; a claim that it cannot be done is ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit is SC-001 for this family. The red exit does not let a stage go unbudgeted: a set-down task leaves the stage without a SOUND verdict, so SC-001 and FR-009 keep the feature open, and the impossibility claim goes to the arbiter, not to the session. It is not the 'set down when the gain is small' exit the request's section 5 forbids (no time saving is weighed here), and D3's correction loop and third-round tripwire are kept by citing D3."
+    },
+    {
+     "id": "T02-budget",
+     "summary": "One landing; six dispatches, more where a verdict asks a correction.",
+     "class": "within",
+     "why": "D3: one dispatch per derivation, re-dispatched after a LOOSE or UNDERIVED correction; D4: one landing per family."
+    },
+    {
+     "id": "T02-done",
+     "summary": "Six budgeted rows in dev/work-budget.json, each with its derivation and verdict.",
+     "class": "within",
+     "why": "D3 saves each verdict beside its derivation, writes its ledger row and pins SOUND budgets with make budget-set; the request's standing record (section 5 item 2) is where budgets are pinned (checklist item 3)."
+    },
+    {
+     "id": "T02-not-perf",
+     "summary": "Not performance work: paper budgets, no code a roll runs changes.",
+     "class": "within",
+     "why": "The request's step 3 derives budgets on paper; rebuilds begin in step 4."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -402,6 +460,62 @@
      "summary": "T01 goes first because T02-T05's budget-set calls need it; one landing; exits green on tests, red recorded and an impossibility claim sent to make arbiter-ask",
      "class": "within",
      "why": "These are sequencing and process choices inside the request. None of them changes what is built or relaxes any standard. The arbiter is asked only whether the task can be done, not to accept a phase over budget, so this matches request section 5 item 4."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T02": {
+   "section_sha256": "e7befcfd0fe9cf08eb6e158e121da2d428349570e6f69ea62d6b87b0158b37c8",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T02-scope",
+     "summary": "The task covers the six water stages (water_frame, field, sink, waterward, pond_stock, pond_bank), each derived, judged SOUND and pinned, landed together.",
+     "class": "within",
+     "why": "D4 lists exactly these six as the water family, one task per family landing derivations, verdicts and budgets together; the request's step 3 derives every stage's budget on paper with MODE BUDGET on each. No stage of the family is left out."
+    },
+    {
+     "id": "T02-blind",
+     "summary": "Goal: each budget found derived by an independent judge blind to today's code and counts.",
+     "class": "within",
+     "why": "FR-001 and the request's section 4 (the MODE BUDGET bundle does not hold the current code or its numbers, so today's waste cannot anchor the target). The cited D1 also keeps the counts out of the writing."
+    },
+    {
+     "id": "T02-contract-sources",
+     "summary": "Item 4: each stage's contract is read from D1's five sources - docstring, the plan fields it reads, the manifest keys and registries it writes (dev/placement.md's STAGES table and draw order), its claims (make claims-report) and the cohort's checks of what it places (cohort_audit's rules).",
+     "class": "within",
+     "why": "This is the changed passage. The earlier text (docstring, dev/placement.md and claims only) dropped the inputs read and the cohort properties; the new text carries all five of D1's sources, which are the request's checklist item 1 (what the phase reads from the manifest and writes, the claims that govern it, the cohort properties it must keep). It now matches D1 in full and narrows nothing."
+    },
+    {
+     "id": "T02-order",
+     "summary": "After T01.",
+     "class": "within",
+     "why": "T01 makes a budget count the derivation's own items, which the budgets pinned here need; sequencing only, the spec leaves it open and it narrows nothing."
+    },
+    {
+     "id": "T02-exits",
+     "summary": "Green: six SOUND verdicts recorded and six budgets pinned. Red: what failed recorded and the task set down; a claim that it cannot be done is ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit is SC-001 for this family. The red exit does not let a stage go unbudgeted: a set-down task leaves the stage without a SOUND verdict, so SC-001 and FR-009 keep the feature open, and the impossibility claim goes to the arbiter, not to the session. It is not the 'set down when the gain is small' exit the request's section 5 forbids (no time saving is weighed here), and D3's correction loop and third-round tripwire are kept by citing D3."
+    },
+    {
+     "id": "T02-budget",
+     "summary": "One landing; six dispatches, more where a verdict asks a correction.",
+     "class": "within",
+     "why": "D3: one dispatch per derivation, re-dispatched after a LOOSE or UNDERIVED correction; D4: one landing per family."
+    },
+    {
+     "id": "T02-done",
+     "summary": "Six budgeted rows in dev/work-budget.json, each with its derivation and verdict.",
+     "class": "within",
+     "why": "D3 saves each verdict beside its derivation, writes its ledger row and pins SOUND budgets with make budget-set; the request's standing record (section 5 item 2) is where budgets are pinned (checklist item 3)."
+    },
+    {
+     "id": "T02-not-perf",
+     "summary": "Not performance work: paper budgets, no code a roll runs changes.",
+     "class": "within",
+     "why": "The request's step 3 derives budgets on paper; rebuilds begin in step 4."
     }
    ],
    "verdict": "CLEAR"
