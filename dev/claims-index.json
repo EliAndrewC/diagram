@@ -76494,6 +76494,30 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/work_budget.py::FIT#plumbing": {
+  "body": "0c827fff559981cc",
+  "claim": "plumbing - NONE: the exponent is fitted from 20 to 80 households (rubric S6)",
+  "code": "1a3766d32176a3ac",
+  "core": "7c69a755383aa8c7",
+  "date": "2026-10-28",
+  "note": "the fit range for a work-budget exponent is measurement plumbing and draws nothing on a map",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/work_budget.py::SIZES#plumbing": {
+  "body": "82ffa976b954a5c6",
+  "claim": "plumbing - NONE: the sizes the design names (10, 20, 40 and 80 households; 80 past the band, as the scaling legs roll it)",
+  "code": "4594b8ddbb9a42a2",
+  "core": "7985c51b31f0e929",
+  "date": "2026-10-28",
+  "note": "the settlement sizes the work-budget tool times are benchmark inputs, not a fact about any drawn place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/banks.py::StrokeIndex#bank geometry": {
   "code": "ff68e604dc0c7ffd",
   "core": "7f4c25209f6faf8d",

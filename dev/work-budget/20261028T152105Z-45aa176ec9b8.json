@@ -1,0 +1,4990 @@
+{
+ "meta": {
+  "code_id": "45aa176ec9b8",
+  "commit": "944a517bb",
+  "refused": [
+   "seed 4 at 40: WebRefused: the web's last resort cannot mend it without dropping a tree lane: the web still breaks joins_short ([(42, -1, (3571.592",
+   "seed 4 at 80: FieldRefused: Inashiro: no fan at any of 5 aspects is legal (no supply tail dangling, no hairpin, both flanks commanded) and lands 104",
+   "seed 25 at 80: FieldRefused: Inashiro: no fan at any of 5 aspects is legal (no supply tail dangling, no hairpin, both flanks commanded) and lands 104",
+   "seed 39 at 80: FieldRefused: Inashiro: no fan at any of 5 aspects is legal (no supply tail dangling, no hairpin, both flanks commanded) and lands 104",
+   "seed 47 at 80: FieldRefused: Inashiro: no fan at any of 5 aspects is legal (no supply tail dangling, no hairpin, both flanks commanded) and lands 104"
+  ],
+  "seeds": [
+   4,
+   25,
+   39,
+   47
+  ],
+  "sizes": [
+   10,
+   20,
+   40,
+   80
+  ],
+  "utc": "2026-10-28T15:21:04Z"
+ },
+ "rows": [
+  {
+   "households": 10,
+   "refused": null,
+   "seed": 4,
+   "stages": {
+    "appurtenances": {
+     "calls": 39897,
+     "ops": {
+      "candidate@Standing.conflicts": 121,
+      "candidate@_fits": 6,
+      "candidate@belt_polygon": 1,
+      "candidate@clears": 4,
+      "candidate@in_dooryard": 3,
+      "candidate@seat_wells": 89,
+      "dist@seg_closest": 7218,
+      "dist@seg_dists": 5597,
+      "index_examined@PointGrid.near": 80,
+      "index_examined@Standing.conflicts": 500,
+      "index_query@PointGrid.near": 249,
+      "index_query@RingIndex.inside_many": 3162,
+      "placed@Standing.record": 49,
+      "pt_test@point_in_poly": 515,
+      "pt_test@points_in_poly": 98,
+      "seg_test@chain_violated": 210,
+      "seg_test@segments_cross": 1675
+     },
+     "placed": 73,
+     "seconds": 0.031
+    },
+    "bamboo": {
+     "calls": 39,
+     "ops": {
+      "pt_test@point_in_poly": 8
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "crossings": {
+     "calls": 15263,
+     "ops": {
+      "candidate@Standing.conflicts": 14,
+      "candidate@_deck_corners_clear": 1,
+      "dist@seg_closest": 3625,
+      "index_examined@PointGrid.near": 561,
+      "index_examined@Standing.conflicts": 112,
+      "index_query@PointGrid.near": 218,
+      "placed@Standing.record": 7,
+      "pt_test@point_in_poly": 1335,
+      "seg_test@seg_intersect": 1,
+      "seg_test@segments_cross": 41
+     },
+     "placed": 7,
+     "seconds": 0.006
+    },
+    "field": {
+     "calls": 502601,
+     "ops": {
+      "candidate@Standing.conflicts": 436,
+      "candidate@_bund_beans": 428,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 3,
+      "candidate@_paddy_features": 2,
+      "candidate@_pond_fit": 14,
+      "candidate@_refused": 359,
+      "candidate@_split_steps": 1,
+      "candidate@bead_drowned": 428,
+      "candidate@bend_at": 5,
+      "candidate@clear_of_field": 111,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 1907,
+      "dist@_seg_dist": 1466,
+      "dist@seg_closest": 315,
+      "index_examined@PointGrid.near": 1060,
+      "index_examined@Standing.conflicts": 5060,
+      "index_query@PointGrid.near": 1333,
+      "placed@Standing.record": 63,
+      "pt_test@_pip": 269,
+      "pt_test@point_in_poly": 1881,
+      "seg_test@ring_meets_ellipse": 12,
+      "seg_test@segments_cross": 5880
+     },
+     "placed": 194,
+     "seconds": 0.329
+    },
+    "frame": {
+     "calls": 209,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_examined@PointGrid.near": 22,
+      "index_query@PointGrid.near": 1
+     },
+     "placed": 12,
+     "seconds": 0.004
+    },
+    "hinterland": {
+     "calls": 569376,
+     "ops": {
+      "candidate@_box_clear": 30,
+      "candidate@_crown_covers": 682,
+      "candidate@_crown_seat_clear": 214,
+      "candidate@_fits": 729,
+      "candidate@belt_polygon": 2,
+      "candidate@clear_of_plot": 1,
+      "candidate@close_belt_gaps": 9558,
+      "candidate@open_ground_patches._ok": 1071,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 2023,
+      "candidate@strip_refused": 190,
+      "dist@seg_closest": 43824,
+      "index_examined@PointGrid.near": 119073,
+      "index_examined@RingIndex.inside": 41350,
+      "index_examined@RingIndex.inside_many": 1089898,
+      "index_query@PointGrid.near": 22093,
+      "index_query@RingIndex.inside": 5044,
+      "index_query@RingIndex.inside_many": 25326,
+      "pt_test@point_in_poly": 1256,
+      "seg_test@chain_violated": 8710,
+      "seg_test@segments_cross": 3543
+     },
+     "placed": 845,
+     "seconds": 0.541
+    },
+    "homesteads": {
+     "calls": 677217,
+     "ops": {
+      "candidate@AccessTree.lay": 22,
+      "candidate@SeatRegion.offer": 14476,
+      "candidate@Standing.conflicts": 831,
+      "candidate@WoodShares.share": 1631,
+      "candidate@_crosses_fabric": 118,
+      "candidate@_filled_lattice": 21,
+      "candidate@_first_admitted": 13,
+      "candidate@_fits": 543,
+      "candidate@_lay_by_hand": 308,
+      "candidate@_place_bundle_nucleated": 172,
+      "candidate@_way_for": 13,
+      "candidate@clears": 6017,
+      "candidate@connector_track": 1,
+      "candidate@fixtures_clear": 419,
+      "candidate@fouled_segment": 56,
+      "candidate@house_hit": 86,
+      "candidate@in_dooryard": 1712,
+      "candidate@offer_seats": 5,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@taut": 32,
+      "candidate@trace": 169,
+      "candidate@way_out": 2283,
+      "dist@box_gap": 1046,
+      "dist@seg_closest": 43175,
+      "dist@seg_dists": 8425,
+      "dropped@Standing.forget": 10,
+      "index_examined@FabricIndex.fouled": 20,
+      "index_examined@PointGrid.near": 29382,
+      "index_examined@Standing.conflicts": 2530,
+      "index_query@FabricIndex.fouled": 406,
+      "index_query@PointGrid.near": 25777,
+      "placed@Standing.record": 44,
+      "pt_test@point_in_poly": 1284,
+      "seg_test@chain_violated": 17850,
+      "seg_test@chain_violated_many": 54369,
+      "seg_test@free_end": 1358,
+      "seg_test@segments_cross": 1146
+     },
+     "placed": 250,
+     "seconds": 0.466
+    },
+    "labels": {
+     "calls": 6374,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.005
+    },
+    "lane_wells": {
+     "calls": 72,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "notice": {
+     "calls": 114420,
+     "ops": {
+      "candidate@Obstacles.blocked": 45,
+      "candidate@Standing.conflicts": 285,
+      "candidate@_fits": 305,
+      "candidate@_route_seats": 972,
+      "candidate@_strict_seat": 1,
+      "dist@seg_closest": 9141,
+      "index_examined@PointGrid.near": 18757,
+      "index_examined@Standing.conflicts": 3521,
+      "index_query@PointGrid.near": 5083,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 234,
+      "seg_test@chain_violated": 10612
+     },
+     "placed": 1,
+     "seconds": 0.053
+    },
+    "pond_bank": {
+     "calls": 28035,
+     "ops": {
+      "candidate@_crown_covers": 52,
+      "candidate@stage_pond_bank": 26,
+      "dist@seg_closest": 11960,
+      "pt_test@point_in_poly": 1352
+     },
+     "placed": 104,
+     "seconds": 0.009
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "seat": {
+     "calls": 19833,
+     "ops": {
+      "candidate@back_fouled": 49,
+      "candidate@seat_cluster": 27,
+      "dist@seg_closest": 251,
+      "index_examined@PointGrid.near": 909,
+      "index_query@PointGrid.near": 368,
+      "pt_test@point_in_poly": 7993
+     },
+     "placed": 0,
+     "seconds": 0.014
+    },
+    "sink": {
+     "calls": 66906,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 1,
+      "candidate@pond_setback": 1,
+      "dist@seg_closest": 181,
+      "index_examined@Standing.conflicts": 54870,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 48
+     },
+     "placed": 7,
+     "seconds": 0.012
+    },
+    "sties": {
+     "calls": 777,
+     "ops": {
+      "candidate@Standing.conflicts": 12,
+      "candidate@against_a_part": 23,
+      "candidate@clears": 46,
+      "index_examined@Standing.conflicts": 124,
+      "placed@Standing.record": 6
+     },
+     "placed": 6,
+     "seconds": 0.001
+    },
+    "track": {
+     "calls": 433,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 76,
+      "index_examined@Standing.conflicts": 36,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "washing": {
+     "calls": 3525,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 3120,
+      "index_examined@Standing.conflicts": 46,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.002
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 1541723,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 19,
+      "candidate@Standing.conflicts": 446,
+      "candidate@_clear_link": 7,
+      "candidate@_crosses_fabric": 429,
+      "candidate@_deck_corners_clear": 7,
+      "candidate@_held": 9,
+      "candidate@a_way_onto_the_bund": 28,
+      "candidate@fouled_segment": 67,
+      "candidate@house_hit": 393,
+      "candidate@lattice_search": 32952,
+      "candidate@over_a_fixture": 115,
+      "candidate@trial_count": 6,
+      "candidate@undeckable_at": 95,
+      "dist@box_gap": 5791,
+      "dist@seg_closest": 90958,
+      "dist@seg_dists": 550770,
+      "dropped@Standing.forget": 14,
+      "index_examined@FabricIndex.fouled": 19141,
+      "index_examined@PointGrid.near": 3158,
+      "index_examined@RingIndex.inside": 1037,
+      "index_examined@Standing.conflicts": 32242,
+      "index_query@FabricIndex.fouled": 5617,
+      "index_query@PointGrid.near": 15957,
+      "index_query@RingIndex.inside": 186,
+      "placed@Standing.record": 15,
+      "pt_test@point_in_poly": 536,
+      "seg_test@free_end": 8376,
+      "seg_test@seg_intersect": 24,
+      "seg_test@segments_cross": 293538,
+      "seg_test@tail_doubled": 2875
+     },
+     "placed": 13,
+     "seconds": 0.449
+    },
+    "windbreak": {
+     "calls": 129931,
+     "ops": {
+      "candidate@GroveMixin.seat": 867,
+      "candidate@_crown_covers": 2277,
+      "candidate@_crown_seat_clear": 1871,
+      "candidate@reseat_clump": 40,
+      "dist@seg_closest": 80,
+      "index_examined@PointGrid.near": 18606,
+      "index_examined@RingIndex.inside": 10350,
+      "index_query@PointGrid.near": 7457,
+      "index_query@RingIndex.inside": 4803
+     },
+     "placed": 943,
+     "seconds": 0.153
+    },
+    "woodland": {
+     "calls": 28511,
+     "ops": {
+      "candidate@_crown_covers": 449,
+      "candidate@_stock_woodland": 1062,
+      "dist@seg_closest": 4620,
+      "index_examined@PointGrid.near": 21921,
+      "index_examined@RingIndex.inside": 23110,
+      "index_query@PointGrid.near": 2445,
+      "index_query@RingIndex.inside": 2807
+     },
+     "placed": 646,
+     "seconds": 0.018
+    }
+   }
+  },
+  {
+   "households": 10,
+   "refused": null,
+   "seed": 25,
+   "stages": {
+    "appurtenances": {
+     "calls": 76839,
+     "ops": {
+      "candidate@Standing.conflicts": 340,
+      "candidate@_fits": 10,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 1590,
+      "dist@seg_closest": 12298,
+      "dist@seg_dists": 17184,
+      "index_examined@PointGrid.near": 344,
+      "index_examined@Standing.conflicts": 1430,
+      "index_query@PointGrid.near": 980,
+      "index_query@RingIndex.inside_many": 840,
+      "placed@Standing.record": 44,
+      "pt_test@point_in_poly": 1403,
+      "pt_test@points_in_poly": 442,
+      "seg_test@chain_violated": 335,
+      "seg_test@segments_cross": 3181
+     },
+     "placed": 71,
+     "seconds": 0.055
+    },
+    "bamboo": {
+     "calls": 69,
+     "ops": {
+      "pt_test@point_in_poly": 16
+     },
+     "placed": 2,
+     "seconds": 0.001
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "crossings": {
+     "calls": 10735,
+     "ops": {
+      "candidate@Standing.conflicts": 12,
+      "dist@seg_closest": 2666,
+      "index_examined@PointGrid.near": 414,
+      "index_examined@Standing.conflicts": 88,
+      "index_query@PointGrid.near": 191,
+      "placed@Standing.record": 6,
+      "pt_test@point_in_poly": 550,
+      "seg_test@segments_cross": 48
+     },
+     "placed": 6,
+     "seconds": 0.005
+    },
+    "field": {
+     "calls": 400580,
+     "ops": {
+      "candidate@Standing.conflicts": 51,
+      "candidate@_bund_beans": 372,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 9,
+      "candidate@_paddy_features": 2,
+      "candidate@_pond_fit": 9,
+      "candidate@_refused": 15,
+      "candidate@_split_steps": 17,
+      "candidate@bead_drowned": 372,
+      "candidate@clear_of_field": 106,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 1155,
+      "dist@_seg_dist": 4169,
+      "dist@seg_closest": 1433,
+      "index_examined@PointGrid.near": 1375,
+      "index_examined@Standing.conflicts": 4312,
+      "index_query@PointGrid.near": 834,
+      "placed@Standing.record": 25,
+      "pt_test@_pip": 284,
+      "pt_test@point_in_poly": 2035,
+      "seg_test@ring_meets_ellipse": 9,
+      "seg_test@segments_cross": 6980
+     },
+     "placed": 161,
+     "seconds": 0.334
+    },
+    "frame": {
+     "calls": 175,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_examined@PointGrid.near": 12,
+      "index_examined@RingIndex.inside": 5,
+      "index_query@PointGrid.near": 1,
+      "index_query@RingIndex.inside": 1
+     },
+     "placed": 12,
+     "seconds": 0.003
+    },
+    "hinterland": {
+     "calls": 321139,
+     "ops": {
+      "candidate@Standing.conflicts": 13,
+      "candidate@_box_clear": 42,
+      "candidate@_crosses_fabric": 4,
+      "candidate@_crown_covers": 475,
+      "candidate@_crown_seat_clear": 183,
+      "candidate@_flexible_clear": 19,
+      "candidate@belt_polygon": 2,
+      "candidate@close_belt_gaps": 5935,
+      "candidate@open_ground_patches._ok": 402,
+      "candidate@over_a_fixture": 72,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 333,
+      "candidate@strip_refused": 182,
+      "dist@seg_closest": 2927,
+      "index_examined@PointGrid.near": 104749,
+      "index_examined@RingIndex.inside": 18792,
+      "index_examined@RingIndex.inside_many": 713580,
+      "index_examined@Standing.conflicts": 99,
+      "index_query@PointGrid.near": 15149,
+      "index_query@RingIndex.inside": 2314,
+      "index_query@RingIndex.inside_many": 15166,
+      "placed@Standing.record": 7,
+      "pt_test@point_in_poly": 651,
+      "seg_test@segments_cross": 3372
+     },
+     "placed": 641,
+     "seconds": 0.351
+    },
+    "homesteads": {
+     "calls": 461866,
+     "ops": {
+      "candidate@AccessTree.lay": 22,
+      "candidate@SeatRegion.offer": 15593,
+      "candidate@Standing.conflicts": 342,
+      "candidate@WoodShares.share": 1140,
+      "candidate@_crosses_fabric": 973,
+      "candidate@_filled_lattice": 19,
+      "candidate@_first_admitted": 13,
+      "candidate@_lay_by_hand": 241,
+      "candidate@_place_bundle_nucleated": 124,
+      "candidate@_way_for": 16,
+      "candidate@clears": 6873,
+      "candidate@connector_track": 13,
+      "candidate@fixtures_clear": 529,
+      "candidate@fouled_segment": 59,
+      "candidate@house_hit": 95,
+      "candidate@in_dooryard": 2519,
+      "candidate@offer_seats": 2,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@taut": 35,
+      "candidate@trace": 160,
+      "candidate@way_out": 2187,
+      "dist@box_gap": 1035,
+      "dist@seg_closest": 23235,
+      "dist@seg_dists": 6314,
+      "dropped@Standing.forget": 10,
+      "index_examined@FabricIndex.fouled": 27,
+      "index_examined@PointGrid.near": 23120,
+      "index_examined@RingIndex.inside": 1875,
+      "index_examined@Standing.conflicts": 557,
+      "index_query@FabricIndex.fouled": 243,
+      "index_query@PointGrid.near": 8003,
+      "index_query@RingIndex.inside": 81,
+      "placed@Standing.record": 44,
+      "pt_test@point_in_poly": 1877,
+      "seg_test@chain_violated": 645,
+      "seg_test@chain_violated_many": 8309,
+      "seg_test@free_end": 1340,
+      "seg_test@segments_cross": 5934
+     },
+     "placed": 394,
+     "seconds": 0.408
+    },
+    "labels": {
+     "calls": 4438,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.003
+    },
+    "lane_wells": {
+     "calls": 59196,
+     "ops": {
+      "candidate@Standing.conflicts": 298,
+      "candidate@_fits": 69,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 1673,
+      "dist@seg_closest": 8159,
+      "dist@seg_dists": 23999,
+      "index_examined@PointGrid.near": 774,
+      "index_examined@Standing.conflicts": 1512,
+      "index_query@PointGrid.near": 1181,
+      "index_query@RingIndex.inside_many": 840,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 813,
+      "pt_test@points_in_poly": 557,
+      "seg_test@chain_violated": 2385,
+      "seg_test@segments_cross": 146
+     },
+     "placed": 1,
+     "seconds": 0.058
+    },
+    "notice": {
+     "calls": 101710,
+     "ops": {
+      "candidate@Obstacles.blocked": 228,
+      "candidate@Standing.conflicts": 209,
+      "candidate@_fits": 232,
+      "candidate@_route_seats": 732,
+      "candidate@_strict_seat": 3,
+      "dist@seg_closest": 2849,
+      "index_examined@PointGrid.near": 13376,
+      "index_examined@Standing.conflicts": 1816,
+      "index_query@PointGrid.near": 3652,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 316,
+      "seg_test@chain_violated": 7934
+     },
+     "placed": 1,
+     "seconds": 0.046
+    },
+    "pond_bank": {
+     "calls": 16,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "seat": {
+     "calls": 11056,
+     "ops": {
+      "candidate@back_fouled": 53,
+      "candidate@seat_cluster": 28,
+      "dist@seg_closest": 39,
+      "index_examined@PointGrid.near": 134,
+      "index_query@PointGrid.near": 400,
+      "pt_test@point_in_poly": 2486
+     },
+     "placed": 0,
+     "seconds": 0.009
+    },
+    "sink": {
+     "calls": 82707,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 3,
+      "candidate@pond_setback": 115,
+      "dist@seg_closest": 10072,
+      "index_examined@Standing.conflicts": 45112,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 2784
+     },
+     "placed": 7,
+     "seconds": 0.029
+    },
+    "sties": {
+     "calls": 924,
+     "ops": {
+      "candidate@Standing.conflicts": 14,
+      "candidate@against_a_part": 35,
+      "candidate@clears": 70,
+      "index_examined@Standing.conflicts": 120,
+      "placed@Standing.record": 7
+     },
+     "placed": 7,
+     "seconds": 0.002
+    },
+    "track": {
+     "calls": 333,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 72,
+      "index_examined@Standing.conflicts": 4,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "washing": {
+     "calls": 3385,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 3030,
+      "index_examined@Standing.conflicts": 20,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.002
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 269045,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 8,
+      "candidate@Standing.conflicts": 58,
+      "candidate@_clear_link": 86,
+      "candidate@_crosses_fabric": 48,
+      "candidate@_held": 3,
+      "candidate@a_way_onto_the_bund": 18,
+      "candidate@fouled_segment": 26,
+      "candidate@house_hit": 28,
+      "candidate@lattice_search": 106192,
+      "candidate@over_a_fixture": 20,
+      "candidate@trial_count": 4,
+      "candidate@undeckable_at": 12,
+      "dist@box_gap": 982,
+      "dist@seg_closest": 16633,
+      "dist@seg_dists": 1616,
+      "dropped@Standing.forget": 22,
+      "index_examined@FabricIndex.fouled": 59912,
+      "index_examined@PointGrid.near": 7195,
+      "index_examined@RingIndex.inside": 4719,
+      "index_examined@Standing.conflicts": 1390,
+      "index_query@FabricIndex.fouled": 18056,
+      "index_query@PointGrid.near": 4536,
+      "index_query@RingIndex.inside": 1081,
+      "placed@Standing.record": 22,
+      "pt_test@point_in_poly": 153,
+      "seg_test@free_end": 1368,
+      "seg_test@seg_intersect": 5,
+      "seg_test@segments_cross": 8620,
+      "seg_test@tail_doubled": 473
+     },
+     "placed": 11,
+     "seconds": 0.186
+    },
+    "windbreak": {
+     "calls": 116394,
+     "ops": {
+      "candidate@GroveMixin.seat": 927,
+      "candidate@_crown_covers": 2305,
+      "candidate@_crown_seat_clear": 1786,
+      "candidate@reseat_clump": 400,
+      "dist@seg_closest": 33,
+      "index_examined@PointGrid.near": 15424,
+      "index_examined@RingIndex.inside": 8827,
+      "index_query@PointGrid.near": 6478,
+      "index_query@RingIndex.inside": 4073
+     },
+     "placed": 883,
+     "seconds": 0.126
+    },
+    "woodland": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    }
+   }
+  },
+  {
+   "households": 10,
+   "refused": null,
+   "seed": 39,
+   "stages": {
+    "appurtenances": {
+     "calls": 73763,
+     "ops": {
+      "candidate@Standing.conflicts": 282,
+      "candidate@_fits": 21,
+      "candidate@belt_polygon": 1,
+      "candidate@clears": 6,
+      "candidate@in_dooryard": 4,
+      "candidate@seat_wells": 402,
+      "dist@seg_closest": 13883,
+      "dist@seg_dists": 15830,
+      "index_examined@PointGrid.near": 214,
+      "index_examined@Standing.conflicts": 1390,
+      "index_query@PointGrid.near": 816,
+      "index_query@RingIndex.inside_many": 1480,
+      "placed@Standing.record": 46,
+      "pt_test@point_in_poly": 1349,
+      "pt_test@points_in_poly": 470,
+      "seg_test@chain_violated": 945,
+      "seg_test@segments_cross": 4180
+     },
+     "placed": 70,
+     "seconds": 0.051
+    },
+    "bamboo": {
+     "calls": 42,
+     "ops": {
+      "pt_test@point_in_poly": 9
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "crossings": {
+     "calls": 12540,
+     "ops": {
+      "candidate@Standing.conflicts": 14,
+      "candidate@_deck_corners_clear": 1,
+      "dist@seg_closest": 3174,
+      "index_examined@PointGrid.near": 440,
+      "index_examined@Standing.conflicts": 102,
+      "index_query@PointGrid.near": 152,
+      "placed@Standing.record": 7,
+      "pt_test@point_in_poly": 578,
+      "seg_test@seg_intersect": 1,
+      "seg_test@segments_cross": 42
+     },
+     "placed": 7,
+     "seconds": 0.005
+    },
+    "field": {
+     "calls": 293895,
+     "ops": {
+      "candidate@Standing.conflicts": 63,
+      "candidate@_bund_beans": 333,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 7,
+      "candidate@_paddy_features": 1,
+      "candidate@_pond_fit": 6,
+      "candidate@_refused": 19,
+      "candidate@_split_steps": 3,
+      "candidate@bead_drowned": 333,
+      "candidate@bend_at": 6,
+      "candidate@clear_of_field": 112,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 1736,
+      "dist@_seg_dist": 2598,
+      "dist@seg_closest": 280,
+      "index_examined@PointGrid.near": 765,
+      "index_examined@Standing.conflicts": 4672,
+      "index_query@PointGrid.near": 953,
+      "placed@Standing.record": 31,
+      "pt_test@_pip": 252,
+      "pt_test@point_in_poly": 1786,
+      "seg_test@ring_meets_ellipse": 35,
+      "seg_test@segments_cross": 4664
+     },
+     "placed": 145,
+     "seconds": 0.244
+    },
+    "frame": {
+     "calls": 172,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_examined@PointGrid.near": 1,
+      "index_examined@RingIndex.inside": 10,
+      "index_query@PointGrid.near": 1,
+      "index_query@RingIndex.inside": 2
+     },
+     "placed": 12,
+     "seconds": 0.003
+    },
+    "hinterland": {
+     "calls": 326994,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@_box_clear": 42,
+      "candidate@_crown_covers": 598,
+      "candidate@_crown_seat_clear": 287,
+      "candidate@_flexible_clear": 10,
+      "candidate@belt_polygon": 2,
+      "candidate@close_belt_gaps": 5995,
+      "candidate@open_ground_patches._ok": 591,
+      "candidate@over_a_fixture": 48,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 1739,
+      "candidate@strip_refused": 276,
+      "dist@seg_closest": 3790,
+      "index_examined@PointGrid.near": 77854,
+      "index_examined@RingIndex.inside": 38720,
+      "index_examined@RingIndex.inside_many": 1197246,
+      "index_examined@Standing.conflicts": 54,
+      "index_query@PointGrid.near": 15064,
+      "index_query@RingIndex.inside": 4229,
+      "index_query@RingIndex.inside_many": 20324,
+      "placed@Standing.record": 4,
+      "pt_test@point_in_poly": 996,
+      "seg_test@segments_cross": 3113
+     },
+     "placed": 823,
+     "seconds": 0.387
+    },
+    "homesteads": {
+     "calls": 380453,
+     "ops": {
+      "candidate@AccessTree.lay": 22,
+      "candidate@SeatRegion.offer": 15116,
+      "candidate@Standing.conflicts": 450,
+      "candidate@WoodShares.share": 2364,
+      "candidate@_crosses_fabric": 101,
+      "candidate@_filled_lattice": 18,
+      "candidate@_first_admitted": 43,
+      "candidate@_lay_by_hand": 348,
+      "candidate@_place_bundle_nucleated": 172,
+      "candidate@_way_for": 51,
+      "candidate@clears": 5684,
+      "candidate@connector_track": 1,
+      "candidate@fixtures_clear": 486,
+      "candidate@fouled_segment": 51,
+      "candidate@house_hit": 82,
+      "candidate@in_dooryard": 1251,
+      "candidate@offer_seats": 2,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@taut": 119,
+      "candidate@trace": 250,
+      "candidate@way_out": 2779,
+      "dist@box_gap": 1152,
+      "dist@seg_closest": 7671,
+      "dist@seg_dists": 6048,
+      "dropped@Standing.forget": 10,
+      "index_examined@PointGrid.near": 26762,
+      "index_examined@RingIndex.inside": 3371,
+      "index_examined@Standing.conflicts": 664,
+      "index_query@FabricIndex.fouled": 278,
+      "index_query@PointGrid.near": 10887,
+      "index_query@RingIndex.inside": 155,
+      "placed@Standing.record": 43,
+      "pt_test@point_in_poly": 403,
+      "seg_test@chain_violated": 1808,
+      "seg_test@chain_violated_many": 21393,
+      "seg_test@free_end": 1484,
+      "seg_test@segments_cross": 1759
+     },
+     "placed": 203,
+     "seconds": 0.409
+    },
+    "labels": {
+     "calls": 4834,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.013
+    },
+    "lane_wells": {
+     "calls": 72,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "notice": {
+     "calls": 127795,
+     "ops": {
+      "candidate@Obstacles.blocked": 214,
+      "candidate@Standing.conflicts": 202,
+      "candidate@_fits": 216,
+      "candidate@_route_seats": 768,
+      "dist@seg_closest": 3565,
+      "index_examined@PointGrid.near": 13108,
+      "index_examined@Standing.conflicts": 1780,
+      "index_query@PointGrid.near": 3816,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 254,
+      "seg_test@chain_violated": 9677,
+      "seg_test@segments_cross": 8
+     },
+     "placed": 1,
+     "seconds": 0.052
+    },
+    "pond_bank": {
+     "calls": 16,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "seat": {
+     "calls": 10940,
+     "ops": {
+      "candidate@back_fouled": 43,
+      "candidate@seat_cluster": 32,
+      "dist@seg_closest": 311,
+      "index_examined@PointGrid.near": 1144,
+      "index_query@PointGrid.near": 320,
+      "pt_test@point_in_poly": 2593
+     },
+     "placed": 0,
+     "seconds": 0.009
+    },
+    "sink": {
+     "calls": 55461,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 1,
+      "candidate@pond_setback": 1,
+      "dist@seg_closest": 184,
+      "index_examined@Standing.conflicts": 44546,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 48
+     },
+     "placed": 7,
+     "seconds": 0.011
+    },
+    "sties": {
+     "calls": 717,
+     "ops": {
+      "candidate@Standing.conflicts": 12,
+      "candidate@against_a_part": 14,
+      "candidate@clears": 28,
+      "index_examined@Standing.conflicts": 88,
+      "placed@Standing.record": 6
+     },
+     "placed": 6,
+     "seconds": 0.001
+    },
+    "track": {
+     "calls": 370,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 76,
+      "index_examined@Standing.conflicts": 26,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "washing": {
+     "calls": 3129,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 2780,
+      "index_examined@Standing.conflicts": 14,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.002
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 250054,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 11,
+      "candidate@Standing.conflicts": 51,
+      "candidate@_clear_link": 2,
+      "candidate@_crosses_fabric": 15,
+      "candidate@_deck_corners_clear": 1,
+      "candidate@_held": 3,
+      "candidate@a_way_onto_the_bund": 20,
+      "candidate@fouled_segment": 1,
+      "candidate@house_hit": 3,
+      "candidate@lattice_search": 76760,
+      "candidate@over_a_fixture": 23,
+      "candidate@trial_count": 2,
+      "candidate@undeckable_at": 12,
+      "dist@box_gap": 1164,
+      "dist@seg_closest": 15963,
+      "dist@seg_dists": 7880,
+      "dropped@Standing.forget": 22,
+      "index_examined@FabricIndex.fouled": 37193,
+      "index_examined@PointGrid.near": 6906,
+      "index_examined@RingIndex.inside": 3973,
+      "index_examined@Standing.conflicts": 1534,
+      "index_query@FabricIndex.fouled": 11484,
+      "index_query@PointGrid.near": 10806,
+      "index_query@RingIndex.inside": 775,
+      "placed@Standing.record": 23,
+      "pt_test@point_in_poly": 99,
+      "seg_test@free_end": 1652,
+      "seg_test@seg_intersect": 5,
+      "seg_test@segments_cross": 9712,
+      "seg_test@tail_doubled": 375
+     },
+     "placed": 11,
+     "seconds": 0.152
+    },
+    "windbreak": {
+     "calls": 130164,
+     "ops": {
+      "candidate@GroveMixin.seat": 1027,
+      "candidate@_crown_covers": 2471,
+      "candidate@_crown_seat_clear": 2037,
+      "dist@seg_closest": 43,
+      "index_examined@PointGrid.near": 23928,
+      "index_examined@RingIndex.inside": 9045,
+      "index_query@PointGrid.near": 7720,
+      "index_query@RingIndex.inside": 4176
+     },
+     "placed": 922,
+     "seconds": 0.148
+    },
+    "woodland": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    }
+   }
+  },
+  {
+   "households": 10,
+   "refused": null,
+   "seed": 47,
+   "stages": {
+    "appurtenances": {
+     "calls": 29757,
+     "ops": {
+      "candidate@Standing.conflicts": 100,
+      "candidate@_fits": 26,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 47,
+      "dist@seg_closest": 5912,
+      "dist@seg_dists": 2544,
+      "index_examined@PointGrid.near": 170,
+      "index_examined@Standing.conflicts": 462,
+      "index_query@PointGrid.near": 270,
+      "index_query@RingIndex.inside_many": 666,
+      "placed@Standing.record": 54,
+      "pt_test@point_in_poly": 388,
+      "pt_test@points_in_poly": 117,
+      "seg_test@chain_violated": 910,
+      "seg_test@segments_cross": 1272
+     },
+     "placed": 81,
+     "seconds": 0.022
+    },
+    "bamboo": {
+     "calls": 9,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "crossings": {
+     "calls": 10114,
+     "ops": {
+      "candidate@Standing.conflicts": 12,
+      "dist@seg_closest": 2606,
+      "index_examined@PointGrid.near": 342,
+      "index_examined@Standing.conflicts": 86,
+      "index_query@PointGrid.near": 177,
+      "placed@Standing.record": 6,
+      "pt_test@point_in_poly": 326,
+      "seg_test@segments_cross": 36
+     },
+     "placed": 6,
+     "seconds": 0.005
+    },
+    "field": {
+     "calls": 328895,
+     "ops": {
+      "candidate@Standing.conflicts": 41,
+      "candidate@_bund_beans": 378,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 2,
+      "candidate@_pond_fit": 2,
+      "candidate@_refused": 11,
+      "candidate@_split_steps": 4,
+      "candidate@bead_drowned": 378,
+      "candidate@bend_at": 2,
+      "candidate@clear_of_field": 108,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 1356,
+      "dist@_seg_dist": 1004,
+      "dist@seg_closest": 995,
+      "index_examined@PointGrid.near": 1733,
+      "index_examined@Standing.conflicts": 4653,
+      "index_query@PointGrid.near": 811,
+      "placed@Standing.record": 20,
+      "pt_test@_pip": 216,
+      "pt_test@point_in_poly": 1923,
+      "seg_test@ring_meets_ellipse": 5,
+      "seg_test@segments_cross": 7382
+     },
+     "placed": 157,
+     "seconds": 0.24
+    },
+    "frame": {
+     "calls": 139,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_examined@PointGrid.near": 20,
+      "index_query@PointGrid.near": 1
+     },
+     "placed": 12,
+     "seconds": 0.003
+    },
+    "hinterland": {
+     "calls": 224516,
+     "ops": {
+      "candidate@_box_clear": 32,
+      "candidate@_crown_covers": 289,
+      "candidate@bamboo_seats._fits": 186,
+      "candidate@belt_polygon": 2,
+      "candidate@close_belt_gaps": 1486,
+      "candidate@open_ground_patches._ok": 566,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 321,
+      "dist@seg_closest": 618,
+      "index_examined@PointGrid.near": 22799,
+      "index_examined@RingIndex.inside": 21064,
+      "index_examined@RingIndex.inside_many": 234580,
+      "index_query@PointGrid.near": 5531,
+      "index_query@RingIndex.inside": 2384,
+      "index_query@RingIndex.inside_many": 5359,
+      "pt_test@point_in_poly": 314
+     },
+     "placed": 290,
+     "seconds": 0.272
+    },
+    "homesteads": {
+     "calls": 530725,
+     "ops": {
+      "candidate@AccessTree.lay": 20,
+      "candidate@SeatRegion.offer": 16088,
+      "candidate@Standing.conflicts": 1096,
+      "candidate@WoodShares.share": 2010,
+      "candidate@_crosses_fabric": 311,
+      "candidate@_filled_lattice": 19,
+      "candidate@_first_admitted": 10,
+      "candidate@_fits": 656,
+      "candidate@_lay_by_hand": 293,
+      "candidate@_place_bundle_nucleated": 128,
+      "candidate@_way_for": 10,
+      "candidate@clears": 6347,
+      "candidate@connector_track": 7,
+      "candidate@fixtures_clear": 588,
+      "candidate@fouled_segment": 52,
+      "candidate@house_hit": 92,
+      "candidate@in_dooryard": 2045,
+      "candidate@offer_seats": 2,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@taut": 31,
+      "candidate@trace": 112,
+      "candidate@way_out": 2513,
+      "dist@box_gap": 1111,
+      "dist@seg_closest": 45589,
+      "dist@seg_dists": 11501,
+      "dropped@Standing.forget": 10,
+      "index_examined@FabricIndex.fouled": 46,
+      "index_examined@PointGrid.near": 21529,
+      "index_examined@RingIndex.inside": 1171,
+      "index_examined@Standing.conflicts": 1030,
+      "index_query@FabricIndex.fouled": 358,
+      "index_query@PointGrid.near": 17493,
+      "index_query@RingIndex.inside": 50,
+      "placed@Standing.record": 46,
+      "pt_test@point_in_poly": 1388,
+      "seg_test@chain_violated": 23933,
+      "seg_test@chain_violated_many": 18613,
+      "seg_test@free_end": 1340,
+      "seg_test@segments_cross": 1993
+     },
+     "placed": 394,
+     "seconds": 0.458
+    },
+    "labels": {
+     "calls": 3747,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.003
+    },
+    "lane_wells": {
+     "calls": 72,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "notice": {
+     "calls": 115906,
+     "ops": {
+      "candidate@Obstacles.blocked": 134,
+      "candidate@Standing.conflicts": 320,
+      "candidate@_fits": 341,
+      "candidate@_route_seats": 970,
+      "candidate@_strict_seat": 2,
+      "dist@seg_closest": 4006,
+      "index_examined@PointGrid.near": 14536,
+      "index_examined@Standing.conflicts": 2134,
+      "index_query@PointGrid.near": 5190,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 250,
+      "seg_test@chain_violated": 11873
+     },
+     "placed": 1,
+     "seconds": 0.054
+    },
+    "pond_bank": {
+     "calls": 16,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "seat": {
+     "calls": 10116,
+     "ops": {
+      "candidate@back_fouled": 54,
+      "candidate@seat_cluster": 34,
+      "dist@seg_closest": 41,
+      "index_examined@PointGrid.near": 112,
+      "index_query@PointGrid.near": 400,
+      "pt_test@point_in_poly": 1802
+     },
+     "placed": 0,
+     "seconds": 0.008
+    },
+    "sink": {
+     "calls": 85417,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 5,
+      "candidate@pond_setback": 146,
+      "dist@seg_closest": 13312,
+      "index_examined@Standing.conflicts": 43789,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 3528
+     },
+     "placed": 7,
+     "seconds": 0.034
+    },
+    "sties": {
+     "calls": 875,
+     "ops": {
+      "candidate@Standing.conflicts": 14,
+      "candidate@against_a_part": 30,
+      "candidate@clears": 60,
+      "index_examined@Standing.conflicts": 120,
+      "placed@Standing.record": 7
+     },
+     "placed": 7,
+     "seconds": 0.002
+    },
+    "track": {
+     "calls": 355,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 44,
+      "index_examined@Standing.conflicts": 12,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "washing": {
+     "calls": 3342,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 3000,
+      "index_examined@Standing.conflicts": 8,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.002
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 180749,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 8,
+      "candidate@Standing.conflicts": 33,
+      "candidate@_clear_link": 2,
+      "candidate@_crosses_fabric": 36,
+      "candidate@_held": 2,
+      "candidate@a_way_onto_the_bund": 20,
+      "candidate@house_hit": 2,
+      "candidate@lattice_search": 30056,
+      "candidate@over_a_fixture": 20,
+      "candidate@trial_count": 2,
+      "candidate@undeckable_at": 12,
+      "dist@box_gap": 971,
+      "dist@seg_closest": 9582,
+      "dist@seg_dists": 2060,
+      "dropped@Standing.forget": 10,
+      "index_examined@FabricIndex.fouled": 12970,
+      "index_examined@PointGrid.near": 1392,
+      "index_examined@RingIndex.inside": 515,
+      "index_examined@Standing.conflicts": 918,
+      "index_query@FabricIndex.fouled": 4581,
+      "index_query@PointGrid.near": 6827,
+      "index_query@RingIndex.inside": 70,
+      "placed@Standing.record": 11,
+      "pt_test@point_in_poly": 154,
+      "seg_test@free_end": 1410,
+      "seg_test@segments_cross": 9885,
+      "seg_test@tail_doubled": 364
+     },
+     "placed": 11,
+     "seconds": 0.11
+    },
+    "windbreak": {
+     "calls": 132352,
+     "ops": {
+      "candidate@GroveMixin.seat": 953,
+      "candidate@_crown_covers": 2371,
+      "candidate@_crown_seat_clear": 1963,
+      "dist@seg_closest": 76,
+      "index_examined@PointGrid.near": 13598,
+      "index_examined@RingIndex.inside": 10257,
+      "index_query@PointGrid.near": 8231,
+      "index_query@RingIndex.inside": 4757
+     },
+     "placed": 946,
+     "seconds": 0.129
+    },
+    "woodland": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    }
+   }
+  },
+  {
+   "households": 20,
+   "refused": null,
+   "seed": 4,
+   "stages": {
+    "appurtenances": {
+     "calls": 87094,
+     "ops": {
+      "candidate@Standing.conflicts": 357,
+      "candidate@_fits": 11,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 264,
+      "dist@seg_closest": 14199,
+      "dist@seg_dists": 20458,
+      "index_examined@PointGrid.near": 302,
+      "index_examined@Standing.conflicts": 1597,
+      "index_query@PointGrid.near": 843,
+      "index_query@RingIndex.inside_many": 14300,
+      "placed@Standing.record": 95,
+      "pt_test@point_in_poly": 1436,
+      "pt_test@points_in_poly": 592,
+      "seg_test@chain_violated": 330,
+      "seg_test@segments_cross": 3623
+     },
+     "placed": 143,
+     "seconds": 0.079
+    },
+    "bamboo": {
+     "calls": 99,
+     "ops": {
+      "pt_test@point_in_poly": 24
+     },
+     "placed": 3,
+     "seconds": 0.001
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "crossings": {
+     "calls": 29404,
+     "ops": {
+      "candidate@Standing.conflicts": 18,
+      "candidate@_deck_corners_clear": 1,
+      "dist@seg_closest": 5264,
+      "index_examined@PointGrid.near": 1001,
+      "index_examined@Standing.conflicts": 100,
+      "index_query@PointGrid.near": 362,
+      "placed@Standing.record": 9,
+      "pt_test@point_in_poly": 7605,
+      "seg_test@seg_intersect": 1,
+      "seg_test@segments_cross": 33
+     },
+     "placed": 9,
+     "seconds": 0.013
+    },
+    "field": {
+     "calls": 874205,
+     "ops": {
+      "candidate@Standing.conflicts": 884,
+      "candidate@_bund_beans": 797,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 3,
+      "candidate@_paddy_features": 1,
+      "candidate@_pond_fit": 17,
+      "candidate@_refused": 746,
+      "candidate@_split_steps": 11,
+      "candidate@bead_drowned": 797,
+      "candidate@bend_at": 7,
+      "candidate@clear_of_field": 113,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 4194,
+      "dist@_seg_dist": 2468,
+      "dist@seg_closest": 401,
+      "index_examined@PointGrid.near": 1871,
+      "index_examined@Standing.conflicts": 6908,
+      "index_query@PointGrid.near": 2607,
+      "placed@Standing.record": 123,
+      "pt_test@_pip": 437,
+      "pt_test@point_in_poly": 2316,
+      "seg_test@ring_meets_ellipse": 16,
+      "seg_test@segments_cross": 8774
+     },
+     "placed": 313,
+     "seconds": 0.668
+    },
+    "frame": {
+     "calls": 334,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_examined@PointGrid.near": 8,
+      "index_query@PointGrid.near": 1,
+      "seg_test@segments_cross": 8
+     },
+     "placed": 12,
+     "seconds": 0.007
+    },
+    "hinterland": {
+     "calls": 786046,
+     "ops": {
+      "candidate@_box_clear": 29,
+      "candidate@_crown_covers": 1064,
+      "candidate@_crown_seat_clear": 195,
+      "candidate@_fits": 746,
+      "candidate@belt_polygon": 2,
+      "candidate@clear_of_plot": 1,
+      "candidate@close_belt_gaps": 9786,
+      "candidate@open_ground_patches._ok": 2085,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 831,
+      "candidate@strip_refused": 565,
+      "dist@seg_closest": 22652,
+      "index_examined@PointGrid.near": 169600,
+      "index_examined@RingIndex.inside": 61618,
+      "index_examined@RingIndex.inside_many": 2581930,
+      "index_query@PointGrid.near": 30756,
+      "index_query@RingIndex.inside": 6267,
+      "index_query@RingIndex.inside_many": 53791,
+      "pt_test@point_in_poly": 2243,
+      "seg_test@chain_violated": 4915,
+      "seg_test@segments_cross": 6586
+     },
+     "placed": 1216,
+     "seconds": 0.89
+    },
+    "homesteads": {
+     "calls": 1420745,
+     "ops": {
+      "candidate@AccessTree.lay": 42,
+      "candidate@SeatRegion.offer": 28706,
+      "candidate@Standing.conflicts": 2457,
+      "candidate@WoodShares.share": 5586,
+      "candidate@_crosses_fabric": 2202,
+      "candidate@_filled_lattice": 36,
+      "candidate@_first_admitted": 38,
+      "candidate@_fits": 1707,
+      "candidate@_lay_by_hand": 579,
+      "candidate@_place_bundle_nucleated": 372,
+      "candidate@_way_for": 42,
+      "candidate@clears": 17987,
+      "candidate@connector_track": 15,
+      "candidate@fixtures_clear": 1052,
+      "candidate@fouled_segment": 98,
+      "candidate@house_hit": 158,
+      "candidate@in_dooryard": 4230,
+      "candidate@offer_seats": 7,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@search": 3788,
+      "candidate@taut": 102,
+      "candidate@trace": 321,
+      "candidate@way_out": 4718,
+      "dist@box_gap": 7794,
+      "dist@seg_closest": 124360,
+      "dist@seg_dists": 23007,
+      "dropped@Standing.forget": 20,
+      "index_examined@FabricIndex.fouled": 18,
+      "index_examined@PointGrid.near": 69777,
+      "index_examined@Standing.conflicts": 5242,
+      "index_query@FabricIndex.fouled": 396,
+      "index_query@PointGrid.near": 35803,
+      "placed@Standing.record": 88,
+      "pt_test@point_in_poly": 5724,
+      "seg_test@chain_violated": 50268,
+      "seg_test@chain_violated_many": 11550,
+      "seg_test@free_end": 11164,
+      "seg_test@segments_cross": 13833
+     },
+     "placed": 419,
+     "seconds": 1.065
+    },
+    "labels": {
+     "calls": 9248,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.007
+    },
+    "lane_wells": {
+     "calls": 132,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "notice": {
+     "calls": 99642,
+     "ops": {
+      "candidate@Obstacles.blocked": 25,
+      "candidate@Standing.conflicts": 487,
+      "candidate@_fits": 531,
+      "candidate@_route_seats": 1408,
+      "dist@seg_closest": 7521,
+      "index_examined@PointGrid.near": 26192,
+      "index_examined@Standing.conflicts": 4147,
+      "index_query@PointGrid.near": 7325,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 510,
+      "seg_test@chain_violated": 15855
+     },
+     "placed": 1,
+     "seconds": 0.068
+    },
+    "pond_bank": {
+     "calls": 32089,
+     "ops": {
+      "candidate@_crown_covers": 66,
+      "candidate@stage_pond_bank": 33,
+      "dist@seg_closest": 12045,
+      "pt_test@point_in_poly": 3663
+     },
+     "placed": 132,
+     "seconds": 0.013
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "seat": {
+     "calls": 43837,
+     "ops": {
+      "candidate@back_fouled": 75,
+      "candidate@seat_cluster": 39,
+      "dist@seg_closest": 165,
+      "index_examined@PointGrid.near": 837,
+      "index_query@PointGrid.near": 576,
+      "pt_test@point_in_poly": 16878
+     },
+     "placed": 0,
+     "seconds": 0.031
+    },
+    "sink": {
+     "calls": 64926,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 1,
+      "candidate@pond_setback": 1,
+      "dist@seg_closest": 187,
+      "index_examined@Standing.conflicts": 52865,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 48
+     },
+     "placed": 7,
+     "seconds": 0.013
+    },
+    "sties": {
+     "calls": 1566,
+     "ops": {
+      "candidate@Standing.conflicts": 24,
+      "candidate@against_a_part": 70,
+      "candidate@clears": 140,
+      "index_examined@Standing.conflicts": 246,
+      "placed@Standing.record": 12
+     },
+     "placed": 12,
+     "seconds": 0.003
+    },
+    "track": {
+     "calls": 359,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 34,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "washing": {
+     "calls": 7740,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 7080,
+      "index_examined@Standing.conflicts": 4,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.005
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 698192,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 25,
+      "candidate@Standing.conflicts": 118,
+      "candidate@_clear_link": 51,
+      "candidate@_crosses_fabric": 103,
+      "candidate@_deck_corners_clear": 1,
+      "candidate@_held": 5,
+      "candidate@a_way_onto_the_bund": 44,
+      "candidate@fouled_segment": 2,
+      "candidate@house_hit": 3,
+      "candidate@lattice_search": 89272,
+      "candidate@over_a_fixture": 47,
+      "candidate@trial_count": 4,
+      "candidate@undeckable_at": 22,
+      "dist@box_gap": 6487,
+      "dist@seg_closest": 58338,
+      "dist@seg_dists": 56942,
+      "dropped@Standing.forget": 58,
+      "index_examined@FabricIndex.fouled": 49482,
+      "index_examined@PointGrid.near": 7447,
+      "index_examined@RingIndex.inside": 2393,
+      "index_examined@Standing.conflicts": 11077,
+      "index_query@FabricIndex.fouled": 16247,
+      "index_query@PointGrid.near": 23951,
+      "index_query@RingIndex.inside": 371,
+      "placed@Standing.record": 49,
+      "pt_test@point_in_poly": 557,
+      "seg_test@free_end": 9446,
+      "seg_test@seg_intersect": 13,
+      "seg_test@segments_cross": 34746,
+      "seg_test@tail_doubled": 1968
+     },
+     "placed": 21,
+     "seconds": 0.403
+    },
+    "windbreak": {
+     "calls": 318731,
+     "ops": {
+      "candidate@GroveMixin.seat": 1959,
+      "candidate@_crown_covers": 4734,
+      "candidate@_crown_seat_clear": 3837,
+      "candidate@reseat_clump": 124,
+      "dist@seg_closest": 82,
+      "index_examined@PointGrid.near": 39960,
+      "index_examined@RingIndex.inside": 30472,
+      "index_query@PointGrid.near": 19979,
+      "index_query@RingIndex.inside": 14544
+     },
+     "placed": 1795,
+     "seconds": 0.371
+    },
+    "woodland": {
+     "calls": 27958,
+     "ops": {
+      "candidate@_crown_covers": 411,
+      "candidate@_stock_woodland": 962,
+      "dist@seg_closest": 4452,
+      "index_examined@PointGrid.near": 20351,
+      "index_examined@RingIndex.inside": 16191,
+      "index_query@PointGrid.near": 2211,
+      "index_query@RingIndex.inside": 2561
+     },
+     "placed": 637,
+     "seconds": 0.021
+    }
+   }
+  },
+  {
+   "households": 20,
+   "refused": null,
+   "seed": 25,
+   "stages": {
+    "appurtenances": {
+     "calls": 113482,
+     "ops": {
+      "candidate@Standing.conflicts": 387,
+      "candidate@_fits": 17,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 330,
+      "dist@seg_closest": 24675,
+      "dist@seg_dists": 18575,
+      "index_examined@PointGrid.near": 156,
+      "index_examined@Standing.conflicts": 1721,
+      "index_query@PointGrid.near": 972,
+      "index_query@RingIndex.inside_many": 3861,
+      "placed@Standing.record": 92,
+      "pt_test@point_in_poly": 2035,
+      "pt_test@points_in_poly": 608,
+      "seg_test@chain_violated": 850,
+      "seg_test@segments_cross": 7087
+     },
+     "placed": 143,
+     "seconds": 0.079
+    },
+    "bamboo": {
+     "calls": 228,
+     "ops": {
+      "pt_test@point_in_poly": 59
+     },
+     "placed": 7,
+     "seconds": 0.001
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "crossings": {
+     "calls": 21175,
+     "ops": {
+      "candidate@Standing.conflicts": 18,
+      "dist@seg_closest": 5054,
+      "index_examined@PointGrid.near": 765,
+      "index_examined@Standing.conflicts": 90,
+      "index_query@PointGrid.near": 415,
+      "placed@Standing.record": 9,
+      "pt_test@point_in_poly": 2376,
+      "seg_test@segments_cross": 80
+     },
+     "placed": 9,
+     "seconds": 0.01
+    },
+    "field": {
+     "calls": 1028382,
+     "ops": {
+      "candidate@Standing.conflicts": 83,
+      "candidate@_bund_beans": 831,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 30,
+      "candidate@_paddy_features": 2,
+      "candidate@_pond_fit": 9,
+      "candidate@_refused": 27,
+      "candidate@_split_steps": 6,
+      "candidate@bead_drowned": 831,
+      "candidate@bend_at": 1,
+      "candidate@clear_of_field": 107,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 5485,
+      "dist@_seg_dist": 19660,
+      "dist@seg_closest": 799,
+      "index_examined@PointGrid.near": 2991,
+      "index_examined@Standing.conflicts": 5271,
+      "index_query@PointGrid.near": 2141,
+      "placed@Standing.record": 41,
+      "pt_test@_pip": 790,
+      "pt_test@point_in_poly": 2440,
+      "seg_test@ring_meets_ellipse": 10,
+      "seg_test@segments_cross": 7969
+     },
+     "placed": 236,
+     "seconds": 1.061
+    },
+    "frame": {
+     "calls": 232,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_query@PointGrid.near": 1
+     },
+     "placed": 12,
+     "seconds": 0.006
+    },
+    "hinterland": {
+     "calls": 486414,
+     "ops": {
+      "candidate@Standing.conflicts": 14,
+      "candidate@_box_clear": 40,
+      "candidate@_crosses_fabric": 1,
+      "candidate@_crown_covers": 895,
+      "candidate@_crown_seat_clear": 224,
+      "candidate@_flexible_clear": 18,
+      "candidate@belt_polygon": 2,
+      "candidate@close_belt_gaps": 6472,
+      "candidate@open_ground_patches._ok": 1400,
+      "candidate@over_a_fixture": 120,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 1713,
+      "candidate@strip_refused": 487,
+      "dist@seg_closest": 5335,
+      "index_examined@PointGrid.near": 97759,
+      "index_examined@RingIndex.inside": 74965,
+      "index_examined@RingIndex.inside_many": 2129127,
+      "index_examined@Standing.conflicts": 107,
+      "index_query@PointGrid.near": 21140,
+      "index_query@RingIndex.inside": 5562,
+      "index_query@RingIndex.inside_many": 24988,
+      "placed@Standing.record": 8,
+      "pt_test@point_in_poly": 1563,
+      "seg_test@segments_cross": 7175
+     },
+     "placed": 1055,
+     "seconds": 0.567
+    },
+    "homesteads": {
+     "calls": 2332706,
+     "ops": {
+      "candidate@AccessTree.lay": 56,
+      "candidate@SeatRegion.offer": 29588,
+      "candidate@Standing.conflicts": 1048,
+      "candidate@WoodShares.share": 4788,
+      "candidate@_crosses_fabric": 9377,
+      "candidate@_filled_lattice": 38,
+      "candidate@_first_admitted": 125,
+      "candidate@_lay_by_hand": 614,
+      "candidate@_place_bundle_nucleated": 316,
+      "candidate@_way_for": 123,
+      "candidate@clears": 21567,
+      "candidate@connector_track": 54,
+      "candidate@fixtures_clear": 2829,
+      "candidate@fouled_segment": 214,
+      "candidate@house_hit": 335,
+      "candidate@in_dooryard": 4683,
+      "candidate@offer_seats": 2,
+      "candidate@pull_clear": 2,
+      "candidate@route_around": 1,
+      "candidate@search": 1295,
+      "candidate@taut": 444,
+      "candidate@trace": 1201,
+      "candidate@way_out": 4987,
+      "dist@box_gap": 6678,
+      "dist@seg_closest": 308869,
+      "dist@seg_dists": 15810,
+      "dropped@Standing.forget": 20,
+      "index_examined@FabricIndex.fouled": 143,
+      "index_examined@PointGrid.near": 63476,
+      "index_examined@RingIndex.inside": 2763,
+      "index_examined@Standing.conflicts": 1378,
+      "index_query@FabricIndex.fouled": 334,
+      "index_query@PointGrid.near": 20469,
+      "index_query@RingIndex.inside": 116,
+      "placed@Standing.record": 88,
+      "pt_test@point_in_poly": 22251,
+      "seg_test@chain_violated": 3436,
+      "seg_test@chain_violated_many": 11610,
+      "seg_test@free_end": 9596,
+      "seg_test@segments_cross": 59263
+     },
+     "placed": 495,
+     "seconds": 1.543
+    },
+    "labels": {
+     "calls": 7612,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.008
+    },
+    "lane_wells": {
+     "calls": 129197,
+     "ops": {
+      "candidate@Standing.conflicts": 629,
+      "candidate@_fits": 149,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 3499,
+      "dist@seg_closest": 19199,
+      "dist@seg_dists": 47184,
+      "index_examined@PointGrid.near": 1782,
+      "index_examined@Standing.conflicts": 3425,
+      "index_query@PointGrid.near": 2379,
+      "index_query@RingIndex.inside_many": 3861,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 1702,
+      "pt_test@points_in_poly": 1244,
+      "seg_test@chain_violated": 7287,
+      "seg_test@segments_cross": 439
+     },
+     "placed": 1,
+     "seconds": 0.136
+    },
+    "notice": {
+     "calls": 156820,
+     "ops": {
+      "candidate@Obstacles.blocked": 158,
+      "candidate@Standing.conflicts": 420,
+      "candidate@_fits": 447,
+      "candidate@_route_seats": 1268,
+      "candidate@_strict_seat": 1,
+      "dist@seg_closest": 5189,
+      "index_examined@PointGrid.near": 22285,
+      "index_examined@Standing.conflicts": 3074,
+      "index_query@PointGrid.near": 6203,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 747,
+      "seg_test@chain_violated": 22350
+     },
+     "placed": 1,
+     "seconds": 0.08
+    },
+    "pond_bank": {
+     "calls": 16,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "seat": {
+     "calls": 18319,
+     "ops": {
+      "candidate@back_fouled": 77,
+      "candidate@seat_cluster": 40,
+      "dist@seg_closest": 42,
+      "index_examined@PointGrid.near": 132,
+      "index_query@PointGrid.near": 592,
+      "pt_test@point_in_poly": 4223
+     },
+     "placed": 0,
+     "seconds": 0.015
+    },
+    "sink": {
+     "calls": 98417,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 5,
+      "candidate@pond_setback": 122,
+      "dist@seg_closest": 10783,
+      "index_examined@Standing.conflicts": 56382,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 2952
+     },
+     "placed": 7,
+     "seconds": 0.034
+    },
+    "sties": {
+     "calls": 1884,
+     "ops": {
+      "candidate@Standing.conflicts": 30,
+      "candidate@against_a_part": 87,
+      "candidate@clears": 174,
+      "index_examined@Standing.conflicts": 220,
+      "placed@Standing.record": 15
+     },
+     "placed": 15,
+     "seconds": 0.004
+    },
+    "track": {
+     "calls": 449,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 78,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "washing": {
+     "calls": 8284,
+     "ops": {
+      "candidate@Standing.conflicts": 6,
+      "dist@seg_closest": 7400,
+      "index_examined@Standing.conflicts": 44,
+      "placed@Standing.record": 3
+     },
+     "placed": 3,
+     "seconds": 0.005
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 474158,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 11,
+      "candidate@Standing.conflicts": 90,
+      "candidate@_clear_link": 181,
+      "candidate@_clear_touch": 29,
+      "candidate@_crosses_fabric": 37,
+      "candidate@_ease_corner": 23,
+      "candidate@_held": 4,
+      "candidate@a_way_onto_the_bund": 36,
+      "candidate@fouled_segment": 2,
+      "candidate@house_hit": 5,
+      "candidate@lattice_search": 126936,
+      "candidate@over_a_fixture": 32,
+      "candidate@trial_count": 2,
+      "candidate@undeckable_at": 20,
+      "dist@box_gap": 4131,
+      "dist@seg_closest": 23872,
+      "dist@seg_dists": 6948,
+      "dropped@Standing.forget": 38,
+      "index_examined@FabricIndex.fouled": 81215,
+      "index_examined@PointGrid.near": 10901,
+      "index_examined@RingIndex.inside": 3901,
+      "index_examined@Standing.conflicts": 2221,
+      "index_query@FabricIndex.fouled": 24195,
+      "index_query@PointGrid.near": 14486,
+      "index_query@RingIndex.inside": 901,
+      "placed@Standing.record": 39,
+      "pt_test@point_in_poly": 284,
+      "seg_test@free_end": 5858,
+      "seg_test@seg_intersect": 39,
+      "seg_test@segments_cross": 18016,
+      "seg_test@tail_doubled": 1124
+     },
+     "placed": 19,
+     "seconds": 0.308
+    },
+    "windbreak": {
+     "calls": 269007,
+     "ops": {
+      "candidate@GroveMixin.seat": 1888,
+      "candidate@_crown_covers": 4747,
+      "candidate@_crown_seat_clear": 3784,
+      "candidate@reseat_clump": 642,
+      "dist@seg_closest": 60,
+      "index_examined@PointGrid.near": 34325,
+      "index_examined@RingIndex.inside": 21997,
+      "index_query@PointGrid.near": 16869,
+      "index_query@RingIndex.inside": 10386
+     },
+     "placed": 1759,
+     "seconds": 0.323
+    },
+    "woodland": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    }
+   }
+  },
+  {
+   "households": 20,
+   "refused": null,
+   "seed": 39,
+   "stages": {
+    "appurtenances": {
+     "calls": 50299,
+     "ops": {
+      "candidate@Standing.conflicts": 196,
+      "candidate@_fits": 4,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 124,
+      "dist@seg_closest": 8740,
+      "dist@seg_dists": 22474,
+      "index_examined@PointGrid.near": 32,
+      "index_examined@Standing.conflicts": 831,
+      "index_query@PointGrid.near": 346,
+      "index_query@RingIndex.inside_many": 6330,
+      "placed@Standing.record": 88,
+      "pt_test@point_in_poly": 745,
+      "pt_test@points_in_poly": 690,
+      "seg_test@chain_violated": 140,
+      "seg_test@segments_cross": 1720
+     },
+     "placed": 139,
+     "seconds": 0.072
+    },
+    "bamboo": {
+     "calls": 129,
+     "ops": {
+      "pt_test@point_in_poly": 32
+     },
+     "placed": 4,
+     "seconds": 0.001
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "crossings": {
+     "calls": 22077,
+     "ops": {
+      "candidate@Standing.conflicts": 22,
+      "candidate@_deck_corners_clear": 1,
+      "dist@seg_closest": 5370,
+      "index_examined@PointGrid.near": 607,
+      "index_examined@Standing.conflicts": 174,
+      "index_query@PointGrid.near": 253,
+      "placed@Standing.record": 11,
+      "pt_test@point_in_poly": 1281,
+      "seg_test@seg_intersect": 1,
+      "seg_test@segments_cross": 80
+     },
+     "placed": 11,
+     "seconds": 0.01
+    },
+    "field": {
+     "calls": 557446,
+     "ops": {
+      "candidate@Standing.conflicts": 89,
+      "candidate@_bund_beans": 933,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 3,
+      "candidate@_paddy_features": 1,
+      "candidate@_pond_fit": 4,
+      "candidate@_refused": 29,
+      "candidate@_split_steps": 18,
+      "candidate@bead_drowned": 933,
+      "candidate@bend_at": 5,
+      "candidate@clear_of_field": 111,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 7089,
+      "dist@_seg_dist": 2628,
+      "dist@seg_closest": 393,
+      "index_examined@PointGrid.near": 2076,
+      "index_examined@Standing.conflicts": 5202,
+      "index_query@PointGrid.near": 2325,
+      "placed@Standing.record": 44,
+      "pt_test@_pip": 479,
+      "pt_test@point_in_poly": 2209,
+      "seg_test@ring_meets_ellipse": 18,
+      "seg_test@segments_cross": 7140
+     },
+     "placed": 221,
+     "seconds": 0.504
+    },
+    "frame": {
+     "calls": 229,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_examined@RingIndex.inside": 8,
+      "index_query@PointGrid.near": 1,
+      "index_query@RingIndex.inside": 2
+     },
+     "placed": 12,
+     "seconds": 0.006
+    },
+    "hinterland": {
+     "calls": 562729,
+     "ops": {
+      "candidate@Standing.conflicts": 20,
+      "candidate@_box_clear": 46,
+      "candidate@_crosses_fabric": 5,
+      "candidate@_crown_covers": 1089,
+      "candidate@_crown_seat_clear": 405,
+      "candidate@_flexible_clear": 26,
+      "candidate@belt_polygon": 2,
+      "candidate@close_belt_gaps": 7023,
+      "candidate@open_ground_patches._ok": 1349,
+      "candidate@over_a_fixture": 207,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 1363,
+      "candidate@strip_refused": 573,
+      "dist@seg_closest": 11610,
+      "index_examined@PointGrid.near": 125284,
+      "index_examined@RingIndex.inside": 90674,
+      "index_examined@RingIndex.inside_many": 4891613,
+      "index_examined@Standing.conflicts": 192,
+      "index_query@PointGrid.near": 26371,
+      "index_query@RingIndex.inside": 6728,
+      "index_query@RingIndex.inside_many": 39137,
+      "placed@Standing.record": 11,
+      "pt_test@point_in_poly": 2116,
+      "seg_test@segments_cross": 10492
+     },
+     "placed": 1434,
+     "seconds": 0.694
+    },
+    "homesteads": {
+     "calls": 799347,
+     "ops": {
+      "candidate@AccessTree.lay": 45,
+      "candidate@SeatRegion.offer": 28304,
+      "candidate@Standing.conflicts": 857,
+      "candidate@WoodShares.share": 4816,
+      "candidate@_crosses_fabric": 336,
+      "candidate@_filled_lattice": 40,
+      "candidate@_first_admitted": 51,
+      "candidate@_lay_by_hand": 574,
+      "candidate@_place_bundle_nucleated": 260,
+      "candidate@_way_for": 63,
+      "candidate@clears": 11540,
+      "candidate@connector_track": 5,
+      "candidate@fixtures_clear": 803,
+      "candidate@fouled_segment": 108,
+      "candidate@house_hit": 159,
+      "candidate@in_dooryard": 2532,
+      "candidate@offer_seats": 2,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@taut": 112,
+      "candidate@trace": 378,
+      "candidate@way_out": 4746,
+      "dist@box_gap": 8359,
+      "dist@seg_closest": 21014,
+      "dist@seg_dists": 14277,
+      "dropped@Standing.forget": 20,
+      "index_examined@FabricIndex.fouled": 37,
+      "index_examined@PointGrid.near": 54597,
+      "index_examined@RingIndex.inside": 28967,
+      "index_examined@Standing.conflicts": 1175,
+      "index_query@FabricIndex.fouled": 305,
+      "index_query@PointGrid.near": 17056,
+      "index_query@RingIndex.inside": 1049,
+      "placed@Standing.record": 87,
+      "pt_test@point_in_poly": 1463,
+      "seg_test@chain_violated": 2240,
+      "seg_test@chain_violated_many": 13573,
+      "seg_test@free_end": 11360,
+      "seg_test@segments_cross": 3249
+     },
+     "placed": 325,
+     "seconds": 0.837
+    },
+    "labels": {
+     "calls": 11465,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.007
+    },
+    "lane_wells": {
+     "calls": 130093,
+     "ops": {
+      "candidate@Standing.conflicts": 708,
+      "candidate@_fits": 144,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 3919,
+      "dist@seg_closest": 15295,
+      "dist@seg_dists": 48979,
+      "index_examined@PointGrid.near": 1595,
+      "index_examined@Standing.conflicts": 4621,
+      "index_query@PointGrid.near": 2562,
+      "index_query@RingIndex.inside_many": 6330,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 1815,
+      "pt_test@points_in_poly": 1245,
+      "seg_test@chain_violated": 4900,
+      "seg_test@segments_cross": 435
+     },
+     "placed": 1,
+     "seconds": 0.142
+    },
+    "notice": {
+     "calls": 136657,
+     "ops": {
+      "candidate@Obstacles.blocked": 82,
+      "candidate@Standing.conflicts": 477,
+      "candidate@_fits": 514,
+      "candidate@_route_seats": 1266,
+      "dist@seg_closest": 8876,
+      "index_examined@PointGrid.near": 30244,
+      "index_examined@Standing.conflicts": 4209,
+      "index_query@PointGrid.near": 6614,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 788,
+      "seg_test@chain_violated": 17928,
+      "seg_test@segments_cross": 8
+     },
+     "placed": 1,
+     "seconds": 0.077
+    },
+    "pond_bank": {
+     "calls": 16,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "seat": {
+     "calls": 16357,
+     "ops": {
+      "candidate@back_fouled": 65,
+      "candidate@seat_cluster": 51,
+      "dist@seg_closest": 236,
+      "index_examined@PointGrid.near": 956,
+      "index_query@PointGrid.near": 496,
+      "pt_test@point_in_poly": 3933
+     },
+     "placed": 0,
+     "seconds": 0.015
+    },
+    "sink": {
+     "calls": 52334,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 1,
+      "candidate@pond_setback": 1,
+      "dist@seg_closest": 181,
+      "index_examined@Standing.conflicts": 41634,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 48
+     },
+     "placed": 7,
+     "seconds": 0.011
+    },
+    "sties": {
+     "calls": 1612,
+     "ops": {
+      "candidate@Standing.conflicts": 24,
+      "candidate@against_a_part": 60,
+      "candidate@clears": 120,
+      "index_examined@Standing.conflicts": 264,
+      "placed@Standing.record": 12
+     },
+     "placed": 12,
+     "seconds": 0.003
+    },
+    "track": {
+     "calls": 506,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 66,
+      "index_examined@Standing.conflicts": 28,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "washing": {
+     "calls": 6918,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 6200,
+      "index_examined@Standing.conflicts": 22,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.004
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 709340,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 30,
+      "candidate@Standing.conflicts": 130,
+      "candidate@_clear_link": 102,
+      "candidate@_crosses_fabric": 44,
+      "candidate@_deck_corners_clear": 1,
+      "candidate@_held": 7,
+      "candidate@a_way_onto_the_bund": 48,
+      "candidate@fouled_segment": 3,
+      "candidate@house_hit": 5,
+      "candidate@lattice_search": 128320,
+      "candidate@over_a_fixture": 53,
+      "candidate@trial_count": 4,
+      "candidate@undeckable_at": 23,
+      "dist@box_gap": 8241,
+      "dist@seg_closest": 49138,
+      "dist@seg_dists": 42180,
+      "dropped@Standing.forget": 61,
+      "index_examined@FabricIndex.fouled": 78567,
+      "index_examined@PointGrid.near": 10812,
+      "index_examined@RingIndex.inside": 3636,
+      "index_examined@Standing.conflicts": 16223,
+      "index_query@FabricIndex.fouled": 23785,
+      "index_query@PointGrid.near": 29289,
+      "index_query@RingIndex.inside": 647,
+      "placed@Standing.record": 54,
+      "pt_test@point_in_poly": 252,
+      "seg_test@free_end": 11616,
+      "seg_test@seg_intersect": 29,
+      "seg_test@segments_cross": 23449,
+      "seg_test@tail_doubled": 2184
+     },
+     "placed": 22,
+     "seconds": 0.38
+    },
+    "windbreak": {
+     "calls": 254219,
+     "ops": {
+      "candidate@GroveMixin.seat": 1837,
+      "candidate@_crown_covers": 4624,
+      "candidate@_crown_seat_clear": 3515,
+      "candidate@reseat_clump": 1283,
+      "dist@seg_closest": 50,
+      "index_examined@PointGrid.near": 46342,
+      "index_examined@RingIndex.inside": 16769,
+      "index_query@PointGrid.near": 16423,
+      "index_query@RingIndex.inside": 7860
+     },
+     "placed": 1783,
+     "seconds": 0.376
+    },
+    "woodland": {
+     "calls": 48613,
+     "ops": {
+      "candidate@_crown_covers": 950,
+      "candidate@_stock_woodland": 1723,
+      "dist@seg_closest": 5798,
+      "index_examined@PointGrid.near": 44759,
+      "index_examined@RingIndex.inside": 19375,
+      "index_query@PointGrid.near": 5281,
+      "index_query@RingIndex.inside": 3529
+     },
+     "placed": 1252,
+     "seconds": 0.03
+    }
+   }
+  },
+  {
+   "households": 20,
+   "refused": null,
+   "seed": 47,
+   "stages": {
+    "appurtenances": {
+     "calls": 36631,
+     "ops": {
+      "candidate@Standing.conflicts": 125,
+      "candidate@_fits": 10,
+      "candidate@belt_polygon": 1,
+      "candidate@clears": 7,
+      "candidate@in_dooryard": 5,
+      "candidate@seat_wells": 25,
+      "dist@seg_closest": 6762,
+      "dist@seg_dists": 6956,
+      "index_examined@PointGrid.near": 70,
+      "index_examined@Standing.conflicts": 666,
+      "index_query@PointGrid.near": 122,
+      "index_query@RingIndex.inside_many": 3100,
+      "placed@Standing.record": 102,
+      "pt_test@point_in_poly": 322,
+      "pt_test@points_in_poly": 243,
+      "seg_test@chain_violated": 500,
+      "seg_test@segments_cross": 784
+     },
+     "placed": 153,
+     "seconds": 0.039
+    },
+    "bamboo": {
+     "calls": 285,
+     "ops": {
+      "pt_test@point_in_poly": 90
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "crossings": {
+     "calls": 17647,
+     "ops": {
+      "candidate@Standing.conflicts": 18,
+      "dist@seg_closest": 4754,
+      "index_examined@PointGrid.near": 587,
+      "index_examined@Standing.conflicts": 98,
+      "index_query@PointGrid.near": 344,
+      "placed@Standing.record": 9,
+      "pt_test@point_in_poly": 1176,
+      "seg_test@segments_cross": 31
+     },
+     "placed": 9,
+     "seconds": 0.008
+    },
+    "field": {
+     "calls": 597518,
+     "ops": {
+      "candidate@Standing.conflicts": 69,
+      "candidate@_bund_beans": 742,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 3,
+      "candidate@_pond_fit": 2,
+      "candidate@_refused": 22,
+      "candidate@_split_steps": 3,
+      "candidate@bead_drowned": 742,
+      "candidate@bend_at": 3,
+      "candidate@clear_of_field": 109,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 3544,
+      "dist@_seg_dist": 2721,
+      "dist@seg_closest": 2096,
+      "index_examined@PointGrid.near": 2502,
+      "index_examined@Standing.conflicts": 5686,
+      "index_query@PointGrid.near": 1862,
+      "placed@Standing.record": 34,
+      "pt_test@_pip": 409,
+      "pt_test@point_in_poly": 2562,
+      "seg_test@ring_meets_ellipse": 6,
+      "seg_test@segments_cross": 10907
+     },
+     "placed": 234,
+     "seconds": 0.462
+    },
+    "frame": {
+     "calls": 214,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_examined@PointGrid.near": 29,
+      "index_query@PointGrid.near": 1
+     },
+     "placed": 12,
+     "seconds": 0.006
+    },
+    "hinterland": {
+     "calls": 468371,
+     "ops": {
+      "candidate@GroveMixin.seat": 1777,
+      "candidate@_box_clear": 38,
+      "candidate@_crown_covers": 6019,
+      "candidate@_crown_seat_clear": 4147,
+      "candidate@bamboo_seats._fits": 200,
+      "candidate@belt_polygon": 2,
+      "candidate@close_belt_gaps": 7100,
+      "candidate@open_ground_patches._ok": 929,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 1492,
+      "dist@seg_closest": 561,
+      "index_examined@PointGrid.near": 107848,
+      "index_examined@RingIndex.inside": 60296,
+      "index_examined@RingIndex.inside_many": 3580035,
+      "index_query@PointGrid.near": 13492,
+      "index_query@RingIndex.inside": 5281,
+      "index_query@RingIndex.inside_many": 33609,
+      "pt_test@point_in_poly": 321,
+      "seg_test@segments_cross": 7
+     },
+     "placed": 2273,
+     "seconds": 0.621
+    },
+    "homesteads": {
+     "calls": 1391590,
+     "ops": {
+      "candidate@AccessTree.lay": 67,
+      "candidate@SeatRegion.offer": 30347,
+      "candidate@Standing.conflicts": 3146,
+      "candidate@WoodShares.share": 2853,
+      "candidate@_crosses_fabric": 397,
+      "candidate@_filled_lattice": 40,
+      "candidate@_first_admitted": 189,
+      "candidate@_fits": 2214,
+      "candidate@_lay_by_hand": 680,
+      "candidate@_place_bundle_nucleated": 304,
+      "candidate@_way_for": 243,
+      "candidate@clears": 17853,
+      "candidate@connector_track": 3,
+      "candidate@fixtures_clear": 3484,
+      "candidate@fouled_segment": 226,
+      "candidate@house_hit": 359,
+      "candidate@in_dooryard": 4542,
+      "candidate@offer_seats": 3,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@search": 300,
+      "candidate@taut": 623,
+      "candidate@trace": 1095,
+      "candidate@undeckable_at": 3,
+      "candidate@way_out": 4939,
+      "dist@box_gap": 7493,
+      "dist@seg_closest": 78452,
+      "dist@seg_dists": 25159,
+      "dropped@Standing.forget": 20,
+      "index_examined@FabricIndex.fouled": 72,
+      "index_examined@PointGrid.near": 54845,
+      "index_examined@RingIndex.inside": 2821,
+      "index_examined@Standing.conflicts": 1640,
+      "index_query@FabricIndex.fouled": 596,
+      "index_query@PointGrid.near": 38055,
+      "index_query@RingIndex.inside": 71,
+      "placed@Standing.record": 86,
+      "pt_test@point_in_poly": 1825,
+      "seg_test@chain_violated": 112980,
+      "seg_test@chain_violated_many": 10050,
+      "seg_test@free_end": 10680,
+      "seg_test@segments_cross": 3255
+     },
+     "placed": 491,
+     "seconds": 1.211
+    },
+    "labels": {
+     "calls": 10916,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.008
+    },
+    "lane_wells": {
+     "calls": 132,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "notice": {
+     "calls": 189857,
+     "ops": {
+      "candidate@Obstacles.blocked": 145,
+      "candidate@Standing.conflicts": 471,
+      "candidate@_fits": 520,
+      "candidate@_route_seats": 1690,
+      "candidate@_strict_seat": 1,
+      "dist@seg_closest": 10015,
+      "index_examined@PointGrid.near": 32181,
+      "index_examined@Standing.conflicts": 3846,
+      "index_query@PointGrid.near": 8588,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 582,
+      "seg_test@chain_violated": 25904,
+      "seg_test@segments_cross": 8
+     },
+     "placed": 1,
+     "seconds": 0.098
+    },
+    "pond_bank": {
+     "calls": 16,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "seat": {
+     "calls": 15925,
+     "ops": {
+      "candidate@back_fouled": 71,
+      "candidate@seat_cluster": 43,
+      "dist@seg_closest": 81,
+      "index_examined@PointGrid.near": 201,
+      "index_query@PointGrid.near": 544,
+      "pt_test@point_in_poly": 3624
+     },
+     "placed": 0,
+     "seconds": 0.014
+    },
+    "sink": {
+     "calls": 92306,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 5,
+      "candidate@pond_setback": 147,
+      "dist@seg_closest": 13493,
+      "index_examined@RingIndex.inside": 5,
+      "index_examined@Standing.conflicts": 48846,
+      "index_query@RingIndex.inside": 1,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 3552
+     },
+     "placed": 7,
+     "seconds": 0.039
+    },
+    "sties": {
+     "calls": 1761,
+     "ops": {
+      "candidate@Standing.conflicts": 28,
+      "candidate@against_a_part": 56,
+      "candidate@clears": 112,
+      "index_examined@Standing.conflicts": 238,
+      "placed@Standing.record": 14
+     },
+     "placed": 14,
+     "seconds": 0.003
+    },
+    "track": {
+     "calls": 501,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 86,
+      "index_examined@Standing.conflicts": 28,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "washing": {
+     "calls": 7908,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 7160,
+      "index_examined@Standing.conflicts": 50,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.004
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 564080,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 14,
+      "candidate@Standing.conflicts": 73,
+      "candidate@_clear_link": 7,
+      "candidate@_crosses_fabric": 49,
+      "candidate@_held": 3,
+      "candidate@a_way_onto_the_bund": 44,
+      "candidate@fouled_segment": 1,
+      "candidate@house_hit": 5,
+      "candidate@lattice_search": 67392,
+      "candidate@over_a_fixture": 39,
+      "candidate@trial_count": 4,
+      "candidate@undeckable_at": 23,
+      "dist@box_gap": 5409,
+      "dist@seg_closest": 36768,
+      "dist@seg_dists": 41925,
+      "dropped@Standing.forget": 22,
+      "index_examined@FabricIndex.fouled": 28017,
+      "index_examined@PointGrid.near": 2794,
+      "index_examined@RingIndex.inside": 777,
+      "index_examined@Standing.conflicts": 8331,
+      "index_query@FabricIndex.fouled": 10117,
+      "index_query@PointGrid.near": 16072,
+      "index_query@RingIndex.inside": 180,
+      "placed@Standing.record": 23,
+      "pt_test@point_in_poly": 329,
+      "seg_test@free_end": 7670,
+      "seg_test@segments_cross": 34990,
+      "seg_test@tail_doubled": 1963
+     },
+     "placed": 22,
+     "seconds": 0.308
+    },
+    "windbreak": {
+     "calls": 259317,
+     "ops": {
+      "candidate@GroveMixin.seat": 1847,
+      "candidate@_crown_covers": 4691,
+      "candidate@_crown_seat_clear": 3683,
+      "candidate@reseat_clump": 440,
+      "dist@seg_closest": 73,
+      "index_examined@PointGrid.near": 40702,
+      "index_examined@RingIndex.inside": 18261,
+      "index_query@PointGrid.near": 17154,
+      "index_query@RingIndex.inside": 8557
+     },
+     "placed": 1780,
+     "seconds": 0.35
+    },
+    "woodland": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    }
+   }
+  },
+  {
+   "households": 40,
+   "refused": "WebRefused: the web's last resort cannot mend it without dropping a tree lane: the web still breaks joins_short ([(42, -1, (3571.592",
+   "seed": 4,
+   "stages": {
+    "appurtenances": {
+     "calls": 103438,
+     "ops": {
+      "candidate@Standing.conflicts": 274,
+      "candidate@_fits": 3,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 85,
+      "dist@seg_closest": 16363,
+      "dist@seg_dists": 44285,
+      "index_examined@PointGrid.near": 20,
+      "index_examined@Standing.conflicts": 1118,
+      "index_query@PointGrid.near": 272,
+      "index_query@RingIndex.inside_many": 76179,
+      "placed@Standing.record": 189,
+      "pt_test@point_in_poly": 958,
+      "pt_test@points_in_poly": 1434,
+      "seg_test@chain_violated": 150,
+      "seg_test@segments_cross": 2346
+     },
+     "placed": 288,
+     "seconds": 0.16
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "field": {
+     "calls": 2353761,
+     "ops": {
+      "candidate@Standing.conflicts": 1647,
+      "candidate@_bund_beans": 1583,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 3,
+      "candidate@_paddy_features": 1,
+      "candidate@_pond_fit": 3,
+      "candidate@_refused": 1412,
+      "candidate@_split_steps": 40,
+      "candidate@bead_drowned": 1583,
+      "candidate@bend_at": 15,
+      "candidate@clear_of_field": 182,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 3,
+      "dist@_seg_d": 10893,
+      "dist@_seg_dist": 3396,
+      "dist@seg_closest": 575,
+      "index_examined@PointGrid.near": 3414,
+      "index_examined@Standing.conflicts": 12002,
+      "index_query@PointGrid.near": 5454,
+      "placed@Standing.record": 217,
+      "pt_test@_pip": 861,
+      "pt_test@point_in_poly": 3988,
+      "seg_test@ring_meets_ellipse": 13,
+      "seg_test@segments_cross": 18920
+     },
+     "placed": 505,
+     "seconds": 2.502
+    },
+    "homesteads": {
+     "calls": 3610162,
+     "ops": {
+      "candidate@AccessTree.lay": 99,
+      "candidate@SeatRegion.offer": 54830,
+      "candidate@Standing.conflicts": 8886,
+      "candidate@WoodShares.share": 6672,
+      "candidate@_crosses_fabric": 579,
+      "candidate@_filled_lattice": 71,
+      "candidate@_first_admitted": 208,
+      "candidate@_fits": 7324,
+      "candidate@_lay_by_hand": 1228,
+      "candidate@_place_bundle_nucleated": 740,
+      "candidate@_way_for": 272,
+      "candidate@clears": 44022,
+      "candidate@connector_track": 1,
+      "candidate@fixtures_clear": 7135,
+      "candidate@fouled_segment": 309,
+      "candidate@house_hit": 510,
+      "candidate@in_dooryard": 11651,
+      "candidate@offer_seats": 2,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@search": 1272,
+      "candidate@taut": 718,
+      "candidate@trace": 2585,
+      "candidate@way_out": 9713,
+      "dist@box_gap": 66637,
+      "dist@seg_closest": 259354,
+      "dist@seg_dists": 52697,
+      "dropped@Standing.forget": 40,
+      "index_examined@FabricIndex.fouled": 80,
+      "index_examined@PointGrid.near": 137947,
+      "index_examined@RingIndex.inside": 36,
+      "index_examined@Standing.conflicts": 17525,
+      "index_query@FabricIndex.fouled": 769,
+      "index_query@PointGrid.near": 109170,
+      "index_query@RingIndex.inside": 10,
+      "placed@Standing.record": 176,
+      "pt_test@point_in_poly": 3025,
+      "seg_test@chain_violated": 366742,
+      "seg_test@chain_violated_many": 34200,
+      "seg_test@free_end": 93408,
+      "seg_test@segments_cross": 3401
+     },
+     "placed": 624,
+     "seconds": 2.952
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "seat": {
+     "calls": 95376,
+     "ops": {
+      "candidate@back_fouled": 114,
+      "candidate@seat_cluster": 59,
+      "dist@seg_closest": 24,
+      "index_examined@PointGrid.near": 1143,
+      "index_query@PointGrid.near": 880,
+      "pt_test@point_in_poly": 34515
+     },
+     "placed": 0,
+     "seconds": 0.067
+    },
+    "sink": {
+     "calls": 73837,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 1,
+      "candidate@pond_setback": 1,
+      "dist@seg_closest": 211,
+      "index_examined@Standing.conflicts": 60431,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 48
+     },
+     "placed": 7,
+     "seconds": 0.016
+    },
+    "track": {
+     "calls": 869,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 92,
+      "index_examined@Standing.conflicts": 32,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.002
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "web": {
+     "calls": 16276364,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 1,
+      "candidate@Standing.conflicts": 3071,
+      "candidate@_clear_link": 92,
+      "candidate@_crosses_fabric": 3299,
+      "candidate@_deck_corners_clear": 28,
+      "candidate@_held": 15,
+      "candidate@a_way_onto_the_bund": 2,
+      "candidate@fouled_segment": 744,
+      "candidate@house_hit": 2898,
+      "candidate@lattice_search": 210560,
+      "candidate@over_a_fixture": 1173,
+      "candidate@trial_count": 22,
+      "candidate@undeckable_at": 1172,
+      "dist@box_gap": 229188,
+      "dist@seg_closest": 409227,
+      "dist@seg_dists": 2847532,
+      "dropped@Standing.forget": 51,
+      "index_examined@FabricIndex.fouled": 116131,
+      "index_examined@PointGrid.near": 21346,
+      "index_examined@RingIndex.inside": 4402,
+      "index_examined@Standing.conflicts": 74957,
+      "index_query@FabricIndex.fouled": 39137,
+      "index_query@PointGrid.near": 144958,
+      "index_query@RingIndex.inside": 737,
+      "placed@Standing.record": 48,
+      "pt_test@point_in_poly": 4605,
+      "seg_test@free_end": 327304,
+      "seg_test@seg_intersect": 33,
+      "seg_test@segments_cross": 2408264,
+      "seg_test@tail_doubled": 120696
+     },
+     "placed": 43,
+     "seconds": 5.476
+    }
+   }
+  },
+  {
+   "households": 40,
+   "refused": null,
+   "seed": 25,
+   "stages": {
+    "appurtenances": {
+     "calls": 78274,
+     "ops": {
+      "candidate@Standing.conflicts": 238,
+      "candidate@_fits": 5,
+      "candidate@belt_polygon": 1,
+      "candidate@clears": 2,
+      "candidate@in_dooryard": 1,
+      "candidate@seat_wells": 65,
+      "dist@seg_closest": 13905,
+      "dist@seg_dists": 49258,
+      "index_examined@PointGrid.near": 36,
+      "index_examined@Standing.conflicts": 1233,
+      "index_query@PointGrid.near": 223,
+      "index_query@RingIndex.inside_many": 11934,
+      "placed@Standing.record": 173,
+      "pt_test@point_in_poly": 966,
+      "pt_test@points_in_poly": 1466,
+      "seg_test@chain_violated": 250,
+      "seg_test@segments_cross": 2709
+     },
+     "placed": 275,
+     "seconds": 0.124
+    },
+    "bamboo": {
+     "calls": 408,
+     "ops": {
+      "pt_test@point_in_poly": 107
+     },
+     "placed": 13,
+     "seconds": 0.002
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "crossings": {
+     "calls": 30495,
+     "ops": {
+      "candidate@Standing.conflicts": 24,
+      "dist@seg_closest": 6800,
+      "index_examined@PointGrid.near": 913,
+      "index_examined@Standing.conflicts": 138,
+      "index_query@PointGrid.near": 648,
+      "placed@Standing.record": 12,
+      "pt_test@point_in_poly": 4606,
+      "seg_test@segments_cross": 44
+     },
+     "placed": 12,
+     "seconds": 0.016
+    },
+    "field": {
+     "calls": 1215564,
+     "ops": {
+      "candidate@Standing.conflicts": 109,
+      "candidate@_bund_beans": 1649,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 13,
+      "candidate@_paddy_features": 2,
+      "candidate@_pond_fit": 6,
+      "candidate@_refused": 40,
+      "candidate@_split_steps": 5,
+      "candidate@bead_drowned": 1649,
+      "candidate@clear_of_field": 106,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 12466,
+      "dist@_seg_dist": 12080,
+      "dist@seg_closest": 1410,
+      "index_examined@PointGrid.near": 3329,
+      "index_examined@Standing.conflicts": 6859,
+      "index_query@PointGrid.near": 3949,
+      "placed@Standing.record": 54,
+      "pt_test@_pip": 1097,
+      "pt_test@point_in_poly": 3098,
+      "seg_test@ring_meets_ellipse": 12,
+      "seg_test@segments_cross": 12198
+     },
+     "placed": 330,
+     "seconds": 1.229
+    },
+    "frame": {
+     "calls": 346,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_examined@PointGrid.near": 6,
+      "index_query@PointGrid.near": 1
+     },
+     "placed": 12,
+     "seconds": 0.013
+    },
+    "hinterland": {
+     "calls": 981099,
+     "ops": {
+      "candidate@Standing.conflicts": 48,
+      "candidate@_box_clear": 53,
+      "candidate@_crosses_fabric": 9,
+      "candidate@_crown_covers": 1046,
+      "candidate@_crown_seat_clear": 53,
+      "candidate@_flexible_clear": 59,
+      "candidate@belt_polygon": 2,
+      "candidate@close_belt_gaps": 11271,
+      "candidate@open_ground_patches._ok": 3096,
+      "candidate@over_a_fixture": 1032,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 2032,
+      "candidate@strip_refused": 1152,
+      "dist@seg_closest": 18760,
+      "index_examined@PointGrid.near": 135297,
+      "index_examined@RingIndex.inside": 137459,
+      "index_examined@RingIndex.inside_many": 7056054,
+      "index_examined@Standing.conflicts": 390,
+      "index_query@PointGrid.near": 35358,
+      "index_query@RingIndex.inside": 9968,
+      "index_query@RingIndex.inside_many": 55695,
+      "placed@Standing.record": 24,
+      "pt_test@point_in_poly": 3276,
+      "seg_test@segments_cross": 21839
+     },
+     "placed": 1124,
+     "seconds": 1.094
+    },
+    "homesteads": {
+     "calls": 2433956,
+     "ops": {
+      "candidate@AccessTree.lay": 90,
+      "candidate@SeatRegion.offer": 57428,
+      "candidate@Standing.conflicts": 1784,
+      "candidate@WoodShares.share": 9317,
+      "candidate@_crosses_fabric": 543,
+      "candidate@_filled_lattice": 73,
+      "candidate@_first_admitted": 121,
+      "candidate@_lay_by_hand": 1111,
+      "candidate@_place_bundle_nucleated": 688,
+      "candidate@_way_for": 148,
+      "candidate@clears": 34060,
+      "candidate@connector_track": 7,
+      "candidate@fixtures_clear": 5374,
+      "candidate@fouled_segment": 261,
+      "candidate@house_hit": 422,
+      "candidate@in_dooryard": 10756,
+      "candidate@offer_seats": 2,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@search": 550,
+      "candidate@taut": 454,
+      "candidate@trace": 1236,
+      "candidate@undeckable_at": 1,
+      "candidate@way_out": 9457,
+      "dist@box_gap": 59354,
+      "dist@seg_closest": 105120,
+      "dist@seg_dists": 73815,
+      "dropped@Standing.forget": 40,
+      "index_examined@FabricIndex.fouled": 70,
+      "index_examined@PointGrid.near": 94472,
+      "index_examined@RingIndex.inside": 1291,
+      "index_examined@Standing.conflicts": 1773,
+      "index_query@FabricIndex.fouled": 463,
+      "index_query@PointGrid.near": 38017,
+      "index_query@RingIndex.inside": 64,
+      "placed@Standing.record": 179,
+      "pt_test@point_in_poly": 1993,
+      "seg_test@chain_violated": 5850,
+      "seg_test@chain_violated_many": 12480,
+      "seg_test@free_end": 85360,
+      "seg_test@segments_cross": 3229
+     },
+     "placed": 485,
+     "seconds": 2.291
+    },
+    "labels": {
+     "calls": 13344,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.01
+    },
+    "lane_wells": {
+     "calls": 600003,
+     "ops": {
+      "candidate@Standing.conflicts": 1709,
+      "candidate@_fits": 334,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 30499,
+      "dist@seg_closest": 87216,
+      "dist@seg_dists": 106566,
+      "index_examined@PointGrid.near": 2911,
+      "index_examined@Standing.conflicts": 10297,
+      "index_query@PointGrid.near": 6201,
+      "index_query@RingIndex.inside_many": 11934,
+      "placed@Standing.record": 4,
+      "pt_test@point_in_poly": 4230,
+      "pt_test@points_in_poly": 2522,
+      "seg_test@chain_violated": 16660,
+      "seg_test@segments_cross": 918
+     },
+     "placed": 4,
+     "seconds": 0.494
+    },
+    "notice": {
+     "calls": 274987,
+     "ops": {
+      "candidate@Obstacles.blocked": 197,
+      "candidate@Standing.conflicts": 1059,
+      "candidate@_fits": 1149,
+      "candidate@_route_seats": 2574,
+      "candidate@_strict_seat": 2,
+      "dist@seg_closest": 15767,
+      "index_examined@PointGrid.near": 64596,
+      "index_examined@Standing.conflicts": 8397,
+      "index_query@PointGrid.near": 13537,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 1478,
+      "seg_test@chain_violated": 57353,
+      "seg_test@segments_cross": 4
+     },
+     "placed": 1,
+     "seconds": 0.19
+    },
+    "pond_bank": {
+     "calls": 16,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "seat": {
+     "calls": 27805,
+     "ops": {
+      "candidate@back_fouled": 103,
+      "candidate@seat_cluster": 61,
+      "dist@seg_closest": 279,
+      "index_examined@PointGrid.near": 459,
+      "index_query@PointGrid.near": 800,
+      "pt_test@point_in_poly": 5724
+     },
+     "placed": 0,
+     "seconds": 0.023
+    },
+    "sink": {
+     "calls": 53784,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 3,
+      "candidate@pond_setback": 107,
+      "dist@seg_closest": 9062,
+      "index_examined@Standing.conflicts": 23145,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 2592
+     },
+     "placed": 7,
+     "seconds": 0.03
+    },
+    "sties": {
+     "calls": 4072,
+     "ops": {
+      "candidate@Standing.conflicts": 60,
+      "candidate@against_a_part": 244,
+      "candidate@clears": 488,
+      "index_examined@Standing.conflicts": 578,
+      "placed@Standing.record": 30
+     },
+     "placed": 30,
+     "seconds": 0.01
+    },
+    "track": {
+     "calls": 634,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 52,
+      "index_examined@Standing.conflicts": 22,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "washing": {
+     "calls": 14885,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 13480,
+      "index_examined@Standing.conflicts": 30,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.008
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 1415076,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 37,
+      "candidate@Standing.conflicts": 186,
+      "candidate@_clear_link": 205,
+      "candidate@_crosses_fabric": 127,
+      "candidate@_held": 3,
+      "candidate@a_way_onto_the_bund": 82,
+      "candidate@fouled_segment": 2,
+      "candidate@house_hit": 4,
+      "candidate@lattice_search": 280664,
+      "candidate@over_a_fixture": 80,
+      "candidate@trial_count": 4,
+      "candidate@undeckable_at": 43,
+      "dist@box_gap": 19486,
+      "dist@seg_closest": 96605,
+      "dist@seg_dists": 89292,
+      "dropped@Standing.forget": 86,
+      "index_examined@FabricIndex.fouled": 153208,
+      "index_examined@PointGrid.near": 17206,
+      "index_examined@RingIndex.inside": 5322,
+      "index_examined@Standing.conflicts": 13902,
+      "index_query@FabricIndex.fouled": 50280,
+      "index_query@PointGrid.near": 19616,
+      "index_query@RingIndex.inside": 1155,
+      "placed@Standing.record": 86,
+      "pt_test@point_in_poly": 587,
+      "seg_test@free_end": 27900,
+      "seg_test@seg_intersect": 23,
+      "seg_test@segments_cross": 50809,
+      "seg_test@tail_doubled": 7102
+     },
+     "placed": 42,
+     "seconds": 0.878
+    },
+    "windbreak": {
+     "calls": 493257,
+     "ops": {
+      "candidate@GroveMixin.seat": 3574,
+      "candidate@_crown_covers": 9166,
+      "candidate@_crown_seat_clear": 6947,
+      "dist@seg_closest": 245,
+      "index_examined@PointGrid.near": 64455,
+      "index_examined@RingIndex.inside": 31560,
+      "index_query@PointGrid.near": 33464,
+      "index_query@RingIndex.inside": 15159
+     },
+     "placed": 3619,
+     "seconds": 0.647
+    },
+    "woodland": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    }
+   }
+  },
+  {
+   "households": 40,
+   "refused": null,
+   "seed": 39,
+   "stages": {
+    "appurtenances": {
+     "calls": 208016,
+     "ops": {
+      "candidate@Standing.conflicts": 997,
+      "candidate@_fits": 33,
+      "candidate@belt_polygon": 1,
+      "candidate@clears": 33,
+      "candidate@in_dooryard": 23,
+      "candidate@seat_wells": 902,
+      "dist@seg_closest": 37121,
+      "dist@seg_dists": 49937,
+      "index_examined@PointGrid.near": 345,
+      "index_examined@Standing.conflicts": 5314,
+      "index_query@PointGrid.near": 2647,
+      "index_query@RingIndex.inside_many": 16200,
+      "placed@Standing.record": 173,
+      "pt_test@point_in_poly": 4338,
+      "pt_test@points_in_poly": 1484,
+      "seg_test@chain_violated": 1815,
+      "seg_test@segments_cross": 11252
+     },
+     "placed": 272,
+     "seconds": 0.184
+    },
+    "bamboo": {
+     "calls": 231,
+     "ops": {
+      "pt_test@point_in_poly": 60
+     },
+     "placed": 7,
+     "seconds": 0.002
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "crossings": {
+     "calls": 44600,
+     "ops": {
+      "candidate@Standing.conflicts": 36,
+      "candidate@_deck_corners_clear": 1,
+      "dist@seg_closest": 10699,
+      "index_examined@PointGrid.near": 1048,
+      "index_examined@Standing.conflicts": 252,
+      "index_query@PointGrid.near": 447,
+      "placed@Standing.record": 18,
+      "pt_test@point_in_poly": 4274,
+      "seg_test@seg_intersect": 1,
+      "seg_test@segments_cross": 119
+     },
+     "placed": 18,
+     "seconds": 0.019
+    },
+    "field": {
+     "calls": 1004229,
+     "ops": {
+      "candidate@Standing.conflicts": 139,
+      "candidate@_bund_beans": 1317,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 3,
+      "candidate@_paddy_features": 1,
+      "candidate@_pond_fit": 3,
+      "candidate@_refused": 53,
+      "candidate@_split_steps": 9,
+      "candidate@bead_drowned": 1317,
+      "candidate@bend_at": 6,
+      "candidate@clear_of_field": 112,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 12205,
+      "dist@_seg_dist": 3257,
+      "dist@seg_closest": 496,
+      "index_examined@PointGrid.near": 2436,
+      "index_examined@Standing.conflicts": 7231,
+      "index_query@PointGrid.near": 4000,
+      "placed@Standing.record": 69,
+      "pt_test@_pip": 715,
+      "pt_test@point_in_poly": 2854,
+      "seg_test@ring_meets_ellipse": 17,
+      "seg_test@segments_cross": 12084
+     },
+     "placed": 335,
+     "seconds": 0.911
+    },
+    "frame": {
+     "calls": 321,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_examined@PointGrid.near": 11,
+      "index_query@PointGrid.near": 1
+     },
+     "placed": 12,
+     "seconds": 0.011
+    },
+    "hinterland": {
+     "calls": 965311,
+     "ops": {
+      "candidate@Standing.conflicts": 37,
+      "candidate@_box_clear": 49,
+      "candidate@_crosses_fabric": 9,
+      "candidate@_crown_covers": 1106,
+      "candidate@_crown_seat_clear": 18,
+      "candidate@_flexible_clear": 49,
+      "candidate@belt_polygon": 2,
+      "candidate@close_belt_gaps": 7116,
+      "candidate@open_ground_patches._ok": 4368,
+      "candidate@over_a_fixture": 756,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 1516,
+      "candidate@strip_refused": 833,
+      "dist@seg_closest": 11341,
+      "index_examined@PointGrid.near": 113799,
+      "index_examined@RingIndex.inside": 157103,
+      "index_examined@RingIndex.inside_many": 5965800,
+      "index_examined@Standing.conflicts": 382,
+      "index_query@PointGrid.near": 30720,
+      "index_query@RingIndex.inside": 12152,
+      "index_query@RingIndex.inside_many": 60215,
+      "placed@Standing.record": 19,
+      "pt_test@point_in_poly": 2802,
+      "seg_test@segments_cross": 12900
+     },
+     "placed": 1137,
+     "seconds": 1.119
+    },
+    "homesteads": {
+     "calls": 1865341,
+     "ops": {
+      "candidate@AccessTree.lay": 96,
+      "candidate@SeatRegion.offer": 55570,
+      "candidate@Standing.conflicts": 1930,
+      "candidate@WoodShares.share": 11917,
+      "candidate@_crosses_fabric": 424,
+      "candidate@_filled_lattice": 66,
+      "candidate@_first_admitted": 177,
+      "candidate@_lay_by_hand": 1362,
+      "candidate@_place_bundle_nucleated": 640,
+      "candidate@_way_for": 224,
+      "candidate@clears": 21842,
+      "candidate@connector_track": 3,
+      "candidate@fixtures_clear": 3276,
+      "candidate@fouled_segment": 257,
+      "candidate@house_hit": 383,
+      "candidate@in_dooryard": 4903,
+      "candidate@offer_seats": 2,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@taut": 497,
+      "candidate@trace": 1188,
+      "candidate@undeckable_at": 3,
+      "candidate@way_out": 10114,
+      "dist@box_gap": 62355,
+      "dist@seg_closest": 77462,
+      "dist@seg_dists": 35554,
+      "dropped@Standing.forget": 40,
+      "index_examined@FabricIndex.fouled": 52,
+      "index_examined@PointGrid.near": 114380,
+      "index_examined@RingIndex.inside": 50978,
+      "index_examined@Standing.conflicts": 2165,
+      "index_query@FabricIndex.fouled": 447,
+      "index_query@PointGrid.near": 37837,
+      "index_query@RingIndex.inside": 2126,
+      "placed@Standing.record": 177,
+      "pt_test@point_in_poly": 1629,
+      "seg_test@chain_violated": 7694,
+      "seg_test@chain_violated_many": 29711,
+      "seg_test@free_end": 88802,
+      "seg_test@segments_cross": 5590
+     },
+     "placed": 441,
+     "seconds": 1.868
+    },
+    "labels": {
+     "calls": 17376,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.011
+    },
+    "lane_wells": {
+     "calls": 408961,
+     "ops": {
+      "candidate@Standing.conflicts": 1748,
+      "candidate@_fits": 306,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 15093,
+      "dist@seg_closest": 57077,
+      "dist@seg_dists": 98603,
+      "index_examined@PointGrid.near": 2943,
+      "index_examined@Standing.conflicts": 10079,
+      "index_query@PointGrid.near": 6186,
+      "index_query@RingIndex.inside_many": 16200,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 4156,
+      "pt_test@points_in_poly": 2480,
+      "seg_test@chain_violated": 16390,
+      "seg_test@segments_cross": 756
+     },
+     "placed": 2,
+     "seconds": 0.376
+    },
+    "notice": {
+     "calls": 187499,
+     "ops": {
+      "candidate@Obstacles.blocked": 59,
+      "candidate@Standing.conflicts": 808,
+      "candidate@_fits": 881,
+      "candidate@_route_seats": 2268,
+      "candidate@_strict_seat": 1,
+      "dist@seg_closest": 12508,
+      "index_examined@PointGrid.near": 47021,
+      "index_examined@Standing.conflicts": 6671,
+      "index_query@PointGrid.near": 11219,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 1030,
+      "seg_test@chain_violated": 48349
+     },
+     "placed": 1,
+     "seconds": 0.128
+    },
+    "pond_bank": {
+     "calls": 16,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "seat": {
+     "calls": 28813,
+     "ops": {
+      "candidate@back_fouled": 91,
+      "candidate@seat_cluster": 73,
+      "dist@seg_closest": 526,
+      "index_examined@PointGrid.near": 978,
+      "index_query@PointGrid.near": 704,
+      "pt_test@point_in_poly": 6161
+     },
+     "placed": 0,
+     "seconds": 0.025
+    },
+    "sink": {
+     "calls": 50487,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 1,
+      "candidate@pond_setback": 1,
+      "dist@seg_closest": 184,
+      "index_examined@Standing.conflicts": 39678,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 48
+     },
+     "placed": 7,
+     "seconds": 0.011
+    },
+    "sties": {
+     "calls": 2756,
+     "ops": {
+      "candidate@Standing.conflicts": 46,
+      "candidate@against_a_part": 68,
+      "candidate@clears": 136,
+      "index_examined@Standing.conflicts": 366,
+      "placed@Standing.record": 23
+     },
+     "placed": 23,
+     "seconds": 0.007
+    },
+    "track": {
+     "calls": 616,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 48,
+      "index_examined@Standing.conflicts": 26,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.002
+    },
+    "washing": {
+     "calls": 15830,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 14440,
+      "index_examined@Standing.conflicts": 16,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.008
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 1376726,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 40,
+      "candidate@Standing.conflicts": 181,
+      "candidate@_clear_link": 6,
+      "candidate@_crosses_fabric": 127,
+      "candidate@_deck_corners_clear": 1,
+      "candidate@_held": 4,
+      "candidate@a_way_onto_the_bund": 80,
+      "candidate@house_hit": 2,
+      "candidate@lattice_search": 129784,
+      "candidate@over_a_fixture": 82,
+      "candidate@trial_count": 4,
+      "candidate@undeckable_at": 42,
+      "dist@box_gap": 21223,
+      "dist@seg_closest": 83228,
+      "dist@seg_dists": 130609,
+      "dropped@Standing.forget": 89,
+      "index_examined@FabricIndex.fouled": 58160,
+      "index_examined@PointGrid.near": 10340,
+      "index_examined@RingIndex.inside": 3936,
+      "index_examined@Standing.conflicts": 9814,
+      "index_query@FabricIndex.fouled": 20573,
+      "index_query@PointGrid.near": 73194,
+      "index_query@RingIndex.inside": 567,
+      "placed@Standing.record": 86,
+      "pt_test@point_in_poly": 676,
+      "seg_test@free_end": 30598,
+      "seg_test@seg_intersect": 12,
+      "seg_test@segments_cross": 39641,
+      "seg_test@tail_doubled": 6976
+     },
+     "placed": 41,
+     "seconds": 0.797
+    },
+    "windbreak": {
+     "calls": 508797,
+     "ops": {
+      "candidate@GroveMixin.seat": 3950,
+      "candidate@_crown_covers": 9624,
+      "candidate@_crown_seat_clear": 7513,
+      "dist@seg_closest": 177,
+      "index_examined@PointGrid.near": 69342,
+      "index_examined@RingIndex.inside": 30170,
+      "index_query@PointGrid.near": 35531,
+      "index_query@RingIndex.inside": 14512
+     },
+     "placed": 3598,
+     "seconds": 0.723
+    },
+    "woodland": {
+     "calls": 71117,
+     "ops": {
+      "candidate@_crown_covers": 1361,
+      "candidate@_stock_woodland": 2426,
+      "dist@seg_closest": 6763,
+      "index_examined@PointGrid.near": 60688,
+      "index_examined@RingIndex.inside": 53733,
+      "index_query@PointGrid.near": 8801,
+      "index_query@RingIndex.inside": 9587
+     },
+     "placed": 1930,
+     "seconds": 0.045
+    }
+   }
+  },
+  {
+   "households": 40,
+   "refused": null,
+   "seed": 47,
+   "stages": {
+    "appurtenances": {
+     "calls": 71952,
+     "ops": {
+      "candidate@Standing.conflicts": 282,
+      "candidate@_fits": 29,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 94,
+      "dist@seg_closest": 11253,
+      "dist@seg_dists": 14210,
+      "index_examined@PointGrid.near": 289,
+      "index_examined@Standing.conflicts": 1487,
+      "index_query@PointGrid.near": 393,
+      "index_query@RingIndex.inside_many": 16065,
+      "placed@Standing.record": 200,
+      "pt_test@point_in_poly": 704,
+      "pt_test@points_in_poly": 489,
+      "seg_test@chain_violated": 1595,
+      "seg_test@segments_cross": 1648
+     },
+     "placed": 302,
+     "seconds": 0.09
+    },
+    "bamboo": {
+     "calls": 285,
+     "ops": {
+      "pt_test@point_in_poly": 90
+     },
+     "placed": 1,
+     "seconds": 0.002
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "crossings": {
+     "calls": 30518,
+     "ops": {
+      "candidate@Standing.conflicts": 26,
+      "dist@seg_closest": 7911,
+      "index_examined@PointGrid.near": 811,
+      "index_examined@Standing.conflicts": 184,
+      "index_query@PointGrid.near": 467,
+      "placed@Standing.record": 13,
+      "pt_test@point_in_poly": 3810,
+      "seg_test@segments_cross": 36
+     },
+     "placed": 13,
+     "seconds": 0.015
+    },
+    "field": {
+     "calls": 1297481,
+     "ops": {
+      "candidate@Standing.conflicts": 121,
+      "candidate@_bund_beans": 1614,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 10,
+      "candidate@_pond_fit": 2,
+      "candidate@_refused": 45,
+      "candidate@_split_steps": 11,
+      "candidate@bead_drowned": 1614,
+      "candidate@clear_of_field": 106,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 12202,
+      "dist@_seg_dist": 9467,
+      "dist@seg_closest": 1344,
+      "index_examined@PointGrid.near": 3343,
+      "index_examined@Standing.conflicts": 7636,
+      "index_query@PointGrid.near": 4363,
+      "placed@Standing.record": 60,
+      "pt_test@_pip": 925,
+      "pt_test@point_in_poly": 3086,
+      "seg_test@ring_meets_ellipse": 5,
+      "seg_test@segments_cross": 10898
+     },
+     "placed": 333,
+     "seconds": 1.242
+    },
+    "frame": {
+     "calls": 320,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_examined@PointGrid.near": 2,
+      "index_query@PointGrid.near": 1
+     },
+     "placed": 12,
+     "seconds": 0.012
+    },
+    "hinterland": {
+     "calls": 792534,
+     "ops": {
+      "candidate@GroveMixin.seat": 1563,
+      "candidate@_box_clear": 53,
+      "candidate@_crown_covers": 5608,
+      "candidate@_crown_seat_clear": 3520,
+      "candidate@bamboo_seats._fits": 235,
+      "candidate@belt_polygon": 2,
+      "candidate@close_belt_gaps": 8844,
+      "candidate@open_ground_patches._ok": 3241,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 3272,
+      "dist@seg_closest": 1840,
+      "index_examined@PointGrid.near": 111214,
+      "index_examined@RingIndex.inside": 234520,
+      "index_examined@RingIndex.inside_many": 9850701,
+      "index_query@PointGrid.near": 18282,
+      "index_query@RingIndex.inside": 10997,
+      "index_query@RingIndex.inside_many": 68313,
+      "pt_test@point_in_poly": 537
+     },
+     "placed": 2408,
+     "seconds": 1.004
+    },
+    "homesteads": {
+     "calls": 3282135,
+     "ops": {
+      "candidate@AccessTree.lay": 120,
+      "candidate@SeatRegion.offer": 59455,
+      "candidate@Standing.conflicts": 10769,
+      "candidate@WoodShares.share": 8779,
+      "candidate@_crosses_fabric": 564,
+      "candidate@_filled_lattice": 84,
+      "candidate@_first_admitted": 289,
+      "candidate@_fits": 8841,
+      "candidate@_lay_by_hand": 1176,
+      "candidate@_place_bundle_nucleated": 688,
+      "candidate@_way_for": 307,
+      "candidate@clears": 29714,
+      "candidate@connector_track": 1,
+      "candidate@fixtures_clear": 5904,
+      "candidate@fouled_segment": 322,
+      "candidate@house_hit": 558,
+      "candidate@in_dooryard": 8134,
+      "candidate@offer_seats": 2,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@search": 500,
+      "candidate@taut": 967,
+      "candidate@trace": 3066,
+      "candidate@way_out": 8954,
+      "dist@box_gap": 47238,
+      "dist@seg_closest": 220147,
+      "dist@seg_dists": 42035,
+      "dropped@Standing.forget": 40,
+      "index_examined@FabricIndex.fouled": 12,
+      "index_examined@PointGrid.near": 127336,
+      "index_examined@RingIndex.inside": 110,
+      "index_examined@Standing.conflicts": 2936,
+      "index_query@FabricIndex.fouled": 928,
+      "index_query@PointGrid.near": 117730,
+      "index_query@RingIndex.inside": 22,
+      "placed@Standing.record": 175,
+      "pt_test@point_in_poly": 3385,
+      "seg_test@chain_violated": 492765,
+      "seg_test@chain_violated_many": 13717,
+      "seg_test@free_end": 68284,
+      "seg_test@segments_cross": 1489
+     },
+     "placed": 501,
+     "seconds": 2.719
+    },
+    "labels": {
+     "calls": 18646,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.017
+    },
+    "lane_wells": {
+     "calls": 108076,
+     "ops": {
+      "candidate@Standing.conflicts": 168,
+      "candidate@_fits": 59,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 325,
+      "dist@seg_closest": 29965,
+      "dist@seg_dists": 16917,
+      "index_examined@PointGrid.near": 1258,
+      "index_examined@Standing.conflicts": 706,
+      "index_query@PointGrid.near": 772,
+      "index_query@RingIndex.inside_many": 16065,
+      "placed@Standing.record": 3,
+      "pt_test@point_in_poly": 474,
+      "pt_test@points_in_poly": 489,
+      "seg_test@chain_violated": 3069,
+      "seg_test@segments_cross": 76
+     },
+     "placed": 3,
+     "seconds": 0.101
+    },
+    "notice": {
+     "calls": 240622,
+     "ops": {
+      "candidate@Obstacles.blocked": 104,
+      "candidate@Standing.conflicts": 926,
+      "candidate@_fits": 997,
+      "candidate@_route_seats": 2904,
+      "dist@seg_closest": 11269,
+      "index_examined@PointGrid.near": 55763,
+      "index_examined@Standing.conflicts": 6780,
+      "index_query@PointGrid.near": 15008,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 943,
+      "seg_test@chain_violated": 54727,
+      "seg_test@segments_cross": 4
+     },
+     "placed": 1,
+     "seconds": 0.16
+    },
+    "pond_bank": {
+     "calls": 16,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "seat": {
+     "calls": 29925,
+     "ops": {
+      "candidate@back_fouled": 105,
+      "candidate@seat_cluster": 60,
+      "dist@seg_closest": 396,
+      "index_examined@PointGrid.near": 609,
+      "index_query@PointGrid.near": 816,
+      "pt_test@point_in_poly": 6420
+     },
+     "placed": 0,
+     "seconds": 0.024
+    },
+    "sink": {
+     "calls": 52697,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 3,
+      "candidate@pond_setback": 75,
+      "dist@seg_closest": 6362,
+      "index_examined@Standing.conflicts": 25073,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 1824
+     },
+     "placed": 7,
+     "seconds": 0.024
+    },
+    "sties": {
+     "calls": 3679,
+     "ops": {
+      "candidate@Standing.conflicts": 56,
+      "candidate@against_a_part": 221,
+      "candidate@clears": 442,
+      "index_examined@Standing.conflicts": 458,
+      "placed@Standing.record": 27
+     },
+     "placed": 27,
+     "seconds": 0.008
+    },
+    "track": {
+     "calls": 604,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 30,
+      "index_examined@Standing.conflicts": 22,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.002
+    },
+    "washing": {
+     "calls": 15810,
+     "ops": {
+      "candidate@Standing.conflicts": 5,
+      "dist@seg_closest": 14280,
+      "index_examined@Standing.conflicts": 50,
+      "placed@Standing.record": 2
+     },
+     "placed": 2,
+     "seconds": 0.009
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 1818728,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 64,
+      "candidate@Standing.conflicts": 198,
+      "candidate@_clear_link": 139,
+      "candidate@_crosses_fabric": 336,
+      "candidate@_held": 4,
+      "candidate@a_way_onto_the_bund": 74,
+      "candidate@fouled_segment": 68,
+      "candidate@house_hit": 167,
+      "candidate@lattice_search": 135392,
+      "candidate@over_a_fixture": 103,
+      "candidate@trial_count": 4,
+      "candidate@undeckable_at": 38,
+      "dist@box_gap": 17526,
+      "dist@seg_closest": 108942,
+      "dist@seg_dists": 124113,
+      "dropped@Standing.forget": 89,
+      "index_examined@FabricIndex.fouled": 77046,
+      "index_examined@PointGrid.near": 18316,
+      "index_examined@RingIndex.inside": 2760,
+      "index_examined@Standing.conflicts": 19175,
+      "index_query@FabricIndex.fouled": 23698,
+      "index_query@PointGrid.near": 74400,
+      "index_query@RingIndex.inside": 557,
+      "placed@Standing.record": 78,
+      "pt_test@point_in_poly": 926,
+      "seg_test@free_end": 25100,
+      "seg_test@segments_cross": 38818,
+      "seg_test@tail_doubled": 7877
+     },
+     "placed": 40,
+     "seconds": 1.067
+    },
+    "windbreak": {
+     "calls": 512325,
+     "ops": {
+      "candidate@GroveMixin.seat": 3861,
+      "candidate@_crown_covers": 9547,
+      "candidate@_crown_seat_clear": 7581,
+      "candidate@reseat_clump": 793,
+      "dist@seg_closest": 137,
+      "index_examined@PointGrid.near": 71425,
+      "index_examined@RingIndex.inside": 32097,
+      "index_query@PointGrid.near": 34601,
+      "index_query@RingIndex.inside": 15271
+     },
+     "placed": 3697,
+     "seconds": 0.784
+    },
+    "woodland": {
+     "calls": 38180,
+     "ops": {
+      "candidate@_crown_covers": 667,
+      "candidate@_stock_woodland": 1359,
+      "dist@seg_closest": 5792,
+      "index_examined@PointGrid.near": 32697,
+      "index_examined@RingIndex.inside": 9866,
+      "index_query@PointGrid.near": 3281,
+      "index_query@RingIndex.inside": 1738
+     },
+     "placed": 874,
+     "seconds": 0.025
+    }
+   }
+  },
+  {
+   "households": 80,
+   "refused": "FieldRefused: Inashiro: no fan at any of 5 aspects is legal (no supply tail dangling, no hairpin, both flanks commanded) and lands 104",
+   "seed": 4,
+   "stages": {
+    "field": {
+     "calls": 1281983,
+     "ops": {
+      "candidate@_fit_at_aspect": 45,
+      "dist@_seg_dist": 391945,
+      "pt_test@_pip": 1856
+     },
+     "placed": 0,
+     "seconds": 1.462
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    }
+   }
+  },
+  {
+   "households": 80,
+   "refused": "FieldRefused: Inashiro: no fan at any of 5 aspects is legal (no supply tail dangling, no hairpin, both flanks commanded) and lands 104",
+   "seed": 25,
+   "stages": {
+    "field": {
+     "calls": 830542,
+     "ops": {
+      "candidate@_fit_at_aspect": 45,
+      "dist@_seg_dist": 42212,
+      "pt_test@_pip": 690
+     },
+     "placed": 0,
+     "seconds": 1.18
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    }
+   }
+  },
+  {
+   "households": 80,
+   "refused": "FieldRefused: Inashiro: no fan at any of 5 aspects is legal (no supply tail dangling, no hairpin, both flanks commanded) and lands 104",
+   "seed": 39,
+   "stages": {
+    "field": {
+     "calls": 957474,
+     "ops": {
+      "candidate@_fit_at_aspect": 45,
+      "dist@_seg_dist": 43835,
+      "pt_test@_pip": 690
+     },
+     "placed": 0,
+     "seconds": 1.222
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    }
+   }
+  },
+  {
+   "households": 80,
+   "refused": "FieldRefused: Inashiro: no fan at any of 5 aspects is legal (no supply tail dangling, no hairpin, both flanks commanded) and lands 104",
+   "seed": 47,
+   "stages": {
+    "field": {
+     "calls": 843186,
+     "ops": {
+      "candidate@_fit_at_aspect": 45,
+      "dist@_seg_dist": 39595,
+      "pt_test@_pip": 702
+     },
+     "placed": 0,
+     "seconds": 1.205
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    }
+   }
+  }
+ ],
+ "summary": {
+  "sizes": [
+   10,
+   20,
+   40
+  ],
+  "stages": {
+   "appurtenances": {
+    "budget_at_40": null,
+    "exponent": 0.9503642289480003,
+    "per": {
+     "10": {
+      "calls": 55064.0,
+      "ops": 28516.0,
+      "placed": 73.75,
+      "seconds": 0.03975
+     },
+     "20": {
+      "calls": 71876.5,
+      "ops": 45414.75,
+      "placed": 144.5,
+      "seconds": 0.06725
+     },
+     "40": {
+      "calls": 119414.0,
+      "ops": 87757.66666666667,
+      "placed": 283.0,
+      "seconds": 0.13266666666666668
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "bamboo": {
+    "budget_at_40": null,
+    "exponent": 0.7411819489672755,
+    "per": {
+     "10": {
+      "calls": 39.75,
+      "ops": 8.25,
+      "placed": 1.0,
+      "seconds": 0.001
+     },
+     "20": {
+      "calls": 185.25,
+      "ops": 51.25,
+      "placed": 3.75,
+      "seconds": 0.001
+     },
+     "40": {
+      "calls": 308.0,
+      "ops": 85.66666666666667,
+      "placed": 7.0,
+      "seconds": 0.002
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "burial": {
+    "budget_at_40": null,
+    "exponent": null,
+    "per": {
+     "10": {
+      "calls": 8.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.00025
+     },
+     "20": {
+      "calls": 8.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     },
+     "40": {
+      "calls": 8.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "crossings": {
+    "budget_at_40": null,
+    "exponent": 0.6039980161633207,
+    "per": {
+     "10": {
+      "calls": 12163.0,
+      "ops": 4491.5,
+      "placed": 6.5,
+      "seconds": 0.00525
+     },
+     "20": {
+      "calls": 22575.75,
+      "ops": 9495.0,
+      "placed": 9.5,
+      "seconds": 0.01025
+     },
+     "40": {
+      "calls": 35204.333333333336,
+      "ops": 14431.666666666666,
+      "placed": 14.333333333333334,
+      "seconds": 0.016666666666666666
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "field": {
+    "budget_at_40": null,
+    "exponent": 0.5677327881982156,
+    "per": {
+     "10": {
+      "calls": 381492.75,
+      "ops": 21045.25,
+      "placed": 164.25,
+      "seconds": 0.28675
+     },
+     "20": {
+      "calls": 764387.75,
+      "ops": 37142.5,
+      "placed": 251.0,
+      "seconds": 0.67375
+     },
+     "40": {
+      "calls": 1172424.6666666667,
+      "ops": 55052.333333333336,
+      "placed": 332.6666666666667,
+      "seconds": 1.1273333333333333
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "frame": {
+    "budget_at_40": null,
+    "exponent": -0.9183862344463481,
+    "per": {
+     "10": {
+      "calls": 173.75,
+      "ops": 20.25,
+      "placed": 12.0,
+      "seconds": 0.0032500000000000003
+     },
+     "20": {
+      "calls": 252.25,
+      "ops": 15.75,
+      "placed": 12.0,
+      "seconds": 0.00625
+     },
+     "40": {
+      "calls": 329.0,
+      "ops": 8.333333333333334,
+      "placed": 12.0,
+      "seconds": 0.011999999999999999
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "hinterland": {
+    "budget_at_40": null,
+    "exponent": 1.1665437725199244,
+    "per": {
+     "10": {
+      "calls": 360506.25,
+      "ops": 981399.75,
+      "placed": 649.75,
+      "seconds": 0.38775000000000004
+     },
+     "20": {
+      "calls": 575890.0,
+      "ops": 3593563.0,
+      "placed": 1494.5,
+      "seconds": 0.693
+     },
+     "40": {
+      "calls": 912981.3333333334,
+      "ops": 8066589.0,
+      "placed": 1556.3333333333333,
+      "seconds": 1.0723333333333334
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "homesteads": {
+    "budget_at_40": null,
+    "exponent": 0.9926772208296122,
+    "per": {
+     "10": {
+      "calls": 512565.25,
+      "ops": 155513.5,
+      "placed": 310.25,
+      "seconds": 0.43525
+     },
+     "20": {
+      "calls": 1486097.0,
+      "ops": 424855.0,
+      "placed": 432.5,
+      "seconds": 1.164
+     },
+     "40": {
+      "calls": 2527144.0,
+      "ops": 845408.0,
+      "placed": 475.6666666666667,
+      "seconds": 2.292666666666667
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "labels": {
+    "budget_at_40": null,
+    "exponent": null,
+    "per": {
+     "10": {
+      "calls": 4848.25,
+      "ops": 0.0,
+      "placed": 1.0,
+      "seconds": 0.006
+     },
+     "20": {
+      "calls": 9810.25,
+      "ops": 0.0,
+      "placed": 1.0,
+      "seconds": 0.0075
+     },
+     "40": {
+      "calls": 16455.333333333332,
+      "ops": 0.0,
+      "placed": 1.0,
+      "seconds": 0.012666666666666666
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "lane_wells": {
+    "budget_at_40": null,
+    "exponent": 2.071806277191857,
+    "per": {
+     "10": {
+      "calls": 14853.0,
+      "ops": 10601.75,
+      "placed": 0.25,
+      "seconds": 0.015250000000000001
+     },
+     "20": {
+      "calls": 64888.5,
+      "ops": 46332.25,
+      "placed": 0.5,
+      "seconds": 0.06999999999999999
+     },
+     "40": {
+      "calls": 372346.6666666667,
+      "ops": 194786.66666666666,
+      "placed": 3.0,
+      "seconds": 0.32366666666666666
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "notice": {
+    "budget_at_40": null,
+    "exponent": 1.0821391680754857,
+    "per": {
+     "10": {
+      "calls": 114957.75,
+      "ops": 38416.75,
+      "placed": 1.0,
+      "seconds": 0.05125
+     },
+     "20": {
+      "calls": 145744.0,
+      "ops": 70275.0,
+      "placed": 1.0,
+      "seconds": 0.08075
+     },
+     "40": {
+      "calls": 234369.33333333334,
+      "ops": 148784.33333333334,
+      "placed": 1.0,
+      "seconds": 0.15933333333333333
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "pond_bank": {
+    "budget_at_40": null,
+    "exponent": null,
+    "per": {
+     "10": {
+      "calls": 7020.75,
+      "ops": 3347.5,
+      "placed": 26.0,
+      "seconds": 0.003
+     },
+     "20": {
+      "calls": 8034.25,
+      "ops": 3951.75,
+      "placed": 33.0,
+      "seconds": 0.004
+     },
+     "40": {
+      "calls": 16.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "pond_stock": {
+    "budget_at_40": null,
+    "exponent": null,
+    "per": {
+     "10": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.00025
+     },
+     "20": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     },
+     "40": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "roll": {
+    "budget_at_40": null,
+    "exponent": 1.1226297441185855,
+    "per": {
+     "10": {
+      "calls": 2248591.5,
+      "ops": 1756760.75,
+      "placed": 2357.75,
+      "seconds": 1.6389999999999998
+     },
+     "20": {
+      "calls": 4166147.5,
+      "ops": 4784844.25,
+      "placed": 4678.5,
+      "seconds": 3.5495
+     },
+     "40": {
+      "calls": 7569884.666666667,
+      "ops": 10418688.0,
+      "placed": 7335.666666666667,
+      "seconds": 6.874
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "seat": {
+    "budget_at_40": null,
+    "exponent": -0.06471075354439529,
+    "per": {
+     "10": {
+      "calls": 12986.25,
+      "ops": 4905.75,
+      "placed": 0.0,
+      "seconds": 0.01
+     },
+     "20": {
+      "calls": 23609.5,
+      "ops": 8494.25,
+      "placed": 0.0,
+      "seconds": 0.01875
+     },
+     "40": {
+      "calls": 28847.666666666668,
+      "ops": 8121.666666666667,
+      "placed": 0.0,
+      "seconds": 0.024000000000000004
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "sink": {
+    "budget_at_40": null,
+    "exponent": -0.6812173926923573,
+    "per": {
+     "10": {
+      "calls": 72622.75,
+      "ops": 54694.75,
+      "placed": 7.0,
+      "seconds": 0.021500000000000002
+     },
+     "20": {
+      "calls": 76995.75,
+      "ops": 57823.0,
+      "placed": 7.0,
+      "seconds": 0.02425
+     },
+     "40": {
+      "calls": 52322.666666666664,
+      "ops": 36060.666666666664,
+      "placed": 7.0,
+      "seconds": 0.021666666666666667
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "sties": {
+    "budget_at_40": null,
+    "exponent": 1.1556566440925327,
+    "per": {
+     "10": {
+      "calls": 823.25,
+      "ops": 202.5,
+      "placed": 6.5,
+      "seconds": 0.0015
+     },
+     "20": {
+      "calls": 1705.75,
+      "ops": 473.25,
+      "placed": 13.25,
+      "seconds": 0.0032500000000000003
+     },
+     "40": {
+      "calls": 3502.3333333333335,
+      "ops": 1054.3333333333333,
+      "placed": 26.666666666666668,
+      "seconds": 0.008333333333333333
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "track": {
+    "budget_at_40": null,
+    "exponent": -0.256013978156022,
+    "per": {
+     "10": {
+      "calls": 372.75,
+      "ops": 88.5,
+      "placed": 1.0,
+      "seconds": 0.001
+     },
+     "20": {
+      "calls": 453.75,
+      "ops": 82.0,
+      "placed": 1.0,
+      "seconds": 0.001
+     },
+     "40": {
+      "calls": 618.0,
+      "ops": 68.66666666666667,
+      "placed": 1.0,
+      "seconds": 0.0016666666666666668
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "washing": {
+    "budget_at_40": null,
+    "exponent": 1.0118822735743178,
+    "per": {
+     "10": {
+      "calls": 3345.25,
+      "ops": 3006.5,
+      "placed": 1.0,
+      "seconds": 0.002
+     },
+     "20": {
+      "calls": 7712.5,
+      "ops": 6993.0,
+      "placed": 1.5,
+      "seconds": 0.0045000000000000005
+     },
+     "40": {
+      "calls": 15508.333333333334,
+      "ops": 14101.666666666666,
+      "placed": 1.3333333333333333,
+      "seconds": 0.008333333333333333
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "water_frame": {
+    "budget_at_40": null,
+    "exponent": null,
+    "per": {
+     "10": {
+      "calls": 7.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.0
+     },
+     "20": {
+      "calls": 7.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.0
+     },
+     "40": {
+      "calls": 7.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.0
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "waterward": {
+    "budget_at_40": null,
+    "exponent": null,
+    "per": {
+     "10": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.0
+     },
+     "20": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.0
+     },
+     "40": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.0
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "web": {
+    "budget_at_40": null,
+    "exponent": 1.0342454302689896,
+    "per": {
+     "10": {
+      "calls": 560392.75,
+      "ops": 391584.5,
+      "placed": 11.5,
+      "seconds": 0.22425
+     },
+     "20": {
+      "calls": 611442.5,
+      "ops": 346619.0,
+      "placed": 21.0,
+      "seconds": 0.34975
+     },
+     "40": {
+      "calls": 1536843.3333333333,
+      "ops": 709890.3333333334,
+      "placed": 41.0,
+      "seconds": 0.914
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "windbreak": {
+    "budget_at_40": null,
+    "exponent": 0.7513795055357388,
+    "per": {
+     "10": {
+      "calls": 127210.25,
+      "ops": 44814.25,
+      "placed": 923.5,
+      "seconds": 0.139
+     },
+     "20": {
+      "calls": 275318.5,
+      "ops": 101125.0,
+      "placed": 1779.25,
+      "seconds": 0.355
+     },
+     "40": {
+      "calls": 504793.0,
+      "ops": 170234.0,
+      "placed": 3638.0,
+      "seconds": 0.718
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   },
+   "woodland": {
+    "budget_at_40": null,
+    "exponent": 1.0436831869827148,
+    "per": {
+     "10": {
+      "calls": 7130.75,
+      "ops": 14103.5,
+      "placed": 161.5,
+      "seconds": 0.00475
+     },
+     "20": {
+      "calls": 19144.75,
+      "ops": 32138.5,
+      "placed": 472.25,
+      "seconds": 0.01325
+     },
+     "40": {
+      "calls": 36433.666666666664,
+      "ops": 66253.0,
+      "placed": 934.6666666666666,
+      "seconds": 0.023666666666666666
+     }
+    },
+    "ratio": null,
+    "status": "unbudgeted"
+   }
+  }
+ }
+}

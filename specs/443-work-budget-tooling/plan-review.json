@@ -1018,6 +1018,52 @@
      "why": "D2: the standing record prints calls beside counts so a stage whose calls are large against its counts shows it; this applies it to the walk."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T02 (FR-003, FR-004: today's figures for every stage, and the counters inert)",
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02-approach",
+     "summary": "Build tools/work_budget.py per D4 and make counters-inert per D5; generate dev/work-budget.md with today's figures at 10, 20, 40 and 80 households.",
+     "class": "within",
+     "why": "Restates FR-003/FR-004 and D4/D5 whole; matches the request's step 1 ('make work-budget and today's figures for every stage at 10/20/40/80 households') and section 1's gate rolling a seed both ways for identical manifests. Nothing in either is dropped."
+    },
+    {
+     "id": "T02-order",
+     "summary": "T02 runs after T01 and T09-T12.",
+     "class": "within",
+     "why": "Sequencing only; it removes no requirement and the request sets no order inside step 1."
+    },
+    {
+     "id": "T02-world-check",
+     "summary": "The record's per-stage figures are read against make perf-fanout's calls for the same rolls.",
+     "class": "within",
+     "why": "An added cross-check that serves FR-003/SC-001 (perf-fanout is SC-001's instrument; the request keeps Python calls recorded beside the counts). It narrows nothing."
+    },
+    {
+     "id": "T02-exits",
+     "summary": "Green: make work-budget writes the record and make counters-inert passes and refuses a stub counter that writes the manifest. Red: the failure is recorded, the task set down, and any claim it cannot be done is ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Green carries FR-003, FR-004 and SC-002 (the stub-counter refusal) exactly. Red pauses the task; it does not relax any requirement, and an impossibility claim goes to the project's standing ruling route instead of being decided by the session. The request's 'set down when the gain is small does not apply' is about phases judged against a budget, not this instrument task, and nothing here sets the task down on a small gain."
+    },
+    {
+     "id": "T02-done",
+     "summary": "Done when dev/work-budget.md is committed with every stage at four sizes, in one landing.",
+     "class": "within",
+     "why": "That is FR-003's last sentence and SC-004's first clause. SC-004's speckit-todo test is FR-007's, cited elsewhere, so T02 does not narrow it."
+    },
+    {
+     "id": "T02-not-perf",
+     "summary": "Classed as not performance work: instrumentation whose overhead is measured with make perf-ab, and which moves no map.",
+     "class": "within",
+     "why": "Matches the request's step 1 ('Engine counters only; no map changes'). Measuring time overhead with perf-ab adds to SC-001's call-count bound and does not replace it, since SC-001 is still listed among T02's constraints."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1317,6 +1363,50 @@
      "summary": "Each family's candidate counts read against its stages' things placed on the reference roll; a stage with calls large against its counts is re-read.",
      "class": "within",
      "why": "D2: the standing record prints calls beside counts so a stage whose calls are large against its counts shows it; this applies it to the walk."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T02": {
+   "section_sha256": "b36fb7d7d7f4c3963f3cc23f6441d05818f391372c0901e3f4156f56dcbb1b7e",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T02-approach",
+     "summary": "Build tools/work_budget.py per D4 and make counters-inert per D5; generate dev/work-budget.md with today's figures at 10, 20, 40 and 80 households.",
+     "class": "within",
+     "why": "Restates FR-003/FR-004 and D4/D5 whole; matches the request's step 1 ('make work-budget and today's figures for every stage at 10/20/40/80 households') and section 1's gate rolling a seed both ways for identical manifests. Nothing in either is dropped."
+    },
+    {
+     "id": "T02-order",
+     "summary": "T02 runs after T01 and T09-T12.",
+     "class": "within",
+     "why": "Sequencing only; it removes no requirement and the request sets no order inside step 1."
+    },
+    {
+     "id": "T02-world-check",
+     "summary": "The record's per-stage figures are read against make perf-fanout's calls for the same rolls.",
+     "class": "within",
+     "why": "An added cross-check that serves FR-003/SC-001 (perf-fanout is SC-001's instrument; the request keeps Python calls recorded beside the counts). It narrows nothing."
+    },
+    {
+     "id": "T02-exits",
+     "summary": "Green: make work-budget writes the record and make counters-inert passes and refuses a stub counter that writes the manifest. Red: the failure is recorded, the task set down, and any claim it cannot be done is ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Green carries FR-003, FR-004 and SC-002 (the stub-counter refusal) exactly. Red pauses the task; it does not relax any requirement, and an impossibility claim goes to the project's standing ruling route instead of being decided by the session. The request's 'set down when the gain is small does not apply' is about phases judged against a budget, not this instrument task, and nothing here sets the task down on a small gain."
+    },
+    {
+     "id": "T02-done",
+     "summary": "Done when dev/work-budget.md is committed with every stage at four sizes, in one landing.",
+     "class": "within",
+     "why": "That is FR-003's last sentence and SC-004's first clause. SC-004's speckit-todo test is FR-007's, cited elsewhere, so T02 does not narrow it."
+    },
+    {
+     "id": "T02-not-perf",
+     "summary": "Classed as not performance work: instrumentation whose overhead is measured with make perf-ab, and which moves no map.",
+     "class": "within",
+     "why": "Matches the request's step 1 ('Engine counters only; no map changes'). Measuring time overhead with perf-ab adds to SC-001's call-count bound and does not replace it, since SC-001 is still listed among T02's constraints."
     }
    ],
    "verdict": "CLEAR"

@@ -51,6 +51,12 @@ perf-share:     ## [performance] where a module's time is: its share of each sta
 phase-calls:    ## [performance] one 40-household hamlet's Python calls by stage and by step, recorded for the placement-stages page (feature 434)   [SEED=39] [HOUSEHOLDS=40] [FORM=nucleated|linear|dispersed] [ARCHETYPE=<field archetype>] [SINK=pond|offmap]
 	$(RUN).tools.phase_calls --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),40)" $(if $(FORM),--form "$(FORM)",) $(if $(ARCHETYPE),--archetype "$(ARCHETYPE)",) $(if $(SINK),--sink "$(SINK)",)
 
+work-budget:    ## [performance] the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=<n>] [SIZES=10,20,40,80]
+	$(RUN).tools.work_budget $(if $(SEED),--seed "$(SEED)",) $(if $(SIZES),--sizes "$(SIZES)",)
+
+counters-inert: ## [performance] the work counters change no map: one seed rolled with them and under python -O, the manifests compared (feature 443, FR-004)   [SEED=25] [HOUSEHOLDS=15]
+	$(RUN).tools.counters_inert --seed "$(or $(SEED),25)" --households "$(or $(HOUSEHOLDS),15)"
+
 perf-profile:   ## [performance] tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web [HOUSEHOLDS=10]
 ##  SEED=<n>      which seed to profile - e.g. `25`
 ##  STAGE=<name>  which single stage to cProfile - e.g. `web`
@@ -86,7 +92,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	done; \
 	if [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
 	tr=$$(date +%s); $(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };) $(RUNSTATS) phase "$$G" reference $$(( $$(date +%s) - tr )) 2>/dev/null || true; \
-	for phase in hooks-test test-full $(if $(FULL),perf-gate,); do \
+	for phase in hooks-test counters-inert test-full $(if $(FULL),perf-gate,); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gates/gate-stamp.py" --fresh hooks; then \
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
