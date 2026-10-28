@@ -188,3 +188,17 @@ def test_a_budget_counts_the_derivations_items_and_a_row_without_them_is_refused
     monkeypatch.setattr(wb, "roll", lambda seed, h: _row(seed, h, 1.0))
     with pytest.raises(SystemExit, match="REFUSED - homesteads: budgeted with no items"):
         wb.run((4,), (40,), calls=lambda seeds, h: {})
+
+
+def test_an_accept_pinned_budget_whose_derivation_changed_is_refused(tmp_path: Path) -> None:
+    """Feature 444 FR-013, SC-008: an accept-pinned budget is bound to its derivation as it read; a change re-owes the arbiter."""
+    import hashlib
+
+    (tmp_path / "d.md").write_text("the derivation\n")
+    sha = hashlib.sha256(b"the derivation\n").hexdigest()
+    table = {"stages": {"web": {"status": "budgeted", "pinned_on": "accept", "derivation": "d.md", "derivation_sha": sha, "verdict": "ask:x"}, "track": {"status": "budgeted"}}}
+    assert wb.stale_pins(table, str(tmp_path)) == [], "as pinned, and a SOUND pin is not read"
+    (tmp_path / "d.md").write_text("changed\n")
+    assert "changed since the arbiter's accept pinned it (ask:x)" in wb.stale_pins(table, str(tmp_path))[0]
+    (tmp_path / "d.md").unlink()
+    assert len(wb.stale_pins(table, str(tmp_path))) == 1, "a derivation gone is a change too"
