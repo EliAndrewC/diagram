@@ -1,0 +1,342 @@
+{
+ "feature": "444-work-budget-program",
+ "blocks": {
+  "preamble": {
+   "sha256": "1da85b513108ea7c0adf558733349c2a833d3deeb38b08c37074b183c523672f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Summary": {
+   "sha256": "4ab19fe642931bd61f3cd4c5bc6ada08ba6e7ba1c24d7c93b2577840e2694bae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Technical Context": {
+   "sha256": "91b56ae8b1700770b39a0d786bc8722144aea430c9c41db0afbba8a6042e4c2e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Performance bookends": {
+   "sha256": "f6666afaed3a11de3801548f066017c42bb99d9bf187301cc441a7949fd196eb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Constitution Check": {
+   "sha256": "49e13b4fb6695276089a379c676185547df7b4f1465ad07276d171d0be182b29",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Decisions": {
+   "sha256": "24fbc27fdd326a575dc81fe6aa261cbeffa586ae09beb036a9dc45c0a709833c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Task approaches": {
+   "sha256": "88b8e3c844dd7f807461674c1112769475adbb980f6bf0e123f202c6886fb995",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T01 - a budget counts the derivation's own items (D2)": {
+   "sha256": "61f86a976d0ca3608b4f7c34316e689a378f921f2515445b811e1b896b04bdb4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "a4825ad678a8c78fa4e38e7f1384165e76c6f66c223ae873920460c66b32cdfe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T02 - the water family's budgets (D1, D3, D4)": {
+   "sha256": "16b848e1e0f9a5f4f247b52505c2ecd22912dfb9eed710e17db34587dc25fce2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "5d123a59010629dfc2f1fa2416bc4f0ff3735ae7f90d7cee5c339bc834c9c195",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T03 - the homesteads family's budgets (D1, D3, D4)": {
+   "sha256": "f644a1c79d1b8e3c6de3e957b520b6eec44d4d1a2faf1ca303c90fb409de43d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "47a34bbd310c4dfe5f20437a7e096d56c835de824f52a726233494c58903fca6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T04 - the ways family's budgets (D1, D3, D4)": {
+   "sha256": "050538fca64803ed67c1fa77c17b70a82530ddcb14afd9b4eb7bed0b62603d06",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "f1f45ad363586fe84ef00a2a83c9c87d1edd5191c01e4af5a8a28e4a36854a91",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T05 - the hinterland and frame family's budgets (D1, D3, D4)": {
+   "sha256": "e4088dab6b6185096ce2bb4b079cdc13c5de740d197c2320738a75a7b923e01e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "b257fd71431f0a548135bf655d95cf65f79a1c137fd6ee162575807f3cecd5a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T06 - the program's target to the GM (D5)": {
+   "sha256": "a2b6b1390900884b665b24d543e127eab66a4ebb668c2350af1265ddc534c551",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "e2b656d46060497070fca1a56e44735feaf6e4af7fb78e40eeed85732c7af82a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Project Structure": {
+   "sha256": "6c68ec01b9e999a408481757ce13a4ba8a8fdb745713f0f45adff9825463cda1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 - a budget counts the derivation's own items (D2)",
+    "### T01 Approach (checklist part A)",
+    "### T02 - the water family's budgets (D1, D3, D4)",
+    "### T02 Approach (checklist part A)",
+    "### T03 - the homesteads family's budgets (D1, D3, D4)",
+    "### T03 Approach (checklist part A)",
+    "### T04 - the ways family's budgets (D1, D3, D4)",
+    "### T04 Approach (checklist part A)",
+    "### T05 - the hinterland and frame family's budgets (D1, D3, D4)",
+    "### T05 Approach (checklist part A)",
+    "### T06 - the program's target to the GM (D5)",
+    "### T06 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary - step 3 planned now, phase tasks filed after the checkpoint",
+     "summary": "Only T01-T06 (step 3) are planned; each phase task is filed with its own plan section and plan review after the GM approves the target.",
+     "class": "within",
+     "why": "FR-002 and the design's step 3 put the GM's target before any phase is rebuilt; deferring the phases' planning past that point is stricter, not narrower. FR-003's one-task-per-phase is still owed and the Project Structure names it."
+    },
+    {
+     "id": "D1 - derivation from the contract alone",
+     "summary": "Each stage's derivation is the template filled from its docstring, plan fields read, manifest keys/registries written and governing claims, never from its loops or today's counts; waste in today's output is reported and routed to the stage that owes it.",
+     "class": "within",
+     "why": "This is FR-001 and the design's checklist box 2 ('written from the contract alone, before the current code's numbers are read') and section 4's blind bundle. Routing a found waste to its owning stage cites the spec's Edge Cases, which the bundle does not carry (spec-cited.md omits it), but it narrows nothing."
+    },
+    {
+     "id": "D2 - a budget counts the derivation's items (items_at_40, items_at_80; budget = per_thing x items)",
+     "summary": "budget-set requires the derivation's item counts at 40 and 80; make work-budget and the ratchet compute budget as per_thing x items at that size.",
+     "class": "within",
+     "why": "S7: 'a budget is items x candidates x checks x slack' - the items are the derivation's, not the manifest's part count. A tooling change whose only effect is that the pinned budget means what S7 says is enforcement of the request, not new scope. Mechanism defect, recorded here: D2 records items at 40 and 80 only, so it cannot produce the budget at 20 households that D5's exponent fit uses (see D5)."
+    },
+    {
+     "id": "D2 legacy clause - a stage recorded before this keeps the placed-things product",
+     "summary": "A budget row recorded without items keeps the old per_thing x placed-things computation; the plan asserts '(none is budgeted today)'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A carve-out that preserves the very formula D2 itself calls wrong (it counts every part rather than the derivation's items and gives seat and sink a budget of 0) - the GM's S7 rule is that a budget is the derivation's items x candidates x checks x slack. None of the three grounds holds: refusing (or migrating) a row without items is trivially possible, nothing in the GM's words implies a legacy formula, and the literal rule defeats no purpose. Its reach rests on an unmeasured parenthetical: the only dated measurement in these blocks (run 20261028T152105Z-45aa176ec9b8) is cited for the placed column, not for which rows carry a budget. If it reaches nothing, deleting it costs nothing; if it reaches something, the standing record shows a non-S7 number as a budget. Fix: a row without items_at_40/items_at_80 is refused by make work-budget and the ratchet, not computed the old way."
+    },
+    {
+     "id": "D3 - MODE BUDGET dispatch loop",
+     "summary": "Each derivation bundled through make work-budget-bundle MODE=budget and dispatched to work-budget; LOOSE/UNDERIVED corrected and re-dispatched; a third round on one stage owes the round arbiter's ruling first; only SOUND is pinned; at most three dispatches per message.",
+     "class": "within",
+     "why": "FR-001 (the verdict on a bundle that passed 443 FR-008's refusal) and SC-001 (SOUND). The arbiter's ruling is on process; the plan still requires SOUND to pin, consistent with the design's 'may rule on process'. Dispatch batching is process."
+    },
+    {
+     "id": "D4 - the 23 stages in four families, one task per family",
+     "summary": "Water (6), homesteads (7), ways (3), hinterland and frame (7), as 443's T09-T12 grouped them; one landing per family.",
+     "class": "within",
+     "why": "Grouping stages into tasks narrows nothing, and the Summary and T06 state the scope as every stage of STAGES (FR-001). Gap, not ruled: the list's search space is '443's T09-T12', not a census of STAGES; the design says 'about 25 stages' and nothing in the blocks shows 23 = len(STAGES). I could not check it (the bundle forbids the repository). The plan should state the census - STAGES itself or the run's stage rows, dated - so a stage 443 did not group cannot fall out of 'every stage'."
+    },
+    {
+     "id": "D5 - the checkpoint",
+     "summary": "Target = sum of the 23 budgets at 40 households and the whole roll's exponent (fit of summed budgets at 20, 40, 80); today's figures and per-stage ratios read only after every budget is pinned and sent beside it; escalation-check, then the GM; make budget-program records his words; no phase task filed before.",
+     "class": "within",
+     "why": "FR-002 and the design's step 3 ('The GM approves the target'). Reading today's counts only after pinning keeps FR-001's blindness. Mechanism defect, recorded here: the fit uses budgets at 20 households that D2 cannot produce (items are recorded at 40 and 80 only). The faithful fix is items_at_20; fitting from 40 and 80 alone would be narrower than S6's 20-to-80 band and would itself need a ruling."
+    },
+    {
+     "id": "Technical Context / Performance bookends / Constitution Check",
+     "summary": "Step 3 changes no code a roll runs; perf bookends per phase task; figures no claim states are labeled guesses (XII).",
+     "class": "within",
+     "why": "Statements of fact and process consistent with the design; nothing narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 - a budget counts the derivation's own items (D2)",
+    "### T01 Approach (checklist part A)",
+    "### T02 - the water family's budgets (D1, D3, D4)",
+    "### T02 Approach (checklist part A)",
+    "### T03 - the homesteads family's budgets (D1, D3, D4)",
+    "### T03 Approach (checklist part A)",
+    "### T04 - the ways family's budgets (D1, D3, D4)",
+    "### T04 Approach (checklist part A)",
+    "### T05 - the hinterland and frame family's budgets (D1, D3, D4)",
+    "### T05 Approach (checklist part A)",
+    "### T06 - the program's target to the GM (D5)",
+    "### T06 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-scope",
+     "summary": "This plan plans step 3 (T01-T06) in full; each phase task is filed after the GM's checkpoint with its own plan section and plan review (make task-add, make plan-delta).",
+     "class": "within",
+     "why": "Sequencing, not scope: the request's step 3 puts the GM's approval of the target before any phase, and FR-003's one-task-per-phase is kept, only filed later. Nothing of steps 4-6 is dropped; the Summary and Project Structure still name FR-003 to FR-012."
+    },
+    {
+     "id": "D1",
+     "summary": "A derivation per stage from its contract alone; the CONTRACT is read from the stage's docstring, the plan fields it reads, the manifest keys and registries it writes, and the research claims that govern it - never from its loops or today's counts.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The design the GM approved defines the contract (checklist box 1) as four things: what the phase reads, what it writes, the governing research claims, AND 'the cohort properties it must keep'; box 2 says the algorithm is 'written from the contract alone'. D1 lists the sources of the contract and omits the cohort properties. They are not a reporting detail: under S4 and FR-004 every rule is asked of a candidate before placing, and a cohort property is a rule the output must satisfy, so it contributes checks to S7's items x candidates x checks x slack. A derivation blind to them undercounts checks, and the target the GM approves at T06 (D5) is built on that undercount - the purpose of step 3 is a target he can hold the program to. Not impossible, not implied by D1's named sources (that the docstring may state them is completing the request's thought), and including them does not defeat the request's purpose. Fix: add 'the cohort properties the stage must keep' to D1's contract sources (and to the derivation's form if the template has no place for them). The anti-anchoring rule (no loops, no counts) is within and stands."
+    },
+    {
+     "id": "D1-waste-to-owner",
+     "summary": "Where a derivation finds today's output wasteful (a thing placed that a later stage drops), it says so and the fix goes to the stage that owes it.",
+     "class": "within",
+     "why": "S4 (nothing placed then dropped) applied across stages; the spec's Edge Cases carry it. Narrows nothing."
+    },
+    {
+     "id": "D2",
+     "summary": "A budgeted stage records items_at_20/40/80 from its derivation (1 for a whole-stage figure); its budget at a size is per_thing x items; make budget-set requires them; make work-budget and the ratchet refuse a budgeted or accepted row without them, naming make budget-change; the placed-things product is retired, not kept for older rows.",
+     "class": "within",
+     "why": "Makes S7's 'items x candidates x checks x slack' the literal budget, and gives the stages that place nothing (seat, sink) a real figure instead of 0. items_at_20 is what D5's 20-80 exponent fit and S6's 20-to-80 exponent need. The earlier text's carve-out (older rows keep the placed-things product) is gone: no residual path computes a budget without items, and the refusal names make budget-change rather than falling back. Changes no budget's value, so 'budgets change only with the GM's words' is untouched."
+    },
+    {
+     "id": "D3",
+     "summary": "Each derivation bundled with make work-budget-bundle MODE=budget and dispatched to the work-budget agent; first line saved as <stage>.verdict.txt and its row ledgered; LOOSE/UNDERIVED corrected and redispatched; a third round on one stage owes the round arbiter's ruling first; only SOUND is pinned by make budget-set; plain Agent calls, at most three per message.",
+     "class": "within",
+     "why": "Implements step 3's 'MODE BUDGET on each' and FR-001. SOUND remains the only route to a pinned budget, so the arbiter's ruling before a third round is a process ruling, not an acceptance of an un-SOUND budget - consistent with the request's limit on the arbiter. The dispatch mechanics are operational."
+    },
+    {
+     "id": "D4",
+     "summary": "Every stage of STAGES - 23, measured 2026-10-28 from driver.py's STAGES tuple - in four families (water 6, homesteads 7, ways 3, hinterland and frame 7), one task per family.",
+     "class": "within",
+     "why": "The request says 'about 25 stages'; the plan derives every one and now states where the 23 comes from. 6+7+3+7=23. Grouping into four tasks is task size, not scope."
+    },
+    {
+     "id": "D5",
+     "summary": "The target is the sum of the 23 budgets at 40 households and the whole roll's exponent from the summed budgets at 20/40/80; today's counts and ratios are read only after every budget is pinned; the draft goes through escalation-check to the GM, whose words set it with make budget-program; no phase task is filed before.",
+     "class": "within",
+     "why": "Step 3: 'their sum, which is the program's target. The GM approves the target.' Reading today's counts only after pinning serves 'before the current code's numbers are read'. The exponent alongside the sum serves S6 and FR-009's 40-and-80 close."
+    },
+    {
+     "id": "Constitution-XII-guess-label",
+     "summary": "A derivation figure no research claim states is labeled a guess in the derivation's reason column.",
+     "class": "within",
+     "why": "Governs what the session writes, not what the judge may rule: a labeled guess is still exposed to an UNDERIVED verdict under S7. Narrows nothing."
+    },
+    {
+     "id": "Performance-bookends",
+     "summary": "Step 3 takes no perf bookend (it changes no code a roll runs); each phase takes its own; the opening record is 443's run 20261028T152105Z-45aa176ec9b8.",
+     "class": "within",
+     "why": "Step 3 is paper budgets plus T01's tooling; the phases keep make perf-ab in box 6 as the request asks."
+    },
+    {
+     "id": "T01-step4-placed-column",
+     "summary": "T01 reads the placed column of today's make work-budget run to establish that seat and sink place nothing.",
+     "class": "within",
+     "why": "Tooling justification read from what the manifest counts, not operation counts; it informs no stage's budget and so anchors nothing."
+    },
+    {
+     "id": "T01-T06-approaches",
+     "summary": "T01 D2's tooling with red-with-each-condition-deleted tests; T02-T05 each family's derivations, SOUND verdicts and budgets; T06 the checkpoint, after T02-T05 and before any phase task.",
+     "class": "within",
+     "why": "Each is the decision it names carried into a task; the exits and done-measured lines check the decisions rather than adding behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 - a budget counts the derivation's own items (D2)",
+    "### T01 Approach (checklist part A)",
+    "### T02 - the water family's budgets (D1, D3, D4)",
+    "### T02 Approach (checklist part A)",
+    "### T03 - the homesteads family's budgets (D1, D3, D4)",
+    "### T03 Approach (checklist part A)",
+    "### T04 - the ways family's budgets (D1, D3, D4)",
+    "### T04 Approach (checklist part A)",
+    "### T05 - the hinterland and frame family's budgets (D1, D3, D4)",
+    "### T05 Approach (checklist part A)",
+    "### T06 - the program's target to the GM (D5)",
+    "### T06 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:444-plan-round-3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  }
+ ]
+}
