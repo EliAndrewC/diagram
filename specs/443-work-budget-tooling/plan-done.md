@@ -192,3 +192,27 @@
 
 **Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
 
+<!-- plan-archive: archived 2026-10-28 -->
+### T05 (FR-008, FR-009: the adversarial check of the arithmetic)
+
+- **Approach**: `.claude/agents/work-budget.md`, `docs/work-budget-rubric.md` (the homestead reference worked out, S7), `scripts/reviews/work_budget_bundle.py` (D9, D10), the two fixtures dispatched once and their rulings recorded (D11).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T05 Approach (checklist part A)
+
+1. **The goal, in the world.** a budget is set only after an independent reviewer, blind to today's code and counts, found its arithmetic derived.
+2. **The constraints.** FR-008, FR-009, SC-005; D9-D11.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`); O: trial 439's funnel (`specs/439-fewer-envelope-probes/research/funnel.md`).
+4. **Do they describe the world here?** the funnel fixture's derivation is checked against trial 439's funnel, measured 2026-10-27 (a counting spike, `specs/439-fewer-envelope-probes/research/funnel.md`).
+5. **The order.** after T02 (the audit bundle reads its runs).
+6. **The exits.** Green: the funnel ruled LOOSE or OVER and the grid placer SOUND or WITHIN, held by a test; a budget bundle with engine code refused. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing and two dispatches.
+9. **Done, measured.** the two rulings recorded and the test green.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+

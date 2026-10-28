@@ -19,8 +19,9 @@
 - [x] T04 The ratchet `make work-budget-review` in the push, and the standing record printed by `make land` and `make speckit-todo` (D7, D8; FR-006, FR-007, SC-003, SC-004)
       research: rendering
       verify: DONE. landed: landed: make work-budget-review in the push beside perf-review (accepted stages held at 40 and 80 households to the accepted figure and the budget, from a run at the pushed engine; seam CI_WORK_BUDGET_REVIEW; no arbiter accept), the standing record printed by make land on engine code and make speckit-todo under 444; each red with its condition deleted
-- [ ] T05 The `work-budget` agent, `docs/work-budget-rubric.md`, `make work-budget-bundle MODE=budget|audit`, the two fixtures dispatched and their rulings held by a test (D9-D11; FR-008, FR-009, SC-005)
+- [x] T05 The `work-budget` agent, `docs/work-budget-rubric.md`, `make work-budget-bundle MODE=budget|audit`, the two fixtures dispatched and their rulings held by a test (D9-D11; FR-008, FR-009, SC-005)
       research: rendering
+      verify: DONE. landed: landed: the work-budget agent and rubric, make work-budget-bundle (MODE BUDGET refuses code and today's counts, red with the refusal deleted), the ledger check; FR-009 held by the typed agent's rulings - the funnel OVER (MODE AUDIT against the rubric's reference; MODE 1 ruled UNDERIVED's acceptance NOT LEGITIMATE), the grid placer SOUND at round 4 (the arbiter's continues on rounds 3 and 4). Departure from D9: work-budget is not added to the WAVE JOBS list - that list is the GM's authorization and a new fan-out is his to grant
 - [ ] T06 `.specify/templates/phase-checklist.md` and `make land`'s refusal of a feature-444 `phase:` task with its checklist absent, short or unticked (D12; FR-010, SC-006)
       research: rendering
 - [ ] T07 `dev/rust-tooling.md` and `make rust-tooling` in `make hooks-test`, over every tracked file and the Makefile's recipes (D13; FR-011, SC-007)
