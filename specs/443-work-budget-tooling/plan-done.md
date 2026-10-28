@@ -240,3 +240,27 @@
 
 **Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
 
+<!-- plan-archive: archived 2026-10-28 -->
+### T07 (FR-011: no Python-only check forgotten)
+
+- **Approach**: `dev/rust-tooling.md` (section 7's table, a key per row) and `scripts/gates/check-rust-tooling.py` in `make hooks-test` (D13).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** every check that reads Python has its row saying what happens to it under Rust.
+2. **The constraints.** FR-011, SC-007; D13.
+3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`)
+4. **Do they describe the world here?** the check run on the real tree finds `scripts/gates/check-file-scale.py` (the arbiter's note).
+5. **The order.** any time after T01.
+6. **The exits.** Green: the check fails on each scratch reader kind with no row and passes on the tree. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** SC-007's tests green.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
+

@@ -25,8 +25,9 @@
 - [x] T06 `.specify/templates/phase-checklist.md` and `make land`'s refusal of a feature-444 `phase:` task with its checklist absent, short or unticked (D12; FR-010, SC-006)
       research: rendering
       verify: DONE. landed: landed: the phase checklist template (eight boxes) and land's refusal of a 444 phase task with its checklist absent, short or unticked, asked among the cheap refusals; red with the call and with each condition deleted
-- [ ] T07 `dev/rust-tooling.md` and `make rust-tooling` in `make hooks-test`, over every tracked file and the Makefile's recipes (D13; FR-011, SC-007)
+- [x] T07 `dev/rust-tooling.md` and `make rust-tooling` in `make hooks-test`, over every tracked file and the Makefile's recipes (D13; FR-011, SC-007)
       research: rendering
+      verify: DONE. landed: landed: dev/rust-tooling.md with a row for each of the 43 readers and 14 make targets the check finds (check-file-scale.py among them), make rust-tooling in hooks-test, failing on a scratch reader of every D13 kind with no row; red with its condition deleted. The design's rule that every one-for-one, partial and rewritten row is proven on a Rust fixture before the first Rust phase lands is carried to 444's step 5 in the inventory's header
 - [ ] T08 `docs/guards.md`, `docs/reviews.md` and each target's help name every change; each guard proven to fire with it deleted; the 443-end bookend; `make feature-report F=443 WRITE=1` (FR-012, SC-008)
       research: rendering
 - [x] T09 The candidate-loop counters of the water and fields stages (water_frame, field, sink, waterward, pond_stock, pond_bank): the walk's loops filtered and hand-read, each loop that tries a site given its candidate@<function> increment, the excluded loops listed with why (D2; FR-001, research/candidate-loops.md)
