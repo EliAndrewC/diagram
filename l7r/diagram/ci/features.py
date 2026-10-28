@@ -89,7 +89,7 @@ def feature_status(root: Path, name: str | None) -> FeatureStatus:
     if not name:
         return FeatureStatus(name=None)
     d = root / "specs" / name
-    tasks, spec = d / "tasks.md", d / "spec.md"
+    tasks = d / "tasks.md"
     if not tasks.is_file():
         return FeatureStatus(name=name, exists=False)
     held = holding(d)
