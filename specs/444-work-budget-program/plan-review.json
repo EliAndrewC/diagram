@@ -8,7 +8,7 @@
    "declared": "round-arbiter"
   },
   "## Summary": {
-   "sha256": "424a55e8177cf8013e46ff13f453c91088b0bc38959181febe2e179987437dcf",
+   "sha256": "e0c7132b626e27685c566ee949697ea925c5d4f28b8932b4f5982d5c6b06d661",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "spec-fidelity"
@@ -895,6 +895,39 @@
      "summary": "field pinned on its accept (ask:444-T02-field-round-15) as T08's done-condition",
      "class": "within",
      "why": "The GM's 444#0 answer ('So please move forward with that') is the instruction to pin field this way, and FR-013 is its requirement. The accept's existence is a state claim carrying a dated source (arbiter.jsonl, recorded 2026-10-28); the bundle forbids repository reads, so it is taken on that label and was not re-read here."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Summary"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary/step-3-first",
+     "summary": "Step 3 comes first: every STAGES stage gets a derivation in the template's form, a MODE BUDGET SOUND verdict or the round arbiter's accept of its derivation (FR-013), and a budget in dev/work-budget.json; the sum and the whole roll's exponent go to the GM through escalation-check before any rebuild.",
+     "class": "within",
+     "why": "Design section 6 step 3 and section 5's enforcement, carried by FR-001/FR-002. The arbiter-accept alternative is FR-013, the GM's own answer to 444#0 on 2026-10-28 ('letting the arbiters acceptance pin it'). This text is unchanged from the version judged CLEAR."
+    },
+    {
+     "id": "Summary/phases-in-order",
+     "summary": "Phases are one task each in STAGES order through the phase checklist, the whole-table bundle before the first phase lands, the language decision after phases 1 and 2, and the Rust ports proven first if Rust.",
+     "class": "within",
+     "why": "Design sections 3, 5.1, 5.6, 5.7, 6 (steps 4-6) and 7, carried by FR-003 to FR-012. Unchanged from the CLEAR version."
+    },
+    {
+     "id": "Summary/phase-tasks-filed-later",
+     "summary": "Phase tasks are filed after the GM's checkpoint, each with its own plan section and plan review, not planned now.",
+     "class": "within",
+     "why": "Sequencing only: the design puts the GM's target approval (step 3) before the phases (steps 4-6). Each phase still gets a task and still goes through the checklist, so nothing asked for is dropped. Unchanged from the CLEAR version."
+    },
+    {
+     "id": "Summary/T07-T08-added",
+     "summary": "Step 3's plan now names T07 (the pre-dispatch checks) and T08 (the accept pin) as tasks added since T01-T06.",
+     "class": "within",
+     "why": "The only text changed since the CLEAR verdict. T08 implements FR-013 (make budget-set ARBITER=ask:<id>), which is the GM's 444#0 answer. T07 serves the GM's 2026-10-28 words that 'careful' has to become a step enforced by tooling, subagent checks or procedure, and that it must 'happen before the place where it would actually matter'. Pre-dispatch checks are that kind of step. Adding tasks to step 3 narrows nothing the request or the spec requires."
     }
    ]
   }

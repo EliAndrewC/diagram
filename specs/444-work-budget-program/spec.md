@@ -135,3 +135,5 @@ standards" (`request.md`).
 - 2026-10-28, amendment 1's review (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 4 items - FR-013's added convergence condition
   dropped; any change to a figure re-owes the ruling (not only a Total or a Bounds figure), the dispatch bar dropped; User Story 1;
   SC-008 for its two guards.
+- 2026-10-28, amendment 1's review, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - all four items of round 1 resolved, no new
+  contradiction; FR-013 matches the GM's "letting the arbiters acceptance pin it".
