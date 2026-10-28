@@ -99,9 +99,11 @@ def test_a_derivation_short_of_a_template_field_is_refused_naming_it(tmp_path: P
 
 
 def test_the_water_familys_derivations_pass_the_form_checks() -> None:
-    """The round arbiter's note on ask:444-T07-plan-round-3: T02's next dispatch runs on these, so they pass the checks first."""
-    done = sorted((REPO / "specs/444-work-budget-program/phases").glob("*.derivation.md"))
-    assert done, "the water family's derivations"
+    """The round arbiter's note on ask:444-T07-plan-round-3: every derivation judged SOUND (its `verdict.txt` beside it) passes the
+    form checks - a budget is pinned from it."""
+    phases = REPO / "specs/444-work-budget-program/phases"
+    done = [p for p in sorted(phases.glob("*.derivation.md")) if (phases / p.name.replace(".derivation.md", ".verdict.txt")).is_file()]
+    assert done, "a derivation judged SOUND (its verdict.txt)"
     for p in done:
         assert wbb.form_problems(p.read_text(encoding="utf-8")) == [], p.name
 
@@ -189,3 +191,23 @@ def test_the_arithmetic_reader_takes_numbers_and_the_four_operators_alone() -> N
     assert wbb._arith(_ast.parse("-(2 + 3) * 4 / 2 - 1", mode="eval").body) == -11
     with pytest.raises(ValueError):
         wbb._arith(_ast.parse("2 ** 3", mode="eval").body)
+
+
+@pytest.mark.parametrize(
+    ("edit", "why"),
+    [
+        (lambda t: t.split("## Indexes")[0] + "## The count" + t.split("## The count", 1)[1], "an `## Indexes` section"),
+        (lambda t: t.replace("cells of 5 ft (d / 2", "cells of d / 2 ("), "its cell size in ft"),
+        (lambda t: t.replace("from a smallest side of 5 ft", "from a smallest area of 25 sq ft"), "from a smallest side in ft"),
+        (lambda t: t.replace("| lookups: the lattice cells examined (S2) |", "| lookups: the cells examined (S2) |"), "a row counting the lattice's cells"),
+        (lambda t: t.replace("## Contract", "## Contract\n\nA 30 px border.", 1), "`30 px`: a px figure with no ft"),
+    ],
+)
+def test_every_index_has_its_own_row_and_every_px_its_ft(tmp_path: Path, edit, why: str) -> None:  # noqa: ANN001
+    """The round arbiter's tooling fix on ask:444-T02-water-round-6: T07's index check held once a derivation, so one cells row passed
+    while each index a rewrite added went unchecked (field round 5, pond_bank round 3); it now holds per index - its cell size in ft, its
+    densest case from a side, never an area, its own row - and every px figure carries its ft."""
+    (tmp_path / "d.md").write_text(edit((FIX / "grid-placer" / "derivation.md").read_text(encoding="utf-8")))
+    rc, msg = wbb.budget_bundle(REPO, "x", str(tmp_path / "d.md"), tmp_path / "out")
+    assert rc == 1 and why in msg, msg
+    assert wbb.index_problems("A 30 px (30 ft) corridor.") == [], "a px figure with its ft passes"
