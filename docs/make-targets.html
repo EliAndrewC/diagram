@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 199 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 200 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -241,6 +241,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make tool-yield</td><td class=a>KIND</td><td>every tool measured: how often it runs, how often it changed something, its misfires and what the record cannot see yet (feature 406)   [KIND=guard|target|check|step|review]</td></tr>
 <tr><td class=n>make translation-owed</td><td class=a>Q</td><td>the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]</td></tr>
 <tr><td class=n>make trial</td><td class=a>APPROVED SLUG</td><td>start a TRIAL - a question a measurement answers: claims a number and writes the trial brief (**Form**: trial), measured first, reviewed once when Done (features 438, 440; docs/spec-kit-and-reviews.md)</td></tr>
+<tr><td class=n>make trial-review</td><td class=a>F</td><td>a trial&#x27;s ONE review: its brief, request and research bundled, and the dispatch printed - check each figure against its recorded output, re-run only what is missing (feature 442)</td></tr>
 <tr><td class=n>make tunables</td><td class=a>ALL COUNT INLINE UNDER</td><td>every claim whose value is ours - GUESS (searched, silent), UNRESEARCHED, CONVENTION - with its figure: a goal and a knob a fixing pass may move (feature 417 T28)   [UNDER=&lt;file or dir&gt;] [ALL=1 keeps claims with no figure] [COUNT=1] [INLINE=1 lists the numbers inside functions no claim states]</td></tr>
 <tr><td class=n>make uncited</td><td class=a>ACCESS ANSWERS DIR DIRS DO DRY INTO KEY LIMIT NOTE OUT REASONS START URL</td><td>the uncited pages judged once, and the kept ones written up - DO=set (count; OUT= writes the URLs) | rule | fetch [LIMIT=n] | bundle OUT=&lt;dir&gt; [LIMIT=n] [START=n] | apply DIRS=&quot;&lt;bundle&gt; ...&quot; | score DIR=&lt;bundle&gt; ANSWERS=&lt;labels.json&gt; | draft OUT=&lt;dir&gt; [START=n] | install DIRS=&quot;&lt;draft&gt; ...&quot; | merge KEY=&lt;dup&gt; INTO=&lt;kept key&gt; | dedupe [DRY=1] | unkeep URL=&lt;u&gt; REASONS=&lt;r,r&gt; NOTE=&lt;why&gt; | requeue URL=&lt;u&gt; | copy-verdicts | stands URL=&lt;u&gt; NOTE=&lt;why&gt; | retire-cited KEY=&lt;k&gt; ACCESS=&lt;state&gt; NOTE=&lt;why&gt; | report (feature 312)</td></tr>
 <tr><td class=n>make use-feature</td><td class=a>F</td><td>make F the clone&#x27;s active feature for the hooks (.specify/feature.json) - instead of writing the file by hand (the round arbiter on hour:396@1)</td></tr>
