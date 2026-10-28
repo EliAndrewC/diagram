@@ -5,19 +5,40 @@
  },
  "stages": {
   "water_frame": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 40.0,
+   "exponent": 0.0,
+   "derivation": "specs/444-work-budget-program/phases/water_frame.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/water_frame.verdict.txt",
+   "items_at_20": 1,
+   "items_at_40": 1,
+   "items_at_80": 1
   },
   "field": {
    "status": "unbudgeted"
   },
   "sink": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 37.5,
+   "exponent": 0.16,
+   "derivation": "specs/444-work-budget-program/phases/sink.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/sink.verdict.txt",
+   "items_at_20": 87,
+   "items_at_40": 97,
+   "items_at_80": 108
   },
   "seat": {
    "status": "unbudgeted"
   },
   "waterward": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.0,
+   "derivation": "specs/444-work-budget-program/phases/waterward.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/waterward.verdict.txt",
+   "items_at_20": 1,
+   "items_at_40": 1,
+   "items_at_80": 1
   },
   "homesteads": {
    "status": "unbudgeted"
@@ -29,7 +50,14 @@
    "status": "unbudgeted"
   },
   "pond_stock": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.0,
+   "derivation": "specs/444-work-budget-program/phases/pond_stock.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/pond_stock.verdict.txt",
+   "items_at_20": 1,
+   "items_at_40": 1,
+   "items_at_80": 1
   },
   "burial": {
    "status": "unbudgeted"
@@ -41,7 +69,14 @@
    "status": "unbudgeted"
   },
   "pond_bank": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 155.0,
+   "exponent": 0.38,
+   "derivation": "specs/444-work-budget-program/phases/pond_bank.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/pond_bank.verdict.txt",
+   "items_at_20": 33,
+   "items_at_40": 43,
+   "items_at_80": 56
   },
   "hinterland": {
    "status": "unbudgeted"

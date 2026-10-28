@@ -22,7 +22,7 @@
 
 ## Indexes
 
-- corridors: cells of 268 ft across the fall at 20 households (2 rx; 380 ft at 40, 536 ft at 80) and the band's length along it; densest every segment gathered, from a smallest side of 268 ft against the longest outline segment, 222 ft: a segment spans at most 2 corridors
+- corridors: cells of 268 ft across the fall at 20 households (2 rx; 380 ft at 40, 536 ft at 80) and the band's length along it; densest every segment gathered in each of the 3, from a smallest side of 268 ft - no segment's length is in the contract, so a segment may span all 3
 
 ## The count, factor by factor
 
@@ -33,7 +33,7 @@
 | the drain's box tests | per item | 7 | its last points against the band's box, at most 7 | always 7 |
 | lines solved (S2) | per item | 3 | the fall's line and one to each side - the step's reach the Bounds state | always 3 |
 | segments gathered (S1) | per item | 87 at 20, 97 at 40, 108 at 80 | the outline's 53 at 20, 57 at 40, 60 at 80, the brook's 28 at 20, 33 at 40, 39 at 80 and the drain's 6 at 20, 7 at 40, 9 at 80 in the band (5 drain points can touch 6 segments, in proportion above) | 80 households |
-| the corridors (cells examined) | per item | 2 | a segment's intervals solved only on the lines whose corridors it spans - at most 2 (the Indexes) | a segment straddling a corridor's edge |
+| the corridors (cells examined) | per item | 3 | a segment's intervals solved on the lines whose corridors it spans - at most all 3, the band's own corridor count, with no segment length assumed | a segment across the whole band |
 | the interval, per segment and line | per item | 3 | a tangency and two endpoints, solved exactly | always 3 |
 | the line's ditch, per segment | per item | 1 | each line's straight ditch tested against every gathered segment | always 1 |
 | the sort, per segment and line | per item | 7 at 20, 7 at 40, 7 at 80 | the intervals sorted, log2 of the segments, rounded up | 80 households |
@@ -41,13 +41,13 @@
 | the record | per item | 2 | the pond and the ditch | always 2 |
 | slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
 
-So: the gather and the drain's tests, twice the segments x (3 + the sort + 1) for the intervals, 3 lines x the segments x 1 for the ditches, and the record.
+So: the gather and the drain's tests, 3 x the segments x (3 + the sort + 1) for the intervals, 3 lines x the segments x 1 for the ditches, and the record.
 
 ## Totals
 
-- at 20: 1 x (114 + 7 + 2 x 87 x (3 + 7 + 1) + 3 x 87 x 1 + 2) x 1 = 2298
-- at 40: 1 x (132 + 7 + 2 x 97 x (3 + 7 + 1) + 3 x 97 x 1 + 2) x 1 = 2566
-- at 80: 1 x (153 + 7 + 2 x 108 x (3 + 7 + 1) + 3 x 108 x 1 + 2) x 1 = 2862
+- at 20: 1 x (114 + 7 + 3 x 87 x (3 + 7 + 1) + 3 x 87 x 1 + 2) x 1 = 3255
+- at 40: 1 x (132 + 7 + 3 x 97 x (3 + 7 + 1) + 3 x 97 x 1 + 2) x 1 = 3633
+- at 80: 1 x (153 + 7 + 3 x 108 x (3 + 7 + 1) + 3 x 108 x 1 + 2) x 1 = 4050
 
 ## Cheaper algorithms considered
 

@@ -16,7 +16,7 @@
         cut it: one new cross line met against the CURRENT segment of each of the strip's two ditches (the plot's top line is
             the last plot's bottom line; each ditch's pointer advances down it)
         select: is the cut beyond either ditch's crossing? - one comparison a ditch; if so, the plot is on the outline:
-            clip its 4 corners against the outline segments in each corner's cell, and keep it
+            clip it against the outline segments in the 6 cells (3 x 2) its 48 by 36 ft can touch, and keep it
         classify it by its fall below the head; record its polygon and its bunds
     walk the outline's points once, filing each to the strip whose crossings it falls between
     walk the brook's segments through the outline's cells, testing the outline segments in each
@@ -36,21 +36,21 @@
 | the class | per item | 1 | one comparison of the plot's fall against the head's | always 1 |
 | the record | per item | 8 | the plot's 4 corners and 4 bund edges | always 8 |
 | slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
-| the outline's plots (outline index cells examined) | over the run | 21,024 at 20, 30,312 at 40, 44,496 at 80 | 72 each: a plot, up to 48 by 36 ft, touches at most 3 x 2 cells of 38.6 ft, each examined and its at most 11 outline segments tested; the plots on the outline the perimeter at its diagonal across a 26 by 48 ft lattice, L x sqrt(1/26^2 + 1/48^2): 292 at 20, 421 at 40, 618 at 80 | the 11-segment cell, every cell |
+| the outline's plots (outline index cells examined) | over the run | 21,024 at 20, 30,312 at 40, 44,496 at 80 | 72 each: a plot, up to 48 by 36 ft, touches at most 3 x 2 cells of 38.6 ft, each examined and its at most 11 outline segments tested; the plots on the outline the perimeter at its diagonal across a 26 by 48 ft lattice, L x sqrt(1/26^2 + 1/48^2), plus one a segment of the outline (each segment can begin in a plot of its own): 292 at 20, 421 at 40, 618 at 80 | the 11-segment cell, every cell |
 | the outline's vertices between crossings | over the run | 78 at 20, 90 at 40, 105 at 80 | each outline point walked once, filed to the strip whose crossings it falls between, so a plot holding a vertex is taken as an outline plot | every point |
 | the pointers' steps | over the run | 240 at 20, 364 at 40, 554 at 80 | one more test each time a strip's pointer steps, once per segment of each of its 2 ditches | every segment a bend |
 | the ditches' crossings (outline index cells examined) | over the run | 2,880 at 20, 3,840 at 40, 5,040 at 80 | 240 a ditch: 2 end segments, each through at most 10 cells (222 ft at its diagonal over 38.6 ft, plus one), each examined and its at most 11 outline segments tested | the longest end segments |
-| the corridors (corridor index cells written) | over the run | 480 at 20, 640 at 40, 840 at 80 | 40 a ditch: 2 stretches, each at most an end segment long and 30 ft wide - 10 cells along by 2 across | the longest end segments |
-| the brook (outline index cells examined) | over the run | 3,591 at 20, 5,036 at 40, 7,216 at 80 | its 236 segments walked through the outline index's cells: each cell it enters examined once, and at most 12 brook segments tested against the outline segments there - the outline index's cells x 12 plus the brook's cells | 80 households |
+| the corridors (corridor index cells written) | over the run | 720 at 20, 960 at 40, 1,260 at 80 | 60 a ditch: 2 stretches, each at most an end segment long and 30 ft wide - 10 cells along by 3 across (a 30 ft band on the diagonal spans about 42 ft across 38.6 ft cells) | the longest end segments, on the diagonal |
+| the brook (outline index cells examined) | over the run | 6,084 at 20, 7,584 at 40, 9,552 at 80 | 12 a cell it enters: each cell examined once and its at most 11 outline segments tested; the cells it enters by the crossing rule, its length at its diagonal over 38.6 ft plus one a segment (507, 632 and 796) | 80 households |
 | the outline index (cells written) | once | 257 at 20, 367 at 40, 535 at 80 | the crossing rule on the perimeter: at its diagonal over 38.6 ft plus one a segment | 80 households |
 
 So: plots x (2 + 2 + 1 + 8) x 1, plus the run's terms and the index once.
 
 ## Totals
 
-- at 20: 853 x (2 + 2 + 1 + 8) x 1 + 21024 + 78 + 240 + 2880 + 480 + 3591 + 257 = 39639
-- at 40: 1807 x (2 + 2 + 1 + 8) x 1 + 30312 + 90 + 364 + 3840 + 640 + 5036 + 367 = 64140
-- at 80: 3715 x (2 + 2 + 1 + 8) x 1 + 44496 + 105 + 554 + 5040 + 840 + 7216 + 535 = 107081
+- at 20: 853 x (2 + 2 + 1 + 8) x 1 + 21024 + 78 + 240 + 2880 + 720 + 6084 + 257 = 42372
+- at 40: 1807 x (2 + 2 + 1 + 8) x 1 + 30312 + 90 + 364 + 3840 + 960 + 7584 + 367 = 67008
+- at 80: 3715 x (2 + 2 + 1 + 8) x 1 + 44496 + 105 + 554 + 5040 + 1260 + 9552 + 535 = 109837
 
 ## Cheaper algorithms considered
 
