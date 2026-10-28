@@ -54,6 +54,15 @@ phase-calls:    ## [performance] one 40-household hamlet's Python calls by stage
 work-budget:    ## [performance] the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=<n>] [SIZES=10,20,40,80]
 	$(RUN).tools.work_budget $(if $(SEED),--seed "$(SEED)",) $(if $(SIZES),--sizes "$(SIZES)",)
 
+budget-set:     ## [performance] a stage's FIRST work budget, only from a SOUND work-budget MODE BUDGET verdict; refused on a stage already budgeted (feature 443)   PHASE=<stage> PER_THING=<ops> EXPONENT=<e> DERIVATION=<file> VERDICT=<verdict file>
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" set "$(PHASE)" "$(PER_THING)" "$(EXPONENT)" "$(DERIVATION)" "$(VERDICT)"
+
+budget-change:  ## [performance] change a budgeted stage's figure with the GM's own words, checked against the session by budget-change-hooks.sh and logged in dev/work-budget-changes.jsonl (feature 443)   PHASE=<stage> TO=<ops per thing> [EXPONENT=<e>] WORDS="<the GM's words>"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" change "$(PHASE)" "$(TO)" $(if $(EXPONENT),--exponent "$(EXPONENT)",) --words "$(WORDS)"
+
+budget-program: ## [performance] set the whole roll's work budget with the GM's own words, checked and logged as budget-change is (feature 443; 444 FR-002)   OPS_AT_40=<ops> EXPONENT=<e> WORDS="<the GM's words>"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" program "$(OPS_AT_40)" "$(EXPONENT)" --words "$(WORDS)"
+
 counters-inert: ## [performance] the work counters change no map: one seed rolled with them and under python -O, the manifests compared (feature 443, FR-004)   [SEED=25] [HOUSEHOLDS=15]
 	$(RUN).tools.counters_inert --seed "$(or $(SEED),25)" --households "$(or $(HOUSEHOLDS),15)"
 

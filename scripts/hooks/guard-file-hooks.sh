@@ -143,6 +143,9 @@ case "$FILE" in
   # (GUARD_EDIT_OK: feature 132 - the iteration switches are a guard; a hand edit is flagged like any other, the
   #  make targets `ci-off` / `ci-on` are the supported write path; the scope lock was retired in 185)
   */dev/switches.json) ;;
+  # (GUARD_EDIT_OK: feature 443 T03 - the work budgets are a guard, plan D6; make budget-set / budget-change / budget-program
+  #  are the write path, and a raise needs the GM's words)
+  */dev/work-budget.json) ;;
   *) exit 0 ;;
 esac
 

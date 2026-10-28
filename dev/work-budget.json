@@ -1,0 +1,77 @@
+{
+ "program": {
+  "ops_at_40": null,
+  "exponent": null
+ },
+ "stages": {
+  "water_frame": {
+   "status": "unbudgeted"
+  },
+  "field": {
+   "status": "unbudgeted"
+  },
+  "sink": {
+   "status": "unbudgeted"
+  },
+  "seat": {
+   "status": "unbudgeted"
+  },
+  "waterward": {
+   "status": "unbudgeted"
+  },
+  "homesteads": {
+   "status": "unbudgeted"
+  },
+  "track": {
+   "status": "unbudgeted"
+  },
+  "appurtenances": {
+   "status": "unbudgeted"
+  },
+  "pond_stock": {
+   "status": "unbudgeted"
+  },
+  "burial": {
+   "status": "unbudgeted"
+  },
+  "web": {
+   "status": "unbudgeted"
+  },
+  "lane_wells": {
+   "status": "unbudgeted"
+  },
+  "pond_bank": {
+   "status": "unbudgeted"
+  },
+  "hinterland": {
+   "status": "unbudgeted"
+  },
+  "woodland": {
+   "status": "unbudgeted"
+  },
+  "windbreak": {
+   "status": "unbudgeted"
+  },
+  "bamboo": {
+   "status": "unbudgeted"
+  },
+  "crossings": {
+   "status": "unbudgeted"
+  },
+  "sties": {
+   "status": "unbudgeted"
+  },
+  "washing": {
+   "status": "unbudgeted"
+  },
+  "frame": {
+   "status": "unbudgeted"
+  },
+  "notice": {
+   "status": "unbudgeted"
+  },
+  "labels": {
+   "status": "unbudgeted"
+  }
+ }
+}

@@ -223,6 +223,16 @@
         "hooks": [
           {
             "type": "command",
+            "command": "h=/diagram/scripts/hooks/budget-change-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/budget-change-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 443 T03 - a NEW guard, plan D6: a work budget changes only with the GM's own words",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
             "command": "h=/diagram/scripts/hooks/ledger-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/ledger-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 294 - a NEW guard: a commit staging the review ledger with a measured row short of its check, class or cost",
             "timeout": 10
           }

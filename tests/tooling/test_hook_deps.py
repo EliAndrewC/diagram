@@ -147,7 +147,8 @@ def test_a_filename_in_prose_is_not_a_dependency() -> None:
     assert "hm_make.py" in code, "the invocation must survive stripping"
     guards = sorted(p.name for p in GUARDS.glob("*-hooks.sh"))
     make_family = [g for g in guards if "hm_make.py" in hookdeps.deps_for(g)]
-    assert len(make_family) <= 5, f"the make/rewrite family should reach a handful of guards, not {len(make_family)} - has a mention started counting as a dependency again?"
+    # 6 since feature 443 T03: budget-change-hooks.sh reads WHICH make target is invoked (`hm_make.targets`), a real import
+    assert len(make_family) <= 6, f"the make/rewrite family should reach a handful of guards, not {len(make_family)} - has a mention started counting as a dependency again?"
 
 
 def test_gate_stamp_derives_to_the_whole_tree_from_the_code_not_the_prose() -> None:

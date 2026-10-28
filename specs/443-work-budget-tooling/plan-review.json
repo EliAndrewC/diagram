@@ -1064,6 +1064,64 @@
      "why": "Matches the request's step 1 ('Engine counters only; no map changes'). Measuring time overhead with perf-ab adds to SC-001's call-count bound and does not replace it, since SC-001 is still listed among T02's constraints."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T03 (FR-005: budgets change only with the GM's words)",
+    "### T03 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T03-approach",
+     "summary": "dev/work-budget.json as a guard file; scripts/budget_change.py as the one writer with budget-set, budget-change and budget-program; budget-change-hooks.sh checking WORDS with hm_approval",
+     "class": "within",
+     "why": "Restates D6 and FR-005 as accepted. It answers request section 5 item 4 (the table a guard file; a raise needs make budget-change WORDS=<the GM's words>, logged like an Approved line) and step 3 (the GM approves the program target, carried by budget-program under the same WORDS hook). Nothing in the request is left out and nothing is added."
+    },
+    {
+     "id": "T03-goal",
+     "summary": "No budget set without a SOUND derivation, none raised without the GM's own words",
+     "class": "within",
+     "why": "This is FR-005's two refusals, which carry request section 2/4 (MODE BUDGET SOUND before a budget is pinned, checklist box 3) and section 5 item 4."
+    },
+    {
+     "id": "T03-world-check",
+     "summary": "The hook's test feeds a transcript with and without the GM's words",
+     "class": "within",
+     "why": "This is how SC-003's 'refuse ... with words the GM did not write' is checked. It enforces the request and narrows nothing."
+    },
+    {
+     "id": "T03-order",
+     "summary": "T03 runs after T02, in one landing",
+     "class": "within",
+     "why": "Sequencing and budget. The spec leaves these open and the request does not constrain them."
+    },
+    {
+     "id": "T03-exits",
+     "summary": "Green: SC-003's refusals and passes in tests and the hook in make hooks-test. Red: the failure recorded and the task set down, with a claim that it cannot be done ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Routing a can't-be-done claim about tooling to the arbiter is a ruling on process, which section 5 item 4 permits ('the round arbiter may rule on process'). It does not let the arbiter accept a phase over budget or change a budget, so it opens no route around the GM's words."
+    },
+    {
+     "id": "T03-done",
+     "summary": "Done when SC-003's tests are green and the hook is proven to fire with it deleted",
+     "class": "within",
+     "why": "This is SC-003 plus the 'prove it fires' rule of FR-012/SC-008, all of which the request asks for. Note: SC-003 also covers FR-006's landing ratchet. If FR-006 lands in another task, T03 cannot turn those parts green, which is an inaccuracy in scope and not a narrowing."
+    },
+    {
+     "id": "T03-perf",
+     "summary": "Classed as not performance work: 'instrumentation; its overhead is measured (make perf-ab), and it moves no map'",
+     "class": "within",
+     "why": "A budget table, its writer and a hook are not performance work, so the classification is right and narrows nothing. The stated reason looks copied from an instrumentation task (T03 adds no counters for perf-ab to measure), but a wrong reason on a right classification is not a fidelity finding."
+    },
+    {
+     "id": "T03-empty-table",
+     "summary": "A table header (step / alone off: fixed and pinned / fresh block vs HEAD / pool manifests moved / the last resort) with no rows",
+     "class": "within",
+     "why": "The table has no rows, so it decides nothing and is not a narrowing. It looks like template residue."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1407,6 +1465,62 @@
      "summary": "Classed as not performance work: instrumentation whose overhead is measured with make perf-ab, and which moves no map.",
      "class": "within",
      "why": "Matches the request's step 1 ('Engine counters only; no map changes'). Measuring time overhead with perf-ab adds to SC-001's call-count bound and does not replace it, since SC-001 is still listed among T02's constraints."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T03": {
+   "section_sha256": "4e71539af3119d68696be69fd007e8861e8ca2db2c2592e135a4f770933a838c",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T03-approach",
+     "summary": "dev/work-budget.json as a guard file; scripts/budget_change.py as the one writer with budget-set, budget-change and budget-program; budget-change-hooks.sh checking WORDS with hm_approval",
+     "class": "within",
+     "why": "Restates D6 and FR-005 as accepted. It answers request section 5 item 4 (the table a guard file; a raise needs make budget-change WORDS=<the GM's words>, logged like an Approved line) and step 3 (the GM approves the program target, carried by budget-program under the same WORDS hook). Nothing in the request is left out and nothing is added."
+    },
+    {
+     "id": "T03-goal",
+     "summary": "No budget set without a SOUND derivation, none raised without the GM's own words",
+     "class": "within",
+     "why": "This is FR-005's two refusals, which carry request section 2/4 (MODE BUDGET SOUND before a budget is pinned, checklist box 3) and section 5 item 4."
+    },
+    {
+     "id": "T03-world-check",
+     "summary": "The hook's test feeds a transcript with and without the GM's words",
+     "class": "within",
+     "why": "This is how SC-003's 'refuse ... with words the GM did not write' is checked. It enforces the request and narrows nothing."
+    },
+    {
+     "id": "T03-order",
+     "summary": "T03 runs after T02, in one landing",
+     "class": "within",
+     "why": "Sequencing and budget. The spec leaves these open and the request does not constrain them."
+    },
+    {
+     "id": "T03-exits",
+     "summary": "Green: SC-003's refusals and passes in tests and the hook in make hooks-test. Red: the failure recorded and the task set down, with a claim that it cannot be done ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Routing a can't-be-done claim about tooling to the arbiter is a ruling on process, which section 5 item 4 permits ('the round arbiter may rule on process'). It does not let the arbiter accept a phase over budget or change a budget, so it opens no route around the GM's words."
+    },
+    {
+     "id": "T03-done",
+     "summary": "Done when SC-003's tests are green and the hook is proven to fire with it deleted",
+     "class": "within",
+     "why": "This is SC-003 plus the 'prove it fires' rule of FR-012/SC-008, all of which the request asks for. Note: SC-003 also covers FR-006's landing ratchet. If FR-006 lands in another task, T03 cannot turn those parts green, which is an inaccuracy in scope and not a narrowing."
+    },
+    {
+     "id": "T03-perf",
+     "summary": "Classed as not performance work: 'instrumentation; its overhead is measured (make perf-ab), and it moves no map'",
+     "class": "within",
+     "why": "A budget table, its writer and a hook are not performance work, so the classification is right and narrows nothing. The stated reason looks copied from an instrumentation task (T03 adds no counters for perf-ab to measure), but a wrong reason on a right classification is not a fidelity finding."
+    },
+    {
+     "id": "T03-empty-table",
+     "summary": "A table header (step / alone off: fixed and pinned / fresh block vs HEAD / pool manifests moved / the last resort) with no rows",
+     "class": "within",
+     "why": "The table has no rows, so it decides nothing and is not a narrowing. It looks like template residue."
     }
    ],
    "verdict": "CLEAR"

@@ -43,6 +43,8 @@ check blocked "$ROOT/.claude/settings.json"
 check blocked "$ROOT/.claude/settings.json" "x" "Write"
 check blocked "$ROOT/dev/switches.json"
 check blocked "$ROOT/dev/switches.json" "x" "Write"
+check blocked "$ROOT/dev/work-budget.json"  # feature 443 T03: the work budgets, written by make budget-set / budget-change
+check blocked "$ROOT/dev/work-budget.json" "x" "Write"
 
 echo
 echo "2. IT STAYS QUIET on everything else (FR-016)"
