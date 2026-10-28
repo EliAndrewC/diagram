@@ -27,8 +27,9 @@
 - [x] T09 The candidate-loop counters of the water and fields stages (water_frame, field, sink, waterward, pond_stock, pond_bank): the walk's loops filtered and hand-read, each loop that tries a site given its candidate@<function> increment, the excluded loops listed with why (D2; FR-001, research/candidate-loops.md)
       research: rendering
       verify: DONE. landed: the water and fields stages' candidate loops counted (research/candidate-loops.md, T09 section); Python calls +0.031% at 40 households; comb.py split at the 1,000-line bar
-- [ ] T10 The candidate-loop counters of the homesteads family (seat, homesteads, appurtenances, burial, lane_wells, sties, washing): the walk's loops filtered and hand-read - the getattr-dispatched seat region, free ground, access and site corridors and homesteads/stages.py included - each given its increment, the excluded listed with why (D2; FR-001)
+- [x] T10 The candidate-loop counters of the homesteads family (seat, homesteads, appurtenances, burial, lane_wells, sties, washing): the walk's loops filtered and hand-read - the getattr-dispatched seat region, free ground, access and site corridors and homesteads/stages.py included - each given its increment, the excluded listed with why (D2; FR-001)
       research: rendering
+      verify: DONE. landed: the homesteads family's candidate loops counted (research/candidate-loops.md, T10 section, three misses of the walk added); Python calls -0.03% at 40 households; stages.py split at the 1,000-line bar; the rank step's drift carried to 405 T166
 - [ ] T11 The candidate-loop counters of the ways (track, web, crossings): the walk's loops filtered and hand-read - the cross-check's misses gap_ways way_out and trace, meet near_misses and web_lines included - each given its increment, the measuring loops excluded with why (D2; FR-001)
       research: rendering
 - [ ] T12 The candidate-loop counters of ground cover, the frame, the notice board and the labels (hinterland, woodland, windbreak, bamboo, frame, notice, labels): the walk's loops filtered and hand-read, each given its increment, the excluded listed with why (D2; FR-001)
