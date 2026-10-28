@@ -185,7 +185,7 @@ def test_remote_off_merge_is_local_gated(remote_off: Path, monkeypatch: pytest.M
     d = remote_off / "specs" / "132-x"
     d.mkdir(parents=True)
     (d / "tasks.md").write_text("- [x] T001 done\n", encoding="utf-8")
-    (d / "spec.md").write_text("FAITHFUL\n", encoding="utf-8")
+    (d / "spec.md").write_text("- round 1 (spec-fidelity): FAITHFUL\n", encoding="utf-8")  # a verdict line, as the one reader reads it (442)
     monkeypatch.setenv("SPECIFY_FEATURE", "132-x")
     assert cli.main(["merge"]) == 1
     out = capsys.readouterr().out
@@ -224,7 +224,7 @@ def test_remote_off_refusals_leave_would_have_entries(remote_off: Path, monkeypa
     d = remote_off / "specs" / "133-x"
     d.mkdir(parents=True)
     (d / "tasks.md").write_text("- [x] T001 done\n", encoding="utf-8")
-    (d / "spec.md").write_text("FAITHFUL\n", encoding="utf-8")
+    (d / "spec.md").write_text("- round 1 (spec-fidelity): FAITHFUL\n", encoding="utf-8")  # a verdict line, as the one reader reads it (442)
     monkeypatch.setenv("SPECIFY_FEATURE", "133-x")
     assert cli.main(["merge"]) == 1 and "would-have-dispatched" in capsys.readouterr().out
     assert runlog.would_have_entries(skill)[-1]["target"] == "ci-merge"

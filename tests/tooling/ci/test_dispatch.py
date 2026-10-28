@@ -50,7 +50,7 @@ def engine_delta_with_green(repo: Path, feature: bool = True, monkeypatch: pytes
         d = repo / "specs" / "130-x"
         d.mkdir(parents=True)
         (d / "tasks.md").write_text("- [x] T001 done\n", encoding="utf-8")
-        (d / "spec.md").write_text("FAITHFUL\n", encoding="utf-8")
+        (d / "spec.md").write_text("- round 1 (spec-fidelity): FAITHFUL\n", encoding="utf-8")  # a verdict line, as the one reader reads it (442)
         monkeypatch.setenv("SPECIFY_FEATURE", "130-x")
 
 
