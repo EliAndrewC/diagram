@@ -44,6 +44,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import hm_arbiter  # noqa: E402
+import hm_budget_rounds  # noqa: E402
 import hm_fixloop  # noqa: E402
 import hm_planhold  # noqa: E402
 
@@ -807,6 +808,9 @@ def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> st
         if check == "spec-fidelity":  # feature 385 T85: a plan review holds the section or blocks it reads
             hm_planhold.hold(state, str(payload.get("tool_use_id") or now), str(ti.get("prompt") or ""), now)
             save(path, state)  # a plan review is no check kind: the branch below returns before the state is saved
+        if check == "work-budget" and root is not None and not escaped("ARBITER_OK", str(ti.get("prompt") or "")):  # its round cap
+            if why := hm_budget_rounds.refusal(hm_arbiter.feature_dir(root, ""), hm_arbiter.rulings(root), str(ti.get("prompt") or "")):
+                return why
         if check not in CHECK_KINDS:
             return ""
         prompt = str(ti.get("prompt") or "")
