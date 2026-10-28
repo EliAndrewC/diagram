@@ -33,5 +33,6 @@
 - [x] T11 The candidate-loop counters of the ways (track, web, crossings): the walk's loops filtered and hand-read - the cross-check's misses gap_ways way_out and trace, meet near_misses and web_lines included - each given its increment, the measuring loops excluded with why (D2; FR-001)
       research: rendering
       verify: DONE. landed: the ways' candidate loops counted (research/candidate-loops.md, T11 section; no miss in the cross-check); Python calls -0.15% at 40 households
-- [ ] T12 The candidate-loop counters of ground cover, the frame, the notice board and the labels (hinterland, woodland, windbreak, bamboo, frame, notice, labels): the walk's loops filtered and hand-read, each given its increment, the excluded listed with why (D2; FR-001)
+- [x] T12 The candidate-loop counters of ground cover, the frame, the notice board and the labels (hinterland, woodland, windbreak, bamboo, frame, notice, labels): the walk's loops filtered and hand-read, each given its increment, the excluded listed with why (D2; FR-001)
       research: rendering
+      verify: DONE. landed: ground cover, frame, notice and labels' candidate loops counted (research/candidate-loops.md, T12 section; one miss of the walk added); Python calls +0.0001% at 40 households
