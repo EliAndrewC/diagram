@@ -710,6 +710,9 @@ def main(argv: list[str]) -> int:
     rel = str(d.relative_to(root))
     how = f"landed in batch {'+'.join(tasks)}" if len(tasks) > 1 else "landed"
     os.environ["L7R_LAND_TICKS"] = " ".join(tasks)  # the tasks the landing ticks: `--landing` is honored for these alone
+    # ...AND THE FEATURE BEING LANDED, named to the push: its gated merge read `.specify/feature.json`, which `make claim` points at
+    # a feature filed mid-task - 443 T12's landing ran its whole gate, then refused as 445's (2026-10-28)
+    os.environ["SPECIFY_FEATURE"] = d.name
     failed = [task for task in tasks if tt.main([argv[0], task, f"{how}: {note}", "--landing", *_box_flag(tt, d, task)])]
     if failed:
         run(root, ["git", "checkout", "--", rel])  # the ticks already written put back: a landing that does not push ticks nothing
