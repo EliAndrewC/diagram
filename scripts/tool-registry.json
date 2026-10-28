@@ -13,6 +13,10 @@
       "kind": "check",
       "what": "scripts/gates/check-entry-headings.py - a refusing check; each run recorded passed or refused"
     },
+    "check-rust-tooling": {
+      "kind": "check",
+      "what": "scripts/gates/check-rust-tooling.py - a refusing check (make rust-tooling, a step of make hooks-test); each run recorded passed or refused"
+    },
     "check-file-scale": {
       "kind": "check",
       "what": "scripts/gates/check-file-scale.py - a refusing check; each run recorded passed or refused"

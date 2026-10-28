@@ -54,6 +54,9 @@ phase-calls:    ## [performance] one 40-household hamlet's Python calls by stage
 work-budget:    ## [performance] the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=<n>] [SIZES=10,20,40,80]
 	$(RUN).tools.work_budget $(if $(SEED),--seed "$(SEED)",) $(if $(SIZES),--sizes "$(SIZES)",)
 
+rust-tooling:   ## [tests] every check, hook, gate and make target that reads Python's syntax tree or .py files has its row in dev/rust-tooling.md, saying what it becomes in the Rust phases; a step of hooks-test (feature 443)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-rust-tooling.py"
+
 work-budget-review: ## [performance] the push's ratchet: on a push carrying engine code, every ACCEPTED stage held to its accepted figure and its budget at 40 and 80 households, from a work-budget run at the pushed engine; no arbiter accept clears it (feature 443)   ROUTE=<GATED|GATED-LOCAL|DIRECT>
 	$(RUN).tools.work_budget --review "$(ROUTE)"
 
@@ -388,6 +391,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	  else skipped=$$((skipped+1)); fi; \
 	fi; \
 	if ! python3 "$$root/scripts/gates/check-tool-signals.py"; then fail="$$fail check-tool-signals"; fi; \
+	if ! python3 "$$root/scripts/gates/check-rust-tooling.py" --root "$$root"; then fail="$$fail rust-tooling"; fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	python3 "$$root/scripts/gates/gate-stamp.py" --write hooks; \
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"; \

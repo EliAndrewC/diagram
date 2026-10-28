@@ -1272,6 +1272,52 @@
      "why": "This is correct: the task is a land-time refusal and never touches the engine. The reason it gives ('instrumentation; its overhead is measured (make perf-ab), and it moves no map') looks copied from an engine-counter task and does not describe this one, because a land.py refusal has no perf-ab overhead to measure. The wording is inaccurate but narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T07 (FR-011: no Python-only check forgotten)",
+    "### T07 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T07-approach",
+     "summary": "Build the inventory as dev/rust-tooling.md (section 7's table, one keyed row per check) and scripts/gates/check-rust-tooling.py run in make hooks-test, as D13 sets out.",
+     "class": "within",
+     "why": "This is D13 and FR-011 restated. It is the request's section 7 'Nothing forgotten, mechanically' paragraph: a hooks-test check that lists every hook, gate script and make target reading .py files or Python's syntax tree, and fails on any with no row. The block adds no carve-out and sets no reach narrower than D13's."
+    },
+    {
+     "id": "T07-world",
+     "summary": "Part A box 4: run on the real tree, the check finds scripts/gates/check-file-scale.py.",
+     "class": "within",
+     "why": "D13 already requires this ('finding scripts/gates/check-file-scale.py, the arbiter's note'). It is a real-tree positive control for the request's 'file cap (check-file-scale.py)' row, and it narrows nothing."
+    },
+    {
+     "id": "T07-order",
+     "summary": "The task may land any time after T01.",
+     "class": "within",
+     "why": "The request puts the inventory in step 1, the tooling feature. Sequencing it inside that feature leaves out nothing that was asked."
+    },
+    {
+     "id": "T07-exits",
+     "summary": "Green: the check fails on each scratch reader kind with no row and passes on the tree. Red: the failure is recorded and the task set down, and any claim that it cannot be done is ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Green is SC-007's condition. Red decides no part of FR-011 is dropped: it only sends an impossibility claim to the arbiter instead of letting the session settle it. 'Each scratch reader kind' is read here as D13's kinds (ast, tokenize, inspect, symtable, compile(, the .py patterns, and Makefile recipes running ruff/pyrefly/pytest/coverage/testmon/vulture), not only SC-007's four. Under that reading it narrows nothing."
+    },
+    {
+     "id": "T07-done-budget",
+     "summary": "Done, measured: SC-007's tests green; the budget is one landing.",
+     "class": "within",
+     "why": "SC-007 is the accepted spec's own success criterion for FR-011, and the plan adds no done-condition looser than it. The approach still implements D13's full reach, so taking the spec's SC as the measured done-line is not a plan narrowing. One landing is a size estimate, not a scope decision."
+    },
+    {
+     "id": "T07-perf",
+     "summary": "Declared not performance work; the perf table is left empty.",
+     "class": "within",
+     "why": "An inventory check in make hooks-test moves no map and is not a speed change. The empty table decides nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1815,6 +1861,50 @@
      "summary": "Not performance work.",
      "class": "within",
      "why": "This is correct: the task is a land-time refusal and never touches the engine. The reason it gives ('instrumentation; its overhead is measured (make perf-ab), and it moves no map') looks copied from an engine-counter task and does not describe this one, because a land.py refusal has no perf-ab overhead to measure. The wording is inaccurate but narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T07": {
+   "section_sha256": "771f3017945a06766931a3d1c4329dd993aad227f3e05192e7c2e786abfc9d5b",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T07-approach",
+     "summary": "Build the inventory as dev/rust-tooling.md (section 7's table, one keyed row per check) and scripts/gates/check-rust-tooling.py run in make hooks-test, as D13 sets out.",
+     "class": "within",
+     "why": "This is D13 and FR-011 restated. It is the request's section 7 'Nothing forgotten, mechanically' paragraph: a hooks-test check that lists every hook, gate script and make target reading .py files or Python's syntax tree, and fails on any with no row. The block adds no carve-out and sets no reach narrower than D13's."
+    },
+    {
+     "id": "T07-world",
+     "summary": "Part A box 4: run on the real tree, the check finds scripts/gates/check-file-scale.py.",
+     "class": "within",
+     "why": "D13 already requires this ('finding scripts/gates/check-file-scale.py, the arbiter's note'). It is a real-tree positive control for the request's 'file cap (check-file-scale.py)' row, and it narrows nothing."
+    },
+    {
+     "id": "T07-order",
+     "summary": "The task may land any time after T01.",
+     "class": "within",
+     "why": "The request puts the inventory in step 1, the tooling feature. Sequencing it inside that feature leaves out nothing that was asked."
+    },
+    {
+     "id": "T07-exits",
+     "summary": "Green: the check fails on each scratch reader kind with no row and passes on the tree. Red: the failure is recorded and the task set down, and any claim that it cannot be done is ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Green is SC-007's condition. Red decides no part of FR-011 is dropped: it only sends an impossibility claim to the arbiter instead of letting the session settle it. 'Each scratch reader kind' is read here as D13's kinds (ast, tokenize, inspect, symtable, compile(, the .py patterns, and Makefile recipes running ruff/pyrefly/pytest/coverage/testmon/vulture), not only SC-007's four. Under that reading it narrows nothing."
+    },
+    {
+     "id": "T07-done-budget",
+     "summary": "Done, measured: SC-007's tests green; the budget is one landing.",
+     "class": "within",
+     "why": "SC-007 is the accepted spec's own success criterion for FR-011, and the plan adds no done-condition looser than it. The approach still implements D13's full reach, so taking the spec's SC as the measured done-line is not a plan narrowing. One landing is a size estimate, not a scope decision."
+    },
+    {
+     "id": "T07-perf",
+     "summary": "Declared not performance work; the perf table is left empty.",
+     "class": "within",
+     "why": "An inventory check in make hooks-test moves no map and is not a speed change. The empty table decides nothing."
     }
    ],
    "verdict": "CLEAR"

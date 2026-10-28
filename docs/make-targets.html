@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 209 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 210 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -45,6 +45,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make quick</td><td class=a><div class=ad><span class=an>ALL=1</span><span class=aw>run EVERY quick test, not just the ones whose code changed (default: change-selected via testmon)</span></div></td><td>tier 2: lint, types and every test that rolls no map; change-selected, stops at the first failure</td></tr>
 <tr><td class=n>make roll-audit</td><td class=a>MIN_LINES</td><td>per rolling context of the gate baseline, the engine lines NO other context reaches</td></tr>
 <tr><td class=n>make roll-census</td><td class=a>FULL</td><td>the roll census of the LAST test phase, judged against tests/rolls.py</td></tr>
+<tr><td class=n>make rust-tooling</td><td class=a>&ndash;</td><td>every check, hook, gate and make target that reads Python&#x27;s syntax tree or .py files has its row in dev/rust-tooling.md, saying what it becomes in the Rust phases; a step of hooks-test (feature 443)</td></tr>
 <tr><td class=n>make soak</td><td class=a>&ndash;</td><td>the tier ABOVE the gate, run by nothing ordinary (constitution VI v2.23.0): the tests that roll more than the floor needs; REFUSES when empty rather than reporting a vacuous green and larger maps (tests/soak/)</td></tr>
 <tr><td class=n>make sweep</td><td class=a><div class=ad><span class=an>FILE=&lt;paths&gt;</span><span class=aw>the test file(s) whose sweeps read `tests/_sweep.py`</span></div><div class=ad><span class=an>SEEDS=&lt;n&gt;</span><span class=aw>how many seeds each sweep takes (`L7R_SWEEP_SEEDS`)</span></div></td><td>run a random-equivalence test over more seeds than its default, the file unchanged</td></tr>
 <tr><td class=n>make test<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>the pytest phase itself (internal - `done` and `test-full` call it, not you)</td></tr>
