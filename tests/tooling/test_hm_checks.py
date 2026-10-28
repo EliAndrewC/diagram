@@ -824,3 +824,37 @@ def test_a_stopped_record_check_stops_holding_its_round(tmp_path: pathlib.Path) 
     d = json.loads((tmp_path / ".git" / hc.STATE).read_text())["dispatches"]["t1"]
     assert d["state"] == "answered" and d["closed"] == "stopped by the session (TaskStop)"
     assert hc.handle("edit", edit, 4) == "", "the page is no longer frozen by it"
+
+
+def test_a_work_budget_round_past_its_cap_or_its_accept_goes_to_the_arbiter(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's tooling fix on ask:444-T02-field-round-15: a work-budget bundle names no page subject, so nothing counted
+    its rounds, and field's rounds 9 to 14 ran past the arbiter's accept. A stage's rounds are its recorded verdicts: past the cap
+    with no continue since the last one, or accepted since it, the next dispatch is refused through the hook's own path."""
+    import os
+    import time
+
+    root = _clone(tmp_path)
+    phases = root / "specs" / "375-x" / "phases"
+    phases.mkdir(parents=True)
+    arb = root / "specs" / "375-x" / "arbiter.jsonl"
+    prompt = "MODE BUDGET: read /tmp/l7r-check/work-budget-budget-field/MANIFEST.md and the files beside it"
+    agent = {"cwd": str(root), "tool_name": "Agent", "tool_use_id": "w1", "tool_input": {"subagent_type": "work-budget", "prompt": prompt}}
+    assert hc.handle("dispatch", agent, 0) == "", "no verdict yet: the first round goes"
+    (phases / "field.verdict-1.txt").write_text("UNDERIVED - x\n")
+    assert hc.handle("dispatch", agent, 0) == "", "one verdict: within the cap"
+    (phases / "field.verdict-2.txt").write_text("UNDERIVED - y\n")
+    old = time.time() - 100
+    for p in phases.glob("*.txt"):
+        os.utime(p, (old, old))
+    why = hc.handle("dispatch", agent, 0)
+    assert "round 3 of work-budget on field passes its cap of 2" in why and "make arbiter-ask" in why
+    stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    arb.write_text(json.dumps({"trigger": "ask:375-T02-field-round-3", "ruling": "continue", "what": "x", "utc": stamp}) + "\n")
+    assert hc.handle("dispatch", agent, 0) == "", "a continue since the last verdict lets one more round go"
+    with arb.open("a") as fh:
+        fh.write(json.dumps({"trigger": "ask:375-T02-field-round-4", "ruling": "accept", "what": "field stands", "utc": stamp}) + "\n")
+    assert "the round arbiter accepted field's derivation" in hc.handle("dispatch", agent, 0), "an accept closes the stage"
+    ok = {**agent, "tool_input": {"subagent_type": "work-budget", "prompt": prompt + "\nARBITER_OK=\"the arbiter's own reopening of it\""}}
+    assert hc.handle("dispatch", ok, 0) == "", "the arbiter's escape"
+    other = {**agent, "tool_input": {"subagent_type": "work-budget", "prompt": "MODE BUDGET: read /tmp/l7r-check/work-budget-budget-sink/MANIFEST.md"}}
+    assert hc.handle("dispatch", other, 0) == "", "another stage is its own count"
