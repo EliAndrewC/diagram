@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-28T15:43:15Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 318,
+  "result": "failed: test-full",
+  "commit": "8895a3a71",
+  "first_failure_s": 229.9,
+  "last_failure_s": 229.9,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/test_operations_registry.py::test_every_entry_point_has_a_registry_row"
+  ],
+  "host": {
+    "load": [
+      3.25,
+      9.77
+    ],
+    "mem_avail_mb": [
+      5990,
+      5117
+    ],
+    "cpu_temp_c": [
+      92.0,
+      82.0
+    ],
+    "stall_s": {
+      "cpu": 8.6,
+      "io": 1.6,
+      "io_full": 1.1,
+      "memory": 0.6
+    },
+    "throttle_ms": {
+      "core": 319882,
+      "package": 118318
+    }
+  },
+  "phases": {
+    "preflight": 14.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "counters-inert": 14.0,
+    "pytest": 290.0,
+    "test-full": 301.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)",
+  "selected": 10292,
+  "collected": 10292
+}
