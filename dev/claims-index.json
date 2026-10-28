@@ -82568,5 +82568,65 @@
   ],
   "triaged": "2026-10-25",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/work_counts.py::BY_STAGE#plumbing": {
+  "body": "96df0ac56f9dae90",
+  "claim": "plumbing - NONE: it counts, and decides nothing about the place",
+  "code": "ae5f68285a5227d0",
+  "core": "b2c8b33f80d567b5",
+  "date": "2026-10-28",
+  "note": "an empty per-stage tally dict; it decides nothing about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/work_counts.py::KINDS#plumbing": {
+  "body": "9de0dd6fbd4cf2cf",
+  "claim": "plumbing - NONE: it counts, and decides nothing about the place",
+  "code": "550eb464878584d6",
+  "core": "fa56924e7b8ad25f",
+  "date": "2026-10-28",
+  "note": "the names of the operation counters only; \"placed\", \"dropped\" and \"moved\" are counter labels, not placement rules",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/work_counts.py::OPS#plumbing": {
+  "body": "dce473532312ba3d",
+  "claim": "plumbing - NONE: it counts, and decides nothing about the place",
+  "code": "3184ce730e34e392",
+  "core": "333a4401ddd3cc65",
+  "date": "2026-10-28",
+  "note": "an operation counter map; no physical or rendering decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/work_counts.py::by_kind#plumbing": {
+  "body": "03f49ecc7312e35a",
+  "claim": "plumbing - NONE: it counts, and decides nothing about the place",
+  "code": "649e63c0df9c4d93",
+  "core": "77081d7648c817c4",
+  "date": "2026-10-28",
+  "note": "sums the counts by key prefix; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/work_counts.py::reset#plumbing": {
+  "body": "22c50e8f424a6d64",
+  "claim": "plumbing - NONE: it counts, and decides nothing about the place",
+  "code": "1f147ce3493a2e55",
+  "core": "848360bab25ea042",
+  "date": "2026-10-28",
+  "note": "clears the counters; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  }
 }
