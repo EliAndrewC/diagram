@@ -8,6 +8,8 @@ from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import boxed_seg_hit, seg_dist
 from .tree_shade import CANOPY_SHADE_FT, plot_box, sun_box
 
@@ -409,6 +411,8 @@ class KeepoutsMixin:
         crown drawn exactly TANGENT to a wall can round to a hair of overlap and fire the check that
         re-reads it. Drawing passes a small pad so a kept crown is unambiguously clear; the check
         itself stays exact (pad 0), which is what keeps its teeth."""
+        if __debug__:
+            OPS["candidate@_crown_covers"] += 1
         reach2 = (r + pad) ** 2
         for cx, cy, hw, hh in rects:
             dx, dy = max(abs(x - cx) - hw, 0.0), max(abs(y - cy) - hh, 0.0)

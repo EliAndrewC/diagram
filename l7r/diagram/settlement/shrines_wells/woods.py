@@ -9,6 +9,8 @@ import random
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import (
     Poly,
     edge_dist,
@@ -120,6 +122,8 @@ class TreeStandsMixin:
 
         Research: no crown under another's - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: d >= max(r, r_other)
         """
+        if __debug__:
+            OPS["candidate@_crown_seat_clear"] += 1
         return all((x - cx) ** 2 + (y - cy) ** 2 >= max(r, cr) ** 2 for cx, cy, cr in crowns)
 
     def _crowns_near(self: Settlement, x0: float, y0: float, x1: float, y1: float) -> list[tuple[float, float, float]]:  # type: ignore[misc]
@@ -220,6 +224,8 @@ class TreeStandsMixin:
 
         Research: fringe on waste ground only - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.html: fields and channels were kept cut, uncut cleared land going to scrub; the masks are ours; off blocks, crops, water and ways
         """
+        if __debug__:
+            OPS["candidate@_fringe_blocked"] += 1
         if any(point_in_poly(tx, ty, b) for b in self.block_polys):
             return True
         if any(point_in_poly(tx, ty, f) or edge_dist(tx, ty, f) < r for f in self.field_polys + self.dry_polys):

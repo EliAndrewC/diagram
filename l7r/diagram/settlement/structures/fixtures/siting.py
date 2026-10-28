@@ -7,6 +7,8 @@ import math
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from ....labels import Placement
 from ..._geom import (
     Manifest,
@@ -327,6 +329,8 @@ class FixtureSitingMixin:
                         if verge_only and off - rw / 2 - dh / 2 > verge:  # past the verge: the roadside rule would drop it
                             break
                         x, y = mx + ux * off * side, my + uy * off * side
+                        if __debug__:
+                            OPS["candidate@_route_seats"] += 1
                         if near is not None and math.hypot(x - near[0], y - near[1]) > near[2]:  # off the placement's ground (`near`)
                             off += 5.0
                             continue

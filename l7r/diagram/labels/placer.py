@@ -27,6 +27,8 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass, replace
 from typing import Literal, overload
 
+from l7r.diagram.work_counts import OPS
+
 from .geom import Poly, Pt, area_centroid, bbox, centroid, inside, nearest_points, poly_gap, rect, seg_closest
 from .layout import layouts
 from .obstacles import ObstacleIndex, Way
@@ -535,6 +537,8 @@ def _strict_seat(
     MEASURING EVERY SEAT (feature 287, the board's siting): a seat `blocked` beyond a nudge's reach can be neither free nor
     nudged free, so where every seat is, the answer is None unmeasured; otherwise those seats are measured now, since
     one may still be the least-cost seat the nudge starts from (the first in order among the cheapest)."""
+    if __debug__:
+        OPS["candidate@_strict_seat"] += 1
     if best is None:
         return None
     for order, cand, block in deep:

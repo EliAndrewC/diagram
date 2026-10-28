@@ -7,6 +7,7 @@ Research: map finishing - CONVENTION: the title placard and its band; geometry -
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.classes import PLACE
+from l7r.diagram.work_counts import OPS
 
 from ._geom import BoxObstacles, Pt
 from .finish import band_keeps_the_strips
@@ -331,6 +332,8 @@ class TitleMixin:
     def _box_clear(self: Settlement, bx0: float, by0: float, bx1: float, by1: float, obs: BoxObstacles) -> bool:  # type: ignore[misc]
         """Whether the axis-aligned box clears every obstacle - asked of the index `_title_obstacles` built
         (feature 222); the linear scan this was is `_geom.box_clear_brute`, the oracle its tests hold it to."""
+        if __debug__:
+            OPS["candidate@_box_clear"] += 1
         return obs.clear(bx0, by0, bx1, by1)
 
     def _blank_label_spot(  # type: ignore[misc]

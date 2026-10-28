@@ -15,6 +15,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement
+from l7r.diagram.work_counts import OPS
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan, _roll
@@ -108,6 +109,8 @@ def clear_of_plot(square: Sequence[Pt], plot: Sequence[Sequence[float]], gap: fl
     """Does `square` stand at least `gap` off `plot` (polygon distance)?
 
     Research: off its paddy - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: the bund and its cut strip kept bare"""
+    if __debug__:
+        OPS["candidate@clear_of_plot"] += 1
     from shapely.geometry import Polygon  # noqa: PLC0415
 
     return bool(Polygon(square).distance(Polygon([(float(p[0]), float(p[1])) for p in plot])) >= gap - 1e-6)

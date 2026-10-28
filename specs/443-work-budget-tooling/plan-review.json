@@ -95,13 +95,13 @@
    "sha256": "cfa68cf5a21b39151023f73ee02b8c96037c2fad074916a0cd492a1fe0add16d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T12 Approach (checklist part A)": {
    "sha256": "23d88ea8f2c95f2948abf5c8d89a8e017a87a20731e5793379fbe43f248f4308",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T02 (FR-003, FR-004: today's figures for every stage, and the counters inert)": {
    "sha256": "387d434ff525d0d1225e9384d6cbca407f1daf7e2f8060e6700bb5f4acf1e076",
@@ -964,6 +964,60 @@
      "why": "Section 6 step 1 of the request: 'Engine counters only; no map changes.'"
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T12 (the walk of ground cover, the frame, the notice board and the labels: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T12 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T12-walk",
+     "summary": "The candidate loops for hinterland, woodland, windbreak, bamboo, frame, notice and labels are found by the ast call-graph scan from each stage's function, filtered by hand, with what the scan cannot follow (getattr dispatch, name-matched modules, the not-fully-walked list, non-unique method names, functions passed by reference found by the stated grep; hinterland/parcels/*, groves.py, grove_fill.py, labels/*) read by hand, and the filtered list and exclusions with reasons written into the research file.",
+     "class": "within",
+     "why": "D2 requires the walk from STAGES through every module reached, recorded in research/candidate-loops.md with its search space, command and date; the section names the scan's search space and the hand-read residue, and makes the walk (not the fanout) the source."
+    },
+    {
+     "id": "T12-counter-form",
+     "summary": "Each loop that tries a site gets an inline `if __debug__: OPS[\"candidate@<function>\"] += n`, n = 1 per iteration; a named predicate or key function counts inside itself.",
+     "class": "within",
+     "why": "FR-001 and D2 verbatim: an inline increment inside `if __debug__:`, keyed candidate@<function>, one per candidate tried, no function call."
+    },
+    {
+     "id": "T12-len-before-bare-sorted",
+     "summary": "A bare sorted/min or inline lambda over a list takes len(cands) before it, len being a C builtin the call guard does not see (measured 2026-10-28, make perf-ab A=29253d4c3, research/overhead.md).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001's literal 'no function call' is departed from by len(), but the same requirement states its purpose (the push's call guard sees no new calls) and requires a vectorized operation to count its elements; counting the elements a C-level sorted/min examines is impossible without either len() or a Python-level call per element, which would defeat the purpose. The purpose is preserved and the plan cites a measurement that the guard's calls column is unchanged; SC-001's one-in-a-thousand exit re-checks it per landing."
+    },
+    {
+     "id": "T12-registry-only-loops",
+     "summary": "A loop whose only test is Standing.admits or conflicts takes no candidate@<function> counter of its own; the registry's candidate@Standing.conflicts counts it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D2's last bullet read literally gives every such loop its own candidate@<function>, but D2's own registry bullet already counts `candidate` in Standing.admits/conflicts per candidate; FR-003 prints FR-001's categories per stage, so a second candidate@ key in the loop would double the stage's candidate figure and defeat the goal (candidates per thing placed as a measured figure). The exception is implied by the spec's own text, every candidate is still counted once (S5 is met), and stage attribution is FR-002's, by the driver. Adjudicated for the registry-only case only: a loop that also tests against _geom or a predicate is not covered by it and keeps its own counter."
+    },
+    {
+     "id": "T12-exits",
+     "summary": "Green: every listed loop counted; Python calls within SC-001's one in a thousand; perf-fanout anchors read against the list as a cross-check, each miss added and written as a miss; cohort-landing unregressed. Red: failure recorded, a cannot-be-done claim to make arbiter-ask.",
+     "class": "within",
+     "why": "SC-001's threshold verbatim; D2 makes the anchors a cross-check of the walk; a stage recorded 'none' only by the walk matches D2's last clause. Instrumentation moving no map is step 1 of the approved design."
+    },
+    {
+     "id": "T12-order-budget",
+     "summary": "After T01; the families in any order, each its own landing; one landing, claims triage as a check-wave.",
+     "class": "within",
+     "why": "Sequencing and process; the spec does not settle it and nothing asked is narrowed."
+    },
+    {
+     "id": "T12-reality-check",
+     "summary": "Each family's candidate counts read against its stages' things placed on the reference roll; a stage with calls large against its counts is re-read.",
+     "class": "within",
+     "why": "D2: the standing record prints calls beside counts so a stage whose calls are large against its counts shows it; this applies it to the walk."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1211,6 +1265,58 @@
      "summary": "Classed as instrumentation, not performance work. Overhead is measured by perf-ab, and no map moves.",
      "class": "within",
      "why": "Section 6 step 1 of the request: 'Engine counters only; no map changes.'"
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T12": {
+   "section_sha256": "b1caa3bea08bd4e276c8be486bad7102b5ecfe0ba56888ec90498605663630c3",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T12-walk",
+     "summary": "The candidate loops for hinterland, woodland, windbreak, bamboo, frame, notice and labels are found by the ast call-graph scan from each stage's function, filtered by hand, with what the scan cannot follow (getattr dispatch, name-matched modules, the not-fully-walked list, non-unique method names, functions passed by reference found by the stated grep; hinterland/parcels/*, groves.py, grove_fill.py, labels/*) read by hand, and the filtered list and exclusions with reasons written into the research file.",
+     "class": "within",
+     "why": "D2 requires the walk from STAGES through every module reached, recorded in research/candidate-loops.md with its search space, command and date; the section names the scan's search space and the hand-read residue, and makes the walk (not the fanout) the source."
+    },
+    {
+     "id": "T12-counter-form",
+     "summary": "Each loop that tries a site gets an inline `if __debug__: OPS[\"candidate@<function>\"] += n`, n = 1 per iteration; a named predicate or key function counts inside itself.",
+     "class": "within",
+     "why": "FR-001 and D2 verbatim: an inline increment inside `if __debug__:`, keyed candidate@<function>, one per candidate tried, no function call."
+    },
+    {
+     "id": "T12-len-before-bare-sorted",
+     "summary": "A bare sorted/min or inline lambda over a list takes len(cands) before it, len being a C builtin the call guard does not see (measured 2026-10-28, make perf-ab A=29253d4c3, research/overhead.md).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001's literal 'no function call' is departed from by len(), but the same requirement states its purpose (the push's call guard sees no new calls) and requires a vectorized operation to count its elements; counting the elements a C-level sorted/min examines is impossible without either len() or a Python-level call per element, which would defeat the purpose. The purpose is preserved and the plan cites a measurement that the guard's calls column is unchanged; SC-001's one-in-a-thousand exit re-checks it per landing."
+    },
+    {
+     "id": "T12-registry-only-loops",
+     "summary": "A loop whose only test is Standing.admits or conflicts takes no candidate@<function> counter of its own; the registry's candidate@Standing.conflicts counts it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D2's last bullet read literally gives every such loop its own candidate@<function>, but D2's own registry bullet already counts `candidate` in Standing.admits/conflicts per candidate; FR-003 prints FR-001's categories per stage, so a second candidate@ key in the loop would double the stage's candidate figure and defeat the goal (candidates per thing placed as a measured figure). The exception is implied by the spec's own text, every candidate is still counted once (S5 is met), and stage attribution is FR-002's, by the driver. Adjudicated for the registry-only case only: a loop that also tests against _geom or a predicate is not covered by it and keeps its own counter."
+    },
+    {
+     "id": "T12-exits",
+     "summary": "Green: every listed loop counted; Python calls within SC-001's one in a thousand; perf-fanout anchors read against the list as a cross-check, each miss added and written as a miss; cohort-landing unregressed. Red: failure recorded, a cannot-be-done claim to make arbiter-ask.",
+     "class": "within",
+     "why": "SC-001's threshold verbatim; D2 makes the anchors a cross-check of the walk; a stage recorded 'none' only by the walk matches D2's last clause. Instrumentation moving no map is step 1 of the approved design."
+    },
+    {
+     "id": "T12-order-budget",
+     "summary": "After T01; the families in any order, each its own landing; one landing, claims triage as a check-wave.",
+     "class": "within",
+     "why": "Sequencing and process; the spec does not settle it and nothing asked is narrowed."
+    },
+    {
+     "id": "T12-reality-check",
+     "summary": "Each family's candidate counts read against its stages' things placed on the reference roll; a stage with calls large against its counts is re-read.",
+     "class": "within",
+     "why": "D2: the standing record prints calls beside counts so a stage whose calls are large against its counts shows it; this applies it to the walk."
     }
    ],
    "verdict": "CLEAR"

@@ -12,6 +12,7 @@ from collections.abc import Sequence
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import RingIndex
 from l7r.diagram.sitegen.geom import crop_polys
+from l7r.diagram.work_counts import OPS
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -399,6 +400,8 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     belt = band(1.0, 0.0)
     span_f, back = 1.0, 0.0
     for span_f, back in ((1.0, 0.0), (1.0, 22.0), (1.0, 44.0), (0.88, 44.0), (0.74, 60.0), (0.6, 60.0)):
+        if __debug__:
+            OPS["candidate@belt_polygon"] += 1
         belt = band(span_f, back)
         if not fouled(belt):
             break

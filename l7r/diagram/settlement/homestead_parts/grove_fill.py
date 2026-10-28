@@ -10,6 +10,8 @@ from __future__ import annotations
 import math
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import point_in_poly
 from ..land.wet import MARSH_FEATHER_BS, marsh_ground
 from ._helpers import _BELT_GAP_FT, _belt_axis
@@ -336,6 +338,8 @@ def reseat_clump(
     # in the ribbon look identical from the manifest.
     for _nr in (step * 0.6, step * 1.0, step * 1.4, step * 1.8, step * 2.2):
         for _na in range(0, 360, 45):
+            if __debug__:
+                OPS["candidate@reseat_clump"] += 1
             ax, ay = qx + _nr * math.cos(math.radians(_na)), qy + _nr * math.sin(math.radians(_na))
             if not blocks.inside(ax, ay):
                 continue
@@ -436,6 +440,8 @@ def close_belt_gaps(
                     _column = [(round(_col * _wv[0] + _d * _perp[0], 1), round(_col * _wv[1] + _d * _perp[1], 1)) for _d in _depths]  # the record's grain (W01)
                     _inside = [q for q, ok in zip(_column, blocks.inside_many(_column), strict=True) if ok]  # the column asked at once (feature 427 T08)
                     for _qx, _qy in _inside[len(_inside) // 2 :] + _inside[: len(_inside) // 2]:  # the band's middle outward
+                        if __debug__:
+                            OPS["candidate@close_belt_gaps"] += 1  # a gap seat tried (feature 443 T12, a miss of the walk)
                         if within is not None and (_qx + clump * 0.9 < within[0] or _qx - clump * 0.9 > within[2] or _qy + clump * 0.9 < within[1] or _qy - clump * 0.9 > within[3]):
                             continue
                         if not blocks.static_clear(_qx, _qy) or (_near is not None and not _near.too_near(_qx, _qy)):

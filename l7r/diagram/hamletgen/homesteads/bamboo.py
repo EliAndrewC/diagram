@@ -19,6 +19,7 @@ from l7r.diagram.settlement.homestead_parts.groves import HOUSEHOLD_BAMBOO_PREVA
 from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.bearing import turned_box
+from l7r.diagram.work_counts import OPS
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -286,6 +287,8 @@ def strip_refused(s: Settlement, cx: float, cy: float, cw: float, ch: float, hou
         strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
         no strip in the belt - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass C, 2026-10-25); no strip with its center or a corner inside the belt (`in_belt`)
         the strip on its house's side of a lane - GUESS: searched, the record silent (feature 417 T29 pass C, 2026-10-25); no lane's centerline between a house and its strip (`across_a_lane`)"""
+    if __debug__:
+        OPS["candidate@strip_refused"] += 1
     hx, hy = house
     g = ground
     if _strip_blocked(s, cx, cy, cw, ch, hx, hy, g.fields, g.marsh, g.pond, g.lanes, g.footing, g.skip, near=g.near) or in_belt(g.belt, cx, cy, cw, ch):

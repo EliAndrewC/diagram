@@ -13,6 +13,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement, point_in_poly
 from l7r.diagram.settlement.land.cover import WOODLAND_MIN_CROWNS, ring_center
 from l7r.diagram.settlement.land.wet import marsh_ground
+from l7r.diagram.work_counts import OPS
 
 from ...consts import Poly, Pt
 from ...plan import SitePlan
@@ -132,6 +133,8 @@ def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N2, 2026-10-25) - 0.8 (shrink-ladder rung); 0.7 (shrink-ladder rung)
     """
     for sh in (0.9, 0.8, 0.7, 0.6):
+        if __debug__:
+            OPS["candidate@fit_square_parcel"] += 1
         cand = max(half * sh, floor_half)
         if fits(cand):
             return cand
@@ -548,6 +551,8 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 # half is unreachable in the corpus - no pool map or cohort seed happens to jitter a
                 # seat past the edge - and an untested line in a predicate whose whole job is
                 # re-asking is exactly what rots.
+                if __debug__:
+                    OPS["candidate@open_ground_patches._ok"] += 1
                 if (
                     not (max(half + 40.0, sx0) <= x <= min(plan.W - half - 40.0, sx1) and max(half + 40.0, sy0) <= y <= min(plan.H - half - 40.0, sy1))
                     or (max(0.0, min(x + half, _fx1) - max(x - half, _fx0)) * max(0.0, min(y + half, _fy1) - max(y - half, _fy0))) < 0.8 * (2.0 * half) ** 2

@@ -9,6 +9,8 @@ import random
 from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import CrownIndex, PointGrid, boxed_grid, boxed_polys, boxes_meeting, nearest_seg_dist, point_in_poly, seg_reach_index
 from .._knobs import Knob, knob_rng, register_knob
 from ._helpers import _belt_axis
@@ -680,6 +682,8 @@ class GrovesMixin:
                     / grove_crown_px2(self.ftpx)
                 )
                 for _ in range(TOPUP_TRIES * max(want, 1)):
+                    if __debug__:
+                        OPS["candidate@GroveMixin.seat"] += 1
                     if sum(seated.values()) >= want:
                         break
                     px, py = random.uniform(-w / 2 + 2, w / 2 - 2), random.uniform(-h / 2 + 2, h / 2 - 2)

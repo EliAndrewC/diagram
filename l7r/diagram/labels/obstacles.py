@@ -13,6 +13,8 @@ import math
 from collections import defaultdict
 from dataclasses import dataclass
 
+from l7r.diagram.work_counts import OPS
+
 from .geom import Poly, Pt, bbox, centroid, inside, poly_gap, poly_seg_gap, seg_dist
 from .standard import WAY_NOTCH, WEIGHT_WAY
 
@@ -249,6 +251,8 @@ class ObstacleIndex:
         `slack`; so an OVERLAP is judged by its depth instead: the block's center inside an obstacle by more than `slack`,
         a disc reaching more than `slack` past the block, or a way through the disc the block's rectangle holds about its
         center by more than `slack` - each still an overlap however the block moves by `slack`."""
+        if __debug__:
+            OPS["candidate@Obstacles.blocked"] += 1
         x0, y0, x1, y1 = bbox(block)
         cx, cy = (x0 + x1) / 2, (y0 + y1) / 2  # a rectangle's center is its box's
         inner = min(math.dist(block[0], block[1]), math.dist(block[1], block[2])) / 2  # the block is a rectangle (`rect`)

@@ -11,6 +11,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.title import placard_height
+from l7r.diagram.work_counts import OPS
 
 from ..plan import SitePlan
 
@@ -270,6 +271,8 @@ def pocket_clear_of_features(pocket: tuple[float, float, float, float], M: Any, 
     # ...AND COVERS NOTHING THE SEATING RESERVED (feature 287 M8, `overlap/reserved.py`): no household's wood seat within the
     # copse's crown of it (the copse refuses a clump inside the pocket grown by its radius - cohort 1-60 lost 95 seats so)
     # and no access corridor through it
+    if __debug__:
+        OPS["candidate@pocket_clear_of_features"] += 1
     st = getattr(M, "standing", None)
     if st is not None and st.reserved.box_covers(pocket[0], pocket[1], pocket[2], pocket[3], st.reserved.clump / 2.0):
         return False

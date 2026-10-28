@@ -405,3 +405,30 @@ through `free_end` and `tail_doubled`, not as candidates - they judge placed lan
 excluded above (`lanes_of`, `project`, `crossing_points`); the homesteads stage's `near_misses` and `web_lines` (T10's) are the
 law's, counted through `free_end` and uncounted shapely respectively. No anchor is a miss. Python calls (the run's raw profiles):
 10,576,254 at 40 households against 10,591,824 after T10 (-0.15%), 7,085,089 at 20 against 7,093,022 (-0.11%).
+
+## T12 - ground cover, the frame, the notice board and the labels, filtered by hand (2026-10-28)
+
+Stages: hinterland, woodland, windbreak, bamboo, frame, notice, labels.
+
+**Counted** (each the function's key): the woods' and groves' crown tests `settlement/shrines_wells/woods.py` `_crown_seat_clear`,
+`_fringe_blocked` and `homestead_parts/keepouts.py` `_crown_covers` (every crown seat a stand, belt, grove or woodland tries); the
+bamboo strips `hamletgen/homesteads/bamboo.py` `strip_refused` and `hinterland/bamboo.py`'s `_fits` (`bamboo_seats._fits`); the
+parcels `hinterland/parcels/patches.py` `_ok` (`open_ground_patches._ok`) and `fit_square_parcel`'s shrinks; the paddy grass
+`hinterland/paddy_grass.py` `clear_of_plot`; the belt `hinterland/belt.py` (`belt_polygon`, one span and setback tried); the
+grove gaps `homestead_parts/grove_fill.py` `reseat_clump` and `close_belt_gaps` (a miss of the walk, added from the cross-check);
+the groves' top-up `homestead_parts/groves.py` (`GroveMixin.seat`); the woodland's stocking `land/cover.py` `_stock_woodland`; the
+title's and title pocket's box tests `settlement/title.py` `_box_clear`, `hinterland/frame.py` `pocket_clear_of_features`; the notice
+board's route seats `settlement/structures/fixtures/siting.py` `_route_seats` (each verge and band seat); the label placer
+`labels/obstacles.py` `Obstacles.blocked` and `labels/placer.py` `_strict_seat`. The notice board's house-fit is `_fits` (T10's).
+
+**Excluded, with why:** drawing and scatter - the stand and fringe fills (`woods._draw_stand`, `_stand_fringe`), the commons'
+scatter (`cover._sparse`, `_in_soft`), `stands.bamboo_stand`'s mark grid, `dikes`' mottle; construction - the belt walk and
+ranks (`groves.belt_walk`, `_belt_ranks`, their tests `_crown_covers` counted), `belt_law`'s index, `grove_blocks`' indexes,
+`ink_and_record_grove`, `village_grove`'s layout (its seats through `_crown_covers`), `convex_hull`; measurement - `bamboo.across_a_lane`,
+`in_belt`, `_strip_blocked` (inside `strip_refused`, counted). **woodland** places nothing of its own (the commons' stocking is the
+hinterland's).
+
+**T12's cross-check** (`make perf-fanout SEED=25 HOT=20000 LABEL=443-T12`, 2026-10-28): one miss, `grove_fill.close_belt_gaps`'
+gap-seat loop, counted now; the rest are counted (`household_bamboo` through `strip_refused`, `open_ground_patches`, the notice
+board's `blocked`) or construction above. Python calls (the run's raw profiles): 10,576,265 at 40 households against 10,576,254
+after T11 (+0.0001%).

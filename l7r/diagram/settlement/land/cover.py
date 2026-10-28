@@ -26,6 +26,8 @@ import random
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.work_counts import OPS
+
 # THE GRASS IS A TILE (feature 298): the blades and brush dots this scatter threw one by one - 55-68% of four pool hamlets'
 # SVGs once merged (features 222-225 merged and culled them) - are the grass tile (`land.tiles`), filling each zone less the
 # ground its throws were kept off (`Cover`, `Settlement.flush_covers`). The scraggly pines and the woodland's crowns stay
@@ -694,6 +696,8 @@ class GroundCoverMixin:
         _wd_seated = CrownIndex(self._crowns_near(min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)))
         _tc0, _g0 = len(self.M["tree_crowns"]), len(g)  # where this wood's crowns start, for the stocking below
         for _ in range(_wd_target * 6):
+            if __debug__:
+                OPS["candidate@_stock_woodland"] += 1
             if _wd_crowns >= _wd_target:
                 break
             cx, cy = random.uniform(x0, x1), random.uniform(y0, y1)

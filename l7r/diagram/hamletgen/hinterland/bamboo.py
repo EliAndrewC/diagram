@@ -14,6 +14,7 @@ from l7r.diagram.settlement._geom.indexes import BambooObstacles
 from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
 from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT
 from l7r.diagram.settlement.land.wet import marsh_ground
+from l7r.diagram.work_counts import OPS
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -279,6 +280,8 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     _seats = [(float(p[0]), float(p[1])) for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
 
     def _fits(cx: float, cy: float, hw: float, hh: float) -> bool:
+        if __debug__:
+            OPS["candidate@bamboo_seats._fits"] += 1
         if not stand_spares_seats(cx, cy, 2.0 * hw, 2.0 * hh, _seats, s.bscale):
             return False
         # a yard persimmon's crown fitted between the samples of a 72 x 55 ft thicket at five by three (settlement-review of
