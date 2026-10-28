@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-28T13:22:05Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 27900,
+  "result": "green",
+  "commit": "a01797206",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10413,
+  "host": {
+    "load": [
+      2.83,
+      3.41
+    ],
+    "mem_avail_mb": [
+      8223,
+      8035
+    ],
+    "cpu_temp_c": [
+      100.0,
+      79.0
+    ],
+    "stall_s": {
+      "cpu": 1.2,
+      "io": 2.0,
+      "io_full": 1.8,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 226412,
+      "package": 105876
+    }
+  },
+  "phases": {
+    "preflight": 16.0,
+    "static": 1.0,
+    "format": 1.0,
+    "typecheck": 0.0,
+    "reference": 1.0,
+    "pytest": 27884.0,
+    "floors": 9.0,
+    "test-full": 27897.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/tools/perf_share.py",
+  "collected": 10413
+}
