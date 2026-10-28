@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-28T14:05:43Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 298,
+  "result": "green",
+  "commit": "66972d079",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10086,
+  "host": {
+    "load": [
+      1.49,
+      4.07
+    ],
+    "mem_avail_mb": [
+      7477,
+      8226
+    ],
+    "cpu_temp_c": [
+      100.0,
+      101.0
+    ],
+    "stall_s": {
+      "cpu": 2.7,
+      "io": 0.6,
+      "io_full": 0.5,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 52509,
+      "package": 24826
+    }
+  },
+  "phases": {
+    "preflight": 9.0,
+    "static": 2.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "pytest": 281.0,
+    "floors": 10.0,
+    "test-full": 294.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/hamletgen/homesteads/stages.py",
+  "collected": 10086
+}
