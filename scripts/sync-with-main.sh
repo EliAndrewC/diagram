@@ -427,6 +427,11 @@ push_cmd() {
   # (CI_PERF_REVIEW, CI_ROUTE, CI_MERGE) are read only when that Makefile is absent.
   if [ -n "$seams" ] && [ -n "${CI_PERF_REVIEW:-}" ]; then bash -c "$CI_PERF_REVIEW"; elif [ -f "$ROOT/Makefile" ]; then ( cd "$ROOT" && make --no-print-directory perf-review ); else true; fi \
     || die "make perf-review refused (or failed to run) - the call counts above owe the round arbiter's accept, named with its command; a timing refuses nothing (feature 427 T03)"
+  # THE WORK BUDGET'S RATCHET (feature 443 FR-006, plan D7): an ACCEPTED stage's counted operations may not grow past its accepted
+  # figure or its budget; nothing to hold while no stage is accepted, or on a push with no engine code. No round-arbiter accept
+  # clears it - the GM's words through `make budget-change` do. CI_WORK_BUDGET_REVIEW is its fixture seam, as CI_PERF_REVIEW is.
+  if [ -n "$seams" ] && [ -n "${CI_WORK_BUDGET_REVIEW:-}" ]; then bash -c "$CI_WORK_BUDGET_REVIEW"; elif [ -f "$ROOT/Makefile" ]; then ( cd "$ROOT" && make --no-print-directory work-budget-review ROUTE="$route" ); else true; fi \
+    || die "make work-budget-review refused (or failed to run) - an accepted stage's work above grew past its figure; only the GM's words through make budget-change raise it (feature 443)"
   # TWO ROUTES TO MAIN, CHOSEN BY THE DELTA, NEVER BY THE SESSION (feature 130, FR-002). The delta
   # is inspected against the LATEST GitHub main (fetched above). DIRECT: no diagram engine code in
   # our own commits - today's locked pull+push, free. GATED: engine code - `make ci-merge` runs the

@@ -54,6 +54,9 @@ phase-calls:    ## [performance] one 40-household hamlet's Python calls by stage
 work-budget:    ## [performance] the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=<n>] [SIZES=10,20,40,80]
 	$(RUN).tools.work_budget $(if $(SEED),--seed "$(SEED)",) $(if $(SIZES),--sizes "$(SIZES)",)
 
+work-budget-review: ## [performance] the push's ratchet: on a push carrying engine code, every ACCEPTED stage held to its accepted figure and its budget at 40 and 80 households, from a work-budget run at the pushed engine; no arbiter accept clears it (feature 443)   ROUTE=<GATED|GATED-LOCAL|DIRECT>
+	$(RUN).tools.work_budget --review "$(ROUTE)"
+
 budget-set:     ## [performance] a stage's FIRST work budget, only from a SOUND work-budget MODE BUDGET verdict; refused on a stage already budgeted (feature 443)   PHASE=<stage> PER_THING=<ops> EXPONENT=<e> DERIVATION=<file> VERDICT=<verdict file>
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" set "$(PHASE)" "$(PER_THING)" "$(EXPONENT)" "$(DERIVATION)" "$(VERDICT)"
 

@@ -213,13 +213,75 @@ def run(seeds: tuple[int, ...], sizes: tuple[int, ...], calls: Any = None) -> tu
     return summary, path, RECORD
 
 
+HELD = (40, 80)
+"""Research: plumbing - NONE: the sizes an accepted stage is held at (443 FR-006)"""
+
+
+def newest_run(code_id: str, run_dir: str = RUN_DIR) -> dict[str, Any] | None:
+    """The newest run recorded at `code_id` (its file `<stamp>-<code id>.json`), or None."""
+    try:
+        names = sorted(n for n in os.listdir(run_dir) if n.endswith(f"-{code_id}.json"))
+    except FileNotFoundError:
+        return None
+    if not names:
+        return None
+    with open(os.path.join(run_dir, names[-1]), encoding="utf-8") as fh:
+        return dict(json.load(fh))
+
+
+def held(table: dict[str, Any], summary: dict[str, Any]) -> list[str]:
+    """Each refusal of an ACCEPTED stage whose counted operations at 40 or 80 households exceed its accepted figure or its budget
+    (`per_thing` times the things it placed at that size), naming the figures and the two commands."""
+    out: list[str] = []
+    for name, b in (table.get("stages") or {}).items():
+        if b.get("status") != "accepted":
+            continue
+        per = ((summary.get("stages") or {}).get(name) or {}).get("per") or {}
+        for h in HELD:
+            got = per.get(str(h)) or per.get(h)  # a run read back from JSON keys its sizes by string
+            if not got:
+                out.append(f"{name}: the run has no roll at {h} households to hold it to")
+                continue
+            ops, accepted, budget = got["ops"], (b.get("accepted") or {}).get(str(h)), b["per_thing"] * got["placed"]
+            if accepted is not None and ops > accepted:
+                out.append(f"{name}: {ops:,.0f} counted operations at {h} households, over its accepted {accepted:,.0f}")
+            if ops > budget:
+                out.append(f"{name}: {ops:,.0f} counted operations at {h} households, over its budget {budget:,.0f} ({b['per_thing']:g} per thing x {got['placed']:,.0f})")
+    return out
+
+
+def review(route: str, table: dict[str, Any] | None = None, code_id: str | None = None, run_dir: str = RUN_DIR) -> tuple[int, str]:
+    """`make work-budget-review` at the push (443 FR-006, plan D7): (exit, message). Nothing to hold while no stage is accepted, or
+    on a push that carries no engine code (a DIRECT route); else a run at the pushed engine's code id is required and every
+    accepted stage held to it. No round-arbiter accept clears a refusal: the GM's words through `make budget-change` do."""
+    table = budgets() if table is None else table
+    if not any(b.get("status") == "accepted" for b in (table.get("stages") or {}).values()):
+        return 0, "work-budget-review: no stage is accepted - nothing to hold"
+    if route not in ("GATED", "GATED-LOCAL"):
+        return 0, "work-budget-review: the push carries no engine code - nothing to hold"
+    code_id = code_id or _code_id()
+    run = newest_run(code_id, run_dir)
+    if run is None:
+        return 1, f"work-budget-review: REFUSED - no work-budget run at the pushed engine (code id {code_id}): run `make work-budget`, commit dev/work-budget/, push again"
+    bad = held(table, run["summary"])
+    if bad:
+        fix = "make the stage do less work, or raise its figure with the GM's words: make budget-change PHASE=<stage> TO=<per thing> WORDS=\"<the GM's words>\""
+        return 1, "work-budget-review: REFUSED - an accepted stage grew past its figure:\n" + "\n".join(f"  {x}" for x in bad) + f"\n  {fix}"
+    return 0, f"work-budget-review: every accepted stage within its figures at {' and '.join(str(h) for h in HELD)} households"
+
+
 def main(argv: list[str] | None = None) -> int:
     from l7r.diagram.tools.perf_snapshot import DEFAULT_SEEDS
 
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     ap.add_argument("--seed", type=int, default=None, help="one seed (default: the reference seeds)")
     ap.add_argument("--sizes", default=",".join(str(h) for h in SIZES))
+    ap.add_argument("--review", metavar="ROUTE", help="the push's ratchet on the route sync-with-main.sh chose (`make work-budget-review`)")
     a = ap.parse_args(argv)
+    if a.review is not None:
+        rc, msg = review(a.review)
+        print(msg)
+        return rc
     seeds = (a.seed,) if a.seed is not None else DEFAULT_SEEDS
     _summary, path, record = run(seeds, tuple(int(x) for x in a.sizes.split(",") if x.strip()))
     with open(record, encoding="utf-8") as fh:

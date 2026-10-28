@@ -1122,6 +1122,52 @@
      "why": "The table has no rows, so it decides nothing and is not a narrowing. It looks like template residue."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T04 (FR-006, FR-007: the budget held at the push and in view)",
+    "### T04 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T04-ratchet-seat",
+     "summary": "make work-budget-review runs in sync-with-main.sh beside make perf-review, with test seam CI_WORK_BUDGET_REVIEW",
+     "class": "within",
+     "why": "Exactly D7 of the accepted spec, which carries FR-006 and the request's section 5 item 3 (a ratchet refusing a landing that raises an accepted phase past its accepted figure or its budget). The block restates the seat and seam; it drops none of D7's conditions (40 and 80 households, figure OR budget, no arbiter accept)."
+    },
+    {
+     "id": "T04-in-view",
+     "summary": "land.py and speckit-todo.py print the standing record (D8)",
+     "class": "within",
+     "why": "FR-007 / D8; the request's section 5 item 2: printed at every engine landing and listed by make speckit-todo."
+    },
+    {
+     "id": "T04-order",
+     "summary": "T04 follows T03 (the budget table and make budget-change)",
+     "class": "within",
+     "why": "Sequencing only; the ratchet compares against the budget table T03 lands and names make budget-change. Narrows nothing asked."
+    },
+    {
+     "id": "T04-exits",
+     "summary": "Green: review refuses over an accepted figure or a budget and passes under both, record printed. Red: failure recorded, task set down, a cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Green covers both refusal conditions of FR-006 and SC-003's pass-under-both, and FR-007's printing. The red exit sends only a process claim (that the task cannot be done) to the arbiter; it gives the arbiter no power to accept an over-budget landing, which the request (section 5 item 4) and FR-006 forbid and which D7 states no arbiter accept clears. The request expressly lets the arbiter rule on process."
+    },
+    {
+     "id": "T04-done-measure",
+     "summary": "Done when the sync suite's new cases are green; one landing",
+     "class": "within",
+     "why": "Tests driving the seam are SC-003's refusal/pass cases; the printed record is in the green exit (SC-004's speckit-todo read). A task budget of one landing narrows nothing."
+    },
+    {
+     "id": "T04-not-perf-work",
+     "summary": "Declared not performance work: instrumentation, overhead measured with make perf-ab, moves no map",
+     "class": "within",
+     "why": "The ratchet is enforcement tooling from section 5, not a phase rebuild; measuring its overhead adds verification of its cost, not new behavior, and it changes no map, consistent with step 1's 'no map changes'."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1521,6 +1567,50 @@
      "summary": "A table header (step / alone off: fixed and pinned / fresh block vs HEAD / pool manifests moved / the last resort) with no rows",
      "class": "within",
      "why": "The table has no rows, so it decides nothing and is not a narrowing. It looks like template residue."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T04": {
+   "section_sha256": "4a7de25f7bdc63c0f2f14e9c4a0fd79403066a021c91ffc564192870ad1a1d0b",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T04-ratchet-seat",
+     "summary": "make work-budget-review runs in sync-with-main.sh beside make perf-review, with test seam CI_WORK_BUDGET_REVIEW",
+     "class": "within",
+     "why": "Exactly D7 of the accepted spec, which carries FR-006 and the request's section 5 item 3 (a ratchet refusing a landing that raises an accepted phase past its accepted figure or its budget). The block restates the seat and seam; it drops none of D7's conditions (40 and 80 households, figure OR budget, no arbiter accept)."
+    },
+    {
+     "id": "T04-in-view",
+     "summary": "land.py and speckit-todo.py print the standing record (D8)",
+     "class": "within",
+     "why": "FR-007 / D8; the request's section 5 item 2: printed at every engine landing and listed by make speckit-todo."
+    },
+    {
+     "id": "T04-order",
+     "summary": "T04 follows T03 (the budget table and make budget-change)",
+     "class": "within",
+     "why": "Sequencing only; the ratchet compares against the budget table T03 lands and names make budget-change. Narrows nothing asked."
+    },
+    {
+     "id": "T04-exits",
+     "summary": "Green: review refuses over an accepted figure or a budget and passes under both, record printed. Red: failure recorded, task set down, a cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Green covers both refusal conditions of FR-006 and SC-003's pass-under-both, and FR-007's printing. The red exit sends only a process claim (that the task cannot be done) to the arbiter; it gives the arbiter no power to accept an over-budget landing, which the request (section 5 item 4) and FR-006 forbid and which D7 states no arbiter accept clears. The request expressly lets the arbiter rule on process."
+    },
+    {
+     "id": "T04-done-measure",
+     "summary": "Done when the sync suite's new cases are green; one landing",
+     "class": "within",
+     "why": "Tests driving the seam are SC-003's refusal/pass cases; the printed record is in the green exit (SC-004's speckit-todo read). A task budget of one landing narrows nothing."
+    },
+    {
+     "id": "T04-not-perf-work",
+     "summary": "Declared not performance work: instrumentation, overhead measured with make perf-ab, moves no map",
+     "class": "within",
+     "why": "The ratchet is enforcement tooling from section 5, not a phase rebuild; measuring its overhead adds verification of its cost, not new behavior, and it changes no map, consistent with step 1's 'no map changes'."
     }
    ],
    "verdict": "CLEAR"

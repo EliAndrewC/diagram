@@ -76506,6 +76506,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/work_budget.py::HELD#plumbing": {
+  "body": "43ffa7da4967d225",
+  "claim": "plumbing - NONE: the sizes an accepted stage is held at (443 FR-006)",
+  "code": "ee8f6e83ca03e50a",
+  "core": "be136c24a6232b10",
+  "date": "2026-10-28",
+  "note": "work-budget tooling sizes; nothing about a place, nothing drawn",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/work_budget.py::SIZES#plumbing": {
   "body": "82ffa976b954a5c6",
   "claim": "plumbing - NONE: the sizes the design names (10, 20, 40 and 80 households; 80 past the band, as the scaling legs roll it)",

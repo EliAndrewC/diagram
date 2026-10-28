@@ -156,7 +156,7 @@ OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git
 case_10() {  # 8 s measured 2026-10-11
 echo "7c. THE SEAMS ARE IGNORED IN A REAL-SHAPED TREE (feature 132): CI_ROUTE=DIRECT cannot skip the gated route"
 D=$(topology gs)
-( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@false\nperf-review:\n\t@true\n' > Makefile && echo 'def a(): return 6' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@false\nperf-review:\n\t@true\nwork-budget-review:\n\t@true\n' > Makefile && echo 'def a(): return 6' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="true" syncmain "$D" push); check "a real-shaped tree with CI_ROUTE=DIRECT does not push" 1 $?
 expect_out "could not decide the route"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  the seam bypassed the gated route"; FAIL=$((FAIL+1)); }
@@ -276,8 +276,14 @@ gh_before=$(git -C "$D/github.git" rev-parse main)
 OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: REFUSED - the call counts owe the round arbiter'; false" syncmain "$D" push); check "IT FIRES: a perf-review refusal (or a failure to run) stops the push" 1 $?
 expect_out "make perf-review refused (or failed to run)"
 [ "$(git -C "$D/github.git" rev-parse main)" = "$gh_before" ] && PASS=$((PASS+1)) || { echo "FAIL  the push landed though the review could not run"; FAIL=$((FAIL+1)); }
-OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: [local] timing band 3 (information only)'" syncmain "$D" push); check "STAYS QUIET: a timing band pushes" 0 $?
+# feature 443 T04 (FR-006): the work budget's ratchet, beside it - an accepted stage grown past its figure stops the push
+OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW=true CI_WORK_BUDGET_REVIEW="echo 'work-budget-review: REFUSED - web: 2,000 counted operations at 40 households, over its accepted 1,500'; false" syncmain "$D" push); check "IT FIRES: a work-budget-review refusal stops the push" 1 $?
+expect_out "make work-budget-review refused (or failed to run)"
+expect_out "over its accepted 1,500"
+[ "$(git -C "$D/github.git" rev-parse main)" = "$gh_before" ] && PASS=$((PASS+1)) || { echo "FAIL  the push landed though the work budget refused"; FAIL=$((FAIL+1)); }
+OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: [local] timing band 3 (information only)'" CI_WORK_BUDGET_REVIEW="echo 'work-budget-review: every accepted stage within its figures'" syncmain "$D" push); check "STAYS QUIET: a timing band and a budget held push" 0 $?
 expect_out "timing band 3 (information only)"
+expect_out "every accepted stage within its figures"
 
 # GUARD_EDIT_OK: feature 167 - A NEW CLONE BORROWS A SIBLING ROLL CACHE (GM 2026-08-30). Measured:
 # a clone that has never rolled pays 30 s for the reference settlement and 122 s for the map-rolling
@@ -532,7 +538,7 @@ case_27() {  # 6 s
 echo "W2. THE LANDING COHORT (feature 386): an engine tree with no cohort record is refused on the GATED route, before ci-merge; COHORT_OK lands it"
 D=$(topology lc)
 # a real-shaped tree (a Makefile: the seams are off), whose route is GATED-LOCAL and whose ci-merge would vouch for it
-( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED-LOCAL\nperf-review:\n\t@true\nci-merge:\n\t@echo SKIP-VERIFIED > .git/ci-verdict\ncohort-landing:\n\t@true\n' > Makefile \
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED-LOCAL\nperf-review:\n\t@true\nwork-budget-review:\n\t@true\nci-merge:\n\t@echo SKIP-VERIFIED > .git/ci-verdict\ncohort-landing:\n\t@true\n' > Makefile \
   && echo 'def a(): return 7' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(syncmain "$D" push); check "IT FIRES: no landing cohort -> the gated push is refused" 1 $?
 expect_out "make cohort-landing"

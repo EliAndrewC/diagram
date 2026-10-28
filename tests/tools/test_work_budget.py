@@ -124,3 +124,49 @@ def test_one_roll_counts_each_stage_and_what_it_placed(monkeypatch: pytest.Monke
 
 def test_the_engine_key_and_commit_name_the_tree() -> None:
     assert len(wb._code_id()) == 12 and wb._commit()
+
+
+def _accepted(per_thing: float = 10, at40: float = 1500, at80: float = 3500) -> dict:
+    return {"stages": {"web": {"status": "accepted", "per_thing": per_thing, "accepted": {"40": at40, "80": at80}}, "track": {"status": "unbudgeted"}}}
+
+
+def _run_file(run_dir: Path, code_id: str, ops40: float, ops80: float, placed: float = 200, stamp: str = "20261028T000000Z") -> None:
+    per = {"40": {"ops": ops40, "placed": placed}, "80": {"ops": ops80, "placed": placed * 2}}
+    run_dir.mkdir(exist_ok=True)
+    (run_dir / f"{stamp}-{code_id}.json").write_text(json.dumps({"summary": {"stages": {"web": {"per": per}}}}))
+
+
+def test_the_ratchet_holds_an_accepted_stage_to_its_figure_and_its_budget(tmp_path: Path) -> None:
+    """Feature 443 T04 (FR-006, SC-003): over the accepted figure refuses, over the budget refuses, under both passes, and the
+    refusal names the stage, the figures and `make budget-change`."""
+    runs = tmp_path / "runs"
+    _run_file(runs, "abc", 1400, 3400)
+    rc, msg = wb.review("GATED", _accepted(), "abc", str(runs))
+    assert rc == 0 and "within its figures" in msg
+    _run_file(runs, "abc", 1600, 3400, stamp="20261028T010000Z")  # the newest run at the code id is the one read
+    rc, msg = wb.review("GATED", _accepted(), "abc", str(runs))
+    assert rc == 1 and "web: 1,600 counted operations at 40 households, over its accepted 1,500" in msg and "make budget-change PHASE=" in msg
+    rc, msg = wb.review("GATED-LOCAL", _accepted(per_thing=7), "abc", str(runs))  # budget 7 x 200 = 1,400 at 40
+    assert rc == 1 and "over its budget 1,400 (7 per thing x 200)" in msg
+    assert wb.held(_accepted(), {"stages": {"web": {"per": {"40": {"ops": 1, "placed": 1}}}}}) == ["web: the run has no roll at 80 households to hold it to"]
+
+
+def test_the_ratchet_holds_nothing_unaccepted_or_off_the_engine_and_refuses_a_missing_run(tmp_path: Path) -> None:
+    assert wb.review("GATED", {"stages": {"web": {"status": "budgeted"}}}, "abc", str(tmp_path)) == (0, "work-budget-review: no stage is accepted - nothing to hold")
+    assert wb.review("DIRECT", _accepted(), "abc", str(tmp_path))[0] == 0, "a push with no engine code holds nothing"
+    rc, msg = wb.review("GATED", _accepted(), "abc", str(tmp_path / "none"))
+    assert rc == 1 and "no work-budget run at the pushed engine (code id abc): run `make work-budget`" in msg
+    _run_file(tmp_path, "other", 1, 1)
+    assert wb.review("GATED", _accepted(), "abc", str(tmp_path))[0] == 1, "a run at another engine is not this one's"
+
+
+def test_the_review_flag_prints_the_verdict(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    monkeypatch.setattr(wb, "review", lambda route: (1, f"refused on {route}"))
+    assert wb.main(["--review", "GATED"]) == 1 and "refused on GATED" in capsys.readouterr().out
+
+
+def test_the_review_reads_the_table_and_the_engine_key_by_default(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(wb, "budgets", _accepted)
+    monkeypatch.setattr(wb, "_code_id", lambda: "k")
+    _run_file(tmp_path, "k", 1, 1)
+    assert wb.review("GATED", run_dir=str(tmp_path))[0] == 0

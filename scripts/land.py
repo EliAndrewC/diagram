@@ -197,6 +197,14 @@ def claims_route(out: str, said: str, in_flight: list[str]) -> tuple[str, str]:
     return ("stop", cure) if cure else ("defer", said)
 
 
+def work_budget_lines(root: Path) -> list[str]:
+    """The work budget's standing record, summarized (`scripts/measure/work_budget_view.py`)."""
+    sys.path.insert(0, str(HERE / "measure"))
+    import work_budget_view  # noqa: PLC0415
+
+    return work_budget_view.lines(root)
+
+
 def _in_flight(root: Path) -> list[str]:
     """The claims checks in flight (`claims_flight.live`), as the wait reads them."""
     sys.path.insert(0, str(HERE / "record"))
@@ -793,6 +801,8 @@ def main(argv: list[str]) -> int:
     print(f"land: {' '.join(tasks)} landed and ticked")
     if line := fresh_block_after(root, engine_delta_landed, counter_only_landed):
         print(line, flush=True)
+    if engine_delta_landed:  # the distance from the goal, at every engine landing (443 FR-007, plan D8)
+        print("\n".join(work_budget_lines(root)), flush=True)
     if reason := refresh_due(root, landing_started):
         print(f"land: the gate's baseline is refreshed after the push, in a worktree ({reason}); its log {start_refresh(root, reason)}", flush=True)
     return 0

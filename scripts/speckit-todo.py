@@ -332,10 +332,22 @@ def report(specs: Path, show_closed: bool = False, by_affects: bool = False, onl
         out.append(f"CLOSED ({len(closed)})")
         out.extend(_line(f, f.why) for f in closed)
         out.append("")
+    budget_under_444(out, specs.parent)
     n = {s: sum(f.state == s for f in fs) for s in STATES}
     scope = f" (affects {', '.join(only)})" if only else ""
     out.append(f"open: {n['filed']} filed, {n['planned']} planned, {n['in progress']} in progress; closed: {len(closed)}{scope}")
     return "\n".join(out) + "\n"
+
+
+def budget_under_444(out: list[str], root: Path) -> None:
+    """Feature 444's row followed, in place, by the work budget's standing record (feature 443 FR-007, plan D8)."""
+    at = next((i for i, ln in enumerate(out) if ln.lstrip().startswith("444-")), None)
+    if at is None:
+        return
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "measure"))
+    import work_budget_view  # noqa: PLC0415
+
+    out[at + 1 : at + 1] = [f"      {ln}" for ln in work_budget_view.lines(root)]
 
 
 def untagged(specs: Path, listed: list[Feature] | None = None) -> list[Feature]:
