@@ -281,6 +281,52 @@
      "why": "A one-shot labeled measurement (date and method) matching D1's recorded census; it decides no scope, only confirms the rule describes the code."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T02 - the claims triage's counter-only clear (D3)",
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02-order",
+     "summary": "T02 runs after T01 because it reads T01's strip_counters",
+     "class": "within",
+     "why": "Sequencing only; D3 names strip_counters, which FR-001/T01 supplies. Narrows nothing asked."
+    },
+    {
+     "id": "T02-exit-green",
+     "summary": "Green exit: test_claims_index.py clears a claim whose unit only gained a counter block, and owes a claim changed otherwise, one whose counter block was removed, one rewritten, and one whose recorded version is not the base's; the clear goes red with its condition deleted",
+     "class": "within",
+     "why": "Each case is FR-003's own clear and its four owed-as-today exclusions, and the condition-deleted red is FR-005/SC-003. This is enforcement of request change 2 (counter-only claims cleared mechanically, nothing else cleared), not added scope."
+    },
+    {
+     "id": "T02-exit-red",
+     "summary": "Red exit: record what failed, set the task down, and route a claim that it cannot be done through make arbiter-ask",
+     "class": "within",
+     "why": "Standing process for a failed task; it does not relax FR-003 and keeps the round arbiter the request lists as kept."
+    },
+    {
+     "id": "T02-done-measured",
+     "summary": "Done when a counter-only change's claims are cleared at make claims-owed with no bundle",
+     "class": "within",
+     "why": "That is FR-003's outcome (cleared, bundled nowhere) observed at claims_owed, one of the two entry points FR-003 names; the test exit covers the triage logic itself. Does not narrow the clear to one path - D3 places it in the shared code-triage owing."
+    },
+    {
+     "id": "T02-world-premise",
+     "summary": "Step 4 records 455 claims triaged and two sent on, neither counter-only (measured 2026-10-28 from make claims-triaged lines of 443's landings)",
+     "class": "within",
+     "why": "A dated, method-labeled one-shot measurement that describes the present world; it decides no scope and cuts nothing from FR-003 - the clear is built regardless."
+    },
+    {
+     "id": "T02-budget",
+     "summary": "Budget of one landing; constants and fitting n/a; not performance work",
+     "class": "within",
+     "why": "Bookkeeping; decides nothing the spec left open."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -324,6 +370,50 @@
      "summary": "133 of 136 if __debug__ blocks under l7r/ are counter blocks, measured 2026-10-28 by an AST walk through is_counter_block",
      "class": "within",
      "why": "A one-shot labeled measurement (date and method) matching D1's recorded census; it decides no scope, only confirms the rule describes the code."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T02": {
+   "section_sha256": "c9dd487b2d78591259cb7eb523a2b9d1bc7f0ec1729b8a0b415c519fa897abdf",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T02-order",
+     "summary": "T02 runs after T01 because it reads T01's strip_counters",
+     "class": "within",
+     "why": "Sequencing only; D3 names strip_counters, which FR-001/T01 supplies. Narrows nothing asked."
+    },
+    {
+     "id": "T02-exit-green",
+     "summary": "Green exit: test_claims_index.py clears a claim whose unit only gained a counter block, and owes a claim changed otherwise, one whose counter block was removed, one rewritten, and one whose recorded version is not the base's; the clear goes red with its condition deleted",
+     "class": "within",
+     "why": "Each case is FR-003's own clear and its four owed-as-today exclusions, and the condition-deleted red is FR-005/SC-003. This is enforcement of request change 2 (counter-only claims cleared mechanically, nothing else cleared), not added scope."
+    },
+    {
+     "id": "T02-exit-red",
+     "summary": "Red exit: record what failed, set the task down, and route a claim that it cannot be done through make arbiter-ask",
+     "class": "within",
+     "why": "Standing process for a failed task; it does not relax FR-003 and keeps the round arbiter the request lists as kept."
+    },
+    {
+     "id": "T02-done-measured",
+     "summary": "Done when a counter-only change's claims are cleared at make claims-owed with no bundle",
+     "class": "within",
+     "why": "That is FR-003's outcome (cleared, bundled nowhere) observed at claims_owed, one of the two entry points FR-003 names; the test exit covers the triage logic itself. Does not narrow the clear to one path - D3 places it in the shared code-triage owing."
+    },
+    {
+     "id": "T02-world-premise",
+     "summary": "Step 4 records 455 claims triaged and two sent on, neither counter-only (measured 2026-10-28 from make claims-triaged lines of 443's landings)",
+     "class": "within",
+     "why": "A dated, method-labeled one-shot measurement that describes the present world; it decides no scope and cuts nothing from FR-003 - the clear is built regardless."
+    },
+    {
+     "id": "T02-budget",
+     "summary": "Budget of one landing; constants and fitting n/a; not performance work",
+     "class": "within",
+     "why": "Bookkeeping; decides nothing the spec left open."
     }
    ],
    "verdict": "CLEAR"

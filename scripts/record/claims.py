@@ -60,6 +60,7 @@ sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True  # the push runs this in fixture trees whose `git status` must stay clean
 import claims_carry  # noqa: E402
 import claims_context  # noqa: E402
+import claims_counters  # noqa: E402
 import claims_flight  # noqa: E402
 import claims_labels  # noqa: E402
 import claims_stale  # noqa: E402
@@ -877,7 +878,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"claims-coverage: {len(probs)} problem(s). The form: {cl.GRAMMAR}")
         return 1 if probs else 0
     cur = current(root)
-    index = load_index(root / INDEX)
+    index = claims_counters.clear(sys.modules[__name__], root, cur, load_index(root / INDEX), args.cmd)  # feature 446, FR-003
     qdir, store = root / QUESTIONS, load_store(root / STORE)
     if args.cmd == "refingerprint":  # 417 T54: a change to how the fingerprint reads owes nothing
         return _refingerprint_cmd(root, index)

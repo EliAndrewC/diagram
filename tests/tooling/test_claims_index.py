@@ -872,3 +872,48 @@ def test_open_findings_lists_findings_only_and_none_deferred() -> None:
     rows = {"a.py::f#x": {"verdict": "IN-STEP"}, "a.py::g#y": {"verdict": "DRIFTED", "note": "n"}, "b.py::h#z": {"verdict": "MISLABELED"}}
     assert cx.open_findings(rows, frozenset()) == [("DRIFTED", "a.py::g#y", "n"), ("MISLABELED", "b.py::h#z", "")]
     assert cx.open_findings(rows, frozenset({"b.py::h"})) == [("DRIFTED", "a.py::g#y", "n")], "a deferred unit's finding"
+
+
+COUNTED = MOD.replace("    return x * SHARE", '    if __debug__:\n        OPS["row@far_row"] += 1\n    return x * SHARE')
+FAR = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
+
+
+def _counter_case(tmp: pathlib.Path, base: str, now: str, recorded: str | None = None) -> tuple[pathlib.Path, dict[str, str]]:
+    """`base` committed as origin/main with its claims recorded (at `recorded`'s fingerprints when given), the tree then `now`,
+    and `make claims-owed` run: (the root, far_row's row after it)."""
+    root = _repo(tmp)
+    _tree(root, base if recorded is None else recorded)
+    cx.save_index(root / cx.INDEX, _all_in_step(root))
+    _tree(root, base)
+    _commit(root, "base")
+    cx._git(root, "update-ref", "refs/remotes/origin/main", "HEAD")
+    _tree(root, now)
+    assert cx.main(["--root", str(root), "owed"]) == 0
+    return root, cx.load_index(root / cx.INDEX)[FAR]
+
+
+def test_a_claim_whose_unit_only_gained_a_counter_block_is_cleared_without_a_triage(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 446 FR-003, SC-003: 443's counters re-owed every claim of each counted unit a triage dispatch; a unit whose only
+    change is an added counter block (its recorded version the merge base's) is recorded cleared with its new fingerprint."""
+    root, row = _counter_case(tmp_path, MOD, COUNTED)
+    assert row["cleared"] == "counter-only (feature 446)" and row["code"] == cx.current(root)[FAR].code
+    assert "1 claim(s) cleared without a triage" in capsys.readouterr().out
+    assert cx.owed(cx.current(root), cx.load_index(root / cx.INDEX)) == [], "bundled nowhere: nothing owed after it"
+
+
+@pytest.mark.parametrize(
+    ("base", "now", "recorded", "why"),
+    [
+        (MOD, COUNTED.replace("x * SHARE", "x * SHARE * 2"), None, "the code changed beside the counter"),
+        (COUNTED, MOD, None, "a counter block removed"),
+        (COUNTED, COUNTED.replace("+= 1", "+= 2"), None, "a counter block rewritten"),
+        (COUNTED, COUNTED.replace("    if __debug__:", "    y = x\n    if __debug__:"), None, "a code line added above a counter"),
+        (MOD.replace("x * SHARE", "x * SHARE * 3"), COUNTED.replace("x * SHARE", "x * SHARE * 3"), MOD, "the recorded version is not the base's"),
+        (MOD, COUNTED.replace("+= 1", "+= SHARE"), None, "a counter reading an in-scope constant"),
+    ],
+)
+def test_a_claim_changed_otherwise_than_by_an_added_counter_is_owed_as_before(tmp_path: pathlib.Path, base: str, now: str, recorded: str | None, why: str) -> None:
+    """Feature 446 FR-003, SC-003: only an added counter clears; everything else keeps its code triage."""
+    root, row = _counter_case(tmp_path, base, now, recorded)
+    assert "cleared" not in row, why
+    assert (FAR, cx.CODE_TRIAGE) in cx.owed(cx.current(root), cx.load_index(root / cx.INDEX)), why
