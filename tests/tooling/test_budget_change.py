@@ -98,3 +98,38 @@ def test_the_programs_budget_needs_words_and_is_logged(root: pathlib.Path, capsy
     assert bc.load(root)["program"] == {"ops_at_40": 1000000, "exponent": 1.2}
     row = json.loads((root / bc.LOG).read_text().splitlines()[-1])
     assert row["what"] == "program" and row["words"] == "a million at forty"
+
+
+def test_an_arbiter_accept_pins_a_first_budget_bound_to_its_derivation(root: pathlib.Path) -> None:
+    """Feature 444 FR-013, SC-008 (the GM 2026-10-28, answering 444#0: "Yes, I am okay with option one, letting the arbiters acceptance
+    pin it"): `budget-set ARBITER=` pins only on an accept the arbiter's log holds naming the stage, and the pin is bound to the
+    derivation - a change after it is flagged as owing the arbiter's ruling."""
+    feat = root / "specs" / "444-x"
+    (feat / "phases").mkdir(parents=True)
+    (feat / "phases" / "web.derivation.md").write_text("the derivation\n")
+    d = "specs/444-x/phases/web.derivation.md"
+    items = {20: 10, 40: 20, 80: 40}
+    assert "holds no accept at ask:444-T05-r9 naming `web`" in bc.set_budget(root, "web", 40, 1.1, d, "", items, "ask:444-T05-r9"), "no log"
+    log = feat / "arbiter.jsonl"
+    log.write_text(json.dumps({"trigger": "ask:444-T05-r9", "ruling": "continue", "what": "web again"}) + "\n")
+    assert "holds no accept" in bc.set_budget(root, "web", 40, 1.1, d, "", items, "ask:444-T05-r9"), "a continue is no accept"
+    log.write_text(json.dumps({"trigger": "ask:444-T05-r9", "ruling": "accept", "what": "the track stands"}) + "\n")
+    assert "holds no accept" in bc.set_budget(root, "web", 40, 1.1, d, "", items, "ask:444-T05-r9"), "an accept that names another stage"
+    log.write_text(json.dumps({"trigger": "ask:444-T05-r9", "ruling": "accept", "what": "web stands as it reads"}) + "\n")
+    assert "its totals' spread" in bc.set_budget(root, "web", 40, 1.1, d, "", items, "ask:444-T05-r9"), "the spread is owed"
+    for n in (1, 2, 3):
+        (feat / "phases" / f"web.verdict-{n}.txt").write_text("UNDERIVED - x\n")
+    args = ["--arbiter", "ask:444-T05-r9", "--spread", "32,280-38,506 at 20", "--items-at-20", "10", "--items-at-40", "20", "--items-at-80", "40"]
+    assert bc.main(["--root", str(root), "set", "web", "40", "1.1", d, "", *args]) == 0
+    row = bc.load(root)["stages"]["web"]
+    assert row["pinned_on"] == "accept" and row["verdict"] == "ask:444-T05-r9" and row["derivation_sha"] == bc.derivation_sha(root, d)
+    assert row["rounds"] == 3 and row["spread"] == "32,280-38,506 at 20", "the rounds and the spread, for the program target"
+
+    import importlib  # noqa: PLC0415
+
+    wb = importlib.import_module("l7r.diagram.tools.work_budget")
+    assert wb.stale_pins(bc.load(root), str(root)) == [], "the derivation as pinned"
+    (feat / "phases" / "web.derivation.md").write_text("the derivation, one figure changed\n")
+    bad = wb.stale_pins(bc.load(root), str(root))
+    assert len(bad) == 1 and "changed since the arbiter's accept pinned it (ask:444-T05-r9)" in bad[0] and "make arbiter-ask" in bad[0]
+    assert bad[0] in wb.held(bc.load(root), {"stages": {}}), "the push's ratchet refuses it too"

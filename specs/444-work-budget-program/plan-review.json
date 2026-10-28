@@ -8,10 +8,10 @@
    "declared": "round-arbiter"
   },
   "## Summary": {
-   "sha256": "4ab19fe642931bd61f3cd4c5bc6ada08ba6e7ba1c24d7c93b2577840e2694bae",
+   "sha256": "424a55e8177cf8013e46ff13f453c91088b0bc38959181febe2e179987437dcf",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "## Technical Context": {
    "sha256": "91b56ae8b1700770b39a0d786bc8722144aea430c9c41db0afbba8a6042e4c2e",
@@ -32,10 +32,10 @@
    "declared": "round-arbiter"
   },
   "## Decisions": {
-   "sha256": "24fbc27fdd326a575dc81fe6aa261cbeffa586ae09beb036a9dc45c0a709833c",
+   "sha256": "d6b8cec57cbe9e68623a83005c4da6a33d79959c1786e528c91fb971ab87f8a2",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "## Task approaches": {
    "sha256": "88b8e3c844dd7f807461674c1112769475adbb980f6bf0e123f202c6886fb995",
@@ -44,52 +44,52 @@
    "declared": "round-arbiter"
   },
   "### T02 - the water family's budgets (D1, D3, D4)": {
-   "sha256": "16b848e1e0f9a5f4f247b52505c2ecd22912dfb9eed710e17db34587dc25fce2",
+   "sha256": "2894fa1b17d4da7cc08668cc9e0b88126b74adf9d7488231ac020146a9399207",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "spec-fidelity"
   },
   "### T02 Approach (checklist part A)": {
-   "sha256": "f67cd11dcd0fae4ea65d7aca669abbcec8634d25bc44bee5e0c460c049808732",
+   "sha256": "51c1a9d9b986ccf34856af2df708df78cc3f847a99b56162ebded405623485bb",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "spec-fidelity"
   },
   "### T03 - the homesteads family's budgets (D1, D3, D4)": {
-   "sha256": "23aea34ced09e53c2e45d36ba8fada8fc116f19f00bd888ca80fb5b8652b6b60",
+   "sha256": "2aa59062b94838f5c485c71ae81283541ea46a5875fd8b9328267eee410a64cd",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T03 Approach (checklist part A)": {
-   "sha256": "a5002517238d3eba77d58868a4d6a6d3c6d2df8e1976ef0c9fab6c6c55768e91",
+   "sha256": "68fbe68556e49ee86d5ccabd9ea911ad895d5f48704daf141100f2d36c02c535",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T04 - the ways family's budgets (D1, D3, D4)": {
-   "sha256": "f5d1c586ff2026396ba673683c905532db6f7eecdda5b64482a503318f285f4f",
+   "sha256": "e925c6505fcb81adc057ccdd2d8c8e0dc9c5c226f482b1e9c965405d620f77e6",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T04 Approach (checklist part A)": {
-   "sha256": "8b82aa6da59d4292bed5294f6ada8be4a952c24424468db0a20549c420a8175f",
+   "sha256": "34e8fb4d2ea92e43cdb2c616c40fad0d699686afa316d472745df81ef4566607",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T05 - the hinterland and frame family's budgets (D1, D3, D4)": {
-   "sha256": "32778d007272e478f866dbea033e7c4fadf9d7cbe3dbcaf80ea23317e0e33cbc",
+   "sha256": "0cdf30aa16f24d8a5c805e435a14a3a90c1d03ea09d9d6ce63caf30783f2b8fb",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T05 Approach (checklist part A)": {
-   "sha256": "915b0754af659b5a28dde68319e83b4d0c8dacaecab09ff05ac4cd3126bbb3b3",
+   "sha256": "fddb52e5f221d4ffd07534067487fff39cd3299eac02956e5f1577012e992e9e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T06 - the program's target to the GM (D5)": {
    "sha256": "a2b6b1390900884b665b24d543e127eab66a4ebb668c2350af1265ddc534c551",
@@ -123,6 +123,18 @@
   },
   "### T07 Approach (checklist part A)": {
    "sha256": "b0ea1a963e2ebc0bdafc0d387fcdbc69e89896952e52643f0d3928a59cb8c297",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T08 - an arbiter accept pins a first budget (FR-013, SC-008)": {
+   "sha256": "879bc79eb52ec3611a4868eb479a13685d85137a19096801580dd6fe2e28c4f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Approach (checklist part A)": {
+   "sha256": "c935fbfd76be982873244b73be8eb3c99196ba75ef19f48c78944905e75d6c8e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "spec-fidelity"
@@ -701,6 +713,190 @@
      "why": "T07 changes the step-3 process. It rebuilds no stage, so the per-phase budget and acceptance in design sections 3 and 6 do not apply to it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Decisions",
+    "## Summary",
+    "### T02 - the water family's budgets (D1, D3, D4)",
+    "### T02 Approach (checklist part A)",
+    "### T03 - the homesteads family's budgets (D1, D3, D4)",
+    "### T03 Approach (checklist part A)",
+    "### T04 - the ways family's budgets (D1, D3, D4)",
+    "### T04 Approach (checklist part A)",
+    "### T05 - the hinterland and frame family's budgets (D1, D3, D4)",
+    "### T05 Approach (checklist part A)",
+    "### T08 - an arbiter accept pins a first budget (FR-013, SC-008)",
+    "### T08 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary",
+     "summary": "Step 3's budgets pinned on a SOUND verdict or the round arbiter's accept of the derivation (FR-013).",
+     "class": "within",
+     "why": "The GM's answer to 444#0: 'letting the arbiters acceptance pin it'; FR-013 carries it."
+    },
+    {
+     "id": "D1",
+     "summary": "A derivation per stage from its contract alone (unchanged text).",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; request step 3 and section 4 (derivation blind to today's code and counts); FR-001."
+    },
+    {
+     "id": "D2",
+     "summary": "A budget counts the derivation's own items at 20/40/80 households (unchanged text).",
+     "class": "within",
+     "why": "Unchanged since CLEAR; S7's items x candidates x checks x slack; untouched by the 444#0 amendment."
+    },
+    {
+     "id": "D3",
+     "summary": "MODE BUDGET verdicts; LOOSE/UNDERIVED corrected and redispatched, third round owes the arbiter; SOUND pins via make budget-set, and the arbiter's ACCEPT pins via make budget-set ARBITER=ask:<id>, bound to the derivation as it reads, a later change to a figure re-owing the arbiter.",
+     "class": "within",
+     "why": "Carries option one's first two parts as the GM accepted them (arbiter accept pins a first budget; the pin bound to the derivation as it reads, a change re-owing a ruling) and FR-013's trigger form. The arbiter accepting a derivation is not the arbiter accepting a phase over budget (section 5.4, FR-006), which the plan leaves untouched."
+    },
+    {
+     "id": "D4",
+     "summary": "23 stages of STAGES in four families, one task per family (unchanged text).",
+     "class": "within",
+     "why": "Unchanged since CLEAR; the census carries its search space (the STAGES tuple in driver.py, dated 2026-10-28)."
+    },
+    {
+     "id": "D5",
+     "summary": "The checkpoint draft: sum of 23 budgets at 40 households, the whole roll's exponent, the opening record's whole-roll figure and each stage's ratio of today to budget, through escalation-check to the GM.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Option one, as the GM accepted it on 2026-10-28 answering 444#0, includes 'the program target says which verdicts are arbiter accepts, with the rounds and the spread', and FR-013 carries it ('the program target (FR-002) names each stage pinned on an accept, with its rounds and its totals' spread'). D5 enumerates the checkpoint draft's contents without it, and no block in the bundle carries it (Summary, D3, T02-T05 and T08 checked); T08's pin records only pinned_on: accept and the derivation's sha256, so neither the rounds nor the spread of totals are recorded anywhere a checkpoint could report them. Not physically impossible, not implied elsewhere in the GM's words. Purpose: the GM's condition for letting an accept stand in for SOUND is that he sees, at the checkpoint, which budgets rest on an accept and how contested they were (field went to round 15); a checkpoint built from D5 as written presents that budget indistinguishably from a first-round SOUND, which guts the condition. Fix: D5's draft names each accept-pinned stage with its round count and the spread of its totals across rounds; D3 or T08 records the figures that produce them (rounds per stage and each round's total, or the min/max), so the checkpoint reports a recorded number."
+    },
+    {
+     "id": "T02-T05",
+     "summary": "Each family task's green exit: every verdict SOUND or an arbiter accept (FR-013), every budget pinned.",
+     "class": "within",
+     "why": "The arbiter-accept path the GM approved, applied to each family's exit; nothing else in these blocks changed."
+    },
+    {
+     "id": "T08",
+     "summary": "make budget-set ARBITER=ask:<id> pins on an accept the arbiter log holds naming the stage, records pinned_on: accept and the derivation's sha256; make work-budget and the ratchet flag an accept-pinned budget whose derivation changed; ordered before field's pin and T03's first review.",
+     "class": "within",
+     "why": "Implements FR-013's trigger and refusal and SC-008's two tests. Binding to the whole derivation's sha256 is stricter than 'a change to a figure' and is enforcement of 'bound to the derivation as it reads', not new scope. 'Flag ... as owing the arbiter's ruling' matches SC-008's own wording. Its omission of the rounds and spread is ruled under D5."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Decisions",
+    "## Summary",
+    "### T02 - the water family's budgets (D1, D3, D4)",
+    "### T02 Approach (checklist part A)",
+    "### T03 - the homesteads family's budgets (D1, D3, D4)",
+    "### T03 Approach (checklist part A)",
+    "### T04 - the ways family's budgets (D1, D3, D4)",
+    "### T04 Approach (checklist part A)",
+    "### T05 - the hinterland and frame family's budgets (D1, D3, D4)",
+    "### T05 Approach (checklist part A)",
+    "### T08 - an arbiter accept pins a first budget (FR-013, SC-008)",
+    "### T08 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary",
+     "summary": "Plan step 3 in full; file each phase task (with its own plan section and review) only after the GM's checkpoint.",
+     "class": "within",
+     "why": "The request's step 3 (whole-program budget, GM approves the target) precedes step 4 (phases); FR-003 still makes each phase a task of this feature. Deferring phase planning until the budget it rests on exists narrows nothing."
+    },
+    {
+     "id": "D1",
+     "summary": "One derivation per stage, written from its contract alone (docstring, plan fields read, manifest keys/registries written, claims, cohort checks), never from loops or today's counts; waste in today's output named and routed to the stage that owes it.",
+     "class": "within",
+     "why": "Checklist boxes 1-2 of the request (contract; minimal algorithm written from the contract alone, before current numbers are read) and FR-001."
+    },
+    {
+     "id": "D2",
+     "summary": "A budget counts the derivation's own items (items_at_20/40/80), budget = per_thing x items; budget-set requires the items; the placed-things product is retired for every row.",
+     "class": "within",
+     "why": "S7 (items x candidates x checks x slack) makes the derivation's items the unit; a budget multiplied by manifest parts, or 0 for stages that place nothing, would not be the derived budget the request asks for. Tooling that makes the requested budget mean what was derived serves the request."
+    },
+    {
+     "id": "D3-sound",
+     "summary": "Each derivation bundled via make work-budget-bundle MODE=budget and judged by the work-budget agent; LOOSE/UNDERIVED corrected and re-dispatched; third round on a stage owes the round arbiter first; plain Agent calls, at most three per message.",
+     "class": "within",
+     "why": "Request section 4 MODE BUDGET and step 3; FR-001's blind bundle. The tripwire and dispatch shape are process inside what was asked."
+    },
+    {
+     "id": "D3-accept",
+     "summary": "The round arbiter's ACCEPT of a derivation also pins a stage's first budget (make budget-set ARBITER=ask:<id>), bound to the derivation as it reads.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Against the original design (step 3: MODE BUDGET on each, pinned on its verdict) this relaxes the SOUND-only pin. It is implied by the GM's own words in the request, 2026-10-28 answering 444#0: 'Yes, I am okay with option one, letting the arbiters acceptance pin it.' Each term of option one is carried: bound to the derivation (D3; T08's sha256 and changed-derivation flag), the target names accepts with rounds and spread (D5 and T08 - the text added since the BLOCKED verdict), and the rebuilt phase is still held to the budget and audited (FR-005/FR-006/FR-007, unchanged and outside these blocks). It does not let the arbiter accept a phase over budget, which the request forbids."
+    },
+    {
+     "id": "D4",
+     "summary": "23 stages of STAGES (measured 2026-10-28 from driver.py's tuple) in four families of 6/7/3/7, one task per family.",
+     "class": "within",
+     "why": "Request's 'about 25 stages', every one of them; the census names its search space (the STAGES tuple, kept equal to dev/work-budget.json by a test) and the family counts sum to 23. Task grouping is plan shape, not scope."
+    },
+    {
+     "id": "D5",
+     "summary": "Target = sum of the 23 budgets at 40 households and the whole roll's exponent from 20/40/80; today's counts read only after every budget is pinned; through escalation-check to the GM; his words recorded via make budget-program in dev/work-budget-changes.jsonl; no phase task before; the draft names each accept-pinned stage with its rounds and spread.",
+     "class": "within",
+     "why": "Step 3 and FR-002 verbatim; the added sentence carries FR-013's and option one's 'the program target says which verdicts are arbiter accepts, with the rounds and the spread' - the clause the earlier text lacked."
+    },
+    {
+     "id": "T02-T05",
+     "summary": "Each family's stages derived, judged SOUND or arbiter-accepted, and pinned; red exit: failure recorded, task set down, a claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Carries step 3 per family. The red exit pauses a budget task pending a ruling; it is not FR-006's set-down of a phase because its time saved is small, and D5 files no phase task until every budget is pinned, so no stage escapes a budget."
+    },
+    {
+     "id": "T08",
+     "summary": "make budget-set ARBITER=ask:<id> refused unless the arbiter's log holds an accept at that trigger naming the stage; the pin records pinned_on: accept, the derivation's sha256, its rounds and its spread (SPREAD required); make work-budget and the push's ratchet flag an accept-pinned budget whose derivation changed since its pin as owing the arbiter's ruling; ordered before field's pin.",
+     "class": "within",
+     "why": "FR-013 and SC-008 as written ('flags' is SC-008's own word). Within on the reading that the ratchet's flag refuses the push/landing until the ruling is recorded, so the budget does not stand meanwhile, as FR-013 requires ('before the budget stands'); a printed warning that let a changed accept-pinned budget be used at a phase's acceptance would not reach that clause. Binding to the whole derivation's sha256 is stricter than 'a change to a figure', and stricter enforcement of the GM's term is not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T08 - an arbiter accept pins a first budget (FR-013, SC-008)",
+    "### T08 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T08-1",
+     "summary": "make budget-set takes the accept by its trigger (ARBITER=ask:<id>) and refuses when the arbiter's log holds no accept at that trigger naming the stage",
+     "class": "within",
+     "why": "FR-013 states both the trigger form and the refusal clause word for word; it carries the GM's 444#0 answer 'letting the arbiters acceptance pin it'."
+    },
+    {
+     "id": "T08-2",
+     "summary": "the pin records pinned_on: accept, the derivation's sha256, its rounds (the stage's recorded verdicts) and its totals' spread, with SPREAD required at the command line",
+     "class": "within",
+     "why": "FR-013 and D5 name rounds and spread as what the pin records, so the target can say which budgets rest on an accept (option one: 'the program target says which verdicts are arbiter accepts, with the rounds and the spread'). Making SPREAD mandatory enforces D5's 'as the pin records them' and adds no behavior beyond it."
+    },
+    {
+     "id": "T08-3",
+     "summary": "binding by a sha256 of the whole derivation taken at the pin; make work-budget and the push's ratchet (work_budget.held) flag an accept-pinned budget whose derivation changed since its pin as owing the arbiter's ruling",
+     "class": "within",
+     "why": "Carries FR-013's 'bound to the derivation as it reads: any later change to a figure in it re-owes the arbiter's ruling before the budget stands' and SC-008's second test. A digest of the whole derivation is BROADER than 'a change to a figure' (it also catches prose edits), so it over-reaches and does not narrow. Read as within on this reading: 'held' at the push is a refusal, as the request's section 5.3 defines a ratchet (a landing is refused), so an accept-pinned budget with a changed derivation does not stand for any landing until make arbiter-ask rules. An advisory-only flag that lets the push through would NOT carry 'before the budget stands' and would be a narrowing."
+    },
+    {
+     "id": "T08-4",
+     "summary": "ordering: lands before field's pin and before T03's first review",
+     "class": "within",
+     "why": "Sequencing only; it puts the mechanism in place before the first place it matters, as the GM asked in 2026-10-28 ('as long as it happens before the place where it would actually matter')."
+    },
+    {
+     "id": "T08-5",
+     "summary": "field pinned on its accept (ask:444-T02-field-round-15) as T08's done-condition",
+     "class": "within",
+     "why": "The GM's 444#0 answer ('So please move forward with that') is the instruction to pin field this way, and FR-013 is its requirement. The accept's existence is a state claim carrying a dated source (arbiter.jsonl, recorded 2026-10-28); the bundle forbids repository reads, so it is taken on that label and was not re-read here."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -832,6 +1028,44 @@
      "summary": "T07 is tooling and not a phase: no budget, checklist items 10 and 11 marked n/a, done measured by the refusals' tests.",
      "class": "within",
      "why": "T07 changes the step-3 process. It rebuilds no stage, so the per-phase budget and acceptance in design sections 3 and 6 do not apply to it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T08": {
+   "section_sha256": "784d81016fd590054e05511c534c1538eeb2f3fdd50543e658d367e48eebcd5c",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T08-1",
+     "summary": "make budget-set takes the accept by its trigger (ARBITER=ask:<id>) and refuses when the arbiter's log holds no accept at that trigger naming the stage",
+     "class": "within",
+     "why": "FR-013 states both the trigger form and the refusal clause word for word; it carries the GM's 444#0 answer 'letting the arbiters acceptance pin it'."
+    },
+    {
+     "id": "T08-2",
+     "summary": "the pin records pinned_on: accept, the derivation's sha256, its rounds (the stage's recorded verdicts) and its totals' spread, with SPREAD required at the command line",
+     "class": "within",
+     "why": "FR-013 and D5 name rounds and spread as what the pin records, so the target can say which budgets rest on an accept (option one: 'the program target says which verdicts are arbiter accepts, with the rounds and the spread'). Making SPREAD mandatory enforces D5's 'as the pin records them' and adds no behavior beyond it."
+    },
+    {
+     "id": "T08-3",
+     "summary": "binding by a sha256 of the whole derivation taken at the pin; make work-budget and the push's ratchet (work_budget.held) flag an accept-pinned budget whose derivation changed since its pin as owing the arbiter's ruling",
+     "class": "within",
+     "why": "Carries FR-013's 'bound to the derivation as it reads: any later change to a figure in it re-owes the arbiter's ruling before the budget stands' and SC-008's second test. A digest of the whole derivation is BROADER than 'a change to a figure' (it also catches prose edits), so it over-reaches and does not narrow. Read as within on this reading: 'held' at the push is a refusal, as the request's section 5.3 defines a ratchet (a landing is refused), so an accept-pinned budget with a changed derivation does not stand for any landing until make arbiter-ask rules. An advisory-only flag that lets the push through would NOT carry 'before the budget stands' and would be a narrowing."
+    },
+    {
+     "id": "T08-4",
+     "summary": "ordering: lands before field's pin and before T03's first review",
+     "class": "within",
+     "why": "Sequencing only; it puts the mechanism in place before the first place it matters, as the GM asked in 2026-10-28 ('as long as it happens before the place where it would actually matter')."
+    },
+    {
+     "id": "T08-5",
+     "summary": "field pinned on its accept (ask:444-T02-field-round-15) as T08's done-condition",
+     "class": "within",
+     "why": "The GM's 444#0 answer ('So please move forward with that') is the instruction to pin field this way, and FR-013 is its requirement. The accept's existence is a state claim carrying a dated source (arbiter.jsonl, recorded 2026-10-28); the bundle forbids repository reads, so it is taken on that label and was not re-read here."
     }
    ],
    "verdict": "CLEAR"

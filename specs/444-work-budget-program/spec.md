@@ -27,7 +27,7 @@ standards" (`request.md`).
 
 1. **Given** every stage of `STAGES` (`l7r/diagram/hamletgen/driver.py`), **Then** each has a written derivation (its contract,
    its minimal algorithm in pseudocode and its operation count, factor by factor, per the rubric's S7), a MODE BUDGET verdict
-   of SOUND from the `work-budget` agent, and a budget in `dev/work-budget.json`; their sum is the program's target, which the
+   of SOUND from the `work-budget` agent or the round arbiter's accept of its derivation (FR-013), and a budget in `dev/work-budget.json`; their sum is the program's target, which the
    GM approves before the first rebuild.
 
 ### User Story 2 - Each phase rebuilt to its budget, through the checklist (Priority: P1)
@@ -80,14 +80,23 @@ standards" (`request.md`).
 - **FR-011**: Before the first Rust phase lands, this feature builds every row of `dev/rust-tooling.md` marked one for one,
   partial or rewritten, and proves each fires on a Rust fixture; the landing of a Rust phase is refused until every such row
   is marked proven.
+- **FR-013**: A stage's first budget is pinned on a SOUND verdict, or on the round arbiter's ACCEPT of its derivation (the GM 2026-10-28, answering 444#0: "Yes, I am okay with option one, letting the
+  arbiters acceptance pin it"). An accept-pinned budget is bound to the derivation as it reads: any later change to a figure in it re-owes the arbiter's
+  ruling (`make arbiter-ask`) before the budget stands; the program target (FR-002) names each
+  stage pinned on an accept, with its rounds and its totals' spread; and the rebuilt phase is held to the budget as any other (FR-005,
+  FR-006) and audited (MODE AUDIT). This amends 443 FR-005's SOUND-only rule for this program's budgets; `make budget-set` takes the
+  accept by its trigger (`ARBITER=ask:<id>`), refusing one the arbiter's log does not hold as an accept naming the stage.
 - **FR-012**: Any Rust spike or phase keeps the counters of 443 FR-001 as a macro behind the Cargo feature `counters`:
   development and the gate build with it on, the deployed build without it, so the compiler removes them. Before a Rust phase
   lands, a seed rolled with the feature on and off writes identical manifests, as 443 FR-004 holds for Python.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001, FR-002): every stage has a SOUND verdict, given on a budget bundle the refusal passed, and a budget; the
-  target carries the GM's words.
+- **SC-001** (FR-001, FR-002, FR-013): every stage has a SOUND verdict, or the round arbiter's accept of its derivation (FR-013), given
+  on a budget bundle the refusal passed, and a budget; the target carries the GM's words and names each stage pinned on an accept.
+- **SC-008** (FR-013): a test refuses `make budget-set ARBITER=ask:<id>` when the arbiter's log holds no accept naming the stage and
+  passes one that does; a test flags an accept-pinned budget whose derivation changed after its pin as owing the arbiter's ruling;
+  each goes red with its condition deleted.
 - **SC-002** (FR-003 to FR-006): each phase's checklist is ticked whole and its accepted figure at most its budget; the
   landing's size delta shows the old implementation removed, with no branch or flag left that selects it (`make
   dead-closure` checks for leftovers).
@@ -121,3 +130,8 @@ standards" (`request.md`).
   no criterion, now SC-007 (the one extension, the stages still Python functions, no tests at the foot of a code file).
 - 2026-10-28, the round cap: the round arbiter ACCEPT (ask:444-spec-round-3), standing as the spec's verdict; SC-007 applies
   only if the language decision is Rust, as FR-010 does.
+- 2026-10-28, amendment 1 (the GM's answer to 444#0, `request.md`): FR-013 - an arbiter accept may pin a first budget, bound to its
+  derivation, named in the program target, the rebuilt phase still held to it; SC-001 and User Story 1 read it; SC-008 tests it.
+- 2026-10-28, amendment 1's review (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 4 items - FR-013's added convergence condition
+  dropped; any change to a figure re-owes the ruling (not only a Total or a Bounds figure), the dispatch bar dropped; User Story 1;
+  SC-008 for its two guards.

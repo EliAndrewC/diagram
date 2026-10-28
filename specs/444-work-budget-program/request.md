@@ -269,3 +269,11 @@ also does three pieces of bookkeeping, which the session will carry out:
 > So does that mean that our process for step 3 needs to change? Because anytime I hear you say that something went wrong and that you will address this by being careful in the future, then I tend to think that that will not work, unless being careful specifically means that our checklist-based process has been updated to include whatever "careful" means in that context. Now you say that there is a working "rule" for step three, but is that an actual enforced rule, either enforced in our tooling or enforced in our subagent checks or enforced in our procedures in some way? Or do you just mean colloquially that you set a rule for yourself? because the latter is likely to be ineffective.
 
 > That's fine, as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to.
+
+## The GM's answer to 444#0, 2026-10-28 (an arbiter accept may pin a first budget)
+
+> Gotcha. Okay. Yes, I am okay with option one, letting the arbiters acceptance pin it. So please move forward with that.
+
+Option one, as put to him after escalation-check: the round arbiter's acceptance pins a stage's first budget; the pin is bound to the
+derivation as it reads (a later change to its figures re-owes a ruling); the program target says which verdicts are arbiter accepts,
+with the rounds and the spread; the rebuilt code is still held to the budget at acceptance (FR-006) and audited (MODE AUDIT).

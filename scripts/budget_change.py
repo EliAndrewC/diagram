@@ -22,7 +22,9 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -63,8 +65,31 @@ def _stage(table: dict[str, Any], phase: str) -> dict[str, Any] | str:
 ITEM_SIZES = (20, 40, 80)  # feature 444 D2: a budget is per_thing x the derivation's own items at each size
 
 
-def set_budget(root: Path, phase: str, per_thing: float, exponent: float, derivation: str, verdict: str, items: dict[int, int] | None = None) -> str:
-    """A first budget: '' when set, else why not."""
+def accepted_by(root: Path, derivation: str, phase: str, trigger: str) -> bool:
+    """Does the round arbiter's log of the derivation's feature (`specs/<feature>/arbiter.jsonl`, beside its `phases/`) hold an ACCEPT
+    at `trigger` naming `phase` - in its trigger or its instruction (feature 444 FR-013)?"""
+    log = (root / derivation).parents[1] / "arbiter.jsonl"
+    named = re.compile(rf"(?<![a-z_]){re.escape(phase)}(?![a-z_])")
+    for line in log.read_text(encoding="utf-8").splitlines() if log.is_file() else []:
+        try:
+            r = json.loads(line)
+        except ValueError:
+            continue
+        if r.get("trigger") == trigger and r.get("ruling") == "accept" and (named.search(trigger) or named.search(str(r.get("what", "")))):
+            return True
+    return False
+
+
+def derivation_sha(root: Path, derivation: str) -> str:
+    """The derivation's text as it was pinned: an accept-pinned budget is bound to it (feature 444 FR-013)."""
+    return hashlib.sha256((root / derivation).read_bytes()).hexdigest()
+
+
+def set_budget(
+    root: Path, phase: str, per_thing: float, exponent: float, derivation: str, verdict: str, items: dict[int, int] | None = None, arbiter: str = "", spread: str = ""
+) -> str:
+    """A first budget, from a SOUND verdict or the round arbiter's accept of the derivation (feature 444 FR-013, the GM 2026-10-28):
+    '' when set, else why not."""
     table = load(root)
     st = _stage(table, phase)
     if isinstance(st, str):
@@ -73,14 +98,31 @@ def set_budget(root: Path, phase: str, per_thing: float, exponent: float, deriva
         return f"`{phase}` is {st['status']} already - a change needs the GM's words: make budget-change PHASE={phase} TO=<per thing> WORDS=\"<the GM's words>\""
     if not (root / derivation).is_file():
         return f"no derivation at {derivation}"
-    got = verdict_of(root / verdict)
+    if arbiter:
+        if not accepted_by(root, derivation, phase, arbiter):
+            return f"the round arbiter's log holds no accept at {arbiter} naming `{phase}` - an accept pins a first budget only as the arbiter gave it (feature 444 FR-013)"
+        if not re.fullmatch(r"[\d,]+-[\d,]+ at \d+", spread.strip()):
+            return "an accept-pinned budget records its totals' spread across the rounds, for the program target: SPREAD=\"<low>-<high> at <households>\" (feature 444 FR-013)"
+        got = SOUND
+    else:
+        got = verdict_of(root / verdict)
     if got != SOUND:
         return f"the verdict at {verdict} reads {got or 'nothing'}, not SOUND - a first budget is set only from a SOUND MODE BUDGET verdict (`make work-budget-bundle MODE=budget PHASE={phase} DERIVATION={derivation}`)"
     if missing := [h for h in ITEM_SIZES if (items or {}).get(h) is None]:
         return f"no items at {', '.join(str(h) for h in missing)} households - a budget is per thing x the derivation's own items at each size: ITEMS_AT_20= ITEMS_AT_40= ITEMS_AT_80= (feature 444 D2)"
     table["stages"][phase] = {
-        "status": "budgeted", "per_thing": per_thing, "exponent": exponent, "derivation": derivation, "verdict": verdict,
+        "status": "budgeted", "per_thing": per_thing, "exponent": exponent, "derivation": derivation, "verdict": arbiter or verdict,
         **{f"items_at_{h}": (items or {})[h] for h in ITEM_SIZES},
+        **(
+            {
+                "pinned_on": "accept",
+                "derivation_sha": derivation_sha(root, derivation),
+                "rounds": len(list((root / derivation).parent.glob(f"{phase}.verdict-*.txt"))),  # its recorded work-budget verdicts
+                "spread": spread.strip(),
+            }
+            if arbiter
+            else {}
+        ),
     }
     save(root, table)
     return ""
@@ -126,6 +168,8 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("set")
     for a in ("phase", "per_thing", "exponent", "derivation", "verdict"):
         s.add_argument(a)
+    s.add_argument("--arbiter", default="", help="the round arbiter's accept of the derivation, by its trigger (feature 444 FR-013)")
+    s.add_argument("--spread", default="", help="with --arbiter: the totals' spread across the rounds, `<low>-<high> at <households>`")
     for h in ITEM_SIZES:
         s.add_argument(f"--items-at-{h}", type=int)
     c = sub.add_parser("change")
@@ -143,7 +187,7 @@ def main(argv: list[str] | None = None) -> int:
     root = Path(args.root)
     if args.cmd == "set":
         items = {h: getattr(args, f"items_at_{h}") for h in ITEM_SIZES if getattr(args, f"items_at_{h}") is not None}
-        why = set_budget(root, args.phase, float(args.per_thing), float(args.exponent), args.derivation, args.verdict, items)
+        why = set_budget(root, args.phase, float(args.per_thing), float(args.exponent), args.derivation, args.verdict, items, args.arbiter, args.spread)
         done = f"`{args.phase}` budgeted at {args.per_thing} per thing, exponent {args.exponent}"
     elif args.cmd == "change":
         items = {h: getattr(args, f"items_at_{h}") for h in ITEM_SIZES if getattr(args, f"items_at_{h}") is not None}

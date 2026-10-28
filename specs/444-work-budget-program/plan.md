@@ -8,12 +8,12 @@ steps 3 to 6). The instrument and the check are feature 443's, closed 2026-10-28
 ## Summary
 
 Step 3 first: every stage of `STAGES` gets a derivation on paper in the template's form (`.specify/templates/derivation.md`), a
-MODE BUDGET verdict of SOUND from the `work-budget` agent and a budget in `dev/work-budget.json`; their sum and the whole roll's
+MODE BUDGET verdict of SOUND from the `work-budget` agent, or the round arbiter's accept of its derivation (FR-013), and a budget in `dev/work-budget.json`; their sum and the whole roll's
 exponent go to the GM through `escalation-check` - the program's CHECKPOINT, before any rebuild (FR-001, FR-002). Then the phases,
 one task each in `STAGES` order, through the phase checklist (FR-003 to FR-006), the whole-table bundle before the first phase
 lands (FR-007), the language decision after phases 1 and 2 (FR-008), and, if Rust, the ports proven first (FR-010 to FR-012).
 
-This plan plans step 3 in full (T01-T06). The phase tasks are filed after the GM's checkpoint, each with its plan section and its
+This plan plans step 3 in full (T01-T06, with T07 and T08 added since: the pre-dispatch checks and the accept pin). The phase tasks are filed after the GM's checkpoint, each with its plan section and its
 own plan review (`make task-add`, `make plan-delta`), because each phase's approach rests on the target he approves and on its own
 derivation - planning them now would plan against a budget that does not yet exist.
 
@@ -69,8 +69,8 @@ not kept for older rows. A tooling change in `scripts/budget_change.py` and `l7r
 **D3 - The MODE BUDGET verdicts** (FR-001): each derivation is bundled (`make work-budget-bundle MODE=budget PHASE=<stage>
 DERIVATION=<file>`) and dispatched to the typed `work-budget` agent once; its first line is saved beside the derivation as
 `<stage>.verdict.txt` and its row written to the ledger. LOOSE or UNDERIVED: the derivation is corrected as the verdict states and
-dispatched again; the third round on one stage owes the round arbiter's ruling first (the tripwire). SOUND: `make budget-set`
-pins it. The agent is not a wave job (the GM's list, `scripts/container/append-system-prompt.md`), so the dispatches are plain
+dispatched again; the third round on one stage owes the round arbiter's ruling first (the tripwire). SOUND: `make budget-set` pins it; the round arbiter's ACCEPT of the derivation pins it too (FR-013, the GM 2026-10-28), by its
+trigger, `make budget-set ARBITER=ask:<id>`, bound to the derivation as it reads - a later change to a figure re-owes the arbiter. The agent is not a wave job (the GM's list, `scripts/container/append-system-prompt.md`), so the dispatches are plain
 Agent calls, at most three in one message.
 
 **D4 - Families, as 443 counted them** (the tasks' size): every stage of `STAGES` - 23, measured 2026-10-28 (the `STAGES` tuple of `l7r/diagram/hamletgen/driver.py`, the same list `dev/work-budget.json` holds and `tests/tooling/test_budget_change.py` keeps equal to it) - in the four families 443's T09-T12 used - water (6:
@@ -82,7 +82,8 @@ labels). One task per family, each landing its derivations, verdicts and budgets
 fit of the summed budgets at 20, 40 and 80 households); with it, the opening record's whole-roll figure and each stage's ratio of
 today to budget (the counts are read only now, after every budget is pinned). The draft goes through `escalation-check`, then to
 the GM in the turn's final message; his words set it with `make budget-program OPS_AT_40= EXPONENT= WORDS=` (logged in
-`dev/work-budget-changes.jsonl`). No phase task is filed before.
+`dev/work-budget-changes.jsonl`). No phase task is filed before. The draft names each stage pinned on the round arbiter's accept (FR-013) with its rounds and its totals' spread, as the
+pin records them (`rounds`, `spread` in `dev/work-budget.json`), so a budget that rests on an accept never reads as a first-round SOUND.
 
 ## Task approaches
 
@@ -91,7 +92,7 @@ T01 D2's tooling; T02-T05 the four families' derivations, verdicts and budgets (
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 ### T02 - the water family's budgets (D1, D3, D4)
 
-water_frame, field, sink, waterward, pond_stock, pond_bank: each derived, judged SOUND and pinned.
+water_frame, field, sink, waterward, pond_stock, pond_bank: each derived, judged SOUND, or accepted by the round arbiter (FR-013), and pinned.
 
 ### T02 Approach (checklist part A)
 
@@ -100,7 +101,7 @@ water_frame, field, sink, waterward, pond_stock, pond_bank: each derived, judged
 3. **Where each comes from.** G: the design the GM approved, 2026-10-28 (`request.md`, step 3).
 4. **Do they describe the world here?** Each stage's contract, read when its derivation is written from D1's five sources: its docstring, the `plan` fields it reads, the manifest keys and registries it writes (`dev/placement.md`'s `STAGES` table and draw order), its claims (`make claims-report`) and the cohort's checks of what it places (`cohort_audit`'s rules).
 5. **The order.** After T01.
-6. **The exits.** Green: six SOUND verdicts recorded and six budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green: six verdicts recorded, each SOUND or an arbiter accept (FR-013), and six budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** none
 8. **The budget.** One landing; six dispatches, more where a verdict asks a correction.
 9. **Done, measured.** Six `budgeted` rows in `dev/work-budget.json`, each with its derivation and verdict.
@@ -111,7 +112,7 @@ water_frame, field, sink, waterward, pond_stock, pond_bank: each derived, judged
 
 ### T03 - the homesteads family's budgets (D1, D3, D4)
 
-seat, homesteads, appurtenances, burial, lane_wells, sties, washing (seven, of D4's census of `STAGES`): each derived, judged SOUND and pinned.
+seat, homesteads, appurtenances, burial, lane_wells, sties, washing (seven, of D4's census of `STAGES`): each derived, judged SOUND, or accepted by the round arbiter (FR-013), and pinned.
 
 ### T03 Approach (checklist part A)
 
@@ -120,7 +121,7 @@ seat, homesteads, appurtenances, burial, lane_wells, sties, washing (seven, of D
 3. **Where each comes from.** G: the design the GM approved, 2026-10-28 (`request.md`, step 3).
 4. **Do they describe the world here?** Each stage's contract, read when its derivation is written from D1's five sources: its docstring, the `plan` fields it reads, the manifest keys and registries it writes (`dev/placement.md`'s `STAGES` table and draw order), its claims (`make claims-report`) and the cohort's checks of what it places (`cohort_audit`'s rules).
 5. **The order.** After T01.
-6. **The exits.** Green: seven SOUND verdicts and seven budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green: seven verdicts, each SOUND or an arbiter accept (FR-013), and seven budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** none
 8. **The budget.** One landing; seven dispatches, more where a verdict asks a correction.
 9. **Done, measured.** Seven `budgeted` rows.
@@ -131,7 +132,7 @@ seat, homesteads, appurtenances, burial, lane_wells, sties, washing (seven, of D
 
 ### T04 - the ways family's budgets (D1, D3, D4)
 
-track, web, crossings (three, of D4's census of `STAGES`): each derived, judged SOUND and pinned.
+track, web, crossings (three, of D4's census of `STAGES`): each derived, judged SOUND, or accepted by the round arbiter (FR-013), and pinned.
 
 ### T04 Approach (checklist part A)
 
@@ -140,7 +141,7 @@ track, web, crossings (three, of D4's census of `STAGES`): each derived, judged 
 3. **Where each comes from.** G: the design the GM approved, 2026-10-28 (`request.md`, step 3).
 4. **Do they describe the world here?** Each stage's contract, read when its derivation is written from D1's five sources: its docstring, the `plan` fields it reads, the manifest keys and registries it writes (`dev/placement.md`'s `STAGES` table and draw order), its claims (`make claims-report`) and the cohort's checks of what it places (`cohort_audit`'s rules).
 5. **The order.** After T01.
-6. **The exits.** Green: three SOUND verdicts and three budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green: three verdicts, each SOUND or an arbiter accept (FR-013), and three budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** none
 8. **The budget.** One landing; three dispatches, more where a verdict asks a correction.
 9. **Done, measured.** Three `budgeted` rows.
@@ -151,7 +152,7 @@ track, web, crossings (three, of D4's census of `STAGES`): each derived, judged 
 
 ### T05 - the hinterland and frame family's budgets (D1, D3, D4)
 
-hinterland, woodland, windbreak, bamboo, frame, notice, labels (seven, of D4's census of `STAGES`): each derived, judged SOUND and pinned.
+hinterland, woodland, windbreak, bamboo, frame, notice, labels (seven, of D4's census of `STAGES`): each derived, judged SOUND, or accepted by the round arbiter (FR-013), and pinned.
 
 ### T05 Approach (checklist part A)
 
@@ -160,7 +161,7 @@ hinterland, woodland, windbreak, bamboo, frame, notice, labels (seven, of D4's c
 3. **Where each comes from.** G: the design the GM approved, 2026-10-28 (`request.md`, step 3).
 4. **Do they describe the world here?** Each stage's contract, read when its derivation is written from D1's five sources: its docstring, the `plan` fields it reads, the manifest keys and registries it writes (`dev/placement.md`'s `STAGES` table and draw order), its claims (`make claims-report`) and the cohort's checks of what it places (`cohort_audit`'s rules).
 5. **The order.** After T01.
-6. **The exits.** Green: seven SOUND verdicts and seven budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green: seven verdicts, each SOUND or an arbiter accept (FR-013), and seven budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** none
 8. **The budget.** One landing; seven dispatches, more where a verdict asks a correction.
 9. **Done, measured.** Seven `budgeted` rows.
@@ -202,3 +203,28 @@ set it with `make budget-program`.
 None.
 
 <!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
+
+### T08 - an arbiter accept pins a first budget (FR-013, SC-008)
+
+`make budget-set ARBITER=ask:<id>`: the budget pinned on the round arbiter's ACCEPT of the derivation, refused when the arbiter's log
+holds no accept at that trigger naming the stage; the pin records `pinned_on: accept`, the derivation's sha256, its rounds (the
+stage's recorded verdicts) and its totals' spread (`SPREAD="<low>-<high> at <households>"`, required), for the program target (D5). `make work-budget`
+and the push's ratchet (`work_budget.held`) flag an accept-pinned budget whose derivation changed since its pin, as owing the arbiter's
+ruling.
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** A stage whose total converged but whose verdict never reached SOUND is pinned on the arbiter's accept, and stays bound to the derivation it accepted.
+2. **The constraints.** FR-013, SC-008 (amendment 1).
+3. **Where each comes from.** G: the GM, 2026-10-28, answering 444#0 (`request.md`).
+4. **Do they describe the world here?** field's accept, ask:444-T02-field-round-15 in `arbiter.jsonl`, recorded 2026-10-28.
+5. **The order.** Before field's pin and before T03's first review.
+6. **The exits.** Green: tests refuse a pin on an accept the log does not hold naming the stage and pass one it does; a changed derivation flagged in the record and the ratchet; each red with its condition deleted. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** SC-008's tests green; field pinned on its accept.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - tooling.
+

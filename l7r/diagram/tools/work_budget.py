@@ -111,6 +111,28 @@ def budget_at(b: dict[str, Any], households: int) -> float | None:
     return b["per_thing"] * items if items is not None and b.get("per_thing") is not None else None
 
 
+def stale_pins(table: dict[str, Any], root: str = SKILL) -> list[str]:
+    """Each budget pinned on the round arbiter's accept whose derivation changed since its pin: it is bound to the derivation as
+    it read, so a change re-owes the arbiter's ruling before the budget stands (feature 444 FR-013, the GM 2026-10-28)."""
+    import hashlib
+
+    out = []
+    for name, b in (table.get("stages") or {}).items():
+        if b.get("pinned_on") != "accept":
+            continue
+        path = os.path.join(root, str(b.get("derivation", "")))
+        try:
+            with open(path, "rb") as fh:
+                now = hashlib.sha256(fh.read()).hexdigest()
+        except OSError:
+            now = ""
+        if now != b.get("derivation_sha"):
+            out.append(
+                f"{name}: its derivation changed since the arbiter's accept pinned it ({b.get('verdict')}) - it owes the arbiter's ruling: make arbiter-ask SUBJECT=<feature>-{name}-repin WHY=\"<what changed>\""
+            )
+    return out
+
+
 def missing_items(table: dict[str, Any]) -> list[str]:
     """Each budgeted or accepted stage that records no items at one of `ITEM_SIZES` - refused, never read the old way (the
     placed-things product, retired by feature 444 D2)."""
@@ -218,7 +240,7 @@ def run(seeds: tuple[int, ...], sizes: tuple[int, ...], calls: Any = None) -> tu
             rows.append(r)
     ok = [r for r in rows if not r["refused"]]
     table = budgets()
-    if bad := missing_items(table):  # feature 444 D2: a budget without its items is refused, never read as the placed-things product
+    if bad := missing_items(table) + stale_pins(table):  # feature 444 D2 and FR-013: a budget without its items, or a changed accept-pinned one
         raise SystemExit("work-budget: REFUSED - " + "; ".join(bad))
     summary = summarize(ok, table)
     meta = {
@@ -258,7 +280,7 @@ def held(table: dict[str, Any], summary: dict[str, Any]) -> list[str]:
     """Each refusal of an ACCEPTED stage whose counted operations at 40 or 80 households exceed its accepted figure or its budget
     (`budget_at`: `per_thing` times the derivation's items at that size), naming the figures and the two commands; and each
     budgeted row with no items (`missing_items`)."""
-    out: list[str] = list(missing_items(table))
+    out: list[str] = list(missing_items(table)) + stale_pins(table)
     for name, b in (table.get("stages") or {}).items():
         if b.get("status") != "accepted":
             continue
