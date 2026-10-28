@@ -16,9 +16,11 @@
     walk the outline's points once, filing each to the strip whose ditches it falls between
     for each strip between two neighboring ditches, walking down the fall, for each plot tried:
         cut it: one new cross line met against the current segment of each of the strip's two ditches (the last plot's line kept)
-        select: past either ditch's crossing (2 comparisons), or holding its strip's next filed vertex (1)? - then it is on the outline: look at the
-            at most 4 cells it touches and clip it against the outline segments filed there; keep it
-        classify it by its fall below the head; record its polygon and its bunds
+        select: past either ditch's crossing (2 comparisons), or holding its strip's next filed vertex (1)? - then it is on the outline
+        classify it by its fall below the head
+    walk the outline's ring through the cut comb, plot by plot: at each plot it enters, find where it leaves (at most 3 side
+        tests against the plot's other edges; across a ditch, a binary search of the next strip's cross lines, so no cross line
+        need line up with its neighbor's); each crossing clips the two plots it divides; then record every plot, clipped or not
     walk the brook's segments through the outline's cells, testing the outline segments filed there
 
 ## Indexes
@@ -34,25 +36,25 @@
 | the cut (S1) | per item | 2 | one new cross line x the current segment of each of two ditches | always 2; a pointer's step counted below |
 | the selection | per item | 3 | the cut against each of the strip's two ditches' crossings, and against the strip's next filed vertex | always 3 |
 | the class | per item | 1 | one comparison of the plot's fall against the head's | always 1 |
-| the record | per item | 8 | the plot's 4 corners and 4 bund edges | always 8 |
-| slack | per item | 1 | every factor is a bound at its worst case | not applicable |
-| the outline's plots (outline index cells examined) | over the run | 12,496 at 20, 18,040 at 40, 26,400 at 80 | 44 each: the at most 4 cells a plot touches at any orientation, examined, and at most 10 outline segments filed in each, tested; the plots on the outline by the crossing rule across a lattice of the plots the contract allows at their most elongated, 26 by 57.2 ft (1,488 sq ft at 0005's narrowest 26 ft): L x sqrt(1/26^2 + 1/57.2^2), 206 at 20, 320 at 40, 495 at 80, plus one a segment (each segment can begin in a plot of its own): 284 at 20, 410 at 40, 600 at 80 | 80 households |
-| the clipped records | over the run | 646 at 20, 910 at 40, 1,305 at 80 | a plot on the outline is recorded clipped, holding the outline's crossing points and any outline vertex inside it: each crossing - one each time the outline enters a plot, so as many as the outline's plots, 284 at 20, 410 at 40, 600 at 80 (on a closed ring, entries and crossings are the same number) - recorded in the 2 plots it divides, each vertex once | every crossing a corner of two plots |
-| the outline's vertices | over the run | 156 at 20, 180 at 40, 210 at 80 | 2 each: the vertex's side of each of the two ditches it falls between - the ring's order keeps each strip's vertices in order, so the selection's next filed vertex needs no sort | every point |
+| the record | per item | 8 | the plot's 4 corners and 4 bund edges, written once after the ring walk (a clipped plot's extra points in the clipped records) | always 8 |
+| slack | per item | 1 | every factor is a bound at its worst case: each crossing-rule row pays 3 a segment, its start cell and the 2 more it can touch at a corner | not applicable |
+| the ring walk | over the run | 5,798 at 20, 8,350 at 40, 12,255 at 80 | each plot the ring enters: at most 3 side tests to find its exit, and a binary search of the next strip's cross lines (log2 of the plots, rounded up: 10 at 20, 11 at 40, 12 at 80) where it crosses a ditch, charged at every entry; the entries at their worst, the length term L x sqrt(1/26^2 + 1/57.2^2) plus 3 a segment (a segment's start and up to 2 more cross lines it can clip at a corner): 440 at 20, 590 at 40, 810 at 80; plus one a vertex | every entry across a ditch |
+| the clipped records | over the run | 958 at 20, 1,270 at 40, 1,725 at 80 | each crossing recorded in the 2 plots it divides - the crossings as many as the entries, 440 at 20, 590 at 40, 810 at 80 - and each vertex once | every crossing a corner of two plots |
+| the outline's vertices | over the run | 156 at 20, 180 at 40, 210 at 80 | 2 each: the vertex's side of each of the two ditches it falls between - the ring's order keeps each strip's vertices in order | every point |
 | the pointers' steps | over the run | 240 at 20, 364 at 40, 554 at 80 | one more test each time a strip's pointer steps: once a ditch segment for each of the 2 strips an inner ditch borders | every segment a bend |
-| the ditches (outline index cells examined) | over the run | 2,761 at 20, 4,466 at 40, 7,282 at 80 | 11 a segment-cell entry - the cell examined, at most 10 outline segments tested - the ditches' entries by the crossing rule, their length at its diagonal over 64 ft plus one a segment: 251 at 20, 406 at 40, 662 at 80 | 80 households |
-| the corridors (corridor index cells written) | over the run | 296 at 20, 438 at 40, 652 at 80 | the ditches' length outside the crop at its diagonal over 64 ft, plus one a ditch segment (where a stretch lies is not assumed), x 2 cells across | 80 households |
-| the brook (outline index cells examined) | over the run | 4,389 at 20, 5,346 at 40, 6,567 at 80 | 11 a segment-cell entry, as the ditches; its entries by the crossing rule: 399 at 20, 486 at 40, 597 at 80 | 80 households |
-| the outline index (cells written) | once | 186 at 20, 257 at 40, 364 at 80 | the crossing rule on the closed outline: its perimeter at its diagonal over 64 ft plus one a segment | 80 households |
+| the ditches (outline index cells examined) | over the run | 5,401 at 20, 8,470 at 40, 13,376 at 80 | 11 a segment-cell entry - the cell examined, at most 10 outline segments tested; the entries at their worst, their length at its diagonal over 64 ft plus 3 a segment (its start cell and up to 2 more at a corner): 491 at 20, 770 at 40, 1,216 at 80 | 80 households |
+| the corridors (corridor index cells written) | over the run | 776 at 20, 1,166 at 40, 1,760 at 80 | the ditches' length outside the crop at its diagonal over 64 ft, plus 3 a ditch segment (its worst: a start cell and 2 more at a corner), x 2 cells across | 80 households |
+| the brook (outline index cells examined) | over the run | 9,581 at 20, 11,154 at 40, 13,079 at 80 | 11 a segment-cell entry - the cell examined, at most 10 outline segments tested; the entries at their worst, its length at its diagonal over 64 ft plus 3 a segment: 871 at 20, 1,014 at 40, 1,189 at 80 | 80 households |
+| the outline index (cells written) | once | 342 at 20, 437 at 40, 574 at 80 | the closed outline's perimeter at its diagonal over 64 ft, plus 3 a segment at its worst | 80 households |
 | the writes | once | 1,096 at 20, 1,551 at 40, 2,238 at 80 | each line written by its points: the dry hem's points (409 at 20, 631 at 40, 974 at 80), the ditches' points (their segments plus one a record: 132 at 20, 198 at 40, 298 at 80), the drawn channels' points (231 at 20, 358 at 40, 555 at 80), the brook's points (237 at 20, 265 at 40, 297 at 80), the outline's points, the weir's 4 points, the field pond's 4 values and the intake's 1 | 80 households |
 
 So: plots x (2 + 3 + 1 + 8) x 1, plus the run's terms, the index and the writes once.
 
 ## Totals
 
-- at 20: 853 x (2 + 3 + 1 + 8) x 1 + 12496 + 646 + 156 + 240 + 2761 + 296 + 4389 + 186 + 1096 = 34208
-- at 40: 1807 x (2 + 3 + 1 + 8) x 1 + 18040 + 910 + 180 + 364 + 4466 + 438 + 5346 + 257 + 1551 = 56850
-- at 80: 3715 x (2 + 3 + 1 + 8) x 1 + 26400 + 1305 + 210 + 554 + 7282 + 652 + 6567 + 364 + 2238 = 97582
+- at 20: 853 x (2 + 3 + 1 + 8) x 1 + 5798 + 958 + 156 + 240 + 5401 + 776 + 9581 + 342 + 1096 = 36290
+- at 40: 1807 x (2 + 3 + 1 + 8) x 1 + 8350 + 1270 + 180 + 364 + 8470 + 1166 + 11154 + 437 + 1551 = 58240
+- at 80: 3715 x (2 + 3 + 1 + 8) x 1 + 12255 + 1725 + 210 + 554 + 13376 + 1760 + 13079 + 574 + 2238 = 97781
 
 ## Earlier findings
 
@@ -98,11 +100,14 @@ So: plots x (2 + 3 + 1 + 8) x 1, plus the run's terms, the index and the writes 
 - verdict-10, finding 1: fixed - the clipped records count a crossing each time the outline enters a plot, as many as the outline's plots
 - verdict-10, finding 2: fixed - the dry hem's points are in the writes, measured from its record
 - verdict-10, finding 3: fixed - filing a vertex is 2 side tests, and the ring's order keeps each strip's vertices in order
+- verdict-11, finding 1: fixed - every crossing-rule row pays 3 a segment, its worst (the start cell and the 2 more a segment can touch at a corner), so slack 1 holds
+- verdict-11, finding 2: fixed - the ring walk follows the cut lines as they are, a binary search of each strip's own cross lines, so none need line up
+- verdict-11, finding 3: fixed - the ring is walked through the cut comb, each crossing found where it happens, in place of the clip of every outline plot against its cells
 
 ## Cheaper algorithms considered
 
 - sweep: used - each strip's plots are cut in order down the fall, each sharing the last plot's line
 - grid or spatial index: used - the outline in 64 ft cells, each segment filed where it crosses, so a plot or a segment meets only what is filed in its cells
 - priority queue: not used - no plot is ranked against another
-- incremental update: used - each ditch's pointer advances as the strip is walked; a plot keeps the last plot's line; the outline's vertices are filed to their strips once
+- incremental update: used - each ditch's pointer advances as the strip is walked; a plot keeps the last plot's line; the outline's vertices are filed to their strips once; the ring is walked through the comb once, each crossing found where it happens
 - memoizing what a scan does not change: used - the outline's index, the ditches' crossings and the vertices' strips are found once, before any strip is cut
