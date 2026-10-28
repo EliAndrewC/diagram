@@ -11,6 +11,7 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.overlap.registry import refuse_unadmitted
+from l7r.diagram.work_counts import OPS
 
 from .._geom import (
     Poly,
@@ -336,6 +337,8 @@ class FieldFeaturesMixin:
             rolled = rng.random() < 0.55
             order = rng.sample(low, len(low)) if rolled else []
             for cand in order if takes else []:
+                if __debug__:
+                    OPS["candidate@_paddy_features"] += 1
                 if self._plot_pond(cand, rings, ink):
                     break
         # ROCK: bedrock outcrops the risers/bunds wrap around (research D3) - terraces always, ribbon ~half.
@@ -359,6 +362,8 @@ class FieldFeaturesMixin:
             self.M.setdefault("meta", {})["grave_form"] = grave_form(self.seed)
             seat = self._plot_grave_island if grave_form(self.seed) == "island" else self._plot_corner_grave
             for k in range(len(plots)):
+                if __debug__:
+                    OPS["candidate@_paddy_features"] += 1
                 if seat(plots[(start + k) % len(plots)], rng, net, ink):
                     break
 
@@ -443,6 +448,8 @@ class FieldFeaturesMixin:
         boxed = [(min(q[0] for q in r), min(q[1] for q in r), max(q[0] for q in r), max(q[1] for q in r), r) for r in recorded]
         cx, cy = round(cx, 1), round(cy, 1)
         while rx >= 10.0 and ry >= 7.0:
+            if __debug__:
+                OPS["candidate@_pond_fit"] += 1
             rx, ry = round(rx, 1), round(ry, 1)
             ok = all(point_in_poly(cx + rx * ux, cy + ry * uy, poly) for ux, uy in rim)
             if ok:

@@ -7,6 +7,8 @@ import math
 import random
 from collections.abc import Callable, Sequence
 
+from l7r.diagram.work_counts import OPS
+
 Pt = tuple[float, float]  # an (x, y) point in map pixels
 Poly = list[Pt]  # a polyline / polygon as a list of points
 
@@ -403,6 +405,8 @@ BANK_MARGIN = 0.75  # half a drawn bund stroke (aze_w is ~1.5 real ft), so bund 
 def _seg_d(px: float, py: float, a: Pt, b: Pt) -> float:
     """Distance from a point to a segment (the same arithmetic several passes nest as a local
     `sd`; module-level here because _bund_beans' burial filter needs it too)."""
+    if __debug__:
+        OPS["dist@_seg_d"] += 1  # the counted work (feature 443): dropped under `python -O`
     vx, vy = b[0] - a[0], b[1] - a[1]
     ll = vx * vx + vy * vy or 1.0
     t = max(0.0, min(1.0, ((px - a[0]) * vx + (py - a[1]) * vy) / ll))
@@ -410,6 +414,8 @@ def _seg_d(px: float, py: float, a: Pt, b: Pt) -> float:
 
 
 def _pip(x: float, y: float, poly: Poly) -> bool:
+    if __debug__:
+        OPS["pt_test@_pip"] += 1
     n = len(poly)
     inside = False
     j = n - 1

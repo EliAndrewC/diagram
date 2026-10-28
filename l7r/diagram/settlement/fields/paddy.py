@@ -11,6 +11,7 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.tags import Split
+from l7r.diagram.work_counts import OPS
 
 from .._geom import (
     FLOODED_SHADES,
@@ -279,6 +280,8 @@ class PaddyMixin:
         xs, ys = [p[0] for p in poly], [p[1] for p in poly]
         tufts = []
         for _ in range(max(3, int(_ring_area(poly) / 900))):
+            if __debug__:
+                OPS["candidate@rest_basin"] += 1
             tx, ty = rng.uniform(min(xs), max(xs)), rng.uniform(min(ys), max(ys))
             if point_in_poly(tx, ty, list(poly)):
                 tufts.append(f'<path d="M{tx - 3:.1f},{ty + 2:.1f} L{tx:.1f},{ty - 4:.1f} L{tx + 3:.1f},{ty + 2:.1f}" fill="none" stroke="{REST_TUFT}" stroke-width="0.8"/>')

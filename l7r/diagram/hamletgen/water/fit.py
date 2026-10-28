@@ -15,6 +15,7 @@ from typing import Any
 from l7r.diagram.settlement._knobs import Knob, register_knob
 from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE, net_acres
 from l7r.diagram.waterfields import CombCarve, carve_comb, finish_comb
+from l7r.diagram.work_counts import OPS
 
 from ..consts import (
     BROOK_FAN_TRIM,
@@ -130,6 +131,8 @@ def _finish_first_admissible(found: list[tuple[tuple[bool, float], CombCarve]], 
     but for the scraps left bare, so the first admissible carve is the one finished on every map measured - ONE finish per
     roll, on the winner - and a second is finished only if the finish moved the first out of the rules."""
     for _score, carve in sorted((f for f in found if _admissible(f[0])), key=lambda f: f[0]):
+        if __debug__:
+            OPS["candidate@_finish_first_admissible"] += 1
         carve.fan_middle = fan_middle  # where the dry band lies is the finish's question, not the search's (`fan_toe_hem`)
         net = finish_comb(carve)
         if fan_admissible(net, plan.down_deg, plan.ftpx, plan.target_acres):
@@ -231,6 +234,8 @@ def _fit_at_aspect(
     lo, hi = lo * _lever, hi * _lever
     k = 1.0 * _lever
     for _ in range(rounds):
+        if __debug__:
+            OPS["candidate@_fit_at_aspect"] += 1
         k = min(max(k, lo + 1e-3), hi - 1e-3)
         carve = carve_comb(
             plan.W,

@@ -12,10 +12,11 @@ Research: package composition - NONE: the field mixins composed
 """
 
 from .comb import CombMixin
+from .comb_record import CombRecordMixin
 from .features import FieldFeaturesMixin
 from .landuse import LandUseMixin
 from .paddy import PaddyMixin
 
 
-class FieldsMixin(PaddyMixin, CombMixin, LandUseMixin, FieldFeaturesMixin):
+class FieldsMixin(PaddyMixin, CombMixin, CombRecordMixin, LandUseMixin, FieldFeaturesMixin):
     """The composed field surface. No members of its own by design - see the module docstring."""

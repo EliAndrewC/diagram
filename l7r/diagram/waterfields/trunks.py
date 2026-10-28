@@ -16,6 +16,8 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
+from l7r.diagram.work_counts import OPS
+
 from .frame import Poly, Pt, _pip
 
 DRAIN_MIN_LEG = 84.0
@@ -58,6 +60,8 @@ FRAME_TOL = 1.0
 
 
 def _seg_dist(p: Pt, a: Pt, b: Pt) -> float:
+    if __debug__:
+        OPS["dist@_seg_dist"] += 1  # the counted work (feature 443)
     vx, vy = b[0] - a[0], b[1] - a[1]
     L2 = vx * vx + vy * vy
     t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / L2))

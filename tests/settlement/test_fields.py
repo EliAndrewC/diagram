@@ -611,11 +611,12 @@ _FIELDS_SURFACE = frozenset(
 
 def _fields_submixins():
     from l7r.diagram.settlement.fields.comb import CombMixin
+    from l7r.diagram.settlement.fields.comb_record import CombRecordMixin
     from l7r.diagram.settlement.fields.features import FieldFeaturesMixin
     from l7r.diagram.settlement.fields.landuse import LandUseMixin
     from l7r.diagram.settlement.fields.paddy import PaddyMixin
 
-    return [PaddyMixin, CombMixin, LandUseMixin, FieldFeaturesMixin]
+    return [PaddyMixin, CombMixin, CombRecordMixin, LandUseMixin, FieldFeaturesMixin]
 
 
 def _own_callables(cls):

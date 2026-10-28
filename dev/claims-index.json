@@ -20608,8 +20608,8 @@
  "l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#after the houses, ways and wells": {
   "body": "6a4e34e411421072",
   "claim": "after the houses, ways and wells - reservoir-ponds-tameike.drawing: a bank tree is left out where its crown would fall on a roof or a wellhead, or its trunk on a lane, so the trees are seated against what stands; coming before the hinterland's scrub and copse is ours; seated against what stands, before the hinterland's scrub and copse",
-  "code": "871472f6208edef4",
-  "core": "94525cb266553268",
+  "code": "903a7ed8c332b37a",
+  "core": "695cdbaf23b2bbe5",
   "date": "2026-10-25",
   "note": "seat_free keeps crowns off roofs, wellheads and sun ground, and trunks off lanes, crop and water; the stage order is labeled as ours",
   "pages": {
@@ -20619,28 +20619,31 @@
   "rests": [
    "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#no two crowns overlap": {
   "body": "6a4e34e411421072",
   "claim": "no two crowns overlap - CONVENTION: a tree kept two crown radii from the last, so each reads as one tree",
-  "code": "e57106b249e1e0b1",
-  "core": "94525cb266553268",
+  "code": "e8b8bc44990059c6",
+  "core": "695cdbaf23b2bbe5",
   "date": "2026-10-18",
   "note": "two crown radii apart is a spacing for legibility",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondbank.py::stage_pond_bank#the two trees in turn": {
   "body": "6a4e34e411421072",
   "claim": "the two trees in turn - GUESS: 0061 names mulberry and cudrania, not their order; they alternate round the ring",
-  "code": "942e704ddebf332a",
-  "core": "94525cb266553268",
+  "code": "a04ea402f107284c",
+  "core": "695cdbaf23b2bbe5",
   "date": "2026-10-18",
   "note": "mulberry and cudrania alternate, as the page records, a GUESS",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::BANK_INSET_FT#sty on the bank": {
@@ -21191,11 +21194,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::confluence_keeps_the_brook#drain plumbing": {
-  "code": "ec454d917ff9599f",
-  "core": "5ad800e585c29592",
+  "code": "6696df9a805a0041",
+  "core": "221446c5b6858e61",
   "date": "2026-10-03",
   "note": "check",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::drain_admitted#drain plumbing": {
@@ -21382,20 +21387,21 @@
  "l7r/diagram/hamletgen/sink.py::lay_sink#bowed ditch": {
   "body": "84d0dc57d1df3109",
   "claim": "bowed ditch - CONVENTION",
-  "code": "c6970f238c64f456",
-  "core": "82c5696cf249ea91",
+  "code": "d0364d4798e8cb1d",
+  "core": "10f84713cebcd884",
   "date": "2026-10-18",
   "note": "",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#brook first, then off the frame": {
   "body": "84d0dc57d1df3109",
   "claim": "brook first, then off the frame - field-drains-akusuiro.drawing",
-  "code": "062e57c307876375",
-  "core": "82c5696cf249ea91",
+  "code": "681f7f8f5c8214b0",
+  "core": "10f84713cebcd884",
   "date": "2026-10-18",
   "note": "",
   "pages": {
@@ -21406,72 +21412,78 @@
    "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
    "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#its salts, guards and sentinels": {
   "body": "84d0dc57d1df3109",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel)",
-  "code": "3820b65b0363d5c7",
-  "core": "82c5696cf249ea91",
+  "code": "cac37422e11a405c",
+  "core": "10f84713cebcd884",
   "date": "2026-10-25",
   "note": "sentinel",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#its search steps and tolerances": {
   "body": "84d0dc57d1df3109",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 12 (bearing swings tried (claim: route search is NONE)); 24 (bearing swings tried (claim: route search is NONE)); 40 (how far back up the drain the start may move to sit inside the field); 60 (a search step or candidate the pass ruled with its row); 38 (bearing swings tried (claim: route search is NONE)); 54 (a search step or candidate the pass ruled with its row); 260 (run carried off the canvas); 20 (pond clamped 20 inside the working canvas); 70 (junction distances, first sweep); 110 (junction distances, first sweep); 160 (a search step or candidate the pass ruled with its row); 300 (junction distances, wider sweep); 400 (a search step or candidate the pass ruled with its row); 120 (floor on the run to the edge)",
-  "code": "82b96801b2355461",
-  "core": "82c5696cf249ea91",
+  "code": "9c92dbd9506977de",
+  "core": "10f84713cebcd884",
   "date": "2026-10-25",
   "note": "swings, back-offs, junction distances and off-canvas runs; no page speaks to them",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#its unstated figures": {
   "body": "84d0dc57d1df3109",
   "claim": "its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N5, 2026-10-25) - 0.08 (drain-to-brook bow, as at line 476)",
-  "code": "afc4c2ba7ec92175",
-  "core": "82c5696cf249ea91",
+  "code": "622620ba24d691a8",
+  "core": "10f84713cebcd884",
   "date": "2026-10-25",
   "note": "bow of 0.08 of the run, at most 10",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#no building on the water": {
   "body": "84d0dc57d1df3109",
   "claim": "no building on the water - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 10 ft round the pond's box",
-  "code": "36067eef7ce094cf",
-  "core": "82c5696cf249ea91",
+  "code": "514d8497c6ce29eb",
+  "core": "10f84713cebcd884",
   "date": "2026-10-25",
   "note": "no bundled page gives a no-build margin round the water itself; the bank's dry ring is a separate rule",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#off-map route search": {
   "body": "84d0dc57d1df3109",
   "claim": "off-map route search - NONE: swings, junction distances and run lengths under route_refusals",
-  "code": "36c6f58ef0c8340d",
-  "core": "82c5696cf249ea91",
+  "code": "c95e25c7f38b39c5",
+  "core": "10f84713cebcd884",
   "date": "2026-10-18",
   "note": "",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#pond area": {
   "body": "84d0dc57d1df3109",
   "claim": "pond area - GUESS field-drains-akusuiro.drawing: a drainage sink about 3/100 of its paddy, not 0061's watering pond of two or three tenths",
-  "code": "cacc6ba78e8db55e",
-  "core": "82c5696cf249ea91",
+  "code": "2b6f3832c9c9fdb5",
+  "core": "10f84713cebcd884",
   "date": "2026-10-18",
   "note": "116 x 74 ft radii at 15 households is about 0.62 acre (about 3/100 of about 20 acres of paddy), grown by sqrt(households/15) so the share holds; the drawing page records it as a GUESS",
   "pages": {
@@ -21482,13 +21494,14 @@
    "0060-field-drains-akusuiro.drawing.html:a6dd4c8ccae9300d",
    "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#pond reference size": {
   "body": "84d0dc57d1df3109",
   "claim": "pond reference size - GUESS field-drains-akusuiro.drawing: about 230 by 150 ft at 15 households (116 x 74 ft radii), grown with the hamlet by the square root",
-  "code": "5197c13afd1d7b18",
-  "core": "82c5696cf249ea91",
+  "code": "453438479fde9435",
+  "core": "10f84713cebcd884",
   "date": "2026-10-18",
   "note": "116 x 74 ft radii (about 232 x 148 ft) at REF_HOUSEHOLDS=15, radius grown by sqrt(households/15) so the area share holds; recorded as a guess (\"about 230 by 150 ft ... grows with the hamlet so that the share stays the same\")",
   "pages": {
@@ -21498,13 +21511,14 @@
   "rests": [
    "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#pond's role": {
   "body": "84d0dc57d1df3109",
   "claim": "pond's role - field-drains-akusuiro.drawing: a drain that ends in a pond of its own is a GUESS recorded there; the pond is laid at the drain's foot as the field's sink, not as a reservoir that waters the paddy",
-  "code": "4586ea227497c32b",
-  "core": "82c5696cf249ea91",
+  "code": "0317bfafab6f3745",
+  "core": "10f84713cebcd884",
   "date": "2026-10-18",
   "note": "the drain ending in its own pond is a GUESS recorded there; meta pond_role is drainage",
   "pages": {
@@ -21515,13 +21529,14 @@
    "0060-field-drains-akusuiro.drawing.html:a6dd4c8ccae9300d",
    "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#reed fringe": {
   "body": "84d0dc57d1df3109",
   "claim": "reed fringe - reservoir-ponds-tameike.drawing: a fringe of reeds at the shore",
-  "code": "a191ad03222b4be3",
-  "core": "82c5696cf249ea91",
+  "code": "c9ac3815736f62a5",
+  "core": "10f84713cebcd884",
   "date": "2026-10-18",
   "note": "a pond_fringe marsh ring at the shore",
   "pages": {
@@ -21532,26 +21547,28 @@
    "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
    "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#reed fringe width": {
   "body": "84d0dc57d1df3109",
   "claim": "reed fringe width - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a 44 ft ring",
-  "code": "f962ca1c587ab69f",
-  "core": "82c5696cf249ea91",
+  "code": "5ae59f7728fce28e",
+  "core": "10f84713cebcd884",
   "date": "2026-10-25",
   "note": "0061 gives reeds at the shore but no width",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::lay_sink#too far below, no pond": {
-  "body": "84d0dc57d1df3109",
-  "claim": "too far below, no pond - GUESS field-drains-akusuiro.drawing: a pond that would sit far below the fields sends the drain off the map; past POND_SETBACK_LIMIT (300 ft, its guess)",
-  "code": "90e815ccc02442a6",
-  "core": "82c5696cf249ea91",
-  "date": "2026-10-18",
-  "note": "the rule is on the page (\"A map whose pond would have to sit far below the fields sends its drain off the map as well\"), but the 300 ft POND_SETBACK_LIMIT is not; the claim's \"(300 ft, its guess)\" puts on 0060 a figure it never gives. Fix: cite 0060 for the rule and mark the 300 ft as UNRESEARCHED, as pond_seat's \"set-back limit\" claim already does",
+  "body": "6a9c3073a3eddb8a",
+  "claim": "too far below, no pond - GUESS field-drains-akusuiro.drawing: a pond that would sit far below the fields sends the drain off the map (how far is pond_seat's set-back limit)",
+  "code": "b4bebfff38b23eef",
+  "core": "10f84713cebcd884",
+  "date": "2026-10-28",
+  "note": "`back > POND_SETBACK_LIMIT` sends the drain off the map, the rule the page states; the page gives no distance, so the limit is a guess",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
@@ -21559,7 +21576,7 @@
   "rests": [
    "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::pond_clear_of_crop#its salts, guards and sentinels": {
   "body": "3583ccc642eab933",
@@ -21638,8 +21655,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::pond_seat#ditch runs downhill, not over the brook": {
-  "code": "ff9f665b465fc35f",
-  "core": "9a30decae224a91b",
+  "code": "fc8d26d07e12fd9b",
+  "core": "04abaaf8dace495b",
   "date": "2026-10-05",
   "note": "runs_downhill and no mid-run brook crossing match the water-only-downhill and no-channel-crosses rules",
   "pages": {
@@ -21652,11 +21669,12 @@
    "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
    "0060-field-drains-akusuiro.drawing.html:5430b16d81429901"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::pond_seat#pond in a pocket below the fields": {
-  "code": "101b566ea2436824",
-  "core": "9a30decae224a91b",
+  "code": "112fbe902e07fe89",
+  "core": "04abaaf8dace495b",
   "date": "2026-10-05",
   "note": "a pond at the field's foot, a recorded guess",
   "pages": {
@@ -21668,46 +21686,49 @@
    "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631",
    "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::pond_seat#set-back limit": {
   "body": "7db1ec424fcfb13e",
   "claim": "set-back limit - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); POND_SETBACK_LIMIT",
-  "code": "9231344c4aeb19d1",
-  "core": "9a30decae224a91b",
+  "code": "c4bdc3472b4d9877",
+  "core": "04abaaf8dace495b",
   "date": "2026-10-25",
   "note": "the page records the rule (\"far below the fields sends its drain off the map\") but no figure",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::pond_seat#sways across the fall": {
   "body": "7db1ec424fcfb13e",
   "claim": "sways across the fall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 0.9 and 1.8 long radii",
-  "code": "cfd1ad122062501c",
-  "core": "9a30decae224a91b",
+  "code": "cf01c79189b1d2e1",
+  "core": "04abaaf8dace495b",
   "date": "2026-10-25",
   "note": "sways 0, ±0.9, ±1.8 prx",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::pond_setback#its search steps and tolerances": {
   "body": "be549c4e4e358c7c",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 14 (step of the walk downslope); 900 (walk's ceiling; the real limit, `POND_SETBACK_LIMIT` 300, is SEARCHED-SILENT (T36 pass P2a)); 24 (rim sample count)",
-  "code": "9656029d5238c68e",
-  "core": "10046e53951345a6",
+  "code": "c9ac84c810ffd503",
+  "core": "f0f615c47b8bcaba",
   "date": "2026-10-25",
   "note": "walk step and ceiling; the real limit is held by the caller",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::pond_setback#pond downslope of the outfall": {
-  "code": "56a1f61b212e0a55",
-  "core": "10046e53951345a6",
+  "code": "76df5c62d2363a42",
+  "core": "f0f615c47b8bcaba",
   "date": "2026-10-05",
   "note": "",
   "pages": {
@@ -21719,17 +21740,19 @@
    "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
    "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::pond_setback#set-back margins": {
   "body": "be549c4e4e358c7c",
   "claim": "set-back margins - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); at least the rim plus 46 ft, a 12 ft cushion, 12 ft off the brook",
-  "code": "a7a50ff78354da07",
-  "core": "10046e53951345a6",
+  "code": "23582190e702f613",
+  "core": "f0f615c47b8bcaba",
   "date": "2026-10-25",
   "note": "d starts at pry+46, returns d+12, brook ellipse +12, as claimed",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::route_refusals#brook not crossed mid-run": {
@@ -22394,24 +22417,25 @@
  "l7r/diagram/hamletgen/water/brook.py::around_the_field#clearance": {
   "body": "9250ade569765aff",
   "claim": "clearance - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) on the figure - a stream keeps its margin (0059, no figure); `pad` (half BROOK_SKIRT, 17 px), the last `intake` 40 ft into the tap exempt",
-  "code": "1bdfd6516909a3f0",
-  "core": "bdc2d2d1c2cc74d7",
+  "code": "06a12a1eb100cea3",
+  "core": "25896fcceee81e04",
   "date": "2026-10-25",
   "note": "0059.drawing gives \"the stream its margin\" with no figure; pad 17 and intake 40 match the code",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::around_the_field#out of the field": {
-  "code": "5cebea2e7fc634e2",
-  "core": "bdc2d2d1c2cc74d7",
+  "code": "1bf81dc04ba8c920",
+  "core": "25896fcceee81e04",
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
   "research": "e1b8f27ddc7aab33",
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::axes_off#descent kept": {
@@ -22448,25 +22472,27 @@
  "l7r/diagram/hamletgen/water/brook.py::bend_at#bend placement": {
   "body": "971bb5d1c4525a5f",
   "claim": "bend placement - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); one bend at the middle of the run's longest segment, the smaller clearing offset, at most half the segment, outside the field",
-  "code": "de30ff8569067cec",
-  "core": "21f701e5a080a70f",
+  "code": "7f96c50eb7b0c627",
+  "core": "2fa2a54f7ae281fb",
   "date": "2026-10-25",
   "note": "the cited pages are silent",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::bend_at#its search steps and tolerances": {
   "body": "971bb5d1c4525a5f",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 8 (match distance: a segment this near the run counts as part of it)",
-  "code": "c95bb40904813b35",
-  "core": "21f701e5a080a70f",
+  "code": "09ab5d437438bb73",
+  "core": "2fa2a54f7ae281fb",
   "date": "2026-10-25",
   "note": "match distance",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::bend_runs#bend across the fall": {
@@ -22774,58 +22800,59 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::clear_of_field#out of the field": {
-  "code": "1ccb5dfbd9d26007",
-  "core": "db3c62bbf9e6d32f",
+  "code": "dc328a0d42de75d8",
+  "core": "05e5030a54a1364e",
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
   "research": "e1b8f27ddc7aab33",
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::clear_of_field#step": {
   "body": "57cdcefc59ee0b97",
   "claim": "step - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 6 px a step, at most 60, the tap run and the ends not moved",
-  "code": "e0d756b8937c14af",
-  "core": "db3c62bbf9e6d32f",
+  "code": "d602cd912f70eb13",
+  "core": "05e5030a54a1364e",
   "date": "2026-10-25",
   "note": "the cited pages are silent; step and cap match the code",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#bar size": {
-  "code": "75844049d0ae7be4",
-  "core": "8442502df932ab49",
+  "code": "da4187c39bb9b980",
+  "core": "283469f465221973",
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
   "research": "e1b8f27ddc7aab33",
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#full closure": {
-  "code": "cb42d4bed13e7b30",
-  "core": "8442502df932ab49",
+  "code": "678bf835f26862a0",
+  "core": "283469f465221973",
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
   "research": "e1b8f27ddc7aab33",
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#its figures from 0068": {
   "body": "6bd9705f625fd4c7",
   "claim": "its figures from 0068 - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: 6 (fallback head-race width, 6.0 ft (\"head race ... 6.0\"))",
-  "code": "fb3f4a33d2b455a0",
-  "core": "8442502df932ab49",
+  "code": "465c9326e1cb87a0",
+  "core": "283469f465221973",
   "date": "2026-10-25",
   "note": "\"head race ... 6.0\"",
   "pages": {
@@ -22837,54 +22864,58 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#its salts, guards and sentinels": {
   "body": "6bd9705f625fd4c7",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (stops division by a tiny sine)",
-  "code": "c8a4dae7536e47c3",
-  "core": "8442502df932ab49",
+  "code": "b95b4401fefa425d",
+  "core": "283469f465221973",
   "date": "2026-10-25",
   "note": "sine floor; never binds at the 35 degree offtake",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#its weir bar": {
-  "body": "6bd9705f625fd4c7",
-  "claim": "its weir bar - CONVENTION: the weir bar drawn just below the race mouth - 1 (1 ft below the half-opening)",
-  "code": "420ad5fded54b11a",
-  "core": "8442502df932ab49",
-  "date": "2026-10-25",
-  "note": "the +1 ft sets where the bar stands on the brook relative to the mouth, a placement rather than a way of drawing; should be GUESS (the bar's root at the mouth per 0059 §405, the 1 ft margin ours)",
+  "body": "3907b1795a97dec1",
+  "claim": "its weir bar - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 1 (the bar's root 1 ft below the race mouth's half-opening, the root at the mouth per 0059)",
+  "code": "78cddf2bca525ef8",
+  "core": "283469f465221973",
+  "date": "2026-10-28",
+  "note": "the bar's root is at the mouth per the page, and the page is silent on the 1-unit gap below it",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#oblique weir": {
-  "code": "7cc943c7879a9e62",
-  "core": "8442502df932ab49",
+  "code": "f64e14b090f14143",
+  "core": "283469f465221973",
   "date": "2026-10-03",
   "note": "0059 \"A weir runs diagonally upstream from the intake mouth\"; root at the downstream end on the intake bank",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
   "research": "e1b8f27ddc7aab33",
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#seat-search reach": {
-  "code": "0d179faea947e2ea",
-  "core": "8442502df932ab49",
+  "code": "222fd2d64f45045e",
+  "core": "283469f465221973",
   "date": "2026-10-03",
   "note": "record silent; a guess as labeled",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#weir form rolled among four (s.resolve(\"weir_form\")), 0059's four forms at even odds": {
-  "code": "becf9c03a5a7dfe2",
-  "core": "8442502df932ab49",
+  "code": "4bbf97a8a491200d",
+  "core": "283469f465221973",
   "date": "2026-10-07",
   "note": "rolled per hamlet among the four forms, with thicknesses fence 1.5, gabion 2, frame 5, crib 5 as the page gives them",
   "pages": {
@@ -22899,26 +22930,26 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:79deddd4ec0f4b3d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a0772093759304da"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#weir or bare mouth": {
-  "code": "181c4cb8c90a456b",
-  "core": "8442502df932ab49",
+  "code": "f0375516db742ff5",
+  "core": "283469f465221973",
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
   "research": "e1b8f27ddc7aab33",
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::draw_intake#weir skew angle": {
   "body": "6bd9705f625fd4c7",
   "claim": "weir skew angle - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: about 30 degrees, the average of the old oblique weirs still standing (river weirs, 5 to 78); WEIR_SKEW_DEG, 30 deg",
-  "code": "6918e28b9b317db1",
-  "core": "8442502df932ab49",
+  "code": "21e129c3804231d3",
+  "core": "283469f465221973",
   "date": "2026-10-25",
   "note": "30 deg, the surveyed average",
   "pages": {
@@ -22928,23 +22959,25 @@
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:bd4acd9d984b8217"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::feed_brook#approach bearing": {
   "body": "20fd302292b9c2cb",
   "claim": "approach bearing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); bearings tried outward from straight upslope in 10 deg steps to 70 either side",
-  "code": "dcf1b3d41965c4af",
-  "core": "bfa928ce089891da",
+  "code": "87268d1a6d728aee",
+  "core": "7c23c31e8f411564",
   "date": "2026-10-25",
   "note": "the cited pages are silent; 10 deg steps to 70 match the code",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::feed_brook#brook course": {
-  "code": "39aef62d4e452677",
-  "core": "bfa928ce089891da",
+  "code": "62c88951162696b7",
+  "core": "7c23c31e8f411564",
   "date": "2026-10-05",
   "note": "as the page draws it",
   "pages": {
@@ -22956,24 +22989,25 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::feed_brook#its search steps and tolerances": {
   "body": "20fd302292b9c2cb",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 420 (shortest distance to the approach's start point, which is always off the canvas); 8 (the same, upper end); 7 (the same bearing search, round-the-field pass)",
-  "code": "b6ca772a8c50fefa",
-  "core": "bfa928ce089891da",
+  "code": "6e9719546046f2a3",
+  "core": "7c23c31e8f411564",
   "date": "2026-10-25",
   "note": "the shortest approach run (approach_legs runs to the edge plus 60 if longer) and the -7..7 bearing range, both passes",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::feed_brook#one flank": {
-  "code": "fbbef96e4926fe95",
-  "core": "bfa928ce089891da",
+  "code": "4de4547cca28e2d1",
+  "core": "7c23c31e8f411564",
   "date": "2026-10-05",
   "note": "the brook runs on down the one flank it passes",
   "pages": {
@@ -22984,18 +23018,19 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::feed_brook#round the ditches": {
-  "code": "b06fd1fac04cefc7",
-  "core": "bfa928ce089891da",
+  "code": "ee895d7aa4dff608",
+  "core": "7c23c31e8f411564",
   "date": "2026-10-03",
   "note": "matches 0054",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::level_offsets#its search steps and tolerances": {
@@ -23148,11 +23183,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::settle_course#plumbing": {
-  "code": "090f7a10daab258f",
-  "core": "2318a0c3e764ffc3",
+  "code": "91c58c42d4f29bb3",
+  "core": "6fed864c2690dd31",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::weir_glyph#its drawn sizes": {
@@ -23985,16 +24022,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::_finish_first_admissible#size search": {
-  "code": "952127ece47dcaf1",
-  "core": "750fee6994ceb4fa",
+  "code": "5b808460b5173e98",
+  "core": "3742ec3df8b314ad",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::_fit_at_aspect#fan cut away from the brook": {
-  "code": "9640461e12b08b7f",
-  "core": "0c14abf186e18df3",
+  "code": "e7a97d9289fa3f92",
+  "core": "89a861f857390621",
   "date": "2026-10-05",
   "note": "the brook-side canal stops short; 0.72 is a degree",
   "pages": {
@@ -24004,50 +24043,55 @@
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::_fit_at_aspect#fan proportions": {
   "body": "00b9e1d58dc5fb72",
   "claim": "fan proportions - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); REF_FIELD_FALL 1,150 ft, flank canals REF_CANAL_A 1,250-1,450 and REF_CANAL_B 680-800 ft, Ikegami's hand-drawn fan",
-  "code": "4e04b64ff81503eb",
-  "core": "0c14abf186e18df3",
+  "code": "ab00f9c9a2065fde",
+  "core": "89a861f857390621",
   "date": "2026-10-25",
   "note": "0053.drawing gives flank reach but no fan dimensions",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::_fit_at_aspect#its salts, guards and sentinels": {
   "body": "00b9e1d58dc5fb72",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.001 (tiny clamp for the probe at the range's top)",
-  "code": "8158c46d3ec61815",
-  "core": "0c14abf186e18df3",
+  "code": "0d6433aa9a28fc8e",
+  "core": "89a861f857390621",
   "date": "2026-10-25",
   "note": "bracket-end clamp",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::_fit_at_aspect#its search steps and tolerances": {
   "body": "00b9e1d58dc5fb72",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.35 (lower end of the size-multiplier search range); 2.2 (upper end of the size-multiplier search range); 0.03 (stop when the range is narrower than about one plot row)",
-  "code": "e5d58ca34e6f834c",
-  "core": "0c14abf186e18df3",
+  "code": "061d854e6413fe46",
+  "core": "89a861f857390621",
   "date": "2026-10-25",
   "note": "multiplier bracket and collapse width",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::_fit_at_aspect#size search": {
-  "code": "c8f3813532623c8b",
-  "core": "0c14abf186e18df3",
+  "code": "7c70394025b452cc",
+  "core": "89a861f857390621",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::_predict_k#its search steps and tolerances": {
@@ -24285,18 +24329,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block centered": {
-  "code": "8aa46507d7966dc0",
-  "core": "fea6f79507867af5",
+  "code": "e0a99199a3d0e3b0",
+  "core": "5f72fb647fc89f6a",
   "date": "2026-10-07",
   "note": "putting the block at the canvas center only frames the map; its bearing comes from plan.fall, and the shore side is decided elsewhere",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block turned to the fall": {
-  "code": "05a793e3522f28b6",
-  "core": "fea6f79507867af5",
+  "code": "f2c7b5ab5b91ab95",
+  "core": "5f72fb647fc89f6a",
   "date": "2026-10-07",
   "note": "the rows run along the fall, so the inlet is at the head (high end) and the outfall at the tail (low end), matching \"an inlet at the polder's head and an outfall at its tail\"",
   "pages": {
@@ -24306,24 +24351,25 @@
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::_polder_candidate#its search steps and tolerances": {
   "body": "457b1e55ef308b1c",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.4 (edge-wobble step, eased until the block fills its box); 0.3 (the same, next step); 0.2 (the same, next step); 0.12 (the same, last step)",
-  "code": "2d828c70a9258de3",
-  "core": "fea6f79507867af5",
+  "code": "da17e1e3f94afa14",
+  "core": "5f72fb647fc89f6a",
   "date": "2026-10-25",
   "note": "the wander's descent steps under the 0.86 box-fill guess",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::_polder_candidate#outer face with the water": {
-  "code": "cca4e7f7e41cf898",
-  "core": "fea6f79507867af5",
+  "code": "7c46fca518d3e78d",
+  "core": "5f72fb647fc89f6a",
   "date": "2026-10-07",
   "note": "the edge always wanders and never comes out a rectangle, even at the lowest wander tried (0.12); the page records the curving outer face as a GUESS and says a rectangular polder is a modern form",
   "pages": {
@@ -24334,12 +24380,12 @@
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:041f79721f113fc6",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
   ],
-  "triaged": "2026-10-18",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::_polder_candidate#parcel cleanup on the drawn block only": {
-  "code": "9822dbd74eb17aa5",
-  "core": "fea6f79507867af5",
+  "code": "726e3b0bcba9f581",
+  "core": "5f72fb647fc89f6a",
   "date": "2026-10-07",
   "note": "clean_parcels=False only defers the cleanup, and the drawn block is still cleaned, so its parcels stop at the bank and keep clear of the drain",
   "pages": {
@@ -24351,11 +24397,12 @@
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::_polder_candidate#wander walked down to a 0.86 box fill": {
-  "code": "a0eaed22869c6c81",
-  "core": "fea6f79507867af5",
+  "code": "ca94e279944991f6",
+  "core": "5f72fb647fc89f6a",
   "date": "2026-10-07",
   "note": "the cited drawing page says the outer face curves with the water and that a rectangle is only modern, but gives no figure for how irregular the dike outline was, so this is a true GUESS",
   "pages": {},
@@ -24365,6 +24412,7 @@
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:4d5302327cebd38f"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::dike_face#its search steps and tolerances": {
@@ -24417,58 +24465,62 @@
  "l7r/diagram/hamletgen/water/polder.py::fit_polder#block aspect": {
   "body": "56bc131ee0c1f6fc",
   "claim": "block aspect - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); cols about 0.55 of rows, Enokida's 15 x 8",
-  "code": "839e30d37cb4f7a3",
-  "core": "054efc36953db481",
+  "code": "245a273d5177085b",
+  "core": "1e7139cf089e0ff8",
   "date": "2026-10-25",
   "note": "no page sets the block's aspect",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::fit_polder#its least block": {
   "body": "56bc131ee0c1f6fc",
   "claim": "its least block - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 4 (a polder block at least 4 modules across in the bisection)",
-  "code": "8f3193d6778e6851",
-  "core": "054efc36953db481",
+  "code": "7195c2d559c4c150",
+  "core": "1e7139cf089e0ff8",
   "date": "2026-10-25",
   "note": "`max(4, ...)` in the bisection; the record is silent",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::fit_polder#its search steps and tolerances": {
   "body": "56bc131ee0c1f6fc",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.06 (the fit's own tolerance, inside the 12% band page the record sets); 9 (number of fitting rounds); 6 (fewest rows in the grid search); 44 (most rows in the grid search)",
-  "code": "1bf793795b2d6b08",
-  "core": "054efc36953db481",
+  "code": "c74c28d9cc96997d",
+  "core": "1e7139cf089e0ff8",
   "date": "2026-10-25",
   "note": "6% inside POLDER_ACRE_BAND 0.12; rounds and row bracket",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::fit_polder#module kept, grid scaled": {
-  "code": "262450ca8aa29a66",
-  "core": "054efc36953db481",
+  "code": "4680ca9e5fdd7655",
+  "core": "1e7139cf089e0ff8",
   "date": "2026-10-03",
   "note": "190/160 ft modules per 0022 drawing; the docstring's \"bay ~1.9 mu, half 0.9, third 0.6\" is stale against 0022's whole module about 5.5 mu, a third about 1.8 mu",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
   "research": "5b339210163f008f",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::fit_polder#polder acreage": {
-  "code": "4ae0bc9f01c427aa",
-  "core": "054efc36953db481",
+  "code": "29bb6ce40efef59e",
+  "core": "1e7139cf089e0ff8",
   "date": "2026-10-03",
   "note": "solved to the household target that 0017 sizes",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544"
   },
   "research": "fa526bd6ae6238be",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::gaps_for_courses#gap at every crossing": {
@@ -24778,18 +24830,19 @@
  "l7r/diagram/hamletgen/water/polder.py::walk_pond_uphill#its search steps and tolerances": {
   "body": "7b9951629f5490a8",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 12 (step size of the uphill walk that seats the reservoir)",
-  "code": "af3ee55f0dadfdf3",
-  "core": "85e4837946e796ab",
+  "code": "6e99d4b71efd9af3",
+  "core": "0b8cf66eda2c0ad6",
   "date": "2026-10-25",
   "note": "walk step",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::walk_pond_uphill#reservoir seat": {
-  "code": "6feab541c382d6fe",
-  "core": "85e4837946e796ab",
+  "code": "869fe353d8e6a55e",
+  "core": "0b8cf66eda2c0ad6",
   "date": "2026-10-05",
   "note": "above the fields it waters, clear of the crop",
   "pages": {
@@ -24802,7 +24855,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:23d33365fc99a589",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:47356b5374b6ea19"
   ],
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::waterward_flanks#waterward flanks": {
@@ -52374,11 +52427,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/__init__.py::FieldsMixin#package composition": {
-  "code": "51c73d278b312186",
-  "core": "92de87bee83afb02",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or class",
+  "body": "a920239b5b174f48",
+  "claim": "package composition - NONE: the field mixins composed",
+  "code": "898fc9caf670e176",
+  "core": "b7296c749cc0cece",
+  "date": "2026-10-28",
+  "note": "mixin composition only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin#plumbing": {
@@ -52523,8 +52580,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#bank beside the source brook": {
-  "code": "0681431fafa56bff",
-  "core": "242b2b262ce32810",
+  "code": "c48d6827d7125ebd",
+  "core": "9eee25b200ac2cca",
   "date": "2026-10-07",
   "note": "3 ft bund margin past a 7 ft brook; the cited material gives no margin beside a brook, so GUESS is right",
   "pages": {},
@@ -52533,11 +52590,12 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#coarse-grain top-up": {
-  "code": "5c62e4f3d2bb76e5",
-  "core": "242b2b262ce32810",
+  "code": "076511e31f586661",
+  "core": "9eee25b200ac2cca",
   "date": "2026-10-07",
   "note": "reserve plots climb from the toe, under the same refusal rule",
   "pages": {
@@ -52549,11 +52607,12 @@
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#dry plot ink": {
-  "code": "909c5499fe559e4b",
-  "core": "242b2b262ce32810",
+  "code": "16217300cf35c547",
+  "core": "9eee25b200ac2cca",
   "date": "2026-10-11",
   "note": "the crop's fill, furrows, a 1.4 tan-brown outline",
   "pages": {
@@ -52566,11 +52625,12 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a97455eb3aeed622",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:f263da6e48629364"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths": {
-  "code": "9583e9d33527b020",
-  "core": "242b2b262ce32810",
+  "code": "1d93777e1cf3a690",
+  "core": "9eee25b200ac2cca",
   "date": "2026-10-07",
   "note": "4.5 ft and 6.0 ft are the ladder's supply-canal and head-race rungs; 7 ft is 0059's brook; the conflict between the two pages is already logged at the named row",
   "pages": {
@@ -52584,12 +52644,12 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e9e1c49b84a3b570"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem off rice and water": {
-  "code": "bcd25b380799848c",
-  "core": "242b2b262ce32810",
+  "code": "ca358658ecdd8da0",
+  "core": "9eee25b200ac2cca",
   "date": "2026-10-07",
   "note": "drops plots on other rice, on water or on its own ditch",
   "pages": {
@@ -52600,12 +52660,12 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem placement": {
-  "code": "cf805b54c1561f86",
-  "core": "242b2b262ce32810",
+  "code": "a76b8f2f21308fc3",
+  "core": "9eee25b200ac2cca",
   "date": "2026-10-07",
   "note": "plots upslope of the supply canal, as the net lays them",
   "pages": {
@@ -52617,30 +52677,32 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing built or planted on a dry plot": {
   "body": "5e66203a4acd5cf1",
   "claim": "nothing built or planted on a dry plot - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); each drawn hem plot registered as blocked ground (`block_polys`) and dry ground (`dry_polys`)",
-  "code": "278b7b9c58ecff82",
-  "core": "242b2b262ce32810",
+  "code": "942be5583697fe30",
+  "core": "9eee25b200ac2cca",
   "date": "2026-10-25",
   "note": "the pages do not state it",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#plot size and crop": {
   "body": "5e66203a4acd5cf1",
   "claim": "plot size and crop - NONE: taken from the net as the comb builder laid them",
-  "code": "688f13ae27103c89",
-  "core": "242b2b262ce32810",
+  "code": "1d4b9676566dd3eb",
+  "core": "9eee25b200ac2cca",
   "date": "2026-10-18",
   "note": "poly, fill, crop, furrow and theta are read from the net unchanged; this unit decides none of them",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#blue plot class": {
@@ -52814,135 +52876,6 @@
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_record_ditches#its salts, guards and sentinels": {
-  "body": "92059fb7480432d7",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (duplicate-point tolerance)",
-  "code": "268bb1d4b55cadd8",
-  "core": "d5441744cc96db2e",
-  "date": "2026-10-25",
-  "note": "duplicate-point tolerance",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_record_field#its salts, guards and sentinels": {
-  "body": "000369f73f55b8e9",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 30 (manifest band for recording plots near the drain)",
-  "code": "8da40565d2a9c8cf",
-  "core": "98d8a258e19c3d89",
-  "date": "2026-10-25",
-  "note": "recording band for the check",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#a stream of no recorded width": {
-  "code": "7db6c9ca56b30adb",
-  "core": "a50ceaf769dd04cf",
-  "date": "2026-10-08",
-  "note": "self.px(7.0) is the village brook's ~7 ft guess",
-  "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html": "653d11fed9d1fb7b"
-  },
-  "research": "be69f0d771c8374a",
-  "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html:0cc5bcaf3d9bf50c"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#feed joins the brook": {
-  "code": "8ae0f37198cbb0db",
-  "core": "a50ceaf769dd04cf",
-  "date": "2026-10-08",
-  "note": "the intake is snapped onto the brook within the 30 px band, otherwise the feed is declared as coming from the sluice; the brook is tapped at the head of the fan",
-  "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
-  },
-  "research": "e1b8f27ddc7aab33",
-  "rests": [
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fa4c88323f4920cb"
-  ],
-  "triaged": "2026-10-25",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#feed recorded width": {
-  "code": "f550a63c4ece3877",
-  "core": "a50ceaf769dd04cf",
-  "date": "2026-10-08",
-  "note": "the width is net channels[0].w, falling back to the head race's 6.0 ft, and both branches trace that same channel",
-  "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
-  },
-  "research": "0563a9dcc87ebedc",
-  "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f51c19a1bbe70e11",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#feed runs downhill": {
-  "code": "6d83801f59696a55",
-  "core": "a50ceaf769dd04cf",
-  "date": "2026-10-08",
-  "note": "runs_downhill refuses net travel that is level or uphill, which matches the strict \"under 90\" bound",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
-  },
-  "research": "a3b4c3a9112374b7",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#its salts, guards and sentinels": {
-  "body": "9a426337e368f8cc",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 70 (step from the fork into the crop); 12 (clearance test for the pulled end); 20 (bow off the chord); 14 (pull off the edge)",
-  "code": "e1323cba3a42f4ab",
-  "core": "a50ceaf769dd04cf",
-  "date": "2026-10-25",
-  "note": "`din` and the bow are overwritten in both `_ch_poly` branches, so 70/12/20/14 decide nothing",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::CombMixin._draw_furrows#furrow ink": {
-  "code": "65d28a47316f6fba",
-  "core": "048b97720d848595",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::CombMixin._draw_furrows#furrow spacing": {
-  "code": "214edb8f459f06f7",
-  "core": "048b97720d848595",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle sizes the rows",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::CombMixin._draw_furrows#furrowed rows": {
-  "code": "acc7aaa5acad96c8",
-  "core": "048b97720d848595",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
-  },
-  "research": "ae8a1665f83d153e",
-  "triaged": "2026-10-11",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#how far a pile swells": {
   "body": "afe25e3ea78f8345",
   "claim": "how far a pile swells - UNRESEARCHED: each fillet bulges 0.15-0.45 of its chord into the basin (405 T127)",
@@ -53078,15 +53011,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::bead_drowned#beads off water": {
-  "code": "38ba4cae627a5212",
-  "core": "45952258fa6c8204",
+  "code": "b9ed20ba3de3ecf8",
+  "core": "ae41aa42fb56e304",
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
   "research": "1a1b231001c7410e",
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::channel_end_on_stream#mouth reaches the water": {
@@ -53129,6 +53062,161 @@
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb_record.py::CombRecordMixin#plumbing": {
+  "body": "e98423302ab35158",
+  "claim": "plumbing - NONE: geometry, indexing, tolerances and manifest records",
+  "code": "7511eecf1f934f6c",
+  "core": "45d47d15b58c96af",
+  "date": "2026-10-28",
+  "note": "empty class body",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb_record.py::CombRecordMixin._comb_record_ditches#its salts, guards and sentinels": {
+  "body": "92059fb7480432d7",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (duplicate-point tolerance)",
+  "code": "268bb1d4b55cadd8",
+  "core": "d5441744cc96db2e",
+  "date": "2026-10-28",
+  "note": "0.05 duplicate-point tolerance, plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb_record.py::CombRecordMixin._comb_record_field#its salts, guards and sentinels": {
+  "body": "000369f73f55b8e9",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 30 (manifest band for recording plots near the drain)",
+  "code": "8da40565d2a9c8cf",
+  "core": "98d8a258e19c3d89",
+  "date": "2026-10-28",
+  "note": "the 30 band only picks which plots the manifest records and draws nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb_record.py::CombRecordMixin._comb_source_channel#a stream of no recorded width": {
+  "body": "9ae705752b299705",
+  "claim": "a stream of no recorded width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths: taken as the village brook's 7 ft in the mouth-in-the-water test, as `stream` draws it",
+  "code": "95c20f791f974989",
+  "core": "7b5f64892285f27a",
+  "date": "2026-10-28",
+  "note": "the fallback is `self.px(7.0)`, the page's 7 ft village brook (itself a guess)",
+  "pages": {
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html": "653d11fed9d1fb7b"
+  },
+  "research": "be69f0d771c8374a",
+  "rests": [
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html:0cc5bcaf3d9bf50c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb_record.py::CombRecordMixin._comb_source_channel#feed joins the brook": {
+  "body": "9ae705752b299705",
+  "claim": "feed joins the brook - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the intake snapped onto a brook within 30 px, else sourced at the sluice",
+  "code": "99c7914fde48699b",
+  "core": "7b5f64892285f27a",
+  "date": "2026-10-28",
+  "note": "the start snaps onto the brook within 30, else the feed is sourced from the sluice; the race leaves the brook's bank as the page draws it",
+  "pages": {
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
+  },
+  "research": "e1b8f27ddc7aab33",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fa4c88323f4920cb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb_record.py::CombRecordMixin._comb_source_channel#feed recorded width": {
+  "body": "9ae705752b299705",
+  "claim": "feed recorded width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: recorded at the drawn width of the channel it traces - the comb's head race, or the polder's main canal from the reservoir's rim (feature 328: both were recorded at the head race's 6.0)",
+  "code": "597e90670aa99d21",
+  "core": "7b5f64892285f27a",
+  "date": "2026-10-28",
+  "note": "w is channels[0]'s width (the head race, or the polder main whose stub the record traces), with 6.0 as the fallback",
+  "pages": {
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
+  },
+  "research": "0563a9dcc87ebedc",
+  "rests": [
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb_record.py::CombRecordMixin._comb_source_channel#feed runs downhill": {
+  "body": "9ae705752b299705",
+  "claim": "feed runs downhill - which-way-water-flows-and-how-channels-bend-and-join.drawing: a feed whose net travel is level or uphill is refused, and the snap onto a stream taken only where it still runs down (`runs_downhill`)",
+  "code": "81e4478d5fd57c2f",
+  "core": "7b5f64892285f27a",
+  "date": "2026-10-28",
+  "note": "`runs_downhill` refuses a level or climbing feed and gates the snap; the 35 deg offtake matches the page",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:2ed226ff417b46c1",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:beebf3a1f3e405e3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb_record.py::CombRecordMixin._comb_source_channel#its salts, guards and sentinels": {
+  "body": "9ae705752b299705",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 70 (step from the fork into the crop); 12 (clearance test for the pulled end); 20 (bow off the chord); 14 (pull off the edge)",
+  "code": "2339fd57808c9ec5",
+  "core": "7b5f64892285f27a",
+  "date": "2026-10-28",
+  "note": "70, 12, 14 and 20 set only `din` and the bow, which both branches overwrite, so nothing reaches the record",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb_record.py::CombRecordMixin._draw_furrows#furrow ink": {
+  "body": "e61452cd45c3e796",
+  "claim": "furrow ink - CONVENTION: 0.8 stroke at 0.8 opacity",
+  "code": "65d28a47316f6fba",
+  "core": "048b97720d848595",
+  "date": "2026-10-28",
+  "note": "stroke width and opacity only",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb_record.py::CombRecordMixin._draw_furrows#furrow spacing": {
+  "body": "e61452cd45c3e796",
+  "claim": "furrow spacing - GUESS: 5 px between rows",
+  "code": "214edb8f459f06f7",
+  "core": "048b97720d848595",
+  "date": "2026-10-28",
+  "note": "the page records the spacing as a guess, and the code uses 5",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb_record.py::CombRecordMixin._draw_furrows#furrowed rows": {
+  "body": "e61452cd45c3e796",
+  "claim": "furrowed rows - dry-fields-and-their-crops-hatake.drawing: every dry plot drawn in ridged rows",
+  "code": "acc7aaa5acad96c8",
+  "core": "048b97720d848595",
+  "date": "2026-10-28",
+  "note": "every plot it is given is drawn in parallel rows at `theta`",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+  },
+  "research": "ae8a1665f83d153e",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:92c3a1caf521b198"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::CORNER_MAX#corner step": {
@@ -53190,8 +53278,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#dike-pond none": {
-  "code": "4b10b91dc39fe68f",
-  "core": "28baa4359410638e",
+  "code": "238a9b867c56c5b8",
+  "core": "1ad68cf50bb2ded7",
   "date": "2026-10-05",
   "note": "the mulberry_dike_fishpond archetype returns before any pond, rock or grave",
   "pages": {
@@ -53203,12 +53291,12 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:140bedbf9c3f6d56",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:ffcefa561c09cbc3"
   ],
-  "triaged": "2026-10-08",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#field grave rate": {
-  "code": "a12eff2773f667bd",
-  "core": "28baa4359410638e",
+  "code": "5229d2f07542fe21",
+  "core": "1ad68cf50bb2ded7",
   "date": "2026-10-05",
   "note": "0.3 on valley, terrace and ribbon maps, recorded as calibrated liberty",
   "pages": {
@@ -53218,14 +53306,14 @@
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:c5af31f6633b6cb8"
   ],
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#field grave's host plot": {
   "body": "073d354f5099122d",
   "claim": "field grave's host plot - ponds-rocks-and-graves-in-the-middle-of-the-fields: a single grave stood in the open field where a priest or a geomancer chose, tied to no plot; the host plot is ours; a plot chosen at random, then the plots after it in list order",
-  "code": "dbc101bae1dfe479",
-  "core": "28baa4359410638e",
+  "code": "03b3b35e43fa8f73",
+  "core": "1ad68cf50bb2ded7",
   "date": "2026-10-25",
   "note": "a spot a priest or geomancer chose, tied to no plot; a random host fits",
   "pages": {
@@ -53236,12 +53324,12 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html:11d63dd1d7b970c9",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html:ae1571949e5e1e6e"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#field pond on a low plot": {
-  "code": "c4ce848af0023b24",
-  "core": "28baa4359410638e",
+  "code": "77262508ffdf59d0",
+  "core": "1ad68cf50bb2ded7",
   "date": "2026-10-08",
   "note": "the pond host is drawn only from the low plots, and the order among them is a free choice",
   "pages": {
@@ -53252,11 +53340,12 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:03ed9353fdea1d55",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#field pond rate": {
-  "code": "e781050aec6ff87c",
-  "core": "28baa4359410638e",
+  "code": "567d098de2079094",
+  "core": "1ad68cf50bb2ded7",
   "date": "2026-10-05",
   "note": "0.55 matches \"a little over half\", disclosed as a GUESS",
   "pages": {
@@ -53266,35 +53355,37 @@
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:02605b446c604185"
   ],
-  "triaged": "2026-10-08",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#its salts, guards and sentinels": {
   "body": "073d354f5099122d",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 4.29497e+09 (seed mask); 39633 (substream salt 0x9AD1)",
-  "code": "37d91025c528e7d9",
-  "core": "28baa4359410638e",
+  "code": "82087258c1ded956",
+  "core": "1ad68cf50bb2ded7",
   "date": "2026-10-25",
   "note": "seed mask and substream salt",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#rock outcrop's host plot": {
   "body": "073d354f5099122d",
   "claim": "rock outcrop's host plot - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); any plot of the field, chosen at random",
-  "code": "b1a0e3e096e2b24b",
-  "core": "28baa4359410638e",
+  "code": "412036d4e108f820",
+  "core": "1ad68cf50bb2ded7",
   "date": "2026-10-25",
   "note": "no page speaks of rocks in a paddy",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#rock outcrops": {
-  "code": "ac998d91d8faeac2",
-  "core": "28baa4359410638e",
+  "code": "3f7a44cf6c560a6f",
+  "core": "1ad68cf50bb2ded7",
   "date": "2026-10-05",
   "note": "terraces always, ribbon valleys at 0.5, one to three outcrops",
   "pages": {
@@ -53306,12 +53397,12 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:3fe0f2932541c1c8",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:6dc62b4125112014"
   ],
-  "triaged": "2026-10-08",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#town and city fields plain": {
-  "code": "d52fc29eef7954f8",
-  "core": "28baa4359410638e",
+  "code": "686f159e436d291e",
+  "core": "1ad68cf50bb2ded7",
   "date": "2026-10-05",
   "note": "the town and city tiers return before any feature",
   "pages": {
@@ -53321,7 +53412,7 @@
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e40a16f282229644"
   ],
-  "triaged": "2026-10-08",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_center_span#plumbing": {
@@ -53584,8 +53675,8 @@
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._pond_fit#field pond size": {
   "body": "9ca51ba37b119cf8",
   "claim": "field pond size - ponds-rocks-and-graves-in-the-middle-of-the-fields: the smallest field ponds ran about 33 ft a side - the legible floor of 10 by 7 px semi-axes draws a pond as small as about 20 by 14 ft, a departure the code keeps until feature 417 T34; 0.82 of the plot's half-span, 10-46 by 7-32 px, shrunk 0.9 a step",
-  "code": "ba3e391e5fe4b580",
-  "core": "4fa6421d00f942aa",
+  "code": "f521b114a1897aff",
+  "core": "34e91ad405a3dfb7",
   "date": "2026-10-25",
   "note": "the legible floor `max(10.0, ...)`/`max(7.0, ...)` draws a pond as small as about 20 x 14 ft, below \"the smallest, about 10 m (~33 ft) on a side\"; the floors and caps are also raw px, not `self.px`, so the size changes with map scale - raise the floor to about 16.5 x 16.5 ft in feet, or record the departure",
   "pages": {
@@ -53595,24 +53686,25 @@
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html:f69963814c648bf4"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-28",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._pond_fit#its salts, guards and sentinels": {
   "body": "9ca51ba37b119cf8",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 12 (rim sampling); 24 (rim sampling)",
-  "code": "71c3ebb53cb3ab26",
-  "core": "4fa6421d00f942aa",
+  "code": "658ba23adf84e977",
+  "core": "34e91ad405a3dfb7",
   "date": "2026-10-25",
   "note": "how often the rim is sampled",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._pond_fit#pond inside one plot": {
-  "code": "ddc5c2d07b93601d",
-  "core": "4fa6421d00f942aa",
+  "code": "7446a74505a1d5cc",
+  "core": "34e91ad405a3dfb7",
   "date": "2026-10-08",
   "note": "the whole rim is inside the plot and meets no ring",
   "pages": {
@@ -53622,6 +53714,7 @@
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._rounded_pond#corners eased": {
@@ -55185,35 +55278,38 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.rest_basin#its drawn sizes": {
   "body": "8d168a688800740b",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 900 (tufts per px² (decoration))",
-  "code": "1f0f5cf279aa3cd8",
-  "core": "a3e55046d053b1b1",
+  "code": "72ac72e95a173cd2",
+  "core": "2a4d8b69ebf0400d",
   "date": "2026-10-25",
   "note": "how densely the tufts are drawn",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.rest_basin#its salts, guards and sentinels": {
   "body": "8d168a688800740b",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (seed multiplier); 13 (seed multiplier)",
-  "code": "23a611395a246a18",
-  "core": "a3e55046d053b1b1",
+  "code": "e95274a0fb44624b",
+  "core": "2a4d8b69ebf0400d",
   "date": "2026-10-25",
   "note": "seed multipliers",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.rest_basin#resting plot drawn": {
-  "code": "8941dae0de0cb33a",
-  "core": "a3e55046d053b1b1",
+  "code": "a98a084abe2b4657",
+  "core": "2a4d8b69ebf0400d",
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
    "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
   },
   "research": "a9a8377184fbd08b",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.resting_plots#rest form applied": {
@@ -63922,18 +64018,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#dike label": {
-  "code": "fcbccc2a7bdd34f0",
-  "core": "42f962eb30de9055",
+  "code": "7a6b51462ffbdcd6",
+  "core": "38207cb4b639cb75",
   "date": "2026-10-03",
   "note": "drawing convention",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#dike width": {
   "body": "4caa58bae16e8df6",
   "claim": "dike width - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the 14-40 ft band",
-  "code": "2afdedcc41fe4c16",
-  "core": "42f962eb30de9055",
+  "code": "0547754654c5c583",
+  "core": "38207cb4b639cb75",
   "date": "2026-10-18",
   "note": "it draws and records (w_min/w_max) the band dike_band makes, which runs 11-43 ft against \"14 to 40 ft across\" (see dike_band)",
   "pages": {
@@ -63943,32 +64041,36 @@
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:46a44cd878ea07e4"
   ],
+  "triaged": "2026-10-28",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#earth mottle": {
-  "code": "03242f2adab4c5fa",
-  "core": "42f962eb30de9055",
+  "code": "50325fcd6ae98007",
+  "core": "38207cb4b639cb75",
   "date": "2026-10-03",
   "note": "drawing convention",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#its drawn sizes": {
   "body": "4caa58bae16e8df6",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.7 (mottle throw count per px of bbox); 13 (mottle ellipse max rx); 9 (mottle ellipse max ry); 1.4 (willow wander off its row line); 1.2 (mulberry wander off its row line); 200 (label siting penalty on the village's side); 1000 (label siting score: prefer the north side)",
-  "code": "54bd254e066a4f19",
-  "core": "42f962eb30de9055",
+  "code": "82209016a6f9de12",
+  "core": "38207cb4b639cb75",
   "date": "2026-10-25",
   "note": "mottle, row wander, label siting",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#its figures from 0027": {
   "body": "4caa58bae16e8df6",
   "claim": "its figures from 0027 - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: 0.74 (willow row's place across the band); 0.26 (mulberry row's place across the band)",
-  "code": "f439261da5c78c0c",
-  "core": "42f962eb30de9055",
+  "code": "2ea2052941c19cb2",
+  "core": "38207cb4b639cb75",
   "date": "2026-10-25",
   "note": "three quarters toward the water, a quarter from the fields",
   "pages": {
@@ -63978,78 +64080,80 @@
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:f542d631ea0516a8"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#its salts, guards and sentinels": {
   "body": "4caa58bae16e8df6",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 29 (seed salt (0x1D))",
-  "code": "4ff7c2565b9a84ab",
-  "core": "42f962eb30de9055",
+  "code": "2213537606f4bfa3",
+  "core": "38207cb4b639cb75",
   "date": "2026-10-25",
   "note": "seed salt",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#mulberry row": {
-  "code": "7d2b9be435a7c50c",
-  "core": "42f962eb30de9055",
+  "code": "474cecf07efa204f",
+  "core": "38207cb4b639cb75",
   "date": "2026-10-03",
   "note": "0.26 out, 4.4 apart, per 0027",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
   "research": "9d4f4eee3c609249",
-  "triaged": "2026-10-18",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#no building on the dike": {
-  "code": "e80e4a916384aacf",
-  "core": "42f962eb30de9055",
+  "code": "3a8137de54b658ad",
+  "core": "38207cb4b639cb75",
   "date": "2026-10-03",
   "note": "per 0019 (dike-top form is its own knob)",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "research": "765c28e2d975a432",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#notched at sluices": {
-  "code": "7897d8cc21c5af31",
-  "core": "42f962eb30de9055",
+  "code": "25aba782d39dd531",
+  "core": "38207cb4b639cb75",
   "date": "2026-10-03",
   "note": "band and rows cut, per 0027",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
   "research": "9d4f4eee3c609249",
-  "triaged": "2026-10-18",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#rows on the faces": {
-  "code": "6b13ccfe831622d1",
-  "core": "42f962eb30de9055",
+  "code": "53509299ec18ef03",
+  "core": "38207cb4b639cb75",
   "date": "2026-10-03",
   "note": "0027 records the deviation",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
   "research": "9d4f4eee3c609249",
-  "triaged": "2026-10-18",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#willow row": {
-  "code": "2f17610481eb8b69",
-  "core": "42f962eb30de9055",
+  "code": "29caab73a80c974c",
+  "core": "38207cb4b639cb75",
   "date": "2026-10-03",
   "note": "0.74 out, 8.5 apart, per 0027",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
   "research": "9d4f4eee3c609249",
-  "triaged": "2026-10-18",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::GAP_REACH#plumbing": {
@@ -76918,8 +77022,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_bund_beans#bead spacing": {
-  "code": "aa9a20c7f0fac418",
-  "core": "1ce4b2723e28e2b8",
+  "code": "6ff8a5a378d79093",
+  "core": "864eec2c0062e5bb",
   "date": "2026-10-05",
   "note": "the bead row is a convention",
   "pages": {},
@@ -76927,31 +77031,34 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_bund_beans#beaded bunds": {
-  "code": "b5047d08eca4b3e6",
-  "core": "1ce4b2723e28e2b8",
+  "code": "868358ef9e6b9aa0",
+  "core": "864eec2c0062e5bb",
   "date": "2026-10-03",
   "note": "0014: \"Some bunds carry a row of soybeans\", a single row",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
   "research": "1a1b231001c7410e",
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_bund_beans#buried beads dropped": {
-  "code": "31800eb0d4c05ce4",
-  "core": "1ce4b2723e28e2b8",
+  "code": "38b47b2645cac131",
+  "core": "864eec2c0062e5bb",
   "date": "2026-10-03",
   "note": "drawing convention",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_bund_beans#two beads at least": {
-  "code": "ae8cb416498e9f3e",
-  "core": "1ce4b2723e28e2b8",
+  "code": "8dffaa50fe559b15",
+  "core": "864eec2c0062e5bb",
   "date": "2026-10-05",
   "note": "a beaded stretch shows at least two beads",
   "pages": {
@@ -76961,7 +77068,7 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#behind a bare bank": {
@@ -78413,11 +78520,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::_pip#frame geometry": {
-  "code": "f27f39bfdc0b20b3",
-  "core": "f6e73626af2d6be8",
+  "code": "4302cfe8705fa977",
+  "core": "4e0e1d5b7ba6d1ee",
   "date": "2026-10-03",
   "note": "geometry",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::_point_along#frame geometry": {
@@ -78445,11 +78554,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::_seg_d#frame geometry": {
-  "code": "d41a939b0f7ccc6e",
-  "core": "9b1214d07b6fa7ec",
+  "code": "932d12e7bc884385",
+  "core": "c1c954e2fb7f780e",
   "date": "2026-10-03",
   "note": "geometry",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::_seg_x#frame geometry": {
@@ -80902,13 +81013,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::_seg_dist#ring plumbing": {
-  "code": "36cbaeb87247b712",
-  "core": "7aedeede97010bb1",
+  "code": "3e59d0d02c3ae6a1",
+  "core": "be2b42ae755d0151",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-27",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::_shapely#ring plumbing": {
@@ -81261,8 +81372,8 @@
  "l7r/diagram/waterfields/seams/close.py::_split_steps#no sideways step": {
   "body": "77092b3311f9a1d0",
   "claim": "no sideways step - how-our-maps-draw-a-bunds-bends-and-corners.drawing: cut until no part steps more than MAX_STEPS times, the cut that makes basins not scraps",
-  "code": "26e63939f7d6df65",
-  "core": "866cdc7252c4e688",
+  "code": "b1ba1824c0f1f056",
+  "core": "947356ce4ea8a653",
   "date": "2026-10-22",
   "note": "cut until no part carries a step",
   "pages": {
@@ -81273,6 +81384,7 @@
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:0a5c813bdbc4ad64",
    "0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html:d7ca85f575a7671c"
   ],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::_weld_within_rules#its salts, guards and sentinels": {
@@ -82214,11 +82326,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/trunks.py::_seg_dist#trunk geometry": {
-  "code": "11de0b0181dca9bb",
-  "core": "7aedeede97010bb1",
+  "code": "fc85a23735a518ee",
+  "core": "be2b42ae755d0151",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/trunks.py::anchor_trunk_ends#no trunk dangles": {

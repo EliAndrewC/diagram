@@ -21,6 +21,7 @@ from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, DRAINAGE_DITCH
 from l7r.diagram.sitegen.geom import crosses_poly, unit
 from l7r.diagram.waterfields import DRAIN_FT, chan_px
 from l7r.diagram.waterfields.twins import TWIN_HI_FT, TWIN_RUN_FT, twin_run_ft
+from l7r.diagram.work_counts import OPS
 
 from .consts import GRAIN, POND_SETBACK_LIMIT, REF_HOUSEHOLDS, Poly, Pt
 from .plan import SitePlan
@@ -186,6 +187,8 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
     rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
     d = pry + 46.0  # never closer than a rim's worth below the outfall, whatever the geometry says
     while d <= limit:
+        if __debug__:
+            OPS["candidate@pond_setback"] += 1
         cx, cy = out[0] + dx * d, out[1] + dy * d
         clear = not any(point_in_poly(cx + prx * ux, cy + pry * uy, env) for ux, uy in rim)
         if clear:
@@ -456,6 +459,8 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
 def confluence_keeps_the_brook(s: Settlement, plan: SitePlan, q: Pt) -> bool:
     """Does the feed brook, drawn with a confluence at `q` held (`drawn_course`, as `round_the_brooks` will draw it), keep
     every rule of the brook (`brook_violations`)? The drain's join and the constructed route's meeting both ask it."""
+    if __debug__:
+        OPS["candidate@confluence_keeps_the_brook"] += 1  # a confluence tried (feature 443 T09)
     heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in s.M.get("channels") or [] if (c.get("frm") or {}).get("kind") == "stream" and c.get("poly")]
     if len(plan.brook) < 2 or not heads:
         return True
@@ -545,6 +550,8 @@ def pond_seat(plan: SitePlan, out: Pt, prx: float, pry: float, heading: Pt | Non
         set-back limit - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); POND_SETBACK_LIMIT
         ditch runs downhill, not over the brook - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html"""
     for sway in (0.0, -0.9 * prx, 0.9 * prx, -1.8 * prx, 1.8 * prx):
+        if __debug__:
+            OPS["candidate@pond_seat"] += 1
         moved = (out[0] - plan.fall[1] * sway, out[1] + plan.fall[0] * sway)
         back = pond_setback(plan, moved, prx, pry)
         # ...AND THE DITCH TO IT RUNS DOWNHILL (feature 287, water:W10/W11): the run ends at the pond's center, `back` down
@@ -689,6 +696,8 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
         # genuinely inside costs nothing - the brook is the drain's own continuation, so it still
         # touches the collector at its end - and it lets the exemption do its job.
         for back_off in (0.0, 12.0, 24.0, 40.0, 60.0):
+            if __debug__:
+                OPS["candidate@lay_sink"] += 1
             cand = (out[0] - heading[0] * back_off, out[1] - heading[1] * back_off)
             if point_in_poly(cand[0], cand[1], plan.envelope):
                 out = cand
@@ -714,6 +723,8 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
         _first = ((bd, sw, j) for sw in _swings for bd in (exit_deg, head_deg) for j in (70.0, 110.0, 160.0, 230.0))
         _wider = ((bd, sw, j) for j in (300.0, 400.0) for sw in _swings for bd in (exit_deg, head_deg))
         for base_deg, swing, jd in (*_first, *_wider):
+            if __debug__:
+                OPS["candidate@lay_sink"] += 1
             th = math.radians(base_deg + swing)
             bis = unit(heading[0] + math.cos(th), heading[1] + math.sin(th))
             mid = (out[0] + bis[0] * jd, out[1] + bis[1] * jd)

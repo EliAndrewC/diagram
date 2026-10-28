@@ -235,3 +235,67 @@ Loop kinds: F `for`, W `while`, lc/sc/dc list, set, dict comprehension, ge gener
 - **R:** `settlement/city/*` is reached only through `bridges.py`. The rest of `city/` (for example `moat.py`) shows up only via name matching (b).
 - **U/W:** `labels/*` and `settlement/finish.py` were scanned, not read.
 - **Not in scope but reached:** `settlement/rolling/*`, `settlement/city/*`, `settlement/land/*`, `waterfields/*` are included only where the name-matched graph reached them.
+## T09 - the water and fields stages, filtered by hand (2026-10-28)
+
+Stages: water_frame, field, sink, waterward, pond_stock, pond_bank. Each loop of the scan for these stages read; the counted
+ones carry `if __debug__: OPS["candidate@<key>"] += <n>` at the line named.
+
+**Counted (a site, shape or route tried):**
+
+| where | key | what each iteration tries |
+|---|---|---|
+| `hamletgen/water/fit.py` `_fit_at_aspect` | `_fit_at_aspect` | one carve of the fan at a size `k` |
+| `hamletgen/water/fit.py` `_finish_first_admissible` | `_finish_first_admissible` | one admissible carve finished and judged |
+| `hamletgen/water/brook.py` `bend_at` | `bend_at` | one bend offset on a stretch |
+| `hamletgen/water/brook.py` `clear_of_field` | `clear_of_field` | one nudge of a course vertex off the field |
+| `hamletgen/water/brook.py` `settle_course` | `settle_course` | one settling pass over a candidate course |
+| `hamletgen/water/brook.py` `feed_brook` (both swing loops) | `feed_brook` | one approach bearing of the brook |
+| `hamletgen/water/brook.py` `around_the_field` | `around_the_field` | one edge of the route search relaxed |
+| `hamletgen/water/brook.py` `draw_intake` | `draw_intake` | one weir-bar offset |
+| `hamletgen/water/polder.py` `walk_pond_uphill` | `walk_pond_uphill` | one reservoir seat up the fall |
+| `hamletgen/water/polder.py` `fit_polder` (both rounds) | `fit_polder` | one block size gridded; one winner cleaned |
+| `hamletgen/water/polder.py` `_polder_candidate` | `_polder_candidate` | one wander of the polder |
+| `settlement/fields/comb.py` `_refused` (the hem's predicate; also `grain.top_up`'s) | `_refused` | one dry plot offered |
+| `settlement/fields/comb.py` `bead_drowned` (passed to `bead_runs` by reference) | `bead_drowned` | one bean bead's seat |
+| `settlement/fields/comb_record.py` `_comb_source_channel` | `_comb_source_channel` | one pull of the intake into the field |
+| `settlement/fields/features.py` `_paddy_features` (pond, grave) | `_paddy_features` | one low plot for the pond; one plot for the grave |
+| `settlement/fields/features.py` `_pond_fit` | `_pond_fit` | one pond size in its plot |
+| `settlement/fields/paddy.py` `rest_basin` | `rest_basin` | one tuft sample in a rest basin |
+| `settlement/land/dikes.py` `perimeter_dike` | `perimeter_dike` | one scatter sample on the dike |
+| `hamletgen/sink.py` `pond_setback`, `pond_seat`, `lay_sink` (two), `confluence_keeps_the_brook` | the function | one setback, sway, back-off, route swing, confluence |
+| `settlement/farm_fixtures.py` `pond_fixture_fits` (pond_stock's and waterward's seats) | `pond_fixture_fits` | one sty seat on a pond bank |
+| `hamletgen/pondbank.py` `stage_pond_bank` | `stage_pond_bank` | one bank tree seat |
+| `waterfields/carve.py` `_bund_beans`' `buried` | `_bund_beans` | one bead seat against the other plots |
+| `waterfields/seams/close.py` `_split_steps` (a `min` with a key over the cuts) | `_split_steps` (`len(cuts)`) | one cut of a stepped ring |
+
+**Counted at the registry, no counter of their own** (the only test is `admits`/`conflicts`): `settlement/fields/paddy.py`
+`resting_plots`, `hamletgen/water/brook.py` `draw_intake`'s record.
+
+**Excluded, with why:**
+
+- measuring or reserving placed things, not trying a site: `hamletgen/water/comb.py` `stage_field`'s ditch corridors,
+  `polder.py` `stage_polder`'s and `dike_gaps_at_channels`, `brook.py` `outside_stretches`, `settlement/fields/comb.py`'s hem
+  ring detection (`_comb_record_field`) and its stream-reach tests, `landuse.py`'s channel cuts, `dikes.py`' breach tests,
+  `sink.py`'s lead scan, `brook_join` sampling and `route_refusals`;
+- a test the counted loops call, not a loop of trials: `brook_rules.py` (160, 259, 280), `sink.py` `pond_clear_of_crop`,
+  `pondbank.py` `seat_free`, `pondstock.py` `seat_faults`;
+- construction of the carved field (no site tried): `brook_course.py` `join_vertices`, `waterfields` partition, pockets,
+  clipping, settle;
+- nearest-point and ordering keys (a `min`/`sorted` over a measure, no test): the `key=` hits of the reference grep in these
+  stages' modules.
+
+**The water_frame stage** has no candidate loop: the walk finds only `pin_knob` and `meta`. **waterward**'s one trial is the
+sty seat it reserves (`pond_fixture_fits`, above).
+
+**Misses of T01's shared sites found here:** waterfields keeps its own geometry - `frame._seg_d`, `frame._pip`,
+`ring_rules._seg_dist`, `trunks._seg_dist` - which T01's `_geom` counters did not reach; counted now (`dist@`, `pt_test@`).
+Other module-local helpers (`brook_rules._proper_cross`, `_dist_to_course`) remain uncounted: these stages' counts are a lower
+bound until their rebuild (D2).
+
+**T09's cross-check** (`make perf-fanout SEED=25 HOT=20000 LABEL=443-T09`, 2026-10-28, `dev/perf-log/`): the field stage's
+anchors are the walk's or construction excluded above (`crosses_mid_run`, `crosses_poly` are tests; `grid_lines`, `_water`,
+`settle`, `_comb_clip_and_cap`, `bund_junctions` build the carve; `_pond_fit` and `_bund_beans` are counted). The sink's
+anchors are the registry's `conflicts` (counted there) and `cluster.back_fouled`, which no line of `hamletgen/sink.py` calls
+(grep, 2026-10-28) - a cluster predicate T10 counts by function wherever it is reached. No anchor is a miss of the walk.
+Python calls after T09 (the run's raw profiles, Python functions only): 10,594,880 at 40 households against 10,591,580 after
+T01 (+0.031%), 7,093,577 at 20 against 7,093,049 (+0.007%) - inside SC-001's one in a thousand.

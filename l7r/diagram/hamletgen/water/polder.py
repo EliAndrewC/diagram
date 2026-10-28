@@ -16,6 +16,7 @@ from l7r.diagram.settlement import PointGrid, Settlement, knob_rng, point_in_pol
 from l7r.diagram.settlement.land.dikes import CREST_REACH, DIKE_GAP_HW, GAP_REACH, course_breaches, dike_band, dike_crest
 from l7r.diagram.sitegen.geom import net_acres, poly_area
 from l7r.diagram.waterfields import build_polder, clean_polder_parcels
+from l7r.diagram.work_counts import OPS
 
 from ..consts import (
     DIKEPOND_CONVERSION,
@@ -75,6 +76,8 @@ def walk_pond_uphill(pond: tuple[float, float, float, float], envelope: list[Any
     reach = math.hypot(pond[2] * fall[0], pond[3] * fall[1])  # the ellipse's half extent along the fall
     last = max(0, math.ceil((pond[0] * fall[0] + pond[1] * fall[1] + reach - top) / step) + 1)
     for k in range(last + 1):
+        if __debug__:
+            OPS["candidate@walk_pond_uphill"] += 1
         seat = (pond[0] + ux * step * k, pond[1] + uy * step * k, pond[2], pond[3])
         if reservoir_clear_of_crop(seat, envelope) and reservoir_uphill_of_field(seat, envelope, fall):
             return seat
@@ -397,6 +400,8 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
     for _ in range(PAIR_ROUNDS):
         if min(miss(a) for a, _n in tried.values()) <= tolerance:
             break
+        if __debug__:
+            OPS["candidate@fit_polder"] += 1
         grid(*_nearest_pair(tried, sum(a / (r * c) for (r, c), (a, _n) in tried.items()) / len(tried), miss))
     # THE BAND IS MEASURED ON THE BLOCK AS DRAWN. The parcel cleanup runs on the WINNER only (feature 150 T55 - see
     # `clean_polder_parcels` for the 15 s -> 41 s it costs on all 45 candidates), and it and the apex pass trim ground
@@ -405,6 +410,8 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
     kept = 1.0
     cleaned: set[tuple[int, int]] = set()
     for _ in range(PAIR_ROUNDS):
+        if __debug__:
+            OPS["candidate@fit_polder"] += 1
         (r, c), (_raw, best) = min(((rc, an) for rc, an in tried.items() if rc not in cleaned), key=lambda t: miss(t[1][0] * kept))
         raw = net_acres(best, plan.ftpx)
         clean_polder_parcels(best)
@@ -474,6 +481,8 @@ def _polder_candidate(plan: SitePlan, seed: int, rows: int, cols: int, cellpx: f
     # hand-piled, fish-scale irregularity as the archetype can carry at that size.
     net: dict[str, Any] = {}
     for wander in (0.5, 0.4, 0.3, 0.2, 0.12):
+        if __debug__:
+            OPS["candidate@_polder_candidate"] += 1
         net = build_polder(
             plan.W,
             plan.H,

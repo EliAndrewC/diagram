@@ -23,6 +23,7 @@ from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.tags import Planted
 from l7r.diagram.settlement._geom.primitives import keepout_ring
+from l7r.diagram.work_counts import OPS
 
 from .._geom import Poly, Pt, point_in_poly, seg_dist, smooth_closed, smooth_points
 
@@ -261,6 +262,8 @@ class DikeMixin:
         random.seed(seed ^ 0x1D)
         g = [f'<clipPath id="{cid}">' + "".join(f'<path d="{rp}"/>' for rp in run_paths) + "</clipPath>", f'<g clip-path="url(#{cid})">']
         for _ in range(int((bx1 - bx0 + by1 - by0) * 0.7)):
+            if __debug__:
+                OPS["candidate@perimeter_dike"] += 1
             px, py = random.uniform(bx0, bx1), random.uniform(by0, by1)
             if not point_in_poly(px, py, smoothed):
                 continue

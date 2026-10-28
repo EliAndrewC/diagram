@@ -14,6 +14,8 @@ import random
 from collections.abc import Callable, Sequence
 from typing import Any
 
+from l7r.diagram.work_counts import OPS
+
 from .banks import StrokeIndex, polyline_cum
 from .frame import CANAL_BERM_FT, Poly, Pt, _at_f, _Frame, _miter_normals, _pip, _seg_d, _Thread, taper_w
 from .furrows import TRACT_PLOT_TURN_RAD, tract_ways
@@ -387,6 +389,8 @@ def _bund_beans(R: random.Random, plots: list[dict[str, Any]], frac: float, spac
     boxes = [(min(q[0] for q in p["poly"]), min(q[1] for q in p["poly"]), max(q[0] for q in p["poly"]), max(q[1] for q in p["poly"])) for p in plots]
 
     def buried(x: float, y: float, host: int) -> bool:
+        if __debug__:
+            OPS["candidate@_bund_beans"] += 1  # a bead's seat tried (feature 443 T09)
         for j in range(host + 1, len(plots)):
             bx0, by0, bx1, by1 = boxes[j]
             if not (bx0 - tol <= x <= bx1 + tol and by0 - tol <= y <= by1 + tol):

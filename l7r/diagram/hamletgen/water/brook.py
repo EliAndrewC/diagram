@@ -17,6 +17,7 @@ from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly
 from l7r.diagram.settlement._knobs import Knob, register_knob
 from l7r.diagram.settlement.water_ways.water import SUPPLY_HUE
 from l7r.diagram.sitegen.geom import crosses_poly, unit
+from l7r.diagram.work_counts import OPS
 
 from ..consts import (
     BROOK_FRAME_MARGIN,
@@ -364,6 +365,8 @@ def bend_at(course: Sequence[Pt], span: Sequence[Pt], need: Callable[[Pt], tuple
         a, b = course[k], course[k + 1]
         base = ((a[0] + b[0]) / 2.0, (a[1] + b[1]) / 2.0)
         for off in sorted(need(base), key=abs):  # the smaller of the two bends first
+            if __debug__:
+                OPS["candidate@bend_at"] += 1
             q = (base[0] + away[0] * off, base[1] + away[1] * off)
             if abs(off) <= min(math.dist(a, b) / 2.0, cap) and not point_in_poly(q[0], q[1], list(envelope)):
                 return [*course[: k + 1], q, *course[k + 1 :]]
@@ -453,6 +456,8 @@ def clear_of_field(course: Sequence[Pt], envelope: Sequence[Pt], away: Pt, sluic
     for k in range(len(out) - 1):
         free = [q for q in (k, k + 1) if q not in pinned]
         for _ in range(limit if free else 0):
+            if __debug__:
+                OPS["candidate@clear_of_field"] += 1
             inside = [q for q in (k, k + 1) if point_in_poly(out[q][0], out[q][1], ring)]
             # a crossing counts only where both ends are free to answer for it: the leg into the tap is the intake itself
             if not ([q for q in inside if q not in pinned] or (len(free) == 2 and k + 1 != tap and crosses_poly(out[k], out[k + 1], ring))):
@@ -469,6 +474,8 @@ def settle_course(course: Sequence[Pt], plan: SitePlan, sluice: Pt) -> Poly:
     away = (-plan.fall[1] * plan.brook_side, plan.fall[0] * plan.brook_side)  # the flank's outward normal, as `brook_skirt`'s
     out = list(course)
     for _ in range(SETTLE_PASSES):
+        if __debug__:
+            OPS["candidate@settle_course"] += 1
         before = out
         out = unfold(axes_off(clear_of_field(out, plan.envelope, away, sluice), away, sluice, plan.fall), BROOK_MAX_TURN_DEG, hold=[sluice])
         out = axes_off(bend_runs(out, plan, sluice, away), away, sluice, plan.fall)
@@ -559,6 +566,8 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
         # the ditches' outside stretches rather than judge fifteen approaches on a skirt that cannot pass
         skirt = brook_skirt(plan, sluice, plan.brook_side, [*crop, *outside_stretches(plan, ditches)])
     for swing in sorted((10.0 * k for k in range(-7, 8)), key=abs):
+        if __debug__:
+            OPS["candidate@feed_brook"] += 1
         legs = approach_legs(plan, sluice, math.radians(base + swing), run)
         if legs is None:
             continue
@@ -573,6 +582,8 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
     for again in (False, True):
         sk = brook_skirt(plan, sluice, plan.brook_side, [*crop, *outside_stretches(plan, ditches)]) if again else skirt
         for swing in sorted((10.0 * k for k in range(-7, 8)), key=abs):
+            if __debug__:
+                OPS["candidate@feed_brook"] += 1
             course = settle_course([*round_the_field(plan, sluice, math.radians(base + swing), run), sluice, *sk], plan, sluice)
             if not brook_violations(course, plan, sluice, ditches):
                 return course
@@ -640,6 +651,8 @@ def around_the_field(envelope: Sequence[Pt], start: Pt, goal: Pt, pad: float = B
             break
         todo.discard(i)
         for j in todo:
+            if __debug__:
+                OPS["candidate@around_the_field"] += 1
             nd = best[i] + math.dist(nodes[i], nodes[j])
             if nd < best.get(j, math.inf) and clear(i, j):
                 best[j], prev[j] = nd, i
@@ -724,6 +737,8 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     # past its next vertex the bar would no longer cross the course it was turned to); none there is refused by name
     reach = math.dist(sluice, nxt) if nxt else 2 * half
     while True:
+        if __debug__:
+            OPS["candidate@draw_intake"] += 1
         cx, cy = sluice[0] + hx * off, sluice[1] + hy * off
         poly = [(cx + ax * a * half + hx * b * half_t, cy + ay * a * half + hy * b * half_t) for a, b in ((1, 1), (-1, 1), (-1, -1), (1, -1))]
         rec = {

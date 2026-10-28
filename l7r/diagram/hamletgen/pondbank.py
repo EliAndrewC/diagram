@@ -17,6 +17,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.settlement.land.wet import ellipse_ring
+from l7r.diagram.work_counts import OPS
 
 from .consts import POND_BANK_CROWN_FT, POND_BANK_FT, POND_BANK_PITCH_FT, POND_BANKS, Pt
 from .plan import SitePlan, _roll
@@ -150,6 +151,8 @@ def stage_pond_bank(s: Settlement, plan: SitePlan) -> None:
     if form == "planted":
         r = s.px(POND_BANK_CROWN_FT)
         for x, y in bank_seats(s, plan.sink_pond):
+            if __debug__:
+                OPS["candidate@stage_pond_bank"] += 1
             if seat_free(s, x, y, r) and all(math.hypot(x - a, y - b) >= 2 * r for a, b, _r, _k in trees):
                 trees.append((x, y, r, ("mulberry", "cudrania")[len(trees) % 2]))
         draw_bank_trees(s, trees)

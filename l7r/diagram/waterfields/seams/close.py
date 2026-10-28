@@ -12,6 +12,8 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
     from shapely.geometry import Polygon
 
+from l7r.diagram.work_counts import OPS
+
 from ..banks import (
     _TOE_MIN_APEX,
     _TOE_MIN_AREA,
@@ -226,6 +228,8 @@ def _split_steps(poly: Polygon, ctx: RingContext) -> list[Polygon]:
         hops = jog_vertices(_ring(q), g)
         cuts = [cut for b, c in hops for cut in [_cut_on_hop(q, b, c)] if cut] if len(hops) > MAX_STEPS else []
         if cuts:
+            if __debug__:
+                OPS["candidate@_split_steps"] += len(cuts)
             todo += min(cuts, key=lambda cut: (sum(1 for part in cut if ring_violations(_ring(part), ctx) - {"steps"}), -min(part.area for part in cut)))
         else:
             done.append(q)

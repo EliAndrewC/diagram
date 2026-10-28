@@ -55,65 +55,53 @@
    "reviewed": "2026-10-28",
    "declared": "round-arbiter"
   },
-  "### T01 (the design's section 1: counted work that survives a port; FR-001, FR-002)": {
-   "sha256": "a024d0514266c24adcf31ae95125c3e672d91a66570aea3703418c8b94af63cf",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T01 Approach (checklist part A)": {
-   "sha256": "23702f61331bcf4379733dfa52fcc0832aafd2262c79c2db342a684fc2443af6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
   "### T09 (the walk of the water and fields stages: plan D2, the round arbiter's ruling on ask:443-plan-round-3)": {
-   "sha256": "903bf314b60ee6ee3ded75afc8616bb431e1ec296b4f13b3dfe33f422638edc7",
+   "sha256": "3fc0083518bb4a828199ae561fe0c08a5bd0167f6d35367b3e672e5ede90799e",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T09 Approach (checklist part A)": {
-   "sha256": "0b222f93546e33e996507f2bf94c53780484dfeab1f587b36cfafdff23dfe652",
+   "sha256": "d59870534205df698a69dd9912d266b80f93f5c30f2bf58a69ff7b7695a46b3d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T10 (the walk of the homesteads family: plan D2, the round arbiter's ruling on ask:443-plan-round-3)": {
-   "sha256": "b7674b5b6d698737003fade5ac6e0ee8be1015cf5d4e1abf0356720f567d7e90",
+   "sha256": "25c6e3cda175ac5e81e512cc8a4655e6be39362439671408a9970fbb6062fb2a",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T10 Approach (checklist part A)": {
-   "sha256": "bdc0482272e4b1faee77c6ceb73f60c6e000e294672daae8c8788a47039a0c13",
+   "sha256": "a7a3a99ce0a273fe4e886948c4ce4a999d4309e53b274b9dda85d67049df08ed",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T11 (the walk of the ways: plan D2, the round arbiter's ruling on ask:443-plan-round-3)": {
-   "sha256": "8795cf4e288c1fd1deb45033e9086ef0833ec6cb0de28365aedc8edf7ef21943",
+   "sha256": "aef0bd2ac7efe28fa55777bbe46cb7056376a963aea19fd16653d2f43fc8e8cc",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T11 Approach (checklist part A)": {
-   "sha256": "a61123add6a61011b112c3b770dad514a07362782ff8653853b1632b1965c678",
+   "sha256": "7dc9ba02397319aa25a96108edcf8bf6b54d923fef733905e37a5d976af92b33",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T12 (the walk of ground cover, the frame, the notice board and the labels: plan D2, the round arbiter's ruling on ask:443-plan-round-3)": {
-   "sha256": "e20b911f83f0c2d01a9487b358c6637c8d811e3df2931eb181d5fe64c0c7da2e",
+   "sha256": "cfa68cf5a21b39151023f73ee02b8c96037c2fad074916a0cd492a1fe0add16d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T12 Approach (checklist part A)": {
-   "sha256": "100e0acb6db8fec26135d9b4d7f28c09cab341f391bb1466b1b429b55ae35c99",
+   "sha256": "23d88ea8f2c95f2948abf5c8d89a8e017a87a20731e5793379fbe43f248f4308",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T02 (FR-003, FR-004: today's figures for every stage, and the counters inert)": {
    "sha256": "387d434ff525d0d1225e9384d6cbca407f1daf7e2f8060e6700bb5f4acf1e076",
@@ -823,6 +811,28 @@
      "why": "Matches the request's step 1 ('the instrument ... Engine counters only; no map changes') and FR-002's 'the manifest is unchanged'. The empty perf-work table (header only, no rows) is consistent with 'Performance work? no' and declares no step."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T09 (the walk of the water and fields stages: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T09 Approach (checklist part A)",
+    "### T10 (the walk of the homesteads family: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T10 Approach (checklist part A)",
+    "### T11 (the walk of the ways: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T11 Approach (checklist part A)",
+    "### T12 (the walk of ground cover, the frame, the notice board and the labels: plan D2, the round arbiter's ruling on ask:443-plan-round-3)",
+    "### T12 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:443-T09-plan-round-3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -881,6 +891,71 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T09": {
+   "section_sha256": "364d2b83dfeeaeb3ee1a79a748ea877f99c59eb9f4c9da8c6c8b581e3fd192c2",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T09-stages",
+     "summary": "The family is water_frame, field, sink, waterward, pond_stock, pond_bank.",
+     "class": "within",
+     "why": "A partition of D2's every-stage walk into a family. It narrows nothing."
+    },
+    {
+     "id": "T09-source",
+     "summary": "The source is an ast call graph over hamletgen, settlement, waterfields, sitegen, overlap and labels. It follows resolved calls (an import, self., a module attribute, a unique method name) and lists every loop, comprehension and min/max/sorted/next in a reached function whose subtree calls a test, directly or through a testing helper. A getattr dispatch, a module reached only by name matching, the modules on the 'not fully walked' list, and water/brook*.py and water/polder.py are read by hand.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The stated reach follows CALLS only. A function passed BY REFERENCE is a Name or Attribute node, not a Call: min(cands, key=self._gap), sorted(..., key=f), filter(ok, cands), map(f, cands) or a callback. So a bare key-function min or sorted, or a filter or map over a testing predicate, has no test call in its subtree and is not listed. The plan knows the form exists, because its own counter rule names 'a key function' as a counting site. But the reach does not say references are resolved, and the hand-read list does not name them. filter and map are not among the listed forms at all. A second, lesser gap: a method call whose name is NOT unique is unresolved under the stated rule, and the text does not say whether that falls inside 'not fully walked' or is dropped. The fanout cross-check does not cure this. D2 makes the walk the source and allows a stage 'none' only by the walk (this block's step 2 says the same), so a stage whose only candidate loop is a key-function min would be written 'none' by the source. This is not impossible to cover, it is not implied by the request, and it defeats D2's walk-as-source. The fix is to state that function-valued arguments (key=, filter, map, callbacks) are resolved as reaches and filter and map are listed forms, or else to name them in the hand-read residue, and to say where unresolved non-unique method calls go."
+    },
+    {
+     "id": "T09-count-placement",
+     "summary": "n = 1 per iteration. Where the test is a named predicate or a key function, the inline increment goes inside it, keyed with it, with no call.",
+     "class": "within",
+     "why": "This is FR-001 literally: an inline increment inside if __debug__ with no call, once per candidate (request.md: 'count once per element')."
+    },
+    {
+     "id": "T09-count-len",
+     "summary": "Only a bare sorted or min, or an inline lambda over a list, takes OPS[...] += len(cands) before it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is an exception to FR-001's 'no function call'. It is implied by FR-001's own clause 'a vectorized operation counts its elements' and by the GM's 'They count once per element, even when a vectorized call handles many elements' (request.md section 1). A bare sorted or min over a list is a C-level operation over n elements with no Python body to hold an increment, which is exactly that case. A lambda cannot hold a statement. The exception is scoped to those forms only, and any named predicate or key function counts inside itself. FR-001's stated purpose also still holds, because a C builtin raises no sys.monitoring PY_START event, and the exit re-measures the calls. The ruling does not rest on the figure '7,564,885 calls in both engines'. That figure points only at research/overhead.md and carries no m: key and no date, so it fails the figures rule on its face. Give it an m: key or a dated method label."
+    },
+    {
+     "id": "T09-registry-only",
+     "summary": "A loop whose only test is the registry's admits or conflicts takes no candidate@<function> counter of its own. It is counted by the registry's candidate@Standing.conflicts.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is NEW since the last verdict, and it is a direct narrowing of D2's 'each gets a candidate@<function> increment per candidate tried'. D2's registry bullet already counts a candidate on every admits or conflicts call. So a loop counter on a loop whose only test is the registry would count the same candidate twice, against the GM's 'count once per element' (request.md section 1). That resolves D2's two bullets in favor of the GM's words. The carve-out is tight: a loop that also tests against _geom keeps its own counter. What it costs is which function the candidates came from inside a stage. FR-002's per-stage attribution and step 1's per-stage figures do not need that."
+    },
+    {
+     "id": "T09-exit-calls",
+     "summary": "Green requires the Python calls unmoved within SC-001's one in a thousand, read from make perf-fanout's Python functions as research/overhead.md reads them.",
+     "class": "within",
+     "why": "SC-001 measures 'the Python calls make perf-fanout counts'. The request defines Python call counts as the thing that misses work in C, including builtins ('They also miss work done in C: shapely, numpy and builtins', request.md section 1). So reading Python functions only is SC-001's own measure, and not a reading chosen to hide the len() calls."
+    },
+    {
+     "id": "T09-exit-fanout",
+     "summary": "make perf-fanout's anchors for the family's stages are read against the list, and each anchor the walk missed is added and written as a miss.",
+     "class": "within",
+     "why": "This is D2's cross-check, as D2 words it."
+    },
+    {
+     "id": "T09-none-by-walk",
+     "summary": "A stage is 'none' only by the walk. The fanout is a cross-check.",
+     "class": "within",
+     "why": "D2: 'A stage the walk finds no candidate loop in is recorded as such.'"
+    },
+    {
+     "id": "T09-order-budget-done",
+     "summary": "After T01, the families in any order, each its own landing. One landing, with the claims triage as a check-wave. Done when the family's section is complete and its counts are printed per stage. Red: recorded, set down, and a claim of impossibility goes to make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and bookkeeping that narrow nothing the request or the spec asks for."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
