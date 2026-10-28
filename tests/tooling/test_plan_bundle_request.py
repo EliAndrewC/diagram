@@ -151,3 +151,9 @@ def test_a_cited_range_of_requirements_is_written_out_id_by_id() -> None:
     assert pb.expand_ranges("D5 (FR-005-FR-007)") == "D5 (FR-005, FR-006, FR-007)"
     assert pb.expand_ranges("FR-001 to FR-003; SC-002 to 004") == "FR-001, FR-002, FR-003; SC-002, SC-003, SC-004"
     assert pb.expand_ranges("FR-007-FR-005 and FR-001 to FR-099") == "FR-007-FR-005 and FR-001 to FR-099", "backwards or too long: left as written"
+
+
+def test_a_cited_range_of_decisions_is_written_out_too() -> None:
+    """Feature 442: "D1-D4" cites D2 and D3 too."""
+    assert pb.expand_ranges("(D1-D4; FR-001 to FR-002)") == "(D1, D2, D3, D4; FR-001, FR-002)"
+    assert pb.expand_ranges("D5 to D3") == "D5 to D3"

@@ -42,6 +42,8 @@ _ITEM = re.compile(r"^- \*\*((?:FR|SC)-\d{3}[a-z]?)\b", re.M)
 #: A RANGE OF REQUIREMENTS, CITED AS ONE (feature 440): "FR-005-FR-007", "FR-005 to FR-007", "FR-001 to 008" - every id in it is
 #: cited; the bundle once kept only the two ends, and feature 440's plan review blocked on the FR-006 it left out
 _RANGE = re.compile(r"\b(FR|SC)-(\d{3})\s*(?:-|to|through)\s*(?:(?:FR|SC)-)?(\d{3})\b")
+#: ...and a range of decisions: "D1-D4", "D3 to D5" (442's preflight was handed D1 and D4 of "D1-D4")
+_DRANGE = re.compile(r"\bD(\d+)\s*(?:-|to|through)\s*D(\d+)\b")
 
 
 def expand_ranges(text: str) -> str:
@@ -51,7 +53,11 @@ def expand_ranges(text: str) -> str:
         a, b = int(m.group(2)), int(m.group(3))
         return ", ".join(f"{m.group(1)}-{n:03d}" for n in range(a, b + 1)) if 0 < b - a <= 40 else m.group(0)
 
-    return _RANGE.sub(each, text)
+    def each_d(m: re.Match[str]) -> str:
+        a, b = int(m.group(1)), int(m.group(2))
+        return ", ".join(f"D{n}" for n in range(a, b + 1)) if 0 < b - a <= 40 else m.group(0)
+
+    return _DRANGE.sub(each_d, _RANGE.sub(each, text))
 #: every form the plans write a decision in (405 T133, D123): `**D83 - `, `- **D96 - `, `- **D121** `, `- **D7 The ...**` and
 #: `**D8.**` - the first form alone left 452 decisions out of every `spec-cited.md` that cited one
 _DECISION = re.compile(r"^(?:- )?\*\*(D\d+[a-z]?)(?: - |\*\*|\.| )", re.M)

@@ -122,6 +122,85 @@
      "why": "FR-003 requires the round's dispatch to show the new candidate; no decision extends FR-001 to hm_review_round.accepted, which FR-001 keeps out."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "### T01 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-order",
+     "summary": "One task, four parts: the four improvements built together in one task and one landing (items 5, 8).",
+     "class": "within",
+     "why": "The GM asked for 'those' improvements to be knocked out together, before the talk about what moves the needle; bundling them in one task drops none of FR-001 to FR-005."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green: landed with its tests. Red: the failure recorded, the task set down, a claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Process for an exit. It narrows nothing: a part that cannot be done is not dropped by the plan's say-so, it goes to the arbiter."
+    },
+    {
+     "id": "T01-done",
+     "summary": "Done when the listed tests pass and make trial-review F=441 prints the stopped trial's dispatch.",
+     "class": "within",
+     "why": "Trial 441 is the measurement-only trial stopped at the measurement that prompted the fourth item; running FR-004's command on it is the requested behavior shown on the case that motivated it. Other trial kinds are still covered by FR-004/SC-004's test."
+    },
+    {
+     "id": "T01-measures",
+     "summary": "Each step measured alone: verdict reader by test_features.py and test-review-gate.sh; the sync by test-sync-with-main.sh case_28; the criterion check by test_stale_terms.py and test-review-round-hooks.sh; the trial review by test_trial_review.py and test_trial_start.py; the docs read for the four.",
+     "class": "within",
+     "why": "Each test enforces a requested item (SC-001 to SC-005); none adds behavior or verifies something unasked."
+    },
+    {
+     "id": "T01-not-performance",
+     "summary": "Performance work? No.",
+     "class": "within",
+     "why": "The four items are tooling improvements; the GM put the work that moves the needle in a later conversation, so declining to treat this as performance work follows the request."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "410a73f516516866473a5cf9a616dd496d4bb94a4b83e97de6d9aa9a5e419b02",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T01-order",
+     "summary": "One task, four parts: the four improvements built together in one task and one landing (items 5, 8).",
+     "class": "within",
+     "why": "The GM asked for 'those' improvements to be knocked out together, before the talk about what moves the needle; bundling them in one task drops none of FR-001 to FR-005."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green: landed with its tests. Red: the failure recorded, the task set down, a claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Process for an exit. It narrows nothing: a part that cannot be done is not dropped by the plan's say-so, it goes to the arbiter."
+    },
+    {
+     "id": "T01-done",
+     "summary": "Done when the listed tests pass and make trial-review F=441 prints the stopped trial's dispatch.",
+     "class": "within",
+     "why": "Trial 441 is the measurement-only trial stopped at the measurement that prompted the fourth item; running FR-004's command on it is the requested behavior shown on the case that motivated it. Other trial kinds are still covered by FR-004/SC-004's test."
+    },
+    {
+     "id": "T01-measures",
+     "summary": "Each step measured alone: verdict reader by test_features.py and test-review-gate.sh; the sync by test-sync-with-main.sh case_28; the criterion check by test_stale_terms.py and test-review-round-hooks.sh; the trial review by test_trial_review.py and test_trial_start.py; the docs read for the four.",
+     "class": "within",
+     "why": "Each test enforces a requested item (SC-001 to SC-005); none adds behavior or verifies something unasked."
+    },
+    {
+     "id": "T01-not-performance",
+     "summary": "Performance work? No.",
+     "class": "within",
+     "why": "The four items are tooling improvements; the GM put the work that moves the needle in a later conversation, so declining to treat this as performance work follows the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }
