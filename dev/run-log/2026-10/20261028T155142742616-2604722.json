@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-28T15:51:42Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 287,
+  "result": "failed: test-full",
+  "commit": "bd65ee046",
+  "first_failure_s": 55.3,
+  "last_failure_s": 55.3,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/gate/hamletgen/test_driver.py::test_no_rolled_hamlet_took_a_seated_house_back"
+  ],
+  "host": {
+    "load": [
+      8.85,
+      8.24
+    ],
+    "mem_avail_mb": [
+      5010,
+      7714
+    ],
+    "cpu_temp_c": [
+      100.0,
+      100.0
+    ],
+    "stall_s": {
+      "cpu": 6.1,
+      "io": 0.9,
+      "io_full": 0.7,
+      "memory": 0.5
+    },
+    "throttle_ms": {
+      "core": 346876,
+      "package": 134509
+    }
+  },
+  "phases": {
+    "preflight": 30.0,
+    "static": 3.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 1.0,
+    "counters-inert": 15.0,
+    "pytest": 259.0,
+    "test-full": 267.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)",
+  "selected": 10308,
+  "collected": 10308
+}
