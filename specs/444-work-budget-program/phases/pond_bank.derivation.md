@@ -2,45 +2,53 @@
 
 ## Contract
 
-- Reads: the tail pond (radii rx and ry, the manifest's `pond`) and its reed fringe (`SINK_FRINGE`, 44 ft), the knob `pond_bank` (rolled bare or planted, 0061), the fan's outline (indexed by the field stage), the brook, and the settlement's standing index of what stands - roofs, wellheads, yards' and beds' sun ground, treads, crowns - kept by the stages before it.
-- Writes: on a planted bank, mulberry and cudrania in turn round the ring, one seat every `POND_BANK_PITCH_FT` (30 ft, a GUESS), the ring a crown's radius (`POND_BANK_CROWN_FT`, 6 ft, a GUESS) beyond the reeds, each seat jittered within the bank's play (`POND_BANK_FT`, 18 ft, less two crown radii: 6 ft, across the ring), each crown recorded in `tree_crowns` and the trees in `meta.pond_bank_trees`; on a bare bank, nothing.
-- Keeps: no crown on a roof or a wellhead, or on a yard's or bed's sun ground; no trunk on a tread, the crop or the water (0061, 0071); no two crowns overlap (CONVENTION) - which the pitch keeps by itself: seats 30 ft apart, jittered at most 6 ft across the ring, stand at least 24 ft apart, twice a crown's 12 ft width, and the ring divided evenly leaves the closing gap no shorter than the pitch. The cohort's checks: each crown against the overlap matrix (`tree_crowns`) - carried by the seat's tests.
-- Bounds (measured 2026-10-28 from the reference manifests at 10 and 20 households, `phases/items.md`): the seat ring 27 seats at 10 and 34 at 20 (the pond's radii plus 50 ft, over the pitch), growing with the pond: 34 at 20, 44 at 40, 57 at 80. Within reach of any seat (its crown and a crown's width of pad, 12 ft): no roof, sun ground, wellhead, lane or crown at 10 or 20; the crop no nearer than 26 ft; the brook within 3 ft at 10 (62 ft at 20) - so a seat's queries find at most the brook's 2 nearest segments.
+- Reads: the tail pond (radii rx and ry, the manifest's `pond`: 134 at 20, 190 at 40, 268 at 80 for rx and 85 at 20, 121 at 40, 170 at 80 for ry, the sink's own figures) and its reed fringe (`SINK_FRINGE`, 44 ft), the knob `pond_bank` (rolled bare or planted, 0061), the fan's outline in the field's index (square cells of 38.6 ft), the brook, and what stands - roofs, wellheads, yards' and beds' sun ground, crowns and lanes - in a standing grid of 24 ft cells (two crown reaches) the stages before it keep as they place.
+- Writes: on a planted bank, mulberry and cudrania in turn round the ring, one seat every `POND_BANK_PITCH_FT` (30 ft, a GUESS), the ring a crown's radius (`POND_BANK_CROWN_FT`, 6 ft, a GUESS) beyond the reeds, each seat jittered within the bank's play (`POND_BANK_FT`, 18 ft, less two crown radii: 6 ft, across the ring), each crown in `tree_crowns`, the trees in `meta.pond_bank_trees`; on a bare bank, nothing.
+- Keeps: no crown on a roof or a wellhead, or on a yard's or bed's sun ground; no trunk on a tread, the crop or the water (0061, 0071); no two crowns overlap (CONVENTION), which the pitch keeps by itself: seats 30 ft apart, jittered at most 6 ft across the ring, stand at least 24 ft apart, twice a crown's width, and the ring divided evenly leaves the closing gap no shorter than the pitch. The cohort's checks: each crown against the overlap matrix (`tree_crowns`) - carried by the seat's tests.
+- Bounds (measured 2026-10-28, the reference manifests, `phases/items.md`): the seat ring the pond's radii plus 50 ft, its perimeter divided evenly at no less than the pitch: floor(perimeter / 30), 33 at 20, 43 at 40, 56 at 80 (the radii x1.41 a doubling, the sink's figures). Of what stands: the smallest side of any footprint 10.3 ft (a byre or a bed, measured at 10; 10.9 ft at 20), a wellhead 16 ft across, the smallest crown 12.8 ft; the most lane segments in one 24 ft cell 8 (at a junction, measured at 20); the brook 7 ft wide, the most brook segments in one 38.6 ft cell 12; the most outline segments in one 38.6 ft cell 11.
 
 ## The algorithm
 
     roll the bank's form; if bare, record it and return
-    for each seat round the ring, at the pitch: jitter it within the bank's play; query its crown and its trunk in the
-        standing index (each query a crown's reach, at most 4 cells); test the trunk against the outline in its cell and the
-        pond exactly, and the brook's segments in its cells; seat it if it stands free
+    for each seat round the ring, at the pitch: jitter it within the play; look once at the 4 standing grid cells its crown reaches
+        (the trunk is the crown's center, so the same look serves both), testing every footprint and lane in them; test the
+        trunk against the outline segments in its 38.6 ft cell, and the brook's segments in its cell and in any neighbor within the brook's half-width, and the pond exactly; seat it if free
     record the trees and their kinds
+
+## Indexes
+
+- standing grid: cells of 24 ft (two crown reaches); densest 19 footprints a cell, from a smallest side of 10.3 ft - non-overlapping footprints touching a cell lie in a square of 24 + 2 x 10.3 ft, each holding at least a 10.3 ft square of it: ((24 + 2 x 10.3) / 10.3)^2 = 18.75, rounded up - and 8 lane segments a cell (measured at a junction, the ceiling)
+- outline index: cells of 38.6 ft (the field's); densest 11 outline segments a cell, measured - a cell's side of 38.6 ft against the outline's 0.1 ft sliver; the ceiling
+- brook cells: cells of 38.6 ft (the field's grid); densest 12 brook segments a cell, measured - a cell's side of 38.6 ft against the brook's shortest segment, 2.9 ft; the ceiling
 
 ## The count, factor by factor
 
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
-| items | per item | 34 at 20, 44 at 40, 57 at 80 | the ring's seats (the Bounds) | a planted bank at 80 households |
-| the standing queries (cells examined) | per item | 8 | the crown's and the trunk's queries, each at most 4 cells of the standing index; nothing found within reach at 10 or 20 (the Bounds) | always 8 |
-| the crop | per item | 5 | the trunk against at most 4 outline segments in its cell, the cell examined once | always 5 |
+| items | per item | 33 at 20, 43 at 40, 56 at 80 | the ring's seats (the Bounds) | a planted bank at 80 households |
+| the standing grid's look (cells examined) | per item | 4 | the crown's reach, 12 ft, in 24 ft cells meets at most 4; the trunk is its center, so one look serves both | always 4 |
+| the footprints | per item | 76 | at most 19 a cell (the Indexes) x 4 cells | the densest cells |
+| the lanes | per item | 32 | at most 8 segments a cell, junctions included (the Indexes) x 4 cells | a seat at a junction |
+| the crop (outline index cells examined) | per item | 12 | the trunk's cell examined and at most 11 outline segments | the 11-segment ceiling |
+| the brook (brook cells examined) | per item | 52 | the brook is 7 ft wide, so a trunk within 3.5 ft of a cell's edge is tested against the next cells too: at most 4 cells, each examined and its at most 12 brook segments tested | a seat at a cell's corner beside the brook |
 | the pond | per item | 1 | one exact distance from the ellipse | always 1 |
-| the brook (cells examined) | per item | 6 | its at most 4 cells near the trunk and its 2 nearest segments | a seat beside the brook, as at 10 |
 | the jitter | per item | 1 | one draw within the play | always 1 |
 | the kind | per item | 1 | the next of mulberry and cudrania | always 1 |
-| slack | per item | 1 | every factor is a bound at its worst case | not applicable |
-| the roll | once | 1 | the bank's form, rolled once | always 1 |
+| slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
+| the roll | once | 1 | the bank's form | always 1 |
 
-So: seats x (8 + 5 + 1 + 6 + 1 + 1) x 1 + the roll - growing as the pond's ring.
+So: seats x (4 + 76 + 32 + 12 + 52 + 1 + 1 + 1) x 1 + the roll.
 
 ## Totals
 
-- at 20: 34 x (8 + 5 + 1 + 6 + 1 + 1) x 1 + 1 = 749
-- at 40: 44 x (8 + 5 + 1 + 6 + 1 + 1) x 1 + 1 = 969
-- at 80: 57 x (8 + 5 + 1 + 6 + 1 + 1) x 1 + 1 = 1255
+- at 20: 33 x (4 + 76 + 32 + 12 + 52 + 1 + 1 + 1) x 1 + 1 = 5908
+- at 40: 43 x (4 + 76 + 32 + 12 + 52 + 1 + 1 + 1) x 1 + 1 = 7698
+- at 80: 56 x (4 + 76 + 32 + 12 + 52 + 1 + 1 + 1) x 1 + 1 = 10025
 
 ## Cheaper algorithms considered
 
 - sweep: used - the ring is walked once, seat by seat, at its pitch
-- grid or spatial index: used - the standing index the earlier stages keep, and the field's outline index, so a seat meets a bounded number of cells
+- grid or spatial index: used - the standing grid of 24 ft cells and the field's outline cells, so a seat meets a bounded number
 - priority queue: not used - no seat is ranked; each is taken or left on its own test
-- incremental update: used - the standing index is kept by the stages before, so this stage builds none; and the pitch keeps the crowns apart, so no seat is tested against another
-- memoizing what a scan does not change: used - the pond's ellipse and the ring are computed once, before the walk
+- incremental update: used - the standing grid is kept by the stages before as they place, so this stage builds none; and the pitch keeps the crowns apart, so no seat is tested against another
+- memoizing what a scan does not change: used - one look at the 4 standing cells serves both the crown and the trunk
