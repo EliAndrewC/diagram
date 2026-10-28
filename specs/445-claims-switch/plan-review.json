@@ -78,6 +78,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "90fb1c0b3f4eed72cde4125e30f466e4c27a78c7c6089f3cda5bbe8890d1f30d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "e9d019b457252ef5a7b8bf0cf8f036d74322df416a1fc6ba3b9fffec970036a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "1899c9202bc10eed36d80001b5631fcfdf710db68c12ce249132fb132ef4ecac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "8a0c2342a7a2a705e4ee9a758ba545f669a7947832dfad61983ad6399270d4ba",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -260,6 +284,42 @@
      "summary": "on failure: recorded and set down, a claim it cannot be done goes to make arbiter-ask",
      "class": "within",
      "why": "procedure for a failed task; narrows nothing asked and drops no requirement - an impossibility claim goes to the arbiter rather than being decided by the session"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-A",
+     "summary": "T01's checklist: goal 'a claims switch on record, thrown with a reason, shipped at report'; constraints FR-001, FR-004, D1; green exit tests/test_switches.py on both axes; done = dev/switches.json reads claims: report with the GM's words.",
+     "class": "within",
+     "why": "Restates FR-001/FR-004/D1 and SC-001 without dropping any part: the two targets with a reason, the report default, the GM's words as reason ('building the check that we want, but then disabling it'). 'Both axes' matches D1's write keeping remote and claims."
+    },
+    {
+     "id": "T02-A",
+     "summary": "T02's checklist: goal 'findings recorded, not refused, at report; every open finding refused at clean'; constraints FR-002, FR-003, D2, D3; green exit tests/tooling/test_claims_switch.py with each refusal red when deleted; done = a landing at report passes with findings warned and none filed.",
+     "class": "within",
+     "why": "Matches the GM's 'ignore claims so long as they are properly marked and show up in the claims report' (report state: warned, not filed, owed claims and form problems still refused per FR-002) and his long-run rule (clean state refuses every open finding, FR-003). The done measure names the report case; the clean case is carried by the cited D3 and the green exit's tests (SC-003). The deletion test is FR-006's enforcement, not extra scope. Nothing excepted beyond what FR-002/FR-003 already carry."
+    },
+    {
+     "id": "T03-A",
+     "summary": "T03's checklist: goal '405 closed and its engine work handed to the phases that rebuild it'; constraints FR-005, D4; world check reads 405's open tasks against STAGES (observed 2026-10-28, with method); green exit make speckit-todo lists 405 closed; done = phase-inputs.md names each of the six tasks once.",
+     "class": "within",
+     "why": "The accepted recommendation verbatim: close 405, move T98, T101, T104, T106, T111 and T165 to 444 as inputs to their phases. The 'six tasks' census matches the request's list exactly; the STAGES read is how D4's per-stage placement is checked, a measurement with its date and method. No task is left out or added."
+    },
+    {
+     "id": "T04-A",
+     "summary": "T04's checklist: goal 'the switch and its state named where a session reads about the claims gate'; constraints FR-006, D5; green exit the docs name the switch; done = the feature report written; ordered last.",
+     "class": "within",
+     "why": "Restates FR-006/D5 (guards.md, the gate's message, CLAUDE.md naming the switch and its state). The green exit's shorter wording ('name the switch') does not narrow the cited constraint, which item 1 and FR-006 both carry with its state. Ordering and the feature-report done line are process, not scope."
     }
    ]
   }
