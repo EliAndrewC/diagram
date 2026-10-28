@@ -102,7 +102,28 @@ Owed by the round arbiter's ruling on red-gate@2026-10-28T15:51:42Z (continue), 
 9. **After a ruling: the step it names?** Yes - one more gate; a same-error red goes to `make arbiter-ask`.
 
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
-<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
+### T03 - 405 closed (D4)
+
+405's status line `Withdrawn` with its evidence; `specs/444-work-budget-program/phase-inputs.md` holding the six tasks' texts under
+their stages, any measured figure in them marked as today's count so 444's budget bundles leave it out (443 FR-008's refusal holds).
+Exits: green - `make speckit-todo` lists 405 closed and `phase-inputs.md` names each task once; red as T01.
+
+### T03 Approach (checklist part A)
+
+1. **The goal, in the world.** 405 closed and its engine work handed to the phases that rebuild it.
+2. **The constraints.** FR-005; D4.
+3. **Where each comes from.** G: the GM's ruling, 2026-10-28 (`request.md`).
+4. **Do they describe the world here?** the open tasks of feature 405 read against `STAGES`, observed 2026-10-28 (method: `make speckit-todo` and `grep -n "STAGES = (" -A60`).
+5. **The order.** after T02.
+6. **The exits.** Green: `make speckit-todo` lists 405 closed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** `phase-inputs.md` names each of the six tasks once.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - tooling.
+
 ### T04 - the docs and the report (D5)
 
 `docs/guards.md`, `claims-gate.sh`'s message and the root `CLAUDE.md` name the switch and its state; `make feature-report F=445
