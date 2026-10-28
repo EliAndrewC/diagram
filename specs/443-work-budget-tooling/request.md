@@ -263,3 +263,9 @@ also does three pieces of bookkeeping, which the session will carry out:
   gate is that the fresh block's pass rate is no worse, as you set for speed work on 2026-10-26.
   When a phase's rebuild does one of 417's "ask before placing" tasks for that phase, the task is
   ticked with the landing as evidence. Its other tasks stay where they are.
+
+## The GM's words, 2026-10-28 (T13: a derivation's form enforced)
+
+> So does that mean that our process for step 3 needs to change? Because anytime I hear you say that something went wrong and that you will address this by being careful in the future, then I tend to think that that will not work, unless being careful specifically means that our checklist-based process has been updated to include whatever "careful" means in that context. Now you say that there is a working "rule" for step three, but is that an actual enforced rule, either enforced in our tooling or enforced in our subagent checks or enforced in our procedures in some way? Or do you just mean colloquially that you set a rule for yourself? because the latter is likely to be ineffective.
+
+> That's fine, as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to.

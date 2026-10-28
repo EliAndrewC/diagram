@@ -208,3 +208,35 @@ checklist and its landing check (D12); T07 the Rust-tooling inventory and its ch
 ## Complexity Tracking
 
 None.
+
+### T13 - a derivation's form checked before any dispatch (the GM 2026-10-28)
+
+The GM, 2026-10-28, on a session's promise to write each derivation more carefully:
+*"anytime I hear you say that something went wrong and that you will address this by being careful in the future, then I tend to think that that will not work, unless being careful specifically means that our checklist-based process has been updated to include whatever "careful" means in that context"*;
+and on where it lands: *"as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to."*
+
+- **Approach**: `.specify/templates/derivation.md` - each factor states its SCOPE (per item placed, over the whole run, or once), its
+  value, its reason and its WORST CASE (the smallest and the largest n the contract allows); a section "Cheaper algorithms
+  considered" names each standard algorithm of the rubric (a sweep, a grid or spatial index, a priority queue, an incremental
+  update, memoizing what a scan does not change) with why it is used or not. `make work-budget-bundle MODE=budget` refuses a
+  derivation missing any of them, naming the field; the phase checklist's box 2 names the template; the two fixtures' derivations
+  carry the fields. Why: 443 T05's grid fixture took four rounds, each a real error a field would have refused - round 2 a "per
+  disc" bound that held only over the run (scope), round 3 an incremental update never considered (the alternatives) and a "once"
+  term with no bound.
+
+### T13 Approach (checklist part A)
+
+1. **The goal, in the world.** A derivation reaches the work-budget agent only with each factor's scope, worst case and the cheaper algorithms considered written down.
+2. **The constraints.** The GM's words above; the rubric's standards (`docs/work-budget-rubric.md`).
+3. **Where each comes from.** G: the GM, 2026-10-28 (quoted above); O: T05's rounds (`tests/fixtures/work-budget/grid-placer/verdict-2.txt`, `verdict-3.txt`).
+4. **Do they describe the world here?** T05's two error classes, measured 2026-10-28 (the grid fixture's round replies, verdict-2.txt and verdict-3.txt).
+5. **The order.** Before T08, and before feature 444's first derivation.
+6. **The exits.** Green: the bundle refuses a derivation missing each field, passes the two fixtures', and the refusal is red with its condition deleted. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** The refusal's tests green.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - tooling.
+

@@ -77,6 +77,33 @@ def test_a_budget_bundle_holding_code_or_todays_counts_is_refused(tmp_path: Path
     assert rc == 1 and why in msg and not (tmp_path / "out").exists()
 
 
+@pytest.mark.parametrize(
+    ("edit", "why"),
+    [
+        (lambda t: t.replace("| factor | scope | value | reason | worst case |", "| factor | value | reason |"), "the columns factor | scope | value | reason | worst case"),
+        (lambda t: t.replace("| marks per disc placed | per item |", "| marks per disc placed | per disc |"), "its scope is one of per item, over the run, once - not `per disc`"),
+        (lambda t: t.replace("| a disc away from the edge, all 8 marked |", "|  |"), "`marks per disc placed`: every column filled"),
+        (lambda t: t.replace("- incremental update: used", "- incremental updates: used"), "a line for `incremental update`"),
+        (lambda t: t.replace("- priority queue: not used - no candidate is ranked; each is taken or refused on its own flag", "- priority queue:"), "a line for `priority queue`"),
+        (lambda t: t.split("## The count, factor by factor")[0], "the `## The count, factor by factor` table"),
+    ],
+)
+def test_a_derivation_short_of_a_template_field_is_refused_naming_it(tmp_path: Path, edit, why: str) -> None:  # noqa: ANN001
+    """Feature 443 T13 (the GM 2026-10-28): each field an error of T05's grid fixture would have been refused at - a bound's scope,
+    its worst case, the cheaper algorithms considered - is checked before any dispatch."""
+    (tmp_path / "d.md").write_text(edit((FIX / "grid-placer" / "derivation.md").read_text(encoding="utf-8")))
+    rc, msg = wbb.budget_bundle(REPO, "x", str(tmp_path / "d.md"), tmp_path / "out")
+    assert rc == 1 and "short of the template's fields" in msg and why in msg, msg
+
+
+def test_the_template_and_both_fixtures_hold_every_field() -> None:
+    template = (REPO / wbb.TEMPLATE).read_text(encoding="utf-8")
+    assert all(f"- {a}:" in template for a in wbb.STANDARD) and "| factor | scope | value | reason | worst case |" in template
+    assert wbb.form_problems((FIX / "grid-placer" / "derivation.md").read_text(encoding="utf-8")) == []
+    assert wbb.form_problems((FIX / "funnel" / "derivation.md").read_text(encoding="utf-8")) == []
+    assert "derivation.md" in (REPO / ".specify/templates/phase-checklist.md").read_text(encoding="utf-8"), "box 2 names it"
+
+
 def test_a_budget_bundle_holds_the_derivation_contract_and_rubric(tmp_path: Path) -> None:
     rc, manifest = wbb.budget_bundle(REPO, "funnel", str(FIX / "funnel" / "derivation.md"), tmp_path / "out")
     assert rc == 0 and Path(manifest).name == "MANIFEST.md"

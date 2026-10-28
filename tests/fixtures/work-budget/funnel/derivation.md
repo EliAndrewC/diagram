@@ -27,17 +27,26 @@ reason the algorithm has for it.
 
 ## The count, factor by factor
 
-| factor | value | its reason |
-|---|---|---|
-| items | 40 houses | one per household |
-| seats asked the cheap ground test, per house | about 21 (830 for 40) | the growth offers seats until one is placed; no bound but the seats in the growth's ring |
-| seats settled, per house | about 10 (406 for 40) | those the ground test keeps |
-| envelopes built, per house | about 20 (803 for 40) | each settle builds one, and builds it again when the reach grows (about 397 rebuilds) |
-| seats offered to the placer, per house | about 7 (272 for 40) | the settled seats not near a house already placed |
-| layouts laid per offered seat | 4 | the homestead's four layouts, each laid before the placer can say whether the seat is refused |
-| houses placed | 40 of 272 offered | 232 refused by the placer, each after its layouts were laid |
-| slack | none stated | |
+| factor | scope | value | reason | worst case |
+|---|---|---|---|---|
+| items | per item | 40 houses | one per household | the reference spec at 40 households |
+| seats asked the cheap ground test | per item | about 21 (830 for 40) | the growth offers seats until one is placed; no bound but the seats in the growth's ring | no bound: until the ring's seats run out |
+| seats settled | per item | about 10 (406 for 40) | those the ground test keeps | as many as the ground test keeps |
+| envelopes built | per item | about 20 (803 for 40) | each settle builds one, and builds it again when the reach grows (about 397 rebuilds) | every settle rebuilt |
+| seats offered to the placer | per item | about 7 (272 for 40) | the settled seats not near a house already placed | every settled seat offered |
+| layouts laid per offered seat | per item | 4 | the homestead's four layouts, each laid before the placer can say whether the seat is refused | every offered seat refused after laying |
+| houses placed | over the run | 40 of 272 offered | 232 refused by the placer, each after its layouts were laid | as measured: 232 refused |
+| slack | per item | 1 | none added to the measured funnel | as measured |
 
 So per house: about 21 ground tests, about 20 full envelopes (95% of them for seats never placed) and about 7 x 4 = 28 laid
 layouts, of which about 24 are refused. The later web stage then tests each lane end against every other lane end and every
 household box (all pairs), a pass over a growing set inside a loop over a growing set.
+
+
+## Cheaper algorithms considered
+
+- sweep: not used - the growth offers seats in its own order
+- grid or spatial index: not used for the near-a-house test, which is asked of every house placed
+- priority queue: used - the growth's ring is taken in order of its seats
+- incremental update: not used - the reach envelope is rebuilt when the reach grows
+- memoizing what a scan does not change: not used - each settle builds its own envelope

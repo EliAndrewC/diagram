@@ -1,3 +1,3 @@
-SOUND - Every factor follows from the d/2 lattice and the contract: the conflict set is exactly 8 sites, each site is looked up at most once, and each lookup is one flag read. That gives at most 9n lookups and 8n marks (17n) with slack 1, linear in n, with nothing placed and then repaired.
+SOUND - every factor states its reason from the d/2 lattice or the contract, each of the rubric's standard algorithms is used or turned down with a reason, and no factor is bigger than its reason supports.
 
-(The typed `work-budget` agent, round 4, 2026-10-28, MODE BUDGET, under the round arbiter's continue on ask:443-T05-grid-fixture-round-4. Rounds 1-3 are verdict-1.txt to verdict-3.txt: SOUND (ad hoc, before the typed agent loaded), UNDERIVED and LOOSE, each a real error in the session-written fixture, corrected as the reviewer stated it.)
+(The typed `work-budget` agent, 2026-10-28, MODE BUDGET on the derivation in the template's form (feature 443 T13: each factor's scope and worst case, the cheaper algorithms considered), its arithmetic unchanged from round 4's SOUND, verdict-4.txt.)

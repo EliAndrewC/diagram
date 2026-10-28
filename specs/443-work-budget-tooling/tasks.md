@@ -42,3 +42,5 @@
 - [x] T12 The candidate-loop counters of ground cover, the frame, the notice board and the labels (hinterland, woodland, windbreak, bamboo, frame, notice, labels): the walk's loops filtered and hand-read, each given its increment, the excluded listed with why (D2; FR-001)
       research: rendering
       verify: DONE. landed: ground cover, frame, notice and labels' candidate loops counted (research/candidate-loops.md, T12 section; one miss of the walk added); Python calls +0.0001% at 40 households
+- [ ] T13 A derivation's form checked before any dispatch: .specify/templates/derivation.md (each factor's scope, value, reason and worst case; the cheaper algorithms considered), make work-budget-bundle MODE=budget refusing a derivation short of a field, the phase checklist's box 2 naming the template (the GM 2026-10-28)
+      research: rendering

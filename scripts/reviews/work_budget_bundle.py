@@ -43,6 +43,40 @@ FORBIDDEN = (
 CONTRACT = re.compile(r"^## Contract\b.*?(?=^## |\Z)", re.M | re.S)
 
 
+#: the derivation's FORM (feature 443 T13; the GM 2026-10-28: being careful means the checklist says what careful is) - each a field
+#: an error of T05's grid fixture would have been refused at: round 2's "per disc" bound that held only over the run (SCOPE), round
+#: 3's incremental update never considered (the ALTERNATIVES) and its "once" term with no bound (WORST CASE)
+COUNT = re.compile(r"^## The count, factor by factor\b(.*?)(?=^## |\Z)", re.M | re.S)
+ALTERNATIVES = re.compile(r"^## Cheaper algorithms considered\b(.*?)(?=^## |\Z)", re.M | re.S)
+COLUMNS = ("factor", "scope", "value", "reason", "worst case")
+SCOPES = ("per item", "over the run", "once")
+STANDARD = ("sweep", "grid or spatial index", "priority queue", "incremental update", "memoizing what a scan does not change")
+TEMPLATE = ".specify/templates/derivation.md"
+
+
+def form_problems(text: str) -> list[str]:
+    """Each field of the derivation template a derivation lacks (`TEMPLATE`): the count's table with every column filled and a
+    scope of its three, and a line for each standard cheaper algorithm saying whether it is used and why."""
+    out: list[str] = []
+    count = COUNT.search(text)
+    rows = [[c.strip() for c in ln.strip().strip("|").split("|")] for ln in (count.group(1) if count else "").splitlines() if ln.strip().startswith("|")]
+    if not rows or tuple(c.lower() for c in rows[0]) != COLUMNS:
+        out.append(f"the `## The count, factor by factor` table with the columns {' | '.join(COLUMNS)}")
+    else:
+        for r in rows[2:]:
+            name = r[0] or "a factor"
+            if len(r) != len(COLUMNS) or any(not c or c.startswith("<") for c in r):
+                out.append(f"`{name}`: every column filled (scope, value, reason, worst case)")
+            elif r[1].lower() not in SCOPES:
+                out.append(f"`{name}`: its scope is one of {', '.join(SCOPES)} - not `{r[1]}`")
+        if len(rows) < 3:
+            out.append("a row for each factor of the count")
+    alts = ALTERNATIVES.search(text)
+    said = {m.group(1).strip().lower(): m.group(2).strip() for m in re.finditer(r"^-\s*([^:\n]+):[ \t]*(.*)$", alts.group(1) if alts else "", re.M)}
+    out += [f"`## Cheaper algorithms considered`: a line for `{a}` - used, or why not" for a in STANDARD if not said.get(a)]
+    return out
+
+
 def refusals(text: str) -> list[str]:
     """Why a derivation may not go to MODE BUDGET: each forbidden thing it holds, with its first match."""
     return [f"{why}: `{m.group(0).strip()[:60]}`" for pat, why in FORBIDDEN if (m := pat.search(text))]
@@ -58,6 +92,8 @@ def budget_bundle(root: Path, phase: str, derivation: str, out: Path) -> tuple[i
     contract = CONTRACT.search(text)
     if contract is None:
         return 1, "work-budget-bundle: REFUSED - the derivation has no `## Contract` section (what the stage reads and writes)"
+    if short := form_problems(text):
+        return 1, f"work-budget-bundle: REFUSED - the derivation is short of the template's fields ({TEMPLATE}):\n" + "\n".join(f"  {b}" for b in short)
     out.mkdir(parents=True, exist_ok=True)
     (out / "derivation.md").write_text(text, encoding="utf-8")
     (out / "contract.md").write_text(contract.group(0), encoding="utf-8")

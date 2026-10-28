@@ -8,7 +8,8 @@ the design the GM approved on 2026-10-28 (`specs/443-work-budget-tooling/request
 - [ ] 1. **Contract.** What the phase reads from the manifest and what it writes; the research claims that govern it (from the
   claims index); the cohort properties it must keep.
 - [ ] 2. **Minimal algorithm.** Pseudocode and its operation count, factor by factor (S7), written from the contract alone,
-  before the current code's numbers are read.
+  before the current code's numbers are read, in the derivation template (`.specify/templates/derivation.md`: each factor's
+  scope, value, reason and worst case, and the cheaper algorithms considered), copied to `phases/<stage>.derivation.md`.
 - [ ] 3. **Budget review, MODE BUDGET.** The `work-budget` agent's SOUND on the derivation (`make work-budget-bundle MODE=budget`);
   the budget and exponent pinned (`make budget-set`).
 - [ ] 4. **Today's measurement.** `make work-budget` for the stage - its ratio to budget and its exponent; the hot chains from

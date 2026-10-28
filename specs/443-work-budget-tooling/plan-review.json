@@ -186,6 +186,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "spec-fidelity"
+  },
+  "### T13 - a derivation's form checked before any dispatch (the GM 2026-10-28)": {
+   "sha256": "794f76a9a051aab743e1efdf4a822d276e7ee408322923a01a86657ccdc0aedf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T13 Approach (checklist part A)": {
+   "sha256": "296aab5a27018208b610935152a673e8eacd2a3af95ae36dee6364e31a55f854",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1318,6 +1330,110 @@
      "why": "An inventory check in make hooks-test moves no map and is not a speed change. The empty table decides nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T13 - a derivation's form checked before any dispatch (the GM 2026-10-28)",
+    "### T13 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T13-home",
+     "summary": "The derivation-form enforcement lands as task T13 of feature 443 rather than in 444.",
+     "class": "within",
+     "why": "The GM 2026-10-28: 'as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to.'"
+    },
+    {
+     "id": "T13-template",
+     "summary": ".specify/templates/derivation.md: each factor states scope (per item / over the run / once), value, reason and worst case (smallest and largest n the contract allows), plus a 'Cheaper algorithms considered' section naming each standard algorithm of the rubric with why used or not.",
+     "class": "within",
+     "why": "This is the content of 'careful' the GM asked to be written into the checklist-based process rather than promised; the fields restate S7 (each factor names its reason) and MODE BUDGET's second question (a sweep, a grid, a priority queue, incremental update). Memoization in the list widens the alternatives considered, it narrows nothing."
+    },
+    {
+     "id": "T13-refusal",
+     "summary": "make work-budget-bundle MODE=budget refuses a derivation missing any field, naming the field.",
+     "class": "within",
+     "why": "The GM asked whether the rule is 'an actual enforced rule, either enforced in our tooling or enforced in our subagent checks or enforced in our procedures'; a tooling refusal before dispatch is the first of those. A presence check does not replace the agent's judgment of content, which MODE BUDGET still makes."
+    },
+    {
+     "id": "T13-checklist-box2",
+     "summary": "The phase checklist's box 2 (minimal algorithm) names the template.",
+     "class": "within",
+     "why": "Puts the template into the checklist-based process itself, the GM's own words: 'our checklist-based process has been updated to include whatever careful means'."
+    },
+    {
+     "id": "T13-fixtures",
+     "summary": "The two MODE BUDGET fixtures' derivations are rewritten to carry the fields.",
+     "class": "within",
+     "why": "Required so the fixtures pass the new refusal; it keeps the design's 'proving that it bites' fixtures in force and changes no ruling they must get."
+    },
+    {
+     "id": "T13-order",
+     "summary": "T13 lands before T08 and before feature 444's first derivation.",
+     "class": "within",
+     "why": "Implements 'before the place where it would actually matter': the first real derivations (step 3, MODE BUDGET on each stage) come after it."
+    },
+    {
+     "id": "T13-exits",
+     "summary": "Green: refusal on each missing field, the fixtures pass, refusal red with its condition deleted. Red: recorded, set down, impossibility ruled via make arbiter-ask; budget one landing.",
+     "class": "within",
+     "why": "The project's standing guard rule (FR-012, 'red with the guard deleted') and arbiter route; no clause of the request is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T13 - a derivation's form checked before any dispatch (the GM 2026-10-28)",
+    "### T13 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T13-D1 template fields",
+     "summary": ".specify/templates/derivation.md: each factor states its scope (per item, over the run, once), value, reason and worst case (smallest and largest n the contract allows); a 'Cheaper algorithms considered' section names each standard algorithm of the rubric with why it is or is not used",
+     "class": "within",
+     "why": "The GM (2026-10-28) asked that 'careful' for step 3 mean the checklist-based process is updated to include whatever careful means there. The fields are exactly the carefulness T05's rounds showed was missing (scope, an unconsidered incremental update, an unbounded 'once' term); they add to the derivation, and narrow nothing the design's section 3 box 2 or section 4 MODE BUDGET asked for."
+    },
+    {
+     "id": "T13-D2 tooling refusal",
+     "summary": "make work-budget-bundle MODE=budget refuses a derivation missing any field, naming it",
+     "class": "within",
+     "why": "The GM asked whether the rule is 'an actual enforced rule, either enforced in our tooling or ... subagent checks or ... procedures', and said a rule a session sets for itself is likely ineffective. A refusal in the bundle builder is enforcement in tooling of exactly the requested thing; its reach is only the MODE BUDGET bundle, the step-3 path the GM named, so no reach beyond the request."
+    },
+    {
+     "id": "T13-D3 form checked, content left to the agent",
+     "summary": "The tooling checks the fields' presence (the derivation's form); judging their substance stays with the work-budget agent's MODE BUDGET questions",
+     "class": "within",
+     "why": "The GM's words accept enforcement in tooling OR subagent checks OR procedure; form in tooling plus substance in the existing adversarial agent is enforcement at both places he named. Nothing the request or design asked of MODE BUDGET is removed."
+    },
+    {
+     "id": "T13-D4 checklist box 2 names the template",
+     "summary": "The phase checklist's box 2 (Minimal algorithm) names the derivation template",
+     "class": "within",
+     "why": "Directly carries 'our checklist-based process has been updated to include whatever careful means'."
+    },
+    {
+     "id": "T13-D5 fixtures carry the fields",
+     "summary": "The two FR-009 fixtures' derivations are rewritten to carry the new fields",
+     "class": "within",
+     "why": "Necessary so the new refusal does not break the agent's proof-of-bite fixtures; changes no ruling the design requires (funnel OVER/LOOSE, grid placer SOUND/WITHIN)."
+    },
+    {
+     "id": "T13-D6 order",
+     "summary": "Lands before T08 and before feature 444's first derivation",
+     "class": "within",
+     "why": "The GM: 'as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to.' Feature 444's step 3 derivations are where it matters; landing earlier satisfies this, and placing it in 443 is the choice he left open."
+    },
+    {
+     "id": "T13-D7 exits and budget",
+     "summary": "Green = refusal per field, fixtures pass, red with condition deleted; red exit records failure, an impossibility claim goes to make arbiter-ask; one landing; tooling, not performance work",
+     "class": "within",
+     "why": "Standard guard discipline (FR-012's prove-it-fires) and the project's arbiter routing; nothing here relaxes the requested enforcement."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1905,6 +2021,56 @@
      "summary": "Declared not performance work; the perf table is left empty.",
      "class": "within",
      "why": "An inventory check in make hooks-test moves no map and is not a speed change. The empty table decides nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T13": {
+   "section_sha256": "72b1a5caa88a424bcdf67f1d096d45cf552ba1ac19b0f138d51b2122c73247a6",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T13-D1 template fields",
+     "summary": ".specify/templates/derivation.md: each factor states its scope (per item, over the run, once), value, reason and worst case (smallest and largest n the contract allows); a 'Cheaper algorithms considered' section names each standard algorithm of the rubric with why it is or is not used",
+     "class": "within",
+     "why": "The GM (2026-10-28) asked that 'careful' for step 3 mean the checklist-based process is updated to include whatever careful means there. The fields are exactly the carefulness T05's rounds showed was missing (scope, an unconsidered incremental update, an unbounded 'once' term); they add to the derivation, and narrow nothing the design's section 3 box 2 or section 4 MODE BUDGET asked for."
+    },
+    {
+     "id": "T13-D2 tooling refusal",
+     "summary": "make work-budget-bundle MODE=budget refuses a derivation missing any field, naming it",
+     "class": "within",
+     "why": "The GM asked whether the rule is 'an actual enforced rule, either enforced in our tooling or ... subagent checks or ... procedures', and said a rule a session sets for itself is likely ineffective. A refusal in the bundle builder is enforcement in tooling of exactly the requested thing; its reach is only the MODE BUDGET bundle, the step-3 path the GM named, so no reach beyond the request."
+    },
+    {
+     "id": "T13-D3 form checked, content left to the agent",
+     "summary": "The tooling checks the fields' presence (the derivation's form); judging their substance stays with the work-budget agent's MODE BUDGET questions",
+     "class": "within",
+     "why": "The GM's words accept enforcement in tooling OR subagent checks OR procedure; form in tooling plus substance in the existing adversarial agent is enforcement at both places he named. Nothing the request or design asked of MODE BUDGET is removed."
+    },
+    {
+     "id": "T13-D4 checklist box 2 names the template",
+     "summary": "The phase checklist's box 2 (Minimal algorithm) names the derivation template",
+     "class": "within",
+     "why": "Directly carries 'our checklist-based process has been updated to include whatever careful means'."
+    },
+    {
+     "id": "T13-D5 fixtures carry the fields",
+     "summary": "The two FR-009 fixtures' derivations are rewritten to carry the new fields",
+     "class": "within",
+     "why": "Necessary so the new refusal does not break the agent's proof-of-bite fixtures; changes no ruling the design requires (funnel OVER/LOOSE, grid placer SOUND/WITHIN)."
+    },
+    {
+     "id": "T13-D6 order",
+     "summary": "Lands before T08 and before feature 444's first derivation",
+     "class": "within",
+     "why": "The GM: 'as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to.' Feature 444's step 3 derivations are where it matters; landing earlier satisfies this, and placing it in 443 is the choice he left open."
+    },
+    {
+     "id": "T13-D7 exits and budget",
+     "summary": "Green = refusal per field, fixtures pass, red with condition deleted; red exit records failure, an impossibility claim goes to make arbiter-ask; one landing; tooling, not performance work",
+     "class": "within",
+     "why": "Standard guard discipline (FR-012's prove-it-fires) and the project's arbiter routing; nothing here relaxes the requested enforcement."
     }
    ],
    "verdict": "CLEAR"
