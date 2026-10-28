@@ -10,7 +10,18 @@ import pytest
 from l7r.diagram.ci.features import FeatureStatus, active_feature, feature_status
 
 
-def _feature(root: Path, name: str, tasks: str, spec: str | None = "## Review history\nFAITHFUL\n") -> None:
+def _sha(d: Path) -> str:
+    """The spec's body hash a ruling carries (`hm_arbiter.spec_body_sha`), as `make arbiter-ruled` writes it."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("hm_arbiter_t", Path(__file__).resolve().parents[3] / "scripts" / "hooks" / "lib" / "hm_arbiter.py")
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return str(mod.spec_body_sha(d))
+
+
+def _feature(root: Path, name: str, tasks: str, spec: str | None = "## Review history\n- round 1 (spec-fidelity): FAITHFUL\n") -> None:
     d = root / "specs" / name
     d.mkdir(parents=True)
     (d / "tasks.md").write_text(tasks, encoding="utf-8")
@@ -101,7 +112,7 @@ def test_a_spec_the_round_arbiter_accepted_at_its_cap_is_faithful(tmp_path: Path
     (d / "arbiter.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\nnot json\n")
     assert not feature_status(tmp_path, "387-x").faithful
     with (d / "arbiter.jsonl").open("a") as fh:
-        fh.write(json.dumps({"trigger": "round:spec-fidelity|387-x#1@6", "ruling": "accept"}) + "\n")
+        fh.write(json.dumps({"trigger": "round:spec-fidelity|387-x#1@6", "ruling": "accept", "spec_sha": _sha(d)}) + "\n")
     assert feature_status(tmp_path, "387-x").complete
 
 
@@ -115,5 +126,29 @@ def test_a_spec_ruled_on_an_asked_round_is_faithful(tmp_path: Path) -> None:
     )
     assert not feature_status(tmp_path, "440-x").faithful
     with (d / "arbiter.jsonl").open("a") as fh:
-        fh.write(json.dumps({"trigger": "ask:440-spec-round-3", "review": "spec", "ruling": "accept"}) + "\n")
+        fh.write(json.dumps({"trigger": "ask:440-spec-round-3", "review": "spec", "ruling": "accept", "spec_sha": _sha(d)}) + "\n")
     assert feature_status(tmp_path, "440-x").complete
+
+
+def test_the_merge_and_the_review_gate_read_one_verdict(tmp_path: Path) -> None:
+    """Feature 442: the merge's check asks the review gate's own reader (`hm_arbiter.spec_verdict`) - a verdict line naming its
+    review, an arbiter ruling on the spec as it reads now; a NOT FAITHFUL, a mention in prose, a bare word, a stale ruling are none."""
+    import subprocess
+
+    gate = Path(__file__).resolve().parents[3] / "scripts" / "hooks" / "lib" / "hm_arbiter.py"
+    cases = {
+        "- round 2 (spec-fidelity-verify): FAITHFUL\n": True,
+        "- round 1: NOT FAITHFUL\n": False,
+        "the word FAITHFUL in prose\n": False,
+        "FAITHFUL\n": False,
+    }
+    for n, (body, want) in enumerate(cases.items()):
+        name = f"90{n}-v"
+        _feature(tmp_path, name, "- [x] T01 done\n", spec="# F\n\n## Review history\n" + body)
+        d = tmp_path / "specs" / name
+        merge = feature_status(tmp_path, name).faithful
+        review = subprocess.run(["python3", str(gate), "spec-verdict", str(d)], capture_output=True).returncode == 0
+        assert merge == review == want, (body, merge, review)
+    d = tmp_path / "specs" / "903-v"
+    (d / "arbiter.jsonl").write_text(json.dumps({"trigger": "ask:x", "review": "spec", "ruling": "accept", "spec_sha": "stale"}) + "\n")
+    assert not feature_status(tmp_path, "903-v").faithful, "a ruling on another text of the spec stands for nothing"

@@ -50,7 +50,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) for _d in ('../../reviews',)]  # the moved scripts it imports (2026-10-08)
 from hm_escape import escape_reason, reason_is_enough  # noqa: E402
-from stale_terms import read_dir, render as render_stale, stale_candidates  # noqa: E402
+from stale_terms import criteria_left_behind, read_dir, render as render_stale, stale_candidates  # noqa: E402
 
 import hm_arbiter  # noqa: E402
 
@@ -459,7 +459,8 @@ def judge(payload: dict, clone: str) -> dict:
             return {"event": "blocked", "rule": f"{STALE_TOKEN}-no-reason", "detail": prompt[:200], "exit": 2, "stdout": "", "stderr": _refusal(STALE_TOKEN)}
         stale_note = f" {STALE_TOKEN}: {stale_reason}"
     else:
-        candidates = stale_candidates(read_dir(snap), read_dir(feature_dir))
+        _old, _new = read_dir(snap), read_dir(feature_dir)
+        candidates = stale_candidates(_old, _new) + criteria_left_behind(_old, _new)  # a criterion left behind too (feature 442)
         if candidates:
             return {"event": "blocked", "rule": "stale-terms", "detail": f"{feature}: {len(candidates)} candidate(s)", "exit": 2, "stdout": "", "stderr": _stale_refusal(feature, candidates)}
     diff = diff_since(snap, feature_dir)

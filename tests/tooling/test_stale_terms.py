@@ -120,3 +120,20 @@ def test_a_line_the_change_rewrote_from_one_already_about_the_subject_is_not_a_c
     assert st.rewritten_from(None, "a\nb\n") == {}
     monkeypatch.setattr(st, "rewritten_from", lambda o, n: {})
     assert [c["line"] for c in st.stale_candidates(old, new)] == [3], "the rule is what spares it"
+
+
+def test_a_criterion_its_rewritten_requirement_left_behind_is_a_candidate():
+    """Feature 442: three of feature 440's ten review findings were a success criterion left saying what its rewritten
+    requirement no longer did. A criterion of a rewritten requirement, untouched, is named; one the same change touched is not."""
+    old = {
+        "spec.md": "- **FR-004**: prints the stages that moved.\n- **FR-005**: other.\n\n- **SC-004** (FR-004): a row for a stage that moved, none for one that did not.\n- **SC-005** (FR-005): other.\n"
+    }
+    new = {
+        "spec.md": "- **FR-004**: prints every stage, the movers marked.\n- **FR-005**: other.\n\n- **SC-004** (FR-004): a row for a stage that moved, none for one that did not.\n- **SC-005** (FR-005): other.\n"
+    }
+    got = st.criteria_left_behind(old, new)
+    assert [(c["subject"], c["old_values"], c["line"]) for c in got] == [("SC-004", ["FR-004"], 4)]
+    assert "the criterion was not touched" in st.render(got)
+    touched = {"spec.md": new["spec.md"].replace("a row for a stage that moved, none for one that did not", "a row for every stage")}
+    assert st.criteria_left_behind(old, touched) == [], "a criterion the same change touched is not named"
+    assert st.criteria_left_behind({}, new) == [] and st.criteria_left_behind(old, {"plan.md": "x"}) == []

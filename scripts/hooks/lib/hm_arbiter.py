@@ -490,6 +490,23 @@ def spec_body_sha(d: Path) -> str:
     return hashlib.sha256((head.split("\n", 1)[0] + sep + rest).encode()).hexdigest()
 
 
+#: A VERDICT LINE, NOT A MENTION (feature 156): a FAITHFUL that survives dropping the negated ones and sits on a line naming the
+#: review it reports - moved here from `review-gate.sh` so every gate reads one rule (feature 442)
+_FAITHFUL_NOT = re.compile(r"NOT\s+\**FAITHFUL", re.I)
+_FAITHFUL_REVIEW = re.compile(r"status|verdict|round|spec-fidelity", re.I)
+
+
+def spec_verdict(d: Path) -> str:
+    """Why feature `d`'s spec carries its fidelity verdict - "FAITHFUL" (a line naming its review), the arbiter ruling's trigger
+    that stands for it (`spec_ruled`: a round cap's or an asked one, on the spec as it reads now) - or "" (feature 442: the review
+    gate and the merge's feature-complete check read the verdict two ways twice, features 387 and 440, each refusing a landing)."""
+    spec = d / "spec.md"
+    text = spec.read_text(encoding="utf-8") if spec.is_file() else ""
+    if any(_FAITHFUL_REVIEW.search(ln) for ln in text.splitlines() if "FAITHFUL" in ln and not _FAITHFUL_NOT.search(ln)):
+        return "FAITHFUL"
+    return spec_ruled(d)
+
+
 def house_styled(obj: Any) -> Any:  # noqa: ANN401 - a ruling's JSON, any shape
     """A ruling with its text in the house style (American spellings) before it is recorded - the GM 2026-10-24: T26's ruling
     wrote a British spelling into arbiter.jsonl and gm-review.jsonl, and the gate's preflight refused the landing on it. The edit hooks
@@ -756,8 +773,10 @@ def main(argv: list[str]) -> int:
             print(f"make done: refused - {why}", file=sys.stderr)
             return 1
         return 0
-    if argv[:1] == ["spec-ruled"] and len(argv) == 2:  # review-gate.sh: does a ruling stand for this spec's verdict?
+    if argv[:1] == ["spec-ruled"] and len(argv) == 2:  # does a ruling stand for this spec's verdict?
         return 0 if spec_ruled(Path(argv[1])) else 1
+    if argv[:1] == ["spec-verdict"] and len(argv) == 2:  # review-gate.sh: does this spec carry its verdict (feature 442)?
+        return 0 if spec_verdict(Path(argv[1])) else 1
     if argv[:1] == ["unit-ruled"] and len(argv) == 3:  # review-gate.sh: does a ruling stand for this review unit's verdict?
         d = feature_dir(Path(".").resolve())
         return 0 if d is not None and unit_ruled(d, argv[1], argv[2]) else 1

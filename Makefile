@@ -698,6 +698,9 @@ spec-harness:   ## [project] run a feature's measurement harness (its harness.py
 	HARNESS_OUT="$(OUT)" python3 -m pytest -q -p no:cacheprovider --no-cov -p no:randomly tests/test_zz_spec_harness_tmp.py; ec=$$?; \
 	rm -f tests/test_zz_spec_harness_tmp.py; exit $$ec
 
+trial-review:   ## [project] a trial's ONE review: its brief, request and research bundled, and the dispatch printed - check each figure against its recorded output, re-run only what is missing (feature 442)   F=<trial number>
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/trial-review.py" "$(F)"
+
 trial: export TRIAL_APPROVED = $(APPROVED)
 trial:          ## [project] start a TRIAL - a question a measurement answers: claims a number and writes the trial brief (**Form**: trial), measured first, reviewed once when Done (features 438, 440; docs/spec-kit-and-reviews.md)   SLUG=kebab-slug [APPROVED="<the GM's words, verbatim>"]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/trial-start.py" "$(SLUG)"

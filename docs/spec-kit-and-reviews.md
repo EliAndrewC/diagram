@@ -59,6 +59,8 @@ GM's words, the measurement, the trial's own decision rule, the evidence, the ti
 - **Its time** is reported as feature 437's was: `make feature-report F=<n>`'s split and a per-step breakdown.
 - `make trial SLUG=<slug> APPROVED="<the GM's words>"` writes the approval line, so the brief's first commit passes the
   approval guard.
+- `make trial-review F=<n>` bundles the Done brief, its request and research for its one review and prints the dispatch, which
+  asks the reviewer to check each figure against the output recorded beside it and re-run only what is missing (feature 442).
 
 The review gate holds the first and third rules (`scripts/gates/review-gate.sh`, its trial clause). For where the time is
 before a performance trial, `make perf-share` reads a module's share of each stage from the kept profiles.

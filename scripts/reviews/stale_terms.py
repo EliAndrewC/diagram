@@ -153,11 +153,54 @@ def read_ref(clone: pathlib.Path, ref: str, feature: str) -> dict[str, str]:
     return out
 
 
+_REQ = re.compile(r"^- \*\*(FR-\d{3}[a-z]?)\*\*")
+_CRIT = re.compile(r"^- \*\*(SC-\d{3}[a-z]?)\*\*\s*\(([^)]*)\)")
+
+
+def _items(text: str, pattern: re.Pattern[str]) -> dict[str, tuple[int, str, re.Match[str]]]:
+    """{id: (line number, the item's whole text - its first line and its indented continuation, the match)} of `text`."""
+    out: dict[str, tuple[int, str, re.Match[str]]] = {}
+    lines = text.splitlines()
+    for n, line in enumerate(lines, 1):
+        m = pattern.match(line)
+        if m:
+            body = [line]
+            for more in lines[n:]:
+                if not more.startswith("  ") or more.lstrip().startswith("- **"):
+                    break
+                body.append(more)
+            out[m.group(1)] = (n, "\n".join(body), m)
+    return out
+
+
+def criteria_left_behind(old_files: dict[str, str], new_files: dict[str, str]) -> list[dict]:
+    """Each success criterion that cites a requirement the change REWROTE and was not itself touched by it (feature 442: three
+    of feature 440's ten review findings were a criterion left saying what its rewritten requirement no longer did)."""
+    found: list[dict] = []
+    for name, new_text in sorted(new_files.items()):
+        if pathlib.PurePath(name).name != "spec.md" or name not in old_files:
+            continue
+        old_req, new_req = _items(old_files[name], _REQ), _items(new_text, _REQ)
+        rewritten = {i for i in new_req if i in old_req and new_req[i][1] != old_req[i][1]}
+        old_crit = _items(old_files[name], _CRIT)
+        for sc, (n, body, m) in _items(new_text, _CRIT).items():
+            cited = set(re.findall(r"FR-\d{3}[a-z]?", m.group(2))) & rewritten
+            if cited and sc in old_crit and old_crit[sc][1] == body:
+                fr = sorted(cited)[0]
+                found.append({"file": name, "line": n, "subject": sc, "old_values": sorted(cited), "text": body.splitlines()[0].strip()[:200],
+                              "changed_in": name, "changed_to": f"{fr} rewritten; this criterion untouched - does it still measure it?", "kind": "criterion"})
+    return found
+
+
 def render(found: list[dict]) -> str:
     if not found:
         return "stale-terms: no candidate - no line names a changed line's subject and still carries its old value"
     lines = [f"stale-terms: {len(found)} candidate(s) - each names a subject whose value CHANGED and still carries the old value:"]
     for c in found[:25]:
+        if c.get("kind") == "criterion":
+            lines.append(f"  {c['file']}:{c['line']}  `{c['subject']}` cites {', '.join(c['old_values'][:4])}, which the change rewrote - the criterion was not touched")
+            lines.append(f"      {c['text']}")
+            continue
         lines.append(f"  {c['file']}:{c['line']}  `{c['subject']}` still with {', '.join(c['old_values'][:4])}")
         lines.append(f"      {c['text']}")
         lines.append(f"      (changed in {c['changed_in']} to: {c['changed_to']})")
@@ -186,7 +229,8 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print(f"stale-terms: no snapshot of {feature_dir.name} (no review round was dispatched yet) - name a ref with --against", file=sys.stderr)
         return 2
-    found = stale_candidates(old, read_dir(feature_dir))
+    new = read_dir(feature_dir)
+    found = stale_candidates(old, new) + criteria_left_behind(old, new)
     print(render(found))
     return 1 if found else 0
 

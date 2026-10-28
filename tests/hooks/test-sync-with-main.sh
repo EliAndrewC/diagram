@@ -541,6 +541,19 @@ OUT=$(COHORT_OK="a fixture with nothing rolled" syncmain "$D" push); check "COHO
 }
 
 
+case_28() {  # 3 s
+echo "X. sync-in BY HAND waits only the bounded time for a held mirror lock and still merges the clone (feature 442)"
+D=$(topology bh)
+( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
+mkdir -p "$D/main/.clones"; ( flock "$D/main/.clones/.sync.lock" sleep 20 ) & holder=$!; sleep 0.3
+start=$(date +%s); OUT=$(SYNC_LOCK_WAIT=1 syncmain "$D" sync-in); rc=$?; took=$(( $(date +%s) - start ))
+kill "$holder" 2>/dev/null; wait "$holder" 2>/dev/null
+check "sync-in with the mirror lock held" 0 $rc
+[ "$took" -lt 10 ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in waited ${took}s behind a held lock (bounded at 1 s)"; FAIL=$((FAIL+1)); }
+expect_out "mirror lock stayed busy"
+[ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  the clone did not merge GitHub main past a busy mirror"; FAIL=$((FAIL+1)); }
+}
+
 # GUARD_EDIT_OK: feature 375 amendment 4 (FR-022) - THE CASES RUN IN PARALLEL PARTS. This suite is held to the whole scripts
 # tree (feature 172: its push path reaches scripts at run time), so every script change re-runs it, and at 202-230 s it was
 # the long pole of a parallel hooks-test (specs/375-enforced-wave-process/research.md R3). Each case builds its own fixture
@@ -548,8 +561,8 @@ OUT=$(COHORT_OK="a fixture with nothing rolled" syncmain "$D" push); check "COHO
 # longest first onto the lightest part (the times are the measured ones beside each case; a new case without one counts
 # 10 s), each part a subshell with its own $T, HOME and guard log. Every check still runs and is counted; a part that ends
 # before a case reports fails the suite and names the case. SYNC_PARTS=1 runs them one after another, as before.
-CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27)
-declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=3 [case_06]=5 [case_07]=4 [case_08]=5 [case_09]=6 [case_10]=4 [case_11]=15 [case_11b]=7 [case_11c]=7 [case_12]=1 [case_13]=2 [case_14]=1 [case_15]=7 [case_16]=3 [case_17]=12 [case_18]=3 [case_19]=6 [case_20]=3 [case_21]=7 [case_22]=6 [case_23]=2 [case_24]=4 [case_25]=5 [case_26]=3 [case_27]=6)  # seconds, each case alone, measured 2026-10-17 (feature 383 amendment 3)
+CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27 case_28)
+declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=3 [case_06]=5 [case_07]=4 [case_08]=5 [case_09]=6 [case_10]=4 [case_11]=15 [case_11b]=7 [case_11c]=7 [case_12]=1 [case_13]=2 [case_14]=1 [case_15]=7 [case_16]=3 [case_17]=12 [case_18]=3 [case_19]=6 [case_20]=3 [case_21]=7 [case_22]=6 [case_23]=2 [case_24]=4 [case_25]=5 [case_26]=3 [case_27]=6 [case_28]=3)  # seconds, each case alone, measured 2026-10-17 (feature 383 amendment 3)
 # SYNC_CASES="case_11 case_17" runs only those cases - to time one case where it lives (feature 383 amendment 3, plan D27); the
 # runner itself is tests/hooks/parts.sh since amendment 4 (plan D28), shared by every split suite
 [ -n "${SYNC_CASES:-}" ] && PARTS_CASES=$SYNC_CASES

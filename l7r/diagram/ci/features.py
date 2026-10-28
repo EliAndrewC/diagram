@@ -94,26 +94,19 @@ def feature_status(root: Path, name: str | None) -> FeatureStatus:
         return FeatureStatus(name=name, exists=False)
     held = holding(d)
     open_tasks = tuple(t[:80] for m in _OPEN.finditer(tasks.read_text(encoding="utf-8")) if any(h.startswith(t := m.group(1).strip()) for h in held))
-    faithful = (spec.is_file() and "FAITHFUL" in spec.read_text(encoding="utf-8")) or spec_accepted(d, name)
+    faithful = bool(spec_verdict(root, d))
     return FeatureStatus(name=name, exists=True, faithful=faithful, open_tasks=open_tasks)
 
 
-def spec_accepted(d: Path, name: str) -> bool:
-    """Did the round arbiter ACCEPT the spec at its review's round cap (feature 379: "accept lets the spec stand as the last round
-    left it - the review gate takes the ruling as its verdict")? Read from the feature's own `arbiter.jsonl`. Feature 387 found the
-    merge's feature-complete check asking only for the word FAITHFUL in `spec.md`, so a spec the arbiter accepted was refused here
-    while the review gate let it through - two readings of one verdict drifted apart, as 375 batch 2 found of the open tasks."""
-    log = d / "arbiter.jsonl"
-    if not log.is_file():
-        return False
-    for line in log.read_text(encoding="utf-8").splitlines():
-        try:
-            r = json.loads(line)
-        except ValueError:
-            continue
-        # ...an ASKED ruling too (`make arbiter-ask ... REVIEW=spec`, feature 409), as `hm_arbiter.spec_ruled` reads it for the review
-        # gate - feature 440's landing was refused here on a spec the review gate had passed on that ruling
-        spec_review = str(r.get("trigger", "")).startswith(f"round:spec-fidelity|{name}#") or r.get("review") == "spec"
-        if spec_review and r.get("ruling") in ("accept", "process-fault"):
-            return True
-    return False
+def spec_verdict(root: Path, d: Path) -> str:  # noqa: ARG001 - `root` kept for the call's shape; the reader is this repository's
+    """Does the spec carry its fidelity verdict - asked of the ONE reader every gate asks (`scripts/hooks/lib/hm_arbiter.py`
+    `spec_verdict`, feature 442): this check once read a bare "FAITHFUL" and its own ruling reader, and refused two landings the
+    review gate had passed (features 387, 440)."""
+    import importlib.util  # noqa: PLC0415
+
+    here = Path(__file__).resolve().parents[3]  # the repository this module is in: its scripts, whatever tree `root` names
+    spec = importlib.util.spec_from_file_location("hm_arbiter_verdict", here / "scripts" / "hooks" / "lib" / "hm_arbiter.py")
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return str(mod.spec_verdict(d))

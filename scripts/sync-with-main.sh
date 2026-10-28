@@ -218,9 +218,12 @@ refuse_unrelated_history() {
   die "this clone's history shares no commit with main's - main's history was rewritten (feature 301's scrub, dev/history-rewrite-301.md). A pull would merge the old history back in. Re-clone it: git clone $MAIN $ROOT.new, cherry-pick any unpushed commits (git log --oneline HEAD --not --remotes), then replace $ROOT"
 }
 
-sync_in() { # [--mirror-only] [--background-render]
-  local mirror_only="" background="" a
-  for a in "$@"; do case "$a" in --mirror-only) mirror_only=1 ;; --background-render) background=1 ;; esac; done
+sync_in() { # [--mirror-only] [--background-render] [--foreground-render]
+  # BOUNDED AND BACKGROUND BY DEFAULT (feature 442): a sync-in run by hand took the mirror lock unbounded and rendered in the
+  # foreground, and after a landing it waited ~3 min behind that landing's own render-sync (trial 441); the prompt hook's path -
+  # wait at most SYNC_LOCK_WAIT, the render to the detached runner - is now every caller's, `--foreground-render` the old one
+  local mirror_only="" background=1 a
+  for a in "$@"; do case "$a" in --mirror-only) mirror_only=1 ;; --background-render) background=1 ;; --foreground-render) background="" ;; esac; done
   git fetch -q origin || die "cannot fetch GitHub main from $GITHUB_URL"
   refuse_unrelated_history
   if [ -z "$background" ]; then
@@ -627,5 +630,5 @@ case "${1:-}" in
   # GUARD_EDIT_OK: feature 405 T35 (D7) - the landing returns once its work is on main; main's renders refresh behind it
   # (render_sync_background: the prompt hook's lock and log). A hand `render-sync` stays in the foreground.
   done)        trap 'backup_on_exit $?' EXIT; push_cmd; render_sync_background ;;
-  *)           die "usage: sync-with-main.sh sync-in [--mirror-only] [--background-render] | push | render-sync | done" ;;
+  *)           die "usage: sync-with-main.sh sync-in [--mirror-only] [--background-render] [--foreground-render] | push | render-sync | done" ;;
 esac
