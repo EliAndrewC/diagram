@@ -1,3 +1,5 @@
 SOUND - every factor states its reason from the d/2 lattice or the contract, each of the rubric's standard algorithms is used or turned down with a reason, and no factor is bigger than its reason supports.
 
 (The typed `work-budget` agent, 2026-10-28, MODE BUDGET on the derivation in the template's form (feature 443 T13: each factor's scope and worst case, the cheaper algorithms considered), its arithmetic unchanged from round 4's SOUND, verdict-4.txt.)
+
+(2026-10-28, feature 444 T07: a `## Totals` section added beside the count, restating its arithmetic per size - the per-item terms only for the grid placer, whose n is discs, not households; no figure changed.)

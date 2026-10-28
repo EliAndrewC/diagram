@@ -30,6 +30,16 @@ never from a figure with no source. WORST CASE names where the bound is tight, a
 
 So: <the total, items x candidates x checks x slack (slack at most 2), plus each once term>.
 
+## Totals
+
+One line per size, the expression in the table's own figures (digits, + - x / and brackets); `make work-budget-bundle` evaluates
+each and refuses a missing size or a value more than 1% off its expression. A derivation that uses a grid or spatial index counts
+the cells it examines in a row of its own.
+
+- at 20: <expression> = <value>
+- at 40: <expression> = <value>
+- at 80: <expression> = <value>
+
 ## Cheaper algorithms considered
 
 One line each: used, or why not (rubric S1-S3).

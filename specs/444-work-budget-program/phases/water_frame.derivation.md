@@ -24,6 +24,12 @@
 
 So: 1 x (36 + 0 + 4) x 1 = 40 basic operations, flat in households.
 
+## Totals
+
+- at 20: 1 x (36 + 0 + 4) x 1 = 40
+- at 40: 1 x (36 + 0 + 4) x 1 = 40
+- at 80: 1 x (36 + 0 + 4) x 1 = 40
+
 ## Cheaper algorithms considered
 
 - sweep: not used - nothing is ordered

@@ -74,10 +74,10 @@
    "declared": "round-arbiter"
   },
   "### T03 Approach (checklist part A)": {
-   "sha256": "47a34bbd310c4dfe5f20437a7e096d56c835de824f52a726233494c58903fca6",
-   "verdict": "CLEAR",
+   "sha256": "a5002517238d3eba77d58868a4d6a6d3c6d2df8e1976ef0c9fab6c6c55768e91",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T04 - the ways family's budgets (D1, D3, D4)": {
    "sha256": "050538fca64803ed67c1fa77c17b70a82530ddcb14afd9b4eb7bed0b62603d06",
@@ -86,10 +86,10 @@
    "declared": "round-arbiter"
   },
   "### T04 Approach (checklist part A)": {
-   "sha256": "f1f45ad363586fe84ef00a2a83c9c87d1edd5191c01e4af5a8a28e4a36854a91",
-   "verdict": "CLEAR",
+   "sha256": "8b82aa6da59d4292bed5294f6ada8be4a952c24424468db0a20549c420a8175f",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T05 - the hinterland and frame family's budgets (D1, D3, D4)": {
    "sha256": "e4088dab6b6185096ce2bb4b079cdc13c5de740d197c2320738a75a7b923e01e",
@@ -98,10 +98,10 @@
    "declared": "round-arbiter"
   },
   "### T05 Approach (checklist part A)": {
-   "sha256": "b257fd71431f0a548135bf655d95cf65f79a1c137fd6ee162575807f3cecd5a4",
-   "verdict": "CLEAR",
+   "sha256": "915b0754af659b5a28dde68319e83b4d0c8dacaecab09ff05ac4cd3126bbb3b3",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T06 - the program's target to the GM (D5)": {
    "sha256": "a2b6b1390900884b665b24d543e127eab66a4ebb668c2350af1265ddc534c551",
@@ -126,6 +126,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "round-arbiter"
+  },
+  "### T07 - a derivation's arithmetic and its index cells checked before any dispatch (the GM 2026-10-28)": {
+   "sha256": "2963e3c8550ce7cfd1cb046a344d9c0b7337b6f83341bfc231a89d4b8c493d6c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "f92105cda187dc947e76ff37f6deb36a594be06995fba0464b3240b62cd25515",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -427,6 +439,69 @@
      "summary": "Not performance work: paper budgets, no code a roll runs changes.",
      "class": "within",
      "why": "The request's step 3 derives budgets on paper; rebuilds begin in step 4."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T07 - a derivation's arithmetic and its index cells checked before any dispatch (the GM 2026-10-28)",
+    "### T07 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T03-item4",
+     "summary": "T03 item 4 now names the five contract sources a derivation is written from (docstring, plan fields read, manifest keys/registries written, claims, cohort checks)",
+     "class": "within",
+     "why": "Word-for-word restatement of accepted D1's definition of the CONTRACT; decides nothing the spec leaves open."
+    },
+    {
+     "id": "T04-item4",
+     "summary": "T04 item 4, the same five-source contract wording",
+     "class": "within",
+     "why": "Restates D1; no new decision."
+    },
+    {
+     "id": "T05-item4",
+     "summary": "T05 item 4, the same five-source contract wording",
+     "class": "within",
+     "why": "Restates D1; no new decision."
+    },
+    {
+     "id": "T07-totals",
+     "summary": "The derivation template gains a ## Totals section (one line per size, expression = value) that make work-budget-bundle MODE=budget evaluates, refusing a missing size or a value off its expression, before any dispatch",
+     "class": "within",
+     "why": "Directly answers the GM's 2026-10-28 rule that 'careful' must mean the checklist-based process is updated and enforced in tooling; a sum written wrong (19 + 8 as 26) is refused."
+    },
+    {
+     "id": "T07-tolerance",
+     "summary": "The value may differ from its evaluated expression by up to 1% (labeled a CONVENTION for the rounding a hand-written total carries)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Exact equality between a hand-written rounded value and an expression with non-integer factors (slack, log terms) is physically unattainable, so some band is forced; the named slip (19 + 8 as 26, about 3.7%) still trips 1%, so the band does not gut the check's purpose."
+    },
+    {
+     "id": "T07-reach",
+     "summary": "The arithmetic check refuses only a total off its own expression; the Why names 'a total leaving out a term' and 'a figure read at half its size' among the slips 'a script could have refused before any dispatch', but no refusal checks the expression's terms or figures against the count table",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Exit 6 lists exactly three refusals: 'a missing size, a total off its expression and an indexed derivation with no cells row'. An expression that omits a count-table term, or uses a figure at half its table value, evaluates to its own written value and passes; 'the expression in the count table's own figures' is an instruction to the writer, not a stated refusal. So two of the four slip classes the block itself defines as what 'careful' meant stay with the session's care and the judge's rounds - exactly what the GM said (2026-10-28) 'will not work'. Not physically impossible (the count table is in the same file: every count row can be required as a term, every figure in the expression required to be a table cell), not implied by the GM's words, and enforcing it does not defeat the request's purpose. To clear: add refusals for an expression missing a count row's term and for a figure in the expression that is not the table's value for that size, each red with its condition deleted, or drop those two slips from the Why's claim and state how they are otherwise checked."
+    },
+    {
+     "id": "T07-index-trigger",
+     "summary": "A derivation whose 'Cheaper algorithms considered' says a grid or spatial index is used must hold a count row whose factor names the cells examined, or is refused",
+     "class": "within",
+     "why": "Answers the named slip (index cells left uncounted, field and sink rounds) and the rubric's S1/S5. The trigger is a self-report in one section, a seam worth widening (an index named only in the pseudocode escapes), but that section exists to answer the rubric's grid question, so the check reaches the case it names."
+    },
+    {
+     "id": "T07-placement",
+     "summary": "T07 lands in 444, before T02's next dispatch, and applies to every later derivation",
+     "class": "within",
+     "why": "The GM, 2026-10-28: 'as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to.'"
     }
    ]
   }

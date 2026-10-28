@@ -200,3 +200,26 @@ set it with `make budget-program`.
 ## Complexity Tracking
 
 None.
+
+### T07 - a derivation's arithmetic and its index cells checked before any dispatch (the GM 2026-10-28)
+
+The GM's rule on a repeated error (`request.md`, 2026-10-28): *"anytime I hear you say that something went wrong and that you will address this by being careful in the future, then I tend to think that that will not work, unless being careful specifically means that our checklist-based process has been updated to include whatever "careful" means in that context"*.
+
+- **Approach**: the derivation template gains a `## Totals` section - one line per size, `- at <20|40|80>: <expression> = <value>`, the expression in the count table's own figures - and `make work-budget-bundle MODE=budget` evaluates each expression and refuses a missing size or a value more than 1% off it (a CONVENTION: the rounding a hand-written total carries), naming the line; and a derivation whose `Cheaper algorithms considered` says a grid or spatial index is used must hold a count row whose factor names the cells examined, or is refused. Why: of T02's first twelve rounds on the water family (2026-10-28, `phases/*.verdict-*.txt`), two kinds of finding were the session's own slips a script can refuse before any dispatch - a sum written wrong (19 + 8 as 26, sink round 2) and index cells left uncounted (field round 3, sink round 3). Two other kinds - a total leaving out a term of the table, and a figure read at the wrong size (the pond's radii read as halves, found by the session after sink round 3) - need the table's meaning, not its arithmetic: they stay the `work-budget` agent's to catch (its questions 1 and 3, whether each factor is derived and none padded), as it caught each in T02, and the arbiter's round cap bounds what they cost.
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** A derivation reaches the judge with its totals arithmetically true and its index cells counted.
+2. **The constraints.** The GM's rule above; the rubric (an index cell examined is a basic operation).
+3. **Where each comes from.** G: the GM, 2026-10-28 (`request.md`); O: T02's rounds (`phases/field.verdict-3.txt`, `phases/sink.verdict-2.txt`, `phases/sink.verdict-3.txt`).
+4. **Do they describe the world here?** The water family's rounds, measured 2026-10-28 (the twelve verdicts recorded beside the derivations).
+5. **The order.** Before T02's next dispatch; it applies to every derivation after it.
+6. **The exits.** Green: the bundle refuses a missing size, a total off its expression and an indexed derivation with no cells row, passes the fixtures' and the water family's derivations once their totals are written, and each refusal is red with its condition deleted. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** The refusals' tests green.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - tooling.
+

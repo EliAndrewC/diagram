@@ -21,6 +21,12 @@
 
 So: 1 x 1 x 1 = 1 basic operation, flat in households.
 
+## Totals
+
+- at 20: 1 x 1 x 1 = 1
+- at 40: 1 x 1 x 1 = 1
+- at 80: 1 x 1 x 1 = 1
+
 ## Cheaper algorithms considered
 
 - sweep: not used - nothing is placed on the reference

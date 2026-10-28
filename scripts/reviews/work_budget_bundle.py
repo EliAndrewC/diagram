@@ -20,6 +20,7 @@ save it as `verdict.txt` beside the derivation, and write its ledger row (`make 
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import re
 import shutil
@@ -54,6 +55,58 @@ STANDARD = ("sweep", "grid or spatial index", "priority queue", "incremental upd
 TEMPLATE = ".specify/templates/derivation.md"
 
 
+TOTALS = re.compile(r"^## Totals\b(.*?)(?=^## |\Z)", re.M | re.S)
+TOTAL_SIZES = (20, 40, 80)
+_TOTAL = re.compile(r"^-\s*at\s+(\d+)\s*:\s*(.+?)\s*=\s*([\d,]+(?:\.\d+)?)\s*$", re.M)
+_EXPR = re.compile(r"^[\d\s.,+\-*/x()]+$")
+#: how far a written total may sit from its own expression (feature 444 T07): a CONVENTION, the rounding a hand-written total carries
+TOLERANCE = 0.01
+
+
+def _arith(node: ast.AST) -> float:
+    """The value of an expression of numbers and + - * / alone (the `_EXPR` match has kept everything else out)."""
+    if isinstance(node, ast.Constant) and isinstance(node.value, int | float):
+        return float(node.value)
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
+        return -_arith(node.operand)
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add | ast.Sub | ast.Mult | ast.Div):
+        a, b = _arith(node.left), _arith(node.right)
+        return a + b if isinstance(node.op, ast.Add) else a - b if isinstance(node.op, ast.Sub) else a * b if isinstance(node.op, ast.Mult) else a / b
+    raise ValueError(ast.dump(node))
+
+
+def total_problems(text: str) -> list[str]:
+    """The `## Totals` section's lines - `- at <size>: <expression> = <value>`, one per size - each evaluated, and refused where
+    a size is missing or the value sits more than `TOLERANCE` off its expression (feature 444 T07: a sum written wrong, or a total
+    leaving out a term, refused before any dispatch)."""
+    sec = TOTALS.search(text)
+    if sec is None:
+        return [f"a `## Totals` section: one line per size, `- at <{'|'.join(str(h) for h in TOTAL_SIZES)}>: <expression> = <value>`"]
+    found = {int(m.group(1)): (m.group(2), m.group(3)) for m in _TOTAL.finditer(sec.group(1))}
+    out = [f"`## Totals`: a line for {h} households" for h in TOTAL_SIZES if h not in found]
+    for h, (expr, value) in sorted(found.items()):
+        if not _EXPR.match(expr):
+            out.append(f"`## Totals` at {h}: `{expr}` is not arithmetic on the table's figures (digits, + - x / and brackets)")
+            continue
+        got = _arith(ast.parse(expr.replace(",", "").replace("x", "*"), mode="eval").body)
+        want = float(value.replace(",", ""))
+        if abs(got - want) > TOLERANCE * max(abs(got), 1):
+            out.append(f"`## Totals` at {h}: `{expr}` is {got:,.0f}, not {value}")
+    return out
+
+
+def cells_problems(text: str) -> list[str]:
+    """A derivation that uses a grid or spatial index counts the cells it examines (the rubric: an index cell examined is a basic
+    operation; feature 444 T07)."""
+    alts = ALTERNATIVES.search(text)
+    used = bool(alts and re.search(r"^-\s*grid or spatial index:\s*used\b", alts.group(1), re.M | re.I))
+    count = COUNT.search(text)
+    rows = [ln.strip().strip("|").split("|")[0].strip().lower() for ln in (count.group(1) if count else "").splitlines() if ln.strip().startswith("|")]
+    if used and not any("cell" in r for r in rows[2:]):
+        return ["`## The count, factor by factor`: a row counting the index cells examined - the derivation says a grid or spatial index is used"]
+    return []
+
+
 def form_problems(text: str) -> list[str]:
     """Each field of the derivation template a derivation lacks (`TEMPLATE`): the count's table with every column filled and a
     scope of its three, and a line for each standard cheaper algorithm saying whether it is used and why."""
@@ -79,7 +132,7 @@ def form_problems(text: str) -> list[str]:
     alts = ALTERNATIVES.search(text)
     said = {m.group(1).strip().lower(): m.group(2).strip() for m in re.finditer(r"^-\s*([^:\n]+):[ \t]*(.*)$", alts.group(1) if alts else "", re.M)}
     out += [f"`## Cheaper algorithms considered`: a line for `{a}` - used, or why not" for a in STANDARD if not said.get(a)]
-    return out
+    return out + cells_problems(text) + total_problems(text)
 
 
 def refusals(text: str) -> list[str]:

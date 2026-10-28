@@ -43,6 +43,12 @@ layouts, of which about 24 are refused. The later web stage then tests each lane
 household box (all pairs), a pass over a growing set inside a loop over a growing set.
 
 
+## Totals
+
+- at 20: 20 x (21 + 20 + 7 x 4) = 1,380
+- at 40: 40 x (21 + 20 + 7 x 4) = 2,760
+- at 80: 80 x (21 + 20 + 7 x 4) = 5,520
+
 ## Cheaper algorithms considered
 
 - sweep: not used - the growth offers seats in its own order

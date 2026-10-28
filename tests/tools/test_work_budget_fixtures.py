@@ -149,3 +149,29 @@ def test_main_builds_and_refuses(tmp_path: Path, capsys: pytest.CaptureFixture[s
     (empty / "l7r" / "diagram" / "hamletgen").mkdir(parents=True)
     (empty / "l7r" / "diagram" / "hamletgen" / "x.py").write_text("def stage_web(s, plan):\n    pass\n")
     assert wbb.audit_bundle(empty, "web", tmp_path / "b")[1].endswith("run it first")
+
+
+@pytest.mark.parametrize(
+    ("edit", "why"),
+    [
+        (lambda t: t.replace("- at 40: 9 x 40 + 8 x 40 = 680\n", ""), "a line for 40 households"),
+        (lambda t: t.replace("- at 80: 9 x 80 + 8 x 80 = 1360", "- at 80: 9 x 80 + 8 x 80 = 1460"), "is 1,360, not 1460"),
+        (lambda t: t.replace("- at 20: 9 x 20 + 8 x 20 = 340", "- at 20: nine x 20 = 340"), "is not arithmetic"),
+        (lambda t: t.split("## Totals")[0] + "## Cheaper" + t.split("## Cheaper")[1], "a `## Totals` section"),
+        (lambda t: t.replace("| lookups: the lattice cells examined (S2) |", "| lookups (S2) |"), "a row counting the index cells examined"),
+    ],
+)
+def test_a_derivations_totals_are_evaluated_and_its_index_cells_counted(tmp_path: Path, edit, why: str) -> None:  # noqa: ANN001
+    """Feature 444 T07 (the GM's rule on a repeated error, 2026-10-28): a sum written wrong, a total leaving out a term, a size
+    left out, and an index whose cells are not counted - each refused before any dispatch."""
+    (tmp_path / "d.md").write_text(edit((FIX / "grid-placer" / "derivation.md").read_text(encoding="utf-8")))
+    rc, msg = wbb.budget_bundle(REPO, "x", str(tmp_path / "d.md"), tmp_path / "out")
+    assert rc == 1 and why in msg, msg
+
+
+def test_the_arithmetic_reader_takes_numbers_and_the_four_operators_alone() -> None:
+    import ast as _ast
+
+    assert wbb._arith(_ast.parse("-(2 + 3) * 4 / 2 - 1", mode="eval").body) == -11
+    with pytest.raises(ValueError):
+        wbb._arith(_ast.parse("2 ** 3", mode="eval").body)

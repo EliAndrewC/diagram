@@ -1,3 +1,5 @@
 UNDERIVED - candidates per house: the funnel retries seats "until the house is placed or the seats run out", bounded by nothing but "the seats in the growth's ring" (a tuned retry, not a count derived from the geometry, S2), and the slack is "none stated" (S7).
 
 (The typed `work-budget` agent, 2026-10-28, MODE BUDGET on derivation.md. Its LOOSE factors, were the underived fixed: envelopes about 20 a house against 1; laid layouts 28 a house against 4. Proposed as meeting FR-009, the exception was ruled NOT LEGITIMATE by spec-fidelity MODE 1 the same day: the literal set holds, and the funnel's ruling is its MODE AUDIT one, verdict.txt.)
+
+(2026-10-28, feature 444 T07: a `## Totals` section added beside the count, restating its arithmetic per size - the per-item terms only for the grid placer, whose n is discs, not households; no figure changed.)
