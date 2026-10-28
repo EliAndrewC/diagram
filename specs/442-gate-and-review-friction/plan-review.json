@@ -1,0 +1,127 @@
+{
+ "feature": "442-gate-and-review-friction",
+ "blocks": {
+  "preamble": {
+   "sha256": "5f7f255cdd1e95be27aa48c72e1ea720e6bc60c320d8056161336fd5e47ecdeb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "b59a733dfb51462b8c4729cdba7cb3f37325b97455b1194078aa0dd36c965a72",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "ca85a2b30257ecc382cbb357d467c18ac9be217b59a89a7861c41c8f769fb541",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "0cb8d0184d9c3b8ceacad50c652a351e052cf6cd574e091a7c017df3e06f2eaf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "ba238607f73fe446880025bb26a858b5123ff53a43278b3fe95bf64be275daa3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "04adf5e94597231e160af21c978501d3caced5564e312b16472bf64793e291c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Task approaches": {
+   "sha256": "03dfa2806b03f962c2ce79cf3db48ec845318771ccffccbe241dd59a1ab2cc61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "410a73f516516866473a5cf9a616dd496d4bb94a4b83e97de6d9aa9a5e419b02",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "678c7f297147a9f7b8b659e26a634e08e693493d4cb474ffb4c2882bf035444e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-27",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "hm_arbiter.spec_verdict: a FAITHFUL line naming its review (not NOT FAITHFUL), else spec_ruled on the body hash; review-gate.sh calls it via CLI, ci/features.py imports it; the merge check's own reader retired",
+     "class": "within",
+     "why": "Exactly FR-001: one reader, both gates call it, the merge check's substring test and its own ruling reader go. Serves the GM's 'one shared reader ... that every gate imports'."
+    },
+    {
+     "id": "D2",
+     "summary": "sync_in compares mirror HEAD with fetched origin/main; equal -> no lock, no refresh; else mirror_refresh with SYNC_LOCK_WAIT and background render; --background-render kept, no foreground flag",
+     "class": "within",
+     "why": "FR-002 verbatim; the foreground render stays render-sync as FR-002 says. Serves 'sync-in not waiting behind the landing's render-sync'. The bounded wait does not refuse on a time (FR-005)."
+    },
+    {
+     "id": "D3",
+     "summary": "stale_terms.criteria_left_behind parses FR items and 'SC-NNN (FR-...)' items with continuations, names an SC attributed to a rewritten FR whose own text is unchanged; make stale-terms and the review-round hook both show it; a rewritten line judged against its whole replaced block",
+     "class": "within",
+     "why": "FR-003: every criterion of a rewritten requirement the change left untouched, shown in the round's dispatch as the search's other candidates. Reading attribution from the SC's parenthetical is what 'a rewritten requirement's criterion' (the GM's words) means in this spec's convention (spec-index: 'SC-001 (FR-001)'), not a narrowing. Whole-block pairing is a correctness detail."
+    },
+    {
+     "id": "D4",
+     "summary": "scripts/trial-review.py (make trial-review F=) copies brief, request, research/*.md to /tmp/l7r-check/trial-review-NNN/ with a MANIFEST; check-not-re-run instruction when Status opens Done and says set down / stopped at the measurement, full-review dispatch otherwise; trial template asks for each measurement's output in a fenced block",
+     "class": "within",
+     "why": "FR-004: the bundle, the conditional instruction, the ordinary dispatch for other trials, the template's fenced output. Serves 'a measurement-only trial's review bundle carrying its commands' outputs'. Writing the bundle for every trial adds nothing beyond FR-004's reach."
+    },
+    {
+     "id": "Performance bookends: none",
+     "summary": "no engine code a roll runs changes",
+     "class": "within",
+     "why": "All four changes are tooling; the request defers 'what moves the needle' to after this feature."
+    },
+    {
+     "id": "T01: one task, four parts; Done = tests pass and make trial-review F=441 prints the stopped trial's dispatch; docs read for the four",
+     "summary": "task shape, exits and done measure",
+     "class": "within",
+     "why": "Covers FR-001..FR-005 (docs/guards.md and spec-kit-and-reviews.md for FR-004/FR-005) with no addition or reduction."
+    },
+    {
+     "id": "Project Structure: hm_review_round.py among the files",
+     "summary": "the review-round hook's module touched",
+     "class": "within",
+     "why": "FR-003 requires the round's dispatch to show the new candidate; no decision extends FR-001 to hm_review_round.accepted, which FR-001 keeps out."
+    }
+   ]
+  }
+ ]
+}

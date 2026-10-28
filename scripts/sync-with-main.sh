@@ -227,7 +227,8 @@ sync_in() { # [--mirror-only] [--background-render]
   git fetch -q origin || die "cannot fetch GitHub main from $GITHUB_URL"
   refuse_unrelated_history
   if [ "$(git -C "$MAIN" rev-parse -q --verify HEAD 2>/dev/null)" = "$(git rev-parse -q --verify origin/main)" ]; then
-    :  # the mirror already holds what GitHub main holds: nothing to refresh, so no lock to wait on
+    render_sync_background  # the mirror already holds GitHub main: no refresh, no lock to wait on; the render runner (never blocking)
+    # is still started, so a render an earlier pass FAILED is retried and its failure reported
   elif mirror_refresh "$SYNC_LOCK_WAIT"; then
     render_sync_background
   else
