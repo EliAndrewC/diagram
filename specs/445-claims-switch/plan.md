@@ -86,6 +86,21 @@ arbiter-ask`.
 
 **Performance work?** no - tooling.
 
+### T01 part B (2026-10-28T15:55Z)
+
+Owed by the round arbiter's ruling on red-gate@2026-10-28T15:51:42Z (continue), taken while T01 was the active task.
+
+1. **What is refusing?** Not T01's change: the gate's two reds were 443 T02's tools without operations-registry rows (fixed,
+   28784b76e) and a race between two gate workers sharing `gencache.load`'s `<out>.tmp` (fixed, 35872eb6c, its test red without it).
+2. **A3 again.** Unchanged: the GM's ruling of 2026-10-28 (G).
+3. **A4 again.** Unchanged.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither - two defects fixed where found (XIV).
+6. **The one-sentence test.** "The claims switch reads `report` and keeps the remote axis on a throw" - true by `tests/test_switches.py`.
+7. **The next step is a measurement.** One `make done` (the ruling's), both tests named green.
+8. **Every route measured before offering one?** No route is offered.
+9. **After a ruling: the step it names?** Yes - one more gate; a same-error red goes to `make arbiter-ask`.
+
 ### T02 - the gate at `report` and `clean` (D2, D3)
 
 `claims_carry.claims_mode`, `gate`'s two modes, `open_findings` lifted from the report and read by both, `file_carries` and
