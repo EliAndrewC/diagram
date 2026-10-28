@@ -159,29 +159,7 @@ today's figures, and `make counters-inert` (D4, D5); T03 the budget table, `budg
 T04 the ratchet and the record in view (D7, D8); T05 the agent, its rubric, bundles and fixtures (D9-D11); T06 the phase
 checklist and its landing check (D12); T07 the Rust-tooling inventory and its check (D13); T08 the docs and the closing report.
 
-### T01 (the design's section 1: counted work that survives a port; FR-001, FR-002)
-
-- **Approach**: `work_counts.py` (a `defaultdict(int)`, its `__missing__` in C), the one-line `if __debug__:` increments of D1-D2's shared sites and `driver._run_stages`' per-stage copy (D3). Measured: `make perf-fanout SEED=25` total calls before and after (SC-001: within one call in a thousand), `make perf-ab A=<443-start commit>` quick form for the overhead, `make counters-inert`'s two rolls compared by hand until T02 builds it.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T01 Approach (checklist part A)
-
-1. **The goal, in the world.** every basic operation the shared geometry and the registry do is counted, by stage, by kind and by function, and a run under `-O` counts nothing.
-2. **The constraints.** FR-001, FR-002; D1-D3; no Python call added (the push's call guard, feature 427 T03).
-3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`); O: the 443-start bookend and the loop survey (`dev/perf-log/20261028T044837Z-443-start-diagram-backlog.json`, `20261028T045040Z-fanout-443-loops.txt`).
-4. **Do they describe the world here?** the counts are read on the reference roll against a hand count of one primitive's calls from the profile (`make perf-profile`).
-5. **The order.** first of the feature; before T09-T12, whose increments use its module.
-6. **The exits.** Green: the calls unmoved, a manifest identical with and without `-O`, the counts printed per stage. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing.
-9. **Done, measured.** `make perf-fanout` before and after, the A/B recorded in `research/overhead.md`.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
-
+<!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 ### T09 (the walk of the water and fields stages: plan D2, the round arbiter's ruling on ask:443-plan-round-3)
 
 - **Approach**: for water_frame, field, sink, waterward, pond_stock, pond_bank: the scan's loops in `research/candidate-loops.md` filtered by hand - `water/brook*.py`, `water/polder.py` read by hand (listed from the scan only) - and each loop that tries a site given `if __debug__: OPS["candidate@<function>"] += <n>` (n = 1 per iteration; `len(cands)` before a comprehension, `sorted` or `min` over a list; a short-circuiting `next`/first-admitted search counted inside the predicate it calls, keyed with that predicate). The filtered list and the excluded loops, with why, are written into the research file's section for the family.
