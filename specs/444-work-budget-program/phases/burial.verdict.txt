@@ -1,0 +1,3 @@
+SOUND - burial writes the same single manifest record at every size, and each factor (1 item x (2 knob tests + 1 write) x slack 1 = 3, flat) comes straight from the contract.
+
+(A note for the rebuild: the attested values kept in a set, so the membership test is one operation.)

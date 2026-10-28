@@ -1,0 +1,22 @@
+UNDERIVED - the seats offered (80 a house, 220,800 of the 264,471 operations at 20): their only reason is `GROW_LEVELS`, and the contract itself calls that "a GUESS, no source could speak to it". That makes them a tuned widening schedule, not candidates derived from the geometry (S2).
+
+**Earlier findings.** This is round 1. The bundle has no `homesteads.verdict-<N>.txt` file and the derivation has no `## Earlier findings` section, so there is nothing to close.
+
+**1. Is each factor derived?** No. Every multiplication in the Totals checks out, but five factors have no reason:
+- **Seats offered** (derivation.md line 37): 8 + 24 + 48 = 80 a house is only `GROW_LEVELS` restated. S2 and the rubric's reference ask for the sites within the house's reach at the rule's spacing, roughly (reach / spacing)^2, kept by the reach's shape. Neither the reach nor the spacing is derived.
+- **Seat test, "9 points where undecided"** (line 38): an undecided 32 ft cell holds one state, so deciding a point in it means testing that point against the boundary segments in the cell. The contract gives no bound on segments per cell, yet each point is charged 1. Nothing says why 9 samples of a 184 ft envelope are enough.
+- **Parts laid, "a part's side is under 64 ft"** (line 35): the contract's Bounds give only the homestead's extent (184 ft). The figure of "at most 4 cells" per part rests on this unsourced claim.
+- **Parts laid, "the rules ... asked once each, 13"** (line 35): the number of rules is set equal to the number of parts with no reason. Each rule is charged 1, but the contract's rules read regions: the 39 ft south sun, the 50 ft west lane, and "opens onto lane ground". Each region means index cells with up to 7 parts in each.
+- **Ways** (lines 22-23 and 42): only the walk of the finished segments through the parts index is counted. Finding the way in the gaps (`gap_ways.lay_the_ways`, a path search) is a stage write with no count at all.
+- **S4 gap:** parts are tested only against placed parts. Nothing tests a part against the site boundary after the 9-point sample, yet the contract's cohort check tests each footprint against the overlap matrix. Either that work is missing from the count, or a part can land on blocked ground.
+
+**2. Is there a standard, cheaper algorithm?** Partly answered. The raster, the parts index, the heap, filing parts as they are placed and rasterizing the boundary once are all used. But a refused seat stays refused, because the boundary is fixed and parts only accumulate. So the offers can be memoized, by raster cell for instance. The derivation does not say why every standing house re-offers seats at every level with no deduplication.
+
+**3. Is any factor padded?** I found none larger than its own stated reason. Slack is 1, with every factor taken as a ceiling. The seats factor cannot be judged for padding until it has a reason. For comparison, the rubric's reference is about 20 candidates a house; this derivation uses 80, each at 138 operations.
+
+**4. Is each figure read at its source's size and unit?** Yes, as the Bounds state them, and the canvas, boundary, ways, corridor and heap figures all recompute. Three are worth flagging:
+- **Ways' segments:** they grow x6.2 a doubling (143, 887, 5,497). That rate is the shape of today's path-search output, not of the geometry. It makes the ways term grow at an exponent of about 2.5 from 20 to 80, with no stated reason (S6). The stage total is still 1.08.
+- **Corridors:** 51 at 20 contradicts the contract's Writes, which give one access corridor a household. That would be 20 corridors, or 280 operations rather than 714.
+- **Heap:** it says "pushed and popped" but charges one log2 per offer rather than two. This is an undercount, not a blocker.
+
+Files read: /tmp/l7r-check/work-budget-budget-homesteads/MANIFEST.md, /tmp/l7r-check/work-budget-budget-homesteads/rubric.md, /tmp/l7r-check/work-budget-budget-homesteads/contract.md and /tmp/l7r-check/work-budget-budget-homesteads/derivation.md.

@@ -1,0 +1,25 @@
+UNDERIVED - the seats per house: "8 about each house" (derivation.md:16) gives no reason from the geometry or the contract (S2), and the 5 houses examined per seat (derivation.md:33) does not follow from its own reason either.
+
+**Q1, is each factor derived?** No. Round 2 has to answer both points below, not only the one on the first line.
+- The 8 seats about each house within the rung has no stated reason. It is not given as sites at the rule's spacing about the house's clearance, or compass points at a stated distance. As written it reads as a tuned candidate count.
+- In the test (derivation.md:17-18) the seat is also checked against "the lanes' verges in its cells" and "the engine's verdict". Neither appears in the 47 ops per seat. Either say the verges are among the 7 parts filed per cell, or give them a factor. The engine's verdict needs a stated cost.
+- "its walk, 1" has no reason. If the walk follows the lanes, it is a path search, not one op.
+- Uncounted, and small: the 3 by 3 house-index query, per well per rung, that lists the houses within the rung of the worst-served household.
+
+**Q2, a cheaper standard algorithm?** Yes, for the wells' service row (derivation.md:34, :53).
+- Each well drawn scans every household, so the cost is wells x households, about n²/10. That is a pass over a growing set inside a loop over a growing set, with no constant bound on the inner set (S3).
+- Use a max-heap keyed on each household's distance to its nearest well, with lazy invalidation, for "the worst-served household".
+- The figure is small (1,280 at 80), but S3 has no size exemption. While this row stands, the Growth paragraph's claim of linear growth past the density bound (derivation.md:47) is false.
+
+**Q3, is any factor padded?** No.
+- The density ceilings are correct at 2.9e-5: 4, 9, 25 and 53 houses within 190, 300, 520 and 760 ft.
+- 47 ops per seat x 8 seats x the houses summed over the rungs gives 19,928, 29,328 and 34,216 per well.
+- The totals check: 40,436, 118,657 and 277,098. Leave these as they are.
+
+**Q4, is each figure read at its source's size and unit?** Two figures are not.
+- **The 5 houses per seat.** It is read as the rule's threshold rather than the work. The scan of the seat's 3 by 3 cells tests every house it meets, inside the rung or not. In the derivation's own worst case ("every rung reached") an earlier rung fails on this rule exactly when fewer than five houses lie within it. Then every house in the 9 cells is examined. The contract states that bound: density x 9 x r², never more than the households (contract.md:6). By rung that is 10 (190 ft), 24 (300 ft), 71 (520 ft) and 151 (760 ft), so at 760 ft it is capped at 20, 40 and 80. The seat rows and totals need redoing on that figure.
+- **A unit mislabel.** The service row is labeled "cells examined" but counts households.
+
+The bundle held no earlier verdicts, so there were no earlier findings to close.
+
+Files read: /tmp/l7r-check/work-budget-budget-appurtenances/MANIFEST.md, /tmp/l7r-check/work-budget-budget-appurtenances/rubric.md, /tmp/l7r-check/work-budget-budget-appurtenances/contract.md, /tmp/l7r-check/work-budget-budget-appurtenances/derivation.md

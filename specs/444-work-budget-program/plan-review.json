@@ -930,6 +930,64 @@
      "why": "The only text changed since the CLEAR verdict. T08 implements FR-013 (make budget-set ARBITER=ask:<id>), which is the GM's 444#0 answer. T07 serves the GM's 2026-10-28 words that 'careful' has to become a step enforced by tooling, subagent checks or procedure, and that it must 'happen before the place where it would actually matter'. Pre-dispatch checks are that kind of step. Adding tasks to step 3 narrows nothing the request or the spec requires."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T03 - the homesteads family's budgets (D1, D3, D4)",
+    "### T03 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T03-scope",
+     "summary": "The task covers the seven homesteads-family stages (seat, homesteads, appurtenances, burial, lane_wells, sties, washing).",
+     "class": "within",
+     "why": "D4 settles the family and its seven members; the request's step 3 asks for a budget for every stage, and these seven are counted in D4's census of all 23."
+    },
+    {
+     "id": "T03-pin-rule",
+     "summary": "Each budget is pinned on a SOUND verdict or on the round arbiter's accept (FR-013).",
+     "class": "within",
+     "why": "This repeats D3/FR-013 as the GM approved it on 2026-10-28 (answer to 444#0: 'letting the arbiters acceptance pin it'). It adds no new carve-out."
+    },
+    {
+     "id": "T03-contract-sources",
+     "summary": "Each stage's contract is read from D1's five sources (docstring, plan fields read, manifest keys/registries written, claims-report rows, cohort_audit rules) when its derivation is written.",
+     "class": "within",
+     "why": "This repeats D1, which carries checklist item 1 (Contract: manifest reads/writes, governing claims, cohort properties). It does not drop a source or let today's counts in."
+    },
+    {
+     "id": "T03-order",
+     "summary": "T03 runs after T01.",
+     "class": "within",
+     "why": "This only sequences the task. Nothing in the request or spec puts the family derivations in a different order relative to T01, and no requirement is narrowed."
+    },
+    {
+     "id": "T03-exits",
+     "summary": "Green: seven verdicts (SOUND or arbiter accept) and seven budgets pinned. Red: the failure is recorded, the task set down, and a claim that it cannot be done goes to the arbiter via make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit is FR-001/FR-013 for these seven stages. The red exit is a derivation task paused on failure, not a phase set down because its gain is small (FR-006 / request section 5.1). It does not close the program or relax a budget, and an arbiter ruling on a 'cannot be done' claim is a process ruling, which the request lets the arbiter make (section 5.4)."
+    },
+    {
+     "id": "T03-budget",
+     "summary": "One landing, seven MODE BUDGET dispatches, with more where a verdict asks for a correction.",
+     "class": "within",
+     "why": "D4 puts each family's derivations, verdicts and budgets in one landing, and D3 sets one dispatch per derivation, re-dispatched after a LOOSE or UNDERIVED correction."
+    },
+    {
+     "id": "T03-done-measure",
+     "summary": "Done when seven 'budgeted' rows are in the standing record.",
+     "class": "within",
+     "why": "This measures exactly the green exit (budgets pinned) in the standing record the request's section 5.2 describes."
+    },
+    {
+     "id": "T03-not-performance",
+     "summary": "The task is not performance work (paper budgets only); the constant-move and fit-into-room checks are n/a.",
+     "class": "within",
+     "why": "The request's step 3 is a paper derivation ('Derive every stage's budget on paper'). No engine code changes here, so those checklist items do not apply."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1099,6 +1157,62 @@
      "summary": "field pinned on its accept (ask:444-T02-field-round-15) as T08's done-condition",
      "class": "within",
      "why": "The GM's 444#0 answer ('So please move forward with that') is the instruction to pin field this way, and FR-013 is its requirement. The accept's existence is a state claim carrying a dated source (arbiter.jsonl, recorded 2026-10-28); the bundle forbids repository reads, so it is taken on that label and was not re-read here."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T03": {
+   "section_sha256": "d162b4fdfdd54c34fbc6d0ffe6366bf1b3a460954053d90951b2929a0a7538a4",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T03-scope",
+     "summary": "The task covers the seven homesteads-family stages (seat, homesteads, appurtenances, burial, lane_wells, sties, washing).",
+     "class": "within",
+     "why": "D4 settles the family and its seven members; the request's step 3 asks for a budget for every stage, and these seven are counted in D4's census of all 23."
+    },
+    {
+     "id": "T03-pin-rule",
+     "summary": "Each budget is pinned on a SOUND verdict or on the round arbiter's accept (FR-013).",
+     "class": "within",
+     "why": "This repeats D3/FR-013 as the GM approved it on 2026-10-28 (answer to 444#0: 'letting the arbiters acceptance pin it'). It adds no new carve-out."
+    },
+    {
+     "id": "T03-contract-sources",
+     "summary": "Each stage's contract is read from D1's five sources (docstring, plan fields read, manifest keys/registries written, claims-report rows, cohort_audit rules) when its derivation is written.",
+     "class": "within",
+     "why": "This repeats D1, which carries checklist item 1 (Contract: manifest reads/writes, governing claims, cohort properties). It does not drop a source or let today's counts in."
+    },
+    {
+     "id": "T03-order",
+     "summary": "T03 runs after T01.",
+     "class": "within",
+     "why": "This only sequences the task. Nothing in the request or spec puts the family derivations in a different order relative to T01, and no requirement is narrowed."
+    },
+    {
+     "id": "T03-exits",
+     "summary": "Green: seven verdicts (SOUND or arbiter accept) and seven budgets pinned. Red: the failure is recorded, the task set down, and a claim that it cannot be done goes to the arbiter via make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit is FR-001/FR-013 for these seven stages. The red exit is a derivation task paused on failure, not a phase set down because its gain is small (FR-006 / request section 5.1). It does not close the program or relax a budget, and an arbiter ruling on a 'cannot be done' claim is a process ruling, which the request lets the arbiter make (section 5.4)."
+    },
+    {
+     "id": "T03-budget",
+     "summary": "One landing, seven MODE BUDGET dispatches, with more where a verdict asks for a correction.",
+     "class": "within",
+     "why": "D4 puts each family's derivations, verdicts and budgets in one landing, and D3 sets one dispatch per derivation, re-dispatched after a LOOSE or UNDERIVED correction."
+    },
+    {
+     "id": "T03-done-measure",
+     "summary": "Done when seven 'budgeted' rows are in the standing record.",
+     "class": "within",
+     "why": "This measures exactly the green exit (budgets pinned) in the standing record the request's section 5.2 describes."
+    },
+    {
+     "id": "T03-not-performance",
+     "summary": "The task is not performance work (paper budgets only); the constant-move and fit-into-room checks are n/a.",
+     "class": "within",
+     "why": "The request's step 3 is a paper derivation ('Derive every stage's budget on paper'). No engine code changes here, so those checklist items do not apply."
     }
    ],
    "verdict": "CLEAR"

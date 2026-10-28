@@ -1,0 +1,15 @@
+LOOSE - the brook (13 per item): 1 per item (the cell examined), since the stated penalty is only that the brook is "in its cell", and the cell lookup alone answers that; the 12 per-segment tests serve no rule the derivation or contract states.
+
+**1. Is each factor derived?** Most are. Items 78/90/105 are the outline points from the Bounds. Wind, upslope and toe are 1 each. The hem is 8: the cell, plus the 7-polygon ceiling. The belt's room is 4, one per canvas side. Slack is 1, which is within S7. The ranking is n x ceil(log2 n), with ceil(log2) = 7 at every size. The hem index is 4 cells per polygon. The frame is a constant 12. Two notes:
+- The brook index costs nothing here only because derivation.md line 23 says the field's outline index is "read" and not built. I accept that because the Bounds cite "the field's measured ceiling". If this stage built that index, no total-segment bound exists to derive its cost from.
+- The tier test is booked once, in the frame (line 39). But ranking by tier needs a tier for every point, so that classification must sit inside the per-item wind op. The AUDIT should expect it counted there.
+
+**2. Is there a standard, cheaper algorithm?** None was missed. The hem index costs 704 at 80, against 105 x 176 = 18,480 for all-pairs. The ladder is a full ranking, so a full sort is right and a heap does not apply. Nothing changes during the scan, so an incremental update gains nothing.
+
+**3. Is any factor padded?** Yes, the brook. Line 15 says only "penalize it: ... the brook in its cell", which is a presence condition. The contract's Keeps name no brook rule at all, and nothing in derivation.md says a point is tested against each segment (a distance, a crossing). Tighter bound: 1 per item, giving 78 x 16 + 802 = 2,050 at 20 and 105 x 16 + 1,451 = 3,131 at 80. If the rule really is a distance to the brook or a belt crossing it, the derivation must state that rule. Then the 13 stands as derived.
+
+**4. Is each figure read at its source's size and unit?** Yes. The derivation uses 78/90/105 outline points and 61/104/176 hem polygons, the figures the contract states at 20, 40 and 80. The ceilings are 7 hem polygons and 12 brook segments per 64 ft cell. A diagonal under 64 ft spans at most 2 cells per axis, so 4 cells per polygon holds. The totals check out: 2,986, 3,578 and 4,391. The exponent from 20 to 80 is about 0.28, well within S6.
+
+No earlier verdict files were in the bundle, so there were no earlier findings to close.
+
+Files read: /tmp/l7r-check/work-budget-budget-seat/MANIFEST.md, /tmp/l7r-check/work-budget-budget-seat/rubric.md, /tmp/l7r-check/work-budget-budget-seat/contract.md, /tmp/l7r-check/work-budget-budget-seat/derivation.md

@@ -1,0 +1,36 @@
+SOUND - Both verdict-1 findings are closed. Every factor names its reason from the contract's Bounds or the geometry, the totals add up (2,126 / 2,586 / 3,234), and no cheaper standard algorithm or padded factor remains.
+
+**1. Is each factor derived?** Yes.
+- **Items:** 78, 90 and 105 outline points, from the Bounds.
+- **Per point:** the wind, the upslope, the toe and the tier are 1 each. The hem is 8: one cell plus the 7-polygon ceiling. The brook is 1: one cell, read for presence. The belt's room is 4, one per canvas side. Slack is 1.
+- **Over the run:** the ranking is n x ceil(log2 n), and ceil(log2 n) is 7 at every size. The hem index is 4 cells per polygon. The frame is 10.
+- **Condition on the brook:** it costs 1 per point only because the field's outline index exists before this stage runs. Line 23 says it is "the field's, read", and the Bounds call the 12-per-cell ceiling "the field's measured ceiling". Line 12 ("index ... the brook in the field's outline index's cells") reads as if this stage builds that index; it must not be taken literally. If the rebuild does file the brook here, that step has no row in the table and no total-segment bound to give it one. That would be UNDERIVED, and the AUDIT should check it.
+- **The hem's 7 is measured, not derived from geometry.** Line 22's reason (a 64 ft cell, polygons with a diagonal under 64 ft) puts no ceiling on polygons per cell without a minimum polygon size. The 7 is the contract's measured ceiling (6 at 10, 7 at 20, rising, while the hem grows x1.69 per doubling). The rubric accepts it as a Bound read at its source. The AUDIT at 40 and 80 is where it holds or fails.
+
+**2. Is there a standard, cheaper algorithm?** None was missed.
+- The hem index costs 704 cell writes at 80, against 105 x 176 = 18,480 tests for all-pairs.
+- The ladder is the whole ranking, so a full sort is right and a heap's first item is not enough.
+- Nothing a point's score reads changes during the scan, so neither a sweep nor an incremental update lowers a factor.
+
+**3. Is any factor padded?** No.
+- Brook: the 13 per point is now 1 (line 33), the presence read the penalty states.
+- Frame, minor: "the refusal test (2)" gives no reason for the 2. That is at most one operation in a constant of 10, so it is not a finding.
+
+**4. Is each figure read at its source's size and unit?** Yes.
+- Outline points 78/90/105 and hem polygons 61/104/176, at 20/40/80, as the contract states them.
+- Ceilings of 7 hem polygons and 12 brook segments per 64 ft cell.
+- A diagonal under 64 ft spans at most 2 cells on each axis, so 4 cells per polygon holds.
+- Totals: 78 x 17 + 546 + 244 + 10 = 2,126; 90 x 17 + 630 + 416 + 10 = 2,586; 105 x 17 + 735 + 704 + 10 = 3,234.
+- The exponent from 20 to 80 is about 0.30, within S6.
+
+**Earlier findings (verdict-1):** both closed.
+- Finding 1, the brook: 13 per point became 1, a presence read of its cell.
+- Finding 2, the tier: moved out of the frame into its own per-point factor of 1. That is why the frame fell from 12 to 10 and the per-point sum went from 28 to 17.
+- Making those two moves on verdict-1's 2,986 / 3,578 / 4,391 gives today's totals exactly.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-seat/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-seat/rubric.md
+- /tmp/l7r-check/work-budget-budget-seat/contract.md
+- /tmp/l7r-check/work-budget-budget-seat/derivation.md
+- /tmp/l7r-check/work-budget-budget-seat/seat.verdict-1.txt

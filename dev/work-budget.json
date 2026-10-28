@@ -39,7 +39,14 @@
    "items_at_80": 108
   },
   "seat": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.3,
+   "derivation": "specs/444-work-budget-program/phases/seat.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/seat.verdict.txt",
+   "items_at_20": 2126,
+   "items_at_40": 2586,
+   "items_at_80": 3234
   },
   "waterward": {
    "status": "budgeted",
@@ -71,7 +78,14 @@
    "items_at_80": 1
   },
   "burial": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 3.0,
+   "exponent": 0.0,
+   "derivation": "specs/444-work-budget-program/phases/burial.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/burial.verdict.txt",
+   "items_at_20": 1,
+   "items_at_40": 1,
+   "items_at_80": 1
   },
   "web": {
    "status": "unbudgeted"
