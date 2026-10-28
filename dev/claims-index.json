@@ -4859,12 +4859,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/_invocation.py::OPERATIONS#invocation guard": {
-  "body": "54cb3e2a7be1e107",
+  "body": "df5ff15290459187",
   "claim": "invocation guard - NONE: process-tree inspection, no map decision",
-  "code": "701bff21f99743a3",
-  "core": "cbcacb88a434f3ca",
-  "date": "2026-10-27",
-  "note": "a registry of make targets and how much each operation costs; it makes no physical or rendering decision, so NONE is correct",
+  "code": "f4a211ebeb75b6bd",
+  "core": "7ecbfa8bbf6195b9",
+  "date": "2026-10-28",
+  "note": "plumbing: maps each module to its make target and to a cost that decides only prompting; the two added rows (work_budget, counters_inert) decide nothing about the map",
   "pages": {},
   "research": "",
   "rests": [],
