@@ -309,29 +309,3 @@ Owed by the cohort (cohort@20261021T172647Z: seeds 12, 21, 22, 24, 38 and 901 ne
 <!-- plan-archive: T133 to T133 moved to plan-done.md, 2026-10-23 (feature 375 FR-044) -->
 
 <!-- plan-archive: T134 to T134 moved to plan-done.md, 2026-10-23 (feature 375 FR-044) -->
-
-### T165 (three impl-drift findings of feature 435's claims rounds, moved here when 435 closed)
-
-- **Approach**: each finding is a drawing page (0047, 0072, 0190) or a claim (`seat_wells`' belt) that does not yet state what
-  the code does; the page or claim is amended to state it, or the code to match the page, and each re-checked by impl-drift.
-  No figure; nothing measured.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T165 Approach (checklist part A)
-
-1. **The goal, in the world.** The record says what the privy, well and notice-board placers do, and why.
-2. **The constraints.** 405's FRs; the three findings as impl-drift wrote them (435's claims rounds, T02, T06, T08).
-3. **Where each comes from.** R: drawing pages 0047, 0072 and 0190; G: the GM's approval moving them (2026-10-28).
-4. **Do they describe the world here?** Read against each page's cited sources when the page is amended.
-5. **The order.** After 405's hold lifts (feature 417 closes).
-6. **The exits.** Green: impl-drift IN-STEP on each. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing.
-9. **Done, measured.** The claims round of the landing: the three claims IN-STEP.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-**Performance work?** no
-
