@@ -855,3 +855,18 @@ def test_a_delta_changing_the_gates_machinery_runs_the_tooling_tests_not_a_gate(
     assert lb.long_runs(tmp_path) == 1, "a red tooling test: nothing lands"
     ran.clear(), delta.update(names="docs/x.md\n", tooling_rc=0)
     assert lb.long_runs(tmp_path) == 0 and made == [] and ran == [], "a docs delta: the stamp decides"
+
+
+def test_a_counter_only_landing_rolls_no_fresh_block(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 446 FR-002: the fresh 48-seed block after the push follows an engine landing, never a counter-only one."""
+    lb, _d = _land(tmp_path, monkeypatch)
+    started: list[pathlib.Path] = []
+    monkeypatch.setattr(lb, "start_fresh_block", lambda root: started.append(root) or root / "fresh.log")
+    assert "counter-only" in lb.fresh_block_after(tmp_path, True, True) and started == []
+    assert "fresh block started" in lb.fresh_block_after(tmp_path, True, False) and started == [tmp_path]
+    assert lb.fresh_block_after(tmp_path, False, False) == ""
+    asked: list[list[str]] = []
+    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: asked.append([str(c) for c in cmd]) or (0, ""))
+    assert lb.counter_only(tmp_path) and asked[-1][-1] == "counter-only" and asked[-1][1].endswith("cohort_gate.py")
+    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (1, ""))
+    assert not lb.counter_only(tmp_path)

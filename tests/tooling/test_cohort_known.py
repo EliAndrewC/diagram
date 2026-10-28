@@ -159,3 +159,70 @@ def test_a_roll_over_an_uncommitted_engine_diff_is_stamped_and_never_a_baseline(
     now = {"utc": "20261018T0100Z", "commit": "x", "households": None, "seeds": [_seed(10, "fail", {"bends": 1})]}
     assert ck.baselines(now, [stamped], lambda c: True) == {}, "a dirty roll is no baseline"
     assert ck.baselines(now, [{k: v for k, v in stamped.items() if k != "engine_diff"}], lambda c: True)
+
+
+def test_a_counter_only_successor_is_the_same_engine_and_an_added_file_is_not(tmp_path: pathlib.Path) -> None:
+    """Feature 446 FR-002: a commit that only adds counter blocks keeps main's engine for the cohort, so a counter-only landing's
+    record stays the baseline; any other change, an added file and a non-counter `if __debug__:` among them, is another engine."""
+    import subprocess
+
+    ck = _load()
+    root = tmp_path / "r"
+    _engine_tree(root)
+
+    def git(*a: str) -> str:
+        return subprocess.run(["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t", *a], check=True, capture_output=True, text=True).stdout.strip()
+
+    body = "def f(xs):\n    n = 0\n    for x in xs:\n        n += x\n    return n\n"
+    git("init", "-q", "-b", "main")
+    (root / "l7r" / "a.py").write_text(body)
+    git("add", "-A")
+    git("commit", "-qm", "engine")
+    base = git("rev-parse", "HEAD")
+    (root / "l7r" / "a.py").write_text(body.replace("    n = 0\n", '    n = 0\n    if __debug__:\n        OPS["candidate@f"] += len(xs)\n'))
+    git("commit", "-qam", "a counter")
+    counted = git("rev-parse", "HEAD")
+    assert ck.counter_only(root, base, counted) and ck.same_key(root, base, counted), "a counter block is the same engine"
+    (root / "l7r" / "a.py").write_text(body.replace("    n = 0\n", "    n = 0\n    if __debug__:\n        n += 1\n"))
+    git("commit", "-qam", "a debug block that is code")
+    coded = git("rev-parse", "HEAD")
+    assert not ck.counter_only(root, base, coded) and not ck.same_key(root, base, coded)
+    (root / "l7r" / "a.py").write_text(body)
+    (root / "l7r" / "b.py").write_text("y = 1\n")
+    git("add", "-A")
+    git("commit", "-qm", "a new engine file")
+    assert not ck.counter_only(root, base, git("rev-parse", "HEAD")), "an added file is no counter-only change"
+    assert not ck.counter_only(root, base, base), "no engine file differing is not a counter-only delta"
+    assert not ck.counter_only(root, base, "nosuchcommit")
+
+
+def test_the_counter_only_test_reads_the_landing_s_own_engine_list(tmp_path: pathlib.Path) -> None:
+    """Feature 446 (the plan review's ruling on D2): a path the landing counts as engine (`land.py`'s `ENGINE`, `l7r/diagram/ci/`
+    among them) changed beside a counter block is no counter-only delta - one list, `codeid.ENGINE`, read by both."""
+    import importlib.util
+    import subprocess
+
+    ck = _load()
+    spec = importlib.util.spec_from_file_location("_land_for_446", REPO / "scripts" / "land.py")
+    assert spec and spec.loader
+    land = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(land)
+    assert land.ENGINE is ck._codeid().ENGINE, "the landing and the counter-only test share one list"
+    root = tmp_path / "r"
+    _engine_tree(root)
+    (root / "l7r" / "diagram" / "ci").mkdir(parents=True)
+
+    def git(*a: str) -> str:
+        return subprocess.run(["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t", *a], check=True, capture_output=True, text=True).stdout.strip()
+
+    body = "def f(xs):\n    n = 0\n    return n\n"
+    (root / "l7r" / "a.py").write_text(body)
+    (root / "l7r" / "diagram" / "ci" / "c.py").write_text("x = 1\n")
+    git("init", "-q", "-b", "main")
+    git("add", "-A")
+    git("commit", "-qm", "engine")
+    base = git("rev-parse", "HEAD")
+    (root / "l7r" / "a.py").write_text(body.replace("    n = 0\n", '    n = 0\n    if __debug__:\n        OPS["a@f"] += 1\n'))
+    (root / "l7r" / "diagram" / "ci" / "c.py").write_text("x = 2\n")
+    git("commit", "-qam", "a counter beside a ci change")
+    assert not ck.counter_only(root, base, git("rev-parse", "HEAD")), "the ci change is the landing's engine: not counter-only"

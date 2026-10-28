@@ -3,6 +3,7 @@
     python3 scripts/gates/cohort_gate.py fresh-seed     the fresh block's first seed for this engine (plan D3)
     python3 scripts/gates/cohort_gate.py check          would the gated push take this engine? exit 0 yes, 1 no
     python3 scripts/gates/cohort_gate.py needs-baseline exit 0 when main's engine has no 48-seed record to be the baseline
+    python3 scripts/gates/cohort_gate.py counter-only   exit 0 when the delta only adds counter blocks (feature 446)
 
 WHY. The cohort is the hamlet generator's strongest test bed and nothing asked for one: sessions rolled it by hand, nearly always
 at the ten-seed default. About 30 ten-seed cohorts passed on 2026-10-12/13 and the next 48-seed run failed on seeds 17, 21, 40
@@ -139,10 +140,15 @@ def main(argv: list[str] | None = None) -> int:
     if what == "fresh-seed":
         print(fresh_seed(root, args[1] if len(args) > 1 else None))
         return 0
+    if what == "counter-only":
+        # FEATURE 446: the delta against the merge base with origin/main only adds counter blocks (`cohort_known.counter_only`);
+        # `make land` then rolls no fresh block after the push, and the same-engine test above already reads the landing as main's
+        base = git(root, "merge-base", "HEAD", "origin/main").stdout.strip()
+        return 0 if base and cohort_known.counter_only(root, base, "HEAD") else 1
     if what == "needs-baseline":
         return 0 if needs_baseline(root) else 1
     if what != "check":
-        print(f"cohort_gate: unknown command {what!r} (fresh-seed | check | needs-baseline)", file=sys.stderr)
+        print(f"cohort_gate: unknown command {what!r} (fresh-seed | check | needs-baseline | counter-only)", file=sys.stderr)
         return 2
     refusals, notes = check(root)
     for line in notes:

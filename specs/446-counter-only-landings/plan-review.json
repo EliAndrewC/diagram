@@ -1,0 +1,332 @@
+{
+ "feature": "446-counter-only-landings",
+ "blocks": {
+  "preamble": {
+   "sha256": "d1841c6f4dd9f736c924b70075840cd870dce43bf7cedad809097a004a64af95",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "6cce943bb4958f72a54ef3db35bb7e81ffde4f6935d27eba5d20ab16f477239d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "21fe26c678281a64650edc4dd98a72a0f51a4b844980d7d52cf70b441a75d1c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "225a3634596c4ffb04a534975b5293c7c4f65fb92d530b0922b5806e24c2b437",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "d8bb831b14f6c661f5822eb446d8cc58d0baa22bf25c8670e218f2aaff9d2b89",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "7d0f1fd86e15a8c0f8ce03096ba224e5ef13ed9a2cedcaa42a2d1a7d34c2f26f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Task approaches": {
+   "sha256": "40aa658feaa1ff5d3580be6429b55b809b083d71fab63d4c7eb46bf3809cbe63",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T01 - the counter-only delta and the cohort skip (D1, D2)": {
+   "sha256": "74a330a1b6ccf3a4ce28e620c85affaa02b0f22e4b30858bb145bcfb4229a526",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "7b0c3d551243c2b50b40d1cf4edbf3152ec2b13233d5277555b8718cdacaf2d9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T02 - the claims triage's counter-only clear (D3)": {
+   "sha256": "2940d8e46f425c08f6ea6db3dd889970d3aac384c2e2f5ab7ea577fcb7f15a55",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "38155815df7defb99efe86f251812acc5e42409c495d085945ad3739b228ea04",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T03 - the docs and the report (D4)": {
+   "sha256": "18d9f382e31ff8c55e19429d7db247c1bff1ec6ec884a66083c26a3767708e62",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "dba5c110bc19a82872be9b5c877a4f481757fb9a166b7be1f505732e68480a55",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "9f68c705abd98efaa2aa5aff4ceb4487ef008726c7d61f5147e6d9ff37ed7d77",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 - the counter-only delta and the cohort skip (D1, D2)",
+    "### T01 Approach (checklist part A)",
+    "### T02 - the claims triage's counter-only clear (D3)",
+    "### T02 Approach (checklist part A)",
+    "### T03 - the docs and the report (D4)",
+    "### T03 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "codeid.is_counter_block / _counter_value / strip_counters / debug_free_bytes as FR-001 defines them; the 3 non-counter if __debug__ blocks (BY_STAGE) stay code",
+     "class": "within",
+     "why": "Restates FR-001 and makes no choice it leaves open; the 136/133/3 figure carries a date and method (one-shot label). Serves the request's 'the proof mechanical, never a judgment'."
+    },
+    {
+     "id": "D2-path-set",
+     "summary": "counter_only walks cohort_known's ENGINE_PATHS, not land.py's ENGINE as FR-002 names",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 fixes the set: 'every engine path it changes (land.py's ENGINE)'. D2 walks ENGINE_PATHS and nothing in the blocks says the two are one set. counter_only is 'every changed path in the list is counter-only-equal', which is vacuously true when the list names none of the changed files, so any path in land.py's ENGINE missing from ENGINE_PATHS can be rewritten and the landing still judged counter-only, skipping both cohorts - the case the GM's accepted change keeps them for ('Any landing that moves a map ... keeps both', 'the proof mechanical, never a judgment'). Whether the lists are identical is an unmeasured premise the plan does not state. Fix: D2 walks land.py's ENGINE, or states (and a test pins) that ENGINE_PATHS is that same object, imported, not a second list."
+    },
+    {
+     "id": "D2-modification-only",
+     "summary": "only modifications count; an add, delete or rename of an engine path is never counter-only",
+     "class": "within",
+     "why": "FR-001's last sentence (an added or deleted file is never counter-only-equal); a rename failing the test is conservative and runs the cohorts."
+    },
+    {
+     "id": "D2-same-key",
+     "summary": "same_key returns True when counter_only does, after its two existing tests; delta.engine_key untouched",
+     "class": "within",
+     "why": "FR-002 verbatim: main's record stays the baseline so the next landing's cohort is not pushed onto it."
+    },
+    {
+     "id": "D2-command-and-base",
+     "summary": "new cohort_gate.py counter-only command (exit 0 when counter-only), delta against the merge base with origin/main; land.py then starts no cohort-landing and no fresh block and prints the skip",
+     "class": "within",
+     "why": "FR-002: base is the merge base with origin/main, make land skips both cohorts and 'says so'. Request change 1 names both the landing cohort and the fresh post-push block."
+    },
+    {
+     "id": "D3",
+     "summary": "claims triage: base unit fingerprinted through the same scan, equal to the recorded code; counter-free cores compared and the base's counter blocks standing in the current unit; cleared with current fingerprints and note 'counter-only (feature 446)', bundled nowhere",
+     "class": "within",
+     "why": "FR-003 and request change 2. 'Standing' must mean unchanged, as FR-003 says ('every counter block of the base version standing unchanged'; 'removed or rewritten' is owed). Non-blocking: T02's exits test a removed base counter block but not a rewritten one; the author should add that case."
+    },
+    {
+     "id": "D4/T03",
+     "summary": "docs/guards.md cohort-gate and claims-gate rows and make land's help name the skips; feature report",
+     "class": "within",
+     "why": "FR-005."
+    },
+    {
+     "id": "Performance bookends",
+     "summary": "none; claims scan gains a counter-free dump only for units owed a code triage",
+     "class": "within",
+     "why": "Tooling only; no roll code changes. Decides nothing the request constrains."
+    },
+    {
+     "id": "T01/T02 exits",
+     "summary": "tests: cohorts skipped on counter-only, run otherwise, full suite on both; each skip red with its condition deleted; claims cleared/owed cases",
+     "class": "within",
+     "why": "Enforcement of FR-002, FR-003, FR-004 and FR-005 - the kept full suite and the skips' guards - not scope."
+    },
+    {
+     "id": "Unchanged list",
+     "summary": "full suite, reviews, checklists, claims switch refusal unchanged",
+     "class": "within",
+     "why": "FR-004 and the request's 'Kept unchanged' list."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "### T01 - the counter-only delta and the cohort skip (D1, D2)",
+    "### T01 Approach (checklist part A)",
+    "### T02 - the claims triage's counter-only clear (D3)",
+    "### T02 Approach (checklist part A)",
+    "### T03 - the docs and the report (D4)",
+    "### T03 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "One counter-block definition in codeid (is_counter_block, _counter_value, strip_counters, debug_free_bytes) as FR-001 defines it; the 3 BY_STAGE blocks stay code.",
+     "class": "within",
+     "why": "Implements FR-001 as written, including FR-001's own statement that the driver's BY_STAGE attribution is code; it serves change 1's 'the proof mechanical, never a judgment'."
+    },
+    {
+     "id": "D2",
+     "summary": "counter_only(root,a,b) over the engine paths named by land.py's ENGINE (moved to codeid.ENGINE, one definition both read, a test failing if they differ); adds/deletes never counter-only; same_key True when counter_only; land.py asks cohort_gate.py counter-only against the merge base and skips cohort-landing and the fresh block, printing the skip.",
+     "class": "within",
+     "why": "The previous round's finding is resolved: the engine list is now FR-002's own (land.py's ENGINE), and moving it to one shared definition is a refactor that cannot make the set differ. Merge base with origin/main, both cohorts skipped, the skip printed, same_key widened, engine_key untouched (not named as changed), adds/deletes excluded per FR-001 - all as FR-002 and change 1 state. Any other engine delta runs both cohorts."
+    },
+    {
+     "id": "D3",
+     "summary": "Where a claim's code changed, fingerprint the unit at the merge base; when it equals the recorded code and the counter-stripped cores are equal with the base's counter blocks standing in the current unit, record the claim cleared ('counter-only (feature 446)') with its current fingerprints, bundled nowhere.",
+     "class": "within",
+     "why": "Implements FR-003 and change 2. The 'standing' condition is FR-003's 'every counter block of the base version standing unchanged', and T02's exit now tests the rewritten-block case as well as the removed one, so the condition is enforced rather than paraphrased. The claims switch's refusal of an owed claim (FR-004) is not touched."
+    },
+    {
+     "id": "D4",
+     "summary": "docs/guards.md cohort-gate and claims-gate rows and make land's help name the skips.",
+     "class": "within",
+     "why": "FR-005's documentation clause, nothing more."
+    },
+    {
+     "id": "Tests/exits (T01, T02, Constitution guard doctrine)",
+     "summary": "Each skip tested to still run on a non-counter delta, red with its condition deleted; land.py test asserts the full suite on both deltas.",
+     "class": "within",
+     "why": "Enforcement of FR-005 and FR-004 (the full suite kept on every engine landing); serves the request."
+    },
+    {
+     "id": "T03 feature report",
+     "summary": "make feature-report F=446 WRITE=1 as the last task's exit.",
+     "class": "within",
+     "why": "Standard closing of a feature; adds no behavior and narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T01 - the counter-only delta and the cohort skip (D1, D2)",
+    "### T01 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-scope",
+     "summary": "T01 builds codeid's counter-block functions with tests, cohort_known.counter_only, same_key's third test, cohort_gate.py counter-only, and land.py skipping both cohorts on a counter-only delta",
+     "class": "within",
+     "why": "Each item is named by D1/D2 (FR-001, FR-002) and serves accepted change 1: skip the landing cohort and the fresh block after the push when a landing provably, mechanically moves no map. Skipping BOTH cohorts matches the request's 'keeps both' / skip both."
+    },
+    {
+     "id": "T01-goal",
+     "summary": "Goal: a landing that only adds counters rolls no cohort; any other rolls both",
+     "class": "within",
+     "why": "Restates FR-002 in plain words, using the request's own 'gained counter lines' wording. The mechanism the task implements is D1/D2 cited in full (counter-only-equal), not a narrower rule; 'any other rolls both' is FR-002's 'Any other engine delta runs both cohorts as today'."
+    },
+    {
+     "id": "T01-constraints",
+     "summary": "Constraints FR-001, FR-002, FR-004, D1, D2; FR-004 keeps the full suite on every engine landing",
+     "class": "within",
+     "why": "The request keeps the full suite on every engine landing; the land.py exit test asserts the full suite runs on both counter-only and other deltas, enforcing that kept item."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green exits: test_codeid.py, a same_key test (counter-only successor same engine, an added file not), a land.py test (skip on counter-only, run on other, full suite on both), each skip red with its condition deleted; red exit records and sets down, a cannot-be-done claim goes to make arbiter-ask",
+     "class": "within",
+     "why": "Tests that only enforce the requested skip and its mechanical proof (FR-005, SC-001, SC-002, SC-004); the added-file case enforces FR-001's 'an added or deleted file is never counter-only-equal'. Enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T01-order-budget",
+     "summary": "Order first; budget one landing; done when a counter-only landing prints the skip and the push's cohort gate passes it",
+     "class": "within",
+     "why": "Sequencing and the done-measure restate D2's printed message and same_key acceptance by the push gate; the GM asked for this work to be prioritized so later landings are faster."
+    },
+    {
+     "id": "T01-world-check",
+     "summary": "133 of 136 if __debug__ blocks under l7r/ are counter blocks, measured 2026-10-28 by an AST walk through is_counter_block",
+     "class": "within",
+     "why": "A one-shot labeled measurement (date and method) matching D1's recorded census; it decides no scope, only confirms the rule describes the code."
+    }
+   ]
+  }
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "5ed3892ea976924b059a466b9fd8eacc7b2f9fc79e199f6e9857d57ef4ddf5d7",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T01-scope",
+     "summary": "T01 builds codeid's counter-block functions with tests, cohort_known.counter_only, same_key's third test, cohort_gate.py counter-only, and land.py skipping both cohorts on a counter-only delta",
+     "class": "within",
+     "why": "Each item is named by D1/D2 (FR-001, FR-002) and serves accepted change 1: skip the landing cohort and the fresh block after the push when a landing provably, mechanically moves no map. Skipping BOTH cohorts matches the request's 'keeps both' / skip both."
+    },
+    {
+     "id": "T01-goal",
+     "summary": "Goal: a landing that only adds counters rolls no cohort; any other rolls both",
+     "class": "within",
+     "why": "Restates FR-002 in plain words, using the request's own 'gained counter lines' wording. The mechanism the task implements is D1/D2 cited in full (counter-only-equal), not a narrower rule; 'any other rolls both' is FR-002's 'Any other engine delta runs both cohorts as today'."
+    },
+    {
+     "id": "T01-constraints",
+     "summary": "Constraints FR-001, FR-002, FR-004, D1, D2; FR-004 keeps the full suite on every engine landing",
+     "class": "within",
+     "why": "The request keeps the full suite on every engine landing; the land.py exit test asserts the full suite runs on both counter-only and other deltas, enforcing that kept item."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green exits: test_codeid.py, a same_key test (counter-only successor same engine, an added file not), a land.py test (skip on counter-only, run on other, full suite on both), each skip red with its condition deleted; red exit records and sets down, a cannot-be-done claim goes to make arbiter-ask",
+     "class": "within",
+     "why": "Tests that only enforce the requested skip and its mechanical proof (FR-005, SC-001, SC-002, SC-004); the added-file case enforces FR-001's 'an added or deleted file is never counter-only-equal'. Enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T01-order-budget",
+     "summary": "Order first; budget one landing; done when a counter-only landing prints the skip and the push's cohort gate passes it",
+     "class": "within",
+     "why": "Sequencing and the done-measure restate D2's printed message and same_key acceptance by the push gate; the GM asked for this work to be prioritized so later landings are faster."
+    },
+    {
+     "id": "T01-world-check",
+     "summary": "133 of 136 if __debug__ blocks under l7r/ are counter blocks, measured 2026-10-28 by an AST walk through is_counter_block",
+     "class": "within",
+     "why": "A one-shot labeled measurement (date and method) matching D1's recorded census; it decides no scope, only confirms the rule describes the code."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
+}

@@ -158,3 +158,18 @@ def test_a_missing_cohort_names_the_pool_maps_the_gate_regenerated(tmp_path: pat
     m.parent.mkdir(parents=True)
     m.write_text("{}")
     assert "uncommitted pool maps (pool/hamlets/x/x.json)" in cg.check(root)[0][0]
+
+
+def test_counter_only_asks_the_delta_against_the_merge_base(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 446 FR-002: `cohort_gate.py counter-only` exits 0 when the delta only adds counter blocks, 1 otherwise or with no base."""
+    import subprocess
+
+    asked: list[tuple[str, str]] = []
+    monkeypatch.setattr(cg, "git", lambda root, *a: subprocess.CompletedProcess(a, 0, stdout="base1\n" if a[0] == "merge-base" else "", stderr=""))
+    monkeypatch.setattr(cg.cohort_known, "counter_only", lambda root, a, b: asked.append((a, b)) or True)
+    assert cg.main(["counter-only"]) == 0 and asked == [("base1", "HEAD")]
+    monkeypatch.setattr(cg.cohort_known, "counter_only", lambda root, a, b: False)
+    assert cg.main(["counter-only"]) == 1
+    monkeypatch.setattr(cg, "git", lambda root, *a: subprocess.CompletedProcess(a, 0, stdout="", stderr=""))
+    assert cg.main(["counter-only"]) == 1, "no merge base: not counter-only"
+    assert cg.main(["sideways"]) == 2 and "counter-only" in capsys.readouterr().err

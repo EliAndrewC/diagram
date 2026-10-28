@@ -97,11 +97,51 @@ def engine_key(root: pathlib.Path, ref: str | None) -> str:
 
 
 def same_key(root: pathlib.Path, a: str, b: str) -> bool:
-    """Do commits `a` and `b` carry the same engine? Identical bytes answer at once; otherwise the semantic keys decide."""
+    """Do commits `a` and `b` carry the same engine? Identical bytes answer at once; otherwise the semantic keys decide - and a
+    counter-only difference (feature 446, FR-002) is the same engine too, so a landing that only adds counters leaves main's
+    cohort record its baseline instead of pushing the next landing's 48 seeds onto a re-roll of main."""
     if subprocess.run(["git", "-C", str(root), "diff", "--quiet", a, b, "--", *ENGINE_PATHS], capture_output=True).returncode == 0:
         return True
     ka = engine_key(root, a)
-    return bool(ka) and ka == engine_key(root, b)
+    return (bool(ka) and ka == engine_key(root, b)) or counter_only(root, a, b)
+
+
+def _codeid():  # noqa: ANN202 - the module, loaded by path (stdlib only, as gate-stamp.py loads it)
+    """`scripts/gates/codeid.py`, the one definition of a counter block (feature 446, FR-001)."""
+    import importlib.util  # noqa: PLC0415
+
+    cached = sys.modules.get("l7r_codeid")
+    if cached is not None:
+        return cached
+    path = pathlib.Path(__file__).resolve().parents[1] / "gates" / "codeid.py"
+    spec = importlib.util.spec_from_file_location("l7r_codeid", path)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["l7r_codeid"] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def counter_only(root: pathlib.Path, a: str, b: str) -> bool:
+    """Is every ENGINE file that differs between `a` and `b` (`codeid.ENGINE`, the landing's list) a modification whose two versions are
+    counter-only-equal (`codeid.debug_free_bytes`)? An added, deleted or renamed engine file is not (feature 446, FR-001/FR-002);
+    no engine file differing is not a counter-only delta either - the existing tests answer that case."""
+    diff = subprocess.run(["git", "-C", str(root), "diff", "--name-status", "--no-renames", a, b], capture_output=True, text=True)
+    if diff.returncode != 0:
+        return False
+    cid = _codeid()
+    rows = [ln.split("\t", 1) for ln in diff.stdout.splitlines() if ln.strip()]
+    engine = [(st, path) for st, path in rows if cid.ENGINE.match(path)]  # the landing's own list (`codeid.ENGINE`), every path
+    if not engine:
+        return False
+    for st, path in engine:
+        if st != "M":
+            return False
+        old = subprocess.run(["git", "-C", str(root), "show", f"{a}:{path}"], capture_output=True).stdout
+        new = subprocess.run(["git", "-C", str(root), "show", f"{b}:{path}"], capture_output=True).stdout
+        if cid.debug_free_bytes(old, path) != cid.debug_free_bytes(new, path):
+            return False
+    return True
 
 
 def baselines(record: dict, earlier: list[dict], ok) -> dict[int, dict]:  # noqa: ANN001 - a predicate on a commit

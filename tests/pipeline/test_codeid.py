@@ -65,3 +65,42 @@ def test_a_file_that_does_not_parse_is_its_bytes_and_a_non_python_file_is_too() 
 def test_the_engine_reads_the_one_module_the_gates_load() -> None:
     """The shim loads `scripts/gates/codeid.py` once: a second load is the module already loaded, which gate-stamp shares."""
     assert codeid._load() is codeid._mod and codeid.semantic_bytes is codeid._mod.semantic_bytes
+
+
+# ---- counter blocks (feature 446, FR-001) -----------------------------------------------------------------------------------
+
+_PLAIN = b"def f(xs, ring):\n    n = 0\n    for x in xs:\n        n += x\n    return n\n"
+
+
+def _free(src: bytes) -> bytes:
+    return codeid._mod.debug_free_bytes(src, "m.py")
+
+
+def test_a_counter_block_is_removed_and_nothing_else_is() -> None:
+    counted = _PLAIN.replace(b"    n = 0\n", b'    n = 0\n    if __debug__:\n        OPS["candidate@f"] += len(xs) * len(self.ring)\n        OPS["dist@f"] -= 1\n')
+    assert _free(counted) == _free(_PLAIN) and counted != _PLAIN, "a counter block changes nothing that runs without it"
+    for form in (b"len(xs)", b"xs.size", b"max(len(xs) - 1, 0)", b"k", b"2"):
+        assert _free(_PLAIN.replace(b"    n = 0\n", b'    n = 0\n    if __debug__:\n        OPS["a@f"] += ' + form + b"\n")) == _free(_PLAIN), form
+    assert codeid._mod.debug_free_bytes(b"not python", "m.txt") == b"not python" and _free(b"def (") == b"def ("
+
+
+def test_anything_but_a_counter_in_a_debug_block_is_code() -> None:
+    for body in (
+        b'        OPS["a@f"] += len(g(xs))\n',  # a call inside len
+        b'        OPS["a@f"] += g(xs)\n',  # a call
+        b'        OPS["a@f"] += xs.total\n',  # an attribute other than .size
+        b'        OPS["a@f"] = 1\n',  # not an augmented assignment
+        b'        OPS[key] += 1\n',  # a computed key
+        b'        BY_STAGE["a"] += 1\n',  # another target
+        b'        n += 1\n',
+        b'        OPS["a@f"] *= 2\n',
+        b'        OPS["a@f"] += max(xs, 0)\n',
+        b'        OPS["a@f"] += self.xs.size\n',  # .size on anything but a bare name
+        b'        OPS["a@f"] += len(xs) + 1\n',  # an operator other than *
+    ):
+        counted = _PLAIN.replace(b"    n = 0\n", b"    n = 0\n    if __debug__:\n" + body)
+        assert _free(counted) != _free(_PLAIN), body
+    with_else = _PLAIN.replace(b"    n = 0\n", b'    n = 0\n    if __debug__:\n        OPS["a@f"] += 1\n    else:\n        n = 1\n')
+    assert _free(with_else) != _free(_PLAIN), "an else runs under -O: code"
+    conj = _PLAIN.replace(b"    n = 0\n", b'    n = 0\n    if __debug__ and n:\n        OPS["a@f"] += 1\n')
+    assert _free(conj) != _free(_PLAIN), "`if __debug__ and ...` is not a counter block"

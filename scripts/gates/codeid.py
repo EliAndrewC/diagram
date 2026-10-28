@@ -29,8 +29,13 @@ from __future__ import annotations
 import ast
 import copy
 import hashlib
+import re
 
 _FUNCS = (ast.FunctionDef, ast.AsyncFunctionDef)
+#: THE ENGINE PATHS of a landing - a delta with one owes the landing cohort (`l7r.diagram.ci.delta.is_engine`'s list, feature 132
+#: FR-008). One definition, read by `scripts/land.py` and by the cohort's counter-only test (`cohort_known.counter_only`, feature
+#: 446), so the two can never disagree about what a counter-only delta may leave unchecked
+ENGINE = re.compile(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json)$")
 
 
 def strip_docstrings(tree: ast.AST, keep_module_docstring: bool = False) -> ast.AST:
@@ -57,6 +62,69 @@ def semantic_bytes(data: bytes, name: str, keep_module_docstring: bool = False) 
     except SyntaxError, ValueError:
         return data
     return ast.dump(strip_docstrings(tree, keep_module_docstring)).encode()
+
+
+def _plain(v: ast.expr) -> bool:
+    """A name, or an attribute chain on one (`self.ring`): read, never called."""
+    return isinstance(v, ast.Name) or (isinstance(v, ast.Attribute) and _plain(v.value))
+
+
+def _counter_value(v: ast.expr) -> bool:
+    """A counter's increment, in the forms feature 446's FR-001 defines: a literal, a name,
+    `len(<name or attribute>)`, `<name>.size`, `max(len(<name>) - <literal>, <literal>)`, or a product of these - nothing that
+    calls engine code, so the block can do no more than add to a counter."""
+    if isinstance(v, ast.Constant) or isinstance(v, ast.Name):
+        return True
+    if isinstance(v, ast.Attribute) and v.attr == "size" and isinstance(v.value, ast.Name):
+        return True
+    if isinstance(v, ast.BinOp) and isinstance(v.op, ast.Mult):
+        return _counter_value(v.left) and _counter_value(v.right)
+    if isinstance(v, ast.Call) and isinstance(v.func, ast.Name) and not v.keywords:
+        if v.func.id == "len" and len(v.args) == 1:
+            return _plain(v.args[0])
+        if v.func.id == "max" and len(v.args) == 2 and isinstance(v.args[1], ast.Constant):
+            d = v.args[0]
+            return isinstance(d, ast.BinOp) and isinstance(d.op, ast.Sub) and isinstance(d.right, ast.Constant) and isinstance(d.left, ast.Call) and _counter_value(d.left)
+    return False
+
+
+def is_counter_block(s: ast.stmt) -> bool:
+    """A COUNTER BLOCK (feature 446, FR-001): `if __debug__:` with no `else`, its body nothing but `OPS["<str>"] += / -= <value>`
+    (`_counter_value`). Any other `if __debug__:` - an `else`, a call, a write elsewhere - is code: a cohort rolls without `-O`, so
+    its body runs, and only a write to the counters is provably inert."""
+    if not (isinstance(s, ast.If) and isinstance(s.test, ast.Name) and s.test.id == "__debug__" and not s.orelse and s.body):
+        return False
+    for b in s.body:
+        if not (isinstance(b, ast.AugAssign) and isinstance(b.op, (ast.Add, ast.Sub)) and isinstance(b.target, ast.Subscript)):
+            return False
+        tgt = b.target
+        if not (isinstance(tgt.value, ast.Name) and tgt.value.id == "OPS" and isinstance(tgt.slice, ast.Constant) and isinstance(tgt.slice.value, str)):
+            return False
+        if not _counter_value(b.value):
+            return False
+    return True
+
+
+def strip_counters(tree: ast.AST) -> ast.AST:
+    """`tree` with every counter block removed, in place (`is_counter_block`)."""
+    for node in ast.walk(tree):
+        for field in ("body", "orelse", "finalbody"):
+            stmts = getattr(node, field, None)
+            if isinstance(stmts, list):
+                stmts[:] = [s for s in stmts if not is_counter_block(s)]
+    return tree
+
+
+def debug_free_bytes(data: bytes, name: str) -> bytes:
+    """A `.py` file's semantic bytes (`semantic_bytes`) with every counter block removed; any other file, or one that does not
+    parse, its bytes. Two versions are COUNTER-ONLY-EQUAL when these are equal (feature 446, FR-001)."""
+    if not name.endswith(".py"):
+        return data
+    try:
+        tree = ast.parse(data)
+    except SyntaxError, ValueError:
+        return data
+    return ast.dump(strip_counters(strip_docstrings(tree))).encode()
 
 
 def _sha(data: bytes) -> str:

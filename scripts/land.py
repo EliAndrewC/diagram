@@ -29,8 +29,23 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-#: the engine paths (`l7r.diagram.ci.delta.is_engine`'s list, feature 132 FR-008): a delta with one owes the landing cohort
-ENGINE = re.compile(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json)$")
+def _codeid():  # noqa: ANN202 - `scripts/gates/codeid.py` by path (stdlib only), as gate-stamp.py loads it
+    import importlib.util  # noqa: PLC0415
+
+    cached = sys.modules.get("l7r_codeid")
+    if cached is not None:
+        return cached
+    spec = importlib.util.spec_from_file_location("l7r_codeid", HERE / "gates" / "codeid.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["l7r_codeid"] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+#: the engine paths, one definition with the cohort's counter-only test (`codeid.ENGINE`, feature 446): a delta with one owes the
+#: landing cohort
+ENGINE = _codeid().ENGINE
 
 
 def _tick_task():  # noqa: ANN202 - `tick-task.py` by path (its name has a hyphen)
@@ -311,6 +326,21 @@ def engine_delta(root: Path) -> bool:
     run(root, ["git", "fetch", "-q", "origin"])
     names = run(root, ["git", "diff", "--name-only", "origin/main...HEAD"])[1].split()
     return any(ENGINE.match(n) for n in names)
+
+
+def fresh_block_after(root: Path, engine: bool, counter: bool) -> str:
+    """The fresh block after the push (feature 415 T03): started after an engine landing, never after a counter-only one
+    (feature 446, FR-002) or a landing with no engine code; the line the landing prints, "" for none."""
+    if engine and counter:
+        return "land: the delta is counter-only (feature 446): no fresh block owed - a counter block changes no map"
+    if engine:
+        return f"land: the cohort's fresh block started after the push - a rate, never a refusal; its log {start_fresh_block(root)}"
+    return ""
+
+
+def counter_only(root: Path) -> bool:
+    """Does the delta against the merge base with origin/main only add counter blocks (`cohort_gate.py counter-only`, feature 446)?"""
+    return run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "counter-only"])[0] == 0
 
 
 def commit_regenerated(root: Path, why: str) -> None:
@@ -700,6 +730,8 @@ def main(argv: list[str]) -> int:
 
     landing_started = time.time()  # a gate result written since is this landing's own (D8)
     engine_delta_landed = engine_delta(root)  # the fresh block follows an engine landing, after its push (D5)
+    # ...unless it only adds counter blocks (feature 446, FR-002), asked before the push moves the merge base
+    counter_only_landed = engine_delta_landed and counter_only(root)
     if rc := long_runs(root):
         return rc
     if why := wait_for_claims(root, tasks, d):
@@ -735,8 +767,8 @@ def main(argv: list[str]) -> int:
         print(f"land: the push failed (exit {rc}) - {revert_ticks(root, tick_sha)}", file=sys.stderr)
         return rc
     print(f"land: {' '.join(tasks)} landed and ticked")
-    if engine_delta_landed:
-        print(f"land: the cohort's fresh block started after the push - a rate, never a refusal; its log {start_fresh_block(root)}", flush=True)
+    if line := fresh_block_after(root, engine_delta_landed, counter_only_landed):
+        print(line, flush=True)
     if reason := refresh_due(root, landing_started):
         print(f"land: the gate's baseline is refreshed after the push, in a worktree ({reason}); its log {start_refresh(root, reason)}", flush=True)
     return 0
