@@ -6,7 +6,8 @@
 
 ## Summary
 
-Counters of basic operations in the geometry layer and the placement registry, attributed per stage and dropped under
+Counters of basic operations in the geometry layer, the placement registry and every stage's candidate loops, attributed per
+stage and per function and dropped under
 `python -O`; `make work-budget` and its standing record; the inertness check; the budget table, `make budget-change` and the
 ratchet at the push; the `work-budget` agent, its rubric, bundles and two proving fixtures; the phase checklist and its
 landing check; the Rust-tooling inventory and its check.
@@ -34,14 +35,16 @@ feature 435: nothing refuses on a time). The counters must add no Python call (S
 - **XII**: N/A - no rendering decision; the counters change no map (FR-004 proves it).
 - **XIII**: PASS - the counters change no manifest; `make counters-inert` and the landing cohort hold it.
 - **XIX**: N/A - nothing placed, moved or removed.
-- **The guard doctrine**: every new refusal (D5, D6, D8, D10, D11) has a test companion run by `make hooks-test`, names the
-  compliant command, is proven to fire by deleting it, and is listed in `docs/guards.md` (FR-012).
+- **The guard doctrine**: every new refusal (D5, D6, D7, D10, D12, D13) has a test companion run by `make hooks-test`, names
+  the command that gets past it (D12: `make tick` of the box's line, or the checklist copied from the template; D13: the row
+  to add to `dev/rust-tooling.md`), is proven to fire by deleting it, and is listed in `docs/guards.md` (FR-012).
 
 ## Decisions
 
 **D1 - The counters** (FR-001): a leaf module `l7r/diagram/work_counts.py` holding `OPS: dict[str, int]` (a
 `collections.defaultdict(int)`) and the kind names: `pt_test`, `seg_test`, `dist`, `index_query`, `index_examined`,
-`candidate`, `placed`, `dropped`, `moved`. A counting site is one line, `if __debug__: OPS["<kind>"] += <n>`: a dict
+`candidate`, `placed`, `dropped`, `moved`. A counting site is one line, `if __debug__: OPS["<kind>@<function>"] += <n>`,
+the key a string literal naming its kind and the function it sits in (so the counts are read by kind and by function): a dict
 subscript and an add are C operations, not Python calls, so `sys.monitoring`'s PY_START count (the push's call guard) does
 not move; `<n>` is 1, or the element count of a vectorized call (`len(pts)`). The module has no imports of the engine.
 
@@ -54,12 +57,17 @@ not move; `<n>` is 1, or the element count of a vectorized call (`len(pts)`). Th
 - `overlap/registry.py` (the placement registry, through which every footprint is admitted): `Standing.admits` and
   `conflicts` (`candidate`, and `index_examined` per extent compared), `_add` (`placed`), `forget` (`dropped`), `rerecord`
   (`moved`).
-- Work done in inline arithmetic elsewhere is not counted. The standing record says so for every stage not yet rebuilt: its
-  count is a lower bound, read beside its Python calls (D4). A rebuilt phase counts its own candidate loop (444's checklist
-  box 5), and MODE AUDIT rules UNCOUNTED on any loop it leaves out (S5).
+- Every stage's candidate loops, found by walking each stage's code (the stage function and every module it reaches, from
+  `STAGES`) for every loop that tries a site - submits it to `Standing.admits` or `conflicts`, or tests it against the `_geom`
+  layer - and recorded in `research/candidate-loops.md` with that search space, the search command and its date; each gets a
+  `candidate@<function>` increment per candidate tried. `make perf-fanout`'s anchors at 40 households (feature 427 T01) are
+  then a cross-check that the walk missed no hot loop. A stage the walk finds no candidate loop in is recorded as such.
+- Inline arithmetic outside these sites is not counted; the standing record prints each stage's Python calls beside its
+  counts (D4), so a stage whose calls are large against its counts shows it. A rebuilt phase counts every inner loop (444's
+  checklist box 5), and MODE AUDIT rules UNCOUNTED on any it leaves out (S5).
 
 **D3 - Attributed per stage** (FR-002): `driver._run_stages` takes, under `if __debug__:`, a copy of `OPS` before each stage
-and stores the difference in `work_counts.BY_STAGE[<stage name>]`; `work_counts.reset()` clears both at the start of a roll.
+and stores the difference, by kind and by function, in `work_counts.BY_STAGE[<stage name>]`; `work_counts.reset()` clears both at the start of a roll.
 Nothing enters the manifest.
 
 **D4 - `make work-budget`** (FR-003): `l7r/diagram/tools/work_budget.py`. Seeds: 25 and the cohort's pinned seeds by default
@@ -68,7 +76,8 @@ records each stage's `BY_STAGE` counts, its things placed (`perf_profile.placed_
 (`perf_snapshot.count_calls`' monitor) and its seconds. It prints, per stage, the counts in total and per thing placed (a
 stage that places nothing: its whole-stage figure, Edge Cases), the exponent from 20 to 80 households (a log-log fit; a size a
 seed refused is named and left out), the budget and the ratio, then the whole roll. It writes the run to
-`dev/work-budget/<stamp>-<engine code id>.json` (the docstring-blind code id, `scripts/gates/codeid.py`) and regenerates
+`dev/work-budget/<stamp>-<engine code id>.json` (the docstring-blind code id, `scripts/gates/codeid.py`), the engine commit
+recorded inside it, and regenerates
 `dev/work-budget.md` from the newest run and `dev/work-budget.json`.
 
 **D5 - `make counters-inert`** (FR-004): rolls seed 25 at 20 households in two subprocesses, `python3` and `python3 -O`, each
@@ -80,12 +89,16 @@ refuse.
 {"<stage>": {"status": "unbudgeted"}}}` for every stage of `STAGES` at landing; a budgeted stage holds `per_thing`,
 `exponent`, `derivation` (a path) and `verdict` (the ledger row's subject of its MODE BUDGET), an accepted one adds
 `accepted` (its counted operations at 40 and 80 households). `scripts/budget_change.py` (`make budget-change PHASE= TO=
-[EXPONENT=] WORDS=` and `make budget-set PHASE= PER_THING= EXPONENT= DERIVATION= VERDICT=`) is the one writer:
-- `budget-set` refuses unless the verdict file it names reads SOUND;
-- `budget-change` refuses a raise without WORDS, and logs each change to `dev/work-budget-changes.jsonl` with the words;
+[EXPONENT=] WORDS=`, `make budget-set PHASE= PER_THING= EXPONENT= DERIVATION= VERDICT=` and `make budget-program`) is the one
+writer:
+- `budget-set` refuses unless the stage is `unbudgeted` (its message names `make budget-change` for a budgeted one) and the
+  verdict file it names reads SOUND;
+- `budget-change` refuses without WORDS, and logs each change to `dev/work-budget-changes.jsonl` with the words;
 - the words are checked by a hook, `scripts/hooks/budget-change-hooks.sh` (PreToolUse on Bash), which matches an invocation
-  of `make budget-change` and refuses it unless WORDS passes `hm_approval.problem` against `hm_approval.gm_messages` of the
+  of `make budget-change` or `make budget-program` and refuses it unless WORDS passes `hm_approval.problem` against `hm_approval.gm_messages` of the
   session's transcript - the check the approval line meets (a make target cannot read the transcript; a hook can).
+- `make budget-program OPS_AT_40= EXPONENT= WORDS=` sets the program's whole-roll budget (444 FR-002: the GM approves the
+  target), under the same WORDS hook and log;
 - `dev/work-budget.json` joins the guard files (`guard-file-hooks.sh`): an edit other than through these targets needs
   `GUARD_EDIT_OK`.
 
@@ -111,8 +124,8 @@ phase landing).
 PHASE=<stage> [DERIVATION=<file>]`) copies to `/tmp/l7r-check/work-budget-<mode>-<stage>/` with a MANIFEST. A budget bundle
 holds the derivation, the stage's contract (its manifest keys read and written, from the derivation) and the rubric; it refuses
 when the derivation contains a fenced block of Python, a path under `l7r/` or a figure tagged as a current count (`calls`,
-`ops` beside a number). An audit bundle holds the stage's modules, the newest run's counts for the stage at each size and its
-budget. 444 FR-007 adds `MODE=table`.
+`ops` beside a number). An audit bundle holds the stage's modules, the newest run's counts for the stage at each size by kind and
+by function, the stage's `make perf-fanout` chains (the callers above each counted function) and its budget. 444 FR-007 adds `MODE=table`.
 
 **D11 - The two fixtures** (FR-009): `tests/fixtures/work-budget/funnel/` (the homesteads seat funnel as it is: the
 derivation written from trial 439's measured funnel, `specs/439-fewer-envelope-probes/research/funnel.md`) and
@@ -127,9 +140,11 @@ unticked box.
 
 **D13 - The inventory** (FR-011): `dev/rust-tooling.md`, one row per check from the design's section 7, each with its key
 (the script's path or the make target's name). `scripts/gates/check-rust-tooling.py` (`make rust-tooling`, and a step of `make
-hooks-test`) lists every file under `scripts/` and `l7r/diagram/tools/` that imports `ast`, `tokenize`, `inspect` or
-`symtable`, calls `compile(`, or reads `.py` files (`"*.py"`, `.py"`, `suffix == ".py"`), and every Makefile recipe that runs
-ruff, pyrefly, pytest, coverage, testmon or vulture; it fails on any whose key has no row. Its test runs it on the real tree
+hooks-test`) reads every tracked file (`git ls-files`) outside `specs/`, `research/`, `dev/` records and `pool/` and lists
+each that imports `ast`, `tokenize`, `inspect` or `symtable`, calls `compile(`, or reads `.py` files (`"*.py"`, `.py"`,
+`suffix == ".py"`, `-name '*.py'`) - the engine's own readers (`gencache.engine_files()`, the placement-stages page, the claims
+reader) included - and every Makefile recipe whose text runs ruff, pyrefly, pytest, coverage, testmon or vulture or matches
+the same `.py` patterns; it fails on any whose key has no row, naming the row to add. Its test runs it on the real tree
 (finding `scripts/gates/check-file-scale.py`, the arbiter's note) and on scratch readers of each kind with no row.
 
 ## Task approaches

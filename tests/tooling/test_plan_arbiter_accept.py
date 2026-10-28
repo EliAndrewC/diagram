@@ -97,6 +97,15 @@ def test_an_asked_plan_review_s_accept_makes_it_the_plan_s_verdict(tmp_path: pat
     assert ha.main(["ask", "385-plan-round4", "may the plan stand now it is fixed?", "plan"]) == 0
     assert ha.main(["ruled", "ask:385-plan-round4", str(ruling), "--as", "round-arbiter"]) == 0
     assert pg.owed(d) is None, "the asked plan review's accept is the plan's verdict"
+    # an asked accept while the clone's active feature is ANOTHER one: the verdict goes to the feature the ask names (443)
+    (root / "specs" / "427-y").mkdir()
+    (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": "specs/427-y"}))
+    (d / "plan.md").write_text((d / "plan.md").read_text() + "\n## Late\n\nA block changed after the accept.\n")
+    assert pg.owed(d) is not None
+    assert ha.main(["ask", "385-plan-round5", "may the plan stand?", "plan"]) == 0
+    assert ha.main(["ruled", "ask:385-plan-round5", str(ruling), "--as", "round-arbiter"]) == 0
+    assert pg.owed(d) is None, "the accept is the named feature's verdict, whatever feature.json names"
+    (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": "specs/385-x"}))
     assert ha.main(["ask", "385-route", "which route should the landing take?"]) == 0
     assert ha.main(["ruled", "ask:385-route", str(ruling), "--as", "round-arbiter"]) == 0
     try:

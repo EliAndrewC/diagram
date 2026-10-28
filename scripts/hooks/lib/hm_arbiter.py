@@ -729,7 +729,9 @@ def main(argv: list[str]) -> int:
         owed = _approach().ruled(root, row["trigger"])
         plan_review = row["trigger"].startswith("round:spec-fidelity|plan:") or row.get("review") == "plan"  # an asked one too (409)
         if plan_review and row["ruling"] in ("accept", "process-fault"):  # feature 385 T16
-            d = feature_dir(root)
+            # the feature the ask names, not the clone's last active one (feature 443: ask:443-plan-round-3 was ruled while
+            # .specify/feature.json named 427, and the verdict step refused on 427's arbiter.jsonl)
+            d = feature_dir(root, row["trigger"])
             if d is not None:
                 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "gates"))
                 import plan_gate  # noqa: PLC0415

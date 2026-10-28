@@ -1,0 +1,415 @@
+{
+ "feature": "443-work-budget-tooling",
+ "blocks": {
+  "preamble": {
+   "sha256": "d8c475c5b4fe4cd53ffc71a27997db22e32f3d9e2c9be4dc43fc4bec31f6700d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Summary": {
+   "sha256": "58fb53dc4bdf0a11ba5ecec67e2d73f760b4f5f1eded879dac983d492e282e63",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Technical Context": {
+   "sha256": "36119652da17246304ccbf9bfa11195f84ade10d093ccd5576ce3774e3e111ed",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Performance bookends": {
+   "sha256": "98b0cc3fe1e0ff277986aa3785d1c509271a7290cf10f931228cfc769fd91314",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Constitution Check": {
+   "sha256": "ddbb54f060937a2e186de76de2030e2727749ac8cffedf72dc3673f74c32ee3c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Decisions": {
+   "sha256": "57b2183f7112046d2fa54dca2acd0ed68b13152e1e2b0764d43e7a4009058e45",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Task approaches": {
+   "sha256": "232385f36db5ffce21505dc7c9be62e14ef49723084161f6c9f4d42257a6083c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Project Structure": {
+   "sha256": "1adecc977176222ff5df4704517ace2a778d7dab0c7ece3fd5526f4f5c6dc36c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "round-arbiter"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "preamble-input",
+     "block": "preamble",
+     "summary": "Plan input is the arbiter-accepted spec and request.md.",
+     "class": "within",
+     "why": "Bookkeeping; decides nothing the spec left open."
+    },
+    {
+     "id": "summary-counting-sites",
+     "block": "## Summary",
+     "summary": "Counters 'in the geometry layer and the placement registry', not at each stage's candidate loop.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Restates D2's narrowing. FR-001 and request section 1 put counters 'at each phase's candidate loop'. The Summary names only the geometry layer and the registry. Carries D2's ruling and fix."
+    },
+    {
+     "id": "tech-context",
+     "block": "## Technical Context",
+     "summary": "Languages, test locations, single-artifact target seed 25 at 40 households.",
+     "class": "within",
+     "why": "Matches the request's reference hamlet (seed 25) and SC-001's 40 households."
+    },
+    {
+     "id": "perf-bookends",
+     "block": "## Performance bookends",
+     "summary": "make perf 443-start/443-end as a record; counters add no Python call, judged by make perf-review.",
+     "class": "within",
+     "why": "A record, not a gate; stricter than SC-001's one-in-a-thousand tolerance, serves request section 1 ('cost nothing')."
+    },
+    {
+     "id": "constitution-guard-list",
+     "block": "## Constitution Check",
+     "summary": "Guard doctrine applied to 'every new refusal (D5, D6, D8, D10, D11)'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-012: every refusal added is a guard with a test companion, deletion proof, a message naming the compliant command, and a docs/guards.md entry. The list leaves out D7 (the ratchet refuses a push), D12 (make land refuses a phase task) and D13 (the inventory check fails). It includes D8, which only prints, and D11, which is a test. As written, three refusals escape FR-012. Fix: name D5, D6 (budget-set, budget-change, the hook, the guard-file entry), D7, D10, D12 and D13. Also state that each refusal message names the compliant command: D12's as written names a file and a box but no command, and D13's names nothing."
+    },
+    {
+     "id": "constitution-other",
+     "block": "## Constitution Check",
+     "summary": "Principles I-V, VII-IX, XI, XII, XIX N/A; VI, X, XIII PASS; indexes.py under 1,000 lines.",
+     "class": "within",
+     "why": "No map change; nothing the request asks is narrowed."
+    },
+    {
+     "id": "D1",
+     "block": "## Decisions",
+     "summary": "Leaf module work_counts.py, OPS defaultdict, nine kinds, one-line if __debug__ increments, vectorized calls count elements.",
+     "class": "within",
+     "why": "Request section 1's operation list (point/segment test, distance, index query with entries examined, candidate, placed, dropped/moved), counted per element, dropped by python -O."
+    },
+    {
+     "id": "D2-candidate-loop-deferral",
+     "block": "## Decisions",
+     "summary": "Candidates counted at the registry's Standing.admits/conflicts. A stage's own candidate loop is counted only when it is rebuilt (444 box 5). Until then each unrebuilt stage's count is recorded as 'a lower bound'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001 and request section 1 put counters 'at each stage's candidate loop' in this feature. Request section 6 step 1 is 'the counters, make work-budget and today's figures for every stage', and checklist box 4 (today's measurement, ratio to budget) comes before box 5 (rebuild). Counters that arrive at box 5 undercount the very measurement the ratio is built from. The plan concedes this ('its count is a lower bound'). The request's purpose is to show how far each stage is from its budget ('nothing showed that the roll does 100-200x too much work'), and a figure that can only understate that distance works against it. Nothing makes the literal reading impossible: each loop takes the same one-line increment D1 already uses. Cost does not count. Fix: T01 puts the one-line 'candidate' increment in every stage's candidate loop now, listing the loops with the command that produced the list. Alternatively, the plan records a measurement that every stage's candidates pass through Standing.admits, so that admits IS each stage's candidate counter, and drops the lower-bound clause for the candidate count. Not counting inline arithmetic outside the three FR-001 sites is within and is not part of this ruling."
+    },
+    {
+     "id": "D2-sites",
+     "block": "## Decisions",
+     "summary": "The named primitives, index queries and registry methods as counting sites.",
+     "class": "within",
+     "why": "FR-001's geometry layer and indexes; the registry sites add placed/dropped/moved, which request section 1 and S4 ask for."
+    },
+    {
+     "id": "D3",
+     "block": "## Decisions",
+     "summary": "_run_stages diffs OPS per stage into BY_STAGE under __debug__; reset per roll; nothing in the manifest.",
+     "class": "within",
+     "why": "FR-002 exactly."
+    },
+    {
+     "id": "D4",
+     "block": "## Decisions",
+     "summary": "work_budget.py: default seeds 25 plus pinned cohort seeds, sizes 10/20/40/80, per-stage totals, per-thing figures, 20-to-80 exponent, budget and ratio, whole roll. Run file named by engine code id. Regenerates dev/work-budget.md.",
+     "class": "within",
+     "why": "Request section 1's printout and S6's 20-to-80 exponent, as FR-003 states them. Not a ruling, a note: FR-003 says the run is written 'with its engine commit'. The plan names the file by the docstring-blind code id and does not say the commit is recorded. The plan is silent rather than deciding, so the run file should carry the commit too."
+    },
+    {
+     "id": "D5",
+     "block": "## Decisions",
+     "summary": "counters-inert: seed 25 at 20 households, python3 vs python3 -O, byte-identical manifests, run by make done; SC-002 stub test.",
+     "class": "within",
+     "why": "Request section 1 ('the gate rolls a seed both ways and requires identical manifests') and FR-004; the size is left open by both."
+    },
+    {
+     "id": "D6-table-and-change",
+     "block": "## Decisions",
+     "summary": "Table shape; budget-change needs WORDS, checked by a PreToolUse hook against the GM's transcript messages through hm_approval, logged to jsonl; table is a guard file.",
+     "class": "within",
+     "why": "Request section 5.4 and FR-005. The hook is the mechanism FR-005 names, used where a make target cannot read the transcript."
+    },
+    {
+     "id": "D6-budget-set-no-status-check",
+     "block": "## Decisions",
+     "summary": "budget-set's only stated refusal is a verdict that does not read SOUND. It has no condition on the stage's current status.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Request section 5.4: 'Budgets change only with the GM's words.' FR-005: a FIRST budget needs SOUND; 'a raise needs make budget-change with the GM's words'. As written, budget-set can be run again on a budgeted or accepted stage with a fresh SOUND verdict and a higher PER_THING or EXPONENT, which raises a budget with no GM words and no log row. That gives the 'one writer' a second route past the guard. Fix: budget-set refuses unless the stage's status is 'unbudgeted', naming make budget-change. Any change to an existing budget goes through budget-change."
+    },
+    {
+     "id": "D7",
+     "block": "## Decisions",
+     "summary": "work-budget-review in sync-with-main beside perf-review: inert with no stage accepted; otherwise needs a run at the pushed code id and refuses an accepted stage over its accepted figure or budget at 40/80; no arbiter accept clears it.",
+     "class": "within",
+     "why": "Request section 5.3 and 5.4 and FR-006. Requiring a run at the pushed code id only enforces the requested comparison."
+    },
+    {
+     "id": "D8",
+     "block": "## Decisions",
+     "summary": "land.py prints the whole-roll line, statuses and moved stages on engine landings; speckit-todo prints it under 444.",
+     "class": "within",
+     "why": "Request section 5.2 and FR-007."
+    },
+    {
+     "id": "D9",
+     "block": "## Decisions",
+     "summary": "Agent file (opus, high, Read/Grep), two modes and verdicts; rubric S1-S7 with the homestead reference worked factor by factor; added to the pre-authorized list, wave list, tier table and review occasions.",
+     "class": "within",
+     "why": "Request section 4, S7 and FR-008. The occasions are the checklist's boxes 3 and 7."
+    },
+    {
+     "id": "D10-budget-bundle",
+     "block": "## Decisions",
+     "summary": "Budget bundle holds the derivation, contract and rubric, and refuses fenced Python, l7r/ paths and tagged current counts.",
+     "class": "within",
+     "why": "Request section 4 ('does not hold the current code or its numbers') and FR-008."
+    },
+    {
+     "id": "D10-audit-by-stage",
+     "block": "## Decisions",
+     "summary": "Audit bundle holds 'the newest run's counts for the stage at each size', counts by kind per stage (D1/D3).",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Request section 4: the MODE AUDIT bundle holds 'the counters BY FUNCTION at each size'. The plan's counters are keyed by kind and attributed by stage only, so the bundle cannot carry counts by function. Reading 'by function' as 'by stage' would complete the GM's thought. The cost to the purpose is concrete: OVER must name the chain, and per-stage totals by kind cannot locate one. The fix adds to FR-002 without contradicting it: stage attribution stays, and each counting site also keys the function it sits in, in the same one-line, call-free form (D1). D3 keeps the per-stage difference, and D10's audit bundle holds those counts by function at each size."
+    },
+    {
+     "id": "D11",
+     "block": "## Decisions",
+     "summary": "Two fixtures (funnel from trial 439's research, a 40-line grid placer), each dispatched once, verdict.txt plus a ledger row, test holds LOOSE/OVER and SOUND/WITHIN.",
+     "class": "within",
+     "why": "Request section 4 'Proving that it bites' and FR-009."
+    },
+    {
+     "id": "D12",
+     "block": "## Decisions",
+     "summary": "Phase-checklist template; land.py refuses a 444 task with a 'phase: <stage>' line unless its checklist exists, holds the eight boxes and all are ticked.",
+     "class": "within",
+     "why": "Request section 3 ('make land refuses a phase task whose boxes are not all ticked') and FR-010."
+    },
+    {
+     "id": "D13-search-bound",
+     "block": "## Decisions",
+     "summary": "The inventory check scans only files under scripts/ and l7r/diagram/tools/, plus Makefile recipes matched by tool name (ruff, pyrefly, pytest, coverage, testmon, vulture).",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Request section 7: the check 'lists every hook, gate script and make target that reads .py files or Python's syntax tree', with the stated purpose 'A new Python-only check therefore cannot be added without saying what happens to it under Rust'. The GM's 2026-10-28 words ask that tooling enforcing conventions mechanically 'not be forgotten or lost'. The plan limits the census to two directories and gives no measurement that every such reader lives there. Request section 7's own table names readers the plan never places inside the bound: the cache's engine hash (gencache.engine_files()), the STAGES/Steps: docstring reader for the placement-stages page, and the claims and make tunables reader. Any reader added outside the two directories, and any convention test that parses .py, escapes, which is the purpose's exact failure. Matching Makefile recipes by tool name alone also misses a recipe that reads .py inline (find -name '*.py', python -c with ast). Fix: scan every tracked file (git ls-files), or state each excluded directory with a census command showing it holds no reader. Apply the plan's own .py-reader patterns to Makefile recipe text as well as the tool names."
+    },
+    {
+     "id": "task-approaches",
+     "block": "## Task approaches",
+     "summary": "T01-T08 landing order.",
+     "class": "within",
+     "why": "Sequencing only. Note: T01's scope changes with the D2 and D10 fixes, and T07's with the D13 fix."
+    },
+    {
+     "id": "project-structure",
+     "block": "## Project Structure",
+     "summary": "Files touched, including the root CLAUDE.md's performance line.",
+     "class": "within",
+     "why": "Each file serves a decision above. The CLAUDE.md line serves request section 5.2 (keeping the record in view)."
+    },
+    {
+     "id": "complexity",
+     "block": "## Complexity Tracking",
+     "summary": "None.",
+     "class": "within",
+     "why": "No decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary",
+     "summary": "Counters in the geometry layer, the registry and every stage's candidate loops, by stage and by function, dropped under python -O; the rest of the tooling list.",
+     "class": "within",
+     "why": "Restates FR-001..FR-011 and design sections 1-5 and 7; the scope it names is the request's."
+    },
+    {
+     "id": "Technical Context / bookends / preamble / Task approaches / Project Structure / Complexity",
+     "summary": "Seed 25 at 40 households as the single target; perf bookends as a record; T01-T08 in landing order; file list.",
+     "class": "within",
+     "why": "Nothing here narrows the request; the bookends refuse on no time, as FR-012 and the design ('a record and not a gate') say."
+    },
+    {
+     "id": "Constitution Check guard list",
+     "summary": "The new refusals are D5, D6, D7, D10, D12, D13, each with a test companion, the command that gets past it, a deletion proof and a docs/guards.md row.",
+     "class": "within",
+     "why": "Answers the previous round: these are the six decisions that refuse (D4 names a refused size but refuses nothing, D8 prints, D11 is a test). Matches FR-012."
+    },
+    {
+     "id": "D1",
+     "summary": "OPS keyed '<kind>@<function>' by string literal, an inline 'if __debug__:' increment, no Python call, n = element count for vectorized calls.",
+     "class": "within",
+     "why": "Answers 'counts by function': the design's MODE AUDIT bundle holds 'the counters by function at each size'. The no-call and per-element rules are FR-001's and the design's section 1."
+    },
+    {
+     "id": "D2-sites",
+     "summary": "Counting sites in primitives.py, indexes.py and overlap/registry.py (admits/conflicts, _add, forget, rerecord).",
+     "class": "within",
+     "why": "The design puts the counters in the shared geometry layer; the registry is where candidates are evaluated and things placed, dropped or moved - the design's own kinds."
+    },
+    {
+     "id": "D2-loops-census",
+     "summary": "Every stage's candidate loops are taken to be 'the anchors make perf-fanout names per stage at 40 households', recorded in research/candidate-loops.md.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM: counters 'at each phase's candidate loop'. The design itself describes perf-fanout's output as 'the hot chains' (checklist box 4), which is a selection by call volume, and the plan does not show that perf-fanout names every loop. As written the search space is 'loops that anchor a hot chain', not 'every loop that tries candidates', so a candidate loop with little call volume is left uncounted. That defeats the purpose: candidates per thing placed is the S2 factor every budget is built on, and step 1 asks for today's figures for every stage. Fix: build the census by walking each stage's code for every loop that tries a site (submits it to Standing.admits/conflicts or tests it against the _geom layer), and state that search space and its command in research/candidate-loops.md. perf-fanout's anchors then serve as a cross-check that the walk missed nothing, not as the source."
+    },
+    {
+     "id": "D2-no-loop-stage",
+     "summary": "A stage none of whose anchors is a candidate loop records that it has none ('the seat, the sink').",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A stage that truly has no candidate loop has nothing to count, so recording 'none' would be legitimate. But the trigger as written is the anchor list (a sample of hot chains), not the stage's code, so a stage with a cool candidate loop is recorded as having none while it tries candidates. Also, '(the seat, the sink)' names the result before the walk runs, a premise nobody measured. Legitimate once it rests on the code walk in D2-loops-census, with the examples removed or marked as expectations pending that walk."
+    },
+    {
+     "id": "D2-inline",
+     "summary": "Inline arithmetic outside the named sites is not counted in unrebuilt stages; Python calls are printed beside the counts; a rebuilt phase counts every inner loop and MODE AUDIT rules UNCOUNTED otherwise.",
+     "class": "within",
+     "why": "The design names where the counters live and records Python calls 'beside these figures'. S5 binds a rebuilt phase and the plan keeps it binding, through box 5 and MODE AUDIT."
+    },
+    {
+     "id": "D3",
+     "summary": "driver._run_stages diffs OPS per stage, by kind and by function, into BY_STAGE, under __debug__, outside the manifest.",
+     "class": "within",
+     "why": "FR-002 plus the design's 'by function'."
+    },
+    {
+     "id": "D4",
+     "summary": "make work-budget: seed 25 plus pinned seeds, sizes 10/20/40/80, per-stage totals, per thing placed, exponent 20-80, budget, ratio, whole roll; run file by code id with the engine commit inside; regenerates the standing record.",
+     "class": "within",
+     "why": "Design section 1 and FR-003. The engine commit, the previous round's gap, is now recorded."
+    },
+    {
+     "id": "D5",
+     "summary": "counters-inert: seed 25 at 20 households under python3 and python3 -O, byte-identical manifests, run by make done.",
+     "class": "within",
+     "why": "Design section 1 ('The gate rolls a seed both ways') and FR-004."
+    },
+    {
+     "id": "D6",
+     "summary": "Budget table as a guard file. budget-set only for an unbudgeted stage with a SOUND verdict. budget-change gated by a PreToolUse hook that checks WORDS against the GM's messages on every invocation, and logged.",
+     "class": "within",
+     "why": "Answers the previous round: budget-set can no longer raise a budget. The hook matches every make budget-change, so lowering is words-gated as well, which honors 'Budgets change only with the GM's words'."
+    },
+    {
+     "id": "D7",
+     "summary": "Ratchet at the push on accepted stages at 40/80 households against the accepted figure and the budget; inert while nothing is accepted; no arbiter accept clears it.",
+     "class": "within",
+     "why": "Design section 5 item 3 and 4, FR-006. Unconverted phases keep the call-count guard, as the design says."
+    },
+    {
+     "id": "D8",
+     "summary": "land.py and speckit-todo print the standing record's summary.",
+     "class": "within",
+     "why": "Design section 5 item 2, FR-007."
+    },
+    {
+     "id": "D9",
+     "summary": "work-budget agent (Opus, high), its two modes, the rubric with S1-S7 and the homestead arithmetic, added to the pre-authorized list, the tier table and docs/reviews.md.",
+     "class": "within",
+     "why": "Design section 4 and FR-008. The registrations make the requested agent dispatchable."
+    },
+    {
+     "id": "D10",
+     "summary": "Bundles: the budget bundle refuses code paths, Python blocks and current-count figures. The audit bundle holds the modules, counts by kind and by function at each size, perf-fanout chains and the budget.",
+     "class": "within",
+     "why": "Design section 4: the budget bundle 'does not hold the current code or its numbers'; the audit bundle holds 'the counters by function at each size'. The perf-fanout chains serve the request's 'OVER, naming the chain'."
+    },
+    {
+     "id": "D11",
+     "summary": "Two fixtures, funnel and grid-placer, dispatched once each; verdicts recorded and held by a test.",
+     "class": "within",
+     "why": "Design section 4 'Proving that it bites', FR-009."
+    },
+    {
+     "id": "D12",
+     "summary": "Phase checklist template; land.py refuses a phase task whose checklist is missing, lacks the eight boxes or has one unticked.",
+     "class": "within",
+     "why": "Design section 3: 'make land refuses a phase task whose boxes are not all ticked'."
+    },
+    {
+     "id": "D13",
+     "summary": "The inventory check scans every tracked file outside specs/, research/, dev/ records and pool/ (engine readers included) and Makefile recipes, by the .py and Python-AST patterns and Python-only tools, and fails on any without a row.",
+     "class": "within",
+     "why": "Answers the previous round. The request names hooks, gate scripts and make targets. The scan covers more than that, in service of 'tooling that integrates with Python ... not forgotten'. The excluded trees hold no hook, gate script or recipe."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:443-plan-round-3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  }
+ ]
+}
