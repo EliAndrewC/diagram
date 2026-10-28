@@ -12,5 +12,6 @@
 - [x] T02 The claims triage clears a claim whose unit only gained counter blocks, its recorded version the merge base's, bundled nowhere (D3; FR-003, SC-003)
       research: rendering
       verify: DONE. landed: landed: the claims triage clears a claim whose unit only gained counter blocks, its recorded version the merge base's, at claims-owed and claims-triage, bundled nowhere; owed as before otherwise (five cases and a constant-reading counter); red with the condition deleted
-- [ ] T03 `docs/guards.md` and `make land`'s help name the skips; each skip proven red with its condition deleted; `make feature-report F=446 WRITE=1` (D4; FR-005, SC-004)
+- [x] T03 `docs/guards.md` and `make land`'s help name the skips; each skip proven red with its condition deleted; `make feature-report F=446 WRITE=1` (D4; FR-005, SC-004)
       research: rendering
+      verify: DONE. landed: landed: docs/guards.md's cohort-gate and claims-gate rows and make land's help name both counter-only skips (each proven red with its condition deleted at T01 and T02); the feature report written; T02's owed call given its store

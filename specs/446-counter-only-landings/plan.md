@@ -58,26 +58,7 @@ report (D4).
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
-### T03 - the docs and the report (D4)
-
-`docs/guards.md` and `make land`'s help name both skips; `make feature-report F=446 WRITE=1`.
-
-### T03 Approach (checklist part A)
-
-1. **The goal, in the world.** A session reading about the cohort and claims gates learns the counter-only skips.
-2. **The constraints.** FR-005; D4.
-3. **Where each comes from.** G: the GM's words, 2026-10-28 (`request.md`).
-4. **Do they describe the world here?** The docs read after the change.
-5. **The order.** Last.
-6. **The exits.** Green: the docs name the skips; the report written. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing.
-9. **Done, measured.** The feature report written.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-**Performance work?** no - tooling.
-
+<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 ## Project Structure
 
 - `scripts/gates/codeid.py`, `scripts/measure/cohort_known.py`, `scripts/gates/cohort_gate.py`, `scripts/land.py`,
