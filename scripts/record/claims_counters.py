@@ -128,7 +128,7 @@ def clear(claims: Any, root: Path, cur: dict[str, Any], index: dict[str, dict[st
     added recorded cleared (`counter_only`), saved, and the count said; any other command, the index as it is."""
     if cmd not in ("owed", "triage"):
         return index
-    keys = [k for k, why in claims.owed(cur, index, root / claims.QUESTIONS) if why == claims.CODE_TRIAGE]
+    keys = [k for k, why in claims.owed(cur, index, root / claims.QUESTIONS, {}) if why == claims.CODE_TRIAGE]
     base = merge_base(root) if keys else None
     if base is None:
         return index
