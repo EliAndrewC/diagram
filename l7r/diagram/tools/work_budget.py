@@ -100,6 +100,28 @@ def budgets(path: str = BUDGETS) -> dict[str, Any]:
         return {"program": {}, "stages": {}}
 
 
+ITEM_SIZES = (20, 40, 80)
+"""Research: plumbing - NONE: the sizes a budgeted stage records its derivation's items at (feature 444 D2: the exponent's fit runs 20 to 80)"""
+
+
+def budget_at(b: dict[str, Any], households: int) -> float | None:
+    """A budgeted stage's budget at `households`: `per_thing` times the derivation's own items at that size (feature 444 D2, S7's
+    items x candidates x checks x slack), or None at a size it records no items for."""
+    items = b.get(f"items_at_{households}")
+    return b["per_thing"] * items if items is not None and b.get("per_thing") is not None else None
+
+
+def missing_items(table: dict[str, Any]) -> list[str]:
+    """Each budgeted or accepted stage that records no items at one of `ITEM_SIZES` - refused, never read the old way (the
+    placed-things product, retired by feature 444 D2)."""
+    return [
+        f"{name}: budgeted with no items at {', '.join(str(h) for h in ITEM_SIZES if b.get(f'items_at_{h}') is None)} households - "
+        f"set them: make budget-change PHASE={name} TO={b.get('per_thing')} ITEMS_AT_20= ITEMS_AT_40= ITEMS_AT_80= WORDS=\"<the GM's words>\""
+        for name, b in (table.get("stages") or {}).items()
+        if b.get("status") in ("budgeted", "accepted") and any(b.get(f"items_at_{h}") is None for h in ITEM_SIZES)
+    ]
+
+
 def _figure(r: dict[str, Any], name: str, key: str) -> float:
     """One roll's `key` (`ops` counted by `total`, or a stage's own field) for stage `name`, or summed over its stages for `roll`."""
     st = r["stages"].values() if name == "roll" else [r["stages"][name]]
@@ -124,7 +146,7 @@ def summarize(rows: list[dict[str, Any]], table: dict[str, Any]) -> dict[str, An
         fit = [(h, v["ops"]) for h, v in per.items() if FIT[0] <= h <= FIT[1]]
         b = (table.get("stages") or {}).get(name, {}) if name != "roll" else table.get("program") or {}
         at40 = per.get(40, {})
-        budget = b.get("ops_at_40") if name == "roll" else (b.get("per_thing") and at40.get("placed") and b["per_thing"] * at40["placed"])
+        budget = b.get("ops_at_40") if name == "roll" else budget_at(b, 40)
         out["stages"][name] = {
             "per": per,
             "exponent": exponent(fit),
@@ -195,7 +217,10 @@ def run(seeds: tuple[int, ...], sizes: tuple[int, ...], calls: Any = None) -> tu
                     r["stages"][name]["calls"] = n
             rows.append(r)
     ok = [r for r in rows if not r["refused"]]
-    summary = summarize(ok, budgets())
+    table = budgets()
+    if bad := missing_items(table):  # feature 444 D2: a budget without its items is refused, never read as the placed-things product
+        raise SystemExit("work-budget: REFUSED - " + "; ".join(bad))
+    summary = summarize(ok, table)
     meta = {
         "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "commit": _commit(),
@@ -231,8 +256,9 @@ def newest_run(code_id: str, run_dir: str = RUN_DIR) -> dict[str, Any] | None:
 
 def held(table: dict[str, Any], summary: dict[str, Any]) -> list[str]:
     """Each refusal of an ACCEPTED stage whose counted operations at 40 or 80 households exceed its accepted figure or its budget
-    (`per_thing` times the things it placed at that size), naming the figures and the two commands."""
-    out: list[str] = []
+    (`budget_at`: `per_thing` times the derivation's items at that size), naming the figures and the two commands; and each
+    budgeted row with no items (`missing_items`)."""
+    out: list[str] = list(missing_items(table))
     for name, b in (table.get("stages") or {}).items():
         if b.get("status") != "accepted":
             continue
@@ -242,11 +268,11 @@ def held(table: dict[str, Any], summary: dict[str, Any]) -> list[str]:
             if not got:
                 out.append(f"{name}: the run has no roll at {h} households to hold it to")
                 continue
-            ops, accepted, budget = got["ops"], (b.get("accepted") or {}).get(str(h)), b["per_thing"] * got["placed"]
+            ops, accepted, budget = got["ops"], (b.get("accepted") or {}).get(str(h)), budget_at(b, h)
             if accepted is not None and ops > accepted:
                 out.append(f"{name}: {ops:,.0f} counted operations at {h} households, over its accepted {accepted:,.0f}")
-            if ops > budget:
-                out.append(f"{name}: {ops:,.0f} counted operations at {h} households, over its budget {budget:,.0f} ({b['per_thing']:g} per thing x {got['placed']:,.0f})")
+            if budget is not None and ops > budget:
+                out.append(f"{name}: {ops:,.0f} counted operations at {h} households, over its budget {budget:,.0f} ({b['per_thing']:g} per thing x {b[f'items_at_{h}']:,} items)")
     return out
 
 

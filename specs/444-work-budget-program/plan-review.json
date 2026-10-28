@@ -47,13 +47,13 @@
    "sha256": "61f86a976d0ca3608b4f7c34316e689a378f921f2515445b811e1b896b04bdb4",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T01 Approach (checklist part A)": {
    "sha256": "a4825ad678a8c78fa4e38e7f1384165e76c6f66c223ae873920460c66b32cdfe",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T02 - the water family's budgets (D1, D3, D4)": {
    "sha256": "16b848e1e0f9a5f4f247b52505c2ecd22912dfb9eed710e17db34587dc25fce2",
@@ -337,6 +337,74 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T01 - a budget counts the derivation's own items (D2)",
+    "### T01 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-items",
+     "summary": "items_at_20/40/80 recorded beside per_thing; make budget-set requires them; make work-budget and the ratchet read them and refuse a budgeted row without them",
+     "class": "within",
+     "why": "This is the spec's own D2, carried out as written: the budget at each size is per_thing x the derivation's items, which is S7's items x candidates x checks x slack (request section 2), and the placed-things product is retired. 'A budgeted row' covers D2's 'budgeted or accepted row', because a phase is accepted only against its budget. The block does not repeat D2's detail that the refusal names the row and make budget-change, and it does not narrow that detail either: the block cites D2, so D2 still governs."
+    },
+    {
+     "id": "T01-contract-form",
+     "summary": "the budget bundle's form check also requires the contract's Reads:, Writes: and Keeps: lines (cohort properties and claims), each filled",
+     "class": "within",
+     "why": "This enforces the design's checklist box 1 (request section 3: what the phase reads and writes, the claims that govern it, the cohort properties it keeps) and FR-001 (each derivation written from the stage's contract alone). It refuses only a bundle that lacks the thing the GM asked for, so it reaches nothing beyond the request. It adds a check and narrows nothing. Aside, not a ruling: exit 6 gives no test and no red-with-the-check-deleted case for this form check, though it does for the items refusals."
+    },
+    {
+     "id": "T01-premise",
+     "summary": "seat and sink place nothing, so they take a whole-stage figure (items = 1)",
+     "class": "within",
+     "why": "D2 and the spec's Edge Cases settle the whole-stage figure. The premise is MEASURED and dated (make work-budget, run 20261028T152105Z-45aa176ec9b8, its placed column), not assumed."
+    },
+    {
+     "id": "T01-order-budget-exits",
+     "summary": "T01 goes first because T02-T05's budget-set calls need it; one landing; exits green on tests, red recorded and an impossibility claim sent to make arbiter-ask",
+     "class": "within",
+     "why": "These are sequencing and process choices inside the request. None of them changes what is built or relaxes any standard. The arbiter is asked only whether the task can be done, not to accept a phase over budget, so this matches request section 5 item 4."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "35b4c888ecd24a3ee7597394b7e2a8e7e23b49a48e9ea8811a524418a0a7de5f",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T01-items",
+     "summary": "items_at_20/40/80 recorded beside per_thing; make budget-set requires them; make work-budget and the ratchet read them and refuse a budgeted row without them",
+     "class": "within",
+     "why": "This is the spec's own D2, carried out as written: the budget at each size is per_thing x the derivation's items, which is S7's items x candidates x checks x slack (request section 2), and the placed-things product is retired. 'A budgeted row' covers D2's 'budgeted or accepted row', because a phase is accepted only against its budget. The block does not repeat D2's detail that the refusal names the row and make budget-change, and it does not narrow that detail either: the block cites D2, so D2 still governs."
+    },
+    {
+     "id": "T01-contract-form",
+     "summary": "the budget bundle's form check also requires the contract's Reads:, Writes: and Keeps: lines (cohort properties and claims), each filled",
+     "class": "within",
+     "why": "This enforces the design's checklist box 1 (request section 3: what the phase reads and writes, the claims that govern it, the cohort properties it keeps) and FR-001 (each derivation written from the stage's contract alone). It refuses only a bundle that lacks the thing the GM asked for, so it reaches nothing beyond the request. It adds a check and narrows nothing. Aside, not a ruling: exit 6 gives no test and no red-with-the-check-deleted case for this form check, though it does for the items refusals."
+    },
+    {
+     "id": "T01-premise",
+     "summary": "seat and sink place nothing, so they take a whole-stage figure (items = 1)",
+     "class": "within",
+     "why": "D2 and the spec's Edge Cases settle the whole-stage figure. The premise is MEASURED and dated (make work-budget, run 20261028T152105Z-45aa176ec9b8, its placed column), not assumed."
+    },
+    {
+     "id": "T01-order-budget-exits",
+     "summary": "T01 goes first because T02-T05's budget-set calls need it; one landing; exits green on tests, red recorded and an impossibility claim sent to make arbiter-ask",
+     "class": "within",
+     "why": "These are sequencing and process choices inside the request. None of them changes what is built or relaxes any standard. The arbiter is asked only whether the task can be done, not to accept a phase over budget, so this matches request section 5 item 4."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

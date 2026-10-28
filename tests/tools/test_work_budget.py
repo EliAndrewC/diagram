@@ -30,7 +30,7 @@ def test_total_leaves_out_outcomes_and_exponent_fits_the_slope() -> None:
 
 def test_summarize_averages_the_seeds_and_reads_the_budget() -> None:
     rows = [_row(s, h, h / 20) for s in (4, 25) for h in (20, 40, 80)]
-    table = {"program": {"ops_at_40": 1000}, "stages": {"homesteads": {"status": "accepted", "per_thing": 10}}}
+    table = {"program": {"ops_at_40": 1000}, "stages": {"homesteads": {"status": "accepted", "per_thing": 10, "items_at_20": 20, "items_at_40": 40, "items_at_80": 80}}}
     out = wb.summarize(rows, table)
     hs = out["stages"]["homesteads"]
     assert hs["per"][40]["ops"] == 200 and hs["exponent"] == pytest.approx(2.0) and hs["status"] == "accepted"
@@ -49,7 +49,7 @@ def test_a_stage_missing_at_a_size_is_left_out_of_it() -> None:
 
 def test_the_record_lists_every_stage_and_the_roll(tmp_path: Path) -> None:
     rows = [_row(s, h, h / 20) for s in (4,) for h in (10, 20, 40, 80)]
-    table = {"program": {"ops_at_40": 1000}, "stages": {"homesteads": {"per_thing": 10}}}
+    table = {"program": {"ops_at_40": 1000}, "stages": {"homesteads": {"per_thing": 10, "items_at_20": 20, "items_at_40": 40, "items_at_80": 80}}}
     md = wb.table_md(wb.summarize(rows, table), {"utc": "T", "commit": "abc", "code_id": "k", "seeds": [4], "refused": ["seed 9 at 80: X"]})
     assert "| homesteads |" in md and "| **the whole roll** |" in md and "ops @80" in md and "Refused rolls" in md
     assert "0.5x" in md and "unbudgeted" in md
@@ -127,7 +127,8 @@ def test_the_engine_key_and_commit_name_the_tree() -> None:
 
 
 def _accepted(per_thing: float = 10, at40: float = 1500, at80: float = 3500) -> dict:
-    return {"stages": {"web": {"status": "accepted", "per_thing": per_thing, "accepted": {"40": at40, "80": at80}}, "track": {"status": "unbudgeted"}}}
+    web = {"status": "accepted", "per_thing": per_thing, "items_at_20": 100, "items_at_40": 200, "items_at_80": 400, "accepted": {"40": at40, "80": at80}}
+    return {"stages": {"web": web, "track": {"status": "unbudgeted"}}}
 
 
 def _run_file(run_dir: Path, code_id: str, ops40: float, ops80: float, placed: float = 200, stamp: str = "20261028T000000Z") -> None:
@@ -147,7 +148,7 @@ def test_the_ratchet_holds_an_accepted_stage_to_its_figure_and_its_budget(tmp_pa
     rc, msg = wb.review("GATED", _accepted(), "abc", str(runs))
     assert rc == 1 and "web: 1,600 counted operations at 40 households, over its accepted 1,500" in msg and "make budget-change PHASE=" in msg
     rc, msg = wb.review("GATED-LOCAL", _accepted(per_thing=7), "abc", str(runs))  # budget 7 x 200 = 1,400 at 40
-    assert rc == 1 and "over its budget 1,400 (7 per thing x 200)" in msg
+    assert rc == 1 and "over its budget 1,400 (7 per thing x 200 items)" in msg
     assert wb.held(_accepted(), {"stages": {"web": {"per": {"40": {"ops": 1, "placed": 1}}}}}) == ["web: the run has no roll at 80 households to hold it to"]
 
 
@@ -170,3 +171,20 @@ def test_the_review_reads_the_table_and_the_engine_key_by_default(tmp_path: Path
     monkeypatch.setattr(wb, "_code_id", lambda: "k")
     _run_file(tmp_path, "k", 1, 1)
     assert wb.review("GATED", run_dir=str(tmp_path))[0] == 0
+
+
+def test_a_budget_counts_the_derivations_items_and_a_row_without_them_is_refused(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 444 T01 (D2): a budget is per_thing x the derivation's own items at each size - a stage that places nothing has a
+    whole-stage figure (items 1) - and a budgeted row without its items is refused by the record and the ratchet, never read as
+    the placed-things product."""
+    seat = {"status": "budgeted", "per_thing": 500, "items_at_20": 1, "items_at_40": 1, "items_at_80": 1}
+    assert wb.budget_at(seat, 40) == 500 and wb.budget_at(seat, 10) is None
+    bare = {"stages": {"homesteads": {"status": "budgeted", "per_thing": 7}, "track": {"status": "unbudgeted"}}}
+    bad = wb.missing_items(bare)
+    assert bad == ["homesteads: budgeted with no items at 20, 40, 80 households - set them: make budget-change PHASE=homesteads TO=7 ITEMS_AT_20= ITEMS_AT_40= ITEMS_AT_80= WORDS=\"<the GM's words>\""]
+    assert wb.summarize([_row(4, 40, 1.0)], bare)["stages"]["homesteads"]["budget_at_40"] is None, "no product of placed things"
+    assert bad[0] in wb.held(bare, {"stages": {}}), "the ratchet refuses it"
+    monkeypatch.setattr(wb, "budgets", lambda: bare)
+    monkeypatch.setattr(wb, "roll", lambda seed, h: _row(seed, h, 1.0))
+    with pytest.raises(SystemExit, match="REFUSED - homesteads: budgeted with no items"):
+        wb.run((4,), (40,), calls=lambda seeds, h: {})

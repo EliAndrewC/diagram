@@ -86,6 +86,8 @@ def test_a_budget_bundle_holding_code_or_todays_counts_is_refused(tmp_path: Path
         (lambda t: t.replace("- incremental update: used", "- incremental updates: used"), "a line for `incremental update`"),
         (lambda t: t.replace("- priority queue: not used - no candidate is ranked; each is taken or refused on its own flag", "- priority queue:"), "a line for `priority queue`"),
         (lambda t: t.split("## The count, factor by factor")[0], "the `## The count, factor by factor` table"),
+        (lambda t: t.replace("- Keeps: no two discs closer than `d`; every disc on open ground.", "- Keeps:"), "its `Keeps:` line, filled"),
+        (lambda t: t.replace("- Reads: a rectangle", "- Takes: a rectangle"), "its `Reads:` line, filled"),
     ],
 )
 def test_a_derivation_short_of_a_template_field_is_refused_naming_it(tmp_path: Path, edit, why: str) -> None:  # noqa: ANN001

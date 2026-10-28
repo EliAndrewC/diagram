@@ -58,8 +58,18 @@ def test_a_first_budget_needs_a_sound_verdict(root: pathlib.Path, word: str) -> 
 
 
 def test_a_sound_verdict_sets_a_first_budget_and_a_second_set_is_refused(root: pathlib.Path) -> None:
-    assert bc.main(["--root", str(root), "set", "web", "40", "1.1", "d.md", "SOUND.txt"]) == 0
-    assert bc.load(root)["stages"]["web"] == {"status": "budgeted", "per_thing": 40, "exponent": 1.1, "derivation": "d.md", "verdict": "SOUND.txt"}
+    assert "no items at 20, 40, 80 households" in bc.set_budget(root, "web", 40, 1.1, "d.md", "SOUND.txt"), "the derivation's items are owed"
+    assert bc.main(["--root", str(root), "set", "web", "40", "1.1", "d.md", "SOUND.txt", "--items-at-20", "10", "--items-at-40", "20", "--items-at-80", "40"]) == 0
+    assert bc.load(root)["stages"]["web"] == {
+        "status": "budgeted",
+        "per_thing": 40,
+        "exponent": 1.1,
+        "derivation": "d.md",
+        "verdict": "SOUND.txt",
+        "items_at_20": 10,
+        "items_at_40": 20,
+        "items_at_80": 40,
+    }
     why = bc.set_budget(root, "web", 30, 1.0, "d.md", "SOUND.txt")
     assert "budgeted already" in why and "make budget-change PHASE=web" in why, "a budgeted stage changes only with the GM's words"
     assert "no derivation at x.md" in bc.set_budget(root, "track", 1, 1, "x.md", "SOUND.txt")
@@ -71,8 +81,9 @@ def test_a_change_needs_words_and_a_budget_and_is_logged_with_the_words(root: pa
     assert "no WORDS" in bc.change_budget(root, "web", 50, None, "  ")
     assert "make budget-set PHASE=web" in bc.change_budget(root, "web", 50, None, "the GM's words here")
     assert "no stage `nope`" in bc.change_budget(root, "nope", 50, None, "the GM's words here")
-    bc.set_budget(root, "web", 40, 1.1, "d.md", "SOUND.txt")
-    assert bc.main(["--root", str(root), "change", "web", "50", "--words", "raise it to fifty"]) == 0
+    bc.set_budget(root, "web", 40, 1.1, "d.md", "SOUND.txt", {20: 10, 40: 20, 80: 40})
+    assert bc.main(["--root", str(root), "change", "web", "50", "--words", "raise it to fifty", "--items-at-80", "45"]) == 0
+    assert bc.load(root)["stages"]["web"]["items_at_80"] == 45 and bc.load(root)["stages"]["web"]["items_at_40"] == 20
     assert bc.load(root)["stages"]["web"]["per_thing"] == 50 and bc.load(root)["stages"]["web"]["exponent"] == 1.1
     assert bc.change_budget(root, "web", 55, 1.2, "and the exponent too") == ""
     rows = [json.loads(ln) for ln in (root / bc.LOG).read_text().splitlines()]

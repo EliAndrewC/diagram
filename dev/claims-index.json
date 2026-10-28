@@ -76518,6 +76518,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/work_budget.py::ITEM_SIZES#plumbing": {
+  "body": "2d1a9aa63da31d4e",
+  "claim": "plumbing - NONE: the sizes a budgeted stage records its derivation's items at (feature 444 D2: the exponent's fit runs 20 to 80)",
+  "code": "43e68fdf6110cae9",
+  "core": "19f2554fc5b08d1b",
+  "date": "2026-10-28",
+  "note": "the item sizes a work-budget derivation is fitted at, which is tooling and says nothing physical about a hamlet",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/work_budget.py::SIZES#plumbing": {
   "body": "82ffa976b954a5c6",
   "claim": "plumbing - NONE: the sizes the design names (10, 20, 40 and 80 households; 80 past the band, as the scaling legs roll it)",

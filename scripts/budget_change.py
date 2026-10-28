@@ -60,7 +60,10 @@ def _stage(table: dict[str, Any], phase: str) -> dict[str, Any] | str:
     return st if st is not None else f"no stage `{phase}` in {TABLE} - the stages are: {', '.join(table['stages'])}"
 
 
-def set_budget(root: Path, phase: str, per_thing: float, exponent: float, derivation: str, verdict: str) -> str:
+ITEM_SIZES = (20, 40, 80)  # feature 444 D2: a budget is per_thing x the derivation's own items at each size
+
+
+def set_budget(root: Path, phase: str, per_thing: float, exponent: float, derivation: str, verdict: str, items: dict[int, int] | None = None) -> str:
     """A first budget: '' when set, else why not."""
     table = load(root)
     st = _stage(table, phase)
@@ -73,12 +76,17 @@ def set_budget(root: Path, phase: str, per_thing: float, exponent: float, deriva
     got = verdict_of(root / verdict)
     if got != SOUND:
         return f"the verdict at {verdict} reads {got or 'nothing'}, not SOUND - a first budget is set only from a SOUND MODE BUDGET verdict (`make work-budget-bundle MODE=budget PHASE={phase} DERIVATION={derivation}`)"
-    table["stages"][phase] = {"status": "budgeted", "per_thing": per_thing, "exponent": exponent, "derivation": derivation, "verdict": verdict}
+    if missing := [h for h in ITEM_SIZES if (items or {}).get(h) is None]:
+        return f"no items at {', '.join(str(h) for h in missing)} households - a budget is per thing x the derivation's own items at each size: ITEMS_AT_20= ITEMS_AT_40= ITEMS_AT_80= (feature 444 D2)"
+    table["stages"][phase] = {
+        "status": "budgeted", "per_thing": per_thing, "exponent": exponent, "derivation": derivation, "verdict": verdict,
+        **{f"items_at_{h}": (items or {})[h] for h in ITEM_SIZES},
+    }
     save(root, table)
     return ""
 
 
-def change_budget(root: Path, phase: str, to: float, exponent: float | None, words: str) -> str:
+def change_budget(root: Path, phase: str, to: float, exponent: float | None, words: str, items: dict[int, int] | None = None) -> str:
     """A budgeted stage's figure changed with the GM's words, and logged: '' when done, else why not."""
     if not words.strip():
         return "no WORDS - a budget changes only with the GM's own words"
@@ -92,6 +100,8 @@ def change_budget(root: Path, phase: str, to: float, exponent: float | None, wor
     st["per_thing"] = to
     if exponent is not None:
         st["exponent"] = exponent
+    for h, n in (items or {}).items():
+        st[f"items_at_{h}"] = n
     save(root, table)
     log(root, {"what": "stage", "phase": phase, "from": before, "to": {"per_thing": st["per_thing"], "exponent": st["exponent"]}, "words": words})
     return ""
@@ -116,11 +126,15 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("set")
     for a in ("phase", "per_thing", "exponent", "derivation", "verdict"):
         s.add_argument(a)
+    for h in ITEM_SIZES:
+        s.add_argument(f"--items-at-{h}", type=int)
     c = sub.add_parser("change")
     c.add_argument("phase")
     c.add_argument("to", type=float)
     c.add_argument("--exponent", type=float)
     c.add_argument("--words", default="")
+    for h in ITEM_SIZES:
+        c.add_argument(f"--items-at-{h}", type=int)
     p = sub.add_parser("program")
     p.add_argument("ops_at_40", type=int)
     p.add_argument("exponent", type=float)
@@ -128,10 +142,12 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     root = Path(args.root)
     if args.cmd == "set":
-        why = set_budget(root, args.phase, float(args.per_thing), float(args.exponent), args.derivation, args.verdict)
+        items = {h: getattr(args, f"items_at_{h}") for h in ITEM_SIZES if getattr(args, f"items_at_{h}") is not None}
+        why = set_budget(root, args.phase, float(args.per_thing), float(args.exponent), args.derivation, args.verdict, items)
         done = f"`{args.phase}` budgeted at {args.per_thing} per thing, exponent {args.exponent}"
     elif args.cmd == "change":
-        why = change_budget(root, args.phase, args.to, args.exponent, args.words)
+        items = {h: getattr(args, f"items_at_{h}") for h in ITEM_SIZES if getattr(args, f"items_at_{h}") is not None}
+        why = change_budget(root, args.phase, args.to, args.exponent, args.words, items)
         done = f"`{args.phase}` changed to {args.to} per thing, logged in {LOG} with the GM's words"
     else:
         why = set_program(root, args.ops_at_40, args.exponent, args.words)

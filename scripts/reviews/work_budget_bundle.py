@@ -58,6 +58,11 @@ def form_problems(text: str) -> list[str]:
     """Each field of the derivation template a derivation lacks (`TEMPLATE`): the count's table with every column filled and a
     scope of its three, and a line for each standard cheaper algorithm saying whether it is used and why."""
     out: list[str] = []
+    contract = CONTRACT.search(text)
+    lines = {m.group(1).lower(): m.group(2).strip() for m in re.finditer(r"^-\s*(Reads|Writes|Keeps):[ \t]*(.*)$", contract.group(0) if contract else "", re.M)}
+    # ...THE CONTRACT'S FOUR PARTS (feature 444 T01, the design's checklist box 1): what it reads, what it writes, and what it keeps -
+    # the cohort properties and the research claims, each a rule asked of a candidate before it is placed, so each a check of the count
+    out += [f"`## Contract`: its `{k}:` line, filled" for k in ("Reads", "Writes", "Keeps") if not lines.get(k.lower()) or lines[k.lower()].startswith("<")]
     count = COUNT.search(text)
     rows = [[c.strip() for c in ln.strip().strip("|").split("|")] for ln in (count.group(1) if count else "").splitlines() if ln.strip().startswith("|")]
     if not rows or tuple(c.lower() for c in rows[0]) != COLUMNS:
