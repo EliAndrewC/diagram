@@ -9956,13 +9956,14 @@
  "l7r/diagram/hamletgen/driver.py::_run_stages#its salts, guards and sentinels": {
   "body": "b199adec2501c73f",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (profile print threshold, in seconds)",
-  "code": "5781544b6e23a4a3",
-  "core": "3fbfacfd37530659",
+  "code": "3b1e53695ff15267",
+  "core": "af6d53860cbd34f4",
   "date": "2026-10-25",
   "note": "print threshold",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::baseline_verdict#driving the roll": {
@@ -45588,13 +45589,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.conflicts#registry plumbing": {
-  "code": "cd311d98c0435920",
-  "core": "adafb47f26c6c979",
+  "code": "d572dabce14e10e7",
+  "core": "cd2a0825c8a02931",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical or visible",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-27",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.extents#registry plumbing": {
@@ -45614,19 +45615,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.forget#registry plumbing": {
-  "code": "05443e31d720b40d",
-  "core": "0977fe8d9882e3a8",
+  "code": "5a09103af6e728cc",
+  "core": "3533130d15249ea5",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical or visible",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.hold#registry plumbing": {
-  "code": "c99a25a5a6c6dff1",
-  "core": "8fd580eb34e5571b",
+  "code": "53cd46f8e888640a",
+  "core": "7d6af7291125e28f",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical or visible",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.kept#registry plumbing": {
@@ -45638,11 +45643,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.record#registry plumbing": {
-  "code": "911b8c0030a92126",
-  "core": "8e242ce1365351ba",
+  "code": "ad6286f0ac2fe2bc",
+  "core": "15c3f7e7d9e45e6e",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical or visible",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.refuse#registry plumbing": {
@@ -45654,19 +45661,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.release#registry plumbing": {
-  "code": "43f90b0e487e8f3a",
-  "core": "f593d3ba5168932c",
+  "code": "df2cc6c6f3388827",
+  "core": "93b4731c985b5609",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical or visible",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.rerecord#registry plumbing": {
-  "code": "a3445e4260ccee1c",
-  "core": "401c600b027648ad",
+  "code": "fbbe8eea40130a27",
+  "core": "4a3ef4bb146978ba",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical or visible",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::Standing.resync#registry plumbing": {
@@ -48297,13 +48308,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::PointGrid.near#spatial indexes": {
-  "code": "dfaafcb9064ad8a9",
-  "core": "148cae0c286fb4e1",
+  "code": "8cda51d1728de179",
+  "core": "a32394bb165b4f6d",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-27",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex#spatial indexes": {
@@ -48337,24 +48348,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex.inside#spatial indexes": {
-  "code": "57b9a98b1bd129cc",
-  "core": "ce3fdc888ec38dfc",
+  "code": "819a71f56e21bf50",
+  "core": "994ff4f750704dbc",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex.inside_many#its salts, guards and sentinels": {
   "body": "d84fd253a17bf226",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (boundary tolerance)",
-  "code": "742aa4be2f29a831",
-  "core": "0a8989aec6fff88d",
+  "code": "07c2274bc599d3ae",
+  "core": "7c51be5d6825e095",
   "date": "2026-10-25",
   "note": "boundary tolerance, plumbing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-26",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::_parity_region#spatial indexes": {
@@ -48742,21 +48755,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::chain_violated#coordinate math": {
-  "code": "1ad736cd02e2f08c",
-  "core": "0b67298a7205eafd",
+  "code": "776ab795ae8cfdd6",
+  "core": "72aa7c356c3f5677",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-27",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::chain_violated_many#plumbing": {
-  "code": "a7714ac229d5d1a9",
-  "core": "8befb7297fea0a33",
+  "code": "98322cd7cca5ff0b",
+  "core": "56a93808d054e315",
   "date": "2026-10-03",
   "note": "vectorized point-to-chord geometry, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::convex_hull#coordinate math": {
@@ -48802,23 +48817,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::point_in_poly#coordinate math": {
-  "code": "72d54ce4f0f21812",
-  "core": "ceb2b3e663bb22ad",
+  "code": "1d61380fb99c2d07",
+  "core": "43458467e717b941",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::points_in_poly#coordinate math": {
   "body": "dad8e5004cb6214c",
   "claim": "coordinate math - NONE",
-  "code": "94c694fe895846fc",
-  "core": "7e61c19b0681ce61",
+  "code": "909f5096b384e3a1",
+  "core": "7a9c40c46003f468",
   "date": "2026-10-27",
   "note": "the crossing test done as arrays; 1e-9 is a guard against dividing by zero",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::poly_seg_dist#coordinate math": {
@@ -48842,11 +48860,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::ring_meets_ellipse#coordinate math": {
-  "code": "0bb108c03c4138e1",
-  "core": "d76603889b07d2d3",
+  "code": "9c3f5261c2947376",
+  "core": "4cedfab2bf70679a",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::ring_offset#its salts, guards and sentinels": {
@@ -48870,13 +48890,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::seg_closest#coordinate math": {
-  "code": "2874dcee7a9bc150",
-  "core": "189df99ed7e79018",
+  "code": "ddc0fae241b839f4",
+  "core": "20c5e4a942698a8d",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-27",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::seg_dist#coordinate math": {
@@ -48890,29 +48910,33 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::seg_dists#coordinate math": {
-  "code": "148aa4d93bd0f6b1",
-  "core": "38b5a2de851b1a14",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/_geom/primitives.py::seg_intersect#coordinate math": {
-  "code": "f8d59c0f7a3e56eb",
-  "core": "04a4bb4cf6a8fc00",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/_geom/primitives.py::segments_cross#coordinate math": {
-  "code": "f21b0520d1987c35",
-  "core": "960d0e2beed070f9",
+  "code": "54f408cb3fc67ae4",
+  "core": "0d383d19769ec6c0",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-27",
+  "triaged": "2026-10-28",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/_geom/primitives.py::seg_intersect#coordinate math": {
+  "code": "21a0bd4d494b9d1e",
+  "core": "f1fce003590d6ce3",
+  "date": "2026-10-03",
+  "note": "plumbing, no physical decision",
+  "pages": {},
+  "research": "",
+  "triaged": "2026-10-28",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/_geom/primitives.py::segments_cross#coordinate math": {
+  "code": "cadc69de64a7722e",
+  "core": "38516f917e20b0bb",
+  "date": "2026-10-03",
+  "note": "plumbing, no physical decision",
+  "pages": {},
+  "research": "",
+  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/primitives.py::simplify_ring#coordinate math": {
