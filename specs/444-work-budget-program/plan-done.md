@@ -44,3 +44,28 @@ The GM's rule on a repeated error (`request.md`, 2026-10-28): *"anytime I hear y
 
 **Performance work?** no - tooling.
 
+<!-- plan-archive: archived 2026-10-28 -->
+### T08 - an arbiter accept pins a first budget (FR-013, SC-008)
+
+`make budget-set ARBITER=ask:<id>`: the budget pinned on the round arbiter's ACCEPT of the derivation, refused when the arbiter's log
+holds no accept at that trigger naming the stage; the pin records `pinned_on: accept`, the derivation's sha256, its rounds (the
+stage's recorded verdicts) and its totals' spread (`SPREAD="<low>-<high> at <households>"`, required), for the program target (D5). `make work-budget`
+and the push's ratchet (`work_budget.held`) flag an accept-pinned budget whose derivation changed since its pin, as owing the arbiter's
+ruling.
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** A stage whose total converged but whose verdict never reached SOUND is pinned on the arbiter's accept, and stays bound to the derivation it accepted.
+2. **The constraints.** FR-013, SC-008 (amendment 1).
+3. **Where each comes from.** G: the GM, 2026-10-28, answering 444#0 (`request.md`).
+4. **Do they describe the world here?** field's accept, ask:444-T02-field-round-15 in `arbiter.jsonl`, recorded 2026-10-28.
+5. **The order.** Before field's pin and before T03's first review.
+6. **The exits.** Green: tests refuse a pin on an accept the log does not hold naming the stage and pass one it does; a changed derivation flagged in the record and the ratchet; each red with its condition deleted. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** SC-008's tests green; field pinned on its accept.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - tooling.
+
