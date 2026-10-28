@@ -580,3 +580,17 @@ def test_the_interactive_page_s_functions_and_an_unparsable_file_there_are_keyed
     assert gencache.split_sources(str(page))[1]["write"] != before
     page.write_text("def (:\n", encoding="utf-8")
     assert gencache.split_sources(str(page))[1:] == ({}, set()), "unparsable: hashed whole"
+
+
+def test_a_load_copies_through_a_temporary_of_its_own(tmp_path, monkeypatch):
+    """Two gate workers loading one map shared `<out>.tmp`: one's rename took the file from under the other's copy (a red gate,
+    2026-10-28). Each process copies through a temporary named by its pid."""
+    eng, gen, out = _fixture(tmp_path)
+    _with_engine(monkeypatch, tmp_path, eng)
+    gencache.store(str(gen), gencache.run_and_record(str(gen)))
+    out.unlink()
+    moved: list[str] = []
+    real = gencache.os.replace
+    monkeypatch.setattr(gencache.os, "replace", lambda a, b: moved.append(str(a)) or real(a, b))
+    assert gencache.load(str(gen)) is True
+    assert moved and all(m.endswith(f".{os.getpid()}.tmp") for m in moved), moved

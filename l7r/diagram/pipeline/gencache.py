@@ -514,9 +514,12 @@ def load(gen: str) -> bool:
         cached = os.path.join(entry, os.path.basename(out))
         if os.path.isfile(cached):
             # copied beside it, then moved into place: a reader in another gate worker sees the old artifact
-            # or the new one, never a half-copied one (feature 261; the same reason as `finish`'s manifest write)
-            shutil.copy2(cached, out + ".tmp")
-            os.replace(out + ".tmp", out)
+            # or the new one, never a half-copied one (feature 261; the same reason as `finish`'s manifest write).
+            # THE TEMPORARY IS THIS PROCESS'S OWN: two workers loading one map shared `<out>.tmp`, and one's rename took
+            # the file from under the other's copy (`FileNotFoundError` in copystat - a red gate on 2026-10-28)
+            tmp = f"{out}.{os.getpid()}.tmp"
+            shutil.copy2(cached, tmp)
+            os.replace(tmp, out)
         elif os.path.isfile(out):
             # DELETE an output the entry LACKS - do not leave it standing (2026-08-17). This used to
             # keep it, arguing that "the key just matched, so any standing artifact was derived from
