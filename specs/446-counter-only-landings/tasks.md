@@ -9,7 +9,8 @@
 - [x] T01 The counter block and the counter-only delta (`codeid`), the cohort's same-engine test reading counter-only engines as one, and `make land` skipping both 48-seed cohorts on a counter-only delta (D1, D2; FR-001, FR-002, FR-004, SC-001, SC-002)
       research: rendering
       verify: DONE. landed: the counter block defined in codeid (133 of 136 debug blocks counters); cohort_known.same_key reads a counter-only successor as the same engine; land skips the fresh block on a counter-only delta; one engine list; each skip red with its condition deleted
-- [ ] T02 The claims triage clears a claim whose unit only gained counter blocks, its recorded version the merge base's, bundled nowhere (D3; FR-003, SC-003)
+- [x] T02 The claims triage clears a claim whose unit only gained counter blocks, its recorded version the merge base's, bundled nowhere (D3; FR-003, SC-003)
       research: rendering
+      verify: DONE. landed: landed: the claims triage clears a claim whose unit only gained counter blocks, its recorded version the merge base's, at claims-owed and claims-triage, bundled nowhere; owed as before otherwise (five cases and a constant-reading counter); red with the condition deleted
 - [ ] T03 `docs/guards.md` and `make land`'s help name the skips; each skip proven red with its condition deleted; `make feature-report F=446 WRITE=1` (D4; FR-005, SC-004)
       research: rendering

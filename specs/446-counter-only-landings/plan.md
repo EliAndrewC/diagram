@@ -57,30 +57,7 @@ T01 the counter-only delta and the cohort skip (D1, D2); T02 the claims triage's
 report (D4).
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
-### T02 - the claims triage's counter-only clear (D3)
-
-The merge base's unit read and fingerprinted; the counter-free cores compared; the claim recorded cleared and bundled nowhere.
-
-### T02 Approach (checklist part A)
-
-1. **The goal, in the world.** A claim whose code only gained counters is cleared without an agent.
-2. **The constraints.** FR-003; D3.
-3. **Where each comes from.** G: the GM's words, 2026-10-28 (`request.md`).
-4. **Do they describe the world here?** 455 claims triaged and two sent on, neither counter-only, measured 2026-10-28 (the `make
-   claims-triaged` lines of 443's landings).
-5. **The order.** After T01 (it reads `strip_counters`).
-6. **The exits.** Green: `tests/tooling/test_claims_index.py` clears a claim whose unit only gained a counter block, and owes one
-   changed otherwise, one whose counter block was removed, one whose counter block was rewritten and one whose recorded version is
-   not the base's; the clear red with its
-   condition deleted. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing.
-9. **Done, measured.** A counter-only change's claims are cleared at `make claims-owed` with no bundle.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-**Performance work?** no - tooling.
-
+<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 ### T03 - the docs and the report (D4)
 
 `docs/guards.md` and `make land`'s help name both skips; `make feature-report F=446 WRITE=1`.
