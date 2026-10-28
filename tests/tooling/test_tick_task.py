@@ -7,6 +7,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import os
 import pathlib
 import sys
 
@@ -273,6 +274,7 @@ def test_one_task_or_several_every_tick_asked_first_landed_once_and_ticked(tmp_p
     monkeypatch.setattr(lb, "long_runs", lambda root: 0)
     monkeypatch.setattr(lb, "wait_for_claims", lambda root, tasks, d=None: "")
     monkeypatch.setattr(lb, "push", lambda root, tasks: landings.append((tasks, (d / "tasks.md").read_text(encoding="utf-8"))) or rc[0])
+    monkeypatch.setenv("SPECIFY_FEATURE", "999-filed-mid-task")  # `make claim` pointed the session at another feature (2026-10-28)
 
     def run(root: pathlib.Path, cmd: list[str], env: dict | None = None, quiet: bool = True) -> tuple[int, str]:
         ran.append([str(c) for c in cmd])
@@ -285,6 +287,7 @@ def test_one_task_or_several_every_tick_asked_first_landed_once_and_ticked(tmp_p
     before = (d / "tasks.md").read_text(encoding="utf-8")
     rc[0] = 1
     assert lb.main(["188", "T02 T03"]) == 1 and len(landings) == 1
+    assert os.environ["SPECIFY_FEATURE"] == d.name, "the push is told the feature being landed, not the one last claimed"
     assert "- [x] T02" in landings[0][1] and "- [x] T03" in landings[0][1], "the push carries the ticks"
     assert ["git", "revert", "--no-edit", "abc123"] in ran, "a failed push reverts its ticks, nothing rewritten"
     (d / "tasks.md").write_text(before, encoding="utf-8")

@@ -325,12 +325,9 @@ def make(root: Path, target: str) -> int:
     return subprocess.run(["make", "--no-print-directory", target], cwd=root).returncode
 
 
-def push(root: Path, tasks: list[str], d: Path | None = None) -> int:
-    """The landing: `scripts/sync-with-main.sh done` once, the tasks named so they hold nothing (D4), and the feature being landed
-    named to it (`SPECIFY_FEATURE`). Without the name the push's gated merge read `.specify/feature.json`, which `make claim`
-    points at a feature filed mid-task: 443 T12's landing ran its whole gate, then refused as 445's (2026-10-28)."""
-    env = {**os.environ, "L7R_LAND_TICKS": " ".join(tasks), **({"SPECIFY_FEATURE": d.name} if d is not None else {})}
-    return subprocess.run([str(HERE / "sync-with-main.sh"), "done"], cwd=root, env=env).returncode
+def push(root: Path, tasks: list[str]) -> int:
+    """The landing: `scripts/sync-with-main.sh done` once, the tasks named so they hold nothing (D4)."""
+    return subprocess.run([str(HERE / "sync-with-main.sh"), "done"], cwd=root, env={**os.environ, "L7R_LAND_TICKS": " ".join(tasks)}).returncode
 
 
 #: the gate the green-gate stamp names for each stale area: "(make done again)", "(make hooks-test again)", "(make page-check again)"
@@ -713,6 +710,9 @@ def main(argv: list[str]) -> int:
     rel = str(d.relative_to(root))
     how = f"landed in batch {'+'.join(tasks)}" if len(tasks) > 1 else "landed"
     os.environ["L7R_LAND_TICKS"] = " ".join(tasks)  # the tasks the landing ticks: `--landing` is honored for these alone
+    # ...AND THE FEATURE BEING LANDED, named to the push: its gated merge read `.specify/feature.json`, which `make claim` points at
+    # a feature filed mid-task - 443 T12's landing ran its whole gate, then refused as 445's (2026-10-28)
+    os.environ["SPECIFY_FEATURE"] = d.name
     failed = [task for task in tasks if tt.main([argv[0], task, f"{how}: {note}", "--landing", *_box_flag(tt, d, task)])]
     if failed:
         run(root, ["git", "checkout", "--", rel])  # the ticks already written put back: a landing that does not push ticks nothing
@@ -721,7 +721,7 @@ def main(argv: list[str]) -> int:
     run(root, ["git", "add", "--", rel, "dev/bypass-log"])  # a tick's honored escape writes its record too (feature 408)
     run(root, ["git", "commit", "-q", "-m", f"{d.name}: {' '.join(tasks)} ticked (make land)"])
     tick_sha = run(root, ["git", "rev-parse", "HEAD"])[1].strip()
-    rc = push(root, tasks, d)
+    rc = push(root, tasks)
     if rc == MERGED:
         # PUSHED, WITH OTHER SESSIONS' EDITS MERGED INTO FILES IT TOUCHED (405 T107: T107's landing pushed its tick, then reverted
         # it in the clone as if nothing had landed, so the clone's next push would have unticked main): the ticks stand
