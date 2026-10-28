@@ -17,6 +17,7 @@ category of thing"*. `scripts/reviews/review_owed.py` is the one answer, asked b
 | `settlement-review` | a map new to the pool (detected); a new settlement form or tier (declared: `new-form:`, `new-tier:`) | the whole map: does it read as a distinct place, its declared economy, a new tier's fabric |
 | `fix-check` | a feature closing a defect the GM reported by eye (declared: `gm-fix: <map> - <the complaint>`) | the GM's complaint, at fit zoom first |
 | `building-review` | a sheet new to the pool (detected); a layout revised or a new program (declared: `layout-revised:`, `new-program:`) | the sheet's layout, program and coherence |
+| `work-budget` | MODE BUDGET at a stage's first budget (`make budget-set` refuses without its SOUND); MODE AUDIT at a feature-444 phase's landing (its checklist's box 7) - feature 443 | the derivation, blind to today's code and counts; then the landed code against its counters (`make work-budget-bundle`, `docs/work-budget-rubric.md`) |
 | `size-audit` | a sized kind new to a sheet (detected); a new program (declared) | that kind's real size, then a band the registry holds |
 
 **A hand-drawn map awaiting conversion owes nothing.** The GM, 2026-10-01: *"All hand-drawn maps should be excempted from

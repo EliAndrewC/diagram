@@ -1,0 +1,122 @@
+"""The `work-budget` agent's two fixtures and its bundles (feature 443 T05, plan D9-D11; FR-008, FR-009, SC-005).
+
+Before its first real use the agent was dispatched once on each fixture (`tests/fixtures/work-budget/`); its first line is
+`verdict.txt` beside the derivation. The design the GM approved (2026-10-28) requires today's homestead seat funnel ruled LOOSE or
+OVER and a textbook grid-indexed placer ruled SOUND or WITHIN: an agent that passed the funnel, or refused the placer, does not
+bite on the right thing.
+"""
+
+from __future__ import annotations
+
+import importlib.util
+import math
+from pathlib import Path
+
+import pytest
+
+from tests._scripts import script
+
+REPO = Path(__file__).resolve().parents[2]
+FIX = REPO / "tests" / "fixtures" / "work-budget"
+AGENT = REPO / ".claude" / "agents" / "work-budget.md"
+
+_spec = importlib.util.spec_from_file_location("work_budget_bundle", script("work_budget_bundle"))
+assert _spec is not None and _spec.loader is not None
+wbb = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(wbb)
+
+
+def _verdict(name: str) -> str:
+    return (FIX / name / "verdict.txt").read_text(encoding="utf-8").split()[0].strip("*:`").upper()
+
+
+def test_the_funnel_is_ruled_loose_or_over_and_the_grid_placer_sound_or_within() -> None:
+    """The funnel's ruling is its MODE AUDIT one - today's homesteads code and counters against the rubric's reference budget
+    (`funnel/budget.json`): OVER is an audit verdict, and the MODE 1 ruling of 2026-10-28 held the design's literal set. Its MODE
+    BUDGET rulings (UNDERIVED, twice) are kept beside it, `verdict-budget-*.txt`."""
+    assert _verdict("funnel") in {"LOOSE", "OVER"}, "today's seat funnel must not pass"
+    assert _verdict("grid-placer") in {"SOUND", "WITHIN"}, "a textbook indexed placer must not be refused"
+
+
+def test_the_grid_placer_places_its_discs_apart_within_its_derived_count() -> None:
+    """The fixture's code does what its derivation says: every pair at least `d` apart, nothing on blocked ground, and at most
+    17 operations per disc placed (9 lookups and 8 marks), plus the blocked sites' flags and lookups, each once."""
+    ns: dict = {}
+    exec((FIX / "grid-placer" / "placer.py.txt").read_text(encoding="utf-8"), ns)  # noqa: S102 - the fixture's own text
+    d, blocked = 10.0, [(0.0, 0.0, 30.0, 30.0)]
+    placed, ops = ns["place"](100.0, 100.0, 60, d, blocked, seed=3)
+    assert len(placed) == 60
+    assert all(math.dist(a, b) >= d for i, a in enumerate(placed) for b in placed[i + 1 :])
+    assert not any(x <= 30 and y <= 30 for x, y in placed)
+    blocked_sites = (30 // 5 + 1) ** 2  # the d / 2 lattice's sites on the blocked square
+    assert ops <= 60 * 17 + 2 * blocked_sites
+
+
+def test_the_agent_asks_the_designs_questions() -> None:
+    text = AGENT.read_text(encoding="utf-8")
+    for q in ("Is each factor derived?", "Is there a standard, cheaper algorithm?", "Is any factor padded?"):
+        assert q in text, f"MODE BUDGET asks: {q}"
+    for q in ("Are the counters within budget?", "Does a counter cover every inner loop (S5)?", "Is anything placed and then repaired (S4)?", "Is the growth linear (S6)?"):
+        assert q in text, f"MODE AUDIT asks: {q}"
+    for v in ("SOUND", "LOOSE", "UNDERIVED", "WITHIN", "OVER", "UNCOUNTED"):
+        assert f"**{v}**" in text
+
+
+@pytest.mark.parametrize(
+    ("text", "why"),
+    [
+        ("## Contract\n\nx\n\n```python\nfor s in seats: pass\n```\n", "a fenced block of Python"),
+        ("## Contract\n\nreads l7r/diagram/hamletgen/plan.py\n", "a path under l7r/"),
+        ("## Contract\n\nx\n\ntoday it takes 180k calls per house\n", "a current count"),
+        ("## Contract\n\nx\n\nops: 4000\n", "a current count"),
+    ],
+)
+def test_a_budget_bundle_holding_code_or_todays_counts_is_refused(tmp_path: Path, text: str, why: str) -> None:
+    (tmp_path / "d.md").write_text(text)
+    rc, msg = wbb.budget_bundle(REPO, "web", str(tmp_path / "d.md"), tmp_path / "out")
+    assert rc == 1 and why in msg and not (tmp_path / "out").exists()
+
+
+def test_a_budget_bundle_holds_the_derivation_contract_and_rubric(tmp_path: Path) -> None:
+    rc, manifest = wbb.budget_bundle(REPO, "funnel", str(FIX / "funnel" / "derivation.md"), tmp_path / "out")
+    assert rc == 0 and Path(manifest).name == "MANIFEST.md"
+    assert {p.name for p in (tmp_path / "out").iterdir()} == {"MANIFEST.md", "derivation.md", "contract.md", "rubric.md"}
+    assert (tmp_path / "out" / "contract.md").read_text().startswith("## Contract")
+    (tmp_path / "nc.md").write_text("no contract here\n")
+    assert "no `## Contract` section" in wbb.budget_bundle(REPO, "x", str(tmp_path / "nc.md"), tmp_path / "o2")[1]
+    assert wbb.budget_bundle(REPO, "x", str(tmp_path / "missing.md"), tmp_path / "o3")[0] == 2
+
+
+def test_an_audit_bundle_holds_the_code_counts_chains_and_budget(tmp_path: Path) -> None:
+    rc, _manifest = wbb.audit_bundle(REPO, "homesteads", tmp_path / "out")
+    assert rc == 0
+    names = {p.name for p in (tmp_path / "out").iterdir()}
+    assert names == {"MANIFEST.md", "code", "counts.json", "chains.txt", "budget.json", "rubric.md"}
+    assert any(p.name == "__init__.py" for p in (tmp_path / "out" / "code").iterdir()), "the stage's own package"
+    assert wbb.audit_bundle(REPO, "no_such_stage", tmp_path / "o2")[0] == 2
+
+
+def test_an_audit_bundle_takes_a_budget_file_in_place_of_the_tables(tmp_path: Path) -> None:
+    rc, _m = wbb.audit_bundle(REPO, "homesteads", tmp_path / "out", "tests/fixtures/work-budget/funnel/budget.json")
+    assert rc == 0 and '"status": "fixture"' in (tmp_path / "out" / "budget.json").read_text()
+
+
+def test_the_chains_say_when_no_fanout_report_is_kept(tmp_path: Path) -> None:
+    assert "no `make perf-fanout` report is kept" in wbb.fanout_section(tmp_path, "web")
+    (tmp_path / "dev" / "perf-log").mkdir(parents=True)
+    (tmp_path / "dev" / "perf-log" / "x-fanout-y.txt").write_text("field: 1 calls\n  a\nweb: 2 calls\n  chain\ntrack: 3 calls\n")
+    assert wbb.fanout_section(tmp_path, "web").endswith("web: 2 calls\n  chain\n")
+    assert "no section for sink" in wbb.fanout_section(tmp_path, "sink")
+
+
+def test_main_builds_and_refuses(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    out = tmp_path / "o"
+    assert wbb.main(["budget", "grid-placer", "--derivation", str(FIX / "grid-placer" / "derivation.md"), "--out", str(out)]) == 0
+    assert wbb.main(["budget", "grid-placer", "--derivation", str(FIX / "grid-placer" / "derivation.md"), "--out", str(out)]) == 0, "a stale bundle is replaced"
+    assert wbb.main(["budget", "web", "--out", str(out)]) == 2 and "needs DERIVATION" in capsys.readouterr().err
+    assert wbb.main(["budget", "", "--out", str(out)]) == 2
+    assert wbb.main(["audit", "homesteads", "--out", str(tmp_path / "a")]) == 0
+    empty = tmp_path / "empty"
+    (empty / "l7r" / "diagram" / "hamletgen").mkdir(parents=True)
+    (empty / "l7r" / "diagram" / "hamletgen" / "x.py").write_text("def stage_web(s, plan):\n    pass\n")
+    assert wbb.audit_bundle(empty, "web", tmp_path / "b")[1].endswith("run it first")

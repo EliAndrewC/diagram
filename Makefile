@@ -57,6 +57,9 @@ work-budget:    ## [performance] the counted work of the reference hamlet per st
 work-budget-review: ## [performance] the push's ratchet: on a push carrying engine code, every ACCEPTED stage held to its accepted figure and its budget at 40 and 80 households, from a work-budget run at the pushed engine; no arbiter accept clears it (feature 443)   ROUTE=<GATED|GATED-LOCAL|DIRECT>
 	$(RUN).tools.work_budget --review "$(ROUTE)"
 
+work-budget-bundle: ## [performance] the work-budget agent's bundle: MODE=budget a stage's derivation (refused holding code or today's counts), MODE=audit the landed code against its counters (feature 443)   MODE=budget|audit PHASE=<stage> [DERIVATION=<file>] [BUDGET=<file>]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/work_budget_bundle.py" "$(MODE)" "$(PHASE)" $(if $(DERIVATION),--derivation "$(DERIVATION)",) $(if $(BUDGET),--budget "$(BUDGET)",)
+
 budget-set:     ## [performance] a stage's FIRST work budget, only from a SOUND work-budget MODE BUDGET verdict; refused on a stage already budgeted (feature 443)   PHASE=<stage> PER_THING=<ops> EXPONENT=<e> DERIVATION=<file> VERDICT=<verdict file>
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" set "$(PHASE)" "$(PER_THING)" "$(EXPONENT)" "$(DERIVATION)" "$(VERDICT)"
 

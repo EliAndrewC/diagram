@@ -1168,6 +1168,58 @@
      "why": "The ratchet is enforcement tooling from section 5, not a phase rebuild; measuring its overhead adds verification of its cost, not new behavior, and it changes no map, consistent with step 1's 'no map changes'."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T05 (FR-008, FR-009: the adversarial check of the arithmetic)",
+    "### T05 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05-order",
+     "summary": "T05 runs after T02, because the audit bundle reads T02's runs.",
+     "class": "within",
+     "why": "Sequencing only. Request section 6 puts the agent (step 2) after the instrument (step 1), and D10's audit bundle reads the newest run's counts. Nothing asked for is dropped."
+    },
+    {
+     "id": "T05-green-exit",
+     "summary": "Green: the funnel ruled LOOSE or OVER, the grid placer ruled SOUND or WITHIN, both held by a test, and a budget bundle holding engine code refused.",
+     "class": "within",
+     "why": "Matches request section 4 ('must be ruled OVER or LOOSE' / 'must be ruled SOUND or WITHIN', 'Its tests hold both rulings'), FR-009 and SC-005 word for word. UNDERIVED for the funnel is not counted as green, which is the literal reading."
+    },
+    {
+     "id": "T05-red-exit",
+     "summary": "Red: the failure is recorded and the task set down, and a claim that it cannot be done is ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "This is a stop path, not a relaxation. A failed fixture does not count as done; the task stops. Routing a 'cannot be done' claim to the arbiter is the project's standing process (feature 379). The block gives the arbiter no power to waive the fixture rulings or the test that holds them, so FR-009 still binds. A ruling that waived them would be a new exception needing MODE 1."
+    },
+    {
+     "id": "T05-funnel-derivation-source",
+     "summary": "The funnel fixture's derivation is written from, and checked against, trial 439's measured funnel (specs/439-fewer-envelope-probes/research/funnel.md, 2026-10-27).",
+     "class": "within",
+     "why": "The spec already settles this in D11. The request names the fixture as 'today's homestead seat funnel (803 envelopes ...)', which is trial 439's measurement. The source is a measurement, not a memory."
+    },
+    {
+     "id": "T05-budget",
+     "summary": "One landing and two dispatches, one per fixture.",
+     "class": "within",
+     "why": "D11: 'Each is bundled and dispatched once'. The request asks for two fixtures before first real use. No dispatch or fixture is left out."
+    },
+    {
+     "id": "T05-approach-files",
+     "summary": "Lists the agent file, the rubric with the homestead reference worked out (S7), the bundle script (D9, D10) and the two fixtures with recorded rulings (D11).",
+     "class": "within",
+     "why": "The approach cites D9 whole. D9 covers the pre-authorized list, the wave-job list, the tier table and docs/reviews.md occasions, so leaving them out of the shorthand narrows nothing. The rubric carrying S1-S7 and the worked homestead figure matches request section 2."
+    },
+    {
+     "id": "T05-not-performance-work",
+     "summary": "Declared not performance work: instrumentation that moves no map, with overhead measured by make perf-ab.",
+     "class": "within",
+     "why": "T05 adds an agent, a rubric, a bundle script and fixtures, and moves no map. The perf-ab note is boilerplate for a task that adds no engine code. It narrows nothing that was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1611,6 +1663,56 @@
      "summary": "Declared not performance work: instrumentation, overhead measured with make perf-ab, moves no map",
      "class": "within",
      "why": "The ratchet is enforcement tooling from section 5, not a phase rebuild; measuring its overhead adds verification of its cost, not new behavior, and it changes no map, consistent with step 1's 'no map changes'."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T05": {
+   "section_sha256": "0203f7c99fc208e16fdf7581a2b5605805f04cd50ba41333f35a5101b0bf1c6a",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T05-order",
+     "summary": "T05 runs after T02, because the audit bundle reads T02's runs.",
+     "class": "within",
+     "why": "Sequencing only. Request section 6 puts the agent (step 2) after the instrument (step 1), and D10's audit bundle reads the newest run's counts. Nothing asked for is dropped."
+    },
+    {
+     "id": "T05-green-exit",
+     "summary": "Green: the funnel ruled LOOSE or OVER, the grid placer ruled SOUND or WITHIN, both held by a test, and a budget bundle holding engine code refused.",
+     "class": "within",
+     "why": "Matches request section 4 ('must be ruled OVER or LOOSE' / 'must be ruled SOUND or WITHIN', 'Its tests hold both rulings'), FR-009 and SC-005 word for word. UNDERIVED for the funnel is not counted as green, which is the literal reading."
+    },
+    {
+     "id": "T05-red-exit",
+     "summary": "Red: the failure is recorded and the task set down, and a claim that it cannot be done is ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "This is a stop path, not a relaxation. A failed fixture does not count as done; the task stops. Routing a 'cannot be done' claim to the arbiter is the project's standing process (feature 379). The block gives the arbiter no power to waive the fixture rulings or the test that holds them, so FR-009 still binds. A ruling that waived them would be a new exception needing MODE 1."
+    },
+    {
+     "id": "T05-funnel-derivation-source",
+     "summary": "The funnel fixture's derivation is written from, and checked against, trial 439's measured funnel (specs/439-fewer-envelope-probes/research/funnel.md, 2026-10-27).",
+     "class": "within",
+     "why": "The spec already settles this in D11. The request names the fixture as 'today's homestead seat funnel (803 envelopes ...)', which is trial 439's measurement. The source is a measurement, not a memory."
+    },
+    {
+     "id": "T05-budget",
+     "summary": "One landing and two dispatches, one per fixture.",
+     "class": "within",
+     "why": "D11: 'Each is bundled and dispatched once'. The request asks for two fixtures before first real use. No dispatch or fixture is left out."
+    },
+    {
+     "id": "T05-approach-files",
+     "summary": "Lists the agent file, the rubric with the homestead reference worked out (S7), the bundle script (D9, D10) and the two fixtures with recorded rulings (D11).",
+     "class": "within",
+     "why": "The approach cites D9 whole. D9 covers the pre-authorized list, the wave-job list, the tier table and docs/reviews.md occasions, so leaving them out of the shorthand narrows nothing. The rubric carrying S1-S7 and the worked homestead figure matches request section 2."
+    },
+    {
+     "id": "T05-not-performance-work",
+     "summary": "Declared not performance work: instrumentation that moves no map, with overhead measured by make perf-ab.",
+     "class": "within",
+     "why": "T05 adds an agent, a rubric, a bundle script and fixtures, and moves no map. The perf-ab note is boilerplate for a task that adds no engine code. It narrows nothing that was asked."
     }
    ],
    "verdict": "CLEAR"

@@ -1,0 +1,9 @@
+{
+ "status": "fixture",
+ "per_house": 4000,
+ "at_40": 160000,
+ "at_80": 320000,
+ "exponent": 1.15,
+ "derivation": "docs/work-budget-rubric.md, the homestead reference: about 20 candidates x 10 neighbors x 10 parts = 2,000 a house, 4,000 at the full slack of 2; the exponent S6's limit",
+ "note": "a FIXTURE budget for the work-budget agent's MODE AUDIT proof (feature 443 FR-009), never the homesteads stage's budget: that is set by feature 444 from a SOUND derivation (make budget-set)"
+}

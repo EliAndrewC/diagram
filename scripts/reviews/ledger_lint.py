@@ -26,6 +26,7 @@ CHECKS = frozenset(
         "source-applicability", "entry-drift", "translation-check", "escalation-check", "perf-audit",
         "intro-check",  # GUARD_EDIT_OK: feature 311 - a new record check the ledger logs; nothing loosened
         "impl-drift",  # GUARD_EDIT_OK: feature 316 - the claims check the ledger logs; nothing loosened
+        "work-budget",  # GUARD_EDIT_OK: feature 443 T05 - the work-budget check the ledger logs; nothing loosened
         # GUARD_EDIT_OK: feature 371 - every agent that judges the work is a check whose pass owes a row (spec round 2): the
         # three modal checks (record checks by feature 375's plan D9) and source-filter; nothing loosened
         "modal-depiction", "modal-form", "modal-research", "source-filter",

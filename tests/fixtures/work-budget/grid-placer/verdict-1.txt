@@ -1,0 +1,3 @@
+SOUND - every factor is derived from the cell geometry or the lattice. The grid with a 5 x 5 neighborhood is the standard indexed placer, so no cheaper algorithm is missed, and 208 n is linear with the index built once outside the loop.
+
+(Dispatched 2026-10-28: the work-budget contract, `.claude/agents/work-budget.md`, run as an Opus agent with that file as its prompt, because a session loads agent definitions at its start. Its notes: the 5 x 5 block's four corner cells can never hold a center closer than d (22 cells, not 26); seeded sequential fill reaches about 0.7 A/d^2, so near capacity with half the ground blocked about 11 candidates per disc, not 8 - net about 250 n against 208 n, inside a slack of 2.)

@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 208 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 209 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -111,6 +111,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make phase-calls</td><td class=a>ARCHETYPE FORM HOUSEHOLDS SEED SINK</td><td>one 40-household hamlet&#x27;s Python calls by stage and by step, recorded for the placement-stages page (feature 434)   [SEED=39] [HOUSEHOLDS=40] [FORM=nucleated|linear|dispersed] [ARCHETYPE=&lt;field archetype&gt;] [SINK=pond|offmap]</td></tr>
 <tr><td class=n>make review-yield</td><td class=a>SINCE</td><td>each review check&#x27;s passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]</td></tr>
 <tr><td class=n>make work-budget</td><td class=a>SEED SIZES</td><td>the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=&lt;n&gt;] [SIZES=10,20,40,80]</td></tr>
+<tr><td class=n>make work-budget-bundle</td><td class=a>BUDGET DERIVATION MODE PHASE</td><td>the work-budget agent&#x27;s bundle: MODE=budget a stage&#x27;s derivation (refused holding code or today&#x27;s counts), MODE=audit the landed code against its counters (feature 443)</td></tr>
 <tr><td class=n>make work-budget-review</td><td class=a>ROUTE</td><td>the push&#x27;s ratchet: on a push carrying engine code, every ACCEPTED stage held to its accepted figure and its budget at 40 and 80 households, from a work-budget run at the pushed engine; no arbiter accept clears it (feature 443)</td></tr>
 </table></div>
 <h2>Remote (AWS CodeBuild)</h2>

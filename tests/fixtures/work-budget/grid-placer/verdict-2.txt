@@ -1,0 +1,1 @@
+UNDERIVED - candidates per disc (at most 8): the stated reason, 4A/d^2 lattice sites divided by a capacity of A/d^2, limits the total tries over the run, not the tries per disc. (The typed agent, round 2, 2026-10-28; corrected: 1 + 8 per disc, 22 cells, the setup counted.)

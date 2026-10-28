@@ -1,0 +1,3 @@
+UNDERIVED - candidates per house: the "about 21" seats per house has no derived bound; it is a loop that runs until a house is placed or the ring runs out of seats, which S2 forbids, and the derivation has no slack figure and no neighbors-per-check factor.
+
+(The first dispatch, 2026-10-28: the work-budget contract, `.claude/agents/work-budget.md`, run as an Opus agent with that file as its prompt, because a session loads agent definitions at its start. Its other findings: memoize the reach envelope (about 20 a house to 1); index the near-a-house test; the web's all-pairs lane-end test (S3); 24 of 28 laid layouts refused after laying (S4).)
