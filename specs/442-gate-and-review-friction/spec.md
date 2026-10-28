@@ -88,6 +88,7 @@ re-ran every profile to re-derive figures its research files already recorded (a
 - 2026-10-27, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED - sync-in skips the lock when the mirror is at the tip, the
   foreground flag cut; the outputs recorded by the trial, the check-not-re-run only for a trial that landed no code; the move to
   stale-terms stated; FR-001's search and `hm_review_round.accepted` ruled out.
+- 2026-10-27, round 2 (spec-fidelity-verify): FAITHFUL.
 
 ## Assumptions
 

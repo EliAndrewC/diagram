@@ -137,3 +137,13 @@ def test_a_criterion_its_rewritten_requirement_left_behind_is_a_candidate():
     touched = {"spec.md": new["spec.md"].replace("a row for a stage that moved, none for one that did not", "a row for every stage")}
     assert st.criteria_left_behind(old, touched) == [], "a criterion the same change touched is not named"
     assert st.criteria_left_behind({}, new) == [] and st.criteria_left_behind(old, {"plan.md": "x"}) == []
+
+
+def test_a_rewritten_line_is_judged_against_its_whole_old_block():
+    """Feature 442: a 3-line passage rewritten as 5 - the subject named on the old block's first line only - spares every line of
+    the new block that names it, not only the one at the same position."""
+    old = {"spec.md": "**FR-4** a trial `Done` owes one verdict.\n\n1. Given `trial-review` runs, it writes\n   a bundle of the brief\n   and the request.\n"}
+    new = {
+        "spec.md": "**FR-4** a trial `Done` owes one review.\n\n1. Given a trial set down,\n   when `trial-review` runs, it writes a bundle\n   of the brief, the request,\n   the research with its outputs,\n   and its verdict.\n"
+    }
+    assert [c for c in st.stale_candidates(old, new) if c["file"] == "spec.md" and c["line"] > 2] == []

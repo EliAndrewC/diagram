@@ -71,7 +71,7 @@ def changed_pairs(old: str, new: str) -> list[tuple[str, str]]:
 
 
 def rewritten_from(old: str | None, new: str) -> dict[int, str]:
-    """For each line of `new` the change REPLACED (1-based), the line it replaced. A candidate the same change rewrote FROM a line
+    """For each line of `new` the change REPLACED (1-based), the old block it replaced. A candidate the same change rewrote FROM a line
     already naming its subject was revisited about that subject on purpose and states the new value (feature 440 T05: feature
     438's and 439's later rounds were refused on the rewritten passages themselves); a line the change rewrote to bring the
     subject in for the first time is still searched."""
@@ -81,8 +81,11 @@ def rewritten_from(old: str | None, new: str) -> dict[int, str]:
     out: dict[int, str] = {}
     for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
         if tag == "replace":
+            # ...THE WHOLE OLD BLOCK, not the line at the same position: a 3-line passage rewritten as 5 paired its second new line
+            # with an old line that did not name the subject, and feature 442's round 2 dispatch was refused on its own rewrite
+            block = "\n".join(a[i1:i2])
             for k in range(j2 - j1):
-                out[j1 + k + 1] = a[min(i1 + k, i2 - 1)]
+                out[j1 + k + 1] = block
     return out
 
 
