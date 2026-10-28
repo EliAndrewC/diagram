@@ -15,7 +15,18 @@
    "items_at_80": 1
   },
   "field": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.71,
+   "derivation": "specs/444-work-budget-program/phases/field.derivation.md",
+   "verdict": "ask:444-T02-field-round-15",
+   "items_at_20": 35440,
+   "items_at_40": 56558,
+   "items_at_80": 94717,
+   "pinned_on": "accept",
+   "derivation_sha": "c0ebd80592d8e081037231ef6a045dbff1352e0369340552732b377bc21ec24c",
+   "rounds": 14,
+   "spread": "32,280-38,506 at 20"
   },
   "sink": {
    "status": "budgeted",
