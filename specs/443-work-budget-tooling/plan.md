@@ -163,29 +163,7 @@ checklist and its landing check (D12); T07 the Rust-tooling inventory and its ch
 <!-- plan-archive: T09 to T09 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 <!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 <!-- plan-archive: T11 to T11 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
-### T12 (the walk of ground cover, the frame, the notice board and the labels: plan D2, the round arbiter's ruling on ask:443-plan-round-3)
-
-- **Approach**: for hinterland, woodland, windbreak, bamboo, frame, notice, labels: the scan's loops in `research/candidate-loops.md` filtered by hand. The scan (`research/candidate_scan.py.txt`, run 2026-10-28) is an `ast` call graph over `hamletgen`, `settlement`, `waterfields`, `sitegen`, `overlap` and `labels`, followed from each stage's function through every resolved call (an import, `self.`, a module attribute, a unique method name); it lists every loop, comprehension and `min`/`max`/`sorted`/`next` in every reached function whose subtree calls a test - directly, or through a helper that itself tests (its `*` mark) - so a loop testing through a helper is listed. What it cannot follow is read by hand: a `getattr` dispatch, a module reached only by name matching, the modules its "not fully walked" list names, a call to a method whose name is not unique (left unresolved by the scan, so read here), and every function passed by reference over candidates - a `key=` to `min`/`max`/`sorted`, a `filter` or `map`, a callback - found in each reached module by `grep -nE "key=|filter\(|map\(|callback|lambda"` and listed beside the scan's own: `hinterland/parcels/*`, `groves.py`, `grove_fill.py`, `labels/*` read by hand - and each loop that tries a site given `if __debug__: OPS["candidate@<function>"] += <n>` (n = 1 per iteration; where the test is a named predicate or a key function, the count goes inside it, keyed with it, with no call; only a bare `sorted`/`min` or an inline lambda over a list takes `len(cands)` before it - `len()` is a C builtin, which raises no `sys.monitoring` PY_START event, so the push's call guard does not see it: measured 2026-10-28 (`make perf-ab A=29253d4c3`, the calls column, seed 25 at 40 households; `research/overhead.md`): the same count in both engines; a loop whose only test is the registry's `admits` or `conflicts` takes no counter of its own, the registry's `candidate@Standing.conflicts` counting it). The filtered list and the excluded loops, with why, are written into the research file's section for the family.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T12 Approach (checklist part A)
-
-1. **The goal, in the world.** every candidate ground cover, the frame, the notice board and the labels try is counted, so today's candidates per thing placed is a measured figure.
-2. **The constraints.** FR-001; D2 as the arbiter's ruling reads it: the walk is the source, the fanout a cross-check, a stage 'none' only by the walk.
-3. **Where each comes from.** G: the GM's approval of the design, 2026-10-28 (`request.md`); R: `research/candidate-loops.md`; O: the loop survey.
-4. **Do they describe the world here?** each family's candidate counts read against its stages' things placed on the reference roll; a stage with calls large against its counts is re-read.
-5. **The order.** after T01; the families in any order, each its own landing.
-6. **The exits.** Green: every listed loop counted; the Python calls unmoved within SC-001's one call in a thousand (`make perf-fanout`'s Python functions, as `research/overhead.md` reads them); `make perf-fanout`'s anchors for the family's stages read against the list, each anchor the walk missed added and written as a miss; `make cohort-landing` unregressed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing; the claims round's triage as a `check-wave`.
-9. **Done, measured.** the family's section of `research/candidate-loops.md` complete and its counts printed per stage
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-**Performance work?** no - instrumentation; its overhead is measured (`make perf-ab`), and it moves no map.
-
+<!-- plan-archive: T12 to T12 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 ### T02 (FR-003, FR-004: today's figures for every stage, and the counters inert)
 
 - **Approach**: `tools/work_budget.py` (D4) and `make counters-inert` (D5); `dev/work-budget.md` generated with today's figures at 10, 20, 40 and 80 households.
