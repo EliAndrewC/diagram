@@ -31,6 +31,7 @@ def _load(name: str):  # noqa: ANN202
 
 
 cx = _load("_claims")
+cc = sys.modules["claims_carry"]  # the carry and the switch, as the claims module imports them
 Q = "research/questions/0033-row-villages-resson.html"
 PAGE = '<h2 id="row-villages-resson">Row villages</h2>\n<p class="intro">Why asked.</p>\n<p>Farms face the street.</p>\n'
 MOD = f'''"""Rows.
@@ -72,8 +73,12 @@ def _git(root: pathlib.Path, *args: str) -> None:
     subprocess.run(["git", "-C", str(root), *args], check=True, capture_output=True)
 
 
-def _repo(tmp: pathlib.Path) -> pathlib.Path:
+def _repo(tmp: pathlib.Path, claims: str = "clean") -> pathlib.Path:
+    """A fixture repository, its claims switch at `claims` - `clean`, today's gate, which these tests describe (feature 445: the
+    shipped `report` is `tests/tooling/test_claims_switch.py`'s)."""
     _tree(tmp)
+    (tmp / "dev").mkdir(exist_ok=True)
+    (tmp / "dev" / "switches.json").write_text(json.dumps({"claims": {"state": claims}}))
     _git(tmp, "init", "-q", "-b", "main")
     _git(tmp, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q", "--allow-empty", "-m", "root")
     return tmp
@@ -341,7 +346,8 @@ def test_the_gate_refuses_owed_and_introduced_and_warns_pre_existing(tmp_path: p
     cx.save_index(root / cx.INDEX, idx)
     assert cx.gate(root)[0] == [f"introduced: DRIFTED        {k} - "]  # the code changed under it: introduced, as before
     _commit(root, "drift")
-    assert cx.gate(root) == ([], [f"pre-existing: DRIFTED        {k} - "])
+    # pre-existing, it warns as before - and at `clean` it is an open finding, which refuses (feature 445, D3)
+    assert cx.gate(root) == ([f"open (DRIFTED): {k} -  - fix it or its claim here: `make claims-bundle UNITS=\"{k}\"`"], [f"pre-existing: DRIFTED        {k} - "])
 
 
 def test_a_page_edit_finding_on_unchanged_code_is_carried_not_introduced(tmp_path: pathlib.Path) -> None:
@@ -402,7 +408,8 @@ def test_the_gate_refuses_an_unfiled_carry_naming_the_command_and_lets_a_filed_o
         in text
     )
     refuse, warn = cx.gate(root)
-    assert refuse == [] and warn == [f"carried (900-x T02): DRIFTED        {k} - "]
+    # ...filed, it warns as carried - and at `clean` it is still an open finding, which refuses (feature 445, D3)
+    assert refuse == [f"open (DRIFTED): {k} -  - fix it or its claim here: `make claims-bundle UNITS=\"{k}\"`"] and warn == [f"carried (900-x T02): DRIFTED        {k} - "]
     assert cx.main(["--root", str(root), "carry", "--feature", "900"]) == 0  # nothing left unfiled: writes nothing
     assert (d / "tasks.md").read_text() == text
     # ticking the task un-files the key: it refuses again
@@ -412,7 +419,7 @@ def test_the_gate_refuses_an_unfiled_carry_naming_the_command_and_lets_a_filed_o
     (d / "tasks.md").write_text(text.replace("- [ ] T02", "- [x] T02"))
     assert cx.main(["--root", str(root), "carry", "--feature", "900", "--task", "T01"]) == 0
     assert f"- [ ] T01 the work; carried by the claims gate (385 FR-013): {k} [lands-open]" in (d / "tasks.md").read_text()
-    assert cx.gate(root)[0] == []
+    assert cx.gate(root)[0] == [f"open (DRIFTED): {k} -  - fix it or its claim here: `make claims-bundle UNITS=\"{k}\"`"], "filed into T01, still open at clean"
     assert cx.main(["--root", str(root), "carry", "--feature", "900", "--task", "T02"]) == 0  # nothing unfiled
 
 
@@ -440,13 +447,15 @@ def test_a_landing_with_no_engine_code_files_its_carries_into_the_claims_feature
         f"- [ ] T02 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: {k} [lands-open]"
         in (claims / "tasks.md").read_text()
     )
-    assert cx.gate(root) == ([], [f"carried (405-claims T02): DRIFTED        {k} - "])
+    assert cx.gate(root) == ([f"open (DRIFTED): {k} -  - fix it or its claim here: `make claims-bundle UNITS=\"{k}\"`"], [f"carried (405-claims T02): DRIFTED        {k} - "]), (
+        "filed, still open at clean"
+    )
     # "engine code" is l7r.diagram.ci.delta's: a comment-only edit to engine Python, or a file of the ci package, is none
     rows = root / "l7r" / "diagram" / "hamletgen" / "rows.py"
     rows.write_text(rows.read_text() + "# a comment, nothing executed\n")
     (root / "l7r" / "diagram" / "ci").mkdir(parents=True, exist_ok=True)
     (root / "l7r" / "diagram" / "ci" / "x.py").write_text("x = 1\n")
-    assert cx.gate(root)[0] == [], "still filed in 405"
+    assert cx.gate(root)[0] == [f"open (DRIFTED): {k} -  - fix it or its claim here: `make claims-bundle UNITS=\"{k}\"`"], "still filed in 405 - and at clean still open"
     # a closed claims feature takes nothing: the feature being landed, as before
     open_text = (claims / "tasks.md").read_text()
     (claims / "tasks.md").write_text(open_text.replace("- [ ]", "- [x]"))
@@ -780,3 +789,86 @@ def test_a_verdict_set_off_by_a_dash_or_closed_by_a_colon_is_read_against_its_ke
     reply = "VERDICT l7r/x.py::f#a T - IN-STEP - a note\nVERDICT l7r/x.py::g#b - DRIFTED: known (417 T32): it\nVERDICT l7r/x.py::h#c IN-STEP - plain"
     verdicts, _ = cx.parse_reply(reply)
     assert verdicts == {"l7r/x.py::f#a T": ("IN-STEP", "a note"), "l7r/x.py::g#b": ("DRIFTED", "known (417 T32): it"), "l7r/x.py::h#c": ("IN-STEP", "plain")}
+
+
+# ---- the claims switch (feature 445) ----------------------------------------------------------------------------------------
+
+
+def test_at_report_a_finding_warns_files_nothing_and_an_owed_claim_or_a_form_problem_still_refuses(tmp_path: pathlib.Path) -> None:
+    """The GM 2026-10-28: "basically ignore claims so long as they are properly marked and show up in the claims report"."""
+    root = _repo(tmp_path, claims="report")
+    assert cc.claims_mode(root) == "report"
+    assert any(r.startswith("owed (new)") for r in cx.gate(root)[0]), "an owed claim is the marking: it still refuses"
+    cx.save_index(root / cx.INDEX, _all_in_step(root))
+    d = _active(root)
+    _commit(root, "base")
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    idx = cx.load_index(root / cx.INDEX)
+    idx[k]["verdict"] = "DRIFTED"
+    cx.save_index(root / cx.INDEX, idx)
+    refuse, warn = cx.gate(root)
+    assert refuse == [] and any(w.startswith("carry: ") and k in w for w in warn), "a carried finding warns"
+    before = (d / "tasks.md").read_text()
+    assert cx.main(["--root", str(root), "carry", "--feature", "900"]) == 2, "make claims-carry refuses at report"
+    assert (d / "tasks.md").read_text() == before and not (d / cc.RECORD).exists(), "and files nothing"
+    (root / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(MOD.replace("x * SHARE", "x * SHARE + 1"))
+    cur = cx.current(root)
+    idx[k] |= {"code": cur[k].code, "core": cur[k].unit.core}
+    cx.save_index(root / cx.INDEX, idx)
+    refuse, warn = cx.gate(root)
+    assert refuse == [] and f"introduced: DRIFTED        {k} - " in warn, "an introduced finding warns"
+    assert cc.record_known(cx, root) == [], "no known-drift row is written for the GM's review"
+    cx._git(root, "update-ref", "refs/remotes/origin/main", "HEAD")
+    (root / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(MOD.replace("Research: plumbing - NONE", f"Research: plumbing - CONVENTION {Q}"))
+    _commit(root, "a malformed claim")
+    assert any("the claims grammar:" in r for r in cx.gate(root)[0]), "a form problem still refuses"
+
+
+def test_at_report_a_known_drift_warns(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    root = _repo(tmp_path, claims="report")
+    cx.save_index(root / cx.INDEX, _all_in_step(root))
+    _commit(root, "base")
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    idx = cx.load_index(root / cx.INDEX)
+    idx[k]["verdict"] = "DRIFTED"
+    (root / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(MOD.replace("x * SHARE", "x * SHARE + 1"))
+    cur = cx.current(root)
+    idx[k] |= {"code": cur[k].code, "core": cur[k].unit.core}
+    cx.save_index(root / cx.INDEX, idx)
+    monkeypatch.setattr(cc, "known_drifts", lambda cx_, root_: {k: "417 T33"})
+    refuse, warn = cx.gate(root)
+    assert refuse == [] and any(w.startswith("known: ") for w in warn)
+
+
+def test_at_clean_a_deferred_finding_passes(tmp_path: pathlib.Path) -> None:
+    root = _repo(tmp_path, claims="clean")
+    cx.save_index(root / cx.INDEX, _all_in_step(root))
+    _commit(root, "base")
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    idx = cx.load_index(root / cx.INDEX)
+    idx[k]["verdict"] = "DRIFTED"
+    cx.save_index(root / cx.INDEX, idx)
+    (root / cx.DEFERRED).write_text(json.dumps({"keys": [k]}))
+    refuse, _warn = cx.gate(root)
+    assert not [r for r in refuse if r.startswith("open ")], "a DEFERRED finding - here a carried one - is no open finding"
+    assert cx.open_findings(cx.live_rows(cx.current(root), cx.load_index(root / cx.INDEX)), cx.load_deferred(root / cx.DEFERRED)) == []
+    (root / cx.DEFERRED).unlink()
+    assert any(k in r for r in cx.gate(root)[0]), "undeferred, it refuses at clean (named once, as the carry it is)"
+
+
+def test_the_switch_reads_absent_as_report_and_malformed_as_clean(tmp_path: pathlib.Path) -> None:
+    assert cc.claims_mode(tmp_path) == "report"
+    (tmp_path / "dev").mkdir()
+    (tmp_path / "dev" / "switches.json").write_text(json.dumps({"remote": {"state": "on"}}))
+    assert cc.claims_mode(tmp_path) == "report"
+    for body in ("not json", "[1]", json.dumps({"claims": {"state": "lax"}}), json.dumps({"claims": "clean"})):
+        (tmp_path / "dev" / "switches.json").write_text(body)
+        assert cc.claims_mode(tmp_path) == "clean", body
+
+
+def test_open_findings_lists_findings_only_and_none_deferred() -> None:
+    """An UNRESEARCHED claim carries a verdict like any other (IN-STEP once checked): it is the open research, never an open
+    finding, so `clean` does not refuse it; a DEFERRED one is counted and not listed."""
+    rows = {"a.py::f#x": {"verdict": "IN-STEP"}, "a.py::g#y": {"verdict": "DRIFTED", "note": "n"}, "b.py::h#z": {"verdict": "MISLABELED"}}
+    assert cx.open_findings(rows, frozenset()) == [("DRIFTED", "a.py::g#y", "n"), ("MISLABELED", "b.py::h#z", "")]
+    assert cx.open_findings(rows, frozenset({"b.py::h"})) == [("DRIFTED", "a.py::g#y", "n")], "a deferred unit's finding"

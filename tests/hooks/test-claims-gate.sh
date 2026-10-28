@@ -53,7 +53,8 @@ PY
 g add -A; g commit -q -m base
 
 # a finding on unchanged code against an IN-STEP base (a re-judgment): a CARRY, refused until filed, the tip naming the command
-# (feature 385 FR-013, the GM 2026-10-17: "Yes, please lock in option three.")
+# (feature 385 FR-013, the GM 2026-10-17: "Yes, please lock in option three.") - with the claims switch at `clean` (feature 445)
+printf '{"claims": {"state": "clean"}}' > "$S/dev/switches.json"
 python3 - "$S/dev/claims-index.json" <<'PY'
 import json, sys
 p = sys.argv[1]; d = json.load(open(p)); d["l7r/diagram/hamletgen/rows.py::far_row#dry share"]["verdict"] = "DRIFTED"
@@ -63,10 +64,19 @@ out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 1 "an unfiled carry refuses"
 case "$out" in *"carry: DRIFTED"*) ok y y "says carry" ;; *) ok n y "says carry" ;; esac
 case "$out" in *'`make claims-carry F=<n>` files it as an open'*) ok y y "names make claims-carry" ;; *) ok n y "names make claims-carry" ;; esac
 
-# the same finding at both ends: pre-existing, passes with the warning
+# ...and at `report`, the shipped state (feature 445, the GM 2026-10-28: "basically ignore claims so long as they are properly
+# marked and show up in the claims report"), the same carry passes as a warning
+printf '{"claims": {"state": "report"}}' > "$S/dev/switches.json"
+out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 0 "at report a carry passes"
+case "$out" in *"carry: DRIFTED"*) ok y y "warns the carry at report" ;; *) ok n y "warns the carry at report" ;; esac
+
+# the same finding at both ends: pre-existing, passes with the warning at report - and refuses at clean, an open finding
 g add -A; g commit -q -m drift
-out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 0 "a pre-existing finding passes"
+out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 0 "a pre-existing finding passes at report"
 case "$out" in *"pre-existing: DRIFTED"*) ok y y "warns pre-existing" ;; *) ok n y "warns pre-existing" ;; esac
+printf '{"claims": {"state": "clean"}}' > "$S/dev/switches.json"
+out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 1 "a pre-existing finding refuses at clean"
+case "$out" in *"open (DRIFTED)"*) ok y y "names the open finding" ;; *) ok n y "names the open finding" ;; esac
 
 printf 'test-claims-gate: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

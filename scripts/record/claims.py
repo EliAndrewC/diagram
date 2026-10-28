@@ -479,6 +479,14 @@ def shown(key: str, verdict: str, deferred: frozenset[str]) -> str:
     return "DEFERRED" if verdict in FINDINGS and (key in deferred or key.rsplit("#", 1)[0] in deferred) else verdict
 
 
+def open_findings(rows: Mapping[str, Mapping[str, str]], deferred: frozenset[str]) -> list[tuple[str, str, str]]:
+    """(verdict as shown, key, note) for every finding the report lists by default - each non-IN-STEP row less the DEFERRED -
+    sorted by key. ONE selection, read by `report` and by the claims gate at `clean` (feature 445, D3), so the gate refuses
+    exactly what the report lists."""
+    out = [(shown(k, v["verdict"], deferred), k, v.get("note", "")) for k, v in sorted(rows.items())]
+    return [(verdict, k, note) for verdict, k, note in out if verdict not in ("IN-STEP", "DEFERRED")]
+
+
 def report(
     cur: dict[str, Row],
     index: dict[str, dict[str, str]],
@@ -495,10 +503,13 @@ def report(
     counts = Counter(shown(k, v["verdict"], deferred) for k, v in rows.items())
     tally = ", ".join(f"{v} {counts[v]}" for v in (*VERDICTS, "DEFERRED") if counts[v]) or "no verdicts yet"
     lines = [f"claims: {len(cur)} in scope; {tally}; owed {len(due)}"]
-    for key, v in sorted(rows.items()):
-        verdict = shown(key, v["verdict"], deferred)
-        if verdict != "IN-STEP" and (show_deferred or verdict != "DEFERRED"):
-            lines.append(f"  {verdict:<14} {key} - {v.get('note', '')}")
+    if show_deferred:
+        for key, v in sorted(rows.items()):
+            verdict = shown(key, v["verdict"], deferred)
+            if verdict != "IN-STEP":
+                lines.append(f"  {verdict:<14} {key} - {v.get('note', '')}")
+    else:
+        lines += [f"  {verdict:<14} {key} - {note}" for verdict, key, note in open_findings(rows, deferred)]
     if counts["DEFERRED"] and not show_deferred:
         lines.append(f"({counts['DEFERRED']} DEFERRED findings not listed: make claims-report ALL=1 lists them)")
     unres = sorted(k for k, r in cur.items() if r.claim.backing == "UNRESEARCHED")

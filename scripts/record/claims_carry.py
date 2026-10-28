@@ -173,6 +173,8 @@ def carry(root: Path, feature: str, task: str, keys: list[str], now: str | None 
     `ruling` (feature 385 T45, D59): `keys` are findings the gate counts as introduced, which that round-arbiter ruling carried;
     it must be a `trigger` in the feature's `arbiter.jsonl`, and the record's row names it. The box and its row are written
     together, so `holding` honors the box by its id - never a box that merely cites a trigger."""
+    if claims_mode(root) == "report":
+        raise ValueError("the claims switch is at report: a carried finding is a row of `make claims-report`, filed nowhere (feature 445); `make claims-clean REASON=` when the claims are closed out")
     d = _plan_gate().resolve(feature, root)
     here, active = target(root), active_feature(root)
     if d is not None and here is not None and active is not None and d.resolve() == active.resolve():
@@ -200,6 +202,26 @@ def carry(root: Path, feature: str, task: str, keys: list[str], now: str | None 
     return f"claims-carry: {len(keys)} finding(s) filed into {d.name} {task}; commit tasks.md and {RECORD} with the landing"
 
 
+#: the claims switch's file and its states (feature 445; `l7r/diagram/switches.py` writes it, `make claims-report-only` /
+#: `make claims-clean` throw it) - read here without importing the engine package, as the scripts do
+SWITCHES = Path("dev") / "switches.json"
+CLAIMS_STATES = ("report", "clean")
+
+
+def claims_mode(root: Path) -> str:
+    """The claims switch: `report` (absent, or no `claims` entry - the shipped state) or `clean`; a malformed file or entry closes
+    to `clean`, the strict state, as `switches.read` does."""
+    path = root / SWITCHES
+    if not path.is_file():
+        return "report"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        state = (data.get("claims") or {"state": "report"}).get("state") if isinstance(data, dict) else None
+    except (ValueError, AttributeError):
+        return "clean"
+    return state if state in CLAIMS_STATES else "clean"
+
+
 def gate(cx: Any, root: Path) -> tuple[list[str], list[str]]:  # noqa: ANN401 - `cx` is the claims module, passed to avoid a cycle
     """(refusals, warnings) for the push: owed units, introduced findings and carried ones not yet filed (FR-013, D28);
     pre-existing and filed carried findings warn."""
@@ -220,7 +242,22 @@ def gate(cx: Any, root: Path) -> tuple[list[str], list[str]]:  # noqa: ANN401 - 
     unfiled = [f"carry: {line} - a finding on code the change left unchanged: file it with {how} (make land files it itself)" for k, line in carried if k not in done]
     warn = [f"carried ({d.name if d else ''} {done[k]}): {line}" for k, line in carried if k in done]
     unknown = [f"known: {x} - a known drift ({known[_key_of(x)]}) to record for the GM: `make claims-known` (make land runs it)" for x in unrecorded]
-    return refuse + [f"introduced: {x}" for x in intro] + unfiled + unknown, [f"pre-existing: {x}" for x in pre] + warn
+    flagged = [f"introduced: {x}" for x in intro] + unfiled + unknown
+    if claims_mode(root) == "report":
+        # THE SWITCH AT REPORT (feature 445, the GM 2026-10-28: "basically ignore claims so long as they are properly marked and
+        # show up in the claims report"): an owed claim still refuses - it is the marking - and every finding is a warning, a row
+        # of `make claims-report`; no carry is filed and no known drift recorded (`carry` refuses, `record_known` finds none)
+        return refuse, flagged + [f"pre-existing: {x}" for x in pre] + warn
+    # ...AND AT CLEAN, "every time a feature lands, there are no open claims": every finding the report lists refuses too
+    index = cx.load_index(root / cx.INDEX)
+    rows = cx.live_rows(cx.current(root), index)
+    named = {_key_of(x) for x in intro} | {k for k, _line in carried} | {_key_of(x) for x in revealed}  # each finding refused once
+    listed = [
+        f"open ({v}): {k} - {note[:160]} - fix it or its claim here: `make claims-bundle UNITS=\"{k}\"`"
+        for v, k, note in cx.open_findings(rows, cx.load_deferred(root / cx.DEFERRED))
+        if k not in named or k in done
+    ]
+    return refuse + flagged + listed, [f"pre-existing: {x}" for x in pre] + warn
 
 
 #: the kind of a gm-review.jsonl row that records an admitted known drift (feature 430 D6)
@@ -280,7 +317,7 @@ ACCEPTED = "a known drift accepted by the round arbiter"
 
 def _key_of(line: str) -> str:
     """The claim key a classified line (`f"{verdict:<14} {key} - {note}"`) names."""
-    return line[14:].strip().split(" - ", 1)[0].strip()
+    return line[14:].split(" - ", 1)[0].strip()  # split before stripping: a line with no note ends in " - " (`key -` otherwise)
 
 
 def known_drifts(cx: Any, root: Path) -> dict[str, str]:  # noqa: ANN401 - `cx` is the claims module

@@ -322,6 +322,52 @@
      "why": "Restates FR-006/D5 (guards.md, the gate's message, CLAUDE.md naming the switch and its state). The green exit's shorter wording ('name the switch') does not narrow the cited constraint, which item 1 and FR-006 both carry with its state. Ordering and the feature-report done line are process, not scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T02 - the gate at `report` and `clean` (D2, D3)",
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02-scope",
+     "summary": "T02 builds claims_mode, gate's two modes, open_findings shared by gate and report, and file_carries/carry at report",
+     "class": "within",
+     "why": "Exactly D2 and D3 as accepted (FR-002, FR-003); the GM asked to build the check he wants (clean) and disable it (report)."
+    },
+    {
+     "id": "T02-green-report",
+     "summary": "Green at report: a fixture with introduced, carried and known findings lands with no task filed and no gm-review.jsonl row; one with an owed claim is refused",
+     "class": "within",
+     "why": "SC-002 and FR-002 verbatim; 'basically ignore claims so long as they are properly marked and show up in the claims report'. A test that fails only when the requested behavior is absent is enforcement, not scope."
+    },
+    {
+     "id": "T02-claims-carry-refusal",
+     "summary": "make claims-carry refuses at report, with a test proven to fire with the refusal deleted",
+     "class": "within",
+     "why": "D2/FR-002 settle the refusal; the deletion proof is SC-005."
+    },
+    {
+     "id": "T02-green-clean",
+     "summary": "Green at clean: a fixture whose report lists an open finding is refused; one whose only findings are DEFERRED (a DEFERRED carried one among them) passes",
+     "class": "within",
+     "why": "SC-003 and FR-003, which already except DEFERRED; this is the GM's long-run ruling 'every time a feature lands, there are no open claims'. Adds no exception beyond the spec's."
+    },
+    {
+     "id": "T02-red-exit",
+     "summary": "Red: record what failed, set the task down, a cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Process for failure; narrows nothing the GM asked."
+    },
+    {
+     "id": "T02-order-budget-done",
+     "summary": "After T01; one landing; done when a landing at report passes with findings warned and none filed",
+     "class": "within",
+     "why": "Sequencing and a measure restating FR-002; no change to what is delivered."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -371,6 +417,50 @@
      "summary": "on failure: recorded and set down, a claim it cannot be done goes to make arbiter-ask",
      "class": "within",
      "why": "procedure for a failed task; narrows nothing asked and drops no requirement - an impossibility claim goes to the arbiter rather than being decided by the session"
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T02": {
+   "section_sha256": "886e89af6e6be25ab3a5af1fc4cf2334eb4f3844ce0c494f88cb1958a8bb9190",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T02-scope",
+     "summary": "T02 builds claims_mode, gate's two modes, open_findings shared by gate and report, and file_carries/carry at report",
+     "class": "within",
+     "why": "Exactly D2 and D3 as accepted (FR-002, FR-003); the GM asked to build the check he wants (clean) and disable it (report)."
+    },
+    {
+     "id": "T02-green-report",
+     "summary": "Green at report: a fixture with introduced, carried and known findings lands with no task filed and no gm-review.jsonl row; one with an owed claim is refused",
+     "class": "within",
+     "why": "SC-002 and FR-002 verbatim; 'basically ignore claims so long as they are properly marked and show up in the claims report'. A test that fails only when the requested behavior is absent is enforcement, not scope."
+    },
+    {
+     "id": "T02-claims-carry-refusal",
+     "summary": "make claims-carry refuses at report, with a test proven to fire with the refusal deleted",
+     "class": "within",
+     "why": "D2/FR-002 settle the refusal; the deletion proof is SC-005."
+    },
+    {
+     "id": "T02-green-clean",
+     "summary": "Green at clean: a fixture whose report lists an open finding is refused; one whose only findings are DEFERRED (a DEFERRED carried one among them) passes",
+     "class": "within",
+     "why": "SC-003 and FR-003, which already except DEFERRED; this is the GM's long-run ruling 'every time a feature lands, there are no open claims'. Adds no exception beyond the spec's."
+    },
+    {
+     "id": "T02-red-exit",
+     "summary": "Red: record what failed, set the task down, a cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Process for failure; narrows nothing the GM asked."
+    },
+    {
+     "id": "T02-order-budget-done",
+     "summary": "After T01; one landing; done when a landing at report passes with findings warned and none filed",
+     "class": "within",
+     "why": "Sequencing and a measure restating FR-002; no change to what is delivered."
     }
    ],
    "verdict": "CLEAR"
