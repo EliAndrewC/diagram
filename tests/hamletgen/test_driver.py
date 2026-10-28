@@ -399,3 +399,55 @@ def test_a_refused_roll_keeps_its_manifest_and_names_it(monkeypatch, tmp_path) -
     path = str(got.value).rsplit(": ", 1)[1].rstrip(")")
     assert json.loads(Path(path).read_text(encoding="utf-8"))["lanes"] == [{"pts": [[1.0, 2.0], [3.0, 4.0]]}]
     assert "/Odd-name-" in driver.keep_refused({"a": 1}, "Odd name") and "/hamlet-" in driver.keep_refused({}, "")
+
+
+def test_the_stage_loop_attributes_the_counted_work_to_each_stage(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 443 D3: `_run_stages` copies the counts before each stage and keeps the difference under the stage's name; a
+    stage that counts nothing is kept empty. Stand-in stages and settlement, no roll (`roll_scope` itself is the census's)."""
+    import contextlib
+    import types
+
+    from l7r.diagram import work_counts
+    from l7r.diagram.hamletgen import driver
+    from l7r.diagram.settlement._geom.primitives import point_in_poly
+
+    ring = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
+
+    def stage_tests(s, plan):  # type: ignore[no-untyped-def]
+        point_in_poly(5.0, 5.0, ring)
+        point_in_poly(50.0, 5.0, ring)
+
+    def stage_idle(s, plan):  # type: ignore[no-untyped-def]
+        pass
+
+    resyncs: list[bool] = []
+    s = types.SimpleNamespace(standing=types.SimpleNamespace(resync=lambda: resyncs.append(True)))
+    monkeypatch.setattr(driver, "STAGES", (stage_tests, stage_idle))
+    monkeypatch.setattr(driver, "roll_scope", lambda spec=None: contextlib.nullcontext())
+    monkeypatch.delenv(driver.STAGE_PROFILE_ENV, raising=False)
+    work_counts.OPS["dist@stale"] += 7  # a previous roll's count: cleared at the start
+    driver._run_stages(s, types.SimpleNamespace(spec=None))  # type: ignore[arg-type]
+    assert work_counts.BY_STAGE == {"tests": {"pt_test@point_in_poly": 2}, "idle": {}} and resyncs == [True, True]
+    assert "dist@stale" not in work_counts.OPS
+
+
+def test_the_profiled_stage_loop_prints_where_the_time_went(monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
+    """Feature 151 US4's printing branch, reached without a roll (feature 443 changed the module, so its lines are asked again)."""
+    import contextlib
+    import types
+
+    from l7r.diagram.hamletgen import driver
+
+    def stage_slow(s, plan):  # type: ignore[no-untyped-def]
+        driver.time.sleep(0.06)
+
+    def stage_fast(s, plan):  # type: ignore[no-untyped-def]
+        pass
+
+    s = types.SimpleNamespace(standing=types.SimpleNamespace(resync=lambda: None))
+    monkeypatch.setattr(driver, "STAGES", (stage_slow, stage_fast))
+    monkeypatch.setattr(driver, "roll_scope", lambda spec=None: contextlib.nullcontext())
+    monkeypatch.setenv(driver.STAGE_PROFILE_ENV, "1")
+    driver._run_stages(s, types.SimpleNamespace(spec=types.SimpleNamespace(name="Stub", seed=3)))  # type: ignore[arg-type]
+    err = capsys.readouterr().err
+    assert "stage profile" in err and "Stub seed 3" in err and "slowest stage_slow" in err and "stage_fast" not in err.split("slowest")[1].split("\n", 1)[1]
