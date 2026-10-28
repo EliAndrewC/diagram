@@ -211,3 +211,22 @@ def test_every_index_has_its_own_row_and_every_px_its_ft(tmp_path: Path, edit, w
     rc, msg = wbb.budget_bundle(REPO, "x", str(tmp_path / "d.md"), tmp_path / "out")
     assert rc == 1 and why in msg, msg
     assert wbb.index_problems("A 30 px (30 ft) corridor.") == [], "a px figure with its ft passes"
+
+
+def test_every_earlier_finding_is_answered_before_the_bundle_builds(tmp_path: Path) -> None:
+    """The round arbiter's tooling fix on ask:444-T02-field-round-8: a finding left open under one verdict's "Also" came back as the
+    next verdict's headline (field verdict-5 to verdict-7). Each finding of each earlier verdict is answered - fixed or disputed with
+    its reason - or the bundle is refused; the earlier verdicts travel in the bundle for the judge to confirm."""
+    d = tmp_path / "x.derivation.md"
+    d.write_text((FIX / "grid-placer" / "derivation.md").read_text(encoding="utf-8"))
+    (tmp_path / "x.verdict-1.txt").write_text("UNDERIVED - the first thing.\n\n(Also: a second thing; a third thing.)\n")
+    assert wbb.findings_of((tmp_path / "x.verdict-1.txt").read_text()) == ["UNDERIVED - the first thing.", "a second thing", "a third thing"]
+    rc, msg = wbb.budget_bundle(REPO, "x", str(d), tmp_path / "out")
+    assert rc == 1 and msg.count("unanswered") == 3, msg
+    d.write_text(d.read_text() + "\n## Earlier findings\n\n- verdict-1, finding 1: fixed - done\n- verdict-1, finding 2: disputed - because\n")
+    rc, msg = wbb.budget_bundle(REPO, "x", str(d), tmp_path / "out")
+    assert rc == 1 and "verdict-1, finding 3 unanswered" in msg and "finding 2 unanswered" not in msg
+    d.write_text(d.read_text() + "- verdict-1, finding 3: fixed - also done\n")
+    rc, manifest = wbb.budget_bundle(REPO, "x", str(d), tmp_path / "out")
+    assert rc == 0 and (tmp_path / "out" / "x.verdict-1.txt").is_file(), "the earlier verdict travels in the bundle"
+    assert wbb.findings_of("") == []

@@ -201,6 +201,34 @@ def refusals(text: str) -> list[str]:
     return [f"{why}: `{m.group(0).strip()[:60]}`" for pat, why in FORBIDDEN if (m := pat.search(text))]
 
 
+ANSWERS = re.compile(r"^## Earlier findings\b(.*?)(?=^## |\Z)", re.M | re.S)
+_ANSWER = re.compile(r"^-\s*verdict-(\d+),\s*finding\s+(\d+):\s*(fixed|disputed)\b\s*-\s*\S", re.M | re.I)
+
+
+def findings_of(text: str) -> list[str]:
+    """A recorded verdict's findings: its headline, then each `;`-separated item of its `(Also: ...)` note."""
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    if not lines:
+        return []
+    also = re.search(r"\(Also:\s*(.*?)\)\s*$", text, re.S)
+    return [lines[0]] + ([a.strip() for a in also.group(1).split(";") if a.strip()] if also else [])
+
+
+def answer_problems(src: Path, text: str) -> list[str]:
+    """EVERY EARLIER FINDING ANSWERED (the round arbiter's tooling fix on ask:444-T02-field-round-8: a finding left open under one
+    verdict's "Also" came back as the next verdict's headline): each finding of each earlier verdict recorded beside the derivation
+    (`<stage>.verdict-<N>.txt`) has a line in `## Earlier findings`, `- verdict-<N>, finding <K>: fixed - ...` or `disputed - ...`."""
+    stage = src.name.removesuffix(".derivation.md")
+    have = {(int(m.group(1)), int(m.group(2))) for m in _ANSWER.finditer(sec.group(1))} if (sec := ANSWERS.search(text)) else set()
+    out = []
+    for v in sorted(src.parent.glob(f"{stage}.verdict-*.txt"), key=lambda p: int(re.sub(r"\D", "", p.name.rsplit("-", 1)[1]) or 0)):
+        n = int(re.sub(r"\D", "", v.name.rsplit("-", 1)[1]))
+        for k, f in enumerate(findings_of(v.read_text(encoding="utf-8")), 1):
+            if (n, k) not in have:
+                out.append(f"`## Earlier findings`: verdict-{n}, finding {k} unanswered - `- verdict-{n}, finding {k}: fixed - <how>` or `disputed - <why>` ({f[:80]})")
+    return out
+
+
 def budget_bundle(root: Path, phase: str, derivation: str, out: Path) -> tuple[int, str]:
     src = root / derivation
     if not src.is_file():
@@ -211,18 +239,21 @@ def budget_bundle(root: Path, phase: str, derivation: str, out: Path) -> tuple[i
     contract = CONTRACT.search(text)
     if contract is None:
         return 1, "work-budget-bundle: REFUSED - the derivation has no `## Contract` section (what the stage reads and writes)"
-    if short := form_problems(text):
+    if short := form_problems(text) + answer_problems(src, text):
         return 1, f"work-budget-bundle: REFUSED - the derivation is short of the template's fields ({TEMPLATE}):\n" + "\n".join(f"  {b}" for b in short)
     out.mkdir(parents=True, exist_ok=True)
     (out / "derivation.md").write_text(text, encoding="utf-8")
     (out / "contract.md").write_text(contract.group(0), encoding="utf-8")
+    for v in sorted(src.parent.glob(f"{src.name.removesuffix('.derivation.md')}.verdict-*.txt")):  # the earlier verdicts, for the judge to confirm each closed
+        shutil.copy(v, out / v.name)
     shutil.copy(root / RUBRIC, out / "rubric.md")
     (out / "MANIFEST.md").write_text(
         f"# work-budget MODE BUDGET - {phase}\n\n"
         "MODE BUDGET: judge the derivation before the rebuild. Read, beside this file:\n\n"
         "- `rubric.md` - the standards S1-S7 and the worked homestead reference;\n"
         "- `contract.md` - what the stage reads and writes;\n"
-        "- `derivation.md` - the pseudocode and the operation count, factor by factor.\n\n"
+        "- `derivation.md` - the pseudocode and the operation count, factor by factor;\n"
+        "- any `<stage>.verdict-<N>.txt` - the earlier verdicts; the derivation's `## Earlier findings` answers each - confirm each closed.\n\n"
         "The first line of your reply is the verdict: SOUND, LOOSE or UNDERIVED.\n",
         encoding="utf-8",
     )
