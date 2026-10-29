@@ -1,0 +1,32 @@
+UNDERIVED - the open region (derivation.md line 50): its keep-out inputs, namely the field box's 360 cells and their "x1.3 a doubling", the lane legs' 1,260 / 2,487 / 4,914 and the water segments' 4,089 / 5,625 / 7,755, have no source in the contract's Bounds or in the geometry, so verdict-1 finding 2 is not closed.
+
+**1. Is each factor derived?** No, not all of them.
+- **Line 50, the open region.** The marsh scanline (783 + 485, 1,638 + 534, 3,416 + 587) and the lattice seats are derived. The other inputs are not. The Bounds give no lane length, no total of water segments and no field side. The lane rate of about x1.97 and the water rate of x1.38 are also unstated. The water rate equals the registry's density rate, which suggests it was borrowed from there. A formula whose inputs have no source still leaves the figure without a reason.
+- **Same family.**
+  - Line 53, the marsh index: "about 5,300 ft of edge at 20" is not in the Bounds, which give only the ring's points.
+  - Line 37: "densest 12 segments a crossed cell" is credited to "the field's outline's measured ceiling", but it is applied to the marsh ring and it is not in the Bounds either.
+- **S1 against growth (line 73).** S1 has no "stated reason" exemption, yet the registry's neighbor bound still grows (29, 40, 55). Finding 5 is closed as an S6 reason. "No geometric ceiling" is not an argument that no per-kind index or finer index could bound it.
+- **Arithmetic.**
+  - Line 53 at 80: the formula gives 142 + 1,761 = 1,903, not 1,905.
+  - Every other row and total reproduces: 1,225,706, 2,981,626 and 7,449,685, an exponent of about 1.30.
+
+**2. Is there a standard, cheaper algorithm?** Yes, two (LOOSE-grade).
+- **Line 61, the holes' sort.** Block sizes are integers no larger than the sample count, so a counting sort costs about 2 a sample instead of log2 at 14, 15 and 16. That removes about 111k at 20 and 599k at 80.
+- **Line 61, the bare test.** Each sample is tested against its cell's 30, 41 or 56 things. The coppice row avoids exactly this by rasterizing once. The derivation's "memoizing" entry does not say why the holes do not paint the things onto the 25 ft grid. It must either use that or say why it cannot. This row is 45% of the total at 80, and it is what carries the registry's density growth.
+
+**3. Is any factor padded?** Yes, two.
+- **Line 54, the marsh raster.** It charges 13 to every sample. Line 37's own index marks cells inside, outside or crossed, and only samples in crossed cells need the 12 segments. Line 50's own method, one scanline pass of samples plus crossings at the 25 ft pitch, would give about 10,000, 20,700 and 43,600, against 120,796, 259,740 and 555,984.
+- **Line 59, the belt.** It charges "at most 2 crowns a clump", but its own source is 84 crowns on 81 clumps and 76 on 76. The measured total supports about 1.04 a clump, so the row's x2 doubles it: about 9,600 at 20 instead of 18,392.
+
+**4. Is each figure read at its source's size and unit?** Two figures are in doubt.
+- **Line 50: "x1.3 a doubling as the field's side".** This applies a side's rate to a cell count. A grown box's cells grow with its area, which would be about x1.69. Either the rate is meant for cells and the wording is wrong, or the figures at 40 and 80 are low.
+- **Line 37: the 12 segments.** They are measured on the field's outline and read as the marsh's.
+- **Line 46, a check rather than a finding.** The near-face samples in the 100 ft frame past the cluster's ends may have no fringe house in their 3 by 3 cells, which the 12 assumes.
+
+**Earlier findings.**
+- Findings 1, 3, 4, 6, 7, 8, 9 and 10 are closed.
+- Finding 5 is closed for S6, with the S1 tension noted under question 1.
+- Finding 11 is closed, but the figure it states is padded (question 3).
+- Finding 2 is not closed.
+
+The bundle is in /tmp/l7r-check/work-budget-budget-hinterland/; the derivation is /tmp/l7r-check/work-budget-budget-hinterland/derivation.md.
