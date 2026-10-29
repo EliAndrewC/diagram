@@ -42,8 +42,9 @@
 - [x] T12 The homesteads family re-derived greenfield - seat, homesteads, appurtenances, burial, lane_wells, sties, washing (FR-015, FR-016)
       research: rendering
       verify: DONE. landed: the homesteads family re-derived greenfield: homesteads 4,118 at 40 (from 243,411), appurtenances 713 (from 5,457), lane_wells 292 (from 115,719), washing 1,194 (from 4,937) on the round arbiter's accepts; seat 191 and sties 138 on SOUND, each LOWER=1; burial SOUND at 77 against its pin of 3, left standing for the GM's words (FR-015)
-- [ ] T13 The ways family re-derived greenfield - track, web, crossings (FR-015, FR-016)
+- [x] T13 The ways family re-derived greenfield - track, web, crossings (FR-015, FR-016)
       research: rendering
+      verify: DONE. landed: the ways family re-derived greenfield: web 1,160 at 40 (from 91,798) on the round arbiter's accept, track 223 (from 2,090) and crossings 442 (from 7,879) on SOUND, each LOWER=1 (FR-015)
 - [ ] T14 The hinterland and frame family re-derived greenfield - hinterland, woodland, windbreak, bamboo, frame, notice, labels (FR-015, FR-016)
       research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
