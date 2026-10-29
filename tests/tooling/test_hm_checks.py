@@ -858,3 +858,7 @@ def test_a_work_budget_round_past_its_cap_or_its_accept_goes_to_the_arbiter(tmp_
     assert hc.handle("dispatch", ok, 0) == "", "the arbiter's escape"
     other = {**agent, "tool_input": {"subagent_type": "work-budget", "prompt": "MODE BUDGET: read /tmp/l7r-check/work-budget-budget-sink/MANIFEST.md"}}
     assert hc.handle("dispatch", other, 0) == "", "another stage is its own count"
+    with arb.open("a") as fh:
+        fh.write(json.dumps({"trigger": "ask:375-spec-round-3", "ruling": "accept", "what": "the track and the sink stand", "utc": stamp}) + "\n")
+    track = {**agent, "tool_input": {"subagent_type": "work-budget", "prompt": "MODE BUDGET: read /tmp/l7r-check/work-budget-budget-track/MANIFEST.md"}}
+    assert hc.handle("dispatch", track, 0) == "", "a stage named only in a ruling's prose is not that ruling's: its trigger names it"
