@@ -1,0 +1,3 @@
+UNDERIVED - the back lanes' cross-lane length: each cross lane set at R / 2 gaps and called the cluster's middle depth from the field's edge, but the measured span (9 by 6, 12 by 9, 16 by 12) puts half the depth at 3, 4.5 and 6 gaps, so R / 2 matches neither axis.
+
+(Also: the way said to go round its beds by the layout's path but charged as 3 points and two straight legs; the back lanes counted whole though some lie on the tree; the halves 51 and 84 against 50 and 83; the Indexes line still carrying the dooryard leg's 1.5; the slack of 1 though the back-lane knob and the share reached across vary around their means.)

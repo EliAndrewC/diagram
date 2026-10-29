@@ -216,16 +216,12 @@
   "crossings": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.7,
-   "derivation": "specs/444-work-budget-program/phases/crossings.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch",
-   "items_at_20": 4899,
-   "items_at_40": 7879,
-   "items_at_80": 13113,
-   "pinned_on": "accept",
-   "derivation_sha": "a7fe899628b8a57b2e5c39d7e667ee720f274255dda62b442c3c9c9eda844a24",
-   "rounds": 4,
-   "spread": "4,899-34,306 at 20"
+   "exponent": 0.31,
+   "derivation": "specs/444-work-budget-program/phases/crossings_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/crossings_greenfield.verdict-2.txt",
+   "items_at_20": 355,
+   "items_at_40": 442,
+   "items_at_80": 549
   },
   "sties": {
    "status": "budgeted",

@@ -31,3 +31,4 @@
 {"date": "2026-10-29", "what": "lowered", "phase": "sties", "from": {"20": 3056.0, "40": 6110.0, "80": 12219.0}, "to": {"20": 70.0, "40": 138.0, "80": 274.0}, "verdict": "specs/444-work-budget-program/phases/sties_greenfield.verdict-1.txt"}
 {"date": "2026-10-29", "what": "lowered", "phase": "washing", "from": {"20": 2463.0, "40": 4937.0, "80": 10053.0}, "to": {"20": 598.0, "40": 1194.0, "80": 2386.0}, "verdict": "ask:444-T12-washing_greenfield-round-3"}
 {"date": "2026-10-29", "what": "lowered", "phase": "track", "from": {"20": 1440.0, "40": 2090.0, "80": 3028.0}, "to": {"20": 157.0, "40": 223.0, "80": 321.0}, "verdict": "specs/444-work-budget-program/phases/track_greenfield.verdict-2.txt"}
+{"date": "2026-10-29", "what": "lowered", "phase": "crossings", "from": {"20": 4899.0, "40": 7879.0, "80": 13113.0}, "to": {"20": 355.0, "40": 442.0, "80": 549.0}, "verdict": "specs/444-work-budget-program/phases/crossings_greenfield.verdict-2.txt"}
