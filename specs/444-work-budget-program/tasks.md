@@ -49,6 +49,12 @@
 - [x] T14 The hinterland and frame family re-derived greenfield - hinterland, woodland, windbreak, bamboo, frame, notice, labels (FR-015, FR-016)
       research: rendering
       verify: DONE. landed: the hinterland and frame family re-derived greenfield: hinterland 19,058 at 40 (from 784,872), notice 1,160 (from 16,884), frame 637 (from 7,826) on the round arbiter's accepts; windbreak 3,183 (from 71,854), woodland 5 (from 12,516), labels 6 on SOUND, each LOWER=1; bamboo SOUND at 288 against its pin of 252, left standing for the GM's words (FR-015)
+- [ ] T15 phase: water_frame - the plan's rolls counted where they happen, through the checklist (FR-003-FR-005)
+      research: rendering
+      phase: water_frame
+- [ ] T16 phase: field - the comb field rebuilt to its greenfield derivation, through the checklist (FR-003-FR-006)
+      research: rendering
+      phase: field
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

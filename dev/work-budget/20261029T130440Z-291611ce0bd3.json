@@ -1,0 +1,1265 @@
+{
+ "meta": {
+  "code_id": "291611ce0bd3",
+  "commit": "2c0cd6f8d",
+  "refused": [],
+  "seeds": [
+   25
+  ],
+  "sizes": [
+   20,
+   40
+  ],
+  "utc": "2026-10-29T13:04:40Z"
+ },
+ "rows": [
+  {
+   "households": 20,
+   "refused": null,
+   "seed": 25,
+   "stages": {
+    "appurtenances": {
+     "calls": 114316,
+     "ops": {
+      "candidate@Standing.conflicts": 387,
+      "candidate@_fits": 17,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 330,
+      "dist@seg_closest": 24675,
+      "dist@seg_dists": 18575,
+      "index_examined@PointGrid.near": 156,
+      "index_examined@Standing.conflicts": 1721,
+      "index_query@PointGrid.near": 972,
+      "index_query@RingIndex.inside_many": 3861,
+      "placed@Standing.record": 92,
+      "pt_test@point_in_poly": 2035,
+      "pt_test@points_in_poly": 608,
+      "seg_test@chain_violated": 850,
+      "seg_test@segments_cross": 7087
+     },
+     "placed": 143,
+     "seconds": 0.079
+    },
+    "bamboo": {
+     "calls": 228,
+     "ops": {
+      "pt_test@point_in_poly": 59
+     },
+     "placed": 7,
+     "seconds": 0.001
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "crossings": {
+     "calls": 21175,
+     "ops": {
+      "candidate@Standing.conflicts": 18,
+      "dist@seg_closest": 5054,
+      "index_examined@PointGrid.near": 765,
+      "index_examined@Standing.conflicts": 90,
+      "index_query@PointGrid.near": 415,
+      "placed@Standing.record": 9,
+      "pt_test@point_in_poly": 2376,
+      "seg_test@segments_cross": 80
+     },
+     "placed": 9,
+     "seconds": 0.011
+    },
+    "field": {
+     "calls": 1056006,
+     "ops": {
+      "candidate@Standing.conflicts": 83,
+      "candidate@_bund_beans": 831,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 30,
+      "candidate@_paddy_features": 2,
+      "candidate@_pond_fit": 9,
+      "candidate@_refused": 27,
+      "candidate@_roll": 1,
+      "candidate@_split_steps": 6,
+      "candidate@bead_drowned": 831,
+      "candidate@bend_at": 1,
+      "candidate@clear_of_field": 107,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 5485,
+      "dist@_seg_dist": 19660,
+      "dist@seg_closest": 799,
+      "index_examined@PointGrid.near": 2991,
+      "index_examined@Standing.conflicts": 5271,
+      "index_query@PointGrid.near": 2141,
+      "placed@Standing.record": 41,
+      "pt_test@_pip": 790,
+      "pt_test@point_in_poly": 2440,
+      "seg_test@ring_meets_ellipse": 10,
+      "seg_test@segments_cross": 7969
+     },
+     "placed": 236,
+     "seconds": 1.104
+    },
+    "frame": {
+     "calls": 232,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_query@PointGrid.near": 1
+     },
+     "placed": 12,
+     "seconds": 0.006
+    },
+    "hinterland": {
+     "calls": 486458,
+     "ops": {
+      "candidate@Standing.conflicts": 14,
+      "candidate@_box_clear": 40,
+      "candidate@_crosses_fabric": 1,
+      "candidate@_crown_covers": 895,
+      "candidate@_crown_seat_clear": 224,
+      "candidate@_flexible_clear": 18,
+      "candidate@_roll": 1,
+      "candidate@belt_polygon": 2,
+      "candidate@close_belt_gaps": 6472,
+      "candidate@open_ground_patches._ok": 1400,
+      "candidate@over_a_fixture": 120,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 1713,
+      "candidate@strip_refused": 487,
+      "dist@seg_closest": 5335,
+      "index_examined@PointGrid.near": 97759,
+      "index_examined@RingIndex.inside": 74965,
+      "index_examined@RingIndex.inside_many": 2129127,
+      "index_examined@Standing.conflicts": 107,
+      "index_query@PointGrid.near": 21140,
+      "index_query@RingIndex.inside": 5562,
+      "index_query@RingIndex.inside_many": 24988,
+      "placed@Standing.record": 8,
+      "pt_test@point_in_poly": 1563,
+      "seg_test@segments_cross": 7175
+     },
+     "placed": 1055,
+     "seconds": 0.594
+    },
+    "homesteads": {
+     "calls": 2484888,
+     "ops": {
+      "candidate@AccessTree.lay": 56,
+      "candidate@SeatRegion.offer": 29588,
+      "candidate@Standing.conflicts": 1048,
+      "candidate@WoodShares.share": 4788,
+      "candidate@_crosses_fabric": 9377,
+      "candidate@_filled_lattice": 38,
+      "candidate@_first_admitted": 125,
+      "candidate@_lay_by_hand": 614,
+      "candidate@_place_bundle_nucleated": 316,
+      "candidate@_roll": 1,
+      "candidate@_way_for": 123,
+      "candidate@clears": 21567,
+      "candidate@connector_track": 54,
+      "candidate@fixtures_clear": 2829,
+      "candidate@fouled_segment": 214,
+      "candidate@house_hit": 335,
+      "candidate@in_dooryard": 4683,
+      "candidate@offer_seats": 2,
+      "candidate@pull_clear": 2,
+      "candidate@route_around": 1,
+      "candidate@search": 1295,
+      "candidate@taut": 444,
+      "candidate@trace": 1201,
+      "candidate@way_out": 4987,
+      "dist@box_gap": 6678,
+      "dist@seg_closest": 308869,
+      "dist@seg_dists": 15810,
+      "dropped@Standing.forget": 20,
+      "index_examined@FabricIndex.fouled": 143,
+      "index_examined@PointGrid.near": 63476,
+      "index_examined@RingIndex.inside": 2763,
+      "index_examined@Standing.conflicts": 1378,
+      "index_query@FabricIndex.fouled": 334,
+      "index_query@PointGrid.near": 20469,
+      "index_query@RingIndex.inside": 116,
+      "placed@Standing.record": 88,
+      "pt_test@point_in_poly": 22251,
+      "seg_test@chain_violated": 3436,
+      "seg_test@chain_violated_many": 11610,
+      "seg_test@free_end": 9596,
+      "seg_test@segments_cross": 59263
+     },
+     "placed": 495,
+     "seconds": 1.409
+    },
+    "labels": {
+     "calls": 7612,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.005
+    },
+    "lane_wells": {
+     "calls": 129197,
+     "ops": {
+      "candidate@Standing.conflicts": 629,
+      "candidate@_fits": 149,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 3499,
+      "dist@seg_closest": 19199,
+      "dist@seg_dists": 47184,
+      "index_examined@PointGrid.near": 1782,
+      "index_examined@Standing.conflicts": 3425,
+      "index_query@PointGrid.near": 2379,
+      "index_query@RingIndex.inside_many": 3861,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 1702,
+      "pt_test@points_in_poly": 1244,
+      "seg_test@chain_violated": 7287,
+      "seg_test@segments_cross": 439
+     },
+     "placed": 1,
+     "seconds": 0.141
+    },
+    "notice": {
+     "calls": 156820,
+     "ops": {
+      "candidate@Obstacles.blocked": 158,
+      "candidate@Standing.conflicts": 420,
+      "candidate@_fits": 447,
+      "candidate@_route_seats": 1268,
+      "candidate@_strict_seat": 1,
+      "dist@seg_closest": 5189,
+      "index_examined@PointGrid.near": 22285,
+      "index_examined@Standing.conflicts": 3074,
+      "index_query@PointGrid.near": 6203,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 747,
+      "seg_test@chain_violated": 22350
+     },
+     "placed": 1,
+     "seconds": 0.083
+    },
+    "pond_bank": {
+     "calls": 16,
+     "ops": {
+      "candidate@_roll": 1
+     },
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "seat": {
+     "calls": 18319,
+     "ops": {
+      "candidate@back_fouled": 77,
+      "candidate@seat_cluster": 40,
+      "dist@seg_closest": 42,
+      "index_examined@PointGrid.near": 132,
+      "index_query@PointGrid.near": 592,
+      "pt_test@point_in_poly": 4223
+     },
+     "placed": 0,
+     "seconds": 0.016
+    },
+    "sink": {
+     "calls": 98495,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 5,
+      "candidate@pond_setback": 122,
+      "dist@seg_closest": 10783,
+      "index_examined@Standing.conflicts": 56382,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 2952
+     },
+     "placed": 7,
+     "seconds": 0.035
+    },
+    "sties": {
+     "calls": 1884,
+     "ops": {
+      "candidate@Standing.conflicts": 30,
+      "candidate@against_a_part": 87,
+      "candidate@clears": 174,
+      "index_examined@Standing.conflicts": 220,
+      "placed@Standing.record": 15
+     },
+     "placed": 15,
+     "seconds": 0.004
+    },
+    "track": {
+     "calls": 449,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 78,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.001
+    },
+    "washing": {
+     "calls": 8284,
+     "ops": {
+      "candidate@Standing.conflicts": 6,
+      "candidate@_roll": 1,
+      "dist@seg_closest": 7400,
+      "index_examined@Standing.conflicts": 44,
+      "placed@Standing.record": 3
+     },
+     "placed": 3,
+     "seconds": 0.005
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {
+      "candidate@_roll": 23
+     },
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 474158,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 11,
+      "candidate@Standing.conflicts": 90,
+      "candidate@_clear_link": 181,
+      "candidate@_clear_touch": 29,
+      "candidate@_crosses_fabric": 37,
+      "candidate@_ease_corner": 23,
+      "candidate@_held": 4,
+      "candidate@_roll": 1,
+      "candidate@a_way_onto_the_bund": 36,
+      "candidate@fouled_segment": 2,
+      "candidate@house_hit": 5,
+      "candidate@lattice_search": 126936,
+      "candidate@over_a_fixture": 32,
+      "candidate@trial_count": 2,
+      "candidate@undeckable_at": 20,
+      "dist@box_gap": 4131,
+      "dist@seg_closest": 23872,
+      "dist@seg_dists": 6948,
+      "dropped@Standing.forget": 38,
+      "index_examined@FabricIndex.fouled": 81215,
+      "index_examined@PointGrid.near": 10901,
+      "index_examined@RingIndex.inside": 3901,
+      "index_examined@Standing.conflicts": 2221,
+      "index_query@FabricIndex.fouled": 24195,
+      "index_query@PointGrid.near": 14486,
+      "index_query@RingIndex.inside": 901,
+      "placed@Standing.record": 39,
+      "pt_test@point_in_poly": 284,
+      "seg_test@free_end": 5858,
+      "seg_test@seg_intersect": 39,
+      "seg_test@segments_cross": 18016,
+      "seg_test@tail_doubled": 1124
+     },
+     "placed": 19,
+     "seconds": 0.309
+    },
+    "windbreak": {
+     "calls": 269007,
+     "ops": {
+      "candidate@GroveMixin.seat": 1888,
+      "candidate@_crown_covers": 4747,
+      "candidate@_crown_seat_clear": 3784,
+      "candidate@reseat_clump": 642,
+      "dist@seg_closest": 60,
+      "index_examined@PointGrid.near": 34325,
+      "index_examined@RingIndex.inside": 21997,
+      "index_query@PointGrid.near": 16869,
+      "index_query@RingIndex.inside": 10386
+     },
+     "placed": 1759,
+     "seconds": 0.304
+    },
+    "woodland": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    }
+   }
+  },
+  {
+   "households": 40,
+   "refused": null,
+   "seed": 25,
+   "stages": {
+    "appurtenances": {
+     "calls": 78274,
+     "ops": {
+      "candidate@Standing.conflicts": 238,
+      "candidate@_fits": 5,
+      "candidate@belt_polygon": 1,
+      "candidate@clears": 2,
+      "candidate@in_dooryard": 1,
+      "candidate@seat_wells": 65,
+      "dist@seg_closest": 13905,
+      "dist@seg_dists": 49258,
+      "index_examined@PointGrid.near": 36,
+      "index_examined@Standing.conflicts": 1233,
+      "index_query@PointGrid.near": 223,
+      "index_query@RingIndex.inside_many": 11934,
+      "placed@Standing.record": 173,
+      "pt_test@point_in_poly": 966,
+      "pt_test@points_in_poly": 1466,
+      "seg_test@chain_violated": 250,
+      "seg_test@segments_cross": 2709
+     },
+     "placed": 275,
+     "seconds": 0.133
+    },
+    "bamboo": {
+     "calls": 408,
+     "ops": {
+      "pt_test@point_in_poly": 107
+     },
+     "placed": 13,
+     "seconds": 0.002
+    },
+    "burial": {
+     "calls": 8,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "crossings": {
+     "calls": 30495,
+     "ops": {
+      "candidate@Standing.conflicts": 24,
+      "dist@seg_closest": 6800,
+      "index_examined@PointGrid.near": 913,
+      "index_examined@Standing.conflicts": 138,
+      "index_query@PointGrid.near": 648,
+      "placed@Standing.record": 12,
+      "pt_test@point_in_poly": 4606,
+      "seg_test@segments_cross": 44
+     },
+     "placed": 12,
+     "seconds": 0.016
+    },
+    "field": {
+     "calls": 1215564,
+     "ops": {
+      "candidate@Standing.conflicts": 109,
+      "candidate@_bund_beans": 1649,
+      "candidate@_comb_source_channel": 1,
+      "candidate@_finish_first_admissible": 1,
+      "candidate@_fit_at_aspect": 13,
+      "candidate@_paddy_features": 2,
+      "candidate@_pond_fit": 6,
+      "candidate@_refused": 40,
+      "candidate@_roll": 1,
+      "candidate@_split_steps": 5,
+      "candidate@bead_drowned": 1649,
+      "candidate@clear_of_field": 106,
+      "candidate@draw_intake": 6,
+      "candidate@feed_brook": 1,
+      "candidate@settle_course": 2,
+      "dist@_seg_d": 12466,
+      "dist@_seg_dist": 12080,
+      "dist@seg_closest": 1410,
+      "index_examined@PointGrid.near": 3329,
+      "index_examined@Standing.conflicts": 6859,
+      "index_query@PointGrid.near": 3949,
+      "placed@Standing.record": 54,
+      "pt_test@_pip": 1097,
+      "pt_test@point_in_poly": 3098,
+      "seg_test@ring_meets_ellipse": 12,
+      "seg_test@segments_cross": 12198
+     },
+     "placed": 330,
+     "seconds": 1.309
+    },
+    "frame": {
+     "calls": 346,
+     "ops": {
+      "candidate@_box_clear": 1,
+      "index_examined@PointGrid.near": 6,
+      "index_query@PointGrid.near": 1
+     },
+     "placed": 12,
+     "seconds": 0.011
+    },
+    "hinterland": {
+     "calls": 981099,
+     "ops": {
+      "candidate@Standing.conflicts": 48,
+      "candidate@_box_clear": 53,
+      "candidate@_crosses_fabric": 9,
+      "candidate@_crown_covers": 1046,
+      "candidate@_crown_seat_clear": 53,
+      "candidate@_flexible_clear": 59,
+      "candidate@_roll": 1,
+      "candidate@belt_polygon": 2,
+      "candidate@close_belt_gaps": 11271,
+      "candidate@open_ground_patches._ok": 3096,
+      "candidate@over_a_fixture": 1032,
+      "candidate@pocket_clear_of_features": 1,
+      "candidate@reseat_clump": 2032,
+      "candidate@strip_refused": 1152,
+      "dist@seg_closest": 18760,
+      "index_examined@PointGrid.near": 135297,
+      "index_examined@RingIndex.inside": 137459,
+      "index_examined@RingIndex.inside_many": 7056054,
+      "index_examined@Standing.conflicts": 390,
+      "index_query@PointGrid.near": 35358,
+      "index_query@RingIndex.inside": 9968,
+      "index_query@RingIndex.inside_many": 55695,
+      "placed@Standing.record": 24,
+      "pt_test@point_in_poly": 3276,
+      "seg_test@segments_cross": 21839
+     },
+     "placed": 1124,
+     "seconds": 1.139
+    },
+    "homesteads": {
+     "calls": 2433956,
+     "ops": {
+      "candidate@AccessTree.lay": 90,
+      "candidate@SeatRegion.offer": 57428,
+      "candidate@Standing.conflicts": 1784,
+      "candidate@WoodShares.share": 9317,
+      "candidate@_crosses_fabric": 543,
+      "candidate@_filled_lattice": 73,
+      "candidate@_first_admitted": 121,
+      "candidate@_lay_by_hand": 1111,
+      "candidate@_place_bundle_nucleated": 688,
+      "candidate@_roll": 1,
+      "candidate@_way_for": 148,
+      "candidate@clears": 34060,
+      "candidate@connector_track": 7,
+      "candidate@fixtures_clear": 5374,
+      "candidate@fouled_segment": 261,
+      "candidate@house_hit": 422,
+      "candidate@in_dooryard": 10756,
+      "candidate@offer_seats": 2,
+      "candidate@pull_clear": 1,
+      "candidate@route_around": 1,
+      "candidate@search": 550,
+      "candidate@taut": 454,
+      "candidate@trace": 1236,
+      "candidate@undeckable_at": 1,
+      "candidate@way_out": 9457,
+      "dist@box_gap": 59354,
+      "dist@seg_closest": 103888,
+      "dist@seg_dists": 73815,
+      "dropped@Standing.forget": 40,
+      "index_examined@FabricIndex.fouled": 70,
+      "index_examined@PointGrid.near": 94472,
+      "index_examined@RingIndex.inside": 1291,
+      "index_examined@Standing.conflicts": 1773,
+      "index_query@FabricIndex.fouled": 463,
+      "index_query@PointGrid.near": 38017,
+      "index_query@RingIndex.inside": 64,
+      "placed@Standing.record": 179,
+      "pt_test@point_in_poly": 1993,
+      "seg_test@chain_violated": 5850,
+      "seg_test@chain_violated_many": 12480,
+      "seg_test@free_end": 85360,
+      "seg_test@segments_cross": 3229
+     },
+     "placed": 485,
+     "seconds": 2.439
+    },
+    "labels": {
+     "calls": 13344,
+     "ops": {},
+     "placed": 1,
+     "seconds": 0.01
+    },
+    "lane_wells": {
+     "calls": 600003,
+     "ops": {
+      "candidate@Standing.conflicts": 1709,
+      "candidate@_fits": 334,
+      "candidate@belt_polygon": 1,
+      "candidate@seat_wells": 30499,
+      "dist@seg_closest": 87216,
+      "dist@seg_dists": 106566,
+      "index_examined@PointGrid.near": 2911,
+      "index_examined@Standing.conflicts": 10297,
+      "index_query@PointGrid.near": 6201,
+      "index_query@RingIndex.inside_many": 11934,
+      "placed@Standing.record": 4,
+      "pt_test@point_in_poly": 4230,
+      "pt_test@points_in_poly": 2522,
+      "seg_test@chain_violated": 16660,
+      "seg_test@segments_cross": 918
+     },
+     "placed": 4,
+     "seconds": 0.535
+    },
+    "notice": {
+     "calls": 274987,
+     "ops": {
+      "candidate@Obstacles.blocked": 197,
+      "candidate@Standing.conflicts": 1059,
+      "candidate@_fits": 1149,
+      "candidate@_route_seats": 2574,
+      "candidate@_strict_seat": 2,
+      "dist@seg_closest": 15767,
+      "index_examined@PointGrid.near": 64596,
+      "index_examined@Standing.conflicts": 8397,
+      "index_query@PointGrid.near": 13537,
+      "placed@Standing.record": 1,
+      "pt_test@point_in_poly": 1478,
+      "seg_test@chain_violated": 57353,
+      "seg_test@segments_cross": 4
+     },
+     "placed": 1,
+     "seconds": 0.173
+    },
+    "pond_bank": {
+     "calls": 16,
+     "ops": {
+      "candidate@_roll": 1
+     },
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "pond_stock": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.001
+    },
+    "seat": {
+     "calls": 27805,
+     "ops": {
+      "candidate@back_fouled": 103,
+      "candidate@seat_cluster": 61,
+      "dist@seg_closest": 279,
+      "index_examined@PointGrid.near": 459,
+      "index_query@PointGrid.near": 800,
+      "pt_test@point_in_poly": 5724
+     },
+     "placed": 0,
+     "seconds": 0.024
+    },
+    "sink": {
+     "calls": 53784,
+     "ops": {
+      "candidate@Standing.conflicts": 8,
+      "candidate@pond_seat": 3,
+      "candidate@pond_setback": 107,
+      "dist@seg_closest": 9062,
+      "index_examined@Standing.conflicts": 23145,
+      "moved@Standing.rerecord": 1,
+      "placed@Standing.record": 2,
+      "pt_test@point_in_poly": 2592
+     },
+     "placed": 7,
+     "seconds": 0.032
+    },
+    "sties": {
+     "calls": 4072,
+     "ops": {
+      "candidate@Standing.conflicts": 60,
+      "candidate@against_a_part": 244,
+      "candidate@clears": 488,
+      "index_examined@Standing.conflicts": 578,
+      "placed@Standing.record": 30
+     },
+     "placed": 30,
+     "seconds": 0.01
+    },
+    "track": {
+     "calls": 634,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "dist@seg_closest": 52,
+      "index_examined@Standing.conflicts": 22,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.002
+    },
+    "washing": {
+     "calls": 14885,
+     "ops": {
+      "candidate@Standing.conflicts": 2,
+      "candidate@_roll": 1,
+      "dist@seg_closest": 13480,
+      "index_examined@Standing.conflicts": 30,
+      "placed@Standing.record": 1
+     },
+     "placed": 1,
+     "seconds": 0.009
+    },
+    "water_frame": {
+     "calls": 7,
+     "ops": {
+      "candidate@_roll": 23
+     },
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "waterward": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.0
+    },
+    "web": {
+     "calls": 1415076,
+     "ops": {
+      "candidate@RunOnBlocks.clear": 37,
+      "candidate@Standing.conflicts": 186,
+      "candidate@_clear_link": 205,
+      "candidate@_crosses_fabric": 127,
+      "candidate@_held": 3,
+      "candidate@_roll": 1,
+      "candidate@a_way_onto_the_bund": 82,
+      "candidate@fouled_segment": 2,
+      "candidate@house_hit": 4,
+      "candidate@lattice_search": 280664,
+      "candidate@over_a_fixture": 80,
+      "candidate@trial_count": 4,
+      "candidate@undeckable_at": 43,
+      "dist@box_gap": 19486,
+      "dist@seg_closest": 81538,
+      "dist@seg_dists": 89292,
+      "dropped@Standing.forget": 86,
+      "index_examined@FabricIndex.fouled": 153208,
+      "index_examined@PointGrid.near": 17206,
+      "index_examined@RingIndex.inside": 5322,
+      "index_examined@Standing.conflicts": 13902,
+      "index_query@FabricIndex.fouled": 50280,
+      "index_query@PointGrid.near": 19616,
+      "index_query@RingIndex.inside": 1155,
+      "placed@Standing.record": 86,
+      "pt_test@point_in_poly": 587,
+      "seg_test@free_end": 27900,
+      "seg_test@seg_intersect": 23,
+      "seg_test@segments_cross": 50809,
+      "seg_test@tail_doubled": 7102
+     },
+     "placed": 42,
+     "seconds": 0.902
+    },
+    "windbreak": {
+     "calls": 493257,
+     "ops": {
+      "candidate@GroveMixin.seat": 3574,
+      "candidate@_crown_covers": 9166,
+      "candidate@_crown_seat_clear": 6947,
+      "dist@seg_closest": 245,
+      "index_examined@PointGrid.near": 64455,
+      "index_examined@RingIndex.inside": 31560,
+      "index_query@PointGrid.near": 33464,
+      "index_query@RingIndex.inside": 15159
+     },
+     "placed": 3619,
+     "seconds": 0.66
+    },
+    "woodland": {
+     "calls": 4,
+     "ops": {},
+     "placed": 0,
+     "seconds": 0.002
+    }
+   }
+  }
+ ],
+ "summary": {
+  "sizes": [
+   20,
+   40
+  ],
+  "stages": {
+   "appurtenances": {
+    "budget_at_40": 713.0,
+    "exponent": 0.42545360706737173,
+    "per": {
+     "20": {
+      "calls": 114316.0,
+      "ops": 61275.0,
+      "placed": 143.0,
+      "seconds": 0.079
+     },
+     "40": {
+      "calls": 78274.0,
+      "ops": 82292.0,
+      "placed": 275.0,
+      "seconds": 0.133
+     }
+    },
+    "ratio": 115.41654978962131,
+    "status": "budgeted"
+   },
+   "bamboo": {
+    "budget_at_40": 288.0,
+    "exponent": 0.8588239370393046,
+    "per": {
+     "20": {
+      "calls": 228.0,
+      "ops": 59.0,
+      "placed": 7.0,
+      "seconds": 0.001
+     },
+     "40": {
+      "calls": 408.0,
+      "ops": 107.0,
+      "placed": 13.0,
+      "seconds": 0.002
+     }
+    },
+    "ratio": 0.3715277777777778,
+    "status": "budgeted"
+   },
+   "burial": {
+    "budget_at_40": 77.0,
+    "exponent": null,
+    "per": {
+     "20": {
+      "calls": 8.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     },
+     "40": {
+      "calls": 8.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     }
+    },
+    "ratio": 0.0,
+    "status": "budgeted"
+   },
+   "crossings": {
+    "budget_at_40": 442.0,
+    "exponent": 0.5823364339375754,
+    "per": {
+     "20": {
+      "calls": 21175.0,
+      "ops": 8798.0,
+      "placed": 9.0,
+      "seconds": 0.011
+     },
+     "40": {
+      "calls": 30495.0,
+      "ops": 13173.0,
+      "placed": 12.0,
+      "seconds": 0.016
+     }
+    },
+    "ratio": 29.80316742081448,
+    "status": "budgeted"
+   },
+   "field": {
+    "budget_at_40": 23988.0,
+    "exponent": 0.2798181217080012,
+    "per": {
+     "20": {
+      "calls": 1056006.0,
+      "ops": 49495.0,
+      "placed": 236.0,
+      "seconds": 1.104
+     },
+     "40": {
+      "calls": 1215564.0,
+      "ops": 60089.0,
+      "placed": 330.0,
+      "seconds": 1.309
+     }
+    },
+    "ratio": 2.5049608137402033,
+    "status": "budgeted"
+   },
+   "frame": {
+    "budget_at_40": 637.0,
+    "exponent": 1.9999999999999993,
+    "per": {
+     "20": {
+      "calls": 232.0,
+      "ops": 2.0,
+      "placed": 12.0,
+      "seconds": 0.006
+     },
+     "40": {
+      "calls": 346.0,
+      "ops": 8.0,
+      "placed": 12.0,
+      "seconds": 0.011
+     }
+    },
+    "ratio": 0.012558869701726845,
+    "status": "budgeted"
+   },
+   "hinterland": {
+    "budget_at_40": 19058.0,
+    "exponent": 1.6553051734516435,
+    "per": {
+     "20": {
+      "calls": 486458.0,
+      "ops": 2379109.0,
+      "placed": 1055.0,
+      "seconds": 0.594
+     },
+     "40": {
+      "calls": 981099.0,
+      "ops": 7493951.0,
+      "placed": 1124.0,
+      "seconds": 1.139
+     }
+    },
+    "ratio": 393.2181236226257,
+    "status": "budgeted"
+   },
+   "homesteads": {
+    "budget_at_40": 4118.0,
+    "exponent": 0.014416655163937756,
+    "per": {
+     "20": {
+      "calls": 2484888.0,
+      "ops": 609880.0,
+      "placed": 495.0,
+      "seconds": 1.409
+     },
+     "40": {
+      "calls": 2433956.0,
+      "ops": 616005.0,
+      "placed": 485.0,
+      "seconds": 2.439
+     }
+    },
+    "ratio": 149.58839242350655,
+    "status": "budgeted"
+   },
+   "labels": {
+    "budget_at_40": 6.0,
+    "exponent": null,
+    "per": {
+     "20": {
+      "calls": 7612.0,
+      "ops": 0.0,
+      "placed": 1.0,
+      "seconds": 0.005
+     },
+     "40": {
+      "calls": 13344.0,
+      "ops": 0.0,
+      "placed": 1.0,
+      "seconds": 0.01
+     }
+    },
+    "ratio": 0.0,
+    "status": "budgeted"
+   },
+   "lane_wells": {
+    "budget_at_40": 292.0,
+    "exponent": 1.6037991794076778,
+    "per": {
+     "20": {
+      "calls": 129197.0,
+      "ops": 92780.0,
+      "placed": 1.0,
+      "seconds": 0.141
+     },
+     "40": {
+      "calls": 600003.0,
+      "ops": 281998.0,
+      "placed": 4.0,
+      "seconds": 0.535
+     }
+    },
+    "ratio": 965.7465753424658,
+    "status": "budgeted"
+   },
+   "notice": {
+    "budget_at_40": 1160.0,
+    "exponent": 1.4185244034784659,
+    "per": {
+     "20": {
+      "calls": 156820.0,
+      "ops": 62142.0,
+      "placed": 1.0,
+      "seconds": 0.083
+     },
+     "40": {
+      "calls": 274987.0,
+      "ops": 166113.0,
+      "placed": 1.0,
+      "seconds": 0.173
+     }
+    },
+    "ratio": 143.2008620689655,
+    "status": "budgeted"
+   },
+   "pond_bank": {
+    "budget_at_40": 142.0,
+    "exponent": 0.0,
+    "per": {
+     "20": {
+      "calls": 16.0,
+      "ops": 1.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     },
+     "40": {
+      "calls": 16.0,
+      "ops": 1.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     }
+    },
+    "ratio": 0.007042253521126761,
+    "status": "budgeted"
+   },
+   "pond_stock": {
+    "budget_at_40": 1.0,
+    "exponent": null,
+    "per": {
+     "20": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     },
+     "40": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     }
+    },
+    "ratio": 0.0,
+    "status": "budgeted"
+   },
+   "roll": {
+    "budget_at_40": 57235,
+    "exponent": 1.3725888748167099,
+    "per": {
+     "20": {
+      "calls": 5327571.0,
+      "ops": 3767163.0,
+      "placed": 3764.0,
+      "seconds": 4.111
+     },
+     "40": {
+      "calls": 7638032.0,
+      "ops": 9754496.0,
+      "placed": 5957.0,
+      "seconds": 7.4110000000000005
+     }
+    },
+    "ratio": 170.4288634576745,
+    "status": "budgeted"
+   },
+   "seat": {
+    "budget_at_40": 191.0,
+    "exponent": 0.5403917774476202,
+    "per": {
+     "20": {
+      "calls": 18319.0,
+      "ops": 5106.0,
+      "placed": 0.0,
+      "seconds": 0.016
+     },
+     "40": {
+      "calls": 27805.0,
+      "ops": 7426.0,
+      "placed": 0.0,
+      "seconds": 0.024
+     }
+    },
+    "ratio": 38.87958115183246,
+    "status": "budgeted"
+   },
+   "sink": {
+    "budget_at_40": 149.0,
+    "exponent": -1.0086096871472146,
+    "per": {
+     "20": {
+      "calls": 98495.0,
+      "ops": 70252.0,
+      "placed": 7.0,
+      "seconds": 0.035
+     },
+     "40": {
+      "calls": 53784.0,
+      "ops": 34917.0,
+      "placed": 7.0,
+      "seconds": 0.032
+     }
+    },
+    "ratio": 234.34228187919464,
+    "status": "budgeted"
+   },
+   "sties": {
+    "budget_at_40": 138.0,
+    "exponent": 1.422780696910268,
+    "per": {
+     "20": {
+      "calls": 1884.0,
+      "ops": 511.0,
+      "placed": 15.0,
+      "seconds": 0.004
+     },
+     "40": {
+      "calls": 4072.0,
+      "ops": 1370.0,
+      "placed": 30.0,
+      "seconds": 0.01
+     }
+    },
+    "ratio": 9.927536231884059,
+    "status": "budgeted"
+   },
+   "track": {
+    "budget_at_40": 223.0,
+    "exponent": -0.07400058144377628,
+    "per": {
+     "20": {
+      "calls": 449.0,
+      "ops": 80.0,
+      "placed": 1.0,
+      "seconds": 0.001
+     },
+     "40": {
+      "calls": 634.0,
+      "ops": 76.0,
+      "placed": 1.0,
+      "seconds": 0.002
+     }
+    },
+    "ratio": 0.34080717488789236,
+    "status": "budgeted"
+   },
+   "washing": {
+    "budget_at_40": 1194.0,
+    "exponent": 0.8588420326595787,
+    "per": {
+     "20": {
+      "calls": 8284.0,
+      "ops": 7451.0,
+      "placed": 3.0,
+      "seconds": 0.005
+     },
+     "40": {
+      "calls": 14885.0,
+      "ops": 13513.0,
+      "placed": 1.0,
+      "seconds": 0.009
+     }
+    },
+    "ratio": 11.317420435510888,
+    "status": "budgeted"
+   },
+   "water_frame": {
+    "budget_at_40": 69.0,
+    "exponent": 0.0,
+    "per": {
+     "20": {
+      "calls": 7.0,
+      "ops": 23.0,
+      "placed": 0.0,
+      "seconds": 0.0
+     },
+     "40": {
+      "calls": 7.0,
+      "ops": 23.0,
+      "placed": 0.0,
+      "seconds": 0.0
+     }
+    },
+    "ratio": 0.3333333333333333,
+    "status": "budgeted"
+   },
+   "waterward": {
+    "budget_at_40": 1.0,
+    "exponent": null,
+    "per": {
+     "20": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.0
+     },
+     "40": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.0
+     }
+    },
+    "ratio": 0.0,
+    "status": "budgeted"
+   },
+   "web": {
+    "budget_at_40": 1160.0,
+    "exponent": 1.3309618879389655,
+    "per": {
+     "20": {
+      "calls": 474158.0,
+      "ops": 325501.0,
+      "placed": 19.0,
+      "seconds": 0.309
+     },
+     "40": {
+      "calls": 1415076.0,
+      "ops": 818864.0,
+      "placed": 42.0,
+      "seconds": 0.902
+     }
+    },
+    "ratio": 705.9172413793103,
+    "status": "budgeted"
+   },
+   "windbreak": {
+    "budget_at_40": 3183.0,
+    "exponent": 0.7972955044208861,
+    "per": {
+     "20": {
+      "calls": 269007.0,
+      "ops": 94698.0,
+      "placed": 1759.0,
+      "seconds": 0.304
+     },
+     "40": {
+      "calls": 493257.0,
+      "ops": 164570.0,
+      "placed": 3619.0,
+      "seconds": 0.66
+     }
+    },
+    "ratio": 51.70279610430411,
+    "status": "budgeted"
+   },
+   "woodland": {
+    "budget_at_40": 5.0,
+    "exponent": null,
+    "per": {
+     "20": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.001
+     },
+     "40": {
+      "calls": 4.0,
+      "ops": 0.0,
+      "placed": 0.0,
+      "seconds": 0.002
+     }
+    },
+    "ratio": 0.0,
+    "status": "budgeted"
+   }
+  }
+ }
+}

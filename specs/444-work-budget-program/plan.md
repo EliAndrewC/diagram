@@ -117,3 +117,52 @@ None.
 <!-- plan-archive: T08 to T08 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 
 <!-- plan-archive: T09 to T09 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
+
+### T15 - phase: water_frame, through the checklist (FR-003, FR-004, FR-005; step 4)
+
+Occasions: none - the plan's rolls and the meta it writes are unchanged, so no map moves; no glyph, form or placement rule.
+
+### T15 Approach (checklist part A)
+
+1. **The goal, in the world.** The plan's rolls are counted where they happen, in the first stage, so the roll's count holds the work the plan does.
+2. **The constraints.** FR-003, FR-004, FR-005; rubric S5; the greenfield derivation `phases/water_frame_greenfield.derivation.md` and its budget, 69, set with the GM's words.
+3. **Where each comes from.** G: the GM, 2026-10-29 ("yes please do step 4 and then we can stop and assess how things are going"); the design's step 4 (`request.md`, section 6).
+4. **Do they describe the world here?** The plan's rolls (`plan_site`), today outside any stage's counted window; the stage's meta writes.
+5. **The order.** First of step 4; before `field`.
+6. **The exits.** Green: the stage counts its rolls at most its budget at 40 and 80, the cohort unmoved, `phases/water_frame.md`'s eight boxes ticked. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing; one MODE AUDIT pass.
+9. **Done, measured.** `make work-budget`: water_frame's counted operations at 40 and 80 against 69, its exponent 0.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+
+### T16 - phase: field, through the checklist (FR-003 to FR-006; step 4)
+
+Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map's form changes - its comb's basins, ditches and brook redrawn); glyph-check only if a glyph is redrawn.
+
+### T16 Approach (checklist part A)
+
+1. **The goal, in the world.** The comb field rebuilt to its greenfield derivation: the brook and its intake, the fan's outline, the comb's ditches and basins cut once with every rule asked before a basin is written, no repair pass.
+2. **The constraints.** FR-003 to FR-006; rubric S1-S9; `phases/field_greenfield.derivation.md` and its budget, 23,988 at 40, exponent 0.79; the research its contract cites (0005, 0017, 0053, 0054, 0059); the manifest keys today's stage writes (FR-004).
+3. **Where each comes from.** G: the GM, 2026-10-29 ("yes please do step 4 and then we can stop and assess how things are going"); the design's step 4.
+4. **Do they describe the world here?** The comb archetypes of the reference spec; a polder keeps today's code until its own derivation (the reference rolls draw none).
+5. **The order.** After `water_frame`; the last of step 4, then the assessment with the GM.
+6. **The exits.** Green: counted operations at most the budget at 40 and 80, `make cohort-landing` with no regressed seed and the fresh block's rate no worse, the claims round IN-STEP, the reviews owed, MODE AUDIT WITHIN, `phases/field.md`'s eight boxes ticked, the old comb code deleted. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** Several landings behind one task is not allowed - one landing; `make cohort` after each increment; one MODE AUDIT pass a round.
+9. **Done, measured.** `make work-budget`: field's counted operations at 40 and 80 against 23,988 and 42,070.
+10. **Before moving a constant.** The research page each figure cites, read before it moves.
+11. **Before fitting things into room.** n/a
+
+**Performance work?** yes - docs/performance-checklist.md's questions follow.
+
+### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** The field stage made about 1.3M Python calls at 40 households and counted 48,335 to 66,214 operations over the four seeds, measured 2026-10-28 (`make work-budget`, `dev/work-budget/20261028T152105Z-45aa176ec9b8.json`), its counted work led by segment crossings, the standing registry's conflicts and segment distances; box 4 adds `make perf-profile` and `make perf-fanout`.
+2. **Removes work, or only moves it?** Removes it: the comb's angles read once a row, the cut basins clipped by the water index, a sharp point cut off by rule before the basin is written - no carve, settle or weld pass after.
+3. **What do you expect it to save, and why?** The counted operations from today's (item 1) to at most the pinned budget at 40 (`dev/work-budget.json`), and the calls with them, the repair passes gone.
+4. **How does the work grow with the settlement?** The rebuild is held to the budget's exponent, the pinned one in `dev/work-budget.json`.
+5. **What did the before and after show, and under what conditions?** Recorded at box 6: `make work-budget` and `make perf-ab` against main.
+6. **Did any map move, and does it still keep the research?** Yes - every comb map's basins and ditches move; the cohort, the claims round and settlement-review hold them to the research.
+

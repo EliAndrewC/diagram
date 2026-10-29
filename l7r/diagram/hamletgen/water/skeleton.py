@@ -6,6 +6,7 @@ See `CLAUDE.md` in this directory.
 
 from __future__ import annotations
 
+from l7r.diagram import work_counts
 from l7r.diagram.settlement import Settlement
 
 from ..consts import POLDER_ARCHETYPES
@@ -51,6 +52,11 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
     # it on the polder would change which knob values are admissible and re-roll a shipped map, to fix a field whose
     # honest sibling `water_source` ("reservoir") is already recorded beside it. The cost of leaving it: `water_kind`
     # reads as the engine's rolling context and not as a claim about the sheet.
+    # THE PLAN'S ROLLS ARE THIS STAGE'S WORK (feature 444 T15, rubric S5): `plan_site` rolled them before the roll's counters
+    # opened, so the stage that writes the plan counts them, and the water frame's budget reads the work the plan does
+    if __debug__:
+        for k, n in plan.counted.items():
+            work_counts.OPS[k] += n
     _brook_fed = plan.field_archetype not in POLDER_ARCHETYPES
     # THE MAP DECLARES THAT A SCRIPT MADE IT (GM 2026-08-13). Rules that the scripted path adopts
     # ahead of the hand-authored pool are gated on this tag, so a legacy map keeps its present

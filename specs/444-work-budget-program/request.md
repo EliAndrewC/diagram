@@ -303,3 +303,9 @@ Put to him after escalation-check: 57,235 operations at 40 households, exponent 
 raises above the old pins (water_frame 40 to 69, burial 3 to 77, bamboo 252 to 288), and the 162 ft lot lattice that shapes the maps.
 
 "Yes I approve of that for now.  I feel like we can probably do even better, but if we hit those targets then I expect it will be acceptable."
+
+## The GM on step 4, 2026-10-29
+
+Asked whether to start step 4, the stage rebuilds, beginning with water_frame and field:
+
+"yes please do step 4 and then we can stop and assess how things are going"

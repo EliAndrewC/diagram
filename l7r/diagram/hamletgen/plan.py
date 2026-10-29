@@ -14,6 +14,7 @@ from contextvars import ContextVar
 from dataclasses import dataclass, field
 from typing import Any
 
+from l7r.diagram import work_counts
 from l7r.diagram.settlement import knob_rng
 from l7r.diagram.settlement._knobs import KNOBS
 
@@ -258,6 +259,9 @@ class SitePlan:
     offtakes_b: tuple[float, ...] = ()
     # filled in by the stages as the map is built, so a later stage can read an earlier one's result
     net: dict[str, Any] = field(default_factory=dict)
+    # THE PLAN'S OWN COUNTED WORK (feature 444 T15, rubric S5): `plan_site` runs before the roll's counters open, so the rolls
+    # it counts are kept here and `stage_water_frame`, the stage that writes the plan, counts them as its own
+    counted: dict[str, int] = field(default_factory=dict, compare=False, repr=False)
 
     envelope: Poly = field(default_factory=list)
     sink_pond: tuple[float, float, float, float] | None = None
@@ -334,6 +338,8 @@ def _roll(seed: int, knob: str, choices: Sequence[Any]) -> Any:
     (map seed, knob name) - never on how much randomness has been drawn before it. That is the
     skill's positional-randomness rule at the knob level: adding a knob here cannot re-roll the
     others, so a cohort's earlier maps do not silently change when a later knob is added."""
+    if __debug__:  # the counted work (feature 444 T15, rubric S5): a knob's form drawn
+        work_counts.OPS["candidate@_roll"] += 1
     return choices[knob_rng(seed, knob).randrange(len(choices))]
 
 
@@ -456,6 +462,8 @@ def fall_backs_the_wind(down_deg: float, windward: str) -> bool:
     Research:
         high side and windward side as one - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high windward margin
         fall square to or away from the wind - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high margin on the windward side, one case among several (how common, a GUESS); a fall square to or away from the wind keeps the high side and the windward side together"""
+    if __debug__:  # the counted work (feature 444 T15): a fall tested against the wind
+        work_counts.OPS["pt_test@fall_backs_the_wind"] += 1
     return _fall_into_wind(down_deg, windward) <= 1e-9
 
 
@@ -486,6 +494,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     # out of standing water, and the survey runs with the cardinal directions; the organic comb fan,
     # which follows its own water down whatever slope it finds, is the one that sits on a diagonal.
     # A GM who pins `down_deg` is still honored - the pin is a fact about that place.
+    _before: dict[str, int] = dict(work_counts.OPS) if __debug__ else {}  # the plan's own count starts here (feature 444 T15)
     _archetype = spec.field_archetype or str(_roll(spec.seed, "field_archetype", ROLLED_ARCHETYPES))
     _falls = CARDINAL_BEARINGS if _archetype in POLDER_ARCHETYPES else FALL_BEARINGS
     # A dike-pond rolls its arrangement; a rice polder IS the surveyed grid (`POND_LAYOUTS`), and
@@ -525,7 +534,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         # ...AND SO DOES A DISPERSED HAMLET OF GROVE FARMS, each farm the same frame: a twenty-farm one ran off the sheet's
         # edge at sixteen (the pinned Audit-905, the same with a well or a channel)
         W, H = int(W * LINEAR_CANVAS), int(H * LINEAR_CANVAS)
-    return SitePlan(
+    plan = SitePlan(
         spec=spec,
         down_deg=down_deg,
         water_flow=water_flow,
@@ -569,3 +578,6 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         offtakes_a=a,
         offtakes_b=b,
     )
+    if __debug__:  # the rolls this plan counted, for `stage_water_frame` to count as its own
+        plan.counted = {k: n - _before.get(k, 0) for k, n in work_counts.OPS.items() if n != _before.get(k, 0)}
+    return plan
