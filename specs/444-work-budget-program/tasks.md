@@ -16,8 +16,9 @@
 - [x] T03 The homesteads family's budgets - seat, homesteads, appurtenances, burial, lane_wells, sties, washing (D1, D3, D4; FR-001)
       research: rendering
       verify: DONE. landed: the homesteads family's seven budgets pinned: seat and burial on SOUND; homesteads, appurtenances, sties, washing and lane_wells on the round arbiter's accepts (FR-013)
-- [ ] T04 The ways family's budgets - track, web, crossings (D1, D3, D4; FR-001)
+- [x] T04 The ways family's budgets - track, web, crossings (D1, D3, D4; FR-001)
       research: rendering
+      verify: DONE. landed: the ways family's three budgets pinned: track, web and crossings, each on the round arbiter's accept (FR-013)
 - [ ] T05 The hinterland and frame family's budgets - hinterland, woodland, windbreak, bamboo, frame, notice, labels (D1, D3, D4; FR-001)
       research: rendering
 - [ ] T06 The program's target - the sum at 40 households and the whole roll's exponent - to the GM through escalation-check, his words set by `make budget-program`: the CHECKPOINT before any phase (D5; FR-002)
