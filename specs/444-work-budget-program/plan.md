@@ -176,7 +176,7 @@ Occasions: settlement-review on the pool's polder hamlets the rebuild moves; gly
 1. **The goal, in the world.** The polder field - its ring dike, its sluices, its ring canal, its surveyed grid or dike-pond mosaic - rebuilt to a greenfield derivation of its own, its budget held at the push like any stage's.
 2. **The constraints.** FR-003 to FR-006, FR-015, FR-016; the round arbiter's ruling ask:444-T16-polder-budget (route (c) with (a)'s held row); 0019.
 3. **Where each comes from.** A: the round arbiter, ask:444-T16-polder-budget; G: the GM, 2026-10-29 ("yes please do step 4 and then we can stop and assess how things are going").
-4. **Do they describe the world here?** The pool's polder hamlets (Kuwabata among them); a `field_polder` reference spec added to `make work-budget`, scaled to 20, 40 and 80 households as the reference is.
+4. **Do they describe the world here?** The pool's polder hamlets (Kuwabata among them); a `field_polder` reference spec added to `make work-budget`, scaled to the sizes the reference is rolled at.
 5. **The order.** After step 5's language decision, before `sink` in `STAGES` order, written in the language it picks.
 6. **The exits.** Green: its derivation SOUND or accepted, its row pinned (FR-013), its counted operations within it at 40 and 80, the cohort, the claims round and settlement-review, MODE AUDIT WITHIN, the old polder code deleted in its landing. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`, FR-006).
 7. **The search smell.** none
