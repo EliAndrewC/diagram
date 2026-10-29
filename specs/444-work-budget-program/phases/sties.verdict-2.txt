@@ -1,0 +1,29 @@
+SOUND - every factor is named from the contract's Bounds or the strip geometry, the sweep and the index are both used, and nothing is padded; but the strips' cells figure (58) is too low: the box's 15 ft overhang makes it 64 by the derivation's own formula, more if the rake tilts walls against the grid, and the cell density of 29 is what the audit has to watch under S6.
+
+**Earlier findings.** Finding 1 is closed: each wall's nearby things are now marked as intervals in a difference array and the places walked once. "No sort" holds because the places sit on a fixed 4 ft lattice. Finding 2 is closed: the contract's "(3 taken: 12 walls)" supplies the wall count. Finding 3 (density) the derivation disputes, and the dispute stands: the contract writes out the doubling for sties only and marks 29 "taken", so 29 is read as the source states it. Round 1 also treated it as non-blocking.
+
+**1. Is each factor derived?** Yes:
+- Items: households tried, each at most once.
+- Strips' cells: 2 x (ceil(L/64)+1) per wall, over 12 walls and 350 ft, gives 58, each read with its 29 things (30).
+- Intervals: 58 x 29 x 3.
+- Prefix sum: one pass over the 88 places.
+- Drawing: 5 per sty, at 15, 33 and 69 sties.
+- Slack: 1.
+
+The arithmetic checks: 137,556, 275,126 and 550,266.
+
+The one gap is the strips' cells reason, and it errs tight, not loose:
+- The strip is the box's sweep along the wall, so its length is L plus the overhang (up to 15 ft), not L. With L+15 the same arithmetic gives 2 x (floor(530/64)+12+12) = 64 cells, or 60 if the places stop half a sty inside each end.
+- The formula assumes walls run along the grid. If 0029's "raked with its house" tilts the walls against the 64 ft grid, a tilted 15 ft strip touches more cells, and the derivation gives no bound for that. The "2 by 2 cells a place" claim survives a tilt, since the box's diagonal is under 20 ft; the per-strip count does not.
+
+Correcting this before `make budget-set` avoids a false OVER that would need the GM's words to undo.
+
+**2. Is there a standard, cheaper algorithm?** None is missed: the sweep, the grid index, the incremental filing and the memoized strips are all used, and a priority queue is rightly not used. The sweep is exact only because each thing is convex. The grove band comes from `grove_rules.fixture_on_band`, not the registry, and a band need not be convex: it is an extra projection per wall (not among a cell's 29) and may take more than one interval. That is negligible for the count, but the derivation should say it.
+
+**3. Is any factor padded?** No. Every factor is at or below what its reason supports. Two small terms are missing, and both would raise the count:
+- If both ends of each wall are places, the places are up to sum(floor(L/4)+1) = 99, not 88.
+- Setting up the difference array costs about 88 more per household.
+
+**4. Is each figure read at its source's size and unit?** Yes: 350 ft of wall, 12 walls, 29 things a cell and 15/33/69 sties are all read as the contract states them. One thing for the audit: the density rose from 21 to 29 between 10 and 20 households. If it keeps rising at 40 and 80, the intervals term (58 x density x 3) breaks S6, and that is where an OVER would land.
+
+Bundle read: /tmp/l7r-check/work-budget-budget-sties/MANIFEST.md, /tmp/l7r-check/work-budget-budget-sties/rubric.md, /tmp/l7r-check/work-budget-budget-sties/contract.md, /tmp/l7r-check/work-budget-budget-sties/derivation.md, /tmp/l7r-check/work-budget-budget-sties/sties.verdict-1.txt

@@ -15,10 +15,11 @@
         each household: its nearest water segment within 120 ft, from its 3 by 3 cells; its water, its bank side and its
             place along the water (the projection on its segment)
         the households grouped by water and bank and sorted along it (one sort of the households)
-        each group, one footing for every 4: the bank point nearest the middle household (its projection), then the 9 shifts
-            along the bank in order (each an offset along the found segment's direction from the projection, a GUESS for
-            "moved along the bank" within 32 ft), each the footing's box against the registry's things in its cells; the first admitted
-            drawn, or the group counted with no seat
+        each group, one footing for every 4: the bank point nearest the middle household (its projection), the 9 shifts along
+            the bank (each an offset along the found segment's direction from the projection, a GUESS for "moved along the bank"
+            within 32 ft), all inside one strip about 70 by 6 ft: its at most 6 cells gathered once, each thing in them
+            projected as the one interval of shifts it blocks (a convex thing against a box sliding along a line), marked in a
+            9-slot array; the first open shift in the contract's order drawn, or the group counted with no seat
     each-house form: each farm's channel end, then the first five shifts, each against the registry as above
 
 ## Indexes
@@ -34,7 +35,7 @@
 | the nearest water (water index cells examined, a household) | per item | 58 at 20, 60 at 40, 62 at 80 | its 3 by 3 cells of 120 ft (9), their water segments (48 at 20, 50 at 40, 52 at 80), and its projection on the nearest (1) | the densest block |
 | slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
 | the order | over the run | 100 at 20, 240 at 40, 560 at 80 | the households sorted along their waters, log2 of the households rounded up each | 80 households |
-| the footing seats (registry cells examined, a footing) | over the run | 1098 at 20, 1494 at 40, 2034 at 80 | at most one footing a household, on either form; each at most 9 shifts, each its offset (1), the box's 2 by 2 cells with their things (29 at 20, 40 at 40, 55 at 80) and the cell, and its bank side (1) | every shift refused but the last |
+| the footing seats (registry cells examined, a footing) | over the run | 546 at 20, 744 at 40, 1014 at 80 | at most one footing a household, on either form; its strip, 70 by 6 ft at any angle, in at most 3 by 2 cells of 64 ft, each read with its things (29 at 20, 40 at 40, 55 at 80) and the cell; each thing projected (1) and its interval's two ends marked in the 9 slots (1 a mark, 2); the slots set (9) and walked (9) | every shift refused but the last |
 | the drawing (registry cells written) | over the run | 100 at 20, 200 at 40, 400 at 80 | each footing recorded (1) and filed in at most 4 cells (4) | a footing a household |
 | the water index (cells written) | once | 1,950 at 20, 2,666 at 40, 3,650 at 80 | each segment walked through the cells it crosses: the waters' length at its diagonal over 120 ft, plus 3 a segment | 80 households |
 | the form | once | 1 | the roll | always 1 |
@@ -43,9 +44,13 @@ So: households x the nearest water x 1, plus the order, the households x the foo
 
 ## Totals
 
-- at 20: 20 x 58 x 1 + 100 + 20 x 1098 + 100 + 1950 + 1 = 25271
-- at 40: 40 x 60 x 1 + 240 + 40 x 1494 + 200 + 2666 + 1 = 65267
-- at 80: 80 x 62 x 1 + 560 + 80 x 2034 + 400 + 3650 + 1 = 172291
+- at 20: 20 x 58 x 1 + 100 + 20 x 546 + 100 + 1950 + 1 = 14231
+- at 40: 40 x 60 x 1 + 240 + 40 x 744 + 200 + 2666 + 1 = 35267
+- at 80: 80 x 62 x 1 + 560 + 80 x 1014 + 400 + 3650 + 1 = 90691
+
+## Growth
+
+From 20 to 80 households the stage grows at an exponent above 1.15 for one stated reason: the registry's density about the houses, measured rising from 21 to 29 things a 64 ft cell between 10 and 20 households and carried at that rate (40 and 55), is the per-footing neighbor factor; no geometric ceiling bounds it, as crowns, parts and way segments differ in size and overlap. Held flat it would be linear; the audit at 40 and 80 measures the density, and the budget is no tighter than the measured rise.
 
 ## Earlier findings
 
@@ -53,11 +58,14 @@ So: households x the nearest water x 1, plus the order, the households x the foo
 - verdict-1, finding 2: fixed - a shift is an offset along the found segment's direction, 1, labeled a GUESS for "moved along the bank"
 - verdict-1, finding 3: fixed - the registry's density is measured on the finished map within 192 ft of a house (the reach and the shift), counting each thing once a cell, and grown at its measured rate
 - verdict-1, finding 4: fixed - the water segments near a house grow at their measured rate
+- verdict-2, finding 1: fixed - the growth past 1.15 is stated: the per-footing neighbor factor is the measured registry density, rising at its measured rate, with no geometric ceiling; the Growth section says so
+- verdict-2, finding 2: fixed - the 9 shifts are one sweep of the footing's strip, its at most 6 cells read once and each thing projected as one interval in a 9-slot array
+- verdict-2, finding 3: fixed - the footing row's figure is per footing, and the totals multiply it by the households
 
 ## Cheaper algorithms considered
 
-- sweep: used - the households of a bank are taken in their order along it, one sort
-- grid or spatial index: used - the water index for each household's nearest water, the registry for each seat
+- sweep: used - the households of a bank are taken in their order along it, one sort; and the 9 shifts of a footing are one interval sweep of its strip
+- grid or spatial index: used - the water index for each household's nearest water, the registry for each footing's strip
 - priority queue: not used - the shifts are taken in their fixed order, not ranked
 - incremental update: used - each footing is filed as it is drawn, for the next group's seats
-- memoizing what a scan does not change: used - each household's water and its place along it, found once
+- memoizing what a scan does not change: used - each household's water and its place along it, found once, and each footing's strip read once for all 9 shifts

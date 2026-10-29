@@ -1,27 +1,39 @@
-UNDERIVED - the well search's "each site examined once per well" (derivation.md:40) has no reason: the contract's reach widens through four rungs, but the pseudocode (derivation.md:21-24) orders the sites by walk alone, tests "the rung's five-house comparison" without naming the rung, and draws "the first admitted", so the count gives no ground for examining a site only once across the rungs.
+UNDERIVED - the well search's candidate houses (derivation.md:41): "53 at 80" counts the houses within 760 ft of the worst-served household by their centers, but the contract's 760 ft reach runs to the seat, so any house with a site within 760 ft of that household can supply a candidate, and the row gives no reason for leaving those houses out.
 
-**Q1, is each factor derived?** No.
-- **The rungs (derivation.md:21-24, :40).** Nothing keys the sites heap by (rung of the memoized fifth-nearest, walk), and nothing memoizes the ten test within a well. Without one of those, walking the rungs in turn reruns the ten test (the 9 + n term) up to four times a site. Taking the first admitted in walk order alone breaks the widening reach. State the key or the memo, and the count holds.
-- **The fallback (derivation.md:24).** The pseudocode says nothing about the case where no site is admitted. The first well always hits it: every household is unserved, so every site in reach serves all n > 10. Keeping the fallback seat costs at least one comparison a site, and that is not in the row.
+**Q1, is each factor derived?** No, for one factor.
+- **The candidate houses (derivation.md:20-21, :41).** A site lies on its homestead's envelope grown by 12.4 ft, so it sits up to half that square's diagonal from the house's center: 208.8 / 2 x root 2 = about 148 ft, if the house is at the envelope's centre. Houses within 760 + 148 = 908 ft can hold a site within 760 ft. At the density bound that is 2.9e-5 x pi x 908 squared = 76 houses at 80, not 53. That gives about 2,584 sites on the heap, about 116 operations a site and 2.4M for the row, against 1,643,424. At 20 and 40 the cap of n holds, so nothing changes there.
+- **The query is too small as well.** A point's 3 by 3 cells of 760 ft guarantee only 760 ft of reach, so they can miss those houses.
+- **The fix.** Either state a site's farthest offset from its house's center (from the Bounds) and widen the query and the factor to 760 ft plus that offset, or file the sites in the house index and take the sites within 760 ft of the household directly. Without one of these, the algorithm can miss the contract's best seat, and the slack-1 reason "every factor is a ceiling at its worst case" (derivation.md:39) does not hold at 80.
+- **Small and uncounted:**
+  - seeding the max-heap: n keys, pushed or heapified;
+  - each household's distance to open water: the contract's reach counts "a well or open water" (contract.md:5), but open water is not in the Reads, and no row starts a key from it;
+  - drawing the wells: a record and its cells each, up to 8 x 5 = 40 at 80.
+- **Not stated.** The heap's push and pop (20, 22 and 22) comes out of the totals, but the reason column does not give it as 2 x log2 of the sites on the heap, rounded up, as the service row does.
 
-**Q2, a cheaper standard algorithm?** Yes, for the dry-households row (derivation.md:43).
-- The row is a pass over the households inside the loop over the wells. That is the S3 shape verdict-1 Q2 flagged, moved to its own row rather than removed.
-- It is also redundant. Any household a new well brings within 760 ft lies in that well's 3 by 3 cells of 760 ft, which the service row already re-keys. Whether anyone is still dry is the max-heap's top against 760 ft.
-- Tighter bound: 0 for the row, plus 1 comparison a well. The cover by squares of 760 x root 2 ft bounds an optimal cover, not a greedy worst-served sequence, but that question goes away once the row is 0.
+**Q2, is there a cheaper standard algorithm?** Yes, a secondary one.
+- **Memoize each site's households within 760 ft.** The houses stand through the stage, and the sites row already reads each site's 9 cells for the fifth-nearest. Recording the households within 760 ft (at most 53, capped at n) makes the ten test a read of that list: 20, 40 and 53 a site a well, instead of 29, 49 and 89.
+- **The saving.** It roughly breaks even at 20 and 40 once the memo's writes are charged, and saves about 375k at 80.
+- **A caveat on the ten's set.** The contract's "nearest" has no distance limit. A dry household beyond the 3 by 3 cells can have the new well as its nearest. The same holds for the service's re-keying, whose reason covers only the reach. At 20 to 80 every value is capped at n anyway, but the Growth paragraph's "constant past 150" (derivation.md:57) depends on this point.
 
-**Q3, is any factor padded?** Yes, twice.
-- **The service row (derivation.md:42)** works out as (9 cells + n) x (1 + 2 x log2 n, rounded up), so the 9 cells are charged the push cost. Its own reason gives 9 + n x (1 + 2 x log2 n, rounded up): 458, 2,116 and 9,672, not 638, 2,548 and 10,680.
-- **The dry row** counts 2 + cover = 4 and 6 wells at 20 and 40. The contract's total is 2 and 4 (contract.md:6).
+**Q3, is any factor padded?** No. Every row and total reproduces:
+- sites: 680, 1,360 and 2,720 sites x 65, 85 and 125;
+- well search: 52, 74 and 114 a site;
+- service: 9 + n x (1 + 2 x log2 n, rounded up) = 458, 2,116 and 9,672;
+- totals: 115,878, 521,381 and 1,995,666.
 
-**Q4, is each figure read at its source's size and unit?** No.
-- **The sites a house (derivation.md:39).** 4 x 184 / 25 gives 30, the envelope's own perimeter. But a site is the well's center, and a well "off" the homestead has its center 12.4 ft outside the envelope. That path is about 736 + 2 x pi x 12.4 = 814 ft, so 33 sites, or 34 if the envelope is grown as a square. This understates the work rather than padding it; a budget set at 30 is one the rebuild cannot meet.
-- **Two figures with no source in the Bounds:** "a part's side under 64 ft" (derivation.md:37), and the width of the way's verge. The 4-cell clearance query is right only if the radius plus the verge is at most 32 ft.
+**Q4, is each figure read at its source's size and unit?** No, once: the same finding as Q1.
+- The 760 ft reach is a seat's distance to a household, but derivation.md:21 measures it to a house's center. This is the same kind of misreading as verdict-2's 30 against 34 sites.
+- The other figures check against the Bounds: the density of 2.9e-5, the 53 and 151, the 2 by 2 cells for a 19.4 ft clearance, the wells at 2, 4 and 8, the parts at 84, 173 and 354, and the cluster's extents.
+- Minor: at 80 the cluster's 2,442 ft side is wider than one 3 by 3 block (2,280 ft), so "every site under the ten reads every household" is loose wording. The cap of n still holds.
 
-**Growth (S6).** The exponent from 20 to 80 is about 2.06 (1,751,242 / 101,416). The stated reason, that the 3 by 3 cells of 760 ft hold every household until about 150, is the kind of reason S6 accepts. Past 150 only the dry row would grow faster than linear, and Q2 removes it.
+**Growth (S6).** The exponent from 20 to 80 is about 2.03 (1,995,666 / 115,878). The bounded-n reason the derivation gives is the kind S6 accepts.
 
-**Earlier findings.**
-- Findings 1, 2, 3, 4 and 7 are closed.
-- Finding 5 is not fully closed: the wells x households pass survives as the dry row.
-- Finding 6 is not fully closed: it answers the houses scanned per site, but not verdict-1 Q4's "every rung reached", which round 2 drops from the count without a reason.
+**Earlier findings.** All of verdict-1's findings (1-7, with the remainders of 5 and 6) and all of verdict-2's (1-7) are closed in the text and the numbers.
 
-Files read: /tmp/l7r-check/work-budget-budget-appurtenances/MANIFEST.md, /tmp/l7r-check/work-budget-budget-appurtenances/rubric.md, /tmp/l7r-check/work-budget-budget-appurtenances/contract.md, /tmp/l7r-check/work-budget-budget-appurtenances/derivation.md, /tmp/l7r-check/work-budget-budget-appurtenances/appurtenances.verdict-1.txt
+Files read:
+- /tmp/l7r-check/work-budget-budget-appurtenances/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-appurtenances/rubric.md
+- /tmp/l7r-check/work-budget-budget-appurtenances/contract.md
+- /tmp/l7r-check/work-budget-budget-appurtenances/derivation.md
+- /tmp/l7r-check/work-budget-budget-appurtenances/appurtenances.verdict-1.txt
+- /tmp/l7r-check/work-budget-budget-appurtenances/appurtenances.verdict-2.txt

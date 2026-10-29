@@ -1,0 +1,17 @@
+UNDERIVED - the footing seats' neighbor factor: 29, 40 and 55 things a cell grows with the households, which S1 does not allow, and the exponent it gives (about 1.38 from 20 to 80) has no stated reason (S6).
+
+**Q1, is each factor derived?**
+- All four findings from verdict-1 are closed. The water index's 3 cells a segment plus √2·L/120 is the right bound for a segment at any angle (cells ≤ 1 + ⌈|dx|/120⌉ + ⌈|dy|/120⌉), and it gives 1,950, 2,666 and 3,650. A shift is now one offset, labeled a GUESS. The registry density is now measured within 192 ft, each thing counted once a cell, and grown at its measured rate. The near-house water segments grow at theirs.
+- The footing seats (derivation.md line 37) examine 4 × 29, 4 × 40, then 4 × 55 things a shift. S1 requires a neighbor bound that "does not grow with the number of households". Per-household work rises from 1,156 at 20 to 2,096 at 80, and the totals give log4(172,291 / 25,271) ≈ 1.38, over 1.15. The derivation states no S6 reason.
+- To close it: tie the neighbor bound to the footing's own 4 by 6 ft scale, with a reason its contents stay bounded (a finer or stage-local cell; things do not overlap; a way's segment counts as one), or state an S6 reason. Going back to a flat 29 is not the fix: verdict-1 rightly asked for it to grow. The growing density is the symptom; it is not the reason. Every other figure checks: 58 = 9 + 48 + 1, 122 = 1 + 4 × 29 + 4 + 1, ×9 = 1,098, the sort at n·⌈log2 n⌉, 5 a footing drawn, and all three totals.
+
+**Q2, is there a standard, cheaper algorithm?** Yes, as a secondary finding (LOOSE).
+- The 9 shifts, 8 ft apart, all lie in one strip about 70 by 6 ft along the bank. At any angle that strip touches at most 3 × 2 = 6 cells of 64 ft, yet the derivation reads nearly the same 2 by 2 cells nine times.
+- Instead, gather those cells once. For each thing, find the one continuous range of shifts it blocks: a convex thing against a box sliding along a line blocks one interval, about 1 operation, marked in a 9-slot array. Then take the first open shift in the contract's order. That is about 6 + 6 × 29 + 9 + 9 ≈ 200 at 20, against 1,098.
+- "Cheaper algorithms considered" (line 63) says memoizing is used, but only for each household's water, not for the neighbors the shifts share. This alone does not fix S6: the per-footing work still grows with the cell density.
+
+**Q3, is any factor padded?** No, on the stated reasons. n footings × 9 shifts is a ceiling the Bounds allow ("at most one a household on either form"), and the slack is 1. One small labeling slip: the footing-seats row says "over the run" but is a per-footing figure that the totals multiply by the households.
+
+**Q4, is each figure read at its source's size and unit?** Yes. Segments 574, 770 and 1,032, length 19,311, 30,126 and 46,996 ft, near-house segments 48, 50 and 52, and registry things 29, 40 and 55 are all used as the contract's Bounds state them, at 1 ft a pixel.
+
+Files read: /tmp/l7r-check/work-budget-budget-washing/MANIFEST.md, /tmp/l7r-check/work-budget-budget-washing/rubric.md, /tmp/l7r-check/work-budget-budget-washing/contract.md, /tmp/l7r-check/work-budget-budget-washing/derivation.md, /tmp/l7r-check/work-budget-budget-washing/washing.verdict-1.txt
