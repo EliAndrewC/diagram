@@ -1,0 +1,31 @@
+UNDERIVED - the sites row's clearance, "once over the run": its reason ("the lanes, houses and parts stand through the stage") does not cover the wells this stage draws itself, and no row asks a popped site against them before its well is drawn (S4).
+
+**Earlier findings (verdict-1).** All six are closed. (1) The pool's heap is built bottom-up at 2 an element, and a pop costs ceil(log2 pool): 45, 66 and 106 per popped site. (2) The 34 cluster sites carry their arithmetic, 835/25 = 33.4. (3) The nearest wall is 20 a site. That holds because at most 4.02 houses have a center within 80 + 130 ft, so the five nearest include every candidate. (4) The worst-served query is 1. (5) The pool's scan has its own row, 9 + every site per well. (6) The pool takes the houses within 908 ft. The 148 ft used there is the half-diagonal of the 208.8 ft square, which is stricter than verdict-1's 865.
+
+**1. Is each factor derived?** Every row and total recomputes as written: 295,522, 1,170,374 and 4,768,948. One factor's reason fails:
+- **The blocking gap.** The clearance is memoized over the run, but the drawing row files each new well into the registry. The popped-site cost (walk, rung, cells, households, last resort, heap) has no test against the wells drawn earlier in this stage.
+- **Why it matters.** The contract's own figures allow overlap. Lane sites on opposite verges are 14 ft apart, and a cluster site can be 12.4 ft from a lane site, against a 25 ft well diameter. The second well can be seated on top of the first, for example as the last resort.
+- **The row to add.** Each popped site takes one distance to each well already drawn in the stage: at most 7 at 80, so 0+1+...+7 = 28 per pool site, about 28 x 3,669 = 102,732 at 80. That is cheaper than re-reading the 2 by 2 registry cells (224 a site at 80).
+- **Smaller, not blocking.** The service row's "1 + 2 x log2 of the households" doesn't say what the 2 pays for, presumably the push and the stale entry's later pop. Under lazy invalidation the heap also holds stale entries, so its size is more than the households. This is about 0.2% of the total.
+
+**2. Is there a standard, cheaper algorithm?** One minor case. The sites row charges lane sites 9 cells + n houses for the five nearest and their rungs, but the lane form needs only the dwelling wall within 80 ft. That 210 ft disc fits in 2 by 2 cells of 760 ft, so the read is 4 cells + min(n, 67) houses, about 18 fewer a lane site at 80 (about 37,800, 0.8%). This would be LOOSE, but the UNDERIVED above blocks first. Verdict-1 settled the pool heap and the 760 ft cells, and nothing here reopens them.
+
+**3. Is any factor padded?** No. The 2 by 2 cells x (things + 1), the 9 cells, and households capped at n are each at their stated ceiling, and slack is 1.
+
+**4. Is each figure read at its source's size and unit?** Yes:
+- 25 ft is used as the spacing diameter and 12.4 ft as the radius that grows the envelope.
+- The 19.4 ft clearance is read as a radius, which fits 2 by 2 cells of 64 ft.
+- 760 ft is read as a radius, and 908 = 760 + 148.
+- The registry holds 29, 40 and 55 things a cell at 20, 40 and 80.
+- The lanes are 5,568, 12,083 and 26,220 ft, doubled for the two verges, and their density is 7.47e-3.
+- The houses' density is 2.9e-5, giving 75.1 within 908 ft, rounded up to 76.
+- The wells are 2, 4 and 8.
+
+Growth: the exponent is about 2.0. The bounded-n reason (every household inside a point's 3 by 3 cells below 151 households) is stated, and verdict-1 accepted it.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-lane_wells/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-lane_wells/rubric.md
+- /tmp/l7r-check/work-budget-budget-lane_wells/contract.md
+- /tmp/l7r-check/work-budget-budget-lane_wells/derivation.md
+- /tmp/l7r-check/work-budget-budget-lane_wells/lane_wells.verdict-1.txt
