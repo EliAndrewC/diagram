@@ -1,0 +1,1 @@
+SOUND - every per-clump factor has a reason (slot 1, write 1, filed in 1.4 cells), the clump count is the mean measured at its source size (462 / 20 = 23.1), and no clump needs a check because the lattice's spacing keeps the strips clear of the rules: 3.4 a clump, 79.5 a household, linear.

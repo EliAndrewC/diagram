@@ -183,16 +183,12 @@
   "windbreak": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 1.05,
-   "derivation": "specs/444-work-budget-program/phases/windbreak.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch-2",
-   "items_at_20": 34657,
-   "items_at_40": 71854,
-   "items_at_80": 148783,
-   "pinned_on": "accept",
-   "derivation_sha": "6efe5918e1b4472d7259b7b858717f623c5328d53451a0a2691e50670a5f6023",
-   "rounds": 4,
-   "spread": "34,657-42,622 at 20"
+   "exponent": 1.0,
+   "derivation": "specs/444-work-budget-program/phases/windbreak_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/windbreak_greenfield.verdict-1.txt",
+   "items_at_20": 1593,
+   "items_at_40": 3183,
+   "items_at_80": 6363
   },
   "bamboo": {
    "status": "budgeted",
@@ -275,18 +271,14 @@
   },
   "labels": {
    "status": "budgeted",
-   "per_thing": 6.0,
+   "per_thing": 1.0,
    "exponent": 0.0,
-   "derivation": "specs/444-work-budget-program/phases/labels.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch",
-   "items_at_20": 1,
-   "items_at_40": 1,
-   "items_at_80": 1,
-   "pinned_on": "accept",
-   "derivation_sha": "1859336a03dc658352cbec6ebc4a9a617a9586cfa79df54a193a0593435f0fae",
-   "rounds": 2,
-   "spread": "6-6 at 20",
-   "reason": "the board's caption is written in the label phase, uncounted today"
+   "derivation": "specs/444-work-budget-program/phases/labels_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/labels_greenfield.verdict-1.txt",
+   "items_at_20": 6,
+   "items_at_40": 6,
+   "items_at_80": 6,
+   "reason": "the stage writes one caption from a proved seat; its budget is that caption's six operations"
   }
  }
 }

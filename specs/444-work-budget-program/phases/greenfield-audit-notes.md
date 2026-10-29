@@ -15,3 +15,6 @@ re-owes a ruling (FR-013) or a verdict.
 - **web** (ask:444-T13-web_greenfield-round-3): the door stands 81 ft from the lot's side edges but the across leg is charged at about 40 ft - about 0.6 cells a household, the budget perhaps 2% low.
 - **track** (verdict-2): the start's line walk must rank lines by their far corner's projection on the bearing (a diagonal bearing), the 7 ft by construction resting on the start being the farthest corner.
 - **washing** (ask:444-T12-washing_greenfield-round-3): the near households' ring-by-ring stop reads fewer than the 19.3 cells charged - a slight overcount.
+- **bamboo** (verdict-1): the stand's sun keep from the lot to its north rests on the lattice's geometry - the audit must show none dropped or moved.
+- **bamboo** (verdict-1): SOUND at 288 at 40 against its standing pin of 252 - left for the GM's words; its sun keep from the north lot rests on the lattice's geometry, so the audit must show no stand dropped or moved.
+- **windbreak** (verdict-1): the strip starts exactly 50 ft below the north lot's yard's end, and a 12 ft clump centered at its edge reaches 6 ft into the keep - the usable band for clump centers is narrower than 19 ft; the beds' extent below the house is not stated; two 19 ft strips and two 10 ft keeps leave no room for the tread.

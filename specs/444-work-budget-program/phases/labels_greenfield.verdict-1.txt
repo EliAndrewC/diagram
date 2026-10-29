@@ -1,0 +1,1 @@
+SOUND - one caption at every size, its seat read from notice and not searched again, four fields and at most one leader written: 6 operations at every size, flat, every factor named and nothing visited that cannot win.
