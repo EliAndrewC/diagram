@@ -1,0 +1,3 @@
+LOOSE - the placard's walk, last row charged whole: the walk stops at the placard's right-hand column, so the last row costs the fit's left column plus 4 cells, not the view's width (S8: the mean the output shows); the fit's x can be read from the reference manifests.
+
+(Also: the depth measured at 20 and used at 40 and 80 - say why; "the four columns ending at it tested" is four comparisons unless a running count; the copse in the lots' gaps tested nowhere - in the mask, the span taken solid, or not at all.)

@@ -258,16 +258,16 @@
   "notice": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.96,
-   "derivation": "specs/444-work-budget-program/phases/notice.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch-2",
-   "items_at_20": 8730,
-   "items_at_40": 16884,
-   "items_at_80": 32928,
+   "exponent": 0.67,
+   "derivation": "specs/444-work-budget-program/phases/notice_greenfield.derivation.md",
+   "verdict": "ask:444-T14-notice_greenfield-round-3",
+   "items_at_20": 753,
+   "items_at_40": 1160,
+   "items_at_80": 1887,
    "pinned_on": "accept",
-   "derivation_sha": "97e53525bc42ea70d490018adc6bb484cc0de466452865afaee3e349705e42ae",
-   "rounds": 4,
-   "spread": "8,730-11,277 at 20"
+   "derivation_sha": "b0a8e7e1e322cb87c6648ceaac75d8294b96e422afe3d049e6b3547c82256af0",
+   "rounds": 2,
+   "spread": "425-753 at 20"
   },
   "labels": {
    "status": "budgeted",
