@@ -29,6 +29,9 @@ So: 1 x (2 + 1) x 1, flat in households.
 - at 40: 1 x (2 + 1) x 1 = 3
 - at 80: 1 x (2 + 1) x 1 = 3
 
+- FR-014 re-score: every factor is an exact count, no density or candidate taken at its worst, so the typical case is the derivation as it reads (rubric S8; ask:444-budget-standard)
+- reason above today's count: today's 0 counts nothing (no counted site); the budget is its exact count
+
 ## Cheaper algorithms considered
 
 - sweep: not used - nothing is placed

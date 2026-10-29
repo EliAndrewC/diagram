@@ -33,6 +33,13 @@ So: 1 x 6 x 1.
 - at 40: 1 x 6 x 1 = 6
 - at 80: 1 x 6 x 1 = 6
 
+- FR-014 re-score: every factor is an exact count, no density or candidate taken at its worst, so the typical case is the derivation as it reads (rubric S8; ask:444-budget-standard)
+- reason above today's count: today's 0 counts nothing (no counted site); the budget is the board's caption written
+
+## Earlier findings
+
+- verdict-1, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+
 ## Cheaper algorithms considered
 
 - sweep: not used - one caption, already seated

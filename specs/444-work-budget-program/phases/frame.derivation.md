@@ -21,7 +21,7 @@
 
 ## Indexes
 
-- registry: cells of 64 ft; densest 29 things a cell at 20, at its measured rate (29 at 20, 40 at 40, 55 at 80), from a smallest side of 64 ft against the placard, 252 by 159 ft, in at most 5 by 4 cells
+- registry: cells of 64 ft; densest the mean 4 things a cell (`items.md`'s typical densities, rubric S8), from a smallest side of 64 ft against the placard, 252 by 159 ft, in at most 5 by 4 cells
 
 ## The count, factor by factor
 
@@ -32,20 +32,21 @@
 | slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
 | the canopy | once | 717 at 20, 1,320 at 40, 2,428 at 80 | each queued crown written once | 80 households |
 | the drift | once | 1,636 at 20, 2,958 at 40, 5,351 at 80 | each hard feature's box read once for the content's frame (1), and the frame against the view (4) | 80 households |
-| the title (registry cells examined) | once | 603 at 20, 823 at 40, 1,123 at 80 | the pocket read (1), the placard's at most 5 by 4 cells of 64 ft with their things and the cell (600 at 20, 820 at 40, 1,120 at 80), the title and its scale bar written (2) | 80 households |
-| the waterward band (registry cells examined) | once | 6,000 at 20, 12,095 at 40, 23,800 at 80 | the band, the view's long side by the title's 193 ft band, in at most (the side over 64 rounded up, plus 1) by 5 cells (200 at 20, 295 at 40, 425 at 80), each with its things and the cell (30 at 20, 41 at 40, 56 at 80) | a polder with a water-facing flank |
+| the title (registry cells examined) | once | 103 | the pocket read (1), the placard's at most 5 by 4 cells of 64 ft with the mean 4 things and the cell (100, `items.md`), the title and its scale bar written (2) | always 103 |
+| the waterward band (registry cells examined) | once | 1,000 at 20, 1,475 at 40, 2,125 at 80 | the band, the view's long side by the title's 193 ft band, in (the side over 64 rounded up, plus 1) by 5 cells (200 at 20, 295 at 40, 425 at 80), each with the mean 4 things and the cell (5) | a polder with a water-facing flank |
 | the union (ring points) | once | 2,664 at 20, 2,664 at 40, 2,664 at 80 | the strip's ring, at most 662 points, and the band's 4 corners, clipped in one walk, each against the band's 4 sides, 4 x (662 + 4) | a polder with a water-facing flank |
 
 So: 1 x 4 x 1, plus the canopy, the drift, the title, the waterward band and the union.
 
 ## Totals
 
-- at 20: 1 x 4 x 1 + 717 + 1636 + 603 + 6000 + 2664 = 11624
-- at 40: 1 x 4 x 1 + 1320 + 2958 + 823 + 12095 + 2664 = 19864
-- at 80: 1 x 4 x 1 + 2428 + 5351 + 1123 + 23800 + 2664 = 35370
+- at 20: 1 x 4 x 1 + 717 + 1636 + 103 + 1000 + 2664 = 6124
+- at 40: 1 x 4 x 1 + 1320 + 2958 + 103 + 1475 + 2664 = 8524
+- at 80: 1 x 4 x 1 + 2428 + 5351 + 103 + 2125 + 2664 = 12675
 
 ## Earlier findings
 
+- verdict-2, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
 - verdict-1, finding 1: fixed - the things a cell grow at their measured rate, 29, 40 and 55, in the title and the band
 - verdict-1, finding 2: fixed - the band is at most the title's band deep because the view passes the strip only where the title's band grew it (`to_the_strips`), cited
 - verdict-1, finding 3: fixed - the union clips the strip's ring against the band's rectangle in one walk, 4 x (points + 4)
@@ -53,6 +54,9 @@ So: 1 x 4 x 1, plus the canopy, the drift, the title, the waterward band and the
 - verdict-1, finding 5: fixed - the strip's ring is a marsh record's, bounded by the pool's longest marsh ring, 662, no pool map carrying a strip
 
 - reason above the reference: the frame is one thing a roll, so its cost per thing is the whole stage - each hard feature's box read once for the view and the title's pocket tested - not a cost per house or per part placed
+
+- FR-014 re-score: the registry's things a cell at the mean 4 of `items.md` in place of the densest 29, 40 and 55; every other factor an exact count (ask:444-budget-standard)
+- reason above today's count: today's 8 at 40 counts the frame's few counted sites alone, a lower bound
 
 ## Cheaper algorithms considered
 

@@ -27,23 +27,47 @@
 |---|---|---|---|---|
 | items | per item | 33 at 20, 43 at 40, 56 at 80 | the ring's seats (the Bounds) | a planted bank at 80 households |
 | the standing grid's look (cells examined) | per item | 4 | the crown's reach, 12 ft, in 24 ft cells meets at most 4; the trunk is its center, so one look serves both | always 4 |
-| the footprints | per item | 76 | at most 19 a cell (the Indexes) x 4 cells | the densest cells |
-| the lanes | per item | 8 | the trunk is a point, tested against the treads in its own 24 ft cell: at most 8 lane segments, junctions included (the Indexes), each lane filed in every cell its tread touches | a trunk at a junction |
-| the crop (outline index cells examined) | per item | 12 | the trunk's cell examined and at most 11 outline segments - the field's index files each outline segment in every cell it crosses, so a cell with none is wholly inside or outside, and the trunk's side of the segments it holds says which | the 11-segment ceiling |
-| the brook (brook cells examined) | per item | 52 | the brook is 7 ft wide, so a trunk within 3.5 ft of a cell's edge is tested against the next cells too: at most 4 cells, each examined and its at most 12 brook segments tested | a seat at a cell's corner beside the brook |
+| the footprints | per item | 4 | the mean 1 footprint a 24 ft cell (the 64 ft cell's mean 3.3 to 5.5 things over its 7 cells of 24 ft, `items.md`) x 4 cells | the typical bank |
+| the lanes | per item | 1 | the trunk's own 24 ft cell, the mean under 1 lane segment a cell (the 64 ft cell's mean 2) | the typical bank |
+| the crop (outline index cells examined) | per item | 3 | the trunk's cell examined and its mean 2 outline segments a crossed cell | the typical bank |
+| the brook (brook cells examined) | per item | 5 | the trunk's own cell, a seat near a cell's edge rare, examined and its mean 4 brook segments | the typical bank |
 | the pond | per item | 1 | one exact distance from the ellipse | always 1 |
 | the jitter | per item | 1 | one draw within the play | always 1 |
 | the kind | per item | 1 | the next of mulberry and cudrania | always 1 |
-| slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
+| slack | per item | 2 | what varies around the typical case (S8): a seat at a junction or a cell's corner | a crowded bank |
 | the roll | once | 1 | the bank's form | always 1 |
 
-So: seats x (4 + 76 + 8 + 12 + 52 + 1 + 1 + 1) x 1 + the roll.
+So: seats x (4 + 4 + 1 + 3 + 5 + 1 + 1 + 1) x 2 + the roll.
 
 ## Totals
 
-- at 20: 33 x (4 + 76 + 8 + 12 + 52 + 1 + 1 + 1) x 1 + 1 = 5116
-- at 40: 43 x (4 + 76 + 8 + 12 + 52 + 1 + 1 + 1) x 1 + 1 = 6666
-- at 80: 56 x (4 + 76 + 8 + 12 + 52 + 1 + 1 + 1) x 1 + 1 = 8681
+- at 20: 33 x (4 + 4 + 1 + 3 + 5 + 1 + 1 + 1) x 2 + 1 = 1321
+- at 40: 43 x (4 + 4 + 1 + 3 + 5 + 1 + 1 + 1) x 2 + 1 = 1721
+- at 80: 56 x (4 + 4 + 1 + 3 + 5 + 1 + 1 + 1) x 2 + 1 = 2241
+
+- FR-014 re-score: each factor at the typical case (rubric S8), the mean densities of `items.md` in place of the densest cells; slack 2 (ask:444-budget-standard)
+- reason above today's count: today's run counts none of this stage at 40 (the reference's bank is bare, or its seats are not counted sites); its budget is the planted bank's
+
+## Earlier findings
+
+- verdict-1, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-1, finding 2: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-1, finding 3: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-1, finding 4: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-1, finding 5: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-1, finding 6: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-2, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-2, finding 2: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-2, finding 3: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-2, finding 4: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-3, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-3, finding 2: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-3, finding 3: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-3, finding 4: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-4, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-4, finding 2: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-4, finding 3: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-4, finding 4: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
 
 ## Cheaper algorithms considered
 

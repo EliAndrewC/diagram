@@ -34,6 +34,13 @@ So: the stands x (4 + 14 + 5) x 1.
 - at 40: 12 x (4 + 14 + 5) x 1 = 276
 - at 80: 24 x (4 + 14 + 5) x 1 = 552
 
+- FR-014 re-score: every factor is an exact count, no density or candidate taken at its worst, so the typical case is the derivation as it reads (rubric S8; ask:444-budget-standard)
+- reason above today's count: today's 86 at 40 is a lower bound; the budget is its stands' exact count
+
+## Earlier findings
+
+- verdict-1, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+
 ## Cheaper algorithms considered
 
 - sweep: not used - each stand is drawn on its own seat, independent of the others

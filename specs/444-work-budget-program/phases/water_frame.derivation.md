@@ -30,6 +30,15 @@ So: 1 x (36 + 0 + 4) x 1 = 40 basic operations, flat in households.
 - at 40: 1 x (36 + 0 + 4) x 1 = 40
 - at 80: 1 x (36 + 0 + 4) x 1 = 40
 
+- FR-014 re-score: every factor is an exact count, no density or candidate taken at its worst, so the typical case is the derivation as it reads (rubric S8; ask:444-budget-standard)
+- reason above today's count: today's 0 at 40 counts nothing of the stage (no counted site); its budget is its derivation's exact count
+
+## Earlier findings
+
+- verdict-1, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-1, finding 2: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+- verdict-2, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+
 ## Cheaper algorithms considered
 
 - sweep: not used - nothing is ordered
