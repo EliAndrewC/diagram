@@ -18,7 +18,7 @@ derivation, or of the code that meets it, is not a reliable judge of either. You
 ## What you read
 
 The bundle's `MANIFEST.md`, and the files it names beside it; nothing in the repository. The rubric, `rubric.md` in the bundle,
-holds the standards S1-S7 and the worked reference figure for a homestead: read it first, every time.
+holds the standards S1-S9 and the worked reference figure for a homestead: read it first, every time.
 
 The MANIFEST says which mode it is.
 
@@ -38,6 +38,10 @@ Ask four questions, in order:
 2. **Is there a standard, cheaper algorithm?** A sweep, a grid or other spatial index, a priority queue, an incremental update,
    memoizing a value that does not change during a scan. If one would lower a factor, the derivation should use it or say why
    it cannot.
+   And first: does the stage touch only what can win (S9)? A row that scores, sorts or paints every member of a set that grows
+   with the map, to keep one or a few of them, is LOOSE unless its `- pruning:` line names why no bound read from an index
+   (a cell's count, an upper bound on its scores) can stop the search early; "the stage is one thing" is not such a reason.
+   Work only a knob's branch needs, charged on every roll, is LOOSE too.
 3. **Is any factor padded?** A factor larger than its own stated reason supports.
 4. **Is each figure read at its source's size and unit?** A figure taken from the contract's Bounds or a measurement - a
    radius or a diameter, a count at 10 households or at 20, a length or a point count - used as the source states it. (Feature

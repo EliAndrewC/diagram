@@ -123,13 +123,16 @@ def total_problems(text: str) -> list[str]:
 
 REFERENCE_PER_THING = 4000  # the rubric's reference, a few thousand basic operations a house (request.md; a GUESS)
 _REASON = re.compile(r"^-\s*reason above the reference:\s*\S", re.M | re.I)
+_PRUNING = re.compile(r"^-\s*pruning:\s*\S", re.M | re.I)  # rubric S9 (the GM 2026-10-29, the notice board's 8,730 operations)
 
 
 def reference_problems(text: str) -> list[str]:
     """THE REFERENCE ASKS A REASON (feature 444 FR-014, rubric S8; the GM 2026-10-28: "I thought the idea was to REDUCE the number of
     operations. Why would we be targeting something HIGHER?"): a derivation whose total at 40 over its items at 40 passes the
-    reference's 4,000 a thing names why, `- reason above the reference: <why>`; under it, nothing is asked. It refuses nothing a
-    reason answers - the band is a GUESS worked for the homesteads."""
+    reference's 4,000 a thing names why, `- reason above the reference: <why>`, and the bound that stops its search early or why none
+    can, `- pruning: <why>` (rubric S9: the GM 2026-10-29, "Why do we think it should take 8,730-11,277 operations to place a single
+    notice board?!" - "the stage is one thing" had passed as the reason); under it, nothing is asked. The agent judges the words.
+    It refuses nothing a reason answers - the band is a GUESS worked for the homesteads."""
     items = row_values(text).get("items", {}).get(40, "")
     sec = TOTALS.search(text)
     total = next((m.group(3) for m in _TOTAL.finditer(sec.group(1)) if int(m.group(1)) == 40), "") if sec else ""
@@ -137,12 +140,20 @@ def reference_problems(text: str) -> list[str]:
         per = float(total.replace(",", "")) / float(items.replace(",", ""))
     except (ValueError, ZeroDivisionError):
         return []
-    if per > REFERENCE_PER_THING and not _REASON.search(text):
-        return [
+    if per <= REFERENCE_PER_THING:
+        return []
+    out = []
+    if not _REASON.search(text):
+        out.append(
             f"the cost per thing at 40, {per:,.0f} ({total} over {items} items), passes the reference's {REFERENCE_PER_THING:,} (rubric S8) - count the"
             " typical case, or name why: `- reason above the reference: <why>`"
-        ]
-    return []
+        )
+    if not _PRUNING.search(text):
+        out.append(
+            f"the cost per thing at 40, {per:,.0f}, passes the reference's {REFERENCE_PER_THING:,} - name the bound that stops the search before it"
+            " visits the whole set, or why none can (rubric S9): `- pruning: <the bound, or why none applies>`"
+        )
+    return out
 
 
 INDEXES = re.compile(r"^## Indexes\b(.*?)(?=^## |\Z)", re.M | re.S)
@@ -274,7 +285,7 @@ def budget_bundle(root: Path, phase: str, derivation: str, out: Path) -> tuple[i
     (out / "MANIFEST.md").write_text(
         f"# work-budget MODE BUDGET - {phase}\n\n"
         "MODE BUDGET: judge the derivation before the rebuild. Read, beside this file:\n\n"
-        "- `rubric.md` - the standards S1-S7 and the worked homestead reference;\n"
+        "- `rubric.md` - the standards S1-S9 and the worked homestead reference;\n"
         "- `contract.md` - what the stage reads and writes;\n"
         "- `derivation.md` - the pseudocode and the operation count, factor by factor;\n"
         "- any `<stage>.verdict-<N>.txt` - the earlier verdicts; the derivation's `## Earlier findings` answers each - confirm each closed.\n\n"
