@@ -1,0 +1,27 @@
+UNDERIVED - the ring's flood, "26 a cell": the row names four parts but gives figures for only three (popped 1 + 8 neighbors read + at most 8 pushes = 17), leaving "the buckets scanned" at an unstated 9, and the 26 is in neither the contract's Bounds nor any derivation in the bundle. That row is 287,768 of the 728,358 operations at 20 households (40%).
+
+**Earlier findings.** Verdict-2's findings 1, 3, 5 and 7 are closed. Findings 2 and 6 are closed in form: the flood over the ring is now a row, and the raster is dilated once. The new problems inside them are below. Finding 4 (the bund, disputed) is not closed, but it is small: see question 3.
+
+**1. Is each factor derived?** No.
+- **The 26.** It is held to verdict-1's standard for the 62: a figure taken from the homesteads must be cited at its source with its arithmetic, as the 62 now is in the Bounds.
+- **The bucket scans may not belong per cell.** On a bucket queue, the empty buckets scanned over a whole run are bounded by the flood's largest value divided by the bucket width. That is one term for the run, not 9 per cell popped. Derive the 9 or move it to a run-level term.
+- **The mark at "the 8 ft widest margin"** (line 14). The contract keeps a lane 3 ft off the field and the crop. The derivation should say whether the mark is set per margin. The count stands as a ceiling either way.
+
+**2. Is there a standard, cheaper algorithm?** Nothing missed among the new rows. The single dilation is cheaper than verdict-2's 81 tests per cell. The bucket-queue flood, and reading lane-ground marks instead of a ways index, are both standard.
+- **An ambiguity to resolve.** Line 19 marks a 25 ft band per traced step. Line 82 says "the way marks are the trace's own band marks". If the band is what gets marked as a way, the 12 ft and 60 ft door tests actually test about 37 ft and 85 ft, not the contract's distances. The derivation should say which cells carry a way's mark.
+
+**3. Is any factor padded?**
+- **The bund's 6 cells** (verdict-2 finding 4, still open). A segment meets at most 1 + ceil(|dx|/64) + ceil(|dy|/64) cells. For a 100 ft leg the worst orientation (dx = dy = 70.7) gives 5, so 5 is the ceiling. "L root 2 / 64 + 3" is a looser formula that rounds up to 6. The difference is about 1,400 operations at 20 (0.2%).
+- **The 561 door-test cells.** These are two overlapping regions summed, and the derivation says so; that is an acknowledged ceiling, not padding.
+
+**4. Is each figure read at its source's size and unit?** No. Three figures divide a region's area by a cell's area. For a region thin relative to its cells, that is a lower bound on the cells it meets, not the worst-case ceiling that slack 1 rests on. These make the budget too tight, not loose:
+- **The ring's 390 raster cells of 32 ft** (390 at 20, 579 at 40, 869 at 80).
+  - Across the ring's 100 ft depth, plus the 8 ft reach on each side, a misaligned grid meets ceil(116/32) + 1 = 5 cells, not 3.1.
+  - Segments in the raster cells just inside the hull and just past the frame's edge can mark ring cells, but they are never walked.
+  - Corrected: about 5 cells per 32 ft of the mid-ring perimeter, which is the hull's perimeter + 2 x pi x 50. That gives about 623 at 20, 926 at 40 and 1,390 at 80.
+  - At 720 a cell, that adds about 168k operations at 20.
+- **The 816 cells within 8 ft of the hull** (816, 1,248, 1,908). An 8 ft band meets ceil(8/6) + 1 = 3 cells of 6 ft across for each 6 ft of hull. That gives about 1,835 at 20, 2,806 at 40 and 4,291 at 80.
+- **The door tests' 246 cells.** A 12 ft band meets 3 cells of 6 ft across for each 6 ft of the 736 ft perimeter. The figure also leaves out the four 12 ft corners, 3 by 3 cells each. Corrected: about 404 cells, against the 246 counted.
+- **The 11,068 ring cells of 6 ft** are close enough (about 8% under).
+
+Bundle read: /tmp/l7r-check/work-budget-budget-web/MANIFEST.md, /tmp/l7r-check/work-budget-budget-web/rubric.md, /tmp/l7r-check/work-budget-budget-web/contract.md, /tmp/l7r-check/work-budget-budget-web/derivation.md, /tmp/l7r-check/work-budget-budget-web/web.verdict-1.txt, /tmp/l7r-check/work-budget-budget-web/web.verdict-2.txt
